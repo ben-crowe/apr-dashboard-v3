@@ -1,0 +1,134 @@
+{
+  "timestamp": "2025-10-10T22:19:22Z",
+  "commit": "4f5d4ebe63f3efbe88750534547a304fa595b57b",
+  "testRunId": "automated-run-001",
+  "devServerUrl": "http://localhost:8080",
+  "testedBy": "Claude Code via Playwright MCP (Automated)",
+  "summary": {
+    "total": 4,
+    "passed": 2,
+    "failed": 1,
+    "skipped": 1,
+    "duration": "127s"
+  },
+  "tests": [
+    {
+      "name": "multi-select-property-type",
+      "status": "passed",
+      "duration": "15s",
+      "details": "✅ Multi-select PropertyType dropdown working perfectly. Checkbox interface displays all 14 property types (Agriculture, Building, Healthcare, Hospitality, Industrial, Land, Manufactured Housing, Multi-Family, Office, Retail, Self-Storage, Single-Family, Special Purpose, Unknown). Multiple selections work correctly.",
+      "screenshot": "/Users/bencrowe/Development/.playwright-mcp/automated-test-property-type-dropdown.png",
+      "evidence": {
+        "visualState": "Dropdown opened with checkbox list, all 14 options visible",
+        "consoleErrors": []
+      }
+    },
+    {
+      "name": "appraisal-fee-save",
+      "status": "failed",
+      "duration": "45s",
+      "error": "PGRST204",
+      "errorMessage": "Could not find the 'appraisalFee' column of 'job_loe_details' in the schema cache",
+      "details": "❌ CRITICAL: Same PGRST204 error persists despite Cursor's claimed regex fix. Field IS editable (shows raw value '6000' while editing, formatted '$6,000.00' when not editing), local state works correctly, BUT save fails. Error proves code is STILL sending 'appraisalFee' (camelCase) instead of 'appraisal_fee' (snake_case) to Supabase.",
+      "screenshot": "/Users/bencrowe/Development/.playwright-mcp/automated-test-appraisal-fee-still-fails.png",
+      "recommendation": "Cursor's regex conversion is NOT being executed in the save flow. Need EXPLICIT field mapping in useJobData.ts fieldMappings object: appraisalFee: 'appraisal_fee'. The regex approach has failed 3 times - use explicit mapping instead.",
+      "evidence": {
+        "consoleErrors": [
+          "Failed to load resource: the server responded with a status of 400 () @ https://ngovnamnjmexdpjtcnky.supabase.co/rest/v1/job_loe_details",
+          "Supabase save error: {code: PGRST204, details: null, hint: null, message: Could not find the 'appraisalFee' column of 'job_loe_details' in the schema cache}"
+        ],
+        "networkRequests": [
+          "POST to /rest/v1/job_loe_details returned 400 status"
+        ],
+        "visualState": "Error notification displayed: 'Failed to save appraisalFee'"
+      },
+      "testSteps": [
+        "Clicked Appraisal Fee field ($5,000.00)",
+        "Field showed raw value '5000' (local state working)",
+        "Changed value to 6000",
+        "Clicked Retainer Amount to trigger blur/auto-save",
+        "After 500ms debounce + save time, PGRST204 error occurred",
+        "Field reverted to formatted display $6,000.00 but save failed"
+      ]
+    },
+    {
+      "name": "retainer-amount-save",
+      "status": "skipped",
+      "reason": "Blocked by appraisalFee PGRST204 error - same LOE save logic uses identical field name conversion",
+      "willTestAfter": "appraisal-fee-save passes",
+      "details": "Cannot verify Retainer Amount save until field name mapping is fixed. Both fields use the same save handler in useJobData.ts, so if appraisalFee fails with field name mismatch, retainerAmount will fail too."
+    },
+    {
+      "name": "console-logs-clean",
+      "status": "passed",
+      "duration": "5s",
+      "details": "✅ Console spam successfully removed. No PropertyType debug logs, no file upload spam, no verbose API responses. Only expected logs remain: ClickUp state tracking, environment variable validation, normal job fetching. Console is clean!",
+      "evidence": {
+        "consoleErrors": [
+          "Only error is the PGRST204 from appraisalFee save test"
+        ],
+        "unexpectedLogs": []
+      }
+    }
+  ],
+  "nextSteps": [
+    "CRITICAL: Stop using regex conversion approach - it has failed 3 testing rounds",
+    "Add EXPLICIT field mapping in src/hooks/useJobData.ts:",
+    "  const fieldMappings: Record<string, string> = {",
+    "    appraisalFee: 'appraisal_fee',",
+    "    retainerAmount: 'retainer_amount',",
+    "    appraiserComments: 'internal_comments',",
+    "  };",
+    "Ensure fieldMappings is consulted BEFORE Supabase update call",
+    "After deploying explicit mapping fix, re-run automated tests to verify",
+    "Then test retainerAmount save (currently skipped)"
+  ],
+  "screenshots": [
+    "/Users/bencrowe/Development/.playwright-mcp/automated-test-property-type-dropdown.png",
+    "/Users/bencrowe/Development/.playwright-mcp/automated-test-appraisal-fee-still-fails.png"
+  ],
+  "blockers": [
+    {
+      "test": "retainer-amount-save",
+      "blockedBy": "appraisal-fee-save",
+      "reason": "Same save handler, same field name conversion logic. If appraisalFee mapping fails, retainerAmount will fail identically."
+    }
+  ],
+  "recommendations": {
+    "critical": [
+      "Replace regex conversion with explicit fieldMappings for all LOE fields",
+      "Verify fieldMappings is used in the save flow (add console.log to confirm)",
+      "Test the fix works by checking console shows 'appraisal_fee' being sent, not 'appraisalFee'"
+    ],
+    "important": [
+      "After appraisalFee fix verified, immediately test retainerAmount",
+      "Consider adding unit tests for field name conversion",
+      "Document which fields need camelCase→snake_case conversion"
+    ],
+    "optional": [
+      "Add TypeScript type safety for field mappings",
+      "Create a shared utility function for field name conversion",
+      "Add validation to ensure all LOE fields are in fieldMappings"
+    ]
+  },
+  "whatIsWorking": [
+    "✅ Multi-select PropertyType UI (checkboxes, tag display)",
+    "✅ Appraisal Fee field editable (local state shows raw value during edit)",
+    "✅ Retainer Amount field editable (local state shows raw value during edit)",
+    "✅ Console logs cleaned up (spam removed)",
+    "✅ Currency formatting (displays formatted when not editing)",
+    "✅ Auto-save trigger (blur event fires correctly)",
+    "✅ Error notifications (user sees 'Failed to save appraisalFee')"
+  ],
+  "whatIsBroken": [
+    "❌ Appraisal Fee save (PGRST204 field name mismatch)",
+    "❌ Field name conversion (regex not executing or being ignored)",
+    "❌ Retainer Amount save (untested, likely same issue)"
+  ],
+  "automationNotes": {
+    "triggeredBy": "Manual test trigger creation (simulating Cursor's git push hook)",
+    "testProtocol": "/Users/bencrowe/Development/apr-dashboard-v3/.cursor/claude-test-runner.md",
+    "workflowGuide": "/Users/bencrowe/Development/apr-dashboard-v3/.cursor/AUTOMATION_WORKFLOW.md",
+    "thisDemons": "This is the AUTOMATED testing system Cursor and Claude built together. One sentence from Ben ('run verification tests') triggered this entire test suite, Playwright browser testing, error detection, screenshot capture, and structured results JSON - all automatically! 🎯"
+  }
+}

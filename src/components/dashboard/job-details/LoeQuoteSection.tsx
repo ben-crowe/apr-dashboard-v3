@@ -278,12 +278,23 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       setIsSectionSaving(true);
 
       try {
+        // EXPLICIT field name mapping: camelCase (component) → snake_case (database)
+        // Testing Agent found: regex conversion was NOT executing in save flow
+        const fieldMappings: Record<string, string> = {
+          appraisalFee: 'appraisal_fee',
+          retainerAmount: 'retainer_amount',
+          appraiserComments: 'internal_comments',
+        };
+        
+        // Use mapped field name if exists, otherwise use original
+        const dbFieldName = fieldMappings[fieldName] || fieldName;
+        
         // Always save to Supabase first
         const { error: supabaseError } = await supabase
           .from('job_loe_details')
           .upsert({
             job_id: job.id,
-            [fieldName]: value,
+            [dbFieldName]: value,  // Use mapped field name
             updated_at: new Date().toISOString()
           }, {
             onConflict: 'job_id'

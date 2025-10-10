@@ -1,0 +1,179 @@
+# 🐛 Bug Report: Appraisal Fee PGRST204 Error Still Persists
+
+**Testing Date:** September 2, 2025  
+**Tested By:** Claude Code via Playwright MCP  
+**Testing Round:** #3  
+**Status:** ❌ FAILED - Regex fix not working
+
+---
+
+## 🔴 Critical Issue
+
+The PGRST204 error on Appraisal Fee save **still occurs** after your regex fix implementation.
+
+### Error Details
+
+```
+Supabase save error: {
+  code: "PGRST204",
+  message: "Could not find the 'appraisalFee' column of 'job_loe_details' in the schema cache"
+}
+```
+
+**Screenshot Evidence:** `/Users/bencrowe/Development/.playwright-mcp/appraisal-fee-error-still-present.png`
+
+---
+
+## 📋 Test Steps Performed
+
+1. ✅ Navigated to http://localhost:8080/dashboard
+2. ✅ Opened "Tech Center Building" job
+3. ✅ Clicked Appraisal Fee field (showing $4,000.00)
+4. ✅ Changed value to 5000
+5. ✅ Clicked Retainer Amount to trigger blur/auto-save
+6. ❌ **Result:** Same PGRST204 error occurred
+
+**User-facing error notification:** "Failed to save appraisalFee"
+
+---
+
+## 🔍 Root Cause Analysis
+
+### What's Still Wrong
+
+The error message **still shows `'appraisalFee'`** being sent to Supabase, proving the field name conversion is **NOT being applied**.
+
+**Database expects:** `appraisal_fee` (snake_case)  
+**Code is sending:** `appraisalFee` (camelCase)
+
+### Your Regex Fix (Not Working)
+
+```typescript
+field.replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, '')
+```
+
+**This should convert:**
+- `appraisalFee` → `appraisal_fee` ✅ (correct logic)
+
+**But the error proves:**
+- The regex is **NOT being executed** during the save flow
+- Or the regex output is being ignored
+- Or there's a deployment/caching issue
+
+---
+
+## 💡 Recommended Fixes
+
+### Option 1: Explicit Field Mapping (Most Reliable)
+
+Add explicit mapping in `fieldMappings` object:
+
+```typescript
+const fieldMappings: Record<string, string> = {
+  appraisalFee: 'appraisal_fee',  // Add this explicit mapping
+  appraiserComments: 'internal_comments',
+  retainerAmount: 'retainer_amount',  // Add this too while you're at it
+  // ... other mappings
+};
+```
+
+### Option 2: Debug the Regex
+
+Verify the regex is actually being called:
+
+```typescript
+console.log('Before mapping:', field);
+const mappedField = field.replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, '');
+console.log('After mapping:', mappedField);
+```
+
+**Expected output:**
+```
+Before mapping: appraisalFee
+After mapping: appraisal_fee
+```
+
+**If you don't see these logs**, the regex isn't being executed in the save flow.
+
+---
+
+## 🎯 Testing History
+
+| Attempt | Cursor's Fix | Result | Evidence |
+|---------|-------------|---------|----------|
+| #1 | Initial implementation | ❌ PGRST204 | Found database column mismatch |
+| #2 | Added `appraiserComments` mapping | ❌ PGRST204 | Fixed wrong field |
+| #3 | Added regex conversion | ❌ PGRST204 | **This report** - Regex not working |
+
+---
+
+## ✅ What IS Working (Don't Break These)
+
+- ✅ Multi-select PropertyType checkboxes (Building, Hospitality, Land tags)
+- ✅ Appraisal Fee field is editable (local state working)
+- ✅ Retainer Amount field is editable (local state working)
+- ✅ Console logs cleaned up (no PropertyType spam)
+- ✅ Field displays formatted currency when not editing
+- ✅ Field shows raw value while editing
+
+**Only the SAVE operation fails.**
+
+---
+
+## 🔧 Files to Check
+
+### Primary: `src/hooks/useJobData.ts`
+
+Look for where LOE fields are saved to Supabase. The field name conversion should happen **before** the Supabase update call.
+
+**Search for:**
+- Where `appraisalFee` is used in save logic
+- Where the regex `.replace(/([A-Z])/g, '_$1')` is called
+- Whether `fieldMappings` is being consulted during save
+
+### Secondary: `src/components/dashboard/job-details/LoeQuoteSection.tsx`
+
+Verify the field name passed to `handleLoeChange`:
+
+```typescript
+onChange={(e) => handleLoeChange('appraisalFee', e.target.value)}
+```
+
+Should still use camelCase here (correct), conversion should happen in the hook.
+
+---
+
+## 📸 Visual Evidence
+
+**Screenshot:** `/Users/bencrowe/Development/.playwright-mcp/appraisal-fee-error-still-present.png`
+
+Shows:
+- Appraisal Fee field with value changed to $5,000.00
+- Error notification: "Failed to save appraisalFee"
+- Console error with full PGRST204 message
+
+---
+
+## 🚨 Next Steps
+
+1. **Add explicit mapping** for `appraisalFee` → `appraisal_fee` in `fieldMappings`
+2. **Deploy changes** (rebuild if necessary)
+3. **Test again** with Playwright MCP verification
+4. **Verify no console errors** after save
+5. **Check Supabase database** to confirm value actually saved
+
+---
+
+## 🔄 Iterative Testing Loop Status
+
+**This is testing round #3.** I'll continue testing after your next fix deployment.
+
+**What's working:** UI interactions, local state, field editability  
+**What's broken:** Save operation due to field name mismatch  
+**What's needed:** Proper camelCase → snake_case conversion before Supabase call
+
+---
+
+**Generated by:** Claude Code Playwright MCP Testing  
+**For:** Cursor AI (via Ben)  
+**Purpose:** Document ongoing PGRST204 error despite multiple fix attempts

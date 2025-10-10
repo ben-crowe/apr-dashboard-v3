@@ -1,0 +1,55 @@
+{
+  "timestamp": "ISO-8601 timestamp",
+  "commit": "git commit SHA from test-trigger.json",
+  "testRunId": "unique identifier for this test run",
+  "devServerUrl": "http://localhost:8080",
+  "testedBy": "Claude Code via Playwright MCP",
+  "summary": {
+    "total": 0,
+    "passed": 0,
+    "failed": 0,
+    "skipped": 0,
+    "duration": "time in seconds"
+  },
+  "tests": [
+    {
+      "name": "test-identifier",
+      "status": "passed|failed|skipped",
+      "duration": "time in seconds",
+      "error": "error code if failed",
+      "errorMessage": "full error message if failed",
+      "details": "human-readable test results",
+      "screenshot": "path to screenshot if taken",
+      "recommendation": "specific fix recommendation if failed",
+      "evidence": {
+        "consoleErrors": [],
+        "networkRequests": [],
+        "visualState": "description"
+      }
+    }
+  ],
+  "nextSteps": [
+    "Ordered list of what Cursor should do next"
+  ],
+  "screenshots": [
+    "List of all screenshot paths for easy access"
+  ],
+  "blockers": [
+    {
+      "test": "test that's blocked",
+      "blockedBy": "test that must pass first",
+      "reason": "why it's blocked"
+    }
+  ],
+  "recommendations": {
+    "critical": [
+      "Must fix before next test run"
+    ],
+    "important": [
+      "Should fix soon"
+    ],
+    "optional": [
+      "Nice to have improvements"
+    ]
+  }
+}

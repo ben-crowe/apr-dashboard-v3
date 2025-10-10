@@ -1,0 +1,50 @@
+{
+  "timestamp": "2025-10-10T12:34:56Z",
+  "commit": "abc123def456",
+  "testsPassed": 4,
+  "testsFailed": 1,
+  "totalTests": 5,
+  "summary": "4/5 tests passed - Appraisal Fee save still failing",
+  "results": [
+    {
+      "name": "multi-select-property-type",
+      "status": "passed",
+      "duration": "2.3s",
+      "notes": "Checkboxes work, tags display correctly, × buttons functional"
+    },
+    {
+      "name": "appraisal-fee-editable",
+      "status": "passed",
+      "duration": "1.1s",
+      "notes": "Field accepts input, local state working"
+    },
+    {
+      "name": "appraisal-fee-save",
+      "status": "failed",
+      "duration": "0.8s",
+      "error": "PGRST204 - Could not find 'appraisal_fee' column",
+      "notes": "Field editable but save fails with 400 error"
+    },
+    {
+      "name": "retainer-amount-editable",
+      "status": "passed",
+      "duration": "1.0s",
+      "notes": "Field accepts input, local state working"
+    },
+    {
+      "name": "console-logs-clean",
+      "status": "passed",
+      "duration": "0.5s",
+      "notes": "No spam in console, only expected warnings"
+    }
+  ],
+  "screenshots": {
+    "multi-select": ".playwright-mcp/multi-select-property-types.png",
+    "error": ".playwright-mcp/appraisal-fee-error.png"
+  },
+  "recommendations": [
+    "Fix camelCase to snake_case conversion in useSaveJobDetails.ts",
+    "Add .replace(/^_/, '') to remove leading underscore from regex"
+  ]
+}
+

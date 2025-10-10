@@ -53,8 +53,10 @@ export function useJobDetail(jobId: string) {
     if (updates.propertyAddress !== undefined) dbUpdates.property_address = updates.propertyAddress;
     if (updates.propertyName !== undefined) dbUpdates.property_name = updates.propertyName;
     if (updates.propertyType !== undefined) dbUpdates.property_type = updates.propertyType;
+    if (updates.propertyTypes !== undefined) dbUpdates.property_types = updates.propertyTypes;
     if (updates.intendedUse !== undefined) dbUpdates.intended_use = updates.intendedUse;
     if (updates.assetCondition !== undefined) dbUpdates.asset_condition = updates.assetCondition;
+    if (updates.valuationPremises !== undefined) dbUpdates.valuation_premises = updates.valuationPremises;
     if (updates.notes !== undefined) dbUpdates.notes = updates.notes;
     if (updates.propertyContactFirstName !== undefined) dbUpdates.property_contact_first_name = updates.propertyContactFirstName;
     if (updates.propertyContactLastName !== undefined) dbUpdates.property_contact_last_name = updates.propertyContactLastName;

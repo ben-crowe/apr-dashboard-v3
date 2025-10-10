@@ -334,8 +334,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
           if (!result.success) {
             console.error('Valcre sync failed:', result.error);
-            // Don't show error toast - Supabase save was successful
+            toast.error(`Failed to sync ${fieldName} to Valcre`);
+          } else {
+            toast.success(`${fieldName} saved and synced to Valcre`);
           }
+        } else {
+          // Field saved to Supabase but no Valcre job yet
+          toast.success(`${fieldName} saved`);
         }
 
         // Clear field and section saving states

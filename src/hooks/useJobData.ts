@@ -55,8 +55,10 @@ export function useJobData(jobId: string) {
             propertyName: jobData.property_name || undefined,
             propertyAddress: jobData.property_address,
             propertyType: jobData.property_type || undefined,
+            propertyTypes: jobData.property_types || undefined, // Multi-select array
             intendedUse: jobData.intended_use || undefined,
             assetCondition: jobData.asset_condition || undefined,
+            valuationPremises: jobData.valuation_premises || undefined,
             notes: jobData.notes || undefined,
             // Property contact fields - NO fallback to client (prevents duplication)
             propertyContactFirstName: jobData.property_contact_first_name || undefined,

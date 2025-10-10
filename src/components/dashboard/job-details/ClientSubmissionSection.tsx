@@ -36,7 +36,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
   
   // Fields that sync to Valcre
-  const VALCRE_SYNC_FIELDS = ['notes'];
+  const VALCRE_SYNC_FIELDS = ['notes', 'valuationPremises', 'intendedUse', 'assetCondition'];
   
   // Auto-save function
   const autoSaveField = useCallback(async (fieldName: string, value: any) => {
@@ -60,8 +60,11 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           updateType: 'loe_details'
         };
         
-        // Map field names correctly
+        // Map field names correctly for Valcre sync
         if (fieldName === 'notes') syncData.notes = value;
+        if (fieldName === 'valuationPremises') syncData.valuationPremises = value;
+        if (fieldName === 'intendedUse') syncData.intendedUse = value;
+        if (fieldName === 'assetCondition') syncData.assetCondition = value;
         
         console.log(`Syncing ${fieldName} to Valcre:`, syncData);
         const result = await sendToValcre(syncData);
@@ -69,7 +72,12 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         if (!result.success) {
           console.warn(`Failed to sync ${fieldName} to Valcre:`, result.error);
           toast.error(`Failed to sync ${fieldName} to Valcre`);
+        } else {
+          toast.success(`${fieldName} saved and synced to Valcre`);
         }
+      } else {
+        // Field saved but not synced (no Valcre job yet)
+        toast.success(`${fieldName} saved`);
       }
     } catch (error) {
       console.error(`Error saving ${fieldName}:`, error);
@@ -499,7 +507,10 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
             <CompactField label="Intended Use">
               <Select
                 value={job.intendedUse || ''}
-                onValueChange={(value) => onUpdateJob?.({intendedUse: value})}
+                onValueChange={(value) => {
+                  onUpdateJob?.({intendedUse: value});
+                  autoSaveField('intendedUse', value);
+                }}
               >
                 <SelectTrigger className="h-7 text-sm max-w-[200px] text-center">
                   <SelectValue placeholder="Select..." />
@@ -517,7 +528,10 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
             <CompactField label="Valuation Premises">
               <Select
                 value={job.valuationPremises || ''}
-                onValueChange={(value) => onUpdateJob?.({valuationPremises: value})}
+                onValueChange={(value) => {
+                  onUpdateJob?.({valuationPremises: value});
+                  autoSaveField('valuationPremises', value);
+                }}
               >
                 <SelectTrigger className="h-7 text-sm max-w-[200px] text-center">
                   <SelectValue placeholder="Select..." />
@@ -534,7 +548,10 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
             <CompactField label="Asset Condition">
               <Select
                 value={job.assetCondition || ''}
-                onValueChange={(value) => onUpdateJob?.({assetCondition: value})}
+                onValueChange={(value) => {
+                  onUpdateJob?.({assetCondition: value});
+                  autoSaveField('assetCondition', value);
+                }}
               >
                 <SelectTrigger className="h-7 text-sm max-w-[200px] text-center">
                   <SelectValue placeholder="Select..." />

@@ -262,16 +262,14 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       jobNumber: data.jobNumber
     };
 
-    // Combine client comments and appraiser comments with headers
-    const creationComments = [];
-    if (formData.notes) {  // notes = client comments from property section
-      creationComments.push(`=== CLIENT COMMENTS ===\n${formData.notes}`);
+    // Map client comments to ClientComments field (client-visible in Valcre)
+    if (formData.notes || formData.clientComments) {
+      jobData.ClientComments = formData.clientComments || formData.notes || '';
     }
+
+    // Map appraiser comments to Comments field (general/internal comments in Valcre)
     if (formData.appraiserComments) {
-      creationComments.push(`=== APPRAISER COMMENTS ===\n${formData.appraiserComments}`);
-    }
-    if (creationComments.length > 0) {
-      jobData.Comments = creationComments.join('\n\n');
+      jobData.Comments = formData.appraiserComments;
     }
 
     // Only include PropertyContact if property contact fields are actually provided

@@ -1,0 +1,17 @@
+project_id = "ngovnamnjmexdpjtcnky"
+
+[functions.create-valcre-job]
+enabled = true
+verify_jwt = true
+import_map = "./functions/create-valcre-job/deno.json"
+entrypoint = "./functions/create-valcre-job/index.ts"
+
+[functions.docuseal-proxy]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/docuseal-proxy/index.ts"
+
+[functions.send-loe-email-fixed]
+enabled = true
+verify_jwt = true
+entrypoint = "./functions/send-loe-email-fixed/index.ts"

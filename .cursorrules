@@ -1,0 +1,125 @@
+# APR Dashboard V3 - Cursor AI Configuration
+
+## Project Context
+
+This is the production APR Dashboard application - a clean, focused codebase containing only essential application files.
+
+## Critical Reference Files
+
+**Field Mapping (Master Source of Truth)**
+- Location: `.docs/field-mapping.md`
+- Use this for ALL Valcre API field name mappings
+- Never guess field names - always reference this file
+- Recent fix: `Retainer` NOT `RetainerAmount` (Oct 2025)
+
+**API Documentation**
+- Location: `.docs/api-reference.md`
+- Covers Valcre, Supabase, and ClickUp integrations
+
+**Deployment Guide**
+- Location: `.docs/deployment.md`
+- Local development and Vercel deployment procedures
+
+## Architecture Patterns
+
+### Two-Table Pattern
+Most form data saves to **BOTH** tables:
+- `job_submissions` - Main job data
+- `job_loe_details` - Line of Effort / Quote details
+
+Always check if data needs to persist in both tables.
+
+### Valcre API Integration
+- Use **exact field names** from `.docs/field-mapping.md`
+- Currency fields: Strip $ and commas before sending
+- Some fields are POST-only (creation), most support PATCH (update)
+- Use PascalCase for API field names (e.g., `Retainer`, `AppraisalFee`)
+
+### Database Schema
+- Primary keys: uuid
+- Foreign keys: `job_id` references `job_submissions.id`
+- Job identifier: `job_number` (text, Valcre job number like "VAL123456")
+- Valcre ID: `valcre_job_id` (integer, Valcre internal ID)
+
+## Code Standards
+
+### TypeScript
+- Strict mode enabled
+- No implicit any
+- Prefer explicit types over inference where clarity improves
+
+### React Components
+- Functional components with hooks
+- Props interfaces defined inline or in separate types file
+- Use Shadcn UI components from `@/components/ui`
+
+### Styling
+- Tailwind CSS utility classes
+- Dark mode support via `dark:` prefix
+- Consistent spacing using Tailwind scale
+
+### File Organization
+```
+src/
+├── components/
+│   ├── ui/                    # Shadcn UI components
+│   ├── dashboard/             # Dashboard-specific components
+│   └── submission-form/       # Form components
+├── hooks/                     # Custom React hooks
+├── utils/                     # Utility functions
+│   └── webhooks/              # Integration services
+├── pages/                     # Route pages
+└── integrations/
+    └── supabase/              # Supabase client and types
+```
+
+## Environment Variables
+
+Required for local development:
+```
+VITE_SUPABASE_URL
+VITE_SUPABASE_PUBLISHABLE_KEY
+VITE_SUPABASE_PROJECT_ID
+VITE_CLICKUP_ENV
+VALCRE_API_KEY
+CLICKUP_API_KEY
+CLICKUP_LIST_ID
+```
+
+See `.env.example` for template.
+
+## Testing Approach
+
+- Manual testing in browser during development
+- Playwright MCP available for automated browser testing
+- Always test currency field formatting ($, commas stripped)
+- Verify data persists to both tables when applicable
+
+## Common Pitfalls
+
+1. **Retainer Field Bug**: Always use `Retainer`, never `RetainerAmount`
+2. **Currency Formatting**: Must strip $ and commas before API calls
+3. **Two-Table Pattern**: Don't forget to save to both tables
+4. **Field Names**: Reference `.docs/field-mapping.md`, don't guess
+5. **Date Format**: Use ISO 8601 (YYYY-MM-DD) for Valcre API
+
+## Build Commands
+
+```bash
+npm install          # Install dependencies
+npm run dev          # Start dev server (localhost:5173)
+npm run build        # Production build
+npm run preview      # Preview production build
+```
+
+## When Making Changes
+
+1. Check `.docs/field-mapping.md` for field names
+2. Consider two-table pattern impact
+3. Test currency formatting if touching payment fields
+4. Verify Valcre API field names match documentation
+5. Test locally before committing
+
+---
+
+Last Updated: October 10, 2025

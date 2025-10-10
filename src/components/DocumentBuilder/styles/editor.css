@@ -1,0 +1,129 @@
+/* Document Editor Styles */
+
+/* Editor Content */
+.editor-content {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.editor-content:empty:before {
+  content: attr(data-placeholder);
+  color: #9ca3af;
+  pointer-events: none;
+  position: absolute;
+}
+
+.editor-content:focus {
+  outline: none;
+}
+
+/* Field Markers */
+.field-marker {
+  background-color: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 3px;
+  padding: 0 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-block;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.field-marker:hover {
+  background-color: #fed7aa;
+  border-color: #ea580c;
+}
+
+.field-marker.missing-value {
+  background-color: #fee2e2;
+  border-color: #ef4444;
+}
+
+.field-marker.has-value {
+  background-color: #d1fae5;
+  border-color: #10b981;
+}
+
+/* Template Styles */
+.modern-template {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #1f2937;
+}
+
+.traditional-template {
+  font-family: 'Times New Roman', Times, serif;
+  color: #000;
+  line-height: 2;
+}
+
+.government-template {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #000;
+}
+
+/* Preview Styles */
+.preview-content {
+  transition: transform 0.2s ease;
+}
+
+.preview-content h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.preview-content h2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.preview-content p {
+  margin-bottom: 0.75rem;
+}
+
+/* Scrollbar Styles */
+.field-list::-webkit-scrollbar,
+.preview-viewport::-webkit-scrollbar {
+  width: 8px;
+}
+
+.field-list::-webkit-scrollbar-track,
+.preview-viewport::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 4px;
+}
+
+.field-list::-webkit-scrollbar-thumb,
+.preview-viewport::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 4px;
+}
+
+.field-list::-webkit-scrollbar-thumb:hover,
+.preview-viewport::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Print Styles */
+@media print {
+  .editor-toolbar,
+  .field-sidebar,
+  .template-selector,
+  .preview-controls {
+    display: none !important;
+  }
+  
+  .preview-content {
+    transform: none !important;
+    width: 100% !important;
+  }
+  
+  .field-marker {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+}

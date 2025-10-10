@@ -19,7 +19,7 @@ export function useSaveJobDetails(jobId: string) {
           'propertyRightsAppraised', 'valuationPremises', 'deliveryDate', 
           'scopeOfWork', 'specialInstructions', 'reportType', 
           'paymentTerms', 'appraisalFee', 'retainerAmount', 
-          'disbursementPercentage', 'internalComments'
+          'disbursementPercentage', 'internalComments', 'appraiserComments'
         ];
         
         const propertyInfoFields = [
@@ -38,9 +38,15 @@ export function useSaveJobDetails(jobId: string) {
         
         for (const field of loeFields) {
           if (field in details) {
-            const snakeField = field
+            // Special mapping: appraiserComments → internal_comments (DB field name)
+            let snakeField = field
               .replace(/([A-Z])/g, '_$1')
               .toLowerCase();
+            
+            if (field === 'appraiserComments') {
+              snakeField = 'internal_comments';
+            }
+            
             loeDetailsToUpdate[snakeField] = details[field as keyof JobDetails];
             hasLoeUpdates = true;
           }

@@ -1,0 +1,103 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - region "Notifications (F8)":
+    - list
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - button "Appraisal Dashboard" [ref=e7] [cursor=pointer]:
+          - generic [ref=e9] [cursor=pointer]: Appraisal Dashboard
+        - generic [ref=e11]:
+          - img [ref=e12]
+          - textbox "Search..." [ref=e15]
+        - generic [ref=e16]:
+          - button "Refresh page" [ref=e17] [cursor=pointer]:
+            - img
+          - button [ref=e18] [cursor=pointer]:
+            - img
+          - button [ref=e19] [cursor=pointer]:
+            - img
+          - button "Toggle theme" [ref=e20] [cursor=pointer]:
+            - img
+          - button "Settings" [ref=e21] [cursor=pointer]:
+            - img
+          - generic [ref=e22]:
+            - generic [ref=e24]: Appraiser
+            - button [ref=e25] [cursor=pointer]:
+              - img
+            - button [ref=e26] [cursor=pointer]:
+              - img
+    - main [ref=e27]:
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - heading "Appraisal Submissions" [level=1] [ref=e31]
+          - button "Switch to Table View" [ref=e32] [cursor=pointer]
+        - generic [ref=e33]:
+          - generic [ref=e34]:
+            - heading "Jobs" [level=1] [ref=e35]
+            - button "New Job" [ref=e36] [cursor=pointer]:
+              - img
+              - text: New Job
+          - generic [ref=e37]:
+            - generic [ref=e38]:
+              - img [ref=e39]
+              - searchbox "Search by property name, address or client name..." [ref=e42]
+            - combobox [ref=e43] [cursor=pointer]:
+              - generic: All Jobs
+              - img [ref=e44] [cursor=pointer]
+          - generic [ref=e46]:
+            - generic [ref=e47]: JOB & PROPERTY
+            - generic [ref=e48]: DATE
+            - generic [ref=e49]: STATUS
+          - generic [ref=e50]:
+            - generic [ref=e51] [cursor=pointer]:
+              - generic [ref=e55] [cursor=pointer]: Jennifer Martinez
+              - generic [ref=e56] [cursor=pointer]: about 1 hour ago
+              - generic [ref=e57] [cursor=pointer]: Submitted
+              - button "Delete job" [ref=e58] [cursor=pointer]:
+                - img [ref=e59] [cursor=pointer]
+              - img [ref=e62] [cursor=pointer]
+            - generic [ref=e64] [cursor=pointer]:
+              - generic [ref=e68] [cursor=pointer]: Jennifer Williams
+              - generic [ref=e69] [cursor=pointer]: about 1 hour ago
+              - generic [ref=e70] [cursor=pointer]: Submitted
+              - button "Delete job" [ref=e71] [cursor=pointer]:
+                - img [ref=e72] [cursor=pointer]
+              - img [ref=e75] [cursor=pointer]
+            - generic [ref=e77] [cursor=pointer]:
+              - generic [ref=e81] [cursor=pointer]: Michael Johnson
+              - generic [ref=e82] [cursor=pointer]: about 2 hours ago
+              - generic [ref=e83] [cursor=pointer]: Submitted
+              - button "Delete job" [ref=e84] [cursor=pointer]:
+                - img [ref=e85] [cursor=pointer]
+              - img [ref=e88] [cursor=pointer]
+            - generic [ref=e90] [cursor=pointer]:
+              - generic [ref=e94] [cursor=pointer]: about 23 hours ago
+              - generic [ref=e95] [cursor=pointer]: Submitted
+              - button "Delete job" [ref=e96] [cursor=pointer]:
+                - img [ref=e97] [cursor=pointer]
+              - img [ref=e100] [cursor=pointer]
+            - generic [ref=e102] [cursor=pointer]:
+              - generic [ref=e106] [cursor=pointer]: Sarah Brown
+              - generic [ref=e107] [cursor=pointer]: 1 day ago
+              - generic [ref=e108] [cursor=pointer]: Submitted
+              - button "Delete job" [ref=e109] [cursor=pointer]:
+                - img [ref=e110] [cursor=pointer]
+              - img [ref=e113] [cursor=pointer]
+            - generic [ref=e115] [cursor=pointer]:
+              - generic [ref=e119] [cursor=pointer]: Robert Brown
+              - generic [ref=e120] [cursor=pointer]: 2 days ago
+              - generic [ref=e121] [cursor=pointer]: Submitted
+              - button "Delete job" [ref=e122] [cursor=pointer]:
+                - img [ref=e123] [cursor=pointer]
+              - img [ref=e126] [cursor=pointer]
+            - generic [ref=e128] [cursor=pointer]:
+              - generic [ref=e132] [cursor=pointer]: David Garcia
+              - generic [ref=e133] [cursor=pointer]: 2 days ago
+              - generic [ref=e134] [cursor=pointer]: Submitted
+              - button "Delete job" [ref=e135] [cursor=pointer]:
+                - img [ref=e136] [cursor=pointer]
+              - img [ref=e139] [cursor=pointer]
+```

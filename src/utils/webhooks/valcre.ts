@@ -182,16 +182,6 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
     // Parse the property address to extract street, city, and province
     const addressParts = parseAddress(formData.propertyAddress);
 
-    // Debug logging for PropertyType and PropertyContact
-    console.log('🏢 PropertyType from UI (legacy single):', formData.propertyType);
-    console.log('🏢 PropertyTypes from UI (new multi-select):', formData.propertyTypes);
-    console.log('👤 PropertyContact fields:', {
-      firstName: formData.propertyContactFirstName,
-      lastName: formData.propertyContactLastName,
-      email: formData.propertyContactEmail,
-      phone: formData.propertyContactPhone
-    });
-
     // Build complete job data with all mapped fields for entity creation
     const jobData: any = {
       // Core Job Information
@@ -210,9 +200,13 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
 
       // Property fields (will be used for Property entity)
       // Support both legacy single-select and new multi-select
-      PropertyType: formData.propertyTypes?.[0] || formData.propertyType || 'Commercial', // First type for backwards compatibility
-      PropertyTypeEnum: formData.propertyTypes?.[0] || formData.propertyType || 'Commercial',  // First type for PropertyTypeEnum mapping
-      PropertyTypes: formData.propertyTypes && formData.propertyTypes.length > 0 ? formData.propertyTypes : [formData.propertyType || 'Commercial'], // Array for Valcre Types field
+      // NOTE: Valcre API cannot parse JSON arrays - must send as comma-separated string
+      PropertyType: formData.propertyTypes && formData.propertyTypes.length > 0 
+        ? formData.propertyTypes.join(', ')  // Multi-select: "Retail, Office, Industrial"
+        : formData.propertyType || 'Commercial', // Legacy single-select
+      PropertyTypeEnum: formData.propertyTypes && formData.propertyTypes.length > 0
+        ? formData.propertyTypes.join(', ')  // Multi-select for PropertyTypeEnum mapping
+        : formData.propertyType || 'Commercial',  // Legacy single-select
       PropertySubtype: formData.propertySubtype || '',
       BuildingSize: formData.buildingSize || formData.sizeSF || 0,
       NumberOfUnits: formData.numberOfUnits || formData.buildingsCount || 1,
@@ -297,9 +291,6 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
     // Use Vercel serverless function endpoint
     // For production deployment on Vercel
     const endpoint = '/api/valcre';
-
-    // Log full payload before sending to API
-    console.log('📤 Full payload to /api/valcre:', JSON.stringify(jobData, null, 2));
 
     const response = await fetch(endpoint, {
       method: 'POST',

@@ -190,12 +190,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     console.log("Received job data:", JSON.stringify(jobData, null, 2));
-    console.log(`🔍 DEBUG - PropertyType in jobData: "${jobData.PropertyType}" (type: ${typeof jobData.PropertyType})`);
-    
-    // Additional logging for PropertyType and PropertyContact investigation
-    console.log('📥 Received jobData.PropertyType:', jobData.PropertyType);
-    console.log('📥 Received jobData.PropertyContact:', JSON.stringify(jobData.PropertyContact, null, 2));
-
     // Check for update operations
     if (jobData.updateType && jobData.jobId) {
       console.log(
@@ -535,13 +529,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const propContact = await propContactResponse.json();
         propertyContactId = propContact.Id || propContact.id;
         console.log("✅ Property Contact created with ID:", propertyContactId);
-        console.log('✅ Contact entity response:', JSON.stringify(propContact, null, 2));
       } else {
         const errorText = await propContactResponse.text();
         console.log(
           "⚠️ Failed to create separate Property Contact, will use ClientId",
         );
-        console.log('❌ Contact creation error:', errorText);
       }
     } else {
       // CRITICAL FIX: Leave propertyContactId as null - don't default to clientId
@@ -571,24 +563,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     };
 
     // Add all other Property fields if provided
-    console.log(`🏢 PropertyType from jobData: "${jobData.PropertyType}" (type: ${typeof jobData.PropertyType})`);
     if (jobData.PropertyType) {
       // Use PropertyType directly - dashboard now sends exact Valcre values
       propertyData.PropertyType = jobData.PropertyType;
-      console.log(`✅ PropertyType set to: "${propertyData.PropertyType}"`);
-    } else {
-      console.log(`⚠️ PropertyType is falsy, not setting on Property entity`);
     }
     if (jobData.PropertySubtype)
       propertyData.SecondaryType = jobData.PropertySubtype;
     
-    // Support both single PropertyTypeEnum and array PropertyTypes
-    if (jobData.PropertyTypes && Array.isArray(jobData.PropertyTypes)) {
-      propertyData.Types = jobData.PropertyTypes; // Multi-select array
-      console.log(`✅ Types (multi-select) set to: ${JSON.stringify(propertyData.Types)}`);
-    } else if (jobData.PropertyTypeEnum) {
-      propertyData.Types = jobData.PropertyTypeEnum; // Legacy single value (kept for backwards compatibility)
-      console.log(`✅ Types (single-select legacy) set to: "${propertyData.Types}"`);
+    // Set Types field from PropertyTypeEnum (now supports comma-separated multi-select)
+    // NOTE: Valcre API cannot parse arrays - expects string primitive
+    if (jobData.PropertyTypeEnum) {
+      propertyData.Types = jobData.PropertyTypeEnum; // Can be single ("Retail") or multi ("Retail, Office, Industrial")
     }
     if (jobData.BuildingSize) propertyData.SizeSF = jobData.BuildingSize;
     if (jobData.GrossBuildingAreaSf)
@@ -673,15 +658,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const propertyResponseText = await propertyResponse.text();
     console.log("Property Response Status:", propertyResponse.status);
     console.log("Property Response:", propertyResponseText);
-    
-    // Additional logging for PropertyType investigation
-    try {
-      const propertyBody = JSON.parse(propertyResponseText);
-      console.log('✅ Property API response:', JSON.stringify(propertyBody, null, 2));
-    } catch (e) {
-      console.log('✅ Property API response (raw text):', propertyResponseText);
-    }
-
     if (!propertyResponse.ok) {
       console.error("Failed to create Property:", propertyResponseText);
       return res

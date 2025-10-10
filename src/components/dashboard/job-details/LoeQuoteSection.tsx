@@ -51,6 +51,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const [isSectionSaving, setIsSectionSaving] = useState(false);
   const [fieldStates, setFieldStates] = useState<Record<string, 'idle' | 'saving' | 'success'>>({});
   
+  // Local state for currency fields during editing (prevents controlled input issues)
+  const [editingAppraisalFee, setEditingAppraisalFee] = useState<string | null>(null);
+  const [editingRetainerAmount, setEditingRetainerAmount] = useState<string | null>(null);
+  
   // Debounce timers
   const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
 
@@ -361,6 +365,15 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!onUpdateDetails) return;
     const { name, value } = e.target;
+    
+    // Store raw input value in local state during editing
+    if (name === 'appraisalFee') {
+      setEditingAppraisalFee(value);
+    } else if (name === 'retainerAmount') {
+      setEditingRetainerAmount(value);
+    }
+    
+    // Update the underlying numeric value
     const rawValue = unformatCurrency(value);
     const numericValue = rawValue ? parseFloat(rawValue) : 0;
     
@@ -371,6 +384,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
   const handleCurrencyBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    
+    // Clear editing state on blur - field will show formatted value again
+    if (name === 'appraisalFee') {
+      setEditingAppraisalFee(null);
+    } else if (name === 'retainerAmount') {
+      setEditingRetainerAmount(null);
+    }
+    
     const rawValue = unformatCurrency(value);
     const numericValue = rawValue ? parseFloat(rawValue) : 0;
     autoSaveField(name, numericValue);
@@ -873,9 +894,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <Input
               type="text"
               name="appraisalFee"
-              value={jobDetails.appraisalFee ? `$${formatCurrency(jobDetails.appraisalFee)}` : ''}
+              value={editingAppraisalFee !== null ? editingAppraisalFee : (jobDetails.appraisalFee ? `$${formatCurrency(jobDetails.appraisalFee)}` : '')}
               onChange={handleCurrencyChange}
               onBlur={handleCurrencyBlur}
+              onFocus={() => setEditingAppraisalFee(jobDetails.appraisalFee ? jobDetails.appraisalFee.toString() : '')}
               className="h-7 text-sm w-full"
             />
           </CompactField>
@@ -905,9 +927,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <Input
               type="text"
               name="retainerAmount"
-              value={jobDetails.retainerAmount ? `$${formatCurrency(jobDetails.retainerAmount)}` : ''}
+              value={editingRetainerAmount !== null ? editingRetainerAmount : (jobDetails.retainerAmount ? `$${formatCurrency(jobDetails.retainerAmount)}` : '')}
               onChange={handleCurrencyChange}
               onBlur={handleCurrencyBlur}
+              onFocus={() => setEditingRetainerAmount(jobDetails.retainerAmount ? jobDetails.retainerAmount.toString() : '')}
               className="h-7 text-sm w-full"
             />
           </CompactField>

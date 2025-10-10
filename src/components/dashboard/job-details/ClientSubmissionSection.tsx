@@ -105,10 +105,6 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Debug logging
-  console.log("📁 ClientSubmissionSection - job.files:", job.files);
-  console.log("📁 ClientSubmissionSection - files count:", job.files?.length || 0);
-
   // Format phone number as (XXX) XXX-XXXX
   const formatPhoneNumber = (value: string): string => {
     if (!value) return '';

@@ -424,34 +424,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               />
             </CompactField>
             <CompactField label="Property Types">
-              <div className="flex flex-col gap-2">
-                {/* Selected Types Display */}
-                {job.propertyTypes && job.propertyTypes.length > 0 && (
-                  <div className="flex flex-wrap gap-x-3 gap-y-1 p-2 bg-gray-50 dark:bg-gray-800 rounded-md">
-                    {job.propertyTypes.map((type) => (
-                      <span
-                        key={type}
-                        className="inline-flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300"
-                        style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}
-                      >
-                        {type}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const newTypes = job.propertyTypes?.filter(t => t !== type) || [];
-                            onUpdateJob?.({ propertyTypes: newTypes });
-                          }}
-                          className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 font-bold text-base leading-none"
-                          title="Remove"
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                )}
-                
-                {/* Multi-Select Dropdown */}
+              <div className="flex items-center gap-2 flex-wrap">
+                {/* "Add more" button at the front */}
                 <Select
                   value=""
                   onValueChange={(value) => {
@@ -467,8 +441,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                     }
                   }}
                 >
-                  <SelectTrigger className="h-7 text-sm max-w-[200px]">
-                    <SelectValue placeholder={job.propertyTypes?.length ? "Add more..." : "Select types..."} />
+                  <SelectTrigger className="h-7 text-sm w-[100px]">
+                    <SelectValue placeholder="Add more..." />
                   </SelectTrigger>
                   <SelectContent>
                     {['Agriculture', 'Building', 'Healthcare', 'Hospitality', 'Industrial', 'Land', 
@@ -491,6 +465,32 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                       })}
                   </SelectContent>
                 </Select>
+                
+                {/* Selected Types Display - inline after the button */}
+                {job.propertyTypes && job.propertyTypes.length > 0 && (
+                  <>
+                    {job.propertyTypes.map((type) => (
+                      <span
+                        key={type}
+                        className="inline-flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300"
+                        style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}
+                      >
+                        {type}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newTypes = job.propertyTypes?.filter(t => t !== type) || [];
+                            onUpdateJob?.({ propertyTypes: newTypes });
+                          }}
+                          className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 font-bold text-base leading-none"
+                          title="Remove"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </>
+                )}
               </div>
             </CompactField>
             <CompactField label="Address">
@@ -565,17 +565,17 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   className="h-7 text-sm max-w-[200px]"
                 />
               </CompactField>
-              <CompactField label="Last Name">
-                <Input
-                  value={job.propertyContactLastName || ''}
-                  onChange={(e) => onUpdateJob?.({propertyContactLastName: e.target.value})}
-                  className="h-7 text-sm max-w-[200px]"
-                />
-              </CompactField>
               <CompactField label="Email">
                 <Input
                   value={job.propertyContactEmail || ''}
                   onChange={(e) => onUpdateJob?.({propertyContactEmail: e.target.value})}
+                  className="h-7 text-sm max-w-[200px]"
+                />
+              </CompactField>
+              <CompactField label="Last Name">
+                <Input
+                  value={job.propertyContactLastName || ''}
+                  onChange={(e) => onUpdateJob?.({propertyContactLastName: e.target.value})}
                   className="h-7 text-sm max-w-[200px]"
                 />
               </CompactField>

@@ -427,11 +427,12 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               <div className="flex flex-col gap-2">
                 {/* Selected Types Display */}
                 {job.propertyTypes && job.propertyTypes.length > 0 && (
-                  <div className="flex flex-wrap gap-1 p-2 bg-gray-50 dark:bg-gray-800 rounded-md">
+                  <div className="flex flex-wrap gap-x-3 gap-y-1 p-2 bg-gray-50 dark:bg-gray-800 rounded-md">
                     {job.propertyTypes.map((type) => (
                       <span
                         key={type}
-                        className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full"
+                        className="inline-flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300"
+                        style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}
                       >
                         {type}
                         <button
@@ -440,7 +441,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                             const newTypes = job.propertyTypes?.filter(t => t !== type) || [];
                             onUpdateJob?.({ propertyTypes: newTypes });
                           }}
-                          className="ml-1 hover:bg-blue-200 dark:hover:bg-blue-800 rounded-full p-0.5"
+                          className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 font-bold text-base leading-none"
+                          title="Remove"
                         >
                           ×
                         </button>

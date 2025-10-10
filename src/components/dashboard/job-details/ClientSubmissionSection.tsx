@@ -1,10 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronRight, FileText, Download, ExternalLink, Upload, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronRight, FileText, Download, ExternalLink, Upload, Trash2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,8 +12,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { SectionProps } from "./types";
 import { supabase } from "@/integrations/supabase/client";
-import { RefreshCw } from "lucide-react";
 import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField } from "./ValcreStyles";
+import { sendToValcre } from "@/utils/webhooks/valcre";
+import { isValcreJobNumber } from "@/config/valcre";
 import {
   Select,
   SelectContent,
@@ -21,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const ClientSubmissionSection: React.FC<SectionProps> = ({
   job,
@@ -28,8 +30,78 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   onUpdateDetails,
   jobDetails
 }) => {
-  const [isSyncing, setIsSyncing] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
+  
+  // Auto-save state for section-level spinner
+  const [isSectionSaving, setIsSectionSaving] = useState(false);
+  const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
+  
+  // Fields that sync to Valcre
+  const VALCRE_SYNC_FIELDS = ['notes'];
+  
+  // Auto-save function
+  const autoSaveField = useCallback(async (fieldName: string, value: any) => {
+    if (!onUpdateJob) return;
+    
+    try {
+      setIsSectionSaving(true);
+      
+      // Always save to Supabase first
+      await onUpdateJob({ [fieldName]: value });
+      
+      // Check if this field should also sync to Valcre
+      const shouldSyncToValcre = VALCRE_SYNC_FIELDS.includes(fieldName) &&
+                                  isValcreJobNumber(jobDetails?.jobNumber) &&
+                                  jobDetails?.valcreJobId;
+      
+      if (shouldSyncToValcre) {
+        const syncData: any = {
+          jobId: jobDetails.valcreJobId,
+          jobNumber: jobDetails.jobNumber,
+          updateType: 'loe_details'
+        };
+        
+        // Map field names correctly
+        if (fieldName === 'notes') syncData.notes = value;
+        
+        console.log(`Syncing ${fieldName} to Valcre:`, syncData);
+        const result = await sendToValcre(syncData);
+        
+        if (!result.success) {
+          console.warn(`Failed to sync ${fieldName} to Valcre:`, result.error);
+          toast.error(`Failed to sync ${fieldName} to Valcre`);
+        }
+      }
+    } catch (error) {
+      console.error(`Error saving ${fieldName}:`, error);
+      toast.error(`Failed to save ${fieldName}`);
+    } finally {
+      setIsSectionSaving(false);
+    }
+  }, [onUpdateJob, jobDetails, VALCRE_SYNC_FIELDS]);
+  
+  // Handle field blur with debouncing
+  const handleBlur = useCallback((fieldName: string, value: any) => {
+    // Clear existing timer
+    if (debounceTimers.current[fieldName]) {
+      clearTimeout(debounceTimers.current[fieldName]);
+    }
+    
+    // Set new timer
+    debounceTimers.current[fieldName] = setTimeout(() => {
+      autoSaveField(fieldName, value);
+    }, 500);
+  }, [autoSaveField]);
+  
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(debounceTimers.current).forEach(timer => {
+        if (timer) clearTimeout(timer);
+      });
+    };
+  }, []);
+  
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -51,23 +123,6 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
     }
   };
 
-  const handleSyncToValcre = async () => {
-    if (!jobDetails?.valcreJobId) {
-      toast.error("Please create a Valcre job first (in Section 2)");
-      return;
-    }
-
-    setIsSyncing(true);
-    try {
-      // Sync logic here
-      toast.success("Client information synced to Valcre!");
-    } catch (error) {
-      console.error('Sync error:', error);
-      toast.error("Failed to sync to Valcre. Please try again.");
-    } finally {
-      setIsSyncing(false);
-    }
-  };
 
   const fillClientTestData = () => {
     if (!onUpdateJob) return;
@@ -278,25 +333,19 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full border rounded-lg">
       <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800`}>
-        <div className="flex items-center gap-2">
-          {isOpen ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}
-          <SectionTitle title="Client Information & Property Details" />
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center gap-2">
+            {isOpen ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}
+            <SectionTitle title="Client Information & Property Details" />
+          </div>
+          {isSectionSaving && (
+            <Loader2 className="h-4 w-4 text-gray-400 dark:text-gray-500 animate-spin mr-2" />
+          )}
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent className={sectionContentStyle}>
         {/* Action Buttons */}
-        <div className="flex justify-between items-center mb-6">
-          <Button
-            onClick={handleSyncToValcre}
-            disabled={isSyncing || !jobDetails?.valcreJobId}
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-2"
-          >
-            <RefreshCw className={`h-4 w-4 ${isSyncing ? 'animate-spin' : ''}`} />
-            {isSyncing ? 'Syncing...' : 'Sync to Valcre'}
-          </Button>
-
+        <div className="flex justify-end items-center mb-6">
           <button
             type="button"
             onClick={fillClientTestData}
@@ -375,32 +424,38 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
-            <CompactField label="Property Type">
-              <Select
-                value={job.propertyType || ''}
-                onValueChange={(value) => onUpdateJob?.({propertyType: value})}
-              >
-                <SelectTrigger className="h-7 text-sm max-w-[200px] text-center">
-                  <SelectValue placeholder="Select..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Agriculture">Agriculture</SelectItem>
-                  <SelectItem value="Building">Building</SelectItem>
-                  <SelectItem value="Healthcare">Healthcare</SelectItem>
-                  <SelectItem value="Hospitality">Hospitality</SelectItem>
-                  <SelectItem value="Industrial">Industrial</SelectItem>
-                  <SelectItem value="Land">Land</SelectItem>
-                  <SelectItem value="Manufactured Housing">Manufactured Housing</SelectItem>
-                  <SelectItem value="Multi-Family">Multi-Family</SelectItem>
-                  <SelectItem value="Office">Office</SelectItem>
-                  <SelectItem value="Retail">Retail</SelectItem>
-                  <SelectItem value="Self-Storage">Self-Storage</SelectItem>
-                  <SelectItem value="Single-Family">Single-Family</SelectItem>
-                  <SelectItem value="Special Purpose">Special Purpose</SelectItem>
-                  <SelectItem value="Unknown">Unknown</SelectItem>
-                </SelectContent>
-              </Select>
-            </CompactField>
+            <SectionGroup title="Property Types">
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                {['Agriculture', 'Building', 'Healthcare', 'Hospitality', 'Industrial', 'Land', 
+                  'Manufactured Housing', 'Multi-Family', 'Office', 'Retail', 'Self-Storage', 
+                  'Single-Family', 'Special Purpose', 'Unknown'].map((type) => {
+                  const selectedTypes = job.propertyTypes || [];
+                  const isChecked = selectedTypes.includes(type);
+                  
+                  return (
+                    <div key={type} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`property-type-${type}`}
+                        checked={isChecked}
+                        onCheckedChange={(checked) => {
+                          const currentTypes = job.propertyTypes || [];
+                          const newTypes = checked
+                            ? [...currentTypes, type]
+                            : currentTypes.filter(t => t !== type);
+                          onUpdateJob?.({ propertyTypes: newTypes });
+                        }}
+                      />
+                      <label
+                        htmlFor={`property-type-${type}`}
+                        className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+                      >
+                        {type}
+                      </label>
+                    </div>
+                  );
+                })}
+              </div>
+            </SectionGroup>
             <CompactField label="Address">
               <Input
                 value={job.propertyAddress || ''}
@@ -501,14 +556,16 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           </div>
         </SectionGroup>
 
-        {/* Additional Notes Section */}
-        <SectionGroup title="Additional Notes">
+        {/* Client Comments Section */}
+        <SectionGroup title="Client Comments">
           <TwoColumnFields>
-            <CompactField label="Notes" fullWidth>
+            <CompactField fullWidth>
               <Textarea
                 value={job.notes || ''}
                 onChange={(e) => onUpdateJob?.({notes: e.target.value})}
-                className="text-sm w-full"
+                onBlur={(e) => handleBlur('notes', e.target.value)}
+                rows={6}
+                className="text-sm w-full resize-none"
               />
             </CompactField>
           </TwoColumnFields>

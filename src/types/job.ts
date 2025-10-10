@@ -30,7 +30,8 @@ export interface JobSubmission {
   clientAddress?: string;
   propertyAddress: string;
   propertyName?: string;
-  propertyType?: string;
+  propertyType?: string; // Legacy single-select (keep for backwards compatibility)
+  propertyTypes?: string[]; // New multi-select array
   intendedUse?: string;
   assetCondition?: string;
   notes?: string;

@@ -191,6 +191,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     console.log("Received job data:", JSON.stringify(jobData, null, 2));
     console.log(`🔍 DEBUG - PropertyType in jobData: "${jobData.PropertyType}" (type: ${typeof jobData.PropertyType})`);
+    
+    // Additional logging for PropertyType and PropertyContact investigation
+    console.log('📥 Received jobData.PropertyType:', jobData.PropertyType);
+    console.log('📥 Received jobData.PropertyContact:', JSON.stringify(jobData.PropertyContact, null, 2));
 
     // Check for update operations
     if (jobData.updateType && jobData.jobId) {
@@ -499,8 +503,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.log("Creating separate Property Contact entity...");
       const propertyContactData = {
         Company: jobData.PropertyContact.Company || contactCompany,
-        FirstName: jobData.PropertyContact.FirstName || firstName,
-        LastName: jobData.PropertyContact.LastName || lastName,
+        FirstName: jobData.PropertyContact.FirstName || clientFirstName,
+        LastName: jobData.PropertyContact.LastName || clientLastName,
         AddressStreet:
           jobData.PropertyContact.AddressStreet || addressParts.street,
         AddressCity: addressParts.city,
@@ -511,6 +515,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         Title: jobData.PropertyContact.Title || "Property Contact",
         OwnerId: 7095, // Chris's correct OwnerId
       };
+
+      // Additional logging for PropertyContact investigation
+      console.log('👤 Creating PropertyContact with data:', JSON.stringify(propertyContactData, null, 2));
 
       const propContactResponse = await fetch(
         "https://api-core.valcre.com/api/v1/Contacts",
@@ -528,10 +535,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const propContact = await propContactResponse.json();
         propertyContactId = propContact.Id || propContact.id;
         console.log("✅ Property Contact created with ID:", propertyContactId);
+        console.log('✅ Contact entity response:', JSON.stringify(propContact, null, 2));
       } else {
+        const errorText = await propContactResponse.text();
         console.log(
           "⚠️ Failed to create separate Property Contact, will use ClientId",
         );
+        console.log('❌ Contact creation error:', errorText);
       }
     } else {
       // CRITICAL FIX: Leave propertyContactId as null - don't default to clientId
@@ -571,7 +581,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
     if (jobData.PropertySubtype)
       propertyData.SecondaryType = jobData.PropertySubtype;
-    if (jobData.PropertyTypeEnum) propertyData.Types = jobData.PropertyTypeEnum;
+    
+    // Support both single PropertyTypeEnum and array PropertyTypes
+    if (jobData.PropertyTypes && Array.isArray(jobData.PropertyTypes)) {
+      propertyData.Types = jobData.PropertyTypes; // Multi-select array
+      console.log(`✅ Types (multi-select) set to: ${JSON.stringify(propertyData.Types)}`);
+    } else if (jobData.PropertyTypeEnum) {
+      propertyData.Types = jobData.PropertyTypeEnum; // Legacy single value (kept for backwards compatibility)
+      console.log(`✅ Types (single-select legacy) set to: "${propertyData.Types}"`);
+    }
     if (jobData.BuildingSize) propertyData.SizeSF = jobData.BuildingSize;
     if (jobData.GrossBuildingAreaSf)
       propertyData.SizeSF = jobData.GrossBuildingAreaSf;
@@ -655,6 +673,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const propertyResponseText = await propertyResponse.text();
     console.log("Property Response Status:", propertyResponse.status);
     console.log("Property Response:", propertyResponseText);
+    
+    // Additional logging for PropertyType investigation
+    try {
+      const propertyBody = JSON.parse(propertyResponseText);
+      console.log('✅ Property API response:', JSON.stringify(propertyBody, null, 2));
+    } catch (e) {
+      console.log('✅ Property API response (raw text):', propertyResponseText);
+    }
 
     if (!propertyResponse.ok) {
       console.error("Failed to create Property:", propertyResponseText);

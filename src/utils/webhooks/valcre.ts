@@ -183,7 +183,8 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
     const addressParts = parseAddress(formData.propertyAddress);
 
     // Debug logging for PropertyType and PropertyContact
-    console.log('🏢 PropertyType from UI:', formData.propertyType);
+    console.log('🏢 PropertyType from UI (legacy single):', formData.propertyType);
+    console.log('🏢 PropertyTypes from UI (new multi-select):', formData.propertyTypes);
     console.log('👤 PropertyContact fields:', {
       firstName: formData.propertyContactFirstName,
       lastName: formData.propertyContactLastName,
@@ -208,8 +209,10 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       PropertyAddress: formData.propertyAddress,
 
       // Property fields (will be used for Property entity)
-      PropertyType: formData.propertyType || 'Commercial',
-      PropertyTypeEnum: formData.propertyType || 'Commercial',  // Also send as PropertyTypeEnum for api/valcre Types field mapping
+      // Support both legacy single-select and new multi-select
+      PropertyType: formData.propertyTypes?.[0] || formData.propertyType || 'Commercial', // First type for backwards compatibility
+      PropertyTypeEnum: formData.propertyTypes?.[0] || formData.propertyType || 'Commercial',  // First type for PropertyTypeEnum mapping
+      PropertyTypes: formData.propertyTypes && formData.propertyTypes.length > 0 ? formData.propertyTypes : [formData.propertyType || 'Commercial'], // Array for Valcre Types field
       PropertySubtype: formData.propertySubtype || '',
       BuildingSize: formData.buildingSize || formData.sizeSF || 0,
       NumberOfUnits: formData.numberOfUnits || formData.buildingsCount || 1,

@@ -555,30 +555,31 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           </TwoColumnFields>
 
           {/* Property Contact Information */}
-          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="mt-3">
+            <h4 className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Property Contact</h4>
             <TwoColumnFields>
-              <CompactField label="Property Contact or Department">
+              <CompactField label="First Name">
                 <Input
                   value={job.propertyContactFirstName || ''}
                   onChange={(e) => onUpdateJob?.({propertyContactFirstName: e.target.value})}
                   className="h-7 text-sm max-w-[200px]"
                 />
               </CompactField>
-              <CompactField label="Property Contact Last Name">
+              <CompactField label="Last Name">
                 <Input
                   value={job.propertyContactLastName || ''}
                   onChange={(e) => onUpdateJob?.({propertyContactLastName: e.target.value})}
                   className="h-7 text-sm max-w-[200px]"
                 />
               </CompactField>
-              <CompactField label="Property Contact Email">
+              <CompactField label="Email">
                 <Input
                   value={job.propertyContactEmail || ''}
                   onChange={(e) => onUpdateJob?.({propertyContactEmail: e.target.value})}
                   className="h-7 text-sm max-w-[200px]"
                 />
               </CompactField>
-              <CompactField label="Property Contact Phone">
+              <CompactField label="Phone">
                 <Input
                   type="tel"
                   value={job.propertyContactPhone ? formatPhoneNumber(job.propertyContactPhone) : ''}

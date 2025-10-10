@@ -1,0 +1,222 @@
+{
+  "testResults": {
+    "environment": {
+      "url": "http://localhost:8080/dashboard",
+      "job": "VAL251022",
+      "testDate": "2025-10-10T18:47:55.376Z"
+    },
+    "tests": [
+      {
+        "field": "PropertyType",
+        "action": "Changed to \"Multi-Family\"",
+        "consoleLogs": [],
+        "errors": [],
+        "networkErrors": [],
+        "result": "Field not found"
+      },
+      {
+        "field": "propertyContactFirstName",
+        "action": "Changed to \"TestFirst\"",
+        "consoleLogs": [],
+        "errors": [],
+        "networkErrors": [],
+        "result": "Field not found"
+      },
+      {
+        "field": "propertyContactLastName",
+        "action": "Changed to \"TestLast\"",
+        "consoleLogs": [],
+        "errors": [],
+        "networkErrors": [],
+        "result": "Field not found"
+      },
+      {
+        "field": "propertyContactEmail",
+        "action": "Changed to \"test@example.com\"",
+        "consoleLogs": [],
+        "errors": [],
+        "networkErrors": [],
+        "result": "Field not found"
+      },
+      {
+        "field": "propertyContactPhone",
+        "action": "Changed to \"555-1234\"",
+        "consoleLogs": [],
+        "errors": [],
+        "networkErrors": [],
+        "result": "Field not found"
+      }
+    ]
+  },
+  "consoleLogs": [
+    {
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "timestamp": "2025-10-10T18:47:55.534Z"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected.",
+      "timestamp": "2025-10-10T18:47:55.537Z"
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+      "timestamp": "2025-10-10T18:47:55.871Z"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Testing Environment Variables:",
+      "timestamp": "2025-10-10T18:47:55.881Z"
+    },
+    {
+      "type": "log",
+      "text": "=====================================",
+      "timestamp": "2025-10-10T18:47:55.881Z"
+    },
+    {
+      "type": "log",
+      "text": "✅ VITE_SUPABASE_URL: https://ngovnamnjmexdpjtcnky.supabase.co",
+      "timestamp": "2025-10-10T18:47:55.881Z"
+    },
+    {
+      "type": "log",
+      "text": "✅ VITE_SUPABASE_PUBLISHABLE_KEY: eyJhbGciOiJIUzI1NiIs...[hidden]",
+      "timestamp": "2025-10-10T18:47:55.881Z"
+    },
+    {
+      "type": "log",
+      "text": "✅ VITE_SUPABASE_PROJECT_ID: ngovnamnjmexdpjtcnky",
+      "timestamp": "2025-10-10T18:47:55.881Z"
+    },
+    {
+      "type": "log",
+      "text": "✅ MODE: development",
+      "timestamp": "2025-10-10T18:47:55.881Z"
+    },
+    {
+      "type": "log",
+      "text": "✅ DEV: true",
+      "timestamp": "2025-10-10T18:47:55.882Z"
+    },
+    {
+      "type": "log",
+      "text": "✅ PROD: false",
+      "timestamp": "2025-10-10T18:47:55.882Z"
+    },
+    {
+      "type": "log",
+      "text": "=====================================",
+      "timestamp": "2025-10-10T18:47:55.882Z"
+    },
+    {
+      "type": "log",
+      "text": "📎 Constructed URL: https://ngovnamnjmexdpjtcnky.supabase.co/functions/v1/docuseal-proxy?endpoint=templates/html",
+      "timestamp": "2025-10-10T18:47:55.882Z"
+    },
+    {
+      "type": "log",
+      "text": "✅ Valid URL: ngovnamnjmexdpjtcnky.supabase.co",
+      "timestamp": "2025-10-10T18:47:55.882Z"
+    },
+    {
+      "type": "log",
+      "text": "Fetching jobs from Supabase...",
+      "timestamp": "2025-10-10T18:47:55.930Z"
+    },
+    {
+      "type": "log",
+      "text": "Fetching jobs from Supabase...",
+      "timestamp": "2025-10-10T18:47:55.930Z"
+    },
+    {
+      "type": "log",
+      "text": "Supabase jobs: [Object, Object, Object, Object]",
+      "timestamp": "2025-10-10T18:47:56.546Z"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+      "timestamp": "2025-10-10T18:47:56.546Z"
+    },
+    {
+      "type": "log",
+      "text": "Supabase jobs: [Object, Object, Object, Object]",
+      "timestamp": "2025-10-10T18:47:56.668Z"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+      "timestamp": "2025-10-10T18:47:56.668Z"
+    },
+    {
+      "type": "log",
+      "text": "⚠️ No files found for job. Error: null Data: []",
+      "timestamp": "2025-10-10T18:47:59.270Z"
+    },
+    {
+      "type": "log",
+      "text": "📋 Final job object with files: {id: 07cf8010-2eed-474d-8ba9-54da48b4b9f7, clientFirstName: Sarah, clientLastName: Brown, clientEmail: sarah.brown@urbandevelopmentgroup.ca, clientPhone: 403-555-0100}",
+      "timestamp": "2025-10-10T18:47:59.270Z"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Fetching LOE details for job_id: 07cf8010-2eed-474d-8ba9-54da48b4b9f7",
+      "timestamp": "2025-10-10T18:47:59.270Z"
+    },
+    {
+      "type": "log",
+      "text": "📋 LOE data received: {id: c58fd14f-2e7a-4bbd-a485-c221da5bff1f, job_id: 07cf8010-2eed-474d-8ba9-54da48b4b9f7, property_rights_appraised: Other, valuation_premises: Market Value As Is And Stabilized, delivery_date: 2025-10-23}",
+      "timestamp": "2025-10-10T18:47:59.457Z"
+    },
+    {
+      "type": "log",
+      "text": "✅ VAL Number found in LOE details: VAL251022",
+      "timestamp": "2025-10-10T18:47:59.457Z"
+    },
+    {
+      "type": "log",
+      "text": "✅ Updated job.jobNumber for detail view: VAL251022",
+      "timestamp": "2025-10-10T18:47:59.457Z"
+    },
+    {
+      "type": "log",
+      "text": "📁 ClientSubmissionSection - job.files: undefined",
+      "timestamp": "2025-10-10T18:47:59.627Z"
+    },
+    {
+      "type": "log",
+      "text": "📁 ClientSubmissionSection - files count: 0",
+      "timestamp": "2025-10-10T18:47:59.627Z"
+    },
+    {
+      "type": "log",
+      "text": "🔍 [ClickUp] Component state: {jobId: 07cf8010-2eed-474d-8ba9-54da48b4b9f7, jobNumber: VAL251022, hasJobNumber: true, hasClickUpTask: true, clickupTaskId: 86b70w422}",
+      "timestamp": "2025-10-10T18:47:59.640Z"
+    },
+    {
+      "type": "log",
+      "text": "🔍 [ClickUp] Component state: {jobId: 07cf8010-2eed-474d-8ba9-54da48b4b9f7, jobNumber: VAL251022, hasJobNumber: true, hasClickUpTask: true, clickupTaskId: 86b70w422}",
+      "timestamp": "2025-10-10T18:47:59.676Z"
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 400 ()",
+      "timestamp": "2025-10-10T18:48:00.154Z"
+    },
+    {
+      "type": "error",
+      "text": "Error creating documents bucket: StorageApiError: new row violates row-level security policy\n    at http://localhost:8080/node_modules/.vite/deps/@supabase_supabase-js.js?v=f8ccc993:3042:14",
+      "timestamp": "2025-10-10T18:48:00.154Z"
+    }
+  ],
+  "errors": [],
+  "networkErrors": [
+    {
+      "url": "https://ngovnamnjmexdpjtcnky.supabase.co/storage/v1/bucket",
+      "status": 400,
+      "statusText": "",
+      "timestamp": "2025-10-10T18:48:00.153Z"
+    }
+  ]
+}

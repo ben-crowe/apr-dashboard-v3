@@ -7,12 +7,8 @@ import {
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { SectionProps } from "./types";
-import { sendToValcre } from "@/utils/webhooks";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { RefreshCw } from "lucide-react";
 import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField } from "./ValcreStyles";
 
 const PropertyInfoSection: React.FC<SectionProps> = ({
@@ -20,7 +16,6 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
   jobDetails = {},
   onUpdateDetails
 }) => {
-  const [isSyncing, setIsSyncing] = useState(false);
   const [isOpen, setIsOpen] = useState(true); // Default to open
 
   // Format number with commas (e.g., 3000 -> 3,000)
@@ -110,69 +105,6 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
     toast.success('Test data populated for Section 3B!');
   };
 
-  const handleSyncToValcre = async () => {
-    if (!job || !jobDetails?.valcreJobId) return;
-    
-    setIsSyncing(true);
-    
-    try {
-      // Prepare property research data for Valcre
-      const propertyData = {
-        jobId: jobDetails.valcreJobId,
-        jobNumber: jobDetails.jobNumber,
-        updateType: 'property_research',
-        // Property Site data
-        zoningClassification: jobDetails.zoningClassification || '',
-        zoneAbbreviation: jobDetails.zoneAbbreviation || '',
-        landUseDesignation: jobDetails.landUseDesignation || '',
-        floodZone: jobDetails.floodZone || '',
-        utilities: jobDetails.utilities || '',
-        // Parcels Summary
-        parcelNumber: jobDetails.parcelNumber || '',
-        grossBuildingAreaSf: jobDetails.grossBuildingAreaSf || 0,
-        netRentableAreaSf: jobDetails.netRentableAreaSf || 0,
-        yearBuilt: jobDetails.yearBuilt || '',
-        usableLandSf: jobDetails.usableLandSf || 0,
-        grossLandSf: jobDetails.grossLandSf || 0,
-        // Assessments & Taxes
-        assessmentYear: jobDetails.assessmentYear || '',
-        landAssessmentValue: jobDetails.landAssessmentValue || 0,
-        improvedAssessmentValue: jobDetails.improvedAssessmentValue || 0,
-        totalAssessmentValue: jobDetails.totalAssessmentValue || 0,
-        assessedValue: jobDetails.assessedValue || 0,
-        taxes: jobDetails.taxes || 0,
-        timestamp: new Date().toISOString(),
-      };
-      
-      console.log('Syncing property research to Valcre:', propertyData);
-      const result = await sendToValcre(propertyData);
-      
-      if (result.success) {
-        toast.success(
-          <div>
-            <div>✅ Property data synced to Valcre!</div>
-            <div className="text-xs mt-1">Job: {jobDetails.jobNumber}</div>
-          </div>
-        );
-        
-        // Update sync timestamp
-        await supabase
-          .from('job_loe_details')
-          .update({
-            last_property_sync_at: new Date().toISOString()
-          })
-          .eq('job_id', job.id);
-          
-      } else {
-        toast.error(result.error || 'Failed to sync property data');
-      }
-    } catch (error: any) {
-      console.error('Error syncing to Valcre:', error);
-      toast.error('Failed to sync property data to Valcre');
-    } finally {
-      setIsSyncing(false);
-    }
-  };
 
   return <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full border rounded-lg">
       <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800`}>
@@ -183,31 +115,7 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
       </CollapsibleTrigger>
       <CollapsibleContent className={sectionContentStyle}>
           {/* Action Buttons Row - Compact */}
-          <div className="mb-4 flex justify-start gap-2">
-            {/* Sync Button - Only show when job exists */}
-            {jobDetails?.jobNumber && jobDetails.jobNumber.toString().startsWith('VAL') && (
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleSyncToValcre}
-                disabled={isSyncing}
-                className="border-green-600 text-green-700 hover:bg-green-50"
-              >
-                {isSyncing ? (
-                  <>
-                    <RefreshCw className="h-4 w-4 mr-1 animate-spin" />
-                    Syncing...
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="h-4 w-4 mr-1" />
-                    Sync to Valcre
-                  </>
-                )}
-              </Button>
-            )}
-            
+          <div className="mb-4 flex justify-end gap-2">
             {/* Test Data Button */}
             <button
               type="button"

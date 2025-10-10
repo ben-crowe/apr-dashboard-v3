@@ -1,0 +1,249 @@
+{
+  "timestamp": "2025-10-10T19:04:06.317Z",
+  "emojiLogs": [
+    "[19:03:38] 🔍 Testing Environment Variables:",
+    "[19:03:38] ✅ VITE_SUPABASE_URL: https://ngovnamnjmexdpjtcnky.supabase.co",
+    "[19:03:38] ✅ VITE_SUPABASE_PUBLISHABLE_KEY: eyJhbGciOiJIUzI1NiIs...[hidden]",
+    "[19:03:38] ✅ VITE_SUPABASE_PROJECT_ID: ngovnamnjmexdpjtcnky",
+    "[19:03:38] ✅ MODE: development",
+    "[19:03:38] ✅ DEV: true",
+    "[19:03:38] ✅ PROD: false",
+    "[19:03:38] ✅ Valid URL: ngovnamnjmexdpjtcnky.supabase.co",
+    "[19:03:39] 🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+    "[19:03:39] 🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+    "[19:03:42] 🔍 Testing Environment Variables:",
+    "[19:03:42] ✅ VITE_SUPABASE_URL: https://ngovnamnjmexdpjtcnky.supabase.co",
+    "[19:03:42] ✅ VITE_SUPABASE_PUBLISHABLE_KEY: eyJhbGciOiJIUzI1NiIs...[hidden]",
+    "[19:03:42] ✅ VITE_SUPABASE_PROJECT_ID: ngovnamnjmexdpjtcnky",
+    "[19:03:42] ✅ MODE: development",
+    "[19:03:42] ✅ DEV: true",
+    "[19:03:42] ✅ PROD: false",
+    "[19:03:42] ✅ Valid URL: ngovnamnjmexdpjtcnky.supabase.co",
+    "[19:03:42] 🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+    "[19:03:42] 🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}"
+  ],
+  "relevantLogs": [
+    {
+      "type": "log",
+      "text": "🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+      "timestamp": "19:03:39"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+      "timestamp": "19:03:39"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+      "timestamp": "19:03:42"
+    }
+  ],
+  "allLogs": [
+    {
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected.",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Testing Environment Variables:",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "=====================================",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "✅ VITE_SUPABASE_URL: https://ngovnamnjmexdpjtcnky.supabase.co",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "✅ VITE_SUPABASE_PUBLISHABLE_KEY: eyJhbGciOiJIUzI1NiIs...[hidden]",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "✅ VITE_SUPABASE_PROJECT_ID: ngovnamnjmexdpjtcnky",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "✅ MODE: development",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "✅ DEV: true",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "✅ PROD: false",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "=====================================",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "📎 Constructed URL: https://ngovnamnjmexdpjtcnky.supabase.co/functions/v1/docuseal-proxy?endpoint=templates/html",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "✅ Valid URL: ngovnamnjmexdpjtcnky.supabase.co",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "Fetching jobs from Supabase...",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "Fetching jobs from Supabase...",
+      "timestamp": "19:03:38"
+    },
+    {
+      "type": "log",
+      "text": "Supabase jobs: [Object, Object, Object, Object]",
+      "timestamp": "19:03:39"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+      "timestamp": "19:03:39"
+    },
+    {
+      "type": "log",
+      "text": "Supabase jobs: [Object, Object, Object, Object]",
+      "timestamp": "19:03:39"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+      "timestamp": "19:03:39"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connecting...",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "debug",
+      "text": "[vite] connected.",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "info",
+      "text": "%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Testing Environment Variables:",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "=====================================",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "✅ VITE_SUPABASE_URL: https://ngovnamnjmexdpjtcnky.supabase.co",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "✅ VITE_SUPABASE_PUBLISHABLE_KEY: eyJhbGciOiJIUzI1NiIs...[hidden]",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "✅ VITE_SUPABASE_PROJECT_ID: ngovnamnjmexdpjtcnky",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "✅ MODE: development",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "✅ DEV: true",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "✅ PROD: false",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "=====================================",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "📎 Constructed URL: https://ngovnamnjmexdpjtcnky.supabase.co/functions/v1/docuseal-proxy?endpoint=templates/html",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "✅ Valid URL: ngovnamnjmexdpjtcnky.supabase.co",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "Fetching jobs from Supabase...",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "Fetching jobs from Supabase...",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "Supabase jobs: [Object, Object, Object, Object]",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "Supabase jobs: [Object, Object, Object, Object]",
+      "timestamp": "19:03:42"
+    },
+    {
+      "type": "log",
+      "text": "🔍 Latest job from database: {id: af8030cc-4920-4ed9-be24-f5bd9e8ea417, property_type: , intended_use: null, asset_condition: null, property_name: null}",
+      "timestamp": "19:03:42"
+    }
+  ]
+}

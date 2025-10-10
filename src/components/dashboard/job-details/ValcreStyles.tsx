@@ -37,7 +37,7 @@ export const SectionGroup = ({
   title,
   children
 }: { 
-  title: string;
+  title: string | React.ReactNode;
   children: React.ReactNode;
 }) => (
   <div className="mb-6 mt-4">
@@ -70,15 +70,17 @@ export const CompactField = ({
   fullWidth = false,
   className = "" 
 }: { 
-  label: string; 
+  label?: string | React.ReactNode; 
   children: React.ReactNode;
   fullWidth?: boolean;
   className?: string;
 }) => (
   <div className={`flex items-center gap-2 py-0.5 ${fullWidth ? 'md:col-span-2' : ''} ${className}`}>
-    <label className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap min-w-[140px] text-right">
-      {label}:
-    </label>
+    {label && (
+      <label className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap min-w-[140px] text-right">
+        {typeof label === 'string' ? `${label}:` : label}
+      </label>
+    )}
     <div className="flex-1">
       {children}
     </div>

@@ -1,11 +1,11 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField } from "./ValcreStyles";
 import { Input } from "@/components/ui/input";
@@ -18,7 +18,7 @@ import JobNumberField from "./loe-quote/JobNumberField";
 import { sendToValcre } from "@/utils/webhooks";
 import { supabase } from "@/integrations/supabase/client";
 import { generateAppraisalTestData } from "@/utils/testDataGenerator";
-import { FileSignature, AlertCircle, RefreshCw, ExternalLink } from "lucide-react";
+import { FileSignature, AlertCircle, ExternalLink } from "lucide-react";
 import { validateRequiredFields } from "@/utils/webhooks/docuseal";
 import { generateLOEHTML, generateAndSendLOE, sendLOEEmail } from "@/utils/loe/generateLOE";
 import LOEPreviewModal from "./actions/LOEPreviewModal";
@@ -47,10 +47,15 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     missingFields: string[];
   }>({ isValid: false, missingFields: [] });
 
-  // Track if LOE details have been modified since last sync
-  const [hasUnsyncedChanges, setHasUnsyncedChanges] = useState(false);
-  const [originalLoeDetails, setOriginalLoeDetails] = useState<any>(null);
-  const [isSyncingLoe, setIsSyncingLoe] = useState(false);
+  // Section-level save state for visual feedback
+  const [isSectionSaving, setIsSectionSaving] = useState(false);
+  const [fieldStates, setFieldStates] = useState<Record<string, 'idle' | 'saving' | 'success'>>({});
+  
+  // Debounce timers
+  const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
+
+  // Fields that sync to Valcre (from valcre.ts lines 231-248)
+  const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments'];
 
   // Check if document was already sent
   const alreadySent = jobDetails.docusealSubmissionId ||
@@ -62,48 +67,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     const result = validateRequiredFields(job, jobDetails);
     setValidation(result);
   }, [job, jobDetails]);
-
-  // REMOVED - We don't need this check anymore
-
-  // Track original LOE details ONLY after a job has been created
-  // This prevents the sync button from appearing before there's anything to sync to
-  useEffect(() => {
-    // Only set original details if we have a Valcre job to sync to
-    const hasValcreJob = isValcreJobNumber(jobDetails?.jobNumber) &&
-                         jobDetails?.valcreJobId;
-
-    if (hasValcreJob && jobDetails && !originalLoeDetails) {
-      setOriginalLoeDetails({
-        propertyRightsAppraised: jobDetails.propertyRightsAppraised,
-        valuationPremises: jobDetails.valuationPremises,
-        deliveryDate: jobDetails.deliveryDate,
-        scopeOfWork: jobDetails.scopeOfWork,
-        paymentTerms: jobDetails.paymentTerms,
-        appraisalFee: jobDetails.appraisalFee,
-        retainerAmount: jobDetails.retainerAmount,
-        reportType: jobDetails.reportType,
-        appraiserComments: jobDetails.appraiserComments
-      });
-    }
-  }, [jobDetails?.jobNumber, jobDetails?.valcreJobId, jobDetails, originalLoeDetails]);
-
-  // Detect changes in LOE details
-  useEffect(() => {
-    if (originalLoeDetails && jobDetails) {
-      const hasChanges =
-        originalLoeDetails.propertyRightsAppraised !== jobDetails.propertyRightsAppraised ||
-        originalLoeDetails.valuationPremises !== jobDetails.valuationPremises ||
-        originalLoeDetails.deliveryDate !== jobDetails.deliveryDate ||
-        originalLoeDetails.scopeOfWork !== jobDetails.scopeOfWork ||
-        originalLoeDetails.paymentTerms !== jobDetails.paymentTerms ||
-        originalLoeDetails.appraisalFee !== jobDetails.appraisalFee ||
-        originalLoeDetails.retainerAmount !== jobDetails.retainerAmount ||
-        originalLoeDetails.reportType !== jobDetails.reportType ||
-        originalLoeDetails.appraiserComments !== jobDetails.appraiserComments;
-
-      setHasUnsyncedChanges(hasChanges);
-    }
-  }, [jobDetails, originalLoeDetails]);
 
   // Check if required fields are filled for Create Valcre button
   const canCreateValcreJob = React.useMemo(() => {
@@ -193,21 +156,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               // Don't store the PENDING values - INTEGER columns can't handle them
               // Will update with real values when Valcre webhook fires
             });
-
-          // Reset original details even for PENDING jobs
-          // The job was JUST created with these values - no need to sync
-          setOriginalLoeDetails({
-            propertyRightsAppraised: jobDetails.propertyRightsAppraised,
-            valuationPremises: jobDetails.valuationPremises,
-            deliveryDate: jobDetails.deliveryDate,
-            scopeOfWork: jobDetails.scopeOfWork,
-            paymentTerms: jobDetails.paymentTerms,
-            appraisalFee: jobDetails.appraisalFee,
-            retainerAmount: jobDetails.retainerAmount,
-            reportType: jobDetails.reportType,
-            appraiserComments: jobDetails.appraiserComments
-          });
-          setHasUnsyncedChanges(false);
         } else {
           // We got real values from Valcre - store them
           // Parse jobId to ensure it's numeric for the INTEGER column
@@ -299,21 +247,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               </a>
             </div>
           );
-
-          // CRITICAL: Reset the original LOE details after job creation
-          // This prevents the Sync button from appearing immediately
-          setOriginalLoeDetails({
-            propertyRightsAppraised: jobDetails.propertyRightsAppraised,
-            valuationPremises: jobDetails.valuationPremises,
-            deliveryDate: jobDetails.deliveryDate,
-            scopeOfWork: jobDetails.scopeOfWork,
-            paymentTerms: jobDetails.paymentTerms,
-            appraisalFee: jobDetails.appraisalFee,
-            retainerAmount: jobDetails.retainerAmount,
-            reportType: jobDetails.reportType,
-            appraiserComments: jobDetails.appraiserComments
-          });
-          setHasUnsyncedChanges(false);
         }
       } else {
         toast.error(result.error || 'Failed to create Valcre job');
@@ -326,82 +259,89 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     }
   };
 
-  // Handle syncing LOE details to existing Valcre job (Section 2)
-  const handleSyncToValcre = async () => {
-    if (!job || !jobDetails?.valcreJobId) return;
+  // Auto-save function with Valcre sync
+  const autoSaveField = useCallback(async (fieldName: string, value: any) => {
+    if (!job || !onUpdateDetails) return;
 
-    setIsSyncingLoe(true);
-
-    try {
-      // Prepare LOE details for Valcre sync
-      const loeData = {
-        jobId: jobDetails.valcreJobId, // Use the stored Valcre job ID
-        jobNumber: jobDetails.jobNumber,
-        updateType: 'loe_details',
-        // Include ALL LOE details for sync
-        appraisalFee: jobDetails?.appraisalFee || 0,
-        scopeOfWork: jobDetails?.scopeOfWork || '',
-        valuationPremises: jobDetails?.valuationPremises || '',
-        propertyRightsAppraised: jobDetails?.propertyRightsAppraised || '',
-        reportType: jobDetails?.reportType || '',
-        deliveryDate: jobDetails?.deliveryDate || '',
-        paymentTerms: jobDetails?.paymentTerms || '',
-        retainerAmount: jobDetails?.retainerAmount || '',
-        appraiserComments: jobDetails?.appraiserComments || '',
-        timestamp: new Date().toISOString(),
-      };
-
-      console.log('Syncing LOE details to Valcre:', loeData);
-      const result = await sendToValcre(loeData);
-
-      if (result.success) {
-        toast.success(
-          <div>
-            <div>✅ LOE details synced to Valcre!</div>
-            <div>Job Number: {jobDetails.jobNumber}</div>
-            <a
-              href={`https://app.valcre.com/job/edit/${jobDetails.valcreJobId}#job`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: '#3b82f6', textDecoration: 'underline' }}
-            >
-              View in Valcre →
-            </a>
-          </div>
-        );
-
-        // Update timestamp in database
-        await supabase
-          .from('job_loe_details')
-          .update({
-            last_synced_at: new Date().toISOString()
-          })
-          .eq('job_id', job.id);
-
-        // Update original details to current after successful sync
-        setOriginalLoeDetails({
-          propertyRightsAppraised: jobDetails.propertyRightsAppraised,
-          valuationPremises: jobDetails.valuationPremises,
-          deliveryDate: jobDetails.deliveryDate,
-          scopeOfWork: jobDetails.scopeOfWork,
-          paymentTerms: jobDetails.paymentTerms,
-          appraisalFee: jobDetails.appraisalFee,
-          retainerAmount: jobDetails.retainerAmount,
-          reportType: jobDetails.reportType,
-          appraiserComments: jobDetails.appraiserComments
-        });
-        setHasUnsyncedChanges(false);
-
-      } else {
-        toast.error(result.error || 'Failed to sync LOE details');
-      }
-    } catch (error: any) {
-      console.error('Error syncing to Valcre:', error);
-      toast.error('Failed to sync to Valcre. Check console for details.');
-    } finally {
-      setIsSyncingLoe(false);
+    // Clear any existing debounce timer for this field
+    if (debounceTimers.current[fieldName]) {
+      clearTimeout(debounceTimers.current[fieldName]);
     }
-  };
+
+    // Set field to saving state after 500ms
+    debounceTimers.current[fieldName] = setTimeout(async () => {
+      setFieldStates(prev => ({ ...prev, [fieldName]: 'saving' }));
+      setIsSectionSaving(true);
+
+      try {
+        // Always save to Supabase first
+        const { error: supabaseError } = await supabase
+          .from('job_loe_details')
+          .upsert({
+            job_id: job.id,
+            [fieldName]: value,
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'job_id'
+          });
+
+        if (supabaseError) {
+          console.error('Supabase save error:', supabaseError);
+          toast.error(`Failed to save ${fieldName}`);
+          setFieldStates(prev => ({ ...prev, [fieldName]: 'idle' }));
+          setIsSectionSaving(false);
+          return;
+        }
+
+        // Check if this field should also sync to Valcre
+        const shouldSyncToValcre = VALCRE_SYNC_FIELDS.includes(fieldName) &&
+                                    isValcreJobNumber(jobDetails?.jobNumber) &&
+                                    jobDetails?.valcreJobId;
+
+        if (shouldSyncToValcre) {
+          // Prepare sync data for Valcre
+          const syncData: any = {
+            jobId: jobDetails.valcreJobId,
+            jobNumber: jobDetails.jobNumber,
+            updateType: 'loe_details',
+            timestamp: new Date().toISOString(),
+          };
+
+          // Map field names to Valcre format
+          if (fieldName === 'appraisalFee') syncData.appraisalFee = value;
+          if (fieldName === 'retainerAmount') syncData.retainerAmount = value;
+          if (fieldName === 'deliveryDate') syncData.deliveryDate = value;
+          if (fieldName === 'paymentTerms') syncData.paymentTerms = value;
+          if (fieldName === 'appraiserComments') syncData.appraiserComments = value;
+
+          console.log(`Syncing ${fieldName} to Valcre:`, syncData);
+          const result = await sendToValcre(syncData);
+
+          if (!result.success) {
+            console.error('Valcre sync failed:', result.error);
+            // Don't show error toast - Supabase save was successful
+          }
+        }
+
+        // Clear field and section saving states
+        setFieldStates(prev => ({ ...prev, [fieldName]: 'idle' }));
+        setIsSectionSaving(false);
+
+      } catch (error: any) {
+        console.error('Auto-save error:', error);
+        toast.error(`Failed to save ${fieldName}`);
+        setFieldStates(prev => ({ ...prev, [fieldName]: 'idle' }));
+        setIsSectionSaving(false);
+      }
+    }, 500); // 500ms debounce
+  }, [job, jobDetails, onUpdateDetails, VALCRE_SYNC_FIELDS]);
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(debounceTimers.current).forEach(timer => clearTimeout(timer));
+    };
+  }, []);
 
   // Currency formatting helpers
   const formatCurrency = (value: string | number): string => {
@@ -417,17 +357,26 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     return value.replace(/[^0-9.]/g, '');
   };
 
-  // Handle currency field changes (appraisalFee, retainerAmount)
+  // Handle currency field changes (appraisalFee, retainerAmount) with auto-save
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!onUpdateDetails) return;
     const { name, value } = e.target;
     const rawValue = unformatCurrency(value);
+    const numericValue = rawValue ? parseFloat(rawValue) : 0;
+    
     onUpdateDetails({
-      [name]: rawValue ? parseFloat(rawValue) : 0
+      [name]: numericValue
     });
   };
 
-  // Handle input changes
+  const handleCurrencyBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const rawValue = unformatCurrency(value);
+    const numericValue = rawValue ? parseFloat(rawValue) : 0;
+    autoSaveField(name, numericValue);
+  };
+
+  // Handle input changes with auto-save
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (!onUpdateDetails) return;
     const { name, value, type } = e.target;
@@ -444,12 +393,25 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     });
   };
 
-  // Handle select changes
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    let processedValue: string | number = value;
+
+    if ((type === 'number' || name === 'appraisalFee') && value !== '') {
+      const cleanValue = value.replace(/[^0-9.]/g, '');
+      processedValue = cleanValue ? parseFloat(cleanValue) : 0;
+    }
+    
+    autoSaveField(name, processedValue);
+  };
+
+  // Handle select changes with auto-save
   const handleSelectChange = (value: string, name: string) => {
     if (!onUpdateDetails) return;
     onUpdateDetails({
       [name]: value
     });
+    autoSaveField(name, value);
   };
 
   // Handle multi-select changes
@@ -613,9 +575,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full border rounded-lg">
       <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800`}>
-        <div className="flex items-center gap-2">
-          {isOpen ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}
-          <SectionTitle title="LOE Quote & Valuation Details" />
+        <div className="flex items-center justify-between w-full">
+          <div className="flex items-center gap-2">
+            {isOpen ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}
+            <SectionTitle title="LOE Quote & Valuation Details" />
+          </div>
+          {isSectionSaving && (
+            <Loader2 className="h-4 w-4 text-gray-400 dark:text-gray-500 animate-spin mr-2" />
+          )}
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent className={sectionContentStyle}>
@@ -836,37 +803,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
         {/* Job Details Section - Valuation fields */}
         <SectionGroup title="Job Details">
-        <div className="flex justify-between items-center mb-4">
-
-          {/* Sync to Valcre Button - Always show when job exists, but only active when changes detected */}
-          {jobDetails?.jobNumber &&
-           isValcreJobNumber(jobDetails.jobNumber) && (
-            <div className="flex items-center gap-2">
-              {hasUnsyncedChanges && (
-                <span className="text-xs text-amber-600 font-medium animate-pulse">Changes detected</span>
-              )}
-              <Button
-                type="button"
-                variant={hasUnsyncedChanges ? "default" : "outline"}
-                size="sm"
-                onClick={handleSyncToValcre}
-                disabled={!hasUnsyncedChanges || isSyncingLoe || !jobDetails?.valcreJobId}
-                className={hasUnsyncedChanges && jobDetails?.valcreJobId
-                  ? "bg-green-600 hover:bg-green-700 text-white animate-pulse-subtle shadow-lg"
-                  : "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed"
-                }
-                title={!jobDetails?.valcreJobId
-                  ? "Waiting for Valcre job ID"
-                  : hasUnsyncedChanges
-                    ? "Click to sync your changes to Valcre"
-                    : "No changes to sync"}
-              >
-                <RefreshCw className={`h-4 w-4 mr-1 ${isSyncingLoe ? 'animate-spin' : ''}`} />
-                {isSyncingLoe ? 'Syncing...' : hasUnsyncedChanges ? 'Sync to Valcre' : 'In Sync'}
-              </Button>
-            </div>
-          )}
-        </div>
 
         {/* Valuation Details Section */}
         <TwoColumnFields>
@@ -939,6 +875,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               name="appraisalFee"
               value={jobDetails.appraisalFee ? `$${formatCurrency(jobDetails.appraisalFee)}` : ''}
               onChange={handleCurrencyChange}
+              onBlur={handleCurrencyBlur}
               className="h-7 text-sm w-full"
             />
           </CompactField>
@@ -970,6 +907,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               name="retainerAmount"
               value={jobDetails.retainerAmount ? `$${formatCurrency(jobDetails.retainerAmount)}` : ''}
               onChange={handleCurrencyChange}
+              onBlur={handleCurrencyBlur}
               className="h-7 text-sm w-full"
             />
           </CompactField>
@@ -981,6 +919,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               name="deliveryDate"
               value={jobDetails.deliveryDate || ''}
               onChange={handleChange}
+              onBlur={handleBlur}
               className="h-7 text-sm w-full"
             />
           </CompactField>
@@ -996,6 +935,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   name="appraiserComments"
                   value={jobDetails.appraiserComments || ''}
                   onChange={handleChange}
+                  onBlur={handleBlur}
                   rows={6}
                   className="text-sm resize-none"
                 />

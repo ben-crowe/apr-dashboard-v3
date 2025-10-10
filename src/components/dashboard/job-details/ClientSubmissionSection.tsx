@@ -22,7 +22,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 
 const ClientSubmissionSection: React.FC<SectionProps> = ({
   job,
@@ -424,38 +423,59 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
-            <SectionGroup title="Property Types">
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                {['Agriculture', 'Building', 'Healthcare', 'Hospitality', 'Industrial', 'Land', 
-                  'Manufactured Housing', 'Multi-Family', 'Office', 'Retail', 'Self-Storage', 
-                  'Single-Family', 'Special Purpose', 'Unknown'].map((type) => {
-                  const selectedTypes = job.propertyTypes || [];
-                  const isChecked = selectedTypes.includes(type);
-                  
-                  return (
-                    <div key={type} className="flex items-center space-x-2">
-                      <Checkbox
-                        id={`property-type-${type}`}
-                        checked={isChecked}
-                        onCheckedChange={(checked) => {
-                          const currentTypes = job.propertyTypes || [];
-                          const newTypes = checked
-                            ? [...currentTypes, type]
-                            : currentTypes.filter(t => t !== type);
-                          onUpdateJob?.({ propertyTypes: newTypes });
-                        }}
-                      />
-                      <label
-                        htmlFor={`property-type-${type}`}
-                        className="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+            <CompactField label="Property Types">
+              <div className="flex flex-col gap-2">
+                {/* Selected Types Display */}
+                {job.propertyTypes && job.propertyTypes.length > 0 && (
+                  <div className="flex flex-wrap gap-1 p-2 bg-gray-50 dark:bg-gray-800 rounded-md">
+                    {job.propertyTypes.map((type) => (
+                      <span
+                        key={type}
+                        className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full"
                       >
                         {type}
-                      </label>
-                    </div>
-                  );
-                })}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newTypes = job.propertyTypes?.filter(t => t !== type) || [];
+                            onUpdateJob?.({ propertyTypes: newTypes });
+                          }}
+                          className="ml-1 hover:bg-blue-200 dark:hover:bg-blue-800 rounded-full p-0.5"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Multi-Select Dropdown */}
+                <Select
+                  value=""
+                  onValueChange={(value) => {
+                    if (value && !job.propertyTypes?.includes(value)) {
+                      const currentTypes = job.propertyTypes || [];
+                      onUpdateJob?.({ propertyTypes: [...currentTypes, value] });
+                    }
+                  }}
+                >
+                  <SelectTrigger className="h-7 text-sm max-w-[200px]">
+                    <SelectValue placeholder={job.propertyTypes?.length ? "Add more..." : "Select types..."} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {['Agriculture', 'Building', 'Healthcare', 'Hospitality', 'Industrial', 'Land', 
+                      'Manufactured Housing', 'Multi-Family', 'Office', 'Retail', 'Self-Storage', 
+                      'Single-Family', 'Special Purpose', 'Unknown']
+                      .filter(type => !job.propertyTypes?.includes(type))
+                      .map((type) => (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      ))}
+                  </SelectContent>
+                </Select>
               </div>
-            </SectionGroup>
+            </CompactField>
             <CompactField label="Address">
               <Input
                 value={job.propertyAddress || ''}

@@ -930,14 +930,15 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           {/* Appraiser Comments Section */}
           <SectionGroup title="Appraiser Comments">
             <TwoColumnFields>
-              <CompactField fullWidth>
+              <CompactField label="">
                 <Textarea
                   name="appraiserComments"
                   value={jobDetails.appraiserComments || ''}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  rows={6}
-                  className="text-sm resize-none"
+                  rows={3}
+                  className="text-sm resize-y min-h-[60px]"
+                  style={{ maxWidth: '400px' }}
                 />
               </CompactField>
             </TwoColumnFields>

@@ -597,13 +597,14 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         {/* Client Comments Section */}
         <SectionGroup title="Client Comments">
           <TwoColumnFields>
-            <CompactField fullWidth>
+            <CompactField label="">
               <Textarea
                 value={job.notes || ''}
                 onChange={(e) => onUpdateJob?.({notes: e.target.value})}
                 onBlur={(e) => handleBlur('notes', e.target.value)}
-                rows={6}
-                className="text-sm w-full resize-none"
+                rows={3}
+                className="text-sm resize-y min-h-[60px]"
+                style={{ maxWidth: '400px' }}
               />
             </CompactField>
           </TwoColumnFields>
@@ -611,19 +612,15 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         {/* Uploaded Documents Section */}
         <SectionGroup title="Uploaded Documents">
-          <div className="space-y-4">
-            {/* Drag-and-Drop Upload Zone */}
-            <div
-              className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
-                dragActive
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-950'
-                  : 'border-gray-300 dark:border-gray-600 hover:border-gray-400'
-              }`}
-              onDragEnter={handleDrag}
-              onDragLeave={handleDrag}
-              onDragOver={handleDrag}
-              onDrop={handleDrop}
-            >
+          <div 
+            className="space-y-3"
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+          >
+            {/* Compact Upload Button */}
+            <div className={`transition-all ${dragActive ? 'bg-blue-50 dark:bg-blue-950 p-3 rounded-lg border-2 border-dashed border-blue-500' : ''}`}>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -636,49 +633,47 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 }}
               />
 
-              <Upload className={`h-10 w-10 mx-auto mb-3 ${dragActive ? 'text-blue-500' : 'text-gray-400'}`} />
-
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                {dragActive ? 'Drop files here' : 'Drag and drop files here, or click to browse'}
-              </p>
-
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={uploading}
-                className="mt-2"
-              >
-                {uploading ? 'Uploading...' : 'Select Files'}
-              </Button>
-
-              <p className="text-xs text-gray-500 dark:text-gray-500 mt-3">
-                Accepts all file types • Multiple files supported
-              </p>
+              {dragActive ? (
+                <div className="text-center py-2">
+                  <Upload className="h-6 w-6 mx-auto mb-2 text-blue-500" />
+                  <p className="text-sm text-blue-600 dark:text-blue-400 font-medium">Drop files here</p>
+                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading}
+                  className="h-8"
+                >
+                  <Upload className="h-4 w-4 mr-2" />
+                  {uploading ? 'Uploading...' : 'Upload Files'}
+                </Button>
+              )}
             </div>
 
-            {/* Uploaded Files List */}
-            <div className="space-y-2">
+            {/* Uploaded Files List - Compact */}
+            <div className="space-y-1.5">
               {job.files && job.files.length > 0 ? (
                 job.files.map((file) => (
                   <div
                     key={file.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"
+                    className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
                   >
-                    <div className="flex items-center gap-3 flex-1 min-w-0">
-                      <FileText className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <FileText className="h-4 w-4 text-blue-600 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                        <p className="text-sm text-gray-900 dark:text-gray-100 truncate">
                           {file.fileName}
                         </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {file.fileType} • {(file.fileSize / 1024).toFixed(1)} KB
-                        </p>
                       </div>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+                        {(file.fileSize / 1024).toFixed(0)} KB
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 ml-2">
                       <Button
-                        variant="outline"
+                        variant="ghost"
                         size="sm"
                         onClick={async () => {
                           try {
@@ -703,13 +698,13 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                             toast.error('Failed to download file');
                           }
                         }}
-                        className="h-8"
+                        className="h-7 w-7 p-0"
+                        title="Download"
                       >
-                        <Download className="h-4 w-4 mr-1" />
-                        Download
+                        <Download className="h-3.5 w-3.5" />
                       </Button>
                       <Button
-                        variant="outline"
+                        variant="ghost"
                         size="sm"
                         onClick={async () => {
                           try {
@@ -725,19 +720,19 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                             toast.error('Failed to view file');
                           }
                         }}
-                        className="h-8"
+                        className="h-7 w-7 p-0"
+                        title="View"
                       >
-                        <ExternalLink className="h-4 w-4 mr-1" />
-                        View
+                        <ExternalLink className="h-3.5 w-3.5" />
                       </Button>
                       <Button
-                        variant="outline"
+                        variant="ghost"
                         size="sm"
                         onClick={() => handleDeleteFile(file)}
-                        className="h-8 text-red-600 hover:bg-red-50"
+                        className="h-7 w-7 p-0 text-red-600 hover:bg-red-50 dark:hover:bg-red-950"
+                        title="Delete"
                       >
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        Delete
+                        <Trash2 className="h-3.5 w-3.5" />
                       </Button>
                     </div>
                   </div>

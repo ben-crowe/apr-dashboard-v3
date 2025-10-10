@@ -373,12 +373,15 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       setEditingRetainerAmount(value);
     }
     
-    // Update the underlying numeric value
+    // Update the underlying value
     const rawValue = unformatCurrency(value);
     const numericValue = rawValue ? parseFloat(rawValue) : 0;
     
+    // CRITICAL: retainerAmount stored as string in DB, appraisalFee as number
+    const processedValue = name === 'retainerAmount' ? numericValue.toString() : numericValue;
+    
     onUpdateDetails({
-      [name]: numericValue
+      [name]: processedValue
     });
   };
 
@@ -394,7 +397,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     
     const rawValue = unformatCurrency(value);
     const numericValue = rawValue ? parseFloat(rawValue) : 0;
-    autoSaveField(name, numericValue);
+    
+    // CRITICAL: retainerAmount must be saved as string, appraisalFee as number
+    // Database schema: retainer_amount is text, appraisal_fee is numeric
+    const processedValue = name === 'retainerAmount' ? numericValue.toString() : numericValue;
+    autoSaveField(name, processedValue);
   };
 
   // Handle input changes with auto-save
@@ -927,10 +934,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <Input
               type="text"
               name="retainerAmount"
-              value={editingRetainerAmount !== null ? editingRetainerAmount : (jobDetails.retainerAmount ? `$${formatCurrency(jobDetails.retainerAmount)}` : '')}
+              value={editingRetainerAmount !== null ? editingRetainerAmount : (jobDetails.retainerAmount ? `$${formatCurrency(parseFloat(jobDetails.retainerAmount))}` : '')}
               onChange={handleCurrencyChange}
               onBlur={handleCurrencyBlur}
-              onFocus={() => setEditingRetainerAmount(jobDetails.retainerAmount ? jobDetails.retainerAmount.toString() : '')}
+              onFocus={() => setEditingRetainerAmount(jobDetails.retainerAmount || '')}
               className="h-7 text-sm w-full"
             />
           </CompactField>

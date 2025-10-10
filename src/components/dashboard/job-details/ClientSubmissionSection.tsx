@@ -455,9 +455,15 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 <Select
                   value=""
                   onValueChange={(value) => {
-                    if (value && !job.propertyTypes?.includes(value)) {
+                    if (value) {
                       const currentTypes = job.propertyTypes || [];
-                      onUpdateJob?.({ propertyTypes: [...currentTypes, value] });
+                      if (currentTypes.includes(value)) {
+                        // Remove if already selected
+                        onUpdateJob?.({ propertyTypes: currentTypes.filter(t => t !== value) });
+                      } else {
+                        // Add if not selected
+                        onUpdateJob?.({ propertyTypes: [...currentTypes, value] });
+                      }
                     }
                   }}
                 >
@@ -468,12 +474,21 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                     {['Agriculture', 'Building', 'Healthcare', 'Hospitality', 'Industrial', 'Land', 
                       'Manufactured Housing', 'Multi-Family', 'Office', 'Retail', 'Self-Storage', 
                       'Single-Family', 'Special Purpose', 'Unknown']
-                      .filter(type => !job.propertyTypes?.includes(type))
-                      .map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
+                      .map((type) => {
+                        const isSelected = job.propertyTypes?.includes(type);
+                        return (
+                          <SelectItem key={type} value={type}>
+                            <div className="flex items-center gap-2">
+                              <Checkbox 
+                                checked={isSelected}
+                                onCheckedChange={() => {}} // Handled by SelectItem's onValueChange
+                                className="pointer-events-none"
+                              />
+                              <span>{type}</span>
+                            </div>
+                          </SelectItem>
+                        );
+                      })}
                   </SelectContent>
                 </Select>
               </div>

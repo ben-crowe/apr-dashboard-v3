@@ -1,0 +1,15 @@
+{
+  "trigger": "cursor-push",
+  "commit": "9963512",
+  "timestamp": "2025-10-10T22:21:00Z",
+  "status": "testing-needed",
+  "round": 5,
+  "cursorDiscovery": "Found REAL bug - LoeQuoteSection.tsx has its own save logic that wasn't using field mappings!",
+  "expectedResult": "ALL TESTS SHOULD PASS NOW - explicit field mapping in the actual save handler",
+  "tests": [
+    "multi-select-property-type",
+    "appraisal-fee-save",
+    "retainer-amount-save",
+    "console-logs-clean"
+  ]
+}

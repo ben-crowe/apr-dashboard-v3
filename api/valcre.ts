@@ -487,6 +487,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     console.log(`🔍 PropertyContact check:`, {
       hasPropertyContact: !!jobData.PropertyContact,
+      propertyContactData: jobData.PropertyContact,
       propertyEmail: jobData.PropertyContact?.Email,
       clientEmail: clientEmail,
       emailsDifferent: jobData.PropertyContact?.Email !== clientEmail,

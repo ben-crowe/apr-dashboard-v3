@@ -38,13 +38,19 @@ export function useSaveJobDetails(jobId: string) {
         
         for (const field of loeFields) {
           if (field in details) {
-            // Special mapping: appraiserComments → internal_comments (DB field name)
+            // Convert camelCase to snake_case, with special mappings for mismatched field names
             let snakeField = field
               .replace(/([A-Z])/g, '_$1')
-              .toLowerCase();
+              .toLowerCase()
+              .replace(/^_/, ''); // Remove leading underscore
             
-            if (field === 'appraiserComments') {
-              snakeField = 'internal_comments';
+            // Special field name mappings (component name → DB column name)
+            const fieldMappings: Record<string, string> = {
+              'appraiser_comments': 'internal_comments',
+            };
+            
+            if (snakeField in fieldMappings) {
+              snakeField = fieldMappings[snakeField];
             }
             
             loeDetailsToUpdate[snakeField] = details[field as keyof JobDetails];

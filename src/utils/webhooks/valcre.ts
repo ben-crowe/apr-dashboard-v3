@@ -122,7 +122,7 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       
       // Appraiser comments go to Comments field (general/internal comments in Valcre)
       if (formData.appraiserComments) {
-        syncPayload.Comments = formData.appraiserComments;
+        syncPayload.InternalComments = formData.appraiserComments;
       }
 
       if (formData.paymentTerms) syncPayload.PaymentTerms = formData.paymentTerms;

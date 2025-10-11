@@ -103,6 +103,11 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
         syncPayload.PropertyType = formData.propertyTypes.join(', ');
         syncPayload.PropertyTypeEnum = formData.propertyTypes.join(', ');
       }
+      
+      // Handle property name updates
+      if (formData.propertyName) {
+        syncPayload.Name = formData.propertyName;
+      }
       // REMOVED: scopeOfWork, valuationPremises, propertyRightsAppraised, reportType
       // These are creation-only fields - cannot be updated via PATCH
       // Sending them with wrong field names was causing Comments to fill with field data

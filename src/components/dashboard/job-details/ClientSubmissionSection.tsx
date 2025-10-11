@@ -36,7 +36,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
   
   // Fields that sync to Valcre
-  const VALCRE_SYNC_FIELDS = ['notes', 'valuationPremises', 'intendedUse', 'assetCondition', 'propertyTypes'];
+  const VALCRE_SYNC_FIELDS = ['notes', 'valuationPremises', 'intendedUse', 'assetCondition', 'propertyTypes', 'propertyName'];
 
   // Helper function to get user-friendly field names for toast messages
   const getFieldDisplayName = (fieldName: string): string => {
@@ -45,7 +45,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       valuationPremises: 'Valuation Premises',
       intendedUse: 'Intended Use',
       assetCondition: 'Asset Condition',
-      propertyTypes: 'Property Types'
+      propertyTypes: 'Property Types',
+      propertyName: 'Property Name'
     };
     return fieldNames[fieldName] || fieldName;
   };
@@ -78,6 +79,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         if (fieldName === 'intendedUse') syncData.intendedUse = value;
         if (fieldName === 'assetCondition') syncData.assetCondition = value;
         if (fieldName === 'propertyTypes') syncData.propertyTypes = value;
+        if (fieldName === 'propertyName') syncData.propertyName = value;
         
         console.log(`Syncing ${fieldName} to Valcre:`, syncData);
         const result = await sendToValcre(syncData);
@@ -437,6 +439,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               <Input
                 value={job.propertyName || ''}
                 onChange={(e) => onUpdateJob?.({propertyName: e.target.value})}
+                onBlur={(e) => handleBlur('propertyName', e.target.value)}
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>

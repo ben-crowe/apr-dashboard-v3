@@ -18106,6 +18106,307 @@ In our dashboard by the
 
 _**Assistant (default)**_
 
+I see you started to say something about "In our dashboard by the" - it looks like your message got cut off. Could you please complete your thought? 
+
+In the meantime, let me continue fixing the Property Type multi-select issue I was working on. The problem is that the Property Type multi-select is calling `onUpdateJob` directly instead of using the `autoSaveField` function, which means it's not getting the proper auto-save functionality and toast notifications.
+
+Let me fix this:
+
+
+---
+
+Tool use: **search_replace**
+
+
+<details><summary>Edit file: src/components/dashboard/job-details/ClientSubmissionSection.tsx</summary>
+
+**Chunk 1**
+Lines added: 10, lines removed: 3
+
+```diff
+@@ -447,11 +447,18 @@
+                      if (value) {
+                        const currentTypes = job.propertyTypes || [];
++                       let newTypes;
+                        if (currentTypes.includes(value)) {
+                          // Remove if already selected
+-                         onUpdateJob?.({ propertyTypes: currentTypes.filter(t => t !== value) });
++                         newTypes = currentTypes.filter(t => t !== value);
+                        } else {
+                          // Add if not selected
+-                         onUpdateJob?.({ propertyTypes: [...currentTypes, value] });
+-                       }
++                         newTypes = [...currentTypes, value];
++                       }
++                       
++                       // Update UI immediately
++                       onUpdateJob?.({ propertyTypes: newTypes });
++                       
++                       // Auto-save to database and sync to Valcre
++                       autoSaveField('propertyTypes', newTypes);
+                      }
+                    }}
+```
+
+</details>
+
+---
+
+Now I need to add `propertyTypes` to the `VALCRE_SYNC_FIELDS` and update the field mapping:
+
+
+---
+
+Tool use: **search_replace**
+
+
+<details><summary>Edit file: src/components/dashboard/job-details/ClientSubmissionSection.tsx</summary>
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -37,5 +37,5 @@
+    
+    // Fields that sync to Valcre
+-   const VALCRE_SYNC_FIELDS = ['notes', 'valuationPremises', 'intendedUse', 'assetCondition'];
++   const VALCRE_SYNC_FIELDS = ['notes', 'valuationPremises', 'intendedUse', 'assetCondition', 'propertyTypes'];
+  
+    // Helper function to get user-friendly field names for toast messages
+```
+
+</details>
+
+---
+
+Tool use: **search_replace**
+
+
+<details><summary>Edit file: src/components/dashboard/job-details/ClientSubmissionSection.tsx</summary>
+
+**Chunk 1**
+Lines added: 2, lines removed: 1
+
+```diff
+@@ -45,5 +45,6 @@
+        valuationPremises: 'Valuation Premises',
+        intendedUse: 'Intended Use',
+-       assetCondition: 'Asset Condition'
++       assetCondition: 'Asset Condition',
++       propertyTypes: 'Property Types'
+      };
+      return fieldNames[fieldName] || fieldName;
+```
+
+</details>
+
+---
+
+Now I need to add the field mapping for `propertyTypes` in the autoSaveField function:
+
+
+---
+
+Tool use: **read_file**
+
+Read file: src/components/dashboard/job-details/ClientSubmissionSection.tsx
+
+---
+
+Tool use: **search_replace**
+
+
+<details><summary>Edit file: src/components/dashboard/job-details/ClientSubmissionSection.tsx</summary>
+
+**Chunk 1**
+Lines added: 1, lines removed: undefined
+
+```diff
+@@ -78,4 +78,5 @@
+          if (fieldName === 'intendedUse') syncData.intendedUse = value;
+          if (fieldName === 'assetCondition') syncData.assetCondition = value;
++         if (fieldName === 'propertyTypes') syncData.propertyTypes = value;
+          
+          console.log(`Syncing ${fieldName} to Valcre:`, syncData);
+```
+
+</details>
+
+---
+
+Now I need to make sure the webhook can handle `propertyTypes` in the LOE sync. Let me check if it's already handled:
+
+
+---
+
+Tool use: **grep**
+
+<details>
+<summary>Grep for "propertyTypes" in "src/utils/webhooks/valcre.ts" • 4 matches</summary>
+
+Output mode: content
+
+
+| Content | Line |
+|------|------|
+| `PropertyType: formData.propertyTypes && formData.propertyTypes.length > 0` | L201 |
+| `? formData.propertyTypes.join(', ')  // Multi-select: "Retail, Office, Industrial"` | L202 |
+| `PropertyTypeEnum: formData.propertyTypes && formData.propertyTypes.length > 0` | L204 |
+| `? formData.propertyTypes.join(', ')  // Multi-select for PropertyTypeEnum mapping` | L205 |
+
+
+</details>
+
+---
+
+Good! The webhook already handles `propertyTypes` for job creation. Now I need to check if it handles it for LOE sync updates:
+
+
+---
+
+Tool use: **read_file**
+
+Read file: src/utils/webhooks/valcre.ts
+
+---
+
+I need to add `propertyTypes` handling to the LOE sync section. Let me add it:
+
+
+---
+
+Tool use: **search_replace**
+
+
+<details><summary>Edit file: src/utils/webhooks/valcre.ts</summary>
+
+**Chunk 1**
+Lines added: 6, lines removed: undefined
+
+```diff
+@@ -98,4 +98,10 @@
+        }
+        if (formData.deliveryDate) syncPayload.DeliveryDate = formData.deliveryDate;
++       
++       // Handle property types (convert array to comma-separated string for Valcre)
++       if (formData.propertyTypes && formData.propertyTypes.length > 0) {
++         syncPayload.PropertyType = formData.propertyTypes.join(', ');
++         syncPayload.PropertyTypeEnum = formData.propertyTypes.join(', ');
++       }
+        // REMOVED: scopeOfWork, valuationPremises, propertyRightsAppraised, reportType
+        // These are creation-only fields - cannot be updated via PATCH
+```
+
+</details>
+
+---
+
+Now let me also fix the remove button functionality to use auto-save:
+
+
+---
+
+Tool use: **read_file**
+
+Read file: src/components/dashboard/job-details/ClientSubmissionSection.tsx
+
+---
+
+Tool use: **search_replace**
+
+
+<details><summary>Edit file: src/components/dashboard/job-details/ClientSubmissionSection.tsx</summary>
+
+**Chunk 1**
+Lines added: 3, lines removed: undefined
+
+```diff
+@@ -505,5 +505,8 @@
+                            onClick={() => {
+                              const newTypes = job.propertyTypes?.filter(t => t !== type) || [];
++                             // Update UI immediately
+                              onUpdateJob?.({ propertyTypes: newTypes });
++                             // Auto-save to database and sync to Valcre
++                             autoSaveField('propertyTypes', newTypes);
+                            }}
+                            className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 font-bold text-base leading-none"
+```
+
+</details>
+
+---
+
+Now let me commit these fixes and push them:
+
+
+---
+
+Tool use: **run_terminal_cmd**
+
+```bash
+git add -A && git commit -m "fix: Property Type multi-select auto-save and appraiser comments mapping
+
+Fixes:
+1. Property Type auto-selection from test data - now uses propertyTypes array
+2. Property Type multi-select auto-save - now calls autoSaveField() for proper save/sync
+3. Appraiser comments mapping - fixed webhook to map to Comments field (General) instead of combined
+4. Improved toast notifications - user-friendly field names instead of camelCase
+5. Added propertyTypes to VALCRE_SYNC_FIELDS for proper Valcre sync
+
+Technical changes:
+- ClientSubmissionSection: Added propertyTypes to auto-save with proper field mapping
+- LoeQuoteSection: Added getFieldDisplayName() for better toast messages  
+- valcre.ts: Fixed LOE sync to map appraiserComments to Comments field separately
+- valcre.ts: Added propertyTypes handling to LOE sync payload
+
+This should resolve:
+- Property Type selections disappearing after selection
+- 'Did not save' error messages on Property Type changes
+- Appraiser comments not appearing in Valcre's General field
+- Generic toast messages showing field names like 'appraisalFee' instead of 'Appraisal Fee'" && git push
+```
+
+```
+[main c0109c7] fix: Property Type multi-select auto-save and appraiser comments mapping
+ 6 files changed, 2683 insertions(+), 21 deletions(-)
+ create mode 100644 .cursor/CURSOR-ACTUAL-RESULTS.md
+ create mode 100644 .cursor/CURSOR-FIX-TEST-RESULTS.md
+To https://github.com/ben-crowe/apr-dashboard-v3.git
+   7b51013..c0109c7  main -> main
+
+```
+
+---
+
+
+
+---
+
+_**User (2025-10-10 21:10Z)**_
+
+Property name does not indicate that it's even syncing. No prompt comes up, positive or negative, when I change the property name in our dashboard.
+
+---
+
+_**Assistant (default)**_
+
+You're right! The Property Name field doesn't have auto-save functionality. Let me add it to the auto-save system:
+
+
+---
+
+Tool use: **todo_write**
+
+## Todo List
+
+- [x] Fix Property Type auto-selecting random values without user interaction
+- [x] Fix missing 'Synced correctly' toast notifications on field saves
+- [x] Fix appraiser comments not mapping to Valcre's General field
+- [x] Fix Property Type multi-select checkbox auto-save and disappearing selections
+- [-] Add auto-save functionality to Property Name field
+
+---
+
 
 
 ---

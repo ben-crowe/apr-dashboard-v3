@@ -61,6 +61,18 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // Fields that sync to Valcre (from valcre.ts lines 231-248)
   const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments'];
 
+  // Helper function to get user-friendly field names for toast messages
+  const getFieldDisplayName = (fieldName: string): string => {
+    const fieldNames: Record<string, string> = {
+      appraisalFee: 'Appraisal Fee',
+      retainerAmount: 'Retainer Amount',
+      deliveryDate: 'Delivery Date',
+      paymentTerms: 'Payment Terms',
+      appraiserComments: 'Appraiser Comments'
+    };
+    return fieldNames[fieldName] || fieldName;
+  };
+
   // Check if document was already sent
   const alreadySent = jobDetails.docusealSubmissionId ||
                       job.status === 'loe_sent' ||
@@ -334,13 +346,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
           if (!result.success) {
             console.error('Valcre sync failed:', result.error);
-            toast.error(`Failed to sync ${fieldName} to Valcre`);
+            toast.error(`Failed to sync ${getFieldDisplayName(fieldName)} to Valcre`);
           } else {
-            toast.success(`${fieldName} saved and synced to Valcre`);
+            toast.success(`${getFieldDisplayName(fieldName)} saved and synced to Valcre`);
           }
         } else {
           // Field saved to Supabase but no Valcre job yet
-          toast.success(`${fieldName} saved`);
+          toast.success(`${getFieldDisplayName(fieldName)} saved`);
         }
 
         // Clear field and section saving states

@@ -97,22 +97,25 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
         syncPayload.Retainer = parseFloat(cleanRetainer) || 0;
       }
       if (formData.deliveryDate) syncPayload.DeliveryDate = formData.deliveryDate;
+      
+      // Handle property types (convert array to comma-separated string for Valcre)
+      if (formData.propertyTypes && formData.propertyTypes.length > 0) {
+        syncPayload.PropertyType = formData.propertyTypes.join(', ');
+        syncPayload.PropertyTypeEnum = formData.propertyTypes.join(', ');
+      }
       // REMOVED: scopeOfWork, valuationPremises, propertyRightsAppraised, reportType
       // These are creation-only fields - cannot be updated via PATCH
       // Sending them with wrong field names was causing Comments to fill with field data
 
-      // Combine client comments and appraiser comments with headers
-      // Use field mapping to handle different field names (e.g., notes -> clientComments)
-      const combinedComments = [];
-      const clientComments = formData.clientComments || formData.notes; // Handle both field names
-      if (clientComments) {
-        combinedComments.push(`=== CLIENT COMMENTS ===\n${clientComments}`);
+      // Map comments to separate fields (matching job creation path)
+      // Client comments go to ClientComments field (client-visible in Valcre)
+      if (formData.notes || formData.clientComments) {
+        syncPayload.ClientComments = formData.clientComments || formData.notes || '';
       }
+      
+      // Appraiser comments go to Comments field (general/internal comments in Valcre)
       if (formData.appraiserComments) {
-        combinedComments.push(`=== APPRAISER COMMENTS ===\n${formData.appraiserComments}`);
-      }
-      if (combinedComments.length > 0) {
-        syncPayload.Comments = combinedComments.join('\n\n');
+        syncPayload.Comments = formData.appraiserComments;
       }
 
       if (formData.paymentTerms) syncPayload.PaymentTerms = formData.paymentTerms;

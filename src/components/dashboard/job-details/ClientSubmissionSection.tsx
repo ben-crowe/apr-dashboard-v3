@@ -36,7 +36,19 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
   
   // Fields that sync to Valcre
-  const VALCRE_SYNC_FIELDS = ['notes', 'valuationPremises', 'intendedUse', 'assetCondition'];
+  const VALCRE_SYNC_FIELDS = ['notes', 'valuationPremises', 'intendedUse', 'assetCondition', 'propertyTypes'];
+
+  // Helper function to get user-friendly field names for toast messages
+  const getFieldDisplayName = (fieldName: string): string => {
+    const fieldNames: Record<string, string> = {
+      notes: 'Client Comments',
+      valuationPremises: 'Valuation Premises',
+      intendedUse: 'Intended Use',
+      assetCondition: 'Asset Condition',
+      propertyTypes: 'Property Types'
+    };
+    return fieldNames[fieldName] || fieldName;
+  };
   
   // Auto-save function
   const autoSaveField = useCallback(async (fieldName: string, value: any) => {
@@ -65,23 +77,24 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         if (fieldName === 'valuationPremises') syncData.valuationPremises = value;
         if (fieldName === 'intendedUse') syncData.intendedUse = value;
         if (fieldName === 'assetCondition') syncData.assetCondition = value;
+        if (fieldName === 'propertyTypes') syncData.propertyTypes = value;
         
         console.log(`Syncing ${fieldName} to Valcre:`, syncData);
         const result = await sendToValcre(syncData);
         
         if (!result.success) {
           console.warn(`Failed to sync ${fieldName} to Valcre:`, result.error);
-          toast.error(`Failed to sync ${fieldName} to Valcre`);
+          toast.error(`Failed to sync ${getFieldDisplayName(fieldName)} to Valcre`);
         } else {
-          toast.success(`${fieldName} saved and synced to Valcre`);
+          toast.success(`${getFieldDisplayName(fieldName)} saved and synced to Valcre`);
         }
       } else {
         // Field saved but not synced (no Valcre job yet)
-        toast.success(`${fieldName} saved`);
+        toast.success(`${getFieldDisplayName(fieldName)} saved`);
       }
     } catch (error) {
       console.error(`Error saving ${fieldName}:`, error);
-      toast.error(`Failed to save ${fieldName}`);
+      toast.error(`Failed to save ${getFieldDisplayName(fieldName)}`);
     } finally {
       setIsSectionSaving(false);
     }
@@ -165,7 +178,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       clientEmail: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${company.toLowerCase().replace(/ /g, '')}.ca`,
       propertyName: propertyName,
       propertyAddress: `${propNum} ${street}, Calgary, AB T2R 1M5`,
-      propertyType: propertyType,
+      propertyTypes: [propertyType], // FIX: Use array format for multi-select
       intendedUse: intendedUse,
       assetCondition: condition,
       notes: `Property is a ${sqft.toLocaleString()} sq ft ${propertyType} complex. Need appraisal for ${intendedUse}.`,
@@ -435,13 +448,20 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   onValueChange={(value) => {
                     if (value) {
                       const currentTypes = job.propertyTypes || [];
+                      let newTypes;
                       if (currentTypes.includes(value)) {
                         // Remove if already selected
-                        onUpdateJob?.({ propertyTypes: currentTypes.filter(t => t !== value) });
+                        newTypes = currentTypes.filter(t => t !== value);
                       } else {
                         // Add if not selected
-                        onUpdateJob?.({ propertyTypes: [...currentTypes, value] });
+                        newTypes = [...currentTypes, value];
                       }
+                      
+                      // Update UI immediately
+                      onUpdateJob?.({ propertyTypes: newTypes });
+                      
+                      // Auto-save to database and sync to Valcre
+                      autoSaveField('propertyTypes', newTypes);
                     }
                   }}
                 >
@@ -484,7 +504,10 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                           type="button"
                           onClick={() => {
                             const newTypes = job.propertyTypes?.filter(t => t !== type) || [];
+                            // Update UI immediately
                             onUpdateJob?.({ propertyTypes: newTypes });
+                            // Auto-save to database and sync to Valcre
+                            autoSaveField('propertyTypes', newTypes);
                           }}
                           className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 font-bold text-base leading-none"
                           title="Remove"

@@ -59,7 +59,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
 
   // Fields that sync to Valcre (from valcre.ts lines 231-248)
-  const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments'];
+  const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments', 'propertyRightsAppraised', 'scopeOfWork', 'valuationPremises', 'reportType'];
 
   // Helper function to get user-friendly field names for toast messages
   const getFieldDisplayName = (fieldName: string): string => {
@@ -68,7 +68,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       retainerAmount: 'Retainer Amount',
       deliveryDate: 'Delivery Date',
       paymentTerms: 'Payment Terms',
-      appraiserComments: 'Appraiser Comments'
+      appraiserComments: 'Appraiser Comments',
+      propertyRightsAppraised: 'Property Rights Appraised',
+      scopeOfWork: 'Scope of Work',
+      valuationPremises: 'Valuation Premises',
+      reportType: 'Report Type'
     };
     return fieldNames[fieldName] || fieldName;
   };
@@ -340,6 +344,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           if (fieldName === 'deliveryDate') syncData.deliveryDate = value;
           if (fieldName === 'paymentTerms') syncData.paymentTerms = value;
           if (fieldName === 'appraiserComments') syncData.appraiserComments = value;
+          if (fieldName === 'propertyRightsAppraised') syncData.propertyRightsAppraised = value;
+          if (fieldName === 'scopeOfWork') syncData.scopeOfWork = value;
+          if (fieldName === 'valuationPremises') syncData.valuationPremises = value;
+          if (fieldName === 'reportType') syncData.reportType = value;
 
           console.log(`Syncing ${fieldName} to Valcre:`, syncData);
           const result = await sendToValcre(syncData);

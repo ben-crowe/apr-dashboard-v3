@@ -97,6 +97,11 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
         syncPayload.Retainer = parseFloat(cleanRetainer) || 0;
       }
       if (formData.deliveryDate) syncPayload.DeliveryDate = formData.deliveryDate;
+      if (formData.paymentTerms) syncPayload.PaymentTerms = formData.paymentTerms;
+      if (formData.scopeOfWork) syncPayload.ScopeOfWork = formData.scopeOfWork;
+      if (formData.valuationPremises) syncPayload.ValuationPremises = formData.valuationPremises;
+      if (formData.propertyRightsAppraised) syncPayload.PropertyRightsAppraised = formData.propertyRightsAppraised;
+      if (formData.reportType) syncPayload.ReportType = formData.reportType;
       
       // Handle property types (convert array to comma-separated string for Valcre)
       if (formData.propertyTypes && formData.propertyTypes.length > 0) {
@@ -108,9 +113,6 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       if (formData.propertyName) {
         syncPayload.Name = formData.propertyName;
       }
-      // REMOVED: scopeOfWork, valuationPremises, propertyRightsAppraised, reportType
-      // These are creation-only fields - cannot be updated via PATCH
-      // Sending them with wrong field names was causing Comments to fill with field data
 
       // Map comments to separate fields (matching job creation path)
       // Client comments go to ClientComments field (client-visible in Valcre)

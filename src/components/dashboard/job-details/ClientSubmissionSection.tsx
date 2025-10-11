@@ -36,7 +36,11 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
   
   // Fields that sync to Valcre
-  const VALCRE_SYNC_FIELDS = ['notes', 'valuationPremises', 'intendedUse', 'assetCondition', 'propertyTypes', 'propertyName'];
+  const VALCRE_SYNC_FIELDS = [
+    'notes', 'valuationPremises', 'intendedUse', 'assetCondition', 'propertyTypes', 'propertyName', 'propertyAddress',
+    'clientFirstName', 'clientLastName', 'clientTitle', 'clientOrganization', 'clientEmail', 'clientPhone', 'clientAddress',
+    'propertyContactFirstName', 'propertyContactLastName', 'propertyContactEmail', 'propertyContactPhone'
+  ];
 
   // Helper function to get user-friendly field names for toast messages
   const getFieldDisplayName = (fieldName: string): string => {
@@ -46,7 +50,19 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       intendedUse: 'Intended Use',
       assetCondition: 'Asset Condition',
       propertyTypes: 'Property Types',
-      propertyName: 'Property Name'
+      propertyName: 'Property Name',
+      propertyAddress: 'Property Address',
+      clientFirstName: 'Client First Name',
+      clientLastName: 'Client Last Name',
+      clientTitle: 'Client Title',
+      clientOrganization: 'Client Organization',
+      clientEmail: 'Client Email',
+      clientPhone: 'Client Phone',
+      clientAddress: 'Client Address',
+      propertyContactFirstName: 'Property Contact First Name',
+      propertyContactLastName: 'Property Contact Last Name',
+      propertyContactEmail: 'Property Contact Email',
+      propertyContactPhone: 'Property Contact Phone'
     };
     return fieldNames[fieldName] || fieldName;
   };
@@ -80,6 +96,18 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         if (fieldName === 'assetCondition') syncData.assetCondition = value;
         if (fieldName === 'propertyTypes') syncData.propertyTypes = value;
         if (fieldName === 'propertyName') syncData.propertyName = value;
+        if (fieldName === 'propertyAddress') syncData.propertyAddress = value;
+        if (fieldName === 'clientFirstName') syncData.clientFirstName = value;
+        if (fieldName === 'clientLastName') syncData.clientLastName = value;
+        if (fieldName === 'clientTitle') syncData.clientTitle = value;
+        if (fieldName === 'clientOrganization') syncData.clientOrganization = value;
+        if (fieldName === 'clientEmail') syncData.clientEmail = value;
+        if (fieldName === 'clientPhone') syncData.clientPhone = value;
+        if (fieldName === 'clientAddress') syncData.clientAddress = value;
+        if (fieldName === 'propertyContactFirstName') syncData.propertyContactFirstName = value;
+        if (fieldName === 'propertyContactLastName') syncData.propertyContactLastName = value;
+        if (fieldName === 'propertyContactEmail') syncData.propertyContactEmail = value;
+        if (fieldName === 'propertyContactPhone') syncData.propertyContactPhone = value;
         
         console.log(`Syncing ${fieldName} to Valcre:`, syncData);
         const result = await sendToValcre(syncData);
@@ -380,6 +408,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               <Input
                 value={job.clientFirstName || ''}
                 onChange={(e) => onUpdateJob?.({clientFirstName: e.target.value})}
+                onBlur={(e) => handleBlur('clientFirstName', e.target.value)}
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
@@ -387,6 +416,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               <Input
                 value={job.clientLastName || ''}
                 onChange={(e) => onUpdateJob?.({clientLastName: e.target.value})}
+                onBlur={(e) => handleBlur('clientLastName', e.target.value)}
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
@@ -394,6 +424,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               <Input
                 value={job.clientTitle || ''}
                 onChange={(e) => onUpdateJob?.({clientTitle: e.target.value})}
+                onBlur={(e) => handleBlur('clientTitle', e.target.value)}
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
@@ -401,6 +432,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               <Input
                 value={job.clientOrganization || ''}
                 onChange={(e) => onUpdateJob?.({clientOrganization: e.target.value})}
+                onBlur={(e) => handleBlur('clientOrganization', e.target.value)}
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
@@ -412,6 +444,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   const numbersOnly = e.target.value.replace(/\D/g, '');
                   onUpdateJob?.({clientPhone: numbersOnly});
                 }}
+                onBlur={(e) => handleBlur('clientPhone', e.target.value.replace(/\D/g, ''))}
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
@@ -419,6 +452,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               <Input
                 value={job.clientEmail || ''}
                 onChange={(e) => onUpdateJob?.({clientEmail: e.target.value})}
+                onBlur={(e) => handleBlur('clientEmail', e.target.value)}
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
@@ -426,6 +460,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               <Input
                 value={job.clientAddress || ''}
                 onChange={(e) => onUpdateJob?.({clientAddress: e.target.value})}
+                onBlur={(e) => handleBlur('clientAddress', e.target.value)}
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
@@ -527,6 +562,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               <Input
                 value={job.propertyAddress || ''}
                 onChange={(e) => onUpdateJob?.({propertyAddress: e.target.value})}
+                onBlur={(e) => handleBlur('propertyAddress', e.target.value)}
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
@@ -601,6 +637,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 <Input
                   value={job.propertyContactFirstName || ''}
                   onChange={(e) => onUpdateJob?.({propertyContactFirstName: e.target.value})}
+                  onBlur={(e) => handleBlur('propertyContactFirstName', e.target.value)}
                   className="h-7 text-sm max-w-[200px]"
                 />
               </CompactField>
@@ -608,6 +645,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 <Input
                   value={job.propertyContactEmail || ''}
                   onChange={(e) => onUpdateJob?.({propertyContactEmail: e.target.value})}
+                  onBlur={(e) => handleBlur('propertyContactEmail', e.target.value)}
                   className="h-7 text-sm max-w-[200px]"
                 />
               </CompactField>
@@ -615,6 +653,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 <Input
                   value={job.propertyContactLastName || ''}
                   onChange={(e) => onUpdateJob?.({propertyContactLastName: e.target.value})}
+                  onBlur={(e) => handleBlur('propertyContactLastName', e.target.value)}
                   className="h-7 text-sm max-w-[200px]"
                 />
               </CompactField>
@@ -626,6 +665,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                     const numbersOnly = e.target.value.replace(/\D/g, '');
                     onUpdateJob?.({propertyContactPhone: numbersOnly});
                   }}
+                  onBlur={(e) => handleBlur('propertyContactPhone', e.target.value.replace(/\D/g, ''))}
                   className="h-7 text-sm max-w-[200px]"
                 />
               </CompactField>

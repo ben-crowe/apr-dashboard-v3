@@ -452,9 +452,16 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       const cleanValue = value.replace(/[^0-9.]/g, '');
       processedValue = cleanValue ? parseFloat(cleanValue) : 0;
     }
+    
+    // Update UI immediately
     onUpdateDetails({
       [name]: processedValue
     });
+    
+    // Trigger auto-save for fields that should auto-save
+    if (name === 'appraiserComments') {
+      autoSaveField(name, processedValue);
+    }
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {

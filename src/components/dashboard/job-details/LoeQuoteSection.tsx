@@ -300,6 +300,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           appraisalFee: 'appraisal_fee',
           retainerAmount: 'retainer_amount',
           appraiserComments: 'internal_comments',
+          scopeOfWork: 'scope_of_work',
+          propertyRightsAppraised: 'property_rights_appraised',
+          reportType: 'report_type',
+          paymentTerms: 'payment_terms',
+          valuationPremises: 'valuation_premises',
+          deliveryDate: 'delivery_date',
         };
         
         // Use mapped field name if exists, otherwise use original

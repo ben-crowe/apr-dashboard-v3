@@ -159,7 +159,7 @@ const useFormSubmission = () => {
           client_address: formData.clientAddress,
           property_name: formData.propertyName,
           property_address: formData.propertyAddress,
-          property_type: formData.propertyType || null,
+          property_type: formData.propertyType, // Required by database - validated before submission
           intended_use: formData.intendedUse || null,
           valuation_premises: formData.valuationPremises || null,
           asset_condition: formData.assetCondition || null,

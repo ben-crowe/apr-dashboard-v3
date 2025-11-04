@@ -7,8 +7,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// ClickUp Configuration - Updated to match production settings
-const CLICKUP_API_TOKEN = Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_U80AIXPC66YFCS56AGWT71SAPXWH6EU5'
+// ClickUp Configuration - Updated with correct API token from client docs (Nov 4, 2025)
+const CLICKUP_API_TOKEN = Deno.env.get('CLICKUP_API_TOKEN') || 'pk_63967834_W45TQXNS33YE9O1CA0K8RZDLGIM5B2FU'
 const CLICKUP_LIST_ID = Deno.env.get('CLICKUP_LIST_ID') || '901402094744' // Chris's list in Valta workspace
 const CLICKUP_TEMPLATE_ID = 't-86b3exqe8' // LOE New Template 2025.01.09
 const CLICKUP_WORKSPACE_ID = '9014181018' // Valta workspace
@@ -42,6 +42,23 @@ Deno.serve(async (req) => {
 
     if (jobError || !job) {
       throw new Error(`Failed to fetch job: ${jobError?.message || 'Job not found'}`)
+    }
+
+    // Idempotency check: If task already exists, return existing task info
+    if (job.clickup_task_id) {
+      console.log('✅ Task already exists, returning existing task:', job.clickup_task_id)
+      return new Response(
+        JSON.stringify({
+          success: true,
+          taskId: job.clickup_task_id,
+          taskUrl: job.clickup_task_url,
+          alreadyExists: true
+        }),
+        {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200
+        }
+      )
     }
 
     // Build task name using the Valcre CAL number if available

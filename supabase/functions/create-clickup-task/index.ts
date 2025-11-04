@@ -8,8 +8,8 @@ const corsHeaders = {
 }
 
 // ClickUp Configuration - Updated to match production settings
-const CLICKUP_API_TOKEN = 'pk_10791838_U80AIXPC66YFCS56AGWT71SAPXWH6EU5'
-const CLICKUP_LIST_ID = '901402094744' // Chris's list in Valta workspace
+const CLICKUP_API_TOKEN = Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_U80AIXPC66YFCS56AGWT71SAPXWH6EU5'
+const CLICKUP_LIST_ID = Deno.env.get('CLICKUP_LIST_ID') || '901402094744' // Chris's list in Valta workspace
 const CLICKUP_TEMPLATE_ID = 't-86b3exqe8' // LOE New Template 2025.01.09
 const CLICKUP_WORKSPACE_ID = '9014181018' // Valta workspace
 
@@ -66,9 +66,9 @@ Deno.serve(async (req) => {
 
     console.log('Task name:', taskName)
     
-    // Use production URL for APR Hub with direct job link
-    const hubUrl = 'https://apr-hub-05-25.vercel.app'
-    const jobUrl = `${hubUrl}/#/dashboard?jobId=${job.id}`
+    // Use production URL for APR Dashboard with direct job link
+    const hubUrl = 'https://apr-dashboard-v2.vercel.app'
+    const jobUrl = `${hubUrl}/dashboard?jobId=${job.id}`
 
     // Create task with template
     const clickupResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {

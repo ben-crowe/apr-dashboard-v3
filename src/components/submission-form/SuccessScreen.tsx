@@ -23,6 +23,14 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({
           Thank You for Your Submission!
         </h2>
 
+        {webhookResponse?.jobId && (
+          <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-3">
+            <p className="text-sm text-green-800">
+              <strong>Job Reference:</strong> <span className="font-mono">{webhookResponse.jobId}</span>
+            </p>
+          </div>
+        )}
+
         <p className="text-center text-base text-gray-600 pt-4">
           Your appraisal request has been successfully submitted. Our team will review your information and get back to you within 24 hours.
         </p>

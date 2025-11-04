@@ -269,10 +269,11 @@ const useFormSubmission = () => {
       // The workflow is now: Supabase → Valcre → ClickUp
       console.log('Job submitted successfully to Supabase');
       
-      // Set a success response for the UI
-      setWebhookResponse({ 
-        success: true, 
-        message: "Job submitted successfully" 
+      // Set a success response for the UI including the job ID
+      setWebhookResponse({
+        success: true,
+        message: "Job submitted successfully",
+        jobId: jobData.id
       });
 
     } catch (error) {

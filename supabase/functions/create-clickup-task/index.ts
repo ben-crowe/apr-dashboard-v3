@@ -7,11 +7,13 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// ClickUp Configuration - Updated with correct API token from client docs (Nov 4, 2025)
+// ClickUp Configuration - DEVELOPMENT ENVIRONMENT (Ben's test workspace)
+// Use for safe testing before production deployment
+// Switch to production credentials after Dev testing passes
 const CLICKUP_API_TOKEN = Deno.env.get('CLICKUP_API_TOKEN') || 'pk_63967834_W45TQXNS33YE9O1CA0K8RZDLGIM5B2FU'
-const CLICKUP_LIST_ID = Deno.env.get('CLICKUP_LIST_ID') || '901402094744' // Chris's list in Valta workspace
-const CLICKUP_TEMPLATE_ID = 't-86b3exqe8' // LOE New Template 2025.01.09
-const CLICKUP_WORKSPACE_ID = '9014181018' // Valta workspace
+const CLICKUP_LIST_ID = Deno.env.get('CLICKUP_LIST_ID') || '901703694310' // Ben's test list in BC Workspace
+const CLICKUP_TEMPLATE_ID = null // Skip template for Dev testing (or create test template)
+const CLICKUP_WORKSPACE_ID = '8555561' // BC Workspace (Development)
 
 Deno.serve(async (req) => {
   // Handle CORS
@@ -87,16 +89,10 @@ Deno.serve(async (req) => {
     const hubUrl = 'https://apr-dashboard-v2.vercel.app'
     const jobUrl = `${hubUrl}/dashboard?jobId=${job.id}`
 
-    // Create task with template
-    const clickupResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
-      method: 'POST',
-      headers: {
-        'Authorization': CLICKUP_API_TOKEN,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: taskName,
-        markdown_description: `📍 **NEW JOB ARRIVED - [View in APR Hub](${jobUrl})**
+    // Build task payload (conditionally include template_id)
+    const taskPayload: any = {
+      name: taskName,
+      markdown_description: `📍 **NEW JOB ARRIVED - [View in APR Hub](${jobUrl})**
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 **Client:** ${job.client_first_name || job.clientFirstName} ${job.client_last_name || job.clientLastName}
 Organization: ${job.client_organization || job.clientOrganization || 'N/A'}
@@ -108,11 +104,24 @@ Intended Use: ${job.intended_use || job.intendedUse || 'N/A'}
 Asset Condition: ${job.asset_condition || job.assetCondition || 'N/A'}
 
 Notes: ${job.notes || job.additionalComments || 'No notes'}`,
-        priority: 3, // Normal priority (1=urgent, 2=high, 3=normal, 4=low)
-        status: 'to do', // Put in "to do" status (default open status)
-        template_id: CLICKUP_TEMPLATE_ID, // This will add the 9 subtasks
-        notify_all: false
-      })
+      priority: 3, // Normal priority (1=urgent, 2=high, 3=normal, 4=low)
+      status: 'to do', // Put in "to do" status (default open status)
+      notify_all: false
+    }
+
+    // Only include template_id if it's set (Production uses template, Dev may skip)
+    if (CLICKUP_TEMPLATE_ID) {
+      taskPayload.template_id = CLICKUP_TEMPLATE_ID
+    }
+
+    // Create task with or without template
+    const clickupResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
+      method: 'POST',
+      headers: {
+        'Authorization': CLICKUP_API_TOKEN,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(taskPayload)
     })
 
     if (!clickupResponse.ok) {

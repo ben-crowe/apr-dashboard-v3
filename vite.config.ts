@@ -9,16 +9,9 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     proxy: {
-      '/api/valcre': {
-        target: 'https://api-core.valcre.com',
+      '/api': {
+        target: 'https://apr-dashboard-v2.vercel.app',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/valcre/, '/api/v1'),
-        secure: true
-      },
-      '/auth/valcre': {
-        target: 'https://auth.valcre.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/auth\/valcre/, ''),
         secure: true
       }
     }

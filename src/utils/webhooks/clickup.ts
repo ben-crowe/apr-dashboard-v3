@@ -1,7 +1,7 @@
 import { DetailJob } from '@/types/job';
 
 // ClickUp API Configuration
-const CLICKUP_API_TOKEN = 'pk_10791838_U80AIXPC66YFCS56AGWT71SAPXWH6EU5';
+const CLICKUP_API_TOKEN = import.meta.env.VITE_CLICKUP_API_TOKEN;
 const CLICKUP_API_BASE = 'https://api.clickup.com/api/v2';
 
 // Environment-specific configuration

@@ -201,11 +201,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.log("Authenticating for update...");
         const authBody = {
           grant_type: "password",
-          client_id: "c9AfkQFS3Scq8YvRsl1DtGbbMRaDDSoh",
-          client_secret:
+          client_id: process.env.VALCRE_CLIENT_ID || "c9AfkQFS3Scq8YvRsl1DtGbbMRaDDSoh",
+          client_secret: process.env.VALCRE_CLIENT_SECRET ||
             "6VLkSjdT-EvELiIh8QLNv-sQrgy-o_P2KXrHn1g1_Sq9p9yPn73NxuBGtKGaO2kZ",
-          username: "chris.chornohos@valta.ca",
-          password: "Valvalta1!",
+          username: process.env.VALCRE_USERNAME || "chris.chornohos@valta.ca",
+          password: process.env.VALCRE_PASSWORD || "Valvalta1!",
           scope: "offline_access",
           audience: "https://valcre.api.com",
         };
@@ -359,11 +359,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log("Authenticating with Valcre...");
     const authBody = {
       grant_type: "password",
-      client_id: "c9AfkQFS3Scq8YvRsl1DtGbbMRaDDSoh",
-      client_secret:
+      client_id: process.env.VALCRE_CLIENT_ID || "c9AfkQFS3Scq8YvRsl1DtGbbMRaDDSoh",
+      client_secret: process.env.VALCRE_CLIENT_SECRET ||
         "6VLkSjdT-EvELiIh8QLNv-sQrgy-o_P2KXrHn1g1_Sq9p9yPn73NxuBGtKGaO2kZ",
-      username: "chris.chornohos@valta.ca",
-      password: "Valvalta1!",
+      username: process.env.VALCRE_USERNAME || "chris.chornohos@valta.ca",
+      password: process.env.VALCRE_PASSWORD || "Valvalta1!",
       scope: "offline_access",
       audience: "https://valcre.api.com",
     };

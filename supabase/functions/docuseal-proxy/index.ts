@@ -28,7 +28,7 @@ serve(async (req) => {
     const body = await req.json()
     
     // DocuSeal API key - Updated Sept 7, 2025
-    const DOCUSEAL_API_KEY = '9jnCPmKv5FfnokxJBnn4ij1tPgsQPEqqXASs2MSyaRN'
+    const DOCUSEAL_API_KEY = Deno.env.get('DOCUSEAL_API_KEY') || '9jnCPmKv5FfnokxJBnn4ij1tPgsQPEqqXASs2MSyaRN'
     
     console.log(`Proxying request to DocuSeal: ${endpoint}`)
     

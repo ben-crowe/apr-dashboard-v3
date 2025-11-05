@@ -3,7 +3,7 @@ import { markLOESent } from "./clickup";
 import { supabase } from "@/integrations/supabase/client";
 
 // DocuSeal API Configuration
-const DOCUSEAL_API_KEY = "9jnCPmKv5FfnokxJBnn4ij1tPgsQPEqqXASs2MSyaRN";
+const DOCUSEAL_API_KEY = import.meta.env.VITE_DOCUSEAL_API_KEY;
 const DOCUSEAL_TEMPLATE_ID = "1680270";
 const DOCUSEAL_API_BASE = "https://api.docuseal.co";
 

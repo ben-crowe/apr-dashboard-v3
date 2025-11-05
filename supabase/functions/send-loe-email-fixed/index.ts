@@ -26,7 +26,7 @@ serve(async (req) => {
     console.log('Sending LOE email to:', to)
     
     // Use Resend API - clean HTML emails without encoding issues
-    const RESEND_API_KEY = 're_8B4Po2eL_84kFfQeEHAf4z4GFTLaqTv94';
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || 're_8B4Po2eL_84kFfQeEHAf4z4GFTLaqTv94';
     
     const emailHtml = `<!DOCTYPE html>
 <html>

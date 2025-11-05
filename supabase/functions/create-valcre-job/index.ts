@@ -323,11 +323,11 @@ serve(async (req) => {
     // OAuth credentials
     const authBody = {
       grant_type: "password",
-      client_id: "c9AfkQFS3Scq8YvRsl1DtGbbMRaDDSoh",
-      client_secret:
+      client_id: Deno.env.get('VALCRE_CLIENT_ID') || "c9AfkQFS3Scq8YvRsl1DtGbbMRaDDSoh",
+      client_secret: Deno.env.get('VALCRE_CLIENT_SECRET') ||
         "6VLkSjdT-EvELiIh8QLNv-sQrgy-o_P2KXrHn1g1_Sq9p9yPn73NxuBGtKGaO2kZ",
-      username: "chris.chornohos@valta.ca",
-      password: "Valvalta1!",
+      username: Deno.env.get('VALCRE_USERNAME') || "chris.chornohos@valta.ca",
+      password: Deno.env.get('VALCRE_PASSWORD') || "Valvalta1!",
       scope: "offline_access",
       audience: "https://valcre.api.com",
     };

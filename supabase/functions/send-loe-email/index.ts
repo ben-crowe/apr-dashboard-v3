@@ -94,8 +94,8 @@ serve(async (req) => {
       await client.connectTLS({
         hostname: "smtp.gmail.com",
         port: 465,
-        username: "admin@valta.ca",
-        password: "spusouthiyfmesdj", // App-specific password
+        username: Deno.env.get('GMAIL_USERNAME') || "admin@valta.ca",
+        password: Deno.env.get('GMAIL_APP_PASSWORD') || "spusouthiyfmesdj", // App-specific password
       })
       
       // Send the email

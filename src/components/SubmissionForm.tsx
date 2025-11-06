@@ -73,7 +73,6 @@ const SubmissionForm = () => {
         formData={formData}
         errors={errors}
         handleChange={handleChange}
-        handleSameAsClientContactChange={handleSameAsClientContactChange}
       />
 
       <Separator />
@@ -83,7 +82,6 @@ const SubmissionForm = () => {
         errors={errors}
         handleChange={handleChange}
         handleSelectChange={handleSelectChange}
-        handleSameAsClientContactChange={handleSameAsClientContactChange}
       />
 
       <Separator />

@@ -3,7 +3,6 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -20,7 +19,6 @@ interface PropertyInformationSectionProps {
   errors: ValidationErrors;
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleSelectChange: (value: string, name: string) => void;
-  handleSameAsClientContactChange: (checked: boolean) => void;
 }
 
 const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
@@ -28,7 +26,6 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
   errors,
   handleChange,
   handleSelectChange,
-  handleSameAsClientContactChange,
 }) => {
   return (
     <FormSection
@@ -76,21 +73,11 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
         {/* Property Contact Information Section */}
         <div className="pt-4 border-t border-gray-200">
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold">Property Contact Information</h4>
-
-            {/* Same as Client Contact Checkbox */}
-            <div className="flex items-center space-x-2">
-              <Checkbox
-                id="sameAsClientContact"
-                checked={formData.sameAsClientContact || false}
-                onCheckedChange={handleSameAsClientContactChange}
-              />
-              <Label
-                htmlFor="sameAsClientContact"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Same as Client Contact
-              </Label>
+            <div>
+              <h4 className="text-lg font-semibold">Optional Property Contact</h4>
+              <p className="text-sm text-muted-foreground mt-1">
+                Leave blank if same as client contact above
+              </p>
             </div>
 
             {/* Property Contact Fields */}
@@ -103,8 +90,6 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                   value={formData.propertyContactFirstName || ""}
                   onChange={handleChange}
                   placeholder="Marcus / Property Management"
-                  disabled={formData.sameAsClientContact}
-                  className={formData.sameAsClientContact ? "bg-gray-50" : ""}
                 />
               </div>
 
@@ -116,8 +101,6 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                   value={formData.propertyContactLastName || ""}
                   onChange={handleChange}
                   placeholder="Johnson"
-                  disabled={formData.sameAsClientContact}
-                  className={formData.sameAsClientContact ? "bg-gray-50" : ""}
                 />
               </div>
             </div>
@@ -132,8 +115,6 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                   value={formData.propertyContactEmail || ""}
                   onChange={handleChange}
                   placeholder="property.manager@example.com"
-                  disabled={formData.sameAsClientContact}
-                  className={formData.sameAsClientContact ? "bg-gray-50" : ""}
                 />
               </div>
 
@@ -146,8 +127,6 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                   value={formData.propertyContactPhone || ""}
                   onChange={handleChange}
                   placeholder="(403) 555-0123"
-                  disabled={formData.sameAsClientContact}
-                  className={formData.sameAsClientContact ? "bg-gray-50" : ""}
                 />
               </div>
             </div>

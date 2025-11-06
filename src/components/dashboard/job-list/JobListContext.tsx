@@ -89,12 +89,11 @@ export const JobListProvider: React.FC<{ children: React.ReactNode }> = ({ child
           intendedUse: cleanQuotedString(job.intended_use),
           assetCondition: cleanQuotedString(job.asset_condition),
           notes: job.notes || undefined,
-          // Property Contact fields
+          // Property Contact fields (optional - defaults to client contact if empty)
           propertyContactFirstName: job.property_contact_first_name || undefined,
           propertyContactLastName: job.property_contact_last_name || undefined,
           propertyContactEmail: job.property_contact_email || undefined,
           propertyContactPhone: job.property_contact_phone || undefined,
-          sameAsClientContact: job.same_as_client_contact || undefined,
           // Validate and cast status to ensure it's one of the JobStatus values
           status: validateJobStatus(job.status),
           createdAt: job.created_at,

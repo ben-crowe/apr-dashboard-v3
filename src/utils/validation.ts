@@ -71,6 +71,10 @@ export const validateForm = (data: FormData): ValidationErrors => {
     errors.propertyAddress = "Property address is required";
   }
 
+  if (!data.propertyType?.trim()) {
+    errors.propertyType = "Property type is required";
+  }
+
   return errors;
 };
 

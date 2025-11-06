@@ -136,7 +136,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
         {/* Property Details - Type, Use, Valuation, Condition */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="propertyType">Property Type</Label>
+            <Label htmlFor="propertyType">Property Type <span className="text-destructive">*</span></Label>
             <Select
               value={formData.propertyType}
               onValueChange={(value) => handleSelectChange(value, "propertyType")}

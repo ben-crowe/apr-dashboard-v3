@@ -212,8 +212,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       intendedUse: intendedUse,
       assetCondition: condition,
       notes: `Property is a ${sqft.toLocaleString()} sq ft ${propertyType} complex. Need appraisal for ${intendedUse}.`,
-      // Initialize property contact fields as empty (user can choose to use checkbox)
-      sameAsClientContact: false,
+      // Initialize property contact fields as empty (defaults to client contact if left blank)
       propertyContactFirstName: '',
       propertyContactLastName: '',
       propertyContactEmail: '',

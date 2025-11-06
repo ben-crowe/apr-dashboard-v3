@@ -14,8 +14,7 @@ export interface FormData {
   assetCondition?: string;
   notes?: string;
   files: File[];
-  // Property Contact fields
-  sameAsClientContact?: boolean;
+  // Property Contact fields (optional - defaults to client contact if empty)
   propertyContactFirstName?: string;
   propertyContactLastName?: string;
   propertyContactEmail?: string;

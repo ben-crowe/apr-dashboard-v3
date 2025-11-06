@@ -21,8 +21,7 @@ const initialFormData: FormData = {
   assetCondition: "",
   notes: "",
   files: [],
-  // Property Contact fields
-  sameAsClientContact: false,
+  // Property Contact fields (optional - defaults to client contact if empty)
   propertyContactFirstName: "",
   propertyContactLastName: "",
   propertyContactEmail: "",
@@ -55,39 +54,6 @@ const useFormSubmission = () => {
     });
     if (errors[name as keyof ValidationErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
-    }
-  };
-
-  const handleSameAsClientContactChange = (checked: boolean) => {
-    if (checked) {
-      // Auto-fill property contact fields from client contact fields
-      setFormData((prev) => ({
-        ...prev,
-        sameAsClientContact: true,
-        propertyContactFirstName: prev.clientFirstName,
-        propertyContactLastName: prev.clientLastName,
-        propertyContactEmail: prev.clientEmail,
-        propertyContactPhone: prev.clientPhone,
-      }));
-      
-      // Clear any errors for property contact fields
-      setErrors((prev) => ({
-        ...prev,
-        propertyContactFirstName: undefined,
-        propertyContactLastName: undefined,
-        propertyContactEmail: undefined,
-        propertyContactPhone: undefined,
-      }));
-    } else {
-      // Clear property contact fields and uncheck
-      setFormData((prev) => ({
-        ...prev,
-        sameAsClientContact: false,
-        propertyContactFirstName: "",
-        propertyContactLastName: "",
-        propertyContactEmail: "",
-        propertyContactPhone: "",
-      }));
     }
   };
 
@@ -300,7 +266,6 @@ const useFormSubmission = () => {
     webhookResponse,
     handleChange,
     handleSelectChange,
-    handleSameAsClientContactChange,
     handleAutoFill,
     handleFileChange,
     handleSubmit,

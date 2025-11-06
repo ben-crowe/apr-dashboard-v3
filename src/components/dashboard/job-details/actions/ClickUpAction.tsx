@@ -117,7 +117,7 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
         <Button
           onClick={handleClick}
           variant="default"
-          className="bg-purple-600 hover:bg-purple-700 text-white"
+          className="bg-blue-600 hover:bg-blue-700 text-white"
         >
           <ExternalLink className="w-4 h-4 mr-2" />
           View in ClickUp

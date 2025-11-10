@@ -821,8 +821,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (jobData.reportType || jobData.ReportType) {
       const rawValue = jobData.reportType || jobData.ReportType;
       const converted = REPORT_FORMAT_MAP[rawValue];
-      if (converted) {
+      if (converted && converted !== 'Form') {
+        // Skip "Form" - not a valid Valcre enum value
         jobCreateData.ReportFormat = converted;
+      } else if (!converted) {
+        console.log(`⚠️ WARNING: ReportType value "${rawValue}" not in REPORT_FORMAT_MAP, skipping`);
       }
     }
 

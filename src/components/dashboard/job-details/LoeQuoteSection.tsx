@@ -91,9 +91,16 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // Check if required fields are filled for Create Valcre button
   const canCreateValcreJob = React.useMemo(() => {
     if (!job) return false;
+
+    // Check if property type exists in either legacy (string) or new (array) format
+    const hasPropertyType = !!(
+      job.propertyType ||
+      (job.propertyTypes && Array.isArray(job.propertyTypes) && job.propertyTypes.length > 0)
+    );
+
     return !!(
       job.propertyAddress &&
-      job.propertyType &&
+      hasPropertyType &&
       job.intendedUse &&
       jobDetails?.appraisalFee &&
       jobDetails?.scopeOfWork &&
@@ -105,7 +112,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const getMissingFieldsForValcre = React.useMemo(() => {
     const missingFields = [];
     if (!job?.propertyAddress) missingFields.push('Property Address');
-    if (!job?.propertyType) missingFields.push('Property Type');
+
+    // Check property type in both legacy and new formats
+    const hasPropertyType = !!(
+      job?.propertyType ||
+      (job?.propertyTypes && Array.isArray(job?.propertyTypes) && job?.propertyTypes.length > 0)
+    );
+    if (!hasPropertyType) missingFields.push('Property Type');
+
     if (!job?.intendedUse) missingFields.push('Intended Use');
     if (!jobDetails?.appraisalFee) missingFields.push('Appraisal Fee');
     if (!jobDetails?.scopeOfWork) missingFields.push('Scope of Work');
@@ -131,7 +145,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         clientOrganization: job.clientOrganization,
         propertyName: job.propertyName,  // Include property name for Valcre job title
         propertyAddress: job.propertyAddress,
-        propertyType: job.propertyType,
+        propertyType: job.propertyType,  // Legacy single-select
+        propertyTypes: job.propertyTypes,  // New multi-select array
         intendedUse: job.intendedUse,
         assetCondition: job.assetCondition,
         notes: job.notes,

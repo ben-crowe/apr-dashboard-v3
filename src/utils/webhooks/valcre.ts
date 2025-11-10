@@ -210,12 +210,14 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
 
       // Property fields (will be used for Property entity)
       // Support both legacy single-select and new multi-select
-      // NOTE: Valcre API cannot parse JSON arrays - must send as comma-separated string
-      PropertyType: formData.propertyTypes && formData.propertyTypes.length > 0 
-        ? formData.propertyTypes.join(', ')  // Multi-select: "Retail, Office, Industrial"
+      // NOTE: Valcre PropertyType field only accepts SINGLE value (enum), not comma-separated
+      // For multi-select, send only the FIRST property type to PropertyType
+      // Send full comma-separated list to PropertyTypeEnum for the Types field
+      PropertyType: formData.propertyTypes && formData.propertyTypes.length > 0
+        ? formData.propertyTypes[0]  // Multi-select: use FIRST value only
         : formData.propertyType || 'Commercial', // Legacy single-select
       PropertyTypeEnum: formData.propertyTypes && formData.propertyTypes.length > 0
-        ? formData.propertyTypes.join(', ')  // Multi-select for PropertyTypeEnum mapping
+        ? formData.propertyTypes.join(', ')  // Multi-select for Types field (supports comma-separated)
         : formData.propertyType || 'Commercial',  // Legacy single-select
       PropertySubtype: formData.propertySubtype || '',
       BuildingSize: formData.buildingSize || formData.sizeSF || 0,

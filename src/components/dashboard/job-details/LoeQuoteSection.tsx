@@ -92,11 +92,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const canCreateValcreJob = React.useMemo(() => {
     if (!job) return false;
 
-    // Check if property type exists in either legacy (string) or new (array) format
-    const hasPropertyType = !!(
-      job.propertyType ||
-      (job.propertyTypes && Array.isArray(job.propertyTypes) && job.propertyTypes.length > 0)
-    );
+    // Check if property type exists (stored as comma-separated string in property_type column)
+    const hasPropertyType = !!(job.propertyType && job.propertyType.trim());
 
     return !!(
       job.propertyAddress &&
@@ -113,11 +110,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     const missingFields = [];
     if (!job?.propertyAddress) missingFields.push('Property Address');
 
-    // Check property type in both legacy and new formats
-    const hasPropertyType = !!(
-      job?.propertyType ||
-      (job?.propertyTypes && Array.isArray(job?.propertyTypes) && job?.propertyTypes.length > 0)
-    );
+    // Check property type (stored as comma-separated string)
+    const hasPropertyType = !!(job?.propertyType && job?.propertyType.trim());
     if (!hasPropertyType) missingFields.push('Property Type');
 
     if (!job?.intendedUse) missingFields.push('Intended Use');
@@ -145,8 +139,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         clientOrganization: job.clientOrganization,
         propertyName: job.propertyName,  // Include property name for Valcre job title
         propertyAddress: job.propertyAddress,
-        propertyType: job.propertyType,  // Legacy single-select
-        propertyTypes: job.propertyTypes,  // New multi-select array
+        propertyType: job.propertyType,  // Comma-separated string: "Healthcare, Manufactured Housing"
+        propertyTypes: job.propertyType ? job.propertyType.split(',').map(t => t.trim()).filter(Boolean) : [],  // Parse to array for Valcre API
         intendedUse: job.intendedUse,
         assetCondition: job.assetCondition,
         notes: job.notes,

@@ -484,7 +484,9 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   value=""
                   onValueChange={(value) => {
                     if (value) {
-                      const currentTypes = job.propertyTypes || [];
+                      // Parse existing comma-separated string into array
+                      const currentTypesStr = job.propertyType || '';
+                      const currentTypes = currentTypesStr ? currentTypesStr.split(',').map(t => t.trim()).filter(Boolean) : [];
                       let newTypes;
                       if (currentTypes.includes(value)) {
                         // Remove if already selected
@@ -493,12 +495,15 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                         // Add if not selected
                         newTypes = [...currentTypes, value];
                       }
-                      
+
+                      // Convert array back to comma-separated string for storage
+                      const newTypesStr = newTypes.join(', ');
+
                       // Update UI immediately
-                      onUpdateJob?.({ propertyTypes: newTypes });
-                      
-                      // Auto-save to database and sync to Valcre
-                      autoSaveField('propertyTypes', newTypes);
+                      onUpdateJob?.({ propertyType: newTypesStr });
+
+                      // Auto-save to database (property_type column) and sync to Valcre
+                      autoSaveField('propertyType', newTypesStr);
                     }
                   }}
                 >
@@ -506,15 +511,17 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                     <SelectValue placeholder="Add more..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {['Agriculture', 'Building', 'Healthcare', 'Hospitality', 'Industrial', 'Land', 
-                      'Manufactured Housing', 'Multi-Family', 'Office', 'Retail', 'Self-Storage', 
+                    {['Agriculture', 'Building', 'Healthcare', 'Hospitality', 'Industrial', 'Land',
+                      'Manufactured Housing', 'Multi-Family', 'Office', 'Retail', 'Self-Storage',
                       'Single-Family', 'Special Purpose', 'Unknown']
                       .map((type) => {
-                        const isSelected = job.propertyTypes?.includes(type);
+                        const currentTypesStr = job.propertyType || '';
+                        const currentTypes = currentTypesStr ? currentTypesStr.split(',').map(t => t.trim()).filter(Boolean) : [];
+                        const isSelected = currentTypes.includes(type);
                         return (
                           <SelectItem key={type} value={type}>
                             <div className="flex items-center gap-2">
-                              <Checkbox 
+                              <Checkbox
                                 checked={isSelected}
                                 onCheckedChange={() => {}} // Handled by SelectItem's onValueChange
                                 className="pointer-events-none"
@@ -526,27 +533,31 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                       })}
                   </SelectContent>
                 </Select>
-                
+
                 {/* Selected Types Display - inline after the button */}
-                {job.propertyTypes && job.propertyTypes.length > 0 && (
-                  <>
-                    {job.propertyTypes.map((type) => (
-                      <span
-                        key={type}
-                        className="inline-flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300"
-                        style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}
-                      >
-                        {type}
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const newTypes = job.propertyTypes?.filter(t => t !== type) || [];
-                            // Update UI immediately
-                            onUpdateJob?.({ propertyTypes: newTypes });
-                            // Auto-save to database and sync to Valcre
-                            autoSaveField('propertyTypes', newTypes);
-                          }}
-                          className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 font-bold text-base leading-none"
+                {(() => {
+                  const currentTypesStr = job.propertyType || '';
+                  const currentTypes = currentTypesStr ? currentTypesStr.split(',').map(t => t.trim()).filter(Boolean) : [];
+                  return currentTypes.length > 0 && (
+                    <>
+                      {currentTypes.map((type) => (
+                        <span
+                          key={type}
+                          className="inline-flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300"
+                          style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}
+                        >
+                          {type}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newTypes = currentTypes.filter(t => t !== type);
+                              const newTypesStr = newTypes.join(', ');
+                              // Update UI immediately
+                              onUpdateJob?.({ propertyType: newTypesStr });
+                              // Auto-save to database and sync to Valcre
+                              autoSaveField('propertyType', newTypesStr);
+                            }}
+                            className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 font-bold text-base leading-none"
                           title="Remove"
                         >
                           ×

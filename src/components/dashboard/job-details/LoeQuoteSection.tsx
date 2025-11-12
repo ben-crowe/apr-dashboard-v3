@@ -144,6 +144,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         intendedUse: job.intendedUse,
         assetCondition: job.assetCondition,
         notes: job.notes,
+        // Include property contact fields (separate from client)
+        propertyContactFirstName: job.propertyContactFirstName || '',
+        propertyContactLastName: job.propertyContactLastName || '',
+        propertyContactEmail: job.propertyContactEmail || '',
+        propertyContactPhone: job.propertyContactPhone || '',
         // Include LOE details for complete job creation
         appraisalFee: jobDetails?.appraisalFee || 0,
         scopeOfWork: jobDetails?.scopeOfWork || '',

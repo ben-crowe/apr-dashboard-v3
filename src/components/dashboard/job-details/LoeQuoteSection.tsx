@@ -151,6 +151,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         propertyContactPhone: job.propertyContactPhone || '',
         // Include LOE details for complete job creation
         appraisalFee: jobDetails?.appraisalFee || 0,
+        retainerAmount: jobDetails?.retainerAmount || '',
         scopeOfWork: jobDetails?.scopeOfWork || '',
         valuationPremises: jobDetails?.valuationPremises || '',
         propertyRightsAppraised: jobDetails?.propertyRightsAppraised || '',

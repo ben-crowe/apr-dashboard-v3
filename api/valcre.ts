@@ -228,9 +228,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // Map job fields that can be updated - handle both regular updates and LOE details
         if (jobData.appraisalFee || jobData.AppraisalFee)
           updateData.Fee = jobData.appraisalFee || jobData.AppraisalFee;
-        if (jobData.retainerAmount || jobData.RetainerAmount)
+        if (jobData.retainerAmount || jobData.RetainerAmount || jobData.Retainer)
           updateData.Retainer =
-            jobData.retainerAmount || jobData.RetainerAmount;
+            jobData.retainerAmount || jobData.RetainerAmount || jobData.Retainer;
         if (jobData.deliveryDate || jobData.DeliveryDate) {
           const date = jobData.deliveryDate || jobData.DeliveryDate;
           updateData.DueDate = date.split("T")[0];

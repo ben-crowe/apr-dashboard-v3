@@ -565,7 +565,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                       </span>
                     ))}
                   </>
-                )}
+                )
+              })()}
               </div>
             </CompactField>
             <CompactField label="Address">

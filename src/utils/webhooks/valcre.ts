@@ -213,9 +213,13 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       // NOTE: Valcre PropertyType field only accepts SINGLE value (enum), not comma-separated
       // For multi-select, send only the FIRST property type to PropertyType
       // Send full comma-separated list to PropertyTypeEnum for the Types field
-      PropertyType: formData.propertyTypes && formData.propertyTypes.length > 0
-        ? formData.propertyTypes[0]  // Multi-select: use FIRST value only
-        : formData.propertyType || 'Commercial', // Legacy single-select
+      PropertyType: (() => {
+        const value = formData.propertyTypes && formData.propertyTypes.length > 0
+          ? formData.propertyTypes[0]  // Multi-select: use FIRST value only
+          : formData.propertyType || 'Commercial'; // Legacy single-select
+        console.log('🔥 PropertyType being sent to Valcre:', value, 'from propertyTypes:', formData.propertyTypes);
+        return value;
+      })(),
       PropertyTypeEnum: formData.propertyTypes && formData.propertyTypes.length > 0
         ? formData.propertyTypes.join(', ')  // Multi-select for Types field (supports comma-separated)
         : formData.propertyType || 'Commercial',  // Legacy single-select

@@ -56,3 +56,4 @@ dist-ssr
 
 # Test screenshots
 .playwright-mcp/
+supabase/functions/.env

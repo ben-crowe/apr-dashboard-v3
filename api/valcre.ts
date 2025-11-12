@@ -423,7 +423,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (searchResponse.ok) {
         const searchResults = await searchResponse.json();
         if (searchResults.value && searchResults.value.length > 0) {
-          clientId = searchResults.value[0].Id || searchResults.value[0].id;
+          const existingContact = searchResults.value[0];
+          // Try multiple possible ID field names
+          clientId = existingContact.Id || existingContact.id || existingContact.ID ||
+                    existingContact.ContactId || existingContact.contactId;
           console.log("✅ Found existing contact with ID:", clientId);
         }
       }
@@ -471,8 +474,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
 
       const contact = await contactResponse.json();
-      clientId = contact.Id || contact.id;
+      // Try multiple possible ID field names
+      clientId = contact.Id || contact.id || contact.ID ||
+                 contact.ContactId || contact.contactId;
+      console.log("🔍 Contact Response Keys:", Object.keys(contact));
       console.log("✅ Contact created with ID:", clientId);
+
+      if (!clientId) {
+        console.error("❌ Contact created but no ID returned!");
+        console.error("Response structure:", JSON.stringify(contact, null, 2));
+        return res
+          .status(500)
+          .setHeader("Access-Control-Allow-Origin", "*")
+          .json({
+            error: "Contact created but no ID returned",
+            details: {
+              message: "Valcre API returned a response without an ID field",
+              responseKeys: Object.keys(contact),
+              fullResponse: contact
+            },
+          });
+      }
     }
 
     // STEP 2: Create Property Contact Entity (if different from client)
@@ -528,8 +550,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       if (propContactResponse.ok) {
         const propContact = await propContactResponse.json();
-        propertyContactId = propContact.Id || propContact.id;
+        // Try multiple possible ID field names
+        propertyContactId = propContact.Id || propContact.id || propContact.ID ||
+                           propContact.ContactId || propContact.contactId;
+        console.log("🔍 PropertyContact Response Keys:", Object.keys(propContact));
         console.log("✅ Property Contact created with ID:", propertyContactId);
+
+        if (!propertyContactId) {
+          console.warn("⚠️ PropertyContact created but no ID returned, will use null");
+          console.warn("Response structure:", JSON.stringify(propContact, null, 2));
+          propertyContactId = null;
+        }
       } else {
         const errorText = await propContactResponse.text();
         console.log(
@@ -564,17 +595,56 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     };
 
     // Add all other Property fields if provided
+    // PROPERTY TYPE VALIDATION - Valcre only accepts specific enum values
+    const VALID_PROPERTY_TYPES = [
+      'Agriculture', 'Building', 'Healthcare', 'Hospitality', 'Industrial', 'Land',
+      'Manufactured Housing', 'Multi-Family', 'Office', 'Retail', 'Self-Storage',
+      'Single-Family', 'Special Purpose', 'Unknown'
+    ];
+
+    // Map legacy/invalid property types to valid ones
+    const PROPERTY_TYPE_MAP: Record<string, string> = {
+      'Mixed Use': 'Building',  // Map "Mixed Use" to "Building"
+      'Commercial': 'Building',
+      'Residential': 'Multi-Family',
+    };
+
     if (jobData.PropertyType) {
-      // Use PropertyType directly - dashboard now sends exact Valcre values
-      propertyData.PropertyType = jobData.PropertyType;
+      // Parse comma-separated property types and validate each one
+      const propertyTypes = jobData.PropertyType.split(',').map((t: string) => t.trim()).filter(Boolean);
+      const firstType = propertyTypes[0];
+
+      // Map or validate the first property type (for PropertyType field - single value only)
+      let validatedType = PROPERTY_TYPE_MAP[firstType] || firstType;
+
+      if (!VALID_PROPERTY_TYPES.includes(validatedType)) {
+        console.warn(`⚠️ Invalid PropertyType "${firstType}" - defaulting to "Building"`);
+        validatedType = 'Building';  // Default fallback
+      }
+
+      propertyData.PropertyType = validatedType;
+      console.log(`🏢 PropertyType: "${firstType}" → "${validatedType}"`);
     }
+
     if (jobData.PropertySubtype)
       propertyData.SecondaryType = jobData.PropertySubtype;
-    
+
     // Set Types field from PropertyTypeEnum (now supports comma-separated multi-select)
     // NOTE: Valcre API cannot parse arrays - expects string primitive
     if (jobData.PropertyTypeEnum) {
-      propertyData.Types = jobData.PropertyTypeEnum; // Can be single ("Retail") or multi ("Retail, Office, Industrial")
+      // Validate and filter property types for the Types field
+      const propertyTypes = jobData.PropertyTypeEnum.split(',').map((t: string) => t.trim()).filter(Boolean);
+      const validatedTypes = propertyTypes
+        .map((type: string) => PROPERTY_TYPE_MAP[type] || type)  // Map invalid types
+        .filter((type: string) => VALID_PROPERTY_TYPES.includes(type));  // Filter to valid only
+
+      if (validatedTypes.length > 0) {
+        propertyData.Types = validatedTypes.join(', ');
+        console.log(`🏢 Types: "${jobData.PropertyTypeEnum}" → "${propertyData.Types}"`);
+      } else {
+        console.warn(`⚠️ No valid property types in "${jobData.PropertyTypeEnum}" - using "Building"`);
+        propertyData.Types = 'Building';
+      }
     }
     if (jobData.BuildingSize) propertyData.SizeSF = jobData.BuildingSize;
     if (jobData.GrossBuildingAreaSf)
@@ -659,17 +729,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const propertyResponseText = await propertyResponse.text();
     console.log("Property Response Status:", propertyResponse.status);
     console.log("Property Response:", propertyResponseText);
-    if (!propertyResponse.ok) {
-      console.error("Failed to create Property:", propertyResponseText);
-      return res
-        .status(500)
-        .setHeader("Access-Control-Allow-Origin", "*")
-        .json({
-          error: "Failed to create Property entity",
-          details: propertyResponseText,
-        });
-    }
 
+    // Parse response first to check for Valcre's error format
     let property;
     try {
       property = JSON.parse(propertyResponseText);
@@ -684,17 +745,47 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         });
     }
 
-    const propertyId = property.Id || property.id;
+    // Check for Valcre's error format (they return 200 with error in body!)
+    if (!propertyResponse.ok || property.success === false || property.error || property.status === "400") {
+      console.error("❌ Valcre rejected Property creation:", property);
+      return res
+        .status(500)
+        .setHeader("Access-Control-Allow-Origin", "*")
+        .json({
+          error: "Valcre API rejected Property creation",
+          details: {
+            message: property.error || "Property validation failed",
+            valcreResponse: property,
+            hint: property.error?.includes('was not found')
+              ? 'Invalid enum value sent to Valcre API. Check PropertyType field.'
+              : undefined
+          },
+        });
+    }
+
+    // Try multiple possible ID field names (case-insensitive)
+    const propertyId = property.Id || property.id || property.ID ||
+                      property.PropertyId || property.propertyId ||
+                      property.PropertyID || property.propertyID;
+
+    console.log("🔍 Property Response Keys:", Object.keys(property));
+    console.log("🔍 Extracted Property ID:", propertyId);
     console.log("✅ Property created with ID:", propertyId);
 
     if (!propertyId) {
-      console.error("Property created but no ID returned!", property);
+      console.error("❌ Property created but no ID returned!");
+      console.error("Response structure:", JSON.stringify(property, null, 2));
+      console.error("Available keys:", Object.keys(property));
       return res
         .status(500)
         .setHeader("Access-Control-Allow-Origin", "*")
         .json({
           error: "Property created but no ID returned",
-          details: property,
+          details: {
+            message: "Valcre API returned a response without an ID field",
+            responseKeys: Object.keys(property),
+            fullResponse: property
+          },
         });
     }
 

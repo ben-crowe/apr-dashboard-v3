@@ -240,9 +240,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (jobData.ClientComments || jobData.specialInstructions)
           updateData.ClientComments =
             jobData.ClientComments || jobData.specialInstructions;
-        if (jobData.InternalComments || jobData.internalComments)
+        if (jobData.InternalComments || jobData.internalComments || jobData.appraiserComments)
           updateData.Comments =
-            jobData.InternalComments || jobData.internalComments;
+            jobData.InternalComments || jobData.internalComments || jobData.appraiserComments;
 
         // Add Report fields to Comments for now (until we fix enum issues)
         const reportFields = [];
@@ -708,8 +708,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (descriptions.length > 0)
       propertyData.DescriptionText = descriptions.join(" | ");
 
-    if (jobData.InternalComments)
-      propertyData.CommentsPrivate = jobData.InternalComments;
+    if (jobData.InternalComments || jobData.internalComments || jobData.appraiserComments)
+      propertyData.CommentsPrivate = jobData.InternalComments || jobData.internalComments || jobData.appraiserComments;
 
     console.log('🚨 CRITICAL DEBUG - Property Data Being Sent:');
     console.log(`   PropertyType field: "${propertyData.PropertyType}"`);
@@ -898,7 +898,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // IntendedUses - CANNOT be set during POST, must PATCH after creation (see below)
 
       // Comments field for internal notes only
-      Comments: jobData.InternalComments || "",
+      Comments: jobData.InternalComments || jobData.internalComments || jobData.appraiserComments || "",
 
       // Client-visible comments
       ClientComments:

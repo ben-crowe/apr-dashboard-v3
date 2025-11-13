@@ -9,12 +9,17 @@ const corsHeaders = {
 // LOE Field Conversion Maps - Dashboard values → Valcre API values
 
 // PURPOSES MAP - Property Rights Appraised conversion
+// Maps Dashboard "Property Rights" field → Valcre "Purpose" field (Nov 13, 2025)
 const PURPOSES_MAP: Record<string, string> = {
   "Fee Simple Interest": "FeeSimple",
   "Leased Fee Interest": "LeasedFee",
   "Leasehold Interest": "Leasehold",
   "Undivided Interest": "UndividedInterest",
   "Partial Interest": "PartialInterest",
+  "Partial Interest Taking": "PartialInterestTaking",
+  "Total Taking": "TotalTaking",
+  "Rent Restricted": "RentRestricted",
+  "Market Study": "MarketStudy",
   "Other": "Other",
   "Going Concern": "GoingConcern",
   "Condominium Ownership": "CondominiumOwnership",
@@ -249,30 +254,50 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (jobData.paymentComments)
           updateData.PaymentComments = jobData.paymentComments;
 
-        // Add Report fields to Comments for now (until we fix enum issues)
-        const reportFields = [];
-        if (jobData.reportType || jobData.ReportType)
-          reportFields.push(
-            `Report Type: ${jobData.reportType || jobData.ReportType}`,
-          );
-        if (jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised)
-          reportFields.push(
-            `Property Rights: ${jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised}`,
-          );
-        if (jobData.valuationPremises || jobData.ValuationPremises)
-          reportFields.push(
-            `Valuation: ${jobData.valuationPremises || jobData.ValuationPremises}`,
-          );
-        if (jobData.AnalysisLevel)
-          reportFields.push(`Analysis Level: ${jobData.AnalysisLevel}`);
-        if (jobData.paymentTerms)
-          reportFields.push(`Payment Terms: ${jobData.paymentTerms}`);
+        // Map Report fields to proper Valcre enum fields (Nov 13, 2025 - Fixed)
 
-        if (reportFields.length > 0) {
-          const reportSection = reportFields.join(" | ");
+        // Property Rights → Purposes field (using PURPOSES_MAP)
+        if (jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised) {
+          const rawValue = jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised;
+          const converted = PURPOSES_MAP[rawValue];
+          if (converted) {
+            updateData.Purposes = converted;
+            console.log(`✅ Property Rights mapped: "${rawValue}" → "${converted}"`);
+          } else {
+            console.log(`⚠️ WARNING: Property Rights value "${rawValue}" not in PURPOSES_MAP, skipping`);
+          }
+        }
+
+        // Report Type → ReportFormat field (using REPORT_FORMAT_MAP)
+        if (jobData.reportType || jobData.ReportType) {
+          const rawValue = jobData.reportType || jobData.ReportType;
+          const converted = REPORT_FORMAT_MAP[rawValue];
+          if (converted && converted !== 'Form') {
+            updateData.ReportFormat = converted;
+            console.log(`✅ Report Type mapped: "${rawValue}" → "${converted}"`);
+          } else if (!converted) {
+            console.log(`⚠️ WARNING: Report Type value "${rawValue}" not in REPORT_FORMAT_MAP, skipping`);
+          }
+        }
+
+        // Valuation Premises → RequestedValues field (using REQUESTED_VALUES_MAP)
+        if (jobData.valuationPremises || jobData.ValuationPremises) {
+          const rawValue = jobData.valuationPremises || jobData.ValuationPremises;
+          const converted = REQUESTED_VALUES_MAP[rawValue];
+          if (converted) {
+            updateData.RequestedValues = converted;
+            console.log(`✅ Valuation Premises mapped: "${rawValue}" → "${converted}"`);
+          } else {
+            console.log(`⚠️ WARNING: Valuation Premises value "${rawValue}" not in REQUESTED_VALUES_MAP, skipping`);
+          }
+        }
+
+        // Payment Terms (keep in Comments for now - no dedicated Valcre field)
+        if (jobData.paymentTerms) {
+          const paymentSection = `Payment Terms: ${jobData.paymentTerms}`;
           updateData.Comments = updateData.Comments
-            ? `${updateData.Comments} | ${reportSection}`
-            : reportSection;
+            ? `${updateData.Comments} | ${paymentSection}`
+            : paymentSection;
         }
 
         console.log(

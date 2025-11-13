@@ -85,10 +85,28 @@ const ANALYSIS_LEVEL_MAP: Record<string, string> = {
   "Form": "Form",
 };
 
-// SCOPE MAP - Dashboard "Intended Use" → Valcre "Scope" field (Nov 13, 2025)
+// SCOPE OF WORK MAP - Dashboard "Scope of Work" → Valcre "Scope" field (Nov 13, 2025)
+const SCOPE_OF_WORK_MAP: Record<string, string> = {
+  "All Applicable": "AllApplicable",
+  "Best One Approach": "BestOneApproach",
+  "Best Two Approaches": "BestTwoApproaches",
+  "Cost Approach": "CostApproach",
+  "Direct Comparison Approach": "DirectComparisonApproach",
+  "Discounted Cash Flow": "DiscountedCashFlow",
+  "Feasibility Study": "FeasibilityStudy",
+  "Income Approach": "IncomeApproach",
+  "Land Value": "LandValue",
+  "Litigation": "Litigation",
+  "Market Research": "MarketResearch",
+  "Market Study": "MarketStudy",
+  "Net Rent Review": "NetRentReview",
+  "Update": "Update",
+};
+
+// INTENDED USES MAP - Dashboard "Intended Use" → Valcre "Authorized Use" field (Nov 13, 2025)
 // NOTE: Valcre has both "Scope" and "Authorized Use" fields - they are DIFFERENT
-// Dashboard "Intended Use" maps to Valcre "Scope" (NOT "IntendedUses"/"Authorized Use")
-const SCOPE_MAP: Record<string, string> = {
+// Dashboard "Intended Use" maps to "Authorized Use" (IntendedUses), NOT "Scope"
+const INTENDED_USES_MAP: Record<string, string> = {
   // Dashboard values:
   "Financing/Refinancing": "Financing",
   "Financing": "Financing",
@@ -248,12 +266,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         // Intended Use → Authorized Use field (IntendedUses)
         if (jobData.intendedUse) {
-          const converted = SCOPE_MAP[jobData.intendedUse];
+          const converted = INTENDED_USES_MAP[jobData.intendedUse];
           if (converted) {
             updateData.IntendedUses = converted;
             console.log(`✅ Intended Use mapped: "${jobData.intendedUse}" → "${converted}"`);
           } else {
-            console.log(`⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in SCOPE_MAP, skipping`);
+            console.log(`⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in INTENDED_USES_MAP, skipping`);
+          }
+        }
+
+        // Scope of Work → Scope field (Nov 13, 2025 - Added)
+        if (jobData.scopeOfWork || jobData.ScopeOfWork) {
+          const rawValue = jobData.scopeOfWork || jobData.ScopeOfWork;
+          const converted = SCOPE_OF_WORK_MAP[rawValue];
+          if (converted) {
+            updateData.Scope = converted;
+            console.log(`✅ Scope of Work mapped: "${rawValue}" → "${converted}"`);
+          } else {
+            console.log(`⚠️ WARNING: Scope of Work value "${rawValue}" not in SCOPE_OF_WORK_MAP, skipping`);
           }
         }
 
@@ -993,12 +1023,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // NOTE: Valcre has BOTH "Scope" and "Authorized Use" (IntendedUses) fields
     // Dashboard "Intended Use" maps to "Authorized Use" (IntendedUses)
     if (jobData.intendedUse) {
-      const converted = SCOPE_MAP[jobData.intendedUse];
+      const converted = INTENDED_USES_MAP[jobData.intendedUse];
       console.log(`🟣 Intended Use: "${jobData.intendedUse}" → "${converted}"`);
       if (converted) {
         jobCreateData.IntendedUses = converted;
       } else {
-        console.log(`⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in SCOPE_MAP, skipping`);
+        console.log(`⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in INTENDED_USES_MAP, skipping`);
+      }
+    }
+
+    // Scope of Work → Scope field (Nov 13, 2025 - Added)
+    if (jobData.scopeOfWork || jobData.ScopeOfWork) {
+      const rawValue = jobData.scopeOfWork || jobData.ScopeOfWork;
+      const converted = SCOPE_OF_WORK_MAP[rawValue];
+      console.log(`🟣 Scope of Work: "${rawValue}" → "${converted}"`);
+      if (converted) {
+        jobCreateData.Scope = converted;
+      } else {
+        console.log(`⚠️ WARNING: Scope of Work value "${rawValue}" not in SCOPE_OF_WORK_MAP, skipping`);
       }
     }
 

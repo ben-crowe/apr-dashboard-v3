@@ -195,6 +195,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.log(
         `Processing ${jobData.updateType} update for job ${jobData.jobId}`,
       );
+      console.log('🔍 DEBUG - Full jobData received:', JSON.stringify(jobData, null, 2));
 
       try {
         // Authenticate with Valcre first
@@ -243,6 +244,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (jobData.InternalComments || jobData.internalComments || jobData.appraiserComments)
           updateData.Comments =
             jobData.InternalComments || jobData.internalComments || jobData.appraiserComments;
+        if (jobData.deliveryComments)
+          updateData.DeliveryComments = jobData.deliveryComments;
+        if (jobData.paymentComments)
+          updateData.PaymentComments = jobData.paymentComments;
 
         // Add Report fields to Comments for now (until we fix enum issues)
         const reportFields = [];
@@ -903,6 +908,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // Client-visible comments
       ClientComments:
         jobData.ClientComments || jobData.SpecialInstructions || "",
+
+      // Delivery and Payment comments (new custom fields)
+      DeliveryComments: jobData.deliveryComments || "",
+      PaymentComments: jobData.paymentComments || "",
     };
 
     // ========== OPTIONAL LOE FIELD MAPPINGS ==========

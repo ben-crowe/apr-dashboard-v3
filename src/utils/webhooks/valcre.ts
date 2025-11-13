@@ -125,6 +125,14 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
         syncPayload.InternalComments = formData.appraiserComments;
       }
 
+      // Delivery and Payment comments (new custom Valcre fields)
+      if (formData.deliveryComments) {
+        syncPayload.deliveryComments = formData.deliveryComments;
+      }
+      if (formData.paymentComments) {
+        syncPayload.paymentComments = formData.paymentComments;
+      }
+
       if (formData.paymentTerms) syncPayload.PaymentTerms = formData.paymentTerms;
       // REMOVED: disbursementPercentage - legacy field no longer used (client is now independent appraiser)
 

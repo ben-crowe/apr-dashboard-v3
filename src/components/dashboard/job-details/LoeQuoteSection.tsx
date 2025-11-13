@@ -59,7 +59,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
 
   // Fields that sync to Valcre (from valcre.ts lines 231-248)
-  const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments', 'propertyRightsAppraised', 'scopeOfWork', 'valuationPremises', 'reportType'];
+  const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments', 'deliveryComments', 'paymentComments', 'propertyRightsAppraised', 'scopeOfWork', 'valuationPremises', 'reportType'];
 
   // Helper function to get user-friendly field names for toast messages
   const getFieldDisplayName = (fieldName: string): string => {
@@ -69,6 +69,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       deliveryDate: 'Delivery Date',
       paymentTerms: 'Payment Terms',
       appraiserComments: 'Appraiser Comments',
+      deliveryComments: 'Delivery Comments',
+      paymentComments: 'Payment Comments',
       propertyRightsAppraised: 'Property Rights Appraised',
       scopeOfWork: 'Scope of Work',
       valuationPremises: 'Valuation Premises',
@@ -315,6 +317,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           appraisalFee: 'appraisal_fee',
           retainerAmount: 'retainer_amount',
           appraiserComments: 'internal_comments',
+          deliveryComments: 'delivery_comments',
+          paymentComments: 'payment_comments',
           scopeOfWork: 'scope_of_work',
           propertyRightsAppraised: 'property_rights_appraised',
           reportType: 'report_type',
@@ -365,6 +369,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           if (fieldName === 'deliveryDate') syncData.deliveryDate = value;
           if (fieldName === 'paymentTerms') syncData.paymentTerms = value;
           if (fieldName === 'appraiserComments') syncData.appraiserComments = value;
+          if (fieldName === 'deliveryComments') syncData.deliveryComments = value;
+          if (fieldName === 'paymentComments') syncData.paymentComments = value;
           if (fieldName === 'propertyRightsAppraised') syncData.propertyRightsAppraised = value;
           if (fieldName === 'scopeOfWork') syncData.scopeOfWork = value;
           if (fieldName === 'valuationPremises') syncData.valuationPremises = value;
@@ -1021,21 +1027,48 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
         </SectionGroup>
 
-          {/* Appraiser Comments Section */}
-          <SectionGroup title="Appraiser Comments">
-            <TwoColumnFields>
-              <CompactField label="">
+          {/* Comments Section - Three columns (responsive) */}
+          <SectionGroup title="Comments">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-4">
+              <div className="flex flex-col gap-2">
+                <label className="text-sm text-gray-400">General:</label>
                 <Textarea
                   name="appraiserComments"
                   value={jobDetails.appraiserComments || ''}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  rows={3}
-                  className="text-sm resize-y min-h-[60px]"
-                  style={{ maxWidth: '400px' }}
+                  rows={4}
+                  className="text-sm resize-y min-h-[80px] w-full"
+                  placeholder="Internal appraiser notes..."
                 />
-              </CompactField>
-            </TwoColumnFields>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm text-gray-400">Delivery:</label>
+                <Textarea
+                  name="deliveryComments"
+                  value={jobDetails.deliveryComments || ''}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  rows={4}
+                  className="text-sm resize-y min-h-[80px] w-full"
+                  placeholder="Delivery instructions..."
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm text-gray-400">Payment:</label>
+                <Textarea
+                  name="paymentComments"
+                  value={jobDetails.paymentComments || ''}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  rows={4}
+                  className="text-sm resize-y min-h-[80px] w-full"
+                  placeholder="Payment terms and notes..."
+                />
+              </div>
+            </div>
           </SectionGroup>
 
         {/* Preview Modal */}

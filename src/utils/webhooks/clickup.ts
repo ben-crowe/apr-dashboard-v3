@@ -279,6 +279,18 @@ export async function updateClickUpChecklist(
   }
 }
 
+// Mark LOE preparation as complete (when LOE is ready to send)
+export async function markLOEPrepComplete(taskId: string): Promise<{ success: boolean; error?: string }> {
+  // This marks the preparation subtask as complete
+  // Try both possible subtask names
+  const result1 = await updateClickUpChecklist(taskId, 'LOE Quote Preparation', true);
+  if (!result1.success) {
+    // Try alternative name
+    return updateClickUpChecklist(taskId, 'Waiting for LOE Quote Preparation', true);
+  }
+  return result1;
+}
+
 // Mark LOE as sent when DocuSeal is triggered
 export async function markLOESent(taskId: string): Promise<{ success: boolean; error?: string }> {
   return updateClickUpChecklist(taskId, '1. Create & Send LOE', true);

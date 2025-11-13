@@ -21,6 +21,7 @@ import { generateAppraisalTestData } from "@/utils/testDataGenerator";
 import { FileSignature, AlertCircle, ExternalLink } from "lucide-react";
 import { validateRequiredFields } from "@/utils/webhooks/docuseal";
 import { generateLOEHTML, generateAndSendLOE, sendLOEEmail } from "@/utils/loe/generateLOE";
+import { markLOEPrepComplete } from "@/utils/webhooks/clickup";
 import LOEPreviewModal from "./actions/LOEPreviewModal";
 import ClickUpAction from "./actions/ClickUpAction";
 import {
@@ -556,6 +557,18 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         setPreviewHTML(html);
         setShowPreview(true);
         toast.info("Preview generated - please review before sending");
+
+        // Mark LOE preparation as complete in ClickUp (all required fields are now filled)
+        if (jobDetails?.clickupTaskId || job.clickupTaskId) {
+          const clickupTaskId = jobDetails?.clickupTaskId || job.clickupTaskId;
+          console.log('📋 Marking LOE prep complete in ClickUp:', clickupTaskId);
+          try {
+            await markLOEPrepComplete(clickupTaskId);
+            console.log('✅ ClickUp subtask updated: LOE preparation complete');
+          } catch (error) {
+            console.warn('Failed to update ClickUp subtask:', error);
+          }
+        }
       }
     } catch (error) {
       console.error("Error generating preview:", error);

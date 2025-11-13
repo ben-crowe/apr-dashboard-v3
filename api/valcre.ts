@@ -28,15 +28,15 @@ const PURPOSES_MAP: Record<string, string> = {
   "None": "None",
 };
 
-// REQUESTED VALUES (Valuation Premises) - Complete Valcre values (Oct 5, 2025)
+// REQUESTED VALUES (Valuation Premises) - Complete Valcre values (Nov 13, 2025 - Updated)
 const REQUESTED_VALUES_MAP: Record<string, string> = {
-  // Dashboard values (verified):
+  // Dashboard values (verified against Valcre dropdown):
   "Market Value": "AsIs",
   "As-Is": "AsIs",
-  "Market Rent": "MarketRentStudy",  // Dashboard sends "Market Rent", Valcre expects "MarketRentStudy"
+  "Market Rent": "MarketRentStudy",
   "Liquidation Value": "Liquidation",
-  "Investment Value": "InvestmentValue",
-  "Insurable Value": "InsurableValue",
+  "Investment Value": "ProspectiveAtStabilization",  // No direct "Investment Value" in Valcre - using "Prospective at Stabilization" (what investors care about)
+  "Insurable Value": "InsurableReplacementCost",  // Fixed: was "InsurableValue" (doesn't exist)
 
   // Complete Valcre dropdown (from screenshots):
   "Prospective at Completion": "ProspectiveAtCompletion",
@@ -246,11 +246,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           updateData.DueDate = date.split("T")[0];
         }
 
-        // Intended Use → Scope field (Nov 13, 2025 - Fixed)
+        // Intended Use → Authorized Use field (IntendedUses)
         if (jobData.intendedUse) {
           const converted = SCOPE_MAP[jobData.intendedUse];
           if (converted) {
-            updateData.Scope = converted;
+            updateData.IntendedUses = converted;
             console.log(`✅ Intended Use mapped: "${jobData.intendedUse}" → "${converted}"`);
           } else {
             console.log(`⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in SCOPE_MAP, skipping`);
@@ -989,14 +989,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
-    // Intended Use → Scope field (Nov 13, 2025 - Fixed)
+    // Intended Use → Authorized Use field (IntendedUses)
     // NOTE: Valcre has BOTH "Scope" and "Authorized Use" (IntendedUses) fields
-    // Dashboard "Intended Use" maps to "Scope" (NOT "IntendedUses")
+    // Dashboard "Intended Use" maps to "Authorized Use" (IntendedUses)
     if (jobData.intendedUse) {
       const converted = SCOPE_MAP[jobData.intendedUse];
       console.log(`🟣 Intended Use: "${jobData.intendedUse}" → "${converted}"`);
       if (converted) {
-        jobCreateData.Scope = converted;
+        jobCreateData.IntendedUses = converted;
       } else {
         console.log(`⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in SCOPE_MAP, skipping`);
       }

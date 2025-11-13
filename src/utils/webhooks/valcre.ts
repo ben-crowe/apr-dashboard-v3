@@ -98,10 +98,11 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       }
       if (formData.deliveryDate) syncPayload.DeliveryDate = formData.deliveryDate;
       if (formData.paymentTerms) syncPayload.PaymentTerms = formData.paymentTerms;
+      if (formData.intendedUse) syncPayload.intendedUse = formData.intendedUse;
       if (formData.scopeOfWork) syncPayload.ScopeOfWork = formData.scopeOfWork;
-      if (formData.valuationPremises) syncPayload.ValuationPremises = formData.valuationPremises;
-      if (formData.propertyRightsAppraised) syncPayload.PropertyRightsAppraised = formData.propertyRightsAppraised;
-      if (formData.reportType) syncPayload.ReportType = formData.reportType;
+      if (formData.valuationPremises) syncPayload.valuationPremises = formData.valuationPremises;
+      if (formData.propertyRightsAppraised) syncPayload.propertyRightsAppraised = formData.propertyRightsAppraised;
+      if (formData.reportType) syncPayload.reportType = formData.reportType;
       
       // Handle property types (convert array to comma-separated string for Valcre)
       if (formData.propertyTypes && formData.propertyTypes.length > 0) {

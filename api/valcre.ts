@@ -275,12 +275,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           }
         }
 
-        // Scope of Work → Scope field (Nov 13, 2025 - Added)
+        // Scope of Work → ScopeOfWork field (Nov 13, 2025 - Added)
         if (jobData.scopeOfWork || jobData.ScopeOfWork) {
           const rawValue = jobData.scopeOfWork || jobData.ScopeOfWork;
           const converted = SCOPE_OF_WORK_MAP[rawValue];
           if (converted) {
-            updateData.Scope = converted;
+            updateData.ScopeOfWork = converted;
             console.log(`✅ Scope of Work mapped: "${rawValue}" → "${converted}"`);
           } else {
             console.log(`⚠️ WARNING: Scope of Work value "${rawValue}" not in SCOPE_OF_WORK_MAP, skipping`);
@@ -1032,13 +1032,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
-    // Scope of Work → Scope field (Nov 13, 2025 - Added)
+    // Scope of Work → ScopeOfWork field (Nov 13, 2025 - Added)
     if (jobData.scopeOfWork || jobData.ScopeOfWork) {
       const rawValue = jobData.scopeOfWork || jobData.ScopeOfWork;
       const converted = SCOPE_OF_WORK_MAP[rawValue];
       console.log(`🟣 Scope of Work: "${rawValue}" → "${converted}"`);
       if (converted) {
-        jobCreateData.Scope = converted;
+        jobCreateData.ScopeOfWork = converted;
       } else {
         console.log(`⚠️ WARNING: Scope of Work value "${rawValue}" not in SCOPE_OF_WORK_MAP, skipping`);
       }

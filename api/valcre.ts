@@ -85,18 +85,22 @@ const ANALYSIS_LEVEL_MAP: Record<string, string> = {
   "Form": "Form",
 };
 
-// INTENDED USES (Authorized Use) - Complete Valcre values (Oct 5, 2025)
-const INTENDED_USES_MAP: Record<string, string> = {
-  // Dashboard values (verified):
+// SCOPE MAP - Dashboard "Intended Use" → Valcre "Scope" field (Nov 13, 2025)
+// NOTE: Valcre has both "Scope" and "Authorized Use" fields - they are DIFFERENT
+// Dashboard "Intended Use" maps to Valcre "Scope" (NOT "IntendedUses"/"Authorized Use")
+const SCOPE_MAP: Record<string, string> = {
+  // Dashboard values:
   "Financing/Refinancing": "Financing",
   "Financing": "Financing",
-  "Insurance": "Financing",  // Dashboard sends "Insurance", map to "Financing"
+  "Insurance": "Financing",
   "Acquisition": "AcquisitionDisposition",
   "Disposition": "AcquisitionDisposition",
   "Litigation": "Litigation",
   "Estate Planning": "EstatePlanning",
+  "Tax Appeal": "PropertyTaxAppeal",
+  "Internal Valuation": "DecisionMakingInternal",
 
-  // Complete Valcre dropdown (from screenshots):
+  // Complete Valcre "Scope" dropdown options:
   "Acquisition/Disposition": "AcquisitionDisposition",
   "Consulting": "Consulting",
   "Decision-Making/Internal": "DecisionMakingInternal",
@@ -241,8 +245,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           const date = jobData.deliveryDate || jobData.DeliveryDate;
           updateData.DueDate = date.split("T")[0];
         }
-        // Skip IntendedUses for now - causing enum errors with Valcre
-        // if (jobData.IntendedUses) updateData.IntendedUses = jobData.IntendedUses;
+
+        // Intended Use → Scope field (Nov 13, 2025 - Fixed)
+        if (jobData.intendedUse) {
+          const converted = SCOPE_MAP[jobData.intendedUse];
+          if (converted) {
+            updateData.Scope = converted;
+            console.log(`✅ Intended Use mapped: "${jobData.intendedUse}" → "${converted}"`);
+          } else {
+            console.log(`⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in SCOPE_MAP, skipping`);
+          }
+        }
+
         if (jobData.ClientComments || jobData.specialInstructions)
           updateData.ClientComments =
             jobData.ClientComments || jobData.specialInstructions;
@@ -925,7 +939,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // Bid Date - Date proposal was submitted (format: "2025-10-01")
       BidDate: jobData.bidDate || new Date().toISOString().split("T")[0],
 
-      // IntendedUses - CANNOT be set during POST, must PATCH after creation (see below)
+      // Scope and other LOE fields are set below after conversion mapping
 
       // Comments field for internal notes only
       Comments: jobData.InternalComments || jobData.internalComments || jobData.appraiserComments || "",
@@ -975,14 +989,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
-    // IntendedUses (Authorized Use) - Convert using map
-    if (jobData.intendedUse && INTENDED_USES_MAP[jobData.intendedUse]) {
-      const converted = INTENDED_USES_MAP[jobData.intendedUse];
+    // Intended Use → Scope field (Nov 13, 2025 - Fixed)
+    // NOTE: Valcre has BOTH "Scope" and "Authorized Use" (IntendedUses) fields
+    // Dashboard "Intended Use" maps to "Scope" (NOT "IntendedUses")
+    if (jobData.intendedUse) {
+      const converted = SCOPE_MAP[jobData.intendedUse];
       console.log(`🟣 Intended Use: "${jobData.intendedUse}" → "${converted}"`);
       if (converted) {
-        jobCreateData.IntendedUses = converted;
+        jobCreateData.Scope = converted;
       } else {
-        console.log(`⚠️ WARNING: IntendedUse value "${jobData.intendedUse}" not in INTENDED_USES_MAP, skipping`);
+        console.log(`⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in SCOPE_MAP, skipping`);
       }
     }
 

@@ -20,12 +20,12 @@ const PURPOSES_MAP: Record<string, string> = {
   "Total Taking": "TotalTaking",
   "Rent Restricted": "RentRestricted",
   "Market Study": "MarketStudy",
-  "Other": "Other",
+  Other: "Other",
   "Going Concern": "GoingConcern",
   "Condominium Ownership": "CondominiumOwnership",
   "Cost Segregation Study": "CostSegregationStudy",
   "ASC 805": "ASC805",
-  "None": "None",
+  None: "None",
 };
 
 // REQUESTED VALUES (Valuation Premises) - Complete Valcre values (Nov 13, 2025 - Updated)
@@ -35,8 +35,8 @@ const REQUESTED_VALUES_MAP: Record<string, string> = {
   "As-Is": "AsIs",
   "Market Rent": "MarketRentStudy",
   "Liquidation Value": "Liquidation",
-  "Investment Value": "ProspectiveAtStabilization",  // No direct "Investment Value" in Valcre - using "Prospective at Stabilization" (what investors care about)
-  "Insurable Value": "InsurableReplacementCost",  // Fixed: was "InsurableValue" (doesn't exist)
+  "Investment Value": "ProspectiveAtStabilization", // No direct "Investment Value" in Valcre - using "Prospective at Stabilization" (what investors care about)
+  "Insurable Value": "InsurableReplacementCost", // Fixed: was "InsurableValue" (doesn't exist)
 
   // Complete Valcre dropdown (from screenshots):
   "Prospective at Completion": "ProspectiveAtCompletion",
@@ -44,35 +44,35 @@ const REQUESTED_VALUES_MAP: Record<string, string> = {
   "As-Vacant": "AsVacant",
   "Insurable Replacement Cost": "InsurableReplacementCost",
   "Bulk Value": "BulkValue",
-  "Disposition": "Disposition",
+  Disposition: "Disposition",
   "Go Dark": "GoDark",
-  "Hypothetical": "Hypothetical",
+  Hypothetical: "Hypothetical",
   "In Use": "InUse",
-  "Lots": "Lots",
+  Lots: "Lots",
   "Lots to Houses": "LotsToHouses",
   "Market Rent Study": "MarketRentStudy",
-  "Other": "Other",
+  Other: "Other",
   "Rent Restricted": "RentRestricted",
-  "Retrospective": "Retrospective",
+  Retrospective: "Retrospective",
   "Tax Credits": "TaxCredits",
 };
 
 // REPORT FORMAT - Complete Valcre values (Oct 5, 2025)
 const REPORT_FORMAT_MAP: Record<string, string> = {
   // Dashboard values (verified):
-  "Comprehensive": "Appraisal",
-  "Summary": "Appraisal",
-  "Restricted": "RestrictedAppraisal",
-  "Form": "Form",
+  Comprehensive: "Appraisal",
+  Summary: "Appraisal",
+  Restricted: "RestrictedAppraisal",
+  Form: "Form",
 
   // Complete Valcre dropdown (from screenshots):
   "Appraisal Report": "Appraisal",
   "Amendment Letter": "AmendmentLetter",
   "Broker Opinion of Value": "BrokerOpinionOfValue",
   "Completion Report": "CompletionReport",
-  "Consultation": "Consultation",
+  Consultation: "Consultation",
   "Desk Review": "DeskReview",
-  "Evaluation": "Evaluation",
+  Evaluation: "Evaluation",
   "Peer Review": "PeerReview",
   "Rent Study": "RentStudy",
   "Restricted Appraisal Report": "RestrictedAppraisal",
@@ -80,9 +80,9 @@ const REPORT_FORMAT_MAP: Record<string, string> = {
 
 // ANALYSIS LEVEL - Valcre values (Oct 5, 2025)
 const ANALYSIS_LEVEL_MAP: Record<string, string> = {
-  "Comprehensive": "Detailed", // Verified from job 706542
-  "Concise": "Concise",
-  "Form": "Form",
+  Comprehensive: "Detailed", // Verified from job 706542
+  Concise: "Concise",
+  Form: "Form",
 };
 
 // SCOPE OF WORK MAP - Dashboard "Scope of Work" → Valcre "Scope" field (Nov 13, 2025)
@@ -96,11 +96,11 @@ const SCOPE_OF_WORK_MAP: Record<string, string> = {
   "Feasibility Study": "FeasibilityStudy",
   "Income Approach": "IncomeApproach",
   "Land Value": "LandValue",
-  "Litigation": "Litigation",
+  Litigation: "Litigation",
   "Market Research": "MarketResearch",
   "Market Study": "MarketStudy",
   "Net Rent Review": "NetRentReview",
-  "Update": "Update",
+  Update: "Update",
 };
 
 // INTENDED USES MAP - Dashboard "Intended Use" → Valcre "Authorized Use" field (Nov 13, 2025)
@@ -109,33 +109,33 @@ const SCOPE_OF_WORK_MAP: Record<string, string> = {
 const INTENDED_USES_MAP: Record<string, string> = {
   // Dashboard values:
   "Financing/Refinancing": "Financing",
-  "Financing": "Financing",
-  "Insurance": "Financing",
-  "Acquisition": "AcquisitionDisposition",
-  "Disposition": "AcquisitionDisposition",
-  "Litigation": "Litigation",
+  Financing: "Financing",
+  Insurance: "Financing",
+  Acquisition: "AcquisitionDisposition",
+  Disposition: "AcquisitionDisposition",
+  Litigation: "Litigation",
   "Estate Planning": "EstatePlanning",
   "Tax Appeal": "PropertyTaxAppeal",
   "Internal Valuation": "DecisionMakingInternal",
 
   // Complete Valcre "Scope" dropdown options:
   "Acquisition/Disposition": "AcquisitionDisposition",
-  "Consulting": "Consulting",
+  Consulting: "Consulting",
   "Decision-Making/Internal": "DecisionMakingInternal",
   "Dispute Resolution": "DisputeResolution",
-  "Divorce": "Divorce",
+  Divorce: "Divorce",
   "Establish Sales Price": "EstablishSalesPrice",
   "Financial Reporting": "FinancialReporting",
-  "Other": "Other",
+  Other: "Other",
   "Property Tax Appeal": "PropertyTaxAppeal",
-  "Review": "Review",
+  Review: "Review",
 };
 
 // Helper function to parse dollar amounts (strip $ and commas)
 function parseDollarAmount(value: string | number | undefined): number {
   if (!value) return 0;
-  if (typeof value === 'number') return value;
-  return parseFloat(value.toString().replace(/[$,]/g, '')) || 0;
+  if (typeof value === "number") return value;
+  return parseFloat(value.toString().replace(/[$,]/g, "")) || 0;
 }
 
 // Helper function to parse city and province from address
@@ -222,15 +222,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.log(
         `Processing ${jobData.updateType} update for job ${jobData.jobId}`,
       );
-      console.log('🔍 DEBUG - Full jobData received:', JSON.stringify(jobData, null, 2));
+      console.log(
+        "🔍 DEBUG - Full jobData received:",
+        JSON.stringify(jobData, null, 2),
+      );
 
       try {
         // Authenticate with Valcre first
         console.log("Authenticating for update...");
         const authBody = {
           grant_type: "password",
-          client_id: process.env.VALCRE_CLIENT_ID || "c9AfkQFS3Scq8YvRsl1DtGbbMRaDDSoh",
-          client_secret: process.env.VALCRE_CLIENT_SECRET ||
+          client_id:
+            process.env.VALCRE_CLIENT_ID || "c9AfkQFS3Scq8YvRsl1DtGbbMRaDDSoh",
+          client_secret:
+            process.env.VALCRE_CLIENT_SECRET ||
             "6VLkSjdT-EvELiIh8QLNv-sQrgy-o_P2KXrHn1g1_Sq9p9yPn73NxuBGtKGaO2kZ",
           username: process.env.VALCRE_USERNAME || "chris.chornohos@valta.ca",
           password: process.env.VALCRE_PASSWORD || "Valvalta1!",
@@ -256,9 +261,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // Map job fields that can be updated - handle both regular updates and LOE details
         if (jobData.appraisalFee || jobData.AppraisalFee)
           updateData.Fee = jobData.appraisalFee || jobData.AppraisalFee;
-        if (jobData.retainerAmount || jobData.RetainerAmount || jobData.Retainer)
+        if (
+          jobData.retainerAmount ||
+          jobData.RetainerAmount ||
+          jobData.Retainer
+        )
           updateData.Retainer =
-            jobData.retainerAmount || jobData.RetainerAmount || jobData.Retainer;
+            jobData.retainerAmount ||
+            jobData.RetainerAmount ||
+            jobData.Retainer;
         if (jobData.deliveryDate || jobData.DeliveryDate) {
           const date = jobData.deliveryDate || jobData.DeliveryDate;
           updateData.DueDate = date.split("T")[0];
@@ -269,9 +280,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           const converted = INTENDED_USES_MAP[jobData.intendedUse];
           if (converted) {
             updateData.IntendedUses = converted;
-            console.log(`✅ Intended Use mapped: "${jobData.intendedUse}" → "${converted}"`);
+            console.log(
+              `✅ Intended Use mapped: "${jobData.intendedUse}" → "${converted}"`,
+            );
           } else {
-            console.log(`⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in INTENDED_USES_MAP, skipping`);
+            console.log(
+              `⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in INTENDED_USES_MAP, skipping`,
+            );
           }
         }
 
@@ -281,18 +296,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           const converted = SCOPE_OF_WORK_MAP[rawValue];
           if (converted) {
             updateData.ScopeOfWork = converted;
-            console.log(`✅ Scope of Work mapped: "${rawValue}" → "${converted}"`);
+            console.log(
+              `✅ Scope of Work mapped: "${rawValue}" → "${converted}"`,
+            );
           } else {
-            console.log(`⚠️ WARNING: Scope of Work value "${rawValue}" not in SCOPE_OF_WORK_MAP, skipping`);
+            console.log(
+              `⚠️ WARNING: Scope of Work value "${rawValue}" not in SCOPE_OF_WORK_MAP, skipping`,
+            );
           }
         }
 
         if (jobData.ClientComments || jobData.specialInstructions)
           updateData.ClientComments =
             jobData.ClientComments || jobData.specialInstructions;
-        if (jobData.InternalComments || jobData.internalComments || jobData.appraiserComments)
+        if (
+          jobData.InternalComments ||
+          jobData.internalComments ||
+          jobData.appraiserComments
+        )
           updateData.Comments =
-            jobData.InternalComments || jobData.internalComments || jobData.appraiserComments;
+            jobData.InternalComments ||
+            jobData.internalComments ||
+            jobData.appraiserComments;
         if (jobData.deliveryComments)
           updateData.DeliveryComments = jobData.deliveryComments;
         if (jobData.paymentComments)
@@ -301,14 +326,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         // Map Report fields to proper Valcre enum fields (Nov 13, 2025 - Fixed)
 
         // Property Rights → Purposes field (using PURPOSES_MAP)
-        if (jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised) {
-          const rawValue = jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised;
+        if (
+          jobData.propertyRightsAppraised ||
+          jobData.PropertyRightsAppraised
+        ) {
+          const rawValue =
+            jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised;
           const converted = PURPOSES_MAP[rawValue];
           if (converted) {
             updateData.Purposes = converted;
-            console.log(`✅ Property Rights mapped: "${rawValue}" → "${converted}"`);
+            console.log(
+              `✅ Property Rights mapped: "${rawValue}" → "${converted}"`,
+            );
           } else {
-            console.log(`⚠️ WARNING: Property Rights value "${rawValue}" not in PURPOSES_MAP, skipping`);
+            console.log(
+              `⚠️ WARNING: Property Rights value "${rawValue}" not in PURPOSES_MAP, skipping`,
+            );
           }
         }
 
@@ -316,23 +349,32 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (jobData.reportType || jobData.ReportType) {
           const rawValue = jobData.reportType || jobData.ReportType;
           const converted = REPORT_FORMAT_MAP[rawValue];
-          if (converted && converted !== 'Form') {
+          if (converted && converted !== "Form") {
             updateData.ReportFormat = converted;
-            console.log(`✅ Report Type mapped: "${rawValue}" → "${converted}"`);
+            console.log(
+              `✅ Report Type mapped: "${rawValue}" → "${converted}"`,
+            );
           } else if (!converted) {
-            console.log(`⚠️ WARNING: Report Type value "${rawValue}" not in REPORT_FORMAT_MAP, skipping`);
+            console.log(
+              `⚠️ WARNING: Report Type value "${rawValue}" not in REPORT_FORMAT_MAP, skipping`,
+            );
           }
         }
 
         // Valuation Premises → RequestedValues field (using REQUESTED_VALUES_MAP)
         if (jobData.valuationPremises || jobData.ValuationPremises) {
-          const rawValue = jobData.valuationPremises || jobData.ValuationPremises;
+          const rawValue =
+            jobData.valuationPremises || jobData.ValuationPremises;
           const converted = REQUESTED_VALUES_MAP[rawValue];
           if (converted) {
             updateData.RequestedValues = converted;
-            console.log(`✅ Valuation Premises mapped: "${rawValue}" → "${converted}"`);
+            console.log(
+              `✅ Valuation Premises mapped: "${rawValue}" → "${converted}"`,
+            );
           } else {
-            console.log(`⚠️ WARNING: Valuation Premises value "${rawValue}" not in REQUESTED_VALUES_MAP, skipping`);
+            console.log(
+              `⚠️ WARNING: Valuation Premises value "${rawValue}" not in REQUESTED_VALUES_MAP, skipping`,
+            );
           }
         }
 
@@ -433,8 +475,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.log("Authenticating with Valcre...");
     const authBody = {
       grant_type: "password",
-      client_id: process.env.VALCRE_CLIENT_ID || "c9AfkQFS3Scq8YvRsl1DtGbbMRaDDSoh",
-      client_secret: process.env.VALCRE_CLIENT_SECRET ||
+      client_id:
+        process.env.VALCRE_CLIENT_ID || "c9AfkQFS3Scq8YvRsl1DtGbbMRaDDSoh",
+      client_secret:
+        process.env.VALCRE_CLIENT_SECRET ||
         "6VLkSjdT-EvELiIh8QLNv-sQrgy-o_P2KXrHn1g1_Sq9p9yPn73NxuBGtKGaO2kZ",
       username: process.env.VALCRE_USERNAME || "chris.chornohos@valta.ca",
       password: process.env.VALCRE_PASSWORD || "Valvalta1!",
@@ -479,11 +523,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const contactCompany = jobData.ClientCompany || "Direct Client";
 
     // Parse the property address for contact/property creation
-    const addressParts = parseAddress(jobData.PropertyAddress || jobData.Street || "");
+    const addressParts = parseAddress(
+      jobData.PropertyAddress || jobData.Street || "",
+    );
 
     // Try to find existing contact by email (if provided)
     if (clientEmail) {
-      console.log("Checking for existing CLIENT contact with email:", clientEmail);
+      console.log(
+        "Checking for existing CLIENT contact with email:",
+        clientEmail,
+      );
       const searchUrl = `https://api-core.valcre.com/api/v1/Contacts?$filter=Email eq '${encodeURIComponent(clientEmail)}'`;
 
       const searchResponse = await fetch(searchUrl, {
@@ -499,8 +548,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (searchResults.value && searchResults.value.length > 0) {
           const existingContact = searchResults.value[0];
           // Try multiple possible ID field names
-          clientId = existingContact.Id || existingContact.id || existingContact.ID ||
-                    existingContact.ContactId || existingContact.contactId;
+          clientId =
+            existingContact.Id ||
+            existingContact.id ||
+            existingContact.ID ||
+            existingContact.ContactId ||
+            existingContact.contactId;
           console.log("✅ Found existing contact with ID:", clientId);
         }
       }
@@ -549,8 +602,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       const contact = await contactResponse.json();
       // Try multiple possible ID field names
-      clientId = contact.Id || contact.id || contact.ID ||
-                 contact.ContactId || contact.contactId;
+      clientId =
+        contact.Id ||
+        contact.id ||
+        contact.ID ||
+        contact.ContactId ||
+        contact.contactId;
       console.log("🔍 Contact Response Keys:", Object.keys(contact));
       console.log("✅ Contact created with ID:", clientId);
 
@@ -565,7 +622,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             details: {
               message: "Valcre API returned a response without an ID field",
               responseKeys: Object.keys(contact),
-              fullResponse: contact
+              fullResponse: contact,
             },
           });
       }
@@ -587,7 +644,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       propertyEmail: jobData.PropertyContact?.Email,
       clientEmail: clientEmail,
       emailsDifferent: jobData.PropertyContact?.Email !== clientEmail,
-      needsSeparate: needsSeparatePropertyContact
+      needsSeparate: needsSeparatePropertyContact,
     });
 
     if (needsSeparatePropertyContact) {
@@ -608,7 +665,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       };
 
       // Additional logging for PropertyContact investigation
-      console.log('👤 Creating PropertyContact with data:', JSON.stringify(propertyContactData, null, 2));
+      console.log(
+        "👤 Creating PropertyContact with data:",
+        JSON.stringify(propertyContactData, null, 2),
+      );
 
       const propContactResponse = await fetch(
         "https://api-core.valcre.com/api/v1/Contacts",
@@ -625,14 +685,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (propContactResponse.ok) {
         const propContact = await propContactResponse.json();
         // Try multiple possible ID field names
-        propertyContactId = propContact.Id || propContact.id || propContact.ID ||
-                           propContact.ContactId || propContact.contactId;
-        console.log("🔍 PropertyContact Response Keys:", Object.keys(propContact));
+        propertyContactId =
+          propContact.Id ||
+          propContact.id ||
+          propContact.ID ||
+          propContact.ContactId ||
+          propContact.contactId;
+        console.log(
+          "🔍 PropertyContact Response Keys:",
+          Object.keys(propContact),
+        );
         console.log("✅ Property Contact created with ID:", propertyContactId);
 
         if (!propertyContactId) {
-          console.warn("⚠️ PropertyContact created but no ID returned, will use null");
-          console.warn("Response structure:", JSON.stringify(propContact, null, 2));
+          console.warn(
+            "⚠️ PropertyContact created but no ID returned, will use null",
+          );
+          console.warn(
+            "Response structure:",
+            JSON.stringify(propContact, null, 2),
+          );
           propertyContactId = null;
         }
       } else {
@@ -646,7 +718,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // This prevents duplicate contact display in Valcre UI
       // The form layer handles "Same as Client Contact" logic - API should just map data
       propertyContactId = null;
-      console.log("No separate property contact needed - PropertyContactId will be null");
+      console.log(
+        "No separate property contact needed - PropertyContactId will be null",
+      );
     }
 
     // STEP 3: Create Property Entity - WITH ALL MAPPED FIELDS
@@ -654,7 +728,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Use the property name from jobData (contains custom name or fallback from webhook)
     // This preserves user's custom building names like "Tech Center Building"
     // DO NOT fall back to address - use "Unnamed Property" instead
-    const propertyName = jobData.Name || 'Unnamed Property';
+    const propertyName = jobData.Name || "Unnamed Property";
 
     const propertyData: any = {
       // Basic address fields - combine unit with street if provided
@@ -671,29 +745,45 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Add all other Property fields if provided
     // PROPERTY TYPE VALIDATION - Valcre only accepts specific enum values
     const VALID_PROPERTY_TYPES = [
-      'Agriculture', 'Building', 'Healthcare', 'Hospitality', 'Industrial', 'Land',
-      'Manufactured Housing', 'Multi-Family', 'Office', 'Retail', 'Self-Storage',
-      'Single-Family', 'Special Purpose', 'Unknown'
+      "Agriculture",
+      "Building",
+      "Healthcare",
+      "Hospitality",
+      "Industrial",
+      "Land",
+      "Manufactured Housing",
+      "Multifamily",
+      "Office",
+      "Retail",
+      "Self-Storage",
+      "Single-Family",
+      "Special Purpose",
+      "Unknown",
     ];
 
     // Map legacy/invalid property types to valid ones
     const PROPERTY_TYPE_MAP: Record<string, string> = {
-      'Mixed Use': 'Building',  // Map "Mixed Use" to "Building"
-      'Commercial': 'Building',
-      'Residential': 'Multi-Family',
+      "Mixed Use": "Building", // Map "Mixed Use" to "Building"
+      Commercial: "Building",
+      Residential: "Building",
+      "Multi-Family": "Multifamily", // Dashboard uses "Multi-Family" (hyphenated), Valcre expects "Multifamily" (one word)
     };
 
     if (jobData.PropertyType) {
       // Parse comma-separated property types and validate each one
-      const propertyTypes = jobData.PropertyType.split(',').map((t: string) => t.trim()).filter(Boolean);
+      const propertyTypes = jobData.PropertyType.split(",")
+        .map((t: string) => t.trim())
+        .filter(Boolean);
       const firstType = propertyTypes[0];
 
       // Map or validate the first property type (for PropertyType field - single value only)
       let validatedType = PROPERTY_TYPE_MAP[firstType] || firstType;
 
       if (!VALID_PROPERTY_TYPES.includes(validatedType)) {
-        console.warn(`⚠️ Invalid PropertyType "${firstType}" - defaulting to "Building"`);
-        validatedType = 'Building';  // Default fallback
+        console.warn(
+          `⚠️ Invalid PropertyType "${firstType}" - defaulting to "Building"`,
+        );
+        validatedType = "Building"; // Default fallback
       }
 
       propertyData.PropertyType = validatedType;
@@ -707,17 +797,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // NOTE: Valcre API cannot parse arrays - expects string primitive
     if (jobData.PropertyTypeEnum) {
       // Validate and filter property types for the Types field
-      const propertyTypes = jobData.PropertyTypeEnum.split(',').map((t: string) => t.trim()).filter(Boolean);
+      const propertyTypes = jobData.PropertyTypeEnum.split(",")
+        .map((t: string) => t.trim())
+        .filter(Boolean);
       const validatedTypes = propertyTypes
-        .map((type: string) => PROPERTY_TYPE_MAP[type] || type)  // Map invalid types
-        .filter((type: string) => VALID_PROPERTY_TYPES.includes(type));  // Filter to valid only
+        .map((type: string) => PROPERTY_TYPE_MAP[type] || type) // Map invalid types
+        .filter((type: string) => VALID_PROPERTY_TYPES.includes(type)); // Filter to valid only
 
       if (validatedTypes.length > 0) {
-        propertyData.Types = validatedTypes.join(', ');
-        console.log(`🏢 Types: "${jobData.PropertyTypeEnum}" → "${propertyData.Types}"`);
+        propertyData.Types = validatedTypes.join(", ");
+        console.log(
+          `🏢 Types: "${jobData.PropertyTypeEnum}" → "${propertyData.Types}"`,
+        );
       } else {
-        console.warn(`⚠️ No valid property types in "${jobData.PropertyTypeEnum}" - using "Building"`);
-        propertyData.Types = 'Building';
+        console.warn(
+          `⚠️ No valid property types in "${jobData.PropertyTypeEnum}" - using "Building"`,
+        );
+        propertyData.Types = "Building";
       }
     }
     if (jobData.BuildingSize) propertyData.SizeSF = jobData.BuildingSize;
@@ -782,12 +878,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (descriptions.length > 0)
       propertyData.DescriptionText = descriptions.join(" | ");
 
-    if (jobData.InternalComments || jobData.internalComments || jobData.appraiserComments)
-      propertyData.CommentsPrivate = jobData.InternalComments || jobData.internalComments || jobData.appraiserComments;
+    if (
+      jobData.InternalComments ||
+      jobData.internalComments ||
+      jobData.appraiserComments
+    )
+      propertyData.CommentsPrivate =
+        jobData.InternalComments ||
+        jobData.internalComments ||
+        jobData.appraiserComments;
 
-    console.log('🚨 CRITICAL DEBUG - Property Data Being Sent:');
+    console.log("🚨 CRITICAL DEBUG - Property Data Being Sent:");
     console.log(`   PropertyType field: "${propertyData.PropertyType}"`);
-    console.log(`   Full propertyData: ${JSON.stringify(propertyData, null, 2)}`);
+    console.log(
+      `   Full propertyData: ${JSON.stringify(propertyData, null, 2)}`,
+    );
     const propertyResponse = await fetch(
       "https://api-core.valcre.com/api/v1/Properties",
       {
@@ -820,7 +925,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     // Check for Valcre's error format (they return 200 with error in body!)
-    if (!propertyResponse.ok || property.success === false || property.error || property.status === "400") {
+    if (
+      !propertyResponse.ok ||
+      property.success === false ||
+      property.error ||
+      property.status === "400"
+    ) {
       console.error("❌ Valcre rejected Property creation:", property);
       return res
         .status(500)
@@ -830,17 +940,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           details: {
             message: property.error || "Property validation failed",
             valcreResponse: property,
-            hint: property.error?.includes('was not found')
-              ? 'Invalid enum value sent to Valcre API. Check PropertyType field.'
-              : undefined
+            hint: property.error?.includes("was not found")
+              ? "Invalid enum value sent to Valcre API. Check PropertyType field."
+              : undefined,
           },
         });
     }
 
     // Try multiple possible ID field names (case-insensitive)
-    const propertyId = property.Id || property.id || property.ID ||
-                      property.PropertyId || property.propertyId ||
-                      property.PropertyID || property.propertyID;
+    const propertyId =
+      property.Id ||
+      property.id ||
+      property.ID ||
+      property.PropertyId ||
+      property.propertyId ||
+      property.PropertyID ||
+      property.propertyID;
 
     console.log("🔍 Property Response Keys:", Object.keys(property));
     console.log("🔍 Extracted Property ID:", propertyId);
@@ -858,7 +973,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           details: {
             message: "Valcre API returned a response without an ID field",
             responseKeys: Object.keys(property),
-            fullResponse: property
+            fullResponse: property,
           },
         });
     }
@@ -943,9 +1058,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     );
 
     // Construct formatted Job.Name: "{Property.Name}, {Street}, {City}, {State}"
-    const street = propertyData.AddressStreet || addressParts.street || '';
-    const city = propertyData.AddressCity || addressParts.city || '';
-    const state = propertyData.AddressState || addressParts.province || '';
+    const street = propertyData.AddressStreet || addressParts.street || "";
+    const city = propertyData.AddressCity || addressParts.city || "";
+    const state = propertyData.AddressState || addressParts.province || "";
     const jobName = `${propertyName}, ${street}, ${city}, ${state}`;
     console.log(`🏢 Job Name: "${jobName}"`);
 
@@ -961,7 +1076,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       // Job-specific fields
       Fee: parseDollarAmount(jobData.Fee || jobData.AppraisalFee) || 3500.0,
-      Retainer: parseDollarAmount(jobData.Retainer || jobData.RetainerAmount) || 350.0,
+      Retainer:
+        parseDollarAmount(jobData.Retainer || jobData.RetainerAmount) || 350.0,
 
       // Due Date - Valcre expects just date format like "2025-10-31"
       DueDate: jobData.DeliveryDate ? jobData.DeliveryDate.split("T")[0] : null,
@@ -972,7 +1088,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       // Scope and other LOE fields are set below after conversion mapping
 
       // Comments field for internal notes only
-      Comments: jobData.InternalComments || jobData.internalComments || jobData.appraiserComments || "",
+      Comments:
+        jobData.InternalComments ||
+        jobData.internalComments ||
+        jobData.appraiserComments ||
+        "",
 
       // Client-visible comments
       ClientComments:
@@ -990,17 +1110,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (jobData.reportType || jobData.ReportType) {
       const rawValue = jobData.reportType || jobData.ReportType;
       const converted = REPORT_FORMAT_MAP[rawValue];
-      if (converted && converted !== 'Form') {
+      if (converted && converted !== "Form") {
         // Skip "Form" - not a valid Valcre enum value
         jobCreateData.ReportFormat = converted;
       } else if (!converted) {
-        console.log(`⚠️ WARNING: ReportType value "${rawValue}" not in REPORT_FORMAT_MAP, skipping`);
+        console.log(
+          `⚠️ WARNING: ReportType value "${rawValue}" not in REPORT_FORMAT_MAP, skipping`,
+        );
       }
     }
 
     // Purposes - Convert using map (e.g., "Fee Simple Interest" → "FeeSimple")
     if (jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised) {
-      const rawValue = jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised;
+      const rawValue =
+        jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised;
       const converted = PURPOSES_MAP[rawValue];
       if (converted) {
         jobCreateData.Purposes = converted;
@@ -1015,7 +1138,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (converted) {
         jobCreateData.RequestedValues = converted;
       } else {
-        console.log(`⚠️ WARNING: ValuationPremises value "${rawValue}" not in REQUESTED_VALUES_MAP, skipping`);
+        console.log(
+          `⚠️ WARNING: ValuationPremises value "${rawValue}" not in REQUESTED_VALUES_MAP, skipping`,
+        );
       }
     }
 
@@ -1028,7 +1153,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (converted) {
         jobCreateData.IntendedUses = converted;
       } else {
-        console.log(`⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in INTENDED_USES_MAP, skipping`);
+        console.log(
+          `⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in INTENDED_USES_MAP, skipping`,
+        );
       }
     }
 
@@ -1040,7 +1167,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (converted) {
         jobCreateData.ScopeOfWork = converted;
       } else {
-        console.log(`⚠️ WARNING: Scope of Work value "${rawValue}" not in SCOPE_OF_WORK_MAP, skipping`);
+        console.log(
+          `⚠️ WARNING: Scope of Work value "${rawValue}" not in SCOPE_OF_WORK_MAP, skipping`,
+        );
       }
     }
 

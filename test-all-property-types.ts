@@ -36,7 +36,7 @@ const DASHBOARD_PROPERTY_TYPES = [
 const EXPECTED_VALCRE_TYPES: Record<string, string> = {
   'Agriculture': 'Agriculture',
   'Building': 'Building',
-  'Healthcare': 'Building', // Healthcare not accepted by Valcre Types field
+  'Healthcare': 'HealthCare', // PascalCase with capital C
   'Hospitality': 'Hospitality',
   'Industrial': 'Industrial',
   'Land': 'Land',

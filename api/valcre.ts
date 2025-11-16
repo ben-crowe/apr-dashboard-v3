@@ -751,10 +751,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ];
 
     // Map legacy/invalid property types to valid ones
+    // NOTE: Multi-Family goes in Types field (multi-select), PropertyType field uses "Building"
     const PROPERTY_TYPE_MAP: Record<string, string> = {
       'Mixed Use': 'Building',
       'Commercial': 'Building',
-      'Residential': 'Multi-Family',
+      'Residential': 'Building',
+      'Multi-Family': 'Building', // PropertyType field doesn't support Multi-Family - it goes in Types field only
     };
 
     if (jobData.PropertyType) {

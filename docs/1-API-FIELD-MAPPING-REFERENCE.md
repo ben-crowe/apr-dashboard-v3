@@ -1,7 +1,7 @@
 # APR Dashboard V3 - API & Field Mapping Reference
 
-**Version:** 2.0 (Production)
-**Last Updated:** November 13, 2025
+**Version:** 2.1 (Production)
+**Last Updated:** November 16, 2025
 **Status:** ✅ Live in Production
 **Extracted From:** Working production code (GitHub `main` branch)
 
@@ -53,9 +53,19 @@ This is the **single source of truth** for all field mappings between APR Dashbo
 | Dashboard Field | Valcre API Field | Type | Critical Notes |
 |----------------|------------------|------|----------------|
 | `propertyType` | `Property.PropertyType` | string | **First value only** (single enum field) |
-| `propertyType` | `Property.Types` | string | **All values** (comma-separated: `"Retail, Office"`) |
+| `propertyType` | `Property.Types` | string | **All values** (PascalCase format: `"MultiFamily, HealthCare"`) |
 
-**See**: [4-SINGLE-TO-MULTI-SELECT-PATTERN.md](4-SINGLE-TO-MULTI-SELECT-PATTERN.md) for complete implementation
+⚠️ **CRITICAL LIMITATION:** Property type **CANNOT be updated** after job is synced to Valcre. Must be set correctly during initial creation. Updates after sync must be done manually in Valcre UI.
+
+**Format Conversions Required:**
+- Healthcare → HealthCare (capital C)
+- Multi-Family → MultiFamily
+- Single-Family → SingleFamily
+- Self-Storage → SelfStorage
+- Manufactured Housing → ManufacturedHousing
+- Special Purpose → SpecialPurpose
+
+**See**: [PROPERTY-TYPE-FIELD-MAPPING.md](07-Valcre-Integration/PROPERTY-TYPE-FIELD-MAPPING.md) for complete documentation
 
 ### Critical Enum Fields (Requires Conversion)
 
@@ -334,7 +344,9 @@ if (needsSeparatePropertyContact) {
 
 #### Property Type Validation
 
-**Valid Valcre Property Types (Enum):**
+⚠️ **CRITICAL:** Property type cannot be updated after Valcre sync. Set correctly on initial creation.
+
+**Valid Valcre Property Types (PropertyType enum field):**
 ```typescript
 [
   'Agriculture', 'Building', 'Healthcare', 'Hospitality',
@@ -344,25 +356,45 @@ if (needsSeparatePropertyContact) {
 ]
 ```
 
-**Auto-Mapping for Invalid Types:**
+**TYPES_FIELD_MAP - Dashboard Format → Valcre Types Field Format:**
 ```typescript
 {
-  'Mixed Use': 'Building',
-  'Commercial': 'Building',
-  'Residential': 'Multi-Family'
+  'Healthcare': 'HealthCare',        // Capital C required
+  'Multi-Family': 'MultiFamily',     // Remove hyphen, PascalCase
+  'Single-Family': 'SingleFamily',   // Remove hyphen, PascalCase
+  'Self-Storage': 'SelfStorage',     // Remove hyphen, PascalCase
+  'Manufactured Housing': 'ManufacturedHousing', // Remove space, PascalCase
+  'Special Purpose': 'SpecialPurpose' // Remove space, PascalCase
+}
+```
+
+**PROPERTY_TYPE_MAP - Legacy Dashboard Values:**
+```typescript
+{
+  'Mixed Use': 'Building',       // Legacy value not in Valcre
+  'Commercial': 'Building',      // Legacy value not in Valcre
+  'Residential': 'Building',     // Legacy value not in Valcre
+  'Multi-Family': 'Building'     // PropertyType field doesn't support Multi-Family
 }
 ```
 
 **Multi-Select Handling:**
 ```typescript
-// Dashboard sends: ["Office", "Retail", "Industrial"]
+// Dashboard sends: ["Multi-Family", "Healthcare", "Office"]
 
-// Valcre receives:
-PropertyType: "Office"              // FIRST value only (enum field)
-Types: "Office, Retail, Industrial" // All values (string field)
+// API converts using TYPES_FIELD_MAP and sends to Valcre:
+PropertyType: "Building"                      // FIRST value mapped (Multi-Family → Building)
+Types: "MultiFamily, HealthCare, Office"      // ALL values converted to PascalCase
 ```
 
-**Code Reference:** `api/valcre.ts` lines 599-648
+**Test Results:** 17/17 property types verified working (Nov 16, 2025)
+
+**Code Reference:**
+- TYPES_FIELD_MAP: `api/valcre.ts` lines 762-773
+- PROPERTY_TYPE_MAP: `api/valcre.ts` lines 755-760
+- Types field conversion: `api/valcre.ts` lines 801-822
+
+**See**: [PROPERTY-TYPE-FIELD-MAPPING.md](07-Valcre-Integration/PROPERTY-TYPE-FIELD-MAPPING.md) for complete documentation and test suite
 
 ---
 
@@ -966,6 +998,16 @@ updateData.DueDate = date.split("T")[0];
 
 ## Change Log
 
+**Version 2.1 (Nov 16, 2025):**
+- ✅ **CRITICAL:** Documented property type update limitation (cannot update after Valcre sync)
+- ✅ Added TYPES_FIELD_MAP conversions (Healthcare→HealthCare, Multi-Family→MultiFamily, etc.)
+- ✅ Clarified PropertyType field vs Types field distinction
+- ✅ Fixed incorrect Residential→Multi-Family mapping (correct: Residential→Building)
+- ✅ Added PascalCase format requirements for Types field
+- ✅ Verified 17/17 property types working via comprehensive test suite
+- ✅ Added reference to PROPERTY-TYPE-FIELD-MAPPING.md for detailed documentation
+- ✅ Updated code line references to reflect current implementation
+
 **Version 2.0 (Nov 13, 2025):**
 - ✅ Reverse-engineered from production code (GitHub main)
 - ✅ Complete enum conversion maps documented
@@ -993,8 +1035,13 @@ updateData.DueDate = date.split("T")[0];
 5. Add test cases to checklist
 
 **Document Owner:** Development Team
-**Last Verified:** November 13, 2025
+**Last Verified:** November 16, 2025
 **Next Review:** When Section 3 & 4 are implemented
+
+**Related Documentation:**
+- [PROPERTY-TYPE-FIELD-MAPPING.md](07-Valcre-Integration/PROPERTY-TYPE-FIELD-MAPPING.md) - Complete property type mapping guide
+- [4-SINGLE-TO-MULTI-SELECT-PATTERN.md](4-SINGLE-TO-MULTI-SELECT-PATTERN.md) - Multi-select implementation pattern
+- [IMPLEMENTATION-STATUS.md](IMPLEMENTATION-STATUS.md) - Known issues and bug tracking
 
 ---
 

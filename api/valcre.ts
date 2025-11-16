@@ -752,7 +752,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       "Industrial",
       "Land",
       "Manufactured Housing",
-      "Multifamily",
+      "Multi-Family", // Valcre accepts "Multi-Family" with hyphen (Nov 16, 2025 - fixed from incorrect "Multifamily")
       "Office",
       "Retail",
       "Self-Storage",
@@ -766,7 +766,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       "Mixed Use": "Building", // Map "Mixed Use" to "Building"
       Commercial: "Building",
       Residential: "Building",
-      "Multi-Family": "Multifamily", // Dashboard uses "Multi-Family" (hyphenated), Valcre expects "Multifamily" (one word)
+      // "Multi-Family" is valid as-is (don't map it)
     };
 
     if (jobData.PropertyType) {

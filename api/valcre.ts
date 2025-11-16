@@ -762,13 +762,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // TYPES FIELD CONVERSION - Dashboard values → Valcre Types field values
     // Based on empirical test data from actual Valcre jobs (test-valcre-property-types.ts)
     // The Types field uses PascalCase without hyphens: "MultiFamily" not "Multi-Family"
+    // NOTE: Some values are NOT accepted by Types field and must be mapped to valid alternatives
     const TYPES_FIELD_MAP: Record<string, string> = {
       'Multi-Family': 'MultiFamily', // Valcre uses "MultiFamily" (no hyphen, PascalCase)
       'Single-Family': 'SingleFamily',
       'Self-Storage': 'SelfStorage',
       'Manufactured Housing': 'ManufacturedHousing',
       'Special Purpose': 'SpecialPurpose',
-      // Others pass through as-is (Agriculture, Building, Healthcare, etc.)
+      'Healthcare': 'Building', // Healthcare not accepted in Types field - map to Building
+      // Others pass through as-is (Agriculture, Building, Hospitality, Industrial, etc.)
     };
 
     if (jobData.PropertyType) {

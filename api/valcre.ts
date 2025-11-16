@@ -745,28 +745,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Add all other Property fields if provided
     // PROPERTY TYPE VALIDATION - Valcre only accepts specific enum values
     const VALID_PROPERTY_TYPES = [
-      "Agriculture",
-      "Building",
-      "Healthcare",
-      "Hospitality",
-      "Industrial",
-      "Land",
-      "Manufactured Housing",
-      "multi_family", // Valcre uses snake_case for multi-family (Nov 16, 2025)
-      "Office",
-      "Retail",
-      "Self-Storage",
-      "Single-Family",
-      "Special Purpose",
-      "Unknown",
+      'Agriculture', 'Building', 'Healthcare', 'Hospitality', 'Industrial', 'Land',
+      'Manufactured Housing', 'Multi-Family', 'Office', 'Retail', 'Self-Storage',
+      'Single-Family', 'Special Purpose', 'Unknown'
     ];
 
     // Map legacy/invalid property types to valid ones
     const PROPERTY_TYPE_MAP: Record<string, string> = {
-      "Mixed Use": "Building",
-      Commercial: "Building",
-      Residential: "Building",
-      "Multi-Family": "multi_family", // Dashboard uses "Multi-Family", Valcre expects snake_case "multi_family"
+      'Mixed Use': 'Building',
+      'Commercial': 'Building',
+      'Residential': 'Multi-Family',
     };
 
     if (jobData.PropertyType) {

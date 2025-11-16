@@ -759,6 +759,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       'Multi-Family': 'Building', // PropertyType field doesn't support Multi-Family - it goes in Types field only
     };
 
+    // TYPES FIELD CONVERSION - Dashboard values → Valcre Types field values
+    // Based on empirical test data from actual Valcre jobs (test-valcre-property-types.ts)
+    // The Types field uses PascalCase without hyphens: "MultiFamily" not "Multi-Family"
+    const TYPES_FIELD_MAP: Record<string, string> = {
+      'Multi-Family': 'MultiFamily', // Valcre uses "MultiFamily" (no hyphen, PascalCase)
+      'Single-Family': 'SingleFamily',
+      'Self-Storage': 'SelfStorage',
+      'Manufactured Housing': 'ManufacturedHousing',
+      'Special Purpose': 'SpecialPurpose',
+      // Others pass through as-is (Agriculture, Building, Healthcare, etc.)
+    };
+
     if (jobData.PropertyType) {
       // Parse comma-separated property types and validate each one
       const propertyTypes = jobData.PropertyType.split(",")
@@ -785,17 +797,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Set Types field from PropertyTypeEnum (now supports comma-separated multi-select)
     // NOTE: Valcre API cannot parse arrays - expects string primitive
+    // CRITICAL: Use TYPES_FIELD_MAP for conversion (e.g., "Multi-Family" → "MultiFamily")
     if (jobData.PropertyTypeEnum) {
-      // Validate and filter property types for the Types field
+      // Parse comma-separated property types
       const propertyTypes = jobData.PropertyTypeEnum.split(",")
         .map((t: string) => t.trim())
         .filter(Boolean);
-      const validatedTypes = propertyTypes
-        .map((type: string) => PROPERTY_TYPE_MAP[type] || type) // Map invalid types
-        .filter((type: string) => VALID_PROPERTY_TYPES.includes(type)); // Filter to valid only
 
-      if (validatedTypes.length > 0) {
-        propertyData.Types = validatedTypes.join(", ");
+      // Convert using TYPES_FIELD_MAP (Dashboard format → Valcre format)
+      const convertedTypes = propertyTypes
+        .map((type: string) => TYPES_FIELD_MAP[type] || type); // Convert format (e.g., "Multi-Family" → "MultiFamily")
+
+      if (convertedTypes.length > 0) {
+        propertyData.Types = convertedTypes.join(", ");
         console.log(
           `🏢 Types: "${jobData.PropertyTypeEnum}" → "${propertyData.Types}"`,
         );

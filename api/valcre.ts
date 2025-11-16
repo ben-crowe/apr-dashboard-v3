@@ -752,7 +752,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       "Industrial",
       "Land",
       "Manufactured Housing",
-      "Multi-Family", // Valcre accepts "Multi-Family" with hyphen (Nov 16, 2025 - fixed from incorrect "Multifamily")
       "Office",
       "Retail",
       "Self-Storage",
@@ -762,11 +761,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ];
 
     // Map legacy/invalid property types to valid ones
+    // NOTE: PropertyType field is ENUM (strict), Types field is TEXT (flexible)
+    // "Multi-Family" goes in Types field, PropertyType gets fallback "Building"
     const PROPERTY_TYPE_MAP: Record<string, string> = {
-      "Mixed Use": "Building", // Map "Mixed Use" to "Building"
+      "Mixed Use": "Building",
       Commercial: "Building",
       Residential: "Building",
-      // "Multi-Family" is valid as-is (don't map it)
+      "Multi-Family": "Building", // Valcre PropertyType enum doesn't include Multi-Family - use Building as fallback, Multi-Family goes in Types field
     };
 
     if (jobData.PropertyType) {

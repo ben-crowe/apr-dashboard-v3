@@ -311,6 +311,14 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       jobData.Comments = formData.appraiserComments;
     }
 
+    // Delivery and Payment comments (Nov 18 fix - add to job creation)
+    if (formData.deliveryComments) {
+      jobData.DeliveryComments = formData.deliveryComments;
+    }
+    if (formData.paymentComments) {
+      jobData.PaymentComments = formData.paymentComments;
+    }
+
     // Only include PropertyContact if property contact fields are actually provided
     // Don't send PropertyContact with client fallbacks - that causes duplication
     if (formData.propertyContactEmail && formData.propertyContactEmail !== formData.clientEmail) {

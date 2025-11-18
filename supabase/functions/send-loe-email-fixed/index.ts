@@ -64,7 +64,7 @@ office: 587-801-5151 | email: clientcare@valta.ca | web: www.valta.ca</p>
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Valta Appraisals <admin@valta.ca>', // Updated Nov 18 - valta.ca verified sender
+        from: 'Valta Appraisals <onboarding@resend.dev>', // Sandbox domain for testing (Nov 18 - switch to admin@valta.ca after domain verification)
         to: [to],
         subject: 'Letter of Engagement - Ready for Signature',
         html: emailHtml,

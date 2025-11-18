@@ -144,7 +144,10 @@ export function useJobData(jobId: string) {
               appraisalFee: loeData.appraisal_fee,
               retainerAmount: loeData.retainer_amount,
               disbursementPercentage: loeData.disbursement_percentage,
-              internalComments: loeData.internal_comments
+              internalComments: loeData.internal_comments,
+              appraiserComments: loeData.internal_comments,  // FIX: Alias for component compatibility (Nov 18)
+              deliveryComments: loeData.delivery_comments,  // FIX: Add delivery comments (Nov 18 - regression fix)
+              paymentComments: loeData.payment_comments  // FIX: Add payment comments (Nov 18 - regression fix)
             });
           }
 

@@ -134,6 +134,20 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
         syncPayload.paymentComments = formData.paymentComments;
       }
 
+      // Property Contact (Nov 18 fix - was missing from LOE sync path)
+      // Only include if property contact fields are provided and different from client
+      if (formData.propertyContactEmail && formData.propertyContactEmail !== formData.clientEmail) {
+        syncPayload.PropertyContact = {
+          FirstName: formData.propertyContactFirstName,
+          LastName: formData.propertyContactLastName,
+          Company: formData.clientOrganization || 'Direct Client',
+          Email: formData.propertyContactEmail,
+          PhoneNumber: formData.propertyContactPhone,
+          Title: 'Property Manager',
+          AddressStreet: formData.propertyAddress
+        };
+      }
+
       if (formData.paymentTerms) syncPayload.PaymentTerms = formData.paymentTerms;
       // REMOVED: disbursementPercentage - legacy field no longer used (client is now independent appraiser)
 

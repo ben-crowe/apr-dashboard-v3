@@ -26,7 +26,8 @@ serve(async (req) => {
     console.log('Sending LOE email to:', to)
     
     // Use Resend API - clean HTML emails without encoding issues
-    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || 're_8B4Po2eL_84kFfQeEHAf4z4GFTLaqTv94';
+    // Updated Nov 18, 2025 - New Resend account for admin@valta.ca
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY') || 're_T2VGRdd3_CqZuH9XCBrjxJuNPyQwykHJp';
     
     const emailHtml = `<!DOCTYPE html>
 <html>
@@ -63,7 +64,7 @@ office: 587-801-5151 | email: clientcare@valta.ca | web: www.valta.ca</p>
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Valta Appraisals <onboarding@resend.dev>', // Using Resend's domain until valta.ca is verified
+        from: 'Valta Appraisals <admin@valta.ca>', // Updated Nov 18 - valta.ca verified sender
         to: [to],
         subject: 'Letter of Engagement - Ready for Signature',
         html: emailHtml,

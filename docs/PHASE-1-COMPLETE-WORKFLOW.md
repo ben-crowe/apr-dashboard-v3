@@ -56,113 +56,136 @@ Phase 1 of the APR Dashboard is a complete appraisal request management system t
 
 ## Complete Phase 1 Workflow
 
-### Step 1: Client Form Submission
+### Step 1: Client Form Submission (valta.ca)
 
 **Location:** https://valta.ca/request-appraisal (iframe embedded on Valta website)
 
 #### What Happens:
-1. Client fills out comprehensive appraisal request form
-2. Form validates all required fields client-side
-3. On submit, form data POSTs to Supabase Edge Function
-4. Edge Function inserts data into `job_submissions` table
-5. Client sees success message with submission confirmation
+1. Client visits valta.ca and clicks "Request Appraisal"
+2. Client fills out basic appraisal request form
+3. Form validates required fields client-side
+4. On submit, form data POSTs to Supabase Edge Function
+5. Edge Function inserts data into `job_submissions` table
+6. Client sees success message with submission confirmation
 
-#### Fields Collected (Section 1):
+#### Fields Submitted by Client (Simple Form):
 
-**Client Information:**
-- Client Name (splits to First/Last)
-- Client Email (required, used for duplicate detection)
-- Client Phone
-- Client Organization
+**Client Information (Required):**
+- First Name ✓
+- Last Name ✓
+- Phone ✓
+- Email ✓
+
+**Client Information (Optional):**
 - Client Title
+- Client Organization
+- Client Organization Address
 
-**Property Information:**
-- Property Name
-- Property Address (full address, parsed later)
-- Property Types (multi-select: Office, Retail, Industrial, etc.)
-- Property Subtype
-- Building Size (sq ft)
-- Number of Units
-- Year Built
-- Parking Spaces
-- Zoning Classification
-- Zone Abbreviation
-- Land Use Designation
-- Flood Zone
-- Utilities
-- Usable Land SF
-- Gross Land SF
-- Environmental Phase 1 notes
-- Asset Condition (Excellent, Very Good, Good, Fair, Poor)
-- Asset Quality (Excellent → Poor scale)
-- Market Area
-- Submarket
-- Legal Description
+**Property & Job Information (Required):**
+- Property Name ✓
+- Property Type ✓ (dropdown: Multifamily, Self Storage, Retail, Industrial, Land, Office, Hotel, Senior, Other)
 
-**Property Contact (if different from client):**
-- Property Contact First Name
-- Property Contact Last Name
-- Property Contact Email
-- Property Contact Phone
+**Property & Job Information (Optional):**
+- Property Address
+- Intended Use (dropdown: Financing Purposes, Internal Business Decisions, Underwriting Decisions, Litigation Purposes, Other)
+- Valuation Premises (dropdown: Market Value As Is, Market Value As Is & As Stabilized, etc.)
+- Asset Current Condition (dropdown: New Development, Existing Property)
+- Additional Information (text area for special notes)
 
-**Parcel Information:**
-- Parcel Number
-- Parcel Legal Description
-- Usable Land SF
-- Gross Land SF
+**Document Uploads (Optional):**
+- Property details, Proforma, Unit Mix, Operating Expenses, Drawings, etc.
+- Multiple files allowed (PDF, DOC, XLS, images)
+- Max 10MB per file
 
-**Assessment Information:**
-- Assessment Year
-- Land Assessment Value
-- Improved Assessment Value
-- Annual Taxes
+#### What Client Form Does NOT Include:
+❌ Appraisal Fee (added by appraiser in dashboard)
+❌ Retainer Amount (added by appraiser in dashboard)
+❌ Delivery Date (added by appraiser in dashboard)
+❌ Payment Terms (added by appraiser in dashboard)
+❌ Report Type (added by appraiser in dashboard)
+❌ Property Rights Appraised (added by appraiser in dashboard)
+❌ Scope of Work (added by appraiser in dashboard)
+❌ Any comment fields (added by appraiser in dashboard)
+❌ Property Contact details (can be added in dashboard)
+❌ Detailed building specs (can be added in dashboard)
 
-**Additional Information:**
-- Notes/Special Instructions (free text)
+**Key Point:** Client form is simple and quick (~5 minutes). All detailed appraisal specifications and pricing are added by the appraiser later in the dashboard.
 
 #### Database Storage:
 All form data stored in `job_submissions` table with:
 - Unique `id` (UUID)
 - `created_at` timestamp
-- All form fields as JSON columns
+- All form fields (see schema below)
 - `status` = 'pending' (initial state)
+- NO LOE details yet (those are in separate `job_loe_details` table)
 
 ---
 
-### Step 2: Dashboard Display & Review
+### Step 2: Dashboard Display & Review (Section 1)
 
-**Location:** APR Dashboard → Jobs List
+**Location:** APR Dashboard → Jobs List → Job Details
 
 #### What Happens:
 1. Dashboard fetches all jobs from `job_submissions` table
-2. Jobs display in sortable/filterable table view
-3. User clicks job to view details in accordion view
-4. Section 1 (Client & Property Info) displays all submitted data
-5. Section 2 (LOE Quote Details) is empty, ready for appraiser input
+2. New job appears in sortable/filterable table view (real-time, < 5 seconds)
+3. Appraiser clicks job to open accordion detail view
+4. **Section 1 (Client & Property Info)** displays all data submitted by client
+5. **Section 2 (LOE Quote Details)** is empty, ready for appraiser to fill in
+
+#### What Section 1 Shows (Read-Only Display):
+
+**Client Information:**
+- Client Name (First + Last combined)
+- Client Email
+- Client Phone
+- Client Organization (if provided)
+- Client Title (if provided)
+- Client Address (if provided)
+
+**Property Information:**
+- Property Name
+- Property Address (if provided)
+- Property Type (e.g., "Multifamily")
+- Intended Use (if provided, e.g., "Financing Purposes")
+- Valuation Premises (if provided, e.g., "Market Value As Is")
+- Asset Condition (if provided, e.g., "Existing Property")
+- Additional Information/Notes (if provided)
+
+**Uploaded Documents:**
+- List of files uploaded by client (if any)
+- Click to download/preview each file
+
+**Property Contact:**
+- Can be added by appraiser if needed (not in client form)
+
+#### What Section 2 Shows (Empty, Ready for Input):
+- Financial fields (blank)
+- Scope fields (blank)
+- Comment fields (blank)
+- "Create Valcre Job" button (disabled until Section 2 filled)
 
 #### Dashboard Features:
-- Real-time updates (jobs appear immediately after submission)
+- Real-time updates (jobs appear within seconds of submission)
 - Search/filter by client name, property address, status
-- Color-coded status indicators
-- Job number display (VAL######)
-- One-click navigation to Valcre job (if synced)
-- Bulk operations support
+- Color-coded status indicators (Pending, LOE Created, Synced, etc.)
+- Job actions: Edit Section 1, Fill Section 2, Create Valcre Job, Generate LOE
+- Bulk operations support (future Phase 2)
 
 ---
 
-### Step 3: LOE Creation & Field Mapping
+### Step 3: Appraiser Creates LOE Quote (Section 2)
 
-**Location:** APR Dashboard → Job Details → Section 2
+**Location:** APR Dashboard → Job Details → Section 2 (LOE Quote Details)
 
 #### What Happens:
-1. Appraiser reviews Section 1 data for accuracy
-2. Appraiser fills out Section 2 (LOE Quote Details)
-3. Each field auto-saves on blur with 500ms debounce
-4. Fields save to `job_loe_details` table in Supabase
+1. Appraiser reviews Section 1 data (client-submitted info) for accuracy
+2. Appraiser fills out **Section 2 (LOE Quote Details)** - this is NEW data not in client form
+3. Each field auto-saves on blur (500ms debounce)
+4. Fields save to `job_loe_details` table in Supabase (separate from Section 1 data)
 5. Success toast notifications confirm each save
-6. If job is already synced to Valcre, fields also sync via webhook
+6. If job is already synced to Valcre, fields also sync via webhook (real-time updates)
 
-#### Fields Created (Section 2):
+#### Fields Added by Appraiser in Section 2:
 
 **Financial Details:**
 - Appraisal Fee (currency, strips $ and commas)

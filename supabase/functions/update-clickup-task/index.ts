@@ -110,8 +110,8 @@ Deno.serve(async (req) => {
     // Replace blank Valcre Job Number with actual job number and link
     if (valcreJobUrl) {
       updatedStage1 = updatedStage1.replace(
-        /📍 \*\*VALCRE JOB NUMBER:\*\*\s+/,
-        `📍 **VALCRE JOB NUMBER:**     [${valcreJobNumber}](${valcreJobUrl})`
+        /📍 \*\*VALCRE JOB NUMBER:\*\*/,
+        `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`
       )
     }
 

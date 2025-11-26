@@ -267,27 +267,19 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           // Update ClickUp task with Section 2 (LOE details)
           console.log('🔄 Updating ClickUp task with LOE section...');
           try {
-            const { data: { session } } = await supabase.auth.getSession();
-            const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-            const updateResponse = await fetch(
-              `${supabaseUrl}/functions/v1/update-clickup-task`,
+            const { data: updateResult, error: updateError } = await supabase.functions.invoke(
+              'update-clickup-task',
               {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${session?.access_token}`
-                },
-                body: JSON.stringify({ jobId: job.id })
+                body: { jobId: job.id }
               }
             );
 
-            if (updateResponse.ok) {
-              const updateResult = await updateResponse.json();
+            if (updateError) {
+              console.error('❌ Failed to update ClickUp task:', updateError);
+              toast.warning('ClickUp task update failed - please refresh ClickUp');
+            } else {
               console.log('✅ ClickUp task updated with LOE section:', updateResult);
               toast.success('ClickUp task updated with LOE details');
-            } else {
-              console.error('❌ Failed to update ClickUp task:', await updateResponse.text());
-              toast.warning('ClickUp task update failed - please refresh ClickUp');
             }
           } catch (clickupError) {
             console.error('❌ Error updating ClickUp task:', clickupError);

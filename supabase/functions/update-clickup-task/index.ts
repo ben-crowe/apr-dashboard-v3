@@ -100,19 +100,20 @@ Deno.serve(async (req) => {
       return `${amount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
     }
 
-    // Extract Stage 1 data from existing description (everything before "⏳ Waiting for LOE")
-    const stage1Match = existingDescription.match(/([\s\S]*?)⏳ Waiting for LOE/i)
-    const stage1Content = stage1Match ? stage1Match[1].trim() : existingDescription
+    // Extract ONLY Stage 1 content (everything before the first LOE section)
+    // Look for the Section 2 divider to properly separate Stage 1 from Stage 2
+    const stage1Match = existingDescription.match(/([\s\S]*?)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\s*\n\s*LOE QUOTE/)
+    const stage1Content = stage1Match ? stage1Match[1].trim() : existingDescription.trim()
 
     // Update top links section with actual Valcre job link
     let updatedStage1 = stage1Content
 
-    // Replace blank Valcre Job Number with actual job number and link
+    // Replace blank Valcre Job Number line - be more flexible with the regex
     if (valcreJobUrl) {
-      updatedStage1 = updatedStage1.replace(
-        /📍 \*\*VALCRE JOB NUMBER:\*\*/,
-        `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`
-      )
+      // Try multiple patterns to catch different formats
+      updatedStage1 = updatedStage1
+        .replace(/📍 \*\*VALCRE JOB NUMBER:\*\*[^\n]*/, `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`)
+        .replace(/VALCRE JOB NUMBER:[^\n]*/, `VALCRE JOB NUMBER: [${valcreJobNumber}](${valcreJobUrl})`)
     }
 
     // Build Stage 2 LOE section

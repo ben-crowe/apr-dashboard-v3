@@ -142,6 +142,14 @@ ${loeDetails.internal_comments || loeDetails.delivery_comments || loeDetails.pay
     // Combine Stage 1 (updated) + Stage 2 (new)
     const combinedDescription = updatedStage1 + stage2Section
 
+    // Debug logging
+    console.log('=== DEBUG INFO ===')
+    console.log('VAL Number:', valcreJobNumber)
+    console.log('VAL URL:', valcreJobUrl)
+    console.log('Stage 1 content (first 300 chars):', updatedStage1.substring(0, 300))
+    console.log('Does Stage 1 contain VAL number?', updatedStage1.includes(valcreJobNumber))
+    console.log('==================')
+
     // Update task name from PENDING to VAL number
     const propertyName = job.property_name || job.propertyName || 'Property'
     const propertyAddress = job.property_address || job.propertyAddress || 'Unknown Address'

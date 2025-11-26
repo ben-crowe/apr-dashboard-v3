@@ -264,6 +264,35 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
           console.log('✅ VAL number saved to database successfully');
 
+          // Update ClickUp task with Section 2 (LOE details)
+          console.log('🔄 Updating ClickUp task with LOE section...');
+          try {
+            const { data: { session } } = await supabase.auth.getSession();
+            const updateResponse = await fetch(
+              `${supabaseUrl}/functions/v1/update-clickup-task`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${session?.access_token || supabaseServiceKey}`
+                },
+                body: JSON.stringify({ jobId: job.id })
+              }
+            );
+
+            if (updateResponse.ok) {
+              const updateResult = await updateResponse.json();
+              console.log('✅ ClickUp task updated with LOE section:', updateResult);
+              toast.success('ClickUp task updated with LOE details');
+            } else {
+              console.error('❌ Failed to update ClickUp task:', await updateResponse.text());
+              toast.warning('ClickUp task update failed - please refresh ClickUp');
+            }
+          } catch (clickupError) {
+            console.error('❌ Error updating ClickUp task:', clickupError);
+            toast.warning('ClickUp task update failed - please refresh ClickUp');
+          }
+
           // Refetch job data to ensure UI reflects latest database state
           if (refetchJobData) {
             console.log('🔄 Refetching job data to update button state...');

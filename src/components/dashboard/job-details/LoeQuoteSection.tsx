@@ -268,13 +268,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           console.log('🔄 Updating ClickUp task with LOE section...');
           try {
             const { data: { session } } = await supabase.auth.getSession();
+            const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
             const updateResponse = await fetch(
               `${supabaseUrl}/functions/v1/update-clickup-task`,
               {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${session?.access_token || supabaseServiceKey}`
+                  'Authorization': `Bearer ${session?.access_token}`
                 },
                 body: JSON.stringify({ jobId: job.id })
               }

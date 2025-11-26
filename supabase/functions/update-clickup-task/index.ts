@@ -105,15 +105,21 @@ Deno.serve(async (req) => {
     const stage1Match = existingDescription.match(/([\s\S]*?)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\s*\n\s*LOE QUOTE/)
     const stage1Content = stage1Match ? stage1Match[1].trim() : existingDescription.trim()
 
-    // Update top links section with actual Valcre job link
+    // Update top links section with actual Valcre job link and fix APR Dashboard link
     let updatedStage1 = stage1Content
 
-    // Replace blank Valcre Job Number line - be more flexible with the regex
+    // Fix APR Dashboard link if it's broken
+    updatedStage1 = updatedStage1.replace(
+      /📍 \*\*NEW APPRAISAL REQUEST:\*\*[^\n]*/,
+      `📍 **NEW APPRAISAL REQUEST:** [APR Dashboard](${jobUrl})`
+    )
+
+    // Replace blank Valcre Job Number line
     if (valcreJobUrl) {
-      // Try multiple patterns to catch different formats
-      updatedStage1 = updatedStage1
-        .replace(/📍 \*\*VALCRE JOB NUMBER:\*\*[^\n]*/, `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`)
-        .replace(/VALCRE JOB NUMBER:[^\n]*/, `VALCRE JOB NUMBER: [${valcreJobNumber}](${valcreJobUrl})`)
+      updatedStage1 = updatedStage1.replace(
+        /📍 \*\*VALCRE JOB NUMBER:\*\*[^\n]*/,
+        `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`
+      )
     }
 
     // Build Stage 2 LOE section

@@ -264,6 +264,32 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
           console.log('✅ VAL number saved to database successfully');
 
+          // Save ALL current LOE details to database before updating ClickUp
+          console.log('💾 Saving all LOE details to database...');
+          const { error: loeDetailsSaveError } = await supabase
+            .from('job_loe_details')
+            .update({
+              appraisal_fee: jobDetails?.appraisalFee || 0,
+              retainer_amount: jobDetails?.retainerAmount || '',
+              scope_of_work: jobDetails?.scopeOfWork || '',
+              valuation_premises: jobDetails?.valuationPremises || '',
+              property_rights_appraised: jobDetails?.propertyRightsAppraised || '',
+              report_type: jobDetails?.reportType || '',
+              delivery_date: jobDetails?.deliveryDate || null,
+              payment_terms: jobDetails?.paymentTerms || '',
+              internal_comments: jobDetails?.appraiserComments || '',
+              delivery_comments: jobDetails?.deliveryComments || '',
+              payment_comments: jobDetails?.paymentComments || '',
+              updated_at: new Date().toISOString()
+            })
+            .eq('job_id', job.id);
+
+          if (loeDetailsSaveError) {
+            console.error('⚠️ Failed to save LOE details:', loeDetailsSaveError);
+          } else {
+            console.log('✅ All LOE details saved to database');
+          }
+
           // Update ClickUp task with Section 2 (LOE details)
           console.log('🔄 Updating ClickUp task with LOE section...');
           try {

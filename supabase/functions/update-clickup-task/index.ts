@@ -118,7 +118,6 @@ Deno.serve(async (req) => {
     // Build Stage 2 LOE section
     const stage2Section = `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
 **LOE QUOTE & VALUATION DETAILS**
 
 **PROPERTY VALUATION**

@@ -102,12 +102,11 @@ Deno.serve(async (req) => {
 
     // Build task description with new format (Stage 1)
     const description = `📍 **NEW APPRAISAL REQUEST:** [APR Dashboard](${jobUrl})
-📍 **VALCRE JOB NUMBER:**     
+📍 **VALCRE JOB NUMBER:**
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
 **RECEIVED DATE:**  ${formattedDateTime}
-  ▸ LOE Sent:   
-  ▸ LOE Signed: 
+  ▸ LOE Sent:
+  ▸ LOE Signed:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 **CLIENT INFORMATION**

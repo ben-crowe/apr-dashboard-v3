@@ -1,0 +1,604 @@
+[
+  {
+    "original": "image1.png",
+    "category": "misc",
+    "filename": "logo-valcre.png",
+    "path": "/test-data/images/misc/logo-valcre.png",
+    "size": 104547
+  },
+  {
+    "original": "image2.jpeg",
+    "category": "cover",
+    "filename": "cover-photo.jpeg",
+    "path": "/test-data/images/cover/cover-photo.jpeg",
+    "size": 131394
+  },
+  {
+    "original": "image3.png",
+    "category": "misc",
+    "filename": "logo-appraisal-institute.png",
+    "path": "/test-data/images/misc/logo-appraisal-institute.png",
+    "size": 27147
+  },
+  {
+    "original": "image4.jpg",
+    "category": "misc",
+    "filename": "logo-aic.jpg",
+    "path": "/test-data/images/misc/logo-aic.jpg",
+    "size": 28241
+  },
+  {
+    "original": "image5.png",
+    "category": "misc",
+    "filename": "image5.png",
+    "path": "/test-data/images/misc/image5.png",
+    "size": 5602
+  },
+  {
+    "original": "image6.png",
+    "category": "misc",
+    "filename": "image6.png",
+    "path": "/test-data/images/misc/image6.png",
+    "size": 28075
+  },
+  {
+    "original": "image7.png",
+    "category": "misc",
+    "filename": "image7.png",
+    "path": "/test-data/images/misc/image7.png",
+    "size": 19765
+  },
+  {
+    "original": "image8.jpg",
+    "category": "misc",
+    "filename": "image8.jpg",
+    "path": "/test-data/images/misc/image8.jpg",
+    "size": 185951
+  },
+  {
+    "original": "image9.jpg",
+    "category": "misc",
+    "filename": "image9.jpg",
+    "path": "/test-data/images/misc/image9.jpg",
+    "size": 92087
+  },
+  {
+    "original": "image10.jpg",
+    "category": "misc",
+    "filename": "image10.jpg",
+    "path": "/test-data/images/misc/image10.jpg",
+    "size": 48376
+  },
+  {
+    "original": "image11.png",
+    "category": "misc",
+    "filename": "image11.png",
+    "path": "/test-data/images/misc/image11.png",
+    "size": 15146
+  },
+  {
+    "original": "image12.jpeg",
+    "category": "exterior",
+    "filename": "exterior-1.jpeg",
+    "path": "/test-data/images/exterior/exterior-1.jpeg",
+    "size": 21246
+  },
+  {
+    "original": "image13.jpeg",
+    "category": "exterior",
+    "filename": "exterior-2.jpeg",
+    "path": "/test-data/images/exterior/exterior-2.jpeg",
+    "size": 23106
+  },
+  {
+    "original": "image14.jpeg",
+    "category": "exterior",
+    "filename": "exterior-3.jpeg",
+    "path": "/test-data/images/exterior/exterior-3.jpeg",
+    "size": 22362
+  },
+  {
+    "original": "image15.jpeg",
+    "category": "exterior",
+    "filename": "exterior-4.jpeg",
+    "path": "/test-data/images/exterior/exterior-4.jpeg",
+    "size": 16523
+  },
+  {
+    "original": "image16.jpeg",
+    "category": "street-views",
+    "filename": "street-1.jpeg",
+    "path": "/test-data/images/street-views/street-1.jpeg",
+    "size": 15586
+  },
+  {
+    "original": "image17.jpeg",
+    "category": "street-views",
+    "filename": "street-2.jpeg",
+    "path": "/test-data/images/street-views/street-2.jpeg",
+    "size": 18066
+  },
+  {
+    "original": "image18.jpeg",
+    "category": "interior",
+    "filename": "interior-1.jpeg",
+    "path": "/test-data/images/interior/interior-1.jpeg",
+    "size": 18524
+  },
+  {
+    "original": "image19.jpeg",
+    "category": "interior",
+    "filename": "interior-2.jpeg",
+    "path": "/test-data/images/interior/interior-2.jpeg",
+    "size": 16780
+  },
+  {
+    "original": "image20.jpeg",
+    "category": "interior",
+    "filename": "interior-3.jpeg",
+    "path": "/test-data/images/interior/interior-3.jpeg",
+    "size": 15218
+  },
+  {
+    "original": "image21.jpeg",
+    "category": "interior",
+    "filename": "interior-4.jpeg",
+    "path": "/test-data/images/interior/interior-4.jpeg",
+    "size": 18823
+  },
+  {
+    "original": "image22.jpeg",
+    "category": "interior",
+    "filename": "interior-5.jpeg",
+    "path": "/test-data/images/interior/interior-5.jpeg",
+    "size": 18569
+  },
+  {
+    "original": "image23.jpeg",
+    "category": "interior",
+    "filename": "interior-6.jpeg",
+    "path": "/test-data/images/interior/interior-6.jpeg",
+    "size": 16118
+  },
+  {
+    "original": "image24.jpeg",
+    "category": "interior",
+    "filename": "interior-7.jpeg",
+    "path": "/test-data/images/interior/interior-7.jpeg",
+    "size": 22796
+  },
+  {
+    "original": "image25.jpeg",
+    "category": "interior",
+    "filename": "interior-8.jpeg",
+    "path": "/test-data/images/interior/interior-8.jpeg",
+    "size": 18777
+  },
+  {
+    "original": "image26.jpeg",
+    "category": "interior",
+    "filename": "interior-9.jpeg",
+    "path": "/test-data/images/interior/interior-9.jpeg",
+    "size": 9227
+  },
+  {
+    "original": "image27.jpeg",
+    "category": "interior",
+    "filename": "interior-10.jpeg",
+    "path": "/test-data/images/interior/interior-10.jpeg",
+    "size": 12172
+  },
+  {
+    "original": "image28.jpeg",
+    "category": "interior",
+    "filename": "interior-11.jpeg",
+    "path": "/test-data/images/interior/interior-11.jpeg",
+    "size": 12021
+  },
+  {
+    "original": "image29.jpeg",
+    "category": "interior",
+    "filename": "interior-12.jpeg",
+    "path": "/test-data/images/interior/interior-12.jpeg",
+    "size": 13056
+  },
+  {
+    "original": "image30.jpeg",
+    "category": "interior",
+    "filename": "interior-13.jpeg",
+    "path": "/test-data/images/interior/interior-13.jpeg",
+    "size": 14453
+  },
+  {
+    "original": "image31.jpeg",
+    "category": "interior",
+    "filename": "interior-14.jpeg",
+    "path": "/test-data/images/interior/interior-14.jpeg",
+    "size": 19648
+  },
+  {
+    "original": "image32.jpeg",
+    "category": "interior",
+    "filename": "interior-15.jpeg",
+    "path": "/test-data/images/interior/interior-15.jpeg",
+    "size": 13436
+  },
+  {
+    "original": "image33.jpeg",
+    "category": "interior",
+    "filename": "interior-16.jpeg",
+    "path": "/test-data/images/interior/interior-16.jpeg",
+    "size": 16556
+  },
+  {
+    "original": "image34.jpeg",
+    "category": "interior",
+    "filename": "interior-17.jpeg",
+    "path": "/test-data/images/interior/interior-17.jpeg",
+    "size": 22116
+  },
+  {
+    "original": "image35.jpeg",
+    "category": "interior",
+    "filename": "interior-18.jpeg",
+    "path": "/test-data/images/interior/interior-18.jpeg",
+    "size": 22098
+  },
+  {
+    "original": "image36.png",
+    "category": "maps",
+    "filename": "location-map.png",
+    "path": "/test-data/images/maps/location-map.png",
+    "size": 367178
+  },
+  {
+    "original": "image37.png",
+    "category": "maps",
+    "filename": "aerial-map.png",
+    "path": "/test-data/images/maps/aerial-map.png",
+    "size": 1628597
+  },
+  {
+    "original": "image38.png",
+    "category": "maps",
+    "filename": "zoning-map.png",
+    "path": "/test-data/images/maps/zoning-map.png",
+    "size": 1325432
+  },
+  {
+    "original": "image39.jpg",
+    "category": "comparables",
+    "filename": "comparable-1.jpg",
+    "path": "/test-data/images/comparables/comparable-1.jpg",
+    "size": 21477
+  },
+  {
+    "original": "image40.jpg",
+    "category": "comparables",
+    "filename": "comparable-2.jpg",
+    "path": "/test-data/images/comparables/comparable-2.jpg",
+    "size": 58714
+  },
+  {
+    "original": "image41.jpg",
+    "category": "comparables",
+    "filename": "comparable-3.jpg",
+    "path": "/test-data/images/comparables/comparable-3.jpg",
+    "size": 35133
+  },
+  {
+    "original": "image42.png",
+    "category": "comparables",
+    "filename": "comparable-4.png",
+    "path": "/test-data/images/comparables/comparable-4.png",
+    "size": 61442
+  },
+  {
+    "original": "image43.jpg",
+    "category": "comparables",
+    "filename": "comparable-5.jpg",
+    "path": "/test-data/images/comparables/comparable-5.jpg",
+    "size": 73299
+  },
+  {
+    "original": "image44.png",
+    "category": "comparables",
+    "filename": "comparable-6.png",
+    "path": "/test-data/images/comparables/comparable-6.png",
+    "size": 45854
+  },
+  {
+    "original": "image45.png",
+    "category": "comparables",
+    "filename": "comparable-7.png",
+    "path": "/test-data/images/comparables/comparable-7.png",
+    "size": 46381
+  },
+  {
+    "original": "image46.jpg",
+    "category": "comparables",
+    "filename": "comparable-8.jpg",
+    "path": "/test-data/images/comparables/comparable-8.jpg",
+    "size": 19122
+  },
+  {
+    "original": "image47.jpg",
+    "category": "comparables",
+    "filename": "comparable-9.jpg",
+    "path": "/test-data/images/comparables/comparable-9.jpg",
+    "size": 60921
+  },
+  {
+    "original": "image48.png",
+    "category": "comparables",
+    "filename": "comparable-10.png",
+    "path": "/test-data/images/comparables/comparable-10.png",
+    "size": 555607
+  },
+  {
+    "original": "image49.png",
+    "category": "comparables",
+    "filename": "comparable-11.png",
+    "path": "/test-data/images/comparables/comparable-11.png",
+    "size": 80159
+  },
+  {
+    "original": "image50.jpg",
+    "category": "comparables",
+    "filename": "comparable-12.jpg",
+    "path": "/test-data/images/comparables/comparable-12.jpg",
+    "size": 38351
+  },
+  {
+    "original": "image54.jpg",
+    "category": "comparables",
+    "filename": "comparable-16.jpg",
+    "path": "/test-data/images/comparables/comparable-16.jpg",
+    "size": 28356
+  },
+  {
+    "original": "image55.jpg",
+    "category": "comparables",
+    "filename": "comparable-17.jpg",
+    "path": "/test-data/images/comparables/comparable-17.jpg",
+    "size": 41911
+  },
+  {
+    "original": "image56.jpg",
+    "category": "comparables",
+    "filename": "comparable-18.jpg",
+    "path": "/test-data/images/comparables/comparable-18.jpg",
+    "size": 249496
+  },
+  {
+    "original": "image57.png",
+    "category": "comparables",
+    "filename": "comparable-19.png",
+    "path": "/test-data/images/comparables/comparable-19.png",
+    "size": 1617609
+  },
+  {
+    "original": "image58.jpg",
+    "category": "comparables",
+    "filename": "comparable-20.jpg",
+    "path": "/test-data/images/comparables/comparable-20.jpg",
+    "size": 104686
+  },
+  {
+    "original": "image59.jpg",
+    "category": "comparables",
+    "filename": "comparable-21.jpg",
+    "path": "/test-data/images/comparables/comparable-21.jpg",
+    "size": 122924
+  },
+  {
+    "original": "image60.jpg",
+    "category": "comparables",
+    "filename": "comparable-22.jpg",
+    "path": "/test-data/images/comparables/comparable-22.jpg",
+    "size": 40862
+  },
+  {
+    "original": "image61.jpg",
+    "category": "comparables",
+    "filename": "comparable-23.jpg",
+    "path": "/test-data/images/comparables/comparable-23.jpg",
+    "size": 31287
+  },
+  {
+    "original": "image62.jpg",
+    "category": "comparables",
+    "filename": "comparable-24.jpg",
+    "path": "/test-data/images/comparables/comparable-24.jpg",
+    "size": 37738
+  },
+  {
+    "original": "image63.jpg",
+    "category": "comparables",
+    "filename": "comparable-25.jpg",
+    "path": "/test-data/images/comparables/comparable-25.jpg",
+    "size": 20854
+  },
+  {
+    "original": "image64.jpg",
+    "category": "comparables",
+    "filename": "comparable-26.jpg",
+    "path": "/test-data/images/comparables/comparable-26.jpg",
+    "size": 160080
+  },
+  {
+    "original": "image65.jpg",
+    "category": "comparables",
+    "filename": "comparable-27.jpg",
+    "path": "/test-data/images/comparables/comparable-27.jpg",
+    "size": 111755
+  },
+  {
+    "original": "image66.png",
+    "category": "comparables",
+    "filename": "comparable-28.png",
+    "path": "/test-data/images/comparables/comparable-28.png",
+    "size": 63673
+  },
+  {
+    "original": "image67.jpg",
+    "category": "comparables",
+    "filename": "comparable-29.jpg",
+    "path": "/test-data/images/comparables/comparable-29.jpg",
+    "size": 87665
+  },
+  {
+    "original": "image68.png",
+    "category": "comparables",
+    "filename": "comparable-30.png",
+    "path": "/test-data/images/comparables/comparable-30.png",
+    "size": 55904
+  },
+  {
+    "original": "image69.jpg",
+    "category": "comparables",
+    "filename": "comparable-31.jpg",
+    "path": "/test-data/images/comparables/comparable-31.jpg",
+    "size": 23567
+  },
+  {
+    "original": "image70.jpg",
+    "category": "comparables",
+    "filename": "comparable-32.jpg",
+    "path": "/test-data/images/comparables/comparable-32.jpg",
+    "size": 203127
+  },
+  {
+    "original": "image71.jpg",
+    "category": "comparables",
+    "filename": "comparable-33.jpg",
+    "path": "/test-data/images/comparables/comparable-33.jpg",
+    "size": 32962
+  },
+  {
+    "original": "image72.png",
+    "category": "comparables",
+    "filename": "comparable-34.png",
+    "path": "/test-data/images/comparables/comparable-34.png",
+    "size": 1153706
+  },
+  {
+    "original": "image73.jpg",
+    "category": "comparables",
+    "filename": "comparable-35.jpg",
+    "path": "/test-data/images/comparables/comparable-35.jpg",
+    "size": 35536
+  },
+  {
+    "original": "image74.png",
+    "category": "comparables",
+    "filename": "comparable-36.png",
+    "path": "/test-data/images/comparables/comparable-36.png",
+    "size": 12468
+  },
+  {
+    "original": "image75.jpg",
+    "category": "comparables",
+    "filename": "comparable-37.jpg",
+    "path": "/test-data/images/comparables/comparable-37.jpg",
+    "size": 32515
+  },
+  {
+    "original": "image76.png",
+    "category": "comparables",
+    "filename": "comparable-38.png",
+    "path": "/test-data/images/comparables/comparable-38.png",
+    "size": 12551
+  },
+  {
+    "original": "image77.jpg",
+    "category": "comparables",
+    "filename": "comparable-39.jpg",
+    "path": "/test-data/images/comparables/comparable-39.jpg",
+    "size": 40332
+  },
+  {
+    "original": "image78.png",
+    "category": "comparables",
+    "filename": "comparable-40.png",
+    "path": "/test-data/images/comparables/comparable-40.png",
+    "size": 14403
+  },
+  {
+    "original": "image79.png",
+    "category": "comparables",
+    "filename": "comparable-41.png",
+    "path": "/test-data/images/comparables/comparable-41.png",
+    "size": 675217
+  },
+  {
+    "original": "image80.png",
+    "category": "comparables",
+    "filename": "comparable-42.png",
+    "path": "/test-data/images/comparables/comparable-42.png",
+    "size": 18271
+  },
+  {
+    "original": "image81.png",
+    "category": "comparables",
+    "filename": "comparable-43.png",
+    "path": "/test-data/images/comparables/comparable-43.png",
+    "size": 600374
+  },
+  {
+    "original": "image82.png",
+    "category": "comparables",
+    "filename": "comparable-44.png",
+    "path": "/test-data/images/comparables/comparable-44.png",
+    "size": 18286
+  },
+  {
+    "original": "image83.jpg",
+    "category": "comparables",
+    "filename": "comparable-45.jpg",
+    "path": "/test-data/images/comparables/comparable-45.jpg",
+    "size": 286296
+  },
+  {
+    "original": "image84.png",
+    "category": "comparables",
+    "filename": "comparable-46.png",
+    "path": "/test-data/images/comparables/comparable-46.png",
+    "size": 50986
+  },
+  {
+    "original": "image85.jpg",
+    "category": "comparables",
+    "filename": "comparable-47.jpg",
+    "path": "/test-data/images/comparables/comparable-47.jpg",
+    "size": 88647
+  },
+  {
+    "original": "image86.jpg",
+    "category": "comparables",
+    "filename": "comparable-48.jpg",
+    "path": "/test-data/images/comparables/comparable-48.jpg",
+    "size": 21222
+  },
+  {
+    "original": "image87.jpg",
+    "category": "comparables",
+    "filename": "comparable-49.jpg",
+    "path": "/test-data/images/comparables/comparable-49.jpg",
+    "size": 93117
+  },
+  {
+    "original": "image88.png",
+    "category": "comparables",
+    "filename": "comparable-50.png",
+    "path": "/test-data/images/comparables/comparable-50.png",
+    "size": 6701
+  },
+  {
+    "original": "image89.png",
+    "category": "comparables",
+    "filename": "comparable-51.png",
+    "path": "/test-data/images/comparables/comparable-51.png",
+    "size": 235708
+  }
+]

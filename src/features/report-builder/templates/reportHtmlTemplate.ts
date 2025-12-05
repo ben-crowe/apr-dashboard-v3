@@ -1,0 +1,2510 @@
+import { ReportSection } from '../types/reportBuilder.types';
+
+export function generateReportHtml(sections: ReportSection[]): string {
+  const coverSection = sections.find(s => s.id === 'cover');
+  const execSection = sections.find(s => s.id === 'exec');
+
+  // Helper function to get field value
+  const getFieldValue = (section: ReportSection | undefined, fieldId: string): string => {
+    if (!section) return '';
+
+    // Check main fields
+    const mainField = section.fields.find(f => f.id === fieldId);
+    if (mainField) return String(mainField.value || '');
+
+    // Check subsection fields
+    if (section.subsections) {
+      for (const subsection of section.subsections) {
+        const subField = subsection.fields.find(f => f.id === fieldId);
+        if (subField) return String(subField.value || '');
+      }
+    }
+
+    return '';
+  };
+
+  // Cover page fields
+  const propertyType = getFieldValue(coverSection, 'property-type-display');
+  const propertyName = getFieldValue(coverSection, 'property-name');
+  const streetAddress = getFieldValue(coverSection, 'street-address');
+  const city = getFieldValue(coverSection, 'city');
+  const province = getFieldValue(coverSection, 'province');
+  const clientContactName = getFieldValue(coverSection, 'client-contact-name');
+  const clientCompany = getFieldValue(coverSection, 'client-company');
+  const clientAddress = getFieldValue(coverSection, 'client-address');
+  const clientCity = getFieldValue(coverSection, 'client-city');
+  const clientProvince = getFieldValue(coverSection, 'client-province');
+  const clientPostal = getFieldValue(coverSection, 'client-postal');
+  const appraiserCompany = getFieldValue(coverSection, 'appraiser-company');
+  const appraiserAddress = getFieldValue(coverSection, 'appraiser-address');
+  const appraiserPhone = getFieldValue(coverSection, 'appraiser-phone');
+  const appraiserWebsite = getFieldValue(coverSection, 'appraiser-website');
+  const valuationDate = getFieldValue(coverSection, 'valuation-date');
+  const reportDate = getFieldValue(coverSection, 'report-date');
+  const fileNumber = getFieldValue(coverSection, 'file-number');
+
+  // Letter of Transmittal additional fields
+  const valueScenario = getFieldValue(execSection, 'value-scenario') || 'As Stabilized';
+  const propertyRights = getFieldValue(execSection, 'property-rights') || 'Fee Simple Estate';
+  const buildingStyle = getFieldValue(execSection, 'building-style') || 'walkup';
+  const totalBuildings = getFieldValue(execSection, 'total-buildings') || '1';
+  const totalNra = getFieldValue(execSection, 'total-nra') || '';
+  const yearBuilt = getFieldValue(execSection, 'year-built') || '';
+  const occupancyRate = getFieldValue(execSection, 'occupancy-rate') || '100';
+  const totalUnits = getFieldValue(execSection, 'total-units') || '';
+  const stories = getFieldValue(execSection, 'stories') || '1';
+  const buildingFormat = getFieldValue(execSection, 'building-format') || 'garden style';
+  const concludedValue = getFieldValue(execSection, 'concluded-value') || '';
+  const hypotheticalConditions = getFieldValue(execSection, 'hypothetical-conditions') || 'No Hypothetical Conditions were made for this assignment.';
+  const extraordinaryAssumptions = getFieldValue(execSection, 'extraordinary-assumptions') || 'No Extraordinary Assumptions were made for this assignment.';
+  const extraordinaryLimitingConditions = getFieldValue(execSection, 'extraordinary-limiting-conditions') || 'No Extraordinary Limiting Conditions were made for this assignment.';
+  const appraiserName = getFieldValue(coverSection, 'appraiser-name') || '';
+  const appraiserCredentials = getFieldValue(coverSection, 'appraiser-credentials') || '';
+  const appraiserTitle = getFieldValue(coverSection, 'appraiser-title') || '';
+  const appraiserEmail = getFieldValue(coverSection, 'appraiser-email') || '';
+  const appraiserAicNumber = getFieldValue(coverSection, 'appraiser-aic-number') || '';
+
+  // Formatting helpers
+  const formatCurrency = (value: string): string => {
+    if (!value) return '';
+    const num = parseFloat(value.replace(/[^0-9.-]/g, ''));
+    if (isNaN(num)) return value;
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(num);
+  };
+
+  const formatPercent = (value: string): string => {
+    if (!value) return "";
+    const num = parseFloat(value.replace(/[^0-9.-]/g, ""));
+    if (isNaN(num)) return value;
+    return `${num.toFixed(1)}%`;
+  };
+
+  const propertyTypeLower = propertyType.toLowerCase();
+  const appraiserCompanyShort = appraiserCompany.split(' ')[0] || appraiserCompany;
+
+  // Extract cover photo from the cover-photo field
+  const coverPhotoUrls = coverSection?.fields.find(f => f.id === 'cover-photo')?.value as string[] || [];
+  const coverPhoto = coverPhotoUrls.length > 0 ? coverPhotoUrls[0] : null;
+
+  // Helper function to render the SITE section with custom template
+  const renderSiteSection = (section: ReportSection): string => {
+    // Get field values from subsections
+    const siteAreaSf = getFieldValue(section, 'site-total-area');
+    const siteAcreage = getFieldValue(section, 'site-acreage');
+    const siteAddress = getFieldValue(section, 'site-address') || `${streetAddress}, ${city}, ${province}`;
+    const siteShape = getFieldValue(section, 'site-shape');
+    const topography = getFieldValue(section, 'topography');
+    const accessibility = getFieldValue(section, 'accessibility');
+    const exposureVisibility = getFieldValue(section, 'exposure-visibility');
+
+    // Adjacent uses
+    const adjacentNorth = getFieldValue(section, 'adjacent-north');
+    const adjacentSouth = getFieldValue(section, 'adjacent-south');
+    const adjacentEast = getFieldValue(section, 'adjacent-east');
+    const adjacentWest = getFieldValue(section, 'adjacent-west');
+
+    // Site conditions
+    const easements = getFieldValue(section, 'easements');
+    const soils = getFieldValue(section, 'soils');
+    const hazardousWaste = getFieldValue(section, 'hazardous-waste');
+    const siteRating = getFieldValue(section, 'site-rating');
+    const siteConclusion = getFieldValue(section, 'site-conclusion');
+
+    // Site plan images
+    const sitePlanImages = section.subsections
+      ?.find(s => s.id === 'site-plan-images')
+      ?.fields.find(f => f.id === 'site-plan-image')?.value as string[] || [];
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Site Details</h2>
+
+      <!-- Site Summary Table -->
+      <h3 class="subsection-title">Site Summary</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">Municipal Address</td>
+            <td class="site-table-value">${siteAddress || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Site Area</td>
+            <td class="site-table-value">
+              ${siteAreaSf ? `${Number(siteAreaSf).toLocaleString()} SF` : ''}
+              ${siteAreaSf && siteAcreage ? ' / ' : ''}
+              ${siteAcreage ? `${Number(siteAcreage).toFixed(2)} Acres` : ''}
+              ${!siteAreaSf && !siteAcreage ? '<span class="empty-state">Not specified</span>' : ''}
+            </td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Shape</td>
+            <td class="site-table-value">${siteShape || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Topography</td>
+            <td class="site-table-value">${topography || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Accessibility</td>
+            <td class="site-table-value">${accessibility || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Exposure & Visibility</td>
+            <td class="site-table-value">${exposureVisibility || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Adjacent Uses Sub-table -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Adjacent Uses</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">North</td>
+            <td class="site-table-value">${adjacentNorth || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">South</td>
+            <td class="site-table-value">${adjacentSouth || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">East</td>
+            <td class="site-table-value">${adjacentEast || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">West</td>
+            <td class="site-table-value">${adjacentWest || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Site Conditions Narrative -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Site Conditions</h3>
+
+      ${easements ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Easements & Encroachments</h4>
+          <p class="site-narrative-text">${easements}</p>
+        </div>
+      ` : ''}
+
+      ${soils ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Soils</h4>
+          <p class="site-narrative-text">${soils}</p>
+        </div>
+      ` : ''}
+
+      ${hazardousWaste ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Environmental Concerns</h4>
+          <p class="site-narrative-text">${hazardousWaste}</p>
+        </div>
+      ` : ''}
+
+      ${siteRating ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Overall Site Rating</h4>
+          <p class="site-narrative-text">${siteRating}</p>
+        </div>
+      ` : ''}
+
+      ${!easements && !soils && !hazardousWaste && !siteRating ? `
+        <div class="empty-state">No site conditions information provided</div>
+      ` : ''}
+
+      <!-- Site Conclusion -->
+      ${siteConclusion ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Site Conclusion</h3>
+        <p class="site-narrative-text">${siteConclusion}</p>
+      ` : ''}
+
+      <!-- Site Plan Images -->
+      ${sitePlanImages.length > 0 ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Site Plan & Images</h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin-top: 1rem;">
+          ${sitePlanImages.map((url, index) => `
+            <div style="border: 1px solid #e5e7eb; border-radius: 4px; overflow: hidden;">
+              <img src="${url}" alt="Site Plan ${index + 1}" style="width: 100%; height: 250px; object-fit: cover;" />
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+    </div>
+    `;
+  };
+
+  // Helper function to render the TAX section with custom template
+  const renderTaxSection = (section: ReportSection): string => {
+    // Get field values from subsections
+    const assessmentYear = getFieldValue(section, 'assessment-year');
+    const landAssessment = getFieldValue(section, 'land-assessment');
+    const buildingAssessment = getFieldValue(section, 'building-assessment');
+    const totalAssessment = getFieldValue(section, 'total-assessment');
+    const millRate = getFieldValue(section, 'mill-rate');
+    const annualTaxes = getFieldValue(section, 'annual-taxes');
+    const taxCommentary = getFieldValue(section, 'tax-commentary');
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Property Taxes & Assessment</h2>
+
+      <!-- Property Taxes & Assessment Table -->
+      <h3 class="subsection-title">Assessment & Tax Summary</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">Assessment Year</td>
+            <td class="site-table-value">${assessmentYear || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Land Assessment</td>
+            <td class="site-table-value">${landAssessment ? formatCurrency(landAssessment) : '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Building Assessment</td>
+            <td class="site-table-value">${buildingAssessment ? formatCurrency(buildingAssessment) : '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Total Assessment</td>
+            <td class="site-table-value">${totalAssessment ? formatCurrency(totalAssessment) : '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Mill Rate</td>
+            <td class="site-table-value">${millRate || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Annual Taxes</td>
+            <td class="site-table-value">${annualTaxes ? formatCurrency(annualTaxes) : '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Tax Commentary Narrative -->
+      ${taxCommentary ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Tax Commentary</h3>
+        <p class="site-narrative-text">${taxCommentary}</p>
+      ` : ''}
+    </div>
+    `;
+  };
+
+  // Helper function to render the ZONE section with custom template
+  const renderZoneSection = (section: ReportSection): string => {
+    // Get field values from subsections
+    const zoningClassification = getFieldValue(section, 'zoning-classification');
+    const permittedUses = getFieldValue(section, 'permitted-uses');
+    const maxHeight = getFieldValue(section, 'max-height');
+    const maxDensity = getFieldValue(section, 'max-density');
+    const minSetback = getFieldValue(section, 'min-setback');
+    const parkingRequirements = getFieldValue(section, 'parking-requirements');
+    const conformanceStatus = getFieldValue(section, 'conformance-status');
+    const zoningConclusion = getFieldValue(section, 'zoning-conclusion');
+
+    // Parse permitted uses if it's a comma-separated string or array
+    let permittedUsesList: string[] = [];
+    if (permittedUses) {
+      if (typeof permittedUses === 'string') {
+        permittedUsesList = permittedUses.split(',').map(use => use.trim()).filter(use => use);
+      } else if (Array.isArray(permittedUses)) {
+        permittedUsesList = permittedUses;
+      }
+    }
+
+    const hasDevelopmentStandards = maxHeight || maxDensity || minSetback || parkingRequirements;
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Zoning Analysis</h2>
+
+      <!-- Zoning Classification -->
+      ${zoningClassification ? `
+        <h3 class="subsection-title">Zoning Classification</h3>
+        <p class="site-narrative-text">${zoningClassification}</p>
+      ` : ''}
+
+      <!-- Permitted Uses -->
+      ${permittedUsesList.length > 0 ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Permitted Uses</h3>
+        <ul style="margin-left: 2rem; line-height: 1.8; font-size: 12px;">
+          ${permittedUsesList.map(use => `<li>${use}</li>`).join('')}
+        </ul>
+      ` : permittedUses ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Permitted Uses</h3>
+        <p class="site-narrative-text">${permittedUses}</p>
+      ` : ''}
+
+      <!-- Development Standards Table -->
+      ${hasDevelopmentStandards ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Development Standards</h3>
+        <table class="site-table">
+          <tbody>
+            ${maxHeight ? `
+              <tr>
+                <td class="site-table-label">Maximum Height</td>
+                <td class="site-table-value">${maxHeight}</td>
+              </tr>
+            ` : ''}
+            ${maxDensity ? `
+              <tr>
+                <td class="site-table-label">Maximum Density</td>
+                <td class="site-table-value">${maxDensity}</td>
+              </tr>
+            ` : ''}
+            ${minSetback ? `
+              <tr>
+                <td class="site-table-label">Minimum Setback</td>
+                <td class="site-table-value">${minSetback}</td>
+              </tr>
+            ` : ''}
+            ${parkingRequirements ? `
+              <tr>
+                <td class="site-table-label">Parking Requirements</td>
+                <td class="site-table-value">${parkingRequirements}</td>
+              </tr>
+            ` : ''}
+          </tbody>
+        </table>
+      ` : ''}
+
+      <!-- Conformance Status -->
+      ${conformanceStatus ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Conformance Status</h3>
+        <p class="site-narrative-text">${conformanceStatus}</p>
+      ` : ''}
+
+      <!-- Zoning Conclusion -->
+      ${zoningConclusion ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Zoning Conclusion</h3>
+        <p class="site-narrative-text">${zoningConclusion}</p>
+      ` : ''}
+
+      ${!zoningClassification && !permittedUses && !hasDevelopmentStandards && !conformanceStatus && !zoningConclusion ? `
+        <div class="empty-state">No zoning information provided</div>
+      ` : ''}
+    </div>
+    `;
+  };
+
+  // Helper function to render the HBU (Highest & Best Use) section with custom template
+  const renderHbuSection = (section: ReportSection): string => {
+    // Get field values
+    const hbuIntroduction = getFieldValue(section, 'hbu-introduction') ||
+      'The highest and best use of a property is defined as the reasonably probable and legal use of property that is physically possible, appropriately supported, and financially feasible, and that results in the highest value. The highest and best use analysis is conducted for the site as if vacant and for the property as improved.';
+
+    // As Vacant Analysis
+    const legallyPermissible = getFieldValue(section, 'legally-permissible');
+    const physicallyPossible = getFieldValue(section, 'physically-possible');
+    const financiallyFeasible = getFieldValue(section, 'financially-feasible');
+    const maximallyProductive = getFieldValue(section, 'maximally-productive');
+    const asVacantConclusion = getFieldValue(section, 'as-vacant-conclusion');
+
+    // As Improved Analysis
+    const asImprovedAnalysis = getFieldValue(section, 'as-improved-analysis');
+    const asImprovedConclusion = getFieldValue(section, 'as-improved-conclusion');
+
+    // Final HBU Conclusion
+    const finalHbuConclusion = getFieldValue(section, 'final-hbu-conclusion');
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Highest & Best Use</h2>
+
+      <!-- Introduction -->
+      <div class="site-narrative-section">
+        <p class="site-narrative-text">${hbuIntroduction}</p>
+      </div>
+
+      <!-- As Vacant Analysis -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Analysis As Vacant</h3>
+
+      ${legallyPermissible ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Legally Permissible</h4>
+          <p class="site-narrative-text">${legallyPermissible}</p>
+        </div>
+      ` : `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Legally Permissible</h4>
+          <div class="empty-state">Not specified</div>
+        </div>
+      `}
+
+      ${physicallyPossible ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Physically Possible</h4>
+          <p class="site-narrative-text">${physicallyPossible}</p>
+        </div>
+      ` : `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Physically Possible</h4>
+          <div class="empty-state">Not specified</div>
+        </div>
+      `}
+
+      ${financiallyFeasible ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Financially Feasible</h4>
+          <p class="site-narrative-text">${financiallyFeasible}</p>
+        </div>
+      ` : `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Financially Feasible</h4>
+          <div class="empty-state">Not specified</div>
+        </div>
+      `}
+
+      ${maximallyProductive ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Maximally Productive</h4>
+          <p class="site-narrative-text">${maximallyProductive}</p>
+        </div>
+      ` : `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Maximally Productive</h4>
+          <div class="empty-state">Not specified</div>
+        </div>
+      `}
+
+      ${asVacantConclusion ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">As Vacant Conclusion</h4>
+          <p class="site-narrative-text" style="font-weight: bold;">${asVacantConclusion}</p>
+        </div>
+      ` : ''}
+
+      <!-- As Improved Analysis -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Analysis As Improved</h3>
+
+      ${asImprovedAnalysis ? `
+        <div class="site-narrative-section">
+          <p class="site-narrative-text">${asImprovedAnalysis}</p>
+        </div>
+      ` : `
+        <div class="empty-state">No as improved analysis provided</div>
+      `}
+
+      ${asImprovedConclusion ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">As Improved Conclusion</h4>
+          <p class="site-narrative-text" style="font-weight: bold;">${asImprovedConclusion}</p>
+        </div>
+      ` : ''}
+
+      <!-- Final HBU Conclusion -->
+      ${finalHbuConclusion ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Final Highest & Best Use Conclusion</h3>
+        <div class="site-narrative-section">
+          <p class="site-narrative-text" style="font-weight: bold; font-size: 13px;">${finalHbuConclusion}</p>
+        </div>
+      ` : ''}
+    </div>
+    `;
+  };
+
+  // Helper function to render the RECON (Reconciliation) section with custom template
+  const renderReconSection = (section: ReportSection): string => {
+    // Get field values
+    const reconIntroduction = getFieldValue(section, 'recon-introduction');
+
+    // Value Summary Table data
+    const incomeApproachValue = getFieldValue(section, 'income-approach-value');
+    const incomeApproachWeight = getFieldValue(section, 'income-approach-weight');
+    const salesComparisonValue = getFieldValue(section, 'sales-comparison-value');
+    const salesComparisonWeight = getFieldValue(section, 'sales-comparison-weight');
+    const costApproachValue = getFieldValue(section, 'cost-approach-value');
+    const costApproachWeight = getFieldValue(section, 'cost-approach-weight');
+
+    // Reconciliation Analysis
+    const reconAnalysis = getFieldValue(section, 'recon-analysis');
+
+    // Final Value Conclusion Table data
+    const finalValueScenario = getFieldValue(section, 'final-value-scenario') || valueScenario;
+    const finalInterestAppraised = getFieldValue(section, 'final-interest-appraised') || propertyRights;
+    const finalEffectiveDate = getFieldValue(section, 'final-effective-date') || valuationDate;
+    const finalConcludedValue = getFieldValue(section, 'final-concluded-value') || concludedValue;
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Reconciliation of Value</h2>
+
+      <!-- Introduction -->
+      ${reconIntroduction ? `
+        <div class="site-narrative-section">
+          <p class="site-narrative-text">${reconIntroduction}</p>
+        </div>
+      ` : ''}
+
+      <!-- Value Summary Table -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Value Summary</h3>
+      <table class="letter-value-table">
+        <thead>
+          <tr>
+            <th>Approach</th>
+            <th>Indicated Value</th>
+            <th>Weight</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${incomeApproachValue ? `
+          <tr>
+            <td>Income Approach</td>
+            <td>${formatCurrency(incomeApproachValue)}</td>
+            <td>${incomeApproachWeight || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          ` : ''}
+          ${salesComparisonValue ? `
+          <tr>
+            <td>Sales Comparison Approach</td>
+            <td>${formatCurrency(salesComparisonValue)}</td>
+            <td>${salesComparisonWeight || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          ` : ''}
+          ${costApproachValue ? `
+          <tr>
+            <td>Cost Approach</td>
+            <td>${formatCurrency(costApproachValue)}</td>
+            <td>${costApproachWeight || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          ` : ''}
+          ${!incomeApproachValue && !salesComparisonValue && !costApproachValue ? `
+          <tr>
+            <td colspan="3" style="text-align: center;">
+              <span class="empty-state">No approach values specified</span>
+            </td>
+          </tr>
+          ` : ''}
+        </tbody>
+      </table>
+
+      <!-- Reconciliation Analysis -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Reconciliation Analysis</h3>
+      ${reconAnalysis ? `
+        <div class="site-narrative-section">
+          <p class="site-narrative-text">${reconAnalysis}</p>
+        </div>
+      ` : `
+        <div class="empty-state">No reconciliation analysis provided</div>
+      `}
+
+      <!-- Final Value Conclusion -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Final Value Conclusion</h3>
+      <table class="letter-value-table">
+        <thead>
+          <tr>
+            <th>Value Scenario</th>
+            <th>Interest Appraised</th>
+            <th>Effective Date</th>
+            <th>Concluded Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>${finalValueScenario || '<span class="empty-state">Not specified</span>'}</td>
+            <td>${finalInterestAppraised || '<span class="empty-state">Not specified</span>'}</td>
+            <td>${finalEffectiveDate || '<span class="empty-state">Not specified</span>'}</td>
+            <td><strong>${finalConcludedValue ? formatCurrency(finalConcludedValue) : '<span class="empty-state">Not specified</span>'}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    `;
+  };
+
+
+  // Helper function to render the INCOME section with custom template
+  const renderIncomeSection = (section: ReportSection): string => {
+    // Get Pro Forma Operating Statement values
+    const potentialGrossIncome = getFieldValue(section, 'potential-gross-income');
+    const vacancyAmount = getFieldValue(section, 'vacancy-amount');
+    const vacancyPercent = getFieldValue(section, 'vacancy-percent');
+    const otherIncome = getFieldValue(section, 'other-income');
+    const effectiveGrossIncome = getFieldValue(section, 'effective-gross-income');
+
+    // Operating expenses
+    const managementFee = getFieldValue(section, 'management-fee');
+    const managementPercent = getFieldValue(section, 'management-percent');
+    const insurance = getFieldValue(section, 'insurance');
+    const insurancePercent = getFieldValue(section, 'insurance-percent');
+    const propertyTaxes = getFieldValue(section, 'property-taxes');
+    const propertyTaxesPercent = getFieldValue(section, 'property-taxes-percent');
+    const utilities = getFieldValue(section, 'utilities');
+    const utilitiesPercent = getFieldValue(section, 'utilities-percent');
+    const repairs = getFieldValue(section, 'repairs-maintenance');
+    const repairsPercent = getFieldValue(section, 'repairs-maintenance-percent');
+    const landscaping = getFieldValue(section, 'landscaping');
+    const landscapingPercent = getFieldValue(section, 'landscaping-percent');
+    const advertising = getFieldValue(section, 'advertising');
+    const advertisingPercent = getFieldValue(section, 'advertising-percent');
+    const legalAccounting = getFieldValue(section, 'legal-accounting');
+    const legalAccountingPercent = getFieldValue(section, 'legal-accounting-percent');
+    const miscExpenses = getFieldValue(section, 'misc-expenses');
+    const miscExpensesPercent = getFieldValue(section, 'misc-expenses-percent');
+    const totalExpenses = getFieldValue(section, 'total-expenses');
+    const totalExpensesPercent = getFieldValue(section, 'total-expenses-percent');
+
+    // Net Operating Income
+    const netOperatingIncome = getFieldValue(section, 'net-operating-income');
+    const noiPercent = getFieldValue(section, 'noi-percent');
+
+    // Capitalization Rate Analysis
+    const capRateAnalysis = getFieldValue(section, 'cap-rate-analysis');
+
+    // Direct Capitalization Values
+    const noi = getFieldValue(section, 'noi-value');
+    const capRate = getFieldValue(section, 'cap-rate');
+    const indicatedValue = getFieldValue(section, 'indicated-value');
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Income Approach</h2>
+
+      <!-- Pro Forma Operating Statement -->
+      <h3 class="subsection-title">Pro Forma Operating Statement</h3>
+      <table class="income-table">
+        <thead>
+          <tr>
+            <th class="income-table-label">Line Item</th>
+            <th class="income-table-amount">Amount</th>
+            <th class="income-table-percent">% of EGI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="income-section-header">
+            <td colspan="3"><strong>REVENUE</strong></td>
+          </tr>
+          <tr>
+            <td class="income-table-label">Potential Gross Income</td>
+            <td class="income-table-amount">${potentialGrossIncome ? formatCurrency(potentialGrossIncome) : '<span class="empty-state">-</span>'}</td>
+            <td class="income-table-percent"></td>
+          </tr>
+          <tr>
+            <td class="income-table-label">Less: Vacancy</td>
+            <td class="income-table-amount">${vacancyAmount ? '(' + formatCurrency(vacancyAmount) + ')' : '<span class="empty-state">-</span>'}</td>
+            <td class="income-table-percent">${vacancyPercent ? formatPercent(vacancyPercent) : ''}</td>
+          </tr>
+          <tr>
+            <td class="income-table-label">Add: Other Income</td>
+            <td class="income-table-amount">${otherIncome ? formatCurrency(otherIncome) : '<span class="empty-state">-</span>'}</td>
+            <td class="income-table-percent"></td>
+          </tr>
+          <tr class="income-subtotal">
+            <td class="income-table-label"><strong>Effective Gross Income</strong></td>
+            <td class="income-table-amount"><strong>${effectiveGrossIncome ? formatCurrency(effectiveGrossIncome) : '<span class="empty-state">-</span>'}</strong></td>
+            <td class="income-table-percent"><strong>100%</strong></td>
+          </tr>
+          <tr class="income-spacer">
+            <td colspan="3"></td>
+          </tr>
+          <tr class="income-section-header">
+            <td colspan="3"><strong>OPERATING EXPENSES</strong></td>
+          </tr>
+          <tr>
+            <td class="income-table-label">Management</td>
+            <td class="income-table-amount">${managementFee ? formatCurrency(managementFee) : '<span class="empty-state">-</span>'}</td>
+            <td class="income-table-percent">${managementPercent ? formatPercent(managementPercent) : ''}</td>
+          </tr>
+          <tr>
+            <td class="income-table-label">Insurance</td>
+            <td class="income-table-amount">${insurance ? formatCurrency(insurance) : '<span class="empty-state">-</span>'}</td>
+            <td class="income-table-percent">${insurancePercent ? formatPercent(insurancePercent) : ''}</td>
+          </tr>
+          <tr>
+            <td class="income-table-label">Property Taxes</td>
+            <td class="income-table-amount">${propertyTaxes ? formatCurrency(propertyTaxes) : '<span class="empty-state">-</span>'}</td>
+            <td class="income-table-percent">${propertyTaxesPercent ? formatPercent(propertyTaxesPercent) : ''}</td>
+          </tr>
+          ${utilities ? `
+          <tr>
+            <td class="income-table-label">Utilities</td>
+            <td class="income-table-amount">${formatCurrency(utilities)}</td>
+            <td class="income-table-percent">${utilitiesPercent ? formatPercent(utilitiesPercent) : ''}</td>
+          </tr>
+          ` : ''}
+          ${repairs ? `
+          <tr>
+            <td class="income-table-label">Repairs & Maintenance</td>
+            <td class="income-table-amount">${formatCurrency(repairs)}</td>
+            <td class="income-table-percent">${repairsPercent ? formatPercent(repairsPercent) : ''}</td>
+          </tr>
+          ` : ''}
+          ${landscaping ? `
+          <tr>
+            <td class="income-table-label">Landscaping</td>
+            <td class="income-table-amount">${formatCurrency(landscaping)}</td>
+            <td class="income-table-percent">${landscapingPercent ? formatPercent(landscapingPercent) : ''}</td>
+          </tr>
+          ` : ''}
+          ${advertising ? `
+          <tr>
+            <td class="income-table-label">Advertising</td>
+            <td class="income-table-amount">${formatCurrency(advertising)}</td>
+            <td class="income-table-percent">${advertisingPercent ? formatPercent(advertisingPercent) : ''}</td>
+          </tr>
+          ` : ''}
+          ${legalAccounting ? `
+          <tr>
+            <td class="income-table-label">Legal & Accounting</td>
+            <td class="income-table-amount">${formatCurrency(legalAccounting)}</td>
+            <td class="income-table-percent">${legalAccountingPercent ? formatPercent(legalAccountingPercent) : ''}</td>
+          </tr>
+          ` : ''}
+          ${miscExpenses ? `
+          <tr>
+            <td class="income-table-label">Miscellaneous</td>
+            <td class="income-table-amount">${formatCurrency(miscExpenses)}</td>
+            <td class="income-table-percent">${miscExpensesPercent ? formatPercent(miscExpensesPercent) : ''}</td>
+          </tr>
+          ` : ''}
+          <tr class="income-subtotal">
+            <td class="income-table-label"><strong>Total Expenses</strong></td>
+            <td class="income-table-amount"><strong>${totalExpenses ? formatCurrency(totalExpenses) : '<span class="empty-state">-</span>'}</strong></td>
+            <td class="income-table-percent"><strong>${totalExpensesPercent ? formatPercent(totalExpensesPercent) : ''}</strong></td>
+          </tr>
+          <tr class="income-spacer">
+            <td colspan="3"></td>
+          </tr>
+          <tr class="income-total">
+            <td class="income-table-label"><strong>NET OPERATING INCOME</strong></td>
+            <td class="income-table-amount"><strong>${netOperatingIncome ? formatCurrency(netOperatingIncome) : '<span class="empty-state">-</span>'}</strong></td>
+            <td class="income-table-percent"><strong>${noiPercent ? formatPercent(noiPercent) : ''}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Capitalization Rate Analysis -->
+      ${capRateAnalysis ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Capitalization Rate Analysis</h3>
+        <div class="site-narrative-section">
+          <p class="site-narrative-text">${capRateAnalysis}</p>
+        </div>
+      ` : ''}
+
+      <!-- Direct Capitalization Value -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Direct Capitalization Value</h3>
+      <table class="cap-value-table">
+        <thead>
+          <tr>
+            <th class="cap-table-label">Component</th>
+            <th class="cap-table-value">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="cap-table-label">Net Operating Income (NOI)</td>
+            <td class="cap-table-value">${noi ? formatCurrency(noi) : (netOperatingIncome ? formatCurrency(netOperatingIncome) : '<span class="empty-state">-</span>')}</td>
+          </tr>
+          <tr>
+            <td class="cap-table-label">Capitalization Rate</td>
+            <td class="cap-table-value">${capRate ? formatPercent(capRate) : '<span class="empty-state">-</span>'}</td>
+          </tr>
+          <tr class="cap-value-total">
+            <td class="cap-table-label"><strong>Indicated Value</strong></td>
+            <td class="cap-table-value"><strong>${indicatedValue ? formatCurrency(indicatedValue) : '<span class="empty-state">-</span>'}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      ${!potentialGrossIncome && !effectiveGrossIncome && !netOperatingIncome && !capRate ? `
+        <div class="empty-state">No income approach data provided. Complete the Pro Forma Operating Statement and Capitalization Rate fields.</div>
+      ` : ''}
+    </div>
+    `;
+  };
+
+  // Helper function to render the SALES section with custom template
+  const renderSalesSection = (section: ReportSection): string => {
+    // Helper to calculate Price/Unit
+    const calculatePricePerUnit = (salePrice: string, numUnits: string): string => {
+      const price = parseFloat(salePrice.replace(/[^0-9.-]/g, ''));
+      const units = parseFloat(numUnits.replace(/[^0-9.-]/g, ''));
+      if (isNaN(price) || isNaN(units) || units === 0) return '-';
+      return formatCurrency(String(price / units));
+    };
+
+    // Helper to calculate Price/SF
+    const calculatePricePerSF = (salePrice: string, gba: string): string => {
+      const price = parseFloat(salePrice.replace(/[^0-9.-]/g, ''));
+      const sf = parseFloat(gba.replace(/[^0-9.-]/g, ''));
+      if (isNaN(price) || isNaN(sf) || sf === 0) return '-';
+      const pricePerSF = price / sf;
+      return `$${pricePerSF.toFixed(2)}`;
+    };
+
+    // Subject Property Summary data
+    const subjectNumUnits = getFieldValue(section, 'subject-num-units');
+    const subjectGba = getFieldValue(section, 'subject-gba');
+    const subjectYearBuilt = getFieldValue(section, 'subject-year-built');
+    const subjectSiteArea = getFieldValue(section, 'subject-site-area');
+    const subjectCondition = getFieldValue(section, 'subject-condition');
+
+    // Sale 1 data
+    const sale1Name = getFieldValue(section, 'sale1-name');
+    const sale1Address = getFieldValue(section, 'sale1-address');
+    const sale1SaleDate = getFieldValue(section, 'sale1-sale-date');
+    const sale1SalePrice = getFieldValue(section, 'sale1-sale-price');
+    const sale1NumUnits = getFieldValue(section, 'sale1-num-units');
+    const sale1Gba = getFieldValue(section, 'sale1-gba');
+    const sale1YearBuilt = getFieldValue(section, 'sale1-year-built');
+    const sale1CapRate = getFieldValue(section, 'sale1-cap-rate');
+
+    // Sale 2 data
+    const sale2Name = getFieldValue(section, 'sale2-name');
+    const sale2Address = getFieldValue(section, 'sale2-address');
+    const sale2SaleDate = getFieldValue(section, 'sale2-sale-date');
+    const sale2SalePrice = getFieldValue(section, 'sale2-sale-price');
+    const sale2NumUnits = getFieldValue(section, 'sale2-num-units');
+    const sale2Gba = getFieldValue(section, 'sale2-gba');
+    const sale2YearBuilt = getFieldValue(section, 'sale2-year-built');
+    const sale2CapRate = getFieldValue(section, 'sale2-cap-rate');
+
+    // Sale 3 data
+    const sale3Name = getFieldValue(section, 'sale3-name');
+    const sale3Address = getFieldValue(section, 'sale3-address');
+    const sale3SaleDate = getFieldValue(section, 'sale3-sale-date');
+    const sale3SalePrice = getFieldValue(section, 'sale3-sale-price');
+    const sale3NumUnits = getFieldValue(section, 'sale3-num-units');
+    const sale3Gba = getFieldValue(section, 'sale3-gba');
+    const sale3YearBuilt = getFieldValue(section, 'sale3-year-built');
+    const sale3CapRate = getFieldValue(section, 'sale3-cap-rate');
+
+    // Sales Comparison Value Conclusion
+    const salesValueIndication = getFieldValue(section, 'sales-value-indication');
+    const adjustmentSummary = getFieldValue(section, 'adjustment-summary');
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Sales Comparison Approach</h2>
+
+      <!-- Subject Property Summary Table -->
+      <h3 class="subsection-title">Subject Property Summary</h3>
+      <table class="site-table">
+        <thead>
+          <tr>
+            <th class="site-table-label" style="background: #1a365d; color: white;">Item</th>
+            <th class="site-table-value" style="background: #1a365d; color: white;">Subject</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="site-table-label">Number of Units</td>
+            <td class="site-table-value">${subjectNumUnits || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">GBA</td>
+            <td class="site-table-value">${subjectGba ? `${Number(subjectGba).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Year Built</td>
+            <td class="site-table-value">${subjectYearBuilt || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Site Area</td>
+            <td class="site-table-value">${subjectSiteArea ? `${Number(subjectSiteArea).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Condition</td>
+            <td class="site-table-value">${subjectCondition || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Comparable Sale 1 -->
+      ${sale1Name || sale1Address ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Comparable Sale 1</h3>
+        <table class="site-table">
+          <tbody>
+            <tr>
+              <td class="site-table-label">Property</td>
+              <td class="site-table-value">${sale1Name || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Address</td>
+              <td class="site-table-value">${sale1Address || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Sale Date</td>
+              <td class="site-table-value">${sale1SaleDate || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Sale Price</td>
+              <td class="site-table-value">${sale1SalePrice ? formatCurrency(sale1SalePrice) : '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Units</td>
+              <td class="site-table-value">${sale1NumUnits || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Price/Unit</td>
+              <td class="site-table-value">${sale1SalePrice && sale1NumUnits ? calculatePricePerUnit(sale1SalePrice, sale1NumUnits) : '<span class="empty-state">-</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">GBA</td>
+              <td class="site-table-value">${sale1Gba ? `${Number(sale1Gba).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Price/SF</td>
+              <td class="site-table-value">${sale1SalePrice && sale1Gba ? calculatePricePerSF(sale1SalePrice, sale1Gba) : '<span class="empty-state">-</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Year Built</td>
+              <td class="site-table-value">${sale1YearBuilt || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Cap Rate</td>
+              <td class="site-table-value">${sale1CapRate ? `${sale1CapRate}%` : '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+          </tbody>
+        </table>
+      ` : ''}
+
+      <!-- Comparable Sale 2 -->
+      ${sale2Name || sale2Address ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Comparable Sale 2</h3>
+        <table class="site-table">
+          <tbody>
+            <tr>
+              <td class="site-table-label">Property</td>
+              <td class="site-table-value">${sale2Name || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Address</td>
+              <td class="site-table-value">${sale2Address || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Sale Date</td>
+              <td class="site-table-value">${sale2SaleDate || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Sale Price</td>
+              <td class="site-table-value">${sale2SalePrice ? formatCurrency(sale2SalePrice) : '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Units</td>
+              <td class="site-table-value">${sale2NumUnits || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Price/Unit</td>
+              <td class="site-table-value">${sale2SalePrice && sale2NumUnits ? calculatePricePerUnit(sale2SalePrice, sale2NumUnits) : '<span class="empty-state">-</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">GBA</td>
+              <td class="site-table-value">${sale2Gba ? `${Number(sale2Gba).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Price/SF</td>
+              <td class="site-table-value">${sale2SalePrice && sale2Gba ? calculatePricePerSF(sale2SalePrice, sale2Gba) : '<span class="empty-state">-</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Year Built</td>
+              <td class="site-table-value">${sale2YearBuilt || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Cap Rate</td>
+              <td class="site-table-value">${sale2CapRate ? `${sale2CapRate}%` : '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+          </tbody>
+        </table>
+      ` : ''}
+
+      <!-- Comparable Sale 3 -->
+      ${sale3Name || sale3Address ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Comparable Sale 3</h3>
+        <table class="site-table">
+          <tbody>
+            <tr>
+              <td class="site-table-label">Property</td>
+              <td class="site-table-value">${sale3Name || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Address</td>
+              <td class="site-table-value">${sale3Address || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Sale Date</td>
+              <td class="site-table-value">${sale3SaleDate || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Sale Price</td>
+              <td class="site-table-value">${sale3SalePrice ? formatCurrency(sale3SalePrice) : '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Units</td>
+              <td class="site-table-value">${sale3NumUnits || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Price/Unit</td>
+              <td class="site-table-value">${sale3SalePrice && sale3NumUnits ? calculatePricePerUnit(sale3SalePrice, sale3NumUnits) : '<span class="empty-state">-</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">GBA</td>
+              <td class="site-table-value">${sale3Gba ? `${Number(sale3Gba).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Price/SF</td>
+              <td class="site-table-value">${sale3SalePrice && sale3Gba ? calculatePricePerSF(sale3SalePrice, sale3Gba) : '<span class="empty-state">-</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Year Built</td>
+              <td class="site-table-value">${sale3YearBuilt || '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Cap Rate</td>
+              <td class="site-table-value">${sale3CapRate ? `${sale3CapRate}%` : '<span class="empty-state">Not specified</span>'}</td>
+            </tr>
+          </tbody>
+        </table>
+      ` : ''}
+
+      <!-- Sales Comparison Value Conclusion -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Sales Comparison Value Conclusion</h3>
+      <table class="cap-value-table">
+        <tbody>
+          <tr class="cap-value-total">
+            <td class="cap-table-label"><strong>Indicated Value</strong></td>
+            <td class="cap-table-value"><strong>${salesValueIndication ? formatCurrency(salesValueIndication) : '<span class="empty-state">Not specified</span>'}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Adjustment Summary Narrative -->
+      ${adjustmentSummary ? `
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Adjustment Summary</h3>
+        <div class="site-narrative-section">
+          <p class="site-narrative-text">${adjustmentSummary}</p>
+        </div>
+      ` : ''}
+
+      ${!subjectNumUnits && !sale1Name && !sale2Name && !sale3Name ? `
+        <div class="empty-state">No sales comparison data provided. Complete the subject property summary and comparable sales fields.</div>
+      ` : ''}
+    </div>
+    `;
+  };
+
+  // Helper function to render the IMPV (Improvements) section with custom template
+  const renderImpvSection = (section: ReportSection): string => {
+    // Building Overview fields
+    const propertyTypeImpv = getFieldValue(section, 'property-type');
+    const numberOfBuildings = getFieldValue(section, 'number-of-buildings');
+    const numberOfStories = getFieldValue(section, 'number-of-stories');
+    const yearBuiltImpv = getFieldValue(section, 'year-built');
+    const netRentableArea = getFieldValue(section, 'net-rentable-area');
+    const totalUnitsImpv = getFieldValue(section, 'total-units');
+    const buildingFormatImpv = getFieldValue(section, 'building-format');
+
+    // Construction & Structure fields
+    const foundation = getFieldValue(section, 'foundation');
+    const exteriorWalls = getFieldValue(section, 'exterior-walls');
+    const roofType = getFieldValue(section, 'roof-type');
+    const roofCondition = getFieldValue(section, 'roof-condition');
+
+    // Building Systems fields
+    const hvac = getFieldValue(section, 'hvac');
+    const electrical = getFieldValue(section, 'electrical');
+    const plumbing = getFieldValue(section, 'plumbing');
+    const fireProtection = getFieldValue(section, 'fire-protection');
+
+    // Amenities fields
+    const projectAmenities = getFieldValue(section, 'project-amenities');
+    const unitAmenities = getFieldValue(section, 'unit-amenities');
+    const laundry = getFieldValue(section, 'laundry');
+    const security = getFieldValue(section, 'security');
+
+    // Site Improvements fields
+    const parkingSpaces = getFieldValue(section, 'parking-spaces');
+    const parkingRatio = getFieldValue(section, 'parking-ratio');
+    const siteCoverage = getFieldValue(section, 'site-coverage');
+    const landscaping = getFieldValue(section, 'landscaping');
+
+    // Overall Condition
+    const overallCondition = getFieldValue(section, 'overall-condition');
+
+    const hasBuildingOverview = propertyTypeImpv || numberOfBuildings || numberOfStories || yearBuiltImpv || netRentableArea || totalUnitsImpv || buildingFormatImpv;
+    const hasConstruction = foundation || exteriorWalls || roofType || roofCondition;
+    const hasBuildingSystems = hvac || electrical || plumbing || fireProtection;
+    const hasAmenities = projectAmenities || unitAmenities || laundry || security;
+    const hasSiteImprovements = parkingSpaces || parkingRatio || siteCoverage || landscaping;
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Improvements</h2>
+
+      ${hasBuildingOverview ? `
+        <!-- Building Summary Table -->
+        <h3 class="subsection-title">Building Summary</h3>
+        <table class="site-table">
+          <tbody>
+            ${propertyTypeImpv ? `
+              <tr>
+                <td class="site-table-label">Property Type</td>
+                <td class="site-table-value">${propertyTypeImpv}</td>
+              </tr>
+            ` : ''}
+            ${numberOfBuildings ? `
+              <tr>
+                <td class="site-table-label">Number of Buildings</td>
+                <td class="site-table-value">${numberOfBuildings}</td>
+              </tr>
+            ` : ''}
+            ${numberOfStories ? `
+              <tr>
+                <td class="site-table-label">Number of Stories</td>
+                <td class="site-table-value">${numberOfStories}</td>
+              </tr>
+            ` : ''}
+            ${yearBuiltImpv ? `
+              <tr>
+                <td class="site-table-label">Year Built</td>
+                <td class="site-table-value">${yearBuiltImpv}</td>
+              </tr>
+            ` : ''}
+            ${netRentableArea ? `
+              <tr>
+                <td class="site-table-label">Net Rentable Area</td>
+                <td class="site-table-value">${Number(netRentableArea).toLocaleString()} SF</td>
+              </tr>
+            ` : ''}
+            ${totalUnitsImpv ? `
+              <tr>
+                <td class="site-table-label">Total Units</td>
+                <td class="site-table-value">${totalUnitsImpv}</td>
+              </tr>
+            ` : ''}
+            ${buildingFormatImpv ? `
+              <tr>
+                <td class="site-table-label">Building Format</td>
+                <td class="site-table-value">${buildingFormatImpv}</td>
+              </tr>
+            ` : ''}
+          </tbody>
+        </table>
+      ` : ''}
+
+      ${hasConstruction ? `
+        <!-- Construction Details Table -->
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Construction Details</h3>
+        <table class="site-table">
+          <tbody>
+            ${foundation ? `
+              <tr>
+                <td class="site-table-label">Foundation</td>
+                <td class="site-table-value">${foundation}</td>
+              </tr>
+            ` : ''}
+            ${exteriorWalls ? `
+              <tr>
+                <td class="site-table-label">Exterior Walls</td>
+                <td class="site-table-value">${exteriorWalls}</td>
+              </tr>
+            ` : ''}
+            ${roofType ? `
+              <tr>
+                <td class="site-table-label">Roof Type</td>
+                <td class="site-table-value">${roofType}</td>
+              </tr>
+            ` : ''}
+            ${roofCondition ? `
+              <tr>
+                <td class="site-table-label">Roof Condition</td>
+                <td class="site-table-value">${roofCondition}</td>
+              </tr>
+            ` : ''}
+          </tbody>
+        </table>
+      ` : ''}
+
+      ${hasBuildingSystems ? `
+        <!-- Building Systems Table -->
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Building Systems</h3>
+        <table class="site-table">
+          <tbody>
+            ${hvac ? `
+              <tr>
+                <td class="site-table-label">HVAC</td>
+                <td class="site-table-value">${hvac}</td>
+              </tr>
+            ` : ''}
+            ${electrical ? `
+              <tr>
+                <td class="site-table-label">Electrical</td>
+                <td class="site-table-value">${electrical}</td>
+              </tr>
+            ` : ''}
+            ${plumbing ? `
+              <tr>
+                <td class="site-table-label">Plumbing</td>
+                <td class="site-table-value">${plumbing}</td>
+              </tr>
+            ` : ''}
+            ${fireProtection ? `
+              <tr>
+                <td class="site-table-label">Fire Protection</td>
+                <td class="site-table-value">${fireProtection}</td>
+              </tr>
+            ` : ''}
+          </tbody>
+        </table>
+      ` : ''}
+
+      ${hasAmenities ? `
+        <!-- Amenities Section -->
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Amenities</h3>
+        <div class="site-narrative-section">
+          ${projectAmenities ? `
+            <div style="margin-bottom: 0.75rem;">
+              <h4 class="site-narrative-label">Project Amenities</h4>
+              <p class="site-narrative-text">${projectAmenities}</p>
+            </div>
+          ` : ''}
+          ${unitAmenities ? `
+            <div style="margin-bottom: 0.75rem;">
+              <h4 class="site-narrative-label">Unit Amenities</h4>
+              <p class="site-narrative-text">${unitAmenities}</p>
+            </div>
+          ` : ''}
+          ${laundry ? `
+            <div style="margin-bottom: 0.75rem;">
+              <h4 class="site-narrative-label">Laundry</h4>
+              <p class="site-narrative-text">${laundry}</p>
+            </div>
+          ` : ''}
+          ${security ? `
+            <div style="margin-bottom: 0.75rem;">
+              <h4 class="site-narrative-label">Security</h4>
+              <p class="site-narrative-text">${security}</p>
+            </div>
+          ` : ''}
+        </div>
+      ` : ''}
+
+      ${hasSiteImprovements ? `
+        <!-- Site Improvements Section -->
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Site Improvements</h3>
+        <table class="site-table">
+          <tbody>
+            ${parkingSpaces ? `
+              <tr>
+                <td class="site-table-label">Parking Spaces</td>
+                <td class="site-table-value">${parkingSpaces}</td>
+              </tr>
+            ` : ''}
+            ${parkingRatio ? `
+              <tr>
+                <td class="site-table-label">Parking Ratio</td>
+                <td class="site-table-value">${parkingRatio}</td>
+              </tr>
+            ` : ''}
+            ${siteCoverage ? `
+              <tr>
+                <td class="site-table-label">Site Coverage %</td>
+                <td class="site-table-value">${siteCoverage}</td>
+              </tr>
+            ` : ''}
+            ${landscaping ? `
+              <tr>
+                <td class="site-table-label">Landscaping</td>
+                <td class="site-table-value">${landscaping}</td>
+              </tr>
+            ` : ''}
+          </tbody>
+        </table>
+      ` : ''}
+
+      ${overallCondition ? `
+        <!-- Overall Condition Section -->
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Overall Condition</h3>
+        <div class="site-narrative-section">
+          <p class="site-narrative-text">${overallCondition}</p>
+        </div>
+      ` : ''}
+
+      ${!hasBuildingOverview && !hasConstruction && !hasBuildingSystems && !hasAmenities && !hasSiteImprovements && !overallCondition ? `
+        <div class="empty-state">No improvements information provided</div>
+      ` : ''}
+    </div>
+    `;
+  };
+
+  // Helper function to render the PHOTOS section with custom 2-column grid template
+  const renderPhotosSection = (section: ReportSection): string => {
+    if (!section.subsections || section.subsections.length === 0) {
+      return `
+    <div class="section">
+      <h2 class="section-title">Photos</h2>
+      <div class="empty-state">No photos added</div>
+    </div>
+      `;
+    }
+
+    let photosHtml = `
+    <div class="section">
+      <h2 class="section-title">Photos</h2>
+    `;
+
+    // Process each subsection (EXTERIOR PHOTOS, STREET VIEWS, etc.)
+    section.subsections.forEach(subsection => {
+      if (!subsection.fields || subsection.fields.length === 0) return;
+
+      // Extract photo fields and their captions
+      const photoData: Array<{imageUrl: string | null; caption: string}> = [];
+
+      // Group fields by their base name (e.g., 'photo-exterior-1' and 'photo-exterior-1-caption')
+      const fieldMap = new Map<string, {imageUrl: string | null; caption: string}>();
+
+      subsection.fields.forEach(field => {
+        if (field.type === 'image') {
+          // This is an image field
+          const imageUrls = Array.isArray(field.value) ? field.value as string[] : [];
+          const imageUrl = imageUrls.length > 0 ? imageUrls[0] : null;
+          const baseId = field.id;
+
+          if (!fieldMap.has(baseId)) {
+            fieldMap.set(baseId, { imageUrl, caption: '' });
+          } else {
+            const existing = fieldMap.get(baseId)!;
+            existing.imageUrl = imageUrl;
+          }
+        } else if (field.id.endsWith('-caption')) {
+          // This is a caption field
+          const baseId = field.id.replace('-caption', '');
+          const caption = String(field.value || '');
+
+          if (!fieldMap.has(baseId)) {
+            fieldMap.set(baseId, { imageUrl: null, caption });
+          } else {
+            const existing = fieldMap.get(baseId)!;
+            existing.caption = caption;
+          }
+        }
+      });
+
+      // Convert map to array
+      fieldMap.forEach(data => {
+        if (data.imageUrl) {
+          photoData.push(data);
+        }
+      });
+
+      if (photoData.length === 0) return;
+
+      // Add subsection title
+      photosHtml += `
+      <h3 class="subsection-title">${subsection.title}</h3>
+      <table class="photo-grid">
+      `;
+
+      // Render photos in 2-column grid
+      for (let i = 0; i < photoData.length; i += 2) {
+        photosHtml += `
+        <tr>
+          <td class="photo-cell">
+            <img src="${photoData[i].imageUrl}" alt="Photo ${i + 1}" class="photo-image" />
+            ${photoData[i].caption ? `<div class="photo-caption">${photoData[i].caption}</div>` : ''}
+          </td>
+        `;
+
+        if (i + 1 < photoData.length) {
+          photosHtml += `
+          <td class="photo-cell">
+            <img src="${photoData[i + 1].imageUrl}" alt="Photo ${i + 2}" class="photo-image" />
+            ${photoData[i + 1].caption ? `<div class="photo-caption">${photoData[i + 1].caption}</div>` : ''}
+          </td>
+          `;
+        } else {
+          // Odd number of photos - leave second cell empty
+          photosHtml += `
+          <td class="photo-cell"></td>
+          `;
+        }
+
+        photosHtml += `
+        </tr>
+        `;
+      }
+
+      photosHtml += `
+      </table>
+      `;
+    });
+
+    photosHtml += `
+    </div>
+    `;
+
+    return photosHtml;
+  };
+
+  // Helper function to render the CERTIFICATION section
+  const renderCertificationSection = (): string => {
+    // Get current date for the certification
+    const certDate = reportDate || new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Certification</h2>
+
+      <div class="site-narrative-section">
+        <p class="site-narrative-text">I certify that, to the best of my knowledge and belief:</p>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">1.</div>
+        <div class="cert-text">The statements of fact contained in this report are true and correct.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">2.</div>
+        <div class="cert-text">The reported analyses, opinions, and conclusions are limited only by the reported assumptions and limiting conditions and are my personal, impartial, and unbiased professional analyses, opinions, and conclusions.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">3.</div>
+        <div class="cert-text">I have no present or prospective interest in the property that is the subject of this report and no personal interest with respect to the parties involved.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">4.</div>
+        <div class="cert-text">I have no bias with respect to the property that is the subject of this report or to the parties involved with this assignment.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">5.</div>
+        <div class="cert-text">My engagement in this assignment was not contingent upon developing or reporting predetermined results.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">6.</div>
+        <div class="cert-text">My compensation for completing this assignment is not contingent upon the development or reporting of a predetermined value or direction in value that favours the cause of the client, the amount of the value opinion, the attainment of a stipulated result, or the occurrence of a subsequent event directly related to the intended use of this appraisal.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">7.</div>
+        <div class="cert-text">My analyses, opinions, and conclusions were developed, and this report has been prepared, in conformity with the Canadian Uniform Standards of Professional Appraisal Practice (CUSPAP).</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">8.</div>
+        <div class="cert-text">${appraiserName || 'The appraiser'} has made a personal inspection of the property that is the subject of this report.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">9.</div>
+        <div class="cert-text">No one provided significant real property appraisal assistance to the person signing this certification.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">10.</div>
+        <div class="cert-text">The reported analyses, opinions, and conclusions were developed, and this report has been prepared, in conformity with the Code of Professional Ethics of the Appraisal Institute of Canada.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">11.</div>
+        <div class="cert-text">The use of this report is subject to the requirements of the Appraisal Institute of Canada relating to review by its duly authorized representatives.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">12.</div>
+        <div class="cert-text">As of the date of this report, ${appraiserName || 'the appraiser'} has completed the continuing professional development program requirements of the Appraisal Institute of Canada.</div>
+      </div>
+
+      <!-- Signature Block -->
+      <div class="cert-signature-block">
+        <div class="cert-signature-line"></div>
+        <div class="cert-signature-name">${appraiserName || 'Appraiser Name'}</div>
+        <div class="cert-signature-credentials">${appraiserCredentials || 'AACI, P.App'}</div>
+        <div class="cert-signature-title">${appraiserTitle || 'Senior Appraiser'}</div>
+        <div class="cert-signature-company">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+        ${appraiserAicNumber ? `<div class="cert-signature-aic">AIC #${appraiserAicNumber}</div>` : ''}
+        <div class="cert-signature-date">Date: ${certDate}</div>
+      </div>
+    </div>
+    `;
+  };
+
+
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appraisal Report</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      line-height: 1.6;
+      color: #00000a;
+      background: #fff;
+      font-size: 12px;
+    }
+
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto;
+      background: white;
+      padding: 0;
+      page-break-after: always;
+      scroll-margin-top: 20px;
+    }
+
+    /* Cover Page Styles - Matching Valcre Design */
+    .cover-page {
+      position: relative;
+      min-height: 11in;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* Top logo section */
+    .cover-logo-header {
+      padding: 0.75in 0.75in 0.5in 0.75in;
+    }
+
+    .cover-logo {
+      max-width: 280px;
+      height: auto;
+    }
+
+    /* Main content area - two columns */
+    .cover-main {
+      display: flex;
+      padding: 0 0.75in;
+      min-height: 4in;
+    }
+
+    .cover-photo-column {
+      width: 50%;
+      padding-right: 1rem;
+      position: relative;
+    }
+
+    .cover-photo {
+      width: 100%;
+      max-width: 380px;
+      height: auto;
+      border: none;
+      /* Feathered edge effect using mask gradients */
+      -webkit-mask-image:
+        linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+      -webkit-mask-composite: source-in;
+      mask-image:
+        linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+      mask-composite: intersect;
+      /* Subtle shadow for depth */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .cover-photo-placeholder {
+      width: 100%;
+      max-width: 380px;
+      height: 280px;
+      background: #f3f4f6;
+      border: 2px dashed #d1d5db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      font-size: 11px;
+      text-align: center;
+      padding: 1rem;
+      /* Match feathered effect for placeholder */
+      -webkit-mask-image:
+        linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+      -webkit-mask-composite: source-in;
+      mask-image:
+        linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+      mask-composite: intersect;
+    }
+
+    .cover-content-column {
+      width: 50%;
+      text-align: right;
+      padding-top: 0.5in;
+    }
+
+    .cover-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      color: #000;
+    }
+
+    .property-info {
+      margin-bottom: 2rem;
+    }
+
+    .property-type {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+
+    .property-name {
+      font-size: 12px;
+      margin-bottom: 0.25rem;
+    }
+
+    .property-address {
+      font-size: 12px;
+      margin-bottom: 0.125rem;
+    }
+
+    .property-city {
+      font-size: 12px;
+    }
+
+    /* Diagonal blue section at bottom */
+    .cover-blue-section {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #1a365d;
+      color: white;
+      padding: 2rem 0.75in 1rem 0.75in;
+      clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+      min-height: 4.5in;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .cover-blue-content {
+      text-align: right;
+      padding-top: 1.5in;
+    }
+
+    .prepared-section {
+      margin-bottom: 1.25rem;
+    }
+
+    .prepared-label {
+      font-size: 11px;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.02em;
+    }
+
+    .prepared-content {
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .prepared-content div {
+      margin-bottom: 0.125rem;
+    }
+
+    .dates-section {
+      margin-top: 1.5rem;
+      font-size: 11px;
+    }
+
+    .dates-section div {
+      margin-bottom: 0.25rem;
+    }
+
+    .file-number {
+      margin-top: 1rem;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    /* Letter of Transmittal Styles */
+    .letter-page {
+      padding: 1in;
+      position: relative;
+    }
+
+    .letter-header {
+      margin-bottom: 1rem;
+    }
+
+    .letter-logo {
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    .letter-date {
+      font-size: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .letter-address-block {
+      font-size: 12px;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .letter-attention {
+      font-size: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .letter-re {
+      font-size: 12px;
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+    }
+
+    .letter-body {
+      font-size: 12px;
+      line-height: 1.8;
+      text-align: left;
+    }
+
+    .letter-body p {
+      margin-bottom: 1rem;
+      text-align: justify;
+    }
+
+    .letter-section-heading {
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .letter-conditions-text {
+      font-size: 11px;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      padding-left: 1rem;
+      text-align: justify;
+    }
+
+    .letter-value-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 11px;
+    }
+
+    .letter-value-table th {
+      background: #1a365d;
+      color: white;
+      padding: 0.5rem;
+      text-align: left;
+      font-weight: bold;
+      border: 1px solid #bfbfbf;
+    }
+
+    .letter-value-table td {
+      padding: 0.5rem;
+      border: 1px solid #bfbfbf;
+    }
+
+    .letter-signature-block {
+      margin-top: 2rem;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .letter-signature-line {
+      margin-top: 3rem;
+      margin-bottom: 0.5rem;
+      border-top: 1px solid #000;
+      width: 250px;
+    }
+
+    .letter-signature-name {
+      font-weight: bold;
+    }
+
+    /* Page Header Branding */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #1a365d;
+    }
+
+    .page-header-logo {
+      height: 45px;
+      width: auto;
+    }
+
+    .page-header-title {
+      font-size: 10px;
+      color: #666;
+      text-align: right;
+    }
+
+    /* Page Footer Branding */
+    .page-footer {
+      position: absolute;
+      bottom: 0.5in;
+      left: 1in;
+      right: 1in;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9px;
+      color: #666;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 0.5rem;
+    }
+
+    .page-footer-left {
+      text-align: left;
+    }
+
+    .page-footer-right {
+      text-align: right;
+    }
+
+    /* Executive Summary Styles */
+    .exec-page {
+      padding: 1in;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #1a365d;
+    }
+
+    .subsection-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #1a365d;
+      margin: 1.5rem 0 0.75rem 0;
+      padding: 0.5rem;
+      background: #f3f4f6;
+      border-left: 4px solid #1a365d;
+    }
+
+    .field-group {
+      margin-bottom: 1rem;
+    }
+
+    .field-label {
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+
+    .field-value {
+      margin-left: 1rem;
+      white-space: pre-wrap;
+    }
+
+    .empty-state {
+      color: #9ca3af;
+      font-style: italic;
+      padding: 1rem;
+      background: #f9fafb;
+      border-radius: 4px;
+      border: 1px dashed #d1d5db;
+      text-align: center;
+    }
+
+    /* SITE Section Table Styles */
+    .site-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12px;
+    }
+
+    .site-table tbody tr {
+      border-bottom: 1px solid #bfbfbf;
+    }
+
+    .site-table-label {
+      width: 35%;
+      padding: 8px 12px;
+      font-weight: bold;
+      color: #333333;
+      vertical-align: top;
+      background: #f9fafb;
+    }
+
+    .site-table-value {
+      width: 65%;
+      padding: 8px 12px;
+      color: #00000a;
+      vertical-align: top;
+    }
+
+    .site-table tbody tr:last-child {
+      border-bottom: 2px solid #bfbfbf;
+    }
+
+    .site-narrative-section {
+      margin-bottom: 1rem;
+    }
+
+    .site-narrative-label {
+      font-size: 12px;
+      font-weight: bold;
+      color: #333333;
+      margin-bottom: 0.5rem;
+    }
+
+    .site-narrative-text {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #00000a;
+      white-space: pre-wrap;
+      margin-left: 1rem;
+    }
+
+
+    /* INCOME Section Table Styles */
+    .income-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12px;
+      border: 1px solid #bfbfbf;
+    }
+
+    .income-table thead th {
+      background: #1a365d;
+      color: white;
+      padding: 8px 12px;
+      font-weight: bold;
+      border: 1px solid #bfbfbf;
+    }
+
+    .income-table-label {
+      text-align: left;
+      padding: 6px 12px;
+      border-right: 1px solid #e5e7eb;
+    }
+
+    .income-table-amount {
+      text-align: right;
+      padding: 6px 12px;
+      border-right: 1px solid #e5e7eb;
+      width: 150px;
+    }
+
+    .income-table-percent {
+      text-align: right;
+      padding: 6px 12px;
+      width: 100px;
+    }
+
+    .income-table tbody tr {
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .income-section-header td {
+      background: #f3f4f6;
+      padding: 8px 12px;
+      font-weight: bold;
+      color: #1a365d;
+      border-top: 2px solid #bfbfbf;
+    }
+
+    .income-subtotal {
+      background: #f9fafb;
+      border-top: 2px solid #bfbfbf;
+      border-bottom: 2px solid #bfbfbf;
+    }
+
+    .income-total {
+      background: #e8eef5;
+      border-top: 3px solid #1a365d;
+      border-bottom: 3px solid #1a365d;
+    }
+
+    .income-spacer {
+      height: 12px;
+      border: none;
+    }
+
+    .income-spacer td {
+      padding: 0;
+      border: none;
+    }
+
+    /* Capitalization Value Table Styles */
+    .cap-value-table {
+      width: 100%;
+      max-width: 500px;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12px;
+      border: 1px solid #bfbfbf;
+    }
+
+    .cap-value-table thead th {
+      background: #1a365d;
+      color: white;
+      padding: 8px 12px;
+      font-weight: bold;
+      border: 1px solid #bfbfbf;
+    }
+
+    .cap-table-label {
+      text-align: left;
+      padding: 8px 12px;
+      border-right: 1px solid #e5e7eb;
+      width: 60%;
+    }
+
+    .cap-table-value {
+      text-align: right;
+      padding: 8px 12px;
+      width: 40%;
+      font-weight: normal;
+    }
+
+    .cap-value-table tbody tr {
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .cap-value-total {
+      background: #e8eef5;
+      border-top: 3px solid #1a365d;
+      border-bottom: 3px solid #1a365d;
+    }
+
+    .cap-value-total .cap-table-value {
+      font-weight: bold;
+    }
+
+
+    /* PHOTOS Section Grid Styles */
+    .photo-grid {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .photo-cell {
+      width: 50%;
+      padding: 10px;
+      text-align: center;
+      vertical-align: top;
+    }
+
+    .photo-image {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .photo-caption {
+      font-size: 11px;
+      margin-top: 8px;
+      font-style: italic;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    /* CERTIFICATION Section Styles */
+    .cert-statement {
+      display: flex;
+      margin-bottom: 1rem;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .cert-number {
+      min-width: 30px;
+      font-weight: bold;
+      color: #1a365d;
+    }
+
+    .cert-text {
+      flex: 1;
+      text-align: justify;
+    }
+
+    .cert-signature-block {
+      margin-top: 3rem;
+      margin-left: 2rem;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .cert-signature-line {
+      width: 250px;
+      border-top: 1px solid #000;
+      margin-bottom: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .cert-signature-name {
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .cert-signature-credentials {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .cert-signature-title {
+      font-size: 11px;
+    }
+
+    .cert-signature-company {
+      font-size: 11px;
+    }
+
+    .cert-signature-aic {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .cert-signature-date {
+      font-size: 11px;
+      margin-top: 0.5rem;
+    }
+
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .page {
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        width: 100%;
+        min-height: 100vh;
+        page-break-after: always;
+      }
+
+      .cover-page {
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Cover Page - Matching Valcre Design -->
+  <div id="section-cover" class="page cover-page">
+    <!-- Top Logo Header -->
+    <div class="cover-logo-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta Property Valuations" class="cover-logo" />
+    </div>
+
+    <!-- Main Content: Photo Left, Info Right -->
+    <div class="cover-main">
+      <div class="cover-photo-column">
+        ${coverPhoto
+          ? `<img src="${coverPhoto}" alt="Property Photo" class="cover-photo" />`
+          : `<div class="cover-photo-placeholder">Property Photo<br/>(Add in Cover Page section)</div>`
+        }
+      </div>
+      <div class="cover-content-column">
+        <div class="cover-title">Appraisal Report</div>
+        <div class="property-info">
+          ${propertyType ? `<div class="property-type">${propertyType} Property</div>` : ''}
+          ${propertyName ? `<div class="property-name">${propertyName}</div>` : ''}
+          ${streetAddress ? `<div class="property-address">${streetAddress}</div>` : ''}
+          ${city && province ? `<div class="property-city">${city}, ${province}</div>` : ''}
+        </div>
+      </div>
+    </div>
+
+    <!-- Diagonal Blue Section -->
+    <div class="cover-blue-section">
+      <div class="cover-blue-content">
+        <!-- Prepared For -->
+        <div class="prepared-section">
+          <div class="prepared-label">PREPARED FOR:</div>
+          <div class="prepared-content">
+            ${clientContactName ? `<div>${clientContactName}</div>` : ''}
+            ${clientCompany ? `<div>${clientCompany}</div>` : ''}
+            ${clientAddress ? `<div>${clientAddress}</div>` : ''}
+            ${!clientContactName && !clientCompany ? `<div style="opacity: 0.7; font-style: italic;">Client information pending</div>` : ''}
+          </div>
+        </div>
+
+        <!-- Prepared By -->
+        <div class="prepared-section">
+          <div class="prepared-label">PREPARED BY:</div>
+          <div class="prepared-content">
+            ${appraiserCompany ? `<div style="font-weight: bold;">${appraiserCompany}</div>` : ''}
+            ${appraiserAddress ? `<div>${appraiserAddress}</div>` : ''}
+            ${appraiserPhone ? `<div>Office: ${appraiserPhone}</div>` : ''}
+            ${appraiserWebsite ? `<div>${appraiserWebsite}</div>` : ''}
+          </div>
+        </div>
+
+        <!-- Dates -->
+        <div class="dates-section">
+          ${valuationDate ? `<div>Date of Valuation: ${valuationDate}</div>` : ''}
+          ${reportDate ? `<div>Date of Report: ${reportDate}</div>` : ''}
+        </div>
+
+        <!-- File Number -->
+        ${fileNumber ? `<div class="file-number">File No: ${fileNumber}</div>` : ''}
+      </div>
+    </div>
+  </div>
+
+  <!-- Letter of Transmittal Page -->
+  <div id="section-home" class="page letter-page">
+    <div class="letter-header">
+      <img src="/images/valta-logo-optimized.png" alt="${appraiserCompany}" class="letter-logo" />
+    </div>
+
+    <div class="letter-date">${reportDate || '[Report Date]'}</div>
+
+    <div class="letter-address-block">
+      ${clientCompany || '[Client Company]'}<br/>
+      ${clientAddress || '[Client Address]'}<br/>
+      ${clientCity && clientProvince && clientPostal ? `${clientCity}, ${clientProvince} ${clientPostal}` : '[City, Province Postal]'}
+    </div>
+
+    <div class="letter-attention">
+      <strong>Attention:</strong> ${clientContactName ? `${clientContactName},` : '[Client Contact Name],'}
+    </div>
+
+    <div class="letter-re">
+      <strong>Re:</strong> ${valueScenario} (${propertyRights}) current market value for the property located at ${streetAddress || '[Street Address]'}, ${city || '[City]'}, ${province || '[Province]'}.
+    </div>
+
+    <div class="letter-body">
+      <p>
+        ${appraiserCompany || '[Appraiser Company]'} is proud to present the appraisal report that satisfies the agreed upon scope of work with ${clientCompany || '[Client Company]'}. The purpose of this assignment is to provide the ${valueScenario.toLowerCase()} current market value of the property which at the time of inspection represents the improved property as of the effective date and leased up at market rental rates and operating costs for the property located at ${streetAddress || '[Street Address]'}, ${city || '[City]'}, ${province || '[Province]'} (herein referred to as the 'subject property').
+      </p>
+
+      <p>
+        The subject property, located at ${streetAddress || '[Street Address]'}, ${city || '[City]'}, ${province || '[Province]'}, is a ${propertyTypeLower}, ${buildingStyle} property with improvements located in ${city || '[City]'}. The improvements are comprised of ${totalBuildings} total building${parseInt(totalBuildings) !== 1 ? 's' : ''}, and consist of ${totalNra || '[NRA]'} square feet of net rentable area (NRA) as of the valuation date. The property, reportedly built in ${yearBuilt || '[Year Built]'}${yearBuilt ? '; (' + yearBuilt + ' weighted)' : ''} is approximately ${occupancyRate}% occupied and features ${totalUnits || '[Units]'} units in a ${stories}-story, ${buildingFormat} format.
+      </p>
+
+      <p>
+        Based upon our investigation of the real estate market and after considering all of the pertinent facts as set forth in the body of this appraisal report, as of the effective date, we have concluded the following:
+      </p>
+
+      <table class="letter-value-table">
+        <thead>
+          <tr>
+            <th>Value Scenario</th>
+            <th>Interest Appraised</th>
+            <th>Effective Date</th>
+            <th>Concluded Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>${valueScenario}</td>
+            <td>${propertyRights}</td>
+            <td>${valuationDate || '[Valuation Date]'}</td>
+            <td><strong>${concludedValue ? formatCurrency(concludedValue) : '[Concluded Value]'}</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="letter-section-heading">Hypothetical Conditions</div>
+      <div class="letter-conditions-text">${hypotheticalConditions}</div>
+
+      <div class="letter-section-heading">Extraordinary Assumptions</div>
+      <div class="letter-conditions-text">${extraordinaryAssumptions}</div>
+
+      <div class="letter-section-heading">Extraordinary Limiting Conditions</div>
+      <div class="letter-conditions-text">${extraordinaryLimitingConditions}</div>
+
+      <p>
+        The report has been completed in accordance with the Canadian Uniform Standards of Professional Appraisal Practice ("CUSPAP") adopted January 1, 2024. The full narrative appraisal report that follows sets forth the pertinent data and analyses leading to the conclusions presented herein. The appraisal requirements section of this report sets out the basis of the appraisal, definitions and the valuation methodology and must be read to gain a full understanding of the process.
+      </p>
+
+      <p>
+        If there are any specific questions or concerns regarding the attached appraisal report, or if ${appraiserCompanyShort} can be of additional assistance, please contact the individuals listed below.
+      </p>
+
+      <p style="margin-top: 2rem;">
+        Respectfully Submitted,<br/>
+        <strong>${appraiserCompany || '[Appraiser Company]'}</strong>
+      </p>
+
+      <div class="letter-signature-block">
+        <div class="letter-signature-line"></div>
+        <div class="letter-signature-name">${appraiserName ? `${appraiserName}${appraiserCredentials ? ', ' + appraiserCredentials : ''}` : '[Appraiser Name, Credentials]'}</div>
+        ${appraiserTitle ? `<div>${appraiserTitle}</div>` : '<div>[Appraiser Title]</div>'}
+        ${appraiserEmail ? `<div>${appraiserEmail}</div>` : '<div>[Appraiser Email]</div>'}
+        ${appraiserAicNumber ? `<div>AIC No: ${appraiserAicNumber}</div>` : '<div>AIC No: [AIC Number]</div>'}
+      </div>
+    </div>
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">${fileNumber || ''}</div>
+      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+    </div>
+  </div>
+
+  <!-- Executive Summary Page -->
+  ${execSection ? `
+  <div id="section-exec" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>${propertyName || 'Appraisal Report'}</div>
+        <div>${streetAddress ? streetAddress + ', ' : ''}${city || ''}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Executive Summary</h2>
+
+      ${execSection.fields.map(field => `
+        <div class="field-group">
+          <div class="field-label">${field.label}:</div>
+          <div class="field-value">${field.value || '<span class="empty-state">Not specified</span>'}</div>
+        </div>
+      `).join('')}
+
+      ${execSection.subsections ? execSection.subsections.map(subsection => `
+        <h3 class="subsection-title">${subsection.title}</h3>
+        ${subsection.fields.map(field => `
+          <div class="field-group">
+            <div class="field-label">${field.label}:</div>
+            <div class="field-value">${field.value || '<span class="empty-state">Not specified</span>'}</div>
+          </div>
+        `).join('')}
+      `).join('') : ''}
+    </div>
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">${fileNumber || ''}</div>
+      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+    </div>
+  </div>
+  ` : ''}
+
+  <!-- Additional Sections -->
+  ${sections.filter(s => s.id !== 'cover' && s.id !== 'exec' && s.id !== 'home' && s.id !== 'custom' && s.id !== 'report').map(section => `
+  <div id="section-${section.id}" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>${propertyName || 'Appraisal Report'}</div>
+        <div>${streetAddress ? streetAddress + ', ' : ''}${city || ''}</div>
+      </div>
+    </div>
+
+    ${section.id === 'site' ? renderSiteSection(section) :
+      section.id === 'tax' ? renderTaxSection(section) :
+      section.id === 'zone' ? renderZoneSection(section) :
+      section.id === 'hbu' ? renderHbuSection(section) :
+      section.id === 'recon' ? renderReconSection(section) :
+      section.id === 'income' ? renderIncomeSection(section) :
+      section.id === 'sales' ? renderSalesSection(section) :
+      section.id === 'impv' ? renderImpvSection(section) :
+      section.id === 'photos' ? renderPhotosSection(section) : `
+    <div class="section">
+      <h2 class="section-title">${section.name}</h2>
+
+      ${section.fields.map(field => {
+        if (field.type === 'image' && Array.isArray(field.value)) {
+          const imageUrls = field.value as string[];
+          return imageUrls.length > 0 ? `
+            <div class="field-group">
+              <div class="field-label">${field.label}:</div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                ${imageUrls.map((url, index) => `
+                  <div style="border: 1px solid #e5e7eb; border-radius: 4px; overflow: hidden;">
+                    <img src="${url}" alt="${field.label} ${index + 1}" style="width: 100%; height: 150px; object-fit: cover;" />
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          ` : `
+            <div class="field-group">
+              <div class="field-label">${field.label}:</div>
+              <div class="empty-state">No images added</div>
+            </div>
+          `;
+        }
+        return `
+          <div class="field-group">
+            <div class="field-label">${field.label}:</div>
+            <div class="field-value">${field.value || '<span class="empty-state">Not specified</span>'}</div>
+          </div>
+        `;
+      }).join('')}
+
+      ${section.subsections ? section.subsections.map(subsection => `
+        <h3 class="subsection-title">${subsection.title}</h3>
+        ${subsection.fields.map(field => `
+          <div class="field-group">
+            <div class="field-label">${field.label}:</div>
+            <div class="field-value">${field.value || '<span class="empty-state">Not specified</span>'}</div>
+          </div>
+        `).join('')}
+      `).join('') : ''}
+    </div>
+    `}
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">${fileNumber || ''}</div>
+      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+    </div>
+  </div>
+  `).join('')}
+
+  <!-- Certification Section -->
+  <div id="section-cert" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>${propertyName || 'Appraisal Report'}</div>
+        <div>${streetAddress ? streetAddress + ', ' : ''}${city || ''}</div>
+      </div>
+    </div>
+
+    ${renderCertificationSection()}
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">${fileNumber || ''}</div>
+      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+    </div>
+  </div>
+
+</body>
+</html>
+  `.trim();
+}

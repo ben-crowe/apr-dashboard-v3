@@ -1,9 +1,55 @@
 # Master Field Directory
 
-**Source:** VAL251012 - North Battleford Apt, 1101, 1121 109 Street, North Battleford.xlsm
-**Total Unique Fields:** 7967
-**Input Fields:** 4016
-**Calculated Fields:** 3951
+## About This Document
+
+**Created:** December 6, 2025
+**Created By:** Claude Code (Marcel Superagent)
+**Purpose:** Definitive naming convention standard for APR Dashboard React application
+
+### What This Is
+
+This document contains every unique named range (field identifier) extracted from the Valcre appraisal workbook. These field IDs serve as the **single source of truth** for field naming conventions in the APR Dashboard React application.
+
+### Source Workbook
+
+| Property | Value |
+|----------|-------|
+| **Filename** | `VAL251012 - North Battleford Apt, 1101, 1121 109 Street, North Battleford.xlsm` |
+| **File Size** | 10.8 MB |
+| **Total Sheets** | 88 |
+| **File Type** | Excel Macro-Enabled Workbook (.xlsm) |
+
+### Extraction Methodology
+
+1. **Parsed workbook** using Python `openpyxl` library
+2. **Extracted all named ranges** from Excel's Name Manager (defined names)
+3. **Excluded internal names** (those prefixed with `_` such as `_xleta.*`)
+4. **Identified input vs calculated** by checking if each cell contains a formula (`=...`) or static value
+5. **Inferred data types** from cell values (text, number, date, currency, percentage, boolean)
+6. **Organized by sheet** with field counts per section
+
+### Verification
+
+- **Total Named Ranges in Workbook:** 7,988 (including internal `_xleta` names)
+- **Extracted User Fields:** 7,967 (excluding internal names)
+- **Verification Method:** Loaded workbook in both formula mode and values mode to accurately detect calculated fields
+- **Cell References:** Each field maps to a specific cell (e.g., `$A$1`) in its respective sheet
+
+### Field Statistics
+
+| Metric | Count |
+|--------|-------|
+| **Total Unique Fields** | 7,967 |
+| **Input Fields** | 4,016 (user-entered data) |
+| **Calculated Fields** | 3,951 (formula-driven) |
+| **Sheets Containing Fields** | 88 |
+
+### How to Use This Document
+
+1. **React App Development:** Use these exact field IDs when creating form fields, state variables, and API payloads
+2. **Field Mapping:** Match dashboard fields to these IDs for Valcre integration
+3. **Validation:** Cross-reference any field naming questions against this directory
+4. **Input vs Calculated:** Fields marked 📝 are user inputs; fields marked 🔢 are calculated and should be read-only in the UI
 
 ---
 

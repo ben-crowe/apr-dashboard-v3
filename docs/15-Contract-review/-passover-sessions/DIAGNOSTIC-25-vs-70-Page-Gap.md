@@ -970,4 +970,209 @@ Even after these fixes, we're still missing 28-32 pages. Possible reasons:
 
 ---
 
-**END OF DIAGNOSTIC - UPDATED WITH AUDIT FINDINGS**
+## ⚠️ CRITICAL CHECKPOINT: DATA VERIFICATION
+
+**YOU CORRECTLY IDENTIFIED:** There are only TWO sources of content that go into the report:
+
+1. **Human Input Data** - Extracted text/values from reference document
+2. **Boilerplate Text** - Static template sections that always appear
+
+Everything else is either:
+- Calculated values (derived from human input)
+- Conditional rendering (show/hide based on data presence)
+
+---
+
+## ✅ CHECKPOINT 1: Human Input Data Verification
+
+### **Source Documents:**
+1. **V4 Template Spec:** `/docs/15-Contract-review/V4-REPORT-TEMPLATE-SPECIFICATION.md`
+   - Documents ~500+ fields that need data
+   - Shows exact template structure with `{{field_name}}` placeholders
+
+2. **Field Mapping:** `/docs/15-Contract-review/2-FIELD-MAPPING.md`
+   - Complete field inventory from VAL251012 reference
+   - Maps field IDs to actual values
+
+3. **Test Data File:** `/src/features/report-builder/data/northBattlefordTestData-REAL.ts`
+   - 938 lines of actual extracted data
+   - Should contain ALL human input values
+
+### **Verification Required:**
+
+**Question 1:** Does `northBattlefordTestData-REAL.ts` contain values for ALL ~500 fields documented in V4-REPORT-TEMPLATE-SPECIFICATION.md?
+
+**Question 2:** Are the values EXACT matches to the reference document text?
+
+**Question 3:** Are there fields in the template spec that DON'T have corresponding test data?
+
+### **Cross-Reference Table to Check:**
+
+| Template Section | Fields Expected | Test Data Status | Missing Fields |
+|------------------|----------------|------------------|----------------|
+| Cover Page | 17 fields | ✅ ❌ ? | List if missing |
+| Letter of Transmittal | 35+ fields | ✅ ❌ ? | List if missing |
+| Property ID | 30+ fields | ✅ ❌ ? | List if missing |
+| Location | 10+ fields | ✅ ❌ ? | List if missing |
+| Site Details | 25+ fields | ✅ ❌ ? | List if missing |
+| Improvements | 80+ fields | ✅ ❌ ? | List if missing |
+| Market Context | 15+ fields | ✅ ❌ ? | List if missing |
+| Income Approach | 100+ fields | ✅ ❌ ? | List if missing |
+| Sales Comparison | 150+ fields | ✅ ❌ ? | List if missing |
+
+**CRITICAL:** If test data is incomplete, the output will be missing content regardless of template quality.
+
+---
+
+## ✅ CHECKPOINT 2: Boilerplate Text Verification
+
+### **What is Boilerplate?**
+
+Boilerplate = text that appears in EVERY report regardless of property. Examples:
+
+1. **CUSPAP Market Value Definition (300+ words)**
+   - Should be HARDCODED in template
+   - Same in every report
+   - Reference location: Section 7 (Identification of Assignment)
+
+2. **Scope of Work Standard Text (500+ words)**
+   - Should be HARDCODED in template
+   - Same in every report
+   - Reference location: Section 7
+
+3. **Exposure Time Definition (200+ words)**
+   - Should be HARDCODED in template
+   - Same in every report
+   - Reference location: Section 7
+
+4. **Economic Overviews (900+ words total)**
+   - National: 400 words
+   - Provincial: 300 words
+   - Multi-Family Market: 200 words
+   - Should be HARDCODED or dynamically generated from market data API
+
+5. **Limiting Conditions (17+ paragraphs, 3 pages)**
+   - Should be HARDCODED in appendix
+   - Same in every report
+
+6. **Definitions (50+ terms, 4 pages)**
+   - Should be HARDCODED in appendix
+   - Same in every report
+
+### **Verification Required:**
+
+**Question 1:** Are ALL boilerplate sections in the template matching the reference EXACTLY?
+
+**Question 2:** Is boilerplate text hardcoded or are there `{{placeholder}}` fields where there should be static text?
+
+### **Boilerplate Audit Checklist:**
+
+| Boilerplate Section | Words Expected | Template Status | Match to Reference? |
+|---------------------|---------------|----------------|-------------------|
+| Market Value Definition | 300 words | ✅ ❌ ? | ✅ ❌ ? |
+| Scope of Work | 500 words | ✅ ❌ ? | ✅ ❌ ? |
+| Exposure Time | 200 words | ✅ ❌ ? | ✅ ❌ ? |
+| National Economic Overview | 400 words | ✅ ❌ ? | ✅ ❌ ? |
+| Provincial Economic Overview | 300 words | ✅ ❌ ? | ✅ ❌ ? |
+| Multi-Family Market | 200 words | ✅ ❌ ? | ✅ ❌ ? |
+| Limiting Conditions | 17 paragraphs | ✅ ❌ ? | ✅ ❌ ? |
+| Definitions | 50+ terms | ✅ ❌ ? | ✅ ❌ ? |
+
+**FINDING:** Already identified that Definitions has only 10 terms (should be 50+). This alone = -3 pages.
+
+---
+
+## ✅ CHECKPOINT 3: Calculated Fields
+
+**Calculated fields** are NOT human input - they're derived from other fields:
+
+Examples:
+- `{{pgi}}` = Sum of all unit rents × 12
+- `{{noi}}` = `{{egi}}` - `{{total_expenses}}`
+- `{{income_approach_value}}` = `{{noi}}` / (`{{concluded_cap_rate}}` / 100)
+
+### **Verification Required:**
+
+**Question 1:** Are calculation functions working correctly in `reportBuilderStore.ts`?
+
+**Question 2:** Do calculated values appear in the preview when test data is loaded?
+
+---
+
+## 🎯 MANDATORY VERIFICATION STEPS
+
+Before proceeding with template fixes, we MUST verify:
+
+### **Step 1: Extract Field List from Test Data File**
+
+```bash
+# Count how many fields are actually populated in test data
+grep -E "^  '[a-z-]+': " northBattlefordTestData-REAL.ts | wc -l
+```
+
+Expected: ~500 fields (matching template spec)
+
+### **Step 2: Compare Field IDs**
+
+Extract all field IDs from:
+1. V4-REPORT-TEMPLATE-SPECIFICATION.md (all `{{field_name}}` placeholders)
+2. northBattlefordTestData-REAL.ts (all field keys)
+
+**Generate:** Missing fields list
+
+### **Step 3: Verify Boilerplate Text**
+
+For each boilerplate section:
+1. Find it in reference text (north-battleford-text.txt lines 1282-2625)
+2. Find it in template (reportHtmlTemplate.ts)
+3. Compare character-by-character
+4. Flag differences
+
+### **Step 4: Test Data Load and Preview**
+
+1. Load test data in Mock Builder
+2. Export HTML (not PDF)
+3. Search HTML for key boilerplate sections
+4. Verify they appear in full
+
+---
+
+## 📊 EXPECTED OUTCOMES
+
+### **If Test Data is Complete:**
+- All ~500 template fields have values
+- Preview shows populated content
+- Missing pages are due to template issues (appendices, boilerplate)
+
+### **If Test Data is Incomplete:**
+- Template fields have no data to render
+- Preview shows empty placeholders
+- Fix: Extract missing data from reference document
+
+### **If Boilerplate is Missing:**
+- Content exists but is shortened/condensed
+- Missing paragraphs in Market Value def, Scope, etc.
+- Fix: Add boilerplate to template
+
+---
+
+## 🚨 CRITICAL QUESTION FOR USER
+
+**Before I audit test data vs template spec, please confirm:**
+
+1. **Is `/src/features/report-builder/data/northBattlefordTestData-REAL.ts` the correct file containing ALL extracted data from the reference?**
+
+2. **Should this file have ~500 field values, or is data split across multiple files?**
+
+3. **Are there any fields that are intentionally BLANK in the reference that we should skip?**
+
+Once confirmed, I will:
+1. Extract all field IDs from test data
+2. Compare to V4 template spec required fields
+3. Generate missing fields list
+4. Verify boilerplate text matches reference
+5. Update diagnostic with data completeness findings
+
+---
+
+**END OF DIAGNOSTIC - AWAITING DATA VERIFICATION CONFIRMATION**

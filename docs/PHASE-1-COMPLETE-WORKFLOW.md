@@ -1,7 +1,7 @@
 # APR Dashboard - Phase 1 Complete Workflow
 
 **Version:** 1.0
-**Last Updated:** November 18, 2025
+**Last Updated:** November 19, 2025
 **Status:** Production (95% Complete)
 
 ---
@@ -10,7 +10,43 @@
 
 Phase 1 of the APR Dashboard is a complete appraisal request management system that automates the workflow from **client form submission to signed Letter of Engagement (LOE)**. It eliminates manual data entry, ensures data accuracy, and provides real-time synchronization across multiple platforms.
 
-**In simple terms:** A client fills out a form on valta.ca, and within minutes, the appraisal request appears in the dashboard, syncs to Valcre CRM, creates a ClickUp task, generates a professional LOE document, and sends it to the client for e-signature - all automatically with zero manual data entry.
+**In simple terms:** A client fills out a form on valta.ca, and within minutes, the appraisal request appears in the dashboard, syncs to Valcre (appraisal management platform), creates a ClickUp task, generates a professional LOE document, and sends it to the client for e-signature - all automatically with zero manual data entry.
+
+---
+
+## Phase 1 Workflow - Quick Overview
+
+**The complete automated workflow from client request to signed contract:**
+
+1. **Client Form Submission** - Client fills out simple appraisal request form on valta.ca (6 required fields: name, phone, email, property name, property type, intended use)
+
+2. **Automatic Database Storage** - Form data saves to Supabase `job_submissions` table
+
+3. **ClickUp Task Creation** - Automated task created in ClickUp with "NEW SUBMISSION - [Property Name]" format
+
+4. **Dashboard Review** - Team opens job in APR Dashboard to review client-submitted information (Section 1 - read-only)
+
+5. **LOE Details Entry** - Appraiser adds Letter of Engagement details in Dashboard Section 2:
+   - Pricing (Appraisal Fee, Retainer Amount, Payment Terms)
+   - Scope (Report Type, Property Rights, Scope of Work, Delivery Date)
+   - Comments (General, Delivery Instructions, Payment Instructions)
+   - Optional: Property Contact, Building Details
+
+6. **Valcre Job Creation** - "Create Valcre Job" button creates job in Valcre platform with complete field mapping, returns VAL##### job number
+
+7. **Real-time Valcre Sync** - Dashboard Section 2 fields auto-save and sync to Valcre as appraiser makes changes (500ms debounce)
+
+8. **ClickUp Task Update** - ClickUp task automatically renamed from "NEW SUBMISSION" to "VAL##### - [Property Name]"
+
+9. **LOE Document Generation** - Appraiser clicks "Preview & Send LOE" to generate 4-page Letter of Engagement with complete field mapping
+
+10. **DocuSeal E-Signature** - LOE sent to client via Resend email with DocuSeal signing link
+
+11. **Client Signs LOE** - Client receives email, reviews LOE, signs electronically via DocuSeal portal
+
+12. **Status Update** - DocuSeal webhook updates job status in dashboard when signature complete
+
+**Result:** Zero manual data entry. Client form data flows automatically through Dashboard → Valcre → ClickUp → LOE → Client signature.
 
 ---
 
@@ -35,7 +71,7 @@ Phase 1 of the APR Dashboard is a complete appraisal request management system t
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
 │  • Supabase (PostgreSQL Database + Edge Functions)                │
-│  • Valcre API (Appraisal CRM - Contacts, Properties, Jobs)        │
+│  • Valcre API (Appraisal Management Platform - Jobs, Contacts, Properties) │
 │  • ClickUp API (Task Management)                                  │
 │  • DocuSeal API (E-Signature Documents)                           │
 │  • Resend API (Transactional Email Delivery)                      │
@@ -1407,35 +1443,460 @@ supabase secrets set RESEND_API_KEY=new_key_here
 
 ---
 
-## Success Metrics (Phase 1)
+## Phase 1 Status Summary
 
-**Time Savings:**
-- Manual data entry: ~20 minutes per job → 0 minutes (100% automated)
-- LOE generation: ~15 minutes → 30 seconds (97% reduction)
-- Total time saved per job: ~35 minutes
+**Completed Automations:**
+- Client form submission → Supabase database (automatic)
+- ClickUp task creation on form submission (automatic)
+- Dashboard job display with 5 sections (working)
+- Valcre job creation with complete field mapping (working)
+- Real-time Valcre sync on LOE field updates (working)
+- LOE document generation with 22 field mappings (working)
+- DocuSeal e-signature integration (working)
+- Email delivery via Resend API (working - sandbox mode)
 
-**Error Reduction:**
-- Manual entry errors: ~5% → 0% (eliminated)
-- Field mapping errors: Eliminated via automated validation
-- Missing information: Caught at form submission
+**Remaining Phase 1 Items:**
+- Email domain verification (currently sandbox mode)
+- End-to-end testing with production data
+- Comment fields in job creation (deployed, needs testing)
 
-**Process Improvements:**
-- Jobs visible in dashboard: Immediately (was 1-2 days)
-- LOE delivery time: < 5 minutes (was 1-2 hours)
-- Valcre sync: Real-time (was manual entry next day)
-- ClickUp task creation: Automatic (was manual)
+---
 
-**Business Impact:**
-- Faster client response time
-- Improved data accuracy
-- Better team coordination
-- Reduced administrative overhead
-- Scalable for growth
+## Phase 2: Next Work Segments
+
+### Overview
+
+Phase 1 successfully automates the workflow from **client form submission to signed LOE**. Phase 2 focuses on **document management, file organization, and advanced automations** to create a complete appraisal workflow hub.
+
+---
+
+### 1. Client Payment Collection System
+
+**Priority:** HIGH - Critical for revenue collection and job activation
+
+**NOTE:** This should be implemented at the same time as the file management system below.
+
+#### Branded Payment Page & Stripe Integration
+
+**Purpose:** Automated payment collection after LOE signature with Valta-branded experience
+
+**Trigger:** Client signs LOE (DocuSeal webhook → status = "loe_signed")
+
+**Complete Payment Flow:**
+1. **Client signs LOE** via DocuSeal portal
+2. **DocuSeal webhook** fires to APR Dashboard (already working)
+3. **Time delay** (configurable, e.g., 1 hour) - allows client to review signed LOE
+4. **Email 2: Thank You + Payment Request** sent automatically:
+   ```
+   From: Valta Appraisals <admin@valta.ca>
+   Subject: Thank You - Payment Information Enclosed
+
+   Body:
+   - Thank you for signing the Letter of Engagement
+   - Attached: Signed LOE document (PDF)
+   - Retainer amount due: $[retainer_amount] CAD
+   - "Pay Now" button → Valta-branded payment page
+   - Alternative payment instructions (e-transfer details)
+   - Contact information for questions
+   ```
+
+5. **Client clicks "Pay Now"** → Redirects to branded payment page
+6. **Payment page** opens (Valta.ca branding, similar design to website)
+7. **Client enters payment details** via Stripe Checkout
+8. **Payment processed** by Stripe
+9. **Stripe webhook** fires to APR Dashboard with payment confirmation
+10. **Automatic updates triggered:**
+    - Job status: "payment_received" → "active"
+    - ClickUp task status: "Payment Requested" → "Active - In Progress"
+    - Payment confirmation email sent to client
+    - Team notification (email/Slack): "Job VAL##### activated"
+
+---
+
+#### Payment Page Design Requirements
+
+**Branding:** Must match Valta.ca website visual identity
+- Valta logo and color scheme (primary brand colors)
+- Professional, clean layout similar to valta.ca/request-appraisal form
+- Responsive design for mobile and desktop
+- Trust indicators (secure payment badges, SSL certificate)
+
+**Payment Page Content:**
+```
+┌─────────────────────────────────────────────────┐
+│  [VALTA LOGO]                                   │
+│                                                 │
+│  Appraisal Retainer Payment                     │
+│                                                 │
+│  Job: VAL251019                                 │
+│  Property: 1510 8th Street Apartments          │
+│  Client: John Smith                             │
+│                                                 │
+│  ╔════════════════════════════════════════╗    │
+│  ║  Retainer Amount: $2,500.00 CAD       ║    │
+│  ╚════════════════════════════════════════╝    │
+│                                                 │
+│  [Stripe Payment Form]                          │
+│  Card Number: [____________]                    │
+│  Expiry: [__/__]  CVC: [___]                   │
+│  Name on Card: [____________]                   │
+│                                                 │
+│  [ Pay $2,500.00 CAD ]                         │
+│                                                 │
+│  🔒 Secure payment powered by Stripe           │
+│                                                 │
+│  Alternative: E-transfer to admin@valta.ca      │
+│                                                 │
+│  Questions? Contact: (403) XXX-XXXX            │
+└─────────────────────────────────────────────────┘
+```
+
+**Technical Implementation Options:**
+
+**Option 1: Stripe Checkout (Recommended)**
+- Stripe-hosted payment page with custom branding
+- Valta logo, colors, and messaging
+- PCI compliance handled by Stripe
+- Mobile-optimized out of the box
+- Quick implementation (3-5 days)
+
+**Option 2: Custom Payment Page + Stripe Elements**
+- Fully custom payment page hosted on APR Dashboard or valta.ca
+- Complete control over design and user experience
+- Uses Stripe Elements for secure payment input
+- Requires more frontend development (5-7 days)
+
+**Option 3: GoHighLevel (GHL) White-Labeled Landing Page**
+- GHL provides payment landing pages with visual builder
+- White-labeled with Valta branding
+- Includes email automation built-in
+- All-in-one solution (payment + email sequence)
+- Requires GHL subscription and setup (5-7 days)
+
+---
+
+#### Technical Implementation (Stripe Recommended)
+
+**Required Setup:**
+- Stripe account (valta.ca business account)
+- Stripe API keys (test and production)
+- Payment success/cancel URLs
+- Webhook endpoint for payment confirmation
+- Email template for payment confirmation
+
+**Database Schema Changes:**
+```sql
+-- Add to job_loe_details table
+ALTER TABLE job_loe_details ADD COLUMN stripe_session_id VARCHAR(255);
+ALTER TABLE job_loe_details ADD COLUMN stripe_payment_intent_id VARCHAR(255);
+ALTER TABLE job_loe_details ADD COLUMN payment_status VARCHAR(50) DEFAULT 'pending';
+ALTER TABLE job_loe_details ADD COLUMN payment_amount DECIMAL(10,2);
+ALTER TABLE job_loe_details ADD COLUMN payment_received_at TIMESTAMP;
+ALTER TABLE job_loe_details ADD COLUMN payment_method VARCHAR(50);
+ALTER TABLE job_loe_details ADD COLUMN thank_you_email_sent_at TIMESTAMP;
+ALTER TABLE job_loe_details ADD COLUMN payment_link TEXT;
+```
+
+**Edge Functions to Create:**
+
+1. **send-thank-you-email** (triggers after LOE signed)
+   - Generates Stripe Checkout session
+   - Creates payment link with job details
+   - Sends Email 2 with payment link
+   - Updates database with payment_link and thank_you_email_sent_at
+
+2. **stripe-webhook** (receives payment confirmation)
+   - Verifies Stripe signature
+   - Extracts payment details from webhook
+   - Updates job status to "payment_received"
+   - Updates ClickUp task status
+   - Sends payment confirmation email to client
+   - Notifies team via email/Slack
+
+**Stripe Checkout Session Creation:**
+```typescript
+const session = await stripe.checkout.sessions.create({
+  payment_method_types: ['card'],
+  line_items: [{
+    price_data: {
+      currency: 'cad',
+      product_data: {
+        name: 'Appraisal Retainer',
+        description: `Job ${jobNumber} - ${propertyAddress}`,
+        images: ['https://valta.ca/logo.png']
+      },
+      unit_amount: retainerAmount * 100 // Convert to cents
+    },
+    quantity: 1
+  }],
+  mode: 'payment',
+  success_url: `https://apr-dashboard-v3.vercel.app/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+  cancel_url: `https://apr-dashboard-v3.vercel.app/payment/cancelled`,
+  metadata: {
+    job_id: jobId,
+    job_number: jobNumber,
+    client_email: clientEmail
+  },
+  customer_email: clientEmail,
+  // Branding
+  billing_address_collection: 'auto',
+  custom_text: {
+    submit: {
+      message: 'Payment securely processed by Stripe'
+    }
+  }
+});
+```
+
+**Expected Time to Implement:** 3-5 days (Stripe Checkout) or 5-7 days (GHL)
+
+---
+
+### 2. Automated File Management System
+
+**Priority:** HIGH - Critical for document organization and team collaboration
+
+**NOTE:** This should be implemented at the same time as the payment system above.
+
+#### Google Drive Folder Creation (N8N Workflow)
+
+**Trigger:** When Valcre job is created (VAL##### assigned)
+
+**Automated Process:**
+1. Copy Google Drive folder template
+2. Rename folder: `"VAL251019 - Property Name, Property Address"` (using Valcre job number + property name + address)
+3. Place in parent directory: `2. Appraisals/2025/Client Intake/`
+4. Create standardized subfolder structure (10 folders):
+   - `1. Engagement Letter, Email Coreresp & Invoice` - LOE, contracts, client correspondence, invoices
+   - `2. Work File` - Internal working documents, notes, draft calculations
+   - `3. Appraisal Report` - Final appraisal report and supporting documentation
+   - `4. External Valuations` - Previous appraisals, third-party valuations, broker opinions
+   - `5. Client Provided Information` - Financial documents, leases, operating statements, legal docs
+   - `6. Property Information` - Property details, tax assessments, title documents, surveys
+   - `7. Market Information` - Comparable sales data, market reports, rent surveys
+   - `8. Research & Articles` - Industry research, market articles, reference materials
+   - `9. Building Plans & Designs` - Architectural plans, site plans, floor plans, renderings
+   - `10. Photos` - Property photos, aerial views, site images, interior/exterior shots
+5. Upload client-submitted files from Supabase Storage to appropriate folders (default: `5. Client Provided Information`)
+6. Apply proper file naming conventions (e.g., `VAL251019_TaxAssessment_2024.pdf`)
+7. Update Supabase database with Google Drive folder ID and shareable URL
+8. Add ClickUp task comment with direct link to Google Drive folder
+
+**Required Setup:**
+- Google Drive API credentials and OAuth configuration
+- Folder template ID (master template to copy)
+- Parent folder ID for job storage location
+- N8N Cloud or self-hosted instance
+- File naming convention standards document
+
+---
+
+#### Dual Storage Architecture
+
+**Current Strategy:** Parallel storage in both Supabase and Google Drive
+
+**Supabase Storage Structure:**
+```
+appraisal-documents/
+├── {job-id}/
+│   ├── 1-engagement/
+│   │   ├── loe_signed.pdf
+│   │   ├── client_correspondence.pdf
+│   │   └── invoice.pdf
+│   ├── 2-work-file/
+│   │   ├── internal_notes.pdf
+│   │   └── draft_calculations.xlsx
+│   ├── 3-appraisal-report/
+│   │   └── final_appraisal_report.pdf
+│   ├── 4-external-valuations/
+│   │   └── previous_appraisal_2023.pdf
+│   ├── 5-client-provided/
+│   │   ├── financial_statements.pdf
+│   │   ├── lease_agreement.pdf
+│   │   └── operating_expenses.xlsx
+│   ├── 6-property-info/
+│   │   ├── tax_assessment.pdf
+│   │   ├── land_title.pdf
+│   │   └── survey_certificate.pdf
+│   ├── 7-market-info/
+│   │   ├── comparable_sales.xlsx
+│   │   └── market_report.pdf
+│   ├── 8-research/
+│   │   └── industry_articles.pdf
+│   ├── 9-plans/
+│   │   ├── site_plan.pdf
+│   │   └── floor_plans.pdf
+│   └── 10-photos/
+│       ├── exterior_front.jpg
+│       ├── interior_lobby.jpg
+│       └── aerial_view.jpg
+```
+
+**Google Drive Structure:**
+```
+2. Appraisals/2025/Client Intake/
+├── VAL251019 - 1510 8th Street Apartments, Calgary AB/
+│   ├── 1. Engagement Letter, Email Coreresp & Invoice/
+│   ├── 2. Work File/
+│   ├── 3. Appraisal Report/
+│   ├── 4. External Valuations/
+│   ├── 5. Client Provided Information/
+│   ├── 6. Property Information/
+│   ├── 7. Market Information/
+│   ├── 8. Research & Articles/
+│   ├── 9. Building Plans & Designs/
+│   └── 10. Photos/
+```
+
+**Why Both Systems:**
+- **Supabase (Primary):** Fast document preview in dashboard, programmatic access via API, version control, direct integration with dashboard
+- **Google Drive (Backup):** Team collaboration, familiar interface, external sharing with clients, long-term archival
+- **Long-term Goal:** Migrate entirely to Supabase once team is comfortable with in-app document management
+
+**Folder Naming Match:**
+- Dashboard Section 4 (Document Hub) categories mirror the 10-folder structure
+- Supabase folders use shortened names (1-engagement, 2-work-file, etc.) for URL compatibility
+- Google Drive uses full descriptive names (1. Engagement Letter, Email Coreresp & Invoice, etc.)
+- Folder numbers (1-10) create a searchable taxonomy across both systems
+- Appraiser can move documents between categories in dashboard
+- Dashboard actions trigger corresponding moves in Google Drive structure
+- Maintains consistency: Supabase folder `5-client-provided` = Google Drive folder `5. Client Provided Information`
+
+---
+
+#### Dashboard Document Preview System
+
+**Purpose:** View and manage all documents without leaving APR Dashboard
+
+**Features to Implement:**
+1. **In-App File Preview** (replaces opening files in new tabs)
+   - PDF viewer with page navigation and zoom controls (25%-200%)
+   - Image viewer with zoom, pan, rotate capabilities
+   - Document viewer for Word/Excel files (read-only)
+   - Based on LOE Preview Modal zoom implementation (already working)
+
+2. **Document Management Interface** (Dashboard Section 4)
+   - Organized categories matching Google Drive folder structure
+   - Drag-and-drop file uploads
+   - Status tracking per document (Complete, Pending, N/A)
+   - Version control (replace/update files)
+   - Metadata display (uploader, date, source, file size)
+
+3. **Smart Links Integration** (already implemented via `src/utils/smartLinks.ts`)
+   - One-click access to government sites with address pre-filled
+   - Calgary: SPIN2, Assessment Search, Zoning Maps, Flood Maps, Building Permits
+   - Edmonton and Saskatoon: Similar smart links
+   - Saves ~22.5 minutes per property on manual searches
+
+4. **Document-to-Field Data Extraction** (Phase 2B - Future)
+   - OCR extraction from PDFs to populate Section 3A building fields
+   - Confidence scoring and manual verification workflow
+   - Extract from tax assessments, leases, financial statements
+   - Auto-populate: Year built, lot size, building area, assessed values
+
+**Technical Requirements:**
+- Install dependencies: `@react-pdf-viewer/core`, `react-pdf`, `pdfjs-dist`, `react-zoom-pan-pinch`
+- Integrate `FilePreviewModal` component (already created, not yet connected)
+- Replace `window.open()` calls in Section4Compact.tsx with preview modal
+- Connect preview system to Supabase Storage URLs (signed URLs)
+
+---
+
+### 3. Advanced Automations (N8N Workflows)
+
+#### Document Auto-Gathering (N8N Workflow)
+
+**Trigger:** Manual button click or scheduled after Valcre job creation
+
+**Process:**
+1. **SPIN2 Land Title** - Automated download using Chris's credentials
+2. **Assessment Data** - Scrape Calgary/Edmonton/Saskatoon assessment sites
+3. **Zoning Map** - Screenshot from city GIS with property highlighted
+4. **Flood Map** - Screenshot from flood portal
+5. **Aerial Photo** - Capture from Google Maps API
+6. **Building Permits** - Search permit databases, download PDFs
+7. Upload all gathered documents to both Supabase and Google Drive
+8. Update dashboard with document status and availability
+
+---
+
+### 4. Enhanced Dashboard Features
+
+#### Section 4: Supporting Documents Hub
+
+**Vision:** Complete document management interface within dashboard
+
+**Features:**
+- Document categories with progress tracking (7 of 9 complete)
+- Status indicators: ✅ Complete, ⏳ In Progress, ⚠️ Missing, 🚫 N/A
+- Auto-gather button triggers N8N workflow
+- Export all documents to organized zip file
+- Direct upload to Valcre (future API integration)
+
+**Document Categories (10 Folders):**
+1. **Engagement & Correspondence** - LOE, contracts, client emails, invoices
+2. **Work File** - Internal notes, draft calculations, working documents
+3. **Appraisal Report** - Final report and supporting documentation
+4. **External Valuations** - Previous appraisals, third-party valuations
+5. **Client Provided Information** - Financial docs, leases, operating statements
+6. **Property Information** - Tax assessments, title docs, surveys, permits
+7. **Market Information** - Comparable sales, market reports, rent surveys
+8. **Research & Articles** - Industry research, market articles, references
+9. **Building Plans & Designs** - Site plans, floor plans, architectural drawings
+10. **Photos** - Property photos, aerial views, interior/exterior shots
+
+---
+
+### 5. Remaining Phase 1 Items
+
+**To Complete Before Phase 2:**
+
+1. ✅ Comment fields persistence - FIXED (Nov 18)
+2. ✅ PropertyContact syncing - FIXED (Nov 18)
+3. ⏳ **Email domain verification** - Currently using sandbox (onboarding@resend.dev)
+   - Add DNS records for valta.ca domain
+   - Verify domain in Resend dashboard
+   - Switch sender to admin@valta.ca in production
+4. ⏳ **Test comment fields in job creation** - Code deployed, needs user testing
+5. ⏳ **Full end-to-end testing** - Complete workflow from form to signed LOE
+
+---
+
+### Implementation Roadmap
+
+**Phase 2A: Payment & File Management Foundation (3-4 weeks) - IN PARALLEL**
+
+*Payment System (3-5 days):*
+- Stripe account setup and API integration
+- Branded payment page configuration (Valta.ca design)
+- Email 2 template (Thank You + Payment Request)
+- Payment webhook endpoint creation
+- Payment confirmation email automation
+- ClickUp status update automation on payment received
+
+*File Management System (2-3 weeks):*
+- Google Drive API setup and folder template creation
+- N8N Workflow 2 (folder creation) implementation and testing
+- Document preview modal integration into dashboard
+- Supabase storage structure finalization
+- Dual storage sync (Supabase ↔ Google Drive)
+
+**Phase 2B: Document Auto-Gathering (3-4 weeks)**
+- SPIN2 integration (requires Chris's credentials)
+- Assessment site scraping for all supported cities
+- Map screenshot automation (city GIS, Google Maps)
+- Permit database searching and PDF retrieval
+
+**Phase 2C: Advanced Features (Ongoing)**
+- OCR data extraction from PDFs
+- Houski API integration for property data enrichment
+- Direct Valcre document upload API
+- Advanced reporting and analytics
 
 ---
 
 **End of Phase 1 Complete Workflow Documentation**
 
-Last Updated: November 18, 2025
+Last Updated: November 19, 2025
 Document Maintainer: Development Team
 Status: Production-Ready (95% Complete)

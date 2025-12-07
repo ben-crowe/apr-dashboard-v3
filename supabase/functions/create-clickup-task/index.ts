@@ -132,10 +132,11 @@ Deno.serve(async (req) => {
 • ${job.notes || job.additionalComments || ''}`
 
     // Build task payload (conditionally include template_id)
+    // CRITICAL: Use ONLY markdown_description field for clickable links to work
+    // ClickUp processes markdown [text](url) syntax in markdown_description field
     const taskPayload: any = {
       name: taskName,
-      description: description, // Plain description (fallback)
-      markdown_description: description, // Markdown description (preferred)
+      markdown_description: description,
       priority: 3, // Normal priority (1=urgent, 2=high, 3=normal, 4=low)
       status: 'to do', // Put in "to do" status (default open status)
       notify_all: false

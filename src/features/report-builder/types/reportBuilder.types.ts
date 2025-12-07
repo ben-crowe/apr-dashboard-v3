@@ -55,4 +55,6 @@ export interface ReportBuilderState {
   initializeMockData: () => void;
   toggleSidebar: () => void;
   loadCalcTestData: () => void;
+  runCalculations: () => void;
+  loadFullTestData: () => void;
 }

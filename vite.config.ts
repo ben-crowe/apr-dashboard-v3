@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     proxy: {
       '/api': {
-        target: 'https://apr-dashboard-v2.vercel.app',
+        target: 'https://apr-dashboard-v3.vercel.app',
         changeOrigin: true,
         secure: true
       }

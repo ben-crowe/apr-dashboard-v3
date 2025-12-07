@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/select';
 
 export default function EditPanel() {
-  const { sections, activeSection, updateFieldValue, loadCalcTestData } = useReportBuilderStore();
+  const { sections, activeSection, updateFieldValue, loadCalcTestData, loadFullTestData } = useReportBuilderStore();
 
   const currentSection = sections.find((s) => s.id === activeSection);
 
@@ -128,8 +128,14 @@ export default function EditPanel() {
   return (
     <div className="h-full flex flex-col bg-background">
       {/* Blue section header */}
-      <div className="bg-[#1a4480] text-white px-4 py-3 font-semibold text-lg">
-        {currentSection.name.toUpperCase()}
+      <div className="bg-[#1a4480] text-white px-4 py-3 font-semibold text-lg flex items-center justify-between">
+        <span>{currentSection.name.toUpperCase()}</span>
+        <button
+          onClick={loadFullTestData}
+          className="text-xs font-normal text-blue-200 hover:text-white transition-colors"
+        >
+          Load Test Data
+        </button>
       </div>
 
       {/* Scrollable content */}

@@ -5,7 +5,7 @@ import {
   SectionGroup,
 } from "../types/reportBuilder.types";
 import { generateReportHtml } from "../templates/reportHtmlTemplate";
-import { northBattlefordTestData } from "../data/northBattlefordTestData";
+import { northBattlefordRealData } from "../data/northBattlefordTestData-REAL";
 
 // Field ID mapping: test data ID -> store field ID (for fields that differ)
 const testDataFieldMapping: Record<string, string> = {
@@ -3065,6 +3065,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       };
     });
     set({ sections: updatedSections, isDirty: true });
+    // Regenerate preview HTML after field update for live sync
+    get().generatePreview();
   },
 
   reorderImages: (fieldId: string, imageUrls: string[]) => {
@@ -3372,19 +3374,11 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   },
 
   loadFullTestData: () => {
-    // Load comprehensive North Battleford test data (240+ fields)
+    // Load comprehensive North Battleford REAL test data (292 fields)
+    // Uses northBattlefordRealData which has field IDs matching store exactly
     const sections = get().sections;
     let mappedCount = 0;
     let unmappedFields: string[] = [];
-
-    // Photo consolidation: map individual photos to consolidated arrays
-    const photoConsolidation: Record<string, string[]> = {
-      "photos-exterior": [],
-      "photos-street": [],
-      "photos-common": [],
-      "photos-units": [],
-      "photos-systems": [],
-    };
 
     // Helper to check if field exists in store
     const fieldExists = (fieldId: string): boolean => {
@@ -3399,87 +3393,16 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       return false;
     };
 
-    // First pass: handle regular fields and collect photos
-    Object.entries(northBattlefordTestData).forEach(([testFieldId, value]) => {
-      // Handle individual photo fields -> consolidate to arrays
-      if (
-        testFieldId.startsWith("photo-exterior-") &&
-        !testFieldId.includes("caption")
-      ) {
-        if (Array.isArray(value) && value.length > 0) {
-          photoConsolidation["photos-exterior"].push(...value);
-        }
-        mappedCount++;
-        return;
-      }
-      if (
-        testFieldId.startsWith("photo-street-") &&
-        !testFieldId.includes("caption")
-      ) {
-        if (Array.isArray(value) && value.length > 0) {
-          photoConsolidation["photos-street"].push(...value);
-        }
-        mappedCount++;
-        return;
-      }
-      if (
-        (testFieldId.startsWith("photo-hallway") ||
-          testFieldId.startsWith("photo-stairway") ||
-          testFieldId.startsWith("photo-lobby")) &&
-        !testFieldId.includes("caption")
-      ) {
-        if (Array.isArray(value) && value.length > 0) {
-          photoConsolidation["photos-common"].push(...value);
-        }
-        mappedCount++;
-        return;
-      }
-      if (
-        (testFieldId.startsWith("photo-kitchen") ||
-          testFieldId.startsWith("photo-bathroom") ||
-          testFieldId.startsWith("photo-bedroom") ||
-          testFieldId.startsWith("photo-livingroom")) &&
-        !testFieldId.includes("caption")
-      ) {
-        if (Array.isArray(value) && value.length > 0) {
-          photoConsolidation["photos-units"].push(...value);
-        }
-        mappedCount++;
-        return;
-      }
-      if (
-        (testFieldId.startsWith("photo-electrical") ||
-          testFieldId.startsWith("photo-mechanical") ||
-          testFieldId.startsWith("photo-laundry")) &&
-        !testFieldId.includes("caption")
-      ) {
-        if (Array.isArray(value) && value.length > 0) {
-          photoConsolidation["photos-systems"].push(...value);
-        }
-        mappedCount++;
-        return;
-      }
-      // Skip photo captions for now (would need caption handling in template)
-      if (testFieldId.includes("-caption")) {
-        mappedCount++;
-        return;
-      }
-
-      // Map test data field ID to store field ID (some differ)
-      const storeFieldId = testDataFieldMapping[testFieldId] || testFieldId;
+    // Load all fields from REAL data (field IDs match store exactly)
+    Object.entries(northBattlefordRealData).forEach(([fieldId, value]) => {
+      // Map test data field ID to store field ID (for any that still differ)
+      const storeFieldId = testDataFieldMapping[fieldId] || fieldId;
 
       if (fieldExists(storeFieldId)) {
         get().updateFieldValue(storeFieldId, value);
         mappedCount++;
       } else {
-        unmappedFields.push(`${testFieldId} -> ${storeFieldId}`);
-      }
-    });
-
-    // Apply consolidated photos
-    Object.entries(photoConsolidation).forEach(([fieldId, photos]) => {
-      if (photos.length > 0) {
-        get().updateFieldValue(fieldId, photos);
+        unmappedFields.push(fieldId);
       }
     });
 
@@ -3492,7 +3415,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     set({ previewHtml: html });
 
     console.log(
-      `Test data loaded: ${mappedCount}/${Object.keys(northBattlefordTestData).length} fields mapped`,
+      `REAL Test data loaded: ${mappedCount}/${Object.keys(northBattlefordRealData).length} fields mapped`,
     );
     if (unmappedFields.length > 0) {
       console.log("Unmapped fields (need store definition):", unmappedFields);

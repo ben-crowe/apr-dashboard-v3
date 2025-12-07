@@ -10,7 +10,7 @@ export interface ExportOptions {
 /**
  * Generate a default filename with timestamp
  */
-function generateFileName(options: ExportOptions, extension: 'pdf' | 'docx' | 'html'): string {
+function generateFileName(options: ExportOptions, extension: 'pdf' | 'docx' | 'doc' | 'html'): string {
   const timestamp = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
   if (options.fileName) {
@@ -124,102 +124,176 @@ export async function exportToPDFDirect(
 }
 
 /**
- * Export the report as DOCX (Word document)
- * Since converting HTML to proper DOCX is complex, we export as HTML
- * which Word can open and convert automatically
+ * Export the report as Word document (.doc format)
+ * We export as HTML with Word-compatible markup which Word can open natively.
+ * Note: Uses .doc extension (not .docx) because .docx requires OOXML/ZIP format.
  */
 export async function exportToDOCX(
   html: string,
   options: ExportOptions = {}
 ): Promise<void> {
   try {
-    // Create a complete HTML document with Word-friendly styling
-    const wordHtml = `
-<!DOCTYPE html>
-<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+    // Create a complete HTML document with Word-friendly styling and XML namespaces
+    const wordHtml = `<!DOCTYPE html>
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns:m="http://schemas.microsoft.com/office/2004/12/omml"
+      xmlns="http://www.w3.org/TR/REC-html40">
 <head>
-  <meta charset='utf-8'>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="ProgId" content="Word.Document">
+  <meta name="Generator" content="APR Dashboard Report Builder">
+  <meta name="Originator" content="APR Dashboard">
   <title>Appraisal Report</title>
   <!--[if gte mso 9]>
   <xml>
+    <o:DocumentProperties>
+      <o:Author>APR Dashboard</o:Author>
+      <o:LastAuthor>APR Dashboard</o:LastAuthor>
+      <o:Revision>1</o:Revision>
+      <o:Created>${new Date().toISOString()}</o:Created>
+      <o:LastSaved>${new Date().toISOString()}</o:LastSaved>
+      <o:Pages>1</o:Pages>
+      <o:Words>0</o:Words>
+      <o:Characters>0</o:Characters>
+      <o:Company>Valta Appraisals</o:Company>
+    </o:DocumentProperties>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+    </o:OfficeDocumentSettings>
     <w:WordDocument>
       <w:View>Print</w:View>
       <w:Zoom>100</w:Zoom>
-      <w:DoNotOptimizeForBrowser/>
+      <w:SpellingState>Clean</w:SpellingState>
+      <w:GrammarState>Clean</w:GrammarState>
+      <w:TrackMoves>false</w:TrackMoves>
+      <w:TrackFormatting/>
+      <w:ValidateAgainstSchemas/>
+      <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+      <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+      <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+      <w:DoNotPromoteQF/>
+      <w:LidThemeOther>EN-US</w:LidThemeOther>
+      <w:LidThemeAsian>X-NONE</w:LidThemeAsian>
+      <w:LidThemeComplexScript>X-NONE</w:LidThemeComplexScript>
+      <w:Compatibility>
+        <w:BreakWrappedTables/>
+        <w:SnapToGridInCell/>
+        <w:WrapTextWithPunct/>
+        <w:UseAsianBreakRules/>
+        <w:DontGrowAutofit/>
+        <w:SplitPgBreakAndParaMark/>
+        <w:EnableOpenTypeKerning/>
+        <w:DontFlipMirrorIndents/>
+        <w:OverrideTableStyleHps/>
+      </w:Compatibility>
+      <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
     </w:WordDocument>
   </xml>
   <![endif]-->
   <style>
+    /* Word-compatible styles */
     @page {
       size: 8.5in 11in;
-      margin: 0;
+      margin: 1in;
+      mso-page-orientation: portrait;
+    }
+    @page Section1 {
+      mso-header-margin: .5in;
+      mso-footer-margin: .5in;
+    }
+    div.Section1 {
+      page: Section1;
     }
     body {
       font-family: 'Times New Roman', Times, serif;
       font-size: 12pt;
-      line-height: 1.6;
+      line-height: 1.5;
       color: #000000;
       margin: 0;
       padding: 0;
+      mso-ansi-font-size: 12.0pt;
+      mso-bidi-font-size: 12.0pt;
+      mso-fareast-font-family: "Times New Roman";
     }
     .page {
       page-break-after: always;
-      width: 8.5in;
-      min-height: 11in;
+      mso-break-type: section-break;
+    }
+    .page:last-child {
+      page-break-after: avoid;
     }
     table {
       border-collapse: collapse;
       width: 100%;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
     }
     table, th, td {
       border: 1px solid black;
+      mso-border-alt: solid black .5pt;
     }
     th, td {
-      padding: 8px;
+      padding: 5pt;
       text-align: left;
+      vertical-align: top;
     }
     h1 {
       font-size: 24pt;
       font-weight: bold;
+      margin-top: 12pt;
       margin-bottom: 12pt;
+      mso-style-name: "Heading 1";
     }
     h2 {
       font-size: 18pt;
       font-weight: bold;
       margin-top: 12pt;
       margin-bottom: 8pt;
+      mso-style-name: "Heading 2";
     }
     h3 {
       font-size: 14pt;
       font-weight: bold;
       margin-top: 8pt;
       margin-bottom: 6pt;
+      mso-style-name: "Heading 3";
     }
     p {
+      margin-top: 0;
       margin-bottom: 8pt;
+      mso-style-name: "Normal";
     }
     img {
       max-width: 100%;
       height: auto;
     }
+    /* Preserve whitespace and line breaks */
+    .preserve-whitespace {
+      white-space: pre-wrap;
+      mso-line-break-override: none;
+    }
   </style>
 </head>
-<body>
-  ${html}
+<body lang="EN-US" style="tab-interval:.5in">
+  <div class="Section1">
+    ${html}
+  </div>
 </body>
-</html>
-    `.trim();
+</html>`;
 
-    // Create a Blob with the HTML content
-    const blob = new Blob([wordHtml], {
-      type: 'application/msword',
+    // Create a Blob with Word-compatible MIME type
+    // Using 'application/msword' for .doc format
+    const blob = new Blob(['\ufeff' + wordHtml], {
+      type: 'application/msword;charset=utf-8',
     });
 
-    // Create download link
+    // Create download link - use .doc extension (not .docx)
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = generateFileName(options, 'docx');
+    link.download = generateFileName(options, 'doc');
 
     // Trigger download
     document.body.appendChild(link);

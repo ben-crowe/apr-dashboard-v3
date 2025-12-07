@@ -12,6 +12,8 @@ import DocumentBuilderTest from "./pages/DocumentBuilderTest";
 import DiagnosticForm from "./pages/DiagnosticForm";
 import { SigningPage } from "./pages/SigningPage";
 import TestLOE from "./pages/TestLOE";
+import MockReportBuilder from "./pages/MockReportBuilder";
+import { TestInputDashboard } from "./features/test-input";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +36,8 @@ const App = () => (
             <Route path="/diagnostic" element={<DiagnosticForm />} />
             <Route path="/sign/:id" element={<SigningPage />} />
             <Route path="/test-loe" element={<TestLOE />} />
+            <Route path="/mock-builder" element={<MockReportBuilder />} />
+            <Route path="/test-input" element={<TestInputDashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

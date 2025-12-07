@@ -1,0 +1,2790 @@
+{
+    "name": "2. Valcre Job-> Add Link to ClickUp",
+    "flow": [
+        {
+            "id": 1,
+            "module": "gateway:CustomWebHook",
+            "version": 1,
+            "parameters": {
+                "hook": 1580621,
+                "maxResults": 1
+            },
+            "mapper": {},
+            "metadata": {
+                "designer": {
+                    "x": 0,
+                    "y": 0
+                },
+                "restore": {
+                    "parameters": {
+                        "hook": {
+                            "data": {
+                                "editable": "true"
+                            },
+                            "label": "Job ID from Valcre"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "hook",
+                        "type": "hook:gateway-webhook",
+                        "label": "Webhook",
+                        "required": true
+                    },
+                    {
+                        "name": "maxResults",
+                        "type": "number",
+                        "label": "Maximum number of results"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 3,
+            "module": "clickup:getATask",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 2391891
+            },
+            "filter": {
+                "name": "",
+                "conditions": [
+                    [
+                        {
+                            "a": "{{length(1.ClickUp_TaskID)}}",
+                            "b": "0",
+                            "o": "number:greater"
+                        },
+                        {
+                            "a": "{{length(1.Job_ID)}}",
+                            "b": "0",
+                            "o": "number:greater"
+                        }
+                    ]
+                ]
+            },
+            "mapper": {
+                "task_id": "{{1.ClickUp_TaskID}}",
+                "map_or_select": "map"
+            },
+            "metadata": {
+                "designer": {
+                    "x": 300,
+                    "y": 0
+                },
+                "restore": {
+                    "expect": {
+                        "map_or_select": {
+                            "label": "Map"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "clickup2"
+                            },
+                            "label": "My ClickUp connection (Chris Chornohos)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:clickup2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "map_or_select",
+                        "type": "select",
+                        "label": "Map or Select",
+                        "required": true,
+                        "validate": {
+                            "enum": [
+                                "map",
+                                "select"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "task_id",
+                        "type": "text",
+                        "label": "Task ID",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "Task ID"
+                    },
+                    {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Task Name"
+                    },
+                    {
+                        "name": "custom_id",
+                        "type": "text",
+                        "label": "Custom ID"
+                    },
+                    {
+                        "name": "description",
+                        "type": "text",
+                        "label": "Description"
+                    },
+                    {
+                        "name": "text_content",
+                        "type": "text",
+                        "label": "Text Content"
+                    },
+                    {
+                        "name": "status",
+                        "spec": [
+                            {
+                                "name": "status",
+                                "type": "text",
+                                "label": "Status"
+                            },
+                            {
+                                "name": "color",
+                                "type": "color",
+                                "label": "Color"
+                            },
+                            {
+                                "name": "type",
+                                "type": "text",
+                                "label": "Type"
+                            },
+                            {
+                                "name": "orderindex",
+                                "type": "number",
+                                "label": "Order Index"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Status"
+                    },
+                    {
+                        "name": "orderindex",
+                        "type": "text",
+                        "label": "Order Index"
+                    },
+                    {
+                        "name": "date_created",
+                        "type": "date",
+                        "label": "Date Created"
+                    },
+                    {
+                        "name": "date_updated",
+                        "type": "date",
+                        "label": "Date Updated"
+                    },
+                    {
+                        "name": "date_closed",
+                        "type": "date",
+                        "label": "Date Closed"
+                    },
+                    {
+                        "name": "archived",
+                        "type": "boolean",
+                        "label": "Archived"
+                    },
+                    {
+                        "name": "creator",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "number",
+                                "label": "User ID"
+                            },
+                            {
+                                "name": "username",
+                                "type": "text",
+                                "label": "Username"
+                            },
+                            {
+                                "name": "color",
+                                "type": "color",
+                                "label": "Color"
+                            },
+                            {
+                                "name": "profilePicture",
+                                "type": "text",
+                                "label": "Profile Picture"
+                            },
+                            {
+                                "name": "email",
+                                "type": "text",
+                                "label": "Email"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Creator"
+                    },
+                    {
+                        "name": "assignees",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "id",
+                                    "type": "number",
+                                    "label": "User ID"
+                                },
+                                {
+                                    "name": "username",
+                                    "type": "text",
+                                    "label": "Username"
+                                },
+                                {
+                                    "name": "color",
+                                    "type": "color",
+                                    "label": "Color"
+                                },
+                                {
+                                    "name": "initials",
+                                    "type": "text",
+                                    "label": "Initials"
+                                },
+                                {
+                                    "name": "profilePicture",
+                                    "type": "url",
+                                    "label": "Profile Picture"
+                                },
+                                {
+                                    "name": "email",
+                                    "type": "email",
+                                    "label": "Email"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Assignees"
+                    },
+                    {
+                        "name": "checklists",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "ID"
+                            },
+                            {
+                                "name": "task_id",
+                                "type": "text",
+                                "label": "Task ID"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name"
+                            },
+                            {
+                                "name": "date_created",
+                                "type": "date",
+                                "label": "Date Created"
+                            },
+                            {
+                                "name": "orderindex",
+                                "type": "number",
+                                "label": "Orderindex"
+                            },
+                            {
+                                "name": "creator",
+                                "type": "number",
+                                "label": "Creator"
+                            },
+                            {
+                                "name": "resolved",
+                                "type": "number",
+                                "label": "Resolved"
+                            },
+                            {
+                                "name": "unresolved",
+                                "type": "number",
+                                "label": "Unresolved"
+                            },
+                            {
+                                "name": "items",
+                                "spec": {
+                                    "spec": [
+                                        {
+                                            "name": "id",
+                                            "type": "text",
+                                            "label": "ID"
+                                        },
+                                        {
+                                            "name": "name",
+                                            "type": "text",
+                                            "label": "Name"
+                                        },
+                                        {
+                                            "name": "orderindex",
+                                            "type": "number",
+                                            "label": "Orderindex"
+                                        },
+                                        {
+                                            "name": "assignee",
+                                            "type": "text",
+                                            "label": "Assignee"
+                                        },
+                                        {
+                                            "name": "group_assignee",
+                                            "type": "text",
+                                            "label": "Group Assignee"
+                                        },
+                                        {
+                                            "name": "resolved",
+                                            "type": "boolean",
+                                            "label": "Resolved"
+                                        },
+                                        {
+                                            "name": "parent",
+                                            "type": "text",
+                                            "label": "Parent"
+                                        },
+                                        {
+                                            "name": "date_created",
+                                            "type": "date",
+                                            "label": "Date Created"
+                                        },
+                                        {
+                                            "name": "children",
+                                            "type": "array",
+                                            "label": "Children"
+                                        }
+                                    ],
+                                    "type": "collection"
+                                },
+                                "type": "array",
+                                "label": "Items"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Checklists"
+                    },
+                    {
+                        "name": "watchers",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "id",
+                                    "type": "number",
+                                    "label": "User ID"
+                                },
+                                {
+                                    "name": "username",
+                                    "type": "text",
+                                    "label": "Username"
+                                },
+                                {
+                                    "name": "color",
+                                    "type": "color",
+                                    "label": "Color"
+                                },
+                                {
+                                    "name": "initials",
+                                    "type": "text",
+                                    "label": "Initials"
+                                },
+                                {
+                                    "name": "profilePicture",
+                                    "type": "url",
+                                    "label": "Profile Picture"
+                                },
+                                {
+                                    "name": "email",
+                                    "type": "email",
+                                    "label": "Email"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Watchers"
+                    },
+                    {
+                        "name": "tags",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "name",
+                                    "type": "text",
+                                    "label": "Name"
+                                },
+                                {
+                                    "name": "creator",
+                                    "type": "text",
+                                    "label": "Creator"
+                                },
+                                {
+                                    "name": "tag_fg",
+                                    "type": "color",
+                                    "label": "Tag Fg"
+                                },
+                                {
+                                    "name": "tag_bg",
+                                    "type": "color",
+                                    "label": "Tag Bg"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Tags"
+                    },
+                    {
+                        "name": "parent",
+                        "type": "text",
+                        "label": "Parent"
+                    },
+                    {
+                        "name": "linked_tasks",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "task_id",
+                                    "type": "text",
+                                    "label": "Task ID"
+                                },
+                                {
+                                    "name": "link_id",
+                                    "type": "text",
+                                    "label": "Link ID"
+                                },
+                                {
+                                    "name": "date_created",
+                                    "type": "date",
+                                    "label": "Date Created"
+                                },
+                                {
+                                    "name": "userid",
+                                    "type": "text",
+                                    "label": "User ID"
+                                },
+                                {
+                                    "name": "workspace_id",
+                                    "type": "text",
+                                    "label": "Workspace ID"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Linked Tasks"
+                    },
+                    {
+                        "name": "permission_level",
+                        "type": "text",
+                        "label": "Permission Level"
+                    },
+                    {
+                        "name": "priority",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "ID"
+                            },
+                            {
+                                "name": "priority",
+                                "type": "text",
+                                "label": "Priority"
+                            },
+                            {
+                                "name": "color",
+                                "type": "color",
+                                "label": "Color"
+                            },
+                            {
+                                "name": "orderindex",
+                                "type": "text",
+                                "label": "Order Index"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Priority"
+                    },
+                    {
+                        "name": "due_date",
+                        "type": "date",
+                        "label": "Due Date"
+                    },
+                    {
+                        "name": "start_date",
+                        "type": "date",
+                        "label": "Start Date"
+                    },
+                    {
+                        "name": "points",
+                        "type": "text",
+                        "label": "Points"
+                    },
+                    {
+                        "name": "time_estimate",
+                        "type": "integer",
+                        "label": "Time Estimate (in minutes)"
+                    },
+                    {
+                        "name": "time_spent",
+                        "type": "uinteger",
+                        "label": "Time Spent"
+                    },
+                    {
+                        "name": "list",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "List ID"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "List Name"
+                            },
+                            {
+                                "name": "access",
+                                "type": "boolean",
+                                "label": "Access"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "List"
+                    },
+                    {
+                        "name": "project",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "Project ID"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Project Name"
+                            },
+                            {
+                                "name": "hidden",
+                                "type": "boolean",
+                                "label": "Hidden"
+                            },
+                            {
+                                "name": "access",
+                                "type": "boolean",
+                                "label": "Access"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Project"
+                    },
+                    {
+                        "name": "folder",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "Folder ID"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Folder Name"
+                            },
+                            {
+                                "name": "hidden",
+                                "type": "boolean",
+                                "label": "Hidden"
+                            },
+                            {
+                                "name": "access",
+                                "type": "boolean",
+                                "label": "Access"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Folder"
+                    },
+                    {
+                        "name": "space",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "Space ID"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Space"
+                    },
+                    {
+                        "name": "dependencies",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "task_id",
+                                    "type": "text",
+                                    "label": "Task ID"
+                                },
+                                {
+                                    "name": "depends_on",
+                                    "type": "text",
+                                    "label": "Depends On Task ID"
+                                },
+                                {
+                                    "name": "type",
+                                    "type": "number",
+                                    "label": "Type"
+                                },
+                                {
+                                    "name": "date_created",
+                                    "type": "date",
+                                    "label": "Date Created"
+                                },
+                                {
+                                    "name": "userid",
+                                    "type": "text",
+                                    "label": "User ID"
+                                },
+                                {
+                                    "name": "workspace_id",
+                                    "type": "text",
+                                    "label": "Workspace ID"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Dependencies"
+                    },
+                    {
+                        "name": "team_id",
+                        "type": "text",
+                        "label": "Workspace ID"
+                    },
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL"
+                    },
+                    {
+                        "name": "custom_fields_original",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "id",
+                                    "type": "text",
+                                    "label": "ID"
+                                },
+                                {
+                                    "name": "name",
+                                    "type": "text",
+                                    "label": "Name"
+                                },
+                                {
+                                    "name": "type",
+                                    "type": "text",
+                                    "label": "Type"
+                                },
+                                {
+                                    "name": "type_config",
+                                    "spec": [],
+                                    "type": "collection",
+                                    "label": "Type Config"
+                                },
+                                {
+                                    "name": "date_created",
+                                    "type": "date",
+                                    "label": "Date Created"
+                                },
+                                {
+                                    "name": "hide_from_guests",
+                                    "type": "boolean",
+                                    "label": "Hide From Guests"
+                                },
+                                {
+                                    "name": "value",
+                                    "type": "any",
+                                    "label": "Value"
+                                },
+                                {
+                                    "name": "required",
+                                    "type": "boolean",
+                                    "label": "Required"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Custom Fields (original)"
+                    },
+                    {
+                        "name": "custom_fields",
+                        "spec": [],
+                        "type": "collection",
+                        "label": "Custom Fields"
+                    },
+                    {
+                        "name": "attachments",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "id",
+                                    "type": "text",
+                                    "label": "ID"
+                                },
+                                {
+                                    "name": "date",
+                                    "type": "date",
+                                    "label": "Date"
+                                },
+                                {
+                                    "name": "title",
+                                    "type": "text",
+                                    "label": "Title"
+                                },
+                                {
+                                    "name": "type",
+                                    "type": "number",
+                                    "label": "Type"
+                                },
+                                {
+                                    "name": "source",
+                                    "type": "number",
+                                    "label": "Source"
+                                },
+                                {
+                                    "name": "version",
+                                    "type": "number",
+                                    "label": "Version"
+                                },
+                                {
+                                    "name": "extension",
+                                    "type": "text",
+                                    "label": "Extension"
+                                },
+                                {
+                                    "name": "thumbnail_small",
+                                    "type": "text",
+                                    "label": "Thumbnail Small"
+                                },
+                                {
+                                    "name": "thumbnail_medium",
+                                    "type": "text",
+                                    "label": "Thumbnail Medium"
+                                },
+                                {
+                                    "name": "thumbnail_large",
+                                    "type": "text",
+                                    "label": "Thumbnail Large"
+                                },
+                                {
+                                    "name": "is_folder",
+                                    "type": "text",
+                                    "label": "Is Folder"
+                                },
+                                {
+                                    "name": "mimetype",
+                                    "type": "text",
+                                    "label": "Mimetype"
+                                },
+                                {
+                                    "name": "hidden",
+                                    "type": "boolean",
+                                    "label": "Hidden"
+                                },
+                                {
+                                    "name": "parent_id",
+                                    "type": "text",
+                                    "label": "Parent ID"
+                                },
+                                {
+                                    "name": "size",
+                                    "type": "number",
+                                    "label": "Size"
+                                },
+                                {
+                                    "name": "total_comments",
+                                    "type": "number",
+                                    "label": "Total Comments"
+                                },
+                                {
+                                    "name": "resolved_comments",
+                                    "type": "number",
+                                    "label": "Resolved Comments"
+                                },
+                                {
+                                    "name": "user",
+                                    "spec": [
+                                        {
+                                            "name": "id",
+                                            "type": "number",
+                                            "label": "ID"
+                                        },
+                                        {
+                                            "name": "username",
+                                            "type": "text",
+                                            "label": "Username"
+                                        },
+                                        {
+                                            "name": "email",
+                                            "type": "text",
+                                            "label": "Email"
+                                        },
+                                        {
+                                            "name": "initials",
+                                            "type": "text",
+                                            "label": "Initials"
+                                        },
+                                        {
+                                            "name": "color",
+                                            "type": "text",
+                                            "label": "Color"
+                                        },
+                                        {
+                                            "name": "profilePicture",
+                                            "type": "text",
+                                            "label": "Profile Picture"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "User"
+                                },
+                                {
+                                    "name": "deleted",
+                                    "type": "boolean",
+                                    "label": "Deleted"
+                                },
+                                {
+                                    "name": "orientation",
+                                    "type": "text",
+                                    "label": "Orientation"
+                                },
+                                {
+                                    "name": "url",
+                                    "type": "text",
+                                    "label": "URL"
+                                },
+                                {
+                                    "name": "email_data",
+                                    "type": "text",
+                                    "label": "Email Data"
+                                },
+                                {
+                                    "name": "url_w_query",
+                                    "type": "text",
+                                    "label": "URL W Query"
+                                },
+                                {
+                                    "name": "url_w_host",
+                                    "type": "text",
+                                    "label": "URL W Host"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Attachments"
+                    }
+                ]
+            }
+        },
+        {
+            "id": 2,
+            "module": "clickup:editATask",
+            "version": 2,
+            "parameters": {
+                "__IMTCONN__": 2391891
+            },
+            "mapper": {
+                "name": "{{1.Job_Number}} - {{3.custom_fields.`2.0 - Property Name`}}  {{3.custom_fields.`2.1 - Property Address`}}",
+                "list_id": "901402094744",
+                "task_id": "{{3.id}}",
+                "team_id": "9014181018",
+                "space_id": "90140682617",
+                "assignees": {},
+                "folder_id": "folderlessList",
+                "custom_fields": {
+                    "4d555148-c2a8-4d39-b475-80821d5c6058": "https://app.valcre.com/Job/Edit/{{1.Job_ID}}",
+                    "f2ea22ec-519d-458c-bcb5-753987673cd0": "{{1.Job_Number}}"
+                },
+                "addCustomFieldDateTime": false
+            },
+            "metadata": {
+                "designer": {
+                    "x": 600,
+                    "y": 0
+                },
+                "restore": {
+                    "expect": {
+                        "status": {
+                            "mode": "chose"
+                        },
+                        "list_id": {
+                            "label": "Chris [Tasks: 43]"
+                        },
+                        "task_id": {
+                            "mode": "edit"
+                        },
+                        "team_id": {
+                            "label": "Appraisal"
+                        },
+                        "archived": {
+                            "mode": "chose"
+                        },
+                        "priority": {
+                            "mode": "chose",
+                            "label": "Empty"
+                        },
+                        "space_id": {
+                            "label": "Jobs"
+                        },
+                        "assignees": {
+                            "nested": {
+                                "add": {
+                                    "mode": "chose"
+                                },
+                                "rem": {
+                                    "mode": "chose"
+                                }
+                            }
+                        },
+                        "folder_id": {
+                            "label": "<Folderless Lists>"
+                        },
+                        "notify_all": {
+                            "mode": "chose"
+                        },
+                        "contentType": {
+                            "label": "Plain Text"
+                        },
+                        "custom_fields": {
+                            "nested": {
+                                "025dcda5-55b6-4328-9f6d-88a41770f3d0": {
+                                    "mode": "chose",
+                                    "label": "Empty"
+                                },
+                                "2342f9d4-13a5-4bc7-ac0d-6ad28a38a230": {
+                                    "mode": "chose",
+                                    "label": "Empty"
+                                },
+                                "5cc27228-1686-4cff-8e92-9c6861f3b544": {
+                                    "mode": "chose",
+                                    "label": "Empty"
+                                },
+                                "6499e6a2-9a4d-406f-9387-178ded86d6a8": {
+                                    "mode": "chose",
+                                    "label": "Empty"
+                                },
+                                "8afec821-c806-4c66-8a4d-9ffeb3321323": {
+                                    "mode": "chose",
+                                    "label": "Empty"
+                                },
+                                "954091d6-6f5f-4d82-8eac-93445e5b593a": {
+                                    "mode": "chose",
+                                    "label": "Empty"
+                                },
+                                "9712f537-cffa-4779-9bbf-5fb6e2275933": {
+                                    "mode": "chose",
+                                    "label": "Empty"
+                                },
+                                "d879f9bc-797d-44e4-a4a4-50b01dcb755b": {
+                                    "mode": "chose",
+                                    "label": "Empty"
+                                },
+                                "fa7ee44d-31e5-401c-ad82-8c22c4bdaddf": {
+                                    "mode": "chose",
+                                    "label": "Empty"
+                                },
+                                "ffa78cad-ccf7-4c39-8396-95e7d48e38f3": {
+                                    "mode": "chose",
+                                    "label": "Empty"
+                                }
+                            }
+                        },
+                        "due_date_time": {
+                            "mode": "chose"
+                        },
+                        "start_date_time": {
+                            "mode": "chose"
+                        },
+                        "time_estimate_in": {
+                            "label": "Empty"
+                        }
+                    },
+                    "parameters": {
+                        "__IMTCONN__": {
+                            "data": {
+                                "scoped": "true",
+                                "connection": "clickup2"
+                            },
+                            "label": "My ClickUp connection (Chris Chornohos)"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "__IMTCONN__",
+                        "type": "account:clickup2",
+                        "label": "Connection",
+                        "required": true
+                    }
+                ],
+                "expect": [
+                    {
+                        "name": "team_id",
+                        "type": "select",
+                        "label": "Workspace",
+                        "required": true
+                    },
+                    {
+                        "name": "space_id",
+                        "type": "select",
+                        "label": "Space",
+                        "required": true
+                    },
+                    {
+                        "name": "folder_id",
+                        "type": "select",
+                        "label": "Folder",
+                        "required": true
+                    },
+                    {
+                        "name": "list_id",
+                        "type": "select",
+                        "label": "List",
+                        "required": true
+                    },
+                    {
+                        "name": "task_id",
+                        "type": "select",
+                        "label": "Task ID",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Task Name"
+                    },
+                    {
+                        "name": "contentType",
+                        "type": "select",
+                        "label": "Content Type",
+                        "validate": {
+                            "enum": [
+                                "markdown"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "content",
+                        "type": "text",
+                        "label": "Content"
+                    },
+                    {
+                        "name": "assignees",
+                        "spec": [
+                            {
+                                "name": "add",
+                                "type": "select",
+                                "label": "Add",
+                                "multiple": true
+                            },
+                            {
+                                "name": "rem",
+                                "type": "select",
+                                "label": "Remove",
+                                "multiple": true
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Assignees"
+                    },
+                    {
+                        "name": "status",
+                        "type": "select",
+                        "label": "Status"
+                    },
+                    {
+                        "name": "priority",
+                        "type": "select",
+                        "label": "Priority",
+                        "validate": {
+                            "enum": [
+                                "urgent",
+                                "high",
+                                "normal",
+                                "low",
+                                "none"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "due_date",
+                        "type": "date",
+                        "label": "Due Date"
+                    },
+                    {
+                        "name": "due_date_time",
+                        "type": "boolean",
+                        "label": "Due Date Time"
+                    },
+                    {
+                        "name": "time_estimate_in",
+                        "type": "select",
+                        "label": "Estimated Time in",
+                        "validate": {
+                            "enum": [
+                                "m",
+                                "h",
+                                "d"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "start_date",
+                        "type": "date",
+                        "label": "Start Date"
+                    },
+                    {
+                        "name": "start_date_time",
+                        "type": "boolean",
+                        "label": "Start Date Time"
+                    },
+                    {
+                        "name": "notify_all",
+                        "type": "boolean",
+                        "label": "Notify All"
+                    },
+                    {
+                        "name": "archived",
+                        "type": "boolean",
+                        "label": "Archived"
+                    },
+                    {
+                        "name": "custom_fields",
+                        "spec": [
+                            {
+                                "name": "025dcda5-55b6-4328-9f6d-88a41770f3d0",
+                                "type": "select",
+                                "label": "4.0 - Action: Create Valcre Job"
+                            },
+                            {
+                                "name": "161b555b-15d9-49fa-99e8-ee06f62b60d8",
+                                "type": "text",
+                                "label": "3.6 - Subject Property"
+                            },
+                            {
+                                "name": "19f3541a-9ec6-4121-9629-da6d46727100",
+                                "type": "text",
+                                "label": "2.0 - Property Name"
+                            },
+                            {
+                                "name": "2342f9d4-13a5-4bc7-ac0d-6ad28a38a230",
+                                "type": "select",
+                                "label": "4.1 - Action: Create LOE Contract"
+                            },
+                            {
+                                "name": "24eac8e4-7f41-447b-827e-9091a5865218",
+                                "type": "text",
+                                "label": "2.1 - Property Address"
+                            },
+                            {
+                                "name": "27ce749d-10a1-4156-befc-72fc49ded05d",
+                                "type": "text",
+                                "label": "1.5 - Client Email"
+                            },
+                            {
+                                "name": "3192eefc-e8b6-4c87-8b6b-8a6704e25a61",
+                                "type": "text",
+                                "label": "5.0 - Link: Box Folder"
+                            },
+                            {
+                                "name": "387d8f85-fe24-472c-bc27-c63939e6b45f",
+                                "type": "date",
+                                "label": "2.7 - Date Contract Created"
+                            },
+                            {
+                                "name": "4d555148-c2a8-4d39-b475-80821d5c6058",
+                                "type": "text",
+                                "label": "5.0 - Link: Valcre Job Link"
+                            },
+                            {
+                                "name": "5cc27228-1686-4cff-8e92-9c6861f3b544",
+                                "type": "select",
+                                "label": "3.2 - Payment Terms"
+                            },
+                            {
+                                "name": "5f6e2e64-e5e6-4813-aeda-fa670093d024",
+                                "type": "text",
+                                "label": "1.0 - Client Full Name"
+                            },
+                            {
+                                "name": "6499e6a2-9a4d-406f-9387-178ded86d6a8",
+                                "type": "select",
+                                "label": "2.3 - Property Rights Appraised"
+                            },
+                            {
+                                "name": "65ebb5d0-6f75-41e8-a1d4-7acbfe056bd6",
+                                "type": "text",
+                                "label": "1.2 - Client Organization Name"
+                            },
+                            {
+                                "name": "783add3d-2750-497e-9c7c-34db10386433",
+                                "type": "text",
+                                "label": "1.3 - Client Organization Address"
+                            },
+                            {
+                                "name": "84f34dd2-2a22-4d2a-a3f6-89a631a00fe4",
+                                "type": "date",
+                                "label": "2.6 - Date Received"
+                            },
+                            {
+                                "name": "85fdaf24-e43b-4b24-82f5-17c6e7fc37cd",
+                                "type": "text",
+                                "label": "1.1 - Client Title"
+                            },
+                            {
+                                "name": "8afec821-c806-4c66-8a4d-9ffeb3321323",
+                                "type": "select",
+                                "label": "2.2 - Property Type"
+                            },
+                            {
+                                "name": "954091d6-6f5f-4d82-8eac-93445e5b593a",
+                                "type": "select",
+                                "label": "6.0 - Send Email"
+                            },
+                            {
+                                "name": "96d8237a-f903-4d89-a298-441f2918c671",
+                                "type": "text",
+                                "label": "5.0 - Link: CRM Deal Ticket"
+                            },
+                            {
+                                "name": "9712f537-cffa-4779-9bbf-5fb6e2275933",
+                                "type": "select",
+                                "label": "3.4 - Report Type"
+                            },
+                            {
+                                "name": "97b21df2-238b-42b4-a913-cc75b2b837d5",
+                                "type": "number",
+                                "label": "3.1 - Disbursment"
+                            },
+                            {
+                                "name": "9e34c829-2667-4d09-91c4-6478ec305440",
+                                "type": "text",
+                                "label": "5.0 - Link: LOE Contract 'Draft'"
+                            },
+                            {
+                                "name": "a40716f8-3f19-4051-b71e-23ca08ed88de",
+                                "type": "number",
+                                "label": "3.7 - Retainer Amount (%)"
+                            },
+                            {
+                                "name": "d879f9bc-797d-44e4-a4a4-50b01dcb755b",
+                                "type": "select",
+                                "label": "2.3 - Intended Use"
+                            },
+                            {
+                                "name": "e1a3b51c-e8cd-40bc-ab15-f6eae99ddbd7",
+                                "type": "text",
+                                "label": "3.3 - Delivery Date"
+                            },
+                            {
+                                "name": "e1e15216-d3c8-42ea-a978-aea442d78fec",
+                                "type": "text",
+                                "label": "2.5 - Comments"
+                            },
+                            {
+                                "name": "ec2175d8-8e77-4159-83b2-2893e1df1424",
+                                "type": "text",
+                                "label": "1.4 - Client Phone"
+                            },
+                            {
+                                "name": "f2ea22ec-519d-458c-bcb5-753987673cd0",
+                                "type": "text",
+                                "label": "0.0 - Job Number"
+                            },
+                            {
+                                "name": "f7ebc840-da7f-48fc-864d-e3b60f8ff0fa",
+                                "type": "number",
+                                "label": "3.0 - Fee Amount"
+                            },
+                            {
+                                "name": "fa3d6c46-9d13-4025-9a2c-15414fc4e748",
+                                "type": "text",
+                                "label": "6.3 - Email Body"
+                            },
+                            {
+                                "name": "fa7ee44d-31e5-401c-ad82-8c22c4bdaddf",
+                                "type": "select",
+                                "label": "2.4 - Valuation Premises"
+                            },
+                            {
+                                "name": "ffa78cad-ccf7-4c39-8396-95e7d48e38f3",
+                                "type": "select",
+                                "label": "3.5 - Scope of Work"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Custom Fields"
+                    },
+                    {
+                        "name": "addCustomFieldDateTime",
+                        "type": "boolean",
+                        "label": "Include a Time in Custom Field Date Parameters",
+                        "required": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "id",
+                        "type": "text",
+                        "label": "Task ID"
+                    },
+                    {
+                        "name": "name",
+                        "type": "text",
+                        "label": "Task Name"
+                    },
+                    {
+                        "name": "custom_id",
+                        "type": "text",
+                        "label": "Custom ID"
+                    },
+                    {
+                        "name": "description",
+                        "type": "text",
+                        "label": "Description"
+                    },
+                    {
+                        "name": "text_content",
+                        "type": "text",
+                        "label": "Text Content"
+                    },
+                    {
+                        "name": "status",
+                        "spec": [
+                            {
+                                "name": "status",
+                                "type": "text",
+                                "label": "Status"
+                            },
+                            {
+                                "name": "color",
+                                "type": "color",
+                                "label": "Color"
+                            },
+                            {
+                                "name": "type",
+                                "type": "text",
+                                "label": "Type"
+                            },
+                            {
+                                "name": "orderindex",
+                                "type": "number",
+                                "label": "Order Index"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Status"
+                    },
+                    {
+                        "name": "orderindex",
+                        "type": "text",
+                        "label": "Order Index"
+                    },
+                    {
+                        "name": "date_created",
+                        "type": "date",
+                        "label": "Date Created"
+                    },
+                    {
+                        "name": "date_updated",
+                        "type": "date",
+                        "label": "Date Updated"
+                    },
+                    {
+                        "name": "date_closed",
+                        "type": "date",
+                        "label": "Date Closed"
+                    },
+                    {
+                        "name": "archived",
+                        "type": "boolean",
+                        "label": "Archived"
+                    },
+                    {
+                        "name": "creator",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "number",
+                                "label": "User ID"
+                            },
+                            {
+                                "name": "username",
+                                "type": "text",
+                                "label": "Username"
+                            },
+                            {
+                                "name": "color",
+                                "type": "color",
+                                "label": "Color"
+                            },
+                            {
+                                "name": "profilePicture",
+                                "type": "text",
+                                "label": "Profile Picture"
+                            },
+                            {
+                                "name": "email",
+                                "type": "text",
+                                "label": "Email"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Creator"
+                    },
+                    {
+                        "name": "assignees",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "id",
+                                    "type": "number",
+                                    "label": "User ID"
+                                },
+                                {
+                                    "name": "username",
+                                    "type": "text",
+                                    "label": "Username"
+                                },
+                                {
+                                    "name": "color",
+                                    "type": "color",
+                                    "label": "Color"
+                                },
+                                {
+                                    "name": "initials",
+                                    "type": "text",
+                                    "label": "Initials"
+                                },
+                                {
+                                    "name": "profilePicture",
+                                    "type": "url",
+                                    "label": "Profile Picture"
+                                },
+                                {
+                                    "name": "email",
+                                    "type": "email",
+                                    "label": "Email"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Assignees"
+                    },
+                    {
+                        "name": "checklists",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "ID"
+                            },
+                            {
+                                "name": "task_id",
+                                "type": "text",
+                                "label": "Task ID"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Name"
+                            },
+                            {
+                                "name": "date_created",
+                                "type": "date",
+                                "label": "Date Created"
+                            },
+                            {
+                                "name": "orderindex",
+                                "type": "number",
+                                "label": "Orderindex"
+                            },
+                            {
+                                "name": "creator",
+                                "type": "number",
+                                "label": "Creator"
+                            },
+                            {
+                                "name": "resolved",
+                                "type": "number",
+                                "label": "Resolved"
+                            },
+                            {
+                                "name": "unresolved",
+                                "type": "number",
+                                "label": "Unresolved"
+                            },
+                            {
+                                "name": "items",
+                                "spec": {
+                                    "spec": [
+                                        {
+                                            "name": "id",
+                                            "type": "text",
+                                            "label": "ID"
+                                        },
+                                        {
+                                            "name": "name",
+                                            "type": "text",
+                                            "label": "Name"
+                                        },
+                                        {
+                                            "name": "orderindex",
+                                            "type": "number",
+                                            "label": "Orderindex"
+                                        },
+                                        {
+                                            "name": "assignee",
+                                            "type": "text",
+                                            "label": "Assignee"
+                                        },
+                                        {
+                                            "name": "group_assignee",
+                                            "type": "text",
+                                            "label": "Group Assignee"
+                                        },
+                                        {
+                                            "name": "resolved",
+                                            "type": "boolean",
+                                            "label": "Resolved"
+                                        },
+                                        {
+                                            "name": "parent",
+                                            "type": "text",
+                                            "label": "Parent"
+                                        },
+                                        {
+                                            "name": "date_created",
+                                            "type": "date",
+                                            "label": "Date Created"
+                                        },
+                                        {
+                                            "name": "children",
+                                            "type": "array",
+                                            "label": "Children"
+                                        }
+                                    ],
+                                    "type": "collection"
+                                },
+                                "type": "array",
+                                "label": "Items"
+                            }
+                        ],
+                        "type": "array",
+                        "label": "Checklists"
+                    },
+                    {
+                        "name": "watchers",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "id",
+                                    "type": "number",
+                                    "label": "User ID"
+                                },
+                                {
+                                    "name": "username",
+                                    "type": "text",
+                                    "label": "Username"
+                                },
+                                {
+                                    "name": "color",
+                                    "type": "color",
+                                    "label": "Color"
+                                },
+                                {
+                                    "name": "initials",
+                                    "type": "text",
+                                    "label": "Initials"
+                                },
+                                {
+                                    "name": "profilePicture",
+                                    "type": "url",
+                                    "label": "Profile Picture"
+                                },
+                                {
+                                    "name": "email",
+                                    "type": "email",
+                                    "label": "Email"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Watchers"
+                    },
+                    {
+                        "name": "tags",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "name",
+                                    "type": "text",
+                                    "label": "Name"
+                                },
+                                {
+                                    "name": "creator",
+                                    "type": "text",
+                                    "label": "Creator"
+                                },
+                                {
+                                    "name": "tag_fg",
+                                    "type": "color",
+                                    "label": "Tag Fg"
+                                },
+                                {
+                                    "name": "tag_bg",
+                                    "type": "color",
+                                    "label": "Tag Bg"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Tags"
+                    },
+                    {
+                        "name": "parent",
+                        "type": "text",
+                        "label": "Parent"
+                    },
+                    {
+                        "name": "linked_tasks",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "task_id",
+                                    "type": "text",
+                                    "label": "Task ID"
+                                },
+                                {
+                                    "name": "link_id",
+                                    "type": "text",
+                                    "label": "Link ID"
+                                },
+                                {
+                                    "name": "date_created",
+                                    "type": "date",
+                                    "label": "Date Created"
+                                },
+                                {
+                                    "name": "userid",
+                                    "type": "text",
+                                    "label": "User ID"
+                                },
+                                {
+                                    "name": "workspace_id",
+                                    "type": "text",
+                                    "label": "Workspace ID"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Linked Tasks"
+                    },
+                    {
+                        "name": "permission_level",
+                        "type": "text",
+                        "label": "Permission Level"
+                    },
+                    {
+                        "name": "priority",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "ID"
+                            },
+                            {
+                                "name": "priority",
+                                "type": "text",
+                                "label": "Priority"
+                            },
+                            {
+                                "name": "color",
+                                "type": "color",
+                                "label": "Color"
+                            },
+                            {
+                                "name": "orderindex",
+                                "type": "text",
+                                "label": "Order Index"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Priority"
+                    },
+                    {
+                        "name": "due_date",
+                        "type": "date",
+                        "label": "Due Date"
+                    },
+                    {
+                        "name": "start_date",
+                        "type": "date",
+                        "label": "Start Date"
+                    },
+                    {
+                        "name": "points",
+                        "type": "text",
+                        "label": "Points"
+                    },
+                    {
+                        "name": "time_estimate",
+                        "type": "integer",
+                        "label": "Time Estimate (in minutes)"
+                    },
+                    {
+                        "name": "time_spent",
+                        "type": "uinteger",
+                        "label": "Time Spent"
+                    },
+                    {
+                        "name": "list",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "List ID"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "List Name"
+                            },
+                            {
+                                "name": "access",
+                                "type": "boolean",
+                                "label": "Access"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "List"
+                    },
+                    {
+                        "name": "project",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "Project ID"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Project Name"
+                            },
+                            {
+                                "name": "hidden",
+                                "type": "boolean",
+                                "label": "Hidden"
+                            },
+                            {
+                                "name": "access",
+                                "type": "boolean",
+                                "label": "Access"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Project"
+                    },
+                    {
+                        "name": "folder",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "Folder ID"
+                            },
+                            {
+                                "name": "name",
+                                "type": "text",
+                                "label": "Folder Name"
+                            },
+                            {
+                                "name": "hidden",
+                                "type": "boolean",
+                                "label": "Hidden"
+                            },
+                            {
+                                "name": "access",
+                                "type": "boolean",
+                                "label": "Access"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Folder"
+                    },
+                    {
+                        "name": "space",
+                        "spec": [
+                            {
+                                "name": "id",
+                                "type": "text",
+                                "label": "Space ID"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Space"
+                    },
+                    {
+                        "name": "dependencies",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "task_id",
+                                    "type": "text",
+                                    "label": "Task ID"
+                                },
+                                {
+                                    "name": "depends_on",
+                                    "type": "text",
+                                    "label": "Depends On Task ID"
+                                },
+                                {
+                                    "name": "type",
+                                    "type": "number",
+                                    "label": "Type"
+                                },
+                                {
+                                    "name": "date_created",
+                                    "type": "date",
+                                    "label": "Date Created"
+                                },
+                                {
+                                    "name": "userid",
+                                    "type": "text",
+                                    "label": "User ID"
+                                },
+                                {
+                                    "name": "workspace_id",
+                                    "type": "text",
+                                    "label": "Workspace ID"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Dependencies"
+                    },
+                    {
+                        "name": "team_id",
+                        "type": "text",
+                        "label": "Workspace ID"
+                    },
+                    {
+                        "name": "url",
+                        "type": "url",
+                        "label": "URL"
+                    },
+                    {
+                        "name": "custom_fields_original",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "id",
+                                    "type": "text",
+                                    "label": "ID"
+                                },
+                                {
+                                    "name": "name",
+                                    "type": "text",
+                                    "label": "Name"
+                                },
+                                {
+                                    "name": "type",
+                                    "type": "text",
+                                    "label": "Type"
+                                },
+                                {
+                                    "name": "type_config",
+                                    "spec": [],
+                                    "type": "collection",
+                                    "label": "Type Config"
+                                },
+                                {
+                                    "name": "date_created",
+                                    "type": "date",
+                                    "label": "Date Created"
+                                },
+                                {
+                                    "name": "hide_from_guests",
+                                    "type": "boolean",
+                                    "label": "Hide From Guests"
+                                },
+                                {
+                                    "name": "value",
+                                    "type": "any",
+                                    "label": "Value"
+                                },
+                                {
+                                    "name": "required",
+                                    "type": "boolean",
+                                    "label": "Required"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Custom Fields (original)"
+                    },
+                    {
+                        "name": "custom_fields",
+                        "spec": [
+                            {
+                                "name": "4.0 - Action: Create Valcre Job",
+                                "type": "number",
+                                "label": "4.0 - Action: Create Valcre Job"
+                            },
+                            {
+                                "name": "3.6 - Subject Property",
+                                "type": "any",
+                                "label": "3.6 - Subject Property"
+                            },
+                            {
+                                "name": "2.0 - Property Name",
+                                "type": "any",
+                                "label": "2.0 - Property Name"
+                            },
+                            {
+                                "name": "4.1 - Action: Create LOE Contract",
+                                "type": "number",
+                                "label": "4.1 - Action: Create LOE Contract"
+                            },
+                            {
+                                "name": "2.1 - Property Address",
+                                "type": "any",
+                                "label": "2.1 - Property Address"
+                            },
+                            {
+                                "name": "1.5 - Client Email",
+                                "type": "any",
+                                "label": "1.5 - Client Email"
+                            },
+                            {
+                                "name": "5.0 - Link: Box Folder",
+                                "type": "text",
+                                "label": "5.0 - Link: Box Folder"
+                            },
+                            {
+                                "name": "2.7 - Date Contract Created",
+                                "type": "date",
+                                "label": "2.7 - Date Contract Created"
+                            },
+                            {
+                                "name": "5.0 - Link: Valcre Job Link",
+                                "type": "text",
+                                "label": "5.0 - Link: Valcre Job Link"
+                            },
+                            {
+                                "name": "3.2 - Payment Terms",
+                                "type": "number",
+                                "label": "3.2 - Payment Terms"
+                            },
+                            {
+                                "name": "1.0 - Client Full Name",
+                                "type": "any",
+                                "label": "1.0 - Client Full Name"
+                            },
+                            {
+                                "name": "2.3 - Property Rights Appraised",
+                                "type": "number",
+                                "label": "2.3 - Property Rights Appraised"
+                            },
+                            {
+                                "name": "1.2 - Client Organization Name",
+                                "type": "any",
+                                "label": "1.2 - Client Organization Name"
+                            },
+                            {
+                                "name": "1.3 - Client Organization Address",
+                                "type": "any",
+                                "label": "1.3 - Client Organization Address"
+                            },
+                            {
+                                "name": "2.6 - Date Received",
+                                "type": "date",
+                                "label": "2.6 - Date Received"
+                            },
+                            {
+                                "name": "1.1 - Client Title",
+                                "type": "any",
+                                "label": "1.1 - Client Title"
+                            },
+                            {
+                                "name": "2.2 - Property Type",
+                                "type": "number",
+                                "label": "2.2 - Property Type"
+                            },
+                            {
+                                "name": "6.0 - Send Email",
+                                "type": "number",
+                                "label": "6.0 - Send Email"
+                            },
+                            {
+                                "name": "5.0 - Link: CRM Deal Ticket",
+                                "type": "text",
+                                "label": "5.0 - Link: CRM Deal Ticket"
+                            },
+                            {
+                                "name": "3.4 - Report Type",
+                                "type": "number",
+                                "label": "3.4 - Report Type"
+                            },
+                            {
+                                "name": "3.1 - Disbursment",
+                                "type": "number",
+                                "label": "3.1 - Disbursment"
+                            },
+                            {
+                                "name": "5.0 - Link: LOE Contract 'Draft'",
+                                "type": "text",
+                                "label": "5.0 - Link: LOE Contract 'Draft'"
+                            },
+                            {
+                                "name": "3.7 - Retainer Amount (%)",
+                                "type": "number",
+                                "label": "3.7 - Retainer Amount (%)"
+                            },
+                            {
+                                "name": "2.3 - Intended Use",
+                                "type": "number",
+                                "label": "2.3 - Intended Use"
+                            },
+                            {
+                                "name": "3.3 - Delivery Date",
+                                "type": "any",
+                                "label": "3.3 - Delivery Date"
+                            },
+                            {
+                                "name": "2.5 - Comments",
+                                "type": "text",
+                                "label": "2.5 - Comments"
+                            },
+                            {
+                                "name": "1.4 - Client Phone",
+                                "type": "any",
+                                "label": "1.4 - Client Phone"
+                            },
+                            {
+                                "name": "0.0 - Job Number",
+                                "type": "any",
+                                "label": "0.0 - Job Number"
+                            },
+                            {
+                                "name": "3.0 - Fee Amount",
+                                "type": "number",
+                                "label": "3.0 - Fee Amount"
+                            },
+                            {
+                                "name": "6.3 - Email Body",
+                                "type": "text",
+                                "label": "6.3 - Email Body"
+                            },
+                            {
+                                "name": "2.4 - Valuation Premises",
+                                "type": "number",
+                                "label": "2.4 - Valuation Premises"
+                            },
+                            {
+                                "name": "3.5 - Scope of Work",
+                                "type": "number",
+                                "label": "3.5 - Scope of Work"
+                            }
+                        ],
+                        "type": "collection",
+                        "label": "Custom Fields"
+                    },
+                    {
+                        "name": "attachments",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "id",
+                                    "type": "text",
+                                    "label": "ID"
+                                },
+                                {
+                                    "name": "date",
+                                    "type": "date",
+                                    "label": "Date"
+                                },
+                                {
+                                    "name": "title",
+                                    "type": "text",
+                                    "label": "Title"
+                                },
+                                {
+                                    "name": "type",
+                                    "type": "number",
+                                    "label": "Type"
+                                },
+                                {
+                                    "name": "source",
+                                    "type": "number",
+                                    "label": "Source"
+                                },
+                                {
+                                    "name": "version",
+                                    "type": "number",
+                                    "label": "Version"
+                                },
+                                {
+                                    "name": "extension",
+                                    "type": "text",
+                                    "label": "Extension"
+                                },
+                                {
+                                    "name": "thumbnail_small",
+                                    "type": "text",
+                                    "label": "Thumbnail Small"
+                                },
+                                {
+                                    "name": "thumbnail_medium",
+                                    "type": "text",
+                                    "label": "Thumbnail Medium"
+                                },
+                                {
+                                    "name": "thumbnail_large",
+                                    "type": "text",
+                                    "label": "Thumbnail Large"
+                                },
+                                {
+                                    "name": "is_folder",
+                                    "type": "text",
+                                    "label": "Is Folder"
+                                },
+                                {
+                                    "name": "mimetype",
+                                    "type": "text",
+                                    "label": "Mimetype"
+                                },
+                                {
+                                    "name": "hidden",
+                                    "type": "boolean",
+                                    "label": "Hidden"
+                                },
+                                {
+                                    "name": "parent_id",
+                                    "type": "text",
+                                    "label": "Parent ID"
+                                },
+                                {
+                                    "name": "size",
+                                    "type": "number",
+                                    "label": "Size"
+                                },
+                                {
+                                    "name": "total_comments",
+                                    "type": "number",
+                                    "label": "Total Comments"
+                                },
+                                {
+                                    "name": "resolved_comments",
+                                    "type": "number",
+                                    "label": "Resolved Comments"
+                                },
+                                {
+                                    "name": "user",
+                                    "spec": [
+                                        {
+                                            "name": "id",
+                                            "type": "number",
+                                            "label": "ID"
+                                        },
+                                        {
+                                            "name": "username",
+                                            "type": "text",
+                                            "label": "Username"
+                                        },
+                                        {
+                                            "name": "email",
+                                            "type": "text",
+                                            "label": "Email"
+                                        },
+                                        {
+                                            "name": "initials",
+                                            "type": "text",
+                                            "label": "Initials"
+                                        },
+                                        {
+                                            "name": "color",
+                                            "type": "text",
+                                            "label": "Color"
+                                        },
+                                        {
+                                            "name": "profilePicture",
+                                            "type": "text",
+                                            "label": "Profile Picture"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "User"
+                                },
+                                {
+                                    "name": "deleted",
+                                    "type": "boolean",
+                                    "label": "Deleted"
+                                },
+                                {
+                                    "name": "orientation",
+                                    "type": "text",
+                                    "label": "Orientation"
+                                },
+                                {
+                                    "name": "url",
+                                    "type": "text",
+                                    "label": "URL"
+                                },
+                                {
+                                    "name": "email_data",
+                                    "type": "text",
+                                    "label": "Email Data"
+                                },
+                                {
+                                    "name": "url_w_query",
+                                    "type": "text",
+                                    "label": "URL W Query"
+                                },
+                                {
+                                    "name": "url_w_host",
+                                    "type": "text",
+                                    "label": "URL W Host"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Attachments"
+                    },
+                    {
+                        "name": "subtasks",
+                        "spec": {
+                            "spec": [
+                                {
+                                    "name": "id",
+                                    "type": "text",
+                                    "label": "ID"
+                                },
+                                {
+                                    "name": "name",
+                                    "type": "text",
+                                    "label": "Name"
+                                },
+                                {
+                                    "name": "status",
+                                    "spec": [
+                                        {
+                                            "name": "status",
+                                            "type": "text",
+                                            "label": "Status"
+                                        },
+                                        {
+                                            "name": "orderindex",
+                                            "type": "number",
+                                            "label": "Orderindex"
+                                        },
+                                        {
+                                            "name": "color",
+                                            "type": "text",
+                                            "label": "Color"
+                                        },
+                                        {
+                                            "name": "type",
+                                            "type": "text",
+                                            "label": "Type"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Status"
+                                },
+                                {
+                                    "name": "orderindex",
+                                    "type": "text",
+                                    "label": "Orderindex"
+                                },
+                                {
+                                    "name": "date_created",
+                                    "type": "date",
+                                    "label": "Date Created"
+                                },
+                                {
+                                    "name": "date_updated",
+                                    "type": "date",
+                                    "label": "Date Updated"
+                                },
+                                {
+                                    "name": "archived",
+                                    "type": "boolean",
+                                    "label": "Archived"
+                                },
+                                {
+                                    "name": "creator",
+                                    "spec": [
+                                        {
+                                            "name": "id",
+                                            "type": "number",
+                                            "label": "ID"
+                                        },
+                                        {
+                                            "name": "username",
+                                            "type": "text",
+                                            "label": "Username"
+                                        },
+                                        {
+                                            "name": "color",
+                                            "type": "text",
+                                            "label": "Color"
+                                        },
+                                        {
+                                            "name": "email",
+                                            "type": "text",
+                                            "label": "Email"
+                                        },
+                                        {
+                                            "name": "profilePicture",
+                                            "type": "text",
+                                            "label": "Profile Picture"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Creator"
+                                },
+                                {
+                                    "name": "assignees",
+                                    "type": "array",
+                                    "label": "Assignees"
+                                },
+                                {
+                                    "name": "watchers",
+                                    "type": "array",
+                                    "label": "Watchers"
+                                },
+                                {
+                                    "name": "checklists",
+                                    "type": "array",
+                                    "label": "Checklists"
+                                },
+                                {
+                                    "name": "tags",
+                                    "type": "array",
+                                    "label": "Tags"
+                                },
+                                {
+                                    "name": "parent",
+                                    "type": "text",
+                                    "label": "Parent"
+                                },
+                                {
+                                    "name": "due_date",
+                                    "type": "date",
+                                    "label": "Due Date"
+                                },
+                                {
+                                    "name": "start_date",
+                                    "type": "date",
+                                    "label": "Start Date"
+                                },
+                                {
+                                    "name": "points",
+                                    "type": "text",
+                                    "label": "Points"
+                                },
+                                {
+                                    "name": "time_estimate",
+                                    "type": "text",
+                                    "label": "Time Estimate"
+                                },
+                                {
+                                    "name": "custom_fields",
+                                    "type": "array",
+                                    "label": "Custom Fields"
+                                },
+                                {
+                                    "name": "dependencies",
+                                    "type": "array",
+                                    "label": "Dependencies"
+                                },
+                                {
+                                    "name": "linked_tasks",
+                                    "type": "array",
+                                    "label": "Linked Tasks"
+                                },
+                                {
+                                    "name": "url",
+                                    "type": "text",
+                                    "label": "URL"
+                                }
+                            ],
+                            "type": "collection"
+                        },
+                        "type": "array",
+                        "label": "Subtasks"
+                    }
+                ]
+            }
+        }
+    ],
+    "metadata": {
+        "instant": true,
+        "version": 1,
+        "scenario": {
+            "roundtrips": 1,
+            "maxErrors": 3,
+            "autoCommit": true,
+            "autoCommitTriggerLast": true,
+            "sequential": false,
+            "slots": null,
+            "confidential": false,
+            "dataloss": false,
+            "dlq": false,
+            "freshVariables": false
+        },
+        "designer": {
+            "orphans": [
+                [
+                    {
+                        "id": 4,
+                        "module": "box:searchForContent",
+                        "version": 3,
+                        "parameters": {
+                            "__IMTCONN__": 2865359
+                        },
+                        "mapper": {
+                            "sort": "relevance",
+                            "type": "folder",
+                            "limit": "1",
+                            "query": "{{3.custom_fields.`2.0 - Property Name`}}, {{3.custom_fields.`2.1 - Property Address`}}",
+                            "scope": "user_content",
+                            "sizeRange": {},
+                            "trashContent": "non_trashed_only",
+                            "createdAtRange": {},
+                            "updatedAtRange": {}
+                        },
+                        "metadata": {
+                            "designer": {
+                                "x": 900,
+                                "y": 0,
+                                "messages": [
+                                    {
+                                        "category": "reference",
+                                        "severity": "warning",
+                                        "message": "Referenced module 'ClickUp - Get a Task' [3] is not accessible."
+                                    },
+                                    {
+                                        "category": "link",
+                                        "severity": "warning",
+                                        "message": "The module is not connected to the data flow."
+                                    }
+                                ]
+                            },
+                            "restore": {
+                                "expect": {
+                                    "sort": {
+                                        "mode": "chose",
+                                        "label": "Relevance"
+                                    },
+                                    "type": {
+                                        "mode": "chose",
+                                        "label": "Folder"
+                                    },
+                                    "scope": {
+                                        "mode": "chose",
+                                        "label": "User Content"
+                                    },
+                                    "fields": {
+                                        "mode": "chose"
+                                    },
+                                    "templateKey": {
+                                        "mode": "chose"
+                                    },
+                                    "contentTypes": {
+                                        "mode": "chose"
+                                    },
+                                    "trashContent": {
+                                        "mode": "chose",
+                                        "label": "Non Trashed Only"
+                                    },
+                                    "ancestorFolderIds": {
+                                        "mode": "chose"
+                                    }
+                                },
+                                "parameters": {
+                                    "__IMTCONN__": {
+                                        "data": {
+                                            "scoped": "true",
+                                            "connection": "box2"
+                                        },
+                                        "label": "My Box connection (bc@crowestudio.com)"
+                                    }
+                                }
+                            },
+                            "parameters": [
+                                {
+                                    "name": "__IMTCONN__",
+                                    "type": "account:box2",
+                                    "label": "Connection",
+                                    "required": true
+                                }
+                            ],
+                            "expect": [
+                                {
+                                    "name": "scope",
+                                    "type": "select",
+                                    "label": "Scope",
+                                    "required": true,
+                                    "validate": {
+                                        "enum": [
+                                            "user_content",
+                                            "enterprise_content"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "type",
+                                    "type": "select",
+                                    "label": "Type",
+                                    "required": true,
+                                    "validate": {
+                                        "enum": [
+                                            "file",
+                                            "folder",
+                                            "weblink"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "sort",
+                                    "type": "select",
+                                    "label": "Sort",
+                                    "required": true,
+                                    "validate": {
+                                        "enum": [
+                                            "relevance",
+                                            "modified_at"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "trashContent",
+                                    "type": "select",
+                                    "label": "Trash Content",
+                                    "required": true,
+                                    "validate": {
+                                        "enum": [
+                                            "non_trashed_only",
+                                            "trashed_only"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "templateKey",
+                                    "type": "select",
+                                    "label": "Metadata Template"
+                                },
+                                {
+                                    "name": "query",
+                                    "type": "text",
+                                    "label": "Query"
+                                },
+                                {
+                                    "name": "ancestorFolderIds",
+                                    "spec": {
+                                        "name": "value",
+                                        "type": "text"
+                                    },
+                                    "type": "array",
+                                    "label": "Parent Folder IDs"
+                                },
+                                {
+                                    "name": "contentTypes",
+                                    "type": "select",
+                                    "label": "Content Types",
+                                    "multiple": true,
+                                    "validate": {
+                                        "enum": [
+                                            "name",
+                                            "description",
+                                            "file_content",
+                                            "comments",
+                                            "tag"
+                                        ]
+                                    }
+                                },
+                                {
+                                    "name": "createdAtRange",
+                                    "spec": [
+                                        {
+                                            "name": "createdFrom",
+                                            "type": "date",
+                                            "label": "Created From"
+                                        },
+                                        {
+                                            "name": "createdTo",
+                                            "type": "date",
+                                            "label": "Created To"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Created at Range"
+                                },
+                                {
+                                    "name": "updatedAtRange",
+                                    "spec": [
+                                        {
+                                            "name": "updatedFrom",
+                                            "type": "date",
+                                            "label": "Updated From"
+                                        },
+                                        {
+                                            "name": "updatedTo",
+                                            "type": "date",
+                                            "label": "Updated To"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Updated at Range"
+                                },
+                                {
+                                    "name": "fields",
+                                    "spec": {
+                                        "name": "value",
+                                        "type": "text"
+                                    },
+                                    "type": "array",
+                                    "label": "Fields"
+                                },
+                                {
+                                    "name": "fileExtensions",
+                                    "type": "text",
+                                    "label": "File Extensions"
+                                },
+                                {
+                                    "name": "sizeRange",
+                                    "spec": [
+                                        {
+                                            "name": "sizeFrom",
+                                            "type": "number",
+                                            "label": "Size From"
+                                        },
+                                        {
+                                            "name": "sizeTo",
+                                            "type": "number",
+                                            "label": "Size To"
+                                        }
+                                    ],
+                                    "type": "collection",
+                                    "label": "Size Range"
+                                },
+                                {
+                                    "name": "ownerUserIds",
+                                    "type": "text",
+                                    "label": "Owner User IDs"
+                                },
+                                {
+                                    "name": "limit",
+                                    "type": "number",
+                                    "label": "Limit"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "id": 7,
+                        "module": "box:renameFolder",
+                        "version": 3,
+                        "parameters": {
+                            "__IMTCONN__": 2865359
+                        },
+                        "mapper": {
+                            "name": "{{replace(replace(replace(trim(1.Job_Number + \" - \" + 3.custom_fields.`2.1 - Property Address`); \"/\"; space); \"\\\"; space); \".\"; space)}}",
+                            "parentId": "/{{4.id}}"
+                        },
+                        "metadata": {
+                            "designer": {
+                                "x": 1200,
+                                "y": 0,
+                                "messages": [
+                                    {
+                                        "category": "reference",
+                                        "severity": "warning",
+                                        "message": "Referenced module 'Webhooks - Custom webhook' [1] is not accessible."
+                                    },
+                                    {
+                                        "category": "reference",
+                                        "severity": "warning",
+                                        "message": "Referenced module 'ClickUp - Get a Task' [3] is not accessible."
+                                    }
+                                ]
+                            },
+                            "restore": {
+                                "expect": {
+                                    "parentId": {
+                                        "mode": "edit",
+                                        "path": []
+                                    }
+                                },
+                                "parameters": {
+                                    "__IMTCONN__": {
+                                        "data": {
+                                            "scoped": "true",
+                                            "connection": "box2"
+                                        },
+                                        "label": "My Box connection (bc@crowestudio.com)"
+                                    }
+                                }
+                            },
+                            "parameters": [
+                                {
+                                    "name": "__IMTCONN__",
+                                    "type": "account:box2",
+                                    "label": "Connection",
+                                    "required": true
+                                }
+                            ],
+                            "expect": [
+                                {
+                                    "mode": "edit",
+                                    "name": "parentId",
+                                    "type": "folder",
+                                    "label": "Folder",
+                                    "required": true
+                                },
+                                {
+                                    "name": "name",
+                                    "type": "text",
+                                    "label": "Name",
+                                    "required": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            ]
+        },
+        "zone": "us1.make.com",
+        "notes": []
+    }
+}

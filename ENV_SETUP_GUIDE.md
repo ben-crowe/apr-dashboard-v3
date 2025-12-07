@@ -55,7 +55,7 @@ GMAIL_APP_PASSWORD=spusouthiyfmesdj
 # ============================================
 # APPLICATION CONFIGURATION
 # ============================================
-VITE_APP_URL=https://apr-dashboard-v2.vercel.app
+VITE_APP_URL=https://apr-dashboard-v3.vercel.app
 ```
 
 ### 2. Update `.gitignore`

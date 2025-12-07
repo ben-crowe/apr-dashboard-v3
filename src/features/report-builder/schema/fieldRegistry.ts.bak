@@ -1,0 +1,2774 @@
+/**
+ * Field Registry - Single Source of Truth for All Report Builder Fields
+ *
+ * This registry contains all 330+ fields from the appraisal report template.
+ * It maps field IDs from the specification to the internal store IDs and
+ * provides metadata for rendering, validation, and data input.
+ *
+ * Based on: docs/15-Contract-review/2-FIELD-MAPPING.md
+ * Total Fields: 330+
+ * Last Updated: 2025-12-05
+ */
+
+export interface FieldDefinition {
+  id: string;                    // Canonical field ID from spec (e.g., "cover_propertyType")
+  storeId: string;               // ID used in reportBuilderStore (may differ from id)
+  label: string;                 // Human-readable label for UI
+  section: string;               // Section ID (cover, exec, site, etc.)
+  subsection?: string;           // Subsection if applicable
+  type: 'text' | 'number' | 'date' | 'image' | 'textarea' | 'select' | 'currency' | 'percentage';
+  inputSource: 'user-input' | 'calculated' | 'api-fetch' | 'template';
+  options?: string[];            // For select fields
+  required: boolean;
+  defaultValue?: string | number;
+  placeholder?: string;
+  calculationFormula?: string;   // For calculated fields
+  notes?: string;                // Additional context from spec
+}
+
+/**
+ * Complete Field Registry
+ * Organized by section following the appraisal report structure
+ */
+export const fieldRegistry: FieldDefinition[] = [
+
+  // ============================================================================
+  // SECTION 1: COVER PAGE & IDENTIFICATION
+  // ============================================================================
+
+  {
+    id: 'cover_propertyType',
+    storeId: 'property-type-display',
+    label: 'Property Type Category',
+    section: 'cover',
+    type: 'text',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Report classification'
+  },
+  {
+    id: 'cover_propertyName',
+    storeId: 'property-name',
+    label: 'Property Name',
+    section: 'cover',
+    type: 'text',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Marketing/common name'
+  },
+  {
+    id: 'cover_propertyAddress',
+    storeId: 'street-address',
+    label: 'Property Address',
+    section: 'cover',
+    type: 'text',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Street address'
+  },
+  {
+    id: 'cover_propertyCity',
+    storeId: 'city',
+    label: 'City',
+    section: 'cover',
+    type: 'text',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'cover_propertyProvince',
+    storeId: 'province',
+    label: 'Province/State',
+    section: 'cover',
+    type: 'text',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'cover_clientName',
+    storeId: 'client-contact-name',
+    label: 'Client Contact Name',
+    section: 'cover',
+    subsection: 'client-info',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true
+  },
+  {
+    id: 'cover_clientCompany',
+    storeId: 'client-company',
+    label: 'Client Company',
+    section: 'cover',
+    subsection: 'client-info',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true
+  },
+  {
+    id: 'cover_clientAddress',
+    storeId: 'client-address',
+    label: 'Client Address',
+    section: 'cover',
+    subsection: 'client-info',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'cover_clientCity',
+    storeId: 'client-city',
+    label: 'Client City',
+    section: 'cover',
+    subsection: 'client-info',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'cover_appraiserCompany',
+    storeId: 'appraiser-company',
+    label: 'Appraiser Company',
+    section: 'cover',
+    subsection: 'appraiser-info',
+    type: 'text',
+    inputSource: 'template',
+    required: true,
+    defaultValue: 'Valta Property Valuations Ltd.'
+  },
+  {
+    id: 'cover_appraiserAddress',
+    storeId: 'appraiser-address',
+    label: 'Appraiser Address',
+    section: 'cover',
+    subsection: 'appraiser-info',
+    type: 'text',
+    inputSource: 'template',
+    required: true,
+    defaultValue: '300, 4838 Richard Road SW'
+  },
+  {
+    id: 'cover_appraiserCity',
+    storeId: 'appraiser-city',
+    label: 'Appraiser City',
+    section: 'cover',
+    subsection: 'appraiser-info',
+    type: 'text',
+    inputSource: 'template',
+    required: true,
+    defaultValue: 'Calgary, AB T3E 6L1'
+  },
+  {
+    id: 'cover_appraiserPhone',
+    storeId: 'appraiser-phone',
+    label: 'Office Phone',
+    section: 'cover',
+    subsection: 'appraiser-info',
+    type: 'text',
+    inputSource: 'template',
+    required: true,
+    defaultValue: '587-801-5151'
+  },
+  {
+    id: 'cover_appraiserWebsite',
+    storeId: 'appraiser-website',
+    label: 'Website',
+    section: 'cover',
+    subsection: 'appraiser-info',
+    type: 'text',
+    inputSource: 'template',
+    required: true,
+    defaultValue: 'www.valta.ca'
+  },
+  {
+    id: 'cover_valuationDate',
+    storeId: 'valuation-date',
+    label: 'Date of Valuation',
+    section: 'cover',
+    type: 'date',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Effective date'
+  },
+  {
+    id: 'cover_reportDate',
+    storeId: 'report-date',
+    label: 'Date of Report',
+    section: 'cover',
+    type: 'date',
+    inputSource: 'calculated',
+    required: true,
+    notes: 'Report completion date'
+  },
+  {
+    id: 'cover_fileNumber',
+    storeId: 'file-number',
+    label: 'File Number',
+    section: 'cover',
+    type: 'text',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Valcre job number'
+  },
+
+  // ============================================================================
+  // SECTION 2: LETTER OF TRANSMITTAL
+  // ============================================================================
+
+  {
+    id: 'transmittal_date',
+    storeId: 'transmittal-date',
+    label: 'Letter Date',
+    section: 'home',
+    type: 'date',
+    inputSource: 'calculated',
+    required: true
+  },
+  {
+    id: 'transmittal_clientName',
+    storeId: 'transmittal-client-name',
+    label: 'Addressee',
+    section: 'home',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true
+  },
+  {
+    id: 'transmittal_attention',
+    storeId: 'transmittal-attention',
+    label: 'Attention Line',
+    section: 'home',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'transmittal_subject',
+    storeId: 'transmittal-subject',
+    label: 'Subject/Re Line',
+    section: 'home',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Purpose statement'
+  },
+  {
+    id: 'transmittal_propertyDescription',
+    storeId: 'transmittal-property-description',
+    label: 'Property Description',
+    section: 'home',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Narrative description'
+  },
+  {
+    id: 'transmittal_numberOfBuildings',
+    storeId: 'num-buildings',
+    label: 'Number of Buildings',
+    section: 'home',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Total structures'
+  },
+  {
+    id: 'transmittal_netRentableArea',
+    storeId: 'nra',
+    label: 'Net Rentable Area (NRA)',
+    section: 'home',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Square feet'
+  },
+  {
+    id: 'transmittal_yearBuilt',
+    storeId: 'year-built',
+    label: 'Year Built',
+    section: 'home',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Original construction'
+  },
+  {
+    id: 'transmittal_occupancyRate',
+    storeId: 'occupancy-rate',
+    label: 'Occupancy Rate',
+    section: 'home',
+    type: 'percentage',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Current occupancy'
+  },
+  {
+    id: 'transmittal_numberOfUnits',
+    storeId: 'num-units',
+    label: 'Number of Units',
+    section: 'home',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Total dwelling units'
+  },
+  {
+    id: 'transmittal_numberOfStories',
+    storeId: 'num-stories',
+    label: 'Number of Stories',
+    section: 'home',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Building height'
+  },
+  {
+    id: 'transmittal_buildingFormat',
+    storeId: 'building-format',
+    label: 'Building Format',
+    section: 'home',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Design type (e.g., garden style)'
+  },
+  {
+    id: 'transmittal_appraiserName',
+    storeId: 'appraiser-name',
+    label: 'Appraiser Name',
+    section: 'home',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Signing appraiser'
+  },
+  {
+    id: 'transmittal_appraiserDesignation',
+    storeId: 'appraiser-designation',
+    label: 'Professional Designation',
+    section: 'home',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Credentials (e.g., AACI, MRICS)'
+  },
+  {
+    id: 'transmittal_appraiserTitle',
+    storeId: 'appraiser-title',
+    label: 'Appraiser Title',
+    section: 'home',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'transmittal_appraiserEmail',
+    storeId: 'appraiser-email',
+    label: 'Appraiser Email',
+    section: 'home',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true
+  },
+  {
+    id: 'transmittal_appraiserLicense',
+    storeId: 'appraiser-license',
+    label: 'License Number',
+    section: 'home',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Professional registration (e.g., AIC No: 902097)'
+  },
+  {
+    id: 'transmittal_signatureImage',
+    storeId: 'appraiser-signature',
+    label: 'Digital Signature',
+    section: 'home',
+    type: 'image',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'For PDF'
+  },
+
+  // ============================================================================
+  // SECTION 3: EXECUTIVE SUMMARY
+  // ============================================================================
+
+  {
+    id: 'exec_propertyName',
+    storeId: 'exec-property-name',
+    label: 'Property Name',
+    section: 'exec',
+    type: 'text',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'exec_propertyAddress',
+    storeId: 'exec-property-address',
+    label: 'Full Address',
+    section: 'exec',
+    type: 'text',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'exec_propertyType',
+    storeId: 'exec-property-type',
+    label: 'Property Type',
+    section: 'exec',
+    type: 'text',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'exec_grossBuildingArea',
+    storeId: 'exec-gba',
+    label: 'Gross Building Area',
+    section: 'exec',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Square feet'
+  },
+  {
+    id: 'exec_numberOfUnits',
+    storeId: 'exec-num-units',
+    label: 'Number of Units',
+    section: 'exec',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'exec_yearBuilt',
+    storeId: 'exec-year-built',
+    label: 'Year Built',
+    section: 'exec',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'exec_valuationPremise',
+    storeId: 'exec-valuation-premise',
+    label: 'Valuation Premise',
+    section: 'exec',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    defaultValue: 'As Stabilized (Fee Simple Estate)'
+  },
+  {
+    id: 'exec_finalValue',
+    storeId: 'exec-final-value',
+    label: 'Market Value Conclusion',
+    section: 'exec',
+    type: 'currency',
+    inputSource: 'calculated',
+    required: true,
+    notes: 'FINAL VALUE'
+  },
+  {
+    id: 'exec_hypotheticalConditions',
+    storeId: 'exec-hypothetical-conditions',
+    label: 'Hypothetical Conditions',
+    section: 'exec',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Standard disclosure'
+  },
+  {
+    id: 'exec_extraordinaryAssumptions',
+    storeId: 'exec-extraordinary-assumptions',
+    label: 'Extraordinary Assumptions',
+    section: 'exec',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'exec_limitingConditions',
+    storeId: 'exec-limiting-conditions',
+    label: 'Extraordinary Limiting Conditions',
+    section: 'exec',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: false
+  },
+
+  // ============================================================================
+  // SECTION 4: PHOTOGRAPHS (Image Gallery)
+  // ============================================================================
+
+  ...Array.from({ length: 25 }, (_, i) => {
+    const photoNum = String(i + 1).padStart(2, '0');
+    return [
+      {
+        id: `photo_${photoNum}`,
+        storeId: `photo-${photoNum}`,
+        label: `Photo ${i + 1}`,
+        section: 'photos',
+        type: 'image' as const,
+        inputSource: 'user-input' as const,
+        required: false,
+        notes: 'Dynamic - varies by property'
+      },
+      {
+        id: `photo_${photoNum}_caption`,
+        storeId: `photo-${photoNum}-caption`,
+        label: `Photo ${i + 1} Caption`,
+        section: 'photos',
+        type: 'text' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      }
+    ];
+  }).flat(),
+
+  // ============================================================================
+  // SECTION 5: MAPS (Location Context)
+  // ============================================================================
+
+  {
+    id: 'map_regional',
+    storeId: 'map-regional',
+    label: 'Regional Map',
+    section: 'maps',
+    type: 'image',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Province/city location'
+  },
+  {
+    id: 'map_local',
+    storeId: 'map-local',
+    label: 'Local Area Map',
+    section: 'maps',
+    type: 'image',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Neighbourhood context'
+  },
+  {
+    id: 'map_site',
+    storeId: 'map-aerial',
+    label: 'Site Plan/Aerial',
+    section: 'maps',
+    type: 'image',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Property boundaries'
+  },
+  {
+    id: 'map_zoning',
+    storeId: 'map-zoning',
+    label: 'Zoning Map',
+    section: 'maps',
+    type: 'image',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Zoning overlay'
+  },
+  {
+    id: 'map_street',
+    storeId: 'map-street',
+    label: 'Street View',
+    section: 'maps',
+    type: 'image',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Property frontage'
+  },
+
+  // ============================================================================
+  // SECTION 6: PROPERTY IDENTIFICATION & ASSIGNMENT
+  // ============================================================================
+
+  {
+    id: 'ident_propertyAddress',
+    storeId: 'ident-property-address',
+    label: 'Property Address',
+    section: 'report',
+    type: 'text',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Full address'
+  },
+  {
+    id: 'ident_propertyDescription',
+    storeId: 'ident-property-description',
+    label: 'Property Description',
+    section: 'report',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Narrative'
+  },
+  {
+    id: 'ident_numberOfBuildings',
+    storeId: 'ident-num-buildings',
+    label: 'Number of Buildings',
+    section: 'report',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'ident_netRentableArea',
+    storeId: 'ident-nra',
+    label: 'Net Rentable Area',
+    section: 'report',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'ident_yearBuilt',
+    storeId: 'ident-year-built',
+    label: 'Year Built',
+    section: 'report',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'ident_occupancyRate',
+    storeId: 'ident-occupancy-rate',
+    label: 'Occupancy Rate',
+    section: 'report',
+    type: 'percentage',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'ident_numberOfUnits',
+    storeId: 'ident-num-units',
+    label: 'Number of Units',
+    section: 'report',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'ident_buildingFormat',
+    storeId: 'ident-building-format',
+    label: 'Building Format',
+    section: 'report',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'ident_legalDescription',
+    storeId: 'legal-description',
+    label: 'Legal Description',
+    section: 'report',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'From land title'
+  },
+  {
+    id: 'ident_authorizedClient',
+    storeId: 'authorized-client',
+    label: 'Authorized Client',
+    section: 'report',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true
+  },
+  {
+    id: 'ident_authorizedUse',
+    storeId: 'authorized-use',
+    label: 'Authorized Use',
+    section: 'report',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Purpose of appraisal'
+  },
+  {
+    id: 'ident_authorizedUsers',
+    storeId: 'authorized-users',
+    label: 'Authorized Users',
+    section: 'report',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Who can rely on report'
+  },
+  {
+    id: 'ident_effectiveDate',
+    storeId: 'effective-date',
+    label: 'Effective Date of Value',
+    section: 'report',
+    type: 'date',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Valuation date'
+  },
+  {
+    id: 'ident_reportDate',
+    storeId: 'ident-report-date',
+    label: 'Report Date',
+    section: 'report',
+    type: 'date',
+    inputSource: 'calculated',
+    required: true,
+    notes: 'Report completion'
+  },
+  {
+    id: 'ident_inspectionDate',
+    storeId: 'inspection-date',
+    label: 'Inspection Date',
+    section: 'report',
+    type: 'date',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Site visit date'
+  },
+  {
+    id: 'ident_purpose',
+    storeId: 'appraisal-purpose',
+    label: 'Purpose of Appraisal',
+    section: 'report',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Assignment scope'
+  },
+  {
+    id: 'ident_currentOwner',
+    storeId: 'current-owner',
+    label: 'Current Owner',
+    section: 'report',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'ident_salesHistory',
+    storeId: 'sales-history',
+    label: 'Three-Year Sales History',
+    section: 'report',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Transaction history'
+  },
+  {
+    id: 'ident_exposureTime',
+    storeId: 'exposure-time',
+    label: 'Exposure Time',
+    section: 'report',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Marketing time estimate'
+  },
+  {
+    id: 'ident_propertyRights',
+    storeId: 'property-rights',
+    label: 'Property Rights Appraised',
+    section: 'report',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    defaultValue: 'Fee Simple Interest',
+    notes: 'Estate type'
+  },
+  {
+    id: 'ident_valueScenario',
+    storeId: 'value-scenario',
+    label: 'Value Scenario',
+    section: 'report',
+    type: 'select',
+    inputSource: 'user-input',
+    required: true,
+    options: ['As Is', 'As Stabilized', 'As Complete', 'Prospective'],
+    defaultValue: 'As Stabilized',
+    notes: 'Current/Prospective'
+  },
+
+  // ============================================================================
+  // SECTION 7: SCOPE OF WORK & COMPLIANCE
+  // ============================================================================
+
+  {
+    id: 'scope_analysisCompleted',
+    storeId: 'scope-analysis',
+    label: 'Analyses Completed',
+    section: 'report',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Bullet list'
+  },
+  {
+    id: 'scope_approachesUsed',
+    storeId: 'scope-approaches',
+    label: 'Valuation Approaches Used',
+    section: 'report',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    defaultValue: 'Direct Comparison and Income (Direct Capitalization)'
+  },
+  {
+    id: 'scope_reportType',
+    storeId: 'scope-report-type',
+    label: 'Report Type',
+    section: 'report',
+    type: 'text',
+    inputSource: 'template',
+    required: true,
+    defaultValue: 'Appraisal Report',
+    notes: 'CUSPAP classification'
+  },
+  {
+    id: 'scope_complianceStandard',
+    storeId: 'scope-compliance',
+    label: 'Compliance Standard',
+    section: 'report',
+    type: 'text',
+    inputSource: 'template',
+    required: true,
+    defaultValue: 'CUSPAP 2024',
+    notes: 'Regulatory framework'
+  },
+  {
+    id: 'scope_assistanceProvided',
+    storeId: 'scope-assistance',
+    label: 'Assistance Provided',
+    section: 'report',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Contributors'
+  },
+  {
+    id: 'scope_sourcesOfInfo',
+    storeId: 'scope-sources',
+    label: 'Sources of Information',
+    section: 'report',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true
+  },
+  {
+    id: 'scope_inspectionType',
+    storeId: 'scope-inspection',
+    label: 'Inspection Type',
+    section: 'report',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    defaultValue: 'Full interior and exterior'
+  },
+  {
+    id: 'scope_personalProperty',
+    storeId: 'scope-personal-property',
+    label: 'Personal Property Included',
+    section: 'report',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    defaultValue: 'No personal property (FF&E) included'
+  },
+
+  // ============================================================================
+  // SECTION 8: LOCATION ANALYSIS
+  // ============================================================================
+
+  {
+    id: 'location_overview',
+    storeId: 'location-overview-text',
+    label: 'Location Overview',
+    section: 'location',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Narrative'
+  },
+  {
+    id: 'location_access',
+    storeId: 'location-access',
+    label: 'Access',
+    section: 'location',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Road access'
+  },
+  {
+    id: 'location_publicTransit',
+    storeId: 'public-transit',
+    label: 'Public Transportation',
+    section: 'location',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Transit access'
+  },
+  {
+    id: 'location_walkScore',
+    storeId: 'walk-score',
+    label: 'Walk Score',
+    section: 'location',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: false,
+    notes: 'Walkability metric'
+  },
+  {
+    id: 'location_transitScore',
+    storeId: 'transit-score',
+    label: 'Transit Score',
+    section: 'location',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: false,
+    notes: 'Transit accessibility'
+  },
+  {
+    id: 'location_bikeScore',
+    storeId: 'bike-score',
+    label: 'Bike Score',
+    section: 'location',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: false,
+    notes: 'Cycling infrastructure'
+  },
+  {
+    id: 'location_localArea',
+    storeId: 'local-area-description',
+    label: 'Local Area Description',
+    section: 'location',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Neighbourhood'
+  },
+  {
+    id: 'location_nearbySchools',
+    storeId: 'nearby-schools',
+    label: 'Nearby Schools',
+    section: 'location',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Schools list'
+  },
+
+  // ============================================================================
+  // SECTION 9: SITE DETAILS
+  // ============================================================================
+
+  {
+    id: 'site_totalArea',
+    storeId: 'site-total-area',
+    label: 'Total Site Area',
+    section: 'site',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true,
+    notes: 'Square feet'
+  },
+  {
+    id: 'site_acreage',
+    storeId: 'site-acreage',
+    label: 'Site Area (Acres)',
+    section: 'site',
+    type: 'number',
+    inputSource: 'calculated',
+    required: true,
+    calculationFormula: 'site-total-area / 43560'
+  },
+  {
+    id: 'site_address',
+    storeId: 'site-address',
+    label: 'Site Address',
+    section: 'site',
+    type: 'text',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'site_adjacentNorth',
+    storeId: 'site-adjacent-north',
+    label: 'Adjacent North',
+    section: 'site',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Surrounding uses'
+  },
+  {
+    id: 'site_adjacentSouth',
+    storeId: 'site-adjacent-south',
+    label: 'Adjacent South',
+    section: 'site',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'site_adjacentEast',
+    storeId: 'site-adjacent-east',
+    label: 'Adjacent East',
+    section: 'site',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'site_adjacentWest',
+    storeId: 'site-adjacent-west',
+    label: 'Adjacent West',
+    section: 'site',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'site_accessibility',
+    storeId: 'site-accessibility',
+    label: 'Accessibility',
+    section: 'site',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'site_exposureVisibility',
+    storeId: 'site-exposure',
+    label: 'Exposure & Visibility',
+    section: 'site',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'site_easements',
+    storeId: 'site-easements',
+    label: 'Easements',
+    section: 'site',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    defaultValue: 'Assumed satisfactory unless noted',
+    notes: 'Legal encumbrances'
+  },
+  {
+    id: 'site_soils',
+    storeId: 'site-soils',
+    label: 'Soils',
+    section: 'site',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    defaultValue: 'Assumed suitable for development',
+    notes: 'Geotechnical'
+  },
+  {
+    id: 'site_hazardousWaste',
+    storeId: 'site-hazardous',
+    label: 'Hazardous Waste',
+    section: 'site',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    defaultValue: 'None present based on review',
+    notes: 'Environmental'
+  },
+  {
+    id: 'site_rating',
+    storeId: 'site-rating',
+    label: 'Site Rating',
+    section: 'site',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Overall assessment'
+  },
+  {
+    id: 'site_conclusion',
+    storeId: 'site-conclusion',
+    label: 'Site Conclusion',
+    section: 'site',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Summary'
+  },
+  {
+    id: 'site_planImage_lot17',
+    storeId: 'site-plan-1',
+    label: 'Site Plan Image 1',
+    section: 'site',
+    type: 'image',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Survey/plot plan'
+  },
+  {
+    id: 'site_planImage_lot18',
+    storeId: 'site-plan-2',
+    label: 'Site Plan Image 2',
+    section: 'site',
+    type: 'image',
+    inputSource: 'user-input',
+    required: false
+  },
+
+  // ============================================================================
+  // SECTION 10: PROPERTY TAXES & ASSESSMENT
+  // ============================================================================
+
+  {
+    id: 'tax_assessmentYear',
+    storeId: 'assessment-year',
+    label: 'Assessment Year',
+    section: 'tax',
+    type: 'number',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Tax year'
+  },
+  {
+    id: 'tax_assessedValue',
+    storeId: 'total-assessment',
+    label: 'Total Assessed Value',
+    section: 'tax',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Municipal assessment'
+  },
+  {
+    id: 'tax_landValue',
+    storeId: 'land-assessment',
+    label: 'Land Assessed Value',
+    section: 'tax',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Land component'
+  },
+  {
+    id: 'tax_buildingValue',
+    storeId: 'building-assessment',
+    label: 'Building Assessed Value',
+    section: 'tax',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Improvement value'
+  },
+  {
+    id: 'tax_annualTax',
+    storeId: 'annual-taxes',
+    label: 'Annual Property Tax',
+    section: 'tax',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Total tax bill'
+  },
+  {
+    id: 'tax_commentary',
+    storeId: 'tax-commentary',
+    label: 'Taxation Commentary',
+    section: 'tax',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Appraiser notes'
+  },
+
+  // ============================================================================
+  // SECTION 11: ZONING & LAND USE
+  // ============================================================================
+
+  {
+    id: 'zoning_classification',
+    storeId: 'zoning-classification',
+    label: 'Zoning Classification',
+    section: 'zone',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Municipal zoning'
+  },
+  {
+    id: 'zoning_description',
+    storeId: 'zoning-description',
+    label: 'Zoning Description',
+    section: 'zone',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Description of permitted uses'
+  },
+  {
+    id: 'zoning_permittedUses',
+    storeId: 'permitted-uses',
+    label: 'Permitted Uses',
+    section: 'zone',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Allowed uses'
+  },
+  {
+    id: 'zoning_conformance',
+    storeId: 'zoning-conformance',
+    label: 'Conforming Use',
+    section: 'zone',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    defaultValue: 'Legally conforming use',
+    notes: 'Compliance status'
+  },
+  {
+    id: 'zoning_conclusion',
+    storeId: 'zoning-conclusion',
+    label: 'Zoning Conclusion',
+    section: 'zone',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'zoning_mapImage',
+    storeId: 'zoning-map',
+    label: 'Zoning Map',
+    section: 'zone',
+    type: 'image',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Visual reference'
+  },
+
+  // ============================================================================
+  // SECTION 12: IMPROVEMENTS DESCRIPTION
+  // ============================================================================
+
+  {
+    id: 'improv_overview',
+    storeId: 'impv-overview',
+    label: 'Overview',
+    section: 'impv',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Summary'
+  },
+  {
+    id: 'improv_numberOfBuildings',
+    storeId: 'impv-num-buildings',
+    label: 'Number of Buildings',
+    section: 'impv',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'improv_netRentableArea',
+    storeId: 'impv-nra',
+    label: 'Net Rentable Area',
+    section: 'impv',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'improv_yearBuilt',
+    storeId: 'impv-year-built',
+    label: 'Year Built',
+    section: 'impv',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'improv_occupancyRate',
+    storeId: 'occupancy-rate',
+    label: 'Occupancy Rate',
+    section: 'impv',
+    type: 'percentage',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'improv_numberOfUnits',
+    storeId: 'impv-num-units',
+    label: 'Number of Units',
+    section: 'impv',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'improv_numberOfStories',
+    storeId: 'impv-stories',
+    label: 'Number of Stories',
+    section: 'impv',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'improv_buildingFormat',
+    storeId: 'impv-building-format',
+    label: 'Building Format',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Design type'
+  },
+  {
+    id: 'improv_projectAmenities',
+    storeId: 'project-amenities',
+    label: 'Project Amenities',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Common amenities'
+  },
+  {
+    id: 'improv_unitAmenities',
+    storeId: 'unit-amenities',
+    label: 'Unit Amenities',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'In-unit features'
+  },
+  {
+    id: 'improv_laundry',
+    storeId: 'laundry',
+    label: 'Laundry',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Laundry facilities'
+  },
+  {
+    id: 'improv_security',
+    storeId: 'security',
+    label: 'Security Features',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'improv_foundation',
+    storeId: 'foundation',
+    label: 'Foundation',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Structural'
+  },
+  {
+    id: 'improv_exteriorWalls',
+    storeId: 'exterior-walls',
+    label: 'Exterior Walls/Framing',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Construction'
+  },
+  {
+    id: 'improv_roof',
+    storeId: 'roof',
+    label: 'Roof',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Roof system'
+  },
+  {
+    id: 'improv_elevator',
+    storeId: 'elevator',
+    label: 'Elevator',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Vertical transport'
+  },
+  {
+    id: 'improv_hvac',
+    storeId: 'hvac',
+    label: 'Heating & AC (HVAC)',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Climate control'
+  },
+  {
+    id: 'improv_insulation',
+    storeId: 'impv-insulation',
+    label: 'Insulation',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Thermal'
+  },
+  {
+    id: 'improv_lighting',
+    storeId: 'impv-lighting',
+    label: 'Lighting',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Electrical fixtures'
+  },
+  {
+    id: 'improv_electrical',
+    storeId: 'electrical',
+    label: 'Electrical',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Power system'
+  },
+  {
+    id: 'improv_interiorWalls',
+    storeId: 'interior-walls',
+    label: 'Interior Walls',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Finishes'
+  },
+  {
+    id: 'improv_doorsWindows',
+    storeId: 'doors-windows',
+    label: 'Doors and Windows',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Openings'
+  },
+  {
+    id: 'improv_ceilings',
+    storeId: 'ceilings',
+    label: 'Ceilings',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Ceiling finish'
+  },
+  {
+    id: 'improv_plumbing',
+    storeId: 'plumbing',
+    label: 'Plumbing',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Plumbing system'
+  },
+  {
+    id: 'improv_flooring',
+    storeId: 'flooring',
+    label: 'Floor Covering',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Floor finishes'
+  },
+  {
+    id: 'improv_fireProtection',
+    storeId: 'fire-protection',
+    label: 'Fire Protection',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Fire safety'
+  },
+  {
+    id: 'improv_interiorFinish',
+    storeId: 'impv-interior-finish',
+    label: 'Interior Finish/Build-Out',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'improv_siteImprovements',
+    storeId: 'site-impv',
+    label: 'Site Improvements',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Hardscape'
+  },
+  {
+    id: 'improv_landscaping',
+    storeId: 'landscaping',
+    label: 'Landscaping',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Softscape'
+  },
+  {
+    id: 'improv_parkingSpaces',
+    storeId: 'parking-spaces',
+    label: 'Parking Spaces',
+    section: 'impv',
+    type: 'number',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Count'
+  },
+  {
+    id: 'improv_parkingRatio',
+    storeId: 'parking-ratio',
+    label: 'Parking Ratio',
+    section: 'impv',
+    type: 'number',
+    inputSource: 'calculated',
+    required: false,
+    calculationFormula: 'parking-spaces / impv-num-units',
+    notes: 'Spaces per unit'
+  },
+  {
+    id: 'improv_siteCoverage',
+    storeId: 'impv-site-coverage',
+    label: 'Site Coverage Ratio',
+    section: 'impv',
+    type: 'percentage',
+    inputSource: 'calculated',
+    required: false,
+    notes: 'Building footprint %'
+  },
+  {
+    id: 'improv_buildingFootprint',
+    storeId: 'impv-building-footprint',
+    label: 'Building Footprint',
+    section: 'impv',
+    type: 'number',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Ground floor area (SF)'
+  },
+  {
+    id: 'improv_functionalDesign',
+    storeId: 'functional-design',
+    label: 'Functional Design',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Design assessment'
+  },
+  {
+    id: 'improv_hazardousMaterials',
+    storeId: 'hazardous-materials',
+    label: 'Hazardous Materials',
+    section: 'impv',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    defaultValue: 'Assumes free of hazardous waste, asbestos, mold',
+    notes: 'Environmental'
+  },
+
+  // ============================================================================
+  // SECTION 13: MARKET CONTEXT
+  // ============================================================================
+
+  {
+    id: 'market_national_overview',
+    storeId: 'national-overview',
+    label: 'National Economic Overview',
+    section: 'market',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Macro context'
+  },
+  {
+    id: 'market_national_gdpGrowth',
+    storeId: 'market-national-gdp',
+    label: 'GDP Growth Forecast',
+    section: 'market',
+    type: 'percentage',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Economic indicator'
+  },
+  {
+    id: 'market_national_inflation',
+    storeId: 'market-national-inflation',
+    label: 'Inflation Rate',
+    section: 'market',
+    type: 'percentage',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Target rate'
+  },
+  {
+    id: 'market_provincial_overview',
+    storeId: 'provincial-overview',
+    label: 'Provincial Overview',
+    section: 'market',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Regional context'
+  },
+  {
+    id: 'market_provincial_unemployment',
+    storeId: 'market-provincial-unemployment',
+    label: 'Unemployment Rate',
+    section: 'market',
+    type: 'percentage',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Labour market'
+  },
+  {
+    id: 'market_multifamily_overview',
+    storeId: 'multifamily-overview',
+    label: 'Multifamily Market Overview',
+    section: 'market',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Sector analysis'
+  },
+  {
+    id: 'market_multifamily_vacancyRate',
+    storeId: 'market-vacancy-rate',
+    label: 'Market Vacancy Rate',
+    section: 'market',
+    type: 'percentage',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Supply indicator'
+  },
+  {
+    id: 'market_multifamily_rentTrend',
+    storeId: 'rent-trend',
+    label: 'Rent Trend',
+    section: 'market',
+    type: 'text',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Pricing trend'
+  },
+
+  // ============================================================================
+  // SECTION 14: HIGHEST & BEST USE ANALYSIS
+  // ============================================================================
+
+  {
+    id: 'hbu_introduction',
+    storeId: 'hbu-intro',
+    label: 'Introduction',
+    section: 'hbu',
+    type: 'textarea',
+    inputSource: 'template',
+    required: true,
+    notes: 'Definition'
+  },
+  {
+    id: 'hbu_asVacant_legal',
+    storeId: 'hbu-vacant-legal',
+    label: 'As Vacant - Legally Permissible',
+    section: 'hbu',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Legal constraints'
+  },
+  {
+    id: 'hbu_asVacant_physical',
+    storeId: 'hbu-vacant-physical',
+    label: 'As Vacant - Physically Possible',
+    section: 'hbu',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Physical factors'
+  },
+  {
+    id: 'hbu_asVacant_financial',
+    storeId: 'hbu-vacant-financial',
+    label: 'As Vacant - Financially Feasible',
+    section: 'hbu',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Economic analysis'
+  },
+  {
+    id: 'hbu_asVacant_maxProductivity',
+    storeId: 'hbu-vacant-productive',
+    label: 'As Vacant - Maximally Productive',
+    section: 'hbu',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Optimal use'
+  },
+  {
+    id: 'hbu_asImproved',
+    storeId: 'hbu-improved',
+    label: 'Highest & Best Use As Improved',
+    section: 'hbu',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Current use analysis'
+  },
+  {
+    id: 'hbu_conclusion',
+    storeId: 'hbu-conclusion-text',
+    label: 'HBU Conclusion',
+    section: 'hbu',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Final determination'
+  },
+
+  // ============================================================================
+  // SECTION 15: INCOME APPROACH - CALCULATIONS
+  // ============================================================================
+
+  // Unit Mix (up to 4 unit types)
+  ...Array.from({ length: 4 }, (_, i) => {
+    const typeNum = i + 1;
+    return [
+      {
+        id: `calc_unit_${typeNum}_type`,
+        storeId: `calc-type${typeNum}-name`,
+        label: `Unit Type ${typeNum} Name`,
+        section: 'calc',
+        subsection: 'unit-mix',
+        type: 'text' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `calc_unit_${typeNum}_count`,
+        storeId: `calc-type${typeNum}-count`,
+        label: `Unit Type ${typeNum} Count`,
+        section: 'calc',
+        subsection: 'unit-mix',
+        type: 'number' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `calc_unit_${typeNum}_sf`,
+        storeId: `calc-type${typeNum}-sf`,
+        label: `Unit Type ${typeNum} Square Feet`,
+        section: 'calc',
+        subsection: 'unit-mix',
+        type: 'number' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `calc_unit_${typeNum}_market_rent`,
+        storeId: `calc-type${typeNum}-rent`,
+        label: `Unit Type ${typeNum} Market Rent`,
+        section: 'calc',
+        subsection: 'unit-mix',
+        type: 'currency' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      }
+    ];
+  }).flat(),
+
+  // Income Calculations
+  {
+    id: 'income_pgi',
+    storeId: 'calc-pgi',
+    label: 'Potential Gross Income (PGI)',
+    section: 'calc',
+    subsection: 'income',
+    type: 'currency',
+    inputSource: 'calculated',
+    required: true,
+    notes: 'Maximum revenue'
+  },
+  {
+    id: 'income_vacancyRate',
+    storeId: 'calc-vacancy-rate',
+    label: 'Vacancy & Collection Loss Rate',
+    section: 'calc',
+    subsection: 'income',
+    type: 'percentage',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Market vacancy'
+  },
+  {
+    id: 'income_vacancyLoss',
+    storeId: 'calc-vacancy-loss',
+    label: 'Vacancy & Collection Loss',
+    section: 'calc',
+    subsection: 'income',
+    type: 'currency',
+    inputSource: 'calculated',
+    required: true,
+    calculationFormula: 'calc-pgi * calc-vacancy-rate',
+    notes: 'Calculated loss'
+  },
+  {
+    id: 'income_egi',
+    storeId: 'calc-egi',
+    label: 'Effective Gross Income (EGI)',
+    section: 'calc',
+    subsection: 'income',
+    type: 'currency',
+    inputSource: 'calculated',
+    required: true,
+    calculationFormula: 'calc-pgi - calc-vacancy-loss',
+    notes: 'PGI - Vacancy'
+  },
+  {
+    id: 'income_otherIncome',
+    storeId: 'calc-other-income',
+    label: 'Other Income',
+    section: 'calc',
+    subsection: 'income',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Parking, laundry, etc.'
+  },
+  {
+    id: 'income_totalGrossIncome',
+    storeId: 'calc-total-income',
+    label: 'Total Gross Income',
+    section: 'calc',
+    subsection: 'income',
+    type: 'currency',
+    inputSource: 'calculated',
+    required: true,
+    calculationFormula: 'calc-egi + calc-other-income',
+    notes: 'EGI + Other'
+  },
+
+  // Operating Expenses
+  {
+    id: 'expense_management',
+    storeId: 'calc-exp-management',
+    label: 'Management Fees',
+    section: 'calc',
+    subsection: 'expenses',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Usually 5% EGI'
+  },
+  {
+    id: 'expense_insurance',
+    storeId: 'calc-exp-insurance',
+    label: 'Insurance',
+    section: 'calc',
+    subsection: 'expenses',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Property insurance'
+  },
+  {
+    id: 'expense_propertyTax',
+    storeId: 'calc-exp-taxes',
+    label: 'Property Taxes',
+    section: 'calc',
+    subsection: 'expenses',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Municipal taxes'
+  },
+  {
+    id: 'expense_utilities',
+    storeId: 'calc-exp-utilities',
+    label: 'Utilities',
+    section: 'calc',
+    subsection: 'expenses',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Common area utilities'
+  },
+  {
+    id: 'expense_repairs',
+    storeId: 'calc-exp-repairs',
+    label: 'Repairs & Maintenance',
+    section: 'calc',
+    subsection: 'expenses',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Ongoing maintenance'
+  },
+  {
+    id: 'expense_janitorial',
+    storeId: 'calc-exp-janitorial',
+    label: 'Janitorial',
+    section: 'calc',
+    subsection: 'expenses',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Cleaning services'
+  },
+  {
+    id: 'expense_landscaping',
+    storeId: 'calc-exp-landscaping',
+    label: 'Landscaping',
+    section: 'calc',
+    subsection: 'expenses',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Grounds maintenance'
+  },
+  {
+    id: 'expense_professional',
+    storeId: 'calc-exp-professional',
+    label: 'Professional Fees',
+    section: 'calc',
+    subsection: 'expenses',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Legal, accounting'
+  },
+  {
+    id: 'expense_reserves',
+    storeId: 'calc-exp-reserves',
+    label: 'Replacement Reserves',
+    section: 'calc',
+    subsection: 'expenses',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Capital reserves'
+  },
+  {
+    id: 'expense_other',
+    storeId: 'calc-exp-other',
+    label: 'Other Expenses',
+    section: 'calc',
+    subsection: 'expenses',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Miscellaneous'
+  },
+  {
+    id: 'expense_total',
+    storeId: 'calc-total-expenses',
+    label: 'Total Operating Expenses',
+    section: 'calc',
+    subsection: 'expenses',
+    type: 'currency',
+    inputSource: 'calculated',
+    required: true,
+    notes: 'Sum of all expenses'
+  },
+
+  // Net Operating Income & Valuation
+  {
+    id: 'income_noi',
+    storeId: 'calc-noi',
+    label: 'Net Operating Income (NOI)',
+    section: 'calc',
+    subsection: 'valuation',
+    type: 'currency',
+    inputSource: 'calculated',
+    required: true,
+    calculationFormula: 'calc-total-income - calc-total-expenses',
+    notes: 'EGI - OpEx'
+  },
+  {
+    id: 'income_capRate',
+    storeId: 'calc-cap-rate',
+    label: 'Capitalization Rate',
+    section: 'calc',
+    subsection: 'valuation',
+    type: 'percentage',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Market cap rate'
+  },
+  {
+    id: 'income_valueIndication',
+    storeId: 'calc-income-value',
+    label: 'Income Approach Value',
+    section: 'calc',
+    subsection: 'valuation',
+    type: 'currency',
+    inputSource: 'calculated',
+    required: true,
+    calculationFormula: 'calc-noi / (calc-cap-rate / 100)',
+    notes: 'NOI / Cap Rate'
+  },
+
+  // ============================================================================
+  // SECTION 16: LAND SALES (Land1 Section)
+  // ============================================================================
+
+  // Land Comparables (typically 3-5)
+  ...Array.from({ length: 5 }, (_, i) => {
+    const compNum = i + 1;
+    return [
+      {
+        id: `landComp_${String(compNum).padStart(2, '0')}_name`,
+        storeId: `land-comp-${compNum}-name`,
+        label: `Land Comp ${compNum} - Name`,
+        section: 'land1',
+        type: 'text' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `landComp_${String(compNum).padStart(2, '0')}_address`,
+        storeId: `land-comp-${compNum}-address`,
+        label: `Land Comp ${compNum} - Address`,
+        section: 'land1',
+        type: 'text' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `landComp_${String(compNum).padStart(2, '0')}_saleDate`,
+        storeId: `land-comp-${compNum}-date`,
+        label: `Land Comp ${compNum} - Sale Date`,
+        section: 'land1',
+        type: 'date' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `landComp_${String(compNum).padStart(2, '0')}_salePrice`,
+        storeId: `land-comp-${compNum}-price`,
+        label: `Land Comp ${compNum} - Sale Price`,
+        section: 'land1',
+        type: 'currency' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `landComp_${String(compNum).padStart(2, '0')}_siteArea`,
+        storeId: `land-comp-${compNum}-area`,
+        label: `Land Comp ${compNum} - Site Area`,
+        section: 'land1',
+        type: 'number' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `landComp_${String(compNum).padStart(2, '0')}_pricePerSF`,
+        storeId: `land-comp-${compNum}-price-sf`,
+        label: `Land Comp ${compNum} - Price/SF`,
+        section: 'land1',
+        type: 'currency' as const,
+        inputSource: 'calculated' as const,
+        required: false
+      }
+    ];
+  }).flat(),
+
+  // ============================================================================
+  // SECTION 17: COST APPROACH (Cost-S Section)
+  // ============================================================================
+
+  {
+    id: 'cost_landValue',
+    storeId: 'cost-land-value',
+    label: 'Land Value',
+    section: 'cost-s',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'From land sales analysis'
+  },
+  {
+    id: 'cost_replacementCost',
+    storeId: 'cost-replacement-cost',
+    label: 'Replacement Cost New',
+    section: 'cost-s',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Building reproduction cost'
+  },
+  {
+    id: 'cost_physicalDepreciation',
+    storeId: 'cost-physical-depreciation',
+    label: 'Physical Depreciation',
+    section: 'cost-s',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'cost_functionalObsolescence',
+    storeId: 'cost-functional-obsolescence',
+    label: 'Functional Obsolescence',
+    section: 'cost-s',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'cost_externalObsolescence',
+    storeId: 'cost-external-obsolescence',
+    label: 'External Obsolescence',
+    section: 'cost-s',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'cost_depreciatedValue',
+    storeId: 'cost-depreciated-value',
+    label: 'Depreciated Building Value',
+    section: 'cost-s',
+    type: 'currency',
+    inputSource: 'calculated',
+    required: false
+  },
+  {
+    id: 'cost_valueIndication',
+    storeId: 'cost-value-indication',
+    label: 'Cost Approach Value',
+    section: 'cost-s',
+    type: 'currency',
+    inputSource: 'calculated',
+    required: false,
+    calculationFormula: 'cost-land-value + cost-depreciated-value',
+    notes: 'Land + Depreciated Building'
+  },
+
+  // ============================================================================
+  // SECTION 18: SALES COMPARISON APPROACH
+  // ============================================================================
+
+  // Subject Property Summary
+  {
+    id: 'subject_numberOfUnits',
+    storeId: 'subject-units',
+    label: 'Subject - Number of Units',
+    section: 'sales',
+    subsection: 'subject',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'subject_gba',
+    storeId: 'subject-gba',
+    label: 'Subject - Gross Building Area',
+    section: 'sales',
+    subsection: 'subject',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'subject_yearBuilt',
+    storeId: 'subject-year',
+    label: 'Subject - Year Built',
+    section: 'sales',
+    subsection: 'subject',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'subject_siteArea',
+    storeId: 'subject-site-area',
+    label: 'Subject - Site Area',
+    section: 'sales',
+    subsection: 'subject',
+    type: 'number',
+    inputSource: 'api-fetch',
+    required: true
+  },
+  {
+    id: 'subject_parkingRatio',
+    storeId: 'subject-parking-ratio',
+    label: 'Subject - Parking Ratio',
+    section: 'sales',
+    subsection: 'subject',
+    type: 'number',
+    inputSource: 'calculated',
+    required: false
+  },
+  {
+    id: 'subject_condition',
+    storeId: 'subject-condition',
+    label: 'Subject - Condition',
+    section: 'sales',
+    subsection: 'subject',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Physical condition'
+  },
+
+  // Sale Comparables (typically 3-5)
+  ...Array.from({ length: 5 }, (_, i) => {
+    const compNum = String(i + 1).padStart(2, '0');
+    return [
+      {
+        id: `saleComp_${compNum}_name`,
+        storeId: `sale-comp-${compNum}-name`,
+        label: `Sale Comp ${compNum} - Name`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'text' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_address`,
+        storeId: `sale-comp-${compNum}-address`,
+        label: `Sale Comp ${compNum} - Address`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'text' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_saleDate`,
+        storeId: `sale-comp-${compNum}-date`,
+        label: `Sale Comp ${compNum} - Sale Date`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'date' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_salePrice`,
+        storeId: `sale-comp-${compNum}-price`,
+        label: `Sale Comp ${compNum} - Sale Price`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'currency' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_pricePerUnit`,
+        storeId: `sale-comp-${compNum}-price-unit`,
+        label: `Sale Comp ${compNum} - Price/Unit`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'currency' as const,
+        inputSource: 'calculated' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_pricePerSF`,
+        storeId: `sale-comp-${compNum}-price-sf`,
+        label: `Sale Comp ${compNum} - Price/SF`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'currency' as const,
+        inputSource: 'calculated' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_numberOfUnits`,
+        storeId: `sale-comp-${compNum}-units`,
+        label: `Sale Comp ${compNum} - Units`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'number' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_gba`,
+        storeId: `sale-comp-${compNum}-gba`,
+        label: `Sale Comp ${compNum} - GBA`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'number' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_yearBuilt`,
+        storeId: `sale-comp-${compNum}-year`,
+        label: `Sale Comp ${compNum} - Year Built`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'number' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_siteArea`,
+        storeId: `sale-comp-${compNum}-site-area`,
+        label: `Sale Comp ${compNum} - Site Area`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'number' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_capRate`,
+        storeId: `sale-comp-${compNum}-cap-rate`,
+        label: `Sale Comp ${compNum} - Cap Rate`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'percentage' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_adj_location`,
+        storeId: `sale-comp-${compNum}-adj-location`,
+        label: `Sale Comp ${compNum} - Location Adj`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'percentage' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_adj_size`,
+        storeId: `sale-comp-${compNum}-adj-size`,
+        label: `Sale Comp ${compNum} - Size Adj`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'percentage' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_adj_age`,
+        storeId: `sale-comp-${compNum}-adj-age`,
+        label: `Sale Comp ${compNum} - Age Adj`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'percentage' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_adj_condition`,
+        storeId: `sale-comp-${compNum}-adj-condition`,
+        label: `Sale Comp ${compNum} - Condition Adj`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'percentage' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_adj_parking`,
+        storeId: `sale-comp-${compNum}-adj-parking`,
+        label: `Sale Comp ${compNum} - Parking Adj`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'percentage' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `saleComp_${compNum}_adj_total`,
+        storeId: `sale-comp-${compNum}-adj-total`,
+        label: `Sale Comp ${compNum} - Total Adj`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'percentage' as const,
+        inputSource: 'calculated' as const,
+        required: false,
+        notes: 'Net adjustment'
+      },
+      {
+        id: `saleComp_${compNum}_adjustedPrice`,
+        storeId: `sale-comp-${compNum}-adj-price`,
+        label: `Sale Comp ${compNum} - Adjusted Price`,
+        section: 'sales',
+        subsection: 'comparables',
+        type: 'currency' as const,
+        inputSource: 'calculated' as const,
+        required: false,
+        notes: 'After adjustments'
+      }
+    ];
+  }).flat(),
+
+  // Sales Comparison Value
+  {
+    id: 'salesComp_valueIndication',
+    storeId: 'sales-value-indication',
+    label: 'Sales Comparison Value Indication',
+    section: 'sales',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Reconciled value'
+  },
+  {
+    id: 'salesComp_adjustmentSummary',
+    storeId: 'sales-adjustment-summary',
+    label: 'Adjustment Summary',
+    section: 'sales',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Analysis narrative'
+  },
+
+  // ============================================================================
+  // SECTION 19: INCOME APPROACH - RENT COMPARABLES
+  // ============================================================================
+
+  ...Array.from({ length: 5 }, (_, i) => {
+    const compNum = String(i + 1).padStart(2, '0');
+    return [
+      {
+        id: `rentComp_${compNum}_name`,
+        storeId: `rent-comp-${compNum}-name`,
+        label: `Rent Comp ${compNum} - Name`,
+        section: 'income',
+        type: 'text' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `rentComp_${compNum}_address`,
+        storeId: `rent-comp-${compNum}-address`,
+        label: `Rent Comp ${compNum} - Address`,
+        section: 'income',
+        type: 'text' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `rentComp_${compNum}_unitType`,
+        storeId: `rent-comp-${compNum}-unit-type`,
+        label: `Rent Comp ${compNum} - Unit Type`,
+        section: 'income',
+        type: 'text' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `rentComp_${compNum}_rent`,
+        storeId: `rent-comp-${compNum}-rent`,
+        label: `Rent Comp ${compNum} - Rent/Month`,
+        section: 'income',
+        type: 'currency' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `rentComp_${compNum}_rentPerSF`,
+        storeId: `rent-comp-${compNum}-rent-sf`,
+        label: `Rent Comp ${compNum} - Rent/SF`,
+        section: 'income',
+        type: 'currency' as const,
+        inputSource: 'calculated' as const,
+        required: false
+      },
+      {
+        id: `rentComp_${compNum}_yearBuilt`,
+        storeId: `rent-comp-${compNum}-year`,
+        label: `Rent Comp ${compNum} - Year Built`,
+        section: 'income',
+        type: 'number' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      },
+      {
+        id: `rentComp_${compNum}_distance`,
+        storeId: `rent-comp-${compNum}-distance`,
+        label: `Rent Comp ${compNum} - Distance`,
+        section: 'income',
+        type: 'text' as const,
+        inputSource: 'user-input' as const,
+        required: false
+      }
+    ];
+  }).flat(),
+
+  // ============================================================================
+  // SECTION 20: RECONCILIATION & FINAL VALUE
+  // ============================================================================
+
+  {
+    id: 'recon_incomeValue',
+    storeId: 'recon-income-value',
+    label: 'Income Approach Value',
+    section: 'recon',
+    type: 'currency',
+    inputSource: 'calculated',
+    required: true,
+    notes: 'From Section 15'
+  },
+  {
+    id: 'recon_salesValue',
+    storeId: 'recon-sales-value',
+    label: 'Sales Comparison Value',
+    section: 'recon',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'From Section 16'
+  },
+  {
+    id: 'recon_costValue',
+    storeId: 'recon-cost-value',
+    label: 'Cost Approach Value',
+    section: 'recon',
+    type: 'currency',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'If applicable'
+  },
+  {
+    id: 'recon_incomeWeight',
+    storeId: 'recon-income-weight',
+    label: 'Income Approach Weight',
+    section: 'recon',
+    type: 'percentage',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Reconciliation weight'
+  },
+  {
+    id: 'recon_salesWeight',
+    storeId: 'recon-sales-weight',
+    label: 'Sales Comparison Weight',
+    section: 'recon',
+    type: 'percentage',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'recon_costWeight',
+    storeId: 'recon-cost-weight',
+    label: 'Cost Approach Weight',
+    section: 'recon',
+    type: 'percentage',
+    inputSource: 'user-input',
+    required: false
+  },
+  {
+    id: 'recon_narrative',
+    storeId: 'recon-narrative',
+    label: 'Reconciliation Narrative',
+    section: 'recon',
+    type: 'textarea',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Reasoning'
+  },
+  {
+    id: 'recon_finalValue',
+    storeId: 'recon-final-value',
+    label: 'Final Value Conclusion',
+    section: 'recon',
+    type: 'currency',
+    inputSource: 'calculated',
+    required: true,
+    notes: 'FINAL VALUE'
+  },
+  {
+    id: 'recon_valuePremise',
+    storeId: 'recon-value-premise',
+    label: 'Value Premise',
+    section: 'recon',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    defaultValue: 'As Stabilized',
+    notes: 'Type of value'
+  },
+  {
+    id: 'recon_effectiveDate',
+    storeId: 'recon-effective-date',
+    label: 'Effective Date',
+    section: 'recon',
+    type: 'date',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Value as of date'
+  },
+
+  // ============================================================================
+  // SECTION 21: CERTIFICATION
+  // ============================================================================
+
+  {
+    id: 'cert_appraiserName',
+    storeId: 'cert-appraiser-name',
+    label: 'Appraiser Name',
+    section: 'cert',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Signing appraiser'
+  },
+  {
+    id: 'cert_appraiserDesignation',
+    storeId: 'cert-designation',
+    label: 'Professional Designation',
+    section: 'cert',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Credentials'
+  },
+  {
+    id: 'cert_appraiserLicense',
+    storeId: 'cert-license',
+    label: 'License Number',
+    section: 'cert',
+    type: 'text',
+    inputSource: 'user-input',
+    required: true,
+    notes: 'Professional ID'
+  },
+  {
+    id: 'cert_companyName',
+    storeId: 'cert-company',
+    label: 'Company Name',
+    section: 'cert',
+    type: 'text',
+    inputSource: 'template',
+    required: true,
+    defaultValue: 'Valta Property Valuations Ltd.',
+    notes: 'Firm name'
+  },
+  {
+    id: 'cert_signatureImage',
+    storeId: 'cert-signature',
+    label: 'Signature Image',
+    section: 'cert',
+    type: 'image',
+    inputSource: 'user-input',
+    required: false,
+    notes: 'Digital signature'
+  },
+  {
+    id: 'cert_signatureDate',
+    storeId: 'cert-date',
+    label: 'Signature Date',
+    section: 'cert',
+    type: 'date',
+    inputSource: 'calculated',
+    required: true,
+    notes: 'Certification date'
+  },
+  {
+    id: 'cert_statementText',
+    storeId: 'cert-statement',
+    label: 'Certification Statement',
+    section: 'cert',
+    type: 'textarea',
+    inputSource: 'template',
+    required: true,
+    notes: 'Standard language'
+  },
+];
+
+/**
+ * Helper Functions
+ */
+
+export const getFieldsBySection = (sectionId: string): FieldDefinition[] =>
+  fieldRegistry.filter(f => f.section === sectionId);
+
+export const getFieldById = (id: string): FieldDefinition | undefined =>
+  fieldRegistry.find(f => f.id === id);
+
+export const getFieldByStoreId = (storeId: string): FieldDefinition | undefined =>
+  fieldRegistry.find(f => f.storeId === storeId);
+
+export const getAllSections = (): string[] =>
+  [...new Set(fieldRegistry.map(f => f.section))];
+
+export const getRequiredFields = (): FieldDefinition[] =>
+  fieldRegistry.filter(f => f.required);
+
+export const getCalculatedFields = (): FieldDefinition[] =>
+  fieldRegistry.filter(f => f.inputSource === 'calculated');
+
+export const getUserInputFields = (): FieldDefinition[] =>
+  fieldRegistry.filter(f => f.inputSource === 'user-input');
+
+export const getApiFields = (): FieldDefinition[] =>
+  fieldRegistry.filter(f => f.inputSource === 'api-fetch');
+
+export const getFieldsBySubsection = (sectionId: string, subsectionId: string): FieldDefinition[] =>
+  fieldRegistry.filter(f => f.section === sectionId && f.subsection === subsectionId);
+
+export const getTotalFieldCount = (): number => fieldRegistry.length;
+
+export const getFieldCountBySection = (): Record<string, number> => {
+  const sections = getAllSections();
+  return sections.reduce((acc, section) => {
+    acc[section] = getFieldsBySection(section).length;
+    return acc;
+  }, {} as Record<string, number>);
+};
+
+/**
+ * Field Registry Statistics
+ */
+export const registryStats = {
+  totalFields: getTotalFieldCount(),
+  sections: getAllSections().length,
+  requiredFields: getRequiredFields().length,
+  calculatedFields: getCalculatedFields().length,
+  userInputFields: getUserInputFields().length,
+  apiFields: getApiFields().length,
+  fieldsBySection: getFieldCountBySection()
+};
+
+// Log stats on module load (development only)
+if (process.env.NODE_ENV === 'development') {
+  console.log('Field Registry loaded:', registryStats);
+}

@@ -77,10 +77,10 @@ Deno.serve(async (req) => {
     const hubUrl = 'https://apr-dashboard-v3.vercel.app'
     const jobUrl = `${hubUrl}/dashboard/job/${job.id}`
 
-    // Build Valcre job URL if we have a job number
+    // Build Valcre job URL only if Valcre job actually exists
     const valcreJobNumber = loeDetails.job_number || job.job_number || 'PENDING'
-    const valcreJobUrl = valcreJobNumber !== 'PENDING'
-      ? `https://app.valcre.com/jobs/${loeDetails.valcre_job_id || ''}`
+    const valcreJobUrl = loeDetails.valcre_job_id
+      ? `https://app.valcre.com/job/edit/${loeDetails.valcre_job_id}#job`
       : null
 
     // Format delivery date
@@ -108,16 +108,18 @@ Deno.serve(async (req) => {
     // Update top links section with actual Valcre job link and fix APR Dashboard link
     let updatedStage1 = stage1Content
 
-    // Fix APR Dashboard link if it's broken
+    // Fix APR Dashboard link
+    // NOTE: ClickUp strips **bold** markers when processing markdown_description
+    // So we match the processed text (without bold markers)
     updatedStage1 = updatedStage1.replace(
-      /📍 \*\*NEW APPRAISAL REQUEST:\*\*[^\n]*/,
+      /📍 NEW APPRAISAL REQUEST:[^\n]*/,
       `📍 **NEW APPRAISAL REQUEST:** [APR Dashboard](${jobUrl})`
     )
 
-    // Replace blank Valcre Job Number line
+    // Replace Valcre Job Number line with link
     if (valcreJobUrl) {
       updatedStage1 = updatedStage1.replace(
-        /📍 \*\*VALCRE JOB NUMBER:\*\*[^\n]*/,
+        /📍 VALCRE JOB NUMBER:[^\n]*/,
         `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`
       )
     }
@@ -171,11 +173,12 @@ ${loeDetails.internal_comments || loeDetails.delivery_comments || loeDetails.pay
 
     const updatedTaskName = `${valcreJobNumber} - ${propertyName}, ${parseShortAddress(propertyAddress)}`
 
-    // PATCH task to ClickUp
+    // UPDATE task to ClickUp
+    // CRITICAL: Use ONLY markdown_description field for clickable links to work
+    // ClickUp processes markdown [text](url) syntax in markdown_description field
     const updatePayload = {
       name: updatedTaskName,
-      description: combinedDescription, // Plain description (fallback)
-      markdown_description: combinedDescription // Markdown description (preferred)
+      markdown_description: combinedDescription
     }
 
     console.log('Updating ClickUp task with payload:', JSON.stringify(updatePayload, null, 2))

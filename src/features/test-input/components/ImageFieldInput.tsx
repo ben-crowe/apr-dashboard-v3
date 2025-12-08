@@ -1,6 +1,6 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Upload, X, Image as ImageIcon, ExternalLink, Loader2 } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, ExternalLink, Loader2, Eye } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { uploadReportImage, deleteReportImage } from '@/utils/reportImageStorage';
 
@@ -36,10 +36,25 @@ const ImageFieldInput: React.FC<ImageFieldInputProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Determine if we should use Supabase
   const shouldUseSupabase = !useDataUrl && jobId && fieldId;
+
+  // Handle escape key to close preview
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && previewOpen) {
+        setPreviewOpen(false);
+      }
+    };
+
+    if (previewOpen) {
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [previewOpen]);
 
   // Convert File to data URL (fallback mode)
   const fileToDataUrl = useCallback((file: File): Promise<string> => {
@@ -204,6 +219,16 @@ const ImageFieldInput: React.FC<ImageFieldInputProps> = ({
             <div className="flex items-center gap-1">
               <Button
                 type="button"
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7"
+                onClick={() => setPreviewOpen(true)}
+                title="Preview image"
+              >
+                <Eye className="w-3 h-3" />
+              </Button>
+              <Button
+                type="button"
                 variant="outline"
                 size="sm"
                 className="h-7 text-xs"
@@ -276,6 +301,30 @@ const ImageFieldInput: React.FC<ImageFieldInputProps> = ({
       {!hasImage && (
         <div className="text-[10px] text-slate-400 mt-1">
           {shouldUseSupabase ? '→ Supabase Storage' : '→ Local (data URL)'}
+        </div>
+      )}
+
+      {/* Preview Modal */}
+      {previewOpen && hasImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          onClick={() => setPreviewOpen(false)}
+        >
+          <div className="relative max-w-4xl max-h-[90vh]">
+            <img
+              src={stringValue}
+              alt="Preview"
+              className="max-w-full max-h-[90vh] object-contain rounded"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              className="absolute top-2 right-2 bg-white/90 hover:bg-white rounded-full p-1.5 transition-colors"
+              onClick={() => setPreviewOpen(false)}
+              title="Close preview"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       )}
     </div>

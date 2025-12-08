@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,7 +10,8 @@ import {
   Plus,
   Upload,
   Image as ImageIcon,
-  Loader2
+  Loader2,
+  Eye
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -25,6 +26,8 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Determine if this is a single image field (img-* prefix)
@@ -33,6 +36,26 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
   // Get value based on field mode
   const singleImageValue = isSingleImageField ? (field.value as string || '') : '';
   const images = !isSingleImageField ? ((field.value as string[]) || []) : [];
+
+  // Handle escape key to close preview
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && previewOpen) {
+        setPreviewOpen(false);
+      }
+    };
+
+    if (previewOpen) {
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [previewOpen]);
+
+  // Open preview modal
+  const handleOpenPreview = (imageUrl: string) => {
+    setPreviewUrl(imageUrl);
+    setPreviewOpen(true);
+  };
 
   // Convert File to data URL
   const fileToDataUrl = useCallback((file: File): Promise<string> => {
@@ -217,6 +240,16 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
             <div className="flex items-center gap-1">
               <Button
                 type="button"
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7"
+                onClick={() => handleOpenPreview(singleImageValue)}
+                title="Preview image"
+              >
+                <Eye className="w-3 h-3" />
+              </Button>
+              <Button
+                type="button"
                 variant="outline"
                 size="sm"
                 className="h-7 text-xs"
@@ -275,6 +308,30 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
 
         {/* Field ID - small */}
         <div className="text-[10px] text-slate-400">{field.id}</div>
+
+        {/* Preview Modal */}
+        {previewOpen && (
+          <div
+            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+            onClick={() => setPreviewOpen(false)}
+          >
+            <div className="relative max-w-4xl max-h-[90vh]">
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="max-w-full max-h-[90vh] object-contain rounded"
+                onClick={(e) => e.stopPropagation()}
+              />
+              <button
+                className="absolute top-2 right-2 bg-white/90 hover:bg-white rounded-full p-1.5 transition-colors"
+                onClick={() => setPreviewOpen(false)}
+                title="Close preview"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -357,10 +414,15 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
               <img
                 src={imageUrl}
                 alt={`Property ${index + 1}`}
-                className="w-16 h-16 object-cover rounded border border-border"
+                className="w-16 h-16 object-cover rounded border border-border cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleOpenPreview(imageUrl);
+                }}
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.opacity = '0.3';
                 }}
+                title="Click to preview"
               />
               <span className="flex-1 text-sm truncate">{imageUrl}</span>
               <Button
@@ -407,6 +469,30 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
       <div className="text-[10px] text-muted-foreground">
         Mode: Array (Multiple Images) | Storage: Data URL (Supabase later)
       </div>
+
+      {/* Preview Modal */}
+      {previewOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          onClick={() => setPreviewOpen(false)}
+        >
+          <div className="relative max-w-4xl max-h-[90vh]">
+            <img
+              src={previewUrl}
+              alt="Preview"
+              className="max-w-full max-h-[90vh] object-contain rounded"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              className="absolute top-2 right-2 bg-white/90 hover:bg-white rounded-full p-1.5 transition-colors"
+              onClick={() => setPreviewOpen(false)}
+              title="Close preview"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

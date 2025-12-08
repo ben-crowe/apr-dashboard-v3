@@ -4874,10 +4874,13 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     /* Cover Page Styles - Matching Valcre Design */
+    /* Cover page is special - maintains full page dimensions even in continuous preview */
     .cover-page {
       position: relative;
+      min-height: 11in;
       padding: 0;
       overflow: hidden;
+      background: white;
     }
 
     /* Top logo section */

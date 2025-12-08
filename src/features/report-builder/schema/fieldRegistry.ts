@@ -30,6 +30,63 @@ export interface FieldDefinition {
 export const fieldRegistry: FieldDefinition[] = [
 
   // ============================================================================
+  // SECTION S1: CLIENT INTAKE (V3 Dashboard)
+  // These fields mirror the deployed V3 Dashboard client form submission
+  // ============================================================================
+
+  // Client Information Subsection
+  { id: 'intake-client-first-name', storeId: 'intake-client-first-name', label: 'Client First Name', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: true },
+  { id: 'intake-client-last-name', storeId: 'intake-client-last-name', label: 'Client Last Name', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: true },
+  { id: 'intake-client-email', storeId: 'intake-client-email', label: 'Client Email', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: true },
+  { id: 'intake-client-phone', storeId: 'intake-client-phone', label: 'Client Phone', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: true },
+  { id: 'intake-client-title', storeId: 'intake-client-title', label: 'Client Title', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'intake-client-organization', storeId: 'intake-client-organization', label: 'Organization', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'intake-client-address', storeId: 'intake-client-address', label: 'Client Address', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
+
+  // Property Information Subsection
+  { id: 'intake-property-name', storeId: 'intake-property-name', label: 'Property Name', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: true },
+  { id: 'intake-property-address', storeId: 'intake-property-address', label: 'Property Address', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'intake-property-type', storeId: 'intake-property-type', label: 'Property Type', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'intake-intended-use', storeId: 'intake-intended-use', label: 'Intended Use', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'intake-valuation-premises', storeId: 'intake-valuation-premises', label: 'Valuation Premises', section: 'client-intake', subsection: 'property-info-intake', type: 'select', inputSource: 'user-input', required: false, options: ['As Is', 'As Stabilized', 'As Complete', 'As Proposed'] },
+  { id: 'intake-asset-condition', storeId: 'intake-asset-condition', label: 'Asset Condition', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
+
+  // Property Contact Subsection
+  { id: 'intake-contact-first-name', storeId: 'intake-contact-first-name', label: 'Contact First Name', section: 'client-intake', subsection: 'property-contact-intake', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'intake-contact-last-name', storeId: 'intake-contact-last-name', label: 'Contact Last Name', section: 'client-intake', subsection: 'property-contact-intake', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'intake-contact-email', storeId: 'intake-contact-email', label: 'Contact Email', section: 'client-intake', subsection: 'property-contact-intake', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'intake-contact-phone', storeId: 'intake-contact-phone', label: 'Contact Phone', section: 'client-intake', subsection: 'property-contact-intake', type: 'text', inputSource: 'user-input', required: false },
+
+  // Notes Subsection
+  { id: 'intake-notes', storeId: 'intake-notes', label: 'Notes', section: 'client-intake', subsection: 'notes-intake', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // SECTION S2: LOE PREP (V3 Dashboard)
+  // These fields mirror the deployed V3 Dashboard LOE/Quote section
+  // ============================================================================
+
+  // Job Assignment Subsection
+  { id: 'loe-valcre-job-id', storeId: 'loe-valcre-job-id', label: 'Valcre Job ID (VAL#)', section: 'loe-prep', subsection: 'job-assignment', type: 'text', inputSource: 'user-input', required: false },
+
+  // Financial Terms Subsection
+  { id: 'loe-appraisal-fee', storeId: 'loe-appraisal-fee', label: 'Appraisal Fee', section: 'loe-prep', subsection: 'financial-terms', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'loe-retainer-amount', storeId: 'loe-retainer-amount', label: 'Retainer Amount', section: 'loe-prep', subsection: 'financial-terms', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'loe-payment-terms', storeId: 'loe-payment-terms', label: 'Payment Terms', section: 'loe-prep', subsection: 'financial-terms', type: 'text', inputSource: 'user-input', required: false },
+
+  // Delivery Details Subsection
+  { id: 'loe-delivery-date', storeId: 'loe-delivery-date', label: 'Delivery Date', section: 'loe-prep', subsection: 'delivery-details', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'loe-report-type', storeId: 'loe-report-type', label: 'Report Type', section: 'loe-prep', subsection: 'delivery-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'loe-property-rights', storeId: 'loe-property-rights', label: 'Property Rights Appraised', section: 'loe-prep', subsection: 'delivery-details', type: 'select', inputSource: 'user-input', required: false, options: ['Fee Simple Estate', 'Leased Fee', 'Leasehold'] },
+
+  // Scope Subsection
+  { id: 'loe-scope-of-work', storeId: 'loe-scope-of-work', label: 'Scope of Work', section: 'loe-prep', subsection: 'scope-loe', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'loe-special-instructions', storeId: 'loe-special-instructions', label: 'Special Instructions', section: 'loe-prep', subsection: 'scope-loe', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // Comments Subsection
+  { id: 'loe-internal-comments', storeId: 'loe-internal-comments', label: 'Internal Comments', section: 'loe-prep', subsection: 'comments-loe', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'loe-appraiser-comments', storeId: 'loe-appraiser-comments', label: 'Appraiser Comments', section: 'loe-prep', subsection: 'comments-loe', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // ============================================================================
   // SECTION: COVER PAGE
   // ============================================================================
 
@@ -69,14 +126,6 @@ export const fieldRegistry: FieldDefinition[] = [
 
   { id: 'transmittal-date', storeId: 'transmittal-date', label: 'Letter Date', section: 'home', subsection: 'transmittal-content', type: 'date', inputSource: 'auto-filled', required: true },
   { id: 'transmittal-body', storeId: 'transmittal-body', label: 'Letter Body', section: 'home', subsection: 'transmittal-content', type: 'textarea', inputSource: 'user-input', required: true },
-
-  // ============================================================================
-  // SECTION: CUSTOM FIELDS
-  // ============================================================================
-
-  { id: 'custom-field-1', storeId: 'custom-field-1', label: 'Custom Field 1', section: 'custom', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'custom-field-2', storeId: 'custom-field-2', label: 'Custom Field 2', section: 'custom', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'custom-field-3', storeId: 'custom-field-3', label: 'Custom Field 3', section: 'custom', type: 'text', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // SECTION: MAPS

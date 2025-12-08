@@ -3279,7 +3279,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <table class="photo-grid">
       `;
 
-      // Render photos in 2-column grid
+      // Render photos in 2-column grid with page breaks every 2 rows (4 photos per page)
+      const PHOTOS_PER_PAGE = 4; // 2 rows x 2 columns
+      let photoCount = 0;
+
       for (let i = 0; i < photoData.length; i += 2) {
         photosHtml += `
         <tr>
@@ -3296,16 +3299,29 @@ export function generateReportHtml(sections: ReportSection[]): string {
             ${photoData[i + 1].caption ? `<div class="photo-caption">${photoData[i + 1].caption}</div>` : ''}
           </td>
           `;
+          photoCount += 2;
         } else {
           // Odd number of photos - leave second cell empty
           photosHtml += `
           <td class="photo-cell"></td>
           `;
+          photoCount += 1;
         }
 
         photosHtml += `
         </tr>
         `;
+
+        // Add page break after every 4 photos (2 rows), but not after the last row
+        if (photoCount >= PHOTOS_PER_PAGE && i + 2 < photoData.length) {
+          photosHtml += `
+      </table>
+      <div style="page-break-before: always;"></div>
+      <h3 class="subsection-title">${subsection.title} (continued)</h3>
+      <table class="photo-grid">
+          `;
+          photoCount = 0;
+        }
       }
 
       photosHtml += `
@@ -4576,6 +4592,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         ` : ''}
 
         ${localMap ? `
+        <div style="page-break-before: always;"></div>
         <div class="map-item" style="text-align: center;">
           <h3 class="subsection-title">Local Area Map</h3>
           <img src="${localMap}" alt="Local Area Map" style="max-width: 100%; height: auto; border: 1px solid #ccc;" />
@@ -4583,6 +4600,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         ` : ''}
 
         ${aerialMap ? `
+        <div style="page-break-before: always;"></div>
         <div class="map-item" style="text-align: center;">
           <h3 class="subsection-title">Aerial View</h3>
           <img src="${aerialMap}" alt="Aerial View" style="max-width: 100%; height: auto; border: 1px solid #ccc;" />

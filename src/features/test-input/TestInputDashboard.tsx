@@ -43,6 +43,10 @@ const TestInputDashboard: React.FC = () => {
 
   // Section names with numbered prefixes for easy cross-reference with Report Builder
   const sectionNameMapping: Record<string, string> = {
+    // V3 Operational Sections (mirrors deployed V3 Dashboard)
+    'client-intake': 'S1 - CLIENT INTAKE (V3)',
+    'loe-prep': 'S2 - LOE PREP (V3)',
+    // Report Builder Sections
     'cover': '01 - COVER PAGE',
     'home': '02 - INTRODUCTION LETTER',
     'maps': '03 - LOCATION MAPS',

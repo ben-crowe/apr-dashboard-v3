@@ -286,7 +286,28 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   'recon-value-premise': 'As Is',
   'recon-effective-date': '2025-10-17',
   'recon-rounded-value': 1780000,
-};
+
+  // ASSIGNMENT SECTION
+  'assignment-property-legal': 'Lot 1, Block 2, Plan 102038542, North Battleford, Saskatchewan',
+  'assignment-property-address': '1101, 1121 109 St, North Battleford, SK S9A 2X2',
+  'assignment-property-type': 'Multi-Family Residential - Walk-up Apartments',
+  'assignment-property-interest': 'Fee Simple Estate',
+  'assignment-client-name': 'Kenneth Engler / 102109845 Saskatchewan Ltd.',
+  'assignment-client-address': '1901, 1088 - 6th Ave SW, Calgary, AB T2P 5N3',
+  'assignment-intended-use': 'The intended use of this appraisal is to provide an opinion of market value for lending/financing purposes.',
+  'assignment-intended-users': 'The client and authorized representatives of financial institutions for mortgage lending decisions.',
+  'assignment-inspection-date': '2025-10-17',
+  'assignment-inspection-type': 'Complete Interior & Exterior',
+  'assignment-inspector-name': 'Professional Appraiser, AACI',
+  'assignment-data-sources': 'Municipal property records, MLS sales data, rental market surveys, physical inspection, client-provided information, public records.',
+  'assignment-analysis-methods': 'Income Approach using Direct Capitalization, Sales Comparison Approach, market analysis, highest and best use analysis in accordance with CUSPAP standards.',
+  'assignment-effective-date': '2025-10-17',
+  'assignment-report-date': '2025-11-20',
+  'assignment-hypothetical': 'No Hypothetical Conditions were made for this assignment.',
+  'assignment-extraordinary-assumptions': 'No Extraordinary Assumptions were made for this assignment.',
+  'assignment-general-assumptions': 'Title is assumed to be good and marketable. Property is assumed to be free of environmental hazards unless otherwise noted. All building systems are assumed to be in working order.',
+  'assignment-limiting-conditions': 'This appraisal is subject to standard limiting conditions as outlined in the Assumptions and Limiting Conditions section of this report.',
+  'assignment-limiting-conditions': 'This appraisal is subject to standard limiting conditions as outlined in the Assumptions and Limiting Conditions section of this report.',
 
 /**
  * Helper function to load test data into the report builder store
@@ -541,7 +562,28 @@ export function loadNorthBattlefordTestData(
     'recon-value-premise': 'recon',
     'recon-effective-date': 'recon',
     'recon-rounded-value': 'recon',
-  };
+
+    // ASSIGNMENT section
+    'assignment-property-legal': 'assignment',
+    'assignment-property-address': 'assignment',
+    'assignment-property-type': 'assignment',
+    'assignment-property-interest': 'assignment',
+    'assignment-client-name': 'assignment',
+    'assignment-client-address': 'assignment',
+    'assignment-intended-use': 'assignment',
+    'assignment-intended-users': 'assignment',
+    'assignment-inspection-date': 'assignment',
+    'assignment-inspection-type': 'assignment',
+    'assignment-inspector-name': 'assignment',
+    'assignment-data-sources': 'assignment',
+    'assignment-analysis-methods': 'assignment',
+    'assignment-effective-date': 'assignment',
+    'assignment-report-date': 'assignment',
+    'assignment-hypothetical': 'assignment',
+    'assignment-extraordinary-assumptions': 'assignment',
+    'assignment-general-assumptions': 'assignment',
+    'assignment-limiting-conditions': 'assignment',
+    'assignment-limiting-conditions': 'assignment',
 
   // Load each field into the store
   Object.entries(northBattlefordTestData).forEach(([fieldId, value]) => {

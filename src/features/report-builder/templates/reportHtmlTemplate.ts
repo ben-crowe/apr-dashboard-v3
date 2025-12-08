@@ -369,6 +369,172 @@ export function generateReportHtml(sections: ReportSection[]): string {
     `;
   };
 
+
+  // Helper function to render the ASSIGNMENT section (CUSPAP mandatory)
+  const renderAssignmentSection = (section: ReportSection): string => {
+    // Get field values from subsections
+    const propertyLegal = getFieldValue(section, 'assignment-property-legal');
+    const propertyAddress = getFieldValue(section, 'assignment-property-address');
+    const propertyType = getFieldValue(section, 'assignment-property-type');
+    const propertyInterest = getFieldValue(section, 'assignment-property-interest');
+    
+    const clientName = getFieldValue(section, 'assignment-client-name');
+    const clientAddress = getFieldValue(section, 'assignment-client-address');
+    const intendedUse = getFieldValue(section, 'assignment-intended-use');
+    const intendedUsers = getFieldValue(section, 'assignment-intended-users');
+    
+    const inspectionDate = getFieldValue(section, 'assignment-inspection-date');
+    const inspectionType = getFieldValue(section, 'assignment-inspection-type');
+    const inspectorName = getFieldValue(section, 'assignment-inspector-name');
+    const dataSources = getFieldValue(section, 'assignment-data-sources');
+    const analysisMethods = getFieldValue(section, 'assignment-analysis-methods');
+    
+    const effectiveDate = getFieldValue(section, 'assignment-effective-date');
+    const reportDate = getFieldValue(section, 'assignment-report-date');
+    
+    const hypotheticalConditions = getFieldValue(section, 'assignment-hypothetical');
+    const extraordinaryAssumptions = getFieldValue(section, 'assignment-extraordinary-assumptions');
+    const generalAssumptions = getFieldValue(section, 'assignment-general-assumptions');
+    const limitingConditions = getFieldValue(section, 'assignment-limiting-conditions');
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Identification of Assignment</h2>
+
+      <!-- Property Identification -->
+      <h3 class="subsection-title">Property Identification</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">Legal Description</td>
+            <td class="site-table-value">${propertyLegal || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Property Address</td>
+            <td class="site-table-value">${propertyAddress || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Property Type</td>
+            <td class="site-table-value">${propertyType || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Property Interest</td>
+            <td class="site-table-value">${propertyInterest || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Client & Intended Use -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Client & Intended Use</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">Client</td>
+            <td class="site-table-value">${clientName || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Client Address</td>
+            <td class="site-table-value">${clientAddress || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      ${intendedUse ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Intended Use</h4>
+          <p class="site-narrative-text">${intendedUse}</p>
+        </div>
+      ` : ''}
+      
+      ${intendedUsers ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Intended Users</h4>
+          <p class="site-narrative-text">${intendedUsers}</p>
+        </div>
+      ` : ''}
+
+      <!-- Scope of Work -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Scope of Work</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">Inspection Date</td>
+            <td class="site-table-value">${inspectionDate || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Inspection Type</td>
+            <td class="site-table-value">${inspectionType || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Inspector</td>
+            <td class="site-table-value">${inspectorName || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      ${dataSources ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Data Sources</h4>
+          <p class="site-narrative-text">${dataSources}</p>
+        </div>
+      ` : ''}
+      
+      ${analysisMethods ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Analysis Methods</h4>
+          <p class="site-narrative-text">${analysisMethods}</p>
+        </div>
+      ` : ''}
+
+      <!-- Effective Dates -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Effective Dates</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">Effective Date of Value</td>
+            <td class="site-table-value">${effectiveDate || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Report Date</td>
+            <td class="site-table-value">${reportDate || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Assumptions & Conditions -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Assumptions & Limiting Conditions</h3>
+      
+      ${hypotheticalConditions ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Hypothetical Conditions</h4>
+          <p class="site-narrative-text">${hypotheticalConditions}</p>
+        </div>
+      ` : ''}
+      
+      ${extraordinaryAssumptions ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Extraordinary Assumptions</h4>
+          <p class="site-narrative-text">${extraordinaryAssumptions}</p>
+        </div>
+      ` : ''}
+      
+      ${generalAssumptions ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">General Assumptions</h4>
+          <p class="site-narrative-text">${generalAssumptions}</p>
+        </div>
+      ` : ''}
+      
+      ${limitingConditions ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Limiting Conditions</h4>
+          <p class="site-narrative-text">${limitingConditions}</p>
+        </div>
+      ` : ''}
+    </div>
+    `;
+  };
+
   // Helper function to render the TAX section with custom template
   const renderTaxSection = (section: ReportSection): string => {
     // Get field values from subsections
@@ -5033,6 +5199,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
     ${section.id === 'home' ? renderHomeSection(section) :
         section.id === 'report' ? renderReportSection(section) :
+          section.id === 'assignment' ? renderAssignmentSection(section) :
           section.id === 'site' ? renderSiteSection(section) :
             section.id === 'tax' ? renderTaxSection(section) :
               section.id === 'zone' ? renderZoneSection(section) :

@@ -16,6 +16,7 @@ import {
   CollapsibleTrigger
 } from '@/components/ui/collapsible';
 import { ChevronDown, ChevronRight, Upload, Download, ExternalLink, Calculator, Database } from 'lucide-react';
+import ImageFieldInput from './components/ImageFieldInput';
 
 type FieldStatus = 'mapped' | 'empty' | 'missing';
 
@@ -40,28 +41,30 @@ const TestInputDashboard: React.FC = () => {
     }
   }, [sections.length, initializeMockData]);
 
-  // Section name mapping for better display
+  // Section names with numbered prefixes for easy cross-reference with Report Builder
   const sectionNameMapping: Record<string, string> = {
-    'cover': 'COVER PAGE',
-    'home': 'LETTER OF TRANSMITTAL',
-    'exec': 'EXECUTIVE SUMMARY',
-    'photos': 'PHOTOGRAPHS',
-    'maps': 'MAPS & LOCATION',
-    'report': 'PROPERTY IDENTIFICATION',
-    'location': 'LOCATION ANALYSIS',
-    'site': 'SITE DETAILS',
-    'tax': 'PROPERTY TAXES',
-    'zone': 'ZONING & LAND USE',
-    'impv': 'IMPROVEMENTS',
-    'market': 'MARKET CONTEXT',
-    'hbu': 'HIGHEST & BEST USE',
-    'calc': 'INCOME CALCULATIONS',
-    'land1': 'LAND SALES',
-    'cost-s': 'COST APPROACH',
-    'sales': 'SALES COMPARISON',
-    'income': 'RENT COMPARABLES',
-    'recon': 'RECONCILIATION',
-    'cert': 'CERTIFICATION'
+    'cover': '01 - COVER PAGE',
+    'home': '02 - LETTER OF TRANSMITTAL',
+    'maps': '03 - LOCATION MAPS',
+    'assignment': '04 - IDENTIFICATION OF ASSIGNMENT',
+    'report': '05 - REPORT INFORMATION',
+    'exec': '06 - EXECUTIVE SUMMARY',
+    'photos': '07 - PROPERTY PHOTOGRAPHS',
+    'site': '08 - SITE DETAILS',
+    'location': '09 - LOCATION ANALYSIS',
+    'tax': '10 - PROPERTY TAXES',
+    'market': '11 - MARKET ANALYSIS',
+    'impv': '12 - IMPROVEMENTS',
+    'zone': '13 - ZONING',
+    'hbu': '14 - HIGHEST & BEST USE',
+    'calc': '15 - CALCULATOR',
+    'land1': '16 - LAND VALUE',
+    'cost-s': '17 - COST APPROACH',
+    'sales': '18 - SALES COMPARISON',
+    'income': '19 - INCOME APPROACH',
+    'rental-survey': '20 - RENTAL SURVEY',
+    'recon': '21 - RECONCILIATION',
+    'cert': '22 - CERTIFICATION'
   };
 
   // Get value from store by traversing sections/subsections
@@ -211,12 +214,10 @@ const TestInputDashboard: React.FC = () => {
 
       case 'image':
         return (
-          <Input
-            type="text"
+          <ImageFieldInput
             value={currentValue || ''}
-            onChange={(e) => handleFieldChange(field, e.target.value)}
-            className="w-64 h-8 text-sm"
-            placeholder="Image path..."
+            onChange={(url) => handleFieldChange(field, url)}
+            placeholder="Drop image or click to upload"
           />
         );
 

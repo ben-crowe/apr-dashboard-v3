@@ -156,7 +156,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "cover",
     name: "Cover Page",
-    shortName: "COVER",
+    shortName: "01 - COVER",
     fields: [
       {
         id: "cover-photo",
@@ -377,7 +377,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "home",
     name: "Letter of Transmittal",
-    shortName: "HOME",
+    shortName: "02 - HOME",
     fields: [],
     subsections: [
       {
@@ -405,40 +405,9 @@ const getMockData = (): ReportSection[] => [
     ],
   },
   {
-    id: "custom",
-    name: "Custom Fields",
-    shortName: "CUSTOM",
-    fields: [
-      {
-        id: "custom-field-1",
-        label: "Custom Field 1",
-        type: "text",
-        value: "",
-        isEditable: true,
-        inputType: "user-input",
-      },
-      {
-        id: "custom-field-2",
-        label: "Custom Field 2",
-        type: "text",
-        value: "",
-        isEditable: true,
-        inputType: "user-input",
-      },
-      {
-        id: "custom-field-3",
-        label: "Custom Field 3",
-        type: "text",
-        value: "",
-        isEditable: true,
-        inputType: "user-input",
-      },
-    ],
-  },
-  {
     id: "maps",
     name: "Location Maps",
-    shortName: "MAPS",
+    shortName: "03 - MAPS",
     fields: [
       {
         id: "map-regional",
@@ -469,7 +438,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "assignment",
     name: "Identification of Assignment",
-    shortName: "ASSIGNMENT",
+    shortName: "04 - ASSIGN",
     fields: [],
     subsections: [
       {
@@ -661,7 +630,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "report",
     name: "Report Information",
-    shortName: "REPORT",
+    shortName: "05 - REPORT",
     fields: [
       {
         id: "report-type",
@@ -700,7 +669,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "exec",
     name: "Executive Summary",
-    shortName: "EXEC",
+    shortName: "06 - EXEC",
     fields: [],
     subsections: [
       {
@@ -836,7 +805,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "photos",
     name: "Property Photographs",
-    shortName: "PHOTOS",
+    shortName: "07 - PHOTOS",
     fields: [],
     subsections: [
       {
@@ -914,7 +883,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "site",
     name: "Site Details",
-    shortName: "SITE",
+    shortName: "08 - SITE",
     fields: [],
     subsections: [
       {
@@ -1082,7 +1051,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "location",
     name: "Location Analysis",
-    shortName: "LOCATION",
+    shortName: "09 - LOCATION",
     fields: [],
     subsections: [
       {
@@ -1180,7 +1149,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "tax",
     name: "Property Taxes",
-    shortName: "TAX",
+    shortName: "10 - TAX",
     fields: [
       {
         id: "assessment-year",
@@ -1243,7 +1212,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "market",
     name: "Market Analysis",
-    shortName: "MARKET",
+    shortName: "11 - MARKET",
     fields: [],
     subsections: [
       {
@@ -1387,7 +1356,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "impv",
     name: "Improvements",
-    shortName: "IMPV",
+    shortName: "12 - IMPV",
     fields: [],
     subsections: [
       {
@@ -1717,7 +1686,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "zone",
     name: "Zoning",
-    shortName: "ZONE",
+    shortName: "13 - ZONE",
     fields: [
       {
         id: "zoning-classification",
@@ -1836,7 +1805,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "hbu",
     name: "Highest & Best Use",
-    shortName: "HBU",
+    shortName: "14 - HBU",
     fields: [],
     subsections: [
       {
@@ -1925,7 +1894,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "calc",
     name: "Calculator",
-    shortName: "CALC",
+    shortName: "15 - CALC",
     fields: [],
     subsections: [
       {
@@ -2485,7 +2454,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "land1",
     name: "Land Value",
-    shortName: "LAND1",
+    shortName: "16 - LAND",
     fields: [
       {
         id: "land-value-conclusion",
@@ -2500,7 +2469,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "cost-s",
     name: "Cost Approach",
-    shortName: "COST-S",
+    shortName: "17 - COST",
     fields: [
       {
         id: "cost-approach-conclusion",
@@ -2515,7 +2484,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "sales",
     name: "Sales Comparison",
-    shortName: "SALES",
+    shortName: "18 - SALES",
     fields: [],
     subsections: [
       {
@@ -3049,7 +3018,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "income",
     name: "Income Approach",
-    shortName: "INCOME",
+    shortName: "19 - INCOME",
     fields: [],
     subsections: [
       {
@@ -3121,7 +3090,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "rental-survey",
     name: "Rental Survey",
-    shortName: "RENTAL",
+    shortName: "20 - RENTAL",
     fields: [],
     subsections: [
       {
@@ -4377,7 +4346,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "recon",
     name: "Reconciliation",
-    shortName: "RECON",
+    shortName: "21 - RECON",
     fields: [],
     subsections: [
       {
@@ -4489,7 +4458,7 @@ const getMockData = (): ReportSection[] => [
   {
     id: "cert",
     name: "Certification",
-    shortName: "CERT",
+    shortName: "22 - CERT",
     fields: [],
     subsections: [
       {
@@ -4653,7 +4622,7 @@ const sectionGroups: SectionGroup[] = [
   {
     id: "intro",
     name: "Introduction",
-    sections: ["cover", "home", "custom", "maps", "assignment", "report"],
+    sections: ["cover", "home", "maps", "assignment", "report"],
   },
   {
     id: "analysis",

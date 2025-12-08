@@ -3117,6 +3117,7 @@ const getMockData = (): ReportSection[] => [
         ],
       },
     ],
+  },
   {
     id: "rental-survey",
     name: "Rental Survey",

@@ -232,11 +232,14 @@ const TestInputDashboard: React.FC = () => {
 
       case 'image':
         return (
-          <ImageFieldInput
-            value={currentValue || ''}
-            onChange={(url) => handleFieldChange(field, url)}
-            placeholder="Drop image or click to upload"
-          />
+          <div className="flex flex-col gap-0">
+            <ImageFieldInput
+              value={currentValue || ''}
+              onChange={(url) => handleFieldChange(field, url)}
+              placeholder="Drop image or click to upload"
+            />
+            <div className="text-[10px] text-slate-400 mt-0.5">{field.id}</div>
+          </div>
         );
 
       default: // text

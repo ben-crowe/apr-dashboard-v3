@@ -412,6 +412,7 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
 
   // ============================================================================
   // RENTAL SURVEY SECTION (REAL data from image38.png, image40, image41)
+  // FIXED: All field IDs now match store naming convention with -rating and -avg suffixes
   // ============================================================================
   // Subject Property
   'rental-subject-name': 'North Battleford Apartments',
@@ -419,14 +420,14 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
   'rental-subject-city': 'North Battleford',
   'rental-subject-province': 'SK',
   'rental-subject-units': 16,
-  'rental-subject-avg-sf': 638,
-  'rental-subject-location': 'Average',
-  'rental-subject-quality': 'Average',
-  'rental-subject-condition': 'Average',
-  'rental-subject-appeal': 'Average',
+  'rental-subject-avg-unit-sf': 638,  // FIXED: was rental-subject-avg-sf
+  'rental-subject-location-rating': 'Average',  // FIXED: was rental-subject-location
+  'rental-subject-quality-rating': 'Average',  // FIXED: was rental-subject-quality
+  'rental-subject-condition-rating': 'Average',  // FIXED: was rental-subject-condition
+  'rental-subject-appeal-rating': 'Average',  // FIXED: was rental-subject-appeal
   'rental-subject-rent-type': 'Market',
-  'rental-subject-rent-unit': 1016,
-  'rental-subject-rent-sf': 1.59,
+  'rental-subject-rent-unit-avg': 1016,  // FIXED: was rental-subject-rent-unit
+  'rental-subject-rent-sf-avg': 1.59,  // FIXED: was rental-subject-rent-sf
   'rental-subject-unit-amenities': 'Deck/Patio, Range/Stove, Refrigerator',
   'rental-subject-utilities': 'Heat, W',
   'rental-subject-parking': 'None Included, Surface',
@@ -440,9 +441,13 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
   'rental-comp1-city': 'North Battleford',
   'rental-comp1-province': 'SK',
   'rental-comp1-units': 4,
-  'rental-comp1-avg-sf': 725,
-  'rental-comp1-rent-unit': 1763,
-  'rental-comp1-rent-sf': 2.43,
+  'rental-comp1-avg-unit-sf': 725,  // FIXED: was rental-comp1-avg-sf
+  'rental-comp1-location-rating': 'Superior',  // FIXED: was rental-comp1-location
+  'rental-comp1-quality-rating': 'Superior',  // FIXED: was rental-comp1-quality
+  'rental-comp1-condition-rating': 'Superior',  // FIXED: was rental-comp1-condition
+  'rental-comp1-appeal-rating': 'Superior',  // FIXED: was rental-comp1-appeal
+  'rental-comp1-rent-unit-avg': 1763,  // FIXED: was rental-comp1-rent-unit
+  'rental-comp1-rent-sf-avg': 2.43,  // FIXED: was rental-comp1-rent-sf
   'rental-comp1-unit-amenities': 'Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring',
   'rental-comp1-utilities': 'G, Heat, I, W',
   'rental-comp1-parking': 'Carport',
@@ -455,9 +460,13 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
   'rental-comp2-city': 'Prince Albert',
   'rental-comp2-province': 'SK',
   'rental-comp2-units': 6,
-  'rental-comp2-avg-sf': 700,
-  'rental-comp2-rent-unit': 1239,
-  'rental-comp2-rent-sf': 1.77,
+  'rental-comp2-avg-unit-sf': 700,  // FIXED: was rental-comp2-avg-sf
+  'rental-comp2-location-rating': 'Average',  // FIXED: was rental-comp2-location
+  'rental-comp2-quality-rating': 'Average',  // FIXED: was rental-comp2-quality
+  'rental-comp2-condition-rating': 'Average',  // FIXED: was rental-comp2-condition
+  'rental-comp2-appeal-rating': 'Average',  // FIXED: was rental-comp2-appeal
+  'rental-comp2-rent-unit-avg': 1239,  // FIXED: was rental-comp2-rent-unit
+  'rental-comp2-rent-sf-avg': 1.77,  // FIXED: was rental-comp2-rent-sf
   'rental-comp2-parking': 'Open',
   'rental-comp2-comments': 'Parking availability without the monthly parking fee',
 
@@ -467,9 +476,13 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
   'rental-comp3-city': 'Prince Albert',
   'rental-comp3-province': 'SK',
   'rental-comp3-units': 6,
-  'rental-comp3-avg-sf': 700,
-  'rental-comp3-rent-unit': 1317,
-  'rental-comp3-rent-sf': 1.88,
+  'rental-comp3-avg-unit-sf': 700,  // FIXED: was rental-comp3-avg-sf
+  'rental-comp3-location-rating': 'Average',  // FIXED: was rental-comp3-location
+  'rental-comp3-quality-rating': 'Average',  // FIXED: was rental-comp3-quality
+  'rental-comp3-condition-rating': 'Average',  // FIXED: was rental-comp3-condition
+  'rental-comp3-appeal-rating': 'Average',  // FIXED: was rental-comp3-appeal
+  'rental-comp3-rent-unit-avg': 1317,  // FIXED: was rental-comp3-rent-unit
+  'rental-comp3-rent-sf-avg': 1.88,  // FIXED: was rental-comp3-rent-sf
   'rental-comp3-comments': 'Parking availability without the monthly parking fee',
 
   // Comp 4 - Forest Grove Village
@@ -478,9 +491,13 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
   'rental-comp4-city': 'Prince Albert',
   'rental-comp4-province': 'SK',
   'rental-comp4-units': 9,
-  'rental-comp4-avg-sf': 783,
-  'rental-comp4-rent-unit': 1378,
-  'rental-comp4-rent-sf': 1.76,
+  'rental-comp4-avg-unit-sf': 783,  // FIXED: was rental-comp4-avg-sf
+  'rental-comp4-location-rating': 'Average',  // FIXED: was rental-comp4-location
+  'rental-comp4-quality-rating': 'Average',  // FIXED: was rental-comp4-quality
+  'rental-comp4-condition-rating': 'Average',  // FIXED: was rental-comp4-condition
+  'rental-comp4-appeal-rating': 'Average',  // FIXED: was rental-comp4-appeal
+  'rental-comp4-rent-unit-avg': 1378,  // FIXED: was rental-comp4-rent-unit
+  'rental-comp4-rent-sf-avg': 1.76,  // FIXED: was rental-comp4-rent-sf
   'rental-comp4-comments': 'Parking availability without the monthly parking fee',
 
   // Comp 5 - Hilltop Towers
@@ -489,9 +506,13 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
   'rental-comp5-city': 'Prince Albert',
   'rental-comp5-province': 'SK',
   'rental-comp5-units': 12,
-  'rental-comp5-avg-sf': 725,
-  'rental-comp5-rent-unit': 1435,
-  'rental-comp5-rent-sf': 1.98,
+  'rental-comp5-avg-unit-sf': 725,  // FIXED: was rental-comp5-avg-sf
+  'rental-comp5-location-rating': 'Average',  // FIXED: was rental-comp5-location
+  'rental-comp5-quality-rating': 'Average',  // FIXED: was rental-comp5-quality
+  'rental-comp5-condition-rating': 'Average',  // FIXED: was rental-comp5-condition
+  'rental-comp5-appeal-rating': 'Average',  // FIXED: was rental-comp5-appeal
+  'rental-comp5-rent-unit-avg': 1435,  // FIXED: was rental-comp5-rent-unit
+  'rental-comp5-rent-sf-avg': 1.98,  // FIXED: was rental-comp5-rent-sf
   'rental-comp5-comments': 'Parking availability without the monthly parking fee',
 
   // Unit Analysis - 1BR
@@ -690,6 +711,7 @@ After considering all factors relevant to the valuation of the subject property,
 
 /**
  * Field ID to Section ID mapping for loading test data
+ * FIXED: All rental survey field IDs updated to match store naming convention
  */
 export const fieldToSectionMap: Record<string, string> = {
   // Cover section
@@ -943,20 +965,20 @@ export const fieldToSectionMap: Record<string, string> = {
   'calc-value-per-sf': 'calc',
   'calc-grm': 'calc',
 
-  // Rental Survey section - Subject
+  // Rental Survey section - Subject (FIXED: All field IDs updated)
   'rental-subject-name': 'rental-survey',
   'rental-subject-address': 'rental-survey',
   'rental-subject-city': 'rental-survey',
   'rental-subject-province': 'rental-survey',
   'rental-subject-units': 'rental-survey',
-  'rental-subject-avg-sf': 'rental-survey',
-  'rental-subject-location': 'rental-survey',
-  'rental-subject-quality': 'rental-survey',
-  'rental-subject-condition': 'rental-survey',
-  'rental-subject-appeal': 'rental-survey',
+  'rental-subject-avg-unit-sf': 'rental-survey',  // FIXED: was rental-subject-avg-sf
+  'rental-subject-location-rating': 'rental-survey',  // FIXED: was rental-subject-location
+  'rental-subject-quality-rating': 'rental-survey',  // FIXED: was rental-subject-quality
+  'rental-subject-condition-rating': 'rental-survey',  // FIXED: was rental-subject-condition
+  'rental-subject-appeal-rating': 'rental-survey',  // FIXED: was rental-subject-appeal
   'rental-subject-rent-type': 'rental-survey',
-  'rental-subject-rent-unit': 'rental-survey',
-  'rental-subject-rent-sf': 'rental-survey',
+  'rental-subject-rent-unit-avg': 'rental-survey',  // FIXED: was rental-subject-rent-unit
+  'rental-subject-rent-sf-avg': 'rental-survey',  // FIXED: was rental-subject-rent-sf
   'rental-subject-unit-amenities': 'rental-survey',
   'rental-subject-utilities': 'rental-survey',
   'rental-subject-parking': 'rental-survey',
@@ -964,64 +986,84 @@ export const fieldToSectionMap: Record<string, string> = {
   'rental-subject-project-amenities': 'rental-survey',
   'rental-subject-security': 'rental-survey',
 
-  // Rental Survey - Comp 1
+  // Rental Survey - Comp 1 (FIXED: All field IDs updated)
   'rental-comp1-name': 'rental-survey',
   'rental-comp1-address': 'rental-survey',
   'rental-comp1-city': 'rental-survey',
   'rental-comp1-province': 'rental-survey',
   'rental-comp1-units': 'rental-survey',
-  'rental-comp1-avg-sf': 'rental-survey',
-  'rental-comp1-rent-unit': 'rental-survey',
-  'rental-comp1-rent-sf': 'rental-survey',
+  'rental-comp1-avg-unit-sf': 'rental-survey',  // FIXED: was rental-comp1-avg-sf
+  'rental-comp1-location-rating': 'rental-survey',  // FIXED: was rental-comp1-location
+  'rental-comp1-quality-rating': 'rental-survey',  // FIXED: was rental-comp1-quality
+  'rental-comp1-condition-rating': 'rental-survey',  // FIXED: was rental-comp1-condition
+  'rental-comp1-appeal-rating': 'rental-survey',  // FIXED: was rental-comp1-appeal
+  'rental-comp1-rent-unit-avg': 'rental-survey',  // FIXED: was rental-comp1-rent-unit
+  'rental-comp1-rent-sf-avg': 'rental-survey',  // FIXED: was rental-comp1-rent-sf
   'rental-comp1-unit-amenities': 'rental-survey',
   'rental-comp1-utilities': 'rental-survey',
   'rental-comp1-parking': 'rental-survey',
   'rental-comp1-laundry': 'rental-survey',
   'rental-comp1-comments': 'rental-survey',
 
-  // Rental Survey - Comp 2
+  // Rental Survey - Comp 2 (FIXED: All field IDs updated)
   'rental-comp2-name': 'rental-survey',
   'rental-comp2-address': 'rental-survey',
   'rental-comp2-city': 'rental-survey',
   'rental-comp2-province': 'rental-survey',
   'rental-comp2-units': 'rental-survey',
-  'rental-comp2-avg-sf': 'rental-survey',
-  'rental-comp2-rent-unit': 'rental-survey',
-  'rental-comp2-rent-sf': 'rental-survey',
+  'rental-comp2-avg-unit-sf': 'rental-survey',  // FIXED: was rental-comp2-avg-sf
+  'rental-comp2-location-rating': 'rental-survey',  // FIXED: was rental-comp2-location
+  'rental-comp2-quality-rating': 'rental-survey',  // FIXED: was rental-comp2-quality
+  'rental-comp2-condition-rating': 'rental-survey',  // FIXED: was rental-comp2-condition
+  'rental-comp2-appeal-rating': 'rental-survey',  // FIXED: was rental-comp2-appeal
+  'rental-comp2-rent-unit-avg': 'rental-survey',  // FIXED: was rental-comp2-rent-unit
+  'rental-comp2-rent-sf-avg': 'rental-survey',  // FIXED: was rental-comp2-rent-sf
   'rental-comp2-parking': 'rental-survey',
   'rental-comp2-comments': 'rental-survey',
 
-  // Rental Survey - Comp 3
+  // Rental Survey - Comp 3 (FIXED: All field IDs updated)
   'rental-comp3-name': 'rental-survey',
   'rental-comp3-address': 'rental-survey',
   'rental-comp3-city': 'rental-survey',
   'rental-comp3-province': 'rental-survey',
   'rental-comp3-units': 'rental-survey',
-  'rental-comp3-avg-sf': 'rental-survey',
-  'rental-comp3-rent-unit': 'rental-survey',
-  'rental-comp3-rent-sf': 'rental-survey',
+  'rental-comp3-avg-unit-sf': 'rental-survey',  // FIXED: was rental-comp3-avg-sf
+  'rental-comp3-location-rating': 'rental-survey',  // FIXED: was rental-comp3-location
+  'rental-comp3-quality-rating': 'rental-survey',  // FIXED: was rental-comp3-quality
+  'rental-comp3-condition-rating': 'rental-survey',  // FIXED: was rental-comp3-condition
+  'rental-comp3-appeal-rating': 'rental-survey',  // FIXED: was rental-comp3-appeal
+  'rental-comp3-rent-unit-avg': 'rental-survey',  // FIXED: was rental-comp3-rent-unit
+  'rental-comp3-rent-sf-avg': 'rental-survey',  // FIXED: was rental-comp3-rent-sf
   'rental-comp3-comments': 'rental-survey',
 
-  // Rental Survey - Comp 4
+  // Rental Survey - Comp 4 (FIXED: All field IDs updated)
   'rental-comp4-name': 'rental-survey',
   'rental-comp4-address': 'rental-survey',
   'rental-comp4-city': 'rental-survey',
   'rental-comp4-province': 'rental-survey',
   'rental-comp4-units': 'rental-survey',
-  'rental-comp4-avg-sf': 'rental-survey',
-  'rental-comp4-rent-unit': 'rental-survey',
-  'rental-comp4-rent-sf': 'rental-survey',
+  'rental-comp4-avg-unit-sf': 'rental-survey',  // FIXED: was rental-comp4-avg-sf
+  'rental-comp4-location-rating': 'rental-survey',  // FIXED: was rental-comp4-location
+  'rental-comp4-quality-rating': 'rental-survey',  // FIXED: was rental-comp4-quality
+  'rental-comp4-condition-rating': 'rental-survey',  // FIXED: was rental-comp4-condition
+  'rental-comp4-appeal-rating': 'rental-survey',  // FIXED: was rental-comp4-appeal
+  'rental-comp4-rent-unit-avg': 'rental-survey',  // FIXED: was rental-comp4-rent-unit
+  'rental-comp4-rent-sf-avg': 'rental-survey',  // FIXED: was rental-comp4-rent-sf
   'rental-comp4-comments': 'rental-survey',
 
-  // Rental Survey - Comp 5
+  // Rental Survey - Comp 5 (FIXED: All field IDs updated)
   'rental-comp5-name': 'rental-survey',
   'rental-comp5-address': 'rental-survey',
   'rental-comp5-city': 'rental-survey',
   'rental-comp5-province': 'rental-survey',
   'rental-comp5-units': 'rental-survey',
-  'rental-comp5-avg-sf': 'rental-survey',
-  'rental-comp5-rent-unit': 'rental-survey',
-  'rental-comp5-rent-sf': 'rental-survey',
+  'rental-comp5-avg-unit-sf': 'rental-survey',  // FIXED: was rental-comp5-avg-sf
+  'rental-comp5-location-rating': 'rental-survey',  // FIXED: was rental-comp5-location
+  'rental-comp5-quality-rating': 'rental-survey',  // FIXED: was rental-comp5-quality
+  'rental-comp5-condition-rating': 'rental-survey',  // FIXED: was rental-comp5-condition
+  'rental-comp5-appeal-rating': 'rental-survey',  // FIXED: was rental-comp5-appeal
+  'rental-comp5-rent-unit-avg': 'rental-survey',  // FIXED: was rental-comp5-rent-unit
+  'rental-comp5-rent-sf-avg': 'rental-survey',  // FIXED: was rental-comp5-rent-sf
   'rental-comp5-comments': 'rental-survey',
 
   // Rental Survey - Unit Analysis

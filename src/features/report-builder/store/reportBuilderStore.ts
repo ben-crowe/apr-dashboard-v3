@@ -377,21 +377,13 @@ const getMockData = (): ReportSection[] => [
         title: "JOB ASSIGNMENT",
         fields: [
           {
-            id: "loe-job-number",
-            label: "VAL Job Number",
+            id: "loe-valcre-job-id",
+            label: "Valcre Job ID (VAL#)",
             type: "text",
             value: "",
             isEditable: true,
             inputType: "auto-filled",
             mapsTo: "file-number",
-          },
-          {
-            id: "loe-valcre-job-id",
-            label: "Valcre Job ID",
-            type: "text",
-            value: "",
-            isEditable: false,
-            inputType: "auto-filled",
           },
         ],
       },

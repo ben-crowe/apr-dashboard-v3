@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   fieldRegistry,
@@ -17,7 +17,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from '@/components/ui/collapsible';
-import { ChevronDown, ChevronRight, Upload, Download, ExternalLink, Calculator, Database } from 'lucide-react';
+import { ChevronDown, ChevronRight, ExternalLink, Calculator, Database } from 'lucide-react';
 import ImageFieldInput from './components/ImageFieldInput';
 
 type FieldStatus = 'mapped' | 'empty' | 'missing';
@@ -33,7 +33,6 @@ const TestInputDashboard: React.FC = () => {
   const { sections, updateFieldValue, runCalculations, loadFullTestData, initializeMockData } = useReportBuilderStore();
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['cover']));
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Initialize store on mount if sections are empty
   useEffect(() => {
@@ -266,50 +265,6 @@ const TestInputDashboard: React.FC = () => {
     }
   };
 
-  // Export JSON
-  const handleExportJson = () => {
-    const data: Record<string, any> = {};
-    fieldRegistry.forEach(field => {
-      const value = getStoreValue(field.storeId);
-      if (value !== undefined && value !== null) {
-        data[field.storeId] = value;
-      }
-    });
-
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `test-data-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-
-    console.log('Exported test data JSON:', Object.keys(data).length, 'fields');
-  };
-
-  // Load JSON
-  const handleLoadJson = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      try {
-        const data = JSON.parse(e.target?.result as string);
-        Object.entries(data).forEach(([key, value]) => {
-          updateFieldValue(key, value);
-        });
-        console.log('Loaded test data JSON:', Object.keys(data).length, 'fields');
-      } catch (error) {
-        console.error('Failed to load JSON:', error);
-        alert('Failed to load JSON file');
-      }
-    };
-    reader.readAsText(file);
-  };
-
   // Preview in builder - use React Router navigation to preserve store state
   const handlePreview = () => {
     // Run calculations before navigating to ensure preview is up to date
@@ -393,31 +348,6 @@ const TestInputDashboard: React.FC = () => {
             >
               <Database className="w-4 h-4" />
               Load Test Data
-            </Button>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".json"
-              onChange={handleLoadJson}
-              className="hidden"
-            />
-            <Button
-              onClick={() => fileInputRef.current?.click()}
-              variant="outline"
-              size="sm"
-              className="gap-2"
-            >
-              <Upload className="w-4 h-4" />
-              Load JSON
-            </Button>
-            <Button
-              onClick={handleExportJson}
-              variant="outline"
-              size="sm"
-              className="gap-2"
-            >
-              <Download className="w-4 h-4" />
-              Export JSON
             </Button>
             <Button
               onClick={handlePreview}

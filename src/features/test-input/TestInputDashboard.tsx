@@ -44,7 +44,7 @@ const TestInputDashboard: React.FC = () => {
   // Section names with numbered prefixes for easy cross-reference with Report Builder
   const sectionNameMapping: Record<string, string> = {
     'cover': '01 - COVER PAGE',
-    'home': '02 - LETTER OF TRANSMITTAL',
+    'home': '02 - INTRODUCTION LETTER',
     'maps': '03 - LOCATION MAPS',
     'assignment': '04 - IDENTIFICATION OF ASSIGNMENT',
     'report': '05 - REPORT INFORMATION',

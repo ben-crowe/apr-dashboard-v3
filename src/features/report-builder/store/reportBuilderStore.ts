@@ -376,8 +376,8 @@ const getMockData = (): ReportSection[] => [
   },
   {
     id: "home",
-    name: "Letter of Transmittal",
-    shortName: "02 - HOME",
+    name: "Introduction Letter",
+    shortName: "02 - INTRO",
     fields: [],
     subsections: [
       {

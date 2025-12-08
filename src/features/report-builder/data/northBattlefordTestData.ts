@@ -17,6 +17,7 @@
 export const northBattlefordTestData: Record<string, string | number | string[]> = {
   // COVER SECTION
   'cover-photo': ['/test-data/images/cover/cover-photo.jpeg'],
+  'img-cover-photo': '/test-data/images/cover/cover-photo.jpeg',
   'property-type-display': 'Multi-Family Walkup',
   'property-name': 'North Battleford Apartments',
   'street-address': '1101, 1121 109 St',
@@ -53,7 +54,21 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   'building-format': 'Lowrise',
   'occupancy-rate': 100,
 
-  // PHOTOGRAPHS (PHOTOS)
+  // MAPS SECTION - OLD FIELD IDS (backwards compatibility)
+  'location-aerial-map': ['/test-data/images/maps/aerial-map.png'],
+  'location-local-map': ['/test-data/images/maps/location-map.png'],
+  'zone-map-image': ['/test-data/images/maps/zoning-map.png'],
+
+  // MAPS SECTION - NEW FIELD IDS
+  'img-map-aerial-1': '/test-data/images/maps/aerial-map.png',
+  'img-map-aerial-2': '/test-data/images/maps/aerial-map.png',
+  'img-map-local': '/test-data/images/maps/location-map.png',
+  'img-map-regional': '/test-data/images/maps/location-map.png',
+  'img-zoning-map': '/test-data/images/maps/zoning-map.png',
+  'img-site-plan-1': '/test-data/images/maps/location-map.png',
+  'img-site-plan-2': '/test-data/images/maps/aerial-map.png',
+
+  // PHOTOGRAPHS (PHOTOS) - OLD FIELD IDS (backwards compatibility)
   // Exterior Photos
   'photo-exterior-1': ['/test-data/images/exterior/exterior-1.jpeg'],
   'photo-exterior-1-caption': '1121 109 St - Front view showing brick exterior',
@@ -96,6 +111,62 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   'photo-laundry': ['/test-data/images/interior/interior-10.jpeg'],
   'photo-laundry-caption': 'Coin-operated laundry facility',
 
+  // EXTERIOR PHOTOS - NEW FIELD IDS
+  'img-exterior-1': '/test-data/images/exterior/exterior-1.jpeg',
+  'img-exterior-1-caption': '1121 109 St - Front view showing brick exterior',
+  'img-exterior-2': '/test-data/images/exterior/exterior-2.jpeg',
+  'img-exterior-2-caption': '1101 109 St - Front view showing stucco/wood frame exterior',
+  'img-exterior-3': '/test-data/images/exterior/exterior-3.jpeg',
+  'img-exterior-3-caption': 'Side view of buildings',
+  'img-exterior-4': '/test-data/images/exterior/exterior-4.jpeg',
+  'img-exterior-4-caption': 'Rear view and parking area',
+  'img-exterior-5': '/test-data/images/exterior/exterior-1.jpeg',
+  'img-exterior-5-caption': 'Additional exterior view',
+  'img-exterior-6': '/test-data/images/exterior/exterior-2.jpeg',
+  'img-exterior-6-caption': 'Additional exterior view',
+
+  // STREET PHOTOS - NEW FIELD IDS
+  'img-street-1': '/test-data/images/street-views/street-1.jpeg',
+  'img-street-1-caption': 'View from 109 Street',
+  'img-street-2': '/test-data/images/street-views/street-2.jpeg',
+  'img-street-2-caption': 'View from 11 Avenue',
+  'img-street-3': '/test-data/images/street-views/street-1.jpeg',
+  'img-street-3-caption': 'Additional street view',
+
+  // COMMON AREA PHOTOS - NEW FIELD IDS
+  'img-common-1': '/test-data/images/interior/interior-3.jpeg',
+  'img-common-1-caption': 'Building entrance lobby',
+  'img-common-2': '/test-data/images/interior/interior-1.jpeg',
+  'img-common-2-caption': 'Main hallway - carpeted with painted walls',
+  'img-common-3': '/test-data/images/interior/interior-2.jpeg',
+  'img-common-3-caption': 'Interior stairway',
+  'img-common-4': '/test-data/images/interior/interior-10.jpeg',
+  'img-common-4-caption': 'Coin-operated laundry facility',
+
+  // UNIT INTERIOR PHOTOS - NEW FIELD IDS
+  'img-unit-1': '/test-data/images/interior/interior-7.jpeg',
+  'img-unit-1-caption': 'Typical unit living room',
+  'img-unit-2': '/test-data/images/interior/interior-4.jpeg',
+  'img-unit-2-caption': 'Typical unit kitchen with updated appliances',
+  'img-unit-3': '/test-data/images/interior/interior-6.jpeg',
+  'img-unit-3-caption': 'Typical unit bedroom',
+  'img-unit-4': '/test-data/images/interior/interior-5.jpeg',
+  'img-unit-4-caption': 'Typical unit bathroom',
+  'img-unit-5': '/test-data/images/interior/interior-6.jpeg',
+  'img-unit-5-caption': 'Additional bedroom view',
+  'img-unit-6': '/test-data/images/interior/interior-4.jpeg',
+  'img-unit-6-caption': 'Additional kitchen view',
+
+  // BUILDING SYSTEMS PHOTOS - NEW FIELD IDS
+  'img-systems-1': '/test-data/images/interior/interior-9.jpeg',
+  'img-systems-1-caption': 'Boiler system (1121 building)',
+  'img-systems-2': '/test-data/images/interior/interior-8.jpeg',
+  'img-systems-2-caption': 'Electrical panel and utility room',
+  'img-systems-3': '/test-data/images/interior/interior-10.jpeg',
+  'img-systems-3-caption': 'Coin-operated laundry facility',
+  'img-systems-4': '/test-data/images/interior/interior-8.jpeg',
+  'img-systems-4-caption': 'Additional utility systems',
+
   // SITE SECTION
   'site-total-area': 24400,
   'site-acreage': 0.56,
@@ -124,8 +195,6 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   'location-local-area': 'Established residential area with mix of single-family homes and low-rise apartment buildings. Quiet neighborhood character with mature trees.',
   'location-nearby-schools': 'John Paul II Collegiate, St. Mary Elementary School, and Sakewew High School within 2 km',
   'location-nearby-amenities': 'Gateway Mall (major shopping center) within 2 km. Grocery stores, restaurants, and services within walking distance. Recreation facilities including outdoor pool and arena nearby.',
-  'location-aerial-map': ['/test-data/images/maps/aerial-map.png'],
-  'location-local-map': ['/test-data/images/maps/location-map.png'],
 
   // TAX
   'tax-assessment-year': 2025,
@@ -202,7 +271,6 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   'zone-parking-req': '1.5 spaces per unit for apartments',
   'zone-conformance': 'Legally Conforming',
   'zone-conclusion': 'The property conforms to current R2 zoning requirements. Existing density (29 units/acre) exceeds current maximum, but is grandfathered as legal non-conforming. Parking meets requirements.',
-  'zone-map-image': ['/test-data/images/maps/zoning-map.png'],
 
   // HIGHEST & BEST USE (HBU)
   'hbu-introduction': 'Highest and best use is defined as the reasonably probable and legal use that is physically possible, appropriately supported, financially feasible, and results in the highest value. The analysis considers four criteria: legally permissible, physically possible, financially feasible, and maximally productive.',
@@ -307,7 +375,7 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   'assignment-extraordinary-assumptions': 'No Extraordinary Assumptions were made for this assignment.',
   'assignment-general-assumptions': 'Title is assumed to be good and marketable. Property is assumed to be free of environmental hazards unless otherwise noted. All building systems are assumed to be in working order.',
   'assignment-limiting-conditions': 'This appraisal is subject to standard limiting conditions as outlined in the Assumptions and Limiting Conditions section of this report.',
-  'assignment-limiting-conditions': 'This appraisal is subject to standard limiting conditions as outlined in the Assumptions and Limiting Conditions section of this report.',
+};
 
 /**
  * Helper function to load test data into the report builder store
@@ -321,6 +389,7 @@ export function loadNorthBattlefordTestData(
   const fieldToSectionMap: Record<string, string> = {
     // Cover section
     'cover-photo': 'cover',
+    'img-cover-photo': 'image-mgt',
     'property-type-display': 'cover',
     'property-name': 'cover',
     'street-address': 'cover',
@@ -351,7 +420,7 @@ export function loadNorthBattlefordTestData(
     'building-format': 'exec',
     'occupancy-rate': 'exec',
 
-    // Photos - all photo fields
+    // Photos - all OLD photo fields
     'photo-exterior-1': 'photos',
     'photo-exterior-1-caption': 'photos',
     'photo-exterior-2': 'photos',
@@ -384,6 +453,72 @@ export function loadNorthBattlefordTestData(
     'photo-mechanical-caption': 'photos',
     'photo-laundry': 'photos',
     'photo-laundry-caption': 'photos',
+
+    // NEW image field mappings
+    // Maps
+    'img-map-aerial-1': 'image-mgt',
+    'img-map-aerial-2': 'image-mgt',
+    'img-map-local': 'image-mgt',
+    'img-map-regional': 'image-mgt',
+    'img-zoning-map': 'image-mgt',
+    'img-site-plan-1': 'image-mgt',
+    'img-site-plan-2': 'image-mgt',
+
+    // Exterior photos
+    'img-exterior-1': 'image-mgt',
+    'img-exterior-1-caption': 'image-mgt',
+    'img-exterior-2': 'image-mgt',
+    'img-exterior-2-caption': 'image-mgt',
+    'img-exterior-3': 'image-mgt',
+    'img-exterior-3-caption': 'image-mgt',
+    'img-exterior-4': 'image-mgt',
+    'img-exterior-4-caption': 'image-mgt',
+    'img-exterior-5': 'image-mgt',
+    'img-exterior-5-caption': 'image-mgt',
+    'img-exterior-6': 'image-mgt',
+    'img-exterior-6-caption': 'image-mgt',
+
+    // Street photos
+    'img-street-1': 'image-mgt',
+    'img-street-1-caption': 'image-mgt',
+    'img-street-2': 'image-mgt',
+    'img-street-2-caption': 'image-mgt',
+    'img-street-3': 'image-mgt',
+    'img-street-3-caption': 'image-mgt',
+
+    // Common area photos
+    'img-common-1': 'image-mgt',
+    'img-common-1-caption': 'image-mgt',
+    'img-common-2': 'image-mgt',
+    'img-common-2-caption': 'image-mgt',
+    'img-common-3': 'image-mgt',
+    'img-common-3-caption': 'image-mgt',
+    'img-common-4': 'image-mgt',
+    'img-common-4-caption': 'image-mgt',
+
+    // Unit interior photos
+    'img-unit-1': 'image-mgt',
+    'img-unit-1-caption': 'image-mgt',
+    'img-unit-2': 'image-mgt',
+    'img-unit-2-caption': 'image-mgt',
+    'img-unit-3': 'image-mgt',
+    'img-unit-3-caption': 'image-mgt',
+    'img-unit-4': 'image-mgt',
+    'img-unit-4-caption': 'image-mgt',
+    'img-unit-5': 'image-mgt',
+    'img-unit-5-caption': 'image-mgt',
+    'img-unit-6': 'image-mgt',
+    'img-unit-6-caption': 'image-mgt',
+
+    // Building systems photos
+    'img-systems-1': 'image-mgt',
+    'img-systems-1-caption': 'image-mgt',
+    'img-systems-2': 'image-mgt',
+    'img-systems-2-caption': 'image-mgt',
+    'img-systems-3': 'image-mgt',
+    'img-systems-3-caption': 'image-mgt',
+    'img-systems-4': 'image-mgt',
+    'img-systems-4-caption': 'image-mgt',
 
     // Site section
     'site-total-area': 'site',
@@ -583,7 +718,7 @@ export function loadNorthBattlefordTestData(
     'assignment-extraordinary-assumptions': 'assignment',
     'assignment-general-assumptions': 'assignment',
     'assignment-limiting-conditions': 'assignment',
-    'assignment-limiting-conditions': 'assignment',
+  };
 
   // Load each field into the store
   Object.entries(northBattlefordTestData).forEach(([fieldId, value]) => {

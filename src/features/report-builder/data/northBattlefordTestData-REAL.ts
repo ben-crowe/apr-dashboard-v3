@@ -411,6 +411,104 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
   'calc-grm': 8.71,
 
   // ============================================================================
+  // RENTAL SURVEY SECTION (REAL data from image38.png, image40, image41)
+  // ============================================================================
+  // Subject Property
+  'rental-subject-name': 'North Battleford Apartments',
+  'rental-subject-address': '1101, 1121 109 St',
+  'rental-subject-city': 'North Battleford',
+  'rental-subject-province': 'SK',
+  'rental-subject-units': 16,
+  'rental-subject-avg-sf': 638,
+  'rental-subject-location': 'Average',
+  'rental-subject-quality': 'Average',
+  'rental-subject-condition': 'Average',
+  'rental-subject-appeal': 'Average',
+  'rental-subject-rent-type': 'Market',
+  'rental-subject-rent-unit': 1016,
+  'rental-subject-rent-sf': 1.59,
+  'rental-subject-unit-amenities': 'Deck/Patio, Range/Stove, Refrigerator',
+  'rental-subject-utilities': 'Heat, W',
+  'rental-subject-parking': 'None Included, Surface',
+  'rental-subject-laundry': 'On Site',
+  'rental-subject-project-amenities': 'Guest Parking',
+  'rental-subject-security': 'Deadbolts, Exterior Lighting, Secured Entry',
+
+  // Comp 1 - 2424 Buhler Ave Apts
+  'rental-comp1-name': '2424 Buhler Ave Apts',
+  'rental-comp1-address': '2424 Buhler Ave',
+  'rental-comp1-city': 'North Battleford',
+  'rental-comp1-province': 'SK',
+  'rental-comp1-units': 4,
+  'rental-comp1-avg-sf': 725,
+  'rental-comp1-rent-unit': 1763,
+  'rental-comp1-rent-sf': 2.43,
+  'rental-comp1-unit-amenities': 'Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring',
+  'rental-comp1-utilities': 'G, Heat, I, W',
+  'rental-comp1-parking': 'Carport',
+  'rental-comp1-laundry': 'Washer/Dryer',
+  'rental-comp1-comments': '-$35/mth for extra parking space',
+
+  // Comp 2 - The Mews - River
+  'rental-comp2-name': 'The Mews - River',
+  'rental-comp2-address': '531 5 St E',
+  'rental-comp2-city': 'Prince Albert',
+  'rental-comp2-province': 'SK',
+  'rental-comp2-units': 6,
+  'rental-comp2-avg-sf': 700,
+  'rental-comp2-rent-unit': 1239,
+  'rental-comp2-rent-sf': 1.77,
+  'rental-comp2-parking': 'Open',
+  'rental-comp2-comments': 'Parking availability without the monthly parking fee',
+
+  // Comp 3 - The Mews - MGM
+  'rental-comp3-name': 'The Mews - MGM',
+  'rental-comp3-address': '2300 2 Ave W',
+  'rental-comp3-city': 'Prince Albert',
+  'rental-comp3-province': 'SK',
+  'rental-comp3-units': 6,
+  'rental-comp3-avg-sf': 700,
+  'rental-comp3-rent-unit': 1317,
+  'rental-comp3-rent-sf': 1.88,
+  'rental-comp3-comments': 'Parking availability without the monthly parking fee',
+
+  // Comp 4 - Forest Grove Village
+  'rental-comp4-name': 'Forest Grove Village',
+  'rental-comp4-address': '3030 Dunn Dr',
+  'rental-comp4-city': 'Prince Albert',
+  'rental-comp4-province': 'SK',
+  'rental-comp4-units': 9,
+  'rental-comp4-avg-sf': 783,
+  'rental-comp4-rent-unit': 1378,
+  'rental-comp4-rent-sf': 1.76,
+  'rental-comp4-comments': 'Parking availability without the monthly parking fee',
+
+  // Comp 5 - Hilltop Towers
+  'rental-comp5-name': 'Hilltop Towers',
+  'rental-comp5-address': '399 32 St W',
+  'rental-comp5-city': 'Prince Albert',
+  'rental-comp5-province': 'SK',
+  'rental-comp5-units': 12,
+  'rental-comp5-avg-sf': 725,
+  'rental-comp5-rent-unit': 1435,
+  'rental-comp5-rent-sf': 1.98,
+  'rental-comp5-comments': 'Parking availability without the monthly parking fee',
+
+  // Unit Analysis - 1BR
+  'rental-1br-unit-size': 550,
+  'rental-1br-rent-unit': 895,
+  'rental-1br-rent-sf': 1.63,
+  'rental-1br-conclusion-sf': 1.64,
+  'rental-1br-final-conclusion': 900,
+
+  // Unit Analysis - 2BR
+  'rental-2br-unit-size': 667,
+  'rental-2br-rent-unit': 1055,
+  'rental-2br-rent-sf': 1.58,
+  'rental-2br-conclusion-sf': 1.59,
+  'rental-2br-final-conclusion': 1060,
+
+  // ============================================================================
   // LAND VALUE SECTION (1 field)
   // ============================================================================
   'land-value-conclusion': 'Characteristics specific to the subject property do not warrant that a site value is developed.',
@@ -844,6 +942,99 @@ export const fieldToSectionMap: Record<string, string> = {
   'calc-value-per-unit': 'calc',
   'calc-value-per-sf': 'calc',
   'calc-grm': 'calc',
+
+  // Rental Survey section - Subject
+  'rental-subject-name': 'rental-survey',
+  'rental-subject-address': 'rental-survey',
+  'rental-subject-city': 'rental-survey',
+  'rental-subject-province': 'rental-survey',
+  'rental-subject-units': 'rental-survey',
+  'rental-subject-avg-sf': 'rental-survey',
+  'rental-subject-location': 'rental-survey',
+  'rental-subject-quality': 'rental-survey',
+  'rental-subject-condition': 'rental-survey',
+  'rental-subject-appeal': 'rental-survey',
+  'rental-subject-rent-type': 'rental-survey',
+  'rental-subject-rent-unit': 'rental-survey',
+  'rental-subject-rent-sf': 'rental-survey',
+  'rental-subject-unit-amenities': 'rental-survey',
+  'rental-subject-utilities': 'rental-survey',
+  'rental-subject-parking': 'rental-survey',
+  'rental-subject-laundry': 'rental-survey',
+  'rental-subject-project-amenities': 'rental-survey',
+  'rental-subject-security': 'rental-survey',
+
+  // Rental Survey - Comp 1
+  'rental-comp1-name': 'rental-survey',
+  'rental-comp1-address': 'rental-survey',
+  'rental-comp1-city': 'rental-survey',
+  'rental-comp1-province': 'rental-survey',
+  'rental-comp1-units': 'rental-survey',
+  'rental-comp1-avg-sf': 'rental-survey',
+  'rental-comp1-rent-unit': 'rental-survey',
+  'rental-comp1-rent-sf': 'rental-survey',
+  'rental-comp1-unit-amenities': 'rental-survey',
+  'rental-comp1-utilities': 'rental-survey',
+  'rental-comp1-parking': 'rental-survey',
+  'rental-comp1-laundry': 'rental-survey',
+  'rental-comp1-comments': 'rental-survey',
+
+  // Rental Survey - Comp 2
+  'rental-comp2-name': 'rental-survey',
+  'rental-comp2-address': 'rental-survey',
+  'rental-comp2-city': 'rental-survey',
+  'rental-comp2-province': 'rental-survey',
+  'rental-comp2-units': 'rental-survey',
+  'rental-comp2-avg-sf': 'rental-survey',
+  'rental-comp2-rent-unit': 'rental-survey',
+  'rental-comp2-rent-sf': 'rental-survey',
+  'rental-comp2-parking': 'rental-survey',
+  'rental-comp2-comments': 'rental-survey',
+
+  // Rental Survey - Comp 3
+  'rental-comp3-name': 'rental-survey',
+  'rental-comp3-address': 'rental-survey',
+  'rental-comp3-city': 'rental-survey',
+  'rental-comp3-province': 'rental-survey',
+  'rental-comp3-units': 'rental-survey',
+  'rental-comp3-avg-sf': 'rental-survey',
+  'rental-comp3-rent-unit': 'rental-survey',
+  'rental-comp3-rent-sf': 'rental-survey',
+  'rental-comp3-comments': 'rental-survey',
+
+  // Rental Survey - Comp 4
+  'rental-comp4-name': 'rental-survey',
+  'rental-comp4-address': 'rental-survey',
+  'rental-comp4-city': 'rental-survey',
+  'rental-comp4-province': 'rental-survey',
+  'rental-comp4-units': 'rental-survey',
+  'rental-comp4-avg-sf': 'rental-survey',
+  'rental-comp4-rent-unit': 'rental-survey',
+  'rental-comp4-rent-sf': 'rental-survey',
+  'rental-comp4-comments': 'rental-survey',
+
+  // Rental Survey - Comp 5
+  'rental-comp5-name': 'rental-survey',
+  'rental-comp5-address': 'rental-survey',
+  'rental-comp5-city': 'rental-survey',
+  'rental-comp5-province': 'rental-survey',
+  'rental-comp5-units': 'rental-survey',
+  'rental-comp5-avg-sf': 'rental-survey',
+  'rental-comp5-rent-unit': 'rental-survey',
+  'rental-comp5-rent-sf': 'rental-survey',
+  'rental-comp5-comments': 'rental-survey',
+
+  // Rental Survey - Unit Analysis
+  'rental-1br-unit-size': 'rental-survey',
+  'rental-1br-rent-unit': 'rental-survey',
+  'rental-1br-rent-sf': 'rental-survey',
+  'rental-1br-conclusion-sf': 'rental-survey',
+  'rental-1br-final-conclusion': 'rental-survey',
+  'rental-2br-unit-size': 'rental-survey',
+  'rental-2br-rent-unit': 'rental-survey',
+  'rental-2br-rent-sf': 'rental-survey',
+  'rental-2br-conclusion-sf': 'rental-survey',
+  'rental-2br-final-conclusion': 'rental-survey',
 
   // Land Value section
   'land-value-conclusion': 'land1',

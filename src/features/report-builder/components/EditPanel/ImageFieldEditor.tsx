@@ -312,18 +312,18 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
         {/* Preview Modal */}
         {previewOpen && (
           <div
-            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-2"
             onClick={() => setPreviewOpen(false)}
           >
-            <div className="relative max-w-4xl max-h-[90vh]">
+            <div className="relative max-w-[95vw] max-h-[95vh]">
               <img
                 src={previewUrl}
                 alt="Preview"
-                className="max-w-full max-h-[90vh] object-contain rounded"
+                className="max-w-[95vw] max-h-[95vh] object-contain rounded shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
               />
               <button
-                className="absolute top-2 right-2 bg-white/90 hover:bg-white rounded-full p-1.5 transition-colors"
+                className="absolute top-2 right-2 bg-white/90 hover:bg-white rounded-full p-1.5 transition-colors shadow-lg"
                 onClick={() => setPreviewOpen(false)}
                 title="Close preview"
               >
@@ -473,18 +473,18 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
       {/* Preview Modal */}
       {previewOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-2"
           onClick={() => setPreviewOpen(false)}
         >
-          <div className="relative max-w-4xl max-h-[90vh]">
+          <div className="relative max-w-[95vw] max-h-[95vh]">
             <img
               src={previewUrl}
               alt="Preview"
-              className="max-w-full max-h-[90vh] object-contain rounded"
+              className="max-w-[95vw] max-h-[95vh] object-contain rounded shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             />
             <button
-              className="absolute top-2 right-2 bg-white/90 hover:bg-white rounded-full p-1.5 transition-colors"
+              className="absolute top-2 right-2 bg-white/90 hover:bg-white rounded-full p-1.5 transition-colors shadow-lg"
               onClick={() => setPreviewOpen(false)}
               title="Close preview"
             >

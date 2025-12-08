@@ -1907,6 +1907,129 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const salesMethodology = getFieldValue(section, 'sales-methodology');
     const salesReconciliation = getFieldValue(section, 'sales-reconciliation');
 
+    // Adjustment data for Sale 1
+    const sale1AdjPropertyRights = getFieldValue(section, 'comp1-adj-property-rights');
+    const sale1AdjFinancing = getFieldValue(section, 'comp1-adj-financing');
+    const sale1AdjConditionsSale = getFieldValue(section, 'comp1-adj-conditions-sale');
+    const sale1AdjMarketTime = getFieldValue(section, 'comp1-adj-market-time');
+    const sale1AdjLocation = getFieldValue(section, 'comp1-adj-location');
+    const sale1AdjSize = getFieldValue(section, 'comp1-adj-size');
+    const sale1AdjAgeCondition = getFieldValue(section, 'comp1-adj-age-condition');
+    const sale1AdjOther = getFieldValue(section, 'comp1-adj-other');
+
+    // Adjustment data for Sale 2
+    const sale2AdjPropertyRights = getFieldValue(section, 'comp2-adj-property-rights');
+    const sale2AdjFinancing = getFieldValue(section, 'comp2-adj-financing');
+    const sale2AdjConditionsSale = getFieldValue(section, 'comp2-adj-conditions-sale');
+    const sale2AdjMarketTime = getFieldValue(section, 'comp2-adj-market-time');
+    const sale2AdjLocation = getFieldValue(section, 'comp2-adj-location');
+    const sale2AdjSize = getFieldValue(section, 'comp2-adj-size');
+    const sale2AdjAgeCondition = getFieldValue(section, 'comp2-adj-age-condition');
+    const sale2AdjOther = getFieldValue(section, 'comp2-adj-other');
+
+    // Adjustment data for Sale 3
+    const sale3AdjPropertyRights = getFieldValue(section, 'comp3-adj-property-rights');
+    const sale3AdjFinancing = getFieldValue(section, 'comp3-adj-financing');
+    const sale3AdjConditionsSale = getFieldValue(section, 'comp3-adj-conditions-sale');
+    const sale3AdjMarketTime = getFieldValue(section, 'comp3-adj-market-time');
+    const sale3AdjLocation = getFieldValue(section, 'comp3-adj-location');
+    const sale3AdjSize = getFieldValue(section, 'comp3-adj-size');
+    const sale3AdjAgeCondition = getFieldValue(section, 'comp3-adj-age-condition');
+    const sale3AdjOther = getFieldValue(section, 'comp3-adj-other');
+
+    // Adjustment data for Sale 4
+    const sale4AdjPropertyRights = getFieldValue(section, 'comp4-adj-property-rights');
+    const sale4AdjFinancing = getFieldValue(section, 'comp4-adj-financing');
+    const sale4AdjConditionsSale = getFieldValue(section, 'comp4-adj-conditions-sale');
+    const sale4AdjMarketTime = getFieldValue(section, 'comp4-adj-market-time');
+    const sale4AdjLocation = getFieldValue(section, 'comp4-adj-location');
+    const sale4AdjSize = getFieldValue(section, 'comp4-adj-size');
+    const sale4AdjAgeCondition = getFieldValue(section, 'comp4-adj-age-condition');
+    const sale4AdjOther = getFieldValue(section, 'comp4-adj-other');
+
+    // Adjustment data for Sale 5
+    const sale5AdjPropertyRights = getFieldValue(section, 'comp5-adj-property-rights');
+    const sale5AdjFinancing = getFieldValue(section, 'comp5-adj-financing');
+    const sale5AdjConditionsSale = getFieldValue(section, 'comp5-adj-conditions-sale');
+    const sale5AdjMarketTime = getFieldValue(section, 'comp5-adj-market-time');
+    const sale5AdjLocation = getFieldValue(section, 'comp5-adj-location');
+    const sale5AdjSize = getFieldValue(section, 'comp5-adj-size');
+    const sale5AdjAgeCondition = getFieldValue(section, 'comp5-adj-age-condition');
+    const sale5AdjOther = getFieldValue(section, 'comp5-adj-other');
+
+    // Adjustment data for Sale 6
+    const sale6AdjPropertyRights = getFieldValue(section, 'comp6-adj-property-rights');
+    const sale6AdjFinancing = getFieldValue(section, 'comp6-adj-financing');
+    const sale6AdjConditionsSale = getFieldValue(section, 'comp6-adj-conditions-sale');
+    const sale6AdjMarketTime = getFieldValue(section, 'comp6-adj-market-time');
+    const sale6AdjLocation = getFieldValue(section, 'comp6-adj-location');
+    const sale6AdjSize = getFieldValue(section, 'comp6-adj-size');
+    const sale6AdjAgeCondition = getFieldValue(section, 'comp6-adj-age-condition');
+    const sale6AdjOther = getFieldValue(section, 'comp6-adj-other');
+
+    // Helper function to parse percentage values
+    const parsePercentage = (value: string): number => {
+      if (!value) return 0;
+      const numericValue = parseFloat(value.toString().replace(/[^0-9.-]/g, ''));
+      return isNaN(numericValue) ? 0 : numericValue;
+    };
+
+    // Helper function to calculate net adjustment
+    const calculateNetAdjustment = (...adjustments: string[]): number => {
+      return adjustments.reduce((sum, adj) => sum + parsePercentage(adj), 0);
+    };
+
+    // Helper function to calculate adjusted price
+    const calculateAdjustedPrice = (salePrice: string, netAdjustmentPercent: number): string => {
+      if (!salePrice) return '-';
+      const price = parseFloat(salePrice.replace(/[^0-9.-]/g, ''));
+      if (isNaN(price)) return '-';
+      const adjustedPrice = price * (1 + netAdjustmentPercent / 100);
+      return formatCurrency(String(adjustedPrice));
+    };
+
+    // Calculate net adjustments for each sale
+    const sale1NetAdj = calculateNetAdjustment(
+      sale1AdjPropertyRights, sale1AdjFinancing, sale1AdjConditionsSale,
+      sale1AdjMarketTime, sale1AdjLocation, sale1AdjSize, sale1AdjAgeCondition, sale1AdjOther
+    );
+    const sale2NetAdj = calculateNetAdjustment(
+      sale2AdjPropertyRights, sale2AdjFinancing, sale2AdjConditionsSale,
+      sale2AdjMarketTime, sale2AdjLocation, sale2AdjSize, sale2AdjAgeCondition, sale2AdjOther
+    );
+    const sale3NetAdj = calculateNetAdjustment(
+      sale3AdjPropertyRights, sale3AdjFinancing, sale3AdjConditionsSale,
+      sale3AdjMarketTime, sale3AdjLocation, sale3AdjSize, sale3AdjAgeCondition, sale3AdjOther
+    );
+    const sale4NetAdj = calculateNetAdjustment(
+      sale4AdjPropertyRights, sale4AdjFinancing, sale4AdjConditionsSale,
+      sale4AdjMarketTime, sale4AdjLocation, sale4AdjSize, sale4AdjAgeCondition, sale4AdjOther
+    );
+    const sale5NetAdj = calculateNetAdjustment(
+      sale5AdjPropertyRights, sale5AdjFinancing, sale5AdjConditionsSale,
+      sale5AdjMarketTime, sale5AdjLocation, sale5AdjSize, sale5AdjAgeCondition, sale5AdjOther
+    );
+    const sale6NetAdj = calculateNetAdjustment(
+      sale6AdjPropertyRights, sale6AdjFinancing, sale6AdjConditionsSale,
+      sale6AdjMarketTime, sale6AdjLocation, sale6AdjSize, sale6AdjAgeCondition, sale6AdjOther
+    );
+
+    // Calculate adjusted prices
+    const sale1AdjustedPrice = calculateAdjustedPrice(sale1SalePrice, sale1NetAdj);
+    const sale2AdjustedPrice = calculateAdjustedPrice(sale2SalePrice, sale2NetAdj);
+    const sale3AdjustedPrice = calculateAdjustedPrice(sale3SalePrice, sale3NetAdj);
+    const sale4AdjustedPrice = calculateAdjustedPrice(sale4SalePrice, sale4NetAdj);
+    const sale5AdjustedPrice = calculateAdjustedPrice(sale5SalePrice, sale5NetAdj);
+    const sale6AdjustedPrice = calculateAdjustedPrice(sale6SalePrice, sale6NetAdj);
+
+    // Helper to format adjustment percentage display
+    const formatAdjustment = (value: string): string => {
+      if (!value) return '0%';
+      const numValue = parsePercentage(value);
+      if (numValue === 0) return '0%';
+      return numValue > 0 ? `+${numValue}%` : `${numValue}%`;
+    };
+
     return `
     <div class="section">
       <h2 class="section-title">Sales Comparison Approach</h2>
@@ -2448,52 +2571,52 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <tr>
             <td style="padding: 0.4rem;">Property Rights</td>
             <td style="padding: 0.4rem;">Fee Simple</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjPropertyRights)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjPropertyRights)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjPropertyRights)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjPropertyRights)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjPropertyRights)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjPropertyRights)}</td>
           </tr>
           <tr>
             <td style="padding: 0.4rem;">Financing Terms</td>
             <td style="padding: 0.4rem;">Cash Equiv.</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjFinancing)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjFinancing)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjFinancing)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjFinancing)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjFinancing)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjFinancing)}</td>
           </tr>
           <tr>
             <td style="padding: 0.4rem;">Conditions of Sale</td>
             <td style="padding: 0.4rem;">Arms Length</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjConditionsSale)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjConditionsSale)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjConditionsSale)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjConditionsSale)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjConditionsSale)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjConditionsSale)}</td>
           </tr>
           <tr>
             <td style="padding: 0.4rem;">Market Conditions (Time)</td>
             <td style="padding: 0.4rem;">Current</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjMarketTime)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjMarketTime)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjMarketTime)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjMarketTime)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjMarketTime)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjMarketTime)}</td>
           </tr>
           <tr>
             <td style="padding: 0.4rem;">Location</td>
             <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjLocation)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjLocation)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjLocation)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjLocation)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjLocation)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjLocation)}</td>
           </tr>
           <tr>
             <td style="padding: 0.4rem;">Size (Units)</td>
@@ -2506,34 +2629,54 @@ export function generateReportHtml(sections: ReportSection[]): string {
             <td style="padding: 0.4rem;">${sale6NumUnits || '-'}</td>
           </tr>
           <tr>
-            <td style="padding: 0.4rem;">Age/Condition</td>
+            <td style="padding: 0.4rem;">Size Adjustment</td>
+            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjSize)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjSize)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjSize)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjSize)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjSize)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjSize)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem;">Age/Condition Adjustment</td>
             <td style="padding: 0.4rem;">${subjectYearBuilt || '-'}/${subjectCondition || '-'}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjAgeCondition)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjAgeCondition)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjAgeCondition)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjAgeCondition)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjAgeCondition)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjAgeCondition)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem;">Other Adjustments</td>
             <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjOther)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjOther)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjOther)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjOther)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjOther)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjOther)}</td>
           </tr>
           <tr style="background: #f9fafb; font-weight: bold;">
             <td style="padding: 0.4rem;">Net Adjustment</td>
             <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${sale1NetAdj > 0 ? '+' : ''}${sale1NetAdj.toFixed(1)}%</td>
+            <td style="padding: 0.4rem;">${sale2NetAdj > 0 ? '+' : ''}${sale2NetAdj.toFixed(1)}%</td>
+            <td style="padding: 0.4rem;">${sale3NetAdj > 0 ? '+' : ''}${sale3NetAdj.toFixed(1)}%</td>
+            <td style="padding: 0.4rem;">${sale4NetAdj > 0 ? '+' : ''}${sale4NetAdj.toFixed(1)}%</td>
+            <td style="padding: 0.4rem;">${sale5NetAdj > 0 ? '+' : ''}${sale5NetAdj.toFixed(1)}%</td>
+            <td style="padding: 0.4rem;">${sale6NetAdj > 0 ? '+' : ''}${sale6NetAdj.toFixed(1)}%</td>
           </tr>
           <tr style="background: #1a365d; color: white; font-weight: bold;">
             <td style="padding: 0.4rem;">Adjusted Price</td>
             <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${sale1AdjustedPrice}</td>
+            <td style="padding: 0.4rem;">${sale2AdjustedPrice}</td>
+            <td style="padding: 0.4rem;">${sale3AdjustedPrice}</td>
+            <td style="padding: 0.4rem;">${sale4AdjustedPrice}</td>
+            <td style="padding: 0.4rem;">${sale5AdjustedPrice}</td>
+            <td style="padding: 0.4rem;">${sale6AdjustedPrice}</td>
           </tr>
         </tbody>
       </table>

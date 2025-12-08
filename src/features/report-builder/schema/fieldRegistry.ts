@@ -88,27 +88,55 @@ export const fieldRegistry: FieldDefinition[] = [
 
   // ============================================================================
   // SECTION S3: IMAGE MANAGEMENT
-  // Consolidated image uploads - easier to manage all in one place
-  // These reference the same storeIds as the originals scattered in other sections
+  // Consolidated image uploads with individual named slots
+  // Each slot has a specific purpose and destination in the report
   // ============================================================================
 
-  // Cover & Report Images
-  { id: 'img-cover-photo', storeId: 'cover-photo', label: 'Cover Photo (→ 01-Cover)', section: 'image-mgt', subsection: 'report-images', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-signature', storeId: 'cert-signature', label: 'Signature Image (→ 22-Cert)', section: 'image-mgt', subsection: 'report-images', type: 'image', inputSource: 'user-input', required: false },
+  // --- COVER & REPORT IMAGES ---
+  { id: 'img-cover-photo', storeId: 'img-cover-photo', label: 'Cover Photo - Main property image', section: 'image-mgt', subsection: 'cover-images', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-signature', storeId: 'img-signature', label: 'Appraiser Signature', section: 'image-mgt', subsection: 'cover-images', type: 'image', inputSource: 'user-input', required: false },
 
-  // Maps
-  { id: 'img-map-regional', storeId: 'map-regional', label: 'Regional Map (→ 03-Maps)', section: 'image-mgt', subsection: 'maps-images', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-map-local', storeId: 'map-local', label: 'Local Area Map (→ 03-Maps)', section: 'image-mgt', subsection: 'maps-images', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-map-aerial', storeId: 'map-aerial', label: 'Aerial/Site Map (→ 03-Maps)', section: 'image-mgt', subsection: 'maps-images', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-zoning-map', storeId: 'zoning-map', label: 'Zoning Map (→ 13-Zone)', section: 'image-mgt', subsection: 'maps-images', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-site-plan', storeId: 'site-plan-image', label: 'Site Plan (→ 08-Site)', section: 'image-mgt', subsection: 'maps-images', type: 'image', inputSource: 'user-input', required: false },
+  // --- MAPS ---
+  { id: 'img-map-regional', storeId: 'img-map-regional', label: 'Regional Map - Province/region context', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-map-local', storeId: 'img-map-local', label: 'Local Area Map - City/neighborhood', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-map-aerial-1', storeId: 'img-map-aerial-1', label: 'Aerial View - Bird\'s eye of property', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-map-aerial-2', storeId: 'img-map-aerial-2', label: 'Site Boundary - Property lines shown', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-zoning-map', storeId: 'img-zoning-map', label: 'Zoning Map - Municipal zoning', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-site-plan-1', storeId: 'img-site-plan-1', label: 'Site Plan - Layout/footprint', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-site-plan-2', storeId: 'img-site-plan-2', label: 'Survey/Plot Plan', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
 
-  // Property Photos
-  { id: 'img-photos-exterior', storeId: 'photos-exterior', label: 'Exterior Photos (→ 07-Photos)', section: 'image-mgt', subsection: 'property-photos', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-photos-street', storeId: 'photos-street', label: 'Street View Photos (→ 07-Photos)', section: 'image-mgt', subsection: 'property-photos', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-photos-common', storeId: 'photos-common', label: 'Common Area Photos (→ 07-Photos)', section: 'image-mgt', subsection: 'property-photos', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-photos-units', storeId: 'photos-units', label: 'Unit Interior Photos (→ 07-Photos)', section: 'image-mgt', subsection: 'property-photos', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-photos-systems', storeId: 'photos-systems', label: 'Building Systems Photos (→ 07-Photos)', section: 'image-mgt', subsection: 'property-photos', type: 'image', inputSource: 'user-input', required: false },
+  // --- EXTERIOR PHOTOS (6 slots) ---
+  { id: 'img-exterior-1', storeId: 'img-exterior-1', label: 'Exterior 1 - Front Facade', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-2', storeId: 'img-exterior-2', label: 'Exterior 2 - Rear Elevation', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-3', storeId: 'img-exterior-3', label: 'Exterior 3 - Left Side', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-4', storeId: 'img-exterior-4', label: 'Exterior 4 - Right Side', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-5', storeId: 'img-exterior-5', label: 'Exterior 5 - Detail/Feature', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-6', storeId: 'img-exterior-6', label: 'Exterior 6 - Additional', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
+
+  // --- STREET VIEW PHOTOS (3 slots) ---
+  { id: 'img-street-1', storeId: 'img-street-1', label: 'Street View 1 - Looking North', section: 'image-mgt', subsection: 'street-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-street-2', storeId: 'img-street-2', label: 'Street View 2 - Looking South', section: 'image-mgt', subsection: 'street-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-street-3', storeId: 'img-street-3', label: 'Street View 3 - Streetscape/Context', section: 'image-mgt', subsection: 'street-photos', type: 'image', inputSource: 'user-input', required: false },
+
+  // --- COMMON AREA PHOTOS (4 slots) ---
+  { id: 'img-common-1', storeId: 'img-common-1', label: 'Common Area 1 - Lobby/Entrance', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-common-2', storeId: 'img-common-2', label: 'Common Area 2 - Hallway/Corridor', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-common-3', storeId: 'img-common-3', label: 'Common Area 3 - Amenity Space', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-common-4', storeId: 'img-common-4', label: 'Common Area 4 - Additional', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
+
+  // --- UNIT INTERIOR PHOTOS (6 slots) ---
+  { id: 'img-unit-1', storeId: 'img-unit-1', label: 'Unit Interior 1 - Living Room', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-unit-2', storeId: 'img-unit-2', label: 'Unit Interior 2 - Kitchen', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-unit-3', storeId: 'img-unit-3', label: 'Unit Interior 3 - Bedroom', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-unit-4', storeId: 'img-unit-4', label: 'Unit Interior 4 - Bathroom', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-unit-5', storeId: 'img-unit-5', label: 'Unit Interior 5 - Additional Room', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-unit-6', storeId: 'img-unit-6', label: 'Unit Interior 6 - Additional', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
+
+  // --- BUILDING SYSTEMS PHOTOS (4 slots) ---
+  { id: 'img-systems-1', storeId: 'img-systems-1', label: 'Building Systems 1 - Mechanical Room', section: 'image-mgt', subsection: 'systems-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-systems-2', storeId: 'img-systems-2', label: 'Building Systems 2 - Electrical Panel', section: 'image-mgt', subsection: 'systems-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-systems-3', storeId: 'img-systems-3', label: 'Building Systems 3 - Plumbing/Water Heater', section: 'image-mgt', subsection: 'systems-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-systems-4', storeId: 'img-systems-4', label: 'Building Systems 4 - HVAC/Furnace', section: 'image-mgt', subsection: 'systems-photos', type: 'image', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // SECTION: COVER PAGE

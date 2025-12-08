@@ -756,3 +756,57 @@ User refused permission to run tool
 ## User
 
 Well, I would do all of the fields, but just know that we don't have to add section 1 and section 2, but have section 1 and section 2 on your markdown also. And know that that's where those fields are coming from. As we don't want to redesign where those fields go or come from once we create it on our V3 dashboard. They are going to want to come. If you want, if you have to have say client's name, for example, well, it needs to come from my current section 1 client's name. I don't want to have it coming from a new field in a new section on our V3 dashboard, if you know what I mean. In other words, a number of current required fields for the report are probably already in section 1 or section 2 of my current V3 dashboard.And please stop doing so much of the work yourself. I don't want you to burn out your context window You're to plan with me and I can delegate this With you helping me write prompts to the agent
+
+---
+
+## Progress Report - 2025-12-08
+
+### Session Summary
+
+**PDF Export Implementation (COMPLETE)**
+
+| Task | Status |
+|------|--------|
+| Create Gotenberg Edge Function | ✅ Complete |
+| Update frontend export | ✅ Complete |
+| Print dialog fallback | ✅ Complete |
+| Docker setup docs | ✅ Complete |
+
+- Commit: `ed368e6` - "Implement Gotenberg-based PDF export with automatic download"
+- Files: `supabase/functions/generate-pdf/index.ts`, `exportReport.ts`, `PreviewPanel.tsx`
+
+**Data Flow Clarification (CONFIRMED)**
+
+User confirmed the intended architecture:
+
+```
+Test Data Dashboard (TDD)  →  Report Builder
+      ↓                          ↓
+[Load Test Data] btn       Receives mapped data
+      ↓                          ↓
+[Send to Builder] btn      Renders preview
+```
+
+**Key Points:**
+1. TDD is source of test data, NOT Report Builder
+2. Report Builder should NOT have its own "Load Test Data" button
+3. TDD reenacts the real ingestion → mapping → builder flow
+4. Data NOT from Valcre API - from ingestion/test data
+
+**Test Data Dashboard Status:**
+
+Already exists at: `src/features/test-input/TestInputDashboard.tsx`
+
+Current features:
+- ✅ "Load Test Data" button (calls `loadFullTestData()`)
+- ✅ "Preview in Builder" button (navigates to `/mock-builder`)
+- ✅ Field status display (Mapped/Empty/Missing)
+- ✅ JSON import/export
+- ✅ Run Calculations button
+
+**Pending Work:**
+1. Remove "Load Valcre Test Data" button from Report Builder EditPanel (line 151-158)
+2. Verify TDD → Report Builder data flow works correctly
+3. Assistant setting up local Gotenberg deployment
+
+---

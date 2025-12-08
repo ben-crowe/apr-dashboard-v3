@@ -186,17 +186,10 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
     singleImageValue.startsWith('/')
   );
 
-  // SINGLE IMAGE MODE
+  // SINGLE IMAGE MODE - Compact layout
   if (isSingleImageField) {
     return (
-      <div className="space-y-3">
-        <Label>{field.label}</Label>
-
-        {/* Field ID indicator */}
-        <div className="text-xs text-muted-foreground font-mono">
-          {field.id}
-        </div>
-
+      <div className="space-y-1">
         <input
           ref={fileInputRef}
           type="file"
@@ -206,65 +199,59 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
         />
 
         {hasSingleImage ? (
-          // Image preview with replace/remove
-          <div className="flex items-start gap-3 p-3 bg-muted rounded-md">
-            <img
-              src={singleImageValue}
-              alt={field.label}
-              className="w-32 h-32 object-cover rounded border border-border"
-              onError={(e) => {
-                (e.target as HTMLImageElement).style.opacity = '0.3';
-              }}
-            />
-            <div className="flex flex-col gap-2 flex-1">
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={isLoading}
-                  className="flex-1"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      Uploading...
-                    </>
-                  ) : (
-                    <>
-                      <Upload className="w-4 h-4 mr-2" />
-                      Replace Image
-                    </>
-                  )}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleClearSingle}
-                  disabled={isLoading}
-                  className="text-red-500 hover:text-red-600"
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-              {error && (
-                <p className="text-xs text-red-500">{error}</p>
-              )}
-              <p className="text-xs text-muted-foreground">
-                Click Replace to upload a new image, or drag & drop
-              </p>
+          // Compact image preview
+          <div className="flex items-center gap-2">
+            <div
+              className="relative w-14 h-14 rounded border overflow-hidden bg-muted flex-shrink-0"
+              title={singleImageValue}
+            >
+              <img
+                src={singleImageValue}
+                alt={field.label}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.opacity = '0.3';
+                }}
+              />
+            </div>
+            <div className="flex items-center gap-1">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-7 text-xs"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                ) : (
+                  <Upload className="w-3 h-3 mr-1" />
+                )}
+                Replace
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 text-red-500 hover:text-red-600"
+                onClick={handleClearSingle}
+                disabled={isLoading}
+              >
+                <X className="w-3 h-3" />
+              </Button>
             </div>
           </div>
         ) : (
-          // Drop zone for new upload
+          // Compact drop zone
           <div
             className={cn(
-              'flex flex-col items-center justify-center gap-3 px-6 py-8 rounded-md border-2 border-dashed cursor-pointer transition-colors',
+              'flex items-center gap-2 px-3 py-2 rounded border-2 border-dashed cursor-pointer transition-colors',
               isDragging
                 ? 'border-blue-500 bg-blue-50'
                 : error
                 ? 'border-red-300 bg-red-50'
-                : 'border-border hover:border-blue-400 bg-muted/50',
+                : 'border-slate-300 hover:border-slate-400',
               isLoading && 'opacity-50 pointer-events-none'
             )}
             onClick={() => fileInputRef.current?.click()}
@@ -276,33 +263,18 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
             tabIndex={0}
           >
             {isLoading ? (
-              <>
-                <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
-                <p className="text-sm text-muted-foreground">Uploading...</p>
-              </>
+              <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
             ) : (
-              <>
-                <ImageIcon className="w-12 h-12 text-muted-foreground/50" />
-                <div className="text-center">
-                  <p className={cn(
-                    'text-sm font-medium',
-                    error ? 'text-red-500' : 'text-foreground'
-                  )}>
-                    {error ? error : 'Drop image here or click to upload'}
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Supports drag & drop, file upload, and paste from clipboard
-                  </p>
-                </div>
-              </>
+              <ImageIcon className="w-4 h-4 text-slate-400" />
             )}
+            <span className={cn('text-sm', error ? 'text-red-500' : 'text-slate-500')}>
+              {isLoading ? 'Uploading...' : error ? error : 'Drop image or click'}
+            </span>
           </div>
         )}
 
-        {/* Mode indicator */}
-        <div className="text-[10px] text-muted-foreground">
-          Mode: Single Image | Storage: Data URL (Supabase later)
-        </div>
+        {/* Field ID - small */}
+        <div className="text-[10px] text-slate-400">{field.id}</div>
       </div>
     );
   }

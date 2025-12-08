@@ -1,0 +1,262 @@
+-- Fix critical security issues with job-related tables
+
+-- First, enable RLS on tables that don't have it
+ALTER TABLE public.conversation_chunks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.conversations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.files_modified ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.job_documents ENABLE ROW LEVEL SECURITY;
+
+-- Add user_id columns to track ownership for job-related tables
+ALTER TABLE public.job_submissions ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
+ALTER TABLE public.job_documents ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
+
+-- Drop existing overly permissive policies
+DROP POLICY IF EXISTS "Enable all operations for authenticated users" ON public.job_submissions;
+DROP POLICY IF EXISTS "Enable all operations for authenticated users" ON public.job_loe_details;
+DROP POLICY IF EXISTS "Enable all operations for authenticated users" ON public.job_property_info;
+DROP POLICY IF EXISTS "Enable all operations for authenticated users" ON public.job_files;
+
+-- Create secure RLS policies for job_submissions
+CREATE POLICY "Users can view their own job submissions" 
+ON public.job_submissions 
+FOR SELECT 
+TO authenticated 
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can create their own job submissions" 
+ON public.job_submissions 
+FOR INSERT 
+TO authenticated 
+WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their own job submissions" 
+ON public.job_submissions 
+FOR UPDATE 
+TO authenticated 
+USING (auth.uid() = user_id)
+WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own job submissions" 
+ON public.job_submissions 
+FOR DELETE 
+TO authenticated 
+USING (auth.uid() = user_id);
+
+-- Create secure RLS policies for job_loe_details (linked via job_submissions)
+CREATE POLICY "Users can view LOE details for their jobs" 
+ON public.job_loe_details 
+FOR SELECT 
+TO authenticated 
+USING (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_loe_details.job_id 
+    AND user_id = auth.uid()
+  )
+);
+
+CREATE POLICY "Users can create LOE details for their jobs" 
+ON public.job_loe_details 
+FOR INSERT 
+TO authenticated 
+WITH CHECK (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_loe_details.job_id 
+    AND user_id = auth.uid()
+  )
+);
+
+CREATE POLICY "Users can update LOE details for their jobs" 
+ON public.job_loe_details 
+FOR UPDATE 
+TO authenticated 
+USING (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_loe_details.job_id 
+    AND user_id = auth.uid()
+  )
+)
+WITH CHECK (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_loe_details.job_id 
+    AND user_id = auth.uid()
+  )
+);
+
+CREATE POLICY "Users can delete LOE details for their jobs" 
+ON public.job_loe_details 
+FOR DELETE 
+TO authenticated 
+USING (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_loe_details.job_id 
+    AND user_id = auth.uid()
+  )
+);
+
+-- Create secure RLS policies for job_property_info (linked via job_submissions)
+CREATE POLICY "Users can view property info for their jobs" 
+ON public.job_property_info 
+FOR SELECT 
+TO authenticated 
+USING (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_property_info.job_id 
+    AND user_id = auth.uid()
+  )
+);
+
+CREATE POLICY "Users can create property info for their jobs" 
+ON public.job_property_info 
+FOR INSERT 
+TO authenticated 
+WITH CHECK (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_property_info.job_id 
+    AND user_id = auth.uid()
+  )
+);
+
+CREATE POLICY "Users can update property info for their jobs" 
+ON public.job_property_info 
+FOR UPDATE 
+TO authenticated 
+USING (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_property_info.job_id 
+    AND user_id = auth.uid()
+  )
+)
+WITH CHECK (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_property_info.job_id 
+    AND user_id = auth.uid()
+  )
+);
+
+CREATE POLICY "Users can delete property info for their jobs" 
+ON public.job_property_info 
+FOR DELETE 
+TO authenticated 
+USING (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_property_info.job_id 
+    AND user_id = auth.uid()
+  )
+);
+
+-- Create secure RLS policies for job_files (linked via job_submissions)
+CREATE POLICY "Users can view files for their jobs" 
+ON public.job_files 
+FOR SELECT 
+TO authenticated 
+USING (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_files.job_id 
+    AND user_id = auth.uid()
+  )
+);
+
+CREATE POLICY "Users can upload files for their jobs" 
+ON public.job_files 
+FOR INSERT 
+TO authenticated 
+WITH CHECK (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_files.job_id 
+    AND user_id = auth.uid()
+  )
+);
+
+CREATE POLICY "Users can update files for their jobs" 
+ON public.job_files 
+FOR UPDATE 
+TO authenticated 
+USING (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_files.job_id 
+    AND user_id = auth.uid()
+  )
+)
+WITH CHECK (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_files.job_id 
+    AND user_id = auth.uid()
+  )
+);
+
+CREATE POLICY "Users can delete files for their jobs" 
+ON public.job_files 
+FOR DELETE 
+TO authenticated 
+USING (
+  EXISTS (
+    SELECT 1 FROM public.job_submissions 
+    WHERE id = job_files.job_id 
+    AND user_id = auth.uid()
+  )
+);
+
+-- Create secure RLS policies for job_documents (with user_id)
+CREATE POLICY "Users can view their job documents" 
+ON public.job_documents 
+FOR SELECT 
+TO authenticated 
+USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can create their job documents" 
+ON public.job_documents 
+FOR INSERT 
+TO authenticated 
+WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can update their job documents" 
+ON public.job_documents 
+FOR UPDATE 
+TO authenticated 
+USING (auth.uid() = user_id)
+WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their job documents" 
+ON public.job_documents 
+FOR DELETE 
+TO authenticated 
+USING (auth.uid() = user_id);
+
+-- Secure policies for conversation tables (restrict to authenticated users only)
+DROP POLICY IF EXISTS "Authenticated users can manage conversations" ON public.conversations;
+CREATE POLICY "Authenticated users can manage conversations" 
+ON public.conversations 
+FOR ALL 
+TO authenticated 
+USING (true)
+WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Authenticated users can manage conversation chunks" ON public.conversation_chunks;
+CREATE POLICY "Authenticated users can manage conversation chunks" 
+ON public.conversation_chunks 
+FOR ALL 
+TO authenticated 
+USING (true)
+WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Authenticated users can manage file modifications" ON public.files_modified;
+CREATE POLICY "Authenticated users can manage file modifications" 
+ON public.files_modified 
+FOR ALL 
+TO authenticated 
+USING (true)
+WITH CHECK (true);

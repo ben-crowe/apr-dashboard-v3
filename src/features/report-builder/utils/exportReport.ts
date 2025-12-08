@@ -7,14 +7,17 @@ export interface ExportOptions {
 /**
  * Generate a default filename with timestamp
  */
-function generateFileName(options: ExportOptions, extension: 'pdf' | 'docx' | 'doc' | 'html'): string {
-  const timestamp = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+function generateFileName(
+  options: ExportOptions,
+  extension: "pdf" | "docx" | "doc" | "html",
+): string {
+  const timestamp = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
   if (options.fileName) {
     return `${options.fileName}.${extension}`;
   }
 
-  const parts: string[] = ['appraisal-report'];
+  const parts: string[] = ["appraisal-report"];
 
   if (options.fileNumber) {
     parts.push(options.fileNumber);
@@ -22,14 +25,32 @@ function generateFileName(options: ExportOptions, extension: 'pdf' | 'docx' | 'd
     // Clean property name for filename
     const cleanName = options.propertyName
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '');
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
     parts.push(cleanName);
   }
 
   parts.push(timestamp);
 
-  return `${parts.join('-')}.${extension}`;
+  return `${parts.join("-")}.${extension}`;
+}
+
+/**
+ * Convert relative image URLs to absolute URLs
+ * Required so Gotenberg can fetch them over HTTP
+ */
+async function convertImagesToAbsoluteUrls(html: string): Promise<string> {
+  // Use host.docker.internal so Gotenberg container can access local dev server
+  // In production, images will be Supabase Storage URLs which work directly
+  const origin = window.location.origin.replace(
+    "localhost",
+    "host.docker.internal",
+  );
+
+  // Replace relative image paths with absolute URLs
+  return html
+    .replace(/src="\/test-data\/images\//g, `src="${origin}/test-data/images/`)
+    .replace(/src="\/images\//g, `src="${origin}/images/`);
 }
 
 /**
@@ -38,34 +59,43 @@ function generateFileName(options: ExportOptions, extension: 'pdf' | 'docx' | 'd
  */
 export async function exportToPDF(
   html: string,
-  options: ExportOptions = {}
+  options: ExportOptions = {},
 ): Promise<void> {
-  const filename = generateFileName(options, 'pdf');
+  const filename = generateFileName(options, "pdf");
 
   try {
+    // Convert relative image URLs to absolute so Gotenberg can fetch them
+    const htmlWithAbsoluteUrls = await convertImagesToAbsoluteUrls(html);
     // Get Supabase URL from environment or use default
-    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'http://localhost:54321';
-    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+    const supabaseUrl =
+      import.meta.env.VITE_SUPABASE_URL || "http://localhost:54321";
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
 
     const response = await fetch(`${supabaseUrl}/functions/v1/generate-pdf`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${supabaseAnonKey}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${supabaseAnonKey}`,
       },
-      body: JSON.stringify({ html, filename }),
+      body: JSON.stringify({ html: htmlWithAbsoluteUrls, filename }),
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      const errorData = await response
+        .json()
+        .catch(() => ({ error: "Unknown error" }));
 
       // Check if it's a service unavailable error (Gotenberg not running)
       if (response.status === 503) {
-        console.warn('Gotenberg service unavailable, falling back to print dialog');
-        throw new Error('PDF_SERVICE_UNAVAILABLE');
+        console.warn(
+          "Gotenberg service unavailable, falling back to print dialog",
+        );
+        throw new Error("PDF_SERVICE_UNAVAILABLE");
       }
 
-      throw new Error(errorData.error || `PDF generation failed: ${response.status}`);
+      throw new Error(
+        errorData.error || `PDF generation failed: ${response.status}`,
+      );
     }
 
     // Get PDF blob from response
@@ -73,7 +103,7 @@ export async function exportToPDF(
 
     // Create download link
     const url = URL.createObjectURL(pdfBlob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
     link.download = filename;
 
@@ -85,7 +115,7 @@ export async function exportToPDF(
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   } catch (error) {
-    console.error('Failed to generate PDF:', error);
+    console.error("Failed to generate PDF:", error);
     throw error;
   }
 }
@@ -95,17 +125,17 @@ export async function exportToPDF(
  * User selects "Save as PDF" from printer dropdown
  */
 export async function exportToPDFViaPrint(
-  iframeRef: HTMLIFrameElement | null
+  iframeRef: HTMLIFrameElement | null,
 ): Promise<void> {
   if (!iframeRef?.contentWindow) {
-    throw new Error('Preview iframe not available');
+    throw new Error("Preview iframe not available");
   }
 
   try {
     iframeRef.contentWindow.print();
   } catch (error) {
-    console.error('Failed to open print dialog:', error);
-    throw new Error('Failed to export PDF');
+    console.error("Failed to open print dialog:", error);
+    throw new Error("Failed to export PDF");
   }
 }
 
@@ -116,7 +146,7 @@ export async function exportToPDFViaPrint(
  */
 export async function exportToDOCX(
   html: string,
-  options: ExportOptions = {}
+  options: ExportOptions = {},
 ): Promise<void> {
   try {
     // Create a complete HTML document with Word-friendly styling and XML namespaces
@@ -271,15 +301,15 @@ export async function exportToDOCX(
 
     // Create a Blob with Word-compatible MIME type
     // Using 'application/msword' for .doc format
-    const blob = new Blob(['\ufeff' + wordHtml], {
-      type: 'application/msword;charset=utf-8',
+    const blob = new Blob(["\ufeff" + wordHtml], {
+      type: "application/msword;charset=utf-8",
     });
 
     // Create download link - use .doc extension (not .docx)
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = generateFileName(options, 'doc');
+    link.download = generateFileName(options, "doc");
 
     // Trigger download
     document.body.appendChild(link);
@@ -289,8 +319,8 @@ export async function exportToDOCX(
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   } catch (error) {
-    console.error('Failed to generate DOCX:', error);
-    throw new Error('Failed to export DOCX');
+    console.error("Failed to generate DOCX:", error);
+    throw new Error("Failed to export DOCX");
   }
 }
 
@@ -300,7 +330,7 @@ export async function exportToDOCX(
  */
 export async function exportToHTML(
   html: string,
-  options: ExportOptions = {}
+  options: ExportOptions = {},
 ): Promise<void> {
   try {
     // Create a complete HTML document
@@ -318,14 +348,14 @@ export async function exportToHTML(
 
     // Create a Blob with the HTML content
     const blob = new Blob([completeHtml], {
-      type: 'text/html',
+      type: "text/html",
     });
 
     // Create download link
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = generateFileName(options, 'html');
+    link.download = generateFileName(options, "html");
 
     // Trigger download
     document.body.appendChild(link);
@@ -335,8 +365,8 @@ export async function exportToHTML(
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   } catch (error) {
-    console.error('Failed to generate HTML:', error);
-    throw new Error('Failed to export HTML');
+    console.error("Failed to generate HTML:", error);
+    throw new Error("Failed to export HTML");
   }
 }
 
@@ -344,7 +374,7 @@ export async function exportToHTML(
  * Get export options from the report sections
  */
 export function getExportOptionsFromSections(sections: any[]): ExportOptions {
-  const coverSection = sections.find(s => s.id === 'cover');
+  const coverSection = sections.find((s) => s.id === "cover");
 
   if (!coverSection) {
     return {};
@@ -353,11 +383,11 @@ export function getExportOptionsFromSections(sections: any[]): ExportOptions {
   // Helper to get field value
   const getFieldValue = (fieldId: string): string => {
     const field = coverSection.fields?.find((f: any) => f.id === fieldId);
-    return field?.value ? String(field.value) : '';
+    return field?.value ? String(field.value) : "";
   };
 
   return {
-    propertyName: getFieldValue('property-name'),
-    fileNumber: getFieldValue('file-number'),
+    propertyName: getFieldValue("property-name"),
+    fileNumber: getFieldValue("file-number"),
   };
 }

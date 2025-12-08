@@ -1,0 +1,13 @@
+-- Create storage bucket for job documents
+INSERT INTO storage.buckets (id, name, public) VALUES ('job-documents', 'job-documents', false);
+
+-- Create RLS policies for job-documents bucket
+CREATE POLICY "Allow anonymous uploads to job-documents" 
+ON storage.objects 
+FOR INSERT 
+WITH CHECK (bucket_id = 'job-documents');
+
+CREATE POLICY "Allow anonymous access to job-documents" 
+ON storage.objects 
+FOR SELECT 
+USING (bucket_id = 'job-documents');

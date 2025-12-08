@@ -1,0 +1,6 @@
+-- Add valcre_job_id column to store the actual Valcre job ID for linking
+ALTER TABLE public.job_loe_details 
+ADD COLUMN IF NOT EXISTS valcre_job_id integer;
+
+-- Add a comment to explain the purpose of this column
+COMMENT ON COLUMN public.job_loe_details.valcre_job_id IS 'The actual Valcre job ID used for constructing links to the Valcre app';

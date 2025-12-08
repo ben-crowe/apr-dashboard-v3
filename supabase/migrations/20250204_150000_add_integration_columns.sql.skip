@@ -1,0 +1,11 @@
+-- Add columns to track integration IDs
+ALTER TABLE public.job_submissions 
+ADD COLUMN IF NOT EXISTS valcre_job_id TEXT,
+ADD COLUMN IF NOT EXISTS clickup_task_id TEXT,
+ADD COLUMN IF NOT EXISTS clickup_task_url TEXT,
+ADD COLUMN IF NOT EXISTS docuseal_submission_id TEXT,
+ADD COLUMN IF NOT EXISTS docuseal_status TEXT;
+
+-- Add indexes for quick lookups
+CREATE INDEX IF NOT EXISTS idx_job_submissions_valcre ON public.job_submissions(valcre_job_id);
+CREATE INDEX IF NOT EXISTS idx_job_submissions_clickup ON public.job_submissions(clickup_task_id);

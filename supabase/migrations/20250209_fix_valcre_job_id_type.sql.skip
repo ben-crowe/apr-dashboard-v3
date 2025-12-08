@@ -1,0 +1,8 @@
+-- Fix valcre_job_id column type in job_loe_details table
+-- It needs to be TEXT to handle both PENDING values and actual job IDs
+
+ALTER TABLE public.job_loe_details 
+ALTER COLUMN valcre_job_id TYPE TEXT USING valcre_job_id::TEXT;
+
+-- Update the comment to reflect the change
+COMMENT ON COLUMN public.job_loe_details.valcre_job_id IS 'The Valcre job ID (can be PENDING or actual ID) used for constructing links to the Valcre app';

@@ -48,7 +48,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'intake-property-address', storeId: 'intake-property-address', label: 'Property Address', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
   { id: 'intake-property-type', storeId: 'intake-property-type', label: 'Property Type', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
   { id: 'intake-intended-use', storeId: 'intake-intended-use', label: 'Intended Use', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'intake-valuation-premises', storeId: 'intake-valuation-premises', label: 'Valuation Premises', section: 'client-intake', subsection: 'property-info-intake', type: 'select', inputSource: 'user-input', required: false, options: ['As Is', 'As Stabilized', 'As Complete', 'As Proposed'] },
+  { id: 'intake-valuation-premises', storeId: 'intake-valuation-premises', label: 'Valuation Premises', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
   { id: 'intake-asset-condition', storeId: 'intake-asset-condition', label: 'Asset Condition', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
 
   // Property Contact Subsection
@@ -76,7 +76,7 @@ export const fieldRegistry: FieldDefinition[] = [
   // Delivery Details Subsection
   { id: 'loe-delivery-date', storeId: 'loe-delivery-date', label: 'Delivery Date', section: 'loe-prep', subsection: 'delivery-details', type: 'date', inputSource: 'user-input', required: false },
   { id: 'loe-report-type', storeId: 'loe-report-type', label: 'Report Type', section: 'loe-prep', subsection: 'delivery-details', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'loe-property-rights', storeId: 'loe-property-rights', label: 'Property Rights Appraised', section: 'loe-prep', subsection: 'delivery-details', type: 'select', inputSource: 'user-input', required: false, options: ['Fee Simple Estate', 'Leased Fee', 'Leasehold'] },
+  { id: 'loe-property-rights', storeId: 'loe-property-rights', label: 'Property Rights Appraised', section: 'loe-prep', subsection: 'delivery-details', type: 'text', inputSource: 'user-input', required: false },
 
   // Scope Subsection
   { id: 'loe-scope-of-work', storeId: 'loe-scope-of-work', label: 'Scope of Work', section: 'loe-prep', subsection: 'scope-loe', type: 'textarea', inputSource: 'user-input', required: false },

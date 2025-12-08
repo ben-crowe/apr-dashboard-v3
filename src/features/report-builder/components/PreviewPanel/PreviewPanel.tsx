@@ -32,10 +32,21 @@ export default function PreviewPanel() {
   };
 
   const handlePrintPdf = async () => {
+    // Close dialog first
     setShowPdfDialog(false);
+
+    // Small delay to let dialog close and ensure iframe is accessible
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     try {
       setIsExporting(true);
-      await exportToPDF(iframeRef.current);
+
+      // Direct call to iframe's print
+      if (iframeRef.current?.contentWindow) {
+        iframeRef.current.contentWindow.print();
+      } else {
+        throw new Error('Preview iframe not available');
+      }
     } catch (error) {
       console.error('Export PDF error:', error);
       toast({

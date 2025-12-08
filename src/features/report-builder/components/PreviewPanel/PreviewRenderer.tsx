@@ -169,7 +169,7 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
                 height: `${iframeHeight}px`, // Dynamic height based on content
                 minHeight: '1056px', // Minimum one page height
               }}
-              sandbox="allow-same-origin"
+              sandbox="allow-same-origin allow-modals"
             />
           </div>
         </div>

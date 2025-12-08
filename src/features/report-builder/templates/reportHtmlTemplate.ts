@@ -5272,13 +5272,13 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     .empty-state {
-      color: #9ca3af;
+      color: #c0c5cc;
       font-style: italic;
-      padding: 1rem;
-      background: #f9fafb;
-      border-radius: 4px;
-      border: 1px dashed #d1d5db;
-      text-align: center;
+      font-size: 10px;
+      padding: 2px 6px;
+      background: transparent;
+      border-radius: 2px;
+      border: none;
     }
 
     /* SITE Section Table Styles */

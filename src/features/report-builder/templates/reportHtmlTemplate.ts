@@ -3756,6 +3756,610 @@ export function generateReportHtml(sections: ReportSection[]): string {
   };
 
 
+
+  // Helper function to render the RENTAL SURVEY section with custom template
+  const renderRentalSurveySection = (section: ReportSection): string => {
+    // Helper to format currency without decimals
+    const formatCurrencyShort = (value: string): string => {
+      if (!value) return '-';
+      const num = parseFloat(value.replace(/[^0-9.-]/g, ''));
+      if (isNaN(num)) return value;
+      return `$${num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+    };
+
+    // Helper to format currency per SF
+    const formatPerSF = (value: string): string => {
+      if (!value) return '-';
+      const num = parseFloat(value.replace(/[^0-9.-]/g, ''));
+      if (isNaN(num)) return value;
+      return `$${num.toFixed(2)}`;
+    };
+
+    // Subject Property Data
+    const subjectName = getFieldValue(section, 'rental-subject-name');
+    const subjectAddress = getFieldValue(section, 'rental-subject-address');
+    const subjectCity = getFieldValue(section, 'rental-subject-city');
+    const subjectProvince = getFieldValue(section, 'rental-subject-province');
+    const subjectRentType = getFieldValue(section, 'rental-subject-rent-type');
+    const subjectRentUnitAvg = getFieldValue(section, 'rental-subject-rent-unit-avg');
+    const subjectRentSfAvg = getFieldValue(section, 'rental-subject-rent-sf-avg');
+    const subjectUnitAmenities = getFieldValue(section, 'rental-subject-unit-amenities');
+    const subjectUtilitiesIncld = getFieldValue(section, 'rental-subject-utilities-incld');
+    const subjectParkingIncld = getFieldValue(section, 'rental-subject-parking-incld');
+    const subjectParkingType = getFieldValue(section, 'rental-subject-parking-type');
+    const subjectLaundry = getFieldValue(section, 'rental-subject-laundry');
+    const subjectSurveyComments = getFieldValue(section, 'rental-subject-survey-comments');
+    const subjectUnits = getFieldValue(section, 'rental-subject-units');
+    const subjectAvgUnitSf = getFieldValue(section, 'rental-subject-avg-unit-sf');
+    const subjectLocation = getFieldValue(section, 'rental-subject-location');
+    const subjectQuality = getFieldValue(section, 'rental-subject-quality');
+    const subjectCondition = getFieldValue(section, 'rental-subject-condition');
+    const subjectAppeal = getFieldValue(section, 'rental-subject-appeal');
+    const subjectProjectAmenities = getFieldValue(section, 'rental-subject-project-amenities');
+    const subjectSecurityFeatures = getFieldValue(section, 'rental-subject-security-features');
+
+    // Comp 1 Data
+    const comp1Name = getFieldValue(section, 'rental-comp1-name');
+    const comp1Address = getFieldValue(section, 'rental-comp1-address');
+    const comp1City = getFieldValue(section, 'rental-comp1-city');
+    const comp1Province = getFieldValue(section, 'rental-comp1-province');
+    const comp1RentType = getFieldValue(section, 'rental-comp1-rent-type');
+    const comp1RentUnitAvg = getFieldValue(section, 'rental-comp1-rent-unit-avg');
+    const comp1RentSfAvg = getFieldValue(section, 'rental-comp1-rent-sf-avg');
+    const comp1UnitAmenities = getFieldValue(section, 'rental-comp1-unit-amenities');
+    const comp1UtilitiesIncld = getFieldValue(section, 'rental-comp1-utilities-incld');
+    const comp1ParkingIncld = getFieldValue(section, 'rental-comp1-parking-incld');
+    const comp1ParkingType = getFieldValue(section, 'rental-comp1-parking-type');
+    const comp1Laundry = getFieldValue(section, 'rental-comp1-laundry');
+    const comp1SurveyComments = getFieldValue(section, 'rental-comp1-survey-comments');
+    const comp1Units = getFieldValue(section, 'rental-comp1-units');
+    const comp1AvgUnitSf = getFieldValue(section, 'rental-comp1-avg-unit-sf');
+    const comp1Location = getFieldValue(section, 'rental-comp1-location');
+    const comp1Quality = getFieldValue(section, 'rental-comp1-quality');
+    const comp1Condition = getFieldValue(section, 'rental-comp1-condition');
+    const comp1Appeal = getFieldValue(section, 'rental-comp1-appeal');
+    const comp1ProjectAmenities = getFieldValue(section, 'rental-comp1-project-amenities');
+    const comp1SecurityFeatures = getFieldValue(section, 'rental-comp1-security-features');
+    const comp1TotalAdjustments = getFieldValue(section, 'rental-comp1-total-adjustments');
+
+    // Comp 2 Data
+    const comp2Name = getFieldValue(section, 'rental-comp2-name');
+    const comp2Address = getFieldValue(section, 'rental-comp2-address');
+    const comp2City = getFieldValue(section, 'rental-comp2-city');
+    const comp2Province = getFieldValue(section, 'rental-comp2-province');
+    const comp2RentType = getFieldValue(section, 'rental-comp2-rent-type');
+    const comp2RentUnitAvg = getFieldValue(section, 'rental-comp2-rent-unit-avg');
+    const comp2RentSfAvg = getFieldValue(section, 'rental-comp2-rent-sf-avg');
+    const comp2UnitAmenities = getFieldValue(section, 'rental-comp2-unit-amenities');
+    const comp2UtilitiesIncld = getFieldValue(section, 'rental-comp2-utilities-incld');
+    const comp2ParkingIncld = getFieldValue(section, 'rental-comp2-parking-incld');
+    const comp2ParkingType = getFieldValue(section, 'rental-comp2-parking-type');
+    const comp2Laundry = getFieldValue(section, 'rental-comp2-laundry');
+    const comp2SurveyComments = getFieldValue(section, 'rental-comp2-survey-comments');
+    const comp2Units = getFieldValue(section, 'rental-comp2-units');
+    const comp2AvgUnitSf = getFieldValue(section, 'rental-comp2-avg-unit-sf');
+    const comp2Location = getFieldValue(section, 'rental-comp2-location');
+    const comp2Quality = getFieldValue(section, 'rental-comp2-quality');
+    const comp2Condition = getFieldValue(section, 'rental-comp2-condition');
+    const comp2Appeal = getFieldValue(section, 'rental-comp2-appeal');
+    const comp2ProjectAmenities = getFieldValue(section, 'rental-comp2-project-amenities');
+    const comp2SecurityFeatures = getFieldValue(section, 'rental-comp2-security-features');
+    const comp2TotalAdjustments = getFieldValue(section, 'rental-comp2-total-adjustments');
+
+    // Comp 3 Data
+    const comp3Name = getFieldValue(section, 'rental-comp3-name');
+    const comp3Address = getFieldValue(section, 'rental-comp3-address');
+    const comp3City = getFieldValue(section, 'rental-comp3-city');
+    const comp3Province = getFieldValue(section, 'rental-comp3-province');
+    const comp3RentType = getFieldValue(section, 'rental-comp3-rent-type');
+    const comp3RentUnitAvg = getFieldValue(section, 'rental-comp3-rent-unit-avg');
+    const comp3RentSfAvg = getFieldValue(section, 'rental-comp3-rent-sf-avg');
+    const comp3UnitAmenities = getFieldValue(section, 'rental-comp3-unit-amenities');
+    const comp3UtilitiesIncld = getFieldValue(section, 'rental-comp3-utilities-incld');
+    const comp3ParkingIncld = getFieldValue(section, 'rental-comp3-parking-incld');
+    const comp3ParkingType = getFieldValue(section, 'rental-comp3-parking-type');
+    const comp3Laundry = getFieldValue(section, 'rental-comp3-laundry');
+    const comp3SurveyComments = getFieldValue(section, 'rental-comp3-survey-comments');
+    const comp3Units = getFieldValue(section, 'rental-comp3-units');
+    const comp3AvgUnitSf = getFieldValue(section, 'rental-comp3-avg-unit-sf');
+    const comp3Location = getFieldValue(section, 'rental-comp3-location');
+    const comp3Quality = getFieldValue(section, 'rental-comp3-quality');
+    const comp3Condition = getFieldValue(section, 'rental-comp3-condition');
+    const comp3Appeal = getFieldValue(section, 'rental-comp3-appeal');
+    const comp3ProjectAmenities = getFieldValue(section, 'rental-comp3-project-amenities');
+    const comp3SecurityFeatures = getFieldValue(section, 'rental-comp3-security-features');
+    const comp3TotalAdjustments = getFieldValue(section, 'rental-comp3-total-adjustments');
+
+    // Comp 4 Data
+    const comp4Name = getFieldValue(section, 'rental-comp4-name');
+    const comp4Address = getFieldValue(section, 'rental-comp4-address');
+    const comp4City = getFieldValue(section, 'rental-comp4-city');
+    const comp4Province = getFieldValue(section, 'rental-comp4-province');
+    const comp4RentType = getFieldValue(section, 'rental-comp4-rent-type');
+    const comp4RentUnitAvg = getFieldValue(section, 'rental-comp4-rent-unit-avg');
+    const comp4RentSfAvg = getFieldValue(section, 'rental-comp4-rent-sf-avg');
+    const comp4UnitAmenities = getFieldValue(section, 'rental-comp4-unit-amenities');
+    const comp4UtilitiesIncld = getFieldValue(section, 'rental-comp4-utilities-incld');
+    const comp4ParkingIncld = getFieldValue(section, 'rental-comp4-parking-incld');
+    const comp4ParkingType = getFieldValue(section, 'rental-comp4-parking-type');
+    const comp4Laundry = getFieldValue(section, 'rental-comp4-laundry');
+    const comp4SurveyComments = getFieldValue(section, 'rental-comp4-survey-comments');
+    const comp4Units = getFieldValue(section, 'rental-comp4-units');
+    const comp4AvgUnitSf = getFieldValue(section, 'rental-comp4-avg-unit-sf');
+    const comp4Location = getFieldValue(section, 'rental-comp4-location');
+    const comp4Quality = getFieldValue(section, 'rental-comp4-quality');
+    const comp4Condition = getFieldValue(section, 'rental-comp4-condition');
+    const comp4Appeal = getFieldValue(section, 'rental-comp4-appeal');
+    const comp4ProjectAmenities = getFieldValue(section, 'rental-comp4-project-amenities');
+    const comp4SecurityFeatures = getFieldValue(section, 'rental-comp4-security-features');
+    const comp4TotalAdjustments = getFieldValue(section, 'rental-comp4-total-adjustments');
+
+    // Comp 5 Data
+    const comp5Name = getFieldValue(section, 'rental-comp5-name');
+    const comp5Address = getFieldValue(section, 'rental-comp5-address');
+    const comp5City = getFieldValue(section, 'rental-comp5-city');
+    const comp5Province = getFieldValue(section, 'rental-comp5-province');
+    const comp5RentType = getFieldValue(section, 'rental-comp5-rent-type');
+    const comp5RentUnitAvg = getFieldValue(section, 'rental-comp5-rent-unit-avg');
+    const comp5RentSfAvg = getFieldValue(section, 'rental-comp5-rent-sf-avg');
+    const comp5UnitAmenities = getFieldValue(section, 'rental-comp5-unit-amenities');
+    const comp5UtilitiesIncld = getFieldValue(section, 'rental-comp5-utilities-incld');
+    const comp5ParkingIncld = getFieldValue(section, 'rental-comp5-parking-incld');
+    const comp5ParkingType = getFieldValue(section, 'rental-comp5-parking-type');
+    const comp5Laundry = getFieldValue(section, 'rental-comp5-laundry');
+    const comp5SurveyComments = getFieldValue(section, 'rental-comp5-survey-comments');
+    const comp5Units = getFieldValue(section, 'rental-comp5-units');
+    const comp5AvgUnitSf = getFieldValue(section, 'rental-comp5-avg-unit-sf');
+    const comp5Location = getFieldValue(section, 'rental-comp5-location');
+    const comp5Quality = getFieldValue(section, 'rental-comp5-quality');
+    const comp5Condition = getFieldValue(section, 'rental-comp5-condition');
+    const comp5Appeal = getFieldValue(section, 'rental-comp5-appeal');
+    const comp5ProjectAmenities = getFieldValue(section, 'rental-comp5-project-amenities');
+    const comp5SecurityFeatures = getFieldValue(section, 'rental-comp5-security-features');
+    const comp5TotalAdjustments = getFieldValue(section, 'rental-comp5-total-adjustments');
+
+    // 1BR Analysis Data
+    const oneBrHigh = getFieldValue(section, 'rental-1br-high');
+    const oneBrAvg = getFieldValue(section, 'rental-1br-avg');
+    const oneBrMed = getFieldValue(section, 'rental-1br-med');
+    const oneBrLow = getFieldValue(section, 'rental-1br-low');
+    const oneBrHighRentUnit = getFieldValue(section, 'rental-1br-high-rent-unit');
+    const oneBrAvgRentUnit = getFieldValue(section, 'rental-1br-avg-rent-unit');
+    const oneBrMedRentUnit = getFieldValue(section, 'rental-1br-med-rent-unit');
+    const oneBrLowRentUnit = getFieldValue(section, 'rental-1br-low-rent-unit');
+    const oneBrHighRentSf = getFieldValue(section, 'rental-1br-high-rent-sf');
+    const oneBrAvgRentSf = getFieldValue(section, 'rental-1br-avg-rent-sf');
+    const oneBrMedRentSf = getFieldValue(section, 'rental-1br-med-rent-sf');
+    const oneBrLowRentSf = getFieldValue(section, 'rental-1br-low-rent-sf');
+    const oneBrHighAdjRentSf = getFieldValue(section, 'rental-1br-high-adj-rent-sf');
+    const oneBrAvgAdjRentSf = getFieldValue(section, 'rental-1br-avg-adj-rent-sf');
+    const oneBrMedAdjRentSf = getFieldValue(section, 'rental-1br-med-adj-rent-sf');
+    const oneBrLowAdjRentSf = getFieldValue(section, 'rental-1br-low-adj-rent-sf');
+    const oneBrConclusionType = getFieldValue(section, 'rental-1br-conclusion-type');
+    const oneBrConclusionUnitSize = getFieldValue(section, 'rental-1br-conclusion-unit-size');
+    const oneBrConclusionRentUnit = getFieldValue(section, 'rental-1br-conclusion-rent-unit');
+    const oneBrConclusionRentSf = getFieldValue(section, 'rental-1br-conclusion-rent-sf');
+    const oneBrConclusionSf = getFieldValue(section, 'rental-1br-conclusion-sf');
+    const oneBrConclusion = getFieldValue(section, 'rental-1br-conclusion');
+
+    // 2BR Analysis Data
+    const twoBrHigh = getFieldValue(section, 'rental-2br-high');
+    const twoBrAvg = getFieldValue(section, 'rental-2br-avg');
+    const twoBrMed = getFieldValue(section, 'rental-2br-med');
+    const twoBrLow = getFieldValue(section, 'rental-2br-low');
+    const twoBrHighRentUnit = getFieldValue(section, 'rental-2br-high-rent-unit');
+    const twoBrAvgRentUnit = getFieldValue(section, 'rental-2br-avg-rent-unit');
+    const twoBrMedRentUnit = getFieldValue(section, 'rental-2br-med-rent-unit');
+    const twoBrLowRentUnit = getFieldValue(section, 'rental-2br-low-rent-unit');
+    const twoBrHighRentSf = getFieldValue(section, 'rental-2br-high-rent-sf');
+    const twoBrAvgRentSf = getFieldValue(section, 'rental-2br-avg-rent-sf');
+    const twoBrMedRentSf = getFieldValue(section, 'rental-2br-med-rent-sf');
+    const twoBrLowRentSf = getFieldValue(section, 'rental-2br-low-rent-sf');
+    const twoBrHighAdjRentSf = getFieldValue(section, 'rental-2br-high-adj-rent-sf');
+    const twoBrAvgAdjRentSf = getFieldValue(section, 'rental-2br-avg-adj-rent-sf');
+    const twoBrMedAdjRentSf = getFieldValue(section, 'rental-2br-med-adj-rent-sf');
+    const twoBrLowAdjRentSf = getFieldValue(section, 'rental-2br-low-adj-rent-sf');
+    const twoBrConclusionType = getFieldValue(section, 'rental-2br-conclusion-type');
+    const twoBrConclusionUnitSize = getFieldValue(section, 'rental-2br-conclusion-unit-size');
+    const twoBrConclusionRentUnit = getFieldValue(section, 'rental-2br-conclusion-rent-unit');
+    const twoBrConclusionRentSf = getFieldValue(section, 'rental-2br-conclusion-rent-sf');
+    const twoBrConclusionSf = getFieldValue(section, 'rental-2br-conclusion-sf');
+    const twoBrConclusion = getFieldValue(section, 'rental-2br-conclusion');
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Rental Survey Comparison</h2>
+
+      <!-- Main Survey Comparison Table -->
+      <h3 class="subsection-title">Survey Comparison Table</h3>
+      <table class="site-table" style="font-size: 0.7rem; width: 100%;">
+        <thead>
+          <tr style="background: #1a365d; color: white;">
+            <th style="padding: 0.4rem; width: 15%;">Item</th>
+            <th style="padding: 0.4rem; width: 14%;">SUBJECT</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 1</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 2</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 3</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 4</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Property Identification -->
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Property Name</td>
+            <td style="padding: 0.4rem;">${subjectName || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Name || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Name || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Name || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Name || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Name || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Address</td>
+            <td style="padding: 0.4rem;">${subjectAddress || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Address || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Address || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Address || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Address || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Address || '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">City</td>
+            <td style="padding: 0.4rem;">${subjectCity || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1City || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2City || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3City || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4City || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5City || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Province</td>
+            <td style="padding: 0.4rem;">${subjectProvince || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Province || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Province || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Province || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Province || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Province || '-'}</td>
+          </tr>
+
+          <!-- Rent Survey Information Header -->
+          <tr style="background: #1a365d; color: white;">
+            <td colspan="7" style="padding: 0.5rem; text-align: center; font-weight: bold;">RENT SURVEY INFORMATION</td>
+          </tr>
+
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Rent Type</td>
+            <td style="padding: 0.4rem;">${subjectRentType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1RentType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2RentType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3RentType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4RentType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5RentType || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Rent/Unit Avg</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(subjectRentUnitAvg)}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(comp1RentUnitAvg)}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(comp2RentUnitAvg)}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(comp3RentUnitAvg)}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(comp4RentUnitAvg)}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(comp5RentUnitAvg)}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Rent/SF Avg</td>
+            <td style="padding: 0.4rem;">${formatPerSF(subjectRentSfAvg)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(comp1RentSfAvg)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(comp2RentSfAvg)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(comp3RentSfAvg)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(comp4RentSfAvg)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(comp5RentSfAvg)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Unit Amenities</td>
+            <td style="padding: 0.4rem;">${subjectUnitAmenities || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1UnitAmenities || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2UnitAmenities || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3UnitAmenities || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4UnitAmenities || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5UnitAmenities || '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Utilities Incld.*</td>
+            <td style="padding: 0.4rem;">${subjectUtilitiesIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1UtilitiesIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2UtilitiesIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3UtilitiesIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4UtilitiesIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5UtilitiesIncld || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Parking Incld.</td>
+            <td style="padding: 0.4rem;">${subjectParkingIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1ParkingIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2ParkingIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3ParkingIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4ParkingIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5ParkingIncld || '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Parking Type</td>
+            <td style="padding: 0.4rem;">${subjectParkingType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1ParkingType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2ParkingType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3ParkingType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4ParkingType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5ParkingType || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Laundry</td>
+            <td style="padding: 0.4rem;">${subjectLaundry || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Laundry || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Laundry || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Laundry || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Laundry || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Laundry || '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Survey Comments</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${subjectSurveyComments || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp1SurveyComments || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp2SurveyComments || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp3SurveyComments || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp4SurveyComments || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp5SurveyComments || '-'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Utilities Legend -->
+      <p style="font-size: 0.7rem; margin-top: 0.5rem; font-style: italic; color: #666;">
+        *Electricity = E | Garbage = T | Gas = G | Hot-Water = HW | Sewer = S | Water = W | Cable/Satellite = C | Internet = I
+      </p>
+
+      <!-- Building Information -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Building Information</h3>
+      <table class="site-table" style="font-size: 0.7rem; width: 100%;">
+        <thead>
+          <tr style="background: #1a365d; color: white;">
+            <th style="padding: 0.4rem; width: 15%;">Item</th>
+            <th style="padding: 0.4rem; width: 14%;">SUBJECT</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 1</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 2</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 3</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 4</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Units</td>
+            <td style="padding: 0.4rem;">${subjectUnits || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Units || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Units || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Units || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Units || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Units || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Avg Unit SF</td>
+            <td style="padding: 0.4rem;">${subjectAvgUnitSf ? `${Number(subjectAvgUnitSf).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${comp1AvgUnitSf ? `${Number(comp1AvgUnitSf).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${comp2AvgUnitSf ? `${Number(comp2AvgUnitSf).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${comp3AvgUnitSf ? `${Number(comp3AvgUnitSf).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${comp4AvgUnitSf ? `${Number(comp4AvgUnitSf).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${comp5AvgUnitSf ? `${Number(comp5AvgUnitSf).toLocaleString()} SF` : '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Location</td>
+            <td style="padding: 0.4rem;">${subjectLocation || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Location || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Location || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Location || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Location || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Location || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Quality</td>
+            <td style="padding: 0.4rem;">${subjectQuality || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Quality || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Quality || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Quality || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Quality || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Quality || '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Condition</td>
+            <td style="padding: 0.4rem;">${subjectCondition || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Condition || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Condition || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Condition || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Condition || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Condition || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Appeal</td>
+            <td style="padding: 0.4rem;">${subjectAppeal || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Appeal || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Appeal || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Appeal || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Appeal || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Appeal || '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Project Amenities</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${subjectProjectAmenities || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp1ProjectAmenities || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp2ProjectAmenities || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp3ProjectAmenities || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp4ProjectAmenities || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp5ProjectAmenities || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Security Features</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${subjectSecurityFeatures || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp1SecurityFeatures || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp2SecurityFeatures || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp3SecurityFeatures || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp4SecurityFeatures || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp5SecurityFeatures || '-'}</td>
+          </tr>
+          <tr style="background: #1a365d; color: white;">
+            <td style="padding: 0.4rem; font-weight: bold;">Total Adjustments</td>
+            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${comp1TotalAdjustments || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2TotalAdjustments || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3TotalAdjustments || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4TotalAdjustments || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5TotalAdjustments || '-'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- PAGE BREAK -->
+      <div style="page-break-before: always;"></div>
+
+      <!-- 1BR Analysis Table -->
+      <h3 class="subsection-title">1 Bedroom Units Analysis</h3>
+      <table class="site-table" style="font-size: 0.75rem; margin-bottom: 1.5rem;">
+        <thead>
+          <tr style="background: #1a365d; color: white;">
+            <th style="padding: 0.4rem;">COMP TYPE</th>
+            <th style="padding: 0.4rem;">AVERAGE<br/>UNIT SIZE</th>
+            <th style="padding: 0.4rem;">UNADJUSTED<br/>RENT/UNIT</th>
+            <th style="padding: 0.4rem;">RENT/SF</th>
+            <th style="padding: 0.4rem;">ADJUSTED<br/>RENT/SF</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #f3f4f6; font-weight: bold;">
+            <td style="padding: 0.4rem;">HIGH</td>
+            <td style="padding: 0.4rem;">${oneBrHigh ? `${Number(oneBrHigh).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(oneBrHighRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrHighRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrHighAdjRentSf)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">AVG</td>
+            <td style="padding: 0.4rem;">${oneBrAvg ? `${Number(oneBrAvg).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(oneBrAvgRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrAvgRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrAvgAdjRentSf)}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">MED</td>
+            <td style="padding: 0.4rem;">${oneBrMed ? `${Number(oneBrMed).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(oneBrMedRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrMedRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrMedAdjRentSf)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">LOW</td>
+            <td style="padding: 0.4rem;">${oneBrLow ? `${Number(oneBrLow).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(oneBrLowRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrLowRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrLowAdjRentSf)}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 1BR Conclusion Table -->
+      <h4 style="color: #1a365d; margin-top: 1rem; margin-bottom: 0.5rem; font-size: 0.95rem;">Unit Type Analysis & Conclusions</h4>
+      <table class="site-table" style="font-size: 0.75rem;">
+        <thead>
+          <tr style="background: #1a365d; color: white;">
+            <th style="padding: 0.4rem;">TYPE</th>
+            <th style="padding: 0.4rem;">UNIT SIZE</th>
+            <th style="padding: 0.4rem;">RENT/UNIT</th>
+            <th style="padding: 0.4rem;">RENT/SF</th>
+            <th style="padding: 0.4rem;">CONCLUSION/SF</th>
+            <th style="padding: 0.4rem;">CONCLUSION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #fffbeb;">
+            <td style="padding: 0.4rem; font-weight: bold;">${oneBrConclusionType || '1 Bed/1 Bath'}</td>
+            <td style="padding: 0.4rem;">${oneBrConclusionUnitSize ? `${Number(oneBrConclusionUnitSize).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(oneBrConclusionRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrConclusionRentSf)}</td>
+            <td style="padding: 0.4rem; font-weight: bold;">${formatPerSF(oneBrConclusionSf)}</td>
+            <td style="padding: 0.4rem; font-weight: bold;">${formatCurrencyShort(oneBrConclusion)}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 2BR Analysis Table -->
+      <h3 class="subsection-title" style="margin-top: 2rem;">2 Bedroom Units Analysis</h3>
+      <table class="site-table" style="font-size: 0.75rem; margin-bottom: 1.5rem;">
+        <thead>
+          <tr style="background: #1a365d; color: white;">
+            <th style="padding: 0.4rem;">COMP TYPE</th>
+            <th style="padding: 0.4rem;">AVERAGE<br/>UNIT SIZE</th>
+            <th style="padding: 0.4rem;">UNADJUSTED<br/>RENT/UNIT</th>
+            <th style="padding: 0.4rem;">RENT/SF</th>
+            <th style="padding: 0.4rem;">ADJUSTED<br/>RENT/SF</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #f3f4f6; font-weight: bold;">
+            <td style="padding: 0.4rem;">HIGH</td>
+            <td style="padding: 0.4rem;">${twoBrHigh ? `${Number(twoBrHigh).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(twoBrHighRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrHighRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrHighAdjRentSf)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">AVG</td>
+            <td style="padding: 0.4rem;">${twoBrAvg ? `${Number(twoBrAvg).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(twoBrAvgRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrAvgRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrAvgAdjRentSf)}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">MED</td>
+            <td style="padding: 0.4rem;">${twoBrMed ? `${Number(twoBrMed).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(twoBrMedRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrMedRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrMedAdjRentSf)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">LOW</td>
+            <td style="padding: 0.4rem;">${twoBrLow ? `${Number(twoBrLow).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(twoBrLowRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrLowRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrLowAdjRentSf)}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 2BR Conclusion Table -->
+      <h4 style="color: #1a365d; margin-top: 1rem; margin-bottom: 0.5rem; font-size: 0.95rem;">Unit Type Analysis & Conclusions</h4>
+      <table class="site-table" style="font-size: 0.75rem;">
+        <thead>
+          <tr style="background: #1a365d; color: white;">
+            <th style="padding: 0.4rem;">TYPE</th>
+            <th style="padding: 0.4rem;">UNIT SIZE</th>
+            <th style="padding: 0.4rem;">RENT/UNIT</th>
+            <th style="padding: 0.4rem;">RENT/SF</th>
+            <th style="padding: 0.4rem;">CONCLUSION/SF</th>
+            <th style="padding: 0.4rem;">CONCLUSION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #fffbeb;">
+            <td style="padding: 0.4rem; font-weight: bold;">${twoBrConclusionType || '2 Bed/1 Bath'}</td>
+            <td style="padding: 0.4rem;">${twoBrConclusionUnitSize ? `${Number(twoBrConclusionUnitSize).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(twoBrConclusionRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrConclusionRentSf)}</td>
+            <td style="padding: 0.4rem; font-weight: bold;">${formatPerSF(twoBrConclusionSf)}</td>
+            <td style="padding: 0.4rem; font-weight: bold;">${formatCurrencyShort(twoBrConclusion)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    `;
+  };
+
   // Helper function to render the CALC section (Income Calculator Results)
   const renderCalcSection = (section: ReportSection): string => {
     const getFieldValue = (sec: ReportSection, fieldId: string): string => {
@@ -5198,6 +5802,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
                             section.id === 'location' ? renderLocationSection(section) :
                               section.id === 'market' ? renderMarketSection(section) :
                                 section.id === 'calc' ? renderCalcSection(section) :
+                                  section.id === 'rental-survey' ? renderRentalSurveySection(section) :
                                   section.id === 'maps' ? renderMapsSection(section) : `
     <div class="section">
       <h2 class="section-title">${section.name}</h2>

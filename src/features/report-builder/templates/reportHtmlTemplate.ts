@@ -4133,6 +4133,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
         *Electricity = E | Garbage = T | Gas = G | Hot-Water = HW | Sewer = S | Water = W | Cable/Satellite = C | Internet = I
       </p>
 
+
+      <!-- PAGE BREAK - Split Survey Table from Building Info -->
+      <div style="page-break-before: always;"></div>
+
       <!-- Building Information -->
       <h3 class="subsection-title" style="margin-top: 1.5rem;">Building Information</h3>
       <table class="site-table" style="font-size: 0.7rem; width: 100%;">
@@ -4303,6 +4307,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
           </tr>
         </tbody>
       </table>
+
+
+      <!-- PAGE BREAK - Separate 1BR and 2BR Analysis -->
+      <div style="page-break-before: always;"></div>
 
       <!-- 2BR Analysis Table -->
       <h3 class="subsection-title" style="margin-top: 2rem;">2 Bedroom Units Analysis</h3>

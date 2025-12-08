@@ -1747,6 +1747,11 @@
   resolved "https://registry.npmjs.org/@types/file-saver/-/file-saver-2.0.7.tgz"
   integrity sha512-dNKVfHd/jk0SkR/exKGj2ggkB45MAkzvWCaqLUUgkyjITkGNzH8H+yUwr+BLJUBjZOe9w8X3wgmXhZDRg1ED6A==
 
+"@types/html2pdf.js@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.npmjs.org/@types/html2pdf.js/-/html2pdf.js-0.10.0.tgz"
+  integrity sha512-XisuzaIQRGHsdu+Xxnymffh/+M2cu4lzpFMsoMTCoq3flN0EcEVFeYhqIO2uq5FE19NoA7tWYE62lS3SeOdMqA==
+
 "@types/json-schema@^7.0.15", "@types/json-schema@^7.0.6":
   version "7.0.15"
   resolved "https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.15.tgz"
@@ -3420,13 +3425,21 @@ hasown@^2.0.2:
   dependencies:
     function-bind "^1.1.2"
 
-html2canvas@^1.0.0-rc.5, html2canvas@^1.4.1:
+html2canvas@^1.0.0, html2canvas@^1.0.0-rc.5, html2canvas@^1.4.1:
   version "1.4.1"
   resolved "https://registry.npmjs.org/html2canvas/-/html2canvas-1.4.1.tgz"
   integrity sha512-fPU6BHNpsyIhr8yyMpTLLxAbkaK8ArIBcmZIRiBLiDhjeqvXolaEmDGmELFuX9I4xDcaKKcJl+TKZLqruBbmWA==
   dependencies:
     css-line-break "^2.1.0"
     text-segmentation "^1.0.3"
+
+html2pdf.js@^0.12.1:
+  version "0.12.1"
+  resolved "https://registry.npmjs.org/html2pdf.js/-/html2pdf.js-0.12.1.tgz"
+  integrity sha512-3rBWQ96H5oOU9jtoz3MnE/epGi27ig9h8aonBk4JTpvUERM3lMRxhIRckhJZEi4wE0YfRINoYOIDY0hLY0CHgQ==
+  dependencies:
+    html2canvas "^1.0.0"
+    jspdf "^3.0.0"
 
 http-errors@~1.4.0:
   version "1.4.0"
@@ -3666,7 +3679,7 @@ jsonfile@^6.0.1:
   optionalDependencies:
     graceful-fs "^4.1.6"
 
-jspdf@^3.0.4:
+jspdf@^3.0.0, jspdf@^3.0.4:
   version "3.0.4"
   resolved "https://registry.npmjs.org/jspdf/-/jspdf-3.0.4.tgz"
   integrity sha512-dc6oQ8y37rRcHn316s4ngz/nOjayLF/FFxBF4V9zamQKRqXxyiH1zagkCdktdWhtoQId5K20xt1lB90XzkB+hQ==

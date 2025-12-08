@@ -46,6 +46,7 @@ const TestInputDashboard: React.FC = () => {
     // V3 Operational Sections (mirrors deployed V3 Dashboard)
     'client-intake': 'S1 - CLIENT INTAKE (V3)',
     'loe-prep': 'S2 - LOE PREP (V3)',
+    'image-mgt': 'S3 - IMAGE MANAGEMENT',
     // Report Builder Sections
     'cover': '01 - COVER PAGE',
     'home': '02 - INTRODUCTION LETTER',

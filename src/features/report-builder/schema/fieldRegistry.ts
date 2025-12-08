@@ -87,6 +87,30 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'loe-appraiser-comments', storeId: 'loe-appraiser-comments', label: 'Appraiser Comments', section: 'loe-prep', subsection: 'comments-loe', type: 'textarea', inputSource: 'user-input', required: false },
 
   // ============================================================================
+  // SECTION S3: IMAGE MANAGEMENT
+  // Consolidated image uploads - easier to manage all in one place
+  // These reference the same storeIds as the originals scattered in other sections
+  // ============================================================================
+
+  // Cover & Report Images
+  { id: 'img-cover-photo', storeId: 'cover-photo', label: 'Cover Photo (→ 01-Cover)', section: 'image-mgt', subsection: 'report-images', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-signature', storeId: 'cert-signature', label: 'Signature Image (→ 22-Cert)', section: 'image-mgt', subsection: 'report-images', type: 'image', inputSource: 'user-input', required: false },
+
+  // Maps
+  { id: 'img-map-regional', storeId: 'map-regional', label: 'Regional Map (→ 03-Maps)', section: 'image-mgt', subsection: 'maps-images', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-map-local', storeId: 'map-local', label: 'Local Area Map (→ 03-Maps)', section: 'image-mgt', subsection: 'maps-images', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-map-aerial', storeId: 'map-aerial', label: 'Aerial/Site Map (→ 03-Maps)', section: 'image-mgt', subsection: 'maps-images', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-zoning-map', storeId: 'zoning-map', label: 'Zoning Map (→ 13-Zone)', section: 'image-mgt', subsection: 'maps-images', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-site-plan', storeId: 'site-plan-image', label: 'Site Plan (→ 08-Site)', section: 'image-mgt', subsection: 'maps-images', type: 'image', inputSource: 'user-input', required: false },
+
+  // Property Photos
+  { id: 'img-photos-exterior', storeId: 'photos-exterior', label: 'Exterior Photos (→ 07-Photos)', section: 'image-mgt', subsection: 'property-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-photos-street', storeId: 'photos-street', label: 'Street View Photos (→ 07-Photos)', section: 'image-mgt', subsection: 'property-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-photos-common', storeId: 'photos-common', label: 'Common Area Photos (→ 07-Photos)', section: 'image-mgt', subsection: 'property-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-photos-units', storeId: 'photos-units', label: 'Unit Interior Photos (→ 07-Photos)', section: 'image-mgt', subsection: 'property-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-photos-systems', storeId: 'photos-systems', label: 'Building Systems Photos (→ 07-Photos)', section: 'image-mgt', subsection: 'property-photos', type: 'image', inputSource: 'user-input', required: false },
+
+  // ============================================================================
   // SECTION: COVER PAGE
   // ============================================================================
 

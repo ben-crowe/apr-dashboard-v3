@@ -4867,19 +4867,6 @@ export function generateReportHtml(sections: ReportSection[]): string {
       position: relative;
     }
 
-    /* Visual indicator for page height - shows where content exceeds 11in */
-    .page::after {
-      content: '';
-      position: absolute;
-      top: 11in;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: repeating-linear-gradient(90deg, #ef4444, #ef4444 10px, transparent 10px, transparent 20px);
-      pointer-events: none;
-      z-index: 100;
-    }
-
     /* Cover Page Styles - Matching Valcre Design */
     .cover-page {
       position: relative;

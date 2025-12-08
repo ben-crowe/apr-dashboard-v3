@@ -5,6 +5,14 @@ import { FileText, Minus, Plus, FileDown, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
   exportToPDF,
   exportToDOCX,
   getExportOptionsFromSections,
@@ -13,23 +21,20 @@ import {
 export default function PreviewPanel() {
   const previewHtml = useReportBuilderStore((state) => state.previewHtml);
   const sections = useReportBuilderStore((state) => state.sections);
-  const [zoom, setZoom] = useState(0.75); // Default to 75% to see more of the document
+  const [zoom, setZoom] = useState(0.75);
   const [isExporting, setIsExporting] = useState(false);
+  const [showPdfDialog, setShowPdfDialog] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { toast } = useToast();
 
-  const handleExportPDF = async () => {
+  const handleOpenPdfDialog = () => {
+    setShowPdfDialog(true);
+  };
+
+  const handlePrintPdf = async () => {
+    setShowPdfDialog(false);
     try {
       setIsExporting(true);
-
-      toast({
-        title: 'Save as PDF',
-        description: 'Select "Save as PDF" from the printer dropdown, then click Save.',
-        duration: 6000,
-      });
-
-      // Small delay to let user see the instructions
-      await new Promise(resolve => setTimeout(resolve, 800));
       await exportToPDF(iframeRef.current);
     } catch (error) {
       console.error('Export PDF error:', error);
@@ -120,7 +125,7 @@ export default function PreviewPanel() {
           <Button
             variant="outline"
             size="sm"
-            onClick={handleExportPDF}
+            onClick={handleOpenPdfDialog}
             disabled={isExporting || !previewHtml}
             title="Download as PDF"
           >
@@ -154,6 +159,33 @@ export default function PreviewPanel() {
           </div>
         )}
       </div>
+
+      {/* PDF Export Dialog */}
+      <Dialog open={showPdfDialog} onOpenChange={setShowPdfDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Download as PDF</DialogTitle>
+            <DialogDescription>
+              Your browser's print dialog will open. To save as PDF:
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <ol className="list-decimal list-inside space-y-2 text-sm">
+              <li>Select <strong>"Save as PDF"</strong> from the printer dropdown</li>
+              <li>Click <strong>Save</strong></li>
+              <li>Choose where to save the file</li>
+            </ol>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowPdfDialog(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handlePrintPdf}>
+              Open Print Dialog
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -648,3 +648,10 @@ export const getRequiredFields = (): FieldDefinition[] =>
 
 export const getFieldsBySubsection = (sectionId: string, subsectionId: string): FieldDefinition[] =>
   fieldRegistry.filter(f => f.section === sectionId && f.subsection === subsectionId);
+
+export const getSubsectionsForSection = (sectionId: string): string[] =>
+  Array.from(new Set(
+    fieldRegistry
+      .filter(f => f.section === sectionId && f.subsection)
+      .map(f => f.subsection as string)
+  ));

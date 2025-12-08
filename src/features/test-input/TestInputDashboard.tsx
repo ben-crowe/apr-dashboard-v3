@@ -4,6 +4,8 @@ import {
   fieldRegistry,
   getAllSections,
   getFieldsBySection,
+  getSubsectionsForSection,
+  getFieldsBySubsection,
   FieldDefinition
 } from '../report-builder/schema/fieldRegistry';
 import { useReportBuilderStore } from '../report-builder/store/reportBuilderStore';
@@ -70,6 +72,17 @@ const TestInputDashboard: React.FC = () => {
     'rental-survey': '20 - RENTAL SURVEY',
     'recon': '21 - RECONCILIATION',
     'cert': '22 - CERTIFICATION'
+  };
+
+  // Subsection name mapping for image-mgt
+  const subsectionNameMapping: Record<string, string> = {
+    'cover-images': 'COVER & SIGNATURE',
+    'maps': 'MAPS',
+    'exterior-photos': 'EXTERIOR PHOTOS',
+    'street-photos': 'STREET VIEWS',
+    'common-photos': 'COMMON AREAS',
+    'unit-photos': 'UNIT INTERIORS',
+    'systems-photos': 'BUILDING SYSTEMS'
   };
 
   // Get value from store by traversing sections/subsections
@@ -460,43 +473,76 @@ const TestInputDashboard: React.FC = () => {
 
                   <CollapsibleContent>
                     <div className="border-t border-slate-200">
-                      <table className="w-full">
-                        <thead>
-                          <tr className="bg-slate-50 border-b border-slate-200">
-                            <th className="text-left text-xs font-semibold text-slate-600 px-4 py-2 w-48">Field ID</th>
-                            <th className="text-left text-xs font-semibold text-slate-600 px-4 py-2">Label</th>
-                            <th className="text-left text-xs font-semibold text-slate-600 px-4 py-2">Value</th>
-                            <th className="text-left text-xs font-semibold text-slate-600 px-4 py-2 w-24">Status</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {fields.map(field => {
-                            const statusInfo = getFieldStatus(field);
+                      {/* Special rendering for image-mgt section with subsection groups */}
+                      {sectionId === 'image-mgt' ? (
+                        <div className="space-y-4 p-4">
+                          {getSubsectionsForSection(sectionId).map(subsectionId => {
+                            const subsectionFields = getFieldsBySubsection(sectionId, subsectionId);
+                            const subsectionName = subsectionNameMapping[subsectionId] || subsectionId.toUpperCase();
                             return (
-                              <tr
-                                key={field.id}
-                                className="border-b border-slate-100 hover:bg-slate-50"
-                              >
-                                <td className="px-4 py-2 text-xs font-mono text-slate-600">
-                                  {field.storeId}
-                                </td>
-                                <td className="px-4 py-2 text-sm text-slate-800">
-                                  {field.label}
-                                  {field.required && (
-                                    <span className="text-red-500 ml-1">*</span>
-                                  )}
-                                </td>
-                                <td className="px-4 py-2">
-                                  {renderInput(field, statusInfo)}
-                                </td>
-                                <td className="px-4 py-2">
-                                  {renderStatusBadge(statusInfo.status)}
-                                </td>
-                              </tr>
+                              <div key={subsectionId} className="border rounded-lg overflow-hidden">
+                                <div className="bg-blue-50 px-4 py-2 border-b">
+                                  <h3 className="text-sm font-semibold text-blue-800">{subsectionName}</h3>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4 p-4">
+                                  {subsectionFields.map(field => {
+                                    const statusInfo = getFieldStatus(field);
+                                    return (
+                                      <div key={field.id} className="flex flex-col gap-1">
+                                        <label className="text-xs text-slate-600 font-medium">
+                                          {field.label}
+                                        </label>
+                                        <div className="flex items-center gap-2">
+                                          {renderInput(field, statusInfo)}
+                                          {renderStatusBadge(statusInfo.status)}
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
                             );
                           })}
-                        </tbody>
-                      </table>
+                        </div>
+                      ) : (
+                        <table className="w-full">
+                          <thead>
+                            <tr className="bg-slate-50 border-b border-slate-200">
+                              <th className="text-left text-xs font-semibold text-slate-600 px-4 py-2 w-48">Field ID</th>
+                              <th className="text-left text-xs font-semibold text-slate-600 px-4 py-2">Label</th>
+                              <th className="text-left text-xs font-semibold text-slate-600 px-4 py-2">Value</th>
+                              <th className="text-left text-xs font-semibold text-slate-600 px-4 py-2 w-24">Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {fields.map(field => {
+                              const statusInfo = getFieldStatus(field);
+                              return (
+                                <tr
+                                  key={field.id}
+                                  className="border-b border-slate-100 hover:bg-slate-50"
+                                >
+                                  <td className="px-4 py-2 text-xs font-mono text-slate-600">
+                                    {field.storeId}
+                                  </td>
+                                  <td className="px-4 py-2 text-sm text-slate-800">
+                                    {field.label}
+                                    {field.required && (
+                                      <span className="text-red-500 ml-1">*</span>
+                                    )}
+                                  </td>
+                                  <td className="px-4 py-2">
+                                    {renderInput(field, statusInfo)}
+                                  </td>
+                                  <td className="px-4 py-2">
+                                    {renderStatusBadge(statusInfo.status)}
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      )}
                     </div>
                   </CollapsibleContent>
                 </div>

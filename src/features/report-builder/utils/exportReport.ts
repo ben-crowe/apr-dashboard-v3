@@ -33,10 +33,68 @@ function generateFileName(options: ExportOptions, extension: 'pdf' | 'docx' | 'd
 }
 
 /**
- * Export the report as PDF using browser print dialog
- * User selects "Save as PDF" from printer dropdown
+ * Export the report as PDF using Gotenberg service
+ * One-click download - no print dialog needed
  */
 export async function exportToPDF(
+  html: string,
+  options: ExportOptions = {}
+): Promise<void> {
+  const filename = generateFileName(options, 'pdf');
+
+  try {
+    // Get Supabase URL from environment or use default
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'http://localhost:54321';
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+
+    const response = await fetch(`${supabaseUrl}/functions/v1/generate-pdf`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${supabaseAnonKey}`,
+      },
+      body: JSON.stringify({ html, filename }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+
+      // Check if it's a service unavailable error (Gotenberg not running)
+      if (response.status === 503) {
+        console.warn('Gotenberg service unavailable, falling back to print dialog');
+        throw new Error('PDF_SERVICE_UNAVAILABLE');
+      }
+
+      throw new Error(errorData.error || `PDF generation failed: ${response.status}`);
+    }
+
+    // Get PDF blob from response
+    const pdfBlob = await response.blob();
+
+    // Create download link
+    const url = URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+
+    // Cleanup
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Failed to generate PDF:', error);
+    throw error;
+  }
+}
+
+/**
+ * Export the report as PDF using browser print dialog (fallback)
+ * User selects "Save as PDF" from printer dropdown
+ */
+export async function exportToPDFViaPrint(
   iframeRef: HTMLIFrameElement | null
 ): Promise<void> {
   if (!iframeRef?.contentWindow) {

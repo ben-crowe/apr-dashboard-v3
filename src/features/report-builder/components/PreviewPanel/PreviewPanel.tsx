@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import {
   exportToPDF,
+  exportToPDFViaPrint,
   exportToDOCX,
   getExportOptionsFromSections,
 } from '../../utils/exportReport';
@@ -27,26 +28,49 @@ export default function PreviewPanel() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { toast } = useToast();
 
-  const handleOpenPdfDialog = () => {
-    setShowPdfDialog(true);
+  const handleExportPDF = async () => {
+    try {
+      setIsExporting(true);
+      const options = getExportOptionsFromSections(sections);
+
+      toast({
+        title: 'Generating PDF...',
+        description: 'Please wait while we generate your PDF.',
+      });
+
+      // Try Gotenberg service first (one-click download)
+      await exportToPDF(previewHtml, options);
+
+      toast({
+        title: 'PDF Downloaded',
+        description: 'Your report has been saved.',
+      });
+    } catch (error) {
+      console.error('Export PDF error:', error);
+
+      // If Gotenberg unavailable, show dialog for print fallback
+      if (error instanceof Error && error.message === 'PDF_SERVICE_UNAVAILABLE') {
+        setShowPdfDialog(true);
+        return;
+      }
+
+      toast({
+        title: 'Export failed',
+        description: error instanceof Error ? error.message : 'Failed to export PDF',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const handlePrintPdf = async () => {
-    // Close dialog first
     setShowPdfDialog(false);
-
-    // Small delay to let dialog close and ensure iframe is accessible
     await new Promise(resolve => setTimeout(resolve, 100));
 
     try {
       setIsExporting(true);
-
-      // Direct call to iframe's print
-      if (iframeRef.current?.contentWindow) {
-        iframeRef.current.contentWindow.print();
-      } else {
-        throw new Error('Preview iframe not available');
-      }
+      await exportToPDFViaPrint(iframeRef.current);
     } catch (error) {
       console.error('Export PDF error:', error);
       toast({
@@ -136,7 +160,7 @@ export default function PreviewPanel() {
           <Button
             variant="outline"
             size="sm"
-            onClick={handleOpenPdfDialog}
+            onClick={handleExportPDF}
             disabled={isExporting || !previewHtml}
             title="Download as PDF"
           >
@@ -171,13 +195,13 @@ export default function PreviewPanel() {
         )}
       </div>
 
-      {/* PDF Export Dialog */}
+      {/* PDF Export Fallback Dialog (when Gotenberg unavailable) */}
       <Dialog open={showPdfDialog} onOpenChange={setShowPdfDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Download as PDF</DialogTitle>
             <DialogDescription>
-              Your browser's print dialog will open. To save as PDF:
+              PDF service is starting up. Use browser print dialog instead:
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">

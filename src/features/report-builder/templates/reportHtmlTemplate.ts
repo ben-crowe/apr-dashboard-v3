@@ -143,7 +143,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <tbody>
           <tr>
             <td class="site-table-label" style="width: 35%;">Address</td>
-            <td class="site-table-value">${siteAddress || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${siteAddress || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Site Area</td>
@@ -151,28 +151,28 @@ export function generateReportHtml(sections: ReportSection[]): string {
               ${siteAreaSf ? `${Number(siteAreaSf).toLocaleString()} SF` : ''}
               ${siteAreaSf && siteAcreage ? ' / ' : ''}
               ${siteAcreage ? `${Number(siteAcreage).toFixed(4)} AC` : ''}
-              ${!siteAreaSf && !siteAcreage ? '<span class="empty-state">Not specified</span>' : ''}
+              ${!siteAreaSf && !siteAcreage ? '<span class="empty-state">—</span>' : ''}
             </td>
           </tr>
           <tr>
             <td class="site-table-label">Shape</td>
-            <td class="site-table-value">${siteShape || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${siteShape || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Topography</td>
-            <td class="site-table-value">${topography || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${topography || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Frontage</td>
-            <td class="site-table-value">${exposureVisibility || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${exposureVisibility || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Access Points</td>
-            <td class="site-table-value">${accessibility || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${accessibility || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Corner Lot Status</td>
-            <td class="site-table-value"><span class="empty-state">Not specified</span></td>
+            <td class="site-table-value"><span class="empty-state">—</span></td>
           </tr>
         </tbody>
       </table>
@@ -288,11 +288,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">Total Spaces</td>
-              <td class="site-table-value">${parkingSpaces || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${parkingSpaces || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Parking Ratio</td>
-              <td class="site-table-value">${parkingRatio ? `${parkingRatio} spaces per unit` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${parkingRatio ? `${parkingRatio} spaces per unit` : '<span class="empty-state">—</span>'}</td>
             </tr>
           </tbody>
         </table>
@@ -409,19 +409,19 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <tbody>
           <tr>
             <td class="site-table-label">Legal Description</td>
-            <td class="site-table-value">${propertyLegal || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${propertyLegal || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Property Address</td>
-            <td class="site-table-value">${propertyAddress || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${propertyAddress || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Property Type</td>
-            <td class="site-table-value">${propertyType || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${propertyType || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Property Interest</td>
-            <td class="site-table-value">${propertyInterest || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${propertyInterest || '<span class="empty-state">—</span>'}</td>
           </tr>
         </tbody>
       </table>
@@ -432,11 +432,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <tbody>
           <tr>
             <td class="site-table-label">Client</td>
-            <td class="site-table-value">${clientName || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${clientName || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Client Address</td>
-            <td class="site-table-value">${clientAddress || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${clientAddress || '<span class="empty-state">—</span>'}</td>
           </tr>
         </tbody>
       </table>
@@ -461,15 +461,15 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <tbody>
           <tr>
             <td class="site-table-label">Inspection Date</td>
-            <td class="site-table-value">${inspectionDate || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${inspectionDate || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Inspection Type</td>
-            <td class="site-table-value">${inspectionType || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${inspectionType || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Inspector</td>
-            <td class="site-table-value">${inspectorName || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${inspectorName || '<span class="empty-state">—</span>'}</td>
           </tr>
         </tbody>
       </table>
@@ -494,11 +494,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <tbody>
           <tr>
             <td class="site-table-label">Effective Date of Value</td>
-            <td class="site-table-value">${effectiveDate || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${effectiveDate || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Report Date</td>
-            <td class="site-table-value">${reportDate || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${reportDate || '<span class="empty-state">—</span>'}</td>
           </tr>
         </tbody>
       </table>
@@ -558,27 +558,27 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <tbody>
           <tr>
             <td class="site-table-label">Assessment Year</td>
-            <td class="site-table-value">${assessmentYear || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${assessmentYear || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Land Assessment</td>
-            <td class="site-table-value">${landAssessment ? formatCurrency(landAssessment) : '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${landAssessment ? formatCurrency(landAssessment) : '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Building Assessment</td>
-            <td class="site-table-value">${buildingAssessment ? formatCurrency(buildingAssessment) : '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${buildingAssessment ? formatCurrency(buildingAssessment) : '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Total Assessment</td>
-            <td class="site-table-value">${totalAssessment ? formatCurrency(totalAssessment) : '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${totalAssessment ? formatCurrency(totalAssessment) : '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Mill Rate</td>
-            <td class="site-table-value">${millRate || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${millRate || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Annual Taxes</td>
-            <td class="site-table-value">${annualTaxes ? formatCurrency(annualTaxes) : '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${annualTaxes ? formatCurrency(annualTaxes) : '<span class="empty-state">—</span>'}</td>
           </tr>
         </tbody>
       </table>
@@ -852,7 +852,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       ` : ''}
 
       ${!zoningClassification && !zoningDescription && !permittedUses && !hasDevelopmentStandards && !zoningConformance && !zoningConclusion ? `
-        <div class="empty-state">No zoning information provided</div>
+        <div class="empty-state-block">[Provide zoning details]</div>
       ` : ''}
     </div>
     `;
@@ -898,7 +898,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       ` : `
         <div class="site-narrative-section">
           <h4 class="site-narrative-label">Legally Permissible</h4>
-          <div class="empty-state">Not specified</div>
+          <div class="empty-state-block">[Provide details]</div>
         </div>
       `}
 
@@ -910,7 +910,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       ` : `
         <div class="site-narrative-section">
           <h4 class="site-narrative-label">Physically Possible</h4>
-          <div class="empty-state">Not specified</div>
+          <div class="empty-state-block">[Provide details]</div>
         </div>
       `}
 
@@ -922,7 +922,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       ` : `
         <div class="site-narrative-section">
           <h4 class="site-narrative-label">Financially Feasible</h4>
-          <div class="empty-state">Not specified</div>
+          <div class="empty-state-block">[Provide details]</div>
         </div>
       `}
 
@@ -934,7 +934,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       ` : `
         <div class="site-narrative-section">
           <h4 class="site-narrative-label">Maximally Productive</h4>
-          <div class="empty-state">Not specified</div>
+          <div class="empty-state-block">[Provide details]</div>
         </div>
       `}
 
@@ -953,7 +953,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <p class="site-narrative-text">${asImprovedAnalysis}</p>
         </div>
       ` : `
-        <div class="empty-state">No as improved analysis provided</div>
+        <div class="empty-state-block">[Provide analysis]</div>
       `}
 
       ${asImprovedConclusion ? `
@@ -1022,21 +1022,21 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <tr>
             <td>Income Approach</td>
             <td>${formatCurrency(incomeApproachValue)}</td>
-            <td>${incomeApproachWeight || '<span class="empty-state">Not specified</span>'}</td>
+            <td>${incomeApproachWeight || '<span class="empty-state">—</span>'}</td>
           </tr>
           ` : ''}
           ${salesComparisonValue ? `
           <tr>
             <td>Sales Comparison Approach</td>
             <td>${formatCurrency(salesComparisonValue)}</td>
-            <td>${salesComparisonWeight || '<span class="empty-state">Not specified</span>'}</td>
+            <td>${salesComparisonWeight || '<span class="empty-state">—</span>'}</td>
           </tr>
           ` : ''}
           ${costApproachValue ? `
           <tr>
             <td>Cost Approach</td>
             <td>${formatCurrency(costApproachValue)}</td>
-            <td>${costApproachWeight || '<span class="empty-state">Not specified</span>'}</td>
+            <td>${costApproachWeight || '<span class="empty-state">—</span>'}</td>
           </tr>
           ` : ''}
           ${!incomeApproachValue && !salesComparisonValue && !costApproachValue ? `
@@ -1056,7 +1056,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <p class="site-narrative-text">${reconAnalysis}</p>
         </div>
       ` : `
-        <div class="empty-state">No reconciliation analysis provided</div>
+        <div class="empty-state-block">[Provide reconciliation analysis]</div>
       `}
 
       <!-- Final Value Conclusion -->
@@ -1072,10 +1072,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
         </thead>
         <tbody>
           <tr>
-            <td>${finalValueScenario || '<span class="empty-state">Not specified</span>'}</td>
-            <td>${finalInterestAppraised || '<span class="empty-state">Not specified</span>'}</td>
-            <td>${finalEffectiveDate || '<span class="empty-state">Not specified</span>'}</td>
-            <td><strong>${finalConcludedValue ? formatCurrency(finalConcludedValue) : '<span class="empty-state">Not specified</span>'}</strong></td>
+            <td>${finalValueScenario || '<span class="empty-state">—</span>'}</td>
+            <td>${finalInterestAppraised || '<span class="empty-state">—</span>'}</td>
+            <td>${finalEffectiveDate || '<span class="empty-state">—</span>'}</td>
+            <td><strong>${finalConcludedValue ? formatCurrency(finalConcludedValue) : '<span class="empty-state">—</span>'}</strong></td>
           </tr>
         </tbody>
       </table>
@@ -2059,23 +2059,23 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <tbody>
           <tr>
             <td class="site-table-label">Number of Units</td>
-            <td class="site-table-value">${subjectNumUnits || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${subjectNumUnits || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">GBA</td>
-            <td class="site-table-value">${subjectGba ? `${Number(subjectGba).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${subjectGba ? `${Number(subjectGba).toLocaleString()} SF` : '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Year Built</td>
-            <td class="site-table-value">${subjectYearBuilt || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${subjectYearBuilt || '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Site Area</td>
-            <td class="site-table-value">${subjectSiteArea ? `${Number(subjectSiteArea).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${subjectSiteArea ? `${Number(subjectSiteArea).toLocaleString()} SF` : '<span class="empty-state">—</span>'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Condition</td>
-            <td class="site-table-value">${subjectCondition || '<span class="empty-state">Not specified</span>'}</td>
+            <td class="site-table-value">${subjectCondition || '<span class="empty-state">—</span>'}</td>
           </tr>
         </tbody>
       </table>
@@ -2090,23 +2090,23 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <tbody>
             <tr>
               <td class="site-table-label">Property</td>
-              <td class="site-table-value">${sale1Name || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale1Name || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Address</td>
-              <td class="site-table-value">${sale1Address || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale1Address || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Sale Date</td>
-              <td class="site-table-value">${sale1SaleDate || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale1SaleDate || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Sale Price</td>
-              <td class="site-table-value">${sale1SalePrice ? formatCurrency(sale1SalePrice) : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale1SalePrice ? formatCurrency(sale1SalePrice) : '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Units</td>
-              <td class="site-table-value">${sale1NumUnits || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale1NumUnits || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Price/Unit</td>
@@ -2114,7 +2114,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">GBA</td>
-              <td class="site-table-value">${sale1Gba ? `${Number(sale1Gba).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale1Gba ? `${Number(sale1Gba).toLocaleString()} SF` : '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Price/SF</td>
@@ -2122,11 +2122,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">Year Built</td>
-              <td class="site-table-value">${sale1YearBuilt || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale1YearBuilt || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Cap Rate</td>
-              <td class="site-table-value">${sale1CapRate ? `${sale1CapRate}%` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale1CapRate ? `${sale1CapRate}%` : '<span class="empty-state">—</span>'}</td>
             </tr>
           </tbody>
         </table>
@@ -2139,23 +2139,23 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <tbody>
             <tr>
               <td class="site-table-label">Property</td>
-              <td class="site-table-value">${sale2Name || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale2Name || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Address</td>
-              <td class="site-table-value">${sale2Address || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale2Address || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Sale Date</td>
-              <td class="site-table-value">${sale2SaleDate || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale2SaleDate || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Sale Price</td>
-              <td class="site-table-value">${sale2SalePrice ? formatCurrency(sale2SalePrice) : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale2SalePrice ? formatCurrency(sale2SalePrice) : '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Units</td>
-              <td class="site-table-value">${sale2NumUnits || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale2NumUnits || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Price/Unit</td>
@@ -2163,7 +2163,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">GBA</td>
-              <td class="site-table-value">${sale2Gba ? `${Number(sale2Gba).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale2Gba ? `${Number(sale2Gba).toLocaleString()} SF` : '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Price/SF</td>
@@ -2171,11 +2171,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">Year Built</td>
-              <td class="site-table-value">${sale2YearBuilt || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale2YearBuilt || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Cap Rate</td>
-              <td class="site-table-value">${sale2CapRate ? `${sale2CapRate}%` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale2CapRate ? `${sale2CapRate}%` : '<span class="empty-state">—</span>'}</td>
             </tr>
           </tbody>
         </table>
@@ -2191,23 +2191,23 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <tbody>
             <tr>
               <td class="site-table-label">Property</td>
-              <td class="site-table-value">${sale3Name || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale3Name || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Address</td>
-              <td class="site-table-value">${sale3Address || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale3Address || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Sale Date</td>
-              <td class="site-table-value">${sale3SaleDate || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale3SaleDate || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Sale Price</td>
-              <td class="site-table-value">${sale3SalePrice ? formatCurrency(sale3SalePrice) : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale3SalePrice ? formatCurrency(sale3SalePrice) : '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Units</td>
-              <td class="site-table-value">${sale3NumUnits || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale3NumUnits || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Price/Unit</td>
@@ -2215,7 +2215,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">GBA</td>
-              <td class="site-table-value">${sale3Gba ? `${Number(sale3Gba).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale3Gba ? `${Number(sale3Gba).toLocaleString()} SF` : '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Price/SF</td>
@@ -2223,11 +2223,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">Year Built</td>
-              <td class="site-table-value">${sale3YearBuilt || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale3YearBuilt || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Cap Rate</td>
-              <td class="site-table-value">${sale3CapRate ? `${sale3CapRate}%` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale3CapRate ? `${sale3CapRate}%` : '<span class="empty-state">—</span>'}</td>
             </tr>
           </tbody>
         </table>
@@ -2240,23 +2240,23 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <tbody>
             <tr>
               <td class="site-table-label">Property</td>
-              <td class="site-table-value">${sale4Name || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale4Name || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Address</td>
-              <td class="site-table-value">${sale4Address || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale4Address || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Sale Date</td>
-              <td class="site-table-value">${sale4SaleDate || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale4SaleDate || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Sale Price</td>
-              <td class="site-table-value">${sale4SalePrice ? formatCurrency(sale4SalePrice) : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale4SalePrice ? formatCurrency(sale4SalePrice) : '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Units</td>
-              <td class="site-table-value">${sale4NumUnits || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale4NumUnits || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Price/Unit</td>
@@ -2264,7 +2264,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">GBA</td>
-              <td class="site-table-value">${sale4Gba ? `${Number(sale4Gba).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale4Gba ? `${Number(sale4Gba).toLocaleString()} SF` : '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Price/SF</td>
@@ -2272,11 +2272,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">Year Built</td>
-              <td class="site-table-value">${sale4YearBuilt || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale4YearBuilt || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Cap Rate</td>
-              <td class="site-table-value">${sale4CapRate ? `${sale4CapRate}%` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale4CapRate ? `${sale4CapRate}%` : '<span class="empty-state">—</span>'}</td>
             </tr>
           </tbody>
         </table>
@@ -2292,23 +2292,23 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <tbody>
             <tr>
               <td class="site-table-label">Property</td>
-              <td class="site-table-value">${sale5Name || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale5Name || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Address</td>
-              <td class="site-table-value">${sale5Address || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale5Address || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Sale Date</td>
-              <td class="site-table-value">${sale5SaleDate || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale5SaleDate || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Sale Price</td>
-              <td class="site-table-value">${sale5SalePrice ? formatCurrency(sale5SalePrice) : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale5SalePrice ? formatCurrency(sale5SalePrice) : '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Units</td>
-              <td class="site-table-value">${sale5NumUnits || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale5NumUnits || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Price/Unit</td>
@@ -2316,7 +2316,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">GBA</td>
-              <td class="site-table-value">${sale5Gba ? `${Number(sale5Gba).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale5Gba ? `${Number(sale5Gba).toLocaleString()} SF` : '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Price/SF</td>
@@ -2324,11 +2324,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">Year Built</td>
-              <td class="site-table-value">${sale5YearBuilt || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale5YearBuilt || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Cap Rate</td>
-              <td class="site-table-value">${sale5CapRate ? `${sale5CapRate}%` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale5CapRate ? `${sale5CapRate}%` : '<span class="empty-state">—</span>'}</td>
             </tr>
           </tbody>
         </table>
@@ -2341,23 +2341,23 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <tbody>
             <tr>
               <td class="site-table-label">Property</td>
-              <td class="site-table-value">${sale6Name || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale6Name || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Address</td>
-              <td class="site-table-value">${sale6Address || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale6Address || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Sale Date</td>
-              <td class="site-table-value">${sale6SaleDate || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale6SaleDate || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Sale Price</td>
-              <td class="site-table-value">${sale6SalePrice ? formatCurrency(sale6SalePrice) : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale6SalePrice ? formatCurrency(sale6SalePrice) : '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Units</td>
-              <td class="site-table-value">${sale6NumUnits || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale6NumUnits || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Price/Unit</td>
@@ -2365,7 +2365,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">GBA</td>
-              <td class="site-table-value">${sale6Gba ? `${Number(sale6Gba).toLocaleString()} SF` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale6Gba ? `${Number(sale6Gba).toLocaleString()} SF` : '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Price/SF</td>
@@ -2373,11 +2373,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
             </tr>
             <tr>
               <td class="site-table-label">Year Built</td>
-              <td class="site-table-value">${sale6YearBuilt || '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale6YearBuilt || '<span class="empty-state">—</span>'}</td>
             </tr>
             <tr>
               <td class="site-table-label">Cap Rate</td>
-              <td class="site-table-value">${sale6CapRate ? `${sale6CapRate}%` : '<span class="empty-state">Not specified</span>'}</td>
+              <td class="site-table-value">${sale6CapRate ? `${sale6CapRate}%` : '<span class="empty-state">—</span>'}</td>
             </tr>
           </tbody>
         </table>
@@ -2741,13 +2741,13 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <tbody>
           <tr class="cap-value-total">
             <td class="cap-table-label"><strong>Indicated Value - Sales Comparison Approach</strong></td>
-            <td class="cap-table-value"><strong>${salesValueIndication ? formatCurrency(salesValueIndication) : '<span class="empty-state">Not specified</span>'}</strong></td>
+            <td class="cap-table-value"><strong>${salesValueIndication ? formatCurrency(salesValueIndication) : '<span class="empty-state">—</span>'}</strong></td>
           </tr>
         </tbody>
       </table>
   
       ${!subjectNumUnits && !sale1Name && !sale2Name && !sale3Name && !sale4Name && !sale5Name && !sale6Name ? `
-        <div class="empty-state">No sales comparison data provided. Complete the subject property summary and comparable sales fields to generate a comprehensive sales comparison analysis.</div>
+        <div class="empty-state-block">[Provide sales comparison data]</div>
       ` : ''}
     </div>
     `;
@@ -3153,7 +3153,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     ` : ''}
 
     ${!hasOverview && !hasBuildingDescription && !hasInteriorFinish && !hasCondition && !hasSiteImprovements && !hasFunctionalObsolescence ? `
-      <div class="empty-state">No improvements information provided. Complete the Improvements section fields to generate comprehensive property description.</div>
+      <div class="empty-state-block">[Provide improvements details]</div>
     ` : ''}
   </div>
   `;
@@ -3207,7 +3207,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
           </div>
         ` : ''}
       ` : `
-        <div class="empty-state">No report information provided. Complete the Report section fields.</div>
+        <div class="empty-state-block">[Provide report details]</div>
       `}
     </div>
     `;
@@ -3219,7 +3219,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       return `
     <div class="section">
       <h2 class="section-title">Photos</h2>
-      <div class="empty-state">No photos added</div>
+      <div class="empty-state-block">[Add photos]</div>
     </div>
       `;
     }
@@ -5272,13 +5272,20 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     .empty-state {
-      color: #c0c5cc;
+      color: #9ca3af;
+      font-style: normal;
+      font-size: 11px;
+    }
+
+    .empty-state-block {
+      color: #9ca3af;
       font-style: italic;
-      font-size: 10px;
-      padding: 2px 6px;
-      background: transparent;
-      border-radius: 2px;
-      border: none;
+      font-size: 11px;
+      padding: 8px 12px;
+      background: #f8f9fa;
+      border-radius: 4px;
+      border: 1px dashed #d1d5db;
+      text-align: center;
     }
 
     /* SITE Section Table Styles */
@@ -5877,7 +5884,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       ${execSection.fields.map(field => `
         <div class="field-group">
           <div class="field-label">${field.label}:</div>
-          <div class="field-value">${field.value || '<span class="empty-state">Not specified</span>'}</div>
+          <div class="field-value">${field.value || '<span class="empty-state">—</span>'}</div>
         </div>
       `).join('')}
 
@@ -5886,7 +5893,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         ${subsection.fields.map(field => `
           <div class="field-group">
             <div class="field-label">${field.label}:</div>
-            <div class="field-value">${field.value || '<span class="empty-state">Not specified</span>'}</div>
+            <div class="field-value">${field.value || '<span class="empty-state">—</span>'}</div>
           </div>
         `).join('')}
       `).join('') : ''}
@@ -5967,14 +5974,14 @@ export function generateReportHtml(sections: ReportSection[]): string {
           ` : `
             <div class="field-group">
               <div class="field-label">${field.label}:</div>
-              <div class="empty-state">No images added</div>
+              <div class="empty-state-block">[Add images]</div>
             </div>
           `;
                                     }
                                     return `
           <div class="field-group">
             <div class="field-label">${field.label}:</div>
-            <div class="field-value">${field.value || '<span class="empty-state">Not specified</span>'}</div>
+            <div class="field-value">${field.value || '<span class="empty-state">—</span>'}</div>
           </div>
         `;
                                   }).join('')}
@@ -5984,7 +5991,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         ${subsection.fields.map(field => `
           <div class="field-group">
             <div class="field-label">${field.label}:</div>
-            <div class="field-value">${field.value || '<span class="empty-state">Not specified</span>'}</div>
+            <div class="field-value">${field.value || '<span class="empty-state">—</span>'}</div>
           </div>
         `).join('')}
       `).join('') : ''}

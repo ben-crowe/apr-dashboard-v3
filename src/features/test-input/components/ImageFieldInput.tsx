@@ -1,32 +1,47 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
-import { Upload, X, Image as ImageIcon, ExternalLink } from 'lucide-react';
+import { Upload, X, Image as ImageIcon, ExternalLink, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { uploadReportImage, deleteReportImage } from '@/utils/reportImageStorage';
 
 interface ImageFieldInputProps {
   value: string | undefined;
   onChange: (url: string) => void;
   placeholder?: string;
   className?: string;
+  // Optional: provide these to enable Supabase uploads
+  jobId?: string;
+  fieldId?: string;
+  // If true, always use data URL (for quick testing without Supabase)
+  useDataUrl?: boolean;
 }
 
 /**
- * Single image upload input for Test Data Dashboard
- * Stores image as data URL (for testing) or accepts external URLs
+ * Image upload input for Test Data Dashboard
  *
- * For production, this would upload to Supabase Storage and store the URL
+ * Modes:
+ * 1. Supabase Upload (default when jobId & fieldId provided): Uploads to report-images bucket
+ * 2. Data URL (useDataUrl=true or no jobId): Stores as base64 data URL
+ * 3. External URL: Accepts pasted URLs
  */
 const ImageFieldInput: React.FC<ImageFieldInputProps> = ({
   value,
   onChange,
   placeholder = 'Drop image or paste URL',
   className,
+  jobId,
+  fieldId,
+  useDataUrl = false,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Convert File to data URL
+  // Determine if we should use Supabase
+  const shouldUseSupabase = !useDataUrl && jobId && fieldId;
+
+  // Convert File to data URL (fallback mode)
   const fileToDataUrl = useCallback((file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -39,18 +54,34 @@ const ImageFieldInput: React.FC<ImageFieldInputProps> = ({
   // Handle file selection
   const handleFileSelect = async (file: File) => {
     if (!file.type.startsWith('image/')) {
-      console.warn('Not an image file:', file.type);
+      setError('Not an image file');
       return;
     }
 
     setIsLoading(true);
+    setError(null);
+
     try {
-      // For testing: convert to data URL
-      // For production: upload to Supabase Storage and get URL
-      const dataUrl = await fileToDataUrl(file);
-      onChange(dataUrl);
-    } catch (error) {
-      console.error('Failed to process image:', error);
+      if (shouldUseSupabase) {
+        // Upload to Supabase Storage
+        const result = await uploadReportImage(file, jobId!, fieldId!);
+
+        if ('error' in result) {
+          setError(result.error);
+          // Fallback to data URL if Supabase fails
+          const dataUrl = await fileToDataUrl(file);
+          onChange(dataUrl);
+        } else {
+          onChange(result.url);
+        }
+      } else {
+        // Use data URL (local testing mode)
+        const dataUrl = await fileToDataUrl(file);
+        onChange(dataUrl);
+      }
+    } catch (err) {
+      console.error('Failed to process image:', err);
+      setError('Failed to upload image');
     } finally {
       setIsLoading(false);
     }
@@ -116,15 +147,17 @@ const ImageFieldInput: React.FC<ImageFieldInputProps> = ({
   };
 
   // Clear image
-  const handleClear = () => {
+  const handleClear = async () => {
+    // If it's a Supabase URL, we could delete it - but skip for now
+    // since we might want to keep orphaned images for debugging
     onChange('');
+    setError(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
   };
 
   // Check if value is a valid image URL or data URL
-  // Handle case where value might be array or non-string
   const stringValue = typeof value === 'string' ? value : '';
   const hasImage = stringValue && (
     stringValue.startsWith('data:image/') ||
@@ -132,6 +165,9 @@ const ImageFieldInput: React.FC<ImageFieldInputProps> = ({
     stringValue.startsWith('https://') ||
     stringValue.startsWith('/') // relative path
   );
+
+  // Check if it's a Supabase URL
+  const isSupabaseUrl = stringValue.includes('supabase') && stringValue.includes('report-images');
 
   return (
     <div className={cn('relative', className)}>
@@ -158,6 +194,11 @@ const ImageFieldInput: React.FC<ImageFieldInputProps> = ({
                 (e.target as HTMLImageElement).style.display = 'none';
               }}
             />
+            {isSupabaseUrl && (
+              <div className="absolute bottom-0 left-0 right-0 bg-green-500/80 text-white text-[8px] text-center">
+                Supabase
+              </div>
+            )}
           </div>
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-1">
@@ -167,8 +208,13 @@ const ImageFieldInput: React.FC<ImageFieldInputProps> = ({
                 size="sm"
                 className="h-7 text-xs"
                 onClick={() => fileInputRef.current?.click()}
+                disabled={isLoading}
               >
-                <Upload className="w-3 h-3 mr-1" />
+                {isLoading ? (
+                  <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                ) : (
+                  <Upload className="w-3 h-3 mr-1" />
+                )}
                 Replace
               </Button>
               <Button
@@ -177,6 +223,7 @@ const ImageFieldInput: React.FC<ImageFieldInputProps> = ({
                 size="sm"
                 className="h-7 w-7 text-red-500 hover:text-red-600"
                 onClick={handleClear}
+                disabled={isLoading}
               >
                 <X className="w-3 h-3" />
               </Button>
@@ -201,6 +248,8 @@ const ImageFieldInput: React.FC<ImageFieldInputProps> = ({
             'flex items-center gap-2 px-3 py-2 rounded border-2 border-dashed cursor-pointer transition-colors',
             isDragging
               ? 'border-blue-500 bg-blue-50'
+              : error
+              ? 'border-red-300 bg-red-50'
               : 'border-slate-300 hover:border-slate-400',
             isLoading && 'opacity-50 pointer-events-none'
           )}
@@ -212,10 +261,21 @@ const ImageFieldInput: React.FC<ImageFieldInputProps> = ({
           onPaste={handlePaste}
           tabIndex={0}
         >
-          <ImageIcon className="w-4 h-4 text-slate-400" />
-          <span className="text-sm text-slate-500">
-            {isLoading ? 'Processing...' : placeholder}
+          {isLoading ? (
+            <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
+          ) : (
+            <ImageIcon className="w-4 h-4 text-slate-400" />
+          )}
+          <span className={cn('text-sm', error ? 'text-red-500' : 'text-slate-500')}>
+            {isLoading ? 'Uploading...' : error ? error : placeholder}
           </span>
+        </div>
+      )}
+
+      {/* Mode indicator */}
+      {!hasImage && (
+        <div className="text-[10px] text-slate-400 mt-1">
+          {shouldUseSupabase ? '→ Supabase Storage' : '→ Local (data URL)'}
         </div>
       )}
     </div>

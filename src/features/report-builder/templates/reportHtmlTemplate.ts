@@ -3015,212 +3015,55 @@ export function generateReportHtml(sections: ReportSection[]): string {
   };
 
 
-  // Helper function to render the REPORT (Identification of Assignment) section with custom template
+  // Helper function to render the REPORT INFORMATION section
+  // This is a simple section with just 4 fields from the store definition
   const renderReportSection = (section: ReportSection): string => {
-    // Property Identification
-    const reportPropertyDescription = getFieldValue(section, 'report-property-description');
-    const reportLegalDescription = getFieldValue(section, 'report-legal-description');
-
-    // Client & Intended User
-    const reportClientName = getFieldValue(section, 'report-client-name') || clientCompany;
-    const reportIntendedUse = getFieldValue(section, 'report-intended-use');
-    const reportAuthorizedUsers = getFieldValue(section, 'report-authorized-users');
-
-    // Dates
-    const reportEffectiveDate = getFieldValue(section, 'report-effective-date') || valuationDate;
-    const reportReportDate = getFieldValue(section, 'report-report-date') || reportDate;
-    const reportInspectionDate = getFieldValue(section, 'report-inspection-date');
-
-    // Purpose & Scope
+    // Get only the 4 fields defined in the store for "report" section
+    const reportType = getFieldValue(section, 'report-type');
     const reportPurpose = getFieldValue(section, 'report-purpose');
-    const reportScopeOfWork = getFieldValue(section, 'report-scope-of-work');
+    const reportScope = getFieldValue(section, 'report-scope');
+    const reportCompliance = getFieldValue(section, 'report-compliance');
 
-    // Property Rights & Value Type
-    const reportPropertyRights = getFieldValue(section, 'report-property-rights') || propertyRights;
-    const reportValueType = getFieldValue(section, 'report-value-type');
-    const reportMarketValueDefinition = getFieldValue(section, 'report-market-value-definition');
-
-    // Exposure & Marketing Time
-    const reportExposureTime = getFieldValue(section, 'report-exposure-time');
-    const reportMarketingTime = getFieldValue(section, 'report-marketing-time');
-
-    // Assumptions & Conditions
-    const reportHypotheticalConditions = getFieldValue(section, 'report-hypothetical-conditions') || hypotheticalConditions;
-    const reportExtraordinaryAssumptions = getFieldValue(section, 'report-extraordinary-assumptions') || extraordinaryAssumptions;
-    const reportExtraordinaryLimitingConditions = getFieldValue(section, 'report-extraordinary-limiting-conditions') || extraordinaryLimitingConditions;
-
-    // Property History
-    const reportCurrentOwner = getFieldValue(section, 'report-current-owner');
-    const reportThreeYearHistory = getFieldValue(section, 'report-three-year-history');
-
-    // Additional
-    const reportPersonalProperty = getFieldValue(section, 'report-personal-property');
-    const reportAssistanceProvided = getFieldValue(section, 'report-assistance-provided');
-    const reportSourcesOfInfo = getFieldValue(section, 'report-sources-of-info');
+    const hasContent = reportType || reportPurpose || reportScope || reportCompliance;
 
     return `
     <div class="section">
-      <h2 class="section-title">Identification of Assignment</h2>
+      <h2 class="section-title">Report Information</h2>
 
-      <!-- Property Identification -->
-      <h3 class="subsection-title">Property Identification</h3>
-      ${reportPropertyDescription ? `
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportPropertyDescription}</p>
-        </div>
-      ` : `
-        <div class="empty-state">No property description provided</div>
-      `}
+      ${hasContent ? `
+        <table class="site-table">
+          <tbody>
+            ${reportType ? `
+              <tr>
+                <td class="site-table-label">Report Type</td>
+                <td class="site-table-value">${reportType}</td>
+              </tr>
+            ` : ''}
+            ${reportCompliance ? `
+              <tr>
+                <td class="site-table-label">Compliance Standard</td>
+                <td class="site-table-value">${reportCompliance}</td>
+              </tr>
+            ` : ''}
+          </tbody>
+        </table>
 
-      ${reportLegalDescription ? `
-        <div class="site-narrative-section" style="margin-top: 1rem;">
-          <h4 class="site-narrative-label">Legal Description</h4>
-          <p class="site-narrative-text">${reportLegalDescription}</p>
-        </div>
-      ` : ''}
-
-      <!-- Client & Intended User -->
-      <h3 class="subsection-title" style="margin-top: 1.5rem;">Authorized Client Identification</h3>
-      <div class="site-narrative-section">
-        <p class="site-narrative-text">The authorized client of this specific assignment is ${reportClientName || '<span class="empty-state">Not specified</span>'}.</p>
-      </div>
-
-      ${reportIntendedUse || reportAuthorizedUsers ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Authorized Use & Authorized Users</h3>
-        <div class="site-narrative-section">
-          ${reportIntendedUse ? `<p class="site-narrative-text">The authorized use of this report is ${reportIntendedUse}.</p>` : ''}
-          ${reportAuthorizedUsers ? `<p class="site-narrative-text">${reportAuthorizedUsers}</p>` : ''}
-        </div>
-      ` : ''}
-
-      <!-- Effective Date & Report Date -->
-      <h3 class="subsection-title" style="margin-top: 1.5rem;">Effective Date of Value and Report Date</h3>
-      <table class="site-table">
-        <tbody>
-          <tr>
-            <td class="site-table-label">Effective Date of Value</td>
-            <td class="site-table-value">${reportEffectiveDate || '<span class="empty-state">Not specified</span>'}</td>
-          </tr>
-          <tr>
-            <td class="site-table-label">Report Date</td>
-            <td class="site-table-value">${reportReportDate || '<span class="empty-state">Not specified</span>'}</td>
-          </tr>
-          ${reportInspectionDate ? `
-          <tr>
-            <td class="site-table-label">Inspection Date</td>
-            <td class="site-table-value">${reportInspectionDate}</td>
-          </tr>
-          ` : ''}
-        </tbody>
-      </table>
-
-      <!-- Purpose -->
-      ${reportPurpose ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Purpose</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportPurpose}</p>
-        </div>
-      ` : ''}
-
-      <!-- Property Rights Appraised -->
-      ${reportPropertyRights ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Property Rights Appraised</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">The property rights appraised constitute the ${reportPropertyRights}.</p>
-        </div>
-      ` : ''}
-
-      <!-- Type of Value -->
-      ${reportValueType || reportMarketValueDefinition ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Type of Value</h3>
-        <div class="site-narrative-section">
-          ${reportValueType ? `<p class="site-narrative-text">${reportValueType}</p>` : ''}
-          ${reportMarketValueDefinition ? `
-            <div style="margin-top: 1rem; padding: 1rem; background: #f9fafb; border-left: 3px solid #1a365d;">
-              <h4 class="site-narrative-label">Definition of Market Value</h4>
-              <p class="site-narrative-text">${reportMarketValueDefinition}</p>
-            </div>
-          ` : ''}
-        </div>
-      ` : ''}
-
-      <!-- Exposure & Marketing Time -->
-      ${reportExposureTime || reportMarketingTime ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Exposure & Marketing Time</h3>
-        <div class="site-narrative-section">
-          ${reportExposureTime ? `<p class="site-narrative-text">${reportExposureTime}</p>` : ''}
-          ${reportMarketingTime ? `<p class="site-narrative-text" style="margin-top: 0.5rem;">${reportMarketingTime}</p>` : ''}
-        </div>
-      ` : ''}
-
-      <!-- Scope of Work -->
-      ${reportScopeOfWork ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Scope of Work</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportScopeOfWork}</p>
-        </div>
-      ` : ''}
-
-      <!-- Hypothetical Conditions -->
-      <h3 class="subsection-title" style="margin-top: 1.5rem;">Hypothetical Conditions</h3>
-      <div class="site-narrative-section">
-        <p class="site-narrative-text">${reportHypotheticalConditions}</p>
-      </div>
-
-      <!-- Extraordinary Assumptions -->
-      <h3 class="subsection-title" style="margin-top: 1.5rem;">Extraordinary Assumptions</h3>
-      <div class="site-narrative-section">
-        <p class="site-narrative-text">${reportExtraordinaryAssumptions}</p>
-      </div>
-
-      <!-- Extraordinary Limiting Conditions -->
-      ${reportExtraordinaryLimitingConditions !== 'No Extraordinary Limiting Conditions were made for this assignment.' ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Extraordinary Limiting Conditions</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportExtraordinaryLimitingConditions}</p>
-        </div>
-      ` : ''}
-
-      <!-- Property & Sales History -->
-      ${reportCurrentOwner || reportThreeYearHistory ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Property And Sales History</h3>
-        ${reportCurrentOwner ? `
-          <div class="site-narrative-section">
-            <h4 class="site-narrative-label">Current Owner</h4>
-            <p class="site-narrative-text">${reportCurrentOwner}</p>
-          </div>
-        ` : ''}
-        ${reportThreeYearHistory ? `
+        ${reportPurpose ? `
           <div class="site-narrative-section" style="margin-top: 1rem;">
-            <h4 class="site-narrative-label">Three-Year Sales History</h4>
-            <p class="site-narrative-text">${reportThreeYearHistory}</p>
+            <h4 class="site-narrative-label">Purpose</h4>
+            <p class="site-narrative-text">${reportPurpose}</p>
           </div>
         ` : ''}
-      ` : ''}
 
-      <!-- Personal Property & Business Intangible -->
-      ${reportPersonalProperty ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Personal Property & Business Intangible</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportPersonalProperty}</p>
-        </div>
-      ` : ''}
-
-      <!-- Assistance Provided -->
-      ${reportAssistanceProvided ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Assistance Provided</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportAssistanceProvided}</p>
-        </div>
-      ` : ''}
-
-      <!-- Sources of Information -->
-      ${reportSourcesOfInfo ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Sources of Information</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportSourcesOfInfo}</p>
-        </div>
-      ` : ''}
+        ${reportScope ? `
+          <div class="site-narrative-section" style="margin-top: 1rem;">
+            <h4 class="site-narrative-label">Scope of Work</h4>
+            <p class="site-narrative-text">${reportScope}</p>
+          </div>
+        ` : ''}
+      ` : `
+        <div class="empty-state">No report information provided. Complete the Report section fields.</div>
+      `}
     </div>
     `;
   };

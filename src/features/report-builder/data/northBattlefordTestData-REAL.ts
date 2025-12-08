@@ -935,4 +935,27 @@ export const northBattlefordSummary = {
   valuePerUnit: 111250,
   valuePerSF: 174.44,
   grm: 9.09,
+
+  // ============================================================================
+  // ASSIGNMENT SECTION - Identification of Assignment (CUSPAP Mandatory)
+  // ============================================================================
+  'assignment-property-legal': 'Lot 10, Block 7, Plan No. 77B06712, North Battleford, Saskatchewan',
+  'assignment-property-address': '1101, 1121 109 St, North Battleford, Saskatchewan S9A 2X2',
+  'assignment-property-type': 'Multi-Family Walkup Property',
+  'assignment-property-interest': 'Fee Simple Estate',
+  'assignment-client-name': 'Kenneth Engler / 102109845 Saskatchewan Ltd.',
+  'assignment-client-address': '1901, 1088 - 6th Ave SW, Calgary, AB T2P 5N3',
+  'assignment-intended-use': 'The intended use of this appraisal is to provide an opinion of market value for lending/financing purposes.',
+  'assignment-intended-users': 'The client and authorized representatives of financial institutions for mortgage lending decisions.',
+  'assignment-inspection-date': '2025-10-17',
+  'assignment-inspection-type': 'Complete Interior & Exterior Inspection',
+  'assignment-inspector-name': 'Chris Chornohos, AACI, MRICS',
+  'assignment-data-sources': 'Municipal property records, MLS sales data, rental market surveys, physical inspection, client-provided information, public records.',
+  'assignment-analysis-methods': 'Income Approach using Direct Capitalization, Sales Comparison Approach, market analysis, highest and best use analysis in accordance with CUSPAP standards.',
+  'assignment-effective-date': '2025-10-17',
+  'assignment-report-date': '2025-11-20',
+  'assignment-hypothetical': 'None.',
+  'assignment-extraordinary-assumptions': 'The property is assumed to be free of environmental contamination. Title is assumed to be marketable and free of encumbrances.',
+  'assignment-general-assumptions': 'Standard CUSPAP assumptions apply regarding legal compliance, condition of improvements, and market conditions.',
+  'assignment-limiting-conditions': 'This appraisal is subject to the limiting conditions set forth in the Certification section of this report.',
 };

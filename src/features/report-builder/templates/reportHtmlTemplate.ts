@@ -5617,22 +5617,33 @@ export function generateReportHtml(sections: ReportSection[]): string {
         padding: 2rem;
       }
 
-      /* Single document container look */
+      /* Continuous document - no page separators */
       .page {
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e5e7eb;
         margin-bottom: 0;
+        border: none;
         border-radius: 0;
+        box-shadow: none;
       }
 
-      /* First page rounded top */
+      /* First page: outer border top + sides, shadow */
       .page:first-child {
+        border: 1px solid #e5e7eb;
+        border-bottom: none;
         border-top-left-radius: 4px;
         border-top-right-radius: 4px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
       }
 
-      /* Last page rounded bottom */
+      /* Middle pages: just side borders */
+      .page:not(:first-child):not(:last-child) {
+        border-left: 1px solid #e5e7eb;
+        border-right: 1px solid #e5e7eb;
+      }
+
+      /* Last page: outer border bottom + sides */
       .page:last-child {
+        border: 1px solid #e5e7eb;
+        border-top: none;
         border-bottom-left-radius: 4px;
         border-bottom-right-radius: 4px;
         margin-bottom: 2rem;

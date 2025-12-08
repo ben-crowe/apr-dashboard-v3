@@ -3791,10 +3791,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const subjectSurveyComments = getFieldValue(section, 'rental-subject-survey-comments');
     const subjectUnits = getFieldValue(section, 'rental-subject-units');
     const subjectAvgUnitSf = getFieldValue(section, 'rental-subject-avg-unit-sf');
-    const subjectLocation = getFieldValue(section, 'rental-subject-location');
-    const subjectQuality = getFieldValue(section, 'rental-subject-quality');
-    const subjectCondition = getFieldValue(section, 'rental-subject-condition');
-    const subjectAppeal = getFieldValue(section, 'rental-subject-appeal');
+    const subjectLocation = getFieldValue(section, 'rental-subject-location-rating');
+    const subjectQuality = getFieldValue(section, 'rental-subject-quality-rating');
+    const subjectCondition = getFieldValue(section, 'rental-subject-condition-rating');
+    const subjectAppeal = getFieldValue(section, 'rental-subject-appeal-rating');
     const subjectProjectAmenities = getFieldValue(section, 'rental-subject-project-amenities');
     const subjectSecurityFeatures = getFieldValue(section, 'rental-subject-security-features');
 
@@ -3814,10 +3814,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const comp1SurveyComments = getFieldValue(section, 'rental-comp1-survey-comments');
     const comp1Units = getFieldValue(section, 'rental-comp1-units');
     const comp1AvgUnitSf = getFieldValue(section, 'rental-comp1-avg-unit-sf');
-    const comp1Location = getFieldValue(section, 'rental-comp1-location');
-    const comp1Quality = getFieldValue(section, 'rental-comp1-quality');
-    const comp1Condition = getFieldValue(section, 'rental-comp1-condition');
-    const comp1Appeal = getFieldValue(section, 'rental-comp1-appeal');
+    const comp1Location = getFieldValue(section, 'rental-comp1-location-rating');
+    const comp1Quality = getFieldValue(section, 'rental-comp1-quality-rating');
+    const comp1Condition = getFieldValue(section, 'rental-comp1-condition-rating');
+    const comp1Appeal = getFieldValue(section, 'rental-comp1-appeal-rating');
     const comp1ProjectAmenities = getFieldValue(section, 'rental-comp1-project-amenities');
     const comp1SecurityFeatures = getFieldValue(section, 'rental-comp1-security-features');
     const comp1TotalAdjustments = getFieldValue(section, 'rental-comp1-total-adjustments');
@@ -3838,10 +3838,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const comp2SurveyComments = getFieldValue(section, 'rental-comp2-survey-comments');
     const comp2Units = getFieldValue(section, 'rental-comp2-units');
     const comp2AvgUnitSf = getFieldValue(section, 'rental-comp2-avg-unit-sf');
-    const comp2Location = getFieldValue(section, 'rental-comp2-location');
-    const comp2Quality = getFieldValue(section, 'rental-comp2-quality');
-    const comp2Condition = getFieldValue(section, 'rental-comp2-condition');
-    const comp2Appeal = getFieldValue(section, 'rental-comp2-appeal');
+    const comp2Location = getFieldValue(section, 'rental-comp2-location-rating');
+    const comp2Quality = getFieldValue(section, 'rental-comp2-quality-rating');
+    const comp2Condition = getFieldValue(section, 'rental-comp2-condition-rating');
+    const comp2Appeal = getFieldValue(section, 'rental-comp2-appeal-rating');
     const comp2ProjectAmenities = getFieldValue(section, 'rental-comp2-project-amenities');
     const comp2SecurityFeatures = getFieldValue(section, 'rental-comp2-security-features');
     const comp2TotalAdjustments = getFieldValue(section, 'rental-comp2-total-adjustments');
@@ -3862,10 +3862,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const comp3SurveyComments = getFieldValue(section, 'rental-comp3-survey-comments');
     const comp3Units = getFieldValue(section, 'rental-comp3-units');
     const comp3AvgUnitSf = getFieldValue(section, 'rental-comp3-avg-unit-sf');
-    const comp3Location = getFieldValue(section, 'rental-comp3-location');
-    const comp3Quality = getFieldValue(section, 'rental-comp3-quality');
-    const comp3Condition = getFieldValue(section, 'rental-comp3-condition');
-    const comp3Appeal = getFieldValue(section, 'rental-comp3-appeal');
+    const comp3Location = getFieldValue(section, 'rental-comp3-location-rating');
+    const comp3Quality = getFieldValue(section, 'rental-comp3-quality-rating');
+    const comp3Condition = getFieldValue(section, 'rental-comp3-condition-rating');
+    const comp3Appeal = getFieldValue(section, 'rental-comp3-appeal-rating');
     const comp3ProjectAmenities = getFieldValue(section, 'rental-comp3-project-amenities');
     const comp3SecurityFeatures = getFieldValue(section, 'rental-comp3-security-features');
     const comp3TotalAdjustments = getFieldValue(section, 'rental-comp3-total-adjustments');
@@ -3886,10 +3886,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const comp4SurveyComments = getFieldValue(section, 'rental-comp4-survey-comments');
     const comp4Units = getFieldValue(section, 'rental-comp4-units');
     const comp4AvgUnitSf = getFieldValue(section, 'rental-comp4-avg-unit-sf');
-    const comp4Location = getFieldValue(section, 'rental-comp4-location');
-    const comp4Quality = getFieldValue(section, 'rental-comp4-quality');
-    const comp4Condition = getFieldValue(section, 'rental-comp4-condition');
-    const comp4Appeal = getFieldValue(section, 'rental-comp4-appeal');
+    const comp4Location = getFieldValue(section, 'rental-comp4-location-rating');
+    const comp4Quality = getFieldValue(section, 'rental-comp4-quality-rating');
+    const comp4Condition = getFieldValue(section, 'rental-comp4-condition-rating');
+    const comp4Appeal = getFieldValue(section, 'rental-comp4-appeal-rating');
     const comp4ProjectAmenities = getFieldValue(section, 'rental-comp4-project-amenities');
     const comp4SecurityFeatures = getFieldValue(section, 'rental-comp4-security-features');
     const comp4TotalAdjustments = getFieldValue(section, 'rental-comp4-total-adjustments');
@@ -3910,10 +3910,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const comp5SurveyComments = getFieldValue(section, 'rental-comp5-survey-comments');
     const comp5Units = getFieldValue(section, 'rental-comp5-units');
     const comp5AvgUnitSf = getFieldValue(section, 'rental-comp5-avg-unit-sf');
-    const comp5Location = getFieldValue(section, 'rental-comp5-location');
-    const comp5Quality = getFieldValue(section, 'rental-comp5-quality');
-    const comp5Condition = getFieldValue(section, 'rental-comp5-condition');
-    const comp5Appeal = getFieldValue(section, 'rental-comp5-appeal');
+    const comp5Location = getFieldValue(section, 'rental-comp5-location-rating');
+    const comp5Quality = getFieldValue(section, 'rental-comp5-quality-rating');
+    const comp5Condition = getFieldValue(section, 'rental-comp5-condition-rating');
+    const comp5Appeal = getFieldValue(section, 'rental-comp5-appeal-rating');
     const comp5ProjectAmenities = getFieldValue(section, 'rental-comp5-project-amenities');
     const comp5SecurityFeatures = getFieldValue(section, 'rental-comp5-security-features');
     const comp5TotalAdjustments = getFieldValue(section, 'rental-comp5-total-adjustments');
@@ -5525,6 +5525,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         overflow: visible;
       }
       
+      /* Page break labels hidden for cleaner preview - uncomment to debug page breaks
       .page-break::after,
       [style*="page-break"]::after {
         content: "PAGE BREAK";
@@ -5543,6 +5544,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         letter-spacing: 0.05em;
         z-index: 10;
       }
+      */
 
       /* Add shadows to pages for "document" feel */
       .page {

@@ -105,38 +105,61 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'img-site-plan-1', storeId: 'img-site-plan-1', label: 'Site Plan - Layout/footprint', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
   { id: 'img-site-plan-2', storeId: 'img-site-plan-2', label: 'Survey/Plot Plan', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
 
-  // --- EXTERIOR PHOTOS (6 slots) ---
+  // --- EXTERIOR PHOTOS (6 slots with captions) ---
   { id: 'img-exterior-1', storeId: 'img-exterior-1', label: 'Exterior 1 - Front Facade', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-1-caption', storeId: 'img-exterior-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'exterior-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-exterior-2', storeId: 'img-exterior-2', label: 'Exterior 2 - Rear Elevation', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-2-caption', storeId: 'img-exterior-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'exterior-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-exterior-3', storeId: 'img-exterior-3', label: 'Exterior 3 - Left Side', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-3-caption', storeId: 'img-exterior-3-caption', label: 'Caption', section: 'image-mgt', subsection: 'exterior-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-exterior-4', storeId: 'img-exterior-4', label: 'Exterior 4 - Right Side', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-4-caption', storeId: 'img-exterior-4-caption', label: 'Caption', section: 'image-mgt', subsection: 'exterior-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-exterior-5', storeId: 'img-exterior-5', label: 'Exterior 5 - Detail/Feature', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-5-caption', storeId: 'img-exterior-5-caption', label: 'Caption', section: 'image-mgt', subsection: 'exterior-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-exterior-6', storeId: 'img-exterior-6', label: 'Exterior 6 - Additional', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-6-caption', storeId: 'img-exterior-6-caption', label: 'Caption', section: 'image-mgt', subsection: 'exterior-photos', type: 'text', inputSource: 'user-input', required: false },
 
-  // --- STREET VIEW PHOTOS (3 slots) ---
+  // --- STREET VIEW PHOTOS (3 slots with captions) ---
   { id: 'img-street-1', storeId: 'img-street-1', label: 'Street View 1 - Looking North', section: 'image-mgt', subsection: 'street-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-street-1-caption', storeId: 'img-street-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'street-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-street-2', storeId: 'img-street-2', label: 'Street View 2 - Looking South', section: 'image-mgt', subsection: 'street-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-street-2-caption', storeId: 'img-street-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'street-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-street-3', storeId: 'img-street-3', label: 'Street View 3 - Streetscape/Context', section: 'image-mgt', subsection: 'street-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-street-3-caption', storeId: 'img-street-3-caption', label: 'Caption', section: 'image-mgt', subsection: 'street-photos', type: 'text', inputSource: 'user-input', required: false },
 
-  // --- COMMON AREA PHOTOS (4 slots) ---
+  // --- COMMON AREA PHOTOS (4 slots with captions) ---
   { id: 'img-common-1', storeId: 'img-common-1', label: 'Common Area 1 - Lobby/Entrance', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-common-1-caption', storeId: 'img-common-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'common-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-common-2', storeId: 'img-common-2', label: 'Common Area 2 - Hallway/Corridor', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-common-2-caption', storeId: 'img-common-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'common-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-common-3', storeId: 'img-common-3', label: 'Common Area 3 - Amenity Space', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-common-3-caption', storeId: 'img-common-3-caption', label: 'Caption', section: 'image-mgt', subsection: 'common-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-common-4', storeId: 'img-common-4', label: 'Common Area 4 - Additional', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-common-4-caption', storeId: 'img-common-4-caption', label: 'Caption', section: 'image-mgt', subsection: 'common-photos', type: 'text', inputSource: 'user-input', required: false },
 
-  // --- UNIT INTERIOR PHOTOS (6 slots) ---
+  // --- UNIT INTERIOR PHOTOS (6 slots with captions) ---
   { id: 'img-unit-1', storeId: 'img-unit-1', label: 'Unit Interior 1 - Living Room', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-unit-1-caption', storeId: 'img-unit-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'unit-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-unit-2', storeId: 'img-unit-2', label: 'Unit Interior 2 - Kitchen', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-unit-2-caption', storeId: 'img-unit-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'unit-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-unit-3', storeId: 'img-unit-3', label: 'Unit Interior 3 - Bedroom', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-unit-3-caption', storeId: 'img-unit-3-caption', label: 'Caption', section: 'image-mgt', subsection: 'unit-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-unit-4', storeId: 'img-unit-4', label: 'Unit Interior 4 - Bathroom', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-unit-4-caption', storeId: 'img-unit-4-caption', label: 'Caption', section: 'image-mgt', subsection: 'unit-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-unit-5', storeId: 'img-unit-5', label: 'Unit Interior 5 - Additional Room', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-unit-5-caption', storeId: 'img-unit-5-caption', label: 'Caption', section: 'image-mgt', subsection: 'unit-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-unit-6', storeId: 'img-unit-6', label: 'Unit Interior 6 - Additional', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-unit-6-caption', storeId: 'img-unit-6-caption', label: 'Caption', section: 'image-mgt', subsection: 'unit-photos', type: 'text', inputSource: 'user-input', required: false },
 
-  // --- BUILDING SYSTEMS PHOTOS (4 slots) ---
+  // --- BUILDING SYSTEMS PHOTOS (4 slots with captions) ---
   { id: 'img-systems-1', storeId: 'img-systems-1', label: 'Building Systems 1 - Mechanical Room', section: 'image-mgt', subsection: 'systems-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-systems-1-caption', storeId: 'img-systems-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'systems-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-systems-2', storeId: 'img-systems-2', label: 'Building Systems 2 - Electrical Panel', section: 'image-mgt', subsection: 'systems-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-systems-2-caption', storeId: 'img-systems-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'systems-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-systems-3', storeId: 'img-systems-3', label: 'Building Systems 3 - Plumbing/Water Heater', section: 'image-mgt', subsection: 'systems-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-systems-3-caption', storeId: 'img-systems-3-caption', label: 'Caption', section: 'image-mgt', subsection: 'systems-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-systems-4', storeId: 'img-systems-4', label: 'Building Systems 4 - HVAC/Furnace', section: 'image-mgt', subsection: 'systems-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-systems-4-caption', storeId: 'img-systems-4-caption', label: 'Caption', section: 'image-mgt', subsection: 'systems-photos', type: 'text', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // SECTION: COVER PAGE

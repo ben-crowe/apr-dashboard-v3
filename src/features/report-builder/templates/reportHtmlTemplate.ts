@@ -82,9 +82,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
   const propertyTypeLower = propertyType.toLowerCase();
   const appraiserCompanyShort = appraiserCompany.split(' ')[0] || appraiserCompany;
 
-  // Extract cover photo from the cover-photo field
-  const coverPhotoUrls = coverSection?.fields.find(f => f.id === 'cover-photo')?.value as string[] || [];
-  const coverPhoto = coverPhotoUrls.length > 0 ? coverPhotoUrls[0] : null;
+  // Extract cover photo from the img-cover-photo field
+  const coverPhotoField = coverSection?.fields.find(f => f.id === 'img-cover-photo');
+  const coverPhotoValue = coverPhotoField?.value;
+  const coverPhoto = typeof coverPhotoValue === 'string' && coverPhotoValue ? coverPhotoValue :
+                     (Array.isArray(coverPhotoValue) && coverPhotoValue.length > 0 ? coverPhotoValue[0] : null);
 
   // Helper function to render the SITE section with custom template
   // Helper function to render the SITE section with custom template - EXPANDED VERSION
@@ -3239,9 +3241,13 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
       subsection.fields.forEach(field => {
         if (field.type === 'image') {
-          // This is an image field
-          const imageUrls = Array.isArray(field.value) ? field.value as string[] : [];
-          const imageUrl = imageUrls.length > 0 ? imageUrls[0] : null;
+          // This is an image field - handle both string and array values
+          let imageUrl: string | null = null;
+          if (typeof field.value === 'string' && field.value) {
+            imageUrl = field.value;
+          } else if (Array.isArray(field.value) && field.value.length > 0) {
+            imageUrl = field.value[0] as string;
+          }
           const baseId = field.id;
 
           if (!fieldMap.has(baseId)) {
@@ -4583,9 +4589,13 @@ export function generateReportHtml(sections: ReportSection[]): string {
       return '';
     };
 
-    const regionalMap = getFieldValue(section, 'map-regional');
-    const localMap = getFieldValue(section, 'map-local');
-    const aerialMap = getFieldValue(section, 'map-aerial');
+    const regionalMap = getFieldValue(section, 'img-map-regional');
+    const localMap = getFieldValue(section, 'img-map-local');
+    const aerialMap = getFieldValue(section, 'img-map-aerial-1');
+    const siteBoundaryMap = getFieldValue(section, 'img-map-aerial-2');
+    const zoningMapImg = getFieldValue(section, 'img-zoning-map');
+    const sitePlan1 = getFieldValue(section, 'img-site-plan-1');
+    const sitePlan2 = getFieldValue(section, 'img-site-plan-2');
 
     return `
     <div class="section page-break-before">
@@ -4612,6 +4622,38 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <div class="map-item" style="text-align: center;">
           <h3 class="subsection-title">Aerial View</h3>
           <img src="${aerialMap}" alt="Aerial View" style="max-width: 100%; height: auto; border: 1px solid #ccc;" />
+        </div>
+        ` : ''}
+
+        ${siteBoundaryMap ? `
+        <div style="page-break-before: always;"></div>
+        <div class="map-item" style="text-align: center;">
+          <h3 class="subsection-title">Site Boundary Map</h3>
+          <img src="${siteBoundaryMap}" alt="Site Boundary Map" style="max-width: 100%; height: auto; border: 1px solid #ccc;" />
+        </div>
+        ` : ''}
+
+        ${zoningMapImg ? `
+        <div style="page-break-before: always;"></div>
+        <div class="map-item" style="text-align: center;">
+          <h3 class="subsection-title">Zoning Map</h3>
+          <img src="${zoningMapImg}" alt="Zoning Map" style="max-width: 100%; height: auto; border: 1px solid #ccc;" />
+        </div>
+        ` : ''}
+
+        ${sitePlan1 ? `
+        <div style="page-break-before: always;"></div>
+        <div class="map-item" style="text-align: center;">
+          <h3 class="subsection-title">Site Plan</h3>
+          <img src="${sitePlan1}" alt="Site Plan" style="max-width: 100%; height: auto; border: 1px solid #ccc;" />
+        </div>
+        ` : ''}
+
+        ${sitePlan2 ? `
+        <div style="page-break-before: always;"></div>
+        <div class="map-item" style="text-align: center;">
+          <h3 class="subsection-title">Survey/Plot Plan</h3>
+          <img src="${sitePlan2}" alt="Survey/Plot Plan" style="max-width: 100%; height: auto; border: 1px solid #ccc;" />
         </div>
         ` : ''}
       </div>

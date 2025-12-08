@@ -3260,7 +3260,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <div class="cert-signature-name">${appraiserName || 'Appraiser Name'}</div>
         <div class="cert-signature-credentials">${appraiserCredentials || 'AACI, P.App'}</div>
         <div class="cert-signature-title">${appraiserTitle || 'Senior Appraiser'}</div>
-        <div class="cert-signature-company">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+        <div class="cert-signature-company">${appraiserCompany || ''}</div>
         ${appraiserAicNumber ? `<div class="cert-signature-aic">AIC #${appraiserAicNumber}</div>` : ''}
         <div class="cert-signature-date">Date: ${certDate}</div>
       </div>
@@ -3311,7 +3311,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         </div>
 
         <div style="margin-bottom: 1.5rem; line-height: 1.8; text-align: justify;">
-          <p>${appraiserCompany || 'Valta Property Valuations Ltd.'} is proud to present the appraisal report that satisfies the agreed upon scope of work with ${clientCompany}. The purpose of this assignment is to provide the ${valueScenario} current market value of the property which at the time of inspection represents the improved property as of the effective date and leased up at market rental rates and operating costs for the property located at ${streetAddress}, ${city}, ${province} (herein referred to as the 'subject property').</p>
+          <p>${appraiserCompany || ''} is proud to present the appraisal report that satisfies the agreed upon scope of work with ${clientCompany}. The purpose of this assignment is to provide the ${valueScenario} current market value of the property which at the time of inspection represents the improved property as of the effective date and leased up at market rental rates and operating costs for the property located at ${streetAddress}, ${city}, ${province} (herein referred to as the 'subject property').</p>
 
           <p>The subject property, located at ${streetAddress}, ${city}, ${province}, is a ${propertyTypeLower}, ${buildingStyle} property with improvements located in ${city}. The improvements are comprised of ${totalBuildings} total building${parseInt(totalBuildings) > 1 ? 's' : ''}, and consist of ${totalNra ? Number(totalNra).toLocaleString() + ' square feet' : '[NRA]'} of net rentable area (NRA) as of the valuation date. The property, reportedly built in ${yearBuilt || '[Year]'}; (${yearBuilt || '[Year]'} weighted) is approximately ${formatPercent(occupancyRate)} occupied and features ${totalUnits || '[units]'} units in a ${stories}-story, ${buildingFormat} format.</p>
 
@@ -3388,7 +3388,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <!-- Closing -->
         <div style="margin: 2rem 0 1rem 0; font-weight: 600;">
           Respectfully Submitted,<br/>
-          ${appraiserCompany?.toUpperCase() || 'VALTA PROPERTY VALUATIONS LTD.'}
+          ${appraiserCompany?.toUpperCase() || ''}
         </div>
 
         <!-- Signature Block -->
@@ -4964,7 +4964,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     <!-- Page Footer -->
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
 
@@ -5005,7 +5005,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     <!-- Page Footer -->
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
   ` : ''}
@@ -5023,7 +5023,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     ${renderTableOfContents(sections)}
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
 
@@ -5103,7 +5103,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     <!-- Page Footer -->
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
   `).join('')}
@@ -5125,7 +5125,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     <!-- Page Footer -->
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
 
@@ -5142,7 +5142,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     ${renderLimitingConditionsAppendix()}
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
 
@@ -5159,7 +5159,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     ${renderDefinitionsAppendix()}
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
 
@@ -5176,7 +5176,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     ${renderQualificationsAppendix(sections.find(s => s.id === 'cert') || { id: 'cert', name: 'Certification', fields: [] })}
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
 

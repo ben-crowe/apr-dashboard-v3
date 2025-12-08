@@ -443,6 +443,16 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
   'comp1-year': 2000,
   'comp1-cap-rate': 5.99,
 
+  // Comp 1 Adjustments (Heritage House - better location, older)
+  'comp1-adj-property-rights': 0,
+  'comp1-adj-financing': 0,
+  'comp1-adj-conditions-sale': 0,
+  'comp1-adj-market-time': 2,
+  'comp1-adj-location': -5,
+  'comp1-adj-size': 3,
+  'comp1-adj-age-condition': -10,
+  'comp1-adj-other': 0,
+
   // Comparable 2 - College View Apartments (REAL from reference)
   'comp2-name': 'College View Apartments',
   'comp2-address': '10910-10912 Winder Crescent, North Battleford, SK S9A 2C3',
@@ -455,6 +465,16 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
   'comp2-year': 2000,
   'comp2-cap-rate': 5.99,
 
+  // Comp 2 Adjustments (College View - larger, similar condition)
+  'comp2-adj-property-rights': 0,
+  'comp2-adj-financing': 0,
+  'comp2-adj-conditions-sale': 0,
+  'comp2-adj-market-time': 3,
+  'comp2-adj-location': 0,
+  'comp2-adj-size': -5,
+  'comp2-adj-age-condition': -5,
+  'comp2-adj-other': 0,
+
   // Comparable 3 - Woodland Estates (REAL from reference)
   'comp3-name': 'Woodland Estates',
   'comp3-address': '1901 Pearson Ave, North Battleford, SK S9A 3L5',
@@ -466,6 +486,16 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
   'comp3-price-per-sf': 137.00,
   'comp3-year': 1980,
   'comp3-cap-rate': 5.99,
+
+  // Comp 3 Adjustments (Woodland Estates - older, inferior)
+  'comp3-adj-property-rights': 0,
+  'comp3-adj-financing': 0,
+  'comp3-adj-conditions-sale': 0,
+  'comp3-adj-market-time': 5,
+  'comp3-adj-location': 5,
+  'comp3-adj-size': 3,
+  'comp3-adj-age-condition': 15,
+  'comp3-adj-other': 0,
 
   // Sales Conclusion
   'sales-value-indication': 1800000,
@@ -860,6 +890,36 @@ export const fieldToSectionMap: Record<string, string> = {
   'comp3-cap-rate': 'sales',
   'sales-value-indication': 'sales',
   'sales-adjustment-summary': 'sales',
+
+  // Comp 1 adjustment mappings
+  'comp1-adj-property-rights': 'sales',
+  'comp1-adj-financing': 'sales',
+  'comp1-adj-conditions-sale': 'sales',
+  'comp1-adj-market-time': 'sales',
+  'comp1-adj-location': 'sales',
+  'comp1-adj-size': 'sales',
+  'comp1-adj-age-condition': 'sales',
+  'comp1-adj-other': 'sales',
+
+  // Comp 2 adjustment mappings
+  'comp2-adj-property-rights': 'sales',
+  'comp2-adj-financing': 'sales',
+  'comp2-adj-conditions-sale': 'sales',
+  'comp2-adj-market-time': 'sales',
+  'comp2-adj-location': 'sales',
+  'comp2-adj-size': 'sales',
+  'comp2-adj-age-condition': 'sales',
+  'comp2-adj-other': 'sales',
+
+  // Comp 3 adjustment mappings
+  'comp3-adj-property-rights': 'sales',
+  'comp3-adj-financing': 'sales',
+  'comp3-adj-conditions-sale': 'sales',
+  'comp3-adj-market-time': 'sales',
+  'comp3-adj-location': 'sales',
+  'comp3-adj-size': 'sales',
+  'comp3-adj-age-condition': 'sales',
+  'comp3-adj-other': 'sales',
 
   // Income section
   'income-pgi-narrative': 'income',

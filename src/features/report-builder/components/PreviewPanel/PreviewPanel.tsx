@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { useReportBuilderStore } from '../../store/reportBuilderStore';
 import PreviewRenderer from './PreviewRenderer';
-import { FileText, Minus, Plus, FileDown, Download } from 'lucide-react';
+import { FileText, Minus, Plus, Printer, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -21,24 +21,12 @@ export default function PreviewPanel() {
   const handleExportPDF = async () => {
     try {
       setIsExporting(true);
-      const options = getExportOptionsFromSections(sections);
-
-      toast({
-        title: 'Opening print dialog...',
-        description: 'Use "Save as PDF" in the print dialog.',
-      });
-
       await exportToPDF(iframeRef.current);
-
-      toast({
-        title: 'Print dialog opened',
-        description: 'Select "Save as PDF" to download your report.',
-      });
     } catch (error) {
       console.error('Export PDF error:', error);
       toast({
         title: 'Export failed',
-        description: error instanceof Error ? error.message : 'Failed to export PDF',
+        description: error instanceof Error ? error.message : 'Failed to open print dialog',
         variant: 'destructive',
       });
     } finally {
@@ -125,10 +113,10 @@ export default function PreviewPanel() {
             size="sm"
             onClick={handleExportPDF}
             disabled={isExporting || !previewHtml}
-            title="Export as PDF (opens print dialog)"
+            title="Opens print dialog - select 'Save as PDF'"
           >
-            <FileDown className="h-4 w-4 mr-1" />
-            PDF
+            <Printer className="h-4 w-4 mr-1" />
+            Print to PDF
           </Button>
 
           <Button

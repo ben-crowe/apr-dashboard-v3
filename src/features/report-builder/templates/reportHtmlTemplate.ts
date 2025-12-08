@@ -5597,6 +5597,15 @@ export function generateReportHtml(sections: ReportSection[]): string {
       .screen-only {
         display: none !important;
       }
+
+      /* Show page headers/footers in print */
+      .page-header {
+        display: flex !important;
+      }
+
+      .page-footer {
+        display: flex !important;
+      }
     }
 
     /* ===========================================
@@ -5629,8 +5638,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
         margin-bottom: 2rem;
       }
 
-      /* Hide print-only elements */
-      .print-only {
+      /* Hide print-only elements in screen preview */
+      .print-only,
+      .page-header,
+      .page-footer,
+      .page-number {
         display: none !important;
       }
     }

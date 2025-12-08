@@ -1,5 +1,3 @@
-import html2pdf from 'html2pdf.js';
-
 export interface ExportOptions {
   fileName?: string;
   propertyName?: string;
@@ -35,45 +33,20 @@ function generateFileName(options: ExportOptions, extension: 'pdf' | 'docx' | 'd
 }
 
 /**
- * Export the report as PDF - automatic download
+ * Export the report as PDF using browser print dialog
+ * User selects "Save as PDF" from printer dropdown
  */
 export async function exportToPDF(
-  iframeRef: HTMLIFrameElement | null,
-  options: ExportOptions = {}
+  iframeRef: HTMLIFrameElement | null
 ): Promise<void> {
-  if (!iframeRef?.contentDocument?.body) {
+  if (!iframeRef?.contentWindow) {
     throw new Error('Preview iframe not available');
   }
 
   try {
-    const element = iframeRef.contentDocument.body;
-    const filename = generateFileName(options, 'pdf');
-
-    const pdfOptions = {
-      margin: 0,
-      filename,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        letterRendering: true,
-      },
-      jsPDF: {
-        unit: 'in',
-        format: 'letter',
-        orientation: 'portrait',
-      },
-      pagebreak: {
-        mode: ['avoid-all', 'css', 'legacy'],
-        before: '.page-break-before',
-        after: '.page-break-after',
-        avoid: ['table', 'img', '.avoid-break'],
-      },
-    };
-
-    await html2pdf().set(pdfOptions).from(element).save();
+    iframeRef.contentWindow.print();
   } catch (error) {
-    console.error('Failed to generate PDF:', error);
+    console.error('Failed to open print dialog:', error);
     throw new Error('Failed to export PDF');
   }
 }

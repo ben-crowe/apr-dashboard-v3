@@ -21,19 +21,16 @@ export default function PreviewPanel() {
   const handleExportPDF = async () => {
     try {
       setIsExporting(true);
-      const options = getExportOptionsFromSections(sections);
 
       toast({
-        title: 'Generating PDF...',
-        description: 'This may take a moment.',
+        title: 'Save as PDF',
+        description: 'Select "Save as PDF" from the printer dropdown, then click Save.',
+        duration: 6000,
       });
 
-      await exportToPDF(iframeRef.current, options);
-
-      toast({
-        title: 'Export successful',
-        description: 'PDF file has been downloaded.',
-      });
+      // Small delay to let user see the instructions
+      await new Promise(resolve => setTimeout(resolve, 800));
+      await exportToPDF(iframeRef.current);
     } catch (error) {
       console.error('Export PDF error:', error);
       toast({

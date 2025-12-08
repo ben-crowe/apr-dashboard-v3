@@ -312,10 +312,10 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
         {/* Preview Modal */}
         {previewOpen && (
           <div
-            className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-2"
+            className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-2 animate-fade-in"
             onClick={() => setPreviewOpen(false)}
           >
-            <div className="relative max-w-[95vw] max-h-[95vh]">
+            <div className="relative max-w-[95vw] max-h-[95vh] animate-zoom-in">
               <img
                 src={previewUrl}
                 alt="Preview"
@@ -473,10 +473,10 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
       {/* Preview Modal */}
       {previewOpen && (
         <div
-          className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-2"
+          className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-2 animate-fade-in"
           onClick={() => setPreviewOpen(false)}
         >
-          <div className="relative max-w-[95vw] max-h-[95vh]">
+          <div className="relative max-w-[95vw] max-h-[95vh] animate-zoom-in">
             <img
               src={previewUrl}
               alt="Preview"

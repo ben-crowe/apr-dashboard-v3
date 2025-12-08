@@ -5,7 +5,7 @@ import { FileText, Minus, Plus, FileDown, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
-  exportToPDFDirect,
+  exportToPDF,
   exportToDOCX,
   getExportOptionsFromSections,
 } from '../../utils/exportReport';
@@ -24,15 +24,15 @@ export default function PreviewPanel() {
       const options = getExportOptionsFromSections(sections);
 
       toast({
-        title: 'Generating PDF...',
-        description: 'This may take a moment for large reports.',
+        title: 'Opening print dialog...',
+        description: 'Use "Save as PDF" in the print dialog.',
       });
 
-      await exportToPDFDirect(iframeRef.current, options);
+      await exportToPDF(iframeRef.current);
 
       toast({
-        title: 'PDF downloaded',
-        description: 'Your report has been saved as PDF.',
+        title: 'Print dialog opened',
+        description: 'Select "Save as PDF" to download your report.',
       });
     } catch (error) {
       console.error('Export PDF error:', error);

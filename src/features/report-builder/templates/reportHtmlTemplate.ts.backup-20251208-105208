@@ -369,6 +369,172 @@ export function generateReportHtml(sections: ReportSection[]): string {
     `;
   };
 
+
+  // Helper function to render the ASSIGNMENT section (CUSPAP mandatory)
+  const renderAssignmentSection = (section: ReportSection): string => {
+    // Get field values from subsections
+    const propertyLegal = getFieldValue(section, 'assignment-property-legal');
+    const propertyAddress = getFieldValue(section, 'assignment-property-address');
+    const propertyType = getFieldValue(section, 'assignment-property-type');
+    const propertyInterest = getFieldValue(section, 'assignment-property-interest');
+    
+    const clientName = getFieldValue(section, 'assignment-client-name');
+    const clientAddress = getFieldValue(section, 'assignment-client-address');
+    const intendedUse = getFieldValue(section, 'assignment-intended-use');
+    const intendedUsers = getFieldValue(section, 'assignment-intended-users');
+    
+    const inspectionDate = getFieldValue(section, 'assignment-inspection-date');
+    const inspectionType = getFieldValue(section, 'assignment-inspection-type');
+    const inspectorName = getFieldValue(section, 'assignment-inspector-name');
+    const dataSources = getFieldValue(section, 'assignment-data-sources');
+    const analysisMethods = getFieldValue(section, 'assignment-analysis-methods');
+    
+    const effectiveDate = getFieldValue(section, 'assignment-effective-date');
+    const reportDate = getFieldValue(section, 'assignment-report-date');
+    
+    const hypotheticalConditions = getFieldValue(section, 'assignment-hypothetical');
+    const extraordinaryAssumptions = getFieldValue(section, 'assignment-extraordinary-assumptions');
+    const generalAssumptions = getFieldValue(section, 'assignment-general-assumptions');
+    const limitingConditions = getFieldValue(section, 'assignment-limiting-conditions');
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Identification of Assignment</h2>
+
+      <!-- Property Identification -->
+      <h3 class="subsection-title">Property Identification</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">Legal Description</td>
+            <td class="site-table-value">${propertyLegal || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Property Address</td>
+            <td class="site-table-value">${propertyAddress || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Property Type</td>
+            <td class="site-table-value">${propertyType || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Property Interest</td>
+            <td class="site-table-value">${propertyInterest || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Client & Intended Use -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Client & Intended Use</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">Client</td>
+            <td class="site-table-value">${clientName || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Client Address</td>
+            <td class="site-table-value">${clientAddress || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      ${intendedUse ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Intended Use</h4>
+          <p class="site-narrative-text">${intendedUse}</p>
+        </div>
+      ` : ''}
+      
+      ${intendedUsers ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Intended Users</h4>
+          <p class="site-narrative-text">${intendedUsers}</p>
+        </div>
+      ` : ''}
+
+      <!-- Scope of Work -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Scope of Work</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">Inspection Date</td>
+            <td class="site-table-value">${inspectionDate || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Inspection Type</td>
+            <td class="site-table-value">${inspectionType || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Inspector</td>
+            <td class="site-table-value">${inspectorName || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      ${dataSources ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Data Sources</h4>
+          <p class="site-narrative-text">${dataSources}</p>
+        </div>
+      ` : ''}
+      
+      ${analysisMethods ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Analysis Methods</h4>
+          <p class="site-narrative-text">${analysisMethods}</p>
+        </div>
+      ` : ''}
+
+      <!-- Effective Dates -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Effective Dates</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">Effective Date of Value</td>
+            <td class="site-table-value">${effectiveDate || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Report Date</td>
+            <td class="site-table-value">${reportDate || '<span class="empty-state">Not specified</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Assumptions & Conditions -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Assumptions & Limiting Conditions</h3>
+      
+      ${hypotheticalConditions ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Hypothetical Conditions</h4>
+          <p class="site-narrative-text">${hypotheticalConditions}</p>
+        </div>
+      ` : ''}
+      
+      ${extraordinaryAssumptions ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Extraordinary Assumptions</h4>
+          <p class="site-narrative-text">${extraordinaryAssumptions}</p>
+        </div>
+      ` : ''}
+      
+      ${generalAssumptions ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">General Assumptions</h4>
+          <p class="site-narrative-text">${generalAssumptions}</p>
+        </div>
+      ` : ''}
+      
+      ${limitingConditions ? `
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Limiting Conditions</h4>
+          <p class="site-narrative-text">${limitingConditions}</p>
+        </div>
+      ` : ''}
+    </div>
+    `;
+  };
+
   // Helper function to render the TAX section with custom template
   const renderTaxSection = (section: ReportSection): string => {
     // Get field values from subsections
@@ -424,17 +590,21 @@ export function generateReportHtml(sections: ReportSection[]): string {
     `;
   };
 
-  // Helper function to render the ZONE section with custom template
+  // Helper function to render the ZONE section with EXPANDED custom template (2-3 pages)
   const renderZoneSection = (section: ReportSection): string => {
     // Get field values from subsections
     const zoningClassification = getFieldValue(section, 'zoning-classification');
+    const zoningDescription = getFieldValue(section, 'zoning-description');
     const permittedUses = getFieldValue(section, 'permitted-uses');
+    const conditionalUses = getFieldValue(section, 'zone-conditional-uses');
     const maxHeight = getFieldValue(section, 'max-height');
     const maxDensity = getFieldValue(section, 'max-density');
-    const minSetback = getFieldValue(section, 'min-setback');
+    const minSetback = getFieldValue(section, 'zone-setbacks');
+    const minLotSize = getFieldValue(section, 'zone-minimum-lot-size');
     const parkingRequirements = getFieldValue(section, 'parking-requirements');
-    const conformanceStatus = getFieldValue(section, 'conformance-status');
+    const zoningConformance = getFieldValue(section, 'zoning-conformance');
     const zoningConclusion = getFieldValue(section, 'zoning-conclusion');
+    const zoningMap = getFieldValue(section, 'zoning-map');
 
     // Parse permitted uses if it's a comma-separated string or array
     let permittedUsesList: string[] = [];
@@ -446,75 +616,240 @@ export function generateReportHtml(sections: ReportSection[]): string {
       }
     }
 
-    const hasDevelopmentStandards = maxHeight || maxDensity || minSetback || parkingRequirements;
+    // Parse conditional uses
+    let conditionalUsesList: string[] = [];
+    if (conditionalUses) {
+      if (typeof conditionalUses === 'string') {
+        conditionalUsesList = conditionalUses.split(',').map(use => use.trim()).filter(use => use);
+      } else if (Array.isArray(conditionalUses)) {
+        conditionalUsesList = conditionalUses;
+      }
+    }
+
+    // Check if we have zoning map images
+    let zoningMapUrls: string[] = [];
+    if (zoningMap) {
+      if (typeof zoningMap === 'string') {
+        zoningMapUrls = [zoningMap];
+      } else if (Array.isArray(zoningMap)) {
+        zoningMapUrls = zoningMap;
+      }
+    }
+
+    const hasDevelopmentStandards = maxHeight || maxDensity || minSetback || minLotSize || parkingRequirements;
 
     return `
     <div class="section">
-      <h2 class="section-title">Zoning Analysis</h2>
+      <h2 class="section-title">Land Use & Planning</h2>
 
-      <!-- Zoning Classification -->
-      ${zoningClassification ? `
-        <h3 class="subsection-title">Zoning Classification</h3>
-        <p class="site-narrative-text">${zoningClassification}</p>
+      <!-- 1. LAND USE OVERVIEW (0.5 page) -->
+      ${zoningDescription || zoningClassification ? `
+        <h3 class="subsection-title">Land Use Overview</h3>
+        ${zoningClassification ? `
+          <p class="site-narrative-text" style="margin-bottom: 1rem;">
+            <strong>Zoning Designation:</strong> ${zoningClassification}
+          </p>
+        ` : ''}
+        ${zoningDescription ? `
+          <p class="site-narrative-text" style="line-height: 1.8;">
+            ${zoningDescription}
+          </p>
+        ` : ''}
+        <div style="page-break-after: avoid; margin-bottom: 2rem;"></div>
       ` : ''}
 
-      <!-- Permitted Uses -->
-      ${permittedUsesList.length > 0 ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Permitted Uses</h3>
-        <ul style="margin-left: 2rem; line-height: 1.8; font-size: 12px;">
-          ${permittedUsesList.map(use => `<li>${use}</li>`).join('')}
-        </ul>
-      ` : permittedUses ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Permitted Uses</h3>
-        <p class="site-narrative-text">${permittedUses}</p>
-      ` : ''}
+      <!-- 2. ZONING CLASSIFICATION TABLE (0.5 page) -->
+      ${zoningClassification || permittedUsesList.length > 0 || zoningDescription ? `
+        <h3 class="subsection-title" style="margin-top: 2rem;">Zoning Classification</h3>
+        <p class="site-narrative-text" style="margin-bottom: 1rem;">
+          The following table summarizes the zoning designation and permitted uses for the subject property:
+        </p>
 
-      <!-- Development Standards Table -->
-      ${hasDevelopmentStandards ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Development Standards</h3>
-        <table class="site-table">
+        <table class="site-table" style="margin-top: 1rem; margin-bottom: 2rem;">
+          <thead>
+            <tr style="background-color: #f3f4f6;">
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb;">Classification</th>
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb;">Details</th>
+            </tr>
+          </thead>
           <tbody>
-            ${maxHeight ? `
+            ${zoningClassification ? `
               <tr>
-                <td class="site-table-label">Maximum Height</td>
-                <td class="site-table-value">${maxHeight}</td>
+                <td class="site-table-label" style="vertical-align: top; width: 35%;">Current Zoning</td>
+                <td class="site-table-value">${zoningClassification}</td>
               </tr>
             ` : ''}
-            ${maxDensity ? `
+            ${zoningDescription ? `
               <tr>
-                <td class="site-table-label">Maximum Density</td>
-                <td class="site-table-value">${maxDensity}</td>
+                <td class="site-table-label" style="vertical-align: top;">Zoning Description</td>
+                <td class="site-table-value">${zoningDescription}</td>
               </tr>
             ` : ''}
-            ${minSetback ? `
+            ${permittedUsesList.length > 0 ? `
               <tr>
-                <td class="site-table-label">Minimum Setback</td>
-                <td class="site-table-value">${minSetback}</td>
+                <td class="site-table-label" style="vertical-align: top;">Permitted Uses</td>
+                <td class="site-table-value">
+                  <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
+                    ${permittedUsesList.map(use => `<li>${use}</li>`).join('')}
+                  </ul>
+                </td>
+              </tr>
+            ` : permittedUses ? `
+              <tr>
+                <td class="site-table-label" style="vertical-align: top;">Permitted Uses</td>
+                <td class="site-table-value">${permittedUses}</td>
               </tr>
             ` : ''}
-            ${parkingRequirements ? `
+            ${conditionalUsesList.length > 0 ? `
               <tr>
-                <td class="site-table-label">Parking Requirements</td>
-                <td class="site-table-value">${parkingRequirements}</td>
+                <td class="site-table-label" style="vertical-align: top;">Conditional Uses</td>
+                <td class="site-table-value">
+                  <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
+                    ${conditionalUsesList.map(use => `<li>${use}</li>`).join('')}
+                  </ul>
+                </td>
+              </tr>
+            ` : conditionalUses ? `
+              <tr>
+                <td class="site-table-label" style="vertical-align: top;">Conditional Uses</td>
+                <td class="site-table-value">${conditionalUses}</td>
               </tr>
             ` : ''}
           </tbody>
         </table>
       ` : ''}
 
-      <!-- Conformance Status -->
-      ${conformanceStatus ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Conformance Status</h3>
-        <p class="site-narrative-text">${conformanceStatus}</p>
+      <!-- PAGE BREAK AFTER CLASSIFICATION TABLE -->
+      <div style="page-break-before: auto; margin-top: 2rem;"></div>
+
+      <!-- 3. ZONING COMPLIANCE ANALYSIS (0.5 page) -->
+      ${hasDevelopmentStandards || zoningConformance ? `
+        <h3 class="subsection-title" style="margin-top: 2rem;">Zoning Compliance Analysis</h3>
+
+        ${zoningConformance ? `
+          <p class="site-narrative-text" style="margin-bottom: 1.5rem;">
+            <strong>Conformance Status:</strong> ${zoningConformance}
+          </p>
+        ` : ''}
+
+        ${hasDevelopmentStandards ? `
+          <p class="site-narrative-text" style="margin-bottom: 1rem;">
+            The subject property's compliance with zoning requirements is analyzed below:
+          </p>
+
+          <table class="site-table" style="margin-top: 1rem; margin-bottom: 2rem;">
+            <thead>
+              <tr style="background-color: #f3f4f6;">
+                <th style="padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb; width: 40%;">Zoning Requirement</th>
+                <th style="padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb;">Standard</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${minLotSize ? `
+                <tr>
+                  <td class="site-table-label">Minimum Lot Size</td>
+                  <td class="site-table-value">${minLotSize}</td>
+                </tr>
+              ` : ''}
+              ${minSetback ? `
+                <tr>
+                  <td class="site-table-label">Setback Requirements</td>
+                  <td class="site-table-value">${minSetback}</td>
+                </tr>
+              ` : ''}
+              ${maxHeight ? `
+                <tr>
+                  <td class="site-table-label">Maximum Height</td>
+                  <td class="site-table-value">${maxHeight}</td>
+                </tr>
+              ` : ''}
+              ${maxDensity ? `
+                <tr>
+                  <td class="site-table-label">Maximum Density</td>
+                  <td class="site-table-value">${maxDensity}</td>
+                </tr>
+              ` : ''}
+              ${parkingRequirements ? `
+                <tr>
+                  <td class="site-table-label">Parking Requirements</td>
+                  <td class="site-table-value">${parkingRequirements}</td>
+                </tr>
+              ` : ''}
+            </tbody>
+          </table>
+        ` : ''}
+
+        <p class="site-narrative-text" style="line-height: 1.8; margin-bottom: 2rem;">
+          ${zoningConformance === 'Legally Conforming' || zoningConformance?.toLowerCase().includes('conforming')
+          ? 'Based on the analysis of the current zoning requirements, the subject property is in compliance with applicable development standards. The current use is a legally permitted use under the current zoning designation.'
+          : zoningConformance
+            ? `The subject property's conformance status is: ${zoningConformance}. Additional details regarding any non-conforming aspects are detailed in the zoning conclusion below.`
+            : 'The subject property zoning compliance has been evaluated against the applicable municipal bylaws and development standards.'}
+        </p>
       ` : ''}
 
-      <!-- Zoning Conclusion -->
+      <!-- 4. FUTURE LAND USE (0.5 page) -->
+      <h3 class="subsection-title" style="margin-top: 2rem;">Future Land Use</h3>
+      <p class="site-narrative-text" style="line-height: 1.8; margin-bottom: 1rem;">
+        The subject property's current zoning and permitted uses align with the municipality's long-term planning objectives. Based on review of available planning documents, no immediate zoning changes are anticipated for this area.
+      </p>
+
+      ${zoningClassification ? `
+        <table class="site-table" style="margin-top: 1rem; margin-bottom: 2rem;">
+          <tbody>
+            <tr>
+              <td class="site-table-label" style="width: 40%;">Official Community Plan Designation</td>
+              <td class="site-table-value">${zoningClassification.includes('Residential') ? 'Residential' : zoningClassification.includes('Commercial') ? 'Commercial' : zoningClassification.includes('Industrial') ? 'Industrial' : 'Mixed Use'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Future Development Potential</td>
+              <td class="site-table-value">
+                ${permittedUses || zoningDescription
+          ? 'The property retains development potential consistent with its current zoning designation. Additional development or intensification would be subject to municipal approval and compliance with current bylaws.'
+          : 'Development potential subject to municipal regulations and approval.'}
+              </td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Anticipated Zoning Changes</td>
+              <td class="site-table-value">No zoning change is believed to be imminent based on current municipal planning initiatives.</td>
+            </tr>
+          </tbody>
+        </table>
+      ` : `
+        <p class="site-narrative-text" style="line-height: 1.8; margin-bottom: 2rem;">
+          The property is anticipated to remain under its current zoning designation. Future development potential exists within the parameters of the existing zoning framework, subject to municipal approval processes and compliance with applicable regulations.
+        </p>
+      `}
+
+      <!-- PAGE BREAK BEFORE CONCLUSION -->
+      <div style="page-break-before: auto; margin-top: 2rem;"></div>
+
+      <!-- 5. ZONING CONCLUSION (0.5 page) -->
       ${zoningConclusion ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Zoning Conclusion</h3>
-        <p class="site-narrative-text">${zoningConclusion}</p>
+        <h3 class="subsection-title" style="margin-top: 2rem;">Zoning Conclusion</h3>
+        <p class="site-narrative-text" style="line-height: 1.8; margin-bottom: 2rem;">
+          ${zoningConclusion}
+        </p>
+      ` : `
+        <h3 class="subsection-title" style="margin-top: 2rem;">Zoning Conclusion</h3>
+        <p class="site-narrative-text" style="line-height: 1.8; margin-bottom: 2rem;">
+          Based on the foregoing analysis, the subject property appears to be a legally conforming use of the subject site under the current zoning designation. The property's existing improvements and use align with the permitted uses outlined in the applicable zoning bylaw. No significant zoning impediments or non-conforming aspects were identified that would adversely impact the property's marketability or highest and best use.
+        </p>
+      `}
+
+      <!-- ZONING MAP (if available) -->
+      ${zoningMapUrls.length > 0 ? `
+        <h3 class="subsection-title" style="margin-top: 2rem;">Zoning Map</h3>
+        <div style="margin-top: 1rem; margin-bottom: 2rem;">
+          ${zoningMapUrls.map(url => `
+            <div style="border: 1px solid #e5e7eb; border-radius: 4px; overflow: hidden; margin-bottom: 1rem;">
+              <img src="${url}" alt="Zoning Map" style="width: 100%; height: auto; max-height: 600px; object-fit: contain;" />
+            </div>
+          `).join('')}
+        </div>
       ` : ''}
 
-      ${!zoningClassification && !permittedUses && !hasDevelopmentStandards && !conformanceStatus && !zoningConclusion ? `
+      ${!zoningClassification && !zoningDescription && !permittedUses && !hasDevelopmentStandards && !zoningConformance && !zoningConclusion ? `
         <div class="empty-state">No zoning information provided</div>
       ` : ''}
     </div>
@@ -748,8 +1083,8 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
 
   // Helper function to render the INCOME section with custom template
-// EXPANDED renderIncomeSection function - 14 pages
-// This is the replacement for lines 751-948 in reportHtmlTemplate.ts
+  // EXPANDED renderIncomeSection function - 14 pages
+  // This is the replacement for lines 751-948 in reportHtmlTemplate.ts
 
   const renderIncomeSection = (section: ReportSection): string => {
     // Get Pro Forma Operating Statement values
@@ -1471,7 +1806,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       if (isNaN(price) || isNaN(units) || units === 0) return '-';
       return formatCurrency(String(price / units));
     };
-  
+
     // Helper to calculate Price/SF
     const calculatePricePerSF = (salePrice: string, gba: string): string => {
       const price = parseFloat(salePrice.replace(/[^0-9.-]/g, ''));
@@ -1480,14 +1815,14 @@ export function generateReportHtml(sections: ReportSection[]): string {
       const pricePerSF = price / sf;
       return `$${pricePerSF.toFixed(2)}`;
     };
-  
+
     // Subject Property Summary data
     const subjectNumUnits = getFieldValue(section, 'subject-num-units');
     const subjectGba = getFieldValue(section, 'subject-gba');
     const subjectYearBuilt = getFieldValue(section, 'subject-year-built');
     const subjectSiteArea = getFieldValue(section, 'subject-site-area');
     const subjectCondition = getFieldValue(section, 'subject-condition');
-  
+
     // Sale 1 data
     const sale1Name = getFieldValue(section, 'sale1-name');
     const sale1Address = getFieldValue(section, 'sale1-address');
@@ -1500,7 +1835,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const sale1SiteArea = getFieldValue(section, 'sale1-site-area');
     const sale1Condition = getFieldValue(section, 'sale1-condition');
     const sale1Description = getFieldValue(section, 'sale1-description');
-  
+
     // Sale 2 data
     const sale2Name = getFieldValue(section, 'sale2-name');
     const sale2Address = getFieldValue(section, 'sale2-address');
@@ -1513,7 +1848,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const sale2SiteArea = getFieldValue(section, 'sale2-site-area');
     const sale2Condition = getFieldValue(section, 'sale2-condition');
     const sale2Description = getFieldValue(section, 'sale2-description');
-  
+
     // Sale 3 data
     const sale3Name = getFieldValue(section, 'sale3-name');
     const sale3Address = getFieldValue(section, 'sale3-address');
@@ -1526,7 +1861,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const sale3SiteArea = getFieldValue(section, 'sale3-site-area');
     const sale3Condition = getFieldValue(section, 'sale3-condition');
     const sale3Description = getFieldValue(section, 'sale3-description');
-  
+
     // Sale 4 data - NEW
     const sale4Name = getFieldValue(section, 'sale4-name');
     const sale4Address = getFieldValue(section, 'sale4-address');
@@ -1539,7 +1874,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const sale4SiteArea = getFieldValue(section, 'sale4-site-area');
     const sale4Condition = getFieldValue(section, 'sale4-condition');
     const sale4Description = getFieldValue(section, 'sale4-description');
-  
+
     // Sale 5 data - NEW
     const sale5Name = getFieldValue(section, 'sale5-name');
     const sale5Address = getFieldValue(section, 'sale5-address');
@@ -1552,7 +1887,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const sale5SiteArea = getFieldValue(section, 'sale5-site-area');
     const sale5Condition = getFieldValue(section, 'sale5-condition');
     const sale5Description = getFieldValue(section, 'sale5-description');
-  
+
     // Sale 6 data - NEW
     const sale6Name = getFieldValue(section, 'sale6-name');
     const sale6Address = getFieldValue(section, 'sale6-address');
@@ -1565,13 +1900,136 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const sale6SiteArea = getFieldValue(section, 'sale6-site-area');
     const sale6Condition = getFieldValue(section, 'sale6-condition');
     const sale6Description = getFieldValue(section, 'sale6-description');
-  
+
     // Sales Comparison Value Conclusion
     const salesValueIndication = getFieldValue(section, 'sales-value-indication');
     const adjustmentSummary = getFieldValue(section, 'adjustment-summary');
     const salesMethodology = getFieldValue(section, 'sales-methodology');
     const salesReconciliation = getFieldValue(section, 'sales-reconciliation');
-  
+
+    // Adjustment data for Sale 1
+    const sale1AdjPropertyRights = getFieldValue(section, 'comp1-adj-property-rights');
+    const sale1AdjFinancing = getFieldValue(section, 'comp1-adj-financing');
+    const sale1AdjConditionsSale = getFieldValue(section, 'comp1-adj-conditions-sale');
+    const sale1AdjMarketTime = getFieldValue(section, 'comp1-adj-market-time');
+    const sale1AdjLocation = getFieldValue(section, 'comp1-adj-location');
+    const sale1AdjSize = getFieldValue(section, 'comp1-adj-size');
+    const sale1AdjAgeCondition = getFieldValue(section, 'comp1-adj-age-condition');
+    const sale1AdjOther = getFieldValue(section, 'comp1-adj-other');
+
+    // Adjustment data for Sale 2
+    const sale2AdjPropertyRights = getFieldValue(section, 'comp2-adj-property-rights');
+    const sale2AdjFinancing = getFieldValue(section, 'comp2-adj-financing');
+    const sale2AdjConditionsSale = getFieldValue(section, 'comp2-adj-conditions-sale');
+    const sale2AdjMarketTime = getFieldValue(section, 'comp2-adj-market-time');
+    const sale2AdjLocation = getFieldValue(section, 'comp2-adj-location');
+    const sale2AdjSize = getFieldValue(section, 'comp2-adj-size');
+    const sale2AdjAgeCondition = getFieldValue(section, 'comp2-adj-age-condition');
+    const sale2AdjOther = getFieldValue(section, 'comp2-adj-other');
+
+    // Adjustment data for Sale 3
+    const sale3AdjPropertyRights = getFieldValue(section, 'comp3-adj-property-rights');
+    const sale3AdjFinancing = getFieldValue(section, 'comp3-adj-financing');
+    const sale3AdjConditionsSale = getFieldValue(section, 'comp3-adj-conditions-sale');
+    const sale3AdjMarketTime = getFieldValue(section, 'comp3-adj-market-time');
+    const sale3AdjLocation = getFieldValue(section, 'comp3-adj-location');
+    const sale3AdjSize = getFieldValue(section, 'comp3-adj-size');
+    const sale3AdjAgeCondition = getFieldValue(section, 'comp3-adj-age-condition');
+    const sale3AdjOther = getFieldValue(section, 'comp3-adj-other');
+
+    // Adjustment data for Sale 4
+    const sale4AdjPropertyRights = getFieldValue(section, 'comp4-adj-property-rights');
+    const sale4AdjFinancing = getFieldValue(section, 'comp4-adj-financing');
+    const sale4AdjConditionsSale = getFieldValue(section, 'comp4-adj-conditions-sale');
+    const sale4AdjMarketTime = getFieldValue(section, 'comp4-adj-market-time');
+    const sale4AdjLocation = getFieldValue(section, 'comp4-adj-location');
+    const sale4AdjSize = getFieldValue(section, 'comp4-adj-size');
+    const sale4AdjAgeCondition = getFieldValue(section, 'comp4-adj-age-condition');
+    const sale4AdjOther = getFieldValue(section, 'comp4-adj-other');
+
+    // Adjustment data for Sale 5
+    const sale5AdjPropertyRights = getFieldValue(section, 'comp5-adj-property-rights');
+    const sale5AdjFinancing = getFieldValue(section, 'comp5-adj-financing');
+    const sale5AdjConditionsSale = getFieldValue(section, 'comp5-adj-conditions-sale');
+    const sale5AdjMarketTime = getFieldValue(section, 'comp5-adj-market-time');
+    const sale5AdjLocation = getFieldValue(section, 'comp5-adj-location');
+    const sale5AdjSize = getFieldValue(section, 'comp5-adj-size');
+    const sale5AdjAgeCondition = getFieldValue(section, 'comp5-adj-age-condition');
+    const sale5AdjOther = getFieldValue(section, 'comp5-adj-other');
+
+    // Adjustment data for Sale 6
+    const sale6AdjPropertyRights = getFieldValue(section, 'comp6-adj-property-rights');
+    const sale6AdjFinancing = getFieldValue(section, 'comp6-adj-financing');
+    const sale6AdjConditionsSale = getFieldValue(section, 'comp6-adj-conditions-sale');
+    const sale6AdjMarketTime = getFieldValue(section, 'comp6-adj-market-time');
+    const sale6AdjLocation = getFieldValue(section, 'comp6-adj-location');
+    const sale6AdjSize = getFieldValue(section, 'comp6-adj-size');
+    const sale6AdjAgeCondition = getFieldValue(section, 'comp6-adj-age-condition');
+    const sale6AdjOther = getFieldValue(section, 'comp6-adj-other');
+
+    // Helper function to parse percentage values
+    const parsePercentage = (value: string): number => {
+      if (!value) return 0;
+      const numericValue = parseFloat(value.toString().replace(/[^0-9.-]/g, ''));
+      return isNaN(numericValue) ? 0 : numericValue;
+    };
+
+    // Helper function to calculate net adjustment
+    const calculateNetAdjustment = (...adjustments: string[]): number => {
+      return adjustments.reduce((sum, adj) => sum + parsePercentage(adj), 0);
+    };
+
+    // Helper function to calculate adjusted price
+    const calculateAdjustedPrice = (salePrice: string, netAdjustmentPercent: number): string => {
+      if (!salePrice) return '-';
+      const price = parseFloat(salePrice.replace(/[^0-9.-]/g, ''));
+      if (isNaN(price)) return '-';
+      const adjustedPrice = price * (1 + netAdjustmentPercent / 100);
+      return formatCurrency(String(adjustedPrice));
+    };
+
+    // Calculate net adjustments for each sale
+    const sale1NetAdj = calculateNetAdjustment(
+      sale1AdjPropertyRights, sale1AdjFinancing, sale1AdjConditionsSale,
+      sale1AdjMarketTime, sale1AdjLocation, sale1AdjSize, sale1AdjAgeCondition, sale1AdjOther
+    );
+    const sale2NetAdj = calculateNetAdjustment(
+      sale2AdjPropertyRights, sale2AdjFinancing, sale2AdjConditionsSale,
+      sale2AdjMarketTime, sale2AdjLocation, sale2AdjSize, sale2AdjAgeCondition, sale2AdjOther
+    );
+    const sale3NetAdj = calculateNetAdjustment(
+      sale3AdjPropertyRights, sale3AdjFinancing, sale3AdjConditionsSale,
+      sale3AdjMarketTime, sale3AdjLocation, sale3AdjSize, sale3AdjAgeCondition, sale3AdjOther
+    );
+    const sale4NetAdj = calculateNetAdjustment(
+      sale4AdjPropertyRights, sale4AdjFinancing, sale4AdjConditionsSale,
+      sale4AdjMarketTime, sale4AdjLocation, sale4AdjSize, sale4AdjAgeCondition, sale4AdjOther
+    );
+    const sale5NetAdj = calculateNetAdjustment(
+      sale5AdjPropertyRights, sale5AdjFinancing, sale5AdjConditionsSale,
+      sale5AdjMarketTime, sale5AdjLocation, sale5AdjSize, sale5AdjAgeCondition, sale5AdjOther
+    );
+    const sale6NetAdj = calculateNetAdjustment(
+      sale6AdjPropertyRights, sale6AdjFinancing, sale6AdjConditionsSale,
+      sale6AdjMarketTime, sale6AdjLocation, sale6AdjSize, sale6AdjAgeCondition, sale6AdjOther
+    );
+
+    // Calculate adjusted prices
+    const sale1AdjustedPrice = calculateAdjustedPrice(sale1SalePrice, sale1NetAdj);
+    const sale2AdjustedPrice = calculateAdjustedPrice(sale2SalePrice, sale2NetAdj);
+    const sale3AdjustedPrice = calculateAdjustedPrice(sale3SalePrice, sale3NetAdj);
+    const sale4AdjustedPrice = calculateAdjustedPrice(sale4SalePrice, sale4NetAdj);
+    const sale5AdjustedPrice = calculateAdjustedPrice(sale5SalePrice, sale5NetAdj);
+    const sale6AdjustedPrice = calculateAdjustedPrice(sale6SalePrice, sale6NetAdj);
+
+    // Helper to format adjustment percentage display
+    const formatAdjustment = (value: string): string => {
+      if (!value) return '0%';
+      const numValue = parsePercentage(value);
+      if (numValue === 0) return '0%';
+      return numValue > 0 ? `+${numValue}%` : `${numValue}%`;
+    };
+
     return `
     <div class="section">
       <h2 class="section-title">Sales Comparison Approach</h2>
@@ -1943,7 +2401,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <tbody>
           <tr style="background: #f5f5f5; font-weight: bold;">
             <td style="padding: 0.5rem;">Subject</td>
-            <td style="padding: 0.5rem;">${propertyAddress || 'Subject Property'}</td>
+            <td style="padding: 0.5rem;">${streetAddress ? `${streetAddress}, ${city}, ${province}` : 'Subject Property'}</td>
             <td style="padding: 0.5rem;">-</td>
             <td style="padding: 0.5rem;">-</td>
             <td style="padding: 0.5rem;">${subjectNumUnits || '-'}</td>
@@ -2113,52 +2571,52 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <tr>
             <td style="padding: 0.4rem;">Property Rights</td>
             <td style="padding: 0.4rem;">Fee Simple</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjPropertyRights)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjPropertyRights)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjPropertyRights)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjPropertyRights)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjPropertyRights)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjPropertyRights)}</td>
           </tr>
           <tr>
             <td style="padding: 0.4rem;">Financing Terms</td>
             <td style="padding: 0.4rem;">Cash Equiv.</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjFinancing)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjFinancing)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjFinancing)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjFinancing)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjFinancing)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjFinancing)}</td>
           </tr>
           <tr>
             <td style="padding: 0.4rem;">Conditions of Sale</td>
             <td style="padding: 0.4rem;">Arms Length</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
-            <td style="padding: 0.4rem;">0%</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjConditionsSale)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjConditionsSale)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjConditionsSale)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjConditionsSale)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjConditionsSale)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjConditionsSale)}</td>
           </tr>
           <tr>
             <td style="padding: 0.4rem;">Market Conditions (Time)</td>
             <td style="padding: 0.4rem;">Current</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjMarketTime)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjMarketTime)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjMarketTime)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjMarketTime)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjMarketTime)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjMarketTime)}</td>
           </tr>
           <tr>
             <td style="padding: 0.4rem;">Location</td>
             <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjLocation)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjLocation)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjLocation)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjLocation)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjLocation)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjLocation)}</td>
           </tr>
           <tr>
             <td style="padding: 0.4rem;">Size (Units)</td>
@@ -2171,34 +2629,54 @@ export function generateReportHtml(sections: ReportSection[]): string {
             <td style="padding: 0.4rem;">${sale6NumUnits || '-'}</td>
           </tr>
           <tr>
-            <td style="padding: 0.4rem;">Age/Condition</td>
+            <td style="padding: 0.4rem;">Size Adjustment</td>
+            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjSize)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjSize)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjSize)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjSize)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjSize)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjSize)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem;">Age/Condition Adjustment</td>
             <td style="padding: 0.4rem;">${subjectYearBuilt || '-'}/${subjectCondition || '-'}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjAgeCondition)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjAgeCondition)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjAgeCondition)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjAgeCondition)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjAgeCondition)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjAgeCondition)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem;">Other Adjustments</td>
             <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale1AdjOther)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale2AdjOther)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale3AdjOther)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale4AdjOther)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale5AdjOther)}</td>
+            <td style="padding: 0.4rem;">${formatAdjustment(sale6AdjOther)}</td>
           </tr>
           <tr style="background: #f9fafb; font-weight: bold;">
             <td style="padding: 0.4rem;">Net Adjustment</td>
             <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${sale1NetAdj > 0 ? '+' : ''}${sale1NetAdj.toFixed(1)}%</td>
+            <td style="padding: 0.4rem;">${sale2NetAdj > 0 ? '+' : ''}${sale2NetAdj.toFixed(1)}%</td>
+            <td style="padding: 0.4rem;">${sale3NetAdj > 0 ? '+' : ''}${sale3NetAdj.toFixed(1)}%</td>
+            <td style="padding: 0.4rem;">${sale4NetAdj > 0 ? '+' : ''}${sale4NetAdj.toFixed(1)}%</td>
+            <td style="padding: 0.4rem;">${sale5NetAdj > 0 ? '+' : ''}${sale5NetAdj.toFixed(1)}%</td>
+            <td style="padding: 0.4rem;">${sale6NetAdj > 0 ? '+' : ''}${sale6NetAdj.toFixed(1)}%</td>
           </tr>
           <tr style="background: #1a365d; color: white; font-weight: bold;">
             <td style="padding: 0.4rem;">Adjusted Price</td>
             <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
-            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${sale1AdjustedPrice}</td>
+            <td style="padding: 0.4rem;">${sale2AdjustedPrice}</td>
+            <td style="padding: 0.4rem;">${sale3AdjustedPrice}</td>
+            <td style="padding: 0.4rem;">${sale4AdjustedPrice}</td>
+            <td style="padding: 0.4rem;">${sale5AdjustedPrice}</td>
+            <td style="padding: 0.4rem;">${sale6AdjustedPrice}</td>
           </tr>
         </tbody>
       </table>
@@ -2276,71 +2754,71 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
   // Helper function to render the IMPV (Improvements) section with custom template
   const renderImpvSection = (section: ReportSection): string => {
-  // SECTION 1: Overview & General Description
-  const impvOverview = getFieldValue(section, 'impv-overview');
+    // SECTION 1: Overview & General Description
+    const impvOverview = getFieldValue(section, 'impv-overview');
 
-  // SECTION 2: Building Description Table (Detailed Specs)
-  const numberOfBuildings = getFieldValue(section, 'impv-num-buildings');
-  const numberOfStories = getFieldValue(section, 'impv-num-stories');
-  const yearBuiltImpv = getFieldValue(section, 'impv-year-built');
-  const buildingFormatImpv = getFieldValue(section, 'impv-building-format');
-  const netRentableArea = getFieldValue(section, 'impv-nra');
-  const totalUnitsImpv = getFieldValue(section, 'impv-num-units');
-  const occupancyRate = getFieldValue(section, 'impv-occupancy-rate');
-  const buildingFootprint = getFieldValue(section, 'impv-building-footprint');
+    // SECTION 2: Building Description Table (Detailed Specs)
+    const numberOfBuildings = getFieldValue(section, 'impv-num-buildings');
+    const numberOfStories = getFieldValue(section, 'impv-num-stories');
+    const yearBuiltImpv = getFieldValue(section, 'impv-year-built');
+    const buildingFormatImpv = getFieldValue(section, 'impv-building-format');
+    const netRentableArea = getFieldValue(section, 'impv-nra');
+    const totalUnitsImpv = getFieldValue(section, 'impv-num-units');
+    const occupancyRate = getFieldValue(section, 'impv-occupancy-rate');
+    const buildingFootprint = getFieldValue(section, 'impv-building-footprint');
 
-  // Construction details
-  const foundation = getFieldValue(section, 'impv-foundation');
-  const exteriorWalls = getFieldValue(section, 'impv-exterior-walls');
-  const roofType = getFieldValue(section, 'impv-roof');
-  const roofCondition = getFieldValue(section, 'impv-roof-condition');
-  const elevator = getFieldValue(section, 'impv-elevator');
+    // Construction details
+    const foundation = getFieldValue(section, 'impv-foundation');
+    const exteriorWalls = getFieldValue(section, 'impv-exterior-walls');
+    const roofType = getFieldValue(section, 'impv-roof');
+    const roofCondition = getFieldValue(section, 'impv-roof-condition');
+    const elevator = getFieldValue(section, 'impv-elevator');
 
-  // SECTION 3: Interior Finish
-  const interiorWalls = getFieldValue(section, 'impv-interior-walls');
-  const ceilings = getFieldValue(section, 'impv-ceilings');
-  const flooring = getFieldValue(section, 'impv-flooring');
-  const doorsWindows = getFieldValue(section, 'impv-doors-windows');
-  const interiorFinish = getFieldValue(section, 'impv-interior-finish');
+    // SECTION 3: Interior Finish
+    const interiorWalls = getFieldValue(section, 'impv-interior-walls');
+    const ceilings = getFieldValue(section, 'impv-ceilings');
+    const flooring = getFieldValue(section, 'impv-flooring');
+    const doorsWindows = getFieldValue(section, 'impv-doors-windows');
+    const interiorFinish = getFieldValue(section, 'impv-interior-finish');
 
-  // Building Systems
-  const hvac = getFieldValue(section, 'impv-hvac');
-  const electrical = getFieldValue(section, 'impv-electrical');
-  const plumbing = getFieldValue(section, 'impv-plumbing');
-  const insulation = getFieldValue(section, 'impv-insulation');
-  const fireProtection = getFieldValue(section, 'impv-fire-protection');
+    // Building Systems
+    const hvac = getFieldValue(section, 'impv-hvac');
+    const electrical = getFieldValue(section, 'impv-electrical');
+    const plumbing = getFieldValue(section, 'impv-plumbing');
+    const insulation = getFieldValue(section, 'impv-insulation');
+    const fireProtection = getFieldValue(section, 'impv-fire-protection');
 
-  // SECTION 4: Building Quality & Condition
-  const overallCondition = getFieldValue(section, 'impv-overall-condition');
+    // SECTION 4: Building Quality & Condition
+    const overallCondition = getFieldValue(section, 'impv-overall-condition');
 
-  // SECTION 5: Site Improvements & Amenities
-  const projectAmenities = getFieldValue(section, 'impv-project-amenities');
-  const unitAmenities = getFieldValue(section, 'impv-unit-amenities');
-  const laundry = getFieldValue(section, 'impv-laundry');
-  const security = getFieldValue(section, 'impv-security');
-  const siteImprovements = getFieldValue(section, 'impv-site-improvements');
-  const landscaping = getFieldValue(section, 'impv-landscaping');
-  const parkingSpaces = getFieldValue(section, 'impv-parking-spaces');
-  const parkingRatio = getFieldValue(section, 'impv-parking-ratio');
-  const siteCoverage = getFieldValue(section, 'impv-site-coverage');
+    // SECTION 5: Site Improvements & Amenities
+    const projectAmenities = getFieldValue(section, 'impv-project-amenities');
+    const unitAmenities = getFieldValue(section, 'impv-unit-amenities');
+    const laundry = getFieldValue(section, 'impv-laundry');
+    const security = getFieldValue(section, 'impv-security');
+    const siteImprovements = getFieldValue(section, 'impv-site-improvements');
+    const landscaping = getFieldValue(section, 'impv-landscaping');
+    const parkingSpaces = getFieldValue(section, 'impv-parking-spaces');
+    const parkingRatio = getFieldValue(section, 'impv-parking-ratio');
+    const siteCoverage = getFieldValue(section, 'impv-site-coverage');
 
-  // SECTION 6: Deferred Maintenance & Obsolescence
-  const functionalDesign = getFieldValue(section, 'impv-functional-design');
-  const hazardousMaterials = getFieldValue(section, 'impv-hazardous-materials');
+    // SECTION 6: Deferred Maintenance & Obsolescence
+    const functionalDesign = getFieldValue(section, 'impv-functional-design');
+    const hazardousMaterials = getFieldValue(section, 'impv-hazardous-materials');
 
-  // Calculate effective age if year built is provided
-  const currentYear = new Date().getFullYear();
-  const effectiveAge = yearBuiltImpv ? currentYear - parseInt(yearBuiltImpv) : null;
+    // Calculate effective age if year built is provided
+    const currentYear = new Date().getFullYear();
+    const effectiveAge = yearBuiltImpv ? currentYear - parseInt(yearBuiltImpv) : null;
 
-  // Validation flags for sections
-  const hasOverview = impvOverview;
-  const hasBuildingDescription = numberOfBuildings || numberOfStories || yearBuiltImpv || foundation || exteriorWalls || roofType || netRentableArea || totalUnitsImpv;
-  const hasInteriorFinish = interiorWalls || ceilings || flooring || doorsWindows || interiorFinish || hvac || electrical || plumbing || insulation;
-  const hasCondition = overallCondition;
-  const hasSiteImprovements = projectAmenities || unitAmenities || siteImprovements || landscaping || parkingSpaces;
-  const hasFunctionalObsolescence = functionalDesign || hazardousMaterials;
+    // Validation flags for sections
+    const hasOverview = impvOverview;
+    const hasBuildingDescription = numberOfBuildings || numberOfStories || yearBuiltImpv || foundation || exteriorWalls || roofType || netRentableArea || totalUnitsImpv;
+    const hasInteriorFinish = interiorWalls || ceilings || flooring || doorsWindows || interiorFinish || hvac || electrical || plumbing || insulation;
+    const hasCondition = overallCondition;
+    const hasSiteImprovements = projectAmenities || unitAmenities || siteImprovements || landscaping || parkingSpaces;
+    const hasFunctionalObsolescence = functionalDesign || hazardousMaterials;
 
-  return `
+    return `
   <div class="section">
     <h2 class="section-title">Description of the Improvements</h2>
 
@@ -2677,215 +3155,58 @@ export function generateReportHtml(sections: ReportSection[]): string {
     ` : ''}
   </div>
   `;
-};
+  };
 
 
-  // Helper function to render the REPORT (Identification of Assignment) section with custom template
+  // Helper function to render the REPORT INFORMATION section
+  // This is a simple section with just 4 fields from the store definition
   const renderReportSection = (section: ReportSection): string => {
-    // Property Identification
-    const reportPropertyDescription = getFieldValue(section, 'report-property-description');
-    const reportLegalDescription = getFieldValue(section, 'report-legal-description');
-    
-    // Client & Intended User
-    const reportClientName = getFieldValue(section, 'report-client-name') || clientCompany;
-    const reportIntendedUse = getFieldValue(section, 'report-intended-use');
-    const reportAuthorizedUsers = getFieldValue(section, 'report-authorized-users');
-    
-    // Dates
-    const reportEffectiveDate = getFieldValue(section, 'report-effective-date') || valuationDate;
-    const reportReportDate = getFieldValue(section, 'report-report-date') || reportDate;
-    const reportInspectionDate = getFieldValue(section, 'report-inspection-date');
-    
-    // Purpose & Scope
+    // Get only the 4 fields defined in the store for "report" section
+    const reportType = getFieldValue(section, 'report-type');
     const reportPurpose = getFieldValue(section, 'report-purpose');
-    const reportScopeOfWork = getFieldValue(section, 'report-scope-of-work');
-    
-    // Property Rights & Value Type
-    const reportPropertyRights = getFieldValue(section, 'report-property-rights') || propertyRights;
-    const reportValueType = getFieldValue(section, 'report-value-type');
-    const reportMarketValueDefinition = getFieldValue(section, 'report-market-value-definition');
-    
-    // Exposure & Marketing Time
-    const reportExposureTime = getFieldValue(section, 'report-exposure-time');
-    const reportMarketingTime = getFieldValue(section, 'report-marketing-time');
-    
-    // Assumptions & Conditions
-    const reportHypotheticalConditions = getFieldValue(section, 'report-hypothetical-conditions') || hypotheticalConditions;
-    const reportExtraordinaryAssumptions = getFieldValue(section, 'report-extraordinary-assumptions') || extraordinaryAssumptions;
-    const reportExtraordinaryLimitingConditions = getFieldValue(section, 'report-extraordinary-limiting-conditions') || extraordinaryLimitingConditions;
-    
-    // Property History
-    const reportCurrentOwner = getFieldValue(section, 'report-current-owner');
-    const reportThreeYearHistory = getFieldValue(section, 'report-three-year-history');
-    
-    // Additional
-    const reportPersonalProperty = getFieldValue(section, 'report-personal-property');
-    const reportAssistanceProvided = getFieldValue(section, 'report-assistance-provided');
-    const reportSourcesOfInfo = getFieldValue(section, 'report-sources-of-info');
+    const reportScope = getFieldValue(section, 'report-scope');
+    const reportCompliance = getFieldValue(section, 'report-compliance');
+
+    const hasContent = reportType || reportPurpose || reportScope || reportCompliance;
 
     return `
     <div class="section">
-      <h2 class="section-title">Identification of Assignment</h2>
+      <h2 class="section-title">Report Information</h2>
 
-      <!-- Property Identification -->
-      <h3 class="subsection-title">Property Identification</h3>
-      ${reportPropertyDescription ? `
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportPropertyDescription}</p>
-        </div>
-      ` : `
-        <div class="empty-state">No property description provided</div>
-      `}
+      ${hasContent ? `
+        <table class="site-table">
+          <tbody>
+            ${reportType ? `
+              <tr>
+                <td class="site-table-label">Report Type</td>
+                <td class="site-table-value">${reportType}</td>
+              </tr>
+            ` : ''}
+            ${reportCompliance ? `
+              <tr>
+                <td class="site-table-label">Compliance Standard</td>
+                <td class="site-table-value">${reportCompliance}</td>
+              </tr>
+            ` : ''}
+          </tbody>
+        </table>
 
-      ${reportLegalDescription ? `
-        <div class="site-narrative-section" style="margin-top: 1rem;">
-          <h4 class="site-narrative-label">Legal Description</h4>
-          <p class="site-narrative-text">${reportLegalDescription}</p>
-        </div>
-      ` : ''}
-
-      <!-- Client & Intended User -->
-      <h3 class="subsection-title" style="margin-top: 1.5rem;">Authorized Client Identification</h3>
-      <div class="site-narrative-section">
-        <p class="site-narrative-text">The authorized client of this specific assignment is ${reportClientName || '<span class="empty-state">Not specified</span>'}.</p>
-      </div>
-
-      ${reportIntendedUse || reportAuthorizedUsers ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Authorized Use & Authorized Users</h3>
-        <div class="site-narrative-section">
-          ${reportIntendedUse ? `<p class="site-narrative-text">The authorized use of this report is ${reportIntendedUse}.</p>` : ''}
-          ${reportAuthorizedUsers ? `<p class="site-narrative-text">${reportAuthorizedUsers}</p>` : ''}
-        </div>
-      ` : ''}
-
-      <!-- Effective Date & Report Date -->
-      <h3 class="subsection-title" style="margin-top: 1.5rem;">Effective Date of Value and Report Date</h3>
-      <table class="site-table">
-        <tbody>
-          <tr>
-            <td class="site-table-label">Effective Date of Value</td>
-            <td class="site-table-value">${reportEffectiveDate || '<span class="empty-state">Not specified</span>'}</td>
-          </tr>
-          <tr>
-            <td class="site-table-label">Report Date</td>
-            <td class="site-table-value">${reportReportDate || '<span class="empty-state">Not specified</span>'}</td>
-          </tr>
-          ${reportInspectionDate ? `
-          <tr>
-            <td class="site-table-label">Inspection Date</td>
-            <td class="site-table-value">${reportInspectionDate}</td>
-          </tr>
-          ` : ''}
-        </tbody>
-      </table>
-
-      <!-- Purpose -->
-      ${reportPurpose ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Purpose</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportPurpose}</p>
-        </div>
-      ` : ''}
-
-      <!-- Property Rights Appraised -->
-      ${reportPropertyRights ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Property Rights Appraised</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">The property rights appraised constitute the ${reportPropertyRights}.</p>
-        </div>
-      ` : ''}
-
-      <!-- Type of Value -->
-      ${reportValueType || reportMarketValueDefinition ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Type of Value</h3>
-        <div class="site-narrative-section">
-          ${reportValueType ? `<p class="site-narrative-text">${reportValueType}</p>` : ''}
-          ${reportMarketValueDefinition ? `
-            <div style="margin-top: 1rem; padding: 1rem; background: #f9fafb; border-left: 3px solid #1a365d;">
-              <h4 class="site-narrative-label">Definition of Market Value</h4>
-              <p class="site-narrative-text">${reportMarketValueDefinition}</p>
-            </div>
-          ` : ''}
-        </div>
-      ` : ''}
-
-      <!-- Exposure & Marketing Time -->
-      ${reportExposureTime || reportMarketingTime ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Exposure & Marketing Time</h3>
-        <div class="site-narrative-section">
-          ${reportExposureTime ? `<p class="site-narrative-text">${reportExposureTime}</p>` : ''}
-          ${reportMarketingTime ? `<p class="site-narrative-text" style="margin-top: 0.5rem;">${reportMarketingTime}</p>` : ''}
-        </div>
-      ` : ''}
-
-      <!-- Scope of Work -->
-      ${reportScopeOfWork ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Scope of Work</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportScopeOfWork}</p>
-        </div>
-      ` : ''}
-
-      <!-- Hypothetical Conditions -->
-      <h3 class="subsection-title" style="margin-top: 1.5rem;">Hypothetical Conditions</h3>
-      <div class="site-narrative-section">
-        <p class="site-narrative-text">${reportHypotheticalConditions}</p>
-      </div>
-
-      <!-- Extraordinary Assumptions -->
-      <h3 class="subsection-title" style="margin-top: 1.5rem;">Extraordinary Assumptions</h3>
-      <div class="site-narrative-section">
-        <p class="site-narrative-text">${reportExtraordinaryAssumptions}</p>
-      </div>
-
-      <!-- Extraordinary Limiting Conditions -->
-      ${reportExtraordinaryLimitingConditions !== 'No Extraordinary Limiting Conditions were made for this assignment.' ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Extraordinary Limiting Conditions</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportExtraordinaryLimitingConditions}</p>
-        </div>
-      ` : ''}
-
-      <!-- Property & Sales History -->
-      ${reportCurrentOwner || reportThreeYearHistory ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Property And Sales History</h3>
-        ${reportCurrentOwner ? `
-          <div class="site-narrative-section">
-            <h4 class="site-narrative-label">Current Owner</h4>
-            <p class="site-narrative-text">${reportCurrentOwner}</p>
-          </div>
-        ` : ''}
-        ${reportThreeYearHistory ? `
+        ${reportPurpose ? `
           <div class="site-narrative-section" style="margin-top: 1rem;">
-            <h4 class="site-narrative-label">Three-Year Sales History</h4>
-            <p class="site-narrative-text">${reportThreeYearHistory}</p>
+            <h4 class="site-narrative-label">Purpose</h4>
+            <p class="site-narrative-text">${reportPurpose}</p>
           </div>
         ` : ''}
-      ` : ''}
 
-      <!-- Personal Property & Business Intangible -->
-      ${reportPersonalProperty ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Personal Property & Business Intangible</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportPersonalProperty}</p>
-        </div>
-      ` : ''}
-
-      <!-- Assistance Provided -->
-      ${reportAssistanceProvided ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Assistance Provided</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportAssistanceProvided}</p>
-        </div>
-      ` : ''}
-
-      <!-- Sources of Information -->
-      ${reportSourcesOfInfo ? `
-        <h3 class="subsection-title" style="margin-top: 1.5rem;">Sources of Information</h3>
-        <div class="site-narrative-section">
-          <p class="site-narrative-text">${reportSourcesOfInfo}</p>
-        </div>
-      ` : ''}
+        ${reportScope ? `
+          <div class="site-narrative-section" style="margin-top: 1rem;">
+            <h4 class="site-narrative-label">Scope of Work</h4>
+            <p class="site-narrative-text">${reportScope}</p>
+          </div>
+        ` : ''}
+      ` : `
+        <div class="empty-state">No report information provided. Complete the Report section fields.</div>
+      `}
     </div>
     `;
   };
@@ -2911,10 +3232,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
       if (!subsection.fields || subsection.fields.length === 0) return;
 
       // Extract photo fields and their captions
-      const photoData: Array<{imageUrl: string | null; caption: string}> = [];
+      const photoData: Array<{ imageUrl: string | null; caption: string }> = [];
 
       // Group fields by their base name (e.g., 'photo-exterior-1' and 'photo-exterior-1-caption')
-      const fieldMap = new Map<string, {imageUrl: string | null; caption: string}>();
+      const fieldMap = new Map<string, { imageUrl: string | null; caption: string }>();
 
       subsection.fields.forEach(field => {
         if (field.type === 'image') {
@@ -2958,7 +3279,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <table class="photo-grid">
       `;
 
-      // Render photos in 2-column grid
+      // Render photos in 2-column grid with page breaks every 2 rows (4 photos per page)
+      const PHOTOS_PER_PAGE = 4; // 2 rows x 2 columns
+      let photoCount = 0;
+
       for (let i = 0; i < photoData.length; i += 2) {
         photosHtml += `
         <tr>
@@ -2975,16 +3299,29 @@ export function generateReportHtml(sections: ReportSection[]): string {
             ${photoData[i + 1].caption ? `<div class="photo-caption">${photoData[i + 1].caption}</div>` : ''}
           </td>
           `;
+          photoCount += 2;
         } else {
           // Odd number of photos - leave second cell empty
           photosHtml += `
           <td class="photo-cell"></td>
           `;
+          photoCount += 1;
         }
 
         photosHtml += `
         </tr>
         `;
+
+        // Add page break after every 4 photos (2 rows), but not after the last row
+        if (photoCount >= PHOTOS_PER_PAGE && i + 2 < photoData.length) {
+          photosHtml += `
+      </table>
+      <div style="page-break-before: always;"></div>
+      <h3 class="subsection-title">${subsection.title} (continued)</h3>
+      <table class="photo-grid">
+          `;
+          photoCount = 0;
+        }
       }
 
       photosHtml += `
@@ -3082,7 +3419,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <div class="cert-signature-name">${appraiserName || 'Appraiser Name'}</div>
         <div class="cert-signature-credentials">${appraiserCredentials || 'AACI, P.App'}</div>
         <div class="cert-signature-title">${appraiserTitle || 'Senior Appraiser'}</div>
-        <div class="cert-signature-company">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+        <div class="cert-signature-company">${appraiserCompany || ''}</div>
         ${appraiserAicNumber ? `<div class="cert-signature-aic">AIC #${appraiserAicNumber}</div>` : ''}
         <div class="cert-signature-date">Date: ${certDate}</div>
       </div>
@@ -3133,7 +3470,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         </div>
 
         <div style="margin-bottom: 1.5rem; line-height: 1.8; text-align: justify;">
-          <p>${appraiserCompany || 'Valta Property Valuations Ltd.'} is proud to present the appraisal report that satisfies the agreed upon scope of work with ${clientCompany}. The purpose of this assignment is to provide the ${valueScenario} current market value of the property which at the time of inspection represents the improved property as of the effective date and leased up at market rental rates and operating costs for the property located at ${streetAddress}, ${city}, ${province} (herein referred to as the 'subject property').</p>
+          <p>${appraiserCompany || ''} is proud to present the appraisal report that satisfies the agreed upon scope of work with ${clientCompany}. The purpose of this assignment is to provide the ${valueScenario} current market value of the property which at the time of inspection represents the improved property as of the effective date and leased up at market rental rates and operating costs for the property located at ${streetAddress}, ${city}, ${province} (herein referred to as the 'subject property').</p>
 
           <p>The subject property, located at ${streetAddress}, ${city}, ${province}, is a ${propertyTypeLower}, ${buildingStyle} property with improvements located in ${city}. The improvements are comprised of ${totalBuildings} total building${parseInt(totalBuildings) > 1 ? 's' : ''}, and consist of ${totalNra ? Number(totalNra).toLocaleString() + ' square feet' : '[NRA]'} of net rentable area (NRA) as of the valuation date. The property, reportedly built in ${yearBuilt || '[Year]'}; (${yearBuilt || '[Year]'} weighted) is approximately ${formatPercent(occupancyRate)} occupied and features ${totalUnits || '[units]'} units in a ${stories}-story, ${buildingFormat} format.</p>
 
@@ -3210,7 +3547,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <!-- Closing -->
         <div style="margin: 2rem 0 1rem 0; font-weight: 600;">
           Respectfully Submitted,<br/>
-          ${appraiserCompany?.toUpperCase() || 'VALTA PROPERTY VALUATIONS LTD.'}
+          ${appraiserCompany?.toUpperCase() || ''}
         </div>
 
         <!-- Signature Block -->
@@ -3435,6 +3772,610 @@ export function generateReportHtml(sections: ReportSection[]): string {
   };
 
 
+
+  // Helper function to render the RENTAL SURVEY section with custom template
+  const renderRentalSurveySection = (section: ReportSection): string => {
+    // Helper to format currency without decimals
+    const formatCurrencyShort = (value: string): string => {
+      if (!value) return '-';
+      const num = parseFloat(value.replace(/[^0-9.-]/g, ''));
+      if (isNaN(num)) return value;
+      return `$${num.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+    };
+
+    // Helper to format currency per SF
+    const formatPerSF = (value: string): string => {
+      if (!value) return '-';
+      const num = parseFloat(value.replace(/[^0-9.-]/g, ''));
+      if (isNaN(num)) return value;
+      return `$${num.toFixed(2)}`;
+    };
+
+    // Subject Property Data
+    const subjectName = getFieldValue(section, 'rental-subject-name');
+    const subjectAddress = getFieldValue(section, 'rental-subject-address');
+    const subjectCity = getFieldValue(section, 'rental-subject-city');
+    const subjectProvince = getFieldValue(section, 'rental-subject-province');
+    const subjectRentType = getFieldValue(section, 'rental-subject-rent-type');
+    const subjectRentUnitAvg = getFieldValue(section, 'rental-subject-rent-unit-avg');
+    const subjectRentSfAvg = getFieldValue(section, 'rental-subject-rent-sf-avg');
+    const subjectUnitAmenities = getFieldValue(section, 'rental-subject-unit-amenities');
+    const subjectUtilitiesIncld = getFieldValue(section, 'rental-subject-utilities-incld');
+    const subjectParkingIncld = getFieldValue(section, 'rental-subject-parking-incld');
+    const subjectParkingType = getFieldValue(section, 'rental-subject-parking-type');
+    const subjectLaundry = getFieldValue(section, 'rental-subject-laundry');
+    const subjectSurveyComments = getFieldValue(section, 'rental-subject-survey-comments');
+    const subjectUnits = getFieldValue(section, 'rental-subject-units');
+    const subjectAvgUnitSf = getFieldValue(section, 'rental-subject-avg-unit-sf');
+    const subjectLocation = getFieldValue(section, 'rental-subject-location-rating');
+    const subjectQuality = getFieldValue(section, 'rental-subject-quality-rating');
+    const subjectCondition = getFieldValue(section, 'rental-subject-condition-rating');
+    const subjectAppeal = getFieldValue(section, 'rental-subject-appeal-rating');
+    const subjectProjectAmenities = getFieldValue(section, 'rental-subject-project-amenities');
+    const subjectSecurityFeatures = getFieldValue(section, 'rental-subject-security-features');
+
+    // Comp 1 Data
+    const comp1Name = getFieldValue(section, 'rental-comp1-name');
+    const comp1Address = getFieldValue(section, 'rental-comp1-address');
+    const comp1City = getFieldValue(section, 'rental-comp1-city');
+    const comp1Province = getFieldValue(section, 'rental-comp1-province');
+    const comp1RentType = getFieldValue(section, 'rental-comp1-rent-type');
+    const comp1RentUnitAvg = getFieldValue(section, 'rental-comp1-rent-unit-avg');
+    const comp1RentSfAvg = getFieldValue(section, 'rental-comp1-rent-sf-avg');
+    const comp1UnitAmenities = getFieldValue(section, 'rental-comp1-unit-amenities');
+    const comp1UtilitiesIncld = getFieldValue(section, 'rental-comp1-utilities-incld');
+    const comp1ParkingIncld = getFieldValue(section, 'rental-comp1-parking-incld');
+    const comp1ParkingType = getFieldValue(section, 'rental-comp1-parking-type');
+    const comp1Laundry = getFieldValue(section, 'rental-comp1-laundry');
+    const comp1SurveyComments = getFieldValue(section, 'rental-comp1-survey-comments');
+    const comp1Units = getFieldValue(section, 'rental-comp1-units');
+    const comp1AvgUnitSf = getFieldValue(section, 'rental-comp1-avg-unit-sf');
+    const comp1Location = getFieldValue(section, 'rental-comp1-location-rating');
+    const comp1Quality = getFieldValue(section, 'rental-comp1-quality-rating');
+    const comp1Condition = getFieldValue(section, 'rental-comp1-condition-rating');
+    const comp1Appeal = getFieldValue(section, 'rental-comp1-appeal-rating');
+    const comp1ProjectAmenities = getFieldValue(section, 'rental-comp1-project-amenities');
+    const comp1SecurityFeatures = getFieldValue(section, 'rental-comp1-security-features');
+    const comp1TotalAdjustments = getFieldValue(section, 'rental-comp1-total-adjustments');
+
+    // Comp 2 Data
+    const comp2Name = getFieldValue(section, 'rental-comp2-name');
+    const comp2Address = getFieldValue(section, 'rental-comp2-address');
+    const comp2City = getFieldValue(section, 'rental-comp2-city');
+    const comp2Province = getFieldValue(section, 'rental-comp2-province');
+    const comp2RentType = getFieldValue(section, 'rental-comp2-rent-type');
+    const comp2RentUnitAvg = getFieldValue(section, 'rental-comp2-rent-unit-avg');
+    const comp2RentSfAvg = getFieldValue(section, 'rental-comp2-rent-sf-avg');
+    const comp2UnitAmenities = getFieldValue(section, 'rental-comp2-unit-amenities');
+    const comp2UtilitiesIncld = getFieldValue(section, 'rental-comp2-utilities-incld');
+    const comp2ParkingIncld = getFieldValue(section, 'rental-comp2-parking-incld');
+    const comp2ParkingType = getFieldValue(section, 'rental-comp2-parking-type');
+    const comp2Laundry = getFieldValue(section, 'rental-comp2-laundry');
+    const comp2SurveyComments = getFieldValue(section, 'rental-comp2-survey-comments');
+    const comp2Units = getFieldValue(section, 'rental-comp2-units');
+    const comp2AvgUnitSf = getFieldValue(section, 'rental-comp2-avg-unit-sf');
+    const comp2Location = getFieldValue(section, 'rental-comp2-location-rating');
+    const comp2Quality = getFieldValue(section, 'rental-comp2-quality-rating');
+    const comp2Condition = getFieldValue(section, 'rental-comp2-condition-rating');
+    const comp2Appeal = getFieldValue(section, 'rental-comp2-appeal-rating');
+    const comp2ProjectAmenities = getFieldValue(section, 'rental-comp2-project-amenities');
+    const comp2SecurityFeatures = getFieldValue(section, 'rental-comp2-security-features');
+    const comp2TotalAdjustments = getFieldValue(section, 'rental-comp2-total-adjustments');
+
+    // Comp 3 Data
+    const comp3Name = getFieldValue(section, 'rental-comp3-name');
+    const comp3Address = getFieldValue(section, 'rental-comp3-address');
+    const comp3City = getFieldValue(section, 'rental-comp3-city');
+    const comp3Province = getFieldValue(section, 'rental-comp3-province');
+    const comp3RentType = getFieldValue(section, 'rental-comp3-rent-type');
+    const comp3RentUnitAvg = getFieldValue(section, 'rental-comp3-rent-unit-avg');
+    const comp3RentSfAvg = getFieldValue(section, 'rental-comp3-rent-sf-avg');
+    const comp3UnitAmenities = getFieldValue(section, 'rental-comp3-unit-amenities');
+    const comp3UtilitiesIncld = getFieldValue(section, 'rental-comp3-utilities-incld');
+    const comp3ParkingIncld = getFieldValue(section, 'rental-comp3-parking-incld');
+    const comp3ParkingType = getFieldValue(section, 'rental-comp3-parking-type');
+    const comp3Laundry = getFieldValue(section, 'rental-comp3-laundry');
+    const comp3SurveyComments = getFieldValue(section, 'rental-comp3-survey-comments');
+    const comp3Units = getFieldValue(section, 'rental-comp3-units');
+    const comp3AvgUnitSf = getFieldValue(section, 'rental-comp3-avg-unit-sf');
+    const comp3Location = getFieldValue(section, 'rental-comp3-location-rating');
+    const comp3Quality = getFieldValue(section, 'rental-comp3-quality-rating');
+    const comp3Condition = getFieldValue(section, 'rental-comp3-condition-rating');
+    const comp3Appeal = getFieldValue(section, 'rental-comp3-appeal-rating');
+    const comp3ProjectAmenities = getFieldValue(section, 'rental-comp3-project-amenities');
+    const comp3SecurityFeatures = getFieldValue(section, 'rental-comp3-security-features');
+    const comp3TotalAdjustments = getFieldValue(section, 'rental-comp3-total-adjustments');
+
+    // Comp 4 Data
+    const comp4Name = getFieldValue(section, 'rental-comp4-name');
+    const comp4Address = getFieldValue(section, 'rental-comp4-address');
+    const comp4City = getFieldValue(section, 'rental-comp4-city');
+    const comp4Province = getFieldValue(section, 'rental-comp4-province');
+    const comp4RentType = getFieldValue(section, 'rental-comp4-rent-type');
+    const comp4RentUnitAvg = getFieldValue(section, 'rental-comp4-rent-unit-avg');
+    const comp4RentSfAvg = getFieldValue(section, 'rental-comp4-rent-sf-avg');
+    const comp4UnitAmenities = getFieldValue(section, 'rental-comp4-unit-amenities');
+    const comp4UtilitiesIncld = getFieldValue(section, 'rental-comp4-utilities-incld');
+    const comp4ParkingIncld = getFieldValue(section, 'rental-comp4-parking-incld');
+    const comp4ParkingType = getFieldValue(section, 'rental-comp4-parking-type');
+    const comp4Laundry = getFieldValue(section, 'rental-comp4-laundry');
+    const comp4SurveyComments = getFieldValue(section, 'rental-comp4-survey-comments');
+    const comp4Units = getFieldValue(section, 'rental-comp4-units');
+    const comp4AvgUnitSf = getFieldValue(section, 'rental-comp4-avg-unit-sf');
+    const comp4Location = getFieldValue(section, 'rental-comp4-location-rating');
+    const comp4Quality = getFieldValue(section, 'rental-comp4-quality-rating');
+    const comp4Condition = getFieldValue(section, 'rental-comp4-condition-rating');
+    const comp4Appeal = getFieldValue(section, 'rental-comp4-appeal-rating');
+    const comp4ProjectAmenities = getFieldValue(section, 'rental-comp4-project-amenities');
+    const comp4SecurityFeatures = getFieldValue(section, 'rental-comp4-security-features');
+    const comp4TotalAdjustments = getFieldValue(section, 'rental-comp4-total-adjustments');
+
+    // Comp 5 Data
+    const comp5Name = getFieldValue(section, 'rental-comp5-name');
+    const comp5Address = getFieldValue(section, 'rental-comp5-address');
+    const comp5City = getFieldValue(section, 'rental-comp5-city');
+    const comp5Province = getFieldValue(section, 'rental-comp5-province');
+    const comp5RentType = getFieldValue(section, 'rental-comp5-rent-type');
+    const comp5RentUnitAvg = getFieldValue(section, 'rental-comp5-rent-unit-avg');
+    const comp5RentSfAvg = getFieldValue(section, 'rental-comp5-rent-sf-avg');
+    const comp5UnitAmenities = getFieldValue(section, 'rental-comp5-unit-amenities');
+    const comp5UtilitiesIncld = getFieldValue(section, 'rental-comp5-utilities-incld');
+    const comp5ParkingIncld = getFieldValue(section, 'rental-comp5-parking-incld');
+    const comp5ParkingType = getFieldValue(section, 'rental-comp5-parking-type');
+    const comp5Laundry = getFieldValue(section, 'rental-comp5-laundry');
+    const comp5SurveyComments = getFieldValue(section, 'rental-comp5-survey-comments');
+    const comp5Units = getFieldValue(section, 'rental-comp5-units');
+    const comp5AvgUnitSf = getFieldValue(section, 'rental-comp5-avg-unit-sf');
+    const comp5Location = getFieldValue(section, 'rental-comp5-location-rating');
+    const comp5Quality = getFieldValue(section, 'rental-comp5-quality-rating');
+    const comp5Condition = getFieldValue(section, 'rental-comp5-condition-rating');
+    const comp5Appeal = getFieldValue(section, 'rental-comp5-appeal-rating');
+    const comp5ProjectAmenities = getFieldValue(section, 'rental-comp5-project-amenities');
+    const comp5SecurityFeatures = getFieldValue(section, 'rental-comp5-security-features');
+    const comp5TotalAdjustments = getFieldValue(section, 'rental-comp5-total-adjustments');
+
+    // 1BR Analysis Data
+    const oneBrHigh = getFieldValue(section, 'rental-1br-high');
+    const oneBrAvg = getFieldValue(section, 'rental-1br-avg');
+    const oneBrMed = getFieldValue(section, 'rental-1br-med');
+    const oneBrLow = getFieldValue(section, 'rental-1br-low');
+    const oneBrHighRentUnit = getFieldValue(section, 'rental-1br-high-rent-unit');
+    const oneBrAvgRentUnit = getFieldValue(section, 'rental-1br-avg-rent-unit');
+    const oneBrMedRentUnit = getFieldValue(section, 'rental-1br-med-rent-unit');
+    const oneBrLowRentUnit = getFieldValue(section, 'rental-1br-low-rent-unit');
+    const oneBrHighRentSf = getFieldValue(section, 'rental-1br-high-rent-sf');
+    const oneBrAvgRentSf = getFieldValue(section, 'rental-1br-avg-rent-sf');
+    const oneBrMedRentSf = getFieldValue(section, 'rental-1br-med-rent-sf');
+    const oneBrLowRentSf = getFieldValue(section, 'rental-1br-low-rent-sf');
+    const oneBrHighAdjRentSf = getFieldValue(section, 'rental-1br-high-adj-rent-sf');
+    const oneBrAvgAdjRentSf = getFieldValue(section, 'rental-1br-avg-adj-rent-sf');
+    const oneBrMedAdjRentSf = getFieldValue(section, 'rental-1br-med-adj-rent-sf');
+    const oneBrLowAdjRentSf = getFieldValue(section, 'rental-1br-low-adj-rent-sf');
+    const oneBrConclusionType = getFieldValue(section, 'rental-1br-conclusion-type');
+    const oneBrConclusionUnitSize = getFieldValue(section, 'rental-1br-conclusion-unit-size');
+    const oneBrConclusionRentUnit = getFieldValue(section, 'rental-1br-conclusion-rent-unit');
+    const oneBrConclusionRentSf = getFieldValue(section, 'rental-1br-conclusion-rent-sf');
+    const oneBrConclusionSf = getFieldValue(section, 'rental-1br-conclusion-sf');
+    const oneBrConclusion = getFieldValue(section, 'rental-1br-conclusion');
+
+    // 2BR Analysis Data
+    const twoBrHigh = getFieldValue(section, 'rental-2br-high');
+    const twoBrAvg = getFieldValue(section, 'rental-2br-avg');
+    const twoBrMed = getFieldValue(section, 'rental-2br-med');
+    const twoBrLow = getFieldValue(section, 'rental-2br-low');
+    const twoBrHighRentUnit = getFieldValue(section, 'rental-2br-high-rent-unit');
+    const twoBrAvgRentUnit = getFieldValue(section, 'rental-2br-avg-rent-unit');
+    const twoBrMedRentUnit = getFieldValue(section, 'rental-2br-med-rent-unit');
+    const twoBrLowRentUnit = getFieldValue(section, 'rental-2br-low-rent-unit');
+    const twoBrHighRentSf = getFieldValue(section, 'rental-2br-high-rent-sf');
+    const twoBrAvgRentSf = getFieldValue(section, 'rental-2br-avg-rent-sf');
+    const twoBrMedRentSf = getFieldValue(section, 'rental-2br-med-rent-sf');
+    const twoBrLowRentSf = getFieldValue(section, 'rental-2br-low-rent-sf');
+    const twoBrHighAdjRentSf = getFieldValue(section, 'rental-2br-high-adj-rent-sf');
+    const twoBrAvgAdjRentSf = getFieldValue(section, 'rental-2br-avg-adj-rent-sf');
+    const twoBrMedAdjRentSf = getFieldValue(section, 'rental-2br-med-adj-rent-sf');
+    const twoBrLowAdjRentSf = getFieldValue(section, 'rental-2br-low-adj-rent-sf');
+    const twoBrConclusionType = getFieldValue(section, 'rental-2br-conclusion-type');
+    const twoBrConclusionUnitSize = getFieldValue(section, 'rental-2br-conclusion-unit-size');
+    const twoBrConclusionRentUnit = getFieldValue(section, 'rental-2br-conclusion-rent-unit');
+    const twoBrConclusionRentSf = getFieldValue(section, 'rental-2br-conclusion-rent-sf');
+    const twoBrConclusionSf = getFieldValue(section, 'rental-2br-conclusion-sf');
+    const twoBrConclusion = getFieldValue(section, 'rental-2br-conclusion');
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Rental Survey Comparison</h2>
+
+      <!-- Main Survey Comparison Table -->
+      <h3 class="subsection-title">Survey Comparison Table</h3>
+      <table class="site-table" style="font-size: 0.7rem; width: 100%;">
+        <thead>
+          <tr style="background: #1a365d; color: white;">
+            <th style="padding: 0.4rem; width: 15%;">Item</th>
+            <th style="padding: 0.4rem; width: 14%;">SUBJECT</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 1</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 2</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 3</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 4</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Property Identification -->
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Property Name</td>
+            <td style="padding: 0.4rem;">${subjectName || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Name || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Name || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Name || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Name || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Name || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Address</td>
+            <td style="padding: 0.4rem;">${subjectAddress || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Address || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Address || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Address || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Address || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Address || '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">City</td>
+            <td style="padding: 0.4rem;">${subjectCity || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1City || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2City || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3City || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4City || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5City || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Province</td>
+            <td style="padding: 0.4rem;">${subjectProvince || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Province || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Province || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Province || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Province || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Province || '-'}</td>
+          </tr>
+
+          <!-- Rent Survey Information Header -->
+          <tr style="background: #1a365d; color: white;">
+            <td colspan="7" style="padding: 0.5rem; text-align: center; font-weight: bold;">RENT SURVEY INFORMATION</td>
+          </tr>
+
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Rent Type</td>
+            <td style="padding: 0.4rem;">${subjectRentType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1RentType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2RentType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3RentType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4RentType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5RentType || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Rent/Unit Avg</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(subjectRentUnitAvg)}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(comp1RentUnitAvg)}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(comp2RentUnitAvg)}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(comp3RentUnitAvg)}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(comp4RentUnitAvg)}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(comp5RentUnitAvg)}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Rent/SF Avg</td>
+            <td style="padding: 0.4rem;">${formatPerSF(subjectRentSfAvg)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(comp1RentSfAvg)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(comp2RentSfAvg)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(comp3RentSfAvg)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(comp4RentSfAvg)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(comp5RentSfAvg)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Unit Amenities</td>
+            <td style="padding: 0.4rem;">${subjectUnitAmenities || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1UnitAmenities || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2UnitAmenities || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3UnitAmenities || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4UnitAmenities || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5UnitAmenities || '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Utilities Incld.*</td>
+            <td style="padding: 0.4rem;">${subjectUtilitiesIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1UtilitiesIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2UtilitiesIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3UtilitiesIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4UtilitiesIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5UtilitiesIncld || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Parking Incld.</td>
+            <td style="padding: 0.4rem;">${subjectParkingIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1ParkingIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2ParkingIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3ParkingIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4ParkingIncld || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5ParkingIncld || '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Parking Type</td>
+            <td style="padding: 0.4rem;">${subjectParkingType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1ParkingType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2ParkingType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3ParkingType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4ParkingType || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5ParkingType || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Laundry</td>
+            <td style="padding: 0.4rem;">${subjectLaundry || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Laundry || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Laundry || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Laundry || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Laundry || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Laundry || '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Survey Comments</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${subjectSurveyComments || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp1SurveyComments || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp2SurveyComments || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp3SurveyComments || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp4SurveyComments || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp5SurveyComments || '-'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Utilities Legend -->
+      <p style="font-size: 0.7rem; margin-top: 0.5rem; font-style: italic; color: #666;">
+        *Electricity = E | Garbage = T | Gas = G | Hot-Water = HW | Sewer = S | Water = W | Cable/Satellite = C | Internet = I
+      </p>
+
+      <!-- Building Information -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Building Information</h3>
+      <table class="site-table" style="font-size: 0.7rem; width: 100%;">
+        <thead>
+          <tr style="background: #1a365d; color: white;">
+            <th style="padding: 0.4rem; width: 15%;">Item</th>
+            <th style="padding: 0.4rem; width: 14%;">SUBJECT</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 1</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 2</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 3</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 4</th>
+            <th style="padding: 0.4rem; width: 14%;">COMP 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Units</td>
+            <td style="padding: 0.4rem;">${subjectUnits || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Units || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Units || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Units || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Units || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Units || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Avg Unit SF</td>
+            <td style="padding: 0.4rem;">${subjectAvgUnitSf ? `${Number(subjectAvgUnitSf).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${comp1AvgUnitSf ? `${Number(comp1AvgUnitSf).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${comp2AvgUnitSf ? `${Number(comp2AvgUnitSf).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${comp3AvgUnitSf ? `${Number(comp3AvgUnitSf).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${comp4AvgUnitSf ? `${Number(comp4AvgUnitSf).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${comp5AvgUnitSf ? `${Number(comp5AvgUnitSf).toLocaleString()} SF` : '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Location</td>
+            <td style="padding: 0.4rem;">${subjectLocation || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Location || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Location || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Location || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Location || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Location || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Quality</td>
+            <td style="padding: 0.4rem;">${subjectQuality || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Quality || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Quality || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Quality || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Quality || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Quality || '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Condition</td>
+            <td style="padding: 0.4rem;">${subjectCondition || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Condition || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Condition || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Condition || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Condition || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Condition || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Appeal</td>
+            <td style="padding: 0.4rem;">${subjectAppeal || '-'}</td>
+            <td style="padding: 0.4rem;">${comp1Appeal || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2Appeal || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3Appeal || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4Appeal || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5Appeal || '-'}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">Project Amenities</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${subjectProjectAmenities || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp1ProjectAmenities || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp2ProjectAmenities || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp3ProjectAmenities || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp4ProjectAmenities || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp5ProjectAmenities || '-'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">Security Features</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${subjectSecurityFeatures || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp1SecurityFeatures || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp2SecurityFeatures || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp3SecurityFeatures || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp4SecurityFeatures || '-'}</td>
+            <td style="padding: 0.4rem; font-size: 0.65rem;">${comp5SecurityFeatures || '-'}</td>
+          </tr>
+          <tr style="background: #1a365d; color: white;">
+            <td style="padding: 0.4rem; font-weight: bold;">Total Adjustments</td>
+            <td style="padding: 0.4rem;">-</td>
+            <td style="padding: 0.4rem;">${comp1TotalAdjustments || '-'}</td>
+            <td style="padding: 0.4rem;">${comp2TotalAdjustments || '-'}</td>
+            <td style="padding: 0.4rem;">${comp3TotalAdjustments || '-'}</td>
+            <td style="padding: 0.4rem;">${comp4TotalAdjustments || '-'}</td>
+            <td style="padding: 0.4rem;">${comp5TotalAdjustments || '-'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- PAGE BREAK -->
+      <div style="page-break-before: always;"></div>
+
+      <!-- 1BR Analysis Table -->
+      <h3 class="subsection-title">1 Bedroom Units Analysis</h3>
+      <table class="site-table" style="font-size: 0.75rem; margin-bottom: 1.5rem;">
+        <thead>
+          <tr style="background: #1a365d; color: white;">
+            <th style="padding: 0.4rem;">COMP TYPE</th>
+            <th style="padding: 0.4rem;">AVERAGE<br/>UNIT SIZE</th>
+            <th style="padding: 0.4rem;">UNADJUSTED<br/>RENT/UNIT</th>
+            <th style="padding: 0.4rem;">RENT/SF</th>
+            <th style="padding: 0.4rem;">ADJUSTED<br/>RENT/SF</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #f3f4f6; font-weight: bold;">
+            <td style="padding: 0.4rem;">HIGH</td>
+            <td style="padding: 0.4rem;">${oneBrHigh ? `${Number(oneBrHigh).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(oneBrHighRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrHighRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrHighAdjRentSf)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">AVG</td>
+            <td style="padding: 0.4rem;">${oneBrAvg ? `${Number(oneBrAvg).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(oneBrAvgRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrAvgRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrAvgAdjRentSf)}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">MED</td>
+            <td style="padding: 0.4rem;">${oneBrMed ? `${Number(oneBrMed).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(oneBrMedRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrMedRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrMedAdjRentSf)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">LOW</td>
+            <td style="padding: 0.4rem;">${oneBrLow ? `${Number(oneBrLow).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(oneBrLowRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrLowRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrLowAdjRentSf)}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 1BR Conclusion Table -->
+      <h4 style="color: #1a365d; margin-top: 1rem; margin-bottom: 0.5rem; font-size: 0.95rem;">Unit Type Analysis & Conclusions</h4>
+      <table class="site-table" style="font-size: 0.75rem;">
+        <thead>
+          <tr style="background: #1a365d; color: white;">
+            <th style="padding: 0.4rem;">TYPE</th>
+            <th style="padding: 0.4rem;">UNIT SIZE</th>
+            <th style="padding: 0.4rem;">RENT/UNIT</th>
+            <th style="padding: 0.4rem;">RENT/SF</th>
+            <th style="padding: 0.4rem;">CONCLUSION/SF</th>
+            <th style="padding: 0.4rem;">CONCLUSION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #fffbeb;">
+            <td style="padding: 0.4rem; font-weight: bold;">${oneBrConclusionType || '1 Bed/1 Bath'}</td>
+            <td style="padding: 0.4rem;">${oneBrConclusionUnitSize ? `${Number(oneBrConclusionUnitSize).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(oneBrConclusionRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(oneBrConclusionRentSf)}</td>
+            <td style="padding: 0.4rem; font-weight: bold;">${formatPerSF(oneBrConclusionSf)}</td>
+            <td style="padding: 0.4rem; font-weight: bold;">${formatCurrencyShort(oneBrConclusion)}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 2BR Analysis Table -->
+      <h3 class="subsection-title" style="margin-top: 2rem;">2 Bedroom Units Analysis</h3>
+      <table class="site-table" style="font-size: 0.75rem; margin-bottom: 1.5rem;">
+        <thead>
+          <tr style="background: #1a365d; color: white;">
+            <th style="padding: 0.4rem;">COMP TYPE</th>
+            <th style="padding: 0.4rem;">AVERAGE<br/>UNIT SIZE</th>
+            <th style="padding: 0.4rem;">UNADJUSTED<br/>RENT/UNIT</th>
+            <th style="padding: 0.4rem;">RENT/SF</th>
+            <th style="padding: 0.4rem;">ADJUSTED<br/>RENT/SF</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #f3f4f6; font-weight: bold;">
+            <td style="padding: 0.4rem;">HIGH</td>
+            <td style="padding: 0.4rem;">${twoBrHigh ? `${Number(twoBrHigh).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(twoBrHighRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrHighRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrHighAdjRentSf)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">AVG</td>
+            <td style="padding: 0.4rem;">${twoBrAvg ? `${Number(twoBrAvg).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(twoBrAvgRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrAvgRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrAvgAdjRentSf)}</td>
+          </tr>
+          <tr style="background: #f3f4f6;">
+            <td style="padding: 0.4rem; font-weight: bold;">MED</td>
+            <td style="padding: 0.4rem;">${twoBrMed ? `${Number(twoBrMed).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(twoBrMedRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrMedRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrMedAdjRentSf)}</td>
+          </tr>
+          <tr>
+            <td style="padding: 0.4rem; font-weight: bold;">LOW</td>
+            <td style="padding: 0.4rem;">${twoBrLow ? `${Number(twoBrLow).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(twoBrLowRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrLowRentSf)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrLowAdjRentSf)}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 2BR Conclusion Table -->
+      <h4 style="color: #1a365d; margin-top: 1rem; margin-bottom: 0.5rem; font-size: 0.95rem;">Unit Type Analysis & Conclusions</h4>
+      <table class="site-table" style="font-size: 0.75rem;">
+        <thead>
+          <tr style="background: #1a365d; color: white;">
+            <th style="padding: 0.4rem;">TYPE</th>
+            <th style="padding: 0.4rem;">UNIT SIZE</th>
+            <th style="padding: 0.4rem;">RENT/UNIT</th>
+            <th style="padding: 0.4rem;">RENT/SF</th>
+            <th style="padding: 0.4rem;">CONCLUSION/SF</th>
+            <th style="padding: 0.4rem;">CONCLUSION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background: #fffbeb;">
+            <td style="padding: 0.4rem; font-weight: bold;">${twoBrConclusionType || '2 Bed/1 Bath'}</td>
+            <td style="padding: 0.4rem;">${twoBrConclusionUnitSize ? `${Number(twoBrConclusionUnitSize).toLocaleString()} SF` : '-'}</td>
+            <td style="padding: 0.4rem;">${formatCurrencyShort(twoBrConclusionRentUnit)}</td>
+            <td style="padding: 0.4rem;">${formatPerSF(twoBrConclusionRentSf)}</td>
+            <td style="padding: 0.4rem; font-weight: bold;">${formatPerSF(twoBrConclusionSf)}</td>
+            <td style="padding: 0.4rem; font-weight: bold;">${formatCurrencyShort(twoBrConclusion)}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    `;
+  };
+
   // Helper function to render the CALC section (Income Calculator Results)
   const renderCalcSection = (section: ReportSection): string => {
     const getFieldValue = (sec: ReportSection, fieldId: string): string => {
@@ -3651,6 +4592,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         ` : ''}
 
         ${localMap ? `
+        <div style="page-break-before: always;"></div>
         <div class="map-item" style="text-align: center;">
           <h3 class="subsection-title">Local Area Map</h3>
           <img src="${localMap}" alt="Local Area Map" style="max-width: 100%; height: auto; border: 1px solid #ccc;" />
@@ -3658,6 +4600,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         ` : ''}
 
         ${aerialMap ? `
+        <div style="page-break-before: always;"></div>
         <div class="map-item" style="text-align: center;">
           <h3 class="subsection-title">Aerial View</h3>
           <img src="${aerialMap}" alt="Aerial View" style="max-width: 100%; height: auto; border: 1px solid #ccc;" />
@@ -3826,7 +4769,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
     const appraiserName = getFieldValue('appraiser-name') || 'Appraiser Name';
     const appraiserDesignation = getFieldValue('appraiser-designation') || 'AACI, P.App';
-    
+
     return `
     <div class="section appendix-section page-break-before">
       <h1 style="text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 30px; text-transform: uppercase;">Qualifications of the Appraiser</h1>
@@ -3897,6 +4840,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     body {
+      counter-reset: page;
       font-family: 'Times New Roman', Times, serif;
       line-height: 1.6;
       color: #00000a;
@@ -3912,6 +4856,20 @@ export function generateReportHtml(sections: ReportSection[]): string {
       padding: 0;
       page-break-after: always;
       scroll-margin-top: 20px;
+      position: relative;
+    }
+
+    /* Visual indicator for page height - shows where content exceeds 11in */
+    .page::after {
+      content: '';
+      position: absolute;
+      top: 11in;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, #ef4444, #ef4444 10px, transparent 10px, transparent 20px);
+      pointer-events: none;
+      z-index: 100;
     }
 
     /* Cover Page Styles - Matching Valcre Design */
@@ -4544,7 +5502,27 @@ export function generateReportHtml(sections: ReportSection[]): string {
       margin-top: 0.5rem;
     }
 
+    /* Page Numbers */
+    .page-number {
+      position: absolute;
+      bottom: 0.5in;
+      right: 0.75in;
+      font-size: 10pt;
+      color: #666;
+    }
+
+    .page-number::before {
+      content: "Page ";
+    }
+
     @media print {
+      .page {
+        counter-increment: page;
+      }
+      .page-number::after {
+        content: counter(page);
+      }
+
       body {
         margin: 0;
         padding: 0;
@@ -4563,6 +5541,55 @@ export function generateReportHtml(sections: ReportSection[]): string {
         page-break-after: always;
       }
     }
+    /* Screen-only visual improvements for preview */
+    @media screen {
+      .page-break, 
+      [style*="page-break-before: always"], 
+      [style*="page-break-before:always"],
+      [style*="page-break-after: always"],
+      [style*="page-break-after:always"] {
+        display: block;
+        height: 2px;
+        background: #e5e7eb; /* Light gray line */
+        border: none;
+        margin: 2rem 0;
+        position: relative;
+        overflow: visible;
+      }
+      
+      /* Page break labels hidden for cleaner preview - uncomment to debug page breaks
+      .page-break::after,
+      [style*="page-break"]::after {
+        content: "PAGE BREAK";
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #f3f4f6;
+        border: 1px solid #d1d5db;
+        border-radius: 4px;
+        padding: 2px 8px;
+        font-size: 10px;
+        color: #6b7280;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        z-index: 10;
+      }
+      */
+
+      /* Add shadows to pages for "document" feel */
+      .page {
+         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+         margin-bottom: 2rem;
+         border: 1px solid #e5e7eb;
+      }
+      
+      body {
+        background-color: #f3f4f6; /* Light gray background to separate pages */
+        padding: 2rem;
+      }
+    }
   </style>
 </head>
 <body>
@@ -4577,9 +5604,9 @@ export function generateReportHtml(sections: ReportSection[]): string {
     <div class="cover-main">
       <div class="cover-photo-column">
         ${coverPhoto
-          ? `<img src="${coverPhoto}" alt="Property Photo" class="cover-photo" />`
-          : `<div class="cover-photo-placeholder">Property Photo<br/>(Add in Cover Page section)</div>`
-        }
+      ? `<img src="${coverPhoto}" alt="Property Photo" class="cover-photo" />`
+      : `<div class="cover-photo-placeholder">Property Photo<br/>(Add in Cover Page section)</div>`
+    }
       </div>
       <div class="cover-content-column">
         <div class="cover-title">Appraisal Report</div>
@@ -4631,6 +5658,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
   <!-- Letter of Transmittal Page -->
   <div id="section-home" class="page letter-page">
+    <div class="page-number"></div>
     <div class="letter-header">
       <img src="/images/valta-logo-optimized.png" alt="${appraiserCompany}" class="letter-logo" />
     </div>
@@ -4717,13 +5745,14 @@ export function generateReportHtml(sections: ReportSection[]): string {
     <!-- Page Footer -->
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
 
   <!-- Executive Summary Page -->
   ${execSection ? `
   <div id="section-exec" class="page exec-page" style="position: relative;">
+    <div class="page-number"></div>
     <!-- Page Header -->
     <div class="page-header">
       <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
@@ -4757,13 +5786,14 @@ export function generateReportHtml(sections: ReportSection[]): string {
     <!-- Page Footer -->
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
   ` : ''}
 
   <!-- Table of Contents -->
   <div id="section-toc" class="page exec-page" style="position: relative;">
+    <div class="page-number"></div>
     <div class="page-header">
       <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
       <div class="page-header-title">
@@ -4774,13 +5804,14 @@ export function generateReportHtml(sections: ReportSection[]): string {
     ${renderTableOfContents(sections)}
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
 
   <!-- Additional Sections -->
   ${sections.filter(s => s.id !== 'cover' && s.id !== 'exec' && s.id !== 'home' && s.id !== 'custom').map(section => `
   <div id="section-${section.id}" class="page exec-page" style="position: relative;">
+    <div class="page-number"></div>
     <!-- Page Header -->
     <div class="page-header">
       <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
@@ -4791,27 +5822,29 @@ export function generateReportHtml(sections: ReportSection[]): string {
     </div>
 
     ${section.id === 'home' ? renderHomeSection(section) :
-      section.id === 'report' ? renderReportSection(section) :
-      section.id === 'site' ? renderSiteSection(section) :
-      section.id === 'tax' ? renderTaxSection(section) :
-      section.id === 'zone' ? renderZoneSection(section) :
-      section.id === 'hbu' ? renderHbuSection(section) :
-      section.id === 'recon' ? renderReconSection(section) :
-      section.id === 'income' ? renderIncomeSection(section) :
-      section.id === 'sales' ? renderSalesSection(section) :
-      section.id === 'impv' ? renderImpvSection(section) :
-      section.id === 'photos' ? renderPhotosSection(section) :
-      section.id === 'location' ? renderLocationSection(section) :
-      section.id === 'market' ? renderMarketSection(section) :
-      section.id === 'calc' ? renderCalcSection(section) :
-      section.id === 'maps' ? renderMapsSection(section) : `
+        section.id === 'report' ? renderReportSection(section) :
+          section.id === 'assignment' ? renderAssignmentSection(section) :
+          section.id === 'site' ? renderSiteSection(section) :
+            section.id === 'tax' ? renderTaxSection(section) :
+              section.id === 'zone' ? renderZoneSection(section) :
+                section.id === 'hbu' ? renderHbuSection(section) :
+                  section.id === 'recon' ? renderReconSection(section) :
+                    section.id === 'income' ? renderIncomeSection(section) :
+                      section.id === 'sales' ? renderSalesSection(section) :
+                        section.id === 'impv' ? renderImpvSection(section) :
+                          section.id === 'photos' ? renderPhotosSection(section) :
+                            section.id === 'location' ? renderLocationSection(section) :
+                              section.id === 'market' ? renderMarketSection(section) :
+                                section.id === 'calc' ? renderCalcSection(section) :
+                                  section.id === 'rental-survey' ? renderRentalSurveySection(section) :
+                                  section.id === 'maps' ? renderMapsSection(section) : `
     <div class="section">
       <h2 class="section-title">${section.name}</h2>
 
       ${section.fields.map(field => {
-        if (field.type === 'image' && Array.isArray(field.value)) {
-          const imageUrls = field.value as string[];
-          return imageUrls.length > 0 ? `
+                                    if (field.type === 'image' && Array.isArray(field.value)) {
+                                      const imageUrls = field.value as string[];
+                                      return imageUrls.length > 0 ? `
             <div class="field-group">
               <div class="field-label">${field.label}:</div>
               <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
@@ -4828,14 +5861,14 @@ export function generateReportHtml(sections: ReportSection[]): string {
               <div class="empty-state">No images added</div>
             </div>
           `;
-        }
-        return `
+                                    }
+                                    return `
           <div class="field-group">
             <div class="field-label">${field.label}:</div>
             <div class="field-value">${field.value || '<span class="empty-state">Not specified</span>'}</div>
           </div>
         `;
-      }).join('')}
+                                  }).join('')}
 
       ${section.subsections ? section.subsections.map(subsection => `
         <h3 class="subsection-title">${subsection.title}</h3>
@@ -4852,13 +5885,14 @@ export function generateReportHtml(sections: ReportSection[]): string {
     <!-- Page Footer -->
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
   `).join('')}
 
   <!-- Certification Section -->
   <div id="section-cert" class="page exec-page" style="position: relative;">
+    <div class="page-number"></div>
     <!-- Page Header -->
     <div class="page-header">
       <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
@@ -4873,12 +5907,13 @@ export function generateReportHtml(sections: ReportSection[]): string {
     <!-- Page Footer -->
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
 
   <!-- Appendix A: Contingent & Limiting Conditions -->
   <div id="section-appendix-conditions" class="page exec-page" style="position: relative;">
+    <div class="page-number"></div>
     <div class="page-header">
       <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
       <div class="page-header-title">
@@ -4889,12 +5924,13 @@ export function generateReportHtml(sections: ReportSection[]): string {
     ${renderLimitingConditionsAppendix()}
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
 
   <!-- Appendix B: Definition of Terms -->
   <div id="section-appendix-definitions" class="page exec-page" style="position: relative;">
+    <div class="page-number"></div>
     <div class="page-header">
       <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
       <div class="page-header-title">
@@ -4905,12 +5941,13 @@ export function generateReportHtml(sections: ReportSection[]): string {
     ${renderDefinitionsAppendix()}
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
 
   <!-- Appendix C: Qualifications of the Appraiser -->
   <div id="section-appendix-qualifications" class="page exec-page" style="position: relative;">
+    <div class="page-number"></div>
     <div class="page-header">
       <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
       <div class="page-header-title">
@@ -4921,7 +5958,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     ${renderQualificationsAppendix(sections.find(s => s.id === 'cert') || { id: 'cert', name: 'Certification', fields: [] })}
     <div class="page-footer">
       <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || 'Valta Property Valuations Ltd.'}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
 

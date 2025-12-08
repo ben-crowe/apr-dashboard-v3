@@ -4856,21 +4856,26 @@ export function generateReportHtml(sections: ReportSection[]): string {
       font-size: 12px;
     }
 
+    /* .page is now semantic only - no fixed dimensions */
+    /* Print CSS handles pagination automatically */
     .page {
-      width: 8.5in;
-      min-height: 11in;
+      max-width: 8.5in;
       margin: 0 auto;
       background: white;
-      padding: 0;
-      page-break-after: always;
-      scroll-margin-top: 20px;
+      padding: 0.75in;
       position: relative;
+    }
+
+    /* Section separators for visual clarity in preview */
+    .section {
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e5e7eb;
     }
 
     /* Cover Page Styles - Matching Valcre Design */
     .cover-page {
       position: relative;
-      min-height: 11in;
       padding: 0;
       overflow: hidden;
     }
@@ -5510,79 +5515,120 @@ export function generateReportHtml(sections: ReportSection[]): string {
       content: "Page ";
     }
 
-    @media print {
-      .page {
-        counter-increment: page;
-      }
-      .page-number::after {
-        content: counter(page);
-      }
+    /* ===========================================
+       PRINT STYLES - Browser handles pagination
+       =========================================== */
+    @page {
+      size: 8.5in 11in;
+      margin: 0.75in;
+    }
 
+    @media print {
+      /* Reset for print */
       body {
         margin: 0;
         padding: 0;
+        background: white;
       }
 
+      /* Remove screen-only styling */
       .page {
+        max-width: none;
+        padding: 0;
         margin: 0;
+        box-shadow: none;
         border: none;
-        border-radius: 0;
-        width: 100%;
-        min-height: 100vh;
-        page-break-after: always;
       }
 
+      .section {
+        border-bottom: none;
+      }
+
+      /* Major sections start new page */
+      .section-title {
+        page-break-before: always;
+      }
+
+      /* First section (after cover) doesn't need break */
+      .page:first-of-type + .page .section-title:first-child {
+        page-break-before: auto;
+      }
+
+      /* Cover page always its own page */
       .cover-page {
         page-break-after: always;
       }
-    }
-    /* Screen-only visual improvements for preview */
-    @media screen {
-      .page-break, 
-      [style*="page-break-before: always"], 
-      [style*="page-break-before:always"],
-      [style*="page-break-after: always"],
-      [style*="page-break-after:always"] {
-        display: block;
-        height: 2px;
-        background: #e5e7eb; /* Light gray line */
-        border: none;
-        margin: 2rem 0;
-        position: relative;
-        overflow: visible;
-      }
-      
-      /* Page break labels hidden for cleaner preview - uncomment to debug page breaks
-      .page-break::after,
-      [style*="page-break"]::after {
-        content: "PAGE BREAK";
-        position: absolute;
-        top: -10px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: #f3f4f6;
-        border: 1px solid #d1d5db;
-        border-radius: 4px;
-        padding: 2px 8px;
-        font-size: 10px;
-        color: #6b7280;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        z-index: 10;
-      }
-      */
 
-      /* Add shadows to pages for "document" feel */
-      .page {
-         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-         margin-bottom: 2rem;
-         border: 1px solid #e5e7eb;
+      /* Prevent orphaned headers */
+      h2, h3, h4, .subsection-title {
+        page-break-after: avoid;
       }
-      
+
+      /* Keep these elements together - don't split across pages */
+      table {
+        page-break-inside: avoid;
+      }
+
+      .site-table,
+      .data-table,
+      .photo-grid,
+      .signature-container,
+      figure,
+      .subsection {
+        page-break-inside: avoid;
+      }
+
+      /* Print footer - fixed at bottom of each printed page */
+      .print-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 10pt;
+        color: #666;
+        padding: 0.25in 0;
+      }
+
+      /* Hide screen-only elements */
+      .screen-only {
+        display: none !important;
+      }
+    }
+
+    /* ===========================================
+       SCREEN STYLES - Continuous preview
+       =========================================== */
+    @media screen {
       body {
-        background-color: #f3f4f6; /* Light gray background to separate pages */
+        background-color: #f3f4f6;
         padding: 2rem;
+      }
+
+      /* Single document container look */
+      .page {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border: 1px solid #e5e7eb;
+        margin-bottom: 0;
+        border-radius: 0;
+      }
+
+      /* First page rounded top */
+      .page:first-child {
+        border-top-left-radius: 4px;
+        border-top-right-radius: 4px;
+      }
+
+      /* Last page rounded bottom */
+      .page:last-child {
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        margin-bottom: 2rem;
+      }
+
+      /* Hide print-only elements */
+      .print-only {
+        display: none !important;
       }
     }
   </style>

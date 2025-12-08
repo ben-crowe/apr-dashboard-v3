@@ -1,6 +1,3 @@
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-
 export interface ExportOptions {
   fileName?: string;
   propertyName?: string;
@@ -53,72 +50,6 @@ export async function exportToPDF(
     iframeRef.contentWindow.print();
   } catch (error) {
     console.error('Failed to open print dialog:', error);
-    throw new Error('Failed to export PDF');
-  }
-}
-
-/**
- * Export the report as PDF using html2canvas and jsPDF
- * This creates a direct PDF download without print dialog
- */
-export async function exportToPDFDirect(
-  iframeRef: HTMLIFrameElement | null,
-  options: ExportOptions = {}
-): Promise<void> {
-  if (!iframeRef?.contentDocument?.body) {
-    throw new Error('Preview iframe not available');
-  }
-
-  try {
-    const body = iframeRef.contentDocument.body;
-
-    // Get all pages in the document
-    const pages = body.querySelectorAll('.page');
-
-    if (pages.length === 0) {
-      throw new Error('No pages found in document');
-    }
-
-    // Standard A4 dimensions in mm
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'mm',
-      format: 'a4',
-    });
-
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
-
-    // Process each page
-    for (let i = 0; i < pages.length; i++) {
-      const page = pages[i] as HTMLElement;
-
-      // Capture the page as canvas
-      const canvas = await html2canvas(page, {
-        scale: 2, // Higher quality
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff',
-      });
-
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const imgWidth = pdfWidth;
-      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-
-      // Add new page if not the first page
-      if (i > 0) {
-        pdf.addPage();
-      }
-
-      // Add image to PDF
-      pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, Math.min(imgHeight, pdfHeight));
-    }
-
-    // Generate filename and save
-    const fileName = generateFileName(options, 'pdf');
-    pdf.save(fileName);
-  } catch (error) {
-    console.error('Failed to generate PDF:', error);
     throw new Error('Failed to export PDF');
   }
 }

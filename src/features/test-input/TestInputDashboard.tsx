@@ -17,7 +17,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from '@/components/ui/collapsible';
-import { ChevronDown, ChevronRight, ExternalLink, Calculator, Database } from 'lucide-react';
+import { ChevronDown, ChevronRight, ExternalLink, Calculator, Database, RefreshCw } from 'lucide-react';
 import ImageFieldInput from './components/ImageFieldInput';
 
 type FieldStatus = 'mapped' | 'empty' | 'missing';
@@ -318,6 +318,16 @@ const TestInputDashboard: React.FC = () => {
 
           {/* Actions Bar */}
           <div className="flex gap-2">
+            <Button
+              onClick={() => window.location.reload()}
+              variant="outline"
+              size="sm"
+              className="gap-2"
+              title="Hard refresh the page"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Reload
+            </Button>
             <Button
               onClick={() => {
                 try {

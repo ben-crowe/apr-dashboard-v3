@@ -3,8 +3,9 @@ import { ReportSection } from '../types/reportBuilder.types';
 export function generateReportHtml(sections: ReportSection[]): string {
   const coverSection = sections.find(s => s.id === 'cover');
   const execSection = sections.find(s => s.id === 'exec');
+  const imageMgtSection = sections.find(s => s.id === 'image-mgt');
 
-  // Helper function to get field value
+  // Helper function to get field value from a specific section
   const getFieldValue = (section: ReportSection | undefined, fieldId: string): string => {
     if (!section) return '';
 
@@ -21,6 +22,24 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     return '';
+  };
+
+  // Helper function to get any field value from ALL sections (for images that may be in image-mgt)
+  const getGlobalFieldValue = (fieldId: string): any => {
+    for (const section of sections) {
+      // Check main fields
+      const mainField = section.fields.find(f => f.id === fieldId);
+      if (mainField && mainField.value) return mainField.value;
+
+      // Check subsection fields
+      if (section.subsections) {
+        for (const subsection of section.subsections) {
+          const subField = subsection.fields.find(f => f.id === fieldId);
+          if (subField && subField.value) return subField.value;
+        }
+      }
+    }
+    return undefined;
   };
 
   // Cover page fields
@@ -82,9 +101,8 @@ export function generateReportHtml(sections: ReportSection[]): string {
   const propertyTypeLower = propertyType.toLowerCase();
   const appraiserCompanyShort = appraiserCompany.split(' ')[0] || appraiserCompany;
 
-  // Extract cover photo from the img-cover-photo field
-  const coverPhotoField = coverSection?.fields.find(f => f.id === 'img-cover-photo');
-  const coverPhotoValue = coverPhotoField?.value;
+  // Extract cover photo from the img-cover-photo field (may be in cover or image-mgt section)
+  const coverPhotoValue = getGlobalFieldValue('img-cover-photo');
   const coverPhoto = typeof coverPhotoValue === 'string' && coverPhotoValue ? coverPhotoValue :
                      (Array.isArray(coverPhotoValue) && coverPhotoValue.length > 0 ? coverPhotoValue[0] : null);
 

@@ -4698,6 +4698,266 @@ export function generateReportHtml(sections: ReportSection[]): string {
   };
 
 
+  // Helper function to render the EXECUTIVE SUMMARY section with custom template
+  const renderExecSection = (_section: ReportSection): string => {
+    // Extract all required field values using getGlobalFieldValue for cross-section lookup
+
+    // PROPERTY IDENTIFICATION fields
+    const propName = getGlobalFieldValue('property-name') || '';
+    const propType = getGlobalFieldValue('property-type-display') || '';
+    const streetAddr = getGlobalFieldValue('street-address') || '';
+    const cityVal = getGlobalFieldValue('city') || '';
+    const provinceVal = getGlobalFieldValue('province') || '';
+    const postalCode = getGlobalFieldValue('postal-code') || '';
+    const market = getGlobalFieldValue('market') || '';
+    const submarket = getGlobalFieldValue('submarket') || '';
+    const latitudeVal = getGlobalFieldValue('latitude') || '';
+    const longitudeVal = getGlobalFieldValue('longitude') || '';
+
+    // SITE DESCRIPTION fields
+    const legalDesc = getGlobalFieldValue('legal-description') || '';
+    const landAreaUsableSf = getGlobalFieldValue('land-area-usable-sf') || '';
+    const landAreaUsableAcres = getGlobalFieldValue('land-area-usable-acres') || '';
+    const landAreaTotalSf = getGlobalFieldValue('site-total-area') || '';
+    const landAreaTotalAcres = getGlobalFieldValue('site-acreage') || '';
+    const zoningDesig = getGlobalFieldValue('zoning-classification') || '';
+    const siteShape = getGlobalFieldValue('site-shape') || '';
+    const topoVal = getGlobalFieldValue('topography') || '';
+
+    // IMPROVEMENT DESCRIPTION fields
+    const tenancyVal = getGlobalFieldValue('tenancy') || '';
+    const totalNraVal = getGlobalFieldValue('total-nra') || getGlobalFieldValue('impv-nra') || '';
+    const gbaVal = getGlobalFieldValue('gba') || getGlobalFieldValue('subject-gba') || '';
+    const totalUnitsVal = getGlobalFieldValue('total-units') || getGlobalFieldValue('impv-num-units') || '';
+    const densityUnitsAcre = getGlobalFieldValue('density-units-acre') || '';
+    const totalBuildingsVal = getGlobalFieldValue('total-buildings') || getGlobalFieldValue('impv-num-buildings') || '';
+    const storiesVal = getGlobalFieldValue('stories') || getGlobalFieldValue('impv-num-stories') || '';
+    const yearBuiltVal = getGlobalFieldValue('year-built') || getGlobalFieldValue('impv-year-built') || '';
+    const actualAgeVal = getGlobalFieldValue('actual-age') || '';
+    const effectiveAgeVal = getGlobalFieldValue('effective-age') || '';
+    const economicLifeVal = getGlobalFieldValue('economic-life') || '';
+    const remainingLifeVal = getGlobalFieldValue('remaining-useful-life') || '';
+    const parkingRatioVal = getGlobalFieldValue('parking-ratio') || getGlobalFieldValue('impv-parking-ratio') || '';
+    const projectAmenitiesVal = getGlobalFieldValue('project-amenities') || getGlobalFieldValue('impv-project-amenities') || '';
+    const laundryVal = getGlobalFieldValue('laundry') || getGlobalFieldValue('impv-laundry') || '';
+    const securityVal = getGlobalFieldValue('security-features') || getGlobalFieldValue('impv-security') || '';
+
+    // QUALITATIVE ANALYSIS fields
+    const siteQualityVal = getGlobalFieldValue('site-quality') || '';
+    const siteAccessVal = getGlobalFieldValue('site-access') || getGlobalFieldValue('accessibility') || '';
+    const siteExposureVal = getGlobalFieldValue('site-exposure') || getGlobalFieldValue('exposure-visibility') || '';
+    const siteUtilityVal = getGlobalFieldValue('site-utility') || '';
+    const buildingQualityVal = getGlobalFieldValue('building-quality') || '';
+    const buildingConditionVal = getGlobalFieldValue('building-condition') || getGlobalFieldValue('impv-overall-condition') || '';
+    const buildingAppealVal = getGlobalFieldValue('building-appeal') || '';
+
+    // Helper to format numbers with commas
+    const formatNum = (val: any) => {
+      if (!val) return '';
+      const num = typeof val === 'string' ? parseFloat(val.replace(/,/g, '')) : val;
+      return isNaN(num) ? val : num.toLocaleString();
+    };
+
+    return `
+    <div class="section">
+      <h2 class="section-title" style="border-bottom: 2px solid #1a4480; padding-bottom: 8px; margin-bottom: 24px;">Introduction & Executive Summary</h2>
+
+      <h3 style="font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #333; margin-bottom: 16px;">PROPERTY OVERVIEW</h3>
+
+      <!-- 1. PROPERTY IDENTIFICATION -->
+      <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
+        <thead>
+          <tr>
+            <th colspan="2" style="background-color: #1a4480; color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;">PROPERTY IDENTIFICATION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; width: 30%; font-weight: 500; color: #555;">Name</td>
+            <td style="padding: 8px 12px; color: #333;">${propName || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Property</td>
+            <td style="padding: 8px 12px; color: #333;">${propType || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Address</td>
+            <td style="padding: 8px 12px; color: #333;">${streetAddr || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">City, Province, Postal Code</td>
+            <td style="padding: 8px 12px; color: #333;">${cityVal && provinceVal ? `${cityVal}, ${provinceVal}${postalCode ? ' ' + postalCode : ''}` : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Market / Submarket</td>
+            <td style="padding: 8px 12px; color: #333;">${market && submarket ? `${market} / ${submarket}` : market || submarket || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Geocode</td>
+            <td style="padding: 8px 12px; color: #333;">${latitudeVal && longitudeVal ? `${latitudeVal}, ${longitudeVal}` : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 2. SITE DESCRIPTION -->
+      <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
+        <thead>
+          <tr>
+            <th colspan="3" style="background-color: #1a4480; color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;">SITE DESCRIPTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td colspan="3" style="padding: 8px 12px;"><strong style="color: #555;">Legal Description</strong><br/><span style="color: #333;">${legalDesc || '<span style="color: #999;">—</span>'}</span></td>
+          </tr>
+          <tr style="background-color: #f3f4f6; border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; width: 50%; font-weight: 600; color: #333;">Land Area</td>
+            <td style="padding: 8px 12px; width: 25%; font-weight: 600; text-align: center; color: #333;">Square Feet</td>
+            <td style="padding: 8px 12px; width: 25%; font-weight: 600; text-align: center; color: #333;">Acres</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; padding-left: 24px; color: #555;">Usable</td>
+            <td style="padding: 8px 12px; text-align: center; color: #333;">${landAreaUsableSf ? formatNum(landAreaUsableSf) : '<span style="color: #999;">—</span>'}</td>
+            <td style="padding: 8px 12px; text-align: center; color: #333;">${landAreaUsableAcres ? formatNum(landAreaUsableAcres) : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; padding-left: 24px; color: #555;">Total</td>
+            <td style="padding: 8px 12px; text-align: center; color: #333;">${landAreaTotalSf ? formatNum(landAreaTotalSf) : '<span style="color: #999;">—</span>'}</td>
+            <td style="padding: 8px 12px; text-align: center; color: #333;">${landAreaTotalAcres ? formatNum(landAreaTotalAcres) : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Zoning</td>
+            <td colspan="2" style="padding: 8px 12px; color: #333;">${zoningDesig || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Shape</td>
+            <td colspan="2" style="padding: 8px 12px; color: #333;">${siteShape || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Topography</td>
+            <td colspan="2" style="padding: 8px 12px; color: #333;">${topoVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 3. IMPROVEMENT DESCRIPTION -->
+      <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
+        <thead>
+          <tr>
+            <th colspan="2" style="background-color: #1a4480; color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;">IMPROVEMENT DESCRIPTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; width: 40%; font-weight: 500; color: #555;">Tenancy</td>
+            <td style="padding: 8px 12px; color: #333;">${tenancyVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Net Rentable Area (NRA)</td>
+            <td style="padding: 8px 12px; color: #333;">${totalNraVal ? formatNum(totalNraVal) + ' SF' : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Gross Building Area (GBA)</td>
+            <td style="padding: 8px 12px; color: #333;">${gbaVal ? formatNum(gbaVal) + ' SF' : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Units</td>
+            <td style="padding: 8px 12px; color: #333;">${totalUnitsVal ? formatNum(totalUnitsVal) : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Density (Units/Acre)</td>
+            <td style="padding: 8px 12px; color: #333;">${densityUnitsAcre ? formatNum(densityUnitsAcre) : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Total Buildings</td>
+            <td style="padding: 8px 12px; color: #333;">${totalBuildingsVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Floors</td>
+            <td style="padding: 8px 12px; color: #333;">${storiesVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Year Built</td>
+            <td style="padding: 8px 12px; color: #333;">${yearBuiltVal ? `${yearBuiltVal}${yearBuiltVal ? ' (' + yearBuiltVal + ' weighted)' : ''}` : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Actual Age</td>
+            <td style="padding: 8px 12px; color: #333;">${actualAgeVal ? actualAgeVal + ' Years' : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Effective Age</td>
+            <td style="padding: 8px 12px; color: #333;">${effectiveAgeVal ? effectiveAgeVal + ' Years' : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Economic Life</td>
+            <td style="padding: 8px 12px; color: #333;">${economicLifeVal ? economicLifeVal + ' Years' : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Remaining Useful Life</td>
+            <td style="padding: 8px 12px; color: #333;">${remainingLifeVal ? remainingLifeVal + ' Years' : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Parking</td>
+            <td style="padding: 8px 12px; color: #333;">${parkingRatioVal ? parkingRatioVal + ' / Unit' : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Project Amenities</td>
+            <td style="padding: 8px 12px; color: #333;">${projectAmenitiesVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Laundry</td>
+            <td style="padding: 8px 12px; color: #333;">${laundryVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Security Features</td>
+            <td style="padding: 8px 12px; color: #333;">${securityVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 4. QUALITATIVE ANALYSIS -->
+      <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
+        <thead>
+          <tr>
+            <th colspan="2" style="background-color: #1a4480; color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;">QUALITATIVE ANALYSIS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; width: 40%; font-weight: 500; color: #555;">Site Quality</td>
+            <td style="padding: 8px 12px; color: #333;">${siteQualityVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Site Access</td>
+            <td style="padding: 8px 12px; color: #333;">${siteAccessVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Site Exposure</td>
+            <td style="padding: 8px 12px; color: #333;">${siteExposureVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Site Utility</td>
+            <td style="padding: 8px 12px; color: #333;">${siteUtilityVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Building Quality</td>
+            <td style="padding: 8px 12px; color: #333;">${buildingQualityVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Building Condition</td>
+            <td style="padding: 8px 12px; color: #333;">${buildingConditionVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Building Appeal</td>
+            <td style="padding: 8px 12px; color: #333;">${buildingAppealVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    `;
+  };
+
+
   // Helper function to render the Table of Contents
   const renderTableOfContents = (sections: ReportSection[]): string => {
     const tocEntries = [
@@ -5914,26 +6174,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       </div>
     </div>
 
-    <div class="section">
-      <h2 class="section-title">Executive Summary</h2>
-
-      ${execSection.fields.map(field => `
-        <div class="field-group">
-          <div class="field-label">${field.label}:</div>
-          <div class="field-value">${field.value || '<span class="empty-state">—</span>'}</div>
-        </div>
-      `).join('')}
-
-      ${execSection.subsections ? execSection.subsections.map(subsection => `
-        <h3 class="subsection-title">${subsection.title}</h3>
-        ${subsection.fields.map(field => `
-          <div class="field-group">
-            <div class="field-label">${field.label}:</div>
-            <div class="field-value">${field.value || '<span class="empty-state">—</span>'}</div>
-          </div>
-        `).join('')}
-      `).join('') : ''}
-    </div>
+    ${renderExecSection(execSection)}
 
     <!-- Page Footer -->
     <div class="page-footer">

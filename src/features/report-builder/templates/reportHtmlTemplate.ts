@@ -3232,12 +3232,23 @@ export function generateReportHtml(sections: ReportSection[]): string {
   };
 
   // Helper function to render the PHOTOS section with custom 2-column grid template
-  const renderPhotosSection = (section: ReportSection): string => {
-    if (!section.subsections || section.subsections.length === 0) {
+  // Now reads from image-mgt section (single source of truth for all images)
+  const renderPhotosSection = (_section: ReportSection): string => {
+    // Photo subsections mapping: subsection ID -> display title
+    const photoSubsections = [
+      { id: 'exterior-photos', title: 'EXTERIOR PHOTOGRAPHS' },
+      { id: 'street-photos', title: 'STREET VIEW PHOTOGRAPHS' },
+      { id: 'common-photos', title: 'INTERIOR COMMON AREA' },
+      { id: 'unit-photos', title: 'UNIT INTERIOR PHOTOGRAPHS' },
+      { id: 'systems-photos', title: 'BUILDING SYSTEMS' },
+    ];
+
+    // Check if image-mgt section has any photos
+    if (!imageMgtSection || !imageMgtSection.subsections) {
       return `
     <div class="section">
       <h2 class="section-title">Photos</h2>
-      <div class="empty-state-block">[Add photos]</div>
+      <div class="empty-state-block">[Add photos in S3 IMAGE MGT section]</div>
     </div>
       `;
     }
@@ -3247,14 +3258,17 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <h2 class="section-title">Photos</h2>
     `;
 
-    // Process each subsection (EXTERIOR PHOTOS, STREET VIEWS, etc.)
-    section.subsections.forEach(subsection => {
-      if (!subsection.fields || subsection.fields.length === 0) return;
+    let hasAnyPhotos = false;
+
+    // Process each photo subsection from image-mgt
+    photoSubsections.forEach(({ id: subsectionId, title: subsectionTitle }) => {
+      const subsection = imageMgtSection.subsections?.find(s => s.id === subsectionId);
+      if (!subsection || !subsection.fields || subsection.fields.length === 0) return;
 
       // Extract photo fields and their captions
       const photoData: Array<{ imageUrl: string | null; caption: string }> = [];
 
-      // Group fields by their base name (e.g., 'photo-exterior-1' and 'photo-exterior-1-caption')
+      // Group fields by their base name (e.g., 'img-exterior-1' and 'img-exterior-1-caption')
       const fieldMap = new Map<string, { imageUrl: string | null; caption: string }>();
 
       subsection.fields.forEach(field => {
@@ -3288,7 +3302,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         }
       });
 
-      // Convert map to array
+      // Convert map to array (only include entries with images)
       fieldMap.forEach(data => {
         if (data.imageUrl) {
           photoData.push(data);
@@ -3297,9 +3311,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
       if (photoData.length === 0) return;
 
+      hasAnyPhotos = true;
+
       // Add subsection title
       photosHtml += `
-      <h3 class="subsection-title">${subsection.title}</h3>
+      <h3 class="subsection-title">${subsectionTitle}</h3>
       <table class="photo-grid">
       `;
 
@@ -3341,7 +3357,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
           photosHtml += `
       </table>
       <div style="page-break-before: always;"></div>
-      <h3 class="subsection-title">${subsection.title} (continued)</h3>
+      <h3 class="subsection-title">${subsectionTitle} (continued)</h3>
       <table class="photo-grid">
           `;
           photoCount = 0;
@@ -3352,6 +3368,16 @@ export function generateReportHtml(sections: ReportSection[]): string {
       </table>
       `;
     });
+
+    // If no photos found at all, show empty state
+    if (!hasAnyPhotos) {
+      return `
+    <div class="section">
+      <h2 class="section-title">Photos</h2>
+      <div class="empty-state-block">[Add photos in S3 IMAGE MGT section]</div>
+    </div>
+      `;
+    }
 
     photosHtml += `
     </div>
@@ -4596,24 +4622,16 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
 
   // Helper function to render the MAPS section with custom template
-  const renderMapsSection = (section: ReportSection): string => {
-    const getFieldValue = (sec: ReportSection, fieldId: string): string => {
-      const field = sec.fields?.find(f => f.id === fieldId);
-      if (field?.value) return String(field.value);
-      for (const subsection of sec.subsections || []) {
-        const subField = subsection.fields?.find(f => f.id === fieldId);
-        if (subField?.value) return String(subField.value);
-      }
-      return '';
-    };
-
-    const regionalMap = getFieldValue(section, 'img-map-regional');
-    const localMap = getFieldValue(section, 'img-map-local');
-    const aerialMap = getFieldValue(section, 'img-map-aerial-1');
-    const siteBoundaryMap = getFieldValue(section, 'img-map-aerial-2');
-    const zoningMapImg = getFieldValue(section, 'img-zoning-map');
-    const sitePlan1 = getFieldValue(section, 'img-site-plan-1');
-    const sitePlan2 = getFieldValue(section, 'img-site-plan-2');
+  // Now uses getGlobalFieldValue to find maps in image-mgt section
+  const renderMapsSection = (_section: ReportSection): string => {
+    // Use global lookup since maps are stored in image-mgt section
+    const regionalMap = getGlobalFieldValue('img-map-regional') || '';
+    const localMap = getGlobalFieldValue('img-map-local') || '';
+    const aerialMap = getGlobalFieldValue('img-map-aerial-1') || '';
+    const siteBoundaryMap = getGlobalFieldValue('img-map-aerial-2') || '';
+    const zoningMapImg = getGlobalFieldValue('img-zoning-map') || '';
+    const sitePlan1 = getGlobalFieldValue('img-site-plan-1') || '';
+    const sitePlan2 = getGlobalFieldValue('img-site-plan-2') || '';
 
     return `
     <div class="section page-break-before">

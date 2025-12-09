@@ -5954,55 +5954,76 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     /* ===========================================
-       SCREEN STYLES - Continuous preview
+       SCREEN STYLES - Paper Simulation (WYSIWYG)
        =========================================== */
     @media screen {
       body {
-        background-color: #f3f4f6;
+        background-color: #525659; /* Standard PDF viewer background gray */
         padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
 
-      /* Continuous document - no page separators */
+      /* Make the div look like a physical sheet of paper */
       .page {
-        margin-bottom: 0;
-        border: none;
-        border-radius: 0;
-        box-shadow: none;
+        width: 8.5in;
+        min-height: 11in; /* Force exact letter height */
+        max-height: 11in; /* OPTIONAL: Warns if content overflows */
+        margin-bottom: 2rem !important;
+        padding: 0.75in !important; /* Match print margins exactly */
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Drop shadow */
+        border: none !important;
+        position: relative; /* Context for absolute footer positioning */
+        overflow: hidden; /* visual cue: cuts off content if it's too long */
       }
 
-      /* First page: outer border top + sides, shadow */
-      .page:first-child {
-        border: 1px solid #e5e7eb;
-        border-bottom: none;
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      }
-
-      /* Middle pages: just side borders */
-      .page:not(:first-child):not(:last-child) {
-        border-left: 1px solid #e5e7eb;
-        border-right: 1px solid #e5e7eb;
-      }
-
-      /* Last page: outer border bottom + sides */
-      .page:last-child {
-        border: 1px solid #e5e7eb;
-        border-top: none;
-        border-bottom-left-radius: 4px;
-        border-bottom-right-radius: 4px;
-        margin-bottom: 2rem;
-      }
-
-      /* Hide print-only elements in screen preview */
-      .print-only,
+      /* CRITICAL: Reveal Headers & Footers in Preview */
       .page-header,
       .page-footer,
       .page-number {
-        display: none !important;
+        display: flex !important; /* Force them to show */
       }
-    }
-  </style>
+
+      /* Position Footer exactly where it will print */
+      .page-footer {
+        position: absolute;
+        bottom: 0.5in;
+        left: 0.75in;
+        right: 0.75in;
+        /* Optional: Visual warning if content hits footer */
+        background: rgba(255, 255, 255, 0.9);
+        z-index: 10;
+      }
+
+      /* Visualize manual page breaks as a thick gray gap */
+      div[style*="page-break-before: always"] {
+        display: block;
+        height: 2rem;
+        background: repeating-linear-gradient(
+          45deg,
+          #525659,
+          #525659 10px,
+          #444 10px,
+          #444 20px
+        );
+        margin: 2rem -0.75in; /* Pull out to edge of paper */
+        border-top: 1px dashed #fff;
+        border-bottom: 1px dashed #fff;
+        position: relative;
+      }
+
+      div[style*="page-break-before: always"]::after {
+        content: "FORCED PAGE BREAK (PDF)";
+        color: white;
+        text-align: center;
+        display: block;
+        padding-top: 4px;
+        font-size: 10px;
+        font-weight: bold;
+      }
+    }  </style>
 </head>
 <body>
   <!-- Cover Page - Matching Valcre Design -->

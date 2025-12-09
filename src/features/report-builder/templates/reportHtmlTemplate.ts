@@ -4740,7 +4740,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const parkingRatioVal = getGlobalFieldValue('parking-ratio') || getGlobalFieldValue('impv-parking-ratio') || '';
     const projectAmenitiesVal = getGlobalFieldValue('project-amenities') || getGlobalFieldValue('impv-project-amenities') || '';
     const laundryVal = getGlobalFieldValue('laundry') || getGlobalFieldValue('impv-laundry') || '';
-    const securityVal = getGlobalFieldValue('security-features') || getGlobalFieldValue('impv-security') || '';
+    const securityVal = getGlobalFieldValue('security-features') || getGlobalFieldValue('security') || getGlobalFieldValue('impv-security') || '';
 
     // QUALITATIVE ANALYSIS fields
     const siteQualityVal = getGlobalFieldValue('site-quality') || '';
@@ -4748,7 +4748,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const siteExposureVal = getGlobalFieldValue('site-exposure') || getGlobalFieldValue('exposure-visibility') || '';
     const siteUtilityVal = getGlobalFieldValue('site-utility') || '';
     const buildingQualityVal = getGlobalFieldValue('building-quality') || '';
-    const buildingConditionVal = getGlobalFieldValue('building-condition') || getGlobalFieldValue('impv-overall-condition') || '';
+    const buildingConditionVal = getGlobalFieldValue('building-condition') || getGlobalFieldValue('overall-condition') || getGlobalFieldValue('impv-overall-condition') || '';
     const buildingAppealVal = getGlobalFieldValue('building-appeal') || '';
 
     // Helper to format numbers with commas

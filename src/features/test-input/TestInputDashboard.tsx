@@ -326,7 +326,7 @@ const TestInputDashboard: React.FC = () => {
               title="Hard refresh the page"
             >
               <RefreshCw className="w-4 h-4" />
-              Reload
+              Refresh
             </Button>
             <Button
               onClick={() => {

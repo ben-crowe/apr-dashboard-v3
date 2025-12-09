@@ -5971,7 +5971,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
         min-height: 11in; /* Force exact letter height */
         max-height: 11in; /* OPTIONAL: Warns if content overflows */
         margin-bottom: 2rem !important;
-        padding: 0.75in !important; /* Match print margins exactly */
+        /* RESERVE SPACE for Header/Footer so text doesn't touch them */
+        padding-top: 1.5in !important;    /* Header height (~1in) + margin */
+        padding-bottom: 1.5in !important; /* Footer height (~1in) + margin */
+        padding-left: 0.75in !important;
+        padding-right: 0.75in !important;
         background-color: white;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Drop shadow */
         border: none !important;
@@ -5992,9 +5996,16 @@ export function generateReportHtml(sections: ReportSection[]): string {
         bottom: 0.5in;
         left: 0.75in;
         right: 0.75in;
-        /* Optional: Visual warning if content hits footer */
+        height: 0.5in; /* Visual cue for footer height */
+        border-top: 1px solid #e5e7eb;
+        padding-top: 0.5rem;
         background: rgba(255, 255, 255, 0.9);
         z-index: 10;
+      }
+
+      /* PREVENT MID-SENTENCE CUTS - Keep blocks together */
+      p, h3, h4, tr, .field-group {
+        page-break-inside: avoid;
       }
 
       /* Visualize manual page breaks as a thick gray gap */

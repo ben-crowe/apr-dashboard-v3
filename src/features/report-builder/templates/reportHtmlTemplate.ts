@@ -5961,7 +5961,8 @@ export function generateReportHtml(sections: ReportSection[]): string {
   </div>
 
   <!-- Additional Sections -->
-  ${sections.filter(s => s.id !== 'cover' && s.id !== 'exec' && s.id !== 'home' && s.id !== 'custom').map(section => `
+  <!-- Exclude data collection tabs: client-intake (S1), loe-prep (S2), image-mgt (S3) - these are input-only, not report pages -->
+  ${sections.filter(s => s.id !== 'cover' && s.id !== 'exec' && s.id !== 'home' && s.id !== 'custom' && s.id !== 'client-intake' && s.id !== 'loe-prep' && s.id !== 'image-mgt').map(section => `
   <div id="section-${section.id}" class="page exec-page" style="position: relative;">
     <div class="page-number"></div>
     <!-- Page Header -->

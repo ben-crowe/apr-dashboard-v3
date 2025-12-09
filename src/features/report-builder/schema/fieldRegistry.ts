@@ -195,6 +195,13 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'appraiser-email', storeId: 'appraiser-email', label: 'Appraiser Email', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'appraiser-aic-number', storeId: 'appraiser-aic-number', label: 'AIC Number', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
 
+  // Cover - Location Fields (for Exec Summary)
+  { id: 'postal-code', storeId: 'postal-code', label: 'Postal Code', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false },
+  { id: 'market', storeId: 'market', label: 'Market', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'submarket', storeId: 'submarket', label: 'Submarket', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'latitude', storeId: 'latitude', label: 'Latitude', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false },
+  { id: 'longitude', storeId: 'longitude', label: 'Longitude', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false },
+
   // ============================================================================
   // SECTION: HOME (Letter of Transmittal)
   // ============================================================================
@@ -276,6 +283,15 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'hazardous-waste', storeId: 'hazardous-waste', label: 'Environmental Concerns', section: 'site', subsection: 'site-conditions', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'site-rating', storeId: 'site-rating', label: 'Site Rating', section: 'site', subsection: 'site-conditions', type: 'text', inputSource: 'user-input', required: false },
   { id: 'site-conclusion', storeId: 'site-conclusion', label: 'Site Conclusion', section: 'site', subsection: 'site-conditions', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // Site - Usable Area and Qualitative Ratings (for Exec Summary)
+  { id: 'legal-description', storeId: 'legal-description', label: 'Legal Description', section: 'site', subsection: 'site-area', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'land-area-usable-sf', storeId: 'land-area-usable-sf', label: 'Usable Land Area (SF)', section: 'site', subsection: 'site-area', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'land-area-usable-acres', storeId: 'land-area-usable-acres', label: 'Usable Land Area (Acres)', section: 'site', subsection: 'site-area', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'site-quality', storeId: 'site-quality', label: 'Site Quality', section: 'site', subsection: 'site-conditions', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'site-utility', storeId: 'site-utility', label: 'Site Utility', section: 'site', subsection: 'site-conditions', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'building-quality', storeId: 'building-quality', label: 'Building Quality', section: 'site', subsection: 'site-conditions', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'building-appeal', storeId: 'building-appeal', label: 'Building Appeal', section: 'site', subsection: 'site-conditions', type: 'text', inputSource: 'user-input', required: false },
 
   // Site - Site Plan Images Subsection
   { id: 'site-plan-image', storeId: 'site-plan-image', label: 'Site Plan Images', section: 'site', subsection: 'site-plan-images', type: 'image', inputSource: 'user-input', required: false },
@@ -389,6 +405,15 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'overall-condition', storeId: 'overall-condition', label: 'Overall Condition', section: 'impv', subsection: 'condition', type: 'text', inputSource: 'user-input', required: false },
   { id: 'functional-design', storeId: 'functional-design', label: 'Functional Design', section: 'impv', subsection: 'condition', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'hazardous-materials', storeId: 'hazardous-materials', label: 'Hazardous Materials', section: 'impv', subsection: 'condition', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // Improvements - Additional Fields (for Exec Summary)
+  { id: 'tenancy', storeId: 'tenancy', label: 'Tenancy', section: 'impv', subsection: 'building-overview', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'gba', storeId: 'gba', label: 'Gross Building Area (SF)', section: 'impv', subsection: 'building-overview', type: 'number', inputSource: 'auto-filled', required: false },
+  { id: 'density-units-acre', storeId: 'density-units-acre', label: 'Density (Units/Acre)', section: 'impv', subsection: 'building-overview', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'actual-age', storeId: 'actual-age', label: 'Actual Age (Years)', section: 'impv', subsection: 'condition', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'effective-age', storeId: 'effective-age', label: 'Effective Age (Years)', section: 'impv', subsection: 'condition', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'economic-life', storeId: 'economic-life', label: 'Economic Life (Years)', section: 'impv', subsection: 'condition', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'remaining-useful-life', storeId: 'remaining-useful-life', label: 'Remaining Useful Life (Years)', section: 'impv', subsection: 'condition', type: 'number', inputSource: 'calculated', required: false },
 
   // ============================================================================
   // SECTION: ZONING

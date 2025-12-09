@@ -7,7 +7,7 @@ import { ReportField } from '../../types/reportBuilder.types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Play } from 'lucide-react';
+import { Play, Image as ImageIcon } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -16,10 +16,56 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+// Mapping of which image fields should appear in which sections
+const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
+  'cover': ['img-cover-photo', 'img-signature'],
+  'maps': ['img-map-regional', 'img-map-local', 'img-map-aerial-1', 'img-map-aerial-2', 'img-zoning-map', 'img-site-plan-1', 'img-site-plan-2'],
+  'photos': [
+    'img-exterior-1', 'img-exterior-2', 'img-exterior-3', 'img-exterior-4', 'img-exterior-5', 'img-exterior-6',
+    'img-street-1', 'img-street-2', 'img-street-3',
+    'img-common-1', 'img-common-2', 'img-common-3', 'img-common-4',
+    'img-unit-1', 'img-unit-2', 'img-unit-3', 'img-unit-4', 'img-unit-5', 'img-unit-6',
+    'img-systems-1', 'img-systems-2', 'img-systems-3', 'img-systems-4'
+  ],
+};
+
 export default function EditPanel() {
   const { sections, activeSection, updateFieldValue, loadCalcTestData, loadFullTestData } = useReportBuilderStore();
 
   const currentSection = sections.find((s) => s.id === activeSection);
+  const imageMgtSection = sections.find((s) => s.id === 'image-mgt');
+
+  // Get related image fields from image-mgt section for the current section
+  const getRelatedImageFields = (): ReportField[] => {
+    if (!imageMgtSection || !activeSection) return [];
+
+    const imageFieldIds = SECTION_IMAGE_MAPPING[activeSection] || [];
+    if (imageFieldIds.length === 0) return [];
+
+    const relatedFields: ReportField[] = [];
+
+    // Search in image-mgt main fields
+    for (const field of imageMgtSection.fields) {
+      if (imageFieldIds.includes(field.id)) {
+        relatedFields.push(field);
+      }
+    }
+
+    // Search in image-mgt subsections
+    if (imageMgtSection.subsections) {
+      for (const subsection of imageMgtSection.subsections) {
+        for (const field of subsection.fields) {
+          if (imageFieldIds.includes(field.id)) {
+            relatedFields.push(field);
+          }
+        }
+      }
+    }
+
+    return relatedFields;
+  };
+
+  const relatedImages = getRelatedImageFields();
 
   if (!currentSection) {
     return (
@@ -178,6 +224,22 @@ export default function EditPanel() {
             </div>
           </div>
         ))}
+
+        {/* Related Images from Image Management */}
+        {relatedImages.length > 0 && (
+          <div className="mb-8">
+            <div className="bg-emerald-700 text-white px-4 py-2 font-semibold text-sm mb-4 flex items-center gap-2">
+              <ImageIcon className="w-4 h-4" />
+              SECTION IMAGES
+            </div>
+            <p className="text-xs text-muted-foreground mb-4 px-2">
+              Images for this section (managed in S3 IMAGE MGT)
+            </p>
+            <div className="grid grid-cols-2 gap-4 pl-2">
+              {relatedImages.map(renderField)}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

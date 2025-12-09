@@ -5879,10 +5879,14 @@ export function generateReportHtml(sections: ReportSection[]): string {
         background: white;
       }
 
-      /* Remove screen-only styling */
+      /* Remove screen-only styling but KEEP padding for header/footer space */
       .page {
         max-width: none;
-        padding: 0;
+        /* CRITICAL: Reserve space for header/footer in PDF */
+        padding-top: 1.5in;
+        padding-bottom: 1.5in;
+        padding-left: 0.75in;
+        padding-right: 0.75in;
         margin: 0;
         box-shadow: none;
         border: none;
@@ -5890,6 +5894,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
       .section {
         border-bottom: none;
+      }
+
+      /* PREVENT MID-SENTENCE CUTS in PDF */
+      p, h3, h4, tr, .field-group {
+        page-break-inside: avoid;
       }
 
       /* Major sections start new page */

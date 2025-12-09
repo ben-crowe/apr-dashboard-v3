@@ -75,7 +75,7 @@ Based upon our investigation of the real estate market and after considering all
   // ============================================================================
   // Cover & Signature
   'img-cover-photo': '/test-data/images/cover/cover-photo.jpeg',
-  'img-signature': '',
+  'img-signature': '/images/chris-signature.png',
 
   // Maps (7 fields)
   'img-map-aerial-1': '/test-data/images/maps/aerial-map.png',

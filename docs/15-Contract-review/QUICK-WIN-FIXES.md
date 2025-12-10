@@ -22,11 +22,10 @@ From reviewing `reportHtmlTemplate.ts` (lines 5180-5966):
 
 ---
 
-## Phase 1: Big Ticket Items (2-3 hours)
+## Phase 1: Foundation Fixes
 
 ### **Fix 1: Color Variables & Font Family**
 **Impact:** 🔴 CRITICAL - Entire visual identity
-**Effort:** 15 minutes
 **Location:** Lines 5180-5200
 
 **Current Code:**
@@ -61,7 +60,6 @@ body {
 
 ### **Fix 2: Table Header Styling (Navy Blue)**
 **Impact:** 🔴 CRITICAL - Most visible element on pages 6, 44, 49, etc.
-**Effort:** 20 minutes
 **Location:** Add new styles after line 5960
 
 **Current:** Tables probably have gray or default headers
@@ -115,7 +113,6 @@ table tbody td.number {
 
 ### **Fix 3: Red Negative Values**
 **Impact:** 🟠 HIGH - Financial tables (Page 49, etc.)
-**Effort:** 15 minutes
 **Location:** Add after table styles
 
 **Reference:** Page 49 - All negative values shown in red with parentheses
@@ -150,7 +147,6 @@ function styleNegativeValues() {
 
 ### **Fix 4: Section Header Styling**
 **Impact:** 🟠 HIGH - Every content page
-**Effort:** 10 minutes
 **Location:** Add after body styles
 
 **Reference:** Page 6 - Black headers with underline
@@ -196,7 +192,6 @@ h3.sub-subsection {
 
 ### **Fix 5: Blue Section Dividers in Tables**
 **Impact:** 🟠 HIGH - Complex tables (Page 58, 59)
-**Effort:** 15 minutes
 **Location:** Add after table styles
 
 **Reference:** Page 58-59 - Blue bars inside tables for sections like "SALE INFORMATION", "INCOME INFORMATION"
@@ -250,7 +245,6 @@ tr.table-section-header td {
 
 ### **Fix 6: Split-Screen TOC**
 **Impact:** 🟡 MEDIUM - Single page (Page 5) but distinctive
-**Effort:** 45 minutes
 **Location:** New section in template
 
 **Reference:** Page 5 - Navy sidebar (30%) + white content (70%)
@@ -262,7 +256,6 @@ See CONSOLIDATED-FORMATTING-SPECIFICATION.md Section 5 for complete CSS.
 
 ### **Fix 7: Chevron Footer Graphic**
 **Impact:** 🟡 MEDIUM - Every page branding
-**Effort:** 30 minutes
 **Location:** Footer section
 
 **Reference:** Page 1, 6, etc. - Blue diagonal stripes bottom-right
@@ -294,13 +287,12 @@ After implementing Phase 1 fixes:
 ## Implementation Order
 
 **Recommended Sequence:**
-1. ✅ **Colors & Font** (15 min) - Foundation for everything else
-2. ✅ **Table Headers** (20 min) - Most visible improvement
-3. ✅ **Section Headers** (10 min) - Affects every page
-4. ✅ **Red Negatives** (15 min) - Financial table accuracy
-5. ✅ **Blue Dividers** (15 min) - Complex tables polish
+1. ✅ **Colors & Font** - Foundation for everything else
+2. ✅ **Table Headers** - Most visible improvement
+3. ✅ **Section Headers** - Affects every page
+4. ✅ **Red Negatives** - Financial table accuracy
+5. ✅ **Blue Dividers** - Complex tables polish
 
-**Total Phase 1 Time:** ~75 minutes (1.25 hours)
 
 **Test & Iterate:** Generate PDF, compare to reference pages 1, 5, 6, 49
 
@@ -349,4 +341,3 @@ After implementing Phase 1 fixes:
 
 **Status:** Ready for Implementation
 **Agent Available:** frontend-developer or react-specialist
-**Estimated Total Time:** Phase 1 (1.25 hrs) + Phase 2 (1.5 hrs) = ~3 hours for major visual improvements

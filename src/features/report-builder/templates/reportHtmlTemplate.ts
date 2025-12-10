@@ -6118,6 +6118,259 @@ export function generateReportHtml(sections: ReportSection[]): string {
       z-index: 1000;
     }
 
+    /* ========================================
+       PHASE 2: Layout Pattern Classes
+       Date: 2025-12-10
+       Patterns: P01, P02, P03, P06, P08 + Components
+       ======================================== */
+
+    /* P01: Hero Cover Page */
+    .cover-page {
+      display: grid;
+      grid-template-columns: 40% 60%;
+      min-height: 100vh;
+      page-break-after: always;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .cover-header {
+      grid-column: 1 / -1;
+      padding: 30px;
+    }
+
+    .cover-body {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 40% 60%;
+      gap: 20px;
+      padding: 0 30px 30px;
+    }
+
+    .cover-left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .property-hero {
+      width: 100%;
+      height: auto;
+      max-height: 400px;
+      object-fit: cover;
+      border: 1px solid var(--border-gray);
+    }
+
+    .cover-right {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .diagonal-overlay {
+      background: linear-gradient(135deg, var(--brand-navy) 0%, var(--brand-sky) 100%);
+      color: #FFFFFF;
+      padding: 30px;
+      clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 100%);
+      margin-top: auto;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* P02: Standard Letter Template */
+    .letter-template {
+      padding: 1.25in 0.75in 1.0in;
+      page-break-after: always;
+    }
+
+    .letterhead {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--brand-navy);
+    }
+
+    .letter-body {
+      font-size: 11pt;
+      line-height: 1.5;
+    }
+
+    .letter-body p {
+      text-align: justify;
+      margin-bottom: 12pt;
+    }
+
+    .signature-block {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .signature-image {
+      max-width: 200px;
+      height: auto;
+    }
+
+    .appraiser-info {
+      font-size: 10pt;
+      line-height: 1.4;
+    }
+
+    .appraiser-name {
+      font-weight: bold;
+      font-size: 11pt;
+    }
+
+    /* P03: Split-Screen TOC */
+    .toc-split-screen {
+      display: grid;
+      grid-template-columns: 30% 70%;
+      min-height: 100vh;
+      page-break-after: always;
+    }
+
+    .toc-sidebar {
+      background-color: var(--brand-navy);
+      color: #FFFFFF;
+      padding: 60px 30px;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    .toc-sidebar h2 {
+      font-size: 28pt;
+      font-weight: bold;
+      text-align: center;
+      line-height: 1.3;
+      color: #FFFFFF;
+    }
+
+    .toc-content {
+      background-color: #FFFFFF;
+      padding: 60px 40px;
+    }
+
+    .toc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .toc-section {
+      font-weight: bold;
+      font-size: 14pt;
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .toc-subsection {
+      font-weight: normal;
+      font-size: 12pt;
+      margin-top: 8px;
+      margin-left: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .section-title,
+    .subsection-title {
+      flex: 1;
+    }
+
+    .page-num {
+      margin-left: 20px;
+      white-space: nowrap;
+    }
+
+    /* P06: Photo Grid (2x3) */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(3, auto);
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .photo-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      page-break-inside: avoid;
+    }
+
+    .photo-item img {
+      width: 100%;
+      height: auto;
+      max-height: 250px;
+      object-fit: cover;
+      border: 1px solid var(--border-gray);
+    }
+
+    .photo-caption {
+      font-size: 9pt;
+      text-align: center;
+      margin-top: 8px;
+      font-weight: 600;
+      color: var(--text-dark-gray);
+    }
+
+    /* P08: Full-Width Map Container */
+    .map-container {
+      width: 100%;
+      margin-top: 20px;
+      position: relative;
+      page-break-inside: avoid;
+    }
+
+    .full-width-map {
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--border-gray);
+      display: block;
+    }
+
+    .map-attribution {
+      font-size: 8pt;
+      color: #666666;
+      margin-top: 8px;
+      text-align: left;
+    }
+
+    .map-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .map-address {
+      font-size: 9pt;
+      text-align: center;
+      margin-top: 8px;
+      color: var(--text-dark-gray);
+    }
+
+    /* Additional Component Classes */
+    .property-info {
+      margin: 20px 0;
+    }
+
+    .client-info {
+      color: #FFFFFF;
+    }
+
+    .contact-info {
+      font-size: 9pt;
+      text-align: right;
+    }
+
+    /* END Phase 2 Layout Patterns */
 
     /* ===========================================
        SCREEN STYLES - Clean preview (no grey)

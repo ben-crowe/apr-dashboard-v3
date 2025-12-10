@@ -5878,13 +5878,15 @@ export function generateReportHtml(sections: ReportSection[]): string {
         background: white;
       }
 
-      /* Standard page padding for PDF */
+      /* Standard page styling for PDF */
       .page {
         max-width: none;
-        padding: 0.75in;
+        padding: 0.5in 0.75in;
         margin: 0;
         box-shadow: none;
         border: none;
+        page-break-after: always;
+        overflow: visible;
       }
 
       /* Cover page - full bleed, no padding */
@@ -5897,13 +5899,13 @@ export function generateReportHtml(sections: ReportSection[]): string {
         border-bottom: none;
       }
 
-      /* Keep content together */
-      p, h3, h4, tr, .field-group, table, .subsection {
+      /* Keep content together - prevent mid-element splits */
+      p, h3, h4, tr, .field-group, table, .subsection, .section-title {
         page-break-inside: avoid;
       }
 
-      /* Prevent orphaned headers */
-      h2, h3, h4, .subsection-title {
+      /* Prevent orphaned headers - keep with following content */
+      h2, h3, h4, .subsection-title, .section-title {
         page-break-after: avoid;
       }
 
@@ -5912,7 +5914,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
         display: none !important;
       }
 
-      /* Page break divs - just break, no styling */
+      /* Page break divs */
       div[style*="page-break-before: always"] {
         height: 0 !important;
         margin: 0 !important;

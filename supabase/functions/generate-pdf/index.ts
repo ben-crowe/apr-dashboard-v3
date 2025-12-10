@@ -42,13 +42,13 @@ serve(async (req) => {
     const htmlBlob = new Blob([html], { type: "text/html" });
     formData.append("files", htmlBlob, "index.html");
 
-    // PDF options - margins reserve space for header/footer
+    // PDF options - margins set to 0, CSS handles all spacing
     formData.append("paperWidth", "8.5");
     formData.append("paperHeight", "11");
-    formData.append("marginTop", "1.5");     // Reserve space for header
-    formData.append("marginBottom", "1.5");  // Reserve space for footer
-    formData.append("marginLeft", "0.75");
-    formData.append("marginRight", "0.75");
+    formData.append("marginTop", "0");       // CSS handles padding
+    formData.append("marginBottom", "0");    // CSS handles padding
+    formData.append("marginLeft", "0");      // CSS handles padding
+    formData.append("marginRight", "0");     // CSS handles padding
     formData.append("printBackground", "true");
     formData.append("preferCssPageSize", "true");
 

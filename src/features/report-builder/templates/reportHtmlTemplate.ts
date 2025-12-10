@@ -5955,10 +5955,35 @@ export function generateReportHtml(sections: ReportSection[]): string {
       /* Show page headers/footers in print */
       .page-header {
         display: flex !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 0.75in;
       }
 
       .page-footer {
         display: flex !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 0.5in;
+        background: white;
+        z-index: 1000;
+      }
+
+      /* HIDE the Grey Page Break Bars in PDF - screen only visual */
+      div[style*="page-break-before: always"] {
+        height: 0 !important;
+        margin: 0 !important;
+        background: none !important;
+        border: none !important;
+        page-break-before: always !important;
+      }
+
+      div[style*="page-break-before: always"]::after {
+        display: none !important;
       }
     }
 

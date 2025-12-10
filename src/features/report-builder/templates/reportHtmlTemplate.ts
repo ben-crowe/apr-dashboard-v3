@@ -5995,8 +5995,8 @@ export function generateReportHtml(sections: ReportSection[]): string {
        =========================================== */
     @media screen {
       body {
-        background-color: white;
-        padding: 0;
+        background-color: #f5f5f5; /* Subtle off-white so pages are visible */
+        padding: 1rem;
         margin: 0;
       }
 

@@ -5182,6 +5182,9 @@ export function generateReportHtml(sections: ReportSection[]): string {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      /* TIER 1 FIX: Gotenberg Color Rendering */
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
 
     html {
@@ -5871,7 +5874,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
        =========================================== */
     @page {
       size: 8.5in 11in;
-      margin: 0; /* Gotenberg handles margins, CSS handles padding */
+      margin-top: 1.5in;    /* TIER 1 FIX: 120px minimum for header collision prevention */
+      margin-bottom: 1.5in; /* TIER 1 FIX: 120px minimum for footer collision prevention */
+      margin-left: 1in;
+      margin-right: 1in;
     }
 
     @media print {
@@ -5923,6 +5929,25 @@ export function generateReportHtml(sections: ReportSection[]): string {
         margin: 0 !important;
         background: none !important;
         page-break-before: always !important;
+      }
+
+      /* TIER 1 FIX: Hard Page Break After TOC */
+      .toc-section {
+        page-break-after: always !important;
+        break-after: page !important;
+      }
+
+      /* TIER 1 FIX: Wrapper Pattern - Orphan Prevention */
+      .section-group {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      /* Enhanced orphan prevention for headings */
+      h1, h2 {
+        page-break-after: avoid;
+        break-after: avoid;
+        orphans: 2;
       }
     }
 

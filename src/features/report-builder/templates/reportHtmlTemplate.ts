@@ -5882,11 +5882,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
       /* Remove screen-only styling but KEEP padding for header/footer space */
       .page {
         max-width: none;
-        /* CRITICAL: Reserve space for header/footer in PDF */
-        padding-top: 1.5in;
-        padding-bottom: 1.5in;
-        padding-left: 0.75in;
-        padding-right: 0.75in;
+        /* CRITICAL: Reserve space for header/footer in PDF - !important overrides page-specific CSS */
+        padding-top: 1.5in !important;
+        padding-bottom: 1.5in !important;
+        padding-left: 0.75in !important;
+        padding-right: 0.75in !important;
         margin: 0;
         box-shadow: none;
         border: none;

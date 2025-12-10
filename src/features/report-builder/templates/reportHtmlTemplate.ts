@@ -5187,13 +5187,25 @@ export function generateReportHtml(sections: ReportSection[]): string {
       print-color-adjust: exact !important;
     }
 
+    /* PHASE 1 FIX: Brand Color Variables */
+    :root {
+      --brand-navy: #003366;
+      --brand-sky: #8DB4E2;
+      --brand-red: #C00000;
+      --text-black: #000000;
+      --text-dark-gray: #222222;
+      --border-gray: #D0D0D0;
+      --bg-white: #FFFFFF;
+      --bg-light-gray: #F5F5F5;
+    }
+
     html {
       scroll-behavior: smooth;
     }
 
     body {
       counter-reset: page;
-      font-family: 'Times New Roman', Times, serif;
+      font-family: Calibri, 'Segoe UI', Arial, sans-serif;
       line-height: 1.6;
       color: #00000a;
       background: #fff;
@@ -5949,7 +5961,163 @@ export function generateReportHtml(sections: ReportSection[]): string {
         break-after: avoid;
         orphans: 2;
       }
+
+      /* TIER 1 FIX: Table Header Repetition - Headers repeat on every page */
+      thead {
+        display: table-header-group;
+      }
+
+      tfoot {
+        display: table-footer-group;
+      }
+
+      /* Prevent table rows from splitting across pages */
+      tr {
+        page-break-inside: avoid;
+      }
     }
+
+    /* ===========================================
+       PHASE 1 FIXES - Brand Styling
+       =========================================== */
+    
+    /* Fix 2: Navy Blue Table Headers */
+    table thead {
+      background-color: var(--brand-navy) !important;
+      color: var(--bg-white) !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    table thead th {
+      background-color: var(--brand-navy) !important;
+      color: var(--bg-white) !important;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 11pt;
+      padding: 10px 8px;
+      text-align: left;
+      border: none;
+    }
+
+    /* Enhanced table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid var(--text-black);
+      margin: 16px 0;
+    }
+
+    table tbody td {
+      padding: 8px;
+      border-bottom: 1px solid var(--border-gray);
+      border-left: none;
+      border-right: none;
+      font-size: 10pt;
+    }
+
+    /* Right-align numbers */
+    table tbody td[data-type="number"],
+    table tbody td.number {
+      text-align: right;
+    }
+
+    /* Fix 3: Red Negative Values */
+    .text-negative,
+    td.negative,
+    span.negative {
+      color: var(--brand-red) !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* Fix 4: Section Header Styling */
+    h1.section-header,
+    .section-title {
+      font-size: 20pt;
+      font-weight: bold;
+      color: var(--text-black);
+      border-bottom: 2px solid var(--text-black);
+      padding-bottom: 8px;
+      margin-top: 32pt;
+      margin-bottom: 20pt;
+      line-height: 1.2;
+    }
+
+    /* Subsection Headers - Blue, no underline */
+    h2.subsection-header,
+    .subsection-title {
+      font-size: 16pt;
+      font-weight: bold;
+      color: var(--brand-navy);
+      margin-top: 20pt;
+      margin-bottom: 12pt;
+      line-height: 1.2;
+    }
+
+    /* Sub-subsection - Blue, smaller */
+    h3.sub-subsection {
+      font-size: 14pt;
+      font-weight: bold;
+      color: var(--brand-navy);
+      margin-top: 16pt;
+      margin-bottom: 10pt;
+    }
+
+    /* Fix 5: Blue Section Dividers in Tables */
+    tr.section-divider,
+    tr.table-section-header {
+      background-color: var(--brand-navy) !important;
+      color: var(--bg-white) !important;
+      font-weight: bold;
+      text-transform: uppercase;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    tr.section-divider td,
+    tr.table-section-header td {
+      padding: 8px;
+      border: none;
+    }
+
+    /* Fix 6: Chevron Footer Graphic (76 pages) */
+    .page-footer-chevron {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: 200px;
+      height: 60px;
+      background: linear-gradient(
+        135deg,
+        transparent 0%,
+        transparent 25%,
+        var(--brand-navy) 25%,
+        var(--brand-navy) 27%,
+        transparent 27%,
+        transparent 35%,
+        var(--brand-sky) 35%,
+        var(--brand-sky) 37%,
+        transparent 37%,
+        transparent 45%,
+        var(--brand-navy) 45%,
+        var(--brand-navy) 47%,
+        transparent 47%,
+        transparent 55%,
+        var(--brand-sky) 55%,
+        var(--brand-sky) 57%,
+        transparent 57%,
+        transparent 65%,
+        var(--brand-navy) 65%,
+        var(--brand-navy) 67%,
+        transparent 67%
+      );
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      pointer-events: none;
+      z-index: 1000;
+    }
+
 
     /* ===========================================
        SCREEN STYLES - Clean preview (no grey)
@@ -6375,6 +6543,25 @@ export function generateReportHtml(sections: ReportSection[]): string {
     </div>
   </div>
 
+  <script>
+    // PHASE 1 FIX: Auto-detect and style negative values
+    window.addEventListener('DOMContentLoaded', function() {
+      styleNegativeValues();
+    });
+
+    function styleNegativeValues() {
+      const cells = document.querySelectorAll('td, .value');
+      cells.forEach(cell => {
+        const text = cell.textContent.trim();
+        // Check for parentheses (accounting format for negatives)
+        // Exclude dates (YYYY-MM-DD format)
+        if ((text.includes('(') && text.includes(')')) ||
+            (text.includes('-') && !text.match(/^\d{4}-\d{2}-\d{2}/))) {
+          cell.classList.add('text-negative');
+        }
+      });
+    }
+  </script>
 </body>
 </html>
   `.trim();

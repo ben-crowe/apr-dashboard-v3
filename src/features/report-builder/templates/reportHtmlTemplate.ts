@@ -5914,6 +5914,9 @@ export function generateReportHtml(sections: ReportSection[]): string {
       /* Cover page always its own page */
       .cover-page {
         page-break-after: always;
+        /* OVERRIDE: Cover has special full-bleed design, no header/footer */
+        padding: 0 !important;
+        max-height: 11in;
       }
 
       /* Prevent orphaned headers */
@@ -6035,6 +6038,12 @@ export function generateReportHtml(sections: ReportSection[]): string {
         padding-top: 0.5rem;
         background: rgba(255, 255, 255, 0.9);
         z-index: 10;
+      }
+
+      /* Cover page - OVERRIDE padding for full-bleed design */
+      .cover-page {
+        padding: 0 !important;
+        max-height: 11in;
       }
 
       /* PREVENT MID-SENTENCE CUTS - Keep blocks together */

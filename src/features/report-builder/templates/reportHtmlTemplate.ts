@@ -5991,91 +5991,38 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     /* ===========================================
-       SCREEN STYLES - Paper Simulation (WYSIWYG)
+       SCREEN STYLES - Clean preview (no grey)
        =========================================== */
     @media screen {
       body {
-        background-color: #525659; /* Standard PDF viewer background gray */
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      /* Make the div look like a physical sheet of paper */
-      .page {
-        width: 8.5in;
-        min-height: 11in; /* Force exact letter height */
-        max-height: 11in; /* OPTIONAL: Warns if content overflows */
-        margin-bottom: 2rem !important;
-        /* RESERVE SPACE for Header/Footer so text doesn't touch them */
-        padding-top: 1.5in !important;    /* Header height (~1in) + margin */
-        padding-bottom: 1.5in !important; /* Footer height (~1in) + margin */
-        padding-left: 0.75in !important;
-        padding-right: 0.75in !important;
         background-color: white;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Drop shadow */
-        border: none !important;
-        position: relative; /* Context for absolute footer positioning */
-        overflow: hidden; /* visual cue: cuts off content if it's too long */
+        padding: 0;
+        margin: 0;
       }
 
-      /* CRITICAL: Reveal Headers & Footers in Preview */
-      .page-header,
-      .page-footer,
-      .page-number {
-        display: flex !important; /* Force them to show */
+      /* Clean page styling for preview */
+      .page {
+        max-width: 8.5in;
+        margin: 0 auto;
+        padding: 0.75in;
+        background-color: white;
+        position: relative;
       }
 
-      /* Position Footer exactly where it will print */
-      .page-footer {
-        position: absolute;
-        bottom: 0.5in;
-        left: 0.75in;
-        right: 0.75in;
-        height: 0.5in; /* Visual cue for footer height */
-        border-top: 1px solid #e5e7eb;
-        padding-top: 0.5rem;
-        background: rgba(255, 255, 255, 0.9);
-        z-index: 10;
-      }
-
-      /* Cover page - OVERRIDE padding for full-bleed design */
+      /* Cover page - no padding for full-bleed design */
       .cover-page {
         padding: 0 !important;
-        max-height: 11in;
       }
 
-      /* PREVENT MID-SENTENCE CUTS - Keep blocks together */
+      /* Keep content together */
       p, h3, h4, tr, .field-group {
         page-break-inside: avoid;
       }
 
-      /* Visualize manual page breaks as a thick gray gap */
+      /* Page breaks are invisible in preview - just spacing */
       div[style*="page-break-before: always"] {
-        display: block;
-        height: 2rem;
-        background: repeating-linear-gradient(
-          45deg,
-          #525659,
-          #525659 10px,
-          #444 10px,
-          #444 20px
-        );
-        margin: 2rem -0.75in; /* Pull out to edge of paper */
-        border-top: 1px dashed #fff;
-        border-bottom: 1px dashed #fff;
-        position: relative;
-      }
-
-      div[style*="page-break-before: always"]::after {
-        content: "FORCED PAGE BREAK (PDF)";
-        color: white;
-        text-align: center;
-        display: block;
-        padding-top: 4px;
-        font-size: 10px;
-        font-weight: bold;
+        height: 0;
+        margin: 0;
       }
     }  </style>
 </head>

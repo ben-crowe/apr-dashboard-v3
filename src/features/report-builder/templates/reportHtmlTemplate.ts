@@ -59,6 +59,9 @@ export function generateReportHtml(sections: ReportSection[]): string {
   const clientPostal = getFieldValue(coverSection, 'client-postal');
   const appraiserCompany = getFieldValue(coverSection, 'appraiser-company');
   const appraiserAddress = getFieldValue(coverSection, 'appraiser-address');
+  const appraiserCity = getFieldValue(coverSection, 'appraiser-city');
+  const appraiserProvince = getFieldValue(coverSection, 'appraiser-province');
+  const appraiserPostal = getFieldValue(coverSection, 'appraiser-postal');
   const appraiserPhone = getFieldValue(coverSection, 'appraiser-phone');
   const appraiserWebsite = getFieldValue(coverSection, 'appraiser-website');
   const valuationDate = getFieldValue(coverSection, 'valuation-date');
@@ -6491,6 +6494,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <div class="prepared-content">
             ${appraiserCompany ? `<div style="font-weight: bold;">${appraiserCompany}</div>` : ''}
             ${appraiserAddress ? `<div>${appraiserAddress}</div>` : ''}
+            ${appraiserCity && appraiserProvince && appraiserPostal ? `<div>${appraiserCity}, ${appraiserProvince} ${appraiserPostal}</div>` : ''}
             ${appraiserPhone ? `<div>Office: ${appraiserPhone}</div>` : ''}
             ${appraiserWebsite ? `<div>${appraiserWebsite}</div>` : ''}
           </div>

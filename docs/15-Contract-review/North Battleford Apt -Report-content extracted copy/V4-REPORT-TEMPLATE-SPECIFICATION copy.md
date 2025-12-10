@@ -2,18 +2,57 @@
 
 **Reference:** VAL251012 - North Battleford Apt, 1101, 1121 109 Street, North Battleford.docx
 **Purpose:** Document every page, field, and image for exact HTML template matching
+**Updated:** December 10, 2025 with accurate visual specifications from 79-page reference analysis
 
 ---
 
-## Typography Standards (from reference HTML)
+## Typography Standards
 
 ```
-Body Text:      Times 12px, #00000a
-Titles:         Times 18px bold, right-aligned, #00000a
-Headers:        Times 14-16px bold
-Table Text:     Times 8px, #333333 / #666666
-White on Dark:  Times 12px, #ffffff
-Captions:       Times 12px, centered
+Font Family:    Calibri (fallback: Segoe UI, Arial, sans-serif)
+Body Text:      11pt Calibri, #222222, line-height 1.4
+Section Headers: 18-20pt Calibri bold, #000000, underlined, line-height 1.2
+Subsection Headers: 14-16pt Calibri bold, #003366 (navy blue), no underline, line-height 1.2
+Sub-subsection: 12-14pt Calibri bold, #003366, line-height 1.2
+Table Headers:  10-11pt Calibri bold, #FFFFFF on #003366 background, UPPERCASE
+Table Body:     9-10pt Calibri, #222222
+Small Text:     8-9pt Calibri, #666666
+```
+
+---
+
+## Visual Formatting Standards
+
+### Color Palette
+```css
+--brand-navy: #003366;        /* Table headers, TOC sidebar, section dividers, footer graphic */
+--brand-sky: #8DB4E2;         /* Chevron footer accent only */
+--brand-red: #C00000;         /* Negative values (parentheses, negatives) */
+--text-black: #000000;        /* Section headers */
+--text-dark-gray: #222222;    /* Body text */
+--border-gray: #D0D0D0;       /* Table horizontal lines */
+--bg-light-gray: #F5F5F5;     /* Subtle row alternation */
+```
+
+### Table Styling Rules
+- **Navy header backgrounds** (#003366 with white uppercase text)
+- **No vertical column lines** (horizontal borders only with #D0D0D0)
+- **Blue section divider rows** (full-width navy rows inside table bodies for category separation)
+- **Red negatives** (any value with parentheses OR negative sign → #C00000)
+- **Right-align numbers**, left-align labels
+
+### Special Layout Elements
+- **Split-screen TOC:** 30% navy sidebar (#003366), 70% white content area
+- **Chevron footer graphic:** Linear gradient (115deg) from sky blue (#8DB4E2) to navy (#003366)
+- **Blue bar section dividers:** Inside complex tables to separate major categories (e.g., "SALE INFORMATION", "INCOME INFORMATION")
+- **Running headers:** Section title with 2px blue underline (#003366)
+
+### Print Requirements
+```css
+* {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+}
 ```
 
 ---
@@ -111,7 +150,7 @@ The subject property, located at {{street_address}}, {{city}}, {{province_abbrev
 
 Based upon our investigation of the real estate market and after considering all of the pertinent facts as set forth in the body of this appraisal report, as of the effective date, we have concluded the following:
 
-[TABLE: Value Conclusion]
+[TABLE: Value Conclusion - Navy header (#003366), white uppercase text, no vertical lines]
 | Value Scenario | Interest Appraised | Effective Date | Concluded Value |
 |----------------|-------------------|----------------|-----------------|
 | {{value_scenario}} | {{property_rights}} | {{valuation_date}} | ${{concluded_value}} |
@@ -169,36 +208,43 @@ AIC No: {{appraiser_aic_number}}
 ## Section 3: Table of Contents
 
 ### Layout
-- Single column with tab-separated page numbers
-- Section titles left, page numbers right
+- **SPECIAL:** Split-screen layout (30% navy sidebar, 70% white content)
+- Navy sidebar: "Table of Contents" title in white, centered
+- White content area: Section titles left, page numbers right
+- NO header/footer on this page
 
 ### Template Content
 
 ```
-Introduction & Executive Summary                    {{toc_intro_page}}
-Property Overview                                   {{toc_overview_page}}
-Photographs                                         {{toc_photos_page}}
-Maps                                                {{toc_maps_page}}
-Identification of Assignment                        {{toc_assignment_page}}
-Property Analysis                                   {{toc_analysis_page}}
-Location                                            {{toc_location_page}}
-Site Details                                        {{toc_site_page}}
-Property Taxes & Assessment                         {{toc_taxes_page}}
-Land Use & Planning                                 {{toc_zoning_page}}
-Description of the Improvements                     {{toc_improvements_page}}
-Market Context                                      {{toc_market_page}}
-Economic Overviews                                  {{toc_economic_page}}
-Multi-Family Market Overview                        {{toc_multifamily_page}}
-Highest & Best Use                                  {{toc_hbu_page}}
-Valuation Methodology                               {{toc_methodology_page}}
-Income Approach                                     {{toc_income_page}}
-Direct Comparison Approach: Multifamily             {{toc_comparison_page}}
-Reconciliation of Value                             {{toc_reconciliation_page}}
-Certification                                       {{toc_certification_page}}
-Appendices                                          {{toc_appendices_page}}
-Contingent & Limiting Conditions                    {{toc_conditions_page}}
-Definition of Terms                                 {{toc_definitions_page}}
-Qualifications of the Appraiser                     {{toc_qualifications_page}}
+[SPLIT-SCREEN LAYOUT]
+Left Sidebar (30%, Navy #003366):
+  Table of Contents (white, centered, 24-28pt)
+
+Right Content (70%, White):
+  Introduction & Executive Summary                    {{toc_intro_page}}
+  Property Overview                                   {{toc_overview_page}}
+  Photographs                                         {{toc_photos_page}}
+  Maps                                                {{toc_maps_page}}
+  Identification of Assignment                        {{toc_assignment_page}}
+  Property Analysis                                   {{toc_analysis_page}}
+  Location                                            {{toc_location_page}}
+  Site Details                                        {{toc_site_page}}
+  Property Taxes & Assessment                         {{toc_taxes_page}}
+  Land Use & Planning                                 {{toc_zoning_page}}
+  Description of the Improvements                     {{toc_improvements_page}}
+  Market Context                                      {{toc_market_page}}
+  Economic Overviews                                  {{toc_economic_page}}
+  Multi-Family Market Overview                        {{toc_multifamily_page}}
+  Highest & Best Use                                  {{toc_hbu_page}}
+  Valuation Methodology                               {{toc_methodology_page}}
+  Income Approach                                     {{toc_income_page}}
+  Direct Comparison Approach: Multifamily             {{toc_comparison_page}}
+  Reconciliation of Value                             {{toc_reconciliation_page}}
+  Certification                                       {{toc_certification_page}}
+  Appendices                                          {{toc_appendices_page}}
+  Contingent & Limiting Conditions                    {{toc_conditions_page}}
+  Definition of Terms                                 {{toc_definitions_page}}
+  Qualifications of the Appraiser                     {{toc_qualifications_page}}
 ```
 
 ### Fields (24)
@@ -210,8 +256,8 @@ Qualifications of the Appraiser                     {{toc_qualifications_page}}
 
 ### Layout
 - Section header
-- Property summary table
-- Value conclusion table
+- Property summary table (navy header, no vertical lines)
+- Value conclusion table (navy header)
 - Conditions text blocks
 
 ### Template Content
@@ -220,7 +266,7 @@ Qualifications of the Appraiser                     {{toc_qualifications_page}}
 Introduction & Executive Summary
 Property Overview
 
-[TABLE: Property Summary - embedded in page layout]
+[TABLE: Property Summary - Navy header (#003366), white uppercase text, no vertical lines, horizontal borders only]
 
 Hypothetical Conditions
 {{hypothetical_conditions_text}}
@@ -241,17 +287,17 @@ Extraordinary Limiting Conditions
 ## Section 5: Photographs
 
 ### Layout
-- **2-column table grid**
+- **2-column CSS grid** (2x3 photos per page)
 - Each cell: [IMAGE placeholder] + centered caption below
 - 2 photos per row
-- Times 12px centered captions
+- Captions: 9pt Calibri, centered
 
 ### Template Content
 
 ```
 Photographs
 
-[TABLE: 2-column photo grid]
+[GRID: 2-column photo grid]
 | [IMAGE: exterior_1]              | [IMAGE: exterior_2]              |
 | {{photo_caption_1}}              | {{photo_caption_2}}              |
 |----------------------------------|----------------------------------|
@@ -327,7 +373,7 @@ Photographs
 
 ### Layout
 - Section header with bold "Assignment" in larger font
-- Multiple subsections with headers
+- Multiple subsections with headers (14-16pt blue, bold)
 
 ### Template Content
 
@@ -440,7 +486,7 @@ Personal Property & Business Intangible
 ### Layout
 - Section header
 - Narrative paragraphs
-- Location data table
+- Location data table (navy header, no vertical lines)
 
 ### Template Content
 
@@ -450,7 +496,7 @@ Location
 
 {{location_overview_paragraph}}
 
-[TABLE: Location Details]
+[TABLE: Location Details - Navy header, horizontal lines only]
 | Category | Details |
 |----------|---------|
 | Municipality | {{municipality}} |
@@ -479,8 +525,8 @@ Location
 ## Section 9: Site Details
 
 ### Layout
-- Multiple subsection headers
-- Data tables
+- Multiple subsection headers (14-16pt blue)
+- Data tables (navy headers, no vertical lines)
 - Narrative descriptions
 
 ### Template Content
@@ -488,7 +534,7 @@ Location
 ```
 Site Details
 
-[TABLE: Site Summary]
+[TABLE: Site Summary - Navy header, horizontal borders only]
 | Item | Details |
 |------|---------|
 | Municipal Address | {{street_address}}, {{city}}, {{province_abbrev}} |
@@ -502,7 +548,7 @@ Site Details
 | Corner Lot | {{is_corner_lot}} |
 
 Utilities
-[TABLE: Utilities]
+[TABLE: Utilities - Navy header, horizontal borders only]
 | Utility | Provider/Status |
 |---------|-----------------|
 | Water | {{water_utility}} |
@@ -549,7 +595,7 @@ Environmental
 ## Section 10: Property Taxes & Assessment
 
 ### Layout
-- Data table
+- Data table (navy header, no vertical lines)
 - Historical comparison if available
 
 ### Template Content
@@ -557,7 +603,7 @@ Environmental
 ```
 Property Taxes & Assessment
 
-[TABLE: Current Assessment]
+[TABLE: Current Assessment - Navy header, horizontal lines only]
 | Category | Value |
 |----------|-------|
 | Land Assessment | ${{land_assessment}} |
@@ -587,16 +633,16 @@ Tax Status: {{tax_status}}
 ## Section 11: Land Use & Planning (Zoning)
 
 ### Layout
-- Zoning designation table
+- Zoning designation table (navy header)
 - Permitted uses list
-- Compliance analysis
+- Compliance analysis table (navy header with blue section dividers)
 
 ### Template Content
 
 ```
 Land Use & Planning
 
-[TABLE: Zoning Summary]
+[TABLE: Zoning Summary - Navy header, horizontal lines only]
 | Item | Details |
 |------|---------|
 | Zoning Designation | {{zoning_designation}} |
@@ -607,7 +653,7 @@ Permitted Uses
 {{permitted_uses_list}}
 
 Development Standards
-[TABLE: Zoning Compliance]
+[TABLE: Zoning Compliance - Navy header, horizontal lines only]
 | Standard | Required | Existing | Compliance |
 |----------|----------|----------|------------|
 | Minimum Lot Area | {{min_lot_area}} | {{actual_lot_area}} | {{lot_area_compliance}} |
@@ -637,9 +683,9 @@ Legal Conforming Status: {{legal_conforming_status}}
 ## Section 12: Description of the Improvements
 
 ### Layout
-- Building summary table
-- Construction details table
-- Unit mix table
+- Building summary table (navy header, no vertical lines)
+- Construction details table (navy header)
+- Unit mix table (navy header with possible blue section dividers)
 - Condition ratings
 
 ### Template Content
@@ -647,7 +693,7 @@ Legal Conforming Status: {{legal_conforming_status}}
 ```
 Description of the Improvements
 
-[TABLE: Building Summary]
+[TABLE: Building Summary - Navy header, horizontal lines only]
 | Item | Details |
 |------|---------|
 | Property Type | {{property_type}} |
@@ -662,7 +708,7 @@ Description of the Improvements
 | Total Units | {{total_units}} |
 
 Construction Details
-[TABLE: Construction]
+[TABLE: Construction - Navy header, horizontal lines only]
 | Component | Description |
 |-----------|-------------|
 | Foundation | {{foundation_type}} |
@@ -674,7 +720,7 @@ Construction Details
 | Exterior Doors | {{exterior_doors}} |
 
 Interior Finishes
-[TABLE: Interior]
+[TABLE: Interior - Navy header, horizontal lines only]
 | Component | Description |
 |-----------|-------------|
 | Interior Walls | {{interior_walls}} |
@@ -685,7 +731,7 @@ Interior Finishes
 | Bathrooms | {{bathroom_description}} |
 
 Mechanical Systems
-[TABLE: Mechanical]
+[TABLE: Mechanical - Navy header, horizontal lines only]
 | System | Description |
 |--------|-------------|
 | HVAC | {{hvac_system}} |
@@ -699,7 +745,7 @@ Mechanical Systems
 | Elevator | {{elevator}} |
 
 Unit Mix
-[TABLE: Unit Mix - DYNAMIC ROWS]
+[TABLE: Unit Mix - DYNAMIC ROWS - Navy header, horizontal lines only]
 | Unit Type | # Units | Avg SF | Total SF | % of Total |
 |-----------|---------|--------|----------|------------|
 | {{unit_type_1}} | {{unit_count_1}} | {{unit_avg_sf_1}} | {{unit_total_sf_1}} | {{unit_pct_1}}% |
@@ -712,7 +758,7 @@ Building Amenities: {{building_amenities}}
 Unit Amenities: {{unit_amenities}}
 
 Condition Assessment
-[TABLE: Condition Ratings]
+[TABLE: Condition Ratings - Navy header, horizontal lines only]
 | Component | Rating | Comments |
 |-----------|--------|----------|
 | Foundation | {{foundation_condition}} | {{foundation_comments}} |
@@ -750,7 +796,7 @@ External Obsolescence
 
 ### Layout
 - National/Provincial/Local economic summaries
-- Key indicators table
+- Key indicators table (navy header, no vertical lines)
 - Narrative paragraphs
 
 ### Template Content
@@ -768,7 +814,7 @@ Provincial Economic Overview
 Local Economic Overview
 {{local_economic_overview}}
 
-[TABLE: Key Economic Indicators]
+[TABLE: Key Economic Indicators - Navy header, horizontal lines only]
 | Indicator | National | Provincial | Local |
 |-----------|----------|------------|-------|
 | GDP Growth | {{gdp_national}}% | {{gdp_provincial}}% | {{gdp_local}}% |
@@ -786,7 +832,7 @@ Local Economic Overview
 ## Section 14: Multi-Family Market Overview
 
 ### Layout
-- Market statistics table
+- Market statistics table (navy header, no vertical lines)
 - Rent comparables
 - Vacancy analysis
 
@@ -797,7 +843,7 @@ Multi-Family Market Overview
 
 {{market_overview_introduction}}
 
-[TABLE: Market Statistics]
+[TABLE: Market Statistics - Navy header, horizontal lines only]
 | Metric | Value |
 |--------|-------|
 | Total Inventory (Units) | {{market_total_units}} |
@@ -866,7 +912,7 @@ Conclusion - As Improved: {{hbu_improved_conclusion}}
 
 ### Layout
 - Methodology explanation
-- Approaches applied table
+- Approaches applied table (navy header, no vertical lines)
 
 ### Template Content
 
@@ -889,7 +935,7 @@ Income Approach
 {{income_approach_description}}
 Applied: {{income_approach_applied}}
 
-[TABLE: Approaches Applied]
+[TABLE: Approaches Applied - Navy header, horizontal lines only]
 | Approach | Applied | Rationale |
 |----------|---------|-----------|
 | Cost Approach | {{cost_approach_applied}} | {{cost_approach_rationale}} |
@@ -909,8 +955,8 @@ Applied: {{income_approach_applied}}
 
 ### Layout
 - **Most complex section with multiple financial tables**
-- Rent roll table
-- Operating statement
+- Rent roll table (navy header, no vertical lines)
+- Operating statement with blue section dividers
 - Cap rate analysis
 - Direct capitalization
 
@@ -923,7 +969,7 @@ Income Approach
 
 Rent Analysis
 
-[TABLE: Rent Roll - DYNAMIC ROWS]
+[TABLE: Rent Roll - DYNAMIC ROWS - Navy header, horizontal lines only]
 | Unit # | Unit Type | SF | Monthly Rent | Annual Rent | $/SF/Month |
 |--------|-----------|-------|--------------|-------------|------------|
 | {{unit_number_1}} | {{unit_type_1}} | {{unit_sf_1}} | ${{monthly_rent_1}} | ${{annual_rent_1}} | ${{rent_psf_1}} |
@@ -934,7 +980,7 @@ Rent Analysis
 Market Rent Analysis
 {{market_rent_analysis}}
 
-[TABLE: Market Rent Comparables]
+[TABLE: Market Rent Comparables - Navy header, horizontal lines only]
 | Property | Location | Unit Type | SF | Rent | $/SF |
 |----------|----------|-----------|-------|------|------|
 | {{rent_comp_1_name}} | {{rent_comp_1_location}} | {{rent_comp_1_type}} | {{rent_comp_1_sf}} | ${{rent_comp_1_rent}} | ${{rent_comp_1_psf}} |
@@ -952,7 +998,7 @@ Other Income
 {{other_income_description}}
 Other Income Amount: ${{other_income_amount}}
 
-[TABLE: Pro Forma Operating Statement]
+[TABLE: Pro Forma Operating Statement - Navy header, blue section dividers for categories, red negatives]
 | Line Item | Amount | $/Unit | % of EGI |
 |-----------|--------|--------|----------|
 | **Revenue** | | | |
@@ -973,9 +1019,11 @@ Other Income Amount: ${{other_income_amount}}
 | | | | |
 | **Net Operating Income** | **${{noi}}** | **${{noi_per_unit}}** | **{{noi_pct}}%** |
 
+Note: Blue section divider rows (navy background, white text) separate major categories
+
 Capitalization Rate Analysis
 
-[TABLE: Cap Rate Comparables]
+[TABLE: Cap Rate Comparables - Navy header, horizontal lines only]
 | Sale | Property | Sale Date | Sale Price | NOI | Cap Rate |
 |------|----------|-----------|------------|-----|----------|
 | 1 | {{cap_comp_1_property}} | {{cap_comp_1_date}} | ${{cap_comp_1_price}} | ${{cap_comp_1_noi}} | {{cap_comp_1_cap}}% |
@@ -988,7 +1036,7 @@ Concluded Capitalization Rate: {{concluded_cap_rate}}%
 
 Direct Capitalization
 
-[TABLE: Value Calculation]
+[TABLE: Value Calculation - Navy header, horizontal lines only]
 | Component | Value |
 |-----------|-------|
 | Net Operating Income | ${{noi}} |
@@ -1012,7 +1060,7 @@ Direct Capitalization
 
 ### Layout
 - Comparable sale summaries
-- Adjustment grid table
+- Adjustment grid table (navy header with blue section dividers, red adjustments)
 - Value reconciliation
 
 ### Template Content
@@ -1025,7 +1073,7 @@ Direct Comparison Approach: Multifamily
 Comparable Sales Summary
 
 Sale 1: {{sale_1_address}}
-[TABLE: Sale 1 Details]
+[TABLE: Sale 1 Details - Navy header, horizontal lines only]
 | Item | Details |
 |------|---------|
 | Address | {{sale_1_address}} |
@@ -1048,7 +1096,7 @@ Sale 1: {{sale_1_address}}
 
 Adjustment Grid
 
-[TABLE: Sales Adjustment Grid - 8px Times font]
+[TABLE: Sales Adjustment Grid - Navy header, blue section dividers, red negatives, horizontal lines only]
 | Element | Subject | Sale 1 | Sale 2 | Sale 3 | Sale 4 | Sale 5 | Sale 6 |
 |---------|---------|--------|--------|--------|--------|--------|--------|
 | Sale Price | | ${{s1_price}} | ${{s2_price}} | ${{s3_price}} | ${{s4_price}} | ${{s5_price}} | ${{s6_price}} |
@@ -1068,13 +1116,15 @@ Adjustment Grid
 | **Net Adjustment** | | {{s1_net_adj}} | {{s2_net_adj}} | {{s3_net_adj}} | {{s4_net_adj}} | {{s5_net_adj}} | {{s6_net_adj}} |
 | **Adjusted Value/Unit** | | **${{s1_final_ppu}}** | **${{s2_final_ppu}}** | **${{s3_final_ppu}}** | **${{s4_final_ppu}}** | **${{s5_final_ppu}}** | **${{s6_final_ppu}}** |
 
+Note: "**Transaction Adjustments**" and "**Property Adjustments**" rows are blue section dividers (navy background, white text)
+
 Reconciliation of Sales Data
 {{sales_reconciliation_analysis}}
 
 Value Range: ${{sales_value_low}} - ${{sales_value_high}} per unit
 Concluded Value Per Unit: ${{concluded_value_per_unit}}
 
-[TABLE: Direct Comparison Value Conclusion]
+[TABLE: Direct Comparison Value Conclusion - Navy header, horizontal lines only]
 | Component | Value |
 |-----------|-------|
 | Total Units | {{total_units}} |
@@ -1094,7 +1144,7 @@ Concluded Value Per Unit: ${{concluded_value_per_unit}}
 ## Section 19: Reconciliation of Value
 
 ### Layout
-- Value summary table
+- Value summary table (navy header, no vertical lines)
 - Weighting analysis
 - Final conclusion
 
@@ -1103,7 +1153,7 @@ Concluded Value Per Unit: ${{concluded_value_per_unit}}
 ```
 Reconciliation of Value
 
-[TABLE: Value Summary]
+[TABLE: Value Summary - Navy header, horizontal lines only]
 | Approach | Indicated Value | Weight |
 |----------|-----------------|--------|
 | Income Approach (Direct Capitalization) | ${{income_approach_value}} | {{income_weight}}% |
@@ -1115,7 +1165,7 @@ Final Value Conclusion
 
 Based upon our investigation of the real estate market and after considering all of the pertinent facts as set forth in the body of this appraisal report, as of {{valuation_date}}, we have concluded the following:
 
-[TABLE: Final Value]
+[TABLE: Final Value - Navy header, horizontal lines only]
 | Value Scenario | Interest Appraised | Effective Date | Concluded Value |
 |----------------|-------------------|----------------|-----------------|
 | {{value_scenario}} | {{property_rights}} | {{valuation_date}} | **${{final_concluded_value}}** |
@@ -1255,11 +1305,15 @@ Areas of Expertise
 ## Implementation Notes
 
 ### Required for HTML Templates
-1. **Font embedding**: Times New Roman (or Times)
-2. **Table styling**: Match exact border colors (#bfbfbf)
-3. **Color codes**: #00000a, #ffffff, #808080, #333333, #666666
-4. **Alignment**: Right-align for cover page, centered for captions
-5. **Photo grid**: 2-column table with consistent cell sizing
+1. **Font embedding**: Calibri (fallback: Segoe UI, Arial)
+2. **Table styling**: Navy headers (#003366), horizontal lines only (#D0D0D0), blue section dividers
+3. **Color codes**: #003366 navy, #8DB4E2 sky, #C00000 red, #000000 black, #222222 dark gray
+4. **Alignment**: Right-align for cover page, centered for captions, right-align numbers in tables
+5. **Photo grid**: 2-column CSS grid with consistent cell sizing
+6. **Split-screen TOC**: 30/70 grid layout with navy sidebar
+7. **Chevron footer**: Linear gradient graphic
+8. **Red negatives**: Auto-detect parentheses and negative values
+9. **Print color adjustment**: Must be enabled for all colored elements
 
 ### Data Sources
 - V3 Dashboard fields → Map to template fields
@@ -1273,9 +1327,12 @@ Areas of Expertise
 - Dynamic table row generation (unit mix, rent roll, comparables)
 - Image placeholder replacement
 - Page break controls for PDF generation
+- Automatic negative value detection and styling
 
 ---
 
 **Document Created:** December 4, 2025
+**Updated:** December 10, 2025 with accurate visual specifications
 **Based on Reference:** VAL251012 - North Battleford Apt DOCX (converted to HTML)
-**Version:** 1.0
+**Cross-Referenced:** PAGE-INVENTORY.md, CONSOLIDATED-FORMATTING-SPECIFICATION.md, LAYOUT-PATTERN-LIBRARY.md
+**Version:** 2.0

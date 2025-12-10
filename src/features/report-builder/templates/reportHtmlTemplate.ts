@@ -5961,13 +5961,15 @@ export function generateReportHtml(sections: ReportSection[]): string {
         margin: 0;
       }
 
-      /* Clean page styling for preview */
+      /* Clean page styling for preview - WITH VISIBLE PAGE SEPARATIONS */
       .page {
         max-width: 8.5in;
-        margin: 0 auto;
+        min-height: 11in; /* Standard US Letter height */
+        margin: 0 auto 2rem auto; /* 2rem gap between pages for visibility */
         padding: 0.75in;
         background-color: white;
         position: relative;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow to show page edge */
       }
 
       /* Cover page - no padding for full-bleed design */
@@ -5980,10 +5982,44 @@ export function generateReportHtml(sections: ReportSection[]): string {
         page-break-inside: avoid;
       }
 
-      /* Page breaks are invisible in preview - just spacing */
+      /* Page breaks are visible in preview - show as page separators */
       div[style*="page-break-before: always"] {
-        height: 0;
+        height: 2rem;
         margin: 0;
+        background: linear-gradient(to bottom, transparent 0%, #e0e0e0 50%, transparent 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px;
+        color: #999;
+        font-family: monospace;
+      }
+
+      div[style*="page-break-before: always"]::after {
+        content: "--- PAGE BREAK ---";
+      }
+
+      /* TOC page break visualization */
+      .toc-section {
+        margin-bottom: 2rem !important;
+        padding-bottom: 1rem;
+        border-bottom: 3px dashed #ccc;
+        position: relative;
+      }
+
+      .toc-section::after {
+        content: "PAGE BREAK (New page starts here)";
+        position: absolute;
+        bottom: -1.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 10px;
+        color: #999;
+        background: #f5f5f5;
+        padding: 0.25rem 0.5rem;
+        border-radius: 3px;
+        font-family: monospace;
+        white-space: nowrap;
       }
     }  </style>
 </head>

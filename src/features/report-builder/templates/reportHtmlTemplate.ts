@@ -104,6 +104,31 @@ export function generateReportHtml(sections: ReportSection[]): string {
     return `${num.toFixed(1)}%`;
   };
 
+  /**
+   * Format percentage values for display
+   * @param value - Numeric percentage value (5.5 for 5.5%)
+   * @param decimals - Number of decimal places (default: 1)
+   * @returns Formatted percentage string with % suffix
+   *
+   * Examples:
+   *   formatPercentage(5.5) → "5.5%"
+   *   formatPercentage(3.0) → "3.0%"
+   *   formatPercentage(10.25, 2) → "10.25%"
+   *   formatPercentage(null) → "—"
+   *
+   * Test Cases:
+   *   formatPercentage(5.5) → "5.5%"
+   *   formatPercentage(3.0) → "3.0%"
+   *   formatPercentage(10.25, 2) → "10.25%"
+   *   formatPercentage(0) → "0.0%"
+   *   formatPercentage(null) → "—"
+   *   formatPercentage(undefined) → "—"
+   */
+  const formatPercentage = (value: number | null | undefined, decimals: number = 1): string => {
+    if (value === null || value === undefined || isNaN(value)) return '—';
+    return `${value.toFixed(decimals)}%`;
+  };
+
   const propertyTypeLower = propertyType.toLowerCase();
   const appraiserCompanyShort = appraiserCompany.split(' ')[0] || appraiserCompany;
 

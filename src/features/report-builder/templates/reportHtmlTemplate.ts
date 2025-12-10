@@ -5864,59 +5864,42 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     /* ===========================================
-       PRINT STYLES - Browser handles pagination
+       PRINT STYLES - Gotenberg/Chromium PDF
        =========================================== */
     @page {
       size: 8.5in 11in;
-      margin: 0.75in;
+      margin: 0; /* Gotenberg handles margins, CSS handles padding */
     }
 
     @media print {
-      /* Reset for print */
       body {
         margin: 0;
         padding: 0;
         background: white;
       }
 
-      /* Remove screen-only styling but KEEP padding for header/footer space */
+      /* Standard page padding for PDF */
       .page {
         max-width: none;
-        /* CRITICAL: Reserve space for header/footer in PDF - !important overrides page-specific CSS */
-        padding-top: 1.5in !important;
-        padding-bottom: 1.5in !important;
-        padding-left: 0.75in !important;
-        padding-right: 0.75in !important;
+        padding: 0.75in;
         margin: 0;
         box-shadow: none;
         border: none;
+      }
+
+      /* Cover page - full bleed, no padding */
+      .cover-page {
+        padding: 0 !important;
+        page-break-after: always;
       }
 
       .section {
         border-bottom: none;
       }
 
-      /* PREVENT MID-SENTENCE CUTS in PDF */
-      p, h3, h4, tr, .field-group {
+      /* Keep content together */
+      p, h3, h4, tr, .field-group, table, .subsection {
         page-break-inside: avoid;
-      }
-
-      /* Major sections start new page */
-      .section-title {
-        page-break-before: always;
-      }
-
-      /* First section (after cover) doesn't need break */
-      .page:first-of-type + .page .section-title:first-child {
-        page-break-before: auto;
-      }
-
-      /* Cover page always its own page */
-      .cover-page {
-        page-break-after: always;
-        /* OVERRIDE: Cover has special full-bleed design, no header/footer */
-        padding: 0 !important;
-        max-height: 11in;
       }
 
       /* Prevent orphaned headers */
@@ -5924,69 +5907,17 @@ export function generateReportHtml(sections: ReportSection[]): string {
         page-break-after: avoid;
       }
 
-      /* Keep these elements together - don't split across pages */
-      table {
-        page-break-inside: avoid;
-      }
-
-      .site-table,
-      .data-table,
-      .photo-grid,
-      .signature-container,
-      figure,
-      .subsection {
-        page-break-inside: avoid;
-      }
-
-      /* Print footer - fixed at bottom of each printed page */
-      .print-footer {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        text-align: center;
-        font-size: 10pt;
-        color: #666;
-        padding: 0.25in 0;
-      }
-
       /* Hide screen-only elements */
       .screen-only {
         display: none !important;
       }
 
-      /* Show page headers/footers in print */
-      .page-header {
-        display: flex !important;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 0.75in;
-      }
-
-      .page-footer {
-        display: flex !important;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 0.5in;
-        background: white;
-        z-index: 1000;
-      }
-
-      /* HIDE the Grey Page Break Bars in PDF - screen only visual */
+      /* Page break divs - just break, no styling */
       div[style*="page-break-before: always"] {
         height: 0 !important;
         margin: 0 !important;
         background: none !important;
-        border: none !important;
         page-break-before: always !important;
-      }
-
-      div[style*="page-break-before: always"]::after {
-        display: none !important;
       }
     }
 

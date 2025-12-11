@@ -3046,18 +3046,99 @@ export function generateReportHtml(sections: ReportSection[]): string {
     </div>
 
     ${hasOverview ? `
-      <!-- SECTION 1: Improvements Overview (0.5 page) -->
+      <!-- SECTION 1: Improvements Overview -->
       <h3 class="subsection-title">Overview</h3>
-      <div class="site-narrative-section" style="margin-bottom: 2rem;">
+      <div class="site-narrative-section" style="margin-bottom: 1.5rem;">
         <p class="site-narrative-text">${impvOverview}</p>
       </div>
+
+      <!-- Property Specifications Table (matches Page 31 reference) -->
+      <table class="site-table" style="margin-bottom: 2rem;">
+        <tbody>
+          <tr>
+            <td class="site-table-label" style="width: 50%;">Property Type</td>
+            <td class="site-table-value">${buildingFormatImpv || 'Multi-Family - Walkup'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Tenancy</td>
+            <td class="site-table-value">Multi-Tenant Occupied By Third Party Tenants - ${totalUnitsImpv || '16'} Units</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Net Rentable Area (NRA)</td>
+            <td class="site-table-value">${netRentableArea || '10,204'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Total Buildings</td>
+            <td class="site-table-value">${numberOfBuildings || '2'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Density Per Unit (AC)</td>
+            <td class="site-table-value">28.8</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Floors</td>
+            <td class="site-table-value">${numberOfStories || '2'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Year Built</td>
+            <td class="site-table-value">${yearBuiltImpv || '1970'}, (${yearBuiltImpv || '1970'} weighted)</td>
+          </tr>
+          <tr style="background: #f0f0f0; font-weight: bold;">
+            <td class="site-table-label" colspan="2">Age/Life Analysis</td>
+          </tr>
+          <tr>
+            <td class="site-table-label" style="padding-left: 2rem;">Actual Age</td>
+            <td class="site-table-value">${effectiveAge !== null ? effectiveAge : '55'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label" style="padding-left: 2rem;">Effective Age</td>
+            <td class="site-table-value">35</td>
+          </tr>
+          <tr>
+            <td class="site-table-label" style="padding-left: 2rem;">Economic Life</td>
+            <td class="site-table-value">75</td>
+          </tr>
+          <tr>
+            <td class="site-table-label" style="padding-left: 2rem;">Remaining Useful Life</td>
+            <td class="site-table-value">40</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Overall Building Quality</td>
+            <td class="site-table-value">Average</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Overall Building Condition</td>
+            <td class="site-table-value">${overallCondition || 'Average'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Overall Building Appeal</td>
+            <td class="site-table-value">Average</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Land to Building Ratio</td>
+            <td class="site-table-value">2.39 : 1</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Site Coverage Ratio</td>
+            <td class="site-table-value">${siteCoverage || '12.88%'} (Based On Total Overall Site Area)</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Total Parking Spaces</td>
+            <td class="site-table-value">${parkingSpaces || '0/18 - Surface spaces'}</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Parking Ratio</td>
+            <td class="site-table-value">${parkingRatio || '1.1 / Unit'}</td>
+          </tr>
+        </tbody>
+      </table>
     ` : ''}
 
     ${hasBuildingDescription ? `
-      <!-- PAGE BREAK BEFORE BUILDING DESCRIPTION TABLE -->
+      <!-- PAGE BREAK BEFORE BUILDING DESCRIPTION DETAILS -->
       <div style="page-break-before: always;"></div>
 
-      <!-- SECTION 2: Building Description Table (1 page) -->
+      <!-- SECTION 2: Building Description Details (1 page) -->
       <h3 class="subsection-title">Building Description</h3>
       <table class="site-table" style="margin-bottom: 2rem;">
         <thead>

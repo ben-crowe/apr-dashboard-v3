@@ -5050,7 +5050,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
         <thead>
           <tr>
-            <th colspan="2" style="background-color: #1a4480; color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;">PROPERTY IDENTIFICATION</th>
+            <th colspan="2" style="background-color: var(--brand-navy); color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">PROPERTY IDENTIFICATION</th>
           </tr>
         </thead>
         <tbody>
@@ -5085,7 +5085,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
         <thead>
           <tr>
-            <th colspan="3" style="background-color: #1a4480; color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;">SITE DESCRIPTION</th>
+            <th colspan="3" style="background-color: var(--brand-navy); color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">SITE DESCRIPTION</th>
           </tr>
         </thead>
         <tbody>
@@ -5126,7 +5126,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
         <thead>
           <tr>
-            <th colspan="2" style="background-color: #1a4480; color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;">IMPROVEMENT DESCRIPTION</th>
+            <th colspan="2" style="background-color: var(--brand-navy); color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">IMPROVEMENT DESCRIPTION</th>
           </tr>
         </thead>
         <tbody>
@@ -5201,7 +5201,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
         <thead>
           <tr>
-            <th colspan="2" style="background-color: #1a4480; color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px;">QUALITATIVE ANALYSIS</th>
+            <th colspan="2" style="background-color: var(--brand-navy); color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">QUALITATIVE ANALYSIS</th>
           </tr>
         </thead>
         <tbody>

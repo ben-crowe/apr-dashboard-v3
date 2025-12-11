@@ -5536,18 +5536,19 @@ export function generateReportHtml(sections: ReportSection[]): string {
     .cover-main {
       display: flex;
       padding: 0 0.75in;
-      min-height: 4in;
+      min-height: 5.5in;
+      align-items: flex-start;
     }
 
     .cover-photo-column {
-      width: 50%;
-      padding-right: 1rem;
+      width: 45%;
+      padding-right: 2rem;
       position: relative;
     }
 
     .cover-photo {
       width: 100%;
-      max-width: 380px;
+      max-width: 100%;
       height: auto;
       border: none;
       /* Feathered edge effect using mask gradients */
@@ -5565,8 +5566,8 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
     .cover-photo-placeholder {
       width: 100%;
-      max-width: 380px;
-      height: 240px;
+      max-width: 100%;
+      height: 300px;
       background: #f3f4f6;
       border: 2px dashed #d1d5db;
       display: flex;
@@ -5588,9 +5589,9 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     .cover-content-column {
-      width: 50%;
+      width: 55%;
       text-align: right;
-      padding-top: 0.5in;
+      padding-top: 1in;
     }
 
     .cover-title {
@@ -5632,9 +5633,9 @@ export function generateReportHtml(sections: ReportSection[]): string {
       right: 0;
       background: var(--brand-navy);
       color: white;
-      padding: 2rem 0.75in 1rem 0.75in;
-      clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
-      min-height: 4.5in;
+      padding: 2rem 0.75in 1.5rem 0.75in;
+      clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 100%);
+      height: 5.5in;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;

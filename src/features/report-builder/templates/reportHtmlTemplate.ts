@@ -5517,7 +5517,6 @@ export function generateReportHtml(sections: ReportSection[]): string {
     .cover-page {
       position: relative;
       min-height: 11in;
-      padding: 0;
       overflow: hidden;
       background: white;
     }
@@ -6210,9 +6209,8 @@ export function generateReportHtml(sections: ReportSection[]): string {
         overflow: visible;
       }
 
-      /* Cover page - full bleed, no padding */
+      /* Cover page - preserve layout */
       .cover-page {
-        padding: 0 !important;
         page-break-after: always;
       }
 
@@ -6424,15 +6422,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
        Patterns: P01, P02, P03, P06, P08 + Components
        ======================================== */
 
-    /* P01: Hero Cover Page */
-    .cover-page {
-      display: grid;
-      grid-template-columns: 40% 60%;
-      min-height: 100vh;
-      page-break-after: always;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
+    /* P01: Hero Cover Page - REMOVED: Conflicted with actual flexbox cover-page HTML */
 
     .cover-header {
       grid-column: 1 / -1;
@@ -6695,9 +6685,8 @@ export function generateReportHtml(sections: ReportSection[]): string {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow to show page edge */
       }
 
-      /* Cover page - no padding for full-bleed design */
+      /* Cover page - preserve layout */
       .cover-page {
-        padding: 0 !important;
       }
 
       /* Keep content together */

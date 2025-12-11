@@ -6749,10 +6749,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <div class="cover-content-column">
         <div class="cover-title">Appraisal Report</div>
         <div class="property-info">
-          ${propertyType ? `<div class="property-type">${propertyType} Property</div>` : ''}
-          ${propertyName ? `<div class="property-name">${propertyName}</div>` : ''}
-          ${streetAddress ? `<div class="property-address">${streetAddress}</div>` : ''}
-          ${city && province ? `<div class="property-city">${city}, ${province}</div>` : ''}
+          <div class="property-type">${propertyType ? `${propertyType} Property` : '[Property Type - e.g., Multi-Family Walkup]'}</div>
+          <div class="property-name">${propertyName || '[Property Name - e.g., North Battleford Apartments]'}</div>
+          <div class="property-address">${streetAddress || '[Street Address - e.g., 1101, 1121 109 St]'}</div>
+          <div class="property-city">${city && province ? `${city}, ${province}` : '[City, Province - e.g., North Battleford, Saskatchewan]'}</div>
         </div>
       </div>
     </div>
@@ -6764,10 +6764,10 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <div class="prepared-section">
           <div class="prepared-label">PREPARED FOR:</div>
           <div class="prepared-content">
-            ${clientContactName ? `<div>${clientContactName}</div>` : ''}
-            ${clientCompany ? `<div>${clientCompany}</div>` : ''}
-            ${clientAddress ? `<div>${clientAddress}</div>` : ''}
-            ${!clientContactName && !clientCompany ? `<div style="opacity: 0.7; font-style: italic;">Client information pending</div>` : ''}
+            <div>${clientContactName || '[Client Contact Name]'}</div>
+            <div>${clientCompany || '[Client Company]'}</div>
+            <div>${clientAddress || '[Client Address]'}</div>
+            <div>${clientCity && clientProvince && clientPostal ? `${clientCity}, ${clientProvince} ${clientPostal}` : '[Client City, Province Postal]'}</div>
           </div>
         </div>
 
@@ -6775,22 +6775,22 @@ export function generateReportHtml(sections: ReportSection[]): string {
         <div class="prepared-section">
           <div class="prepared-label">PREPARED BY:</div>
           <div class="prepared-content">
-            ${appraiserCompany ? `<div style="font-weight: bold;">${appraiserCompany}</div>` : ''}
-            ${appraiserAddress ? `<div>${appraiserAddress}</div>` : ''}
-            ${appraiserCity && appraiserProvince && appraiserPostal ? `<div>${appraiserCity}, ${appraiserProvince} ${appraiserPostal}</div>` : ''}
-            ${appraiserPhone ? `<div>Office: ${appraiserPhone}</div>` : ''}
-            ${appraiserWebsite ? `<div>${appraiserWebsite}</div>` : ''}
+            <div style="font-weight: bold;">${appraiserCompany || '[Appraiser Company]'}</div>
+            <div>${appraiserAddress || '[Appraiser Address]'}</div>
+            <div>${appraiserCity && appraiserProvince && appraiserPostal ? `${appraiserCity}, ${appraiserProvince} ${appraiserPostal}` : '[City, Province Postal]'}</div>
+            <div>${appraiserPhone ? `Office: ${appraiserPhone}` : 'Office: [Phone]'}</div>
+            <div>${appraiserWebsite || '[Website]'}</div>
           </div>
         </div>
 
         <!-- Dates -->
         <div class="dates-section">
-          ${valuationDate ? `<div>Date of Valuation: ${valuationDate}</div>` : ''}
-          ${reportDate ? `<div>Date of Report: ${reportDate}</div>` : ''}
+          <div>Date of Valuation: ${valuationDate || '[Valuation Date]'}</div>
+          <div>Date of Report: ${reportDate || '[Report Date]'}</div>
         </div>
 
         <!-- File Number -->
-        ${fileNumber ? `<div class="file-number">File No: ${fileNumber}</div>` : ''}
+        <div class="file-number">File No: ${fileNumber || '[File Number]'}</div>
       </div>
     </div>
   </div>

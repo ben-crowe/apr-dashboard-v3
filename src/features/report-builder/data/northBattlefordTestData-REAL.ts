@@ -453,12 +453,12 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
   'calc-avg-rent-per-sf': 1.67,
 
   // Other Income Subsection
-  'calc-parking-per-unit': 0,
-  'calc-parking-total': 0,
-  'calc-laundry-per-unit': 0,  // REAL: $0 (PGR of $204,240 comes purely from rent)
-  'calc-laundry-total': 0,
+  'calc-parking-per-unit': 375,   // REAL: $375/unit/month → $6,000 annual
+  'calc-parking-total': 6000,     // REAL: $6,000 annual parking income
+  'calc-laundry-per-unit': 150,   // REAL: $150/unit/month → $2,400 annual
+  'calc-laundry-total': 2400,     // REAL: $2,400 annual laundry income
   'calc-other-income': 0,
-  'calc-total-other-income': 0,
+  'calc-total-other-income': 8400, // REAL: $8,400 (parking + laundry)
   'calc-pgr': 204240,  // REAL: $204,240 PGR
 
   // Vacancy Subsection

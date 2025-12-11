@@ -5512,37 +5512,52 @@ export function generateReportHtml(sections: ReportSection[]): string {
       border-bottom: 1px solid #e5e7eb;
     }
 
-    /* Cover Page Styles - Matching Valcre Design */
-    /* Cover page is special - maintains full page dimensions even in continuous preview */
+    /* Cover Page Styles - Exact Reference Match */
+    /* Based on VAL251012 cover page specifications */
     .cover-page {
       position: relative;
+      width: 8.5in;
+      height: 11in;
       min-height: 11in;
       overflow: hidden;
       background: white;
+      font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
     }
 
-    /* Top logo section */
+    /* Logo section - Top left */
     .cover-logo-header {
-      padding: 0.75in 0.75in 0.5in 0.75in;
+      position: absolute;
+      top: 30px;
+      left: 30px;
+      width: 260px;
+      height: 60px;
+      z-index: 3;
     }
 
     .cover-logo {
-      max-width: 280px;
+      max-width: 100%;
       height: auto;
+      display: block;
     }
 
-    /* Main content area - two columns */
+    /* Main content area - two columns positioned absolutely */
     .cover-main {
+      position: absolute;
+      top: 170px;
+      left: 0;
+      right: 0;
       display: flex;
-      padding: 0 0.75in;
-      min-height: 5.5in;
+      padding: 0 30px;
+      justify-content: space-between;
       align-items: flex-start;
+      z-index: 2;
     }
 
+    /* Property photo - Left side */
     .cover-photo-column {
       flex-shrink: 0;
-      padding-right: 2rem;
-      position: relative;
+      width: 215px;
+      height: 160px;
     }
 
     .cover-photo {
@@ -5554,9 +5569,8 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     .cover-photo-placeholder {
-      width: 100%;
-      max-width: none;
-      height: 300px;
+      width: 215px;
+      height: 160px;
       background: #f3f4f6;
       border: 2px dashed #d1d5db;
       display: flex;
@@ -5566,89 +5580,118 @@ export function generateReportHtml(sections: ReportSection[]): string {
       font-size: 11px;
       text-align: center;
       padding: 1rem;
+      box-sizing: border-box;
     }
 
+    /* Right content column */
     .cover-content-column {
-      width: 55%;
+      width: 280px;
       text-align: right;
-      padding-top: 1in;
+      margin-left: auto;
     }
 
     .cover-title {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 1.5rem;
-      color: #000;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 35px;
+      color: #000000;
+      letter-spacing: -0.5px;
+      line-height: 1;
     }
 
     .property-info {
-      margin-bottom: 2rem;
+      text-align: right;
     }
 
     .property-type {
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 0.25rem;
+      font-size: 15px;
+      font-weight: 700;
+      color: #000000;
+      margin-bottom: 10px;
+      line-height: 1.2;
     }
 
     .property-name {
-      font-size: 12px;
-      margin-bottom: 0.25rem;
+      font-size: 13px;
+      font-weight: 400;
+      color: #333333;
+      line-height: 1.45;
+      margin-bottom: 0;
     }
 
     .property-address {
-      font-size: 12px;
-      margin-bottom: 0.125rem;
+      font-size: 13px;
+      font-weight: 400;
+      color: #333333;
+      line-height: 1.45;
+      margin-bottom: 0;
     }
 
     .property-city {
-      font-size: 12px;
+      font-size: 13px;
+      font-weight: 400;
+      color: #333333;
+      line-height: 1.45;
+      margin-bottom: 0;
     }
 
-    /* Diagonal blue section at bottom */
+    /* Blue diagonal section - bottom with precise angle */
     .cover-blue-section {
       position: absolute;
       bottom: 0;
       left: 0;
-      right: 0;
-      background: var(--brand-navy);
-      color: white;
-      padding: 2rem 0.75in 1.5rem 0.75in;
-      clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 100%);
-      height: 5.5in;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
+      width: 100%;
+      height: 475px;
+      background: #1e4d6b;
+      /* Diagonal cut: starts at 40% height on left, 18% on right */
+      clip-path: polygon(0 40%, 100% 18%, 100% 100%, 0 100%);
+      z-index: 1;
     }
 
+    /* Blue section content - bottom right */
     .cover-blue-content {
+      position: absolute;
+      bottom: 30px;
+      right: 30px;
+      width: 290px;
+      color: white;
       text-align: right;
-      padding-top: 1.5in;
+      z-index: 2;
     }
 
     .prepared-section {
-      margin-bottom: 1.25rem;
+      margin-bottom: 28px;
     }
 
     .prepared-label {
-      font-size: 11px;
-      font-weight: bold;
-      margin-bottom: 0.25rem;
-      letter-spacing: 0.02em;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      color: white;
     }
 
     .prepared-content {
-      font-size: 11px;
+      font-size: 12px;
+      font-weight: 400;
       line-height: 1.5;
+      color: white;
     }
 
     .prepared-content div {
       margin-bottom: 0.125rem;
     }
 
+    .prepared-content strong,
+    .prepared-content [style*="font-weight: bold"] {
+      font-weight: 700;
+    }
+
     .dates-section {
-      margin-top: 1.5rem;
-      font-size: 11px;
+      margin-top: 35px;
+      font-size: 11.5px;
+      line-height: 1.6;
+      color: white;
     }
 
     .dates-section div {
@@ -5656,9 +5699,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     .file-number {
-      margin-top: 1rem;
-      font-size: 11px;
-      font-weight: bold;
+      margin-top: 25px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: white;
     }
 
     /* Letter of Transmittal Styles */

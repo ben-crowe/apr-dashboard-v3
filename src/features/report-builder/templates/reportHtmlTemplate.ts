@@ -5644,11 +5644,11 @@ export function generateReportHtml(sections: ReportSection[]): string {
       height: 475px;
       background: #1e4d6b;
       /* Diagonal cut: starts at 40% height on left, 18% on right */
-      clip-path: polygon(0 40%, 100% 18%, 100% 100%, 0 100%);
+      clip-path: polygon(0 42%, 100% 20%, 100% 100%, 0 100%);
       z-index: 1;
     }
 
-    /* Blue section content - bottom right */
+    /* Blue section content - OUTSIDE blue section, positioned independently */
     .cover-blue-content {
       position: absolute;
       bottom: 30px;
@@ -5656,7 +5656,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       width: 290px;
       color: white;
       text-align: right;
-      z-index: 2;
+      z-index: 3;
     }
 
     .prepared-section {
@@ -6791,41 +6791,42 @@ export function generateReportHtml(sections: ReportSection[]): string {
       </div>
     </div>
 
-    <!-- Diagonal Blue Section -->
-    <div class="cover-blue-section">
-      <div class="cover-blue-content">
-        <!-- Prepared For -->
-        <div class="prepared-section">
-          <div class="prepared-label">PREPARED FOR:</div>
-          <div class="prepared-content">
-            <div>${clientContactName || '[Client Contact Name]'}</div>
-            <div>${clientCompany || '[Client Company]'}</div>
-            <div>${clientAddress || '[Client Address]'}</div>
-            <div>${clientCity && clientProvince && clientPostal ? `${clientCity}, ${clientProvince} ${clientPostal}` : '[Client City, Province Postal]'}</div>
-          </div>
-        </div>
+    <!-- Diagonal Blue Section (background only) -->
+    <div class="cover-blue-section"></div>
 
-        <!-- Prepared By -->
-        <div class="prepared-section">
-          <div class="prepared-label">PREPARED BY:</div>
-          <div class="prepared-content">
-            <div style="font-weight: bold;">${appraiserCompany || '[Appraiser Company]'}</div>
-            <div>${appraiserAddress || '[Appraiser Address]'}</div>
-            <div>${appraiserCity && appraiserProvince && appraiserPostal ? `${appraiserCity}, ${appraiserProvince} ${appraiserPostal}` : '[City, Province Postal]'}</div>
-            <div>${appraiserPhone ? `Office: ${appraiserPhone}` : 'Office: [Phone]'}</div>
-            <div>${appraiserWebsite || '[Website]'}</div>
-          </div>
+    <!-- Blue Section Content (positioned independently) -->
+    <div class="cover-blue-content">
+      <!-- Prepared For -->
+      <div class="prepared-section">
+        <div class="prepared-label">PREPARED FOR:</div>
+        <div class="prepared-content">
+          <div>${clientContactName || '[Client Contact Name]'}</div>
+          <div>${clientCompany || '[Client Company]'}</div>
+          <div>${clientAddress || '[Client Address]'}</div>
+          <div>${clientCity && clientProvince && clientPostal ? `${clientCity}, ${clientProvince} ${clientPostal}` : '[Client City, Province Postal]'}</div>
         </div>
-
-        <!-- Dates -->
-        <div class="dates-section">
-          <div>Date of Valuation: ${valuationDate || '[Valuation Date]'}</div>
-          <div>Date of Report: ${reportDate || '[Report Date]'}</div>
-        </div>
-
-        <!-- File Number -->
-        <div class="file-number">File No: ${fileNumber || '[File Number]'}</div>
       </div>
+
+      <!-- Prepared By -->
+      <div class="prepared-section">
+        <div class="prepared-label">PREPARED BY:</div>
+        <div class="prepared-content">
+          <div style="font-weight: bold;">${appraiserCompany || '[Appraiser Company]'}</div>
+          <div>${appraiserAddress || '[Appraiser Address]'}</div>
+          <div>${appraiserCity && appraiserProvince && appraiserPostal ? `${appraiserCity}, ${appraiserProvince} ${appraiserPostal}` : '[City, Province Postal]'}</div>
+          <div>${appraiserPhone ? `Office: ${appraiserPhone}` : 'Office: [Phone]'}</div>
+          <div>${appraiserWebsite || '[Website]'}</div>
+        </div>
+      </div>
+
+      <!-- Dates -->
+      <div class="dates-section">
+        <div>Date of Valuation: ${valuationDate || '[Valuation Date]'}</div>
+        <div>Date of Report: ${reportDate || '[Report Date]'}</div>
+      </div>
+
+      <!-- File Number -->
+      <div class="file-number">File No: ${fileNumber || '[File Number]'}</div>
     </div>
   </div>
 

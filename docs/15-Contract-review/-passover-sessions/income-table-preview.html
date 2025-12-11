@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Income Approach Table - Preview</title>
+  <style>
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      max-width: 8.5in;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: #f5f5f5;
+    }
+
+    .page {
+      background: white;
+      padding: 0.75in;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h3 {
+      color: #1a4480;
+      font-size: 16px;
+      font-weight: bold;
+      margin: 1.5rem 0 1rem 0;
+      text-transform: uppercase;
+    }
+
+    h4 {
+      color: #1a4480;
+      font-size: 13px;
+      font-weight: bold;
+      margin: 1rem 0 0.5rem 0;
+    }
+
+    .income-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12px;
+      border: 1px solid #bfbfbf;
+    }
+
+    .income-table thead th {
+      background: #1a365d;
+      color: white;
+      padding: 8px 12px;
+      font-weight: bold;
+      border: 1px solid #bfbfbf;
+    }
+
+    .income-table-label {
+      text-align: left;
+      padding: 6px 12px;
+      border-right: 1px solid #e5e7eb;
+    }
+
+    .income-table-amount {
+      text-align: right;
+      padding: 6px 12px;
+      border-right: 1px solid #e5e7eb;
+      width: 150px;
+    }
+
+    .income-table-percent {
+      text-align: right;
+      padding: 6px 12px;
+      width: 100px;
+    }
+
+    .income-table tbody tr {
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .income-section-header td {
+      background: #f3f4f6;
+      padding: 8px 12px;
+      font-weight: bold;
+      color: #1a365d;
+      border-top: 2px solid #bfbfbf;
+    }
+
+    .income-subtotal {
+      background: #f9fafb;
+      border-top: 2px solid #bfbfbf;
+      border-bottom: 2px solid #bfbfbf;
+    }
+
+    .income-total {
+      background: #e8eef5;
+      border-top: 3px solid #1a365d;
+      border-bottom: 3px solid #1a365d;
+    }
+
+    .income-spacer {
+      height: 12px;
+      border: none;
+    }
+
+    .income-spacer td {
+      padding: 0;
+      border: none;
+    }
+
+    .text-negative {
+      color: #dc2626;
+    }
+
+    .cap-value-table {
+      width: 100%;
+      max-width: 500px;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      font-size: 12px;
+    }
+
+    .cap-value-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .site-table-label {
+      text-align: left;
+      font-weight: normal;
+    }
+
+    .site-table-value {
+      text-align: right;
+      font-weight: normal;
+    }
+
+    .summary-box {
+      margin-top: 0.5rem;
+      font-size: 11px;
+      padding: 8px;
+      background: #f9fafb;
+      border-left: 4px solid #1a365d;
+    }
+
+    .summary-box div {
+      margin: 4px 0;
+    }
+
+    .empty-state {
+      color: #999;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h3>Income Capitalization Approach</h3>
+
+    <h4>Pro Forma Operating Statement</h4>
+    <table class="income-table">
+      <thead>
+        <tr>
+          <th class="income-table-label">Line Item</th>
+          <th class="income-table-amount">Amount</th>
+          <th class="income-table-percent">% of EGR</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- REVENUE SECTION -->
+        <tr class="income-section-header">
+          <td colspan="3"><strong>REVENUE</strong></td>
+        </tr>
+        <tr>
+          <td class="income-table-label">Rental Revenue</td>
+          <td class="income-table-amount">$195,060</td>
+          <td class="income-table-percent"></td>
+        </tr>
+
+        <!-- MISCELLANEOUS REVENUE SECTION -->
+        <tr class="income-section-header">
+          <td colspan="3"><strong>MISCELLANEOUS REVENUE</strong></td>
+        </tr>
+        <tr>
+          <td class="income-table-label" style="padding-left: 24px;">Parking Income</td>
+          <td class="income-table-amount">$6,000</td>
+          <td class="income-table-percent"></td>
+        </tr>
+        <tr>
+          <td class="income-table-label" style="padding-left: 24px;">Laundry Income</td>
+          <td class="income-table-amount">$2,400</td>
+          <td class="income-table-percent"></td>
+        </tr>
+        <tr>
+          <td class="income-table-label"><strong>Total Miscellaneous Revenue</strong></td>
+          <td class="income-table-amount"><strong>$8,400</strong></td>
+          <td class="income-table-percent"></td>
+        </tr>
+
+        <!-- POTENTIAL GROSS REVENUE -->
+        <tr class="income-subtotal">
+          <td class="income-table-label"><strong>POTENTIAL GROSS REVENUE</strong></td>
+          <td class="income-table-amount"><strong>$203,460</strong></td>
+          <td class="income-table-percent"></td>
+        </tr>
+
+        <!-- VACANCY & COLLECTION LOSS -->
+        <tr class="income-spacer">
+          <td colspan="3"></td>
+        </tr>
+        <tr class="income-section-header">
+          <td colspan="3"><strong>VACANCY & COLLECTION LOSS</strong></td>
+        </tr>
+        <tr>
+          <td class="income-table-label">Vacancy & Collection Loss (3.8%)</td>
+          <td class="income-table-amount text-negative">($7,731)</td>
+          <td class="income-table-percent">3.8%</td>
+        </tr>
+
+        <!-- EFFECTIVE GROSS REVENUE -->
+        <tr class="income-subtotal">
+          <td class="income-table-label"><strong>EFFECTIVE GROSS REVENUE</strong></td>
+          <td class="income-table-amount"><strong>$195,729</strong></td>
+          <td class="income-table-percent"><strong>100.0%</strong></td>
+        </tr>
+
+        <!-- OPERATING EXPENSES SECTION -->
+        <tr class="income-spacer">
+          <td colspan="3"></td>
+        </tr>
+        <tr class="income-section-header">
+          <td colspan="3"><strong>OPERATING EXPENSES</strong></td>
+        </tr>
+        <tr>
+          <td class="income-table-label">Management</td>
+          <td class="income-table-amount text-negative">($7,829)</td>
+          <td class="income-table-percent">4.0%</td>
+        </tr>
+        <tr>
+          <td class="income-table-label">Real Estate Taxes</td>
+          <td class="income-table-amount text-negative">($13,668)</td>
+          <td class="income-table-percent">7.0%</td>
+        </tr>
+        <tr>
+          <td class="income-table-label">Insurance</td>
+          <td class="income-table-amount text-negative">($11,314)</td>
+          <td class="income-table-percent">5.8%</td>
+        </tr>
+        <tr>
+          <td class="income-table-label">Repairs & Maintenance</td>
+          <td class="income-table-amount text-negative">($13,280)</td>
+          <td class="income-table-percent">6.8%</td>
+        </tr>
+        <tr>
+          <td class="income-table-label">Utilities</td>
+          <td class="income-table-amount text-negative">($21,025)</td>
+          <td class="income-table-percent">10.7%</td>
+        </tr>
+        <tr>
+          <td class="income-table-label">Payroll</td>
+          <td class="income-table-amount text-negative">($8,000)</td>
+          <td class="income-table-percent">4.1%</td>
+        </tr>
+        <tr>
+          <td class="income-table-label">Admin & General</td>
+          <td class="income-table-amount text-negative">($3,500)</td>
+          <td class="income-table-percent">1.8%</td>
+        </tr>
+        <tr>
+          <td class="income-table-label">Replacement Reserves</td>
+          <td class="income-table-amount text-negative">($4,800)</td>
+          <td class="income-table-percent">2.5%</td>
+        </tr>
+
+        <!-- TOTAL OPERATING EXPENSES -->
+        <tr class="income-subtotal">
+          <td class="income-table-label"><strong>TOTAL OPERATING EXPENSES</strong></td>
+          <td class="income-table-amount text-negative"><strong>($83,416)</strong></td>
+          <td class="income-table-percent"><strong>42.6%</strong></td>
+        </tr>
+
+        <!-- NET OPERATING INCOME -->
+        <tr class="income-spacer">
+          <td colspan="3"></td>
+        </tr>
+        <tr class="income-total">
+          <td class="income-table-label"><strong>NET OPERATING INCOME</strong></td>
+          <td class="income-table-amount"><strong>$112,313</strong></td>
+          <td class="income-table-percent"><strong>57.4%</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- NOI Summary -->
+    <div class="summary-box">
+      <div><strong>NOI per Unit:</strong> $7,019</div>
+      <div><strong>NOI per SF:</strong> $11.04/SF</div>
+    </div>
+
+    <h4 style="margin-top: 2rem;">Direct Capitalization</h4>
+    <table class="cap-value-table">
+      <tbody>
+        <tr>
+          <td class="site-table-label" style="width: 60%;">Net Operating Income</td>
+          <td class="site-table-value">$112,313</td>
+        </tr>
+        <tr>
+          <td class="site-table-label">Overall Capitalization Rate</td>
+          <td class="site-table-value">5.8%</td>
+        </tr>
+        <tr style="background: #e8eef5; font-weight: bold; border-top: 2px solid #1a365d;">
+          <td class="site-table-label"><strong>INDICATED VALUE (ROUNDED)</strong></td>
+          <td class="site-table-value"><strong>$1,940,000</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Auto-detect and style negative values
+    window.addEventListener('DOMContentLoaded', function() {
+      const cells = document.querySelectorAll('td');
+      cells.forEach(cell => {
+        const text = cell.textContent.trim();
+        if ((text.includes('(') && text.includes(')')) ||
+            (text.includes('-') && !text.match(/^\d{4}-\d{2}-\d{2}/))) {
+          cell.classList.add('text-negative');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

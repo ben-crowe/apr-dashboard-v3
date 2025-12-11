@@ -5548,8 +5548,8 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
     .cover-photo {
       width: 100%;
-      max-width: none;
-      height: auto;
+      height: 420px;
+      object-fit: cover;
       display: block;
       border: 1px solid #ddd;
     }

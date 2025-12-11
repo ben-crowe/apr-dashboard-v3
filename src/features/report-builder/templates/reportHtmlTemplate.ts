@@ -5548,25 +5548,15 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
     .cover-photo {
       width: 100%;
-      max-width: 100%;
+      max-width: none;
       height: auto;
-      border: none;
-      /* Feathered edge effect using mask gradients */
-      -webkit-mask-image:
-        linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%),
-        linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
-      -webkit-mask-composite: source-in;
-      mask-image:
-        linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%),
-        linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
-      mask-composite: intersect;
-      /* Subtle shadow for depth */
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      display: block;
+      border: 1px solid #ddd;
     }
 
     .cover-photo-placeholder {
       width: 100%;
-      max-width: 100%;
+      max-width: none;
       height: 300px;
       background: #f3f4f6;
       border: 2px dashed #d1d5db;
@@ -5577,15 +5567,6 @@ export function generateReportHtml(sections: ReportSection[]): string {
       font-size: 11px;
       text-align: center;
       padding: 1rem;
-      /* Match feathered effect for placeholder */
-      -webkit-mask-image:
-        linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%),
-        linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
-      -webkit-mask-composite: source-in;
-      mask-image:
-        linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%),
-        linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
-      mask-composite: intersect;
     }
 
     .cover-content-column {

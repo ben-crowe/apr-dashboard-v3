@@ -1237,6 +1237,40 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const incomeApproachConclusion = getFieldValue(section, 'income-approach-conclusion') ||
       `Given that the subject is a multitenant asset with short term leases, it is generally understood that the direct capitalization method is preferred, making the discounted cash flow (DCF) method less meaningful. For this reason, we have completed only the direct capitalization method.`;
 
+    // Operating History table fields (Page 44)
+    const calcTotalUnits = getGlobalFieldValue('calc-total-units') || 16;
+    const calcRentalRevenue = getGlobalFieldValue('calc-total-rental-revenue') || 0;
+    const calcParkingTotal = getGlobalFieldValue('calc-parking-total') || 0;
+    const calcLaundryTotal = getGlobalFieldValue('calc-laundry-total') || 0;
+    const calcTotalOtherIncome = getGlobalFieldValue('calc-total-other-income') || 0;
+    const calcPGR = getGlobalFieldValue('calc-pgr') || 0;
+    const calcVacancyLoss = getGlobalFieldValue('calc-vacancy-loss') || 0;
+    const calcVacancyRate = getGlobalFieldValue('calc-vacancy-rate') || 0;
+    const calcEGR = getGlobalFieldValue('calc-egr') || 0;
+    const calcExpTaxes = (getGlobalFieldValue('calc-exp-taxes') || 0) * calcTotalUnits;
+    const calcExpInsurance = (getGlobalFieldValue('calc-exp-insurance') || 0) * calcTotalUnits;
+    const calcExpRepairs = (getGlobalFieldValue('calc-exp-repairs') || 0) * calcTotalUnits;
+    const calcExpPayroll = (getGlobalFieldValue('calc-exp-payroll') || 0) * calcTotalUnits;
+    const calcExpUtilities = (getGlobalFieldValue('calc-exp-utilities') || 0) * calcTotalUnits;
+    const calcExpManagementPct = getGlobalFieldValue('calc-exp-management') || 0;
+    const calcExpManagement = calcEGR * (calcExpManagementPct / 100);
+    const calcExpOther = (getGlobalFieldValue('calc-exp-other') || 0) * calcTotalUnits;
+    const calcExpensesTotal = getGlobalFieldValue('calc-expenses-total') || 0;
+    const calcNOI = getGlobalFieldValue('calc-noi') || 0;
+    const calcNOIPerUnit = getGlobalFieldValue('calc-noi-per-unit') || 0;
+
+    // Helper to format value with sub-columns (TOTAL | $/UNIT | %/PR)
+    const formatOperatingHistoryCell = (total: number, perUnit: number | null, percentPGR: number | null): string => {
+      const totalFormatted = formatCurrency(String(total));
+      const perUnitFormatted = perUnit !== null ? formatCurrency(String(perUnit)) : '—';
+      const percentFormatted = percentPGR !== null ? formatPercentage(percentPGR) : '—';
+      return `
+        <td class="op-hist-total" style="text-align: right; padding: 6px 8px; border: 1px solid #ddd;">${totalFormatted}</td>
+        <td class="op-hist-per-unit" style="text-align: right; padding: 6px 8px; border: 1px solid #ddd;">${perUnitFormatted}</td>
+        <td class="op-hist-percent" style="text-align: right; padding: 6px 8px; border: 1px solid #ddd;">${percentFormatted}</td>
+      `;
+    };
+
     return `
     <div class="section">
       <h2 class="section-title">Income Capitalization Approach</h2>
@@ -1561,6 +1595,133 @@ export function generateReportHtml(sections: ReportSection[]): string {
       ` : ''}
 
       <!-- PAGE BREAK -->
+
+      <!-- PAGE 44: OPERATING HISTORY -->
+      <div class="section" style="margin-bottom: 2rem;">
+        <h3 class="subsection-title" style="margin-bottom: 1rem;">OPERATING HISTORY</h3>
+        
+        <p class="site-narrative-text" style="margin-bottom: 1rem; font-size: 10pt;">
+          The following table presents the historical operating performance (YTD 2025) and projected stabilized performance (PROJECTION - DCAP) for the subject property:
+        </p>
+
+        <table class="operating-history-table" style="width: 100%; border-collapse: collapse; font-size: 9pt; margin-bottom: 2rem;">
+          <thead>
+            <tr style="background: #003366; color: white;">
+              <th style="text-align: left; padding: 8px; width: 30%; border: 1px solid #ddd;">LINE ITEM</th>
+              <th colspan="3" style="text-align: center; padding: 8px; border: 1px solid #ddd;">YTD 2025</th>
+              <th colspan="3" style="text-align: center; padding: 8px; border: 1px solid #ddd;">PROJECTION - DCAP</th>
+            </tr>
+            <tr style="background: #8DB4E2; color: #000;">
+              <th style="padding: 6px 8px; border: 1px solid #ddd;"></th>
+              <th style="text-align: right; padding: 6px 8px; width: 10%; border: 1px solid #ddd;">TOTAL</th>
+              <th style="text-align: right; padding: 6px 8px; width: 10%; border: 1px solid #ddd;">$/UNIT</th>
+              <th style="text-align: right; padding: 6px 8px; width: 10%; border: 1px solid #ddd;">%/PR</th>
+              <th style="text-align: right; padding: 6px 8px; width: 10%; border: 1px solid #ddd;">TOTAL</th>
+              <th style="text-align: right; padding: 6px 8px; width: 10%; border: 1px solid #ddd;">$/UNIT</th>
+              <th style="text-align: right; padding: 6px 8px; width: 10%; border: 1px solid #ddd;">%/PR</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- REVENUE SECTION -->
+            <tr style="background: #003366; color: white; font-weight: bold;">
+              <td colspan="7" style="padding: 6px 8px; border: 1px solid #ddd;">REVENUE</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">Rental Revenue</td>
+              ${formatOperatingHistoryCell(calcRentalRevenue, calcRentalRevenue / calcTotalUnits, (calcRentalRevenue / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(calcRentalRevenue, calcRentalRevenue / calcTotalUnits, (calcRentalRevenue / calcPGR) * 100)}
+            </tr>
+            <tr>
+              <td style="padding: 6px 8px; padding-left: 24px; border: 1px solid #ddd;">Parking Income</td>
+              ${formatOperatingHistoryCell(calcParkingTotal, calcParkingTotal / calcTotalUnits, (calcParkingTotal / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(calcParkingTotal, calcParkingTotal / calcTotalUnits, (calcParkingTotal / calcPGR) * 100)}
+            </tr>
+            <tr>
+              <td style="padding: 6px 8px; padding-left: 24px; border: 1px solid #ddd;">Laundry</td>
+              ${formatOperatingHistoryCell(calcLaundryTotal, calcLaundryTotal / calcTotalUnits, (calcLaundryTotal / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(calcLaundryTotal, calcLaundryTotal / calcTotalUnits, (calcLaundryTotal / calcPGR) * 100)}
+            </tr>
+            <tr style="background: #f0f0f0; font-weight: bold;">
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">Total Miscellaneous</td>
+              ${formatOperatingHistoryCell(calcTotalOtherIncome, calcTotalOtherIncome / calcTotalUnits, (calcTotalOtherIncome / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(calcTotalOtherIncome, calcTotalOtherIncome / calcTotalUnits, (calcTotalOtherIncome / calcPGR) * 100)}
+            </tr>
+            <tr style="background: #003366; color: white; font-weight: bold;">
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">POTENTIAL GROSS REVENUE</td>
+              ${formatOperatingHistoryCell(calcPGR, calcPGR / calcTotalUnits, 104)}
+              ${formatOperatingHistoryCell(calcPGR, calcPGR / calcTotalUnits, 104)}
+            </tr>
+            <tr style="color: #C00000;">
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">Vacancy Loss</td>
+              ${formatOperatingHistoryCell(-calcVacancyLoss, -calcVacancyLoss / calcTotalUnits, -calcVacancyRate)}
+              ${formatOperatingHistoryCell(-calcVacancyLoss, -calcVacancyLoss / calcTotalUnits, -calcVacancyRate)}
+            </tr>
+            <tr style="background: #003366; color: white; font-weight: bold;">
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">EFFECTIVE GROSS REVENUE</td>
+              ${formatOperatingHistoryCell(calcEGR, calcEGR / calcTotalUnits, 96)}
+              ${formatOperatingHistoryCell(calcEGR, calcEGR / calcTotalUnits, 96)}
+            </tr>
+
+            <!-- EXPENSES SECTION -->
+            <tr style="background: #003366; color: white; font-weight: bold;">
+              <td colspan="7" style="padding: 6px 8px; border: 1px solid #ddd;">OPERATING EXPENSES</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">Taxes</td>
+              ${formatOperatingHistoryCell(calcExpTaxes, calcExpTaxes / calcTotalUnits, (calcExpTaxes / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(calcExpTaxes, calcExpTaxes / calcTotalUnits, (calcExpTaxes / calcPGR) * 100)}
+            </tr>
+            <tr>
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">Insurance</td>
+              ${formatOperatingHistoryCell(calcExpInsurance, calcExpInsurance / calcTotalUnits, (calcExpInsurance / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(calcExpInsurance, calcExpInsurance / calcTotalUnits, (calcExpInsurance / calcPGR) * 100)}
+            </tr>
+            <tr>
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">Repairs & Maintenance</td>
+              ${formatOperatingHistoryCell(calcExpRepairs, calcExpRepairs / calcTotalUnits, (calcExpRepairs / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(calcExpRepairs, calcExpRepairs / calcTotalUnits, (calcExpRepairs / calcPGR) * 100)}
+            </tr>
+            <tr>
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">Payroll</td>
+              ${formatOperatingHistoryCell(calcExpPayroll, calcExpPayroll / calcTotalUnits, (calcExpPayroll / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(calcExpPayroll, calcExpPayroll / calcTotalUnits, (calcExpPayroll / calcPGR) * 100)}
+            </tr>
+            <tr>
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">Utilities</td>
+              ${formatOperatingHistoryCell(calcExpUtilities, calcExpUtilities / calcTotalUnits, (calcExpUtilities / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(calcExpUtilities, calcExpUtilities / calcTotalUnits, (calcExpUtilities / calcPGR) * 100)}
+            </tr>
+            <tr>
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">Management Fees</td>
+              ${formatOperatingHistoryCell(calcExpManagement, calcExpManagement / calcTotalUnits, (calcExpManagement / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(calcExpManagement, calcExpManagement / calcTotalUnits, (calcExpManagement / calcPGR) * 100)}
+            </tr>
+            <tr>
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">Other Expenses</td>
+              ${formatOperatingHistoryCell(calcExpOther, calcExpOther / calcTotalUnits, (calcExpOther / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(calcExpOther, calcExpOther / calcTotalUnits, (calcExpOther / calcPGR) * 100)}
+            </tr>
+            <tr style="background: #f0f0f0; font-weight: bold; color: #C00000;">
+              <td style="padding: 6px 8px; border: 1px solid #ddd;">TOTAL OPERATING EXPENSES</td>
+              ${formatOperatingHistoryCell(-calcExpensesTotal, -calcExpensesTotal / calcTotalUnits, -(calcExpensesTotal / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(-calcExpensesTotal, -calcExpensesTotal / calcTotalUnits, -(calcExpensesTotal / calcPGR) * 100)}
+            </tr>
+            <tr style="background: #003366; color: white; font-weight: bold; font-size: 10pt;">
+              <td style="padding: 8px; border: 1px solid #ddd;">NET OPERATING INCOME</td>
+              ${formatOperatingHistoryCell(calcNOI, calcNOIPerUnit, (calcNOI / calcPGR) * 100)}
+              ${formatOperatingHistoryCell(calcNOI, calcNOIPerUnit, (calcNOI / calcPGR) * 100)}
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="site-narrative-text" style="font-size: 9pt; font-style: italic; color: #666;">
+          Note: YTD 2025 column currently displays PROJECTION values. Historical YTD data requires separate data source (future enhancement).
+        </p>
+      </div>
+
+      <!-- PAGE BREAK -->
+      <div style="page-break-before: always;"></div>
+
       <div style="page-break-before: always;"></div>
 
       <!-- PAGE 10: Net Operating Income (0.5 page) -->

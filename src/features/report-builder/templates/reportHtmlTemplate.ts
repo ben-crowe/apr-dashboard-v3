@@ -6511,8 +6511,9 @@ export function generateReportHtml(sections: ReportSection[]): string {
     .toc-split-screen {
       display: grid;
       grid-template-columns: 30% 70%;
-      min-height: 100vh;
+      grid-template-rows: auto;
       page-break-after: always;
+      position: relative;
     }
 
     .toc-sidebar {
@@ -6521,6 +6522,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       padding: 60px 30px;
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
+      min-height: 100%;
     }
 
     .toc-sidebar h2 {
@@ -6534,6 +6536,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     .toc-content {
       background-color: #FFFFFF;
       padding: 60px 40px;
+      min-height: 100%;
     }
 
     .toc-list {

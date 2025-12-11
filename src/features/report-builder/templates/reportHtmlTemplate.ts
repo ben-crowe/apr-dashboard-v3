@@ -6345,7 +6345,6 @@ export function generateReportHtml(sections: ReportSection[]): string {
     .property-hero {
       width: 100%;
       height: auto;
-      max-height: 400px;
       object-fit: cover;
       border: 1px solid var(--border-gray);
     }

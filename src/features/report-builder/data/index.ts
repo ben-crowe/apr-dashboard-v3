@@ -9,7 +9,7 @@ export {
   loadNorthBattlefordTestData,
   northBattlefordImages,
   northBattlefordSummary,
-} from './northBattlefordTestData';
+} from './northBattlefordTestData-REAL';
 
 // Re-export types for convenience
 export type TestDataRecord = Record<string, string | number | string[]>;

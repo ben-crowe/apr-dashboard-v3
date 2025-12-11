@@ -5541,17 +5541,17 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     .cover-photo-column {
-      width: 45%;
+      flex-shrink: 0;
       padding-right: 2rem;
       position: relative;
     }
 
     .cover-photo {
-      width: 100%;
-      height: 420px;
+      width: 215px;
+      height: 160px;
       object-fit: cover;
       display: block;
-      border: 1px solid #ddd;
+      border: 0.5px solid #d0d0d0;
     }
 
     .cover-photo-placeholder {

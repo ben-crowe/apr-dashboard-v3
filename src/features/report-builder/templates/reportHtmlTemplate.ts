@@ -6685,28 +6685,12 @@ export function generateReportHtml(sections: ReportSection[]): string {
         font-family: monospace;
       }
 
-      div[style*="page-break-before: always"]::after {
-        content: "--- PAGE BREAK ---";
-      }
+      /* Page break indicators removed - clean preview */
 
-      /* TOC page break visualization */
+      /* TOC page break styling */
       .toc-section {
         margin-bottom: 2rem !important;
         padding-bottom: 1rem;
-        border-bottom: 3px dashed #ccc;
-        position: relative;
-      }
-
-      .toc-section::after {
-        content: "PAGE BREAK (New page starts here)";
-        position: absolute;
-        bottom: -1.5rem;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 10px;
-        color: #999;
-        background: #f5f5f5;
-        padding: 0.25rem 0.5rem;
         border-radius: 3px;
         font-family: monospace;
         white-space: nowrap;

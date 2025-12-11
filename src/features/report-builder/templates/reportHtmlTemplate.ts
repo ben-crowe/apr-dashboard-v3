@@ -5267,16 +5267,20 @@ export function generateReportHtml(sections: ReportSection[]): string {
     ];
 
     return `
-    <div class="section toc-section page-break-before">
-      <h1 style="text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 30px; text-transform: uppercase;">Table of Contents</h1>
-      <div class="toc-container" style="max-width: 600px; margin: 0 auto;">
+    <div class="toc-split-screen page-break-before">
+      <div class="toc-sidebar">
+        <h2>Table of Contents</h2>
+      </div>
+      <div class="toc-content">
+        <ul class="toc-list">
         ${tocEntries.map(entry => `
-          <div class="toc-entry" style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: ${(entry as { isHeader?: boolean }).isHeader ? '15px' : '8px'}; padding-left: ${(entry as { indent?: boolean }).indent ? '20px' : '0'};">
+          <li class="toc-entry ${(entry as { isHeader?: boolean }).isHeader ? 'toc-header' : ''} ${(entry as { indent?: boolean }).indent ? 'toc-indent' : ''}" style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: ${(entry as { isHeader?: boolean }).isHeader ? '15px' : '8px'};">
             <span class="toc-title" style="font-size: 12px; ${(entry as { isHeader?: boolean }).isHeader ? 'font-weight: bold; text-transform: uppercase;' : ''}">${entry.title}</span>
             <span class="toc-dots" style="flex: 1; border-bottom: 1px dotted #999; margin: 0 10px;"></span>
             <span class="toc-page" style="font-size: 12px; font-weight: 500;">${entry.page}</span>
-          </div>
+          </li>
         `).join('')}
+        </ul>
       </div>
     </div>
     `;
@@ -5562,7 +5566,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
     .cover-photo-placeholder {
       width: 100%;
       max-width: 380px;
-      height: 280px;
+      height: 240px;
       background: #f3f4f6;
       border: 2px dashed #d1d5db;
       display: flex;
@@ -5626,7 +5630,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       bottom: 0;
       left: 0;
       right: 0;
-      background: #1a365d;
+      background: var(--brand-navy);
       color: white;
       padding: 2rem 0.75in 1rem 0.75in;
       clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);

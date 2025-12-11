@@ -5669,13 +5669,21 @@ export function generateReportHtml(sections: ReportSection[]): string {
     }
 
     .letter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
       margin-bottom: 1rem;
     }
 
     .letter-logo {
       max-width: 200px;
       height: auto;
-      margin-bottom: 1.5rem;
+    }
+
+    .letter-company-address {
+      text-align: right;
+      font-size: 10px;
+      line-height: 1.4;
     }
 
     .letter-date {
@@ -5726,20 +5734,35 @@ export function generateReportHtml(sections: ReportSection[]): string {
       text-align: justify;
     }
 
+    .letter-value-table-header {
+      background: var(--brand-navy);
+      color: white;
+      padding: 0.5rem;
+      font-weight: bold;
+      font-size: 11px;
+      text-align: center;
+      margin-top: 1rem;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
     .letter-value-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 1.5rem 0;
-      font-size: 11px;
+      margin-bottom: 1.5rem;
+      font-size: 10px;
     }
 
     .letter-value-table th {
-      background: #1a365d;
+      background: var(--brand-navy);
       color: white;
       padding: 0.5rem;
       text-align: left;
       font-weight: bold;
+      font-size: 9px;
       border: 1px solid #bfbfbf;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
 
     .letter-value-table td {
@@ -5762,6 +5785,18 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
     .letter-signature-name {
       font-weight: bold;
+    }
+
+    .letter-diagonal-stripe {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 30%;
+      height: 3in;
+      background: var(--brand-navy);
+      clip-path: polygon(0 30%, 100% 0, 100% 100%, 0 100%);
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
 
     /* Page Header Branding */
@@ -6765,6 +6800,14 @@ export function generateReportHtml(sections: ReportSection[]): string {
     <div class="page-number"></div>
     <div class="letter-header">
       <img src="${VALTA_LOGO_BASE64}" alt="${appraiserCompany}" class="letter-logo" />
+      <div class="letter-company-address">
+        ${appraiserCompany ? `<div>${appraiserCompany}</div>` : ''}
+        ${appraiserAddress ? `<div>${appraiserAddress}</div>` : ''}
+        ${appraiserCity && appraiserProvince && appraiserPostal ? `<div>${appraiserCity}, ${appraiserProvince} ${appraiserPostal}</div>` : ''}
+        ${appraiserPhone ? `<div>Office: ${appraiserPhone}</div>` : ''}
+        ${appraiserEmail ? `<div>${appraiserEmail}</div>` : ''}
+        ${appraiserWebsite ? `<div>${appraiserWebsite}</div>` : ''}
+      </div>
     </div>
 
     <div class="letter-date">${reportDate || '[Report Date]'}</div>
@@ -6796,19 +6839,22 @@ export function generateReportHtml(sections: ReportSection[]): string {
         Based upon our investigation of the real estate market and after considering all of the pertinent facts as set forth in the body of this appraisal report, as of the effective date, we have concluded the following:
       </p>
 
+      <div class="letter-value-table-header">MARKET VALUE CONCLUSION</div>
       <table class="letter-value-table">
         <thead>
           <tr>
-            <th>Value Scenario</th>
-            <th>Interest Appraised</th>
-            <th>Effective Date</th>
-            <th>Concluded Value</th>
+            <th>VALUATION SCENARIO</th>
+            <th>INTEREST APPRAISED</th>
+            <th>EXPOSURE TIME</th>
+            <th>EFFECTIVE DATE</th>
+            <th>VALUE</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>${valueScenario}</td>
             <td>${propertyRights}</td>
+            <td>Six Months</td>
             <td>${valuationDate || '[Valuation Date]'}</td>
             <td><strong>${concludedValue ? formatCurrency(concludedValue) : '[Concluded Value]'}</strong></td>
           </tr>
@@ -6851,6 +6897,9 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <div class="page-footer-left">${fileNumber || ''}</div>
       <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
+
+    <!-- Blue Diagonal Stripe -->
+    <div class="letter-diagonal-stripe"></div>
   </div>
 
   <!-- Executive Summary Page -->

@@ -3010,17 +3010,26 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const security = getFieldValue(section, 'impv-security');
     const siteImprovements = getFieldValue(section, 'impv-site-improvements');
     const landscaping = getFieldValue(section, 'impv-landscaping');
-    const parkingSpaces = getFieldValue(section, 'impv-parking-spaces');
-    const parkingRatio = getFieldValue(section, 'impv-parking-ratio');
+    const parkingSpaces = getFieldValue(section, 'parking-spaces');
+    const parkingRatio = getFieldValue(section, 'parking-ratio');
     const siteCoverage = getFieldValue(section, 'impv-site-coverage');
+
+    // Property Specifications table fields
+    const densityUnitsAcre = getFieldValue(section, 'density-units-acre');
+    const effectiveAgeImpv = getFieldValue(section, 'effective-age');
+    const economicLife = getFieldValue(section, 'economic-life');
+    const buildingQuality = getFieldValue(section, 'building-quality');
+    const buildingAppeal = getFieldValue(section, 'building-appeal');
+    const landToBuildingRatio = getFieldValue(section, 'land-to-building-ratio');
 
     // SECTION 6: Deferred Maintenance & Obsolescence
     const functionalDesign = getFieldValue(section, 'impv-functional-design');
     const hazardousMaterials = getFieldValue(section, 'impv-hazardous-materials');
 
-    // Calculate effective age if year built is provided
+    // Calculate actual age and remaining useful life
     const currentYear = new Date().getFullYear();
-    const effectiveAge = yearBuiltImpv ? currentYear - parseInt(yearBuiltImpv) : null;
+    const actualAge = yearBuiltImpv ? currentYear - parseInt(yearBuiltImpv) : null;
+    const remainingUsefulLife = (economicLife && effectiveAgeImpv) ? parseInt(economicLife) - parseInt(effectiveAgeImpv) : null;
 
     // Validation flags for sections
     const hasOverview = impvOverview;
@@ -3073,7 +3082,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
           </tr>
           <tr>
             <td class="site-table-label">Density Per Unit (AC)</td>
-            <td class="site-table-value">28.8</td>
+            <td class="site-table-value">${densityUnitsAcre || '28.8'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Floors</td>
@@ -3088,23 +3097,23 @@ export function generateReportHtml(sections: ReportSection[]): string {
           </tr>
           <tr>
             <td class="site-table-label" style="padding-left: 2rem;">Actual Age</td>
-            <td class="site-table-value">${effectiveAge !== null ? effectiveAge : '55'}</td>
+            <td class="site-table-value">${actualAge !== null ? actualAge : '55'}</td>
           </tr>
           <tr>
             <td class="site-table-label" style="padding-left: 2rem;">Effective Age</td>
-            <td class="site-table-value">35</td>
+            <td class="site-table-value">${effectiveAgeImpv || '35'}</td>
           </tr>
           <tr>
             <td class="site-table-label" style="padding-left: 2rem;">Economic Life</td>
-            <td class="site-table-value">75</td>
+            <td class="site-table-value">${economicLife || '75'}</td>
           </tr>
           <tr>
             <td class="site-table-label" style="padding-left: 2rem;">Remaining Useful Life</td>
-            <td class="site-table-value">40</td>
+            <td class="site-table-value">${remainingUsefulLife !== null ? remainingUsefulLife : '40'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Overall Building Quality</td>
-            <td class="site-table-value">Average</td>
+            <td class="site-table-value">${buildingQuality || 'Average'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Overall Building Condition</td>
@@ -3112,23 +3121,23 @@ export function generateReportHtml(sections: ReportSection[]): string {
           </tr>
           <tr>
             <td class="site-table-label">Overall Building Appeal</td>
-            <td class="site-table-value">Average</td>
+            <td class="site-table-value">${buildingAppeal || 'Average'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Land to Building Ratio</td>
-            <td class="site-table-value">2.39 : 1</td>
+            <td class="site-table-value">${landToBuildingRatio || '2.39 : 1'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Site Coverage Ratio</td>
-            <td class="site-table-value">${siteCoverage || '12.88%'} (Based On Total Overall Site Area)</td>
+            <td class="site-table-value">${siteCoverage ? siteCoverage + '%' : '12.9%'} (Based On Total Overall Site Area)</td>
           </tr>
           <tr>
             <td class="site-table-label">Total Parking Spaces</td>
-            <td class="site-table-value">${parkingSpaces || '0/18 - Surface spaces'}</td>
+            <td class="site-table-value">${parkingSpaces ? `0/${parkingSpaces} - Surface spaces` : '0/18 - Surface spaces'}</td>
           </tr>
           <tr>
             <td class="site-table-label">Parking Ratio</td>
-            <td class="site-table-value">${parkingRatio || '1.1 / Unit'}</td>
+            <td class="site-table-value">${parkingRatio ? parkingRatio + ' / Unit' : '1.1 / Unit'}</td>
           </tr>
         </tbody>
       </table>

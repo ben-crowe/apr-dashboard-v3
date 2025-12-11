@@ -5160,7 +5160,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
           </tr>
           <tr style="border-bottom: 1px solid #e5e7eb;">
             <td style="padding: 8px 12px; font-weight: 500; color: #555;">Year Built</td>
-            <td style="padding: 8px 12px; color: #333;">${yearBuiltVal ? `${yearBuiltVal}${yearBuiltVal ? ' (' + yearBuiltVal + ' weighted)' : ''}` : '<span style="color: #999;">—</span>'}</td>
+            <td style="padding: 8px 12px; color: #333;">${yearBuiltVal ? `${yearBuiltVal}; (${yearBuiltVal} weighted)` : '<span style="color: #999;">—</span>'}</td>
           </tr>
           <tr style="border-bottom: 1px solid #e5e7eb;">
             <td style="padding: 8px 12px; font-weight: 500; color: #555;">Actual Age</td>

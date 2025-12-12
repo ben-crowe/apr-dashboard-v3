@@ -448,18 +448,18 @@ Among the five alternative uses, a continuation of the multifamily use is the Hi
   'calc-total-units': 16,
   'calc-total-sf': 10204,
   'calc-avg-unit-sf': 638,
-  'calc-total-rental-revenue': 195840,
-  'calc-avg-rent-per-unit': 1020,
-  'calc-avg-rent-per-sf': 1.60,
+  'calc-total-rental-revenue': 204240,
+  'calc-avg-rent-per-unit': 1064,
+  'calc-avg-rent-per-sf': 1.67,
 
-  // Other Income Subsection (parking + laundry broken out separately)
-  'calc-parking-per-unit': 375,
-  'calc-parking-total': 6000,
-  'calc-laundry-per-unit': 150,
-  'calc-laundry-total': 2400,
+  // Other Income Subsection (parking/laundry included in rental revenue for this property)
+  'calc-parking-per-unit': 0,
+  'calc-parking-total': 0,
+  'calc-laundry-per-unit': 0,
+  'calc-laundry-total': 0,
   'calc-other-income': 0,
-  'calc-total-other-income': 8400,
-  'calc-pgr': 204240,  // $195,840 rental + $6,000 parking + $2,400 laundry = $204,240
+  'calc-total-other-income': 0,
+  'calc-pgr': 204240,  // Parking/laundry included in rental revenue
 
   // Vacancy Subsection
   'calc-vacancy-rate': 3.8,  // REAL: 3.8% (not fabricated 4%)

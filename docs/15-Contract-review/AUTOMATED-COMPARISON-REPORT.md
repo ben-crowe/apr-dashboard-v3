@@ -1,6 +1,6 @@
 # Automated Report Comparison
 
-**Generated:** 2025-12-11 20:01:42
+**Generated:** 2025-12-11 20:10:06
 **Reference:** `Ref.ReportVAL251012NorthBattlefordApt.docx.html`
 
 ## Executive Summary
@@ -9,7 +9,7 @@
 
 | Metric | Reference | Generated | Status |
 |--------|-----------|-----------|--------|
-| Text Blocks | 529 | 814 | ⚠️ |
+| Text Blocks | 529 | 923 | ⚠️ |
 | Images | 90 | 37 | ⚠️ |
 | Field Values | 8 | 5 | ⚠️ |
 
@@ -18,7 +18,7 @@
 - ✅ **Matches:** 138 blocks
 - ❌ **Missing:** 391 blocks
 - ⚠️ **Different:** 117 blocks
-- ➕ **Extra:** 676 blocks
+- ➕ **Extra:** 785 blocks
 
 ### Missing Content (in Reference, not in Generated)
 
@@ -200,7 +200,7 @@
 **10. Section:** Unknown
    - Text: `Valta Property Valuations Ltd.300, 4838 Richard Road SWOffice:587-801-5151chris.chornohos@valta.caww...`
 
-*... and 666 more*
+*... and 775 more*
 
 ## Image Analysis
 

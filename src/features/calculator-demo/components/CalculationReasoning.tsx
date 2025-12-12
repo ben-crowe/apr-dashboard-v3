@@ -419,19 +419,19 @@ export default function CalculationReasoning() {
         <span className="text-xs font-medium text-[#909090] uppercase tracking-wider">Calculation Breakdown</span>
       </div>
 
-      {/* Content - document style, left-aligned, larger text */}
+      {/* Content - document style, padded, larger text */}
       <div
         ref={containerRef}
-        className="px-5 py-4 font-mono cursor-pointer bg-[#232323] flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden"
+        className="px-8 py-4 font-mono cursor-pointer bg-[#232323] flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#1e1e1e] [&::-webkit-scrollbar-thumb]:bg-[#4a4a4a] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#5a5a5a]"
         style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#4a4a4a #1e1e1e',
           fontSize: '13px',
           lineHeight: '1.7',
         }}
         title={animation.isAnimating ? 'Click to skip animation' : undefined}
       >
-        <div className="whitespace-pre" style={{ minWidth: '500px', maxWidth: '600px' }}>
+        <div className="whitespace-pre" style={{ minWidth: '480px', maxWidth: '580px' }}>
           {lines.map((line, index) => renderLine(line, index))}
         </div>
       </div>

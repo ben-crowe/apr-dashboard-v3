@@ -15,7 +15,6 @@ import { useReportBuilderStore } from '@/features/report-builder/store/reportBui
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useEffect } from 'react';
 
 export default function InputPanel() {
   const { sections, updateFieldValue, runCalculations } = useReportBuilderStore();
@@ -40,12 +39,9 @@ export default function InputPanel() {
   const handleFieldChange = (fieldId: string, value: string) => {
     const numValue = parseFloat(value) || 0;
     updateFieldValue(fieldId, numValue);
-  };
-
-  // Trigger calculations when any field changes
-  useEffect(() => {
+    // Run calculations after field update
     runCalculations();
-  }, [sections, runCalculations]);
+  };
 
   const renderInputField = (fieldId: string, label: string, unit?: string, readOnly = false) => {
     const value = getFieldValue(fieldId);

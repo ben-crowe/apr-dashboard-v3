@@ -20,10 +20,11 @@ import WalkthroughPanel from './components/WalkthroughPanel';
 export default function CalculatorDemoPage() {
   const { loadFullTestData, runCalculations, sections } = useReportBuilderStore();
 
-  // Run calculations on mount and whenever store changes
+  // Run calculations on mount only
   useEffect(() => {
     runCalculations();
-  }, [runCalculations]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleLoadTestData = () => {
     loadFullTestData();

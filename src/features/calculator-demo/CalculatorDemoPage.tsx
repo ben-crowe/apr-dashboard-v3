@@ -8,7 +8,7 @@
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calculator, RefreshCw } from 'lucide-react';
+import { Calculator, RefreshCw, ChevronDown, ChevronRight } from 'lucide-react';
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
 import InputPanel from './components/InputPanel';
 import OutputPanel from './components/OutputPanel';
@@ -17,6 +17,7 @@ import MarkdownSummary from './components/MarkdownSummary';
 export default function CalculatorDemoPage() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [lastRefresh, setLastRefresh] = useState(new Date().toLocaleTimeString());
+  const [summaryExpanded, setSummaryExpanded] = useState(false);
   const initializeMockData = useReportBuilderStore(state => state.initializeMockData);
   const sections = useReportBuilderStore(state => state.sections);
 
@@ -93,17 +94,36 @@ export default function CalculatorDemoPage() {
           </div>
         </div>
 
-        {/* Markdown Summary - Full Width */}
+        {/* Markdown Summary - Collapsible Accordion */}
         <Card className="shadow-lg">
-          <CardHeader>
-            <CardTitle className="text-lg">Professional Summary Report</CardTitle>
-            <CardDescription className="text-xs">
-              Markdown-formatted calculation breakdown ready for export
-            </CardDescription>
+          <CardHeader
+            className="cursor-pointer hover:bg-slate-50 transition-colors"
+            onClick={() => setSummaryExpanded(!summaryExpanded)}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  {summaryExpanded ? (
+                    <ChevronDown className="h-5 w-5 text-slate-500" />
+                  ) : (
+                    <ChevronRight className="h-5 w-5 text-slate-500" />
+                  )}
+                  Professional Summary Report
+                </CardTitle>
+                <CardDescription className="text-xs ml-7">
+                  Markdown-formatted calculation breakdown ready for export
+                </CardDescription>
+              </div>
+              <span className="text-xs text-slate-400">
+                {summaryExpanded ? 'Click to collapse' : 'Click to expand'}
+              </span>
+            </div>
           </CardHeader>
-          <CardContent>
-            <MarkdownSummary />
-          </CardContent>
+          {summaryExpanded && (
+            <CardContent>
+              <MarkdownSummary />
+            </CardContent>
+          )}
         </Card>
       </div>
     </div>

@@ -6,6 +6,7 @@
  */
 
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
+import CalculationReasoning from './CalculationReasoning';
 
 export default function OutputPanel() {
   const { sections } = useReportBuilderStore();
@@ -103,6 +104,9 @@ export default function OutputPanel() {
           </div>
         </div>
       )}
+
+      {/* Calculation Reasoning - Show Your Math */}
+      <CalculationReasoning />
 
       {/* Key Metrics Summary */}
       <div className="grid grid-cols-3 gap-4 pt-4">

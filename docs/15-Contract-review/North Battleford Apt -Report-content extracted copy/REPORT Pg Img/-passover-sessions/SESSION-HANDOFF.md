@@ -1,18 +1,28 @@
 # Session Handoff - APR Dashboard Template Integration
 
 **Date:** 2025-12-12
-**Session:** Consolidation Complete
+**Session:** Template Skeleton Complete
 
 ---
 
 ## COMPLETED THIS SESSION
 
-1. **Fixed JSON consolidation** - Universal parser handles all 7 structure variants
+1. **Fixed JSON consolidation** - Universal parser handles all 8 structure variants
 2. **77 pages consolidated** into `master-field-mapping-consolidated.json`
-3. **Identified gaps**:
-   - Page 2: Mapping exists, no HTML (Letter of Transmittal - skip or create manually)
-   - Page 10: HTML exists, no mapping (needs agent mapping)
-   - Page 70: Doesn't exist in document set
+3. **Fixed test data income breakdown**:
+   - Rental Revenue: $195,840 (was $204,240)
+   - Parking: $6,000 (was $0)
+   - Laundry: $2,400 (was $0)
+   - PGR total unchanged: $204,240
+4. **Created template skeleton** - `reportPageTemplates.ts` (1,525 lines)
+   - 77 page render functions with TODO field lists
+   - Master orchestrator function
+   - Type definitions and helpers
+
+**Gaps identified:**
+- Page 2: Mapping exists, no HTML (Letter of Transmittal)
+- Page 10: HTML exists, no mapping (needs agent mapping)
+- Page 70: Doesn't exist in document set
 
 ---
 
@@ -47,21 +57,20 @@
 
 ## IMMEDIATE NEXT STEPS
 
-### Option A: Proceed with 77 pages
-- Skip page 10 for now
-- Build template skeleton with 77 functions
-- Add page 10 later when mapped
+### 1. Populate Page Templates (10-15 at a time)
+Each `renderPageXX()` function in `reportPageTemplates.ts` needs actual HTML.
+- Read corresponding `html-pages/page-XX.html`
+- Replace TODO stub with real HTML template
+- Use field interpolation: `${getFieldValue(sections, 'field-id')}`
 
-### Option B: Map page 10 first
+### 2. Test with Sample Data
+- Run report builder with `northBattlefordTestData-REAL.ts`
+- Verify HTML output matches reference pages
+
+### 3. Optional: Map page 10
 - Read `/html-pages/page-10.html`
-- Create mapping entry for page 10
-- Add to consolidated JSON
-- Then proceed with 78-page template
-
-### After consolidation complete:
-1. Create `reportHtmlTemplate.ts` skeleton with render functions
-2. Populate incrementally (10-15 pages at a time)
-3. Test with sample data
+- Add mapping entry to consolidated JSON
+- Add `renderPage10()` function
 
 ---
 
@@ -69,10 +78,11 @@
 
 | File | Purpose |
 |------|---------|
-| `master-field-mapping-consolidated.json` | **NEW** - 77 pages, normalized format |
-| `consolidate-mappings.py` | **NEW** - Universal consolidation script |
-| `page-mapping-*.json` (8 files) | Source files (keep as reference) |
-| `html-pages/page-*.html` | 78 rendered HTML pages |
+| `src/.../templates/reportPageTemplates.ts` | **NEW** - 77 page render functions (1,525 lines) |
+| `src/.../data/northBattlefordTestData-REAL.ts` | Test data with income breakdown fix |
+| `master-field-mapping-consolidated.json` | 77 pages, normalized format |
+| `consolidate-mappings.py` | Universal consolidation script |
+| `html-pages/page-*.html` | 78 reference HTML pages |
 
 ---
 

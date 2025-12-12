@@ -1,47 +1,50 @@
 /**
  * Input Panel - Connects to Zustand Store
  *
- * FIXED: Now reads/writes from useReportBuilderStore
- * All inputs trigger store updates and recalculations
+ * FIXED: Uses proper Zustand selector pattern for re-renders
  */
 
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-export default function InputPanel() {
-  const { sections, updateFieldValue, runCalculations, loadFullTestData } = useReportBuilderStore();
+// Helper to find field value from calc section
+const findFieldValue = (calcSection: any, fieldId: string): number | string => {
+  if (!calcSection) return 0;
 
-  const calcSection = sections.find(s => s.id === 'calc');
+  // Check direct fields
+  const field = calcSection.fields?.find((f: any) => f.id === fieldId);
+  if (field) return field.value;
+
+  // Check subsections
+  if (calcSection.subsections) {
+    for (const sub of calcSection.subsections) {
+      const subField = sub.fields?.find((f: any) => f.id === fieldId);
+      if (subField) return subField.value;
+    }
+  }
+  return 0;
+};
+
+export default function InputPanel() {
+  // Use selector to subscribe to just the calc section - this ensures re-renders
+  const calcSection = useReportBuilderStore(state =>
+    state.sections.find(s => s.id === 'calc')
+  );
+
+  // Get store actions separately (these don't change)
+  const updateFieldValue = useReportBuilderStore(state => state.updateFieldValue);
+  const runCalculations = useReportBuilderStore(state => state.runCalculations);
+  const loadFullTestData = useReportBuilderStore(state => state.loadFullTestData);
 
   const getFieldValue = (fieldId: string): number => {
-    if (!calcSection) return 0;
-
-    const field = calcSection.fields.find(f => f.id === fieldId);
-    if (field) return Number(field.value) || 0;
-
-    if (calcSection.subsections) {
-      for (const sub of calcSection.subsections) {
-        const subField = sub.fields.find(f => f.id === fieldId);
-        if (subField) return Number(subField.value) || 0;
-      }
-    }
-    return 0;
+    const val = findFieldValue(calcSection, fieldId);
+    return Number(val) || 0;
   };
 
   const getStringFieldValue = (fieldId: string): string => {
-    if (!calcSection) return '';
-
-    const field = calcSection.fields.find(f => f.id === fieldId);
-    if (field) return String(field.value) || '';
-
-    if (calcSection.subsections) {
-      for (const sub of calcSection.subsections) {
-        const subField = sub.fields.find(f => f.id === fieldId);
-        if (subField) return String(subField.value) || '';
-      }
-    }
-    return '';
+    const val = findFieldValue(calcSection, fieldId);
+    return String(val) || '';
   };
 
   const updateField = (fieldId: string, value: string) => {
@@ -55,7 +58,6 @@ export default function InputPanel() {
   };
 
   const handleReset = () => {
-    // Reset all calculator fields to 0
     const calcFields = [
       'calc-type1-count', 'calc-type1-sf', 'calc-type1-rent',
       'calc-parking-per-unit', 'calc-laundry-per-unit',
@@ -65,7 +67,6 @@ export default function InputPanel() {
       'calc-exp-admin', 'calc-exp-reserves', 'calc-exp-other',
       'calc-cap-rate', 'calc-adj-capex', 'calc-adj-leasing', 'calc-adj-other'
     ];
-
     calcFields.forEach(fieldId => updateFieldValue(fieldId, 0));
     runCalculations();
   };

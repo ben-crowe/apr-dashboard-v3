@@ -6827,7 +6827,7 @@ const formatDate = (dateStr: string): string => {
       <div class="cover-content-column">
         <div class="cover-title">Appraisal Report</div>
         <div class="property-info">
-          <div class="property-type">${propertyType ? `${propertyType} Property` : '[Property Type - e.g., Multi-Family Walkup]'}</div>
+          <div class="property-type">${propertyType ? `${propertyType}` : '[Property Type - e.g., Multi-Family Walkup]'}</div>
           <div class="property-name">${propertyName || '[Property Name - e.g., North Battleford Apartments]'}</div>
           <div class="property-address">${streetAddress || '[Street Address - e.g., 1101, 1121 109 St]'}</div>
           <div class="property-city">${city && province ? `${city}, ${province}` : '[City, Province - e.g., North Battleford, Saskatchewan]'}</div>

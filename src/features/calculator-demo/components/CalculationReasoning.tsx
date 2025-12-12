@@ -1,9 +1,9 @@
 /**
- * Calculation Reasoning - Professional Audit-Style Breakdown
+ * Calculation Reasoning - Step-by-step Breakdown
  *
- * Terminal-like display showing step-by-step calculation logic.
+ * Claude-inspired minimal aesthetic: light background, subtle borders, no scroll.
  * Typewriter animation effect on load/update.
- * USPAP/CUSPAP Direct Capitalization Method.
+ * Natural expansion - content just exists.
  */
 
 import { useEffect, useState, useRef, useCallback } from 'react';
@@ -352,12 +352,12 @@ export default function CalculationReasoning() {
     }
 
     const lineClasses = [
-      line.isHeader ? 'font-bold text-white' : 'text-slate-300',
-      line.isTotal ? 'text-white font-semibold' : '',
-      isCurrent ? 'bg-slate-700/50' : '',
-      line.text.startsWith('  ') ? 'text-slate-500' : '',
-      line.text.includes('[OK]') ? 'text-emerald-400' : '',
-      line.text.includes('[!!]') ? 'text-amber-400' : '',
+      line.isHeader ? 'font-medium text-[#b0b0b0]' : 'text-[#808080]',
+      line.isTotal ? 'text-[#e5e5e5] font-medium' : '',
+      isCurrent ? 'bg-[#3a3a3a]/30' : '',
+      line.text.startsWith('  ') ? 'text-[#606060]' : '',
+      line.text.includes('[OK]') ? 'text-[#4ade80]' : '',
+      line.text.includes('[!!]') ? 'text-[#fbbf24]' : '',
     ].filter(Boolean).join(' ');
 
     return (
@@ -367,32 +367,25 @@ export default function CalculationReasoning() {
         style={{ opacity: isComplete || isCurrent ? 1 : 0.3 }}
       >
         {displayText}
-        {isCurrent && <span className="animate-pulse">▌</span>}
+        {isCurrent && <span className="animate-pulse text-[#606060]">▌</span>}
       </div>
     );
   };
 
   return (
     <div
-      className="mt-4 border border-slate-600 bg-slate-900 overflow-hidden"
-      style={{ borderRadius: '2px' }}
+      className="border border-[#3a3a3a] rounded-sm overflow-hidden"
       onClick={animation.isAnimating ? completeAnimation : undefined}
     >
-      {/* Simple Header */}
-      <div className="bg-slate-800 text-white px-4 py-2 border-b border-slate-700">
-        <div className="font-bold text-sm tracking-wide">CALCULATION BREAKDOWN</div>
-        <div className="text-xs text-slate-400">Direct Capitalization Method · USPAP/CUSPAP</div>
+      {/* Minimal Header - just text + border */}
+      <div className="px-4 py-2 border-b border-[#3a3a3a]">
+        <span className="text-xs font-medium text-[#909090] uppercase tracking-wider">Calculation Breakdown</span>
       </div>
 
-      {/* Terminal-style Content */}
+      {/* Content - Natural expansion, no fixed height */}
       <div
         ref={containerRef}
-        className="overflow-y-auto px-4 py-3 font-mono text-[11px] leading-[1.4] text-slate-300 cursor-pointer"
-        style={{
-          minHeight: '500px',
-          maxHeight: '700px',
-          scrollBehavior: 'smooth',
-        }}
+        className="px-4 py-3 font-mono text-[11px] leading-[1.5] cursor-pointer bg-[#232323]"
         title={animation.isAnimating ? 'Click to skip animation' : undefined}
       >
         <div className="whitespace-pre">
@@ -400,15 +393,12 @@ export default function CalculationReasoning() {
         </div>
       </div>
 
-      {/* Status Bar */}
-      <div className="bg-slate-800 text-slate-500 px-4 py-1 text-[10px] border-t border-slate-700 flex justify-between">
-        <span>
-          {animation.isAnimating ? 'Computing...' : 'Ready'}
-        </span>
-        <span>
-          {animation.isAnimating ? 'Click to skip' : `${lines.length} lines`}
-        </span>
-      </div>
+      {/* Minimal status - only during animation */}
+      {animation.isAnimating && (
+        <div className="px-4 py-1.5 text-[10px] border-t border-[#3a3a3a] text-[#505050]">
+          Click to skip
+        </div>
+      )}
     </div>
   );
 }

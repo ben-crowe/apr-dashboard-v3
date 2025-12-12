@@ -1,12 +1,11 @@
 /**
- * Calculator Demo Page - Professional Income Capitalization Calculator
+ * Calculator Demo Page - Income Capitalization Calculator
  *
- * Interactive demonstration of income capitalization calculator.
- * Professional navy/charcoal color scheme - Bloomberg terminal aesthetic.
+ * Claude-inspired minimal aesthetic: dark background, light cards, subtle borders.
+ * Borders and whitespace, not colors and fills.
  */
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RefreshCw, ChevronDown, ChevronRight } from 'lucide-react';
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
@@ -36,30 +35,30 @@ export default function CalculatorDemoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f5f5f5]">
-      {/* Header - Professional Navy */}
-      <div className="border-b border-[#999] bg-[#1a1a2e]">
+    <div className="min-h-screen bg-[#1e1e1e]">
+      {/* Header - Minimal, text-based */}
+      <div className="border-b border-[#3a3a3a]">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-xl font-bold text-white tracking-wide">
-                INCOME CAPITALIZATION CALCULATOR
+              <h1 className="text-lg font-semibold text-[#e5e5e5] tracking-wide">
+                Income Capitalization Calculator
               </h1>
-              <p className="text-xs text-slate-400">
-                Direct Capitalization Method · USPAP/CUSPAP Compliant · v2.1
+              <p className="text-xs text-[#808080]">
+                Direct Capitalization Method · USPAP/CUSPAP · v2.1
               </p>
             </div>
             <div className="flex items-center gap-4">
-              <span className="text-xs text-slate-500">
-                Last refresh: {lastRefresh}
+              <span className="text-xs text-[#606060]">
+                {lastRefresh}
               </span>
               <Button
                 onClick={handleRefresh}
-                variant="outline"
+                variant="ghost"
                 size="sm"
-                className="gap-2 bg-transparent border-slate-500 text-slate-300 hover:bg-slate-700 hover:text-white"
+                className="gap-2 text-[#808080] hover:text-[#e5e5e5] hover:bg-[#2a2a2a]"
               >
-                <RefreshCw className="h-4 w-4" />
+                <RefreshCw className="h-3.5 w-3.5" />
                 Refresh
               </Button>
             </div>
@@ -69,13 +68,13 @@ export default function CalculatorDemoPage() {
 
       {/* Main Content - 2 Column Layout */}
       <div className="container mx-auto px-6 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* Input Panel - Left Column (1/3) */}
           <div className="lg:col-span-1">
-            <div className="bg-white border border-[#999] overflow-hidden h-full" style={{ borderRadius: '2px' }}>
-              <div className="bg-[#2d2d2d] text-white px-4 py-2 border-b border-[#999]">
-                <h2 className="font-bold text-sm tracking-wide">INPUT PARAMETERS</h2>
-                <p className="text-xs text-slate-400">Property data and assumptions</p>
+            <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-sm h-full">
+              <div className="px-4 py-3 border-b border-[#3a3a3a]">
+                <h2 className="font-medium text-sm text-[#e5e5e5]">Input Parameters</h2>
+                <p className="text-xs text-[#707070] mt-0.5">Property data and assumptions</p>
               </div>
               <div className="p-4">
                 <InputPanel />
@@ -85,10 +84,10 @@ export default function CalculatorDemoPage() {
 
           {/* Output Panel - Right Column (2/3) */}
           <div className="lg:col-span-2">
-            <div className="bg-white border border-[#999] overflow-hidden h-full" style={{ borderRadius: '2px' }}>
-              <div className="bg-[#2d2d2d] text-white px-4 py-2 border-b border-[#999]">
-                <h2 className="font-bold text-sm tracking-wide">VALUATION RESULTS</h2>
-                <p className="text-xs text-slate-400">Real-time calculation output</p>
+            <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-sm h-full">
+              <div className="px-4 py-3 border-b border-[#3a3a3a]">
+                <h2 className="font-medium text-sm text-[#e5e5e5]">Valuation Results</h2>
+                <p className="text-xs text-[#707070] mt-0.5">Real-time calculation output</p>
               </div>
               <div className="p-4">
                 <OutputPanel />
@@ -98,39 +97,39 @@ export default function CalculatorDemoPage() {
         </div>
 
         {/* Markdown Summary - Collapsible */}
-        <div className="bg-white border border-[#999] overflow-hidden" style={{ borderRadius: '2px' }}>
+        <div className="mt-5 bg-[#2a2a2a] border border-[#3a3a3a] rounded-sm">
           <div
-            className="bg-[#2d2d2d] text-white px-4 py-2 cursor-pointer hover:bg-[#3d3d3d] transition-colors flex items-center justify-between"
+            className="px-4 py-3 cursor-pointer hover:bg-[#333333] transition-colors flex items-center justify-between border-b border-transparent hover:border-[#3a3a3a]"
             onClick={() => setSummaryExpanded(!summaryExpanded)}
           >
             <div className="flex items-center gap-2">
               {summaryExpanded ? (
-                <ChevronDown className="h-4 w-4 text-slate-400" />
+                <ChevronDown className="h-4 w-4 text-[#606060]" />
               ) : (
-                <ChevronRight className="h-4 w-4 text-slate-400" />
+                <ChevronRight className="h-4 w-4 text-[#606060]" />
               )}
               <div>
-                <h2 className="font-bold text-sm tracking-wide">PROFESSIONAL SUMMARY REPORT</h2>
-                <p className="text-xs text-slate-400">Exportable markdown format</p>
+                <h2 className="font-medium text-sm text-[#e5e5e5]">Summary Report</h2>
+                <p className="text-xs text-[#707070] mt-0.5">Exportable markdown format</p>
               </div>
             </div>
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-[#606060]">
               {summaryExpanded ? 'Collapse' : 'Expand'}
             </span>
           </div>
           {summaryExpanded && (
-            <div className="p-4 border-t border-[#999]">
+            <div className="p-4 border-t border-[#3a3a3a]">
               <MarkdownSummary />
             </div>
           )}
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="border-t border-[#999] bg-[#2d2d2d] py-2">
+      {/* Footer - Minimal */}
+      <div className="border-t border-[#3a3a3a] py-3 mt-6">
         <div className="container mx-auto px-6">
-          <p className="text-xs text-slate-500 text-center">
-            Engine validated against Valcre workbook · 7/7 metrics exact match · Production ready
+          <p className="text-xs text-[#505050] text-center">
+            Engine validated against Valcre workbook · 7/7 metrics exact match
           </p>
         </div>
       </div>

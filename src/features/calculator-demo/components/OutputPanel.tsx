@@ -1,8 +1,7 @@
 /**
- * Output Panel - Professional Financial Results Summary
+ * Output Panel - Calculation Results
  *
- * Displays the 7 key calculation results in a clean, professional format.
- * Color scheme: Navy/charcoal - Bloomberg terminal aesthetic.
+ * Claude-inspired minimal aesthetic: subtle borders, grayscale, color only for key values.
  */
 
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
@@ -48,65 +47,63 @@ export default function OutputPanel() {
 
   return (
     <div className="space-y-4">
-      {/* Compact Results Box - Professional Navy Theme */}
-      <div className="border border-slate-400 overflow-hidden" style={{ borderRadius: '2px' }}>
-        <div className="bg-[#1a1a2e] text-white px-4 py-2 font-bold text-sm tracking-wide">
-          CALCULATION RESULTS
+      {/* Results Box - Minimal, border-defined */}
+      <div className="border border-[#3a3a3a] rounded-sm overflow-hidden">
+        <div className="px-4 py-2 border-b border-[#3a3a3a]">
+          <span className="text-xs font-medium text-[#909090] uppercase tracking-wider">Results</span>
         </div>
-        <div className="divide-y divide-slate-200 bg-white">
-          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
-            <span className="text-sm font-medium text-[#1a1a1a]">PGR:</span>
-            <span className="text-base font-semibold text-[#1a1a1a]">{formatCurrency(pgr)}</span>
+        <div className="divide-y divide-[#3a3a3a]">
+          <div className="px-4 py-2 flex justify-between items-center">
+            <span className="text-sm text-[#909090]">PGR</span>
+            <span className="text-sm font-medium text-[#e5e5e5]">{formatCurrency(pgr)}</span>
           </div>
-          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
-            <span className="text-sm font-medium text-[#1a1a1a]">Vacancy Loss:</span>
-            <span className="text-base font-semibold text-[#8b0000]">({formatCurrency(vacancyLoss)})</span>
+          <div className="px-4 py-2 flex justify-between items-center">
+            <span className="text-sm text-[#909090]">Vacancy Loss</span>
+            <span className="text-sm font-medium text-[#909090]">({formatCurrency(vacancyLoss)})</span>
           </div>
-          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
-            <span className="text-sm font-medium text-[#1a1a1a]">EGR:</span>
-            <span className="text-base font-semibold text-[#1a1a1a]">{formatCurrency(egr)}</span>
+          <div className="px-4 py-2 flex justify-between items-center">
+            <span className="text-sm text-[#909090]">EGR</span>
+            <span className="text-sm font-medium text-[#e5e5e5]">{formatCurrency(egr)}</span>
           </div>
-          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
-            <span className="text-sm font-medium text-[#1a1a1a]">Operating Exp:</span>
-            <span className="text-base font-semibold text-[#8b0000]">({formatCurrency(expensesTotal)})</span>
+          <div className="px-4 py-2 flex justify-between items-center">
+            <span className="text-sm text-[#909090]">Operating Expenses</span>
+            <span className="text-sm font-medium text-[#909090]">({formatCurrency(expensesTotal)})</span>
           </div>
-          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
-            <span className="text-sm font-medium text-[#1a1a1a]">NOI:</span>
-            <span className="text-base font-semibold text-[#003366]">{formatCurrency(noi)}</span>
+          <div className="px-4 py-2 flex justify-between items-center">
+            <span className="text-sm text-[#909090]">NOI</span>
+            <span className="text-sm font-medium text-[#e5e5e5]">{formatCurrency(noi)}</span>
           </div>
-          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
-            <span className="text-sm font-medium text-[#1a1a1a]">Cap Rate:</span>
-            <span className="text-base font-semibold text-[#1a1a1a]">{capRate.toFixed(2)}%</span>
+          <div className="px-4 py-2 flex justify-between items-center">
+            <span className="text-sm text-[#909090]">Cap Rate</span>
+            <span className="text-sm font-medium text-[#e5e5e5]">{capRate.toFixed(2)}%</span>
           </div>
-          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
-            <span className="text-sm font-medium text-[#1a1a1a]">Raw Value:</span>
-            <span className="text-base font-semibold text-[#1a1a1a]">{formatCurrency(rawValue)}</span>
+          <div className="px-4 py-2 flex justify-between items-center">
+            <span className="text-sm text-[#909090]">Raw Value</span>
+            <span className="text-sm font-medium text-[#e5e5e5]">{formatCurrency(rawValue)}</span>
           </div>
         </div>
-        {/* Indicated Value - Navy Background */}
-        <div className="bg-[#1a1a2e] border-t-2 border-[#003366] px-4 py-4">
+        {/* Indicated Value - The ONE colored element */}
+        <div className="px-4 py-4 border-t border-[#3a3a3a] bg-[#252525]">
           <div className="flex justify-between items-center">
-            <span className="text-sm font-bold text-white uppercase tracking-wide">Indicated Value:</span>
-            <span className="text-3xl font-bold text-white">{formatCurrency(indicatedValue)}</span>
+            <span className="text-sm text-[#909090]">Indicated Value</span>
+            <span className="text-2xl font-semibold text-[#4ade80]">{formatCurrency(indicatedValue)}</span>
           </div>
         </div>
       </div>
 
-      {/* Validation Badge - Muted Green */}
+      {/* Validation - Subtle, inline */}
       {indicatedValue === 1780000 && (
-        <div className="bg-[#f0f4f0] border border-[#1e5631] px-4 py-2" style={{ borderRadius: '2px' }}>
-          <div className="flex items-center gap-2">
-            <svg className="w-4 h-4 text-[#1e5631]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-            <span className="font-semibold text-[#1e5631] text-sm">
-              Validated: Matches expected $1,780,000 result
-            </span>
-          </div>
+        <div className="flex items-center gap-2 px-1">
+          <svg className="w-3.5 h-3.5 text-[#4ade80]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+          <span className="text-xs text-[#707070]">
+            Validated against $1,780,000 baseline
+          </span>
         </div>
       )}
 
-      {/* Calculation Reasoning - Terminal-style breakdown */}
+      {/* Calculation Breakdown */}
       <CalculationReasoning />
     </div>
   );

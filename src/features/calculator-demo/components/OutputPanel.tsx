@@ -91,18 +91,6 @@ export default function OutputPanel() {
         </div>
       </div>
 
-      {/* Validation - Subtle, inline */}
-      {indicatedValue === 1780000 && (
-        <div className="flex items-center gap-2 px-1">
-          <svg className="w-3.5 h-3.5 text-[#808080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-          <span className="text-xs text-[#606060]">
-            Validated against $1,780,000 baseline
-          </span>
-        </div>
-      )}
-
       {/* Calculation Breakdown - grows to fill remaining space, then scrolls */}
       <div className="mt-4 flex-1 min-h-0">
         <CalculationReasoning />

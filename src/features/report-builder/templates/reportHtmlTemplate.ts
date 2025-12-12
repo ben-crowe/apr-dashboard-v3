@@ -5557,14 +5557,19 @@ const formatDate = (dateStr: string): string => {
       font-size: 12px;
     }
 
-    /* .page is now semantic only - no fixed dimensions */
-    /* Print CSS handles pagination automatically */
+    /* STRICT "Slide Deck" Architecture - Each page is a fixed 8.5x11 block */
+    /* Overflow is CUT OFF, not allowed to create ghost pages */
     .page {
-      max-width: 8.5in;
+      width: 8.5in;           /* STRICT width - not max-width */
+      height: 11in;           /* STRICT height - exact Letter size */
+      max-height: 11in;       /* KILL SWITCH - prevent overflow */
+      overflow: hidden;       /* Cut off overflow - don't create new pages */
       margin: 0 auto;
       background: white;
-      padding: 0.75in;
+      padding: 0.75in;        /* Default padding - can be overridden per page type */
       position: relative;
+      page-break-after: always; /* Force new page after each .page div */
+      break-after: page;        /* Modern syntax */
     }
 
     /* Section separators for visual clarity in preview */
@@ -6303,15 +6308,18 @@ const formatDate = (dateStr: string): string => {
         background: white;
       }
 
-      /* Standard page styling for PDF */
+      /* STRICT page styling for PDF - "Slide Deck" Protocol */
       .page {
-        max-width: none;
+        width: 8.5in;           /* STRICT width */
+        height: 11in;           /* STRICT height */
+        max-height: 11in;       /* KILL SWITCH - prevent overflow */
+        overflow: hidden;       /* Cut off overflow - NO ghost pages */
         padding: 0.5in 0.75in;
         margin: 0;
         box-shadow: none;
         border: none;
         page-break-after: always;
-        overflow: visible;
+        break-after: page;
       }
 
       /* Cover page - preserve layout */
@@ -6780,10 +6788,12 @@ const formatDate = (dateStr: string): string => {
         margin: 0;
       }
 
-      /* Clean page styling for preview - WITH VISIBLE PAGE SEPARATIONS */
+      /* STRICT "Slide Deck" for preview - Each page is exactly 8.5x11 */
       .page {
-        max-width: 8.5in;
-        min-height: 11in; /* Standard US Letter height */
+        width: 8.5in;           /* STRICT width */
+        height: 11in;           /* STRICT height */
+        max-height: 11in;       /* KILL SWITCH - prevent overflow */
+        overflow: hidden;       /* Cut off overflow visually */
         margin: 0 auto 2rem auto; /* 2rem gap between pages for visibility */
         padding: 0.75in;
         background-color: white;

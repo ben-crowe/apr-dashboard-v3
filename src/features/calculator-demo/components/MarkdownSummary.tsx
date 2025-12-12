@@ -1,25 +1,66 @@
 /**
- * Markdown Summary Component
+ * Summary Accordions Component
  *
- * Generates and displays a professional markdown-formatted calculation summary
- * Similar to validation report styling - clean, structured, and professional
+ * Individual collapsible sections for calculation details.
+ * Dark theme matching the rest of the calculator interface.
  */
 
+import { useState } from 'react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+
+interface AccordionSectionProps {
+  title: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}
+
+function AccordionSection({ title, isOpen, onToggle, children }: AccordionSectionProps) {
+  return (
+    <div className="border-b border-[#3a3a3a] last:border-b-0">
+      <button
+        onClick={onToggle}
+        className="w-full px-3 py-2 flex items-center gap-2 hover:bg-[#333] transition-colors text-left"
+      >
+        {isOpen ? (
+          <ChevronDown className="w-3.5 h-3.5 text-[#606060] flex-shrink-0" />
+        ) : (
+          <ChevronRight className="w-3.5 h-3.5 text-[#606060] flex-shrink-0" />
+        )}
+        <span className="text-xs font-medium text-[#909090]">{title}</span>
+      </button>
+      {isOpen && (
+        <div className="px-3 pb-3">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function MarkdownSummary() {
+  const [openSections, setOpenSections] = useState<Set<string>>(new Set());
   const { sections } = useReportBuilderStore();
 
   const calcSection = sections.find(s => s.id === 'calc');
 
+  const toggleSection = (section: string) => {
+    setOpenSections(prev => {
+      const next = new Set(prev);
+      if (next.has(section)) {
+        next.delete(section);
+      } else {
+        next.add(section);
+      }
+      return next;
+    });
+  };
+
   const getFieldValue = (fieldId: string): number => {
     if (!calcSection) return 0;
-
     const field = calcSection.fields.find(f => f.id === fieldId);
     if (field) return Number(field.value) || 0;
-
     if (calcSection.subsections) {
       for (const sub of calcSection.subsections) {
         const subField = sub.fields.find(f => f.id === fieldId);
@@ -29,7 +70,7 @@ export default function MarkdownSummary() {
     return 0;
   };
 
-  const formatCurrency = (value: number): string => {
+  const fmt = (value: number): string => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -38,11 +79,9 @@ export default function MarkdownSummary() {
     }).format(value);
   };
 
-  const formatNumber = (value: number): string => {
-    return value.toLocaleString('en-US');
-  };
+  const fmtNum = (value: number): string => value.toLocaleString('en-US');
 
-  // Extract all values
+  // Extract values
   const totalUnits = getFieldValue('calc-total-units');
   const totalSF = getFieldValue('calc-total-sf');
   const totalRentalRevenue = getFieldValue('calc-total-rental-revenue');
@@ -75,146 +114,216 @@ export default function MarkdownSummary() {
   const adjTotal = getFieldValue('calc-adj-total');
   const indicatedValue = getFieldValue('calc-indicated-value');
 
-  // Generate markdown content
-  const markdownContent = `## Calculation Summary
-
-**Property:** Multi-Family Income Property
-**Calculation Date:** ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-**Indicated Value:** ${formatCurrency(indicatedValue)}
-
----
-
-### Income Analysis
-
-| Metric | Value |
-|--------|-------|
-| Total Units | ${formatNumber(totalUnits)} |
-| Total SF | ${formatNumber(totalSF)} |
-| Rental Revenue | ${formatCurrency(totalRentalRevenue)}/year |
-| Other Income | ${formatCurrency(totalOtherIncome)}/year |
-| **Potential Gross Revenue** | **${formatCurrency(pgr)}** |
-
-### Vacancy & Loss
-
-| Rate Type | Percentage | Amount |
-|-----------|------------|--------|
-| Vacancy | ${vacancyRate.toFixed(2)}% | ${formatCurrency(pgr * (vacancyRate / 100))} |
-| Bad Debt | ${badDebtRate.toFixed(2)}% | ${formatCurrency(pgr * (badDebtRate / 100))} |
-| Concessions | ${concessionsRate.toFixed(2)}% | ${formatCurrency(pgr * (concessionsRate / 100))} |
-| **Total Loss** | **${totalVacancyRate.toFixed(2)}%** | **${formatCurrency(vacancyLoss)}** |
-| **Effective Gross Revenue** | | **${formatCurrency(egr)}** |
-
-### Operating Expenses
-
-| Expense | Calculation | Amount |
-|---------|-------------|--------|
-| Management | ${expManagement.toFixed(2)}% of EGR | ${formatCurrency(egr * (expManagement / 100))} |
-| Taxes | ${formatCurrency(expTaxes)}/unit × ${totalUnits} units | ${formatCurrency(expTaxes * totalUnits)} |
-| Insurance | ${formatCurrency(expInsurance)}/unit × ${totalUnits} units | ${formatCurrency(expInsurance * totalUnits)} |
-| Repairs | ${formatCurrency(expRepairs)}/unit × ${totalUnits} units | ${formatCurrency(expRepairs * totalUnits)} |
-| Utilities | ${formatCurrency(expUtilities)}/unit × ${totalUnits} units | ${formatCurrency(expUtilities * totalUnits)} |
-| Payroll | ${formatCurrency(expPayroll)}/unit × ${totalUnits} units | ${formatCurrency(expPayroll * totalUnits)} |
-| Admin | ${formatCurrency(expAdmin)}/unit × ${totalUnits} units | ${formatCurrency(expAdmin * totalUnits)} |
-| Reserves | ${formatCurrency(expReserves)}/unit × ${totalUnits} units | ${formatCurrency(expReserves * totalUnits)} |
-| Other | ${formatCurrency(expOther)}/unit × ${totalUnits} units | ${formatCurrency(expOther * totalUnits)} |
-| **Total Expenses** | | **${formatCurrency(expensesTotal)}** |
-| **Expense Ratio** | | **${expenseRatio.toFixed(2)}%** |
-
-### Valuation
-
-| Step | Calculation | Result |
-|------|-------------|--------|
-| NOI | EGR - Expenses | ${formatCurrency(noi)} |
-| Cap Rate | | ${capRate.toFixed(2)}% |
-| Raw Value | NOI ÷ Cap Rate | ${formatCurrency(rawValue)} |
-| Rounded | to $10,000 | ${formatCurrency(roundedValue)} |
-| Adjustments | | ${formatCurrency(adjTotal)} |
-| **Indicated Value** | | **${formatCurrency(indicatedValue)}** |
-
----
-
-*Calculated using Direct Capitalization Method per USPAP/CUSPAP standards*
-`;
+  // Table styling
+  const tableClass = "w-full text-[11px]";
+  const thClass = "px-2 py-1 text-left text-[#707070] font-normal border-b border-[#3a3a3a]";
+  const tdClass = "px-2 py-1 text-[#909090] border-b border-[#3a3a3a]";
+  const tdValueClass = "px-2 py-1 text-[#e5e5e5] text-right border-b border-[#3a3a3a]";
+  const tdBoldClass = "px-2 py-1 text-[#e5e5e5] font-medium border-b border-[#3a3a3a]";
 
   return (
-    <div className="prose prose-sm max-w-none">
-      <style>{`
-        .prose h2 {
-          color: #1e293b;
-          font-size: 1.5rem;
-          font-weight: 700;
-          margin-top: 1.5rem;
-          margin-bottom: 1rem;
-          border-bottom: 2px solid #e2e8f0;
-          padding-bottom: 0.5rem;
-        }
+    <div className="bg-[#232323] rounded-sm">
+      {/* Income Analysis */}
+      <AccordionSection
+        title="Income Analysis"
+        isOpen={openSections.has('income')}
+        onToggle={() => toggleSection('income')}
+      >
+        <table className={tableClass}>
+          <tbody>
+            <tr>
+              <td className={tdClass}>Total Units</td>
+              <td className={tdValueClass}>{fmtNum(totalUnits)}</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Total SF</td>
+              <td className={tdValueClass}>{fmtNum(totalSF)}</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Rental Revenue</td>
+              <td className={tdValueClass}>{fmt(totalRentalRevenue)}/yr</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Other Income</td>
+              <td className={tdValueClass}>{fmt(totalOtherIncome)}/yr</td>
+            </tr>
+            <tr>
+              <td className={tdBoldClass}>Potential Gross Revenue</td>
+              <td className={`${tdValueClass} font-medium`}>{fmt(pgr)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </AccordionSection>
 
-        .prose h3 {
-          color: #334155;
-          font-size: 1.125rem;
-          font-weight: 600;
-          margin-top: 1.5rem;
-          margin-bottom: 0.75rem;
-          background: #f8fafc;
-          padding: 0.5rem 0.75rem;
-          border-left: 4px solid #3b82f6;
-        }
+      {/* Vacancy & Loss */}
+      <AccordionSection
+        title="Vacancy & Loss"
+        isOpen={openSections.has('vacancy')}
+        onToggle={() => toggleSection('vacancy')}
+      >
+        <table className={tableClass}>
+          <thead>
+            <tr>
+              <th className={thClass}>Type</th>
+              <th className={`${thClass} text-right`}>Rate</th>
+              <th className={`${thClass} text-right`}>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={tdClass}>Vacancy</td>
+              <td className={tdValueClass}>{vacancyRate.toFixed(2)}%</td>
+              <td className={tdValueClass}>{fmt(pgr * (vacancyRate / 100))}</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Bad Debt</td>
+              <td className={tdValueClass}>{badDebtRate.toFixed(2)}%</td>
+              <td className={tdValueClass}>{fmt(pgr * (badDebtRate / 100))}</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Concessions</td>
+              <td className={tdValueClass}>{concessionsRate.toFixed(2)}%</td>
+              <td className={tdValueClass}>{fmt(pgr * (concessionsRate / 100))}</td>
+            </tr>
+            <tr>
+              <td className={tdBoldClass}>Total Loss</td>
+              <td className={`${tdValueClass} font-medium`}>{totalVacancyRate.toFixed(2)}%</td>
+              <td className={`${tdValueClass} font-medium`}>{fmt(vacancyLoss)}</td>
+            </tr>
+            <tr>
+              <td className={tdBoldClass}>Effective Gross Revenue</td>
+              <td className={tdValueClass}></td>
+              <td className={`${tdValueClass} font-medium`}>{fmt(egr)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </AccordionSection>
 
-        .prose table {
-          width: 100%;
-          border-collapse: collapse;
-          margin: 1rem 0;
-          font-size: 0.875rem;
-        }
+      {/* Operating Expenses */}
+      <AccordionSection
+        title="Operating Expenses"
+        isOpen={openSections.has('expenses')}
+        onToggle={() => toggleSection('expenses')}
+      >
+        <table className={tableClass}>
+          <thead>
+            <tr>
+              <th className={thClass}>Expense</th>
+              <th className={`${thClass} text-right`}>Calculation</th>
+              <th className={`${thClass} text-right`}>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={tdClass}>Management</td>
+              <td className={tdValueClass}>{expManagement.toFixed(2)}% of EGR</td>
+              <td className={tdValueClass}>{fmt(egr * (expManagement / 100))}</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Taxes</td>
+              <td className={tdValueClass}>{fmt(expTaxes)}/unit</td>
+              <td className={tdValueClass}>{fmt(expTaxes * totalUnits)}</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Insurance</td>
+              <td className={tdValueClass}>{fmt(expInsurance)}/unit</td>
+              <td className={tdValueClass}>{fmt(expInsurance * totalUnits)}</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Repairs</td>
+              <td className={tdValueClass}>{fmt(expRepairs)}/unit</td>
+              <td className={tdValueClass}>{fmt(expRepairs * totalUnits)}</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Utilities</td>
+              <td className={tdValueClass}>{fmt(expUtilities)}/unit</td>
+              <td className={tdValueClass}>{fmt(expUtilities * totalUnits)}</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Payroll</td>
+              <td className={tdValueClass}>{fmt(expPayroll)}/unit</td>
+              <td className={tdValueClass}>{fmt(expPayroll * totalUnits)}</td>
+            </tr>
+            {expAdmin > 0 && (
+              <tr>
+                <td className={tdClass}>Admin</td>
+                <td className={tdValueClass}>{fmt(expAdmin)}/unit</td>
+                <td className={tdValueClass}>{fmt(expAdmin * totalUnits)}</td>
+              </tr>
+            )}
+            {expReserves > 0 && (
+              <tr>
+                <td className={tdClass}>Reserves</td>
+                <td className={tdValueClass}>{fmt(expReserves)}/unit</td>
+                <td className={tdValueClass}>{fmt(expReserves * totalUnits)}</td>
+              </tr>
+            )}
+            {expOther > 0 && (
+              <tr>
+                <td className={tdClass}>Other</td>
+                <td className={tdValueClass}>{fmt(expOther)}/unit</td>
+                <td className={tdValueClass}>{fmt(expOther * totalUnits)}</td>
+              </tr>
+            )}
+            <tr>
+              <td className={tdBoldClass}>Total Expenses</td>
+              <td className={`${tdValueClass} font-medium`}>{expenseRatio.toFixed(1)}% OER</td>
+              <td className={`${tdValueClass} font-medium`}>{fmt(expensesTotal)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </AccordionSection>
 
-        .prose thead {
-          background: #1e293b;
-          color: white;
-        }
-
-        .prose th {
-          padding: 0.75rem;
-          text-align: left;
-          font-weight: 600;
-          border: 1px solid #cbd5e1;
-        }
-
-        .prose td {
-          padding: 0.5rem 0.75rem;
-          border: 1px solid #cbd5e1;
-        }
-
-        .prose tbody tr:nth-child(even) {
-          background: #f8fafc;
-        }
-
-        .prose tbody tr:hover {
-          background: #f1f5f9;
-        }
-
-        .prose strong {
-          color: #1e293b;
-          font-weight: 700;
-        }
-
-        .prose hr {
-          border-top: 2px solid #e2e8f0;
-          margin: 1.5rem 0;
-        }
-
-        .prose em {
-          color: #64748b;
-          font-size: 0.875rem;
-        }
-
-        .prose p {
-          line-height: 1.6;
-          margin: 0.5rem 0;
-        }
-      `}</style>
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {markdownContent}
-      </ReactMarkdown>
+      {/* Valuation */}
+      <AccordionSection
+        title="Valuation"
+        isOpen={openSections.has('valuation')}
+        onToggle={() => toggleSection('valuation')}
+      >
+        <table className={tableClass}>
+          <thead>
+            <tr>
+              <th className={thClass}>Step</th>
+              <th className={`${thClass} text-right`}>Calculation</th>
+              <th className={`${thClass} text-right`}>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className={tdClass}>NOI</td>
+              <td className={tdValueClass}>EGR - Expenses</td>
+              <td className={tdValueClass}>{fmt(noi)}</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Cap Rate</td>
+              <td className={tdValueClass}></td>
+              <td className={tdValueClass}>{capRate.toFixed(2)}%</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Raw Value</td>
+              <td className={tdValueClass}>NOI ÷ Cap Rate</td>
+              <td className={tdValueClass}>{fmt(rawValue)}</td>
+            </tr>
+            <tr>
+              <td className={tdClass}>Rounded</td>
+              <td className={tdValueClass}>to $10,000</td>
+              <td className={tdValueClass}>{fmt(roundedValue)}</td>
+            </tr>
+            {adjTotal !== 0 && (
+              <tr>
+                <td className={tdClass}>Adjustments</td>
+                <td className={tdValueClass}></td>
+                <td className={tdValueClass}>{fmt(adjTotal)}</td>
+              </tr>
+            )}
+            <tr>
+              <td className={tdBoldClass}>Indicated Value</td>
+              <td className={tdValueClass}></td>
+              <td className={`${tdValueClass} font-medium text-[#e5e5e5]`}>{fmt(indicatedValue)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </AccordionSection>
     </div>
   );
 }

@@ -355,6 +355,10 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   'recon-effective-date': '2025-10-17',
   'recon-rounded-value': 1780000,
 
+  // Methodology Toggles (for conditional boilerplate)
+  'use-dcf-methodology': 'No',  // North Battleford uses Direct Capitalization, not DCF
+  'property-is-listed': 'No',    // Property is not currently listed for sale
+
   // ASSIGNMENT SECTION
   'assignment-property-legal': 'Lot 1, Block 2, Plan 102038542, North Battleford, Saskatchewan',
   'assignment-property-address': '1101, 1121 109 St, North Battleford, SK S9A 2X2',
@@ -697,6 +701,8 @@ export function loadNorthBattlefordTestData(
     'recon-value-premise': 'recon',
     'recon-effective-date': 'recon',
     'recon-rounded-value': 'recon',
+    'use-dcf-methodology': 'recon',
+    'property-is-listed': 'recon',
 
     // ASSIGNMENT section
     'assignment-property-legal': 'assignment',

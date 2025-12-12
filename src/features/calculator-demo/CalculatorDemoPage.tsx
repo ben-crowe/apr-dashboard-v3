@@ -8,6 +8,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calculator } from 'lucide-react';
 import InputPanel from './components/InputPanel';
+import OutputPanel from './components/OutputPanel';
+import MarkdownSummary from './components/MarkdownSummary';
 
 export default function CalculatorDemoPage() {
   return (
@@ -29,21 +31,52 @@ export default function CalculatorDemoPage() {
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main Content - 2 Column Layout */}
       <div className="container mx-auto px-6 py-6">
-        <div className="max-w-2xl mx-auto">
-          <Card className="shadow-lg">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg">Calculator</CardTitle>
-              <CardDescription className="text-xs">
-                Select a property or enter custom values
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <InputPanel />
-            </CardContent>
-          </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          {/* Input Panel - Left Column (1/3) */}
+          <div className="lg:col-span-1">
+            <Card className="shadow-lg h-full">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Input Parameters</CardTitle>
+                <CardDescription className="text-xs">
+                  Excel-style tables for all fields
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <InputPanel />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Output Panel - Right Column (2/3) */}
+          <div className="lg:col-span-2">
+            <Card className="shadow-lg h-full">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Results</CardTitle>
+                <CardDescription className="text-xs">
+                  Key metrics calculated in real-time
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <OutputPanel />
+              </CardContent>
+            </Card>
+          </div>
         </div>
+
+        {/* Markdown Summary - Full Width */}
+        <Card className="shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-lg">Professional Summary Report</CardTitle>
+            <CardDescription className="text-xs">
+              Markdown-formatted calculation breakdown ready for export
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <MarkdownSummary />
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

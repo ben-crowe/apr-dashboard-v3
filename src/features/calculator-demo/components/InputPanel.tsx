@@ -1,147 +1,137 @@
 /**
- * Input Panel - Compact Excel-Style Tables
+ * Input Panel - Connects to Zustand Store
  *
- * HARDCODED TEST DATA - Bypasses store completely
+ * FIXED: Now reads/writes from useReportBuilderStore
+ * All inputs trigger store updates and recalculations
  */
 
-import { useState } from 'react';
+import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
 import { Input } from '@/components/ui/input';
-
-// Property data sets
-const PROPERTIES = {
-  'north-battleford': {
-    name: 'North Battleford Multi-Family',
-    data: {
-      type1Name: '1 Bed / 1 Bath',
-      type1Count: 16,
-      type1Sf: 638,
-      type1Rent: 1064,
-      parkingPerUnit: 375,
-      laundryPerUnit: 150,
-      otherIncome: 0,
-      vacancyRate: 3.8,
-      badDebtRate: 0,
-      concessionsRate: 0,
-      expManagement: 4.25,
-      expTaxes: 1168,
-      expInsurance: 710,
-      expRepairs: 830,
-      expUtilities: 1315,
-      expPayroll: 500,
-      expAdmin: 0,
-      expReserves: 0,
-      expOther: 245,
-      capRate: 6.25,
-      adjCapex: 0,
-      adjLeasing: 0,
-      adjOther: 0,
-    }
-  },
-  'empty': {
-    name: 'Blank Template',
-    data: {
-      type1Name: 'Unit Type 1',
-      type1Count: 0,
-      type1Sf: 0,
-      type1Rent: 0,
-      parkingPerUnit: 0,
-      laundryPerUnit: 0,
-      otherIncome: 0,
-      vacancyRate: 5,
-      badDebtRate: 0,
-      concessionsRate: 0,
-      expManagement: 5,
-      expTaxes: 0,
-      expInsurance: 0,
-      expRepairs: 0,
-      expUtilities: 0,
-      expPayroll: 0,
-      expAdmin: 0,
-      expReserves: 0,
-      expOther: 0,
-      capRate: 6,
-      adjCapex: 0,
-      adjLeasing: 0,
-      adjOther: 0,
-    }
-  }
-};
-
-type PropertyKey = keyof typeof PROPERTIES;
-type PropertyData = typeof PROPERTIES['north-battleford']['data'];
+import { Button } from '@/components/ui/button';
 
 export default function InputPanel() {
-  const [selectedProperty, setSelectedProperty] = useState<PropertyKey>('north-battleford');
-  const [data, setData] = useState(PROPERTIES['north-battleford'].data);
+  const { sections, updateFieldValue, runCalculations, loadFullTestData } = useReportBuilderStore();
 
-  const loadProperty = (key: PropertyKey) => {
-    setSelectedProperty(key);
-    setData(PROPERTIES[key].data);
+  const calcSection = sections.find(s => s.id === 'calc');
+
+  const getFieldValue = (fieldId: string): number => {
+    if (!calcSection) return 0;
+
+    const field = calcSection.fields.find(f => f.id === fieldId);
+    if (field) return Number(field.value) || 0;
+
+    if (calcSection.subsections) {
+      for (const sub of calcSection.subsections) {
+        const subField = sub.fields.find(f => f.id === fieldId);
+        if (subField) return Number(subField.value) || 0;
+      }
+    }
+    return 0;
   };
 
-  // Calculations
-  const type1Annual = data.type1Count * data.type1Rent * 12;
-  const totalUnits = data.type1Count;
-  const totalSf = data.type1Count * data.type1Sf;
-  const totalRentalRevenue = type1Annual;
+  const getStringFieldValue = (fieldId: string): string => {
+    if (!calcSection) return '';
 
-  const parkingTotal = data.parkingPerUnit * totalUnits * 12;
-  const laundryTotal = data.laundryPerUnit * totalUnits * 12;
-  const totalOtherIncome = parkingTotal + laundryTotal + data.otherIncome;
+    const field = calcSection.fields.find(f => f.id === fieldId);
+    if (field) return String(field.value) || '';
 
-  const pgr = totalRentalRevenue + totalOtherIncome;
-  const totalVacancyRate = data.vacancyRate + data.badDebtRate + data.concessionsRate;
-  const vacancyLoss = pgr * (totalVacancyRate / 100);
-  const egr = pgr - vacancyLoss;
+    if (calcSection.subsections) {
+      for (const sub of calcSection.subsections) {
+        const subField = sub.fields.find(f => f.id === fieldId);
+        if (subField) return String(subField.value) || '';
+      }
+    }
+    return '';
+  };
 
-  const expManagementAmt = egr * (data.expManagement / 100);
-  const expTaxesAmt = data.expTaxes * totalUnits;
-  const expInsuranceAmt = data.expInsurance * totalUnits;
-  const expRepairsAmt = data.expRepairs * totalUnits;
-  const expUtilitiesAmt = data.expUtilities * totalUnits;
-  const expPayrollAmt = data.expPayroll * totalUnits;
-  const expAdminAmt = data.expAdmin * totalUnits;
-  const expReservesAmt = data.expReserves * totalUnits;
-  const expOtherAmt = data.expOther * totalUnits;
-  const expensesTotal = expManagementAmt + expTaxesAmt + expInsuranceAmt + expRepairsAmt +
-                        expUtilitiesAmt + expPayrollAmt + expAdminAmt + expReservesAmt + expOtherAmt;
-  const expenseRatio = egr > 0 ? (expensesTotal / egr) * 100 : 0;
+  const updateField = (fieldId: string, value: string) => {
+    const numValue = parseFloat(value) || 0;
+    updateFieldValue(fieldId, numValue);
+    runCalculations();
+  };
 
-  const noi = egr - expensesTotal;
-  const rawValue = data.capRate > 0 ? noi / (data.capRate / 100) : 0;
+  const handleLoadTestData = () => {
+    loadFullTestData();
+  };
+
+  const handleReset = () => {
+    // Reset all calculator fields to 0
+    const calcFields = [
+      'calc-type1-count', 'calc-type1-sf', 'calc-type1-rent',
+      'calc-parking-per-unit', 'calc-laundry-per-unit',
+      'calc-vacancy-rate', 'calc-bad-debt-rate', 'calc-concessions-rate',
+      'calc-exp-management', 'calc-exp-taxes', 'calc-exp-insurance',
+      'calc-exp-repairs', 'calc-exp-utilities', 'calc-exp-payroll',
+      'calc-exp-admin', 'calc-exp-reserves', 'calc-exp-other',
+      'calc-cap-rate', 'calc-adj-capex', 'calc-adj-leasing', 'calc-adj-other'
+    ];
+
+    calcFields.forEach(fieldId => updateFieldValue(fieldId, 0));
+    runCalculations();
+  };
+
+  // Get values from store
+  const type1Name = getStringFieldValue('calc-type1-name') || '1 Bed / 1 Bath';
+  const type1Count = getFieldValue('calc-type1-count');
+  const type1Sf = getFieldValue('calc-type1-sf');
+  const type1Rent = getFieldValue('calc-type1-rent');
+  const type1Annual = getFieldValue('calc-type1-annual');
+
+  const totalUnits = getFieldValue('calc-total-units');
+  const totalSf = getFieldValue('calc-total-sf');
+  const totalRentalRevenue = getFieldValue('calc-total-rental-revenue');
+
+  const parkingPerUnit = getFieldValue('calc-parking-per-unit');
+  const laundryPerUnit = getFieldValue('calc-laundry-per-unit');
+  const parkingTotal = getFieldValue('calc-parking-total');
+  const laundryTotal = getFieldValue('calc-laundry-total');
+  const totalOtherIncome = getFieldValue('calc-total-other-income');
+
+  const pgr = getFieldValue('calc-pgr');
+  const vacancyRate = getFieldValue('calc-vacancy-rate');
+  const badDebtRate = getFieldValue('calc-bad-debt-rate');
+  const vacancyLoss = getFieldValue('calc-vacancy-loss');
+  const egr = getFieldValue('calc-egr');
+
+  const expManagement = getFieldValue('calc-exp-management');
+  const expTaxes = getFieldValue('calc-exp-taxes');
+  const expInsurance = getFieldValue('calc-exp-insurance');
+  const expRepairs = getFieldValue('calc-exp-repairs');
+  const expUtilities = getFieldValue('calc-exp-utilities');
+  const expPayroll = getFieldValue('calc-exp-payroll');
+  const expOther = getFieldValue('calc-exp-other');
+  const expensesTotal = getFieldValue('calc-expenses-total');
+  const expenseRatio = getFieldValue('calc-expense-ratio');
+
+  const noi = getFieldValue('calc-noi');
+  const capRate = getFieldValue('calc-cap-rate');
+  const rawValue = getFieldValue('calc-raw-value');
   const roundedValue = Math.round(rawValue / 10000) * 10000;
-
-  const adjTotal = data.adjCapex + data.adjLeasing + data.adjOther;
-  const indicatedValue = roundedValue - adjTotal;
+  const indicatedValue = getFieldValue('calc-indicated-value');
 
   const formatCurrency = (n: number) => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
   const formatNumber = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 2 });
 
-  const updateField = (field: keyof PropertyData, value: string) => {
-    setData(prev => ({ ...prev, [field]: parseFloat(value) || 0 }));
-  };
-
   return (
     <div className="space-y-3 text-xs">
 
-      {/* PROPERTY SELECTOR */}
+      {/* DATA CONTROL BUTTONS */}
       <div className="border rounded overflow-hidden">
-        <div className="bg-slate-800 text-white px-2 py-1 font-semibold">SELECT PROPERTY</div>
-        <div className="p-2 flex flex-wrap gap-2">
-          {Object.entries(PROPERTIES).map(([key, prop]) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => loadProperty(key as PropertyKey)}
-              className={`px-3 py-1.5 text-xs rounded font-medium transition-colors ${
-                selectedProperty === key
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-              }`}
-            >
-              {prop.name}
-            </button>
-          ))}
+        <div className="bg-slate-800 text-white px-2 py-1 font-semibold">DATA CONTROLS</div>
+        <div className="p-2 flex flex-col gap-2">
+          <Button
+            onClick={handleLoadTestData}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs py-2"
+          >
+            Load North Battleford Test Data
+          </Button>
+          <Button
+            onClick={handleReset}
+            variant="outline"
+            className="w-full text-xs py-2"
+          >
+            Reset All Fields
+          </Button>
         </div>
       </div>
 
@@ -160,10 +150,31 @@ export default function InputPanel() {
           </thead>
           <tbody>
             <tr className="border-t">
-              <td className="px-2 py-1">{data.type1Name}</td>
-              <td className="px-2 py-1"><Input type="number" value={data.type1Count} onChange={e => updateField('type1Count', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
-              <td className="px-2 py-1"><Input type="number" value={data.type1Sf} onChange={e => updateField('type1Sf', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
-              <td className="px-2 py-1"><Input type="number" value={data.type1Rent} onChange={e => updateField('type1Rent', e.target.value)} className="h-6 w-20 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">{type1Name}</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={type1Count}
+                  onChange={e => updateField('calc-type1-count', e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1"
+                />
+              </td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={type1Sf}
+                  onChange={e => updateField('calc-type1-sf', e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1"
+                />
+              </td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={type1Rent}
+                  onChange={e => updateField('calc-type1-rent', e.target.value)}
+                  className="h-6 w-20 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-right font-medium">{formatCurrency(type1Annual)}</td>
             </tr>
           </tbody>
@@ -186,13 +197,27 @@ export default function InputPanel() {
           <tbody>
             <tr className="border-t">
               <td className="px-2 py-1">Parking</td>
-              <td className="px-2 py-1"><Input type="number" value={data.parkingPerUnit} onChange={e => updateField('parkingPerUnit', e.target.value)} className="h-6 w-20 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={parkingPerUnit}
+                  onChange={e => updateField('calc-parking-per-unit', e.target.value)}
+                  className="h-6 w-20 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-right text-slate-500">/unit/mo</td>
               <td className="px-2 py-1 text-right font-medium">{formatCurrency(parkingTotal)}</td>
             </tr>
             <tr className="border-t">
               <td className="px-2 py-1">Laundry</td>
-              <td className="px-2 py-1"><Input type="number" value={data.laundryPerUnit} onChange={e => updateField('laundryPerUnit', e.target.value)} className="h-6 w-20 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={laundryPerUnit}
+                  onChange={e => updateField('calc-laundry-per-unit', e.target.value)}
+                  className="h-6 w-20 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-right text-slate-500">/unit/mo</td>
               <td className="px-2 py-1 text-right font-medium">{formatCurrency(laundryTotal)}</td>
             </tr>
@@ -219,12 +244,28 @@ export default function InputPanel() {
           <tbody>
             <tr className="border-t">
               <td className="px-2 py-1">Vacancy Rate</td>
-              <td className="px-2 py-1"><Input type="number" step="0.1" value={data.vacancyRate} onChange={e => updateField('vacancyRate', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  step="0.1"
+                  value={vacancyRate}
+                  onChange={e => updateField('calc-vacancy-rate', e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-slate-500">%</td>
             </tr>
             <tr className="border-t">
               <td className="px-2 py-1">Bad Debt</td>
-              <td className="px-2 py-1"><Input type="number" step="0.1" value={data.badDebtRate} onChange={e => updateField('badDebtRate', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  step="0.1"
+                  value={badDebtRate}
+                  onChange={e => updateField('calc-bad-debt-rate', e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-slate-500">%</td>
             </tr>
           </tbody>
@@ -250,45 +291,95 @@ export default function InputPanel() {
           <tbody>
             <tr className="border-t">
               <td className="px-2 py-1">Management</td>
-              <td className="px-2 py-1"><Input type="number" step="0.25" value={data.expManagement} onChange={e => updateField('expManagement', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  step="0.25"
+                  value={expManagement}
+                  onChange={e => updateField('calc-exp-management', e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-slate-500">% EGR</td>
-              <td className="px-2 py-1 text-right">{formatCurrency(expManagementAmt)}</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(egr * (expManagement / 100))}</td>
             </tr>
             <tr className="border-t">
               <td className="px-2 py-1">Taxes</td>
-              <td className="px-2 py-1"><Input type="number" value={data.expTaxes} onChange={e => updateField('expTaxes', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={expTaxes}
+                  onChange={e => updateField('calc-exp-taxes', e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-slate-500">/unit</td>
-              <td className="px-2 py-1 text-right">{formatCurrency(expTaxesAmt)}</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expTaxes * totalUnits)}</td>
             </tr>
             <tr className="border-t">
               <td className="px-2 py-1">Insurance</td>
-              <td className="px-2 py-1"><Input type="number" value={data.expInsurance} onChange={e => updateField('expInsurance', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={expInsurance}
+                  onChange={e => updateField('calc-exp-insurance', e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-slate-500">/unit</td>
-              <td className="px-2 py-1 text-right">{formatCurrency(expInsuranceAmt)}</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expInsurance * totalUnits)}</td>
             </tr>
             <tr className="border-t">
               <td className="px-2 py-1">Repairs</td>
-              <td className="px-2 py-1"><Input type="number" value={data.expRepairs} onChange={e => updateField('expRepairs', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={expRepairs}
+                  onChange={e => updateField('calc-exp-repairs', e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-slate-500">/unit</td>
-              <td className="px-2 py-1 text-right">{formatCurrency(expRepairsAmt)}</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expRepairs * totalUnits)}</td>
             </tr>
             <tr className="border-t">
               <td className="px-2 py-1">Utilities</td>
-              <td className="px-2 py-1"><Input type="number" value={data.expUtilities} onChange={e => updateField('expUtilities', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={expUtilities}
+                  onChange={e => updateField('calc-exp-utilities', e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-slate-500">/unit</td>
-              <td className="px-2 py-1 text-right">{formatCurrency(expUtilitiesAmt)}</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expUtilities * totalUnits)}</td>
             </tr>
             <tr className="border-t">
               <td className="px-2 py-1">Payroll</td>
-              <td className="px-2 py-1"><Input type="number" value={data.expPayroll} onChange={e => updateField('expPayroll', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={expPayroll}
+                  onChange={e => updateField('calc-exp-payroll', e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-slate-500">/unit</td>
-              <td className="px-2 py-1 text-right">{formatCurrency(expPayrollAmt)}</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expPayroll * totalUnits)}</td>
             </tr>
             <tr className="border-t">
               <td className="px-2 py-1">Other</td>
-              <td className="px-2 py-1"><Input type="number" value={data.expOther} onChange={e => updateField('expOther', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={expOther}
+                  onChange={e => updateField('calc-exp-other', e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-slate-500">/unit</td>
-              <td className="px-2 py-1 text-right">{formatCurrency(expOtherAmt)}</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expOther * totalUnits)}</td>
             </tr>
           </tbody>
           <tfoot className="bg-red-50 font-semibold border-t">
@@ -313,7 +404,15 @@ export default function InputPanel() {
           <tbody>
             <tr className="border-t">
               <td className="px-2 py-1">Cap Rate</td>
-              <td className="px-2 py-1"><Input type="number" step="0.25" value={data.capRate} onChange={e => updateField('capRate', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  step="0.25"
+                  value={capRate}
+                  onChange={e => updateField('calc-cap-rate', e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1"
+                />
+              </td>
               <td className="px-2 py-1 text-slate-500">%</td>
               <td className="px-2 py-1"></td>
             </tr>
@@ -333,9 +432,11 @@ export default function InputPanel() {
       <div className="bg-purple-100 border-2 border-purple-400 rounded p-3 text-center">
         <div className="text-sm font-semibold text-purple-800 mb-1">INDICATED VALUE</div>
         <div className="text-2xl font-bold text-purple-900">{formatCurrency(indicatedValue)}</div>
-        <div className="text-xs text-purple-700 mt-1">
-          {formatCurrency(indicatedValue / totalUnits)}/unit | ${formatNumber(indicatedValue / totalSf)}/SF
-        </div>
+        {totalUnits > 0 && (
+          <div className="text-xs text-purple-700 mt-1">
+            {formatCurrency(indicatedValue / totalUnits)}/unit | ${formatNumber(indicatedValue / totalSf)}/SF
+          </div>
+        )}
       </div>
 
     </div>

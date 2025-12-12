@@ -1,0 +1,647 @@
+{
+  "_metadata": {
+    "project": "North Battleford Apartments - VAL251012",
+    "pages": "51-60",
+    "created": "2025-12-12",
+    "report_section": "Valuation & Conclusions",
+    "total_pages": 10,
+    "mapping_status": "complete",
+    "notes": "Pages 51-60 contain valuation approaches, comparable analysis, and direct comparison methodology"
+  },
+  "pages": {
+    "page-51": {
+      "page_number": 51,
+      "title": "Valuation & Conclusions - Capitalization Rate Selection",
+      "section": "valuation-conclusions",
+      "subsection": "cap-rate-selection",
+      "main_heading": "Valuation & Conclusions",
+      "content_type": "narrative-with-chart",
+      "key_topics": [
+        "Capitalization Rate Selection",
+        "Alternative Investment Rates",
+        "Investment Activity and Trends",
+        "Multifamily Investment Indicators"
+      ],
+      "fields": [
+        {
+          "fieldId": "cap-rate-selection-intro",
+          "label": "Capitalization Rate Selection Introduction",
+          "type": "narrative-text",
+          "content_snippet": "To determine the appropriate capitalization rate for the subject property, consideration is given to...",
+          "data_points": [
+            "Alternative investment rates",
+            "Investor activity and trends",
+            "Property income, location, and physical characteristics",
+            "Comparable sales and market activity"
+          ]
+        },
+        {
+          "fieldId": "alternative-investment-rates-text",
+          "label": "Alternative Investment Rates Narrative",
+          "type": "narrative-text",
+          "content_snippet": "The capitalization rate selected is one the subject property is expected to be higher than the current yield...",
+          "metrics": [
+            "10-year Government of Canada bonds yield (~3.2%)",
+            "Risk premium (75-300 basis points)",
+            "Implied cap rate range (4.25%-6.25%)"
+          ]
+        },
+        {
+          "fieldId": "investment-activity-trends-text",
+          "label": "Investment Activity and Trends Narrative",
+          "type": "narrative-text",
+          "content_snippet": "The Multifamily Investment indicator graph below highlights how multifamily yields track interest rate cycles...",
+          "historical_context": "2015-2021 mid-4% range, post-2022 above 5.0%"
+        },
+        {
+          "fieldId": "multifamily-chart-placeholder",
+          "label": "Multifamily Investment Indicators Chart",
+          "type": "chart-image",
+          "description": "Line graph showing multiple colored trend lines tracking yields from 2013 to 2030",
+          "chart_elements": [
+            "Canada",
+            "Calgary",
+            "Edmonton",
+            "GSH",
+            "Ottawa",
+            "Regina",
+            "Toronto",
+            "Vancouver",
+            "BCCS YTD Yield",
+            "Boardwalk REIT"
+          ],
+          "time_range": "2013-2030"
+        }
+      ],
+      "footer": {
+        "page_indicator": "46",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    "page-52": {
+      "page_number": 52,
+      "title": "Valuation & Conclusions - Capitalization Rate",
+      "section": "valuation-conclusions",
+      "subsection": "comparable-sales-cap-rate",
+      "main_heading": "Valuation & Conclusions",
+      "content_type": "narrative-with-data-table",
+      "key_topics": [
+        "Capitalization Rate",
+        "Comparable Sales Analysis"
+      ],
+      "fields": [
+        {
+          "fieldId": "cap-rate-methodology-intro",
+          "label": "Capitalization Rate Methodology",
+          "type": "narrative-text",
+          "content_snippet": "In this section, a capitalization rate for the subject is developed based upon the comparable properties in the following table."
+        },
+        {
+          "fieldId": "comparable-sales-table",
+          "label": "Comparable Sales Data Table",
+          "type": "data-table",
+          "description": "Comprehensive comparable sales analysis with 5 comparables",
+          "table_structure": {
+            "columns": [
+              "Data Point",
+              "COMP 1",
+              "COMP 2",
+              "COMP 3",
+              "COMP 4",
+              "COMP 5"
+            ],
+            "header_background": "#003d7a",
+            "header_color": "white"
+          },
+          "data_rows": [
+            {
+              "label": "Name",
+              "comp1": "Heritage House",
+              "comp2": "Parkside View Apartments",
+              "comp3": "Woodland Estates",
+              "comp4": "Parkside Flats 1",
+              "comp5": "Parkside Flats 2"
+            },
+            {
+              "label": "Address",
+              "comp1": "1501 102 St",
+              "comp2": "1070-1092 Ferguson Ave",
+              "comp3": "1901 Pearson Ave",
+              "comp4": "1030 Parr Hill Dr",
+              "comp5": "1030 Parr Hill Dr"
+            },
+            {
+              "label": "City",
+              "comp1": "North Battleford",
+              "comp2": "North Battleford",
+              "comp3": "North Battleford",
+              "comp4": "Martensville",
+              "comp5": "Martensville"
+            },
+            {
+              "label": "Province",
+              "comp1": "SK",
+              "comp2": "SK",
+              "comp3": "SK",
+              "comp4": "SK",
+              "comp5": "SK"
+            },
+            {
+              "label": "NRA (SF)",
+              "comp1": "22,754",
+              "comp2": "33,309",
+              "comp3": "15,000",
+              "comp4": "47,916",
+              "comp5": "52,708"
+            },
+            {
+              "label": "# Units",
+              "comp1": "24",
+              "comp2": "45",
+              "comp3": "24",
+              "comp4": "47",
+              "comp5": "52"
+            },
+            {
+              "label": "Year Built",
+              "comp1": "2006",
+              "comp2": "2002",
+              "comp3": "1980",
+              "comp4": "2016",
+              "comp5": "2019"
+            },
+            {
+              "label": "Sale Date",
+              "type": "date-range-start"
+            }
+          ],
+          "styling": {
+            "alternate_rows": "#f9f9f9",
+            "data_label_background": "#e8e8e8"
+          }
+        }
+      ],
+      "footer": {
+        "page_indicator": "47",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    "page-53": {
+      "page_number": 53,
+      "title": "Valuation & Conclusions - Comparable Analysis",
+      "section": "valuation-conclusions",
+      "subsection": "comparable-details-continuation",
+      "main_heading": "Valuation & Conclusions",
+      "content_type": "data-table-continuation",
+      "key_topics": [
+        "Comparable Properties Detailed Analysis"
+      ],
+      "fields": [
+        {
+          "fieldId": "comparable-details-table",
+          "label": "Comparable Properties Detailed Data",
+          "type": "data-table",
+          "description": "Continuation of comparable sales data with additional metrics",
+          "table_styling": {
+            "header_background": "#003366",
+            "alternate_rows": "#f9f9f9",
+            "total_row_background": "#f0f0f0",
+            "total_row_weight": "bold"
+          }
+        }
+      ],
+      "footer": {
+        "page_indicator": "48",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    "page-54": {
+      "page_number": 54,
+      "title": "Valuation & Conclusions - Direct Capitalization",
+      "section": "valuation-conclusions",
+      "subsection": "direct-capitalization",
+      "main_heading": "Valuation & Conclusions",
+      "content_type": "methodology-with-tables",
+      "key_topics": [
+        "Direct Capitalization Approach",
+        "Income Approach Conclusion"
+      ],
+      "fields": [
+        {
+          "fieldId": "direct-capitalization-intro",
+          "label": "Direct Capitalization Introduction",
+          "type": "narrative-text",
+          "content_snippet": "Text describing direct capitalization methodology"
+        },
+        {
+          "fieldId": "income-approach-conclusion-table",
+          "label": "Income Approach Conclusion Table",
+          "type": "data-table",
+          "description": "Direct capitalization valuation table",
+          "table_rows": [
+            {
+              "label": "INCOME APPROACH - DIRECT CAPITALIZATION",
+              "value": ""
+            },
+            {
+              "label": "NOI",
+              "value": "$111,771"
+            },
+            {
+              "label": "NOI $/SF NRA",
+              "value": "$10.95"
+            },
+            {
+              "label": "Capitalization Rate (CAR)",
+              "value": "6.25%"
+            },
+            {
+              "label": "Indicated Value",
+              "value": "$1,800,000"
+            },
+            {
+              "label": "$/SF NRA",
+              "value": "$176"
+            }
+          ]
+        },
+        {
+          "fieldId": "dcf-methodology-note",
+          "label": "DCF Methodology Note",
+          "type": "narrative-text",
+          "content_snippet": "Given that the subject is a multitenant asset with short term it is generally understood that the direct capitalization method is preferred, making the discounted cash flow (DCF) method less meaningful."
+        }
+      ],
+      "footer": {
+        "page_indicator": "49",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    "page-55": {
+      "page_number": 55,
+      "title": "Valuation & Conclusions - Comparable 1 Analysis",
+      "section": "valuation-conclusions",
+      "subsection": "comparable-detail-1",
+      "main_heading": "Valuation & Conclusions",
+      "secondary_heading": "College View Apartments",
+      "subtitle": "Comparable 1",
+      "content_type": "comparable-property-sheet",
+      "layout": "two-column",
+      "key_topics": [
+        "Sale Information",
+        "Income Analysis",
+        "Property Details",
+        "Unit Mix",
+        "Comparable Property Analysis"
+      ],
+      "fields": [
+        {
+          "fieldId": "comp1-sale-info-table",
+          "label": "Comparable 1 - Sale Information",
+          "type": "data-table",
+          "section": "left-column",
+          "table_data": [
+            {"key": "Buyer", "value": "Epiphany Group"},
+            {"key": "Seller", "value": "Macro Properties Toronto"},
+            {"key": "Sale Date", "value": "2024-06-17"},
+            {"key": "Transaction Status", "value": "Closed"},
+            {"key": "Sale Price", "value": "$4,560,858"},
+            {"key": "Analysis Price", "value": "$4,530,858"},
+            {"key": "Rights Transferred", "value": "Fee Simple"},
+            {"key": "Financing", "value": "Cash to Seller"},
+            {"key": "Conditions of Sale", "value": "Arm's Length"}
+          ]
+        },
+        {
+          "fieldId": "comp1-income-analysis-table",
+          "label": "Comparable 1 - Income Analysis",
+          "type": "data-table",
+          "section": "left-column",
+          "table_data": [
+            {"key": "Occupancy", "value": "100.0%"},
+            {"key": "Net Operating Income", "value": "$374,992.39"},
+            {"key": "Cap Rate", "value": "5.99%"}
+          ]
+        },
+        {
+          "fieldId": "comp1-property-table",
+          "label": "Comparable 1 - Property Details",
+          "type": "data-table",
+          "section": "left-column",
+          "table_data": [
+            {"key": "Type", "value": "Multi-family, Walk-Up"},
+            {"key": "Rent Type", "value": "Market"},
+            {"key": "Gross Building Area (GBA)", "value": "33,509 SF"},
+            {"key": "Net Rentable Area (NRA)", "value": "33,509 SF"},
+            {"key": "Units", "value": "45"},
+            {"key": "Buildings", "value": "2 Buildings, 3 Floors"},
+            {"key": "Year Built", "value": "2000"},
+            {"key": "Land Area", "value": "0.3 Acres (23,780 SF)"},
+            {"key": "Zoning", "value": "R1"},
+            {"key": "County", "value": "North Battleford"},
+            {"key": "Submarket", "value": "Saskatchewan Area"},
+            {"key": "Special Amenities", "value": "No Amenities"},
+            {"key": "Locality", "value": "On Site"},
+            {"key": "Unit Amenities", "value": "Range/Stove, Refrigerator"},
+            {"key": "Parking Type", "value": "Surface"},
+            {"key": "Utilities", "value": "Full Municipal Services"}
+          ]
+        },
+        {
+          "fieldId": "comp1-unit-mix-table",
+          "label": "Comparable 1 - Unit Mix",
+          "type": "data-table",
+          "section": "left-column",
+          "table_headers": ["Flat", "Units", "Avg. Size"],
+          "table_data": [
+            {"flat": "1 Bed / 1 Bath", "units": "45", "avg_size": "0 SF"}
+          ]
+        },
+        {
+          "fieldId": "comp1-photo-placeholder",
+          "label": "Comparable 1 - Building Photograph",
+          "type": "image-placeholder",
+          "section": "right-column",
+          "content": "Building Photograph\\n(1090-1092 Cinder Crescent)\\nNorth Battleford, SK"
+        },
+        {
+          "fieldId": "comp1-map-placeholder",
+          "label": "Comparable 1 - Location Map",
+          "type": "image-placeholder",
+          "section": "right-column",
+          "content": "Location Map\\n(Google Maps Data)"
+        },
+        {
+          "fieldId": "comp1-description",
+          "label": "Comparable 1 - Property Description",
+          "type": "narrative-text",
+          "section": "right-column",
+          "content_snippet": "Macro Properties Toronto said this 143-unit portfolio to Epiphany Group for $37,962,093 per unit. The buyer was driven to purchasing these properties to diversify and strengthen their investment portfolio."
+        }
+      ],
+      "footer": {
+        "page_indicator": "50",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    "page-56": {
+      "page_number": 56,
+      "title": "Valuation & Conclusions - Direct Comparison Approach",
+      "section": "valuation-conclusions",
+      "subsection": "direct-comparison-approach",
+      "main_heading": "Valuation & Conclusions",
+      "primary_section": "Direct Comparison Approach: Multifamily",
+      "content_type": "methodology-narrative",
+      "key_topics": [
+        "Direct Comparison Approach",
+        "Sales Comparison Approach",
+        "Principle of Substitution",
+        "Introduction"
+      ],
+      "fields": [
+        {
+          "fieldId": "direct-comparison-section-heading",
+          "label": "Direct Comparison Approach Section Heading",
+          "type": "section-heading",
+          "content": "Direct Comparison Approach: Multifamily"
+        },
+        {
+          "fieldId": "direct-comparison-intro-text",
+          "label": "Direct Comparison Approach Introduction",
+          "type": "narrative-text",
+          "content_snippet": "In the Sales Comparison Approach, the value of a property is estimated by comparing it with similar, recently sold properties in the surrounding or competing areas. Inherent in this approach is the principle of substitution, which holds that when a property is replaceable in the market, its value tends to be set by the cost of buying an equally desirable property..."
+        }
+      ],
+      "footer": {
+        "page_indicator": "51",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    "page-57": {
+      "page_number": 57,
+      "title": "Valuation & Conclusions - Comparable Properties Presentation",
+      "section": "valuation-conclusions",
+      "subsection": "comparable-presentation",
+      "main_heading": "Valuation & Conclusions",
+      "content_type": "presentation-with-placeholders",
+      "key_topics": [
+        "Comparable Properties",
+        "Market Analysis Presentation"
+      ],
+      "fields": [
+        {
+          "fieldId": "comparable-presentation-heading",
+          "label": "Comparable Properties Presentation Section",
+          "type": "section-heading"
+        },
+        {
+          "fieldId": "comparable-content-placeholder",
+          "label": "Comparable Properties Content Area",
+          "type": "content-placeholder",
+          "description": "Space for comparable properties analysis and presentation",
+          "dimensions": "400px height"
+        }
+      ],
+      "footer": {
+        "page_indicator": "52",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    "page-58": {
+      "page_number": 58,
+      "title": "Valuation & Conclusions - Comparable 2",
+      "section": "valuation-conclusions",
+      "subsection": "comparable-detail-2",
+      "main_heading": "Valuation & Conclusions",
+      "secondary_heading": "Comparable 2",
+      "content_type": "comparable-property-sheet",
+      "key_topics": [
+        "Comparable 2 Analysis",
+        "Secondary Comparable Property"
+      ],
+      "fields": [
+        {
+          "fieldId": "comp2-analysis-section",
+          "label": "Comparable 2 Detailed Analysis",
+          "type": "data-table",
+          "description": "Complete analysis of second comparable property"
+        }
+      ],
+      "footer": {
+        "page_indicator": "53",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    "page-59": {
+      "page_number": 59,
+      "title": "Valuation & Conclusions - Market Analysis",
+      "section": "valuation-conclusions",
+      "subsection": "market-analysis",
+      "main_heading": "Valuation & Conclusions",
+      "content_type": "analysis-narrative",
+      "key_topics": [
+        "Market Analysis",
+        "Valuation Support"
+      ],
+      "fields": [
+        {
+          "fieldId": "market-analysis-content",
+          "label": "Market Analysis Content Area",
+          "type": "narrative-or-data",
+          "description": "Supporting market analysis and valuation conclusions"
+        }
+      ],
+      "footer": {
+        "page_indicator": "54",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    "page-60": {
+      "page_number": 60,
+      "title": "Valuation & Conclusions - Comparable 2 Details",
+      "section": "valuation-conclusions",
+      "subsection": "comparable-detail-2-continued",
+      "main_heading": "Valuation & Conclusions",
+      "secondary_heading": "College View Apartments",
+      "subtitle": "Comparable 2",
+      "content_type": "comparable-property-sheet",
+      "layout": "two-column",
+      "key_topics": [
+        "Sale Information",
+        "Income Analysis",
+        "Property Details",
+        "Unit Mix",
+        "Comparable Property Analysis"
+      ],
+      "fields": [
+        {
+          "fieldId": "comp2-sale-info-table",
+          "label": "Comparable 2 - Sale Information",
+          "type": "data-table",
+          "section": "left-column",
+          "table_data": [
+            {"key": "Buyer", "value": "Epiphany Group"},
+            {"key": "Seller", "value": "Macro Properties Toronto"},
+            {"key": "Sale Date", "value": "2024-06-17"},
+            {"key": "Transaction Status", "value": "Closed"},
+            {"key": "Sale Price", "value": "$4,560,858"},
+            {"key": "Analysis Price", "value": "$4,530,858"},
+            {"key": "Rights Transferred", "value": "Fee Simple"},
+            {"key": "Financing", "value": "Cash to Seller"},
+            {"key": "Conditions of Sale", "value": "Arm's Length"}
+          ]
+        },
+        {
+          "fieldId": "comp2-income-analysis-table",
+          "label": "Comparable 2 - Income Analysis",
+          "type": "data-table",
+          "section": "left-column",
+          "table_data": [
+            {"key": "Occupancy", "value": "100.0%"},
+            {"key": "Net Operating Income", "value": "$374,992.39"},
+            {"key": "Cap Rate", "value": "5.99%"}
+          ]
+        },
+        {
+          "fieldId": "comp2-property-table",
+          "label": "Comparable 2 - Property Details",
+          "type": "data-table",
+          "section": "left-column",
+          "table_data": [
+            {"key": "Type", "value": "Multi-family, Walk-Up"},
+            {"key": "Rent Type", "value": "Market"},
+            {"key": "Gross Building Area (GBA)", "value": "33,509 SF"},
+            {"key": "Net Rentable Area (NRA)", "value": "33,509 SF"},
+            {"key": "Units", "value": "45"},
+            {"key": "Buildings", "value": "2 Buildings, 3 Floors"},
+            {"key": "Year Built", "value": "2000"},
+            {"key": "Land Area", "value": "0.3 Acres (23,780 SF)"},
+            {"key": "Zoning", "value": "R1"},
+            {"key": "County", "value": "North Battleford"},
+            {"key": "Submarket", "value": "Saskatchewan Area"},
+            {"key": "Special Amenities", "value": "No Amenities"},
+            {"key": "Locality", "value": "On Site"},
+            {"key": "Unit Amenities", "value": "Range/Stove, Refrigerator"},
+            {"key": "Parking Type", "value": "Surface"},
+            {"key": "Utilities", "value": "Full Municipal Services"}
+          ]
+        },
+        {
+          "fieldId": "comp2-unit-mix-table",
+          "label": "Comparable 2 - Unit Mix",
+          "type": "data-table",
+          "section": "left-column",
+          "table_headers": ["Flat", "Units", "Avg. Size"],
+          "table_data": [
+            {"flat": "1 Bed / 1 Bath", "units": "45", "avg_size": "0 SF"}
+          ]
+        },
+        {
+          "fieldId": "comp2-photo-placeholder",
+          "label": "Comparable 2 - Building Photograph",
+          "type": "image-placeholder",
+          "section": "right-column",
+          "content": "Building Photograph\\n(1090-1092 Cinder Crescent)\\nNorth Battleford, SK"
+        },
+        {
+          "fieldId": "comp2-map-placeholder",
+          "label": "Comparable 2 - Location Map",
+          "type": "image-placeholder",
+          "section": "right-column",
+          "content": "Location Map\\n(Google Maps Data)"
+        },
+        {
+          "fieldId": "comp2-description",
+          "label": "Comparable 2 - Property Description",
+          "type": "narrative-text",
+          "section": "right-column",
+          "content_snippet": "Macro Properties Toronto said this 143-unit portfolio to Epiphany Group for $37,962,093 per unit. The buyer was driven to purchasing these properties to diversify and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.98% cap rate."
+        }
+      ],
+      "footer": {
+        "page_indicator": "55",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    }
+  },
+  "section_summary": {
+    "report_section": "Valuation & Conclusions",
+    "page_range": "51-60",
+    "key_analysis_components": [
+      "Capitalization Rate Selection and Analysis",
+      "Alternative Investment Rates Discussion",
+      "Investment Activity and Trends",
+      "Multifamily Investment Indicators Chart",
+      "Comparable Sales Data (5 comparables)",
+      "Direct Capitalization Approach",
+      "Income Approach Conclusion",
+      "Direct Comparison Approach (Sales Comparison)",
+      "Comparable Property Detailed Sheets (Comps 1-2)",
+      "Market Analysis and Supporting Data"
+    ],
+    "critical_metrics": [
+      "Capitalization Rates",
+      "Net Operating Income (NOI)",
+      "Comparable Property Data",
+      "Sale Prices and Dates",
+      "Property Characteristics",
+      "Unit Mix and Distribution",
+      "Income Analysis",
+      "Property Types and Locations"
+    ],
+    "data_table_count": 12,
+    "narrative_sections": 8,
+    "comparable_properties_count": 2,
+    "chart_elements": 1
+  }
+}

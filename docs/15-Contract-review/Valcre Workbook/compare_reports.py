@@ -22,6 +22,7 @@ import json
 # ============================================================================
 
 REFERENCE_HTML = Path("/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/North Battleford Apt -Report-content extracted copy/Ref.ReportVAL251012NorthBattlefordApt.docx.html")
+GENERATED_HTML = Path("/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/Valcre Workbook/generated-report.html")
 OUTPUT_REPORT = Path("/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/AUTOMATED-COMPARISON-REPORT.md")
 
 # Key field values to verify (from North Battleford workbook)
@@ -332,9 +333,10 @@ def generate_comparison_report(
     report_lines = []
 
     # Header
+    from datetime import datetime
     report_lines.append("# Automated Report Comparison")
     report_lines.append("")
-    report_lines.append(f"**Generated:** {Path.ctime(Path(__file__))}")
+    report_lines.append(f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     report_lines.append(f"**Reference:** `Ref.ReportVAL251012NorthBattlefordApt.docx.html`")
     report_lines.append("")
 
@@ -474,74 +476,68 @@ def main() -> None:
     print("AUTOMATED REPORT COMPARISON")
     print("="*70 + "\n")
 
-    # Check if we need to generate HTML first
-    print("⚠️  NOTE: This script currently only compares reference HTML.")
-    print("   To compare with generated report, you need to:")
-    print("   1. Run Report Builder with North Battleford test data")
-    print("   2. Export/save the generated HTML")
-    print("   3. Update GENERATED_HTML path in this script")
-    print("")
+    # Check if generated HTML exists
+    if not GENERATED_HTML.exists():
+        print("❌ Generated HTML not found. Please run:")
+        print("   node generate_and_compare.js")
+        print("")
+        return
 
-    # For now, just analyze the reference
+    # Load both HTMLs
     print("📊 Analyzing Reference HTML...")
     ref_soup = load_html(REFERENCE_HTML)
-
-    # Extract components
     ref_blocks = extract_text_blocks(ref_soup)
     ref_images = extract_images(ref_soup)
-
     print(f"   - Text blocks: {len(ref_blocks)}")
     print(f"   - Images: {len(ref_images)}")
     print("")
 
-    # Generate reference analysis
-    print("📝 Generating Reference Analysis...")
+    print("📊 Analyzing Generated HTML...")
+    gen_soup = load_html(GENERATED_HTML)
+    gen_blocks = extract_text_blocks(gen_soup)
+    gen_images = extract_images(gen_soup)
+    print(f"   - Text blocks: {len(gen_blocks)}")
+    print(f"   - Images: {len(gen_images)}")
+    print("")
 
-    output_lines = []
-    output_lines.append("# Reference HTML Analysis")
-    output_lines.append("")
-    output_lines.append(f"**File:** `{REFERENCE_HTML.name}`")
-    output_lines.append("")
-    output_lines.append("## Statistics")
-    output_lines.append("")
-    output_lines.append(f"- Total text blocks: {len(ref_blocks)}")
-    output_lines.append(f"- Total images: {len(ref_images)}")
-    output_lines.append("")
+    # Run comparisons
+    print("🔍 Comparing content...")
+    text_comparison = compare_text_blocks(ref_blocks, gen_blocks)
+    image_comparison = compare_images(ref_images, gen_images)
+    field_verification = verify_field_values(gen_soup, EXPECTED_FIELD_VALUES)
+    print("")
 
-    # Section breakdown
-    sections = {}
-    for block in ref_blocks:
-        section = block['section']
-        if section not in sections:
-            sections[section] = []
-        sections[section].append(block)
+    # Generate full report
+    print("📝 Generating Comparison Report...")
+    generate_comparison_report(
+        text_comparison,
+        image_comparison,
+        field_verification,
+        OUTPUT_REPORT
+    )
 
-    output_lines.append("## Sections Detected")
-    output_lines.append("")
-    for section, blocks in sorted(sections.items(), key=lambda x: -len(x[1])):
-        output_lines.append(f"- **{section}:** {len(blocks)} blocks")
-    output_lines.append("")
+    # Calculate and display summary
+    total_blocks = (
+        len(text_comparison['matches']) +
+        len(text_comparison['missing']) +
+        len(text_comparison['different'])
+    )
+    match_percentage = 0 if total_blocks == 0 else (
+        len(text_comparison['matches']) / total_blocks * 100
+    )
 
-    # Sample content
-    output_lines.append("## Sample Content (First 10 Blocks)")
-    output_lines.append("")
-    for i, block in enumerate(ref_blocks[:10], 1):
-        output_lines.append(f"{i}. **Section:** {block['section']}")
-        output_lines.append(f"   - Text: {block['text'][:100]}{'...' if len(block['text']) > 100 else ''}")
-        output_lines.append("")
-
-    # Next steps
-    output_lines.append("## Next Steps")
-    output_lines.append("")
-    output_lines.append("1. Generate HTML from Report Builder with North Battleford data")
-    output_lines.append("2. Save generated HTML to a file")
-    output_lines.append("3. Run full comparison with both HTMLs")
-    output_lines.append("")
-
-    with open(OUTPUT_REPORT, 'w', encoding='utf-8') as f:
-        f.write('\n'.join(output_lines))
-
-    print(f"✅ Analysis complete: {OUTPUT_REPORT.name}")
+    print("")
+    print("="*70)
+    print("COMPARISON SUMMARY")
+    print("="*70)
+    print(f"Match Percentage: {match_percentage:.1f}%")
+    print(f"Matches: {len(text_comparison['matches'])}")
+    print(f"Missing: {len(text_comparison['missing'])}")
+    print(f"Different: {len(text_comparison['different'])}")
+    print(f"Extra: {len(text_comparison['extra'])}")
+    print("="*70)
+    print("")
+    print(f"✅ Full report: {OUTPUT_REPORT.name}")
     print("\n" + "="*70 + "\n")
 
 

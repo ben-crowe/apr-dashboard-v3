@@ -108,6 +108,15 @@ export function generateReportHtml(sections: ReportSection[]): string {
 const formatDate = (dateStr: string): string => {
   if (!dateStr) return '';
   try {
+    // Parse ISO date string manually to avoid timezone issues
+    // ISO dates like '2025-10-17' should render as October 17, not October 16
+    const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (match) {
+      const [, year, month, day] = match;
+      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+      return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+    // Fallback for non-ISO formats
     const date = new Date(dateStr);
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   } catch {
@@ -6858,7 +6867,7 @@ const formatDate = (dateStr: string): string => {
           <div style="font-weight: bold;">${appraiserCompany || '[Appraiser Company]'}</div>
           <div>${appraiserAddress || '[Appraiser Address]'}</div>
           <div>${appraiserCity && appraiserProvince && appraiserPostal ? `${appraiserCity}, ${appraiserProvince} ${appraiserPostal}` : '[City, Province Postal]'}</div>
-          <div>${appraiserPhone ? `Office: ${appraiserPhone}` : 'Office: [Phone]'}</div>
+          <div>${appraiserPhone ? `Office:${appraiserPhone}` : 'Office:[Phone]'}</div>
           <div>${appraiserWebsite || '[Website]'}</div>
         </div>
       </div>
@@ -6870,7 +6879,7 @@ const formatDate = (dateStr: string): string => {
       </div>
 
       <!-- File Number -->
-      <div class="file-number">File No: ${fileNumber || '[File Number]'}</div>
+      <div class="file-number">File No:${fileNumber || '[File Number]'}</div>
     </div>
   </div>
 
@@ -6883,7 +6892,7 @@ const formatDate = (dateStr: string): string => {
         ${appraiserCompany ? `<div>${appraiserCompany}</div>` : ''}
         ${appraiserAddress ? `<div>${appraiserAddress}</div>` : ''}
         ${appraiserCity && appraiserProvince && appraiserPostal ? `<div>${appraiserCity}, ${appraiserProvince} ${appraiserPostal}</div>` : ''}
-        ${appraiserPhone ? `<div>Office: ${appraiserPhone}</div>` : ''}
+        ${appraiserPhone ? `<div>Office:${appraiserPhone}</div>` : ''}
         ${appraiserEmail ? `<div>${appraiserEmail}</div>` : ''}
         ${appraiserWebsite ? `<div>${appraiserWebsite}</div>` : ''}
       </div>

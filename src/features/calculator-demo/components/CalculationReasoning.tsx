@@ -1,9 +1,9 @@
 /**
  * Calculation Reasoning - Step-by-step Breakdown
  *
- * Claude-inspired minimal aesthetic: light background, subtle borders, no scroll.
+ * Claude-inspired minimal aesthetic: dark background, subtle borders.
  * Typewriter animation effect on load/update.
- * Natural expansion - content just exists.
+ * Dynamic height - grows with content until reaching parent constraints, then scrolls.
  */
 
 import { useEffect, useState, useRef, useCallback } from 'react';
@@ -381,8 +381,7 @@ export default function CalculationReasoning() {
 
   return (
     <div
-      className="border border-[#3a3a3a] rounded-sm overflow-hidden flex flex-col"
-      style={{ maxHeight: '680px' }}
+      className="border border-[#3a3a3a] rounded-sm overflow-hidden flex flex-col h-full"
       onClick={animation.isAnimating ? completeAnimation : undefined}
     >
       {/* Minimal Header - just text + border */}

@@ -1,19 +1,11 @@
 /**
- * Output Panel - 7 Key Validated Results
+ * Output Panel - Compact Results Summary
  *
- * Displays the calculated results in real-time:
- * 1. PGR (Potential Gross Revenue)
- * 2. Vacancy Loss
- * 3. EGR (Effective Gross Revenue)
- * 4. Total Expenses
- * 5. NOI (Net Operating Income)
- * 6. Raw Value (before rounding)
- * 7. Indicated Value (FINAL - must be $1,780,000 with test data)
+ * Displays the 7 key calculation results in a simple, compact format
+ * No giant cards - just clean summary box
  */
 
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
-import { Card } from '@/components/ui/card';
-import { ArrowRight, TrendingUp, TrendingDown, DollarSign } from 'lucide-react';
 
 export default function OutputPanel() {
   const { sections } = useReportBuilderStore();
@@ -44,164 +36,95 @@ export default function OutputPanel() {
     }).format(value);
   };
 
-  const formatPercent = (value: number): string => {
-    return `${value.toFixed(2)}%`;
-  };
-
-  const ResultCard = ({
-    label,
-    value,
-    icon: Icon,
-    colorClass,
-    subtitle,
-  }: {
-    label: string;
-    value: string;
-    icon: any;
-    colorClass: string;
-    subtitle?: string;
-  }) => (
-    <Card className={`p-4 border-l-4 ${colorClass}`}>
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <Icon className="h-4 w-4 text-slate-600" />
-            <p className="text-xs font-medium text-slate-600">{label}</p>
-          </div>
-          <p className="text-2xl font-bold text-slate-900">{value}</p>
-          {subtitle && <p className="text-xs text-slate-500 mt-1">{subtitle}</p>}
-        </div>
-      </div>
-    </Card>
-  );
-
   const pgr = getFieldValue('calc-pgr');
   const vacancyLoss = getFieldValue('calc-vacancy-loss');
   const egr = getFieldValue('calc-egr');
   const expensesTotal = getFieldValue('calc-expenses-total');
-  const expenseRatio = getFieldValue('calc-expense-ratio');
   const noi = getFieldValue('calc-noi');
-  const noiPerUnit = getFieldValue('calc-noi-per-unit');
-  const noiPerSf = getFieldValue('calc-noi-per-sf');
+  const capRate = getFieldValue('calc-cap-rate');
   const rawValue = getFieldValue('calc-raw-value');
   const indicatedValue = getFieldValue('calc-indicated-value');
-  const valuePerUnit = getFieldValue('calc-value-per-unit');
-  const valuePerSf = getFieldValue('calc-value-per-sf');
-  const grm = getFieldValue('calc-grm');
-  const totalUnits = getFieldValue('calc-total-units');
 
   return (
-    <div className="space-y-4">
-      {/* Flow Diagram */}
-      <div className="flex items-center justify-center gap-3 py-4 bg-slate-50 rounded-lg mb-6">
-        <div className="text-center">
-          <p className="text-xs text-slate-600 mb-1">PGR</p>
-          <p className="font-bold text-green-700">{formatCurrency(pgr)}</p>
+    <div className="space-y-6">
+      {/* Compact Results Box */}
+      <div className="border-2 border-slate-300 rounded-lg overflow-hidden">
+        <div className="bg-slate-800 text-white px-4 py-2 font-bold">
+          CALCULATION RESULTS
         </div>
-        <ArrowRight className="h-4 w-4 text-slate-400" />
-        <div className="text-center">
-          <p className="text-xs text-slate-600 mb-1">EGR</p>
-          <p className="font-bold text-green-700">{formatCurrency(egr)}</p>
-        </div>
-        <ArrowRight className="h-4 w-4 text-slate-400" />
-        <div className="text-center">
-          <p className="text-xs text-slate-600 mb-1">NOI</p>
-          <p className="font-bold text-blue-700">{formatCurrency(noi)}</p>
-        </div>
-        <ArrowRight className="h-4 w-4 text-slate-400" />
-        <div className="text-center">
-          <p className="text-xs text-slate-600 mb-1">Value</p>
-          <p className="font-bold text-purple-700">{formatCurrency(indicatedValue)}</p>
-        </div>
-      </div>
-
-      {/* Detailed Results */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-        {/* 1. PGR */}
-        <ResultCard
-          label="Potential Gross Revenue (PGR)"
-          value={formatCurrency(pgr)}
-          icon={TrendingUp}
-          colorClass="border-l-green-500"
-          subtitle="Total rental + other income"
-        />
-
-        {/* 2. Vacancy Loss */}
-        <ResultCard
-          label="Vacancy & Collection Loss"
-          value={formatCurrency(vacancyLoss)}
-          icon={TrendingDown}
-          colorClass="border-l-red-500"
-          subtitle="Total revenue loss"
-        />
-
-        {/* 3. EGR */}
-        <ResultCard
-          label="Effective Gross Revenue (EGR)"
-          value={formatCurrency(egr)}
-          icon={TrendingUp}
-          colorClass="border-l-green-600"
-          subtitle="PGR - Vacancy Loss"
-        />
-
-        {/* 4. Total Expenses */}
-        <ResultCard
-          label="Total Operating Expenses"
-          value={formatCurrency(expensesTotal)}
-          icon={TrendingDown}
-          colorClass="border-l-red-600"
-          subtitle={`Expense Ratio: ${formatPercent(expenseRatio)}`}
-        />
-
-        {/* 5. NOI */}
-        <ResultCard
-          label="Net Operating Income (NOI)"
-          value={formatCurrency(noi)}
-          icon={DollarSign}
-          colorClass="border-l-blue-600"
-          subtitle={`${formatCurrency(noiPerUnit)}/unit | $${noiPerSf.toFixed(2)}/SF`}
-        />
-
-        {/* 6. Raw Value */}
-        <ResultCard
-          label="Raw Capitalized Value"
-          value={formatCurrency(rawValue)}
-          icon={DollarSign}
-          colorClass="border-l-purple-500"
-          subtitle="Before rounding & adjustments"
-        />
-
-      </div>
-
-      {/* 7. Final Indicated Value - Highlighted */}
-      <Card className="p-6 border-2 border-purple-600 bg-gradient-to-br from-purple-50 to-blue-50">
-        <div className="text-center">
-          <p className="text-sm font-medium text-slate-600 mb-2">FINAL INDICATED VALUE</p>
-          <p className="text-5xl font-bold text-purple-900 mb-4">{formatCurrency(indicatedValue)}</p>
-          <div className="flex justify-center gap-8 text-sm text-slate-700">
-            <div>
-              <p className="text-xs text-slate-500">Per Unit</p>
-              <p className="font-semibold">{formatCurrency(valuePerUnit)}</p>
-            </div>
-            <div>
-              <p className="text-xs text-slate-500">Per SF</p>
-              <p className="font-semibold">${valuePerSf.toFixed(2)}</p>
-            </div>
-            <div>
-              <p className="text-xs text-slate-500">GRM</p>
-              <p className="font-semibold">{grm.toFixed(2)}</p>
-            </div>
+        <div className="divide-y">
+          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
+            <span className="text-sm font-medium text-slate-700">PGR:</span>
+            <span className="text-base font-semibold text-slate-900">{formatCurrency(pgr)}</span>
           </div>
-          {totalUnits > 0 && indicatedValue === 1780000 && (
-            <div className="mt-4 p-3 bg-green-100 border border-green-400 rounded-lg">
-              <p className="text-sm font-semibold text-green-800">
-                Validated: Matches expected $1,780,000 result
-              </p>
-            </div>
-          )}
+          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
+            <span className="text-sm font-medium text-slate-700">Vacancy Loss:</span>
+            <span className="text-base font-semibold text-red-600">({formatCurrency(vacancyLoss)})</span>
+          </div>
+          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
+            <span className="text-sm font-medium text-slate-700">EGR:</span>
+            <span className="text-base font-semibold text-slate-900">{formatCurrency(egr)}</span>
+          </div>
+          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
+            <span className="text-sm font-medium text-slate-700">Operating Exp:</span>
+            <span className="text-base font-semibold text-red-600">({formatCurrency(expensesTotal)})</span>
+          </div>
+          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
+            <span className="text-sm font-medium text-slate-700">NOI:</span>
+            <span className="text-base font-semibold text-blue-700">{formatCurrency(noi)}</span>
+          </div>
+          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
+            <span className="text-sm font-medium text-slate-700">Cap Rate:</span>
+            <span className="text-base font-semibold text-slate-900">{capRate.toFixed(2)}%</span>
+          </div>
+          <div className="px-4 py-2 flex justify-between items-center hover:bg-slate-50">
+            <span className="text-sm font-medium text-slate-700">Raw Value:</span>
+            <span className="text-base font-semibold text-slate-900">{formatCurrency(rawValue)}</span>
+          </div>
         </div>
-      </Card>
+        <div className="bg-gradient-to-br from-purple-100 to-blue-100 border-t-4 border-purple-600 px-4 py-4">
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-bold text-purple-900 uppercase">Indicated Value:</span>
+            <span className="text-3xl font-bold text-purple-900">{formatCurrency(indicatedValue)}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Validation Badge */}
+      {indicatedValue === 1780000 && (
+        <div className="bg-green-100 border-2 border-green-500 rounded-lg px-4 py-3">
+          <div className="flex items-center gap-2">
+            <svg className="w-5 h-5 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            <span className="font-semibold text-green-800">
+              Validated: Matches expected $1,780,000 result
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Key Metrics Summary */}
+      <div className="grid grid-cols-3 gap-4 pt-4">
+        <div className="text-center p-3 bg-slate-50 rounded border">
+          <div className="text-xs text-slate-600 mb-1">Per Unit</div>
+          <div className="text-lg font-bold text-slate-900">
+            {formatCurrency(getFieldValue('calc-value-per-unit'))}
+          </div>
+        </div>
+        <div className="text-center p-3 bg-slate-50 rounded border">
+          <div className="text-xs text-slate-600 mb-1">Per SF</div>
+          <div className="text-lg font-bold text-slate-900">
+            ${getFieldValue('calc-value-per-sf').toFixed(2)}
+          </div>
+        </div>
+        <div className="text-center p-3 bg-slate-50 rounded border">
+          <div className="text-xs text-slate-600 mb-1">GRM</div>
+          <div className="text-lg font-bold text-slate-900">
+            {getFieldValue('calc-grm').toFixed(2)}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,8 +1,8 @@
 /**
- * Calculator Demo Page
+ * Calculator Demo Page - Redesigned with Compact Layout
  *
  * Interactive demonstration of the validated income capitalization calculator.
- * Features 3-panel layout: Input | Output | Walkthrough
+ * Features compact Excel-style inputs and markdown summary output
  *
  * CRITICAL: Uses validated calculator engine from reportBuilderStore
  * DO NOT modify the calculation logic - import and use only
@@ -10,12 +10,11 @@
 
 import { useEffect } from 'react';
 import { useReportBuilderStore } from '../report-builder/store/reportBuilderStore';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calculator, RotateCcw, Upload } from 'lucide-react';
+import { Calculator } from 'lucide-react';
 import InputPanel from './components/InputPanel';
 import OutputPanel from './components/OutputPanel';
-import WalkthroughPanel from './components/WalkthroughPanel';
+import MarkdownSummary from './components/MarkdownSummary';
 
 export default function CalculatorDemoPage() {
   const { loadFullTestData, runCalculations, sections } = useReportBuilderStore();
@@ -62,34 +61,38 @@ export default function CalculatorDemoPage() {
                   Income Capitalization Calculator
                 </h1>
                 <p className="text-sm text-slate-600 dark:text-slate-400">
-                  Interactive demonstration with step-by-step transparency
+                  Compact Excel-style interface with markdown summary export
                 </p>
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" onClick={handleReset}>
-                <RotateCcw className="h-4 w-4 mr-2" />
+              <button
+                onClick={handleReset}
+                className="px-4 py-2 border border-slate-300 rounded bg-white hover:bg-gray-50 text-sm font-medium transition-colors"
+              >
                 Reset
-              </Button>
-              <Button onClick={handleLoadTestData}>
-                <Upload className="h-4 w-4 mr-2" />
+              </button>
+              <button
+                onClick={handleLoadTestData}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium transition-colors"
+              >
                 Load Test Data
-              </Button>
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content - 3 Panel Layout */}
-      <div className="container mx-auto px-6 py-8">
+      {/* Main Content - 2 Column Layout */}
+      <div className="container mx-auto px-6 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-          {/* Input Panel */}
+          {/* Input Panel - Left Column (1/3) */}
           <div className="lg:col-span-1">
-            <Card className="shadow-lg">
-              <CardHeader>
-                <CardTitle>Input Parameters</CardTitle>
-                <CardDescription>
-                  62 calculator fields organized in sections
+            <Card className="shadow-lg h-full">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Input Parameters</CardTitle>
+                <CardDescription className="text-xs">
+                  Excel-style tables for all 62 fields
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -98,12 +101,12 @@ export default function CalculatorDemoPage() {
             </Card>
           </div>
 
-          {/* Output Panel */}
+          {/* Output Panel - Right Column (2/3) */}
           <div className="lg:col-span-2">
-            <Card className="shadow-lg">
-              <CardHeader>
-                <CardTitle>Results</CardTitle>
-                <CardDescription>
+            <Card className="shadow-lg h-full">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Results</CardTitle>
+                <CardDescription className="text-xs">
                   7 key metrics calculated in real-time
                 </CardDescription>
               </CardHeader>
@@ -114,16 +117,16 @@ export default function CalculatorDemoPage() {
           </div>
         </div>
 
-        {/* Walkthrough Panel - Full Width */}
+        {/* Markdown Summary - Full Width */}
         <Card className="shadow-lg">
           <CardHeader>
-            <CardTitle>Calculation Walkthrough</CardTitle>
-            <CardDescription>
-              Step-by-step breakdown showing HOW each result is calculated
+            <CardTitle className="text-lg">Professional Summary Report</CardTitle>
+            <CardDescription className="text-xs">
+              Markdown-formatted calculation breakdown ready for export
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <WalkthroughPanel />
+            <MarkdownSummary />
           </CardContent>
         </Card>
       </div>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 75 - Appendices</title>
+    <style>
+        @page {
+            size: 8.5in 11in;
+            margin: 0.5in;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #000;
+            background: #fff;
+            width: 8.5in;
+            height: 11in;
+            padding: 0.5in;
+        }
+
+        .page {
+            width: 100%;
+            height: 100%;
+            background: white;
+            padding: 0;
+            position: relative;
+        }
+
+        .content {
+            width: 100%;
+            min-height: calc(100% - 60px);
+            padding-bottom: 60px;
+        }
+
+        h1 {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #003366;
+            color: #003366;
+        }
+
+        ul {
+            list-style: disc;
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            text-align: justify;
+            line-height: 1.5;
+        }
+
+        strong {
+            font-weight: bold;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            font-size: 10px;
+            color: #666;
+            padding: 10px 0.5in;
+            text-align: right;
+            border-top: 1px solid #ddd;
+            background: white;
+        }
+
+        .footer-right {
+            float: right;
+        }
+
+        .footer-left {
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="content">
+            <h1>Appendices</h1>
+
+            <ul>
+                <li>
+                    <strong>Extraordinary Assumption:</strong> An assumption, directly related to a specific Assignment, which, if were not assumed to be true, could materially alter the opinions or conclusions. Extraordinary Assumptions presume uncertain information about or anticipated changes in: the physical, legal or economic characteristics of the subject property, or about conditions external to the subject property such as market conditions or trends, or the integrity of data used in an analysis to be fact.
+                </li>
+                <li>
+                    <strong>Fee Simple Estate:</strong> Absolute ownership unencumbered by any other interest or estate, subject only to the limitations imposed by the governmental powers of taxation, eminent domain, police power and escheat.
+                </li>
+                <li>
+                    <strong>Floor Area Ratio (FAR):</strong> The relationship between the above-ground floor area of a building, as described by the zoning of building code, and the area of the plot on which it stands; in planning and zoning, often expressed as a decimal, e.g., a ratio of 2.0 indicates that the permissible floor area of a building is twice the total area.
+                </li>
+                <li>
+                    <strong>Frictional Vacancy:</strong> The amount of vacant space needed in a market for its orderly operation. Frictional vacancy allows for move-ins and move-outs.
+                </li>
+                <li>
+                    <strong>Full Service Lease:</strong> See gross lease.
+                </li>
+                <li>
+                    <strong>General Vacancy:</strong> A method of calculating any remaining vacancy and collection loss considerations when using discounted cash flow (DCF) analysis, where turnover vacancy has been used as part of the income estimate. The combined effects of turnover vacancy and general vacancy relate to total vacancy and collection loss.
+                </li>
+                <li>
+                    <strong>Going Concern Premise:</strong> One of the premises under the total assets concept, an assumption that a company is expected to continue operating well into the future (usually indefinitely).
+                </li>
+                <li>
+                    <strong>Leasehold Interest:</strong> An established and operating business with an indefinite life, as if sold in aggregate; more accurately termed the market value of the going concern or market value of the total assets of the business.
+                </li>
+                <li>
+                    <strong>Gross Building Area (GBA):</strong> 1) Total floor area of a building, excluding unenclosed areas, measured from the exterior of the walls of the above-grade area. This includes mechanical and basement areas and does not typically include basement garage. 2) For residential space, the total area of all floor levels measured from the exterior of the walls and including the superstructure and substructure basement; typically does not include garage space.
+                </li>
+                <li>
+                    <strong>Gross Lease:</strong> A lease in which the landlord receives stipulated rent and is obliged to pay all of the property's operating and fixed expenses; also called full-service lease.
+                </li>
+                <li>
+                    <strong>Hypothetical Condition:</strong> Hypothetical Conditions are a specific type of an Extraordinary Assumption that presumes, as fact, although but untrue information about a typical, legal, or economic characteristics of the subject property or external conditions, and are imposed for purposes of reasonable analysis.
+                </li>
+                <li>
+                    <strong>Investment Value:</strong> The value of a property to a particular investor or class of investors based on the investor's specific requirements. Investment value may be different from market value because it depends on a set of investment criteria that are not necessarily typical of the market. 2) The value of an asset to the owner or a previous owner for individual investment or operational objectives. (International Valuation Standards (IVS))
+                </li>
+                <li>
+                    <strong>Land-to-Building Ratio:</strong> The proportion of land area to gross building area; one of the factors determining comparability of properties.
+                </li>
+                <li>
+                    <strong>Lease:</strong> A legal agreement that grants the right to use, occupy, or control all or part of a property for a stated period of time and on the terms and covenants of the lease including but not limited to the rental rate.
+                </li>
+                <li>
+                    <strong>Leased Fee Interest:</strong> The ownership interest held by the lessor, which includes the right to receive the contract rent specified in the lease plus any residuary right when the lease expires.
+                </li>
+                <li>
+                    <strong>Leasehold Interest:</strong> The right held by the lessee to occupy and use the property under a lease agreement, for a period of time according to a lease agreement.
+                </li>
+            </ul>
+        </div>
+
+        <div class="footer">
+            <span class="footer-left">70</span>
+            <span class="footer-right">101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</span>
+        </div>
+    </div>
+</body>
+</html>

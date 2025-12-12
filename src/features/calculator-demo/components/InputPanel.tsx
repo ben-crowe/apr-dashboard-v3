@@ -1,20 +1,12 @@
 /**
- * Input Panel - 62 Calculator Fields
+ * Input Panel - Compact Excel-Style Tables
  *
- * Displays all calculator input fields organized in collapsible sections:
- * - Unit Mix (20 fields)
- * - Totals (6 calculated fields)
- * - Other Income (6 fields)
- * - Vacancy & Loss (5 fields)
- * - Operating Expenses (11 fields)
- * - Cap Rate (1 field)
- * - Adjustments (4 fields)
+ * Replaces accordion-heavy design with dense spreadsheet-style tables
+ * All inputs editable inline with auto-recalculation
  */
 
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 
 export default function InputPanel() {
   const { sections, updateFieldValue, runCalculations } = useReportBuilderStore();
@@ -39,149 +31,468 @@ export default function InputPanel() {
   const handleFieldChange = (fieldId: string, value: string) => {
     const numValue = parseFloat(value) || 0;
     updateFieldValue(fieldId, numValue);
-    // Run calculations after field update
     runCalculations();
   };
 
-  const renderInputField = (fieldId: string, label: string, unit?: string, readOnly = false) => {
-    const value = getFieldValue(fieldId);
-
-    return (
-      <div className="space-y-1.5">
-        <Label htmlFor={fieldId} className="text-xs font-medium">
-          {label}
-        </Label>
-        <div className="relative">
-          <Input
-            id={fieldId}
-            type="number"
-            value={value}
-            onChange={(e) => handleFieldChange(fieldId, e.target.value)}
-            readOnly={readOnly}
-            className={`text-sm ${readOnly ? 'bg-slate-100 text-slate-600' : ''}`}
-            step="0.01"
-          />
-          {unit && (
-            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500">
-              {unit}
-            </span>
-          )}
-        </div>
-      </div>
-    );
+  const formatCurrency = (value: number): string => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(value);
   };
 
+  // Calculate totals for display
+  const totalUnits = getFieldValue('calc-total-units');
+  const totalSF = getFieldValue('calc-total-sf');
+  const totalRentalRevenue = getFieldValue('calc-total-rental-revenue');
+  const totalOtherIncome = getFieldValue('calc-total-other-income');
+  const vacancyLoss = getFieldValue('calc-vacancy-loss');
+  const egr = getFieldValue('calc-egr');
+  const expensesTotal = getFieldValue('calc-expenses-total');
+
   return (
-    <div className="max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
-      <Accordion type="multiple" defaultValue={['unit-mix', 'other-income', 'vacancy', 'expenses', 'cap-rate']} className="space-y-2">
+    <div className="space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
 
-        {/* Unit Mix Section */}
-        <AccordionItem value="unit-mix">
-          <AccordionTrigger className="text-sm font-semibold">
-            Unit Mix (20 fields)
-          </AccordionTrigger>
-          <AccordionContent className="space-y-4">
-            {[1, 2, 3, 4].map(type => (
-              <div key={type} className="p-3 border rounded-lg space-y-3 bg-white">
-                <h4 className="font-medium text-sm text-slate-700">Type {type}</h4>
-                {renderInputField(`calc-type${type}-name`, 'Unit Type')}
-                {renderInputField(`calc-type${type}-count`, 'Count', 'units')}
-                {renderInputField(`calc-type${type}-sf`, 'SF/Unit', 'SF')}
-                {renderInputField(`calc-type${type}-rent`, 'Rent', '$/mo')}
-                {renderInputField(`calc-type${type}-annual`, 'Annual Revenue', '$', true)}
-              </div>
-            ))}
-          </AccordionContent>
-        </AccordionItem>
+      {/* UNIT MIX TABLE */}
+      <div className="border rounded-lg overflow-hidden">
+        <div className="bg-slate-800 text-white px-3 py-2 font-semibold text-sm">
+          UNIT MIX
+        </div>
+        <table className="w-full text-xs">
+          <thead className="bg-slate-100 border-b">
+            <tr>
+              <th className="px-2 py-1.5 text-left font-medium">Type</th>
+              <th className="px-2 py-1.5 text-right font-medium">Count</th>
+              <th className="px-2 py-1.5 text-right font-medium">SF/Unit</th>
+              <th className="px-2 py-1.5 text-right font-medium">Rent/Mo</th>
+              <th className="px-2 py-1.5 text-right font-medium">Annual Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[1, 2, 3, 4].map(type => {
+              const name = getFieldValue(`calc-type${type}-name`);
+              const count = getFieldValue(`calc-type${type}-count`);
+              const sf = getFieldValue(`calc-type${type}-sf`);
+              const rent = getFieldValue(`calc-type${type}-rent`);
+              const annual = getFieldValue(`calc-type${type}-annual`);
 
-        {/* Totals Section */}
-        <AccordionItem value="totals">
-          <AccordionTrigger className="text-sm font-semibold">
-            Totals (6 calculated fields)
-          </AccordionTrigger>
-          <AccordionContent className="space-y-3 p-3 bg-slate-50 rounded-lg">
-            {renderInputField('calc-total-units', 'Total Units', 'units', true)}
-            {renderInputField('calc-total-sf', 'Total SF', 'SF', true)}
-            {renderInputField('calc-avg-unit-sf', 'Avg Unit SF', 'SF', true)}
-            {renderInputField('calc-total-rental-revenue', 'Total Rental Revenue', '$', true)}
-            {renderInputField('calc-avg-rent-per-unit', 'Avg Rent/Unit', '$/mo', true)}
-            {renderInputField('calc-avg-rent-per-sf', 'Avg Rent/SF', '$/SF', true)}
-          </AccordionContent>
-        </AccordionItem>
+              return (
+                <tr key={type} className="border-b hover:bg-slate-50">
+                  <td className="px-2 py-1">
+                    <Input
+                      type="text"
+                      value={name || `Type ${type}`}
+                      onChange={(e) => handleFieldChange(`calc-type${type}-name`, e.target.value)}
+                      className="h-7 text-xs border-0 bg-transparent p-1"
+                    />
+                  </td>
+                  <td className="px-2 py-1">
+                    <Input
+                      type="number"
+                      value={count}
+                      onChange={(e) => handleFieldChange(`calc-type${type}-count`, e.target.value)}
+                      className="h-7 text-xs text-right"
+                      step="1"
+                    />
+                  </td>
+                  <td className="px-2 py-1">
+                    <Input
+                      type="number"
+                      value={sf}
+                      onChange={(e) => handleFieldChange(`calc-type${type}-sf`, e.target.value)}
+                      className="h-7 text-xs text-right"
+                      step="1"
+                    />
+                  </td>
+                  <td className="px-2 py-1">
+                    <Input
+                      type="number"
+                      value={rent}
+                      onChange={(e) => handleFieldChange(`calc-type${type}-rent`, e.target.value)}
+                      className="h-7 text-xs text-right"
+                      step="0.01"
+                    />
+                  </td>
+                  <td className="px-2 py-1 text-right text-slate-600">
+                    {formatCurrency(annual)}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+          <tfoot className="bg-slate-50 border-t-2 font-semibold">
+            <tr>
+              <td className="px-2 py-1.5">TOTALS</td>
+              <td className="px-2 py-1.5 text-right">{totalUnits} units</td>
+              <td className="px-2 py-1.5 text-right">{totalSF.toLocaleString()} SF</td>
+              <td className="px-2 py-1.5"></td>
+              <td className="px-2 py-1.5 text-right">{formatCurrency(totalRentalRevenue)}/year</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
 
-        {/* Other Income Section */}
-        <AccordionItem value="other-income">
-          <AccordionTrigger className="text-sm font-semibold">
-            Other Income (6 fields)
-          </AccordionTrigger>
-          <AccordionContent className="space-y-3">
-            {renderInputField('calc-parking-per-unit', 'Parking/Unit', '$/mo')}
-            {renderInputField('calc-parking-total', 'Parking Total', '$/yr', true)}
-            {renderInputField('calc-laundry-per-unit', 'Laundry/Unit', '$/mo')}
-            {renderInputField('calc-laundry-total', 'Laundry Total', '$/yr', true)}
-            {renderInputField('calc-other-income', 'Other Income', '$/yr')}
-            {renderInputField('calc-total-other-income', 'Total Other Income', '$/yr', true)}
-          </AccordionContent>
-        </AccordionItem>
+      {/* OTHER INCOME TABLE */}
+      <div className="border rounded-lg overflow-hidden">
+        <div className="bg-slate-800 text-white px-3 py-2 font-semibold text-sm">
+          OTHER INCOME
+        </div>
+        <table className="w-full text-xs">
+          <thead className="bg-slate-100 border-b">
+            <tr>
+              <th className="px-2 py-1.5 text-left font-medium">Item</th>
+              <th className="px-2 py-1.5 text-right font-medium">Per Unit/Mo</th>
+              <th className="px-2 py-1.5 text-right font-medium">Annual Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Parking</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-parking-per-unit')}
+                  onChange={(e) => handleFieldChange('calc-parking-per-unit', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600">
+                {formatCurrency(getFieldValue('calc-parking-total'))}
+              </td>
+            </tr>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Laundry</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-laundry-per-unit')}
+                  onChange={(e) => handleFieldChange('calc-laundry-per-unit', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600">
+                {formatCurrency(getFieldValue('calc-laundry-total'))}
+              </td>
+            </tr>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Other (annual)</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-other-income')}
+                  onChange={(e) => handleFieldChange('calc-other-income', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600">
+                {formatCurrency(getFieldValue('calc-other-income'))}
+              </td>
+            </tr>
+          </tbody>
+          <tfoot className="bg-slate-50 border-t-2 font-semibold">
+            <tr>
+              <td className="px-2 py-1.5" colSpan={2}>TOTAL OTHER INCOME</td>
+              <td className="px-2 py-1.5 text-right">{formatCurrency(totalOtherIncome)}/year</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
 
-        {/* Vacancy & Loss Section */}
-        <AccordionItem value="vacancy">
-          <AccordionTrigger className="text-sm font-semibold">
-            Vacancy & Loss (5 fields)
-          </AccordionTrigger>
-          <AccordionContent className="space-y-3">
-            {renderInputField('calc-vacancy-rate', 'Vacancy Rate', '%')}
-            {renderInputField('calc-bad-debt-rate', 'Bad Debt Rate', '%')}
-            {renderInputField('calc-concessions-rate', 'Concessions Rate', '%')}
-            {renderInputField('calc-vacancy-loss', 'Vacancy Loss', '$', true)}
-            {renderInputField('calc-egr', 'EGR', '$', true)}
-          </AccordionContent>
-        </AccordionItem>
+      {/* VACANCY & LOSS TABLE */}
+      <div className="border rounded-lg overflow-hidden">
+        <div className="bg-slate-800 text-white px-3 py-2 font-semibold text-sm">
+          VACANCY & LOSS
+        </div>
+        <table className="w-full text-xs">
+          <thead className="bg-slate-100 border-b">
+            <tr>
+              <th className="px-2 py-1.5 text-left font-medium">Type</th>
+              <th className="px-2 py-1.5 text-right font-medium">Rate (%)</th>
+              <th className="px-2 py-1.5 text-right font-medium">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Vacancy</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-vacancy-rate')}
+                  onChange={(e) => handleFieldChange('calc-vacancy-rate', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600" rowSpan={3}>
+                {formatCurrency(vacancyLoss)}
+              </td>
+            </tr>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Bad Debt</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-bad-debt-rate')}
+                  onChange={(e) => handleFieldChange('calc-bad-debt-rate', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+            </tr>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Concessions</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-concessions-rate')}
+                  onChange={(e) => handleFieldChange('calc-concessions-rate', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+            </tr>
+          </tbody>
+          <tfoot className="bg-slate-50 border-t-2 font-semibold">
+            <tr>
+              <td className="px-2 py-1.5" colSpan={2}>EFFECTIVE GROSS REVENUE</td>
+              <td className="px-2 py-1.5 text-right">{formatCurrency(egr)}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
 
-        {/* Operating Expenses Section */}
-        <AccordionItem value="expenses">
-          <AccordionTrigger className="text-sm font-semibold">
-            Operating Expenses (11 fields)
-          </AccordionTrigger>
-          <AccordionContent className="space-y-3">
-            {renderInputField('calc-exp-management', 'Management', '% EGR')}
-            {renderInputField('calc-exp-taxes', 'Taxes', '$/unit/yr')}
-            {renderInputField('calc-exp-insurance', 'Insurance', '$/unit/yr')}
-            {renderInputField('calc-exp-repairs', 'Repairs', '$/unit/yr')}
-            {renderInputField('calc-exp-utilities', 'Utilities', '$/unit/yr')}
-            {renderInputField('calc-exp-payroll', 'Payroll', '$/unit/yr')}
-            {renderInputField('calc-exp-admin', 'Admin', '$/unit/yr')}
-            {renderInputField('calc-exp-reserves', 'Reserves', '$/unit/yr')}
-            {renderInputField('calc-exp-other', 'Other', '$/unit/yr')}
-            {renderInputField('calc-expenses-total', 'Total Expenses', '$', true)}
-            {renderInputField('calc-expense-ratio', 'Expense Ratio', '%', true)}
-          </AccordionContent>
-        </AccordionItem>
+      {/* OPERATING EXPENSES TABLE */}
+      <div className="border rounded-lg overflow-hidden">
+        <div className="bg-slate-800 text-white px-3 py-2 font-semibold text-sm">
+          OPERATING EXPENSES
+        </div>
+        <table className="w-full text-xs">
+          <thead className="bg-slate-100 border-b">
+            <tr>
+              <th className="px-2 py-1.5 text-left font-medium">Expense</th>
+              <th className="px-2 py-1.5 text-right font-medium">Rate/Unit</th>
+              <th className="px-2 py-1.5 text-right font-medium">Annual Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Management (% of EGR)</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-exp-management')}
+                  onChange={(e) => handleFieldChange('calc-exp-management', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600">
+                {formatCurrency(egr * (getFieldValue('calc-exp-management') / 100))}
+              </td>
+            </tr>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Taxes</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-exp-taxes')}
+                  onChange={(e) => handleFieldChange('calc-exp-taxes', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600">
+                {formatCurrency(getFieldValue('calc-exp-taxes') * totalUnits)}
+              </td>
+            </tr>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Insurance</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-exp-insurance')}
+                  onChange={(e) => handleFieldChange('calc-exp-insurance', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600">
+                {formatCurrency(getFieldValue('calc-exp-insurance') * totalUnits)}
+              </td>
+            </tr>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Repairs</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-exp-repairs')}
+                  onChange={(e) => handleFieldChange('calc-exp-repairs', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600">
+                {formatCurrency(getFieldValue('calc-exp-repairs') * totalUnits)}
+              </td>
+            </tr>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Utilities</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-exp-utilities')}
+                  onChange={(e) => handleFieldChange('calc-exp-utilities', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600">
+                {formatCurrency(getFieldValue('calc-exp-utilities') * totalUnits)}
+              </td>
+            </tr>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Payroll</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-exp-payroll')}
+                  onChange={(e) => handleFieldChange('calc-exp-payroll', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600">
+                {formatCurrency(getFieldValue('calc-exp-payroll') * totalUnits)}
+              </td>
+            </tr>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Admin</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-exp-admin')}
+                  onChange={(e) => handleFieldChange('calc-exp-admin', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600">
+                {formatCurrency(getFieldValue('calc-exp-admin') * totalUnits)}
+              </td>
+            </tr>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Reserves</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-exp-reserves')}
+                  onChange={(e) => handleFieldChange('calc-exp-reserves', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600">
+                {formatCurrency(getFieldValue('calc-exp-reserves') * totalUnits)}
+              </td>
+            </tr>
+            <tr className="border-b hover:bg-slate-50">
+              <td className="px-2 py-1">Other</td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  value={getFieldValue('calc-exp-other')}
+                  onChange={(e) => handleFieldChange('calc-exp-other', e.target.value)}
+                  className="h-7 text-xs text-right"
+                  step="0.01"
+                />
+              </td>
+              <td className="px-2 py-1 text-right text-slate-600">
+                {formatCurrency(getFieldValue('calc-exp-other') * totalUnits)}
+              </td>
+            </tr>
+          </tbody>
+          <tfoot className="bg-slate-50 border-t-2 font-semibold">
+            <tr>
+              <td className="px-2 py-1.5" colSpan={2}>TOTAL EXPENSES</td>
+              <td className="px-2 py-1.5 text-right">{formatCurrency(expensesTotal)}</td>
+            </tr>
+            <tr>
+              <td className="px-2 py-1.5" colSpan={2}>Expense Ratio</td>
+              <td className="px-2 py-1.5 text-right">{getFieldValue('calc-expense-ratio').toFixed(2)}%</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
 
-        {/* Cap Rate Section */}
-        <AccordionItem value="cap-rate">
-          <AccordionTrigger className="text-sm font-semibold">
-            Cap Rate (1 field)
-          </AccordionTrigger>
-          <AccordionContent className="space-y-3">
-            {renderInputField('calc-cap-rate', 'Capitalization Rate', '%')}
-          </AccordionContent>
-        </AccordionItem>
+      {/* CAP RATE & ADJUSTMENTS */}
+      <div className="grid grid-cols-2 gap-4">
+        {/* CAP RATE */}
+        <div className="border rounded-lg overflow-hidden">
+          <div className="bg-slate-800 text-white px-3 py-2 font-semibold text-sm">
+            CAP RATE
+          </div>
+          <div className="p-3">
+            <label className="text-xs font-medium text-slate-600 mb-1 block">
+              Capitalization Rate (%)
+            </label>
+            <Input
+              type="number"
+              value={getFieldValue('calc-cap-rate')}
+              onChange={(e) => handleFieldChange('calc-cap-rate', e.target.value)}
+              className="text-sm text-right"
+              step="0.01"
+            />
+          </div>
+        </div>
 
-        {/* Adjustments Section */}
-        <AccordionItem value="adjustments">
-          <AccordionTrigger className="text-sm font-semibold">
-            Adjustments (4 fields)
-          </AccordionTrigger>
-          <AccordionContent className="space-y-3">
-            {renderInputField('calc-adj-capex', 'CapEx', '$')}
-            {renderInputField('calc-adj-leasing', 'Leasing Costs', '$')}
-            {renderInputField('calc-adj-other', 'Other Adjustments', '$')}
-            {renderInputField('calc-adj-total', 'Total Adjustments', '$', true)}
-          </AccordionContent>
-        </AccordionItem>
+        {/* ADJUSTMENTS */}
+        <div className="border rounded-lg overflow-hidden">
+          <div className="bg-slate-800 text-white px-3 py-2 font-semibold text-sm">
+            ADJUSTMENTS
+          </div>
+          <div className="p-3 space-y-2">
+            <div>
+              <label className="text-xs font-medium text-slate-600 mb-1 block">CapEx</label>
+              <Input
+                type="number"
+                value={getFieldValue('calc-adj-capex')}
+                onChange={(e) => handleFieldChange('calc-adj-capex', e.target.value)}
+                className="h-7 text-xs text-right"
+                step="1"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-slate-600 mb-1 block">Leasing</label>
+              <Input
+                type="number"
+                value={getFieldValue('calc-adj-leasing')}
+                onChange={(e) => handleFieldChange('calc-adj-leasing', e.target.value)}
+                className="h-7 text-xs text-right"
+                step="1"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-medium text-slate-600 mb-1 block">Other</label>
+              <Input
+                type="number"
+                value={getFieldValue('calc-adj-other')}
+                onChange={(e) => handleFieldChange('calc-adj-other', e.target.value)}
+                className="h-7 text-xs text-right"
+                step="1"
+              />
+            </div>
+            <div className="pt-2 border-t font-semibold text-xs">
+              Total: {formatCurrency(getFieldValue('calc-adj-total'))}
+            </div>
+          </div>
+        </div>
+      </div>
 
-      </Accordion>
     </div>
   );
 }

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valuation & Conclusions - Page 48</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: 8.5in 11in;
+            margin: 0.75in;
+        }
+
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .page {
+                margin: 0;
+                padding: 0.75in;
+                page-break-after: always;
+            }
+        }
+
+        body {
+            font-family: Calibri, Arial, sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        .page {
+            width: 816px;
+            height: 1056px;
+            margin: 20px auto;
+            padding: 0.75in;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .page-header {
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 8px;
+            margin-bottom: 16px;
+        }
+
+        .page-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #003366;
+            margin-top: 16px;
+            margin-bottom: 8px;
+        }
+
+        .section-content {
+            font-size: 11px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 10px;
+        }
+
+        table th {
+            background-color: #f0f0f0;
+            border: 1px solid #999;
+            padding: 6px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        table td {
+            border: 1px solid #999;
+            padding: 6px;
+            text-align: center;
+        }
+
+        table td:first-child {
+            text-align: left;
+            font-weight: normal;
+        }
+
+        .negative {
+            color: #d63031;
+        }
+
+        .page-footer {
+            position: absolute;
+            bottom: 20px;
+            width: calc(816px - 1.5in);
+            font-size: 9px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-right {
+            width: 80px;
+            height: 40px;
+            background: linear-gradient(to right, #003366 50%, #0066cc 50%);
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="page-header">
+            <div class="page-title">Valuation & Conclusions</div>
+        </div>
+
+        <div class="section-title">Vacancy Allowance</div>
+        <div class="section-content">
+            This category accounts for the time period between occupants, as well as possible prolonged vacancies under slow market conditions. Market participants typically expect a vacancy of 2% to 5% of potential gross income for similar property types. This assignment reflects the probable vacancy during the economic life of the property and not necessarily the current or short-term vacancy. The findings of the Multi-Family Market Overview section support a typical vacancy allocation. As of the effective date, the subject is 100.0% occupied. Based on current and perceived long-term market conditions and the subject's anticipated tenancy over a 12-month holding period, a vacancy allowance of 3.8% is concluded.
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ALL VACANCY LOSS</th>
+                    <th>%/QTR</th>
+                    <th>%EGR</th>
+                    <th>%UNIT</th>
+                    <th>%IF YR1</th>
+                    <th>$YEAR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>TOTAL VACANCY & CREDIT LOSS</td>
+                    <td>3.8%</td>
+                    <td>4.0%</td>
+                    <td class="negative">(485)</td>
+                    <td class="negative">(60.77)</td>
+                    <td class="negative">(57,634)</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="section-title">Effective Gross Revenue (EGR)</div>
+        <div class="section-content">
+            Effective gross revenue equals the potential gross revenue less vacancy. The total effective gross revenue for the subject is $196,406 which is $12,275/Unit and $19.25/SF.
+        </div>
+
+        <div class="section-title">Operating Expenses</div>
+        <div class="section-content">
+            We have reviewed the owner's historical operating expenses. As appropriate, the owner's operating expenses are reclassified into standard categories and exclude items that do not reflect normal operating expenses for this type of property. The reclassification is done for proper analysis against comparable data and industry benchmarks as appropriate. The subject's historical operating expenses with our projections are shown in the following chart.
+        </div>
+    </div>
+
+    <div class="page-footer">
+        <div class="footer-left">
+            <span>43</span>
+            <span>1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</span>
+        </div>
+        <div class="footer-right"></div>
+    </div>
+</body>
+</html>

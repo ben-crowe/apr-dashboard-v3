@@ -7027,7 +7027,24 @@ const formatDate = (dateStr: string): string => {
     <div class="letter-diagonal-stripe"></div>
   </div>
 
-  <!-- Executive Summary Page -->
+  <!-- Table of Contents - Page 5 -->
+  <div id="section-toc" class="page exec-page" style="position: relative;">
+    <div class="page-number"></div>
+    <div class="page-header">
+      <img src="${VALTA_LOGO_BASE64}" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>${propertyName || 'Appraisal Report'}</div>
+        <div>${streetAddress ? streetAddress + ', ' : ''}${city || ''}</div>
+      </div>
+    </div>
+    ${renderTableOfContents(sections)}
+    <div class="page-footer">
+      <div class="page-footer-left">${fileNumber || ''}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
+    </div>
+  </div>
+
+  <!-- Executive Summary - Pages 6-8 -->
   ${execSection ? `
   <div id="section-exec" class="page exec-page" style="position: relative;">
     <div class="page-number"></div>
@@ -7049,23 +7066,6 @@ const formatDate = (dateStr: string): string => {
     </div>
   </div>
   ` : ''}
-
-  <!-- Table of Contents -->
-  <div id="section-toc" class="page exec-page" style="position: relative;">
-    <div class="page-number"></div>
-    <div class="page-header">
-      <img src="${VALTA_LOGO_BASE64}" alt="Valta" class="page-header-logo" />
-      <div class="page-header-title">
-        <div>${propertyName || 'Appraisal Report'}</div>
-        <div>${streetAddress ? streetAddress + ', ' : ''}${city || ''}</div>
-      </div>
-    </div>
-    ${renderTableOfContents(sections)}
-    <div class="page-footer">
-      <div class="page-footer-left">${fileNumber || ''}</div>
-      <div class="page-footer-right">${appraiserCompany || ''}</div>
-    </div>
-  </div>
 
   <!-- Additional Sections -->
   <!-- Exclude data collection tabs: client-intake (S1), loe-prep (S2), image-mgt (S3) - these are input-only, not report pages -->

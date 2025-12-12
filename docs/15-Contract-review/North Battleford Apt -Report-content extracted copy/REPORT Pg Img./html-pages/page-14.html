@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page 14 - Maps</title>
+  <title>Page 14 - Introduction & Executive Summary - Maps</title>
   <style>
     @page {
       size: 8.5in 11in;
@@ -51,7 +51,7 @@
     .header-underline {
       width: 540px;
       height: 2px;
-      background: #0066cc;
+      background: #003d7a;
       margin-bottom: 4px;
     }
 
@@ -66,99 +66,32 @@
     .maps-title {
       font-size: 14px;
       font-weight: bold;
-      color: #003d99;
+      color: #003d7a;
       margin-bottom: 12px;
       letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
 
     .map-container {
       flex: 1;
       position: relative;
-      background: #e8e8e8;
-      border: 1px solid #d0d0d0;
-      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 400px;
     }
 
-    .map-grid {
+    .image-placeholder {
       width: 100%;
       height: 100%;
-      position: relative;
-      background-image:
-        linear-gradient(0deg, #d0d0d0 1px, transparent 1px),
-        linear-gradient(90deg, #d0d0d0 1px, transparent 1px);
-      background-size: 40px 40px;
-      background-position: 0 0;
-    }
-
-    /* Street labels */
-    .street-label {
-      position: absolute;
-      font-size: 9px;
-      color: #999;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 1px 3px;
-      border-radius: 2px;
-      white-space: nowrap;
-    }
-
-    /* Markers */
-    .marker {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      border: 2px solid white;
-      z-index: 10;
+      background-color: #cccccc;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 8px;
-      font-weight: bold;
-      color: white;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-
-    .marker.subject {
-      background: #003d99;
-      left: 50%;
-      top: 42%;
-      transform: translate(-50%, -50%);
-    }
-
-    .marker.hospital {
-      background: #ff6b35;
-      left: 18%;
-      top: 62%;
-      transform: translate(-50%, -50%);
-    }
-
-    .marker-label {
-      position: absolute;
-      font-size: 9px;
-      font-weight: 600;
-      color: #333;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 2px 6px;
-      border-radius: 2px;
-      white-space: nowrap;
-      z-index: 11;
-      border: 1px solid #e0e0e0;
-    }
-
-    .subject-label {
-      left: 50%;
-      top: 38%;
-      transform: translate(-50%, -100%);
-    }
-
-    .hospital-label {
-      left: 18%;
-      top: 58%;
-      transform: translate(-50%, -100%);
+      color: #666666;
+      font-size: 12px;
+      border: 1px dashed #999999;
+      font-weight: normal;
+      min-height: 450px;
     }
 
     /* Footer Section */
@@ -168,7 +101,7 @@
       align-items: center;
       padding: 12px 36px;
       border-top: 1px solid #e0e0e0;
-      font-size: 11px;
+      font-size: 10px;
       color: #333;
       background: white;
     }
@@ -180,27 +113,24 @@
     .footer-right {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
 
     .accent-bar {
-      width: 70px;
+      width: 60px;
       height: 16px;
-      background: linear-gradient(90deg, #0066cc 0%, #003d99 100%);
+      background: linear-gradient(90deg, #4a90e2 0%, #003d7a 100%);
     }
 
-    .scale-text {
+    .page-number {
       font-size: 10px;
       color: #666;
+      margin-right: 4px;
     }
 
-    /* Copyright */
-    .copyright {
-      position: absolute;
-      bottom: 10px;
-      left: 12px;
-      font-size: 8px;
+    .divider {
       color: #999;
+      margin: 0 4px;
     }
   </style>
 </head>
@@ -214,54 +144,11 @@
 
     <!-- Maps Section -->
     <div class="maps-section">
-      <div class="maps-title">MAPS</div>
+      <div class="maps-title">Maps</div>
 
       <div class="map-container">
-        <div class="map-grid">
-          <!-- Horizontal street labels (top) -->
-          <div class="street-label" style="top: 10%; left: 35%;">13th Ave</div>
-          <div class="street-label" style="top: 10%; right: 10%;">13th Ave</div>
-
-          <!-- Horizontal street labels (middle) -->
-          <div class="street-label" style="top: 40%; left: 8%;">12th Ave</div>
-          <div class="street-label" style="top: 40%; left: 50%;">12th Ave</div>
-          <div class="street-label" style="top: 40%; right: 8%;">12th Ave</div>
-
-          <!-- Horizontal street labels (lower) -->
-          <div class="street-label" style="top: 62%; left: 8%;">11th Ave</div>
-          <div class="street-label" style="top: 62%; left: 50%;">11th Ave</div>
-          <div class="street-label" style="top: 62%; right: 8%;">11th Ave</div>
-
-          <!-- Horizontal street labels (bottom) -->
-          <div class="street-label" style="bottom: 15%; left: 8%;">10th Ave</div>
-          <div class="street-label" style="bottom: 15%; left: 50%;">10th Ave</div>
-          <div class="street-label" style="bottom: 15%; right: 8%;">10th Ave</div>
-
-          <!-- Vertical street labels (left to right) -->
-          <div class="street-label" style="left: 8%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">5 St</div>
-          <div class="street-label" style="left: 16%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">Cree Ave</div>
-          <div class="street-label" style="left: 24%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">2 St</div>
-          <div class="street-label" style="left: 32%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">3 St</div>
-          <div class="street-label" style="left: 50%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">4 St</div>
-          <div class="street-label" style="left: 58%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">Main St</div>
-          <div class="street-label" style="left: 66%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">5 St</div>
-          <div class="street-label" style="left: 74%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">6 St</div>
-          <div class="street-label" style="left: 82%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">7 St</div>
-          <div class="street-label" style="right: 8%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">8 St</div>
-
-          <!-- Hospital Marker -->
-          <div class="marker hospital"></div>
-          <div class="marker-label hospital-label">Battlefords<br>Union<br>Hospital</div>
-
-          <!-- Subject Marker -->
-          <div class="marker subject"></div>
-          <div class="marker-label subject-label">Subject</div>
-
-          <!-- Copyright -->
-          <div class="copyright">© 1987-2025 HERE, Canada</div>
-
-          <!-- Scale -->
-          <div style="position: absolute; bottom: 15px; right: 12px; font-size: 10px; color: #666;">100ft</div>
+        <div class="image-placeholder">
+          [MAP: North Battleford street map showing subject property location (blue marker) and Battlefords Union Hospital (red marker)]
         </div>
       </div>
     </div>
@@ -269,11 +156,12 @@
     <!-- Footer -->
     <div class="footer">
       <div class="footer-left">
-        9 1101, 1121 109 St. North Battleford, Saskatchewan | File VAL251012 - 1
+        <span class="page-number">9</span>
+        <span class="divider">|</span>
+        <span>1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</span>
       </div>
       <div class="footer-right">
         <div class="accent-bar"></div>
-        <div class="scale-text">100ft</div>
       </div>
     </div>
   </div>

@@ -105,22 +105,22 @@ const TestInputDashboard: React.FC = () => {
   const getFieldStatus = (field: FieldDefinition): FieldStatusInfo => {
     const storeValue = getStoreValue(field.storeId);
 
+    // Missing: undefined or null
     if (storeValue === undefined || storeValue === null) {
       return { field, status: 'missing', storeValue: undefined };
     }
 
+    // Empty strings are truly empty
     if (typeof storeValue === 'string' && storeValue.trim() === '') {
       return { field, status: 'empty', storeValue };
     }
 
-    if (typeof storeValue === 'number' && storeValue === 0) {
-      return { field, status: 'empty', storeValue };
-    }
-
+    // Empty arrays are empty
     if (Array.isArray(storeValue) && storeValue.length === 0) {
       return { field, status: 'empty', storeValue };
     }
 
+    // Everything else (including 0) is mapped
     return { field, status: 'mapped', storeValue };
   };
 

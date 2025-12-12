@@ -1,0 +1,438 @@
+{
+  "_metadata": {
+    "total_mapped_fields": 22,
+    "existing_registry_size": 519,
+    "boilerplate_total_fields": 99,
+    "exact_matches": 22,
+    "coverage": "22.2% of boilerplate fields map directly to existing registry",
+    "date": "2025-12-12"
+  },
+  "mapped_fields": [
+    {
+      "templateField": "{{adjacent-east}}",
+      "registryFieldId": "adjacent-east",
+      "section": "site",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Description of adjacent property to the east"
+    },
+    {
+      "templateField": "{{adjacent-north}}",
+      "registryFieldId": "adjacent-north",
+      "section": "site",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Description of adjacent property to the north"
+    },
+    {
+      "templateField": "{{adjacent-south}}",
+      "registryFieldId": "adjacent-south",
+      "section": "site",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Description of adjacent property to the south"
+    },
+    {
+      "templateField": "{{adjacent-west}}",
+      "registryFieldId": "adjacent-west",
+      "section": "site",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Description of adjacent property to the west"
+    },
+    {
+      "templateField": "{{building-style}}",
+      "registryFieldId": "building-style",
+      "section": "impv",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Building style (e.g., 'garden style', 'townhouse', 'mid-rise')"
+    },
+    {
+      "templateField": "{{client-address}}",
+      "registryFieldId": "client-address",
+      "section": "cover",
+      "subsection": "client-info",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Client street address"
+    },
+    {
+      "templateField": "{{client-company}}",
+      "registryFieldId": "client-company",
+      "section": "cover",
+      "subsection": "client-info",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Client company name"
+    },
+    {
+      "templateField": "{{elevator}}",
+      "registryFieldId": "elevator",
+      "section": "impv",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Elevator description (typically 'None' for walkups)"
+    },
+    {
+      "templateField": "{{exterior-walls}}",
+      "registryFieldId": "exterior-walls",
+      "section": "impv",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Exterior wall construction/materials"
+    },
+    {
+      "templateField": "{{file-number}}",
+      "registryFieldId": "file-number",
+      "section": "cover",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Valcre file number (e.g., 'VAL251012')"
+    },
+    {
+      "templateField": "{{interior-walls}}",
+      "registryFieldId": "interior-walls",
+      "section": "impv",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Interior wall finish/materials"
+    },
+    {
+      "templateField": "{{laundry}}",
+      "registryFieldId": "laundry",
+      "section": "impv",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Laundry facilities description (e.g., 'On Site', 'In-Suite')"
+    },
+    {
+      "templateField": "{{legal-description}}",
+      "registryFieldId": "legal-description",
+      "section": "site",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Legal land description (Plan, Block, Lot, etc.)"
+    },
+    {
+      "templateField": "{{local-area-description}}",
+      "registryFieldId": "local-area-description",
+      "section": "location",
+      "dataType": "textarea",
+      "notes": "EXACT MATCH - Rich text description of local area characteristics"
+    },
+    {
+      "templateField": "{{location-overview-text}}",
+      "registryFieldId": "location-overview-text",
+      "section": "location",
+      "dataType": "textarea",
+      "notes": "EXACT MATCH - Rich text overview of property location and context"
+    },
+    {
+      "templateField": "{{project-amenities}}",
+      "registryFieldId": "project-amenities",
+      "section": "impv",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Project-level amenities (e.g., 'Guest Parking', 'Pool', 'Gym')"
+    },
+    {
+      "templateField": "{{property-name}}",
+      "registryFieldId": "property-name",
+      "section": "cover",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Property name for cover page"
+    },
+    {
+      "templateField": "{{report-date}}",
+      "registryFieldId": "report-date",
+      "section": "cover",
+      "dataType": "date",
+      "notes": "EXACT MATCH - Date report was completed"
+    },
+    {
+      "templateField": "{{unit-amenities}}",
+      "registryFieldId": "unit-amenities",
+      "section": "impv",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Unit-level amenities (e.g., 'Deck/Patio, Range/Stove, Refrigerator')"
+    },
+    {
+      "templateField": "{{valuation-date}}",
+      "registryFieldId": "valuation-date",
+      "section": "cover",
+      "dataType": "date",
+      "notes": "EXACT MATCH - Effective date of valuation"
+    },
+    {
+      "templateField": "{{topography}}",
+      "registryFieldId": "topography",
+      "section": "site",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Site topography description (e.g., 'Level', 'Sloped')"
+    },
+    {
+      "templateField": "{{site-shape}}",
+      "registryFieldId": "site-shape",
+      "section": "site",
+      "dataType": "text",
+      "notes": "EXACT MATCH - Site shape description (e.g., 'Rectangular', 'Irregular')"
+    }
+  ],
+  "similar_mappings": [
+    {
+      "templateField": "{{accessibility-rating}}",
+      "registryFieldId": "accessibility",
+      "section": "site",
+      "similarity": "high",
+      "notes": "SIMILAR - Template field is specifically 'rating', registry field is general 'accessibility'. May need to verify if they serve same purpose."
+    },
+    {
+      "templateField": "{{city-name}}",
+      "registryFieldId": "city",
+      "section": "cover",
+      "similarity": "high",
+      "notes": "SIMILAR - Likely the same field with different naming convention"
+    },
+    {
+      "templateField": "{{client-name}}",
+      "registryFieldId": "client-contact-name",
+      "section": "cover",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent client contact person name"
+    },
+    {
+      "templateField": "{{building-count}}",
+      "registryFieldId": "total-buildings",
+      "section": "impv",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent number of buildings on property"
+    },
+    {
+      "templateField": "{{building-nra-sqft}}",
+      "registryFieldId": "total-nra",
+      "section": "impv",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent total Net Rentable Area. Also similar to 'impv-nra'."
+    },
+    {
+      "templateField": "{{capitalization-rate}}",
+      "registryFieldId": "calc-cap-rate",
+      "section": "calc",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent cap rate for income approach"
+    },
+    {
+      "templateField": "{{effective-gross-revenue}}",
+      "registryFieldId": "calc-egr",
+      "section": "calc",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent EGR in income analysis"
+    },
+    {
+      "templateField": "{{electrical-description}}",
+      "registryFieldId": "electrical",
+      "section": "impv",
+      "similarity": "high",
+      "notes": "SIMILAR - Template has 'description' suffix but likely same field"
+    },
+    {
+      "templateField": "{{exposure-description}}",
+      "registryFieldId": "exposure-visibility",
+      "section": "site",
+      "similarity": "high",
+      "notes": "SIMILAR - Both describe site exposure and visibility"
+    },
+    {
+      "templateField": "{{foundation-type}}",
+      "registryFieldId": "foundation",
+      "section": "impv",
+      "similarity": "high",
+      "notes": "SIMILAR - Template has 'type' suffix but likely same field"
+    },
+    {
+      "templateField": "{{hvac-description}}",
+      "registryFieldId": "hvac",
+      "section": "impv",
+      "similarity": "high",
+      "notes": "SIMILAR - Template has 'description' suffix but likely same field"
+    },
+    {
+      "templateField": "{{market-name}}",
+      "registryFieldId": "market",
+      "section": "location",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent primary market name"
+    },
+    {
+      "templateField": "{{market-rent-per-sf}}",
+      "registryFieldId": "calc-avg-rent-per-sf",
+      "section": "calc",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent average/market rent per SF"
+    },
+    {
+      "templateField": "{{market-rent-per-unit}}",
+      "registryFieldId": "calc-avg-rent-per-unit",
+      "section": "calc",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent average/market rent per unit"
+    },
+    {
+      "templateField": "{{nearby-schools-list}}",
+      "registryFieldId": "nearby-schools",
+      "section": "location",
+      "similarity": "high",
+      "notes": "SIMILAR - Template has 'list' suffix but likely same field"
+    },
+    {
+      "templateField": "{{net-operating-income}}",
+      "registryFieldId": "calc-noi",
+      "section": "calc",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent Net Operating Income"
+    },
+    {
+      "templateField": "{{noi-per-sf}}",
+      "registryFieldId": "calc-noi-per-sf",
+      "section": "calc",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent NOI per square foot"
+    },
+    {
+      "templateField": "{{noi-per-unit}}",
+      "registryFieldId": "calc-noi-per-unit",
+      "section": "calc",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent NOI per unit"
+    },
+    {
+      "templateField": "{{nra-sqft}}",
+      "registryFieldId": "total-nra",
+      "section": "impv",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent total Net Rentable Area. Also similar to 'impv-nra'."
+    },
+    {
+      "templateField": "{{occupancy-percent}}",
+      "registryFieldId": "occupancy-rate",
+      "section": "impv",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent current occupancy percentage"
+    },
+    {
+      "templateField": "{{potential-gross-revenue}}",
+      "registryFieldId": "calc-pgr",
+      "section": "calc",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent Potential Gross Revenue"
+    },
+    {
+      "templateField": "{{property-address-line1}}",
+      "registryFieldId": "street-address",
+      "section": "cover",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent street address of property"
+    },
+    {
+      "templateField": "{{property-city}}",
+      "registryFieldId": "city",
+      "section": "cover",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent property city"
+    },
+    {
+      "templateField": "{{property-province}}",
+      "registryFieldId": "province",
+      "section": "cover",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent property province"
+    },
+    {
+      "templateField": "{{roof-type}}",
+      "registryFieldId": "roof",
+      "section": "impv",
+      "similarity": "high",
+      "notes": "SIMILAR - Template has 'type' suffix but likely same field"
+    },
+    {
+      "templateField": "{{security-features}}",
+      "registryFieldId": "security",
+      "section": "impv",
+      "similarity": "high",
+      "notes": "SIMILAR - Template has 'features' suffix but likely same field"
+    },
+    {
+      "templateField": "{{site-area-ac}}",
+      "registryFieldId": "site-acreage",
+      "section": "site",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent site area in acres"
+    },
+    {
+      "templateField": "{{site-area-sf}}",
+      "registryFieldId": "site-total-area",
+      "section": "site",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent site area in square feet"
+    },
+    {
+      "templateField": "{{story-count}}",
+      "registryFieldId": "stories",
+      "section": "impv",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent number of stories. Also similar to 'impv-stories'."
+    },
+    {
+      "templateField": "{{submarket-name}}",
+      "registryFieldId": "submarket",
+      "section": "location",
+      "similarity": "high",
+      "notes": "SIMILAR - Template has 'name' suffix but likely same field"
+    },
+    {
+      "templateField": "{{total-operating-expenses}}",
+      "registryFieldId": "calc-expenses-total",
+      "section": "calc",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent total operating expenses"
+    },
+    {
+      "templateField": "{{transit-description}}",
+      "registryFieldId": "public-transit",
+      "section": "location",
+      "similarity": "high",
+      "notes": "SIMILAR - Template has 'description' suffix but likely same field"
+    },
+    {
+      "templateField": "{{unit-count}}",
+      "registryFieldId": "total-units",
+      "section": "impv",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent total number of units. Also similar to 'impv-num-units'."
+    },
+    {
+      "templateField": "{{vacancy-percent}}",
+      "registryFieldId": "calc-vacancy-rate",
+      "section": "calc",
+      "similarity": "high",
+      "notes": "SIMILAR - Both represent vacancy allowance percentage"
+    },
+    {
+      "templateField": "{{value-scenario-type}}",
+      "registryFieldId": "value-scenario",
+      "section": "identification",
+      "similarity": "high",
+      "notes": "SIMILAR - Template has 'type' suffix but likely same field"
+    },
+    {
+      "templateField": "{{year-built}}",
+      "registryFieldId": "year-built",
+      "section": "impv",
+      "similarity": "exact",
+      "notes": "EXACT MATCH - Year property was built (duplicate in analysis)"
+    },
+    {
+      "templateField": "{{zoning-description}}",
+      "registryFieldId": "zoning-description",
+      "section": "zoning",
+      "similarity": "exact",
+      "notes": "EXACT MATCH - Zoning description (duplicate in analysis)"
+    }
+  ],
+  "recommendation": {
+    "strategy": "Many template fields have high-similarity matches in registry. Recommend consolidating field names to use existing registry IDs where possible. This will reduce new field count from 77 to approximately 30-40 truly new fields.",
+    "consolidation_priority": [
+      "Use calc-* prefix for all financial calculations",
+      "Use impv-* prefix for improvement characteristics",
+      "Remove redundant 'description', 'type', 'name' suffixes where registry field exists",
+      "Use calculated fields for composite values (property-full-address, property-city-province, etc.)"
+    ]
+  }
+}

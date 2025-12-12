@@ -7054,10 +7054,10 @@ const formatDate = (dateStr: string): string => {
     </div>
   </div>
 
-  <!-- Executive Summary - Pages 6-8 -->
+  <!-- Executive Summary - Page 6: Property Overview Tables -->
   ${execSection ? `
-  <div id="section-exec" class="page exec-page" style="position: relative;">
-    <div class="page-number"></div>
+  <div id="section-exec-page-6" class="page exec-page" style="position: relative;">
+    <div class="page-number">1</div>
     <!-- Page Header -->
     <div class="page-header">
       <img src="${VALTA_LOGO_BASE64}" alt="Valta" class="page-header-logo" />
@@ -7068,6 +7068,194 @@ const formatDate = (dateStr: string): string => {
     </div>
 
     ${renderExecSection(execSection)}
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">${fileNumber || ''}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
+    </div>
+  </div>
+
+  <!-- Executive Summary - Page 7: Summary & Conclusion Tables -->
+  <div id="section-exec-page-7" class="page exec-page" style="position: relative;">
+    <div class="page-number">2</div>
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="${VALTA_LOGO_BASE64}" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>${propertyName || 'Appraisal Report'}</div>
+        <div>${streetAddress ? streetAddress + ', ' : ''}${city || ''}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title" style="border-bottom: 2px solid #1a4480; padding-bottom: 8px; margin-bottom: 24px;">Introduction & Executive Summary</h2>
+
+      <!-- HIGHEST & BEST USE -->
+      <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
+        <thead>
+          <tr>
+            <th colspan="2" style="background-color: var(--brand-navy); color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">HIGHEST & BEST USE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; width: 50%; font-weight: 500; color: #555;">Proposed Construction</td>
+            <td style="padding: 8px 12px; color: #333;">No</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">As Though Vacant</td>
+            <td style="padding: 8px 12px; color: #333;">Multifamily</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">As Improved</td>
+            <td style="padding: 8px 12px; color: #333;">Multifamily</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- EXPOSURE & MARKETING TIME -->
+      <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
+        <thead>
+          <tr>
+            <th colspan="2" style="background-color: var(--brand-navy); color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">EXPOSURE & MARKETING TIME</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; width: 50%; font-weight: 500; color: #555;">Exposure Time</td>
+            <td style="padding: 8px 12px; color: #333;">${exposureTime || 'Six Months'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Marketing Time</td>
+            <td style="padding: 8px 12px; color: #333;">${marketingTime || 'Six Months'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- INVESTMENT INDICATORS -->
+      <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
+        <thead>
+          <tr>
+            <th colspan="3" style="background-color: var(--brand-navy); color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">INVESTMENT INDICATORS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; width: 60%; font-weight: 500; color: #555;">Current Occupancy</td>
+            <td colspan="2" style="padding: 8px 12px; text-align: right; color: #333;">${occupancyRate}%</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Stabilized Occupancy / Stabilized Vacancy & Credit Loss</td>
+            <td style="padding: 8px 12px; text-align: right; color: #333;">96.16%</td>
+            <td style="padding: 8px 12px; text-align: right; color: #333;">3.84%</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">SF Multifamily</td>
+            <td colspan="2" style="padding: 8px 12px; text-align: right; color: #333;">${totalNra || '10,204'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Occupied MF Units / Vacant MF Units</td>
+            <td style="padding: 8px 12px; text-align: right; color: #333;">${totalUnits || '16'}</td>
+            <td style="padding: 8px 12px; text-align: right; color: #333;">0</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Current Rent/MF Units / Concluded Rent/MF Units</td>
+            <td style="padding: 8px 12px; text-align: right; color: #333;">$1,015</td>
+            <td style="padding: 8px 12px; text-align: right; color: #333;">$1,020</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Expense Ratio: (Expenses/EGR)</td>
+            <td colspan="2" style="padding: 8px 12px; text-align: right; color: #333;">+3.09%</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Capitalization Rate (OAR) Conclusion</td>
+            <td colspan="2" style="padding: 8px 12px; text-align: right; color: #333;">6.25%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- VALUE CONCLUSION -->
+      <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
+        <thead>
+          <tr>
+            <th colspan="2" style="background-color: var(--brand-navy); color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">VALUE CONCLUSION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; width: 60%; font-weight: 600; color: #555;">VALUATION SCENARIOS</td>
+            <td style="padding: 8px 12px; text-align: right; font-weight: 600; color: #333;">AS STABILIZED</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Interest</td>
+            <td style="padding: 8px 12px; text-align: right; color: #333;">${propertyRights || 'Fee Simple Estate'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Exposure Time</td>
+            <td style="padding: 8px 12px; text-align: right; color: #333;">${exposureTime || 'Six Months'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Effective Date</td>
+            <td style="padding: 8px 12px; text-align: right; color: #333;">${formatDate(valuationDate) || 'October 17, 2025'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Cost Approach</td>
+            <td style="padding: 8px 12px; text-align: right; color: #333;">Not Presented</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Direct Comparison Approach</td>
+            <td style="padding: 8px 12px; text-align: right; color: #333;">${finalValue ? '$' + parseInt(finalValue).toLocaleString() : '$1,800,000'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Income Approach</td>
+            <td style="padding: 8px 12px; text-align: right; color: #333;">${finalValue ? '$' + parseInt(finalValue).toLocaleString() : '$1,800,000'}</td>
+          </tr>
+          <tr style="background-color: var(--brand-navy); -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">
+            <td style="padding: 8px 12px; font-weight: 700; color: white;">FINAL VALUE CONCLUSION</td>
+            <td style="padding: 8px 12px; text-align: right; font-weight: 700; color: white;">${finalValue ? '$' + parseInt(finalValue).toLocaleString() : '$1,800,000'}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">${fileNumber || ''}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
+    </div>
+  </div>
+
+  <!-- Executive Summary - Page 8: Hypothetical Conditions & Assumptions -->
+  <div id="section-exec-page-8" class="page exec-page" style="position: relative;">
+    <div class="page-number">3</div>
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="${VALTA_LOGO_BASE64}" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>${propertyName || 'Appraisal Report'}</div>
+        <div>${streetAddress ? streetAddress + ', ' : ''}${city || ''}</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title" style="border-bottom: 2px solid #1a4480; padding-bottom: 8px; margin-bottom: 24px;">Introduction & Executive Summary</h2>
+
+      <div class="letter-section-heading" style="color: #1a4480; font-size: 12px; font-weight: 600; margin-bottom: 12px;">Hypothetical Conditions</div>
+      <div class="letter-conditions-text" style="font-size: 11px; line-height: 1.6; color: #333; margin-bottom: 24px;">
+        ${hypotheticalConditions || 'The use of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed based on the hypothetical condition that the subject property is fully leased at prevailing market rents and has achieved stabilized occupancy as of the effective date although this may not be the actual condition. This is a hypothetical condition that all units could achieve stabilized occupancy as of the effective date, the property's existing lease terms reflect contract rents that are deemed to be below-market etc. For the purposes of this analysis, it is assumed that lease-up to market rent levels and stabilized occupancy has occurred under typical market conditions, without undue delay or concessions exceeding market norms. If this assumption proves incorrect, such as market rents are not achievable or that lease-up may be materially impacted.'}
+      </div>
+
+      <div class="letter-section-heading" style="color: #1a4480; font-size: 12px; font-weight: 600; margin-bottom: 12px;">Extraordinary Assumptions</div>
+      <div class="letter-conditions-text" style="font-size: 11px; line-height: 1.6; color: #333; margin-bottom: 24px;">
+        ${extraordinaryAssumptions || 'No Extraordinary Assumptions were made for this assignment.'}
+      </div>
+
+      <div class="letter-section-heading" style="color: #1a4480; font-size: 12px; font-weight: 600; margin-bottom: 12px;">Extraordinary Limiting Conditions</div>
+      <div class="letter-conditions-text" style="font-size: 11px; line-height: 1.6; color: #333; margin-bottom: 24px;">
+        ${extraordinaryLimitingConditions || 'No Extraordinary Limiting Conditions were made for this assignment.'}
+      </div>
+    </div>
 
     <!-- Page Footer -->
     <div class="page-footer">

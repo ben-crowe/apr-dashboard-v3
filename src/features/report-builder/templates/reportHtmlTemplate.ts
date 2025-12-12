@@ -547,7 +547,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
           </tr>
           <tr>
             <td class="site-table-label">Report Date</td>
-            <td class="site-table-value">${reportDate || '<span class="empty-state">—</span>'}</td>
+            <td class="site-table-value">${formatDate(reportDate) || '<span class="empty-state">—</span>'}</td>
           </tr>
         </tbody>
       </table>
@@ -2022,7 +2022,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       </table>
 
       <div class="site-narrative-section" style="margin-top: 1.5rem; padding: 1rem; background: #f9fafb; border-left: 4px solid #1a365d;">
-        <p class="site-narrative-text" style="margin: 0;"><strong>Value Conclusion:</strong> Based on the Income Capitalization Approach utilizing the Direct Capitalization method, the market value of the subject property as of ${valuationDate || '[DATE]'} is indicated to be <strong>${indicatedValue ? formatCurrency(indicatedValue) : '[VALUE]'}</strong>.</p>
+        <p class="site-narrative-text" style="margin: 0;"><strong>Value Conclusion:</strong> Based on the Income Capitalization Approach utilizing the Direct Capitalization method, the market value of the subject property as of ${formatDate(valuationDate) || '[DATE]'} is indicated to be <strong>${indicatedValue ? formatCurrency(indicatedValue) : '[VALUE]'}</strong>.</p>
       </div>
 
       ${!potentialGrossIncome && !effectiveGrossIncome && !netOperatingIncome && !capRate ? `
@@ -6862,8 +6862,8 @@ export function generateReportHtml(sections: ReportSection[]): string {
 
       <!-- Dates -->
       <div class="dates-section">
-        <div>Date of Valuation: ${valuationDate || '[Valuation Date]'}</div>
-        <div>Date of Report: ${reportDate || '[Report Date]'}</div>
+        <div>Date of Valuation: ${formatDate(valuationDate) || '[Valuation Date]'}</div>
+        <div>Date of Report: ${formatDate(reportDate) || '[Report Date]'}</div>
       </div>
 
       <!-- File Number -->
@@ -6886,7 +6886,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
       </div>
     </div>
 
-    <div class="letter-date">${reportDate || '[Report Date]'}</div>
+    <div class="letter-date">${formatDate(reportDate) || '[Report Date]'}</div>
 
     <div class="letter-address-block">
       ${clientCompany || '[Client Company]'}<br/>
@@ -6931,7 +6931,7 @@ export function generateReportHtml(sections: ReportSection[]): string {
             <td>${valueScenario}</td>
             <td>${propertyRights}</td>
             <td>Six Months</td>
-            <td>${valuationDate || '[Valuation Date]'}</td>
+            <td>${formatDate(valuationDate) || '[Valuation Date]'}</td>
             <td><strong>${concludedValue ? formatCurrency(concludedValue) : '[Concluded Value]'}</strong></td>
           </tr>
         </tbody>

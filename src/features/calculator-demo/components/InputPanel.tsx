@@ -1,495 +1,340 @@
 /**
  * Input Panel - Compact Excel-Style Tables
  *
- * Replaces accordion-heavy design with dense spreadsheet-style tables
- * All inputs editable inline with auto-recalculation
+ * HARDCODED TEST DATA - Bypasses store completely
  */
 
-import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
+import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 
-export default function InputPanel() {
-  const { sections, updateFieldValue, runCalculations } = useReportBuilderStore();
-
-  const calcSection = sections.find(s => s.id === 'calc');
-
-  const getFieldValue = (fieldId: string): number => {
-    if (!calcSection) return 0;
-
-    const field = calcSection.fields.find(f => f.id === fieldId);
-    if (field) return Number(field.value) || 0;
-
-    if (calcSection.subsections) {
-      for (const sub of calcSection.subsections) {
-        const subField = sub.fields.find(f => f.id === fieldId);
-        if (subField) return Number(subField.value) || 0;
-      }
+// Property data sets
+const PROPERTIES = {
+  'north-battleford': {
+    name: 'North Battleford Multi-Family',
+    data: {
+      type1Name: '1 Bed / 1 Bath',
+      type1Count: 16,
+      type1Sf: 638,
+      type1Rent: 1064,
+      parkingPerUnit: 375,
+      laundryPerUnit: 150,
+      otherIncome: 0,
+      vacancyRate: 3.8,
+      badDebtRate: 0,
+      concessionsRate: 0,
+      expManagement: 4.25,
+      expTaxes: 1168,
+      expInsurance: 710,
+      expRepairs: 830,
+      expUtilities: 1315,
+      expPayroll: 500,
+      expAdmin: 0,
+      expReserves: 0,
+      expOther: 245,
+      capRate: 6.25,
+      adjCapex: 0,
+      adjLeasing: 0,
+      adjOther: 0,
     }
-    return 0;
+  },
+  'empty': {
+    name: 'Blank Template',
+    data: {
+      type1Name: 'Unit Type 1',
+      type1Count: 0,
+      type1Sf: 0,
+      type1Rent: 0,
+      parkingPerUnit: 0,
+      laundryPerUnit: 0,
+      otherIncome: 0,
+      vacancyRate: 5,
+      badDebtRate: 0,
+      concessionsRate: 0,
+      expManagement: 5,
+      expTaxes: 0,
+      expInsurance: 0,
+      expRepairs: 0,
+      expUtilities: 0,
+      expPayroll: 0,
+      expAdmin: 0,
+      expReserves: 0,
+      expOther: 0,
+      capRate: 6,
+      adjCapex: 0,
+      adjLeasing: 0,
+      adjOther: 0,
+    }
+  }
+};
+
+type PropertyKey = keyof typeof PROPERTIES;
+type PropertyData = typeof PROPERTIES['north-battleford']['data'];
+
+export default function InputPanel() {
+  const [selectedProperty, setSelectedProperty] = useState<PropertyKey>('north-battleford');
+  const [data, setData] = useState(PROPERTIES['north-battleford'].data);
+
+  const loadProperty = (key: PropertyKey) => {
+    setSelectedProperty(key);
+    setData(PROPERTIES[key].data);
   };
 
-  const handleFieldChange = (fieldId: string, value: string) => {
-    const numValue = parseFloat(value) || 0;
-    updateFieldValue(fieldId, numValue);
-    runCalculations();
-  };
+  // Calculations
+  const type1Annual = data.type1Count * data.type1Rent * 12;
+  const totalUnits = data.type1Count;
+  const totalSf = data.type1Count * data.type1Sf;
+  const totalRentalRevenue = type1Annual;
 
-  const formatCurrency = (value: number): string => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
-  };
+  const parkingTotal = data.parkingPerUnit * totalUnits * 12;
+  const laundryTotal = data.laundryPerUnit * totalUnits * 12;
+  const totalOtherIncome = parkingTotal + laundryTotal + data.otherIncome;
 
-  // Calculate totals for display
-  const totalUnits = getFieldValue('calc-total-units');
-  const totalSF = getFieldValue('calc-total-sf');
-  const totalRentalRevenue = getFieldValue('calc-total-rental-revenue');
-  const totalOtherIncome = getFieldValue('calc-total-other-income');
-  const vacancyLoss = getFieldValue('calc-vacancy-loss');
-  const egr = getFieldValue('calc-egr');
-  const expensesTotal = getFieldValue('calc-expenses-total');
+  const pgr = totalRentalRevenue + totalOtherIncome;
+  const totalVacancyRate = data.vacancyRate + data.badDebtRate + data.concessionsRate;
+  const vacancyLoss = pgr * (totalVacancyRate / 100);
+  const egr = pgr - vacancyLoss;
+
+  const expManagementAmt = egr * (data.expManagement / 100);
+  const expTaxesAmt = data.expTaxes * totalUnits;
+  const expInsuranceAmt = data.expInsurance * totalUnits;
+  const expRepairsAmt = data.expRepairs * totalUnits;
+  const expUtilitiesAmt = data.expUtilities * totalUnits;
+  const expPayrollAmt = data.expPayroll * totalUnits;
+  const expAdminAmt = data.expAdmin * totalUnits;
+  const expReservesAmt = data.expReserves * totalUnits;
+  const expOtherAmt = data.expOther * totalUnits;
+  const expensesTotal = expManagementAmt + expTaxesAmt + expInsuranceAmt + expRepairsAmt +
+                        expUtilitiesAmt + expPayrollAmt + expAdminAmt + expReservesAmt + expOtherAmt;
+  const expenseRatio = egr > 0 ? (expensesTotal / egr) * 100 : 0;
+
+  const noi = egr - expensesTotal;
+  const rawValue = data.capRate > 0 ? noi / (data.capRate / 100) : 0;
+  const roundedValue = Math.round(rawValue / 10000) * 10000;
+
+  const adjTotal = data.adjCapex + data.adjLeasing + data.adjOther;
+  const indicatedValue = roundedValue - adjTotal;
+
+  const formatCurrency = (n: number) => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  const formatNumber = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 2 });
+
+  const updateField = (field: keyof PropertyData, value: string) => {
+    setData(prev => ({ ...prev, [field]: parseFloat(value) || 0 }));
+  };
 
   return (
-    <div className="space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto pr-2">
+    <div className="space-y-3 text-xs">
 
-      {/* UNIT MIX TABLE */}
-      <div className="border rounded-lg overflow-hidden">
-        <div className="bg-slate-800 text-white px-3 py-2 font-semibold text-sm">
-          UNIT MIX
+      {/* PROPERTY SELECTOR */}
+      <div className="border rounded overflow-hidden">
+        <div className="bg-slate-800 text-white px-2 py-1 font-semibold">SELECT PROPERTY</div>
+        <div className="p-2 flex flex-wrap gap-2">
+          {Object.entries(PROPERTIES).map(([key, prop]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => loadProperty(key as PropertyKey)}
+              className={`px-3 py-1.5 text-xs rounded font-medium transition-colors ${
+                selectedProperty === key
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              {prop.name}
+            </button>
+          ))}
         </div>
-        <table className="w-full text-xs">
-          <thead className="bg-slate-100 border-b">
+      </div>
+
+      {/* UNIT MIX */}
+      <div className="border rounded overflow-hidden">
+        <div className="bg-slate-800 text-white px-2 py-1 font-semibold">UNIT MIX</div>
+        <table className="w-full">
+          <thead className="bg-slate-100">
             <tr>
-              <th className="px-2 py-1.5 text-left font-medium">Type</th>
-              <th className="px-2 py-1.5 text-right font-medium">Count</th>
-              <th className="px-2 py-1.5 text-right font-medium">SF/Unit</th>
-              <th className="px-2 py-1.5 text-right font-medium">Rent/Mo</th>
-              <th className="px-2 py-1.5 text-right font-medium">Annual Revenue</th>
+              <th className="px-2 py-1 text-left">Type</th>
+              <th className="px-2 py-1 text-right">Count</th>
+              <th className="px-2 py-1 text-right">SF</th>
+              <th className="px-2 py-1 text-right">Rent/Mo</th>
+              <th className="px-2 py-1 text-right">Annual</th>
             </tr>
           </thead>
           <tbody>
-            {[1, 2, 3, 4].map(type => {
-              const name = getFieldValue(`calc-type${type}-name`);
-              const count = getFieldValue(`calc-type${type}-count`);
-              const sf = getFieldValue(`calc-type${type}-sf`);
-              const rent = getFieldValue(`calc-type${type}-rent`);
-              const annual = getFieldValue(`calc-type${type}-annual`);
-
-              return (
-                <tr key={type} className="border-b hover:bg-slate-50">
-                  <td className="px-2 py-1">
-                    <Input
-                      type="text"
-                      value={name || `Type ${type}`}
-                      onChange={(e) => handleFieldChange(`calc-type${type}-name`, e.target.value)}
-                      className="h-7 text-xs border-0 bg-transparent p-1"
-                    />
-                  </td>
-                  <td className="px-2 py-1">
-                    <Input
-                      type="number"
-                      value={count}
-                      onChange={(e) => handleFieldChange(`calc-type${type}-count`, e.target.value)}
-                      className="h-7 text-xs text-right"
-                      step="1"
-                    />
-                  </td>
-                  <td className="px-2 py-1">
-                    <Input
-                      type="number"
-                      value={sf}
-                      onChange={(e) => handleFieldChange(`calc-type${type}-sf`, e.target.value)}
-                      className="h-7 text-xs text-right"
-                      step="1"
-                    />
-                  </td>
-                  <td className="px-2 py-1">
-                    <Input
-                      type="number"
-                      value={rent}
-                      onChange={(e) => handleFieldChange(`calc-type${type}-rent`, e.target.value)}
-                      className="h-7 text-xs text-right"
-                      step="0.01"
-                    />
-                  </td>
-                  <td className="px-2 py-1 text-right text-slate-600">
-                    {formatCurrency(annual)}
-                  </td>
-                </tr>
-              );
-            })}
+            <tr className="border-t">
+              <td className="px-2 py-1">{data.type1Name}</td>
+              <td className="px-2 py-1"><Input type="number" value={data.type1Count} onChange={e => updateField('type1Count', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1"><Input type="number" value={data.type1Sf} onChange={e => updateField('type1Sf', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1"><Input type="number" value={data.type1Rent} onChange={e => updateField('type1Rent', e.target.value)} className="h-6 w-20 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-right font-medium">{formatCurrency(type1Annual)}</td>
+            </tr>
           </tbody>
-          <tfoot className="bg-slate-50 border-t-2 font-semibold">
-            <tr>
-              <td className="px-2 py-1.5">TOTALS</td>
-              <td className="px-2 py-1.5 text-right">{totalUnits} units</td>
-              <td className="px-2 py-1.5 text-right">{totalSF.toLocaleString()} SF</td>
-              <td className="px-2 py-1.5"></td>
-              <td className="px-2 py-1.5 text-right">{formatCurrency(totalRentalRevenue)}/year</td>
+          <tfoot className="bg-slate-50 font-semibold">
+            <tr className="border-t">
+              <td className="px-2 py-1">TOTALS</td>
+              <td className="px-2 py-1 text-right">{totalUnits}</td>
+              <td className="px-2 py-1 text-right">{formatNumber(totalSf)}</td>
+              <td className="px-2 py-1"></td>
+              <td className="px-2 py-1 text-right">{formatCurrency(totalRentalRevenue)}</td>
             </tr>
           </tfoot>
         </table>
       </div>
 
-      {/* OTHER INCOME TABLE */}
-      <div className="border rounded-lg overflow-hidden">
-        <div className="bg-slate-800 text-white px-3 py-2 font-semibold text-sm">
-          OTHER INCOME
-        </div>
-        <table className="w-full text-xs">
-          <thead className="bg-slate-100 border-b">
-            <tr>
-              <th className="px-2 py-1.5 text-left font-medium">Item</th>
-              <th className="px-2 py-1.5 text-right font-medium">Per Unit/Mo</th>
-              <th className="px-2 py-1.5 text-right font-medium">Annual Total</th>
-            </tr>
-          </thead>
+      {/* OTHER INCOME */}
+      <div className="border rounded overflow-hidden">
+        <div className="bg-slate-800 text-white px-2 py-1 font-semibold">OTHER INCOME</div>
+        <table className="w-full">
           <tbody>
-            <tr className="border-b hover:bg-slate-50">
+            <tr className="border-t">
               <td className="px-2 py-1">Parking</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-parking-per-unit')}
-                  onChange={(e) => handleFieldChange('calc-parking-per-unit', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600">
-                {formatCurrency(getFieldValue('calc-parking-total'))}
-              </td>
+              <td className="px-2 py-1"><Input type="number" value={data.parkingPerUnit} onChange={e => updateField('parkingPerUnit', e.target.value)} className="h-6 w-20 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-right text-slate-500">/unit/mo</td>
+              <td className="px-2 py-1 text-right font-medium">{formatCurrency(parkingTotal)}</td>
             </tr>
-            <tr className="border-b hover:bg-slate-50">
+            <tr className="border-t">
               <td className="px-2 py-1">Laundry</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-laundry-per-unit')}
-                  onChange={(e) => handleFieldChange('calc-laundry-per-unit', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600">
-                {formatCurrency(getFieldValue('calc-laundry-total'))}
-              </td>
-            </tr>
-            <tr className="border-b hover:bg-slate-50">
-              <td className="px-2 py-1">Other (annual)</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-other-income')}
-                  onChange={(e) => handleFieldChange('calc-other-income', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600">
-                {formatCurrency(getFieldValue('calc-other-income'))}
-              </td>
+              <td className="px-2 py-1"><Input type="number" value={data.laundryPerUnit} onChange={e => updateField('laundryPerUnit', e.target.value)} className="h-6 w-20 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-right text-slate-500">/unit/mo</td>
+              <td className="px-2 py-1 text-right font-medium">{formatCurrency(laundryTotal)}</td>
             </tr>
           </tbody>
-          <tfoot className="bg-slate-50 border-t-2 font-semibold">
+          <tfoot className="bg-slate-50 font-semibold border-t">
             <tr>
-              <td className="px-2 py-1.5" colSpan={2}>TOTAL OTHER INCOME</td>
-              <td className="px-2 py-1.5 text-right">{formatCurrency(totalOtherIncome)}/year</td>
+              <td className="px-2 py-1" colSpan={3}>Total Other Income</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(totalOtherIncome)}</td>
             </tr>
           </tfoot>
         </table>
       </div>
 
-      {/* VACANCY & LOSS TABLE */}
-      <div className="border rounded-lg overflow-hidden">
-        <div className="bg-slate-800 text-white px-3 py-2 font-semibold text-sm">
-          VACANCY & LOSS
-        </div>
-        <table className="w-full text-xs">
-          <thead className="bg-slate-100 border-b">
-            <tr>
-              <th className="px-2 py-1.5 text-left font-medium">Type</th>
-              <th className="px-2 py-1.5 text-right font-medium">Rate (%)</th>
-              <th className="px-2 py-1.5 text-right font-medium">Amount</th>
-            </tr>
-          </thead>
+      {/* PGR */}
+      <div className="bg-green-50 border border-green-200 rounded p-2 flex justify-between">
+        <span className="font-semibold text-green-800">Potential Gross Revenue (PGR)</span>
+        <span className="font-bold text-green-800">{formatCurrency(pgr)}</span>
+      </div>
+
+      {/* VACANCY */}
+      <div className="border rounded overflow-hidden">
+        <div className="bg-slate-800 text-white px-2 py-1 font-semibold">VACANCY & LOSS</div>
+        <table className="w-full">
           <tbody>
-            <tr className="border-b hover:bg-slate-50">
-              <td className="px-2 py-1">Vacancy</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-vacancy-rate')}
-                  onChange={(e) => handleFieldChange('calc-vacancy-rate', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600" rowSpan={3}>
-                {formatCurrency(vacancyLoss)}
-              </td>
+            <tr className="border-t">
+              <td className="px-2 py-1">Vacancy Rate</td>
+              <td className="px-2 py-1"><Input type="number" step="0.1" value={data.vacancyRate} onChange={e => updateField('vacancyRate', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-slate-500">%</td>
             </tr>
-            <tr className="border-b hover:bg-slate-50">
+            <tr className="border-t">
               <td className="px-2 py-1">Bad Debt</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-bad-debt-rate')}
-                  onChange={(e) => handleFieldChange('calc-bad-debt-rate', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-            </tr>
-            <tr className="border-b hover:bg-slate-50">
-              <td className="px-2 py-1">Concessions</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-concessions-rate')}
-                  onChange={(e) => handleFieldChange('calc-concessions-rate', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
+              <td className="px-2 py-1"><Input type="number" step="0.1" value={data.badDebtRate} onChange={e => updateField('badDebtRate', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-slate-500">%</td>
             </tr>
           </tbody>
-          <tfoot className="bg-slate-50 border-t-2 font-semibold">
+          <tfoot className="bg-red-50 font-semibold border-t">
             <tr>
-              <td className="px-2 py-1.5" colSpan={2}>EFFECTIVE GROSS REVENUE</td>
-              <td className="px-2 py-1.5 text-right">{formatCurrency(egr)}</td>
+              <td className="px-2 py-1">Vacancy Loss</td>
+              <td className="px-2 py-1 text-right text-red-700" colSpan={2}>{formatCurrency(vacancyLoss)}</td>
             </tr>
           </tfoot>
         </table>
       </div>
 
-      {/* OPERATING EXPENSES TABLE */}
-      <div className="border rounded-lg overflow-hidden">
-        <div className="bg-slate-800 text-white px-3 py-2 font-semibold text-sm">
-          OPERATING EXPENSES
-        </div>
-        <table className="w-full text-xs">
-          <thead className="bg-slate-100 border-b">
-            <tr>
-              <th className="px-2 py-1.5 text-left font-medium">Expense</th>
-              <th className="px-2 py-1.5 text-right font-medium">Rate/Unit</th>
-              <th className="px-2 py-1.5 text-right font-medium">Annual Total</th>
-            </tr>
-          </thead>
+      {/* EGR */}
+      <div className="bg-green-50 border border-green-200 rounded p-2 flex justify-between">
+        <span className="font-semibold text-green-800">Effective Gross Revenue (EGR)</span>
+        <span className="font-bold text-green-800">{formatCurrency(egr)}</span>
+      </div>
+
+      {/* EXPENSES */}
+      <div className="border rounded overflow-hidden">
+        <div className="bg-slate-800 text-white px-2 py-1 font-semibold">OPERATING EXPENSES</div>
+        <table className="w-full">
           <tbody>
-            <tr className="border-b hover:bg-slate-50">
-              <td className="px-2 py-1">Management (% of EGR)</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-exp-management')}
-                  onChange={(e) => handleFieldChange('calc-exp-management', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600">
-                {formatCurrency(egr * (getFieldValue('calc-exp-management') / 100))}
-              </td>
+            <tr className="border-t">
+              <td className="px-2 py-1">Management</td>
+              <td className="px-2 py-1"><Input type="number" step="0.25" value={data.expManagement} onChange={e => updateField('expManagement', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-slate-500">% EGR</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expManagementAmt)}</td>
             </tr>
-            <tr className="border-b hover:bg-slate-50">
+            <tr className="border-t">
               <td className="px-2 py-1">Taxes</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-exp-taxes')}
-                  onChange={(e) => handleFieldChange('calc-exp-taxes', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600">
-                {formatCurrency(getFieldValue('calc-exp-taxes') * totalUnits)}
-              </td>
+              <td className="px-2 py-1"><Input type="number" value={data.expTaxes} onChange={e => updateField('expTaxes', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-slate-500">/unit</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expTaxesAmt)}</td>
             </tr>
-            <tr className="border-b hover:bg-slate-50">
+            <tr className="border-t">
               <td className="px-2 py-1">Insurance</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-exp-insurance')}
-                  onChange={(e) => handleFieldChange('calc-exp-insurance', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600">
-                {formatCurrency(getFieldValue('calc-exp-insurance') * totalUnits)}
-              </td>
+              <td className="px-2 py-1"><Input type="number" value={data.expInsurance} onChange={e => updateField('expInsurance', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-slate-500">/unit</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expInsuranceAmt)}</td>
             </tr>
-            <tr className="border-b hover:bg-slate-50">
+            <tr className="border-t">
               <td className="px-2 py-1">Repairs</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-exp-repairs')}
-                  onChange={(e) => handleFieldChange('calc-exp-repairs', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600">
-                {formatCurrency(getFieldValue('calc-exp-repairs') * totalUnits)}
-              </td>
+              <td className="px-2 py-1"><Input type="number" value={data.expRepairs} onChange={e => updateField('expRepairs', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-slate-500">/unit</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expRepairsAmt)}</td>
             </tr>
-            <tr className="border-b hover:bg-slate-50">
+            <tr className="border-t">
               <td className="px-2 py-1">Utilities</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-exp-utilities')}
-                  onChange={(e) => handleFieldChange('calc-exp-utilities', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600">
-                {formatCurrency(getFieldValue('calc-exp-utilities') * totalUnits)}
-              </td>
+              <td className="px-2 py-1"><Input type="number" value={data.expUtilities} onChange={e => updateField('expUtilities', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-slate-500">/unit</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expUtilitiesAmt)}</td>
             </tr>
-            <tr className="border-b hover:bg-slate-50">
+            <tr className="border-t">
               <td className="px-2 py-1">Payroll</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-exp-payroll')}
-                  onChange={(e) => handleFieldChange('calc-exp-payroll', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600">
-                {formatCurrency(getFieldValue('calc-exp-payroll') * totalUnits)}
-              </td>
+              <td className="px-2 py-1"><Input type="number" value={data.expPayroll} onChange={e => updateField('expPayroll', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-slate-500">/unit</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expPayrollAmt)}</td>
             </tr>
-            <tr className="border-b hover:bg-slate-50">
-              <td className="px-2 py-1">Admin</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-exp-admin')}
-                  onChange={(e) => handleFieldChange('calc-exp-admin', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600">
-                {formatCurrency(getFieldValue('calc-exp-admin') * totalUnits)}
-              </td>
-            </tr>
-            <tr className="border-b hover:bg-slate-50">
-              <td className="px-2 py-1">Reserves</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-exp-reserves')}
-                  onChange={(e) => handleFieldChange('calc-exp-reserves', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600">
-                {formatCurrency(getFieldValue('calc-exp-reserves') * totalUnits)}
-              </td>
-            </tr>
-            <tr className="border-b hover:bg-slate-50">
+            <tr className="border-t">
               <td className="px-2 py-1">Other</td>
-              <td className="px-2 py-1">
-                <Input
-                  type="number"
-                  value={getFieldValue('calc-exp-other')}
-                  onChange={(e) => handleFieldChange('calc-exp-other', e.target.value)}
-                  className="h-7 text-xs text-right"
-                  step="0.01"
-                />
-              </td>
-              <td className="px-2 py-1 text-right text-slate-600">
-                {formatCurrency(getFieldValue('calc-exp-other') * totalUnits)}
-              </td>
+              <td className="px-2 py-1"><Input type="number" value={data.expOther} onChange={e => updateField('expOther', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-slate-500">/unit</td>
+              <td className="px-2 py-1 text-right">{formatCurrency(expOtherAmt)}</td>
             </tr>
           </tbody>
-          <tfoot className="bg-slate-50 border-t-2 font-semibold">
+          <tfoot className="bg-red-50 font-semibold border-t">
             <tr>
-              <td className="px-2 py-1.5" colSpan={2}>TOTAL EXPENSES</td>
-              <td className="px-2 py-1.5 text-right">{formatCurrency(expensesTotal)}</td>
-            </tr>
-            <tr>
-              <td className="px-2 py-1.5" colSpan={2}>Expense Ratio</td>
-              <td className="px-2 py-1.5 text-right">{getFieldValue('calc-expense-ratio').toFixed(2)}%</td>
+              <td className="px-2 py-1" colSpan={3}>Total Expenses ({formatNumber(expenseRatio)}%)</td>
+              <td className="px-2 py-1 text-right text-red-700">{formatCurrency(expensesTotal)}</td>
             </tr>
           </tfoot>
         </table>
       </div>
 
-      {/* CAP RATE & ADJUSTMENTS */}
-      <div className="grid grid-cols-2 gap-4">
-        {/* CAP RATE */}
-        <div className="border rounded-lg overflow-hidden">
-          <div className="bg-slate-800 text-white px-3 py-2 font-semibold text-sm">
-            CAP RATE
-          </div>
-          <div className="p-3">
-            <label className="text-xs font-medium text-slate-600 mb-1 block">
-              Capitalization Rate (%)
-            </label>
-            <Input
-              type="number"
-              value={getFieldValue('calc-cap-rate')}
-              onChange={(e) => handleFieldChange('calc-cap-rate', e.target.value)}
-              className="text-sm text-right"
-              step="0.01"
-            />
-          </div>
-        </div>
+      {/* NOI */}
+      <div className="bg-blue-50 border border-blue-200 rounded p-2 flex justify-between">
+        <span className="font-semibold text-blue-800">Net Operating Income (NOI)</span>
+        <span className="font-bold text-blue-800">{formatCurrency(noi)}</span>
+      </div>
 
-        {/* ADJUSTMENTS */}
-        <div className="border rounded-lg overflow-hidden">
-          <div className="bg-slate-800 text-white px-3 py-2 font-semibold text-sm">
-            ADJUSTMENTS
-          </div>
-          <div className="p-3 space-y-2">
-            <div>
-              <label className="text-xs font-medium text-slate-600 mb-1 block">CapEx</label>
-              <Input
-                type="number"
-                value={getFieldValue('calc-adj-capex')}
-                onChange={(e) => handleFieldChange('calc-adj-capex', e.target.value)}
-                className="h-7 text-xs text-right"
-                step="1"
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-slate-600 mb-1 block">Leasing</label>
-              <Input
-                type="number"
-                value={getFieldValue('calc-adj-leasing')}
-                onChange={(e) => handleFieldChange('calc-adj-leasing', e.target.value)}
-                className="h-7 text-xs text-right"
-                step="1"
-              />
-            </div>
-            <div>
-              <label className="text-xs font-medium text-slate-600 mb-1 block">Other</label>
-              <Input
-                type="number"
-                value={getFieldValue('calc-adj-other')}
-                onChange={(e) => handleFieldChange('calc-adj-other', e.target.value)}
-                className="h-7 text-xs text-right"
-                step="1"
-              />
-            </div>
-            <div className="pt-2 border-t font-semibold text-xs">
-              Total: {formatCurrency(getFieldValue('calc-adj-total'))}
-            </div>
-          </div>
+      {/* CAP RATE & VALUE */}
+      <div className="border rounded overflow-hidden">
+        <div className="bg-slate-800 text-white px-2 py-1 font-semibold">CAPITALIZATION</div>
+        <table className="w-full">
+          <tbody>
+            <tr className="border-t">
+              <td className="px-2 py-1">Cap Rate</td>
+              <td className="px-2 py-1"><Input type="number" step="0.25" value={data.capRate} onChange={e => updateField('capRate', e.target.value)} className="h-6 w-16 text-right text-xs p-1" /></td>
+              <td className="px-2 py-1 text-slate-500">%</td>
+              <td className="px-2 py-1"></td>
+            </tr>
+            <tr className="border-t bg-slate-50">
+              <td className="px-2 py-1" colSpan={3}>Raw Value (NOI ÷ Cap Rate)</td>
+              <td className="px-2 py-1 text-right font-medium">{formatCurrency(rawValue)}</td>
+            </tr>
+            <tr className="border-t bg-slate-50">
+              <td className="px-2 py-1" colSpan={3}>Rounded (to $10,000)</td>
+              <td className="px-2 py-1 text-right font-medium">{formatCurrency(roundedValue)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* FINAL VALUE */}
+      <div className="bg-purple-100 border-2 border-purple-400 rounded p-3 text-center">
+        <div className="text-sm font-semibold text-purple-800 mb-1">INDICATED VALUE</div>
+        <div className="text-2xl font-bold text-purple-900">{formatCurrency(indicatedValue)}</div>
+        <div className="text-xs text-purple-700 mt-1">
+          {formatCurrency(indicatedValue / totalUnits)}/unit | ${formatNumber(indicatedValue / totalSf)}/SF
         </div>
       </div>
 

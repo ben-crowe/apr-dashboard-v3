@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Page Layout Test</title>
+    <style>
+        /* ============================================
+           RESET AND BASE STYLES
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+
+        /* ============================================
+           SCREEN VIEW: Shows pages with gaps
+           ============================================ */
+        @media screen {
+            .page {
+                width: 8.5in;
+                height: 11in;
+                background: white;
+                margin: 0 auto 20px auto; /* 20px gap between pages */
+                padding: 0.75in;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+                position: relative;
+                overflow: hidden; /* Prevent content overflow */
+            }
+
+            /* Show page boundaries visually */
+            .page::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                border: 1px solid #e0e0e0;
+                pointer-events: none;
+            }
+        }
+
+        /* ============================================
+           PRINT VIEW: Proper page breaks
+           ============================================ */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .page {
+                width: 8.5in;
+                height: 11in;
+                padding: 0.75in;
+                margin: 0;
+                box-shadow: none;
+
+                /* Force page break after each page */
+                page-break-after: always;
+                break-after: always;
+            }
+
+            /* Don't break after the last page */
+            .page:last-child {
+                page-break-after: auto;
+                break-after: auto;
+            }
+
+            /* Prevent content from breaking across pages */
+            .page-header,
+            .page-footer,
+            .content-block {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+        }
+
+        /* ============================================
+           SHARED STYLES (Screen + Print)
+           ============================================ */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #003366;
+        }
+
+        .logo {
+            width: 120px;
+            height: 40px;
+            background: #003366;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .page-number {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .page-title {
+            color: #003366;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .content-block {
+            margin-bottom: 20px;
+        }
+
+        .content-block h2 {
+            color: #003366;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .content-block p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+            text-align: justify;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        table th {
+            background: #003366;
+            color: white;
+            font-weight: bold;
+        }
+
+        table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .page-footer {
+            position: absolute;
+            bottom: 0.5in;
+            left: 0.75in;
+            right: 0.75in;
+            padding-top: 10px;
+            border-top: 1px solid #ddd;
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================
+         PAGE 1: Cover Page
+         ============================================ -->
+    <div class="page">
+        <div class="page-header">
+            <div class="logo">LOGO</div>
+            <div class="page-number">Page 1 of 10</div>
+        </div>
+
+        <div style="text-align: center; padding-top: 150px;">
+            <h1 style="color: #003366; font-size: 48px; margin-bottom: 20px;">
+                Multi-Page Layout Test
+            </h1>
+            <p style="font-size: 24px; color: #666; margin-bottom: 40px;">
+                Demonstrating Proper Page Breaks
+            </p>
+            <div style="font-size: 18px; color: #999;">
+                <p>December 12, 2025</p>
+                <p style="margin-top: 10px;">Test Document</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            Generated: December 12, 2025 | Confidential Document
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 2: Text Content
+         ============================================ -->
+    <div class="page">
+        <div class="page-header">
+            <div class="logo">LOGO</div>
+            <div class="page-number">Page 2 of 10</div>
+        </div>
+
+        <div class="page-title">Introduction</div>
+
+        <div class="content-block">
+            <h2>Purpose of This Test</h2>
+            <p>
+                This test document demonstrates proper multi-page layout techniques using HTML and CSS.
+                The goal is to create a document that displays correctly both on screen (with visual
+                separation between pages) and when printed (with proper page breaks).
+            </p>
+            <p>
+                Each page is exactly 8.5 inches wide by 11 inches tall, which is the standard US Letter
+                size. The pages include 0.75 inch margins on all sides to ensure content is safely within
+                the printable area of most printers.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h2>Key Techniques Used</h2>
+            <p>
+                The CSS employs separate media queries for screen and print viewing. For screen display,
+                pages are shown with a 20px gap and drop shadow to clearly indicate page boundaries.
+                For print, pages use the page-break-after property to ensure each page starts on a new
+                sheet of paper.
+            </p>
+            <p>
+                Content is prevented from overflowing page boundaries using the overflow: hidden property
+                on screen, and page-break-inside: avoid on print to prevent awkward content splits.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h2>Testing Methodology</h2>
+            <p>
+                To properly test this layout, view this document in a web browser and use Print Preview
+                to see how it will appear when printed. Each page should start at the top of a new sheet,
+                and content should not overflow or get cut off unexpectedly.
+            </p>
+        </div>
+
+        <div class="page-footer">
+            Generated: December 12, 2025 | Confidential Document
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 3: Content with Image
+         ============================================ -->
+    <div class="page">
+        <div class="page-header">
+            <div class="logo">LOGO</div>
+            <div class="page-number">Page 3 of 10</div>
+        </div>
+
+        <div class="page-title">Visual Content</div>
+
+        <div class="content-block">
+            <h2>Image Handling</h2>
+            <p>
+                Images and other visual elements must be carefully sized to fit within page boundaries.
+                This page demonstrates how to include images that don't cause layout issues or overflow
+                onto adjacent pages.
+            </p>
+        </div>
+
+        <div class="image-placeholder">
+            Image Placeholder<br>
+            200px height
+        </div>
+
+        <div class="content-block">
+            <p>
+                The image above is sized to fit comfortably within the page margins while leaving room
+                for surrounding text content. In a real document, you would replace this placeholder
+                with actual images using the img tag.
+            </p>
+            <p>
+                It's important to set explicit width and height constraints on images to prevent them
+                from causing unexpected page breaks or layout issues. Using max-width: 100% ensures
+                images scale down on smaller displays while respecting their container boundaries.
+            </p>
+        </div>
+
+        <div class="page-footer">
+            Generated: December 12, 2025 | Confidential Document
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 4: Table Content
+         ============================================ -->
+    <div class="page">
+        <div class="page-header">
+            <div class="logo">LOGO</div>
+            <div class="page-number">Page 4 of 10</div>
+        </div>
+
+        <div class="page-title">Tabular Data</div>
+
+        <div class="content-block">
+            <h2>Data Tables</h2>
+            <p>
+                Tables present a particular challenge in multi-page layouts. They must be carefully
+                sized to fit within page boundaries, or broken across pages in a way that maintains
+                readability.
+            </p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Value</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Item 1</td>
+                    <td>First test item for demonstration</td>
+                    <td>$1,234</td>
+                    <td>Active</td>
+                </tr>
+                <tr>
+                    <td>Item 2</td>
+                    <td>Second test item for demonstration</td>
+                    <td>$2,345</td>
+                    <td>Pending</td>
+                </tr>
+                <tr>
+                    <td>Item 3</td>
+                    <td>Third test item for demonstration</td>
+                    <td>$3,456</td>
+                    <td>Active</td>
+                </tr>
+                <tr>
+                    <td>Item 4</td>
+                    <td>Fourth test item for demonstration</td>
+                    <td>$4,567</td>
+                    <td>Complete</td>
+                </tr>
+                <tr>
+                    <td>Item 5</td>
+                    <td>Fifth test item for demonstration</td>
+                    <td>$5,678</td>
+                    <td>Active</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="content-block">
+            <p>
+                The table above demonstrates proper formatting with alternating row colors and clear
+                column headers. In print mode, the page-break-inside: avoid property helps prevent
+                tables from breaking at awkward positions.
+            </p>
+        </div>
+
+        <div class="page-footer">
+            Generated: December 12, 2025 | Confidential Document
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 5: Long Content Test
+         ============================================ -->
+    <div class="page">
+        <div class="page-header">
+            <div class="logo">LOGO</div>
+            <div class="page-number">Page 5 of 10</div>
+        </div>
+
+        <div class="page-title">Extended Content</div>
+
+        <div class="content-block">
+            <h2>Paragraph Flow</h2>
+            <p>
+                This page tests how longer text content behaves within the page boundaries. The key
+                is ensuring that text flows naturally without overflowing the bottom margin of the page.
+                Each page has a fixed height of 11 inches, with 0.75 inch margins, leaving 9.5 inches
+                of usable vertical space.
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt
+                ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+            </p>
+            <p>
+                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+                mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit
+                voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab
+                illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h2>Content Density</h2>
+            <p>
+                The amount of content that fits on a single page depends on font size, line height,
+                and margin settings. This example uses Arial font at standard size with 1.6 line
+                height for comfortable reading. Adjusting these values will change how much content
+                fits per page.
+            </p>
+            <p>
+                Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
+                consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro
+                quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit.
+            </p>
+        </div>
+
+        <div class="page-footer">
+            Generated: December 12, 2025 | Confidential Document
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 6: Mixed Content
+         ============================================ -->
+    <div class="page">
+        <div class="page-header">
+            <div class="logo">LOGO</div>
+            <div class="page-number">Page 6 of 10</div>
+        </div>
+
+        <div class="page-title">Mixed Layout</div>
+
+        <div class="content-block">
+            <h2>Combining Elements</h2>
+            <p>
+                Real-world documents often combine different types of content on the same page. This
+                page demonstrates how text, lists, and other elements can coexist while respecting
+                page boundaries.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h2>Best Practices</h2>
+            <ul style="line-height: 1.8; margin-left: 30px;">
+                <li>Always set explicit page dimensions (8.5in x 11in)</li>
+                <li>Use consistent margins on all pages (0.75in recommended)</li>
+                <li>Apply page-break-after: always for print media</li>
+                <li>Use overflow: hidden to prevent content spillover</li>
+                <li>Test in print preview before finalizing</li>
+                <li>Include page numbers for easy reference</li>
+                <li>Add headers and footers for context</li>
+                <li>Use page-break-inside: avoid for content blocks</li>
+            </ul>
+        </div>
+
+        <div class="content-block">
+            <h2>Common Pitfalls</h2>
+            <p>
+                The most common mistakes in multi-page layouts include forgetting to set fixed page
+                heights, not using proper page-break properties, and failing to test in print preview.
+                Always validate your layout before deploying to production.
+            </p>
+        </div>
+
+        <div class="page-footer">
+            Generated: December 12, 2025 | Confidential Document
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 7: Data Visualization
+         ============================================ -->
+    <div class="page">
+        <div class="page-header">
+            <div class="logo">LOGO</div>
+            <div class="page-number">Page 7 of 10</div>
+        </div>
+
+        <div class="page-title">Visual Data</div>
+
+        <div class="content-block">
+            <h2>Chart Placeholder</h2>
+            <p>
+                Data visualizations like charts and graphs need special consideration in paginated
+                layouts. They should be sized to fit entirely within a single page to maintain readability.
+            </p>
+        </div>
+
+        <div class="image-placeholder" style="height: 300px;">
+            Chart/Graph Placeholder<br>
+            300px height
+        </div>
+
+        <div class="content-block">
+            <p>
+                The visualization above demonstrates a larger content block that still fits comfortably
+                within the page boundaries. When working with actual charts, libraries like Chart.js
+                or D3.js should be configured with explicit dimensions that respect the available space.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h2>Responsive Considerations</h2>
+            <p>
+                While this layout is optimized for printing and PDF generation, it's also important
+                to consider how it displays on different screen sizes. The fixed 8.5in width means
+                users on smaller screens will need to zoom out or scroll horizontally.
+            </p>
+        </div>
+
+        <div class="page-footer">
+            Generated: December 12, 2025 | Confidential Document
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 8: Additional Tables
+         ============================================ -->
+    <div class="page">
+        <div class="page-header">
+            <div class="logo">LOGO</div>
+            <div class="page-number">Page 8 of 10</div>
+        </div>
+
+        <div class="page-title">Financial Summary</div>
+
+        <div class="content-block">
+            <h2>Quarterly Results</h2>
+            <p>
+                Financial reports often require multiple tables across several pages. Each table
+                should be self-contained and properly formatted for easy reading.
+            </p>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Quarter</th>
+                    <th>Revenue</th>
+                    <th>Expenses</th>
+                    <th>Net Income</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Q1 2025</td>
+                    <td>$125,000</td>
+                    <td>$75,000</td>
+                    <td>$50,000</td>
+                </tr>
+                <tr>
+                    <td>Q2 2025</td>
+                    <td>$135,000</td>
+                    <td>$78,000</td>
+                    <td>$57,000</td>
+                </tr>
+                <tr>
+                    <td>Q3 2025</td>
+                    <td>$145,000</td>
+                    <td>$82,000</td>
+                    <td>$63,000</td>
+                </tr>
+                <tr>
+                    <td>Q4 2025</td>
+                    <td>$155,000</td>
+                    <td>$85,000</td>
+                    <td>$70,000</td>
+                </tr>
+                <tr style="font-weight: bold; background: #e6f2ff;">
+                    <td>Total</td>
+                    <td>$560,000</td>
+                    <td>$320,000</td>
+                    <td>$240,000</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="content-block">
+            <p>
+                The table above includes a highlighted total row to draw attention to summary data.
+                This is achieved through inline styles that override the default alternating row colors.
+            </p>
+        </div>
+
+        <div class="page-footer">
+            Generated: December 12, 2025 | Confidential Document
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 9: Technical Details
+         ============================================ -->
+    <div class="page">
+        <div class="page-header">
+            <div class="logo">LOGO</div>
+            <div class="page-number">Page 9 of 10</div>
+        </div>
+
+        <div class="page-title">Technical Implementation</div>
+
+        <div class="content-block">
+            <h2>CSS Media Queries</h2>
+            <p>
+                The core of this layout system relies on two media queries: @media screen and
+                @media print. The screen query adds visual spacing and shadows to separate pages,
+                while the print query ensures proper pagination.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h2>Page Break Properties</h2>
+            <p>
+                Modern CSS provides several page break properties:
+            </p>
+            <ul style="line-height: 1.8; margin-left: 30px; margin-top: 10px;">
+                <li><strong>page-break-after:</strong> Forces a break after the element</li>
+                <li><strong>page-break-before:</strong> Forces a break before the element</li>
+                <li><strong>page-break-inside:</strong> Controls breaks within the element</li>
+                <li><strong>break-after:</strong> Modern replacement for page-break-after</li>
+                <li><strong>break-before:</strong> Modern replacement for page-break-before</li>
+                <li><strong>break-inside:</strong> Modern replacement for page-break-inside</li>
+            </ul>
+        </div>
+
+        <div class="content-block">
+            <h2>Browser Compatibility</h2>
+            <p>
+                This layout is tested and works correctly in all modern browsers including Chrome,
+                Firefox, Safari, and Edge. The older page-break properties are included alongside
+                newer break properties for maximum compatibility.
+            </p>
+        </div>
+
+        <div class="content-block">
+            <h2>PDF Generation</h2>
+            <p>
+                When converting to PDF using browser print or libraries like Puppeteer, these page
+                breaks are properly respected, resulting in a clean multi-page PDF document.
+            </p>
+        </div>
+
+        <div class="page-footer">
+            Generated: December 12, 2025 | Confidential Document
+        </div>
+    </div>
+
+    <!-- ============================================
+         PAGE 10: Summary
+         ============================================ -->
+    <div class="page">
+        <div class="page-header">
+            <div class="logo">LOGO</div>
+            <div class="page-number">Page 10 of 10</div>
+        </div>
+
+        <div class="page-title">Conclusion</div>
+
+        <div class="content-block">
+            <h2>Summary of Techniques</h2>
+            <p>
+                This test document has demonstrated all the essential techniques for creating proper
+                multi-page layouts in HTML and CSS:
+            </p>
+            <ul style="line-height: 1.8; margin-left: 30px; margin-top: 10px;">
+                <li>Fixed page dimensions (8.5in x 11in)</li>
+                <li>Consistent margins (0.75in all sides)</li>
+                <li>Screen vs print media queries</li>
+                <li>Proper page break properties</li>
+                <li>Content overflow prevention</li>
+                <li>Headers and footers on each page</li>
+                <li>Page numbering</li>
+                <li>Mixed content types (text, images, tables)</li>
+            </ul>
+        </div>
+
+        <div class="content-block">
+            <h2>Testing Checklist</h2>
+            <p>
+                When implementing this in your own documents, verify the following:
+            </p>
+            <ul style="line-height: 1.8; margin-left: 30px; margin-top: 10px;">
+                <li>Pages display with visual separation in browser</li>
+                <li>Print preview shows 10 separate pages</li>
+                <li>No content overflows page boundaries</li>
+                <li>Headers appear on every page</li>
+                <li>Page numbers are sequential</li>
+                <li>Tables don't break awkwardly</li>
+                <li>Images fit within page margins</li>
+                <li>PDF export produces clean results</li>
+            </ul>
+        </div>
+
+        <div class="content-block">
+            <h2>Next Steps</h2>
+            <p>
+                Use this test file as a reference when debugging issues in your report templates.
+                Compare the CSS and HTML structure to identify what's causing incorrect page breaks
+                or layout problems in your production code.
+            </p>
+        </div>
+
+        <div class="page-footer">
+            Generated: December 12, 2025 | Confidential Document
+        </div>
+    </div>
+
+</body>
+</html>

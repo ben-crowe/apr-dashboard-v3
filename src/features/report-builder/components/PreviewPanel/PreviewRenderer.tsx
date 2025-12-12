@@ -11,7 +11,6 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
     const activeSection = useReportBuilderStore((state) => state.activeSection);
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
-    const [iframeHeight, setIframeHeight] = useState(1056); // Start with one page height
 
     // State for drag-to-pan functionality
     const [isDragging, setIsDragging] = useState(false);
@@ -21,30 +20,9 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
     // Expose the iframe ref to parent component
     useImperativeHandle(ref, () => iframeRef.current as HTMLIFrameElement);
 
-    // Function to resize iframe to content height
-    const resizeIframeToContent = () => {
-      if (iframeRef.current?.contentDocument) {
-        const body = iframeRef.current.contentDocument.body;
-        const html = iframeRef.current.contentDocument.documentElement;
-
-        if (body && html) {
-          // Get the full height of the content
-          const contentHeight = Math.max(
-            body.scrollHeight,
-            body.offsetHeight,
-            html.scrollHeight,
-            html.offsetHeight
-          );
-
-          // Set iframe height to content height (with a small buffer)
-          setIframeHeight(contentHeight + 10);
-        }
-      }
-    };
-
+    // Update iframe content when HTML changes
     useEffect(() => {
       if (iframeRef.current) {
-        // Update iframe content
         const iframe = iframeRef.current;
         const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
 
@@ -52,17 +30,6 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
           iframeDoc.open();
           iframeDoc.write(html);
           iframeDoc.close();
-
-          // Resize iframe after content loads
-          // Use a small delay to ensure content is fully rendered
-          setTimeout(() => {
-            resizeIframeToContent();
-          }, 100);
-
-          // Also resize on window load events within iframe
-          if (iframe.contentWindow) {
-            iframe.contentWindow.addEventListener('load', resizeIframeToContent);
-          }
         }
       }
     }, [html]);
@@ -131,11 +98,11 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
     return (
       <div
         ref={containerRef}
-        className="w-full h-full overflow-auto bg-muted/50"
+        className="w-full h-full overflow-auto"
         style={{
+          backgroundColor: '#525659', // Dark grey like Adobe Acrobat
           cursor: isDragging ? 'grabbing' : 'grab',
           userSelect: isDragging ? 'none' : 'auto',
-          // NO TRANSFORM ON CONTAINER - it stays 100% size
         }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -163,11 +130,11 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
             <iframe
               ref={iframeRef}
               title="Report Preview"
-              className="w-full border-0 bg-white shadow-lg"
+              className="border-0 bg-white shadow-lg"
               style={{
-                width: '816px', // Standard A4 width in pixels at 96 DPI (8.5" × 96)
-                height: `${iframeHeight}px`, // Dynamic height based on content
-                minHeight: '1056px', // Minimum one page height
+                width: '8.5in', // Fixed page width
+                minHeight: '90in', // Tall enough for ~82 pages (79 pages + buffer)
+                display: 'block',
               }}
               sandbox="allow-same-origin allow-modals"
             />

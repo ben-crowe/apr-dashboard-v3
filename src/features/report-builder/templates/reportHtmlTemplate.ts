@@ -3900,24 +3900,29 @@ export function generateReportHtml(sections: ReportSection[]): string {
           <p>If there are any specific questions or concerns regarding the attached appraisal report, or if ${appraiserCompanyShort} can be of additional assistance, please contact the individuals listed below.</p>
         </div>
 
-        <!-- Closing -->
-        <div style="margin: 2rem 0 1rem 0; font-weight: 600;">
-          Respectfully Submitted,<br/>
-          ${appraiserCompany?.toUpperCase() || ''}
+
+        <!-- Closing and Signature Block -->
+        <p style="margin-top: 2rem; margin-bottom: 0.5rem;">Respectfully Submitted,</p>
+        <p style="font-weight: bold; margin-bottom: 2rem;">${appraiserCompany?.toUpperCase() || 'VALTA PROPERTY VALUATIONS LTD.'}</p>
+
+        <!-- Signature Image Placeholder (actual signature image would go here) -->
+        <div style="margin-top: 1rem; margin-bottom: 1rem; height: 60px;">
+          <!-- Space for signature image -->
         </div>
 
-        <!-- Signature Block -->
-        <div style="margin-top: 3rem; margin-bottom: 2rem;">
-          <div style="border-bottom: 2px solid #000; width: 250px; margin-bottom: 0.5rem;"></div>
-          <div style="font-weight: 700; font-size: 11pt;">${appraiserName || 'Appraiser Name'}${appraiserCredentials ? ', ' + appraiserCredentials : ''}</div>
-          ${appraiserTitle ? `<div style="font-size: 10pt; margin-top: 0.25rem;">${appraiserTitle}</div>` : ''}
-          ${appraiserEmail ? `<div style="font-size: 10pt; margin-top: 0.25rem;">${appraiserEmail}</div>` : ''}
-          ${appraiserAicNumber ? `<div style="font-size: 10pt; margin-top: 0.25rem;">AIC No: ${appraiserAicNumber}</div>` : ''}
+        <!-- Signature Line and Details -->
+        <div style="margin-bottom: 2rem;">
+          <div class="signature-line" style="border-top: 1px solid #000; width: 250px; margin-bottom: 0.5rem;"></div>
+          <p class="signature-name" style="font-weight: bold; margin-bottom: 0.25rem;">${appraiserName || 'Chris Chornohos'}${appraiserCredentials ? ', ' + appraiserCredentials : ''}</p>
+          ${appraiserTitle ? `<p class="signature-title" style="font-size: 10pt; margin-top: 0.25rem; margin-bottom: 0.25rem;">${appraiserTitle}</p>` : ''}
+          ${appraiserEmail ? `<p class="signature-email" style="font-size: 10pt; margin-top: 0.25rem; margin-bottom: 0.25rem;">${appraiserEmail}</p>` : ''}
+          ${appraiserAicNumber ? `<p class="signature-aic" style="font-size: 10pt; margin-top: 0.25rem;">AIC No: ${appraiserAicNumber}</p>` : ''}
         </div>
       </div>
     </div>
     `;
   };
+
 
 
 

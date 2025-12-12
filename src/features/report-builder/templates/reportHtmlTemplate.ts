@@ -1053,9 +1053,15 @@ export function generateReportHtml(sections: ReportSection[]): string {
       ${reconIntroduction ? `
         <div class="site-narrative-section">
           <p class="site-narrative-text">${reconIntroduction}</p>
+        ${costApproachValue ? `
+        <p class="site-narrative-text" style="margin-top: 0.5rem;">
+          The Cost Approach has limited applicability due to the age of the improvements and lack of market based data to support an estimate of accrued depreciation. Based on the preceding information, the Cost Approach has not been undertaken as part of this analysis.
+        </p>
+        ` : `
         <p class="site-narrative-text" style="margin-top: 0.5rem;">
           The Cost Approach has limited applicability due to the age of the improvements and lack of market based data to support an estimate of accrued depreciation. Based on the preceding information, the Cost Approach will not be presented.
         </p>
+        `}
         </div>
       ` : ''}
 
@@ -1189,6 +1195,9 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const directCapMethodology = getFieldValue(section, 'direct-cap-methodology') ||
       `The first step in direct capitalization is to estimate the durable rental income through analysis of the in-place or projected (proposed developments) leases and market rent terms. Next, reimbursements and other revenue are analyzed. Then, vacancy and operating expenses are estimated. Finally, the net operating income is capitalized at a supported rate. The implied value may be adjusted to account for non-stabilized conditions or required capital expenditures to reflect an as-is value.`;
 
+    // Methodology toggle fields
+    const useDcfMethodology = getFieldValue(section, 'use-dcf-methodology');
+
     // Rental Analysis fields
     const marketRentSurvey = getFieldValue(section, 'income-market-rent-survey') || '';
     const rentComparables = getFieldValue(section, 'income-rent-comparables') || '';
@@ -1282,9 +1291,15 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <h3 class="subsection-title">Income Approach Methodology</h3>
       <div class="site-narrative-section">
         <p class="site-narrative-text">${incomeApproachMethodology}</p>
+        ${useDcfMethodology === 'Yes' ? `
+        <p class="site-narrative-text" style="margin-top: 0.5rem;">
+          In undertaking this approach, we have relied on the Discounted Cash Flow (DCF) method only as the Direct Capitalization method does not contribute substantially to estimating the market value of the subject property beyond the DCF analysis.
+        </p>
+        ` : `
         <p class="site-narrative-text" style="margin-top: 0.5rem;">
           In undertaking this approach, we have relied on the Direct Capitalization method only as the Discounted Cash Flow method does not contribute substantially to estimating the market value of the subject property beyond the Direct Capitalization method.
         </p>
+        `}
         <p class="site-narrative-text" style="margin-top: 0.5rem;">
           The subject property comprises an income generating asset and as such, we consider the inclusion of this approach warranted.
         </p>
@@ -5042,6 +5057,9 @@ export function generateReportHtml(sections: ReportSection[]): string {
     const buildingConditionVal = getGlobalFieldValue('building-condition') || getGlobalFieldValue('overall-condition') || getGlobalFieldValue('impv-overall-condition') || '';
     const buildingAppealVal = getGlobalFieldValue('building-appeal') || '';
 
+    // PROPERTY STATUS fields
+    const propertyIsListed = getGlobalFieldValue('property-is-listed') || '';
+
     // Helper to format numbers with commas
     const formatNum = (val: any) => {
       if (!val) return '';
@@ -5248,9 +5266,15 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <!-- Property History / Ownership -->
       <div style="margin-top: 24px;">
         <h3 style="font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #333; margin-bottom: 12px;">PROPERTY HISTORY</h3>
+        ${propertyIsListed === 'Yes' ? `
+        <p style="font-size: 10px; line-height: 1.6; color: #333; margin: 0;">
+          Ownership of the subject property has not changed in the past three years, however the property is currently listed for sale. We are unaware of any pending sales activity relating to the subject property.
+        </p>
+        ` : `
         <p style="font-size: 10px; line-height: 1.6; color: #333; margin: 0;">
           Ownership of the subject property has not changed in the past three years. We are unaware of any pending sales or listing activity relating to the subject property.
         </p>
+        `}
       </div>
     </div>
     `;

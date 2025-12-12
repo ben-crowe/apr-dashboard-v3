@@ -5,10 +5,11 @@
  * Features compact Excel-style inputs with property selector.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Calculator, RefreshCw } from 'lucide-react';
+import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
 import InputPanel from './components/InputPanel';
 import OutputPanel from './components/OutputPanel';
 import MarkdownSummary from './components/MarkdownSummary';
@@ -16,6 +17,16 @@ import MarkdownSummary from './components/MarkdownSummary';
 export default function CalculatorDemoPage() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [lastRefresh, setLastRefresh] = useState(new Date().toLocaleTimeString());
+  const initializeMockData = useReportBuilderStore(state => state.initializeMockData);
+  const sections = useReportBuilderStore(state => state.sections);
+
+  // Initialize store with sections on mount
+  useEffect(() => {
+    if (sections.length === 0) {
+      console.log('Initializing store with mock data...');
+      initializeMockData();
+    }
+  }, [sections.length, initializeMockData]);
 
   const handleRefresh = () => {
     setRefreshKey(prev => prev + 1);

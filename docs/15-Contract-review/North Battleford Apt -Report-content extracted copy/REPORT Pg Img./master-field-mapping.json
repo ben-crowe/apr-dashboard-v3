@@ -1,0 +1,2015 @@
+{
+  "_metadata": {
+    "date_generated": "2025-12-12",
+    "pages_analyzed": "1-79 (excluding page 2)",
+    "total_pages": 10,
+    "source_files": "8 page-mapping JSON files"
+  },
+  "pages": [
+    {
+      "number": 11,
+      "title": "Introduction & Executive Summary - Photos (Part 1)",
+      "section": "introduction",
+      "subsection": "executive-summary-photos",
+      "contentType": "photo-grid",
+      "fields": [
+        {
+          "fieldId": "intro-photo-1",
+          "description": "Unit 1101 - Living Room interior with furniture",
+          "type": "photo",
+          "label": "1101 - Living Room",
+          "contentArea": "photo-grid-item-1"
+        },
+        {
+          "fieldId": "intro-photo-2",
+          "description": "West elevation of building exterior",
+          "type": "photo",
+          "label": "1121 - West Elevation",
+          "contentArea": "photo-grid-item-2"
+        },
+        {
+          "fieldId": "intro-photo-3",
+          "description": "East elevation of building exterior",
+          "type": "photo",
+          "label": "1121 - East Elevation",
+          "contentArea": "photo-grid-item-3"
+        },
+        {
+          "fieldId": "intro-photo-4",
+          "description": "Typical hallway corridor",
+          "type": "photo",
+          "label": "1121 - Typical Hallway",
+          "contentArea": "photo-grid-item-4"
+        },
+        {
+          "fieldId": "intro-photo-5",
+          "description": "Typical stairway",
+          "type": "photo",
+          "label": "1121 - Typical Stairway",
+          "contentArea": "photo-grid-item-5"
+        },
+        {
+          "fieldId": "intro-photo-6",
+          "description": "Typical living room interior",
+          "type": "photo",
+          "label": "1121 - Typical Living Room",
+          "contentArea": "photo-grid-item-6"
+        }
+      ],
+      "footerInfo": {
+        "pageNumber": "6",
+        "address": "1101, 1121 109 St. North Battleford, Saskatchewan",
+        "fileNumber": "File VAL251012 - 1"
+      }
+    },
+    {
+      "number": 12,
+      "title": "Introduction & Executive Summary - Photos (Part 2)",
+      "section": "introduction",
+      "subsection": "executive-summary-photos",
+      "contentType": "photo-grid",
+      "fields": [
+        {
+          "fieldId": "intro-photo-7",
+          "description": "Typical Bathroom",
+          "type": "photo",
+          "label": "1121 - Typical Bathroom",
+          "contentArea": "photo-grid-item-1"
+        },
+        {
+          "fieldId": "intro-photo-8",
+          "description": "Typical Kitchen",
+          "type": "photo",
+          "label": "1121 - Typical Kitchen",
+          "contentArea": "photo-grid-item-2"
+        },
+        {
+          "fieldId": "intro-photo-9",
+          "description": "Typical Bedroom",
+          "type": "photo",
+          "label": "1121 - Typical Bedroom",
+          "contentArea": "photo-grid-item-3"
+        },
+        {
+          "fieldId": "intro-photo-10",
+          "description": "Laundry Room",
+          "type": "photo",
+          "label": "1121 - Laundry Room",
+          "contentArea": "photo-grid-item-4"
+        },
+        {
+          "fieldId": "intro-photo-11",
+          "description": "Electrical Room",
+          "type": "photo",
+          "label": "1121 - Electrical Room",
+          "contentArea": "photo-grid-item-5"
+        },
+        {
+          "fieldId": "intro-photo-12",
+          "description": "Typical Boiler",
+          "type": "photo",
+          "label": "1121 - Typical Boiler",
+          "contentArea": "photo-grid-item-6"
+        }
+      ],
+      "footerInfo": {
+        "pageNumber": "7",
+        "address": "1101, 1121 109 St. North Battleford, Saskatchewan",
+        "fileNumber": "File VAL251012 - 1"
+      }
+    },
+    {
+      "number": 13,
+      "title": "Introduction & Executive Summary - Photos (Part 3)",
+      "section": "introduction",
+      "subsection": "executive-summary-photos",
+      "contentType": "single-photo",
+      "fields": [
+        {
+          "fieldId": "intro-photo-13",
+          "description": "Utility Room",
+          "type": "photo",
+          "label": "1121 - Utility Room",
+          "contentArea": "photo-container"
+        }
+      ],
+      "footerInfo": {
+        "pageNumber": "8",
+        "address": "1101, 1121 109 St. North Battleford, Saskatchewan",
+        "fileNumber": "File VAL251012 - 1"
+      }
+    },
+    {
+      "number": 14,
+      "title": "Introduction & Executive Summary - Maps (Street Level)",
+      "section": "introduction",
+      "subsection": "executive-summary-maps",
+      "contentType": "map",
+      "fields": [
+        {
+          "fieldId": "intro-map-street",
+          "description": "North Battleford street map showing subject property location (blue marker) and Battlefords Union Hospital (red marker)",
+          "type": "map",
+          "label": "Maps",
+          "contentArea": "map-container",
+          "mapType": "street-level"
+        }
+      ],
+      "footerInfo": {
+        "pageNumber": "9",
+        "address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "fileNumber": "File VAL251012 - 1"
+      }
+    },
+    {
+      "number": 15,
+      "title": "Introduction & Executive Summary - Maps (Localized)",
+      "section": "introduction",
+      "subsection": "executive-summary-maps",
+      "contentType": "map",
+      "fields": [
+        {
+          "fieldId": "intro-map-local",
+          "description": "Location map showing North Battleford, Saskatchewan area with subject property marked",
+          "type": "map",
+          "label": "Location Map",
+          "contentArea": "map-placeholder",
+          "mapType": "local-area"
+        }
+      ],
+      "footerInfo": {
+        "pageNumber": "10",
+        "address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "fileNumber": "File VAL251012 - 1",
+        "copyright": "© 1987-2025 HERE, Canada"
+      }
+    },
+    {
+      "number": 16,
+      "title": "Introduction & Executive Summary - Maps (Regional)",
+      "section": "introduction",
+      "subsection": "executive-summary-maps",
+      "contentType": "map",
+      "fields": [
+        {
+          "fieldId": "intro-map-regional",
+          "description": "North Battleford regional location map showing subject property marked in central circle with nearby highways, municipalities (Cochin, Prince Albert area), towns (Wilkie, Cut Knife, Sweetgrass, Denholm, Mayfield), and provincial geography with roads and water features",
+          "type": "map",
+          "label": "Regional Location Map",
+          "contentArea": "image-placeholder",
+          "mapType": "regional",
+          "copyright": "© 1987-2025 HERE, Canada"
+        }
+      ],
+      "footerInfo": {
+        "pageNumber": "11",
+        "address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "fileNumber": "File VAL251012 - 1"
+      }
+    },
+    {
+      "number": 17,
+      "title": "Introduction & Executive Summary - Subject Property Description",
+      "section": "introduction",
+      "subsection": "executive-summary-property-description",
+      "contentType": "narrative-text",
+      "fields": [
+        {
+          "fieldId": "subject-property-location",
+          "description": "Property address and location details",
+          "type": "text",
+          "extractedText": "The subject property, located at 1101, 1121 109 St, North Battleford, SK, is a multi-family, walkup property with approximately 10,204 square feet of net rentable area."
+        },
+        {
+          "fieldId": "property-improvements-summary",
+          "description": "Building count, NRA, year built, occupancy, units, and style",
+          "type": "text",
+          "extractedText": "The improvements are comprised of 2 total buildings, and consist of 10,204 square feet of net rentable area (NRA) as of the valuation date. The property, reportedly built in 1970; (1970 weighted) is approximately 100.0% occupied and features 16 units in a 2-story, garden style format."
+        },
+        {
+          "fieldId": "appraisal-purpose",
+          "description": "Purpose of the appraisal assignment",
+          "type": "text",
+          "extractedText": "The purpose of this assignment is to provide the As Stabilized which at the time of inspection represents the existing improvements assuming stabilized occupancy as of the effective date for the property located at 1101, 1121 109 St, North Battleford, SK (herein referred to as the Subject property)."
+        },
+        {
+          "fieldId": "hypothetical-conditions",
+          "description": "Hypothetical conditions and assumptions related to market rents and stabilized occupancy",
+          "type": "text",
+          "contentArea": "hypothetical-conditions-section",
+          "note": "Lengthy assumption block regarding as-if-stabilized valuation and market rent achievement"
+        }
+      ]
+    },
+    {
+      "number": 18,
+      "title": "Introduction & Executive Summary - Ownership & Exposure Time",
+      "section": "introduction",
+      "subsection": "executive-summary-ownership-exposure",
+      "contentType": "narrative-text",
+      "fields": [
+        {
+          "fieldId": "current-owner",
+          "description": "Current owner of the subject property",
+          "type": "text",
+          "extractedText": "The subject property is currently under the ownership of 102109845 Saskatchewan Ltd."
+        },
+        {
+          "fieldId": "ownership-history",
+          "description": "Ownership change history and pending transactions",
+          "type": "text",
+          "extractedText": "Ownership of the subject property has not changed in the past three years. We are unaware of any pending sales or listing activity relating to the subject property."
+        },
+        {
+          "fieldId": "exposure-time-definition",
+          "description": "Definition and explanation of exposure time concept",
+          "type": "text",
+          "contentArea": "exposure-time-section"
+        },
+        {
+          "fieldId": "marketing-time-vs-exposure-time",
+          "description": "Distinction between marketing time and exposure time",
+          "type": "text",
+          "contentArea": "marketing-time-section"
+        },
+        {
+          "fieldId": "exposure-time-assumptions",
+          "description": "Assumptions underlying the exposure time estimate",
+          "type": "list",
+          "contentArea": "exposure-assumptions-list"
+        },
+        {
+          "fieldId": "exposure-time-conclusion",
+          "description": "Concluded reasonable exposure and marketing time",
+          "type": "text",
+          "extractedText": "Noting the subject property's physical, legal, economic and market characteristics, which are described further in this report, we have concluded a reasonable estimate of exposure and marketing time for the subject property to be six months."
+        }
+      ]
+    },
+    {
+      "number": 19,
+      "title": "Introduction & Executive Summary - Definitions & Value Scenarios",
+      "section": "introduction",
+      "subsection": "executive-summary-definitions",
+      "contentType": "definitions-and-scenarios",
+      "fields": [
+        {
+          "fieldId": "market-value-definition",
+          "description": "CUSPAP definition of market value",
+          "type": "definition",
+          "contentArea": "definition-block",
+          "note": "Standard market value definition in italics"
+        },
+        {
+          "fieldId": "market-value-characteristics",
+          "description": "Key characteristics of market value (cash, unaffected by financing, competitive market, fair sale)",
+          "type": "list",
+          "contentArea": "characteristics-list"
+        },
+        {
+          "fieldId": "property-rights-appraised",
+          "description": "Definition of fee simple estate interest",
+          "type": "definition",
+          "contentArea": "property-rights-section"
+        },
+        {
+          "fieldId": "property-rights-details",
+          "description": "Explanation of fee simple ownership and residential tenancy implications",
+          "type": "text",
+          "contentArea": "property-rights-details-section"
+        },
+        {
+          "fieldId": "value-scenarios",
+          "description": "Value scenarios included in appraisal",
+          "type": "list",
+          "contentArea": "value-scenarios-list",
+          "note": "Market analysis, Highest and Best Use analysis included"
+        }
+      ]
+    },
+    {
+      "number": 20,
+      "title": "Introduction & Executive Summary - Assistance & Sources of Information",
+      "section": "introduction",
+      "subsection": "executive-summary-assistance-sources",
+      "contentType": "professional-assistance-and-sources",
+      "fields": [
+        {
+          "fieldId": "appraiser-assistance-provided",
+          "description": "Professional assistance provided by Paul Liboiron (Insight Home Inspections)",
+          "type": "text",
+          "extractedText": "Paul Liboiron of Insight Home Inspections Ltd., a member of Alberta Professional Home Inspectors Society provided real property appraisal assistance to the appraisers signing this certification. Assistance provided included property inspection. Paul Liboiron is registered as a non-member with the AIC to provide professional assistance with real property inspection."
+        },
+        {
+          "fieldId": "sources-of-information-table",
+          "description": "Table of information sources (SAMA, Client, CoStar, ICS, etc.)",
+          "type": "table",
+          "contentArea": "sources-information-table",
+          "sources": [
+            "Property Assessment & Tax - City of North Battleford Zoning",
+            "Zoning & Land Use Planning - ICS",
+            "Site Size - Client",
+            "Building Size - CoStar | Confirmed by Local Agents",
+            "Comparable Information - Client",
+            "Legal Description - Client",
+            "Rent Roll - Not Provided",
+            "Income/Expense Budget - Not Provided",
+            "Title - Phase I Environmental Report",
+            "Lease Documents - Not Provided"
+          ]
+        },
+        {
+          "fieldId": "sources-data-limitation-note",
+          "description": "Note regarding impact of unavailable information items",
+          "type": "text",
+          "contentArea": "sources-limitation-section"
+        }
+      ],
+      "footerInfo": {
+        "pageNumber": "15",
+        "address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "fileNumber": "File VAL251012 - 1"
+      }
+    },
+    {
+      "page_number": 51,
+      "title": "Valuation & Conclusions - Capitalization Rate Selection",
+      "section": "valuation-conclusions",
+      "subsection": "cap-rate-selection",
+      "main_heading": "Valuation & Conclusions",
+      "content_type": "narrative-with-chart",
+      "key_topics": [
+        "Capitalization Rate Selection",
+        "Alternative Investment Rates",
+        "Investment Activity and Trends",
+        "Multifamily Investment Indicators"
+      ],
+      "fields": [
+        {
+          "fieldId": "cap-rate-selection-intro",
+          "label": "Capitalization Rate Selection Introduction",
+          "type": "narrative-text",
+          "content_snippet": "To determine the appropriate capitalization rate for the subject property, consideration is given to...",
+          "data_points": [
+            "Alternative investment rates",
+            "Investor activity and trends",
+            "Property income, location, and physical characteristics",
+            "Comparable sales and market activity"
+          ]
+        },
+        {
+          "fieldId": "alternative-investment-rates-text",
+          "label": "Alternative Investment Rates Narrative",
+          "type": "narrative-text",
+          "content_snippet": "The capitalization rate selected is one the subject property is expected to be higher than the current yield...",
+          "metrics": [
+            "10-year Government of Canada bonds yield (~3.2%)",
+            "Risk premium (75-300 basis points)",
+            "Implied cap rate range (4.25%-6.25%)"
+          ]
+        },
+        {
+          "fieldId": "investment-activity-trends-text",
+          "label": "Investment Activity and Trends Narrative",
+          "type": "narrative-text",
+          "content_snippet": "The Multifamily Investment indicator graph below highlights how multifamily yields track interest rate cycles...",
+          "historical_context": "2015-2021 mid-4% range, post-2022 above 5.0%"
+        },
+        {
+          "fieldId": "multifamily-chart-placeholder",
+          "label": "Multifamily Investment Indicators Chart",
+          "type": "chart-image",
+          "description": "Line graph showing multiple colored trend lines tracking yields from 2013 to 2030",
+          "chart_elements": [
+            "Canada",
+            "Calgary",
+            "Edmonton",
+            "GSH",
+            "Ottawa",
+            "Regina",
+            "Toronto",
+            "Vancouver",
+            "BCCS YTD Yield",
+            "Boardwalk REIT"
+          ],
+          "time_range": "2013-2030"
+        }
+      ],
+      "footer": {
+        "page_indicator": "46",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    {
+      "page_number": 52,
+      "title": "Valuation & Conclusions - Capitalization Rate",
+      "section": "valuation-conclusions",
+      "subsection": "comparable-sales-cap-rate",
+      "main_heading": "Valuation & Conclusions",
+      "content_type": "narrative-with-data-table",
+      "key_topics": [
+        "Capitalization Rate",
+        "Comparable Sales Analysis"
+      ],
+      "fields": [
+        {
+          "fieldId": "cap-rate-methodology-intro",
+          "label": "Capitalization Rate Methodology",
+          "type": "narrative-text",
+          "content_snippet": "In this section, a capitalization rate for the subject is developed based upon the comparable properties in the following table."
+        },
+        {
+          "fieldId": "comparable-sales-table",
+          "label": "Comparable Sales Data Table",
+          "type": "data-table",
+          "description": "Comprehensive comparable sales analysis with 5 comparables",
+          "table_structure": {
+            "columns": [
+              "Data Point",
+              "COMP 1",
+              "COMP 2",
+              "COMP 3",
+              "COMP 4",
+              "COMP 5"
+            ],
+            "header_background": "#003d7a",
+            "header_color": "white"
+          },
+          "data_rows": [
+            {
+              "label": "Name",
+              "comp1": "Heritage House",
+              "comp2": "Parkside View Apartments",
+              "comp3": "Woodland Estates",
+              "comp4": "Parkside Flats 1",
+              "comp5": "Parkside Flats 2"
+            },
+            {
+              "label": "Address",
+              "comp1": "1501 102 St",
+              "comp2": "1070-1092 Ferguson Ave",
+              "comp3": "1901 Pearson Ave",
+              "comp4": "1030 Parr Hill Dr",
+              "comp5": "1030 Parr Hill Dr"
+            },
+            {
+              "label": "City",
+              "comp1": "North Battleford",
+              "comp2": "North Battleford",
+              "comp3": "North Battleford",
+              "comp4": "Martensville",
+              "comp5": "Martensville"
+            },
+            {
+              "label": "Province",
+              "comp1": "SK",
+              "comp2": "SK",
+              "comp3": "SK",
+              "comp4": "SK",
+              "comp5": "SK"
+            },
+            {
+              "label": "NRA (SF)",
+              "comp1": "22,754",
+              "comp2": "33,309",
+              "comp3": "15,000",
+              "comp4": "47,916",
+              "comp5": "52,708"
+            },
+            {
+              "label": "# Units",
+              "comp1": "24",
+              "comp2": "45",
+              "comp3": "24",
+              "comp4": "47",
+              "comp5": "52"
+            },
+            {
+              "label": "Year Built",
+              "comp1": "2006",
+              "comp2": "2002",
+              "comp3": "1980",
+              "comp4": "2016",
+              "comp5": "2019"
+            },
+            {
+              "label": "Sale Date",
+              "type": "date-range-start"
+            }
+          ],
+          "styling": {
+            "alternate_rows": "#f9f9f9",
+            "data_label_background": "#e8e8e8"
+          }
+        }
+      ],
+      "footer": {
+        "page_indicator": "47",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    {
+      "page_number": 53,
+      "title": "Valuation & Conclusions - Comparable Analysis",
+      "section": "valuation-conclusions",
+      "subsection": "comparable-details-continuation",
+      "main_heading": "Valuation & Conclusions",
+      "content_type": "data-table-continuation",
+      "key_topics": [
+        "Comparable Properties Detailed Analysis"
+      ],
+      "fields": [
+        {
+          "fieldId": "comparable-details-table",
+          "label": "Comparable Properties Detailed Data",
+          "type": "data-table",
+          "description": "Continuation of comparable sales data with additional metrics",
+          "table_styling": {
+            "header_background": "#003366",
+            "alternate_rows": "#f9f9f9",
+            "total_row_background": "#f0f0f0",
+            "total_row_weight": "bold"
+          }
+        }
+      ],
+      "footer": {
+        "page_indicator": "48",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    {
+      "page_number": 54,
+      "title": "Valuation & Conclusions - Direct Capitalization",
+      "section": "valuation-conclusions",
+      "subsection": "direct-capitalization",
+      "main_heading": "Valuation & Conclusions",
+      "content_type": "methodology-with-tables",
+      "key_topics": [
+        "Direct Capitalization Approach",
+        "Income Approach Conclusion"
+      ],
+      "fields": [
+        {
+          "fieldId": "direct-capitalization-intro",
+          "label": "Direct Capitalization Introduction",
+          "type": "narrative-text",
+          "content_snippet": "Text describing direct capitalization methodology"
+        },
+        {
+          "fieldId": "income-approach-conclusion-table",
+          "label": "Income Approach Conclusion Table",
+          "type": "data-table",
+          "description": "Direct capitalization valuation table",
+          "table_rows": [
+            {
+              "label": "INCOME APPROACH - DIRECT CAPITALIZATION",
+              "value": ""
+            },
+            {
+              "label": "NOI",
+              "value": "$111,771"
+            },
+            {
+              "label": "NOI $/SF NRA",
+              "value": "$10.95"
+            },
+            {
+              "label": "Capitalization Rate (CAR)",
+              "value": "6.25%"
+            },
+            {
+              "label": "Indicated Value",
+              "value": "$1,800,000"
+            },
+            {
+              "label": "$/SF NRA",
+              "value": "$176"
+            }
+          ]
+        },
+        {
+          "fieldId": "dcf-methodology-note",
+          "label": "DCF Methodology Note",
+          "type": "narrative-text",
+          "content_snippet": "Given that the subject is a multitenant asset with short term it is generally understood that the direct capitalization method is preferred, making the discounted cash flow (DCF) method less meaningful."
+        }
+      ],
+      "footer": {
+        "page_indicator": "49",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    {
+      "page_number": 55,
+      "title": "Valuation & Conclusions - Comparable 1 Analysis",
+      "section": "valuation-conclusions",
+      "subsection": "comparable-detail-1",
+      "main_heading": "Valuation & Conclusions",
+      "secondary_heading": "College View Apartments",
+      "subtitle": "Comparable 1",
+      "content_type": "comparable-property-sheet",
+      "layout": "two-column",
+      "key_topics": [
+        "Sale Information",
+        "Income Analysis",
+        "Property Details",
+        "Unit Mix",
+        "Comparable Property Analysis"
+      ],
+      "fields": [
+        {
+          "fieldId": "comp1-sale-info-table",
+          "label": "Comparable 1 - Sale Information",
+          "type": "data-table",
+          "section": "left-column",
+          "table_data": [
+            {
+              "key": "Buyer",
+              "value": "Epiphany Group"
+            },
+            {
+              "key": "Seller",
+              "value": "Macro Properties Toronto"
+            },
+            {
+              "key": "Sale Date",
+              "value": "2024-06-17"
+            },
+            {
+              "key": "Transaction Status",
+              "value": "Closed"
+            },
+            {
+              "key": "Sale Price",
+              "value": "$4,560,858"
+            },
+            {
+              "key": "Analysis Price",
+              "value": "$4,530,858"
+            },
+            {
+              "key": "Rights Transferred",
+              "value": "Fee Simple"
+            },
+            {
+              "key": "Financing",
+              "value": "Cash to Seller"
+            },
+            {
+              "key": "Conditions of Sale",
+              "value": "Arm's Length"
+            }
+          ]
+        },
+        {
+          "fieldId": "comp1-income-analysis-table",
+          "label": "Comparable 1 - Income Analysis",
+          "type": "data-table",
+          "section": "left-column",
+          "table_data": [
+            {
+              "key": "Occupancy",
+              "value": "100.0%"
+            },
+            {
+              "key": "Net Operating Income",
+              "value": "$374,992.39"
+            },
+            {
+              "key": "Cap Rate",
+              "value": "5.99%"
+            }
+          ]
+        },
+        {
+          "fieldId": "comp1-property-table",
+          "label": "Comparable 1 - Property Details",
+          "type": "data-table",
+          "section": "left-column",
+          "table_data": [
+            {
+              "key": "Type",
+              "value": "Multi-family, Walk-Up"
+            },
+            {
+              "key": "Rent Type",
+              "value": "Market"
+            },
+            {
+              "key": "Gross Building Area (GBA)",
+              "value": "33,509 SF"
+            },
+            {
+              "key": "Net Rentable Area (NRA)",
+              "value": "33,509 SF"
+            },
+            {
+              "key": "Units",
+              "value": "45"
+            },
+            {
+              "key": "Buildings",
+              "value": "2 Buildings, 3 Floors"
+            },
+            {
+              "key": "Year Built",
+              "value": "2000"
+            },
+            {
+              "key": "Land Area",
+              "value": "0.3 Acres (23,780 SF)"
+            },
+            {
+              "key": "Zoning",
+              "value": "R1"
+            },
+            {
+              "key": "County",
+              "value": "North Battleford"
+            },
+            {
+              "key": "Submarket",
+              "value": "Saskatchewan Area"
+            },
+            {
+              "key": "Special Amenities",
+              "value": "No Amenities"
+            },
+            {
+              "key": "Locality",
+              "value": "On Site"
+            },
+            {
+              "key": "Unit Amenities",
+              "value": "Range/Stove, Refrigerator"
+            },
+            {
+              "key": "Parking Type",
+              "value": "Surface"
+            },
+            {
+              "key": "Utilities",
+              "value": "Full Municipal Services"
+            }
+          ]
+        },
+        {
+          "fieldId": "comp1-unit-mix-table",
+          "label": "Comparable 1 - Unit Mix",
+          "type": "data-table",
+          "section": "left-column",
+          "table_headers": [
+            "Flat",
+            "Units",
+            "Avg. Size"
+          ],
+          "table_data": [
+            {
+              "flat": "1 Bed / 1 Bath",
+              "units": "45",
+              "avg_size": "0 SF"
+            }
+          ]
+        },
+        {
+          "fieldId": "comp1-photo-placeholder",
+          "label": "Comparable 1 - Building Photograph",
+          "type": "image-placeholder",
+          "section": "right-column",
+          "content": "Building Photograph\\n(1090-1092 Cinder Crescent)\\nNorth Battleford, SK"
+        },
+        {
+          "fieldId": "comp1-map-placeholder",
+          "label": "Comparable 1 - Location Map",
+          "type": "image-placeholder",
+          "section": "right-column",
+          "content": "Location Map\\n(Google Maps Data)"
+        },
+        {
+          "fieldId": "comp1-description",
+          "label": "Comparable 1 - Property Description",
+          "type": "narrative-text",
+          "section": "right-column",
+          "content_snippet": "Macro Properties Toronto said this 143-unit portfolio to Epiphany Group for $37,962,093 per unit. The buyer was driven to purchasing these properties to diversify and strengthen their investment portfolio."
+        }
+      ],
+      "footer": {
+        "page_indicator": "50",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    {
+      "page_number": 56,
+      "title": "Valuation & Conclusions - Direct Comparison Approach",
+      "section": "valuation-conclusions",
+      "subsection": "direct-comparison-approach",
+      "main_heading": "Valuation & Conclusions",
+      "primary_section": "Direct Comparison Approach: Multifamily",
+      "content_type": "methodology-narrative",
+      "key_topics": [
+        "Direct Comparison Approach",
+        "Sales Comparison Approach",
+        "Principle of Substitution",
+        "Introduction"
+      ],
+      "fields": [
+        {
+          "fieldId": "direct-comparison-section-heading",
+          "label": "Direct Comparison Approach Section Heading",
+          "type": "section-heading",
+          "content": "Direct Comparison Approach: Multifamily"
+        },
+        {
+          "fieldId": "direct-comparison-intro-text",
+          "label": "Direct Comparison Approach Introduction",
+          "type": "narrative-text",
+          "content_snippet": "In the Sales Comparison Approach, the value of a property is estimated by comparing it with similar, recently sold properties in the surrounding or competing areas. Inherent in this approach is the principle of substitution, which holds that when a property is replaceable in the market, its value tends to be set by the cost of buying an equally desirable property..."
+        }
+      ],
+      "footer": {
+        "page_indicator": "51",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    {
+      "page_number": 57,
+      "title": "Valuation & Conclusions - Comparable Properties Presentation",
+      "section": "valuation-conclusions",
+      "subsection": "comparable-presentation",
+      "main_heading": "Valuation & Conclusions",
+      "content_type": "presentation-with-placeholders",
+      "key_topics": [
+        "Comparable Properties",
+        "Market Analysis Presentation"
+      ],
+      "fields": [
+        {
+          "fieldId": "comparable-presentation-heading",
+          "label": "Comparable Properties Presentation Section",
+          "type": "section-heading"
+        },
+        {
+          "fieldId": "comparable-content-placeholder",
+          "label": "Comparable Properties Content Area",
+          "type": "content-placeholder",
+          "description": "Space for comparable properties analysis and presentation",
+          "dimensions": "400px height"
+        }
+      ],
+      "footer": {
+        "page_indicator": "52",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    {
+      "page_number": 58,
+      "title": "Valuation & Conclusions - Comparable 2",
+      "section": "valuation-conclusions",
+      "subsection": "comparable-detail-2",
+      "main_heading": "Valuation & Conclusions",
+      "secondary_heading": "Comparable 2",
+      "content_type": "comparable-property-sheet",
+      "key_topics": [
+        "Comparable 2 Analysis",
+        "Secondary Comparable Property"
+      ],
+      "fields": [
+        {
+          "fieldId": "comp2-analysis-section",
+          "label": "Comparable 2 Detailed Analysis",
+          "type": "data-table",
+          "description": "Complete analysis of second comparable property"
+        }
+      ],
+      "footer": {
+        "page_indicator": "53",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    {
+      "page_number": 59,
+      "title": "Valuation & Conclusions - Market Analysis",
+      "section": "valuation-conclusions",
+      "subsection": "market-analysis",
+      "main_heading": "Valuation & Conclusions",
+      "content_type": "analysis-narrative",
+      "key_topics": [
+        "Market Analysis",
+        "Valuation Support"
+      ],
+      "fields": [
+        {
+          "fieldId": "market-analysis-content",
+          "label": "Market Analysis Content Area",
+          "type": "narrative-or-data",
+          "description": "Supporting market analysis and valuation conclusions"
+        }
+      ],
+      "footer": {
+        "page_indicator": "54",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    {
+      "page_number": 60,
+      "title": "Valuation & Conclusions - Comparable 2 Details",
+      "section": "valuation-conclusions",
+      "subsection": "comparable-detail-2-continued",
+      "main_heading": "Valuation & Conclusions",
+      "secondary_heading": "College View Apartments",
+      "subtitle": "Comparable 2",
+      "content_type": "comparable-property-sheet",
+      "layout": "two-column",
+      "key_topics": [
+        "Sale Information",
+        "Income Analysis",
+        "Property Details",
+        "Unit Mix",
+        "Comparable Property Analysis"
+      ],
+      "fields": [
+        {
+          "fieldId": "comp2-sale-info-table",
+          "label": "Comparable 2 - Sale Information",
+          "type": "data-table",
+          "section": "left-column",
+          "table_data": [
+            {
+              "key": "Buyer",
+              "value": "Epiphany Group"
+            },
+            {
+              "key": "Seller",
+              "value": "Macro Properties Toronto"
+            },
+            {
+              "key": "Sale Date",
+              "value": "2024-06-17"
+            },
+            {
+              "key": "Transaction Status",
+              "value": "Closed"
+            },
+            {
+              "key": "Sale Price",
+              "value": "$4,560,858"
+            },
+            {
+              "key": "Analysis Price",
+              "value": "$4,530,858"
+            },
+            {
+              "key": "Rights Transferred",
+              "value": "Fee Simple"
+            },
+            {
+              "key": "Financing",
+              "value": "Cash to Seller"
+            },
+            {
+              "key": "Conditions of Sale",
+              "value": "Arm's Length"
+            }
+          ]
+        },
+        {
+          "fieldId": "comp2-income-analysis-table",
+          "label": "Comparable 2 - Income Analysis",
+          "type": "data-table",
+          "section": "left-column",
+          "table_data": [
+            {
+              "key": "Occupancy",
+              "value": "100.0%"
+            },
+            {
+              "key": "Net Operating Income",
+              "value": "$374,992.39"
+            },
+            {
+              "key": "Cap Rate",
+              "value": "5.99%"
+            }
+          ]
+        },
+        {
+          "fieldId": "comp2-property-table",
+          "label": "Comparable 2 - Property Details",
+          "type": "data-table",
+          "section": "left-column",
+          "table_data": [
+            {
+              "key": "Type",
+              "value": "Multi-family, Walk-Up"
+            },
+            {
+              "key": "Rent Type",
+              "value": "Market"
+            },
+            {
+              "key": "Gross Building Area (GBA)",
+              "value": "33,509 SF"
+            },
+            {
+              "key": "Net Rentable Area (NRA)",
+              "value": "33,509 SF"
+            },
+            {
+              "key": "Units",
+              "value": "45"
+            },
+            {
+              "key": "Buildings",
+              "value": "2 Buildings, 3 Floors"
+            },
+            {
+              "key": "Year Built",
+              "value": "2000"
+            },
+            {
+              "key": "Land Area",
+              "value": "0.3 Acres (23,780 SF)"
+            },
+            {
+              "key": "Zoning",
+              "value": "R1"
+            },
+            {
+              "key": "County",
+              "value": "North Battleford"
+            },
+            {
+              "key": "Submarket",
+              "value": "Saskatchewan Area"
+            },
+            {
+              "key": "Special Amenities",
+              "value": "No Amenities"
+            },
+            {
+              "key": "Locality",
+              "value": "On Site"
+            },
+            {
+              "key": "Unit Amenities",
+              "value": "Range/Stove, Refrigerator"
+            },
+            {
+              "key": "Parking Type",
+              "value": "Surface"
+            },
+            {
+              "key": "Utilities",
+              "value": "Full Municipal Services"
+            }
+          ]
+        },
+        {
+          "fieldId": "comp2-unit-mix-table",
+          "label": "Comparable 2 - Unit Mix",
+          "type": "data-table",
+          "section": "left-column",
+          "table_headers": [
+            "Flat",
+            "Units",
+            "Avg. Size"
+          ],
+          "table_data": [
+            {
+              "flat": "1 Bed / 1 Bath",
+              "units": "45",
+              "avg_size": "0 SF"
+            }
+          ]
+        },
+        {
+          "fieldId": "comp2-photo-placeholder",
+          "label": "Comparable 2 - Building Photograph",
+          "type": "image-placeholder",
+          "section": "right-column",
+          "content": "Building Photograph\\n(1090-1092 Cinder Crescent)\\nNorth Battleford, SK"
+        },
+        {
+          "fieldId": "comp2-map-placeholder",
+          "label": "Comparable 2 - Location Map",
+          "type": "image-placeholder",
+          "section": "right-column",
+          "content": "Location Map\\n(Google Maps Data)"
+        },
+        {
+          "fieldId": "comp2-description",
+          "label": "Comparable 2 - Property Description",
+          "type": "narrative-text",
+          "section": "right-column",
+          "content_snippet": "Macro Properties Toronto said this 143-unit portfolio to Epiphany Group for $37,962,093 per unit. The buyer was driven to purchasing these properties to diversify and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.98% cap rate."
+        }
+      ],
+      "footer": {
+        "page_indicator": "55",
+        "property_address": "1101, 1121 109 St, North Battleford, Saskatchewan",
+        "file_number": "VAL251012 - 1"
+      }
+    },
+    {
+      "pageNumber": 1,
+      "title": "Cover Page - Appraisal Report",
+      "elements": [
+        {
+          "selector": ".heading",
+          "fieldId": "report-title",
+          "currentValue": "Appraisal Report",
+          "description": "Main report heading - static text"
+        },
+        {
+          "selector": ".property-type",
+          "fieldId": "property-type",
+          "currentValue": "Multi-Family Walkup Property",
+          "description": "Property type descriptor"
+        },
+        {
+          "selector": ".property-address:nth-of-type(2)",
+          "fieldId": "property-name",
+          "currentValue": "North Battleford Apartments",
+          "description": "Property name/title"
+        },
+        {
+          "selector": ".property-address:nth-of-type(3)",
+          "fieldId": "property-address-line1",
+          "currentValue": "1101, 1121 109 St",
+          "description": "Street address of property"
+        },
+        {
+          "selector": ".property-city",
+          "fieldId": "property-address-line2",
+          "currentValue": "North Battleford, Saskatchewan",
+          "description": "City, province of property (calculated from city + province)"
+        },
+        {
+          "selector": ".info-content-name:nth-of-type(1)",
+          "fieldId": "client-name",
+          "currentValue": "Kenneth Engler",
+          "description": "Client contact person name"
+        },
+        {
+          "selector": ".prepared-for .info-content",
+          "fieldId": "client-address-full",
+          "currentValue": "10210984S Saskatchewan Ltd.\n1901, 1088 - 6th Ave SW\nCalgary, AB T2P 5N3",
+          "description": "Full client address with company and street"
+        },
+        {
+          "selector": ".info-content-name:nth-of-type(2)",
+          "fieldId": "appraiser-company",
+          "currentValue": "Valta Property Valuations Ltd.",
+          "description": "Appraisal company name"
+        },
+        {
+          "selector": ".prepared-by .info-content",
+          "fieldId": "appraiser-address",
+          "currentValue": "300, 4838 Richard Road SW\nCalgary, AB T3E 6L1\nOffice: 587-801-5151\nwww.valta.ca",
+          "description": "Appraiser company full address and contact"
+        },
+        {
+          "selector": ".date-line:nth-of-type(1)",
+          "fieldId": "valuation-date",
+          "currentValue": "October 17, 2025",
+          "description": "Effective date of valuation"
+        },
+        {
+          "selector": ".date-line:nth-of-type(2)",
+          "fieldId": "report-date",
+          "currentValue": "November 20, 2025",
+          "description": "Date report was completed"
+        },
+        {
+          "selector": ".file-number",
+          "fieldId": "file-number",
+          "currentValue": "VAL251012 - 1",
+          "description": "Valcre file number/reference"
+        }
+      ]
+    },
+    {
+      "pageNumber": 2,
+      "title": "Letter of Transmittal",
+      "elements": [
+        {
+          "selector": ".date",
+          "fieldId": "report-date",
+          "currentValue": "November 20, 2025",
+          "description": "Date of report letter"
+        },
+        {
+          "selector": ".recipient",
+          "fieldId": "client-address-full",
+          "currentValue": "1021098645 Saskatchewan Ltd.\n1901, 1088 - 6th Ave SW,\nCalgary, AB T2P 5N3",
+          "description": "Client/recipient address"
+        },
+        {
+          "selector": ".attention",
+          "fieldId": "client-name",
+          "currentValue": "Kenneth Engler",
+          "description": "Recipient attention line (client contact name)"
+        },
+        {
+          "selector": ".header-info p:nth-of-type(1)",
+          "fieldId": "appraiser-company",
+          "currentValue": "Valta Property Valuations Ltd.",
+          "description": "Appraiser company name in letter"
+        },
+        {
+          "selector": ".header-info p:nth-of-type(2)",
+          "fieldId": "appraiser-address",
+          "currentValue": "# 300-6858 Richard Road SW",
+          "description": "Appraiser address line 1"
+        },
+        {
+          "selector": "p.first",
+          "fieldId": "assignment-purpose-text",
+          "currentValue": "As Stabilized (Fee Simple Estate) current market value for the property located at 1101, 1121 109 St, North Battleford, SK.",
+          "description": "Purpose of assignment / scenario type"
+        },
+        {
+          "selector": ".letter-body p:nth-of-type(2)",
+          "fieldId": "scope-of-work",
+          "currentValue": "Valta Property Valuations Ltd. is proud to present the appraisal report that satisfies the agreed upon scope of work with 1021098645 Saskatchewan Ltd. The purpose of this assignment is to provide the As Stabilized current market value of the subject property, which at the time of inspection represents the improved property as of the effective date and is leased up at market rental rates and operating costs for the property located at 1101, 1121 109 St, North Battleford, SK (herein after referred to as the subject property).",
+          "description": "Scope of work and assignment purpose narrative"
+        },
+        {
+          "selector": ".letter-body p:nth-of-type(3)",
+          "fieldId": "property-description",
+          "currentValue": "The subject property, located at 1101, 1121 109 St, North Battleford, SK, is a multi-family, walkup property with improvements located in North Battleford. The improvements are comprised of 2 total buildings, and consist of 19,204 square feet of rentable area (NRA) as of the valuation date. The property, reportedly built in 1970 (1970 weighted) is approximately 100.0% occupied and features 16 units in a 2-story, garden style format.",
+          "description": "Executive summary property description with key metrics"
+        },
+        {
+          "selector": ".market-value-table tr:nth-child(2) td:nth-child(1)",
+          "fieldId": "value-scenario-type",
+          "currentValue": "As Stabilized",
+          "description": "Valuation scenario presented"
+        },
+        {
+          "selector": ".market-value-table tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "interest-appraised",
+          "currentValue": "Fee Simple Estate",
+          "description": "Type of interest appraised"
+        },
+        {
+          "selector": ".market-value-table tr:nth-child(2) td:nth-child(3)",
+          "fieldId": "exposure-time-conclusion",
+          "currentValue": "Six Months",
+          "description": "Reasonable exposure time estimate"
+        },
+        {
+          "selector": ".market-value-table tr:nth-child(2) td:nth-child(4)",
+          "fieldId": "valuation-date",
+          "currentValue": "October 17, 2025",
+          "description": "Effective date of valuation in table"
+        },
+        {
+          "selector": ".market-value-table tr:nth-child(2) td:nth-child(5)",
+          "fieldId": "concluded-value",
+          "currentValue": "$1,800,000",
+          "description": "Final concluded market value"
+        },
+        {
+          "selector": ".hypothesis-text",
+          "fieldId": "hypothetical-conditions-text",
+          "currentValue": "The use of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed in part based on the hypothetical condition that all units could achieve current market rent levels and has achieved stabilized occupancy as of the effective date of the appraisal. Under this premise, no additional rental income concessions (such as free rent, move-in specials, or the like) are provided. In reality, as of the effective date, the property's existing lease terms reflect contract rents that are deemed to be below-market rents. For the purposes of this analysis, it is assumed that lease-up to market rent levels has occurred under typical market conditions, without undue delay or concessions exceeding market norms. If this assumption proves incorrect, such as market rents are not achievable the value conclusion may be materially impacted.",
+          "description": "Hypothetical conditions explanation"
+        },
+        {
+          "selector": ".extraordinary-text",
+          "fieldId": "extraordinary-assumptions-text",
+          "currentValue": "No Extraordinary Assumptions were made for this assignment.",
+          "description": "Extraordinary assumptions statement"
+        }
+      ]
+    },
+    {
+      "pageNumber": 3,
+      "title": "Extraordinary Limiting Conditions",
+      "elements": [
+        {
+          "selector": "h1",
+          "fieldId": "section-title",
+          "currentValue": "Extraordinary Limiting Conditions",
+          "description": "Page section title"
+        },
+        {
+          "selector": ".intro-line",
+          "fieldId": "extraordinary-limiting-conditions",
+          "currentValue": "No Extraordinary Limiting Conditions were made for this assignment.",
+          "description": "Statement of extraordinary limiting conditions"
+        },
+        {
+          "selector": ".company-info p:nth-of-type(1)",
+          "fieldId": "appraiser-company",
+          "currentValue": "Valta Property Valuations Ltd.",
+          "description": "Appraiser company name"
+        },
+        {
+          "selector": ".signatory-name",
+          "fieldId": "appraiser-signatory-name",
+          "currentValue": "Chris Chornohos, AACI, MRICS",
+          "description": "Name of appraiser signing report"
+        },
+        {
+          "selector": ".signatory-title",
+          "fieldId": "appraiser-signatory-title",
+          "currentValue": "Founder",
+          "description": "Title of appraiser"
+        },
+        {
+          "selector": ".signatory-email",
+          "fieldId": "appraiser-email",
+          "currentValue": "chris.chornohos@valta.ca",
+          "description": "Appraiser contact email"
+        },
+        {
+          "selector": ".signatory-aic",
+          "fieldId": "appraiser-aic-number",
+          "currentValue": "902097",
+          "description": "AIC certification number"
+        }
+      ]
+    },
+    {
+      "pageNumber": 4,
+      "title": "Table of Contents",
+      "elements": [
+        {
+          "selector": ".sidebar-title",
+          "fieldId": "section-title",
+          "currentValue": "Table of Contents",
+          "description": "Page title - static"
+        },
+        {
+          "selector": ".toc-item:nth-of-type(1) .toc-item-text",
+          "fieldId": "toc-section-1",
+          "currentValue": "Property Overview",
+          "description": "TOC entry - Property Overview"
+        },
+        {
+          "selector": ".toc-item:nth-of-type(2) .toc-item-text",
+          "fieldId": "toc-section-2",
+          "currentValue": "Photographs",
+          "description": "TOC entry - Photographs"
+        }
+      ]
+    },
+    {
+      "pageNumber": 5,
+      "title": "Introduction & Executive Summary (Property Identification)",
+      "elements": [
+        {
+          "selector": ".page-title",
+          "fieldId": "section-title",
+          "currentValue": "Introduction & Executive Summary",
+          "description": "Page section title"
+        },
+        {
+          "selector": ".section-title:nth-of-type(1)",
+          "fieldId": "subsection-title",
+          "currentValue": "Property Overview",
+          "description": "Subsection title"
+        },
+        {
+          "selector": ".section-header:nth-of-type(1)",
+          "fieldId": "table-section-header",
+          "currentValue": "PROPERTY IDENTIFICATION",
+          "description": "Property Identification table header"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "property-name",
+          "currentValue": "North Battleford Apartments",
+          "description": "Property name in identification table"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "property-type",
+          "currentValue": "Multi-Family - Walkup",
+          "description": "Property type in table"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "property-address-line1",
+          "currentValue": "1101, 1121 109 St.",
+          "description": "Property address line 1"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(4) td:nth-child(2)",
+          "fieldId": "property-address-line2",
+          "currentValue": "North Battleford, Saskatchewan 59A 2E5",
+          "description": "City, province, postal code"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(5) td:nth-child(1)",
+          "fieldId": "market-submarket-label",
+          "currentValue": "Market / Submarket",
+          "description": "Table label for market info"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(5) td:nth-child(2)",
+          "fieldId": "market-name",
+          "currentValue": "North Battleford / North Battleford",
+          "description": "Market and submarket name"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(6) td:nth-child(2)",
+          "fieldId": "geocode",
+          "currentValue": "52.7736945, -108.30161°",
+          "description": "Geographic coordinates of property"
+        },
+        {
+          "selector": ".section-header:nth-of-type(2)",
+          "fieldId": "table-section-header",
+          "currentValue": "SITE DESCRIPTION",
+          "description": "Site Description table header"
+        },
+        {
+          "selector": "table:nth-of-type(2) tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "legal-description",
+          "currentValue": "Plan - C4240 Block - 55 Lot - 17,18, 19, 20",
+          "description": "Legal land description"
+        },
+        {
+          "selector": "table:nth-of-type(2) tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "site-area-sf",
+          "currentValue": "24,600",
+          "description": "Usable site area in square feet"
+        },
+        {
+          "selector": "table:nth-of-type(2) tr:nth-child(4) td:nth-child(2)",
+          "fieldId": "site-area-sf",
+          "currentValue": "24,600",
+          "description": "Total site area in square feet"
+        },
+        {
+          "selector": "table:nth-of-type(2) tr:nth-child(5) td:nth-child(2)",
+          "fieldId": "zoning-district",
+          "currentValue": "Low Density Residential District (R2)",
+          "description": "Zoning classification and code"
+        },
+        {
+          "selector": "table:nth-of-type(2) tr:nth-child(6) td:nth-child(2)",
+          "fieldId": "site-shape",
+          "currentValue": "Rectangular",
+          "description": "Site shape description"
+        },
+        {
+          "selector": "table:nth-of-type(2) tr:nth-child(7) td:nth-child(2)",
+          "fieldId": "topography",
+          "currentValue": "Level at street grade",
+          "description": "Site topography"
+        },
+        {
+          "selector": ".section-header:nth-of-type(3)",
+          "fieldId": "table-section-header",
+          "currentValue": "IMPROVEMENT DESCRIPTION",
+          "description": "Improvement Description table header"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "tenancy-type",
+          "currentValue": "Multi-Tenant; Occupied By Three Party Tenants - 18 Units",
+          "description": "Tenancy type and current units occupied"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "nra-sqft",
+          "currentValue": "10,204",
+          "description": "Net Rentable Area in square feet"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "building-nra-sqft",
+          "currentValue": "10,204",
+          "description": "Gross Building Area (matches NRA)"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(4) td:nth-child(2)",
+          "fieldId": "unit-count",
+          "currentValue": "18",
+          "description": "Total number of rental units"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(5) td:nth-child(2)",
+          "fieldId": "density-units-per-acre",
+          "currentValue": "29",
+          "description": "Units per acre density"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(6) td:nth-child(2)",
+          "fieldId": "building-count",
+          "currentValue": "2",
+          "description": "Total number of buildings"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(7) td:nth-child(2)",
+          "fieldId": "story-count",
+          "currentValue": "2",
+          "description": "Number of stories"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(8) td:nth-child(2)",
+          "fieldId": "year-built",
+          "currentValue": "1970; (1970 wtg/sec)",
+          "description": "Year built with weighted average"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(9) td:nth-child(2)",
+          "fieldId": "actual-age",
+          "currentValue": "55 Years",
+          "description": "Actual age of property"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(10) td:nth-child(2)",
+          "fieldId": "effective-age",
+          "currentValue": "35 Years",
+          "description": "Effective age of property"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(11) td:nth-child(2)",
+          "fieldId": "economic-life",
+          "currentValue": "75 Years",
+          "description": "Total economic life of property"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(12) td:nth-child(2)",
+          "fieldId": "remaining-useful-life",
+          "currentValue": "20 Years",
+          "description": "Remaining useful life"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(13) td:nth-child(2)",
+          "fieldId": "parking-ratio",
+          "currentValue": "1.1 / Unit",
+          "description": "Parking spaces per unit"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(14) td:nth-child(2)",
+          "fieldId": "project-amenities",
+          "currentValue": "Guest Parking",
+          "description": "Project-level amenities"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(15) td:nth-child(2)",
+          "fieldId": "laundry",
+          "currentValue": "On Site",
+          "description": "Laundry facilities location"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(16) td:nth-child(2)",
+          "fieldId": "security-features",
+          "currentValue": "Deadbolts, Exterior Lighting, Secured Entry",
+          "description": "Security features list"
+        },
+        {
+          "selector": ".section-header:nth-of-type(4)",
+          "fieldId": "table-section-header",
+          "currentValue": "QUALITATIVE ANALYSIS",
+          "description": "Qualitative Analysis table header"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "site-quality-rating",
+          "currentValue": "Average",
+          "description": "Site quality rating"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "site-access-rating",
+          "currentValue": "Average",
+          "description": "Site access rating"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "site-exposure-rating",
+          "currentValue": "Average",
+          "description": "Site exposure rating"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(4) td:nth-child(2)",
+          "fieldId": "site-utility-rating",
+          "currentValue": "Average",
+          "description": "Site utility rating"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(5) td:nth-child(2)",
+          "fieldId": "building-quality-rating",
+          "currentValue": "Average",
+          "description": "Building quality rating"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(6) td:nth-child(2)",
+          "fieldId": "building-condition-rating",
+          "currentValue": "Average",
+          "description": "Building condition rating"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(7) td:nth-child(2)",
+          "fieldId": "building-appeal-rating",
+          "currentValue": "Average",
+          "description": "Building appeal/aesthetic rating"
+        },
+        {
+          "selector": ".footer-left",
+          "fieldId": "page-footer",
+          "currentValue": "1   1101, 1121 109 St. North Battleford, Saskatchewan | File VAL251012 - 1",
+          "description": "Page footer with address and file number"
+        }
+      ]
+    },
+    {
+      "pageNumber": 6,
+      "title": "Introduction & Executive Summary (HBU, Exposure Time, Investment Indicators, Value Conclusion)",
+      "elements": [
+        {
+          "selector": ".page-title",
+          "fieldId": "section-title",
+          "currentValue": "Introduction & Executive Summary",
+          "description": "Page section title"
+        },
+        {
+          "selector": "table.hbu-table tr:nth-child(1) td:nth-child(1)",
+          "fieldId": "hbu-label-construction",
+          "currentValue": "Proposed Construction",
+          "description": "HBU - Proposed construction label"
+        },
+        {
+          "selector": "table.hbu-table tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "hbu-proposed-construction",
+          "currentValue": "No",
+          "description": "Whether proposed construction exists"
+        },
+        {
+          "selector": "table.hbu-table tr:nth-child(2) td:nth-child(1)",
+          "fieldId": "hbu-label-vacant",
+          "currentValue": "As Though Vacant",
+          "description": "HBU as though vacant label"
+        },
+        {
+          "selector": "table.hbu-table tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "hbu-vacant-use",
+          "currentValue": "Multifamily",
+          "description": "Highest and best use if vacant"
+        },
+        {
+          "selector": "table.hbu-table tr:nth-child(3) td:nth-child(1)",
+          "fieldId": "hbu-label-improved",
+          "currentValue": "As Improved",
+          "description": "HBU as improved label"
+        },
+        {
+          "selector": "table.hbu-table tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "hbu-improved-use",
+          "currentValue": "Multifamily",
+          "description": "Highest and best use as improved"
+        },
+        {
+          "selector": "table.hbu-table:nth-of-type(2) tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "exposure-time-conclusion",
+          "currentValue": "Six Months",
+          "description": "Reasonable exposure time"
+        },
+        {
+          "selector": "table.hbu-table:nth-of-type(2) tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "marketing-time",
+          "currentValue": "Six Months",
+          "description": "Reasonable marketing time"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "current-occupancy-percent",
+          "currentValue": "109.00%",
+          "description": "Current occupancy percentage"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "stabilized-occupancy-percent",
+          "currentValue": "96.16%",
+          "description": "Stabilized occupancy percentage"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "multifamily-sf",
+          "currentValue": "10,204",
+          "description": "SF Multifamily rentable area"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(4) td:nth-child(2)",
+          "fieldId": "units-occupied-vacant",
+          "currentValue": "0",
+          "description": "Occupied/Vacant MF units indicator"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(5) td:nth-child(2)",
+          "fieldId": "current-rent-per-unit",
+          "currentValue": "$1,015",
+          "description": "Current rent per unit"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(6) td:nth-child(2)",
+          "fieldId": "concluded-rent-per-unit",
+          "currentValue": "$1,020",
+          "description": "Concluded market rent per unit"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(7) td:nth-child(2)",
+          "fieldId": "expense-ratio",
+          "currentValue": "",
+          "description": "Expense ratio (Expenses/EGI)"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(8) td:nth-child(2)",
+          "fieldId": "dscr-or-noi-per-unit",
+          "currentValue": "$6,980 unit",
+          "description": "DSCR or NOI per unit indicator"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(9) td:nth-child(2)",
+          "fieldId": "capitalization-rate",
+          "currentValue": "6.25%",
+          "description": "Concluded capitalization rate (OAR)"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(1) td:nth-child(1)",
+          "fieldId": "value-scenario-label",
+          "currentValue": "VALUATION SCENARIOS",
+          "description": "Valuation scenarios label"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "value-scenario-type",
+          "currentValue": "AS STABILIZED",
+          "description": "Value scenario type (As Stabilized)"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "interest-appraised",
+          "currentValue": "Fee Simple Estate",
+          "description": "Type of interest appraised"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "exposure-time-value-table",
+          "currentValue": "Six Months",
+          "description": "Exposure time in value conclusion table"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(4) td:nth-child(2)",
+          "fieldId": "valuation-date",
+          "currentValue": "October 17, 2025",
+          "description": "Effective date of valuation"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(5) td:nth-child(2)",
+          "fieldId": "cost-approach-status",
+          "currentValue": "Not Presented",
+          "description": "Cost approach inclusion status"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(6) td:nth-child(2)",
+          "fieldId": "direct-comparison-value",
+          "currentValue": "$1,800,000",
+          "description": "Value concluded via direct comparison approach"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(7) td:nth-child(2)",
+          "fieldId": "income-approach-value",
+          "currentValue": "$1,800,000",
+          "description": "Value concluded via income approach"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(8) td:nth-child(2)",
+          "fieldId": "concluded-value",
+          "currentValue": "$1,800,000",
+          "description": "Final value conclusion"
+        },
+        {
+          "selector": ".footer-left",
+          "fieldId": "page-footer",
+          "currentValue": "2   1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1",
+          "description": "Page footer"
+        }
+      ]
+    },
+    {
+      "pageNumber": 7,
+      "title": "Introduction & Executive Summary (Hypothetical Conditions and Assumptions)",
+      "elements": [
+        {
+          "selector": ".header h1",
+          "fieldId": "section-title",
+          "currentValue": "Introduction & Executive Summary",
+          "description": "Page section title"
+        },
+        {
+          "selector": ".section:nth-of-type(1) .section-title",
+          "fieldId": "subsection-title",
+          "currentValue": "Hypothetical Conditions",
+          "description": "Hypothetical conditions section heading"
+        },
+        {
+          "selector": ".section:nth-of-type(1) .section-content",
+          "fieldId": "hypothetical-conditions-text",
+          "currentValue": "The use of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed based on the hypothetical condition that the subject property is fully leased at prevailing market rents and has achieved stabilized occupancy as of the effective date of the appraisal. Under this premise, no deductions are made for holding costs, rent loss, or lease-up expenses. In addition it is a hypothetical condition that all units could achieve current market rent levels and stabilized occupancy as of the effective date. In reality, as of the effective date, the property's existing lease terms reflect contract rents that are deemed to be below-market rents. For purposes of this analysis, it is assumed that lease-up to market rent levels has occurred under typical market conditions, without undue delay or concessions exceeding market norms. If this assumption proves incorrect, such as market rents are not achievable the value conclusion may be materially impacted.",
+          "description": "Hypothetical conditions narrative"
+        },
+        {
+          "selector": ".section:nth-of-type(2) .section-title",
+          "fieldId": "subsection-title",
+          "currentValue": "Extraordinary Assumptions",
+          "description": "Extraordinary assumptions section heading"
+        },
+        {
+          "selector": ".section:nth-of-type(2) .section-content",
+          "fieldId": "extraordinary-assumptions-text",
+          "currentValue": "No Extraordinary Assumptions were made for this assignment.",
+          "description": "Extraordinary assumptions statement"
+        },
+        {
+          "selector": ".section:nth-of-type(3) .section-title",
+          "fieldId": "subsection-title",
+          "currentValue": "Extraordinary Limiting Conditions",
+          "description": "Extraordinary limiting conditions section heading"
+        },
+        {
+          "selector": ".section:nth-of-type(3) .section-content",
+          "fieldId": "extraordinary-limiting-conditions",
+          "currentValue": "No Extraordinary Limiting Conditions were made for this assignment.",
+          "description": "Extraordinary limiting conditions statement"
+        },
+        {
+          "selector": ".footer-left",
+          "fieldId": "page-footer",
+          "currentValue": "3   1101, 1121 109 St. North Battleford, Saskatchewan | File VAL251012 - 1",
+          "description": "Page footer"
+        }
+      ]
+    },
+    {
+      "pageNumber": 8,
+      "title": "Photographs (Page 1 of 2)",
+      "elements": [
+        {
+          "selector": ".page-header h1",
+          "fieldId": "section-title",
+          "currentValue": "Introduction & Executive Summary",
+          "description": "Page section title"
+        },
+        {
+          "selector": ".section-title",
+          "fieldId": "subsection-title",
+          "currentValue": "Photographs",
+          "description": "Photographs section heading"
+        },
+        {
+          "selector": ".photos-grid .photo-item:nth-child(1) .photo-caption",
+          "fieldId": "photo-1-caption",
+          "currentValue": "1101 - East Elevation",
+          "description": "Photo 1 caption"
+        },
+        {
+          "selector": ".photos-grid .photo-item:nth-child(2) .photo-caption",
+          "fieldId": "photo-2-caption",
+          "currentValue": "1101 - West Elevation",
+          "description": "Photo 2 caption"
+        },
+        {
+          "selector": ".photos-grid .photo-item:nth-child(3) .photo-caption",
+          "fieldId": "photo-3-caption",
+          "currentValue": "Street View Facing East - 11 Ave",
+          "description": "Photo 3 caption"
+        },
+        {
+          "selector": ".photos-grid .photo-item:nth-child(4) .photo-caption",
+          "fieldId": "photo-4-caption",
+          "currentValue": "Street View Facing North - 109 St",
+          "description": "Photo 4 caption"
+        },
+        {
+          "selector": ".photos-grid .photo-item:nth-child(5) .photo-caption",
+          "fieldId": "photo-5-caption",
+          "currentValue": "1101 - Typical Hallway",
+          "description": "Photo 5 caption"
+        },
+        {
+          "selector": ".photos-grid .photo-item:nth-child(6) .photo-caption",
+          "fieldId": "photo-6-caption",
+          "currentValue": "1101 - Typical Stairway",
+          "description": "Photo 6 caption"
+        },
+        {
+          "selector": ".footer-text",
+          "fieldId": "page-footer",
+          "currentValue": "4    1101, 1121 109 St. North Battleford, Saskatchewan | File VAL251012 - 1",
+          "description": "Page footer"
+        }
+      ]
+    },
+    {
+      "pageNumber": 9,
+      "title": "Photographs (Page 2 of 2)",
+      "elements": [
+        {
+          "selector": ".header h1",
+          "fieldId": "section-title",
+          "currentValue": "Introduction & Executive Summary",
+          "description": "Page section title"
+        },
+        {
+          "selector": ".photo-item:nth-child(1) .photo-label",
+          "fieldId": "photo-7-caption",
+          "currentValue": "1101 - Typical Bathroom",
+          "description": "Photo 7 caption"
+        },
+        {
+          "selector": ".photo-item:nth-child(2) .photo-label",
+          "fieldId": "photo-8-caption",
+          "currentValue": "1101 - Typical Bedroom 1",
+          "description": "Photo 8 caption"
+        },
+        {
+          "selector": ".photo-item:nth-child(3) .photo-label",
+          "fieldId": "photo-9-caption",
+          "currentValue": "1101 - Typical Bedroom 2",
+          "description": "Photo 9 caption"
+        },
+        {
+          "selector": ".photo-item:nth-child(4) .photo-label",
+          "fieldId": "photo-10-caption",
+          "currentValue": "1101 - Electrical Room",
+          "description": "Photo 10 caption"
+        },
+        {
+          "selector": ".photo-item:nth-child(5) .photo-label",
+          "fieldId": "photo-11-caption",
+          "currentValue": "1101 - Mechanical Room",
+          "description": "Photo 11 caption"
+        },
+        {
+          "selector": ".photo-item:nth-child(6) .photo-label",
+          "fieldId": "photo-12-caption",
+          "currentValue": "1101 - Typical Kitchen",
+          "description": "Photo 12 caption"
+        },
+        {
+          "selector": ".footer-left",
+          "fieldId": "page-footer",
+          "currentValue": "5    1101, 1121 109 St. North Battleford, Saskatchewan | File VAL251012 - 1",
+          "description": "Page footer"
+        }
+      ]
+    }
+  ]
+}

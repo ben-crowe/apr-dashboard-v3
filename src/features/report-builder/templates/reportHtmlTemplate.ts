@@ -156,6 +156,11 @@ const formatDate = (dateStr: string): string => {
   const coverPhoto = typeof coverPhotoValue === 'string' && coverPhotoValue ? coverPhotoValue :
                      (Array.isArray(coverPhotoValue) && coverPhotoValue.length > 0 ? coverPhotoValue[0] : null);
 
+  // Extract appraiser signature from the img-signature field
+  const signatureValue = getGlobalFieldValue('img-signature');
+  const appraiserSignature = typeof signatureValue === 'string' && signatureValue ? signatureValue :
+                              (Array.isArray(signatureValue) && signatureValue.length > 0 ? signatureValue[0] : null);
+
   // Helper function to render the SITE section with custom template
   // Helper function to render the SITE section with custom template - EXPANDED VERSION
   const renderSiteSection = (section: ReportSection): string => {
@@ -6972,7 +6977,7 @@ const formatDate = (dateStr: string): string => {
       </p>
 
       <div class="letter-signature-block">
-        <div class="letter-signature-line"></div>
+        ${appraiserSignature ? `<img src="${appraiserSignature}" alt="Appraiser Signature" style="width: 254px; height: auto; margin-bottom: 0.5rem;" />` : '<div class="letter-signature-line"></div>'}
         <div class="letter-signature-name">${appraiserName ? `${appraiserName}${appraiserCredentials ? ', ' + appraiserCredentials : ''}` : '[Appraiser Name, Credentials]'}</div>
         ${appraiserTitle ? `<div>${appraiserTitle}</div>` : '<div>[Appraiser Title]</div>'}
         ${appraiserEmail ? `<div>${appraiserEmail}</div>` : '<div>[Appraiser Email]</div>'}

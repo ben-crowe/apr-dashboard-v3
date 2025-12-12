@@ -5315,10 +5315,8 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <div class="toc-content">
         <ul class="toc-list">
         ${tocEntries.map(entry => `
-          <li class="toc-entry ${(entry as { isHeader?: boolean }).isHeader ? 'toc-header' : ''} ${(entry as { indent?: boolean }).indent ? 'toc-indent' : ''}" style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: ${(entry as { isHeader?: boolean }).isHeader ? '15px' : '8px'};">
-            <span class="toc-title" style="font-size: 12px; ${(entry as { isHeader?: boolean }).isHeader ? 'font-weight: bold; text-transform: uppercase;' : ''}">${entry.title}</span>
-            <span class="toc-dots" style="flex: 1; border-bottom: 1px dotted #999; margin: 0 10px;"></span>
-            <span class="toc-page" style="font-size: 12px; font-weight: 500;">${entry.page}</span>
+          <li class="toc-entry ${(entry as { isHeader?: boolean }).isHeader ? 'toc-header' : ''} ${(entry as { indent?: boolean }).indent ? 'toc-indent' : ''}" style="margin-bottom: ${(entry as { isHeader?: boolean }).isHeader ? '15px' : '8px'};">
+            <span class="toc-title" style="font-size: 12px; ${(entry as { isHeader?: boolean }).isHeader ? 'font-weight: bold; text-transform: uppercase;' : ''}">${entry.title} ${entry.page}</span>
           </li>
         `).join('')}
         </ul>

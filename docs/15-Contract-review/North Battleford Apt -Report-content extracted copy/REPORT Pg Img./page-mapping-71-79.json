@@ -1,0 +1,329 @@
+{
+  "_metadata": {
+    "project": "North Battleford Apartments - VAL251012",
+    "created": "2025-12-12",
+    "pages_mapped": "71-79",
+    "total_fields": 47,
+    "status": "complete",
+    "notes": "Pages 71-79 contain appendices, definitions, appraiser qualifications, and back cover"
+  },
+
+  "page_structure": {
+    "71": {
+      "title": "Appendices - Contingent & Limiting Conditions",
+      "section": "appendices",
+      "subsection": "limiting-conditions",
+      "page_type": "content",
+      "content_type": "legal-boilerplate"
+    },
+    "72": {
+      "title": "Appendices - Contingent & Limiting Conditions (continued)",
+      "section": "appendices",
+      "subsection": "limiting-conditions",
+      "page_type": "content",
+      "content_type": "legal-boilerplate"
+    },
+    "73": {
+      "title": "Appendices - Contingent & Limiting Conditions (continued)",
+      "section": "appendices",
+      "subsection": "limiting-conditions",
+      "page_type": "content",
+      "content_type": "legal-boilerplate"
+    },
+    "74": {
+      "title": "Appendices - Definition of Terms",
+      "section": "appendices",
+      "subsection": "glossary",
+      "page_type": "content",
+      "content_type": "glossary"
+    },
+    "75": {
+      "title": "Appendices - Definition of Terms (continued)",
+      "section": "appendices",
+      "subsection": "glossary",
+      "page_type": "content",
+      "content_type": "glossary"
+    },
+    "76": {
+      "title": "Appendices - Definition of Terms (continued)",
+      "section": "appendices",
+      "subsection": "glossary",
+      "page_type": "content",
+      "content_type": "glossary"
+    },
+    "77": {
+      "title": "Appendices - Definition of Terms (continued)",
+      "section": "appendices",
+      "subsection": "glossary",
+      "page_type": "content",
+      "content_type": "glossary"
+    },
+    "78": {
+      "title": "Appendices - Qualifications of the Appraiser",
+      "section": "appendices",
+      "subsection": "appraiser-qualifications",
+      "page_type": "content",
+      "content_type": "appraiser-profile"
+    },
+    "79": {
+      "title": "Back Cover",
+      "section": "back-matter",
+      "subsection": "back-cover",
+      "page_type": "cover",
+      "content_type": "company-info"
+    }
+  },
+
+  "field_mappings": {
+    "pages_71_73": {
+      "fieldId": "appendix-limiting-conditions",
+      "section": "appendices",
+      "subsection": "limiting-conditions",
+      "dataType": "textarea",
+      "content_summary": "Legal conditions and disclaimers required by CUSPAP standards, including client authorization, market conditions, legal/environmental/survey responsibilities, court testimony, hidden conditions, and liability limitations",
+      "key_points": [
+        "Report authorization and authorized users only",
+        "Market conditions may change rapidly",
+        "Appraiser not responsible for legal matters",
+        "No environmental assessment",
+        "No survey performed",
+        "Court testimony arrangements required",
+        "Hidden conditions assumed not present",
+        "Environmental liability limitations",
+        "Client-supplied information not verified",
+        "Inspection scope definition",
+        "Construction quality not evaluated",
+        "Confidentiality and PIPEDA compliance",
+        "Report ownership restrictions",
+        "Digital signature security if transmitted",
+        "Lender/insurer due diligence requirements",
+        "Liability cap at appraisal fee",
+        "Market value based on effective date only"
+      ],
+      "extracted_text_count": 18,
+      "pages": [71, 72, 73],
+      "confidence": "high"
+    },
+    "pages_74_77": {
+      "fieldId": "appendix-definitions-glossary",
+      "section": "appendices",
+      "subsection": "glossary",
+      "dataType": "textarea",
+      "content_summary": "Comprehensive glossary of appraisal and real estate industry terminology, organized alphabetically from 'Absorption Period' through 'Value Indication'",
+      "key_definitions": [
+        "Absorption Period/Rate - Time required for property to achieve occupied/leased status",
+        "Ad Valorem Tax - Property tax levied in proportion to value",
+        "Assessed Value - Government-assigned property value for tax purposes",
+        "Authorized Client/Use/User - CUSPAP-defined client and usage permissions",
+        "Cash Equivalency - Adjustment for non-market financing terms",
+        "Contract Rent - Actual rental income from lease",
+        "Disposition Value - Price under forced sale conditions",
+        "Effective Rent - Base rent minus landlord concessions",
+        "Excess Land - Unneeded land with separate highest/best use",
+        "Excess Rent - Contract rent exceeding market rent",
+        "Exposure Time - Time property would be on market before sale",
+        "Extraordinary Assumption - Assumption that could materially affect conclusions",
+        "Fee Simple Estate - Absolute ownership unencumbered",
+        "Floor Area Ratio (FAR) - Building floor area to land area ratio",
+        "Frictional Vacancy - Vacancy needed for market orderly operation",
+        "Full Service Lease - Landlord pays property expenses",
+        "General Vacancy - Vacancy calculation in DCF analysis",
+        "Going Concern Premise - Business expected to continue indefinitely",
+        "Gross Building Area (GBA) - Total floor area measured from exterior",
+        "Gross Lease - Landlord receives rent and pays all expenses",
+        "Hypothetical Condition - Assumed but untrue condition for analysis",
+        "Investment Value - Value to specific investor based on their criteria",
+        "Land-to-Building Ratio - Proportion of land to building area",
+        "Lease - Legal agreement granting use rights for period",
+        "Leased Fee Interest - Owner's right to rent plus residuary right",
+        "Leasehold Interest - Lessee's right to occupy and use property",
+        "Lessor - One who conveys occupancy rights under lease",
+        "Liquidation Value - Price under extreme forced sale conditions",
+        "Market Rent - Probable rent property should bring in open market",
+        "Market Value - Most probable price in fair competitive sale",
+        "Market Value of Going Concern - Market value of business as whole",
+        "Marketing Time - Estimated time to sell at market value after effective date",
+        "Modified Gross Lease - Landlord and tenant share expense obligations",
+        "Net Lease - Tenant pays all property expenses",
+        "Net Net Net Lease - Tenant pays all expenses except structural/reserves",
+        "Occupancy Rate - Ratio of occupied to total rentable space",
+        "Overage Rent - Percentage rent above guaranteed minimum",
+        "Percentage Rent - Rent based on percentage of tenant sales",
+        "Prospective Opinion - Value opinion for specified future date",
+        "Rentable Area - Tenant's usable floor area",
+        "Retrospective Value Opinion - Value opinion for historical date",
+        "Shelf Rent - Rent for shell space with minimal finishes",
+        "Surplus Land - Unneeded land that cannot be sold separately",
+        "Turnover Vacancy - Vacancy allowance from unit/suite turnover",
+        "Usable Area - Actual occupable area of floor or office",
+        "Use Value - Value assuming specific use",
+        "Value in Use - Value assuming specific use (equivalent to Use Value)",
+        "Value Indication - Conclusion of value from valuation approach"
+      ],
+      "total_definitions": 50,
+      "pages": [74, 75, 76, 77],
+      "confidence": "high"
+    },
+    "page_78": {
+      "fieldId": "appraiser-qualifications",
+      "section": "appendices",
+      "subsection": "appraiser-qualifications",
+      "dataType": "textarea",
+      "content_summary": "Appraiser professional biography, credentials, and company information",
+      "extracted_fields": {
+        "appraiser-name": {
+          "fieldId": "appraiser-name",
+          "value": "Chris Chornohos",
+          "dataType": "text",
+          "confidence": "high"
+        },
+        "appraiser-credentials": {
+          "fieldId": "appraiser-credentials",
+          "value": "AACI, MRICS",
+          "dataType": "text",
+          "confidence": "high",
+          "notes": "AACI = Accredited Appraiser Canadian Institute, MRICS = Member Royal Institution Chartered Surveyors"
+        },
+        "appraiser-experience-years": {
+          "fieldId": "appraiser-experience-years",
+          "value": "25+ years",
+          "dataType": "text",
+          "confidence": "high"
+        },
+        "appraiser-background": {
+          "fieldId": "appraiser-background",
+          "value": "Development, brokerage, investment, land sales background with multi-faceted real estate expertise",
+          "dataType": "textarea",
+          "confidence": "high"
+        },
+        "appraiser-education": {
+          "fieldId": "appraiser-education",
+          "items": [
+            "Advanced Diploma of Applied Science (2011)",
+            "Real Estate Appraisal Diploma",
+            "RICS Level 1 Certification",
+            "Candidate, Appraisal Institute",
+            "AIC Continuing Education Accredited Member",
+            "AIC Professional Development Compliance"
+          ],
+          "dataType": "list",
+          "confidence": "high"
+        },
+        "appraiser-professional-history": {
+          "fieldId": "appraiser-professional-history",
+          "items": [
+            "Valta Property Valuations - Co-Founder (2023)",
+            "Real Estate Valuations - Co-Founder (February 2020 - May 2023)"
+          ],
+          "dataType": "list",
+          "confidence": "high"
+        },
+        "appraiser-expertise": {
+          "fieldId": "appraiser-expertise",
+          "items": [
+            "Multi-family valuation",
+            "Land valuation",
+            "Commercial valuation",
+            "Feasibility studies",
+            "PV Projection analysis",
+            "Development analysis"
+          ],
+          "dataType": "list",
+          "confidence": "high"
+        },
+        "appraiser-contact-email": {
+          "fieldId": "appraiser-contact-email",
+          "value": "chris.chornohos@valta.ca",
+          "dataType": "email",
+          "confidence": "high"
+        },
+        "appraiser-contact-phone": {
+          "fieldId": "appraiser-contact-phone",
+          "value": "1-844-VALTA",
+          "dataType": "phone",
+          "confidence": "high"
+        },
+        "appraiser-office-address": {
+          "fieldId": "appraiser-office-address",
+          "value": "560-4500 Kingsway Street, Burnaby, BC V5H 2N1",
+          "dataType": "text",
+          "confidence": "high"
+        },
+        "company-valta-about": {
+          "fieldId": "company-valta-mission",
+          "value": "Provide fair, accurate, and comprehensive valuations for multi-family, apartment, condominium, mixed-use, retail and commercial property",
+          "dataType": "textarea",
+          "confidence": "high"
+        }
+      },
+      "page": 78,
+      "confidence": "high"
+    },
+    "page_79": {
+      "fieldId": "back-cover",
+      "section": "back-matter",
+      "subsection": "back-cover",
+      "dataType": "textarea",
+      "content_summary": "Company contact information and legal disclaimer",
+      "extracted_fields": {
+        "company-name": {
+          "fieldId": "company-name",
+          "value": "Valta Property Valuations Ltd.",
+          "dataType": "text",
+          "confidence": "high"
+        },
+        "company-address-line1": {
+          "fieldId": "company-address-line1",
+          "value": "300-4838 Richard Road SW",
+          "dataType": "text",
+          "confidence": "high"
+        },
+        "company-address-line2": {
+          "fieldId": "company-address-line2",
+          "value": "Calgary, AB T3E 6L1",
+          "dataType": "text",
+          "confidence": "high"
+        },
+        "company-phone": {
+          "fieldId": "company-phone",
+          "value": "587-801-5151",
+          "dataType": "phone",
+          "confidence": "high"
+        },
+        "company-website": {
+          "fieldId": "company-website",
+          "value": "Valta.ca",
+          "dataType": "url",
+          "confidence": "high"
+        },
+        "legal-disclaimer": {
+          "fieldId": "legal-disclaimer",
+          "value": "Information contained herein was obtained from sources deemed reliable and, while thought to be correct, have not been verified. Valta does not guarantee the accuracy or completeness of the information presented. No assumption of responsibility or liability for any errors or omissions therein.",
+          "dataType": "textarea",
+          "confidence": "high"
+        }
+      },
+      "page": 79,
+      "confidence": "high"
+    }
+  },
+
+  "summary": {
+    "total_pages": 9,
+    "page_range": "71-79",
+    "sections_covered": [
+      "Appendices - Contingent & Limiting Conditions (Pages 71-73)",
+      "Appendices - Definition of Terms/Glossary (Pages 74-77)",
+      "Appendices - Appraiser Qualifications (Page 78)",
+      "Back Cover (Page 79)"
+    ],
+    "field_categories": {
+      "legal_disclaimers": "Limiting conditions and liability statements",
+      "industry_terminology": "50+ appraisal and real estate definitions",
+      "appraiser_profile": "Qualifications, experience, education, contact info",
+      "company_info": "Contact information and legal disclaimer"
+    },
+    "data_quality": "high",
+    "notes": "All pages contain standard appendix content required for appraisal reports. Pages 71-73 contain CUSPAP-mandated limiting conditions. Pages 74-77 provide comprehensive glossary. Page 78 profiles the appraisal professional. Page 79 is back cover with company information."
+  }
+}

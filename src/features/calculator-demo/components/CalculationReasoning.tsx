@@ -1,7 +1,7 @@
 /**
  * Calculation Reasoning - Step-by-step Breakdown
  *
- * Claude-inspired minimal aesthetic: dark background, subtle borders.
+ * Clean document-style layout with subtle separators.
  * Typewriter animation effect on load/update.
  * Dynamic height - grows with content until reaching parent constraints, then scrolls.
  */
@@ -14,7 +14,14 @@ interface AnimationState {
   currentLine: number;
   visibleChars: number;
   completedLines: Set<number>;
-  rollingNumbers: Map<number, number>;
+}
+
+type LineType = 'header' | 'separator' | 'row' | 'total' | 'note' | 'blank' | 'check';
+
+interface ContentLine {
+  text: string;
+  type: LineType;
+  value?: number;
 }
 
 export default function CalculationReasoning() {
@@ -29,7 +36,6 @@ export default function CalculationReasoning() {
     currentLine: 0,
     visibleChars: 0,
     completedLines: new Set(),
-    rollingNumbers: new Map(),
   });
   const [skipAnimation, setSkipAnimation] = useState(false);
   const [lastDataHash, setLastDataHash] = useState('');
@@ -106,6 +112,7 @@ export default function CalculationReasoning() {
   const nim = noi > 0 ? indicatedValue / noi : 0;
   const breakeven = pgr > 0 ? (expensesTotal / pgr) * 100 : 0;
   const capRateInverse = capRate > 0 ? 100 / capRate : 0;
+  const roundedValue = Math.round(rawValue / 10000) * 10000;
 
   // Validation checks
   const oerOk = oer >= 35 && oer <= 50;
@@ -114,115 +121,126 @@ export default function CalculationReasoning() {
   const breakEvenOk = breakeven < 85;
   const matchesBaseline = indicatedValue === 1780000;
 
-  // Generate content lines
-  const generateLines = useCallback((): { text: string; isHeader: boolean; isTotal: boolean; value?: number }[] => {
-    const lines: { text: string; isHeader: boolean; isTotal: boolean; value?: number }[] = [];
+  // Generate content lines - clean document style
+  const generateLines = useCallback((): ContentLine[] => {
+    const lines: ContentLine[] = [];
 
-    // STEP 1
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: 'STEP 1: POTENTIAL GROSS REVENUE', isHeader: true, isTotal: false });
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: `Rental Revenue:                                    ${fmt(rentalRevenue).padStart(14)}`, isHeader: false, isTotal: false, value: rentalRevenue });
-    lines.push({ text: `+ Parking Income:                                  ${fmt(parkingTotal).padStart(14)}`, isHeader: false, isTotal: false, value: parkingTotal });
-    lines.push({ text: `+ Laundry Income:                                  ${fmt(laundryTotal).padStart(14)}`, isHeader: false, isTotal: false, value: laundryTotal });
-    lines.push({ text: '───────────────────────────────────────────────────────────────', isHeader: false, isTotal: false });
-    lines.push({ text: `= Potential Gross Revenue:                         ${fmt(pgr).padStart(14)}`, isHeader: false, isTotal: true, value: pgr });
-    lines.push({ text: '  Maximum revenue at 100% occupancy', isHeader: false, isTotal: false });
-    lines.push({ text: '', isHeader: false, isTotal: false });
+    // Helper to add a row with label and value
+    const row = (label: string, value: string): ContentLine => ({
+      text: `${label}${value}`,
+      type: 'row',
+    });
 
-    // STEP 2
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: 'STEP 2: VACANCY & COLLECTION LOSS', isHeader: true, isTotal: false });
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: `PGR × Total Vacancy Rate`, isHeader: false, isTotal: false });
-    lines.push({ text: `${fmt(pgr)} × ${fmtNum(totalVacRate)}% =                          (${fmt(vacancyLoss)})`, isHeader: false, isTotal: false, value: vacancyLoss });
-    lines.push({ text: `  Vacancy: ${fmtNum(vacancyRate)}% | Bad Debt: ${fmtNum(badDebtRate)}% | Concessions: ${fmtNum(concessionsRate)}%`, isHeader: false, isTotal: false });
-    lines.push({ text: '───────────────────────────────────────────────────────────────', isHeader: false, isTotal: false });
-    lines.push({ text: `= Effective Gross Revenue:                         ${fmt(egr).padStart(14)}`, isHeader: false, isTotal: true, value: egr });
-    lines.push({ text: '  Actual expected collected revenue', isHeader: false, isTotal: false });
-    lines.push({ text: '', isHeader: false, isTotal: false });
+    // STEP 1: POTENTIAL GROSS REVENUE
+    lines.push({ text: 'STEP 1: POTENTIAL GROSS REVENUE', type: 'header' });
+    lines.push({ text: '────────────────────────────────────────', type: 'separator' });
+    lines.push(row('Rental Revenue                    ', fmt(rentalRevenue)));
+    lines.push(row('+ Parking Income                  ', fmt(parkingTotal)));
+    lines.push(row('+ Laundry Income                  ', fmt(laundryTotal)));
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: `= Potential Gross Revenue         ${fmt(pgr)}`, type: 'total', value: pgr });
+    lines.push({ text: 'Maximum revenue at 100% occupancy', type: 'note' });
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: '', type: 'blank' });
 
-    // STEP 3
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: 'STEP 3: OPERATING EXPENSES', isHeader: true, isTotal: false });
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: `Management:      ${fmtNum(mgmtPct)}% × EGR                       ${fmt(Math.round(mgmtTotal)).padStart(14)}`, isHeader: false, isTotal: false, value: mgmtTotal });
-    lines.push({ text: '  Calculated on EGR (collected revenue), NOT PGR', isHeader: false, isTotal: false });
-    lines.push({ text: '', isHeader: false, isTotal: false });
-    lines.push({ text: `Taxes:           $${fmtNum(taxPerUnit, 0)}/unit × ${totalUnits} units           ${fmt(taxTotal).padStart(14)}`, isHeader: false, isTotal: false, value: taxTotal });
-    lines.push({ text: `Insurance:       $${fmtNum(insPerUnit, 0)}/unit × ${totalUnits} units           ${fmt(insTotal).padStart(14)}`, isHeader: false, isTotal: false, value: insTotal });
-    lines.push({ text: `Repairs:         $${fmtNum(repPerUnit, 0)}/unit × ${totalUnits} units           ${fmt(repTotal).padStart(14)}`, isHeader: false, isTotal: false, value: repTotal });
-    lines.push({ text: `Utilities:       $${fmtNum(utilPerUnit, 0)}/unit × ${totalUnits} units          ${fmt(utilTotal).padStart(14)}`, isHeader: false, isTotal: false, value: utilTotal });
-    lines.push({ text: `Payroll:         $${fmtNum(payPerUnit, 0)}/unit × ${totalUnits} units           ${fmt(payTotal).padStart(14)}`, isHeader: false, isTotal: false, value: payTotal });
-    lines.push({ text: `Admin:           $${fmtNum(adminPerUnit, 0)}/unit × ${totalUnits} units           ${fmt(adminTotal).padStart(14)}`, isHeader: false, isTotal: false, value: adminTotal });
-    lines.push({ text: `Reserves:        $${fmtNum(resPerUnit, 0)}/unit × ${totalUnits} units           ${fmt(resTotal).padStart(14)}`, isHeader: false, isTotal: false, value: resTotal });
-    lines.push({ text: '  Treated "Above the Line" - conservative, lending-grade', isHeader: false, isTotal: false });
-    lines.push({ text: `Other:           $${fmtNum(otherPerUnit, 0)}/unit × ${totalUnits} units           ${fmt(otherTotal).padStart(14)}`, isHeader: false, isTotal: false, value: otherTotal });
-    lines.push({ text: '───────────────────────────────────────────────────────────────', isHeader: false, isTotal: false });
-    lines.push({ text: `= Total Operating Expenses:                        ${fmt(expensesTotal).padStart(14)}`, isHeader: false, isTotal: true, value: expensesTotal });
-    lines.push({ text: `  Expense Ratio: ${fmtNum(oer)}% (industry range: 35-50%)`, isHeader: false, isTotal: false });
-    lines.push({ text: '', isHeader: false, isTotal: false });
+    // STEP 2: VACANCY & COLLECTION LOSS
+    lines.push({ text: 'STEP 2: VACANCY & COLLECTION LOSS', type: 'header' });
+    lines.push({ text: '────────────────────────────────────────', type: 'separator' });
+    lines.push({ text: `PGR x Total Vacancy Rate`, type: 'row' });
+    lines.push({ text: `${fmt(pgr)} x ${fmtNum(totalVacRate)}% = (${fmt(vacancyLoss)})`, type: 'row', value: vacancyLoss });
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: `Vacancy: ${fmtNum(vacancyRate)}%  |  Bad Debt: ${fmtNum(badDebtRate)}%  |  Concessions: ${fmtNum(concessionsRate)}%`, type: 'note' });
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: `= Effective Gross Revenue         ${fmt(egr)}`, type: 'total', value: egr });
+    lines.push({ text: 'Actual expected collected revenue', type: 'note' });
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: '', type: 'blank' });
 
-    // STEP 4
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: 'STEP 4: NET OPERATING INCOME', isHeader: true, isTotal: false });
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: 'EGR - Operating Expenses = NOI', isHeader: false, isTotal: false });
-    lines.push({ text: `${fmt(egr)} - ${fmt(expensesTotal)} =                  ${fmt(noi).padStart(14)}`, isHeader: false, isTotal: true, value: noi });
-    lines.push({ text: '  Property profitability before debt service', isHeader: false, isTotal: false });
-    lines.push({ text: '', isHeader: false, isTotal: false });
+    // STEP 3: OPERATING EXPENSES
+    lines.push({ text: 'STEP 3: OPERATING EXPENSES', type: 'header' });
+    lines.push({ text: '────────────────────────────────────────', type: 'separator' });
+    lines.push(row(`Management   ${fmtNum(mgmtPct)}% of EGR          `, fmt(Math.round(mgmtTotal))));
+    lines.push({ text: 'Calculated on EGR (collected revenue), not PGR', type: 'note' });
+    lines.push({ text: '', type: 'blank' });
+    lines.push(row(`Taxes        $${fmtNum(taxPerUnit, 0)}/unit x ${totalUnits}         `, fmt(taxTotal)));
+    lines.push(row(`Insurance    $${fmtNum(insPerUnit, 0)}/unit x ${totalUnits}         `, fmt(insTotal)));
+    lines.push(row(`Repairs      $${fmtNum(repPerUnit, 0)}/unit x ${totalUnits}         `, fmt(repTotal)));
+    lines.push(row(`Utilities    $${fmtNum(utilPerUnit, 0)}/unit x ${totalUnits}        `, fmt(utilTotal)));
+    lines.push(row(`Payroll      $${fmtNum(payPerUnit, 0)}/unit x ${totalUnits}         `, fmt(payTotal)));
+    if (adminPerUnit > 0) {
+      lines.push(row(`Admin        $${fmtNum(adminPerUnit, 0)}/unit x ${totalUnits}         `, fmt(adminTotal)));
+    }
+    if (resPerUnit > 0) {
+      lines.push(row(`Reserves     $${fmtNum(resPerUnit, 0)}/unit x ${totalUnits}         `, fmt(resTotal)));
+      lines.push({ text: 'Treated "Above the Line" - conservative', type: 'note' });
+    }
+    if (otherPerUnit > 0) {
+      lines.push(row(`Other        $${fmtNum(otherPerUnit, 0)}/unit x ${totalUnits}         `, fmt(otherTotal)));
+    }
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: `= Total Operating Expenses        ${fmt(expensesTotal)}`, type: 'total', value: expensesTotal });
+    lines.push({ text: `Expense Ratio: ${fmtNum(oer)}% (industry range: 35-50%)`, type: 'note' });
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: '', type: 'blank' });
 
-    // STEP 5
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: 'STEP 5: DIRECT CAPITALIZATION', isHeader: true, isTotal: false });
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: 'NOI ÷ Cap Rate = Value', isHeader: false, isTotal: false });
-    lines.push({ text: `${fmt(noi)} ÷ ${fmtNum(capRate)}% =                        ${fmt(rawValue).padStart(14)}`, isHeader: false, isTotal: true, value: rawValue });
-    lines.push({ text: '  Cap Rate reflects market risk/return expectations', isHeader: false, isTotal: false });
-    lines.push({ text: '', isHeader: false, isTotal: false });
+    // STEP 4: NET OPERATING INCOME
+    lines.push({ text: 'STEP 4: NET OPERATING INCOME', type: 'header' });
+    lines.push({ text: '────────────────────────────────────────', type: 'separator' });
+    lines.push({ text: 'EGR - Operating Expenses = NOI', type: 'row' });
+    lines.push({ text: `${fmt(egr)} - ${fmt(expensesTotal)} = ${fmt(noi)}`, type: 'total', value: noi });
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: 'Property profitability before debt service', type: 'note' });
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: '', type: 'blank' });
 
-    // STEP 6
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: 'STEP 6: ROUNDING & FINAL VALUE', isHeader: true, isTotal: false });
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: `Raw Value:                                         ${fmt(rawValue).padStart(14)}`, isHeader: false, isTotal: false, value: rawValue });
-    lines.push({ text: 'Rounded to nearest $10,000 (industry convention)', isHeader: false, isTotal: false });
-    lines.push({ text: `Post-Value Adjustments:                            ${fmt(adjustments).padStart(14)}`, isHeader: false, isTotal: false });
-    lines.push({ text: '───────────────────────────────────────────────────────────────', isHeader: false, isTotal: false });
-    lines.push({ text: `= INDICATED VALUE:                                 ${fmt(indicatedValue).padStart(14)}`, isHeader: false, isTotal: true, value: indicatedValue });
-    lines.push({ text: '', isHeader: false, isTotal: false });
+    // STEP 5: DIRECT CAPITALIZATION
+    lines.push({ text: 'STEP 5: DIRECT CAPITALIZATION', type: 'header' });
+    lines.push({ text: '────────────────────────────────────────', type: 'separator' });
+    lines.push({ text: 'NOI / Cap Rate = Value', type: 'row' });
+    lines.push({ text: `${fmt(noi)} / ${fmtNum(capRate)}% = ${fmt(rawValue)}`, type: 'total', value: rawValue });
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: 'Cap Rate reflects market risk/return expectations', type: 'note' });
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: '', type: 'blank' });
+
+    // STEP 6: ROUNDING & FINAL VALUE
+    lines.push({ text: 'STEP 6: FINAL VALUE', type: 'header' });
+    lines.push({ text: '────────────────────────────────────────', type: 'separator' });
+    lines.push(row('Raw Value                         ', fmt(rawValue)));
+    lines.push(row('Rounded to $10,000                ', fmt(roundedValue)));
+    if (adjustments !== 0) {
+      lines.push(row('Post-Value Adjustments            ', fmt(adjustments)));
+    }
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: `= INDICATED VALUE                 ${fmt(indicatedValue)}`, type: 'total', value: indicatedValue });
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: '', type: 'blank' });
 
     // VALIDATION
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: 'VALIDATION & BENCHMARKS', isHeader: true, isTotal: false });
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: `${oerOk ? '[OK]' : '[!!]'} OER: ${fmtNum(oer)}% (range: 35-50%)`, isHeader: false, isTotal: false });
-    lines.push({ text: `${expUnitOk ? '[OK]' : '[!!]'} Expense/Unit: ${fmt(expPerUnit)} (range: $4,500-$7,500)`, isHeader: false, isTotal: false });
-    lines.push({ text: `${nimOk ? '[OK]' : '[!!]'} Net Income Multiplier: ${fmtNum(nim)}x (should be ~${fmtNum(capRateInverse)}x)`, isHeader: false, isTotal: false });
-    lines.push({ text: `${breakEvenOk ? '[OK]' : '[!!]'} Breakeven Occupancy: ${fmtNum(breakeven)}% (should be <85%)`, isHeader: false, isTotal: false });
+    lines.push({ text: 'VALIDATION', type: 'header' });
+    lines.push({ text: '────────────────────────────────────────', type: 'separator' });
+    lines.push({ text: `${oerOk ? '[OK]' : '[!!]'} OER: ${fmtNum(oer)}% (range: 35-50%)`, type: 'check' });
+    lines.push({ text: `${expUnitOk ? '[OK]' : '[!!]'} Expense/Unit: ${fmt(expPerUnit)} (range: $4,500-$7,500)`, type: 'check' });
+    lines.push({ text: `${nimOk ? '[OK]' : '[!!]'} Net Income Multiplier: ${fmtNum(nim)}x (~${fmtNum(capRateInverse)}x)`, type: 'check' });
+    lines.push({ text: `${breakEvenOk ? '[OK]' : '[!!]'} Breakeven Occupancy: ${fmtNum(breakeven)}% (<85%)`, type: 'check' });
     if (matchesBaseline) {
-      lines.push({ text: '[OK] Matches Valcre validation baseline ($1,780,000)', isHeader: false, isTotal: false });
+      lines.push({ text: '[OK] Matches Valcre baseline ($1,780,000)', type: 'check' });
     }
-    lines.push({ text: '', isHeader: false, isTotal: false });
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: '', type: 'blank' });
 
     // METHODOLOGY
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: 'METHODOLOGY COMPLIANCE', isHeader: true, isTotal: false });
-    lines.push({ text: '═══════════════════════════════════════════════════════════════', isHeader: true, isTotal: false });
-    lines.push({ text: '[OK] Direct Capitalization Method', isHeader: false, isTotal: false });
-    lines.push({ text: '[OK] USPAP (Uniform Standards of Professional Appraisal Practice)', isHeader: false, isTotal: false });
-    lines.push({ text: '[OK] CUSPAP (Canadian Uniform Standards)', isHeader: false, isTotal: false });
-    lines.push({ text: '[OK] Income Approach to Value', isHeader: false, isTotal: false });
-    lines.push({ text: '[OK] Lending-grade conservative assumptions', isHeader: false, isTotal: false });
-    lines.push({ text: '', isHeader: false, isTotal: false });
-    lines.push({ text: '───────────────────────────────────────────────────────────────', isHeader: false, isTotal: false });
-    lines.push({ text: 'Calculated using Direct Capitalization Method', isHeader: false, isTotal: false });
-    lines.push({ text: 'Per USPAP/CUSPAP Professional Appraisal Standards', isHeader: false, isTotal: false });
-    lines.push({ text: 'Engine validated against Valcre workbook: 7/7 metrics exact match', isHeader: false, isTotal: false });
-    lines.push({ text: '───────────────────────────────────────────────────────────────', isHeader: false, isTotal: false });
+    lines.push({ text: 'METHODOLOGY', type: 'header' });
+    lines.push({ text: '────────────────────────────────────────', type: 'separator' });
+    lines.push({ text: 'Direct Capitalization Method', type: 'row' });
+    lines.push({ text: 'USPAP / CUSPAP Professional Standards', type: 'row' });
+    lines.push({ text: 'Income Approach to Value', type: 'row' });
+    lines.push({ text: 'Lending-grade conservative assumptions', type: 'row' });
+    lines.push({ text: '', type: 'blank' });
+    lines.push({ text: 'Engine validated: 7/7 metrics exact match', type: 'note' });
 
     return lines;
-  }, [rentalRevenue, parkingTotal, laundryTotal, pgr, totalVacRate, vacancyRate, badDebtRate, concessionsRate, vacancyLoss, egr, mgmtPct, mgmtTotal, taxPerUnit, taxTotal, insPerUnit, insTotal, repPerUnit, repTotal, utilPerUnit, utilTotal, payPerUnit, payTotal, adminPerUnit, adminTotal, resPerUnit, resTotal, otherPerUnit, otherTotal, expensesTotal, oer, noi, capRate, rawValue, adjustments, indicatedValue, oerOk, expUnitOk, nim, capRateInverse, nimOk, breakeven, breakEvenOk, matchesBaseline, totalUnits]);
+  }, [rentalRevenue, parkingTotal, laundryTotal, pgr, totalVacRate, vacancyRate, badDebtRate, concessionsRate, vacancyLoss, egr, mgmtPct, mgmtTotal, taxPerUnit, taxTotal, insPerUnit, insTotal, repPerUnit, repTotal, utilPerUnit, utilTotal, payPerUnit, payTotal, adminPerUnit, adminTotal, resPerUnit, resTotal, otherPerUnit, otherTotal, expensesTotal, oer, noi, capRate, rawValue, roundedValue, adjustments, indicatedValue, oerOk, expUnitOk, nim, capRateInverse, nimOk, breakeven, breakEvenOk, matchesBaseline, totalUnits]);
 
   const lines = generateLines();
 
@@ -237,7 +255,6 @@ export default function CalculationReasoning() {
       currentLine: 0,
       visibleChars: 0,
       completedLines: new Set(),
-      rollingNumbers: new Map(),
     });
   }, []);
 
@@ -248,7 +265,6 @@ export default function CalculationReasoning() {
       currentLine: lines.length,
       visibleChars: 1000,
       completedLines: new Set(lines.map((_, i) => i)),
-      rollingNumbers: new Map(),
     });
   }, [lines.length]);
 
@@ -283,11 +299,11 @@ export default function CalculationReasoning() {
         }
 
         const lineLength = currentLineData.text.length;
-        const isHeaderLine = currentLineData.isHeader;
-        const isTotalLine = currentLineData.isTotal;
+        const isInstant = currentLineData.type === 'header' || currentLineData.type === 'separator' || currentLineData.type === 'blank';
+        const isSlow = currentLineData.type === 'total';
 
-        // Headers appear instantly
-        if (isHeaderLine) {
+        // Headers, separators, blanks appear instantly
+        if (isInstant) {
           const newCompleted = new Set(prev.completedLines);
           newCompleted.add(prev.currentLine);
           return {
@@ -300,7 +316,7 @@ export default function CalculationReasoning() {
 
         // Typewriter effect for regular lines
         if (prev.visibleChars < lineLength) {
-          const charsPerFrame = isTotalLine ? 3 : 5; // Slower for totals
+          const charsPerFrame = isSlow ? 3 : 6;
           return {
             ...prev,
             visibleChars: Math.min(prev.visibleChars + charsPerFrame, lineLength),
@@ -311,8 +327,8 @@ export default function CalculationReasoning() {
         const newCompleted = new Set(prev.completedLines);
         newCompleted.add(prev.currentLine);
 
-        // Pause on total lines
-        if (isTotalLine && !prev.completedLines.has(prev.currentLine)) {
+        // Brief pause on total lines
+        if (isSlow && !prev.completedLines.has(prev.currentLine)) {
           return {
             ...prev,
             completedLines: newCompleted,
@@ -328,7 +344,7 @@ export default function CalculationReasoning() {
       });
     };
 
-    const frameDelay = lines[animation.currentLine]?.isTotal ? 40 : 20;
+    const frameDelay = lines[animation.currentLine]?.type === 'total' ? 50 : 25;
     animationRef.current = window.setTimeout(() => {
       animate();
     }, frameDelay);
@@ -346,35 +362,49 @@ export default function CalculationReasoning() {
   }, [animation.currentLine, animation.visibleChars]);
 
   // Render line with animation
-  const renderLine = (line: { text: string; isHeader: boolean; isTotal: boolean; value?: number }, index: number) => {
+  const renderLine = (line: ContentLine, index: number) => {
     const isComplete = animation.completedLines.has(index) || skipAnimation;
     const isCurrent = animation.currentLine === index && animation.isAnimating && !skipAnimation;
     const isVisible = index <= animation.currentLine || skipAnimation;
 
     if (!isVisible) return null;
+    if (line.type === 'blank') return <div key={index} className="h-3" />;
 
     let displayText = line.text;
-    if (isCurrent && !line.isHeader) {
+    if (isCurrent && line.type !== 'header' && line.type !== 'separator') {
       displayText = line.text.substring(0, animation.visibleChars);
     }
 
-    const lineClasses = [
-      line.isHeader ? 'font-medium text-[#b0b0b0]' : 'text-[#808080]',
-      line.isTotal ? 'text-[#e5e5e5] font-medium' : '',
-      isCurrent ? 'bg-[#3a3a3a]/30' : '',
-      line.text.startsWith('  ') ? 'text-[#606060]' : '',
-      line.text.includes('[OK]') ? 'text-[#909090]' : '',
-      line.text.includes('[!!]') ? 'text-[#b0b0b0]' : '',
-    ].filter(Boolean).join(' ');
+    // Style based on line type
+    let className = '';
+    switch (line.type) {
+      case 'header':
+        className = 'font-semibold text-[#d0d0d0] tracking-wide';
+        break;
+      case 'separator':
+        className = 'text-[#4a4a4a]';
+        break;
+      case 'total':
+        className = 'text-[#e5e5e5] font-medium';
+        break;
+      case 'note':
+        className = 'text-[#606060] italic';
+        break;
+      case 'check':
+        className = line.text.includes('[OK]') ? 'text-[#808080]' : 'text-[#a0a0a0]';
+        break;
+      default:
+        className = 'text-[#909090]';
+    }
 
     return (
       <div
         key={index}
-        className={`${lineClasses} transition-opacity duration-100`}
+        className={`${className} transition-opacity duration-100`}
         style={{ opacity: isComplete || isCurrent ? 1 : 0.3 }}
       >
         {displayText}
-        {isCurrent && <span className="animate-pulse text-[#606060]">▌</span>}
+        {isCurrent && <span className="animate-pulse text-[#606060]">|</span>}
       </div>
     );
   };
@@ -384,33 +414,31 @@ export default function CalculationReasoning() {
       className="border border-[#3a3a3a] rounded-sm overflow-hidden flex flex-col h-full"
       onClick={animation.isAnimating ? completeAnimation : undefined}
     >
-      {/* Minimal Header - just text + border */}
-      <div className="px-4 py-2 border-b border-[#3a3a3a] flex-shrink-0">
+      {/* Header */}
+      <div className="px-5 py-2.5 border-b border-[#3a3a3a] flex-shrink-0">
         <span className="text-xs font-medium text-[#909090] uppercase tracking-wider">Calculation Breakdown</span>
       </div>
 
-      {/* Content - Terminal style scroll, hidden scrollbar, centered content */}
+      {/* Content - document style, left-aligned, larger text */}
       <div
         ref={containerRef}
-        className="py-3 font-mono text-[11px] leading-[1.5] cursor-pointer bg-[#232323] flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden"
+        className="px-5 py-4 font-mono cursor-pointer bg-[#232323] flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
+          fontSize: '13px',
+          lineHeight: '1.7',
         }}
         title={animation.isAnimating ? 'Click to skip animation' : undefined}
       >
-        {/* Centered content block */}
-        <div
-          className="whitespace-pre mx-auto px-6"
-          style={{ maxWidth: '580px' }}
-        >
+        <div className="whitespace-pre" style={{ minWidth: '500px', maxWidth: '600px' }}>
           {lines.map((line, index) => renderLine(line, index))}
         </div>
       </div>
 
-      {/* Minimal status - only during animation */}
+      {/* Status - only during animation */}
       {animation.isAnimating && (
-        <div className="px-4 py-1.5 text-[10px] border-t border-[#3a3a3a] text-[#505050] flex-shrink-0 text-center">
+        <div className="px-5 py-1.5 text-[11px] border-t border-[#3a3a3a] text-[#505050] flex-shrink-0">
           Click to skip
         </div>
       )}

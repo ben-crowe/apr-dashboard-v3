@@ -104,6 +104,16 @@ export function generateReportHtml(sections: ReportSection[]): string {
     return `${num.toFixed(1)}%`;
   };
 
+
+const formatDate = (dateStr: string): string => {
+  if (!dateStr) return '';
+  try {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  } catch {
+    return dateStr;
+  }
+};
   /**
    * Format percentage values for display
    * @param value - Numeric percentage value (5.5 for 5.5%)
@@ -3795,16 +3805,6 @@ export function generateReportHtml(sections: ReportSection[]): string {
       return '';
     };
 
-    // Format dates for professional display
-    const formatDate = (dateStr: string): string => {
-      if (!dateStr) return '';
-      try {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-      } catch {
-        return dateStr;
-      }
-    };
 
     return `
     <div class="section page-break-before">

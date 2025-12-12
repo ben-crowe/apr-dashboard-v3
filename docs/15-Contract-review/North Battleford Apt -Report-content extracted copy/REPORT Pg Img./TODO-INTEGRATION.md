@@ -52,25 +52,40 @@
     - Provincial/city market overviews are 100% dynamic
     - Building specs are structured boilerplate with dynamic values
 
-- [ ] **6. CREATE field list for prose sections** ← **CURRENT PRIORITY**
-  - **Status:** IN PROGRESS
-  - **Purpose:** Identify new fields needed for dynamic prose
-  - **Source:** 26 new fields identified in BOILERPLATE-VS-DYNAMIC-ANALYSIS.md
-  - **Action:** Create structured field list ready for fieldRegistry.ts integration
+- [x] **6. CREATE field list for prose sections**
+  - **Status:** DONE
+  - **Output Files:**
+    - `new-fields-needed.json` - 77 field specs (consolidates to 31 truly new)
+    - `existing-fields-mapping.json` - 22 exact + 37 similar matches
+    - `conditional-logic-requirements.json` - 8 major scenarios
+    - `FIELD-CROSS-REFERENCE-SUMMARY.md` - Executive summary
+    - `QUICK-START-TEMPLATE-BUILDER.md` - Implementation guide
+  - **Key Results:**
+    - 22 fields (22%) already exist
+    - 37 fields (37%) can consolidate
+    - 31 fields (31%) truly new
+    - value-scenario-type is master conditional switch
 
-- [ ] **7. MAP all 79 pages to field IDs**
-  - **Status:** PENDING
-  - **Includes:**
-    - Numbers (site-total-area, site-acreage, etc.)
-    - Prose (dynamic paragraphs from #5/#6)
-    - Images (from #4)
-  - **Output:** Complete page-to-field mapping
+- [ ] **7. MAP all 79 pages to field IDs** ← **IN PROGRESS**
+  - **Status:** Background agents running (8 Haiku agents deployed)
+  - **Agent IDs:**
+    - Pages 1-10: a1f3d6d
+    - Pages 11-20: af4addb
+    - Pages 21-30: a3dd90d
+    - Pages 31-40: a904908
+    - Pages 41-50: a8eb267
+    - Pages 51-60: afe6bcd
+    - Pages 61-70: a4e3e84
+    - Pages 71-79: ac0d44a
+  - **Expected Output:** 8 JSON files (page-mapping-{range}.json)
+  - **Next:** Check agent outputs, consolidate results
 
-- [ ] **8. BUILD new reportHtmlTemplate.ts**
-  - **Status:** PENDING
+- [ ] **8. BUILD new reportHtmlTemplate.ts** ← **IN PROGRESS**
+  - **Status:** Template builder agent launched (a4b4adc) - FAILED (output token limit)
   - **Structure:** 79 discrete page functions
   - **Uses:** Existing fieldRegistry field names
   - **Replaces:** Broken 7,481-line template
+  - **Next:** Adjust approach - build incrementally, not all at once
 
 - [ ] **9. INTEGRATE with existing viewer**
   - **Status:** PENDING

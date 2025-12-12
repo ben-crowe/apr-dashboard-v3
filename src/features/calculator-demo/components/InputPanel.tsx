@@ -1,51 +1,55 @@
 /**
  * Input Panel - Connects to Zustand Store
- *
- * FIXED: Uses proper Zustand selector pattern for re-renders
  */
 
+import { useState, useCallback } from 'react';
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-// Helper to find field value from calc section
-const findFieldValue = (calcSection: any, fieldId: string): number | string => {
-  if (!calcSection) return 0;
-
-  // Check direct fields
-  const field = calcSection.fields?.find((f: any) => f.id === fieldId);
-  if (field) return field.value;
-
-  // Check subsections
-  if (calcSection.subsections) {
-    for (const sub of calcSection.subsections) {
-      const subField = sub.fields?.find((f: any) => f.id === fieldId);
-      if (subField) return subField.value;
-    }
-  }
-  return 0;
-};
-
 export default function InputPanel() {
-  // Use selector to subscribe to just the calc section - this ensures re-renders
-  const calcSection = useReportBuilderStore(state =>
-    state.sections.find(s => s.id === 'calc')
-  );
+  // Force re-render trigger
+  const [updateKey, setUpdateKey] = useState(0);
 
-  // Get store actions separately (these don't change)
+  // Subscribe to sections with a dependency on updateKey to force refresh
+  const sections = useReportBuilderStore(state => state.sections);
   const updateFieldValue = useReportBuilderStore(state => state.updateFieldValue);
   const runCalculations = useReportBuilderStore(state => state.runCalculations);
   const loadFullTestData = useReportBuilderStore(state => state.loadFullTestData);
 
-  const getFieldValue = (fieldId: string): number => {
-    const val = findFieldValue(calcSection, fieldId);
-    return Number(val) || 0;
-  };
+  const calcSection = sections.find(s => s.id === 'calc');
 
-  const getStringFieldValue = (fieldId: string): string => {
-    const val = findFieldValue(calcSection, fieldId);
-    return String(val) || '';
-  };
+  const getFieldValue = useCallback((fieldId: string): number => {
+    if (!calcSection) return 0;
+
+    // Check direct fields
+    const field = calcSection.fields?.find((f: any) => f.id === fieldId);
+    if (field) return Number(field.value) || 0;
+
+    // Check subsections
+    if (calcSection.subsections) {
+      for (const sub of calcSection.subsections) {
+        const subField = sub.fields?.find((f: any) => f.id === fieldId);
+        if (subField) return Number(subField.value) || 0;
+      }
+    }
+    return 0;
+  }, [calcSection, updateKey]);
+
+  const getStringFieldValue = useCallback((fieldId: string): string => {
+    if (!calcSection) return '';
+
+    const field = calcSection.fields?.find((f: any) => f.id === fieldId);
+    if (field) return String(field.value) || '';
+
+    if (calcSection.subsections) {
+      for (const sub of calcSection.subsections) {
+        const subField = sub.fields?.find((f: any) => f.id === fieldId);
+        if (subField) return String(subField.value) || '';
+      }
+    }
+    return '';
+  }, [calcSection, updateKey]);
 
   const updateField = (fieldId: string, value: string) => {
     const numValue = parseFloat(value) || 0;
@@ -55,6 +59,8 @@ export default function InputPanel() {
 
   const handleLoadTestData = () => {
     loadFullTestData();
+    // Force component to re-render after store update
+    setTimeout(() => setUpdateKey(k => k + 1), 50);
   };
 
   const handleReset = () => {
@@ -69,6 +75,7 @@ export default function InputPanel() {
     ];
     calcFields.forEach(fieldId => updateFieldValue(fieldId, 0));
     runCalculations();
+    setTimeout(() => setUpdateKey(k => k + 1), 50);
   };
 
   // Get values from store

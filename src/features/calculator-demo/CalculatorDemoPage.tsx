@@ -5,28 +5,45 @@
  * Features compact Excel-style inputs with property selector.
  */
 
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Calculator } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Calculator, RefreshCw } from 'lucide-react';
 import InputPanel from './components/InputPanel';
 import OutputPanel from './components/OutputPanel';
 import MarkdownSummary from './components/MarkdownSummary';
 
 export default function CalculatorDemoPage() {
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [lastRefresh, setLastRefresh] = useState(new Date().toLocaleTimeString());
+
+  const handleRefresh = () => {
+    setRefreshKey(prev => prev + 1);
+    setLastRefresh(new Date().toLocaleTimeString());
+    window.location.reload();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       {/* Header */}
       <div className="border-b bg-white dark:bg-slate-900 shadow-sm">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center gap-3">
-            <Calculator className="h-8 w-8 text-blue-600" />
-            <div>
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-                Income Capitalization Calculator
-              </h1>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Compact Excel-style interface - select a property to load data
-              </p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Calculator className="h-8 w-8 text-blue-600" />
+              <div>
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+                  Income Capitalization Calculator
+                </h1>
+                <p className="text-sm text-slate-600 dark:text-slate-400">
+                  v2.0 Store Connected | Last refresh: {lastRefresh}
+                </p>
+              </div>
             </div>
+            <Button onClick={handleRefresh} variant="outline" size="sm" className="gap-2">
+              <RefreshCw className="h-4 w-4" />
+              Hard Refresh
+            </Button>
           </div>
         </div>
       </div>

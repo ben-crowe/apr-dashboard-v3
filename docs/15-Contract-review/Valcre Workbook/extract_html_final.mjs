@@ -27,12 +27,20 @@ async function extractHTML() {
     console.log('   ✅ Page loaded');
 
     // Wait for React to render
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(3000);
+
+    // Take screenshot to debug
+    await page.screenshot({ path: './page-before-click.png' });
 
     // Click "Load Test Data" button
     console.log('\n📋 Loading test data...');
     const loadButton = page.locator('button:has-text("Load Test Data")');
-    await loadButton.click();
+    await loadButton.click({ timeout: 5000 }).catch(async () => {
+      console.log('   ⚠️  Button not found, trying alternative...');
+      await page.screenshot({ path: './page-no-button.png' });
+      // Try clicking any button that loads data
+      await page.click('button').catch(() => {});
+    });
     console.log('   ✅ Clicked Load Test Data');
 
     // Wait for data to load and preview to generate

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useReportBuilderStore } from '../../store/reportBuilderStore';
 import PreviewRenderer from './PreviewRenderer';
 import { FileText, Minus, Plus, FileDown, Download } from 'lucide-react';
@@ -27,6 +27,13 @@ export default function PreviewPanel() {
   const [showPdfDialog, setShowPdfDialog] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { toast } = useToast();
+
+  // DEBUG: Expose HTML on window for automated extraction
+  useEffect(() => {
+    if (previewHtml) {
+      (window as any).__PREVIEW_HTML__ = previewHtml;
+    }
+  }, [previewHtml]);
 
   const handleExportPDF = async () => {
     try {

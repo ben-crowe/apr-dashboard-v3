@@ -12,6 +12,14 @@ export function generateReportHtml(sections: ReportSection[]): string {
   const execSection = sections.find(s => s.id === 'exec');
   const imageMgtSection = sections.find(s => s.id === 'image-mgt');
 
+  // DEBUG: Log all section IDs and whether execSection was found
+  console.log("🔍 ALL SECTION IDs:", sections.map(s => s.id).join(', '));
+  console.log("✅ execSection found?", execSection ? "YES" : "NO");
+  if (execSection) {
+    console.log("📊 execSection fields count:", execSection.fields?.length || 0);
+    console.log("📊 execSection subsections:", execSection.subsections?.map(sub => sub.id).join(', ') || 'none');
+  }
+
   // Helper function to get field value from a specific section
   const getFieldValue = (section: ReportSection | undefined, fieldId: string): string => {
     if (!section) return '';
@@ -96,6 +104,23 @@ export function generateReportHtml(sections: ReportSection[]): string {
   const appraiserEmail = getFieldValue(coverSection, 'appraiser-email') || '';
   const appraiserAicNumber = getFieldValue(coverSection, 'appraiser-aic-number') || '';
 
+  // Page 6 - PROPERTY IDENTIFICATION table variables
+  const postalCode = getGlobalFieldValue('postal-code') || '';
+  const market = getGlobalFieldValue('market') || '';
+  const submarket = getGlobalFieldValue('submarket') || '';
+  const latitude = getGlobalFieldValue('latitude') || '';
+  const longitude = getGlobalFieldValue('longitude') || '';
+
+  // Page 6 - SITE DESCRIPTION table variables
+  const legalDesc = getGlobalFieldValue('legal-description') || '';
+  const landAreaUsableSf = getGlobalFieldValue('land-area-usable-sf') || '';
+  const landAreaUsableAcres = getGlobalFieldValue('land-area-usable-acres') || '';
+  const landAreaTotalSf = getGlobalFieldValue('site-total-area') || '';
+  const landAreaTotalAcres = getGlobalFieldValue('site-acreage') || '';
+  const zoningDesig = getGlobalFieldValue('zoning-classification') || '';
+  const siteShape = getGlobalFieldValue('site-shape') || '';
+  const topoVal = getGlobalFieldValue('topography') || '';
+
   // Formatting helpers
   const formatCurrency = (value: string): string => {
     if (!value) return '';
@@ -130,6 +155,14 @@ const formatDate = (dateStr: string): string => {
     return dateStr;
   }
 };
+
+  // Helper to format numbers with commas (used in Page 6 SITE DESCRIPTION table)
+  const formatNum = (val: any) => {
+    if (!val) return '';
+    const num = typeof val === 'string' ? parseFloat(val.replace(/,/g, '')) : val;
+    return isNaN(num) ? val : num.toLocaleString();
+  };
+
   /**
    * Format percentage values for display
    * @param value - Numeric percentage value (5.5 for 5.5%)
@@ -7058,7 +7091,9 @@ const formatDate = (dateStr: string): string => {
   </div>
 
   <!-- Executive Summary - Page 6: Property Overview Tables -->
-  ${execSection ? `
+  ${execSection ? (() => {
+    console.log("🎯 RENDERING EXEC PAGES 6-8!");
+    return `
   <div id="section-exec-page-6" class="page exec-page" style="position: relative;">
     <div class="page-number">1</div>
     <!-- Page Header -->
@@ -7070,7 +7105,88 @@ const formatDate = (dateStr: string): string => {
       </div>
     </div>
 
-    ${renderExecSection(execSection)}
+    <!-- Page 6 Content: PROPERTY IDENTIFICATION + SITE DESCRIPTION -->
+    <div class="section">
+      <h2 class="section-title" style="border-bottom: 2px solid #1a4480; padding-bottom: 8px; margin-bottom: 24px;">Introduction & Executive Summary</h2>
+
+      <h3 style="font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #333; margin-bottom: 16px;">PROPERTY OVERVIEW</h3>
+
+      <!-- 1. PROPERTY IDENTIFICATION -->
+      <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
+        <thead>
+          <tr>
+            <th colspan="2" style="background-color: var(--brand-navy); color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">PROPERTY IDENTIFICATION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; width: 30%; font-weight: 500; color: #555;">Name</td>
+            <td style="padding: 8px 12px; color: #333;">${propertyName || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Property</td>
+            <td style="padding: 8px 12px; color: #333;">${propertyType || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Address</td>
+            <td style="padding: 8px 12px; color: #333;">${streetAddress || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">City, Province, Postal Code</td>
+            <td style="padding: 8px 12px; color: #333;">${city && province ? `${city}, ${province}${postalCode ? ' ' + postalCode : ''}` : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Market / Submarket</td>
+            <td style="padding: 8px 12px; color: #333;">${market && submarket ? `${market} / ${submarket}` : market || submarket || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Geocode</td>
+            <td style="padding: 8px 12px; color: #333;">${latitude && longitude ? `${latitude}, ${longitude}` : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 2. SITE DESCRIPTION -->
+      <table class="exec-overview-table" style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10px;">
+        <thead>
+          <tr>
+            <th colspan="3" style="background-color: var(--brand-navy); color: white; padding: 8px 12px; text-align: left; font-size: 10px; font-weight: 600; letter-spacing: 0.5px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important;">SITE DESCRIPTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td colspan="3" style="padding: 8px 12px;"><strong style="color: #555;">Legal Description</strong><br/><span style="color: #333;">${legalDesc || '<span style="color: #999;">—</span>'}</span></td>
+          </tr>
+          <tr style="background-color: #f3f4f6; border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; width: 50%; font-weight: 600; color: #333;">Land Area</td>
+            <td style="padding: 8px 12px; width: 25%; font-weight: 600; text-align: center; color: #333;">Square Feet</td>
+            <td style="padding: 8px 12px; width: 25%; font-weight: 600; text-align: center; color: #333;">Acres</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; padding-left: 24px; color: #555;">Usable</td>
+            <td style="padding: 8px 12px; text-align: center; color: #333;">${landAreaUsableSf ? formatNum(landAreaUsableSf) : '<span style="color: #999;">—</span>'}</td>
+            <td style="padding: 8px 12px; text-align: center; color: #333;">${landAreaUsableAcres ? formatNum(landAreaUsableAcres) : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; padding-left: 24px; color: #555;">Total</td>
+            <td style="padding: 8px 12px; text-align: center; color: #333;">${landAreaTotalSf ? formatNum(landAreaTotalSf) : '<span style="color: #999;">—</span>'}</td>
+            <td style="padding: 8px 12px; text-align: center; color: #333;">${landAreaTotalAcres ? formatNum(landAreaTotalAcres) : '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Zoning</td>
+            <td colspan="2" style="padding: 8px 12px; color: #333;">${zoningDesig || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr style="border-bottom: 1px solid #e5e7eb;">
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Shape</td>
+            <td colspan="2" style="padding: 8px 12px; color: #333;">${siteShape || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 12px; font-weight: 500; color: #555;">Topography</td>
+            <td colspan="2" style="padding: 8px 12px; color: #333;">${topoVal || '<span style="color: #999;">—</span>'}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Page Footer -->
     <div class="page-footer">
@@ -7266,7 +7382,8 @@ const formatDate = (dateStr: string): string => {
       <div class="page-footer-right">${appraiserCompany || ''}</div>
     </div>
   </div>
-  ` : ''}
+  `;
+  })() : ''}
 
   <!-- Additional Sections -->
   <!-- Exclude data collection tabs: client-intake (S1), loe-prep (S2), image-mgt (S3) - these are input-only, not report pages -->

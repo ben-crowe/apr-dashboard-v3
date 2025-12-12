@@ -1,6 +1,6 @@
 # Automated Report Comparison
 
-**Generated:** 2025-12-11 20:37:05
+**Generated:** 2025-12-11 21:03:22
 **Reference:** `Ref.ReportVAL251012NorthBattlefordApt.docx.html`
 
 ## Executive Summary
@@ -9,16 +9,16 @@
 
 | Metric | Reference | Generated | Status |
 |--------|-----------|-----------|--------|
-| Text Blocks | 530 | 811 | ⚠️ |
-| Images | 90 | 36 | ⚠️ |
+| Text Blocks | 529 | 841 | ⚠️ |
+| Images | 90 | 60 | ⚠️ |
 | Field Values | 8 | 5 | ⚠️ |
 
 ## Text Block Analysis
 
 - ✅ **Matches:** 138 blocks
-- ❌ **Missing:** 392 blocks
-- ⚠️ **Different:** 116 blocks
-- ➕ **Extra:** 673 blocks
+- ❌ **Missing:** 391 blocks
+- ⚠️ **Different:** 117 blocks
+- ➕ **Extra:** 703 blocks
 
 ### Missing Content (in Reference, not in Generated)
 
@@ -55,54 +55,54 @@
    - Length: 20 chars
 
 **9. Section:** Unknown
-   - Text: `Photographs`
-   - Length: 11 chars
-
-**10. Section:** Unknown
    - Text: `1101 - East Elevation`
    - Length: 21 chars
 
-**11. Section:** Unknown
+**10. Section:** Unknown
    - Text: `1101 - West Elevation`
    - Length: 21 chars
 
-**12. Section:** Unknown
+**11. Section:** Unknown
    - Text: `Street View Facing East - 11 Ave`
    - Length: 32 chars
 
-**13. Section:** Unknown
+**12. Section:** Unknown
    - Text: `Street View Facing North - 109 St`
    - Length: 33 chars
 
-**14. Section:** Unknown
+**13. Section:** Unknown
    - Text: `1101 - Typical Hallwall`
    - Length: 23 chars
 
-**15. Section:** Unknown
+**14. Section:** Unknown
    - Text: `1101 - Typical Stairway`
    - Length: 23 chars
 
-**16. Section:** Unknown
+**15. Section:** Unknown
    - Text: `1101 - Typical Bathroom`
    - Length: 23 chars
 
-**17. Section:** Unknown
+**16. Section:** Unknown
    - Text: `1101 - Typical Bedroom 1`
    - Length: 24 chars
 
-**18. Section:** Unknown
+**17. Section:** Unknown
    - Text: `1101 - Typical Bedroom 2`
    - Length: 24 chars
 
-**19. Section:** Unknown
+**18. Section:** Unknown
    - Text: `1101 - Electrical Room`
    - Length: 22 chars
 
-**20. Section:** Unknown
+**19. Section:** Unknown
    - Text: `1101 - Mechanical Room`
    - Length: 22 chars
 
-*... and 372 more*
+**20. Section:** Unknown
+   - Text: `1101 - Typical Kitchen`
+   - Length: 22 chars
+
+*... and 371 more*
 
 ### Different Content (Similar but not Exact)
 
@@ -166,7 +166,7 @@
    - Expected: `Description of the Improvements 26...`
    - Actual: `Description of the Improvements...`
 
-*... and 101 more*
+*... and 102 more*
 
 ### Extra Content (in Generated, not in Reference)
 
@@ -200,13 +200,13 @@
 **10. Section:** Unknown
    - Text: `Valta Property Valuations Ltd.300, 4838 Richard Road SWOffice:587-801-5151chris.chornohos@valta.caww...`
 
-*... and 663 more*
+*... and 693 more*
 
 ## Image Analysis
 
 - Reference: 90 images
-- Generated: 36 images
-- Difference: 54 images
+- Generated: 60 images
+- Difference: 30 images
 
 ## Field Value Verification
 
@@ -226,6 +226,6 @@
 
 ## Actionable Fixes
 
-1. **Add Missing Content:** 392 text blocks from reference are missing
-2. **Fix Different Content:** 116 blocks have differences
+1. **Add Missing Content:** 391 text blocks from reference are missing
+2. **Fix Different Content:** 117 blocks have differences
 4. **Populate Missing Fields:** 3 field values not found

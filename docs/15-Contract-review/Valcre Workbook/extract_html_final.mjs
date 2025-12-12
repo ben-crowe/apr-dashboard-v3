@@ -22,6 +22,10 @@ async function extractHTML() {
     const context = await browser.newContext();
     const page = await context.newPage();
 
+    // Listen for console messages
+    page.on('console', msg => console.log('PAGE LOG:', msg.text()));
+    page.on('pageerror', error => console.log('PAGE ERROR:', error.message));
+
     console.log(`📍 Navigating to ${DEV_SERVER_URL}${TDD_PATH}...`);
     await page.goto(DEV_SERVER_URL + TDD_PATH, { waitUntil: 'networkidle', timeout: 30000 });
     console.log('   ✅ Page loaded');

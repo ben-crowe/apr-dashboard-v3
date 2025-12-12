@@ -2,10 +2,12 @@ import { create } from "zustand";
 import {
   ReportBuilderState,
   ReportSection,
+  ReportField,
   SectionGroup,
 } from "../types/reportBuilder.types";
 import { generateReportHtml } from "../templates/reportHtmlTemplate";
 import { northBattlefordRealData } from "../data/northBattlefordTestData-REAL";
+import { fieldRegistry } from "../schema/fieldRegistry";
 
 // Field ID mapping: test data ID -> store field ID (for fields that differ)
 const testDataFieldMapping: Record<string, string> = {
@@ -150,6 +152,41 @@ const testDataFieldMapping: Record<string, string> = {
 
   // PHOTOS - map individual photos to consolidated arrays (special handling in loadFullTestData)
   // These will be handled specially since store uses arrays
+};
+
+// Helper to build image-mgt section from fieldRegistry
+const buildImageMgtSection = (): ReportSection => {
+  const subsections: Record<string, { id: string; title: string; fields: ReportField[] }> = {
+    'cover-images': { id: 'cover-images', title: 'COVER & SIGNATURE', fields: [] },
+    'maps': { id: 'maps', title: 'MAPS', fields: [] },
+    'exterior-photos': { id: 'exterior-photos', title: 'EXTERIOR PHOTOGRAPHS', fields: [] },
+    'street-photos': { id: 'street-photos', title: 'STREET VIEW PHOTOGRAPHS', fields: [] },
+    'common-photos': { id: 'common-photos', title: 'INTERIOR COMMON AREA', fields: [] },
+    'unit-photos': { id: 'unit-photos', title: 'UNIT INTERIOR PHOTOGRAPHS', fields: [] },
+    'systems-photos': { id: 'systems-photos', title: 'BUILDING SYSTEMS', fields: [] },
+  };
+
+  // Populate fields from fieldRegistry
+  fieldRegistry.forEach(fieldDef => {
+    if (fieldDef.section === 'image-mgt' && fieldDef.subsection && subsections[fieldDef.subsection]) {
+      subsections[fieldDef.subsection].fields.push({
+        id: fieldDef.storeId,
+        label: fieldDef.label,
+        type: fieldDef.type as any,
+        value: fieldDef.defaultValue || '',
+        isEditable: true,
+        inputType: 'user-input',
+      });
+    }
+  });
+
+  return {
+    id: 'image-mgt',
+    name: 'Section 3: Image Management',
+    shortName: 'S3 - IMAGE MGT',
+    fields: [],
+    subsections: Object.values(subsections),
+  };
 };
 
 const getMockData = (): ReportSection[] => [
@@ -502,6 +539,8 @@ const getMockData = (): ReportSection[] => [
       },
     ],
   },
+  // Build image-mgt section dynamically from fieldRegistry
+  buildImageMgtSection(),
   // ═══════════════════════════════════════════════════════════════════════════
   // REPORT BUILDER SECTIONS - Standard appraisal report sections
   // ═══════════════════════════════════════════════════════════════════════════

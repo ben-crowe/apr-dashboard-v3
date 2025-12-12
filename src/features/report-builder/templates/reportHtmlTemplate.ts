@@ -6977,7 +6977,7 @@ const formatDate = (dateStr: string): string => {
       </p>
 
       <div class="letter-signature-block">
-        ${appraiserSignature ? `<img src="${appraiserSignature}" alt="Appraiser Signature" style="width: 254px; height: auto; margin-bottom: 0.5rem;" />` : '<div class="letter-signature-line"></div>'}
+        ${appraiserSignature ? `<img src="${appraiserSignature}" alt="Appraiser Signature" style="width: 200px; height: auto; margin-bottom: 0.5rem;" />` : '<div class="letter-signature-line"></div>'}
         <div class="letter-signature-name">${appraiserName ? `${appraiserName}${appraiserCredentials ? ', ' + appraiserCredentials : ''}` : '[Appraiser Name, Credentials]'}</div>
         ${appraiserTitle ? `<div>${appraiserTitle}</div>` : '<div>[Appraiser Title]</div>'}
         ${appraiserEmail ? `<div>${appraiserEmail}</div>` : '<div>[Appraiser Email]</div>'}

@@ -46,9 +46,9 @@ export default function OutputPanel() {
   const indicatedValue = getFieldValue('calc-indicated-value');
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="space-y-4">
       {/* Results Box - Minimal, border-defined */}
-      <div className="border border-[#3a3a3a] rounded-sm overflow-hidden flex-shrink-0">
+      <div className="border border-[#3a3a3a] rounded-sm overflow-hidden">
         <div className="px-4 py-2 border-b border-[#3a3a3a]">
           <span className="text-xs font-medium text-[#909090] uppercase tracking-wider">Results</span>
         </div>
@@ -93,7 +93,7 @@ export default function OutputPanel() {
 
       {/* Validation - Subtle, inline */}
       {indicatedValue === 1780000 && (
-        <div className="flex items-center gap-2 px-1 mt-3 flex-shrink-0">
+        <div className="flex items-center gap-2 px-1">
           <svg className="w-3.5 h-3.5 text-[#808080]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
           </svg>
@@ -103,10 +103,8 @@ export default function OutputPanel() {
         </div>
       )}
 
-      {/* Calculation Breakdown - fills remaining space, scrolls internally */}
-      <div className="mt-4 flex-1 min-h-0">
-        <CalculationReasoning />
-      </div>
+      {/* Calculation Breakdown - fixed height, terminal-style scroll */}
+      <CalculationReasoning />
     </div>
   );
 }

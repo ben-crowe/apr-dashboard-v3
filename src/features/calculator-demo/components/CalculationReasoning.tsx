@@ -338,6 +338,13 @@ export default function CalculationReasoning() {
     };
   }, [animation, skipAnimation, lines]);
 
+  // Auto-scroll to bottom as content updates
+  useEffect(() => {
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight;
+    }
+  }, [animation.currentLine, animation.visibleChars]);
+
   // Render line with animation
   const renderLine = (line: { text: string; isHeader: boolean; isTotal: boolean; value?: number }, index: number) => {
     const isComplete = animation.completedLines.has(index) || skipAnimation;
@@ -374,7 +381,8 @@ export default function CalculationReasoning() {
 
   return (
     <div
-      className="border border-[#3a3a3a] rounded-sm overflow-hidden h-full flex flex-col"
+      className="border border-[#3a3a3a] rounded-sm overflow-hidden flex flex-col"
+      style={{ maxHeight: '420px' }}
       onClick={animation.isAnimating ? completeAnimation : undefined}
     >
       {/* Minimal Header - just text + border */}
@@ -382,24 +390,28 @@ export default function CalculationReasoning() {
         <span className="text-xs font-medium text-[#909090] uppercase tracking-wider">Calculation Breakdown</span>
       </div>
 
-      {/* Content - Scrollable with hidden scrollbar */}
+      {/* Content - Terminal style scroll, hidden scrollbar, centered content */}
       <div
         ref={containerRef}
-        className="px-4 py-3 font-mono text-[11px] leading-[1.5] cursor-pointer bg-[#232323] flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden"
+        className="py-3 font-mono text-[11px] leading-[1.5] cursor-pointer bg-[#232323] flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
         }}
         title={animation.isAnimating ? 'Click to skip animation' : undefined}
       >
-        <div className="whitespace-pre">
+        {/* Centered content block */}
+        <div
+          className="whitespace-pre mx-auto px-6"
+          style={{ maxWidth: '580px' }}
+        >
           {lines.map((line, index) => renderLine(line, index))}
         </div>
       </div>
 
       {/* Minimal status - only during animation */}
       {animation.isAnimating && (
-        <div className="px-4 py-1.5 text-[10px] border-t border-[#3a3a3a] text-[#505050] flex-shrink-0">
+        <div className="px-4 py-1.5 text-[10px] border-t border-[#3a3a3a] text-[#505050] flex-shrink-0 text-center">
           Click to skip
         </div>
       )}

@@ -6960,6 +6960,9 @@ const formatDate = (dateStr: string): string => {
 
       <div class="letter-section-heading">Hypothetical Conditions</div>
       <div class="letter-conditions-text">${hypotheticalConditions}</div>
+
+      <div class="letter-section-heading">Extraordinary Assumptions</div>
+      <div class="letter-conditions-text">${extraordinaryAssumptions}</div>
     </div>
 
     <!-- Page Footer -->
@@ -6988,8 +6991,6 @@ const formatDate = (dateStr: string): string => {
     </div>
 
     <div class="letter-body" style="margin-top: 3rem;">
-      <div class="letter-section-heading">Extraordinary Assumptions</div>
-      <div class="letter-conditions-text">${extraordinaryAssumptions}</div>
 
       <div class="letter-section-heading">Extraordinary Limiting Conditions</div>
       <div class="letter-conditions-text">${extraordinaryLimitingConditions}</div>

@@ -133,7 +133,8 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
               className="border-0 bg-white shadow-lg"
               style={{
                 width: '8.5in', // Fixed page width
-                minHeight: '90in', // Tall enough for ~82 pages (79 pages + buffer)
+                minHeight: '1000in', // Tall enough for 90+ pages (11in each + gaps)
+                height: 'auto', // Expands to fit content
                 display: 'block',
               }}
               sandbox="allow-same-origin allow-modals"

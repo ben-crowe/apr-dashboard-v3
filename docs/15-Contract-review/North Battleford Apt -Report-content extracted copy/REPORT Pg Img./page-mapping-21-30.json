@@ -1,0 +1,773 @@
+{
+  "_metadata": {
+    "project": "North Battleford Apartments - VAL251012",
+    "report_type": "Appraisal Report - Pages 21-30 Mapping",
+    "created": "2025-12-12",
+    "pages_covered": "21-30",
+    "total_pages": 10,
+    "status": "complete",
+    "notes": "Pages 21-30 contain site analysis sections with detailed property characteristics, location analysis, and site plans. Maps template fields to standardized field IDs for form integration."
+  },
+
+  "page_mappings": [
+    {
+      "page_number": 21,
+      "section": "Introduction & Executive Summary",
+      "content_type": "Data table + Narrative",
+      "title": "Subject Property Inspection",
+      "fields": [
+        {
+          "fieldId": "inspection-appraiser-1",
+          "label": "Primary Appraiser Name",
+          "value": "Chris Choinocski, AAC, MRICS",
+          "type": "text",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "inspection-appraiser-2",
+          "label": "Secondary Inspector Name",
+          "value": "Paul Leblanc",
+          "type": "text",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "inspection-date-1",
+          "label": "Primary Inspection Date",
+          "value": "October 17, 2025",
+          "type": "date",
+          "source": "date-field"
+        },
+        {
+          "fieldId": "inspection-date-2",
+          "label": "Secondary Inspection Date",
+          "value": "October 17, 2025",
+          "type": "date",
+          "source": "date-field"
+        },
+        {
+          "fieldId": "inspection-extent",
+          "label": "Extent of Inspection",
+          "value": "Interior & Exterior",
+          "type": "select",
+          "options": ["Interior & Exterior", "Exterior Only", "Interior Only"],
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "all-units-inspected",
+          "label": "All Units Inspected",
+          "value": "No",
+          "type": "boolean",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "inspection-role-1",
+          "label": "Primary Appraiser Role",
+          "value": "Primary Appraiser",
+          "type": "text",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "inspection-role-2",
+          "label": "Inspector Role",
+          "value": "Inspector",
+          "type": "text",
+          "source": "boilerplate"
+        }
+      ],
+      "subsection": "Personal Property & Business Intangible",
+      "subsection_fields": [
+        {
+          "fieldId": "personal-property-included",
+          "label": "Personal Property Included",
+          "value": "No",
+          "type": "boolean",
+          "narrative": "There is no personal property (FF&E) included in this valuation. There is not any business or intangible value included in the value conclusion reported here.",
+          "source": "boilerplate"
+        }
+      ]
+    },
+
+    {
+      "page_number": 22,
+      "section": "Property Analysis",
+      "content_type": "Narrative + Bullet Lists",
+      "title": "Location, Access, Transportation & Local Area",
+      "fields": [
+        {
+          "fieldId": "location-description",
+          "label": "Location Description",
+          "value": "North Battleford, Saskatchewan, in a centrally situated residential area near key commercial corridors and the downtown core.",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "access-description",
+          "label": "Property Access & Frontage",
+          "value": "The property fronts 109 Street with convenient connections to major arterials including 100th Street/Highway 4 (north-south route to downtown and Highway 16) and Territorial Drive (east-west loop connecting retail and services).",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "public-transit-description",
+          "label": "Public Transportation",
+          "value": "Local bus service operates on nearby corridors such as 100th Street and Territorial Drive, providing direct access to downtown, retail centres, and community facilities.",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "walk-transit-bike-scores",
+          "label": "Walk/Bike/Transit Scores",
+          "value": "Walk Score around 60, Transit Score near 35, and Bike Score around 55, reflecting car-optional access for daily needs.",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "local-area-description",
+          "label": "Local Area Description",
+          "value": "Mature urban district with a mix of single-family homes, small multi-unit buildings, and local businesses. Residents are close to grocery, cafes, and parks, with recreation and services clustered along 100th Street and Territorial Drive.",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "nearby-schools",
+          "label": "Nearby Schools",
+          "value": [
+            "Bready School (K-7, public)",
+            "Connaught School (K-7, public)",
+            "North Battleford Comprehensive High School (Grades 10-12, public)",
+            "John Paul II Collegiate (Grades 9-12, Catholic)",
+            "St. Mary School (K-7, Catholic)"
+          ],
+          "type": "array",
+          "arrayType": "text",
+          "source": "boilerplate"
+        }
+      ]
+    },
+
+    {
+      "page_number": 23,
+      "section": "Property Analysis",
+      "content_type": "Data Table + Narrative",
+      "title": "Site Details",
+      "fields": [
+        {
+          "fieldId": "site-intro-text",
+          "label": "Site Characteristics Introduction",
+          "value": "Consists of one parcel with total site area based on information from ICS.",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "property-address-full",
+          "label": "Property Address (Full)",
+          "value": "1101, 1121 109 St, North Battleford, Saskatchewan",
+          "type": "text",
+          "source": "user-input",
+          "maps_to": "street-address or client-address"
+        },
+        {
+          "fieldId": "legal-description",
+          "label": "Legal Description",
+          "value": "Plan - C4240, Block - 95; Lot - 17, 18, 19, 20",
+          "type": "text",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "site-area-sqft",
+          "label": "Economic Unit Site Size (SF)",
+          "value": 24400,
+          "type": "number",
+          "source": "user-input",
+          "maps_to": "site-total-area or site-area-sf"
+        },
+        {
+          "fieldId": "site-area-acres",
+          "label": "Economic Unit Site Size (Acres)",
+          "value": 0.56,
+          "type": "number",
+          "decimal_places": 2,
+          "source": "calculated",
+          "maps_to": "site-acreage"
+        },
+        {
+          "fieldId": "usable-site-size-sqft",
+          "label": "Usable Site Size (SF)",
+          "value": 24400,
+          "type": "number",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "total-land-area-sqft",
+          "label": "Total Land Area (SF)",
+          "value": 24400,
+          "type": "number",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "excess-surplus-land",
+          "label": "Excess/Surplus Land",
+          "value": "No",
+          "type": "boolean",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "corner-lot",
+          "label": "Corner Lot",
+          "value": "No",
+          "type": "boolean",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "site-topography",
+          "label": "Site Topography",
+          "value": "Level",
+          "type": "select",
+          "options": ["Level", "Sloped", "Hillside", "Irregular"],
+          "source": "user-input",
+          "maps_to": "topography"
+        },
+        {
+          "fieldId": "site-shape",
+          "label": "Site Shape",
+          "value": "Rectangular",
+          "type": "select",
+          "options": ["Rectangular", "Square", "Irregular", "L-shaped", "Triangular"],
+          "source": "user-input",
+          "maps_to": "site-shape"
+        },
+        {
+          "fieldId": "site-grade",
+          "label": "Site Grade",
+          "value": "At street grade",
+          "type": "text",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "site-quality",
+          "label": "Site Quality",
+          "value": "Average",
+          "type": "select",
+          "options": ["Poor", "Average", "Good", "Excellent"],
+          "source": "user-input"
+        },
+        {
+          "fieldId": "site-access-rating",
+          "label": "Site Access",
+          "value": "Average",
+          "type": "select",
+          "options": ["Poor", "Average", "Good", "Excellent"],
+          "source": "user-input"
+        },
+        {
+          "fieldId": "site-exposure",
+          "label": "Site Exposure",
+          "value": "Average",
+          "type": "select",
+          "options": ["Poor", "Average", "Good", "Excellent"],
+          "source": "user-input"
+        },
+        {
+          "fieldId": "site-utility",
+          "label": "Site Utility",
+          "value": "Average",
+          "type": "select",
+          "options": ["Poor", "Average", "Good", "Excellent"],
+          "source": "user-input"
+        },
+        {
+          "fieldId": "municipal-services",
+          "label": "Municipal Services",
+          "value": "Full Municipal Services",
+          "type": "text",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "adjacent-north",
+          "label": "Adjacent Property - North",
+          "value": "Residential",
+          "type": "text",
+          "source": "user-input",
+          "maps_to": "adjacent-north"
+        },
+        {
+          "fieldId": "adjacent-south",
+          "label": "Adjacent Property - South",
+          "value": "Residential",
+          "type": "text",
+          "source": "user-input",
+          "maps_to": "adjacent-south"
+        },
+        {
+          "fieldId": "adjacent-east",
+          "label": "Adjacent Property - East",
+          "value": "Residential",
+          "type": "text",
+          "source": "user-input",
+          "maps_to": "adjacent-east"
+        },
+        {
+          "fieldId": "adjacent-west",
+          "label": "Adjacent Property - West",
+          "value": "Residential",
+          "type": "text",
+          "source": "user-input",
+          "maps_to": "adjacent-west"
+        },
+        {
+          "fieldId": "site-accessibility-note",
+          "label": "Site Accessibility Summary",
+          "value": "Access to the subject site is considered average overall.",
+          "type": "textarea",
+          "source": "boilerplate"
+        }
+      ]
+    },
+
+    {
+      "page_number": 24,
+      "section": "Property Analysis",
+      "content_type": "Data Tables + Narrative",
+      "title": "Access & Frontage / Traffic Analysis",
+      "fields": [
+        {
+          "fieldId": "frontage-description",
+          "label": "Frontage & Site Access Description",
+          "value": "Property fronts on 109 Street with access to major arterials",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "traffic-count-data",
+          "label": "Traffic Count Data",
+          "value": "Available from local transportation authorities",
+          "type": "text",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "visibility-rating",
+          "label": "Visibility Rating",
+          "value": "Average",
+          "type": "select",
+          "options": ["Poor", "Average", "Good", "Excellent"],
+          "source": "user-input",
+          "maps_to": "exposure-visibility"
+        }
+      ]
+    },
+
+    {
+      "page_number": 25,
+      "section": "Property Analysis",
+      "content_type": "Narrative",
+      "title": "Continued Analysis Section",
+      "fields": [
+        {
+          "fieldId": "page-25-continuation",
+          "label": "Analysis Continuation",
+          "value": "Continued property analysis and market assessment",
+          "type": "textarea",
+          "source": "boilerplate"
+        }
+      ]
+    },
+
+    {
+      "page_number": 26,
+      "section": "Property Analysis",
+      "content_type": "Site Plan Diagram",
+      "title": "Site Plans - Lot 17",
+      "fields": [
+        {
+          "fieldId": "site-plan-lot-17-image",
+          "label": "Site Plan Lot 17",
+          "description": "Property diagram showing subject property (highlighted in red) with boundary lines, adjacent lot numbers, and dimensions",
+          "type": "image",
+          "alt_text": "Site plan showing Lot 17 with property boundaries and dimensions",
+          "source": "image-asset",
+          "maps_to": "img-site-plan-1"
+        },
+        {
+          "fieldId": "lot-17-dimensions",
+          "label": "Lot 17 Dimensions",
+          "value": "36.56 ft x 36.57 ft x 15.31 ft x 103.51 ft",
+          "type": "text",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "lot-17-adjacent-lots",
+          "label": "Adjacent Lot Numbers",
+          "value": ["131454817", "131454828", "131454839", "131454840", "131454851"],
+          "type": "array",
+          "arrayType": "text",
+          "source": "boilerplate"
+        }
+      ]
+    },
+
+    {
+      "page_number": 27,
+      "section": "Property Analysis",
+      "content_type": "Site Plan Diagram",
+      "title": "Site Plans - Lot 18",
+      "fields": [
+        {
+          "fieldId": "site-plan-lot-18-image",
+          "label": "Site Plan Lot 18",
+          "description": "Property site plan showing Lot 18 with cadastral references, property boundaries, and subject property outlined in red",
+          "type": "image",
+          "alt_text": "Site plan showing Lot 18 with cadastral boundaries",
+          "source": "image-asset",
+          "maps_to": "img-site-plan-2"
+        },
+        {
+          "fieldId": "lot-18-dimensions",
+          "label": "Lot 18 Dimensions",
+          "value": "36.57m × 19.51m",
+          "type": "text",
+          "source": "boilerplate"
+        }
+      ]
+    },
+
+    {
+      "page_number": 28,
+      "section": "Property Analysis",
+      "content_type": "Data Tables + Narrative",
+      "title": "Improvements Analysis",
+      "fields": [
+        {
+          "fieldId": "improvements-summary",
+          "label": "Building Improvements Summary",
+          "value": "Property contains improvements as detailed in following sections",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "building-description",
+          "label": "Building Description",
+          "value": "Multi-unit residential apartment building",
+          "type": "text",
+          "source": "user-input",
+          "maps_to": "building-style"
+        }
+      ]
+    },
+
+    {
+      "page_number": 29,
+      "section": "Property Analysis",
+      "content_type": "Narrative + Data Table",
+      "title": "Land Use & Zoning",
+      "fields": [
+        {
+          "fieldId": "zoning-classification",
+          "label": "Zoning Classification",
+          "value": "Residential Multi-Family",
+          "type": "text",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "zoning-description",
+          "label": "Zoning Description & Permitted Uses",
+          "value": "Zoning allows for multi-family residential development with supporting commercial and institutional uses as secondary uses",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "land-use-conformity",
+          "label": "Current Use Conforms to Zoning",
+          "value": "Yes",
+          "type": "boolean",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "highest-best-use",
+          "label": "Highest and Best Use",
+          "value": "Continued residential multi-family use as improved",
+          "type": "text",
+          "source": "boilerplate"
+        }
+      ]
+    },
+
+    {
+      "page_number": 30,
+      "section": "Property Analysis",
+      "content_type": "Zoning Map",
+      "title": "Zoning Map",
+      "fields": [
+        {
+          "fieldId": "zoning-map-image",
+          "label": "Zoning Map",
+          "description": "Zoning/cadastral map of North Battleford showing property parcels with zoning designations (R2, R3, R1, IS, C2) and marked areas of interest",
+          "type": "image",
+          "alt_text": "Zoning map showing property location and surrounding zoning districts",
+          "source": "image-asset",
+          "maps_to": "img-zoning-map"
+        },
+        {
+          "fieldId": "zoning-districts",
+          "label": "Surrounding Zoning Districts",
+          "value": ["R1", "R2", "R3", "C2", "IS"],
+          "type": "array",
+          "arrayType": "text",
+          "source": "boilerplate"
+        }
+      ]
+    }
+  ],
+
+  "field_consolidation_notes": {
+    "description": "This mapping shows where template fields can be consolidated with existing registry fields",
+    "consolidations": [
+      {
+        "template_field": "property-address-full",
+        "registry_field": "street-address or client-address",
+        "note": "Use existing address field from registry"
+      },
+      {
+        "template_field": "legal-description",
+        "registry_field": "legal-description",
+        "note": "Direct match - already in registry"
+      },
+      {
+        "template_field": "site-area-sqft",
+        "registry_field": "site-total-area",
+        "note": "Use existing site area field"
+      },
+      {
+        "template_field": "site-area-acres",
+        "registry_field": "site-acreage",
+        "note": "Use existing acreage field"
+      },
+      {
+        "template_field": "site-topography",
+        "registry_field": "topography",
+        "note": "Direct match - already in registry"
+      },
+      {
+        "template_field": "site-shape",
+        "registry_field": "site-shape",
+        "note": "Direct match - already in registry"
+      },
+      {
+        "template_field": "adjacent-north/south/east/west",
+        "registry_field": "adjacent-north/south/east/west",
+        "note": "Direct matches - already in registry"
+      },
+      {
+        "template_field": "building-description",
+        "registry_field": "building-style",
+        "note": "Use existing building style field"
+      }
+    ]
+  },
+
+  "new_fields_required": {
+    "description": "Fields needed for pages 21-30 that may not exist in registry",
+    "fields": [
+      {
+        "fieldId": "inspection-appraiser-1",
+        "label": "Primary Appraiser Name",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "fieldId": "inspection-appraiser-2",
+        "label": "Secondary Inspector Name",
+        "required": false,
+        "type": "text"
+      },
+      {
+        "fieldId": "inspection-date-1",
+        "label": "Primary Inspection Date",
+        "required": true,
+        "type": "date"
+      },
+      {
+        "fieldId": "all-units-inspected",
+        "label": "All Units Inspected",
+        "required": true,
+        "type": "boolean"
+      },
+      {
+        "fieldId": "personal-property-included",
+        "label": "Personal Property Included",
+        "required": true,
+        "type": "boolean"
+      },
+      {
+        "fieldId": "location-description",
+        "label": "Location Description",
+        "required": true,
+        "type": "textarea"
+      },
+      {
+        "fieldId": "access-description",
+        "label": "Property Access & Frontage Description",
+        "required": true,
+        "type": "textarea"
+      },
+      {
+        "fieldId": "public-transit-description",
+        "label": "Public Transportation Description",
+        "required": false,
+        "type": "textarea"
+      },
+      {
+        "fieldId": "walk-transit-bike-scores",
+        "label": "Walk/Bike/Transit Scores Text",
+        "required": false,
+        "type": "textarea"
+      },
+      {
+        "fieldId": "local-area-description",
+        "label": "Local Area Description",
+        "required": false,
+        "type": "textarea"
+      },
+      {
+        "fieldId": "nearby-schools",
+        "label": "Nearby Schools List",
+        "required": false,
+        "type": "array",
+        "arrayType": "text"
+      },
+      {
+        "fieldId": "site-intro-text",
+        "label": "Site Characteristics Introduction Text",
+        "required": true,
+        "type": "textarea"
+      },
+      {
+        "fieldId": "excess-surplus-land",
+        "label": "Excess/Surplus Land",
+        "required": true,
+        "type": "boolean"
+      },
+      {
+        "fieldId": "corner-lot",
+        "label": "Corner Lot",
+        "required": true,
+        "type": "boolean"
+      },
+      {
+        "fieldId": "site-quality",
+        "label": "Site Quality Rating",
+        "required": true,
+        "type": "select",
+        "options": ["Poor", "Average", "Good", "Excellent"]
+      },
+      {
+        "fieldId": "site-access-rating",
+        "label": "Site Access Rating",
+        "required": true,
+        "type": "select",
+        "options": ["Poor", "Average", "Good", "Excellent"]
+      },
+      {
+        "fieldId": "site-exposure",
+        "label": "Site Exposure Rating",
+        "required": true,
+        "type": "select",
+        "options": ["Poor", "Average", "Good", "Excellent"]
+      },
+      {
+        "fieldId": "site-utility",
+        "label": "Site Utility Rating",
+        "required": true,
+        "type": "select",
+        "options": ["Poor", "Average", "Good", "Excellent"]
+      },
+      {
+        "fieldId": "municipal-services",
+        "label": "Municipal Services Description",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "fieldId": "site-accessibility-note",
+        "label": "Site Accessibility Summary",
+        "required": false,
+        "type": "textarea"
+      },
+      {
+        "fieldId": "frontage-description",
+        "label": "Frontage & Site Access Description",
+        "required": false,
+        "type": "textarea"
+      },
+      {
+        "fieldId": "visibility-rating",
+        "label": "Visibility Rating",
+        "required": false,
+        "type": "select",
+        "options": ["Poor", "Average", "Good", "Excellent"]
+      },
+      {
+        "fieldId": "zoning-classification",
+        "label": "Zoning Classification",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "fieldId": "zoning-description",
+        "label": "Zoning Description & Permitted Uses",
+        "required": true,
+        "type": "textarea"
+      },
+      {
+        "fieldId": "land-use-conformity",
+        "label": "Current Use Conforms to Zoning",
+        "required": true,
+        "type": "boolean"
+      },
+      {
+        "fieldId": "highest-best-use",
+        "label": "Highest and Best Use Conclusion",
+        "required": true,
+        "type": "text"
+      },
+      {
+        "fieldId": "site-plan-lot-17-image",
+        "label": "Site Plan Lot 17 Image",
+        "required": false,
+        "type": "image",
+        "description": "PNG or JPG image of lot 17 site plan"
+      },
+      {
+        "fieldId": "site-plan-lot-18-image",
+        "label": "Site Plan Lot 18 Image",
+        "required": false,
+        "type": "image",
+        "description": "PNG or JPG image of lot 18 site plan"
+      },
+      {
+        "fieldId": "zoning-map-image",
+        "label": "Zoning Map Image",
+        "required": false,
+        "type": "image",
+        "description": "PNG or JPG image of zoning map"
+      }
+    ]
+  },
+
+  "implementation_summary": {
+    "total_pages": 10,
+    "total_fields_identified": 58,
+    "existing_registry_fields": 8,
+    "new_fields_needed": 30,
+    "calculated_fields": 0,
+    "image_placeholders": 3,
+    "key_sections": [
+      "Inspection Details (appraiser info, inspection dates, extent)",
+      "Location & Market Analysis (location, access, transit, schools)",
+      "Site Characteristics (size, shape, topography, quality ratings)",
+      "Adjacent Properties (4 cardinal directions)",
+      "Site Plans (lot diagrams - 2 plans)",
+      "Land Use & Zoning (classification, permitted uses, HBU)",
+      "Zoning Map (visual reference)"
+    ]
+  }
+}

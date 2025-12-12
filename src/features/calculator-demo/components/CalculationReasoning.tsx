@@ -382,7 +382,7 @@ export default function CalculationReasoning() {
   return (
     <div
       className="border border-[#3a3a3a] rounded-sm overflow-hidden flex flex-col"
-      style={{ maxHeight: '420px' }}
+      style={{ maxHeight: '680px' }}
       onClick={animation.isAnimating ? completeAnimation : undefined}
     >
       {/* Minimal Header - just text + border */}

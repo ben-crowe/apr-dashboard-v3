@@ -356,8 +356,8 @@ export default function CalculationReasoning() {
       line.isTotal ? 'text-[#e5e5e5] font-medium' : '',
       isCurrent ? 'bg-[#3a3a3a]/30' : '',
       line.text.startsWith('  ') ? 'text-[#606060]' : '',
-      line.text.includes('[OK]') ? 'text-[#4ade80]' : '',
-      line.text.includes('[!!]') ? 'text-[#fbbf24]' : '',
+      line.text.includes('[OK]') ? 'text-[#909090]' : '',
+      line.text.includes('[!!]') ? 'text-[#b0b0b0]' : '',
     ].filter(Boolean).join(' ');
 
     return (
@@ -374,18 +374,22 @@ export default function CalculationReasoning() {
 
   return (
     <div
-      className="border border-[#3a3a3a] rounded-sm overflow-hidden"
+      className="border border-[#3a3a3a] rounded-sm overflow-hidden h-full flex flex-col"
       onClick={animation.isAnimating ? completeAnimation : undefined}
     >
       {/* Minimal Header - just text + border */}
-      <div className="px-4 py-2 border-b border-[#3a3a3a]">
+      <div className="px-4 py-2 border-b border-[#3a3a3a] flex-shrink-0">
         <span className="text-xs font-medium text-[#909090] uppercase tracking-wider">Calculation Breakdown</span>
       </div>
 
-      {/* Content - Natural expansion, no fixed height */}
+      {/* Content - Scrollable with hidden scrollbar */}
       <div
         ref={containerRef}
-        className="px-4 py-3 font-mono text-[11px] leading-[1.5] cursor-pointer bg-[#232323]"
+        className="px-4 py-3 font-mono text-[11px] leading-[1.5] cursor-pointer bg-[#232323] flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden"
+        style={{
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+        }}
         title={animation.isAnimating ? 'Click to skip animation' : undefined}
       >
         <div className="whitespace-pre">
@@ -395,7 +399,7 @@ export default function CalculationReasoning() {
 
       {/* Minimal status - only during animation */}
       {animation.isAnimating && (
-        <div className="px-4 py-1.5 text-[10px] border-t border-[#3a3a3a] text-[#505050]">
+        <div className="px-4 py-1.5 text-[10px] border-t border-[#3a3a3a] text-[#505050] flex-shrink-0">
           Click to skip
         </div>
       )}

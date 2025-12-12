@@ -107,9 +107,9 @@ export const fieldRegistry: FieldDefinition[] = [
 
   // --- EXTERIOR PHOTOS (6 slots with captions) ---
   { id: 'img-exterior-1', storeId: 'img-exterior-1', label: 'Exterior 1 - Front Facade', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-exterior-1-caption', storeId: 'img-exterior-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'exterior-photos', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-1-caption', storeId: 'img-exterior-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'exterior-photos', type: 'text', inputSource: 'user-input', required: false, defaultValue: '1101 - East Elevation' },
   { id: 'img-exterior-2', storeId: 'img-exterior-2', label: 'Exterior 2 - Rear Elevation', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-exterior-2-caption', storeId: 'img-exterior-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'exterior-photos', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'img-exterior-2-caption', storeId: 'img-exterior-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'exterior-photos', type: 'text', inputSource: 'user-input', required: false, defaultValue: '1101 - West Elevation' },
   { id: 'img-exterior-3', storeId: 'img-exterior-3', label: 'Exterior 3 - Left Side', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
   { id: 'img-exterior-3-caption', storeId: 'img-exterior-3-caption', label: 'Caption', section: 'image-mgt', subsection: 'exterior-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-exterior-4', storeId: 'img-exterior-4', label: 'Exterior 4 - Right Side', section: 'image-mgt', subsection: 'exterior-photos', type: 'image', inputSource: 'user-input', required: false },
@@ -121,17 +121,17 @@ export const fieldRegistry: FieldDefinition[] = [
 
   // --- STREET VIEW PHOTOS (3 slots with captions) ---
   { id: 'img-street-1', storeId: 'img-street-1', label: 'Street View 1 - Looking North', section: 'image-mgt', subsection: 'street-photos', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-street-1-caption', storeId: 'img-street-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'street-photos', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'img-street-1-caption', storeId: 'img-street-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'street-photos', type: 'text', inputSource: 'user-input', required: false, defaultValue: 'Street View Facing East - 11 Ave' },
   { id: 'img-street-2', storeId: 'img-street-2', label: 'Street View 2 - Looking South', section: 'image-mgt', subsection: 'street-photos', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-street-2-caption', storeId: 'img-street-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'street-photos', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'img-street-2-caption', storeId: 'img-street-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'street-photos', type: 'text', inputSource: 'user-input', required: false, defaultValue: 'Street View Facing North - 109 St' },
   { id: 'img-street-3', storeId: 'img-street-3', label: 'Street View 3 - Streetscape/Context', section: 'image-mgt', subsection: 'street-photos', type: 'image', inputSource: 'user-input', required: false },
   { id: 'img-street-3-caption', storeId: 'img-street-3-caption', label: 'Caption', section: 'image-mgt', subsection: 'street-photos', type: 'text', inputSource: 'user-input', required: false },
 
   // --- COMMON AREA PHOTOS (4 slots with captions) ---
   { id: 'img-common-1', storeId: 'img-common-1', label: 'Common Area 1 - Lobby/Entrance', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-common-1-caption', storeId: 'img-common-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'common-photos', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'img-common-1-caption', storeId: 'img-common-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'common-photos', type: 'text', inputSource: 'user-input', required: false, defaultValue: '1101 - Typical Hallway' },
   { id: 'img-common-2', storeId: 'img-common-2', label: 'Common Area 2 - Hallway/Corridor', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-common-2-caption', storeId: 'img-common-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'common-photos', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'img-common-2-caption', storeId: 'img-common-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'common-photos', type: 'text', inputSource: 'user-input', required: false, defaultValue: '1101 - Typical Stairway' },
   { id: 'img-common-3', storeId: 'img-common-3', label: 'Common Area 3 - Amenity Space', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
   { id: 'img-common-3-caption', storeId: 'img-common-3-caption', label: 'Caption', section: 'image-mgt', subsection: 'common-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-common-4', storeId: 'img-common-4', label: 'Common Area 4 - Additional', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
@@ -139,9 +139,9 @@ export const fieldRegistry: FieldDefinition[] = [
 
   // --- UNIT INTERIOR PHOTOS (6 slots with captions) ---
   { id: 'img-unit-1', storeId: 'img-unit-1', label: 'Unit Interior 1 - Living Room', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-unit-1-caption', storeId: 'img-unit-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'unit-photos', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'img-unit-1-caption', storeId: 'img-unit-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'unit-photos', type: 'text', inputSource: 'user-input', required: false, defaultValue: '1101 - Typical Bedroom 1' },
   { id: 'img-unit-2', storeId: 'img-unit-2', label: 'Unit Interior 2 - Kitchen', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'img-unit-2-caption', storeId: 'img-unit-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'unit-photos', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'img-unit-2-caption', storeId: 'img-unit-2-caption', label: 'Caption', section: 'image-mgt', subsection: 'unit-photos', type: 'text', inputSource: 'user-input', required: false, defaultValue: '1101 - Typical Bedroom 2' },
   { id: 'img-unit-3', storeId: 'img-unit-3', label: 'Unit Interior 3 - Bedroom', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },
   { id: 'img-unit-3-caption', storeId: 'img-unit-3-caption', label: 'Caption', section: 'image-mgt', subsection: 'unit-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-unit-4', storeId: 'img-unit-4', label: 'Unit Interior 4 - Bathroom', section: 'image-mgt', subsection: 'unit-photos', type: 'image', inputSource: 'user-input', required: false },

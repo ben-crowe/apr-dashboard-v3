@@ -84,6 +84,9 @@ export function generateReportHtml(sections: ReportSection[]): string {
   const stories = getFieldValue(execSection, 'stories') || '1';
   const buildingFormat = getFieldValue(execSection, 'building-format') || 'garden style';
   const concludedValue = getFieldValue(execSection, 'concluded-value') || '';
+  const finalValue = concludedValue; // Alias for value conclusion table
+  const exposureTime = getFieldValue(execSection, 'exposure-time') || '';
+  const marketingTime = getFieldValue(execSection, 'marketing-time') || '';
   const hypotheticalConditions = getFieldValue(execSection, 'hypothetical-conditions') || 'No Hypothetical Conditions were made for this assignment.';
   const extraordinaryAssumptions = getFieldValue(execSection, 'extraordinary-assumptions') || 'No Extraordinary Assumptions were made for this assignment.';
   const extraordinaryLimitingConditions = getFieldValue(execSection, 'extraordinary-limiting-conditions') || 'No Extraordinary Limiting Conditions were made for this assignment.';

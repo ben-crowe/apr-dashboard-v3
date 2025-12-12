@@ -7055,7 +7055,7 @@ const formatDate = (dateStr: string): string => {
                     section.id === 'income' ? renderIncomeSection(section) :
                       section.id === 'sales' ? renderSalesSection(section) :
                         section.id === 'impv' ? renderImpvSection(section) :
-                          section.id === 'photos' ? renderPhotosSection(section) :
+                          
                             section.id === 'location' ? renderLocationSection(section) :
                               section.id === 'market' ? renderMarketSection(section) :
                                 section.id === 'calc' ? renderCalcSection(section) :
@@ -7112,6 +7112,30 @@ const formatDate = (dateStr: string): string => {
     </div>
   </div>
   `).join('')}
+
+  <!-- Photographs Section (using image-mgt data) -->
+  ${imageMgtSection ? `
+  <div id="section-photos" class="page exec-page" style="position: relative;">
+    <div class="page-number"></div>
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="${VALTA_LOGO_BASE64}" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>${propertyName || 'Appraisal Report'}</div>
+        <div>${streetAddress ? streetAddress + ', ' : ''}${city || ''}</div>
+      </div>
+    </div>
+
+    ${renderPhotosSection(imageMgtSection)}
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">${fileNumber || ''}</div>
+      <div class="page-footer-right">${appraiserCompany || ''}</div>
+    </div>
+  </div>
+  ` : ''}
+
 
   <!-- Certification Section -->
   <div id="section-cert" class="page exec-page" style="position: relative;">

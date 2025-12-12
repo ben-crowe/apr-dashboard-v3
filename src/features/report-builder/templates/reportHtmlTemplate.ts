@@ -1053,6 +1053,9 @@ export function generateReportHtml(sections: ReportSection[]): string {
       ${reconIntroduction ? `
         <div class="site-narrative-section">
           <p class="site-narrative-text">${reconIntroduction}</p>
+        <p class="site-narrative-text" style="margin-top: 0.5rem;">
+          The Cost Approach has limited applicability due to the age of the improvements and lack of market based data to support an estimate of accrued depreciation. Based on the preceding information, the Cost Approach will not be presented.
+        </p>
         </div>
       ` : ''}
 
@@ -1279,6 +1282,12 @@ export function generateReportHtml(sections: ReportSection[]): string {
       <h3 class="subsection-title">Income Approach Methodology</h3>
       <div class="site-narrative-section">
         <p class="site-narrative-text">${incomeApproachMethodology}</p>
+        <p class="site-narrative-text" style="margin-top: 0.5rem;">
+          In undertaking this approach, we have relied on the Direct Capitalization method only as the Discounted Cash Flow method does not contribute substantially to estimating the market value of the subject property beyond the Direct Capitalization method.
+        </p>
+        <p class="site-narrative-text" style="margin-top: 0.5rem;">
+          The subject property comprises an income generating asset and as such, we consider the inclusion of this approach warranted.
+        </p>
       </div>
 
       <h4 class="site-narrative-label" style="margin-top: 1rem;">Direct Capitalization Method</h4>
@@ -5235,6 +5244,14 @@ export function generateReportHtml(sections: ReportSection[]): string {
           </tr>
         </tbody>
       </table>
+
+      <!-- Property History / Ownership -->
+      <div style="margin-top: 24px;">
+        <h3 style="font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #333; margin-bottom: 12px;">PROPERTY HISTORY</h3>
+        <p style="font-size: 10px; line-height: 1.6; color: #333; margin: 0;">
+          Ownership of the subject property has not changed in the past three years. We are unaware of any pending sales or listing activity relating to the subject property.
+        </p>
+      </div>
     </div>
     `;
   };

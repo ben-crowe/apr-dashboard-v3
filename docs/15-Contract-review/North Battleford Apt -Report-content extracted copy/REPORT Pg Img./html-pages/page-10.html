@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 10 - Introduction & Executive Summary</title>
+    <style>
+        @page {
+            size: 8.5in 11in;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 816px;
+            height: 1056px;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.2;
+        }
+
+        .page-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 36px;
+            position: relative;
+        }
+
+        .header {
+            border-bottom: 2px solid #003d7a;
+            padding-bottom: 8px;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            color: #000000;
+            letter-spacing: 0.5px;
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px 40px;
+            margin-bottom: 40px;
+        }
+
+        .photo-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .photo-placeholder {
+            width: 240px;
+            height: 280px;
+            background-color: #cccccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #999999;
+            margin-bottom: 8px;
+            color: #666666;
+            font-size: 12px;
+            text-align: center;
+            padding: 4px;
+        }
+
+        .photo-label {
+            font-size: 13px;
+            color: #000000;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .footer-left {
+            font-size: 11px;
+            color: #333333;
+        }
+
+        .footer-right {
+            width: 80px;
+            height: 20px;
+            background: linear-gradient(90deg, #003d7a 0%, #0066cc 100%);
+            border-radius: 2px;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 20px;
+            right: 36px;
+            font-size: 11px;
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="header">
+            <h1>Introduction & Executive Summary</h1>
+        </div>
+
+        <div class="content-area">
+            <div class="photo-grid">
+                <!-- Row 1 -->
+                <div class="photo-item">
+                    <div class="photo-placeholder">[PHOTO: 1101 Typical Bathroom]</div>
+                    <div class="photo-label">1101 - Typical Bathroom</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">[PHOTO: 1101 Typical Bedroom 1]</div>
+                    <div class="photo-label">1101 - Typical Bedroom 1</div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="photo-item">
+                    <div class="photo-placeholder">[PHOTO: 1101 Typical Bedroom 2]</div>
+                    <div class="photo-label">1101 - Typical Bedroom 2</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">[PHOTO: 1101 Electrical Room]</div>
+                    <div class="photo-label">1101 - Electrical Room</div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="photo-item">
+                    <div class="photo-placeholder">[PHOTO: 1101 Mechanical Room]</div>
+                    <div class="photo-label">1101 - Mechanical Room</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">[PHOTO: 1101 Typical Kitchen]</div>
+                    <div class="photo-label">1101 - Typical Kitchen</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-left">5&nbsp;&nbsp;&nbsp;&nbsp;1101, 1121 109 St. North Battleford, Saskatchewan | File VAL251012 - 1</div>
+            <div class="footer-right"></div>
+        </div>
+    </div>
+</body>
+</html>

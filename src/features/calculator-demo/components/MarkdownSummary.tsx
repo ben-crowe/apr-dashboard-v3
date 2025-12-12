@@ -1,8 +1,8 @@
 /**
  * Summary Accordions Component
  *
- * Individual collapsible sections for calculation details.
- * Dark theme matching the rest of the calculator interface.
+ * Two-column grid of collapsible sections for calculation details.
+ * Compact tables with auto-width columns. Dark theme.
  */
 
 import { useState } from 'react';
@@ -18,10 +18,10 @@ interface AccordionSectionProps {
 
 function AccordionSection({ title, isOpen, onToggle, children }: AccordionSectionProps) {
   return (
-    <div className="border-b border-[#3a3a3a] last:border-b-0">
+    <div className="bg-[#262626] border border-[#3a3a3a] rounded-sm overflow-hidden">
       <button
         onClick={onToggle}
-        className="w-full px-3 py-2 flex items-center gap-2 hover:bg-[#333] transition-colors text-left"
+        className="w-full px-3 py-2 flex items-center gap-2 hover:bg-[#2e2e2e] transition-colors text-left"
       >
         {isOpen ? (
           <ChevronDown className="w-3.5 h-3.5 text-[#606060] flex-shrink-0" />
@@ -31,7 +31,7 @@ function AccordionSection({ title, isOpen, onToggle, children }: AccordionSectio
         <span className="text-xs font-medium text-[#909090]">{title}</span>
       </button>
       {isOpen && (
-        <div className="px-3 pb-3">
+        <div className="px-3 pb-3 pt-1">
           {children}
         </div>
       )}
@@ -114,212 +114,182 @@ export default function MarkdownSummary() {
   const adjTotal = getFieldValue('calc-adj-total');
   const indicatedValue = getFieldValue('calc-indicated-value');
 
-  // Table styling
-  const tableClass = "w-full text-[11px]";
-  const thClass = "px-2 py-1 text-left text-[#707070] font-normal border-b border-[#3a3a3a]";
-  const tdClass = "px-2 py-1 text-[#909090] border-b border-[#3a3a3a]";
-  const tdValueClass = "px-2 py-1 text-[#e5e5e5] text-right border-b border-[#3a3a3a]";
-  const tdBoldClass = "px-2 py-1 text-[#e5e5e5] font-medium border-b border-[#3a3a3a]";
+  // Compact table styling - auto width, tight spacing
+  const tdLabel = "pr-4 py-0.5 text-[11px] text-[#808080] whitespace-nowrap";
+  const tdValue = "py-0.5 text-[11px] text-[#e5e5e5] text-right whitespace-nowrap";
+  const tdTotal = "pr-4 py-0.5 text-[11px] text-[#e5e5e5] font-medium whitespace-nowrap border-t border-[#3a3a3a]";
+  const tdTotalValue = "py-0.5 text-[11px] text-[#e5e5e5] font-medium text-right whitespace-nowrap border-t border-[#3a3a3a]";
 
   return (
-    <div className="bg-[#232323] rounded-sm">
-      {/* Income Analysis */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      {/* Row 1: Income Analysis | Vacancy & Loss */}
       <AccordionSection
         title="Income Analysis"
         isOpen={openSections.has('income')}
         onToggle={() => toggleSection('income')}
       >
-        <table className={tableClass}>
+        <table className="text-[11px]">
           <tbody>
             <tr>
-              <td className={tdClass}>Total Units</td>
-              <td className={tdValueClass}>{fmtNum(totalUnits)}</td>
+              <td className={tdLabel}>Total Units</td>
+              <td className={tdValue}>{fmtNum(totalUnits)}</td>
             </tr>
             <tr>
-              <td className={tdClass}>Total SF</td>
-              <td className={tdValueClass}>{fmtNum(totalSF)}</td>
+              <td className={tdLabel}>Total SF</td>
+              <td className={tdValue}>{fmtNum(totalSF)}</td>
             </tr>
             <tr>
-              <td className={tdClass}>Rental Revenue</td>
-              <td className={tdValueClass}>{fmt(totalRentalRevenue)}/yr</td>
+              <td className={tdLabel}>Rental Revenue</td>
+              <td className={tdValue}>{fmt(totalRentalRevenue)}/yr</td>
             </tr>
             <tr>
-              <td className={tdClass}>Other Income</td>
-              <td className={tdValueClass}>{fmt(totalOtherIncome)}/yr</td>
+              <td className={tdLabel}>Other Income</td>
+              <td className={tdValue}>{fmt(totalOtherIncome)}/yr</td>
             </tr>
             <tr>
-              <td className={tdBoldClass}>Potential Gross Revenue</td>
-              <td className={`${tdValueClass} font-medium`}>{fmt(pgr)}</td>
+              <td className={tdTotal}>PGR</td>
+              <td className={tdTotalValue}>{fmt(pgr)}</td>
             </tr>
           </tbody>
         </table>
       </AccordionSection>
 
-      {/* Vacancy & Loss */}
       <AccordionSection
         title="Vacancy & Loss"
         isOpen={openSections.has('vacancy')}
         onToggle={() => toggleSection('vacancy')}
       >
-        <table className={tableClass}>
-          <thead>
-            <tr>
-              <th className={thClass}>Type</th>
-              <th className={`${thClass} text-right`}>Rate</th>
-              <th className={`${thClass} text-right`}>Amount</th>
-            </tr>
-          </thead>
+        <table className="text-[11px]">
           <tbody>
             <tr>
-              <td className={tdClass}>Vacancy</td>
-              <td className={tdValueClass}>{vacancyRate.toFixed(2)}%</td>
-              <td className={tdValueClass}>{fmt(pgr * (vacancyRate / 100))}</td>
+              <td className={tdLabel}>Vacancy</td>
+              <td className={tdValue}>{vacancyRate.toFixed(2)}%</td>
+              <td className={tdValue}>{fmt(pgr * (vacancyRate / 100))}</td>
             </tr>
             <tr>
-              <td className={tdClass}>Bad Debt</td>
-              <td className={tdValueClass}>{badDebtRate.toFixed(2)}%</td>
-              <td className={tdValueClass}>{fmt(pgr * (badDebtRate / 100))}</td>
+              <td className={tdLabel}>Bad Debt</td>
+              <td className={tdValue}>{badDebtRate.toFixed(2)}%</td>
+              <td className={tdValue}>{fmt(pgr * (badDebtRate / 100))}</td>
             </tr>
             <tr>
-              <td className={tdClass}>Concessions</td>
-              <td className={tdValueClass}>{concessionsRate.toFixed(2)}%</td>
-              <td className={tdValueClass}>{fmt(pgr * (concessionsRate / 100))}</td>
+              <td className={tdLabel}>Concessions</td>
+              <td className={tdValue}>{concessionsRate.toFixed(2)}%</td>
+              <td className={tdValue}>{fmt(pgr * (concessionsRate / 100))}</td>
             </tr>
             <tr>
-              <td className={tdBoldClass}>Total Loss</td>
-              <td className={`${tdValueClass} font-medium`}>{totalVacancyRate.toFixed(2)}%</td>
-              <td className={`${tdValueClass} font-medium`}>{fmt(vacancyLoss)}</td>
+              <td className={tdTotal}>Total Loss</td>
+              <td className={tdTotalValue}>{totalVacancyRate.toFixed(2)}%</td>
+              <td className={tdTotalValue}>{fmt(vacancyLoss)}</td>
             </tr>
             <tr>
-              <td className={tdBoldClass}>Effective Gross Revenue</td>
-              <td className={tdValueClass}></td>
-              <td className={`${tdValueClass} font-medium`}>{fmt(egr)}</td>
+              <td className={tdTotal}>EGR</td>
+              <td className={tdTotalValue}></td>
+              <td className={tdTotalValue}>{fmt(egr)}</td>
             </tr>
           </tbody>
         </table>
       </AccordionSection>
 
-      {/* Operating Expenses */}
+      {/* Row 2: Operating Expenses | Valuation */}
       <AccordionSection
         title="Operating Expenses"
         isOpen={openSections.has('expenses')}
         onToggle={() => toggleSection('expenses')}
       >
-        <table className={tableClass}>
-          <thead>
-            <tr>
-              <th className={thClass}>Expense</th>
-              <th className={`${thClass} text-right`}>Calculation</th>
-              <th className={`${thClass} text-right`}>Amount</th>
-            </tr>
-          </thead>
+        <table className="text-[11px]">
           <tbody>
             <tr>
-              <td className={tdClass}>Management</td>
-              <td className={tdValueClass}>{expManagement.toFixed(2)}% of EGR</td>
-              <td className={tdValueClass}>{fmt(egr * (expManagement / 100))}</td>
+              <td className={tdLabel}>Management</td>
+              <td className={tdValue}>{expManagement.toFixed(1)}%</td>
+              <td className={tdValue}>{fmt(egr * (expManagement / 100))}</td>
             </tr>
             <tr>
-              <td className={tdClass}>Taxes</td>
-              <td className={tdValueClass}>{fmt(expTaxes)}/unit</td>
-              <td className={tdValueClass}>{fmt(expTaxes * totalUnits)}</td>
+              <td className={tdLabel}>Taxes</td>
+              <td className={tdValue}>${expTaxes}/u</td>
+              <td className={tdValue}>{fmt(expTaxes * totalUnits)}</td>
             </tr>
             <tr>
-              <td className={tdClass}>Insurance</td>
-              <td className={tdValueClass}>{fmt(expInsurance)}/unit</td>
-              <td className={tdValueClass}>{fmt(expInsurance * totalUnits)}</td>
+              <td className={tdLabel}>Insurance</td>
+              <td className={tdValue}>${expInsurance}/u</td>
+              <td className={tdValue}>{fmt(expInsurance * totalUnits)}</td>
             </tr>
             <tr>
-              <td className={tdClass}>Repairs</td>
-              <td className={tdValueClass}>{fmt(expRepairs)}/unit</td>
-              <td className={tdValueClass}>{fmt(expRepairs * totalUnits)}</td>
+              <td className={tdLabel}>Repairs</td>
+              <td className={tdValue}>${expRepairs}/u</td>
+              <td className={tdValue}>{fmt(expRepairs * totalUnits)}</td>
             </tr>
             <tr>
-              <td className={tdClass}>Utilities</td>
-              <td className={tdValueClass}>{fmt(expUtilities)}/unit</td>
-              <td className={tdValueClass}>{fmt(expUtilities * totalUnits)}</td>
+              <td className={tdLabel}>Utilities</td>
+              <td className={tdValue}>${expUtilities}/u</td>
+              <td className={tdValue}>{fmt(expUtilities * totalUnits)}</td>
             </tr>
             <tr>
-              <td className={tdClass}>Payroll</td>
-              <td className={tdValueClass}>{fmt(expPayroll)}/unit</td>
-              <td className={tdValueClass}>{fmt(expPayroll * totalUnits)}</td>
+              <td className={tdLabel}>Payroll</td>
+              <td className={tdValue}>${expPayroll}/u</td>
+              <td className={tdValue}>{fmt(expPayroll * totalUnits)}</td>
             </tr>
             {expAdmin > 0 && (
               <tr>
-                <td className={tdClass}>Admin</td>
-                <td className={tdValueClass}>{fmt(expAdmin)}/unit</td>
-                <td className={tdValueClass}>{fmt(expAdmin * totalUnits)}</td>
+                <td className={tdLabel}>Admin</td>
+                <td className={tdValue}>${expAdmin}/u</td>
+                <td className={tdValue}>{fmt(expAdmin * totalUnits)}</td>
               </tr>
             )}
             {expReserves > 0 && (
               <tr>
-                <td className={tdClass}>Reserves</td>
-                <td className={tdValueClass}>{fmt(expReserves)}/unit</td>
-                <td className={tdValueClass}>{fmt(expReserves * totalUnits)}</td>
+                <td className={tdLabel}>Reserves</td>
+                <td className={tdValue}>${expReserves}/u</td>
+                <td className={tdValue}>{fmt(expReserves * totalUnits)}</td>
               </tr>
             )}
             {expOther > 0 && (
               <tr>
-                <td className={tdClass}>Other</td>
-                <td className={tdValueClass}>{fmt(expOther)}/unit</td>
-                <td className={tdValueClass}>{fmt(expOther * totalUnits)}</td>
+                <td className={tdLabel}>Other</td>
+                <td className={tdValue}>${expOther}/u</td>
+                <td className={tdValue}>{fmt(expOther * totalUnits)}</td>
               </tr>
             )}
             <tr>
-              <td className={tdBoldClass}>Total Expenses</td>
-              <td className={`${tdValueClass} font-medium`}>{expenseRatio.toFixed(1)}% OER</td>
-              <td className={`${tdValueClass} font-medium`}>{fmt(expensesTotal)}</td>
+              <td className={tdTotal}>Total</td>
+              <td className={tdTotalValue}>{expenseRatio.toFixed(1)}%</td>
+              <td className={tdTotalValue}>{fmt(expensesTotal)}</td>
             </tr>
           </tbody>
         </table>
       </AccordionSection>
 
-      {/* Valuation */}
       <AccordionSection
         title="Valuation"
         isOpen={openSections.has('valuation')}
         onToggle={() => toggleSection('valuation')}
       >
-        <table className={tableClass}>
-          <thead>
-            <tr>
-              <th className={thClass}>Step</th>
-              <th className={`${thClass} text-right`}>Calculation</th>
-              <th className={`${thClass} text-right`}>Result</th>
-            </tr>
-          </thead>
+        <table className="text-[11px]">
           <tbody>
             <tr>
-              <td className={tdClass}>NOI</td>
-              <td className={tdValueClass}>EGR - Expenses</td>
-              <td className={tdValueClass}>{fmt(noi)}</td>
+              <td className={tdLabel}>NOI</td>
+              <td className={tdValue}>{fmt(noi)}</td>
             </tr>
             <tr>
-              <td className={tdClass}>Cap Rate</td>
-              <td className={tdValueClass}></td>
-              <td className={tdValueClass}>{capRate.toFixed(2)}%</td>
+              <td className={tdLabel}>Cap Rate</td>
+              <td className={tdValue}>{capRate.toFixed(2)}%</td>
             </tr>
             <tr>
-              <td className={tdClass}>Raw Value</td>
-              <td className={tdValueClass}>NOI ÷ Cap Rate</td>
-              <td className={tdValueClass}>{fmt(rawValue)}</td>
+              <td className={tdLabel}>Raw Value</td>
+              <td className={tdValue}>{fmt(rawValue)}</td>
             </tr>
             <tr>
-              <td className={tdClass}>Rounded</td>
-              <td className={tdValueClass}>to $10,000</td>
-              <td className={tdValueClass}>{fmt(roundedValue)}</td>
+              <td className={tdLabel}>Rounded</td>
+              <td className={tdValue}>{fmt(roundedValue)}</td>
             </tr>
             {adjTotal !== 0 && (
               <tr>
-                <td className={tdClass}>Adjustments</td>
-                <td className={tdValueClass}></td>
-                <td className={tdValueClass}>{fmt(adjTotal)}</td>
+                <td className={tdLabel}>Adjustments</td>
+                <td className={tdValue}>{fmt(adjTotal)}</td>
               </tr>
             )}
             <tr>
-              <td className={tdBoldClass}>Indicated Value</td>
-              <td className={tdValueClass}></td>
-              <td className={`${tdValueClass} font-medium text-[#e5e5e5]`}>{fmt(indicatedValue)}</td>
+              <td className={tdTotal}>Indicated Value</td>
+              <td className={tdTotalValue}>{fmt(indicatedValue)}</td>
             </tr>
           </tbody>
         </table>

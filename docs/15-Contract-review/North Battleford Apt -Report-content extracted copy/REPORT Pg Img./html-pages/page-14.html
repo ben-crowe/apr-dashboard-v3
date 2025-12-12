@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page 14 - Maps</title>
+  <style>
+    @page {
+      size: 8.5in 11in;
+      margin: 0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 816px;
+      height: 1056px;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      background: white;
+      color: #000;
+    }
+
+    .page-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Header Section */
+    .header {
+      padding: 24px 36px 12px 36px;
+      background: white;
+    }
+
+    .header h1 {
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+      margin-bottom: 8px;
+    }
+
+    .header-underline {
+      width: 540px;
+      height: 2px;
+      background: #0066cc;
+      margin-bottom: 4px;
+    }
+
+    /* Maps Section */
+    .maps-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 0 36px 12px 36px;
+    }
+
+    .maps-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #003d99;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .map-container {
+      flex: 1;
+      position: relative;
+      background: #e8e8e8;
+      border: 1px solid #d0d0d0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    .map-grid {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background-image:
+        linear-gradient(0deg, #d0d0d0 1px, transparent 1px),
+        linear-gradient(90deg, #d0d0d0 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: 0 0;
+    }
+
+    /* Street labels */
+    .street-label {
+      position: absolute;
+      font-size: 9px;
+      color: #999;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 1px 3px;
+      border-radius: 2px;
+      white-space: nowrap;
+    }
+
+    /* Markers */
+    .marker {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid white;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    .marker.subject {
+      background: #003d99;
+      left: 50%;
+      top: 42%;
+      transform: translate(-50%, -50%);
+    }
+
+    .marker.hospital {
+      background: #ff6b35;
+      left: 18%;
+      top: 62%;
+      transform: translate(-50%, -50%);
+    }
+
+    .marker-label {
+      position: absolute;
+      font-size: 9px;
+      font-weight: 600;
+      color: #333;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 2px 6px;
+      border-radius: 2px;
+      white-space: nowrap;
+      z-index: 11;
+      border: 1px solid #e0e0e0;
+    }
+
+    .subject-label {
+      left: 50%;
+      top: 38%;
+      transform: translate(-50%, -100%);
+    }
+
+    .hospital-label {
+      left: 18%;
+      top: 58%;
+      transform: translate(-50%, -100%);
+    }
+
+    /* Footer Section */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 36px;
+      border-top: 1px solid #e0e0e0;
+      font-size: 11px;
+      color: #333;
+      background: white;
+    }
+
+    .footer-left {
+      flex: 1;
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .accent-bar {
+      width: 70px;
+      height: 16px;
+      background: linear-gradient(90deg, #0066cc 0%, #003d99 100%);
+    }
+
+    .scale-text {
+      font-size: 10px;
+      color: #666;
+    }
+
+    /* Copyright */
+    .copyright {
+      position: absolute;
+      bottom: 10px;
+      left: 12px;
+      font-size: 8px;
+      color: #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <!-- Header -->
+    <div class="header">
+      <h1>Introduction & Executive Summary</h1>
+      <div class="header-underline"></div>
+    </div>
+
+    <!-- Maps Section -->
+    <div class="maps-section">
+      <div class="maps-title">MAPS</div>
+
+      <div class="map-container">
+        <div class="map-grid">
+          <!-- Horizontal street labels (top) -->
+          <div class="street-label" style="top: 10%; left: 35%;">13th Ave</div>
+          <div class="street-label" style="top: 10%; right: 10%;">13th Ave</div>
+
+          <!-- Horizontal street labels (middle) -->
+          <div class="street-label" style="top: 40%; left: 8%;">12th Ave</div>
+          <div class="street-label" style="top: 40%; left: 50%;">12th Ave</div>
+          <div class="street-label" style="top: 40%; right: 8%;">12th Ave</div>
+
+          <!-- Horizontal street labels (lower) -->
+          <div class="street-label" style="top: 62%; left: 8%;">11th Ave</div>
+          <div class="street-label" style="top: 62%; left: 50%;">11th Ave</div>
+          <div class="street-label" style="top: 62%; right: 8%;">11th Ave</div>
+
+          <!-- Horizontal street labels (bottom) -->
+          <div class="street-label" style="bottom: 15%; left: 8%;">10th Ave</div>
+          <div class="street-label" style="bottom: 15%; left: 50%;">10th Ave</div>
+          <div class="street-label" style="bottom: 15%; right: 8%;">10th Ave</div>
+
+          <!-- Vertical street labels (left to right) -->
+          <div class="street-label" style="left: 8%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">5 St</div>
+          <div class="street-label" style="left: 16%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">Cree Ave</div>
+          <div class="street-label" style="left: 24%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">2 St</div>
+          <div class="street-label" style="left: 32%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">3 St</div>
+          <div class="street-label" style="left: 50%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">4 St</div>
+          <div class="street-label" style="left: 58%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">Main St</div>
+          <div class="street-label" style="left: 66%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">5 St</div>
+          <div class="street-label" style="left: 74%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">6 St</div>
+          <div class="street-label" style="left: 82%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">7 St</div>
+          <div class="street-label" style="right: 8%; top: 20%; writing-mode: vertical-rl; text-orientation: mixed; transform: translateY(-50%) rotate(180deg);">8 St</div>
+
+          <!-- Hospital Marker -->
+          <div class="marker hospital"></div>
+          <div class="marker-label hospital-label">Battlefords<br>Union<br>Hospital</div>
+
+          <!-- Subject Marker -->
+          <div class="marker subject"></div>
+          <div class="marker-label subject-label">Subject</div>
+
+          <!-- Copyright -->
+          <div class="copyright">© 1987-2025 HERE, Canada</div>
+
+          <!-- Scale -->
+          <div style="position: absolute; bottom: 15px; right: 12px; font-size: 10px; color: #666;">100ft</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-left">
+        9 1101, 1121 109 St. North Battleford, Saskatchewan | File VAL251012 - 1
+      </div>
+      <div class="footer-right">
+        <div class="accent-bar"></div>
+        <div class="scale-text">100ft</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

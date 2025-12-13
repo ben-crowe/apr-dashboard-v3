@@ -4710,35 +4710,262 @@ export function renderPage60(sections: ReportSection[], valueScenarioType: strin
 }
 
 /**
- * Page 61: Valuation & Conclusions - Comparable 1 (Woodland Estates)
- * Fields: 39 fields for comparable-1 including title, property-name, buyer, seller, sale-date,
- * transaction-status, sale-price, financing, occupancy, NOI, cap-rate, address, property details, etc.
+ * Page 61: Valuation & Conclusions - Comparable 3 (Woodland Estates)
+ * Fields: comp3-buyer, comp3-seller, comp3-sale-date, comp3-sale-price, comp3-noi, comp3-cap-rate,
+ * comp3-address, comp3-property-type, comp3-gba, comp3-nra, comp3-units, comp3-buildings, comp3-year-built,
+ * comp3-land-area, comp3-amenities, comp3-security, comp3-laundry, comp3-unit-amenities, comp3-parking-type,
+ * comp3-utilities, comp3-unit-mix, comp3-photo, comp3-map, comp3-remarks
  */
 export function renderPage61(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 61 - Comparable 1 (Woodland Estates)
-  // 39 fields total for comparable-1
-
   return `
-    <div class="page page-61">
-      <h1>Page 61: Comparable 1 (Woodland Estates)</h1>
-      <p>TODO: Implement comparable 1 full template</p>
+    <div class="page page-61" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; width: 816px; height: 1056px; padding: 40px; background: white; color: #333; position: relative;">
+      <style>
+        .page-61 .page-header { border-bottom: 3px solid #0066cc; padding-bottom: 8px; margin-bottom: 16px; }
+        .page-61 .page-title { font-size: 18px; font-weight: bold; color: #333; }
+        .page-61 .comparable-label { font-size: 10px; color: #666; margin-top: 2px; }
+        .page-61 .section-subheading { font-size: 13px; font-weight: bold; margin-top: 12px; margin-bottom: 8px; color: #333; }
+        .page-61 .content-wrapper { display: flex; gap: 16px; margin-bottom: 20px; }
+        .page-61 .left-column { flex: 1; }
+        .page-61 .right-column { width: 280px; }
+        .page-61 .info-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+        .page-61 .info-table td { padding: 4px 0; border-bottom: 1px solid #ddd; }
+        .page-61 .info-table td:first-child { font-weight: 600; width: 45%; padding-right: 12px; }
+        .page-61 .info-table td:last-child { text-align: right; padding-left: 8px; }
+        .page-61 .section-divider { border-top: 1px solid #0066cc; margin: 12px 0; padding-top: 8px; }
+        .page-61 .image-placeholder { width: 100%; background-color: #ccc; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; color: #666; font-size: 11px; margin-bottom: 12px; }
+        .page-61 .building-photo { height: 200px; }
+        .page-61 .location-map { height: 140px; }
+        .page-61 .unit-mix-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+        .page-61 .unit-mix-table th { background-color: #f0f0f0; font-weight: bold; padding: 6px 4px; text-align: left; border-bottom: 1px solid #999; font-size: 10px; }
+        .page-61 .unit-mix-table td { padding: 4px; border-bottom: 1px solid #ddd; font-size: 10px; }
+        .page-61 .footer { position: absolute; bottom: 20px; left: 0; right: 0; padding: 0 40px; font-size: 9px; color: #999; display: flex; justify-content: space-between; align-items: center; }
+        .page-61 .footer-right { width: 60px; height: 40px; background-color: #0066cc; }
+      </style>
+
+      <div class="page-header">
+        <div class="page-title">Valuation & Conclusions</div>
+        <div class="comparable-label">Woodland Estates<br>Comparable 3</div>
+      </div>
+
+      <div class="content-wrapper">
+        <div class="left-column">
+          <!-- Sale Information Section -->
+          <div class="section-subheading">Sale Information</div>
+          <table class="info-table">
+            <tr><td>Buyer</td><td>Epiphany Group</td></tr>
+            <tr><td>Seller</td><td>Macro Properties Toronto</td></tr>
+            <tr><td>Sale Date</td><td>2024-06-17</td></tr>
+            <tr><td>Transaction Status</td><td>Closed</td></tr>
+            <tr><td>Sale Price</td><td>$2,055,056</td></tr>
+            <tr><td>Price / Unit</td><td>$85,627 / Unit</td></tr>
+            <tr><td>Analysis Price</td><td>$2,055,056</td></tr>
+            <tr><td>Analysis Price / Unit</td><td>$85,627 / Unit</td></tr>
+            <tr><td>Fee Sample</td><td></td></tr>
+            <tr><td>Financing</td><td>Cash to Seller</td></tr>
+            <tr><td>Conditions of Sale</td><td>Arm's Length</td></tr>
+          </table>
+
+          <div class="section-divider"></div>
+
+          <!-- Income Analysis Section -->
+          <div class="section-subheading">Income Analysis</div>
+          <table class="info-table">
+            <tr><td>Occupancy</td><td>100.0%</td></tr>
+            <tr><td>Net Operating Income</td><td>$123,087.85</td></tr>
+            <tr><td>NOI / Unit</td><td>$5,129.08 / Unit</td></tr>
+            <tr><td>Cap Rate</td><td>5.98%</td></tr>
+          </table>
+
+          <div class="section-divider"></div>
+
+          <!-- Property Section -->
+          <div class="section-subheading">Property</div>
+          <table class="info-table">
+            <tr><td>Address</td><td>1801 Pearson Ave<br>North Battleford, SK 58A 3L5</td></tr>
+            <tr><td>Property Type</td><td>Multi-family, Walk-Up</td></tr>
+            <tr><td>Rent Type</td><td>Market</td></tr>
+            <tr><td>Gross Building Area (GBA)</td><td>15,000 SF</td></tr>
+            <tr><td>Net Rentable Area (NRA)</td><td>15,000 SF</td></tr>
+            <tr><td>Units</td><td>24</td></tr>
+            <tr><td>Buildings</td><td>2 Buildings, 3 Floors</td></tr>
+            <tr><td>Year Built</td><td>1980</td></tr>
+            <tr><td>Land Area</td><td>1.932 Acres (51,977 SF)</td></tr>
+            <tr><td>Corner</td><td>Yes</td></tr>
+            <tr><td>Project Amenities</td><td>No</td></tr>
+            <tr><td>Security Features</td><td>Deadbolts, Exterior Lighting, Secured Entry</td></tr>
+            <tr><td>Laundry</td><td>On Site</td></tr>
+            <tr><td>Unit Amenities</td><td>Air Conditioning, Range/Stove</td></tr>
+            <tr><td>Parking Type</td><td>Surface</td></tr>
+            <tr><td>Utilities</td><td>Full Municipal Services</td></tr>
+          </table>
+
+          <!-- Unit Mix Table -->
+          <div class="section-subheading">Unit Mix</div>
+          <table class="unit-mix-table">
+            <thead>
+              <tr><th>Unit Type</th><th>Units</th><th>Avg. Size</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1 Bed / 1 Bath</td><td>24</td><td>0 SF</td></tr>
+            </tbody>
+          </table>
+
+          <!-- Market Notes -->
+          <div style="margin-top: 16px; font-size: 10px; line-height: 1.5; color: #666;">
+            <strong>Market Notes:</strong> Macro Properties Toronto said this 143-unit portfolio to Epiphany Group for $37,902,000 in April 2024. The buyer was drawn to purchasing these properties to diversify and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,309, yielding a 5.98% cap rate.
+          </div>
+        </div>
+
+        <div class="right-column">
+          <!-- Building Photo Placeholder -->
+          <div class="image-placeholder building-photo">Building Photo<br>(280px × 200px)</div>
+
+          <!-- Location Map Placeholder -->
+          <div class="image-placeholder location-map">Location Map<br>(280px × 140px)</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <span>56&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }
 
 /**
  * Page 62: Valuation & Conclusions - Comparable 4 (Parkside Flats 1)
- * Fields: 42 fields for comparable-4 including title, property-name, buyer, seller, sale details,
- * financial metrics, property characteristics, unit mix, etc.
+ * Fields: comp4-buyer, comp4-seller, comp4-sale-date, comp4-sale-price, comp4-recording-number,
+ * comp4-rights-transferred, comp4-financing, comp4-conditions, comp4-occupancy, comp4-expenses,
+ * comp4-noi, comp4-cap-rate, comp4-property-type, comp4-gba, comp4-nra, comp4-units, comp4-buildings,
+ * comp4-year-built, comp4-land-area, comp4-amenities, comp4-security, comp4-laundry, comp4-unit-amenities,
+ * comp4-parking-type, comp4-utilities, comp4-unit-mix, comp4-photo, comp4-map, comp4-remarks
  */
 export function renderPage62(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 62 - Comparable 4 (Parkside Flats 1)
-  // 42 fields total for comparable-4
-
   return `
-    <div class="page page-62">
-      <h1>Page 62: Comparable 4 (Parkside Flats 1)</h1>
-      <p>TODO: Implement comparable 4 template</p>
+    <div class="page page-62" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; background: #ffffff; color: #333; line-height: 1.5; width: 816px; height: 1056px; margin: 0 auto; padding: 20px;">
+      <style>
+        .page-62 .page-container { width: 100%; height: 100%; display: flex; flex-direction: column; }
+        .page-62 .header { border-bottom: 2px solid #0066cc; padding-bottom: 10px; margin-bottom: 15px; }
+        .page-62 .header h1 { font-size: 18px; font-weight: bold; color: #000; margin: 0; }
+        .page-62 .header h2 { font-size: 14px; color: #333; margin-top: 5px; font-weight: normal; }
+        .page-62 .subtitle { font-size: 11px; color: #666; margin-top: 2px; }
+        .page-62 .content { display: flex; gap: 20px; flex: 1; }
+        .page-62 .left-column { flex: 1; }
+        .page-62 .right-column { width: 280px; display: flex; flex-direction: column; gap: 15px; }
+        .page-62 .section { margin-bottom: 20px; }
+        .page-62 .section-title { font-size: 12px; font-weight: bold; color: #000; border-bottom: 1px solid #000; padding-bottom: 5px; margin-bottom: 10px; }
+        .page-62 table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 10px; }
+        .page-62 table tr { border-bottom: 1px solid #e0e0e0; }
+        .page-62 table td { padding: 5px 8px; vertical-align: top; }
+        .page-62 table td:first-child { width: 60%; font-weight: 500; color: #333; }
+        .page-62 table td:last-child { text-align: right; color: #333; }
+        .page-62 .value-negative { color: #cc0000; }
+        .page-62 .photo-placeholder { width: 100%; height: 180px; background-color: #cccccc; border: 2px dashed #999999; display: flex; align-items: center; justify-content: center; color: #666; font-size: 12px; text-align: center; margin-bottom: 10px; }
+        .page-62 .map-placeholder { width: 100%; height: 140px; background-color: #cccccc; border: 2px dashed #999999; display: flex; align-items: center; justify-content: center; color: #666; font-size: 12px; text-align: center; }
+        .page-62 .remarks { font-size: 10px; line-height: 1.4; color: #333; }
+        .page-62 .remarks-title { font-size: 12px; font-weight: bold; margin-bottom: 8px; border-bottom: 1px solid #000; padding-bottom: 5px; }
+        .page-62 .footer { margin-top: auto; padding-top: 20px; border-top: 2px solid #0066cc; font-size: 10px; color: #666; display: flex; justify-content: space-between; align-items: center; }
+      </style>
+
+      <div class="page-container">
+        <div class="header">
+          <h1>Valuation & Conclusions</h1>
+          <h2>Parkside Flats 1</h2>
+          <div class="subtitle">Comparable 4</div>
+        </div>
+
+        <div class="content">
+          <div class="left-column">
+            <!-- Sale Information Section -->
+            <div class="section">
+              <div class="section-title">Sale Information</div>
+              <table>
+                <tr><td>Buyer</td><td>600342 Ontario Inc.</td></tr>
+                <tr><td>Seller</td><td>10300036 Saskatchewan Ltd</td></tr>
+                <tr><td>Sale Date</td><td>2023-05-19</td></tr>
+                <tr><td>Transaction Status</td><td>Closed</td></tr>
+                <tr><td>Sale Price</td><td>$9,310,000</td></tr>
+                <tr><td></td><td>$198,085 /Unit</td></tr>
+                <tr><td>Analysis Price</td><td>$9,310,000</td></tr>
+                <tr><td></td><td>$198,085 /Unit</td></tr>
+                <tr><td>Recording Number</td><td>156849444</td></tr>
+                <tr><td>Rights Transferred</td><td>Fee Simple</td></tr>
+                <tr><td>Financing</td><td>Cash to Seller</td></tr>
+                <tr><td>Arm's Length</td><td>Arm's Length</td></tr>
+              </table>
+            </div>
+
+            <!-- Income Analysis Section -->
+            <div class="section">
+              <div class="section-title">Income Analysis</div>
+              <table>
+                <tr><td>Occupancy</td><td>100.0%</td></tr>
+                <tr><td>Expenses</td><td class="value-negative">($255,062)</td></tr>
+                <tr><td></td><td>($5,001.32) /Unit</td></tr>
+                <tr><td>Net Operating Income</td><td>$381,076</td></tr>
+                <tr><td></td><td>$2,365.49 /Unit</td></tr>
+                <tr><td>Cap Rate</td><td>6.24%</td></tr>
+              </table>
+            </div>
+
+            <!-- Property Section -->
+            <div class="section">
+              <div class="section-title">Property</div>
+              <table>
+                <tr><td>Type</td><td>Multi-family, Low-Rise</td></tr>
+                <tr><td>Year Type</td><td>Market</td></tr>
+                <tr><td>Gross Building Area (GBA)</td><td>47,816 SF</td></tr>
+                <tr><td>Net Rentable Area (NRA)</td><td>47,816 SF</td></tr>
+                <tr><td>Units</td><td>47</td></tr>
+                <tr><td>Buildings</td><td>1 Building</td></tr>
+                <tr><td>Year Built</td><td>2008</td></tr>
+                <tr><td>Lot Size</td><td>2.41 Acres (47,386 SF)</td></tr>
+                <tr><td>Land Area</td><td>8.3 Acres (6,386 SF)</td></tr>
+                <tr><td>Project Amenities</td><td>Elevators, Cured Parking, Storage Units</td></tr>
+                <tr><td>Security Features</td><td>Cameras, Detections Lighting, Secured Entry</td></tr>
+                <tr><td>Flooring</td><td>Laminate, Deck/Patio, Premium Appliances</td></tr>
+                <tr><td>Laundry</td><td>Washer/Dryer</td></tr>
+                <tr><td>Unit Amenities</td><td>Balcony/Patio, Air Conditioning, Ceiling Fans, Premium Flooring, Walk-in Closets</td></tr>
+                <tr><td>Parking Type</td><td>Surface</td></tr>
+                <tr><td>Utilities</td><td>Full Municipal Services</td></tr>
+              </table>
+            </div>
+
+            <!-- Unit Mix Section -->
+            <div class="section">
+              <div class="section-title">Unit Mix</div>
+              <table>
+                <tr><td></td><td>Units</td><td>Avg. Size</td></tr>
+                <tr><td>1 Bed / 0 Bath</td><td style="text-align: center;">11</td><td>0 SF</td></tr>
+                <tr><td>2 Bed / 0 Bath</td><td style="text-align: center;">36</td><td>0 SF</td></tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="right-column">
+            <!-- Building Photo -->
+            <div class="photo-placeholder">Building Photo</div>
+
+            <!-- Map -->
+            <div class="map-placeholder">Google Map Location<br>1000 Parr Hill Dr<br>Martensville, SK</div>
+
+            <!-- Remarks Section -->
+            <div class="section" style="flex: 1;">
+              <div class="remarks-title">Remarks</div>
+              <div class="remarks">
+                <p style="margin-bottom: 8px;">Parkside Flats, a 47 unit multifamily property located at 1000 Parr Hill Drive in Martensville, Saskatchewan, sold on May 19, 2023, for $9,310,000 or $198,085 per unit. The property on 10300036 Saskatchewan Ltd. for $9,310,000. Constructed in 2008, Parkside Flats is a wood-frame apartment building that offers modern finishes, in-suite laundry, and access to surface parking.</p>
+                <p>Parkside Flats generated an estimated net operating income of $381,076 in the larger portfolio associated that included two additional apartment buildings.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <span>${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+          <span>57</span>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -4749,13 +4976,116 @@ export function renderPage62(sections: ReportSection[], valueScenarioType: strin
  * property characteristics, unit mix breakdown, analysis text, etc.
  */
 export function renderPage63(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 63 - Comparable 1 (Parkside Flats 2)
-  // 45 fields total for comparable-1b
-
   return `
-    <div class="page page-63">
-      <h1>Page 63: Comparable 1 (Parkside Flats 2)</h1>
-      <p>TODO: Implement comparable 1b template</p>
+    <div class="page page-63" style="font-family: Arial, sans-serif; font-size: 10pt; line-height: 1.4; color: #333; width: 816px; height: 1056px; padding: 48px; background: white; position: relative;">
+      <style>
+        .page-63 .section-title { font-size: 16pt; font-weight: bold; border-bottom: 2px solid #004B87; padding-bottom: 4px; margin-bottom: 12px; margin-top: 0; }
+        .page-63 .subsection-title { font-size: 11pt; font-weight: bold; margin-top: 10px; margin-bottom: 6px; color: #000; }
+        .page-63 .content-wrapper { display: flex; gap: 16px; margin-bottom: 12px; }
+        .page-63 .left-column { flex: 1; }
+        .page-63 .right-column { width: 280px; display: flex; flex-direction: column; gap: 12px; }
+        .page-63 .image-placeholder { background-color: #ccc; border: 1px dashed #999; display: flex; align-items: center; justify-content: center; color: #666; font-size: 9pt; text-align: center; padding: 8px; }
+        .page-63 .building-image { width: 100%; height: 140px; }
+        .page-63 .map-image { width: 100%; height: 120px; }
+        .page-63 table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 9.5pt; }
+        .page-63 table td { padding: 4px; border-bottom: 1px solid #ddd; }
+        .page-63 table td:first-child { width: 55%; font-weight: normal; }
+        .page-63 table td:last-child { width: 45%; text-align: right; }
+        .page-63 .table-value { color: #333; }
+        .page-63 .negative { color: #d9534f; }
+        .page-63 .unit-mix-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 9pt; }
+        .page-63 .unit-mix-table th { background-color: #f5f5f5; padding: 4px; text-align: left; border: 1px solid #ddd; font-weight: bold; }
+        .page-63 .unit-mix-table td { padding: 4px; border: 1px solid #ddd; }
+        .page-63 .unit-mix-table td:nth-child(2), .page-63 .unit-mix-table td:nth-child(3) { text-align: center; }
+        .page-63 .remarks { font-size: 9pt; line-height: 1.5; margin-top: 8px; text-align: justify; }
+        .page-63 .analysis-section { margin-top: 16px; }
+        .page-63 .section-text { font-size: 9.5pt; line-height: 1.5; margin-bottom: 8px; text-align: justify; }
+        .page-63 .footer { position: absolute; bottom: 48px; left: 48px; right: 48px; font-size: 8pt; color: #666; border-top: 1px solid #ddd; padding-top: 8px; }
+      </style>
+
+      <!-- Main Title -->
+      <h1 class="section-title">Valuation & Conclusions</h1>
+
+      <!-- Parkside Flats 2 Section -->
+      <div style="margin-bottom: 12px;">
+        <h2 style="font-size: 12pt; font-weight: bold; margin-bottom: 4px;">${getFieldValue(sections, 'comparable-1b-property-name') || 'Parkside Flats 2'}</h2>
+        <p style="font-size: 9pt; color: #666; margin-bottom: 8px;">Comparable 1</p>
+      </div>
+
+      <!-- Content with sidebar -->
+      <div class="content-wrapper">
+        <!-- Left Column -->
+        <div class="left-column">
+          <!-- Sale Information -->
+          <div class="subsection-title">Sale Information</div>
+          <table>
+            <tr><td>BUYER</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-buyer') || '600342 Ontario Inc.'}</td></tr>
+            <tr><td>Seller</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-seller') || '10300036 Saskatchewan Ltd'}</td></tr>
+            <tr><td>Sale Date</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-sale-date') || '2023-05-19'}</td></tr>
+            <tr><td>Transaction Status</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-transaction-status') || 'Closed'}</td></tr>
+            <tr><td>Sale Price</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-sale-price') || '$13,720,000'}</td></tr>
+            <tr><td>Adjusted Price</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-adjusted-price-per-unit') || '$204,375 /Unit'}</td></tr>
+            <tr><td>Analysis Price</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-analysis-price') || '$13,720,000'}</td></tr>
+            <tr><td>Recording Number</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-recording-number') || '156488432'}</td></tr>
+            <tr><td>Rights Transferred</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-rights-transferred') || 'Fee Simple'}</td></tr>
+            <tr><td>Financing</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-financing') || 'Cash to Seller'}</td></tr>
+            <tr><td>Arm's Length</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-arms-length') || "Arm's Length"}</td></tr>
+          </table>
+
+          <!-- Income Analysis -->
+          <div class="subsection-title">Income Analysis</div>
+          <table>
+            <tr><td>Occupancy</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-occupancy') || '100.0%'}</td></tr>
+            <tr><td>Expenses</td><td class="table-value"><span class="negative">${getFieldValue(sections, 'comparable-1b-expenses') || '($322.70)'}</span></td></tr>
+            <tr><td>Net Operating Income</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-noi') || '$811,585'}</td></tr>
+            <tr><td>Cap Rate</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-cap-rate') || '5.92%'}</td></tr>
+          </table>
+
+          <!-- Property -->
+          <div class="subsection-title">Property</div>
+          <table>
+            <tr><td>Property Type</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-property-type') || 'Multi-Family, Low-Rise'}</td></tr>
+            <tr><td>Rent Type</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-rent-type') || 'Market'}</td></tr>
+            <tr><td>Gross Building Area (GBA)</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-gba') || '52,708 SF'}</td></tr>
+            <tr><td>Units</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-units') || '64'}</td></tr>
+            <tr><td>Year Built</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-year-built') || '2009'}</td></tr>
+            <tr><td>Land Area</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-land-area') || '1.21 Acres'}</td></tr>
+            <tr><td>Construction Type</td><td class="table-value">${getFieldValue(sections, 'comparable-1b-construction-type') || 'Concrete'}</td></tr>
+          </table>
+
+          <!-- Unit Mix Table -->
+          <div class="subsection-title">Unit Mix</div>
+          <table class="unit-mix-table">
+            <thead><tr><th>Flat</th><th>Units</th><th>Avg. Size</th></tr></thead>
+            <tbody>
+              <tr><td>1 Bed / 0 Bath</td><td>20</td><td>0 SF</td></tr>
+              <tr><td>2 Bed / 0 Bath</td><td>29</td><td>0 SF</td></tr>
+              <tr><td>3 Bed / 0 Bath</td><td>15</td><td>0 SF</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Right Column -->
+        <div class="right-column">
+          <div class="image-placeholder building-image">No photo available</div>
+          <div style="font-size: 9pt; line-height: 1.4;">
+            <p style="margin-bottom: 6px; font-weight: bold;">${getFieldValue(sections, 'comparable-1b-address') || '1030 Parr Hill Dr'}<br>${getFieldValue(sections, 'comparable-1b-city-prov-postal') || 'Martinsville, SK 50K 2T1'}</p>
+          </div>
+          <div class="image-placeholder map-image">Google Map<br>Map data 2025 Google</div>
+          <div class="remarks">
+            <p><strong>Remarks</strong></p>
+            <p>${getFieldValue(sections, 'comparable-1b-remarks') || 'Parkside Flats 2, a 64-unit multifamily property located at 1030 Parr Hill Drive in Martinsville, SK sold on May 19, 2023 for $13.72 million.'}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analysis of Comparable Sales Section -->
+      <div class="analysis-section">
+        <h2 class="section-title">Analysis of Comparable Sales</h2>
+        <p class="section-text">${getFieldValue(sections, 'analysis-of-comparable-sales-text') || 'The comparable sales indicate an overall unadjusted unit value range from $85,627/Unit to $214,375/Unit, and an average of $145,999/Unit. After adjustments, the comparables indicate a narrower range for the subject property from $111,914/Unit to $118,100/Unit, and $115,981/Unit on average. The adjustment process is summarized below.'}</p>
+      </div>
+
+      <div class="footer">58   1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012-1</div>
     </div>
   `;
 }
@@ -4766,13 +5096,250 @@ export function renderPage63(sections: ReportSection[], valueScenarioType: strin
  * physical info, adjustments arrays, etc.
  */
 export function renderPage64(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 64 - Direct Comparison Table
-  // 37 fields total including comparison grid data
-
   return `
-    <div class="page page-64">
-      <h1>Page 64: Direct Comparison Table</h1>
-      <p>TODO: Implement comparison table template</p>
+    <div class="page page-64" style="font-family: 'Calibri', 'Segoe UI', sans-serif; font-size: 11px; line-height: 1.3; color: #333; width: 816px; height: 1056px; padding: 48px; background: white; position: relative;">
+      <style>
+        .page-64 h1 { font-size: 16px; font-weight: bold; color: #1a1a1a; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid #003366; }
+        .page-64 .section-title { background-color: #003366; color: white; font-weight: bold; font-size: 11px; padding: 6px 8px; margin-top: 10px; margin-bottom: 6px; text-align: center; }
+        .page-64 table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10px; }
+        .page-64 th { background-color: #e6e6e6; border: 1px solid #999; padding: 4px 6px; text-align: left; font-weight: bold; font-size: 10px; }
+        .page-64 td { border: 1px solid #ccc; padding: 4px 6px; text-align: left; vertical-align: top; }
+        .page-64 tr:nth-child(even) { background-color: #f9f9f9; }
+        .page-64 .numeric { text-align: right; font-family: 'Courier New', monospace; }
+        .page-64 .section-subheader { background-color: #4d7a99; color: white; font-weight: bold; font-size: 10px; padding: 4px 6px; }
+        .page-64 .adjust-positive { color: green; }
+        .page-64 .adjust-negative { color: red; }
+        .page-64 .footer { position: absolute; bottom: 48px; left: 48px; right: 48px; padding-top: 10px; border-top: 1px solid #ccc; font-size: 9px; color: #666; text-align: center; }
+      </style>
+
+      <h1>Valuation & Conclusions</h1>
+
+      <!-- DIRECT COMPARISON APPROACH TABLE -->
+      <div class="section-title">DIRECT COMPARISON APPROACH TABLE</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Items</th>
+            <th>SUBJECT</th>
+            <th>COMP 1</th>
+            <th>COMP 2</th>
+            <th>COMP 3</th>
+            <th>COMP 4</th>
+            <th>COMP 5</th>
+            <th>COMP 6</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Address</td>
+            <td>${getFieldValue(sections, 'subject-address') || '1101, 1121 109 St, North Battleford, SK'}</td>
+            <td>Non-Saturated</td>
+            <td>Market</td>
+            <td>Non-Saturated</td>
+            <td>Market</td>
+            <td>Non-Saturated</td>
+            <td>Market</td>
+          </tr>
+          <tr>
+            <td>Zone/ Market</td>
+            <td>Urban</td>
+            <td>Urban Saturated</td>
+            <td>Urban Saturated</td>
+            <td>Urban Saturated</td>
+            <td>Urban Saturated</td>
+            <td>Urban</td>
+            <td>Urban</td>
+          </tr>
+          <tr>
+            <td>Distance</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>SK</td>
+            <td>SK</td>
+          </tr>
+          <tr>
+            <td>Province</td>
+            <td>SK</td>
+            <td>Non-Saturated</td>
+            <td>SK</td>
+            <td>Non-Saturated</td>
+            <td>SK</td>
+            <td>Non-Saturated</td>
+            <td>SK</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- SALE INFORMATION -->
+      <div class="section-title">SALE INFORMATION</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Transaction Price</th>
+            <th class="numeric">$1,173,300</th>
+            <th class="numeric">$892,300</th>
+            <th class="numeric">$1,108,200</th>
+            <th class="numeric">$1,301,200</th>
+            <th class="numeric">$950,000</th>
+            <th class="numeric">$1,242,500</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Price per Unit (3)</td>
+            <td class="numeric">$391,100</td>
+            <td class="numeric">$297,433</td>
+            <td class="numeric">$369,400</td>
+            <td class="numeric">$433,733</td>
+            <td class="numeric">$316,667</td>
+            <td class="numeric">$414,167</td>
+          </tr>
+          <tr>
+            <td>DOM</td>
+            <td>Cash + Owner</td>
+            <td>Cash + Owner</td>
+            <td>Bank Financed</td>
+            <td>Bank Financed</td>
+            <td>Bank + Owner</td>
+            <td>Cash + Owner</td>
+          </tr>
+          <tr>
+            <td>Conditions</td>
+            <td>None-Saturated</td>
+            <td>None-Saturated</td>
+            <td>Bank Financed</td>
+            <td>Bank Financed</td>
+            <td>Bank + Owner</td>
+            <td>None-Saturated</td>
+          </tr>
+          <tr>
+            <td>Concessions/ After Sale</td>
+            <td>$0</td>
+            <td>$0</td>
+            <td>$0</td>
+            <td>$0</td>
+            <td>$0</td>
+            <td>$0</td>
+          </tr>
+          <tr>
+            <td>Adjusted Price</td>
+            <td class="numeric">$1,173,300</td>
+            <td class="numeric">2024-06-07</td>
+            <td class="numeric">2024-09-15</td>
+            <td class="numeric">2024-05-09</td>
+            <td class="numeric">2023-08-14</td>
+            <td class="numeric">2024-07-20</td>
+          </tr>
+          <tr>
+            <td>Total Transaction Adjustments</td>
+            <td class="numeric">0%</td>
+            <td class="numeric">0%</td>
+            <td class="numeric">0%</td>
+            <td class="numeric">2%</td>
+            <td class="numeric">0%</td>
+            <td class="numeric">0%</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- PHYSICAL INFORMATION -->
+      <div class="section-title">PHYSICAL INFORMATION</div>
+      <table>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th>SUBJECT</th>
+            <th>COMP 1</th>
+            <th>COMP 2</th>
+            <th>COMP 3</th>
+            <th>COMP 4</th>
+            <th>COMP 5</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>No. of Units</td>
+            <td class="numeric">3</td>
+            <td class="numeric">3</td>
+            <td class="numeric">3</td>
+            <td class="numeric">3</td>
+            <td class="numeric">3</td>
+            <td class="numeric">3</td>
+          </tr>
+          <tr>
+            <td>Year Built/ Renovated</td>
+            <td class="numeric">1970 (2011)*</td>
+            <td class="numeric">2000</td>
+            <td class="numeric">2000</td>
+            <td class="numeric">1989</td>
+            <td class="numeric">2019</td>
+            <td class="numeric">2019</td>
+          </tr>
+          <tr>
+            <td>Condition</td>
+            <td>Average</td>
+            <td>Average</td>
+            <td>Average</td>
+            <td>Average</td>
+            <td>Average</td>
+            <td>Average</td>
+          </tr>
+          <tr>
+            <td>Exterior</td>
+            <td>Average</td>
+            <td>Average</td>
+            <td>Average</td>
+            <td>Average</td>
+            <td>Average</td>
+            <td>Average</td>
+          </tr>
+          <tr>
+            <td>Parking Type</td>
+            <td>Guest Parking</td>
+            <td>Guest Parking</td>
+            <td>No Amenities</td>
+            <td>Guest Parking</td>
+            <td>Parking/Garage</td>
+            <td>Parking/Garage</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- UNIT AMENITIES -->
+      <div class="section-title">UNIT AMENITIES</div>
+      <table>
+        <tbody>
+          <tr>
+            <td><strong>Unit Amenities</strong></td>
+            <td>Stove, Fridge, Counter, Sink</td>
+            <td>Air Conditioning, Furnishings</td>
+            <td>Dishwasher, Facilities</td>
+            <td>Air Conditioning, Furnished</td>
+            <td>Air Conditioning, Laundry</td>
+          </tr>
+          <tr>
+            <td><strong>Total Physical Adjustments</strong></td>
+            <td class="numeric">-$17,208 (0%)</td>
+            <td class="numeric">$14,608</td>
+            <td class="numeric">-$37,502 (30%)</td>
+            <td class="numeric">-$86,377 (41%)</td>
+            <td class="numeric">-$86,276 (16%)</td>
+          </tr>
+          <tr>
+            <td><strong>Adjusted Value</strong></td>
+            <td class="numeric">$1,155,605</td>
+            <td class="numeric">$115,814</td>
+            <td class="numeric">$116,189</td>
+            <td class="numeric">$111,954</td>
+            <td class="numeric">$216,160</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="footer">59 | 1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</div>
     </div>
   `;
 }
@@ -4783,13 +5350,37 @@ export function renderPage64(sections: ReportSection[], valueScenarioType: strin
  * unadjusted-adjusted-price-chart
  */
 export function renderPage65(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 65 - Sales Comparison Analysis
-  // Fields: titles, 4 analysis paragraphs, price chart
-
   return `
-    <div class="page page-65">
-      <h1>Page 65: Sales Comparison Analysis</h1>
-      <p>TODO: Implement sales comparison template</p>
+    <div class="page page-65" style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; width: 816px; height: 1056px; padding: 48px; background: white; position: relative;">
+      <style>
+        .page-65 h1 { font-size: 16px; font-weight: bold; border-bottom: 2px solid #003366; padding-bottom: 8px; margin-bottom: 16px; color: #000; }
+        .page-65 h2 { font-size: 13px; font-weight: bold; color: #003366; margin-top: 16px; margin-bottom: 12px; }
+        .page-65 p { font-size: 11px; margin-bottom: 12px; text-align: justify; line-height: 1.5; }
+        .page-65 .chart-container { width: 100%; height: 280px; background-color: #ccc; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; margin: 20px 0; color: #666; font-size: 12px; font-weight: bold; }
+        .page-65 .footer { position: absolute; bottom: 48px; left: 48px; right: 48px; font-size: 9px; color: #666; padding-top: 12px; border-top: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
+        .page-65 .footer-right { width: 80px; height: 30px; background: linear-gradient(to right, #1a5a96 50%, #003366 50%); }
+      </style>
+
+      <h1>Valuation & Conclusions</h1>
+
+      <h2>Sales Comparison Approach Analysis</h2>
+
+      <p>${getFieldValue(sections, 'sales-comparison-analysis-para-1') || "In our opinion, a buyer's criteria for the purchase of properties such as the subject are predicated primarily on the property's income and the building characteristics. Thus, we have identified a relationship between the net operating income and the sales price of the subject and the comparables. The income analysis accounts for differences between the comparables and the subject relative to differences in location, construction quality, appreciation, exposure, access and other physical characteristics. Inferior properties generally achieve lower rent levels resulting in a lower net operating income per square foot."}</p>
+
+      <p>${getFieldValue(sections, 'sales-comparison-analysis-para-2') || 'In this method, we have compared the sales to the subject primarily along economic lines rather than on physical characteristics. Economic measures such as the relationship of sales price to net operating income are inclusive of all physical attributes of a property.'}</p>
+
+      <p>${getFieldValue(sections, 'sales-comparison-analysis-para-3') || "Based on the preceding, we have trended the subject properties projected NOI per square foot and unit against comparable properties NOI per square foot and unit and sale price per square foot and unit to estimate a value per unit for the subject property."}</p>
+
+      <p>${getFieldValue(sections, 'sales-comparison-analysis-para-4') || 'Based on general bracketing, the comparable sales support an adjusted unit value ranges from $111,914/Unit to $113,100/unit, with a unit value of $112,500/Unit concluded for the subject property. The following table summarizes the analysis of the comparables, reports the reconciled price per Unit value conclusion, and presents the concluded value of the subject property by the Sales Comparison Approach.'}</p>
+
+      <div class="chart-container">
+        UNADJUSTED & ADJUSTED PRICE<br>(Chart Image - Bar graph comparison)
+      </div>
+
+      <div class="footer">
+        <div>60     1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</div>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }
@@ -4800,13 +5391,186 @@ export function renderPage65(sections: ReportSection[], valueScenarioType: strin
  * final values, statistical summary (high, avg, med, low), subject indicated value
  */
 export function renderPage66(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 66 - Direct Comparison Conclusion
-  // 49 fields total with complete conclusion data
-
   return `
-    <div class="page page-66">
-      <h1>Page 66: Direct Comparison Conclusion</h1>
-      <p>TODO: Implement comparison conclusion template</p>
+    <div class="page page-66" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #000; width: 816px; height: 1056px; padding: 48px; background: #fff; position: relative;">
+      <style>
+        .page-66 h2 { font-size: 14px; font-weight: bold; color: #000; margin: 20px 0 12px 0; border-bottom: 2px solid #003366; padding-bottom: 6px; }
+        .page-66 .section-title { font-size: 13px; font-weight: bold; color: #000; margin: 16px 0 8px 0; }
+        .page-66 table { width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 10px; }
+        .page-66 th { background-color: #003366; color: #fff; padding: 6px 4px; text-align: center; font-weight: bold; border: 1px solid #003366; }
+        .page-66 td { padding: 5px 4px; text-align: center; border: 1px solid #ccc; }
+        .page-66 td.left-align { text-align: left; }
+        .page-66 .number { text-align: right; padding-right: 8px; }
+        .page-66 .red-text { color: #c00; font-weight: bold; }
+        .page-66 .green-text { color: #060; }
+        .page-66 .summary-table { margin-top: 16px; width: 100%; }
+        .page-66 .summary-table th { background-color: #003366; color: #fff; padding: 8px 4px; text-align: left; font-weight: bold; }
+        .page-66 .summary-table td { padding: 8px 4px; border: 1px solid #ccc; }
+        .page-66 .summary-table .label { text-align: left; font-weight: normal; }
+        .page-66 .summary-table .value { text-align: right; font-weight: bold; }
+        .page-66 .subject-box { margin-top: 12px; padding: 8px; border: 1px solid #ccc; background-color: #f9f9f9; }
+        .page-66 .footer { position: absolute; bottom: 48px; left: 48px; right: 48px; font-size: 9px; color: #666; text-align: right; }
+      </style>
+
+      <h2>Valuation & Conclusions</h2>
+
+      <!-- Direct Comparison Approach Conclusion (Unit) -->
+      <div class="section-title">DIRECT COMPARISON APPROACH CONCLUSION (UNIT)</div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>TRANSACTION</th>
+            <th>PRICE</th>
+            <th>TRANSACTIONAL</th>
+            <th>ADJUSTED</th>
+            <th>ADJUSTMENT</th>
+            <th>PROPERTY</th>
+            <th>FINAL VALUE</th>
+            <th>NET GROSS (%)</th>
+            <th>ADJ (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td class="number">$129,891</td>
+            <td class="number">0%</td>
+            <td class="number">$129,891</td>
+            <td class="number">7%</td>
+            <td class="number">$119,635</td>
+            <td class="number">14%</td>
+            <td class="number">14%</td>
+            <td class="number">-</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td class="number">$102,519</td>
+            <td class="number">0%</td>
+            <td class="number">$102,519</td>
+            <td class="number">14%</td>
+            <td class="number">$116,627</td>
+            <td class="number">14%</td>
+            <td class="number">14%</td>
+            <td class="number">-</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td class="number">$85,627</td>
+            <td class="number">0%</td>
+            <td class="number">$85,627</td>
+            <td class="number">36%</td>
+            <td class="number">$116,627</td>
+            <td class="number">36%</td>
+            <td class="number">36%</td>
+            <td class="number">-</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td class="number">$108,085</td>
+            <td class="number">0%</td>
+            <td class="number">$108,085</td>
+            <td class="red-text">(44%)</td>
+            <td class="number">$111,914</td>
+            <td class="red-text">(44%)</td>
+            <td class="red-text">(44%)</td>
+            <td class="number">-</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td class="number">$214,375</td>
+            <td class="number">0%</td>
+            <td class="number">$214,375</td>
+            <td class="red-text">(45%)</td>
+            <td class="number">$118,100</td>
+            <td class="red-text">(45%)</td>
+            <td class="red-text">(45%)</td>
+            <td class="number">-</td>
+          </tr>
+          <tr>
+            <td>HIGH</td>
+            <td class="number">$214,375</td>
+            <td class="number">0%</td>
+            <td class="number">$214,375</td>
+            <td class="number">36%</td>
+            <td class="number">$118,100</td>
+            <td class="number">36%</td>
+            <td class="number">45%</td>
+            <td class="number">-</td>
+          </tr>
+          <tr>
+            <td>AVG</td>
+            <td class="number">$148,089</td>
+            <td class="number">0%</td>
+            <td class="number">$148,089</td>
+            <td class="number">3%</td>
+            <td class="number">$115,981</td>
+            <td class="number">(20%)</td>
+            <td class="number">30%</td>
+            <td class="number">-</td>
+          </tr>
+          <tr>
+            <td>MED</td>
+            <td class="number">$128,891</td>
+            <td class="number">0%</td>
+            <td class="number">$128,891</td>
+            <td class="red-text">(10%)</td>
+            <td class="number">$116,629</td>
+            <td class="red-text">(10%)</td>
+            <td class="number">38%</td>
+            <td class="number">-</td>
+          </tr>
+          <tr>
+            <td>LOW</td>
+            <td class="number">$85,627</td>
+            <td class="number">0%</td>
+            <td class="number">$85,627</td>
+            <td class="red-text">(45%)</td>
+            <td class="number">$117,914</td>
+            <td class="red-text">(45%)</td>
+            <td class="number">10%</td>
+            <td class="number">-</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Subject Unit Section -->
+      <div class="subject-box">
+        <div class="section-title">SUBJECT UNIT</div>
+        <table style="margin-top: 8px;">
+          <tr>
+            <td class="left-align" style="font-weight: bold;">INDICATED VALUE (ROUNDED TO NEAREST $10,000)</td>
+            <td class="number" style="font-weight: bold;">= ${getFieldValue(sections, 'indicated-value-per-unit') || '$112,500'}</td>
+            <td style="width: 30%;"></td>
+            <td class="left-align" style="font-weight: bold;">${getFieldValue(sections, 'sales-comparison-indicated-value') || '$1,800,000'}</td>
+          </tr>
+        </table>
+      </div>
+
+      <h2>Sales Comparison Approach Conclusion</h2>
+
+      <!-- Direct Comparison Approach Summary -->
+      <div class="section-title">DIRECT COMPARISON APPROACH</div>
+
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th colspan="2">DIRECT COMPARISON APPROACH</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label">Indicated Value</td>
+            <td class="value">${getFieldValue(sections, 'sales-comparison-indicated-value') || '$1,800,000'}</td>
+          </tr>
+          <tr>
+            <td class="label">$/SF NRA</td>
+            <td class="value">${getFieldValue(sections, 'sales-comparison-psf-nra') || '$176'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="footer">61   1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</div>
     </div>
   `;
 }
@@ -4817,13 +5581,39 @@ export function renderPage66(sections: ReportSection[], valueScenarioType: strin
  * page-number, footer-address
  */
 export function renderPage67(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 67 - Reconciliation
-  // Fields: titles, 6 reconciliation paragraphs, footer
-
   return `
-    <div class="page page-67">
-      <h1>Page 67: Reconciliation of Value</h1>
-      <p>TODO: Implement reconciliation template</p>
+    <div class="page page-67" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 1.5; color: #333; width: 816px; height: 1056px; padding: 48px; background: #fff; position: relative;">
+      <style>
+        .page-67 h1 { font-size: 18px; font-weight: bold; margin: 0 0 12px 0; padding-bottom: 6px; border-bottom: 2px solid #0066cc; color: #000; }
+        .page-67 h2 { font-size: 13px; font-weight: bold; color: #003366; margin: 16px 0 12px 0; text-transform: uppercase; letter-spacing: 0.5px; }
+        .page-67 p { margin: 0 0 12px 0; text-align: justify; color: #333; line-height: 1.6; }
+        .page-67 .footer { position: absolute; bottom: 48px; left: 48px; right: 48px; font-size: 9px; color: #666; display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #ddd; }
+        .page-67 .footer-right { background: linear-gradient(to right, #e6f2ff 0%, #0066cc 50%, #003366 100%); width: 80px; height: 20px; }
+        .page-67 .content { padding-bottom: 60px; }
+      </style>
+
+      <div class="content">
+        <h1>Valuation & Conclusions</h1>
+
+        <h2>Reconciliation of Value</h2>
+
+        <p>${getFieldValue(sections, 'reconciliation-para-1') || 'Based on the agreed upon scope with the authorized client, the subject\'s specific characteristics and the interest appraised, this appraisal developed Direct Comparison and Income (Direct Capitalization) Approaches. The values presented represent the As Stabilized (Fee Simple Estate).'}</p>
+
+        <p>${getFieldValue(sections, 'reconciliation-para-2') || 'The Reconciliation of Value Conclusion is the final step in the appraisal process and involves the weighing of the individual valuation techniques in relationship to their substantiation by market data, and the reliability and applicability of each valuation technique to the subject property. Below, the individual strengths and weaknesses of each approach are analyzed.'}</p>
+
+        <p>${getFieldValue(sections, 'reconciliation-para-3') || 'As previously discussed, the <strong>Cost Approach</strong> was not presented in this analysis. This approach has limited application due to the age of the improvements and lack of market-based evidence to support accrued depreciation. Additionally, investors typically do not place emphasis on accrued cost in establishing value for investment properties. The exclusion of the Cost Approach does not diminish the credibility of the value conclusion.'}</p>
+
+        <p>${getFieldValue(sections, 'reconciliation-para-4') || 'The price per unit method has been presented in the <strong>Sales Comparison Approach</strong>. There have been several recent sales of properties similar to the subject in the market area in the current market conditions, which increases the validity of this approach. The most likely buyer of the subject would be an investor and this approach is given less weight.'}</p>
+
+        <p>${getFieldValue(sections, 'reconciliation-para-5') || 'The <strong>Income Approach</strong> to value is generally considered to be the best and most accurate measure of the value of income-producing properties. The value estimate by this approach best reflects the analysis that knowledgeable buyers and sellers carry out in their decision-making processes regarding this type of property. Sufficient market data was available to reliably estimate gross income, vacancy, expenses and capitalization rates for the subject property. The subject is fully leased to multiple tenants at the effective date of valuation. The most likely buyer is an investor, suggesting this approach deserves primary emphasis.'}</p>
+
+        <p>${getFieldValue(sections, 'reconciliation-para-6') || 'After considering all factors relevant to the valuation of the subject property, sole emphasis is placed on the Income (Direct Capitalization) Approach in the following market value.'}</p>
+      </div>
+
+      <div class="footer">
+        <div>62     1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</div>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }
@@ -4835,13 +5625,125 @@ export function renderPage67(sections: ReportSection[], valueScenarioType: strin
  * hypothetical conditions, extraordinary assumptions/limiting conditions
  */
 export function renderPage68(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 68 - Final Reconciliation
-  // 34 fields total with complete final value conclusion
-
   return `
-    <div class="page page-68">
-      <h1>Page 68: Final Reconciliation</h1>
-      <p>TODO: Implement final reconciliation template</p>
+    <div class="page page-68" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #333; width: 816px; height: 1056px; padding: 48px; background: white; position: relative;">
+      <style>
+        .page-68 h1 { font-size: 16px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #333; padding-bottom: 8px; }
+        .page-68 h2 { font-size: 13px; font-weight: bold; color: #1a5490; margin-top: 20px; margin-bottom: 10px; }
+        .page-68 .section-title { font-size: 12px; font-weight: bold; background-color: #1a5490; color: white; padding: 8px; text-align: center; margin: 15px 0 10px 0; letter-spacing: 1px; }
+        .page-68 table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 11px; }
+        .page-68 thead { background-color: #1a5490; color: white; }
+        .page-68 th { padding: 8px 6px; text-align: left; border: 1px solid #ccc; font-weight: bold; }
+        .page-68 td { padding: 6px 6px; border: 1px solid #ccc; }
+        .page-68 tbody tr:nth-child(odd) { background-color: #f9f9f9; }
+        .page-68 .label-col { width: 60%; text-align: left; font-weight: 500; }
+        .page-68 .value-col { width: 40%; text-align: right; font-weight: bold; }
+        .page-68 .nested-indent { padding-left: 20px; }
+        .page-68 .section-text { margin-bottom: 12px; line-height: 1.5; }
+        .page-68 .section-text p { margin-bottom: 10px; text-align: justify; }
+        .page-68 .footer { position: absolute; bottom: 48px; left: 48px; right: 48px; font-size: 10px; color: #666; text-align: center; border-top: 1px solid #ccc; padding-top: 10px; }
+      </style>
+
+      <h1>Valuation & Conclusions</h1>
+
+      <!-- Reconciliation of Values Section -->
+      <div class="section-title">RECONCILIATION OF VALUES</div>
+
+      <table>
+        <tr>
+          <td colspan="2" style="background-color: #f0f0f0; font-weight: bold;">VALUATION SCENARIOS</td>
+          <td style="background-color: #f0f0f0; font-weight: bold;">AS STABILIZED</td>
+        </tr>
+        <tr>
+          <td class="label-col">Interest</td>
+          <td></td>
+          <td class="value-col">${getFieldValue(sections, 'interest-appraised') || 'Fee Simple Estate'}</td>
+        </tr>
+        <tr>
+          <td class="label-col">Date</td>
+          <td></td>
+          <td class="value-col">${getFieldValue(sections, 'effective-date') || 'October 17, 2025'}</td>
+        </tr>
+      </table>
+
+      <div class="section-title">DIRECT COMPARISON APPROACH</div>
+
+      <table>
+        <tr>
+          <td class="label-col">DIRECT COMPARISON APPROACH</td>
+          <td class="value-col"></td>
+        </tr>
+        <tr>
+          <td class="nested-indent label-col">Indicated Value</td>
+          <td class="value-col">${getFieldValue(sections, 'direct-comparison-indicated-value') || '$1,800,000'}</td>
+        </tr>
+        <tr>
+          <td class="nested-indent label-col">$/SF NRA</td>
+          <td class="value-col">${getFieldValue(sections, 'direct-comparison-psf-nra') || '$176'}</td>
+        </tr>
+      </table>
+
+      <div class="section-title">INCOME APPROACH</div>
+
+      <table>
+        <tr>
+          <td class="label-col">INCOME APPROACH  DIRECT CAPITALIZATION</td>
+          <td class="value-col"></td>
+        </tr>
+        <tr>
+          <td class="nested-indent label-col">NOI</td>
+          <td class="value-col">${getFieldValue(sections, 'income-approach-noi') || '$111,771'}</td>
+        </tr>
+        <tr>
+          <td class="nested-indent label-col">NOI $/SF NRA</td>
+          <td class="value-col">${getFieldValue(sections, 'income-approach-noi-psf') || '$10.95'}</td>
+        </tr>
+        <tr>
+          <td class="nested-indent label-col">Capitalization Rate (OAR)</td>
+          <td class="value-col">${getFieldValue(sections, 'capitalization-rate') || '6.25%'}</td>
+        </tr>
+        <tr>
+          <td class="nested-indent label-col">Indicated Value</td>
+          <td class="value-col">${getFieldValue(sections, 'income-approach-indicated-value') || '$1,800,000'}</td>
+        </tr>
+        <tr>
+          <td class="nested-indent label-col">$/SF NRA</td>
+          <td class="value-col">${getFieldValue(sections, 'income-approach-psf-nra') || '$176'}</td>
+        </tr>
+      </table>
+
+      <div class="section-title">FINAL VALUE CONCLUSION</div>
+
+      <table>
+        <tr>
+          <td class="label-col">FINAL VALUE CONCLUSION</td>
+          <td class="value-col">${getFieldValue(sections, 'final-value-conclusion') || '$1,800,000'}</td>
+        </tr>
+        <tr>
+          <td class="nested-indent label-col">$/SF NRA</td>
+          <td class="value-col">${getFieldValue(sections, 'final-value-psf-nra') || '$176'}</td>
+        </tr>
+      </table>
+
+      <!-- Hypothetical Conditions -->
+      <h2>Hypothetical Conditions</h2>
+      <div class="section-text">
+        <p>${getFieldValue(sections, 'hypothetical-conditions-text') || "The use of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed based on the hypothetical condition that the subject property is fully leased at prevailing market rents and it has achieved stabilized occupancy as of the effective date of the appraisal. Under this premise, no deductions are made for holding costs, rent loss, or lease-up expenses."}</p>
+      </div>
+
+      <!-- Extraordinary Assumptions -->
+      <h2>Extraordinary Assumptions</h2>
+      <div class="section-text">
+        <p>${getFieldValue(sections, 'extraordinary-assumptions-text') || 'No Extraordinary Assumptions were made for this assignment.'}</p>
+      </div>
+
+      <!-- Extraordinary Limiting Conditions -->
+      <h2>Extraordinary Limiting Conditions</h2>
+      <div class="section-text">
+        <p>${getFieldValue(sections, 'extraordinary-limiting-conditions-text') || 'No Extraordinary Limiting Conditions were made for this assignment.'}</p>
+      </div>
+
+      <div class="footer">63  1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</div>
     </div>
   `;
 }
@@ -4852,13 +5754,117 @@ export function renderPage68(sections: ReportSection[], valueScenarioType: strin
  * page-number, footer-address
  */
 export function renderPage69(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 69 - Certification
-  // 15 fields total with all certification statements
-
   return `
-    <div class="page page-69">
-      <h1>Page 69: Certification</h1>
-      <p>TODO: Implement certification template</p>
+    <div class="page page-69" style="font-family: 'Calibri', 'Arial', sans-serif; font-size: 11pt; line-height: 1.5; color: #333; width: 816px; height: 1056px; padding: 40px; background: white; position: relative;">
+      <style>
+        .page-69 h1 { font-size: 14pt; font-weight: bold; color: #000; margin-bottom: 12pt; padding-bottom: 8pt; border-bottom: 2pt solid #0066cc; }
+        .page-69 h2 { font-size: 11pt; font-weight: bold; color: #000; text-transform: uppercase; letter-spacing: 1pt; margin-bottom: 12pt; margin-top: 12pt; }
+        .page-69 ol { margin-left: 20pt; margin-bottom: 20pt; }
+        .page-69 li { margin-bottom: 8pt; text-align: justify; line-height: 1.6; }
+        .page-69 .footer { position: absolute; bottom: 40px; left: 40px; right: 40px; display: flex; justify-content: space-between; align-items: center; font-size: 9pt; color: #666; border-top: 1pt solid #ddd; padding-top: 20pt; }
+        .page-69 .footer-graphic { width: 120px; height: 40px; background: linear-gradient(to right, #0066cc 50%, #003399 50%); border-radius: 2px; }
+      </style>
+
+      <h1>Valuation & Conclusions</h1>
+
+      <h2>Certification</h2>
+
+      <ol>
+        <li>${getFieldValue(sections, 'certification-item-1') || 'The statements of fact contained in this report are true and correct.'}</li>
+        <li>${getFieldValue(sections, 'certification-item-2') || 'The reported analyses, opinions and conclusions are limited only by the reported assumptions and limiting conditions and are our impartial and unbiased professional analyses, opinions and conclusions.'}</li>
+        <li>${getFieldValue(sections, 'certification-item-3') || 'We have no past, present or prospective interest in the property that is the subject of this report and no personal or pecuniary interest or conflict with respect to the parties involved with this assignment.'}</li>
+        <li>${getFieldValue(sections, 'certification-item-4') || 'We have no bias with respect to the property that is the subject of this report or to the parties involved with this assignment.'}</li>
+        <li>${getFieldValue(sections, 'certification-item-5') || 'Our engagement in and compensation is not contingent upon developing or reporting predetermined results, the amount of value estimate, a conclusion favoring the authorised client, or the occurrence of a subsequent event.'}</li>
+        <li>${getFieldValue(sections, 'certification-item-6') || 'Our analyses, opinions and conclusions were developed, and this report has been prepared, in conformity with the CUSAP.'}</li>
+        <li>${getFieldValue(sections, 'certification-item-7') || 'We have the knowledge and experience to complete this assignment competently.'}</li>
+        <li>${getFieldValue(sections, 'certification-item-8') || 'Except as herein disclosed, no one has provided significant professional assistance in the preparation of this appraisal.'}</li>
+        <li>${getFieldValue(sections, 'certification-item-9') || "As of the date of this report we have fulfilled the requirements of the AIC's Continuing Professional Development Program."}</li>
+        <li>${getFieldValue(sections, 'certification-item-10') || 'We are members in good standing of the Appraisal Institute of Canada.'}</li>
+        <li>${getFieldValue(sections, 'certification-item-11') || 'For this appraisal to be valid, an original or a password protected digital signature is required.'}</li>
+      </ol>
+
+      <div class="footer">
+        <div>64     1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</div>
+        <div class="footer-graphic"></div>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Page 70: Valuation & Conclusions - Final Estimate of Value
+ * Fields: valuation scenario, interest, exposure time, effective date, value, signature, contact info
+ */
+export function renderPage70(sections: ReportSection[], valueScenarioType: string): string {
+  return `
+    <div class="page page-70" style="font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; color: #333; width: 816px; height: 1056px; padding: 54px; background: white; position: relative;">
+      <style>
+        .page-70 .header-section { margin-bottom: 20px; border-bottom: 2px solid #003d7a; padding-bottom: 8px; }
+        .page-70 h1 { font-size: 16pt; font-weight: bold; color: #003d7a; margin-bottom: 4px; }
+        .page-70 h2 { font-size: 13pt; font-weight: bold; color: #003d7a; margin-top: 18px; margin-bottom: 10px; }
+        .page-70 p { margin-bottom: 10px; text-align: justify; line-height: 1.6; }
+        .page-70 table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 10pt; }
+        .page-70 th { background-color: #003d7a; color: white; padding: 8px; text-align: left; font-weight: bold; border: 1px solid #003d7a; }
+        .page-70 td { padding: 8px; border: 1px solid #ddd; text-align: left; }
+        .page-70 tr:nth-child(even) { background-color: #f9f9f9; }
+        .page-70 .signature-placeholder { width: 120px; height: 60px; background-color: #ccc; border: 1px dashed #999; margin: 20px 0; display: flex; align-items: center; justify-content: center; color: #666; font-size: 9pt; }
+        .page-70 .contact-info { margin: 20px 0; font-size: 10pt; line-height: 1.6; }
+        .page-70 .contact-info p { margin-bottom: 4px; }
+        .page-70 .footer { position: absolute; bottom: 36px; left: 54px; right: 54px; font-size: 9pt; color: #666; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #ddd; padding-top: 8px; }
+        .page-70 .footer-logo-placeholder { width: 120px; height: 40px; background-color: #003d7a; border-radius: 4px; }
+      </style>
+
+      <div class="header-section">
+        <h1>Valuation & Conclusions</h1>
+      </div>
+
+      <h2>Final Estimate of Value</h2>
+
+      <p>Based upon the data, analyses and conclusions contained herein, the market value of the fee simple estate in the subject property is concluded as follows:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Valuation Scenario</th>
+            <th>Interest Appraised</th>
+            <th>Exposure Time</th>
+            <th>Effective Date</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>${getFieldValue(sections, 'valuation-scenario') || 'As Stabilized'}</td>
+            <td>${getFieldValue(sections, 'interest-appraised') || 'Fee Simple Estate'}</td>
+            <td>${getFieldValue(sections, 'exposure-time') || 'Six Months'}</td>
+            <td>${getFieldValue(sections, 'effective-date') || 'October 17, 2025'}</td>
+            <td>${getFieldValue(sections, 'final-value-conclusion') || '$1,800,000'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Hypothetical Conditions</h2>
+      <p>${getFieldValue(sections, 'final-hypothetical-conditions') || "The use of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed based on the hypothetical condition that the subject property is fully leased at prevailing market rents and has achieved stabilized occupancy as of the effective date of the appraisal."}</p>
+
+      <h2>Extraordinary Assumptions</h2>
+      <p>${getFieldValue(sections, 'final-extraordinary-assumptions') || 'No Extraordinary Assumptions were made for this assignment.'}</p>
+
+      <h2>Extraordinary Limiting Conditions</h2>
+      <p>${getFieldValue(sections, 'final-extraordinary-limiting') || 'No Extraordinary Limiting Conditions were made for this assignment.'}</p>
+
+      <div class="signature-placeholder">[Signature]</div>
+
+      <div class="contact-info">
+        <p><strong>${getFieldValue(sections, 'appraiser-name') || 'Chris Chornohos, AACI, MRICS'}</strong></p>
+        <p>${getFieldValue(sections, 'appraiser-title') || 'Founder'}</p>
+        <p>${getFieldValue(sections, 'appraiser-email') || 'chris.chornohos@valta.ca'}</p>
+        <p>${getFieldValue(sections, 'appraiser-aic-number') || 'AIC No. 90209'}</p>
+      </div>
+
+      <div class="footer">
+        <div>65    1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</div>
+        <div class="footer-logo-placeholder"></div>
+      </div>
     </div>
   `;
 }
@@ -4868,13 +5874,61 @@ export function renderPage69(sections: ReportSection[], valueScenarioType: strin
  * No fields defined yet
  */
 export function renderPage71(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 71 - Contingent & Limiting Conditions
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-71">
-      <h1>Page 71: Contingent & Limiting Conditions</h1>
-      <p>TODO: Implement conditions template</p>
+    <div class="page page-71" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #000; width: 816px; height: 1056px; padding: 48px; background: #fff; position: relative;">
+      <style>
+        .page-71 h1 { font-size: 14px; font-weight: bold; text-decoration: underline; margin-bottom: 12px; color: #000; }
+        .page-71 h2 { font-size: 12px; font-weight: bold; text-transform: uppercase; margin-bottom: 12px; color: #000; border-bottom: 2px solid #000; padding-bottom: 6px; }
+        .page-71 h3 { font-size: 11px; font-weight: bold; margin-top: 16px; margin-bottom: 8px; color: #000; }
+        .page-71 .paragraph { margin-bottom: 12px; text-align: justify; line-height: 1.5; }
+        .page-71 .paragraph-number { font-weight: bold; margin-right: 8px; }
+        .page-71 .footer { position: absolute; bottom: 48px; left: 48px; right: 48px; padding-top: 12px; border-top: 1px solid #ccc; font-size: 9px; display: flex; justify-content: space-between; align-items: center; }
+        .page-71 .footer-accent { width: 108px; height: 14px; background: #4A9FD8; }
+      </style>
+
+      <h1>Appendices</h1>
+      <h2>Contingent & Limiting Conditions</h2>
+      <h3>Assumptions, Limiting Conditions, Disclaimers and Limitations of Liability</h3>
+
+      <div class="paragraph">
+        <span class="paragraph-number">1.</span>
+        The certification that appears in the appraisal report is subject to compliance with the Canadian Uniform Standards of Professional Appraisal Practice ("CUSAPP") and the following conditions: This report is provided only for Authorized Client and authorized users specifically identified in this report and only for the specific use identified herein. No other person may rely on this report or any part of this report without first obtaining consent from Authorized Client and written authorization from the authors.
+      </div>
+
+      <div class="paragraph">
+        <span class="paragraph-number">2.</span>
+        Because market conditions, including economic, social and political factors, may change rapidly and, on occasion, without warning, this report cannot be relied upon as of any date other than the effective date specified in this report unless specifically authorized by the author(s).
+      </div>
+
+      <div class="paragraph">
+        <span class="paragraph-number">3.</span>
+        The appraiser will not be responsible for matters of a legal nature that affect either the property being appraised or the title to it. The property is appraised on the basis of it being under responsible ownership, the registry office search has been performed and the author assumes that the title is good and marketable and free and clear of all encumbrances.
+      </div>
+
+      <div class="paragraph">
+        <span class="paragraph-number">4.</span>
+        The appraiser does not accept responsibility for environmental matters or relationships. Whereas of a matter is outside the scope of work and expertise of the appraiser. Any information provided by the appraiser is for informational purposes only and any reliance is unreasonable.
+      </div>
+
+      <div class="paragraph">
+        <span class="paragraph-number">5.</span>
+        No survey of the property has been made. Any sketch in this report shows approximate dimensions and is included only to assist the reader of this report in visualizing the property. It is unreasonable to rely on this report as an alternative to a survey.
+      </div>
+
+      <div class="paragraph">
+        <span class="paragraph-number">6.</span>
+        This report is completed on the basis that testimony or appearance in court concerning this report is not required unless specific arrangements to do so have been made.
+      </div>
+
+      <div class="paragraph">
+        <span class="paragraph-number">7.</span>
+        Unless otherwise stated in this report, the author has no knowledge of any hidden or transparent conditions of the subject property or of a neighbouring property that could affect the value of the subject property.
+      </div>
+
+      <div class="footer">
+        <div>66  1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</div>
+        <div class="footer-accent"></div>
+      </div>
     </div>
   `;
 }
@@ -4884,13 +5938,58 @@ export function renderPage71(sections: ReportSection[], valueScenarioType: strin
  * No fields defined yet
  */
 export function renderPage72(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 72 - Conditions (continued)
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-72">
-      <h1>Page 72: Conditions (continued)</h1>
-      <p>TODO: Implement conditions continuation template</p>
+    <div class="page page-72" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #000; width: 816px; height: 1056px; padding: 48px; background: #fff; position: relative;">
+      <style>
+        .page-72 h1 { font-size: 16px; font-weight: bold; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid #0066cc; color: #000; }
+        .page-72 .section { margin-bottom: 8px; text-align: justify; }
+        .page-72 .section-number { display: inline-block; font-weight: bold; min-width: 20px; margin-right: 6px; }
+        .page-72 .section-text { display: inline; }
+        .page-72 .footer { position: absolute; bottom: 48px; left: 48px; right: 48px; font-size: 9px; color: #666; padding-top: 8px; border-top: 1px solid #ccc; text-align: right; }
+      </style>
+
+      <h1>Appendices</h1>
+
+      <div class="section">
+        <span class="section-text">not be construed as an environmental audit or detailed property condition report, as such reporting is beyond the scope of this report and/or the qualifications of the author. The author makes no guarantees or warranties, express or implied, regarding the condition of the property.</span>
+      </div>
+
+      <div class="section">
+        <span class="section-number">8.</span>
+        <span class="section-text">The author is not qualified to comment on detrimental environmental, chemical or biological conditions that may affect the market value of the property appraised, including but not limited to pollution or contamination of land, buildings, water, groundwater or air which may include but are not limited to moulds and mildews or the conditions that may give rise to either.</span>
+      </div>
+
+      <div class="section">
+        <span class="section-number">9.</span>
+        <span class="section-text">The analyses set out in this report relied on written and visual information obtained from a variety of sources the author considered reliable. Unless otherwise stated herein, the author did not verify client-supplied information, which the author believed to be correct.</span>
+      </div>
+
+      <div class="section">
+        <span class="section-number">10.</span>
+        <span class="section-text">The term "inspection" refers to observation only as defined by CUSPAP and reporting of the general material items/features and conditions observed for the purposes of a standard appraisal inspection.</span>
+      </div>
+
+      <div class="section">
+        <span class="section-number">11.</span>
+        <span class="section-text">The opinions of value and other conclusions contained herein assume satisfactory completion of any work remaining to be completed in a good and workmanlike manner. The author has not confirmed that all mandatory building inspections have been completed to date.</span>
+      </div>
+
+      <div class="section">
+        <span class="section-number">12.</span>
+        <span class="section-text">The contents of this report are confidential and will not be disclosed by the author except as provided for by the provisions of the CUSPAP and/or when properly entered into evidence of a duly qualified judicial or quasi-judicial body.</span>
+      </div>
+
+      <div class="section">
+        <span class="section-number">13.</span>
+        <span class="section-text">The author has agreed to enter into an assignment as requested by Authorized Client named in this report for the use specified by Authorized Client, which is stated in this report.</span>
+      </div>
+
+      <div class="section">
+        <span class="section-number">14.</span>
+        <span class="section-text">This report, its content and all attachments/addendums and their content are the property of the author. Authorized Client, authorized users and any staff members and agents of Authorized Client are prohibited from modifying or changing any part of this report.</span>
+      </div>
+
+      <div class="footer">67   1101, 1121 109 St, North Battleford, Saskatchewan | File VAL25102-1</div>
     </div>
   `;
 }
@@ -4900,13 +5999,41 @@ export function renderPage72(sections: ReportSection[], valueScenarioType: strin
  * No fields defined yet
  */
 export function renderPage73(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 73 - Conditions (continued)
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-73">
-      <h1>Page 73: Conditions (continued)</h1>
-      <p>TODO: Implement conditions continuation template</p>
+    <div class="page page-73" style="font-family: 'Calibri', 'Arial', sans-serif; font-size: 11px; line-height: 1.5; color: #333; width: 816px; height: 1056px; padding: 48px; background: white; position: relative;">
+      <style>
+        .page-73 h1 { font-size: 16px; font-weight: bold; margin: 0 0 12px 0; padding-bottom: 8px; border-bottom: 2px solid #1e5aa8; color: #000; }
+        .page-73 .paragraph { margin-bottom: 12px; text-align: justify; }
+        .page-73 .paragraph-num { display: inline; font-weight: bold; margin-right: 8px; }
+        .page-73 .footer { position: absolute; bottom: 48px; left: 48px; right: 48px; background-color: #4a9fd7; color: white; padding: 8px 12px; font-size: 10px; display: flex; justify-content: space-between; align-items: center; }
+      </style>
+
+      <h1>Appendices</h1>
+
+      <div class="paragraph">
+        <span class="paragraph-num">15.</span>
+        reorganize, scan, copy, manipulate electronically, digitally, manually or by any other means whatsoever this appraisal report, addendum, all attachments and the data contained within for any commercial or other use.
+      </div>
+
+      <div class="paragraph">
+        <span class="paragraph-num">16.</span>
+        If transmitted electronically, this report will have been digitally signed and secured with personal passwords to lock the appraisal file. Due to the possibility of digital modification, only originally signed reports and those reports sent directly by the author can be reasonably relied upon.
+      </div>
+
+      <div class="paragraph">
+        <span class="paragraph-num">17.</span>
+        Where the authorized use of this report is for financing or mortgage lending of mortgage insurance, it is a condition of reliance on this report that the authorized user has will conduct, financing, underwriting and insurance underwriting and rigorous due diligence in accordance with the standards of a responsible and prudent lender or insurer, including but not limited to ensuring the borrower demonstrates willingness and capacity to service higher debt obligations on a timely basis.
+      </div>
+
+      <div class="paragraph">
+        <span class="paragraph-num">18.</span>
+        Values contained in this appraisal are based on market conditions as at the time of this report. This appraisal does not provide a prediction of future values. In the event of market instability and/or disruption, values may change rapidly and such potential future events have NOT been considered in this report.
+      </div>
+
+      <div class="footer">
+        <div>68   1101, 1121 109 St, North Battleford, Saskatchewan | File VAL25101Z-1</div>
+        <div></div>
+      </div>
     </div>
   `;
 }
@@ -4916,13 +6043,102 @@ export function renderPage73(sections: ReportSection[], valueScenarioType: strin
  * No fields defined yet
  */
 export function renderPage74(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 74 - Definition of Terms
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-74">
-      <h1>Page 74: Definition of Terms</h1>
-      <p>TODO: Implement definitions template</p>
+    <div class="page page-74" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #000; background-color: #fff; padding: 54px; width: 816px; height: 1056px; position: relative;">
+      <style>
+        .page-74 .page-container { width: 100%; height: 100%; display: flex; flex-direction: column; }
+        .page-74 .header { margin-bottom: 20px; }
+        .page-74 h1 { font-size: 16px; font-weight: bold; color: #000; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 2px solid #000; }
+        .page-74 h2 { font-size: 12px; font-weight: bold; color: #000; text-transform: uppercase; margin-bottom: 16px; letter-spacing: 0.5px; }
+        .page-74 .definitions-list { flex-grow: 1; }
+        .page-74 .definition-item { margin-bottom: 12px; padding-left: 20px; }
+        .page-74 .definition-term { font-weight: bold; }
+        .page-74 .definition-text { display: inline; text-align: justify; }
+        .page-74 .footer { position: absolute; bottom: 54px; left: 54px; right: 54px; padding-top: 10px; border-top: 1px solid #ccc; font-size: 10px; color: #333; }
+      </style>
+
+      <div class="page-container">
+        <div class="header">
+          <h1>Appendices</h1>
+          <h2>Definition of Terms</h2>
+        </div>
+
+        <div class="definitions-list">
+          <div class="definition-item">
+            <span class="definition-term">Absorption Period:</span>
+            <span class="definition-text">The actual or expected period required from the time a property, group of properties, or commodity is initially offered for lease, purchase, or use by its eventual users until all portions have been sold or stabilized occupancy has been achieved.</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Absorption Rate:</span>
+            <span class="definition-text">1) Broadly, the rate at which vacant space in a property or group of properties for sale or lease has been or is expected to be successfully sold or leased over a specified period of time. 2) In subdivision analysis, the rate of sales of lots or units in a subdivision.</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Ad Valorem Tax:</span>
+            <span class="definition-text">A tax levied in proportion to the value of the thing(s) being taxed. Exclusive of exemptions, use value assessment provisions, and the like, the property tax is an ad valorem tax. (International Association of Assessing Officers [IAAO])</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Assessed Value:</span>
+            <span class="definition-text">A value set on real estate and personal property by a government as a basis for levying taxes. Assessed value is a certified value identified on an assessment roll produced by an Assessment Jurisdiction and is typically defined by statute and regulations. It may not be the same as market value.</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Authorized Client:</span>
+            <span class="definition-text">The individual or organization for whom the Member renders or agrees to render Professional Services.</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Authorized Use:</span>
+            <span class="definition-text">The use of a Member's Professional Services, as identified and authorized by the Member and based on communication between the Member and the Authorized Client.</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Authorized User:</span>
+            <span class="definition-text">A party identified by name and authorized as a user of the Professional Services of the Member, based on communication between the Member and the Authorized Client.</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Cash Equivalency:</span>
+            <span class="definition-text">An analytical process in which the sale price of a transaction with nonmarket financing or financing with unusual conditions or incentives is adjusted to the price equivalent in terms of cash or cash equivalent.</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Contract Rent:</span>
+            <span class="definition-text">The actual rental income specified in a lease.</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Disposition Value:</span>
+            <span class="definition-text">The most probable price that a specified interest in property should bring under the following conditions: 1) Consummation of a sale within a specified time, which is shorter than the typical exposure time for such a property in that market. 2) The property is subjected to market conditions prevailing as of the date of valuation. 3) Both the buyer and seller are acting prudently and knowledgeably. 4) The seller is under compulsion to sell. 5) The buyer is typically motivated. 6) Both parties are acting in what they consider to be their best interests. 7) An adequate marketing effort will be made during the exposure time. 8) Payment will be made in cash in Canadian dollars (or the local currency) or in terms of financial arrangements comparable thereto. 9) The price represents the normal consideration for the property sold, unaffected by special or creative financing or sales concessions granted by anyone associated with the sale.</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Effective Rent:</span>
+            <span class="definition-text">Total base rent, or minimum rent stipulated in a lease, over the specified lease term minus rent concessions provided by the landlord.</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Excess Land:</span>
+            <span class="definition-text">Land that is not needed to support the existing use. The highest and best use of the excess land may or may not be the same as the highest and best use of the improved parcel. Excess land has the potential to be sold separately and is valued separately. See also surplus land.</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Excess Rent:</span>
+            <span class="definition-text">The amount by which contract rent exceeds market rent at the time of the appraisal; created by a lease favorable to the landlord (lessor) and may reflect unusual management, knowledgeable or unusually motivated parties, a lease execution in an earlier, stronger rental market, or an agreement of the parties.</span>
+          </div>
+
+          <div class="definition-item">
+            <span class="definition-term">Exposure Time:</span>
+            <span class="definition-text">The estimated length of time the property interest being appraised would have been offered on the market prior to the hypothetical consummation of a sale at market value on the effective date of the appraisal. Exposure time is backward-looking.</span>
+          </div>
+        </div>
+
+        <div class="footer">
+          69 &nbsp;&nbsp;&nbsp; 1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1
+        </div>
+      </div>
     </div>
   `;
 }
@@ -4932,13 +6148,81 @@ export function renderPage74(sections: ReportSection[], valueScenarioType: strin
  * No fields defined yet
  */
 export function renderPage75(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 75 - Definitions (continued)
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-75">
-      <h1>Page 75: Definitions (continued)</h1>
-      <p>TODO: Implement definitions continuation template</p>
+    <div class="page page-75" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #000; background: #fff; width: 816px; height: 1056px; padding: 54px; position: relative;">
+      <style>
+        .page-75 .page { width: 100%; height: 100%; background: white; position: relative; }
+        .page-75 .content { width: 100%; min-height: calc(100% - 60px); padding-bottom: 60px; }
+        .page-75 h1 { font-size: 14px; font-weight: bold; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #003366; color: #003366; }
+        .page-75 ul { list-style: disc; margin-left: 20px; margin-bottom: 10px; }
+        .page-75 li { margin-bottom: 10px; text-align: justify; line-height: 1.5; }
+        .page-75 strong { font-weight: bold; }
+        .page-75 .footer { position: absolute; bottom: 54px; left: 54px; right: 54px; font-size: 10px; color: #666; padding: 10px 0; text-align: right; border-top: 1px solid #ddd; background: white; }
+        .page-75 .footer-right { float: right; }
+        .page-75 .footer-left { float: left; }
+      </style>
+
+      <div class="page">
+        <div class="content">
+          <h1>Appendices</h1>
+
+          <ul>
+            <li>
+              <strong>Extraordinary Assumption:</strong> An assumption, directly related to a specific Assignment, which, if found to be false, could alter the opinions or conclusions. Extraordinary Assumptions presume uncertain information about or anticipated changes in: the physical, legal or economic characteristics of the subject property or external conditions, such as market conditions or trends, or the integrity of data used in an analysis to be factual.
+            </li>
+            <li>
+              <strong>Fee Simple Estate:</strong> Absolute ownership unencumbered by any other interest or estate, subject only to the limitations imposed by the governmental powers of taxation, eminent domain, police power and escheat.
+            </li>
+            <li>
+              <strong>Floor Area Ratio (FAR):</strong> The relationship between the above-ground floor area of a building, as described by the zoning or building code, and the area of the plot on which it stands; in planning and zoning, often expressed as a decimal, e.g., a ratio of 2.0 indicates that the permissible floor area of a building is twice the total land area.
+            </li>
+            <li>
+              <strong>Frictional Vacancy:</strong> The amount of vacant space needed in a market for its orderly operation. Frictional vacancy allows for move-ins and move-outs.
+            </li>
+            <li>
+              <strong>Full Service Lease:</strong> See gross lease.
+            </li>
+            <li>
+              <strong>General Vacancy:</strong> A method of calculating any remaining vacancy and collection loss considerations when using discounted cash flow (DCF) analysis, where turnover vacancy has been used as part of the income estimate. The combined effects of turnover vacancy and general vacancy relate to total vacancy and collection loss.
+            </li>
+            <li>
+              <strong>Going Concern Premise:</strong> One of the premises under which the total assets of the business are valued; an assumption that a company is expected to continue operating well into the future (usually indefinitely).
+            </li>
+            <li>
+              <strong>Going Concern Value:</strong> An established and operating business with an indefinite life, as if sold in aggregate; more accurately termed the market value of the going concern or market value of the total assets of the business.
+            </li>
+            <li>
+              <strong>Gross Building Area (GBA):</strong> 1) Total floor area of a building, excluding unenclosed areas, measured from the exterior of the walls of the above-grade area. This includes mechanical and basement areas and garage but does not typically include basement garage. 2) For residential space, the total area of all floor levels measured from the exterior of the walls and including the superstructure and substructure basement; typically does not include garage space.
+            </li>
+            <li>
+              <strong>Gross Lease:</strong> A lease in which the landlord receives stipulated rent and is obligated to pay all of the property's operating and fixed expenses; also called full-service lease.
+            </li>
+            <li>
+              <strong>Hypothetical Condition:</strong> Hypothetical Conditions are a specific type of Extraordinary Assumption that presumes as fact, although untrue, information about the physical, legal, or economic characteristics of the subject property or external conditions, and are imposed for purposes of reasonable analysis.
+            </li>
+            <li>
+              <strong>Investment Value:</strong> The value of a property to a particular investor or class of investors based on the investor's specific requirements. Investment value may be different from market value because it depends on a set of investment criteria that are not necessarily typical of the market. 2) The value of an asset to the owner or a prospective owner for individual investment or operational objectives. (International Valuation Standards (IVS))
+            </li>
+            <li>
+              <strong>Land-to-Building Ratio:</strong> The proportion of land area to gross building area; one of the factors determining comparability of properties.
+            </li>
+            <li>
+              <strong>Lease:</strong> A written document in which the rights to use and occupy land, space, or structures are transferred by the owner to another for a specified period of time in return for a specified rent.
+            </li>
+            <li>
+              <strong>Leased Fee Interest:</strong> The ownership interest held by the lessor, which includes the right to receive the contract rent specified in the lease plus the reversionary right when the lease expires.
+            </li>
+            <li>
+              <strong>Leasehold Interest:</strong> The right held by the lessee to use and occupy real estate for a stated term and under the conditions specified in the lease.
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer">
+          <span class="footer-left">70</span>
+          <span class="footer-right">1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</span>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -4948,13 +6232,52 @@ export function renderPage75(sections: ReportSection[], valueScenarioType: strin
  * No fields defined yet
  */
 export function renderPage76(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 76 - Definitions (continued)
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-76">
-      <h1>Page 76: Definitions (continued)</h1>
-      <p>TODO: Implement definitions continuation template</p>
+    <div class="page page-76" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #000; width: 816px; height: 1056px; margin: 0 auto; padding: 54px; background: #fff; position: relative;">
+      <style>
+        .page-76 h1 { font-size: 16px; font-weight: bold; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #0066cc; display: inline-block; }
+        .page-76 ul { list-style: disc; margin-left: 20px; margin-bottom: 20px; }
+        .page-76 li { margin-bottom: 10px; text-align: justify; }
+        .page-76 li strong { font-weight: bold; }
+        .page-76 .term { font-weight: bold; }
+        .page-76 .footer { position: absolute; bottom: 54px; left: 54px; right: 54px; font-size: 10px; color: #666; padding-top: 10px; border-top: 1px solid #ddd; }
+      </style>
+
+      <h1>Appendices</h1>
+
+      <ul>
+        <li><span class="term">Lessor:</span> One who conveys the rights of occupancy and use to others under a lease agreement.</li>
+
+        <li><span class="term">Liquidation Value:</span> The most probable price that a specified interest in property should bring under the following conditions: 1) Consummation of a sale within a short time period. 2) The property is subjected to market conditions prevailing as of the date of valuation. 3) Both the buyer and seller are acting prudently and knowledgeably. 4) The seller is under extreme compulsion to sell. 5) The buyer is typically motivated. 6) Both parties are acting in what they consider to be their best interests. 7) A normal marketing effort is not possible due to the brief exposure time. 8) Payment will be made in cash in Canadian dollars (or the local currency) or in terms of financial arrangements comparable thereto. 9) The price represents the normal consideration for the property sold, unaffected by special or creative financing or sales concessions granted by anyone associated with the sale.</li>
+
+        <li><span class="term">Market Rent:</span> The most probable rent that a property should bring in a competitive and open market reflecting the conditions and restrictions of a specified lease agreement, including the rental adjustment and revaluation, permitted uses, use restrictions, expense obligations, term, concessions, renewal and purchase options, and tenant improvements (TI's).</li>
+
+        <li><span class="term">Market Value:</span> The most probable price, as of a specified date, in cash, or in terms equivalent to cash, or in other precisely revealed terms, for which the specified property rights should sell after reasonable exposure in a competitive market under all conditions requisite to a fair sale, with the buyer and seller each acting prudently, knowledgeably, and for self-interest, and assuming that neither is under undue duress.</li>
+
+        <li><span class="term">Market Value of the Going Concern:</span> The market value of an established and operating business including the real property, personal property, financial assets, and the intangible assets of the business.</li>
+
+        <li><span class="term">Marketing Time:</span> An opinion of the amount of time it might take to sell a real or personal property interest at the concluded market value level during the period immediately after the effective date of an appraisal. Marketing time differs from exposure time, which is always presumed to precede the effective date of an appraisal.</li>
+
+        <li><span class="term">Modified Gross Lease:</span> A lease in which the landlord receives stipulated rent and is obligated to pay some, but not all, of the property's operating and fixed expenses. Since expense responsibility varies among modified gross leases, expense responsibility must always be specified. In some markets, a modified gross lease may be called a double net lease, net net lease, partial net lease, or semi-gross lease.</li>
+
+        <li><span class="term">Net Lease:</span> A lease in which the landlord passes on all expenses to the tenant. See also <span class="term">gross lease; modified gross lease.</span></li>
+
+        <li><span class="term">Net Net Net Lease:</span> An alternative term for a type of net lease. In some markets, a net net net lease is defined as a lease in which the tenant assumes all expenses of operating a property except that the landlord is responsible for structural maintenance, building reserves, and management; also called NNN lease, triple net lease, or fully net lease.</li>
+
+        <li><span class="term">Occupancy Rate:</span> 1) The relationship or ratio between the income received from the currently rented units in a property and the income that would be received if all the units were occupied. 2) The ratio of occupied space to total rentable space in a building.</li>
+
+        <li><span class="term">Overage Rent:</span> The percentage rent paid over and above the guaranteed minimum rent or base rent; calculated as a percentage of sales in excess of a specified breakpoint sales volume.</li>
+
+        <li><span class="term">Percentage Rent:</span> Rental income received in accordance with the terms of a percentage clause; typically derived from retail tenants and based on a certain percentage of their gross sales.</li>
+
+        <li><span class="term">Prospective Opinion of Value:</span> A value opinion effective as of a specified future date. The term does not define a type of value. Instead, it identifies a value opinion as being effective at some specific future date. An opinion of value as of a prospective date is frequently sought in connection with projects that are proposed, under construction, or under conversion to a new use, or those that have not yet achieved sellout or a stabilized level of long-term occupancy.</li>
+
+        <li><span class="term">Rentable Area:</span> For office or retail buildings, the tenant's pro rata portion of the entire office floor, excluding elements of the building that penetrate through the floor to the areas below. The rentable area of a floor is computed by measuring to the inside finished surface of the dominant portion of the</li>
+      </ul>
+
+      <div class="footer">
+        71 &nbsp;&nbsp;&nbsp; 1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1
+      </div>
     </div>
   `;
 }
@@ -4964,13 +6287,48 @@ export function renderPage76(sections: ReportSection[], valueScenarioType: strin
  * No fields defined yet
  */
 export function renderPage77(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 77 - Definitions (continued)
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-77">
-      <h1>Page 77: Definitions (continued)</h1>
-      <p>TODO: Implement definitions continuation template</p>
+    <div class="page page-77" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; font-size: 11pt; line-height: 1.4; color: #000; width: 816px; height: 1056px; padding: 54px; background: white; position: relative;">
+      <style>
+        .page-77 .page { width: 100%; height: 100%; display: flex; flex-direction: column; }
+        .page-77 .content { flex: 1; }
+        .page-77 h1 { font-size: 14pt; font-weight: bold; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #0066cc; }
+        .page-77 ul { list-style: disc; margin-left: 24px; margin-bottom: 8px; }
+        .page-77 li { margin-bottom: 12px; text-align: justify; }
+        .page-77 strong { font-weight: bold; }
+        .page-77 em { font-style: italic; }
+        .page-77 .footer { position: absolute; bottom: 54px; left: 54px; right: 54px; border-top: 1px solid #999; padding-top: 10px; font-size: 9pt; color: #666; text-align: right; }
+      </style>
+
+      <div class="page">
+        <div class="content">
+          <h1>Appendices</h1>
+
+          <ul>
+            <li>permanent building walls, excluding any major vertical penetrations of the floor. Alternatively, the amount of space on which the rent is based calculated according to local practice.</li>
+
+            <li><strong>Retrospective Value Opinion:</strong> A value opinion effective as of a specified historical date. The term retrospective does not define a type of value. Instead, it identifies a value opinion as being effective at some specific prior date. Value as of a historical date is frequently sought in connection with property tax appeals, damage claims, lease renegotiation, deficiency judgments, estate tax, and condemnation. Inclusion of the type of value with this term is appropriate, e.g., "retrospective market value opinion".</li>
+
+            <li><strong>Shell Rent:</strong> The typical rent paid for retail, office, or industrial tenant space based on minimal "shell" interior finishes (called vanilla finish or white wall finish in some areas). Usually the landlord delivers the main building shell space or some minimum level of interior build-out, and the tenant completes the interior finish, which can include walls, ceiling, and floor finishes, mechanical systems, interior electricity, and plumbing. Typically these are long-term leases with tenants paying all or most property expenses.</li>
+
+            <li><strong>Surplus Land:</strong> Land that is not currently needed to support the existing use but cannot be separated from the property and sold off for another use. Surplus land does not have an independent highest and best use and may or may not contribute value to the improved parcel. See also excess land.</li>
+
+            <li><strong>Turnover Vacancy:</strong> A method of calculating vacancy allowance that is estimated as part of the potential income estimate when using discounted cash flow (DCF) analysis. As units or suites turn over and are available for re-leasing, the periodic vacancy time "turn vacancy" will reduce the space that is occupied.</li>
+
+            <li><strong>Usable Area:</strong> 1) For office buildings, the actual occupiable area of a floor or an office space; computed by measuring from the finished surface of the office side of corridor and other permanent walls, to the center of partitions that separate the office from adjoining usable areas, and to the inside finished surface of the dominant portion of the permanent outer building walls. Sometimes called net building area or net floor area. See also gross area. 2) The area that is actually used by the tenants measured from the inside of the exterior walls to the exterior walls separating spaces from hallways and common areas.</li>
+
+            <li><strong>Use Value:</strong> The value of a property assuming a specific use, which may or may not be the property's highest and best use on the effective date of the appraisal. Use value may or may not be equal to market value but is different conceptually. See also <em>value in use</em>.</li>
+
+            <li><strong>Value in Use:</strong> The value of a property assuming a specific use, which may or may not be the property's highest and best use on the effective date of the appraisal. Use value may or may not be equal to market value but is different conceptually. See also <em>use value</em>.</li>
+
+            <li><strong>Value Indication:</strong> A valuer's conclusion of value resulting from the application of an approach to value, e.g., the value indication by the sales comparison approach.</li>
+          </ul>
+        </div>
+
+        <div class="footer">
+          72 &nbsp;&nbsp;&nbsp; 1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1
+        </div>
+      </div>
     </div>
   `;
 }
@@ -5083,6 +6441,7 @@ const PAGE_RENDERERS: Record<number, PageRenderFunction> = {
   67: renderPage67,
   68: renderPage68,
   69: renderPage69,
+  70: renderPage70,
   71: renderPage71,
   72: renderPage72,
   73: renderPage73,

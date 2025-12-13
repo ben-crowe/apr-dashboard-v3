@@ -268,24 +268,24 @@ export default function CalculationReasoning() {
     });
   }, [lines.length]);
 
-  // Detect data changes with debounce
+  // Listen for test data load event to trigger animation
   useEffect(() => {
-    if (currentDataHash !== lastDataHash && lastDataHash !== '') {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(() => {
-        startAnimation();
-      }, 300);
-    }
-    setLastDataHash(currentDataHash);
-  }, [currentDataHash, lastDataHash, startAnimation]);
+    const handleTestDataLoaded = () => {
+      // Small delay to let data settle
+      setTimeout(() => startAnimation(), 100);
+    };
 
-  // Initial animation on mount
+    window.addEventListener('testDataLoaded', handleTestDataLoaded);
+    return () => window.removeEventListener('testDataLoaded', handleTestDataLoaded);
+  }, [startAnimation]);
+
+  // Show all content immediately on mount (no auto-animation)
   useEffect(() => {
-    if (pgr > 0) {
-      const timer = setTimeout(() => startAnimation(), 500);
-      return () => clearTimeout(timer);
+    if (pgr > 0 && animation.completedLines.size === 0 && !animation.isAnimating) {
+      // Start with all content visible
+      completeAnimation();
     }
-  }, []);
+  }, [pgr]);
 
   // Animation loop
   useEffect(() => {

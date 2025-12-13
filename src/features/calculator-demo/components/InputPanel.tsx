@@ -63,6 +63,8 @@ export default function InputPanel() {
     loadFullTestData();
     // Force component to re-render after store update
     setTimeout(() => setUpdateKey(k => k + 1), 50);
+    // Trigger calculation animation
+    setTimeout(() => window.dispatchEvent(new Event('testDataLoaded')), 100);
   };
 
   const handleReset = () => {

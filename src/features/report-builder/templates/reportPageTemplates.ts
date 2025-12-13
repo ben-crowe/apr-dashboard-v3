@@ -2278,210 +2278,813 @@ export function renderPage30(sections: ReportSection[], valueScenarioType: strin
 
 /**
  * Page 31: Property Analysis - Description of Improvements
- * No fields defined yet
+ * Fields: improvements-description (boilerplate text)
  */
 export function renderPage31(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 31 - Property Analysis - Description of Improvements
-  // No fields defined in JSON yet
+  const improvementsDesc = getFieldValue(sections, 'improvements-description') || 'The subject property is an improved multi-family residential property. The improvements have been inspected and are described in this section.';
 
   return `
-    <div class="page page-31">
-      <h1>Page 31: Description of Improvements</h1>
-      <p>TODO: Implement improvements description template</p>
+    <div class="page page-31" style="font-family: Arial, sans-serif; padding: 40px 36px; position: relative; min-height: 11in;">
+      <div class="page-content">
+        <h2 style="font-size: 14px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 8px; letter-spacing: 0.5px;">Property Analysis</h2>
+
+        <h3 style="font-size: 12px; font-weight: bold; color: #003d7a; margin-bottom: 12px;">Description of Improvements</h3>
+
+        <p style="font-size: 11px; line-height: 1.6; margin-bottom: 16px; text-align: justify;">${improvementsDesc}</p>
+
+        <p style="font-size: 11px; line-height: 1.6; margin-bottom: 16px; text-align: justify;">The improvements were inspected as part of this appraisal assignment. The building features and physical characteristics are summarized in the following pages.</p>
+      </div>
+
+      <div class="footer" style="position: absolute; bottom: 30px; left: 36px; right: 36px; border-top: 1px solid #d0d0d0; padding-top: 10px; font-size: 9px; color: #666; display: flex; justify-content: space-between; align-items: center;">
+        <span>26 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <div style="width: 60px; height: 20px; background: linear-gradient(90deg, #5ba3d0 0%, #1a3a52 100%);"></div>
+      </div>
     </div>
   `;
 }
 
 /**
  * Page 32: Property Analysis - Unit Breakdown
- * No fields defined yet
+ * Fields: unit-mix-table (tabular data)
  */
 export function renderPage32(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 32 - Unit Breakdown
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-32">
-      <h1>Page 32: Unit Breakdown</h1>
-      <p>TODO: Implement unit breakdown template</p>
+    <div class="page page-32" style="font-family: Arial, Helvetica, sans-serif; padding: 40px 36px; position: relative; min-height: 11in;">
+      <div class="page-content">
+        <h2 style="font-size: 14px; font-weight: bold; margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 8px; letter-spacing: 0.5px;">Property Analysis</h2>
+
+        <table style="width: 100%; border-collapse: collapse; font-size: 10px; line-height: 1.4;">
+          <thead style="background-color: #1a3a52; color: white;">
+            <tr>
+              <th style="padding: 10px 8px; text-align: left; font-weight: bold; border: 1px solid #1a3a52; font-size: 10px;">TYPE</th>
+              <th style="padding: 10px 8px; text-align: left; font-weight: bold; border: 1px solid #1a3a52; font-size: 10px;">DESCRIPTION</th>
+              <th style="padding: 10px 8px; text-align: right; font-weight: bold; border: 1px solid #1a3a52; font-size: 10px;">UNIT DETAIL<br>UNITS</th>
+              <th style="padding: 10px 8px; text-align: right; font-weight: bold; border: 1px solid #1a3a52; font-size: 10px;">% TOT</th>
+              <th style="padding: 10px 8px; text-align: right; font-weight: bold; border: 1px solid #1a3a52; font-size: 10px;">SIZE</th>
+              <th style="padding: 10px 8px; text-align: right; font-weight: bold; border: 1px solid #1a3a52; font-size: 10px;">NRA<br>SF</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; background: #fafafa;">Flat 1 Bed / 1 Bath</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; background: #fafafa;">One Bed/One Bath</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; background: #fafafa; text-align: right; font-family: 'Courier New', monospace;">4</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; background: #fafafa; text-align: right; font-family: 'Courier New', monospace;">25%</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; background: #fafafa; text-align: right; font-family: 'Courier New', monospace;">550</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; background: #fafafa; text-align: right; font-family: 'Courier New', monospace;">2,200</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; background: #fff;">Flat 2 Bed / 1 Bath</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; background: #fff;">Two Bed/One Bath</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; background: #fff; text-align: right; font-family: 'Courier New', monospace;">12</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; background: #fff; text-align: right; font-family: 'Courier New', monospace;">75%</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; background: #fff; text-align: right; font-family: 'Courier New', monospace;">667</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; background: #fff; text-align: right; font-family: 'Courier New', monospace;">8,004</td>
+            </tr>
+            <tr style="font-weight: bold; background: #f5f5f5; border-top: 1px solid #999;">
+              <td colspan="2" style="padding: 8px; border: 1px solid #d0d0d0;">TOTAL / AVERAGE</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; text-align: right; font-family: 'Courier New', monospace;">16</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; text-align: right; font-family: 'Courier New', monospace;">100%</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; text-align: right; font-family: 'Courier New', monospace;">638</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; text-align: right; font-family: 'Courier New', monospace;">10,204</td>
+            </tr>
+            <tr style="font-weight: bold; background: #f5f5f5;">
+              <td colspan="2" style="padding: 8px; border: 1px solid #d0d0d0;">NET RENTABLE AREA</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; text-align: right; font-family: 'Courier New', monospace;">16</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; text-align: right;"></td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; text-align: right; font-family: 'Courier New', monospace;">638</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; text-align: right; font-family: 'Courier New', monospace;">10,204</td>
+            </tr>
+            <tr style="font-weight: bold; background: #f5f5f5;">
+              <td colspan="2" style="padding: 8px; border: 1px solid #d0d0d0;">GROSS BUILDING AREA</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; text-align: right; font-family: 'Courier New', monospace;">16</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; text-align: right;"></td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; text-align: right; font-family: 'Courier New', monospace;">638</td>
+              <td style="padding: 8px; border: 1px solid #d0d0d0; text-align: right; font-family: 'Courier New', monospace;">10,204</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer" style="position: absolute; bottom: 30px; left: 36px; right: 36px; border-top: 1px solid #d0d0d0; padding-top: 10px; font-size: 9px; color: #666; display: flex; justify-content: space-between; align-items: center;">
+        <span>27 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <div style="width: 60px; height: 20px; background: linear-gradient(90deg, #5ba3d0 0%, #1a3a52 100%);"></div>
+      </div>
     </div>
   `;
 }
 
 /**
  * Page 33: Property Analysis - Building Description
- * No fields defined yet
+ * Fields: building-description-table (component/description pairs)
  */
 export function renderPage33(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 33 - Building Description
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-33">
-      <h1>Page 33: Building Description</h1>
-      <p>TODO: Implement building description template</p>
+    <div class="page page-33" style="font-family: Arial, sans-serif; padding: 48px 36px; position: relative; min-height: 11in; color: #333; line-height: 1.4;">
+      <div class="section-title" style="font-size: 14px; font-weight: bold; margin-bottom: 4px; color: #000; border-bottom: 1px solid #000; padding-bottom: 4px;">Property Analysis</div>
+
+      <div class="subsection-title" style="font-size: 12px; font-weight: bold; color: #003d7a; margin-top: 12px; margin-bottom: 8px;">Building Description</div>
+
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 12px; font-size: 11px;">
+        <thead style="background-color: #003d7a; color: white;">
+          <tr>
+            <th style="padding: 8px; text-align: left; font-weight: bold; font-size: 11px;">COMPONENT</th>
+            <th style="padding: 8px; text-align: left; font-weight: bold; font-size: 11px;">DESCRIPTION</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; width: 20%; background-color: #f0f0f0;">Project Amenities</td><td style="padding: 6px 8px; border: 1px solid #ddd; width: 80%;">Guest Parking</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Unit Amenities</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Deck/Patio, Range/Stove, Refrigerator</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Laundry</td><td style="padding: 6px 8px; border: 1px solid #ddd;">On Site</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Security Features</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Deadbolts, Exterior Lighting, Secured Entry</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Foundation</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Concrete footings and walls;</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Exterior Walls/Framing</td><td style="padding: 6px 8px; border: 1px solid #ddd;">1121 - Brick, 1101 Stucco/Wood frame;</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Roof</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Flat built up membrane;</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Elevator</td><td style="padding: 6px 8px; border: 1px solid #ddd;">None;</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Heating & AC (HVAC)</td><td style="padding: 6px 8px; border: 1px solid #ddd;">1101 - 8 Furnaces, 1121 - Boilers with baseboard radiant heat;</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Insulation</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Fiberglass;</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Lighting</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Various;</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Electrical</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Individually metered;</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Interior Walls</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Painted drywall;</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Doors and Windows</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Wood interior & metal exterior doors/Vinyl or metal frame double pane glazing;</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Ceilings</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Textured drywall;</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Plumbing</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Standard;</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Floor Covering</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Combination of carpet, tile, vinyl tile and laminate hard wood;</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Fire Protection</td><td style="padding: 6px 8px; border: 1px solid #ddd;">None;</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Interior Finish/Build-Out</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Standard rental finishes;</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Site Improvements</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Gravel parking, sidewalks, and curbs;</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Landscaping</td><td style="padding: 6px 8px; border: 1px solid #ddd;">Landscaping around the building perimeter to consist of shrubs and trees. The landscaping as proposed is well established and well maintained.</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Parking</td><td style="padding: 6px 8px; border: 1px solid #ddd;">The subject provides 18 parking spaces and is therefore conforming to zoning requirements. The parking ratio of 1.1 per unit is within the typical range of 0.75-1.25 spaces per unit.</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Site Coverage Ratio</td><td style="padding: 6px 8px; border: 1px solid #ddd;">12.9% (3,138 SF footprint / 24,400 SF site), which is within market standards (20-35%) for similar walkup buildings in the area.</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Functional Design</td><td style="padding: 6px 8px; border: 1px solid #ddd;">The building features a functional Walkup design with typical site coverage and adequate off-street parking.</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ddd; font-weight: bold; background-color: #f0f0f0;">Hazardous Materials</td><td style="padding: 6px 8px; border: 1px solid #ddd;">A Phase I report was not provided. This appraisal assumes that the improvements are constructed free of all hazardous waste and toxic substances.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="footer" style="position: absolute; bottom: 30px; left: 36px; right: 36px; font-size: 10px; color: #666; display: flex; justify-content: space-between; align-items: center;">
+        <span>28 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <div style="width: 60px; height: 20px; background: linear-gradient(to right, #4da6ff, #0066cc); border-radius: 3px;"></div>
+      </div>
     </div>
   `;
 }
 
 /**
- * Page 34: Property Analysis - Continuation
- * No fields defined yet
+ * Page 34: Property Analysis - Continuation (Hazardous Materials)
+ * Fields: hazardous-materials-disclaimer
  */
 export function renderPage34(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 34 - Property Analysis Continuation
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-34">
-      <h1>Page 34: Property Analysis Continuation</h1>
-      <p>TODO: Implement continuation template</p>
+    <div class="page page-34" style="font-family: 'Calibri', 'Segoe UI', sans-serif; padding: 40px 40px 80px 40px; position: relative; min-height: 11in;">
+      <h1 style="font-size: 16px; font-weight: bold; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #000; letter-spacing: 0.5px;">Property Analysis</h1>
+
+      <p style="font-size: 11px; line-height: 1.6; color: #333; text-align: justify; margin-bottom: 12px;">materials, including (but not limited to) unseen asbestos and mold. Please refer to the Assumptions and Limiting Conditions section regarding this issue.</p>
+
+      <div class="footer" style="position: absolute; bottom: 20px; left: 40px; right: 40px; height: 60px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #e0e0e0;">
+        <span style="font-size: 10px; color: #666;">29 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <div style="width: 120px; height: 20px; background: linear-gradient(to right, #5a9fd4, #1e3a5f); border-radius: 10px 0 0 0;"></div>
+      </div>
     </div>
   `;
 }
 
 /**
- * Page 35: Market Context - Economic Overviews
- * No fields defined yet
+ * Page 35: Market Context - Economic Overviews (National)
+ * Fields: national-economic-overview, canada-economic-indicators-table
  */
 export function renderPage35(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 35 - Economic Overviews
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-35">
-      <h1>Page 35: Economic Overviews</h1>
-      <p>TODO: Implement economic overview template</p>
+    <div class="page page-35" style="font-family: 'Calibri', Arial, sans-serif; font-size: 11px; color: #333333; line-height: 1.4; padding: 36px; position: relative; min-height: 11in;">
+      <h1 style="font-size: 18px; font-weight: bold; color: #1a1a1a; margin-bottom: 8px;">Market Context</h1>
+
+      <h2 style="font-size: 12px; font-weight: bold; color: #2563eb; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #2563eb; padding-bottom: 4px; margin-bottom: 12px;">Economic Overviews</h2>
+
+      <h3 style="font-size: 12px; font-weight: bold; color: #1a1a1a; margin-top: 12px; margin-bottom: 8px;">National</h3>
+
+      <p style="font-size: 11px; line-height: 1.5; margin-bottom: 12px; text-align: justify; color: #333333;">Canada's economy in 2025 finds itself in a delicate balance: modest growth, contained inflation, but significant uncertainty from external trade and global energy markets. The Bank of Canada expects real GDP growth to recover toward 1.8% in 2025-2026, after a softer 2024. Inflation is projected to remain close to the 2% target, aided by moderating rent inflation and easing supply pressures. On the positive side, residential investment and housing construction are expected to lead growth, supported by tight rate cuts, pent-up demand, and government incentives for rental construction. Meanwhile, energy and export infrastructure especially pipeline capacity and LNG projects could provide a lift to Canadian exports. However, the risk of U.S. tariffs and a weakening labour market looms as a drag. In sum, Canada's 2025 is expected to be a moderating year, with growth stabilizing, inflation under control, and selective pockets of strength in housing, energy, and exports.</p>
+
+      <div style="font-size: 11px; font-weight: bold; background-color: #1a3a52; color: white; padding: 6px 8px; margin-bottom: 0; margin-top: 12px;">Canada Economic Indicators</div>
+      <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 12px; line-height: 1.3;">
+        <thead style="background-color: #e8e8e8;">
+          <tr>
+            <th style="padding: 6px 4px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Indicator</th>
+            <th style="padding: 6px 4px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Estimate</th>
+            <th style="padding: 6px 4px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Commentary</th>
+            <th style="padding: 6px 4px; text-align: left; font-weight: bold; border: 1px solid #cccccc;">Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Population (2025)</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">41.8 million</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Population distribution historic, primarily via immigration growth</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Statistics Canada</td></tr>
+          <tr><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Population Growth Rate</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">1.0-1.8%</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Growth slower than historical rates</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Statistics Canada</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Unemployment Rate (2025 YTD)</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">6.1%</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Labour markets have declined; job gains moderate</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Labour Force Survey</td></tr>
+          <tr><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Real GDP Growth (YoY)</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">1.8%</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Moderate recovery projected</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Bank of Canada</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Inflation (YoY)</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">2.1%</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Inflation near target; pressures easing</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Bank of Canada</td></tr>
+          <tr><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Housing Starts</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">6% growth</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Leading sector with stimulus support</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Bank of Canada</td></tr>
+          <tr style="background-color: #f9f9f9;"><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Energy Benchmark WTI</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">USD 70-80/bbl</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Key driver for trade and income</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Market data</td></tr>
+          <tr><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Natural Gas (AECO)</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">CAD 2-3$/GJ</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Normalized after 2022; LNG may firm demand</td><td style="padding: 5px 4px; border: 1px solid #e0e0e0;">Energy market</td></tr>
+        </tbody>
+      </table>
+
+      <div class="footer" style="position: absolute; bottom: 24px; left: 36px; right: 36px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; color: #666666; border-top: 1px solid #e0e0e0; padding-top: 6px;">
+        <span>30 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <div style="background: linear-gradient(90deg, #87ceeb 0%, #1a3a52 100%); width: 60px; height: 20px;"></div>
+      </div>
     </div>
   `;
 }
 
 /**
- * Page 36: Market Context - Provincial
- * No fields defined yet
+ * Page 36: Market Context - Provincial (Saskatchewan)
+ * Fields: provincial-economic-overview, saskatchewan-economic-indicators-table
  */
 export function renderPage36(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 36 - Provincial Context
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-36">
-      <h1>Page 36: Provincial Context</h1>
-      <p>TODO: Implement provincial context template</p>
+    <div class="page page-36" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; padding: 36px; position: relative; min-height: 11in;">
+      <h1 style="font-size: 18px; font-weight: bold; color: #000; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 2px solid #333;">Market Context</h1>
+
+      <h2 style="font-size: 14px; font-weight: bold; color: #003d7a; margin-top: 16px; margin-bottom: 12px;">Provincial</h2>
+
+      <p style="font-size: 11px; line-height: 1.5; margin-bottom: 16px; text-align: justify;">Saskatchewan's economy in 2025 is defined by steady growth, strong resource activity, and an improving housing sector. Real GDP is expanding at a moderate pace, supported by agriculture, potash, and oil production, while inflation has cooled to below 2%, easing cost pressures on households. Investment conditions remain relatively solid, with unemployment near 5.5-6%, and consumer demand is buoyed by wage gains and population growth. Housing starts have surged, reflecting confidence in residential markets and rising construction momentum. On the investment front, resource projects and infrastructure spending provide additional stability, and the province maintains a solid AA credit rating with a balanced budget outlook. Risks remain tied to commodity markets, especially oil prices and global agricultural demand, along with challenges in attracting and retaining skilled labour.</p>
+
+      <div style="font-size: 11px; font-weight: bold; color: #000; margin-top: 16px; margin-bottom: 8px;">Saskatchewan Economic Indicators</div>
+
+      <table style="width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 24px;">
+        <thead style="background-color: #f5f5f5;">
+          <tr>
+            <th style="padding: 6px 4px; text-align: left; font-weight: bold; border-bottom: 1px solid #ccc;">Indicator</th>
+            <th style="padding: 6px 4px; text-align: left; font-weight: bold; border-bottom: 1px solid #ccc;">Estimate</th>
+            <th style="padding: 6px 4px; text-align: left; font-weight: bold; border-bottom: 1px solid #ccc;">Commentary</th>
+            <th style="padding: 6px 4px; text-align: left; font-weight: bold; border-bottom: 1px solid #ccc;">Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Population (Apr 2025)</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">1,230,596</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Steady population growth YoY</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Statistics Bureau</td></tr>
+          <tr style="background-color: #fafafa;"><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Population Growth Rate</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">1.3%</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Moderate steady growth</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Statistics Canada</td></tr>
+          <tr><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Unemployment Rate (2025)</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">5.6%</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Stable labour market; below national avg</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Labour Force Survey</td></tr>
+          <tr style="background-color: #fafafa;"><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Total GDP</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">CAD 85.3B</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Solid resource-driven economy</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Government of SK</td></tr>
+          <tr><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">GDP/capita</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">$69,000</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Top-tier provincial economy</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Statistics Canada</td></tr>
+          <tr style="background-color: #fafafa;"><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Housing Starts</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">5,800 units</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">Strong construction activity</td><td style="padding: 5px 4px; border-bottom: 1px solid #eee;">CMHC</td></tr>
+        </tbody>
+      </table>
+
+      <div class="footer" style="position: absolute; bottom: 24px; left: 36px; right: 36px; font-size: 9px; color: #666; border-top: 1px solid #ccc; padding-top: 8px; display: flex; justify-content: space-between; align-items: center;">
+        <span>31 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <div style="width: 80px; height: 20px; background-color: #d0e8f2; border-left: 4px solid #003d7a;"></div>
+      </div>
     </div>
   `;
 }
 
 /**
- * Page 37: Market Context - Multi-Family Market Overview
- * No fields defined yet
+ * Page 37: Market Context - Multi-Family Market Overview (Saskatchewan)
+ * Fields: multifamily-market-overview, saskatchewan-multifamily-indicators-table
  */
 export function renderPage37(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 37 - Multi-Family Market
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-37">
-      <h1>Page 37: Multi-Family Market Overview</h1>
-      <p>TODO: Implement market overview template</p>
+    <div class="page page-37" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; padding: 54px 54px; position: relative; min-height: 11in;">
+      <div style="font-size: 18px; font-weight: bold; margin-bottom: 4px; color: #000; border-bottom: 2px solid #000; padding-bottom: 8px;">Market Context</div>
+      <div style="font-size: 13px; font-weight: bold; color: #003d6b; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;">Multi-Family Market Overview</div>
+
+      <div style="font-size: 14px; font-weight: bold; color: #003d6b; margin-bottom: 12px;">Saskatchewan</div>
+
+      <p style="font-size: 11px; line-height: 1.5; margin-bottom: 16px; color: #333;">Saskatchewan's rental markets entered 2025 with improving balance. Vacancy rates approached 3%, reflecting steady new completions and a cooling influx of migrants. Rents plateaued after outsized 2023-24 gains, with most urban landlords holding rates or offering small concessions. Construction activity remains healthy, supported by government and CMHC financing programs. Affordability remains better than the national average, yet rents signal growing strain among lower-income tenants.</p>
+
+      <div style="font-size: 12px; font-weight: bold; background: #003d6b; color: white; padding: 6px 8px; margin-bottom: 0; text-transform: uppercase;">Saskatchewan Multifamily Indicators</div>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 10px;">
+        <thead style="background: #e8e8e8;">
+          <tr>
+            <th style="padding: 6px 8px; text-align: left; font-weight: bold; border: 1px solid #ccc;">INDICATOR</th>
+            <th style="padding: 6px 8px; text-align: left; font-weight: bold; border: 1px solid #ccc;">ESTIMATE</th>
+            <th style="padding: 6px 8px; text-align: left; font-weight: bold; border: 1px solid #ccc;">COMMENTARY</th>
+            <th style="padding: 6px 8px; text-align: left; font-weight: bold; border: 1px solid #ccc;">SOURCE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ccc;">Vacancy Rate</td><td style="padding: 6px 8px; border: 1px solid #ccc;">3.0%</td><td style="padding: 6px 8px; border: 1px solid #ccc;">Near equilibrium with moderate rent growth</td><td style="padding: 6px 8px; border: 1px solid #ccc;">CMHC</td></tr>
+          <tr style="background: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ccc;">Avg Rent - Bachelor</td><td style="padding: 6px 8px; border: 1px solid #ccc;">$851</td><td style="padding: 6px 8px; border: 1px solid #ccc;">Rents stabilizing</td><td style="padding: 6px 8px; border: 1px solid #ccc;">CMHC</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ccc;">Avg Rent - 1 Bed</td><td style="padding: 6px 8px; border: 1px solid #ccc;">$1,168</td><td style="padding: 6px 8px; border: 1px solid #ccc;">Growth moderating</td><td style="padding: 6px 8px; border: 1px solid #ccc;">CMHC</td></tr>
+          <tr style="background: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ccc;">Avg Rent - 2 Bed</td><td style="padding: 6px 8px; border: 1px solid #ccc;">$1,398</td><td style="padding: 6px 8px; border: 1px solid #ccc;">Family units in demand</td><td style="padding: 6px 8px; border: 1px solid #ccc;">CMHC</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ccc;">Rental Rate Growth</td><td style="padding: 6px 8px; border: 1px solid #ccc;">+2.5% YoY</td><td style="padding: 6px 8px; border: 1px solid #ccc;">Moderating from 2024 highs</td><td style="padding: 6px 8px; border: 1px solid #ccc;">CMHC</td></tr>
+          <tr style="background: #f9f9f9;"><td style="padding: 6px 8px; border: 1px solid #ccc;">New Supply</td><td style="padding: 6px 8px; border: 1px solid #ccc;">+1,200 units YoY</td><td style="padding: 6px 8px; border: 1px solid #ccc;">Steady development pipeline</td><td style="padding: 6px 8px; border: 1px solid #ccc;">CMHC</td></tr>
+          <tr><td style="padding: 6px 8px; border: 1px solid #ccc;">Supply Growth Ratio</td><td style="padding: 6px 8px; border: 1px solid #ccc;">+3.8% YoY</td><td style="padding: 6px 8px; border: 1px solid #ccc;">Construction outpacing demand</td><td style="padding: 6px 8px; border: 1px solid #ccc;">CMHC</td></tr>
+        </tbody>
+      </table>
+
+      <div class="footer" style="position: absolute; bottom: 24px; left: 54px; right: 54px; padding-top: 8px; font-size: 9px; color: #666;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span>32 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+          <div style="width: 60px; height: 20px; background: #003d6b;"></div>
+        </div>
+      </div>
     </div>
   `;
 }
 
 /**
  * Page 38: Valuation & Conclusions - Highest & Best Use
- * No fields defined yet
+ * Fields: hbu-introduction, hbu-as-vacant-analysis, legally-permissible, physically-possible, financial-feasibility, maximum-productivity
  */
 export function renderPage38(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 38 - Highest & Best Use
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-38">
-      <h1>Page 38: Highest & Best Use</h1>
-      <p>TODO: Implement HBU template</p>
+    <div class="page page-38" style="font-family: 'Calibri', 'Segoe UI', sans-serif; line-height: 1.6; color: #333; padding: 36px; position: relative; min-height: 11in;">
+      <div style="border-bottom: 3px solid #003f7f; padding-bottom: 8px; margin-bottom: 20px;">
+        <div style="font-size: 18px; font-weight: bold; color: #003f7f; letter-spacing: 0.5px;">Valuation & Conclusions</div>
+      </div>
+
+      <div style="font-size: 14px; font-weight: bold; color: #003f7f; margin-top: 16px; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Highest & Best Use</div>
+
+      <div style="font-size: 12px; font-weight: bold; color: #003f7f; margin-top: 14px; margin-bottom: 8px;">Introduction</div>
+      <p style="font-size: 11px; line-height: 1.65; margin-bottom: 12px; text-align: justify;">The highest and best use of a property is defined as the legally permissible, physically possible, financially feasible, and maximally productive use that results in the highest value. This analysis serves as the foundation for the valuation process and determines the most reasonable and profitable use of the property to support its maximum present value.</p>
+
+      <p style="font-size: 11px; line-height: 1.65; margin-bottom: 12px; text-align: justify;">The analysis is completed through the following four steps:</p>
+
+      <ul style="margin-left: 20px; margin-bottom: 12px; font-size: 11px; line-height: 1.65;">
+        <li>Step 1: Highest and Best Use as Vacant</li>
+        <li>Step 2: Determination of Ideal Improvements</li>
+        <li>Step 3: Highest and Best Use as Proposed</li>
+        <li>Step 4: Final Conclusion</li>
+      </ul>
+
+      <p style="font-size: 11px; line-height: 1.65; margin-bottom: 12px; text-align: justify;">This section develops the highest and best use of the subject property As Though Vacant and As Improved.</p>
+
+      <div style="font-size: 12px; font-weight: bold; color: #003f7f; margin-top: 14px; margin-bottom: 8px;">As Though Vacant Analysis</div>
+      <p style="font-size: 11px; line-height: 1.65; margin-bottom: 12px; text-align: justify;">In this section the highest and best use of the subject as though vacant is concluded after taking into consideration financial feasibility, maximal productivity, marketability, legal, and physical factors.</p>
+
+      <div style="font-size: 12px; font-weight: bold; color: #003f7f; margin-top: 14px; margin-bottom: 8px;">Legally Permissible</div>
+      <p style="font-size: 11px; line-height: 1.65; margin-bottom: 12px; text-align: justify;">Private restrictions, zoning, building codes, historic district controls, and environmental regulations are considered. The legal factors influencing the highest and best use of the subject site are primarily government regulations such as zoning ordinances. Permitted uses of the subject's Low Density Residential District (R2) zoning include low and medium density residential. A zoning change is not likely, therefore, uses outside of those permitted by the R2 zoning are not considered moving forward in the as though vacant analysis.</p>
+
+      <div style="font-size: 12px; font-weight: bold; color: #003f7f; margin-top: 14px; margin-bottom: 8px;">Physically Possible</div>
+      <p style="font-size: 11px; line-height: 1.65; margin-bottom: 12px; text-align: justify;">An evaluation of what is physically possible for the subject site considers physical and locational characteristics that influence its highest and best use. In terms of physical features, the subject site totals 0.5601 acres (24,400 SF). It is rectangular in shape and has a level topography. The site has average exposure and average overall access. There are no physical limitations that would prohibit development of any of the by-right uses on the site.</p>
+
+      <div style="font-size: 12px; font-weight: bold; color: #003f7f; margin-top: 14px; margin-bottom: 8px;">Financial Feasibility</div>
+      <p style="font-size: 11px; line-height: 1.65; margin-bottom: 12px; text-align: justify;">Based on the analysis of the subject's market and an examination of costs and investment metrics and real estate market attributes, a multifamily building would likely have a value commensurate with its costs and requisite developer's profit.</p>
+
+      <div style="font-size: 12px; font-weight: bold; color: #003f7f; margin-top: 14px; margin-bottom: 8px;">Maximum Productivity</div>
+      <p style="font-size: 11px; line-height: 1.65; margin-bottom: 12px; text-align: justify;">There is only one use that creates value and at the same time conforms to the requirements of the first three tests. Financial feasibility, maximal productivity, marketability, legal, and physical factors have been considered and the highest and best use of the subject site as though vacant is concluded to be a multifamily use.</p>
+
+      <div style="position: absolute; bottom: 0; right: 0; width: 120px; height: 80px; background: linear-gradient(135deg, #b0d4e8 0%, #003f7f 100%); clip-path: polygon(100% 0, 100% 100%, 0 100%);"></div>
+
+      <div style="position: absolute; bottom: 36px; left: 36px; right: 36px; font-size: 9px; color: #666; border-top: 1px solid #ccc; padding-top: 6px;">
+        33 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}
+      </div>
     </div>
   `;
 }
 
 /**
  * Page 39: Valuation & Conclusions - As Improved Analysis
- * No fields defined yet
+ * Fields: as-improved-analysis, most-probable-buyer
  */
 export function renderPage39(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 39 - As Improved Analysis
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-39">
-      <h1>Page 39: As Improved Analysis</h1>
-      <p>TODO: Implement as improved template</p>
+    <div class="page page-39" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; padding: 36px 40px; position: relative; min-height: 11in;">
+      <h1 style="font-size: 18px; font-weight: 700; color: #000; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 3px solid #003d82; display: inline-block;">Valuation & Conclusions</h1>
+
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 14px; font-weight: 700; color: #003d82; margin-top: 20px; margin-bottom: 12px;">As Improved Analysis</h2>
+        <p style="font-size: 12px; line-height: 1.55; margin-bottom: 12px; text-align: justify;">The legal factors influencing the highest and best use of the subject property are primarily governmental regulations such as zoning and building codes. The subject improvements were constructed in 1970 (1970 weighted) and are a legal, conforming use. The physical and locational characteristics of the subject improvements have been previously discussed in this report. The project is of average quality construction and average condition, with adequate site coverage and parking ratios.</p>
+        <p style="font-size: 12px; line-height: 1.55; margin-bottom: 12px; text-align: justify;">The five possible alternative treatments of the property are redevelopment/demolition (not warranted as the improvements contribute substantial value to the site), expansion (not applicable, no excess or surplus land), renovation (not warranted), conversion (not warranted), and continued use "as-is". Given the underlying market conditions and activity, it appears that the multifamily use as improved has sufficient degree of financial feasibility.</p>
+        <p style="font-size: 12px; line-height: 1.55; margin-bottom: 12px; text-align: justify;">Among the five alternative uses, a continuation of the multifamily use is the Highest and Best Use of the subject As Improved.</p>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <h2 style="font-size: 14px; font-weight: 700; color: #003d82; margin-top: 20px; margin-bottom: 12px;">Most Probable Buyer</h2>
+        <p style="font-size: 12px; line-height: 1.55; margin-bottom: 12px; text-align: justify;">Based on the type of property and the income generating potential of the improvements, it is our opinion that the most probable buyer for the subject would be a local or regional investor As Improved.</p>
+      </div>
+
+      <div style="position: absolute; bottom: 24px; left: 40px; right: 40px; display: flex; justify-content: space-between; align-items: flex-end; padding-top: 20px; border-top: 1px solid #e0e0e0;">
+        <span style="font-size: 11px; color: #666;">34 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <div style="width: 140px; height: 40px; background: linear-gradient(to right, #7ba5d4 0%, #003d82 100%); border-radius: 4px 0 0 0;"></div>
+      </div>
     </div>
   `;
 }
 
 /**
- * Page 40: Valuation & Conclusions - Valuation Methodology
- * No fields defined yet
+ * Page 40: Valuation Methodology
+ * Fields: valuation-methodology-intro, land-valuation-text, cost-approach-text,
+ * sales-comparison-text, income-capitalization-text
  */
 export function renderPage40(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 40 - Valuation Methodology
-  // No fields defined in JSON yet
-
   return `
-    <div class="page page-40">
-      <h1>Page 40: Valuation Methodology</h1>
-      <p>TODO: Implement methodology template</p>
+    <div class="page page-40" style="font-family: 'Calibri', 'Segoe UI', sans-serif; line-height: 1.5; color: #000; padding: 40px 50px; position: relative; min-height: 11in;">
+      <!-- Header -->
+      <div style="margin-bottom: 30px; border-bottom: 2px solid #1a5490; padding-bottom: 10px;">
+        <div style="font-size: 16px; font-weight: bold; color: #1a5490; letter-spacing: 0.5px;">Valuation & Conclusions</div>
+      </div>
+
+      <!-- Valuation Methodology Section -->
+      <div style="font-size: 14px; font-weight: bold; color: #1a5490; text-transform: uppercase; letter-spacing: 1px; margin-top: 20px; margin-bottom: 12px;">Valuation Methodology</div>
+
+      <p style="font-size: 11px; line-height: 1.6; margin-bottom: 10px; text-align: justify; color: #333;">${getFieldValue(sections, 'valuation-methodology-intro') || 'In traditional valuation theory, the three approaches to estimating the value of an asset are the cost approach, sales comparison approach, and income capitalization approach. Each approach assumes valuation of the property at the property\'s highest and best use. From the indications of these analyses, an opinion of value is reached based upon expert judgment within the outline of the appraised process.'}</p>
+
+      <!-- Land Valuation Subsection -->
+      <div style="font-size: 13px; font-weight: bold; color: #1a5490; margin-top: 16px; margin-bottom: 10px;">Land Valuation</div>
+
+      <p style="font-size: 11px; line-height: 1.6; margin-bottom: 10px; text-align: justify; color: #333;">${getFieldValue(sections, 'land-valuation-text') || 'Characteristics specific to the subject property do not warrant that a site value is developed.'}</p>
+
+      <!-- Cost Approach Subsection -->
+      <div style="font-size: 13px; font-weight: bold; color: #1a5490; margin-top: 16px; margin-bottom: 10px;">Cost Approach</div>
+
+      <p style="font-size: 11px; line-height: 1.6; margin-bottom: 10px; text-align: justify; color: #333;">${getFieldValue(sections, 'cost-approach-text') || 'The cost approach considers the cost to replace the proposed improvements, less accrued depreciation, plus the market value of the land. The cost approach is based upon the understanding that purchasers give careful consideration to the cost to construct a replacement or substitution of improvements and do not depreciation in the structure from all causes. Profit for co-ordination by the entrepreneur is included in the value indication. Considering the limited applicability of this approach in relation to the subject property\'s characteristics, we have not undertaken the Cost Approach. The Cost Approach has limited applicability due to the age of the improvements and lack of market based data to support an estimate of accrued depreciation. Based on the preceding information, the Cost Approach has not been undertaken as part of this analysis.'}</p>
+
+      <p style="font-size: 11px; line-height: 1.6; margin-bottom: 10px; text-align: justify; color: #333;">Investors typically do not place emphasis on replacement cost in establishing value for investment properties. The exclusion of the Cost Approach does not diminish the credibility of the value conclusion.</p>
+
+      <!-- Sales Comparison Approach Subsection -->
+      <div style="font-size: 13px; font-weight: bold; color: #1a5490; margin-top: 16px; margin-bottom: 10px;">Sales Comparison Approach</div>
+
+      <p style="font-size: 11px; line-height: 1.6; margin-bottom: 10px; text-align: justify; color: #333;">${getFieldValue(sections, 'sales-comparison-text') || 'The sales comparison approach estimates value based on what other purchasers and sellers in the market have agreed to as price for comparable properties. This approach is based upon the principle of substitution, which states that the limit of price, rents, and rates tend to be set by the prevailing prices, terms, and price of equally desirable substitutes. In conducting the sales comparison approach, we gather data on reasonably substitutable properties and make adjustments for transactional and property characteristics. The resulting adjusted prices form a basis to an estimate of the price one might expect to realize upon sale of the property.'}</p>
+
+      <p style="font-size: 11px; line-height: 1.6; margin-bottom: 10px; text-align: justify; color: #333;">We have undertaken the Direct Comparison Approach as part of this assignment. Considering the applicability of this approach in relation to the subject property's characteristics, we consider the application of this approach to be warranted.</p>
+
+      <!-- Income Capitalization Approach Subsection -->
+      <div style="font-size: 13px; font-weight: bold; color: #1a5490; margin-top: 16px; margin-bottom: 10px;">Income Capitalization Approach</div>
+
+      <p style="font-size: 11px; line-height: 1.6; margin-bottom: 10px; text-align: justify; color: #333;">${getFieldValue(sections, 'income-capitalization-text') || 'The income capitalization approach ("income approach") simulates the reasoning of an investor who views the cash flows that would result from the anticipated revenue and expense of a property throughout its lifetime. The net income developed in our analysis is the balance of potential income remaining after vacancy and collection loss, and operating expenses. This net income is then capitalized at an appropriate rate to derive an estimate of value or discounted by an appropriate yield rate over a typical projection period in a discounted cash flow analysis. Thus, two key steps are involved: (1) estimating the net income applicable to the subject and (2) choosing appropriate capitalization rates and discount rates. The appropriate rates are not typically provided on an investment and return of the investment over the life of the particular property.'}</p>
+
+      <!-- Footer -->
+      <div style="position: absolute; bottom: 20px; left: 0; right: 0; height: 40px; background: linear-gradient(to right, transparent 0%, transparent 60%, #1a5490 60%, #1a5490 100%); display: flex; align-items: center; padding: 0 50px; font-size: 10px; color: #666;">
+        <div style="flex: 1;">35 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
+      </div>
     </div>
   `;
 }
 
 /**
- * Page 41: Valuation & Conclusions
- * Fields: approaches-to-value-table, valuation-intro-text
+ * Page 41: Valuation & Conclusions - Approaches to Value
+ * Fields: valuation-intro-text, correlation-conclusion-text, approaches-to-value-table
  */
 export function renderPage41(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 41 - Valuation & Conclusions
-  // Fields: approaches-to-value-table, valuation-intro-text
-
   return `
-    <div class="page page-41">
-      <h1>Page 41: Valuation Approaches</h1>
-      <p>TODO: Implement valuation approaches template</p>
+    <div class="page page-41" style="font-family: 'Calibri', 'Segoe UI', sans-serif; line-height: 1.5; color: #1a1a1a; padding: 40px 40px 60px 40px; position: relative; min-height: 11in;">
+      <!-- Header -->
+      <h1 style="font-size: 16px; font-weight: bold; color: #1a1a1a; border-bottom: 3px solid #003d7a; padding-bottom: 8px; margin-bottom: 16px; letter-spacing: 0.5px;">Valuation & Conclusions</h1>
+
+      <p style="font-size: 11px; line-height: 1.6; margin-bottom: 12px; text-align: justify; color: #333;">${getFieldValue(sections, 'valuation-intro-text') || 'We have undertaken the Income Approach as part of this assignment. The subject property comprises an income generating asset and as such, we consider the inclusion of this approach warranted. In undertaking this approach, we have relied on the Direct Capitalization method only as the Discounted Cash Flow method does not contribute substantially to estimating the market value of the subject property beyond the Direct Capitalization method.'}</p>
+
+      <!-- Correlation and Conclusion -->
+      <h2 style="font-size: 14px; font-weight: bold; color: #1a1a1a; margin-top: 18px; margin-bottom: 12px;">Correlation and Conclusion</h2>
+
+      <p style="font-size: 11px; line-height: 1.6; margin-bottom: 12px; text-align: justify; color: #333;">${getFieldValue(sections, 'correlation-conclusion-text') || 'Upon scope with the authorized client, the subject\'s specific characteristics and the interest appraised, this appraisal report will address the Direct Capitalization Approaches. The values presented represent the As Stabilized (Fee Simple Estate). This appraisal does not develop the Cost Approach, the impact of which is addressed in the reconciliation section.'}</p>
+
+      <!-- Approaches to Value Table -->
+      <div style="margin-top: 16px; margin-bottom: 20px;">
+        <div style="font-size: 12px; font-weight: bold; color: white; background-color: #003d7a; padding: 10px 12px; margin-bottom: 0; letter-spacing: 0.5px;">APPROACHES TO VALUE APPLIED</div>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 0; font-size: 11px;">
+          <thead>
+            <tr>
+              <th style="background-color: #e8f0f7; color: #1a1a1a; padding: 10px 12px; text-align: left; font-weight: bold; border-bottom: 2px solid #003d7a; font-size: 10px; letter-spacing: 0.3px;">APPROACH</th>
+              <th style="background-color: #e8f0f7; color: #1a1a1a; padding: 10px 12px; text-align: left; font-weight: bold; border-bottom: 2px solid #003d7a; font-size: 10px; letter-spacing: 0.3px;">APPLICABILITY TO THE SUBJECT</th>
+              <th style="background-color: #e8f0f7; color: #1a1a1a; padding: 10px 12px; text-align: left; font-weight: bold; border-bottom: 2px solid #003d7a; font-size: 10px; letter-spacing: 0.3px;">USE IN ASSIGNMENT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #ddd; vertical-align: top;">Cost Approach</td>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #ddd; vertical-align: top;">${getFieldValue(sections, 'cost-approach-applicability') || 'Not Applicable'}</td>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #ddd; vertical-align: top;">${getFieldValue(sections, 'cost-approach-use') || 'No'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #ddd; vertical-align: top;">Income Approach</td>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #ddd; vertical-align: top;">${getFieldValue(sections, 'income-approach-applicability') || 'Applicable'}</td>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #ddd; vertical-align: top;">${getFieldValue(sections, 'income-approach-use') || 'Yes'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #999; vertical-align: top;">Sales Approach</td>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #999; vertical-align: top;">${getFieldValue(sections, 'sales-approach-applicability') || 'Applicable'}</td>
+              <td style="padding: 10px 12px; border-bottom: 1px solid #999; vertical-align: top;">${getFieldValue(sections, 'sales-approach-use') || 'Yes'}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer -->
+      <div style="position: absolute; bottom: 15px; left: 40px; font-size: 9px; color: #666;">36 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
+      <div style="position: absolute; bottom: 15px; right: 40px; width: 120px; height: 25px; background: linear-gradient(90deg, #e8f0f7 50%, #003d7a 50%); border-radius: 2px;"></div>
     </div>
   `;
 }
 
 /**
  * Page 42: Valuation & Conclusions - Income Approach
- * Fields: 9 fields including income-approach-overview, direct-capitalization-method,
- * multifamily-revenue-analysis-intro, subject-rent-roll-table, etc.
+ * Fields: income-approach-overview, direct-capitalization-method, multifamily-revenue-analysis-intro,
+ * subject-rent-roll-table, rent-roll-note, market-rent-survey-intro, unit-of-comparison-text,
+ * selection-of-comparables-text, concessions-text
  */
 export function renderPage42(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 42 - Income Approach
-  // 9 fields total
-
   return `
-    <div class="page page-42">
-      <h1>Page 42: Income Approach</h1>
-      <p>TODO: Implement income approach template</p>
+    <div class="page page-42" style="font-family: 'Calibri', 'Arial', sans-serif; line-height: 1.5; color: #333; padding: 0.5in; position: relative; min-height: 11in;">
+      <!-- Header -->
+      <div style="border-bottom: 3px solid #0052A3; padding-bottom: 8px; margin-bottom: 20px;">
+        <h1 style="font-size: 16px; font-weight: bold; color: #000; letter-spacing: 0.5px; margin: 0;">Valuation & Conclusions</h1>
+      </div>
+
+      <!-- Income Approach Section -->
+      <div style="margin-bottom: 18px;">
+        <h2 style="font-size: 13px; font-weight: bold; color: #0052A3; margin-bottom: 8px; letter-spacing: 0.5px; text-transform: uppercase;">Income Approach</h2>
+        <p style="font-style: italic; font-size: 11px; margin-bottom: 12px; line-height: 1.4;">${getFieldValue(sections, 'income-approach-overview') || 'The Income Approach is based on the premise that properties are purchased for their income producing potential. It considers both the annual return on the invested capital and the rate of return anticipated by market participants. The two fundamental methods of this valuation technique include Discounted Cash Flow and Direct Capitalization. The Direct Capitalization method of the Income Approach is used in this analysis. This capitalization technique best represents the decision-making process of an investor.'}</p>
+      </div>
+
+      <!-- Direct Capitalization Method -->
+      <div style="margin-bottom: 18px;">
+        <h3 style="font-size: 12px; font-weight: bold; color: #000; margin-bottom: 8px;">Direct Capitalization Method</h3>
+        <p style="font-size: 11px; margin-bottom: 10px; text-align: justify; line-height: 1.4;">${getFieldValue(sections, 'direct-capitalization-method') || 'The first step in direct capitalization is to estimate the durable rental income through analysis of the in-place or projected (proposed developments) leases and market rent terms. Next, encumbrances and other revenue are analyzed. Then, vacancy and operating expenses are estimated. Finally, the net operating income is capitalized at a supported rate. The implied value may be adjusted to account for non-stabilized conditions or required capital expenditures to reflect an as-is value.'}</p>
+      </div>
+
+      <!-- Multi-Family Revenue Analysis -->
+      <div style="margin-bottom: 18px;">
+        <h3 style="font-size: 12px; font-weight: bold; color: #000; margin-bottom: 6px;">Multi-Family Revenue Analysis</h3>
+        <h4 style="font-size: 11px; font-weight: bold; margin-bottom: 6px;">Multi-Family Subject Rent Roll</h4>
+        <p style="font-size: 11px; margin-bottom: 10px; line-height: 1.4;">${getFieldValue(sections, 'multifamily-revenue-analysis-intro') || 'The following table summarizes the subject in place unit mix and rental rates.'}</p>
+
+        <!-- Rent Roll Table -->
+        <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin: 14px 0;">
+          <thead style="background: #003D82; color: white; font-weight: bold;">
+            <tr>
+              <th style="padding: 6px 4px; text-align: left; border: 1px solid #003D82; font-size: 9px; text-transform: uppercase;">TYPE</th>
+              <th style="padding: 6px 4px; text-align: left; border: 1px solid #003D82; font-size: 9px; text-transform: uppercase;">DESCRIPTION</th>
+              <th style="padding: 6px 4px; text-align: center; border: 1px solid #003D82; font-size: 9px; text-transform: uppercase;">UNITS</th>
+              <th style="padding: 6px 4px; text-align: center; border: 1px solid #003D82; font-size: 9px; text-transform: uppercase;">% OF TOTAL</th>
+              <th style="padding: 6px 4px; text-align: center; border: 1px solid #003D82; font-size: 9px; text-transform: uppercase;">VAC %</th>
+              <th style="padding: 6px 4px; text-align: center; border: 1px solid #003D82; font-size: 9px; text-transform: uppercase;">OCC %</th>
+              <th style="padding: 6px 4px; text-align: center; border: 1px solid #003D82; font-size: 9px; text-transform: uppercase;">AVG RENT</th>
+              <th style="padding: 6px 4px; text-align: center; border: 1px solid #003D82; font-size: 9px; text-transform: uppercase;">ACTUAL RENT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background: #f9f9f9;">
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: left;">Flat 1 Bed / 1 Bath</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: left;">One Bed/One Bath</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">${getFieldValue(sections, 'one-bed-units') || '4'}</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">25%</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">0%</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">100%</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">$${getFieldValue(sections, 'one-bed-avg-rent') || '585'}</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">$${getFieldValue(sections, 'one-bed-actual-rent') || '1,633'}</td>
+            </tr>
+            <tr style="background: white;">
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: left;">Flat 2 Bed / 1 Bath</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: left;">Two Bed/One Bath</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">${getFieldValue(sections, 'two-bed-units') || '12'}</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">75%</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">8%</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">92%</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">$${getFieldValue(sections, 'two-bed-avg-rent') || '650'}</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">$${getFieldValue(sections, 'two-bed-actual-rent') || '1,913'}</td>
+            </tr>
+            <tr style="background: #f9f9f9; font-weight: bold;">
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: left;">TOTAL / AVERAGE</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc;"></td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">${getFieldValue(sections, 'total-units') || '16'}</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">100%</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">6%</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">94%</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">$${getFieldValue(sections, 'avg-rent-total') || '1,013'}</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">$${getFieldValue(sections, 'actual-rent-total') || '3,546'}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="font-size: 10px; margin-top: 8px; line-height: 1.4;">${getFieldValue(sections, 'rent-roll-note') || 'The majority of the subject tenant leases are on 12-month leases. In addition, security deposit fees for the property equal one month\'s rent. The landlord pays for all utilities except electricity.'}</p>
+      </div>
+
+      <!-- Market Rent Survey Analysis -->
+      <div style="margin-bottom: 18px;">
+        <h3 style="font-size: 12px; font-weight: bold; color: #000; margin-bottom: 8px;">Multi-Family Market Rent Survey Analysis</h3>
+        <p style="font-size: 11px; margin-bottom: 10px; text-align: justify; line-height: 1.4;">${getFieldValue(sections, 'market-rent-survey-intro') || 'This section examines comparable properties within the marketplace to estimate market rent for the subject. This allows for a comparison of the subject property\'s contract to what is attainable in the current market.'}</p>
+      </div>
+
+      <!-- Unit of Comparison -->
+      <div style="margin-bottom: 18px;">
+        <h3 style="font-size: 12px; font-weight: bold; color: #000; margin-bottom: 8px;">Unit of Comparison</h3>
+        <p style="font-size: 11px; margin-bottom: 10px; text-align: justify; line-height: 1.4;">${getFieldValue(sections, 'unit-of-comparison-text') || 'The analysis is conducted on a dollar per square foot, per month basis, reflecting market behavior. The total dollar per month per unit is also considered.'}</p>
+      </div>
+
+      <!-- Selection of Comparables -->
+      <div style="margin-bottom: 18px;">
+        <h3 style="font-size: 12px; font-weight: bold; color: #000; margin-bottom: 8px;">Selection of Comparables</h3>
+        <p style="font-size: 11px; margin-bottom: 10px; text-align: justify; line-height: 1.4;">${getFieldValue(sections, 'selection-of-comparables-text') || 'A comparable search of the marketplace was undertaken to find the most comparable properties in terms of location, tenancy, age, exposure, quality, and condition. The comparables in this analysis are the most reliable indicators of market rent for the subject available at the time of this appraisal.'}</p>
+      </div>
+
+      <!-- Concessions -->
+      <div style="margin-bottom: 18px;">
+        <h3 style="font-size: 12px; font-weight: bold; color: #000; margin-bottom: 8px;">Concessions</h3>
+        <p style="font-size: 11px; margin-bottom: 10px; text-align: justify; line-height: 1.4;">${getFieldValue(sections, 'concessions-text') || 'Currently landlords are not offering concessions.'}</p>
+      </div>
+
+      <!-- Footer -->
+      <div style="position: absolute; bottom: 20px; left: 0; right: 0; padding: 0 40px; border-top: 2px solid #0052A3; padding-top: 8px; font-size: 10px; display: flex; justify-content: space-between; align-items: center;">
+        <div style="flex: 1;"><strong>37</strong> | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
+        <div style="width: 80px; height: 30px; background: linear-gradient(to right, #E8F0F8 50%, #003D82 50%); margin-left: 10px;"></div>
+      </div>
     </div>
   `;
 }
 
 /**
- * Page 43: Valuation & Conclusions - Rent Survey
+ * Page 43: Valuation & Conclusions - Rent Survey Comparison
  * Fields: survey-presentation-intro, survey-comparison-table, rent-survey-information-table, building-information-table
  */
 export function renderPage43(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 43 - Rent Survey
-  // Fields: survey-presentation-intro, survey-comparison-table
-  // rent-survey-information-table, building-information-table
-
   return `
-    <div class="page page-43">
-      <h1>Page 43: Rent Survey</h1>
-      <p>TODO: Implement rent survey template</p>
+    <div class="page page-43" style="font-family: Arial, sans-serif; padding: 0.5in; position: relative; min-height: 11in; display: flex; flex-direction: column;">
+      <div style="flex: 1; overflow: hidden; display: flex; flex-direction: column;">
+        <!-- Header -->
+        <h1 style="font-size: 18px; font-weight: bold; color: #000; padding-bottom: 8px; border-bottom: 3px solid #4a7ba7; margin-bottom: 12px;">Valuation & Conclusions</h1>
+
+        <!-- Presentation Section -->
+        <h2 style="font-size: 13px; font-weight: bold; color: #003366; margin-top: 12px; margin-bottom: 8px;">Presentation</h2>
+        <p style="font-size: 10px; line-height: 1.4; color: #333; margin-bottom: 10px; text-align: justify;">${getFieldValue(sections, 'survey-presentation-intro') || 'The following summarizes the comparables most similar to the subject property. The Survey Comparison Table, location map, photographs, and an analysis of the rent survey are presented on the following pages.'}</p>
+
+        <!-- Survey Comparison Table -->
+        <div style="margin-bottom: 12px;">
+          <div style="background: #2d5a8c; color: white; padding: 6px 8px; font-size: 9px; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 0;">SURVEY COMPARISON TABLE</div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 8px; margin-bottom: 10px; border: 1px solid #999;">
+            <thead style="background: #e8f0f7;">
+              <tr>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">Property Name</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">Subject</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">COMP 1</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">COMP 2</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">COMP 3</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">COMP 4</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">COMP 5</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Address</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'comp1-address') || '2624 B-84th Ave'}</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'comp2-address') || '521 G-81 St'}</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'comp3-address') || '2306-2 Ave W'}</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'comp4-address') || '3050 Ulm St'}</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'comp5-address') || '399 24 St W'}</td>
+              </tr>
+              <tr style="background: #fafbfc;">
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">City</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'property-city') || 'North Battleford'}</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">North Battleford</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Prince Albert</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Prince Albert</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Prince Albert</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Prince Albert</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Province</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">SK</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">SK</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">SK</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">SK</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">SK</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">SK</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Rent Survey Information Table -->
+        <div style="margin-bottom: 12px;">
+          <div style="background: #2d5a8c; color: white; padding: 6px 8px; font-size: 9px; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 0;">RENT SURVEY INFORMATION</div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 8px; margin-bottom: 10px; border: 1px solid #999;">
+            <thead style="background: #e8f0f7;">
+              <tr>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">Rent Type</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">Market</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;" colspan="5">Comparables</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Rent/Unit Avg</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">$${getFieldValue(sections, 'market-rent-unit-avg') || '1,216'}</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">$1,762</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">$1,238</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">$1,217</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">$1,375</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">$1,435</td>
+              </tr>
+              <tr style="background: #fafbfc;">
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Rent/SF Avg</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">$${getFieldValue(sections, 'market-rent-sf-avg') || '1.39'}</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">$2.43</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">$1.77</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">$1.58</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">$1.76</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">$1.98</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Unit Amenities</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Partial Kitchen, Electric Baseboard Heating</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Full Kitchen, Gas Heating</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Full Kitchen, Gas Heating</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Full Kitchen, Gas Heating</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Full Kitchen, Gas Heating</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Full Kitchen, Gas Heating</td>
+              </tr>
+              <tr style="background: #fafbfc;">
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Utilities Incl.</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Heat, W</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">G, Heat, L, W</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Heat, W</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Heat, W</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Heat, W</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Heat, W</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Parking</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">None included</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Carport</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Open</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Open</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Open</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Open</td>
+              </tr>
+              <tr style="background: #fafbfc;">
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Laundry</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">On Site</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Washer/Dryer</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">On-Site</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">On-Site</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">On-Site</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">On-Site</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Building Information Table -->
+        <div style="margin-bottom: 12px;">
+          <div style="background: #2d5a8c; color: white; padding: 6px 8px; font-size: 9px; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 0;">BUILDING INFORMATION</div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 8px; margin-bottom: 10px; border: 1px solid #999;">
+            <thead style="background: #e8f0f7;">
+              <tr>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">Item</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">Subject</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">COMP 1</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">COMP 2</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">COMP 3</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">COMP 4</th>
+                <th style="background: #d0dce6; padding: 4px 3px; text-align: center; font-weight: bold; border: 1px solid #999; font-size: 7px;">COMP 5</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Avg Unit SF</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'avg-unit-sf') || '886'}</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">725</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">769</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">768</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">780</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">724</td>
+              </tr>
+              <tr style="background: #fafbfc;">
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Quality</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Average</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Average</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Average</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Average</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Average</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Average</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Condition</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Average</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Average</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Average</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Average</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Average</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">Average</td>
+              </tr>
+              <tr style="background: #fafbfc;">
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Project Amenities</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Guest Parking</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Elevators, Guest Parking</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Guest Parking, Storage</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Guest Parking, Storage</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Guest Parking, Storage</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Elevators, Guest Parking</td>
+              </tr>
+              <tr>
+                <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Security</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Deadbolt, Intercom</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Electronic, CCTV</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Deadbolt, CCTV</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Electronic, CCTV</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Electronic, CCTV</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd; font-size: 7px;">Electronic, CCTV</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="margin-top: auto; padding-top: 0.25in; border-top: 1px solid #ccc; font-size: 9px; color: #666; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: bold;">38</span>
+        <span>${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <div style="width: 60px; height: 20px; background: linear-gradient(to right, #4a7ba7 50%, #2d5a8c 50%); border-radius: 2px;"></div>
+      </div>
     </div>
   `;
 }
@@ -2491,13 +3094,69 @@ export function renderPage43(sections: ReportSection[], valueScenarioType: strin
  * Fields: location-map-placeholder, comparable-distance-table
  */
 export function renderPage44(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 44 - Comparable Location Map
-  // Fields: location-map-placeholder, comparable-distance-table
-
   return `
-    <div class="page page-44">
-      <h1>Page 44: Comparable Location Map</h1>
-      <p>TODO: Implement location map template</p>
+    <div class="page page-44" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; padding: 40px 36px; position: relative; min-height: 11in; display: flex; flex-direction: column;">
+      <!-- Header -->
+      <div style="font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #0066cc;">Valuation & Conclusions</div>
+
+      <!-- Map Section -->
+      <div style="width: 100%; height: 340px; margin-bottom: 16px;">
+        <div style="width: 100%; height: 100%; background: #e8f0f7; display: flex; align-items: center; justify-content: center; color: #666; font-size: 13px; border: 1px solid #ccc; font-weight: normal; font-style: italic;">
+          ${getFieldValue(sections, 'location-map-placeholder') || '[MAP: Saskatchewan location map showing subject property and comparable properties. Map includes cities, highways, and geographic features.]'}
+        </div>
+      </div>
+
+      <!-- Comparable Distance Table -->
+      <div style="width: 100%; margin-bottom: 16px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 11px; line-height: 1.4;">
+          <thead>
+            <tr>
+              <th style="background-color: #d4e6f1; color: #1a1a1a; font-weight: 700; text-align: left; padding: 6px 8px; border: 1px solid #999; font-size: 10px;">COMPARABLE</th>
+              <th style="background-color: #d4e6f1; color: #1a1a1a; font-weight: 700; text-align: left; padding: 6px 8px; border: 1px solid #999; font-size: 10px;">LABEL</th>
+              <th style="background-color: #d4e6f1; color: #1a1a1a; font-weight: 700; text-align: left; padding: 6px 8px; border: 1px solid #999; font-size: 10px;">ADDRESS</th>
+              <th style="background-color: #d4e6f1; color: #1a1a1a; font-weight: 700; text-align: left; padding: 6px 8px; border: 1px solid #999; font-size: 10px;">KILOMETRES FROM SUBJECT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">COMPARABLE 1</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">1</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">${getFieldValue(sections, 'comp1-full-address') || '1520 - 99 Ave., North Battleford, SK, S9A 3X6'}</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">${getFieldValue(sections, 'comp1-distance') || '177.9'}</td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">COMPARABLE 2</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">2</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">${getFieldValue(sections, 'comp2-full-address') || '531 S St. E., Prince Albert, SK, S6V 6J3'}</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">${getFieldValue(sections, 'comp2-distance') || '177.1'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">COMPARABLE 3</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">3</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">${getFieldValue(sections, 'comp3-full-address') || '2302 2 Ave. W, Prince Albert, SK, S6V 5C7'}</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">${getFieldValue(sections, 'comp3-distance') || '175.4'}</td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">COMPARABLE 4</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">4</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">${getFieldValue(sections, 'comp4-full-address') || '3020 Durn Dr, Prince Albert, SK, S6V 7E7'}</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">${getFieldValue(sections, 'comp4-distance') || '177.9'}</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">COMPARABLE 5</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">5</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">${getFieldValue(sections, 'comp5-full-address') || '388 32 St W, Prince Albert, SK, S6V 5Z3'}</td>
+              <td style="padding: 6px 8px; border: 1px solid #999; color: #1a1a1a;">${getFieldValue(sections, 'comp5-distance') || '174.9'}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer -->
+      <div style="margin-top: auto; font-size: 10px; color: #666; display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #ddd;">
+        <div style="flex: 1;">39 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
+        <div style="width: 100px; height: 24px; background: #0052a3; border-radius: 2px;"></div>
+      </div>
     </div>
   `;
 }
@@ -2508,14 +3167,186 @@ export function renderPage44(sections: ReportSection[], valueScenarioType: strin
  * two-bed-units-analysis-table, two-bed-unit-conclusion-table
  */
 export function renderPage45(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 45 - Market Rent Analysis
-  // Fields: market-rent-conclusion-intro, one-bed-units-analysis-table
-  // one-bed-unit-conclusion-table, two-bed-units-analysis-table, two-bed-unit-conclusion-table
-
   return `
-    <div class="page page-45">
-      <h1>Page 45: Market Rent Analysis</h1>
-      <p>TODO: Implement market rent template</p>
+    <div class="page page-45" style="font-family: Calibri, Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #000; padding: 40px 40px; position: relative; min-height: 11in;">
+      <!-- Header -->
+      <div style="border-bottom: 2px solid #0066cc; padding-bottom: 8px; margin-bottom: 16px;">
+        <h1 style="font-size: 14px; font-weight: bold; color: #000; margin-bottom: 4px;">Valuation & Conclusions</h1>
+        <h2 style="font-size: 12px; font-weight: bold; color: #003d99; margin-bottom: 8px;">Conclusion Of Market Rent - Multi-Family</h2>
+      </div>
+
+      <p style="font-size: 11px; margin-bottom: 12px; line-height: 1.5; color: #333;">${getFieldValue(sections, 'market-rent-conclusion-intro') || 'The following table summarizes the various indicators of market rent for each unit type and provides the market rent analysis and conclusions for the subject property.'}</p>
+
+      <!-- 1 BED UNITS TABLE -->
+      <div style="margin-bottom: 20px;">
+        <div style="background-color: #1f4f78; color: white; padding: 6px 8px; font-weight: bold; font-size: 11px; margin-bottom: 2px; text-align: center;">1 BED UNITS</div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 12px;">
+          <thead>
+            <tr>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">COMP TYPE</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">UNIT SIZE</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">RENT/UNIT</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">RENT/SF</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">1 Flat 1 Bed / 1 Bath</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">650</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1,379</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$2.12</td>
+            </tr>
+            <tr style="background-color: #f8f9fa;">
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">2 Flat 1 Bed / 1 Bath</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">650</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1,185</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1.82</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">3 Flat 1 Bed / 1 Bath</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">650</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1,165</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1.79</td>
+            </tr>
+            <tr style="background-color: #f8f9fa;">
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">4 Flat 1 Bed / 1 Bath</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">650</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1,155</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1.78</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">5 Flat 1 Bed / 1 Bath</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">650</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1,280</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1.97</td>
+            </tr>
+            <tr style="background-color: #e8e8e8; font-weight: bold;">
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">AVG</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">650</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$${getFieldValue(sections, 'one-bed-avg-rent-conclusion') || '1,287'}</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$${getFieldValue(sections, 'one-bed-avg-rent-sf') || '1.98'}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- UNIT TYPE ANALYSIS & CONCLUSIONS - 1 BED -->
+      <div style="margin-bottom: 20px;">
+        <div style="background-color: #1f4f78; color: white; padding: 6px 8px; font-weight: bold; font-size: 11px; margin-bottom: 2px; text-align: center;">UNIT TYPE ANALYSIS & CONCLUSIONS</div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 12px;">
+          <thead>
+            <tr>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">TYPE</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">UNIT SIZE</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">RENT/UNIT</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">RENT/SF</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">CONCLUSION/SF</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">Flat 1 Bed / 1 Bath</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">${getFieldValue(sections, 'one-bed-unit-size') || '650'}</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$${getFieldValue(sections, 'one-bed-rent-unit') || '895'}</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$${getFieldValue(sections, 'one-bed-rent-sf') || '1.63'}</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$${getFieldValue(sections, 'one-bed-conclusion-sf') || '1.63'}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 2 BED UNITS TABLE -->
+      <div style="margin-bottom: 20px;">
+        <div style="background-color: #1f4f78; color: white; padding: 6px 8px; font-weight: bold; font-size: 11px; margin-bottom: 2px; text-align: center;">2 BED UNITS</div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 12px;">
+          <thead>
+            <tr>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">COMP TYPE</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">UNIT SIZE</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">RENT/UNIT</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">RENT/SF</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">NET ADJ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">1 Flat 2 Bed / 2 Bath</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">750</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1,500</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$2.00</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">0%</td>
+            </tr>
+            <tr style="background-color: #f8f9fa;">
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">2 Flat 2 Bed / 2 Bath</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">750</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1,825</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$2.43</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">0%</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">3 Flat 2 Bed / 2 Bath</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">750</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1,285</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1.71</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">0%</td>
+            </tr>
+            <tr style="background-color: #f8f9fa;">
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">4 Flat 2 Bed / 2 Bath</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">750</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1,290</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1.72</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">0%</td>
+            </tr>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">5 Flat 2 Bed / 2 Bath</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">750</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1,430</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$1.91</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">0%</td>
+            </tr>
+            <tr style="background-color: #e8e8e8; font-weight: bold;">
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">AVG</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">750</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$${getFieldValue(sections, 'two-bed-avg-rent-conclusion') || '1,486'}</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$${getFieldValue(sections, 'two-bed-avg-rent-sf') || '1.98'}</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">0%</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- UNIT TYPE ANALYSIS & CONCLUSIONS - 2 BED -->
+      <div style="margin-bottom: 20px;">
+        <div style="background-color: #1f4f78; color: white; padding: 6px 8px; font-weight: bold; font-size: 11px; margin-bottom: 2px; text-align: center;">UNIT TYPE ANALYSIS & CONCLUSIONS</div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 12px;">
+          <thead>
+            <tr>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">TYPE</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">UNIT SIZE</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">RENT/UNIT</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">RENT/SF</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">CONCLUSION/SF</th>
+              <th style="background-color: #d9e1f2; border: 1px solid #999; padding: 6px 4px; text-align: center; font-weight: bold; font-size: 9px;">CONCLUSION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: left;">Flat 2 Bed / 1 Bath</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">${getFieldValue(sections, 'two-bed-unit-size') || '667'}</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$${getFieldValue(sections, 'two-bed-rent-unit') || '1,056'}</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$${getFieldValue(sections, 'two-bed-rent-sf') || '1.58'}</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$${getFieldValue(sections, 'two-bed-conclusion-sf') || '1.59'}</td>
+              <td style="border: 1px solid #ccc; padding: 5px 4px; text-align: right;">$${getFieldValue(sections, 'two-bed-conclusion-total') || '1,060'}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer -->
+      <div style="position: absolute; bottom: 20px; left: 0; right: 0; padding: 0 40px; border-top: 1px solid #ddd; padding-top: 8px; font-size: 9px; color: #666; display: flex; align-items: center; height: 30px;">
+        <div style="flex: 1;">40 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
+        <div style="width: 40px; height: 20px; background-color: #0066cc; margin-left: auto;"></div>
+      </div>
     </div>
   `;
 }

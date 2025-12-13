@@ -8,6 +8,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
+import { useTheme } from '../context/ThemeContext';
 
 interface AnimationState {
   isAnimating: boolean;
@@ -26,6 +27,7 @@ interface ContentLine {
 
 export default function CalculationReasoning() {
   const sections = useReportBuilderStore(state => state.sections);
+  const { colors } = useTheme();
   const calcSection = sections.find(s => s.id === 'calc');
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
@@ -375,57 +377,78 @@ export default function CalculationReasoning() {
       displayText = line.text.substring(0, animation.visibleChars);
     }
 
-    // Style based on line type
-    let className = '';
+    // Style based on line type - using theme colors
+    let lineColor = colors.textMuted;
+    let fontWeight = 'normal';
+    let fontStyle = 'normal';
+
     switch (line.type) {
       case 'header':
-        className = 'font-semibold text-[#d0d0d0] tracking-wide';
+        lineColor = colors.header;
+        fontWeight = '600';
         break;
       case 'separator':
-        className = 'text-[#4a4a4a]';
+        lineColor = colors.separator;
         break;
       case 'total':
-        className = 'text-[#e5e5e5] font-medium';
+        lineColor = colors.text;
+        fontWeight = '500';
         break;
       case 'note':
-        className = 'text-[#606060] italic';
+        lineColor = colors.textDim;
+        fontStyle = 'italic';
         break;
       case 'check':
-        className = line.text.includes('[OK]') ? 'text-[#808080]' : 'text-[#a0a0a0]';
+        lineColor = colors.textMuted;
         break;
       default:
-        className = 'text-[#909090]';
+        lineColor = colors.textMuted;
     }
 
     return (
       <div
         key={index}
-        className={`${className} transition-opacity duration-100`}
-        style={{ opacity: isComplete || isCurrent ? 1 : 0.3 }}
+        className="transition-opacity duration-100 tracking-wide"
+        style={{
+          opacity: isComplete || isCurrent ? 1 : 0.3,
+          color: lineColor,
+          fontWeight,
+          fontStyle,
+        }}
       >
         {displayText}
-        {isCurrent && <span className="animate-pulse text-[#606060]">|</span>}
+        {isCurrent && <span className="animate-pulse" style={{ color: colors.textDim }}>|</span>}
       </div>
     );
   };
 
   return (
     <div
-      className="border border-[#3a3a3a] rounded-sm overflow-hidden flex flex-col h-full"
+      className="rounded-sm overflow-hidden flex flex-col h-full"
+      style={{ border: `1px solid ${colors.border}` }}
       onClick={animation.isAnimating ? completeAnimation : undefined}
     >
       {/* Header */}
-      <div className="px-5 py-2.5 border-b border-[#3a3a3a] flex-shrink-0">
-        <span className="text-xs font-medium text-[#909090] uppercase tracking-wider">Calculation Breakdown</span>
+      <div
+        className="px-5 py-2.5 flex-shrink-0"
+        style={{ borderBottom: `1px solid ${colors.border}` }}
+      >
+        <span
+          className="text-xs font-medium uppercase tracking-wider"
+          style={{ color: colors.textMuted }}
+        >
+          Calculation Breakdown
+        </span>
       </div>
 
       {/* Content - document style, padded, larger text */}
       <div
         ref={containerRef}
-        className="px-8 py-4 font-mono cursor-pointer bg-[#232323] flex-1 overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-track]:bg-[#1e1e1e] [&::-webkit-scrollbar-thumb]:bg-[#4a4a4a] [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-[#5a5a5a]"
+        className="px-8 py-4 font-mono cursor-pointer flex-1 overflow-y-auto"
         style={{
+          backgroundColor: colors.headerBg,
           scrollbarWidth: 'thin',
-          scrollbarColor: '#4a4a4a #1e1e1e',
+          scrollbarColor: `${colors.borderLight} ${colors.headerBg}`,
           fontSize: '13px',
           lineHeight: '1.7',
         }}
@@ -438,7 +461,13 @@ export default function CalculationReasoning() {
 
       {/* Status - only during animation */}
       {animation.isAnimating && (
-        <div className="px-5 py-1.5 text-[11px] border-t border-[#3a3a3a] text-[#505050] flex-shrink-0">
+        <div
+          className="px-5 py-1.5 text-[11px] flex-shrink-0"
+          style={{
+            borderTop: `1px solid ${colors.border}`,
+            color: colors.textDim,
+          }}
+        >
           Click to skip
         </div>
       )}

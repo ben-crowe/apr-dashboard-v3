@@ -6,9 +6,11 @@
 
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
 import CalculationReasoning from './CalculationReasoning';
+import { useTheme } from '../context/ThemeContext';
 
 export default function OutputPanel() {
   const { sections } = useReportBuilderStore();
+  const { colors } = useTheme();
 
   const calcSection = sections.find(s => s.id === 'calc');
 
@@ -43,15 +45,27 @@ export default function OutputPanel() {
   return (
     <div className="flex flex-col h-full">
       {/* Indicated Value - Prominent Display */}
-      <div className="border border-[#3a3a3a] rounded-sm overflow-hidden flex-shrink-0 bg-[#252525]">
+      <div
+        className="rounded-sm overflow-hidden flex-shrink-0"
+        style={{
+          border: `1px solid ${colors.border}`,
+          backgroundColor: colors.panelBgAlt,
+        }}
+      >
         <div className="px-5 py-4">
-          <div className="text-xs font-medium text-[#707070] uppercase tracking-wider mb-2">
+          <div
+            className="text-xs font-medium uppercase tracking-wider mb-2"
+            style={{ color: colors.textMuted }}
+          >
             Indicated Value
           </div>
-          <div className="text-3xl font-semibold text-[#e5e5e5] tracking-tight">
+          <div
+            className="text-3xl font-semibold tracking-tight"
+            style={{ color: colors.text }}
+          >
             {formatCurrency(indicatedValue)}
           </div>
-          <div className="mt-2 text-xs text-[#606060]">
+          <div className="mt-2 text-xs" style={{ color: colors.textDim }}>
             NOI {formatCurrency(noi)} @ {capRate.toFixed(2)}% Cap Rate
           </div>
         </div>

@@ -1,24 +1,25 @@
 /**
  * Calculator Demo Page - Income Capitalization Calculator
  *
- * Claude-inspired minimal aesthetic: dark background, light cards, subtle borders.
+ * Minimal aesthetic with light/dark mode toggle.
  * Borders and whitespace, not colors and fills.
  */
 
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { RefreshCw, ChevronDown, ChevronRight } from 'lucide-react';
+import { RefreshCw, ChevronDown, ChevronRight, Sun, Moon } from 'lucide-react';
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import InputPanel from './components/InputPanel';
 import OutputPanel from './components/OutputPanel';
 import MarkdownSummary from './components/MarkdownSummary';
 
-export default function CalculatorDemoPage() {
-  const [refreshKey, setRefreshKey] = useState(0);
+function CalculatorContent() {
   const [lastRefresh, setLastRefresh] = useState(new Date().toLocaleTimeString());
-  const [summaryExpanded, setSummaryExpanded] = useState(false);
+  const [summaryExpanded, setSummaryExpanded] = useState(true);
   const initializeMockData = useReportBuilderStore(state => state.initializeMockData);
   const sections = useReportBuilderStore(state => state.sections);
+  const { theme, toggleTheme, colors } = useTheme();
 
   // Initialize store with sections on mount
   useEffect(() => {
@@ -29,34 +30,49 @@ export default function CalculatorDemoPage() {
   }, [sections.length, initializeMockData]);
 
   const handleRefresh = () => {
-    setRefreshKey(prev => prev + 1);
     setLastRefresh(new Date().toLocaleTimeString());
     window.location.reload();
   };
 
   return (
-    <div className="min-h-screen bg-[#1e1e1e]">
-      {/* Header - Minimal, text-based */}
-      <div className="border-b border-[#3a3a3a]">
-        <div className="container mx-auto px-6 py-4">
+    <div className="min-h-screen" style={{ backgroundColor: colors.pageBg }}>
+      {/* Header */}
+      <div style={{ borderBottom: `1px solid ${colors.border}` }}>
+        <div className="mx-auto px-12 py-4" style={{ maxWidth: '1400px' }}>
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-lg font-semibold text-[#e5e5e5] tracking-wide">
+              <h1 className="text-lg font-semibold tracking-wide" style={{ color: colors.text }}>
                 Income Capitalization Calculator
               </h1>
-              <p className="text-xs text-[#808080]">
+              <p className="text-xs" style={{ color: colors.textMuted }}>
                 Direct Capitalization Method · USPAP/CUSPAP · v2.1
               </p>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-xs text-[#606060]">
+            <div className="flex items-center gap-3">
+              <span className="text-xs" style={{ color: colors.textDim }}>
                 {lastRefresh}
               </span>
+              <Button
+                onClick={toggleTheme}
+                variant="ghost"
+                size="sm"
+                className="gap-2"
+                style={{
+                  color: colors.textMuted,
+                }}
+              >
+                {theme === 'dark' ? (
+                  <Sun className="h-4 w-4" />
+                ) : (
+                  <Moon className="h-4 w-4" />
+                )}
+              </Button>
               <Button
                 onClick={handleRefresh}
                 variant="ghost"
                 size="sm"
-                className="gap-2 text-[#808080] hover:text-[#e5e5e5] hover:bg-[#2a2a2a]"
+                className="gap-2"
+                style={{ color: colors.textMuted }}
               >
                 <RefreshCw className="h-3.5 w-3.5" />
                 Refresh
@@ -67,14 +83,27 @@ export default function CalculatorDemoPage() {
       </div>
 
       {/* Main Content - 2 Column Layout (45/55 split) */}
-      <div className="container mx-auto px-6 py-6">
+      <div className="mx-auto px-12 py-6" style={{ maxWidth: '1400px' }}>
         <div className="grid grid-cols-1 lg:grid-cols-[45%_1fr] gap-5 items-stretch">
           {/* Input Panel - Left Column (45%) */}
           <div>
-            <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-sm h-full">
-              <div className="px-4 py-3 border-b border-[#3a3a3a]">
-                <h2 className="font-medium text-sm text-[#e5e5e5]">Input Parameters</h2>
-                <p className="text-xs text-[#707070] mt-0.5">Property data and assumptions</p>
+            <div
+              className="rounded-sm h-full"
+              style={{
+                backgroundColor: colors.panelBg,
+                border: `1px solid ${colors.border}`,
+              }}
+            >
+              <div
+                className="px-4 py-3"
+                style={{ borderBottom: `1px solid ${colors.border}` }}
+              >
+                <h2 className="font-medium text-sm" style={{ color: colors.text }}>
+                  Input Parameters
+                </h2>
+                <p className="text-xs mt-0.5" style={{ color: colors.textMuted }}>
+                  Property data and assumptions
+                </p>
               </div>
               <div className="p-4">
                 <InputPanel />
@@ -84,7 +113,13 @@ export default function CalculatorDemoPage() {
 
           {/* Output Panel - Right Column (55%) */}
           <div>
-            <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-sm h-full flex flex-col">
+            <div
+              className="rounded-sm h-full flex flex-col"
+              style={{
+                backgroundColor: colors.panelBg,
+                border: `1px solid ${colors.border}`,
+              }}
+            >
               <div className="p-4 flex-1 flex flex-col min-h-0">
                 <OutputPanel />
               </div>
@@ -92,43 +127,67 @@ export default function CalculatorDemoPage() {
           </div>
         </div>
 
-        {/* Markdown Summary - Collapsible */}
-        <div className="mt-5 bg-[#2a2a2a] border border-[#3a3a3a] rounded-sm">
+        {/* Summary - Collapsible */}
+        <div
+          className="mt-5 rounded-sm"
+          style={{
+            backgroundColor: colors.panelBg,
+            border: `1px solid ${colors.border}`,
+          }}
+        >
           <div
-            className="px-4 py-3 cursor-pointer hover:bg-[#333333] transition-colors flex items-center justify-between border-b border-transparent hover:border-[#3a3a3a]"
+            className="px-4 py-3 cursor-pointer transition-colors flex items-center justify-between"
+            style={{
+              borderBottom: summaryExpanded ? `1px solid ${colors.border}` : 'none',
+            }}
             onClick={() => setSummaryExpanded(!summaryExpanded)}
           >
             <div className="flex items-center gap-2">
               {summaryExpanded ? (
-                <ChevronDown className="h-4 w-4 text-[#606060]" />
+                <ChevronDown className="h-4 w-4" style={{ color: colors.textDim }} />
               ) : (
-                <ChevronRight className="h-4 w-4 text-[#606060]" />
+                <ChevronRight className="h-4 w-4" style={{ color: colors.textDim }} />
               )}
               <div>
-                <h2 className="font-medium text-sm text-[#e5e5e5]">Summary Report</h2>
-                <p className="text-xs text-[#707070] mt-0.5">Exportable markdown format</p>
+                <h2 className="font-medium text-sm" style={{ color: colors.text }}>
+                  Summary Report
+                </h2>
+                <p className="text-xs mt-0.5" style={{ color: colors.textMuted }}>
+                  Quick reference cards
+                </p>
               </div>
             </div>
-            <span className="text-xs text-[#606060]">
+            <span className="text-xs" style={{ color: colors.textDim }}>
               {summaryExpanded ? 'Collapse' : 'Expand'}
             </span>
           </div>
           {summaryExpanded && (
-            <div className="p-4 border-t border-[#3a3a3a]">
+            <div className="p-4">
               <MarkdownSummary />
             </div>
           )}
         </div>
       </div>
 
-      {/* Footer - Minimal */}
-      <div className="border-t border-[#3a3a3a] py-3 mt-6">
-        <div className="container mx-auto px-6">
-          <p className="text-xs text-[#505050] text-center">
+      {/* Footer */}
+      <div
+        className="py-3 mt-6"
+        style={{ borderTop: `1px solid ${colors.border}` }}
+      >
+        <div className="mx-auto px-12" style={{ maxWidth: '1400px' }}>
+          <p className="text-xs text-center" style={{ color: colors.textDim }}>
             Engine validated against Valcre workbook · 7/7 metrics exact match
           </p>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CalculatorDemoPage() {
+  return (
+    <ThemeProvider>
+      <CalculatorContent />
+    </ThemeProvider>
   );
 }

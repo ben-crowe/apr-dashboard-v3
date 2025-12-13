@@ -6,9 +6,11 @@
  */
 
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
+import { useTheme } from '../context/ThemeContext';
 
 export default function MarkdownSummary() {
   const { sections } = useReportBuilderStore();
+  const { colors } = useTheme();
   const calcSection = sections.find(s => s.id === 'calc');
 
   const getFieldValue = (fieldId: string): number => {
@@ -66,9 +68,18 @@ export default function MarkdownSummary() {
 
   // Card component
   const Card = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div className="bg-[#262626] border border-[#3a3a3a] rounded-sm overflow-hidden">
-      <div className="px-4 py-2 border-b border-[#3a3a3a]">
-        <h3 className="text-sm font-medium text-[#a0a0a0]">{title}</h3>
+    <div
+      className="rounded-sm overflow-hidden"
+      style={{
+        backgroundColor: colors.panelBgAlt,
+        border: `1px solid ${colors.border}`,
+      }}
+    >
+      <div
+        className="px-4 py-2"
+        style={{ borderBottom: `1px solid ${colors.border}` }}
+      >
+        <h3 className="text-sm font-medium" style={{ color: colors.textMuted }}>{title}</h3>
       </div>
       <div className="px-4 py-3">
         {children}
@@ -79,17 +90,31 @@ export default function MarkdownSummary() {
   // Row component for label/value pairs
   const Row = ({ label, value, bold = false }: { label: string; value: string; bold?: boolean }) => (
     <div className="flex justify-between items-baseline py-1">
-      <span className={`text-[14px] ${bold ? 'text-[#c0c0c0] font-medium' : 'text-[#808080]'}`}>
+      <span
+        className="text-[14px]"
+        style={{
+          color: bold ? colors.textSecondary : colors.textMuted,
+          fontWeight: bold ? 500 : 400,
+        }}
+      >
         {label}
       </span>
-      <span className={`text-[14px] ${bold ? 'text-[#e5e5e5] font-medium' : 'text-[#c0c0c0]'}`}>
+      <span
+        className="text-[14px]"
+        style={{
+          color: bold ? colors.text : colors.textSecondary,
+          fontWeight: bold ? 500 : 400,
+        }}
+      >
         {value}
       </span>
     </div>
   );
 
   // Divider
-  const Divider = () => <div className="border-t border-[#3a3a3a] my-2" />;
+  const Divider = () => (
+    <div className="my-2" style={{ borderTop: `1px solid ${colors.border}` }} />
+  );
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

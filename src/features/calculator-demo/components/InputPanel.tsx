@@ -8,10 +8,12 @@ import { useState, useCallback } from 'react';
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useTheme } from '../context/ThemeContext';
 
 export default function InputPanel() {
   // Force re-render trigger
   const [updateKey, setUpdateKey] = useState(0);
+  const { colors } = useTheme();
 
   // Subscribe to sections with a dependency on updateKey to force refresh
   const sections = useReportBuilderStore(state => state.sections);
@@ -124,25 +126,34 @@ export default function InputPanel() {
   const formatCurrency = (n: number) => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
   const formatNumber = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 2 });
 
+  // Input styling helper
+  const inputStyle = {
+    backgroundColor: colors.inputBg,
+    borderColor: colors.border,
+    color: colors.text,
+  };
+
   return (
-    <div className="space-y-3 text-xs text-[#e5e5e5]">
+    <div className="space-y-3 text-xs" style={{ color: colors.text }}>
 
       {/* DATA CONTROL BUTTONS */}
-      <div className="border border-[#3a3a3a] rounded-sm overflow-hidden">
-        <div className="px-2 py-1.5 border-b border-[#3a3a3a]">
-          <span className="text-[10px] font-medium text-[#808080] uppercase tracking-wider">Data Controls</span>
+      <div className="rounded-sm overflow-hidden" style={{ border: `1px solid ${colors.border}` }}>
+        <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
+          <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>{`Data Controls`}</span>
         </div>
         <div className="p-2 flex flex-col gap-2">
           <Button
             onClick={handleLoadTestData}
-            className="w-full bg-[#3a3a3a] hover:bg-[#4a4a4a] text-[#e5e5e5] text-xs py-2 border-0"
+            className="w-full text-xs py-2 border-0"
+            style={{ backgroundColor: colors.border, color: colors.text }}
           >
             Load North Battleford Test Data
           </Button>
           <Button
             onClick={handleReset}
             variant="ghost"
-            className="w-full text-xs py-2 text-[#808080] hover:text-[#e5e5e5] hover:bg-[#333]"
+            className="w-full text-xs py-2"
+            style={{ color: colors.textMuted }}
           >
             Reset All Fields
           </Button>
@@ -150,29 +161,30 @@ export default function InputPanel() {
       </div>
 
       {/* UNIT MIX */}
-      <div className="border border-[#3a3a3a] rounded-sm overflow-hidden">
-        <div className="px-2 py-1.5 border-b border-[#3a3a3a]">
-          <span className="text-[10px] font-medium text-[#808080] uppercase tracking-wider">Unit Mix</span>
+      <div className="rounded-sm overflow-hidden" style={{ border: `1px solid ${colors.border}` }}>
+        <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
+          <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>{`Unit Mix`}</span>
         </div>
         <table className="w-full">
-          <thead className="border-b border-[#3a3a3a]">
+          <thead style={{ borderBottom: `1px solid ${colors.border}` }}>
             <tr>
-              <th className="px-2 py-1 text-left text-[#707070] font-normal">Type</th>
-              <th className="px-2 py-1 text-right text-[#707070] font-normal">Count</th>
-              <th className="px-2 py-1 text-right text-[#707070] font-normal">SF</th>
-              <th className="px-2 py-1 text-right text-[#707070] font-normal">Rent/Mo</th>
-              <th className="px-2 py-1 text-right text-[#707070] font-normal">Annual</th>
+              <th className="px-2 py-1 text-left font-normal" style={{ color: colors.textMuted }}>Type</th>
+              <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Count</th>
+              <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>SF</th>
+              <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Rent/Mo</th>
+              <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Annual</th>
             </tr>
           </thead>
           <tbody>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">{type1Name}</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>{type1Name}</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   value={type1Count}
                   onChange={e => updateField('calc-type1-count', e.target.value)}
-                  className="h-6 w-16 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-16 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
               <td className="px-2 py-1">
@@ -180,7 +192,8 @@ export default function InputPanel() {
                   type="number"
                   value={type1Sf}
                   onChange={e => updateField('calc-type1-sf', e.target.value)}
-                  className="h-6 w-16 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-16 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
               <td className="px-2 py-1">
@@ -188,278 +201,291 @@ export default function InputPanel() {
                   type="number"
                   value={type1Rent}
                   onChange={e => updateField('calc-type1-rent', e.target.value)}
-                  className="h-6 w-20 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-20 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-right font-medium text-[#e5e5e5]">{formatCurrency(type1Annual)}</td>
+              <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(type1Annual)}</td>
             </tr>
           </tbody>
-          <tfoot className="border-t border-[#3a3a3a]">
+          <tfoot style={{ borderTop: `1px solid ${colors.border}` }}>
             <tr>
-              <td className="px-2 py-1 text-[#909090] font-medium">Totals</td>
-              <td className="px-2 py-1 text-right text-[#e5e5e5]">{totalUnits}</td>
-              <td className="px-2 py-1 text-right text-[#e5e5e5]">{formatNumber(totalSf)}</td>
+              <td className="px-2 py-1 font-medium" style={{ color: colors.textMuted }}>Totals</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{totalUnits}</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatNumber(totalSf)}</td>
               <td className="px-2 py-1"></td>
-              <td className="px-2 py-1 text-right font-medium text-[#e5e5e5]">{formatCurrency(totalRentalRevenue)}</td>
+              <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(totalRentalRevenue)}</td>
             </tr>
           </tfoot>
         </table>
       </div>
 
       {/* OTHER INCOME */}
-      <div className="border border-[#3a3a3a] rounded-sm overflow-hidden">
-        <div className="px-2 py-1.5 border-b border-[#3a3a3a]">
-          <span className="text-[10px] font-medium text-[#808080] uppercase tracking-wider">Other Income</span>
+      <div className="rounded-sm overflow-hidden" style={{ border: `1px solid ${colors.border}` }}>
+        <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
+          <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>{`Other Income`}</span>
         </div>
         <table className="w-full">
           <tbody>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">Parking</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Parking</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   value={parkingPerUnit}
                   onChange={e => updateField('calc-parking-per-unit', e.target.value)}
-                  className="h-6 w-20 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-20 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-right text-[#606060]">/unit/mo</td>
-              <td className="px-2 py-1 text-right font-medium text-[#e5e5e5]">{formatCurrency(parkingTotal)}</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textDim }}>/unit/mo</td>
+              <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(parkingTotal)}</td>
             </tr>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">Laundry</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Laundry</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   value={laundryPerUnit}
                   onChange={e => updateField('calc-laundry-per-unit', e.target.value)}
-                  className="h-6 w-20 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-20 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-right text-[#606060]">/unit/mo</td>
-              <td className="px-2 py-1 text-right font-medium text-[#e5e5e5]">{formatCurrency(laundryTotal)}</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textDim }}>/unit/mo</td>
+              <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(laundryTotal)}</td>
             </tr>
           </tbody>
-          <tfoot className="border-t border-[#3a3a3a]">
+          <tfoot style={{ borderTop: `1px solid ${colors.border}` }}>
             <tr>
-              <td className="px-2 py-1 text-[#909090]" colSpan={3}>Total Other Income</td>
-              <td className="px-2 py-1 text-right font-medium text-[#e5e5e5]">{formatCurrency(totalOtherIncome)}</td>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }} colSpan={3}>Total Other Income</td>
+              <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(totalOtherIncome)}</td>
             </tr>
           </tfoot>
         </table>
       </div>
 
       {/* PGR */}
-      <div className="border border-[#3a3a3a] rounded-sm px-3 py-2 flex justify-between">
-        <span className="text-[#909090]">Potential Gross Revenue (PGR)</span>
-        <span className="font-medium text-[#e5e5e5]">{formatCurrency(pgr)}</span>
+      <div className="rounded-sm px-3 py-2 flex justify-between" style={{ border: `1px solid ${colors.border}` }}>
+        <span style={{ color: colors.textMuted }}>Potential Gross Revenue (PGR)</span>
+        <span className="font-medium" style={{ color: colors.text }}>{formatCurrency(pgr)}</span>
       </div>
 
       {/* VACANCY */}
-      <div className="border border-[#3a3a3a] rounded-sm overflow-hidden">
-        <div className="px-2 py-1.5 border-b border-[#3a3a3a]">
-          <span className="text-[10px] font-medium text-[#808080] uppercase tracking-wider">Vacancy & Loss</span>
+      <div className="rounded-sm overflow-hidden" style={{ border: `1px solid ${colors.border}` }}>
+        <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
+          <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>{`Vacancy & Loss`}</span>
         </div>
         <table className="w-full">
           <tbody>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">Vacancy Rate</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Vacancy Rate</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   step="0.1"
                   value={vacancyRate}
                   onChange={e => updateField('calc-vacancy-rate', e.target.value)}
-                  className="h-6 w-16 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-16 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-[#606060]">%</td>
+              <td className="px-2 py-1" style={{ color: colors.textDim }}>%</td>
             </tr>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">Bad Debt</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Bad Debt</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   step="0.1"
                   value={badDebtRate}
                   onChange={e => updateField('calc-bad-debt-rate', e.target.value)}
-                  className="h-6 w-16 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-16 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-[#606060]">%</td>
+              <td className="px-2 py-1" style={{ color: colors.textDim }}>%</td>
             </tr>
           </tbody>
-          <tfoot className="border-t border-[#3a3a3a]">
+          <tfoot style={{ borderTop: `1px solid ${colors.border}` }}>
             <tr>
-              <td className="px-2 py-1 text-[#909090]">Vacancy Loss</td>
-              <td className="px-2 py-1 text-right text-[#909090]" colSpan={2}>({formatCurrency(vacancyLoss)})</td>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Vacancy Loss</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textMuted }} colSpan={2}>({formatCurrency(vacancyLoss)})</td>
             </tr>
           </tfoot>
         </table>
       </div>
 
       {/* EGR */}
-      <div className="border border-[#3a3a3a] rounded-sm px-3 py-2 flex justify-between">
-        <span className="text-[#909090]">Effective Gross Revenue (EGR)</span>
-        <span className="font-medium text-[#e5e5e5]">{formatCurrency(egr)}</span>
+      <div className="rounded-sm px-3 py-2 flex justify-between" style={{ border: `1px solid ${colors.border}` }}>
+        <span style={{ color: colors.textMuted }}>Effective Gross Revenue (EGR)</span>
+        <span className="font-medium" style={{ color: colors.text }}>{formatCurrency(egr)}</span>
       </div>
 
       {/* EXPENSES */}
-      <div className="border border-[#3a3a3a] rounded-sm overflow-hidden">
-        <div className="px-2 py-1.5 border-b border-[#3a3a3a]">
-          <span className="text-[10px] font-medium text-[#808080] uppercase tracking-wider">Operating Expenses</span>
+      <div className="rounded-sm overflow-hidden" style={{ border: `1px solid ${colors.border}` }}>
+        <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
+          <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>{`Operating Expenses`}</span>
         </div>
         <table className="w-full">
           <tbody>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">Management</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Management</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   step="0.25"
                   value={expManagement}
                   onChange={e => updateField('calc-exp-management', e.target.value)}
-                  className="h-6 w-16 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-16 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-[#606060]">% EGR</td>
-              <td className="px-2 py-1 text-right text-[#909090]">{formatCurrency(egr * (expManagement / 100))}</td>
+              <td className="px-2 py-1" style={{ color: colors.textDim }}>% EGR</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textMuted }}>{formatCurrency(egr * (expManagement / 100))}</td>
             </tr>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">Taxes</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Taxes</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   value={expTaxes}
                   onChange={e => updateField('calc-exp-taxes', e.target.value)}
-                  className="h-6 w-16 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-16 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-[#606060]">/unit</td>
-              <td className="px-2 py-1 text-right text-[#909090]">{formatCurrency(expTaxes * totalUnits)}</td>
+              <td className="px-2 py-1" style={{ color: colors.textDim }}>/unit</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textMuted }}>{formatCurrency(expTaxes * totalUnits)}</td>
             </tr>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">Insurance</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Insurance</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   value={expInsurance}
                   onChange={e => updateField('calc-exp-insurance', e.target.value)}
-                  className="h-6 w-16 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-16 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-[#606060]">/unit</td>
-              <td className="px-2 py-1 text-right text-[#909090]">{formatCurrency(expInsurance * totalUnits)}</td>
+              <td className="px-2 py-1" style={{ color: colors.textDim }}>/unit</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textMuted }}>{formatCurrency(expInsurance * totalUnits)}</td>
             </tr>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">Repairs</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Repairs</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   value={expRepairs}
                   onChange={e => updateField('calc-exp-repairs', e.target.value)}
-                  className="h-6 w-16 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-16 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-[#606060]">/unit</td>
-              <td className="px-2 py-1 text-right text-[#909090]">{formatCurrency(expRepairs * totalUnits)}</td>
+              <td className="px-2 py-1" style={{ color: colors.textDim }}>/unit</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textMuted }}>{formatCurrency(expRepairs * totalUnits)}</td>
             </tr>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">Utilities</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Utilities</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   value={expUtilities}
                   onChange={e => updateField('calc-exp-utilities', e.target.value)}
-                  className="h-6 w-16 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-16 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-[#606060]">/unit</td>
-              <td className="px-2 py-1 text-right text-[#909090]">{formatCurrency(expUtilities * totalUnits)}</td>
+              <td className="px-2 py-1" style={{ color: colors.textDim }}>/unit</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textMuted }}>{formatCurrency(expUtilities * totalUnits)}</td>
             </tr>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">Payroll</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Payroll</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   value={expPayroll}
                   onChange={e => updateField('calc-exp-payroll', e.target.value)}
-                  className="h-6 w-16 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-16 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-[#606060]">/unit</td>
-              <td className="px-2 py-1 text-right text-[#909090]">{formatCurrency(expPayroll * totalUnits)}</td>
+              <td className="px-2 py-1" style={{ color: colors.textDim }}>/unit</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textMuted }}>{formatCurrency(expPayroll * totalUnits)}</td>
             </tr>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">Other</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Other</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   value={expOther}
                   onChange={e => updateField('calc-exp-other', e.target.value)}
-                  className="h-6 w-16 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-16 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-[#606060]">/unit</td>
-              <td className="px-2 py-1 text-right text-[#909090]">{formatCurrency(expOther * totalUnits)}</td>
+              <td className="px-2 py-1" style={{ color: colors.textDim }}>/unit</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textMuted }}>{formatCurrency(expOther * totalUnits)}</td>
             </tr>
           </tbody>
-          <tfoot className="border-t border-[#3a3a3a]">
+          <tfoot style={{ borderTop: `1px solid ${colors.border}` }}>
             <tr>
-              <td className="px-2 py-1 text-[#909090]" colSpan={3}>Total Expenses ({formatNumber(expenseRatio)}%)</td>
-              <td className="px-2 py-1 text-right text-[#909090]">({formatCurrency(expensesTotal)})</td>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }} colSpan={3}>Total Expenses ({formatNumber(expenseRatio)}%)</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textMuted }}>({formatCurrency(expensesTotal)})</td>
             </tr>
           </tfoot>
         </table>
       </div>
 
       {/* NOI */}
-      <div className="border border-[#3a3a3a] rounded-sm px-3 py-2 flex justify-between">
-        <span className="text-[#909090]">Net Operating Income (NOI)</span>
-        <span className="font-medium text-[#e5e5e5]">{formatCurrency(noi)}</span>
+      <div className="rounded-sm px-3 py-2 flex justify-between" style={{ border: `1px solid ${colors.border}` }}>
+        <span style={{ color: colors.textMuted }}>Net Operating Income (NOI)</span>
+        <span className="font-medium" style={{ color: colors.text }}>{formatCurrency(noi)}</span>
       </div>
 
       {/* CAP RATE & VALUE */}
-      <div className="border border-[#3a3a3a] rounded-sm overflow-hidden">
-        <div className="px-2 py-1.5 border-b border-[#3a3a3a]">
-          <span className="text-[10px] font-medium text-[#808080] uppercase tracking-wider">Capitalization</span>
+      <div className="rounded-sm overflow-hidden" style={{ border: `1px solid ${colors.border}` }}>
+        <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
+          <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>{`Capitalization`}</span>
         </div>
         <table className="w-full">
           <tbody>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#909090]">Cap Rate</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Cap Rate</td>
               <td className="px-2 py-1">
                 <Input
                   type="number"
                   step="0.25"
                   value={capRate}
                   onChange={e => updateField('calc-cap-rate', e.target.value)}
-                  className="h-6 w-16 text-right text-xs p-1 bg-[#1e1e1e] border-[#3a3a3a] text-[#e5e5e5]"
+                  className="h-6 w-16 text-right text-xs p-1"
+                  style={inputStyle}
                 />
               </td>
-              <td className="px-2 py-1 text-[#606060]">%</td>
+              <td className="px-2 py-1" style={{ color: colors.textDim }}>%</td>
               <td className="px-2 py-1"></td>
             </tr>
-            <tr className="border-b border-[#3a3a3a]">
-              <td className="px-2 py-1 text-[#707070]" colSpan={3}>Raw Value (NOI ÷ Cap Rate)</td>
-              <td className="px-2 py-1 text-right text-[#909090]">{formatCurrency(rawValue)}</td>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }} colSpan={3}>Raw Value (NOI ÷ Cap Rate)</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textMuted }}>{formatCurrency(rawValue)}</td>
             </tr>
             <tr>
-              <td className="px-2 py-1 text-[#707070]" colSpan={3}>Rounded (to $10,000)</td>
-              <td className="px-2 py-1 text-right text-[#909090]">{formatCurrency(roundedValue)}</td>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }} colSpan={3}>Rounded (to $10,000)</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textMuted }}>{formatCurrency(roundedValue)}</td>
             </tr>
           </tbody>
         </table>
       </div>
 
       {/* FINAL VALUE - The ONE accent */}
-      <div className="border border-[#3a3a3a] rounded-sm px-3 py-3 bg-[#252525]">
+      <div className="rounded-sm px-3 py-3" style={{ border: `1px solid ${colors.border}`, backgroundColor: colors.panelBgAlt }}>
         <div className="flex justify-between items-center">
-          <span className="text-[#909090]">Indicated Value</span>
-          <span className="text-xl font-semibold text-[#e5e5e5]">{formatCurrency(indicatedValue)}</span>
+          <span style={{ color: colors.textMuted }}>Indicated Value</span>
+          <span className="text-xl font-semibold" style={{ color: colors.text }}>{formatCurrency(indicatedValue)}</span>
         </div>
         {totalUnits > 0 && (
-          <div className="text-[10px] text-[#606060] mt-1 text-right">
+          <div className="text-[10px] mt-1 text-right" style={{ color: colors.textDim }}>
             {formatCurrency(indicatedValue / totalUnits)}/unit · ${formatNumber(indicatedValue / totalSf)}/SF
           </div>
         )}

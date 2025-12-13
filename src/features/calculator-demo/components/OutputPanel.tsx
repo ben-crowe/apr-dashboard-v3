@@ -1,7 +1,7 @@
 /**
- * Output Panel - Calculation Results
+ * Output Panel - Indicated Value + Calculation Breakdown
  *
- * Claude-inspired minimal aesthetic: subtle borders, grayscale, color only for key values.
+ * Simplified layout: prominent value display + detailed breakdown below.
  */
 
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
@@ -36,57 +36,23 @@ export default function OutputPanel() {
     }).format(value);
   };
 
-  const pgr = getFieldValue('calc-pgr');
-  const vacancyLoss = getFieldValue('calc-vacancy-loss');
-  const egr = getFieldValue('calc-egr');
-  const expensesTotal = getFieldValue('calc-expenses-total');
-  const noi = getFieldValue('calc-noi');
-  const capRate = getFieldValue('calc-cap-rate');
-  const rawValue = getFieldValue('calc-raw-value');
   const indicatedValue = getFieldValue('calc-indicated-value');
+  const capRate = getFieldValue('calc-cap-rate');
+  const noi = getFieldValue('calc-noi');
 
   return (
     <div className="flex flex-col h-full">
-      {/* Results Box - Minimal, border-defined */}
-      <div className="border border-[#3a3a3a] rounded-sm overflow-hidden flex-shrink-0">
-        <div className="px-4 py-2 border-b border-[#3a3a3a]">
-          <span className="text-xs font-medium text-[#909090] uppercase tracking-wider">Results</span>
-        </div>
-        <div className="divide-y divide-[#3a3a3a]">
-          <div className="px-4 py-2 flex justify-between items-center">
-            <span className="text-sm text-[#909090]">PGR</span>
-            <span className="text-sm font-medium text-[#e5e5e5]">{formatCurrency(pgr)}</span>
+      {/* Indicated Value - Prominent Display */}
+      <div className="border border-[#3a3a3a] rounded-sm overflow-hidden flex-shrink-0 bg-[#252525]">
+        <div className="px-5 py-4">
+          <div className="text-xs font-medium text-[#707070] uppercase tracking-wider mb-2">
+            Indicated Value
           </div>
-          <div className="px-4 py-2 flex justify-between items-center">
-            <span className="text-sm text-[#909090]">Vacancy Loss</span>
-            <span className="text-sm font-medium text-[#909090]">({formatCurrency(vacancyLoss)})</span>
+          <div className="text-3xl font-semibold text-[#e5e5e5] tracking-tight">
+            {formatCurrency(indicatedValue)}
           </div>
-          <div className="px-4 py-2 flex justify-between items-center">
-            <span className="text-sm text-[#909090]">EGR</span>
-            <span className="text-sm font-medium text-[#e5e5e5]">{formatCurrency(egr)}</span>
-          </div>
-          <div className="px-4 py-2 flex justify-between items-center">
-            <span className="text-sm text-[#909090]">Operating Expenses</span>
-            <span className="text-sm font-medium text-[#909090]">({formatCurrency(expensesTotal)})</span>
-          </div>
-          <div className="px-4 py-2 flex justify-between items-center">
-            <span className="text-sm text-[#909090]">NOI</span>
-            <span className="text-sm font-medium text-[#e5e5e5]">{formatCurrency(noi)}</span>
-          </div>
-          <div className="px-4 py-2 flex justify-between items-center">
-            <span className="text-sm text-[#909090]">Cap Rate</span>
-            <span className="text-sm font-medium text-[#e5e5e5]">{capRate.toFixed(2)}%</span>
-          </div>
-          <div className="px-4 py-2 flex justify-between items-center">
-            <span className="text-sm text-[#909090]">Raw Value</span>
-            <span className="text-sm font-medium text-[#e5e5e5]">{formatCurrency(rawValue)}</span>
-          </div>
-        </div>
-        {/* Indicated Value */}
-        <div className="px-4 py-4 border-t border-[#3a3a3a] bg-[#252525]">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-[#909090]">Indicated Value</span>
-            <span className="text-2xl font-semibold text-[#e5e5e5]">{formatCurrency(indicatedValue)}</span>
+          <div className="mt-2 text-xs text-[#606060]">
+            NOI {formatCurrency(noi)} @ {capRate.toFixed(2)}% Cap Rate
           </div>
         </div>
       </div>

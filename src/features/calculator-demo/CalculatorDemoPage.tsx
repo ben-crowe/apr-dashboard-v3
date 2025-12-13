@@ -66,11 +66,11 @@ export default function CalculatorDemoPage() {
         </div>
       </div>
 
-      {/* Main Content - 2 Column Layout */}
+      {/* Main Content - 2 Column Layout (45/55 split) */}
       <div className="container mx-auto px-6 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-          {/* Input Panel - Left Column (1/3) */}
-          <div className="lg:col-span-1">
+        <div className="grid grid-cols-1 lg:grid-cols-[45%_1fr] gap-5 items-stretch">
+          {/* Input Panel - Left Column (45%) */}
+          <div>
             <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-sm h-full">
               <div className="px-4 py-3 border-b border-[#3a3a3a]">
                 <h2 className="font-medium text-sm text-[#e5e5e5]">Input Parameters</h2>
@@ -82,14 +82,10 @@ export default function CalculatorDemoPage() {
             </div>
           </div>
 
-          {/* Output Panel - Right Column (2/3) */}
-          <div className="lg:col-span-2">
-            <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-sm h-full">
-              <div className="px-4 py-3 border-b border-[#3a3a3a]">
-                <h2 className="font-medium text-sm text-[#e5e5e5]">Valuation Results</h2>
-                <p className="text-xs text-[#707070] mt-0.5">Real-time calculation output</p>
-              </div>
-              <div className="p-4">
+          {/* Output Panel - Right Column (55%) */}
+          <div>
+            <div className="bg-[#2a2a2a] border border-[#3a3a3a] rounded-sm h-full flex flex-col">
+              <div className="p-4 flex-1 flex flex-col min-h-0">
                 <OutputPanel />
               </div>
             </div>

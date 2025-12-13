@@ -152,8 +152,8 @@ export default function InputPanel() {
           <Button
             onClick={handleReset}
             variant="ghost"
-            className="w-full text-xs py-2"
-            style={{ color: colors.textMuted }}
+            className="w-full text-xs py-2 hover:bg-transparent"
+            style={{ color: colors.textDim }}
           >
             Reset All Fields
           </Button>

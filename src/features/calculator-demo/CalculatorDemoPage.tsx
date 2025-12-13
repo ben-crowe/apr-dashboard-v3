@@ -13,6 +13,7 @@ import { ThemeProvider, useTheme } from './context/ThemeContext';
 import InputPanel from './components/InputPanel';
 import OutputPanel from './components/OutputPanel';
 import MarkdownSummary from './components/MarkdownSummary';
+import SalesComparisonSection from './components/SalesComparisonSection';
 
 function CalculatorContent() {
   const [lastRefresh, setLastRefresh] = useState(new Date().toLocaleTimeString());
@@ -99,7 +100,7 @@ function CalculatorContent() {
                 style={{ borderBottom: `1px solid ${colors.border}` }}
               >
                 <h2 className="font-medium text-sm" style={{ color: colors.text }}>
-                  Input Parameters
+                  Income Approach
                 </h2>
                 <p className="text-xs mt-0.5" style={{ color: colors.textMuted }}>
                   Property data and assumptions
@@ -126,6 +127,9 @@ function CalculatorContent() {
             </div>
           </div>
         </div>
+
+        {/* Sales Comparison and Reconciliation Sections */}
+        <SalesComparisonSection />
 
         {/* Summary - Collapsible */}
         <div

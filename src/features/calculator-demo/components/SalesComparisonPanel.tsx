@@ -5,7 +5,7 @@
  * Pulls subject units from existing Income Approach via store.
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -32,6 +32,10 @@ interface Adjustments {
   other: number;
 }
 
+interface SalesComparisonPanelProps {
+  onIndicatedValueChange?: (value: number) => void;
+}
+
 const emptyComp: Comparable = {
   propertyName: '',
   address: '',
@@ -53,7 +57,7 @@ const emptyAdjustments: Adjustments = {
   other: 0,
 };
 
-export default function SalesComparisonPanel() {
+export default function SalesComparisonPanel({ onIndicatedValueChange }: SalesComparisonPanelProps) {
   const { colors } = useTheme();
 
   // Local state for comps and adjustments
@@ -138,6 +142,13 @@ export default function SalesComparisonPanel() {
 
   // Calculate indicated value (Sales)
   const indicatedValueSales = indicatedPerUnit * subjectUnits;
+
+  // Notify parent when indicated value changes
+  useEffect(() => {
+    if (onIndicatedValueChange) {
+      onIndicatedValueChange(indicatedValueSales);
+    }
+  }, [indicatedValueSales, onIndicatedValueChange]);
 
   // Load sample data
   const loadSampleData = () => {

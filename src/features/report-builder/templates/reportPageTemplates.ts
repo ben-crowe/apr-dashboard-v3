@@ -97,26 +97,139 @@ function getImageUrl(sections: ReportSection[], fieldId: string): string {
  * client-name, client-address-full, appraiser-company, appraiser-address, valuation-date, report-date, file-number
  */
 export function renderPage01(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 01 - Cover Page - Appraisal Report
-  // Fields to interpolate:
-  // - report-title
-  // - property-type
-  // - property-name
-  // - property-address-line1
-  // - property-address-line2
-  // - client-name
-  // - client-address-full
-  // - appraiser-company
-  // - appraiser-address
-  // - valuation-date
-  // - report-date
-  // - file-number
-
   return `
-    <div class="page page-01">
-      <h1>Page 1: Cover Page</h1>
-      <p>TODO: Implement cover page template</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appraisal Report - Page 1</title>
+  <link rel="stylesheet" href="master-appraisal-styles.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @page { size: 8.5in 11in; margin: 0; }
+    body {
+      width: 8.5in; height: 11in; font-family: Arial, Helvetica, sans-serif;
+      background-color: white; color: #333; position: relative; overflow: hidden;
+    }
+    .header {
+      padding: 24px 32px 0 32px; background-color: white; height: 120px;
+      display: flex; align-items: flex-start;
+    }
+    .logo { font-size: 0; }
+    .logo-text {
+      font-size: 24px; font-weight: bold; color: #1a4d6d;
+      letter-spacing: 6px; line-height: 1.2;
+    }
+    .logo-subtext {
+      font-size: 9px; color: #555; letter-spacing: 2px;
+      margin-top: 2px; font-weight: normal;
+    }
+    .content-wrapper { display: flex; height: calc(11in - 120px); position: relative; }
+    .left-section {
+      flex: 0 0 45%; padding: 32px; padding-right: 16px;
+      display: flex; flex-direction: column; justify-content: flex-start;
+    }
+    .property-photo {
+      width: 100%; height: 200px; background-color: #ddd; border: 1px solid #ccc;
+      display: flex; align-items: center; justify-content: center;
+      color: #666; font-size: 12px; margin-bottom: 24px;
+    }
+    .right-section {
+      flex: 1; padding: 32px; padding-left: 16px;
+      display: flex; flex-direction: column; justify-content: flex-start;
+      background-color: white; position: relative; z-index: 1;
+    }
+    .heading {
+      font-size: 32px; font-weight: bold; color: #1a1a1a;
+      margin-bottom: 28px; line-height: 1.2;
+    }
+    .property-type { font-size: 14px; font-weight: bold; color: #1a1a1a; margin-bottom: 6px; }
+    .property-address { font-size: 12px; color: #1a1a1a; margin-bottom: 2px; line-height: 1.4; }
+    .property-city { font-size: 12px; color: #1a1a1a; margin-bottom: 24px; line-height: 1.4; }
+    .diagonal-section {
+      position: absolute; bottom: 0; right: 0; width: 100%; height: 520px;
+      background: linear-gradient(135deg, #004a6f 0%, #1a5f7f 50%, #1a6b8f 100%);
+      clip-path: polygon(0 35%, 100% 0, 100% 100%, 0 100%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 60px 32px 32px 32px; z-index: 0;
+    }
+    .info-section {
+      color: white; font-size: 12px; line-height: 1.6;
+      margin-bottom: 36px; position: relative; z-index: 2;
+    }
+    .info-label {
+      font-weight: bold; font-size: 11px; letter-spacing: 0.5px; margin-bottom: 8px;
+    }
+    .info-content { font-size: 12px; line-height: 1.5; }
+    .info-content-name { font-weight: bold; font-size: 13px; margin-bottom: 4px; }
+    .prepared-for, .prepared-by { text-align: right; margin-bottom: 32px; }
+    .prepared-for .info-label, .prepared-by .info-label { text-align: right; }
+    .prepared-for .info-content, .prepared-for .info-content-name,
+    .prepared-by .info-content, .prepared-by .info-content-name { text-align: right; }
+    .footer-info {
+      text-align: right; color: white; font-size: 11px;
+      line-height: 1.6; position: relative; z-index: 2;
+    }
+    .date-line { margin-bottom: 2px; }
+    .file-number { margin-bottom: 0; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <svg width="32" height="32" viewBox="0 0 32 32" style="display: inline-block;">
+          <g fill="#1a4d6d">
+            <path d="M4 8L12 20L8 20L0 8Z"></path>
+            <path d="M20 8L28 20L24 20L16 8Z"></path>
+          </g>
+        </svg>
+        <div>
+          <div class="logo-text">VALTA</div>
+          <div class="logo-subtext">PROPERTY VALUATIONS</div>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <div class="content-wrapper">
+    <div class="left-section">
+      <div class="property-photo">
+        <!-- Property Photo Placeholder -->
+      </div>
+    </div>
+
+    <div class="right-section">
+      <h1 class="heading">${getFieldValue(sections, 'report-title') || 'Appraisal Report'}</h1>
+      <div class="property-type">${getFieldValue(sections, 'property-type')}</div>
+      <div class="property-address">${getFieldValue(sections, 'property-name')}</div>
+      <div class="property-address">${getFieldValue(sections, 'property-address-line1')}</div>
+      <div class="property-city">${getFieldValue(sections, 'property-address-line2')}</div>
+    </div>
+
+    <div class="diagonal-section">
+      <div class="prepared-for">
+        <div class="info-label">PREPARED FOR:</div>
+        <div class="info-content-name">${getFieldValue(sections, 'client-name')}</div>
+        <div class="info-content">${getFieldValue(sections, 'client-address-full').replace(/\n/g, '<br>')}</div>
+      </div>
+
+      <div class="prepared-by">
+        <div class="info-label">PREPARED BY:</div>
+        <div class="info-content-name">${getFieldValue(sections, 'appraiser-company')}</div>
+        <div class="info-content">${getFieldValue(sections, 'appraiser-address').replace(/\n/g, '<br>')}</div>
+      </div>
+
+      <div class="footer-info">
+        <div class="date-line">Date of Valuation: ${getFieldValue(sections, 'valuation-date')}</div>
+        <div class="date-line">Date of Report: ${getFieldValue(sections, 'report-date')}</div>
+        <div class="file-number" style="margin-top: 8px;">File No: ${getFieldValue(sections, 'file-number')}</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
   `;
 }
 
@@ -144,19 +257,116 @@ export function renderPage02(sections: ReportSection[], valueScenarioType: strin
 
 /**
  * Page 3: Extraordinary Limiting Conditions
- * Fields: section-title, extraordinary-limiting-conditions, appraiser-company, appraiser-signatory-name,
- * appraiser-signatory-title, appraiser-email, appraiser-aic-number
+ * Fields: section-title, extraordinary-limiting-conditions, appraiser-company,
+ * appraiser-signatory-name, appraiser-signatory-title, appraiser-email, appraiser-aic-number
  */
 export function renderPage03(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 03 - Extraordinary Limiting Conditions
-  // Fields: section-title, extraordinary-limiting-conditions, appraiser-company
-  // appraiser-signatory-name, appraiser-signatory-title, appraiser-email, appraiser-aic-number
-
   return `
-    <div class="page page-03">
-      <h1>Page 3: Extraordinary Limiting Conditions</h1>
-      <p>TODO: Implement limiting conditions template</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page 4 - Extraordinary Limiting Conditions</title>
+  <link rel="stylesheet" href="master-appraisal-styles.css">
+  <style>
+    @page { size: 8.5in 11in; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 8.5in; height: 11in; font-family: Arial, sans-serif;
+      font-size: 11px; line-height: 1.4; color: #000; background: #fff;
+      padding: 0; margin: 0; display: flex; flex-direction: column;
+    }
+    .page-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 24px 36px 16px 36px; border-bottom: none;
+    }
+    .logo { width: 150px; flex-shrink: 0; }
+    .logo-text {
+      font-weight: 600; font-size: 14px; color: #003d7a; letter-spacing: 0.5px;
+    }
+    .company-info {
+      text-align: right; font-size: 10px; line-height: 1.5; color: #000;
+    }
+    .company-info p { margin: 2px 0; }
+    .content {
+      flex: 1; padding: 0 36px 40px 36px; overflow-y: auto;
+    }
+    h1 {
+      font-size: 18px; font-weight: bold; color: #003d7a;
+      margin: 12px 0 8px 0; letter-spacing: 0.3px;
+    }
+    .intro-line {
+      font-size: 11px; margin-bottom: 12px; color: #000; font-weight: normal;
+    }
+    p {
+      font-size: 11px; line-height: 1.5; margin-bottom: 10px;
+      text-align: justify; color: #000;
+    }
+    .closing-text { margin-top: 16px; font-size: 11px; line-height: 1.5; }
+    .closing-line { margin-bottom: 6px; }
+    .signature-section { margin-top: 20px; margin-bottom: 8px; }
+    .signature {
+      width: 60px; height: 30px; border-top: 1px solid #000;
+      margin-bottom: 4px; font-style: italic;
+    }
+    .signature-text { font-size: 11px; line-height: 1.4; margin-top: 2px; }
+    .signatory-name { font-weight: bold; margin-bottom: 2px; }
+    .signatory-title { margin-bottom: 1px; }
+    .signatory-email { margin-bottom: 1px; }
+    .signatory-aic { margin-bottom: 0; }
+    .footer-bar {
+      width: 100%; height: 12px;
+      background: linear-gradient(to right, #4a9fd8 0%, #003d7a 100%);
+      margin-top: auto; flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <div class="logo">
+      <div class="logo-text">VALTA</div>
+      <div style="font-size: 9px; color: #666; margin-top: 2px;">PROPERTY VALUATIONS</div>
     </div>
+
+    <div class="company-info">
+      <p><strong>${getFieldValue(sections, 'appraiser-company')}</strong></p>
+      <p>#300-6858 Richard Road SW.</p>
+      <p>Calgary, AB T3E 6L1</p>
+      <p>Office: 587-801-5151</p>
+      <p>clientcare@valta.ca</p>
+      <p>www.valta.ca</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <h1>${getFieldValue(sections, 'section-title') || 'Extraordinary Limiting Conditions'}</h1>
+
+    <div class="intro-line">${getFieldValue(sections, 'extraordinary-limiting-conditions')}</div>
+
+    <p>The report has been completed in accordance with the Canadian Uniform Standards of Professional Appraisal Practice (CUSAP) adopted January 1, 2024. The full narrative appraisal report that follows sets forth the pertinent data and analyses leading to the conclusions presented herein. The appraisal requirements section of this report sets out the basis of the appraisal, definitions and the valuation methodology and must be read to gain a full understanding of the process.</p>
+
+    <p>If there are any specific questions or concerns regarding the attached appraisal report, or if Valta can be of additional assistance, please contact the individuals listed below.</p>
+
+    <div class="closing-text">
+      <div class="closing-line">Respectfully Submitted,</div>
+      <div style="font-weight: bold; margin-bottom: 10px;">${getFieldValue(sections, 'appraiser-company').toUpperCase()}</div>
+
+      <div class="signature-section">
+        <div class="signature"></div>
+        <div class="signature-text">
+          <div class="signatory-name">${getFieldValue(sections, 'appraiser-signatory-name')}</div>
+          <div class="signatory-title">${getFieldValue(sections, 'appraiser-signatory-title')}</div>
+          <div class="signatory-email">${getFieldValue(sections, 'appraiser-email')}</div>
+          <div class="signatory-aic">AIC No: ${getFieldValue(sections, 'appraiser-aic-number')}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bar"></div>
+</body>
+</html>
   `;
 }
 
@@ -165,14 +375,150 @@ export function renderPage03(sections: ReportSection[], valueScenarioType: strin
  * Fields: section-title, toc-section-1, toc-section-2
  */
 export function renderPage04(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 04 - Table of Contents
-  // Fields: section-title, toc-section-1, toc-section-2
-
   return `
-    <div class="page page-04">
-      <h1>Page 4: Table of Contents</h1>
-      <p>TODO: Implement table of contents template</p>
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Table of Contents - Page 5</title>
+  <link rel="stylesheet" href="master-appraisal-styles.css">
+  <style>
+    @page { size: 8.5in 11in; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 8.5in; height: 11in; margin: 0; padding: 0;
+      font-family: Arial, sans-serif; background-color: #fff; display: flex;
+    }
+    .sidebar {
+      width: 180px; background-color: #1a3a52; padding: 40px 20px;
+      display: flex; align-items: flex-start; justify-content: flex-start;
+    }
+    .sidebar-title {
+      color: #fff; font-size: 28px; font-weight: bold;
+      line-height: 1.2; text-align: center; width: 100%;
+    }
+    .content { flex: 1; padding: 40px 40px; overflow-y: auto; }
+    .toc-section { margin-bottom: 28px; }
+    .section-title {
+      font-size: 13px; font-weight: bold; color: #1a3a52;
+      margin-bottom: 12px; text-transform: capitalize;
+    }
+    .toc-item {
+      display: flex; justify-content: space-between; align-items: baseline;
+      font-size: 12px; color: #333; margin-bottom: 8px; line-height: 1.4;
+    }
+    .toc-item-text { flex: 1; padding-right: 10px; }
+    .toc-item-page {
+      flex-shrink: 0; text-align: right; font-weight: 600; color: #1a3a52;
+    }
+    .sub-item { margin-left: 0; }
+    .sub-item .toc-item-text { font-weight: normal; color: #333; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="sidebar-title">${getFieldValue(sections, 'section-title') || 'Table of<br>Contents'}</div>
+  </div>
+
+  <div class="content">
+    <div class="toc-section">
+      <div class="section-title">Introduction & Executive Summary</div>
+      <div class="toc-item">
+        <div class="toc-item-text">Property Overview</div>
+        <div class="toc-item-page">1</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Photographs</div>
+        <div class="toc-item-page">4</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Maps</div>
+        <div class="toc-item-page">9</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Identification of Assignment</div>
+        <div class="toc-item-page">12</div>
+      </div>
     </div>
+
+    <div class="toc-section">
+      <div class="section-title">Property Analysis</div>
+      <div class="toc-item">
+        <div class="toc-item-text">Location</div>
+        <div class="toc-item-page">17</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Site Details</div>
+        <div class="toc-item-page">18</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Property Taxes & Assessment</div>
+        <div class="toc-item-page">23</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Land Use & Planning</div>
+        <div class="toc-item-page">24</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Description of the Improvements</div>
+        <div class="toc-item-page">26</div>
+      </div>
+    </div>
+
+    <div class="toc-section">
+      <div class="section-title">Market Context</div>
+      <div class="toc-item">
+        <div class="toc-item-text">Economic Overviews</div>
+        <div class="toc-item-page">29</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Multi-Family Market Overview</div>
+        <div class="toc-item-page">31</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Highest & Best Use</div>
+        <div class="toc-item-page">32</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Valuation Methodology</div>
+        <div class="toc-item-page">34</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Income Approach</div>
+        <div class="toc-item-page">36</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Direct Comparison Approach: Multifamily</div>
+        <div class="toc-item-page">50</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Reconciliation of Value</div>
+        <div class="toc-item-page">61</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Certification</div>
+        <div class="toc-item-page">63</div>
+      </div>
+    </div>
+
+    <div class="toc-section">
+      <div class="section-title">Appendices</div>
+      <div class="toc-item">
+        <div class="toc-item-text">Contingent & Limiting Conditions</div>
+        <div class="toc-item-page">65</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Definition of Terms</div>
+        <div class="toc-item-page">68</div>
+      </div>
+      <div class="toc-item">
+        <div class="toc-item-text">Qualifications of the Appraiser</div>
+        <div class="toc-item-page">72</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
   `;
 }
 
@@ -182,14 +528,233 @@ export function renderPage04(sections: ReportSection[], valueScenarioType: strin
  * legal-description, site-area-sf, zoning-district, tenancy-type, nra-sqft, unit-count, etc.
  */
 export function renderPage05(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 05 - Introduction & Executive Summary (Property Identification)
-  // 43 fields total - see master-field-mapping-consolidated.json for full list
-
   return `
-    <div class="page page-05">
-      <h1>Page 5: Executive Summary - Property Identification</h1>
-      <p>TODO: Implement property identification template</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page 6 - Introduction & Executive Summary</title>
+  <link rel="stylesheet" href="master-appraisal-styles.css">
+  <style>
+    @page { size: 8.5in 11in; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 8.5in; height: 11in; margin: 0; padding: 0.5in;
+      font-family: Arial, sans-serif; background: white; color: #000;
+      font-size: 11px; line-height: 1.4;
+    }
+    .page-title {
+      font-size: 18px; font-weight: bold; margin-bottom: 20px;
+      border-bottom: 2px solid #000; padding-bottom: 8px;
+    }
+    .section-title {
+      font-size: 12px; font-weight: bold; color: #003d82;
+      margin-top: 20px; margin-bottom: 10px; text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .section-header {
+      background-color: #003d82; color: white; padding: 6px 10px;
+      font-weight: bold; font-size: 11px; margin-bottom: 0;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    table {
+      width: 100%; border-collapse: collapse; margin-bottom: 15px;
+    }
+    td {
+      padding: 6px 8px; border: 1px solid #ccc; font-size: 11px;
+      vertical-align: top;
+    }
+    td.label {
+      font-weight: bold; width: 50%; background-color: #f5f5f5;
+    }
+    td.value { width: 50%; background-color: white; }
+    .footer {
+      position: absolute; bottom: 0.5in; width: 7.5in;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 9px; margin-top: 20px; padding-top: 10px;
+      border-top: 1px solid #ccc;
+    }
+    .footer-left { flex: 1; }
+    .footer-right {
+      width: 100px; height: 40px;
+      background: linear-gradient(to right, #e8f0f7 50%, #003d82 50%);
+    }
+  </style>
+</head>
+<body>
+  <div class="page-title">${getFieldValue(sections, 'section-title') || 'Introduction & Executive Summary'}</div>
+
+  <div class="section-title">${getFieldValue(sections, 'subsection-title') || 'Property Overview'}</div>
+
+  <div class="section-header">PROPERTY IDENTIFICATION</div>
+  <table>
+    <tr>
+      <td class="label">Name</td>
+      <td class="value">${getFieldValue(sections, 'property-name')}</td>
+    </tr>
+    <tr>
+      <td class="label">Property</td>
+      <td class="value">${getFieldValue(sections, 'property-type')}</td>
+    </tr>
+    <tr>
+      <td class="label">Address</td>
+      <td class="value">${getFieldValue(sections, 'property-address-line1')}</td>
+    </tr>
+    <tr>
+      <td class="label">City, Province, Postal Code</td>
+      <td class="value">${getFieldValue(sections, 'property-address-line2')}</td>
+    </tr>
+    <tr>
+      <td class="label">Market / Submarket</td>
+      <td class="value">${getFieldValue(sections, 'market-name')}</td>
+    </tr>
+    <tr>
+      <td class="label">Geocode</td>
+      <td class="value">${getFieldValue(sections, 'geocode')}</td>
+    </tr>
+  </table>
+
+  <div class="section-header">SITE DESCRIPTION</div>
+  <table>
+    <tr>
+      <td class="label">Legal Description</td>
+      <td class="value">${getFieldValue(sections, 'legal-description')}</td>
+    </tr>
+    <tr>
+      <td class="label">Land Area</td>
+      <td class="value">Square Feet</td>
+    </tr>
+    <tr>
+      <td class="label">Usable</td>
+      <td class="value">${getFieldValue(sections, 'site-area-sf')}</td>
+    </tr>
+    <tr>
+      <td class="label">Total</td>
+      <td class="value">${getFieldValue(sections, 'site-area-sf')}</td>
+    </tr>
+    <tr>
+      <td class="label">Zoning</td>
+      <td class="value">${getFieldValue(sections, 'zoning-district')}</td>
+    </tr>
+    <tr>
+      <td class="label">Shape</td>
+      <td class="value">${getFieldValue(sections, 'site-shape')}</td>
+    </tr>
+    <tr>
+      <td class="label">Topography</td>
+      <td class="value">${getFieldValue(sections, 'topography')}</td>
+    </tr>
+  </table>
+
+  <div class="section-header">IMPROVEMENT DESCRIPTION</div>
+  <table>
+    <tr>
+      <td class="label">Tenancy</td>
+      <td class="value">${getFieldValue(sections, 'tenancy-type')}</td>
+    </tr>
+    <tr>
+      <td class="label">Net Rentable Area (NRA)</td>
+      <td class="value">${getFieldValue(sections, 'nra-sqft')}</td>
+    </tr>
+    <tr>
+      <td class="label">Gross Building Area (GBA)</td>
+      <td class="value">${getFieldValue(sections, 'building-nra-sqft')}</td>
+    </tr>
+    <tr>
+      <td class="label">Units</td>
+      <td class="value">${getFieldValue(sections, 'unit-count')}</td>
+    </tr>
+    <tr>
+      <td class="label">Density (Units/Acre)</td>
+      <td class="value">${getFieldValue(sections, 'density-units-per-acre')}</td>
+    </tr>
+    <tr>
+      <td class="label">Total Buildings</td>
+      <td class="value">${getFieldValue(sections, 'building-count')}</td>
+    </tr>
+    <tr>
+      <td class="label">Stories</td>
+      <td class="value">${getFieldValue(sections, 'story-count')}</td>
+    </tr>
+    <tr>
+      <td class="label">Year Built</td>
+      <td class="value">${getFieldValue(sections, 'year-built')}</td>
+    </tr>
+    <tr>
+      <td class="label">Actual Age</td>
+      <td class="value">${getFieldValue(sections, 'actual-age')}</td>
+    </tr>
+    <tr>
+      <td class="label">Effective Age</td>
+      <td class="value">${getFieldValue(sections, 'effective-age')}</td>
+    </tr>
+    <tr>
+      <td class="label">Economic Life</td>
+      <td class="value">${getFieldValue(sections, 'economic-life')}</td>
+    </tr>
+    <tr>
+      <td class="label">Remaining Useful Life</td>
+      <td class="value">${getFieldValue(sections, 'remaining-useful-life')}</td>
+    </tr>
+    <tr>
+      <td class="label">Parking</td>
+      <td class="value">${getFieldValue(sections, 'parking-ratio')}</td>
+    </tr>
+    <tr>
+      <td class="label">Project Amenities</td>
+      <td class="value">${getFieldValue(sections, 'project-amenities')}</td>
+    </tr>
+    <tr>
+      <td class="label">Laundry</td>
+      <td class="value">${getFieldValue(sections, 'laundry')}</td>
+    </tr>
+    <tr>
+      <td class="label">Security Features</td>
+      <td class="value">${getFieldValue(sections, 'security-features')}</td>
+    </tr>
+  </table>
+
+  <div class="section-header">QUALITATIVE ANALYSIS</div>
+  <table>
+    <tr>
+      <td class="label">Site Quality</td>
+      <td class="value">${getFieldValue(sections, 'site-quality-rating')}</td>
+    </tr>
+    <tr>
+      <td class="label">Site Access</td>
+      <td class="value">${getFieldValue(sections, 'site-access-rating')}</td>
+    </tr>
+    <tr>
+      <td class="label">Site Exposure</td>
+      <td class="value">${getFieldValue(sections, 'site-exposure-rating')}</td>
+    </tr>
+    <tr>
+      <td class="label">Site Utility</td>
+      <td class="value">${getFieldValue(sections, 'site-utility-rating')}</td>
+    </tr>
+    <tr>
+      <td class="label">Building Quality</td>
+      <td class="value">${getFieldValue(sections, 'building-quality-rating')}</td>
+    </tr>
+    <tr>
+      <td class="label">Building Condition</td>
+      <td class="value">${getFieldValue(sections, 'building-condition-rating')}</td>
+    </tr>
+    <tr>
+      <td class="label">Building Appeal</td>
+      <td class="value">${getFieldValue(sections, 'building-appeal-rating')}</td>
+    </tr>
+  </table>
+
+  <div class="footer">
+    <div class="footer-left">
+      1   ${getFieldValue(sections, 'property-address-line1')}. ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}
     </div>
+    <div class="footer-right"></div>
+  </div>
+</body>
+</html>
   `;
 }
 
@@ -199,14 +764,205 @@ export function renderPage05(sections: ReportSection[], valueScenarioType: strin
  * exposure-time-conclusion, current-occupancy-percent, capitalization-rate, concluded-value, etc.
  */
 export function renderPage06(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 06 - Executive Summary (HBU, Exposure, Value)
-  // 28 fields total
-
   return `
-    <div class="page page-06">
-      <h1>Page 6: Executive Summary - HBU & Value</h1>
-      <p>TODO: Implement HBU and value conclusion template</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page 7 - Introduction & Executive Summary</title>
+  <link rel="stylesheet" href="master-appraisal-styles.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @page { size: 8.5in 11in; margin: 0; }
+    body {
+      width: 8.5in; height: 11in; margin: 0; padding: 0;
+      font-family: Arial, sans-serif; font-size: 11px; color: #000;
+      background: #fff; line-height: 1.3;
+    }
+    .page-container {
+      width: 100%; height: 100%; display: flex; flex-direction: column;
+      padding: 36px 36px 36px 36px;
+    }
+    .content-area { flex: 1; }
+    .page-title {
+      font-size: 16px; font-weight: bold; margin-bottom: 20px; color: #000;
+      border-bottom: 2px solid #003d66; padding-bottom: 8px;
+    }
+    .section-title {
+      background-color: #003d66; color: white; padding: 8px 12px;
+      font-weight: bold; font-size: 12px; margin-top: 16px;
+      margin-bottom: 0; letter-spacing: 0.5px;
+    }
+    table {
+      width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 11px;
+    }
+    table.hbu-table { margin-top: 0; }
+    table.hbu-table th, table.hbu-table td {
+      padding: 6px 8px; text-align: left; border-bottom: 1px solid #d0d0d0;
+    }
+    table.hbu-table th { background-color: #f5f5f5; font-weight: bold; }
+    table.hbu-table tr:nth-child(even) { background-color: #fafafa; }
+    table.investment-table tr, table.investment-table td, table.investment-table th {
+      padding: 5px 8px; text-align: left; border-bottom: 1px solid #d0d0d0;
+    }
+    table.investment-table tr:nth-child(even) { background-color: #fafafa; }
+    table.investment-table th { background-color: #f5f5f5; font-weight: bold; }
+    table.value-conclusion { margin-top: 0; }
+    table.value-conclusion tr, table.value-conclusion td {
+      padding: 5px 8px; border-bottom: 1px solid #d0d0d0;
+    }
+    table.value-conclusion tr:nth-child(even) { background-color: #fafafa; }
+    table.value-conclusion .label-cell { font-weight: normal; width: 60%; }
+    table.value-conclusion .value-cell {
+      text-align: right; width: 40%; padding-right: 16px;
+    }
+    .final-value-row {
+      background-color: #003d66; color: white; font-weight: bold;
+    }
+    .final-value-row .label-cell, .final-value-row .value-cell { color: white; }
+    .col1-narrow { width: 50%; }
+    .col2-narrow { width: 50%; }
+    .footer {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 24px; padding-top: 12px; border-top: 1px solid #e0e0e0;
+      font-size: 9px; color: #666;
+    }
+    .footer-left { display: flex; gap: 6px; }
+    .footer-right { width: 80px; height: 40px; }
+    .logo-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #e8f0f7 0%, #d0dce8 100%);
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid #bbb; font-size: 8px; color: #666;
+    }
+    .spacer { height: 48px; }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <div class="content-area">
+      <div class="page-title">${getFieldValue(sections, 'section-title') || 'Introduction & Executive Summary'}</div>
+
+      <div class="section-title">HIGHEST & BEST USE</div>
+      <table class="hbu-table">
+        <tr>
+          <td class="col1-narrow">Proposed Construction</td>
+          <td class="col2-narrow">${getFieldValue(sections, 'hbu-proposed-construction')}</td>
+        </tr>
+        <tr>
+          <td>As Though Vacant</td>
+          <td>${getFieldValue(sections, 'hbu-vacant-use')}</td>
+        </tr>
+        <tr>
+          <td>As Improved</td>
+          <td>${getFieldValue(sections, 'hbu-improved-use')}</td>
+        </tr>
+      </table>
+
+      <div class="section-title">EXPOSURE & MARKETING TIME</div>
+      <table class="hbu-table">
+        <tr>
+          <td class="col1-narrow">Exposure Time</td>
+          <td class="col2-narrow">${getFieldValue(sections, 'exposure-time-conclusion')}</td>
+        </tr>
+        <tr>
+          <td>Marketing Time</td>
+          <td>${getFieldValue(sections, 'marketing-time')}</td>
+        </tr>
+      </table>
+
+      <div class="section-title">INVESTMENT INDICATORS</div>
+      <table class="investment-table">
+        <tr>
+          <td class="col1-narrow">Current Occupancy</td>
+          <td class="col2-narrow">${getFieldValue(sections, 'current-occupancy-percent')}</td>
+        </tr>
+        <tr>
+          <td>Stabilized Occupancy, Stabilized Vacancy & Credit Loss</td>
+          <td>${getFieldValue(sections, 'stabilized-occupancy-percent')}</td>
+        </tr>
+        <tr>
+          <td>SF Multifamily</td>
+          <td>${getFieldValue(sections, 'multifamily-sf')}</td>
+        </tr>
+        <tr>
+          <td>Occupied MF Units / Vacant MF Units</td>
+          <td>${getFieldValue(sections, 'units-occupied-vacant')}</td>
+        </tr>
+        <tr>
+          <td>Current Rent/MF Units / Concluded Rent/MF Units</td>
+          <td>${getFieldValue(sections, 'current-rent-per-unit')}</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>${getFieldValue(sections, 'concluded-rent-per-unit')}</td>
+        </tr>
+        <tr>
+          <td>Expense Ratio (Expenses/EGI)</td>
+          <td>${getFieldValue(sections, 'expense-ratio')}</td>
+        </tr>
+        <tr>
+          <td>Debt Service Coverage Ratio</td>
+          <td>${getFieldValue(sections, 'dscr-or-noi-per-unit')}</td>
+        </tr>
+        <tr>
+          <td>Capitalization Rate (OAR) Conclusion</td>
+          <td>${getFieldValue(sections, 'capitalization-rate')}</td>
+        </tr>
+      </table>
+
+      <div class="section-title">VALUE CONCLUSION</div>
+      <table class="value-conclusion" style="margin-bottom: 8px;">
+        <tr>
+          <td class="label-cell">VALUATION SCENARIOS</td>
+          <td class="value-cell">${getFieldValue(sections, 'value-scenario-type')}</td>
+        </tr>
+        <tr>
+          <td class="label-cell">Interest</td>
+          <td class="value-cell">${getFieldValue(sections, 'interest-appraised')}</td>
+        </tr>
+        <tr>
+          <td class="label-cell">Exposure Time</td>
+          <td class="value-cell">${getFieldValue(sections, 'exposure-time-value-table')}</td>
+        </tr>
+        <tr>
+          <td class="label-cell">Effective Date</td>
+          <td class="value-cell">${getFieldValue(sections, 'valuation-date')}</td>
+        </tr>
+        <tr>
+          <td class="label-cell">Cost Approach</td>
+          <td class="value-cell">${getFieldValue(sections, 'cost-approach-status')}</td>
+        </tr>
+        <tr>
+          <td class="label-cell">Direct Comparison Approach</td>
+          <td class="value-cell">${getFieldValue(sections, 'direct-comparison-value')}</td>
+        </tr>
+        <tr>
+          <td class="label-cell">Income Approach</td>
+          <td class="value-cell">${getFieldValue(sections, 'income-approach-value')}</td>
+        </tr>
+        <tr class="final-value-row">
+          <td class="label-cell">FINAL VALUE CONCLUSION</td>
+          <td class="value-cell">${getFieldValue(sections, 'concluded-value')}</td>
+        </tr>
+      </table>
+
+      <div class="spacer"></div>
     </div>
+
+    <div class="footer">
+      <div class="footer-left">
+        <span>2</span>
+        <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
+      </div>
+      <div class="footer-right">
+        <div class="logo-placeholder">[LOGO]</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
   `;
 }
 
@@ -216,15 +972,88 @@ export function renderPage06(sections: ReportSection[], valueScenarioType: strin
  * extraordinary-limiting-conditions, page-footer
  */
 export function renderPage07(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 07 - Hypothetical Conditions and Assumptions
-  // Fields: section-title, subsection-title, hypothetical-conditions-text
-  // extraordinary-assumptions-text, extraordinary-limiting-conditions, page-footer
-
   return `
-    <div class="page page-07">
-      <h1>Page 7: Hypothetical Conditions and Assumptions</h1>
-      <p>TODO: Implement conditions and assumptions template</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Valuation Report - Page 8</title>
+  <link rel="stylesheet" href="master-appraisal-styles.css">
+  <style>
+    @page { size: 8.5in 11in; margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 8.5in; height: 11in; margin: 0; padding: 0;
+      font-family: Arial, sans-serif; font-size: 11px; line-height: 1.5;
+      color: #000; background: #fff; position: relative;
+    }
+    body::before {
+      content: ''; position: absolute; top: 0; right: 0; width: 40px;
+      height: 1056px;
+      background: linear-gradient(to right, #1a5a96 0%, #2a7bb7 50%, #3a9ad9 100%);
+      z-index: -1;
+    }
+    .page-container {
+      width: 100%; height: 100%; display: flex; flex-direction: column;
+      padding: 0.75in 0.75in 0.5in 0.75in;
+    }
+    .header {
+      border-bottom: 2px solid #003d7a; padding-bottom: 8px; margin-bottom: 20px;
+    }
+    .header h1 { font-size: 16px; font-weight: bold; color: #000; }
+    .content { flex: 1; overflow: hidden; }
+    .section { margin-bottom: 18px; }
+    .section-title {
+      font-size: 12px; font-weight: bold; color: #0047ab; margin-bottom: 8px;
+    }
+    .section-content {
+      font-size: 11px; line-height: 1.6; color: #000; text-align: justify;
+      margin-bottom: 12px;
+    }
+    .footer {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      border-top: 1px solid #ccc; padding-top: 6px; font-size: 9px;
+      color: #666; margin-top: auto; position: absolute; bottom: 0.3in;
+      left: 0.75in; right: 1in; width: calc(100% - 1.75in);
+    }
+    .footer-left { display: flex; gap: 20px; align-items: center; }
+    .footer-text { font-size: 9px; color: #333; }
+    .page-number { font-size: 9px; color: #333; }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <div class="header">
+      <h1>${getFieldValue(sections, 'section-title') || 'Introduction & Executive Summary'}</h1>
     </div>
+
+    <div class="content">
+      <div class="section">
+        <div class="section-title">Hypothetical Conditions</div>
+        <div class="section-content">${getFieldValue(sections, 'hypothetical-conditions-text')}</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Extraordinary Assumptions</div>
+        <div class="section-content">${getFieldValue(sections, 'extraordinary-assumptions-text')}</div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Extraordinary Limiting Conditions</div>
+        <div class="section-content">${getFieldValue(sections, 'extraordinary-limiting-conditions')}</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-left">
+        <span class="footer-text">3</span>
+        <span class="footer-text">${getFieldValue(sections, 'property-address-line1')}. ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
   `;
 }
 
@@ -233,14 +1062,108 @@ export function renderPage07(sections: ReportSection[], valueScenarioType: strin
  * Fields: section-title, subsection-title, photo-1-caption through photo-6-caption, page-footer
  */
 export function renderPage08(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 08 - Photographs (Page 1 of 2)
-  // Fields: section-title, subsection-title, photo-1-caption...photo-6-caption, page-footer
-
   return `
-    <div class="page page-08">
-      <h1>Page 8: Photographs (1 of 2)</h1>
-      <p>TODO: Implement photographs page 1 template</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page 9 - Photographs</title>
+  <link rel="stylesheet" href="master-appraisal-styles.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @page { size: 8.5in 11in; margin: 0; }
+    body {
+      width: 8.5in; height: 11in; margin: 0; padding: 0.5in 0.5in;
+      font-family: Arial, sans-serif; background: white; font-size: 11px;
+      line-height: 1.4;
+    }
+    .page-header {
+      margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #003d7a;
+    }
+    .page-header h1 {
+      font-size: 16px; font-weight: bold; color: #000; margin-bottom: 5px;
+    }
+    .section-title {
+      font-size: 12px; font-weight: bold; color: #003d7a;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px;
+    }
+    .photos-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+      margin-bottom: 40px;
+    }
+    .photo-item { text-align: center; }
+    .photo-placeholder {
+      width: 100%; height: auto; background: #cccccc;
+      display: flex; align-items: center; justify-content: center;
+      color: #666; font-size: 11px; border: 1px dashed #999;
+      margin-bottom: 8px; aspect-ratio: 4 / 3;
+    }
+    .photo-caption {
+      font-size: 11px; color: #000; font-weight: 500; line-height: 1.3;
+    }
+    .footer-text {
+      position: absolute; bottom: 0.5in; left: 0.5in; right: 0.5in;
+      font-size: 9px; color: #666; display: flex;
+      justify-content: space-between; align-items: center;
+      padding-top: 10px; border-top: 1px solid #ddd;
+    }
+    .page-number { font-size: 9px; color: #666; }
+    .footer-logo {
+      width: 80px; height: 20px;
+      background: linear-gradient(90deg, #003d7a 0%, #0066cc 100%);
+      border-radius: 3px;
+    }
+    .body-content { margin-bottom: 80px; }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <h1>${getFieldValue(sections, 'section-title') || 'Introduction & Executive Summary'}</h1>
+  </div>
+
+  <div class="body-content">
+    <div class="section-title">${getFieldValue(sections, 'subsection-title') || 'Photographs'}</div>
+
+    <div class="photos-grid">
+      <div class="photo-item">
+        <div class="photo-placeholder">[PHOTO: Photo 1]</div>
+        <div class="photo-caption">${getFieldValue(sections, 'photo-1-caption')}</div>
+      </div>
+
+      <div class="photo-item">
+        <div class="photo-placeholder">[PHOTO: Photo 2]</div>
+        <div class="photo-caption">${getFieldValue(sections, 'photo-2-caption')}</div>
+      </div>
+
+      <div class="photo-item">
+        <div class="photo-placeholder">[PHOTO: Photo 3]</div>
+        <div class="photo-caption">${getFieldValue(sections, 'photo-3-caption')}</div>
+      </div>
+
+      <div class="photo-item">
+        <div class="photo-placeholder">[PHOTO: Photo 4]</div>
+        <div class="photo-caption">${getFieldValue(sections, 'photo-4-caption')}</div>
+      </div>
+
+      <div class="photo-item">
+        <div class="photo-placeholder">[PHOTO: Photo 5]</div>
+        <div class="photo-caption">${getFieldValue(sections, 'photo-5-caption')}</div>
+      </div>
+
+      <div class="photo-item">
+        <div class="photo-placeholder">[PHOTO: Photo 6]</div>
+        <div class="photo-caption">${getFieldValue(sections, 'photo-6-caption')}</div>
+      </div>
     </div>
+  </div>
+
+  <div class="footer-text">
+    <div class="page-number">4    ${getFieldValue(sections, 'property-address-line1')}. ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</div>
+    <div class="footer-logo"></div>
+  </div>
+</body>
+</html>
   `;
 }
 
@@ -249,14 +1172,108 @@ export function renderPage08(sections: ReportSection[], valueScenarioType: strin
  * Fields: section-title, photo-7-caption through photo-12-caption, page-footer
  */
 export function renderPage09(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 09 - Photographs (Page 2 of 2)
-  // Fields: section-title, photo-7-caption...photo-12-caption, page-footer
-
   return `
-    <div class="page page-09">
-      <h1>Page 9: Photographs (2 of 2)</h1>
-      <p>TODO: Implement photographs page 2 template</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page 9 - Photographs (Page 2)</title>
+  <link rel="stylesheet" href="master-appraisal-styles.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @page { size: 8.5in 11in; margin: 0; }
+    body {
+      width: 8.5in; height: 11in; margin: 0; padding: 0.5in 0.5in;
+      font-family: Arial, sans-serif; background: white; font-size: 11px;
+      line-height: 1.4;
+    }
+    .page-header {
+      margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #003d7a;
+    }
+    .page-header h1 {
+      font-size: 16px; font-weight: bold; color: #000; margin-bottom: 5px;
+    }
+    .section-title {
+      font-size: 12px; font-weight: bold; color: #003d7a;
+      text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px;
+    }
+    .photos-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 30px;
+      margin-bottom: 40px;
+    }
+    .photo-item { text-align: center; }
+    .photo-placeholder {
+      width: 100%; height: auto; background: #cccccc;
+      display: flex; align-items: center; justify-content: center;
+      color: #666; font-size: 11px; border: 1px dashed #999;
+      margin-bottom: 8px; aspect-ratio: 4 / 3;
+    }
+    .photo-caption {
+      font-size: 11px; color: #000; font-weight: 500; line-height: 1.3;
+    }
+    .footer-text {
+      position: absolute; bottom: 0.5in; left: 0.5in; right: 0.5in;
+      font-size: 9px; color: #666; display: flex;
+      justify-content: space-between; align-items: center;
+      padding-top: 10px; border-top: 1px solid #ddd;
+    }
+    .page-number { font-size: 9px; color: #666; }
+    .footer-logo {
+      width: 80px; height: 20px;
+      background: linear-gradient(90deg, #003d7a 0%, #0066cc 100%);
+      border-radius: 3px;
+    }
+    .body-content { margin-bottom: 80px; }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <h1>${getFieldValue(sections, 'section-title') || 'Introduction & Executive Summary'}</h1>
+  </div>
+
+  <div class="body-content">
+    <div class="section-title">Photographs</div>
+
+    <div class="photos-grid">
+      <div class="photo-item">
+        <div class="photo-placeholder">[PHOTO: Photo 7]</div>
+        <div class="photo-caption">${getFieldValue(sections, 'photo-7-caption')}</div>
+      </div>
+
+      <div class="photo-item">
+        <div class="photo-placeholder">[PHOTO: Photo 8]</div>
+        <div class="photo-caption">${getFieldValue(sections, 'photo-8-caption')}</div>
+      </div>
+
+      <div class="photo-item">
+        <div class="photo-placeholder">[PHOTO: Photo 9]</div>
+        <div class="photo-caption">${getFieldValue(sections, 'photo-9-caption')}</div>
+      </div>
+
+      <div class="photo-item">
+        <div class="photo-placeholder">[PHOTO: Photo 10]</div>
+        <div class="photo-caption">${getFieldValue(sections, 'photo-10-caption')}</div>
+      </div>
+
+      <div class="photo-item">
+        <div class="photo-placeholder">[PHOTO: Photo 11]</div>
+        <div class="photo-caption">${getFieldValue(sections, 'photo-11-caption')}</div>
+      </div>
+
+      <div class="photo-item">
+        <div class="photo-placeholder">[PHOTO: Photo 12]</div>
+        <div class="photo-caption">${getFieldValue(sections, 'photo-12-caption')}</div>
+      </div>
     </div>
+  </div>
+
+  <div class="footer-text">
+    <div class="page-number">5    ${getFieldValue(sections, 'property-address-line1')}. ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</div>
+    <div class="footer-logo"></div>
+  </div>
+</body>
+</html>
   `;
 }
 
@@ -265,13 +1282,39 @@ export function renderPage09(sections: ReportSection[], valueScenarioType: strin
  * Fields: intro-photo-1 through intro-photo-6
  */
 export function renderPage11(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 11 - Photos (Part 1)
-  // Fields: intro-photo-1...intro-photo-6
-
   return `
     <div class="page page-11">
-      <h1>Page 11: Photos (Part 1)</h1>
-      <p>TODO: Implement photos part 1 template</p>
+      <div class="page-header">Introduction & Executive Summary</div>
+      <div class="photos-grid">
+        <div class="photo-item">
+          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-1') || '[PHOTO: Unit 1101 - Living Room]'}</div>
+          <div class="photo-caption">1101 - Living Room</div>
+        </div>
+        <div class="photo-item">
+          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-2') || '[PHOTO: West Elevation]'}</div>
+          <div class="photo-caption">1121 - West Elevation</div>
+        </div>
+        <div class="photo-item">
+          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-3') || '[PHOTO: East Elevation]'}</div>
+          <div class="photo-caption">1121 - East Elevation</div>
+        </div>
+        <div class="photo-item">
+          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-4') || '[PHOTO: Typical Hallway]'}</div>
+          <div class="photo-caption">1121 - Typical Hallway</div>
+        </div>
+        <div class="photo-item">
+          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-5') || '[PHOTO: Typical Stairway]'}</div>
+          <div class="photo-caption">1121 - Typical Stairway</div>
+        </div>
+        <div class="photo-item">
+          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-6') || '[PHOTO: Typical Living Room]'}</div>
+          <div class="photo-caption">1121 - Typical Living Room</div>
+        </div>
+      </div>
+      <div class="page-footer">
+        <span>6</span>
+        <span>\${getFieldValue(sections, 'property-address-line1')}, \${getFieldValue(sections, 'property-address-line2')} | File \${getFieldValue(sections, 'file-number')}</span>
+      </div>
     </div>
   `;
 }
@@ -281,13 +1324,39 @@ export function renderPage11(sections: ReportSection[], valueScenarioType: strin
  * Fields: intro-photo-7 through intro-photo-12
  */
 export function renderPage12(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 12 - Photos (Part 2)
-  // Fields: intro-photo-7...intro-photo-12
-
   return `
     <div class="page page-12">
-      <h1>Page 12: Photos (Part 2)</h1>
-      <p>TODO: Implement photos part 2 template</p>
+      <div class="page-header">Introduction & Executive Summary</div>
+      <div class="photos-grid">
+        <div class="photo-item">
+          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-7') || '[PHOTO: Typical Bathroom]'}</div>
+          <div class="photo-caption">1121 - Typical Bathroom</div>
+        </div>
+        <div class="photo-item">
+          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-8') || '[PHOTO: Typical Kitchen]'}</div>
+          <div class="photo-caption">1121 - Typical Kitchen</div>
+        </div>
+        <div class="photo-item">
+          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-9') || '[PHOTO: Typical Bedroom]'}</div>
+          <div class="photo-caption">1121 - Typical Bedroom</div>
+        </div>
+        <div class="photo-item">
+          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-10') || '[PHOTO: Laundry Room]'}</div>
+          <div class="photo-caption">1121 - Laundry Room</div>
+        </div>
+        <div class="photo-item">
+          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-11') || '[PHOTO: Electrical Room]'}</div>
+          <div class="photo-caption">1121 - Electrical Room</div>
+        </div>
+        <div class="photo-item">
+          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-12') || '[PHOTO: Typical Boiler]'}</div>
+          <div class="photo-caption">1121 - Typical Boiler</div>
+        </div>
+      </div>
+      <div class="page-footer">
+        <span>7</span>
+        <span>\${getFieldValue(sections, 'property-address-line1')}, \${getFieldValue(sections, 'property-address-line2')} | File \${getFieldValue(sections, 'file-number')}</span>
+      </div>
     </div>
   `;
 }
@@ -297,13 +1366,17 @@ export function renderPage12(sections: ReportSection[], valueScenarioType: strin
  * Fields: intro-photo-13
  */
 export function renderPage13(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 13 - Photos (Part 3)
-  // Fields: intro-photo-13
-
   return `
     <div class="page page-13">
-      <h1>Page 13: Photos (Part 3)</h1>
-      <p>TODO: Implement photos part 3 template</p>
+      <div class="page-header">Introduction & Executive Summary</div>
+      <div class="single-photo">
+        <div class="photo-placeholder large">${getImageUrl(sections, 'intro-photo-13') || '[PHOTO: Additional Property View]'}</div>
+        <div class="photo-caption">Additional Property View</div>
+      </div>
+      <div class="page-footer">
+        <span>8</span>
+        <span>\${getFieldValue(sections, 'property-address-line1')}, \${getFieldValue(sections, 'property-address-line2')} | File \${getFieldValue(sections, 'file-number')}</span>
+      </div>
     </div>
   `;
 }
@@ -313,13 +1386,17 @@ export function renderPage13(sections: ReportSection[], valueScenarioType: strin
  * Fields: intro-map-street
  */
 export function renderPage14(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 14 - Maps (Street Level)
-  // Fields: intro-map-street
-
   return `
     <div class="page page-14">
-      <h1>Page 14: Maps (Street Level)</h1>
-      <p>TODO: Implement street map template</p>
+      <div class="page-header">Introduction & Executive Summary</div>
+      <div class="map-container">
+        <div class="map-placeholder">${getImageUrl(sections, 'intro-map-street') || '[MAP: Street Level View]'}</div>
+        <div class="map-caption">Street Level Map</div>
+      </div>
+      <div class="page-footer">
+        <span>9</span>
+        <span>\${getFieldValue(sections, 'property-address-line1')}, \${getFieldValue(sections, 'property-address-line2')} | File \${getFieldValue(sections, 'file-number')}</span>
+      </div>
     </div>
   `;
 }
@@ -329,13 +1406,17 @@ export function renderPage14(sections: ReportSection[], valueScenarioType: strin
  * Fields: intro-map-local
  */
 export function renderPage15(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 15 - Maps (Localized)
-  // Fields: intro-map-local
-
   return `
     <div class="page page-15">
-      <h1>Page 15: Maps (Localized)</h1>
-      <p>TODO: Implement local map template</p>
+      <div class="page-header">Introduction & Executive Summary</div>
+      <div class="map-container">
+        <div class="map-placeholder">${getImageUrl(sections, 'intro-map-local') || '[MAP: Localized Area View]'}</div>
+        <div class="map-caption">Localized Area Map</div>
+      </div>
+      <div class="page-footer">
+        <span>10</span>
+        <span>\${getFieldValue(sections, 'property-address-line1')}, \${getFieldValue(sections, 'property-address-line2')} | File \${getFieldValue(sections, 'file-number')}</span>
+      </div>
     </div>
   `;
 }

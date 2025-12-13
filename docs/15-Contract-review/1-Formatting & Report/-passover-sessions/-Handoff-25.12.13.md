@@ -140,6 +140,9 @@ These fields are used in templates but may need adding to fieldRegistry:
 | 2025-12-12 | Batch 1-2 | Pages 1-30 populated |
 | 2025-12-13 | Batch 3-5 | Pages 31-77 populated |
 
+and this to add to session history list 
+/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/-passover-sessions/25.12.12 - Sales Comp Plan.md
+
 **See individual session summaries in this folder for detailed notes.**
 
 ---

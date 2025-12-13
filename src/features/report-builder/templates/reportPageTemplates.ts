@@ -1426,13 +1426,20 @@ export function renderPage15(sections: ReportSection[], valueScenarioType: strin
  * Fields: intro-map-regional
  */
 export function renderPage16(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 16 - Maps (Regional)
-  // Fields: intro-map-regional
-
   return `
     <div class="page page-16">
-      <h1>Page 16: Maps (Regional)</h1>
-      <p>TODO: Implement regional map template</p>
+      <div class="page-title">Introduction & Executive Summary</div>
+      <div class="map-container">
+        <div class="image-placeholder">
+          ${getImageUrl(sections, 'intro-map-regional') || '[MAP: Regional location map showing subject property marked in central circle with nearby highways, municipalities, towns, and provincial geography with roads and water features]'}
+        </div>
+      </div>
+      <div class="footer-section">
+        <div class="address-info">
+          <span class="page-number">11</span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}
+        </div>
+        <div class="accent-bar"></div>
+      </div>
     </div>
   `;
 }
@@ -1442,14 +1449,45 @@ export function renderPage16(sections: ReportSection[], valueScenarioType: strin
  * Fields: subject-property-location, property-improvements-summary, appraisal-purpose, hypothetical-conditions
  */
 export function renderPage17(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 17 - Subject Property Description
-  // Fields: subject-property-location, property-improvements-summary
-  // appraisal-purpose, hypothetical-conditions
-
   return `
     <div class="page page-17">
-      <h1>Page 17: Subject Property Description</h1>
-      <p>TODO: Implement property description template</p>
+      <div class="content-wrapper">
+        <div class="page-header">
+          <div class="page-title">Introduction & Executive Summary</div>
+        </div>
+
+        <div class="section-heading">Identification of Assignment</div>
+
+        <h3 class="subsection-heading">Property Identification</h3>
+        <p class="first-paragraph">The subject property, located at ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')}, is a multi-family, walkup property with approximately ${getFieldValue(sections, 'building-nra-sf')} square feet of net rentable area.</p>
+        <p>The improvements are comprised of ${getFieldValue(sections, 'number-of-buildings')} total buildings, and consist of ${getFieldValue(sections, 'building-nra-sf')} square feet of net rentable area (NRA) as of the valuation date. The property, reportedly built in ${getFieldValue(sections, 'year-built')}; (${getFieldValue(sections, 'effective-year-built')} weighted) is approximately ${getFieldValue(sections, 'occupancy-rate')}% occupied and features ${getFieldValue(sections, 'total-units')} units in a ${getFieldValue(sections, 'number-of-stories')}-story, garden style format.</p>
+
+        <h3 class="subsection-heading">Legal Description</h3>
+        <p class="first-paragraph">${getFieldValue(sections, 'legal-description')}</p>
+
+        <h3 class="subsection-heading">Authorized Client Identification</h3>
+        <p class="first-paragraph">The authorized client of this specific assignment is ${getFieldValue(sections, 'client-name')}.</p>
+
+        <h3 class="subsection-heading">Authorized Use & Authorized Users</h3>
+        <p class="first-paragraph">The authorized use of this report is for ${getFieldValue(sections, 'appraisal-purpose')}. ${getFieldValue(sections, 'client-name')} is the only authorized user of this report.</p>
+
+        <h3 class="subsection-heading">Effective Date of Value and Report Date</h3>
+        <p class="first-paragraph">The effective date of value of this appraisal is ${getFieldValue(sections, 'effective-date')}. The report date is ${getFieldValue(sections, 'report-date')}.</p>
+
+        <h3 class="subsection-heading">Inspection Date</h3>
+        <p class="first-paragraph">${getFieldValue(sections, 'inspection-date')}</p>
+
+        <h3 class="subsection-heading">Purpose</h3>
+        <p class="first-paragraph">The purpose of this assignment is to provide the ${valueScenarioType} which at the time of inspection represents the existing improvements assuming stabilized occupancy as of the effective date for the property located at ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} (herein referred to as the Subject property).</p>
+
+        <h3 class="subsection-heading">Hypothetical Conditions</h3>
+        <p class="first-paragraph">${getFieldValue(sections, 'hypothetical-conditions') || 'One of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed based on the hypothetical condition that the subject property is fully leased at prevailing market rents and has achieved stabilized occupancy as of the effective date of the appraisal.'}</p>
+      </div>
+
+      <div class="page-footer">
+        <span class="footer-text">12     ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <div class="footer-accent"></div>
+      </div>
     </div>
   `;
 }
@@ -1460,14 +1498,75 @@ export function renderPage17(sections: ReportSection[], valueScenarioType: strin
  * exposure-time-assumptions, exposure-time-conclusion
  */
 export function renderPage18(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 18 - Ownership & Exposure Time
-  // Fields: current-owner, ownership-history, exposure-time-definition
-  // marketing-time-vs-exposure-time, exposure-time-assumptions, exposure-time-conclusion
-
   return `
     <div class="page page-18">
-      <h1>Page 18: Ownership & Exposure Time</h1>
-      <p>TODO: Implement ownership template</p>
+      <div class="page-header">
+        <h1>Introduction & Executive Summary</h1>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Extraordinary Assumptions</h2>
+        <p class="text-content">${getFieldValue(sections, 'extraordinary-assumptions') || 'No Extraordinary Assumptions were made for this assignment.'}</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Extraordinary Limiting Conditions</h2>
+        <p class="text-content">${getFieldValue(sections, 'extraordinary-limiting-conditions') || 'No Extraordinary Limiting Conditions were made for this assignment.'}</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Property And Sales History</h2>
+
+        <h3 class="subsection-title">Current Owner</h3>
+        <p class="text-content">The subject property is currently under the ownership of ${getFieldValue(sections, 'current-owner') || getFieldValue(sections, 'client-name')}.</p>
+
+        <h3 class="subsection-title">Three-Year Sales History</h3>
+        <p class="text-content">${getFieldValue(sections, 'ownership-history') || 'Ownership of the subject property has not changed in the past three years. We are unaware of any pending sales or listing activity relating to the subject property.'}</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Exposure & Marketing Time</h2>
+        <p class="text-content">An estimate of market value is related to the concept of reasonable exposure time. Exposure time is the property's estimated marketing time prior to a hypothetical sale at market value on the effective date of the appraisal. It is a retrospective function of asking price, property type, and past market conditions and encompasses not only adequate, sufficient and appropriate marketing time but also adequate, sufficient and logical effort. Reasonable exposure time is a necessary element of a market value definition but is not a prediction of a specific date of sale.</p>
+
+        <p class="text-content">In appraisal theory and practice, there is a distinction relating to the perspective between exposure time and marketing time. Exposure time is presumed to precede the effective date of appraisal whereas marketing time is presumed to succeed the effective date. Marketing time is a prospective function of asking price, property type, and anticipated market conditions.</p>
+
+        <ul>
+          <li>The property would have been offered at a competitive price on the open market</li>
+          <li>The owner provided interested agents with any and all relevant property information</li>
+          <li>Negotiated for any offers to purchase were performed in a timely manner</li>
+          <li>The property was maintained at a physical status equivalent to its present condition</li>
+          <li>Market level financing was readily available</li>
+        </ul>
+
+        <p class="text-content">Noting the subject property's physical, legal, economic and market characteristics, we have concluded a reasonable estimate of <strong>exposure and marketing time</strong> for the subject property to be ${getFieldValue(sections, 'exposure-time-conclusion') || 'six months'}.</p>
+
+        <div class="table-container">
+          <div class="table-header">EXPOSURE & MARKETING TIME</div>
+          <table>
+            <tr>
+              <th>PROFILE</th>
+              <th>AVERAGE</th>
+            </tr>
+            <tr>
+              <td>Exposure Period Conclusion</td>
+              <td>${getFieldValue(sections, 'exposure-period') || 'Six Months'}</td>
+            </tr>
+            <tr>
+              <td>Marketing Time Conclusion</td>
+              <td>${getFieldValue(sections, 'marketing-time') || 'Six Months'}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="page-footer">
+        <div class="footer-left">
+          13 | ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}
+        </div>
+        <div class="footer-right">
+          <div class="footer-bar"></div>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -1478,14 +1577,53 @@ export function renderPage18(sections: ReportSection[], valueScenarioType: strin
  * property-rights-details, value-scenarios
  */
 export function renderPage19(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 19 - Definitions & Value Scenarios
-  // Fields: market-value-definition, market-value-characteristics
-  // property-rights-appraised, property-rights-details, value-scenarios
-
   return `
     <div class="page page-19">
-      <h1>Page 19: Definitions & Value Scenarios</h1>
-      <p>TODO: Implement definitions template</p>
+      <div class="page-header">
+        <h1>Introduction & Executive Summary</h1>
+      </div>
+
+      <h2>Definition of Market Value</h2>
+      <p>According to the January 1, 2024 version of the Canadian Uniform Standards of Professional Appraisal Practice (CUSPAP), market value is defined as:</p>
+
+      <div class="definition-block">
+        <p><em>"The most probable price, as of a specified date, in cash, or in terms equivalent to cash, or in other precisely revealed terms, for which the specified property rights should sell after reasonable exposure in a competitive market under all conditions requisite to a fair sale, with the buyer and the seller each acting prudently, knowledgeably, and for self-interest, and assuming that neither is under duress."</em></p>
+      </div>
+
+      <p>Implicit in this definition are the consumption of a sale of the specified date and the passing of title from seller to buyer under the following conditions whereby:</p>
+
+      <ol>
+        <li>the seller and buyer are typically motivated;</li>
+        <li>both parties are well informed or well advised, and acting in what they consider their best interests;</li>
+        <li>a reasonable time is allowed for exposure in the open market;</li>
+        <li>payment is made in terms of cash in Canadian dollars or in terms of financial arrangements comparable thereto;</li>
+        <li>the price represents the normal consideration for the property sold unaffected by special or creative financing or sales concessions granted by anyone associated with the sale.</li>
+      </ol>
+
+      <h2>Property Rights Appraised</h2>
+      <p>The property rights appraised constitute the fee simple estate interest.</p>
+
+      <h3>Fee Simple Interest</h3>
+      <p>Absolute ownership unencumbered by any other interest or estate, subject only to the limitations imposed by the governmental powers of taxation, eminent domain, police power and escheat. The subject multifamily property is appraised under the fee simple interest, as residential tenancies are typically short-term in nature and do not constitute long-term encumbrances on the estate that would give rise to a leased fee interest.</p>
+
+      <h2>Value Scenarios</h2>
+
+      <h3>Current Value</h3>
+      <p>Current Value Opinion refers to an effective date at the time of inspection or, at some other date within a reasonably short period of time from the date of inspection when market conditions have not or are not expected to have changed.</p>
+
+      <h3>Scope of Work</h3>
+      <p>The scope of work for this appraisal assignment is outlined below:</p>
+
+      <ul>
+        <li>The appraisal analyzes legal and physical features of the subject including site size, improvement size, site zoning, easements, encumbrances, site access and site exposure.</li>
+        <li>The appraisal includes a market analysis for the ${getFieldValue(sections, 'property-city')} market and ${getFieldValue(sections, 'property-city')} submarket using vacancy and rent data.</li>
+        <li>Research of recent sale and rent comparables. Examined market conditions and analyzed their potential effect on the various properties.</li>
+        <li>The appraisal includes a Highest and Best Use analysis and conclusions have been completed for the highest and best use of the subject property As Though Vacant and As Improved.</li>
+      </ul>
+
+      <div class="footnote">
+        <p><strong>14</strong>&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</p>
+      </div>
     </div>
   `;
 }
@@ -1495,13 +1633,64 @@ export function renderPage19(sections: ReportSection[], valueScenarioType: strin
  * Fields: appraiser-assistance-provided, sources-of-information-table, sources-data-limitation-note
  */
 export function renderPage20(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 20 - Assistance & Sources
-  // Fields: appraiser-assistance-provided, sources-of-information-table, sources-data-limitation-note
-
   return `
     <div class="page page-20">
-      <h1>Page 20: Assistance & Sources</h1>
-      <p>TODO: Implement sources template</p>
+      <h1>Introduction & Executive Summary</h1>
+
+      <div class="section">
+        <p>In selecting applicable approaches to value, the appraiser's considered the agreed upon appraisal scope and assessed the applicability of each traditional approach given the subject's characteristics and the intended use of the appraisal. As a result, this appraisal developed Direct Comparison and Income (Direct Capitalization) Approaches. The values presented represent the ${valueScenarioType} (see Appraisal Exhibits).</p>
+
+        <p>The assignment was prepared as an Appraisal Report in accordance with CUSPAP, with the analysis stated within the document and representing a fully described scope of analysis.</p>
+
+        <p>The author of this report has the knowledge and experience to complete this assignment competently. The following work was not undertaken as it was not required for credible results within the scope of this appraisal.</p>
+
+        <p>Environmental reports, building condition assessments, and title searches were not reviewed by the appraiser and are assumed to be satisfactory unless otherwise stated.</p>
+
+        <p>The appraiser did not review title documents or legal encumbrances other than zoning information provided by municipal sources.</p>
+
+        <p>No verification of building permits, code compliance, or outstanding orders was undertaken. Rent rolls, leases and operating statements, were accepted as accurate without audit or verification.</p>
+
+        <p>This appraisal was completed in conformity with the CUSPAP 2024 Appraisal Standard and the Reporting Standard for a Concise Report, which requires inclusion of all relevant information necessary to produce a credible result.</p>
+      </div>
+
+      <h2>Assistance Provided</h2>
+      <div class="section">
+        <p>${getFieldValue(sections, 'appraiser-assistance-provided') || 'Property inspection assistance was provided by a qualified inspector registered with the AIC to provide professional assistance with real property inspection.'}</p>
+      </div>
+
+      <h2>Sources of Information</h2>
+      <div class="section">
+        <p>The following sources were contacted to obtain relevant information:</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>INFORMATION PROVIDED</th>
+              <th>SOURCE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Property Assessment & Tax</td><td>SAMA</td></tr>
+            <tr><td>Zoning & Land Use Planning</td><td>City of ${getFieldValue(sections, 'property-city')} Zoning</td></tr>
+            <tr><td>Site Size</td><td>ICS</td></tr>
+            <tr><td>Building Size</td><td>Client</td></tr>
+            <tr><td>Comparable Information</td><td>CoStar | Confirmed by Local Agents</td></tr>
+            <tr><td>Legal Description</td><td>Client</td></tr>
+            <tr><td>Rent Roll</td><td>Client</td></tr>
+            <tr><td>Income/Expense Budget</td><td>Not Provided</td></tr>
+            <tr><td>Title</td><td>Not Provided</td></tr>
+            <tr><td>Lease Documents</td><td>Not Provided</td></tr>
+          </tbody>
+        </table>
+
+        <p>${getFieldValue(sections, 'sources-data-limitation-note') || 'The lack of the unavailable items could affect the results of this analysis. As part of the general assumptions and limiting conditions, the subject is assumed to have no adverse easements, significant items of deferred maintenance, or be impacted by adverse environmental conditions.'}</p>
+      </div>
+
+      <div class="footer-text">
+        ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}
+      </div>
+
+      <div class="page-number">15</div>
     </div>
   `;
 }
@@ -1512,14 +1701,47 @@ export function renderPage20(sections: ReportSection[], valueScenarioType: strin
  * inspection-extent, all-units-inspected, inspection-role-1, inspection-role-2
  */
 export function renderPage21(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 21 - Subject Property Inspection
-  // Fields: inspection-appraiser-1, inspection-appraiser-2, inspection-date-1, inspection-date-2
-  // inspection-extent, all-units-inspected, inspection-role-1, inspection-role-2
-
   return `
     <div class="page page-21">
-      <h1>Page 21: Property Inspection</h1>
-      <p>TODO: Implement inspection template</p>
+      <div class="page-header">
+        <div class="section-title">Introduction & Executive Summary</div>
+      </div>
+
+      <div class="subsection-title">Subject Property Inspection</div>
+
+      <table class="property-inspection-table">
+        <thead>
+          <tr>
+            <th>APPRAISER</th>
+            <th>INSPECTED</th>
+            <th>EXTENT</th>
+            <th>ALL UNITS INSPECTED</th>
+            <th>DATE</th>
+            <th>ROLE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>${getFieldValue(sections, 'inspection-appraiser-1') || getFieldValue(sections, 'appraiser-name')}<br>${getFieldValue(sections, 'inspection-appraiser-2') || ''}</td>
+            <td>Yes</td>
+            <td>${getFieldValue(sections, 'inspection-extent') || 'Interior & Exterior'}</td>
+            <td>${getFieldValue(sections, 'all-units-inspected') || 'No'}</td>
+            <td>${getFieldValue(sections, 'inspection-date-1') || getFieldValue(sections, 'inspection-date')}<br>${getFieldValue(sections, 'inspection-date-2') || ''}</td>
+            <td>${getFieldValue(sections, 'inspection-role-1') || 'Primary Appraiser'}<br>${getFieldValue(sections, 'inspection-role-2') || 'Inspector'}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="subsection-title">Personal Property & Business Intangible</div>
+
+      <div class="text-content">
+        <p>${getFieldValue(sections, 'personal-property-note') || 'There is no personal property (FF&E) included in this valuation. There is not any business or intangible value included in the value conclusion reported here.'}</p>
+      </div>
+
+      <div class="footer">
+        <div class="footer-left">16&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }
@@ -1530,14 +1752,58 @@ export function renderPage21(sections: ReportSection[], valueScenarioType: strin
  * local-area-description, nearby-schools
  */
 export function renderPage22(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 22 - Location, Access, Transportation
-  // Fields: location-description, access-description, public-transit-description
-  // walk-transit-bike-scores, local-area-description, nearby-schools
-
   return `
     <div class="page page-22">
-      <h1>Page 22: Location & Access</h1>
-      <p>TODO: Implement location template</p>
+      <div class="content">
+        <h1>Property Analysis</h1>
+
+        <div class="section">
+          <div class="section-title">Location</div>
+          <div class="section-content">
+            <p>${getFieldValue(sections, 'location-description') || 'The subject property is located in ' + getFieldValue(sections, 'property-city') + ', ' + getFieldValue(sections, 'property-province') + ', in a centrally situated residential area near key commercial corridors and the downtown core.'}</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Access</div>
+          <div class="section-content">
+            <p>${getFieldValue(sections, 'access-description') || 'The property fronts ' + getFieldValue(sections, 'frontage-street') + ' with convenient connections to major arterials.'}</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Public Transportation</div>
+          <div class="section-content">
+            <p>${getFieldValue(sections, 'public-transit-description') || 'Local bus service operates on nearby corridors, providing direct access to downtown, retail centres, and community facilities.'}</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Walk/Bike/Transit Scores</div>
+          <div class="section-content">
+            <p>${getFieldValue(sections, 'walk-transit-bike-scores') || 'The immediate area offers moderate walkability and cycling potential, with an estimated Walk Score around 60, Transit Score near 35, and Bike Score around 55, reflecting car-optional access for daily needs.'}</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Local Area</div>
+          <div class="section-content">
+            <p>${getFieldValue(sections, 'local-area-description') || 'The neighborhood is a mature urban district with a mix of single-family homes, small multi-unit buildings, and local businesses. Residents are close to grocery, cafes, and parks, with recreation and services clustered nearby.'}</p>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Nearby Schools</div>
+          <ul class="bullet-list">
+            ${getFieldValue(sections, 'nearby-schools') || '<li>Local Elementary School (K-7, public)</li><li>Local High School (Grades 10-12, public)</li>'}
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-left">17   ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }
@@ -1548,13 +1814,105 @@ export function renderPage22(sections: ReportSection[], valueScenarioType: strin
  * site-area-sqft, site-topography, site-shape, municipal-services, etc.
  */
 export function renderPage23(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 23 - Site Details
-  // 22 fields total including site measurements, topography, utilities, adjacencies
-
   return `
     <div class="page page-23">
-      <h1>Page 23: Site Details</h1>
-      <p>TODO: Implement site details template</p>
+      <h1>Property Analysis</h1>
+
+      <h2>Site Details</h2>
+
+      <p class="intro-text">
+        ${getFieldValue(sections, 'site-intro-text') || 'The subject property consists of one parcel with a total site area of ' + getFieldValue(sections, 'site-area-sqft') + ' SF (' + getFieldValue(sections, 'site-area-acres') + ' AC) which is based on information obtained from ICS. For the purposes of this report, we have relied on this site area and reserve the right to amend our analysis upon receipt of a formal legal plan.'}
+      </p>
+
+      <table class="details-table">
+        <tr class="data-row">
+          <td class="label-cell">Address</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Legal Description</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'legal-description')}</td>
+        </tr>
+        <tr class="header-row">
+          <td class="label-cell"></td>
+          <td style="text-align: center; font-weight: 600;">Square Feet</td>
+          <td style="text-align: center; font-weight: 600;">Acres</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Economic Unit (Primary) Site Size</td>
+          <td class="numeric-cell">${getFieldValue(sections, 'site-area-sqft')}</td>
+          <td class="numeric-cell">${getFieldValue(sections, 'site-area-acres')}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Usable Site Size</td>
+          <td class="numeric-cell">${getFieldValue(sections, 'usable-site-sqft') || getFieldValue(sections, 'site-area-sqft')}</td>
+          <td class="numeric-cell">${getFieldValue(sections, 'usable-site-acres') || getFieldValue(sections, 'site-area-acres')}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Total Land Area</td>
+          <td class="numeric-cell">${getFieldValue(sections, 'site-area-sqft')}</td>
+          <td class="numeric-cell">${getFieldValue(sections, 'site-area-acres')}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Excess/Surplus Land</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'excess-surplus-land') || 'No'}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Corner</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'site-corner') || 'No'}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Site Topography</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'site-topography') || 'Level'}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Site Shape</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'site-shape') || 'Rectangular'}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Site Grade</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'site-grade') || 'At street grade'}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Site Quality</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'site-quality') || 'Average'}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Site Access</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'site-access') || 'Average'}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Site Exposure</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'site-exposure') || 'Average'}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Site Utility</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'site-utility') || 'Average'}</td>
+        </tr>
+        <tr class="data-row">
+          <td class="label-cell">Municipal Services</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'municipal-services') || 'Full Municipal Services'}</td>
+        </tr>
+      </table>
+
+      <div class="adjacent-properties">
+        <strong>Adjacent Properties</strong>
+        <div>
+          North: ${getFieldValue(sections, 'adjacent-north') || 'Residential'}<br>
+          South: ${getFieldValue(sections, 'adjacent-south') || 'Residential'}<br>
+          East: ${getFieldValue(sections, 'adjacent-east') || 'Residential'}<br>
+          West: ${getFieldValue(sections, 'adjacent-west') || 'Residential'}
+        </div>
+      </div>
+
+      <p class="accessibility-note">
+        <strong>Accessibility</strong> ${getFieldValue(sections, 'accessibility-note') || 'Access to the subject site is considered average overall.'}
+      </p>
+
+      <div class="footer">
+        <div class="footer-left">18 &nbsp;&nbsp;&nbsp; ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }
@@ -1564,13 +1922,112 @@ export function renderPage23(sections: ReportSection[], valueScenarioType: strin
  * Fields: frontage-description, traffic-count-data, visibility-rating
  */
 export function renderPage24(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 24 - Access & Frontage / Traffic
-  // Fields: frontage-description, traffic-count-data, visibility-rating
-
   return `
     <div class="page page-24">
-      <h1>Page 24: Access & Traffic</h1>
-      <p>TODO: Implement traffic analysis template</p>
+      <div class="section-title">Property Analysis</div>
+
+      <div class="subsection-header">Access & Frontage</div>
+
+      <div class="improvements-section">
+        <div class="improvements-label">Street Improvements</div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 20%;">Street</th>
+              <th style="width: 18%;">Type</th>
+              <th style="width: 12%;">Direction</th>
+              <th style="width: 8%;">Lanes</th>
+              <th style="width: 8%; text-align: center;">Lit</th>
+              <th style="width: 8%; text-align: center;">Curb</th>
+              <th style="width: 8%; text-align: center;">Gutter</th>
+              <th style="width: 10%; text-align: center;">Sidewalk</th>
+              <th style="width: 10%; text-align: center;">Parking</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>${getFieldValue(sections, 'frontage-street-1') || '109 Street'}</td>
+              <td>${getFieldValue(sections, 'street-1-type') || 'Minor arterial'}</td>
+              <td>Two-Way</td>
+              <td class="centered-text">${getFieldValue(sections, 'street-1-lanes') || '2'}</td>
+              <td class="centered-text">x</td>
+              <td class="centered-text">x</td>
+              <td class="centered-text">x</td>
+              <td class="centered-text"></td>
+              <td class="centered-text"></td>
+            </tr>
+            <tr>
+              <td>${getFieldValue(sections, 'frontage-street-2') || '11 Avenue'}</td>
+              <td>${getFieldValue(sections, 'street-2-type') || 'Minor arterial'}</td>
+              <td>Two-Way</td>
+              <td class="centered-text">${getFieldValue(sections, 'street-2-lanes') || '4'}</td>
+              <td class="centered-text">x</td>
+              <td class="centered-text">x</td>
+              <td class="centered-text">x</td>
+              <td class="centered-text">x</td>
+              <td class="centered-text"></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="improvements-label">Frontage</div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 33%;">Street</th>
+              <th style="width: 33%;">Distance</th>
+              <th style="width: 33%;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>${getFieldValue(sections, 'frontage-street-1') || '109 Street'}</td>
+              <td>${getFieldValue(sections, 'frontage-1-distance') || '200 feet'}</td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>${getFieldValue(sections, 'frontage-street-2') || '11 Avenue'}</td>
+              <td>${getFieldValue(sections, 'frontage-2-distance') || '125 feet'}</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="traffic-section">
+        <div class="improvements-label">Traffic Counts</div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 25%;">Location</th>
+              <th style="width: 25%;">Date</th>
+              <th style="width: 25%;">Source</th>
+              <th style="width: 25%;">Count</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>${getFieldValue(sections, 'frontage-street-1') || '109 Street'}</td>
+              <td class="centered-text">${getFieldValue(sections, 'traffic-date') || 'N/A'}</td>
+              <td class="centered-text">${getFieldValue(sections, 'traffic-source') || 'N/A'}</td>
+              <td class="numeric">${getFieldValue(sections, 'traffic-count-1') || 'N/A'}</td>
+            </tr>
+            <tr>
+              <td>${getFieldValue(sections, 'frontage-street-2') || '11 Avenue'}</td>
+              <td class="centered-text">${getFieldValue(sections, 'traffic-date') || 'N/A'}</td>
+              <td class="centered-text">${getFieldValue(sections, 'traffic-source') || 'N/A'}</td>
+              <td class="numeric">${getFieldValue(sections, 'traffic-count-2') || 'N/A'}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="footer">
+        <div class="footer-left">
+          19 | ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}
+        </div>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }
@@ -1580,13 +2037,46 @@ export function renderPage24(sections: ReportSection[], valueScenarioType: strin
  * Fields: page-25-continuation
  */
 export function renderPage25(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 25 - Continued Analysis
-  // Fields: page-25-continuation
-
   return `
     <div class="page page-25">
-      <h1>Page 25: Continued Analysis</h1>
-      <p>TODO: Implement continuation template</p>
+      <div class="page-content">
+        <h1>Property Analysis</h1>
+
+        <div class="section">
+          <h2>Exposure & Visibility</h2>
+          <p>${getFieldValue(sections, 'exposure-visibility') || 'Exposure of the subject is average noting frontage on ' + getFieldValue(sections, 'frontage-street-1') + ' & ' + getFieldValue(sections, 'frontage-street-2')}</p>
+        </div>
+
+        <div class="section">
+          <h2>Easements</h2>
+          <p>${getFieldValue(sections, 'easements-note') || 'A legal opinion regarding title information was not provided or commissioned in conjunction with this assignment. Under the scope of this appraisal, it is assumed that any legal notations and registered charges on the do not adversely affect the highest and best use of the subject property as described herein, unless otherwise noted. If there is any concern on the part of the reader with respect to the status of title, we recommend a legal opinion be obtained.'}</p>
+        </div>
+
+        <div class="section">
+          <h2>Soils</h2>
+          <p>${getFieldValue(sections, 'soils-note') || 'We have not undertaken a detailed soil analysis and we are not qualified to comment on soil conditions. As such, the soils are assumed to be similar to other lands in the area and suitable to drainage qualities and load bearing capacity to support the existing development.'}</p>
+        </div>
+
+        <div class="section">
+          <h2>Hazardous Waste</h2>
+          <p>${getFieldValue(sections, 'hazardous-waste-note') || 'Based on a review of the independent investigation to determine the presence or absence of toxins on the subject property, none are present. If questions arise, the reader is strongly cautioned to seek qualified professional assistance in this matter. Please see the Assumptions and Limiting Conditions for a full disclaimer.'}</p>
+        </div>
+
+        <div class="section">
+          <h2>Site Rating</h2>
+          <p>${getFieldValue(sections, 'site-rating') || 'Overall, the subject site is considered average as a multi-family site in terms of its location, exposure and access to employment, education and shopping centers, based on its location along a minor arterial.'}</p>
+        </div>
+
+        <div class="section">
+          <h2>Site Conclusion</h2>
+          <p>${getFieldValue(sections, 'site-conclusion') || 'In conclusion, the site\'s physical characteristics appear to be supportive of the subject\'s current use and there were no significant detriments discovered that would inhibit development in accordance with its highest and best use.'}</p>
+        </div>
+      </div>
+
+      <div class="page-footer">
+        <div class="footer-left">20&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }
@@ -1596,13 +2086,22 @@ export function renderPage25(sections: ReportSection[], valueScenarioType: strin
  * Fields: site-plan-lot-17-image, lot-17-dimensions, lot-17-adjacent-lots
  */
 export function renderPage26(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 26 - Site Plans Lot 17
-  // Fields: site-plan-lot-17-image, lot-17-dimensions, lot-17-adjacent-lots
-
   return `
     <div class="page page-26">
-      <h1>Page 26: Site Plans - Lot 17</h1>
-      <p>TODO: Implement site plan template</p>
+      <div class="section-title">Property Analysis</div>
+
+      <div class="subsection-title">Site Plans - Lot 17</div>
+
+      <div class="diagram-container">
+        <div class="image-placeholder">
+          ${getImageUrl(sections, 'site-plan-lot-17-image') || '[SITE PLAN: Lot 17 property diagram showing subject property with boundary lines, adjacent lot numbers, and dimensions]'}
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-left">21     ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }
@@ -1612,13 +2111,23 @@ export function renderPage26(sections: ReportSection[], valueScenarioType: strin
  * Fields: site-plan-lot-18-image, lot-18-dimensions
  */
 export function renderPage27(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 27 - Site Plans Lot 18
-  // Fields: site-plan-lot-18-image, lot-18-dimensions
-
   return `
     <div class="page page-27">
-      <h1>Page 27: Site Plans - Lot 18</h1>
-      <p>TODO: Implement site plan template</p>
+      <div class="section-title">Property Analysis</div>
+
+      <div class="subsection-title">Site Plans - Lot 18</div>
+
+      <div class="image-placeholder">
+        ${getImageUrl(sections, 'site-plan-lot-18-image') || '[MAP: Property site plan showing Lot 18 with cadastral references, property boundaries, and subject property outlined with dimensions]'}
+      </div>
+
+      <div class="footer">
+        <div class="footer-left">
+          <span>22</span>
+          <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</span>
+        </div>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }
@@ -1628,13 +2137,52 @@ export function renderPage27(sections: ReportSection[], valueScenarioType: strin
  * Fields: improvements-summary, building-description
  */
 export function renderPage28(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 28 - Improvements Analysis
-  // Fields: improvements-summary, building-description
-
   return `
     <div class="page page-28">
-      <h1>Page 28: Improvements Analysis</h1>
-      <p>TODO: Implement improvements template</p>
+      <div class="page-content">
+        <div class="main-content">
+          <h1>Property Analysis</h1>
+
+          <div class="section-title">Property Taxes & Assessment</div>
+
+          <div class="subsection-title">Real Estate Taxes</div>
+          <p>The subject's assessment and taxes are shown in the following table:</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>YEAR</th>
+                <th>TOTAL ASSESSMENT VALUE</th>
+                <th>TAX RATE</th>
+                <th>TAXES</th>
+                <th>TAXES/SF</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>${getFieldValue(sections, 'tax-year') || '2025'}</td>
+                <td>$${getFieldValue(sections, 'assessed-value') || getFieldValue(sections, 'calc-assessed-value')}</td>
+                <td>${getFieldValue(sections, 'tax-rate') || '0.21757'}</td>
+                <td>$${getFieldValue(sections, 'annual-taxes') || getFieldValue(sections, 'calc-real-estate-taxes')}</td>
+                <td>$${getFieldValue(sections, 'taxes-per-sf') || getFieldValue(sections, 'calc-taxes-per-sf')}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="section-title">Taxation & Assessment Commentary</div>
+
+          <div class="commentary">
+            <p class="commentary-text">${getFieldValue(sections, 'tax-assessment-commentary') || 'The assessed value is below the value concluded here, a tax assessment appeal is not warranted.'}</p>
+
+            <p class="commentary-text">${getFieldValue(sections, 'tax-assessment-note') || 'The assessed value is lower than our valuation herein. Smaller markets tend to under assess real property assets in comparison to larger markets.'}</p>
+          </div>
+        </div>
+
+        <div class="page-footer">
+          <div class="page-number">23 | ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+          <div class="footer-accent"></div>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -1644,13 +2192,63 @@ export function renderPage28(sections: ReportSection[], valueScenarioType: strin
  * Fields: zoning-classification, zoning-description, land-use-conformity, highest-best-use
  */
 export function renderPage29(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 29 - Land Use & Zoning
-  // Fields: zoning-classification, zoning-description, land-use-conformity, highest-best-use
-
   return `
     <div class="page page-29">
-      <h1>Page 29: Zoning</h1>
-      <p>TODO: Implement zoning template</p>
+      <div class="page-content">
+        <div class="main-content">
+          <h1 class="section-title">Property Analysis</h1>
+
+          <h2 class="subsection-title">Land Use & Planning</h2>
+
+          <p>The subject is located in the ${getFieldValue(sections, 'zoning-classification') || 'Low Density Residential District (R2)'} zoning area which is a ${getFieldValue(sections, 'zoning-district-type') || 'Low Density Residential District'}.</p>
+
+          <div class="zoning-table-header">ZONING</div>
+
+          <table class="zoning-table">
+            <tr>
+              <td>Designation</td>
+              <td>${getFieldValue(sections, 'zoning-classification') || 'Low Density Residential District (R2)'}</td>
+            </tr>
+            <tr>
+              <td>Zoning Authority</td>
+              <td>City of ${getFieldValue(sections, 'property-city')}</td>
+            </tr>
+            <tr>
+              <td>Permitted Uses</td>
+              <td>${getFieldValue(sections, 'zoning-permitted-uses') || 'Low and medium density residential'}</td>
+            </tr>
+            <tr>
+              <td>Current Use</td>
+              <td>${getFieldValue(sections, 'property-type') || 'Walkup'}</td>
+            </tr>
+            <tr>
+              <td>Current Use Legally Permitted</td>
+              <td>${getFieldValue(sections, 'use-legally-permitted') || 'Yes'}</td>
+            </tr>
+            <tr>
+              <td>Conforming Use</td>
+              <td>${getFieldValue(sections, 'conforming-use') || 'The bulk of the improvements as well as the parking conform to the requirements'}</td>
+            </tr>
+            <tr>
+              <td>Conforming Lot</td>
+              <td>${getFieldValue(sections, 'conforming-lot') || 'The bulk of the improvements as well as the parking conform to the requirements'}</td>
+            </tr>
+            <tr>
+              <td>Zoning Change</td>
+              <td>${getFieldValue(sections, 'zoning-change') || 'No'}</td>
+            </tr>
+          </table>
+
+          <h2 class="subsection-title">Zoning Conclusion</h2>
+
+          <p>${getFieldValue(sections, 'zoning-conclusion') || 'The current use for the subject property is walkup and is a permitted use based on the current zoning guidelines. No zoning change is believed to be imminent. Based on the foregoing, it appears that the subject\'s improvements are a legally conforming use of the subject site.'}</p>
+        </div>
+
+        <div class="footer">
+          <div class="footer-left">24    ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+          <div class="footer-right"></div>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -1660,13 +2258,20 @@ export function renderPage29(sections: ReportSection[], valueScenarioType: strin
  * Fields: zoning-map-image, zoning-districts
  */
 export function renderPage30(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 30 - Zoning Map
-  // Fields: zoning-map-image, zoning-districts
-
   return `
     <div class="page page-30">
-      <h1>Page 30: Zoning Map</h1>
-      <p>TODO: Implement zoning map template</p>
+      <div class="section-title">Property Analysis</div>
+
+      <div class="map-title">Zoning Map</div>
+
+      <div class="image-placeholder">
+        ${getImageUrl(sections, 'zoning-map-image') || '[MAP: Zoning/cadastral map of ' + getFieldValue(sections, 'property-city') + ' showing property parcels with zoning designations (R2, R3, R1, etc.) and marked areas of interest]'}
+      </div>
+
+      <div class="footer">
+        <div class="footer-left">25   ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }

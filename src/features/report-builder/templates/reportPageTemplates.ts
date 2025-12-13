@@ -3356,13 +3356,31 @@ export function renderPage45(sections: ReportSection[], valueScenarioType: strin
  * Fields: section-divider-page
  */
 export function renderPage46(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 46 - Section Divider
-  // Fields: section-divider-page
-
   return `
-    <div class="page page-46">
-      <h1>Page 46: Section Divider</h1>
-      <p>TODO: Implement divider template</p>
+    <div class="page page-46" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; width: 816px; min-height: 1056px; background: white; padding: 40px; position: relative; display: flex; flex-direction: column; page-break-after: always;">
+      <style>
+        .page-46 .page-header { margin-bottom: 40px; border-bottom: 2px solid #0066cc; padding-bottom: 12px; }
+        .page-46 .page-header h1 { font-size: 18px; font-weight: 700; color: #333; letter-spacing: 0px; margin: 0; }
+        .page-46 .page-content { flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .page-46 .decorative-banner { width: 160px; height: 40px; background: linear-gradient(90deg, #4a9fd8 0%, #1e3a5f 100%); align-self: flex-end; margin-top: auto; margin-right: 0; }
+        .page-46 .page-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; font-size: 10px; color: #666; border-top: 1px solid #e0e0e0; }
+        .page-46 .page-footer-left { flex: 1; }
+      </style>
+
+      <div class="page-header">
+        <h1>Valuation & Conclusions</h1>
+      </div>
+
+      <div class="page-content">
+        <!-- Main content area (mostly blank for section divider) -->
+        <div class="decorative-banner"></div>
+      </div>
+
+      <div class="page-footer">
+        <div class="page-footer-left">
+          41&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}
+        </div>
+      </div>
     </div>
   `;
 }
@@ -3373,13 +3391,198 @@ export function renderPage46(sections: ReportSection[], valueScenarioType: strin
  * rental-revenue-table, other-revenue-conclusions-table, etc.
  */
 export function renderPage47(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 47 - Revenue Analysis
-  // 7 fields total
-
   return `
-    <div class="page page-47">
-      <h1>Page 47: Revenue Analysis</h1>
-      <p>TODO: Implement revenue template</p>
+    <div class="page page-47" style="font-family: Arial, Helvetica, sans-serif; color: #333; width: 816px; min-height: 1056px; padding: 38px; background: white; position: relative; overflow: hidden; page-break-after: always;">
+      <style>
+        .page-47 h1 { font-size: 18px; font-weight: bold; border-bottom: 3px solid #0066cc; padding-bottom: 8px; margin-bottom: 20px; color: #000; margin-top: 0; }
+        .page-47 h2 { font-size: 14px; font-weight: bold; color: #0066cc; margin-top: 18px; margin-bottom: 10px; }
+        .page-47 p { font-size: 11px; margin-bottom: 10px; text-align: justify; line-height: 1.4; }
+        .page-47 .section { margin-bottom: 16px; }
+        .page-47 .table-container { margin: 14px 0; width: 100%; }
+        .page-47 table { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 8px; }
+        .page-47 table.header-dark thead { background-color: #1f4788; color: white; }
+        .page-47 table.header-dark th { padding: 6px 4px; text-align: left; font-weight: bold; border: 1px solid #1f4788; font-size: 9px; }
+        .page-47 table td { padding: 6px 4px; border: 1px solid #ccc; text-align: left; }
+        .page-47 table.header-dark tbody tr:nth-child(even) { background-color: #f9f9f9; }
+        .page-47 table.header-dark tbody tr { background-color: white; }
+        .page-47 .text-right { text-align: right; }
+        .page-47 .text-center { text-align: center; }
+        .page-47 .bold { font-weight: bold; }
+        .page-47 .table-title { font-size: 9px; font-weight: bold; color: white; background-color: #1f4788; padding: 4px 6px; margin-bottom: 0; display: block; }
+        .page-47 .footer { position: absolute; bottom: 38px; left: 38px; right: 38px; font-size: 9px; color: #666; border-top: 1px solid #ccc; padding-top: 8px; }
+        .page-47 .blue-banner { position: absolute; bottom: 0; right: 0; width: 120px; height: 80px; background: linear-gradient(135deg, #e8f1f7 0%, #1f4788 100%); clip-path: polygon(100% 0%, 0% 100%, 100% 100%); }
+      </style>
+
+      <h1>Valuation & Conclusions</h1>
+
+      <div class="section">
+        <h2>Unit Rent Discussion</h2>
+        <p>${getFieldValue(sections, 'unit-rent-discussion') || 'The subject property, North Battleford Apartments at 1101, 1121 109 Street, is a 16-unit building of average quality and condition with heat and water included, surface parking, and on-site laundry.'}</p>
+        <p>A survey of five comparable buildings in North Battleford and Prince Albert shows 1 bedroom market rents ranging from $1,110-$1,575/month ($1.71-$2.42/SF). Most comparable buildings include heat and water, with upgraded interiors and similar amenities.</p>
+        <p>Based on the comparables, the subject's estimated market rent is:<br><strong>1 Bed / 1 Bath: $1,050/month ($1.62/SF)</strong></p>
+        <p>This level is slightly below market averages, reflecting the property's modest finishes and smaller scale, but it remains competitive within the local rental market.</p>
+      </div>
+
+      <div class="section">
+        <h2>Contract Versus Market Rent</h2>
+        <p>Based on the previous conclusions, the subject's average contract rent is 99.5% of market rents.</p>
+
+        <div class="table-container">
+          <span class="table-title">CONTRACT VERSUS MARKET</span>
+          <table class="header-dark">
+            <thead>
+              <tr>
+                <th>TYPE</th>
+                <th>DESCRIPTION</th>
+                <th>UNITS</th>
+                <th>ASKING RENT $/UNIT</th>
+                <th>ACTUAL RENT $/UNIT</th>
+                <th>CONCLUDED RENT $/UNIT</th>
+                <th>CONTRACT VS MARKET</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Flat 1 Bed / 1 Bath</td>
+                <td>One Bed-One Bath</td>
+                <td class="text-center">4</td>
+                <td class="text-right">$885</td>
+                <td class="text-right">$900</td>
+                <td class="text-right">$900</td>
+                <td class="text-right">89.4%</td>
+              </tr>
+              <tr>
+                <td>Flat 2 Bed / 1 Bath</td>
+                <td>Two Bed-One Bath</td>
+                <td class="text-center">12</td>
+                <td class="text-right">$1,015</td>
+                <td class="text-right">$1,050</td>
+                <td class="text-right">$1,050</td>
+                <td class="text-right">96.5%</td>
+              </tr>
+              <tr>
+                <td colspan="2" class="bold">TOTAL / AVERAGE</td>
+                <td class="text-center bold">16</td>
+                <td class="text-right bold">$990</td>
+                <td class="text-right bold">$1,015</td>
+                <td class="text-right bold">$1,020</td>
+                <td class="text-right bold">99.5%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Total Rental Revenue - Multi-Family</h2>
+        <p>The Total Rental Revenue for the Multi-Family component is summarized in the table below. The subject's average contract rent is 99.5% of market rents. Market rents are applied in our analysis.</p>
+
+        <div class="table-container">
+          <table class="header-dark">
+            <thead>
+              <tr>
+                <th>UNIT MIX TYPE</th>
+                <th>UNITS</th>
+                <th>CATEGORY</th>
+                <th>CONTRACT RENT</th>
+                <th>MARKET RENT</th>
+                <th>CONV V MKT</th>
+                <th>$/UNIT</th>
+                <th>$/SF[1]</th>
+                <th>$/YEAR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Flat 1 Bed / 1 Bath</td>
+                <td class="text-center">4</td>
+                <td>1 Bed</td>
+                <td class="text-right">$900</td>
+                <td class="text-right">$900</td>
+                <td class="text-right">100%</td>
+                <td class="text-right">$900</td>
+                <td class="text-right">$13.86</td>
+                <td class="text-right">$43,200</td>
+              </tr>
+              <tr>
+                <td>Flat 2 Bed / 1 Bath</td>
+                <td class="text-center">12</td>
+                <td>2 Bed</td>
+                <td class="text-right">$1,015</td>
+                <td class="text-right">$1,050</td>
+                <td class="text-right">100%</td>
+                <td class="text-right">$1,050</td>
+                <td class="text-right">$16.07</td>
+                <td class="text-right">$152,840</td>
+              </tr>
+              <tr>
+                <td colspan="2" class="bold">UNIT MIX SUBTOTAL</td>
+                <td class="text-center">-</td>
+                <td class="text-right bold">$1,015</td>
+                <td class="text-right bold">$1,000</td>
+                <td class="text-right bold">100%</td>
+                <td class="text-right bold">$1,000</td>
+                <td class="text-right bold">$16.19</td>
+                <td class="text-right bold">$196,040</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>The following table summarizes the miscellaneous revenue projected for the subject property.</p>
+
+        <div class="table-container">
+          <span class="table-title">OTHER REVENUE CONCLUSIONS</span>
+          <table class="header-dark">
+            <thead>
+              <tr>
+                <th>OTHER REVENUE</th>
+                <th>%/UNITS</th>
+                <th>$/SF</th>
+                <th>$/UNIT</th>
+                <th>TOTAL</th>
+                <th>COMMENT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Parking Income</td>
+                <td class="text-center">3.1%</td>
+                <td class="text-right">$0.50</td>
+                <td class="text-right">$375</td>
+                <td class="text-right">$6,000</td>
+                <td>5 surface stalls at $100 per month</td>
+              </tr>
+              <tr>
+                <td>Laundry</td>
+                <td class="text-center">1.2%</td>
+                <td class="text-right">$0.24</td>
+                <td class="text-right">$150</td>
+                <td class="text-right">$2,400</td>
+                <td>$12.50 monthly for 16 units</td>
+              </tr>
+              <tr>
+                <td colspan="2" class="bold">TOTAL OTHER REVENUE</td>
+                <td class="text-right bold">$0.82</td>
+                <td class="text-right bold">$525</td>
+                <td class="text-right bold">$8,400</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Potential Gross Revenue (PGR)</h2>
+        <p>The potential gross revenue equals the total rental revenue plus reimbursement and miscellaneous revenue. The potential gross revenue of the subject is calculated by multiplying the sum of market rent of $12,765/Unit and $20.02 per square foot rent and reimbursements, if any. As noted, the $0/Unit represents an area of 10,204 square feet, which indicates a PGR of $204,240.</p>
+      </div>
+
+      <div class="footer">
+        42&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}
+      </div>
+
+      <div class="blue-banner"></div>
     </div>
   `;
 }
@@ -3389,14 +3592,72 @@ export function renderPage47(sections: ReportSection[], valueScenarioType: strin
  * Fields: vacancy-allowance-discussion, vacancy-loss-table, effective-gross-revenue-section, operating-expenses-discussion
  */
 export function renderPage48(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 48 - Vacancy & EGR
-  // Fields: vacancy-allowance-discussion, vacancy-loss-table
-  // effective-gross-revenue-section, operating-expenses-discussion
-
   return `
-    <div class="page page-48">
-      <h1>Page 48: Vacancy & EGR</h1>
-      <p>TODO: Implement vacancy template</p>
+    <div class="page page-48" style="font-family: Calibri, Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #333; width: 816px; min-height: 1056px; padding: 54px; background-color: white; position: relative; page-break-after: always;">
+      <style>
+        .page-48 .page-header { border-bottom: 2px solid #0066cc; padding-bottom: 8px; margin-bottom: 16px; }
+        .page-48 .page-title { font-size: 16px; font-weight: bold; color: #000; margin: 0; }
+        .page-48 .section-title { font-size: 13px; font-weight: bold; color: #003366; margin-top: 16px; margin-bottom: 8px; }
+        .page-48 .section-content { font-size: 11px; line-height: 1.5; margin-bottom: 12px; text-align: justify; }
+        .page-48 table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 10px; }
+        .page-48 table th { background-color: #f0f0f0; border: 1px solid #999; padding: 6px; text-align: center; font-weight: bold; }
+        .page-48 table td { border: 1px solid #999; padding: 6px; text-align: center; }
+        .page-48 table td:first-child { text-align: left; font-weight: normal; }
+        .page-48 .negative { color: #d63031; }
+        .page-48 .page-footer { position: absolute; bottom: 20px; left: 54px; right: 54px; font-size: 9px; color: #666; display: flex; justify-content: space-between; align-items: center; }
+        .page-48 .footer-left { display: flex; gap: 20px; }
+        .page-48 .footer-right { width: 80px; height: 40px; background: linear-gradient(to right, #003366 50%, #0066cc 50%); }
+      </style>
+
+      <div class="page-header">
+        <div class="page-title">Valuation & Conclusions</div>
+      </div>
+
+      <div class="section-title">Vacancy Allowance</div>
+      <div class="section-content">
+        ${getFieldValue(sections, 'vacancy-allowance-discussion') || 'This category accounts for the time period between occupants, as well as possible prolonged vacancies under slow market conditions. Market participants typically expect a vacancy of 2% to 5% of potential gross income for similar property types. This assignment reflects the probable vacancy during the economic life of the property and not necessarily the current or short-term vacancy. The findings of the Multi-Family Market Overview section support a typical vacancy allocation. As of the effective date, the subject is 100.0% occupied. Based on current and perceived long-term market conditions and the subject\'s anticipated tenancy over a 12-month holding period, a vacancy allowance of 3.8% is concluded.'}
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>ALL VACANCY LOSS</th>
+            <th>%/QTR</th>
+            <th>%EGR</th>
+            <th>$/UNIT</th>
+            <th>$/SF YR1</th>
+            <th>$/YEAR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>TOTAL VACANCY & CREDIT LOSS</td>
+            <td>3.8%</td>
+            <td>4.0%</td>
+            <td class="negative">($485)</td>
+            <td class="negative">($0.77)</td>
+            <td class="negative">($7,834)</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="section-title">Effective Gross Revenue (EGR)</div>
+      <div class="section-content">
+        ${getFieldValue(sections, 'effective-gross-revenue-section') || 'Effective gross revenue equals the potential gross revenue less vacancy. The total effective gross revenue for the subject is $196,406 which is $12,275/Unit and $19.25/SF.'}
+      </div>
+
+      <div class="section-title">Operating Expenses</div>
+      <div class="section-content">
+        ${getFieldValue(sections, 'operating-expenses-discussion') || 'We have reviewed the owner\'s historical operating expenses. As appropriate, the owner\'s operating expenses are reclassified into standard categories and exclude items that do not reflect normal operating expenses for this type of property. The reclassification is done for proper analysis against comparable data and industry benchmarks as appropriate. The subject\'s historical operating expenses with our projections are shown in the following chart.'}
+      </div>
+
+      <div class="page-footer">
+        <div class="footer-left">
+          <span>43</span>
+          <span>${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+        </div>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }
@@ -3406,13 +3667,86 @@ export function renderPage48(sections: ReportSection[], valueScenarioType: strin
  * Fields: operating-history-table, operating-expenses-breakdown-table, net-operating-income-ytd
  */
 export function renderPage49(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 49 - Operating Expenses
-  // Fields: operating-history-table, operating-expenses-breakdown-table, net-operating-income-ytd
-
   return `
-    <div class="page page-49">
-      <h1>Page 49: Operating Expenses</h1>
-      <p>TODO: Implement expenses template</p>
+    <div class="page page-49" style="font-family: Arial, sans-serif; color: #000; background: #fff; padding: 38px; width: 816px; min-height: 1056px; position: relative; page-break-after: always;">
+      <style>
+        .page-49 .page-header { margin-bottom: 20px; }
+        .page-49 h1 { font-size: 16px; font-weight: bold; color: #000; border-bottom: 2px solid #003366; padding-bottom: 8px; margin: 0 0 20px 0; }
+        .page-49 table { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 20px; }
+        .page-49 thead { background-color: #003366; color: #fff; }
+        .page-49 th { padding: 8px 4px; text-align: center; font-weight: bold; border: 1px solid #999; white-space: nowrap; }
+        .page-49 td { padding: 6px 4px; border: 1px solid #ddd; text-align: right; }
+        .page-49 td:first-child { text-align: left; padding-left: 8px; }
+        .page-49 tbody tr:nth-child(odd) { background-color: #f9f9f9; }
+        .page-49 .category { font-weight: bold; background-color: #e8eef7 !important; }
+        .page-49 .category td:first-child { padding-left: 12px; }
+        .page-49 .subcategory td:first-child { padding-left: 20px; }
+        .page-49 .negative { color: #d32f2f; font-weight: bold; }
+        .page-49 .footer { font-size: 9px; margin-top: 40px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #ccc; padding-top: 10px; position: absolute; bottom: 38px; left: 38px; right: 38px; }
+        .page-49 .footer-left { flex: 1; }
+        .page-49 .footer-right { width: 100px; height: 40px; background: linear-gradient(to right, #4a90e2 50%, #003366 50%); margin-left: 20px; }
+      </style>
+
+      <div class="page-header">
+        <h1>Valuation & Conclusions</h1>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 30%;">OPERATING HISTORY</th>
+            <th colspan="3">YTD 2025</th>
+            <th colspan="3">PROJECTION - DCAP</th>
+          </tr>
+          <tr>
+            <th style="width: 30%;">YEAR</th>
+            <th style="width: 12%;">TOTAL</th>
+            <th style="width: 12%;">$/UNIT</th>
+            <th style="width: 10%;">%PRR</th>
+            <th style="width: 12%;">TOTAL</th>
+            <th style="width: 12%;">$/UNIT</th>
+            <th style="width: 10%;">%PRR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="category"><td>RENTAL REVENUE</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr class="subcategory"><td>Total Multifamily Revenue</td><td>$0</td><td></td><td>0%</td><td>$0</td><td></td><td>0%</td></tr>
+          <tr class="category"><td>TOTAL RENTAL REVENUE</td><td>$195,060</td><td>$12,191</td><td>100%</td><td>$195,840</td><td>$12,240</td><td>100%</td></tr>
+
+          <tr class="category"><td>REIMBURSEMENT REVENUE</td><td>TOTAL</td><td>$/UNIT</td><td></td><td>TOTAL</td><td>$/UNIT</td><td>%/PRR</td></tr>
+
+          <tr class="category"><td>MISCELLANEOUS REVENUE</td><td>TOTAL</td><td>$/UNIT</td><td></td><td>TOTAL</td><td>$/UNIT</td><td>%/PRR</td></tr>
+          <tr class="subcategory"><td>Parking Income</td><td>$6,000</td><td>$375</td><td>3%</td><td>$6,000</td><td>$375</td><td>3%</td></tr>
+          <tr class="subcategory"><td>Laundry</td><td>$2,400</td><td>$150</td><td>1%</td><td>$2,400</td><td>$150</td><td>1%</td></tr>
+          <tr class="category"><td>TOTAL MISCELLANEOUS REVENUE</td><td>$8,400</td><td>$525</td><td>4%</td><td>$8,400</td><td>$525</td><td>4%</td></tr>
+
+          <tr class="category"><td>POTENTIAL GROSS REVENUE</td><td>$203,460</td><td>$12,716</td><td>104%</td><td>$204,240</td><td>$12,765</td><td>104%</td></tr>
+
+          <tr class="category"><td>ALL VACANCY LOSS</td><td>TOTAL</td><td>$/UNIT</td><td></td><td>TOTAL</td><td>$/UNIT</td><td>%/PGR</td></tr>
+          <tr class="subcategory"><td>Vacancy</td><td class="negative">($8,135)</td><td class="negative">($509)</td><td class="negative">(4%)</td><td class="negative">($7,895)</td><td class="negative">($490)</td><td class="negative">(4%)</td></tr>
+
+          <tr class="category"><td>EFFECTIVE GROSS REVENUE</td><td>$195,322</td><td>$12,208</td><td>96%</td><td>$196,406</td><td>$12,275</td><td>96%</td></tr>
+
+          <tr class="category"><td>OPERATING EXPENSES</td><td>TOTAL</td><td>$/UNIT</td><td></td><td>TOTAL</td><td>$/UNIT</td><td>%/EGR</td></tr>
+          <tr class="subcategory"><td>Taxes</td><td class="negative">($18,600)</td><td class="negative">($1,163)</td><td class="negative">(10%)</td><td class="negative">($18,688)</td><td class="negative">($1,168)</td><td class="negative">(10%)</td></tr>
+          <tr class="subcategory"><td>Insurance</td><td class="negative">($11,314)</td><td class="negative">($707)</td><td class="negative">(6%)</td><td class="negative">($11,360)</td><td class="negative">($710)</td><td class="negative">(6%)</td></tr>
+          <tr class="subcategory"><td>Repairs & Maintenance</td><td class="negative">($13,280)</td><td class="negative">($830)</td><td class="negative">(7%)</td><td class="negative">($13,280)</td><td class="negative">($830)</td><td class="negative">(7%)</td></tr>
+          <tr class="subcategory"><td>Payroll</td><td class="negative">($8,000)</td><td class="negative">($500)</td><td class="negative">(4%)</td><td class="negative">($8,000)</td><td class="negative">($500)</td><td class="negative">(4%)</td></tr>
+          <tr class="subcategory"><td>Utilities</td><td class="negative">($21,025)</td><td class="negative">($1,314)</td><td class="negative">(11%)</td><td class="negative">($21,040)</td><td class="negative">($1,315)</td><td class="negative">(11%)</td></tr>
+          <tr class="subcategory"><td>Management Fees</td><td class="negative">($8,301)</td><td class="negative">($519)</td><td class="negative">(4%)</td><td class="negative">($8,347)</td><td class="negative">($522)</td><td class="negative">(4%)</td></tr>
+          <tr class="subcategory"><td>Other Expenses</td><td class="negative">($3,908)</td><td class="negative">($244)</td><td class="negative">(2%)</td><td class="negative">($3,920)</td><td class="negative">($245)</td><td class="negative">(2%)</td></tr>
+          <tr class="category"><td>TOTAL OPERATING EXPENSES</td><td class="negative">($84,510)</td><td class="negative">($5,282)</td><td class="negative">(43%)</td><td class="negative">($84,635)</td><td class="negative">($5,290)</td><td class="negative">(43%)</td></tr>
+
+          <tr class="category"><td>NET OPERATING INCOME</td><td>$110,812</td><td>$6,926</td><td>57%</td><td>$111,771</td><td>$6,986</td><td>57%</td></tr>
+        </tbody>
+      </table>
+
+      <div class="footer">
+        <div class="footer-left">
+          44&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}
+        </div>
+        <div class="footer-right"></div>
+      </div>
     </div>
   `;
 }
@@ -3422,13 +3756,125 @@ export function renderPage49(sections: ReportSection[], valueScenarioType: strin
  * Fields: expense-conclusions-header, operating-expenses-detail-table, net-operating-income-conclusion
  */
 export function renderPage50(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 50 - Expense Detail
-  // Fields: expense-conclusions-header, operating-expenses-detail-table, net-operating-income-conclusion
-
   return `
-    <div class="page page-50">
-      <h1>Page 50: Expense Detail</h1>
-      <p>TODO: Implement expense detail template</p>
+    <div class="page page-50" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #333; width: 816px; min-height: 1056px; margin: 0; padding: 38px; background: white; display: flex; flex-direction: column; page-break-after: always;">
+      <style>
+        .page-50 .header-section { margin-bottom: 22px; }
+        .page-50 h1 { font-size: 16px; font-weight: bold; color: #003366; border-bottom: 2px solid #003366; padding-bottom: 8px; margin: 0 0 11px 0; }
+        .page-50 h2 { font-size: 13px; font-weight: bold; color: #003366; margin-top: 14px; margin-bottom: 7px; }
+        .page-50 .intro-text { font-size: 11px; margin-bottom: 11px; color: #333; }
+        .page-50 .table-container { width: 100%; margin-bottom: 14px; overflow-x: auto; }
+        .page-50 table { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 7px; }
+        .page-50 thead { background-color: #003366; color: white; }
+        .page-50 th { padding: 8px 4px; text-align: left; font-weight: bold; border: 1px solid #003366; font-size: 10px; white-space: nowrap; }
+        .page-50 td { padding: 6px 4px; border: 1px solid #ddd; font-size: 10px; }
+        .page-50 tbody tr:nth-child(even) { background-color: #f9f9f9; }
+        .page-50 tbody tr:last-child { background-color: #e8e8e8; font-weight: bold; }
+        .page-50 td.numeric { text-align: right; font-family: 'Courier New', monospace; }
+        .page-50 td.comment { font-size: 9px; color: #555; max-width: 200px; }
+        .page-50 .noi-section { margin-top: 18px; page-break-inside: avoid; }
+        .page-50 .noi-text { font-size: 11px; line-height: 1.5; color: #333; }
+        .page-50 .footer { margin-top: auto; padding-top: 14px; border-top: 1px solid #ccc; font-size: 9px; color: #666; text-align: center; }
+      </style>
+
+      <div class="header-section">
+        <h1>Valuation & Conclusions</h1>
+      </div>
+
+      <div class="content-section">
+        <h2>Expense Conclusions</h2>
+        <p class="intro-text">The individual expense conclusions for the subject are summarized below.</p>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>OPERATING EXPENSES</th>
+                <th>%EGR</th>
+                <th>$/SF NRA</th>
+                <th>$/UNIT</th>
+                <th>TOTAL</th>
+                <th>COMMENT</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Taxes</td>
+                <td class="numeric">9.5%</td>
+                <td class="numeric">$1.83</td>
+                <td class="numeric">$1,168</td>
+                <td class="numeric">$18,688</td>
+                <td class="comment">Based on historical expenses and expense comparable information</td>
+              </tr>
+              <tr>
+                <td>Insurance</td>
+                <td class="numeric">5.8%</td>
+                <td class="numeric">$1.11</td>
+                <td class="numeric">$710</td>
+                <td class="numeric">$11,360</td>
+                <td class="comment">Based on historical expenses and expense comparable information</td>
+              </tr>
+              <tr>
+                <td>Repairs & Maintenance</td>
+                <td class="numeric">6.8%</td>
+                <td class="numeric">$1.30</td>
+                <td class="numeric">$830</td>
+                <td class="numeric">$13,280</td>
+                <td class="comment">Based on historical expenses and expense comparable information</td>
+              </tr>
+              <tr>
+                <td>Payroll</td>
+                <td class="numeric">4.1%</td>
+                <td class="numeric">$0.78</td>
+                <td class="numeric">$500</td>
+                <td class="numeric">$8,000</td>
+                <td class="comment">Based on historical expenses and expense comparable information</td>
+              </tr>
+              <tr>
+                <td>Utilities</td>
+                <td class="numeric">10.7%</td>
+                <td class="numeric">$2.06</td>
+                <td class="numeric">$1,315</td>
+                <td class="numeric">$21,040</td>
+                <td class="comment">Based on historical expenses and expense comparable information</td>
+              </tr>
+              <tr>
+                <td>Management Fees</td>
+                <td class="numeric">4.3%</td>
+                <td class="numeric">$0.82</td>
+                <td class="numeric">$522</td>
+                <td class="numeric">$8,347</td>
+                <td class="comment">Based on historical expenses and expense comparable information</td>
+              </tr>
+              <tr>
+                <td>Other Expenses</td>
+                <td class="numeric">2.0%</td>
+                <td class="numeric">$0.38</td>
+                <td class="numeric">$245</td>
+                <td class="numeric">$3,920</td>
+                <td class="comment">Based on historical expenses and expense comparable information</td>
+              </tr>
+              <tr>
+                <td>TOTAL OPERATING EXPENSES</td>
+                <td class="numeric">43.1%</td>
+                <td class="numeric">$8.29</td>
+                <td class="numeric">$5,290</td>
+                <td class="numeric">$84,635</td>
+                <td class="comment"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="noi-section">
+          <h2>Net Operating Income (NOI)</h2>
+          <p class="noi-text">${getFieldValue(sections, 'net-operating-income-conclusion') || 'The net operating income equals the effective gross income less the total expenses. The total net operating income for the subject is $111,771 which is $6,986/Unit and $10.95/SF.'}</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>45&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</p>
+      </div>
     </div>
   `;
 }
@@ -3438,14 +3884,47 @@ export function renderPage50(sections: ReportSection[], valueScenarioType: strin
  * Fields: cap-rate-selection-intro, alternative-investment-rates-text, investment-activity-trends-text, multifamily-chart-placeholder
  */
 export function renderPage51(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 51 - Cap Rate Selection
-  // Fields: cap-rate-selection-intro, alternative-investment-rates-text
-  // investment-activity-trends-text, multifamily-chart-placeholder
-
   return `
-    <div class="page page-51">
-      <h1>Page 51: Cap Rate Selection</h1>
-      <p>TODO: Implement cap rate template</p>
+    <div class="page page-51" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #333; background: white; margin: 0; padding: 38px; width: 816px; min-height: 1056px; page-break-after: always;">
+      <style>
+        .page-51 h1 { font-size: 16px; font-weight: bold; border-bottom: 2px solid #003366; padding-bottom: 8px; margin: 0 0 16px 0; color: #000; }
+        .page-51 h2 { font-size: 13px; font-weight: bold; color: #003366; margin: 12px 0 8px 0; padding: 0; }
+        .page-51 p { margin: 8px 0; text-align: justify; }
+        .page-51 ul { margin: 8px 0 8px 24px; padding: 0; }
+        .page-51 li { margin: 4px 0; }
+        .page-51 .chart-container { border: 3px solid #ffcc00; background: #f9f9f9; padding: 16px; margin: 16px 0; page-break-inside: avoid; }
+        .page-51 .image-placeholder { width: 100%; height: 300px; background: #cccccc; display: flex; align-items: center; justify-content: center; color: #666; font-size: 12px; border: 1px dashed #999; font-weight: normal; margin: 0 auto; }
+        .page-51 .footer { font-size: 10px; color: #666; margin-top: 24px; padding-top: 8px; border-top: 1px solid #ccc; }
+      </style>
+
+      <h1>Valuation & Conclusions</h1>
+
+      <h2>Capitalization Rate Selection</h2>
+
+      <p>${getFieldValue(sections, 'cap-rate-selection-intro') || 'To determine the appropriate capitalization rate for the subject property, consideration is given to:'}</p>
+
+      <ul>
+        <li>Alternative investment rates</li>
+        <li>Investor activity and trends</li>
+        <li>The property's income, location, and physical characteristics</li>
+        <li>Comparable sales and market activity</li>
+      </ul>
+
+      <h2>Alternative Investment Rates</h2>
+
+      <p>${getFieldValue(sections, 'alternative-investment-rates-text') || 'The capitalization rate selected is one the subject property is expected to be higher than the current yield of approximately 3.2% on 10-year Government of Canada bonds. A risk premium of 75-300 basis points is typically applied to commercial and multifamily real estate, resulting in an implied capitalization rate in the range of 4.25%-6.25%. This spread reflects the illiquidity of real estate, management burden and overall (leasing, micro and macro market, physical, financing and regulatory) risk associated with real estate compared to the risk-free rate of government securities.'}</p>
+
+      <h2>Investment Activity and Trends</h2>
+
+      <p>${getFieldValue(sections, 'investment-activity-trends-text') || 'The Multifamily Investment indicator graph below highlights how multifamily yields track interest rate cycles. From 2015 to 2021, cap rates compressed into the mid-4% range as bond yields fell, with investors accepting narrower spreads in exchange for stable rental cash flows. Since 2022, rising bond yields have pushed cap rates back above 5.0%, restoring a healthier premium over government securities. Forecasts suggest modest re-compression as inflation cools and spreads compress, though cap rates are expected to remain above 3.2% long-term due to structurally higher rates. Boardwalk REIT\'s fair market cap rate serves as a useful benchmark, providing an ancillary check on market yield expectations for multifamily assets.'}</p>
+
+      <div class="chart-container">
+        <div class="image-placeholder">[CHART: Multifamily Investment Indicators - Line graph showing multiple colored trend lines tracking yields from 2013 to 2030 across various markets including Canada, Calgary, Edmonton, GSH, Ottawa, Regina, Toronto, Vancouver, BCCS Yld Yield, and Boardwalk REIT]</div>
+      </div>
+
+      <div class="footer">
+        <strong>46</strong> | ${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}
+      </div>
     </div>
   `;
 }
@@ -3455,13 +3934,100 @@ export function renderPage51(sections: ReportSection[], valueScenarioType: strin
  * Fields: cap-rate-methodology-intro, comparable-sales-table
  */
 export function renderPage52(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 52 - Cap Rate Methodology
-  // Fields: cap-rate-methodology-intro, comparable-sales-table
-
   return `
-    <div class="page page-52">
-      <h1>Page 52: Cap Rate Methodology</h1>
-      <p>TODO: Implement cap rate methodology template</p>
+    <div class="page page-52" style="font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; color: #333; background: #f5f5f5; width: 816px; min-height: 1056px; position: relative; page-break-after: always;">
+      <style>
+        .page-52 .page-inner { width: 100%; min-height: 1056px; background: white; margin: 0; padding: 38px; box-shadow: 0 0 10px rgba(0,0,0,0.1); position: relative; padding-bottom: 60px; }
+        .page-52 h1 { font-size: 16px; font-weight: bold; color: #333; border-bottom: 2px solid #0066cc; padding-bottom: 8px; margin: 0 0 12px 0; }
+        .page-52 h2 { font-size: 13px; font-weight: bold; color: #0066cc; margin-top: 12px; margin-bottom: 8px; }
+        .page-52 p { margin-bottom: 10px; line-height: 1.5; text-align: justify; }
+        .page-52 .table-container { margin: 15px 0; overflow-x: auto; }
+        .page-52 table { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 12px; }
+        .page-52 table thead { background-color: #003d7a; color: white; font-weight: bold; }
+        .page-52 table thead th { padding: 6px 4px; text-align: left; border: 1px solid #003d7a; vertical-align: middle; font-size: 9px; }
+        .page-52 table tbody td { padding: 5px 4px; border: 1px solid #ddd; text-align: left; }
+        .page-52 table tbody tr:nth-child(even) { background-color: #f9f9f9; }
+        .page-52 table tbody tr:hover { background-color: #f0f0f0; }
+        .page-52 .data-row-label { font-weight: bold; background-color: #e8e8e8; width: 20%; }
+        .page-52 .numeric { text-align: right; }
+        .page-52 .chart-container { margin: 20px 0; text-align: center; }
+        .page-52 .chart-wrapper { display: flex; align-items: flex-end; justify-content: center; height: 180px; margin: 20px 0; position: relative; border-bottom: 2px solid #333; }
+        .page-52 .chart-bar { width: 35px; background-color: #1a3d66; margin: 0 10px; }
+        .page-52 .chart-label { font-size: 9px; font-weight: bold; margin-top: 5px; }
+        .page-52 .summary-text { font-size: 10px; margin-top: 12px; line-height: 1.5; }
+        .page-52 .footer { position: absolute; bottom: 18px; left: 38px; right: 38px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; color: #666; border-top: 1px solid #ccc; padding-top: 8px; }
+        .page-52 .footer-left { flex: 1; }
+        .page-52 .footer-right { width: 80px; height: 20px; background: linear-gradient(to right, #1a3d66 50%, #0099cc 50%); }
+      </style>
+
+      <div class="page-inner">
+        <h1>Valuation & Conclusions</h1>
+
+        <h2>Capitalization Rate</h2>
+
+        <p>${getFieldValue(sections, 'cap-rate-methodology-intro') || 'In this section, a capitalization rate for the subject is developed based upon the comparable properties in the following table.'}</p>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th colspan="6" style="text-align: center; background-color: #003d7a; color: white; padding: 8px;">COMPARABLE SALES</th>
+              </tr>
+              <tr>
+                <th>Data Point</th>
+                <th>COMP 1</th>
+                <th>COMP 2</th>
+                <th>COMP 3</th>
+                <th>COMP 4</th>
+                <th>COMP 5</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="data-row-label">Name</td><td>Heritage House</td><td>Parkside View Apartments</td><td>Woodland Estates</td><td>Parkside Flats 1</td><td>Parkside Flats 2</td></tr>
+              <tr><td class="data-row-label">Address</td><td>1501 102 St</td><td>1070-1092 Ferguson Ave</td><td>1901 Pearson Ave</td><td>1030 Parr Hill Dr</td><td>1030 Parr Hill Dr</td></tr>
+              <tr><td class="data-row-label">City</td><td>North Battleford</td><td>North Battleford</td><td>North Battleford</td><td>Martensville</td><td>Martensville</td></tr>
+              <tr><td class="data-row-label">Province</td><td>SK</td><td>SK</td><td>SK</td><td>SK</td><td>SK</td></tr>
+              <tr><td class="data-row-label">NRA (SF)</td><td class="numeric">22,754</td><td class="numeric">33,309</td><td class="numeric">15,000</td><td class="numeric">47,916</td><td class="numeric">52,708</td></tr>
+              <tr><td class="data-row-label"># Units</td><td class="numeric">24</td><td class="numeric">45</td><td class="numeric">24</td><td class="numeric">47</td><td class="numeric">52</td></tr>
+              <tr><td class="data-row-label">Year Built</td><td class="numeric">2006</td><td class="numeric">2002</td><td class="numeric">1980</td><td class="numeric">2016</td><td class="numeric">2019</td></tr>
+              <tr><td class="data-row-label">Sale Date</td><td>2024-06-17</td><td>2024-04-17</td><td>2024-05-27</td><td>2023-05-19</td><td>2023-05-19</td></tr>
+              <tr><td class="data-row-label">Sale Price</td><td class="numeric">$3,750,000</td><td class="numeric">$2,650,000</td><td class="numeric">$1,500,000</td><td class="numeric">$8,900,000</td><td class="numeric">$11,150,000</td></tr>
+              <tr><td class="data-row-label">Price/SF</td><td class="numeric">$165</td><td class="numeric">$80</td><td class="numeric">$100</td><td class="numeric">$186</td><td class="numeric">$212</td></tr>
+              <tr><td class="data-row-label">NOI</td><td class="numeric">$224,250</td><td class="numeric">$158,405</td><td class="numeric">$89,850</td><td class="numeric">$555,360</td><td class="numeric">$659,740</td></tr>
+              <tr><td class="data-row-label">NOI/Unit</td><td class="numeric">$9,344</td><td class="numeric">$3,520</td><td class="numeric">$3,744</td><td class="numeric">$11,816</td><td class="numeric">$12,687</td></tr>
+              <tr><td class="data-row-label">Capitalization Rate</td><td class="numeric">5.98%</td><td class="numeric">5.98%</td><td class="numeric">5.99%</td><td class="numeric">6.24%</td><td class="numeric">5.92%</td></tr>
+              <tr><td class="data-row-label">AVERAGE</td><td colspan="5" class="numeric">6.02%</td></tr>
+              <tr><td class="data-row-label">HIGH</td><td colspan="5" class="numeric">6.24%</td></tr>
+              <tr><td class="data-row-label">LOW</td><td colspan="5" class="numeric">5.92%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="chart-container">
+          <h3 style="font-size: 11px; margin-bottom: 15px;">NOI & CAPITALIZATION RATE</h3>
+          <div style="display: flex; align-items: flex-end; justify-content: center; height: 160px; margin: 20px 0; position: relative;">
+            <div style="display: flex; align-items: flex-end; justify-content: center; gap: 20px; flex: 1; height: 100%;">
+              <div style="display: flex; flex-direction: column; align-items: center;"><div style="width: 35px; height: 75px; background-color: #1a3d66;"></div><span style="font-size: 9px; font-weight: bold; margin-top: 5px;">COMP 1</span></div>
+              <div style="display: flex; flex-direction: column; align-items: center;"><div style="width: 35px; height: 28px; background-color: #1a3d66;"></div><span style="font-size: 9px; font-weight: bold; margin-top: 5px;">COMP 2</span></div>
+              <div style="display: flex; flex-direction: column; align-items: center;"><div style="width: 35px; height: 30px; background-color: #1a3d66;"></div><span style="font-size: 9px; font-weight: bold; margin-top: 5px;">COMP 3</span></div>
+              <div style="display: flex; flex-direction: column; align-items: center;"><div style="width: 35px; height: 95px; background-color: #1a3d66;"></div><span style="font-size: 9px; font-weight: bold; margin-top: 5px;">COMP 4</span></div>
+              <div style="display: flex; flex-direction: column; align-items: center;"><div style="width: 35px; height: 102px; background-color: #1a3d66;"></div><span style="font-size: 9px; font-weight: bold; margin-top: 5px;">COMP 5</span></div>
+            </div>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 30px; margin-top: 10px; font-size: 9px;">
+            <div style="display: flex; align-items: center; gap: 8px;"><div style="width: 15px; height: 15px; background-color: #1a3d66;"></div><span>NOI/Unit</span></div>
+          </div>
+        </div>
+
+        <div class="summary-text">
+          The comparable capitalization rates indicate a range from 5.92% to 6.24% with an average of 6.02%.
+        </div>
+
+        <div class="footer">
+          <div class="footer-left">47&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</div>
+          <div class="footer-right"></div>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -3471,13 +4037,75 @@ export function renderPage52(sections: ReportSection[], valueScenarioType: strin
  * Fields: comparable-details-table
  */
 export function renderPage53(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 53 - Comparable Analysis
-  // Fields: comparable-details-table
-
   return `
-    <div class="page page-53">
-      <h1>Page 53: Comparable Analysis</h1>
-      <p>TODO: Implement comparable analysis template</p>
+    <div class="page page-53" style="font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.4; color: #333; width: 816px; min-height: 1056px; background: white; padding: 38px; position: relative; page-break-after: always;">
+      <style>
+        .page-53 .page-content { width: 100%; height: 100%; display: flex; flex-direction: column; padding: 0; position: relative; }
+        .page-53 h1 { font-size: 16pt; font-weight: bold; margin-bottom: 12pt; border-bottom: 2px solid #333; padding-bottom: 6pt; margin-top: 0; }
+        .page-53 h2 { font-size: 12pt; font-weight: bold; color: #003366; margin-top: 12pt; margin-bottom: 10pt; }
+        .page-53 p { font-size: 11pt; line-height: 1.5; margin-bottom: 10pt; text-align: justify; }
+        .page-53 .table-container { margin: 20pt 0; border: 1px solid #999; }
+        .page-53 table { width: 100%; border-collapse: collapse; font-size: 11pt; }
+        .page-53 table th { background-color: #003366; color: white; padding: 8pt; text-align: left; font-weight: bold; border: 1px solid #666; }
+        .page-53 table td { padding: 8pt; border: 1px solid #999; text-align: left; }
+        .page-53 table tr:nth-child(even) { background-color: #f9f9f9; }
+        .page-53 table tr:last-child { font-weight: bold; background-color: #f0f0f0; }
+        .page-53 .footer { position: absolute; bottom: 38px; left: 38px; right: 38px; font-size: 10pt; color: #666; border-top: 1px solid #999; padding-top: 8pt; display: flex; justify-content: space-between; align-items: center; }
+        .page-53 .footer-text { flex: 1; }
+        .page-53 .footer-logo { display: flex; gap: 6pt; height: 16pt; }
+        .page-53 .logo-bar { width: 20pt; height: 16pt; background-color: #003366; }
+        .page-53 .logo-bar.light { background-color: #4db3ff; }
+      </style>
+
+      <div class="page-content">
+        <h1>Valuation & Conclusions</h1>
+
+        <h2>Capitalization Rate Analysis - Multifamily</h2>
+
+        <p>Comparable sales were analyzed from both North Battleford and Martensville to reflect investor activity in tertiary Saskatchewan markets. The comparable properties indicate capitalization rates ranging from 5.92% to 6.24%, with the majority clustering near the 5.99% range.</p>
+
+        <p>The newer properties in Martensville (Parkside Flats 1 and 2) exhibit lower cap rates of 5.92%, consistent with higher quality construction, modern finishes, and superior appeal. In contrast, the older assets located in North Battleford, such as Heritage House and College View Apartments, achieved cap rates closer to 5.99%-6.24%, reflecting higher risk premiums associated with tertiary markets, older improvements, and smaller population bases.</p>
+
+        <p>Given the subject's age (circa 1970), average unit mix and location within North Battleford, a smaller tertiary market with limited liquidity, an upward adjustment toward the higher end of the observed range is appropriate. The subject's age and leverage condition support investor confidence, though risk perception remains elevated relative to newer comparables.</p>
+
+        <p>Based on the foregoing analysis, an appropriate capitalization rate for the subject property is concluded at approximately 6.25%, reflecting market expectations for well-maintained, stabilized multifamily assets within tertiary Saskatchewan markets.</p>
+
+        <h2>Capitalization Rate Conclusion</h2>
+
+        <p>Based on these indicators and the subject's characteristics, average location, vintage, and limited amenity offering, a cap rate at the higher end of the range is considered appropriate for valuing the subject on an as stabilized basis. This aligns with recent market activity for similar assets in comparable locations.</p>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>COMPONENT</th>
+                <th>RANGE</th>
+                <th>AVERAGE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Market Extraction</td>
+                <td>5.92% to 6.24%</td>
+                <td>6.02%</td>
+              </tr>
+              <tr>
+                <td>CONCLUDED CAPITALIZATION RATE</td>
+                <td></td>
+                <td>6.25%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="footer">
+          <span class="footer-text">48&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+          <div class="footer-logo">
+            <div class="logo-bar light"></div>
+            <div class="logo-bar"></div>
+          </div>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -3487,30 +4115,210 @@ export function renderPage53(sections: ReportSection[], valueScenarioType: strin
  * Fields: direct-capitalization-intro, income-approach-conclusion-table, dcf-methodology-note
  */
 export function renderPage54(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 54 - Direct Capitalization
-  // Fields: direct-capitalization-intro, income-approach-conclusion-table, dcf-methodology-note
-
   return `
-    <div class="page page-54">
-      <h1>Page 54: Direct Capitalization</h1>
-      <p>TODO: Implement direct capitalization template</p>
+    <div class="page page-54" style="font-family: Arial, sans-serif; font-size: 10px; line-height: 1.3; color: #000; background: white; padding: 30px; width: 816px; min-height: 1056px; position: relative; page-break-after: always;">
+      <style>
+        .page-54 h1 { font-size: 14px; font-weight: bold; margin-bottom: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-top: 0; }
+        .page-54 h2 { font-size: 12px; font-weight: bold; color: #003366; margin-top: 12px; margin-bottom: 6px; }
+        .page-54 p { font-size: 10px; margin-bottom: 6px; line-height: 1.4; }
+        .page-54 table { width: 100%; border-collapse: collapse; margin: 8px 0 12px 0; font-size: 9px; }
+        .page-54 th, .page-54 td { border: 1px solid #999; padding: 4px 6px; text-align: right; }
+        .page-54 th { background-color: #003366; color: white; font-weight: bold; padding: 5px 6px; text-align: center; }
+        .page-54 td.label { text-align: left; font-weight: normal; }
+        .page-54 tr.section-header td { background-color: #003366; color: white; font-weight: bold; padding: 6px 6px; text-align: left; }
+        .page-54 tr.subsection-header td { background-color: #e0e0e0; font-weight: bold; text-align: left; }
+        .page-54 tr.total-row td { background-color: #e0e0e0; font-weight: bold; }
+        .page-54 tr.grand-total-row td { background-color: #003366; color: white; font-weight: bold; }
+        .page-54 .numeric { text-align: right; }
+        .page-54 .red-text { color: #c00000; }
+        .page-54 .footer { position: absolute; bottom: 20px; left: 30px; right: 30px; font-size: 9px; color: #666; display: flex; justify-content: space-between; align-items: center; }
+        .page-54 .footer-left { display: flex; gap: 20px; }
+        .page-54 .footer-logo { width: 60px; height: 40px; background: linear-gradient(135deg, #4a9fd8 0%, #003366 100%); }
+      </style>
+
+      <h1>Valuation & Conclusions</h1>
+
+      <h2>Direct Capitalization Conclusion</h2>
+      <p>${getFieldValue(sections, 'direct-capitalization-intro') || 'The table below summarizes the Direct Capitalization Method and its value conclusion.'}</p>
+
+      <table>
+        <thead>
+          <tr class="section-header"><td colspan="9">DIRECT CAPITALIZATION</td></tr>
+          <tr>
+            <th style="text-align: left;">Unit Mix</th>
+            <th>Units</th>
+            <th>Category</th>
+            <th>Contract</th>
+            <th>Market</th>
+            <th>Cont v Mkt</th>
+            <th>$/Unit</th>
+            <th>$/SF(Y1)</th>
+            <th>$/Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="label">Flat 1 Bed / 1 Bath</td>
+            <td class="numeric">4</td>
+            <td class="numeric">1 Bed</td>
+            <td class="numeric">$900</td>
+            <td class="numeric">$900</td>
+            <td class="numeric">100%</td>
+            <td class="numeric">$900</td>
+            <td class="numeric">$13.86</td>
+            <td class="numeric">$43,200</td>
+          </tr>
+          <tr>
+            <td class="label">Flat 2 Bed / 1 Bath</td>
+            <td class="numeric">12</td>
+            <td class="numeric">2 Bed</td>
+            <td class="numeric">$1,015</td>
+            <td class="numeric">$1,050</td>
+            <td class="numeric">97%</td>
+            <td class="numeric">$1,050</td>
+            <td class="numeric">$16.07</td>
+            <td class="numeric">$151,200</td>
+          </tr>
+          <tr>
+            <td class="label">UNIT MIX SUBTOTAL</td>
+            <td class="numeric">16</td>
+            <td class="numeric"></td>
+            <td class="numeric"></td>
+            <td class="numeric"></td>
+            <td class="numeric"></td>
+            <td class="numeric"></td>
+            <td class="numeric"></td>
+            <td class="numeric">$194,400</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead><tr class="section-header"><td colspan="7">RENTAL REVENUE</td></tr></thead>
+        <tbody>
+          <tr><td class="label">Total Scheduled Revenue</td><td class="numeric"></td><td class="numeric"></td><td class="numeric"></td><td class="numeric">$12,150</td><td class="numeric">$19.06</td><td class="numeric">$194,400</td></tr>
+          <tr><td class="label">TOTAL RENTAL REVENUE</td><td class="numeric"></td><td class="numeric"></td><td class="numeric"></td><td class="numeric">$12,240</td><td class="numeric">$19.19</td><td class="numeric">$195,840</td></tr>
+          <tr><td class="label">OTHER INCOME (MISCELLANEOUS)</td><td class="numeric">4%</td><td class="numeric">4%</td><td class="numeric"></td><td class="numeric">$525</td><td class="numeric">$0.82</td><td class="numeric">$8,400</td></tr>
+          <tr class="total-row"><td class="label">TOTAL GROSS REVENUE</td><td class="numeric">104%</td><td class="numeric">104%</td><td class="numeric"></td><td class="numeric">$12,765</td><td class="numeric">$20.02</td><td class="numeric">$204,240</td></tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead><tr class="section-header"><td colspan="7">POTENTIAL GROSS REVENUE</td></tr></thead>
+        <tbody>
+          <tr><td class="label">ALL VACANCY LOSS</td><td class="numeric">%/PGR</td><td class="numeric">%/EGR</td><td class="numeric">$/UNIT</td><td class="numeric">$12,765</td><td class="numeric">$20.02</td><td class="numeric">$204,240</td></tr>
+          <tr><td class="label">Vacancy</td><td class="numeric red-text">3.8%</td><td class="numeric red-text">4.0%</td><td class="numeric red-text">($490)</td><td class="numeric red-text">($0.77)</td><td class="numeric red-text">($7,834)</td><td></td></tr>
+          <tr class="total-row"><td class="label">TOTAL VACANCY & CREDIT LOSS</td><td class="numeric red-text">3.8%</td><td class="numeric red-text">4.0%</td><td class="numeric red-text">($490)</td><td class="numeric red-text">($0.77)</td><td class="numeric red-text">($7,834)</td><td></td></tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead><tr class="section-header"><td colspan="7">EFFECTIVE GROSS REVENUE</td></tr></thead>
+        <tbody>
+          <tr><td class="label">OPERATING EXPENSES</td><td class="numeric">%/PGR</td><td class="numeric">%/EGR</td><td class="numeric">$/UNIT</td><td class="numeric">$12,275</td><td class="numeric">$19.25</td><td class="numeric">$196,406</td></tr>
+          <tr><td class="label">Real Estate Taxes</td><td class="numeric red-text">9.2%</td><td class="numeric red-text">9.5%</td><td class="numeric red-text">($1,168)</td><td class="numeric red-text">($1.83)</td><td class="numeric red-text">($18,688)</td><td></td></tr>
+          <tr><td class="label">Insurance</td><td class="numeric red-text">5.6%</td><td class="numeric red-text">5.8%</td><td class="numeric red-text">($710)</td><td class="numeric red-text">($1.11)</td><td class="numeric red-text">($11,360)</td><td></td></tr>
+          <tr><td class="label">Repairs & Maintenance</td><td class="numeric red-text">6.5%</td><td class="numeric red-text">6.8%</td><td class="numeric red-text">($830)</td><td class="numeric red-text">($1.30)</td><td class="numeric red-text">($13,280)</td><td></td></tr>
+          <tr><td class="label">Payroll</td><td class="numeric red-text">3.9%</td><td class="numeric red-text">4.1%</td><td class="numeric red-text">($500)</td><td class="numeric red-text">($0.78)</td><td class="numeric red-text">($8,000)</td><td></td></tr>
+          <tr><td class="label">Utilities</td><td class="numeric red-text">10.3%</td><td class="numeric red-text">10.7%</td><td class="numeric red-text">($1,315)</td><td class="numeric red-text">($2.06)</td><td class="numeric red-text">($21,040)</td><td></td></tr>
+          <tr><td class="label">Management Fees</td><td class="numeric red-text">4.1%</td><td class="numeric red-text">4.3%</td><td class="numeric red-text">($522)</td><td class="numeric red-text">($0.82)</td><td class="numeric red-text">($8,347)</td><td></td></tr>
+          <tr><td class="label">Other Expenses</td><td class="numeric red-text">1.9%</td><td class="numeric red-text">2.0%</td><td class="numeric red-text">($245)</td><td class="numeric red-text">($0.38)</td><td class="numeric red-text">($3,920)</td><td></td></tr>
+          <tr class="total-row"><td class="label">TOTAL OPERATING EXPENSES</td><td class="numeric red-text">41.4%</td><td class="numeric red-text">43.1%</td><td class="numeric red-text">($5,290)</td><td class="numeric red-text">($8.29)</td><td class="numeric red-text">($84,635)</td><td></td></tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead><tr class="section-header"><td colspan="4">NET OPERATING INCOME</td></tr></thead>
+        <tbody>
+          <tr><td class="label">Net Operating Income</td><td class="numeric">$6,986</td><td class="numeric">$10.95</td><td class="numeric">$111,771</td></tr>
+          <tr><td class="label">Capitalization Rate</td><td colspan="3" class="numeric">6.25%</td></tr>
+          <tr><td class="label">Capitalized Value</td><td colspan="3" class="numeric">$1,788,336</td></tr>
+          <tr class="grand-total-row"><td class="label">INDICATED VALUE (ROUNDED TO NEAREST $10,000)</td><td class="numeric">$112,500/Unit</td><td class="numeric">$176/SF</td><td class="numeric">$1,800,000</td></tr>
+        </tbody>
+      </table>
+
+      <div class="footer">
+        <div class="footer-left">
+          <span>49&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+        </div>
+        <div class="footer-logo"></div>
+      </div>
     </div>
   `;
 }
 
 /**
- * Page 55: Valuation & Conclusions - Comparable 1 Analysis
- * Fields: 7 fields for comp1 including sale-info-table, income-analysis-table, property-table,
- * unit-mix-table, photo-placeholder, map-placeholder, description
+ * Page 55: Valuation & Conclusions - Income Approach Conclusion
+ * Fields: income-approach-conclusion-table, dcf-methodology-note
  */
 export function renderPage55(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 55 - Comparable 1
-  // 7 fields for comp1
-
   return `
-    <div class="page page-55">
-      <h1>Page 55: Comparable 1 Analysis</h1>
-      <p>TODO: Implement comparable 1 template</p>
+    <div class="page page-55" style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: white; width: 816px; min-height: 1056px; padding: 40px; position: relative; page-break-after: always;">
+      <style>
+        .page-55 .page-header { margin-bottom: 30px; }
+        .page-55 h1 { font-size: 18px; font-weight: bold; color: #333; border-bottom: 2px solid #333; padding-bottom: 10px; margin: 0 0 20px 0; }
+        .page-55 h2 { font-size: 14px; font-weight: bold; color: #004B87; margin-bottom: 15px; margin-top: 20px; }
+        .page-55 table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .page-55 .table-header { background-color: #004B87; color: white; font-weight: bold; padding: 10px; text-align: left; font-size: 12px; letter-spacing: 0.5px; }
+        .page-55 td { padding: 10px; border-bottom: 1px solid #e0e0e0; font-size: 12px; }
+        .page-55 td:first-child { font-weight: bold; width: 70%; }
+        .page-55 td:last-child { text-align: right; width: 30%; font-weight: bold; }
+        .page-55 .section-content { margin-bottom: 30px; }
+        .page-55 .methodology-text { font-size: 12px; line-height: 1.8; color: #333; margin-top: 15px; }
+        .page-55 .page-footer { position: absolute; bottom: 40px; width: calc(100% - 80px); font-size: 10px; color: #666; display: flex; justify-content: space-between; align-items: center; }
+        .page-55 .footer-left { flex: 1; }
+        .page-55 .footer-right { display: flex; gap: 10px; align-items: center; }
+        .page-55 .footer-logo { width: 50px; height: 30px; background: linear-gradient(135deg, #87CEEB 0%, #004B87 100%); border-radius: 3px; }
+      </style>
+
+      <div class="page-header">
+        <h1>Valuation & Conclusions</h1>
+      </div>
+
+      <div class="section-content">
+        <h2>Income Approach Conclusion</h2>
+
+        <table>
+          <thead>
+            <tr>
+              <td colspan="2" class="table-header">INCOME APPROACH - DIRECT CAPITALIZATION</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>NOI</td>
+              <td>$111,771</td>
+            </tr>
+            <tr>
+              <td>NOI $/SF NRA</td>
+              <td>$10.95</td>
+            </tr>
+            <tr>
+              <td>Capitalization Rate (CAR)</td>
+              <td>6.25%</td>
+            </tr>
+            <tr>
+              <td>Indicated Value</td>
+              <td>$1,800,000</td>
+            </tr>
+            <tr>
+              <td>$/SF NRA</td>
+              <td>$176</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="methodology-text">
+          <p>${getFieldValue(sections, 'dcf-methodology-note') || 'Given that the subject is a multitenant asset with short term leases, it is generally understood that the direct capitalization method is preferred, making the discounted cash flow (DCF) method less meaningful. For this reason, we have completed only the direct capitalization method.'}</p>
+        </div>
+      </div>
+
+      <div class="page-footer">
+        <div class="footer-left">50&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-right">
+          <div class="footer-logo"></div>
+        </div>
+      </div>
     </div>
   `;
 }
@@ -3520,13 +4328,45 @@ export function renderPage55(sections: ReportSection[], valueScenarioType: strin
  * Fields: direct-comparison-section-heading, direct-comparison-intro-text
  */
 export function renderPage56(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 56 - Direct Comparison Approach
-  // Fields: direct-comparison-section-heading, direct-comparison-intro-text
-
   return `
-    <div class="page page-56">
-      <h1>Page 56: Direct Comparison Approach</h1>
-      <p>TODO: Implement direct comparison template</p>
+    <div class="page page-56" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; font-size: 11pt; line-height: 1.4; color: #333; width: 816px; min-height: 1056px; padding: 38px; background: white; page-break-after: always;">
+      <style>
+        .page-56 .page-title { font-size: 14pt; font-weight: bold; margin-bottom: 11px; padding-bottom: 7px; border-bottom: 2px solid #003366; color: #000; }
+        .page-56 .section-heading { font-size: 12pt; font-weight: bold; color: #003366; margin-top: 22px; margin-bottom: 7px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .page-56 .subsection-heading { font-size: 11pt; font-weight: bold; color: #003366; margin-top: 14px; margin-bottom: 6px; }
+        .page-56 p { margin-bottom: 11px; text-align: justify; line-height: 1.5; }
+        .page-56 .list-item { margin-left: 22px; margin-bottom: 7px; text-align: justify; line-height: 1.4; }
+        .page-56 .list-number { font-weight: bold; color: #003366; }
+        .page-56 .footer { margin-top: 29px; padding-top: 14px; border-top: 1px solid #ccc; font-size: 9pt; text-align: right; color: #666; }
+      </style>
+
+      <div class="page-title">Valuation & Conclusions</div>
+
+      <div class="section-heading">Direct Comparison Approach: Multifamily</div>
+
+      <div class="subsection-heading">Introduction</div>
+      <p>In the Sales Comparison Approach, the value of a property is estimated by comparing it with similar, recently sold properties in the surrounding or competing areas. Inherent in this approach is the principle of substitution, which holds that when a property is replaceable in the market, its value tends to be set by the cost of buying an equally desirable property, assuming that no costly delay occurs in making the substitution.</p>
+
+      <div class="subsection-heading">Comparable Selection</div>
+      <p>Through the analysis of sales of verified arm's-length transactions, market value and price trends are identified. The sales utilized are comparable to the subject in physical, functional, and economic characteristics.</p>
+      <p>Comparable sales are presented, which were selected due to their similarity in physical, locational, and qualitative attributes. They represent the most recent and relevant comparable sale available for this analysis. Emphasis was given to the subject's location and similarly positioned properties.</p>
+
+      <div class="subsection-heading">Unit of Comparison</div>
+      <p>The most relevant unit of comparison is the price per Unit. This best reflects the unit of comparison used by buyers and sellers in this market for the subject property type.</p>
+
+      <div class="subsection-heading">Adjustments</div>
+      <p>Adjustments to the comparable sales were considered and made when warranted for property rights, financing terms, conditions of sale, expenditures after sale and market conditions.</p>
+
+      <div class="list-item"><span class="list-number">1. Property Rights</span> - All the sales comparables were fee simple sales reflecting the property rights appraised herein per the agreed upon scope of work.</div>
+      <div class="list-item"><span class="list-number">2. Financing</span> - The sales all reflected typical cash equivalent, lender-financed transactions and no adjustments were required for financing terms.</div>
+      <div class="list-item"><span class="list-number">3. Sale Conditions</span> - None of the comparables required a condition of sale adjustment, as all were confirmed to be arm's length transactions.</div>
+      <div class="list-item"><span class="list-number">4. Expenditures After Sale</span> - Expenses that the buyer incurs after purchase (deferred maintenance, HVAC repairs, etc.). No adjustments are warranted based on review of the sales.</div>
+      <div class="list-item"><span class="list-number">5. Market Conditions</span> - Typically reflected as a time adjustment to account for value trends of the comparables presented herein, a market conditions adjustment of 0% is applied on an annual basis reflecting the relatively consistent appreciation that occurred between the oldest comparable sale date up through the effective valuation date.</div>
+
+      <div class="subsection-heading">Quantitative Adjustment Process</div>
+      <p>In this method, we have compared the sales to the subject primarily along economic lines rather than on physical characteristics. Economic measures such as the relationship of sales price to net operating income are inclusive of all the physical and economic attributes of a property. It should be stressed that the adjustments are subjective in nature and are meant to illustrate the logic in deriving a value opinion for the subject property by the Sales Comparison Approach.</p>
+
+      <div class="footer">51&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</div>
     </div>
   `;
 }
@@ -3536,62 +4376,335 @@ export function renderPage56(sections: ReportSection[], valueScenarioType: strin
  * Fields: comparable-presentation-heading, comparable-content-placeholder
  */
 export function renderPage57(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 57 - Comparable Properties
-  // Fields: comparable-presentation-heading, comparable-content-placeholder
-
   return `
-    <div class="page page-57">
-      <h1>Page 57: Comparable Properties</h1>
-      <p>TODO: Implement comparable properties template</p>
+    <div class="page page-57" style="font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; color: #333; background-color: #fff; width: 816px; min-height: 1056px; margin: 0 auto; padding: 54px; position: relative;">
+      <style>
+        .page-57 h1 { font-size: 18pt; font-weight: bold; color: #000; border-bottom: 2px solid #003d7a; padding-bottom: 8px; margin-bottom: 16px; margin-top: 0; }
+        .page-57 h2 { font-size: 13pt; font-weight: bold; color: #003d7a; margin-top: 12px; margin-bottom: 12px; }
+        .page-57 p { margin-bottom: 12px; text-align: left; }
+        .page-57 .content-placeholder { width: 100%; height: 400px; background-color: #ccc; border: 2px dashed #999; margin: 24px 0; display: flex; align-items: center; justify-content: center; color: #666; font-size: 10pt; }
+        .page-57 .footer-info { position: absolute; bottom: 54px; left: 54px; right: 54px; display: flex; justify-content: space-between; align-items: center; font-size: 9pt; color: #666; border-top: 1px solid #e0e0e0; padding-top: 12px; }
+        .page-57 .footer-logo { width: 150px; height: 30px; background: linear-gradient(90deg, #4a90e2 0%, #003d7a 100%); border-radius: 4px; }
+      </style>
+
+      <h1>Valuation & Conclusions</h1>
+      <h2>Presentation</h2>
+      <p>
+        The subject and comparable property attributes are presented on the following Improved Sales Comparison Table,
+        location map and photographs. This is followed by analysis of the subject and comparable sales and the value
+        conclusion indicated using the Sales Comparison Approach.
+      </p>
+
+      <div class="content-placeholder">
+        [Images, maps, and comparison charts to follow]
+      </div>
+
+      <div class="footer-info">
+        <span>52</span>
+        <span>${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <div class="footer-logo"></div>
+      </div>
     </div>
   `;
 }
 
 /**
- * Page 58: Valuation & Conclusions - Comparable 2
- * Fields: comp2-analysis-section
+ * Page 58: Valuation & Conclusions - Photo Page
+ * Fields: photo-placeholder
  */
 export function renderPage58(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 58 - Comparable 2
-  // Fields: comp2-analysis-section
-
   return `
-    <div class="page page-58">
-      <h1>Page 58: Comparable 2</h1>
-      <p>TODO: Implement comparable 2 template</p>
+    <div class="page page-58" style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; background: #f5f5f5; width: 816px; height: 1056px; padding: 0; position: relative; overflow: hidden;">
+      <style>
+        .page-58 .content { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 40px; background: white; }
+        .page-58 .image-placeholder { width: 100%; height: 100%; background-color: #cccccc; border: 2px dashed #999999; display: flex; align-items: center; justify-content: center; color: #666666; font-size: 14px; text-align: center; flex-direction: column; gap: 10px; }
+        .page-58 .image-placeholder span { font-weight: 500; }
+        .page-58 .image-placeholder .subtext { font-size: 12px; color: #999999; }
+      </style>
+
+      <div class="content">
+        <div class="image-placeholder">
+          <span>Photograph: Apartment Building Construction Site</span>
+          <span class="subtext">(image58.png)</span>
+        </div>
+      </div>
     </div>
   `;
 }
 
 /**
- * Page 59: Valuation & Conclusions - Market Analysis
- * Fields: market-analysis-content
+ * Page 59: Valuation & Conclusions - Sales Summary Sheet (Heritage House - Comparable 1)
+ * Fields: comp1-buyer, comp1-seller, comp1-sale-date, comp1-transaction-status, comp1-sale-price,
+ * comp1-price-per-unit, comp1-analysis-price, comp1-rights-transferred, comp1-market-conditions,
+ * comp1-occupancy, comp1-noi, comp1-cap-rate, comp1-property-type, comp1-rent-type, comp1-gba,
+ * comp1-nra, comp1-units, comp1-buildings, comp1-year-built, comp1-land-area, comp1-zoning,
+ * comp1-parking, comp1-security, comp1-laundry, comp1-unit-amenities, comp1-parking-type,
+ * comp1-utilities, comp1-unit-mix, comp1-address, comp1-county, comp1-subdivision, comp1-remarks
  */
 export function renderPage59(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 59 - Market Analysis
-  // Fields: market-analysis-content
-
   return `
-    <div class="page page-59">
-      <h1>Page 59: Market Analysis</h1>
-      <p>TODO: Implement market analysis template</p>
+    <div class="page page-59" style="width: 816px; min-height: 1056px; margin: 0; padding: 36px; font-family: Arial, sans-serif; font-size: 10pt; line-height: 1.4; color: #333; background: white;">
+      <style>
+        .page-59 .page-header { margin-bottom: 18px; }
+        .page-59 .main-title { font-size: 14pt; font-weight: bold; color: #1f4788; border-bottom: 2px solid #1f4788; padding-bottom: 4px; margin-bottom: 11px; }
+        .page-59 .section-title { font-size: 11pt; font-weight: bold; color: #1f4788; margin-top: 11px; margin-bottom: 7px; }
+        .page-59 .property-name { font-size: 11pt; font-weight: bold; margin-bottom: 2px; }
+        .page-59 .comparable-label { font-size: 9pt; color: #666; margin-bottom: 7px; }
+        .page-59 .content-wrapper { display: flex; gap: 22px; margin-bottom: 14px; }
+        .page-59 .left-column { flex: 1; min-width: 252px; }
+        .page-59 .right-column { width: 202px; }
+        .page-59 .info-table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+        .page-59 .info-table td { padding: 3px 4px; vertical-align: top; }
+        .page-59 .info-table td:first-child { font-weight: 600; width: 40%; padding-right: 7px; }
+        .page-59 .info-table td:last-child { text-align: left; padding-left: 6px; }
+        .page-59 .table-section-header { background-color: #f0f0f0; font-weight: bold; padding: 4px; border-bottom: 1px solid #999; margin-top: 6px; margin-bottom: 3px; font-size: 9pt; }
+        .page-59 .building-image { width: 100%; height: 130px; background-color: #ccc; border: 1px dashed #999; display: flex; align-items: center; justify-content: center; color: #666; font-size: 8pt; margin-bottom: 7px; }
+        .page-59 .map-location { width: 100%; height: 94px; background-color: #ccc; border: 1px dashed #999; display: flex; align-items: center; justify-content: center; color: #666; font-size: 8pt; margin-bottom: 7px; }
+        .page-59 .remarks-section { font-size: 8.5pt; line-height: 1.3; }
+        .page-59 .remarks-label { font-weight: bold; margin-bottom: 4px; }
+        .page-59 .footer-info { font-size: 8pt; color: #666; margin-top: 11px; text-align: center; }
+        .page-59 .unit-mix-table { width: 100%; border-collapse: collapse; font-size: 8.5pt; }
+        .page-59 .unit-mix-table th, .page-59 .unit-mix-table td { padding: 3px 4px; border: 1px solid #999; text-align: center; }
+        .page-59 .unit-mix-table th { background-color: #f0f0f0; font-weight: bold; }
+        .page-59 .unit-mix-table td:first-child { text-align: left; font-weight: 600; }
+      </style>
+
+      <div class="page-header">
+        <div class="main-title">Valuation & Conclusions</div>
+      </div>
+
+      <div class="section-title">Sales Summary Sheets</div>
+
+      <div class="property-name">Heritage House</div>
+      <div class="comparable-label">Comparable 1</div>
+
+      <div class="content-wrapper">
+        <div class="left-column">
+          <!-- Sale Information Section -->
+          <div class="table-section-header">Sale Information</div>
+          <table class="info-table">
+            <tr><td>Buyer</td><td>Epiphany Group</td></tr>
+            <tr><td>Seller</td><td>Macro Properties Toronto</td></tr>
+            <tr><td>Sale Date</td><td>2024-06-17</td></tr>
+            <tr><td>Transaction Status</td><td>Closed</td></tr>
+            <tr><td>Sale Price</td><td>$3,117,383</td></tr>
+            <tr><td>Price/Unit</td><td>$129,891 /Unit</td></tr>
+            <tr><td>Analysis Price</td><td>$3,117,383</td></tr>
+            <tr><td>Price/Unit</td><td>$129,891 /Unit</td></tr>
+            <tr><td>Rights Transferred</td><td>Fee Simple</td></tr>
+            <tr><td>Market Conditions</td><td>Arm's Length</td></tr>
+          </table>
+
+          <!-- Income Analysis Section -->
+          <div class="table-section-header">Income Analysis</div>
+          <table class="info-table">
+            <tr><td>Occupancy</td><td>100.0%</td></tr>
+            <tr><td>Net Operating Income</td><td>$186,731.24</td></tr>
+            <tr><td>Cap Rate</td><td>5.98%</td></tr>
+          </table>
+
+          <!-- Property Section -->
+          <div class="table-section-header">Property</div>
+          <table class="info-table">
+            <tr><td>Address</td><td>Multi-family, Walk-Up</td></tr>
+            <tr><td>Building Type</td><td>Market</td></tr>
+            <tr><td>Rent Type</td><td>Market</td></tr>
+            <tr><td>Gross Building Area (GBA)</td><td>22,754 SF</td></tr>
+            <tr><td>Net Rentable Area (NRA)</td><td>22,754 SF</td></tr>
+            <tr><td>Units</td><td>24</td></tr>
+            <tr><td>Buildings</td><td>1 Building, 3 Floors</td></tr>
+            <tr><td>Year Built</td><td>2000</td></tr>
+            <tr><td>Land Area</td><td>0.5 Acres (21,780 SF)</td></tr>
+            <tr><td>Zoning</td><td>No</td></tr>
+            <tr><td>Parking</td><td>No</td></tr>
+            <tr><td>Security Features</td><td>Deadbolts, Exterior Lighting, Secured Entry</td></tr>
+            <tr><td>Laundry</td><td>On-Site</td></tr>
+            <tr><td>Unit Amenities</td><td>Air Conditioning, Range/Stove.</td></tr>
+            <tr><td>Parking Type</td><td>Surface</td></tr>
+            <tr><td>Utilities</td><td>Full Municipal Services</td></tr>
+          </table>
+
+          <!-- Unit Mix Section -->
+          <div class="table-section-header">Unit Mix</div>
+          <table class="unit-mix-table">
+            <thead>
+              <tr><th>Flat</th><th>Units</th><th>Avg. Size</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1 Bed / 1 Bath</td><td>24</td><td>0 SF</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="right-column">
+          <!-- Building Photo Placeholder -->
+          <div class="building-image">PHOTO: Heritage House Building</div>
+
+          <!-- Location Map Placeholder -->
+          <div class="map-location">MAP: North Battleford Location</div>
+
+          <!-- Address and Location Info -->
+          <div style="font-size: 8.5pt; line-height: 1.3; margin-bottom: 7px;">
+            <div style="font-weight: bold;">1501 107 St,</div>
+            <div style="font-weight: bold;">North Battleford, SK 59A 2AI</div>
+            <div style="margin-top: 4px; color: #666;">County: North Battleford</div>
+            <div style="color: #666;">Subdivision: Saskatchewan Area</div>
+          </div>
+
+          <!-- Remarks Section -->
+          <div class="remarks-section">
+            <div class="remarks-label">Remarks</div>
+            <div style="font-size: 8pt; line-height: 1.3;">
+              Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $4,600,000 or $32,062.00 per unit. The buyer was drawn to purchasing these properties to diversify and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.98% cap rate.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-info">
+        54&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}
+      </div>
     </div>
   `;
 }
 
 /**
- * Page 60: Valuation & Conclusions - Comparable 2 Details
- * Fields: 7 fields for comp2 including sale-info-table, income-analysis-table, property-table,
- * unit-mix-table, photo-placeholder, map-placeholder, description
+ * Page 60: Valuation & Conclusions - Sales Summary Sheet (College View Apartments - Comparable 2)
+ * Fields: comp2-buyer, comp2-seller, comp2-sale-date, comp2-transaction-status, comp2-sale-price,
+ * comp2-analysis-price, comp2-rights-transferred, comp2-financing, comp2-conditions,
+ * comp2-occupancy, comp2-noi, comp2-cap-rate, comp2-property-type, comp2-rent-type, comp2-gba,
+ * comp2-nra, comp2-units, comp2-buildings, comp2-year-built, comp2-land-area, comp2-zoning,
+ * comp2-county, comp2-submarket, comp2-special-amenities, comp2-locality, comp2-unit-amenities,
+ * comp2-parking-type, comp2-utilities, comp2-unit-mix, comp2-description, comp2-photo, comp2-map
  */
 export function renderPage60(sections: ReportSection[], valueScenarioType: string): string {
-  // TODO: Implement page 60 - Comparable 2 Details
-  // 7 fields for comp2
-
   return `
-    <div class="page page-60">
-      <h1>Page 60: Comparable 2 Details</h1>
-      <p>TODO: Implement comparable 2 details template</p>
+    <div class="page page-60" style="width: 816px; min-height: 1056px; padding: 40px 30px; font-family: Arial, sans-serif; font-size: 11px; line-height: 1.4; background: white; position: relative; overflow: hidden;">
+      <style>
+        .page-60 .header { margin-bottom: 20px; }
+        .page-60 .header h1 { font-size: 18px; font-weight: bold; color: #000; border-bottom: 2px solid #4a90e2; padding-bottom: 8px; margin-bottom: 4px; }
+        .page-60 .header h2 { font-size: 12px; font-weight: bold; color: #333; margin-bottom: 12px; }
+        .page-60 .subtitle { font-size: 10px; color: #666; margin-bottom: 8px; }
+        .page-60 .content-wrapper { display: flex; gap: 20px; height: 620px; }
+        .page-60 .left-column { flex: 0 0 45%; overflow-y: auto; }
+        .page-60 .right-column { flex: 0 0 55%; display: flex; flex-direction: column; gap: 12px; }
+        .page-60 .section { margin-bottom: 16px; }
+        .page-60 .section-title { font-size: 11px; font-weight: bold; color: #000; border-bottom: 1px solid #999; padding-bottom: 4px; margin-bottom: 8px; }
+        .page-60 table { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 10px; }
+        .page-60 table td { padding: 4px; border: none; }
+        .page-60 table td:first-child { font-weight: 500; color: #333; width: 50%; }
+        .page-60 table td:last-child { text-align: right; color: #000; }
+        .page-60 .photo-placeholder { width: 100%; height: 240px; background: #ccc; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; color: #666; font-size: 11px; text-align: center; }
+        .page-60 .map-placeholder { width: 100%; height: 160px; background: #ccc; border: 2px dashed #999; display: flex; align-items: center; justify-content: center; color: #666; font-size: 11px; text-align: center; }
+        .page-60 .description { font-size: 10px; color: #333; line-height: 1.5; margin-top: 8px; padding: 8px; background: #f9f9f9; }
+        .page-60 .footer { position: absolute; bottom: 20px; left: 30px; right: 30px; font-size: 10px; color: #666; display: flex; justify-content: space-between; align-items: center; }
+        .page-60 .divider { height: 20px; background: linear-gradient(to right, #4a90e2 0%, #2c5aa0 100%); margin-top: auto; }
+        .page-60 .unit-mix-section table thead { background: #f5f5f5; }
+        .page-60 .unit-mix-section table th { text-align: left; font-weight: bold; padding: 4px; border-bottom: 1px solid #999; }
+        .page-60 .unit-mix-section table td { padding: 4px; }
+      </style>
+
+      <!-- Header -->
+      <div class="header">
+        <h1>Valuation & Conclusions</h1>
+        <h2>College View Apartments</h2>
+        <div class="subtitle">Comparable 2</div>
+      </div>
+
+      <!-- Content Wrapper -->
+      <div class="content-wrapper">
+        <!-- Left Column: Tables -->
+        <div class="left-column">
+          <!-- Sale Information -->
+          <div class="section">
+            <div class="section-title">Sale Information</div>
+            <table>
+              <tr><td>Buyer</td><td>Epiphany Group</td></tr>
+              <tr><td>Seller</td><td>Macro Properties Toronto</td></tr>
+              <tr><td>Sale Date</td><td>2024-06-17</td></tr>
+              <tr><td>Transaction Status</td><td>Closed</td></tr>
+              <tr><td>Sale Price</td><td>$4,560,858</td></tr>
+              <tr><td>Analysis Price</td><td>$4,530,858</td></tr>
+              <tr><td>Rights Transferred</td><td>Fee Simple</td></tr>
+              <tr><td>Financing</td><td>Cash to Seller</td></tr>
+              <tr><td>Conditions of Sale</td><td>Arm's Length</td></tr>
+            </table>
+          </div>
+
+          <!-- Income Analysis -->
+          <div class="section">
+            <div class="section-title">Income Analysis</div>
+            <table>
+              <tr><td>Occupancy</td><td>100.0%</td></tr>
+              <tr><td>Net Operating Income</td><td>$374,992.39</td></tr>
+              <tr><td>Cap Rate</td><td>5.99%</td></tr>
+            </table>
+          </div>
+
+          <!-- Property -->
+          <div class="section">
+            <div class="section-title">Property</div>
+            <table>
+              <tr><td>Type</td><td>Multi-family, Walk-Up</td></tr>
+              <tr><td>Rent Type</td><td>Market</td></tr>
+              <tr><td>Gross Building Area (GBA)</td><td>33,509 SF</td></tr>
+              <tr><td>Net Rentable Area (NRA)</td><td>33,509 SF</td></tr>
+              <tr><td>Units</td><td>45</td></tr>
+              <tr><td>Buildings</td><td>2 Buildings, 3 Floors</td></tr>
+              <tr><td>Year Built</td><td>2000</td></tr>
+              <tr><td>Land Area</td><td>0.3 Acres (23,780 SF)</td></tr>
+              <tr><td>Zoning</td><td>R1</td></tr>
+              <tr><td>County</td><td>North Battleford</td></tr>
+              <tr><td>Submarket</td><td>Saskatchewan Area</td></tr>
+              <tr><td>Special Amenities</td><td>No Amenities</td></tr>
+              <tr><td>Locality</td><td>On Site</td></tr>
+              <tr><td>Unit Amenities</td><td>Range/Stove, Refrigerator</td></tr>
+              <tr><td>Parking Type</td><td>Surface</td></tr>
+              <tr><td>Utilities</td><td>Full Municipal Services</td></tr>
+            </table>
+          </div>
+
+          <!-- Unit Mix -->
+          <div class="section unit-mix-section">
+            <div class="section-title">Unit Mix</div>
+            <table>
+              <thead>
+                <tr><th>Flat</th><th>Units</th><th>Avg. Size</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>1 Bed / 1 Bath</td><td>45</td><td>0 SF</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Right Column: Images -->
+        <div class="right-column">
+          <!-- Building Photo Placeholder -->
+          <div class="photo-placeholder">
+            Building Photograph<br>(1090-1092 Cinder Crescent)<br>North Battleford, SK
+          </div>
+
+          <!-- Map Placeholder -->
+          <div class="map-placeholder">
+            Location Map<br>(Google Maps Data)
+          </div>
+
+          <!-- Description -->
+          <div class="description">
+            Macro Properties Toronto said this 143-unit portfolio to Epiphany Group for $37,962,093 per unit. The buyer was driven to purchasing these properties to diversify and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.98% cap rate.
+          </div>
+
+          <!-- Blue divider bar -->
+          <div class="divider"></div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <span class="page-number">55&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <span class="address"></span>
+      </div>
     </div>
   `;
 }

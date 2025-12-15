@@ -28,11 +28,11 @@
 |------|---------|
 | `/docs/15-Contract-review/1-Formatting & Report/VAL251012...html` | **Source of Truth** - Word HTML with authoritative field IDs |
 | `/src/features/report-builder/schema/fieldRegistry.ts` | Current field registry (519 fields) |
-| `/docs/15-Contract-review/DATA-FLOW-SUMMARY.md` | **Master Reference** - Complete data flow documentation |
-| `/docs/15-Contract-review/FIELD-INPUT-OUTPUT-CLASSIFICATION.md` | Input vs calculated classification (377/59/83 split) |
-| `/docs/15-Contract-review/FIELD-DESTINATION-MAP.md` | Which fields appear in which report sections |
-| `/docs/15-Contract-review/TABLE-FIELD-ANALYSIS.md` | Proves 300 fields are calculator outputs |
-| `/docs/15-Contract-review/FIELD-ALIGNMENT-REPORT.md` | Registry → HTML mapping with match status |
+| `/docs/15-Contract-review/2-Field Mgt-12.14.25/DATA-FLOW-SUMMARY.md` | **Master Reference** - Complete data flow documentation |
+| `/docs/15-Contract-review/2-Field Mgt-12.14.25/FIELD-INPUT-OUTPUT-CLASSIFICATION.md` | Input vs calculated classification (377/59/83 split) |
+| `/docs/15-Contract-review/2-Field Mgt-12.14.25/FIELD-DESTINATION-MAP.md` | Which fields appear in which report sections |
+| `/docs/15-Contract-review/2-Field Mgt-12.14.25/TABLE-FIELD-ANALYSIS.md` | Proves 300 fields are calculator outputs |
+| `/docs/15-Contract-review/2-Field Mgt-12.14.25/FIELD-ALIGNMENT-REPORT.md` | Registry → HTML mapping with match status |
 | `/docs/15-Contract-review/2-Field Mgt-12.14.25/MASTER-FIELD-DIRECTORY.md` | Valcre workbook lookup (7,967 fields) |
 | `/scripts/classify-input-output-fields.py` | Input/output classification tool |
 | `/scripts/map-field-destinations.py` | Section/field mapping tool |
@@ -185,7 +185,7 @@ cat /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Field
 cat /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Field\ Mgt-12.14.25/-passover-sessions/25.12.15-2\ -\ Valuations-consolidation.md
 
 # Check key analysis reports
-ls -lh /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/*FIELD*.md
+ls -lh /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Field\ Mgt-12.14.25/*FIELD*.md
 
 # Search memory for context
 /check-all-memory "calculator engine data flow"

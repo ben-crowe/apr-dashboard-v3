@@ -87,8 +87,8 @@ const TestInputDashboard: React.FC = () => {
   };
 
   // Sections hidden because they're consolidated into accordions
-  // Maintains number gaps (07, 17-19) for alignment with Report Builder
-  const hiddenSections = ['photos', 'cost-s', 'sales', 'income'];
+  // Maintains number gaps (03, 07, 17-19) for alignment with Report Builder
+  const hiddenSections = ['maps', 'photos', 'cost-s', 'sales', 'income'];
 
   // Helper function to categorize fields as inputs or outputs
   const categorizeValuationFields = (fields: FieldDefinition[]): { inputs: FieldDefinition[], outputs: FieldDefinition[] } => {

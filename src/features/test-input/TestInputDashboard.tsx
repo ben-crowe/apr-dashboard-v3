@@ -653,10 +653,10 @@ const TestInputDashboard: React.FC = () => {
                           >
                             <div className="border rounded-lg overflow-hidden">
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-amber-50 hover:bg-amber-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                <div className="bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
                                   <div className="flex items-center gap-2">
-                                    {expandedImageDestinations.has('cover-sig') ? <ChevronDown className="w-4 h-4 text-amber-600" /> : <ChevronRight className="w-4 h-4 text-amber-600" />}
-                                    <h3 className="text-sm font-semibold text-amber-800">📄 01 - COVER & SIGNATURE</h3>
+                                    {expandedImageDestinations.has('cover-sig') ? <ChevronDown className="w-4 h-4 text-slate-600" /> : <ChevronRight className="w-4 h-4 text-slate-600" />}
+                                    <h3 className="text-sm font-semibold text-slate-800">01 - COVER & SIGNATURE</h3>
                                   </div>
                                   <Badge variant="outline" className="text-xs ml-auto">
                                     {getFieldsBySubsection(sectionId, 'cover-images').length} fields
@@ -691,10 +691,10 @@ const TestInputDashboard: React.FC = () => {
                           >
                             <div className="border rounded-lg overflow-hidden">
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-blue-50 hover:bg-blue-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                <div className="bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
                                   <div className="flex items-center gap-2">
-                                    {expandedImageDestinations.has('location-maps') ? <ChevronDown className="w-4 h-4 text-blue-600" /> : <ChevronRight className="w-4 h-4 text-blue-600" />}
-                                    <h3 className="text-sm font-semibold text-blue-800">🗺️ 03 - LOCATION MAPS</h3>
+                                    {expandedImageDestinations.has('location-maps') ? <ChevronDown className="w-4 h-4 text-slate-600" /> : <ChevronRight className="w-4 h-4 text-slate-600" />}
+                                    <h3 className="text-sm font-semibold text-slate-800">03 - LOCATION MAPS</h3>
                                   </div>
                                   <Badge variant="outline" className="text-xs ml-auto">
                                     {getFieldsBySubsection(sectionId, 'maps').length} fields
@@ -729,10 +729,10 @@ const TestInputDashboard: React.FC = () => {
                           >
                             <div className="border rounded-lg overflow-hidden">
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-emerald-50 hover:bg-emerald-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                <div className="bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
                                   <div className="flex items-center gap-2">
-                                    {expandedImageDestinations.has('property-photos') ? <ChevronDown className="w-4 h-4 text-emerald-600" /> : <ChevronRight className="w-4 h-4 text-emerald-600" />}
-                                    <h3 className="text-sm font-semibold text-emerald-800">📸 07 - PROPERTY PHOTOGRAPHS</h3>
+                                    {expandedImageDestinations.has('property-photos') ? <ChevronDown className="w-4 h-4 text-slate-600" /> : <ChevronRight className="w-4 h-4 text-slate-600" />}
+                                    <h3 className="text-sm font-semibold text-slate-800">07 - PROPERTY PHOTOGRAPHS</h3>
                                   </div>
                                   <Badge variant="outline" className="text-xs ml-auto">
                                     {getFieldsBySubsection(sectionId, 'exterior-photos').length +

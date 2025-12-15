@@ -32,6 +32,7 @@ const TestInputDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { sections, updateFieldValue, runCalculations, loadFullTestData, initializeMockData } = useReportBuilderStore();
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['cover']));
+  const [expandedValuations, setExpandedValuations] = useState<Set<string>>(new Set(['cost', 'sales', 'income']));
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
 
   // Initialize store on mount if sections are empty
@@ -165,6 +166,19 @@ const TestInputDashboard: React.FC = () => {
         newSet.delete(sectionId);
       } else {
         newSet.add(sectionId);
+      }
+      return newSet;
+    });
+  };
+
+  // Toggle valuation approach accordion
+  const toggleValuation = (valuationId: string) => {
+    setExpandedValuations(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(valuationId)) {
+        newSet.delete(valuationId);
+      } else {
+        newSet.add(valuationId);
       }
       return newSet;
     });
@@ -427,11 +441,137 @@ const TestInputDashboard: React.FC = () => {
                       {/* Special rendering for Calculator tab - consolidated valuations view */}
                       {sectionId === 'calc' ? (
                         <div className="space-y-4 p-4">
-                          {/* 19 - Income Approach */}
-                          <div className="border rounded-lg overflow-hidden">
-                            <div className="bg-emerald-50 px-4 py-2 border-b">
-                              <h3 className="text-sm font-semibold text-emerald-800">💰 19-Income Approach</h3>
+                          {/* 17 - Cost Approach */}
+                          <Collapsible
+                            open={expandedValuations.has('cost')}
+                            onOpenChange={() => toggleValuation('cost')}
+                          >
+                            <div className="border rounded-lg overflow-hidden">
+                              <CollapsibleTrigger className="w-full">
+                                <div className="bg-amber-50 px-4 py-2 border-b hover:bg-amber-100 cursor-pointer flex items-center gap-2">
+                                  {expandedValuations.has('cost') ? (
+                                    <ChevronDown className="w-4 h-4 text-amber-800" />
+                                  ) : (
+                                    <ChevronRight className="w-4 h-4 text-amber-800" />
+                                  )}
+                                  <h3 className="text-sm font-semibold text-amber-800">🏗️ 17-Cost Approach</h3>
+                                </div>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <div className="space-y-3 p-4">
+                                  {(() => {
+                                    const costFields = getFieldsBySection('cost-s');
+                                    return (
+                                      <div className="space-y-2">
+                                        <table className="w-full text-sm">
+                                          <tbody>
+                                            {costFields.map(field => {
+                                              const statusInfo = getFieldStatus(field);
+                                              return (
+                                                <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50">
+                                                  <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
+                                                  <td className="px-2 py-1.5 text-sm">{field.label}</td>
+                                                  <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
+                                                  <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
+                                                </tr>
+                                              );
+                                            })}
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    );
+                                  })()}
+                                </div>
+                              </CollapsibleContent>
                             </div>
+                          </Collapsible>
+
+                          {/* 18 - Sales Comparison Approach */}
+                          <Collapsible
+                            open={expandedValuations.has('sales')}
+                            onOpenChange={() => toggleValuation('sales')}
+                          >
+                            <div className="border rounded-lg overflow-hidden">
+                              <CollapsibleTrigger className="w-full">
+                                <div className="bg-blue-50 px-4 py-2 border-b hover:bg-blue-100 cursor-pointer flex items-center gap-2">
+                                  {expandedValuations.has('sales') ? (
+                                    <ChevronDown className="w-4 h-4 text-blue-800" />
+                                  ) : (
+                                    <ChevronRight className="w-4 h-4 text-blue-800" />
+                                  )}
+                                  <h3 className="text-sm font-semibold text-blue-800">📈 18-Sales Comparison Approach</h3>
+                                </div>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <div className="space-y-3 p-4">
+                                  {(() => {
+                                    const salesFields = getFieldsBySection('sales');
+                                    const { inputs, outputs } = categorizeValuationFields(salesFields);
+                                    return (
+                                      <>
+                                        {/* Inputs */}
+                                        <div className="space-y-2">
+                                          <div className="text-xs font-semibold text-slate-600 pb-1 border-b">📝 INPUTS ({inputs.length} fields)</div>
+                                          <table className="w-full text-sm">
+                                            <tbody>
+                                              {inputs.map(field => {
+                                                const statusInfo = getFieldStatus(field);
+                                                return (
+                                                  <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50">
+                                                    <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
+                                                    <td className="px-2 py-1.5 text-sm">{field.label}</td>
+                                                    <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
+                                                    <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
+                                                  </tr>
+                                                );
+                                              })}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                        {/* Outputs */}
+                                        <div className="space-y-2">
+                                          <div className="text-xs font-semibold text-slate-600 pb-1 border-b">🔢 OUTPUTS ({outputs.length} calculated fields)</div>
+                                          <table className="w-full text-sm">
+                                            <tbody>
+                                              {outputs.map(field => {
+                                                const statusInfo = getFieldStatus(field);
+                                                return (
+                                                  <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50 bg-slate-50">
+                                                    <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
+                                                    <td className="px-2 py-1.5 text-sm font-medium">{field.label}</td>
+                                                    <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
+                                                    <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
+                                                  </tr>
+                                                );
+                                              })}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </>
+                                    );
+                                  })()}
+                                </div>
+                              </CollapsibleContent>
+                            </div>
+                          </Collapsible>
+
+                          {/* 19 - Income Approach */}
+                          <Collapsible
+                            open={expandedValuations.has('income')}
+                            onOpenChange={() => toggleValuation('income')}
+                          >
+                            <div className="border rounded-lg overflow-hidden">
+                              <CollapsibleTrigger className="w-full">
+                                <div className="bg-emerald-50 px-4 py-2 border-b hover:bg-emerald-100 cursor-pointer flex items-center gap-2">
+                                  {expandedValuations.has('income') ? (
+                                    <ChevronDown className="w-4 h-4 text-emerald-800" />
+                                  ) : (
+                                    <ChevronRight className="w-4 h-4 text-emerald-800" />
+                                  )}
+                                  <h3 className="text-sm font-semibold text-emerald-800">💰 19-Income Approach</h3>
+                                </div>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
                             <div className="space-y-3 p-4">
                               {(() => {
                                 const incomeFields = getFieldsBySection('calc');
@@ -480,93 +620,9 @@ const TestInputDashboard: React.FC = () => {
                                 );
                               })()}
                             </div>
-                          </div>
-
-                          {/* 18 - Sales Comparison Approach */}
-                          <div className="border rounded-lg overflow-hidden">
-                            <div className="bg-blue-50 px-4 py-2 border-b">
-                              <h3 className="text-sm font-semibold text-blue-800">📈 18-Sales Comparison Approach</h3>
+                              </CollapsibleContent>
                             </div>
-                            <div className="space-y-3 p-4">
-                              {(() => {
-                                const salesFields = getFieldsBySection('sales');
-                                const { inputs, outputs } = categorizeValuationFields(salesFields);
-                                return (
-                                  <>
-                                    {/* Inputs */}
-                                    <div className="space-y-2">
-                                      <div className="text-xs font-semibold text-slate-600 pb-1 border-b">📝 INPUTS ({inputs.length} fields)</div>
-                                      <table className="w-full text-sm">
-                                        <tbody>
-                                          {inputs.map(field => {
-                                            const statusInfo = getFieldStatus(field);
-                                            return (
-                                              <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50">
-                                                <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
-                                                <td className="px-2 py-1.5 text-sm">{field.label}</td>
-                                                <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
-                                                <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
-                                              </tr>
-                                            );
-                                          })}
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                    {/* Outputs */}
-                                    <div className="space-y-2">
-                                      <div className="text-xs font-semibold text-slate-600 pb-1 border-b">🔢 OUTPUTS ({outputs.length} calculated fields)</div>
-                                      <table className="w-full text-sm">
-                                        <tbody>
-                                          {outputs.map(field => {
-                                            const statusInfo = getFieldStatus(field);
-                                            return (
-                                              <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50 bg-slate-50">
-                                                <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
-                                                <td className="px-2 py-1.5 text-sm font-medium">{field.label}</td>
-                                                <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
-                                                <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
-                                              </tr>
-                                            );
-                                          })}
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                  </>
-                                );
-                              })()}
-                            </div>
-                          </div>
-
-                          {/* 17 - Cost Approach */}
-                          <div className="border rounded-lg overflow-hidden">
-                            <div className="bg-amber-50 px-4 py-2 border-b">
-                              <h3 className="text-sm font-semibold text-amber-800">🏗️ 17-Cost Approach</h3>
-                            </div>
-                            <div className="space-y-3 p-4">
-                              {(() => {
-                                const costFields = getFieldsBySection('cost-s');
-                                return (
-                                  <div className="space-y-2">
-                                    <table className="w-full text-sm">
-                                      <tbody>
-                                        {costFields.map(field => {
-                                          const statusInfo = getFieldStatus(field);
-                                          return (
-                                            <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50">
-                                              <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
-                                              <td className="px-2 py-1.5 text-sm">{field.label}</td>
-                                              <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
-                                              <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
-                                            </tr>
-                                          );
-                                        })}
-                                      </tbody>
-                                    </table>
-                                  </div>
-                                );
-                              })()}
-                            </div>
-                          </div>
+                          </Collapsible>
                         </div>
                       ) : sectionId === 'image-mgt' ? (
                         <div className="space-y-4 p-4">

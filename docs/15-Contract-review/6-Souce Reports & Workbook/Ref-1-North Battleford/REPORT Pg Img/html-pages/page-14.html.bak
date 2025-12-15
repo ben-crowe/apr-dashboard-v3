@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page 14 - Introduction & Executive Summary - Maps</title>
+  <style>
+    @page {
+      size: 8.5in 11in;
+      margin: 0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 816px;
+      height: 1056px;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      background: white;
+      color: #000;
+    }
+
+    .page-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Header Section */
+    .header {
+      padding: 24px 36px 12px 36px;
+      background: white;
+    }
+
+    .header h1 {
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+      margin-bottom: 8px;
+    }
+
+    .header-underline {
+      width: 540px;
+      height: 2px;
+      background: #003d7a;
+      margin-bottom: 4px;
+    }
+
+    /* Maps Section */
+    .maps-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 0 36px 12px 36px;
+    }
+
+    .maps-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #003d7a;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .map-container {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-placeholder {
+      width: 100%;
+      height: 100%;
+      background-color: #cccccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666666;
+      font-size: 12px;
+      border: 1px dashed #999999;
+      font-weight: normal;
+      min-height: 450px;
+    }
+
+    /* Footer Section */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 36px;
+      border-top: 1px solid #e0e0e0;
+      font-size: 10px;
+      color: #333;
+      background: white;
+    }
+
+    .footer-left {
+      flex: 1;
+    }
+
+    .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .accent-bar {
+      width: 60px;
+      height: 16px;
+      background: linear-gradient(90deg, #4a90e2 0%, #003d7a 100%);
+    }
+
+    .page-number {
+      font-size: 10px;
+      color: #666;
+      margin-right: 4px;
+    }
+
+    .divider {
+      color: #999;
+      margin: 0 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <!-- Header -->
+    <div class="header">
+      <h1>Introduction & Executive Summary</h1>
+      <div class="header-underline"></div>
+    </div>
+
+    <!-- Maps Section -->
+    <div class="maps-section">
+      <div class="maps-title">Maps</div>
+
+      <div class="map-container">
+        <div class="image-placeholder">
+          [MAP: North Battleford street map showing subject property location (blue marker) and Battlefords Union Hospital (red marker)]
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-left">
+        <span class="page-number">9</span>
+        <span class="divider">|</span>
+        <span>1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</span>
+      </div>
+      <div class="footer-right">
+        <div class="accent-bar"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,950 @@
+{
+  "_metadata": {
+    "project": "North Battleford Apartments - VAL251012",
+    "pages_covered": "41-50",
+    "created": "2025-12-12",
+    "section": "Valuation & Conclusions (Income Approach & Operating Analysis)",
+    "total_pages": 10,
+    "mapping_status": "complete",
+    "notes": "Pages 41-50 contain income approach analysis, market rent comparables, rent roll data, revenue projections, operating expenses, and NOI calculations"
+  },
+
+  "page_mappings": {
+    "page-41": {
+      "page_number": 41,
+      "title": "Valuation & Conclusions",
+      "section": "correlation-conclusion",
+      "fields": [
+        {
+          "fieldId": "approaches-to-value-table",
+          "content": "Table showing three valuation approaches (Cost, Income, Sales) and their applicability to the subject property",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "cost-approach-applicable",
+              "value": "Not Applicable"
+            },
+            {
+              "field": "income-approach-applicable",
+              "value": "Applicable"
+            },
+            {
+              "field": "sales-approach-applicable",
+              "value": "Applicable"
+            }
+          ]
+        },
+        {
+          "fieldId": "valuation-intro-text",
+          "content": "Introduction to Income Approach methodology and direct capitalization method justification",
+          "type": "paragraph"
+        }
+      ]
+    },
+
+    "page-42": {
+      "page_number": 42,
+      "title": "Valuation & Conclusions",
+      "section": "income-approach-rent-analysis",
+      "fields": [
+        {
+          "fieldId": "income-approach-overview",
+          "content": "Overview of Income Approach based on income-producing potential and market participant expectations",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "direct-capitalization-method",
+          "content": "Explanation of Direct Capitalization Method steps for estimating rental income, vacancies, and expenses",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "multifamily-revenue-analysis-intro",
+          "content": "Introduction to multi-family unit mix and rental rate analysis section",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "subject-rent-roll-table",
+          "content": "Table summarizing subject in-place unit mix and rental rates by unit type",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "rent-roll-unit-type-1bed",
+              "label": "Flat 1 Bed / 1 Bath",
+              "units": 4,
+              "rent_per_month": "$585",
+              "occupancy_percent": "100%"
+            },
+            {
+              "field": "rent-roll-unit-type-2bed",
+              "label": "Flat 2 Bed / 1 Bath",
+              "units": 12,
+              "rent_per_month": "$650",
+              "occupancy_percent": "75%"
+            }
+          ]
+        },
+        {
+          "fieldId": "rent-roll-notes",
+          "content": "Notes on lease terms, security deposits, and utility inclusions for subject property",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "market-rent-survey-intro",
+          "content": "Introduction to comparable property market rent analysis",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "unit-of-comparison",
+          "content": "Definition of unit of comparison methodology ($/SF/month and $/unit/month)",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "comparable-selection-criteria",
+          "content": "Criteria for selecting comparable properties based on location, tenancy, age, exposure, quality, condition",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "concessions-conclusion",
+          "content": "Statement that landlords are not offering concessions",
+          "type": "paragraph"
+        }
+      ]
+    },
+
+    "page-43": {
+      "page_number": 43,
+      "title": "Valuation & Conclusions",
+      "section": "market-survey-analysis",
+      "fields": [
+        {
+          "fieldId": "survey-presentation-intro",
+          "content": "Introduction to comparable property survey analysis and presentation format",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "survey-comparison-table",
+          "content": "Detailed comparison table of subject and six comparable properties with addresses and unit descriptions",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "subject-property-address",
+              "value": "1101, 1121 109 St, North Battleford, Saskatchewan"
+            },
+            {
+              "field": "comparable-1-address",
+              "value": "2624 B-84th Ave, North Battleford"
+            },
+            {
+              "field": "comparable-2-address",
+              "value": "521 G-81 St, Prince Albert"
+            },
+            {
+              "field": "comparable-3-address",
+              "value": "2306-2 Ave W, Prince Albert"
+            },
+            {
+              "field": "comparable-4-address",
+              "value": "3050 Ulm St, Prince Albert"
+            },
+            {
+              "field": "comparable-5-address",
+              "value": "399 24 St W, Prince Albert"
+            }
+          ]
+        },
+        {
+          "fieldId": "rent-survey-information-table",
+          "content": "Table comparing rent per unit, rent per SF, amenities, utilities included, parking, and laundry across subject and comparables",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "subject-rent-per-unit",
+              "value": "$1,216"
+            },
+            {
+              "field": "subject-rent-per-sf",
+              "value": "$1.39"
+            },
+            {
+              "field": "subject-unit-amenities",
+              "value": "Partial Kitchen, Electric Baseboard Heating"
+            }
+          ]
+        },
+        {
+          "fieldId": "building-information-table",
+          "content": "Detailed building characteristics table including unit SF, quality, condition, occupancy, amenities, and security features",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "subject-avg-unit-sf",
+              "value": "886"
+            },
+            {
+              "field": "subject-quality-rating",
+              "value": "Average"
+            },
+            {
+              "field": "subject-condition-rating",
+              "value": "Average"
+            },
+            {
+              "field": "subject-project-amenities",
+              "value": "Guest Parking"
+            },
+            {
+              "field": "subject-security-features",
+              "value": "Deadbolt Locks, Intercom or Video Entry"
+            }
+          ]
+        }
+      ]
+    },
+
+    "page-44": {
+      "page_number": 44,
+      "title": "Valuation & Conclusions",
+      "section": "location-map-comparables",
+      "fields": [
+        {
+          "fieldId": "location-map-placeholder",
+          "content": "Saskatchewan location map showing subject property and comparable properties with distance labels",
+          "type": "map-placeholder",
+          "map_details": "Regional map with subject marker at North Battleford and comparable markers 1-4, 6 in surrounding Prince Albert region"
+        },
+        {
+          "fieldId": "comparable-distance-table",
+          "content": "Table listing comparable properties with labels and distance in kilometres from subject",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "comparable-1-distance",
+              "distance_km": 177.9,
+              "label": "1"
+            },
+            {
+              "field": "comparable-2-distance",
+              "distance_km": 177.1,
+              "label": "2"
+            },
+            {
+              "field": "comparable-3-distance",
+              "distance_km": 175.4,
+              "label": "3"
+            },
+            {
+              "field": "comparable-4-distance",
+              "distance_km": 177.9,
+              "label": "4"
+            },
+            {
+              "field": "comparable-5-distance",
+              "distance_km": 174.9,
+              "label": "5"
+            }
+          ]
+        }
+      ]
+    },
+
+    "page-45": {
+      "page_number": 45,
+      "title": "Valuation & Conclusions",
+      "section": "market-rent-conclusions",
+      "fields": [
+        {
+          "fieldId": "market-rent-conclusion-intro",
+          "content": "Introduction to market rent analysis and conclusions by unit type",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "one-bed-units-analysis-table",
+          "content": "Detailed analysis table for 1-bedroom units showing comp averages, rents, and market conclusions",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "one-bed-unit-size",
+              "value": "650 SF"
+            },
+            {
+              "field": "one-bed-high-rent",
+              "value": "$1,287"
+            },
+            {
+              "field": "one-bed-average-rent",
+              "value": "$1,287"
+            },
+            {
+              "field": "one-bed-median-rent",
+              "value": "$1,240"
+            },
+            {
+              "field": "one-bed-low-rent",
+              "value": "$1,110"
+            },
+            {
+              "field": "one-bed-rent-per-sf-high",
+              "value": "$1.98"
+            }
+          ]
+        },
+        {
+          "fieldId": "one-bed-unit-conclusion-table",
+          "content": "Unit type analysis and conclusion table for 1-bedroom units",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "one-bed-concluded-rent",
+              "value": "$895"
+            },
+            {
+              "field": "one-bed-concluded-rent-per-sf",
+              "value": "$1.63"
+            }
+          ]
+        },
+        {
+          "fieldId": "two-bed-units-analysis-table",
+          "content": "Detailed analysis table for 2-bedroom units showing comp averages, rents, and market conclusions",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "two-bed-unit-size",
+              "value": "750 SF"
+            },
+            {
+              "field": "two-bed-high-rent",
+              "value": "$1,673"
+            },
+            {
+              "field": "two-bed-average-rent",
+              "value": "$1,486"
+            },
+            {
+              "field": "two-bed-median-rent",
+              "value": "$1,453"
+            },
+            {
+              "field": "two-bed-low-rent",
+              "value": "$1,210"
+            }
+          ]
+        },
+        {
+          "fieldId": "two-bed-unit-conclusion-table",
+          "content": "Unit type analysis and conclusion table for 2-bedroom units",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "two-bed-concluded-rent",
+              "value": "$1,056"
+            },
+            {
+              "field": "two-bed-concluded-rent-per-sf",
+              "value": "$1.58"
+            }
+          ]
+        }
+      ]
+    },
+
+    "page-46": {
+      "page_number": 46,
+      "title": "Valuation & Conclusions",
+      "section": "section-divider",
+      "fields": [
+        {
+          "fieldId": "section-divider-page",
+          "content": "Mostly blank divider page with decorative banner for section transition",
+          "type": "divider",
+          "notes": "This page serves as a visual break between market analysis and income projections"
+        }
+      ]
+    },
+
+    "page-47": {
+      "page_number": 47,
+      "title": "Valuation & Conclusions",
+      "section": "rent-discussion-revenue",
+      "fields": [
+        {
+          "fieldId": "unit-rent-discussion",
+          "content": "Discussion of subject property rental rates compared to market rent survey results",
+          "type": "paragraph",
+          "key_points": {
+            "subject_description": "16-unit building of average quality with heat/water included, surface parking, on-site laundry",
+            "comparable_1bed_range": "$1,110–$1,575/month ($1.71–$2.42/SF)",
+            "subject_market_1bed": "$1,050/month ($1.62/SF)"
+          }
+        },
+        {
+          "fieldId": "contract-vs-market-rent-section",
+          "content": "Analysis of subject contract rent versus concluded market rent",
+          "type": "paragraph",
+          "key_finding": "Subject average contract rent is 99.5% of market rents"
+        },
+        {
+          "fieldId": "contract-vs-market-table",
+          "content": "Table comparing contract rent vs market rent by unit type",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "one-bed-contract-rent",
+              "value": "$885"
+            },
+            {
+              "field": "one-bed-market-rent",
+              "value": "$900"
+            },
+            {
+              "field": "one-bed-contract-vs-market",
+              "percent": "89.4%"
+            },
+            {
+              "field": "two-bed-contract-rent",
+              "value": "$1,015"
+            },
+            {
+              "field": "two-bed-market-rent",
+              "value": "$1,050"
+            },
+            {
+              "field": "two-bed-contract-vs-market",
+              "percent": "96.5%"
+            },
+            {
+              "field": "total-average-contract-vs-market",
+              "percent": "99.5%"
+            }
+          ]
+        },
+        {
+          "fieldId": "total-rental-revenue-section",
+          "content": "Summary of total rental revenue and unit mix",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "rental-revenue-table",
+          "content": "Table showing unit mix, contract rent, market rent, and annual revenue",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "one-bed-units-count",
+              "value": 4
+            },
+            {
+              "field": "one-bed-market-rent-annual",
+              "value": "$43,200"
+            },
+            {
+              "field": "two-bed-units-count",
+              "value": 12
+            },
+            {
+              "field": "two-bed-market-rent-annual",
+              "value": "$152,840"
+            },
+            {
+              "field": "total-rental-revenue",
+              "value": "$196,840"
+            }
+          ]
+        },
+        {
+          "fieldId": "other-revenue-conclusions-table",
+          "content": "Table showing miscellaneous revenue (parking, laundry)",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "parking-income",
+              "value": "$6,000"
+            },
+            {
+              "field": "laundry-income",
+              "value": "$2,400"
+            },
+            {
+              "field": "total-other-revenue",
+              "value": "$8,400"
+            }
+          ]
+        },
+        {
+          "fieldId": "potential-gross-revenue-section",
+          "content": "Summary of PGR calculation methodology",
+          "type": "paragraph",
+          "key_finding": "Total PGR of $204,240"
+        }
+      ]
+    },
+
+    "page-48": {
+      "page_number": 48,
+      "title": "Valuation & Conclusions",
+      "section": "vacancy-egr-operating-expenses",
+      "fields": [
+        {
+          "fieldId": "vacancy-allowance-discussion",
+          "content": "Explanation of vacancy allowance methodology and market benchmarks (2-5% typical)",
+          "type": "paragraph",
+          "key_conclusion": "Vacancy allowance of 3.8% is concluded"
+        },
+        {
+          "fieldId": "vacancy-loss-table",
+          "content": "Table showing total vacancy and credit loss calculations",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "vacancy-percent",
+              "value": "3.8%"
+            },
+            {
+              "field": "vacancy-loss-amount",
+              "value": "($7,895)"
+            },
+            {
+              "field": "vacancy-loss-per-unit",
+              "value": "($490)"
+            }
+          ]
+        },
+        {
+          "fieldId": "effective-gross-revenue-section",
+          "content": "Definition and calculation of EGR (PGR minus vacancy)",
+          "type": "paragraph",
+          "key_finding": "Total EGR of $196,406 ($12,275/Unit, $19.25/SF)"
+        },
+        {
+          "fieldId": "operating-expenses-discussion",
+          "content": "Overview of operating expense analysis methodology and reclassification process",
+          "type": "paragraph"
+        }
+      ]
+    },
+
+    "page-49": {
+      "page_number": 49,
+      "title": "Valuation & Conclusions",
+      "section": "operating-history-noi",
+      "fields": [
+        {
+          "fieldId": "operating-history-table",
+          "content": "Comprehensive operating history table showing YTD 2025 actual and DCAP projections",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "total-rental-revenue-ytd",
+              "value": "$195,060"
+            },
+            {
+              "field": "total-rental-revenue-projected",
+              "value": "$195,840"
+            },
+            {
+              "field": "potential-gross-revenue-ytd",
+              "value": "$203,460"
+            },
+            {
+              "field": "potential-gross-revenue-projected",
+              "value": "$204,240"
+            },
+            {
+              "field": "vacancy-loss-ytd",
+              "value": "($8,135)"
+            },
+            {
+              "field": "vacancy-loss-projected",
+              "value": "($7,895)"
+            },
+            {
+              "field": "effective-gross-revenue-ytd",
+              "value": "$195,322"
+            },
+            {
+              "field": "effective-gross-revenue-projected",
+              "value": "$196,406"
+            }
+          ]
+        },
+        {
+          "fieldId": "operating-expenses-breakdown-table",
+          "content": "Detailed operating expenses by category (taxes, insurance, maintenance, payroll, utilities, management, other)",
+          "type": "table",
+          "expense_categories": [
+            {
+              "field": "taxes-projected",
+              "value": "($19,688)"
+            },
+            {
+              "field": "insurance-projected",
+              "value": "($11,360)"
+            },
+            {
+              "field": "repairs-maintenance-projected",
+              "value": "($13,380)"
+            },
+            {
+              "field": "payroll-projected",
+              "value": "($8,000)"
+            },
+            {
+              "field": "utilities-projected",
+              "value": "($21,040)"
+            },
+            {
+              "field": "management-fees-projected",
+              "value": "($8,347)"
+            },
+            {
+              "field": "other-expenses-projected",
+              "value": "($3,409)"
+            },
+            {
+              "field": "total-operating-expenses-projected",
+              "value": "($84,635)"
+            }
+          ]
+        },
+        {
+          "fieldId": "net-operating-income-ytd",
+          "content": "Net Operating Income (NOI) calculation",
+          "type": "paragraph",
+          "key_values": {
+            "noi-ytd": "$110,812",
+            "noi-projected": "$111,771",
+            "noi-per-unit-projected": "$6,986",
+            "noi-per-sf-projected": "57%"
+          }
+        }
+      ]
+    },
+
+    "page-50": {
+      "page_number": 50,
+      "title": "Valuation & Conclusions",
+      "section": "expense-conclusions-noi",
+      "fields": [
+        {
+          "fieldId": "expense-conclusions-header",
+          "content": "Introduction to individual expense conclusions for the subject",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "operating-expenses-detail-table",
+          "content": "Detailed table of operating expense conclusions with %EGR, $/SF NRA, $/Unit, and total amounts",
+          "type": "table",
+          "expense_details": [
+            {
+              "field": "taxes-conclusion",
+              "percent_egr": "18.4%",
+              "per_sf_nra": "$3.16",
+              "per_unit": "$420",
+              "total": "$13,682"
+            },
+            {
+              "field": "insurance-conclusion",
+              "percent_egr": "5.8%",
+              "per_sf_nra": "$1.11",
+              "per_unit": "$176",
+              "total": "$11,306"
+            },
+            {
+              "field": "repairs-maintenance-conclusion",
+              "percent_egr": "8.0%",
+              "per_sf_nra": "$1.36",
+              "per_unit": "$640",
+              "total": "$17,260"
+            },
+            {
+              "field": "supplies-conclusion",
+              "percent_egr": "2.6%",
+              "per_sf_nra": "$0.73",
+              "per_unit": "$450",
+              "total": "$8,360"
+            },
+            {
+              "field": "utilities-conclusion",
+              "percent_egr": "12.7%",
+              "per_sf_nra": "$2.56",
+              "per_unit": "$1,315",
+              "total": "$21,060"
+            },
+            {
+              "field": "management-fees-conclusion",
+              "percent_egr": "4.3%",
+              "per_sf_nra": "$0.82",
+              "per_unit": "$622",
+              "total": "$8,347"
+            },
+            {
+              "field": "other-expenses-conclusion",
+              "percent_egr": "2.0%",
+              "per_sf_nra": "$0.38",
+              "per_unit": "$245",
+              "total": "$3,925"
+            },
+            {
+              "field": "total-operating-expenses-conclusion",
+              "percent_egr": "43.1%",
+              "per_sf_nra": "$8.29",
+              "per_unit": "$5,290",
+              "total": "$84,635"
+            }
+          ]
+        },
+        {
+          "fieldId": "net-operating-income-conclusion",
+          "content": "Final NOI conclusion with total, per-unit, and per-SF metrics",
+          "type": "paragraph",
+          "key_findings": {
+            "total-noi": "$111,771",
+            "noi-per-unit": "$6,986",
+            "noi-per-sf": "$10.95"
+          }
+        }
+      ]
+    }
+  },
+
+  "field_registry_mapping": {
+    "direct-applicability": [
+      {
+        "htmlFieldId": "approaches-to-value-table",
+        "registryFieldId": "calc-valuation-approaches",
+        "section": "calculation",
+        "description": "Summary of which valuation approaches are applicable to subject property"
+      },
+      {
+        "htmlFieldId": "subject-rent-roll-table",
+        "registryFieldId": "impv-rental-analysis",
+        "section": "improvements",
+        "description": "Subject property in-place unit mix and rental rates"
+      },
+      {
+        "htmlFieldId": "survey-comparison-table",
+        "registryFieldId": "calc-comparable-analysis",
+        "section": "calculation",
+        "description": "Comparable property survey data for market analysis"
+      },
+      {
+        "htmlFieldId": "rent-survey-information-table",
+        "registryFieldId": "calc-market-rent-data",
+        "section": "calculation",
+        "description": "Market rent survey information across subject and comparables"
+      },
+      {
+        "htmlFieldId": "building-information-table",
+        "registryFieldId": "calc-comparable-characteristics",
+        "section": "calculation",
+        "description": "Comparable building characteristics and amenities analysis"
+      },
+      {
+        "htmlFieldId": "comparable-distance-table",
+        "registryFieldId": "calc-comparable-locations",
+        "section": "calculation",
+        "description": "Geographic distances from subject to comparable properties"
+      },
+      {
+        "htmlFieldId": "one-bed-units-analysis-table",
+        "registryFieldId": "calc-1bed-market-rent-analysis",
+        "section": "calculation",
+        "description": "Market rent analysis for 1-bedroom units"
+      },
+      {
+        "htmlFieldId": "two-bed-units-analysis-table",
+        "registryFieldId": "calc-2bed-market-rent-analysis",
+        "section": "calculation",
+        "description": "Market rent analysis for 2-bedroom units"
+      },
+      {
+        "htmlFieldId": "contract-vs-market-table",
+        "registryFieldId": "calc-rent-conclusion",
+        "section": "calculation",
+        "description": "Comparison of contract rent to concluded market rent"
+      },
+      {
+        "htmlFieldId": "rental-revenue-table",
+        "registryFieldId": "calc-rental-revenue",
+        "section": "calculation",
+        "description": "Total rental revenue by unit type and annual projections"
+      },
+      {
+        "htmlFieldId": "other-revenue-conclusions-table",
+        "registryFieldId": "calc-miscellaneous-revenue",
+        "section": "calculation",
+        "description": "Miscellaneous revenue (parking, laundry) conclusions"
+      },
+      {
+        "htmlFieldId": "vacancy-loss-table",
+        "registryFieldId": "calc-vacancy-loss",
+        "section": "calculation",
+        "description": "Vacancy allowance and credit loss calculations"
+      },
+      {
+        "htmlFieldId": "operating-history-table",
+        "registryFieldId": "calc-operating-history",
+        "section": "calculation",
+        "description": "Operating history and projections for revenue and expenses"
+      },
+      {
+        "htmlFieldId": "operating-expenses-breakdown-table",
+        "registryFieldId": "calc-operating-expenses",
+        "section": "calculation",
+        "description": "Operating expenses by category with historical and projected amounts"
+      },
+      {
+        "htmlFieldId": "operating-expenses-detail-table",
+        "registryFieldId": "calc-expense-conclusions",
+        "section": "calculation",
+        "description": "Final concluded operating expense amounts per category"
+      }
+    ],
+
+    "narrative-sections": [
+      {
+        "htmlFieldId": "income-approach-overview",
+        "registryFieldId": "income-approach-text",
+        "section": "valuation-section",
+        "description": "Narrative overview of Income Approach methodology"
+      },
+      {
+        "htmlFieldId": "direct-capitalization-method",
+        "registryFieldId": "direct-cap-methodology",
+        "section": "valuation-section",
+        "description": "Explanation of Direct Capitalization Method"
+      },
+      {
+        "htmlFieldId": "unit-rent-discussion",
+        "registryFieldId": "market-rent-discussion",
+        "section": "valuation-section",
+        "description": "Discussion of subject unit rents versus market comparables"
+      },
+      {
+        "htmlFieldId": "vacancy-allowance-discussion",
+        "registryFieldId": "vacancy-analysis-narrative",
+        "section": "valuation-section",
+        "description": "Explanation of vacancy allowance methodology and conclusions"
+      },
+      {
+        "htmlFieldId": "operating-expenses-discussion",
+        "registryFieldId": "operating-expense-narrative",
+        "section": "valuation-section",
+        "description": "Overview of operating expense analysis and reclassification"
+      },
+      {
+        "htmlFieldId": "net-operating-income-conclusion",
+        "registryFieldId": "noi-conclusion",
+        "section": "valuation-section",
+        "description": "Final Net Operating Income conclusion with supporting metrics"
+      }
+    ]
+  },
+
+  "data_hierarchy": {
+    "level_1_valuation_approach": {
+      "fieldId": "income-approach-section",
+      "tables": ["approaches-to-value-table"],
+      "narratives": ["income-approach-overview", "direct-capitalization-method"]
+    },
+    "level_2_market_analysis": {
+      "fieldId": "market-rent-analysis-section",
+      "tables": [
+        "subject-rent-roll-table",
+        "survey-comparison-table",
+        "rent-survey-information-table",
+        "building-information-table",
+        "comparable-distance-table",
+        "one-bed-units-analysis-table",
+        "two-bed-units-analysis-table"
+      ],
+      "narratives": ["market-rent-conclusion-intro"]
+    },
+    "level_3_rent_conclusions": {
+      "fieldId": "rent-conclusion-section",
+      "tables": [
+        "one-bed-unit-conclusion-table",
+        "two-bed-unit-conclusion-table",
+        "contract-vs-market-table"
+      ],
+      "narratives": ["unit-rent-discussion", "contract-vs-market-rent-section"]
+    },
+    "level_4_revenue_analysis": {
+      "fieldId": "revenue-analysis-section",
+      "tables": [
+        "rental-revenue-table",
+        "other-revenue-conclusions-table"
+      ],
+      "narratives": ["total-rental-revenue-section", "potential-gross-revenue-section"]
+    },
+    "level_5_expense_analysis": {
+      "fieldId": "expense-analysis-section",
+      "tables": [
+        "operating-history-table",
+        "operating-expenses-breakdown-table",
+        "vacancy-loss-table"
+      ],
+      "narratives": [
+        "vacancy-allowance-discussion",
+        "effective-gross-revenue-section",
+        "operating-expenses-discussion"
+      ]
+    },
+    "level_6_noi_conclusion": {
+      "fieldId": "noi-section",
+      "tables": ["operating-expenses-detail-table"],
+      "narratives": ["expense-conclusions-header", "net-operating-income-conclusion"]
+    }
+  },
+
+  "financial_metrics_summary": {
+    "potential_gross_revenue": {
+      "fieldId": "pgr-total",
+      "value": "$204,240",
+      "per_unit": "$13,765",
+      "per_sf": "$20.02",
+      "source": "page-47"
+    },
+    "effective_gross_revenue": {
+      "fieldId": "egr-total",
+      "value": "$196,406",
+      "per_unit": "$12,275",
+      "per_sf": "$19.25",
+      "vacancy_percent": "3.8%",
+      "source": "page-48"
+    },
+    "total_operating_expenses": {
+      "fieldId": "total-opex",
+      "value": "$84,635",
+      "per_unit": "$5,290",
+      "per_sf": "$8.29",
+      "percent_egr": "43.1%",
+      "source": "page-50"
+    },
+    "net_operating_income": {
+      "fieldId": "noi-total",
+      "value": "$111,771",
+      "per_unit": "$6,986",
+      "per_sf": "$10.95",
+      "noi_percent_egr": "57%",
+      "source": "page-50"
+    }
+  },
+
+  "summary": {
+    "content_overview": "Pages 41-50 form the 'Valuation & Conclusions' section covering the Income Approach methodology, market rent analysis through comparable properties, rental revenue conclusions, operating expense analysis, and final NOI calculations",
+    "key_sections": [
+      "Approaches to Value (Page 41)",
+      "Income Approach & Direct Capitalization (Page 42)",
+      "Market Rent Survey Analysis (Pages 43-44)",
+      "Market Rent Conclusions by Unit Type (Page 45)",
+      "Section Divider (Page 46)",
+      "Rent Discussion & Revenue Analysis (Page 47)",
+      "Vacancy & Operating Expense Discussion (Page 48)",
+      "Operating History & Detailed Expense Analysis (Page 49)",
+      "Final Expense Conclusions & NOI (Page 50)"
+    ],
+    "total_fields_mapped": 42,
+    "total_tables": 15,
+    "total_narratives": 11
+  }
+}

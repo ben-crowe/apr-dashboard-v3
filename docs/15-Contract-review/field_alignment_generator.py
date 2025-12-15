@@ -9,7 +9,6 @@ import json
 from difflib import SequenceMatcher
 from collections import defaultdict
 from datetime import datetime
-from pathlib import Path
 
 # File paths
 REGISTRY_FILE = "/Users/bencrowe/Development/APR-Dashboard-v3/src/features/report-builder/schema/fieldRegistry.ts"
@@ -68,9 +67,13 @@ def find_best_match(registry_field, html_fields, used_matches):
     Find the best matching HTML field for a registry field
     Returns: (html_field, status, confidence_score)
     """
+    # Try exact string match first (case-sensitive)
+    if registry_field in html_fields and registry_field not in used_matches:
+        return registry_field, "✅ Exact", 1.0
+
     registry_norm = normalize_for_comparison(registry_field)
 
-    # Try exact match first (after normalization)
+    # Try normalized match (case-insensitive, separator-agnostic)
     for html_field in html_fields:
         if html_field in used_matches:
             continue
@@ -91,9 +94,9 @@ def find_best_match(registry_field, html_fields, used_matches):
             best_match = html_field
 
     # Categorize based on score
-    if best_score >= 0.75:
+    if best_score >= 0.80:
         return best_match, "✅ Close", best_score
-    elif best_score >= 0.50:
+    elif best_score >= 0.60:
         return best_match, "⚠️ Uncertain", best_score
     else:
         return None, "🔵 Extra", 0.0
@@ -101,15 +104,17 @@ def find_best_match(registry_field, html_fields, used_matches):
 
 def generate_notes(registry_field, html_field, status, score):
     """Generate helpful notes for the match"""
-    if status == "✅ Close":
+    if status == "✅ Exact":
+        return "Perfect match - already aligned"
+    elif status == "✅ Close":
         if score == 1.0:
-            return "Exact match (case/separator difference only)"
+            return "Exact match (case/separator difference only) - rename recommended"
         else:
-            return f"Strong match (similarity: {score:.2%}) - verify and rename"
+            return f"Strong match ({score:.2%}) - verify and rename"
     elif status == "⚠️ Uncertain":
-        return f"Possible match (similarity: {score:.2%}) - needs manual review"
+        return f"Uncertain match ({score:.2%}) - manual review required"
     elif status == "🔵 Extra":
-        return "Not found in HTML - may be obsolete or custom"
+        return "Not found in HTML - may be obsolete or custom field"
     elif status == "❌ Missing":
         return "Must be added to registry"
     return ""
@@ -156,14 +161,15 @@ def generate_report():
                 'score': 0.0
             })
 
-    # Sort by priority: Uncertain → Close → Extra → Missing
+    # Sort by priority: Uncertain → Close → Exact → Extra → Missing
     status_priority = {
         "⚠️ Uncertain": 1,
         "✅ Close": 2,
-        "🔵 Extra": 3,
-        "❌ Missing": 4
+        "✅ Exact": 3,
+        "🔵 Extra": 4,
+        "❌ Missing": 5
     }
-    alignments.sort(key=lambda x: (status_priority.get(x['status'], 5), x['registry']))
+    alignments.sort(key=lambda x: (status_priority.get(x['status'], 6), -x['score'], x['registry']))
 
     # Count by status
     status_counts = defaultdict(int)
@@ -180,10 +186,20 @@ def generate_report():
 
 - **Total Registry Fields:** {len(registry_fields)}
 - **Total HTML Source Fields:** {len(html_fields)}
-- **Close Matches:** {status_counts.get('✅ Close', 0)} (just need renaming)
-- **Uncertain Matches:** {status_counts.get('⚠️ Uncertain', 0)} (need review)
+- **Exact Matches:** {status_counts.get('✅ Exact', 0)} (already aligned perfectly)
+- **Close Matches:** {status_counts.get('✅ Close', 0)} (need renaming)
+- **Uncertain Matches:** {status_counts.get('⚠️ Uncertain', 0)} (need manual review)
 - **Extra in Registry:** {status_counts.get('🔵 Extra', 0)} (not in HTML)
 - **Missing from Registry:** {status_counts.get('❌ Missing', 0)} (in HTML, not in registry)
+
+## Coverage Analysis
+
+**Registry → HTML Match Rate:** {((status_counts.get('✅ Exact', 0) + status_counts.get('✅ Close', 0)) / len(registry_fields) * 100):.1f}%
+- Fields that align well: {status_counts.get('✅ Exact', 0) + status_counts.get('✅ Close', 0)} / {len(registry_fields)}
+- Potential obsolete fields: {status_counts.get('🔵 Extra', 0)} ({(status_counts.get('🔵 Extra', 0) / len(registry_fields) * 100):.1f}%)
+
+**HTML → Registry Coverage:** {((status_counts.get('✅ Exact', 0) + status_counts.get('✅ Close', 0)) / len(html_fields) * 100):.1f}%
+- Fields needing addition: {status_counts.get('❌ Missing', 0)} / {len(html_fields)} ({(status_counts.get('❌ Missing', 0) / len(html_fields) * 100):.1f}%)
 
 ## Field Alignment Table
 
@@ -201,7 +217,7 @@ def generate_report():
     # Uncertain matches
     uncertain = [a for a in alignments if a['status'] == "⚠️ Uncertain"]
     if uncertain:
-        report += "### High Priority - Uncertain Matches (Review First)\n\n"
+        report += f"### High Priority - Uncertain Matches ({len(uncertain)} fields)\n\n"
         report += "These matches need manual verification to confirm they are correct:\n\n"
         for a in uncertain:
             report += f"- `{a['registry']}` → `{a['html']}` (similarity: {a['score']:.2%})\n"
@@ -210,29 +226,77 @@ def generate_report():
     # Close matches
     close = [a for a in alignments if a['status'] == "✅ Close"]
     if close:
-        report += "### Medium Priority - Close Matches (Easy Renames)\n\n"
+        report += f"### Medium Priority - Close Matches ({len(close)} fields)\n\n"
         report += "These fields just need to be renamed in fieldRegistry.ts:\n\n"
         for a in close:
-            report += f"- Rename `{a['registry']}` → `{a['html']}`\n"
+            if a['registry'] != a['html']:  # Only show if names differ
+                report += f"- Rename `{a['registry']}` → `{a['html']}`\n"
         report += "\n"
+
+    # Exact matches
+    exact = [a for a in alignments if a['status'] == "✅ Exact"]
+    if exact:
+        report += f"### Already Aligned - Exact Matches ({len(exact)} fields)\n\n"
+        report += "These fields are perfectly aligned and need no changes:\n\n"
+        report += "```\n"
+        for i, a in enumerate(exact):
+            report += f"{a['registry']}"
+            if (i + 1) % 5 == 0:
+                report += "\n"
+            else:
+                report += ", " if i < len(exact) - 1 else ""
+        report += "\n```\n\n"
 
     # Extra fields
     extra = [a for a in alignments if a['status'] == "🔵 Extra"]
     if extra:
-        report += "### Low Priority - Extra Fields (Not in HTML)\n\n"
+        report += f"### Low Priority - Extra Fields ({len(extra)} fields)\n\n"
         report += "These registry fields are not found in the HTML source. Review if they are still needed:\n\n"
-        for a in extra:
+        for a in extra[:50]:  # Limit to first 50 to keep report manageable
             report += f"- `{a['registry']}` - Consider removing if obsolete\n"
+        if len(extra) > 50:
+            report += f"\n... and {len(extra) - 50} more (see table above for full list)\n"
         report += "\n"
 
     # Missing fields
     missing = [a for a in alignments if a['status'] == "❌ Missing"]
     if missing:
-        report += "### Required - Missing Fields (Must Add to Registry)\n\n"
+        report += f"### Required - Missing Fields ({len(missing)} fields)\n\n"
         report += "These HTML fields are not in the registry and must be added:\n\n"
-        for a in missing:
-            report += f"- Add `{a['html']}` to fieldRegistry.ts\n"
+        for a in missing[:50]:  # Limit to first 50
+            report += f"- `{a['html']}`\n"
+        if len(missing) > 50:
+            report += f"\n... and {len(missing) - 50} more (see table above for full list)\n"
         report += "\n"
+
+    # Next steps
+    report += """## Recommended Next Steps
+
+1. **Review Uncertain Matches** (High Priority)
+   - Manually verify the suggested mappings
+   - Update field names where appropriate
+   - Document any intentional differences
+
+2. **Rename Close Matches** (Medium Priority)
+   - Systematically rename registry fields to match HTML source
+   - Update all references in code
+   - Commit changes incrementally
+
+3. **Add Missing Fields** (Required)
+   - Add new field definitions to fieldRegistry.ts
+   - Follow existing patterns for field structure
+   - Include proper categories and data types
+
+4. **Review Extra Fields** (Low Priority)
+   - Identify which fields are truly obsolete
+   - Remove unused fields to reduce maintenance burden
+   - Document any custom fields that should remain
+
+5. **Test and Validate**
+   - Run full report generation after changes
+   - Verify all fields render correctly
+   - Check for any breaking changes
+"""
 
     # Write report
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
@@ -240,6 +304,7 @@ def generate_report():
 
     print(f"\n✓ Report generated: {OUTPUT_FILE}")
     print(f"\nSummary:")
+    print(f"  Exact matches: {status_counts.get('✅ Exact', 0)}")
     print(f"  Close matches: {status_counts.get('✅ Close', 0)}")
     print(f"  Uncertain matches: {status_counts.get('⚠️ Uncertain', 0)}")
     print(f"  Extra fields: {status_counts.get('🔵 Extra', 0)}")

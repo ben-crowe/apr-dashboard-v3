@@ -1,0 +1,3430 @@
+{
+  "_metadata": {
+    "date_generated": "2025-12-12",
+    "pages_analyzed": "1-79 (excluding page 2)",
+    "total_pages": 66,
+    "source_files": 8
+  },
+  "pages": [
+    {
+      "page_number": 21,
+      "section": "Introduction & Executive Summary",
+      "content_type": "Data table + Narrative",
+      "title": "Subject Property Inspection",
+      "fields": [
+        {
+          "fieldId": "inspection-appraiser-1",
+          "label": "Primary Appraiser Name",
+          "value": "Chris Choinocski, AAC, MRICS",
+          "type": "text",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "inspection-appraiser-2",
+          "label": "Secondary Inspector Name",
+          "value": "Paul Leblanc",
+          "type": "text",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "inspection-date-1",
+          "label": "Primary Inspection Date",
+          "value": "October 17, 2025",
+          "type": "date",
+          "source": "date-field"
+        },
+        {
+          "fieldId": "inspection-date-2",
+          "label": "Secondary Inspection Date",
+          "value": "October 17, 2025",
+          "type": "date",
+          "source": "date-field"
+        },
+        {
+          "fieldId": "inspection-extent",
+          "label": "Extent of Inspection",
+          "value": "Interior & Exterior",
+          "type": "select",
+          "options": [
+            "Interior & Exterior",
+            "Exterior Only",
+            "Interior Only"
+          ],
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "all-units-inspected",
+          "label": "All Units Inspected",
+          "value": "No",
+          "type": "boolean",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "inspection-role-1",
+          "label": "Primary Appraiser Role",
+          "value": "Primary Appraiser",
+          "type": "text",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "inspection-role-2",
+          "label": "Inspector Role",
+          "value": "Inspector",
+          "type": "text",
+          "source": "boilerplate"
+        }
+      ],
+      "subsection": "Personal Property & Business Intangible",
+      "subsection_fields": [
+        {
+          "fieldId": "personal-property-included",
+          "label": "Personal Property Included",
+          "value": "No",
+          "type": "boolean",
+          "narrative": "There is no personal property (FF&E) included in this valuation. There is not any business or intangible value included in the value conclusion reported here.",
+          "source": "boilerplate"
+        }
+      ]
+    },
+    {
+      "page_number": 22,
+      "section": "Property Analysis",
+      "content_type": "Narrative + Bullet Lists",
+      "title": "Location, Access, Transportation & Local Area",
+      "fields": [
+        {
+          "fieldId": "location-description",
+          "label": "Location Description",
+          "value": "North Battleford, Saskatchewan, in a centrally situated residential area near key commercial corridors and the downtown core.",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "access-description",
+          "label": "Property Access & Frontage",
+          "value": "The property fronts 109 Street with convenient connections to major arterials including 100th Street/Highway 4 (north-south route to downtown and Highway 16) and Territorial Drive (east-west loop connecting retail and services).",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "public-transit-description",
+          "label": "Public Transportation",
+          "value": "Local bus service operates on nearby corridors such as 100th Street and Territorial Drive, providing direct access to downtown, retail centres, and community facilities.",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "walk-transit-bike-scores",
+          "label": "Walk/Bike/Transit Scores",
+          "value": "Walk Score around 60, Transit Score near 35, and Bike Score around 55, reflecting car-optional access for daily needs.",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "local-area-description",
+          "label": "Local Area Description",
+          "value": "Mature urban district with a mix of single-family homes, small multi-unit buildings, and local businesses. Residents are close to grocery, cafes, and parks, with recreation and services clustered along 100th Street and Territorial Drive.",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "nearby-schools",
+          "label": "Nearby Schools",
+          "value": [
+            "Bready School (K-7, public)",
+            "Connaught School (K-7, public)",
+            "North Battleford Comprehensive High School (Grades 10-12, public)",
+            "John Paul II Collegiate (Grades 9-12, Catholic)",
+            "St. Mary School (K-7, Catholic)"
+          ],
+          "type": "array",
+          "arrayType": "text",
+          "source": "boilerplate"
+        }
+      ]
+    },
+    {
+      "page_number": 23,
+      "section": "Property Analysis",
+      "content_type": "Data Table + Narrative",
+      "title": "Site Details",
+      "fields": [
+        {
+          "fieldId": "site-intro-text",
+          "label": "Site Characteristics Introduction",
+          "value": "Consists of one parcel with total site area based on information from ICS.",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "property-address-full",
+          "label": "Property Address (Full)",
+          "value": "1101, 1121 109 St, North Battleford, Saskatchewan",
+          "type": "text",
+          "source": "user-input",
+          "maps_to": "street-address or client-address"
+        },
+        {
+          "fieldId": "legal-description",
+          "label": "Legal Description",
+          "value": "Plan - C4240, Block - 95; Lot - 17, 18, 19, 20",
+          "type": "text",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "site-area-sqft",
+          "label": "Economic Unit Site Size (SF)",
+          "value": 24400,
+          "type": "number",
+          "source": "user-input",
+          "maps_to": "site-total-area or site-area-sf"
+        },
+        {
+          "fieldId": "site-area-acres",
+          "label": "Economic Unit Site Size (Acres)",
+          "value": 0.56,
+          "type": "number",
+          "decimal_places": 2,
+          "source": "calculated",
+          "maps_to": "site-acreage"
+        },
+        {
+          "fieldId": "usable-site-size-sqft",
+          "label": "Usable Site Size (SF)",
+          "value": 24400,
+          "type": "number",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "total-land-area-sqft",
+          "label": "Total Land Area (SF)",
+          "value": 24400,
+          "type": "number",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "excess-surplus-land",
+          "label": "Excess/Surplus Land",
+          "value": "No",
+          "type": "boolean",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "corner-lot",
+          "label": "Corner Lot",
+          "value": "No",
+          "type": "boolean",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "site-topography",
+          "label": "Site Topography",
+          "value": "Level",
+          "type": "select",
+          "options": [
+            "Level",
+            "Sloped",
+            "Hillside",
+            "Irregular"
+          ],
+          "source": "user-input",
+          "maps_to": "topography"
+        },
+        {
+          "fieldId": "site-shape",
+          "label": "Site Shape",
+          "value": "Rectangular",
+          "type": "select",
+          "options": [
+            "Rectangular",
+            "Square",
+            "Irregular",
+            "L-shaped",
+            "Triangular"
+          ],
+          "source": "user-input",
+          "maps_to": "site-shape"
+        },
+        {
+          "fieldId": "site-grade",
+          "label": "Site Grade",
+          "value": "At street grade",
+          "type": "text",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "site-quality",
+          "label": "Site Quality",
+          "value": "Average",
+          "type": "select",
+          "options": [
+            "Poor",
+            "Average",
+            "Good",
+            "Excellent"
+          ],
+          "source": "user-input"
+        },
+        {
+          "fieldId": "site-access-rating",
+          "label": "Site Access",
+          "value": "Average",
+          "type": "select",
+          "options": [
+            "Poor",
+            "Average",
+            "Good",
+            "Excellent"
+          ],
+          "source": "user-input"
+        },
+        {
+          "fieldId": "site-exposure",
+          "label": "Site Exposure",
+          "value": "Average",
+          "type": "select",
+          "options": [
+            "Poor",
+            "Average",
+            "Good",
+            "Excellent"
+          ],
+          "source": "user-input"
+        },
+        {
+          "fieldId": "site-utility",
+          "label": "Site Utility",
+          "value": "Average",
+          "type": "select",
+          "options": [
+            "Poor",
+            "Average",
+            "Good",
+            "Excellent"
+          ],
+          "source": "user-input"
+        },
+        {
+          "fieldId": "municipal-services",
+          "label": "Municipal Services",
+          "value": "Full Municipal Services",
+          "type": "text",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "adjacent-north",
+          "label": "Adjacent Property - North",
+          "value": "Residential",
+          "type": "text",
+          "source": "user-input",
+          "maps_to": "adjacent-north"
+        },
+        {
+          "fieldId": "adjacent-south",
+          "label": "Adjacent Property - South",
+          "value": "Residential",
+          "type": "text",
+          "source": "user-input",
+          "maps_to": "adjacent-south"
+        },
+        {
+          "fieldId": "adjacent-east",
+          "label": "Adjacent Property - East",
+          "value": "Residential",
+          "type": "text",
+          "source": "user-input",
+          "maps_to": "adjacent-east"
+        },
+        {
+          "fieldId": "adjacent-west",
+          "label": "Adjacent Property - West",
+          "value": "Residential",
+          "type": "text",
+          "source": "user-input",
+          "maps_to": "adjacent-west"
+        },
+        {
+          "fieldId": "site-accessibility-note",
+          "label": "Site Accessibility Summary",
+          "value": "Access to the subject site is considered average overall.",
+          "type": "textarea",
+          "source": "boilerplate"
+        }
+      ]
+    },
+    {
+      "page_number": 24,
+      "section": "Property Analysis",
+      "content_type": "Data Tables + Narrative",
+      "title": "Access & Frontage / Traffic Analysis",
+      "fields": [
+        {
+          "fieldId": "frontage-description",
+          "label": "Frontage & Site Access Description",
+          "value": "Property fronts on 109 Street with access to major arterials",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "traffic-count-data",
+          "label": "Traffic Count Data",
+          "value": "Available from local transportation authorities",
+          "type": "text",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "visibility-rating",
+          "label": "Visibility Rating",
+          "value": "Average",
+          "type": "select",
+          "options": [
+            "Poor",
+            "Average",
+            "Good",
+            "Excellent"
+          ],
+          "source": "user-input",
+          "maps_to": "exposure-visibility"
+        }
+      ]
+    },
+    {
+      "page_number": 25,
+      "section": "Property Analysis",
+      "content_type": "Narrative",
+      "title": "Continued Analysis Section",
+      "fields": [
+        {
+          "fieldId": "page-25-continuation",
+          "label": "Analysis Continuation",
+          "value": "Continued property analysis and market assessment",
+          "type": "textarea",
+          "source": "boilerplate"
+        }
+      ]
+    },
+    {
+      "page_number": 26,
+      "section": "Property Analysis",
+      "content_type": "Site Plan Diagram",
+      "title": "Site Plans - Lot 17",
+      "fields": [
+        {
+          "fieldId": "site-plan-lot-17-image",
+          "label": "Site Plan Lot 17",
+          "description": "Property diagram showing subject property (highlighted in red) with boundary lines, adjacent lot numbers, and dimensions",
+          "type": "image",
+          "alt_text": "Site plan showing Lot 17 with property boundaries and dimensions",
+          "source": "image-asset",
+          "maps_to": "img-site-plan-1"
+        },
+        {
+          "fieldId": "lot-17-dimensions",
+          "label": "Lot 17 Dimensions",
+          "value": "36.56 ft x 36.57 ft x 15.31 ft x 103.51 ft",
+          "type": "text",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "lot-17-adjacent-lots",
+          "label": "Adjacent Lot Numbers",
+          "value": [
+            "131454817",
+            "131454828",
+            "131454839",
+            "131454840",
+            "131454851"
+          ],
+          "type": "array",
+          "arrayType": "text",
+          "source": "boilerplate"
+        }
+      ]
+    },
+    {
+      "page_number": 27,
+      "section": "Property Analysis",
+      "content_type": "Site Plan Diagram",
+      "title": "Site Plans - Lot 18",
+      "fields": [
+        {
+          "fieldId": "site-plan-lot-18-image",
+          "label": "Site Plan Lot 18",
+          "description": "Property site plan showing Lot 18 with cadastral references, property boundaries, and subject property outlined in red",
+          "type": "image",
+          "alt_text": "Site plan showing Lot 18 with cadastral boundaries",
+          "source": "image-asset",
+          "maps_to": "img-site-plan-2"
+        },
+        {
+          "fieldId": "lot-18-dimensions",
+          "label": "Lot 18 Dimensions",
+          "value": "36.57m \u00d7 19.51m",
+          "type": "text",
+          "source": "boilerplate"
+        }
+      ]
+    },
+    {
+      "page_number": 28,
+      "section": "Property Analysis",
+      "content_type": "Data Tables + Narrative",
+      "title": "Improvements Analysis",
+      "fields": [
+        {
+          "fieldId": "improvements-summary",
+          "label": "Building Improvements Summary",
+          "value": "Property contains improvements as detailed in following sections",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "building-description",
+          "label": "Building Description",
+          "value": "Multi-unit residential apartment building",
+          "type": "text",
+          "source": "user-input",
+          "maps_to": "building-style"
+        }
+      ]
+    },
+    {
+      "page_number": 29,
+      "section": "Property Analysis",
+      "content_type": "Narrative + Data Table",
+      "title": "Land Use & Zoning",
+      "fields": [
+        {
+          "fieldId": "zoning-classification",
+          "label": "Zoning Classification",
+          "value": "Residential Multi-Family",
+          "type": "text",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "zoning-description",
+          "label": "Zoning Description & Permitted Uses",
+          "value": "Zoning allows for multi-family residential development with supporting commercial and institutional uses as secondary uses",
+          "type": "textarea",
+          "source": "boilerplate"
+        },
+        {
+          "fieldId": "land-use-conformity",
+          "label": "Current Use Conforms to Zoning",
+          "value": "Yes",
+          "type": "boolean",
+          "source": "user-input"
+        },
+        {
+          "fieldId": "highest-best-use",
+          "label": "Highest and Best Use",
+          "value": "Continued residential multi-family use as improved",
+          "type": "text",
+          "source": "boilerplate"
+        }
+      ]
+    },
+    {
+      "page_number": 30,
+      "section": "Property Analysis",
+      "content_type": "Zoning Map",
+      "title": "Zoning Map",
+      "fields": [
+        {
+          "fieldId": "zoning-map-image",
+          "label": "Zoning Map",
+          "description": "Zoning/cadastral map of North Battleford showing property parcels with zoning designations (R2, R3, R1, IS, C2) and marked areas of interest",
+          "type": "image",
+          "alt_text": "Zoning map showing property location and surrounding zoning districts",
+          "source": "image-asset",
+          "maps_to": "img-zoning-map"
+        },
+        {
+          "fieldId": "zoning-districts",
+          "label": "Surrounding Zoning Districts",
+          "value": [
+            "R1",
+            "R2",
+            "R3",
+            "C2",
+            "IS"
+          ],
+          "type": "array",
+          "arrayType": "text",
+          "source": "boilerplate"
+        }
+      ]
+    },
+    {
+      "page_number": 31,
+      "title": "Property Analysis - Description of Improvements",
+      "section": "improvements",
+      "page_type": "Property Overview",
+      "fields": [
+        {
+          "field_id": "property-location",
+          "value": "1101, 1121 109 St, North Battleford, SK",
+          "type": "text",
+          "source": "hardcoded"
+        },
+        {
+          "field_id": "property-type-description",
+          "value": "multi-family, walkup property",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "total-buildings",
+          "value": "2",
+          "type": "number",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "total-nra",
+          "value": "10,204",
+          "type": "number",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "year-built",
+          "value": "1970",
+          "type": "number",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "year-built-weighted",
+          "value": "1970",
+          "type": "number",
+          "source": "calculated"
+        },
+        {
+          "field_id": "occupancy-rate",
+          "value": "100.0%",
+          "type": "percentage",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "total-units",
+          "value": "16",
+          "type": "number",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "stories",
+          "value": "2",
+          "type": "number",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "building-style",
+          "value": "garden style",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "actual-age",
+          "value": "55",
+          "type": "number",
+          "source": "calculated"
+        },
+        {
+          "field_id": "effective-age",
+          "value": "35",
+          "type": "number",
+          "source": "template"
+        },
+        {
+          "field_id": "economic-life",
+          "value": "75",
+          "type": "number",
+          "source": "template"
+        },
+        {
+          "field_id": "remaining-useful-life",
+          "value": "40",
+          "type": "number",
+          "source": "calculated"
+        },
+        {
+          "field_id": "building-quality",
+          "value": "Average",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "building-condition",
+          "value": "Average",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "building-appeal",
+          "value": "Average",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "land-to-building-ratio",
+          "value": "2.39:1",
+          "type": "text",
+          "source": "calculated"
+        },
+        {
+          "field_id": "site-coverage-ratio",
+          "value": "12.86%",
+          "type": "percentage",
+          "source": "calculated"
+        },
+        {
+          "field_id": "total-parking-spaces",
+          "value": "18",
+          "type": "number",
+          "source": "template"
+        },
+        {
+          "field_id": "parking-ratio-per-unit",
+          "value": "1.1",
+          "type": "decimal",
+          "source": "calculated"
+        }
+      ]
+    },
+    {
+      "page_number": 32,
+      "title": "Property Analysis - Unit Breakdown",
+      "section": "improvements",
+      "page_type": "Unit Mix Analysis",
+      "fields": [
+        {
+          "field_id": "unit-type-1-description",
+          "value": "Flat 1 Bed / 1 Bath",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "unit-type-1-detail",
+          "value": "One Bed/Core Bath",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "unit-type-1-count",
+          "value": "4",
+          "type": "number",
+          "source": "template"
+        },
+        {
+          "field_id": "unit-type-1-percent",
+          "value": "25%",
+          "type": "percentage",
+          "source": "calculated"
+        },
+        {
+          "field_id": "unit-type-1-size",
+          "value": "550",
+          "type": "number",
+          "source": "template"
+        },
+        {
+          "field_id": "unit-type-1-nra",
+          "value": "2,200",
+          "type": "number",
+          "source": "template"
+        },
+        {
+          "field_id": "unit-type-2-description",
+          "value": "Flat 2 Bed / 1 Bath",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "unit-type-2-detail",
+          "value": "Two Bed/Core Bath",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "unit-type-2-count",
+          "value": "12",
+          "type": "number",
+          "source": "template"
+        },
+        {
+          "field_id": "unit-type-2-percent",
+          "value": "75%",
+          "type": "percentage",
+          "source": "calculated"
+        },
+        {
+          "field_id": "unit-type-2-size",
+          "value": "667",
+          "type": "number",
+          "source": "template"
+        },
+        {
+          "field_id": "unit-type-2-nra",
+          "value": "8,004",
+          "type": "number",
+          "source": "template"
+        },
+        {
+          "field_id": "total-units-avg-size",
+          "value": "638",
+          "type": "number",
+          "source": "calculated"
+        },
+        {
+          "field_id": "total-nra-sum",
+          "value": "10,204",
+          "type": "number",
+          "source": "calculated"
+        }
+      ]
+    },
+    {
+      "page_number": 33,
+      "title": "Property Analysis - Building Description",
+      "section": "improvements",
+      "page_type": "Component Description",
+      "fields": [
+        {
+          "field_id": "project-amenities",
+          "value": "Guest Parking",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "unit-amenities",
+          "value": "Deck/Patio, Range/Stove, Refrigerator",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "laundry",
+          "value": "On Site",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "security",
+          "value": "Deadbolts, Exterior Lighting, Secured Entry",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "foundation",
+          "value": "Concrete footings and walls",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "exterior-walls",
+          "value": "1121 - Brick, 1101 Stucco/Wood frame",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "roof",
+          "value": "Flat built up membrane",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "elevator",
+          "value": "None",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "hvac",
+          "value": "1101 - 8 Furnaces, 1121 - Boilers with baseboard radiant heat",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "insulation",
+          "value": "Fiberglass",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "lighting",
+          "value": "Various",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "electrical",
+          "value": "Individually metered",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "interior-walls",
+          "value": "Painted drywall",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "doors-windows",
+          "value": "Wood interior & metal exterior doors/Vinyl or metal frame double pane glazing",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "ceilings",
+          "value": "Textured drywall",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "plumbing",
+          "value": "Standard",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "floor-covering",
+          "value": "Combination of carpet, tile, vinyl tile and laminate hard wood",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "fire-protection",
+          "value": "None",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "interior-finish-buildout",
+          "value": "Standard rental finishes",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "site-improvements",
+          "value": "Gravel parking, sidewalks, and curbs",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "landscaping-description",
+          "value": "Landscaping around the building perimeter to consist of shrubs and trees. The landscaping as proposed is well established and well maintained.",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "parking-description",
+          "value": "The subject provides 18 parking spaces and is therefore conforming to zoning requirements. The parking ratio of 1.1 per unit is within the typical range of 0.75-1.25 spaces per unit within zoning requirements.",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "site-coverage-description",
+          "value": "12.9% (3,138 SF footprint / 24,400 SF site), which is within market standards (20-35%) for similar walkup buildings in the area.",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "functional-design",
+          "value": "The building features a functional 'Walkup design with typical site coverage and adequate off-street parking.",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "hazardous-materials-text",
+          "value": "A Phase I report was not provided. This appraisal assumes that the improvements are constructed free of all hazardous waste and toxic substances.",
+          "type": "textarea",
+          "source": "template"
+        }
+      ]
+    },
+    {
+      "page_number": 34,
+      "title": "Property Analysis - Continuation",
+      "section": "improvements",
+      "page_type": "Boilerplate Text",
+      "fields": [
+        {
+          "field_id": "hazardous-materials-continuation",
+          "value": "materials, including (but not limited to) unseen asbestos and mold.",
+          "type": "textarea",
+          "source": "template",
+          "note": "Continuation of assumptions and limiting conditions regarding hidden materials"
+        }
+      ]
+    },
+    {
+      "page_number": 35,
+      "title": "Market Context - Economic Overviews",
+      "section": "market",
+      "page_type": "National Economic Analysis",
+      "fields": [
+        {
+          "field_id": "market-context-title",
+          "value": "Market Context",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "economic-overviews-subtitle",
+          "value": "Economic Overviews",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "national-economic-narrative",
+          "value": "Canada's economy in 2025 finds itself in a delicate balance...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "canada-population-2025",
+          "value": "41.8 million",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "canada-population-growth-rate",
+          "value": "1.0-1.8%",
+          "type": "percentage",
+          "source": "template"
+        },
+        {
+          "field_id": "canada-unemployment-rate",
+          "value": "6.1%",
+          "type": "percentage",
+          "source": "template"
+        },
+        {
+          "field_id": "canada-gdp-quarterly",
+          "value": "Q4 2.2-3 trillion",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "canada-real-gdp-growth",
+          "value": "1.8%",
+          "type": "percentage",
+          "source": "template"
+        },
+        {
+          "field_id": "canada-inflation-rate",
+          "value": "2.1%",
+          "type": "percentage",
+          "source": "template"
+        },
+        {
+          "field_id": "canada-housing-starts-growth",
+          "value": "6%",
+          "type": "percentage",
+          "source": "template"
+        },
+        {
+          "field_id": "canada-wti-benchmark",
+          "value": "USD 70-80/bbl",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "canada-natural-gas-aeco",
+          "value": "CAD 2-3$/GJ",
+          "type": "text",
+          "source": "template"
+        }
+      ]
+    },
+    {
+      "page_number": 36,
+      "title": "Market Context - Provincial",
+      "section": "market",
+      "page_type": "Provincial Economic Analysis",
+      "fields": [
+        {
+          "field_id": "provincial-economic-narrative",
+          "value": "Saskatchewan's economy in 2025 is defined by steady growth...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-population-2025",
+          "value": "1,230,596",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-population-growth",
+          "value": "1.3%",
+          "type": "percentage",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-unemployment-rate",
+          "value": "5.6%",
+          "type": "percentage",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-gdp-per-capita",
+          "value": "69k",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-gfcf-growth",
+          "value": "7.2%",
+          "type": "percentage",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-housing-starts",
+          "value": "5.8 per 1.3k",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-average-rents",
+          "value": "C$ 2,300",
+          "type": "currency",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-average-home-prices",
+          "value": "CAD 345K YoY",
+          "type": "currency",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-retail-inflation",
+          "value": "2%",
+          "type": "percentage",
+          "source": "template"
+        }
+      ]
+    },
+    {
+      "page_number": 37,
+      "title": "Market Context - Multi-Family Market Overview",
+      "section": "market",
+      "page_type": "Multifamily Market Analysis",
+      "fields": [
+        {
+          "field_id": "market-context-title",
+          "value": "Market Context",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "multifamily-overview-subtitle",
+          "value": "Multi-Family Market Overview",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "location-heading",
+          "value": "Saskatchewan",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "market-overview-narrative",
+          "value": "Saskatchewan's rental markets entered 2025 with improving balance...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-vacancy-rate",
+          "value": "3.0%",
+          "type": "percentage",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-avg-rent-2bed-2bath",
+          "value": "$851",
+          "type": "currency",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-avg-rent-1bed",
+          "value": "$1,168",
+          "type": "currency",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-avg-rent-3bed",
+          "value": "$1,398",
+          "type": "currency",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-rental-rate-growth",
+          "value": "+2.5% YoY",
+          "type": "percentage",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-new-supply",
+          "value": "+1,200 units YoY",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "saskatchewan-supply-growth-ratio",
+          "value": "+3.8% YoY",
+          "type": "percentage",
+          "source": "template"
+        }
+      ]
+    },
+    {
+      "page_number": 38,
+      "title": "Valuation & Conclusions - Highest & Best Use",
+      "section": "valuation",
+      "page_type": "Valuation Methodology",
+      "fields": [
+        {
+          "field_id": "valuation-title",
+          "value": "Valuation & Conclusions",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "hbu-title",
+          "value": "Highest & Best Use",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "hbu-introduction",
+          "value": "The highest and best use of a property is defined as...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "hbu-analysis-steps",
+          "value": "Four-step analysis process",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "hbu-as-vacant-intro",
+          "value": "In this section the highest and best use of the subject as though vacant...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "hbu-legally-permissible",
+          "value": "Private restrictions, zoning, building codes...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "property-zoning",
+          "value": "Low Density Residential District (R2)",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "zoning-change-likely",
+          "value": "false",
+          "type": "boolean",
+          "source": "template"
+        },
+        {
+          "field_id": "hbu-physically-possible",
+          "value": "An evaluation of what is physically possible...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "site-total-area-acres",
+          "value": "0.5601",
+          "type": "decimal",
+          "source": "template"
+        },
+        {
+          "field_id": "site-total-area-sf",
+          "value": "24,400",
+          "type": "number",
+          "source": "template"
+        },
+        {
+          "field_id": "site-shape",
+          "value": "rectangular",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "topography",
+          "value": "level",
+          "type": "text",
+          "source": "fieldRegistry"
+        },
+        {
+          "field_id": "hbu-financial-feasibility",
+          "value": "Based on the analysis of the subject's market...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "hbu-maximum-productivity",
+          "value": "There is only one use that creates value...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "hbu-as-vacant-conclusion",
+          "value": "multifamily use",
+          "type": "text",
+          "source": "template"
+        }
+      ]
+    },
+    {
+      "page_number": 39,
+      "title": "Valuation & Conclusions - As Improved Analysis",
+      "section": "valuation",
+      "page_type": "Highest & Best Use - As Improved",
+      "fields": [
+        {
+          "field_id": "valuation-title",
+          "value": "Valuation & Conclusions",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "as-improved-title",
+          "value": "As Improved Analysis",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "as-improved-legal-factors",
+          "value": "The legal factors influencing the highest and best use...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "improvements-legal-conforming-status",
+          "value": "legal, conforming use",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "property-alternative-treatments",
+          "value": "Five possible alternative treatments: redevelopment/demolition, expansion, renovation, conversion, continued use as-is",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "hbu-as-improved-conclusion",
+          "value": "continuation of the multifamily use",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "most-probable-buyer-title",
+          "value": "Most Probable Buyer",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "most-probable-buyer-description",
+          "value": "local or regional investor",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "buyer-type-basis",
+          "value": "Based on the type of property and the income generating potential of the improvements",
+          "type": "textarea",
+          "source": "template"
+        }
+      ]
+    },
+    {
+      "page_number": 40,
+      "title": "Valuation & Conclusions - Valuation Methodology",
+      "section": "valuation",
+      "page_type": "Three Approaches to Valuation",
+      "fields": [
+        {
+          "field_id": "valuation-title",
+          "value": "Valuation & Conclusions",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "valuation-methodology-title",
+          "value": "Valuation Methodology",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "valuation-methodology-intro",
+          "value": "In traditional valuation theory, the three approaches to estimating the value of an asset are the cost approach, sales comparison approach, and income capitalization approach...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "land-valuation-subtitle",
+          "value": "Land Valuation",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "land-valuation-conclusion",
+          "value": "Characteristics specific to the subject property do not warrant that a site value is developed.",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "cost-approach-subtitle",
+          "value": "Cost Approach",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "cost-approach-explanation",
+          "value": "The cost approach considers the cost to replace the proposed improvements, less accrued depreciation, plus the market value of the land...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "cost-approach-applicability",
+          "value": "limited applicability",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "cost-approach-conclusion",
+          "value": "Cost Approach has not been undertaken",
+          "type": "text",
+          "source": "template"
+        },
+        {
+          "field_id": "cost-approach-reasoning",
+          "value": "Investors typically do not place emphasis on replacement cost in establishing value for investment properties.",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "sales-comparison-subtitle",
+          "value": "Sales Comparison Approach",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "sales-comparison-explanation",
+          "value": "The sales comparison approach estimates value based on what other purchasers and sellers in the market have agreed to as price for comparable properties...",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "sales-comparison-use",
+          "value": "We have undertaken the Direct Comparison Approach as part of this assignment.",
+          "type": "textarea",
+          "source": "template"
+        },
+        {
+          "field_id": "income-capitalization-subtitle",
+          "value": "Income Capitalization Approach",
+          "type": "text",
+          "source": "static"
+        },
+        {
+          "field_id": "income-capitalization-explanation",
+          "value": "The income capitalization approach (\"income approach\") simulates the reasoning of an investor who views the cash flows that would result from the anticipated revenue and expense of a property throughout its lifetime...",
+          "type": "textarea",
+          "source": "template"
+        }
+      ]
+    },
+    {
+      "page_number": 41,
+      "title": "Valuation & Conclusions",
+      "section": "correlation-conclusion",
+      "fields": [
+        {
+          "fieldId": "approaches-to-value-table",
+          "content": "Table showing three valuation approaches (Cost, Income, Sales) and their applicability to the subject property",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "cost-approach-applicable",
+              "value": "Not Applicable"
+            },
+            {
+              "field": "income-approach-applicable",
+              "value": "Applicable"
+            },
+            {
+              "field": "sales-approach-applicable",
+              "value": "Applicable"
+            }
+          ]
+        },
+        {
+          "fieldId": "valuation-intro-text",
+          "content": "Introduction to Income Approach methodology and direct capitalization method justification",
+          "type": "paragraph"
+        }
+      ]
+    },
+    {
+      "page_number": 42,
+      "title": "Valuation & Conclusions",
+      "section": "income-approach-rent-analysis",
+      "fields": [
+        {
+          "fieldId": "income-approach-overview",
+          "content": "Overview of Income Approach based on income-producing potential and market participant expectations",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "direct-capitalization-method",
+          "content": "Explanation of Direct Capitalization Method steps for estimating rental income, vacancies, and expenses",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "multifamily-revenue-analysis-intro",
+          "content": "Introduction to multi-family unit mix and rental rate analysis section",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "subject-rent-roll-table",
+          "content": "Table summarizing subject in-place unit mix and rental rates by unit type",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "rent-roll-unit-type-1bed",
+              "label": "Flat 1 Bed / 1 Bath",
+              "units": 4,
+              "rent_per_month": "$585",
+              "occupancy_percent": "100%"
+            },
+            {
+              "field": "rent-roll-unit-type-2bed",
+              "label": "Flat 2 Bed / 1 Bath",
+              "units": 12,
+              "rent_per_month": "$650",
+              "occupancy_percent": "75%"
+            }
+          ]
+        },
+        {
+          "fieldId": "rent-roll-notes",
+          "content": "Notes on lease terms, security deposits, and utility inclusions for subject property",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "market-rent-survey-intro",
+          "content": "Introduction to comparable property market rent analysis",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "unit-of-comparison",
+          "content": "Definition of unit of comparison methodology ($/SF/month and $/unit/month)",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "comparable-selection-criteria",
+          "content": "Criteria for selecting comparable properties based on location, tenancy, age, exposure, quality, condition",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "concessions-conclusion",
+          "content": "Statement that landlords are not offering concessions",
+          "type": "paragraph"
+        }
+      ]
+    },
+    {
+      "page_number": 43,
+      "title": "Valuation & Conclusions",
+      "section": "market-survey-analysis",
+      "fields": [
+        {
+          "fieldId": "survey-presentation-intro",
+          "content": "Introduction to comparable property survey analysis and presentation format",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "survey-comparison-table",
+          "content": "Detailed comparison table of subject and six comparable properties with addresses and unit descriptions",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "subject-property-address",
+              "value": "1101, 1121 109 St, North Battleford, Saskatchewan"
+            },
+            {
+              "field": "comparable-1-address",
+              "value": "2624 B-84th Ave, North Battleford"
+            },
+            {
+              "field": "comparable-2-address",
+              "value": "521 G-81 St, Prince Albert"
+            },
+            {
+              "field": "comparable-3-address",
+              "value": "2306-2 Ave W, Prince Albert"
+            },
+            {
+              "field": "comparable-4-address",
+              "value": "3050 Ulm St, Prince Albert"
+            },
+            {
+              "field": "comparable-5-address",
+              "value": "399 24 St W, Prince Albert"
+            }
+          ]
+        },
+        {
+          "fieldId": "rent-survey-information-table",
+          "content": "Table comparing rent per unit, rent per SF, amenities, utilities included, parking, and laundry across subject and comparables",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "subject-rent-per-unit",
+              "value": "$1,216"
+            },
+            {
+              "field": "subject-rent-per-sf",
+              "value": "$1.39"
+            },
+            {
+              "field": "subject-unit-amenities",
+              "value": "Partial Kitchen, Electric Baseboard Heating"
+            }
+          ]
+        },
+        {
+          "fieldId": "building-information-table",
+          "content": "Detailed building characteristics table including unit SF, quality, condition, occupancy, amenities, and security features",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "subject-avg-unit-sf",
+              "value": "886"
+            },
+            {
+              "field": "subject-quality-rating",
+              "value": "Average"
+            },
+            {
+              "field": "subject-condition-rating",
+              "value": "Average"
+            },
+            {
+              "field": "subject-project-amenities",
+              "value": "Guest Parking"
+            },
+            {
+              "field": "subject-security-features",
+              "value": "Deadbolt Locks, Intercom or Video Entry"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "page_number": 44,
+      "title": "Valuation & Conclusions",
+      "section": "location-map-comparables",
+      "fields": [
+        {
+          "fieldId": "location-map-placeholder",
+          "content": "Saskatchewan location map showing subject property and comparable properties with distance labels",
+          "type": "map-placeholder",
+          "map_details": "Regional map with subject marker at North Battleford and comparable markers 1-4, 6 in surrounding Prince Albert region"
+        },
+        {
+          "fieldId": "comparable-distance-table",
+          "content": "Table listing comparable properties with labels and distance in kilometres from subject",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "comparable-1-distance",
+              "distance_km": 177.9,
+              "label": "1"
+            },
+            {
+              "field": "comparable-2-distance",
+              "distance_km": 177.1,
+              "label": "2"
+            },
+            {
+              "field": "comparable-3-distance",
+              "distance_km": 175.4,
+              "label": "3"
+            },
+            {
+              "field": "comparable-4-distance",
+              "distance_km": 177.9,
+              "label": "4"
+            },
+            {
+              "field": "comparable-5-distance",
+              "distance_km": 174.9,
+              "label": "5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "page_number": 45,
+      "title": "Valuation & Conclusions",
+      "section": "market-rent-conclusions",
+      "fields": [
+        {
+          "fieldId": "market-rent-conclusion-intro",
+          "content": "Introduction to market rent analysis and conclusions by unit type",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "one-bed-units-analysis-table",
+          "content": "Detailed analysis table for 1-bedroom units showing comp averages, rents, and market conclusions",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "one-bed-unit-size",
+              "value": "650 SF"
+            },
+            {
+              "field": "one-bed-high-rent",
+              "value": "$1,287"
+            },
+            {
+              "field": "one-bed-average-rent",
+              "value": "$1,287"
+            },
+            {
+              "field": "one-bed-median-rent",
+              "value": "$1,240"
+            },
+            {
+              "field": "one-bed-low-rent",
+              "value": "$1,110"
+            },
+            {
+              "field": "one-bed-rent-per-sf-high",
+              "value": "$1.98"
+            }
+          ]
+        },
+        {
+          "fieldId": "one-bed-unit-conclusion-table",
+          "content": "Unit type analysis and conclusion table for 1-bedroom units",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "one-bed-concluded-rent",
+              "value": "$895"
+            },
+            {
+              "field": "one-bed-concluded-rent-per-sf",
+              "value": "$1.63"
+            }
+          ]
+        },
+        {
+          "fieldId": "two-bed-units-analysis-table",
+          "content": "Detailed analysis table for 2-bedroom units showing comp averages, rents, and market conclusions",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "two-bed-unit-size",
+              "value": "750 SF"
+            },
+            {
+              "field": "two-bed-high-rent",
+              "value": "$1,673"
+            },
+            {
+              "field": "two-bed-average-rent",
+              "value": "$1,486"
+            },
+            {
+              "field": "two-bed-median-rent",
+              "value": "$1,453"
+            },
+            {
+              "field": "two-bed-low-rent",
+              "value": "$1,210"
+            }
+          ]
+        },
+        {
+          "fieldId": "two-bed-unit-conclusion-table",
+          "content": "Unit type analysis and conclusion table for 2-bedroom units",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "two-bed-concluded-rent",
+              "value": "$1,056"
+            },
+            {
+              "field": "two-bed-concluded-rent-per-sf",
+              "value": "$1.58"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "page_number": 46,
+      "title": "Valuation & Conclusions",
+      "section": "section-divider",
+      "fields": [
+        {
+          "fieldId": "section-divider-page",
+          "content": "Mostly blank divider page with decorative banner for section transition",
+          "type": "divider",
+          "notes": "This page serves as a visual break between market analysis and income projections"
+        }
+      ]
+    },
+    {
+      "page_number": 47,
+      "title": "Valuation & Conclusions",
+      "section": "rent-discussion-revenue",
+      "fields": [
+        {
+          "fieldId": "unit-rent-discussion",
+          "content": "Discussion of subject property rental rates compared to market rent survey results",
+          "type": "paragraph",
+          "key_points": {
+            "subject_description": "16-unit building of average quality with heat/water included, surface parking, on-site laundry",
+            "comparable_1bed_range": "$1,110\u2013$1,575/month ($1.71\u2013$2.42/SF)",
+            "subject_market_1bed": "$1,050/month ($1.62/SF)"
+          }
+        },
+        {
+          "fieldId": "contract-vs-market-rent-section",
+          "content": "Analysis of subject contract rent versus concluded market rent",
+          "type": "paragraph",
+          "key_finding": "Subject average contract rent is 99.5% of market rents"
+        },
+        {
+          "fieldId": "contract-vs-market-table",
+          "content": "Table comparing contract rent vs market rent by unit type",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "one-bed-contract-rent",
+              "value": "$885"
+            },
+            {
+              "field": "one-bed-market-rent",
+              "value": "$900"
+            },
+            {
+              "field": "one-bed-contract-vs-market",
+              "percent": "89.4%"
+            },
+            {
+              "field": "two-bed-contract-rent",
+              "value": "$1,015"
+            },
+            {
+              "field": "two-bed-market-rent",
+              "value": "$1,050"
+            },
+            {
+              "field": "two-bed-contract-vs-market",
+              "percent": "96.5%"
+            },
+            {
+              "field": "total-average-contract-vs-market",
+              "percent": "99.5%"
+            }
+          ]
+        },
+        {
+          "fieldId": "total-rental-revenue-section",
+          "content": "Summary of total rental revenue and unit mix",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "rental-revenue-table",
+          "content": "Table showing unit mix, contract rent, market rent, and annual revenue",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "one-bed-units-count",
+              "value": 4
+            },
+            {
+              "field": "one-bed-market-rent-annual",
+              "value": "$43,200"
+            },
+            {
+              "field": "two-bed-units-count",
+              "value": 12
+            },
+            {
+              "field": "two-bed-market-rent-annual",
+              "value": "$152,840"
+            },
+            {
+              "field": "total-rental-revenue",
+              "value": "$196,840"
+            }
+          ]
+        },
+        {
+          "fieldId": "other-revenue-conclusions-table",
+          "content": "Table showing miscellaneous revenue (parking, laundry)",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "parking-income",
+              "value": "$6,000"
+            },
+            {
+              "field": "laundry-income",
+              "value": "$2,400"
+            },
+            {
+              "field": "total-other-revenue",
+              "value": "$8,400"
+            }
+          ]
+        },
+        {
+          "fieldId": "potential-gross-revenue-section",
+          "content": "Summary of PGR calculation methodology",
+          "type": "paragraph",
+          "key_finding": "Total PGR of $204,240"
+        }
+      ]
+    },
+    {
+      "page_number": 48,
+      "title": "Valuation & Conclusions",
+      "section": "vacancy-egr-operating-expenses",
+      "fields": [
+        {
+          "fieldId": "vacancy-allowance-discussion",
+          "content": "Explanation of vacancy allowance methodology and market benchmarks (2-5% typical)",
+          "type": "paragraph",
+          "key_conclusion": "Vacancy allowance of 3.8% is concluded"
+        },
+        {
+          "fieldId": "vacancy-loss-table",
+          "content": "Table showing total vacancy and credit loss calculations",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "vacancy-percent",
+              "value": "3.8%"
+            },
+            {
+              "field": "vacancy-loss-amount",
+              "value": "($7,895)"
+            },
+            {
+              "field": "vacancy-loss-per-unit",
+              "value": "($490)"
+            }
+          ]
+        },
+        {
+          "fieldId": "effective-gross-revenue-section",
+          "content": "Definition and calculation of EGR (PGR minus vacancy)",
+          "type": "paragraph",
+          "key_finding": "Total EGR of $196,406 ($12,275/Unit, $19.25/SF)"
+        },
+        {
+          "fieldId": "operating-expenses-discussion",
+          "content": "Overview of operating expense analysis methodology and reclassification process",
+          "type": "paragraph"
+        }
+      ]
+    },
+    {
+      "page_number": 49,
+      "title": "Valuation & Conclusions",
+      "section": "operating-history-noi",
+      "fields": [
+        {
+          "fieldId": "operating-history-table",
+          "content": "Comprehensive operating history table showing YTD 2025 actual and DCAP projections",
+          "type": "table",
+          "data_elements": [
+            {
+              "field": "total-rental-revenue-ytd",
+              "value": "$195,060"
+            },
+            {
+              "field": "total-rental-revenue-projected",
+              "value": "$195,840"
+            },
+            {
+              "field": "potential-gross-revenue-ytd",
+              "value": "$203,460"
+            },
+            {
+              "field": "potential-gross-revenue-projected",
+              "value": "$204,240"
+            },
+            {
+              "field": "vacancy-loss-ytd",
+              "value": "($8,135)"
+            },
+            {
+              "field": "vacancy-loss-projected",
+              "value": "($7,895)"
+            },
+            {
+              "field": "effective-gross-revenue-ytd",
+              "value": "$195,322"
+            },
+            {
+              "field": "effective-gross-revenue-projected",
+              "value": "$196,406"
+            }
+          ]
+        },
+        {
+          "fieldId": "operating-expenses-breakdown-table",
+          "content": "Detailed operating expenses by category (taxes, insurance, maintenance, payroll, utilities, management, other)",
+          "type": "table",
+          "expense_categories": [
+            {
+              "field": "taxes-projected",
+              "value": "($19,688)"
+            },
+            {
+              "field": "insurance-projected",
+              "value": "($11,360)"
+            },
+            {
+              "field": "repairs-maintenance-projected",
+              "value": "($13,380)"
+            },
+            {
+              "field": "payroll-projected",
+              "value": "($8,000)"
+            },
+            {
+              "field": "utilities-projected",
+              "value": "($21,040)"
+            },
+            {
+              "field": "management-fees-projected",
+              "value": "($8,347)"
+            },
+            {
+              "field": "other-expenses-projected",
+              "value": "($3,409)"
+            },
+            {
+              "field": "total-operating-expenses-projected",
+              "value": "($84,635)"
+            }
+          ]
+        },
+        {
+          "fieldId": "net-operating-income-ytd",
+          "content": "Net Operating Income (NOI) calculation",
+          "type": "paragraph",
+          "key_values": {
+            "noi-ytd": "$110,812",
+            "noi-projected": "$111,771",
+            "noi-per-unit-projected": "$6,986",
+            "noi-per-sf-projected": "57%"
+          }
+        }
+      ]
+    },
+    {
+      "page_number": 50,
+      "title": "Valuation & Conclusions",
+      "section": "expense-conclusions-noi",
+      "fields": [
+        {
+          "fieldId": "expense-conclusions-header",
+          "content": "Introduction to individual expense conclusions for the subject",
+          "type": "paragraph"
+        },
+        {
+          "fieldId": "operating-expenses-detail-table",
+          "content": "Detailed table of operating expense conclusions with %EGR, $/SF NRA, $/Unit, and total amounts",
+          "type": "table",
+          "expense_details": [
+            {
+              "field": "taxes-conclusion",
+              "percent_egr": "18.4%",
+              "per_sf_nra": "$3.16",
+              "per_unit": "$420",
+              "total": "$13,682"
+            },
+            {
+              "field": "insurance-conclusion",
+              "percent_egr": "5.8%",
+              "per_sf_nra": "$1.11",
+              "per_unit": "$176",
+              "total": "$11,306"
+            },
+            {
+              "field": "repairs-maintenance-conclusion",
+              "percent_egr": "8.0%",
+              "per_sf_nra": "$1.36",
+              "per_unit": "$640",
+              "total": "$17,260"
+            },
+            {
+              "field": "supplies-conclusion",
+              "percent_egr": "2.6%",
+              "per_sf_nra": "$0.73",
+              "per_unit": "$450",
+              "total": "$8,360"
+            },
+            {
+              "field": "utilities-conclusion",
+              "percent_egr": "12.7%",
+              "per_sf_nra": "$2.56",
+              "per_unit": "$1,315",
+              "total": "$21,060"
+            },
+            {
+              "field": "management-fees-conclusion",
+              "percent_egr": "4.3%",
+              "per_sf_nra": "$0.82",
+              "per_unit": "$622",
+              "total": "$8,347"
+            },
+            {
+              "field": "other-expenses-conclusion",
+              "percent_egr": "2.0%",
+              "per_sf_nra": "$0.38",
+              "per_unit": "$245",
+              "total": "$3,925"
+            },
+            {
+              "field": "total-operating-expenses-conclusion",
+              "percent_egr": "43.1%",
+              "per_sf_nra": "$8.29",
+              "per_unit": "$5,290",
+              "total": "$84,635"
+            }
+          ]
+        },
+        {
+          "fieldId": "net-operating-income-conclusion",
+          "content": "Final NOI conclusion with total, per-unit, and per-SF metrics",
+          "type": "paragraph",
+          "key_findings": {
+            "total-noi": "$111,771",
+            "noi-per-unit": "$6,986",
+            "noi-per-sf": "$10.95"
+          }
+        }
+      ]
+    },
+    {
+      "section": "Comparable Properties Analysis",
+      "subsection": "Woodland Estates (Comparable 1)",
+      "type": "property_detail"
+    },
+    {
+      "section": "Comparable Properties Analysis",
+      "subsection": "Parkside Flats 1 (Comparable 4)",
+      "type": "property_detail"
+    },
+    {
+      "section": "Comparable Properties Analysis",
+      "subsection": "Parkside Flats 2 (Comparable 1 variant)",
+      "type": "property_detail"
+    },
+    {
+      "section": "Comparative Tables",
+      "subsection": "Direct Comparison Data Matrix",
+      "type": "data_table"
+    },
+    {
+      "section": "Analysis Section",
+      "subsection": "Sales Comparison Approach Analysis",
+      "type": "narrative_analysis"
+    },
+    {
+      "section": "Valuation Conclusion",
+      "subsection": "Direct Comparison Approach Conclusion",
+      "type": "valuation_conclusion"
+    },
+    {
+      "section": "Reconciliation",
+      "subsection": "Reconciliation of Value Discussion",
+      "type": "narrative_analysis"
+    },
+    {
+      "section": "Final Conclusion",
+      "subsection": "Reconciliation of Values & Final Value Conclusion",
+      "type": "valuation_summary"
+    },
+    {
+      "section": "Certification",
+      "subsection": "Appraiser Certification",
+      "type": "certification"
+    },
+    {
+      "title": "Appendices - Contingent & Limiting Conditions",
+      "section": "appendices",
+      "subsection": "limiting-conditions",
+      "page_type": "content",
+      "content_type": "legal-boilerplate"
+    },
+    {
+      "title": "Appendices - Contingent & Limiting Conditions (continued)",
+      "section": "appendices",
+      "subsection": "limiting-conditions",
+      "page_type": "content",
+      "content_type": "legal-boilerplate"
+    },
+    {
+      "title": "Appendices - Contingent & Limiting Conditions (continued)",
+      "section": "appendices",
+      "subsection": "limiting-conditions",
+      "page_type": "content",
+      "content_type": "legal-boilerplate"
+    },
+    {
+      "title": "Appendices - Definition of Terms",
+      "section": "appendices",
+      "subsection": "glossary",
+      "page_type": "content",
+      "content_type": "glossary"
+    },
+    {
+      "title": "Appendices - Definition of Terms (continued)",
+      "section": "appendices",
+      "subsection": "glossary",
+      "page_type": "content",
+      "content_type": "glossary"
+    },
+    {
+      "title": "Appendices - Definition of Terms (continued)",
+      "section": "appendices",
+      "subsection": "glossary",
+      "page_type": "content",
+      "content_type": "glossary"
+    },
+    {
+      "title": "Appendices - Definition of Terms (continued)",
+      "section": "appendices",
+      "subsection": "glossary",
+      "page_type": "content",
+      "content_type": "glossary"
+    },
+    {
+      "title": "Appendices - Qualifications of the Appraiser",
+      "section": "appendices",
+      "subsection": "appraiser-qualifications",
+      "page_type": "content",
+      "content_type": "appraiser-profile"
+    },
+    {
+      "title": "Back Cover",
+      "section": "back-matter",
+      "subsection": "back-cover",
+      "page_type": "cover",
+      "content_type": "company-info"
+    },
+    {
+      "pageNumber": 1,
+      "title": "Cover Page - Appraisal Report",
+      "elements": [
+        {
+          "selector": ".heading",
+          "fieldId": "report-title",
+          "currentValue": "Appraisal Report",
+          "description": "Main report heading - static text"
+        },
+        {
+          "selector": ".property-type",
+          "fieldId": "property-type",
+          "currentValue": "Multi-Family Walkup Property",
+          "description": "Property type descriptor"
+        },
+        {
+          "selector": ".property-address:nth-of-type(2)",
+          "fieldId": "property-name",
+          "currentValue": "North Battleford Apartments",
+          "description": "Property name/title"
+        },
+        {
+          "selector": ".property-address:nth-of-type(3)",
+          "fieldId": "property-address-line1",
+          "currentValue": "1101, 1121 109 St",
+          "description": "Street address of property"
+        },
+        {
+          "selector": ".property-city",
+          "fieldId": "property-address-line2",
+          "currentValue": "North Battleford, Saskatchewan",
+          "description": "City, province of property (calculated from city + province)"
+        },
+        {
+          "selector": ".info-content-name:nth-of-type(1)",
+          "fieldId": "client-name",
+          "currentValue": "Kenneth Engler",
+          "description": "Client contact person name"
+        },
+        {
+          "selector": ".prepared-for .info-content",
+          "fieldId": "client-address-full",
+          "currentValue": "10210984S Saskatchewan Ltd.\n1901, 1088 - 6th Ave SW\nCalgary, AB T2P 5N3",
+          "description": "Full client address with company and street"
+        },
+        {
+          "selector": ".info-content-name:nth-of-type(2)",
+          "fieldId": "appraiser-company",
+          "currentValue": "Valta Property Valuations Ltd.",
+          "description": "Appraisal company name"
+        },
+        {
+          "selector": ".prepared-by .info-content",
+          "fieldId": "appraiser-address",
+          "currentValue": "300, 4838 Richard Road SW\nCalgary, AB T3E 6L1\nOffice: 587-801-5151\nwww.valta.ca",
+          "description": "Appraiser company full address and contact"
+        },
+        {
+          "selector": ".date-line:nth-of-type(1)",
+          "fieldId": "valuation-date",
+          "currentValue": "October 17, 2025",
+          "description": "Effective date of valuation"
+        },
+        {
+          "selector": ".date-line:nth-of-type(2)",
+          "fieldId": "report-date",
+          "currentValue": "November 20, 2025",
+          "description": "Date report was completed"
+        },
+        {
+          "selector": ".file-number",
+          "fieldId": "file-number",
+          "currentValue": "VAL251012 - 1",
+          "description": "Valcre file number/reference"
+        }
+      ]
+    },
+    {
+      "pageNumber": 2,
+      "title": "Letter of Transmittal",
+      "elements": [
+        {
+          "selector": ".date",
+          "fieldId": "report-date",
+          "currentValue": "November 20, 2025",
+          "description": "Date of report letter"
+        },
+        {
+          "selector": ".recipient",
+          "fieldId": "client-address-full",
+          "currentValue": "1021098645 Saskatchewan Ltd.\n1901, 1088 - 6th Ave SW,\nCalgary, AB T2P 5N3",
+          "description": "Client/recipient address"
+        },
+        {
+          "selector": ".attention",
+          "fieldId": "client-name",
+          "currentValue": "Kenneth Engler",
+          "description": "Recipient attention line (client contact name)"
+        },
+        {
+          "selector": ".header-info p:nth-of-type(1)",
+          "fieldId": "appraiser-company",
+          "currentValue": "Valta Property Valuations Ltd.",
+          "description": "Appraiser company name in letter"
+        },
+        {
+          "selector": ".header-info p:nth-of-type(2)",
+          "fieldId": "appraiser-address",
+          "currentValue": "# 300-6858 Richard Road SW",
+          "description": "Appraiser address line 1"
+        },
+        {
+          "selector": "p.first",
+          "fieldId": "assignment-purpose-text",
+          "currentValue": "As Stabilized (Fee Simple Estate) current market value for the property located at 1101, 1121 109 St, North Battleford, SK.",
+          "description": "Purpose of assignment / scenario type"
+        },
+        {
+          "selector": ".letter-body p:nth-of-type(2)",
+          "fieldId": "scope-of-work",
+          "currentValue": "Valta Property Valuations Ltd. is proud to present the appraisal report that satisfies the agreed upon scope of work with 1021098645 Saskatchewan Ltd. The purpose of this assignment is to provide the As Stabilized current market value of the subject property, which at the time of inspection represents the improved property as of the effective date and is leased up at market rental rates and operating costs for the property located at 1101, 1121 109 St, North Battleford, SK (herein after referred to as the subject property).",
+          "description": "Scope of work and assignment purpose narrative"
+        },
+        {
+          "selector": ".letter-body p:nth-of-type(3)",
+          "fieldId": "property-description",
+          "currentValue": "The subject property, located at 1101, 1121 109 St, North Battleford, SK, is a multi-family, walkup property with improvements located in North Battleford. The improvements are comprised of 2 total buildings, and consist of 19,204 square feet of rentable area (NRA) as of the valuation date. The property, reportedly built in 1970 (1970 weighted) is approximately 100.0% occupied and features 16 units in a 2-story, garden style format.",
+          "description": "Executive summary property description with key metrics"
+        },
+        {
+          "selector": ".market-value-table tr:nth-child(2) td:nth-child(1)",
+          "fieldId": "value-scenario-type",
+          "currentValue": "As Stabilized",
+          "description": "Valuation scenario presented"
+        },
+        {
+          "selector": ".market-value-table tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "interest-appraised",
+          "currentValue": "Fee Simple Estate",
+          "description": "Type of interest appraised"
+        },
+        {
+          "selector": ".market-value-table tr:nth-child(2) td:nth-child(3)",
+          "fieldId": "exposure-time-conclusion",
+          "currentValue": "Six Months",
+          "description": "Reasonable exposure time estimate"
+        },
+        {
+          "selector": ".market-value-table tr:nth-child(2) td:nth-child(4)",
+          "fieldId": "valuation-date",
+          "currentValue": "October 17, 2025",
+          "description": "Effective date of valuation in table"
+        },
+        {
+          "selector": ".market-value-table tr:nth-child(2) td:nth-child(5)",
+          "fieldId": "concluded-value",
+          "currentValue": "$1,800,000",
+          "description": "Final concluded market value"
+        },
+        {
+          "selector": ".hypothesis-text",
+          "fieldId": "hypothetical-conditions-text",
+          "currentValue": "The use of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed in part based on the hypothetical condition that all units could achieve current market rent levels and has achieved stabilized occupancy as of the effective date of the appraisal. Under this premise, no additional rental income concessions (such as free rent, move-in specials, or the like) are provided. In reality, as of the effective date, the property's existing lease terms reflect contract rents that are deemed to be below-market rents. For the purposes of this analysis, it is assumed that lease-up to market rent levels has occurred under typical market conditions, without undue delay or concessions exceeding market norms. If this assumption proves incorrect, such as market rents are not achievable the value conclusion may be materially impacted.",
+          "description": "Hypothetical conditions explanation"
+        },
+        {
+          "selector": ".extraordinary-text",
+          "fieldId": "extraordinary-assumptions-text",
+          "currentValue": "No Extraordinary Assumptions were made for this assignment.",
+          "description": "Extraordinary assumptions statement"
+        }
+      ]
+    },
+    {
+      "pageNumber": 3,
+      "title": "Extraordinary Limiting Conditions",
+      "elements": [
+        {
+          "selector": "h1",
+          "fieldId": "section-title",
+          "currentValue": "Extraordinary Limiting Conditions",
+          "description": "Page section title"
+        },
+        {
+          "selector": ".intro-line",
+          "fieldId": "extraordinary-limiting-conditions",
+          "currentValue": "No Extraordinary Limiting Conditions were made for this assignment.",
+          "description": "Statement of extraordinary limiting conditions"
+        },
+        {
+          "selector": ".company-info p:nth-of-type(1)",
+          "fieldId": "appraiser-company",
+          "currentValue": "Valta Property Valuations Ltd.",
+          "description": "Appraiser company name"
+        },
+        {
+          "selector": ".signatory-name",
+          "fieldId": "appraiser-signatory-name",
+          "currentValue": "Chris Chornohos, AACI, MRICS",
+          "description": "Name of appraiser signing report"
+        },
+        {
+          "selector": ".signatory-title",
+          "fieldId": "appraiser-signatory-title",
+          "currentValue": "Founder",
+          "description": "Title of appraiser"
+        },
+        {
+          "selector": ".signatory-email",
+          "fieldId": "appraiser-email",
+          "currentValue": "chris.chornohos@valta.ca",
+          "description": "Appraiser contact email"
+        },
+        {
+          "selector": ".signatory-aic",
+          "fieldId": "appraiser-aic-number",
+          "currentValue": "902097",
+          "description": "AIC certification number"
+        }
+      ]
+    },
+    {
+      "pageNumber": 4,
+      "title": "Table of Contents",
+      "elements": [
+        {
+          "selector": ".sidebar-title",
+          "fieldId": "section-title",
+          "currentValue": "Table of Contents",
+          "description": "Page title - static"
+        },
+        {
+          "selector": ".toc-item:nth-of-type(1) .toc-item-text",
+          "fieldId": "toc-section-1",
+          "currentValue": "Property Overview",
+          "description": "TOC entry - Property Overview"
+        },
+        {
+          "selector": ".toc-item:nth-of-type(2) .toc-item-text",
+          "fieldId": "toc-section-2",
+          "currentValue": "Photographs",
+          "description": "TOC entry - Photographs"
+        }
+      ]
+    },
+    {
+      "pageNumber": 5,
+      "title": "Introduction & Executive Summary (Property Identification)",
+      "elements": [
+        {
+          "selector": ".page-title",
+          "fieldId": "section-title",
+          "currentValue": "Introduction & Executive Summary",
+          "description": "Page section title"
+        },
+        {
+          "selector": ".section-title:nth-of-type(1)",
+          "fieldId": "subsection-title",
+          "currentValue": "Property Overview",
+          "description": "Subsection title"
+        },
+        {
+          "selector": ".section-header:nth-of-type(1)",
+          "fieldId": "table-section-header",
+          "currentValue": "PROPERTY IDENTIFICATION",
+          "description": "Property Identification table header"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "property-name",
+          "currentValue": "North Battleford Apartments",
+          "description": "Property name in identification table"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "property-type",
+          "currentValue": "Multi-Family - Walkup",
+          "description": "Property type in table"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "property-address-line1",
+          "currentValue": "1101, 1121 109 St.",
+          "description": "Property address line 1"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(4) td:nth-child(2)",
+          "fieldId": "property-address-line2",
+          "currentValue": "North Battleford, Saskatchewan 59A 2E5",
+          "description": "City, province, postal code"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(5) td:nth-child(1)",
+          "fieldId": "market-submarket-label",
+          "currentValue": "Market / Submarket",
+          "description": "Table label for market info"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(5) td:nth-child(2)",
+          "fieldId": "market-name",
+          "currentValue": "North Battleford / North Battleford",
+          "description": "Market and submarket name"
+        },
+        {
+          "selector": "table:nth-of-type(1) tr:nth-child(6) td:nth-child(2)",
+          "fieldId": "geocode",
+          "currentValue": "52.7736945, -108.30161\u00b0",
+          "description": "Geographic coordinates of property"
+        },
+        {
+          "selector": ".section-header:nth-of-type(2)",
+          "fieldId": "table-section-header",
+          "currentValue": "SITE DESCRIPTION",
+          "description": "Site Description table header"
+        },
+        {
+          "selector": "table:nth-of-type(2) tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "legal-description",
+          "currentValue": "Plan - C4240 Block - 55 Lot - 17,18, 19, 20",
+          "description": "Legal land description"
+        },
+        {
+          "selector": "table:nth-of-type(2) tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "site-area-sf",
+          "currentValue": "24,600",
+          "description": "Usable site area in square feet"
+        },
+        {
+          "selector": "table:nth-of-type(2) tr:nth-child(4) td:nth-child(2)",
+          "fieldId": "site-area-sf",
+          "currentValue": "24,600",
+          "description": "Total site area in square feet"
+        },
+        {
+          "selector": "table:nth-of-type(2) tr:nth-child(5) td:nth-child(2)",
+          "fieldId": "zoning-district",
+          "currentValue": "Low Density Residential District (R2)",
+          "description": "Zoning classification and code"
+        },
+        {
+          "selector": "table:nth-of-type(2) tr:nth-child(6) td:nth-child(2)",
+          "fieldId": "site-shape",
+          "currentValue": "Rectangular",
+          "description": "Site shape description"
+        },
+        {
+          "selector": "table:nth-of-type(2) tr:nth-child(7) td:nth-child(2)",
+          "fieldId": "topography",
+          "currentValue": "Level at street grade",
+          "description": "Site topography"
+        },
+        {
+          "selector": ".section-header:nth-of-type(3)",
+          "fieldId": "table-section-header",
+          "currentValue": "IMPROVEMENT DESCRIPTION",
+          "description": "Improvement Description table header"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "tenancy-type",
+          "currentValue": "Multi-Tenant; Occupied By Three Party Tenants - 18 Units",
+          "description": "Tenancy type and current units occupied"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "nra-sqft",
+          "currentValue": "10,204",
+          "description": "Net Rentable Area in square feet"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "building-nra-sqft",
+          "currentValue": "10,204",
+          "description": "Gross Building Area (matches NRA)"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(4) td:nth-child(2)",
+          "fieldId": "unit-count",
+          "currentValue": "18",
+          "description": "Total number of rental units"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(5) td:nth-child(2)",
+          "fieldId": "density-units-per-acre",
+          "currentValue": "29",
+          "description": "Units per acre density"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(6) td:nth-child(2)",
+          "fieldId": "building-count",
+          "currentValue": "2",
+          "description": "Total number of buildings"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(7) td:nth-child(2)",
+          "fieldId": "story-count",
+          "currentValue": "2",
+          "description": "Number of stories"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(8) td:nth-child(2)",
+          "fieldId": "year-built",
+          "currentValue": "1970; (1970 wtg/sec)",
+          "description": "Year built with weighted average"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(9) td:nth-child(2)",
+          "fieldId": "actual-age",
+          "currentValue": "55 Years",
+          "description": "Actual age of property"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(10) td:nth-child(2)",
+          "fieldId": "effective-age",
+          "currentValue": "35 Years",
+          "description": "Effective age of property"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(11) td:nth-child(2)",
+          "fieldId": "economic-life",
+          "currentValue": "75 Years",
+          "description": "Total economic life of property"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(12) td:nth-child(2)",
+          "fieldId": "remaining-useful-life",
+          "currentValue": "20 Years",
+          "description": "Remaining useful life"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(13) td:nth-child(2)",
+          "fieldId": "parking-ratio",
+          "currentValue": "1.1 / Unit",
+          "description": "Parking spaces per unit"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(14) td:nth-child(2)",
+          "fieldId": "project-amenities",
+          "currentValue": "Guest Parking",
+          "description": "Project-level amenities"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(15) td:nth-child(2)",
+          "fieldId": "laundry",
+          "currentValue": "On Site",
+          "description": "Laundry facilities location"
+        },
+        {
+          "selector": "table:nth-of-type(3) tr:nth-child(16) td:nth-child(2)",
+          "fieldId": "security-features",
+          "currentValue": "Deadbolts, Exterior Lighting, Secured Entry",
+          "description": "Security features list"
+        },
+        {
+          "selector": ".section-header:nth-of-type(4)",
+          "fieldId": "table-section-header",
+          "currentValue": "QUALITATIVE ANALYSIS",
+          "description": "Qualitative Analysis table header"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "site-quality-rating",
+          "currentValue": "Average",
+          "description": "Site quality rating"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "site-access-rating",
+          "currentValue": "Average",
+          "description": "Site access rating"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "site-exposure-rating",
+          "currentValue": "Average",
+          "description": "Site exposure rating"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(4) td:nth-child(2)",
+          "fieldId": "site-utility-rating",
+          "currentValue": "Average",
+          "description": "Site utility rating"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(5) td:nth-child(2)",
+          "fieldId": "building-quality-rating",
+          "currentValue": "Average",
+          "description": "Building quality rating"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(6) td:nth-child(2)",
+          "fieldId": "building-condition-rating",
+          "currentValue": "Average",
+          "description": "Building condition rating"
+        },
+        {
+          "selector": "table:nth-of-type(4) tr:nth-child(7) td:nth-child(2)",
+          "fieldId": "building-appeal-rating",
+          "currentValue": "Average",
+          "description": "Building appeal/aesthetic rating"
+        },
+        {
+          "selector": ".footer-left",
+          "fieldId": "page-footer",
+          "currentValue": "1   1101, 1121 109 St. North Battleford, Saskatchewan | File VAL251012 - 1",
+          "description": "Page footer with address and file number"
+        }
+      ]
+    },
+    {
+      "pageNumber": 6,
+      "title": "Introduction & Executive Summary (HBU, Exposure Time, Investment Indicators, Value Conclusion)",
+      "elements": [
+        {
+          "selector": ".page-title",
+          "fieldId": "section-title",
+          "currentValue": "Introduction & Executive Summary",
+          "description": "Page section title"
+        },
+        {
+          "selector": "table.hbu-table tr:nth-child(1) td:nth-child(1)",
+          "fieldId": "hbu-label-construction",
+          "currentValue": "Proposed Construction",
+          "description": "HBU - Proposed construction label"
+        },
+        {
+          "selector": "table.hbu-table tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "hbu-proposed-construction",
+          "currentValue": "No",
+          "description": "Whether proposed construction exists"
+        },
+        {
+          "selector": "table.hbu-table tr:nth-child(2) td:nth-child(1)",
+          "fieldId": "hbu-label-vacant",
+          "currentValue": "As Though Vacant",
+          "description": "HBU as though vacant label"
+        },
+        {
+          "selector": "table.hbu-table tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "hbu-vacant-use",
+          "currentValue": "Multifamily",
+          "description": "Highest and best use if vacant"
+        },
+        {
+          "selector": "table.hbu-table tr:nth-child(3) td:nth-child(1)",
+          "fieldId": "hbu-label-improved",
+          "currentValue": "As Improved",
+          "description": "HBU as improved label"
+        },
+        {
+          "selector": "table.hbu-table tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "hbu-improved-use",
+          "currentValue": "Multifamily",
+          "description": "Highest and best use as improved"
+        },
+        {
+          "selector": "table.hbu-table:nth-of-type(2) tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "exposure-time-conclusion",
+          "currentValue": "Six Months",
+          "description": "Reasonable exposure time"
+        },
+        {
+          "selector": "table.hbu-table:nth-of-type(2) tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "marketing-time",
+          "currentValue": "Six Months",
+          "description": "Reasonable marketing time"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "current-occupancy-percent",
+          "currentValue": "109.00%",
+          "description": "Current occupancy percentage"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "stabilized-occupancy-percent",
+          "currentValue": "96.16%",
+          "description": "Stabilized occupancy percentage"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "multifamily-sf",
+          "currentValue": "10,204",
+          "description": "SF Multifamily rentable area"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(4) td:nth-child(2)",
+          "fieldId": "units-occupied-vacant",
+          "currentValue": "0",
+          "description": "Occupied/Vacant MF units indicator"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(5) td:nth-child(2)",
+          "fieldId": "current-rent-per-unit",
+          "currentValue": "$1,015",
+          "description": "Current rent per unit"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(6) td:nth-child(2)",
+          "fieldId": "concluded-rent-per-unit",
+          "currentValue": "$1,020",
+          "description": "Concluded market rent per unit"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(7) td:nth-child(2)",
+          "fieldId": "expense-ratio",
+          "currentValue": "",
+          "description": "Expense ratio (Expenses/EGI)"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(8) td:nth-child(2)",
+          "fieldId": "dscr-or-noi-per-unit",
+          "currentValue": "$6,980 unit",
+          "description": "DSCR or NOI per unit indicator"
+        },
+        {
+          "selector": "table.investment-table tr:nth-child(9) td:nth-child(2)",
+          "fieldId": "capitalization-rate",
+          "currentValue": "6.25%",
+          "description": "Concluded capitalization rate (OAR)"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(1) td:nth-child(1)",
+          "fieldId": "value-scenario-label",
+          "currentValue": "VALUATION SCENARIOS",
+          "description": "Valuation scenarios label"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(1) td:nth-child(2)",
+          "fieldId": "value-scenario-type",
+          "currentValue": "AS STABILIZED",
+          "description": "Value scenario type (As Stabilized)"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(2) td:nth-child(2)",
+          "fieldId": "interest-appraised",
+          "currentValue": "Fee Simple Estate",
+          "description": "Type of interest appraised"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(3) td:nth-child(2)",
+          "fieldId": "exposure-time-value-table",
+          "currentValue": "Six Months",
+          "description": "Exposure time in value conclusion table"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(4) td:nth-child(2)",
+          "fieldId": "valuation-date",
+          "currentValue": "October 17, 2025",
+          "description": "Effective date of valuation"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(5) td:nth-child(2)",
+          "fieldId": "cost-approach-status",
+          "currentValue": "Not Presented",
+          "description": "Cost approach inclusion status"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(6) td:nth-child(2)",
+          "fieldId": "direct-comparison-value",
+          "currentValue": "$1,800,000",
+          "description": "Value concluded via direct comparison approach"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(7) td:nth-child(2)",
+          "fieldId": "income-approach-value",
+          "currentValue": "$1,800,000",
+          "description": "Value concluded via income approach"
+        },
+        {
+          "selector": "table.value-conclusion tr:nth-child(8) td:nth-child(2)",
+          "fieldId": "concluded-value",
+          "currentValue": "$1,800,000",
+          "description": "Final value conclusion"
+        },
+        {
+          "selector": ".footer-left",
+          "fieldId": "page-footer",
+          "currentValue": "2   1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1",
+          "description": "Page footer"
+        }
+      ]
+    },
+    {
+      "pageNumber": 7,
+      "title": "Introduction & Executive Summary (Hypothetical Conditions and Assumptions)",
+      "elements": [
+        {
+          "selector": ".header h1",
+          "fieldId": "section-title",
+          "currentValue": "Introduction & Executive Summary",
+          "description": "Page section title"
+        },
+        {
+          "selector": ".section:nth-of-type(1) .section-title",
+          "fieldId": "subsection-title",
+          "currentValue": "Hypothetical Conditions",
+          "description": "Hypothetical conditions section heading"
+        },
+        {
+          "selector": ".section:nth-of-type(1) .section-content",
+          "fieldId": "hypothetical-conditions-text",
+          "currentValue": "The use of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed based on the hypothetical condition that the subject property is fully leased at prevailing market rents and has achieved stabilized occupancy as of the effective date of the appraisal. Under this premise, no deductions are made for holding costs, rent loss, or lease-up expenses. In addition it is a hypothetical condition that all units could achieve current market rent levels and stabilized occupancy as of the effective date. In reality, as of the effective date, the property's existing lease terms reflect contract rents that are deemed to be below-market rents. For purposes of this analysis, it is assumed that lease-up to market rent levels has occurred under typical market conditions, without undue delay or concessions exceeding market norms. If this assumption proves incorrect, such as market rents are not achievable the value conclusion may be materially impacted.",
+          "description": "Hypothetical conditions narrative"
+        },
+        {
+          "selector": ".section:nth-of-type(2) .section-title",
+          "fieldId": "subsection-title",
+          "currentValue": "Extraordinary Assumptions",
+          "description": "Extraordinary assumptions section heading"
+        },
+        {
+          "selector": ".section:nth-of-type(2) .section-content",
+          "fieldId": "extraordinary-assumptions-text",
+          "currentValue": "No Extraordinary Assumptions were made for this assignment.",
+          "description": "Extraordinary assumptions statement"
+        },
+        {
+          "selector": ".section:nth-of-type(3) .section-title",
+          "fieldId": "subsection-title",
+          "currentValue": "Extraordinary Limiting Conditions",
+          "description": "Extraordinary limiting conditions section heading"
+        },
+        {
+          "selector": ".section:nth-of-type(3) .section-content",
+          "fieldId": "extraordinary-limiting-conditions",
+          "currentValue": "No Extraordinary Limiting Conditions were made for this assignment.",
+          "description": "Extraordinary limiting conditions statement"
+        },
+        {
+          "selector": ".footer-left",
+          "fieldId": "page-footer",
+          "currentValue": "3   1101, 1121 109 St. North Battleford, Saskatchewan | File VAL251012 - 1",
+          "description": "Page footer"
+        }
+      ]
+    },
+    {
+      "pageNumber": 8,
+      "title": "Photographs (Page 1 of 2)",
+      "elements": [
+        {
+          "selector": ".page-header h1",
+          "fieldId": "section-title",
+          "currentValue": "Introduction & Executive Summary",
+          "description": "Page section title"
+        },
+        {
+          "selector": ".section-title",
+          "fieldId": "subsection-title",
+          "currentValue": "Photographs",
+          "description": "Photographs section heading"
+        },
+        {
+          "selector": ".photos-grid .photo-item:nth-child(1) .photo-caption",
+          "fieldId": "photo-1-caption",
+          "currentValue": "1101 - East Elevation",
+          "description": "Photo 1 caption"
+        },
+        {
+          "selector": ".photos-grid .photo-item:nth-child(2) .photo-caption",
+          "fieldId": "photo-2-caption",
+          "currentValue": "1101 - West Elevation",
+          "description": "Photo 2 caption"
+        },
+        {
+          "selector": ".photos-grid .photo-item:nth-child(3) .photo-caption",
+          "fieldId": "photo-3-caption",
+          "currentValue": "Street View Facing East - 11 Ave",
+          "description": "Photo 3 caption"
+        },
+        {
+          "selector": ".photos-grid .photo-item:nth-child(4) .photo-caption",
+          "fieldId": "photo-4-caption",
+          "currentValue": "Street View Facing North - 109 St",
+          "description": "Photo 4 caption"
+        },
+        {
+          "selector": ".photos-grid .photo-item:nth-child(5) .photo-caption",
+          "fieldId": "photo-5-caption",
+          "currentValue": "1101 - Typical Hallway",
+          "description": "Photo 5 caption"
+        },
+        {
+          "selector": ".photos-grid .photo-item:nth-child(6) .photo-caption",
+          "fieldId": "photo-6-caption",
+          "currentValue": "1101 - Typical Stairway",
+          "description": "Photo 6 caption"
+        },
+        {
+          "selector": ".footer-text",
+          "fieldId": "page-footer",
+          "currentValue": "4    1101, 1121 109 St. North Battleford, Saskatchewan | File VAL251012 - 1",
+          "description": "Page footer"
+        }
+      ]
+    },
+    {
+      "pageNumber": 9,
+      "title": "Photographs (Page 2 of 2)",
+      "elements": [
+        {
+          "selector": ".header h1",
+          "fieldId": "section-title",
+          "currentValue": "Introduction & Executive Summary",
+          "description": "Page section title"
+        },
+        {
+          "selector": ".photo-item:nth-child(1) .photo-label",
+          "fieldId": "photo-7-caption",
+          "currentValue": "1101 - Typical Bathroom",
+          "description": "Photo 7 caption"
+        },
+        {
+          "selector": ".photo-item:nth-child(2) .photo-label",
+          "fieldId": "photo-8-caption",
+          "currentValue": "1101 - Typical Bedroom 1",
+          "description": "Photo 8 caption"
+        },
+        {
+          "selector": ".photo-item:nth-child(3) .photo-label",
+          "fieldId": "photo-9-caption",
+          "currentValue": "1101 - Typical Bedroom 2",
+          "description": "Photo 9 caption"
+        },
+        {
+          "selector": ".photo-item:nth-child(4) .photo-label",
+          "fieldId": "photo-10-caption",
+          "currentValue": "1101 - Electrical Room",
+          "description": "Photo 10 caption"
+        },
+        {
+          "selector": ".photo-item:nth-child(5) .photo-label",
+          "fieldId": "photo-11-caption",
+          "currentValue": "1101 - Mechanical Room",
+          "description": "Photo 11 caption"
+        },
+        {
+          "selector": ".photo-item:nth-child(6) .photo-label",
+          "fieldId": "photo-12-caption",
+          "currentValue": "1101 - Typical Kitchen",
+          "description": "Photo 12 caption"
+        },
+        {
+          "selector": ".footer-left",
+          "fieldId": "page-footer",
+          "currentValue": "5    1101, 1121 109 St. North Battleford, Saskatchewan | File VAL251012 - 1",
+          "description": "Page footer"
+        }
+      ]
+    },
+    {
+      "pageNumber": 61,
+      "title": "Valuation & Conclusions - Comparable 1 (Woodland Estates)",
+      "contentType": "comparable_analysis",
+      "fieldIds": {
+        "page_header": "comparable-1-title",
+        "property_name": "comparable-1-property-name",
+        "comparable_label": "comparable-1-label",
+        "sale_info_buyer": "comparable-1-buyer",
+        "sale_info_seller": "comparable-1-seller",
+        "sale_info_date": "comparable-1-sale-date",
+        "sale_info_status": "comparable-1-transaction-status",
+        "sale_info_price": "comparable-1-sale-price",
+        "sale_info_price_per_unit": "comparable-1-price-per-unit",
+        "sale_info_analysis_price": "comparable-1-analysis-price",
+        "sale_info_analysis_price_per_unit": "comparable-1-analysis-price-per-unit",
+        "sale_info_financing": "comparable-1-financing",
+        "sale_info_conditions": "comparable-1-conditions-of-sale",
+        "income_occupancy": "comparable-1-occupancy",
+        "income_noi": "comparable-1-net-operating-income",
+        "income_noi_per_unit": "comparable-1-noi-per-unit",
+        "income_cap_rate": "comparable-1-cap-rate",
+        "property_address": "comparable-1-address",
+        "property_type": "comparable-1-property-type",
+        "property_rent_type": "comparable-1-rent-type",
+        "property_gba": "comparable-1-gross-building-area",
+        "property_nra": "comparable-1-net-rentable-area",
+        "property_units": "comparable-1-units",
+        "property_buildings": "comparable-1-buildings",
+        "property_year_built": "comparable-1-year-built",
+        "property_land_area": "comparable-1-land-area",
+        "property_corner": "comparable-1-corner",
+        "property_amenities": "comparable-1-project-amenities",
+        "property_security": "comparable-1-security-features",
+        "property_laundry": "comparable-1-laundry",
+        "property_unit_amenities": "comparable-1-unit-amenities",
+        "property_parking": "comparable-1-parking-type",
+        "property_utilities": "comparable-1-utilities",
+        "unit_mix_type": "comparable-1-unit-mix-type",
+        "unit_mix_units": "comparable-1-unit-mix-units",
+        "unit_mix_size": "comparable-1-unit-mix-avg-size",
+        "market_notes": "comparable-1-market-notes",
+        "building_photo_placeholder": "comparable-1-building-photo",
+        "location_map_placeholder": "comparable-1-location-map"
+      }
+    },
+    {
+      "pageNumber": 62,
+      "title": "Valuation & Conclusions - Comparable 4 (Parkside Flats 1)",
+      "contentType": "comparable_analysis",
+      "fieldIds": {
+        "page_header": "comparable-4-title",
+        "property_name": "comparable-4-property-name",
+        "comparable_label": "comparable-4-label",
+        "sale_info_buyer": "comparable-4-buyer",
+        "sale_info_seller": "comparable-4-seller",
+        "sale_info_date": "comparable-4-sale-date",
+        "sale_info_status": "comparable-4-transaction-status",
+        "sale_info_price": "comparable-4-sale-price",
+        "sale_info_price_per_unit": "comparable-4-price-per-unit",
+        "sale_info_analysis_price": "comparable-4-analysis-price",
+        "sale_info_analysis_price_per_unit": "comparable-4-analysis-price-per-unit",
+        "sale_info_recording_number": "comparable-4-recording-number",
+        "sale_info_rights": "comparable-4-rights-transferred",
+        "sale_info_financing": "comparable-4-financing",
+        "sale_info_arms_length": "comparable-4-arms-length",
+        "income_occupancy": "comparable-4-occupancy",
+        "income_expenses": "comparable-4-expenses",
+        "income_expenses_per_unit": "comparable-4-expenses-per-unit",
+        "income_noi": "comparable-4-net-operating-income",
+        "income_noi_per_unit": "comparable-4-noi-per-unit",
+        "income_cap_rate": "comparable-4-cap-rate",
+        "property_type": "comparable-4-property-type",
+        "property_rent_type": "comparable-4-rent-type",
+        "property_gba": "comparable-4-gross-building-area",
+        "property_nra": "comparable-4-net-rentable-area",
+        "property_units": "comparable-4-units",
+        "property_buildings": "comparable-4-buildings",
+        "property_year_built": "comparable-4-year-built",
+        "property_lot_size": "comparable-4-lot-size",
+        "property_land_area": "comparable-4-land-area",
+        "property_amenities": "comparable-4-project-amenities",
+        "property_security": "comparable-4-security-features",
+        "property_flooring": "comparable-4-flooring",
+        "property_laundry": "comparable-4-laundry",
+        "property_unit_amenities": "comparable-4-unit-amenities",
+        "property_parking": "comparable-4-parking-type",
+        "property_utilities": "comparable-4-utilities",
+        "unit_mix_bedroom_1": "comparable-4-unit-mix-1bed",
+        "unit_mix_bedroom_2": "comparable-4-unit-mix-2bed",
+        "remarks": "comparable-4-remarks",
+        "building_photo_placeholder": "comparable-4-building-photo",
+        "location_map_placeholder": "comparable-4-location-map"
+      }
+    },
+    {
+      "pageNumber": 63,
+      "title": "Valuation & Conclusions - Comparable 1 (Parkside Flats 2)",
+      "contentType": "comparable_analysis",
+      "fieldIds": {
+        "page_header": "comparable-1b-title",
+        "property_name": "comparable-1b-property-name",
+        "comparable_label": "comparable-1b-label",
+        "address": "comparable-1b-address",
+        "sale_info_buyer": "comparable-1b-buyer",
+        "sale_info_seller": "comparable-1b-seller",
+        "sale_info_date": "comparable-1b-sale-date",
+        "sale_info_status": "comparable-1b-transaction-status",
+        "sale_info_price": "comparable-1b-sale-price",
+        "sale_info_adjusted_price_per_unit": "comparable-1b-adjusted-price-per-unit",
+        "sale_info_analysis_price": "comparable-1b-analysis-price",
+        "sale_info_recording_number": "comparable-1b-recording-number",
+        "sale_info_rights": "comparable-1b-rights-transferred",
+        "sale_info_financing": "comparable-1b-financing",
+        "sale_info_arms_length": "comparable-1b-arms-length",
+        "income_occupancy": "comparable-1b-occupancy",
+        "income_expenses": "comparable-1b-expenses",
+        "income_noi": "comparable-1b-net-operating-income",
+        "income_noi_per_unit": "comparable-1b-noi-per-unit",
+        "income_cap_rate": "comparable-1b-cap-rate",
+        "property_type": "comparable-1b-property-type",
+        "property_rent_type": "comparable-1b-rent-type",
+        "property_gba": "comparable-1b-gross-building-area",
+        "property_nra": "comparable-1b-net-rentable-area",
+        "property_units": "comparable-1b-units",
+        "property_buildings": "comparable-1b-buildings",
+        "property_year_built": "comparable-1b-year-built",
+        "property_land_area": "comparable-1b-land-area",
+        "property_construction_type": "comparable-1b-construction-type",
+        "property_amenities": "comparable-1b-project-amenities",
+        "property_security": "comparable-1b-security-features",
+        "property_laundry": "comparable-1b-laundry",
+        "property_unit_amenities": "comparable-1b-unit-amenities",
+        "property_parking": "comparable-1b-parking-type",
+        "property_utilities": "comparable-1b-utilities",
+        "unit_mix_bedroom_1": "comparable-1b-unit-mix-1bed",
+        "unit_mix_units_1bed": "comparable-1b-unit-mix-1bed-count",
+        "unit_mix_bedroom_2": "comparable-1b-unit-mix-2bed",
+        "unit_mix_units_2bed": "comparable-1b-unit-mix-2bed-count",
+        "unit_mix_bedroom_3": "comparable-1b-unit-mix-3bed",
+        "unit_mix_units_3bed": "comparable-1b-unit-mix-3bed-count",
+        "remarks": "comparable-1b-remarks",
+        "analysis_text": "comparable-1b-analysis-text",
+        "building_photo_placeholder": "comparable-1b-building-photo",
+        "location_map_placeholder": "comparable-1b-location-map"
+      }
+    },
+    {
+      "pageNumber": 64,
+      "title": "Valuation & Conclusions - Direct Comparison Approach Table",
+      "contentType": "comparative_table",
+      "fieldIds": {
+        "page_header": "direct-comparison-title",
+        "table_section_1_title": "direct-comparison-addresses-title",
+        "table_section_2_title": "direct-comparison-sale-info-title",
+        "table_section_3_title": "direct-comparison-income-info-title",
+        "table_section_4_title": "direct-comparison-physical-info-title",
+        "table_section_5_title": "direct-comparison-unit-amenities-title",
+        "subject_address": "subject-address",
+        "comp_1_address": "comp-1-address",
+        "comp_2_address": "comp-2-address",
+        "comp_3_address": "comp-3-address",
+        "comp_4_address": "comp-4-address",
+        "comp_5_address": "comp-5-address",
+        "comp_6_address": "comp-6-address",
+        "subject_zone_market": "subject-zone-market",
+        "comp_zones": "comp-zones-array",
+        "subject_distance": "subject-distance",
+        "subject_province": "subject-province",
+        "transaction_prices": "transaction-prices-array",
+        "price_per_unit": "price-per-unit-array",
+        "dom_financing": "dom-financing-array",
+        "conditions": "conditions-array",
+        "concessions": "concessions-array",
+        "adjusted_prices": "adjusted-prices-array",
+        "transaction_adjustments": "transaction-adjustments-array",
+        "revenue_data": "revenue-data-array",
+        "vacancy_rates": "vacancy-rates-array",
+        "effective_gross_income": "effective-gross-income-array",
+        "units_count": "units-count-array",
+        "year_built": "year-built-array",
+        "condition": "condition-array",
+        "exterior": "exterior-array",
+        "roof": "roof-array",
+        "foundation": "foundation-array",
+        "parking_type": "parking-type-array",
+        "unit_amenities": "unit-amenities-array",
+        "physical_adjustments": "physical-adjustments-array",
+        "adjusted_values": "adjusted-values-array"
+      }
+    },
+    {
+      "pageNumber": 65,
+      "title": "Valuation & Conclusions - Sales Comparison Approach Analysis",
+      "contentType": "analysis_narrative",
+      "fieldIds": {
+        "page_header": "sales-comparison-title",
+        "section_1_title": "sales-comparison-approach-title",
+        "analysis_paragraph_1": "sales-comparison-analysis-para-1",
+        "analysis_paragraph_2": "sales-comparison-analysis-para-2",
+        "analysis_paragraph_3": "sales-comparison-analysis-para-3",
+        "analysis_paragraph_4": "sales-comparison-analysis-para-4",
+        "chart_placeholder": "unadjusted-adjusted-price-chart"
+      }
+    },
+    {
+      "pageNumber": 66,
+      "title": "Valuation & Conclusions - Direct Comparison Approach Conclusion",
+      "contentType": "valuation_conclusion",
+      "fieldIds": {
+        "page_header": "direct-comparison-conclusion-title",
+        "table_title": "direct-comparison-conclusion-unit-title",
+        "comp_1_unadjusted_price": "comp-1-conclusion-unadjusted-price",
+        "comp_1_adjustment_pct": "comp-1-conclusion-adjustment-pct",
+        "comp_1_adjusted_price": "comp-1-conclusion-adjusted-price",
+        "comp_1_property_adjustment": "comp-1-conclusion-property-adjustment",
+        "comp_1_final_value": "comp-1-conclusion-final-value",
+        "comp_1_net_gross_pct": "comp-1-conclusion-net-gross-pct",
+        "comp_2_unadjusted_price": "comp-2-conclusion-unadjusted-price",
+        "comp_2_adjustment_pct": "comp-2-conclusion-adjustment-pct",
+        "comp_2_adjusted_price": "comp-2-conclusion-adjusted-price",
+        "comp_2_property_adjustment": "comp-2-conclusion-property-adjustment",
+        "comp_2_final_value": "comp-2-conclusion-final-value",
+        "comp_2_net_gross_pct": "comp-2-conclusion-net-gross-pct",
+        "comp_3_unadjusted_price": "comp-3-conclusion-unadjusted-price",
+        "comp_3_adjustment_pct": "comp-3-conclusion-adjustment-pct",
+        "comp_3_adjusted_price": "comp-3-conclusion-adjusted-price",
+        "comp_3_property_adjustment": "comp-3-conclusion-property-adjustment",
+        "comp_3_final_value": "comp-3-conclusion-final-value",
+        "comp_3_net_gross_pct": "comp-3-conclusion-net-gross-pct",
+        "comp_4_unadjusted_price": "comp-4-conclusion-unadjusted-price",
+        "comp_4_adjustment_pct": "comp-4-conclusion-adjustment-pct",
+        "comp_4_adjusted_price": "comp-4-conclusion-adjusted-price",
+        "comp_4_property_adjustment": "comp-4-conclusion-property-adjustment",
+        "comp_4_final_value": "comp-4-conclusion-final-value",
+        "comp_4_net_gross_pct": "comp-4-conclusion-net-gross-pct",
+        "comp_5_unadjusted_price": "comp-5-conclusion-unadjusted-price",
+        "comp_5_adjustment_pct": "comp-5-conclusion-adjustment-pct",
+        "comp_5_adjusted_price": "comp-5-conclusion-adjusted-price",
+        "comp_5_property_adjustment": "comp-5-conclusion-property-adjustment",
+        "comp_5_final_value": "comp-5-conclusion-final-value",
+        "comp_5_net_gross_pct": "comp-5-conclusion-net-gross-pct",
+        "high_price": "conclusion-high-price",
+        "high_price_value": "conclusion-high-price-value",
+        "avg_price": "conclusion-avg-price",
+        "avg_price_value": "conclusion-avg-price-value",
+        "med_price": "conclusion-med-price",
+        "med_price_value": "conclusion-med-price-value",
+        "low_price": "conclusion-low-price",
+        "low_price_value": "conclusion-low-price-value",
+        "subject_unit_indicated_value": "subject-unit-indicated-value",
+        "subject_unit_indicated_value_amount": "subject-unit-indicated-value-amount",
+        "subject_total_value": "subject-total-value",
+        "subject_total_value_amount": "subject-total-value-amount",
+        "sales_comparison_section_title": "sales-comparison-approach-conclusion-title",
+        "indicated_value": "sales-comparison-indicated-value",
+        "indicated_value_amount": "sales-comparison-indicated-value-amount",
+        "price_per_sf": "sales-comparison-price-per-sf",
+        "price_per_sf_amount": "sales-comparison-price-per-sf-amount"
+      }
+    },
+    {
+      "pageNumber": 67,
+      "title": "Valuation & Conclusions - Reconciliation of Value",
+      "contentType": "analysis_narrative",
+      "fieldIds": {
+        "page_header": "reconciliation-title",
+        "section_title": "reconciliation-of-value-title",
+        "paragraph_1": "reconciliation-para-1-scope",
+        "paragraph_2": "reconciliation-para-2-process",
+        "paragraph_3": "reconciliation-para-3-cost-approach",
+        "paragraph_4": "reconciliation-para-4-sales-comparison",
+        "paragraph_5": "reconciliation-para-5-income-approach",
+        "paragraph_6": "reconciliation-para-6-emphasis",
+        "footer_page_number": "reconciliation-page-number",
+        "footer_address": "reconciliation-footer-address"
+      }
+    },
+    {
+      "pageNumber": 68,
+      "title": "Valuation & Conclusions - Reconciliation of Values (Final)",
+      "contentType": "valuation_summary",
+      "fieldIds": {
+        "page_header": "final-reconciliation-title",
+        "valuation_scenarios_section": "valuation-scenarios-title",
+        "valuation_interest": "valuation-interest",
+        "valuation_interest_value": "valuation-interest-value",
+        "valuation_date": "valuation-date",
+        "valuation_date_value": "valuation-date-value",
+        "direct_comparison_section": "direct-comparison-final-title",
+        "direct_comparison_indicated_value": "direct-comparison-final-indicated-value",
+        "direct_comparison_indicated_value_amount": "direct-comparison-final-indicated-value-amount",
+        "direct_comparison_price_per_sf": "direct-comparison-final-price-per-sf",
+        "direct_comparison_price_per_sf_amount": "direct-comparison-final-price-per-sf-amount",
+        "income_approach_section": "income-approach-final-title",
+        "income_approach_noi": "income-approach-final-noi",
+        "income_approach_noi_amount": "income-approach-final-noi-amount",
+        "income_approach_noi_per_sf": "income-approach-final-noi-per-sf",
+        "income_approach_noi_per_sf_amount": "income-approach-final-noi-per-sf-amount",
+        "income_approach_cap_rate": "income-approach-final-cap-rate",
+        "income_approach_cap_rate_value": "income-approach-final-cap-rate-value",
+        "income_approach_indicated_value": "income-approach-final-indicated-value",
+        "income_approach_indicated_value_amount": "income-approach-final-indicated-value-amount",
+        "income_approach_price_per_sf": "income-approach-final-price-per-sf",
+        "income_approach_price_per_sf_amount": "income-approach-final-price-per-sf-amount",
+        "final_value_section": "final-value-conclusion-title",
+        "final_value_conclusion": "final-value-conclusion-amount",
+        "final_price_per_sf": "final-price-per-sf",
+        "final_price_per_sf_amount": "final-price-per-sf-amount",
+        "hypothetical_conditions_title": "hypothetical-conditions-title",
+        "hypothetical_conditions_text": "hypothetical-conditions-text",
+        "extraordinary_assumptions_title": "extraordinary-assumptions-title",
+        "extraordinary_assumptions_text": "extraordinary-assumptions-text",
+        "extraordinary_limiting_conditions_title": "extraordinary-limiting-conditions-title",
+        "extraordinary_limiting_conditions_text": "extraordinary-limiting-conditions-text",
+        "footer_page_number": "final-reconciliation-page-number",
+        "footer_address": "final-reconciliation-footer-address"
+      }
+    },
+    {
+      "pageNumber": 69,
+      "title": "Valuation & Conclusions - Certification",
+      "contentType": "certification",
+      "fieldIds": {
+        "page_header": "certification-title",
+        "section_title": "certification-section-title",
+        "certification_item_1": "certification-item-1-statements-of-fact",
+        "certification_item_2": "certification-item-2-analyses-opinions",
+        "certification_item_3": "certification-item-3-no-interest",
+        "certification_item_4": "certification-item-4-no-bias",
+        "certification_item_5": "certification-item-5-compensation",
+        "certification_item_6": "certification-item-6-cusap-conformity",
+        "certification_item_7": "certification-item-7-competency",
+        "certification_item_8": "certification-item-8-professional-assistance",
+        "certification_item_9": "certification-item-9-cpd-requirements",
+        "certification_item_10": "certification-item-10-aic-membership",
+        "certification_item_11": "certification-item-11-signature-requirement",
+        "footer_page_number": "certification-page-number",
+        "footer_address": "certification-footer-address"
+      }
+    }
+  ]
+}

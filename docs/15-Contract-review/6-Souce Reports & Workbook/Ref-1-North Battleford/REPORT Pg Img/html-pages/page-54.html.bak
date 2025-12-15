@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valuation & Conclusions - Direct Capitalization</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: 8.5in 11in;
+            margin: 0.5in;
+            orphans: 3;
+            widows: 3;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            line-height: 1.3;
+            color: #000;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .print-container {
+            width: 816px;
+            height: 1056px;
+            background: white;
+            margin: 0 auto;
+            padding: 40px 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+            .print-container {
+                width: 100%;
+                height: auto;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+            }
+        }
+
+        h1 {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 2px;
+            border-bottom: 1px solid #000;
+            padding-bottom: 4px;
+        }
+
+        h2 {
+            font-size: 12px;
+            font-weight: bold;
+            color: #003366;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        p {
+            font-size: 10px;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0 12px 0;
+            font-size: 9px;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 4px 6px;
+            text-align: right;
+        }
+
+        th {
+            background-color: #003366;
+            color: white;
+            font-weight: bold;
+            padding: 5px 6px;
+            text-align: center;
+        }
+
+        td {
+            text-align: right;
+        }
+
+        td.label {
+            text-align: left;
+            font-weight: normal;
+        }
+
+        tr.section-header td {
+            background-color: #003366;
+            color: white;
+            font-weight: bold;
+            padding: 6px 6px;
+            text-align: left;
+        }
+
+        tr.section-header td {
+            text-align: left;
+        }
+
+        tr.subsection-header td {
+            background-color: #e0e0e0;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        tr.total-row td {
+            background-color: #e0e0e0;
+            font-weight: bold;
+        }
+
+        tr.grand-total-row td {
+            background-color: #003366;
+            color: white;
+            font-weight: bold;
+        }
+
+        .numeric {
+            text-align: right;
+        }
+
+        .percentage {
+            text-align: right;
+        }
+
+        .red-text {
+            color: #c00000;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            left: 30px;
+            right: 30px;
+            font-size: 9px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-logo {
+            width: 60px;
+            height: 40px;
+            background: linear-gradient(135deg, #4a9fd8 0%, #003366 100%);
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="print-container">
+        <h1>Valuation & Conclusions</h1>
+
+        <h2>Direct Capitalization Conclusion</h2>
+        <p>The table below summarizes the Direct Capitalization Method and its value conclusion.</p>
+
+        <table>
+            <thead>
+                <tr class="section-header">
+                    <td colspan="8">DIRECT CAPITALIZATION</td>
+                </tr>
+                <tr>
+                    <th style="text-align: left;">Unit Mix</th>
+                    <th>Units</th>
+                    <th>Category</th>
+                    <th>Contract</th>
+                    <th>Market</th>
+                    <th>Cont`v Mkt</th>
+                    <th>$/Unit</th>
+                    <th>$/SF(Y1)</th>
+                    <th>$/Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label">Type 1 bed / 1 bath</td>
+                    <td class="numeric">6</td>
+                    <td class="numeric">1 Bed</td>
+                    <td class="numeric">$650</td>
+                    <td class="numeric">$800</td>
+                    <td class="numeric">81%</td>
+                    <td class="numeric">$1,040</td>
+                    <td class="numeric">$18.07</td>
+                    <td class="numeric">$152,640</td>
+                </tr>
+                <tr>
+                    <td class="label">Flat 2 bed / 1 bath</td>
+                    <td class="numeric">12</td>
+                    <td class="numeric">2 Bed</td>
+                    <td class="numeric">$1,055</td>
+                    <td class="numeric">$1,080</td>
+                    <td class="numeric">100%</td>
+                    <td class="numeric">$1,080</td>
+                    <td class="numeric">$18.19</td>
+                    <td class="numeric">$155,640</td>
+                </tr>
+                <tr>
+                    <td class="label">UNIT MIX SUBTOTAL</td>
+                    <td class="numeric">18</td>
+                    <td class="numeric"></td>
+                    <td class="numeric"></td>
+                    <td class="numeric"></td>
+                    <td class="numeric"></td>
+                    <td class="numeric"></td>
+                    <td class="numeric"></td>
+                    <td class="numeric"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr class="section-header">
+                    <td colspan="8">RENTAL REVENUE</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label">Total Scheduled Revenue</td>
+                    <td class="numeric">$Y/1R</td>
+                    <td class="numeric">%/SQR</td>
+                    <td class="numeric">%/EGR</td>
+                    <td class="numeric">$/UNIT</td>
+                    <td class="numeric">$/SF (Y1)</td>
+                    <td class="numeric">$/YEAR</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">TOTAL RENTAL REVENUE</td>
+                    <td class="numeric"></td>
+                    <td class="numeric"></td>
+                    <td class="numeric"></td>
+                    <td class="numeric"></td>
+                    <td class="numeric"></td>
+                    <td class="numeric">$12,240</td>
+                    <td class="numeric">$18.19</td>
+                    <td class="numeric">$185,640</td>
+                </tr>
+                <tr>
+                    <td class="label">OTHER INCOME (MISCELLANEOUS)</td>
+                    <td class="numeric">0%</td>
+                    <td class="numeric">0%</td>
+                    <td class="numeric">0%</td>
+                    <td class="numeric">$0</td>
+                    <td class="numeric">$0.00</td>
+                    <td class="numeric">$0</td>
+                    <td></td>
+                </tr>
+                <tr class="total-row">
+                    <td class="label">TOTAL GROSS REVENUE (MISCELLANEOUS)</td>
+                    <td class="numeric">0%</td>
+                    <td class="numeric">0%</td>
+                    <td class="numeric">0%</td>
+                    <td class="numeric">$0</td>
+                    <td class="numeric">$0.82</td>
+                    <td class="numeric">$0</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr class="section-header">
+                    <td colspan="8">POTENTIAL GROSS REVENUE</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label">ALL VACANCY LOSS</td>
+                    <td class="numeric">%/QGR</td>
+                    <td class="numeric">%/EGR</td>
+                    <td class="numeric">$/UNIT</td>
+                    <td class="numeric">$12,705</td>
+                    <td class="numeric">$23.02</td>
+                    <td class="numeric">$204,240</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Vacancy</td>
+                    <td class="numeric">4.0%</td>
+                    <td class="numeric">4.0%</td>
+                    <td class="numeric">($406)</td>
+                    <td class="numeric">($0.77)</td>
+                    <td class="numeric">($7,426)</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">TOTAL VACANCY & CREDIT LOSS</td>
+                    <td class="numeric">3.8%</td>
+                    <td class="numeric">3.8%</td>
+                    <td class="numeric">($409)</td>
+                    <td class="numeric">($0.77)</td>
+                    <td class="numeric">($7,834)</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr class="section-header">
+                    <td colspan="8">EFFECTIVE GROSS REVENUE</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label">OPERATING EXPENSES</td>
+                    <td class="numeric">%/QGR</td>
+                    <td class="numeric">%/EGR</td>
+                    <td class="numeric">$/UNIT</td>
+                    <td class="numeric">$12,275</td>
+                    <td class="numeric">$19.25</td>
+                    <td class="numeric">$196,406</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Real Estate Taxes</td>
+                    <td class="numeric">9.2%</td>
+                    <td class="numeric">9.4%</td>
+                    <td class="numeric">($1,131)</td>
+                    <td class="numeric">($1.77)</td>
+                    <td class="numeric">($20,358)</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Insurance</td>
+                    <td class="numeric">5.6%</td>
+                    <td class="numeric">5.8%</td>
+                    <td class="numeric">($715)</td>
+                    <td class="numeric">($1.11)</td>
+                    <td class="numeric">($11,680)</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Repairs & Maintenance</td>
+                    <td class="numeric">8.5%</td>
+                    <td class="numeric">8.9%</td>
+                    <td class="numeric">($1,035)</td>
+                    <td class="numeric">($1.62)</td>
+                    <td class="numeric">($18,630)</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Payroll</td>
+                    <td class="numeric">3.9%</td>
+                    <td class="numeric">4.1%</td>
+                    <td class="numeric">($500)</td>
+                    <td class="numeric">($0.78)</td>
+                    <td class="numeric">($9,000)</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Utilities</td>
+                    <td class="numeric">10.3%</td>
+                    <td class="numeric">10.7%</td>
+                    <td class="numeric">($1,315)</td>
+                    <td class="numeric">($2.06)</td>
+                    <td class="numeric">($23,640)</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Management Fees</td>
+                    <td class="numeric">4.1%</td>
+                    <td class="numeric">4.3%</td>
+                    <td class="numeric">($525)</td>
+                    <td class="numeric">($0.82)</td>
+                    <td class="numeric">($9,347)</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="label">Other Expenses</td>
+                    <td class="numeric">1.9%</td>
+                    <td class="numeric">2.0%</td>
+                    <td class="numeric">($245)</td>
+                    <td class="numeric">($0.38)</td>
+                    <td class="numeric">($4,401)</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr class="total-row">
+                    <td class="label">TOTAL OPERATING EXPENSES</td>
+                    <td class="numeric">41.6%</td>
+                    <td class="numeric">43.7%</td>
+                    <td class="numeric"></td>
+                    <td class="numeric"></td>
+                    <td class="numeric"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table>
+            <thead>
+                <tr class="section-header">
+                    <td colspan="4">NET OPERATING INCOME</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label">Net Operating Income</td>
+                    <td class="numeric">$6,860</td>
+                    <td class="numeric">$10.65</td>
+                    <td class="numeric">$111,771</td>
+                </tr>
+                <tr>
+                    <td class="label">Capitalization Rate</td>
+                    <td colspan="3"></td>
+                </tr>
+                <tr>
+                    <td class="label">Capitalized Value</td>
+                    <td colspan="3" class="numeric">$1,788,338</td>
+                </tr>
+                <tr class="grand-total-row">
+                    <td class="label">INDICATED VALUE (ROUNDED TO NEAREST $10,000)</td>
+                    <td class="numeric">$112,586/Unit</td>
+                    <td class="numeric">$179</td>
+                    <td class="numeric">$1,800,000</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            <div class="footer-left">
+                <span>49   1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</span>
+            </div>
+            <div class="footer-logo"></div>
+        </div>
+    </div>
+</body>
+</html>

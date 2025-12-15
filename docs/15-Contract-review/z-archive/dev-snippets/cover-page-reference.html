@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appraisal Report - Cover Page Reference</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: letter;
+            margin: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: white;
+            width: 8.5in;
+            height: 11in;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Logo container */
+        .logo-container {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 260px;
+            height: 60px;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Placeholder for actual logo - using SVG representation */
+        .logo-placeholder {
+            width: 260px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #2c5f7f 0%, #1e4d6b 100%);
+            clip-path: polygon(0 20%, 50% 0, 100% 20%, 100% 100%, 0 100%);
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-text .main {
+            font-size: 24px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            color: #2c5f7f;
+        }
+
+        .logo-text .sub {
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: #2c5f7f;
+            margin-top: -2px;
+        }
+
+        /* Property photo */
+        .property-photo {
+            position: absolute;
+            top: 170px;
+            left: 30px;
+            width: 215px;
+            height: 160px;
+            border: 1px solid #ccc;
+            overflow: hidden;
+        }
+
+        .property-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Photo placeholder */
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: #e8e8e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Right content area */
+        .right-content {
+            position: absolute;
+            top: 170px;
+            right: 30px;
+            width: 280px;
+            text-align: right;
+        }
+
+        .right-content h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 30px;
+        }
+
+        .property-details {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .property-details .type {
+            font-weight: 700;
+            color: #000;
+            margin-bottom: 8px;
+        }
+
+        .property-details .address {
+            font-weight: 400;
+            color: #333;
+            line-height: 1.3;
+        }
+
+        /* Blue diagonal section */
+        .blue-diagonal {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(165deg, transparent 0%, transparent 38%, #1e4d6b 38%, #1e4d6b 100%);
+            z-index: 1;
+        }
+
+        /* Alternative blue diagonal using clip-path for cleaner edge */
+        .blue-diagonal-alt {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 475px;
+            background: #1e4d6b;
+            clip-path: polygon(0 40%, 100% 18%, 100% 100%, 0 100%);
+            z-index: 1;
+        }
+
+        /* Content in blue section */
+        .blue-content {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 280px;
+            color: white;
+            z-index: 2;
+            text-align: right;
+        }
+
+        .blue-content .section {
+            margin-bottom: 25px;
+        }
+
+        .blue-content .section-label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .blue-content .section-content {
+            font-size: 12px;
+            line-height: 1.4;
+            font-weight: 400;
+        }
+
+        .blue-content .company-name {
+            font-weight: 700;
+        }
+
+        .blue-content .dates {
+            margin-top: 30px;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .blue-content .file-number {
+            margin-top: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo -->
+    <div class="logo-container">
+        <div class="logo-placeholder">
+            <div class="logo-icon"></div>
+            <div class="logo-text">
+                <span class="main">VALTA</span>
+                <span class="sub">PROPERTY VALUATIONS</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Property Photo -->
+    <div class="property-photo">
+        <div class="photo-placeholder">Property Image</div>
+        <!-- Replace with: <img src="property-photo.jpg" alt="Property"> -->
+    </div>
+
+    <!-- Right Content -->
+    <div class="right-content">
+        <h1>Appraisal Report</h1>
+        <div class="property-details">
+            <div class="type">Multi-Family Walkup Property</div>
+            <div class="address">
+                North Battleford Apartments<br>
+                1101, 1121 109 St<br>
+                North Battleford, Saskatchewan
+            </div>
+        </div>
+    </div>
+
+    <!-- Blue Diagonal Section -->
+    <div class="blue-diagonal-alt"></div>
+
+    <!-- Blue Section Content -->
+    <div class="blue-content">
+        <div class="section">
+            <div class="section-label">PREPARED FOR:</div>
+            <div class="section-content">
+                <strong>Kenneth Engler</strong><br><br>
+                102109845 Saskatchewan Ltd<br>
+                1901, 1088 - 6th Ave SW<br>
+                Calgary, AB T2P 5N3
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-label">PREPARED BY:</div>
+            <div class="section-content">
+                <div class="company-name">Valta Property Valuations Ltd.</div>
+                300, 4838 Richard Road SW<br>
+                Calgary, AB T3E 6L1<br>
+                Office: 587-801-5151<br>
+                www.valta.ca
+            </div>
+        </div>
+
+        <div class="dates">
+            Date of Valuation: October 17, 2025<br>
+            Date of Report: November 20, 2025
+        </div>
+
+        <div class="file-number">
+            File No: VAL251012 - 1
+        </div>
+    </div>
+</body>
+</html>

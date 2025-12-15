@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 68 - Valuation & Conclusions</title>
+    <style>
+        @page {
+            size: 8.5in 11in;
+            margin: 0.5in;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .page {
+            width: 8.5in;
+            height: 11in;
+            background: white;
+            margin: 0 auto 20px;
+            padding: 0.5in;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 13px;
+            font-weight: bold;
+            color: #1a5490;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: bold;
+            background-color: #1a5490;
+            color: white;
+            padding: 8px;
+            text-align: center;
+            margin: 15px 0 10px 0;
+            letter-spacing: 1px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 11px;
+        }
+
+        thead {
+            background-color: #1a5490;
+            color: white;
+        }
+
+        th {
+            padding: 8px 6px;
+            text-align: left;
+            border: 1px solid #ccc;
+            font-weight: bold;
+        }
+
+        td {
+            padding: 6px 6px;
+            border: 1px solid #ccc;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        .label-col {
+            width: 60%;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .value-col {
+            width: 40%;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .nested-indent {
+            padding-left: 20px;
+        }
+
+        .section-text {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .section-text p {
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- Header -->
+        <h1>Valuation & Conclusions</h1>
+
+        <!-- Reconciliation of Values Section -->
+        <div class="section-title">RECONCILIATION OF VALUES</div>
+
+        <table>
+            <tr>
+                <td colspan="2" style="background-color: #f0f0f0; font-weight: bold;">VALUATION SCENARIOS</td>
+                <td style="background-color: #f0f0f0; font-weight: bold;">AS STABILIZED</td>
+            </tr>
+            <tr>
+                <td class="label-col">Interest</td>
+                <td></td>
+                <td class="value-col">Fee Simple Estate</td>
+            </tr>
+            <tr>
+                <td class="label-col">Date</td>
+                <td></td>
+                <td class="value-col">October 17, 2025</td>
+            </tr>
+        </table>
+
+        <div class="section-title">DIRECT COMPARISON APPROACH</div>
+
+        <table>
+            <tr>
+                <td class="label-col">DIRECT COMPARISON APPROACH</td>
+                <td class="value-col"></td>
+            </tr>
+            <tr>
+                <td class="nested-indent label-col">Indicated Value</td>
+                <td class="value-col">$1,800,000</td>
+            </tr>
+            <tr>
+                <td class="nested-indent label-col">$/SF NRA</td>
+                <td class="value-col">$176</td>
+            </tr>
+        </table>
+
+        <div class="section-title">INCOME APPROACH</div>
+
+        <table>
+            <tr>
+                <td class="label-col">INCOME APPROACH  DIRECT CAPITALIZATION</td>
+                <td class="value-col"></td>
+            </tr>
+            <tr>
+                <td class="nested-indent label-col">NOI</td>
+                <td class="value-col">$111,771</td>
+            </tr>
+            <tr>
+                <td class="nested-indent label-col">NOI $/SF NRA</td>
+                <td class="value-col">$10.95</td>
+            </tr>
+            <tr>
+                <td class="nested-indent label-col">Capitalization Rate (OAR)</td>
+                <td class="value-col">6.25%</td>
+            </tr>
+            <tr>
+                <td class="nested-indent label-col">Indicated Value</td>
+                <td class="value-col">$1,800,000</td>
+            </tr>
+            <tr>
+                <td class="nested-indent label-col">$/SF NRA</td>
+                <td class="value-col">$176</td>
+            </tr>
+        </table>
+
+        <div class="section-title">FINAL VALUE CONCLUSION</div>
+
+        <table>
+            <tr>
+                <td class="label-col">FINAL VALUE CONCLUSION</td>
+                <td class="value-col">$1,800,000</td>
+            </tr>
+            <tr>
+                <td class="nested-indent label-col">$/SF NRA</td>
+                <td class="value-col">$176</td>
+            </tr>
+        </table>
+
+        <!-- Hypothetical Conditions -->
+        <h2>Hypothetical Conditions</h2>
+        <div class="section-text">
+            <p>The use of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed based on the hypothetical condition that the subject property is fully leased at prevailing market rents and it has achieved stabilized occupancy as of the effective date of the appraisal. Under this premise, no deductions are made for holding costs, rent loss, or lease-up expenses. In addition to a hypothetical condition that all units could achieve current market rents levels and stabilized occupancy as of the effective date. In reality, as of the effective date, the property's existing lease terms reflect contract rents that are deemed to be below-market rents. For purposes of this analysis, it is assumed that lease-up to market rent levels has occurred and typical market conditions, without undue delay or concessions exceeding market norms. If this assumption proves incorrect, such as market rents are not achievable, the value conclusion may be materially impacted.</p>
+        </div>
+
+        <!-- Extraordinary Assumptions -->
+        <h2>Extraordinary Assumptions</h2>
+        <div class="section-text">
+            <p>No Extraordinary Assumptions were made for this assignment.</p>
+        </div>
+
+        <!-- Extraordinary Limiting Conditions -->
+        <h2>Extraordinary Limiting Conditions</h2>
+        <div class="section-text">
+            <p>No Extraordinary Limiting Conditions were made for this assignment.</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>63  1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</p>
+        </div>
+    </div>
+</body>
+</html>

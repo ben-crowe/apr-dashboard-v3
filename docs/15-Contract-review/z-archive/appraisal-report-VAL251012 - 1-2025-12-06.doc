@@ -1,0 +1,2853 @@
+﻿<!DOCTYPE html>
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+      xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns:m="http://schemas.microsoft.com/office/2004/12/omml"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="ProgId" content="Word.Document">
+  <meta name="Generator" content="APR Dashboard Report Builder">
+  <meta name="Originator" content="APR Dashboard">
+  <title>Appraisal Report</title>
+  <!--[if gte mso 9]>
+  <xml>
+    <o:DocumentProperties>
+      <o:Author>APR Dashboard</o:Author>
+      <o:LastAuthor>APR Dashboard</o:LastAuthor>
+      <o:Revision>1</o:Revision>
+      <o:Created>2025-12-06T16:21:07.518Z</o:Created>
+      <o:LastSaved>2025-12-06T16:21:07.518Z</o:LastSaved>
+      <o:Pages>1</o:Pages>
+      <o:Words>0</o:Words>
+      <o:Characters>0</o:Characters>
+      <o:Company>Valta Appraisals</o:Company>
+    </o:DocumentProperties>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+    </o:OfficeDocumentSettings>
+    <w:WordDocument>
+      <w:View>Print</w:View>
+      <w:Zoom>100</w:Zoom>
+      <w:SpellingState>Clean</w:SpellingState>
+      <w:GrammarState>Clean</w:GrammarState>
+      <w:TrackMoves>false</w:TrackMoves>
+      <w:TrackFormatting/>
+      <w:ValidateAgainstSchemas/>
+      <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+      <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+      <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+      <w:DoNotPromoteQF/>
+      <w:LidThemeOther>EN-US</w:LidThemeOther>
+      <w:LidThemeAsian>X-NONE</w:LidThemeAsian>
+      <w:LidThemeComplexScript>X-NONE</w:LidThemeComplexScript>
+      <w:Compatibility>
+        <w:BreakWrappedTables/>
+        <w:SnapToGridInCell/>
+        <w:WrapTextWithPunct/>
+        <w:UseAsianBreakRules/>
+        <w:DontGrowAutofit/>
+        <w:SplitPgBreakAndParaMark/>
+        <w:EnableOpenTypeKerning/>
+        <w:DontFlipMirrorIndents/>
+        <w:OverrideTableStyleHps/>
+      </w:Compatibility>
+      <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+    </w:WordDocument>
+  </xml>
+  <![endif]-->
+  <style>
+    /* Word-compatible styles */
+    @page {
+      size: 8.5in 11in;
+      margin: 1in;
+      mso-page-orientation: portrait;
+    }
+    @page Section1 {
+      mso-header-margin: .5in;
+      mso-footer-margin: .5in;
+    }
+    div.Section1 {
+      page: Section1;
+    }
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12pt;
+      line-height: 1.5;
+      color: #000000;
+      margin: 0;
+      padding: 0;
+      mso-ansi-font-size: 12.0pt;
+      mso-bidi-font-size: 12.0pt;
+      mso-fareast-font-family: "Times New Roman";
+    }
+    .page {
+      page-break-after: always;
+      mso-break-type: section-break;
+    }
+    .page:last-child {
+      page-break-after: avoid;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      mso-table-lspace: 0pt;
+      mso-table-rspace: 0pt;
+    }
+    table, th, td {
+      border: 1px solid black;
+      mso-border-alt: solid black .5pt;
+    }
+    th, td {
+      padding: 5pt;
+      text-align: left;
+      vertical-align: top;
+    }
+    h1 {
+      font-size: 24pt;
+      font-weight: bold;
+      margin-top: 12pt;
+      margin-bottom: 12pt;
+      mso-style-name: "Heading 1";
+    }
+    h2 {
+      font-size: 18pt;
+      font-weight: bold;
+      margin-top: 12pt;
+      margin-bottom: 8pt;
+      mso-style-name: "Heading 2";
+    }
+    h3 {
+      font-size: 14pt;
+      font-weight: bold;
+      margin-top: 8pt;
+      margin-bottom: 6pt;
+      mso-style-name: "Heading 3";
+    }
+    p {
+      margin-top: 0;
+      margin-bottom: 8pt;
+      mso-style-name: "Normal";
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+    /* Preserve whitespace and line breaks */
+    .preserve-whitespace {
+      white-space: pre-wrap;
+      mso-line-break-override: none;
+    }
+  </style>
+</head>
+<body lang="EN-US" style="tab-interval:.5in">
+  <div class="Section1">
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appraisal Report</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      line-height: 1.6;
+      color: #00000a;
+      background: #fff;
+      font-size: 12px;
+    }
+
+    .page {
+      width: 8.5in;
+      min-height: 11in;
+      margin: 0 auto;
+      background: white;
+      padding: 0;
+      page-break-after: always;
+      scroll-margin-top: 20px;
+    }
+
+    /* Cover Page Styles - Matching Valcre Design */
+    .cover-page {
+      position: relative;
+      min-height: 11in;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* Top logo section */
+    .cover-logo-header {
+      padding: 0.75in 0.75in 0.5in 0.75in;
+    }
+
+    .cover-logo {
+      max-width: 280px;
+      height: auto;
+    }
+
+    /* Main content area - two columns */
+    .cover-main {
+      display: flex;
+      padding: 0 0.75in;
+      min-height: 4in;
+    }
+
+    .cover-photo-column {
+      width: 50%;
+      padding-right: 1rem;
+      position: relative;
+    }
+
+    .cover-photo {
+      width: 100%;
+      max-width: 380px;
+      height: auto;
+      border: none;
+      /* Feathered edge effect using mask gradients */
+      -webkit-mask-image:
+        linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+      -webkit-mask-composite: source-in;
+      mask-image:
+        linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+      mask-composite: intersect;
+      /* Subtle shadow for depth */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .cover-photo-placeholder {
+      width: 100%;
+      max-width: 380px;
+      height: 280px;
+      background: #f3f4f6;
+      border: 2px dashed #d1d5db;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #9ca3af;
+      font-size: 11px;
+      text-align: center;
+      padding: 1rem;
+      /* Match feathered effect for placeholder */
+      -webkit-mask-image:
+        linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+      -webkit-mask-composite: source-in;
+      mask-image:
+        linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%),
+        linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%);
+      mask-composite: intersect;
+    }
+
+    .cover-content-column {
+      width: 50%;
+      text-align: right;
+      padding-top: 0.5in;
+    }
+
+    .cover-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      color: #000;
+    }
+
+    .property-info {
+      margin-bottom: 2rem;
+    }
+
+    .property-type {
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+
+    .property-name {
+      font-size: 12px;
+      margin-bottom: 0.25rem;
+    }
+
+    .property-address {
+      font-size: 12px;
+      margin-bottom: 0.125rem;
+    }
+
+    .property-city {
+      font-size: 12px;
+    }
+
+    /* Diagonal blue section at bottom */
+    .cover-blue-section {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #1a365d;
+      color: white;
+      padding: 2rem 0.75in 1rem 0.75in;
+      clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+      min-height: 4.5in;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .cover-blue-content {
+      text-align: right;
+      padding-top: 1.5in;
+    }
+
+    .prepared-section {
+      margin-bottom: 1.25rem;
+    }
+
+    .prepared-label {
+      font-size: 11px;
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.02em;
+    }
+
+    .prepared-content {
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .prepared-content div {
+      margin-bottom: 0.125rem;
+    }
+
+    .dates-section {
+      margin-top: 1.5rem;
+      font-size: 11px;
+    }
+
+    .dates-section div {
+      margin-bottom: 0.25rem;
+    }
+
+    .file-number {
+      margin-top: 1rem;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    /* Letter of Transmittal Styles */
+    .letter-page {
+      padding: 1in;
+      position: relative;
+    }
+
+    .letter-header {
+      margin-bottom: 1rem;
+    }
+
+    .letter-logo {
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    .letter-date {
+      font-size: 12px;
+      margin-bottom: 2rem;
+    }
+
+    .letter-address-block {
+      font-size: 12px;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+
+    .letter-attention {
+      font-size: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .letter-re {
+      font-size: 12px;
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+    }
+
+    .letter-body {
+      font-size: 12px;
+      line-height: 1.8;
+      text-align: left;
+    }
+
+    .letter-body p {
+      margin-bottom: 1rem;
+      text-align: justify;
+    }
+
+    .letter-section-heading {
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .letter-conditions-text {
+      font-size: 11px;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      padding-left: 1rem;
+      text-align: justify;
+    }
+
+    .letter-value-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-size: 11px;
+    }
+
+    .letter-value-table th {
+      background: #1a365d;
+      color: white;
+      padding: 0.5rem;
+      text-align: left;
+      font-weight: bold;
+      border: 1px solid #bfbfbf;
+    }
+
+    .letter-value-table td {
+      padding: 0.5rem;
+      border: 1px solid #bfbfbf;
+    }
+
+    .letter-signature-block {
+      margin-top: 2rem;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .letter-signature-line {
+      margin-top: 3rem;
+      margin-bottom: 0.5rem;
+      border-top: 1px solid #000;
+      width: 250px;
+    }
+
+    .letter-signature-name {
+      font-weight: bold;
+    }
+
+    /* Page Header Branding */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #1a365d;
+    }
+
+    .page-header-logo {
+      height: 45px;
+      width: auto;
+    }
+
+    .page-header-title {
+      font-size: 10px;
+      color: #666;
+      text-align: right;
+    }
+
+    /* Page Footer Branding */
+    .page-footer {
+      position: absolute;
+      bottom: 0.5in;
+      left: 1in;
+      right: 1in;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9px;
+      color: #666;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 0.5rem;
+    }
+
+    .page-footer-left {
+      text-align: left;
+    }
+
+    .page-footer-right {
+      text-align: right;
+    }
+
+    /* Executive Summary Styles */
+    .exec-page {
+      padding: 1in;
+    }
+
+    .section {
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #1a365d;
+    }
+
+    .subsection-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #1a365d;
+      margin: 1.5rem 0 0.75rem 0;
+      padding: 0.5rem;
+      background: #f3f4f6;
+      border-left: 4px solid #1a365d;
+    }
+
+    .field-group {
+      margin-bottom: 1rem;
+    }
+
+    .field-label {
+      font-weight: bold;
+      margin-bottom: 0.25rem;
+    }
+
+    .field-value {
+      margin-left: 1rem;
+      white-space: pre-wrap;
+    }
+
+    .empty-state {
+      color: #9ca3af;
+      font-style: italic;
+      padding: 1rem;
+      background: #f9fafb;
+      border-radius: 4px;
+      border: 1px dashed #d1d5db;
+      text-align: center;
+    }
+
+    /* SITE Section Table Styles */
+    .site-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12px;
+    }
+
+    .site-table tbody tr {
+      border-bottom: 1px solid #bfbfbf;
+    }
+
+    .site-table-label {
+      width: 35%;
+      padding: 8px 12px;
+      font-weight: bold;
+      color: #333333;
+      vertical-align: top;
+      background: #f9fafb;
+    }
+
+    .site-table-value {
+      width: 65%;
+      padding: 8px 12px;
+      color: #00000a;
+      vertical-align: top;
+    }
+
+    .site-table tbody tr:last-child {
+      border-bottom: 2px solid #bfbfbf;
+    }
+
+    .site-narrative-section {
+      margin-bottom: 1rem;
+    }
+
+    .site-narrative-label {
+      font-size: 12px;
+      font-weight: bold;
+      color: #333333;
+      margin-bottom: 0.5rem;
+    }
+
+    .site-narrative-text {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #00000a;
+      white-space: pre-wrap;
+      margin-left: 1rem;
+    }
+
+
+    /* INCOME Section Table Styles */
+    .income-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12px;
+      border: 1px solid #bfbfbf;
+    }
+
+    .income-table thead th {
+      background: #1a365d;
+      color: white;
+      padding: 8px 12px;
+      font-weight: bold;
+      border: 1px solid #bfbfbf;
+    }
+
+    .income-table-label {
+      text-align: left;
+      padding: 6px 12px;
+      border-right: 1px solid #e5e7eb;
+    }
+
+    .income-table-amount {
+      text-align: right;
+      padding: 6px 12px;
+      border-right: 1px solid #e5e7eb;
+      width: 150px;
+    }
+
+    .income-table-percent {
+      text-align: right;
+      padding: 6px 12px;
+      width: 100px;
+    }
+
+    .income-table tbody tr {
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .income-section-header td {
+      background: #f3f4f6;
+      padding: 8px 12px;
+      font-weight: bold;
+      color: #1a365d;
+      border-top: 2px solid #bfbfbf;
+    }
+
+    .income-subtotal {
+      background: #f9fafb;
+      border-top: 2px solid #bfbfbf;
+      border-bottom: 2px solid #bfbfbf;
+    }
+
+    .income-total {
+      background: #e8eef5;
+      border-top: 3px solid #1a365d;
+      border-bottom: 3px solid #1a365d;
+    }
+
+    .income-spacer {
+      height: 12px;
+      border: none;
+    }
+
+    .income-spacer td {
+      padding: 0;
+      border: none;
+    }
+
+    /* Capitalization Value Table Styles */
+    .cap-value-table {
+      width: 100%;
+      max-width: 500px;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 12px;
+      border: 1px solid #bfbfbf;
+    }
+
+    .cap-value-table thead th {
+      background: #1a365d;
+      color: white;
+      padding: 8px 12px;
+      font-weight: bold;
+      border: 1px solid #bfbfbf;
+    }
+
+    .cap-table-label {
+      text-align: left;
+      padding: 8px 12px;
+      border-right: 1px solid #e5e7eb;
+      width: 60%;
+    }
+
+    .cap-table-value {
+      text-align: right;
+      padding: 8px 12px;
+      width: 40%;
+      font-weight: normal;
+    }
+
+    .cap-value-table tbody tr {
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .cap-value-total {
+      background: #e8eef5;
+      border-top: 3px solid #1a365d;
+      border-bottom: 3px solid #1a365d;
+    }
+
+    .cap-value-total .cap-table-value {
+      font-weight: bold;
+    }
+
+
+    /* PHOTOS Section Grid Styles */
+    .photo-grid {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .photo-cell {
+      width: 50%;
+      padding: 10px;
+      text-align: center;
+      vertical-align: top;
+    }
+
+    .photo-image {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .photo-caption {
+      font-size: 11px;
+      margin-top: 8px;
+      font-style: italic;
+      color: #666;
+      line-height: 1.4;
+    }
+
+    /* CERTIFICATION Section Styles */
+    .cert-statement {
+      display: flex;
+      margin-bottom: 1rem;
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .cert-number {
+      min-width: 30px;
+      font-weight: bold;
+      color: #1a365d;
+    }
+
+    .cert-text {
+      flex: 1;
+      text-align: justify;
+    }
+
+    .cert-signature-block {
+      margin-top: 3rem;
+      margin-left: 2rem;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .cert-signature-line {
+      width: 250px;
+      border-top: 1px solid #000;
+      margin-bottom: 0.5rem;
+      margin-top: 2rem;
+    }
+
+    .cert-signature-name {
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .cert-signature-credentials {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .cert-signature-title {
+      font-size: 11px;
+    }
+
+    .cert-signature-company {
+      font-size: 11px;
+    }
+
+    .cert-signature-aic {
+      font-size: 11px;
+      color: #666;
+    }
+
+    .cert-signature-date {
+      font-size: 11px;
+      margin-top: 0.5rem;
+    }
+
+    @media print {
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .page {
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        width: 100%;
+        min-height: 100vh;
+        page-break-after: always;
+      }
+
+      .cover-page {
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Cover Page - Matching Valcre Design -->
+  <div id="section-cover" class="page cover-page">
+    <!-- Top Logo Header -->
+    <div class="cover-logo-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta Property Valuations" class="cover-logo" />
+    </div>
+
+    <!-- Main Content: Photo Left, Info Right -->
+    <div class="cover-main">
+      <div class="cover-photo-column">
+        <img src="/test-data/images/cover/cover-photo.jpeg" alt="Property Photo" class="cover-photo" />
+      </div>
+      <div class="cover-content-column">
+        <div class="cover-title">Appraisal Report</div>
+        <div class="property-info">
+          <div class="property-type">Multi-Family - Walkup Property</div>
+          <div class="property-name">North Battleford Apartments</div>
+          <div class="property-address">1101, 1121 109 St</div>
+          <div class="property-city">North Battleford, Saskatchewan</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Diagonal Blue Section -->
+    <div class="cover-blue-section">
+      <div class="cover-blue-content">
+        <!-- Prepared For -->
+        <div class="prepared-section">
+          <div class="prepared-label">PREPARED FOR:</div>
+          <div class="prepared-content">
+            <div>Kenneth Engler</div>
+            <div>102109845 Saskatchewan Ltd.</div>
+            <div>1901, 1088 - 6th Ave SW</div>
+            
+          </div>
+        </div>
+
+        <!-- Prepared By -->
+        <div class="prepared-section">
+          <div class="prepared-label">PREPARED BY:</div>
+          <div class="prepared-content">
+            <div style="font-weight: bold;">Valta Property Valuations Ltd.</div>
+            <div>300, 4838 Richard Road SW</div>
+            <div>Office: 587-801-5151</div>
+            <div>www.valta.ca</div>
+          </div>
+        </div>
+
+        <!-- Dates -->
+        <div class="dates-section">
+          <div>Date of Valuation: 2025-10-17</div>
+          <div>Date of Report: 2025-11-20</div>
+        </div>
+
+        <!-- File Number -->
+        <div class="file-number">File No: VAL251012 - 1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Letter of Transmittal Page -->
+  <div id="section-home" class="page letter-page">
+    <div class="letter-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta Property Valuations Ltd." class="letter-logo" />
+    </div>
+
+    <div class="letter-date">2025-11-20</div>
+
+    <div class="letter-address-block">
+      102109845 Saskatchewan Ltd.<br/>
+      1901, 1088 - 6th Ave SW<br/>
+      Calgary, AB S9A 2X2
+    </div>
+
+    <div class="letter-attention">
+      <strong>Attention:</strong> Kenneth Engler,
+    </div>
+
+    <div class="letter-re">
+      <strong>Re:</strong> As Is (Fee Simple Estate) current market value for the property located at 1101, 1121 109 St, North Battleford, Saskatchewan.
+    </div>
+
+    <div class="letter-body">
+      <p>
+        Valta Property Valuations Ltd. is proud to present the appraisal report that satisfies the agreed upon scope of work with 102109845 Saskatchewan Ltd.. The purpose of this assignment is to provide the as is current market value of the property which at the time of inspection represents the improved property as of the effective date and leased up at market rental rates and operating costs for the property located at 1101, 1121 109 St, North Battleford, Saskatchewan (herein referred to as the 'subject property').
+      </p>
+
+      <p>
+        The subject property, located at 1101, 1121 109 St, North Battleford, Saskatchewan, is a multi-family - walkup, walkup property with improvements located in North Battleford. The improvements are comprised of 2 total buildings, and consist of 10204 square feet of net rentable area (NRA) as of the valuation date. The property, reportedly built in 1970; (1970 weighted) is approximately 100% occupied and features 16 units in a 2-story, Lowrise format.
+      </p>
+
+      <p>
+        Based upon our investigation of the real estate market and after considering all of the pertinent facts as set forth in the body of this appraisal report, as of the effective date, we have concluded the following:
+      </p>
+
+      <table class="letter-value-table">
+        <thead>
+          <tr>
+            <th>Value Scenario</th>
+            <th>Interest Appraised</th>
+            <th>Effective Date</th>
+            <th>Concluded Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>As Is</td>
+            <td>Fee Simple Estate</td>
+            <td>2025-10-17</td>
+            <td><strong>$1,780,000</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="letter-section-heading">Hypothetical Conditions</div>
+      <div class="letter-conditions-text">No Hypothetical Conditions were made for this assignment.</div>
+
+      <div class="letter-section-heading">Extraordinary Assumptions</div>
+      <div class="letter-conditions-text">No Extraordinary Assumptions were made for this assignment.</div>
+
+      <div class="letter-section-heading">Extraordinary Limiting Conditions</div>
+      <div class="letter-conditions-text">No Extraordinary Limiting Conditions were made for this assignment.</div>
+
+      <p>
+        The report has been completed in accordance with the Canadian Uniform Standards of Professional Appraisal Practice ("CUSPAP") adopted January 1, 2024. The full narrative appraisal report that follows sets forth the pertinent data and analyses leading to the conclusions presented herein. The appraisal requirements section of this report sets out the basis of the appraisal, definitions and the valuation methodology and must be read to gain a full understanding of the process.
+      </p>
+
+      <p>
+        If there are any specific questions or concerns regarding the attached appraisal report, or if Valta can be of additional assistance, please contact the individuals listed below.
+      </p>
+
+      <p style="margin-top: 2rem;">
+        Respectfully Submitted,<br/>
+        <strong>Valta Property Valuations Ltd.</strong>
+      </p>
+
+      <div class="letter-signature-block">
+        <div class="letter-signature-line"></div>
+        <div class="letter-signature-name">Chris Chornohos, AACI, MRICS</div>
+        <div>Founder</div>
+        <div>chris.chornohos@valta.ca</div>
+        <div>AIC No: 902097</div>
+      </div>
+    </div>
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+
+  <!-- Executive Summary Page -->
+  
+  <div id="section-exec" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2 class="section-title">Executive Summary</h2>
+
+      
+
+      
+        <h3 class="subsection-title">PROPERTY IDENTIFICATION</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Value Scenario:</div>
+            <div class="field-value">As Is</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Property Rights:</div>
+            <div class="field-value">Fee Simple Estate</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Building Style:</div>
+            <div class="field-value">walkup</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Total Buildings:</div>
+            <div class="field-value">2</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Net Rentable Area (SF):</div>
+            <div class="field-value">10204</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Year Built:</div>
+            <div class="field-value">1970</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Occupancy Rate (%):</div>
+            <div class="field-value">100</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Total Units:</div>
+            <div class="field-value">16</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Number of Stories:</div>
+            <div class="field-value">2</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Building Format:</div>
+            <div class="field-value">Lowrise</div>
+          </div>
+        
+      
+        <h3 class="subsection-title">VALUE SUMMARY</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Concluded Value:</div>
+            <div class="field-value">1780000</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Hypothetical Conditions:</div>
+            <div class="field-value">No Hypothetical Conditions were made for this assignment.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Extraordinary Assumptions:</div>
+            <div class="field-value">No Extraordinary Assumptions were made for this assignment.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Extraordinary Limiting Conditions:</div>
+            <div class="field-value">No Extraordinary Limiting Conditions were made for this assignment.</div>
+          </div>
+        
+      
+    </div>
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+
+  <!-- Additional Sections -->
+  
+  <div id="section-maps" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Location Maps</h2>
+
+      
+            <div class="field-group">
+              <div class="field-label">Regional Map:</div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                
+                  <div style="border: 1px solid #e5e7eb; border-radius: 4px; overflow: hidden;">
+                    <img src="/test-data/images/maps/regional-map.png" alt="Regional Map 1" style="width: 100%; height: 150px; object-fit: cover;" />
+                  </div>
+                
+              </div>
+            </div>
+          
+            <div class="field-group">
+              <div class="field-label">Local Area Map:</div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                
+                  <div style="border: 1px solid #e5e7eb; border-radius: 4px; overflow: hidden;">
+                    <img src="/test-data/images/maps/location-map.png" alt="Local Area Map 1" style="width: 100%; height: 150px; object-fit: cover;" />
+                  </div>
+                
+              </div>
+            </div>
+          
+            <div class="field-group">
+              <div class="field-label">Aerial/Site Map:</div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                
+                  <div style="border: 1px solid #e5e7eb; border-radius: 4px; overflow: hidden;">
+                    <img src="/test-data/images/maps/aerial-map.png" alt="Aerial/Site Map 1" style="width: 100%; height: 150px; object-fit: cover;" />
+                  </div>
+                
+              </div>
+            </div>
+          
+
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-photos" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Photos</h2>
+    
+      <h3 class="subsection-title">EXTERIOR PHOTOGRAPHS</h3>
+      <table class="photo-grid">
+      
+        <tr>
+          <td class="photo-cell">
+            <img src="/test-data/images/exterior/exterior-1.jpeg" alt="Photo 1" class="photo-image" />
+            
+          </td>
+        
+          <td class="photo-cell"></td>
+          
+        </tr>
+        
+      </table>
+      
+      <h3 class="subsection-title">STREET VIEW PHOTOGRAPHS</h3>
+      <table class="photo-grid">
+      
+        <tr>
+          <td class="photo-cell">
+            <img src="/test-data/images/street-views/street-1.jpeg" alt="Photo 1" class="photo-image" />
+            
+          </td>
+        
+          <td class="photo-cell"></td>
+          
+        </tr>
+        
+      </table>
+      
+      <h3 class="subsection-title">INTERIOR COMMON AREA</h3>
+      <table class="photo-grid">
+      
+        <tr>
+          <td class="photo-cell">
+            <img src="/test-data/images/interior/interior-1.jpeg" alt="Photo 1" class="photo-image" />
+            
+          </td>
+        
+          <td class="photo-cell"></td>
+          
+        </tr>
+        
+      </table>
+      
+      <h3 class="subsection-title">UNIT INTERIOR PHOTOGRAPHS</h3>
+      <table class="photo-grid">
+      
+        <tr>
+          <td class="photo-cell">
+            <img src="/test-data/images/interior/interior-4.jpeg" alt="Photo 1" class="photo-image" />
+            
+          </td>
+        
+          <td class="photo-cell"></td>
+          
+        </tr>
+        
+      </table>
+      
+      <h3 class="subsection-title">BUILDING SYSTEMS</h3>
+      <table class="photo-grid">
+      
+        <tr>
+          <td class="photo-cell">
+            <img src="/test-data/images/interior/interior-8.jpeg" alt="Photo 1" class="photo-image" />
+            
+          </td>
+        
+          <td class="photo-cell"></td>
+          
+        </tr>
+        
+      </table>
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-site" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Site Details</h2>
+
+      <!-- Site Summary Table -->
+      <h3 class="subsection-title">Site Summary</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">Municipal Address</td>
+            <td class="site-table-value">1101, 1121 109 St, North Battleford, SK</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Site Area</td>
+            <td class="site-table-value">
+              24,400 SF
+               / 
+              0.56 Acres
+              
+            </td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Shape</td>
+            <td class="site-table-value">Rectangular</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Topography</td>
+            <td class="site-table-value">Level</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Accessibility</td>
+            <td class="site-table-value">Good</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Exposure & Visibility</td>
+            <td class="site-table-value">Corner lot with frontage on 109 Street and 11 Avenue</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Adjacent Uses Sub-table -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Adjacent Uses</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">North</td>
+            <td class="site-table-value">Residential</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">South</td>
+            <td class="site-table-value">Residential</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">East</td>
+            <td class="site-table-value">Commercial</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">West</td>
+            <td class="site-table-value">Residential</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Site Conditions Narrative -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Site Conditions</h3>
+
+      
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Easements & Encroachments</h4>
+          <p class="site-narrative-text">Standard utility easements. No known encroachments.</p>
+        </div>
+      
+
+      
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Soils</h4>
+          <p class="site-narrative-text">Stable, suitable for low-rise construction</p>
+        </div>
+      
+
+      
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Environmental Concerns</h4>
+          <p class="site-narrative-text">No known environmental concerns. No Phase I ESA conducted.</p>
+        </div>
+      
+
+      
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Overall Site Rating</h4>
+          <p class="site-narrative-text">Good</p>
+        </div>
+      
+
+      
+
+      <!-- Site Conclusion -->
+      
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Site Conclusion</h3>
+        <p class="site-narrative-text">The site is well-suited for multi-family residential use. Corner lot provides good visibility and access. Level topography and adequate size support current improvements.</p>
+      
+
+      <!-- Site Plan Images -->
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-location" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Location Analysis</h2>
+
+      
+
+      
+        <h3 class="subsection-title">LOCATION OVERVIEW</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Location Overview:</div>
+            <div class="field-value">North Battleford is a city in west-central Saskatchewan with a population of approximately 14,000. The property is located in an established residential neighborhood with good access to amenities and services.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Access:</div>
+            <div class="field-value">The property has frontage on 109 Street, a local collector road, and 11 Avenue. Highway 16 (Yellowhead Highway) provides regional connectivity. The property is approximately 140 km northwest of Saskatoon.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Public Transportation:</div>
+            <div class="field-value">Limited public transit available in North Battleford. Most residents rely on private vehicles.</div>
+          </div>
+        
+      
+        <h3 class="subsection-title">WALKABILITY SCORES</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Walk Score:</div>
+            <div class="field-value">45</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Transit Score:</div>
+            <div class="field-value">25</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Bike Score:</div>
+            <div class="field-value">50</div>
+          </div>
+        
+      
+        <h3 class="subsection-title">LOCAL AREA</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Local Area Description:</div>
+            <div class="field-value">Established residential area with mix of single-family homes and low-rise apartment buildings. Quiet neighborhood character with mature trees.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Nearby Schools:</div>
+            <div class="field-value">John Paul II Collegiate, St. Mary Elementary School, and Sakewew High School within 2 km</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Nearby Amenities:</div>
+            <div class="field-value">Gateway Mall (major shopping center) within 2 km. Grocery stores, restaurants, and services within walking distance. Recreation facilities including outdoor pool and arena nearby.</div>
+          </div>
+        
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-tax" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Property Taxes & Assessment</h2>
+
+      <!-- Property Taxes & Assessment Table -->
+      <h3 class="subsection-title">Assessment & Tax Summary</h3>
+      <table class="site-table">
+        <tbody>
+          <tr>
+            <td class="site-table-label">Assessment Year</td>
+            <td class="site-table-value">2025</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Land Assessment</td>
+            <td class="site-table-value">$300,000</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Building Assessment</td>
+            <td class="site-table-value">$900,000</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Total Assessment</td>
+            <td class="site-table-value">$1,200,000</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Mill Rate</td>
+            <td class="site-table-value">15</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Annual Taxes</td>
+            <td class="site-table-value">$18,000</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Tax Commentary Narrative -->
+      
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Tax Commentary</h3>
+        <p class="site-narrative-text">The assessed value is below the concluded market value, which is typical for income-producing properties. The assessment represents approximately 67% of market value.</p>
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-market" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Market Analysis</h2>
+
+      
+
+      
+        <h3 class="subsection-title">NATIONAL OVERVIEW</h3>
+        
+          <div class="field-group">
+            <div class="field-label">National Economic Overview:</div>
+            <div class="field-value">Canadian economy showing moderate growth with GDP increasing 1.8% annually. Interest rates have stabilized after recent increases by the Bank of Canada.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">GDP Growth:</div>
+            <div class="field-value">1.8% annual growth</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Inflation Rate:</div>
+            <div class="field-value">CPI at 3.2%, trending toward Bank of Canada target of 2%</div>
+          </div>
+        
+      
+        <h3 class="subsection-title">PROVINCIAL OVERVIEW</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Provincial Overview:</div>
+            <div class="field-value">Saskatchewan economy supported by strong agricultural sector and resource industries. Population growth driven by interprovincial migration.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Unemployment Rate:</div>
+            <div class="field-value">4.8%</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Key Industries:</div>
+            <div class="field-value">Agriculture, mining (potash, uranium), oil and gas, manufacturing</div>
+          </div>
+        
+      
+        <h3 class="subsection-title">LOCAL MARKET</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Local Market Analysis:</div>
+            <div class="field-value">North Battleford serves as regional center for agricultural area. Economy based on agriculture, healthcare, education, and government services.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Population:</div>
+            <div class="field-value">14,000 (city), 40,000+ (regional trade area)</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Employment:</div>
+            <div class="field-value">Healthcare and education are major employers. Seasonal agricultural employment.</div>
+          </div>
+        
+      
+        <h3 class="subsection-title">MULTIFAMILY MARKET</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Multifamily Market Overview:</div>
+            <div class="field-value">Multi-family rental market in North Battleford is stable with consistent demand. Limited new construction in recent years. Tenant base includes working families, healthcare workers, and young professionals.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Market Vacancy Rate (%):</div>
+            <div class="field-value">4</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Rent Trend:</div>
+            <div class="field-value">Rents have increased 2-3% annually over past 5 years. Current market remains stable.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Supply Pipeline:</div>
+            <div class="field-value">No major multi-family projects in development or planning stages.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Demand Drivers:</div>
+            <div class="field-value">Employment growth in healthcare and education sectors, limited homeownership options for moderate income households, regional population growth</div>
+          </div>
+        
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-impv" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Improvements</h2>
+
+      
+
+      
+        <!-- Construction Details Table -->
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Construction Details</h3>
+        <table class="site-table">
+          <tbody>
+            
+              <tr>
+                <td class="site-table-label">Foundation</td>
+                <td class="site-table-value">Concrete</td>
+              </tr>
+            
+            
+              <tr>
+                <td class="site-table-label">Exterior Walls</td>
+                <td class="site-table-value">1121: Brick exterior. 1101: Stucco on wood frame</td>
+              </tr>
+            
+            
+            
+          </tbody>
+        </table>
+      
+
+      
+        <!-- Building Systems Table -->
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Building Systems</h3>
+        <table class="site-table">
+          <tbody>
+            
+              <tr>
+                <td class="site-table-label">HVAC</td>
+                <td class="site-table-value">1101: 8 individual furnaces. 1121: Boilers with baseboard radiant heat</td>
+              </tr>
+            
+            
+              <tr>
+                <td class="site-table-label">Electrical</td>
+                <td class="site-table-value">200 amp service, copper wiring, adequate for residential use</td>
+              </tr>
+            
+            
+              <tr>
+                <td class="site-table-label">Plumbing</td>
+                <td class="site-table-value">Copper supply lines, PVC drains, individual water heaters</td>
+              </tr>
+            
+            
+              <tr>
+                <td class="site-table-label">Fire Protection</td>
+                <td class="site-table-value">Alarms Only</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+
+      
+        <!-- Amenities Section -->
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Amenities</h3>
+        <div class="site-narrative-section">
+          
+            <div style="margin-bottom: 0.75rem;">
+              <h4 class="site-narrative-label">Project Amenities</h4>
+              <p class="site-narrative-text">On-site parking, coin laundry, outdoor common areas</p>
+            </div>
+          
+          
+            <div style="margin-bottom: 0.75rem;">
+              <h4 class="site-narrative-label">Unit Amenities</h4>
+              <p class="site-narrative-text">Range/stove, refrigerator, window coverings</p>
+            </div>
+          
+          
+            <div style="margin-bottom: 0.75rem;">
+              <h4 class="site-narrative-label">Laundry</h4>
+              <p class="site-narrative-text">On Site</p>
+            </div>
+          
+          
+            <div style="margin-bottom: 0.75rem;">
+              <h4 class="site-narrative-label">Security</h4>
+              <p class="site-narrative-text">Deadbolts, exterior lighting, individual unit entry</p>
+            </div>
+          
+        </div>
+      
+
+      
+        <!-- Site Improvements Section -->
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Site Improvements</h3>
+        <table class="site-table">
+          <tbody>
+            
+              <tr>
+                <td class="site-table-label">Parking Spaces</td>
+                <td class="site-table-value">24</td>
+              </tr>
+            
+            
+              <tr>
+                <td class="site-table-label">Parking Ratio</td>
+                <td class="site-table-value">1.5</td>
+              </tr>
+            
+            
+            
+              <tr>
+                <td class="site-table-label">Landscaping</td>
+                <td class="site-table-value">Grass areas with some mature trees, minimal plantings</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+
+      
+        <!-- Overall Condition Section -->
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Overall Condition</h3>
+        <div class="site-narrative-section">
+          <p class="site-narrative-text">Average</p>
+        </div>
+      
+
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-zone" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Zoning Analysis</h2>
+
+      <!-- Zoning Classification -->
+      
+        <h3 class="subsection-title">Zoning Classification</h3>
+        <p class="site-narrative-text">R2 - Low Density Residential District</p>
+      
+
+      <!-- Permitted Uses -->
+      
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Permitted Uses</h3>
+        <ul style="margin-left: 2rem; line-height: 1.8; font-size: 12px;">
+          <li>Single-family dwellings</li><li>duplexes</li><li>townhouses</li><li>apartment buildings (up to 3 stories)</li><li>home-based businesses</li>
+        </ul>
+      
+
+      <!-- Development Standards Table -->
+      
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Development Standards</h3>
+        <table class="site-table">
+          <tbody>
+            
+              <tr>
+                <td class="site-table-label">Maximum Height</td>
+                <td class="site-table-value">35 feet or 3 stories</td>
+              </tr>
+            
+            
+              <tr>
+                <td class="site-table-label">Maximum Density</td>
+                <td class="site-table-value">15 units per acre</td>
+              </tr>
+            
+            
+            
+              <tr>
+                <td class="site-table-label">Parking Requirements</td>
+                <td class="site-table-value">1.5 spaces per unit for apartments</td>
+              </tr>
+            
+          </tbody>
+        </table>
+      
+
+      <!-- Conformance Status -->
+      
+
+      <!-- Zoning Conclusion -->
+      
+        <h3 class="subsection-title" style="margin-top: 1.5rem;">Zoning Conclusion</h3>
+        <p class="site-narrative-text">The property conforms to current R2 zoning requirements. Existing density (29 units/acre) exceeds current maximum, but is grandfathered as legal non-conforming. Parking meets requirements.</p>
+      
+
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-hbu" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Highest & Best Use</h2>
+
+      <!-- Introduction -->
+      <div class="site-narrative-section">
+        <p class="site-narrative-text">The highest and best use of a property is defined as the reasonably probable and legal use of property that is physically possible, appropriately supported, and financially feasible, and that results in the highest value. The highest and best use analysis is conducted for the site as if vacant and for the property as improved.</p>
+      </div>
+
+      <!-- As Vacant Analysis -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Analysis As Vacant</h3>
+
+      
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Legally Permissible</h4>
+          <div class="empty-state">Not specified</div>
+        </div>
+      
+
+      
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Physically Possible</h4>
+          <div class="empty-state">Not specified</div>
+        </div>
+      
+
+      
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Financially Feasible</h4>
+          <div class="empty-state">Not specified</div>
+        </div>
+      
+
+      
+        <div class="site-narrative-section">
+          <h4 class="site-narrative-label">Maximally Productive</h4>
+          <div class="empty-state">Not specified</div>
+        </div>
+      
+
+      
+
+      <!-- As Improved Analysis -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Analysis As Improved</h3>
+
+      
+        <div class="empty-state">No as improved analysis provided</div>
+      
+
+      
+
+      <!-- Final HBU Conclusion -->
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-calc" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Calculator</h2>
+
+      
+
+      
+        <h3 class="subsection-title">UNIT MIX</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Unit Type 1:</div>
+            <div class="field-value">1BR/1BA</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Unit Count:</div>
+            <div class="field-value">4</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Avg SF:</div>
+            <div class="field-value">550</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Market Rent/Mo:</div>
+            <div class="field-value">900</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Annual Revenue:</div>
+            <div class="field-value">43200</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Unit Type 2:</div>
+            <div class="field-value">2BR/1BA</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Unit Count:</div>
+            <div class="field-value">12</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Avg SF:</div>
+            <div class="field-value">667</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Market Rent/Mo:</div>
+            <div class="field-value">1060</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Annual Revenue:</div>
+            <div class="field-value">152640</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Unit Type 3:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Unit Count:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Avg SF:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Market Rent/Mo:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Annual Revenue:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Unit Type 4:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Unit Count:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Avg SF:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Market Rent/Mo:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Annual Revenue:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Total Units:</div>
+            <div class="field-value">16</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Total SF:</div>
+            <div class="field-value">10204</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Avg Unit SF:</div>
+            <div class="field-value">638</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Total Rental Revenue:</div>
+            <div class="field-value">195840</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Avg Rent/Unit:</div>
+            <div class="field-value">1020</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Avg Rent/SF:</div>
+            <div class="field-value">1.6</div>
+          </div>
+        
+      
+        <h3 class="subsection-title">OTHER INCOME</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Parking $/Unit/Mo:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Parking Annual:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Laundry $/Unit/Mo:</div>
+            <div class="field-value">300</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Laundry Annual:</div>
+            <div class="field-value">57600</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Other Income Annual:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Total Other Income:</div>
+            <div class="field-value">57600</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Potential Gross Revenue:</div>
+            <div class="field-value">253440</div>
+          </div>
+        
+      
+        <h3 class="subsection-title">VACANCY & LOSS</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Vacancy Rate (%):</div>
+            <div class="field-value">4</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Bad Debt Rate (%):</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Concessions Rate (%):</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Total Vacancy & Loss:</div>
+            <div class="field-value">10137.6</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Effective Gross Revenue:</div>
+            <div class="field-value">243302.4</div>
+          </div>
+        
+      
+        <h3 class="subsection-title">OPERATING EXPENSES</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Management:</div>
+            <div class="field-value">5</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Real Estate Taxes:</div>
+            <div class="field-value">1125</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Insurance:</div>
+            <div class="field-value">625</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Repairs & Maintenance:</div>
+            <div class="field-value">625</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Utilities:</div>
+            <div class="field-value">750</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Payroll:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Admin & General:</div>
+            <div class="field-value">156.25</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Replacement Reserves:</div>
+            <div class="field-value">250</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Other Expenses:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Total Expenses:</div>
+            <div class="field-value">68665</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Expense Ratio (%):</div>
+            <div class="field-value">28.22</div>
+          </div>
+        
+      
+        <h3 class="subsection-title">CAPITALIZATION</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Cap Rate (%):</div>
+            <div class="field-value">6.25</div>
+          </div>
+        
+      
+        <h3 class="subsection-title">POST-VALUE ADJUSTMENTS</h3>
+        
+          <div class="field-group">
+            <div class="field-label">CapEx Adjustment:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Leasing Costs:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Other Adjustments:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Total Adjustments:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+      
+        <h3 class="subsection-title">VALUATION RESULTS</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Net Operating Income:</div>
+            <div class="field-value">174637</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">NOI/Unit:</div>
+            <div class="field-value">10915</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">NOI/SF:</div>
+            <div class="field-value">17.11</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Raw Value:</div>
+            <div class="field-value">2794196</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Indicated Value:</div>
+            <div class="field-value">2790000</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Value/Unit:</div>
+            <div class="field-value">174375</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Value/SF:</div>
+            <div class="field-value">273.42</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">GRM:</div>
+            <div class="field-value">14.25</div>
+          </div>
+        
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-land1" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Land Value</h2>
+
+      
+          <div class="field-group">
+            <div class="field-label">Land Value Conclusion:</div>
+            <div class="field-value">Land value analysis not applicable for this assignment.</div>
+          </div>
+        
+
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-cost-s" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Cost Approach</h2>
+
+      
+          <div class="field-group">
+            <div class="field-label">Cost Approach Conclusion:</div>
+            <div class="field-value">Cost approach not applicable for this assignment.</div>
+          </div>
+        
+
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-sales" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Sales Comparison Approach</h2>
+
+      <!-- Subject Property Summary Table -->
+      <h3 class="subsection-title">Subject Property Summary</h3>
+      <table class="site-table">
+        <thead>
+          <tr>
+            <th class="site-table-label" style="background: #1a365d; color: white;">Item</th>
+            <th class="site-table-value" style="background: #1a365d; color: white;">Subject</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="site-table-label">Number of Units</td>
+            <td class="site-table-value"><span class="empty-state">Not specified</span></td>
+          </tr>
+          <tr>
+            <td class="site-table-label">GBA</td>
+            <td class="site-table-value">10,204 SF</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Year Built</td>
+            <td class="site-table-value"><span class="empty-state">Not specified</span></td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Site Area</td>
+            <td class="site-table-value">24,400 SF</td>
+          </tr>
+          <tr>
+            <td class="site-table-label">Condition</td>
+            <td class="site-table-value">Average</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Comparable Sale 1 -->
+      
+
+      <!-- Comparable Sale 2 -->
+      
+
+      <!-- Comparable Sale 3 -->
+      
+
+      <!-- Sales Comparison Value Conclusion -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Sales Comparison Value Conclusion</h3>
+      <table class="cap-value-table">
+        <tbody>
+          <tr class="cap-value-total">
+            <td class="cap-table-label"><strong>Indicated Value</strong></td>
+            <td class="cap-table-value"><strong>$1,800,000</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Adjustment Summary Narrative -->
+      
+
+      
+        <div class="empty-state">No sales comparison data provided. Complete the subject property summary and comparable sales fields.</div>
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-income" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Income Approach</h2>
+
+      <!-- Pro Forma Operating Statement -->
+      <h3 class="subsection-title">Pro Forma Operating Statement</h3>
+      <table class="income-table">
+        <thead>
+          <tr>
+            <th class="income-table-label">Line Item</th>
+            <th class="income-table-amount">Amount</th>
+            <th class="income-table-percent">% of EGI</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="income-section-header">
+            <td colspan="3"><strong>REVENUE</strong></td>
+          </tr>
+          <tr>
+            <td class="income-table-label">Potential Gross Income</td>
+            <td class="income-table-amount"><span class="empty-state">-</span></td>
+            <td class="income-table-percent"></td>
+          </tr>
+          <tr>
+            <td class="income-table-label">Less: Vacancy</td>
+            <td class="income-table-amount"><span class="empty-state">-</span></td>
+            <td class="income-table-percent"></td>
+          </tr>
+          <tr>
+            <td class="income-table-label">Add: Other Income</td>
+            <td class="income-table-amount"><span class="empty-state">-</span></td>
+            <td class="income-table-percent"></td>
+          </tr>
+          <tr class="income-subtotal">
+            <td class="income-table-label"><strong>Effective Gross Income</strong></td>
+            <td class="income-table-amount"><strong><span class="empty-state">-</span></strong></td>
+            <td class="income-table-percent"><strong>100%</strong></td>
+          </tr>
+          <tr class="income-spacer">
+            <td colspan="3"></td>
+          </tr>
+          <tr class="income-section-header">
+            <td colspan="3"><strong>OPERATING EXPENSES</strong></td>
+          </tr>
+          <tr>
+            <td class="income-table-label">Management</td>
+            <td class="income-table-amount"><span class="empty-state">-</span></td>
+            <td class="income-table-percent"></td>
+          </tr>
+          <tr>
+            <td class="income-table-label">Insurance</td>
+            <td class="income-table-amount"><span class="empty-state">-</span></td>
+            <td class="income-table-percent"></td>
+          </tr>
+          <tr>
+            <td class="income-table-label">Property Taxes</td>
+            <td class="income-table-amount"><span class="empty-state">-</span></td>
+            <td class="income-table-percent"></td>
+          </tr>
+          
+          
+          
+          
+          
+          
+          <tr class="income-subtotal">
+            <td class="income-table-label"><strong>Total Expenses</strong></td>
+            <td class="income-table-amount"><strong><span class="empty-state">-</span></strong></td>
+            <td class="income-table-percent"><strong></strong></td>
+          </tr>
+          <tr class="income-spacer">
+            <td colspan="3"></td>
+          </tr>
+          <tr class="income-total">
+            <td class="income-table-label"><strong>NET OPERATING INCOME</strong></td>
+            <td class="income-table-amount"><strong><span class="empty-state">-</span></strong></td>
+            <td class="income-table-percent"><strong></strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Capitalization Rate Analysis -->
+      
+
+      <!-- Direct Capitalization Value -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Direct Capitalization Value</h3>
+      <table class="cap-value-table">
+        <thead>
+          <tr>
+            <th class="cap-table-label">Component</th>
+            <th class="cap-table-value">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="cap-table-label">Net Operating Income (NOI)</td>
+            <td class="cap-table-value"><span class="empty-state">-</span></td>
+          </tr>
+          <tr>
+            <td class="cap-table-label">Capitalization Rate</td>
+            <td class="cap-table-value"><span class="empty-state">-</span></td>
+          </tr>
+          <tr class="cap-value-total">
+            <td class="cap-table-label"><strong>Indicated Value</strong></td>
+            <td class="cap-table-value"><strong><span class="empty-state">-</span></strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      
+        <div class="empty-state">No income approach data provided. Complete the Pro Forma Operating Statement and Capitalization Rate fields.</div>
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-recon" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Reconciliation of Value</h2>
+
+      <!-- Introduction -->
+      
+
+      <!-- Value Summary Table -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Value Summary</h3>
+      <table class="letter-value-table">
+        <thead>
+          <tr>
+            <th>Approach</th>
+            <th>Indicated Value</th>
+            <th>Weight</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          
+          
+          
+          <tr>
+            <td colspan="3" style="text-align: center;">
+              <span class="empty-state">No approach values specified</span>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+
+      <!-- Reconciliation Analysis -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Reconciliation Analysis</h3>
+      
+        <div class="empty-state">No reconciliation analysis provided</div>
+      
+
+      <!-- Final Value Conclusion -->
+      <h3 class="subsection-title" style="margin-top: 1.5rem;">Final Value Conclusion</h3>
+      <table class="letter-value-table">
+        <thead>
+          <tr>
+            <th>Value Scenario</th>
+            <th>Interest Appraised</th>
+            <th>Effective Date</th>
+            <th>Concluded Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>As Is</td>
+            <td>Fee Simple Estate</td>
+            <td>2025-10-17</td>
+            <td><strong>$1,780,000</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+  <div id="section-cert" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Certification</h2>
+
+      
+
+      
+        <h3 class="subsection-title">CERTIFICATION</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Statement 1:</div>
+            <div class="field-value">The statements of fact contained in this report are true and correct.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Statement 2:</div>
+            <div class="field-value">The reported analyses, opinions, and conclusions are limited only by the reported assumptions and limiting conditions and are my personal, impartial, and unbiased professional analyses, opinions, and conclusions.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Statement 3:</div>
+            <div class="field-value">I have no present or prospective interest in the property that is the subject of this report and no personal interest with respect to the parties involved.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Statement 4:</div>
+            <div class="field-value">I have performed no services, as an appraiser or in any other capacity, regarding the property that is the subject of this report within the three-year period immediately preceding acceptance of this assignment.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Statement 5:</div>
+            <div class="field-value">I have no bias with respect to the property that is the subject of this report or to the parties involved with this assignment.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Statement 6:</div>
+            <div class="field-value">My engagement in this assignment was not contingent upon developing or reporting predetermined results.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Statement 7:</div>
+            <div class="field-value">My compensation for completing this assignment is not contingent upon the development or reporting of a predetermined value or direction in value that favors the cause of the client, the amount of the value opinion, the attainment of a stipulated result, or the occurrence of a subsequent event directly related to the intended use of this appraisal.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Statement 8:</div>
+            <div class="field-value">My analyses, opinions, and conclusions were developed, and this report has been prepared, in conformity with the Canadian Uniform Standards of Professional Appraisal Practice.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Statement 9:</div>
+            <div class="field-value">I have made a personal inspection of the property that is the subject of this report.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Statement 10:</div>
+            <div class="field-value">No one provided significant real property appraisal assistance to the person signing this certification.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Statement 11:</div>
+            <div class="field-value">The reported analyses, opinions, and conclusions were developed, and this report has been prepared, in conformity with the requirements of the Code of Professional Ethics and Standards of Professional Appraisal Practice of the Appraisal Institute.</div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Statement 12:</div>
+            <div class="field-value">As of the date of this report, I have completed the continuing education program for Designated Members of the Appraisal Institute.</div>
+          </div>
+        
+      
+        <h3 class="subsection-title">SIGNATURE</h3>
+        
+          <div class="field-group">
+            <div class="field-label">Signature Image:</div>
+            <div class="field-value"></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Appraiser Name:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Credentials:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+          <div class="field-group">
+            <div class="field-label">Signature Date:</div>
+            <div class="field-value"><span class="empty-state">Not specified</span></div>
+          </div>
+        
+      
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+  
+
+  <!-- Certification Section -->
+  <div id="section-cert" class="page exec-page" style="position: relative;">
+    <!-- Page Header -->
+    <div class="page-header">
+      <img src="/images/valta-logo-optimized.png" alt="Valta" class="page-header-logo" />
+      <div class="page-header-title">
+        <div>North Battleford Apartments</div>
+        <div>1101, 1121 109 St, North Battleford</div>
+      </div>
+    </div>
+
+    
+    <div class="section">
+      <h2 class="section-title">Certification</h2>
+
+      <div class="site-narrative-section">
+        <p class="site-narrative-text">I certify that, to the best of my knowledge and belief:</p>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">1.</div>
+        <div class="cert-text">The statements of fact contained in this report are true and correct.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">2.</div>
+        <div class="cert-text">The reported analyses, opinions, and conclusions are limited only by the reported assumptions and limiting conditions and are my personal, impartial, and unbiased professional analyses, opinions, and conclusions.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">3.</div>
+        <div class="cert-text">I have no present or prospective interest in the property that is the subject of this report and no personal interest with respect to the parties involved.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">4.</div>
+        <div class="cert-text">I have no bias with respect to the property that is the subject of this report or to the parties involved with this assignment.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">5.</div>
+        <div class="cert-text">My engagement in this assignment was not contingent upon developing or reporting predetermined results.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">6.</div>
+        <div class="cert-text">My compensation for completing this assignment is not contingent upon the development or reporting of a predetermined value or direction in value that favours the cause of the client, the amount of the value opinion, the attainment of a stipulated result, or the occurrence of a subsequent event directly related to the intended use of this appraisal.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">7.</div>
+        <div class="cert-text">My analyses, opinions, and conclusions were developed, and this report has been prepared, in conformity with the Canadian Uniform Standards of Professional Appraisal Practice (CUSPAP).</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">8.</div>
+        <div class="cert-text">Chris Chornohos has made a personal inspection of the property that is the subject of this report.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">9.</div>
+        <div class="cert-text">No one provided significant real property appraisal assistance to the person signing this certification.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">10.</div>
+        <div class="cert-text">The reported analyses, opinions, and conclusions were developed, and this report has been prepared, in conformity with the Code of Professional Ethics of the Appraisal Institute of Canada.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">11.</div>
+        <div class="cert-text">The use of this report is subject to the requirements of the Appraisal Institute of Canada relating to review by its duly authorized representatives.</div>
+      </div>
+
+      <div class="cert-statement">
+        <div class="cert-number">12.</div>
+        <div class="cert-text">As of the date of this report, Chris Chornohos has completed the continuing professional development program requirements of the Appraisal Institute of Canada.</div>
+      </div>
+
+      <!-- Signature Block -->
+      <div class="cert-signature-block">
+        <div class="cert-signature-line"></div>
+        <div class="cert-signature-name">Chris Chornohos</div>
+        <div class="cert-signature-credentials">AACI, MRICS</div>
+        <div class="cert-signature-title">Founder</div>
+        <div class="cert-signature-company">Valta Property Valuations Ltd.</div>
+        <div class="cert-signature-aic">AIC #902097</div>
+        <div class="cert-signature-date">Date: 2025-11-20</div>
+      </div>
+    </div>
+    
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+      <div class="page-footer-left">VAL251012 - 1</div>
+      <div class="page-footer-right">Valta Property Valuations Ltd.</div>
+    </div>
+  </div>
+
+</body>
+</html>
+  </div>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valuation & Conclusions - Page 42</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: 8.5in 11in;
+            margin: 0.5in;
+        }
+
+        body {
+            font-family: 'Calibri', 'Arial', sans-serif;
+            line-height: 1.5;
+            color: #333;
+            background: white;
+            padding: 0.5in;
+            width: 8.5in;
+            height: 11in;
+        }
+
+        .page-content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: relative;
+        }
+
+        .header {
+            border-bottom: 3px solid #0052A3;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+            letter-spacing: 0.5px;
+        }
+
+        .section {
+            margin-bottom: 18px;
+        }
+
+        .section h2 {
+            font-size: 13px;
+            font-weight: bold;
+            color: #0052A3;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .section h3 {
+            font-size: 12px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 8px;
+        }
+
+        p {
+            font-size: 11px;
+            margin-bottom: 10px;
+            text-align: justify;
+            line-height: 1.4;
+        }
+
+        .income-approach-intro {
+            font-style: italic;
+            font-size: 11px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .section-divider {
+            margin-top: 16px;
+            margin-bottom: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 10px;
+        }
+
+        table.rent-roll {
+            background: white;
+            margin: 14px 0 14px 0;
+        }
+
+        .rent-roll thead {
+            background: #003D82;
+            color: white;
+            font-weight: bold;
+        }
+
+        .rent-roll th {
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #003D82;
+            font-size: 9px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .rent-roll td {
+            padding: 5px 4px;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .rent-roll td.type,
+        .rent-roll td.description {
+            text-align: left;
+        }
+
+        .rent-roll tr:nth-child(odd) {
+            background: #f9f9f9;
+        }
+
+        .rent-roll tr:nth-child(even) {
+            background: white;
+        }
+
+        .rent-roll tbody tr:last-child {
+            font-weight: bold;
+        }
+
+        .table-note {
+            font-size: 10px;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+
+        .footer-section {
+            margin-top: auto;
+            border-top: 2px solid #0052A3;
+            padding-top: 8px;
+            font-size: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left {
+            flex: 1;
+        }
+
+        .footer-right {
+            width: 80px;
+            height: 30px;
+            background: linear-gradient(to right, #E8F0F8 50%, #003D82 50%);
+            margin-left: 10px;
+        }
+
+        @media print {
+            body {
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
+            .page-content {
+                height: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-content">
+        <div class="header">
+            <h1>Valuation & Conclusions</h1>
+        </div>
+
+        <div class="section">
+            <h2>Income Approach</h2>
+            <p class="income-approach-intro">The Income Approach is based on the premise that properties are purchased for their income producing potential. It considers both the annual return on the invested capital and the rate of return anticipated by market participants. The two fundamental methods of this valuation technique include Discounted Cash Flow and Direct Capitalization. The Direct Capitalization method of the Income Approach is used in this analysis. This capitalization technique best represents the decision-making process of an investor.</p>
+        </div>
+
+        <div class="section">
+            <h3>Direct Capitalization Method</h3>
+            <p>The first step in direct capitalization is to estimate the durable rental income through analysis of the in-place or projected (proposed developments) leases and market rent terms. Next, encumbrances and other revenue are analyzed. Then, vacancy and operating expenses are estimated. Finally, the net operating income is capitalized at a supported rate. The implied value may be adjusted to account for non-stabilized conditions or required capital expenditures to reflect an as-is value.</p>
+        </div>
+
+        <div class="section">
+            <h3>Multi-Family Revenue Analysis</h3>
+            <h4 style="font-size: 11px; font-weight: bold; margin-bottom: 6px;">Multi-Family Subject Rent Roll</h4>
+            <p>The following table summarizes the subject in place unit mix and rental rates.</p>
+
+            <table class="rent-roll">
+                <thead>
+                    <tr>
+                        <th>TYPE</th>
+                        <th>DESCRIPTION</th>
+                        <th style="text-align: center;">UNIT<br>DETAIL</th>
+                        <th style="text-align: center;">SIZE<br>% OF<br>TOTAL</th>
+                        <th style="text-align: center;">SIZE<br>VAC %</th>
+                        <th style="text-align: center;">OCC %</th>
+                        <th style="text-align: center;">AGING<br>RENT<br>$/MO</th>
+                        <th style="text-align: center;">RENT<br>$/SF</th>
+                        <th style="text-align: center;">RECENT<br>LEASES<br>$/MO</th>
+                        <th style="text-align: center;">ACTUAL<br>RENT<br>$/MO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="type">Flat 1 Bed / 1 Bath</td>
+                        <td class="description">One Bed/One Bath</td>
+                        <td>4</td>
+                        <td>4</td>
+                        <td>0%</td>
+                        <td>100%</td>
+                        <td>$550</td>
+                        <td>0.0%</td>
+                        <td>100.0%</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>$585</td>
+                        <td>$1,633</td>
+                    </tr>
+                    <tr>
+                        <td class="type">Flat 2 Bed / 1 Bath</td>
+                        <td class="description">Two Bed/One Bath</td>
+                        <td>12</td>
+                        <td>12</td>
+                        <td>8%</td>
+                        <td>75%</td>
+                        <td>$650</td>
+                        <td>0.0%</td>
+                        <td>100.0%</td>
+                        <td>$0</td>
+                        <td>$0.00</td>
+                        <td>$0.00</td>
+                        <td>$1,913</td>
+                    </tr>
+                    <tr>
+                        <td class="type">TOTAL / AVERAGE</td>
+                        <td class="description"></td>
+                        <td>16</td>
+                        <td>16</td>
+                        <td>100%</td>
+                        <td>638</td>
+                        <td>0.0%</td>
+                        <td>100.0%</td>
+                        <td>$0</td>
+                        <td>$0.00</td>
+                        <td>$0.00</td>
+                        <td>$1,013</td>
+                        <td>$1.59</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p class="table-note">The majority of the subject tenant leases are on 12-month leases. In addition, security deposit fees for the property equal one month's rent. The landlord pays for all utilities except electricity.</p>
+        </div>
+
+        <div class="section">
+            <h3>Multi-Family Market Rent Survey Analysis</h3>
+            <p>This section examines comparable properties within the marketplace to estimate market rent for the subject. This allows for a comparison of the subject property's contract to what is attainable in the current market.</p>
+        </div>
+
+        <div class="section">
+            <h3>Unit of Comparison</h3>
+            <p>The analysis is conducted on a dollar per square foot, per month basis, reflecting market behavior. The total dollar per month per unit is also considered.</p>
+        </div>
+
+        <div class="section">
+            <h3>Selection of Comparables</h3>
+            <p>A comparable search of the marketplace was undertaken to find the most comparable properties in terms of location, tenancy, age, exposure, quality, and condition. The comparables in this analysis are the most reliable indicators of market rent for the subject available at the time of this appraisal.</p>
+        </div>
+
+        <div class="section">
+            <h3>Concessions</h3>
+            <p>Currently landlords are not offering concessions.</p>
+        </div>
+
+        <div class="footer-section">
+            <div class="footer-left">
+                <strong>37</strong> | 1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1
+            </div>
+            <div class="footer-right"></div>
+        </div>
+    </div>
+</body>
+</html>

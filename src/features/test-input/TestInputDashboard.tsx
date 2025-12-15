@@ -455,6 +455,9 @@ const TestInputDashboard: React.FC = () => {
                                     <ChevronRight className="w-4 h-4 text-amber-800" />
                                   )}
                                   <h3 className="text-sm font-semibold text-amber-800">🏗️ 17-Cost Approach</h3>
+                                  <Badge variant="outline" className="text-xs ml-auto">
+                                    {getFieldsBySection('cost-s').length} fields
+                                  </Badge>
                                 </div>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
@@ -500,6 +503,9 @@ const TestInputDashboard: React.FC = () => {
                                     <ChevronRight className="w-4 h-4 text-blue-800" />
                                   )}
                                   <h3 className="text-sm font-semibold text-blue-800">📈 18-Sales Comparison Approach</h3>
+                                  <Badge variant="outline" className="text-xs ml-auto">
+                                    {getFieldsBySection('sales').length} fields
+                                  </Badge>
                                 </div>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
@@ -569,12 +575,18 @@ const TestInputDashboard: React.FC = () => {
                                     <ChevronRight className="w-4 h-4 text-emerald-800" />
                                   )}
                                   <h3 className="text-sm font-semibold text-emerald-800">💰 19-Income Approach</h3>
+                                  <Badge variant="outline" className="text-xs ml-auto">
+                                    {getFieldsBySection('calc').length + getFieldsBySection('income').length} fields
+                                  </Badge>
                                 </div>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
                             <div className="space-y-3 p-4">
                               {(() => {
-                                const incomeFields = getFieldsBySection('calc');
+                                // Combine calc section (calculations) and income section (narratives/conclusions)
+                                const calcFields = getFieldsBySection('calc');
+                                const incomeNarrativeFields = getFieldsBySection('income');
+                                const incomeFields = [...calcFields, ...incomeNarrativeFields];
                                 const { inputs, outputs } = categorizeValuationFields(incomeFields);
                                 return (
                                   <>

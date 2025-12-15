@@ -17,7 +17,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from '@/components/ui/collapsible';
-import { ChevronDown, ChevronRight, ExternalLink, Calculator, Database, RefreshCw } from 'lucide-react';
+import { ChevronDown, ChevronRight, ExternalLink, Database, RefreshCw } from 'lucide-react';
 import ImageFieldInput from './components/ImageFieldInput';
 
 type FieldStatus = 'mapped' | 'empty' | 'missing';
@@ -84,6 +84,10 @@ const TestInputDashboard: React.FC = () => {
     'unit-photos': 'UNIT INTERIORS',
     'systems-photos': 'BUILDING SYSTEMS'
   };
+
+  // Sections hidden because they're consolidated into accordions
+  // Maintains number gaps (07, 17-19) for alignment with Report Builder
+  const hiddenSections = ['photos', 'cost-s', 'sales', 'income'];
 
   // Helper function to categorize fields as inputs or outputs
   const categorizeValuationFields = (fields: FieldDefinition[]): { inputs: FieldDefinition[], outputs: FieldDefinition[] } => {
@@ -296,12 +300,6 @@ const TestInputDashboard: React.FC = () => {
     navigate('/mock-builder');
   };
 
-  // Run calculations
-  const handleRunCalculations = () => {
-    runCalculations();
-    console.log('Calculations triggered');
-  };
-
   // Group fields by section
   const allSections = getAllSections();
 
@@ -390,21 +388,14 @@ const TestInputDashboard: React.FC = () => {
               <ExternalLink className="w-4 h-4" />
               Preview in Builder
             </Button>
-            <Button
-              onClick={handleRunCalculations}
-              variant="default"
-              size="sm"
-              className="gap-2"
-            >
-              <Calculator className="w-4 h-4" />
-              Run Calculations
-            </Button>
           </div>
         </div>
 
         {/* Sections */}
         <div className="space-y-2">
-          {allSections.map(sectionId => {
+          {allSections
+            .filter(sectionId => !hiddenSections.includes(sectionId))
+            .map(sectionId => {
             const fields = getFieldsBySection(sectionId);
             if (fields.length === 0) return null;
 

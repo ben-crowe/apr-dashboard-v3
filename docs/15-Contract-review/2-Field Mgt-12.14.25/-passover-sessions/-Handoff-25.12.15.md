@@ -166,14 +166,6 @@ Report Tables (Expenses, Surveys, Comps)
 ## SESSION HISTORY
 
 | Date | Session | Work Done | Deliverables |
-|------|---------|-----------|--------------|
-| 2025-12-15 | 26 | Field extraction from Word HTML, registry comparison, table analysis | 7 reports, 2 Python scripts, 6 git commits |
-
----
-
-## SESSION HISTORY
-
-| Date | Session | Work Done | Deliverables |
 |------|---------|-----------|--------------:|
 | 2025-12-15 | 26 | Field extraction from Word HTML, registry comparison, table analysis | 7 reports, 2 Python scripts, 6 git commits |
 | 2025-12-15 | 27 | Input/output classification, field destination mapping, data flow synthesis | 3 reports, 2 Python scripts, 4 git commits |

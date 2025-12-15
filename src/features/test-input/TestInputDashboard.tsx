@@ -33,6 +33,7 @@ const TestInputDashboard: React.FC = () => {
   const { sections, updateFieldValue, runCalculations, loadFullTestData, initializeMockData } = useReportBuilderStore();
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['cover']));
   const [expandedValuations, setExpandedValuations] = useState<Set<string>>(new Set(['cost', 'sales', 'income']));
+  const [expandedImageDestinations, setExpandedImageDestinations] = useState<Set<string>>(new Set(['cover-sig', 'location-maps', 'property-photos']));
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
 
   // Initialize store on mount if sections are empty
@@ -137,7 +138,7 @@ const TestInputDashboard: React.FC = () => {
     return { field, status: 'mapped', storeValue };
   };
 
-  // Calculate statistics
+  // Calculate statistics - only for visible sections (exclude hidden/consolidated tabs)
   const stats = useMemo(() => {
     let total = 0;
     let mapped = 0;
@@ -145,6 +146,9 @@ const TestInputDashboard: React.FC = () => {
     let missing = 0;
 
     fieldRegistry.forEach(field => {
+      // Skip fields from hidden sections (consolidated into accordions)
+      if (hiddenSections.includes(field.section)) return;
+
       total++;
       const status = getFieldStatus(field);
       if (status.status === 'mapped') mapped++;
@@ -183,6 +187,19 @@ const TestInputDashboard: React.FC = () => {
         newSet.delete(valuationId);
       } else {
         newSet.add(valuationId);
+      }
+      return newSet;
+    });
+  };
+
+  // Toggle image management destination accordion
+  const toggleImageDestination = (destinationId: string) => {
+    setExpandedImageDestinations(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(destinationId)) {
+        newSet.delete(destinationId);
+      } else {
+        newSet.add(destinationId);
       }
       return newSet;
     });
@@ -629,33 +646,213 @@ const TestInputDashboard: React.FC = () => {
                         </div>
                       ) : sectionId === 'image-mgt' ? (
                         <div className="space-y-4 p-4">
-                          {getSubsectionsForSection(sectionId).map(subsectionId => {
-                            const subsectionFields = getFieldsBySubsection(sectionId, subsectionId);
-                            const subsectionName = subsectionNameMapping[subsectionId] || subsectionId.toUpperCase();
-                            return (
-                              <div key={subsectionId} className="border rounded-lg overflow-hidden">
-                                <div className="bg-blue-50 px-4 py-2 border-b">
-                                  <h3 className="text-sm font-semibold text-blue-800">{subsectionName}</h3>
+                          {/* 01 - Cover & Signature */}
+                          <Collapsible
+                            open={expandedImageDestinations.has('cover-sig')}
+                            onOpenChange={() => toggleImageDestination('cover-sig')}
+                          >
+                            <div className="border rounded-lg overflow-hidden">
+                              <CollapsibleTrigger className="w-full">
+                                <div className="bg-amber-50 hover:bg-amber-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                  <div className="flex items-center gap-2">
+                                    {expandedImageDestinations.has('cover-sig') ? <ChevronDown className="w-4 h-4 text-amber-600" /> : <ChevronRight className="w-4 h-4 text-amber-600" />}
+                                    <h3 className="text-sm font-semibold text-amber-800">📄 01 - COVER & SIGNATURE</h3>
+                                  </div>
+                                  <Badge variant="outline" className="text-xs ml-auto">
+                                    {getFieldsBySubsection(sectionId, 'cover-images').length} fields
+                                  </Badge>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4 p-4">
-                                  {subsectionFields.map(field => {
-                                    const statusInfo = getFieldStatus(field);
-                                    return (
-                                      <div key={field.id} className="flex flex-col gap-1">
-                                        <label className="text-xs text-slate-600 font-medium">
-                                          {field.label}
-                                        </label>
-                                        <div className="flex items-center gap-2">
-                                          {renderInput(field, statusInfo)}
-                                          {renderStatusBadge(statusInfo.status)}
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <div className="p-4 bg-white">
+                                  <div className="grid grid-cols-2 gap-4">
+                                    {getFieldsBySubsection(sectionId, 'cover-images').map(field => {
+                                      const statusInfo = getFieldStatus(field);
+                                      return (
+                                        <div key={field.id} className="flex flex-col gap-1">
+                                          <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                          <div className="flex items-center gap-2">
+                                            {renderInput(field, statusInfo)}
+                                            {renderStatusBadge(statusInfo.status)}
+                                          </div>
                                         </div>
-                                      </div>
-                                    );
-                                  })}
+                                      );
+                                    })}
+                                  </div>
                                 </div>
-                              </div>
-                            );
-                          })}
+                              </CollapsibleContent>
+                            </div>
+                          </Collapsible>
+
+                          {/* 03 - Location Maps */}
+                          <Collapsible
+                            open={expandedImageDestinations.has('location-maps')}
+                            onOpenChange={() => toggleImageDestination('location-maps')}
+                          >
+                            <div className="border rounded-lg overflow-hidden">
+                              <CollapsibleTrigger className="w-full">
+                                <div className="bg-blue-50 hover:bg-blue-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                  <div className="flex items-center gap-2">
+                                    {expandedImageDestinations.has('location-maps') ? <ChevronDown className="w-4 h-4 text-blue-600" /> : <ChevronRight className="w-4 h-4 text-blue-600" />}
+                                    <h3 className="text-sm font-semibold text-blue-800">🗺️ 03 - LOCATION MAPS</h3>
+                                  </div>
+                                  <Badge variant="outline" className="text-xs ml-auto">
+                                    {getFieldsBySubsection(sectionId, 'maps').length} fields
+                                  </Badge>
+                                </div>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <div className="p-4 bg-white">
+                                  <div className="grid grid-cols-2 gap-4">
+                                    {getFieldsBySubsection(sectionId, 'maps').map(field => {
+                                      const statusInfo = getFieldStatus(field);
+                                      return (
+                                        <div key={field.id} className="flex flex-col gap-1">
+                                          <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                          <div className="flex items-center gap-2">
+                                            {renderInput(field, statusInfo)}
+                                            {renderStatusBadge(statusInfo.status)}
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
+                              </CollapsibleContent>
+                            </div>
+                          </Collapsible>
+
+                          {/* 07 - Property Photographs */}
+                          <Collapsible
+                            open={expandedImageDestinations.has('property-photos')}
+                            onOpenChange={() => toggleImageDestination('property-photos')}
+                          >
+                            <div className="border rounded-lg overflow-hidden">
+                              <CollapsibleTrigger className="w-full">
+                                <div className="bg-emerald-50 hover:bg-emerald-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                  <div className="flex items-center gap-2">
+                                    {expandedImageDestinations.has('property-photos') ? <ChevronDown className="w-4 h-4 text-emerald-600" /> : <ChevronRight className="w-4 h-4 text-emerald-600" />}
+                                    <h3 className="text-sm font-semibold text-emerald-800">📸 07 - PROPERTY PHOTOGRAPHS</h3>
+                                  </div>
+                                  <Badge variant="outline" className="text-xs ml-auto">
+                                    {getFieldsBySubsection(sectionId, 'exterior-photos').length +
+                                     getFieldsBySubsection(sectionId, 'street-photos').length +
+                                     getFieldsBySubsection(sectionId, 'common-photos').length +
+                                     getFieldsBySubsection(sectionId, 'unit-photos').length +
+                                     getFieldsBySubsection(sectionId, 'systems-photos').length} fields
+                                  </Badge>
+                                </div>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <div className="p-4 bg-white space-y-4">
+                                  {/* Exterior Photos */}
+                                  <div className="border rounded-lg overflow-hidden">
+                                    <div className="bg-slate-50 px-4 py-2 border-b">
+                                      <h4 className="text-xs font-semibold text-slate-700">Exterior Photos</h4>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4 p-4">
+                                      {getFieldsBySubsection(sectionId, 'exterior-photos').map(field => {
+                                        const statusInfo = getFieldStatus(field);
+                                        return (
+                                          <div key={field.id} className="flex flex-col gap-1">
+                                            <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                            <div className="flex items-center gap-2">
+                                              {renderInput(field, statusInfo)}
+                                              {renderStatusBadge(statusInfo.status)}
+                                            </div>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+
+                                  {/* Street Views */}
+                                  <div className="border rounded-lg overflow-hidden">
+                                    <div className="bg-slate-50 px-4 py-2 border-b">
+                                      <h4 className="text-xs font-semibold text-slate-700">Street Views</h4>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4 p-4">
+                                      {getFieldsBySubsection(sectionId, 'street-photos').map(field => {
+                                        const statusInfo = getFieldStatus(field);
+                                        return (
+                                          <div key={field.id} className="flex flex-col gap-1">
+                                            <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                            <div className="flex items-center gap-2">
+                                              {renderInput(field, statusInfo)}
+                                              {renderStatusBadge(statusInfo.status)}
+                                            </div>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+
+                                  {/* Common Areas */}
+                                  <div className="border rounded-lg overflow-hidden">
+                                    <div className="bg-slate-50 px-4 py-2 border-b">
+                                      <h4 className="text-xs font-semibold text-slate-700">Common Areas</h4>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4 p-4">
+                                      {getFieldsBySubsection(sectionId, 'common-photos').map(field => {
+                                        const statusInfo = getFieldStatus(field);
+                                        return (
+                                          <div key={field.id} className="flex flex-col gap-1">
+                                            <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                            <div className="flex items-center gap-2">
+                                              {renderInput(field, statusInfo)}
+                                              {renderStatusBadge(statusInfo.status)}
+                                            </div>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+
+                                  {/* Unit Interiors */}
+                                  <div className="border rounded-lg overflow-hidden">
+                                    <div className="bg-slate-50 px-4 py-2 border-b">
+                                      <h4 className="text-xs font-semibold text-slate-700">Unit Interiors</h4>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4 p-4">
+                                      {getFieldsBySubsection(sectionId, 'unit-photos').map(field => {
+                                        const statusInfo = getFieldStatus(field);
+                                        return (
+                                          <div key={field.id} className="flex flex-col gap-1">
+                                            <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                            <div className="flex items-center gap-2">
+                                              {renderInput(field, statusInfo)}
+                                              {renderStatusBadge(statusInfo.status)}
+                                            </div>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+
+                                  {/* Building Systems */}
+                                  <div className="border rounded-lg overflow-hidden">
+                                    <div className="bg-slate-50 px-4 py-2 border-b">
+                                      <h4 className="text-xs font-semibold text-slate-700">Building Systems</h4>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4 p-4">
+                                      {getFieldsBySubsection(sectionId, 'systems-photos').map(field => {
+                                        const statusInfo = getFieldStatus(field);
+                                        return (
+                                          <div key={field.id} className="flex flex-col gap-1">
+                                            <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                            <div className="flex items-center gap-2">
+                                              {renderInput(field, statusInfo)}
+                                              {renderStatusBadge(statusInfo.status)}
+                                            </div>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                </div>
+                              </CollapsibleContent>
+                            </div>
+                          </Collapsible>
                         </div>
                       ) : (
                         <table className="w-full">

@@ -17,7 +17,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from '@/components/ui/collapsible';
-import { ChevronDown, ChevronRight, ExternalLink, Database, RefreshCw } from 'lucide-react';
+import { ChevronDown, ChevronRight, ExternalLink, Database, RefreshCw, Eye, X } from 'lucide-react';
 import ImageFieldInput from './components/ImageFieldInput';
 
 type FieldStatus = 'mapped' | 'empty' | 'missing';
@@ -35,6 +35,7 @@ const TestInputDashboard: React.FC = () => {
   const [expandedValuations, setExpandedValuations] = useState<Set<string>>(new Set(['cost', 'sales', 'income']));
   const [expandedImageDestinations, setExpandedImageDestinations] = useState<Set<string>>(new Set(['cover-sig', 'location-maps', 'property-photos']));
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
+  const [imagePreview, setImagePreview] = useState<{ url: string; label: string } | null>(null);
 
   // Initialize store on mount if sections are empty
   useEffect(() => {
@@ -301,6 +302,17 @@ const TestInputDashboard: React.FC = () => {
                 />
               ) : (
                 <div className="w-8 h-8 bg-slate-100 rounded border border-dashed border-slate-300" />
+              )}
+
+              {/* Eye icon for preview - only show if image exists */}
+              {managedFieldValue && (
+                <button
+                  onClick={() => setImagePreview({ url: managedFieldValue, label: field.label })}
+                  className="text-slate-500 hover:text-slate-700"
+                  title="Preview image"
+                >
+                  <Eye className="w-4 h-4" />
+                </button>
               )}
 
               {/* Compact link */}
@@ -949,6 +961,30 @@ const TestInputDashboard: React.FC = () => {
           })}
         </div>
       </div>
+
+      {/* Image Preview Modal */}
+      {imagePreview && (
+        <div
+          className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-2"
+          onClick={() => setImagePreview(null)}
+        >
+          <div className="relative max-w-[95vw] max-h-[95vh]">
+            <img
+              src={imagePreview.url}
+              alt={imagePreview.label}
+              className="max-w-[95vw] max-h-[95vh] object-contain rounded shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              className="absolute top-2 right-2 bg-white/90 hover:bg-white rounded-full p-1.5 transition-colors shadow-lg"
+              onClick={() => setImagePreview(null)}
+              title="Close preview"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

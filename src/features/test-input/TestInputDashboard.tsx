@@ -456,13 +456,13 @@ const TestInputDashboard: React.FC = () => {
                           >
                             <div className="border rounded-lg overflow-hidden">
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-amber-50 px-4 py-2 border-b hover:bg-amber-100 cursor-pointer flex items-center gap-2">
+                                <div className="bg-slate-50 px-4 py-2 border-b hover:bg-slate-100 cursor-pointer flex items-center gap-2">
                                   {expandedValuations.has('cost') ? (
-                                    <ChevronDown className="w-4 h-4 text-amber-800" />
+                                    <ChevronDown className="w-4 h-4 text-slate-600" />
                                   ) : (
-                                    <ChevronRight className="w-4 h-4 text-amber-800" />
+                                    <ChevronRight className="w-4 h-4 text-slate-600" />
                                   )}
-                                  <h3 className="text-sm font-semibold text-amber-800">🏗️ 17-Cost Approach</h3>
+                                  <h3 className="text-sm font-semibold text-slate-800">17 - Cost Approach</h3>
                                   <Badge variant="outline" className="text-xs ml-auto">
                                     {getFieldsBySection('cost-s').length} fields
                                   </Badge>
@@ -504,13 +504,13 @@ const TestInputDashboard: React.FC = () => {
                           >
                             <div className="border rounded-lg overflow-hidden">
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-blue-50 px-4 py-2 border-b hover:bg-blue-100 cursor-pointer flex items-center gap-2">
+                                <div className="bg-slate-50 px-4 py-2 border-b hover:bg-slate-100 cursor-pointer flex items-center gap-2">
                                   {expandedValuations.has('sales') ? (
-                                    <ChevronDown className="w-4 h-4 text-blue-800" />
+                                    <ChevronDown className="w-4 h-4 text-slate-600" />
                                   ) : (
-                                    <ChevronRight className="w-4 h-4 text-blue-800" />
+                                    <ChevronRight className="w-4 h-4 text-slate-600" />
                                   )}
-                                  <h3 className="text-sm font-semibold text-blue-800">📈 18-Sales Comparison Approach</h3>
+                                  <h3 className="text-sm font-semibold text-slate-800">18 - Sales Comparison Approach</h3>
                                   <Badge variant="outline" className="text-xs ml-auto">
                                     {getFieldsBySection('sales').length} fields
                                   </Badge>
@@ -525,7 +525,7 @@ const TestInputDashboard: React.FC = () => {
                                       <>
                                         {/* Inputs */}
                                         <div className="space-y-2">
-                                          <div className="text-xs font-semibold text-slate-600 pb-1 border-b">📝 INPUTS ({inputs.length} fields)</div>
+                                          <div className="text-xs font-semibold text-slate-600 pb-1 border-b">INPUTS ({inputs.length} fields)</div>
                                           <table className="w-full text-sm">
                                             <tbody>
                                               {inputs.map(field => {
@@ -544,7 +544,7 @@ const TestInputDashboard: React.FC = () => {
                                         </div>
                                         {/* Outputs */}
                                         <div className="space-y-2">
-                                          <div className="text-xs font-semibold text-slate-600 pb-1 border-b">🔢 OUTPUTS ({outputs.length} calculated fields)</div>
+                                          <div className="text-xs font-semibold text-slate-600 pb-1 border-b">OUTPUTS ({outputs.length} calculated fields)</div>
                                           <table className="w-full text-sm">
                                             <tbody>
                                               {outputs.map(field => {
@@ -576,13 +576,13 @@ const TestInputDashboard: React.FC = () => {
                           >
                             <div className="border rounded-lg overflow-hidden">
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-emerald-50 px-4 py-2 border-b hover:bg-emerald-100 cursor-pointer flex items-center gap-2">
+                                <div className="bg-slate-50 px-4 py-2 border-b hover:bg-slate-100 cursor-pointer flex items-center gap-2">
                                   {expandedValuations.has('income') ? (
-                                    <ChevronDown className="w-4 h-4 text-emerald-800" />
+                                    <ChevronDown className="w-4 h-4 text-slate-600" />
                                   ) : (
-                                    <ChevronRight className="w-4 h-4 text-emerald-800" />
+                                    <ChevronRight className="w-4 h-4 text-slate-600" />
                                   )}
-                                  <h3 className="text-sm font-semibold text-emerald-800">💰 19-Income Approach</h3>
+                                  <h3 className="text-sm font-semibold text-slate-800">19 - Income Approach</h3>
                                   <Badge variant="outline" className="text-xs ml-auto">
                                     {getFieldsBySection('calc').length + getFieldsBySection('income').length} fields
                                   </Badge>
@@ -600,7 +600,7 @@ const TestInputDashboard: React.FC = () => {
                                   <>
                                     {/* Inputs */}
                                     <div className="space-y-2">
-                                      <div className="text-xs font-semibold text-slate-600 pb-1 border-b">📝 INPUTS ({inputs.length} fields)</div>
+                                      <div className="text-xs font-semibold text-slate-600 pb-1 border-b">INPUTS ({inputs.length} fields)</div>
                                       <table className="w-full text-sm">
                                         <tbody>
                                           {inputs.map(field => {
@@ -619,7 +619,7 @@ const TestInputDashboard: React.FC = () => {
                                     </div>
                                     {/* Outputs */}
                                     <div className="space-y-2">
-                                      <div className="text-xs font-semibold text-slate-600 pb-1 border-b">🔢 OUTPUTS ({outputs.length} calculated fields)</div>
+                                      <div className="text-xs font-semibold text-slate-600 pb-1 border-b">OUTPUTS ({outputs.length} calculated fields)</div>
                                       <table className="w-full text-sm">
                                         <tbody>
                                           {outputs.map(field => {

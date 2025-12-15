@@ -63,7 +63,7 @@ const TestInputDashboard: React.FC = () => {
     'impv': '12 - IMPROVEMENTS',
     'zone': '13 - ZONING',
     'hbu': '14 - HIGHEST & BEST USE',
-    'calc': '15 - CALCULATOR',
+    'calc': '15 - VALUATIONS (All 3 Approaches)',
     'land1': '16 - LAND VALUE',
     'cost-s': '17 - COST APPROACH',
     'sales': '18 - SALES COMPARISON',
@@ -82,6 +82,14 @@ const TestInputDashboard: React.FC = () => {
     'common-photos': 'COMMON AREAS',
     'unit-photos': 'UNIT INTERIORS',
     'systems-photos': 'BUILDING SYSTEMS'
+  };
+
+  // Helper function to categorize fields as inputs or outputs
+  const categorizeValuationFields = (fields: FieldDefinition[]): { inputs: FieldDefinition[], outputs: FieldDefinition[] } => {
+    return {
+      inputs: fields.filter(f => f.inputSource === 'user-input' || f.inputSource === 'auto-filled'),
+      outputs: fields.filter(f => f.inputSource === 'calculated')
+    };
   };
 
   // Get value from store by traversing sections/subsections
@@ -416,8 +424,151 @@ const TestInputDashboard: React.FC = () => {
 
                   <CollapsibleContent>
                     <div className="border-t border-slate-200">
-                      {/* Special rendering for image-mgt section with subsection groups */}
-                      {sectionId === 'image-mgt' ? (
+                      {/* Special rendering for Calculator tab - consolidated valuations view */}
+                      {sectionId === 'calc' ? (
+                        <div className="space-y-4 p-4">
+                          {/* 19 - Income Approach */}
+                          <div className="border rounded-lg overflow-hidden">
+                            <div className="bg-emerald-50 px-4 py-2 border-b">
+                              <h3 className="text-sm font-semibold text-emerald-800">💰 19-Income Approach</h3>
+                            </div>
+                            <div className="space-y-3 p-4">
+                              {(() => {
+                                const incomeFields = getFieldsBySection('calc');
+                                const { inputs, outputs } = categorizeValuationFields(incomeFields);
+                                return (
+                                  <>
+                                    {/* Inputs */}
+                                    <div className="space-y-2">
+                                      <div className="text-xs font-semibold text-slate-600 pb-1 border-b">📝 INPUTS ({inputs.length} fields)</div>
+                                      <table className="w-full text-sm">
+                                        <tbody>
+                                          {inputs.map(field => {
+                                            const statusInfo = getFieldStatus(field);
+                                            return (
+                                              <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50">
+                                                <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
+                                                <td className="px-2 py-1.5 text-sm">{field.label}</td>
+                                                <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
+                                                <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
+                                              </tr>
+                                            );
+                                          })}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    {/* Outputs */}
+                                    <div className="space-y-2">
+                                      <div className="text-xs font-semibold text-slate-600 pb-1 border-b">🔢 OUTPUTS ({outputs.length} calculated fields)</div>
+                                      <table className="w-full text-sm">
+                                        <tbody>
+                                          {outputs.map(field => {
+                                            const statusInfo = getFieldStatus(field);
+                                            return (
+                                              <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50 bg-slate-50">
+                                                <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
+                                                <td className="px-2 py-1.5 text-sm font-medium">{field.label}</td>
+                                                <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
+                                                <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
+                                              </tr>
+                                            );
+                                          })}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </>
+                                );
+                              })()}
+                            </div>
+                          </div>
+
+                          {/* 18 - Sales Comparison Approach */}
+                          <div className="border rounded-lg overflow-hidden">
+                            <div className="bg-blue-50 px-4 py-2 border-b">
+                              <h3 className="text-sm font-semibold text-blue-800">📈 18-Sales Comparison Approach</h3>
+                            </div>
+                            <div className="space-y-3 p-4">
+                              {(() => {
+                                const salesFields = getFieldsBySection('sales');
+                                const { inputs, outputs } = categorizeValuationFields(salesFields);
+                                return (
+                                  <>
+                                    {/* Inputs */}
+                                    <div className="space-y-2">
+                                      <div className="text-xs font-semibold text-slate-600 pb-1 border-b">📝 INPUTS ({inputs.length} fields)</div>
+                                      <table className="w-full text-sm">
+                                        <tbody>
+                                          {inputs.map(field => {
+                                            const statusInfo = getFieldStatus(field);
+                                            return (
+                                              <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50">
+                                                <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
+                                                <td className="px-2 py-1.5 text-sm">{field.label}</td>
+                                                <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
+                                                <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
+                                              </tr>
+                                            );
+                                          })}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    {/* Outputs */}
+                                    <div className="space-y-2">
+                                      <div className="text-xs font-semibold text-slate-600 pb-1 border-b">🔢 OUTPUTS ({outputs.length} calculated fields)</div>
+                                      <table className="w-full text-sm">
+                                        <tbody>
+                                          {outputs.map(field => {
+                                            const statusInfo = getFieldStatus(field);
+                                            return (
+                                              <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50 bg-slate-50">
+                                                <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
+                                                <td className="px-2 py-1.5 text-sm font-medium">{field.label}</td>
+                                                <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
+                                                <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
+                                              </tr>
+                                            );
+                                          })}
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </>
+                                );
+                              })()}
+                            </div>
+                          </div>
+
+                          {/* 17 - Cost Approach */}
+                          <div className="border rounded-lg overflow-hidden">
+                            <div className="bg-amber-50 px-4 py-2 border-b">
+                              <h3 className="text-sm font-semibold text-amber-800">🏗️ 17-Cost Approach</h3>
+                            </div>
+                            <div className="space-y-3 p-4">
+                              {(() => {
+                                const costFields = getFieldsBySection('cost-s');
+                                return (
+                                  <div className="space-y-2">
+                                    <table className="w-full text-sm">
+                                      <tbody>
+                                        {costFields.map(field => {
+                                          const statusInfo = getFieldStatus(field);
+                                          return (
+                                            <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50">
+                                              <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
+                                              <td className="px-2 py-1.5 text-sm">{field.label}</td>
+                                              <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
+                                              <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
+                                            </tr>
+                                          );
+                                        })}
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                );
+                              })()}
+                            </div>
+                          </div>
+                        </div>
+                      ) : sectionId === 'image-mgt' ? (
                         <div className="space-y-4 p-4">
                           {getSubsectionsForSection(sectionId).map(subsectionId => {
                             const subsectionFields = getFieldsBySubsection(sectionId, subsectionId);

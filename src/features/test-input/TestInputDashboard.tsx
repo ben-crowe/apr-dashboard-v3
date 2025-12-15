@@ -291,47 +291,31 @@ const TestInputDashboard: React.FC = () => {
           const managedFieldValue = managedSection?.fields?.[legacyMapping.managedFieldId];
 
           return (
-            <div className="flex flex-col gap-1 p-2 bg-slate-50 rounded border border-slate-200">
-              {/* Image thumbnail preview */}
+            <div className="flex items-center gap-2">
+              {/* Small thumbnail */}
               {managedFieldValue ? (
-                <div className="flex items-center gap-2">
-                  <img
-                    src={managedFieldValue}
-                    alt="Preview"
-                    className="w-16 h-16 object-cover rounded border border-slate-300"
-                  />
-                  <div className="flex flex-col gap-1">
-                    <span className="text-xs text-slate-700 font-medium">Image uploaded</span>
-                    <span className="text-[10px] text-slate-500">{field.label}</span>
-                  </div>
-                </div>
+                <img
+                  src={managedFieldValue}
+                  alt="Preview"
+                  className="w-8 h-8 object-cover rounded border border-slate-300"
+                />
               ) : (
-                <div className="flex items-center gap-2">
-                  <div className="w-16 h-16 bg-slate-100 rounded border border-dashed border-slate-300 flex items-center justify-center">
-                    <span className="text-xs text-slate-400">No image</span>
-                  </div>
-                  <span className="text-xs text-slate-500">{field.label}</span>
-                </div>
+                <div className="w-8 h-8 bg-slate-100 rounded border border-dashed border-slate-300" />
               )}
 
-              {/* Link to Image Management */}
+              {/* Compact link */}
               <button
                 onClick={() => {
-                  // Expand Image Management section
                   setExpandedSections(prev => new Set([...prev, 'image-mgt']));
-                  // Scroll to Image Management after a brief delay
                   setTimeout(() => {
                     const element = document.getElementById('section-image-mgt');
                     element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }, 100);
                 }}
-                className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-1"
+                className="text-xs text-blue-600 hover:underline"
               >
-                <ExternalLink className="w-3 h-3" />
-                Managed in: Image Management → {legacyMapping.destination}
+                Managed in Image Mgt
               </button>
-
-              <div className="text-[10px] text-slate-400 mt-0.5">{field.id}</div>
             </div>
           );
         }

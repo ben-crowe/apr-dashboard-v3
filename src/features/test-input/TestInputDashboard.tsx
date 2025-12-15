@@ -90,6 +90,15 @@ const TestInputDashboard: React.FC = () => {
   // Maintains number gaps (03, 07, 17-19) for alignment with Report Builder
   const hiddenSections = ['maps', 'photos', 'cost-s', 'sales', 'income'];
 
+  // Legacy image fields that are now managed in Image Management
+  // Maps legacy field ID to: { managedFieldId, destination label, scrollToSection }
+  const legacyImageFields: Record<string, { managedFieldId: string, destination: string, section: string }> = {
+    'cover-photo': { managedFieldId: 'img-cover-photo', destination: '01 - Cover & Signature', section: 'image-mgt' },
+    'site-plan-image': { managedFieldId: 'img-site-plan-1', destination: '03 - Location Maps', section: 'image-mgt' },
+    'zoning-map': { managedFieldId: 'img-zoning-map', destination: '03 - Location Maps', section: 'image-mgt' },
+    'cert-signature': { managedFieldId: 'img-signature', destination: '01 - Cover & Signature', section: 'image-mgt' }
+  };
+
   // Helper function to categorize fields as inputs or outputs
   const categorizeValuationFields = (fields: FieldDefinition[]): { inputs: FieldDefinition[], outputs: FieldDefinition[] } => {
     return {
@@ -273,6 +282,61 @@ const TestInputDashboard: React.FC = () => {
         );
 
       case 'image':
+        // Check if this is a legacy image field that's now managed in Image Management
+        const legacyMapping = legacyImageFields[field.id];
+
+        if (legacyMapping) {
+          // Get the value from the managed Image Management field
+          const managedSection = sections.find(s => s.id === legacyMapping.section);
+          const managedFieldValue = managedSection?.fields?.[legacyMapping.managedFieldId];
+
+          return (
+            <div className="flex flex-col gap-1 p-2 bg-slate-50 rounded border border-slate-200">
+              {/* Image thumbnail preview */}
+              {managedFieldValue ? (
+                <div className="flex items-center gap-2">
+                  <img
+                    src={managedFieldValue}
+                    alt="Preview"
+                    className="w-16 h-16 object-cover rounded border border-slate-300"
+                  />
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs text-slate-700 font-medium">Image uploaded</span>
+                    <span className="text-[10px] text-slate-500">{field.label}</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <div className="w-16 h-16 bg-slate-100 rounded border border-dashed border-slate-300 flex items-center justify-center">
+                    <span className="text-xs text-slate-400">No image</span>
+                  </div>
+                  <span className="text-xs text-slate-500">{field.label}</span>
+                </div>
+              )}
+
+              {/* Link to Image Management */}
+              <button
+                onClick={() => {
+                  // Expand Image Management section
+                  setExpandedSections(prev => new Set([...prev, 'image-mgt']));
+                  // Scroll to Image Management after a brief delay
+                  setTimeout(() => {
+                    const element = document.getElementById('section-image-mgt');
+                    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 100);
+                }}
+                className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-1"
+              >
+                <ExternalLink className="w-3 h-3" />
+                Managed in: Image Management → {legacyMapping.destination}
+              </button>
+
+              <div className="text-[10px] text-slate-400 mt-0.5">{field.id}</div>
+            </div>
+          );
+        }
+
+        // Normal image field rendering for Image Management fields
         return (
           <div className="flex flex-col gap-0">
             <ImageFieldInput
@@ -425,7 +489,7 @@ const TestInputDashboard: React.FC = () => {
                 open={isExpanded}
                 onOpenChange={() => toggleSection(sectionId)}
               >
-                <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div id={`section-${sectionId}`} className="bg-white rounded-lg shadow-sm overflow-hidden">
                   <CollapsibleTrigger className="w-full">
                     <div className="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer">
                       <div className="flex items-center gap-2">

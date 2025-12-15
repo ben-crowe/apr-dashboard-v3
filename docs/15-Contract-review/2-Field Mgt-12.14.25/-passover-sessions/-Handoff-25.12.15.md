@@ -1,7 +1,7 @@
 # Session Handoff - Field Management & Report Template Integration
 
-**Last Updated:** 2025-12-15 (Session 27 Update)
-**Status:** Input/output classification complete, field destinations mapped, data flow documented
+**Last Updated:** 2025-12-15 (Session 28 Update)
+**Status:** Consolidated valuations tab complete, all 3 approaches in one view with collapsible accordions
 
 ---
 
@@ -17,6 +17,7 @@
 | Field Input/Output Classification | ✅ Complete | 377 inputs, 59 calculated, 15 Valcre matches |
 | Per-Page Field Mapping | ✅ Complete | 10 sections mapped, 38 multi-section fields |
 | Data Flow Summary | ✅ Complete | Comprehensive synthesis document created |
+| Consolidated Valuations Tab | ✅ Complete | All 3 approaches in one tab with accordions |
 | HTML Template Integration | ⏸️ Not Started | May use Word HTML directly |
 
 ---
@@ -37,6 +38,7 @@
 | `/scripts/map-field-destinations.py` | Section/field mapping tool |
 | `/scripts/compare-word-html-fields.py` | Field extraction & comparison tool |
 | `/scripts/field_alignment_generator.py` | Registry-first alignment generator |
+| `/docs/15-Contract-review/2-Field Mgt-12.14.25/-passover-sessions/25.12.15-2 - Valuations-consolidation.md` | Session 2 summary - Consolidated valuations tab |
 
 ---
 
@@ -169,6 +171,7 @@ Report Tables (Expenses, Surveys, Comps)
 |------|---------|-----------|--------------:|
 | 2025-12-15 | 26 | Field extraction from Word HTML, registry comparison, table analysis | 7 reports, 2 Python scripts, 6 git commits |
 | 2025-12-15 | 27 | Input/output classification, field destination mapping, data flow synthesis | 3 reports, 2 Python scripts, 4 git commits |
+| 2025-12-15 | 28 | Consolidated valuations tab, collapsible accordions, input/output separation | 1 feature, 1 summary doc, 3 git commits |
 
 ---
 
@@ -179,7 +182,7 @@ Report Tables (Expenses, Surveys, Comps)
 cat /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Field\ Mgt-12.14.25/-passover-sessions/-Handoff-25.12.15.md
 
 # Read latest session summary
-cat /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Field\ Mgt-12.14.25/-passover-sessions/25.12.15-26\ -\ Field-extraction-validation.md
+cat /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Field\ Mgt-12.14.25/-passover-sessions/25.12.15-2\ -\ Valuations-consolidation.md
 
 # Check key analysis reports
 ls -lh /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/*FIELD*.md

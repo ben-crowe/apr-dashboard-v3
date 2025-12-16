@@ -203,11 +203,161 @@
             .page-sheet { width: 100%; margin: 0; box-shadow: none; padding: 0.75in; height: 11in; overflow: hidden; }
             .field-mapped { background-color: transparent; border: none; }
             .img-placeholder { border: none; background: none; }
+            #preview-controls { display: none; }
+        }
+
+        /* --- 9. PREVIEW MODE TOGGLE & PAGE NAVIGATION --- */
+        #preview-controls {
+            position: fixed;
+            top: 10px;
+            right: 20px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 9999;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        #preview-controls label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: #003B7E;
+        }
+
+        #page-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-top: 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        #page-nav label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #003B7E;
+            cursor: default;
+        }
+
+        #page-input {
+            width: 60px;
+            padding: 6px 10px;
+            border: 2px solid #003B7E;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            color: #003B7E;
+        }
+
+        #page-input:focus {
+            outline: none;
+            border-color: #4a9fd8;
+            box-shadow: 0 0 0 3px rgba(74, 159, 216, 0.2);
+        }
+
+        #go-button {
+            padding: 6px 16px;
+            background: #003B7E;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #go-button:hover {
+            background: #4a9fd8;
+        }
+
+        #go-button:active {
+            transform: scale(0.98);
+        }
+
+        #page-count {
+            font-size: 12px;
+            color: #666;
+        }
+
+        #preview-toggle {
+            width: 50px;
+            height: 26px;
+            position: relative;
+            appearance: none;
+            background: #ccc;
+            border-radius: 13px;
+            outline: none;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        #preview-toggle:checked {
+            background: #4a9fd8;
+        }
+
+        #preview-toggle::before {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: white;
+            top: 2px;
+            left: 2px;
+            transition: left 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        #preview-toggle:checked::before {
+            left: 26px;
+        }
+
+        #mode-label {
+            min-width: 120px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* Preview Mode Active - Hide field mapping indicators */
+        body.preview-mode .field-mapped {
+            background-color: transparent;
+            border-bottom: none;
+            cursor: default;
+        }
+
+        body.preview-mode .field-mapped:hover::before {
+            content: none;
         }
     </style>
 </head>
 
 <body>
+    <!-- Preview Controls -->
+    <div id="preview-controls">
+        <!-- Preview Mode Toggle -->
+        <label>
+            <input type="checkbox" id="preview-toggle">
+            <span id="mode-label">Show Field IDs</span>
+        </label>
+
+        <!-- Page Navigation -->
+        <div id="page-nav">
+            <label>Go to Page:</label>
+            <input type="number" id="page-input" min="1" placeholder="1">
+            <button id="go-button">Go</button>
+            <span id="page-count"></span>
+        </div>
+    </div>
 
     <div class="page-sheet" data-page-num="Page 3">
         <div
@@ -1635,84 +1785,175 @@
     </div>
 
     <!-- PAGE 31 (26) -->
+    <style>
+        /* Page 31 - Market Context - exact SVG measurements with proper padding */
+        .page-sheet[data-page-num="Page 31"] {
+            padding: 0.75in; /* Ensure proper padding on all sides */
+            padding-bottom: 180px; /* Reserve space for footer */
+        }
+        .page-sheet[data-page-num="Page 31"] .Header1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 14.6pt; /* 58.333px ÷ 4 */
+            margin-bottom: 27px; /* 108.25px ÷ 4 */
+        }
+        .page-sheet[data-page-num="Page 31"] .Header2 {
+            font-family: 'Helvetica', Arial, sans-serif;
+            font-size: 14.6pt; /* 58.333px ÷ 4 */
+            color: rgb(0, 59, 126);
+            margin-bottom: 23px; /* 91.083px ÷ 4 */
+        }
+        .page-sheet[data-page-num="Page 31"] .Subheader1 {
+            font-family: 'Helvetica', Arial, sans-serif;
+            font-size: 11.5pt; /* 45.833px ÷ 4 */
+            margin-bottom: 14.5px; /* 57.959px ÷ 4 */
+        }
+        .page-sheet[data-page-num="Page 31"] p {
+            font-family: 'Helvetica', Arial, sans-serif;
+            font-size: 10.4pt; /* 41.667px ÷ 4 */
+            margin-bottom: 14.2px; /* ~56.75px ÷ 4 */
+            line-height: 1.36; /* (56.75px line spacing / 41.667px font) */
+        }
+        .page-sheet[data-page-num="Page 31"] table {
+            font-size: 8pt;
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .page-sheet[data-page-num="Page 31"] table th.table-title {
+            background-color: rgb(0, 59, 126);
+            color: white;
+            padding: 8px 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 10pt;
+        }
+        .page-sheet[data-page-num="Page 31"] table th {
+            background-color: rgb(0, 59, 126);
+            color: white;
+            padding: 4px 8px;
+            text-align: left;
+            font-weight: bold;
+        }
+        .page-sheet[data-page-num="Page 31"] table td {
+            padding: 3px 8px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+            text-align: left;
+        }
+        .page-sheet[data-page-num="Page 31"] table td:first-child {
+            font-weight: bold;
+            text-align: left;
+        }
+    </style>
+
     <div class="page-sheet" data-page-num="Page 31">
-        <div class="Header1">Property Analysis</div>
+        <div class="Header1"><span class="field-mapped" title="{{MarketContext_Header}}">{{MarketContext_Header}}</span></div>
 
-        <div class="Header2">Description of the Improvements</div>
+        <div class="Header2"><span class="field-mapped" title="{{MarketContext_Provincial_Header}}">{{MarketContext_Provincial_Header}}</span></div>
 
-        <p>The information presented below is a basic description of the existing improvements that are used in the valuation of the property. Reliance is placed on information provided by sources deemed dependable for this analysis. It is assumed that there are no hidden defects, and that all structural components are functional and operational, unless otherwise noted. If questions arise regarding the integrity of the improvements or their operational components, it may be necessary to consult additional professional resources. The sizes are based on the information provided by the client and from public sources.</p>
+        <div class="Subheader1"><span class="field-mapped" title="{{MarketContext_Saskatchewan_Header}}">{{MarketContext_Saskatchewan_Header}}</span></div>
 
-        <div class="Subheader1">Overview</div>
-        <p>The subject property, located at <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>, is a multi-family, walkup property with improvements located in <span class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span></p>
-
-        <p>The improvements are comprised of <span class="field-mapped" title="{{Subject_Buildings}}">{{Subject_Buildings}}</span> total buildings, and consist of <span class="field-mapped" title="{{Subject_NRA}}">{{Subject_NRA}}</span> square feet of net rentable area (NRA) as of the valuation date. The property, reportedly built in <span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span> (<span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span> weighted) is approximately <span class="field-mapped" title="{{Subject_Occupancy}}">{{Subject_Occupancy}}</span> occupied and features <span class="field-mapped" title="{{Subject_Units}}">{{Subject_Units}}</span> units in a <span class="field-mapped" title="{{Subject_Stories}}">{{Subject_Stories}}</span>-story, garden style format.</p>
+        <p><span class="field-mapped" title="{{MarketContext_Saskatchewan_Overview}}">{{MarketContext_Saskatchewan_Overview}}</span></p>
 
         <table>
-            <tr>
-                <td colspan="2" class="table-section-header">PROPERTY TYPE</td>
+            <tr class="table-title-row">
+                <th colspan="4" class="table-title">Saskatchewan Economic Indicators</th>
             </tr>
             <tr>
-                <td class="label-col">Tenancy</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_Tenancy}}">{{Subject_Tenancy}}</span></td>
+                <th>Indicator</th>
+                <th>Estimate</th>
+                <th>Commentary</th>
+                <th>Source</th>
             </tr>
             <tr>
-                <td class="label-col">Net Rentable Area (NRA)</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_NRA}}">{{Subject_NRA}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_1_Name}}">{{SK_Econ_Indicator_1_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_1_Estimate}}">{{SK_Econ_Indicator_1_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_1_Commentary}}">{{SK_Econ_Indicator_1_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_1_Source}}">{{SK_Econ_Indicator_1_Source}}</span></td>
             </tr>
             <tr>
-                <td class="label-col">Total Buildings</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_Buildings}}">{{Subject_Buildings}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_2_Name}}">{{SK_Econ_Indicator_2_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_2_Estimate}}">{{SK_Econ_Indicator_2_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_2_Commentary}}">{{SK_Econ_Indicator_2_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_2_Source}}">{{SK_Econ_Indicator_2_Source}}</span></td>
             </tr>
             <tr>
-                <td class="label-col">Density Per Unit (AC)</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_Density}}">{{Subject_Density}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_3_Name}}">{{SK_Econ_Indicator_3_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_3_Estimate}}">{{SK_Econ_Indicator_3_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_3_Commentary}}">{{SK_Econ_Indicator_3_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_3_Source}}">{{SK_Econ_Indicator_3_Source}}</span></td>
             </tr>
             <tr>
-                <td class="label-col">Floors</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_Stories}}">{{Subject_Stories}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_4_Name}}">{{SK_Econ_Indicator_4_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_4_Estimate}}">{{SK_Econ_Indicator_4_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_4_Commentary}}">{{SK_Econ_Indicator_4_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_4_Source}}">{{SK_Econ_Indicator_4_Source}}</span></td>
             </tr>
             <tr>
-                <td class="label-col">Year Built</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span>; (<span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span> weighted)</td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_5_Name}}">{{SK_Econ_Indicator_5_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_5_Estimate}}">{{SK_Econ_Indicator_5_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_5_Commentary}}">{{SK_Econ_Indicator_5_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_5_Source}}">{{SK_Econ_Indicator_5_Source}}</span></td>
             </tr>
             <tr>
-                <td colspan="2" class="table-section-header">AGE/LIFE ANALYSIS</td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_6_Name}}">{{SK_Econ_Indicator_6_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_6_Estimate}}">{{SK_Econ_Indicator_6_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_6_Commentary}}">{{SK_Econ_Indicator_6_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_6_Source}}">{{SK_Econ_Indicator_6_Source}}</span></td>
             </tr>
             <tr>
-                <td class="label-col">Actual Age</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_ActualAge}}">{{Subject_ActualAge}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_7_Name}}">{{SK_Econ_Indicator_7_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_7_Estimate}}">{{SK_Econ_Indicator_7_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_7_Commentary}}">{{SK_Econ_Indicator_7_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_7_Source}}">{{SK_Econ_Indicator_7_Source}}</span></td>
             </tr>
             <tr>
-                <td class="label-col">Effective Age</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_EffectiveAge}}">{{Subject_EffectiveAge}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_8_Name}}">{{SK_Econ_Indicator_8_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_8_Estimate}}">{{SK_Econ_Indicator_8_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_8_Commentary}}">{{SK_Econ_Indicator_8_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_8_Source}}">{{SK_Econ_Indicator_8_Source}}</span></td>
             </tr>
             <tr>
-                <td class="label-col">Economic Life</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_EconomicLife}}">{{Subject_EconomicLife}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_9_Name}}">{{SK_Econ_Indicator_9_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_9_Estimate}}">{{SK_Econ_Indicator_9_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_9_Commentary}}">{{SK_Econ_Indicator_9_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_9_Source}}">{{SK_Econ_Indicator_9_Source}}</span></td>
             </tr>
             <tr>
-                <td class="label-col">Remaining Useful Life</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_RemainingLife}}">{{Subject_RemainingLife}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_10_Name}}">{{SK_Econ_Indicator_10_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_10_Estimate}}">{{SK_Econ_Indicator_10_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_10_Commentary}}">{{SK_Econ_Indicator_10_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_10_Source}}">{{SK_Econ_Indicator_10_Source}}</span></td>
             </tr>
             <tr>
-                <td colspan="2" class="table-section-header">BUILDING QUALITY & CONDITION</td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_11_Name}}">{{SK_Econ_Indicator_11_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_11_Estimate}}">{{SK_Econ_Indicator_11_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_11_Commentary}}">{{SK_Econ_Indicator_11_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_11_Source}}">{{SK_Econ_Indicator_11_Source}}</span></td>
             </tr>
             <tr>
-                <td class="label-col">Overall Building Quality</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_Quality}}">{{Subject_Quality}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_12_Name}}">{{SK_Econ_Indicator_12_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_12_Estimate}}">{{SK_Econ_Indicator_12_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_12_Commentary}}">{{SK_Econ_Indicator_12_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_12_Source}}">{{SK_Econ_Indicator_12_Source}}</span></td>
             </tr>
             <tr>
-                <td class="label-col">Overall Building Condition</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_Condition}}">{{Subject_Condition}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_13_Name}}">{{SK_Econ_Indicator_13_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_13_Estimate}}">{{SK_Econ_Indicator_13_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_13_Commentary}}">{{SK_Econ_Indicator_13_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_13_Source}}">{{SK_Econ_Indicator_13_Source}}</span></td>
             </tr>
             <tr>
-                <td class="label-col">Overall Building Appeal</td>
-                <td class="value-col"><span class="field-mapped" title="{{Subject_Appeal}}">{{Subject_Appeal}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_14_Name}}">{{SK_Econ_Indicator_14_Name}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_14_Estimate}}">{{SK_Econ_Indicator_14_Estimate}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_14_Commentary}}">{{SK_Econ_Indicator_14_Commentary}}</span></td>
+                <td><span class="field-mapped" title="{{SK_Econ_Indicator_14_Source}}">{{SK_Econ_Indicator_14_Source}}</span></td>
             </tr>
         </table>
 
         <div class="page-footer">
-            <div><span class="page-num">26</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div><span class="page-num">31</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
             <div class="footer-accent"></div>
         </div>
     </div>
@@ -2610,6 +2851,216 @@
         <div class="footer-accent"></div>
     </div>
 </div>
+
+<script>
+// Sample Data for Preview Mode
+const sampleData = {
+    // Company Information
+    'Company_Name': 'Valta Property Valuations Ltd.',
+    'Company_Address': '1234 Main Street',
+    'Company_CityStateZip': 'Saskatoon, SK S7K 0A1',
+    'Company_Phone': '(306) 555-0100',
+    'Company_JobNumber': 'VAL251012',
+
+    // Client Information
+    'Client_Company': 'First National Bank',
+    'Client_Name': 'John Smith',
+    'Client_Address': '5678 Bank Avenue',
+    'Client_CityStateZip': 'Saskatoon, SK S7K 2B2',
+
+    // Subject Property
+    'Subject_Street': '1101, 1121 109 Street',
+    'Subject_City': 'North Battleford',
+    'Subject_State': 'Saskatchewan',
+
+    // Report Information
+    'Report_Date': 'December 16, 2025',
+    'Report_Values': 'As-Is',
+    'Report_ValueScenario1': 'As-Stabilized',
+
+    // Market Context - Page 31
+    'MarketContext_Header': 'MARKET CONTEXT',
+    'MarketContext_Provincial_Header': 'PROVINCIAL',
+    'MarketContext_Saskatchewan_Header': 'Saskatchewan',
+    'MarketContext_Saskatchewan_Overview': 'Saskatchewan economy in 2025 is defined by steady growth, strong resource activity, and an improving housing sector. Real GDP is expanding at a moderate pace, supported by agriculture, potash, and oil production, while inflation has cooled to below 2%, easing cost pressures on households.',
+
+    // Saskatchewan Economic Indicators
+    'SK_Econ_Indicator_1_Name': 'Real GDP (2025)',
+    'SK_Econ_Indicator_1_Estimate': '+1.8%',
+    'SK_Econ_Indicator_1_Commentary': 'Growth driven by resource exports, housing starts',
+    'SK_Econ_Indicator_1_Source': 'Bank of Canada',
+
+    'SK_Econ_Indicator_2_Name': 'Population Growth Rate',
+    'SK_Econ_Indicator_2_Estimate': '1.5%',
+    'SK_Econ_Indicator_2_Commentary': 'Strong interprovincial migration',
+    'SK_Econ_Indicator_2_Source': 'Statistics Canada',
+
+    'SK_Econ_Indicator_3_Name': 'Unemployment Rate',
+    'SK_Econ_Indicator_3_Estimate': '5.7%',
+    'SK_Econ_Indicator_3_Commentary': 'Below national average',
+    'SK_Econ_Indicator_3_Source': 'Statistics Canada',
+
+    'SK_Econ_Indicator_4_Name': 'CPI Inflation',
+    'SK_Econ_Indicator_4_Estimate': '1.8%',
+    'SK_Econ_Indicator_4_Commentary': 'Moderating from 2024 peaks',
+    'SK_Econ_Indicator_4_Source': 'Statistics Canada',
+
+    'SK_Econ_Indicator_5_Name': 'Housing Starts (2025)',
+    'SK_Econ_Indicator_5_Estimate': '3,200',
+    'SK_Econ_Indicator_5_Commentary': 'Up 12% year-over-year',
+    'SK_Econ_Indicator_5_Source': 'CMHC',
+
+    'SK_Econ_Indicator_6_Name': 'Average Home Price',
+    'SK_Econ_Indicator_6_Estimate': '$385,000',
+    'SK_Econ_Indicator_6_Commentary': 'Stable with selective appreciation',
+    'SK_Econ_Indicator_6_Source': 'CREA',
+
+    'SK_Econ_Indicator_7_Name': 'Rental Vacancy Rate',
+    'SK_Econ_Indicator_7_Estimate': '3.0%',
+    'SK_Econ_Indicator_7_Commentary': 'Balanced market conditions',
+    'SK_Econ_Indicator_7_Source': 'CMHC',
+
+    'SK_Econ_Indicator_8_Name': 'Average Rent (2BR)',
+    'SK_Econ_Indicator_8_Estimate': '$1,250',
+    'SK_Econ_Indicator_8_Commentary': 'Plateaued after 2023-24 surge',
+    'SK_Econ_Indicator_8_Source': 'CMHC',
+
+    'SK_Econ_Indicator_9_Name': 'Credit Rating',
+    'SK_Econ_Indicator_9_Estimate': 'AA',
+    'SK_Econ_Indicator_9_Commentary': 'Stable outlook, balanced budget',
+    'SK_Econ_Indicator_9_Source': 'S&P',
+
+    'SK_Econ_Indicator_10_Name': 'Oil Price (WTI)',
+    'SK_Econ_Indicator_10_Estimate': '$78/barrel',
+    'SK_Econ_Indicator_10_Commentary': 'Key driver for provincial revenues',
+    'SK_Econ_Indicator_10_Source': 'Market Data',
+
+    'SK_Econ_Indicator_11_Name': 'Potash Exports',
+    'SK_Econ_Indicator_11_Estimate': '12M tonnes',
+    'SK_Econ_Indicator_11_Commentary': 'Strong global demand',
+    'SK_Econ_Indicator_11_Source': 'Industry',
+
+    'SK_Econ_Indicator_12_Name': 'Agriculture Output',
+    'SK_Econ_Indicator_12_Estimate': '$15.2B',
+    'SK_Econ_Indicator_12_Commentary': 'Above 10-year average',
+    'SK_Econ_Indicator_12_Source': 'Ag Canada',
+
+    'SK_Econ_Indicator_13_Name': 'Business Investment',
+    'SK_Econ_Indicator_13_Estimate': '+4.5%',
+    'SK_Econ_Indicator_13_Commentary': 'Resource projects, infrastructure',
+    'SK_Econ_Indicator_13_Source': 'Statistics Canada',
+
+    'SK_Econ_Indicator_14_Name': 'Labour Productivity',
+    'SK_Econ_Indicator_14_Estimate': '+1.2%',
+    'SK_Econ_Indicator_14_Commentary': 'Modest gains, skilled labour challenges',
+    'SK_Econ_Indicator_14_Source': 'Statistics Canada'
+};
+
+// Store original field ID text
+const originalFieldText = new Map();
+
+// Initialize - Store all field IDs and count pages
+const allPages = document.querySelectorAll('.page-sheet');
+const totalPages = allPages.length;
+
+document.querySelectorAll('.field-mapped').forEach(field => {
+    const fieldId = field.getAttribute('title');
+    if (fieldId && !originalFieldText.has(field)) {
+        originalFieldText.set(field, field.textContent);
+    }
+});
+
+// Update page count display
+document.getElementById('page-count').textContent = `of ${totalPages}`;
+
+// Page Navigation Handler
+const pageInput = document.getElementById('page-input');
+const goButton = document.getElementById('go-button');
+
+function jumpToPage(pageNumber) {
+    const pageNum = parseInt(pageNumber);
+
+    if (isNaN(pageNum) || pageNum < 1 || pageNum > totalPages) {
+        pageInput.style.borderColor = '#e74c3c';
+        setTimeout(() => {
+            pageInput.style.borderColor = '#003B7E';
+        }, 500);
+        return;
+    }
+
+    // Find the page element (accounting for page numbering)
+    let targetPage = null;
+    allPages.forEach(page => {
+        const pageNumAttr = page.getAttribute('data-page-num');
+        const extractedNum = pageNumAttr ? parseInt(pageNumAttr.replace('Page ', '')) : null;
+        if (extractedNum === pageNum) {
+            targetPage = page;
+        }
+    });
+
+    if (targetPage) {
+        targetPage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Flash the page border briefly
+        targetPage.style.outline = '3px solid #4a9fd8';
+        setTimeout(() => {
+            targetPage.style.outline = '';
+        }, 1000);
+    }
+}
+
+goButton.addEventListener('click', () => {
+    jumpToPage(pageInput.value);
+});
+
+pageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        jumpToPage(pageInput.value);
+    }
+});
+
+// Preview Mode Toggle Handler
+const previewToggle = document.getElementById('preview-toggle');
+const modeLabel = document.getElementById('mode-label');
+
+previewToggle.addEventListener('change', function() {
+    const isPreviewMode = this.checked;
+
+    if (isPreviewMode) {
+        // Enable Preview Mode - Show actual data
+        document.body.classList.add('preview-mode');
+        modeLabel.textContent = 'Preview Mode ✓';
+
+        // Replace field IDs with sample data
+        document.querySelectorAll('.field-mapped').forEach(field => {
+            const fieldId = field.getAttribute('title');
+            if (fieldId) {
+                // Extract field name from {{Field_Name}}
+                const fieldName = fieldId.replace(/[{}]/g, '');
+                const sampleValue = sampleData[fieldName];
+
+                if (sampleValue) {
+                    field.textContent = sampleValue;
+                } else {
+                    // If no sample data, show placeholder
+                    field.textContent = `[${fieldName}]`;
+                }
+            }
+        });
+    } else {
+        // Disable Preview Mode - Show field IDs
+        document.body.classList.remove('preview-mode');
+        modeLabel.textContent = 'Show Field IDs';
+
+        // Restore original field IDs
+        document.querySelectorAll('.field-mapped').forEach(field => {
+            const original = originalFieldText.get(field);
+            if (original) {
+                field.textContent = original;
+            }
+        });
+    }
+});
+</script>
 
 </body>
 

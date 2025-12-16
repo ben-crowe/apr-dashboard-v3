@@ -20,19 +20,20 @@
             color: black;
         }
 
-        /* --- 2. PAPER SHEET STYLING (TRUE WYSIWYG) --- */
+        /* --- 2. PAPER SHEET STYLING (TRUE WYSIWYG - FLEXBOX METHOD) --- */
         .page-sheet {
             background-color: white;
             width: 8.5in;
-            height: 11in; /* STRICT FIX: Changed from min-height to fixed height */
+            height: 11in; /* Lock the height (Paper doesn't stretch) */
             padding: 0.75in;
-            padding-bottom: 80px; /* Reserve space for footer */
             margin-bottom: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             position: relative;
+            overflow: hidden; /* Clip content if it gets too long */
 
-            /* FAILURE INDICATOR: If content is too long, it gets cut off ABOVE footer */
-            overflow: hidden;
+            /* THE MAGIC FIX: Turn the page into a vertical stack */
+            display: flex;
+            flex-direction: column;
 
             page-break-after: always;
         }
@@ -167,16 +168,13 @@
             font-style: italic;
         }
 
-        /* --- 7. FOOTER STYLING (Always at Bottom - Like Word Header/Footer) --- */
-        /* Footer is SEPARATE from content flow - like boilerplate/page border.
-           Absolutely positioned so it NEVER moves, NEVER disappears.
-           Content clips ABOVE footer if too long - that's the visual alarm.
+        /* --- 7. FOOTER STYLING (Flexbox Method - Footer is Solid Block) --- */
+        /* Footer stays at bottom but remains IN THE FLOW.
+           Content hits it and stops (cannot flow underneath).
+           If content is too long, it gets clipped ABOVE footer.
         */
         .page-footer {
-            position: absolute;
-            bottom: 0.75in;
-            left: 0.75in;
-            right: 0.75in;
+            margin-top: auto; /* Push to bottom of flex container */
             padding-top: 15px;
             border-top: 1px solid #ccc;
             font-size: 9pt;
@@ -184,7 +182,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background-color: white; /* Ensure footer background covers any content behind it */
+            flex-shrink: 0; /* Do not squish footer if content is too long */
         }
         .footer-accent {
             width: 60px;
@@ -953,6 +951,7 @@
     <div class="page-sheet" data-page-num="Page 18">
         <div class="Header1">Introduction & Executive Summary</div>
 
+        <div style="flex: 1;">
         <div class="Subheader1">Extraordinary Assumptions</div>
         <p>
             <span class="field-mapped" title="{{Report_Extraordinary}}">{{Report_Extraordinary}}</span>
@@ -1005,6 +1004,7 @@
                 <td><span class="field-mapped" title="{{Subject_Marketing}}">{{Subject_Marketing}}</span></td>
             </tr>
         </table>
+        </div>
 
         <div class="page-footer">
             <div><span class="page-num">13</span> <span class="field-mapped"
@@ -1023,6 +1023,7 @@
     <div class="page-sheet" data-page-num="Page 19">
         <div class="Header1">Introduction & Executive Summary</div>
 
+        <div style="flex: 1;">
         <div class="Header2">Definition of Market Value</div>
         <p>According to the January 1, 2024 version of the Canadian Uniform Standards of Professional Appraisal Practice (CUSPAP), market value is defined as:</p>
 
@@ -1060,6 +1061,7 @@
             <li>Research of recent sale and rent comparables. Examined market conditions and analyzed their potential effect on the various properties.</li>
             <li>The appraisal includes a Highest and Best Use analysis and conclusions have been completed for the highest and best use of the subject property As Though Vacant and As Improved. The analysis considered legal, locational, physical and financial feasibility characteristics of the subject site and existing improvements.</li>
         </ul>
+        </div>
 
         <div class="page-footer">
             <div><span class="page-num">14</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
@@ -1071,6 +1073,7 @@
     <div class="page-sheet" data-page-num="Page 20">
         <div class="Header1">Introduction & Executive Summary</div>
 
+        <div style="flex: 1;">
         <p>In selecting applicable approaches to value, the appraiser's considered the agreed upon appraisal scope and assessed the applicability of each traditional approach given the subject's characteristics and the intended use of the appraisal. As a result, this appraisal developed Direct Comparison and Income (Direct Capitalization) Approaches. The values presented represent the As Stabilized (see Appraisal Exhibits).</p>
 
         <p>The assignment was prepared as an Appraisal Report in accordance with CUSPAP, with the analysis stated within the document and representing a fully described scope of analysis.</p>
@@ -1141,6 +1144,7 @@
         </table>
 
         <p>The lack of the unavailable items could affect the results of this analysis. As part of the general assumptions and limiting conditions, the subject is assumed to have no adverse easements, significant items of deferred maintenance, or be impacted by adverse environmental conditions.</p>
+        </div>
 
         <div class="page-footer">
             <div><span class="page-num">15</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
@@ -1152,6 +1156,7 @@
     <div class="page-sheet" data-page-num="Page 21">
         <div class="Header1">Introduction & Executive Summary</div>
 
+        <div style="flex: 1;">
         <div class="Header2">Subject Property Inspection</div>
 
         <table>
@@ -1187,6 +1192,7 @@
 
         <div class="Header2">Personal Property & Business Intangible</div>
         <p>There is no personal property (FF&E) included in this valuation. There is not any business or intangible value included in the value conclusion reported here.</p>
+        </div>
 
         <div class="page-footer">
             <div><span class="page-num">16</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>

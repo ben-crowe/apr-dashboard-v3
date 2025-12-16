@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Appraisal Report - Pages 52-56 (Report Pages 47-51)</title>
+    <style>
+        /* --- 1. GLOBAL RESET & FONTS --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Open Sans", Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            background-color: #525659;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
+            color: black;
+        }
+
+        /* --- 2. PAPER SHEET STYLING --- */
+        .page-sheet {
+            background-color: white;
+            width: 8.5in;
+            height: 11in;
+            padding: 0.75in;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            page-break-after: always;
+        }
+
+        /* --- 3. HEADERS & TYPOGRAPHY --- */
+        .Header1 {
+            font-size: 18pt;
+            color: #003B7E;
+            border-bottom: 1px solid #003B7E;
+            padding-bottom: 5px;
+            margin-bottom: 12px;
+            font-weight: normal;
+        }
+
+        .Header2 {
+            font-size: 12pt;
+            color: #003B7E;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        .Subheader1 {
+            font-size: 11pt;
+            color: #003B7E;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 4px;
+        }
+
+        p {
+            margin-bottom: 8pt;
+            text-align: justify;
+            font-size: 10pt;
+            line-height: 1.5;
+        }
+
+        /* --- 4. TABLES --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+            font-size: 9pt;
+        }
+
+        td, th {
+            padding: 6px 8px;
+            border: 1px solid #ddd;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #f0f0f0;
+            color: #333;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .label-col {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            width: 30%;
+            color: #333;
+        }
+
+        .numeric-cell {
+            text-align: right;
+            font-family: monospace;
+        }
+
+        .centered-text {
+            text-align: center;
+        }
+
+        .table-section-header {
+            background-color: #f0f0f0;
+            color: #333;
+            font-weight: bold;
+            font-size: 10pt;
+            text-align: center;
+            padding: 8px;
+        }
+
+        /* --- 5. LISTS --- */
+        ol, ul {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        li {
+            margin-bottom: 6px;
+            text-align: justify;
+            line-height: 1.5;
+        }
+
+        .list-number {
+            font-weight: bold;
+            color: #003B7E;
+        }
+
+        /* --- 6. CHART STYLING --- */
+        .chart-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .chart-wrapper {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            height: 200px;
+            margin: 20px 0;
+            position: relative;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .chart-bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 10px;
+        }
+
+        .chart-bar {
+            width: 35px;
+            background-color: #1a3d66;
+            margin-bottom: 5px;
+        }
+
+        .chart-label {
+            font-size: 8pt;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .y-axis-labels {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 8pt;
+            width: 50px;
+            text-align: right;
+            padding-right: 10px;
+        }
+
+        .chart-bars {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 15px;
+            margin-left: 50px;
+            flex: 1;
+            height: 100%;
+        }
+
+        /* --- 7. FOOTER STYLING --- */
+        .page-footer {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            font-size: 9pt;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .footer-accent {
+            width: 60px;
+            height: 10px;
+            background: linear-gradient(to right, #4a9fd8, #003d7a);
+            border-radius: 2px;
+        }
+
+        .page-num {
+            color: #003B7E;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        /* --- 8. PRINT MEDIA --- */
+        @media print {
+            body { background: white; padding: 0; }
+            .page-sheet {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ============================================ -->
+    <!-- PAGE 52 (Report Page 47): Capitalization Rate -->
+    <!-- ============================================ -->
+    <div class="page-sheet">
+        <h1 class="Header1">Valuation & Conclusions</h1>
+
+        <h2 class="Header2">Capitalization Rate</h2>
+
+        <p>In this section, a capitalization rate for the subject is developed based upon the comparable properties in the following table.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="6" class="table-section-header">COMPARABLE SALES</th>
+                </tr>
+                <tr>
+                    <th>Data Point</th>
+                    <th>COMP 1</th>
+                    <th>COMP 2</th>
+                    <th>COMP 3</th>
+                    <th>COMP 4</th>
+                    <th>COMP 5</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label-col">Name</td>
+                    <td><span title="{{COMP_1_Name}}">Heritage House</span></td>
+                    <td><span title="{{COMP_2_Name}}">Parkside View Apartments</span></td>
+                    <td><span title="{{COMP_3_Name}}">Woodland Estates</span></td>
+                    <td><span title="{{COMP_4_Name}}">Parkside Flats 1</span></td>
+                    <td><span title="{{COMP_5_Name}}">Parkside Flats 2</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Address</td>
+                    <td><span title="{{COMP_1_Address}}">1501 102 St</span></td>
+                    <td><span title="{{COMP_2_Address}}">1070-1092 Ferguson Ave</span></td>
+                    <td><span title="{{COMP_3_Address}}">1901 Pearson Ave</span></td>
+                    <td><span title="{{COMP_4_Address}}">1030 Parr Hill Dr</span></td>
+                    <td><span title="{{COMP_5_Address}}">1030 Parr Hill Dr</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">City</td>
+                    <td><span title="{{COMP_1_City}}">North Battleford</span></td>
+                    <td><span title="{{COMP_2_City}}">North Battleford</span></td>
+                    <td><span title="{{COMP_3_City}}">North Battleford</span></td>
+                    <td><span title="{{COMP_4_City}}">Martensville</span></td>
+                    <td><span title="{{COMP_5_City}}">Martensville</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Province</td>
+                    <td><span title="{{COMP_1_Province}}">SK</span></td>
+                    <td><span title="{{COMP_2_Province}}">SK</span></td>
+                    <td><span title="{{COMP_3_Province}}">SK</span></td>
+                    <td><span title="{{COMP_4_Province}}">SK</span></td>
+                    <td><span title="{{COMP_5_Province}}">SK</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">NRA (SF)</td>
+                    <td class="numeric-cell"><span title="{{COMP_1_NRA}}">22,754</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_2_NRA}}">33,309</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_3_NRA}}">15,000</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_4_NRA}}">47,916</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_5_NRA}}">52,708</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col"># Units</td>
+                    <td class="numeric-cell"><span title="{{COMP_1_Units}}">24</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_2_Units}}">45</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_3_Units}}">24</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_4_Units}}">47</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_5_Units}}">52</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Year Built</td>
+                    <td class="numeric-cell"><span title="{{COMP_1_YearBuilt}}">2006</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_2_YearBuilt}}">2002</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_3_YearBuilt}}">1980</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_4_YearBuilt}}">2016</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_5_YearBuilt}}">2019</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Sale Date</td>
+                    <td><span title="{{COMP_1_SaleDate}}">2024-06-17</span></td>
+                    <td><span title="{{COMP_2_SaleDate}}">2024-04-17</span></td>
+                    <td><span title="{{COMP_3_SaleDate}}">2024-05-27</span></td>
+                    <td><span title="{{COMP_4_SaleDate}}">2023-05-19</span></td>
+                    <td><span title="{{COMP_5_SaleDate}}">2023-05-19</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Sale Price</td>
+                    <td class="numeric-cell"><span title="{{COMP_1_SalePrice}}">$3,750,000</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_2_SalePrice}}">$2,650,000</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_3_SalePrice}}">$1,500,000</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_4_SalePrice}}">$3,650,000</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_5_SalePrice}}">$4,200,000</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Price/SF</td>
+                    <td class="numeric-cell"><span title="{{COMP_1_PriceSF}}">$137</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_2_PriceSF}}">$137</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_3_PriceSF}}">$137</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_4_PriceSF}}">$194</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_5_PriceSF}}">$286</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">NOI</td>
+                    <td class="numeric-cell"><span title="{{COMP_1_NOI}}">$129,891</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_2_NOI}}">$102,019</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_3_NOI}}">$82,827</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_4_NOI}}">$189,400</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_5_NOI}}">$214,375</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">NOI/Unit</td>
+                    <td class="numeric-cell"><span title="{{COMP_1_NOI_Unit}}">$7,780.02</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_2_NOI_Unit}}">$6,111.00</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_3_NOI_Unit}}">$5,129.00</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_4_NOI_Unit}}">$12,389.00</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_5_NOI_Unit}}">$12,891.00</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Capitalization Rate</td>
+                    <td class="numeric-cell"><span title="{{COMP_1_CapRate}}">5.98%</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_2_CapRate}}">5.98%</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_3_CapRate}}">5.99%</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_4_CapRate}}">6.24%</span></td>
+                    <td class="numeric-cell"><span title="{{COMP_5_CapRate}}">5.92%</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">AVERAGE</td>
+                    <td colspan="5" class="numeric-cell"><span title="{{CapRate_Average}}">6.03%</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">HIGH</td>
+                    <td colspan="5" class="numeric-cell"><span title="{{CapRate_High}}">6.24%</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">LOW</td>
+                    <td colspan="5" class="numeric-cell"><span title="{{CapRate_Low}}">5.92%</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="chart-container">
+            <h3 style="font-size: 11pt; font-weight: bold; margin-bottom: 15px;">NOI & CAPITALIZATION RATE</h3>
+
+            <div class="chart-wrapper">
+                <div class="y-axis-labels">
+                    <span>$14,000</span>
+                    <span>$12,000</span>
+                    <span>$10,000</span>
+                    <span>$8,000</span>
+                    <span>$6,000</span>
+                    <span>$4,000</span>
+                    <span>$2,000</span>
+                    <span>$0</span>
+                </div>
+
+                <div class="chart-bars">
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 135px;"></div>
+                        <span class="chart-label">COMP 1</span>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 103px;"></div>
+                        <span class="chart-label">COMP 2</span>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 83px;"></div>
+                        <span class="chart-label">COMP 3</span>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 170px;"></div>
+                        <span class="chart-label">COMP 4</span>
+                    </div>
+                    <div class="chart-bar-group">
+                        <div class="chart-bar" style="height: 190px;"></div>
+                        <span class="chart-label">COMP 5</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 30px; margin-top: 15px; font-size: 9pt;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 15px; height: 15px; background-color: #1a3d66;"></div>
+                    <span>NOI/Unit</span>
+                </div>
+            </div>
+        </div>
+
+        <p style="margin-top: 10px;">The comparable capitalization rates indicate a range from <span title="{{CapRate_Low}}">5.92%</span> to <span title="{{CapRate_High}}">6.24%</span> with an average of <span title="{{CapRate_Average}}">6.03%</span>.</p>
+
+        <div class="page-footer">
+            <div>
+                <span class="page-num">47</span>
+                <span title="{{Property_Address}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span title="{{File_Number}}">VAL251012 - 1</span>
+            </div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- PAGE 53 (Report Page 48): Capitalization Rate Analysis -->
+    <!-- ============================================ -->
+    <div class="page-sheet">
+        <h1 class="Header1">Valuation & Conclusions</h1>
+
+        <h2 class="Header2">Capitalization Rate Analysis - Multifamily</h2>
+
+        <p>Comparable sales were analyzed from both North Battleford and Martensville to reflect investor activity in tertiary Saskatchewan markets. The comparable properties indicate capitalization rates ranging from <span title="{{CapRate_Low}}">5.92%</span> to <span title="{{CapRate_High}}">6.24%</span>, with the majority clustering near the <span title="{{CapRate_Average}}">5.99%</span> range.</p>
+
+        <p>The newer properties in Martensville (Parkside Flats 1 and 2) exhibit lower cap rates of <span title="{{COMP_5_CapRate}}">5.92%</span>, consistent with higher quality construction, modern finishes, and superior appeal. In contrast, the older assets located in North Battleford, such as Heritage House and College View Apartments, achieved cap rates closer to 5.99%-6.24%, reflecting higher risk premiums associated with tertiary markets, older improvements, and smaller population bases.</p>
+
+        <p>Given the subject's age (circa <span title="{{Year_Built}}">1970</span>), average unit mix and location within North Battleford, a smaller tertiary market with limited liquidity, an upward adjustment toward the higher end of the observed range is appropriate. The subject's age and leverage condition support investor confidence, though risk perception remains elevated relative to newer comparables.</p>
+
+        <p>Based on the foregoing analysis, an appropriate capitalization rate for the subject property is concluded at approximately <span title="{{Concluded_CapRate}}">6.25%</span>, reflecting market expectations for well-maintained, stabilized multifamily assets within tertiary Saskatchewan markets.</p>
+
+        <h2 class="Header2">Capitalization Rate Conclusion</h2>
+
+        <p>Based on these indicators and the subject's characteristics, average location, vintage, and limited amenity offering, a cap rate at the higher end of the range is considered appropriate for valuing the subject on an as stabilized basis. This aligns with recent market activity for similar assets in comparable locations.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>COMPONENT</th>
+                    <th>RANGE</th>
+                    <th>AVERAGE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Market Extraction</td>
+                    <td><span title="{{CapRate_Range}}">5.92% to 6.24%</span></td>
+                    <td class="numeric-cell"><span title="{{CapRate_Average}}">6.03%</span></td>
+                </tr>
+                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                    <td>CONCLUDED CAPITALIZATION RATE</td>
+                    <td></td>
+                    <td class="numeric-cell"><span title="{{Concluded_CapRate}}">6.25%</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div>
+                <span class="page-num">48</span>
+                <span title="{{Property_Address}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span title="{{File_Number}}">VAL251012 - 1</span>
+            </div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- PAGE 54 (Report Page 49): Direct Capitalization -->
+    <!-- ============================================ -->
+    <div class="page-sheet">
+        <h1 class="Header1">Valuation & Conclusions</h1>
+
+        <h2 class="Header2">Direct Capitalization Conclusion</h2>
+
+        <p>The table below summarizes the Direct Capitalization Method and its value conclusion.</p>
+
+        <table style="font-size: 8pt;">
+            <thead>
+                <tr>
+                    <th colspan="9" class="table-section-header">DIRECT CAPITALIZATION</th>
+                </tr>
+                <tr>
+                    <th>Unit Mix</th>
+                    <th>Units</th>
+                    <th>Category</th>
+                    <th>Contract</th>
+                    <th>Market</th>
+                    <th>Cont v Mkt</th>
+                    <th>$/Unit</th>
+                    <th>$/SF(Y1)</th>
+                    <th>$/Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Type 1 bed / 1 bath</td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_1_Count}}">6</span></td>
+                    <td>1 Bed</td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_1_Contract_Rent}}">$650</span></td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_1_Market_Rent}}">$800</span></td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_1_Cont_v_Market}}">81%</span></td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_1_Per_Unit}}">$1,040</span></td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_1_Per_SF}}">$18.07</span></td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_1_Annual}}">$152,640</span></td>
+                </tr>
+                <tr>
+                    <td>Flat 2 bed / 1 bath</td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_2_Count}}">12</span></td>
+                    <td>2 Bed</td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_2_Contract_Rent}}">$1,055</span></td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_2_Market_Rent}}">$1,080</span></td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_2_Cont_v_Market}}">100%</span></td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_2_Per_Unit}}">$1,080</span></td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_2_Per_SF}}">$18.19</span></td>
+                    <td class="numeric-cell"><span title="{{Unit_Type_2_Annual}}">$155,640</span></td>
+                </tr>
+                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                    <td>TOTAL RENTAL REVENUE</td>
+                    <td class="numeric-cell"><span title="{{Total_Units}}">18</span></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="numeric-cell"><span title="{{Total_Per_Unit}}">$12,240</span></td>
+                    <td class="numeric-cell"><span title="{{Total_Per_SF}}">$18.19</span></td>
+                    <td class="numeric-cell"><span title="{{Total_Rental_Revenue}}">$185,640</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="font-size: 8pt;">
+            <thead>
+                <tr>
+                    <th colspan="9" class="table-section-header">POTENTIAL GROSS REVENUE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Other Income (Miscellaneous)</td>
+                    <td class="numeric-cell">0%</td>
+                    <td class="numeric-cell">0%</td>
+                    <td class="numeric-cell"><span title="{{Other_Income_Per_Unit}}">$0</span></td>
+                    <td class="numeric-cell"><span title="{{Other_Income_Per_SF}}">$0.00</span></td>
+                    <td class="numeric-cell"><span title="{{Other_Income_Annual}}">$0</span></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                    <td>POTENTIAL GROSS REVENUE</td>
+                    <td></td>
+                    <td></td>
+                    <td class="numeric-cell"><span title="{{PGR_Per_Unit}}">$12,705</span></td>
+                    <td class="numeric-cell"><span title="{{PGR_Per_SF}}">$23.02</span></td>
+                    <td class="numeric-cell"><span title="{{PGR_Annual}}">$204,240</span></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Vacancy</td>
+                    <td class="numeric-cell"><span title="{{Vacancy_Pct_PGR}}">4.0%</span></td>
+                    <td class="numeric-cell"><span title="{{Vacancy_Pct_EGR}}">4.0%</span></td>
+                    <td class="numeric-cell"><span title="{{Vacancy_Per_Unit}}">($406)</span></td>
+                    <td class="numeric-cell"><span title="{{Vacancy_Per_SF}}">($0.77)</span></td>
+                    <td class="numeric-cell"><span title="{{Vacancy_Annual}}">($7,426)</span></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                    <td>EFFECTIVE GROSS REVENUE</td>
+                    <td></td>
+                    <td></td>
+                    <td class="numeric-cell"><span title="{{EGR_Per_Unit}}">$12,275</span></td>
+                    <td class="numeric-cell"><span title="{{EGR_Per_SF}}">$19.25</span></td>
+                    <td class="numeric-cell"><span title="{{EGR_Annual}}">$196,406</span></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="font-size: 8pt;">
+            <thead>
+                <tr>
+                    <th colspan="6" class="table-section-header">OPERATING EXPENSES</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Real Estate Taxes</td>
+                    <td class="numeric-cell"><span title="{{Tax_Pct_PGR}}">9.2%</span></td>
+                    <td class="numeric-cell"><span title="{{Tax_Pct_EGR}}">9.4%</span></td>
+                    <td class="numeric-cell"><span title="{{Tax_Per_Unit}}">($1,131)</span></td>
+                    <td class="numeric-cell"><span title="{{Tax_Per_SF}}">($1.77)</span></td>
+                    <td class="numeric-cell"><span title="{{Tax_Annual}}">($20,358)</span></td>
+                </tr>
+                <tr>
+                    <td>Insurance</td>
+                    <td class="numeric-cell"><span title="{{Insurance_Pct_PGR}}">5.6%</span></td>
+                    <td class="numeric-cell"><span title="{{Insurance_Pct_EGR}}">5.8%</span></td>
+                    <td class="numeric-cell"><span title="{{Insurance_Per_Unit}}">($715)</span></td>
+                    <td class="numeric-cell"><span title="{{Insurance_Per_SF}}">($1.11)</span></td>
+                    <td class="numeric-cell"><span title="{{Insurance_Annual}}">($11,680)</span></td>
+                </tr>
+                <tr>
+                    <td>Repairs & Maintenance</td>
+                    <td class="numeric-cell"><span title="{{Repairs_Pct_PGR}}">8.5%</span></td>
+                    <td class="numeric-cell"><span title="{{Repairs_Pct_EGR}}">8.9%</span></td>
+                    <td class="numeric-cell"><span title="{{Repairs_Per_Unit}}">($1,035)</span></td>
+                    <td class="numeric-cell"><span title="{{Repairs_Per_SF}}">($1.62)</span></td>
+                    <td class="numeric-cell"><span title="{{Repairs_Annual}}">($18,630)</span></td>
+                </tr>
+                <tr>
+                    <td>Payroll</td>
+                    <td class="numeric-cell"><span title="{{Payroll_Pct_PGR}}">3.9%</span></td>
+                    <td class="numeric-cell"><span title="{{Payroll_Pct_EGR}}">4.1%</span></td>
+                    <td class="numeric-cell"><span title="{{Payroll_Per_Unit}}">($500)</span></td>
+                    <td class="numeric-cell"><span title="{{Payroll_Per_SF}}">($0.78)</span></td>
+                    <td class="numeric-cell"><span title="{{Payroll_Annual}}">($9,000)</span></td>
+                </tr>
+                <tr>
+                    <td>Utilities</td>
+                    <td class="numeric-cell"><span title="{{Utilities_Pct_PGR}}">10.3%</span></td>
+                    <td class="numeric-cell"><span title="{{Utilities_Pct_EGR}}">10.7%</span></td>
+                    <td class="numeric-cell"><span title="{{Utilities_Per_Unit}}">($1,315)</span></td>
+                    <td class="numeric-cell"><span title="{{Utilities_Per_SF}}">($2.06)</span></td>
+                    <td class="numeric-cell"><span title="{{Utilities_Annual}}">($23,640)</span></td>
+                </tr>
+                <tr>
+                    <td>Management Fees</td>
+                    <td class="numeric-cell"><span title="{{Management_Pct_PGR}}">4.1%</span></td>
+                    <td class="numeric-cell"><span title="{{Management_Pct_EGR}}">4.3%</span></td>
+                    <td class="numeric-cell"><span title="{{Management_Per_Unit}}">($525)</span></td>
+                    <td class="numeric-cell"><span title="{{Management_Per_SF}}">($0.82)</span></td>
+                    <td class="numeric-cell"><span title="{{Management_Annual}}">($9,347)</span></td>
+                </tr>
+                <tr>
+                    <td>Other Expenses</td>
+                    <td class="numeric-cell"><span title="{{Other_Expenses_Pct_PGR}}">1.9%</span></td>
+                    <td class="numeric-cell"><span title="{{Other_Expenses_Pct_EGR}}">2.0%</span></td>
+                    <td class="numeric-cell"><span title="{{Other_Expenses_Per_Unit}}">($245)</span></td>
+                    <td class="numeric-cell"><span title="{{Other_Expenses_Per_SF}}">($0.38)</span></td>
+                    <td class="numeric-cell"><span title="{{Other_Expenses_Annual}}">($4,401)</span></td>
+                </tr>
+                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                    <td>TOTAL OPERATING EXPENSES</td>
+                    <td class="numeric-cell"><span title="{{Total_OpEx_Pct_PGR}}">41.6%</span></td>
+                    <td class="numeric-cell"><span title="{{Total_OpEx_Pct_EGR}}">43.7%</span></td>
+                    <td class="numeric-cell"><span title="{{Total_OpEx_Per_Unit}}">($5,467)</span></td>
+                    <td class="numeric-cell"><span title="{{Total_OpEx_Per_SF}}">($8.54)</span></td>
+                    <td class="numeric-cell"><span title="{{Total_OpEx_Annual}}">($85,635)</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="font-size: 8pt;">
+            <thead>
+                <tr>
+                    <th colspan="4" class="table-section-header">NET OPERATING INCOME</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Net Operating Income</td>
+                    <td class="numeric-cell"><span title="{{NOI_Per_Unit}}">$6,860</span></td>
+                    <td class="numeric-cell"><span title="{{NOI_Per_SF}}">$10.65</span></td>
+                    <td class="numeric-cell"><span title="{{NOI_Annual}}">$111,771</span></td>
+                </tr>
+                <tr>
+                    <td>Capitalization Rate</td>
+                    <td colspan="3" class="numeric-cell"><span title="{{Concluded_CapRate}}">6.25%</span></td>
+                </tr>
+                <tr>
+                    <td>Capitalized Value</td>
+                    <td colspan="3" class="numeric-cell"><span title="{{Capitalized_Value}}">$1,788,338</span></td>
+                </tr>
+                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                    <td>INDICATED VALUE (ROUNDED)</td>
+                    <td class="numeric-cell"><span title="{{Value_Per_Unit}}">$112,586/Unit</span></td>
+                    <td class="numeric-cell"><span title="{{Value_Per_SF}}">$179</span></td>
+                    <td class="numeric-cell"><span title="{{Indicated_Value_Rounded}}">$1,800,000</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div>
+                <span class="page-num">49</span>
+                <span title="{{Property_Address}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span title="{{File_Number}}">VAL251012 - 1</span>
+            </div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- PAGE 55 (Report Page 50): Income Approach Conclusion -->
+    <!-- ============================================ -->
+    <div class="page-sheet">
+        <h1 class="Header1">Valuation & Conclusions</h1>
+
+        <h2 class="Header2">Income Approach Conclusion</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="2" class="table-section-header">INCOME APPROACH - DIRECT CAPITALIZATION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label-col">NOI</td>
+                    <td class="numeric-cell"><span title="{{NOI_Annual}}">$111,771</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">NOI $/SF NRA</td>
+                    <td class="numeric-cell"><span title="{{NOI_Per_SF}}">$10.95</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Capitalization Rate (CAR)</td>
+                    <td class="numeric-cell"><span title="{{Concluded_CapRate}}">6.25%</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Indicated Value</td>
+                    <td class="numeric-cell"><span title="{{Indicated_Value_Rounded}}">$1,800,000</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">$/SF NRA</td>
+                    <td class="numeric-cell"><span title="{{Value_Per_SF}}">$176</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p style="margin-top: 15px;">Given that the subject is a multitenant asset with short term leases, it is generally understood that the direct capitalization method is preferred, making the discounted cash flow (DCF) method less meaningful. For this reason, we have completed only the direct capitalization method.</p>
+
+        <div class="page-footer">
+            <div>
+                <span class="page-num">50</span>
+                <span title="{{Property_Address}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span title="{{File_Number}}">VAL251012 - 1</span>
+            </div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- PAGE 56 (Report Page 51): Direct Comparison Approach -->
+    <!-- ============================================ -->
+    <div class="page-sheet">
+        <h1 class="Header1">Valuation & Conclusions</h1>
+
+        <h2 class="Header2">Direct Comparison Approach: Multifamily</h2>
+
+        <h3 class="Subheader1">Introduction</h3>
+        <p>In the Sales Comparison Approach, the value of a property is estimated by comparing it with similar, recently sold properties in the surrounding or competing areas. Inherent in this approach is the principle of substitution, which holds that when a property is replaceable in the market, its value tends to be set by the cost of buying an equally desirable property, assuming that no costly delay occurs in making the substitution.</p>
+
+        <h3 class="Subheader1">Comparable Selection</h3>
+        <p>Through the analysis of sales of verified arm's-length transactions, market value and price trends are identified. The sales utilized are comparable to the subject in physical, functional, and economic characteristics.</p>
+
+        <p>Comparable sales are presented, which were selected due to their similarity in physical, locational, and qualitative attributes. They represent the most recent and relevant comparable sale available for this analysis. Emphasis was given to the subject's location and similarly positioned properties.</p>
+
+        <h3 class="Subheader1">Unit of Comparison</h3>
+        <p>The most relevant unit of comparison is the price per Unit. This best reflects the unit of comparison used by buyers and sellers in this market for the subject property type.</p>
+
+        <h3 class="Subheader1">Adjustments</h3>
+        <p>Adjustments to the comparable sales were considered and made when warranted for property rights, financing terms, conditions of sale, expenditures after sale and market conditions.</p>
+
+        <ol style="margin-left: 25px; margin-top: 10px;">
+            <li><span class="list-number">Property Rights</span> - All the sales comparables were fee simple sales reflecting the property rights appraised herein per the agreed upon scope of work.</li>
+
+            <li><span class="list-number">Financing</span> - The sales all reflected typical cash equivalent, lender-financed transactions and no adjustments were required for financing terms.</li>
+
+            <li><span class="list-number">Sale Conditions</span> - None of the comparables required a condition of sale adjustment, as all were confirmed to be arm's length transactions.</li>
+
+            <li><span class="list-number">Expenditures After Sale</span> - Expenses that the buyer incurs after purchase (deferred maintenance, HVAC repairs, etc.). No adjustments are warranted based on review of the sales.</li>
+
+            <li><span class="list-number">Market Conditions</span> - Based on review of value trends of the comparables presented herein, a market conditions adjustment of 0% is applied on an annual basis reflecting the relatively consistent appreciation that occurred between the oldest comparable sale date up through the effective valuation date.</li>
+        </ol>
+
+        <h3 class="Subheader1">Quantitative Adjustment Process</h3>
+        <p>In this method, we have compared the sales to the subject primarily along economic lines rather than on physical characteristics. Economic measures such as the relationship of sales price to net operating income are inclusive of all the physical and economic attributes of a property. It should be stressed that the adjustments are subjective in nature and are meant to illustrate the logic in deriving a value opinion for the subject property by the Sales Comparison Approach.</p>
+
+        <div class="page-footer">
+            <div>
+                <span class="page-num">51</span>
+                <span title="{{Property_Address}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span title="{{File_Number}}">VAL251012 - 1</span>
+            </div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+</body>
+</html>

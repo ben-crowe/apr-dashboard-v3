@@ -72,6 +72,12 @@ grep '<span class="page-num">14</span>' PREVIEW-Master.html
 
 **Next Batch (40-77):** Current assignment
 
+**⚠️ BATCH SIZE LIMIT: 5-7 pages per session**
+- Do NOT attempt to format more than 7 pages in one batch
+- Small batches = faster review cycles and better quality control
+- Example: Format pages 40-45 (6 pages), then append, commit, and request review
+- After review approval, proceed with next batch (pages 46-52)
+
 ---
 
 ## 🏗️ HTML Structure Reference
@@ -423,7 +429,7 @@ We use a two-layer approach to prevent layout overflow:
 
 ### File Structure:
 
-Create HTML files for batch of pages (e.g., `pg-40-50.html`)
+Create HTML files for batch of 5-7 pages (e.g., `pg-40-45.html` for 6 pages)
 
 **File structure:**
 ```html
@@ -447,6 +453,8 @@ Create HTML files for batch of pages (e.g., `pg-40-50.html`)
 ### Save Location:
 `/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/html-pages/New Formated/`
 
+**File naming:** Use page range in filename (e.g., `pg-40-45.html`)
+
 ### What NOT to Include:
 ❌ `<!DOCTYPE html>`
 ❌ `<html>`, `<head>`, `<body>` tags
@@ -455,7 +463,7 @@ Create HTML files for batch of pages (e.g., `pg-40-50.html`)
 ❌ Personal comments or notes
 
 ### What TO Include:
-✅ Just the `<div class="page-sheet">` blocks
+✅ Just the `<div class="page-sheet">` blocks (5-7 pages)
 ✅ Properly formatted HTML
 ✅ All field mappings with `class="field-mapped"`
 ✅ Footer on every page
@@ -527,17 +535,25 @@ Before delivering your HTML, verify:
 - [ ] Valid HTML (no unclosed tags)
 - [ ] No inline CSS (use classes instead)
 - [ ] No DOCTYPE or html/head/body tags
-- [ ] File named appropriately (e.g., `pg-40-50.html`)
+- [ ] File named appropriately with page range (e.g., `pg-40-45.html`)
+- [ ] Batch size is 5-7 pages (not more, not less)
 
 ---
 
 ## 🔄 Workflow After Delivery
 
-**YOU are responsible for completing Steps 1-2. This is not optional.**
+**YOU are responsible for completing Steps 1-3. This is not optional.**
+
+**⚠️ BATCH SIZE: Format only 5-7 pages per session, then request review.**
 
 ### Step 1: Create Your HTML File
 
-Create a batch file with your formatted pages (e.g., `pg-40-50.html`) containing just the page-sheet divs.
+Create a batch file with your formatted pages (e.g., `pg-40-45.html` for pages 40-45) containing just the page-sheet divs.
+
+**Batch size:**
+- Minimum: 5 pages
+- Maximum: 7 pages
+- Recommended: 6 pages for consistent batching
 
 ### Step 2: Append to PREVIEW-Master.html
 
@@ -579,9 +595,9 @@ After appending to PREVIEW-Master.html, commit to git:
 ```bash
 cd "/Users/bencrowe/Development/APR-Dashboard-v3"
 git add "docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/html-pages/New Formated/PREVIEW-Master.html"
-git commit -m "Add pages 40-50 to preview master
+git commit -m "Add pages 40-45 to preview master (6 pages)
 
-- Formatted pages 40-50 from reference document
+- Formatted pages 40-45 from reference document
 - Field mapped all dynamic content
 - Footer visible on all pages
 - [Add any field ID notes here]
@@ -591,35 +607,61 @@ git commit -m "Add pages 40-50 to preview master
 Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
 ```
 
-### Step 4: Review Together
+### Step 4: Request Review
 
-1. **Announce completion:** Tell user pages are added and committed
-2. **User opens in browser:** User will review the preview
-3. **Check for issues:** Footer overlap, field IDs, formatting
-4. **Iterate if needed:** Make refinements based on feedback
+**⚠️ STOP HERE - Do not continue to next batch without review approval.**
+
+1. **Announce completion:** "Pages 40-45 (6 pages) have been formatted, appended to PREVIEW-Master.html, and committed. Ready for review."
+2. **Provide summary:**
+   - Pages completed: 40-45
+   - Total pages in batch: 6
+   - Field ID notes (if any)
+   - Any issues or concerns encountered
+3. **Wait for user review:** User will open browser and review the preview
+4. **User checks:**
+   - Footer overlap on all pages
+   - Field ID completeness
+   - Visual formatting consistency
+   - Content accuracy
+5. **Iterate if needed:** Make refinements based on feedback before next batch
 
 ### Step 5: Repeat for Next Batch
 
-Continue with next set of pages using the same workflow.
+**Only after receiving user approval**, continue with next set of 5-7 pages using the same workflow.
+
+Example progression:
+- Batch 1: Pages 40-45 (6 pages) → Review → Approved ✅
+- Batch 2: Pages 46-52 (7 pages) → Review → Approved ✅
+- Batch 3: Pages 53-58 (6 pages) → Review → Approved ✅
 
 ---
 
-## 📝 Why You Do Step 2 (Not Me)
+## 📝 Why This Workflow Works
+
+### Small Batch Size (5-7 pages):
+- **Fast feedback:** Issues caught early before propagating
+- **Quality control:** User reviews while content is fresh
+- **Token efficiency:** Smaller corrections, not rewriting large sections
+- **Manageable scope:** Clear start/end points for each session
+
+### You Do Steps 1-3 (Not Me):
 
 **Efficiency:**
 - Reduces token usage significantly
 - You can append pages directly without back-and-forth
-- Faster iteration cycle
+- Faster iteration cycle within each batch
 
 **Learning:**
 - If you make mistakes, we refine this guide
 - Guide becomes better SOP (Standard Operating Procedure)
 - Enables spawning sub-agents to work independently
+- Small batches = small mistakes = easy fixes
 
 **Responsibility:**
-- You own the entire delivery: format → append → commit
+- You own the entire delivery: format → append → commit → request review
 - Quality control happens at review step
 - Clear accountability for each batch
+- User approves before you proceed to next batch
 
 ---
 

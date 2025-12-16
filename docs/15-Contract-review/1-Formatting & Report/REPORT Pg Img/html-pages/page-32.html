@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Analysis - Page 32</title>
+    <link rel="stylesheet" href="master-appraisal-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: 8.5in 11in;
+            margin: 0;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .page {
+            width: 8.5in;
+            height: 11in;
+            background: white;
+            margin: 0 auto 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding: 40px 36px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-content {
+            flex: 1;
+        }
+
+        h2 {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .table-container {
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
+        thead {
+            background-color: #1a3a52;
+            color: white;
+        }
+
+        thead tr {
+            border: 1px solid #1a3a52;
+        }
+
+        thead th {
+            padding: 10px 8px;
+            text-align: left;
+            font-weight: bold;
+            border: 1px solid #1a3a52;
+            font-size: 10px;
+            letter-spacing: 0.3px;
+        }
+
+        tbody td {
+            padding: 8px 8px;
+            border: 1px solid #d0d0d0;
+            background: #fafafa;
+            text-align: left;
+        }
+
+        tbody tr:nth-child(even) td {
+            background: #fff;
+        }
+
+        tbody tr.section-header td {
+            background: #f0f0f0;
+            font-weight: bold;
+            border-top: 2px solid #999;
+        }
+
+        tbody tr.summary-row td {
+            font-weight: bold;
+            background: #f5f5f5;
+            border-top: 1px solid #999;
+        }
+
+        /* Numeric columns - right align */
+        td.numeric {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+        }
+
+        th.numeric {
+            text-align: right;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #d0d0d0;
+            font-size: 9px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .footer-left {
+            flex: 1;
+        }
+
+        .footer-accent {
+            width: 60px;
+            height: 20px;
+            background: linear-gradient(90deg, #5ba3d0 0%, #1a3a52 100%);
+            margin-left: auto;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .page {
+                box-shadow: none;
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="page-content">
+            <h2>Property Analysis</h2>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 12%;">TYPE</th>
+                            <th style="width: 28%;">DESCRIPTION</th>
+                            <th class="numeric" style="width: 12%;">UNIT DETAIL<br>UNITS</th>
+                            <th class="numeric" style="width: 10%;">% TOT</th>
+                            <th class="numeric" style="width: 10%;">SIZE</th>
+                            <th class="numeric" style="width: 12%;">NRA<br>SF</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Flat 1 Bed / 1 Bath</td>
+                            <td>One Bed/Core Bath</td>
+                            <td class="numeric">4</td>
+                            <td class="numeric">25%</td>
+                            <td class="numeric">550</td>
+                            <td class="numeric">2,200</td>
+                        </tr>
+                        <tr>
+                            <td>Flat 2 Bed / 1 Bath</td>
+                            <td>Two Bed/Core Bath</td>
+                            <td class="numeric">12</td>
+                            <td class="numeric">75%</td>
+                            <td class="numeric">667</td>
+                            <td class="numeric">8,004</td>
+                        </tr>
+                        <tr class="summary-row">
+                            <td colspan="2">TOTAL / AVERAGE</td>
+                            <td class="numeric">16</td>
+                            <td class="numeric">100%</td>
+                            <td class="numeric">638</td>
+                            <td class="numeric">10,204</td>
+                        </tr>
+                        <tr class="summary-row">
+                            <td colspan="2">NET RENTABLE AREA</td>
+                            <td class="numeric">16</td>
+                            <td class="numeric"></td>
+                            <td class="numeric">638</td>
+                            <td class="numeric">10,204</td>
+                        </tr>
+                        <tr class="summary-row">
+                            <td colspan="2">GROSS BUILDING AREA</td>
+                            <td class="numeric">16</td>
+                            <td class="numeric"></td>
+                            <td class="numeric">638</td>
+                            <td class="numeric">10,204</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-left">27 | 1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1</div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+</body>
+</html>

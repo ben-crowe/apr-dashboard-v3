@@ -3004,8 +3004,8 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     }
 });
 
-// Update page count display
-document.getElementById('page-count').textContent = `of ${totalPages}`;
+// Update page count display (removed - no limit)
+document.getElementById('page-count').textContent = '';
 
 // Page Navigation Handler
 const pageInput = document.getElementById('page-input');
@@ -3014,7 +3014,7 @@ const goButton = document.getElementById('go-button');
 function jumpToPage(pageNumber) {
     const pageNum = parseInt(pageNumber);
 
-    if (isNaN(pageNum) || pageNum < 1 || pageNum > totalPages) {
+    if (isNaN(pageNum) || pageNum < 1) {
         pageInput.style.borderColor = '#e74c3c';
         setTimeout(() => {
             pageInput.style.borderColor = '#003B7E';

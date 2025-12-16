@@ -350,5 +350,75 @@ When you find a new reusable pattern:
 
 ---
 
+## Field Management Integration
+
+### Where Field IDs Come From
+
+All field IDs used in the component library (like `{{SK_Econ_Indicator_1_Name}}`) come from the centralized Field Management system:
+
+**Field Management Directory:**
+`/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Field Management/`
+
+**Key Files:**
+- **MASTER-FIELD-DIRECTORY.md** - Complete catalog of 7,967 fields from final report
+- **TABLE-FIELD-ANALYSIS.md** - Table-specific field organization and patterns
+- **FIELD-DESTINATION-MAP.md** - Maps each field to its report location
+- **README.md** - Quick reference guide for field lookup
+
+### Finding Field IDs for Your Table
+
+**Step 1: Identify the table type**
+- Economic indicators table? → Look for `*_Econ_Indicator_*` pattern
+- Rental comparables? → Look for `survey1-*`, `survey2-*` patterns
+- Sales comparables? → Look for `comp1-*`, `comp2-*` patterns
+- Property details? → Look for `Subject_*` pattern
+
+**Step 2: Check existing examples**
+- Page 31 Saskatchewan Economic Indicators → 14 rows of `SK_Econ_Indicator_*` fields
+- Pattern: `{Province}_Econ_Indicator_{Row#}_{Column}`
+- Columns: `_Name`, `_Estimate`, `_Commentary`, `_Source`
+
+**Step 3: Reference Field Management docs**
+```bash
+# Search for field patterns
+grep -r "SK_Econ" /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Field\ Management/
+
+# Or check MASTER-FIELD-DIRECTORY.md for complete field list
+```
+
+### Table-Specific Field Patterns
+
+**Economic Indicators Tables (Pages 31-34):**
+```
+Saskatchewan: SK_Econ_Indicator_{1-14}_{Name|Estimate|Commentary|Source}
+Alberta: AB_Econ_Indicator_{1-14}_{Name|Estimate|Commentary|Source}
+British Columbia: BC_Econ_Indicator_{1-14}_{Name|Estimate|Commentary|Source}
+National: National_Econ_Indicator_{1-14}_{Name|Estimate|Commentary|Source}
+```
+
+**Rental Survey Tables (Pages 35-39):**
+```
+survey1-{address|units|nra|rent-per-unit|1br-rent|1br-sf|1br-psf|...}
+survey2-{same fields}
+survey3-{same fields}
+survey4-{same fields}
+survey5-{same fields}
+```
+
+**Sales Comparables Tables (Pages 55-60):**
+```
+comp1-{gba|units|year|name|sale-price|price-per-unit|...}
+comp2-{same fields}
+comp3-{same fields}
+```
+
+---
+
 **Created:** December 16, 2025
+**Last Updated:** December 16, 2025
 **Status:** Active - Use for all future SVG-to-HTML conversions
+
+**Related Documentation:**
+- [Field Management Directory](../../2-Field Management/README.md)
+- [AGENT-GUIDE-Page-Formatting.md](../-passover-sessions/AGENT-GUIDE-Page-Formatting.md)
+- [README-SVG-Conversion.md](../README-SVG-Conversion.md)

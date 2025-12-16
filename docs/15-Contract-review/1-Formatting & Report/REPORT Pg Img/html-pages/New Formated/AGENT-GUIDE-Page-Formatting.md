@@ -533,12 +533,93 @@ Before delivering your HTML, verify:
 
 ## 🔄 Workflow After Delivery
 
-1. **You create:** HTML file with batch of pages
-2. **I append:** Your HTML to `PREVIEW-Master.html`
-3. **We review:** Preview together in browser
-4. **Check for overlap:** Verify no content overlapping footers
-5. **You refine:** Based on feedback (if needed)
-6. **Repeat:** For next batch of pages
+**YOU are responsible for completing Steps 1-2. This is not optional.**
+
+### Step 1: Create Your HTML File
+
+Create a batch file with your formatted pages (e.g., `pg-40-50.html`) containing just the page-sheet divs.
+
+### Step 2: Append to PREVIEW-Master.html
+
+**⚠️ CRITICAL:** You must append your pages to the master file yourself.
+
+**Location:** `/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/html-pages/New Formated/PREVIEW-Master.html`
+
+**How to append:**
+
+1. **Read the end of PREVIEW-Master.html** to find where to insert
+2. **Look for the last page-sheet closing tag** `</div>` before the closing `</body>`
+3. **Insert your pages BEFORE** the `</body></html>` tags
+
+**Example workflow:**
+```bash
+# 1. Find insertion point (look for last page-sheet div)
+tail -20 PREVIEW-Master.html
+
+# 2. You'll see something like:
+#     </div>  <!-- End of last existing page -->
+#
+#     </body>
+#     </html>
+
+# 3. Insert your pages BEFORE </body>
+# Use the Edit tool to add your pages at the correct location
+```
+
+**Verification after appending:**
+- Check that your pages appear before `</body></html>`
+- Verify no duplicate page numbers
+- Ensure proper closing tags
+- Check that file still has valid HTML structure
+
+### Step 3: Commit Your Changes
+
+After appending to PREVIEW-Master.html, commit to git:
+
+```bash
+cd "/Users/bencrowe/Development/APR-Dashboard-v3"
+git add "docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/html-pages/New Formated/PREVIEW-Master.html"
+git commit -m "Add pages 40-50 to preview master
+
+- Formatted pages 40-50 from reference document
+- Field mapped all dynamic content
+- Footer visible on all pages
+- [Add any field ID notes here]
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
+```
+
+### Step 4: Review Together
+
+1. **Announce completion:** Tell user pages are added and committed
+2. **User opens in browser:** User will review the preview
+3. **Check for issues:** Footer overlap, field IDs, formatting
+4. **Iterate if needed:** Make refinements based on feedback
+
+### Step 5: Repeat for Next Batch
+
+Continue with next set of pages using the same workflow.
+
+---
+
+## 📝 Why You Do Step 2 (Not Me)
+
+**Efficiency:**
+- Reduces token usage significantly
+- You can append pages directly without back-and-forth
+- Faster iteration cycle
+
+**Learning:**
+- If you make mistakes, we refine this guide
+- Guide becomes better SOP (Standard Operating Procedure)
+- Enables spawning sub-agents to work independently
+
+**Responsibility:**
+- You own the entire delivery: format → append → commit
+- Quality control happens at review step
+- Clear accountability for each batch
 
 ---
 

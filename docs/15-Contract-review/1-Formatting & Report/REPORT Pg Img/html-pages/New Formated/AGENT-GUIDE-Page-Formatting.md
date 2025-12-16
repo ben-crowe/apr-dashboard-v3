@@ -1,30 +1,34 @@
-# Agent Guide: Report Page Formatting (Pages 19-25)
+# Agent Guide: Report Page Formatting
 
 **Project:** APR Dashboard v3 - Report Builder HTML Template Migration
-**Task:** Format pages 19-25 from Word document into clean HTML with field mapping
-**Status:** Pages 3-18 complete and approved ✅
+**Task:** Format pages from Word document into clean HTML with field mapping
+**Last Updated:** 2024-12-16
+**Current Status:** Pages 3-39 complete ✅ | Pages 40-77 in progress
 
 ---
 
 ## 🎯 Mission
 
-Convert pages 19-25 from the reference Word document into properly formatted HTML pages that:
-1. Match the existing visual style (pages 3-18)
+Convert pages from the reference Word document into properly formatted HTML pages that:
+1. Match the existing visual style (pages 3-39)
 2. Use the master CSS stylesheet
 3. Map all dynamic content to `{{Field_ID}}` placeholders
 4. Fit within strict 11-inch page height (WYSIWYG preview)
-5. Include consistent footer styling
+5. Include consistent footer styling with **visual overlap alarm**
 
 ---
 
 ## 📋 Current Progress
 
-**Completed Pages (3-18):**
+**Completed Pages (3-39):**
 - Pages 3-7: Letter of Transmittal, Limiting Conditions, TOC, Property Overview
 - Pages 8-12: Hypothetical Conditions, Photo grids (25 photos)
 - Pages 13-18: Maps (Regional/Local/Aerial), Property ID, Sales History, Exposure Time
+- Pages 19-25: Market Analysis sections
+- Pages 26-32: Property Analysis, Zoning, Site details
+- Pages 33-39: Improvements, Condition, Building details
 
-**Next Batch (19-25):** Your assignment
+**Next Batch (40-77):** Current assignment
 
 ---
 
@@ -35,7 +39,7 @@ Convert pages 19-25 from the reference Word document into properly formatted HTM
 Every page follows this structure:
 
 ```html
-<div class="page-sheet" data-page-num="Page 19">
+<div class="page-sheet" data-page-num="Page 40">
     <!-- Page Header (if needed) -->
     <div class="Header1">Section Name</div>
 
@@ -60,9 +64,8 @@ Every page follows this structure:
     <!-- Page Footer (REQUIRED ON EVERY PAGE) -->
     <div class="page-footer">
         <div>
-            <span class="page-num">19</span>
-            <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>,
-            <span class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span> |
+            <span class="page-num">40</span>
+            <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> |
             File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
         </div>
         <div class="footer-accent"></div>
@@ -73,39 +76,38 @@ Every page follows this structure:
 ### Example: Full Page with Content
 
 ```html
-<div class="page-sheet" data-page-num="Page 19">
-    <div class="Header1">Market Analysis</div>
-    <div class="Header2">REGIONAL MARKET OVERVIEW</div>
+<div class="page-sheet" data-page-num="Page 40">
+    <div class="Header1">Highest & Best Use Analysis</div>
+    <div class="Header2">AS THOUGH VACANT</div>
 
-    <div class="Subheader1">Economic Indicators</div>
+    <div class="Subheader1">Legal Permissibility</div>
     <p>
-        The regional economy is characterized by
-        <span class="field-mapped" title="{{Market_EconomicIndicators}}">{{Market_EconomicIndicators}}</span>
-        with a current unemployment rate of
-        <span class="field-mapped" title="{{Market_UnemploymentRate}}">{{Market_UnemploymentRate}}</span>.
+        The subject site is zoned
+        <span class="field-mapped" title="{{Subject_Zoning}}">{{Subject_Zoning}}</span>
+        which permits
+        <span class="field-mapped" title="{{Subject_PermittedUses}}">{{Subject_PermittedUses}}</span>.
     </p>
 
-    <div class="Subheader1">Market Trends</div>
+    <div class="Subheader1">Physical Feasibility</div>
     <table>
         <tr>
-            <td class="label-col">Supply Trend</td>
+            <td class="label-col">Site Area</td>
             <td class="value-col">
-                <span class="field-mapped" title="{{Market_SupplyTrend}}">{{Market_SupplyTrend}}</span>
+                <span class="field-mapped" title="{{Subject_SiteArea}}">{{Subject_SiteArea}}</span>
             </td>
         </tr>
         <tr>
-            <td class="label-col">Demand Trend</td>
+            <td class="label-col">Topography</td>
             <td class="value-col">
-                <span class="field-mapped" title="{{Market_DemandTrend}}">{{Market_DemandTrend}}</span>
+                <span class="field-mapped" title="{{Subject_Topography}}">{{Subject_Topography}}</span>
             </td>
         </tr>
     </table>
 
     <div class="page-footer">
         <div>
-            <span class="page-num">19</span>
-            <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>,
-            <span class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span> |
+            <span class="page-num">40</span>
+            <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> |
             File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
         </div>
         <div class="footer-accent"></div>
@@ -123,8 +125,12 @@ Just reference these classes in your HTML. The master file already has this CSS.
 ### Key CSS Classes:
 
 ```css
+/* Page container with ABSOLUTE FOOTER method */
 .page-sheet {
     height: 11in; /* STRICT - Pages cannot grow */
+    padding: 0.75in;
+    padding-bottom: 180px; /* Reserves space for footer */
+    position: relative;
     overflow: hidden; /* Content overflow gets clipped */
 }
 
@@ -132,6 +138,7 @@ Just reference these classes in your HTML. The master file already has this CSS.
     font-size: 18pt;
     color: #003B7E;
     border-bottom: 1px solid #003B7E;
+    padding-bottom: 5px;
     margin-bottom: 12px;
 }
 
@@ -159,11 +166,16 @@ Just reference these classes in your HTML. The master file already has this CSS.
     cursor: help;
 }
 
+/* ABSOLUTE FOOTER - Always visible at bottom */
 .page-footer {
-    margin-top: auto; /* Pushes to bottom via flexbox */
+    position: absolute;
+    bottom: 0.75in;
+    left: 0.75in;
+    right: 0.75in;
     padding-top: 15px;
     border-top: 1px solid #ccc;
-    flex-shrink: 0;
+    background-color: white; /* Solid background */
+    z-index: 10; /* Stays on top of content */
 }
 
 .footer-accent {
@@ -206,7 +218,7 @@ td, th {
 - Subheaders: 10px top, 4px bottom
 - Paragraphs: 8pt spacing
 - Tables: 10px bottom margin
-- **Content must fit in 11 inches!** If footer disappears, content is too long.
+- **Content must fit in 11 inches!** If content overlaps footer, it's too long.
 
 ---
 
@@ -227,13 +239,16 @@ td, th {
 - `{{Subject_Subtype}}` - Property subtype
 - `{{Subject_NRA}}` - Net rentable area
 - `{{Subject_Owner}}` - Current owner
+- `{{Subject_Zoning}}` - Zoning designation
+- `{{Subject_SiteArea}}` - Site area
+- `{{Subject_Units}}` - Number of units
 
 **Company/Report:**
 - `{{Company_JobNumber}}` - File number
 - `{{Company_Name}}` - Appraisal company
 - `{{Report_Date}}` - Report date
 - `{{Report_Date1}}` - Effective date of value
-- `{{Report_DateInspection}}` - Inspection date
+- `{{Report_InspectionDate}}` - Inspection date
 
 **Market/Valuation:**
 - `{{Market_[Description]}}` - Market analysis fields
@@ -243,7 +258,7 @@ td, th {
 ### Field Naming Convention:
 1. Use **PascalCase** (e.g., `Subject_Street`, not `subject_street`)
 2. Use **descriptive names** (e.g., `Market_SupplyTrend`, not `mkt_sup`)
-3. Match existing patterns from pages 3-18
+3. Match existing patterns from pages 3-39
 4. **Check the master field ID document** if unsure
 
 ### What to Map:
@@ -278,26 +293,58 @@ Check `/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Fi
 
 ## 📐 WYSIWYG Requirements (CRITICAL)
 
-### The Problem We Solved:
-"If the previewer doesn't show you the failure, it's not a previewer—it's a liar." - Gemini
+### The Dual-Layer Defense Strategy
 
-### The Solution:
-- **Fixed height: 11 inches** (not min-height)
-- **overflow: hidden** (content that exceeds gets clipped)
-- **Footer behavior:** If content is too long, footer gets clipped = visual warning
+We use a two-layer approach to prevent layout overflow:
+
+**Layer 1: Input Character Limits (Future - Prevention)**
+- React editor will have character limits per field
+- User sees "2800 / 2800 characters" counter
+- Prevents 95% of overflow issues before they happen
+- *(Implementation planned after pages 40-77 complete)*
+
+**Layer 2: Visual Overlap Alarm (Current - Detection)**
+- Footer absolutely positioned at bottom with `z-index: 10`
+- If content is too long, it **overlaps the footer visibly**
+- User can SEE the overlap = knows content needs adjustment
+- Acts as safety net for edge cases
+
+### The CSS Solution (Currently Implemented):
+
+**Absolute Positioning Method:**
+- Footer is **always visible** at bottom (position: absolute)
+- Footer has white background and high z-index (stays on top)
+- If content exceeds page capacity, content appears **behind footer**
+- User sees overlap = visual alarm "too much content"
 
 ### What This Means for You:
-1. **Content must fit in 11 inches** (including footer)
-2. **Test your pages:** If footer disappears, content is too long
-3. **Solutions if content too long:**
+
+1. **Content should fit in available space** (11 inches minus footer height)
+2. **Test your pages:** If content overlaps footer, reduce content or adjust spacing
+3. **Solutions if content overlaps footer:**
    - Reduce paragraph spacing (use inline `margin-bottom: 6pt`)
    - Split content across two pages
    - Use more compact table formatting
    - Remove unnecessary line breaks
+   - Shorten text content (will be enforced by character limits later)
 
 ### Visual Feedback:
-✅ **Footer visible** = Page fits correctly
-⚠️ **Footer missing/clipped** = Content overflow, needs adjustment
+
+✅ **Footer visible, no overlap** = Page fits correctly
+⚠️ **Content overlapping footer** = Content overflow, needs adjustment
+🚨 **Footer completely covered** = Severe overflow, must reduce content
+
+### Why This Approach is Better:
+
+**Old approach (flexbox):**
+- Footer would disappear when content too long
+- No visual feedback = user doesn't know there's a problem
+
+**Current approach (absolute positioning):**
+- Footer always visible = marks page boundary
+- Overlap is visual alarm = immediate feedback
+- User sees problem and fixes it manually
+- Combined with future character limits = 95%+ prevention
 
 ---
 
@@ -305,7 +352,7 @@ Check `/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Fi
 
 ### File Structure:
 
-Create a single HTML file named: `pg-19-25.html`
+Create HTML files for batch of pages (e.g., `pg-40-50.html`)
 
 **File structure:**
 ```html
@@ -313,21 +360,21 @@ Create a single HTML file named: `pg-19-25.html`
 <!-- NO <head> or <style> tags -->
 <!-- JUST the page content -->
 
-<div class="page-sheet" data-page-num="Page 19">
-    <!-- Page 19 content -->
+<div class="page-sheet" data-page-num="Page 40">
+    <!-- Page 40 content -->
     <div class="page-footer">...</div>
 </div>
 
-<div class="page-sheet" data-page-num="Page 20">
-    <!-- Page 20 content -->
+<div class="page-sheet" data-page-num="Page 41">
+    <!-- Page 41 content -->
     <div class="page-footer">...</div>
 </div>
 
-<!-- ... pages 21-25 ... -->
+<!-- ... more pages ... -->
 ```
 
 ### Save Location:
-`/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/html-pages/New Formated/pg-19-25.html`
+`/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/html-pages/New Formated/`
 
 ### What NOT to Include:
 ❌ `<!DOCTYPE html>`
@@ -341,7 +388,7 @@ Create a single HTML file named: `pg-19-25.html`
 ✅ Properly formatted HTML
 ✅ All field mappings with `class="field-mapped"`
 ✅ Footer on every page
-✅ Page numbers in `data-page-num` attribute
+✅ Correct page numbers in `data-page-num` and footer
 
 ---
 
@@ -365,11 +412,11 @@ Before delivering your HTML, verify:
 - [ ] Headers use proper classes (Header1, Header2, Subheader1)
 - [ ] Tables use label-col and value-col classes
 - [ ] Paragraphs have proper spacing (8pt default)
-- [ ] Content fits within 11-inch page height
-- [ ] Footer is visible on all pages (not clipped)
+- [ ] Content fits within available page space (no footer overlap)
+- [ ] Footer is visible on all pages (not hidden behind content)
 
 ### Consistency:
-- [ ] Style matches pages 3-18 (check PREVIEW-Master.html)
+- [ ] Style matches pages 3-39 (check PREVIEW-Master.html)
 - [ ] Spacing is moderate (not too tight, not too loose)
 - [ ] Color scheme matches (#003B7E for headers)
 - [ ] Table formatting is consistent
@@ -378,26 +425,28 @@ Before delivering your HTML, verify:
 - [ ] Valid HTML (no unclosed tags)
 - [ ] No inline CSS (use classes instead)
 - [ ] No DOCTYPE or html/head/body tags
-- [ ] File saved as `pg-19-25.html`
+- [ ] File named appropriately (e.g., `pg-40-50.html`)
 
 ---
 
 ## 🔄 Workflow After Delivery
 
-1. **You create:** `pg-19-25.html` with pages 19-25
+1. **You create:** HTML file with batch of pages
 2. **I append:** Your HTML to `PREVIEW-Master.html`
 3. **We review:** Preview together in browser
-4. **You refine:** Based on feedback (if needed)
-5. **Repeat:** For next batch of pages
+4. **Check for overlap:** Verify no content overlapping footers
+5. **You refine:** Based on feedback (if needed)
+6. **Repeat:** For next batch of pages
 
 ---
 
 ## 💡 Tips & Best Practices
 
 ### Content Fitting:
-- Start with page 19, check footer visibility
-- If footer clips, reduce spacing before moving to page 20
+- Start with first page, check for footer overlap
+- If overlap occurs, reduce spacing before moving to next page
 - Use reference PDF to gauge content density
+- Remember: footer overlap = visual alarm, not failure
 
 ### Field Mapping:
 - When in doubt, map it (better to have extra fields than missing ones)
@@ -448,23 +497,31 @@ Before delivering your HTML, verify:
 If you encounter:
 - **Unclear content:** Use best judgment, we'll refine in review
 - **Missing field IDs:** Create descriptive names following the pattern
-- **Content overflow:** Try reducing spacing first, then ask
-- **Formatting questions:** Check pages 3-18 in PREVIEW-Master.html
+- **Content overlap:** Try reducing spacing first, then ask
+- **Formatting questions:** Check pages 3-39 in PREVIEW-Master.html
 
 ---
 
 ## 🎯 Success Criteria
 
-Your pages 19-25 are successful when:
-1. ✅ All content fits within 11-inch pages (footers visible)
-2. ✅ Visual style matches pages 3-18
+Your pages are successful when:
+1. ✅ Content fits within available page space (no excessive footer overlap)
+2. ✅ Visual style matches pages 3-39
 3. ✅ All dynamic content is field-mapped
 4. ✅ Footer on every page with correct page numbers
 5. ✅ HTML is clean and valid
-6. ✅ File saved as `pg-19-25.html` in correct location
+6. ✅ File saved in correct location with appropriate name
 
 ---
 
-**Ready to start? Format pages 19-25 and save as `pg-19-25.html`!**
+## 📚 Related Documentation
+
+- **Footer Strategy:** See `formatting-fixed pg brakes.md` for absolute positioning rationale
+- **Character Limits:** See `Formatting-defined-input.md` for Layer 1 prevention strategy
+- **WYSIWYG Notes:** See `formatting-notes.md` and `formatting-note-2.md` for evolution of approach
+
+---
+
+**Ready to start? Format your assigned pages and deliver clean HTML!**
 
 **Good luck! 🚀**

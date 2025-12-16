@@ -1,784 +1,997 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<title>Appraisal Report Master Preview (All Pages)</title>
-<style>
-    /* --- MASTER STYLESHEET (Fixed for Bolding & Layout) --- */
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <title>Appraisal Report - Master Preview (Formatted)</title>
+    <style>
+        /* --- 1. GLOBAL RESET & FONTS --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-        font-family: "Open Sans", Arial, sans-serif;
-        font-size: 10pt;
-        line-height: 1.4;
-        background-color: #525659; /* Preview Mode Background */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 40px 0;
-        color: black;
-    }
+        body {
+            font-family: "Open Sans", Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            background-color: #525659;
+            /* Preview Mode Background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
+            color: black;
+        }
 
-    /* --- THE "PAPER SHEET" --- */
-    .page-sheet {
-        background-color: white;
-        width: 8.5in;
-        min-height: 11in;
-        padding: 0.75in;
-        margin-bottom: 30px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        position: relative;
-        overflow: hidden;
-        page-break-after: always; /* Critical for PDF generation */
-    }
+        /* --- 2. PAPER SHEET STYLING --- */
+        .page-sheet {
+            background-color: white;
+            width: 8.5in;
+            min-height: 11in;
+            padding: 0.75in;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
 
-    /* --- HEADERS --- */
-    .Header1 {
-        font-size: 18pt;
-        color: #003B7E;
-        border-bottom: 1px solid #003B7E;
-        padding-bottom: 5px;
-        margin-bottom: 20px;
-        font-weight: normal;
-    }
+            /* Flexbox for Footer Pushing */
+            display: flex;
+            flex-direction: column;
 
-    .Header2 {
-        font-size: 12pt;
-        color: #003B7E;
-        font-weight: bold;
-        text-transform: uppercase;
-        margin-top: 20px;
-        margin-bottom: 10px;
-    }
+            page-break-after: always;
+        }
 
-    .Subheader1 {
-        font-size: 11pt;
-        color: #003B7E;
-        font-weight: bold;
-        margin-top: 15px;
-        margin-bottom: 5px;
-    }
+        /* --- 3. HEADERS & TYPOGRAPHY --- */
+        .Header1 {
+            font-size: 18pt;
+            color: #003B7E;
+            border-bottom: 1px solid #003B7E;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            font-weight: normal;
+        }
 
-    /* --- LEGACY HEADERS (for backward compatibility) --- */
-    .header-logo-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
-    .logo-text { font-size: 20pt; font-weight: bold; color: #003B7E; }
-    .logo-sub { font-size: 9pt; color: #666; letter-spacing: 2px; }
-    .company-info { text-align: right; font-size: 9pt; color: #333; }
-    .section-header {
-        background-color: #003B7E;
-        color: white;
-        font-weight: bold;
-        padding: 5px 10px;
-        margin-top: 20px;
-        margin-bottom: 10px;
-        font-size: 10pt;
-        text-transform: uppercase;
-    }
-    .page-title {
-        font-size: 16pt;
-        font-weight: bold;
-        border-bottom: 2px solid #003B7E;
-        padding-bottom: 5px;
-        margin-bottom: 20px;
-    }
+        .Header2 {
+            font-size: 12pt;
+            color: #003B7E;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
 
-    /* --- TEXT & LISTS --- */
-    p { margin-bottom: 10pt; text-align: justify; }
-    ul { margin-bottom: 10pt; margin-left: 20px; }
-    li { margin-bottom: 5pt; }
+        .Subheader1 {
+            font-size: 11pt;
+            color: #003B7E;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
 
-    /* --- TABLES --- */
-    table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 10pt; }
-    td, th { padding: 4px 8px; border: 1px solid #ddd; vertical-align: top; }
-    .label-col { background-color: #f0f0f0; font-weight: bold; width: 35%; }
-    .value-col { width: 65%; }
+        /* Standard Text */
+        p {
+            margin-bottom: 10pt;
+            text-align: justify;
+        }
 
-    /* --- SIGNATURES --- */
-    .signature-block { margin-top: 40px; }
-    .sig-line { width: 250px; border-top: 1px solid black; margin-top: 40px; padding-top: 5px; }
+        /* --- 4. TABLES --- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 10pt;
+        }
 
-    /* --- FIELD MAPPING (The Yellow Highlight) --- */
-    .field-mapped {
-        background-color: rgba(255, 255, 0, 0.15);
-        border-bottom: 1px dotted #999;
-        cursor: help;
-        font-weight: inherit; /* FIXES THE BOLD ISSUE */
-        display: inline;
-    }
+        td,
+        th {
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
 
-    /* Tooltip on Hover */
-    .field-mapped:hover::before {
-        content: attr(title);
-        position: absolute;
-        transform: translateY(-100%);
-        background: #333; color: white;
-        padding: 4px 8px; font-size: 8pt;
-        border-radius: 4px; white-space: nowrap;
-        z-index: 1000;
-    }
+        .label-col {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            width: 35%;
+            color: #333;
+        }
 
-    /* --- IMAGES --- */
-    .img-placeholder {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: #f4f4f4;
-        border: 1px dashed #ccc;
-        color: #666;
-        margin-bottom: 15px;
-    }
+        .value-col {
+            width: 65%;
+        }
 
-    /* --- PRINT SETTINGS --- */
-    @media print {
-        body { background-color: white; padding: 0; display: block; }
-        .page-sheet { width: 100%; margin: 0; box-shadow: none; padding: 0.75in; min-height: auto; }
-        .field-mapped { background-color: transparent; border: none; }
-        .img-placeholder { border: none; background: none; }
-    }
-</style>
+        /* --- 5. FIELD MAPPING HIGHLIGHTER --- */
+        .field-mapped {
+            background-color: rgba(255, 255, 0, 0.15);
+            border-bottom: 1px dotted #999;
+            cursor: help;
+            font-weight: inherit;
+            /* Fixes bold overflow */
+            display: inline;
+        }
+
+        .field-mapped:hover::before {
+            content: attr(title);
+            position: absolute;
+            transform: translateY(-100%);
+            background: #333;
+            color: white;
+            padding: 4px 8px;
+            font-size: 8pt;
+            border-radius: 4px;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+
+        /* --- 6. IMAGES --- */
+        .img-placeholder {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f4f4f4;
+            border: 1px dashed #ccc;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* --- 7. FOOTER STYLING --- */
+        .page-footer {
+            margin-top: auto;
+            /* Pushes footer to bottom */
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            font-size: 9pt;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-accent {
+            width: 60px;
+            height: 10px;
+            background: linear-gradient(to right, #4a9fd8, #003d7a);
+            border-radius: 2px;
+        }
+
+        .page-num {
+            color: #003B7E;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        /* --- 8. PRINT SETTINGS --- */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                display: block;
+            }
+
+            .page-sheet {
+                width: 100%;
+                margin: 0;
+                box-shadow: none;
+                padding: 0.75in;
+                min-height: 11in;
+            }
+
+            .field-mapped {
+                background-color: transparent;
+                border: none;
+            }
+
+            .img-placeholder {
+                border: none;
+                background: none;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<!-- PAGE 3: Letter of Transmittal -->
-<div class="page-sheet">
-    <div class="header-logo-row">
-        <div>
-            <div class="logo-text">VALTA</div>
-            <div class="logo-sub">PROPERTY VALUATIONS</div>
+    <div class="page-sheet" data-page-num="Page 3">
+        <div
+            style="display:flex; justify-content:space-between; border-bottom:1px solid #e0e0e0; padding-bottom:10px; margin-bottom:20px;">
+            <div>
+                <div style="font-size:18pt; font-weight:bold; color:#003B7E;">VALTA</div>
+                <div style="font-size:9pt; color:#666;">PROPERTY VALUATIONS</div>
+            </div>
+            <div style="text-align:right; font-size:9pt; color:#333;">
+                <b><span class="field-mapped" title="{{Company_Name}}">{{Company_Name}}</span></b><br>
+                <span class="field-mapped" title="{{Company_Address}}">{{Company_Address}}</span><br>
+                <span class="field-mapped" title="{{Company_CityStateZip}}">{{Company_CityStateZip}}</span><br>
+                Office: <span class="field-mapped" title="{{Company_Phone}}">{{Company_Phone}}</span><br>
+                www.valta.ca
+            </div>
         </div>
-        <div class="company-info">
-            <b><span class="field-mapped" title="{{Company_Name}}">{{Company_Name}}</span></b><br>
-            <span class="field-mapped" title="{{Company_Address}}">{{Company_Address}}</span><br>
-            <span class="field-mapped" title="{{Company_CityStateZip}}">{{Company_CityStateZip}}</span><br>
-            Office: <span class="field-mapped" title="{{Company_Phone}}">{{Company_Phone}}</span><br>
-            www.valta.ca
-        </div>
-    </div>
 
-    <p><b><span class="field-mapped" title="{{Report_Date}}">{{Report_Date}}</span></b></p>
+        <p><b><span class="field-mapped" title="{{Report_Date}}">{{Report_Date}}</span></b></p>
 
-    <p>
-        <span class="field-mapped" title="{{Client_Company}}">{{Client_Company}}</span><br>
-        <span class="field-mapped" title="{{Client_Address}}">{{Client_Address}}</span><br>
-        <span class="field-mapped" title="{{Client_CityStateZip}}">{{Client_CityStateZip}}</span>
-    </p>
-
-    <p>Attention: <span class="field-mapped" title="{{Client_Name}}">{{Client_Name}}</span></p>
-
-    <p style="margin-top:20px;">
-        <b>Re: <span class="field-mapped" title="{{Report_Values}}">{{Report_Values}}</span> current market value for the property located at <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>, <span class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped" title="{{Subject_State}}">{{Subject_State}}</span>.</b>
-    </p>
-
-    <p>
-        Valta Property Valuations Ltd. is proud to present the appraisal report that satisfies the agreed upon scope of work with <span class="field-mapped" title="{{Client_Company}}">{{Client_Company}}</span>. The purpose of this assignment is to provide the <b>{{Report_ValueScenario1}}</b> current market value of the property... (Boilerplate text)... for the property located at <b>{{Subject_Street}}, {{Subject_City}}</b> (herein referred to as the 'subject property').
-    </p>
-
-    <p>
-        <span class="field-mapped" title="{{Subject_IntroComment}}">{{Subject_IntroComment}}</span> <span class="field-mapped" title="{{Subject_EconCharacteristics}}">{{Subject_EconCharacteristics}}</span>
-    </p>
-
-    <div class="section-header">MARKET VALUE CONCLUSION</div>
-    <table style="text-align:center;">
-        <tr style="background:#eee; font-weight:bold;">
-            <td>VALUATION SEQUENCE</td>
-            <td>INTEREST APPRAISED</td>
-            <td>EXPOSURE TIME</td>
-            <td>EFFECTIVE DATE</td>
-            <td>VALUE</td>
-        </tr>
-        <tr>
-            <td><span class="field-mapped" title="{{Report_ValueScenario1}}">{{Report_ValueScenario1}}</span></td>
-            <td><span class="field-mapped" title="{{Report_Interest}}">{{Report_Interest}}</span></td>
-            <td><span class="field-mapped" title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span></td>
-            <td><span class="field-mapped" title="{{Report_Date1}}">{{Report_Date1}}</span></td>
-            <td><b><span class="field-mapped" title="{{Report_Values}}">{{Report_Values}}</span></b></td>
-        </tr>
-    </table>
-
-    <div class="section-header">Hypothetical Conditions</div>
-    <p style="background-color:#ffffcc; padding:5px;">
-        <span class="field-mapped" title="{{Report_Hypothetical}}">{{Report_Hypothetical}}</span>
-    </p>
-
-    <div class="section-header">Extraordinary Assumptions</div>
-    <p>
-        <span class="field-mapped" title="{{Report_Extraordinary}}">{{Report_Extraordinary}}</span>
-    </p>
-</div>
-
-<!-- PAGE 4: Extraordinary Limiting Conditions -->
-<div class="page-sheet">
-    <h1 style="color:#003B7E; border-bottom:none;">Extraordinary Limiting Conditions</h1>
-
-    <p>
-        <span class="field-mapped" title="{{Report_LimCond}}">{{Report_LimCond}}</span>
-    </p>
-
-    <p>
-        The report has been completed in accordance with the Canadian Uniform Standards of Professional Appraisal Practice ("CUSPAP")... (Boilerplate standard text).
-    </p>
-    <p>
-        If there are any specific questions or concerns regarding the attached appraisal report, or if Valta can be of additional assistance, please contact the individuals listed below.
-    </p>
-
-    <div class="signature-block">
-        <p>Respectfully Submitted,</p>
-        <p><b><span class="field-mapped" title="{{Company_Name}}">{{Company_Name}}</span></b></p>
-
-        <div class="sig-line">
-            [IMAGE: <span class="field-mapped" title="{{Appraiser1_Signature}}">Appraiser1_Signature</span>]
-        </div>
-        <p style="margin-top:5px;">
-            <b><span class="field-mapped" title="{{Appraiser1_Name}}">{{Appraiser1_Name}}</span></b><br>
-            <span class="field-mapped" title="{{Appraiser1_Title}}">{{Appraiser1_Title}}</span><br>
-            <span class="field-mapped" title="{{Appraiser1_Email}}">{{Appraiser1_Email}}</span><br>
-            AIC No: 902097
+        <p>
+            <span class="field-mapped" title="{{Client_Company}}">{{Client_Company}}</span><br>
+            <span class="field-mapped" title="{{Client_Address}}">{{Client_Address}}</span><br>
+            <span class="field-mapped" title="{{Client_CityStateZip}}">{{Client_CityStateZip}}</span>
         </p>
-    </div>
-</div>
 
-<!-- PAGE 5: Table of Contents -->
-<div class="page-sheet" style="display:flex; padding:0;">
-    <div style="width:180px; background-color:#1a3a52; padding:40px 20px; color:white; font-size:24pt; font-weight:bold; text-align:center;">
-        Table of<br>Contents
-    </div>
+        <p>Attention: <span class="field-mapped" title="{{Client_Name}}">{{Client_Name}}</span></p>
 
-    <div style="flex:1; padding:40px;">
-        <h3 style="color:#1a3a52; border-bottom:1px solid #ccc; padding-bottom:5px; margin-bottom:10px;">Introduction & Executive Summary</h3>
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Property Overview</span><b>1</b></div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Photographs</span><b>4</b></div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Maps</span><b>9</b></div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Identification of Assignment</span><b>12</b></div>
+        <p style="margin-top:20px;">
+            <b>Re: <span class="field-mapped" title="{{Report_Values}}">{{Report_Values}}</span> current market value
+                for the property located at <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span>, <span class="field-mapped"
+                    title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped"
+                    title="{{Subject_State}}">{{Subject_State}}</span>.</b>
+        </p>
 
-        <h3 style="color:#1a3a52; border-bottom:1px solid #ccc; padding-bottom:5px; margin-bottom:10px; margin-top:20px;">Property Analysis</h3>
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Location</span><b>17</b></div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Site Details</span><b>18</b></div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Property Taxes & Assessment</span><b>23</b></div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Land Use & Planning</span><b>24</b></div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Description of Improvements</span><b>26</b></div>
-    </div>
-</div>
+        <p>
+            Valta Property Valuations Ltd. is proud to present the appraisal report that satisfies the agreed upon scope
+            of work with <span class="field-mapped" title="{{Client_Company}}">{{Client_Company}}</span>. The purpose of
+            this assignment is to provide the <b><span class="field-mapped"
+                    title="{{Report_ValueScenario1}}">{{Report_ValueScenario1}}</span></b> current market value of the
+            property which at the time of inspection represents the improved property.
+        </p>
 
-<!-- PAGE 6: Property Overview -->
-<div class="page-sheet">
-    <div class="page-title">Introduction & Executive Summary</div>
-    <h2 style="font-size:12pt; color:#003B7E; text-transform:uppercase; margin-bottom:10px;">Property Overview</h2>
+        <p>
+            <span class="field-mapped" title="{{Subject_IntroComment}}">{{Subject_IntroComment}}</span> <span
+                class="field-mapped" title="{{Subject_EconCharacteristics}}">{{Subject_EconCharacteristics}}</span>
+        </p>
 
-    <div class="section-header">PROPERTY IDENTIFICATION</div>
-    <table>
-        <tr><td class="label-col">Name</td><td><span class="field-mapped" title="{{Subject_PropertyName}}">{{Subject_PropertyName}}</span></td></tr>
-        <tr><td class="label-col">Property</td><td><span class="field-mapped" title="{{Subject_Primary}}">{{Subject_Primary}}</span> - <span class="field-mapped" title="{{Subject_Subtype}}">{{Subject_Subtype}}</span></td></tr>
-        <tr><td class="label-col">Address</td><td><span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span></td></tr>
-        <tr><td class="label-col">City, State, Zip</td><td><span class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped" title="{{Subject_State}}">{{Subject_State}}</span> <span class="field-mapped" title="{{Subject_Zip}}">{{Subject_Zip}}</span></td></tr>
-        <tr><td class="label-col">Market / Submarket</td><td><span class="field-mapped" title="{{Subject_Market}}">{{Subject_Market}}</span> / <span class="field-mapped" title="{{Subject_Submarket}}">{{Subject_Submarket}}</span></td></tr>
-    </table>
+        <div class="Subheader1">MARKET VALUE CONCLUSION</div>
+        <table style="text-align:center;">
+            <tr style="background:#eee; font-weight:bold;">
+                <td>VALUATION SEQUENCE</td>
+                <td>INTEREST</td>
+                <td>EXPOSURE</td>
+                <td>EFFECTIVE DATE</td>
+                <td>VALUE</td>
+            </tr>
+            <tr>
+                <td><span class="field-mapped" title="{{Report_ValueScenario1}}">{{Report_ValueScenario1}}</span></td>
+                <td><span class="field-mapped" title="{{Report_Interest}}">{{Report_Interest}}</span></td>
+                <td><span class="field-mapped" title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span></td>
+                <td><span class="field-mapped" title="{{Report_Date1}}">{{Report_Date1}}</span></td>
+                <td><b><span class="field-mapped" title="{{Report_Values}}">{{Report_Values}}</span></b></td>
+            </tr>
+        </table>
 
-    <div class="section-header">SITE DESCRIPTION</div>
-    <table>
-        <tr><td class="label-col">Legal Description</td><td><span class="field-mapped" title="{{Report_Legal}}">{{Report_Legal}}</span></td></tr>
-        <tr><td class="label-col">Usable Area</td><td><span class="field-mapped" title="{{Subject_UsableSF}}">{{Subject_UsableSF}}</span> SF</td></tr>
-        <tr><td class="label-col">Total Area</td><td><span class="field-mapped" title="{{Subject_TotalSF}}">{{Subject_TotalSF}}</span> SF (<span class="field-mapped" title="{{Subject_TotalAcre}}">{{Subject_TotalAcre}}</span> AC)</td></tr>
-        <tr><td class="label-col">Zoning</td><td><span class="field-mapped" title="{{Subject_Zoning}}">{{Subject_Zoning}}</span> (<span class="field-mapped" title="{{Subject_ZoningCode}}">{{Subject_ZoningCode}}</span>)</td></tr>
-        <tr><td class="label-col">Shape</td><td><span class="field-mapped" title="{{Subject_Shape}}">{{Subject_Shape}}</span></td></tr>
-        <tr><td class="label-col">Topography</td><td><span class="field-mapped" title="{{Subject_Topography}}">{{Subject_Topography}}</span></td></tr>
-    </table>
+        <div class="Subheader1">Hypothetical Conditions</div>
+        <p style="background-color:#ffffcc; padding:5px; border:1px solid #ddd;">
+            <span class="field-mapped" title="{{Report_Hypothetical}}">{{Report_Hypothetical}}</span>
+        </p>
 
-    <div class="section-header">IMPROVEMENT DESCRIPTION</div>
-    <table>
-        <tr><td class="label-col">Tenancy</td><td><span class="field-mapped" title="{{Subject_Tenancy}}">{{Subject_Tenancy}}</span></td></tr>
-        <tr><td class="label-col">NRA / GBA</td><td><span class="field-mapped" title="{{Subject_NRA}}">{{Subject_NRA}}</span> / <span class="field-mapped" title="{{Subject_GBA}}">{{Subject_GBA}}</span></td></tr>
-        <tr><td class="label-col">Units</td><td><span class="field-mapped" title="{{Subject_Units}}">{{Subject_Units}}</span></td></tr>
-        <tr><td class="label-col">Year Built</td><td><span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span></td></tr>
-        <tr><td class="label-col">Parking</td><td><span class="field-mapped" title="{{Subject_Parking}}">{{Subject_Parking}}</span></td></tr>
-        <tr><td class="label-col">Amenities</td><td><span class="field-mapped" title="{{Subject_ProjectAmenities}}">{{Subject_ProjectAmenities}}</span></td></tr>
-    </table>
+        <div class="Subheader1">Extraordinary Assumptions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_Extraordinary}}">{{Report_Extraordinary}}</span>
+        </p>
 
-    <div class="section-header">QUALITATIVE ANALYSIS</div>
-    <table>
-        <tr><td class="label-col">Site Quality</td><td><span class="field-mapped" title="{{Subject_SiteQuality}}">{{Subject_SiteQuality}}</span></td></tr>
-        <tr><td class="label-col">Building Quality</td><td><span class="field-mapped" title="{{Subject_Quality}}">{{Subject_Quality}}</span></td></tr>
-        <tr><td class="label-col">Building Condition</td><td><span class="field-mapped" title="{{Subject_Condition}}">{{Subject_Condition}}</span></td></tr>
-    </table>
-</div>
-
-<!-- PAGE 7: Investment Indicators & Value Conclusion -->
-<div class="page-sheet">
-    <div class="page-title">Introduction & Executive Summary (Cont.)</div>
-
-    <div class="section-header">HIGHEST & BEST USE</div>
-    <table>
-        <tr><td class="label-col">As Though Vacant</td><td><span class="field-mapped" title="{{Subject_HBUVacant}}">{{Subject_HBUVacant}}</span></td></tr>
-        <tr><td class="label-col">As Improved</td><td><span class="field-mapped" title="{{Subject_HBUImproved}}">{{Subject_HBUImproved}}</span></td></tr>
-    </table>
-
-    <div class="section-header">EXPOSURE & MARKETING TIME</div>
-    <table>
-        <tr><td class="label-col">Exposure Time</td><td><span class="field-mapped" title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span></td></tr>
-    </table>
-
-    <div class="section-header">INVESTMENT INDICATORS</div>
-    <table>
-        <tr><td class="label-col">Current Occupancy</td><td><span class="field-mapped" title="{{Subject_Occupancy}}">{{Subject_Occupancy}}</span></td></tr>
-        <tr><td class="label-col">Stabilized Occupancy</td><td><span class="field-mapped" title="{{Subject_OccupancyStabilized}}">{{Subject_OccupancyStabilized}}</span></td></tr>
-        <tr><td class="label-col">Expense Ratio</td><td><span class="field-mapped" title="{{IA_DirCap_ExpenseRatio}}">{{IA_DirCap_ExpenseRatio}}</span></td></tr>
-        <tr><td class="label-col">Cap Rate (OAR)</td><td><span class="field-mapped" title="{{IA_DirCap_CapRate1}}">{{IA_DirCap_CapRate1}}</span></td></tr>
-    </table>
-
-    <div class="section-header">VALUE CONCLUSION</div>
-    <table style="border: 2px solid #003B7E;">
-        <tr style="background:#003B7E; color:white; font-weight:bold;">
-            <td>VALUATION SCENARIO</td>
-            <td style="text-align:right;">VALUE</td>
-        </tr>
-        <tr>
-            <td>Cost Approach</td>
-            <td style="text-align:right;"><span class="field-mapped" title="{{Report_ValuationCost}}">{{Report_ValuationCost}}</span></td>
-        </tr>
-        <tr>
-            <td>Sales Comparison Approach</td>
-            <td style="text-align:right;"><span class="field-mapped" title="{{Report_ValuationSales}}">{{Report_ValuationSales}}</span></td>
-        </tr>
-        <tr>
-            <td>Income Approach</td>
-            <td style="text-align:right;"><span class="field-mapped" title="{{Report_ValuationIncome}}">{{Report_ValuationIncome}}</span></td>
-        </tr>
-        <tr style="background:#eee; font-weight:bold; border-top:2px solid #003B7E;">
-            <td>FINAL VALUE CONCLUSION</td>
-            <td style="text-align:right;"><span class="field-mapped" title="{{Report_Values}}">{{Report_Values}}</span></td>
-        </tr>
-    </table>
-</div>
-
-<!-- PAGE 8: Hypothetical Conditions & Assumptions -->
-<div class="page-sheet" data-page-num="Page 8">
-    <div class="Header1">Introduction & Executive Summary</div>
-
-    <div class="Subheader1">Hypothetical Conditions</div>
-    <p>
-        <span class="field-mapped" title="{{Report_Hypothetical}}">{{Report_Hypothetical}}</span>
-    </p>
-
-    <div class="Subheader1">Extraordinary Assumptions</div>
-    <p>
-        <span class="field-mapped" title="{{Report_Extraordinary}}">{{Report_Extraordinary}}</span>
-    </p>
-
-    <div class="Subheader1">Extraordinary Limiting Conditions</div>
-    <p>
-        <span class="field-mapped" title="{{Report_LimCond}}">{{Report_LimCond}}</span>
-    </p>
-
-    <div style="height:200px;"></div>
-    <div style="border-top:1px solid #ccc; padding-top:10px; margin-top:20px; font-size:9pt; color:#666; display:flex; justify-content:space-between;">
-        <div>
-            3&nbsp;&nbsp;&nbsp;&nbsp;<span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>, <span class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped" title="{{Subject_State}}">{{Subject_State}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
-        </div>
-    </div>
-</div>
-
-<!-- PAGE 9: Photographs (Grid Layout) -->
-<div class="page-sheet" data-page-num="Page 9">
-    <div class="Header1">Introduction & Executive Summary</div>
-    <div class="Header2">Photographs</div>
-
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:40px;">
-
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_1}}">Subject_Photo_1</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1101 - East Elevation</p>
-        </div>
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_2}}">Subject_Photo_2</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1101 - West Elevation</p>
-        </div>
-
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_3}}">Subject_Photo_3</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">Street View Facing East - 11 Ave</p>
-        </div>
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_4}}">Subject_Photo_4</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">Street View Facing North - 109 St</p>
-        </div>
-
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_5}}">Subject_Photo_5</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1101 - Typical Hallway</p>
-        </div>
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_6}}">Subject_Photo_6</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1101 - Typical Stairway</p>
+        <div class="page-footer">
+            <div><span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span
+                    class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
         </div>
     </div>
 
-    <div style="border-top:1px solid #ccc; padding-top:10px; font-size:9pt; color:#666;">
-        4&nbsp;&nbsp;&nbsp;&nbsp;<span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>, <span class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
-    </div>
-</div>
+    <div class="page-sheet" data-page-num="Page 4">
+        <div class="Header1" style="border-bottom:none;">Extraordinary Limiting Conditions</div>
 
-<!-- PAGE 10: Photographs Continued -->
-<div class="page-sheet" data-page-num="Page 10">
-    <div class="Header1">Introduction & Executive Summary</div>
+        <p>
+            <span class="field-mapped" title="{{Report_LimCond}}">{{Report_LimCond}}</span>
+        </p>
 
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:40px;">
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_7}}">Subject_Photo_7</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1101 - Typical Bathroom</p>
-        </div>
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_8}}">Subject_Photo_8</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1101 - Typical Bedroom 1</p>
-        </div>
+        <p>
+            The report has been completed in accordance with the Canadian Uniform Standards of Professional Appraisal
+            Practice ("CUSPAP"). The full narrative appraisal report that follows sets forth the pertinent data and
+            analyses leading to the conclusions presented herein.
+        </p>
+        <p>
+            If there are any specific questions or concerns regarding the attached appraisal report, or if Valta can be
+            of additional assistance, please contact the individuals listed below.
+        </p>
 
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_9}}">Subject_Photo_9</span>]
+        <div class="signature-block">
+            <p>Respectfully Submitted,</p>
+            <p><b><span class="field-mapped" title="{{Company_Name}}">{{Company_Name}}</span></b></p>
+
+            <div class="sig-line">
+                [IMAGE: <span class="field-mapped" title="{{Appraiser1_Signature}}">Appraiser1_Signature</span>]
             </div>
-            <p style="font-size:10pt; text-align:center;">1101 - Typical Bedroom 2</p>
-        </div>
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_10}}">Subject_Photo_10</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1101 - Electrical Room</p>
+            <p style="margin-top:5px;">
+                <b><span class="field-mapped" title="{{Appraiser1_Name}}">{{Appraiser1_Name}}</span></b><br>
+                <span class="field-mapped" title="{{Appraiser1_Title}}">{{Appraiser1_Title}}</span><br>
+                <span class="field-mapped" title="{{Appraiser1_Email}}">{{Appraiser1_Email}}</span><br>
+                AIC No: 902097
+            </p>
         </div>
 
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_11}}">Subject_Photo_11</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1101 - Mechanical Room</p>
-        </div>
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_12}}">Subject_Photo_12</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1101 - Typical Kitchen</p>
+        <div class="page-footer">
+            <div><span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span
+                    class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
         </div>
     </div>
 
-    <div style="border-top:1px solid #ccc; padding-top:10px; font-size:9pt; color:#666;">
-        5&nbsp;&nbsp;&nbsp;&nbsp;File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
-    </div>
-</div>
-
-<!-- PAGE 11: Photographs Continued -->
-<div class="page-sheet" data-page-num="Page 11">
-    <div class="Header1">Introduction & Executive Summary</div>
-
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:40px;">
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_13}}">Subject_Photo_13</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1101 - Living Room</p>
-        </div>
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_14}}">Subject_Photo_14</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1121 - West Elevation</p>
+    <div class="page-sheet" data-page-num="Page 5" style="padding:0; flex-direction:row;">
+        <div
+            style="width:200px; background-color:#1a3a52; padding:60px 30px; color:white; font-size:24pt; font-weight:bold; text-align:center;">
+            Table of<br>Contents
         </div>
 
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_15}}">Subject_Photo_15</span>]
+        <div style="flex:1; padding:50px 40px; display:flex; flex-direction:column;">
+            <div style="margin-bottom:20px;">
+                <div
+                    style="color:#1a3a52; border-bottom:1px solid #ccc; padding-bottom:5px; margin-bottom:10px; font-weight:bold;">
+                    Introduction & Executive Summary</div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Property
+                        Overview</span><b>1</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span>Photographs</span><b>4</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Maps</span><b>9</b>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Identification of
+                        Assignment</span><b>12</b></div>
             </div>
-            <p style="font-size:10pt; text-align:center;">1121 - East Elevation</p>
-        </div>
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_16}}">Subject_Photo_16</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1121 - Typical Hallway</p>
-        </div>
 
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_17}}">Subject_Photo_17</span>]
+            <div style="margin-bottom:20px;">
+                <div
+                    style="color:#1a3a52; border-bottom:1px solid #ccc; padding-bottom:5px; margin-bottom:10px; font-weight:bold;">
+                    Property Analysis</div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span>Location</span><b>17</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Site
+                        Details</span><b>18</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Property Taxes &
+                        Assessment</span><b>23</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Land Use &
+                        Planning</span><b>24</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Description of
+                        Improvements</span><b>26</b></div>
             </div>
-            <p style="font-size:10pt; text-align:center;">1121 - Typical Stairway</p>
-        </div>
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_18}}">Subject_Photo_18</span>]
+
+            <div style="margin-top:auto; font-size:9pt; color:#666; border-top:1px solid #ccc; padding-top:10px;">
+                File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
             </div>
-            <p style="font-size:10pt; text-align:center;">1121 - Typical Living Room</p>
         </div>
     </div>
 
-    <div style="border-top:1px solid #ccc; padding-top:10px; font-size:9pt; color:#666;">
-        6&nbsp;&nbsp;&nbsp;&nbsp;File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
-    </div>
-</div>
+    <div class="page-sheet" data-page-num="Page 6">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div class="Header2">Property Overview</div>
 
-<!-- PAGE 12: Photographs Continued -->
-<div class="page-sheet" data-page-num="Page 12">
-    <div class="Header1">Introduction & Executive Summary</div>
+        <div class="Subheader1">PROPERTY IDENTIFICATION</div>
+        <table>
+            <tr>
+                <td class="label-col">Name</td>
+                <td><span class="field-mapped" title="{{Subject_PropertyName}}">{{Subject_PropertyName}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Property</td>
+                <td><span class="field-mapped" title="{{Subject_Primary}}">{{Subject_Primary}}</span> - <span
+                        class="field-mapped" title="{{Subject_Subtype}}">{{Subject_Subtype}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Address</td>
+                <td><span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">City, State, Zip</td>
+                <td><span class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span>, <span
+                        class="field-mapped" title="{{Subject_State}}">{{Subject_State}}</span> <span
+                        class="field-mapped" title="{{Subject_Zip}}">{{Subject_Zip}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Market / Submarket</td>
+                <td><span class="field-mapped" title="{{Subject_Market}}">{{Subject_Market}}</span> / <span
+                        class="field-mapped" title="{{Subject_Submarket}}">{{Subject_Submarket}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Geocode</td>
+                <td><span class="field-mapped" title="{{Subject_Geocode}}">{{Subject_Geocode}}</span></td>
+            </tr>
+        </table>
 
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:40px;">
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_19}}">Subject_Photo_19</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1121 - Typical Bathroom</p>
+        <div class="Subheader1">SITE DESCRIPTION</div>
+        <table>
+            <tr>
+                <td class="label-col">Legal Description</td>
+                <td><span class="field-mapped" title="{{Report_Legal}}">{{Report_Legal}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Usable Area</td>
+                <td><span class="field-mapped" title="{{Subject_UsableSF}}">{{Subject_UsableSF}}</span> SF</td>
+            </tr>
+            <tr>
+                <td class="label-col">Total Area</td>
+                <td><span class="field-mapped" title="{{Subject_TotalSF}}">{{Subject_TotalSF}}</span> SF (<span
+                        class="field-mapped" title="{{Subject_TotalAcre}}">{{Subject_TotalAcre}}</span> AC)</td>
+            </tr>
+            <tr>
+                <td class="label-col">Zoning</td>
+                <td><span class="field-mapped" title="{{Subject_Zoning}}">{{Subject_Zoning}}</span> (<span
+                        class="field-mapped" title="{{Subject_ZoningCode}}">{{Subject_ZoningCode}}</span>)</td>
+            </tr>
+            <tr>
+                <td class="label-col">Shape</td>
+                <td><span class="field-mapped" title="{{Subject_Shape}}">{{Subject_Shape}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Topography</td>
+                <td><span class="field-mapped" title="{{Subject_Topography}}">{{Subject_Topography}}</span></td>
+            </tr>
+        </table>
+
+        <div class="Subheader1">IMPROVEMENT DESCRIPTION</div>
+        <table>
+            <tr>
+                <td class="label-col">Tenancy</td>
+                <td><span class="field-mapped" title="{{Subject_Tenancy}}">{{Subject_Tenancy}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">NRA / GBA</td>
+                <td><span class="field-mapped" title="{{Subject_NRA}}">{{Subject_NRA}}</span> / <span
+                        class="field-mapped" title="{{Subject_GBA}}">{{Subject_GBA}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Units</td>
+                <td><span class="field-mapped" title="{{Subject_Units}}">{{Subject_Units}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Density</td>
+                <td><span class="field-mapped" title="{{Subject_Density}}">{{Subject_Density}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Stories</td>
+                <td><span class="field-mapped" title="{{Subject_Stories}}">{{Subject_Stories}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Year Built</td>
+                <td><span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Amenities</td>
+                <td><span class="field-mapped" title="{{Subject_ProjectAmenities}}">{{Subject_ProjectAmenities}}</span>
+                </td>
+            </tr>
+        </table>
+
+        <div class="Subheader1">QUALITATIVE ANALYSIS</div>
+        <table>
+            <tr>
+                <td class="label-col">Site Quality</td>
+                <td><span class="field-mapped" title="{{Subject_SiteQuality}}">{{Subject_SiteQuality}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Building Quality</td>
+                <td><span class="field-mapped" title="{{Subject_Quality}}">{{Subject_Quality}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Building Condition</td>
+                <td><span class="field-mapped" title="{{Subject_Condition}}">{{Subject_Condition}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Appeal</td>
+                <td><span class="field-mapped" title="{{Subject_Appeal}}">{{Subject_Appeal}}</span></td>
+            </tr>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">1</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
         </div>
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_20}}">Subject_Photo_20</span>]
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 7">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <div class="Subheader1">HIGHEST & BEST USE</div>
+        <table>
+            <tr>
+                <td class="label-col">As Though Vacant</td>
+                <td><span class="field-mapped" title="{{Subject_HBUVacant}}">{{Subject_HBUVacant}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">As Improved</td>
+                <td><span class="field-mapped" title="{{Subject_HBUImproved}}">{{Subject_HBUImproved}}</span></td>
+            </tr>
+        </table>
+
+        <div class="Subheader1">EXPOSURE & MARKETING TIME</div>
+        <table>
+            <tr>
+                <td class="label-col">Exposure Time</td>
+                <td><span class="field-mapped" title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Marketing Time</td>
+                <td><span class="field-mapped" title="{{Subject_Marketing}}">{{Subject_Marketing}}</span></td>
+            </tr>
+        </table>
+
+        <div class="Subheader1">INVESTMENT INDICATORS</div>
+        <table>
+            <tr>
+                <td class="label-col">Current Occupancy</td>
+                <td><span class="field-mapped" title="{{Subject_Occupancy}}">{{Subject_Occupancy}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Stabilized Occupancy</td>
+                <td><span class="field-mapped"
+                        title="{{Subject_OccupancyStabilized}}">{{Subject_OccupancyStabilized}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Expense Ratio</td>
+                <td><span class="field-mapped" title="{{IA_DirCap_ExpenseRatio}}">{{IA_DirCap_ExpenseRatio}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Cap Rate (OAR)</td>
+                <td><span class="field-mapped" title="{{IA_DirCap_CapRate1}}">{{IA_DirCap_CapRate1}}</span></td>
+            </tr>
+        </table>
+
+        <div class="Subheader1">VALUE CONCLUSION</div>
+        <table style="border: 2px solid #003B7E;">
+            <tr style="background:#003B7E; color:white; font-weight:bold;">
+                <td>VALUATION SCENARIO</td>
+                <td style="text-align:right;">VALUE</td>
+            </tr>
+            <tr>
+                <td>Cost Approach</td>
+                <td style="text-align:right;"><span class="field-mapped"
+                        title="{{Report_ValuationCost}}">{{Report_ValuationCost}}</span></td>
+            </tr>
+            <tr>
+                <td>Sales Comparison Approach</td>
+                <td style="text-align:right;"><span class="field-mapped"
+                        title="{{Report_ValuationSales}}">{{Report_ValuationSales}}</span></td>
+            </tr>
+            <tr>
+                <td>Income Approach</td>
+                <td style="text-align:right;"><span class="field-mapped"
+                        title="{{Report_ValuationIncome}}">{{Report_ValuationIncome}}</span></td>
+            </tr>
+            <tr style="background:#eee; font-weight:bold; border-top:2px solid #003B7E;">
+                <td>FINAL VALUE CONCLUSION</td>
+                <td style="text-align:right;"><span class="field-mapped"
+                        title="{{Report_Values}}">{{Report_Values}}</span></td>
+            </tr>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">2</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 8">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <div class="Subheader1">Hypothetical Conditions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_Hypothetical}}">{{Report_Hypothetical}}</span>
+        </p>
+
+        <div class="Subheader1">Extraordinary Assumptions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_Extraordinary}}">{{Report_Extraordinary}}</span>
+        </p>
+
+        <div class="Subheader1">Extraordinary Limiting Conditions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_LimCond}}">{{Report_LimCond}}</span>
+        </p>
+
+        <div class="page-footer">
+            <div><span class="page-num">3</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 9">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div class="Header2">Photographs</div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_1}}">Subject_Photo_1</span>]
+                </div>
+                <p style="font-size:10pt;">1101 - East Elevation</p>
             </div>
-            <p style="font-size:10pt; text-align:center;">1121 - Typical Kitchen</p>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_2}}">Subject_Photo_2</span>]
+                </div>
+                <p style="font-size:10pt;">1101 - West Elevation</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_3}}">Subject_Photo_3</span>]
+                </div>
+                <p style="font-size:10pt;">Street View Facing East</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_4}}">Subject_Photo_4</span>]
+                </div>
+                <p style="font-size:10pt;">Street View Facing North</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_5}}">Subject_Photo_5</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Hallway</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_6}}">Subject_Photo_6</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Stairway</p>
+            </div>
         </div>
 
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_21}}">Subject_Photo_21</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1121 - Typical Bedroom</p>
-        </div>
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_22}}">Subject_Photo_22</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1121 - Laundry Room</p>
-        </div>
-
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_23}}">Subject_Photo_23</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1121 - Electrical Room</p>
-        </div>
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_24}}">Subject_Photo_24</span>]
-            </div>
-            <p style="font-size:10pt; text-align:center;">1121 - Typical Boiler</p>
+        <div class="page-footer">
+            <div><span class="page-num">4</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
         </div>
     </div>
 
-    <div style="border-top:1px solid #ccc; padding-top:10px; font-size:9pt; color:#666;">
-        7&nbsp;&nbsp;&nbsp;&nbsp;File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
-    </div>
-</div>
-
-<div class="page-sheet" data-page-num="Page 8">
-    <div class="Header1">Introduction & Executive Summary</div>
-
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:40px;">
-        <div style="text-align:center;">
-            <div class="img-placeholder" style="height:200px;">
-                [IMAGE: <span class="field-mapped" title="{{Subject_Photo_25}}">Subject_Photo_25</span>]
+    <div class="page-sheet" data-page-num="Page 10">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_7}}">Subject_Photo_7</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Bathroom</p>
             </div>
-            <p style="font-size:10pt; text-align:center;">1121 - Utility Room</p>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_8}}">Subject_Photo_8</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Bedroom 1</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_9}}">Subject_Photo_9</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Bedroom 2</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_10}}">Subject_Photo_10</span>]
+                </div>
+                <p style="font-size:10pt;">Electrical Room</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_11}}">Subject_Photo_11</span>]
+                </div>
+                <p style="font-size:10pt;">Mechanical Room</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_12}}">Subject_Photo_12</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Kitchen</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">5</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
         </div>
     </div>
 
-    <div style="border-top:1px solid #ccc; padding-top:10px; font-size:9pt; color:#666;">
-        8&nbsp;&nbsp;&nbsp;&nbsp;File <span class="field-mapped"
-            title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
+    <div class="page-sheet" data-page-num="Page 11">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_13}}">Subject_Photo_13</span>]
+                </div>
+                <p style="font-size:10pt;">Living Room</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_14}}">Subject_Photo_14</span>]
+                </div>
+                <p style="font-size:10pt;">West Elevation</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_15}}">Subject_Photo_15</span>]
+                </div>
+                <p style="font-size:10pt;">East Elevation</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_16}}">Subject_Photo_16</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Hallway</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_17}}">Subject_Photo_17</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Stairway</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_18}}">Subject_Photo_18</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Living Room</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">6</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
     </div>
-</div>
 
-<br clear=all style='page-break-before:always'>
+    <div class="page-sheet" data-page-num="Page 12">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_19}}">Subject_Photo_19</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Bathroom</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_20}}">Subject_Photo_20</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Kitchen</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_21}}">Subject_Photo_21</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Bedroom</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_22}}">Subject_Photo_22</span>]
+                </div>
+                <p style="font-size:10pt;">Laundry Room</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_23}}">Subject_Photo_23</span>]
+                </div>
+                <p style="font-size:10pt;">Electrical Room</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_24}}">Subject_Photo_24</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Boiler</p>
+            </div>
+        </div>
 
-<div class="page-sheet" data-page-num="Page 9">
-    <div class="Header1">Introduction & Executive Summary</div>
-    <div class="Header2">Maps</div>
-
-    <div class="img-placeholder" style="height: 650px;">
-        [IMAGE: <span class="field-mapped" title="{{Map_Regional}}">Map_Regional</span>]
+        <div class="page-footer">
+            <div><span class="page-num">7</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
     </div>
 
-    <div style="border-top:1px solid #ccc; padding-top:10px; margin-top:20px; font-size:9pt; color:#666;">
-        9&nbsp;&nbsp;&nbsp;&nbsp;File <span class="field-mapped"
-            title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
-    </div>
-</div>
+    <div class="page-sheet" data-page-num="Page 13">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_25}}">Subject_Photo_25</span>]
+                </div>
+                <p style="font-size:10pt;">Utility Room</p>
+            </div>
+        </div>
 
-<br clear=all style='page-break-before:always'>
-
-<div class="page-sheet" data-page-num="Page 10">
-    <div class="Header1">Introduction & Executive Summary</div>
-
-    <div class="img-placeholder" style="height: 650px;">
-        [IMAGE: <span class="field-mapped" title="{{Map_Local}}">Map_Local</span>]
-    </div>
-
-    <div style="border-top:1px solid #ccc; padding-top:10px; margin-top:20px; font-size:9pt; color:#666;">
-        10&nbsp;&nbsp;&nbsp;&nbsp;File <span class="field-mapped"
-            title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
-    </div>
-</div>
-
-<br clear=all style='page-break-before:always'>
-
-<div class="page-sheet" data-page-num="Page 11">
-    <div class="Header1">Introduction & Executive Summary</div>
-
-    <div class="img-placeholder" style="height: 650px;">
-        [IMAGE: <span class="field-mapped" title="{{Map_Aerial}}">Map_Aerial</span>]
+        <div class="page-footer">
+            <div><span class="page-num">8</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
     </div>
 
-    <div style="border-top:1px solid #ccc; padding-top:10px; margin-top:20px; font-size:9pt; color:#666;">
-        11&nbsp;&nbsp;&nbsp;&nbsp;File <span class="field-mapped"
-            title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
+    <div class="page-sheet" data-page-num="Page 14">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div class="Header2">Maps</div>
+
+        <div class="img-placeholder" style="height: 650px;">
+            [IMAGE: <span class="field-mapped" title="{{Map_Regional}}">Map_Regional</span>]
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">9</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
     </div>
-</div>
 
-<br clear=all style='page-break-before:always'>
+    <div class="page-sheet" data-page-num="Page 15">
+        <div class="Header1">Introduction & Executive Summary</div>
 
-<div class="page-sheet" data-page-num="Page 12">
-    <div class="Header1">Introduction & Executive Summary</div>
-    <div class="Header2">Identification of Assignment</div>
+        <div class="img-placeholder" style="height: 650px;">
+            [IMAGE: <span class="field-mapped" title="{{Map_Local}}">Map_Local</span>]
+        </div>
 
-    <div class="Subheader1">Property Identification</div>
-    <p>
-        The subject property, located at <span class="field-mapped"
-            title="{{Subject_Street}}">{{Subject_Street}}</span>, <span class="field-mapped"
-            title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped"
-            title="{{Subject_State}}">{{Subject_State}}</span>, is a <span class="field-mapped"
-            title="{{Subject_Primary}}">{{Subject_Primary}}</span>, <span class="field-mapped"
-            title="{{Subject_Subtype}}">{{Subject_Subtype}}</span> property with approximately <span
-            class="field-mapped" title="{{Subject_NRA}}">{{Subject_NRA}}</span> square feet of net rentable area.
-    </p>
-    <p>
-        <span class="field-mapped" title="{{Subject_EconCharacteristics}}">{{Subject_EconCharacteristics}}</span>
-    </p>
-
-    <div class="Subheader1">Legal Description</div>
-    <p>
-        <span class="field-mapped" title="{{Report_Legal}}">{{Report_Legal}}</span>
-    </p>
-
-    <div class="Subheader1">Authorized Client Identification</div>
-    <p>
-        The authorized client of this specific assignment is <span class="field-mapped"
-            title="{{Client_Company}}">{{Client_Company}}</span>.
-    </p>
-
-    <div class="Subheader1">Authorized Use & Authorized Users</div>
-    <p>
-        <span class="field-mapped" title="{{Report_IntendedUse}}">{{Report_IntendedUse}}</span> <span
-            class="field-mapped" title="{{Report_IntendedUser}}">{{Report_IntendedUser}}</span>
-    </p>
-
-    <div class="Subheader1">Effective Date of Value and Report Date</div>
-    <p>
-        The effective date of value of this appraisal is <span class="field-mapped"
-            title="{{Report_Date1}}">{{Report_Date1}}</span>. The report date is <span class="field-mapped"
-            title="{{Report_Date}}">{{Report_Date}}</span>.
-    </p>
-
-    <div class="Subheader1">Inspection Date</div>
-    <p>
-        <span class="field-mapped" title="{{Report_DateInspection}}">{{Report_DateInspection}}</span>
-    </p>
-
-    <div class="Subheader1">Purpose</div>
-    <p>
-        The purpose of this assignment is to provide the <span class="field-mapped"
-            title="{{Report_ValueScenario1}}">{{Report_ValueScenario1}}</span> which at the time of inspection
-        represents the existing improvements assuming stabilized occupancy as of the effective date for the property
-        located at <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>, <span
-            class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped"
-            title="{{Subject_State}}">{{Subject_State}}</span> (herein referred to as the Subject property).
-    </p>
-
-    <div class="Subheader1">Hypothetical Conditions</div>
-    <p>
-        <span class="field-mapped" title="{{Report_Hypothetical}}">{{Report_Hypothetical}}</span>
-    </p>
-
-    <div style="border-top:1px solid #ccc; padding-top:10px; margin-top:30px; font-size:9pt; color:#666;">
-        12&nbsp;&nbsp;&nbsp;&nbsp;<span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>, <span
-            class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped"
-            title="{{Subject_State}}">{{Subject_State}}</span> | File <span class="field-mapped"
-            title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
+        <div class="page-footer">
+            <div><span class="page-num">10</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
     </div>
-</div>
 
-<br clear=all style='page-break-before:always'>
+    <div class="page-sheet" data-page-num="Page 16">
+        <div class="Header1">Introduction & Executive Summary</div>
 
-<div class="page-sheet" data-page-num="Page 13">
-    <div class="Header1">Introduction & Executive Summary</div>
+        <div class="img-placeholder" style="height: 650px;">
+            [IMAGE: <span class="field-mapped" title="{{Map_Aerial}}">Map_Aerial</span>]
+        </div>
 
-    <div class="Subheader1">Extraordinary Assumptions</div>
-    <p>
-        <span class="field-mapped" title="{{Report_Extraordinary}}">{{Report_Extraordinary}}</span>
-    </p>
-
-    <div class="Subheader1">Extraordinary Limiting Conditions</div>
-    <p>
-        <span class="field-mapped" title="{{Report_LimCond}}">{{Report_LimCond}}</span>
-    </p>
-
-    <div class="Header2">Property And Sales History</div>
-
-    <div class="Subheader1">Current Owner</div>
-    <p>
-        <span class="field-mapped" title="{{Subject_Owner}}">{{Subject_Owner}}</span>
-    </p>
-
-    <div class="Subheader1">Three-Year Sales History</div>
-    <p>
-        <span class="field-mapped" title="{{Subject_SaleHistory}}">{{Subject_SaleHistory}}</span>
-    </p>
-
-    <div class="Header2">Exposure & Marketing Time</div>
-    <p>
-        An estimate of market value is related to the concept of reasonable exposure time... (Standard Boilerplate text
-        about exposure time concepts).
-    </p>
-
-    <p>
-        Noting the subject property's physical, legal, economic and market characteristics, which are described further
-        in this report, we have concluded a reasonable estimate of <b>exposure and marketing time</b> for the subject
-        property to be <span class="field-mapped" title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span>.
-    </p>
-
-    <div class="Subheader1">EXPOSURE & MARKETING TIME</div>
-    <table>
-        <tr>
-            <td class="label-col">PROFILE</td>
-            <td class="label-col">AVERAGE</td>
-        </tr>
-        <tr>
-            <td>Exposure Period Conclusion</td>
-            <td><span class="field-mapped" title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span></td>
-        </tr>
-        <tr>
-            <td>Marketing Time Conclusion</td>
-            <td><span class="field-mapped" title="{{Subject_Marketing}}">{{Subject_Marketing}}</span></td>
-        </tr>
-    </table>
-
-    <div style="border-top:1px solid #ccc; padding-top:10px; margin-top:30px; font-size:9pt; color:#666;">
-        13 | <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>, <span class="field-mapped"
-            title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped"
-            title="{{Subject_State}}">{{Subject_State}}</span> | File <span class="field-mapped"
-            title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
+        <div class="page-footer">
+            <div><span class="page-num">11</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
     </div>
-</div>
 
-<br clear=all style='page-break-before:always'>
+    <div class="page-sheet" data-page-num="Page 17">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div class="Header2">Identification of Assignment</div>
+
+        <div class="Subheader1">Property Identification</div>
+        <p>
+            The subject property, located at <span class="field-mapped"
+                title="{{Subject_Street}}">{{Subject_Street}}</span>, <span class="field-mapped"
+                title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped"
+                title="{{Subject_State}}">{{Subject_State}}</span>, is a <span class="field-mapped"
+                title="{{Subject_Primary}}">{{Subject_Primary}}</span>, <span class="field-mapped"
+                title="{{Subject_Subtype}}">{{Subject_Subtype}}</span> property with approximately <span
+                class="field-mapped" title="{{Subject_NRA}}">{{Subject_NRA}}</span> square feet of net rentable area.
+        </p>
+        <p>
+            <span class="field-mapped" title="{{Subject_EconCharacteristics}}">{{Subject_EconCharacteristics}}</span>
+        </p>
+
+        <div class="Subheader1">Legal Description</div>
+        <p>
+            <span class="field-mapped" title="{{Report_Legal}}">{{Report_Legal}}</span>
+        </p>
+
+        <div class="Subheader1">Authorized Client Identification</div>
+        <p>
+            The authorized client of this specific assignment is <span class="field-mapped"
+                title="{{Client_Company}}">{{Client_Company}}</span>.
+        </p>
+
+        <div class="Subheader1">Authorized Use & Authorized Users</div>
+        <p>
+            <span class="field-mapped" title="{{Report_IntendedUse}}">{{Report_IntendedUse}}</span> <span
+                class="field-mapped" title="{{Report_IntendedUser}}">{{Report_IntendedUser}}</span>
+        </p>
+
+        <div class="Subheader1">Effective Date of Value and Report Date</div>
+        <p>
+            The effective date of value of this appraisal is <span class="field-mapped"
+                title="{{Report_Date1}}">{{Report_Date1}}</span>. The report date is <span class="field-mapped"
+                title="{{Report_Date}}">{{Report_Date}}</span>.
+        </p>
+
+        <div class="Subheader1">Inspection Date</div>
+        <p>
+            <span class="field-mapped" title="{{Report_DateInspection}}">{{Report_DateInspection}}</span>
+        </p>
+
+        <div class="Subheader1">Purpose</div>
+        <p>
+            The purpose of this assignment is to provide the <span class="field-mapped"
+                title="{{Report_ValueScenario1}}">{{Report_ValueScenario1}}</span> which at the time of inspection
+            represents the existing improvements assuming stabilized occupancy as of the effective date for the property
+            located at <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>, <span
+                class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped"
+                title="{{Subject_State}}">{{Subject_State}}</span> (herein referred to as the Subject property).
+        </p>
+
+        <div class="Subheader1">Hypothetical Conditions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_Hypothetical}}">{{Report_Hypothetical}}</span>
+        </p>
+
+        <div class="page-footer">
+            <div><span class="page-num">12</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 18">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <div class="Subheader1">Extraordinary Assumptions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_Extraordinary}}">{{Report_Extraordinary}}</span>
+        </p>
+
+        <div class="Subheader1">Extraordinary Limiting Conditions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_LimCond}}">{{Report_LimCond}}</span>
+        </p>
+
+        <div class="Header2">Property And Sales History</div>
+
+        <div class="Subheader1">Current Owner</div>
+        <p>
+            <span class="field-mapped" title="{{Subject_Owner}}">{{Subject_Owner}}</span>
+        </p>
+
+        <div class="Subheader1">Three-Year Sales History</div>
+        <p>
+            <span class="field-mapped" title="{{Subject_SaleHistory}}">{{Subject_SaleHistory}}</span>
+        </p>
+
+        <div class="Header2">Exposure & Marketing Time</div>
+        <p>
+            An estimate of market value is related to the concept of reasonable exposure time... (Standard Boilerplate
+            text about exposure time concepts).
+        </p>
+
+        <p>
+            Noting the subject property's physical, legal, economic and market characteristics, which are described
+            further in this report, we have concluded a reasonable estimate of <b>exposure and marketing time</b> for
+            the subject property to be <span class="field-mapped"
+                title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span>.
+        </p>
+
+        <div class="Subheader1">EXPOSURE & MARKETING TIME</div>
+        <table>
+            <tr>
+                <td class="label-col">PROFILE</td>
+                <td class="label-col">AVERAGE</td>
+            </tr>
+            <tr>
+                <td>Exposure Period Conclusion</td>
+                <td><span class="field-mapped" title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span></td>
+            </tr>
+            <tr>
+                <td>Marketing Time Conclusion</td>
+                <td><span class="field-mapped" title="{{Subject_Marketing}}">{{Subject_Marketing}}</span></td>
+            </tr>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">13</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
 
 </body>
+
 </html>

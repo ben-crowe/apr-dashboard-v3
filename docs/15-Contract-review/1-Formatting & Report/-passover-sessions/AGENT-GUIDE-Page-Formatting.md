@@ -906,160 +906,40 @@ Your pages are successful when:
 
 ## 🔍 SECTION 3: Field ID Verification & Mapping
 
-**CRITICAL:** Before formatting any page, you MUST identify which field IDs belong on that page. This section shows you exactly how to find them.
+**CRITICAL:** Before formatting any page, you MUST identify which field IDs belong on that page.
 
-### The Problem:
+### Complete Field ID Guide
 
-You're assigned pages 40-45. You need to know:
-- What field IDs appear on these pages?
-- What tables are on these pages?
-- What field patterns should you use?
+**See the dedicated field ID guide for complete instructions:**
 
-### The Solution (4-Step Workflow):
+**📄 [FIELD-ID-GUIDE-for-Agents.md](../../2-Field Management/FIELD-ID-GUIDE-for-Agents.md)**
 
-**STEP 1: Look at the source image**
+This standalone guide provides:
+- 4-step workflow to find field IDs for your pages
+- Page range → field pattern reference table
+- Field Management directory walkthrough
+- Real example walkthrough (pages 40-45)
+- Field naming conventions and best practices
+- How to create new field IDs when needed
 
-Open the source image for your page to see what content is there:
+### Quick Reference:
 
-```bash
-# For page 40, read:
-/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/doc-page-images/Page-40.png
-```
+**The 4-Step Workflow:**
+1. **Look at source image** → What content is on the page?
+2. **Check TABLE-FIELD-ANALYSIS.md** → What field pattern for this page range?
+3. **Search PREVIEW-Master.html** → How are similar fields named?
+4. **Check doc-pages-html-single template** → Does exact mapping already exist?
 
-**Identify the content type:**
-- Is it a table with calculations? (Income Approach)
-- Is it a survey/rental comparison? (Market Rent Survey)
-- Is it sales comparables? (Sales Comparison Approach)
-- Is it narrative text? (Property Description)
-
-**STEP 2: Check TABLE-FIELD-ANALYSIS.md for page range**
-
-The Field Management directory has a master reference that tells you which field types appear on which pages:
-
-**Location:** `/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Field Management/TABLE-FIELD-ANALYSIS.md`
-
-**Page Range Reference:**
-
-| Page Range | Section Name | Field Pattern | Example Fields |
-|------------|--------------|---------------|----------------|
-| **Pages 35-39** | Market Rent Survey | `survey1-*`, `survey2-*`, `survey3-*`, `survey4-*`, `survey5-*` | `survey1-name`, `survey1-address`, `survey1-rent-1br` |
-| **Pages 40-50** | Income Approach | `calc-noi`, `calc-egr`, `calc-exp-*`, `calc-vacancy` | `calc-noi`, `calc-egr`, `calc-exp-taxes`, `calc-exp-insurance` |
-| **Pages 55-60** | Sales Comparison | `comp1-*`, `comp2-*`, `comp3-*` | `comp1-sale-price`, `comp2-units`, `comp3-nra` |
-
-**Example:**
-- You're formatting **page 42** → Income Approach section (pages 40-50)
-- Field pattern: `calc-*` (calculation fields)
-- Likely fields: `calc-noi`, `calc-egr`, `calc-exp-taxes`, etc.
-
-**STEP 3: Search PREVIEW-Master.html for similar content**
-
-Check if similar content already exists in pages 3-39 to see field naming patterns:
-
-```bash
-# Search for similar field patterns
-grep -i "calc-" PREVIEW-Master.html
-grep -i "expense" PREVIEW-Master.html
-grep -i "income" PREVIEW-Master.html
-```
-
-**Example:**
-If page 42 has an expense table, search PREVIEW-Master.html for "expense" to see:
-- How expense fields are named
-- What structure was used
-- Which field IDs were mapped
-
-**STEP 4: Check doc-pages-html-single/ for template field IDs**
-
-The most reliable source: check if your specific page already has field mappings:
-
-**Location:** `/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/doc-page-html/doc-pages-html-single/`
-
-```bash
-# Read the single HTML page for your page number
-Read: /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/doc-page-html/doc-pages-html-single/Page-42.html
-```
-
-**If the file exists:**
-- ✅ Copy field IDs directly from this template
-- ✅ Field mappings are already verified
-- ✅ Saves you from guessing field names
-
-**If the file doesn't exist:**
-- ✅ Use Steps 2-3 to determine field patterns
-- ✅ Follow existing naming conventions
-- ✅ Document new field IDs in your delivery notes
-
-### Field Management Directory Reference:
-
-**Master Directory Location:**
+**Field Management Directory:**
 `/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Field Management/`
 
 **Key Files:**
+- `MASTER-FIELD-DIRECTORY.md` - Complete field catalog (7,967 fields)
+- `TABLE-FIELD-ANALYSIS.md` - Page ranges and field patterns
+- `FIELD-ALIGNMENT-REPORT.md` - Cross-system alignment
+- `DATA-FLOW-SUMMARY.md` - Data flow documentation
 
-1. **MASTER-FIELD-DIRECTORY.md** - Complete catalog of 7,967 fields from final report
-2. **TABLE-FIELD-ANALYSIS.md** - Page ranges and field patterns (pages 35-39, 40-50, 55-60)
-3. **FIELD-ALIGNMENT-REPORT.md** - Three-way alignment between all sources
-4. **DATA-FLOW-SUMMARY.md** - How data flows through the system
-
-**When to check Field Management:**
-- ✅ Before creating ANY new field IDs
-- ✅ When uncertain about field naming
-- ✅ To verify field patterns for your section
-- ✅ To understand which fields are already defined
-
-### Real Example Walkthrough:
-
-**Scenario:** You're assigned pages 40-45 (Income Approach section)
-
-**Step 1: Check source images**
-- Open `Page-40.png`, `Page-41.png`, etc.
-- See tables with: Potential Gross Rent, Vacancy, Effective Gross Rent, Expenses, NOI
-
-**Step 2: Check TABLE-FIELD-ANALYSIS.md**
-- Pages 40-50 = Income Approach section
-- Field pattern: `calc-*` (calculation fields)
-
-**Step 3: Search PREVIEW-Master.html**
-```bash
-grep -i "calc-" PREVIEW-Master.html
-# Returns: calc-noi, calc-egr, calc-exp-taxes, calc-vacancy
-```
-
-**Step 4: Check single HTML templates**
-```bash
-Read: Page-40.html
-# Find exact field mappings used on page 40
-# Copy field IDs directly from template
-```
-
-**Result:**
-- ✅ You know exactly which field IDs to use
-- ✅ No guessing required
-- ✅ Consistent with existing pages
-- ✅ Ready to format with confidence
-
-### If You Create New Field IDs:
-
-If you determine a new field ID is needed (not found in templates or Field Management):
-
-1. **Follow naming convention:** `Category_Description` (e.g., `calc-cap-rate`, `survey1-parking`)
-2. **Document in delivery notes:**
-   ```
-   === NEW FIELD IDs CREATED ===
-   - {{calc-cap-rate}} - Capitalization rate for income approach (page 42)
-   - {{calc-value-income}} - Indicated value by income approach (page 45)
-   ```
-3. **Verify in review:** User will confirm if field IDs are appropriate or need adjustment
-
-### Summary:
-
-**Don't guess field IDs.** Use the 4-step workflow:
-1. Look at source image (what content is on the page?)
-2. Check TABLE-FIELD-ANALYSIS.md (what field pattern for this page range?)
-3. Search PREVIEW-Master.html (how are similar fields named?)
-4. Check doc-pages-html-single template (does exact mapping already exist?)
-
-This workflow ensures consistency, reduces errors, and makes your formatting work align with the existing system.
+**For detailed instructions, examples, and troubleshooting → Read the full Field ID Guide.**
 
 ---
 

@@ -266,10 +266,39 @@ td, th {
 
 ## 🏷️ Field Mapping Rules
 
+**⚠️ CRITICAL PHASE REQUIREMENT:** Identifying and mapping ALL field IDs is a PRIMARY objective of this formatting work. This is not optional - every dynamic content item must be mapped to a field ID.
+
+### Why Field Mapping is Critical:
+
+1. **Data Binding:** Field IDs connect HTML template to React editor inputs
+2. **User Editing:** Every field ID becomes an editable input in the dashboard
+3. **Report Generation:** Field IDs are replaced with actual data when generating reports
+4. **Completeness:** Missing field IDs = broken functionality in production
+
+**Your responsibility:** Identify EVERY piece of dynamic content and assign appropriate field IDs.
+
 ### Format:
 ```html
 <span class="field-mapped" title="{{Field_ID}}">{{Field_ID}}</span>
 ```
+
+### Field ID Reference Files (SOURCE OF TRUTH):
+
+**Location:** `/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Field Management/`
+
+**Before creating new field IDs:**
+1. Check existing field mapping files in Field Management directory
+2. Look for similar fields in pages 3-39 (PREVIEW-Master.html)
+3. Follow existing naming patterns
+4. Only create NEW field IDs if no suitable match exists
+
+**If uncertain about a field ID:**
+1. ✅ Check Field Management directory files first
+2. ✅ Search PREVIEW-Master.html for similar content
+3. ✅ Create a **"Unknown Field IDs"** list in your delivery notes
+4. ✅ Propose descriptive field names following the convention below
+5. ❌ DON'T skip field mapping (better to have a tentative ID than none)
+6. ❌ DON'T use generic names like "Field1", "Text1" (use descriptive names)
 
 ### Common Field IDs:
 
@@ -432,6 +461,28 @@ Create HTML files for batch of pages (e.g., `pg-40-50.html`)
 ✅ Footer on every page
 ✅ Correct page numbers in `data-page-num` and footer
 
+### Delivery Notes (REQUIRED if applicable):
+
+**If you created new field IDs or have uncertainties:**
+
+Create a separate text block in your delivery with:
+```
+=== FIELD ID NOTES ===
+
+New Field IDs Created:
+- {{Building_MechanicalSystems}} - Used for HVAC/mechanical description on page 42
+- {{Subject_ParkingRatio}} - Parking spaces per unit on page 45
+
+Uncertain Field IDs (please verify):
+- {{Subject_ElevatorCount}} - Might already exist as {{Building_Elevators}}?
+- {{Market_RentalTrends}} - Could this be {{Market_RentTrend}} (singular)?
+
+Questions:
+- Page 47: Should "Maintenance History" be field-mapped or remain static text?
+```
+
+This helps with review and ensures no field mapping issues slip through.
+
 ---
 
 ## ✅ Quality Checklist
@@ -449,6 +500,15 @@ Before delivering your HTML, verify:
 - [ ] Field IDs use PascalCase (e.g., `Subject_Street`)
 - [ ] No hard-coded property-specific data (use field IDs instead)
 - [ ] Static labels are NOT field-mapped
+
+### Field Mapping (CRITICAL):
+- [ ] **Every** piece of dynamic content has a field ID (no exceptions)
+- [ ] Checked Field Management directory for existing field IDs
+- [ ] Searched PREVIEW-Master.html for similar field patterns
+- [ ] New field IDs follow naming conventions (Category_Description)
+- [ ] Created "Field ID Notes" section if any uncertainties exist
+- [ ] No generic field names like "Field1" or "Text1"
+- [ ] Verified field IDs match content purpose (not just placeholders)
 
 ### Formatting:
 - [ ] Headers use proper classes (Header1, Header2, Subheader1)

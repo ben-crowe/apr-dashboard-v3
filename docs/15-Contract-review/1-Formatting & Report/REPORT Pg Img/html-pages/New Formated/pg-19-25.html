@@ -70,10 +70,32 @@
         ol, ul { margin-left: 20px; margin-bottom: 10px; }
         li { margin-bottom: 6px; text-align: justify; line-height: 1.5; }
 
+        /* Blue subsection header bar */
+        .subsection-header {
+            background-color: #003B7E;
+            color: white;
+            font-weight: bold;
+            font-size: 11pt;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            margin: 16px 0 12px 0;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        /* Subsection label (bold, not a header bar) */
+        .subsection-label {
+            font-weight: bold;
+            font-size: 10pt;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            color: #000;
+        }
+
         /* --- 4. TABLES --- */
         table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 10pt; }
         td, th { padding: 4px 8px; border: 1px solid #ddd; vertical-align: top; }
-        th { background-color: #003B7E; color: white; font-weight: bold; text-align: left; }
+        th { background-color: #f0f0f0; color: #333; font-weight: bold; text-align: left; }
         .label-col { background-color: #f0f0f0; font-weight: bold; width: 35%; color: #333; }
         .value-col { width: 65%; }
         tr:nth-child(even) td { background-color: #f9f9f9; }
@@ -468,9 +490,9 @@
     <div class="page-sheet" data-page-num="Page 24">
         <div class="Header1">Property Analysis</div>
 
-        <div class="Header2">Access & Frontage</div>
+        <div class="subsection-header">Access & Frontage</div>
 
-        <div class="Subheader1">Street Improvements</div>
+        <div class="subsection-label">Street Improvements</div>
         <table>
             <thead>
                 <tr>
@@ -514,7 +536,7 @@
             </tbody>
         </table>
 
-        <div class="Subheader1">Frontage</div>
+        <div class="subsection-label">Frontage</div>
         <table>
             <thead>
                 <tr>
@@ -537,7 +559,7 @@
             </tbody>
         </table>
 
-        <div class="Subheader1">Traffic Counts</div>
+        <div class="subsection-label">Traffic Counts</div>
         <table>
             <thead>
                 <tr>

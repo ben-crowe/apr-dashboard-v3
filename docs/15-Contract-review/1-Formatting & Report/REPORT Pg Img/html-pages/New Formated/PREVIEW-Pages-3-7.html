@@ -4,20 +4,22 @@
 <meta charset="UTF-8">
 <title>Appraisal Report Boilerplate (Pages 3-7) - PREVIEW</title>
 <style>
-    /* --- 1. GLOBAL RESET & FONTS --- */
+    /* --- MASTER STYLESHEET (Fixed for Bolding & Layout) --- */
     * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
         font-family: "Open Sans", Arial, sans-serif;
         font-size: 10pt;
         line-height: 1.4;
-        background-color: #525659; /* Dark Preview Background */
+        background-color: #525659; /* Preview Mode Background */
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 40px 0;
+        color: black;
     }
 
-    /* --- 2. PAPER SHEET STYLING (The "Split Panel" Look) --- */
+    /* --- THE "PAPER SHEET" --- */
     .page-sheet {
         background-color: white;
         width: 8.5in;
@@ -27,16 +29,41 @@
         box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         position: relative;
         overflow: hidden;
+        page-break-after: always; /* Critical for PDF generation */
     }
 
-    /* --- 3. COMMON ELEMENT STYLING --- */
-    /* Headers */
+    /* --- HEADERS --- */
+    .Header1 {
+        font-size: 18pt;
+        color: #003B7E;
+        border-bottom: 1px solid #003B7E;
+        padding-bottom: 5px;
+        margin-bottom: 20px;
+        font-weight: normal;
+    }
+
+    .Header2 {
+        font-size: 12pt;
+        color: #003B7E;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .Subheader1 {
+        font-size: 11pt;
+        color: #003B7E;
+        font-weight: bold;
+        margin-top: 15px;
+        margin-bottom: 5px;
+    }
+
+    /* --- LEGACY HEADERS (for backward compatibility) --- */
     .header-logo-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
     .logo-text { font-size: 20pt; font-weight: bold; color: #003B7E; }
     .logo-sub { font-size: 9pt; color: #666; letter-spacing: 2px; }
     .company-info { text-align: right; font-size: 9pt; color: #333; }
-
-    /* Section Headers */
     .section-header {
         background-color: #003B7E;
         color: white;
@@ -47,7 +74,6 @@
         font-size: 10pt;
         text-transform: uppercase;
     }
-
     .page-title {
         font-size: 16pt;
         font-weight: bold;
@@ -56,39 +82,59 @@
         margin-bottom: 20px;
     }
 
-    /* Standard Text */
+    /* --- TEXT & LISTS --- */
     p { margin-bottom: 10pt; text-align: justify; }
+    ul { margin-bottom: 10pt; margin-left: 20px; }
+    li { margin-bottom: 5pt; }
 
-    /* Tables */
+    /* --- TABLES --- */
     table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 10pt; }
     td, th { padding: 4px 8px; border: 1px solid #ddd; vertical-align: top; }
     .label-col { background-color: #f0f0f0; font-weight: bold; width: 35%; }
     .value-col { width: 65%; }
 
-    /* Signatures */
+    /* --- SIGNATURES --- */
     .signature-block { margin-top: 40px; }
     .sig-line { width: 250px; border-top: 1px solid black; margin-top: 40px; padding-top: 5px; }
 
-    /* --- 4. MAPPING VISUALIZATION (Yellow Highlights) --- */
+    /* --- FIELD MAPPING (The Yellow Highlight) --- */
     .field-mapped {
         background-color: rgba(255, 255, 0, 0.15);
         border-bottom: 1px dotted #999;
         cursor: help;
-        position: relative;
+        font-weight: inherit; /* FIXES THE BOLD ISSUE */
+        display: inline;
     }
+
+    /* Tooltip on Hover */
     .field-mapped:hover::before {
         content: attr(title);
         position: absolute;
-        top: -20px; left: 0; background: #333; color: #fff;
-        padding: 2px 5px; font-size: 8pt; border-radius: 3px;
-        white-space: nowrap; z-index: 100;
+        transform: translateY(-100%);
+        background: #333; color: white;
+        padding: 4px 8px; font-size: 8pt;
+        border-radius: 4px; white-space: nowrap;
+        z-index: 1000;
     }
 
-    /* --- 5. PRINT SETTINGS --- */
+    /* --- IMAGES --- */
+    .img-placeholder {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f4f4f4;
+        border: 1px dashed #ccc;
+        color: #666;
+        margin-bottom: 15px;
+    }
+
+    /* --- PRINT SETTINGS --- */
     @media print {
-        body { background-color: white; padding: 0; }
-        .page-sheet { width: 100%; margin: 0; box-shadow: none; page-break-after: always; min-height: auto; }
+        body { background-color: white; padding: 0; display: block; }
+        .page-sheet { width: 100%; margin: 0; box-shadow: none; padding: 0.75in; min-height: auto; }
         .field-mapped { background-color: transparent; border: none; }
+        .img-placeholder { border: none; background: none; }
     }
 </style>
 </head>

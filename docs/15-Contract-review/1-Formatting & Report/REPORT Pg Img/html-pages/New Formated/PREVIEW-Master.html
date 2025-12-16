@@ -26,15 +26,12 @@
             width: 8.5in;
             height: 11in; /* STRICT FIX: Changed from min-height to fixed height */
             padding: 0.75in;
+            padding-bottom: 80px; /* Reserve space for footer */
             margin-bottom: 30px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             position: relative;
 
-            /* Layout Logic */
-            display: flex;
-            flex-direction: column;
-
-            /* FAILURE INDICATOR: If content is too long, it gets cut off */
+            /* FAILURE INDICATOR: If content is too long, it gets cut off ABOVE footer */
             overflow: hidden;
 
             page-break-after: always;
@@ -170,14 +167,16 @@
             font-style: italic;
         }
 
-        /* --- 7. FOOTER STYLING (Pinned to Bottom) --- */
-        /* Note: Using margin-top: auto in a flex container pushes this to the bottom.
-           If content is too long, the fixed page height + overflow:hidden means
-           this footer will be pushed OFF the visible page.
-           This is the intended behavior: Missing Footer = Page Overflow Error.
+        /* --- 7. FOOTER STYLING (Always at Bottom - Like Word Header/Footer) --- */
+        /* Footer is SEPARATE from content flow - like boilerplate/page border.
+           Absolutely positioned so it NEVER moves, NEVER disappears.
+           Content clips ABOVE footer if too long - that's the visual alarm.
         */
         .page-footer {
-            margin-top: auto;
+            position: absolute;
+            bottom: 0.75in;
+            left: 0.75in;
+            right: 0.75in;
             padding-top: 15px;
             border-top: 1px solid #ccc;
             font-size: 9pt;
@@ -185,7 +184,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-shrink: 0; /* Prevents footer from squishing if content is tight */
+            background-color: white; /* Ensure footer background covers any content behind it */
         }
         .footer-accent {
             width: 60px;

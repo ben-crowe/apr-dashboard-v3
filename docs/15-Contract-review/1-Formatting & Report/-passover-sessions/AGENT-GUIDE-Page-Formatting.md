@@ -611,26 +611,61 @@ Create a batch file with your formatted pages (e.g., `pg-40-45.html` for pages 4
 2. **Look for the last page-sheet closing tag** `</div>` before the closing `</body>`
 3. **Insert your pages BEFORE** the `</body></html>` tags
 
-**Example workflow:**
+**Step-by-step workflow:**
+
+**STEP 1: Check for duplicate page numbers first**
 ```bash
-# 1. Find insertion point (look for last page-sheet div)
-tail -20 PREVIEW-Master.html
+# Search for your page numbers to ensure they don't already exist
+grep '<span class="page-num">40</span>' PREVIEW-Master.html
+# If this returns results, those pages already exist - DO NOT append duplicates
+```
 
-# 2. You'll see something like:
-#     </div>  <!-- End of last existing page -->
-#
-#     </body>
-#     </html>
+**STEP 2: Find insertion point**
+```bash
+# Read the end of PREVIEW-Master.html to find where to insert
+Read: /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/doc-page-html/doc-pages-html-formatted/PREVIEW-Master.html
+# (use offset and limit to read last 50 lines)
+```
 
-# 3. Insert your pages BEFORE </body>
-# Use the Edit tool to add your pages at the correct location
+**STEP 3: Use Edit tool to insert your pages**
+
+You'll see the end of the file looks like:
+```html
+    </div>  <!-- End of last existing page -->
+
+</body>
+</html>
+```
+
+**Use the Edit tool with this exact pattern:**
+```
+Edit tool:
+- file_path: /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/doc-page-html/doc-pages-html-formatted/PREVIEW-Master.html
+- old_string: "</body>\n</html>"
+- new_string: "[YOUR FORMATTED PAGES HERE]\n\n</body>\n</html>"
+```
+
+**Example:**
+```
+old_string: "</body>\n</html>"
+
+new_string: "<div class=\"page-sheet\" data-page-num=\"Page 40\">
+    <!-- Your page 40 content -->
+</div>
+
+<div class=\"page-sheet\" data-page-num=\"Page 41\">
+    <!-- Your page 41 content -->
+</div>
+
+</body>
+</html>"
 ```
 
 **Verification after appending:**
-- Check that your pages appear before `</body></html>`
-- Verify no duplicate page numbers
-- Ensure proper closing tags
-- Check that file still has valid HTML structure
+- ✅ Read the file to confirm your pages appear before `</body></html>`
+- ✅ Verify no duplicate page numbers (grep for page-num)
+- ✅ Ensure proper closing tags (all `<div>` have matching `</div>`)
+- ✅ Check that file still has valid HTML structure
 
 ### Step 3: Commit Your Changes
 
@@ -638,7 +673,7 @@ After appending to PREVIEW-Master.html, commit to git:
 
 ```bash
 cd "/Users/bencrowe/Development/APR-Dashboard-v3"
-git add "docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/html-pages/New Formated/PREVIEW-Master.html"
+git add "docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/doc-page-html/doc-pages-html-formatted/PREVIEW-Master.html"
 git commit -m "Add pages 40-45 to preview master (6 pages)
 
 - Formatted pages 40-45 from reference document

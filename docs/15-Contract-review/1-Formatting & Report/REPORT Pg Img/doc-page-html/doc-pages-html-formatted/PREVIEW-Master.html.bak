@@ -46,12 +46,12 @@
         }
 
         .Header2 {
-            font-size: 11pt;
+            font-size: 12pt;
             color: #003B7E;
             font-weight: bold;
             text-transform: uppercase;
-            margin-top: 10px;
-            margin-bottom: 5px;
+            margin-top: 12px;
+            margin-bottom: 6px;
         }
 
         .Subheader1 {
@@ -269,7 +269,7 @@
             box-shadow: 0 0 0 3px rgba(74, 159, 216, 0.2);
         }
 
-        #go-button, #refresh-button {
+        #go-button {
             padding: 6px 16px;
             background: #003B7E;
             color: white;
@@ -281,17 +281,11 @@
             transition: background 0.2s;
         }
 
-        #refresh-button {
-            padding: 6px 12px;
-            font-size: 18px;
-            line-height: 1;
-        }
-
-        #go-button:hover, #refresh-button:hover {
+        #go-button:hover {
             background: #4a9fd8;
         }
 
-        #go-button:active, #refresh-button:active {
+        #go-button:active {
             transform: scale(0.98);
         }
 
@@ -367,7 +361,6 @@
             <input type="number" id="page-input" min="1" placeholder="1">
             <button id="go-button">Go</button>
             <span id="page-count"></span>
-            <button id="refresh-button" title="Refresh Page">⟳</button>
         </div>
     </div>
 
@@ -3054,30 +3047,14 @@ function jumpToPage(pageNumber) {
     }
 }
 
-// Go button click
 goButton.addEventListener('click', () => {
     jumpToPage(pageInput.value);
 });
 
-// Enter key press - instant navigation
 pageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
-        e.preventDefault();
         jumpToPage(pageInput.value);
     }
-});
-
-// Also jump on input change for instant feedback
-pageInput.addEventListener('change', () => {
-    if (pageInput.value) {
-        jumpToPage(pageInput.value);
-    }
-});
-
-// Refresh button
-const refreshButton = document.getElementById('refresh-button');
-refreshButton.addEventListener('click', () => {
-    location.reload();
 });
 
 // Preview Mode Toggle Handler
@@ -3161,30 +3138,30 @@ previewToggle.addEventListener('change', function() {
             </thead>
             <tbody>
                 <tr>
-                    <td>Flat 1 Bed / 1 Bath</td>
-                    <td>One Bed-One Bath</td>
-                    <td class="text-center">4</td>
-                    <td class="text-right">$885</td>
-                    <td class="text-right">$900</td>
-                    <td class="text-right">$900</td>
-                    <td class="text-right">98.3%</td>
+                    <td style="padding: 3px 6px;">Flat 1 Bed / 1 Bath</td>
+                    <td style="padding: 3px 6px;">One Bed-One Bath</td>
+                    <td class="text-center" style="padding: 3px 6px;">4</td>
+                    <td class="text-right" style="padding: 3px 6px;">$885</td>
+                    <td class="text-right" style="padding: 3px 6px;">$900</td>
+                    <td class="text-right" style="padding: 3px 6px;">$900</td>
+                    <td class="text-right" style="padding: 3px 6px;">98.3%</td>
                 </tr>
                 <tr>
-                    <td>Flat 2 Bed / 1 Bath</td>
-                    <td>Two Bed-One Bath</td>
-                    <td class="text-center">12</td>
-                    <td class="text-right">$1,015</td>
-                    <td class="text-right">$1,050</td>
-                    <td class="text-right">$1,050</td>
-                    <td class="text-right">96.7%</td>
+                    <td style="padding: 3px 6px;">Flat 2 Bed / 1 Bath</td>
+                    <td style="padding: 3px 6px;">Two Bed-One Bath</td>
+                    <td class="text-center" style="padding: 3px 6px;">12</td>
+                    <td class="text-right" style="padding: 3px 6px;">$1,015</td>
+                    <td class="text-right" style="padding: 3px 6px;">$1,050</td>
+                    <td class="text-right" style="padding: 3px 6px;">$1,050</td>
+                    <td class="text-right" style="padding: 3px 6px;">96.7%</td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="font-weight: bold;">TOTAL / AVERAGE</td>
-                    <td class="text-center" style="font-weight: bold;">16</td>
-                    <td class="text-right" style="font-weight: bold;">$989</td>
-                    <td class="text-right" style="font-weight: bold;">$1,015</td>
-                    <td class="text-right" style="font-weight: bold;">$1,020</td>
-                    <td class="text-right" style="font-weight: bold;">99.5%</td>
+                    <td colspan="2" style="font-weight: bold; padding: 3px 6px;">TOTAL / AVERAGE</td>
+                    <td class="text-center" style="font-weight: bold; padding: 3px 6px;">16</td>
+                    <td class="text-right" style="font-weight: bold; padding: 3px 6px;">$989</td>
+                    <td class="text-right" style="font-weight: bold; padding: 3px 6px;">$1,015</td>
+                    <td class="text-right" style="font-weight: bold; padding: 3px 6px;">$1,020</td>
+                    <td class="text-right" style="font-weight: bold; padding: 3px 6px;">99.5%</td>
                 </tr>
             </tbody>
         </table>

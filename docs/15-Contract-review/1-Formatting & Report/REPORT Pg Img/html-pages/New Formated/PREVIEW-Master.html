@@ -6,18 +6,13 @@
     <title>Appraisal Report - Master Preview (Formatted)</title>
     <style>
         /* --- 1. GLOBAL RESET & FONTS --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: "Open Sans", Arial, sans-serif;
             font-size: 10pt;
             line-height: 1.4;
-            background-color: #525659;
-            /* Preview Mode Background */
+            background-color: #525659; /* Preview Mode Background */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -25,20 +20,22 @@
             color: black;
         }
 
-        /* --- 2. PAPER SHEET STYLING --- */
+        /* --- 2. PAPER SHEET STYLING (TRUE WYSIWYG) --- */
         .page-sheet {
             background-color: white;
             width: 8.5in;
-            min-height: 11in;
+            height: 11in; /* STRICT FIX: Changed from min-height to fixed height */
             padding: 0.75in;
             margin-bottom: 30px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
             position: relative;
-            overflow: hidden;
 
-            /* Flexbox for Footer Pushing */
+            /* Layout Logic */
             display: flex;
             flex-direction: column;
+
+            /* FAILURE INDICATOR: If content is too long, it gets cut off */
+            overflow: hidden;
 
             page-break-after: always;
         }
@@ -72,36 +69,13 @@
         }
 
         /* Standard Text */
-        p {
-            margin-bottom: 10pt;
-            text-align: justify;
-        }
+        p { margin-bottom: 10pt; text-align: justify; }
 
         /* --- 4. TABLES --- */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
-            font-size: 10pt;
-        }
-
-        td,
-        th {
-            padding: 4px 8px;
-            border: 1px solid #ddd;
-            vertical-align: top;
-        }
-
-        .label-col {
-            background-color: #f0f0f0;
-            font-weight: bold;
-            width: 35%;
-            color: #333;
-        }
-
-        .value-col {
-            width: 65%;
-        }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 10pt; }
+        td, th { padding: 4px 8px; border: 1px solid #ddd; vertical-align: top; }
+        .label-col { background-color: #f0f0f0; font-weight: bold; width: 35%; color: #333; }
+        .value-col { width: 65%; }
 
         /* --- 5. FIELD MAPPING HIGHLIGHTER --- */
         .field-mapped {
@@ -109,20 +83,15 @@
             border-bottom: 1px dotted #999;
             cursor: help;
             font-weight: inherit;
-            /* Fixes bold overflow */
             display: inline;
         }
-
         .field-mapped:hover::before {
             content: attr(title);
             position: absolute;
             transform: translateY(-100%);
-            background: #333;
-            color: white;
-            padding: 4px 8px;
-            font-size: 8pt;
-            border-radius: 4px;
-            white-space: nowrap;
+            background: #333; color: white;
+            padding: 4px 8px; font-size: 8pt;
+            border-radius: 4px; white-space: nowrap;
             z-index: 1000;
         }
 
@@ -138,10 +107,14 @@
             margin-bottom: 15px;
         }
 
-        /* --- 7. FOOTER STYLING --- */
+        /* --- 7. FOOTER STYLING (Pinned to Bottom) --- */
+        /* Note: Using margin-top: auto in a flex container pushes this to the bottom.
+           If content is too long, the fixed page height + overflow:hidden means
+           this footer will be pushed OFF the visible page.
+           This is the intended behavior: Missing Footer = Page Overflow Error.
+        */
         .page-footer {
             margin-top: auto;
-            /* Pushes footer to bottom */
             padding-top: 15px;
             border-top: 1px solid #ccc;
             font-size: 9pt;
@@ -149,15 +122,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-shrink: 0; /* Prevents footer from squishing if content is tight */
         }
-
         .footer-accent {
             width: 60px;
             height: 10px;
             background: linear-gradient(to right, #4a9fd8, #003d7a);
             border-radius: 2px;
         }
-
         .page-num {
             color: #003B7E;
             font-weight: bold;
@@ -166,29 +138,10 @@
 
         /* --- 8. PRINT SETTINGS --- */
         @media print {
-            body {
-                background-color: white;
-                padding: 0;
-                display: block;
-            }
-
-            .page-sheet {
-                width: 100%;
-                margin: 0;
-                box-shadow: none;
-                padding: 0.75in;
-                min-height: 11in;
-            }
-
-            .field-mapped {
-                background-color: transparent;
-                border: none;
-            }
-
-            .img-placeholder {
-                border: none;
-                background: none;
-            }
+            body { background-color: white; padding: 0; display: block; }
+            .page-sheet { width: 100%; margin: 0; box-shadow: none; padding: 0.75in; height: 11in; overflow: hidden; }
+            .field-mapped { background-color: transparent; border: none; }
+            .img-placeholder { border: none; background: none; }
         }
     </style>
 </head>

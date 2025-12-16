@@ -18,6 +18,46 @@ Convert pages from the reference Word document into properly formatted HTML page
 
 ---
 
+## 🎭 For Orchestrator Agents: Critical Workflow Understanding
+
+**⚠️ THIS GUIDE IS FOR ORCHESTRATOR AGENTS WHO DEPLOY SUB-AGENTS**
+
+You are responsible for:
+1. **Understanding the complete workflow** before delegating to sub-agents
+2. **Prompting your sub-agents correctly** with exact references and requirements
+3. **Verifying sub-agent outputs** before delivering work to the user
+4. **Owning quality control** - you cannot return unverified work
+
+**Why This Matters:**
+
+If you don't fully understand the workflow, you won't know if your sub-agents are doing correct work or not. You must be able to verify their outputs against the requirements in this guide.
+
+**Your Sub-Agent Architecture:**
+
+```
+YOU (Orchestrator)
+  ↓
+  ├─→ Sub-Agent: Formatting (Step 1: creates HTML from PNG source)
+  ├─→ Sub-Agent: Visual Verification (Step 1.5: validates HTML vs PNG)
+  └─→ You handle: Integration (Steps 2-3: append + commit)
+  ↓
+Deliver to User (only after verification)
+```
+
+**Example: Visual Verification Sub-Agent**
+
+Step 1.5 requires deploying a visual verification sub-agent. If you prompt them incorrectly (missing PNG references, unclear comparison criteria), they will return bad verification results, and you'll deliver incorrect work.
+
+**Read this entire guide** to understand:
+- What source materials exist and where
+- What the expected outputs look like
+- How to verify quality at each step
+- What prompts to use for your sub-agents
+
+Only then can you confidently deploy sub-agents and verify their work.
+
+---
+
 ## 📚 Guide Structure
 
 This guide contains three main sections:

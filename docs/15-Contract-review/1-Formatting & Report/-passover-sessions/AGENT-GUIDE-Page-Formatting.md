@@ -18,44 +18,20 @@ Convert pages from the reference Word document into properly formatted HTML page
 
 ---
 
-## ⚠️ CRITICAL: Understanding Page Numbers
+## 📄 Page Numbers - Simple & Aligned
 
-**IMPORTANT:** When referring to page numbers, we ALWAYS mean the **footer page number** on the actual document page, NOT file names or screenshot numbers.
+**File names now match document page numbers** - all confusion eliminated!
 
-### The Confusion:
-- The PDF/Word document has cover pages and front matter
-- **Document page numbering starts around page 3-4** of the PDF file
-- Screenshot files may be named differently than document page numbers
-- File: "Page 1.png" might be a cover page, NOT document page 1
+- **File `Page-14.png`** = Document page 14 (footer shows "14")
+- **File `Page-40.html`** = Document page 40 (footer shows "40")
+- **Front matter:** `-a-cover`, `-b-conditions`, `-c-letter`, `-d-table-contents` (no page numbers)
 
-### How to Identify the Correct Page:
+**When user says "page 14"** → Use file `Page-14.png` or `Page-14.html`
 
-**✅ CORRECT - Use Footer Page Number:**
-```html
-<div class="page-footer">
-    <div><span class="page-num">14</span> <!-- THIS IS DOCUMENT PAGE 14 -->
-```
-When user says "document page 14", find the page with `<span class="page-num">14</span>` in the footer.
-
-**❌ WRONG - Using File Name:**
-- File name: "Page-14.png" ≠ Document page 14
-- PDF page 14 ≠ Document page 14
-- Screenshot order ≠ Document page order
-
-### Examples:
-
-**User says:** "Check document page 14"
-**You should:** Search for `<span class="page-num">14</span>` in the HTML
-**Don't:** Look for file "Page 14.png" or PDF page 14
-
-**User says:** "Footer missing on pages 13-16"
-**You should:** Find pages with footer numbers 13, 14, 15, 16
-**Don't:** Look at the 13th-16th files in the folder
-
-### Quick Reference Command:
+**To verify page number in HTML:**
 ```bash
-# Find document page 14 in HTML
-grep '<span class="page-num">14</span>' PREVIEW-Master.html
+grep '<span class="page-num">14</span>' Page-14.html
+# Should return the footer with page number 14
 ```
 
 ---
@@ -471,7 +447,7 @@ We use a two-layer approach to prevent layout overflow:
 
 ### File Structure:
 
-Create HTML files for batch of 5-7 pages (e.g., `pg-40-45.html` for 6 pages)
+Create HTML files for batch of 5-7 pages (e.g., `Page-40-45.html` for 6 pages)
 
 **File structure:**
 ```html
@@ -577,7 +553,7 @@ Before delivering your HTML, verify:
 - [ ] Valid HTML (no unclosed tags)
 - [ ] No inline CSS (use classes instead)
 - [ ] No DOCTYPE or html/head/body tags
-- [ ] File named appropriately with page range (e.g., `pg-40-45.html`)
+- [ ] File named appropriately with page range (e.g., `Page-40-45.html`)
 - [ ] Batch size is 5-7 pages (not more, not less)
 
 ---
@@ -590,7 +566,7 @@ Before delivering your HTML, verify:
 
 ### Step 1: Create Your HTML File
 
-Create a batch file with your formatted pages (e.g., `pg-40-45.html` for pages 40-45) containing just the page-sheet divs.
+Create a batch file with your formatted pages (e.g., `Page-40-45.html` for pages 40-45) containing just the page-sheet divs.
 
 **Batch size:**
 - Minimum: 5 pages

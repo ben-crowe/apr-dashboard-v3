@@ -18,6 +18,48 @@ Convert pages from the reference Word document into properly formatted HTML page
 
 ---
 
+## ⚠️ CRITICAL: Understanding Page Numbers
+
+**IMPORTANT:** When referring to page numbers, we ALWAYS mean the **footer page number** on the actual document page, NOT file names or screenshot numbers.
+
+### The Confusion:
+- The PDF/Word document has cover pages and front matter
+- **Document page numbering starts around page 3-4** of the PDF file
+- Screenshot files may be named differently than document page numbers
+- File: "Page 1.png" might be a cover page, NOT document page 1
+
+### How to Identify the Correct Page:
+
+**✅ CORRECT - Use Footer Page Number:**
+```html
+<div class="page-footer">
+    <div><span class="page-num">14</span> <!-- THIS IS DOCUMENT PAGE 14 -->
+```
+When user says "document page 14", find the page with `<span class="page-num">14</span>` in the footer.
+
+**❌ WRONG - Using File Name:**
+- File name: "Page-14.png" ≠ Document page 14
+- PDF page 14 ≠ Document page 14
+- Screenshot order ≠ Document page order
+
+### Examples:
+
+**User says:** "Check document page 14"
+**You should:** Search for `<span class="page-num">14</span>` in the HTML
+**Don't:** Look for file "Page 14.png" or PDF page 14
+
+**User says:** "Footer missing on pages 13-16"
+**You should:** Find pages with footer numbers 13, 14, 15, 16
+**Don't:** Look at the 13th-16th files in the folder
+
+### Quick Reference Command:
+```bash
+# Find document page 14 in HTML
+grep '<span class="page-num">14</span>' PREVIEW-Master.html
+```
+
+---
+
 ## 📋 Current Progress
 
 **Completed Pages (3-39):**

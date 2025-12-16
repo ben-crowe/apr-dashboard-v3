@@ -29,10 +29,11 @@ This guide contains three main sections:
 - Creating your batch HTML file (pages 40-45, etc.)
 
 **SECTION 2: Workflow & Delivery**
-- Step-by-step append to PREVIEW-Master.html
-- Git commit process
-- Review and approval workflow
-- Batch size limits (5-7 pages)
+- Step 1: Create batch HTML file (5-7 pages)
+- Step 1.5: Visual verification against PNG source images ⭐
+- Step 2: Append to PREVIEW-Master.html
+- Step 3: Git commit process
+- Step 4: User review and approval workflow
 
 **SECTION 3: Field ID Verification & Mapping** ⭐
 - How to find which field IDs go on your page
@@ -62,15 +63,16 @@ grep '<span class="page-num">14</span>' Page-14.html
 
 ## 📋 Current Progress
 
-**Completed Pages (3-39):**
+**Completed Pages (3-34):**
 - Pages 3-7: Letter of Transmittal, Limiting Conditions, TOC, Property Overview
 - Pages 8-12: Hypothetical Conditions, Photo grids (25 photos)
 - Pages 13-18: Maps (Regional/Local/Aerial), Property ID, Sales History, Exposure Time
 - Pages 19-25: Market Analysis sections
 - Pages 26-32: Property Analysis, Zoning, Site details
-- Pages 33-39: Improvements, Condition, Building details
+- Pages 33-34: Improvements, Condition, Building details
 
-**Next Batch (40-77):** Current assignment
+**Next Batch (35-77):** Current assignment
+**First batch:** Pages 35-40 (Market Rent Survey + Income Approach start)
 
 **⚠️ BATCH SIZE LIMIT: 5-7 pages per session**
 - Do NOT attempt to format more than 7 pages in one batch
@@ -596,6 +598,50 @@ Create a batch file with your formatted pages (e.g., `Page-40-45.html` for pages
 - Minimum: 5 pages
 - Maximum: 7 pages
 - Recommended: 6 pages for consistent batching
+
+### Step 1.5: Visual Verification ⭐ REQUIRED
+
+**BEFORE appending to PREVIEW-Master, request visual review of your batch file.**
+
+**⚠️ CRITICAL:** The PNG images are the source of truth - they are screenshots from the actual final report document.
+
+**Source Image Location:**
+`/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/doc-page-images/`
+
+**For pages 35-40 batch, the visual agent compares:**
+- Your HTML output (Page-35-40.html)
+- Against source PNG images: `Page-35.png`, `Page-36.png`, `Page-37.png`, `Page-38.png`, `Page-39.png`, `Page-40.png`
+
+**Request visual review with this prompt:**
+
+```
+Visual verification needed for batch file Page-35-40.html.
+
+Compare formatted HTML output against source PNG images:
+- Location: /Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/doc-page-images/
+- Files: Page-35.png through Page-40.png
+
+Verify:
+- Footer positioning matches PNG (no excessive overlap)
+- Visual layout matches PNG exactly
+- Table formatting and alignment match PNG
+- Text spacing and styling match PNG
+- Overall page aesthetics match PNG
+
+The PNG images are screenshots from the actual final report - they are the source of truth.
+```
+
+**Visual agent checks:**
+1. Opens each PNG image (Page-35.png through Page-40.png)
+2. Opens the batch HTML file in browser
+3. Compares HTML output side-by-side with PNG images
+4. Flags any visual discrepancies
+5. Approves or requests specific fixes
+
+**If issues found:** Fix batch HTML file, repeat visual review
+**If approved:** Proceed to Step 2 (append to PREVIEW-Master)
+
+---
 
 ### Step 2: Append to PREVIEW-Master.html
 

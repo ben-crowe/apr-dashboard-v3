@@ -269,7 +269,7 @@
             box-shadow: 0 0 0 3px rgba(74, 159, 216, 0.2);
         }
 
-        #go-button {
+        #go-button, #refresh-button {
             padding: 6px 16px;
             background: #003B7E;
             color: white;
@@ -281,11 +281,17 @@
             transition: background 0.2s;
         }
 
-        #go-button:hover {
+        #refresh-button {
+            padding: 6px 12px;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        #go-button:hover, #refresh-button:hover {
             background: #4a9fd8;
         }
 
-        #go-button:active {
+        #go-button:active, #refresh-button:active {
             transform: scale(0.98);
         }
 
@@ -361,6 +367,7 @@
             <input type="number" id="page-input" min="1" placeholder="1">
             <button id="go-button">Go</button>
             <span id="page-count"></span>
+            <button id="refresh-button" title="Refresh Page">⟳</button>
         </div>
     </div>
 
@@ -3047,14 +3054,30 @@ function jumpToPage(pageNumber) {
     }
 }
 
+// Go button click
 goButton.addEventListener('click', () => {
     jumpToPage(pageInput.value);
 });
 
+// Enter key press - instant navigation
 pageInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
+        e.preventDefault();
         jumpToPage(pageInput.value);
     }
+});
+
+// Also jump on input change for instant feedback
+pageInput.addEventListener('change', () => {
+    if (pageInput.value) {
+        jumpToPage(pageInput.value);
+    }
+});
+
+// Refresh button
+const refreshButton = document.getElementById('refresh-button');
+refreshButton.addEventListener('click', () => {
+    location.reload();
 });
 
 // Preview Mode Toggle Handler

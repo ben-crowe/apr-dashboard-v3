@@ -1,0 +1,2278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Appraisal Report - Master Preview (Formatted)</title>
+    <style>
+        /* --- 1. GLOBAL RESET & FONTS --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Open Sans", Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            background-color: #525659; /* Preview Mode Background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
+            color: black;
+        }
+
+        /* --- 2. PAPER SHEET STYLING (TRUE WYSIWYG - ABSOLUTE FOOTER METHOD) --- */
+        .page-sheet {
+            background-color: white;
+            width: 8.5in;
+            height: 11in; /* Lock the height (Paper doesn't stretch) */
+            padding: 0.75in;
+            padding-bottom: 180px; /* Reserve space for footer */
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden; /* Clip content if it gets too long */
+
+            page-break-after: always;
+        }
+
+        /* --- 3. HEADERS & TYPOGRAPHY --- */
+        .Header1 {
+            font-size: 18pt;
+            color: #003B7E;
+            border-bottom: 1px solid #003B7E;
+            padding-bottom: 5px;
+            margin-bottom: 12px;
+            font-weight: normal;
+        }
+
+        .Header2 {
+            font-size: 12pt;
+            color: #003B7E;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        .Subheader1 {
+            font-size: 11pt;
+            color: #003B7E;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .centered-title {
+            font-size: 11pt;
+            color: #003B7E;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        /* Blue subsection header bar */
+        .subsection-header {
+            background-color: #003B7E;
+            color: white;
+            font-weight: bold;
+            font-size: 11pt;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            margin: 16px 0 12px 0;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        /* Subsection label (bold, not a header bar) */
+        .subsection-label {
+            font-weight: bold;
+            font-size: 10pt;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            color: #000;
+        }
+
+        /* Standard Text */
+        p { margin-bottom: 8pt; text-align: justify; }
+
+        /* --- 4. TABLES --- */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 10pt; }
+        td, th { padding: 4px 8px; border: 1px solid #ddd; vertical-align: top; }
+        th { background-color: #f0f0f0; color: #333; font-weight: bold; text-align: left; }
+        .label-col { background-color: #f0f0f0; font-weight: bold; width: 35%; color: #333; }
+        .value-col { width: 65%; }
+        .numeric-cell { text-align: right; font-family: monospace; }
+        .centered-text { text-align: center; }
+
+        /* Blue table section headers */
+        .table-section-header {
+            background-color: #003B7E;
+            color: white;
+            font-weight: bold;
+            font-size: 10pt;
+            text-transform: uppercase;
+            padding: 6px 8px;
+            text-align: left;
+        }
+
+        /* Lists */
+        ol, ul { margin-left: 20px; margin-bottom: 10px; }
+        li { margin-bottom: 6px; text-align: justify; line-height: 1.5; }
+
+        /* --- 5. FIELD MAPPING HIGHLIGHTER --- */
+        .field-mapped {
+            background-color: rgba(255, 255, 0, 0.15);
+            border-bottom: 1px dotted #999;
+            cursor: help;
+            font-weight: inherit;
+            display: inline;
+        }
+        .field-mapped:hover::before {
+            content: attr(title);
+            position: absolute;
+            transform: translateY(-100%);
+            background: #333; color: white;
+            padding: 4px 8px; font-size: 8pt;
+            border-radius: 4px; white-space: nowrap;
+            z-index: 1000;
+        }
+
+        /* --- 6. IMAGES --- */
+        .img-placeholder {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f4f4f4;
+            border: 1px dashed #ccc;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        /* --- 6.5 SPECIAL SECTIONS --- */
+        .definition-block {
+            margin: 10px 0;
+            padding: 8px;
+            background: #f9f9f9;
+            border-left: 2px solid #003B7E;
+        }
+        .definition-block p {
+            margin-bottom: 6px;
+            font-size: 10pt;
+        }
+        .definition-block em {
+            font-style: italic;
+        }
+
+        /* --- 7. FOOTER STYLING (Absolute Position - Always Visible) --- */
+        /* Footer is absolutely positioned at bottom with high z-index.
+           Content CAN overlap footer if too long - this gives VISUAL FEEDBACK.
+           User sees overlap and knows to move content manually.
+        */
+        .page-footer {
+            position: absolute;
+            bottom: 0.75in;
+            left: 0.75in;
+            right: 0.75in;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            font-size: 9pt;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: white; /* Solid background */
+            z-index: 10; /* Always on top */
+        }
+        .footer-accent {
+            width: 60px;
+            height: 10px;
+            background: linear-gradient(to right, #4a9fd8, #003d7a);
+            border-radius: 2px;
+        }
+        .page-num {
+            color: #003B7E;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        /* --- 8. PRINT SETTINGS --- */
+        @media print {
+            body { background-color: white; padding: 0; display: block; }
+            .page-sheet { width: 100%; margin: 0; box-shadow: none; padding: 0.75in; height: 11in; overflow: hidden; }
+            .field-mapped { background-color: transparent; border: none; }
+            .img-placeholder { border: none; background: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-sheet" data-page-num="Page 3">
+        <div
+            style="display:flex; justify-content:space-between; border-bottom:1px solid #e0e0e0; padding-bottom:10px; margin-bottom:20px;">
+            <div>
+                <div style="font-size:18pt; font-weight:bold; color:#003B7E;">VALTA</div>
+                <div style="font-size:9pt; color:#666;">PROPERTY VALUATIONS</div>
+            </div>
+            <div style="text-align:right; font-size:9pt; color:#333;">
+                <b><span class="field-mapped" title="{{Company_Name}}">{{Company_Name}}</span></b><br>
+                <span class="field-mapped" title="{{Company_Address}}">{{Company_Address}}</span><br>
+                <span class="field-mapped" title="{{Company_CityStateZip}}">{{Company_CityStateZip}}</span><br>
+                Office: <span class="field-mapped" title="{{Company_Phone}}">{{Company_Phone}}</span><br>
+                www.valta.ca
+            </div>
+        </div>
+
+        <p><b><span class="field-mapped" title="{{Report_Date}}">{{Report_Date}}</span></b></p>
+
+        <p>
+            <span class="field-mapped" title="{{Client_Company}}">{{Client_Company}}</span><br>
+            <span class="field-mapped" title="{{Client_Address}}">{{Client_Address}}</span><br>
+            <span class="field-mapped" title="{{Client_CityStateZip}}">{{Client_CityStateZip}}</span>
+        </p>
+
+        <p>Attention: <span class="field-mapped" title="{{Client_Name}}">{{Client_Name}}</span></p>
+
+        <p style="margin-top:20px;">
+            <b>Re: <span class="field-mapped" title="{{Report_Values}}">{{Report_Values}}</span> current market value
+                for the property located at <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span>, <span class="field-mapped"
+                    title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped"
+                    title="{{Subject_State}}">{{Subject_State}}</span>.</b>
+        </p>
+
+        <p>
+            Valta Property Valuations Ltd. is proud to present the appraisal report that satisfies the agreed upon scope
+            of work with <span class="field-mapped" title="{{Client_Company}}">{{Client_Company}}</span>. The purpose of
+            this assignment is to provide the <b><span class="field-mapped"
+                    title="{{Report_ValueScenario1}}">{{Report_ValueScenario1}}</span></b> current market value of the
+            property which at the time of inspection represents the improved property.
+        </p>
+
+        <p>
+            <span class="field-mapped" title="{{Subject_IntroComment}}">{{Subject_IntroComment}}</span> <span
+                class="field-mapped" title="{{Subject_EconCharacteristics}}">{{Subject_EconCharacteristics}}</span>
+        </p>
+
+        <div class="Subheader1">MARKET VALUE CONCLUSION</div>
+        <table style="text-align:center;">
+            <tr style="background:#eee; font-weight:bold;">
+                <td>VALUATION SEQUENCE</td>
+                <td>INTEREST</td>
+                <td>EXPOSURE</td>
+                <td>EFFECTIVE DATE</td>
+                <td>VALUE</td>
+            </tr>
+            <tr>
+                <td><span class="field-mapped" title="{{Report_ValueScenario1}}">{{Report_ValueScenario1}}</span></td>
+                <td><span class="field-mapped" title="{{Report_Interest}}">{{Report_Interest}}</span></td>
+                <td><span class="field-mapped" title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span></td>
+                <td><span class="field-mapped" title="{{Report_Date1}}">{{Report_Date1}}</span></td>
+                <td><b><span class="field-mapped" title="{{Report_Values}}">{{Report_Values}}</span></b></td>
+            </tr>
+        </table>
+
+        <div class="Subheader1">Hypothetical Conditions</div>
+        <p style="background-color:#ffffcc; padding:5px; border:1px solid #ddd;">
+            <span class="field-mapped" title="{{Report_Hypothetical}}">{{Report_Hypothetical}}</span>
+        </p>
+
+        <div class="Subheader1">Extraordinary Assumptions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_Extraordinary}}">{{Report_Extraordinary}}</span>
+        </p>
+
+        <div class="page-footer">
+            <div><span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span
+                    class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 4">
+        <div class="Header1" style="border-bottom:none;">Extraordinary Limiting Conditions</div>
+
+        <p>
+            <span class="field-mapped" title="{{Report_LimCond}}">{{Report_LimCond}}</span>
+        </p>
+
+        <p>
+            The report has been completed in accordance with the Canadian Uniform Standards of Professional Appraisal
+            Practice ("CUSPAP"). The full narrative appraisal report that follows sets forth the pertinent data and
+            analyses leading to the conclusions presented herein.
+        </p>
+        <p>
+            If there are any specific questions or concerns regarding the attached appraisal report, or if Valta can be
+            of additional assistance, please contact the individuals listed below.
+        </p>
+
+        <div class="signature-block">
+            <p>Respectfully Submitted,</p>
+            <p><b><span class="field-mapped" title="{{Company_Name}}">{{Company_Name}}</span></b></p>
+
+            <div class="sig-line">
+                [IMAGE: <span class="field-mapped" title="{{Appraiser1_Signature}}">Appraiser1_Signature</span>]
+            </div>
+            <p style="margin-top:5px;">
+                <b><span class="field-mapped" title="{{Appraiser1_Name}}">{{Appraiser1_Name}}</span></b><br>
+                <span class="field-mapped" title="{{Appraiser1_Title}}">{{Appraiser1_Title}}</span><br>
+                <span class="field-mapped" title="{{Appraiser1_Email}}">{{Appraiser1_Email}}</span><br>
+                AIC No: 902097
+            </p>
+        </div>
+
+        <div class="page-footer">
+            <div><span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span
+                    class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 5" style="padding:0; flex-direction:row;">
+        <div
+            style="width:200px; background-color:#1a3a52; padding:60px 30px; color:white; font-size:24pt; font-weight:bold; text-align:center;">
+            Table of<br>Contents
+        </div>
+
+        <div style="flex:1; padding:50px 40px; display:flex; flex-direction:column;">
+            <div style="margin-bottom:20px;">
+                <div
+                    style="color:#1a3a52; border-bottom:1px solid #ccc; padding-bottom:5px; margin-bottom:10px; font-weight:bold;">
+                    Introduction & Executive Summary</div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Property
+                        Overview</span><b>1</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span>Photographs</span><b>4</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Maps</span><b>9</b>
+                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Identification of
+                        Assignment</span><b>12</b></div>
+            </div>
+
+            <div style="margin-bottom:20px;">
+                <div
+                    style="color:#1a3a52; border-bottom:1px solid #ccc; padding-bottom:5px; margin-bottom:10px; font-weight:bold;">
+                    Property Analysis</div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                    <span>Location</span><b>17</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Site
+                        Details</span><b>18</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Property Taxes &
+                        Assessment</span><b>23</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Land Use &
+                        Planning</span><b>24</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Description of
+                        Improvements</span><b>26</b></div>
+            </div>
+
+            <div style="margin-top:auto; font-size:9pt; color:#666; border-top:1px solid #ccc; padding-top:10px;">
+                File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 6">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div class="Header2">Property Overview</div>
+
+        <table>
+            <tr>
+                <td colspan="2" class="table-section-header">PROPERTY IDENTIFICATION</td>
+            </tr>
+            <tr>
+                <td class="label-col">Name</td>
+                <td><span class="field-mapped" title="{{Subject_PropertyName}}">{{Subject_PropertyName}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Property</td>
+                <td><span class="field-mapped" title="{{Subject_Primary}}">{{Subject_Primary}}</span> - <span
+                        class="field-mapped" title="{{Subject_Subtype}}">{{Subject_Subtype}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Address</td>
+                <td><span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">City, State, Zip</td>
+                <td><span class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span>, <span
+                        class="field-mapped" title="{{Subject_State}}">{{Subject_State}}</span> <span
+                        class="field-mapped" title="{{Subject_Zip}}">{{Subject_Zip}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Market / Submarket</td>
+                <td><span class="field-mapped" title="{{Subject_Market}}">{{Subject_Market}}</span> / <span
+                        class="field-mapped" title="{{Subject_Submarket}}">{{Subject_Submarket}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Geocode</td>
+                <td><span class="field-mapped" title="{{Subject_Geocode}}">{{Subject_Geocode}}</span></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="table-section-header">SITE DESCRIPTION</td>
+            </tr>
+            <tr>
+                <td class="label-col">Legal Description</td>
+                <td><span class="field-mapped" title="{{Report_Legal}}">{{Report_Legal}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Usable Area</td>
+                <td><span class="field-mapped" title="{{Subject_UsableSF}}">{{Subject_UsableSF}}</span> SF</td>
+            </tr>
+            <tr>
+                <td class="label-col">Total Area</td>
+                <td><span class="field-mapped" title="{{Subject_TotalSF}}">{{Subject_TotalSF}}</span> SF (<span
+                        class="field-mapped" title="{{Subject_TotalAcre}}">{{Subject_TotalAcre}}</span> AC)</td>
+            </tr>
+            <tr>
+                <td class="label-col">Zoning</td>
+                <td><span class="field-mapped" title="{{Subject_Zoning}}">{{Subject_Zoning}}</span> (<span
+                        class="field-mapped" title="{{Subject_ZoningCode}}">{{Subject_ZoningCode}}</span>)</td>
+            </tr>
+            <tr>
+                <td class="label-col">Shape</td>
+                <td><span class="field-mapped" title="{{Subject_Shape}}">{{Subject_Shape}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Topography</td>
+                <td><span class="field-mapped" title="{{Subject_Topography}}">{{Subject_Topography}}</span></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="table-section-header">IMPROVEMENT DESCRIPTION</td>
+            </tr>
+            <tr>
+                <td class="label-col">Tenancy</td>
+                <td><span class="field-mapped" title="{{Subject_Tenancy}}">{{Subject_Tenancy}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">NRA / GBA</td>
+                <td><span class="field-mapped" title="{{Subject_NRA}}">{{Subject_NRA}}</span> / <span
+                        class="field-mapped" title="{{Subject_GBA}}">{{Subject_GBA}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Units</td>
+                <td><span class="field-mapped" title="{{Subject_Units}}">{{Subject_Units}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Density</td>
+                <td><span class="field-mapped" title="{{Subject_Density}}">{{Subject_Density}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Stories</td>
+                <td><span class="field-mapped" title="{{Subject_Stories}}">{{Subject_Stories}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Year Built</td>
+                <td><span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Amenities</td>
+                <td><span class="field-mapped" title="{{Subject_ProjectAmenities}}">{{Subject_ProjectAmenities}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="table-section-header">QUALITATIVE ANALYSIS</td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Quality</td>
+                <td><span class="field-mapped" title="{{Subject_SiteQuality}}">{{Subject_SiteQuality}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Building Quality</td>
+                <td><span class="field-mapped" title="{{Subject_Quality}}">{{Subject_Quality}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Building Condition</td>
+                <td><span class="field-mapped" title="{{Subject_Condition}}">{{Subject_Condition}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Appeal</td>
+                <td><span class="field-mapped" title="{{Subject_Appeal}}">{{Subject_Appeal}}</span></td>
+            </tr>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">1</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 7">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <table>
+            <tr>
+                <td colspan="2" class="table-section-header">HIGHEST & BEST USE</td>
+            </tr>
+            <tr>
+                <td class="label-col">As Though Vacant</td>
+                <td><span class="field-mapped" title="{{Subject_HBUVacant}}">{{Subject_HBUVacant}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">As Improved</td>
+                <td><span class="field-mapped" title="{{Subject_HBUImproved}}">{{Subject_HBUImproved}}</span></td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <td colspan="2" class="table-section-header">EXPOSURE & MARKETING TIME</td>
+            </tr>
+            <tr>
+                <td class="label-col">Exposure Time</td>
+                <td><span class="field-mapped" title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Marketing Time</td>
+                <td><span class="field-mapped" title="{{Subject_Marketing}}">{{Subject_Marketing}}</span></td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <td colspan="2" class="table-section-header">INVESTMENT INDICATORS</td>
+            </tr>
+            <tr>
+                <td class="label-col">Current Occupancy</td>
+                <td><span class="field-mapped" title="{{Subject_Occupancy}}">{{Subject_Occupancy}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Stabilized Occupancy</td>
+                <td><span class="field-mapped"
+                        title="{{Subject_OccupancyStabilized}}">{{Subject_OccupancyStabilized}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Expense Ratio</td>
+                <td><span class="field-mapped" title="{{IA_DirCap_ExpenseRatio}}">{{IA_DirCap_ExpenseRatio}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Cap Rate (OAR)</td>
+                <td><span class="field-mapped" title="{{IA_DirCap_CapRate1}}">{{IA_DirCap_CapRate1}}</span></td>
+            </tr>
+        </table>
+
+        <div class="Subheader1">VALUE CONCLUSION</div>
+        <table style="border: 2px solid #003B7E;">
+            <tr style="background:#003B7E; color:white; font-weight:bold;">
+                <td>VALUATION SCENARIO</td>
+                <td style="text-align:right;">VALUE</td>
+            </tr>
+            <tr>
+                <td>Cost Approach</td>
+                <td style="text-align:right;"><span class="field-mapped"
+                        title="{{Report_ValuationCost}}">{{Report_ValuationCost}}</span></td>
+            </tr>
+            <tr>
+                <td>Sales Comparison Approach</td>
+                <td style="text-align:right;"><span class="field-mapped"
+                        title="{{Report_ValuationSales}}">{{Report_ValuationSales}}</span></td>
+            </tr>
+            <tr>
+                <td>Income Approach</td>
+                <td style="text-align:right;"><span class="field-mapped"
+                        title="{{Report_ValuationIncome}}">{{Report_ValuationIncome}}</span></td>
+            </tr>
+            <tr style="background:#eee; font-weight:bold; border-top:2px solid #003B7E;">
+                <td>FINAL VALUE CONCLUSION</td>
+                <td style="text-align:right;"><span class="field-mapped"
+                        title="{{Report_Values}}">{{Report_Values}}</span></td>
+            </tr>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">2</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 8">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <div class="Subheader1">Hypothetical Conditions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_Hypothetical}}">{{Report_Hypothetical}}</span>
+        </p>
+
+        <div class="Subheader1">Extraordinary Assumptions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_Extraordinary}}">{{Report_Extraordinary}}</span>
+        </p>
+
+        <div class="Subheader1">Extraordinary Limiting Conditions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_LimCond}}">{{Report_LimCond}}</span>
+        </p>
+
+        <div class="page-footer">
+            <div><span class="page-num">3</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 9">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div class="Header2">Photographs</div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_1}}">Subject_Photo_1</span>]
+                </div>
+                <p style="font-size:10pt;">1101 - East Elevation</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_2}}">Subject_Photo_2</span>]
+                </div>
+                <p style="font-size:10pt;">1101 - West Elevation</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_3}}">Subject_Photo_3</span>]
+                </div>
+                <p style="font-size:10pt;">Street View Facing East</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_4}}">Subject_Photo_4</span>]
+                </div>
+                <p style="font-size:10pt;">Street View Facing North</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_5}}">Subject_Photo_5</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Hallway</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_6}}">Subject_Photo_6</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Stairway</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">4</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 10">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_7}}">Subject_Photo_7</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Bathroom</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_8}}">Subject_Photo_8</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Bedroom 1</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_9}}">Subject_Photo_9</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Bedroom 2</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_10}}">Subject_Photo_10</span>]
+                </div>
+                <p style="font-size:10pt;">Electrical Room</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_11}}">Subject_Photo_11</span>]
+                </div>
+                <p style="font-size:10pt;">Mechanical Room</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_12}}">Subject_Photo_12</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Kitchen</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">5</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 11">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_13}}">Subject_Photo_13</span>]
+                </div>
+                <p style="font-size:10pt;">Living Room</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_14}}">Subject_Photo_14</span>]
+                </div>
+                <p style="font-size:10pt;">West Elevation</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_15}}">Subject_Photo_15</span>]
+                </div>
+                <p style="font-size:10pt;">East Elevation</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_16}}">Subject_Photo_16</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Hallway</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_17}}">Subject_Photo_17</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Stairway</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_18}}">Subject_Photo_18</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Living Room</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">6</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 12">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_19}}">Subject_Photo_19</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Bathroom</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_20}}">Subject_Photo_20</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Kitchen</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_21}}">Subject_Photo_21</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Bedroom</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_22}}">Subject_Photo_22</span>]
+                </div>
+                <p style="font-size:10pt;">Laundry Room</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_23}}">Subject_Photo_23</span>]
+                </div>
+                <p style="font-size:10pt;">Electrical Room</p>
+            </div>
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_24}}">Subject_Photo_24</span>]
+                </div>
+                <p style="font-size:10pt;">Typical Boiler</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">7</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 13">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
+            <div style="text-align:center;">
+                <div class="img-placeholder" style="height:200px;">
+                    [IMAGE: <span class="field-mapped" title="{{Subject_Photo_25}}">Subject_Photo_25</span>]
+                </div>
+                <p style="font-size:10pt;">Utility Room</p>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">8</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 14">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div class="Header2">Maps</div>
+
+        <div class="img-placeholder" style="height: 450px;">
+            [IMAGE: <span class="field-mapped" title="{{Map_Regional}}">Map_Regional</span>]
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">9</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 15">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <div class="img-placeholder" style="height: 500px;">
+            [IMAGE: <span class="field-mapped" title="{{Map_Local}}">Map_Local</span>]
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">10</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 16">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <div class="img-placeholder" style="height: 500px;">
+            [IMAGE: <span class="field-mapped" title="{{Map_Aerial}}">Map_Aerial</span>]
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">11</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 17">
+        <div class="Header1">Introduction & Executive Summary</div>
+        <div class="Header2">Identification of Assignment</div>
+
+        <div class="Subheader1">Property Identification</div>
+        <p>
+            The subject property, located at <span class="field-mapped"
+                title="{{Subject_Street}}">{{Subject_Street}}</span>, <span class="field-mapped"
+                title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped"
+                title="{{Subject_State}}">{{Subject_State}}</span>, is a <span class="field-mapped"
+                title="{{Subject_Primary}}">{{Subject_Primary}}</span>, <span class="field-mapped"
+                title="{{Subject_Subtype}}">{{Subject_Subtype}}</span> property with approximately <span
+                class="field-mapped" title="{{Subject_NRA}}">{{Subject_NRA}}</span> square feet of net rentable area.
+        </p>
+        <p>
+            <span class="field-mapped" title="{{Subject_EconCharacteristics}}">{{Subject_EconCharacteristics}}</span>
+        </p>
+
+        <div class="Subheader1">Legal Description</div>
+        <p>
+            <span class="field-mapped" title="{{Report_Legal}}">{{Report_Legal}}</span>
+        </p>
+
+        <div class="Subheader1">Authorized Client Identification</div>
+        <p>
+            The authorized client of this specific assignment is <span class="field-mapped"
+                title="{{Client_Company}}">{{Client_Company}}</span>.
+        </p>
+
+        <div class="Subheader1">Authorized Use & Authorized Users</div>
+        <p>
+            <span class="field-mapped" title="{{Report_IntendedUse}}">{{Report_IntendedUse}}</span> <span
+                class="field-mapped" title="{{Report_IntendedUser}}">{{Report_IntendedUser}}</span>
+        </p>
+
+        <div class="Subheader1">Effective Date of Value and Report Date</div>
+        <p>
+            The effective date of value of this appraisal is <span class="field-mapped"
+                title="{{Report_Date1}}">{{Report_Date1}}</span>. The report date is <span class="field-mapped"
+                title="{{Report_Date}}">{{Report_Date}}</span>.
+        </p>
+
+        <div class="Subheader1">Inspection Date</div>
+        <p>
+            <span class="field-mapped" title="{{Report_DateInspection}}">{{Report_DateInspection}}</span>
+        </p>
+
+        <div class="Subheader1">Purpose</div>
+        <p>
+            The purpose of this assignment is to provide the <span class="field-mapped"
+                title="{{Report_ValueScenario1}}">{{Report_ValueScenario1}}</span> which at the time of inspection
+            represents the existing improvements assuming stabilized occupancy as of the effective date for the property
+            located at <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>, <span
+                class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped"
+                title="{{Subject_State}}">{{Subject_State}}</span> (herein referred to as the Subject property).
+        </p>
+
+        <div class="Subheader1">Hypothetical Conditions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_Hypothetical}}">{{Report_Hypothetical}}</span>
+        </p>
+
+        <div class="page-footer">
+            <div><span class="page-num">12</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <div class="page-sheet" data-page-num="Page 18">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <div class="Subheader1">Extraordinary Assumptions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_Extraordinary}}">{{Report_Extraordinary}}</span>
+        </p>
+
+        <div class="Subheader1">Extraordinary Limiting Conditions</div>
+        <p>
+            <span class="field-mapped" title="{{Report_LimCond}}">{{Report_LimCond}}</span>
+        </p>
+
+        <div class="Header2">Property And Sales History</div>
+
+        <div class="Subheader1">Current Owner</div>
+        <p>
+            <span class="field-mapped" title="{{Subject_Owner}}">{{Subject_Owner}}</span>
+        </p>
+
+        <div class="Subheader1">Three-Year Sales History</div>
+        <p>
+            <span class="field-mapped" title="{{Subject_SaleHistory}}">{{Subject_SaleHistory}}</span>
+        </p>
+
+        <div class="Header2">Exposure & Marketing Time</div>
+        <p>
+            An estimate of market value is related to the concept of reasonable exposure time... (Standard Boilerplate
+            text about exposure time concepts).
+        </p>
+
+        <p>
+            Noting the subject property's physical, legal, economic and market characteristics, which are described
+            further in this report, we have concluded a reasonable estimate of <b>exposure and marketing time</b> for
+            the subject property to be <span class="field-mapped"
+                title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span>.
+        </p>
+
+        <table>
+            <tr>
+                <td colspan="2" class="table-section-header">EXPOSURE & MARKETING TIME</td>
+            </tr>
+            <tr>
+                <td class="label-col">PROFILE</td>
+                <td class="label-col">AVERAGE</td>
+            </tr>
+            <tr>
+                <td>Exposure Period Conclusion</td>
+                <td><span class="field-mapped" title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span></td>
+            </tr>
+            <tr>
+                <td>Marketing Time Conclusion</td>
+                <td><span class="field-mapped" title="{{Subject_Marketing}}">{{Subject_Marketing}}</span></td>
+            </tr>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">13</span> <span class="field-mapped"
+                    title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped"
+                    title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PAGES 19-25: Property Analysis Section     -->
+    <!-- Added: 2025-12-15 (Agent Batch)            -->
+    <!-- ========================================== -->
+
+    <!-- PAGE 19 -->
+    <div class="page-sheet" data-page-num="Page 19">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <div class="Header2">Definition of Market Value</div>
+        <p>According to the January 1, 2024 version of the Canadian Uniform Standards of Professional Appraisal Practice (CUSPAP), market value is defined as:</p>
+
+        <div class="definition-block">
+            <p><em>"The most probable price, as of a specified date, in cash, or in terms equivalent to cash, or in other precisely revealed terms, for which the specified property rights should sell after reasonable exposure in a competitive market under all conditions requisite to a fair sale, with the buyer and the seller each acting prudently, knowledgeably, and for self-interest, and assuming that neither is under duress."</em></p>
+        </div>
+
+        <p>Implicit in this definition are the consumption of a sale of the specified date and the passing of title from seller to buyer under the following conditions whereby:</p>
+
+        <ol>
+            <li>the seller and buyer are typically motivated;</li>
+            <li>both parties are well informed or well advised, and acting in what they consider their best interests;</li>
+            <li>a reasonable time is allowed for exposure in the open market;</li>
+            <li>payment is made in terms of cash in Canadian dollars or in terms of financial arrangements comparable thereto;</li>
+            <li>the price represents the normal consideration for the property sold unaffected by special or creative financing or sales concessions granted by anyone associated with the sale.</li>
+        </ol>
+
+        <div class="Header2">Property Rights Appraised</div>
+        <p>The property rights appraised constitute the fee simple estate interest.</p>
+
+        <div class="Subheader1">Fee Simple Interest</div>
+        <p>Absolute ownership unencumbered by any other interest or estate, subject only to the limitations imposed by the governmental powers of taxation, eminent domain, police power and escheat. The subject multifamily property is appraised under the fee simple interest, as residential tenancies are typically short-term in nature and do not constitute long-term encumbrances on the estate that would give rise to a leased fee interest.</p>
+
+        <div class="Header2">Value Scenarios</div>
+
+        <div class="Subheader1">Current Value</div>
+        <p>Current Value Opinion refers to an effective date at the time of inspection or, at some other date within a reasonably short period of time from the date of inspection when market conditions have not or are not expected to have changed.</p>
+
+        <div class="Subheader1">Scope of Work</div>
+        <p>The scope of work for this appraisal assignment is outlined below:</p>
+
+        <ul>
+            <li>The appraisal analyzes legal and physical features of the subject including site size, improvement size, site zoning, easements, encumbrances, site access and site exposure.</li>
+            <li>The appraisal includes a market analysis for the North Battleford market and North Battleford submarket using vacancy and rent data. Conclusions were drawn for the subject's competitive position and its physical and locational features, current market conditions and external influences.</li>
+            <li>Research of recent sale and rent comparables. Examined market conditions and analyzed their potential effect on the various properties.</li>
+            <li>The appraisal includes a Highest and Best Use analysis and conclusions have been completed for the highest and best use of the subject property As Though Vacant and As Improved. The analysis considered legal, locational, physical and financial feasibility characteristics of the subject site and existing improvements.</li>
+        </ul>
+
+        <div class="page-footer">
+            <div><span class="page-num">14</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 20 -->
+    <div class="page-sheet" data-page-num="Page 20">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <p>In selecting applicable approaches to value, the appraiser's considered the agreed upon appraisal scope and assessed the applicability of each traditional approach given the subject's characteristics and the intended use of the appraisal. As a result, this appraisal developed Direct Comparison and Income (Direct Capitalization) Approaches. The values presented represent the As Stabilized (see Appraisal Exhibits).</p>
+
+        <p>The assignment was prepared as an Appraisal Report in accordance with CUSPAP, with the analysis stated within the document and representing a fully described scope of analysis.</p>
+
+        <p>The author of this report has the knowledge and experience to complete this assignment competently. The following work was not undertaken as it was not required for credible results within the scope of this appraisal.</p>
+
+        <p>Environmental reports, building condition assessments, and title searches were not reviewed by the appraiser and are assumed to be satisfactory unless otherwise stated.</p>
+
+        <p>The appraiser did not review title documents or legal encumbrances other than zoning information provided by municipal sources.</p>
+
+        <p>No verification of building permits, code compliance, or outstanding orders was undertaken. Rent rolls, leases and operating statements, were accepted as accurate without audit or verification.</p>
+
+        <p>Discussions with market participants were limited to informal inquiries and published sources.</p>
+
+        <p>This appraisal was completed in conformity with the CUSPAP 2024 Appraisal Standard and the Reporting Standard for a Concise Report, which requires inclusion of all relevant information necessary to produce a credible result, summarized in narrative form with supporting detail in the work file.</p>
+
+        <div class="Header2">Assistance Provided</div>
+        <p>Paul Liboiron of Insight Home Inspections Ltd., a member of Alberta Professional Home Inspectors Society provided real property appraisal assistance to the appraisers signing this certification. Assistance provided included property inspection. Paul Liboiron is registered as a non-member with the AIC to provide professional assistance with real property inspection.</p>
+
+        <div class="Header2">Sources of Information</div>
+        <p>The following sources were contacted to obtain relevant information:</p>
+
+        <table>
+            <tr>
+                <td class="label-col">Property Assessment & Tax</td>
+                <td class="value-col">SAMA</td>
+            </tr>
+            <tr>
+                <td class="label-col">Zoning & Land Use Planning</td>
+                <td class="value-col">City of North Battleford Zoning</td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Size</td>
+                <td class="value-col">ICS</td>
+            </tr>
+            <tr>
+                <td class="label-col">Building Size</td>
+                <td class="value-col">Client</td>
+            </tr>
+            <tr>
+                <td class="label-col">Comparable Information</td>
+                <td class="value-col">CoStar | Confirmed by Local Agents</td>
+            </tr>
+            <tr>
+                <td class="label-col">Legal Description</td>
+                <td class="value-col">Client</td>
+            </tr>
+            <tr>
+                <td class="label-col">Rent Roll</td>
+                <td class="value-col">Client</td>
+            </tr>
+            <tr>
+                <td class="label-col">Income/Expense Budget</td>
+                <td class="value-col">Not Provided</td>
+            </tr>
+            <tr>
+                <td class="label-col">Title</td>
+                <td class="value-col">Not Provided</td>
+            </tr>
+            <tr>
+                <td class="label-col">Phase I Environmental Report</td>
+                <td class="value-col">Not Provided</td>
+            </tr>
+            <tr>
+                <td class="label-col">Lease Documents</td>
+                <td class="value-col">Not Provided</td>
+            </tr>
+        </table>
+
+        <p>The lack of the unavailable items could affect the results of this analysis. As part of the general assumptions and limiting conditions, the subject is assumed to have no adverse easements, significant items of deferred maintenance, or be impacted by adverse environmental conditions.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">15</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 21 -->
+    <div class="page-sheet" data-page-num="Page 21">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <div class="Header2">Subject Property Inspection</div>
+
+        <table>
+            <tr>
+                <td class="label-col">Appraiser</td>
+                <td class="value-col"><span class="field-mapped" title="{{Appraiser1_Name}}">{{Appraiser1_Name}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Inspected</td>
+                <td class="value-col">Yes</td>
+            </tr>
+            <tr>
+                <td class="label-col">Extent</td>
+                <td class="value-col">Interior & Exterior</td>
+            </tr>
+            <tr>
+                <td class="label-col">All Units Inspected</td>
+                <td class="value-col">No</td>
+            </tr>
+            <tr>
+                <td class="label-col">Date</td>
+                <td class="value-col"><span class="field-mapped" title="{{Report_InspectionDate}}">{{Report_InspectionDate}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Role</td>
+                <td class="value-col">Primary Appraiser</td>
+            </tr>
+            <tr>
+                <td class="label-col">Inspector</td>
+                <td class="value-col"><span class="field-mapped" title="{{Appraiser2_Name}}">{{Appraiser2_Name}}</span></td>
+            </tr>
+        </table>
+
+        <div class="Header2">Personal Property & Business Intangible</div>
+        <p>There is no personal property (FF&E) included in this valuation. There is not any business or intangible value included in the value conclusion reported here.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">16</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 22 -->
+    <div class="page-sheet" data-page-num="Page 22">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="Header2">Location</div>
+        <p>The subject property is located in North Battleford, Saskatchewan, in a centrally situated residential area near key commercial corridors and the downtown core.</p>
+
+        <div class="Header2">Access</div>
+        <p>The property fronts 109 Street with convenient connections to major arterials including 100th Street/Highway 4 (north-south route to downtown and Highway 16) and Territorial Drive (east-west loop connecting retail and services).</p>
+
+        <div class="Header2">Public Transportation</div>
+        <p>Local bus service operates on nearby corridors such as 100th Street and Territorial Drive, providing direct access to downtown, retail centres, and community facilities.</p>
+
+        <div class="Header2">Walk/Bike/Transit Scores</div>
+        <p>The immediate area offers moderate walkability and cycling potential, with an estimated Walk Score around 60, Transit Score near 35, and Bike Score around 55, reflecting car-optional access for daily needs.</p>
+
+        <div class="Header2">Local Area</div>
+        <p>The neighborhood is a mature urban district with a mix of single-family homes, small multi-unit buildings, and local businesses. Residents are close to grocery, cafes, and parks, with recreation and services clustered along 100th Street and Territorial Drive. The location balances neighborhood livability with quick access to city amenities and employment nodes.</p>
+
+        <div class="Header2">Nearby Schools</div>
+        <ul>
+            <li>Bready School (K-7, public)</li>
+            <li>Connaught School (K-7, public)</li>
+            <li>North Battleford Comprehensive High School (Grades 10-12, public)</li>
+            <li>John Paul II Collegiate (Grades 9-12, Catholic)</li>
+            <li>St. Mary School (K-7, Catholic)</li>
+        </ul>
+
+        <div class="page-footer">
+            <div><span class="page-num">17</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 23 -->
+    <div class="page-sheet" data-page-num="Page 23">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="Header2">Site Details</div>
+
+        <p>The subject property consists of one parcel with a total site area of 24,400 SF (0.56 AC) which is based on information obtained from ICS. For the purposes of this report, we have relied on this site area and reserve the right to amend our analysis upon receipt of a formal legal plan. The following summarizes the salient characteristics of the subject site.</p>
+
+        <table>
+            <tr>
+                <td class="label-col">Address</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Legal Description</td>
+                <td class="value-col"><span class="field-mapped" title="{{Report_Legal}}">{{Report_Legal}}</span></td>
+            </tr>
+            <tr style="background-color: #f0f0f0; font-weight: bold;">
+                <td></td>
+                <td style="text-align: center;">Square Feet</td>
+                <td style="text-align: center;">Acres</td>
+            </tr>
+            <tr>
+                <td class="label-col">Economic Unit (Primary) Site Size</td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_UsableSF}}">{{Subject_UsableSF}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_UsableAcres}}">{{Subject_UsableAcres}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Usable Site Size</td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_UsableSF}}">{{Subject_UsableSF}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_UsableAcres}}">{{Subject_UsableAcres}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Total Land Area</td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_TotalSF}}">{{Subject_TotalSF}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_TotalAcre}}">{{Subject_TotalAcre}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Excess/Surplus Land</td>
+                <td class="value-col" colspan="2">No</td>
+            </tr>
+            <tr>
+                <td class="label-col">Corner</td>
+                <td class="value-col" colspan="2">No</td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Topography</td>
+                <td class="value-col" colspan="2"><span class="field-mapped" title="{{Subject_Topography}}">{{Subject_Topography}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Shape</td>
+                <td class="value-col" colspan="2"><span class="field-mapped" title="{{Subject_Shape}}">{{Subject_Shape}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Grade</td>
+                <td class="value-col" colspan="2">At street grade</td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Quality</td>
+                <td class="value-col" colspan="2"><span class="field-mapped" title="{{Subject_SiteQuality}}">{{Subject_SiteQuality}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Access</td>
+                <td class="value-col" colspan="2">Average</td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Exposure</td>
+                <td class="value-col" colspan="2">Average</td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Utility</td>
+                <td class="value-col" colspan="2">Average</td>
+            </tr>
+            <tr>
+                <td class="label-col">Municipal Services</td>
+                <td class="value-col" colspan="2">Full Municipal Services</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="table-section-header">ADJACENT PROPERTIES</td>
+            </tr>
+            <tr>
+                <td class="label-col">North</td>
+                <td class="value-col">Residential</td>
+            </tr>
+            <tr>
+                <td class="label-col">South</td>
+                <td class="value-col">Residential</td>
+            </tr>
+            <tr>
+                <td class="label-col">East</td>
+                <td class="value-col">Residential</td>
+            </tr>
+            <tr>
+                <td class="label-col">West</td>
+                <td class="value-col">Residential</td>
+            </tr>
+        </table>
+
+        <p><strong>Accessibility:</strong> Access to the subject site is considered average overall.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">18</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 24 -->
+    <div class="page-sheet" data-page-num="Page 24">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="Header2">Access & Frontage</div>
+
+        <table style="margin-bottom: 5px;">
+            <tr>
+                <td colspan="10" class="table-section-header">STREET IMPROVEMENTS</td>
+            </tr>
+            <thead>
+                <tr>
+                    <th>Street</th>
+                    <th>Type</th>
+                    <th>Direction</th>
+                    <th>Lanes</th>
+                    <th>Lit</th>
+                    <th>Curb</th>
+                    <th>Gutter</th>
+                    <th>Sidewalk</th>
+                    <th>Parking</th>
+                    <th>Bike Lane</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>108 Street</td>
+                    <td>Minor arterial</td>
+                    <td>Two-Way</td>
+                    <td class="centered-text">2</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text"></td>
+                    <td class="centered-text"></td>
+                    <td class="centered-text"></td>
+                </tr>
+                <tr>
+                    <td>11 Avenue</td>
+                    <td>Minor arterial</td>
+                    <td>Two-Way</td>
+                    <td class="centered-text">4</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text"></td>
+                    <td class="centered-text"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="margin-bottom: 5px;">
+            <tr>
+                <td colspan="3" class="table-section-header">FRONTAGE</td>
+            </tr>
+            <thead>
+                <tr>
+                    <th>Street</th>
+                    <th>Type</th>
+                    <th>Distance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>108 Street</td>
+                    <td>200 feet</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>11 Avenue</td>
+                    <td>125 feet</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table style="margin-bottom: 5px;">
+            <tr>
+                <td colspan="4" class="table-section-header">TRAFFIC COUNTS</td>
+            </tr>
+            <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Source</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>108 Street</td>
+                    <td class="centered-text">0</td>
+                    <td class="centered-text">Jan-00</td>
+                    <td class="numeric-cell">0</td>
+                </tr>
+                <tr>
+                    <td>11 Avenue</td>
+                    <td class="centered-text">0</td>
+                    <td class="centered-text">Jan-00</td>
+                    <td class="numeric-cell">0</td>
+                </tr>
+                <tr style="font-weight: bold;">
+                    <td>TOTAL</td>
+                    <td></td>
+                    <td></td>
+                    <td class="numeric-cell">0</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">19</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 25 -->
+    <div class="page-sheet" data-page-num="Page 25">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="Header2">Exposure & Visibility</div>
+        <p>Exposure of the subject is average noting frontage on 109 Street & 11 Avenue</p>
+
+        <div class="Header2">Easements</div>
+        <p>A legal opinion regarding title information was not provided or commissioned in conjunction with this assignment. Under the scope of this appraisal, it is assumed that any legal notations and registered charges on the do not adversely affect the highest and best use of the subject property as described herein, unless otherwise noted. If there is any concern on the part of the reader with respect to the status of title, we recommend a legal opinion be obtained. Copy of the subject property deed has been inserted in the appendix to this report if further information is required.</p>
+
+        <div class="Header2">Soils</div>
+        <p>We have not undertaken a detailed soil analysis and we are not qualified to comment on soil conditions. As such, the soils are assumed to be similar to other lands in the area and suitable to drainage qualities and load bearing capacity to support the existing development.</p>
+
+        <div class="Header2">Hazardous Waste</div>
+        <p>Based on a review of the independent investigation to determine the presence or absence of toxins on the subject property, none are present. If questions arise, the reader is strongly cautioned to seek qualified professional assistance in this matter. Please see the Assumptions and Limiting Conditions for a full disclaimer.</p>
+
+        <div class="Header2">Site Rating</div>
+        <p>Overall, the subject site is considered average as a multi-family site in terms of its location, exposure and access to employment, education and shopping centers, based on its location along a minor arterial.</p>
+
+        <div class="Header2">Site Conclusion</div>
+        <p>In conclusion, the site's physical characteristics appear to be supportive of the subject's current use and there were no significant detriments discovered that would inhibit development in accordance with its highest and best use.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">20</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PAGES 26-32: Site Plans, Taxes, Zoning, Improvements -->
+    <!-- Added: 2025-12-15 (Agent Batch)            -->
+    <!-- ========================================== -->
+
+    <!-- PAGE 26 (21) -->
+    <div class="page-sheet" data-page-num="Page 26">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="centered-title">Site Plans - Lot 17</div>
+
+        <div class="img-placeholder">
+            [IMAGE: <span class="field-mapped" title="{{img-site-plan-1}}">img-site-plan-1</span>]<br><br>
+            Property diagram showing subject property (highlighted in red) with boundary lines,<br>
+            adjacent lot numbers, and dimensions
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">21</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 27 (22) -->
+    <div class="page-sheet" data-page-num="Page 27">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="centered-title">Site Plans - Lot 18</div>
+
+        <div class="img-placeholder">
+            [IMAGE: <span class="field-mapped" title="{{img-site-plan-2}}">img-site-plan-2</span>]<br><br>
+            Property site plan showing Lot 18 with cadastral references,<br>
+            property boundaries, and subject property outlined in red with dimensions
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">22</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 28 (23) -->
+    <div class="page-sheet" data-page-num="Page 28">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="Header2">Property Taxes & Assessment</div>
+
+        <table>
+            <tr>
+                <td colspan="5" class="table-section-header">REAL ESTATE TAXES</td>
+            </tr>
+            <thead>
+                <tr>
+                    <th>YEAR</th>
+                    <th>TOTAL ASSESSMENT VALUE</th>
+                    <th>TAX RATE</th>
+                    <th>TAXES</th>
+                    <th>TAXES/SF</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="field-mapped" title="{{Subject_TaxYear}}">{{Subject_TaxYear}}</span></td>
+                    <td><span class="field-mapped" title="{{Subject_TaxAssessment}}">{{Subject_TaxAssessment}}</span></td>
+                    <td><span class="field-mapped" title="{{Subject_TaxRate}}">{{Subject_TaxRate}}</span></td>
+                    <td><span class="field-mapped" title="{{Subject_TaxAmount}}">{{Subject_TaxAmount}}</span></td>
+                    <td><span class="field-mapped" title="{{Subject_TaxPerSF}}">{{Subject_TaxPerSF}}</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>The subject's assessment and taxes are shown in the table above.</p>
+
+        <div class="Header2">Taxation & Assessment Commentary</div>
+        <p>The assessed value is below the value concluded here, a tax assessment appeal is not warranted.</p>
+        <p>The assessed value is lower than our valuation herein. Smaller markets tend to under assess real property assets in comparison to larger markets.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">23</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 29 (24) -->
+    <div class="page-sheet" data-page-num="Page 29">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="Header2">Land Use & Planning</div>
+
+        <p>The subject is located in the <span class="field-mapped" title="{{Subject_ZoningDescription}}">{{Subject_ZoningDescription}}</span> zoning area.</p>
+
+        <table>
+            <tr>
+                <td colspan="2" class="table-section-header">ZONING</td>
+            </tr>
+            <tr>
+                <td class="label-col">Designation</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_Zoning}}">{{Subject_Zoning}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Zoning Authority</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_ZoningAuthority}}">{{Subject_ZoningAuthority}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Permitted Uses</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_PermittedUses}}">{{Subject_PermittedUses}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Current Use</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_Subtype}}">{{Subject_Subtype}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Current Use Legally Permitted</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_LegallyPermitted}}">{{Subject_LegallyPermitted}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Conforming Use</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_ConformingUse}}">{{Subject_ConformingUse}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Conforming Lot</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_ConformingLot}}">{{Subject_ConformingLot}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Zoning Change</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_ZoningChange}}">{{Subject_ZoningChange}}</span></td>
+            </tr>
+        </table>
+
+        <div class="Subheader1">Zoning Conclusion</div>
+        <p>The current use for the subject property is <span class="field-mapped" title="{{Subject_Subtype}}">{{Subject_Subtype}}</span> and is a permitted use based on the current zoning guidelines. <span class="field-mapped" title="{{Subject_ZoningChangeStatus}}">{{Subject_ZoningChangeStatus}}</span>. Based on the foregoing, it appears that the subject's improvements are a legally conforming use of the subject site.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">24</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 30 (25) -->
+    <div class="page-sheet" data-page-num="Page 30">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="centered-title">Zoning Map</div>
+
+        <div class="img-placeholder">
+            [IMAGE: <span class="field-mapped" title="{{img-zoning-map}}">img-zoning-map</span>]<br><br>
+            Zoning/cadastral map of North Battleford showing property parcels<br>
+            with zoning designations (R2, R3, R1, IS, C2) and marked areas of interest
+        </div>
+
+        <div class="page-footer">
+            <div><span class="page-num">25</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 31 (26) -->
+    <div class="page-sheet" data-page-num="Page 31">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="Header2">Description of the Improvements</div>
+
+        <p>The information presented below is a basic description of the existing improvements that are used in the valuation of the property. Reliance is placed on information provided by sources deemed dependable for this analysis. It is assumed that there are no hidden defects, and that all structural components are functional and operational, unless otherwise noted. If questions arise regarding the integrity of the improvements or their operational components, it may be necessary to consult additional professional resources. The sizes are based on the information provided by the client and from public sources.</p>
+
+        <div class="Subheader1">Overview</div>
+        <p>The subject property, located at <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>, is a multi-family, walkup property with improvements located in <span class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span></p>
+
+        <p>The improvements are comprised of <span class="field-mapped" title="{{Subject_Buildings}}">{{Subject_Buildings}}</span> total buildings, and consist of <span class="field-mapped" title="{{Subject_NRA}}">{{Subject_NRA}}</span> square feet of net rentable area (NRA) as of the valuation date. The property, reportedly built in <span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span> (<span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span> weighted) is approximately <span class="field-mapped" title="{{Subject_Occupancy}}">{{Subject_Occupancy}}</span> occupied and features <span class="field-mapped" title="{{Subject_Units}}">{{Subject_Units}}</span> units in a <span class="field-mapped" title="{{Subject_Stories}}">{{Subject_Stories}}</span>-story, garden style format.</p>
+
+        <table>
+            <tr>
+                <td colspan="2" class="table-section-header">PROPERTY TYPE</td>
+            </tr>
+            <tr>
+                <td class="label-col">Tenancy</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_Tenancy}}">{{Subject_Tenancy}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Net Rentable Area (NRA)</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_NRA}}">{{Subject_NRA}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Total Buildings</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_Buildings}}">{{Subject_Buildings}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Density Per Unit (AC)</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_Density}}">{{Subject_Density}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Floors</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_Stories}}">{{Subject_Stories}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Year Built</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span>; (<span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span> weighted)</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="table-section-header">AGE/LIFE ANALYSIS</td>
+            </tr>
+            <tr>
+                <td class="label-col">Actual Age</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_ActualAge}}">{{Subject_ActualAge}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Effective Age</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_EffectiveAge}}">{{Subject_EffectiveAge}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Economic Life</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_EconomicLife}}">{{Subject_EconomicLife}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Remaining Useful Life</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_RemainingLife}}">{{Subject_RemainingLife}}</span></td>
+            </tr>
+            <tr>
+                <td colspan="2" class="table-section-header">BUILDING QUALITY & CONDITION</td>
+            </tr>
+            <tr>
+                <td class="label-col">Overall Building Quality</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_Quality}}">{{Subject_Quality}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Overall Building Condition</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_Condition}}">{{Subject_Condition}}</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Overall Building Appeal</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_Appeal}}">{{Subject_Appeal}}</span></td>
+            </tr>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">26</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 32 (27) -->
+    <div class="page-sheet" data-page-num="Page 32">
+        <div class="Header1">Property Analysis</div>
+
+        <table>
+            <tr>
+                <td colspan="6" class="table-section-header">UNIT MIX</td>
+            </tr>
+            <thead>
+                <tr>
+                    <th>TYPE</th>
+                    <th>DESCRIPTION</th>
+                    <th style="text-align: right;">UNITS</th>
+                    <th style="text-align: right;">% TOT</th>
+                    <th style="text-align: right;">SIZE</th>
+                    <th style="text-align: right;">NRA SF</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Flat 1 Bed / 1 Bath</td>
+                    <td>One Bed/Core Bath</td>
+                    <td class="numeric-cell">4</td>
+                    <td class="numeric-cell">25%</td>
+                    <td class="numeric-cell">550</td>
+                    <td class="numeric-cell">2,200</td>
+                </tr>
+                <tr>
+                    <td>Flat 2 Bed / 1 Bath</td>
+                    <td>Two Bed/Core Bath</td>
+                    <td class="numeric-cell">12</td>
+                    <td class="numeric-cell">75%</td>
+                    <td class="numeric-cell">667</td>
+                    <td class="numeric-cell">8,004</td>
+                </tr>
+                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                    <td colspan="2">TOTAL / AVERAGE</td>
+                    <td class="numeric-cell">16</td>
+                    <td class="numeric-cell">100%</td>
+                    <td class="numeric-cell">638</td>
+                    <td class="numeric-cell">10,204</td>
+                </tr>
+                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                    <td colspan="2">NET RENTABLE AREA</td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{Subject_Units}}">{{Subject_Units}}</span></td>
+                    <td class="numeric-cell"></td>
+                    <td class="numeric-cell">638</td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{Subject_NRA}}">{{Subject_NRA}}</span></td>
+                </tr>
+                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                    <td colspan="2">GROSS BUILDING AREA</td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{Subject_Units}}">{{Subject_Units}}</span></td>
+                    <td class="numeric-cell"></td>
+                    <td class="numeric-cell">638</td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{Subject_GBA}}">{{Subject_GBA}}</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">27</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 33 (numbered 28) -->
+    <div class="page-sheet" data-page-num="Page 33">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="Header2" style="margin-bottom: 4px;">Building Description</div>
+
+        <style>
+            .page-sheet[data-page-num="Page 33"] table td {
+                padding: 2px 4px !important;
+            }
+            .page-sheet[data-page-num="Page 33"] table td.label-col {
+                width: 18% !important;
+            }
+            .page-sheet[data-page-num="Page 33"] table td:not(.label-col) {
+                width: 82% !important;
+            }
+        </style>
+
+        <table style="margin-bottom: 5px; font-size: 9pt;">
+            <colgroup>
+                <col style="width: 18%;">
+                <col style="width: 82%;">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th style="padding: 2px 4px;">COMPONENT</th>
+                    <th style="padding: 2px 4px;">DESCRIPTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label-col">Project Amenities</td>
+                    <td>Guest Parking</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Unit Amenities</td>
+                    <td>Deck/Patio, Range/Stove, Refrigerator</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Laundry</td>
+                    <td>On Site</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Security Features</td>
+                    <td>Deadbolts, Exterior Lighting, Secured Entry</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Foundation</td>
+                    <td>Concrete footings and walls;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Exterior Walls/Framing</td>
+                    <td>1121 - Brick, 1101 Stucco/Wood frame;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Roof</td>
+                    <td>Flat built up membrane;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Elevator</td>
+                    <td>None;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Heating & AC (HVAC)</td>
+                    <td>1101 - 8 Furnaces, 1121 - Boilers with baseboard radiant heat;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Insulation</td>
+                    <td>Fiberglass;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Lighting</td>
+                    <td>Various;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Electrical</td>
+                    <td>Individually metered;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Interior Walls</td>
+                    <td>Painted drywall;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Doors and Windows</td>
+                    <td>Wood interior & metal exterior doors/Vinyl or metal frame double pane glazing;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Ceilings</td>
+                    <td>Textured drywall;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Plumbing</td>
+                    <td>Standard;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Floor Covering</td>
+                    <td>Combination of carpet, tile, vinyl tile and laminate hard wood;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Fire Protection</td>
+                    <td>None;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Interior Finish/Build-Out</td>
+                    <td>Standard rental finishes;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Site Improvements</td>
+                    <td>Gravel parking, sidewalks, and curbs;</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Landscaping</td>
+                    <td>Landscaping around the building perimeter to consist of shrubs and trees. The landscaping as proposed is well established and well maintained.</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Parking</td>
+                    <td>The subject provides 18 parking spaces and is therefore conforming to zoning requirements. The parking ratio of 1.1 per unit is within the typical range of 0.75-1.25 spaces per unit within zoning requirements.</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Site Coverage Ratio</td>
+                    <td>12.9% (3,138 SF footprint / 24,400 SF site), which is within market standards (20-35%) for similar walkup buildings in the area.</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Functional Design</td>
+                    <td>The building features a functional 'Walkup design with typical site coverage and adequate off-street parking.</td>
+                </tr>
+                <tr>
+                    <td class="label-col">Hazardous Materials</td>
+                    <td>A Phase I report was not provided. This appraisal assumes that the improvements are constructed free of all hazardous waste and toxic substances.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">28</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 34 (numbered 29) -->
+    <div class="page-sheet" data-page-num="Page 34">
+        <div class="Header1">Property Analysis</div>
+
+        <p>materials, including (but not limited to) unseen asbestos and mold. Please refer to the Assumptions and Limiting Conditions section regarding this issue.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">29</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 35 (numbered 30) -->
+    <div class="page-sheet" data-page-num="Page 35">
+        <div class="Header1">Market Context</div>
+
+        <div class="Header2">Economic Overviews</div>
+
+        <div class="Subheader1">National</div>
+        <p>Canada's economy in 2025 finds itself in a delicate balance: modest growth, contained inflation, but significant uncertainty from external trade and global energy markets. The Bank of Canada expects real GDP growth to recover toward 1.8% in 2025-2026, after a softer 2024. Inflation is projected to remain close to the 2% target, aided by moderating rent inflation and easing supply pressures. On the positive side, residential investment and housing construction are expected to lead growth, supported by tight rate cuts, pent-up demand, and government incentives for rental construction. Meanwhile, energy and export infrastructure especially pipeline capacity and LNG projects could provide a lift to Canadian exports. However, the risk of U.S. tariffs and a weakening labour market looms as a drag. In sum, Canada's 2025 is expected to be a moderating year, with growth stabilizing, inflation under control, and selective pockets of strength in housing, energy, and exports. The upside hinges on trade resolution and external demand; the downside centers on global turmoil, policy missteps, or weakening domestic demand.</p>
+
+        <div class="Subheader1">Canada Economic Indicators</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Indicator</th>
+                    <th>Estimate</th>
+                    <th>Commentary</th>
+                    <th>Source</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Population (2025)</td>
+                    <td>41.8 million</td>
+                    <td>Population distribution historic, primarily via immigration growth</td>
+                    <td>Statistics Canada</td>
+                </tr>
+                <tr>
+                    <td>Population Growth Rate (2024-25)</td>
+                    <td>1.0-1.8%</td>
+                    <td>Growth slower than historical rates from 2023-2023 as it gets gains</td>
+                    <td>Projections / Statistics Canada</td>
+                </tr>
+                <tr>
+                    <td>Unemployment Rate (2025: YTD)</td>
+                    <td>6.1%</td>
+                    <td>Labour markets have declined from 2023-2023 as weight. Job gains</td>
+                    <td>Labour Force Survey</td>
+                </tr>
+                <tr>
+                    <td>Total GDP (Quarterly)</td>
+                    <td>Q4 2.2-3 trillion</td>
+                    <td>Top 10 global economy ranked [by energy services; projection]</td>
+                    <td>National Accounts</td>
+                </tr>
+                <tr>
+                    <td>Real GDP Growth (YoY, % per annum)</td>
+                    <td>1.8%</td>
+                    <td>Legislative protection from 2024 are antitrust federal economic hikes</td>
+                    <td>Bank of Canada</td>
+                </tr>
+                <tr>
+                    <td>Inflation (YoY, YoYh)</td>
+                    <td>2.1%</td>
+                    <td>Inflation-near target-quarter; Quarter three-year pressures</td>
+                    <td>Bank of Canada</td>
+                </tr>
+                <tr>
+                    <td>Retail / Consumer Spending</td>
+                    <td>$28.1 hundred</td>
+                    <td>Mild and steady and stele-run demand, population-growth</td>
+                    <td>Bank of Canada</td>
+                </tr>
+                <tr>
+                    <td>Housing Starts</td>
+                    <td>6% growth</td>
+                    <td>Historically decline; evident in recent goods [leading with stimulate]</td>
+                    <td>Bank of Canada</td>
+                </tr>
+                <tr>
+                    <td>Business Investment</td>
+                    <td>1-2% growth</td>
+                    <td>Timid productivity-s culture supports; uncertainty long-death</td>
+                    <td>Bank of Canada</td>
+                </tr>
+                <tr>
+                    <td>Energy Benchmark WTI</td>
+                    <td>USD 70-80/bbl</td>
+                    <td>Key driver for home of trade and income</td>
+                    <td>Market data</td>
+                </tr>
+                <tr>
+                    <td>Energy Benchmark WCS</td>
+                    <td>USD 55-65/bbl</td>
+                    <td>Discount to WTI moderate with improved exports</td>
+                    <td>Market data</td>
+                </tr>
+                <tr>
+                    <td>Natural Gas (AECO)</td>
+                    <td>CAD 2-3$/GJ</td>
+                    <td>Normalized after 2022; LNG may firm demand later in decade</td>
+                    <td>Energy market</td>
+                </tr>
+                <tr>
+                    <td>Wits Credit (Western Canada)</td>
+                    <td>6,000-7,000</td>
+                    <td>Robust vs 2019-2020; historic bid by visible prices</td>
+                    <td>Industry outlook</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">30</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 36 (numbered 31) -->
+    <div class="page-sheet" data-page-num="Page 36">
+        <div class="Header1">Market Context</div>
+
+        <div class="Subheader1">Provincial</div>
+        <p>Saskatchewan's economy in 2025 is defined by steady growth, strong resource activity, and an improving housing sector. Real GDP is expanding at a moderate pace, supported by agriculture, potash, and oil production, while inflation has cooled to below 2%, easing cost pressures on households. Investment conditions remain relatively solid, with unemployment near 5.5–6%, and consumer demand is buoyed by wage gains and population growth. Housing starts have surged, reflecting confidence in residential markets and rising construction momentum. On the investment front, resource projects and infrastructure spending provide additional stability, and the province maintains a solid AA credit rating with a balanced budget outlook. Risks remain tied to commodity markets, especially oil prices and global agricultural demand, along with challenges in attracting and retaining skilled labour. In sum, Saskatchewan's 2025 outlook is stable and resource-anchored, with healthy construction activity and moderate inflation, but still exposed to the swings of global markets.</p>
+
+        <div class="Subheader1">Saskatchewan Economic Indicators</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Indicator</th>
+                    <th>Estimate</th>
+                    <th>Commentary</th>
+                    <th>Source</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Population (Apr 2025)</td>
+                    <td>1,230,596</td>
+                    <td>Population: .93% c-o-d at YoY scale / +0.4K</td>
+                    <td>Statistics Bureau of Statistics</td>
+                </tr>
+                <tr>
+                    <td>Population Growth Rate (2024-25)</td>
+                    <td>1.3%</td>
+                    <td>Slide vs good, steady tone</td>
+                    <td>Stat Stats</td>
+                </tr>
+                <tr>
+                    <td>Unemployment Rate (2025 Y1)</td>
+                    <td>5.6%</td>
+                    <td>Stable as labor shortages linger; only work on all of nation</td>
+                    <td>Statistics of Labor; Figure Having</td>
+                </tr>
+                <tr>
+                    <td>Total GDP (per 2024)</td>
+                    <td>CAD 85.3B (JV's YIY)</td>
+                    <td>Abby average 2-3K from growth, solid</td>
+                    <td>Sire of Saskatchewan</td>
+                </tr>
+                <tr>
+                    <td>GDP/capita</td>
+                    <td>69k</td>
+                    <td>Y-3 class province is economy</td>
+                    <td>Stat Can</td>
+                </tr>
+                <tr>
+                    <td>GFCF growth</td>
+                    <td>7.2% (on-x 0.8%)</td>
+                    <td>Zig-zagging gross & n: 1-2 growth</td>
+                    <td>Sire of Saskatchewan</td>
+                </tr>
+                <tr>
+                    <td>Housing Starts (units)</td>
+                    <td>5.8 per (m = 1.3k)</td>
+                    <td>High: price w a 1 at 1</td>
+                    <td>TL is offset based on / (0401)</td>
+                </tr>
+                <tr>
+                    <td>Average Rents</td>
+                    <td>Y 85 sy Zdf 2025 - C$ 2,300</td>
+                    <td>by the avg: a Qty 5 p w 3 build it</td>
+                    <td>QANQ / SMA</td>
+                </tr>
+                <tr>
+                    <td>Average Home Prices</td>
+                    <td>CAD 4 345 YoY Qty 2024</td>
+                    <td>-3.9% yiy, .to-very -Y-o-t-e</td>
+                    <td>Sa-GIN / QNHP</td>
+                </tr>
+                <tr>
+                    <td>MLS/Home Sales</td>
+                    <td>Y 28.0 yes/ is Oiry 26%</td>
+                    <td>High: also all more ref infosystems</td>
+                    <td>MKNN</td>
+                </tr>
+                <tr>
+                    <td>Retail/Inflation (CPI)</td>
+                    <td>27 2% yia 2026</td>
+                    <td>N P on E 1 d of a, bc, is proportionally</td>
+                    <td>Sire of Saskatchewan</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">31</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 37 (numbered 32) -->
+    <div class="page-sheet" data-page-num="Page 37">
+        <div class="Header1">Market Context</div>
+
+        <div class="Header2">Multi-Family Market Overview</div>
+
+        <div class="Subheader1">Saskatchewan</div>
+        <p>Saskatchewan's rental markets entered 2025 with improving balance. Vacancy rates approached 3%, reflecting steady new completions and a cooling influx of migrants. Rents plateaued after outsized 2023–24 gains, with most urban landlords holding rates or offering small concessions. Construction activity remains healthy, supported by government and CMHC financing programs. Affordability remains better than the national average, yet rents signal growing strain among lower-income tenants.</p>
+
+        <div class="Subheader1">Saskatchewan Multifamily Indicators</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>INDICATOR</th>
+                    <th>ESTIMATE</th>
+                    <th>COMMENTARY</th>
+                    <th>SOURCE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Vacancy Rate</td>
+                    <td>3.0%</td>
+                    <td>Rpl | near~dent*769 on city-driven rents and marginal slows.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>Avg Rent - 2-Bed/2Bath</td>
+                    <td>$851</td>
+                    <td>Rents stabilizing, offering contain at leverage.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>Avg Rent - 1-1 Bed</td>
+                    <td>$1,168</td>
+                    <td>Growth Saturating price -1256 in 2024.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>Avg Rent - 3-Bed</td>
+                    <td>$1,398</td>
+                    <td>Mid-run rent growth 0.4-0.6 %.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>Average Rent - 2 Bed</td>
+                    <td>25,848</td>
+                    <td>Larger dw to hold demand due to unsatisfied coordination.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>Rental Rate Growth</td>
+                    <td>+2.5% YoY</td>
+                    <td>Prior—next-Rent' 2025 versus8%.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>New Supply</td>
+                    <td>+1,200 units YoY</td>
+                    <td>Concurrent steady—expanse(s)evelopm in Saskatchewan and Regina.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>Supply Growth Ratio</td>
+                    <td>+3.8% YoY</td>
+                    <td>Outpaced remainder dw to 5 project below added plans.</td>
+                    <td>CMHC</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">32</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 38 (numbered 33) -->
+    <div class="page-sheet" data-page-num="Page 38">
+        <div class="Header1">Valuation & Conclusions</div>
+
+        <div class="Header2">Highest & Best Use</div>
+
+        <div class="Subheader1">Introduction</div>
+        <p>The highest and best use of a property is defined as the legally permissible, physically possible, financially feasible, and maximally productive use that results in the highest value. This analysis serves as the foundation for the valuation process and determines the most reasonable and profitable use of the property to support its maximum present value.</p>
+
+        <p>The analysis is completed through the following four steps:</p>
+
+        <ul>
+            <li>Step 1: Highest and Best Use as Vacant</li>
+            <li>Step 2: Determination of Ideal Improvements</li>
+            <li>Step 3: Highest and Best Use as Proposed</li>
+            <li>Step 4: Final Conclusion</li>
+        </ul>
+
+        <p>This structured approach ensures a comprehensive evaluation of the property, moving from a broad market perspective to a focused determination of its optimal use.</p>
+
+        <p>This section develops the highest and best use of the subject property As Thought Vacant and As Improved.</p>
+
+        <div class="Subheader1">As Though Vacant Analysis</div>
+        <p>In this section the highest and best use of the subject as though vacant is concluded after taking into consideration financial feasibility, maximal productivity, marketability, legal, and physical factors.</p>
+
+        <div class="Subheader1">Legally Permissible</div>
+        <p>Private restrictions, zoning, building codes, historic district controls, and environmental regulations are considered. If applicable to the subject site. The legal factors influencing the highest and best use of the subject site are primarily government regulations such as zoning ordinances. Permitted uses of the subject's Low Density Residential District (R2) zoning include low and medium density residential. A zoning change is not likely, therefore, uses outside of those permitted by the R2 zoning are not considered moving forward in the as though vacant analysis.</p>
+
+        <div class="Subheader1">Physically Possible</div>
+        <p>An evaluation of what is physically possible for the subject site considers physical and locational characteristics that influence its highest and best use. In terms of physical features, the subject site totals 0.5601 acres (24,400 SF). It is rectangular in shape and has a level topography. The site has average exposure and average overall access. There are no physical limitations that would prohibit development of any of the by-right uses on the site.</p>
+
+        <div class="Subheader1">Financial Feasibility</div>
+        <p>Based on the analysis of the subject's market and an examination of costs and investment metrics and real estate market attributes, a multifamily building would likely have a value commensurate with its costs and requisite developer's profit.</p>
+
+        <div class="Subheader1">Maximum Productivity</div>
+        <p>There is only one use that creates value and at the same time conforms to the requirements of the first three tests. Financial feasibility, maximal productivity, marketability, legal, and physical factors have been considered and the highest and best use of the subject site as though vacant and is concluded to be a multifamily use.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">33</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 39 (numbered 34) -->
+    <div class="page-sheet" data-page-num="Page 39">
+        <div class="Header1">Valuation & Conclusions</div>
+
+        <div class="Header2">As Improved Analysis</div>
+        <p>The legal factors influencing the highest and best use of the subject property are primarily governmental regulations such as zoning and building codes. The subject improvements were constructed in 1970 (1970 weighted) and are a legal, conforming use. The physical and locational characteristics of the subject improvements have been previously discussed in this report. The project is of average quality construction and average condition, with adequate site coverage and parking ratios.</p>
+
+        <p>The five possible alternative treatments of the property are redevelopment/demolition (not warranted as the improvements contribute substantial value to the site), expansion (not applicable, no excess or surplus land), renovation (not warranted), conversion (not warranted), and continued use "as-is" (see. Given the underlying market conditions and activity, it appears that the multifamily use is improved-has sufficient degree of financial feasibility.</p>
+
+        <p>Among the five alternative uses, a continuation of the multifamily use is the Highest and Best Use of the subject is As improved.</p>
+
+        <div class="Header2">Most Probable Buyer</div>
+        <p>Based on the type of property and the income generating potential of the improvements, it is our opinion that the most probable buyer for the subject would be a local or regional investor As improved.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">34</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+</body>
+
+</html>

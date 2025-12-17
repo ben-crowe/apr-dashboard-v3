@@ -171,12 +171,62 @@ If you determine a new field ID is needed (not found in templates or Field Manag
 
 ---
 
-## 🏷️ Field Mapping Format
+## 🏷️ Field Mapping Format (CRITICAL - UPDATED DEC 16, 2025)
 
-**Standard format:**
+### ✅ CORRECT Format (With Toggle Support)
+
+**CRITICAL - Use this format for ALL field-mapped spans:**
 ```html
-<span class="field-mapped" title="{{Field_ID}}">{{Field_ID}}</span>
+<span class="field-mapped" data-sample="VALUE" title="{{Field_ID}}">{{Field_ID}}</span>
 ```
+
+**Why This Format:**
+- `textContent` = `{{Field_ID}}` (shows field ID by default)
+- `data-sample` attribute = actual sample value (used by toggle feature)
+- `title` attribute = `{{Field_ID}}` (for reference/tooltip)
+
+**Toggle Mechanism:**
+The PREVIEW-Master.html has a toggle button at the top that switches between:
+- **Toggle OFF (default):** Shows field IDs like `{{Market_Rent_1Bed_Comp1_UnitSize}}`
+- **Toggle ON:** Reads `data-sample` attribute and shows sample data like `650`
+
+**JavaScript reads from data-sample:**
+```javascript
+// Toggle OFF: field.textContent shows "{{Market_Rent_1Bed_Comp1_UnitSize}}"
+// Toggle ON: field.textContent = field.getAttribute('data-sample'); // Shows "650"
+```
+
+### ❌ WRONG Format (DO NOT USE)
+
+**Don't put value as textContent:**
+```html
+<!-- ❌ WRONG - Can't toggle back to field ID -->
+<span class="field-mapped" title="{{Field_ID}}">650</span>
+```
+
+**Don't put field ID in data-sample:**
+```html
+<!-- ❌ WRONG - Backwards, won't work with toggle -->
+<span class="field-mapped" data-sample="{{Field_ID}}" title="{{Field_ID}}">650</span>
+```
+
+### 📋 Real Examples from Pages 40-42
+
+**Market Rent Table (Page 40):**
+```html
+<td class="text-right">
+  <span class="field-mapped" data-sample="650" title="{{Market_Rent_1Bed_Comp1_UnitSize}}">{{Market_Rent_1Bed_Comp1_UnitSize}}</span>
+</td>
+```
+
+**Revenue Table (Page 42):**
+```html
+<td class="text-right">
+  <span class="field-mapped" data-sample="12" title="{{ContractVsMarket_1Bed_Units}}">{{ContractVsMarket_1Bed_Units}}</span>
+</td>
+```
+
+**See Pages 40-42 in PREVIEW-Master.html for verified working examples.**
 
 ### Common Field ID Patterns:
 
@@ -212,6 +262,104 @@ If you determine a new field ID is needed (not found in templates or Field Manag
 2. Use **descriptive names** (e.g., `Market_SupplyTrend`, not `mkt_sup`)
 3. Match existing patterns from pages 3-39
 4. **Check the master field ID document** if unsure
+
+---
+
+## ⚠️ COMMON MISTAKES TO AVOID (Dec 16, 2025)
+
+These mistakes were found during Pages 40-42 fixes. Avoid them:
+
+### ❌ MISTAKE 1: Wrapping Row Labels in field-mapped spans
+
+**WRONG:**
+```html
+<tr>
+  <td><span class="field-mapped" data-sample="1 Flat 1 Bed / 1 Bath" title="{{Label}}">{{Label}}</span></td>
+  <td class="text-right"><span class="field-mapped" data-sample="650" title="{{UnitSize}}">{{UnitSize}}</span></td>
+</tr>
+```
+
+**CORRECT:**
+```html
+<tr>
+  <td>1 Flat 1 Bed / 1 Bath</td>  <!-- First column as plain text -->
+  <td class="text-right"><span class="field-mapped" data-sample="650" title="{{Market_Rent_1Bed_Comp1_UnitSize}}">{{Market_Rent_1Bed_Comp1_UnitSize}}</span></td>
+</tr>
+```
+
+**Why:** Row labels are static text, not dynamic data. Only wrap the actual data values.
+
+---
+
+### ❌ MISTAKE 2: Using Inline Styles Instead of CSS Classes
+
+**WRONG:**
+```html
+<td style="border: 1px solid #ddd; text-align: right; padding: 8px;">650</td>
+```
+
+**CORRECT:**
+```html
+<td class="text-right">650</td>
+```
+
+**Why:** Inline styles override CSS and make tables too wide. Use utility classes:
+- `.text-right` - Right-align text
+- `.bold` - Bold text
+- `.compact-table` - Compact table styling (already applied to `<table>` tag)
+
+---
+
+### ❌ MISTAKE 3: Missing `<tr>` Row Tags
+
+**WRONG:**
+```html
+<tbody>
+  <td>Label</td>
+  <td>Value</td>
+  <td>Label</td>
+  <td>Value</td>
+</tbody>
+```
+
+**CORRECT:**
+```html
+<tbody>
+  <tr>
+    <td>Label</td>
+    <td>Value</td>
+  </tr>
+  <tr>
+    <td>Label</td>
+    <td>Value</td>
+  </tr>
+</tbody>
+```
+
+**Why:** Every set of `<td>` cells must be wrapped in a `<tr>` tag. Tables won't render correctly otherwise.
+
+---
+
+### ❌ MISTAKE 4: Using Obsolete sampleData JavaScript Object
+
+**WRONG:**
+```javascript
+const sampleValue = sampleData[fieldName]; // Obsolete approach
+```
+
+**CORRECT:**
+```javascript
+const sampleValue = field.getAttribute('data-sample'); // Current approach
+```
+
+**Why:** The toggle feature reads directly from the `data-sample` attribute, not from a JavaScript object.
+
+---
+
+### ✅ Reference: See Page-40-Fix-Documentation.md
+
+For complete details on all problems found and how they were fixed, see:
+[`/docs/15-Contract-review/2-Field Management/-passover-sessions/25.12.16-2 - Page-40-Fix-Documentation.md`](../-passover-sessions/25.12.16-2 - Page-40-Fix-Documentation.md)
 
 ---
 
@@ -262,6 +410,45 @@ This workflow ensures consistency, reduces errors, and makes your formatting wor
 - **Agent Guide:** See `AGENT-GUIDE-Page-Formatting.md` for complete page formatting workflow
 - **Field Management README:** See `README.md` in this directory for all field documentation files
 - **Master Field Directory:** See `MASTER-FIELD-DIRECTORY.md` for complete field catalog (7,967 fields)
+- **Page 40-42 Fix Documentation:** See `-passover-sessions/25.12.16-2 - Page-40-Fix-Documentation.md` for detailed fix explanations
+
+---
+
+## 📚 Proven Examples to Reference
+
+**Pages 40-42 are VERIFIED WORKING** and serve as the gold standard for field mapping:
+
+**Location:** `/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/doc-page-html/doc-pages-html-formatted/PREVIEW-Master.html`
+
+**What to look for in these pages:**
+1. **Correct data-sample attribute usage** - All field-mapped spans use the correct format
+2. **Proper table structure** - No inline styles, proper `<tr>` tags, CSS utility classes
+3. **Field naming patterns** - Market rent comparables, revenue tables, statistics tables
+4. **Toggle functionality** - Verified working in browser
+
+**Field Naming Patterns from Pages 40-42:**
+
+**Market Rent Comparables:**
+```
+{{Market_Rent_[1/2]Bed_Comp[1-5]_[UnitSize/RentUnit/RentSF/RentSF_Unadj/NetAdj]}}
+```
+Examples: `{{Market_Rent_1Bed_Comp1_UnitSize}}`, `{{Market_Rent_2Bed_Comp3_RentSF}}`
+
+**Market Rent Statistics:**
+```
+{{Market_Rent_[1/2]Bed_[High/Avg/Med/Low]_[Column]}}
+```
+Examples: `{{Market_Rent_1Bed_High}}`, `{{Market_Rent_2Bed_Avg}}`
+
+**Revenue Tables:**
+```
+{{ContractVsMarket_[UnitType]_[Metric]}}
+{{RentalRevenue_[UnitType]_[Metric]}}
+{{OtherRevenue_[Category]_[Metric]}}
+```
+Examples: `{{ContractVsMarket_1Bed_Units}}`, `{{RentalRevenue_Total_Annual}}`
+
+**When in doubt, reference Pages 40-42 for correct implementation patterns.**
 
 ---
 

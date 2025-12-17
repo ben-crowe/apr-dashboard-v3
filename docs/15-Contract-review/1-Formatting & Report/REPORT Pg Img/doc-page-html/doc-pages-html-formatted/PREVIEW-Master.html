@@ -605,13 +605,6 @@
                     <div style="flex-shrink:0; text-align:right; font-weight:600; color:#0A3D62;">72</div>
                 </div>
             </div>
-
-            <div class="footer">
-                <div class="footer-accent"></div>
-                <div class="footer-content">
-                    File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -3447,27 +3440,27 @@ previewToggle.addEventListener('change', function() {
                     <td class="text-right"><span class="field-mapped" title="{{Revenue_Parking_Total}}" data-sample="$6,000">{{Revenue_Parking_Total}}</span></td>
                     <td class="text-right"><span class="field-mapped" title="{{Revenue_Parking_YTD_Unit}}" data-sample="$375">{{Revenue_Parking_YTD_Unit}}</span></td>
                     <td class="text-right"><span class="field-mapped" title="{{Revenue_Parking_YTD_Pct}}" data-sample="3%">{{Revenue_Parking_YTD_Pct}}</span></td>
-                    <td class="text-right">$6,000</td>
-                    <td class="text-right">$375</td>
-                    <td class="text-right">3%</td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$6,000" title="{{Revenue_Parking_Proj_Total}}">{{Revenue_Parking_Proj_Total}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$375" title="{{Revenue_Parking_Proj_Unit}}">{{Revenue_Parking_Proj_Unit}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="3%" title="{{Revenue_Parking_Proj_Pct}}">{{Revenue_Parking_Proj_Pct}}</span></td>
                 </tr>
                 <tr>
                     <td style="padding-left: 16px;">Laundry</td>
                     <td class="text-right"><span class="field-mapped" title="{{Revenue_Laundry_Total}}" data-sample="$2,400">{{Revenue_Laundry_Total}}</span></td>
                     <td class="text-right"><span class="field-mapped" title="{{Revenue_Laundry_Unit}}" data-sample="$150">{{Revenue_Laundry_Unit}}</span></td>
                     <td class="text-right"><span class="field-mapped" title="{{Revenue_Laundry_YTD_Pct}}" data-sample="1%">{{Revenue_Laundry_YTD_Pct}}</span></td>
-                    <td class="text-right">$2,400</td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$2,400" title="{{Revenue_Laundry_Proj_Total}}">{{Revenue_Laundry_Proj_Total}}</span></td>
                     <td class="text-right"><span class="field-mapped" title="{{Revenue_Laundry_YTD_Unit}}" data-sample="$150">{{Revenue_Laundry_YTD_Unit}}</span></td>
-                    <td class="text-right">1%</td>
+                    <td class="text-right"><span class="field-mapped" data-sample="1%" title="{{Revenue_Laundry_Proj_Pct}}">{{Revenue_Laundry_Proj_Pct}}</span></td>
                 </tr>
                 <tr style="background-color: #e8eef7; font-weight: bold;">
                     <td>TOTAL MISCELLANEOUS REVENUE</td>
                     <td class="text-right"><span class="field-mapped" title="{{Revenue_Misc_YTD_Total}}" data-sample="$8,400">{{Revenue_Misc_YTD_Total}}</span></td>
                     <td class="text-right"><span class="field-mapped" title="{{Revenue_Misc_YTD_Unit}}" data-sample="$525">{{Revenue_Misc_YTD_Unit}}</span></td>
                     <td class="text-right"><span class="field-mapped" title="{{Revenue_Misc_YTD_Pct}}" data-sample="4%">{{Revenue_Misc_YTD_Pct}}</span></td>
-                    <td class="text-right">$8,400</td>
-                    <td class="text-right">$525</td>
-                    <td class="text-right">4%</td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$8,400" title="{{Revenue_Misc_Proj_Total}}">{{Revenue_Misc_Proj_Total}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$525" title="{{Revenue_Misc_Proj_Unit}}">{{Revenue_Misc_Proj_Unit}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="4%" title="{{Revenue_Misc_Proj_Pct}}">{{Revenue_Misc_Proj_Pct}}</span></td>
                 </tr>
                 <tr style="background-color: #e8eef7; font-weight: bold;">
                     <td>POTENTIAL GROSS REVENUE</td>
@@ -3476,7 +3469,7 @@ previewToggle.addEventListener('change', function() {
                     <td class="text-right"><span class="field-mapped" title="{{PGR_YTD_Pct}}" data-sample="100%">{{PGR_YTD_Pct}}</span></td>
                     <td class="text-right"><span class="field-mapped" title="{{PGR_Proj_Total}}" data-sample="$202,800">{{PGR_Proj_Total}}</span></td>
                     <td class="text-right"><span class="field-mapped" title="{{PGR_Proj_Unit}}" data-sample="$12,675">{{PGR_Proj_Unit}}</span></td>
-                    <td class="text-right">100%</td>
+                    <td class="text-right"><span class="field-mapped" data-sample="100%" title="{{PGR_Proj_Pct}}">{{PGR_Proj_Pct}}</span></td>
                 </tr>
                 <tr style="background-color: #e8eef7; font-weight: bold;">
                     <td>ALL VACANCY LOSS</td>
@@ -3494,16 +3487,16 @@ previewToggle.addEventListener('change', function() {
                     <td class="text-right negative"><span class="field-mapped" title="{{Vacancy_YTD_Pct}}" data-sample="(4%)">{{Vacancy_YTD_Pct}}</span></td>
                     <td class="text-right negative"><span class="field-mapped" title="{{Vacancy_Loss_Year}}" data-sample="($7,786)">{{Vacancy_Loss_Year}}</span></td>
                     <td class="text-right negative"><span class="field-mapped" title="{{Vacancy_Proj_Unit}}" data-sample="($487)">{{Vacancy_Proj_Unit}}</span></td>
-                    <td class="text-right negative">(4%)</td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(4%)" title="{{Vacancy_Proj_Pct}}">{{Vacancy_Proj_Pct}}</span></td>
                 </tr>
                 <tr style="background-color: #e8eef7; font-weight: bold;">
                     <td>EFFECTIVE GROSS REVENUE</td>
                     <td class="text-right"><span class="field-mapped" title="{{EGR_YTD_Total}}" data-sample="$195,729">{{EGR_YTD_Total}}</span></td>
                     <td class="text-right"><span class="field-mapped" title="{{EGR_YTD_Unit}}" data-sample="$12,233">{{EGR_YTD_Unit}}</span></td>
-                    <td class="text-right">96%</td>
+                    <td class="text-right"><span class="field-mapped" data-sample="96%" title="{{EGR_YTD_Pct}}">{{EGR_YTD_Pct}}</span></td>
                     <td class="text-right"><span class="field-mapped" title="{{EGR_Proj_Total}}" data-sample="$195,014">{{EGR_Proj_Total}}</span></td>
                     <td class="text-right"><span class="field-mapped" title="{{EGR_Proj_Unit}}" data-sample="$12,188">{{EGR_Proj_Unit}}</span></td>
-                    <td class="text-right">96%</td>
+                    <td class="text-right"><span class="field-mapped" data-sample="96%" title="{{EGR_Proj_Pct}}">{{EGR_Proj_Pct}}</span></td>
                 </tr>
                 <tr style="background-color: #e8eef7; font-weight: bold;">
                     <td>OPERATING EXPENSES</td>
@@ -3518,82 +3511,82 @@ previewToggle.addEventListener('change', function() {
                     <td style="padding-left: 16px;">Taxes</td>
                     <td class="text-right negative"><span class="field-mapped" title="{{OpEx_Taxes_YTD_Total}}" data-sample="($18,600)">{{OpEx_Taxes_YTD_Total}}</span></td>
                     <td class="text-right negative"><span class="field-mapped" title="{{OpEx_Taxes_YTD_Unit}}" data-sample="($1,163)">{{OpEx_Taxes_YTD_Unit}}</span></td>
-                    <td class="text-right negative">(10%)</td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(10%)" title="{{OpEx_Taxes_YTD_Pct}}">{{OpEx_Taxes_YTD_Pct}}</span></td>
                     <td class="text-right negative"><span class="field-mapped" title="{{OpEx_Taxes_Proj_Total}}" data-sample="($19,688)">{{OpEx_Taxes_Proj_Total}}</span></td>
                     <td class="text-right negative"><span class="field-mapped" title="{{OpEx_Taxes_Proj_Unit}}" data-sample="($1,231)">{{OpEx_Taxes_Proj_Unit}}</span></td>
-                    <td class="text-right negative">(10%)</td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(10%)" title="{{OpEx_Taxes_Proj_Pct}}">{{OpEx_Taxes_Proj_Pct}}</span></td>
                 </tr>
                 <tr>
                     <td style="padding-left: 16px;">Insurance</td>
-                    <td class="text-right negative">($11,314)</td>
-                    <td class="text-right negative">($707)</td>
-                    <td class="text-right negative">(6%)</td>
-                    <td class="text-right negative">($11,360)</td>
-                    <td class="text-right negative">($710)</td>
-                    <td class="text-right negative">(6%)</td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($11,314)" title="{{OpEx_Insurance_YTD_Total}}">{{OpEx_Insurance_YTD_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($707)" title="{{OpEx_Insurance_YTD_Unit}}">{{OpEx_Insurance_YTD_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(6%)" title="{{OpEx_Insurance_YTD_Pct}}">{{OpEx_Insurance_YTD_Pct}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($11,360)" title="{{OpEx_Insurance_Proj_Total}}">{{OpEx_Insurance_Proj_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($710)" title="{{OpEx_Insurance_Proj_Unit}}">{{OpEx_Insurance_Proj_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(6%)" title="{{OpEx_Insurance_Proj_Pct}}">{{OpEx_Insurance_Proj_Pct}}</span></td>
                 </tr>
                 <tr>
                     <td style="padding-left: 16px;">Repairs & Maintenance</td>
-                    <td class="text-right negative">($13,280)</td>
-                    <td class="text-right negative">($830)</td>
-                    <td class="text-right negative">(7%)</td>
-                    <td class="text-right negative">($13,280)</td>
-                    <td class="text-right negative">($830)</td>
-                    <td class="text-right negative">(7%)</td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($13,280)" title="{{OpEx_RepairsMaint_YTD_Total}}">{{OpEx_RepairsMaint_YTD_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($830)" title="{{OpEx_RepairsMaint_YTD_Unit}}">{{OpEx_RepairsMaint_YTD_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(7%)" title="{{OpEx_RepairsMaint_YTD_Pct}}">{{OpEx_RepairsMaint_YTD_Pct}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($13,280)" title="{{OpEx_RepairsMaint_Proj_Total}}">{{OpEx_RepairsMaint_Proj_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($830)" title="{{OpEx_RepairsMaint_Proj_Unit}}">{{OpEx_RepairsMaint_Proj_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(7%)" title="{{OpEx_RepairsMaint_Proj_Pct}}">{{OpEx_RepairsMaint_Proj_Pct}}</span></td>
                 </tr>
                 <tr>
                     <td style="padding-left: 16px;">Payroll</td>
-                    <td class="text-right negative">($8,000)</td>
-                    <td class="text-right negative">($500)</td>
-                    <td class="text-right negative">(4%)</td>
-                    <td class="text-right negative">($8,000)</td>
-                    <td class="text-right negative">($500)</td>
-                    <td class="text-right negative">(4%)</td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($8,000)" title="{{OpEx_Payroll_YTD_Total}}">{{OpEx_Payroll_YTD_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($500)" title="{{OpEx_Payroll_YTD_Unit}}">{{OpEx_Payroll_YTD_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(4%)" title="{{OpEx_Payroll_YTD_Pct}}">{{OpEx_Payroll_YTD_Pct}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($8,000)" title="{{OpEx_Payroll_Proj_Total}}">{{OpEx_Payroll_Proj_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($500)" title="{{OpEx_Payroll_Proj_Unit}}">{{OpEx_Payroll_Proj_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(4%)" title="{{OpEx_Payroll_Proj_Pct}}">{{OpEx_Payroll_Proj_Pct}}</span></td>
                 </tr>
                 <tr>
                     <td style="padding-left: 16px;">Utilities</td>
-                    <td class="text-right negative">($23,025)</td>
-                    <td class="text-right negative">($1,439)</td>
-                    <td class="text-right negative">(12%)</td>
-                    <td class="text-right negative">($21,040)</td>
-                    <td class="text-right negative">($1,315)</td>
-                    <td class="text-right negative">(11%)</td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($23,025)" title="{{OpEx_Utilities_YTD_Total}}">{{OpEx_Utilities_YTD_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($1,439)" title="{{OpEx_Utilities_YTD_Unit}}">{{OpEx_Utilities_YTD_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(12%)" title="{{OpEx_Utilities_YTD_Pct}}">{{OpEx_Utilities_YTD_Pct}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($21,040)" title="{{OpEx_Utilities_Proj_Total}}">{{OpEx_Utilities_Proj_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($1,315)" title="{{OpEx_Utilities_Proj_Unit}}">{{OpEx_Utilities_Proj_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(11%)" title="{{OpEx_Utilities_Proj_Pct}}">{{OpEx_Utilities_Proj_Pct}}</span></td>
                 </tr>
                 <tr>
                     <td style="padding-left: 16px;">Management Fees</td>
-                    <td class="text-right negative">($8,301)</td>
-                    <td class="text-right negative">($519)</td>
-                    <td class="text-right negative">(4%)</td>
-                    <td class="text-right negative">($8,281)</td>
-                    <td class="text-right negative">($518)</td>
-                    <td class="text-right negative">(4%)</td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($8,301)" title="{{OpEx_MgmtFees_YTD_Total}}">{{OpEx_MgmtFees_YTD_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($519)" title="{{OpEx_MgmtFees_YTD_Unit}}">{{OpEx_MgmtFees_YTD_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(4%)" title="{{OpEx_MgmtFees_YTD_Pct}}">{{OpEx_MgmtFees_YTD_Pct}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($8,281)" title="{{OpEx_MgmtFees_Proj_Total}}">{{OpEx_MgmtFees_Proj_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($518)" title="{{OpEx_MgmtFees_Proj_Unit}}">{{OpEx_MgmtFees_Proj_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(4%)" title="{{OpEx_MgmtFees_Proj_Pct}}">{{OpEx_MgmtFees_Proj_Pct}}</span></td>
                 </tr>
                 <tr>
                     <td style="padding-left: 16px;">Other Expenses</td>
-                    <td class="text-right negative">($3,908)</td>
-                    <td class="text-right negative">($244)</td>
-                    <td class="text-right negative">(2%)</td>
-                    <td class="text-right negative">($3,920)</td>
-                    <td class="text-right negative">($245)</td>
-                    <td class="text-right negative">(2%)</td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($3,908)" title="{{OpEx_Other_YTD_Total}}">{{OpEx_Other_YTD_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($244)" title="{{OpEx_Other_YTD_Unit}}">{{OpEx_Other_YTD_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(2%)" title="{{OpEx_Other_YTD_Pct}}">{{OpEx_Other_YTD_Pct}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($3,920)" title="{{OpEx_Other_Proj_Total}}">{{OpEx_Other_Proj_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($245)" title="{{OpEx_Other_Proj_Unit}}">{{OpEx_Other_Proj_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(2%)" title="{{OpEx_Other_Proj_Pct}}">{{OpEx_Other_Proj_Pct}}</span></td>
                 </tr>
                 <tr style="background-color: #e8eef7; font-weight: bold;">
                     <td>TOTAL OPERATING EXPENSES</td>
-                    <td class="text-right negative">($86,428)</td>
-                    <td class="text-right negative">($5,402)</td>
-                    <td class="text-right negative">(44%)</td>
-                    <td class="text-right negative">($85,569)</td>
-                    <td class="text-right negative">($5,348)</td>
-                    <td class="text-right negative">(44%)</td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($86,428)" title="{{OpEx_Total_YTD_Total}}">{{OpEx_Total_YTD_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($5,402)" title="{{OpEx_Total_YTD_Unit}}">{{OpEx_Total_YTD_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(44%)" title="{{OpEx_Total_YTD_Pct}}">{{OpEx_Total_YTD_Pct}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($85,569)" title="{{OpEx_Total_Proj_Total}}">{{OpEx_Total_Proj_Total}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="($5,348)" title="{{OpEx_Total_Proj_Unit}}">{{OpEx_Total_Proj_Unit}}</span></td>
+                    <td class="text-right negative"><span class="field-mapped" data-sample="(44%)" title="{{OpEx_Total_Proj_Pct}}">{{OpEx_Total_Proj_Pct}}</span></td>
                 </tr>
                 <tr style="background-color: #d4e6f1; font-weight: bold; font-size: 10pt;">
                     <td>NET OPERATING INCOME</td>
-                    <td class="text-right">$109,301</td>
-                    <td class="text-right">$6,831</td>
-                    <td class="text-right">54%</td>
-                    <td class="text-right">$109,445</td>
-                    <td class="text-right">$6,840</td>
-                    <td class="text-right">54%</td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$109,301" title="{{NOI_YTD_Total}}">{{NOI_YTD_Total}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$6,831" title="{{NOI_YTD_Unit}}">{{NOI_YTD_Unit}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="54%" title="{{NOI_YTD_Pct}}">{{NOI_YTD_Pct}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$109,445" title="{{NOI_Proj_Total}}">{{NOI_Proj_Total}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$6,840" title="{{NOI_Proj_Unit}}">{{NOI_Proj_Unit}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="54%" title="{{NOI_Proj_Pct}}">{{NOI_Proj_Pct}}</span></td>
                 </tr>
             </tbody>
         </table>

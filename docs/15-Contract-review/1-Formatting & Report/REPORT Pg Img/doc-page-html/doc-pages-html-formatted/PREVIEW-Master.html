@@ -4348,276 +4348,113 @@ previewToggle.addEventListener('change', function() {
         </div>
     </div>
 
-    <!-- ============================================ -->
-    <!-- PAGE 58 (Report Page 53): Comparable 5 -->
+        <!-- ============================================ -->
+    <!-- PAGE 58 (Report Page 53): Comparables Location Map -->
     <!-- ============================================ -->
     <style>
-        /* Page 53 - Comparable 5 - Compressed spacing to prevent footer overflow */
+        /* Page 53 - Comparables Location Map */
         .page-sheet[data-page-num="Page 53"] {
             padding-bottom: 180px;
         }
 
         .page-sheet[data-page-num="Page 53"] h1.Header1 {
             font-size: 18pt;
-            margin-bottom: 6px;
+            margin-bottom: 12px;
         }
 
-        .page-sheet[data-page-num="Page 53"] h2.Header2 {
-            font-size: 13pt;
-            text-align: center;
-            margin-bottom: 8px;
-        }
-
-        .page-sheet[data-page-num="Page 53"] h3.Subheader1 {
+        .page-sheet[data-page-num="Page 53"] .map-container {
+            width: 100%;
+            height: 650px;
+            background-color: #e8f4f8;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
             font-size: 10pt;
-            margin-top: 8px;
-            margin-bottom: 4px;
+            margin-bottom: 12px;
         }
 
-        .page-sheet[data-page-num="Page 53"] p {
+        .page-sheet[data-page-num="Page 53"] table.comparables-list {
+            width: 100%;
+            border-collapse: collapse;
             font-size: 8pt;
-            line-height: 1.3;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
-        /* Reduce gap in photo + sale info flex container */
-        .page-sheet[data-page-num="Page 53"] > div:first-of-type {
-            gap: 12px !important;
-            margin-bottom: 8px !important;
+        .page-sheet[data-page-num="Page 53"] table.comparables-list th {
+            background-color: #003B7E;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+            text-align: left;
+            border: 1px solid #003B7E;
         }
 
-        /* Photo placeholder - reduce height */
-        .page-sheet[data-page-num="Page 53"] > div:first-of-type > div:first-child {
-            height: 180px !important;
-        }
-
-        /* Compact table styling */
-        .page-sheet[data-page-num="Page 53"] table.compact-table {
-            font-size: 7pt;
-            margin-bottom: 8px;
-        }
-
-        .page-sheet[data-page-num="Page 53"] table.compact-table th {
-            padding: 3px 4px;
-            font-size: 8pt;
-        }
-
-        .page-sheet[data-page-num="Page 53"] table.compact-table td {
-            padding: 2px 4px;
+        .page-sheet[data-page-num="Page 53"] table.comparables-list td {
+            padding: 3px 6px;
+            border: 1px solid #ddd;
+            vertical-align: top;
             line-height: 1.3;
         }
 
-        .page-sheet[data-page-num="Page 53"] table.compact-table .label-col {
-            padding: 2px 4px;
-        }
-
-        .page-sheet[data-page-num="Page 53"] table.compact-table .numeric-cell {
-            padding: 2px 4px;
+        .page-sheet[data-page-num="Page 53"] table.comparables-list td:first-child {
+            font-weight: 600;
+            width: 20%;
         }
     </style>
 
     <div class="page-sheet" data-page-num="Page 53">
         <h1 class="Header1">Valuation & Conclusions</h1>
 
-        <h2 class="Header2">Comparable 5</h2>
-
-        <div style="display: flex; gap: 20px; margin-bottom: 20px;">
-            <!-- Property Photo Placeholder -->
-            <div style="flex: 0 0 300px; height: 200px; background: #f0f0f0; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; color: #666;">
-                <span>No photo available</span>
-            </div>
-
-            <!-- Sale Information Table -->
-            <div style="flex: 1;">
-                <table class="compact-table">
-                    <thead>
-                        <tr>
-                            <th colspan="2" class="table-section-header">Sale Information</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="label-col">Buyer</td>
-                            <td><span class="field-mapped" title="{{Comp5_Buyer}}" data-sample="600342 Ontario Inc.">{{Comp5_Buyer}}</span></td>
-                        </tr>
-                        <tr>
-                            <td class="label-col">Seller</td>
-                            <td><span class="field-mapped" title="{{Comp5_Seller}}" data-sample="101300036 Saskatchewan Ltd.">{{Comp5_Seller}}</span></td>
-                        </tr>
-                        <tr>
-                            <td class="label-col">Sale Date</td>
-                            <td><span class="field-mapped" title="{{Comp5_Sale_Date}}" data-sample="2023-05-19">{{Comp5_Sale_Date}}</span></td>
-                        </tr>
-                        <tr>
-                            <td class="label-col">Transaction Status</td>
-                            <td><span class="field-mapped" title="{{Comp5_Transaction_Status}}" data-sample="Closed">{{Comp5_Transaction_Status}}</span></td>
-                        </tr>
-                        <tr>
-                            <td class="label-col">Recording Number</td>
-                            <td><span class="field-mapped" title="{{Comp5_Recording_Number}}" data-sample="156498452">{{Comp5_Recording_Number}}</span></td>
-                        </tr>
-                        <tr>
-                            <td class="label-col">Rights Transferred</td>
-                            <td><span class="field-mapped" title="{{Comp5_Rights_Transferred}}" data-sample="Fee Simple">{{Comp5_Rights_Transferred}}</span></td>
-                        </tr>
-                        <tr>
-                            <td class="label-col">Financing</td>
-                            <td><span class="field-mapped" title="{{Comp5_Financing}}" data-sample="Cash to Seller">{{Comp5_Financing}}</span></td>
-                        </tr>
-                        <tr>
-                            <td class="label-col">Conditions of Sale</td>
-                            <td><span class="field-mapped" title="{{Comp5_Conditions}}" data-sample="Arm's Length">{{Comp5_Conditions}}</span></td>
-                        </tr>
-                        <tr style="background-color: #f0f0f0; font-weight: bold;">
-                            <td class="label-col">Sale Price</td>
-                            <td><span class="field-mapped" title="{{Comp5_Sale_Price}}" data-sample="$13,720,000">{{Comp5_Sale_Price}}</span> | <span class="field-mapped" title="{{Comp5_Price_Per_Unit}}" data-sample="$214,375">{{Comp5_Price_Per_Unit}}</span>/Unit</td>
-                        </tr>
-                        <tr style="background-color: #f0f0f0; font-weight: bold;">
-                            <td class="label-col">Analysis Price</td>
-                            <td><span class="field-mapped" title="{{Comp5_Analysis_Price}}" data-sample="$13,720,000">{{Comp5_Analysis_Price}}</span> | <span class="field-mapped" title="{{Comp5_Analysis_Price_Per_Unit}}" data-sample="$214,375">{{Comp5_Analysis_Price_Per_Unit}}</span>/Unit</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        <!-- Map Image Placeholder -->
+        <div class="map-container">
+            <span class="field-mapped" title="{{ComparablesMap}}" data-sample="[Comparables Location Map]">{{ComparablesMap}}</span>
         </div>
 
-        <!-- Property Details Table -->
-        <table class="compact-table">
+        <!-- Comparables List Table -->
+        <table class="comparables-list">
             <thead>
                 <tr>
-                    <th colspan="4" class="table-section-header">Property</th>
+                    <th>Property</th>
+                    <th>Label</th>
+                    <th>Address</th>
+                    <th>Distance from Subject</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td class="label-col">Type</td>
-                    <td colspan="3"><span class="field-mapped" title="{{Comp5_Property_Type}}" data-sample="Multi-Family, Low-Rise">{{Comp5_Property_Type}}</span></td>
+                    <td>COMPARABLE 1</td>
+                    <td><span class="field-mapped" title="{{Comp1_Label}}" data-sample="1">{{Comp1_Label}}</span></td>
+                    <td><span class="field-mapped" title="{{Comp1_Address_Full}}" data-sample="1551-107 St, North Battleford, SK, S9A 2A1">{{Comp1_Address_Full}}</span></td>
+                    <td><span class="field-mapped" title="{{Comp1_Distance}}" data-sample="0.3">{{Comp1_Distance}}</span></td>
                 </tr>
                 <tr>
-                    <td class="label-col">Address</td>
-                    <td colspan="3"><span class="field-mapped" title="{{Comp5_Address}}" data-sample="1030 Parr Hill Dr, Martensville, SK S0K 2T1">{{Comp5_Address}}</span></td>
+                    <td>COMPARABLE 2</td>
+                    <td><span class="field-mapped" title="{{Comp2_Label}}" data-sample="2">{{Comp2_Label}}</span></td>
+                    <td><span class="field-mapped" title="{{Comp2_Address_Full}}" data-sample="1501/5-1091/5 Windsor Crescent, North Battleford, SK, S9A 2G3">{{Comp2_Address_Full}}</span></td>
+                    <td><span class="field-mapped" title="{{Comp2_Distance}}" data-sample="2.8">{{Comp2_Distance}}</span></td>
                 </tr>
                 <tr>
-                    <td class="label-col">Rent Type</td>
-                    <td><span class="field-mapped" title="{{Comp5_Rent_Type}}" data-sample="Market">{{Comp5_Rent_Type}}</span></td>
-                    <td class="label-col">Units</td>
-                    <td><span class="field-mapped" title="{{Comp5_Units}}" data-sample="64">{{Comp5_Units}}</span></td>
+                    <td>COMPARABLE 3</td>
+                    <td><span class="field-mapped" title="{{Comp3_Label}}" data-sample="3">{{Comp3_Label}}</span></td>
+                    <td><span class="field-mapped" title="{{Comp3_Address_Full}}" data-sample="1001 Pearson Ave, North Battleford, SK, S9A 3L5">{{Comp3_Address_Full}}</span></td>
+                    <td><span class="field-mapped" title="{{Comp3_Distance}}" data-sample="1.3">{{Comp3_Distance}}</span></td>
                 </tr>
                 <tr>
-                    <td class="label-col">Gross Building Area (GBA)</td>
-                    <td><span class="field-mapped" title="{{Comp5_GBA}}" data-sample="52,708 SF">{{Comp5_GBA}}</span></td>
-                    <td class="label-col">Buildings</td>
-                    <td><span class="field-mapped" title="{{Comp5_Buildings}}" data-sample="1 Building">{{Comp5_Buildings}}</span></td>
+                    <td>COMPARABLE 4</td>
+                    <td><span class="field-mapped" title="{{Comp4_Label}}" data-sample="4">{{Comp4_Label}}</span></td>
+                    <td><span class="field-mapped" title="{{Comp4_Address_Full}}" data-sample="1000 Star Hill Dr, Martensville, SK, S0K 2T1">{{Comp4_Address_Full}}</span></td>
+                    <td><span class="field-mapped" title="{{Comp4_Distance}}" data-sample="123.3">{{Comp4_Distance}}</span></td>
                 </tr>
                 <tr>
-                    <td class="label-col">Net Rentable Area (NRA)</td>
-                    <td><span class="field-mapped" title="{{Comp5_NRA}}" data-sample="52,708 SF">{{Comp5_NRA}}</span></td>
-                    <td class="label-col">Year Built</td>
-                    <td><span class="field-mapped" title="{{Comp5_Year_Built}}" data-sample="2019">{{Comp5_Year_Built}}</span></td>
-                </tr>
-                <tr>
-                    <td class="label-col">Land Area</td>
-                    <td><span class="field-mapped" title="{{Comp5_Land_Area}}" data-sample="1.21 Acres (52,708 SF)">{{Comp5_Land_Area}}</span></td>
-                    <td class="label-col">County</td>
-                    <td><span class="field-mapped" title="{{Comp5_County}}" data-sample="Corman Park No. 344">{{Comp5_County}}</span></td>
-                </tr>
-                <tr>
-                    <td class="label-col">Zoning</td>
-                    <td><span class="field-mapped" title="{{Comp5_Zoning}}" data-sample="R3">{{Comp5_Zoning}}</span></td>
-                    <td class="label-col">Corner</td>
-                    <td><span class="field-mapped" title="{{Comp5_Corner}}" data-sample="No">{{Comp5_Corner}}</span></td>
-                </tr>
-                <tr>
-                    <td class="label-col">Project Amenities</td>
-                    <td colspan="3"><span class="field-mapped" title="{{Comp5_Project_Amenities}}" data-sample="Elevators, Guest Parking, Storage Units">{{Comp5_Project_Amenities}}</span></td>
-                </tr>
-                <tr>
-                    <td class="label-col">Security Features</td>
-                    <td colspan="3"><span class="field-mapped" title="{{Comp5_Security}}" data-sample="Cameras, Deadbolts, Exterior Lighting, Secured Entry">{{Comp5_Security}}</span></td>
-                </tr>
-                <tr>
-                    <td class="label-col">Laundry</td>
-                    <td><span class="field-mapped" title="{{Comp5_Laundry}}" data-sample="Washer/Dryer">{{Comp5_Laundry}}</span></td>
-                    <td class="label-col">Parking Type</td>
-                    <td><span class="field-mapped" title="{{Comp5_Parking}}" data-sample="Surface">{{Comp5_Parking}}</span></td>
-                </tr>
-                <tr>
-                    <td class="label-col">Unit Amenities</td>
-                    <td colspan="3"><span class="field-mapped" title="{{Comp5_Unit_Amenities}}" data-sample="Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring, Walk-in Closets">{{Comp5_Unit_Amenities}}</span></td>
-                </tr>
-                <tr>
-                    <td class="label-col">Utilities</td>
-                    <td colspan="3"><span class="field-mapped" title="{{Comp5_Utilities}}" data-sample="Full Municipal Services">{{Comp5_Utilities}}</span></td>
+                    <td>COMPARABLE 5</td>
+                    <td><span class="field-mapped" title="{{Comp5_Label}}" data-sample="5">{{Comp5_Label}}</span></td>
+                    <td><span class="field-mapped" title="{{Comp5_Address_Full}}" data-sample="1030 Parr Hill Dr, Martensville, SK, S0K 2T1">{{Comp5_Address_Full}}</span></td>
+                    <td><span class="field-mapped" title="{{Comp5_Distance}}" data-sample="123.3">{{Comp5_Distance}}</span></td>
                 </tr>
             </tbody>
         </table>
-
-        <!-- Unit Mix Table -->
-        <table class="compact-table">
-            <thead>
-                <tr>
-                    <th colspan="3" class="table-section-header">Unit Mix</th>
-                </tr>
-                <tr>
-                    <th>Type</th>
-                    <th>Units</th>
-                    <th>Avg. Size</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Flat - 1 Bed / 0 Bath</td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{Comp5_1Bed_Units}}" data-sample="20">{{Comp5_1Bed_Units}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{Comp5_1Bed_Size}}" data-sample="0 SF">{{Comp5_1Bed_Size}}</span></td>
-                </tr>
-                <tr>
-                    <td>Flat - 2 Bed / 0 Bath</td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{Comp5_2Bed_Units}}" data-sample="29">{{Comp5_2Bed_Units}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{Comp5_2Bed_Size}}" data-sample="0 SF">{{Comp5_2Bed_Size}}</span></td>
-                </tr>
-                <tr>
-                    <td>Flat - 3 Bed / 0 Bath</td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{Comp5_3Bed_Units}}" data-sample="15">{{Comp5_3Bed_Units}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{Comp5_3Bed_Size}}" data-sample="0 SF">{{Comp5_3Bed_Size}}</span></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- Income Analysis Table -->
-        <table class="compact-table">
-            <thead>
-                <tr>
-                    <th colspan="3" class="table-section-header">Income Analysis</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="label-col">Occupancy</td>
-                    <td colspan="2" class="numeric-cell"><span class="field-mapped" title="{{Comp5_Occupancy}}" data-sample="100.0%">{{Comp5_Occupancy}}</span></td>
-                </tr>
-                <tr>
-                    <td class="label-col">Expenses</td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{Comp5_Expenses}}" data-sample="($322,715)">{{Comp5_Expenses}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{Comp5_Expenses_Per_Unit}}" data-sample="($5,042.42)">{{Comp5_Expenses_Per_Unit}}</span>/Unit</td>
-                </tr>
-                <tr>
-                    <td class="label-col">Net Operating Income</td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{Comp5_NOI}}" data-sample="$811,585">{{Comp5_NOI}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{Comp5_NOI_Per_Unit}}" data-sample="$12,681.02">{{Comp5_NOI_Per_Unit}}</span>/Unit</td>
-                </tr>
-                <tr style="background-color: #f0f0f0; font-weight: bold;">
-                    <td class="label-col">Cap Rate</td>
-                    <td colspan="2" class="numeric-cell"><span class="field-mapped" title="{{Comp5_CapRate}}" data-sample="5.92%">{{Comp5_CapRate}}</span></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- Remarks -->
-        <h3 class="Subheader1">Remarks</h3>
-        <p>Parkside Flats 2, a 64-unit multifamily property located at 1030 Parr Hill Drive in Martensville, Saskatchewan, sold in May 2023 for $13,720,000, reflecting a price per unit of $214,375. The property was purchased by 600342 Ontario Inc. from 101300036 Saskatchewan Ltd. in an arm's-length, cash-to-seller transaction. Completed in 2019, this wood-frame apartment building features a unit mix of 20 one-bedroom, 29 two-bedroom, and 15 three-bedroom suites. Each unit includes in-suite laundry and modern interior finishes, with a combination of surface and underground parking. Parkside Flats 2 generated an estimated net operating income of $811,585, equating to a capitalization rate of 5.92%. The transaction was part of a portfolio acquisition involving two additional multifamily properties.</p>
-
-        <h3 class="Subheader1">Analysis of Comparable Sales</h3>
-        <p>The comparable sales indicate an overall unadjusted unit value range from $85,627/Unit to $214,375/Unit, and an average of $145,999/Unit. After adjustments, the comparables indicate a narrower range for the subject property from $111,914/Unit to $118,100/Unit, and $115,981/Unit on average. The adjustment process is summarized below.</p>
 
         <div class="page-footer">
             <div>
@@ -4628,7 +4465,6 @@ previewToggle.addEventListener('change', function() {
         </div>
     </div>
 
-    <!-- ============================================ -->
     <!-- PAGE 59 (Report Page 54): Comparable Sales Adjustment Grid -->
     <!-- ============================================ -->
         <!-- ============================================ -->

@@ -312,6 +312,175 @@ td, th {
 
 ---
 
+## 📊 TABLE FORMATTING BEST PRACTICES (Dec 16, 2025)
+
+**Based on verified working examples from Pages 40-42**
+
+### ✅ CORRECT Table Structure with Field Mapping
+
+**Market Rent Comparables Table (Page 40 Pattern):**
+```html
+<table class="compact-table">
+  <thead>
+    <tr>
+      <th>Unit Type</th>
+      <th class="text-right">Unit Size (SF)</th>
+      <th class="text-right">Rent/Unit</th>
+      <th class="text-right">Rent/SF</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1 Flat 1 Bed / 1 Bath</td>  <!-- Row label - plain text, NOT field-mapped -->
+      <td class="text-right">
+        <span class="field-mapped" data-sample="650" title="{{Market_Rent_1Bed_Comp1_UnitSize}}">{{Market_Rent_1Bed_Comp1_UnitSize}}</span>
+      </td>
+      <td class="text-right">
+        <span class="field-mapped" data-sample="$1,200" title="{{Market_Rent_1Bed_Comp1_RentUnit}}">{{Market_Rent_1Bed_Comp1_RentUnit}}</span>
+      </td>
+      <td class="text-right">
+        <span class="field-mapped" data-sample="$1.85" title="{{Market_Rent_1Bed_Comp1_RentSF}}">{{Market_Rent_1Bed_Comp1_RentSF}}</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+```
+
+**Revenue Summary Table (Page 42 Pattern):**
+```html
+<table class="compact-table">
+  <thead>
+    <tr>
+      <th>Unit Type</th>
+      <th class="text-right">Units</th>
+      <th class="text-right">Contract Rent</th>
+      <th class="text-right">Market Rent</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1 Bedroom</td>  <!-- Static label -->
+      <td class="text-right">
+        <span class="field-mapped" data-sample="12" title="{{ContractVsMarket_1Bed_Units}}">{{ContractVsMarket_1Bed_Units}}</span>
+      </td>
+      <td class="text-right">
+        <span class="field-mapped" data-sample="$14,400" title="{{ContractVsMarket_1Bed_Contract}}">{{ContractVsMarket_1Bed_Contract}}</span>
+      </td>
+      <td class="text-right">
+        <span class="field-mapped" data-sample="$15,600" title="{{ContractVsMarket_1Bed_Market}}">{{ContractVsMarket_1Bed_Market}}</span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+```
+
+### 🎨 CSS Utility Classes for Tables
+
+**Use these CSS classes instead of inline styles:**
+
+```css
+.text-right     /* Right-align text and numbers */
+.bold           /* Bold text */
+.compact-table  /* Apply to <table> tag for compact spacing */
+```
+
+**Example:**
+```html
+<table class="compact-table">  <!-- ✅ Use class, not inline style -->
+  <tr>
+    <td>Label</td>
+    <td class="text-right">  <!-- ✅ Use class, not style="text-align: right;" -->
+      <span class="field-mapped" data-sample="650" title="{{Field_ID}}">{{Field_ID}}</span>
+    </td>
+  </tr>
+</table>
+```
+
+### ⚠️ Common Table Formatting Mistakes
+
+**MISTAKE 1: Using Inline Styles**
+```html
+<!-- ❌ WRONG - Inline styles make tables too wide -->
+<td style="border: 1px solid #ddd; text-align: right; padding: 8px;">650</td>
+
+<!-- ✅ CORRECT - Use CSS classes -->
+<td class="text-right">650</td>
+```
+
+**MISTAKE 2: Wrapping Row Labels in field-mapped spans**
+```html
+<!-- ❌ WRONG - First column should be plain text -->
+<tr>
+  <td><span class="field-mapped" data-sample="1 Bedroom" title="{{Label}}">{{Label}}</span></td>
+  <td class="text-right"><span class="field-mapped"...>...</span></td>
+</tr>
+
+<!-- ✅ CORRECT - Only wrap dynamic data values -->
+<tr>
+  <td>1 Bedroom</td>  <!-- Static label -->
+  <td class="text-right"><span class="field-mapped" data-sample="12" title="{{Units}}">{{Units}}</span></td>
+</tr>
+```
+
+**MISTAKE 3: Missing `<tr>` Row Tags**
+```html
+<!-- ❌ WRONG - Cells not wrapped in rows -->
+<tbody>
+  <td>Label</td>
+  <td>Value</td>
+</tbody>
+
+<!-- ✅ CORRECT - Every set of <td> cells needs <tr> wrapper -->
+<tbody>
+  <tr>
+    <td>Label</td>
+    <td>Value</td>
+  </tr>
+</tbody>
+```
+
+**MISTAKE 4: Wrong data-sample Format**
+```html
+<!-- ❌ WRONG - Value as textContent, can't toggle back -->
+<span class="field-mapped" title="{{Field_ID}}">650</span>
+
+<!-- ✅ CORRECT - Field ID as textContent, value in data-sample -->
+<span class="field-mapped" data-sample="650" title="{{Field_ID}}">{{Field_ID}}</span>
+```
+
+### 📋 Table Field Mapping Workflow
+
+**Step-by-step for creating tables with field mapping:**
+
+1. **Create table structure** with proper `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<td>` tags
+2. **Add .compact-table class** to `<table>` tag
+3. **Identify static vs dynamic content:**
+   - Row labels (first column) = Static text
+   - Data values (other columns) = Dynamic, need field-mapped spans
+4. **Add .text-right class** to numeric/currency columns
+5. **Wrap dynamic values** in field-mapped spans with data-sample attribute
+6. **Verify toggle works** - Field IDs show by default, toggle shows sample data
+
+### 📚 Proven Examples Reference
+
+**Pages 40-42 are VERIFIED WORKING** - Use them as templates:
+
+**Location:** `/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/1-Formatting & Report/REPORT Pg Img/doc-page-html/doc-pages-html-formatted/PREVIEW-Master.html`
+
+**Search for these pages in PREVIEW-Master.html to see:**
+- Market Rent Comparables tables (Page 40)
+- Revenue Summary tables (Page 42)
+- Proper field-mapped span format with data-sample
+- Correct use of CSS utility classes
+- No inline styles, proper `<tr>` structure
+
+**Field Naming Patterns from Pages 40-42:**
+- Market Rent: `{{Market_Rent_[1/2]Bed_Comp[1-5]_[Metric]}}`
+- Revenue: `{{ContractVsMarket_[UnitType]_[Metric]}}`
+- Statistics: `{{Market_Rent_[1/2]Bed_[High/Avg/Med/Low]}}`
+
+---
+
 ## 🏷️ Field Mapping Rules
 
 **⚠️ CRITICAL PHASE REQUIREMENT:** Identifying and mapping ALL field IDs is a PRIMARY objective of this formatting work. This is not optional - every dynamic content item must be mapped to a field ID.
@@ -325,9 +494,26 @@ td, th {
 
 **Your responsibility:** Identify EVERY piece of dynamic content and assign appropriate field IDs.
 
-### Format:
+### Format (UPDATED DEC 16, 2025):
+
+**✅ CORRECT Format with Toggle Support:**
 ```html
-<span class="field-mapped" title="{{Field_ID}}">{{Field_ID}}</span>
+<span class="field-mapped" data-sample="VALUE" title="{{Field_ID}}">{{Field_ID}}</span>
+```
+
+**Why this format:**
+- `textContent` = `{{Field_ID}}` (shows field ID by default)
+- `data-sample` attribute = actual sample value (used by toggle feature)
+- `title` attribute = `{{Field_ID}}` (for reference/tooltip)
+
+**Toggle Mechanism:**
+PREVIEW-Master.html has a toggle button that switches between field IDs and sample data. The JavaScript reads from the `data-sample` attribute to replace the textContent when toggled ON.
+
+**Example:**
+```html
+<span class="field-mapped" data-sample="123 Main Street" title="{{Subject_Street}}">{{Subject_Street}}</span>
+<!-- Toggle OFF: Shows "{{Subject_Street}}" -->
+<!-- Toggle ON: Shows "123 Main Street" -->
 ```
 
 ### Field ID Reference Files (SOURCE OF TRUTH):

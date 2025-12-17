@@ -4989,20 +4989,179 @@ previewToggle.addEventListener('change', function() {
     </div>
 
     <!-- ============================================ -->
-    <!-- PAGE 60 (Report Page 55): Sales Comparison Analysis -->
     <!-- ============================================ -->
+    <!-- PAGE 60 (Report Page 55): Comparable 2 - College View Apartments -->
+    <!-- ============================================ -->
+    <style>
+        /* Page 55 - Comparable 2 - Reduce spacing, fix column widths */
+        .page-sheet[data-page-num="Page 55"] table.compact-table td {
+            padding: 4px 6px; /* Reduced from default 8px */
+        }
+        .page-sheet[data-page-num="Page 55"] table.compact-table th {
+            padding: 4px 6px;
+        }
+        .page-sheet[data-page-num="Page 55"] table.compact-table td.label-col {
+            min-width: 140px; /* Prevent excessive wrapping */
+        }
+    </style>
+
     <div class="page-sheet" data-page-num="Page 55">
         <h1 class="Header1">Valuation & Conclusions</h1>
 
-        <h2 class="Header2">Sales Comparison Approach Analysis</h2>
+        <h2 class="Header2" style="text-align: center; margin-bottom: 20px;">Comparable 2</h2>
 
-        <p>In our opinion, a buyer's criteria for the purchase of properties such as the subject are predicated primarily on the property's net income characteristics. Thus, we have identified a relationship between the net operating income and the sales price of the subject and the comparables. The income analysis accounts for differences between the comparables and the subject relative to differences in location, construction quality, age/condition, exposure, access and other physical characteristics. Inferior properties generally achieve lower rent levels resulting in a lower net operating income per square foot.</p>
+        <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+            <!-- Property Photo Placeholder -->
+            <div style="flex: 0 0 300px; height: 200px; background: #f0f0f0; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; color: #666;">
+                <span class="field-mapped" title="{{Comp2_Photo}}" data-sample="Property Photo">{{Comp2_Photo}}</span>
+            </div>
 
-        <p>In this method, we have compared the sales to the subject primarily along economic lines rather than on physical characteristics. Economic measures such as the relationship of sales price to net operating income are inclusive of all the physical and economic attributes of a property.</p>
+            <!-- Sale Information Table -->
+            <div style="flex: 1;">
+                <table class="compact-table">
+                    <thead>
+                        <tr>
+                            <th colspan="2" class="table-section-header">Sale Information</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="label-col">Buyer</td>
+                            <td><span class="field-mapped" title="{{Comp2_Buyer}}" data-sample="Epiphany Group">{{Comp2_Buyer}}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Seller</td>
+                            <td><span class="field-mapped" title="{{Comp2_Seller}}" data-sample="Macro Properties Toronto">{{Comp2_Seller}}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Sale Date</td>
+                            <td><span class="field-mapped" title="{{Comp2_SaleDate}}" data-sample="2024-06-17">{{Comp2_SaleDate}}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Transaction Status</td>
+                            <td><span class="field-mapped" title="{{Comp2_TransactionStatus}}" data-sample="Closed">{{Comp2_TransactionStatus}}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Rights Transferred</td>
+                            <td><span class="field-mapped" title="{{Comp2_RightsTransferred}}" data-sample="Fee Simple">{{Comp2_RightsTransferred}}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Financing</td>
+                            <td><span class="field-mapped" title="{{Comp2_Financing}}" data-sample="Cash To Seller">{{Comp2_Financing}}</span></td>
+                        </tr>
+                        <tr>
+                            <td class="label-col">Conditions of Sale</td>
+                            <td><span class="field-mapped" title="{{Comp2_ConditionsOfSale}}" data-sample="Arm's Length">{{Comp2_ConditionsOfSale}}</span></td>
+                        </tr>
+                        <tr style="background-color: #f0f0f0; font-weight: bold;">
+                            <td class="label-col">Sale Price</td>
+                            <td><span class="field-mapped" title="{{Comp2_SalePrice}}" data-sample="$4,590,858">{{Comp2_SalePrice}}</span> | <span class="field-mapped" title="{{Comp2_PricePerUnit}}" data-sample="$102,019">{{Comp2_PricePerUnit}}</span>/Unit</td>
+                        </tr>
+                        <tr style="background-color: #f0f0f0; font-weight: bold;">
+                            <td class="label-col">Analysis Price</td>
+                            <td><span class="field-mapped" title="{{Comp2_AnalysisPrice}}" data-sample="$4,590,858">{{Comp2_AnalysisPrice}}</span> | <span class="field-mapped" title="{{Comp2_AnalysisPricePerUnit}}" data-sample="$102,019">{{Comp2_AnalysisPricePerUnit}}</span>/Unit</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        <p>Based on the preceding, we have trended the subject properties projected NOI per square foot and unit against the comparable properties NOI per square foot and unit and sale price per square foot and unit to estimate a value per unit for the subject property.</p>
+        <!-- Property Details Table -->
+        <table class="compact-table">
+            <thead>
+                <tr>
+                    <th colspan="4" class="table-section-header">Property</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label-col">Type</td>
+                    <td colspan="3"><span class="field-mapped" title="{{Comp2_PropertyType}}" data-sample="Multi-Family, Walk-Up">{{Comp2_PropertyType}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Address</td>
+                    <td colspan="3"><span class="field-mapped" title="{{Comp2_Address}}" data-sample="10910-10912 Winder Crescent, North Battleford, SK S9A 2C3">{{Comp2_Address}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Rent Type</td>
+                    <td><span class="field-mapped" title="{{Comp2_RentType}}" data-sample="Market">{{Comp2_RentType}}</span></td>
+                    <td class="label-col">Units</td>
+                    <td><span class="field-mapped" title="{{Comp2_Units}}" data-sample="45">{{Comp2_Units}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Gross Building Area (GBA)</td>
+                    <td><span class="field-mapped" title="{{Comp2_GBA}}" data-sample="33,509 SF">{{Comp2_GBA}}</span></td>
+                    <td class="label-col">Structures</td>
+                    <td><span class="field-mapped" title="{{Comp2_Structures}}" data-sample="2 Buildings, 3 Floors">{{Comp2_Structures}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Net Rentable Area (NRA)</td>
+                    <td><span class="field-mapped" title="{{Comp2_NRA}}" data-sample="33,509 SF">{{Comp2_NRA}}</span></td>
+                    <td class="label-col">Year Built</td>
+                    <td><span class="field-mapped" title="{{Comp2_YearBuilt}}" data-sample="2000">{{Comp2_YearBuilt}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Avg. Size</td>
+                    <td><span class="field-mapped" title="{{Comp2_AvgSize}}" data-sample="0 SF">{{Comp2_AvgSize}}</span></td>
+                    <td class="label-col">Unit Type</td>
+                    <td><span class="field-mapped" title="{{Comp2_UnitType}}" data-sample="Flat 1Bed / 1Bath">{{Comp2_UnitType}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Land Area</td>
+                    <td><span class="field-mapped" title="{{Comp2_LandArea}}" data-sample="0.5 Acres (21,780 SF)">{{Comp2_LandArea}}</span></td>
+                    <td class="label-col">County</td>
+                    <td><span class="field-mapped" title="{{Comp2_County}}" data-sample="North Battleford">{{Comp2_County}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Zoning</td>
+                    <td><span class="field-mapped" title="{{Comp2_Zoning}}" data-sample="RS6">{{Comp2_Zoning}}</span></td>
+                    <td class="label-col">Submarket</td>
+                    <td><span class="field-mapped" title="{{Comp2_Submarket}}" data-sample="Saskatchewan Area">{{Comp2_Submarket}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Project Amenities</td>
+                    <td colspan="3"><span class="field-mapped" title="{{Comp2_ProjectAmenities}}" data-sample="Parking">{{Comp2_ProjectAmenities}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Unit Amenities</td>
+                    <td colspan="3"><span class="field-mapped" title="{{Comp2_UnitAmenities}}" data-sample="Balcony, Dishwasher, Microwave, Range/Stove, Refrigerator">{{Comp2_UnitAmenities}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Parking Type</td>
+                    <td><span class="field-mapped" title="{{Comp2_ParkingType}}" data-sample="Surface">{{Comp2_ParkingType}}</span></td>
+                    <td class="label-col">Utilities</td>
+                    <td><span class="field-mapped" title="{{Comp2_Utilities}}" data-sample="Full Services">{{Comp2_Utilities}}</span></td>
+                </tr>
+            </tbody>
+        </table>
 
-        <p>Based on general bracketing, the comparable sales support an adjusted unit value ranges from $111,914/Unit to $118,100/Unit, with a unit value of $112,500/Unit concluded for the subject property. The following table summarizes the analysis of the comparables, reports the reconciled price per Unit value conclusion, and presents the concluded value of the subject property by the Sales Comparison Approach.</p>
+        <!-- Income Analysis Table -->
+        <table class="compact-table">
+            <thead>
+                <tr>
+                    <th colspan="3" class="table-section-header">Income Analysis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label-col">Occupancy</td>
+                    <td colspan="2" class="numeric-cell"><span class="field-mapped" title="{{Comp2_Occupancy}}" data-sample="100.0%">{{Comp2_Occupancy}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Net Operating Income</td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{Comp2_NOI}}" data-sample="$274,992.39">{{Comp2_NOI}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{Comp2_NOI_PerUnit}}" data-sample="$6,110.94">{{Comp2_NOI_PerUnit}}</span>/Unit</td>
+                </tr>
+                <tr style="background-color: #f0f0f0; font-weight: bold;">
+                    <td class="label-col">Cap Rate</td>
+                    <td colspan="2" class="numeric-cell"><span class="field-mapped" title="{{Comp2_CapRate}}" data-sample="5.99%">{{Comp2_CapRate}}</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Remarks -->
+        <h3 class="Subheader1">Remarks</h3>
+        <p><span class="field-mapped" title="{{Comp2_Remarks}}" data-sample="Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversify and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.">{{Comp2_Remarks}}</span></p>
 
         <div class="page-footer">
             <div>

@@ -110,6 +110,7 @@
         table.compact-table td,
         table.compact-table th { padding: 3px 6px; }
         .text-right { text-align: right; }
+        .bold { font-weight: bold; }
 
         /* Blue table section headers */
         .table-section-header {
@@ -3164,41 +3165,41 @@ previewToggle.addEventListener('change', function() {
         <table class="compact-table">
             <thead>
                 <tr>
-                    <th style="width: 18%;">TYPE</th>
-                    <th style="width: 18%;">DESCRIPTION</th>
-                    <th style="width: 8%;">UNITS</th>
-                    <th style="width: 14%;">ASKING RENT $/UNIT</th>
-                    <th style="width: 14%;">ACTUAL RENT $/UNIT</th>
-                    <th style="width: 14%;">CONCLUDED RENT $/UNIT</th>
-                    <th style="width: 14%;">CONTRACT VS MARKET</th>
+                    <th>TYPE</th>
+                    <th>DESCRIPTION</th>
+                    <th>UNITS</th>
+                    <th>ASKING RENT $/UNIT</th>
+                    <th>ACTUAL RENT $/UNIT</th>
+                    <th>CONCLUDED RENT $/UNIT</th>
+                    <th>CONTRACT VS MARKET</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>Flat 1 Bed / 1 Bath</td>
                     <td>One Bed-One Bath</td>
-                    <td class="text-center">4</td>
-                    <td class="text-right">$885</td>
-                    <td class="text-right">$900</td>
-                    <td class="text-right">$900</td>
-                    <td class="text-right">98.3%</td>
+                    <td class="text-center"><span class="field-mapped" data-sample="4" title="{{ContractVsMarket_1Bed_Units}}">{{ContractVsMarket_1Bed_Units}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$885" title="{{ContractVsMarket_1Bed_AskingRent}}">{{ContractVsMarket_1Bed_AskingRent}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$900" title="{{ContractVsMarket_1Bed_ActualRent}}">{{ContractVsMarket_1Bed_ActualRent}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$900" title="{{ContractVsMarket_1Bed_ConcludedRent}}">{{ContractVsMarket_1Bed_ConcludedRent}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="98.3%" title="{{ContractVsMarket_1Bed_Percentage}}">{{ContractVsMarket_1Bed_Percentage}}</span></td>
                 </tr>
                 <tr>
                     <td>Flat 2 Bed / 1 Bath</td>
                     <td>Two Bed-One Bath</td>
-                    <td class="text-center">12</td>
-                    <td class="text-right">$1,015</td>
-                    <td class="text-right">$1,050</td>
-                    <td class="text-right">$1,050</td>
-                    <td class="text-right">96.7%</td>
+                    <td class="text-center"><span class="field-mapped" data-sample="12" title="{{ContractVsMarket_2Bed_Units}}">{{ContractVsMarket_2Bed_Units}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$1,015" title="{{ContractVsMarket_2Bed_AskingRent}}">{{ContractVsMarket_2Bed_AskingRent}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$1,050" title="{{ContractVsMarket_2Bed_ActualRent}}">{{ContractVsMarket_2Bed_ActualRent}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$1,050" title="{{ContractVsMarket_2Bed_ConcludedRent}}">{{ContractVsMarket_2Bed_ConcludedRent}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="96.7%" title="{{ContractVsMarket_2Bed_Percentage}}">{{ContractVsMarket_2Bed_Percentage}}</span></td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="font-weight: bold;">TOTAL / AVERAGE</td>
-                    <td class="text-center" style="font-weight: bold;">16</td>
-                    <td class="text-right" style="font-weight: bold;">$989</td>
-                    <td class="text-right" style="font-weight: bold;">$1,015</td>
-                    <td class="text-right" style="font-weight: bold;">$1,020</td>
-                    <td class="text-right" style="font-weight: bold;">99.5%</td>
+                    <td colspan="2" class="bold">TOTAL / AVERAGE</td>
+                    <td class="text-center bold"><span class="field-mapped" data-sample="16" title="{{ContractVsMarket_Total_Units}}">{{ContractVsMarket_Total_Units}}</span></td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="$989" title="{{ContractVsMarket_Total_AskingRent}}">{{ContractVsMarket_Total_AskingRent}}</span></td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="$1,015" title="{{ContractVsMarket_Total_ActualRent}}">{{ContractVsMarket_Total_ActualRent}}</span></td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="$1,020" title="{{ContractVsMarket_Total_ConcludedRent}}">{{ContractVsMarket_Total_ConcludedRent}}</span></td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="99.5%" title="{{ContractVsMarket_Total_Percentage}}">{{ContractVsMarket_Total_Percentage}}</span></td>
                 </tr>
             </tbody>
         </table>
@@ -3222,35 +3223,35 @@ previewToggle.addEventListener('change', function() {
             <tbody>
                 <tr>
                     <td>Flat 1 Bed / 1 Bath</td>
-                    <td class="text-center">4</td>
+                    <td class="text-center"><span class="field-mapped" data-sample="4" title="{{RentalRevenue_1Bed_Units}}">{{RentalRevenue_1Bed_Units}}</span></td>
                     <td>1 Bed</td>
-                    <td class="text-right">$900</td>
-                    <td class="text-right">$900</td>
-                    <td class="text-right">100%</td>
-                    <td class="text-right">$900</td>
-                    <td class="text-right">$1.39</td>
-                    <td class="text-right">$43,200</td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$900" title="{{RentalRevenue_1Bed_ContractRent}}">{{RentalRevenue_1Bed_ContractRent}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$900" title="{{RentalRevenue_1Bed_MarketRent}}">{{RentalRevenue_1Bed_MarketRent}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="100%" title="{{RentalRevenue_1Bed_ConvVMkt}}">{{RentalRevenue_1Bed_ConvVMkt}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$900" title="{{RentalRevenue_1Bed_PerUnit}}">{{RentalRevenue_1Bed_PerUnit}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$1.39" title="{{RentalRevenue_1Bed_PerSF}}">{{RentalRevenue_1Bed_PerSF}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$43,200" title="{{RentalRevenue_1Bed_PerYear}}">{{RentalRevenue_1Bed_PerYear}}</span></td>
                 </tr>
                 <tr>
                     <td>Flat 2 Bed / 1 Bath</td>
-                    <td class="text-center">12</td>
+                    <td class="text-center"><span class="field-mapped" data-sample="12" title="{{RentalRevenue_2Bed_Units}}">{{RentalRevenue_2Bed_Units}}</span></td>
                     <td>2 Bed</td>
-                    <td class="text-right">$1,015</td>
-                    <td class="text-right">$1,050</td>
-                    <td class="text-right">103%</td>
-                    <td class="text-right">$1,050</td>
-                    <td class="text-right">$1.63</td>
-                    <td class="text-right">$151,200</td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$1,015" title="{{RentalRevenue_2Bed_ContractRent}}">{{RentalRevenue_2Bed_ContractRent}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$1,050" title="{{RentalRevenue_2Bed_MarketRent}}">{{RentalRevenue_2Bed_MarketRent}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="103%" title="{{RentalRevenue_2Bed_ConvVMkt}}">{{RentalRevenue_2Bed_ConvVMkt}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$1,050" title="{{RentalRevenue_2Bed_PerUnit}}">{{RentalRevenue_2Bed_PerUnit}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$1.63" title="{{RentalRevenue_2Bed_PerSF}}">{{RentalRevenue_2Bed_PerSF}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$151,200" title="{{RentalRevenue_2Bed_PerYear}}">{{RentalRevenue_2Bed_PerYear}}</span></td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="font-weight: bold;">UNIT MIX SUBTOTAL</td>
+                    <td colspan="2" class="bold">UNIT MIX SUBTOTAL</td>
                     <td class="text-center">-</td>
-                    <td class="text-right" style="font-weight: bold;">$989</td>
-                    <td class="text-right" style="font-weight: bold;">$1,013</td>
-                    <td class="text-right" style="font-weight: bold;">102%</td>
-                    <td class="text-right" style="font-weight: bold;">$1,013</td>
-                    <td class="text-right" style="font-weight: bold;">$1.59</td>
-                    <td class="text-right" style="font-weight: bold;">$194,400</td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="$989" title="{{RentalRevenue_Total_ContractRent}}">{{RentalRevenue_Total_ContractRent}}</span></td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="$1,013" title="{{RentalRevenue_Total_MarketRent}}">{{RentalRevenue_Total_MarketRent}}</span></td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="102%" title="{{RentalRevenue_Total_ConvVMkt}}">{{RentalRevenue_Total_ConvVMkt}}</span></td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="$1,013" title="{{RentalRevenue_Total_PerUnit}}">{{RentalRevenue_Total_PerUnit}}</span></td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="$1.59" title="{{RentalRevenue_Total_PerSF}}">{{RentalRevenue_Total_PerSF}}</span></td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="$194,400" title="{{RentalRevenue_Total_PerYear}}">{{RentalRevenue_Total_PerYear}}</span></td>
                 </tr>
             </tbody>
         </table>
@@ -3271,25 +3272,25 @@ previewToggle.addEventListener('change', function() {
             <tbody>
                 <tr>
                     <td>Parking Income</td>
-                    <td class="text-center">3.1%</td>
-                    <td class="text-right">$0.59</td>
-                    <td class="text-right">$375</td>
-                    <td class="text-right">$6,000</td>
+                    <td class="text-center"><span class="field-mapped" data-sample="3.1%" title="{{OtherRevenue_Parking_Percent}}">{{OtherRevenue_Parking_Percent}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$0.59" title="{{OtherRevenue_Parking_PerSF}}">{{OtherRevenue_Parking_PerSF}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$375" title="{{OtherRevenue_Parking_PerUnit}}">{{OtherRevenue_Parking_PerUnit}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$6,000" title="{{OtherRevenue_Parking_Total}}">{{OtherRevenue_Parking_Total}}</span></td>
                     <td>5 surface stalls at $100 per month</td>
                 </tr>
                 <tr>
                     <td>Laundry</td>
-                    <td class="text-center">1.2%</td>
-                    <td class="text-right">$0.24</td>
-                    <td class="text-right">$150</td>
-                    <td class="text-right">$2,400</td>
+                    <td class="text-center"><span class="field-mapped" data-sample="1.2%" title="{{OtherRevenue_Laundry_Percent}}">{{OtherRevenue_Laundry_Percent}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$0.24" title="{{OtherRevenue_Laundry_PerSF}}">{{OtherRevenue_Laundry_PerSF}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$150" title="{{OtherRevenue_Laundry_PerUnit}}">{{OtherRevenue_Laundry_PerUnit}}</span></td>
+                    <td class="text-right"><span class="field-mapped" data-sample="$2,400" title="{{OtherRevenue_Laundry_Total}}">{{OtherRevenue_Laundry_Total}}</span></td>
                     <td>$150/unit/year for 16 units</td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="font-weight: bold;">TOTAL OTHER REVENUE</td>
-                    <td class="text-right" style="font-weight: bold;">$0.82</td>
-                    <td class="text-right" style="font-weight: bold;">$525</td>
-                    <td class="text-right" style="font-weight: bold;">$8,400</td>
+                    <td colspan="2" class="bold">TOTAL OTHER REVENUE</td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="$0.82" title="{{OtherRevenue_Total_PerSF}}">{{OtherRevenue_Total_PerSF}}</span></td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="$525" title="{{OtherRevenue_Total_PerUnit}}">{{OtherRevenue_Total_PerUnit}}</span></td>
+                    <td class="text-right bold"><span class="field-mapped" data-sample="$8,400" title="{{OtherRevenue_Total_Total}}">{{OtherRevenue_Total_Total}}</span></td>
                     <td></td>
                 </tr>
             </tbody>

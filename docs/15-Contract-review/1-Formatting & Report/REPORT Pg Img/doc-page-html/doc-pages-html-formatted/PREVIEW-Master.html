@@ -4993,27 +4993,49 @@ previewToggle.addEventListener('change', function() {
     <!-- PAGE 60 (Report Page 55): Comparable 2 - College View Apartments -->
     <!-- ============================================ -->
     <style>
-        /* Page 55 - Comparable 2 - Reduce spacing, fix column widths */
+        /* Page 55 - Comparable 2 - Ultra-compact spacing to prevent overflow */
+        .page-sheet[data-page-num="Page 55"] table.compact-table {
+            margin-bottom: 10px; /* Reduced spacing between tables */
+        }
         .page-sheet[data-page-num="Page 55"] table.compact-table td {
-            padding: 4px 6px; /* Reduced from default 8px */
+            padding: 2px 4px; /* Reduced to prevent overflow */
         }
         .page-sheet[data-page-num="Page 55"] table.compact-table th {
-            padding: 4px 6px;
+            padding: 2px 4px;
         }
         .page-sheet[data-page-num="Page 55"] table.compact-table td.label-col {
-            min-width: 140px; /* Prevent excessive wrapping */
+            width: 160px; /* Fixed width for label column */
+            padding-right: 8px; /* Reduce gap to data column */
+        }
+        .page-sheet[data-page-num="Page 55"] table.compact-table td:nth-child(2) {
+            min-width: 200px; /* Wider data column to prevent wrapping */
+        }
+        .page-sheet[data-page-num="Page 55"] h1 {
+            margin-bottom: 10px;
+        }
+        .page-sheet[data-page-num="Page 55"] h2 {
+            margin-bottom: 10px;
+        }
+        .page-sheet[data-page-num="Page 55"] h3 {
+            margin-top: 8px;
+            margin-bottom: 6px;
+        }
+        .page-sheet[data-page-num="Page 55"] p {
+            margin-top: 6px;
+            margin-bottom: 10px;
+            line-height: 1.4; /* Tighter line spacing */
         }
     </style>
 
     <div class="page-sheet" data-page-num="Page 55">
         <h1 class="Header1">Valuation & Conclusions</h1>
 
-        <h2 class="Header2" style="text-align: center; margin-bottom: 20px;">Comparable 2</h2>
+        <h2 class="Header2" style="text-align: center;">Comparable 2</h2>
 
-        <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+        <div style="display: flex; gap: 10px; margin-bottom: 12px;">
             <!-- Property Photo Placeholder -->
-            <div style="flex: 0 0 300px; height: 200px; background: #f0f0f0; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; color: #666;">
-                <span class="field-mapped" title="{{Comp2_Photo}}" data-sample="Property Photo">{{Comp2_Photo}}</span>
+            <div style="flex: 0 0 280px; height: 190px; background: #f0f0f0; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; color: #666;">
+                <span class="field-mapped" data-sample="[Property Photo]" title="{{Comp2_Photo}}">{{Comp2_Photo}}</span>
             </div>
 
             <!-- Sale Information Table -->

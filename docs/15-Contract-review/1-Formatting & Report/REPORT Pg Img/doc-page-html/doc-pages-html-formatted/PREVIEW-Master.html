@@ -3291,7 +3291,7 @@ previewToggle.addEventListener('change', function() {
     <div class="page-sheet" data-page-num="Page 43">
         <div class="Header1">Valuation & Conclusions</div>
         <div class="Header2">Vacancy Allowance</div>
-        <p>This category accounts for the time period between occupants, as well as possible prolonged vacancies under slow market conditions. Market participants typically expect a vacancy of 2% to 5% of potential gross income for similar property types. This assignment reflects the probable vacancy during the economic life of the property and not necessarily the current or short-term vacancy. The findings of the Multi-Family Market Overview section support a typical vacancy allocation. As of the effective date, the subject is 100.0% occupied. Based on current and perceived long-term market conditions and the subject's anticipated tenancy over a 12-month holding period, a vacancy allowance of 3.8% is concluded.</p>
+        <p>This category accounts for the time period between occupants, as well as possible prolonged vacancies under slow market conditions. Market participants typically expect a vacancy of 2% to 5% of potential gross income for similar property types. This assignment reflects the probable vacancy during the economic life of the property and not necessarily the current or short-term vacancy. The findings of the Multi-Family Market Overview section support a typical vacancy allocation. As of the effective date, the subject is <span class="field-mapped" title="{{Subject_Occupancy_Current}}">100.0%</span> occupied. Based on current and perceived long-term market conditions and the subject's anticipated tenancy over a 12-month holding period, a vacancy allowance of <span class="field-mapped" title="{{Vacancy_Rate_Concluded}}">3.8%</span> is concluded.</p>
 
         <table class="compact-table">
             <thead>
@@ -3306,16 +3306,16 @@ previewToggle.addEventListener('change', function() {
             <tbody>
                 <tr>
                     <td>TOTAL VACANCY & CREDIT LOSS</td>
-                    <td class="text-center">3.8%</td>
-                    <td class="text-right negative">($0.77)</td>
-                    <td class="text-right negative">($493)</td>
-                    <td class="text-right negative">($7,786)</td>
+                    <td class="text-center"><span class="field-mapped" title="{{Vacancy_Rate_Concluded}}">3.8%</span></td>
+                    <td class="text-right negative"><span class="field-mapped" title="{{Vacancy_Loss_SF}}">($0.77)</span></td>
+                    <td class="text-right negative"><span class="field-mapped" title="{{Vacancy_Loss_Unit}}">($493)</span></td>
+                    <td class="text-right negative"><span class="field-mapped" title="{{Vacancy_Loss_Year}}">($7,786)</span></td>
                 </tr>
             </tbody>
         </table>
 
         <div class="Header2">Effective Gross Revenue (EGR)</div>
-        <p>Effective gross revenue equals the potential gross revenue less vacancy. The total effective gross revenue for the subject is $196,406 which is $12,275/Unit and $19.25/SF.</p>
+        <p>Effective gross revenue equals the potential gross revenue less vacancy. The total effective gross revenue for the subject is <span class="field-mapped" title="{{EGR_Total}}">$196,406</span> which is <span class="field-mapped" title="{{EGR_Per_Unit}}">$12,275</span>/Unit and <span class="field-mapped" title="{{EGR_Per_SF}}">$19.25</span>/SF.</p>
 
         <div class="Header2">Operating Expenses</div>
         <p>We have reviewed the owner's historical operating expenses. As appropriate, the owner's operating expenses are reclassified into standard categories and exclude items that do not reflect normal operating expenses for this type of property. The reclassification is done for proper analysis against comparable data and industry benchmarks as appropriate. The subject's historical operating expenses with our projections are shown in the following chart.</p>
@@ -3358,7 +3358,7 @@ previewToggle.addEventListener('change', function() {
                 </tr>
                 <tr>
                     <td style="padding-left: 16px;">Total Multifamily Revenue</td>
-                    <td class="text-right">$195,060</td>
+                    <td class="text-right"><span class="field-mapped" title="{{Revenue_Multifamily_YTD_Total}}">$195,060</span></td>
                     <td class="text-right">$12,191</td>
                     <td class="text-right">96%</td>
                     <td class="text-right">$194,400</td>
@@ -3385,7 +3385,7 @@ previewToggle.addEventListener('change', function() {
                 </tr>
                 <tr>
                     <td style="padding-left: 16px;">Parking Income</td>
-                    <td class="text-right">$6,000</td>
+                    <td class="text-right"><span class="field-mapped" title="{{Revenue_Parking_Total}}">$6,000</span></td>
                     <td class="text-right">$375</td>
                     <td class="text-right">3%</td>
                     <td class="text-right">$6,000</td>
@@ -3394,8 +3394,8 @@ previewToggle.addEventListener('change', function() {
                 </tr>
                 <tr>
                     <td style="padding-left: 16px;">Laundry</td>
-                    <td class="text-right">$2,400</td>
-                    <td class="text-right">$150</td>
+                    <td class="text-right"><span class="field-mapped" title="{{Revenue_Laundry_Total}}">$2,400</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{Revenue_Laundry_Unit}}">$150</span></td>
                     <td class="text-right">1%</td>
                     <td class="text-right">$2,400</td>
                     <td class="text-right">$150</td>
@@ -3433,7 +3433,7 @@ previewToggle.addEventListener('change', function() {
                     <td class="text-right negative">($7,731)</td>
                     <td class="text-right negative">($483)</td>
                     <td class="text-right negative">(4%)</td>
-                    <td class="text-right negative">($7,786)</td>
+                    <td class="text-right negative"><span class="field-mapped" title="{{Vacancy_Loss_Year}}">($7,786)</span></td>
                     <td class="text-right negative">($487)</td>
                     <td class="text-right negative">(4%)</td>
                 </tr>
@@ -3566,73 +3566,73 @@ previewToggle.addEventListener('change', function() {
             <tbody>
                 <tr>
                     <td>Taxes</td>
-                    <td class="text-center">10.1%</td>
-                    <td class="text-right">$1.93</td>
-                    <td class="text-right">$1,231</td>
-                    <td class="text-right">$19,688</td>
+                    <td class="text-center"><span class="field-mapped" title="{{OpEx_Taxes_PctEGR}}">10.1%</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Taxes_SF}}">$1.93</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Taxes_Unit}}">$1,231</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Taxes_Total}}">$19,688</span></td>
                     <td>The concluded amount is based on the historical expenses and the expense comparable information</td>
                 </tr>
                 <tr>
                     <td>Insurance</td>
-                    <td class="text-center">5.8%</td>
-                    <td class="text-right">$1.11</td>
-                    <td class="text-right">$710</td>
-                    <td class="text-right">$11,360</td>
+                    <td class="text-center"><span class="field-mapped" title="{{OpEx_Insurance_PctEGR}}">5.8%</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Insurance_SF}}">$1.11</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Insurance_Unit}}">$710</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Insurance_Total}}">$11,360</span></td>
                     <td>The concluded amount is based on the historical expenses and the expense comparable information</td>
                 </tr>
                 <tr>
                     <td>Repairs & Maintenance</td>
-                    <td class="text-center">6.8%</td>
-                    <td class="text-right">$1.30</td>
-                    <td class="text-right">$830</td>
-                    <td class="text-right">$13,280</td>
+                    <td class="text-center"><span class="field-mapped" title="{{OpEx_Repairs_PctEGR}}">6.8%</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Repairs_SF}}">$1.30</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Repairs_Unit}}">$830</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Repairs_Total}}">$13,280</span></td>
                     <td>The concluded amount is based on the historical expenses and the expense comparable information</td>
                 </tr>
                 <tr>
                     <td>Payroll</td>
-                    <td class="text-center">4.1%</td>
-                    <td class="text-right">$0.78</td>
-                    <td class="text-right">$500</td>
-                    <td class="text-right">$8,000</td>
+                    <td class="text-center"><span class="field-mapped" title="{{OpEx_Payroll_PctEGR}}">4.1%</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Payroll_SF}}">$0.78</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Payroll_Unit}}">$500</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Payroll_Total}}">$8,000</span></td>
                     <td>The concluded amount is based on the historical expenses and the expense comparable information</td>
                 </tr>
                 <tr>
                     <td>Utilities</td>
-                    <td class="text-center">10.8%</td>
-                    <td class="text-right">$2.06</td>
-                    <td class="text-right">$1,315</td>
-                    <td class="text-right">$21,040</td>
+                    <td class="text-center"><span class="field-mapped" title="{{OpEx_Utilities_PctEGR}}">10.8%</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Utilities_SF}}">$2.06</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Utilities_Unit}}">$1,315</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Utilities_Total}}">$21,040</span></td>
                     <td>The concluded amount is based on the historical expenses and the expense comparable information</td>
                 </tr>
                 <tr>
                     <td>Management Fees</td>
-                    <td class="text-center">4.2%</td>
-                    <td class="text-right">$0.81</td>
-                    <td class="text-right">$518</td>
-                    <td class="text-right">$8,281</td>
+                    <td class="text-center"><span class="field-mapped" title="{{OpEx_Management_PctEGR}}">4.2%</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Management_SF}}">$0.81</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Management_Unit}}">$518</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Management_Total}}">$8,281</span></td>
                     <td>The concluded amount is based on the historical expenses and the expense comparable information</td>
                 </tr>
                 <tr>
                     <td>Other Expenses</td>
-                    <td class="text-center">2.0%</td>
-                    <td class="text-right">$0.38</td>
-                    <td class="text-right">$245</td>
-                    <td class="text-right">$3,920</td>
+                    <td class="text-center"><span class="field-mapped" title="{{OpEx_Other_PctEGR}}">2.0%</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Other_SF}}">$0.38</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Other_Unit}}">$245</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Other_Total}}">$3,920</span></td>
                     <td>The concluded amount is based on the historical expenses and the expense comparable information</td>
                 </tr>
                 <tr style="background-color: #e8eef7; font-weight: bold;">
                     <td>TOTAL OPERATING EXPENSES</td>
-                    <td class="text-center">43.9%</td>
-                    <td class="text-right">$8.38</td>
-                    <td class="text-right">$5,348</td>
-                    <td class="text-right">$85,569</td>
+                    <td class="text-center"><span class="field-mapped" title="{{OpEx_Total_PctEGR}}">43.9%</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Total_SF}}">$8.38</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Total_Unit}}">$5,348</span></td>
+                    <td class="text-right"><span class="field-mapped" title="{{OpEx_Total_Total}}">$85,569</span></td>
                     <td></td>
                 </tr>
             </tbody>
         </table>
 
         <div class="Header2">Net Operating Income (NOI)</div>
-        <p>The net operating income equals the effective gross income less the total expenses. The total net operating income for the subject is $109,445 which is $6,840/Unit and $10.73/SF.</p>
+        <p>The net operating income equals the effective gross income less the total expenses. The total net operating income for the subject is <span class="field-mapped" title="{{NOI_Total}}">$109,445</span> which is <span class="field-mapped" title="{{NOI_Per_Unit}}">$6,840</span>/Unit and <span class="field-mapped" title="{{NOI_Per_SF}}">$10.73</span>/SF.</p>
 
         <div class="page-footer">
             <div><span class="page-num">45</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
@@ -3653,7 +3653,7 @@ previewToggle.addEventListener('change', function() {
         </ul>
 
         <div class="Subheader1">Alternative Investment Rates</div>
-        <p>The capitalization rate selected is one the subject property is expected to be higher than the current yield of approximately 3.2% on 10-year Government of Canada bonds. A risk premium of 75-300 basis points is typically applied to commercial and multifamily real estate, resulting in an implied capitalization rate in the range of 4.25%-6.25%. This spread reflects the illiquidity of real estate, management burden and overall (leasing, micro and macro market, physical, financing and regulatory) risk associated with real estate compared to the risk-free rate of government securities.</p>
+        <p>The capitalization rate selected is one the subject property is expected to be higher than the current yield of approximately <span class="field-mapped" title="{{Bond_Yield_10yr}}">3.2%</span> on 10-year Government of Canada bonds. A risk premium of <span class="field-mapped" title="{{Risk_Premium_BP}}">75-300</span> basis points is typically applied to commercial and multifamily real estate, resulting in an implied capitalization rate in the range of <span class="field-mapped" title="{{CapRate_Implied_Range}}">4.25%-6.25%</span>. This spread reflects the illiquidity of real estate, management burden and overall (leasing, micro and macro market, physical, financing and regulatory) risk associated with real estate compared to the risk-free rate of government securities.</p>
 
         <div class="Subheader1">Investment Activity and Trends</div>
         <p>The Multifamily Investment indicator graph below highlights how multifamily yields track interest rate cycles. From 2015 to 2021, cap rates compressed into the mid-4% range as bond yields fell, with investors accepting narrower spreads in exchange for stable rental cash flows. Since 2022, rising bond yields have pushed cap rates back above 5.0%, restoring a healthier premium over government securities. Forecasts suggest modest re-compression as inflation cools and spreads compress, though cap rates are expected to remain above 3.2% long-term due to structurally higher rates. Boardwalk REIT's reported fair market cap rate serves as a useful benchmark, providing an ancillary check on market yield expectations for multifamily assets.</p>
@@ -4029,7 +4029,7 @@ previewToggle.addEventListener('change', function() {
                     <td></td>
                     <td class="numeric-cell"><span class="field-mapped" title="{{EGR_Per_Unit}}">$12,275</span></td>
                     <td class="numeric-cell"><span class="field-mapped" title="{{EGR_Per_SF}}">$19.25</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{EGR_Annual}}">$196,406</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{EGR_Annual}}"><span class="field-mapped" title="{{EGR_Total}}">$196,406</span></span></td>
                     <td></td>
                     <td></td>
                     <td></td>

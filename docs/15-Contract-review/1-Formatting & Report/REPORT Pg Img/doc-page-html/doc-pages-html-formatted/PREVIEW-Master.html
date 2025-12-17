@@ -3820,7 +3820,7 @@ previewToggle.addEventListener('change', function() {
         <p>The capitalization rate selected is one the subject property is expected to be higher than the current yield of approximately <span class="field-mapped" title="{{Bond_Yield_10yr}}">3.2%</span> on 10-year Government of Canada bonds. A risk premium of <span class="field-mapped" title="{{Risk_Premium_BP}}">75-300</span> basis points is typically applied to commercial and multifamily real estate, resulting in an implied capitalization rate in the range of <span class="field-mapped" title="{{CapRate_Implied_Range}}">4.25%-6.25%</span>. This spread reflects the illiquidity of real estate, management burden and overall (leasing, micro and macro market, physical, financing and regulatory) risk associated with real estate compared to the risk-free rate of government securities.</p>
 
         <div class="Subheader1">Investment Activity and Trends</div>
-        <p>The Multifamily Investment indicator graph below highlights how multifamily yields track interest rate cycles. From 2015 to 2021, cap rates compressed into the mid-4% range as bond yields fell, with investors accepting narrower spreads in exchange for stable rental cash flows. Since 2022, rising bond yields have pushed cap rates back above 5.0%, restoring a healthier premium over government securities. Forecasts suggest modest re-compression as inflation cools and spreads compress, though cap rates are expected to remain above 3.2% long-term due to structurally higher rates. Boardwalk REIT's reported fair market cap rate serves as a useful benchmark, providing an ancillary check on market yield expectations for multifamily assets.</p>
+        <p>The Multifamily Investment indicator graph below highlights how multifamily yields track interest rate cycles. From 2015 to 2021, cap rates compressed into the mid-4% range as bond yields fell, with investors accepting narrower spreads in exchange for stable rental cash flows. Since 2022, rising bond yields have pushed cap rates back above 5.0%, restoring a healthier premium over government securities. Forecasts suggest modest re-compression as inflation cools and spreads compress, though cap rates are expected to remain above <span class="field-mapped" title="{{Bond_Yield_10yr}}">3.2%</span> long-term due to structurally higher rates. Boardwalk REIT's reported fair market cap rate serves as a useful benchmark, providing an ancillary check on market yield expectations for multifamily assets.</p>
 
         <div class="chart-placeholder">[CHART: Multifamily Investment Indicators - Line graph showing trend lines from 2013 to 2030 tracking yields across various markets including Canada, Calgary, Edmonton, GSH, Ottawa, Regina, Toronto, Vancouver, BCCS Yield, and Boardwalk REIT]</div>
 
@@ -3979,14 +3979,14 @@ previewToggle.addEventListener('change', function() {
 
             <div class="chart-wrapper">
                 <div class="y-axis-labels">
-                    <span>$14,000</span>
-                    <span>$12,000</span>
-                    <span>$10,000</span>
-                    <span>$8,000</span>
-                    <span>$6,000</span>
-                    <span>$4,000</span>
-                    <span>$2,000</span>
-                    <span>$0</span>
+                    <span><span class="field-mapped" title="{{Chart_YAxis_Max}}">$14,000</span></span>
+                    <span><span class="field-mapped" title="{{Chart_YAxis_Label_6}}">$12,000</span></span>
+                    <span><span class="field-mapped" title="{{Chart_YAxis_Label_5}}">$10,000</span></span>
+                    <span><span class="field-mapped" title="{{Chart_YAxis_Label_4}}">$8,000</span></span>
+                    <span><span class="field-mapped" title="{{Chart_YAxis_Label_3}}">$6,000</span></span>
+                    <span><span class="field-mapped" title="{{Chart_YAxis_Label_2}}">$4,000</span></span>
+                    <span><span class="field-mapped" title="{{Chart_YAxis_Label_1}}">$2,000</span></span>
+                    <span><span class="field-mapped" title="{{Chart_YAxis_Min}}">$0</span></span>
                 </div>
 
                 <div class="chart-bars">
@@ -4025,7 +4025,7 @@ previewToggle.addEventListener('change', function() {
 
         <div class="page-footer">
             <div>
-                <span class="page-num">47</span>
+                <span class="page-num"><span class="field-mapped" title="{{Page_Number}}">47</span></span>
                 <span class="field-mapped" title="{{Property_Address}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{File_Number}}">VAL251012 - 1</span>
             </div>
             <div class="footer-accent"></div>
@@ -4040,11 +4040,11 @@ previewToggle.addEventListener('change', function() {
 
         <h2 class="Header2">Capitalization Rate Analysis - Multifamily</h2>
 
-        <p>Comparable sales were analyzed from both North Battleford and Martensville to reflect investor activity in tertiary Saskatchewan markets. The comparable properties indicate capitalization rates ranging from <span class="field-mapped" title="{{CapRate_Low}}">5.92%</span> to <span class="field-mapped" title="{{CapRate_High}}">6.24%</span>, with the majority clustering near the <span class="field-mapped" title="{{CapRate_Average}}">5.99%</span> range.</p>
+        <p>Comparable sales were analyzed from both <span class="field-mapped" title="{{Subject_City}}">North Battleford</span> and <span class="field-mapped" title="{{COMP_4_City}}">Martensville</span> to reflect investor activity in tertiary Saskatchewan markets. The comparable properties indicate capitalization rates ranging from <span class="field-mapped" title="{{CapRate_Low}}">5.92%</span> to <span class="field-mapped" title="{{CapRate_High}}">6.24%</span>, with the majority clustering near the <span class="field-mapped" title="{{CapRate_Average}}">5.99%</span> range.</p>
 
-        <p>The newer properties in Martensville (Parkside Flats 1 and 2) exhibit lower cap rates of <span class="field-mapped" title="{{COMP_5_CapRate}}">5.92%</span>, consistent with higher quality construction, modern finishes, and superior appeal. In contrast, the older assets located in North Battleford, such as Heritage House and College View Apartments, achieved cap rates closer to 5.99%-6.24%, reflecting higher risk premiums associated with tertiary markets, older improvements, and smaller population bases.</p>
+        <p>The newer properties in <span class="field-mapped" title="{{COMP_4_City}}">Martensville</span> (<span class="field-mapped" title="{{COMP_4_Name}}">Parkside Flats 1</span> and <span class="field-mapped" title="{{COMP_5_Name}}">Parkside Flats 2</span>) exhibit lower cap rates of <span class="field-mapped" title="{{COMP_5_CapRate}}">5.92%</span>, consistent with higher quality construction, modern finishes, and superior appeal. In contrast, the older assets located in <span class="field-mapped" title="{{Subject_City}}">North Battleford</span>, such as <span class="field-mapped" title="{{COMP_1_Name}}">Heritage House</span> and <span class="field-mapped" title="{{COMP_2_Name}}">Parkside View Apartments</span>, achieved cap rates closer to <span class="field-mapped" title="{{CapRate_Range}}">5.92% to 6.24%</span>, reflecting higher risk premiums associated with tertiary markets, older improvements, and smaller population bases.</p>
 
-        <p>Given the subject's age (circa <span class="field-mapped" title="{{Year_Built}}">1970</span>), average unit mix and location within North Battleford, a smaller tertiary market with limited liquidity, an upward adjustment toward the higher end of the observed range is appropriate. The subject's age and leverage condition support investor confidence, though risk perception remains elevated relative to newer comparables.</p>
+        <p>Given the subject's age (circa <span class="field-mapped" title="{{Year_Built}}">1970</span>), average unit mix and location within <span class="field-mapped" title="{{Subject_City}}">North Battleford</span>, a smaller tertiary market with limited liquidity, an upward adjustment toward the higher end of the observed range is appropriate. The subject's age and leverage condition support investor confidence, though risk perception remains elevated relative to newer comparables.</p>
 
         <p>Based on the foregoing analysis, an appropriate capitalization rate for the subject property is concluded at approximately <span class="field-mapped" title="{{Concluded_CapRate}}">6.25%</span>, reflecting market expectations for well-maintained, stabilized multifamily assets within tertiary Saskatchewan markets.</p>
 

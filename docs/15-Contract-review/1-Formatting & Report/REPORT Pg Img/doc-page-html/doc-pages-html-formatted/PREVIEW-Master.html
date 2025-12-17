@@ -3089,24 +3089,19 @@ previewToggle.addEventListener('change', function() {
     const isPreviewMode = this.checked;
 
     if (isPreviewMode) {
-        // Enable Preview Mode - Show actual data
+        // Enable Preview Mode - Show actual sample data
         document.body.classList.add('preview-mode');
         modeLabel.textContent = 'Preview Mode ✓';
 
-        // Replace field IDs with sample data
+        // Replace field IDs with sample data from data-sample attribute
         document.querySelectorAll('.field-mapped').forEach(field => {
-            const fieldId = field.getAttribute('title');
-            if (fieldId) {
-                // Extract field name from {{Field_Name}}
-                const fieldName = fieldId.replace(/[{}]/g, '');
-                const sampleValue = sampleData[fieldName];
-
-                if (sampleValue) {
-                    field.textContent = sampleValue;
-                } else {
-                    // If no sample data, show placeholder
-                    field.textContent = `[${fieldName}]`;
+            const sampleValue = field.getAttribute('data-sample');
+            if (sampleValue) {
+                // Store original field ID for restoration
+                if (!field.hasAttribute('data-original')) {
+                    field.setAttribute('data-original', field.textContent);
                 }
+                field.textContent = sampleValue;
             }
         });
     } else {
@@ -3114,11 +3109,11 @@ previewToggle.addEventListener('change', function() {
         document.body.classList.remove('preview-mode');
         modeLabel.textContent = 'Show Field IDs';
 
-        // Restore original field IDs
+        // Restore original field IDs from data-original
         document.querySelectorAll('.field-mapped').forEach(field => {
-            const original = originalFieldText.get(field);
-            if (original) {
-                field.textContent = original;
+            const originalText = field.getAttribute('data-original');
+            if (originalText) {
+                field.textContent = originalText;
             }
         });
     }

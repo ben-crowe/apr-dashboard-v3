@@ -1,0 +1,226 @@
+<!-- ============================================ -->
+<!-- TEMPLATE: Comparison Table with Chart -->
+<!-- ============================================ -->
+<!-- Use For: Pages with comparable sales data and analysis chart (e.g., Page 47) -->
+<!-- Pattern: Comparison table (COMP 1-5) with NOI/Capitalization Rate chart below -->
+<!-- Created: December 17, 2025 -->
+<!-- Status: ✅ Production-ready -->
+<!-- ============================================ -->
+
+<div class="page-sheet" data-page-num="Page {PAGE_NUM}">
+    <h1 class="Header1">{SECTION_TITLE}</h1>
+    <h2 class="Header2">{SUBSECTION_TITLE}</h2>
+
+    <p>{INTRODUCTION_TEXT}</p>
+
+    <!-- Comparison Table -->
+    <table class="compact-table" style="font-size: 8.5pt;">
+        <style>
+            /* Scoped CSS for this page */
+            .page-sheet[data-page-num="Page {PAGE_NUM}"] .compact-table td,
+            .page-sheet[data-page-num="Page {PAGE_NUM}"] .compact-table th {
+                padding: 3px 3px;
+                line-height: 1.1;
+                border: none;
+            }
+            .page-sheet[data-page-num="Page {PAGE_NUM}"] .compact-table {
+                border-collapse: collapse;
+            }
+            .page-sheet[data-page-num="Page {PAGE_NUM}"] .label-col {
+                background-color: transparent;
+            }
+            .page-sheet[data-page-num="Page {PAGE_NUM}"] .compact-table thead tr:last-child {
+                border-bottom: 1px solid #ccc;
+            }
+            .page-sheet[data-page-num="Page {PAGE_NUM}"] .compact-table tbody tr:first-child td {
+                padding-top: 12px;
+            }
+            .page-sheet[data-page-num="Page {PAGE_NUM}"] .compact-table thead tr:last-child th {
+                text-align: left;
+            }
+            .page-sheet[data-page-num="Page {PAGE_NUM}"] .compact-table tbody tr:not(:nth-last-child(-n+4)) td {
+                font-size: 7.5pt;
+            }
+        </style>
+        <thead>
+            <tr>
+                <th colspan="6" class="table-section-header">{TABLE_TITLE}</th>
+            </tr>
+            <tr>
+                <th style="background-color: white;"></th>
+                <th style="background-color: white;">COMP 1</th>
+                <th style="background-color: white;">COMP 2</th>
+                <th style="background-color: white;">COMP 3</th>
+                <th style="background-color: white;">COMP 4</th>
+                <th style="background-color: white;">COMP 5</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data Rows (7.5pt font) -->
+            <tr>
+                <td class="label-col">Name</td>
+                <td><span class="field-mapped" title="{{COMP_1_Name}}" data-sample="Sample Name">{{COMP_1_Name}}</span></td>
+                <td><span class="field-mapped" title="{{COMP_2_Name}}" data-sample="Sample Name">{{COMP_2_Name}}</span></td>
+                <td><span class="field-mapped" title="{{COMP_3_Name}}" data-sample="Sample Name">{{COMP_3_Name}}</span></td>
+                <td><span class="field-mapped" title="{{COMP_4_Name}}" data-sample="Sample Name">{{COMP_4_Name}}</span></td>
+                <td><span class="field-mapped" title="{{COMP_5_Name}}" data-sample="Sample Name">{{COMP_5_Name}}</span></td>
+            </tr>
+            <!-- Add more data rows as needed -->
+            <!-- ... -->
+
+            <!-- Capitalization Rate Section (8.5pt font, spacing above) -->
+            <tr style="border-bottom: 1px solid #ccc;">
+                <td style="padding-top: 14px;"><strong>Capitalization Rate</strong></td>
+                <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{COMP_1_CapRate}}" data-sample="5.98%">{{COMP_1_CapRate}}</span></strong></td>
+                <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{COMP_2_CapRate}}" data-sample="5.98%">{{COMP_2_CapRate}}</span></strong></td>
+                <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{COMP_3_CapRate}}" data-sample="5.99%">{{COMP_3_CapRate}}</span></strong></td>
+                <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{COMP_4_CapRate}}" data-sample="6.24%">{{COMP_4_CapRate}}</span></strong></td>
+                <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{COMP_5_CapRate}}" data-sample="5.92%">{{COMP_5_CapRate}}</span></strong></td>
+            </tr>
+            <tr>
+                <td style="font-size: 7.5pt; padding-top: 2px;">HIGH</td>
+                <td colspan="5" style="font-size: 7.5pt; padding-top: 2px;"><span class="field-mapped" title="{{CapRate_High}}" data-sample="6.24%">{{CapRate_High}}</span></td>
+            </tr>
+            <tr>
+                <td style="padding-top: 6px;"><strong>AVERAGE</strong></td>
+                <td colspan="5" style="padding-top: 6px;"><strong><span class="field-mapped" title="{{CapRate_Average}}" data-sample="6.03%">{{CapRate_Average}}</span></strong></td>
+            </tr>
+            <tr style="border-bottom: 2px solid #ccc;">
+                <td style="font-size: 7.5pt; padding-top: 2px;">LOW</td>
+                <td colspan="5" style="font-size: 7.5pt; padding-top: 2px;"><span class="field-mapped" title="{{CapRate_Low}}" data-sample="5.92%">{{CapRate_Low}}</span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Chart Section -->
+    <div style="margin-top: 44px;">
+        <div style="position: relative;">
+            <h3 style="font-size: 10pt; font-weight: bold; text-align: center; margin-bottom: 8px;">{CHART_TITLE}</h3>
+            <!-- Legend top right -->
+            <div style="position: absolute; top: 0; right: 0; font-size: 7pt; display: flex; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 3px;">
+                    <div style="width: 10px; height: 10px; background-color: #003B7E;"></div>
+                    <span>{LEGEND_1_LABEL}</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 3px;">
+                    <div style="width: 6px; height: 6px; border-radius: 50%; background-color: #000;"></div>
+                    <span>{LEGEND_2_LABEL}</span>
+                </div>
+            </div>
+        </div>
+
+        <div style="position: relative; height: 210px; margin-top: 12px;">
+            <!-- Centered wrapper for chart and axes -->
+            <div style="position: absolute; left: 50%; transform: translateX(-50%); width: 490px; height: 100%;">
+                <!-- Left Y-axis labels (dollars) -->
+                <div style="position: absolute; left: 0; top: 0; height: 180px; width: 45px; display: flex; flex-direction: column; justify-content: space-between; font-size: 7pt; text-align: right; padding-right: 5px;">
+                    <span>$14,000</span>
+                    <span>$12,000</span>
+                    <span>$10,000</span>
+                    <span>$8,000</span>
+                    <span>$6,000</span>
+                    <span>$4,000</span>
+                    <span>$2,000</span>
+                    <span>$0</span>
+                </div>
+
+                <!-- Right Y-axis labels (percentages) -->
+                <div style="position: absolute; right: 0; top: 0; height: 180px; width: 35px; display: flex; flex-direction: column; justify-content: space-between; font-size: 7pt; text-align: left; padding-left: 5px;">
+                    <span>6.3%</span>
+                    <span>6.3%</span>
+                    <span>6.2%</span>
+                    <span>6.2%</span>
+                    <span>6.1%</span>
+                    <span>6.1%</span>
+                    <span>6.0%</span>
+                    <span>6.0%</span>
+                    <span>5.9%</span>
+                </div>
+
+                <!-- Chart area with gridlines and bars -->
+                <div style="position: absolute; left: 50px; right: 40px; top: 0; height: 180px;">
+                    <!-- Horizontal gridlines -->
+                    <div style="position: absolute; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div style="border-top: 1px solid #ccc;"></div>
+                        <div style="border-top: 1px solid #ccc;"></div>
+                        <div style="border-top: 1px solid #ccc;"></div>
+                        <div style="border-top: 1px solid #ccc;"></div>
+                        <div style="border-top: 1px solid #ccc;"></div>
+                        <div style="border-top: 1px solid #ccc;"></div>
+                        <div style="border-top: 1px solid #ccc;"></div>
+                        <div style="border-top: 2px solid #ccc;"></div>
+                    </div>
+
+                    <!-- Bars (adjust heights based on data) -->
+                    <div style="position: absolute; width: 100%; height: 100%; display: flex; justify-content: space-around; align-items: flex-end;">
+                        <div style="width: 24px; background-color: #003B7E; height: 95px;"></div>
+                        <div style="width: 24px; background-color: #003B7E; height: 76px;"></div>
+                        <div style="width: 24px; background-color: #003B7E; height: 63px;"></div>
+                        <div style="width: 24px; background-color: #003B7E; height: 153px;"></div>
+                        <div style="width: 24px; background-color: #003B7E; height: 159px;"></div>
+                    </div>
+                </div>
+
+                <!-- Labels below chart -->
+                <div style="position: absolute; left: 50px; right: 40px; top: 185px; display: flex; justify-content: space-around; font-size: 7pt; text-align: center;">
+                    <span>COMP 1</span>
+                    <span>COMP 2</span>
+                    <span>COMP 3</span>
+                    <span>COMP 4</span>
+                    <span>COMP 5</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Text (centered below chart) -->
+    <p style="margin-top: 10px; font-size: 9pt; text-align: center;">{SUMMARY_TEXT}</p>
+
+    <!-- Page Footer -->
+    <div class="page-footer">
+        <div>
+            <span class="page-num">{PAGE_NUM}</span>
+            <span class="field-mapped" title="{{Property_Address}}" data-sample="Property Address">{{Property_Address}}</span> | File <span class="field-mapped" title="{{File_Number}}" data-sample="FILE123">{{File_Number}}</span>
+        </div>
+        <div class="footer-accent"></div>
+    </div>
+</div>
+
+<!-- ============================================ -->
+<!-- TEMPLATE USAGE INSTRUCTIONS -->
+<!-- ============================================ -->
+<!--
+PLACEHOLDERS TO REPLACE:
+- {PAGE_NUM} → Page number (e.g., "47")
+- {SECTION_TITLE} → Main section heading (e.g., "Direct Capitalization Approach")
+- {SUBSECTION_TITLE} → Subsection heading (e.g., "Capitalization Rate")
+- {INTRODUCTION_TEXT} → Intro paragraph text
+- {TABLE_TITLE} → Table header title (e.g., "COMPARABLE SALES")
+- {CHART_TITLE} → Chart title (e.g., "NOI & CAPITALIZATION RATE")
+- {LEGEND_1_LABEL} → First legend item (e.g., "NOI/Unit")
+- {LEGEND_2_LABEL} → Second legend item (e.g., "OAR")
+- {SUMMARY_TEXT} → Summary text below chart
+
+KEY FEATURES:
+✅ Borderless table design with gray separator lines
+✅ Left-aligned COMP headers
+✅ Smaller font (7.5pt) for data rows
+✅ Regular font (8.5pt) for Capitalization Rate section
+✅ Proper spacing: 12px after headers, 14px before Cap Rate
+✅ Compact, centered chart (490px wrapper)
+✅ Gray gridlines (#ccc) with thicker bottom line (2px)
+✅ Labels positioned below chart gridlines
+✅ Dual Y-axes (dollars left, percentages right)
+✅ Centered summary text
+
+DESIGN NOTES:
+- Table has NO borders on cells (border: none)
+- First column has NO gray background (transparent)
+- Light gray line under COMP headers (1px #ccc)
+- Cap Rate section: bold + left-aligned
+- HIGH/LOW: smaller font (7.5pt), close to parent rows
+- Chart bars: 24px wide, brand blue (#003B7E)
+- Bottom borders: 2px thick for emphasis
+
+TESTED ON: Page 47 (December 17, 2025)
+-->

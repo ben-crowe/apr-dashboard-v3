@@ -2898,283 +2898,11 @@
     </div>
 </div>
 
+
 <script>
-// Sample Data for Preview Mode
-const sampleData = {
-    // Company Information
-    'Company_Name': 'Valta Property Valuations Ltd.',
-    'Company_Address': '1234 Main Street',
-    'Company_CityStateZip': 'Saskatoon, SK S7K 0A1',
-    'Company_Phone': '(306) 555-0100',
-    'Company_JobNumber': 'VAL251012',
-
-    // Client Information
-    'Client_Company': 'First National Bank',
-    'Client_Name': 'John Smith',
-    'Client_Address': '5678 Bank Avenue',
-    'Client_CityStateZip': 'Saskatoon, SK S7K 2B2',
-
-    // Subject Property
-    'Subject_Street': '1101, 1121 109 Street',
-    'Subject_City': 'North Battleford',
-    'Subject_State': 'Saskatchewan',
-
-    // Report Information
-    'Report_Date': 'December 16, 2025',
-    'Report_Values': 'As-Is',
-    'Report_ValueScenario1': 'As-Stabilized',
-
-    // Market Context - Page 31
-    'MarketContext_Header': 'MARKET CONTEXT',
-    'MarketContext_Provincial_Header': 'PROVINCIAL',
-    'MarketContext_Saskatchewan_Header': 'Saskatchewan',
-    'MarketContext_Saskatchewan_Overview': 'Saskatchewan economy in 2025 is defined by steady growth, strong resource activity, and an improving housing sector. Real GDP is expanding at a moderate pace, supported by agriculture, potash, and oil production, while inflation has cooled to below 2%, easing cost pressures on households.',
-
-    // Saskatchewan Economic Indicators
-    'SK_Econ_Indicator_1_Name': 'Real GDP (2025)',
-    'SK_Econ_Indicator_1_Estimate': '+1.8%',
-    'SK_Econ_Indicator_1_Commentary': 'Growth driven by resource exports, housing starts',
-    'SK_Econ_Indicator_1_Source': 'Bank of Canada',
-
-    'SK_Econ_Indicator_2_Name': 'Population Growth Rate',
-    'SK_Econ_Indicator_2_Estimate': '1.5%',
-    'SK_Econ_Indicator_2_Commentary': 'Strong interprovincial migration',
-    'SK_Econ_Indicator_2_Source': 'Statistics Canada',
-
-    'SK_Econ_Indicator_3_Name': 'Unemployment Rate',
-    'SK_Econ_Indicator_3_Estimate': '5.7%',
-    'SK_Econ_Indicator_3_Commentary': 'Below national average',
-    'SK_Econ_Indicator_3_Source': 'Statistics Canada',
-
-    'SK_Econ_Indicator_4_Name': 'CPI Inflation',
-    'SK_Econ_Indicator_4_Estimate': '1.8%',
-    'SK_Econ_Indicator_4_Commentary': 'Moderating from 2024 peaks',
-    'SK_Econ_Indicator_4_Source': 'Statistics Canada',
-
-    'SK_Econ_Indicator_5_Name': 'Housing Starts (2025)',
-    'SK_Econ_Indicator_5_Estimate': '3,200',
-    'SK_Econ_Indicator_5_Commentary': 'Up 12% year-over-year',
-    'SK_Econ_Indicator_5_Source': 'CMHC',
-
-    'SK_Econ_Indicator_6_Name': 'Average Home Price',
-    'SK_Econ_Indicator_6_Estimate': '$385,000',
-    'SK_Econ_Indicator_6_Commentary': 'Stable with selective appreciation',
-    'SK_Econ_Indicator_6_Source': 'CREA',
-
-    'SK_Econ_Indicator_7_Name': 'Rental Vacancy Rate',
-    'SK_Econ_Indicator_7_Estimate': '3.0%',
-    'SK_Econ_Indicator_7_Commentary': 'Balanced market conditions',
-    'SK_Econ_Indicator_7_Source': 'CMHC',
-
-    'SK_Econ_Indicator_8_Name': 'Average Rent (2BR)',
-    'SK_Econ_Indicator_8_Estimate': '$1,250',
-    'SK_Econ_Indicator_8_Commentary': 'Plateaued after 2023-24 surge',
-    'SK_Econ_Indicator_8_Source': 'CMHC',
-
-    'SK_Econ_Indicator_9_Name': 'Credit Rating',
-    'SK_Econ_Indicator_9_Estimate': 'AA',
-    'SK_Econ_Indicator_9_Commentary': 'Stable outlook, balanced budget',
-    'SK_Econ_Indicator_9_Source': 'S&P',
-
-    'SK_Econ_Indicator_10_Name': 'Oil Price (WTI)',
-    'SK_Econ_Indicator_10_Estimate': '$78/barrel',
-    'SK_Econ_Indicator_10_Commentary': 'Key driver for provincial revenues',
-    'SK_Econ_Indicator_10_Source': 'Market Data',
-
-    'SK_Econ_Indicator_11_Name': 'Potash Exports',
-    'SK_Econ_Indicator_11_Estimate': '12M tonnes',
-    'SK_Econ_Indicator_11_Commentary': 'Strong global demand',
-    'SK_Econ_Indicator_11_Source': 'Industry',
-
-    'SK_Econ_Indicator_12_Name': 'Agriculture Output',
-    'SK_Econ_Indicator_12_Estimate': '$15.2B',
-    'SK_Econ_Indicator_12_Commentary': 'Above 10-year average',
-    'SK_Econ_Indicator_12_Source': 'Ag Canada',
-
-    'SK_Econ_Indicator_13_Name': 'Business Investment',
-    'SK_Econ_Indicator_13_Estimate': '+4.5%',
-    'SK_Econ_Indicator_13_Commentary': 'Resource projects, infrastructure',
-    'SK_Econ_Indicator_13_Source': 'Statistics Canada',
-
-    'SK_Econ_Indicator_14_Name': 'Labour Productivity',
-    'SK_Econ_Indicator_14_Estimate': '+1.2%',
-    'SK_Econ_Indicator_14_Commentary': 'Modest gains, skilled labour challenges',
-    'SK_Econ_Indicator_14_Source': 'Statistics Canada',
-    // Page 43 - Vacancy & EGR Fields
-    'Subject_Occupancy_Current': '100.0%',
-    'Vacancy_Rate_Concluded': '3.8%',
-    'Vacancy_Loss_SF': '($0.77)',
-    'Vacancy_Loss_Unit': '($493)',
-    'Vacancy_Loss_Year': '($7,786)',
-    'EGR_Total': '$196,406',
-    'EGR_Per_Unit': '$12,275',
-    'EGR_Per_SF': '$19.25',
-    
-    // Page 44 - Operating History (YTD)
-    'Revenue_Multifamily_YTD_Total': '$195,060',
-    'Revenue_Multifamily_YTD_Unit': '$12,191',
-    'Revenue_Multifamily_YTD_Pct': '96%',
-    'Revenue_Rental_YTD_Total': '$195,060',
-    'Revenue_Rental_YTD_Unit': '$12,191',
-    'Revenue_Rental_YTD_Pct': '96%',
-    'Revenue_Parking_YTD_Total': '$6,000',
-    'Revenue_Parking_YTD_Unit': '$375',
-    'Revenue_Parking_YTD_Pct': '3%',
-    'Revenue_Laundry_YTD_Total': '$2,400',
-    'Revenue_Laundry_YTD_Unit': '$150',
-    'Revenue_Laundry_YTD_Pct': '1%',
-    'Revenue_Misc_YTD_Total': '$8,400',
-    'Revenue_Misc_YTD_Unit': '$525',
-    'Revenue_Misc_YTD_Pct': '4%',
-    'PGR_YTD_Total': '$203,460',
-    'PGR_YTD_Unit': '$12,716',
-    'PGR_YTD_Pct': '100%',
-    'Vacancy_YTD_Total': '($7,731)',
-    'Vacancy_YTD_Unit': '($483)',
-    'Vacancy_YTD_Pct': '(4%)',
-    'EGR_YTD_Total': '$195,729',
-    'EGR_YTD_Unit': '$12,233',
-    'OpEx_Taxes_YTD_Total': '($18,600)',
-    'OpEx_Taxes_YTD_Unit': '($1,163)',
-    
-    // Page 44 - Operating History (Projection)
-    'Revenue_Multifamily_Proj_Total': '$194,400',
-    'Revenue_Multifamily_Proj_Unit': '$12,150',
-    'Revenue_Multifamily_Proj_Pct': '95%',
-    'Revenue_Rental_Proj_Total': '$194,400',
-    'Revenue_Rental_Proj_Unit': '$12,150',
-    'Revenue_Rental_Proj_Pct': '95%',
-    'PGR_Proj_Total': '$202,800',
-    'PGR_Proj_Unit': '$12,675',
-    'Vacancy_Proj_Total': '($7,786)',
-    'Vacancy_Proj_Unit': '($487)',
-    'EGR_Proj_Total': '$195,014',
-    'EGR_Proj_Unit': '$12,188',
-    'OpEx_Taxes_Proj_Total': '($19,688)',
-    'OpEx_Taxes_Proj_Unit': '($1,231)',
-    // Page 44 - Operating History (YTD) - Additional Fields
-    'Revenue_Parking_Proj_Total': '$6,000',
-    'Revenue_Parking_Proj_Unit': '$375',
-    'Revenue_Parking_Proj_Pct': '3%',
-    'Revenue_Laundry_Proj_Total': '$2,400',
-    'Revenue_Laundry_Proj_Unit': '$150',
-    'Revenue_Laundry_Proj_Pct': '1%',
-    'Revenue_Misc_Proj_Total': '$8,400',
-    'Revenue_Misc_Proj_Unit': '$525',
-    'Revenue_Misc_Proj_Pct': '4%',
-    'PGR_Proj_Pct': '100%',
-    'Vacancy_Proj_Pct': '(4%)',
-    'EGR_YTD_Pct': '96%',
-    'EGR_Proj_Pct': '96%',
-    'OpEx_Taxes_YTD_Pct': '(10%)',
-    'OpEx_Taxes_Proj_Pct': '(10%)',
-    'OpEx_Insurance_YTD_Total': '($11,314)',
-    'OpEx_Insurance_YTD_Unit': '($707)',
-    'OpEx_Insurance_YTD_Pct': '(6%)',
-    'OpEx_Insurance_Proj_Total': '($11,360)',
-    'OpEx_Insurance_Proj_Unit': '($710)',
-    'OpEx_Insurance_Proj_Pct': '(6%)',
-    'OpEx_Repairs_YTD_Total': '($13,280)',
-    'OpEx_Repairs_YTD_Unit': '($830)',
-    'OpEx_Repairs_YTD_Pct': '(7%)',
-    'OpEx_Repairs_Proj_Total': '($13,280)',
-    'OpEx_Repairs_Proj_Unit': '($830)',
-    'OpEx_Repairs_Proj_Pct': '(7%)',
-    'OpEx_Payroll_YTD_Total': '($8,000)',
-    'OpEx_Payroll_YTD_Unit': '($500)',
-    'OpEx_Payroll_YTD_Pct': '(4%)',
-    'OpEx_Payroll_Proj_Total': '($8,000)',
-    'OpEx_Payroll_Proj_Unit': '($500)',
-    'OpEx_Payroll_Proj_Pct': '(4%)',
-    'OpEx_Utilities_YTD_Total': '($23,025)',
-    'OpEx_Utilities_YTD_Unit': '($1,439)',
-    'OpEx_Utilities_YTD_Pct': '(12%)',
-    'OpEx_Utilities_Proj_Total': '($21,040)',
-    'OpEx_Utilities_Proj_Unit': '($1,315)',
-    'OpEx_Utilities_Proj_Pct': '(11%)',
-    'OpEx_Management_YTD_Total': '($8,301)',
-    'OpEx_Management_YTD_Unit': '($519)',
-    'OpEx_Management_YTD_Pct': '(4%)',
-    'OpEx_Management_Proj_Total': '($8,281)',
-    'OpEx_Management_Proj_Unit': '($518)',
-    'OpEx_Management_Proj_Pct': '(4%)',
-    'OpEx_Other_YTD_Total': '($3,908)',
-    'OpEx_Other_YTD_Unit': '($244)',
-    'OpEx_Other_YTD_Pct': '(2%)',
-    'OpEx_Other_Proj_Total': '($3,920)',
-    'OpEx_Other_Proj_Unit': '($245)',
-    'OpEx_Other_Proj_Pct': '(2%)',
-    'OpEx_Total_YTD_Total': '($86,428)',
-    'OpEx_Total_YTD_Unit': '($5,402)',
-    'OpEx_Total_YTD_Pct': '(44%)',
-    'OpEx_Total_Proj_Total': '($85,569)',
-    'OpEx_Total_Proj_Unit': '($5,348)',
-    'OpEx_Total_Proj_Pct': '(44%)',
-    'NOI_YTD_Total': '$109,301',
-    'NOI_YTD_Unit': '$6,831',
-    'NOI_YTD_Pct': '54%',
-    'NOI_Proj_Total': '$109,445',
-    'NOI_Proj_Unit': '$6,840',
-    'NOI_Proj_Pct': '54%',
-
-    
-    // Page 45 - Operating Expenses Summary
-    'OpEx_Taxes_PctEGR': '10.1%',
-    'OpEx_Taxes_SF': '$1.93',
-    'OpEx_Taxes_Unit': '$1,231',
-    'OpEx_Taxes_Total': '$19,688',
-    'OpEx_Insurance_PctEGR': '5.8%',
-    'OpEx_Insurance_SF': '$1.11',
-    'OpEx_Insurance_Unit': '$710',
-    'OpEx_Insurance_Total': '$11,360',
-    'OpEx_Repairs_PctEGR': '6.8%',
-    'OpEx_Repairs_SF': '$1.30',
-    'OpEx_Repairs_Unit': '$830',
-    'OpEx_Repairs_Total': '$13,280',
-    'OpEx_Payroll_PctEGR': '4.1%',
-    'OpEx_Payroll_SF': '$0.78',
-    'OpEx_Payroll_Unit': '$500',
-    'OpEx_Payroll_Total': '$8,000',
-    'OpEx_Utilities_PctEGR': '10.8%',
-    'OpEx_Utilities_SF': '$2.06',
-    'OpEx_Utilities_Unit': '$1,315',
-    'OpEx_Utilities_Total': '$21,040',
-    'OpEx_Management_PctEGR': '4.2%',
-    'OpEx_Management_SF': '$0.81',
-    'OpEx_Management_Unit': '$518',
-    'OpEx_Management_Total': '$8,281',
-    'OpEx_Other_PctEGR': '2.0%',
-    'OpEx_Other_SF': '$0.38',
-    'OpEx_Other_Unit': '$245',
-    'OpEx_Other_Total': '$3,920',
-    'OpEx_Total_PctEGR': '43.9%',
-    'OpEx_Total_SF': '$8.38',
-    'OpEx_Total_Unit': '$5,348',
-    'OpEx_Total_Total': '$85,569',
-    'NOI_Total': '$109,445',
-    'NOI_Per_Unit': '$6,840',
-    'NOI_Per_SF': '$10.73',
-    
-    // Page 46 - Capitalization Rate Context
-    'Bond_Yield_10yr': '3.2%',
-    'Risk_Premium_BP': '75-300',
-    'CapRate_Implied_Range': '4.25%-6.25%'
-
-};
-
-// Store original field ID text
-const originalFieldText = new Map();
-
 // Initialize - Store all field IDs and count pages
 const allPages = document.querySelectorAll('.page-sheet');
 const totalPages = allPages.length;
-
-document.querySelectorAll('.field-mapped').forEach(field => {
-    const fieldId = field.getAttribute('title');
-    if (fieldId && !originalFieldText.has(field)) {
-        originalFieldText.set(field, field.textContent);
-    }
-});
 
 // Update page count display (removed - no limit)
 document.getElementById('page-count').textContent = '';
@@ -3248,24 +2976,19 @@ previewToggle.addEventListener('change', function() {
     const isPreviewMode = this.checked;
 
     if (isPreviewMode) {
-        // Enable Preview Mode - Show actual data
+        // Enable Preview Mode - Show actual sample data
         document.body.classList.add('preview-mode');
         modeLabel.textContent = 'Preview Mode ✓';
 
-        // Replace field IDs with sample data
+        // Replace field IDs with sample data from data-sample attribute
         document.querySelectorAll('.field-mapped').forEach(field => {
-            const fieldId = field.getAttribute('title');
-            if (fieldId) {
-                // Extract field name from {{Field_Name}}
-                const fieldName = fieldId.replace(/[{}]/g, '');
-                const sampleValue = sampleData[fieldName];
-
-                if (sampleValue) {
-                    field.textContent = sampleValue;
-                } else {
-                    // If no sample data, show placeholder
-                    field.textContent = `[${fieldName}]`;
+            const sampleValue = field.getAttribute('data-sample');
+            if (sampleValue) {
+                // Store original field ID for restoration
+                if (!field.hasAttribute('data-original')) {
+                    field.setAttribute('data-original', field.textContent);
                 }
+                field.textContent = sampleValue;
             }
         });
     } else {
@@ -3273,11 +2996,11 @@ previewToggle.addEventListener('change', function() {
         document.body.classList.remove('preview-mode');
         modeLabel.textContent = 'Show Field IDs';
 
-        // Restore original field IDs
+        // Restore original field IDs from data-original
         document.querySelectorAll('.field-mapped').forEach(field => {
-            const original = originalFieldText.get(field);
-            if (original) {
-                field.textContent = original;
+            const originalText = field.getAttribute('data-original');
+            if (originalText) {
+                field.textContent = originalText;
             }
         });
     }

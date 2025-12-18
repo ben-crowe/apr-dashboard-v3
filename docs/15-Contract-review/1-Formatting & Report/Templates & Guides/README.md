@@ -62,7 +62,34 @@ This template contains the **OLD DESIGN** with:
 
 ---
 
-### 3. **template-map-page.html**
+### 3. **template-direct-comparison-table.html**
+**Type:** HTML Template
+**Use For:** Direct Comparison Approach analysis with 4 sections (Property, Sale, Income, Physical)
+**Pages Using This Template:** 59 (current implementation)
+
+**Features:**
+- 7-column layout (Items/Label + SUBJECT + COMP 1-5)
+- Four distinct sections: Direct Comparison, Sale Information, Income Information, Physical Information
+- Clean vertical gridlines between data columns only
+- Horizontal lines under headers and above summary rows
+- Empty SUBJECT column in Sale Information (no borders)
+- Summary rows with colspan labels and adjustment percentages
+- Compact spacing (2px padding, 10px above summaries)
+- Field mapping pattern: `{{Subject_FieldName}}`, `{{COMP_#_FieldName}}`
+
+**Design Specifications:**
+- Columns: 17% label + 13.83% × 6 (SUBJECT + COMP 1-5)
+- Font: 7.5pt data, 8.5pt section headers, 6.5pt amenities, 6pt percentages
+- Borders: Vertical gridlines between data columns, no outer borders
+- Lines: 1px under headers, 1px above summaries, 2px at bottom
+- Label column: No vertical borders, white-space: nowrap
+- Summary rows: No vertical gridlines, colspan="2" for labels
+
+**Status:** ✅ Production-ready (based on Page 59, December 17, 2025)
+
+---
+
+### 4. **template-map-page.html**
 **Type:** HTML Template
 **Use For:** Location map pages showing all comparables on one map
 **Pages Using This Template:** 53 (Comparable Locations Map)
@@ -77,7 +104,7 @@ This template contains the **OLD DESIGN** with:
 
 ---
 
-### 4. **AGENT-GUIDE-Page-Formatting.md**
+### 5. **AGENT-GUIDE-Page-Formatting.md**
 **Type:** Documentation
 **Audience:** AI Agents (orchestrators and sub-agents)
 
@@ -100,7 +127,7 @@ This template contains the **OLD DESIGN** with:
 
 ---
 
-### 5. **GUIDE-Template-Usage.md**
+### 6. **GUIDE-Template-Usage.md**
 **Type:** Documentation
 **Audience:** Developers and AI Agents
 
@@ -123,7 +150,7 @@ This template contains the **OLD DESIGN** with:
 
 ---
 
-### 6. **Comparables Pg.png**
+### 7. **Comparables Pg.png**
 **Type:** Reference Image
 **Format:** PNG Screenshot
 
@@ -232,6 +259,32 @@ This template contains the **OLD DESIGN** with:
 **Template Status:** ⚠️ Not yet updated - use Pages 54-58 as reference
 
 **Reason:** User provided screenshot showing cleaner design without grid lines and better use of space for larger photos
+
+---
+
+### December 17, 2025 - Page 59 Direct Comparison Table Design
+**Changed By:** Claude Code AI Agent & Ben Crowe
+
+**Changes:**
+1. Reduced vertical padding from 3px to 2px for more compact layout
+2. Removed all vertical gridlines from label column (first column)
+3. Removed vertical gridlines from empty SUBJECT column in Sale Information section
+4. Removed vertical gridlines from column headers (SUBJECT, COMP 1-5)
+5. Added full-width horizontal line under column headers (1px #ccc)
+6. Removed horizontal lines above blue section headers (vertical lines flow to headers)
+7. Added horizontal lines above summary rows (Total Transactional/Physical Adjustments)
+8. Summary rows use colspan="2" for labels spanning Items + SUBJECT columns
+9. Removed vertical gridlines from summary rows (no column divisions)
+10. Added 8px spacing above final summary line (before Total Physical Adjustments)
+11. Thicker 2px bottom border only on final table's last row
+12. Label text set to nowrap (prevents wrapping of long labels)
+13. Removed "(Weighted)" suffix from "Year Built/Ren" label
+14. Empty capitalization rate cell for SUBJECT (no field mapping)
+
+**Affected Pages:** 59
+**Template Created:** `template-direct-comparison-table.html`
+
+**Reason:** User requested cleaner design with selective gridlines - vertical lines only between data columns, horizontal lines only where they add value (under headers, above summaries). Label column needs to extend without visual interruption. Summary rows should read as continuous lines.
 
 ---
 

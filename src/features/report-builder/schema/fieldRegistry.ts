@@ -461,24 +461,40 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'calc-type1-sf', storeId: 'calc-type1-sf', label: 'Avg SF', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-type1-rent', storeId: 'calc-type1-rent', label: 'Market Rent/Mo', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-type1-annual', storeId: 'calc-type1-annual', label: 'Annual Revenue', section: 'calc', subsection: 'calc-unit-mix', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'calc-type1-contract-rent', storeId: 'calc-type1-contract-rent', label: 'Contract Rent/Mo', section: 'calc', subsection: 'calc-unit-mix', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'calc-type1-cont-v-market', storeId: 'calc-type1-cont-v-market', label: 'Contract vs Market %', section: 'calc', subsection: 'calc-unit-mix', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-type1-per-unit', storeId: 'calc-type1-per-unit', label: 'Revenue/Unit', section: 'calc', subsection: 'calc-unit-mix', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-type1-per-sf', storeId: 'calc-type1-per-sf', label: 'Revenue/SF', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'calculated', required: false },
 
   { id: 'calc-type2-name', storeId: 'calc-type2-name', label: 'Unit Type 2', section: 'calc', subsection: 'calc-unit-mix', type: 'text', inputSource: 'user-input', required: false },
   { id: 'calc-type2-count', storeId: 'calc-type2-count', label: 'Unit Count', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-type2-sf', storeId: 'calc-type2-sf', label: 'Avg SF', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-type2-rent', storeId: 'calc-type2-rent', label: 'Market Rent/Mo', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-type2-annual', storeId: 'calc-type2-annual', label: 'Annual Revenue', section: 'calc', subsection: 'calc-unit-mix', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'calc-type2-contract-rent', storeId: 'calc-type2-contract-rent', label: 'Contract Rent/Mo', section: 'calc', subsection: 'calc-unit-mix', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'calc-type2-cont-v-market', storeId: 'calc-type2-cont-v-market', label: 'Contract vs Market %', section: 'calc', subsection: 'calc-unit-mix', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-type2-per-unit', storeId: 'calc-type2-per-unit', label: 'Revenue/Unit', section: 'calc', subsection: 'calc-unit-mix', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-type2-per-sf', storeId: 'calc-type2-per-sf', label: 'Revenue/SF', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'calculated', required: false },
 
   { id: 'calc-type3-name', storeId: 'calc-type3-name', label: 'Unit Type 3', section: 'calc', subsection: 'calc-unit-mix', type: 'text', inputSource: 'user-input', required: false },
   { id: 'calc-type3-count', storeId: 'calc-type3-count', label: 'Unit Count', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-type3-sf', storeId: 'calc-type3-sf', label: 'Avg SF', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-type3-rent', storeId: 'calc-type3-rent', label: 'Market Rent/Mo', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-type3-annual', storeId: 'calc-type3-annual', label: 'Annual Revenue', section: 'calc', subsection: 'calc-unit-mix', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'calc-type3-contract-rent', storeId: 'calc-type3-contract-rent', label: 'Contract Rent/Mo', section: 'calc', subsection: 'calc-unit-mix', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'calc-type3-cont-v-market', storeId: 'calc-type3-cont-v-market', label: 'Contract vs Market %', section: 'calc', subsection: 'calc-unit-mix', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-type3-per-unit', storeId: 'calc-type3-per-unit', label: 'Revenue/Unit', section: 'calc', subsection: 'calc-unit-mix', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-type3-per-sf', storeId: 'calc-type3-per-sf', label: 'Revenue/SF', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'calculated', required: false },
 
   { id: 'calc-type4-name', storeId: 'calc-type4-name', label: 'Unit Type 4', section: 'calc', subsection: 'calc-unit-mix', type: 'text', inputSource: 'user-input', required: false },
   { id: 'calc-type4-count', storeId: 'calc-type4-count', label: 'Unit Count', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-type4-sf', storeId: 'calc-type4-sf', label: 'Avg SF', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-type4-rent', storeId: 'calc-type4-rent', label: 'Market Rent/Mo', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-type4-annual', storeId: 'calc-type4-annual', label: 'Annual Revenue', section: 'calc', subsection: 'calc-unit-mix', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'calc-type4-contract-rent', storeId: 'calc-type4-contract-rent', label: 'Contract Rent/Mo', section: 'calc', subsection: 'calc-unit-mix', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'calc-type4-cont-v-market', storeId: 'calc-type4-cont-v-market', label: 'Contract vs Market %', section: 'calc', subsection: 'calc-unit-mix', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-type4-per-unit', storeId: 'calc-type4-per-unit', label: 'Revenue/Unit', section: 'calc', subsection: 'calc-unit-mix', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-type4-per-sf', storeId: 'calc-type4-per-sf', label: 'Revenue/SF', section: 'calc', subsection: 'calc-unit-mix', type: 'number', inputSource: 'calculated', required: false },
 
   { id: 'calc-total-units', storeId: 'calc-total-units', label: 'Total Units', section: 'calc', subsection: 'calc-unit-mix', type: 'calculated', inputSource: 'calculated', required: false },
   { id: 'calc-total-sf', storeId: 'calc-total-sf', label: 'Total SF', section: 'calc', subsection: 'calc-unit-mix', type: 'calculated', inputSource: 'calculated', required: false },
@@ -517,6 +533,56 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'calc-exp-admin', storeId: 'calc-exp-admin', label: 'Admin & General', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-exp-reserves', storeId: 'calc-exp-reserves', label: 'Replacement Reserves', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-exp-other', storeId: 'calc-exp-other', label: 'Other Expenses', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'user-input', required: false },
+
+  // Expense Breakdown - Taxes
+  { id: 'calc-exp-taxes-pct-pgr', storeId: 'calc-exp-taxes-pct-pgr', label: 'Taxes % of PGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-taxes-pct-egr', storeId: 'calc-exp-taxes-pct-egr', label: 'Taxes % of EGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-taxes-per-unit', storeId: 'calc-exp-taxes-per-unit', label: 'Taxes/Unit', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-taxes-per-sf', storeId: 'calc-exp-taxes-per-sf', label: 'Taxes/SF', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-taxes-annual', storeId: 'calc-exp-taxes-annual', label: 'Taxes Annual', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'user-input', required: false },
+
+  // Expense Breakdown - Insurance
+  { id: 'calc-exp-insurance-pct-pgr', storeId: 'calc-exp-insurance-pct-pgr', label: 'Insurance % of PGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-insurance-pct-egr', storeId: 'calc-exp-insurance-pct-egr', label: 'Insurance % of EGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-insurance-per-unit', storeId: 'calc-exp-insurance-per-unit', label: 'Insurance/Unit', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-insurance-per-sf', storeId: 'calc-exp-insurance-per-sf', label: 'Insurance/SF', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-insurance-annual', storeId: 'calc-exp-insurance-annual', label: 'Insurance Annual', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'user-input', required: false },
+
+  // Expense Breakdown - Repairs
+  { id: 'calc-exp-repairs-pct-pgr', storeId: 'calc-exp-repairs-pct-pgr', label: 'Repairs % of PGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-repairs-pct-egr', storeId: 'calc-exp-repairs-pct-egr', label: 'Repairs % of EGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-repairs-per-unit', storeId: 'calc-exp-repairs-per-unit', label: 'Repairs/Unit', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-repairs-per-sf', storeId: 'calc-exp-repairs-per-sf', label: 'Repairs/SF', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-repairs-annual', storeId: 'calc-exp-repairs-annual', label: 'Repairs Annual', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'user-input', required: false },
+
+  // Expense Breakdown - Payroll
+  { id: 'calc-exp-payroll-pct-pgr', storeId: 'calc-exp-payroll-pct-pgr', label: 'Payroll % of PGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-payroll-pct-egr', storeId: 'calc-exp-payroll-pct-egr', label: 'Payroll % of EGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-payroll-per-unit', storeId: 'calc-exp-payroll-per-unit', label: 'Payroll/Unit', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-payroll-per-sf', storeId: 'calc-exp-payroll-per-sf', label: 'Payroll/SF', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-payroll-annual', storeId: 'calc-exp-payroll-annual', label: 'Payroll Annual', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'user-input', required: false },
+
+  // Expense Breakdown - Utilities
+  { id: 'calc-exp-utilities-pct-pgr', storeId: 'calc-exp-utilities-pct-pgr', label: 'Utilities % of PGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-utilities-pct-egr', storeId: 'calc-exp-utilities-pct-egr', label: 'Utilities % of EGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-utilities-per-unit', storeId: 'calc-exp-utilities-per-unit', label: 'Utilities/Unit', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-utilities-per-sf', storeId: 'calc-exp-utilities-per-sf', label: 'Utilities/SF', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-utilities-annual', storeId: 'calc-exp-utilities-annual', label: 'Utilities Annual', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'user-input', required: false },
+
+  // Expense Breakdown - Management
+  { id: 'calc-exp-management-pct-pgr', storeId: 'calc-exp-management-pct-pgr', label: 'Management % of PGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-management-pct-egr', storeId: 'calc-exp-management-pct-egr', label: 'Management % of EGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-management-per-unit', storeId: 'calc-exp-management-per-unit', label: 'Management/Unit', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-management-per-sf', storeId: 'calc-exp-management-per-sf', label: 'Management/SF', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-management-annual', storeId: 'calc-exp-management-annual', label: 'Management Annual', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'user-input', required: false },
+
+  // Expense Breakdown - Other
+  { id: 'calc-exp-other-pct-pgr', storeId: 'calc-exp-other-pct-pgr', label: 'Other % of PGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-other-pct-egr', storeId: 'calc-exp-other-pct-egr', label: 'Other % of EGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-other-per-unit', storeId: 'calc-exp-other-per-unit', label: 'Other/Unit', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-other-per-sf', storeId: 'calc-exp-other-per-sf', label: 'Other/SF', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'calc-exp-other-annual', storeId: 'calc-exp-other-annual', label: 'Other Annual', section: 'calc', subsection: 'calc-expenses', type: 'currency', inputSource: 'user-input', required: false },
+
   { id: 'calc-expenses-total', storeId: 'calc-expenses-total', label: 'Total Expenses', section: 'calc', subsection: 'calc-expenses', type: 'calculated', inputSource: 'calculated', required: false },
   { id: 'calc-expense-ratio', storeId: 'calc-expense-ratio', label: 'Expense Ratio (%)', section: 'calc', subsection: 'calc-expenses', type: 'calculated', inputSource: 'calculated', required: false },
   { id: 'calc-expenses-per-unit', storeId: 'calc-expenses-per-unit', label: 'Expenses Per Unit', section: 'calc', subsection: 'calc-expenses', type: 'calculated', inputSource: 'calculated', required: false },

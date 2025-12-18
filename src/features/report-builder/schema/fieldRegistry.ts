@@ -171,6 +171,8 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'street-address', storeId: 'street-address', label: 'Street Address', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
   { id: 'city', storeId: 'city', label: 'City', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
   { id: 'province', storeId: 'province', label: 'Province', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
+  { id: 'province-abbr', storeId: 'province-abbr', label: 'Province Abbreviation', section: 'cover', type: 'text', inputSource: 'auto-filled', required: false },
+  { id: 'property-full-address', storeId: 'property-full-address', label: 'Full Property Address', section: 'cover', type: 'text', inputSource: 'calculated', required: false },
   { id: 'valuation-date', storeId: 'valuation-date', label: 'Date of Valuation', section: 'cover', type: 'date', inputSource: 'user-input', required: true },
   { id: 'report-date', storeId: 'report-date', label: 'Date of Report', section: 'cover', type: 'date', inputSource: 'auto-filled', required: true },
   { id: 'file-number', storeId: 'file-number', label: 'File Number', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
@@ -182,6 +184,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'client-city', storeId: 'client-city', label: 'Client City', section: 'cover', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'client-province', storeId: 'client-province', label: 'Client Province', section: 'cover', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'client-postal', storeId: 'client-postal', label: 'Client Postal Code', section: 'cover', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'client-title', storeId: 'client-title', label: 'Client Title', section: 'cover', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
 
   // Cover - Appraiser Info Subsection
   { id: 'appraiser-name', storeId: 'appraiser-name', label: 'Appraiser Name', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: true },
@@ -492,6 +495,8 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'calc-other-income', storeId: 'calc-other-income', label: 'Other Income Annual', section: 'calc', subsection: 'calc-other-income', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-total-other-income', storeId: 'calc-total-other-income', label: 'Total Other Income', section: 'calc', subsection: 'calc-other-income', type: 'calculated', inputSource: 'calculated', required: false },
   { id: 'calc-pgr', storeId: 'calc-pgr', label: 'Potential Gross Revenue', section: 'calc', subsection: 'calc-other-income', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'calc-pgr-per-unit', storeId: 'calc-pgr-per-unit', label: 'PGR Per Unit', section: 'calc', subsection: 'calc-other-income', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'calc-pgr-per-sf', storeId: 'calc-pgr-per-sf', label: 'PGR Per SF', section: 'calc', subsection: 'calc-other-income', type: 'calculated', inputSource: 'calculated', required: false },
 
   // Calc - Vacancy Subsection
   { id: 'calc-vacancy-rate', storeId: 'calc-vacancy-rate', label: 'Vacancy Rate (%)', section: 'calc', subsection: 'calc-vacancy', type: 'number', inputSource: 'user-input', required: false },
@@ -499,6 +504,8 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'calc-concessions-rate', storeId: 'calc-concessions-rate', label: 'Concessions Rate (%)', section: 'calc', subsection: 'calc-vacancy', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-vacancy-loss', storeId: 'calc-vacancy-loss', label: 'Total Vacancy & Loss', section: 'calc', subsection: 'calc-vacancy', type: 'calculated', inputSource: 'calculated', required: false },
   { id: 'calc-egr', storeId: 'calc-egr', label: 'Effective Gross Revenue', section: 'calc', subsection: 'calc-vacancy', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'calc-egr-per-unit', storeId: 'calc-egr-per-unit', label: 'EGR Per Unit', section: 'calc', subsection: 'calc-vacancy', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'calc-egr-per-sf', storeId: 'calc-egr-per-sf', label: 'EGR Per SF', section: 'calc', subsection: 'calc-vacancy', type: 'calculated', inputSource: 'calculated', required: false },
 
   // Calc - Expenses Subsection
   { id: 'calc-exp-management', storeId: 'calc-exp-management', label: 'Management', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'user-input', required: false },
@@ -512,9 +519,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'calc-exp-other', storeId: 'calc-exp-other', label: 'Other Expenses', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-expenses-total', storeId: 'calc-expenses-total', label: 'Total Expenses', section: 'calc', subsection: 'calc-expenses', type: 'calculated', inputSource: 'calculated', required: false },
   { id: 'calc-expense-ratio', storeId: 'calc-expense-ratio', label: 'Expense Ratio (%)', section: 'calc', subsection: 'calc-expenses', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'calc-expenses-per-unit', storeId: 'calc-expenses-per-unit', label: 'Expenses Per Unit', section: 'calc', subsection: 'calc-expenses', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'calc-expenses-per-sf', storeId: 'calc-expenses-per-sf', label: 'Expenses Per SF', section: 'calc', subsection: 'calc-expenses', type: 'calculated', inputSource: 'calculated', required: false },
 
   // Calc - Cap Rate Subsection
   { id: 'calc-cap-rate', storeId: 'calc-cap-rate', label: 'Cap Rate (%)', section: 'calc', subsection: 'calc-cap', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'cap-rate-average', storeId: 'cap-rate-average', label: 'Cap Rate Average', section: 'calc', subsection: 'calc-cap', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'cap-rate-range-high', storeId: 'cap-rate-range-high', label: 'Cap Rate Range High', section: 'calc', subsection: 'calc-cap', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'cap-rate-range-low', storeId: 'cap-rate-range-low', label: 'Cap Rate Range Low', section: 'calc', subsection: 'calc-cap', type: 'percentage', inputSource: 'user-input', required: false },
 
   // Calc - Adjustments Subsection
   { id: 'calc-adj-capex', storeId: 'calc-adj-capex', label: 'CapEx Adjustment', section: 'calc', subsection: 'calc-adjustments', type: 'number', inputSource: 'user-input', required: false },
@@ -556,6 +568,11 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'subject-parking', storeId: 'subject-parking', label: 'Parking Ratio', section: 'sales', subsection: 'subject-summary', type: 'number', inputSource: 'auto-filled', required: false },
   { id: 'subject-condition', storeId: 'subject-condition', label: 'Condition', section: 'sales', subsection: 'subject-summary', type: 'text', inputSource: 'user-input', required: false },
 
+  // Sales - DCA Summary Subsection
+  { id: 'dca-price-per-unit-concluded', storeId: 'dca-price-per-unit-concluded', label: 'Concluded Price Per Unit', section: 'sales', subsection: 'dca-summary', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'dca-price-per-unit-high', storeId: 'dca-price-per-unit-high', label: 'Price Per Unit High', section: 'sales', subsection: 'dca-summary', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-price-per-unit-low', storeId: 'dca-price-per-unit-low', label: 'Price Per Unit Low', section: 'sales', subsection: 'dca-summary', type: 'currency', inputSource: 'calculated', required: false },
+
   // Sales - Comp 1 Subsection
   { id: 'comp1-name', storeId: 'comp1-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp1-address', storeId: 'comp1-address', label: 'Address', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
@@ -567,6 +584,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp1-price-per-sf', storeId: 'comp1-price-per-sf', label: 'Price/SF', section: 'sales', subsection: 'sale-comp-1', type: 'calculated', inputSource: 'calculated', required: false },
   { id: 'comp1-year', storeId: 'comp1-year', label: 'Year Built', section: 'sales', subsection: 'sale-comp-1', type: 'number', inputSource: 'user-input', required: false },
   { id: 'comp1-cap-rate', storeId: 'comp1-cap-rate', label: 'Cap Rate (%)', section: 'sales', subsection: 'sale-comp-1', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp1-city', storeId: 'comp1-city', label: 'City', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-noi', storeId: 'comp1-noi', label: 'NOI', section: 'sales', subsection: 'sale-comp-1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp1-noi-per-unit', storeId: 'comp1-noi-per-unit', label: 'NOI/Unit', section: 'sales', subsection: 'sale-comp-1', type: 'currency', inputSource: 'calculated', required: false },
 
   // Sales - Comp 2 Subsection
   { id: 'comp2-name', storeId: 'comp2-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
@@ -579,6 +599,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp2-price-per-sf', storeId: 'comp2-price-per-sf', label: 'Price/SF', section: 'sales', subsection: 'sale-comp-2', type: 'calculated', inputSource: 'calculated', required: false },
   { id: 'comp2-year', storeId: 'comp2-year', label: 'Year Built', section: 'sales', subsection: 'sale-comp-2', type: 'number', inputSource: 'user-input', required: false },
   { id: 'comp2-cap-rate', storeId: 'comp2-cap-rate', label: 'Cap Rate (%)', section: 'sales', subsection: 'sale-comp-2', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp2-city', storeId: 'comp2-city', label: 'City', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-noi', storeId: 'comp2-noi', label: 'NOI', section: 'sales', subsection: 'sale-comp-2', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp2-noi-per-unit', storeId: 'comp2-noi-per-unit', label: 'NOI/Unit', section: 'sales', subsection: 'sale-comp-2', type: 'currency', inputSource: 'calculated', required: false },
 
   // Sales - Comp 3 Subsection
   { id: 'comp3-name', storeId: 'comp3-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
@@ -591,6 +614,39 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp3-price-per-sf', storeId: 'comp3-price-per-sf', label: 'Price/SF', section: 'sales', subsection: 'sale-comp-3', type: 'calculated', inputSource: 'calculated', required: false },
   { id: 'comp3-year', storeId: 'comp3-year', label: 'Year Built', section: 'sales', subsection: 'sale-comp-3', type: 'number', inputSource: 'user-input', required: false },
   { id: 'comp3-cap-rate', storeId: 'comp3-cap-rate', label: 'Cap Rate (%)', section: 'sales', subsection: 'sale-comp-3', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp3-city', storeId: 'comp3-city', label: 'City', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-noi', storeId: 'comp3-noi', label: 'NOI', section: 'sales', subsection: 'sale-comp-3', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp3-noi-per-unit', storeId: 'comp3-noi-per-unit', label: 'NOI/Unit', section: 'sales', subsection: 'sale-comp-3', type: 'currency', inputSource: 'calculated', required: false },
+
+  // Sales - Comp 4 Subsection
+  { id: 'comp4-name', storeId: 'comp4-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-address', storeId: 'comp4-address', label: 'Address', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-sale-date', storeId: 'comp4-sale-date', label: 'Sale Date', section: 'sales', subsection: 'sale-comp-4', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'comp4-sale-price', storeId: 'comp4-sale-price', label: 'Sale Price', section: 'sales', subsection: 'sale-comp-4', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp4-units', storeId: 'comp4-units', label: 'Units', section: 'sales', subsection: 'sale-comp-4', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp4-price-per-unit', storeId: 'comp4-price-per-unit', label: 'Price/Unit', section: 'sales', subsection: 'sale-comp-4', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'comp4-gba', storeId: 'comp4-gba', label: 'GBA (SF)', section: 'sales', subsection: 'sale-comp-4', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp4-price-per-sf', storeId: 'comp4-price-per-sf', label: 'Price/SF', section: 'sales', subsection: 'sale-comp-4', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'comp4-year', storeId: 'comp4-year', label: 'Year Built', section: 'sales', subsection: 'sale-comp-4', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp4-cap-rate', storeId: 'comp4-cap-rate', label: 'Cap Rate (%)', section: 'sales', subsection: 'sale-comp-4', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp4-city', storeId: 'comp4-city', label: 'City', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-noi', storeId: 'comp4-noi', label: 'NOI', section: 'sales', subsection: 'sale-comp-4', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp4-noi-per-unit', storeId: 'comp4-noi-per-unit', label: 'NOI/Unit', section: 'sales', subsection: 'sale-comp-4', type: 'currency', inputSource: 'calculated', required: false },
+
+  // Sales - Comp 5 Subsection
+  { id: 'comp5-name', storeId: 'comp5-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-address', storeId: 'comp5-address', label: 'Address', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-sale-date', storeId: 'comp5-sale-date', label: 'Sale Date', section: 'sales', subsection: 'sale-comp-5', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'comp5-sale-price', storeId: 'comp5-sale-price', label: 'Sale Price', section: 'sales', subsection: 'sale-comp-5', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp5-units', storeId: 'comp5-units', label: 'Units', section: 'sales', subsection: 'sale-comp-5', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp5-price-per-unit', storeId: 'comp5-price-per-unit', label: 'Price/Unit', section: 'sales', subsection: 'sale-comp-5', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'comp5-gba', storeId: 'comp5-gba', label: 'GBA (SF)', section: 'sales', subsection: 'sale-comp-5', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp5-price-per-sf', storeId: 'comp5-price-per-sf', label: 'Price/SF', section: 'sales', subsection: 'sale-comp-5', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'comp5-year', storeId: 'comp5-year', label: 'Year Built', section: 'sales', subsection: 'sale-comp-5', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp5-cap-rate', storeId: 'comp5-cap-rate', label: 'Cap Rate (%)', section: 'sales', subsection: 'sale-comp-5', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp5-city', storeId: 'comp5-city', label: 'City', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-noi', storeId: 'comp5-noi', label: 'NOI', section: 'sales', subsection: 'sale-comp-5', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp5-noi-per-unit', storeId: 'comp5-noi-per-unit', label: 'NOI/Unit', section: 'sales', subsection: 'sale-comp-5', type: 'currency', inputSource: 'calculated', required: false },
 
   // Sales - Conclusion Subsection
   { id: 'sales-value-indication', storeId: 'sales-value-indication', label: 'Sales Comparison Value', section: 'sales', subsection: 'sales-conclusion', type: 'number', inputSource: 'user-input', required: false },
@@ -605,6 +661,13 @@ export const fieldRegistry: FieldDefinition[] = [
   // --- RENTAL SURVEY INTRODUCTION ---
   { id: 'survey-intro', storeId: 'survey-intro', label: 'Rental Survey Introduction', section: 'survey', subsection: 'survey-overview', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'survey-methodology', storeId: 'survey-methodology', label: 'Survey Methodology', section: 'survey', subsection: 'survey-overview', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // --- SURVEY SUMMARY ---
+  { id: 'contract-to-market-pct', storeId: 'contract-to-market-pct', label: 'Contract to Market %', section: 'survey', subsection: 'survey-summary', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'survey-1br-avg-rent', storeId: 'survey-1br-avg-rent', label: '1BR Average Rent', section: 'survey', subsection: 'survey-summary', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'survey-1br-avg-psf', storeId: 'survey-1br-avg-psf', label: '1BR Average PSF', section: 'survey', subsection: 'survey-summary', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'survey-2br-avg-rent', storeId: 'survey-2br-avg-rent', label: '2BR Average Rent', section: 'survey', subsection: 'survey-summary', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'survey-2br-avg-psf', storeId: 'survey-2br-avg-psf', label: '2BR Average PSF', section: 'survey', subsection: 'survey-summary', type: 'number', inputSource: 'calculated', required: false },
 
   // --- RENTAL COMP 1 ---
   { id: 'survey1-name', storeId: 'survey1-name', label: 'Property Name', section: 'survey', subsection: 'rental-comp-1', type: 'text', inputSource: 'user-input', required: false },

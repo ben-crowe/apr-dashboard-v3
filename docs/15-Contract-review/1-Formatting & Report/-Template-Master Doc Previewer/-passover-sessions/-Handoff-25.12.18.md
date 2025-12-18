@@ -1,7 +1,7 @@
 # Session Handoff - APR Report Template & Field Mapping
 
 **Last Updated:** 2025-12-18
-**Status:** Pages 49, 59, 39, 63, 44, 61, 37, 31 HTML updates complete ✅ | Page 65 field mapping next 🔄
+**Status:** Pages 49, 59, 39, 63, 44, 61, 37, 31, 32, 65 complete ✅ | Page 37 awaiting CSS formatting 🔄
 
 ---
 
@@ -31,7 +31,11 @@
 | Page 37 HTML Field Updates | ✅ Complete | a8a6153 |
 | Page 31 Field ID Conversion | ✅ Complete | 63b5b62 |
 | Page 31 Field Mapping | ✅ Complete | c999c8e |
-| Page 65 Field Mapping | 🔄 Next | - |
+| Page 32 Field Mapping | ✅ Complete | 39ad3af |
+| Page 65 Field Mapping | ✅ Complete | e987380 |
+| Page 65 HTML Field Updates | ✅ Complete | e987380 |
+| TABLE-OF-CONTENTS Update (Page 65) | ✅ Complete | 608b0cd |
+| Page 37 Formatting (CSS-based) | ⏳ Awaiting other agent | - |
 
 ---
 
@@ -130,12 +134,16 @@ Need to verify these exist in fieldRegistry.ts:
 ## NEXT STEPS
 
 ### Completed in Latest Session ✅
-1. **Page 39 Rental Comp Location Table** - DONE
-   - Replaced hardcoded table with field-mapped version (lines 2668-2709)
-   - Created FIELD-MAPPING-Page-39-Registry.md
-   - 20 fields total (4 per comparable × 5 comparables)
-   - 15 fields verified in test data, 5 distance fields need adding
-   - Updated TABLE-OF-CONTENTS status
+1. **Page 32 HBU Field Mapping** - DONE
+   - Created FIELD-MAPPING-Page-32-Registry.md
+   - 3 fields documented: zoning-designation, site-size, hbu-conclusion-vacant
+   - Follows same pattern as Page 31 documentation
+
+2. **Page 37 Formatting Investigation** - DONE (REVERTED)
+   - Tested explicit font approach (Montserrat, Open Sans)
+   - Discovered font size limits: Header1 ≤14pt, body ≤9pt
+   - Reverted via git reset to restore working version
+   - Awaiting CSS class-based approach from other agent
 
 ### Immediate (Next Session)
 1. **Add 5 distance fields to test data** (For TypeScript Pro Agent)
@@ -175,7 +183,8 @@ Need to verify these exist in fieldRegistry.ts:
 
 | Date | Session | Work Done | Commits |
 |------|---------|-----------|---------|
-| 2025-12-18 | 7 | Page 37 replaced (15-col rent roll, 37 fields), Page 31 replaced (multifamily indicators, 8 fields), field mapping docs | a8a6153, 9730ebc, 42ff11a, 0918da1, 7f36594 |
+| 2025-12-18 | 9 | Page 32 HBU field mapping (3 fields), Page 37 formatting attempt + revert, CSS class approach discussion | 39ad3af (kept), d0be22d + 1676ded (reverted) |
+| 2025-12-18 | 7-8 | Page 37 replaced (15-col rent roll, 37 fields), Page 31 replaced (multifamily indicators, 8 fields), styling optimization | a8a6153, 9730ebc, various styling commits |
 | 2025-12-18 | 3 | Field registry verification, calc engine docs, Page 49 registry mapping, TABLE-OF-CONTENTS versioning | a240466, 954ac94 |
 | 2025-12-18 | 2 | Pages 65-72 added, Page 49 field analysis (80 fields documented), TABLE-OF-CONTENTS created | 126eb97, 2d55d8e, 15 commits |
 | 2025-12-13 | 1 | Pages 60-64 completed | Various |

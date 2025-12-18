@@ -186,7 +186,7 @@
 | 39 | Rental Comp Location Table | 20 | 15 verified, 5 pending | [FIELD-MAPPING-Page-39-Registry.md](./FIELD-MAPPING-Page-39-Registry.md) | ✅ Complete (HTML Updated, 5 distance fields need adding) |
 | 38-40 | Rental Survey Detail Pages | ~110-140 | Analysis complete | [FIELD-MAPPING-Page-37-40-Registry.md](./FIELD-MAPPING-Page-37-40-Registry.md) | ⏸️ **Deferred** (Requires template loop support + calc engine) |
 | 44 | Operating History | 102 | 96 verified (+51 new) | - | ✅ Complete (HTML Updated) |
-| 65 | Market Value Conclusion | ~10 | TBD | - | ⏳ Pending |
+| 65 | Market Value Conclusion | 11 | 9 new fields + 2 footer | [FIELD-MAPPING-Page-65-Registry.md](./FIELD-MAPPING-Page-65-Registry.md) | ✅ Complete (HTML Updated, Field IDs Converted) |
 
 **Documentation Pattern:**
 - Each table gets its own `FIELD-MAPPING-Page-XX-Registry.md` file

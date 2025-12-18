@@ -14,13 +14,14 @@
 | Page 49 HTML Field Updates | ✅ Complete | ec8dc6a |
 | Page 59 Field Mapping | ✅ Complete | a2b9108 |
 | Page 59 HTML Field Updates | ✅ Complete | d15a343 |
-| Page 39 Field Mapping | ✅ Complete | Pending commit |
-| Page 39 HTML Field Updates | ✅ Complete | Pending commit |
+| Page 39 Field Mapping | ✅ Complete | c724e10, 6991ec5 |
+| Page 39 HTML Field Updates | ✅ Complete | c724e10 |
+| Pages 37-40 Analysis | ✅ Complete (DEFERRED) | 5476f8a, 873c35b |
+| Page 61 Field Mapping | ✅ Complete | Pending commit |
 | Team Workflow SOP | ✅ Complete | da07309, b7c9eb2 |
 | Calc Engine Documentation | ✅ Complete | 954ac94 |
 | TABLE-OF-CONTENTS Versioning | ✅ Complete | 954ac94 |
-| Pages 37-40 Field Mapping | 🔄 Next | - |
-| Page 44 Field Mapping | ⏳ Pending | - |
+| Page 44 Field Mapping | 🔄 Next | - |
 | Page 65 Field Mapping | ⏳ Pending | - |
 
 ---

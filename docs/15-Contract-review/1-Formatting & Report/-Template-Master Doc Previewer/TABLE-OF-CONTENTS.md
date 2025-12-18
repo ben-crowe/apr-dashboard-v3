@@ -157,13 +157,31 @@
 
 ## Field Mapping Notes
 
+### Registry Mapping Status (Per Table)
+
+| Page | Table Name | HTML Fields | Registry Fields | Mapping Doc | Status |
+|------|-----------|-------------|-----------------|-------------|--------|
+| 49 | Direct Capitalization | 80 | 74 verified | [FIELD-MAPPING-Page-49-Registry.md](./FIELD-MAPPING-Page-49-Registry.md) | ✅ Complete |
+| 59 | Sales Comparison Grid | ~65 | TBD | - | 🔄 Next |
+| 37-40 | Rental Survey Grid | ~110 | TBD | - | ⏳ Pending |
+| 44 | Operating History | ~40 | TBD | - | ⏳ Pending |
+| 65 | Market Value Conclusion | ~10 | TBD | - | ⏳ Pending |
+
+**Documentation Pattern:**
+- Each table gets its own `FIELD-MAPPING-Page-XX-Registry.md` file
+- Maps HTML field IDs → Registry field IDs → Valcre sources
+- Serves as template for implementation
+
+---
+
 ### For Your Other Assistant
 
 **Start with these HIGH PRIORITY tables first:**
 
-1. **Page 49** - Direct Capitalization (~60 fields)
+1. **Page 49** - Direct Capitalization (80 fields) ✅ **MAPPED**
    - PGR, Concessions, EGR, Vacancy, Effective Gross Income, Operating Expenses, NOI, Cap Rate, Value
    - Data source: `DIRECTCAP`
+   - Registry mapping: [FIELD-MAPPING-Page-49-Registry.md](./FIELD-MAPPING-Page-49-Registry.md)
 
 2. **Page 59** - Sales Comparison Grid (~65 fields)
    - Comp prices, adjustments (%), adjusted values, reconciliation

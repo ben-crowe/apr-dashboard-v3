@@ -181,8 +181,9 @@
 | 59 | Sales Comparison Grid | 188 | 188 verified | [FIELD-MAPPING-Page-59-Registry.md](./FIELD-MAPPING-Page-59-Registry.md) | ✅ Complete (HTML Updated) |
 | 61 | DCA Conclusion Grid | 68 | 68 verified | [FIELD-MAPPING-Page-61-Registry.md](./FIELD-MAPPING-Page-61-Registry.md) | ✅ Complete (HTML Updated) |
 | 63 | Reconciliation of Values | 14 | 14 verified (12 existing + 2 new) | [FIELD-MAPPING-Page-63-Registry.md](./FIELD-MAPPING-Page-63-Registry.md) | ✅ Complete (HTML Updated) |
+| 37 | Rent Roll Table | 37 | 37 new fields | [FIELD-MAPPING-Page-37-Registry.md](./FIELD-MAPPING-Page-37-Registry.md) | ✅ Complete (HTML Updated) |
 | 39 | Rental Comp Location Table | 20 | 15 verified, 5 pending | [FIELD-MAPPING-Page-39-Registry.md](./FIELD-MAPPING-Page-39-Registry.md) | ✅ Complete (HTML Updated, 5 distance fields need adding) |
-| 37-40 | Rental Survey Grid | ~110-140 | Analysis complete | [FIELD-MAPPING-Page-37-40-Registry.md](./FIELD-MAPPING-Page-37-40-Registry.md) | ⏸️ **Deferred** (Requires template loop support + calc engine) |
+| 38-40 | Rental Survey Detail Pages | ~110-140 | Analysis complete | [FIELD-MAPPING-Page-37-40-Registry.md](./FIELD-MAPPING-Page-37-40-Registry.md) | ⏸️ **Deferred** (Requires template loop support + calc engine) |
 | 44 | Operating History | 102 | 96 verified (+51 new) | - | ✅ Complete (HTML Updated) |
 | 65 | Market Value Conclusion | ~10 | TBD | - | ⏳ Pending |
 

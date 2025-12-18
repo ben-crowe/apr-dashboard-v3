@@ -304,6 +304,49 @@
 
         #preview-toggle {
             width: 50px;
+
+        #page-size-control {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        #page-size-control label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        #size-decrease, #size-increase, #size-reset {
+            padding: 6px 12px;
+            background: #003B7E;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #size-decrease:hover, #size-increase:hover, #size-reset:hover {
+            background: #4a9fd8;
+        }
+
+        #size-decrease:active, #size-increase:active, #size-reset:active {
+            transform: scale(0.98);
+        }
+
+        #size-display {
+            font-size: 12px;
+            color: #666;
+            min-width: 40px;
+            text-align: center;
+        }
             height: 26px;
             position: relative;
             appearance: none;
@@ -371,7 +414,15 @@
             <span id="page-count"></span>
             <button id="refresh-button" title="Refresh Page">⟳</button>
         </div>
-    </div>
+
+        <!-- Page Size Adjuster -->
+        <div id="page-size-control">
+            <label>Page Size:</label>
+            <button id="size-decrease" title="Decrease page size">−</button>
+            <span id="size-display">100%</span>
+            <button id="size-increase" title="Increase page size">+</button>
+            <button id="size-reset" title="Reset to 100%">Reset</button>
+        </div>
 
     <div class="page-sheet" data-page-num="Page 3">
         <div
@@ -3196,6 +3247,48 @@ if (previewToggle && modeLabel) {
         modeLabel: modeLabel ? 'found' : 'MISSING'
     });
 }
+
+// Page Size Adjuster
+const sizeDecrease = document.getElementById('size-decrease');
+const sizeIncrease = document.getElementById('size-increase');
+const sizeReset = document.getElementById('size-reset');
+const sizeDisplay = document.getElementById('size-display');
+const pageSheets = document.querySelectorAll('.page-sheet');
+
+let currentZoom = 100;
+
+function updatePageSize(newZoom) {
+    currentZoom = Math.max(50, Math.min(200, newZoom));
+    const zoomDecimal = currentZoom / 100;
+    
+    pageSheets.forEach(sheet => {
+        sheet.style.transform = 'scale(' + zoomDecimal + ')';
+        sheet.style.transformOrigin = 'top center';
+        sheet.style.margin = (10 * zoomDecimal) + 'px auto';
+    });
+    
+    sizeDisplay.textContent = currentZoom + '%';
+    localStorage.setItem('pageZoom', currentZoom);
+}
+
+const savedZoom = localStorage.getItem('pageZoom');
+if (savedZoom) {
+    updatePageSize(parseInt(savedZoom));
+}
+
+sizeDecrease.addEventListener('click', function() {
+    updatePageSize(currentZoom - 10);
+});
+
+sizeIncrease.addEventListener('click', function() {
+    updatePageSize(currentZoom + 10);
+});
+
+sizeReset.addEventListener('click', function() {
+    updatePageSize(100);
+});
+
+console.log('Page size adjuster initialized');
 </script>
 
     <!-- PAGE 41 (36) -->

@@ -1,7 +1,7 @@
 # Session Handoff - APR Report Template & Field Mapping
 
 **Last Updated:** 2025-12-18
-**Status:** Pages 49, 59, 39, 63 HTML updates complete ✅ | Page 61 HTML wiring next 🔄
+**Status:** Pages 49, 59, 39, 63, 44 HTML updates complete ✅ | Page 61 HTML wiring next 🔄
 
 ---
 
@@ -20,11 +20,13 @@
 | Page 61 Field Mapping | ✅ Complete | 248439a |
 | Page 63 Field Mapping | ✅ Complete | 24e17ad |
 | Page 63 HTML Field Updates | ✅ Complete | 07ca9b3 |
+| Page 44 HTML Field Updates | ✅ Complete | c568b99 |
 | Team Workflow SOP | ✅ Complete | da07309, b7c9eb2 |
 | Calc Engine Documentation | ✅ Complete | 954ac94 |
 | TABLE-OF-CONTENTS Versioning | ✅ Complete | 954ac94 |
-| Registry Update (+2 fields) | ✅ Complete | f0a7610 (TypeScript Pro) |
-| Page 44 Field Mapping | 🔄 Next | - |
+| Registry Update (+2 fields Page 63) | ✅ Complete | f0a7610 (TypeScript Pro) |
+| Registry Update (+51 fields Page 44) | ✅ Complete | TypeScript Pro (837 total) |
+| Page 61 HTML Field Updates | 🔄 Next | - |
 | Page 65 Field Mapping | ⏳ Pending | - |
 
 ---

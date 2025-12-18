@@ -588,6 +588,15 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'calc-expenses-per-unit', storeId: 'calc-expenses-per-unit', label: 'Expenses Per Unit', section: 'calc', subsection: 'calc-expenses', type: 'calculated', inputSource: 'calculated', required: false },
   { id: 'calc-expenses-per-sf', storeId: 'calc-expenses-per-sf', label: 'Expenses Per SF', section: 'calc', subsection: 'calc-expenses', type: 'calculated', inputSource: 'calculated', required: false },
 
+  // Expenses - Comment Fields (Page 45)
+  { id: 'exp-taxes-comment', storeId: 'exp-taxes-comment', label: 'Taxes Comment', section: 'expenses', subsection: 'exp-comments', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'exp-insurance-comment', storeId: 'exp-insurance-comment', label: 'Insurance Comment', section: 'expenses', subsection: 'exp-comments', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'exp-repairs-comment', storeId: 'exp-repairs-comment', label: 'Repairs Comment', section: 'expenses', subsection: 'exp-comments', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'exp-payroll-comment', storeId: 'exp-payroll-comment', label: 'Payroll Comment', section: 'expenses', subsection: 'exp-comments', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'exp-utilities-comment', storeId: 'exp-utilities-comment', label: 'Utilities Comment', section: 'expenses', subsection: 'exp-comments', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'exp-management-comment', storeId: 'exp-management-comment', label: 'Management Comment', section: 'expenses', subsection: 'exp-comments', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'exp-other-comment', storeId: 'exp-other-comment', label: 'Other Comment', section: 'expenses', subsection: 'exp-comments', type: 'text', inputSource: 'user-input', required: false },
+
   // Calc - Cap Rate Subsection
   { id: 'calc-cap-rate', storeId: 'calc-cap-rate', label: 'Cap Rate (%)', section: 'calc', subsection: 'calc-cap', type: 'number', inputSource: 'user-input', required: false },
   { id: 'cap-rate-average', storeId: 'cap-rate-average', label: 'Cap Rate Average', section: 'calc', subsection: 'calc-cap', type: 'percentage', inputSource: 'calculated', required: false },

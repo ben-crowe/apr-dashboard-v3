@@ -135,17 +135,23 @@ Need to verify these exist in fieldRegistry.ts:
    - Verify in fieldRegistry.ts
 
 ### Follow-up (Sessions 5-7)
-3. **Pages 37-40 Field Mapping** (~110 fields)
-   - Rental Survey Grid with 5 comparables
-   - Adjustment grid for 1BR and 2BR units
+3. **Pages 37-40 Analysis Complete** ⏸️ **DEFERRED**
+   - Architectural analysis documented in FIELD-MAPPING-Page-37-40-Registry.md
+   - Requires template loop support (dynamic rows)
+   - Requires rental survey calc engine (statistical: high/avg/med/low)
+   - Requires array-based data structure redesign
+   - Est. 110-140 fields when implemented
+   - **Action:** Return after template architecture enhancement
 
-4. **Page 44 Field Mapping** (~40 fields)
+4. **Page 44 Field Mapping** (~40 fields) 🔄 **Next Priority**
    - Operating History table
    - Direct cap projections
+   - Fixed structure - compatible with current template pattern
 
 5. **Page 65 Field Mapping** (~10 fields)
    - Market Value Conclusion
    - Valuation scenario, interest appraised, exposure time
+   - Fixed structure - compatible with current template pattern
 
 ### Future Enhancement
 6. **HTML Template Field ID Updates**

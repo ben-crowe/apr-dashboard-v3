@@ -7047,22 +7047,106 @@ if (previewToggle && modeLabel) {
     </div>
 </div>
 
-<!-- PAGE 63: Comparable 4 - Sunridge Apartments -->
+<!-- PAGE 63: Reconciliation of Values -->
 <div class="page-sheet" data-page-num="Page 63">
     <div class="Header1">Valuation & Conclusions</div>
-    <div class="Header2">Comparable 4 - Sunridge Apartments</div>
-    <p style="margin-bottom: 12px;"><strong>Property:</strong> <span class="field-mapped" data-sample="Sunridge Apartments" title="{{COMP_4_PropertyName}}">{{COMP_4_PropertyName}}</span> | <strong>Address:</strong> <span class="field-mapped" data-sample="234 Sunridge Street, North Battleford, SK" title="{{COMP_4_Address}}">{{COMP_4_Address}}</span></p>
-    <table style="width: 100%; font-size: 10pt; border-collapse: collapse;">
-        <tr style="background-color: #f0f0f0;"><td style="padding: 6px; border: 1px solid #ddd; width: 40%;"><strong>Sale Price</strong></td><td style="padding: 6px; border: 1px solid #ddd;"><span class="field-mapped" data-sample="$2,400,000" title="{{COMP_4_SalePrice}}">{{COMP_4_SalePrice}}</span></td></tr>
-        <tr><td style="padding: 6px; border: 1px solid #ddd;">Price Per Unit</td><td style="padding: 6px; border: 1px solid #ddd;"><span class="field-mapped" data-sample="$160,000" title="{{COMP_4_PricePerUnit}}">{{COMP_4_PricePerUnit}}</span></td></tr>
-        <tr><td style="padding: 6px; border: 1px solid #ddd;">Sale Date</td><td style="padding: 6px; border: 1px solid #ddd;"><span class="field-mapped" data-sample="August 5, 2024" title="{{COMP_4_SaleDate}}">{{COMP_4_SaleDate}}</span></td></tr>
-        <tr><td style="padding: 6px; border: 1px solid #ddd;">Units</td><td style="padding: 6px; border: 1px solid #ddd;"><span class="field-mapped" data-sample="15" title="{{COMP_4_Units}}">{{COMP_4_Units}}</span></td></tr>
-        <tr><td style="padding: 6px; border: 1px solid #ddd;">Year Built</td><td style="padding: 6px; border: 1px solid #ddd;"><span class="field-mapped" data-sample="2000" title="{{COMP_4_YearBuilt}}">{{COMP_4_YearBuilt}}</span></td></tr>
-        <tr><td style="padding: 6px; border: 1px solid #ddd;">Occupancy</td><td style="padding: 6px; border: 1px solid #ddd;"><span class="field-mapped" data-sample="96.0%" title="{{COMP_4_Occupancy}}">{{COMP_4_Occupancy}}</span></td></tr>
-        <tr style="background-color: #f0f0f0;"><td style="padding: 6px; border: 1px solid #ddd;"><strong>Cap Rate</strong></td><td style="padding: 6px; border: 1px solid #ddd;"><strong><span class="field-mapped" data-sample="7.95%" title="{{COMP_4_CapRate}}">{{COMP_4_CapRate}}</span></strong></td></tr>
+
+    <!-- Reconciliation of Values Table -->
+    <table style="width: 100%; border-collapse: collapse; font-size: 10pt;">
+        <thead>
+            <tr>
+                <th colspan="2" style="background-color: #003B7E; color: white; font-weight: bold; text-transform: uppercase; padding: 8px; text-align: center;">Reconciliation of Values</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 8px; font-weight: bold; text-transform: uppercase;">Valuation Scenarios</td>
+                <td style="padding: 8px; text-align: right; font-weight: bold; text-transform: uppercase;"><span class="field-mapped" data-sample="AS STABILIZED" title="{{Valuation_Scenario}}">{{Valuation_Scenario}}</span></td>
+            </tr>
+            <tr>
+                <td style="padding: 6px 8px;">Interest</td>
+                <td style="padding: 6px 8px; text-align: right;"><span class="field-mapped" data-sample="Fee Simple Estate" title="{{Interest_Appraised}}">{{Interest_Appraised}}</span></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 6px 8px;">Date</td>
+                <td style="padding: 6px 8px; text-align: right;"><span class="field-mapped" data-sample="October 17, 2025" title="{{Effective_Date}}">{{Effective_Date}}</span></td>
+            </tr>
+            <!-- Direct Comparison Approach Header -->
+            <tr>
+                <td colspan="2" style="background-color: #e8e8e8; padding: 6px 8px; text-align: center; font-weight: bold; text-transform: uppercase;">Direct Comparison Approach</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 6px 8px; font-weight: bold;">DIRECT COMPARISON APPROACH</td>
+                <td style="padding: 6px 8px; text-align: right;"></td>
+            </tr>
+            <tr>
+                <td style="padding: 6px 8px;">Indicated Value</td>
+                <td style="padding: 6px 8px; text-align: right;"><span class="field-mapped" data-sample="$1,800,000" title="{{SCA_IndicatedValue}}">{{SCA_IndicatedValue}}</span></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 6px 8px 6px 20px;">$/SF NRA</td>
+                <td style="padding: 6px 8px; text-align: right;"><span class="field-mapped" data-sample="$176" title="{{SCA_ValuePerSF}}">{{SCA_ValuePerSF}}</span></td>
+            </tr>
+            <!-- Income Approach Header -->
+            <tr>
+                <td colspan="2" style="background-color: #e8e8e8; padding: 6px 8px; text-align: center; font-weight: bold; text-transform: uppercase;">Income Approach</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 6px 8px; font-weight: bold;">INCOME APPROACH - DIRECT CAPITALIZATION</td>
+                <td style="padding: 6px 8px; text-align: right;"></td>
+            </tr>
+            <tr>
+                <td style="padding: 6px 8px;">NOI</td>
+                <td style="padding: 6px 8px; text-align: right;"><span class="field-mapped" data-sample="$111,771" title="{{NOI_Stabilized}}">{{NOI_Stabilized}}</span></td>
+            </tr>
+            <tr>
+                <td style="padding: 6px 8px 6px 20px;">NOI $/SF NRA</td>
+                <td style="padding: 6px 8px; text-align: right;"><span class="field-mapped" data-sample="$10.95" title="{{NOI_PerSF}}">{{NOI_PerSF}}</span></td>
+            </tr>
+            <tr>
+                <td style="padding: 6px 8px;">Capitalization Rate (OAR)</td>
+                <td style="padding: 6px 8px; text-align: right;"><span class="field-mapped" data-sample="6.25%" title="{{Cap_Rate}}">{{Cap_Rate}}</span></td>
+            </tr>
+            <tr>
+                <td style="padding: 6px 8px;">Indicated Value</td>
+                <td style="padding: 6px 8px; text-align: right;"><span class="field-mapped" data-sample="$1,800,000" title="{{Income_IndicatedValue}}">{{Income_IndicatedValue}}</span></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 6px 8px 6px 20px;">$/SF NRA</td>
+                <td style="padding: 6px 8px; text-align: right;"><span class="field-mapped" data-sample="$176" title="{{Income_ValuePerSF}}">{{Income_ValuePerSF}}</span></td>
+            </tr>
+            <!-- Final Value Conclusion Header -->
+            <tr>
+                <td colspan="2" style="background-color: #e8e8e8; padding: 6px 8px; text-align: center; font-weight: bold; text-transform: uppercase;">Final Value Conclusion</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; font-weight: bold;">FINAL VALUE CONCLUSION</td>
+                <td style="padding: 8px; text-align: right; font-weight: bold; font-size: 12pt;"><span class="field-mapped" data-sample="$1,800,000" title="{{Final_Value_Conclusion}}">{{Final_Value_Conclusion}}</span></td>
+            </tr>
+            <tr style="border-bottom: 2px solid #003B7E;">
+                <td style="padding: 6px 8px 6px 20px;">$/SF NRA</td>
+                <td style="padding: 6px 8px; text-align: right;"><span class="field-mapped" data-sample="$176" title="{{Final_ValuePerSF}}">{{Final_ValuePerSF}}</span></td>
+            </tr>
+        </tbody>
     </table>
+
+    <!-- Hypothetical Conditions -->
+    <div class="Header2" style="margin-top: 24px;">Hypothetical Conditions</div>
+    <p>The use of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed based on the hypothetical condition that the subject property is fully leased at prevailing market rents and has achieved stabilized occupancy as of the effective date of the appraisal. Under this premise, no deductions are made for holding costs, rent loss, or lease-up expenses. In addition it is a hypothetical condition that all units could achieve current market rent levels and stabilized occupancy as of the effective date. In reality, as of the effective date, the property's existing lease terms reflect contract rents that are deemed to be below-market rents. For the purposes of this analysis, it is assumed that lease-up to market rent levels has occurred under typical market conditions, without undue delay or concessions exceeding market norms. If this assumption proves incorrect, such as market rents are not achievable the value conclusion may be materially impacted.</p>
+
+    <!-- Extraordinary Assumptions -->
+    <div class="Header2" style="margin-top: 20px;">Extraordinary Assumptions</div>
+    <p>No Extraordinary Assumptions were made for this assignment.</p>
+
+    <!-- Extraordinary Limiting Conditions -->
+    <div class="Header2" style="margin-top: 20px;">Extraordinary Limiting Conditions</div>
+    <p>No Extraordinary Limiting Conditions were made for this assignment.</p>
+
     <div class="page-footer">
-        <div><span class="page-num">63</span> <span class="field-mapped" title="{{Property_Address}}" data-sample="1101, 1121 109 St, North Battleford, Saskatchewan">{{Property_Address}}</span></div>
+        <div>
+            <span class="page-num">63</span>
+            <span class="field-mapped" title="{{Property_Address}}" data-sample="1101, 1121 109 St, North Battleford, Saskatchewan">{{Property_Address}}</span> | File <span class="field-mapped" title="{{File_Number}}" data-sample="VAL251012 - 1">{{File_Number}}</span>
+        </div>
         <div class="footer-accent"></div>
     </div>
 </div>

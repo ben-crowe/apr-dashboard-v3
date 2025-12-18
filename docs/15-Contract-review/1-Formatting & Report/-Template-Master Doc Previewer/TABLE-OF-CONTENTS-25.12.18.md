@@ -2,6 +2,7 @@
 
 **Document:** PREVIEW-Master.html (72 pages)
 **Last Updated:** December 18, 2025
+**Version:** 25.12.18
 **Total Line Count:** 7,513 lines
 
 ---
@@ -157,12 +158,27 @@
 
 ## Field Mapping Notes
 
+### 📊 Master Calculation Reference
+
+**[Calc-eng Field Map.md](./Calc-eng%20Field%20Map.md)** - Complete calculation engine documentation
+- **Income Approach:** 25 inputs → 50 outputs (11-step flow)
+- **Sales Comparison:** 70 inputs → 35 outputs (simple division/sum)
+- Shows what calc engine needs vs produces
+- Defines data flow: `Source → Registry → Report`
+
+**This is the master reference for understanding:**
+- Which fields are user input vs calculated
+- What calculations the engine must perform
+- How data flows from entry to display
+
+---
+
 ### Registry Mapping Status (Per Table)
 
 | Page | Table Name | HTML Fields | Registry Fields | Mapping Doc | Status |
 |------|-----------|-------------|-----------------|-------------|--------|
 | 49 | Direct Capitalization | 80 | 74 verified | [FIELD-MAPPING-Page-49-Registry.md](./FIELD-MAPPING-Page-49-Registry.md) | ✅ Complete |
-| 59 | Sales Comparison Grid | ~65 | TBD | - | 🔄 Next |
+| 59 | Sales Comparison Grid | ~105 | TBD | - | 🔄 Next |
 | 37-40 | Rental Survey Grid | ~110 | TBD | - | ⏳ Pending |
 | 44 | Operating History | ~40 | TBD | - | ⏳ Pending |
 | 65 | Market Value Conclusion | ~10 | TBD | - | ⏳ Pending |
@@ -171,6 +187,12 @@
 - Each table gets its own `FIELD-MAPPING-Page-XX-Registry.md` file
 - Maps HTML field IDs → Registry field IDs → Valcre sources
 - Serves as template for implementation
+
+**Documentation Chain:**
+```
+Calc-eng Field Map.md → fieldRegistry.ts → FIELD-MAPPING-Page-XX-Registry.md → PREVIEW-Master.html
+(What to calculate)   (Registry defs)   (HTML mapping)                        (Template)
+```
 
 ---
 

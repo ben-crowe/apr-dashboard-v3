@@ -623,6 +623,69 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'cost-approach-conclusion', storeId: 'cost-approach-conclusion', label: 'Cost Approach Conclusion', section: 'cost-s', type: 'textarea', inputSource: 'user-input', required: false },
 
   // ============================================================================
+  // SECTION: HISTORICAL (Page 44 Operating History - YTD Actuals)
+  // ============================================================================
+
+  // Hist - Revenue Subsection (18 fields)
+  { id: 'hist-revenue-multifamily-total', storeId: 'hist-revenue-multifamily-total', label: 'Multifamily Revenue', section: 'hist', subsection: 'hist-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-revenue-multifamily-per-unit', storeId: 'hist-revenue-multifamily-per-unit', label: 'Multifamily Revenue/Unit', section: 'hist', subsection: 'hist-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-revenue-multifamily-pct-pgr', storeId: 'hist-revenue-multifamily-pct-pgr', label: 'Multifamily Revenue % PGR', section: 'hist', subsection: 'hist-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-revenue-rental-total', storeId: 'hist-revenue-rental-total', label: 'Rental Revenue', section: 'hist', subsection: 'hist-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-revenue-rental-per-unit', storeId: 'hist-revenue-rental-per-unit', label: 'Rental Revenue/Unit', section: 'hist', subsection: 'hist-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-revenue-rental-pct-pgr', storeId: 'hist-revenue-rental-pct-pgr', label: 'Rental Revenue % PGR', section: 'hist', subsection: 'hist-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-revenue-parking-total', storeId: 'hist-revenue-parking-total', label: 'Parking Revenue', section: 'hist', subsection: 'hist-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-revenue-parking-per-unit', storeId: 'hist-revenue-parking-per-unit', label: 'Parking Revenue/Unit', section: 'hist', subsection: 'hist-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-revenue-parking-pct-pgr', storeId: 'hist-revenue-parking-pct-pgr', label: 'Parking Revenue % PGR', section: 'hist', subsection: 'hist-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-revenue-laundry-total', storeId: 'hist-revenue-laundry-total', label: 'Laundry Revenue', section: 'hist', subsection: 'hist-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-revenue-laundry-per-unit', storeId: 'hist-revenue-laundry-per-unit', label: 'Laundry Revenue/Unit', section: 'hist', subsection: 'hist-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-revenue-laundry-pct-pgr', storeId: 'hist-revenue-laundry-pct-pgr', label: 'Laundry Revenue % PGR', section: 'hist', subsection: 'hist-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-revenue-misc-total', storeId: 'hist-revenue-misc-total', label: 'Misc Revenue', section: 'hist', subsection: 'hist-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-revenue-misc-per-unit', storeId: 'hist-revenue-misc-per-unit', label: 'Misc Revenue/Unit', section: 'hist', subsection: 'hist-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-revenue-misc-pct-pgr', storeId: 'hist-revenue-misc-pct-pgr', label: 'Misc Revenue % PGR', section: 'hist', subsection: 'hist-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-pgr-total', storeId: 'hist-pgr-total', label: 'PGR Total', section: 'hist', subsection: 'hist-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-pgr-per-unit', storeId: 'hist-pgr-per-unit', label: 'PGR/Unit', section: 'hist', subsection: 'hist-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-pgr-pct', storeId: 'hist-pgr-pct', label: 'PGR %', section: 'hist', subsection: 'hist-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+
+  // Hist - Vacancy/EGR Subsection (6 fields)
+  { id: 'hist-vacancy-total', storeId: 'hist-vacancy-total', label: 'Vacancy Loss', section: 'hist', subsection: 'hist-vacancy', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-vacancy-per-unit', storeId: 'hist-vacancy-per-unit', label: 'Vacancy/Unit', section: 'hist', subsection: 'hist-vacancy', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-vacancy-pct-pgr', storeId: 'hist-vacancy-pct-pgr', label: 'Vacancy % PGR', section: 'hist', subsection: 'hist-vacancy', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-egr-total', storeId: 'hist-egr-total', label: 'EGR Total', section: 'hist', subsection: 'hist-vacancy', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-egr-per-unit', storeId: 'hist-egr-per-unit', label: 'EGR/Unit', section: 'hist', subsection: 'hist-vacancy', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-egr-pct-pgr', storeId: 'hist-egr-pct-pgr', label: 'EGR % PGR', section: 'hist', subsection: 'hist-vacancy', type: 'percentage', inputSource: 'calculated', required: false },
+
+  // Hist - Expenses Subsection (24 fields)
+  { id: 'hist-exp-taxes-total', storeId: 'hist-exp-taxes-total', label: 'Taxes', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-exp-taxes-per-unit', storeId: 'hist-exp-taxes-per-unit', label: 'Taxes/Unit', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-taxes-pct-pgr', storeId: 'hist-exp-taxes-pct-pgr', label: 'Taxes % PGR', section: 'hist', subsection: 'hist-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-insurance-total', storeId: 'hist-exp-insurance-total', label: 'Insurance', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-exp-insurance-per-unit', storeId: 'hist-exp-insurance-per-unit', label: 'Insurance/Unit', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-insurance-pct-pgr', storeId: 'hist-exp-insurance-pct-pgr', label: 'Insurance % PGR', section: 'hist', subsection: 'hist-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-repairs-total', storeId: 'hist-exp-repairs-total', label: 'Repairs & Maintenance', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-exp-repairs-per-unit', storeId: 'hist-exp-repairs-per-unit', label: 'Repairs/Unit', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-repairs-pct-pgr', storeId: 'hist-exp-repairs-pct-pgr', label: 'Repairs % PGR', section: 'hist', subsection: 'hist-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-payroll-total', storeId: 'hist-exp-payroll-total', label: 'Payroll', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-exp-payroll-per-unit', storeId: 'hist-exp-payroll-per-unit', label: 'Payroll/Unit', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-payroll-pct-pgr', storeId: 'hist-exp-payroll-pct-pgr', label: 'Payroll % PGR', section: 'hist', subsection: 'hist-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-utilities-total', storeId: 'hist-exp-utilities-total', label: 'Utilities', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-exp-utilities-per-unit', storeId: 'hist-exp-utilities-per-unit', label: 'Utilities/Unit', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-utilities-pct-pgr', storeId: 'hist-exp-utilities-pct-pgr', label: 'Utilities % PGR', section: 'hist', subsection: 'hist-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-management-total', storeId: 'hist-exp-management-total', label: 'Management', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-exp-management-per-unit', storeId: 'hist-exp-management-per-unit', label: 'Management/Unit', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-management-pct-pgr', storeId: 'hist-exp-management-pct-pgr', label: 'Management % PGR', section: 'hist', subsection: 'hist-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-other-total', storeId: 'hist-exp-other-total', label: 'Other Expenses', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'hist-exp-other-per-unit', storeId: 'hist-exp-other-per-unit', label: 'Other/Unit', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-other-pct-pgr', storeId: 'hist-exp-other-pct-pgr', label: 'Other % PGR', section: 'hist', subsection: 'hist-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-total-total', storeId: 'hist-exp-total-total', label: 'Total Expenses', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-total-per-unit', storeId: 'hist-exp-total-per-unit', label: 'Total Expenses/Unit', section: 'hist', subsection: 'hist-expenses', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-exp-total-pct-pgr', storeId: 'hist-exp-total-pct-pgr', label: 'Total Expenses % PGR', section: 'hist', subsection: 'hist-expenses', type: 'percentage', inputSource: 'calculated', required: false },
+
+  // Hist - NOI Subsection (3 fields)
+  { id: 'hist-noi-total', storeId: 'hist-noi-total', label: 'NOI', section: 'hist', subsection: 'hist-noi', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-noi-per-unit', storeId: 'hist-noi-per-unit', label: 'NOI/Unit', section: 'hist', subsection: 'hist-noi', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hist-noi-pct-pgr', storeId: 'hist-noi-pct-pgr', label: 'NOI % PGR', section: 'hist', subsection: 'hist-noi', type: 'percentage', inputSource: 'calculated', required: false },
+
+  // ============================================================================
   // SECTION: SALES COMPARISON
   // ============================================================================
 

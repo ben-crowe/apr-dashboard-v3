@@ -1871,179 +1871,88 @@
         </div>
     </div>
 
-    <!-- PAGE 31 (26) -->
-    <style>
-        /* Page 31 - Market Context - exact SVG measurements with proper padding */
-        .page-sheet[data-page-num="Page 31"] {
-            padding: 0.75in; /* Ensure proper padding on all sides */
-            padding-bottom: 180px; /* Reserve space for footer */
-        }
-        .page-sheet[data-page-num="Page 31"] .Header1 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 300;
-            font-size: 14.6pt; /* 58.333px ÷ 4 */
-            margin-bottom: 27px; /* 108.25px ÷ 4 */
-        }
-        .page-sheet[data-page-num="Page 31"] .Header2 {
-            font-family: 'Helvetica', Arial, sans-serif;
-            font-size: 14.6pt; /* 58.333px ÷ 4 */
-            color: rgb(0, 59, 126);
-            margin-bottom: 23px; /* 91.083px ÷ 4 */
-        }
-        .page-sheet[data-page-num="Page 31"] .Subheader1 {
-            font-family: 'Helvetica', Arial, sans-serif;
-            font-size: 11.5pt; /* 45.833px ÷ 4 */
-            margin-bottom: 14.5px; /* 57.959px ÷ 4 */
-        }
-        .page-sheet[data-page-num="Page 31"] p {
-            font-family: 'Helvetica', Arial, sans-serif;
-            font-size: 10.4pt; /* 41.667px ÷ 4 */
-            margin-bottom: 14.2px; /* ~56.75px ÷ 4 */
-            line-height: 1.36; /* (56.75px line spacing / 41.667px font) */
-        }
-        .page-sheet[data-page-num="Page 31"] table {
-            font-size: 8pt;
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .page-sheet[data-page-num="Page 31"] table th.table-title {
-            background-color: rgb(0, 59, 126);
-            color: white;
-            padding: 8px 12px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 10pt;
-        }
-        .page-sheet[data-page-num="Page 31"] table th {
-            background-color: rgb(0, 59, 126);
-            color: white;
-            padding: 4px 8px;
-            text-align: left;
-            font-weight: bold;
-        }
-        .page-sheet[data-page-num="Page 31"] table td {
-            padding: 3px 8px;
-            border: 1px solid #ddd;
-            vertical-align: top;
-            text-align: left;
-        }
-        .page-sheet[data-page-num="Page 31"] table td:first-child {
-            font-weight: bold;
-            text-align: left;
-        }
-    </style>
+<!-- PAGE 31: Multi-Family Market Overview -->
+<div class="page-sheet" data-page-num="Page 31">
+    <div class="Header1">Market Context</div>
+    <div class="Header2" style="font-size: 16pt; font-weight: bold; color: #003B7E; margin-top: 16px;">Multi-Family Market Overview</div>
 
-    <div class="page-sheet" data-page-num="Page 31">
-        <div class="Header1"><span class="field-mapped" title="{{MarketContext_Header}}">{{MarketContext_Header}}</span></div>
+    <div class="Header3" style="font-size: 14pt; font-weight: bold; color: #333; margin-top: 20px; margin-bottom: 12px;">Saskatchewan</div>
 
-        <div class="Header2"><span class="field-mapped" title="{{MarketContext_Provincial_Header}}">{{MarketContext_Provincial_Header}}</span></div>
+    <p>Saskatchewan's rental markets entered 2025 with improving balance. Vacancy rates approached 3 %, reflecting steady new completions and a cooling inflow of migrants. Rents plateaued after outsized 2023–24 gains, with most urban landlords holding rates or offering small concessions. Construction activity remains healthy, supported by government and CMHC financing programs. Affordability remains better than the national average, yet rising rent-to-income ratios signal growing strain among lower-income tenants.</p>
 
-        <div class="Subheader1"><span class="field-mapped" title="{{MarketContext_Saskatchewan_Header}}">{{MarketContext_Saskatchewan_Header}}</span></div>
+    <!-- Saskatchewan Multifamily Indicators Table -->
+    <table style="width: 100%; border-collapse: collapse; font-size: 9pt; margin-top: 20px;">
+        <thead>
+            <tr>
+                <th colspan="4" style="background-color: #003B7E; color: white; font-weight: bold; padding: 10px; text-align: center; font-size: 12pt; font-family: Georgia, serif;">Saskatchewan Multifamily Indicators</th>
+            </tr>
+            <tr style="border-bottom: 2px solid #003B7E;">
+                <th style="padding: 8px; text-align: left; font-weight: bold; text-transform: uppercase; font-size: 8pt; width: 18%;">Indicator</th>
+                <th style="padding: 8px; text-align: left; font-weight: bold; text-transform: uppercase; font-size: 8pt; width: 14%;">Estimate</th>
+                <th style="padding: 8px; text-align: left; font-weight: bold; text-transform: uppercase; font-size: 8pt; width: 58%;">Commentary</th>
+                <th style="padding: 8px; text-align: right; font-weight: bold; text-transform: uppercase; font-size: 8pt; width: 10%;">Source</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 8px;">Vacancy Rate</td>
+                <td style="padding: 10px 8px;"><span class="field-mapped" data-sample="3.0%" title="{{SK_VacancyRate}}">{{SK_VacancyRate}}</span></td>
+                <td style="padding: 10px 8px;">Slight rise since 2024 as completions increase and in-migration slows.</td>
+                <td style="padding: 10px 8px; text-align: right;">CMHC</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 8px;">Average Rent - Bachelor</td>
+                <td style="padding: 10px 8px;"><span class="field-mapped" data-sample="$885" title="{{SK_AvgRent_Bachelor}}">{{SK_AvgRent_Bachelor}}</span></td>
+                <td style="padding: 10px 8px;">Rents stabilizing; softening evident in listings.</td>
+                <td style="padding: 10px 8px; text-align: right;">CMHC</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 8px;">Average Rent - 1 Bed</td>
+                <td style="padding: 10px 8px;"><span class="field-mapped" data-sample="$1,160" title="{{SK_AvgRent_1Bed}}">{{SK_AvgRent_1Bed}}</span></td>
+                <td style="padding: 10px 8px;">Growth flattening after +7.9 % in 2024.</td>
+                <td style="padding: 10px 8px; text-align: right;">CMHC</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 8px;">Average Rent - 2 Bed</td>
+                <td style="padding: 10px 8px;"><span class="field-mapped" data-sample="$1,390" title="{{SK_AvgRent_2Bed}}">{{SK_AvgRent_2Bed}}</span></td>
+                <td style="padding: 10px 8px;">Moderate rent growth (~3–4 %).</td>
+                <td style="padding: 10px 8px; text-align: right;">CMHC</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 8px;">Average Rent - 3 Bed</td>
+                <td style="padding: 10px 8px;"><span class="field-mapped" data-sample="$1,650" title="{{SK_AvgRent_3Bed}}">{{SK_AvgRent_3Bed}}</span></td>
+                <td style="padding: 10px 8px;">Larger units in higher demand due to household consolidation.</td>
+                <td style="padding: 10px 8px; text-align: right;">CMHC</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 8px;">Rental Rate Growth</td>
+                <td style="padding: 10px 8px;"><span class="field-mapped" data-sample="+3.5% YoY" title="{{SK_RentalRateGrowth}}">{{SK_RentalRateGrowth}}</span></td>
+                <td style="padding: 10px 8px;">Pace eased from 2024' which was 8%.</td>
+                <td style="padding: 10px 8px; text-align: right;">CMHC</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 8px;">New Supply</td>
+                <td style="padding: 10px 8px;"><span class="field-mapped" data-sample="+1,200 units YoY" title="{{SK_NewSupply}}">{{SK_NewSupply}}</span></td>
+                <td style="padding: 10px 8px;">Continued steady apartment construction in Saskatoon and Regina.</td>
+                <td style="padding: 10px 8px; text-align: right;">CMHC</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 10px 8px;">Supply Growth Rate</td>
+                <td style="padding: 10px 8px;"><span class="field-mapped" data-sample="+3.0% YoY" title="{{SK_SupplyGrowthRate}}">{{SK_SupplyGrowthRate}}</span></td>
+                <td style="padding: 10px 8px;">Output remains above 5-yr avg but below national pace.</td>
+                <td style="padding: 10px 8px; text-align: right;">CMHC</td>
+            </tr>
+        </tbody>
+    </table>
 
-        <p><span class="field-mapped" title="{{MarketContext_Saskatchewan_Overview}}">{{MarketContext_Saskatchewan_Overview}}</span></p>
-
-        <table>
-            <tr class="table-title-row">
-                <th colspan="4" class="table-title">Saskatchewan Economic Indicators</th>
-            </tr>
-            <tr>
-                <th>Indicator</th>
-                <th>Estimate</th>
-                <th>Commentary</th>
-                <th>Source</th>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_1_Name}}">{{SK_Econ_Indicator_1_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_1_Estimate}}">{{SK_Econ_Indicator_1_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_1_Commentary}}">{{SK_Econ_Indicator_1_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_1_Source}}">{{SK_Econ_Indicator_1_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_2_Name}}">{{SK_Econ_Indicator_2_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_2_Estimate}}">{{SK_Econ_Indicator_2_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_2_Commentary}}">{{SK_Econ_Indicator_2_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_2_Source}}">{{SK_Econ_Indicator_2_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_3_Name}}">{{SK_Econ_Indicator_3_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_3_Estimate}}">{{SK_Econ_Indicator_3_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_3_Commentary}}">{{SK_Econ_Indicator_3_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_3_Source}}">{{SK_Econ_Indicator_3_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_4_Name}}">{{SK_Econ_Indicator_4_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_4_Estimate}}">{{SK_Econ_Indicator_4_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_4_Commentary}}">{{SK_Econ_Indicator_4_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_4_Source}}">{{SK_Econ_Indicator_4_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_5_Name}}">{{SK_Econ_Indicator_5_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_5_Estimate}}">{{SK_Econ_Indicator_5_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_5_Commentary}}">{{SK_Econ_Indicator_5_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_5_Source}}">{{SK_Econ_Indicator_5_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_6_Name}}">{{SK_Econ_Indicator_6_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_6_Estimate}}">{{SK_Econ_Indicator_6_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_6_Commentary}}">{{SK_Econ_Indicator_6_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_6_Source}}">{{SK_Econ_Indicator_6_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_7_Name}}">{{SK_Econ_Indicator_7_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_7_Estimate}}">{{SK_Econ_Indicator_7_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_7_Commentary}}">{{SK_Econ_Indicator_7_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_7_Source}}">{{SK_Econ_Indicator_7_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_8_Name}}">{{SK_Econ_Indicator_8_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_8_Estimate}}">{{SK_Econ_Indicator_8_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_8_Commentary}}">{{SK_Econ_Indicator_8_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_8_Source}}">{{SK_Econ_Indicator_8_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_9_Name}}">{{SK_Econ_Indicator_9_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_9_Estimate}}">{{SK_Econ_Indicator_9_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_9_Commentary}}">{{SK_Econ_Indicator_9_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_9_Source}}">{{SK_Econ_Indicator_9_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_10_Name}}">{{SK_Econ_Indicator_10_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_10_Estimate}}">{{SK_Econ_Indicator_10_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_10_Commentary}}">{{SK_Econ_Indicator_10_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_10_Source}}">{{SK_Econ_Indicator_10_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_11_Name}}">{{SK_Econ_Indicator_11_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_11_Estimate}}">{{SK_Econ_Indicator_11_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_11_Commentary}}">{{SK_Econ_Indicator_11_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_11_Source}}">{{SK_Econ_Indicator_11_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_12_Name}}">{{SK_Econ_Indicator_12_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_12_Estimate}}">{{SK_Econ_Indicator_12_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_12_Commentary}}">{{SK_Econ_Indicator_12_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_12_Source}}">{{SK_Econ_Indicator_12_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_13_Name}}">{{SK_Econ_Indicator_13_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_13_Estimate}}">{{SK_Econ_Indicator_13_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_13_Commentary}}">{{SK_Econ_Indicator_13_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_13_Source}}">{{SK_Econ_Indicator_13_Source}}</span></td>
-            </tr>
-            <tr>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_14_Name}}">{{SK_Econ_Indicator_14_Name}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_14_Estimate}}">{{SK_Econ_Indicator_14_Estimate}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_14_Commentary}}">{{SK_Econ_Indicator_14_Commentary}}</span></td>
-                <td><span class="field-mapped" title="{{SK_Econ_Indicator_14_Source}}">{{SK_Econ_Indicator_14_Source}}</span></td>
-            </tr>
-        </table>
-
-        <div class="page-footer">
-            <div><span class="page-num">31</span> <span class="field-mapped" data-sample="1101, 1121 109 St" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" data-sample="VAL251012" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
-            <div class="footer-accent"></div>
+    <div class="page-footer">
+        <div>
+            <span class="page-num">31</span>
+            <span class="field-mapped" title="{{Property_Address}}" data-sample="1101, 1121 109 St, North Battleford, Saskatchewan">{{Property_Address}}</span> | File <span class="field-mapped" title="{{File_Number}}" data-sample="VAL251012 - 1">{{File_Number}}</span>
         </div>
+        <div class="footer-accent"></div>
     </div>
+</div>
 
     <!-- PAGE 32 (27) -->
     <div class="page-sheet" data-page-num="Page 32">

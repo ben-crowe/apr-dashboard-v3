@@ -17,10 +17,12 @@
 | Page 39 Field Mapping | ✅ Complete | c724e10, 6991ec5 |
 | Page 39 HTML Field Updates | ✅ Complete | c724e10 |
 | Pages 37-40 Analysis | ✅ Complete (DEFERRED) | 5476f8a, 873c35b |
-| Page 61 Field Mapping | ✅ Complete | Pending commit |
+| Page 61 Field Mapping | ✅ Complete | 248439a |
+| Page 63 Field Mapping | ✅ Complete | Pending commit |
 | Team Workflow SOP | ✅ Complete | da07309, b7c9eb2 |
 | Calc Engine Documentation | ✅ Complete | 954ac94 |
 | TABLE-OF-CONTENTS Versioning | ✅ Complete | 954ac94 |
+| Registry Update (+2 fields) | ✅ Complete | f0a7610 (TypeScript Pro) |
 | Page 44 Field Mapping | 🔄 Next | - |
 | Page 65 Field Mapping | ⏳ Pending | - |
 

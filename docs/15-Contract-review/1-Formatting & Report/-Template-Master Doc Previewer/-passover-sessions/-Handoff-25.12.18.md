@@ -14,6 +14,8 @@
 | Page 49 HTML Field Updates | ✅ Complete | ec8dc6a |
 | Page 59 Field Mapping | ✅ Complete | a2b9108 |
 | Page 59 HTML Field Updates | ✅ Complete | d15a343 |
+| Page 39 Field Mapping | ✅ Complete | Pending commit |
+| Page 39 HTML Field Updates | ✅ Complete | Pending commit |
 | Team Workflow SOP | ✅ Complete | da07309, b7c9eb2 |
 | Calc Engine Documentation | ✅ Complete | 954ac94 |
 | TABLE-OF-CONTENTS Versioning | ✅ Complete | 954ac94 |
@@ -117,18 +119,20 @@ Need to verify these exist in fieldRegistry.ts:
 
 ## NEXT STEPS
 
-### Immediate (Session 4)
-1. **Create FIELD-MAPPING-Page-59-Registry.md**
-   - Sales Comparison Grid (105 fields total)
-   - 70 input fields: comp data + adjustments (14 fields × 5 comps)
-   - 35 calculated fields: price/unit, price/SF, cap rate, gross adj, etc.
-   - Reference Calc-eng Field Map.md (lines 121-170 for Sales Comparison)
-   - Follow Page 49 pattern: 4-section table structure
+### Completed in Latest Session ✅
+1. **Page 39 Rental Comp Location Table** - DONE
+   - Replaced hardcoded table with field-mapped version (lines 2668-2709)
+   - Created FIELD-MAPPING-Page-39-Registry.md
+   - 20 fields total (4 per comparable × 5 comparables)
+   - 15 fields verified in test data, 5 distance fields need adding
+   - Updated TABLE-OF-CONTENTS status
 
-2. **Verify Page 49 missing fields**
-   - Check 8 fields in fieldRegistry.ts
-   - Add to registry if missing
-   - Update FIELD-MAPPING-Page-49-Registry.md status
+### Immediate (Next Session)
+1. **Add 5 distance fields to test data** (For TypeScript Pro Agent)
+   - rental-comp1-distance through rental-comp5-distance
+   - Values: 177.9, 177.1, 175.4, 177.9, 174.9 km
+   - Add to northBattlefordTestData-REAL.ts
+   - Verify in fieldRegistry.ts
 
 ### Follow-up (Sessions 5-7)
 3. **Pages 37-40 Field Mapping** (~110 fields)

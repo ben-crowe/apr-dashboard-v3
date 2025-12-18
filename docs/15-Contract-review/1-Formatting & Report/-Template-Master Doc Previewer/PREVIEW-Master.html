@@ -403,7 +403,7 @@
             <b>Re: <span class="field-mapped" data-sample="As Stabilized (Fee Simple Estate)" title="{{Report_Values}}">{{Report_Values}}</span> current market value
                 for the property located at <span class="field-mapped" data-sample="1101, 1121 109 St"
                     title="{{Subject_Street}}">{{Subject_Street}}</span>, <span class="field-mapped" data-sample="North Battleford"
-                    title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped" data-sample="SK"
+                    title="{{city}}">{{city}}</span>, <span class="field-mapped" data-sample="SK"
                     title="{{Subject_State}}">{{Subject_State}}</span>.</b>
         </p>
 
@@ -631,7 +631,7 @@
             </tr>
             <tr>
                 <td class="label-col">City, State, Zip</td>
-                <td><span class="field-mapped" data-sample="North Battleford" title="{{Subject_City}}">{{Subject_City}}</span>, <span
+                <td><span class="field-mapped" data-sample="North Battleford" title="{{city}}">{{city}}</span>, <span
                         class="field-mapped" data-sample="Saskatchewan" title="{{Subject_State}}">{{Subject_State}}</span> <span
                         class="field-mapped" data-sample="S9A 2T5" title="{{Subject_Zip}}">{{Subject_Zip}}</span></td>
             </tr>
@@ -682,12 +682,12 @@
             </tr>
             <tr>
                 <td class="label-col">NRA / GBA</td>
-                <td><span class="field-mapped" data-sample="10,204" title="{{Subject_NRA}}">{{Subject_NRA}}</span> / <span
+                <td><span class="field-mapped" data-sample="10,204" title="{{subject-gba}}">{{subject-gba}}</span> / <span
                         class="field-mapped" data-sample="10,204" title="{{Subject_GBA}}">{{Subject_GBA}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Units</td>
-                <td><span class="field-mapped" data-sample="16" title="{{Subject_Units}}">{{Subject_Units}}</span></td>
+                <td><span class="field-mapped" data-sample="16" title="{{subject-units}}">{{subject-units}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Density</td>
@@ -715,15 +715,15 @@
             </tr>
             <tr>
                 <td class="label-col">Building Quality</td>
-                <td><span class="field-mapped" data-sample="Average" title="{{Subject_Quality}}">{{Subject_Quality}}</span></td>
+                <td><span class="field-mapped" data-sample="Average" title="{{subject-quality-rating}}">{{subject-quality-rating}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Building Condition</td>
-                <td><span class="field-mapped" data-sample="Average" title="{{Subject_Condition}}">{{Subject_Condition}}</span></td>
+                <td><span class="field-mapped" data-sample="Average" title="{{subject-condition}}">{{subject-condition}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Appeal</td>
-                <td><span class="field-mapped" data-sample="Average" title="{{Subject_Appeal}}">{{Subject_Appeal}}</span></td>
+                <td><span class="field-mapped" data-sample="Average" title="{{subject-appeal-rating}}">{{subject-appeal-rating}}</span></td>
             </tr>
         </table>
 
@@ -772,7 +772,7 @@
             </tr>
             <tr>
                 <td class="label-col">Current Occupancy</td>
-                <td><span class="field-mapped" data-sample="100.00%" title="{{Subject_Occupancy}}">{{Subject_Occupancy}}</span></td>
+                <td><span class="field-mapped" data-sample="100.00%" title="{{occupancy-rate}}">{{occupancy-rate}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Stabilized Occupancy</td>
@@ -1124,11 +1124,11 @@
         <p>
             The subject property, located at <span class="field-mapped" data-sample="1101, 1121 109 St"
                 title="{{Subject_Street}}">{{Subject_Street}}</span>, <span class="field-mapped" data-sample="North Battleford"
-                title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped" data-sample="Saskatchewan"
+                title="{{city}}">{{city}}</span>, <span class="field-mapped" data-sample="Saskatchewan"
                 title="{{Subject_State}}">{{Subject_State}}</span>, is a <span class="field-mapped" data-sample="multi-family, walkup"
                 title="{{Subject_Primary}}">{{Subject_Primary}}</span>, <span class="field-mapped" data-sample="apartment"
                 title="{{Subject_Subtype}}">{{Subject_Subtype}}</span> property with approximately <span
-                class="field-mapped" data-sample="10,204" title="{{Subject_NRA}}">{{Subject_NRA}}</span> square feet of net rentable area.
+                class="field-mapped" data-sample="10,204" title="{{subject-gba}}">{{subject-gba}}</span> square feet of net rentable area.
         </p>
         <p>
             <span class="field-mapped" data-sample="The improvements are comprised of 2 total buildings, and consist of 10,204 square feet of net rentable area (NRA) as of the valuation date." title="{{Subject_EconCharacteristics}}">{{Subject_EconCharacteristics}}</span>
@@ -1169,7 +1169,7 @@
                 title="{{Report_ValueScenario1}}">{{Report_ValueScenario1}}</span> which at the time of inspection
             represents the existing improvements assuming stabilized occupancy as of the effective date for the property
             located at <span class="field-mapped" data-sample="1101, 1121 109 St" title="{{Subject_Street}}">{{Subject_Street}}</span>, <span
-                class="field-mapped" data-sample="North Battleford" title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped" data-sample="Saskatchewan"
+                class="field-mapped" data-sample="North Battleford" title="{{city}}">{{city}}</span>, <span class="field-mapped" data-sample="Saskatchewan"
                 title="{{Subject_State}}">{{Subject_State}}</span> (herein referred to as the Subject property).
         </p>
 
@@ -2089,14 +2089,14 @@
                 </tr>
                 <tr style="background-color: #f0f0f0; font-weight: bold;">
                     <td colspan="2">NET RENTABLE AREA</td>
-                    <td class="numeric-cell"><span class="field-mapped" data-sample="16" title="{{Subject_Units}}">{{Subject_Units}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" data-sample="16" title="{{subject-units}}">{{subject-units}}</span></td>
                     <td class="numeric-cell"></td>
                     <td class="numeric-cell">638</td>
-                    <td class="numeric-cell"><span class="field-mapped" data-sample="10,204" title="{{Subject_NRA}}">{{Subject_NRA}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" data-sample="10,204" title="{{subject-gba}}">{{subject-gba}}</span></td>
                 </tr>
                 <tr style="background-color: #f0f0f0; font-weight: bold;">
                     <td colspan="2">GROSS BUILDING AREA</td>
-                    <td class="numeric-cell"><span class="field-mapped" data-sample="16" title="{{Subject_Units}}">{{Subject_Units}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" data-sample="16" title="{{subject-units}}">{{subject-units}}</span></td>
                     <td class="numeric-cell"></td>
                     <td class="numeric-cell">638</td>
                     <td class="numeric-cell"><span class="field-mapped" data-sample="10,204" title="{{Subject_GBA}}">{{Subject_GBA}}</span></td>
@@ -3213,7 +3213,7 @@ if (previewToggle && modeLabel) {
     <div class="page-sheet" data-page-num="Page 42">
         <div class="Header1">Valuation & Conclusions</div>
         <div class="Header2">Unit Rent Discussion</div>
-        <p>The subject property, <span class="field-mapped" data-sample="North Battleford Apartments" title="{{Subject_PropertyName}}">{{Subject_PropertyName}}</span> at <span class="field-mapped" data-sample="1101, 1121 109 Street" title="{{Subject_Street}}">{{Subject_Street}}</span>, is a <span class="field-mapped" data-sample="16" title="{{Subject_Units}}">{{Subject_Units}}</span>-unit building of <span class="field-mapped" data-sample="average" title="{{Subject_Quality}}">{{Subject_Quality}}</span> quality and condition with <span class="field-mapped" data-sample="heat and water included" title="{{Subject_Amenities_Utilities}}">{{Subject_Amenities_Utilities}}</span>, <span class="field-mapped" data-sample="surface parking" title="{{Subject_Amenities_Parking}}">{{Subject_Amenities_Parking}}</span>, and <span class="field-mapped" data-sample="on-site laundry" title="{{Subject_Amenities_Laundry}}">{{Subject_Amenities_Laundry}}</span>.</p>
+        <p>The subject property, <span class="field-mapped" data-sample="North Battleford Apartments" title="{{Subject_PropertyName}}">{{Subject_PropertyName}}</span> at <span class="field-mapped" data-sample="1101, 1121 109 Street" title="{{Subject_Street}}">{{Subject_Street}}</span>, is a <span class="field-mapped" data-sample="16" title="{{subject-units}}">{{subject-units}}</span>-unit building of <span class="field-mapped" data-sample="average" title="{{subject-quality-rating}}">{{subject-quality-rating}}</span> quality and condition with <span class="field-mapped" data-sample="heat and water included" title="{{Subject_Amenities_Utilities}}">{{Subject_Amenities_Utilities}}</span>, <span class="field-mapped" data-sample="surface parking" title="{{Subject_Amenities_Parking}}">{{Subject_Amenities_Parking}}</span>, and <span class="field-mapped" data-sample="on-site laundry" title="{{Subject_Amenities_Laundry}}">{{Subject_Amenities_Laundry}}</span>.</p>
         <p>A survey of <span class="field-mapped" data-sample="five" title="{{Market_Rent_Comps_Count}}">{{Market_Rent_Comps_Count}}</span> comparable buildings in <span class="field-mapped" data-sample="North Battleford and Prince Albert" title="{{Market_Rent_Comps_Markets}}">{{Market_Rent_Comps_Markets}}</span> shows 1 bedroom market rents ranging from <span class="field-mapped" data-sample="$1,110" title="{{Market_Rent_1Bed_RangeLow}}">{{Market_Rent_1Bed_RangeLow}}</span>–<span class="field-mapped" data-sample="$1,575" title="{{Market_Rent_1Bed_RangeHigh}}">{{Market_Rent_1Bed_RangeHigh}}</span>/month (<span class="field-mapped" data-sample="$1.71" title="{{Market_Rent_1Bed_SF_Low}}">{{Market_Rent_1Bed_SF_Low}}</span>–<span class="field-mapped" data-sample="$2.42" title="{{Market_Rent_1Bed_SF_High}}">{{Market_Rent_1Bed_SF_High}}</span>/SF). Most comparable buildings include heat and water, with upgraded interiors and similar amenities.</p>
         <p>Based on the comparables, the subject's estimated market rent is:<br><strong>1 Bed / 1 Bath: <span class="field-mapped" data-sample="$1,050" title="{{Market_Rent_1Bed_Concluded}}">{{Market_Rent_1Bed_Concluded}}</span>/month (<span class="field-mapped" data-sample="$1.62" title="{{Market_Rent_1Bed_Concluded_SF}}">{{Market_Rent_1Bed_Concluded_SF}}</span>/SF)</strong></p>
         <p>This level is slightly below market averages, reflecting the property's modest finishes and smaller scale, but it remains competitive within the local rental market.</p>
@@ -3793,107 +3793,107 @@ if (previewToggle && modeLabel) {
             <tbody>
                 <tr>
                     <td class="label-col">Name</td>
-                    <td><span class="field-mapped" title="{{COMP_1_Name}}" data-sample="Heritage House">{{COMP_1_Name}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_2_Name}}" data-sample="Parkside View Apartments">{{COMP_2_Name}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_3_Name}}" data-sample="Woodland Estates">{{COMP_3_Name}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_4_Name}}" data-sample="Parkside Flats 1">{{COMP_4_Name}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_5_Name}}" data-sample="Parkside Flats 2">{{COMP_5_Name}}</span></td>
+                    <td><span class="field-mapped" title="{{comp1-name}}" data-sample="Heritage House">{{comp1-name}}</span></td>
+                    <td><span class="field-mapped" title="{{comp2-name}}" data-sample="Parkside View Apartments">{{comp2-name}}</span></td>
+                    <td><span class="field-mapped" title="{{comp3-name}}" data-sample="Woodland Estates">{{comp3-name}}</span></td>
+                    <td><span class="field-mapped" title="{{comp4-name}}" data-sample="Parkside Flats 1">{{comp4-name}}</span></td>
+                    <td><span class="field-mapped" title="{{comp5-name}}" data-sample="Parkside Flats 2">{{comp5-name}}</span></td>
                 </tr>
                 <tr>
                     <td class="label-col">Address</td>
-                    <td><span class="field-mapped" title="{{COMP_1_Address}}" data-sample="1501 102 St">{{COMP_1_Address}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_2_Address}}" data-sample="1070-1092 Ferguson Ave">{{COMP_2_Address}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_3_Address}}" data-sample="1901 Pearson Ave">{{COMP_3_Address}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_4_Address}}" data-sample="1030 Parr Hill Dr">{{COMP_4_Address}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_5_Address}}" data-sample="1030 Parr Hill Dr">{{COMP_5_Address}}</span></td>
+                    <td><span class="field-mapped" title="{{comp1-address}}" data-sample="1501 102 St">{{comp1-address}}</span></td>
+                    <td><span class="field-mapped" title="{{comp2-address}}" data-sample="1070-1092 Ferguson Ave">{{comp2-address}}</span></td>
+                    <td><span class="field-mapped" title="{{comp3-address}}" data-sample="1901 Pearson Ave">{{comp3-address}}</span></td>
+                    <td><span class="field-mapped" title="{{comp4-address}}" data-sample="1030 Parr Hill Dr">{{comp4-address}}</span></td>
+                    <td><span class="field-mapped" title="{{comp5-address}}" data-sample="1030 Parr Hill Dr">{{comp5-address}}</span></td>
                 </tr>
                 <tr>
                     <td class="label-col">City</td>
-                    <td><strong><span class="field-mapped" title="{{COMP_1_City}}" data-sample="North Battleford">{{COMP_1_City}}</span></strong></td>
-                    <td><strong><span class="field-mapped" title="{{COMP_2_City}}" data-sample="North Battleford">{{COMP_2_City}}</span></strong></td>
-                    <td><strong><span class="field-mapped" title="{{COMP_3_City}}" data-sample="North Battleford">{{COMP_3_City}}</span></strong></td>
-                    <td><strong><span class="field-mapped" title="{{COMP_4_City}}" data-sample="Martensville">{{COMP_4_City}}</span></strong></td>
-                    <td><strong><span class="field-mapped" title="{{COMP_5_City}}" data-sample="Martensville">{{COMP_5_City}}</span></strong></td>
+                    <td><strong><span class="field-mapped" title="{{comp1-city}}" data-sample="North Battleford">{{comp1-city}}</span></strong></td>
+                    <td><strong><span class="field-mapped" title="{{comp2-city}}" data-sample="North Battleford">{{comp2-city}}</span></strong></td>
+                    <td><strong><span class="field-mapped" title="{{comp3-city}}" data-sample="North Battleford">{{comp3-city}}</span></strong></td>
+                    <td><strong><span class="field-mapped" title="{{comp4-city}}" data-sample="Martensville">{{comp4-city}}</span></strong></td>
+                    <td><strong><span class="field-mapped" title="{{comp5-city}}" data-sample="Martensville">{{comp5-city}}</span></strong></td>
                 </tr>
                 <tr>
                     <td class="label-col">Province</td>
-                    <td><span class="field-mapped" title="{{COMP_1_Province}}" data-sample="SK">{{COMP_1_Province}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_2_Province}}" data-sample="SK">{{COMP_2_Province}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_3_Province}}" data-sample="SK">{{COMP_3_Province}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_4_Province}}" data-sample="SK">{{COMP_4_Province}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_5_Province}}" data-sample="SK">{{COMP_5_Province}}</span></td>
+                    <td><span class="field-mapped" title="{{comp1-province}}" data-sample="SK">{{comp1-province}}</span></td>
+                    <td><span class="field-mapped" title="{{comp2-province}}" data-sample="SK">{{comp2-province}}</span></td>
+                    <td><span class="field-mapped" title="{{comp3-province}}" data-sample="SK">{{comp3-province}}</span></td>
+                    <td><span class="field-mapped" title="{{comp4-province}}" data-sample="SK">{{comp4-province}}</span></td>
+                    <td><span class="field-mapped" title="{{comp5-province}}" data-sample="SK">{{comp5-province}}</span></td>
                 </tr>
                 <tr>
                     <td class="label-col">NRA (SF)</td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_NRA}}" data-sample="22,754">{{COMP_1_NRA}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_NRA}}" data-sample="33,309">{{COMP_2_NRA}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_NRA}}" data-sample="15,000">{{COMP_3_NRA}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_NRA}}" data-sample="47,916">{{COMP_4_NRA}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_NRA}}" data-sample="52,708">{{COMP_5_NRA}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp1-gba}}" data-sample="22,754">{{comp1-gba}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp2-gba}}" data-sample="33,309">{{comp2-gba}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp3-gba}}" data-sample="15,000">{{comp3-gba}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp4-gba}}" data-sample="47,916">{{comp4-gba}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp5-gba}}" data-sample="52,708">{{comp5-gba}}</span></td>
                 </tr>
                 <tr>
                     <td class="label-col"># Units</td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_Units}}" data-sample="24">{{COMP_1_Units}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_Units}}" data-sample="45">{{COMP_2_Units}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_Units}}" data-sample="24">{{COMP_3_Units}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_Units}}" data-sample="47">{{COMP_4_Units}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_Units}}" data-sample="52">{{COMP_5_Units}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp1-units}}" data-sample="24">{{comp1-units}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp2-units}}" data-sample="45">{{comp2-units}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp3-units}}" data-sample="24">{{comp3-units}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp4-units}}" data-sample="47">{{comp4-units}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp5-units}}" data-sample="52">{{comp5-units}}</span></td>
                 </tr>
                 <tr>
                     <td class="label-col">Year Built</td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_YearBuilt}}" data-sample="2006">{{COMP_1_YearBuilt}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_YearBuilt}}" data-sample="2002">{{COMP_2_YearBuilt}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_YearBuilt}}" data-sample="1980">{{COMP_3_YearBuilt}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_YearBuilt}}" data-sample="2016">{{COMP_4_YearBuilt}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_YearBuilt}}" data-sample="2019">{{COMP_5_YearBuilt}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp1-year}}" data-sample="2006">{{comp1-year}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp2-year}}" data-sample="2002">{{comp2-year}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp3-year}}" data-sample="1980">{{comp3-year}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp4-year}}" data-sample="2016">{{comp4-year}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp5-year}}" data-sample="2019">{{comp5-year}}</span></td>
                 </tr>
                 <tr>
                     <td class="label-col">Sale Date</td>
-                    <td><span class="field-mapped" title="{{COMP_1_SaleDate}}" data-sample="2024-06-17">{{COMP_1_SaleDate}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_2_SaleDate}}" data-sample="2024-04-17">{{COMP_2_SaleDate}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_3_SaleDate}}" data-sample="2024-05-27">{{COMP_3_SaleDate}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_4_SaleDate}}" data-sample="2023-05-19">{{COMP_4_SaleDate}}</span></td>
-                    <td><span class="field-mapped" title="{{COMP_5_SaleDate}}" data-sample="2023-05-19">{{COMP_5_SaleDate}}</span></td>
+                    <td><span class="field-mapped" title="{{comp1-sale-date}}" data-sample="2024-06-17">{{comp1-sale-date}}</span></td>
+                    <td><span class="field-mapped" title="{{comp2-sale-date}}" data-sample="2024-04-17">{{comp2-sale-date}}</span></td>
+                    <td><span class="field-mapped" title="{{comp3-sale-date}}" data-sample="2024-05-27">{{comp3-sale-date}}</span></td>
+                    <td><span class="field-mapped" title="{{comp4-sale-date}}" data-sample="2023-05-19">{{comp4-sale-date}}</span></td>
+                    <td><span class="field-mapped" title="{{comp5-sale-date}}" data-sample="2023-05-19">{{comp5-sale-date}}</span></td>
                 </tr>
                 <tr>
                     <td class="label-col">Sale Price</td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_SalePrice}}" data-sample="$3,750,000">{{COMP_1_SalePrice}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_SalePrice}}" data-sample="$2,650,000">{{COMP_2_SalePrice}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_SalePrice}}" data-sample="$1,500,000">{{COMP_3_SalePrice}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_SalePrice}}" data-sample="$3,650,000">{{COMP_4_SalePrice}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_SalePrice}}" data-sample="$4,200,000">{{COMP_5_SalePrice}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp1-sale-price}}" data-sample="$3,750,000">{{comp1-sale-price}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp2-sale-price}}" data-sample="$2,650,000">{{comp2-sale-price}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp3-sale-price}}" data-sample="$1,500,000">{{comp3-sale-price}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp4-sale-price}}" data-sample="$3,650,000">{{comp4-sale-price}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp5-sale-price}}" data-sample="$4,200,000">{{comp5-sale-price}}</span></td>
                 </tr>
                 <tr>
                     <td class="label-col">Price/SF</td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_PriceSF}}" data-sample="$137">{{COMP_1_PriceSF}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_PriceSF}}" data-sample="$137">{{COMP_2_PriceSF}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_PriceSF}}" data-sample="$137">{{COMP_3_PriceSF}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_PriceSF}}" data-sample="$194">{{COMP_4_PriceSF}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_PriceSF}}" data-sample="$286">{{COMP_5_PriceSF}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp1-price-per-sf}}" data-sample="$137">{{comp1-price-per-sf}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp2-price-per-sf}}" data-sample="$137">{{comp2-price-per-sf}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp3-price-per-sf}}" data-sample="$137">{{comp3-price-per-sf}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp4-price-per-sf}}" data-sample="$194">{{comp4-price-per-sf}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp5-price-per-sf}}" data-sample="$286">{{comp5-price-per-sf}}</span></td>
                 </tr>
                 <tr>
                     <td class="label-col">NOI</td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_NOI}}" data-sample="$129,891">{{COMP_1_NOI}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_NOI}}" data-sample="$102,019">{{COMP_2_NOI}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_NOI}}" data-sample="$82,827">{{COMP_3_NOI}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_NOI}}" data-sample="$189,400">{{COMP_4_NOI}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_NOI}}" data-sample="$214,375">{{COMP_5_NOI}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp1-noi}}" data-sample="$129,891">{{comp1-noi}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp2-noi}}" data-sample="$102,019">{{comp2-noi}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp3-noi}}" data-sample="$82,827">{{comp3-noi}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp4-noi}}" data-sample="$189,400">{{comp4-noi}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp5-noi}}" data-sample="$214,375">{{comp5-noi}}</span></td>
                 </tr>
                 <tr>
                     <td class="label-col">NOI/Unit</td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_NOI_Unit}}" data-sample="$7,780.02">{{COMP_1_NOI_Unit}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_NOI_Unit}}" data-sample="$6,111.00">{{COMP_2_NOI_Unit}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_NOI_Unit}}" data-sample="$5,129.00">{{COMP_3_NOI_Unit}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_NOI_Unit}}" data-sample="$12,389.00">{{COMP_4_NOI_Unit}}</span></td>
-                    <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_NOI_Unit}}" data-sample="$12,891.00">{{COMP_5_NOI_Unit}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp1-noi-per-unit}}" data-sample="$7,780.02">{{comp1-noi-per-unit}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp2-noi-per-unit}}" data-sample="$6,111.00">{{comp2-noi-per-unit}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp3-noi-per-unit}}" data-sample="$5,129.00">{{comp3-noi-per-unit}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp4-noi-per-unit}}" data-sample="$12,389.00">{{comp4-noi-per-unit}}</span></td>
+                    <td class="numeric-cell"><span class="field-mapped" title="{{comp5-noi-per-unit}}" data-sample="$12,891.00">{{comp5-noi-per-unit}}</span></td>
                 </tr>
                 <tr style="border-bottom: 1px solid #ccc;">
                     <td style="padding-top: 14px;"><strong>Capitalization Rate</strong></td>
-                    <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{COMP_1_CapRate}}" data-sample="5.98%">{{COMP_1_CapRate}}</span></strong></td>
-                    <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{COMP_2_CapRate}}" data-sample="5.98%">{{COMP_2_CapRate}}</span></strong></td>
-                    <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{COMP_3_CapRate}}" data-sample="5.99%">{{COMP_3_CapRate}}</span></strong></td>
-                    <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{COMP_4_CapRate}}" data-sample="6.24%">{{COMP_4_CapRate}}</span></strong></td>
-                    <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{COMP_5_CapRate}}" data-sample="5.92%">{{COMP_5_CapRate}}</span></strong></td>
+                    <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{comp1-cap-rate}}" data-sample="5.98%">{{comp1-cap-rate}}</span></strong></td>
+                    <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{comp2-cap-rate}}" data-sample="5.98%">{{comp2-cap-rate}}</span></strong></td>
+                    <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{comp3-cap-rate}}" data-sample="5.99%">{{comp3-cap-rate}}</span></strong></td>
+                    <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{comp4-cap-rate}}" data-sample="6.24%">{{comp4-cap-rate}}</span></strong></td>
+                    <td style="padding-top: 14px; text-align: left;"><strong><span class="field-mapped" title="{{comp5-cap-rate}}" data-sample="5.92%">{{comp5-cap-rate}}</span></strong></td>
                 </tr>
                 <tr>
                     <td style="font-size: 7.5pt; padding-top: 2px;">HIGH</td>
@@ -4011,7 +4011,7 @@ if (previewToggle && modeLabel) {
 
         <p>Comparable sales were analyzed from both North Battleford and Martensville to reflect investor activity in tertiary Saskatchewan markets. The comparable properties indicate capitalization rates ranging from <span class="field-mapped" title="{{CapRate_Low}}" data-sample="5.92%">{{CapRate_Low}}</span> to <span class="field-mapped" title="{{CapRate_High}}" data-sample="6.24%">{{CapRate_High}}</span>, with the majority clustering near the <span class="field-mapped" title="{{CapRate_Average}}" data-sample="5.99%">{{CapRate_Average}}</span> range.</p>
 
-        <p>The newer properties in Martensville (Parkside Flats 1 and 2) exhibit lower cap rates of <span class="field-mapped" title="{{COMP_5_CapRate}}" data-sample="5.92%">{{COMP_5_CapRate}}</span>, consistent with higher quality construction, modern finishes, and superior appeal. In contrast, the older assets located in North Battleford, such as Heritage House and College View Apartments, achieved cap rates closer to 5.99%-6.24%, reflecting higher risk premiums associated with tertiary markets, older improvements, and smaller population bases.</p>
+        <p>The newer properties in Martensville (Parkside Flats 1 and 2) exhibit lower cap rates of <span class="field-mapped" title="{{comp5-cap-rate}}" data-sample="5.92%">{{comp5-cap-rate}}</span>, consistent with higher quality construction, modern finishes, and superior appeal. In contrast, the older assets located in North Battleford, such as Heritage House and College View Apartments, achieved cap rates closer to 5.99%-6.24%, reflecting higher risk premiums associated with tertiary markets, older improvements, and smaller population bases.</p>
 
         <p>Given the subject's age (circa <span class="field-mapped" title="{{Year_Built}}" data-sample="1970">{{Year_Built}}</span>), average unit mix and location within North Battleford, a smaller tertiary market with limited liquidity, an upward adjustment toward the higher end of the observed range is appropriate. The subject's age and leverage condition support investor confidence, though risk perception remains elevated relative to newer comparables.</p>
 
@@ -6365,48 +6365,48 @@ if (previewToggle && modeLabel) {
         <tbody>
             <tr>
                 <td class="label-col">Name</td>
-                <td><span class="field-mapped" title="{{Subject_Name}}" data-sample="Acorn Apartments">{{Subject_Name}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_Name}}" data-sample="Heritage House">{{COMP_1_Name}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_Name}}" data-sample="College View Apartments">{{COMP_2_Name}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_Name}}" data-sample="Woodland Estates">{{COMP_3_Name}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_Name}}" data-sample="Parkside Flats 1">{{COMP_4_Name}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_Name}}" data-sample="Parkside Flats 2">{{COMP_5_Name}}</span></td>
+                <td><span class="field-mapped" title="{{property-name}}" data-sample="Acorn Apartments">{{property-name}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-name}}" data-sample="Heritage House">{{comp1-name}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-name}}" data-sample="College View Apartments">{{comp2-name}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-name}}" data-sample="Woodland Estates">{{comp3-name}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-name}}" data-sample="Parkside Flats 1">{{comp4-name}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-name}}" data-sample="Parkside Flats 2">{{comp5-name}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Address</td>
-                <td><span class="field-mapped" title="{{Subject_Address}}" data-sample="1101, 1121 109 St">{{Subject_Address}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_Address}}" data-sample="1351 107 St">{{COMP_1_Address}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_Address}}" data-sample="10910-10912 Winder Crescent">{{COMP_2_Address}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_Address}}" data-sample="1901 Pearson Ave">{{COMP_3_Address}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_Address}}" data-sample="1000 Parr Hill Dr">{{COMP_4_Address}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_Address}}" data-sample="1030 Parr Hill Dr">{{COMP_5_Address}}</span></td>
+                <td><span class="field-mapped" title="{{street-address}}" data-sample="1101, 1121 109 St">{{street-address}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-address}}" data-sample="1351 107 St">{{comp1-address}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-address}}" data-sample="10910-10912 Winder Crescent">{{comp2-address}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-address}}" data-sample="1901 Pearson Ave">{{comp3-address}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-address}}" data-sample="1000 Parr Hill Dr">{{comp4-address}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-address}}" data-sample="1030 Parr Hill Dr">{{comp5-address}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">City</td>
-                <td><span class="field-mapped" title="{{Subject_City}}" data-sample="North Battleford">{{Subject_City}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_City}}" data-sample="North Battleford">{{COMP_1_City}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_City}}" data-sample="North Battleford">{{COMP_2_City}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_City}}" data-sample="North Battleford">{{COMP_3_City}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_City}}" data-sample="Martensville">{{COMP_4_City}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_City}}" data-sample="Martensville">{{COMP_5_City}}</span></td>
+                <td><span class="field-mapped" title="{{city}}" data-sample="North Battleford">{{city}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-city}}" data-sample="North Battleford">{{comp1-city}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-city}}" data-sample="North Battleford">{{comp2-city}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-city}}" data-sample="North Battleford">{{comp3-city}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-city}}" data-sample="Martensville">{{comp4-city}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-city}}" data-sample="Martensville">{{comp5-city}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Province</td>
-                <td><span class="field-mapped" title="{{Subject_Province}}" data-sample="SK">{{Subject_Province}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_Province}}" data-sample="SK">{{COMP_1_Province}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_Province}}" data-sample="SK">{{COMP_2_Province}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_Province}}" data-sample="SK">{{COMP_3_Province}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_Province}}" data-sample="SK">{{COMP_4_Province}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_Province}}" data-sample="SK">{{COMP_5_Province}}</span></td>
+                <td><span class="field-mapped" title="{{province}}" data-sample="SK">{{province}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-province}}" data-sample="SK">{{comp1-province}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-province}}" data-sample="SK">{{comp2-province}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-province}}" data-sample="SK">{{comp3-province}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-province}}" data-sample="SK">{{comp4-province}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-province}}" data-sample="SK">{{comp5-province}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Postal Code</td>
-                <td><span class="field-mapped" title="{{Subject_PostalCode}}" data-sample="S9A 2E5">{{Subject_PostalCode}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_PostalCode}}" data-sample="S9A 2A1">{{COMP_1_PostalCode}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_PostalCode}}" data-sample="S9A 2C3">{{COMP_2_PostalCode}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_PostalCode}}" data-sample="S9A 3L5">{{COMP_3_PostalCode}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_PostalCode}}" data-sample="S0K 2I1">{{COMP_4_PostalCode}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_PostalCode}}" data-sample="S0K 2I1">{{COMP_5_PostalCode}}</span></td>
+                <td><span class="field-mapped" title="{{postal-code}}" data-sample="S9A 2E5">{{postal-code}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-postal-code}}" data-sample="S9A 2A1">{{comp1-postal-code}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-postal-code}}" data-sample="S9A 2C3">{{comp2-postal-code}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-postal-code}}" data-sample="S9A 3L5">{{comp3-postal-code}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-postal-code}}" data-sample="S0K 2I1">{{comp4-postal-code}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-postal-code}}" data-sample="S0K 2I1">{{comp5-postal-code}}</span></td>
             </tr>
         </tbody>
     </table>
@@ -6430,90 +6430,90 @@ if (previewToggle && modeLabel) {
             <tr>
                 <td class="label-col">Transaction Price</td>
                 <td></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_TransPrice}}" data-sample="$3,117,383">{{COMP_1_TransPrice}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_TransPrice}}" data-sample="$4,590,858">{{COMP_2_TransPrice}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_TransPrice}}" data-sample="$2,055,056">{{COMP_3_TransPrice}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_TransPrice}}" data-sample="$9,310,000">{{COMP_4_TransPrice}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_TransPrice}}" data-sample="$13,720,000">{{COMP_5_TransPrice}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp1-sale-price}}" data-sample="$3,117,383">{{comp1-sale-price}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp2-sale-price}}" data-sample="$4,590,858">{{comp2-sale-price}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp3-sale-price}}" data-sample="$2,055,056">{{comp3-sale-price}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp4-sale-price}}" data-sample="$9,310,000">{{comp4-sale-price}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp5-sale-price}}" data-sample="$13,720,000">{{comp5-sale-price}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Transaction Price$/Unit</td>
                 <td></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_PricePerUnit}}" data-sample="$129,891">{{COMP_1_PricePerUnit}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_PricePerUnit}}" data-sample="$102,019">{{COMP_2_PricePerUnit}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_PricePerUnit}}" data-sample="$85,627">{{COMP_3_PricePerUnit}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_PricePerUnit}}" data-sample="$198,085">{{COMP_4_PricePerUnit}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_PricePerUnit}}" data-sample="$214,375">{{COMP_5_PricePerUnit}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp1-price-per-unit}}" data-sample="$129,891">{{comp1-price-per-unit}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp2-price-per-unit}}" data-sample="$102,019">{{comp2-price-per-unit}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp3-price-per-unit}}" data-sample="$85,627">{{comp3-price-per-unit}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp4-price-per-unit}}" data-sample="$198,085">{{comp4-price-per-unit}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp5-price-per-unit}}" data-sample="$214,375">{{comp5-price-per-unit}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Property Rights <sup>1</sup></td>
                 <td></td>
-                <td><span class="field-mapped" title="{{COMP_1_PropertyRights}}" data-sample="Fee Simple">{{COMP_1_PropertyRights}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_PropertyRights}}" data-sample="Fee Simple">{{COMP_2_PropertyRights}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_PropertyRights}}" data-sample="Fee Simple">{{COMP_3_PropertyRights}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_PropertyRights}}" data-sample="Fee Simple">{{COMP_4_PropertyRights}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_PropertyRights}}" data-sample="Fee Simple">{{COMP_5_PropertyRights}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-property-rights}}" data-sample="Fee Simple">{{comp1-property-rights}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-property-rights}}" data-sample="Fee Simple">{{comp2-property-rights}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-property-rights}}" data-sample="Fee Simple">{{comp3-property-rights}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-property-rights}}" data-sample="Fee Simple">{{comp4-property-rights}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-property-rights}}" data-sample="Fee Simple">{{comp5-property-rights}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Financing <sup>2</sup></td>
                 <td></td>
-                <td><span class="field-mapped" title="{{COMP_1_Financing}}" data-sample="Cash to Seller">{{COMP_1_Financing}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_Financing}}" data-sample="Cash To Seller">{{COMP_2_Financing}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_Financing}}" data-sample="Cash to Seller">{{COMP_3_Financing}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_Financing}}" data-sample="Cash to Seller">{{COMP_4_Financing}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_Financing}}" data-sample="Cash to Seller">{{COMP_5_Financing}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-financing}}" data-sample="Cash to Seller">{{comp1-financing}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-financing}}" data-sample="Cash To Seller">{{comp2-financing}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-financing}}" data-sample="Cash to Seller">{{comp3-financing}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-financing}}" data-sample="Cash to Seller">{{comp4-financing}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-financing}}" data-sample="Cash to Seller">{{comp5-financing}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Sale Conditions <sup>3</sup></td>
                 <td></td>
-                <td><span class="field-mapped" title="{{COMP_1_SaleConditions}}" data-sample="Arm's Length">{{COMP_1_SaleConditions}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_SaleConditions}}" data-sample="Arm's Length">{{COMP_2_SaleConditions}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_SaleConditions}}" data-sample="Arm's Length">{{COMP_3_SaleConditions}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_SaleConditions}}" data-sample="Arm's Length">{{COMP_4_SaleConditions}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_SaleConditions}}" data-sample="Arm's Length">{{COMP_5_SaleConditions}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-sale-conditions}}" data-sample="Arm's Length">{{comp1-sale-conditions}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-sale-conditions}}" data-sample="Arm's Length">{{comp2-sale-conditions}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-sale-conditions}}" data-sample="Arm's Length">{{comp3-sale-conditions}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-sale-conditions}}" data-sample="Arm's Length">{{comp4-sale-conditions}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-sale-conditions}}" data-sample="Arm's Length">{{comp5-sale-conditions}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Expenditures After Sale <sup>4</sup></td>
                 <td></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_ExpendituresAfterSale}}" data-sample="$0">{{COMP_1_ExpendituresAfterSale}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_ExpendituresAfterSale}}" data-sample="$0">{{COMP_2_ExpendituresAfterSale}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_ExpendituresAfterSale}}" data-sample="$0">{{COMP_3_ExpendituresAfterSale}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_ExpendituresAfterSale}}" data-sample="$0">{{COMP_4_ExpendituresAfterSale}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_ExpendituresAfterSale}}" data-sample="$0">{{COMP_5_ExpendituresAfterSale}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp1-expenditures-after}}" data-sample="$0">{{comp1-expenditures-after}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp2-expenditures-after}}" data-sample="$0">{{comp2-expenditures-after}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp3-expenditures-after}}" data-sample="$0">{{comp3-expenditures-after}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp4-expenditures-after}}" data-sample="$0">{{comp4-expenditures-after}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp5-expenditures-after}}" data-sample="$0">{{comp5-expenditures-after}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Market Conditions <sup>5</sup></td>
                 <td></td>
-                <td><span class="field-mapped" title="{{COMP_1_MarketConditions}}" data-sample="2024-06-17">{{COMP_1_MarketConditions}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_MarketConditions}}" data-sample="2024-06-17">{{COMP_2_MarketConditions}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_MarketConditions}}" data-sample="2024-06-17">{{COMP_3_MarketConditions}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_MarketConditions}}" data-sample="2023-05-19">{{COMP_4_MarketConditions}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_MarketConditions}}" data-sample="2023-05-19">{{COMP_5_MarketConditions}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-market-conditions}}" data-sample="2024-06-17">{{comp1-market-conditions}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-market-conditions}}" data-sample="2024-06-17">{{comp2-market-conditions}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-market-conditions}}" data-sample="2024-06-17">{{comp3-market-conditions}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-market-conditions}}" data-sample="2023-05-19">{{comp4-market-conditions}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-market-conditions}}" data-sample="2023-05-19">{{comp5-market-conditions}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Sale Status</td>
                 <td></td>
-                <td><span class="field-mapped" title="{{COMP_1_SaleStatus}}" data-sample="Closed">{{COMP_1_SaleStatus}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_SaleStatus}}" data-sample="Closed">{{COMP_2_SaleStatus}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_SaleStatus}}" data-sample="Closed">{{COMP_3_SaleStatus}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_SaleStatus}}" data-sample="Closed">{{COMP_4_SaleStatus}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_SaleStatus}}" data-sample="Closed">{{COMP_5_SaleStatus}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-sale-status}}" data-sample="Closed">{{comp1-sale-status}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-sale-status}}" data-sample="Closed">{{comp2-sale-status}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-sale-status}}" data-sample="Closed">{{comp3-sale-status}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-sale-status}}" data-sample="Closed">{{comp4-sale-status}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-sale-status}}" data-sample="Closed">{{comp5-sale-status}}</span></td>
             </tr>
             <tr class="summary-separator">
                 <td colspan="2">Total Transactional Adjustments</td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_TotalTransAdj}}" data-sample="$0">{{COMP_1_TotalTransAdj}}</span> <span style="font-size: 6pt;">0%</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_TotalTransAdj}}" data-sample="$0">{{COMP_2_TotalTransAdj}}</span> <span style="font-size: 6pt;">0%</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_TotalTransAdj}}" data-sample="$0">{{COMP_3_TotalTransAdj}}</span> <span style="font-size: 6pt;">0%</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_TotalTransAdj}}" data-sample="$0">{{COMP_4_TotalTransAdj}}</span> <span style="font-size: 6pt;">0%</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_TotalTransAdj}}" data-sample="$0">{{COMP_5_TotalTransAdj}}</span> <span style="font-size: 6pt;">0%</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp1-total-trans-adj}}" data-sample="$0">{{comp1-total-trans-adj}}</span> <span style="font-size: 6pt;">0%</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp2-total-trans-adj}}" data-sample="$0">{{comp2-total-trans-adj}}</span> <span style="font-size: 6pt;">0%</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp3-total-trans-adj}}" data-sample="$0">{{comp3-total-trans-adj}}</span> <span style="font-size: 6pt;">0%</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp4-total-trans-adj}}" data-sample="$0">{{comp4-total-trans-adj}}</span> <span style="font-size: 6pt;">0%</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp5-total-trans-adj}}" data-sample="$0">{{comp5-total-trans-adj}}</span> <span style="font-size: 6pt;">0%</span></td>
             </tr>
             <tr>
                 <td colspan="2"><strong>Adjusted $/Unit</strong></td>
-                <td class="numeric-cell"><strong><span class="field-mapped" title="{{COMP_1_AdjPerUnit}}" data-sample="$129,891">{{COMP_1_AdjPerUnit}}</span></strong></td>
-                <td class="numeric-cell"><strong><span class="field-mapped" title="{{COMP_2_AdjPerUnit}}" data-sample="$102,019">{{COMP_2_AdjPerUnit}}</span></strong></td>
-                <td class="numeric-cell"><strong><span class="field-mapped" title="{{COMP_3_AdjPerUnit}}" data-sample="$85,627">{{COMP_3_AdjPerUnit}}</span></strong></td>
-                <td class="numeric-cell"><strong><span class="field-mapped" title="{{COMP_4_AdjPerUnit}}" data-sample="$198,085">{{COMP_4_AdjPerUnit}}</span></strong></td>
-                <td class="numeric-cell"><strong><span class="field-mapped" title="{{COMP_5_AdjPerUnit}}" data-sample="$214,375">{{COMP_5_AdjPerUnit}}</span></strong></td>
+                <td class="numeric-cell"><strong><span class="field-mapped" title="{{comp1-adj-price-per-unit}}" data-sample="$129,891">{{comp1-adj-price-per-unit}}</span></strong></td>
+                <td class="numeric-cell"><strong><span class="field-mapped" title="{{comp2-adj-price-per-unit}}" data-sample="$102,019">{{comp2-adj-price-per-unit}}</span></strong></td>
+                <td class="numeric-cell"><strong><span class="field-mapped" title="{{comp3-adj-price-per-unit}}" data-sample="$85,627">{{comp3-adj-price-per-unit}}</span></strong></td>
+                <td class="numeric-cell"><strong><span class="field-mapped" title="{{comp4-adj-price-per-unit}}" data-sample="$198,085">{{comp4-adj-price-per-unit}}</span></strong></td>
+                <td class="numeric-cell"><strong><span class="field-mapped" title="{{comp5-adj-price-per-unit}}" data-sample="$214,375">{{comp5-adj-price-per-unit}}</span></strong></td>
             </tr>
         </tbody>
     </table>
@@ -6536,30 +6536,30 @@ if (previewToggle && modeLabel) {
         <tbody>
             <tr>
                 <td class="label-col">NOI/Unit</td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_NOIPerUnit}}" data-sample="$6,986">{{Subject_NOIPerUnit}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_NOIPerUnit}}" data-sample="$7,780">{{COMP_1_NOIPerUnit}}</span> <span style="font-size: 6pt; color: #d32f2f;">(10%)</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_NOIPerUnit}}" data-sample="$6,111">{{COMP_2_NOIPerUnit}}</span> <span style="font-size: 6pt;">14%</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_NOIPerUnit}}" data-sample="$5,129">{{COMP_3_NOIPerUnit}}</span> <span style="font-size: 6pt;">36%</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_NOIPerUnit}}" data-sample="$12,365">{{COMP_4_NOIPerUnit}}</span> <span style="font-size: 6pt; color: #d32f2f;">(44%)</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_NOIPerUnit}}" data-sample="$12,681">{{COMP_5_NOIPerUnit}}</span> <span style="font-size: 6pt; color: #d32f2f;">(45%)</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{calc-noi-per-unit}}" data-sample="$6,986">{{calc-noi-per-unit}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp1-noi-per-unit}}" data-sample="$7,780">{{comp1-noi-per-unit}}</span> <span style="font-size: 6pt; color: #d32f2f;">(10%)</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp2-noi-per-unit}}" data-sample="$6,111">{{comp2-noi-per-unit}}</span> <span style="font-size: 6pt;">14%</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp3-noi-per-unit}}" data-sample="$5,129">{{comp3-noi-per-unit}}</span> <span style="font-size: 6pt;">36%</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp4-noi-per-unit}}" data-sample="$12,365">{{comp4-noi-per-unit}}</span> <span style="font-size: 6pt; color: #d32f2f;">(44%)</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp5-noi-per-unit}}" data-sample="$12,681">{{comp5-noi-per-unit}}</span> <span style="font-size: 6pt; color: #d32f2f;">(45%)</span></td>
             </tr>
             <tr>
                 <td class="label-col">Occupancy</td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_Occupancy}}" data-sample="100%">{{Subject_Occupancy}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_Occupancy}}" data-sample="100%">{{COMP_1_Occupancy}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_Occupancy}}" data-sample="100%">{{COMP_2_Occupancy}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_Occupancy}}" data-sample="100%">{{COMP_3_Occupancy}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_Occupancy}}" data-sample="100%">{{COMP_4_Occupancy}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_Occupancy}}" data-sample="100%">{{COMP_5_Occupancy}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{occupancy-rate}}" data-sample="100%">{{occupancy-rate}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp1-occupancy}}" data-sample="100%">{{comp1-occupancy}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp2-occupancy}}" data-sample="100%">{{comp2-occupancy}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp3-occupancy}}" data-sample="100%">{{comp3-occupancy}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp4-occupancy}}" data-sample="100%">{{comp4-occupancy}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp5-occupancy}}" data-sample="100%">{{comp5-occupancy}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Capitalization Rate</td>
                 <td class="numeric-cell"></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_CapRate}}" data-sample="5.99%">{{COMP_1_CapRate}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_CapRate}}" data-sample="5.99%">{{COMP_2_CapRate}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_CapRate}}" data-sample="5.99%">{{COMP_3_CapRate}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_CapRate}}" data-sample="6.24%">{{COMP_4_CapRate}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_CapRate}}" data-sample="5.92%">{{COMP_5_CapRate}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp1-cap-rate}}" data-sample="5.99%">{{comp1-cap-rate}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp2-cap-rate}}" data-sample="5.99%">{{comp2-cap-rate}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp3-cap-rate}}" data-sample="5.99%">{{comp3-cap-rate}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp4-cap-rate}}" data-sample="6.24%">{{comp4-cap-rate}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp5-cap-rate}}" data-sample="5.92%">{{comp5-cap-rate}}</span></td>
             </tr>
         </tbody>
     </table>
@@ -6582,127 +6582,127 @@ if (previewToggle && modeLabel) {
         <tbody>
             <tr>
                 <td class="label-col">Units</td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_Units}}" data-sample="16">{{Subject_Units}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_Units}}" data-sample="24">{{COMP_1_Units}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_Units}}" data-sample="45">{{COMP_2_Units}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_Units}}" data-sample="24">{{COMP_3_Units}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_Units}}" data-sample="47">{{COMP_4_Units}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_Units}}" data-sample="64">{{COMP_5_Units}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{subject-units}}" data-sample="16">{{subject-units}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp1-units}}" data-sample="24">{{comp1-units}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp2-units}}" data-sample="45">{{comp2-units}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp3-units}}" data-sample="24">{{comp3-units}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp4-units}}" data-sample="47">{{comp4-units}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp5-units}}" data-sample="64">{{comp5-units}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">NRA (SF)</td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_NRA}}" data-sample="10,204">{{Subject_NRA}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_1_NRA}}" data-sample="22,754">{{COMP_1_NRA}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_2_NRA}}" data-sample="33,509">{{COMP_2_NRA}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_3_NRA}}" data-sample="15,600">{{COMP_3_NRA}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_4_NRA}}" data-sample="47,916">{{COMP_4_NRA}}</span></td>
-                <td class="numeric-cell"><span class="field-mapped" title="{{COMP_5_NRA}}" data-sample="52,708">{{COMP_5_NRA}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{subject-gba}}" data-sample="10,204">{{subject-gba}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp1-gba}}" data-sample="22,754">{{comp1-gba}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp2-gba}}" data-sample="33,509">{{comp2-gba}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp3-gba}}" data-sample="15,600">{{comp3-gba}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp4-gba}}" data-sample="47,916">{{comp4-gba}}</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{comp5-gba}}" data-sample="52,708">{{comp5-gba}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Year Built/Ren</td>
-                <td><span class="field-mapped" title="{{Subject_YearBuiltWeighted}}" data-sample="1970 (1970 Weighted)">{{Subject_YearBuiltWeighted}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_YearBuiltWeighted}}" data-sample="2000">{{COMP_1_YearBuiltWeighted}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_YearBuiltWeighted}}" data-sample="2000">{{COMP_2_YearBuiltWeighted}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_YearBuiltWeighted}}" data-sample="1980">{{COMP_3_YearBuiltWeighted}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_YearBuiltWeighted}}" data-sample="2016">{{COMP_4_YearBuiltWeighted}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_YearBuiltWeighted}}" data-sample="2019">{{COMP_5_YearBuiltWeighted}}</span></td>
+                <td><span class="field-mapped" title="{{subject-year}}" data-sample="1970 (1970 Weighted)">{{subject-year}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-year}}" data-sample="2000">{{comp1-year}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-year}}" data-sample="2000">{{comp2-year}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-year}}" data-sample="1980">{{comp3-year}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-year}}" data-sample="2016">{{comp4-year}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-year}}" data-sample="2019">{{comp5-year}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Location</td>
-                <td><span class="field-mapped" title="{{Subject_Location}}" data-sample="Average">{{Subject_Location}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_Location}}" data-sample="Average">{{COMP_1_Location}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_Location}}" data-sample="Average">{{COMP_2_Location}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_Location}}" data-sample="Average">{{COMP_3_Location}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_Location}}" data-sample="Average">{{COMP_4_Location}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_Location}}" data-sample="Average">{{COMP_5_Location}}</span></td>
+                <td><span class="field-mapped" title="{{subject-location-rating}}" data-sample="Average">{{subject-location-rating}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-location}}" data-sample="Average">{{comp1-location}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-location}}" data-sample="Average">{{comp2-location}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-location}}" data-sample="Average">{{comp3-location}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-location}}" data-sample="Average">{{comp4-location}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-location}}" data-sample="Average">{{comp5-location}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Access</td>
-                <td><span class="field-mapped" title="{{Subject_Access}}" data-sample="Average">{{Subject_Access}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_Access}}" data-sample="Average">{{COMP_1_Access}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_Access}}" data-sample="Average">{{COMP_2_Access}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_Access}}" data-sample="Average">{{COMP_3_Access}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_Access}}" data-sample="Average">{{COMP_4_Access}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_Access}}" data-sample="Average">{{COMP_5_Access}}</span></td>
+                <td><span class="field-mapped" title="{{subject-access-rating}}" data-sample="Average">{{subject-access-rating}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-access}}" data-sample="Average">{{comp1-access}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-access}}" data-sample="Average">{{comp2-access}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-access}}" data-sample="Average">{{comp3-access}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-access}}" data-sample="Average">{{comp4-access}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-access}}" data-sample="Average">{{comp5-access}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Exposure</td>
-                <td><span class="field-mapped" title="{{Subject_Exposure}}" data-sample="Average">{{Subject_Exposure}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_Exposure}}" data-sample="Average">{{COMP_1_Exposure}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_Exposure}}" data-sample="Average">{{COMP_2_Exposure}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_Exposure}}" data-sample="Average">{{COMP_3_Exposure}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_Exposure}}" data-sample="Average">{{COMP_4_Exposure}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_Exposure}}" data-sample="Average">{{COMP_5_Exposure}}</span></td>
+                <td><span class="field-mapped" title="{{subject-exposure-rating}}" data-sample="Average">{{subject-exposure-rating}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-exposure}}" data-sample="Average">{{comp1-exposure}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-exposure}}" data-sample="Average">{{comp2-exposure}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-exposure}}" data-sample="Average">{{comp3-exposure}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-exposure}}" data-sample="Average">{{comp4-exposure}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-exposure}}" data-sample="Average">{{comp5-exposure}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Quality</td>
-                <td><span class="field-mapped" title="{{Subject_Quality}}" data-sample="Average">{{Subject_Quality}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_Quality}}" data-sample="Average">{{COMP_1_Quality}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_Quality}}" data-sample="Average">{{COMP_2_Quality}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_Quality}}" data-sample="Average">{{COMP_3_Quality}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_Quality}}" data-sample="Average">{{COMP_4_Quality}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_Quality}}" data-sample="Average">{{COMP_5_Quality}}</span></td>
+                <td><span class="field-mapped" title="{{subject-quality-rating}}" data-sample="Average">{{subject-quality-rating}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-quality}}" data-sample="Average">{{comp1-quality}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-quality}}" data-sample="Average">{{comp2-quality}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-quality}}" data-sample="Average">{{comp3-quality}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-quality}}" data-sample="Average">{{comp4-quality}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-quality}}" data-sample="Average">{{comp5-quality}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Condition</td>
-                <td><span class="field-mapped" title="{{Subject_Condition}}" data-sample="Average">{{Subject_Condition}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_Condition}}" data-sample="Average">{{COMP_1_Condition}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_Condition}}" data-sample="Average">{{COMP_2_Condition}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_Condition}}" data-sample="Average">{{COMP_3_Condition}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_Condition}}" data-sample="Average">{{COMP_4_Condition}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_Condition}}" data-sample="Average">{{COMP_5_Condition}}</span></td>
+                <td><span class="field-mapped" title="{{subject-condition}}" data-sample="Average">{{subject-condition}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-condition}}" data-sample="Average">{{comp1-condition}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-condition}}" data-sample="Average">{{comp2-condition}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-condition}}" data-sample="Average">{{comp3-condition}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-condition}}" data-sample="Average">{{comp4-condition}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-condition}}" data-sample="Average">{{comp5-condition}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Appeal</td>
-                <td><span class="field-mapped" title="{{Subject_Appeal}}" data-sample="Average">{{Subject_Appeal}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_Appeal}}" data-sample="Average">{{COMP_1_Appeal}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_Appeal}}" data-sample="Average">{{COMP_2_Appeal}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_Appeal}}" data-sample="Average">{{COMP_3_Appeal}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_Appeal}}" data-sample="Average">{{COMP_4_Appeal}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_Appeal}}" data-sample="Average">{{COMP_5_Appeal}}</span></td>
+                <td><span class="field-mapped" title="{{subject-appeal-rating}}" data-sample="Average">{{subject-appeal-rating}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-appeal}}" data-sample="Average">{{comp1-appeal}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-appeal}}" data-sample="Average">{{comp2-appeal}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-appeal}}" data-sample="Average">{{comp3-appeal}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-appeal}}" data-sample="Average">{{comp4-appeal}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-appeal}}" data-sample="Average">{{comp5-appeal}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Parking Type</td>
-                <td><span class="field-mapped" title="{{Subject_ParkingType}}" data-sample="Surface">{{Subject_ParkingType}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_ParkingType}}" data-sample="Surface">{{COMP_1_ParkingType}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_ParkingType}}" data-sample="Surface">{{COMP_2_ParkingType}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_ParkingType}}" data-sample="Surface">{{COMP_3_ParkingType}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_4_ParkingType}}" data-sample="Surface">{{COMP_4_ParkingType}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_5_ParkingType}}" data-sample="Surface">{{COMP_5_ParkingType}}</span></td>
+                <td><span class="field-mapped" title="{{subject-parking}}" data-sample="Surface">{{subject-parking}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-parking-type}}" data-sample="Surface">{{comp1-parking-type}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-parking-type}}" data-sample="Surface">{{comp2-parking-type}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-parking-type}}" data-sample="Surface">{{comp3-parking-type}}</span></td>
+                <td><span class="field-mapped" title="{{comp4-parking-type}}" data-sample="Surface">{{comp4-parking-type}}</span></td>
+                <td><span class="field-mapped" title="{{comp5-parking-type}}" data-sample="Surface">{{comp5-parking-type}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Proj. Amenities</td>
-                <td><span class="field-mapped" title="{{Subject_ProjAmenities}}" data-sample="Guest Parking">{{Subject_ProjAmenities}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_1_ProjAmenities}}" data-sample="Guest Parking">{{COMP_1_ProjAmenities}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_2_ProjAmenities}}" data-sample="No Amenities">{{COMP_2_ProjAmenities}}</span></td>
-                <td><span class="field-mapped" title="{{COMP_3_ProjAmenities}}" data-sample="Guest Parking">{{COMP_3_ProjAmenities}}</span></td>
-                <td class="amenities-list"><span class="field-mapped" title="{{COMP_4_ProjAmenities}}" data-sample="Elevators, Guest Parking, Storage Units">{{COMP_4_ProjAmenities}}</span></td>
-                <td class="amenities-list"><span class="field-mapped" title="{{COMP_5_ProjAmenities}}" data-sample="Elevators, Guest Parking, Storage Units">{{COMP_5_ProjAmenities}}</span></td>
+                <td><span class="field-mapped" title="{{subject-proj-amenities}}" data-sample="Guest Parking">{{subject-proj-amenities}}</span></td>
+                <td><span class="field-mapped" title="{{comp1-proj-amenities}}" data-sample="Guest Parking">{{comp1-proj-amenities}}</span></td>
+                <td><span class="field-mapped" title="{{comp2-proj-amenities}}" data-sample="No Amenities">{{comp2-proj-amenities}}</span></td>
+                <td><span class="field-mapped" title="{{comp3-proj-amenities}}" data-sample="Guest Parking">{{comp3-proj-amenities}}</span></td>
+                <td class="amenities-list"><span class="field-mapped" title="{{comp4-proj-amenities}}" data-sample="Elevators, Guest Parking, Storage Units">{{comp4-proj-amenities}}</span></td>
+                <td class="amenities-list"><span class="field-mapped" title="{{comp5-proj-amenities}}" data-sample="Elevators, Guest Parking, Storage Units">{{comp5-proj-amenities}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Unit Amenities</td>
-                <td class="amenities-list"><span class="field-mapped" title="{{Subject_UnitAmenities}}" data-sample="Ceramic Tile, Garbage Disposal, Fridge">{{Subject_UnitAmenities}}</span></td>
-                <td class="amenities-list"><span class="field-mapped" title="{{COMP_1_UnitAmenities}}" data-sample="A/C, Appliances, Flooring">{{COMP_1_UnitAmenities}}</span></td>
-                <td class="amenities-list"><span class="field-mapped" title="{{COMP_2_UnitAmenities}}" data-sample="Dishwasher">{{COMP_2_UnitAmenities}}</span></td>
-                <td class="amenities-list"><span class="field-mapped" title="{{COMP_3_UnitAmenities}}" data-sample="Air Conditioner, Appliances, Flooring">{{COMP_3_UnitAmenities}}</span></td>
-                <td class="amenities-list"><span class="field-mapped" title="{{COMP_4_UnitAmenities}}" data-sample="Deck/Patio, Dishwasher, In-Suite Laundry, Window Coverings">{{COMP_4_UnitAmenities}}</span></td>
-                <td class="amenities-list"><span class="field-mapped" title="{{COMP_5_UnitAmenities}}" data-sample="Deck/Patio, Fireplace, Dishwasher, In-Suite Laundry, Window Coverings">{{COMP_5_UnitAmenities}}</span></td>
+                <td class="amenities-list"><span class="field-mapped" title="{{subject-unit-amenities}}" data-sample="Ceramic Tile, Garbage Disposal, Fridge">{{subject-unit-amenities}}</span></td>
+                <td class="amenities-list"><span class="field-mapped" title="{{comp1-unit-amenities}}" data-sample="A/C, Appliances, Flooring">{{comp1-unit-amenities}}</span></td>
+                <td class="amenities-list"><span class="field-mapped" title="{{comp2-unit-amenities}}" data-sample="Dishwasher">{{comp2-unit-amenities}}</span></td>
+                <td class="amenities-list"><span class="field-mapped" title="{{comp3-unit-amenities}}" data-sample="Air Conditioner, Appliances, Flooring">{{comp3-unit-amenities}}</span></td>
+                <td class="amenities-list"><span class="field-mapped" title="{{comp4-unit-amenities}}" data-sample="Deck/Patio, Dishwasher, In-Suite Laundry, Window Coverings">{{comp4-unit-amenities}}</span></td>
+                <td class="amenities-list"><span class="field-mapped" title="{{comp5-unit-amenities}}" data-sample="Deck/Patio, Fireplace, Dishwasher, In-Suite Laundry, Window Coverings">{{comp5-unit-amenities}}</span></td>
             </tr>
             <tr class="summary-separator" style="background-color: white;">
                 <td colspan="2" style="background-color: white;"><strong>Total Physical Adjustments</strong></td>
-                <td class="numeric-cell" style="background-color: white;"><span class="field-mapped" title="{{COMP_1_TotalPhysAdj}}" data-sample="-$13,208">{{COMP_1_TotalPhysAdj}}</span> <span style="font-size: 6pt; color: #d32f2f;">(10%)</span></td>
-                <td class="numeric-cell" style="background-color: white;"><span class="field-mapped" title="{{COMP_2_TotalPhysAdj}}" data-sample="$14,608">{{COMP_2_TotalPhysAdj}}</span> <span style="font-size: 6pt;">14%</span></td>
-                <td class="numeric-cell" style="background-color: white;"><span class="field-mapped" title="{{COMP_3_TotalPhysAdj}}" data-sample="-$31,562">{{COMP_3_TotalPhysAdj}}</span> <span style="font-size: 6pt; color: #d32f2f;">(36%)</span></td>
-                <td class="numeric-cell" style="background-color: white;"><span class="field-mapped" title="{{COMP_4_TotalPhysAdj}}" data-sample="-$86,171">{{COMP_4_TotalPhysAdj}}</span> <span style="font-size: 6pt; color: #d32f2f;">(44%)</span></td>
-                <td class="numeric-cell" style="background-color: white;"><span class="field-mapped" title="{{COMP_5_TotalPhysAdj}}" data-sample="-$96,270">{{COMP_5_TotalPhysAdj}}</span> <span style="font-size: 6pt; color: #d32f2f;">(45%)</span></td>
+                <td class="numeric-cell" style="background-color: white;"><span class="field-mapped" title="{{comp1-total-phys-adj}}" data-sample="-$13,208">{{comp1-total-phys-adj}}</span> <span style="font-size: 6pt; color: #d32f2f;">(10%)</span></td>
+                <td class="numeric-cell" style="background-color: white;"><span class="field-mapped" title="{{comp2-total-phys-adj}}" data-sample="$14,608">{{comp2-total-phys-adj}}</span> <span style="font-size: 6pt;">14%</span></td>
+                <td class="numeric-cell" style="background-color: white;"><span class="field-mapped" title="{{comp3-total-phys-adj}}" data-sample="-$31,562">{{comp3-total-phys-adj}}</span> <span style="font-size: 6pt; color: #d32f2f;">(36%)</span></td>
+                <td class="numeric-cell" style="background-color: white;"><span class="field-mapped" title="{{comp4-total-phys-adj}}" data-sample="-$86,171">{{comp4-total-phys-adj}}</span> <span style="font-size: 6pt; color: #d32f2f;">(44%)</span></td>
+                <td class="numeric-cell" style="background-color: white;"><span class="field-mapped" title="{{comp5-total-phys-adj}}" data-sample="-$96,270">{{comp5-total-phys-adj}}</span> <span style="font-size: 6pt; color: #d32f2f;">(45%)</span></td>
             </tr>
             <tr style="background-color: white;">
                 <td colspan="2" style="background-color: white;"><strong>Adjusted $/Unit</strong></td>
-                <td class="numeric-cell" style="background-color: white;"><strong><span class="field-mapped" title="{{COMP_1_AdjPerUnit}}" data-sample="$116,683">{{COMP_1_AdjPerUnit}}</span></strong></td>
-                <td class="numeric-cell" style="background-color: white;"><strong><span class="field-mapped" title="{{COMP_2_AdjPerUnit}}" data-sample="$116,627">{{COMP_2_AdjPerUnit}}</span></strong></td>
-                <td class="numeric-cell" style="background-color: white;"><strong><span class="field-mapped" title="{{COMP_3_AdjPerUnit}}" data-sample="$54,065">{{COMP_3_AdjPerUnit}}</span></strong></td>
-                <td class="numeric-cell" style="background-color: white;"><strong><span class="field-mapped" title="{{COMP_4_AdjPerUnit}}" data-sample="$111,914">{{COMP_4_AdjPerUnit}}</span></strong></td>
-                <td class="numeric-cell" style="background-color: white;"><strong><span class="field-mapped" title="{{COMP_5_AdjPerUnit}}" data-sample="$118,105">{{COMP_5_AdjPerUnit}}</span></strong></td>
+                <td class="numeric-cell" style="background-color: white;"><strong><span class="field-mapped" title="{{comp1-adj-price-per-unit}}" data-sample="$116,683">{{comp1-adj-price-per-unit}}</span></strong></td>
+                <td class="numeric-cell" style="background-color: white;"><strong><span class="field-mapped" title="{{comp2-adj-price-per-unit}}" data-sample="$116,627">{{comp2-adj-price-per-unit}}</span></strong></td>
+                <td class="numeric-cell" style="background-color: white;"><strong><span class="field-mapped" title="{{comp3-adj-price-per-unit}}" data-sample="$54,065">{{comp3-adj-price-per-unit}}</span></strong></td>
+                <td class="numeric-cell" style="background-color: white;"><strong><span class="field-mapped" title="{{comp4-adj-price-per-unit}}" data-sample="$111,914">{{comp4-adj-price-per-unit}}</span></strong></td>
+                <td class="numeric-cell" style="background-color: white;"><strong><span class="field-mapped" title="{{comp5-adj-price-per-unit}}" data-sample="$118,105">{{comp5-adj-price-per-unit}}</span></strong></td>
             </tr>
         </tbody>
     </table>
@@ -6971,7 +6971,7 @@ if (previewToggle && modeLabel) {
             </tr>
             <tr style="border-bottom: 1px solid #ccc;">
                 <td style="padding: 8px;"></td>
-                <td style="padding: 8px; text-align: center;"><span class="field-mapped" data-sample="16" title="{{Subject_Units}}">{{Subject_Units}}</span></td>
+                <td style="padding: 8px; text-align: center;"><span class="field-mapped" data-sample="16" title="{{subject-units}}">{{subject-units}}</span></td>
                 <td style="padding: 8px; text-align: center;">x</td>
                 <td style="padding: 8px; text-align: center;"><span class="field-mapped" data-sample="$112,500" title="{{SCA_ConcludedValuePerUnit}}">{{SCA_ConcludedValuePerUnit}}</span></td>
                 <td style="padding: 8px; text-align: center;">=</td>

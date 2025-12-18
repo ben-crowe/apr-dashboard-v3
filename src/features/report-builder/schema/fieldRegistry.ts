@@ -686,6 +686,53 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'hist-noi-pct-pgr', storeId: 'hist-noi-pct-pgr', label: 'NOI % PGR', section: 'hist', subsection: 'hist-noi', type: 'percentage', inputSource: 'calculated', required: false },
 
   // ============================================================================
+  // SECTION: RENT ROLL (Page 37)
+  // ============================================================================
+
+  // Rent Roll - Unit Type 1 Subsection (12 fields)
+  { id: 'rentroll-type1-name', storeId: 'rentroll-type1-name', label: 'Type 1 Name', section: 'rentroll', subsection: 'rentroll-type1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type1-desc', storeId: 'rentroll-type1-desc', label: 'Type 1 Description', section: 'rentroll', subsection: 'rentroll-type1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type1-occ', storeId: 'rentroll-type1-occ', label: 'Type 1 Occupied', section: 'rentroll', subsection: 'rentroll-type1', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type1-vac', storeId: 'rentroll-type1-vac', label: 'Type 1 Vacant', section: 'rentroll', subsection: 'rentroll-type1', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type1-total', storeId: 'rentroll-type1-total', label: 'Type 1 Total', section: 'rentroll', subsection: 'rentroll-type1', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'rentroll-type1-pct', storeId: 'rentroll-type1-pct', label: 'Type 1 %', section: 'rentroll', subsection: 'rentroll-type1', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'rentroll-type1-size', storeId: 'rentroll-type1-size', label: 'Type 1 Size (SF)', section: 'rentroll', subsection: 'rentroll-type1', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type1-vac-pct', storeId: 'rentroll-type1-vac-pct', label: 'Type 1 Vacancy %', section: 'rentroll', subsection: 'rentroll-type1', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'rentroll-type1-occ-pct', storeId: 'rentroll-type1-occ-pct', label: 'Type 1 Occupancy %', section: 'rentroll', subsection: 'rentroll-type1', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'rentroll-type1-recent-sf', storeId: 'rentroll-type1-recent-sf', label: 'Type 1 Recent Rent/SF', section: 'rentroll', subsection: 'rentroll-type1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type1-actual-unit', storeId: 'rentroll-type1-actual-unit', label: 'Type 1 Actual Rent/Unit', section: 'rentroll', subsection: 'rentroll-type1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type1-actual-sf', storeId: 'rentroll-type1-actual-sf', label: 'Type 1 Actual Rent/SF', section: 'rentroll', subsection: 'rentroll-type1', type: 'currency', inputSource: 'calculated', required: false },
+
+  // Rent Roll - Unit Type 2 Subsection (12 fields)
+  { id: 'rentroll-type2-name', storeId: 'rentroll-type2-name', label: 'Type 2 Name', section: 'rentroll', subsection: 'rentroll-type2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type2-desc', storeId: 'rentroll-type2-desc', label: 'Type 2 Description', section: 'rentroll', subsection: 'rentroll-type2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type2-occ', storeId: 'rentroll-type2-occ', label: 'Type 2 Occupied', section: 'rentroll', subsection: 'rentroll-type2', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type2-vac', storeId: 'rentroll-type2-vac', label: 'Type 2 Vacant', section: 'rentroll', subsection: 'rentroll-type2', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type2-total', storeId: 'rentroll-type2-total', label: 'Type 2 Total', section: 'rentroll', subsection: 'rentroll-type2', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'rentroll-type2-pct', storeId: 'rentroll-type2-pct', label: 'Type 2 %', section: 'rentroll', subsection: 'rentroll-type2', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'rentroll-type2-size', storeId: 'rentroll-type2-size', label: 'Type 2 Size (SF)', section: 'rentroll', subsection: 'rentroll-type2', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type2-vac-pct', storeId: 'rentroll-type2-vac-pct', label: 'Type 2 Vacancy %', section: 'rentroll', subsection: 'rentroll-type2', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'rentroll-type2-occ-pct', storeId: 'rentroll-type2-occ-pct', label: 'Type 2 Occupancy %', section: 'rentroll', subsection: 'rentroll-type2', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'rentroll-type2-recent-sf', storeId: 'rentroll-type2-recent-sf', label: 'Type 2 Recent Rent/SF', section: 'rentroll', subsection: 'rentroll-type2', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type2-actual-unit', storeId: 'rentroll-type2-actual-unit', label: 'Type 2 Actual Rent/Unit', section: 'rentroll', subsection: 'rentroll-type2', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentroll-type2-actual-sf', storeId: 'rentroll-type2-actual-sf', label: 'Type 2 Actual Rent/SF', section: 'rentroll', subsection: 'rentroll-type2', type: 'currency', inputSource: 'calculated', required: false },
+
+  // Rent Roll - Totals/Averages Subsection (13 fields)
+  { id: 'rentroll-total-occ', storeId: 'rentroll-total-occ', label: 'Total Occupied', section: 'rentroll', subsection: 'rentroll-totals', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'rentroll-total-vac', storeId: 'rentroll-total-vac', label: 'Total Vacant', section: 'rentroll', subsection: 'rentroll-totals', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'rentroll-total-units', storeId: 'rentroll-total-units', label: 'Total Units', section: 'rentroll', subsection: 'rentroll-totals', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'rentroll-total-pct', storeId: 'rentroll-total-pct', label: 'Total %', section: 'rentroll', subsection: 'rentroll-totals', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'rentroll-avg-size', storeId: 'rentroll-avg-size', label: 'Average Size (SF)', section: 'rentroll', subsection: 'rentroll-totals', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'rentroll-avg-vac-pct', storeId: 'rentroll-avg-vac-pct', label: 'Average Vacancy %', section: 'rentroll', subsection: 'rentroll-totals', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'rentroll-avg-occ-pct', storeId: 'rentroll-avg-occ-pct', label: 'Average Occupancy %', section: 'rentroll', subsection: 'rentroll-totals', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'rentroll-avg-asking-unit', storeId: 'rentroll-avg-asking-unit', label: 'Average Asking Rent/Unit', section: 'rentroll', subsection: 'rentroll-totals', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentroll-avg-asking-sf', storeId: 'rentroll-avg-asking-sf', label: 'Average Asking Rent/SF', section: 'rentroll', subsection: 'rentroll-totals', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentroll-avg-recent-unit', storeId: 'rentroll-avg-recent-unit', label: 'Average Recent Rent/Unit', section: 'rentroll', subsection: 'rentroll-totals', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentroll-avg-recent-sf', storeId: 'rentroll-avg-recent-sf', label: 'Average Recent Rent/SF', section: 'rentroll', subsection: 'rentroll-totals', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentroll-avg-actual-unit', storeId: 'rentroll-avg-actual-unit', label: 'Average Actual Rent/Unit', section: 'rentroll', subsection: 'rentroll-totals', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentroll-avg-actual-sf', storeId: 'rentroll-avg-actual-sf', label: 'Average Actual Rent/SF', section: 'rentroll', subsection: 'rentroll-totals', type: 'currency', inputSource: 'calculated', required: false },
+
+  // ============================================================================
   // SECTION: SALES COMPARISON
   // ============================================================================
 

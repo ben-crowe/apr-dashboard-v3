@@ -177,8 +177,8 @@
 
 | Page | Table Name | HTML Fields | Registry Fields | Mapping Doc | Status |
 |------|-----------|-------------|-----------------|-------------|--------|
-| 49 | Direct Capitalization | 80 | 74 verified | [FIELD-MAPPING-Page-49-Registry.md](./FIELD-MAPPING-Page-49-Registry.md) | ✅ Complete |
-| 59 | Sales Comparison Grid | ~105 | TBD | - | 🔄 Next |
+| 49 | Direct Capitalization | 80 | 80 verified | [FIELD-MAPPING-Page-49-Registry.md](./FIELD-MAPPING-Page-49-Registry.md) | ✅ Complete (HTML Updated) |
+| 59 | Sales Comparison Grid | 188 | 188 verified | [FIELD-MAPPING-Page-59-Registry.md](./FIELD-MAPPING-Page-59-Registry.md) | ✅ Complete (HTML Updated) |
 | 37-40 | Rental Survey Grid | ~110 | TBD | - | ⏳ Pending |
 | 44 | Operating History | ~40 | TBD | - | ⏳ Pending |
 | 65 | Market Value Conclusion | ~10 | TBD | - | ⏳ Pending |

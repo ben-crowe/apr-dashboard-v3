@@ -1,7 +1,7 @@
 # Session Handoff - APR Report Template & Field Mapping
 
 **Last Updated:** 2025-12-18
-**Status:** Pages 49, 59, 39, 63, 44, 61 HTML updates complete ✅ | Page 65 field mapping next 🔄
+**Status:** Pages 49, 59, 39, 63, 44, 61, 37 HTML updates complete ✅ | Page 65 field mapping next 🔄
 
 ---
 
@@ -27,6 +27,8 @@
 | Registry Update (+2 fields Page 63) | ✅ Complete | f0a7610 (TypeScript Pro) |
 | Registry Update (+51 fields Page 44) | ✅ Complete | TypeScript Pro (837 total) |
 | Page 61 HTML Field Updates | ✅ Complete | a3c8893 |
+| Page 37 Field Mapping | ✅ Complete | 9730ebc |
+| Page 37 HTML Field Updates | ✅ Complete | a8a6153 |
 | Page 65 Field Mapping | 🔄 Next | - |
 
 ---

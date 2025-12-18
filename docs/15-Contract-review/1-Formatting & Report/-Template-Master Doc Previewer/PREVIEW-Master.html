@@ -2582,59 +2582,117 @@
     </div>
 </div>
 
-<!-- PAGE 39 -->
-<div class="page-sheet" data-page-num="Page 39">
-    <div class="Header1">Valuation & Conclusions</div>
+<!-- PAGE 39: Rental Comparables Location Map -->
+<style>
+    /* Page 39 - Rental Comparables Location Map */
+    .page-sheet[data-page-num="Page 39"] {
+        padding: 54px 54px 180px 54px;
+    }
 
-    <div style="width: 100%; height: 520px; background-color: #e8f0f7; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; color: #666; font-size: 11px; font-style: italic; margin-bottom: 10px;">
-        [MAP: Saskatchewan location map showing subject property and comparable properties]
+    .page-sheet[data-page-num="Page 39"] h1.Header1 {
+        font-size: 18pt;
+        margin-bottom: 12px;
+    }
+
+    .page-sheet[data-page-num="Page 39"] .map-container {
+        width: 100%;
+        height: 520px;
+        background-color: #e8f0f7;
+        border: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-size: 11pt;
+        font-style: italic;
+        margin-bottom: 16px;
+    }
+
+    .page-sheet[data-page-num="Page 39"] table.comparables-list {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 12px;
+    }
+
+    .page-sheet[data-page-num="Page 39"] table.comparables-list th {
+        background-color: #003B7E;
+        color: white;
+        padding: 8px 10px;
+        text-align: left;
+        font-size: 9pt;
+        font-weight: bold;
+        border: 1px solid #003B7E;
+    }
+
+    .page-sheet[data-page-num="Page 39"] table.comparables-list td {
+        padding: 8px 10px;
+        border: 1px solid #ddd;
+        font-size: 9pt;
+    }
+
+    .page-sheet[data-page-num="Page 39"] table.comparables-list td:first-child {
+        font-weight: bold;
+        background-color: #f5f5f5;
+    }
+</style>
+
+<div class="page-sheet" data-page-num="Page 39">
+    <h1 class="Header1">Valuation & Conclusions</h1>
+
+    <!-- Map Image Placeholder -->
+    <div class="map-container">
+        <span class="field-mapped" title="{{rental-comparables-map}}" data-sample="[Rental Comparables Location Map]">{{rental-comparables-map}}</span>
     </div>
 
-    <table style="margin-bottom: 10px; font-size: 8px;">
+    <!-- Comparables List Table -->
+    <table class="comparables-list">
         <thead>
-            <tr style="background-color: #e8f0f7;">
-                <th style="width: 25%; padding: 2px 3px; border: 1px solid #999; text-align: left; font-size: 7px;">COMPARABLE</th>
-                <th style="width: 10%; padding: 2px 3px; border: 1px solid #999; text-align: center; font-size: 7px;">LABEL</th>
-                <th style="width: 50%; padding: 2px 3px; border: 1px solid #999; text-align: left; font-size: 7px;">ADDRESS</th>
-                <th style="width: 15%; padding: 2px 3px; border: 1px solid #999; text-align: center; font-size: 7px;">KILOMETRES FROM SUBJECT</th>
+            <tr>
+                <th>Property</th>
+                <th>Label</th>
+                <th>Address</th>
+                <th>Distance from Subject</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; font-size: 7px;"><span class="field-mapped" title="{{rental-comp1-name}}" data-sample="2424 Buhler Ave Apts">{{rental-comp1-name}}</span></td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; text-align: center; font-size: 7px;">1</td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; font-size: 7px;"><span class="field-mapped" title="{{rental-comp1-address}}" data-sample="2424 Buhler Ave">{{rental-comp1-address}}</span>, <span class="field-mapped" title="{{rental-comp1-city}}" data-sample="North Battleford">{{rental-comp1-city}}</span>, <span class="field-mapped" title="{{rental-comp1-province}}" data-sample="SK">{{rental-comp1-province}}</span></td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; text-align: center; font-size: 7px;"><span class="field-mapped" title="{{rental-comp1-distance}}" data-sample="177.9">{{rental-comp1-distance}}</span></td>
-            </tr>
-            <tr style="background-color: #f9f9f9;">
-                <td style="padding: 2px 3px; border: 1px solid #ddd; font-size: 7px;"><span class="field-mapped" title="{{rental-comp2-name}}" data-sample="531 S St E Apts">{{rental-comp2-name}}</span></td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; text-align: center; font-size: 7px;">2</td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; font-size: 7px;"><span class="field-mapped" title="{{rental-comp2-address}}" data-sample="531 S St. E.">{{rental-comp2-address}}</span>, <span class="field-mapped" title="{{rental-comp2-city}}" data-sample="Prince Albert">{{rental-comp2-city}}</span>, <span class="field-mapped" title="{{rental-comp2-province}}" data-sample="SK">{{rental-comp2-province}}</span></td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; text-align: center; font-size: 7px;"><span class="field-mapped" title="{{rental-comp2-distance}}" data-sample="177.1">{{rental-comp2-distance}}</span></td>
+                <td>COMPARABLE 1</td>
+                <td><span class="field-mapped" title="{{rental-comp1-label}}" data-sample="1">{{rental-comp1-label}}</span></td>
+                <td><span class="field-mapped" title="{{rental-comp1-address-full}}" data-sample="2424 Buhler Ave, North Battleford, SK">{{rental-comp1-address-full}}</span></td>
+                <td><span class="field-mapped" title="{{rental-comp1-distance}}" data-sample="177.9">{{rental-comp1-distance}}</span></td>
             </tr>
             <tr>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; font-size: 7px;"><span class="field-mapped" title="{{rental-comp3-name}}" data-sample="2302 2 Ave W Apts">{{rental-comp3-name}}</span></td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; text-align: center; font-size: 7px;">3</td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; font-size: 7px;"><span class="field-mapped" title="{{rental-comp3-address}}" data-sample="2302 2 Ave. W">{{rental-comp3-address}}</span>, <span class="field-mapped" title="{{rental-comp3-city}}" data-sample="Prince Albert">{{rental-comp3-city}}</span>, <span class="field-mapped" title="{{rental-comp3-province}}" data-sample="SK">{{rental-comp3-province}}</span></td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; text-align: center; font-size: 7px;"><span class="field-mapped" title="{{rental-comp3-distance}}" data-sample="175.4">{{rental-comp3-distance}}</span></td>
-            </tr>
-            <tr style="background-color: #f9f9f9;">
-                <td style="padding: 2px 3px; border: 1px solid #ddd; font-size: 7px;"><span class="field-mapped" title="{{rental-comp4-name}}" data-sample="3020 Durn Dr Apts">{{rental-comp4-name}}</span></td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; text-align: center; font-size: 7px;">4</td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; font-size: 7px;"><span class="field-mapped" title="{{rental-comp4-address}}" data-sample="3020 Durn Dr">{{rental-comp4-address}}</span>, <span class="field-mapped" title="{{rental-comp4-city}}" data-sample="Prince Albert">{{rental-comp4-city}}</span>, <span class="field-mapped" title="{{rental-comp4-province}}" data-sample="SK">{{rental-comp4-province}}</span></td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; text-align: center; font-size: 7px;"><span class="field-mapped" title="{{rental-comp4-distance}}" data-sample="177.9">{{rental-comp4-distance}}</span></td>
+                <td>COMPARABLE 2</td>
+                <td><span class="field-mapped" title="{{rental-comp2-label}}" data-sample="2">{{rental-comp2-label}}</span></td>
+                <td><span class="field-mapped" title="{{rental-comp2-address-full}}" data-sample="531 S St. E., Prince Albert, SK">{{rental-comp2-address-full}}</span></td>
+                <td><span class="field-mapped" title="{{rental-comp2-distance}}" data-sample="177.1">{{rental-comp2-distance}}</span></td>
             </tr>
             <tr>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; font-size: 7px;"><span class="field-mapped" title="{{rental-comp5-name}}" data-sample="388 32 St W Apts">{{rental-comp5-name}}</span></td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; text-align: center; font-size: 7px;">5</td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; font-size: 7px;"><span class="field-mapped" title="{{rental-comp5-address}}" data-sample="388 32 St W">{{rental-comp5-address}}</span>, <span class="field-mapped" title="{{rental-comp5-city}}" data-sample="Prince Albert">{{rental-comp5-city}}</span>, <span class="field-mapped" title="{{rental-comp5-province}}" data-sample="SK">{{rental-comp5-province}}</span></td>
-                <td style="padding: 2px 3px; border: 1px solid #ddd; text-align: center; font-size: 7px;"><span class="field-mapped" title="{{rental-comp5-distance}}" data-sample="174.9">{{rental-comp5-distance}}</span></td>
+                <td>COMPARABLE 3</td>
+                <td><span class="field-mapped" title="{{rental-comp3-label}}" data-sample="3">{{rental-comp3-label}}</span></td>
+                <td><span class="field-mapped" title="{{rental-comp3-address-full}}" data-sample="2302 2 Ave. W, Prince Albert, SK">{{rental-comp3-address-full}}</span></td>
+                <td><span class="field-mapped" title="{{rental-comp3-distance}}" data-sample="175.4">{{rental-comp3-distance}}</span></td>
+            </tr>
+            <tr>
+                <td>COMPARABLE 4</td>
+                <td><span class="field-mapped" title="{{rental-comp4-label}}" data-sample="4">{{rental-comp4-label}}</span></td>
+                <td><span class="field-mapped" title="{{rental-comp4-address-full}}" data-sample="3020 Durn Dr, Prince Albert, SK">{{rental-comp4-address-full}}</span></td>
+                <td><span class="field-mapped" title="{{rental-comp4-distance}}" data-sample="177.9">{{rental-comp4-distance}}</span></td>
+            </tr>
+            <tr>
+                <td>COMPARABLE 5</td>
+                <td><span class="field-mapped" title="{{rental-comp5-label}}" data-sample="5">{{rental-comp5-label}}</span></td>
+                <td><span class="field-mapped" title="{{rental-comp5-address-full}}" data-sample="388 32 St W, Prince Albert, SK">{{rental-comp5-address-full}}</span></td>
+                <td><span class="field-mapped" title="{{rental-comp5-distance}}" data-sample="174.9">{{rental-comp5-distance}}</span></td>
             </tr>
         </tbody>
     </table>
 
     <div class="page-footer">
-        <div><span class="page-num">39</span> <span class="field-mapped" data-sample="1101, 1121 109 St" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" data-sample="VAL251012" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+        <div>
+            <span class="page-num">39</span>
+            <span class="field-mapped" title="{{property-address}}" data-sample="1101, 1121 109 St, North Battleford, Saskatchewan">{{property-address}}</span> | File <span class="field-mapped" title="{{file-number}}" data-sample="VAL251012 - 1">{{file-number}}</span>
+        </div>
         <div class="footer-accent"></div>
     </div>
 </div>

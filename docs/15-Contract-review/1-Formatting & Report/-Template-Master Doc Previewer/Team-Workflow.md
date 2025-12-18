@@ -27,18 +27,27 @@
 ---
 
 ### Agent 2: TypeScript Pro Specialist (Field Registry Manager)
+**Type:** Specialized Claude Code Agent Persona (potential dedicated skill)
 **Handles:** `src/features/report-builder/schema/fieldRegistry.ts`
+
+**What This Is:**
+- Specialized Claude Code agent persona focused exclusively on registry management
+- May become a dedicated Claude skill to ensure consistency and avoid mistakes
+- Single-purpose agent: "Don't screw up the registry" 😄
+- Maintains field registry integrity across all sessions
 
 **Responsibilities:**
 - ✅ Add/modify fields in fieldRegistry.ts
 - ✅ Ensure field type definitions are correct
 - ✅ Verify field IDs match registry standards
 - ✅ Handle calculation engine field requirements
+- ✅ Maintain naming conventions and consistency
 
 **Coordination:**
 - User provides field lists from field mapping docs
 - TypeScript Pro adds fields to registry
 - Reports back field IDs for HTML mapping
+- Ensures no duplicate field IDs or naming conflicts
 
 ---
 
@@ -513,10 +522,12 @@ grep "calc-type1-count" /Users/bencrowe/Development/APR-Dashboard-v3/src/feature
 - **When unsure about field ID:** Mark for verification, don't guess
 - **After completing task:** Confirm next task or end session
 
-### With TypeScript Pro (via User):
+### With TypeScript Pro (Specialized Claude Code Agent Persona):
+- **What it is:** Dedicated registry management persona (potential Claude skill)
 - **When creating field mapping:** Provide list of needed fields
 - **After registry update:** Get confirmed field IDs
 - **When adding new fields:** Specify type, inputSource, category
+- **Why specialized:** Single-purpose agent prevents registry inconsistencies/mistakes
 
 ### With Claude Desktop (via User):
 - **No direct coordination needed** - User handles this workflow

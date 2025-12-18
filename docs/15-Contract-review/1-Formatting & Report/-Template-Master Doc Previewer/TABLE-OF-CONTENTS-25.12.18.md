@@ -179,6 +179,7 @@
 |------|-----------|-------------|-----------------|-------------|--------|
 | 49 | Direct Capitalization | 80 | 80 verified | [FIELD-MAPPING-Page-49-Registry.md](./FIELD-MAPPING-Page-49-Registry.md) | ✅ Complete (HTML Updated) |
 | 59 | Sales Comparison Grid | 188 | 188 verified | [FIELD-MAPPING-Page-59-Registry.md](./FIELD-MAPPING-Page-59-Registry.md) | ✅ Complete (HTML Updated) |
+| 39 | Rental Comp Location Table | 20 | 15 verified, 5 pending | [FIELD-MAPPING-Page-39-Registry.md](./FIELD-MAPPING-Page-39-Registry.md) | ✅ Complete (HTML Updated, 5 distance fields need adding) |
 | 37-40 | Rental Survey Grid | ~110 | TBD | - | ⏳ Pending |
 | 44 | Operating History | ~40 | TBD | - | ⏳ Pending |
 | 65 | Market Value Conclusion | ~10 | TBD | - | ⏳ Pending |

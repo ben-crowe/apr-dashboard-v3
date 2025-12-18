@@ -681,6 +681,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp1-proj-amenities', storeId: 'comp1-proj-amenities', label: 'Project Amenities', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp1-unit-amenities', storeId: 'comp1-unit-amenities', label: 'Unit Amenities', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp1-total-phys-adj', storeId: 'comp1-total-phys-adj', label: 'Total Physical Adj %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp1-trans-adj-price', storeId: 'comp1-trans-adj-price', label: 'Transactional Adj Price', section: 'sales', subsection: 'sale-comp-1', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'comp1-net-adj', storeId: 'comp1-net-adj', label: 'Net Adjustment %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp1-gross-adj', storeId: 'comp1-gross-adj', label: 'Gross Adjustment %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'calculated', required: false },
 
   // Sales - Comp 2 Subsection
   { id: 'comp2-name', storeId: 'comp2-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
@@ -717,6 +720,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp2-proj-amenities', storeId: 'comp2-proj-amenities', label: 'Project Amenities', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp2-unit-amenities', storeId: 'comp2-unit-amenities', label: 'Unit Amenities', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp2-total-phys-adj', storeId: 'comp2-total-phys-adj', label: 'Total Physical Adj %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp2-trans-adj-price', storeId: 'comp2-trans-adj-price', label: 'Transactional Adj Price', section: 'sales', subsection: 'sale-comp-2', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'comp2-net-adj', storeId: 'comp2-net-adj', label: 'Net Adjustment %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp2-gross-adj', storeId: 'comp2-gross-adj', label: 'Gross Adjustment %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'calculated', required: false },
 
   // Sales - Comp 3 Subsection
   { id: 'comp3-name', storeId: 'comp3-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
@@ -753,6 +759,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp3-proj-amenities', storeId: 'comp3-proj-amenities', label: 'Project Amenities', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp3-unit-amenities', storeId: 'comp3-unit-amenities', label: 'Unit Amenities', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp3-total-phys-adj', storeId: 'comp3-total-phys-adj', label: 'Total Physical Adj %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp3-trans-adj-price', storeId: 'comp3-trans-adj-price', label: 'Transactional Adj Price', section: 'sales', subsection: 'sale-comp-3', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'comp3-net-adj', storeId: 'comp3-net-adj', label: 'Net Adjustment %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp3-gross-adj', storeId: 'comp3-gross-adj', label: 'Gross Adjustment %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'calculated', required: false },
 
   // Sales - Comp 4 Subsection
   { id: 'comp4-name', storeId: 'comp4-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
@@ -789,6 +798,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp4-proj-amenities', storeId: 'comp4-proj-amenities', label: 'Project Amenities', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp4-unit-amenities', storeId: 'comp4-unit-amenities', label: 'Unit Amenities', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp4-total-phys-adj', storeId: 'comp4-total-phys-adj', label: 'Total Physical Adj %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp4-trans-adj-price', storeId: 'comp4-trans-adj-price', label: 'Transactional Adj Price', section: 'sales', subsection: 'sale-comp-4', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'comp4-net-adj', storeId: 'comp4-net-adj', label: 'Net Adjustment %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp4-gross-adj', storeId: 'comp4-gross-adj', label: 'Gross Adjustment %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'calculated', required: false },
 
   // Sales - Comp 5 Subsection
   { id: 'comp5-name', storeId: 'comp5-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
@@ -825,10 +837,49 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp5-proj-amenities', storeId: 'comp5-proj-amenities', label: 'Project Amenities', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp5-unit-amenities', storeId: 'comp5-unit-amenities', label: 'Unit Amenities', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp5-total-phys-adj', storeId: 'comp5-total-phys-adj', label: 'Total Physical Adj %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp5-trans-adj-price', storeId: 'comp5-trans-adj-price', label: 'Transactional Adj Price', section: 'sales', subsection: 'sale-comp-5', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'comp5-net-adj', storeId: 'comp5-net-adj', label: 'Net Adjustment %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp5-gross-adj', storeId: 'comp5-gross-adj', label: 'Gross Adjustment %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'calculated', required: false },
 
   // Sales - Conclusion Subsection
   { id: 'sales-value-indication', storeId: 'sales-value-indication', label: 'Sales Comparison Value', section: 'sales', subsection: 'sales-conclusion', type: 'number', inputSource: 'user-input', required: false },
   { id: 'sales-adjustment-summary', storeId: 'sales-adjustment-summary', label: 'Adjustment Summary', section: 'sales', subsection: 'sales-conclusion', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // Sales - DCA Summary Statistics (High, Avg, Med, Low)
+  { id: 'dca-high-price-per-unit', storeId: 'dca-high-price-per-unit', label: 'High Price/Unit', section: 'sales', subsection: 'dca-statistics', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-high-trans-adj', storeId: 'dca-high-trans-adj', label: 'High Trans Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-high-trans-adj-price', storeId: 'dca-high-trans-adj-price', label: 'High Trans Adj Price', section: 'sales', subsection: 'dca-statistics', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-high-phys-adj', storeId: 'dca-high-phys-adj', label: 'High Physical Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-high-final-price', storeId: 'dca-high-final-price', label: 'High Final Price', section: 'sales', subsection: 'dca-statistics', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-high-net-adj', storeId: 'dca-high-net-adj', label: 'High Net Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-high-gross-adj', storeId: 'dca-high-gross-adj', label: 'High Gross Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-avg-price-per-unit', storeId: 'dca-avg-price-per-unit', label: 'Avg Price/Unit', section: 'sales', subsection: 'dca-statistics', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-avg-trans-adj', storeId: 'dca-avg-trans-adj', label: 'Avg Trans Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-avg-trans-adj-price', storeId: 'dca-avg-trans-adj-price', label: 'Avg Trans Adj Price', section: 'sales', subsection: 'dca-statistics', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-avg-phys-adj', storeId: 'dca-avg-phys-adj', label: 'Avg Physical Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-avg-final-price', storeId: 'dca-avg-final-price', label: 'Avg Final Price', section: 'sales', subsection: 'dca-statistics', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-avg-net-adj', storeId: 'dca-avg-net-adj', label: 'Avg Net Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-avg-gross-adj', storeId: 'dca-avg-gross-adj', label: 'Avg Gross Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-med-price-per-unit', storeId: 'dca-med-price-per-unit', label: 'Median Price/Unit', section: 'sales', subsection: 'dca-statistics', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-med-trans-adj', storeId: 'dca-med-trans-adj', label: 'Median Trans Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-med-trans-adj-price', storeId: 'dca-med-trans-adj-price', label: 'Median Trans Adj Price', section: 'sales', subsection: 'dca-statistics', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-med-phys-adj', storeId: 'dca-med-phys-adj', label: 'Median Physical Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-med-final-price', storeId: 'dca-med-final-price', label: 'Median Final Price', section: 'sales', subsection: 'dca-statistics', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-med-net-adj', storeId: 'dca-med-net-adj', label: 'Median Net Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-med-gross-adj', storeId: 'dca-med-gross-adj', label: 'Median Gross Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-low-price-per-unit', storeId: 'dca-low-price-per-unit', label: 'Low Price/Unit', section: 'sales', subsection: 'dca-statistics', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-low-trans-adj', storeId: 'dca-low-trans-adj', label: 'Low Trans Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-low-trans-adj-price', storeId: 'dca-low-trans-adj-price', label: 'Low Trans Adj Price', section: 'sales', subsection: 'dca-statistics', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-low-phys-adj', storeId: 'dca-low-phys-adj', label: 'Low Physical Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-low-final-price', storeId: 'dca-low-final-price', label: 'Low Final Price', section: 'sales', subsection: 'dca-statistics', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-low-net-adj', storeId: 'dca-low-net-adj', label: 'Low Net Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'dca-low-gross-adj', storeId: 'dca-low-gross-adj', label: 'Low Gross Adj %', section: 'sales', subsection: 'dca-statistics', type: 'percentage', inputSource: 'calculated', required: false },
+
+  // Sales - SCA Value Conclusion
+  { id: 'sca-concluded-value-per-unit', storeId: 'sca-concluded-value-per-unit', label: 'Concluded Value/Unit', section: 'sales', subsection: 'sca-conclusion', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'sca-indicated-value', storeId: 'sca-indicated-value', label: 'SCA Indicated Value', section: 'sales', subsection: 'sca-conclusion', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'sca-indicated-value-rounded', storeId: 'sca-indicated-value-rounded', label: 'SCA Indicated Value (Rounded)', section: 'sales', subsection: 'sca-conclusion', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'sca-value-per-sf', storeId: 'sca-value-per-sf', label: 'SCA Value/SF', section: 'sales', subsection: 'sca-conclusion', type: 'currency', inputSource: 'calculated', required: false },
 
   // ============================================================================
   // SECTION: RENTAL SURVEY (Market Rent Analysis)

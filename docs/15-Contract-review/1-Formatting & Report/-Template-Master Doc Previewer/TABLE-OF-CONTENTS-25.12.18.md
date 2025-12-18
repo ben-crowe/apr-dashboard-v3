@@ -177,6 +177,7 @@
 
 | Page | Table Name | HTML Fields | Registry Fields | Mapping Doc | Status |
 |------|-----------|-------------|-----------------|-------------|--------|
+| 31 | Saskatchewan Multifamily Indicators | 8 | 8 new fields | [FIELD-MAPPING-Page-31-Registry.md](./FIELD-MAPPING-Page-31-Registry.md) | ✅ Complete (HTML Updated, Field IDs Converted) |
 | 49 | Direct Capitalization | 80 | 80 verified | [FIELD-MAPPING-Page-49-Registry.md](./FIELD-MAPPING-Page-49-Registry.md) | ✅ Complete (HTML Updated) |
 | 59 | Sales Comparison Grid | 188 | 188 verified | [FIELD-MAPPING-Page-59-Registry.md](./FIELD-MAPPING-Page-59-Registry.md) | ✅ Complete (HTML Updated) |
 | 61 | DCA Conclusion Grid | 68 | 68 verified | [FIELD-MAPPING-Page-61-Registry.md](./FIELD-MAPPING-Page-61-Registry.md) | ✅ Complete (HTML Updated) |

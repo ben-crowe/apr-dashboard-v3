@@ -1066,6 +1066,8 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'recon-final-value', storeId: 'recon-final-value', label: 'Final Value', section: 'recon', subsection: 'final-value', type: 'number', inputSource: 'calculated', required: false },
   { id: 'recon-value-premise', storeId: 'recon-value-premise', label: 'Value Premise', section: 'recon', subsection: 'final-value', type: 'text', inputSource: 'auto-filled', required: false },
   { id: 'recon-effective-date', storeId: 'recon-effective-date', label: 'Effective Date', section: 'recon', subsection: 'final-value', type: 'date', inputSource: 'auto-filled', required: false },
+  { id: 'recon-final-value-per-unit', storeId: 'recon-final-value-per-unit', label: 'Final Value/Unit', section: 'recon', subsection: 'final-value', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'recon-final-value-per-sf', storeId: 'recon-final-value-per-sf', label: 'Final Value/SF', section: 'recon', subsection: 'final-value', type: 'currency', inputSource: 'calculated', required: false },
 
   // Recon - Methodology Toggles Subsection
   { id: 'use-dcf-methodology', storeId: 'use-dcf-methodology', label: 'Use DCF Methodology', section: 'recon', subsection: 'methodology-toggles', type: 'select', options: ['Yes', 'No'], inputSource: 'user-input', required: false },

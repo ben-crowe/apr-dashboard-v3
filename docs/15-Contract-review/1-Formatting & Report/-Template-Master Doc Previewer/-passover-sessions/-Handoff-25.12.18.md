@@ -1,7 +1,7 @@
 # Session Handoff - APR Report Template & Field Mapping
 
 **Last Updated:** 2025-12-18
-**Status:** Pages 49, 59, 39, 63, 44, 61, 37 HTML updates complete ✅ | Page 65 field mapping next 🔄
+**Status:** Pages 49, 59, 39, 63, 44, 61, 37, 31 HTML updates complete ✅ | Page 65 field mapping next 🔄
 
 ---
 
@@ -29,6 +29,8 @@
 | Page 61 HTML Field Updates | ✅ Complete | a3c8893 |
 | Page 37 Field Mapping | ✅ Complete | 9730ebc |
 | Page 37 HTML Field Updates | ✅ Complete | a8a6153 |
+| Page 31 Field ID Conversion | ✅ Complete | 63b5b62 |
+| Page 31 Field Mapping | ✅ Complete | c999c8e |
 | Page 65 Field Mapping | 🔄 Next | - |
 
 ---
@@ -173,6 +175,7 @@ Need to verify these exist in fieldRegistry.ts:
 
 | Date | Session | Work Done | Commits |
 |------|---------|-----------|---------|
+| 2025-12-18 | 7 | Page 37 replaced (15-col rent roll, 37 fields), Page 31 replaced (multifamily indicators, 8 fields), field mapping docs | a8a6153, 9730ebc, 42ff11a, 0918da1, 7f36594 |
 | 2025-12-18 | 3 | Field registry verification, calc engine docs, Page 49 registry mapping, TABLE-OF-CONTENTS versioning | a240466, 954ac94 |
 | 2025-12-18 | 2 | Pages 65-72 added, Page 49 field analysis (80 fields documented), TABLE-OF-CONTENTS created | 126eb97, 2d55d8e, 15 commits |
 | 2025-12-13 | 1 | Pages 60-64 completed | Various |

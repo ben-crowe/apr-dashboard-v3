@@ -619,6 +619,16 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'calc-value-per-sf', storeId: 'calc-value-per-sf', label: 'Value/SF', section: 'calc', subsection: 'calc-results', type: 'calculated', inputSource: 'calculated', required: false },
   { id: 'calc-grm', storeId: 'calc-grm', label: 'GRM', section: 'calc', subsection: 'calc-results', type: 'calculated', inputSource: 'calculated', required: false },
 
+  // Calc - Revenue Percentages Subsection (Page 44 projection percentages)
+  { id: 'calc-revenue-multifamily-pct-pgr', storeId: 'calc-revenue-multifamily-pct-pgr', label: 'Multifamily Revenue % PGR', section: 'calc', subsection: 'calc-revenue-pct', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-revenue-rental-pct-pgr', storeId: 'calc-revenue-rental-pct-pgr', label: 'Rental Revenue % PGR', section: 'calc', subsection: 'calc-revenue-pct', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-revenue-parking-pct-pgr', storeId: 'calc-revenue-parking-pct-pgr', label: 'Parking Revenue % PGR', section: 'calc', subsection: 'calc-revenue-pct', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-revenue-laundry-pct-pgr', storeId: 'calc-revenue-laundry-pct-pgr', label: 'Laundry Revenue % PGR', section: 'calc', subsection: 'calc-revenue-pct', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-revenue-misc-pct-pgr', storeId: 'calc-revenue-misc-pct-pgr', label: 'Misc Revenue % PGR', section: 'calc', subsection: 'calc-revenue-pct', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-pgr-pct-pgr', storeId: 'calc-pgr-pct-pgr', label: 'PGR % PGR', section: 'calc', subsection: 'calc-revenue-pct', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-egr-pct-pgr', storeId: 'calc-egr-pct-pgr', label: 'EGR % PGR', section: 'calc', subsection: 'calc-revenue-pct', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-noi-pct-pgr', storeId: 'calc-noi-pct-pgr', label: 'NOI % PGR', section: 'calc', subsection: 'calc-revenue-pct', type: 'percentage', inputSource: 'calculated', required: false },
+
   // ============================================================================
   // SECTION: LAND VALUE
   // ============================================================================

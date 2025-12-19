@@ -2687,121 +2687,121 @@
         <div class="footer-accent"></div>
     </div>
 </div>
-<!-- PAGE 39: Rental Comparables Location Map -->
-<style>
-    /* Page 39 - Rental Comparables Location Map */
-    .page-sheet[data-page-num="Page 39"] {
-        padding: 54px 54px 180px 54px;
-    }
+    <!-- PAGE 58 (Report Page 39): Rental Comparables Location Map -->
+    <!-- ============================================ -->
+    <style>
+        /* Page 39 - Rental Comparables Location Map */
+        .page-sheet[data-page-num="Page 39"] {
+            padding-bottom: 180px;
+        }
 
-    .page-sheet[data-page-num="Page 39"] h1.Header1 {
-        font-size: 18pt;
-        margin-bottom: 12px;
-    }
+        .page-sheet[data-page-num="Page 39"] h1.Header1 {
+            font-size: 18pt;
+            margin-bottom: 12px;
+        }
 
-    .page-sheet[data-page-num="Page 39"] .map-container {
-        width: 100%;
-        height: 520px;
-        background-color: #e8f0f7;
-        border: 1px solid #ccc;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #666;
-        font-size: 11pt;
-        font-style: italic;
-        margin-bottom: 16px;
-    }
+        .page-sheet[data-page-num="Page 39"] .map-container {
+            width: 100%;
+            height: 650px;
+            background-color: #e8f4f8;
+            border: 1px solid #ccc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 10pt;
+            margin-bottom: 12px;
+        }
 
-    .page-sheet[data-page-num="Page 39"] table.comparables-list {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 12px;
-    }
+        .page-sheet[data-page-num="Page 39"] table.comparables-list {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8pt;
+            margin-bottom: 12px;
+        }
 
-    .page-sheet[data-page-num="Page 39"] table.comparables-list th {
-        background-color: #003B7E;
-        color: white;
-        padding: 8px 10px;
-        text-align: left;
-        font-size: 9pt;
-        font-weight: bold;
-        border: 1px solid #003B7E;
-    }
+        .page-sheet[data-page-num="Page 39"] table.comparables-list th {
+            background-color: #003B7E;
+            color: white;
+            font-weight: bold;
+            padding: 4px 6px;
+            text-align: left;
+            border: 1px solid #003B7E;
+        }
 
-    .page-sheet[data-page-num="Page 39"] table.comparables-list td {
-        padding: 8px 10px;
-        border: 1px solid #ddd;
-        font-size: 9pt;
-    }
+        .page-sheet[data-page-num="Page 39"] table.comparables-list td {
+            padding: 3px 6px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+            line-height: 1.3;
+        }
 
-    .page-sheet[data-page-num="Page 39"] table.comparables-list td:first-child {
-        font-weight: bold;
-        background-color: #f5f5f5;
-    }
-</style>
+        .page-sheet[data-page-num="Page 39"] table.comparables-list td:first-child {
+            font-weight: 600;
+            width: 20%;
+        }
+    </style>
 
-<div class="page-sheet" data-page-num="Page 39">
-    <h1 class="Header1">Valuation & Conclusions</h1>
+    <div class="page-sheet" data-page-num="Page 39">
+        <h1 class="Header1">Valuation & Conclusions</h1>
 
-    <!-- Map Image Placeholder -->
-    <div class="map-container">
-        <span class="field-mapped" title="{{rental-comparables-map}}" data-sample="[Rental Comparables Location Map]">{{rental-comparables-map}}</span>
-    </div>
-
-    <!-- Comparables List Table -->
-    <table class="comparables-list">
-        <thead>
-            <tr>
-                <th>Property</th>
-                <th>Label</th>
-                <th>Address</th>
-                <th>Distance from Subject</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>COMPARABLE 1</td>
-                <td><span class="field-mapped" title="{{rental-comp1-label}}" data-sample="1">{{rental-comp1-label}}</span></td>
-                <td><span class="field-mapped" title="{{rental-comp1-address-full}}" data-sample="2424 Buhler Ave, North Battleford, SK">{{rental-comp1-address-full}}</span></td>
-                <td><span class="field-mapped" title="{{rental-comp1-distance}}" data-sample="177.9">{{rental-comp1-distance}}</span></td>
-            </tr>
-            <tr>
-                <td>COMPARABLE 2</td>
-                <td><span class="field-mapped" title="{{rental-comp2-label}}" data-sample="2">{{rental-comp2-label}}</span></td>
-                <td><span class="field-mapped" title="{{rental-comp2-address-full}}" data-sample="531 S St. E., Prince Albert, SK">{{rental-comp2-address-full}}</span></td>
-                <td><span class="field-mapped" title="{{rental-comp2-distance}}" data-sample="177.1">{{rental-comp2-distance}}</span></td>
-            </tr>
-            <tr>
-                <td>COMPARABLE 3</td>
-                <td><span class="field-mapped" title="{{rental-comp3-label}}" data-sample="3">{{rental-comp3-label}}</span></td>
-                <td><span class="field-mapped" title="{{rental-comp3-address-full}}" data-sample="2302 2 Ave. W, Prince Albert, SK">{{rental-comp3-address-full}}</span></td>
-                <td><span class="field-mapped" title="{{rental-comp3-distance}}" data-sample="175.4">{{rental-comp3-distance}}</span></td>
-            </tr>
-            <tr>
-                <td>COMPARABLE 4</td>
-                <td><span class="field-mapped" title="{{rental-comp4-label}}" data-sample="4">{{rental-comp4-label}}</span></td>
-                <td><span class="field-mapped" title="{{rental-comp4-address-full}}" data-sample="3020 Durn Dr, Prince Albert, SK">{{rental-comp4-address-full}}</span></td>
-                <td><span class="field-mapped" title="{{rental-comp4-distance}}" data-sample="177.9">{{rental-comp4-distance}}</span></td>
-            </tr>
-            <tr>
-                <td>COMPARABLE 5</td>
-                <td><span class="field-mapped" title="{{rental-comp5-label}}" data-sample="5">{{rental-comp5-label}}</span></td>
-                <td><span class="field-mapped" title="{{rental-comp5-address-full}}" data-sample="388 32 St W, Prince Albert, SK">{{rental-comp5-address-full}}</span></td>
-                <td><span class="field-mapped" title="{{rental-comp5-distance}}" data-sample="174.9">{{rental-comp5-distance}}</span></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="page-footer">
-        <div>
-            <span class="page-num">39</span>
-            <span class="field-mapped" title="{{property-address}}" data-sample="1101, 1121 109 St, North Battleford, Saskatchewan">{{property-address}}</span> | File <span class="field-mapped" title="{{file-number}}" data-sample="VAL251012 - 1">{{file-number}}</span>
+        <!-- Map Image Placeholder -->
+        <div class="map-container">
+            <span class="field-mapped" title="{{rental-comparables-map}}" data-sample="[Rental Comparables Location Map]">{{rental-comparables-map}}</span>
         </div>
-        <div class="footer-accent"></div>
-    </div>
-</div>
 
+        <!-- Comparables List Table -->
+        <table class="comparables-list">
+            <thead>
+                <tr>
+                    <th>Property</th>
+                    <th>Label</th>
+                    <th>Address</th>
+                    <th>Distance from Subject</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>COMPARABLE 1</td>
+                    <td><span class="field-mapped" title="{{rental-comp1-label}}" data-sample="1">{{rental-comp1-label}}</span></td>
+                    <td><span class="field-mapped" title="{{rental-comp1-address-full}}" data-sample="1551-107 St, North Battleford, SK, S9A 2A1">{{rental-comp1-address-full}}</span></td>
+                    <td><span class="field-mapped" title="{{rental-comp1-distance}}" data-sample="0.3">{{rental-comp1-distance}}</span></td>
+                </tr>
+                <tr>
+                    <td>COMPARABLE 2</td>
+                    <td><span class="field-mapped" title="{{rental-comp2-label}}" data-sample="2">{{rental-comp2-label}}</span></td>
+                    <td><span class="field-mapped" title="{{rental-comp2-address-full}}" data-sample="1501/5-1091/5 Windsor Crescent, North Battleford, SK, S9A 2G3">{{rental-comp2-address-full}}</span></td>
+                    <td><span class="field-mapped" title="{{rental-comp2-distance}}" data-sample="2.8">{{rental-comp2-distance}}</span></td>
+                </tr>
+                <tr>
+                    <td>COMPARABLE 3</td>
+                    <td><span class="field-mapped" title="{{rental-comp3-label}}" data-sample="3">{{rental-comp3-label}}</span></td>
+                    <td><span class="field-mapped" title="{{rental-comp3-address-full}}" data-sample="1001 Pearson Ave, North Battleford, SK, S9A 3L5">{{rental-comp3-address-full}}</span></td>
+                    <td><span class="field-mapped" title="{{rental-comp3-distance}}" data-sample="1.3">{{rental-comp3-distance}}</span></td>
+                </tr>
+                <tr>
+                    <td>COMPARABLE 4</td>
+                    <td><span class="field-mapped" title="{{rental-comp4-label}}" data-sample="4">{{rental-comp4-label}}</span></td>
+                    <td><span class="field-mapped" title="{{rental-comp4-address-full}}" data-sample="1000 Star Hill Dr, Martensville, SK, S0K 2T1">{{rental-comp4-address-full}}</span></td>
+                    <td><span class="field-mapped" title="{{rental-comp4-distance}}" data-sample="123.3">{{rental-comp4-distance}}</span></td>
+                </tr>
+                <tr>
+                    <td>COMPARABLE 5</td>
+                    <td><span class="field-mapped" title="{{rental-comp5-label}}" data-sample="5">{{rental-comp5-label}}</span></td>
+                    <td><span class="field-mapped" title="{{rental-comp5-address-full}}" data-sample="1030 Parr Hill Dr, Martensville, SK, S0K 2T1">{{rental-comp5-address-full}}</span></td>
+                    <td><span class="field-mapped" title="{{rental-comp5-distance}}" data-sample="123.3">{{rental-comp5-distance}}</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div>
+                <span class="page-num">39</span>
+                <span class="field-mapped" title="{{Property_Address}}" data-sample="1101, 1121 109 St, North Battleford, Saskatchewan">{{Property_Address}}</span> | File <span class="field-mapped" title="{{File_Number}}" data-sample="VAL251012 - 1">{{File_Number}}</span>
+            </div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
 <!-- PAGE 40 -->
 <div class="page-sheet" data-page-num="Page 40">
     <div class="Header1" style="margin-bottom: 8px;">Valuation & Conclusions</div>

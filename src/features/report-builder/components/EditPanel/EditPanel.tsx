@@ -173,12 +173,34 @@ export default function EditPanel() {
 
   return (
     <div className="h-full flex flex-col bg-background">
-      {/* Blue section header */}
-      <div className="bg-[#1a4480] text-white px-4 py-3 font-semibold text-lg flex items-center justify-between">
-        <span>{currentSection.name.toUpperCase()}</span>
+      {/* Dark gray section header - matches preview panel */}
+      <div style={{
+        backgroundColor: '#4b5563',
+        padding: '12px 16px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderBottom: '1px solid #374151'
+      }}>
+        <span style={{
+          color: '#ffffff',
+          fontWeight: '600',
+          fontSize: '15px'
+        }}>
+          {currentSection.name.toUpperCase()}
+        </span>
         <button
           onClick={loadFullTestData}
-          className="text-xs font-normal text-blue-200 hover:text-white transition-colors"
+          style={{
+            fontSize: '12px',
+            color: 'rgba(255, 255, 255, 0.7)',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            padding: '4px 8px'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.color = '#ffffff'}
+          onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)'}
         >
           Load Test Data
         </button>
@@ -213,10 +235,18 @@ export default function EditPanel() {
           </div>
         )}
 
-        {/* Subsections with blue headers */}
+        {/* Subsections with dark gray headers */}
         {currentSection.subsections?.map((subsection) => (
           <div key={subsection.id} className="mb-8">
-            <div className="bg-[#1a4480] text-white px-4 py-2 font-semibold text-sm mb-4">
+            <div style={{
+              backgroundColor: '#4b5563',
+              color: '#ffffff',
+              padding: '8px 16px',
+              fontWeight: '600',
+              fontSize: '13px',
+              marginBottom: '16px',
+              borderBottom: '1px solid #374151'
+            }}>
               {subsection.title}
             </div>
             <div className="pl-2">

@@ -222,6 +222,22 @@ export default function PreviewPanel() {
 
   return (
     <div className="h-full flex flex-col">
+      {/* Gray Header Bar - Matches TDD Panel Height */}
+      <div style={{
+        backgroundColor: '#6b7280',
+        padding: '24px',
+        borderBottom: '1px solid #4b5563'
+      }}>
+        <h2 style={{
+          fontSize: '20px',
+          fontWeight: '600',
+          color: '#ffffff',
+          margin: 0
+        }}>
+          REPORT PREVIEW
+        </h2>
+      </div>
+
       {/* Compact Control Bar - Single Row */}
       <div style={{
         backgroundColor: '#6b7280',

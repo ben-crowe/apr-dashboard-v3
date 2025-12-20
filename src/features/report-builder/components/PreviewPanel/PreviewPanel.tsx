@@ -52,6 +52,7 @@ export default function PreviewPanel() {
         const style = iframeDoc.createElement('style');
         style.id = 'hide-builtin-controls';
         style.textContent = `
+          #preview-controls,
           #go-button,
           #refresh-button,
           #page-nav,

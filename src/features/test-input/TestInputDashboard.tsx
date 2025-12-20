@@ -354,88 +354,112 @@ const TestInputDashboard: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-100 p-4">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-4">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-2xl font-bold text-slate-800">TEST DATA INPUT DASHBOARD</h1>
-
-            {/* Stats Bar */}
-            <div className="flex items-center gap-4 text-sm">
-              <div className="flex items-center gap-2">
-                <span className="text-slate-600">Total:</span>
-                <span className="font-bold text-slate-800">{stats.total}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-slate-600">Mapped:</span>
-                <Badge className="bg-green-500 text-white">{stats.mapped}</Badge>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-slate-600">Empty:</span>
-                <Badge className="bg-yellow-500 text-white">{stats.empty}</Badge>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-slate-600">Missing:</span>
-                <Badge className="bg-red-500 text-white">{stats.missing}</Badge>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-slate-600">Coverage:</span>
-                <span className="font-bold text-slate-800">{stats.percentage}%</span>
-              </div>
-            </div>
+        {/* Header - Two Part Structure to Match Preview Panel */}
+        <div className="bg-white rounded-lg shadow-sm mb-4 overflow-hidden">
+          {/* Part 1: Title Bar (matches Preview's "REPORT PREVIEW") */}
+          <div style={{
+            backgroundColor: '#4b5563',
+            padding: '12px 16px',
+            borderBottom: '1px solid #374151'
+          }}>
+            <h1 style={{
+              fontSize: '15px',
+              fontWeight: '600',
+              color: '#ffffff',
+              margin: 0
+            }}>
+              TEST DATA INPUT DASHBOARD
+            </h1>
           </div>
 
-          {/* Actions Bar */}
-          <div className="flex gap-2">
-            <Button
-              onClick={() => window.location.reload()}
-              variant="outline"
-              size="sm"
-              className="gap-2"
-              title="Hard refresh the page"
-            >
-              <RefreshCw className="w-4 h-4" />
-              Refresh
-            </Button>
-            <Button
-              onClick={() => {
-                try {
-                  console.log('Button clicked - calling loadFullTestData...');
-                  console.log('Sections BEFORE:', sections.length, 'sections');
-                  console.log('First field ID in store:', sections[0]?.fields[0]?.id);
-                  console.log('First storeId in registry:', fieldRegistry[0]?.storeId);
+          {/* Part 2: Stats & Actions Bar (matches Preview's control bar) */}
+          <div style={{
+            backgroundColor: '#4b5563',
+            padding: '8px 16px',
+            borderBottom: '1px solid #374151',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+            minHeight: '44px',
+            color: '#ffffff'
+          }}>
+            {/* Stats */}
+            <div className="flex items-center gap-4 text-sm">
+              <div className="flex items-center gap-2">
+                <span style={{ fontSize: '13px', fontWeight: '500' }}>Total:</span>
+                <span style={{ fontSize: '13px', fontWeight: '600' }}>{stats.total}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span style={{ fontSize: '13px', fontWeight: '500' }}>Mapped:</span>
+                <Badge className="bg-green-500 text-white text-xs">{stats.mapped}</Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <span style={{ fontSize: '13px', fontWeight: '500' }}>Empty:</span>
+                <Badge className="bg-yellow-500 text-white text-xs">{stats.empty}</Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <span style={{ fontSize: '13px', fontWeight: '500' }}>Missing:</span>
+                <Badge className="bg-red-500 text-white text-xs">{stats.missing}</Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <span style={{ fontSize: '13px', fontWeight: '500' }}>Coverage:</span>
+                <span style={{ fontSize: '13px', fontWeight: '600' }}>{stats.percentage}%</span>
+              </div>
+            </div>
 
-                  loadFullTestData();
+            {/* Actions */}
+            <div className="flex gap-2">
+              <Button
+                onClick={() => window.location.reload()}
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 border-gray-300"
+                title="Hard refresh the page"
+              >
+                <RefreshCw className="w-3 h-3" />
+                Refresh
+              </Button>
+              <Button
+                onClick={() => {
+                  try {
+                    console.log('Button clicked - calling loadFullTestData...');
+                    console.log('Sections BEFORE:', sections.length, 'sections');
+                    console.log('First field ID in store:', sections[0]?.fields[0]?.id);
+                    console.log('First storeId in registry:', fieldRegistry[0]?.storeId);
 
-                  console.log('loadFullTestData completed');
-                  console.log('Sections reference same?', sections === useReportBuilderStore.getState().sections);
+                    loadFullTestData();
 
-                  // Force check after load
-                  const freshSections = useReportBuilderStore.getState().sections;
-                  const testField = freshSections[0]?.fields.find(f => f.id === 'property-name');
-                  console.log('property-name field value after load:', testField?.value);
+                    console.log('loadFullTestData completed');
+                    console.log('Sections reference same?', sections === useReportBuilderStore.getState().sections);
 
-                  alert('Test data loaded! Check console for details.');
-                } catch (error) {
-                  console.error('Error loading test data:', error);
-                  alert('Error: ' + String(error));
-                }
-              }}
-              variant="default"
-              size="sm"
-              className="gap-2 bg-green-600 hover:bg-green-700"
-            >
-              <Database className="w-4 h-4" />
-              Load Test Data
-            </Button>
-            <Button
-              onClick={handlePreview}
-              variant="outline"
-              size="sm"
-              className="gap-2"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Preview in Builder
-            </Button>
+                    // Force check after load
+                    const freshSections = useReportBuilderStore.getState().sections;
+                    const testField = freshSections[0]?.fields.find(f => f.id === 'property-name');
+                    console.log('property-name field value after load:', testField?.value);
+
+                    alert('Test data loaded! Check console for details.');
+                  } catch (error) {
+                    console.error('Error loading test data:', error);
+                    alert('Error: ' + String(error));
+                  }
+                }}
+                size="sm"
+                className="gap-2 bg-green-600 hover:bg-green-700 text-white"
+              >
+                <Database className="w-3 h-3" />
+                Load Test Data
+              </Button>
+              <Button
+                onClick={handlePreview}
+                variant="outline"
+                size="sm"
+                className="gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 border-gray-300"
+              >
+                <ExternalLink className="w-3 h-3" />
+                Preview in Builder
+              </Button>
+            </div>
           </div>
         </div>
 

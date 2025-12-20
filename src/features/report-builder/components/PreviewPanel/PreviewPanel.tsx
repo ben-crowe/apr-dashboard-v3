@@ -26,6 +26,7 @@ export default function PreviewPanel() {
   const [isExporting, setIsExporting] = useState(false);
   const [showPdfDialog, setShowPdfDialog] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [showFieldIds, setShowFieldIds] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const zoomIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
@@ -38,6 +39,29 @@ export default function PreviewPanel() {
   useEffect(() => {
     if (previewHtml) {
       (window as any).__PREVIEW_HTML__ = previewHtml;
+    }
+  }, [previewHtml]);
+
+  // Hide built-in controls from template (we use React controls instead)
+  useEffect(() => {
+    if (iframeRef.current?.contentDocument) {
+      const iframeDoc = iframeRef.current.contentDocument;
+
+      // Inject CSS to hide template's built-in controls
+      if (!iframeDoc.getElementById('hide-builtin-controls')) {
+        const style = iframeDoc.createElement('style');
+        style.id = 'hide-builtin-controls';
+        style.textContent = `
+          #go-button,
+          #refresh-button,
+          label[for="preview-toggle"],
+          .controls-bar,
+          .toggle-container {
+            display: none !important;
+          }
+        `;
+        iframeDoc.head.appendChild(style);
+      }
     }
   }, [previewHtml]);
 
@@ -138,7 +162,23 @@ export default function PreviewPanel() {
     }
   };
 
-  // Dark mode toggle
+  // Show Field IDs toggle
+  const handleShowFieldIdsToggle = () => {
+    const newShowFieldIds = !showFieldIds;
+    setShowFieldIds(newShowFieldIds);
+
+    // Toggle field IDs in iframe content
+    if (iframeRef.current?.contentDocument) {
+      const iframeDoc = iframeRef.current.contentDocument;
+      const previewToggle = iframeDoc.getElementById('preview-toggle') as HTMLInputElement;
+      if (previewToggle) {
+        previewToggle.checked = newShowFieldIds;
+        previewToggle.dispatchEvent(new Event('change'));
+      }
+    }
+  };
+
+  // Dark mode toggle - 10-15% darkening filter
   const handleDarkModeToggle = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
@@ -152,14 +192,14 @@ export default function PreviewPanel() {
         if (newDarkMode) {
           iframeBody.classList.add('dark-mode');
 
-          // Inject dark mode CSS if not already present
+          // Inject dark mode CSS if not already present (subtle 15% darkening)
           if (!iframeDoc.getElementById('dark-mode-styles')) {
             const style = iframeDoc.createElement('style');
             style.id = 'dark-mode-styles';
             style.textContent = `
               body.dark-mode .page-sheet,
               body.dark-mode .page {
-                filter: brightness(0.8);
+                filter: brightness(0.85);
               }
             `;
             iframeDoc.head.appendChild(style);
@@ -181,103 +221,197 @@ export default function PreviewPanel() {
   }, []);
 
   return (
-    <div className="h-full flex flex-col bg-muted/30">
-      <div className="border-b bg-background">
-        <div className="px-6 py-4">
-          <div className="flex items-center gap-2">
-            <FileText className="h-5 w-5 text-muted-foreground" />
-            <h2 className="text-xl font-semibold">Live Preview</h2>
-          </div>
-          <p className="text-sm text-muted-foreground mt-1">
-            Updates automatically as you edit
-          </p>
-        </div>
-
-        {/* Enhanced Zoom Controls and Export Buttons */}
-        <div className="px-6 py-3 border-t bg-background/50 flex items-center gap-4">
-          <span className="text-sm text-muted-foreground font-medium min-w-[60px]">
-            Zoom:
+    <div className="h-full flex flex-col">
+      {/* Compact Control Bar - Single Row */}
+      <div style={{
+        backgroundColor: '#6b7280',
+        padding: '8px 16px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '16px',
+        height: '44px',
+        borderBottom: '1px solid #4b5563',
+        color: '#ffffff'
+      }}>
+        {/* Zoom Controls */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '13px', fontWeight: '500' }}>Zoom:</span>
+          <button
+            onClick={() => setZoom(z => Math.max(minZoom, z - 0.1))}
+            onMouseDown={handleZoomOutMouseDown}
+            onMouseUp={handleZoomMouseUp}
+            onMouseLeave={handleZoomMouseUp}
+            disabled={zoom <= minZoom}
+            style={{
+              backgroundColor: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              width: '28px',
+              height: '28px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              color: '#374151'
+            }}
+          >
+            −
+          </button>
+          <span style={{ fontSize: '13px', fontWeight: '500', minWidth: '40px', textAlign: 'center' }}>
+            {Math.round(zoom * 100)}%
           </span>
-
-          {/* Enhanced Zoom Controls - Click or Hold to Zoom */}
-          <div className="flex items-center gap-1">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              onClick={() => setZoom(z => Math.max(minZoom, z - 0.1))}
-              onMouseDown={handleZoomOutMouseDown}
-              onMouseUp={handleZoomMouseUp}
-              onMouseLeave={handleZoomMouseUp}
-              disabled={zoom <= minZoom}
-              title="Zoom out (click or hold)"
-            >
-              <Minus className="h-4 w-4" />
-            </Button>
-
-            <span className="text-sm w-12 text-center font-medium">
-              {Math.round(zoom * 100)}%
-            </span>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className="h-7 w-7"
-              onClick={() => setZoom(z => Math.min(maxZoom, z + 0.1))}
-              onMouseDown={handleZoomInMouseDown}
-              onMouseUp={handleZoomMouseUp}
-              onMouseLeave={handleZoomMouseUp}
-              disabled={zoom >= maxZoom}
-              title="Zoom in (click or hold)"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
-
-          {/* Divider */}
-          <div className="h-4 w-px bg-border mx-2" />
-
-          {/* Dark Mode Toggle */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-7 w-7"
-            onClick={handleDarkModeToggle}
-            title={darkMode ? 'Light mode' : 'Dark mode'}
+          <button
+            onClick={() => setZoom(z => Math.min(maxZoom, z + 0.1))}
+            onMouseDown={handleZoomInMouseDown}
+            onMouseUp={handleZoomMouseUp}
+            onMouseLeave={handleZoomMouseUp}
+            disabled={zoom >= maxZoom}
+            style={{
+              backgroundColor: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              width: '28px',
+              height: '28px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: 'bold',
+              color: '#374151'
+            }}
           >
-            {darkMode ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
-          </Button>
-
-          {/* Divider */}
-          <div className="h-4 w-px bg-border mx-2" />
-
-          {/* Export Buttons */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleExportPDF}
-            disabled={isExporting || !previewHtml}
-            title="Download as PDF"
-          >
-            <FileDown className="h-4 w-4 mr-1" />
-            PDF
-          </Button>
-
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleExportDOCX}
-            disabled={isExporting || !previewHtml}
-            title="Export as Word document"
-          >
-            <Download className="h-4 w-4 mr-1" />
-            DOCX
-          </Button>
+            +
+          </button>
         </div>
+
+        {/* iOS-Style Toggle Switch for Show Field IDs */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: '20px' }}>
+          <label style={{
+            position: 'relative',
+            display: 'inline-block',
+            width: '44px',
+            height: '24px',
+            cursor: 'pointer'
+          }}>
+            <input
+              type="checkbox"
+              checked={showFieldIds}
+              onChange={handleShowFieldIdsToggle}
+              style={{
+                opacity: 0,
+                width: 0,
+                height: 0
+              }}
+            />
+            <span style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: showFieldIds ? '#3b82f6' : '#d1d5db',
+              borderRadius: '24px',
+              transition: 'background-color 0.3s',
+              cursor: 'pointer'
+            }}>
+              <span style={{
+                position: 'absolute',
+                content: '',
+                height: '18px',
+                width: '18px',
+                left: showFieldIds ? '23px' : '3px',
+                bottom: '3px',
+                backgroundColor: 'white',
+                borderRadius: '50%',
+                transition: 'left 0.3s'
+              }} />
+            </span>
+          </label>
+          <span style={{ fontSize: '13px', fontWeight: '500' }}>Show Field IDs</span>
+        </div>
+
+        {/* Page Navigation */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
+          <input
+            type="number"
+            value={1}
+            min={1}
+            max={77}
+            style={{
+              width: '50px',
+              height: '28px',
+              padding: '4px 8px',
+              fontSize: '13px',
+              borderRadius: '4px',
+              border: '1px solid #9ca3af',
+              textAlign: 'center',
+              backgroundColor: 'white',
+              color: '#374151'
+            }}
+          />
+          <span style={{ fontSize: '13px', fontWeight: '500' }}>of 77</span>
+        </div>
+
+        {/* Dark Mode Toggle */}
+        <button
+          onClick={handleDarkModeToggle}
+          title={darkMode ? 'Light mode' : 'Dark mode'}
+          style={{
+            backgroundColor: 'transparent',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '18px',
+            padding: '4px'
+          }}
+        >
+          {darkMode ? '☀️' : '🌙'}
+        </button>
+
+        {/* Export Buttons */}
+        <button
+          onClick={handleExportPDF}
+          disabled={isExporting || !previewHtml}
+          style={{
+            backgroundColor: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '6px 12px',
+            fontSize: '12px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            color: '#374151',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px'
+          }}
+        >
+          <FileDown className="h-3 w-3" />
+          PDF
+        </button>
+
+        <button
+          onClick={handleExportDOCX}
+          disabled={isExporting || !previewHtml}
+          style={{
+            backgroundColor: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            padding: '6px 12px',
+            fontSize: '12px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            color: '#374151',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px'
+          }}
+        >
+          <Download className="h-3 w-3" />
+          DOCX
+        </button>
       </div>
 
       <div className="flex-1 overflow-hidden">

@@ -230,14 +230,14 @@ export default function PreviewPanel() {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Gray Header Bar - Matches TDD Panel Height */}
+      {/* Compact Header Bar */}
       <div style={{
-        backgroundColor: '#6b7280',
-        padding: '24px',
-        borderBottom: '1px solid #4b5563'
+        backgroundColor: '#4b5563',
+        padding: '12px 16px',
+        borderBottom: '1px solid #374151'
       }}>
         <h2 style={{
-          fontSize: '20px',
+          fontSize: '15px',
           fontWeight: '600',
           color: '#ffffff',
           margin: 0
@@ -248,13 +248,13 @@ export default function PreviewPanel() {
 
       {/* Compact Control Bar - Single Row */}
       <div style={{
-        backgroundColor: '#6b7280',
+        backgroundColor: '#4b5563',
         padding: '8px 16px',
         display: 'flex',
         alignItems: 'center',
         gap: '16px',
         height: '44px',
-        borderBottom: '1px solid #4b5563',
+        borderBottom: '1px solid #374151',
         color: '#ffffff'
       }}>
         {/* Zoom Controls */}
@@ -267,8 +267,8 @@ export default function PreviewPanel() {
             onMouseLeave={handleZoomMouseUp}
             disabled={zoom <= minZoom}
             style={{
-              backgroundColor: '#e5e7eb',
-              border: 'none',
+              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
               borderRadius: '4px',
               width: '28px',
               height: '28px',
@@ -278,7 +278,7 @@ export default function PreviewPanel() {
               cursor: 'pointer',
               fontSize: '16px',
               fontWeight: 'bold',
-              color: '#374151'
+              color: '#ffffff'
             }}
           >
             −
@@ -293,8 +293,8 @@ export default function PreviewPanel() {
             onMouseLeave={handleZoomMouseUp}
             disabled={zoom >= maxZoom}
             style={{
-              backgroundColor: '#e5e7eb',
-              border: 'none',
+              backgroundColor: 'rgba(255, 255, 255, 0.15)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
               borderRadius: '4px',
               width: '28px',
               height: '28px',
@@ -304,7 +304,7 @@ export default function PreviewPanel() {
               cursor: 'pointer',
               fontSize: '16px',
               fontWeight: 'bold',
-              color: '#374151'
+              color: '#ffffff'
             }}
           >
             +

@@ -56,8 +56,16 @@ export default function PreviewPanel() {
           #refresh-button,
           label[for="preview-toggle"],
           .controls-bar,
-          .toggle-container {
+          .toggle-container,
+          .field-toggle-container,
+          .page-nav-container,
+          #mode-label,
+          .preview-controls,
+          div[style*="position: fixed"],
+          div[style*="position: absolute"][style*="top"],
+          .floating-controls {
             display: none !important;
+            visibility: hidden !important;
           }
         `;
         iframeDoc.head.appendChild(style);
@@ -259,7 +267,7 @@ export default function PreviewPanel() {
             onMouseLeave={handleZoomMouseUp}
             disabled={zoom <= minZoom}
             style={{
-              backgroundColor: 'white',
+              backgroundColor: '#e5e7eb',
               border: 'none',
               borderRadius: '4px',
               width: '28px',
@@ -285,7 +293,7 @@ export default function PreviewPanel() {
             onMouseLeave={handleZoomMouseUp}
             disabled={zoom >= maxZoom}
             style={{
-              backgroundColor: 'white',
+              backgroundColor: '#e5e7eb',
               border: 'none',
               borderRadius: '4px',
               width: '28px',
@@ -364,7 +372,7 @@ export default function PreviewPanel() {
               borderRadius: '4px',
               border: '1px solid #9ca3af',
               textAlign: 'center',
-              backgroundColor: 'white',
+              backgroundColor: '#e5e7eb',
               color: '#374151'
             }}
           />
@@ -391,7 +399,7 @@ export default function PreviewPanel() {
           onClick={handleExportPDF}
           disabled={isExporting || !previewHtml}
           style={{
-            backgroundColor: 'white',
+            backgroundColor: '#e5e7eb',
             border: 'none',
             borderRadius: '4px',
             padding: '6px 12px',
@@ -412,7 +420,7 @@ export default function PreviewPanel() {
           onClick={handleExportDOCX}
           disabled={isExporting || !previewHtml}
           style={{
-            backgroundColor: 'white',
+            backgroundColor: '#e5e7eb',
             border: 'none',
             borderRadius: '4px',
             padding: '6px 12px',

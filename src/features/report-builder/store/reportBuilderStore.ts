@@ -5496,13 +5496,17 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
   generatePreview: async () => {
     const sections = get().sections;
-    const html = await get().interpolateTemplate(sections);
+    // Ensure template is loaded
+    const template = await get().loadPreviewTemplate();
+    const html = get().interpolateTemplate(sections, template);
     set({ previewHtml: html });
   },
 
   initializeMockData: async () => {
     const sections = getMockData();
-    const html = await get().interpolateTemplate(sections);
+    // Load template first
+    const template = await get().loadPreviewTemplate();
+    const html = get().interpolateTemplate(sections, template);
     set({ sections, sectionGroups, previewHtml: html });
   },
 
@@ -5531,10 +5535,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     }
   },
 
-  // Interpolate field values into template
-  interpolateTemplate: async (sections: ReportSection[]) => {
-    // Load template if not cached
-    const template = await get().loadPreviewTemplate();
+  // Interpolate field values into template (synchronous - template must be preloaded)
+  interpolateTemplate: (sections: ReportSection[], template: string) => {
     let html = template;
 
     // Build field value map from all sections
@@ -5823,6 +5825,33 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Expenses calculated
     updateField("calc-expenses-total", Math.round(expensesTotal));
     updateField("calc-expense-ratio", Math.round(expenseRatio * 100) / 100);
+    updateField("calc-expenses-per-unit", totalUnits > 0 ? Math.round((expensesTotal / totalUnits) * 100) / 100 : 0);
+    updateField("calc-expenses-per-sf", totalSf > 0 ? Math.round((expensesTotal / totalSf) * 100) / 100 : 0);
+
+    // Expense Breakdown - Calculate and output all 5 metrics per category (35 fields total)
+    const expenseCategories = [
+      { name: "taxes", value: expTaxes },
+      { name: "insurance", value: expInsurance },
+      { name: "repairs", value: expRepairs },
+      { name: "payroll", value: expPayroll },
+      { name: "utilities", value: expUtilities },
+      { name: "management", value: expManagement },
+      { name: "other", value: expOther },
+    ];
+
+    expenseCategories.forEach(({ name, value }) => {
+      const annual = Math.round(value);
+      const perUnit = totalUnits > 0 ? value / totalUnits : 0;
+      const perSf = totalSf > 0 ? value / totalSf : 0;
+      const pctPgr = pgr > 0 ? (value / pgr) * 100 : 0;
+      const pctEgr = egr > 0 ? (value / egr) * 100 : 0;
+
+      updateField(`calc-exp-${name}-annual`, annual);
+      updateField(`calc-exp-${name}-per-unit`, Math.round(perUnit * 100) / 100);
+      updateField(`calc-exp-${name}-per-sf`, Math.round(perSf * 100) / 100);
+      updateField(`calc-exp-${name}-pct-pgr`, Math.round(pctPgr * 100) / 100);
+      updateField(`calc-exp-${name}-pct-egr`, Math.round(pctEgr * 100) / 100);
+    });
 
     // Adjustments calculated
     updateField("calc-adj-total", adjTotal);
@@ -5883,7 +5912,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // Regenerate preview with all data
     const updatedSections = get().sections;
-    const html = await get().interpolateTemplate(updatedSections);
+    const template = await get().loadPreviewTemplate();
+    const html = get().interpolateTemplate(updatedSections, template);
     set({ previewHtml: html });
 
     console.log(

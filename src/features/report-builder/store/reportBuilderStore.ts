@@ -5,7 +5,6 @@ import {
   ReportField,
   SectionGroup,
 } from "../types/reportBuilder.types";
-import { generateReportHtml } from "../templates/reportHtmlTemplate";
 import { northBattlefordRealData } from "../data/northBattlefordTestData-REAL";
 import { fieldRegistry } from "../schema/fieldRegistry";
 
@@ -5431,6 +5430,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   sectionGroups: [],
   activeSection: "cover",
   previewHtml: "",
+  previewTemplate: "", // Cached PREVIEW-Master.html template
   isDirty: false,
   sidebarCollapsed: false,
 
@@ -5494,20 +5494,98 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     }
   },
 
-  generatePreview: () => {
+  generatePreview: async () => {
     const sections = get().sections;
-    const html = generateReportHtml(sections);
+    const html = await get().interpolateTemplate(sections);
     set({ previewHtml: html });
   },
 
-  initializeMockData: () => {
+  initializeMockData: async () => {
     const sections = getMockData();
-    const html = generateReportHtml(sections);
+    const html = await get().interpolateTemplate(sections);
     set({ sections, sectionGroups, previewHtml: html });
   },
 
   toggleSidebar: () => {
     set({ sidebarCollapsed: !get().sidebarCollapsed });
+  },
+
+  // Load PREVIEW-Master.html template (fetch once, cache)
+  loadPreviewTemplate: async () => {
+    const currentTemplate = get().previewTemplate;
+    if (currentTemplate) {
+      return currentTemplate; // Already loaded
+    }
+
+    try {
+      const response = await fetch('/PREVIEW-Master.html');
+      if (!response.ok) {
+        throw new Error(`Failed to load template: ${response.statusText}`);
+      }
+      const html = await response.text();
+      set({ previewTemplate: html });
+      return html;
+    } catch (error) {
+      console.error('Error loading PREVIEW-Master.html:', error);
+      throw error;
+    }
+  },
+
+  // Interpolate field values into template
+  interpolateTemplate: async (sections: ReportSection[]) => {
+    // Load template if not cached
+    const template = await get().loadPreviewTemplate();
+    let html = template;
+
+    // Build field value map from all sections
+    const fieldMap = new Map<string, string>();
+
+    sections.forEach(section => {
+      // Handle section fields
+      section.fields?.forEach(field => {
+        const value = get().formatFieldValue(field);
+        fieldMap.set(field.id, value);
+      });
+
+      // Handle subsection fields
+      section.subsections?.forEach(subsection => {
+        subsection.fields?.forEach(field => {
+          const value = get().formatFieldValue(field);
+          fieldMap.set(field.id, value);
+        });
+      });
+    });
+
+    // Replace all {{field-id}} placeholders with actual values
+    fieldMap.forEach((value, fieldId) => {
+      const placeholder = `{{${fieldId}}}`;
+      html = html.replaceAll(placeholder, value);
+    });
+
+    // Leave unreplaced placeholders as-is (for toggle display in test mode)
+    return html;
+  },
+
+  // Format field value based on type
+  formatFieldValue: (field: ReportField) => {
+    if (!field.value && field.value !== 0) return '';
+
+    switch (field.type) {
+      case 'currency':
+        return `$${Number(field.value).toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        })}`;
+      case 'percentage':
+        return `${field.value}%`;
+      case 'date':
+        return new Date(field.value).toISOString().split('T')[0];
+      case 'image':
+        // For images, return the URL or empty
+        return Array.isArray(field.value) ? field.value[0] || '' : String(field.value);
+      default:
+        return String(field.value);
+    }
   },
 
   loadCalcTestData: () => {
@@ -5765,7 +5843,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     console.log("Calculations complete. Indicated Value:", indicatedValue);
   },
 
-  loadFullTestData: () => {
+  loadFullTestData: async () => {
     console.log("=== LOAD FULL TEST DATA CALLED ===");
     console.log("northBattlefordRealData keys:", Object.keys(northBattlefordRealData).length);
     // Load comprehensive North Battleford REAL test data (292 fields)
@@ -5805,7 +5883,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // Regenerate preview with all data
     const updatedSections = get().sections;
-    const html = generateReportHtml(updatedSections);
+    const html = await get().interpolateTemplate(updatedSections);
     set({ previewHtml: html });
 
     console.log(

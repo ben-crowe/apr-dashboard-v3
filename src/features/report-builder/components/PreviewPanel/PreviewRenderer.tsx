@@ -4,13 +4,17 @@ import { useReportBuilderStore } from '../../store/reportBuilderStore';
 interface PreviewRendererProps {
   html: string;
   zoom?: number;
+  onZoomChange?: (newZoom: number) => void;
 }
 
 const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
-  ({ html, zoom = 1 }, ref) => {
+  ({ html, zoom = 1, onZoomChange }, ref) => {
     const activeSection = useReportBuilderStore((state) => state.activeSection);
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const minZoom = 0.1;
+    const maxZoom = 1.5;
 
     // State for drag-to-pan functionality
     const [isDragging, setIsDragging] = useState(false);
@@ -95,6 +99,16 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
       setIsDragging(false);
     };
 
+    // Pinch-to-zoom on trackpad (Ctrl + wheel)
+    const handleWheel = (e: React.WheelEvent) => {
+      if (e.ctrlKey && onZoomChange) {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 0.025 : -0.025;
+        const newZoom = Math.max(minZoom, Math.min(maxZoom, zoom + delta));
+        onZoomChange(newZoom);
+      }
+    };
+
     return (
       <div
         ref={containerRef}
@@ -108,6 +122,7 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
+        onWheel={handleWheel}
       >
         {/* Inner wrapper with padding and centering - THIS is what gets scaled */}
         <div

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useReportBuilderStore } from '../../store/reportBuilderStore';
 import PreviewRenderer from './PreviewRenderer';
-import { FileText, Minus, Plus, FileDown, Download } from 'lucide-react';
+import { FileText, Minus, Plus, FileDown, Download, Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -25,8 +25,14 @@ export default function PreviewPanel() {
   const [zoom, setZoom] = useState(0.75);
   const [isExporting, setIsExporting] = useState(false);
   const [showPdfDialog, setShowPdfDialog] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const zoomIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
+
+  const minZoom = 0.1;
+  const maxZoom = 1.5;
+  const zoomStep = 0.05; // 5% for smoother hold-to-zoom
 
   // DEBUG: Expose HTML on window for automated extraction
   useEffect(() => {
@@ -112,6 +118,68 @@ export default function PreviewPanel() {
     }
   };
 
+  // Hold-to-zoom: Start continuous zoom on mousedown
+  const handleZoomOutMouseDown = () => {
+    zoomIntervalRef.current = setInterval(() => {
+      setZoom(z => Math.max(minZoom, z - zoomStep));
+    }, 100);
+  };
+
+  const handleZoomInMouseDown = () => {
+    zoomIntervalRef.current = setInterval(() => {
+      setZoom(z => Math.min(maxZoom, z + zoomStep));
+    }, 100);
+  };
+
+  const handleZoomMouseUp = () => {
+    if (zoomIntervalRef.current) {
+      clearInterval(zoomIntervalRef.current);
+      zoomIntervalRef.current = null;
+    }
+  };
+
+  // Dark mode toggle
+  const handleDarkModeToggle = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+
+    // Apply dark mode to iframe content
+    if (iframeRef.current?.contentDocument) {
+      const iframeDoc = iframeRef.current.contentDocument;
+      const iframeBody = iframeDoc.body;
+
+      if (iframeBody) {
+        if (newDarkMode) {
+          iframeBody.classList.add('dark-mode');
+
+          // Inject dark mode CSS if not already present
+          if (!iframeDoc.getElementById('dark-mode-styles')) {
+            const style = iframeDoc.createElement('style');
+            style.id = 'dark-mode-styles';
+            style.textContent = `
+              body.dark-mode .page-sheet,
+              body.dark-mode .page {
+                filter: brightness(0.8);
+              }
+            `;
+            iframeDoc.head.appendChild(style);
+          }
+        } else {
+          iframeBody.classList.remove('dark-mode');
+        }
+      }
+    }
+  };
+
+  // Cleanup interval on unmount
+  useEffect(() => {
+    return () => {
+      if (zoomIntervalRef.current) {
+        clearInterval(zoomIntervalRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="h-full flex flex-col bg-muted/30">
       <div className="border-b bg-background">
@@ -125,21 +193,24 @@ export default function PreviewPanel() {
           </p>
         </div>
 
-        {/* Zoom Controls and Export Buttons */}
+        {/* Enhanced Zoom Controls and Export Buttons */}
         <div className="px-6 py-3 border-t bg-background/50 flex items-center gap-4">
           <span className="text-sm text-muted-foreground font-medium min-w-[60px]">
             Zoom:
           </span>
 
-          {/* Simplified Zoom Controls - 10% increments */}
+          {/* Enhanced Zoom Controls - Click or Hold to Zoom */}
           <div className="flex items-center gap-1">
             <Button
               variant="ghost"
               size="icon"
               className="h-7 w-7"
-              onClick={() => setZoom(z => Math.max(0.1, z - 0.1))}
-              disabled={zoom <= 0.1}
-              title="Zoom out"
+              onClick={() => setZoom(z => Math.max(minZoom, z - 0.1))}
+              onMouseDown={handleZoomOutMouseDown}
+              onMouseUp={handleZoomMouseUp}
+              onMouseLeave={handleZoomMouseUp}
+              disabled={zoom <= minZoom}
+              title="Zoom out (click or hold)"
             >
               <Minus className="h-4 w-4" />
             </Button>
@@ -152,13 +223,34 @@ export default function PreviewPanel() {
               variant="ghost"
               size="icon"
               className="h-7 w-7"
-              onClick={() => setZoom(z => Math.min(1.5, z + 0.1))}
-              disabled={zoom >= 1.5}
-              title="Zoom in"
+              onClick={() => setZoom(z => Math.min(maxZoom, z + 0.1))}
+              onMouseDown={handleZoomInMouseDown}
+              onMouseUp={handleZoomMouseUp}
+              onMouseLeave={handleZoomMouseUp}
+              disabled={zoom >= maxZoom}
+              title="Zoom in (click or hold)"
             >
               <Plus className="h-4 w-4" />
             </Button>
           </div>
+
+          {/* Divider */}
+          <div className="h-4 w-px bg-border mx-2" />
+
+          {/* Dark Mode Toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7"
+            onClick={handleDarkModeToggle}
+            title={darkMode ? 'Light mode' : 'Dark mode'}
+          >
+            {darkMode ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
+          </Button>
 
           {/* Divider */}
           <div className="h-4 w-px bg-border mx-2" />
@@ -193,6 +285,7 @@ export default function PreviewPanel() {
           <PreviewRenderer
             html={previewHtml}
             zoom={zoom}
+            onZoomChange={setZoom}
             ref={iframeRef}
           />
         ) : (

@@ -54,18 +54,27 @@ export default function PreviewPanel() {
         style.textContent = `
           #go-button,
           #refresh-button,
+          #page-nav,
+          #page-input,
+          #preview-toggle,
+          #mode-label,
           label[for="preview-toggle"],
+          label[for="page-input"],
+          input[type="checkbox"]#preview-toggle,
           .controls-bar,
           .toggle-container,
           .field-toggle-container,
           .page-nav-container,
-          #mode-label,
           .preview-controls,
           div[style*="position: fixed"],
           div[style*="position: absolute"][style*="top"],
-          .floating-controls {
+          div[style*="z-index"],
+          .floating-controls,
+          #preview-toggle + *,
+          #preview-toggle ~ * {
             display: none !important;
             visibility: hidden !important;
+            opacity: 0 !important;
           }
         `;
         iframeDoc.head.appendChild(style);

@@ -47,35 +47,47 @@ export default function PreviewPanel() {
   // Track scroll position to update current page indicator
   useEffect(() => {
     const iframe = iframeRef.current;
-    if (!iframe?.contentDocument || !iframe?.contentWindow) return;
+    if (!iframe) return;
 
-    const iframeDoc = iframe.contentDocument;
-    const iframeWindow = iframe.contentWindow;
+    // Wait for iframe to be fully loaded before attaching scroll listener
+    const setupScrollTracking = () => {
+      const iframeDoc = iframe.contentDocument;
+      const iframeWindow = iframe.contentWindow;
 
-    const handleScroll = () => {
-      const scrollTop = iframeWindow.scrollY || iframeDoc.documentElement.scrollTop;
-      const pageHeight = 1056; // Height of each page in pixels
-      const newPageNumber = Math.floor(scrollTop / pageHeight) + 1;
+      if (!iframeDoc || !iframeWindow) return;
 
-      // Only update if page actually changed (avoid unnecessary re-renders)
-      setCurrentPage(prev => {
-        if (newPageNumber !== prev && newPageNumber >= 1 && newPageNumber <= totalPages) {
-          return newPageNumber;
-        }
-        return prev;
-      });
+      const handleScroll = () => {
+        const scrollTop = iframeWindow.scrollY || iframeDoc.documentElement.scrollTop || iframeDoc.body.scrollTop;
+        const pageHeight = 1056; // Height of each page in pixels (11in at 96 DPI)
+        const newPageNumber = Math.floor(scrollTop / pageHeight) + 1;
+
+        // Update page number if it changed and is valid
+        setCurrentPage(prev => {
+          if (newPageNumber !== prev && newPageNumber >= 1 && newPageNumber <= totalPages) {
+            return newPageNumber;
+          }
+          return prev;
+        });
+      };
+
+      // Attach scroll listener to iframe window
+      iframeWindow.addEventListener('scroll', handleScroll, { passive: true });
+
+      // Initial check
+      handleScroll();
+
+      return () => {
+        iframeWindow.removeEventListener('scroll', handleScroll);
+      };
     };
 
-    // Attach scroll listener
-    iframeWindow.addEventListener('scroll', handleScroll, { passive: true });
-
-    // Initial check in case we're already scrolled
-    handleScroll();
+    // Delay setup to ensure iframe content is ready
+    const timeoutId = setTimeout(setupScrollTracking, 100);
 
     return () => {
-      iframeWindow.removeEventListener('scroll', handleScroll);
+      clearTimeout(timeoutId);
     };
-  }, [previewHtml, totalPages]); // Re-attach when content changes
+  }, [previewHtml, totalPages]);
 
   // Hide built-in controls from template (we use React controls instead)
   useEffect(() => {
@@ -430,19 +442,19 @@ export default function PreviewPanel() {
         {/* Page Navigation */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
           <button
-            onClick={handleNextPage}
-            disabled={currentPage >= totalPages}
+            onClick={handlePreviousPage}
+            disabled={currentPage <= 1}
             style={{
               background: 'none',
               border: 'none',
-              cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
+              cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
               fontSize: '18px',
               fontWeight: 'bold',
-              color: currentPage >= totalPages ? '#6b7280' : '#ffffff',
+              color: currentPage <= 1 ? '#6b7280' : '#ffffff',
               padding: 0,
-              opacity: currentPage >= totalPages ? 0.5 : 1
+              opacity: currentPage <= 1 ? 0.5 : 1
             }}
-            title="Next page (scroll down)"
+            title="Previous page"
           >
             −
           </button>
@@ -466,19 +478,19 @@ export default function PreviewPanel() {
           />
           <span style={{ fontSize: '13px', fontWeight: '500' }}>of {totalPages}</span>
           <button
-            onClick={handlePreviousPage}
-            disabled={currentPage <= 1}
+            onClick={handleNextPage}
+            disabled={currentPage >= totalPages}
             style={{
               background: 'none',
               border: 'none',
-              cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
+              cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
               fontSize: '18px',
               fontWeight: 'bold',
-              color: currentPage <= 1 ? '#6b7280' : '#ffffff',
+              color: currentPage >= totalPages ? '#6b7280' : '#ffffff',
               padding: 0,
-              opacity: currentPage <= 1 ? 0.5 : 1
+              opacity: currentPage >= totalPages ? 0.5 : 1
             }}
-            title="Previous page (scroll up)"
+            title="Next page"
           >
             +
           </button>

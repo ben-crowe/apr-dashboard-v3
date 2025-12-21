@@ -39,7 +39,9 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
       }
     }, [html]);
 
-    // Track which page is visible when scrolling
+    // Track which page is visible when scrolling - DISABLED for now
+    // TODO: Add debounced scroll tracking
+    /*
     useEffect(() => {
       const container = containerRef.current;
       const iframe = iframeRef.current;
@@ -84,6 +86,7 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
       container.addEventListener('scroll', handleScroll);
       return () => container.removeEventListener('scroll', handleScroll);
     }, [html, onPageChange]);
+    */
 
     // Scroll to active section when it changes
     useEffect(() => {

@@ -1512,20 +1512,173 @@ export function renderPage12(sections: ReportSection[], valueScenarioType: strin
 }
 
 /**
- * Page 13: Introduction & Executive Summary - Photos (Part 3)
- * Fields: intro-photo-13
+ * Page 13: Introduction & Executive Summary (Continued)
+ * Fields: extraordinary-assumptions, extraordinary-conditions, property-sales-history, exposure-marketing-time
  */
 export function renderPage13(sections: ReportSection[], valueScenarioType: string): string {
   return `
-    <div class="page page-13">
-      <div class="page-header">Introduction & Executive Summary</div>
-      <div class="single-photo">
-        <div class="photo-placeholder large">${getImageUrl(sections, 'intro-photo-13') || '[PHOTO: Additional Property View]'}</div>
-        <div class="photo-caption">Additional Property View</div>
+    <div class="page page-13" style="width: 816px; height: 1056px; padding: 0; background: white; font-family: Arial, sans-serif; font-size: 11px; color: #000; position: relative;">
+      <style>
+        .page-13 { box-sizing: border-box; }
+        .page-13 * { box-sizing: border-box; }
+
+        /* Header */
+        .page-13 .header {
+          padding: 20px 32px;
+          border-bottom: 2px solid #003B7E;
+          background: white;
+        }
+        .page-13 .header-title {
+          font-size: 14px;
+          font-weight: bold;
+          color: #003B7E;
+          margin: 0;
+        }
+
+        /* Main Content */
+        .page-13 .content {
+          padding: 24px 32px 50px 32px;
+          height: calc(1056px - 100px);
+          overflow: hidden;
+        }
+
+        /* Sections */
+        .page-13 .section {
+          margin-bottom: 14px;
+        }
+        .page-13 .section-header {
+          font-size: 10px;
+          font-weight: bold;
+          color: #000;
+          margin-bottom: 6px;
+        }
+        .page-13 .section-content {
+          font-size: 10px;
+          line-height: 1.4;
+          color: #000;
+        }
+        .page-13 .section-label {
+          font-weight: bold;
+          margin-top: 8px;
+          font-size: 10px;
+        }
+
+        /* Table */
+        .page-13 table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 8px;
+          font-size: 9px;
+        }
+        .page-13 table th {
+          background: #003B7E;
+          color: white;
+          padding: 6px 8px;
+          text-align: left;
+          font-weight: bold;
+          font-size: 9px;
+        }
+        .page-13 table td {
+          padding: 6px 8px;
+          border: 1px solid #ddd;
+        }
+
+        /* Footer */
+        .page-13 .footer {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 40px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 32px;
+          border-top: 1px solid #003B7E;
+          background: white;
+          font-size: 9px;
+          color: #666;
+        }
+      </style>
+
+      <!-- Header -->
+      <div class="header">
+        <h1 class="header-title">Introduction & Executive Summary</h1>
       </div>
-      <div class="page-footer">
-        <span>8</span>
-        <span>\${getFieldValue(sections, 'property-address-line1')}, \${getFieldValue(sections, 'property-address-line2')} | File \${getFieldValue(sections, 'file-number')}</span>
+
+      <!-- Main Content -->
+      <div class="content">
+        <div class="section">
+          <div class="section-header">Extraordinary Assumptions</div>
+          <div class="section-content">
+            No Extraordinary Assumptions were made for this assignment.
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">Extraordinary Limiting Conditions</div>
+          <div class="section-content">
+            No Extraordinary Limiting Conditions were made for this assignment.
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">Property And Sales History</div>
+
+          <div class="section-label">Current Owner</div>
+          <div class="section-content">
+            The subject property is currently under the ownership of 10210840 Saskatchewan Ltd.
+          </div>
+
+          <div class="section-label">Three-Year Sales History</div>
+          <div class="section-content">
+            Ownership of the subject property has not changed in the past three years. We are unaware of any pending sales or listing activity relating to the subject property.
+          </div>
+
+          <div class="section-label">Exposure & Marketing Time</div>
+          <div class="section-content">
+            An estimate of market value is related to the concept of reasonable exposure time. Exposure time is the property's estimated marketing time, which may be different from exposure time. Exposure time is presumed to precede the effective date of value at a specified price, whereas marketing time commences on any date and precedes exposure at a reasonable price. Marketing time includes research and analysis of appropriate price exposure in advance. In appraisal theory and practice, there is a distinction relating to the perspective between exposure time and marketing time. Exposure time is presumed to occur prior to the effective date of value at a specified price, whereas marketing time commences on any date and precedes acquisition at the current market value. The exposure time assumes that both the buyer and the seller have no undue economic pressures or compulsion to transact a sale at other than market price. The exposure time assumes the following:
+          </div>
+          <ul style="padding-left: 20px; margin-top: 6px; font-size: 10px; line-height: 1.4;">
+            <li>The property was or will be examined. Potential purchasers will inspect the property at will.</li>
+            <li>Both parties are well informed or well advised, and seeking to act in what they consider their best interests.</li>
+            <li>A reasonable time is allowed for exposure in the open market.</li>
+            <li>Payment will be made in terms of cash or in terms of financial arrangements comparable to cash.</li>
+            <li>The price represents the normal consideration for the property sold unaffected by special or creative financing or sales concessions granted by anyone associated with the sale.</li>
+          </ul>
+
+          <div class="section-content" style="margin-top: 10px;">
+            A marketing time estimate is a reasonable amount of time, future occurrence. History should be considered as a guide, but appraisers may not use subjective judgments if statistical analysis techniques are unavailable. Assuming the subject property's physical, legal, economic and market characteristics, which are described further in this report, we have concluded that a reasonable exposure time and reasonable marketing time for the subject property at its present value is not likely to be longer than 12 months. The exposure time and marketing time assumptions are based upon our analysis and conclusions that have been completed for the highest and best use of the subject property at its As Vacant or as if vacant state.
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header" style="background: #003B7E; color: white; padding: 6px 8px; margin-top: 10px;">EXPOSURE & MARKETING TIME</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Conclusion</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Exposure Period Conclusion</td>
+                <td>≤6 Months</td>
+              </tr>
+              <tr>
+                <td>Marketing Time Conclusion</td>
+                <td>≤6 Months</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <span>13</span>
+        <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
       </div>
     </div>
   `;

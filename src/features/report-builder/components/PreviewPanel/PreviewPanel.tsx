@@ -33,7 +33,7 @@ export default function PreviewPanel() {
   const { toast } = useToast();
 
   const minZoom = 0.1;
-  const maxZoom = 1.5;
+  const maxZoom = 1.0; // 100% - no need to zoom beyond actual size
   const zoomStep = 0.025; // 2.5% for smoother hold-to-zoom
   const totalPages = 77;
 

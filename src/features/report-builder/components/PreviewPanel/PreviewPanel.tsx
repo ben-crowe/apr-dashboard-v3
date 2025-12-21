@@ -208,20 +208,29 @@ export default function PreviewPanel() {
     }
   };
 
-  // Page Navigation - simple and clean
-  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const pageNum = parseInt(e.target.value, 10);
-    if (isNaN(pageNum) || pageNum < 1 || pageNum > totalPages) return;
+  // Page Navigation - arrow buttons
+  const goToPage = (pageNum: number) => {
+    if (pageNum < 1 || pageNum > totalPages) return;
 
     setCurrentPage(pageNum);
 
-    // Jump to page instantly (no smooth scroll)
+    // Jump to page instantly
     const iframe = iframeRef.current;
     if (iframe?.contentWindow) {
       const pageHeight = 1056;
       const scrollPosition = (pageNum - 1) * pageHeight;
       iframe.contentWindow.scrollTo(0, scrollPosition);
     }
+  };
+
+  const handleUpArrow = () => {
+    // UP arrow = go backward (decrease page number)
+    goToPage(currentPage - 1);
+  };
+
+  const handleDownArrow = () => {
+    // DOWN arrow = go forward (increase page number)
+    goToPage(currentPage + 1);
   };
 
   // Show Field IDs toggle
@@ -400,28 +409,45 @@ export default function PreviewPanel() {
           <span style={{ fontSize: '13px', fontWeight: '500' }}>Show Field IDs</span>
         </div>
 
-        {/* Page Navigation - Clean and Simple */}
+        {/* Page Navigation - Arrow Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
-          <span style={{ fontSize: '13px', fontWeight: '500', color: '#9ca3af' }}>Page</span>
-          <input
-            type="number"
-            value={currentPage}
-            onChange={handlePageInputChange}
-            min={1}
-            max={totalPages}
+          <button
+            onClick={handleUpArrow}
+            disabled={currentPage <= 1}
             style={{
-              width: '50px',
-              height: '28px',
-              padding: '4px 8px',
-              fontSize: '13px',
-              borderRadius: '4px',
-              border: '1px solid #9ca3af',
-              textAlign: 'center',
-              backgroundColor: '#e5e7eb',
-              color: '#374151'
+              background: 'none',
+              border: 'none',
+              cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
+              fontSize: '20px',
+              color: currentPage <= 1 ? '#6b7280' : '#ffffff',
+              padding: 0,
+              opacity: currentPage <= 1 ? 0.5 : 1,
+              lineHeight: 1
             }}
-          />
-          <span style={{ fontSize: '13px', fontWeight: '500' }}>of {totalPages}</span>
+            title="Previous page"
+          >
+            ▲
+          </button>
+          <span style={{ fontSize: '13px', fontWeight: '500' }}>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleDownArrow}
+            disabled={currentPage >= totalPages}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
+              fontSize: '20px',
+              color: currentPage >= totalPages ? '#6b7280' : '#ffffff',
+              padding: 0,
+              opacity: currentPage >= totalPages ? 0.5 : 1,
+              lineHeight: 1
+            }}
+            title="Next page"
+          >
+            ▼
+          </button>
         </div>
 
         {/* Dark Mode Toggle */}

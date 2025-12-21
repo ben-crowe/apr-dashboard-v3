@@ -315,22 +315,30 @@ export default function PreviewPanel() {
   const handleUpArrowMouseDown = () => {
     // Hold to scroll backward continuously
     pageIntervalRef.current = setInterval(() => {
-      const currentIndex = pageNumbers.indexOf(currentPage);
-      if (currentIndex > 0) {
-        const newPage = pageNumbers[currentIndex - 1];
-        goToPage(newPage);
-      }
+      setCurrentPage(prevPage => {
+        const currentIndex = pageNumbers.indexOf(prevPage);
+        if (currentIndex > 0) {
+          const newPage = pageNumbers[currentIndex - 1];
+          goToPage(newPage);
+          return newPage;
+        }
+        return prevPage;
+      });
     }, 200);
   };
 
   const handleDownArrowMouseDown = () => {
     // Hold to scroll forward continuously
     pageIntervalRef.current = setInterval(() => {
-      const currentIndex = pageNumbers.indexOf(currentPage);
-      if (currentIndex < pageNumbers.length - 1) {
-        const newPage = pageNumbers[currentIndex + 1];
-        goToPage(newPage);
-      }
+      setCurrentPage(prevPage => {
+        const currentIndex = pageNumbers.indexOf(prevPage);
+        if (currentIndex < pageNumbers.length - 1) {
+          const newPage = pageNumbers[currentIndex + 1];
+          goToPage(newPage);
+          return newPage;
+        }
+        return prevPage;
+      });
     }, 200);
   };
 

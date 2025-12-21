@@ -58,8 +58,9 @@ export default function PreviewPanel() {
       const iframeDoc = iframe.contentDocument;
       if (!iframeDoc) return;
 
-      const pageSheets = iframeDoc.querySelectorAll('.page-sheet[data-page-num]');
+      const pageSheets = iframeDoc.querySelectorAll('.page-sheet');
       const numbers: number[] = [];
+      let unnumberedIndex = 0;
 
       pageSheets.forEach((sheet) => {
         const pageNumAttr = sheet.getAttribute('data-page-num');
@@ -68,15 +69,23 @@ export default function PreviewPanel() {
           const match = pageNumAttr.match(/Page (\d+)/i);
           if (match) {
             numbers.push(parseInt(match[1], 10));
+          } else {
+            // Has data-page-num but no number - treat as unnumbered
+            numbers.push(unnumberedIndex);
+            unnumberedIndex--;
           }
+        } else {
+          // No data-page-num attribute - cover or unnumbered page
+          numbers.push(unnumberedIndex);
+          unnumberedIndex--;
         }
       });
 
       if (numbers.length > 0) {
         setPageNumbers(numbers);
         setTotalPages(numbers.length);
-        // Set current page to first page number (e.g., Page 3)
-        if (currentPage === 1) {
+        // Set current page to first page number
+        if (currentPage === 1 || currentPage === 0) {
           setCurrentPage(numbers[0]);
         }
       }
@@ -531,7 +540,7 @@ export default function PreviewPanel() {
             ▲
           </button>
           <span style={{ fontSize: '13px', fontWeight: '500' }}>
-            Page {currentPage}
+            {currentPage <= 0 ? 'Cover' : `Page ${currentPage}`}
           </span>
           <button
             onClick={handleDownArrowClick}

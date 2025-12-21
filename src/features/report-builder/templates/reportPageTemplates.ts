@@ -1323,39 +1323,189 @@ export function renderPage11(sections: ReportSection[], valueScenarioType: strin
  * Page 12: Introduction & Executive Summary - Photos (Part 2)
  * Fields: intro-photo-7 through intro-photo-12
  */
+/**
+ * Page 12: Introduction & Executive Summary
+ * Fields: property-map, property-identification, legal-description, authorized-client,
+ * authorized-use, effective-date, inspection-date, purpose, hypothetical-condition
+ */
 export function renderPage12(sections: ReportSection[], valueScenarioType: string): string {
   return `
-    <div class="page page-12">
-      <div class="page-header">Introduction & Executive Summary</div>
-      <div class="photos-grid">
-        <div class="photo-item">
-          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-7') || '[PHOTO: Typical Bathroom]'}</div>
-          <div class="photo-caption">1121 - Typical Bathroom</div>
+    <div class="page page-12" style="width: 816px; height: 1056px; padding: 0; background: white; font-family: Arial, sans-serif; font-size: 11px; color: #000; position: relative;">
+      <style>
+        .page-12 { box-sizing: border-box; }
+        .page-12 * { box-sizing: border-box; }
+
+        /* Header */
+        .page-12 .header {
+          padding: 20px 32px;
+          border-bottom: 2px solid #003B7E;
+          background: white;
+        }
+        .page-12 .header-title {
+          font-size: 14px;
+          font-weight: bold;
+          color: #003B7E;
+          margin: 0;
+        }
+
+        /* Main Content Area */
+        .page-12 .content {
+          display: flex;
+          height: calc(1056px - 100px); /* Leave 100px for header+footer */
+          padding: 24px 32px 40px 32px;
+        }
+
+        /* Left Column - Map */
+        .page-12 .left-column {
+          width: 320px;
+          padding-right: 20px;
+        }
+        .page-12 .map-container {
+          width: 100%;
+          height: 400px;
+          border: 1px solid #ccc;
+          background: #f5f5f5;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .page-12 .map-placeholder {
+          font-size: 10px;
+          color: #666;
+        }
+
+        /* Right Column - Content */
+        .page-12 .right-column {
+          flex: 1;
+        }
+
+        /* Section Styling */
+        .page-12 .section {
+          margin-bottom: 16px;
+        }
+        .page-12 .section-header {
+          font-size: 10px;
+          font-weight: bold;
+          color: #000;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          margin-bottom: 6px;
+          padding-bottom: 2px;
+          border-bottom: 1px solid #003B7E;
+        }
+        .page-12 .section-content {
+          font-size: 10px;
+          line-height: 1.4;
+          color: #000;
+        }
+        .page-12 .section-label {
+          font-weight: bold;
+          margin-top: 6px;
+        }
+
+        /* Footer */
+        .page-12 .footer {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 40px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 32px;
+          border-top: 1px solid #003B7E;
+          background: white;
+          font-size: 9px;
+          color: #666;
+        }
+      </style>
+
+      <!-- Header -->
+      <div class="header">
+        <h1 class="header-title">Introduction & Executive Summary</h1>
+      </div>
+
+      <!-- Main Content -->
+      <div class="content">
+        <!-- Left Column: Map -->
+        <div class="left-column">
+          <div class="map-container">
+            <div class="map-placeholder">[Property Location Map]</div>
+          </div>
         </div>
-        <div class="photo-item">
-          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-8') || '[PHOTO: Typical Kitchen]'}</div>
-          <div class="photo-caption">1121 - Typical Kitchen</div>
-        </div>
-        <div class="photo-item">
-          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-9') || '[PHOTO: Typical Bedroom]'}</div>
-          <div class="photo-caption">1121 - Typical Bedroom</div>
-        </div>
-        <div class="photo-item">
-          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-10') || '[PHOTO: Laundry Room]'}</div>
-          <div class="photo-caption">1121 - Laundry Room</div>
-        </div>
-        <div class="photo-item">
-          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-11') || '[PHOTO: Electrical Room]'}</div>
-          <div class="photo-caption">1121 - Electrical Room</div>
-        </div>
-        <div class="photo-item">
-          <div class="photo-placeholder">${getImageUrl(sections, 'intro-photo-12') || '[PHOTO: Typical Boiler]'}</div>
-          <div class="photo-caption">1121 - Typical Boiler</div>
+
+        <!-- Right Column: Sections -->
+        <div class="right-column">
+          <div class="section">
+            <div class="section-header">Identification of Assignment</div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">Property Identification</div>
+            <div class="section-content">
+              The subject property is located at ${getFieldValue(sections, 'property-address-line1') || '1101, 1103, 1105, 1107, 1109, 1111, 1113, 1115, 1117, 1119 & 1121, 100 St, North Battleford, SK'}, is a multi-family, walkup property with improvements located in North Battleford.
+            </div>
+            <div class="section-content" style="margin-top: 6px;">
+              The improvements are comprised of 5 four-plex buildings, and consist of 10,250 square feet of net rentable area (NRA). The site area is 3.065 acres (133,508 square feet) and the land is approximately 100,425 square feet with a 2-storey, garden style format.
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">Legal Description</div>
+            <div class="section-content">
+              Plan : C4620; Block : 95; Lot : 17-18, 19, 20
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">Authorized Client Identification</div>
+            <div class="section-content">
+              The authorized client of this specific assignment is 10210840 Saskatchewan Ltd.
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">Authorized Use & Authorized Users</div>
+            <div class="section-content">
+              The authorized use of this report is for the mortgage financing purposes. 10210840 Saskatchewan Ltd. is the only authorized user of this report.
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">Effective Date of Value and Report Date</div>
+            <div class="section-content">
+              The effective date of value of this appraisal is October 17, 2025. The report date is November 25, 2025.
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">Inspection Date</div>
+            <div class="section-content">
+              October 17, 2025
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">Purpose</div>
+            <div class="section-content">
+              The purpose of this assignment is to provide the As-Stabilized value as of the time of inspection represents the existing requirements assuming stabilized occupancy as of the re-inspection date for the property located at 1101, 1103, 1105, 1107, 1109, 1111, 1113, 1115, 1117, 1119 & 1121, 100 St, North Battleford, SK, Canada VALCR012 - 1
+            </div>
+          </div>
+
+          <div class="section">
+            <div class="section-label">Hypothetical Condition</div>
+            <div class="section-content">
+              The value of hypothetical condition(s) may have impacted the results of the assignment. The As-Stabilized value at the time developed based on the assumption that the property has recently undergone or is about to undergo a transition to its stabilized occupancy level and achieves a market stabilized net operating income following a reasonable absorption period, regardless of actual current occupancy level. There are no deductions are made for holding costs, rent loss or lease-up expenses. In addition to (1) income that would reasonably be expected over the short term, so that rents currently being charged...
+            </div>
+          </div>
         </div>
       </div>
-      <div class="page-footer">
-        <span>7</span>
-        <span>\${getFieldValue(sections, 'property-address-line1')}, \${getFieldValue(sections, 'property-address-line2')} | File \${getFieldValue(sections, 'file-number')}</span>
+
+      <!-- Footer -->
+      <div class="footer">
+        <span>12</span>
+        <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
       </div>
     </div>
   `;

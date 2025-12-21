@@ -5,10 +5,11 @@ interface PreviewRendererProps {
   html: string;
   zoom?: number;
   onZoomChange?: (newZoom: number) => void;
+  onPageChange?: (pageNum: number) => void;
 }
 
 const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
-  ({ html, zoom = 1, onZoomChange }, ref) => {
+  ({ html, zoom = 1, onZoomChange, onPageChange }, ref) => {
     const activeSection = useReportBuilderStore((state) => state.activeSection);
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -37,6 +38,52 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
         }
       }
     }, [html]);
+
+    // Track which page is visible when scrolling
+    useEffect(() => {
+      const container = containerRef.current;
+      const iframe = iframeRef.current;
+      if (!container || !iframe?.contentDocument || !onPageChange) return;
+
+      const handleScroll = () => {
+        const iframeDoc = iframe.contentDocument;
+        if (!iframeDoc) return;
+
+        const pageSheets = iframeDoc.querySelectorAll('.page-sheet');
+        const containerRect = container.getBoundingClientRect();
+        const containerCenter = containerRect.top + containerRect.height / 2;
+
+        let closestPage = null;
+        let closestDistance = Infinity;
+
+        pageSheets.forEach((sheet, index) => {
+          const pageRect = sheet.getBoundingClientRect();
+          const pageCenter = pageRect.top + pageRect.height / 2;
+          const distance = Math.abs(pageCenter - containerCenter);
+
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestPage = sheet;
+          }
+        });
+
+        if (closestPage) {
+          const pageNumAttr = closestPage.getAttribute('data-page-num');
+          if (pageNumAttr) {
+            const match = pageNumAttr.match(/Page (\d+)/i);
+            if (match) {
+              onPageChange(parseInt(match[1], 10));
+            }
+          } else {
+            // No page number - cover page
+            onPageChange(0);
+          }
+        }
+      };
+
+      container.addEventListener('scroll', handleScroll);
+      return () => container.removeEventListener('scroll', handleScroll);
+    }, [html, onPageChange]);
 
     // Scroll to active section when it changes
     useEffect(() => {

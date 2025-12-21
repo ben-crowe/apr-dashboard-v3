@@ -97,46 +97,12 @@ export default function PreviewPanel() {
     return () => clearTimeout(timer);
   }, [previewHtml]);
 
-  // Scroll tracking - find which page is currently visible
-  useEffect(() => {
-    const iframe = iframeRef.current;
-    if (!iframe?.contentWindow || pageNumbers.length === 0) return;
-
-    const handleScroll = () => {
-      const iframeWindow = iframe.contentWindow;
-      const iframeDoc = iframe.contentDocument;
-      if (!iframeWindow || !iframeDoc) return;
-
-      const scrollTop = iframeWindow.scrollY || 0;
-      const viewportHeight = iframeWindow.innerHeight;
-      const pageSheets = iframeDoc.querySelectorAll('.page-sheet[data-page-num]');
-
-      // Find the page that's most visible in viewport
-      let mostVisiblePage = currentPage;
-      let maxVisibility = 0;
-
-      pageSheets.forEach((sheet, index) => {
-        const rect = sheet.getBoundingClientRect();
-        const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
-
-        if (visibleHeight > maxVisibility) {
-          maxVisibility = visibleHeight;
-          mostVisiblePage = pageNumbers[index];
-        }
-      });
-
-      if (mostVisiblePage !== currentPage) {
-        setCurrentPage(mostVisiblePage);
-      }
-    };
-
-    const iframeWindow = iframe.contentWindow;
-    iframeWindow?.addEventListener('scroll', handleScroll);
-
-    return () => {
-      iframeWindow?.removeEventListener('scroll', handleScroll);
-    };
-  }, [pageNumbers, currentPage, previewHtml]);
+  // Handle page change from scroll tracking in PreviewRenderer
+  const handlePageChangeFromScroll = (pageNum: number) => {
+    if (pageNum !== currentPage) {
+      setCurrentPage(pageNum);
+    }
+  };
 
   // Hide built-in controls from template (we use React controls instead)
   useEffect(() => {
@@ -588,6 +554,7 @@ export default function PreviewPanel() {
             html={previewHtml}
             zoom={zoom}
             onZoomChange={setZoom}
+            onPageChange={handlePageChangeFromScroll}
             ref={iframeRef}
           />
         ) : (

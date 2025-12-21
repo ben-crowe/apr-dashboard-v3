@@ -1685,63 +1685,493 @@ export function renderPage13(sections: ReportSection[], valueScenarioType: strin
 }
 
 /**
- * Page 14: Introduction & Executive Summary - Maps (Street Level)
- * Fields: intro-map-street
+ * Page 14: Introduction & Executive Summary (Continued)
+ * Fields: market-value-definition, property-rights, current-value, scope-of-work, sources-of-information
  */
 export function renderPage14(sections: ReportSection[], valueScenarioType: string): string {
   return `
-    <div class="page page-14">
-      <div class="page-header">Introduction & Executive Summary</div>
-      <div class="map-container">
-        <div class="map-placeholder">${getImageUrl(sections, 'intro-map-street') || '[MAP: Street Level View]'}</div>
-        <div class="map-caption">Street Level Map</div>
+    <div class="page page-14" style="width: 816px; height: 1056px; padding: 0; background: white; font-family: Arial, sans-serif; font-size: 11px; color: #000; position: relative;">
+      <style>
+        .page-14 { box-sizing: border-box; }
+        .page-14 * { box-sizing: border-box; }
+
+        /* Header */
+        .page-14 .header {
+          padding: 20px 32px;
+          border-bottom: 2px solid #003B7E;
+          background: white;
+        }
+        .page-14 .header-title {
+          font-size: 14px;
+          font-weight: bold;
+          color: #003B7E;
+          margin: 0;
+        }
+
+        /* Main Content */
+        .page-14 .content {
+          padding: 24px 32px 50px 32px;
+          height: calc(1056px - 100px);
+          overflow: hidden;
+        }
+
+        /* Sections */
+        .page-14 .section {
+          margin-bottom: 14px;
+        }
+        .page-14 .section-header {
+          font-size: 10px;
+          font-weight: bold;
+          color: #000;
+          margin-bottom: 6px;
+        }
+        .page-14 .section-content {
+          font-size: 10px;
+          line-height: 1.4;
+          color: #000;
+        }
+        .page-14 .section-label {
+          font-weight: bold;
+          margin-top: 8px;
+          font-size: 10px;
+        }
+
+        /* Lists */
+        .page-14 ul {
+          padding-left: 20px;
+          margin: 6px 0;
+          font-size: 10px;
+          line-height: 1.4;
+        }
+
+        /* Footer */
+        .page-14 .footer {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 40px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 32px;
+          border-top: 1px solid #003B7E;
+          background: white;
+          font-size: 9px;
+          color: #666;
+        }
+      </style>
+
+      <!-- Header -->
+      <div class="header">
+        <h1 class="header-title">Introduction & Executive Summary</h1>
       </div>
-      <div class="page-footer">
-        <span>9</span>
-        <span>\${getFieldValue(sections, 'property-address-line1')}, \${getFieldValue(sections, 'property-address-line2')} | File \${getFieldValue(sections, 'file-number')}</span>
+
+      <!-- Main Content -->
+      <div class="content">
+        <div class="section">
+          <div class="section-header">Definition of Market Value</div>
+          <div class="section-content">
+            This appraisal is being prepared in conformance with the Canadian Uniform Standards of Professional Appraisal Practice (CUSPAP), market value is defined as:
+          </div>
+          <div class="section-content" style="margin-top: 6px;">
+            "The most probable price, as of a specified date, in cash, or in terms equivalent to cash, or in other precisely revealed terms, for which the specified property rights should sell after reasonable exposure in a competitive market under all conditions requisite to a fair sale, with the buyer and the seller each acting prudently, knowledgeably, and for self-interest, and assuming that neither is under undue duress."
+          </div>
+          <div class="section-content" style="margin-top: 6px;">
+            Implicit in this definition are the consummation of a sale as of a specified date and the passing of title from seller to buyer under conditions whereby:
+          </div>
+          <ul>
+            <li>Buyer and seller are typically motivated.</li>
+            <li>Both parties are well informed or well advised, and acting in what they consider their best interests.</li>
+            <li>A reasonable time is allowed for exposure in the open market.</li>
+            <li>Payment is made in terms of cash in Canadian dollars or in terms of financial arrangements comparable thereto.</li>
+            <li>The price represents the normal consideration for the property sold unaffected by special or creative financing or sales concessions granted by anyone associated with the sale.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <div class="section-header">Property Rights Appraised</div>
+
+          <div class="section-label">Fee Simple Interest</div>
+          <div class="section-content">
+            Absolute ownership unencumbered by any other interest or estate, subject only to the limitations imposed by the governmental powers of taxation, expropriation, police power and escheat. The subject marketability profile is the implied value of the fee simple interest, as residential leasehold interests are typically short-term in nature and do not materially long-term encumbrances or the estate that would give rise to any hypothetical condition.
+          </div>
+
+          <div class="section-label">Leased Fee Interest</div>
+          <div class="section-content">
+            Leased fee interests include rights to rent and the reversionary interest in the real property. Leasehold interests are the lessees' interest in using and occupying property. The value of market rent or the market rent value of income that would give rise to any difference from the value of the lessee interest or the lessees' interest in the estate that would give rise to any hypothetical condition.
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">Current Value</div>
+          <div class="section-content">
+            Current Value should be interpreted as either the "market value" or "fair market value," or "value which could be reasonably expected from the sale of inspection or at some other date after a change or combination of any other changes.
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">Scope of Work</div>
+          <div class="section-content">
+            The scope of work for this appraised assignment is outlined below:
+          </div>
+          <ul>
+            <li>The appraisal analyzed legal and physical features of the subject including the size, improvements, site, location, and legal description.</li>
+            <li>The appraisal analyzed occupancy and market conditions.</li>
+            <li>Discussions with market participants were limited to informal inquiries and published sources.</li>
+            <li>This appraisal was completed in conformity with the Uniform Standard Appraisal Practices and Reporting Standard as published by the Appraisal Institute of Canada. A summary of selected published professional appraisal standards is summarized in narrative form with supporting detail in the work file.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <div class="section-header">Assistance Provided</div>
+          <div class="section-content">
+            Paul Larson of Knight Home Inspections Ltd., a member of Alberta Professional Home Inspectors Society provided real property appraisal assistance for the appraisers during the certification. Assistance provided by Knight Home Inspections related to identifying issues and developing remediation recommendations in assistance with real property inspection.
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">Sources of Information</div>
+          <div class="section-content">
+            The following sources were contacted to obtain required information:
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <span>14</span>
+        <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
       </div>
     </div>
   `;
 }
 
 /**
- * Page 15: Introduction & Executive Summary - Maps (Localized)
- * Fields: intro-map-local
+ * Page 15: Introduction & Executive Summary (Continued)
+ * Fields: sources-info-table, subject-inspection, personal-property
  */
 export function renderPage15(sections: ReportSection[], valueScenarioType: string): string {
   return `
-    <div class="page page-15">
-      <div class="page-header">Introduction & Executive Summary</div>
-      <div class="map-container">
-        <div class="map-placeholder">${getImageUrl(sections, 'intro-map-local') || '[MAP: Localized Area View]'}</div>
-        <div class="map-caption">Localized Area Map</div>
+    <div class="page page-15" style="width: 816px; height: 1056px; padding: 0; background: white; font-family: Arial, sans-serif; font-size: 11px; color: #000; position: relative;">
+      <style>
+        .page-15 { box-sizing: border-box; }
+        .page-15 * { box-sizing: border-box; }
+
+        /* Header */
+        .page-15 .header {
+          padding: 20px 32px;
+          border-bottom: 2px solid #003B7E;
+          background: white;
+        }
+        .page-15 .header-title {
+          font-size: 14px;
+          font-weight: bold;
+          color: #003B7E;
+          margin: 0;
+        }
+
+        /* Main Content */
+        .page-15 .content {
+          padding: 24px 32px 50px 32px;
+          height: calc(1056px - 100px);
+          overflow: hidden;
+        }
+
+        /* Table */
+        .page-15 table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 10px 0;
+          font-size: 9px;
+        }
+        .page-15 table th {
+          background: #003B7E;
+          color: white;
+          padding: 6px 8px;
+          text-align: left;
+          font-weight: bold;
+          font-size: 9px;
+        }
+        .page-15 table td {
+          padding: 6px 8px;
+          border: 1px solid #ddd;
+        }
+
+        /* Sections */
+        .page-15 .section {
+          margin-bottom: 14px;
+        }
+        .page-15 .section-header {
+          font-size: 10px;
+          font-weight: bold;
+          color: #000;
+          margin-bottom: 6px;
+        }
+        .page-15 .section-content {
+          font-size: 10px;
+          line-height: 1.4;
+          color: #000;
+        }
+
+        /* Footer */
+        .page-15 .footer {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 40px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 32px;
+          border-top: 1px solid #003B7E;
+          background: white;
+          font-size: 9px;
+          color: #666;
+        }
+      </style>
+
+      <!-- Header -->
+      <div class="header">
+        <h1 class="header-title">Introduction & Executive Summary</h1>
       </div>
-      <div class="page-footer">
-        <span>10</span>
-        <span>\${getFieldValue(sections, 'property-address-line1')}, \${getFieldValue(sections, 'property-address-line2')} | File \${getFieldValue(sections, 'file-number')}</span>
+
+      <!-- Main Content -->
+      <div class="content">
+        <div class="section">
+          <div class="section-header" style="background: #003B7E; color: white; padding: 6px 8px; margin-bottom: 0;">INFORMATION PROVIDED</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Information Type</th>
+                <th>Source</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Rezoning & Land Use Planning</td>
+                <td>City of North Battleford Zoning</td>
+              </tr>
+              <tr>
+                <td>Site Size</td>
+                <td>Client</td>
+              </tr>
+              <tr>
+                <td>Assessed Value Info</td>
+                <td>SASK</td>
+              </tr>
+              <tr>
+                <td>Comparable Information</td>
+                <td>CoStar / Confirmed by Local Agents</td>
+              </tr>
+              <tr>
+                <td>Land Reservation</td>
+                <td>Client</td>
+              </tr>
+              <tr>
+                <td>Environmental</td>
+                <td>Client</td>
+              </tr>
+              <tr>
+                <td>Title</td>
+                <td>Not Provided</td>
+              </tr>
+              <tr>
+                <td>Private Environmental Report</td>
+                <td>Not Provided</td>
+              </tr>
+              <tr>
+                <td>Flood Documents</td>
+                <td>Not Provided</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <div class="section-content">
+            The loss of the unavailable items could be... (text cut off) As part of the general assumptions and limiting conditions, the appraiser assumes that there are no adverse easements, significant items of deferred maintenance, or to be impacted by adverse environmental conditions.
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">Subject Property Inspection</div>
+          <div class="section-content">
+            In assisting our client we endeavoured to value the appraiser a conducted site-by-appraisal practice the appraiser conducting the assignment should have the knowledge and experience to complete the assignment competently.
+          </div>
+          <div class="section-content" style="margin-top: 6px;">
+            The following work was not carried out nor called for outside assistance with respect to analyzing the work:
+          </div>
+          <div class="section-content" style="margin-top: 6px;">
+            The author of this report has the knowledge and experience to complete this assignment competently, according to legal and physical requirements provided. The following work was not carried out nor called for outside assistance, engineering review or building inspection.
+          </div>
+          <div class="section-content" style="margin-top: 6px;">
+            Government records, building condition assessments, and title examined to be examined by law. The appraisal nor are assummed to be current, and nor are no adverse easements or other conditions, restrictions, municipal spacies.
+          </div>
+          <div class="section-content" style="margin-top: 6px;">
+            No verification of building permits, ongoing compliance, or outstanding work orders.
+          </div>
+          <div class="section-content" style="margin-top: 6px;">
+            Discussions with market participants were limited to informal inquiries and published sources.
+          </div>
+          <div class="section-content" style="margin-top: 6px;">
+            This appraisal was completed in conformity with the Reporting Standard published by the Appraisal Institute of Canada. A summary of a selected published in a narrative form with supporting detail in the work file.
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">Personal Property & Business Intangible</div>
+          <div class="section-content">
+            There is no personal property (PPE) included in the valuation. There is no any business of intangible value included in the value conclusion reported herein.
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <span>15</span>
+        <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
       </div>
     </div>
   `;
 }
 
 /**
- * Page 16: Introduction & Executive Summary - Maps (Regional)
- * Fields: intro-map-regional
+ * Page 16: Introduction & Executive Summary (Continued)
+ * Fields: property-inspection-table, personal-property
  */
 export function renderPage16(sections: ReportSection[], valueScenarioType: string): string {
   return `
-    <div class="page page-16">
-      <div class="page-title">Introduction & Executive Summary</div>
-      <div class="map-container">
-        <div class="image-placeholder">
-          ${getImageUrl(sections, 'intro-map-regional') || '[MAP: Regional location map showing subject property marked in central circle with nearby highways, municipalities, towns, and provincial geography with roads and water features]'}
+    <div class="page page-16" style="width: 816px; height: 1056px; padding: 0; background: white; font-family: Arial, sans-serif; font-size: 11px; color: #000; position: relative;">
+      <style>
+        .page-16 { box-sizing: border-box; }
+        .page-16 * { box-sizing: border-box; }
+
+        /* Header */
+        .page-16 .header {
+          padding: 20px 32px;
+          border-bottom: 2px solid #003B7E;
+          background: white;
+        }
+        .page-16 .header-title {
+          font-size: 14px;
+          font-weight: bold;
+          color: #003B7E;
+          margin: 0;
+        }
+
+        /* Main Content */
+        .page-16 .content {
+          padding: 24px 32px 50px 32px;
+          height: calc(1056px - 100px);
+          overflow: hidden;
+        }
+
+        /* Table */
+        .page-16 table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 10px 0;
+          font-size: 9px;
+        }
+        .page-16 table th {
+          background: #003B7E;
+          color: white;
+          padding: 6px 8px;
+          text-align: left;
+          font-weight: bold;
+          font-size: 9px;
+        }
+        .page-16 table td {
+          padding: 6px 8px;
+          border: 1px solid #ddd;
+        }
+
+        /* Sections */
+        .page-16 .section {
+          margin-bottom: 14px;
+        }
+        .page-16 .section-header {
+          font-size: 10px;
+          font-weight: bold;
+          color: #000;
+          margin-bottom: 6px;
+        }
+        .page-16 .section-content {
+          font-size: 10px;
+          line-height: 1.4;
+          color: #000;
+        }
+
+        /* Footer */
+        .page-16 .footer {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 40px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 32px;
+          border-top: 1px solid #003B7E;
+          background: white;
+          font-size: 9px;
+          color: #666;
+        }
+      </style>
+
+      <!-- Header -->
+      <div class="header">
+        <h1 class="header-title">Introduction & Executive Summary</h1>
+      </div>
+
+      <!-- Main Content -->
+      <div class="content">
+        <div class="section">
+          <div class="section-header">Subject Property Inspection</div>
+          <div class="section-content">
+            (Continued from previous page...)
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header" style="background: #003B7E; color: white; padding: 6px 8px; margin-bottom: 0;">PROPERTY INSPECTION</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Address</th>
+                <th>Inspection Date</th>
+                <th>Inspection Type</th>
+                <th>Primary Appraiser</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1101, 1103, 1105</td>
+                <td>100 St, North Battleford, SK</td>
+                <td>October 17, 2025</td>
+                <td>Full Exterior & Interior</td>
+                <td>Ben Crowe</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <div class="section-header">Personal Property & Business Intangible</div>
+          <div class="section-content">
+            There is no personal property (PPE) included in the valuation. There is no any business of intangible value included in the value conclusion reported herein.
+          </div>
         </div>
       </div>
-      <div class="footer-section">
-        <div class="address-info">
-          <span class="page-number">11</span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}
-        </div>
-        <div class="accent-bar"></div>
+
+      <!-- Footer -->
+      <div class="footer">
+        <span>16</span>
+        <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
       </div>
     </div>
   `;

@@ -30,6 +30,7 @@ export default function PreviewPanel() {
   const [currentPage, setCurrentPage] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const zoomIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const pageIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
 
   const minZoom = 0.1;
@@ -208,7 +209,7 @@ export default function PreviewPanel() {
     }
   };
 
-  // Page Navigation - arrow buttons
+  // Page Navigation - arrow buttons with hold-to-scroll
   const goToPage = (pageNum: number) => {
     if (pageNum < 1 || pageNum > totalPages) return;
 
@@ -223,14 +224,47 @@ export default function PreviewPanel() {
     }
   };
 
-  const handleUpArrow = () => {
-    // UP arrow = go backward (decrease page number)
-    goToPage(currentPage - 1);
+  const handleUpArrowClick = () => {
+    // Single click - go back one page
+    if (currentPage > 1) {
+      goToPage(currentPage - 1);
+    }
   };
 
-  const handleDownArrow = () => {
-    // DOWN arrow = go forward (increase page number)
-    goToPage(currentPage + 1);
+  const handleDownArrowClick = () => {
+    // Single click - go forward one page
+    if (currentPage < totalPages) {
+      goToPage(currentPage + 1);
+    }
+  };
+
+  const handleUpArrowMouseDown = () => {
+    // Hold to scroll backward continuously
+    pageIntervalRef.current = setInterval(() => {
+      setCurrentPage(p => {
+        const newPage = Math.max(1, p - 1);
+        goToPage(newPage);
+        return newPage;
+      });
+    }, 200);
+  };
+
+  const handleDownArrowMouseDown = () => {
+    // Hold to scroll forward continuously
+    pageIntervalRef.current = setInterval(() => {
+      setCurrentPage(p => {
+        const newPage = Math.min(totalPages, p + 1);
+        goToPage(newPage);
+        return newPage;
+      });
+    }, 200);
+  };
+
+  const handlePageMouseUp = () => {
+    if (pageIntervalRef.current) {
+      clearInterval(pageIntervalRef.current);
+      pageIntervalRef.current = null;
+    }
   };
 
   // Show Field IDs toggle
@@ -412,7 +446,10 @@ export default function PreviewPanel() {
         {/* Page Navigation - Arrow Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
           <button
-            onClick={handleUpArrow}
+            onClick={handleUpArrowClick}
+            onMouseDown={handleUpArrowMouseDown}
+            onMouseUp={handlePageMouseUp}
+            onMouseLeave={handlePageMouseUp}
             disabled={currentPage <= 1}
             style={{
               background: 'none',
@@ -424,7 +461,7 @@ export default function PreviewPanel() {
               opacity: currentPage <= 1 ? 0.5 : 1,
               lineHeight: 1
             }}
-            title="Previous page"
+            title="Previous page (hold to scroll)"
           >
             ▲
           </button>
@@ -432,7 +469,10 @@ export default function PreviewPanel() {
             Page {currentPage} of {totalPages}
           </span>
           <button
-            onClick={handleDownArrow}
+            onClick={handleDownArrowClick}
+            onMouseDown={handleDownArrowMouseDown}
+            onMouseUp={handlePageMouseUp}
+            onMouseLeave={handlePageMouseUp}
             disabled={currentPage >= totalPages}
             style={{
               background: 'none',
@@ -444,7 +484,7 @@ export default function PreviewPanel() {
               opacity: currentPage >= totalPages ? 0.5 : 1,
               lineHeight: 1
             }}
-            title="Next page"
+            title="Next page (hold to scroll)"
           >
             ▼
           </button>

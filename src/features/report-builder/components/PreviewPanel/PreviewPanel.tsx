@@ -27,13 +27,15 @@ export default function PreviewPanel() {
   const [showPdfDialog, setShowPdfDialog] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [showFieldIds, setShowFieldIds] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const zoomIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
 
   const minZoom = 0.1;
   const maxZoom = 1.5;
-  const zoomStep = 0.05; // 5% for smoother hold-to-zoom
+  const zoomStep = 0.025; // 2.5% for smoother hold-to-zoom
+  const totalPages = 77;
 
   // DEBUG: Expose HTML on window for automated extraction
   useEffect(() => {
@@ -41,6 +43,33 @@ export default function PreviewPanel() {
       (window as any).__PREVIEW_HTML__ = previewHtml;
     }
   }, [previewHtml]);
+
+  // Track scroll position to update current page indicator
+  useEffect(() => {
+    if (!iframeRef.current?.contentDocument) return;
+
+    const iframeDoc = iframeRef.current.contentDocument;
+    const iframeWindow = iframeRef.current.contentWindow;
+
+    const handleScroll = () => {
+      if (!iframeWindow) return;
+
+      const scrollTop = iframeWindow.scrollY || iframeDoc.documentElement.scrollTop;
+      const pageHeight = 1056; // Height of each page in pixels
+      const currentPageNumber = Math.floor(scrollTop / pageHeight) + 1;
+
+      // Only update if page actually changed (avoid unnecessary re-renders)
+      if (currentPageNumber !== currentPage && currentPageNumber >= 1 && currentPageNumber <= totalPages) {
+        setCurrentPage(currentPageNumber);
+      }
+    };
+
+    iframeWindow?.addEventListener('scroll', handleScroll);
+
+    return () => {
+      iframeWindow?.removeEventListener('scroll', handleScroll);
+    };
+  }, [currentPage, totalPages]);
 
   // Hide built-in controls from template (we use React controls instead)
   useEffect(() => {
@@ -180,6 +209,42 @@ export default function PreviewPanel() {
     }
   };
 
+  // Page Navigation handlers
+  const scrollToPage = (pageNumber: number) => {
+    if (iframeRef.current?.contentDocument) {
+      const iframeDoc = iframeRef.current.contentDocument;
+      const pageElement = iframeDoc.querySelector(`.page-sheet:nth-child(${pageNumber})`);
+      if (pageElement) {
+        pageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    const validPage = Math.max(1, Math.min(totalPages, newPage));
+    setCurrentPage(validPage);
+    scrollToPage(validPage);
+  };
+
+  const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
+    if (!isNaN(value)) {
+      handlePageChange(value);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      handlePageChange(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      handlePageChange(currentPage + 1);
+    }
+  };
+
   // Show Field IDs toggle
   const handleShowFieldIdsToggle = () => {
     const newShowFieldIds = !showFieldIds;
@@ -269,26 +334,20 @@ export default function PreviewPanel() {
       }}>
         {/* Zoom Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '13px', fontWeight: '500' }}>Zoom:</span>
           <button
-            onClick={() => setZoom(z => Math.max(minZoom, z - 0.1))}
+            onClick={() => setZoom(z => Math.max(minZoom, z - 0.025))}
             onMouseDown={handleZoomOutMouseDown}
             onMouseUp={handleZoomMouseUp}
             onMouseLeave={handleZoomMouseUp}
             disabled={zoom <= minZoom}
             style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.15)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              borderRadius: '4px',
-              width: '28px',
-              height: '28px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              background: 'none',
+              border: 'none',
               cursor: 'pointer',
-              fontSize: '16px',
+              fontSize: '18px',
               fontWeight: 'bold',
-              color: '#ffffff'
+              color: '#ffffff',
+              padding: 0
             }}
           >
             −
@@ -297,24 +356,19 @@ export default function PreviewPanel() {
             {Math.round(zoom * 100)}%
           </span>
           <button
-            onClick={() => setZoom(z => Math.min(maxZoom, z + 0.1))}
+            onClick={() => setZoom(z => Math.min(maxZoom, z + 0.025))}
             onMouseDown={handleZoomInMouseDown}
             onMouseUp={handleZoomMouseUp}
             onMouseLeave={handleZoomMouseUp}
             disabled={zoom >= maxZoom}
             style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.15)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              borderRadius: '4px',
-              width: '28px',
-              height: '28px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              background: 'none',
+              border: 'none',
               cursor: 'pointer',
-              fontSize: '16px',
+              fontSize: '18px',
               fontWeight: 'bold',
-              color: '#ffffff'
+              color: '#ffffff',
+              padding: 0
             }}
           >
             +
@@ -369,11 +423,29 @@ export default function PreviewPanel() {
 
         {/* Page Navigation */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
+          <button
+            onClick={handlePreviousPage}
+            disabled={currentPage <= 1}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              color: currentPage <= 1 ? '#6b7280' : '#ffffff',
+              padding: 0,
+              opacity: currentPage <= 1 ? 0.5 : 1
+            }}
+            title="Previous page"
+          >
+            −
+          </button>
           <input
             type="number"
-            value={1}
+            value={currentPage}
+            onChange={handlePageInputChange}
             min={1}
-            max={77}
+            max={totalPages}
             style={{
               width: '50px',
               height: '28px',
@@ -386,7 +458,24 @@ export default function PreviewPanel() {
               color: '#374151'
             }}
           />
-          <span style={{ fontSize: '13px', fontWeight: '500' }}>of 77</span>
+          <span style={{ fontSize: '13px', fontWeight: '500' }}>of {totalPages}</span>
+          <button
+            onClick={handleNextPage}
+            disabled={currentPage >= totalPages}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
+              fontSize: '18px',
+              fontWeight: 'bold',
+              color: currentPage >= totalPages ? '#6b7280' : '#ffffff',
+              padding: 0,
+              opacity: currentPage >= totalPages ? 0.5 : 1
+            }}
+            title="Next page"
+          >
+            +
+          </button>
         </div>
 
         {/* Dark Mode Toggle */}

@@ -44,50 +44,31 @@ export default function PreviewPanel() {
     }
   }, [previewHtml]);
 
-  // Track scroll position to update current page indicator
+  // Simple scroll tracking - updates page number when you scroll manually
   useEffect(() => {
     const iframe = iframeRef.current;
-    if (!iframe) return;
+    if (!iframe?.contentWindow) return;
 
-    // Wait for iframe to be fully loaded before attaching scroll listener
-    const setupScrollTracking = () => {
-      const iframeDoc = iframe.contentDocument;
+    const handleScroll = () => {
       const iframeWindow = iframe.contentWindow;
+      if (!iframeWindow) return;
 
-      if (!iframeDoc || !iframeWindow) return;
+      const scrollTop = iframeWindow.scrollY || 0;
+      const pageHeight = 1056; // 11 inches at 96 DPI
+      const pageNumber = Math.floor(scrollTop / pageHeight) + 1;
 
-      const handleScroll = () => {
-        const scrollTop = iframeWindow.scrollY || iframeDoc.documentElement.scrollTop || iframeDoc.body.scrollTop;
-        const pageHeight = 1056; // Height of each page in pixels (11in at 96 DPI)
-        const newPageNumber = Math.floor(scrollTop / pageHeight) + 1;
-
-        // Update page number if it changed and is valid
-        setCurrentPage(prev => {
-          if (newPageNumber !== prev && newPageNumber >= 1 && newPageNumber <= totalPages) {
-            return newPageNumber;
-          }
-          return prev;
-        });
-      };
-
-      // Attach scroll listener to iframe window
-      iframeWindow.addEventListener('scroll', handleScroll, { passive: true });
-
-      // Initial check
-      handleScroll();
-
-      return () => {
-        iframeWindow.removeEventListener('scroll', handleScroll);
-      };
+      if (pageNumber >= 1 && pageNumber <= totalPages && pageNumber !== currentPage) {
+        setCurrentPage(pageNumber);
+      }
     };
 
-    // Delay setup to ensure iframe content is ready
-    const timeoutId = setTimeout(setupScrollTracking, 100);
+    const iframeWindow = iframe.contentWindow;
+    iframeWindow?.addEventListener('scroll', handleScroll);
 
     return () => {
-      clearTimeout(timeoutId);
+      iframeWindow?.removeEventListener('scroll', handleScroll);
     };
-  }, [previewHtml, totalPages]);
+  }, [totalPages, currentPage, previewHtml]);
 
   // Hide built-in controls from template (we use React controls instead)
   useEffect(() => {
@@ -227,39 +208,19 @@ export default function PreviewPanel() {
     }
   };
 
-  // Page Navigation handlers
-  const scrollToPage = (pageNumber: number) => {
-    if (iframeRef.current?.contentDocument) {
-      const iframeDoc = iframeRef.current.contentDocument;
-      const pageElement = iframeDoc.querySelector(`.page-sheet:nth-child(${pageNumber})`);
-      if (pageElement) {
-        pageElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-  };
-
-  const handlePageChange = (newPage: number) => {
-    const validPage = Math.max(1, Math.min(totalPages, newPage));
-    setCurrentPage(validPage);
-    scrollToPage(validPage);
-  };
-
+  // Page Navigation - simple and clean
   const handlePageInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value)) {
-      handlePageChange(value);
-    }
-  };
+    const pageNum = parseInt(e.target.value, 10);
+    if (isNaN(pageNum) || pageNum < 1 || pageNum > totalPages) return;
 
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      handlePageChange(currentPage - 1);
-    }
-  };
+    setCurrentPage(pageNum);
 
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      handlePageChange(currentPage + 1);
+    // Jump to page instantly (no smooth scroll)
+    const iframe = iframeRef.current;
+    if (iframe?.contentWindow) {
+      const pageHeight = 1056;
+      const scrollPosition = (pageNum - 1) * pageHeight;
+      iframe.contentWindow.scrollTo(0, scrollPosition);
     }
   };
 
@@ -439,25 +400,9 @@ export default function PreviewPanel() {
           <span style={{ fontSize: '13px', fontWeight: '500' }}>Show Field IDs</span>
         </div>
 
-        {/* Page Navigation */}
+        {/* Page Navigation - Clean and Simple */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
-          <button
-            onClick={handlePreviousPage}
-            disabled={currentPage <= 1}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
-              fontSize: '18px',
-              fontWeight: 'bold',
-              color: currentPage <= 1 ? '#6b7280' : '#ffffff',
-              padding: 0,
-              opacity: currentPage <= 1 ? 0.5 : 1
-            }}
-            title="Previous page"
-          >
-            −
-          </button>
+          <span style={{ fontSize: '13px', fontWeight: '500', color: '#9ca3af' }}>Page</span>
           <input
             type="number"
             value={currentPage}
@@ -477,23 +422,6 @@ export default function PreviewPanel() {
             }}
           />
           <span style={{ fontSize: '13px', fontWeight: '500' }}>of {totalPages}</span>
-          <button
-            onClick={handleNextPage}
-            disabled={currentPage >= totalPages}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
-              fontSize: '18px',
-              fontWeight: 'bold',
-              color: currentPage >= totalPages ? '#6b7280' : '#ffffff',
-              padding: 0,
-              opacity: currentPage >= totalPages ? 0.5 : 1
-            }}
-            title="Next page"
-          >
-            +
-          </button>
         </div>
 
         {/* Dark Mode Toggle */}

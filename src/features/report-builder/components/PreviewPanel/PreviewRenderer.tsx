@@ -99,15 +99,63 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
       setIsDragging(false);
     };
 
-    // Pinch-to-zoom on trackpad (Ctrl + wheel)
-    const handleWheel = (e: React.WheelEvent) => {
-      if (e.ctrlKey && onZoomChange) {
+    // Pinch-to-zoom on trackpad - cross-browser support
+    useEffect(() => {
+      const container = containerRef.current;
+      if (!container || !onZoomChange) return;
+
+      const handleWheel = (e: WheelEvent) => {
+        // Chrome/Firefox: Pinch gestures automatically set ctrlKey to true
+        if (e.ctrlKey) {
+          e.preventDefault();
+
+          // deltaY > 0 means pinching in (zoom out)
+          // deltaY < 0 means pinching out (zoom in)
+          const zoomDelta = e.deltaY > 0 ? -0.025 : 0.025;
+          const newZoom = Math.max(minZoom, Math.min(maxZoom, zoom + zoomDelta));
+          onZoomChange(newZoom);
+        }
+      };
+
+      // Safari-specific gesture events (WebKit)
+      let lastScale = 1;
+
+      const handleGestureStart = (e: Event) => {
         e.preventDefault();
-        const delta = e.deltaY < 0 ? 0.025 : -0.025;
-        const newZoom = Math.max(minZoom, Math.min(maxZoom, zoom + delta));
-        onZoomChange(newZoom);
-      }
-    };
+        lastScale = 1;
+      };
+
+      const handleGestureChange = (e: Event) => {
+        e.preventDefault();
+        const gestureEvent = e as any; // GestureEvent is WebKit-specific
+
+        if (gestureEvent.scale && gestureEvent.scale !== lastScale) {
+          const scaleDiff = gestureEvent.scale - lastScale;
+          const zoomDelta = scaleDiff * 0.5; // Adjust sensitivity
+          const newZoom = Math.max(minZoom, Math.min(maxZoom, zoom + zoomDelta));
+          onZoomChange(newZoom);
+          lastScale = gestureEvent.scale;
+        }
+      };
+
+      const handleGestureEnd = (e: Event) => {
+        e.preventDefault();
+        lastScale = 1;
+      };
+
+      // Add event listeners with passive: false to allow preventDefault
+      container.addEventListener('wheel', handleWheel, { passive: false });
+      container.addEventListener('gesturestart', handleGestureStart, { passive: false });
+      container.addEventListener('gesturechange', handleGestureChange, { passive: false });
+      container.addEventListener('gestureend', handleGestureEnd, { passive: false });
+
+      return () => {
+        container.removeEventListener('wheel', handleWheel);
+        container.removeEventListener('gesturestart', handleGestureStart);
+        container.removeEventListener('gesturechange', handleGestureChange);
+        container.removeEventListener('gestureend', handleGestureEnd);
+      };
+    }, [zoom, onZoomChange, minZoom, maxZoom]);
 
     return (
       <div
@@ -122,7 +170,6 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
-        onWheel={handleWheel}
       >
         {/* Inner wrapper with padding and centering - THIS is what gets scaled */}
         <div
@@ -136,7 +183,7 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
         >
           <div
             style={{
-              transform: `scale(${zoom})`,
+              transform: `scale(${zoom * 0.85})`,
               transformOrigin: 'top center',
               transition: 'transform 0.2s ease-in-out',
               pointerEvents: isDragging ? 'none' : 'auto',

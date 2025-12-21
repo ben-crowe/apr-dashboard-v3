@@ -46,30 +46,36 @@ export default function PreviewPanel() {
 
   // Track scroll position to update current page indicator
   useEffect(() => {
-    if (!iframeRef.current?.contentDocument) return;
+    const iframe = iframeRef.current;
+    if (!iframe?.contentDocument || !iframe?.contentWindow) return;
 
-    const iframeDoc = iframeRef.current.contentDocument;
-    const iframeWindow = iframeRef.current.contentWindow;
+    const iframeDoc = iframe.contentDocument;
+    const iframeWindow = iframe.contentWindow;
 
     const handleScroll = () => {
-      if (!iframeWindow) return;
-
       const scrollTop = iframeWindow.scrollY || iframeDoc.documentElement.scrollTop;
       const pageHeight = 1056; // Height of each page in pixels
-      const currentPageNumber = Math.floor(scrollTop / pageHeight) + 1;
+      const newPageNumber = Math.floor(scrollTop / pageHeight) + 1;
 
       // Only update if page actually changed (avoid unnecessary re-renders)
-      if (currentPageNumber !== currentPage && currentPageNumber >= 1 && currentPageNumber <= totalPages) {
-        setCurrentPage(currentPageNumber);
-      }
+      setCurrentPage(prev => {
+        if (newPageNumber !== prev && newPageNumber >= 1 && newPageNumber <= totalPages) {
+          return newPageNumber;
+        }
+        return prev;
+      });
     };
 
-    iframeWindow?.addEventListener('scroll', handleScroll);
+    // Attach scroll listener
+    iframeWindow.addEventListener('scroll', handleScroll, { passive: true });
+
+    // Initial check in case we're already scrolled
+    handleScroll();
 
     return () => {
-      iframeWindow?.removeEventListener('scroll', handleScroll);
+      iframeWindow.removeEventListener('scroll', handleScroll);
     };
-  }, [currentPage, totalPages]);
+  }, [previewHtml, totalPages]); // Re-attach when content changes
 
   // Hide built-in controls from template (we use React controls instead)
   useEffect(() => {
@@ -424,19 +430,19 @@ export default function PreviewPanel() {
         {/* Page Navigation */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
           <button
-            onClick={handlePreviousPage}
-            disabled={currentPage <= 1}
+            onClick={handleNextPage}
+            disabled={currentPage >= totalPages}
             style={{
               background: 'none',
               border: 'none',
-              cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
+              cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
               fontSize: '18px',
               fontWeight: 'bold',
-              color: currentPage <= 1 ? '#6b7280' : '#ffffff',
+              color: currentPage >= totalPages ? '#6b7280' : '#ffffff',
               padding: 0,
-              opacity: currentPage <= 1 ? 0.5 : 1
+              opacity: currentPage >= totalPages ? 0.5 : 1
             }}
-            title="Previous page"
+            title="Next page (scroll down)"
           >
             −
           </button>
@@ -460,19 +466,19 @@ export default function PreviewPanel() {
           />
           <span style={{ fontSize: '13px', fontWeight: '500' }}>of {totalPages}</span>
           <button
-            onClick={handleNextPage}
-            disabled={currentPage >= totalPages}
+            onClick={handlePreviousPage}
+            disabled={currentPage <= 1}
             style={{
               background: 'none',
               border: 'none',
-              cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
+              cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
               fontSize: '18px',
               fontWeight: 'bold',
-              color: currentPage >= totalPages ? '#6b7280' : '#ffffff',
+              color: currentPage <= 1 ? '#6b7280' : '#ffffff',
               padding: 0,
-              opacity: currentPage >= totalPages ? 0.5 : 1
+              opacity: currentPage <= 1 ? 0.5 : 1
             }}
-            title="Next page"
+            title="Previous page (scroll up)"
           >
             +
           </button>

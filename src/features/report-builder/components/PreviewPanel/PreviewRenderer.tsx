@@ -194,7 +194,8 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
               title="Report Preview"
               className="border-0 bg-white shadow-lg"
               style={{
-                width: '8.5in', // Fixed page width
+                width: '100%', // Responsive to container width
+                maxWidth: '8.5in', // Don't exceed actual page width
                 minHeight: '1000in', // Tall enough for 90+ pages (11in each + gaps)
                 height: 'auto', // Expands to fit content
                 display: 'block',

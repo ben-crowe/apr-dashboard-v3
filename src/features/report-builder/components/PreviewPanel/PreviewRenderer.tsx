@@ -39,54 +39,62 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
       }
     }, [html]);
 
-    // Track which page is visible when scrolling - DISABLED for now
-    // TODO: Add debounced scroll tracking
-    /*
+    // Track which page is visible when scrolling - debounced
     useEffect(() => {
       const container = containerRef.current;
       const iframe = iframeRef.current;
       if (!container || !iframe?.contentDocument || !onPageChange) return;
 
+      let scrollTimeout: NodeJS.Timeout;
+
       const handleScroll = () => {
-        const iframeDoc = iframe.contentDocument;
-        if (!iframeDoc) return;
+        // Debounce scroll events - only update after scrolling stops for 150ms
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          const iframeDoc = iframe.contentDocument;
+          if (!iframeDoc) return;
 
-        const pageSheets = iframeDoc.querySelectorAll('.page-sheet');
-        const containerRect = container.getBoundingClientRect();
-        const containerCenter = containerRect.top + containerRect.height / 2;
+          const pageSheets = iframeDoc.querySelectorAll('.page-sheet');
+          const containerRect = container.getBoundingClientRect();
+          const containerCenter = containerRect.top + containerRect.height / 2;
 
-        let closestPage = null;
-        let closestDistance = Infinity;
+          let closestPage = null;
+          let closestDistance = Infinity;
+          let closestIndex = 0;
 
-        pageSheets.forEach((sheet, index) => {
-          const pageRect = sheet.getBoundingClientRect();
-          const pageCenter = pageRect.top + pageRect.height / 2;
-          const distance = Math.abs(pageCenter - containerCenter);
+          pageSheets.forEach((sheet, index) => {
+            const pageRect = sheet.getBoundingClientRect();
+            const pageCenter = pageRect.top + pageRect.height / 2;
+            const distance = Math.abs(pageCenter - containerCenter);
 
-          if (distance < closestDistance) {
-            closestDistance = distance;
-            closestPage = sheet;
-          }
-        });
-
-        if (closestPage) {
-          const pageNumAttr = closestPage.getAttribute('data-page-num');
-          if (pageNumAttr) {
-            const match = pageNumAttr.match(/Page (\d+)/i);
-            if (match) {
-              onPageChange(parseInt(match[1], 10));
+            if (distance < closestDistance) {
+              closestDistance = distance;
+              closestPage = sheet;
+              closestIndex = index;
             }
-          } else {
-            // No page number - cover page
-            onPageChange(0);
+          });
+
+          if (closestPage) {
+            const pageNumAttr = closestPage.getAttribute('data-page-num');
+            if (pageNumAttr) {
+              const match = pageNumAttr.match(/Page (\d+)/i);
+              if (match) {
+                onPageChange(parseInt(match[1], 10));
+              }
+            } else {
+              // No page number - use negative index (0, -1, -2, etc.)
+              onPageChange(-closestIndex);
+            }
           }
-        }
+        }, 150);
       };
 
-      container.addEventListener('scroll', handleScroll);
-      return () => container.removeEventListener('scroll', handleScroll);
+      container.addEventListener('scroll', handleScroll, { passive: true });
+      return () => {
+        clearTimeout(scrollTimeout);
+        container.removeEventListener('scroll', handleScroll);
+      };
     }, [html, onPageChange]);
-    */
 
     // Scroll to active section when it changes
     useEffect(() => {

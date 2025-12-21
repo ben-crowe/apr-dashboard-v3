@@ -480,7 +480,7 @@ export default function PreviewPanel() {
             ▲
           </button>
           <span style={{ fontSize: '13px', fontWeight: '500' }}>
-            {currentPage <= 0 ? 'Cover' : `Page ${currentPage}`}
+            Page {currentPage}
           </span>
           <button
             onClick={handleDownArrowClick}

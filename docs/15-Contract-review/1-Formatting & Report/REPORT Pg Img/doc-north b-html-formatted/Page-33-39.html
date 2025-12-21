@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Appraisal Report - Pages 33-39 (Formatted)</title>
+    <style>
+        /* --- 1. GLOBAL RESET & FONTS --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Open Sans", Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            background-color: #525659; /* Preview Mode Background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
+            color: black;
+        }
+
+        /* --- 2. PAPER SHEET STYLING (TRUE WYSIWYG) --- */
+        .page-sheet {
+            background-color: white;
+            width: 8.5in;
+            height: 11in;
+            padding: 0.75in;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            page-break-after: always;
+        }
+
+        /* --- 3. HEADERS & TYPOGRAPHY --- */
+        .Header1 {
+            font-size: 18pt;
+            color: #003B7E;
+            border-bottom: 1px solid #003B7E;
+            padding-bottom: 5px;
+            margin-bottom: 12px;
+            font-weight: normal;
+        }
+
+        .Header2 {
+            font-size: 12pt;
+            color: #003B7E;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        .Subheader1 {
+            font-size: 11pt;
+            color: #003B7E;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Standard Text */
+        p { margin-bottom: 8pt; text-align: justify; }
+
+        /* Lists */
+        ol, ul { margin-left: 20px; margin-bottom: 10px; }
+        li { margin-bottom: 6px; text-align: justify; line-height: 1.5; }
+
+        /* --- 4. TABLES --- */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 10pt; }
+        td, th { padding: 4px 8px; border: 1px solid #ddd; vertical-align: top; }
+        th { background-color: #f0f0f0; color: #333; font-weight: bold; text-align: left; }
+        .label-col { background-color: #f0f0f0; font-weight: bold; width: 35%; color: #333; }
+        .value-col { width: 65%; }
+        tr:nth-child(even) td { background-color: #f9f9f9; }
+        .numeric-cell { text-align: right; font-family: monospace; }
+        .centered-text { text-align: center; }
+
+        /* Blue table section headers */
+        .table-section-header {
+            background-color: #003B7E;
+            color: white;
+            font-weight: bold;
+            font-size: 10pt;
+            text-transform: uppercase;
+            padding: 6px 8px;
+            text-align: left;
+        }
+
+        /* --- 5. FIELD MAPPING HIGHLIGHTER --- */
+        .field-mapped {
+            background-color: rgba(255, 255, 0, 0.15);
+            border-bottom: 1px dotted #999;
+            cursor: help;
+            font-weight: inherit;
+            display: inline;
+        }
+        .field-mapped:hover::before {
+            content: attr(title);
+            position: absolute;
+            transform: translateY(-100%);
+            background: #333; color: white;
+            padding: 4px 8px; font-size: 8pt;
+            border-radius: 4px; white-space: nowrap;
+            z-index: 1000;
+        }
+
+        /* --- 6. FOOTER STYLING (Pinned to Bottom) --- */
+        .page-footer {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            font-size: 9pt;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .footer-accent {
+            width: 60px;
+            height: 10px;
+            background: linear-gradient(to right, #4a9fd8, #003d7a);
+            border-radius: 2px;
+        }
+        .page-num {
+            color: #003B7E;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        /* --- 7. PRINT SETTINGS --- */
+        @media print {
+            body { background-color: white; padding: 0; display: block; }
+            .page-sheet { width: 100%; margin: 0; box-shadow: none; padding: 0.75in; height: 11in; overflow: hidden; }
+            .field-mapped { background-color: transparent; border: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PAGE 33 (numbered 28) -->
+    <div class="page-sheet" data-page-num="Page 33">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="Header2">Building Description</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>COMPONENT</th>
+                    <th>DESCRIPTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="label-col">Project Amenities</td>
+                    <td><span class="field-mapped" title="{{Subject_ProjectAmenities}}">{{Subject_ProjectAmenities}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Unit Amenities</td>
+                    <td><span class="field-mapped" title="{{Subject_UnitAmenities}}">{{Subject_UnitAmenities}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Laundry</td>
+                    <td><span class="field-mapped" title="{{Subject_Laundry}}">{{Subject_Laundry}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Security Features</td>
+                    <td><span class="field-mapped" title="{{Subject_Security}}">{{Subject_Security}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Foundation</td>
+                    <td><span class="field-mapped" title="{{Subject_Foundation}}">{{Subject_Foundation}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Exterior Walls/Framing</td>
+                    <td><span class="field-mapped" title="{{Subject_WallsExt}}">{{Subject_WallsExt}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Roof</td>
+                    <td><span class="field-mapped" title="{{Subject_Roof}}">{{Subject_Roof}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Elevator</td>
+                    <td><span class="field-mapped" title="{{Subject_Elevator}}">{{Subject_Elevator}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Heating & AC (HVAC)</td>
+                    <td><span class="field-mapped" title="{{Subject_HeatingAC}}">{{Subject_HeatingAC}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Insulation</td>
+                    <td><span class="field-mapped" title="{{Subject_Insulation}}">{{Subject_Insulation}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Lighting</td>
+                    <td><span class="field-mapped" title="{{Subject_Lighting}}">{{Subject_Lighting}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Electrical</td>
+                    <td><span class="field-mapped" title="{{Subject_Electrical}}">{{Subject_Electrical}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Interior Walls</td>
+                    <td><span class="field-mapped" title="{{Subject_WallsInt}}">{{Subject_WallsInt}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Doors and Windows</td>
+                    <td><span class="field-mapped" title="{{Subject_DoorsWindows}}">{{Subject_DoorsWindows}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Ceilings</td>
+                    <td><span class="field-mapped" title="{{Subject_Ceilings}}">{{Subject_Ceilings}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Plumbing</td>
+                    <td><span class="field-mapped" title="{{Subject_Plumbing}}">{{Subject_Plumbing}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Floor Covering</td>
+                    <td><span class="field-mapped" title="{{Subject_Floor}}">{{Subject_Floor}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Fire Protection</td>
+                    <td><span class="field-mapped" title="{{Subject_Fire}}">{{Subject_Fire}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Interior Finish/Build-Out</td>
+                    <td><span class="field-mapped" title="{{Subject_InteriorBuildout}}">{{Subject_InteriorBuildout}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Site Improvements</td>
+                    <td><span class="field-mapped" title="{{Subject_SiteImpv}}">{{Subject_SiteImpv}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Landscaping</td>
+                    <td><span class="field-mapped" title="{{Subject_Landscaping}}">{{Subject_Landscaping}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Parking</td>
+                    <td><span class="field-mapped" title="{{Subject_Parking}}">{{Subject_Parking}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Site Coverage Ratio</td>
+                    <td><span class="field-mapped" title="{{Subject_SiteCoverageRatio}}">{{Subject_SiteCoverageRatio}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Functional Design</td>
+                    <td><span class="field-mapped" title="{{Subject_FunctionalDesign}}">{{Subject_FunctionalDesign}}</span></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Hazardous Materials</td>
+                    <td><span class="field-mapped" title="{{Subject_Hazerdous}}">{{Subject_Hazerdous}}</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">28</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 34 (numbered 29) -->
+    <div class="page-sheet" data-page-num="Page 34">
+        <div class="Header1">Property Analysis</div>
+
+        <p>materials, including (but not limited to) unseen asbestos and mold. Please refer to the Assumptions and Limiting Conditions section regarding this issue.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">29</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 35 (numbered 30) -->
+    <div class="page-sheet" data-page-num="Page 35">
+        <div class="Header1">Market Context</div>
+
+        <div class="Header2">Economic Overviews</div>
+
+        <div class="Subheader1">National</div>
+        <p>Canada's economy in 2025 finds itself in a delicate balance: modest growth, contained inflation, but significant uncertainty from external trade and global energy markets. The Bank of Canada expects real GDP growth to recover toward 1.8% in 2025-2026, after a softer 2024. Inflation is projected to remain close to the 2% target, aided by moderating rent inflation and easing supply pressures. On the positive side, residential investment and housing construction are expected to lead growth, supported by tight rate cuts, pent-up demand, and government incentives for rental construction. Meanwhile, energy and export infrastructure especially pipeline capacity and LNG projects could provide a lift to Canadian exports. However, the risk of U.S. tariffs and a weakening labour market looms as a drag. In sum, Canada's 2025 is expected to be a moderating year, with growth stabilizing, inflation under control, and selective pockets of strength in housing, energy, and exports. The upside hinges on trade resolution and external demand; the downside centers on global turmoil, policy missteps, or weakening domestic demand.</p>
+
+        <div class="Subheader1">Canada Economic Indicators</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Indicator</th>
+                    <th>Estimate</th>
+                    <th>Commentary</th>
+                    <th>Source</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Population (2025)</td>
+                    <td>41.8 million</td>
+                    <td>Population distribution historic, primarily via immigration growth</td>
+                    <td>Statistics Canada</td>
+                </tr>
+                <tr>
+                    <td>Population Growth Rate (2024-25)</td>
+                    <td>1.0-1.8%</td>
+                    <td>Growth slower than historical rates from 2023-2023 as it gets gains</td>
+                    <td>Projections / Statistics Canada</td>
+                </tr>
+                <tr>
+                    <td>Unemployment Rate (2025: YTD)</td>
+                    <td>6.1%</td>
+                    <td>Labour markets have declined from 2023-2023 as weight. Job gains</td>
+                    <td>Labour Force Survey</td>
+                </tr>
+                <tr>
+                    <td>Total GDP (Quarterly)</td>
+                    <td>Q4 2.2-3 trillion</td>
+                    <td>Top 10 global economy ranked [by energy services; projection]</td>
+                    <td>National Accounts</td>
+                </tr>
+                <tr>
+                    <td>Real GDP Growth (YoY, % per annum)</td>
+                    <td>1.8%</td>
+                    <td>Legislative protection from 2024 are antitrust federal economic hikes</td>
+                    <td>Bank of Canada</td>
+                </tr>
+                <tr>
+                    <td>Inflation (YoY, YoYh)</td>
+                    <td>2.1%</td>
+                    <td>Inflation-near target-quarter; Quarter three-year pressures</td>
+                    <td>Bank of Canada</td>
+                </tr>
+                <tr>
+                    <td>Retail / Consumer Spending</td>
+                    <td>$28.1 hundred</td>
+                    <td>Mild and steady and stele-run demand, population-growth</td>
+                    <td>Bank of Canada</td>
+                </tr>
+                <tr>
+                    <td>Housing Starts</td>
+                    <td>6% growth</td>
+                    <td>Historically decline; evident in recent goods [leading with stimulate]</td>
+                    <td>Bank of Canada</td>
+                </tr>
+                <tr>
+                    <td>Business Investment</td>
+                    <td>1-2% growth</td>
+                    <td>Timid productivity-s culture supports; uncertainty long-death</td>
+                    <td>Bank of Canada</td>
+                </tr>
+                <tr>
+                    <td>Energy Benchmark WTI</td>
+                    <td>USD 70-80/bbl</td>
+                    <td>Key driver for home of trade and income</td>
+                    <td>Market data</td>
+                </tr>
+                <tr>
+                    <td>Energy Benchmark WCS</td>
+                    <td>USD 55-65/bbl</td>
+                    <td>Discount to WTI moderate with improved exports</td>
+                    <td>Market data</td>
+                </tr>
+                <tr>
+                    <td>Natural Gas (AECO)</td>
+                    <td>CAD 2-3$/GJ</td>
+                    <td>Normalized after 2022; LNG may firm demand later in decade</td>
+                    <td>Energy market</td>
+                </tr>
+                <tr>
+                    <td>Wits Credit (Western Canada)</td>
+                    <td>6,000-7,000</td>
+                    <td>Robust vs 2019-2020; historic bid by visible prices</td>
+                    <td>Industry outlook</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">30</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 36 (numbered 31) -->
+    <div class="page-sheet" data-page-num="Page 36">
+        <div class="Header1">Market Context</div>
+
+        <div class="Subheader1">Provincial</div>
+        <p>Saskatchewan's economy in 2025 is defined by steady growth, strong resource activity, and an improving housing sector. Real GDP is expanding at a moderate pace, supported by agriculture, potash, and oil production, while inflation has cooled to below 2%, easing cost pressures on households. Investment conditions remain relatively solid, with unemployment near 5.5–6%, and consumer demand is buoyed by wage gains and population growth. Housing starts have surged, reflecting confidence in residential markets and rising construction momentum. On the investment front, resource projects and infrastructure spending provide additional stability, and the province maintains a solid AA credit rating with a balanced budget outlook. Risks remain tied to commodity markets, especially oil prices and global agricultural demand, along with challenges in attracting and retaining skilled labour. In sum, Saskatchewan's 2025 outlook is stable and resource-anchored, with healthy construction activity and moderate inflation, but still exposed to the swings of global markets.</p>
+
+        <div class="Subheader1">Saskatchewan Economic Indicators</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Indicator</th>
+                    <th>Estimate</th>
+                    <th>Commentary</th>
+                    <th>Source</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Population (Apr 2025)</td>
+                    <td>1,230,596</td>
+                    <td>Population: .93% c-o-d at YoY scale / +0.4K</td>
+                    <td>Statistics Bureau of Statistics</td>
+                </tr>
+                <tr>
+                    <td>Population Growth Rate (2024-25)</td>
+                    <td>1.3%</td>
+                    <td>Slide vs good, steady tone</td>
+                    <td>Stat Stats</td>
+                </tr>
+                <tr>
+                    <td>Unemployment Rate (2025 Y1)</td>
+                    <td>5.6%</td>
+                    <td>Stable as labor shortages linger; only work on all of nation</td>
+                    <td>Statistics of Labor; Figure Having</td>
+                </tr>
+                <tr>
+                    <td>Total GDP (per 2024)</td>
+                    <td>CAD 85.3B (JV's YIY)</td>
+                    <td>Abby average 2-3K from growth, solid</td>
+                    <td>Sire of Saskatchewan</td>
+                </tr>
+                <tr>
+                    <td>GDP/capita</td>
+                    <td>69k</td>
+                    <td>Y-3 class province is economy</td>
+                    <td>Stat Can</td>
+                </tr>
+                <tr>
+                    <td>GFCF growth</td>
+                    <td>7.2% (on-x 0.8%)</td>
+                    <td>Zig-zagging gross & n: 1-2 growth</td>
+                    <td>Sire of Saskatchewan</td>
+                </tr>
+                <tr>
+                    <td>Housing Starts (units)</td>
+                    <td>5.8 per (m = 1.3k)</td>
+                    <td>High: price w a 1 at 1</td>
+                    <td>TL is offset based on / (0401)</td>
+                </tr>
+                <tr>
+                    <td>Average Rents</td>
+                    <td>Y 85 sy Zdf 2025 - C$ 2,300</td>
+                    <td>by the avg: a Qty 5 p w 3 build it</td>
+                    <td>QANQ / SMA</td>
+                </tr>
+                <tr>
+                    <td>Average Home Prices</td>
+                    <td>CAD 4 345 YoY Qty 2024</td>
+                    <td>-3.9% yiy, .to-very -Y-o-t-e</td>
+                    <td>Sa-GIN / QNHP</td>
+                </tr>
+                <tr>
+                    <td>MLS/Home Sales</td>
+                    <td>Y 28.0 yes/ is Oiry 26%</td>
+                    <td>High: also all more ref infosystems</td>
+                    <td>MKNN</td>
+                </tr>
+                <tr>
+                    <td>Retail/Inflation (CPI)</td>
+                    <td>27 2% yia 2026</td>
+                    <td>N P on E 1 d of a, bc, is proportionally</td>
+                    <td>Sire of Saskatchewan</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">31</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 37 (numbered 32) -->
+    <div class="page-sheet" data-page-num="Page 37">
+        <div class="Header1">Market Context</div>
+
+        <div class="Header2">Multi-Family Market Overview</div>
+
+        <div class="Subheader1">Saskatchewan</div>
+        <p>Saskatchewan's rental markets entered 2025 with improving balance. Vacancy rates approached 3%, reflecting steady new completions and a cooling influx of migrants. Rents plateaued after outsized 2023–24 gains, with most urban landlords holding rates or offering small concessions. Construction activity remains healthy, supported by government and CMHC financing programs. Affordability remains better than the national average, yet rents signal growing strain among lower-income tenants.</p>
+
+        <div class="Subheader1">Saskatchewan Multifamily Indicators</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>INDICATOR</th>
+                    <th>ESTIMATE</th>
+                    <th>COMMENTARY</th>
+                    <th>SOURCE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Vacancy Rate</td>
+                    <td>3.0%</td>
+                    <td>Rpl | near~dent*769 on city-driven rents and marginal slows.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>Avg Rent - 2-Bed/2Bath</td>
+                    <td>$851</td>
+                    <td>Rents stabilizing, offering contain at leverage.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>Avg Rent - 1-1 Bed</td>
+                    <td>$1,168</td>
+                    <td>Growth Saturating price -1256 in 2024.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>Avg Rent - 3-Bed</td>
+                    <td>$1,398</td>
+                    <td>Mid-run rent growth 0.4-0.6 %.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>Average Rent - 2 Bed</td>
+                    <td>25,848</td>
+                    <td>Larger dw to hold demand due to unsatisfied coordination.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>Rental Rate Growth</td>
+                    <td>+2.5% YoY</td>
+                    <td>Prior—next-Rent' 2025 versus8%.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>New Supply</td>
+                    <td>+1,200 units YoY</td>
+                    <td>Concurrent steady—expanse(s)evelopm in Saskatchewan and Regina.</td>
+                    <td>CMHC</td>
+                </tr>
+                <tr>
+                    <td>Supply Growth Ratio</td>
+                    <td>+3.8% YoY</td>
+                    <td>Outpaced remainder dw to 5 project below added plans.</td>
+                    <td>CMHC</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">32</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 38 (numbered 33) -->
+    <div class="page-sheet" data-page-num="Page 38">
+        <div class="Header1">Valuation & Conclusions</div>
+
+        <div class="Header2">Highest & Best Use</div>
+
+        <div class="Subheader1">Introduction</div>
+        <p>The highest and best use of a property is defined as the legally permissible, physically possible, financially feasible, and maximally productive use that results in the highest value. This analysis serves as the foundation for the valuation process and determines the most reasonable and profitable use of the property to support its maximum present value.</p>
+
+        <p>The analysis is completed through the following four steps:</p>
+
+        <ul>
+            <li>Step 1: Highest and Best Use as Vacant</li>
+            <li>Step 2: Determination of Ideal Improvements</li>
+            <li>Step 3: Highest and Best Use as Proposed</li>
+            <li>Step 4: Final Conclusion</li>
+        </ul>
+
+        <p>This structured approach ensures a comprehensive evaluation of the property, moving from a broad market perspective to a focused determination of its optimal use.</p>
+
+        <p>This section develops the highest and best use of the subject property As Thought Vacant and As Improved.</p>
+
+        <div class="Subheader1">As Though Vacant Analysis</div>
+        <p>In this section the highest and best use of the subject as though vacant is concluded after taking into consideration financial feasibility, maximal productivity, marketability, legal, and physical factors.</p>
+
+        <div class="Subheader1">Legally Permissible</div>
+        <p>Private restrictions, zoning, building codes, historic district controls, and environmental regulations are considered. If applicable to the subject site. The legal factors influencing the highest and best use of the subject site are primarily government regulations such as zoning ordinances. Permitted uses of the subject's <span class="field-mapped" title="{{Subject_Zoning}}">{{Subject_Zoning}}</span> zoning include low and medium density residential. A zoning change is not likely, therefore, uses outside of those permitted by the <span class="field-mapped" title="{{Subject_ZoningCode}}">{{Subject_ZoningCode}}</span> zoning are not considered moving forward in the as though vacant analysis.</p>
+
+        <div class="Subheader1">Physically Possible</div>
+        <p>An evaluation of what is physically possible for the subject site considers physical and locational characteristics that influence its highest and best use. In terms of physical features, the subject site totals <span class="field-mapped" title="{{Subject_TotalAcre}}">{{Subject_TotalAcre}}</span> acres (<span class="field-mapped" title="{{Subject_TotalSF}}">{{Subject_TotalSF}}</span> SF). It is <span class="field-mapped" title="{{Subject_Shape}}">{{Subject_Shape}}</span> in shape and has a <span class="field-mapped" title="{{Subject_Topography}}">{{Subject_Topography}}</span> topography. The site has <span class="field-mapped" title="{{Subject_Exposure}}">{{Subject_Exposure}}</span> exposure and <span class="field-mapped" title="{{Subject_Access}}">{{Subject_Access}}</span> overall access. There are no physical limitations that would prohibit development of any of the by-right uses on the site.</p>
+
+        <div class="Subheader1">Financial Feasibility</div>
+        <p>Based on the analysis of the subject's market and an examination of costs and investment metrics and real estate market attributes, a multifamily building would likely have a value commensurate with its costs and requisite developer's profit.</p>
+
+        <div class="Subheader1">Maximum Productivity</div>
+        <p>There is only one use that creates value and at the same time conforms to the requirements of the first three tests. Financial feasibility, maximal productivity, marketability, legal, and physical factors have been considered and the highest and best use of the subject site as though vacant and is concluded to be a multifamily use.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">33</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 39 (numbered 34) -->
+    <div class="page-sheet" data-page-num="Page 39">
+        <div class="Header1">Valuation & Conclusions</div>
+
+        <div class="Header2">As Improved Analysis</div>
+        <p>The legal factors influencing the highest and best use of the subject property are primarily governmental regulations such as zoning and building codes. The subject improvements were constructed in <span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span> and are a legal, conforming use. The physical and locational characteristics of the subject improvements have been previously discussed in this report. The project is of <span class="field-mapped" title="{{Subject_Quality}}">{{Subject_Quality}}</span> quality construction and <span class="field-mapped" title="{{Subject_Condition}}">{{Subject_Condition}}</span> condition, with adequate site coverage and parking ratios.</p>
+
+        <p>The five possible alternative treatments of the property are redevelopment/demolition (not warranted as the improvements contribute substantial value to the site), expansion (not applicable, no excess or surplus land), renovation (not warranted), conversion (not warranted), and continued use "as-is" (see. Given the underlying market conditions and activity, it appears that the multifamily use is improved-has sufficient degree of financial feasibility.</p>
+
+        <p>Among the five alternative uses, a continuation of the multifamily use is the Highest and Best Use of the subject is As improved.</p>
+
+        <div class="Header2">Most Probable Buyer</div>
+        <p>Based on the type of property and the income generating potential of the improvements, it is our opinion that the most probable buyer for the subject would be a local or regional investor As improved.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">34</span> <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">{{Company_JobNumber}}</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+</body>
+</html>

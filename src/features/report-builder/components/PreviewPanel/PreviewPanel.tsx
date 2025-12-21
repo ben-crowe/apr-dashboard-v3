@@ -36,7 +36,10 @@ export default function PreviewPanel() {
   const minZoom = 0.1;
   const maxZoom = 1.0; // 100% - no need to zoom beyond actual size
   const zoomStep = 0.025; // 2.5% for smoother hold-to-zoom
-  const totalPages = 77;
+
+  // Page numbers are extracted from template's data-page-num attributes
+  const [pageNumbers, setPageNumbers] = useState<number[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
 
   // DEBUG: Expose HTML on window for automated extraction
   useEffect(() => {
@@ -45,21 +48,77 @@ export default function PreviewPanel() {
     }
   }, [previewHtml]);
 
-  // Simple scroll tracking - updates page number when you scroll manually
+  // Extract page numbers from template after iframe loads
   useEffect(() => {
     const iframe = iframeRef.current;
-    if (!iframe?.contentWindow) return;
+    if (!iframe?.contentDocument) return;
+
+    // Wait for content to load
+    const extractPageNumbers = () => {
+      const iframeDoc = iframe.contentDocument;
+      if (!iframeDoc) return;
+
+      const pageSheets = iframeDoc.querySelectorAll('.page-sheet[data-page-num]');
+      const numbers: number[] = [];
+
+      pageSheets.forEach((sheet) => {
+        const pageNumAttr = sheet.getAttribute('data-page-num');
+        if (pageNumAttr) {
+          // Extract number from "Page 3" -> 3
+          const match = pageNumAttr.match(/Page (\d+)/i);
+          if (match) {
+            numbers.push(parseInt(match[1], 10));
+          }
+        }
+      });
+
+      if (numbers.length > 0) {
+        setPageNumbers(numbers);
+        setTotalPages(numbers.length);
+        // Set current page to first page number (e.g., Page 3)
+        if (currentPage === 1) {
+          setCurrentPage(numbers[0]);
+        }
+      }
+    };
+
+    // Try immediately and after a delay (in case iframe is still loading)
+    extractPageNumbers();
+    const timer = setTimeout(extractPageNumbers, 500);
+
+    return () => clearTimeout(timer);
+  }, [previewHtml]);
+
+  // Scroll tracking - find which page is currently visible
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe?.contentWindow || pageNumbers.length === 0) return;
 
     const handleScroll = () => {
       const iframeWindow = iframe.contentWindow;
-      if (!iframeWindow) return;
+      const iframeDoc = iframe.contentDocument;
+      if (!iframeWindow || !iframeDoc) return;
 
       const scrollTop = iframeWindow.scrollY || 0;
-      const pageHeight = 1056; // 11 inches at 96 DPI
-      const pageNumber = Math.floor(scrollTop / pageHeight) + 1;
+      const viewportHeight = iframeWindow.innerHeight;
+      const pageSheets = iframeDoc.querySelectorAll('.page-sheet[data-page-num]');
 
-      if (pageNumber >= 1 && pageNumber <= totalPages && pageNumber !== currentPage) {
-        setCurrentPage(pageNumber);
+      // Find the page that's most visible in viewport
+      let mostVisiblePage = currentPage;
+      let maxVisibility = 0;
+
+      pageSheets.forEach((sheet, index) => {
+        const rect = sheet.getBoundingClientRect();
+        const visibleHeight = Math.min(rect.bottom, viewportHeight) - Math.max(rect.top, 0);
+
+        if (visibleHeight > maxVisibility) {
+          maxVisibility = visibleHeight;
+          mostVisiblePage = pageNumbers[index];
+        }
+      });
+
+      if (mostVisiblePage !== currentPage) {
+        setCurrentPage(mostVisiblePage);
       }
     };
 
@@ -69,7 +128,7 @@ export default function PreviewPanel() {
     return () => {
       iframeWindow?.removeEventListener('scroll', handleScroll);
     };
-  }, [totalPages, currentPage, previewHtml]);
+  }, [pageNumbers, currentPage, previewHtml]);
 
   // Hide built-in controls from template (we use React controls instead)
   useEffect(() => {
@@ -209,54 +268,60 @@ export default function PreviewPanel() {
     }
   };
 
-  // Page Navigation - arrow buttons with hold-to-scroll
+  // Page Navigation - scroll to actual page element
   const goToPage = (pageNum: number) => {
-    if (pageNum < 1 || pageNum > totalPages) return;
+    const iframe = iframeRef.current;
+    const iframeDoc = iframe?.contentDocument;
+    if (!iframeDoc || !pageNumbers.includes(pageNum)) return;
 
     setCurrentPage(pageNum);
 
-    // Jump to page instantly
-    const iframe = iframeRef.current;
-    if (iframe?.contentWindow) {
-      const pageHeight = 1056;
-      const scrollPosition = (pageNum - 1) * pageHeight;
-      iframe.contentWindow.scrollTo(0, scrollPosition);
+    // Find the page-sheet element with this page number
+    const pageSheets = iframeDoc.querySelectorAll('.page-sheet[data-page-num]');
+    const pageIndex = pageNumbers.indexOf(pageNum);
+
+    if (pageIndex >= 0 && pageSheets[pageIndex]) {
+      const pageElement = pageSheets[pageIndex] as HTMLElement;
+      // Scroll to the element's top position
+      pageElement.scrollIntoView({ behavior: 'auto', block: 'start' });
     }
   };
 
   const handleUpArrowClick = () => {
-    // Single click - go back one page
-    if (currentPage > 1) {
-      goToPage(currentPage - 1);
+    // Single click - go to previous page
+    const currentIndex = pageNumbers.indexOf(currentPage);
+    if (currentIndex > 0) {
+      goToPage(pageNumbers[currentIndex - 1]);
     }
   };
 
   const handleDownArrowClick = () => {
-    // Single click - go forward one page
-    if (currentPage < totalPages) {
-      goToPage(currentPage + 1);
+    // Single click - go to next page
+    const currentIndex = pageNumbers.indexOf(currentPage);
+    if (currentIndex < pageNumbers.length - 1) {
+      goToPage(pageNumbers[currentIndex + 1]);
     }
   };
 
   const handleUpArrowMouseDown = () => {
     // Hold to scroll backward continuously
     pageIntervalRef.current = setInterval(() => {
-      setCurrentPage(p => {
-        const newPage = Math.max(1, p - 1);
+      const currentIndex = pageNumbers.indexOf(currentPage);
+      if (currentIndex > 0) {
+        const newPage = pageNumbers[currentIndex - 1];
         goToPage(newPage);
-        return newPage;
-      });
+      }
     }, 200);
   };
 
   const handleDownArrowMouseDown = () => {
     // Hold to scroll forward continuously
     pageIntervalRef.current = setInterval(() => {
-      setCurrentPage(p => {
-        const newPage = Math.min(totalPages, p + 1);
+      const currentIndex = pageNumbers.indexOf(currentPage);
+      if (currentIndex < pageNumbers.length - 1) {
+        const newPage = pageNumbers[currentIndex + 1];
         goToPage(newPage);
-        return newPage;
-      });
+      }
     }, 200);
   };
 
@@ -450,15 +515,15 @@ export default function PreviewPanel() {
             onMouseDown={handleUpArrowMouseDown}
             onMouseUp={handlePageMouseUp}
             onMouseLeave={handlePageMouseUp}
-            disabled={currentPage <= 1}
+            disabled={pageNumbers.indexOf(currentPage) === 0}
             style={{
               background: 'none',
               border: 'none',
-              cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
+              cursor: pageNumbers.indexOf(currentPage) === 0 ? 'not-allowed' : 'pointer',
               fontSize: '20px',
-              color: currentPage <= 1 ? '#6b7280' : '#ffffff',
+              color: pageNumbers.indexOf(currentPage) === 0 ? '#6b7280' : '#ffffff',
               padding: 0,
-              opacity: currentPage <= 1 ? 0.5 : 1,
+              opacity: pageNumbers.indexOf(currentPage) === 0 ? 0.5 : 1,
               lineHeight: 1
             }}
             title="Previous page (hold to scroll)"
@@ -466,22 +531,22 @@ export default function PreviewPanel() {
             ▲
           </button>
           <span style={{ fontSize: '13px', fontWeight: '500' }}>
-            Page {currentPage} of {totalPages}
+            Page {currentPage}
           </span>
           <button
             onClick={handleDownArrowClick}
             onMouseDown={handleDownArrowMouseDown}
             onMouseUp={handlePageMouseUp}
             onMouseLeave={handlePageMouseUp}
-            disabled={currentPage >= totalPages}
+            disabled={pageNumbers.indexOf(currentPage) === pageNumbers.length - 1}
             style={{
               background: 'none',
               border: 'none',
-              cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
+              cursor: pageNumbers.indexOf(currentPage) === pageNumbers.length - 1 ? 'not-allowed' : 'pointer',
               fontSize: '20px',
-              color: currentPage >= totalPages ? '#6b7280' : '#ffffff',
+              color: pageNumbers.indexOf(currentPage) === pageNumbers.length - 1 ? '#6b7280' : '#ffffff',
               padding: 0,
-              opacity: currentPage >= totalPages ? 0.5 : 1,
+              opacity: pageNumbers.indexOf(currentPage) === pageNumbers.length - 1 ? 0.5 : 1,
               lineHeight: 1
             }}
             title="Next page (hold to scroll)"

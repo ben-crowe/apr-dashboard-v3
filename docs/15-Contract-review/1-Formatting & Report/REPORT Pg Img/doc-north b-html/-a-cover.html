@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appraisal Report - Cover</title>
+    <link rel="stylesheet" href="master-appraisal-styles.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: 8.5in 11in;
+      margin: 0;
+    }
+
+    body {
+      width: 8.5in;
+      height: 11in;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: white;
+      color: #333;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Header with VALTA logo */
+    .header {
+      padding: 24px 32px 0 32px;
+      background-color: white;
+      height: 120px;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .logo {
+      font-size: 0;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1a4d6d;
+      letter-spacing: 6px;
+      line-height: 1.2;
+    }
+
+    .logo-subtext {
+      font-size: 9px;
+      color: #555;
+      letter-spacing: 2px;
+      margin-top: 2px;
+      font-weight: normal;
+    }
+
+    /* Main content area */
+    .content-wrapper {
+      display: flex;
+      height: calc(11in - 120px);
+      position: relative;
+    }
+
+    .left-section {
+      flex: 0 0 45%;
+      padding: 32px;
+      padding-right: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .property-photo {
+      width: 100%;
+      height: 200px;
+      background-color: #ddd;
+      border: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 12px;
+      margin-bottom: 24px;
+    }
+
+    .right-section {
+      flex: 1;
+      padding: 32px;
+      padding-left: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      background-color: white;
+      position: relative;
+      z-index: 1;
+    }
+
+    .heading {
+      font-size: 32px;
+      font-weight: bold;
+      color: #1a1a1a;
+      margin-bottom: 28px;
+      line-height: 1.2;
+    }
+
+    .property-type {
+      font-size: 14px;
+      font-weight: bold;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+    }
+
+    .property-address {
+      font-size: 12px;
+      color: #1a1a1a;
+      margin-bottom: 2px;
+      line-height: 1.4;
+    }
+
+    .property-city {
+      font-size: 12px;
+      color: #1a1a1a;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    /* Diagonal background section */
+    .diagonal-section {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      height: 520px;
+      background: linear-gradient(135deg, #004a6f 0%, #1a5f7f 50%, #1a6b8f 100%);
+      clip-path: polygon(0 35%, 100% 0, 100% 100%, 0 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 60px 32px 32px 32px;
+      z-index: 0;
+    }
+
+    .info-section {
+      color: white;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-bottom: 36px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .info-label {
+      font-weight: bold;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .info-content {
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .info-content-name {
+      font-weight: bold;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    /* Prepared for section */
+    .prepared-for {
+      text-align: right;
+      margin-bottom: 32px;
+    }
+
+    .prepared-for .info-label {
+      text-align: right;
+    }
+
+    .prepared-for .info-content,
+    .prepared-for .info-content-name {
+      text-align: right;
+    }
+
+    /* Prepared by section */
+    .prepared-by {
+      text-align: right;
+      margin-bottom: 32px;
+    }
+
+    .prepared-by .info-label {
+      text-align: right;
+    }
+
+    .prepared-by .info-content,
+    .prepared-by .info-content-name {
+      text-align: right;
+    }
+
+    /* Footer info */
+    .footer-info {
+      text-align: right;
+      color: white;
+      font-size: 11px;
+      line-height: 1.6;
+      position: relative;
+      z-index: 2;
+    }
+
+    .date-line {
+      margin-bottom: 2px;
+    }
+
+    .file-number {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header with VALTA logo -->
+  <div class="header">
+    <div class="logo">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <!-- LOGO: valta-logo.svg -->
+        <svg width="32" height="32" viewBox="0 0 32 32" style="display: inline-block;">
+          <g fill="#1a4d6d">
+            <path d="M4 8L12 20L8 20L0 8Z"></path>
+            <path d="M20 8L28 20L24 20L16 8Z"></path>
+          </g>
+        </svg>
+        <div>
+          <div class="logo-text">VALTA</div>
+          <div class="logo-subtext">PROPERTY VALUATIONS</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content area -->
+  <div class="content-wrapper">
+    <div class="left-section">
+      <div class="property-photo">
+        <!-- LOGO: property-photo.jpg -->
+      </div>
+    </div>
+
+    <div class="right-section">
+      <h1 class="heading">Appraisal Report</h1>
+
+      <div class="property-type">Multi-Family Walkup Property</div>
+      <div class="property-address">North Battleford Apartments</div>
+      <div class="property-address">1101, 1121 109 St</div>
+      <div class="property-city">North Battleford, Saskatchewan</div>
+    </div>
+
+    <!-- Diagonal background section with info -->
+    <div class="diagonal-section">
+      <div class="prepared-for">
+        <div class="info-label">PREPARED FOR:</div>
+        <div class="info-content-name">Kenneth Engler</div>
+        <div class="info-content">
+          10210984S Saskatchewan Ltd.<br>
+          1901, 1088 - 6th Ave SW<br>
+          Calgary, AB T2P 5N3
+        </div>
+      </div>
+
+      <div class="prepared-by">
+        <div class="info-label">PREPARED BY:</div>
+        <div class="info-content-name">Valta Property Valuations Ltd.</div>
+        <div class="info-content">
+          300, 4838 Richard Road SW<br>
+          Calgary, AB T3E 6L1<br>
+          Office: 587-801-5151<br>
+          www.valta.ca
+        </div>
+      </div>
+
+      <div class="footer-info">
+        <div class="date-line">Date of Valuation: October 17, 2025</div>
+        <div class="date-line">Date of Report: November 20, 2025</div>
+        <div class="file-number" style="margin-top: 8px;">File No: VAL251012 - 1</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

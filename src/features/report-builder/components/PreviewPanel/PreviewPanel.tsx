@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useReportBuilderStore } from '../../store/reportBuilderStore';
 import PreviewRenderer from './PreviewRenderer';
-import { FileText, Minus, Plus, FileDown, Download, Moon, Sun } from 'lucide-react';
+import { FileText, Minus, Plus, FileDown, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -25,7 +25,6 @@ export default function PreviewPanel() {
   const [zoom, setZoom] = useState(0.75);
   const [isExporting, setIsExporting] = useState(false);
   const [showPdfDialog, setShowPdfDialog] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
   const [showFieldIds, setShowFieldIds] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const iframeRef = useRef<HTMLIFrameElement>(null);
@@ -324,7 +323,7 @@ export default function PreviewPanel() {
         }
         return prevPage;
       });
-    }, 200);
+    }, 100); // Faster scroll: 100ms interval
   };
 
   const handleDownArrowMouseDown = () => {
@@ -339,7 +338,7 @@ export default function PreviewPanel() {
         }
         return prevPage;
       });
-    }, 200);
+    }, 100); // Faster scroll: 100ms interval
   };
 
   const handlePageMouseUp = () => {
@@ -361,39 +360,6 @@ export default function PreviewPanel() {
       if (previewToggle) {
         previewToggle.checked = newShowFieldIds;
         previewToggle.dispatchEvent(new Event('change'));
-      }
-    }
-  };
-
-  // Dark mode toggle - 10-15% darkening filter
-  const handleDarkModeToggle = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-
-    // Apply dark mode to iframe content
-    if (iframeRef.current?.contentDocument) {
-      const iframeDoc = iframeRef.current.contentDocument;
-      const iframeBody = iframeDoc.body;
-
-      if (iframeBody) {
-        if (newDarkMode) {
-          iframeBody.classList.add('dark-mode');
-
-          // Inject dark mode CSS if not already present (subtle 15% darkening)
-          if (!iframeDoc.getElementById('dark-mode-styles')) {
-            const style = iframeDoc.createElement('style');
-            style.id = 'dark-mode-styles';
-            style.textContent = `
-              body.dark-mode .page-sheet,
-              body.dark-mode .page {
-                filter: brightness(0.85);
-              }
-            `;
-            iframeDoc.head.appendChild(style);
-          }
-        } else {
-          iframeBody.classList.remove('dark-mode');
-        }
       }
     }
   };
@@ -571,21 +537,6 @@ export default function PreviewPanel() {
             ▼
           </button>
         </div>
-
-        {/* Dark Mode Toggle */}
-        <button
-          onClick={handleDarkModeToggle}
-          title={darkMode ? 'Light mode' : 'Dark mode'}
-          style={{
-            backgroundColor: 'transparent',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '18px',
-            padding: '4px'
-          }}
-        >
-          {darkMode ? '☀️' : '🌙'}
-        </button>
 
         {/* Export Buttons */}
         <button

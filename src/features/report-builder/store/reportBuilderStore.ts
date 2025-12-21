@@ -5522,7 +5522,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     }
 
     try {
-      const response = await fetch('/PREVIEW-Master.html');
+      const response = await fetch('/Report-MF-template.html');
       if (!response.ok) {
         throw new Error(`Failed to load template: ${response.statusText}`);
       }
@@ -5530,7 +5530,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       set({ previewTemplate: html });
       return html;
     } catch (error) {
-      console.error('Error loading PREVIEW-Master.html:', error);
+      console.error('Error loading Report-MF-template.html:', error);
       throw error;
     }
   },
@@ -5828,7 +5828,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("calc-expenses-per-unit", totalUnits > 0 ? Math.round((expensesTotal / totalUnits) * 100) / 100 : 0);
     updateField("calc-expenses-per-sf", totalSf > 0 ? Math.round((expensesTotal / totalSf) * 100) / 100 : 0);
 
-    // Expense Breakdown - Calculate and output all 5 metrics per category (35 fields total)
+
+    // Expense Breakdown - Calculate and output all 5 metrics per category (35 fields total for Page 49)
     const expenseCategories = [
       { name: "taxes", value: expTaxes },
       { name: "insurance", value: expInsurance },

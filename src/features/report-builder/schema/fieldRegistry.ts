@@ -1363,6 +1363,28 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'subject-proposedconstruction', storeId: 'subject-proposedconstruction', label: 'Proposed Construction', section: 'property-identification', subsection: 'subject-property', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'subject-quality', storeId: 'subject-quality', label: 'Quality', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
 
+  // Subject Property - Rent, Site & Tax Info
+  { id: 'subject-rentsfavg', storeId: 'subject-rentsfavg', label: 'Rent per SF Average', section: 'income-analysis', subsection: 'rent-analysis', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'subject-renttype', storeId: 'subject-renttype', label: 'Rent Type', section: 'income-analysis', subsection: 'rent-analysis', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-rentunitavg', storeId: 'subject-rentunitavg', label: 'Rent per Unit Average', section: 'income-analysis', subsection: 'rent-analysis', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'subject-salehistory', storeId: 'subject-salehistory', label: 'Sale History', section: 'property-identification', subsection: 'subject-property', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-security', storeId: 'subject-security', label: 'Security', section: 'amenities', subsection: 'subject-amenities', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-securityfeatures', storeId: 'subject-securityfeatures', label: 'Security Features', section: 'amenities', subsection: 'subject-amenities', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-sfmultifamily', storeId: 'subject-sfmultifamily', label: 'SF Multifamily', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-shape', storeId: 'subject-shape', label: 'Site Shape', section: 'site-conditions', subsection: 'site-characteristics', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-siteaccess', storeId: 'subject-siteaccess', label: 'Site Access', section: 'site-conditions', subsection: 'site-characteristics', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-siteexposure', storeId: 'subject-siteexposure', label: 'Site Exposure', section: 'site-conditions', subsection: 'site-characteristics', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-sitequality', storeId: 'subject-sitequality', label: 'Site Quality', section: 'site-conditions', subsection: 'site-characteristics', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-siteutility', storeId: 'subject-siteutility', label: 'Site Utility', section: 'site-conditions', subsection: 'site-characteristics', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-stories', storeId: 'subject-stories', label: 'Number of Stories', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-subtype', storeId: 'subject-subtype', label: 'Property Subtype', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-surveycomments', storeId: 'subject-surveycomments', label: 'Survey Comments', section: 'income-analysis', subsection: 'rent-analysis', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-taxamount', storeId: 'subject-taxamount', label: 'Tax Amount', section: 'tax', subsection: 'tax-info', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'subject-taxassessment', storeId: 'subject-taxassessment', label: 'Tax Assessment', section: 'tax', subsection: 'tax-info', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'subject-taxpersf', storeId: 'subject-taxpersf', label: 'Tax per SF', section: 'tax', subsection: 'tax-info', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'subject-taxrate', storeId: 'subject-taxrate', label: 'Tax Rate', section: 'tax', subsection: 'tax-info', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'subject-taxyear', storeId: 'subject-taxyear', label: 'Tax Year', section: 'tax', subsection: 'tax-info', type: 'number', inputSource: 'user-input', required: false },
+
 ];
 
 // ============================================================================

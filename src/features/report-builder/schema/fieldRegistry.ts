@@ -1497,6 +1497,42 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'market-rent-comps-count', storeId: 'market-rent-comps-count', label: 'Market Rent Comps Count', section: 'rent-analysis-2br', subsection: 'market-rent-2br', type: 'number', inputSource: 'user-input', required: false },
   { id: 'market-rent-comps-markets', storeId: 'market-rent-comps-markets', label: 'Market Rent Comps Markets', section: 'rent-analysis-2br', subsection: 'market-rent-2br', type: 'text', inputSource: 'user-input', required: false },
 
+  // ============================================================================
+  // SECTION: SALES COMPARISON - COMP1
+  // ============================================================================
+
+  { id: 'comp1-address-full', storeId: 'comp1-address-full', label: 'Comp1 Address Full', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-analysis-price-per-unit', storeId: 'comp1-analysis-price-per-unit', label: 'Comp1 Analysis Price Per Unit', section: 'sales-comparison', subsection: 'comp1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp1-analysisprice', storeId: 'comp1-analysisprice', label: 'Comp1 Analysis Price', section: 'sales-comparison', subsection: 'comp1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp1-buyer', storeId: 'comp1-buyer', label: 'Comp1 Buyer', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-citystatezip', storeId: 'comp1-citystatezip', label: 'Comp1 City State Zip', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-conditionsofsale', storeId: 'comp1-conditionsofsale', label: 'Comp1 Conditions of Sale', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-corner', storeId: 'comp1-corner', label: 'Comp1 Corner', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-county', storeId: 'comp1-county', label: 'Comp1 County', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-distance', storeId: 'comp1-distance', label: 'Comp1 Distance', section: 'sales-comparison', subsection: 'comp1', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp1-label', storeId: 'comp1-label', label: 'Comp1 Label', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-landarea', storeId: 'comp1-landarea', label: 'Comp1 Land Area', section: 'sales-comparison', subsection: 'comp1', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp1-laundry', storeId: 'comp1-laundry', label: 'Comp1 Laundry', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-map', storeId: 'comp1-map', label: 'Comp1 Map', section: 'sales-comparison', subsection: 'comp1', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp1-noi-perunit', storeId: 'comp1-noi-perunit', label: 'Comp1 NOI Per Unit', section: 'sales-comparison', subsection: 'comp1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp1-nra', storeId: 'comp1-nra', label: 'Comp1 NRA', section: 'sales-comparison', subsection: 'comp1', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp1-photo', storeId: 'comp1-photo', label: 'Comp1 Photo', section: 'sales-comparison', subsection: 'comp1', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp1-propertytype', storeId: 'comp1-propertytype', label: 'Comp1 Property Type', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-remarks', storeId: 'comp1-remarks', label: 'Comp1 Remarks', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-renttype', storeId: 'comp1-renttype', label: 'Comp1 Rent Type', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-rightstransferred', storeId: 'comp1-rightstransferred', label: 'Comp1 Rights Transferred', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-securityfeatures', storeId: 'comp1-securityfeatures', label: 'Comp1 Security Features', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-seller', storeId: 'comp1-seller', label: 'Comp1 Seller', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-structures', storeId: 'comp1-structures', label: 'Comp1 Structures', section: 'sales-comparison', subsection: 'comp1', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp1-submarket', storeId: 'comp1-submarket', label: 'Comp1 Submarket', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-transactionstatus', storeId: 'comp1-transactionstatus', label: 'Comp1 Transaction Status', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-unitmix-avgsize', storeId: 'comp1-unitmix-avgsize', label: 'Comp1 Unit Mix Avg Size', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-unitmix-count', storeId: 'comp1-unitmix-count', label: 'Comp1 Unit Mix Count', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-unitmix-type', storeId: 'comp1-unitmix-type', label: 'Comp1 Unit Mix Type', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-utilities', storeId: 'comp1-utilities', label: 'Comp1 Utilities', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-year-built', storeId: 'comp1-year-built', label: 'Comp1 Year Built', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+
+
 ];
 
 // ============================================================================

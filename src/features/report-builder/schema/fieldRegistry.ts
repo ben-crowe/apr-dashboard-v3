@@ -1385,6 +1385,23 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'subject-taxrate', storeId: 'subject-taxrate', label: 'Tax Rate', section: 'tax', subsection: 'tax-info', type: 'percentage', inputSource: 'user-input', required: false },
   { id: 'subject-taxyear', storeId: 'subject-taxyear', label: 'Tax Year', section: 'tax', subsection: 'tax-info', type: 'number', inputSource: 'user-input', required: false },
 
+  // Subject Property - Final Fields
+  { id: 'subject-tenancy', storeId: 'subject-tenancy', label: 'Tenancy', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-topography', storeId: 'subject-topography', label: 'Topography', section: 'site-conditions', subsection: 'site-characteristics', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-totalacre', storeId: 'subject-totalacre', label: 'Total Acres', section: 'site-area', subsection: 'site-measurements', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-totalbuildings', storeId: 'subject-totalbuildings', label: 'Total Buildings', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-totalsf', storeId: 'subject-totalsf', label: 'Total SF', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-unitamenities', storeId: 'subject-unitamenities', label: 'Unit Amenities', section: 'amenities', subsection: 'subject-amenities', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-usableacre', storeId: 'subject-usableacre', label: 'Usable Acre', section: 'site-area', subsection: 'site-measurements', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-usableacres', storeId: 'subject-usableacres', label: 'Usable Acres', section: 'site-area', subsection: 'site-measurements', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-usablesf', storeId: 'subject-usablesf', label: 'Usable SF', section: 'site-area', subsection: 'site-measurements', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-utilities', storeId: 'subject-utilities', label: 'Utilities', section: 'site-conditions', subsection: 'site-characteristics', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-vacancycreditloss', storeId: 'subject-vacancycreditloss', label: 'Vacancy & Credit Loss', section: 'income-analysis', subsection: 'vacancy-loss', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'subject-vacantunits', storeId: 'subject-vacantunits', label: 'Vacant Units', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-zoningauthority', storeId: 'subject-zoningauthority', label: 'Zoning Authority', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-zoningchange', storeId: 'subject-zoningchange', label: 'Zoning Change', section: 'property-identification', subsection: 'subject-property', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-zoningchangestatus', storeId: 'subject-zoningchangestatus', label: 'Zoning Change Status', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+
 ];
 
 // ============================================================================

@@ -1634,6 +1634,41 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp4-year-built', storeId: 'comp4-year-built', label: 'Comp4 Year Built', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp4-zoning', storeId: 'comp4-zoning', label: 'Comp4 Zoning', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
 
+  // ============================================================================
+  // SECTION: SALES COMPARISON - COMP5
+  // ============================================================================
+
+  { id: 'comp5-address-full', storeId: 'comp5-address-full', label: 'Comp5 Address Full', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-analysisprice', storeId: 'comp5-analysisprice', label: 'Comp5 Analysis Price', section: 'sales-comparison', subsection: 'comp5', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp5-buildings', storeId: 'comp5-buildings', label: 'Comp5 Buildings', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-buyer', storeId: 'comp5-buyer', label: 'Comp5 Buyer', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-citystatezip', storeId: 'comp5-citystatezip', label: 'Comp5 City State Zip', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-county', storeId: 'comp5-county', label: 'Comp5 County', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-distance', storeId: 'comp5-distance', label: 'Comp5 Distance', section: 'sales-comparison', subsection: 'comp5', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp5-label', storeId: 'comp5-label', label: 'Comp5 Label', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-landarea', storeId: 'comp5-landarea', label: 'Comp5 Land Area', section: 'sales-comparison', subsection: 'comp5', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp5-laundry', storeId: 'comp5-laundry', label: 'Comp5 Laundry', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-map', storeId: 'comp5-map', label: 'Comp5 Map', section: 'sales-comparison', subsection: 'comp5', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp5-marketconditions', storeId: 'comp5-marketconditions', label: 'Comp5 Market Conditions', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-nra', storeId: 'comp5-nra', label: 'Comp5 NRA', section: 'sales-comparison', subsection: 'comp5', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp5-parking', storeId: 'comp5-parking', label: 'Comp5 Parking', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-photo', storeId: 'comp5-photo', label: 'Comp5 Photo', section: 'sales-comparison', subsection: 'comp5', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp5-propertytype', storeId: 'comp5-propertytype', label: 'Comp5 Property Type', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-remarks', storeId: 'comp5-remarks', label: 'Comp5 Remarks', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-renttype', storeId: 'comp5-renttype', label: 'Comp5 Rent Type', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-rightstransferred', storeId: 'comp5-rightstransferred', label: 'Comp5 Rights Transferred', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-securityfeatures', storeId: 'comp5-securityfeatures', label: 'Comp5 Security Features', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-seller', storeId: 'comp5-seller', label: 'Comp5 Seller', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-submarket', storeId: 'comp5-submarket', label: 'Comp5 Submarket', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-transactionstatus', storeId: 'comp5-transactionstatus', label: 'Comp5 Transaction Status', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-unitmix-avgsize', storeId: 'comp5-unitmix-avgsize', label: 'Comp5 Unit Mix Avg Size', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-unitmix-count', storeId: 'comp5-unitmix-count', label: 'Comp5 Unit Mix Count', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-unitmix-type', storeId: 'comp5-unitmix-type', label: 'Comp5 Unit Mix Type', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-utilities', storeId: 'comp5-utilities', label: 'Comp5 Utilities', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-year-built', storeId: 'comp5-year-built', label: 'Comp5 Year Built', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-zoning', storeId: 'comp5-zoning', label: 'Comp5 Zoning', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+
+
 
 
 

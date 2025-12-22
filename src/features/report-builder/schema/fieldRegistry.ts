@@ -1667,10 +1667,319 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp5-utilities', storeId: 'comp5-utilities', label: 'Comp5 Utilities', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp5-year-built', storeId: 'comp5-year-built', label: 'Comp5 Year Built', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp5-zoning', storeId: 'comp5-zoning', label: 'Comp5 Zoning', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  // ============================================================================
+  // RENTAL COMPARABLE 1 (RENTCOMP1) - 22 Fields
+  // ============================================================================
+  { id: 'rentcomp1-address', storeId: 'rentcomp1-address', label: 'Rentcomp1 Address', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-appeal', storeId: 'rentcomp1-appeal', label: 'Rentcomp1 Appeal', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-avg-unit-sf', storeId: 'rentcomp1-avg-unit-sf', label: 'Rentcomp1 Avg Unit SF', section: 'rent-analysis', subsection: 'rentcomp1', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-city', storeId: 'rentcomp1-city', label: 'Rentcomp1 City', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-condition', storeId: 'rentcomp1-condition', label: 'Rentcomp1 Condition', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-laundry', storeId: 'rentcomp1-laundry', label: 'Rentcomp1 Laundry', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-location', storeId: 'rentcomp1-location', label: 'Rentcomp1 Location', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-name', storeId: 'rentcomp1-name', label: 'Rentcomp1 Name', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-parking-incl', storeId: 'rentcomp1-parking-incl', label: 'Rentcomp1 Parking Included', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-parking-type', storeId: 'rentcomp1-parking-type', label: 'Rentcomp1 Parking Type', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-proj-amenities', storeId: 'rentcomp1-proj-amenities', label: 'Rentcomp1 Project Amenities', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-province', storeId: 'rentcomp1-province', label: 'Rentcomp1 Province', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-quality', storeId: 'rentcomp1-quality', label: 'Rentcomp1 Quality', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-rent-sf-avg', storeId: 'rentcomp1-rent-sf-avg', label: 'Rentcomp1 Rent/SF Avg', section: 'rent-analysis', subsection: 'rentcomp1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-rent-unit-avg', storeId: 'rentcomp1-rent-unit-avg', label: 'Rentcomp1 Rent/Unit Avg', section: 'rent-analysis', subsection: 'rentcomp1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-renttype', storeId: 'rentcomp1-renttype', label: 'Rentcomp1 Rent Type', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-security', storeId: 'rentcomp1-security', label: 'Rentcomp1 Security', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-surveycomments', storeId: 'rentcomp1-surveycomments', label: 'Rentcomp1 Survey Comments', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-totaladj', storeId: 'rentcomp1-totaladj', label: 'Rentcomp1 Total Adj', section: 'rent-analysis', subsection: 'rentcomp1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-unit-amenities', storeId: 'rentcomp1-unit-amenities', label: 'Rentcomp1 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-units', storeId: 'rentcomp1-units', label: 'Rentcomp1 Units', section: 'rent-analysis', subsection: 'rentcomp1', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-utilities', storeId: 'rentcomp1-utilities', label: 'Rentcomp1 Utilities', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
 
+  // ============================================================================
+  // RENTAL COMPARABLE 2 (RENTCOMP2) - 22 Fields
+  // ============================================================================
+  { id: 'rentcomp2-address', storeId: 'rentcomp2-address', label: 'Rentcomp2 Address', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-appeal', storeId: 'rentcomp2-appeal', label: 'Rentcomp2 Appeal', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-avg-unit-sf', storeId: 'rentcomp2-avg-unit-sf', label: 'Rentcomp2 Avg Unit SF', section: 'rent-analysis', subsection: 'rentcomp2', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-city', storeId: 'rentcomp2-city', label: 'Rentcomp2 City', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-condition', storeId: 'rentcomp2-condition', label: 'Rentcomp2 Condition', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-laundry', storeId: 'rentcomp2-laundry', label: 'Rentcomp2 Laundry', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-location', storeId: 'rentcomp2-location', label: 'Rentcomp2 Location', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-name', storeId: 'rentcomp2-name', label: 'Rentcomp2 Name', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-parking-incl', storeId: 'rentcomp2-parking-incl', label: 'Rentcomp2 Parking Included', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-parking-type', storeId: 'rentcomp2-parking-type', label: 'Rentcomp2 Parking Type', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-proj-amenities', storeId: 'rentcomp2-proj-amenities', label: 'Rentcomp2 Project Amenities', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-province', storeId: 'rentcomp2-province', label: 'Rentcomp2 Province', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-quality', storeId: 'rentcomp2-quality', label: 'Rentcomp2 Quality', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-rent-sf-avg', storeId: 'rentcomp2-rent-sf-avg', label: 'Rentcomp2 Rent/SF Avg', section: 'rent-analysis', subsection: 'rentcomp2', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-rent-unit-avg', storeId: 'rentcomp2-rent-unit-avg', label: 'Rentcomp2 Rent/Unit Avg', section: 'rent-analysis', subsection: 'rentcomp2', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-renttype', storeId: 'rentcomp2-renttype', label: 'Rentcomp2 Rent Type', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-security', storeId: 'rentcomp2-security', label: 'Rentcomp2 Security', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-surveycomments', storeId: 'rentcomp2-surveycomments', label: 'Rentcomp2 Survey Comments', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-totaladj', storeId: 'rentcomp2-totaladj', label: 'Rentcomp2 Total Adj', section: 'rent-analysis', subsection: 'rentcomp2', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-unit-amenities', storeId: 'rentcomp2-unit-amenities', label: 'Rentcomp2 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-units', storeId: 'rentcomp2-units', label: 'Rentcomp2 Units', section: 'rent-analysis', subsection: 'rentcomp2', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-utilities', storeId: 'rentcomp2-utilities', label: 'Rentcomp2 Utilities', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
 
+  // ============================================================================
+  // RENTAL COMPARABLE 3 (RENTCOMP3) - 22 Fields
+  // ============================================================================
+  { id: 'rentcomp3-address', storeId: 'rentcomp3-address', label: 'Rentcomp3 Address', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-appeal', storeId: 'rentcomp3-appeal', label: 'Rentcomp3 Appeal', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-avg-unit-sf', storeId: 'rentcomp3-avg-unit-sf', label: 'Rentcomp3 Avg Unit SF', section: 'rent-analysis', subsection: 'rentcomp3', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-city', storeId: 'rentcomp3-city', label: 'Rentcomp3 City', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-condition', storeId: 'rentcomp3-condition', label: 'Rentcomp3 Condition', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-laundry', storeId: 'rentcomp3-laundry', label: 'Rentcomp3 Laundry', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-location', storeId: 'rentcomp3-location', label: 'Rentcomp3 Location', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-name', storeId: 'rentcomp3-name', label: 'Rentcomp3 Name', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-parking-incl', storeId: 'rentcomp3-parking-incl', label: 'Rentcomp3 Parking Included', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-parking-type', storeId: 'rentcomp3-parking-type', label: 'Rentcomp3 Parking Type', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-proj-amenities', storeId: 'rentcomp3-proj-amenities', label: 'Rentcomp3 Project Amenities', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-province', storeId: 'rentcomp3-province', label: 'Rentcomp3 Province', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-quality', storeId: 'rentcomp3-quality', label: 'Rentcomp3 Quality', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-rent-sf-avg', storeId: 'rentcomp3-rent-sf-avg', label: 'Rentcomp3 Rent/SF Avg', section: 'rent-analysis', subsection: 'rentcomp3', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-rent-unit-avg', storeId: 'rentcomp3-rent-unit-avg', label: 'Rentcomp3 Rent/Unit Avg', section: 'rent-analysis', subsection: 'rentcomp3', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-renttype', storeId: 'rentcomp3-renttype', label: 'Rentcomp3 Rent Type', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-security', storeId: 'rentcomp3-security', label: 'Rentcomp3 Security', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-surveycomments', storeId: 'rentcomp3-surveycomments', label: 'Rentcomp3 Survey Comments', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-totaladj', storeId: 'rentcomp3-totaladj', label: 'Rentcomp3 Total Adj', section: 'rent-analysis', subsection: 'rentcomp3', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-unit-amenities', storeId: 'rentcomp3-unit-amenities', label: 'Rentcomp3 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-units', storeId: 'rentcomp3-units', label: 'Rentcomp3 Units', section: 'rent-analysis', subsection: 'rentcomp3', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-utilities', storeId: 'rentcomp3-utilities', label: 'Rentcomp3 Utilities', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
 
+  // ============================================================================
+  // RENTAL COMPARABLE 4 (RENTCOMP4) - 22 Fields
+  // ============================================================================
+  { id: 'rentcomp4-address', storeId: 'rentcomp4-address', label: 'Rentcomp4 Address', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-appeal', storeId: 'rentcomp4-appeal', label: 'Rentcomp4 Appeal', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-avg-unit-sf', storeId: 'rentcomp4-avg-unit-sf', label: 'Rentcomp4 Avg Unit SF', section: 'rent-analysis', subsection: 'rentcomp4', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-city', storeId: 'rentcomp4-city', label: 'Rentcomp4 City', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-condition', storeId: 'rentcomp4-condition', label: 'Rentcomp4 Condition', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-laundry', storeId: 'rentcomp4-laundry', label: 'Rentcomp4 Laundry', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-location', storeId: 'rentcomp4-location', label: 'Rentcomp4 Location', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-name', storeId: 'rentcomp4-name', label: 'Rentcomp4 Name', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-parking-incl', storeId: 'rentcomp4-parking-incl', label: 'Rentcomp4 Parking Included', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-parking-type', storeId: 'rentcomp4-parking-type', label: 'Rentcomp4 Parking Type', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-proj-amenities', storeId: 'rentcomp4-proj-amenities', label: 'Rentcomp4 Project Amenities', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-province', storeId: 'rentcomp4-province', label: 'Rentcomp4 Province', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-quality', storeId: 'rentcomp4-quality', label: 'Rentcomp4 Quality', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-rent-sf-avg', storeId: 'rentcomp4-rent-sf-avg', label: 'Rentcomp4 Rent/SF Avg', section: 'rent-analysis', subsection: 'rentcomp4', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-rent-unit-avg', storeId: 'rentcomp4-rent-unit-avg', label: 'Rentcomp4 Rent/Unit Avg', section: 'rent-analysis', subsection: 'rentcomp4', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-renttype', storeId: 'rentcomp4-renttype', label: 'Rentcomp4 Rent Type', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-security', storeId: 'rentcomp4-security', label: 'Rentcomp4 Security', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-surveycomments', storeId: 'rentcomp4-surveycomments', label: 'Rentcomp4 Survey Comments', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-totaladj', storeId: 'rentcomp4-totaladj', label: 'Rentcomp4 Total Adj', section: 'rent-analysis', subsection: 'rentcomp4', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-unit-amenities', storeId: 'rentcomp4-unit-amenities', label: 'Rentcomp4 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-units', storeId: 'rentcomp4-units', label: 'Rentcomp4 Units', section: 'rent-analysis', subsection: 'rentcomp4', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-utilities', storeId: 'rentcomp4-utilities', label: 'Rentcomp4 Utilities', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
 
+  // ============================================================================
+  // RENTAL COMPARABLE 5 (RENTCOMP5) - 22 Fields
+  // ============================================================================
+  { id: 'rentcomp5-address', storeId: 'rentcomp5-address', label: 'Rentcomp5 Address', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-appeal', storeId: 'rentcomp5-appeal', label: 'Rentcomp5 Appeal', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-avg-unit-sf', storeId: 'rentcomp5-avg-unit-sf', label: 'Rentcomp5 Avg Unit SF', section: 'rent-analysis', subsection: 'rentcomp5', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-city', storeId: 'rentcomp5-city', label: 'Rentcomp5 City', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-condition', storeId: 'rentcomp5-condition', label: 'Rentcomp5 Condition', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-laundry', storeId: 'rentcomp5-laundry', label: 'Rentcomp5 Laundry', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-location', storeId: 'rentcomp5-location', label: 'Rentcomp5 Location', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-name', storeId: 'rentcomp5-name', label: 'Rentcomp5 Name', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-parking-incl', storeId: 'rentcomp5-parking-incl', label: 'Rentcomp5 Parking Included', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-parking-type', storeId: 'rentcomp5-parking-type', label: 'Rentcomp5 Parking Type', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-proj-amenities', storeId: 'rentcomp5-proj-amenities', label: 'Rentcomp5 Project Amenities', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-province', storeId: 'rentcomp5-province', label: 'Rentcomp5 Province', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-quality', storeId: 'rentcomp5-quality', label: 'Rentcomp5 Quality', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-rent-sf-avg', storeId: 'rentcomp5-rent-sf-avg', label: 'Rentcomp5 Rent/SF Avg', section: 'rent-analysis', subsection: 'rentcomp5', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-rent-unit-avg', storeId: 'rentcomp5-rent-unit-avg', label: 'Rentcomp5 Rent/Unit Avg', section: 'rent-analysis', subsection: 'rentcomp5', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-renttype', storeId: 'rentcomp5-renttype', label: 'Rentcomp5 Rent Type', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-security', storeId: 'rentcomp5-security', label: 'Rentcomp5 Security', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-surveycomments', storeId: 'rentcomp5-surveycomments', label: 'Rentcomp5 Survey Comments', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-totaladj', storeId: 'rentcomp5-totaladj', label: 'Rentcomp5 Total Adj', section: 'rent-analysis', subsection: 'rentcomp5', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-unit-amenities', storeId: 'rentcomp5-unit-amenities', label: 'Rentcomp5 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-units', storeId: 'rentcomp5-units', label: 'Rentcomp5 Units', section: 'rent-analysis', subsection: 'rentcomp5', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-utilities', storeId: 'rentcomp5-utilities', label: 'Rentcomp5 Utilities', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  // ============================================================================
+  // ADDITIONAL SUBJECT FIELDS (7 fields)
+  // ============================================================================
+
+  { id: 'subject-avg-unit-sf', storeId: 'subject-avg-unit-sf', label: 'Average Unit SF', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-name', storeId: 'subject-name', label: 'Property Name', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-parking-incl', storeId: 'subject-parking-incl', label: 'Parking Included', section: 'amenities', subsection: 'subject-amenities', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-parking-type', storeId: 'subject-parking-type', label: 'Parking Type', section: 'amenities', subsection: 'subject-amenities', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-rent-sf-avg', storeId: 'subject-rent-sf-avg', label: 'Average Rent/SF', section: 'income-analysis', subsection: 'rent-analysis', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'subject-rent-unit-avg', storeId: 'subject-rent-unit-avg', label: 'Average Rent/Unit', section: 'income-analysis', subsection: 'rent-analysis', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'subject-year-built', storeId: 'subject-year-built', label: 'Year Built', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // COMPANY FIELDS (6 fields)
+  // ============================================================================
+
+  { id: 'company-address', storeId: 'company-address', label: 'Company Address', section: 'company-info', subsection: 'company-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'company-citystatezip', storeId: 'company-citystatezip', label: 'Company City/State/Zip', section: 'company-info', subsection: 'company-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'company-jobnumber', storeId: 'company-jobnumber', label: 'Job Number', section: 'company-info', subsection: 'company-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'company-name', storeId: 'company-name', label: 'Company Name', section: 'company-info', subsection: 'company-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'company-phone', storeId: 'company-phone', label: 'Company Phone', section: 'company-info', subsection: 'company-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'company-website', storeId: 'company-website', label: 'Company Website', section: 'company-info', subsection: 'company-details', type: 'text', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // CLIENT FIELDS (2 fields)
+  // ============================================================================
+
+  { id: 'client-citystatezip', storeId: 'client-citystatezip', label: 'Client City/State/Zip', section: 'client-info', subsection: 'client-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'client-name', storeId: 'client-name', label: 'Client Name', section: 'client-info', subsection: 'client-details', type: 'text', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // APPRAISER FIELDS (1 field)
+  // ============================================================================
+
+  { id: 'appraiser-name-credentials', storeId: 'appraiser-name-credentials', label: 'Appraiser Name & Credentials', section: 'appraiser-info', subsection: 'appraiser-details', type: 'text', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // REPORT FIELDS (16 fields)
+  // ============================================================================
+
+  { id: 'report-date1', storeId: 'report-date1', label: 'Report Date', section: 'report-info', subsection: 'report-details', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'report-dateinspection', storeId: 'report-dateinspection', label: 'Date of Inspection', section: 'report-info', subsection: 'report-details', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'report-effectivedate', storeId: 'report-effectivedate', label: 'Effective Date', section: 'report-info', subsection: 'report-details', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'report-extraordinary', storeId: 'report-extraordinary', label: 'Extraordinary Assumptions', section: 'report-info', subsection: 'report-details', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'report-hypothetical', storeId: 'report-hypothetical', label: 'Hypothetical Conditions', section: 'report-info', subsection: 'report-details', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'report-inspectiondate', storeId: 'report-inspectiondate', label: 'Inspection Date', section: 'report-info', subsection: 'report-details', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'report-intendeduse', storeId: 'report-intendeduse', label: 'Intended Use', section: 'report-info', subsection: 'report-details', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'report-intendeduser', storeId: 'report-intendeduser', label: 'Intended User', section: 'report-info', subsection: 'report-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'report-interest', storeId: 'report-interest', label: 'Interest Appraised', section: 'report-info', subsection: 'report-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'report-legal', storeId: 'report-legal', label: 'Legal Description', section: 'report-info', subsection: 'report-details', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'report-limcond', storeId: 'report-limcond', label: 'Limiting Conditions', section: 'report-info', subsection: 'report-details', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'report-valuationcost', storeId: 'report-valuationcost', label: 'Valuation - Cost Approach', section: 'report-info', subsection: 'report-details', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'report-valuationincome', storeId: 'report-valuationincome', label: 'Valuation - Income Approach', section: 'report-info', subsection: 'report-details', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'report-valuationsales', storeId: 'report-valuationsales', label: 'Valuation - Sales Approach', section: 'report-info', subsection: 'report-details', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'report-values', storeId: 'report-values', label: 'Final Value Conclusion', section: 'report-info', subsection: 'report-details', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'report-valuescenario1', storeId: 'report-valuescenario1', label: 'Value Scenario 1', section: 'report-info', subsection: 'report-details', type: 'currency', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // RENTAL COMPARABLES FIELDS (16 fields)
+  // ============================================================================
+
+  { id: 'rental-comp1-address-full', storeId: 'rental-comp1-address-full', label: 'Rental Comp 1 - Full Address', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp1-distance', storeId: 'rental-comp1-distance', label: 'Rental Comp 1 - Distance', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp1-label', storeId: 'rental-comp1-label', label: 'Rental Comp 1 - Label', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp2-address-full', storeId: 'rental-comp2-address-full', label: 'Rental Comp 2 - Full Address', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp2-distance', storeId: 'rental-comp2-distance', label: 'Rental Comp 2 - Distance', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp2-label', storeId: 'rental-comp2-label', label: 'Rental Comp 2 - Label', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp3-address-full', storeId: 'rental-comp3-address-full', label: 'Rental Comp 3 - Full Address', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp3-distance', storeId: 'rental-comp3-distance', label: 'Rental Comp 3 - Distance', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp3-label', storeId: 'rental-comp3-label', label: 'Rental Comp 3 - Label', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp4-address-full', storeId: 'rental-comp4-address-full', label: 'Rental Comp 4 - Full Address', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp4-distance', storeId: 'rental-comp4-distance', label: 'Rental Comp 4 - Distance', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp4-label', storeId: 'rental-comp4-label', label: 'Rental Comp 4 - Label', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp5-address-full', storeId: 'rental-comp5-address-full', label: 'Rental Comp 5 - Full Address', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp5-distance', storeId: 'rental-comp5-distance', label: 'Rental Comp 5 - Distance', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comp5-label', storeId: 'rental-comp5-label', label: 'Rental Comp 5 - Label', section: 'rent-analysis', subsection: 'rental-comps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rental-comparables-map', storeId: 'rental-comparables-map', label: 'Rental Comparables Map', section: 'rent-analysis', subsection: 'rental-comps', type: 'image', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // RENTAL REVENUE FIELDS (20 fields)
+  // ============================================================================
+
+  { id: 'rentalrevenue-1bed-contractrent', storeId: 'rentalrevenue-1bed-contractrent', label: '1BR Contract Rent', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-1bed-convvmkt', storeId: 'rentalrevenue-1bed-convvmkt', label: '1BR Contract vs Market', section: 'income-analysis', subsection: 'rental-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-1bed-marketrent', storeId: 'rentalrevenue-1bed-marketrent', label: '1BR Market Rent', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-1bed-persf', storeId: 'rentalrevenue-1bed-persf', label: '1BR Per SF', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-1bed-perunit', storeId: 'rentalrevenue-1bed-perunit', label: '1BR Per Unit', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-1bed-peryear', storeId: 'rentalrevenue-1bed-peryear', label: '1BR Per Year', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-1bed-units', storeId: 'rentalrevenue-1bed-units', label: '1BR Units Count', section: 'income-analysis', subsection: 'rental-revenue', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-2bed-contractrent', storeId: 'rentalrevenue-2bed-contractrent', label: '2BR Contract Rent', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-2bed-convvmkt', storeId: 'rentalrevenue-2bed-convvmkt', label: '2BR Contract vs Market', section: 'income-analysis', subsection: 'rental-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-2bed-marketrent', storeId: 'rentalrevenue-2bed-marketrent', label: '2BR Market Rent', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-2bed-persf', storeId: 'rentalrevenue-2bed-persf', label: '2BR Per SF', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-2bed-perunit', storeId: 'rentalrevenue-2bed-perunit', label: '2BR Per Unit', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-2bed-peryear', storeId: 'rentalrevenue-2bed-peryear', label: '2BR Per Year', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-2bed-units', storeId: 'rentalrevenue-2bed-units', label: '2BR Units Count', section: 'income-analysis', subsection: 'rental-revenue', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-total-contractrent', storeId: 'rentalrevenue-total-contractrent', label: 'Total Contract Rent', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-total-convvmkt', storeId: 'rentalrevenue-total-convvmkt', label: 'Total Contract vs Market', section: 'income-analysis', subsection: 'rental-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-total-marketrent', storeId: 'rentalrevenue-total-marketrent', label: 'Total Market Rent', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-total-persf', storeId: 'rentalrevenue-total-persf', label: 'Total Per SF', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-total-perunit', storeId: 'rentalrevenue-total-perunit', label: 'Total Per Unit', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'rentalrevenue-total-peryear', storeId: 'rentalrevenue-total-peryear', label: 'Total Per Year', section: 'income-analysis', subsection: 'rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+
+  // ============================================================================
+  // CONTRACT VS MARKET FIELDS (15 fields)
+  // ============================================================================
+
+  { id: 'contractvsmarket-1bed-actualrent', storeId: 'contractvsmarket-1bed-actualrent', label: '1BR Actual Rent', section: 'income-analysis', subsection: 'contract-vs-market', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-1bed-askingrent', storeId: 'contractvsmarket-1bed-askingrent', label: '1BR Asking Rent', section: 'income-analysis', subsection: 'contract-vs-market', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-1bed-concludedrent', storeId: 'contractvsmarket-1bed-concludedrent', label: '1BR Concluded Rent', section: 'income-analysis', subsection: 'contract-vs-market', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-1bed-percentage', storeId: 'contractvsmarket-1bed-percentage', label: '1BR Percentage', section: 'income-analysis', subsection: 'contract-vs-market', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-1bed-units', storeId: 'contractvsmarket-1bed-units', label: '1BR Units', section: 'income-analysis', subsection: 'contract-vs-market', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-2bed-actualrent', storeId: 'contractvsmarket-2bed-actualrent', label: '2BR Actual Rent', section: 'income-analysis', subsection: 'contract-vs-market', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-2bed-askingrent', storeId: 'contractvsmarket-2bed-askingrent', label: '2BR Asking Rent', section: 'income-analysis', subsection: 'contract-vs-market', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-2bed-concludedrent', storeId: 'contractvsmarket-2bed-concludedrent', label: '2BR Concluded Rent', section: 'income-analysis', subsection: 'contract-vs-market', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-2bed-percentage', storeId: 'contractvsmarket-2bed-percentage', label: '2BR Percentage', section: 'income-analysis', subsection: 'contract-vs-market', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-2bed-units', storeId: 'contractvsmarket-2bed-units', label: '2BR Units', section: 'income-analysis', subsection: 'contract-vs-market', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-total-actualrent', storeId: 'contractvsmarket-total-actualrent', label: 'Total Actual Rent', section: 'income-analysis', subsection: 'contract-vs-market', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-total-askingrent', storeId: 'contractvsmarket-total-askingrent', label: 'Total Asking Rent', section: 'income-analysis', subsection: 'contract-vs-market', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-total-concludedrent', storeId: 'contractvsmarket-total-concludedrent', label: 'Total Concluded Rent', section: 'income-analysis', subsection: 'contract-vs-market', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-total-percentage', storeId: 'contractvsmarket-total-percentage', label: 'Total Percentage', section: 'income-analysis', subsection: 'contract-vs-market', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'contractvsmarket-total-units', storeId: 'contractvsmarket-total-units', label: 'Total Units', section: 'income-analysis', subsection: 'contract-vs-market', type: 'number', inputSource: 'calculated', required: false },
+
+  // ============================================================================
+  // OTHER REVENUE FIELDS (11 fields)
+  // ============================================================================
+
+  { id: 'otherrevenue-laundry-percent', storeId: 'otherrevenue-laundry-percent', label: 'Laundry Revenue Percent', section: 'income-analysis', subsection: 'other-revenue', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'otherrevenue-laundry-persf', storeId: 'otherrevenue-laundry-persf', label: 'Laundry Revenue Per SF', section: 'income-analysis', subsection: 'other-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'otherrevenue-laundry-perunit', storeId: 'otherrevenue-laundry-perunit', label: 'Laundry Revenue Per Unit', section: 'income-analysis', subsection: 'other-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'otherrevenue-laundry-total', storeId: 'otherrevenue-laundry-total', label: 'Laundry Revenue Total', section: 'income-analysis', subsection: 'other-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'otherrevenue-parking-percent', storeId: 'otherrevenue-parking-percent', label: 'Parking Revenue Percent', section: 'income-analysis', subsection: 'other-revenue', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'otherrevenue-parking-persf', storeId: 'otherrevenue-parking-persf', label: 'Parking Revenue Per SF', section: 'income-analysis', subsection: 'other-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'otherrevenue-parking-perunit', storeId: 'otherrevenue-parking-perunit', label: 'Parking Revenue Per Unit', section: 'income-analysis', subsection: 'other-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'otherrevenue-parking-total', storeId: 'otherrevenue-parking-total', label: 'Parking Revenue Total', section: 'income-analysis', subsection: 'other-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'otherrevenue-total-persf', storeId: 'otherrevenue-total-persf', label: 'Other Revenue Total Per SF', section: 'income-analysis', subsection: 'other-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'otherrevenue-total-perunit', storeId: 'otherrevenue-total-perunit', label: 'Other Revenue Total Per Unit', section: 'income-analysis', subsection: 'other-revenue', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'otherrevenue-total-total', storeId: 'otherrevenue-total-total', label: 'Other Revenue Grand Total', section: 'income-analysis', subsection: 'other-revenue', type: 'currency', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // SASKATCHEWAN MARKET DATA FIELDS (8 fields)
+  // ============================================================================
+
+  { id: 'sk-avgrent-1bed', storeId: 'sk-avgrent-1bed', label: 'SK Avg Rent - 1 Bedroom', section: 'market', subsection: 'sk-market-data', type: 'currency', inputSource: 'api-fetch', required: false },
+  { id: 'sk-avgrent-2bed', storeId: 'sk-avgrent-2bed', label: 'SK Avg Rent - 2 Bedroom', section: 'market', subsection: 'sk-market-data', type: 'currency', inputSource: 'api-fetch', required: false },
+  { id: 'sk-avgrent-3bed', storeId: 'sk-avgrent-3bed', label: 'SK Avg Rent - 3 Bedroom', section: 'market', subsection: 'sk-market-data', type: 'currency', inputSource: 'api-fetch', required: false },
+  { id: 'sk-avgrent-bachelor', storeId: 'sk-avgrent-bachelor', label: 'SK Avg Rent - Bachelor', section: 'market', subsection: 'sk-market-data', type: 'currency', inputSource: 'api-fetch', required: false },
+  { id: 'sk-new-supply', storeId: 'sk-new-supply', label: 'SK New Supply', section: 'market', subsection: 'sk-market-data', type: 'number', inputSource: 'api-fetch', required: false },
+  { id: 'sk-rental-rate-growth', storeId: 'sk-rental-rate-growth', label: 'SK Rental Rate Growth', section: 'market', subsection: 'sk-market-data', type: 'percentage', inputSource: 'api-fetch', required: false },
+  { id: 'sk-supply-growth-rate', storeId: 'sk-supply-growth-rate', label: 'SK Supply Growth Rate', section: 'market', subsection: 'sk-market-data', type: 'percentage', inputSource: 'api-fetch', required: false },
+  { id: 'sk-vacancy-rate', storeId: 'sk-vacancy-rate', label: 'SK Vacancy Rate', section: 'market', subsection: 'sk-market-data', type: 'percentage', inputSource: 'api-fetch', required: false },
+
+  // ============================================================================
+  // CALCULATED FIELDS (8 fields)
+  // ============================================================================
+
+  { id: 'calc-indicated-value-rounded', storeId: 'calc-indicated-value-rounded', label: 'Indicated Value (Rounded)', section: 'calc', subsection: 'calculated-values', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-other-income-per-sf', storeId: 'calc-other-income-per-sf', label: 'Other Income Per SF', section: 'calc', subsection: 'calculated-values', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-other-income-per-unit', storeId: 'calc-other-income-per-unit', label: 'Other Income Per Unit', section: 'calc', subsection: 'calculated-values', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-rental-revenue-per-unit', storeId: 'calc-rental-revenue-per-unit', label: 'Rental Revenue Per Unit', section: 'calc', subsection: 'calculated-values', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-type-total-per-sf', storeId: 'calc-type-total-per-sf', label: 'Type Total Per SF', section: 'calc', subsection: 'calculated-values', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-type-total-per-unit', storeId: 'calc-type-total-per-unit', label: 'Type Total Per Unit', section: 'calc', subsection: 'calculated-values', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-vacancy-per-sf', storeId: 'calc-vacancy-per-sf', label: 'Vacancy Per SF', section: 'calc', subsection: 'calculated-values', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-vacancy-per-unit', storeId: 'calc-vacancy-per-unit', label: 'Vacancy Per Unit', section: 'calc', subsection: 'calculated-values', type: 'currency', inputSource: 'calculated', required: false },
+
+  // ============================================================================
+  // REVENUE PROJECTION FIELDS (6 fields)
+  // ============================================================================
+
+  { id: 'revenue-laundry-proj-pct', storeId: 'revenue-laundry-proj-pct', label: 'Laundry Revenue - Projected %', section: 'income-analysis', subsection: 'revenue-projections', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'revenue-laundry-proj-total', storeId: 'revenue-laundry-proj-total', label: 'Laundry Revenue - Projected Total', section: 'income-analysis', subsection: 'revenue-projections', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'revenue-misc-proj-pct', storeId: 'revenue-misc-proj-pct', label: 'Misc Revenue - Projected %', section: 'income-analysis', subsection: 'revenue-projections', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'revenue-multifamily-proj-pct', storeId: 'revenue-multifamily-proj-pct', label: 'Multifamily Revenue - Projected %', section: 'income-analysis', subsection: 'revenue-projections', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'revenue-parking-proj-pct', storeId: 'revenue-parking-proj-pct', label: 'Parking Revenue - Projected %', section: 'income-analysis', subsection: 'revenue-projections', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'revenue-rental-proj-pct', storeId: 'revenue-rental-proj-pct', label: 'Rental Revenue - Projected %', section: 'income-analysis', subsection: 'revenue-projections', type: 'percentage', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // VACANCY & CREDIT LOSS FIELDS (4 fields)
+  // ============================================================================
+
+  { id: 'vacancy-loss-sf', storeId: 'vacancy-loss-sf', label: 'Vacancy Loss Per SF', section: 'income-analysis', subsection: 'vacancy-loss', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'vacancy-loss-unit', storeId: 'vacancy-loss-unit', label: 'Vacancy Loss Per Unit', section: 'income-analysis', subsection: 'vacancy-loss', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'vacancy-loss-year', storeId: 'vacancy-loss-year', label: 'Vacancy Loss Per Year', section: 'income-analysis', subsection: 'vacancy-loss', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'vacancy-rate-concluded', storeId: 'vacancy-rate-concluded', label: 'Vacancy Rate - Concluded', section: 'income-analysis', subsection: 'vacancy-loss', type: 'percentage', inputSource: 'user-input', required: false },
 
 
 ];

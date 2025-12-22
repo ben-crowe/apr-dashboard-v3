@@ -831,6 +831,12 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'dca-price-per-unit-concluded', storeId: 'dca-price-per-unit-concluded', label: 'Concluded Price Per Unit', section: 'sales', subsection: 'dca-summary', type: 'currency', inputSource: 'user-input', required: false },
   { id: 'dca-price-per-unit-high', storeId: 'dca-price-per-unit-high', label: 'Price Per Unit High', section: 'sales', subsection: 'dca-summary', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'dca-price-per-unit-low', storeId: 'dca-price-per-unit-low', label: 'Price Per Unit Low', section: 'sales', subsection: 'dca-summary', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'dca-price-per-unit-avg', storeId: 'dca-price-per-unit-avg', label: 'Price Per Unit Average', section: 'sales', subsection: 'dca-summary', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'sales-indicated-value', storeId: 'sales-indicated-value', label: 'Sales Indicated Value', section: 'sales', subsection: 'sales-conclusion', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'sales-value-per-sf', storeId: 'sales-value-per-sf', label: 'Sales Value Per SF', section: 'sales', subsection: 'sales-conclusion', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'sca-adjustedvaluehigh', storeId: 'sca-adjustedvaluehigh', label: 'SCA Adjusted Value High', section: 'sales', subsection: 'sca-analysis', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'sca-adjustedvaluelow', storeId: 'sca-adjustedvaluelow', label: 'SCA Adjusted Value Low', section: 'sales', subsection: 'sca-analysis', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'sca-concludedvalueperunit', storeId: 'sca-concludedvalueperunit', label: 'SCA Concluded Value Per Unit', section: 'sales', subsection: 'sca-analysis', type: 'currency', inputSource: 'user-input', required: false },
 
   // Sales - Comp 1 Subsection
   { id: 'comp1-name', storeId: 'comp1-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
@@ -1229,6 +1235,18 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'income-expense-narrative', storeId: 'income-expense-narrative', label: 'Expense Analysis', section: 'income', subsection: 'income-expenses', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'income-noi-narrative', storeId: 'income-noi-narrative', label: 'NOI Analysis', section: 'income', subsection: 'income-noi', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'income-cap-rate-analysis', storeId: 'income-cap-rate-analysis', label: 'Cap Rate Analysis', section: 'income', subsection: 'income-analysis', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'bond-yield-10yr', storeId: 'bond-yield-10yr', label: '10-Year Bond Yield', section: 'income', subsection: 'cap-rate-analysis', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'caprate-average', storeId: 'caprate-average', label: 'Cap Rate Average', section: 'income', subsection: 'cap-rate-analysis', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'caprate-high', storeId: 'caprate-high', label: 'Cap Rate High', section: 'income', subsection: 'cap-rate-analysis', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'caprate-implied-range', storeId: 'caprate-implied-range', label: 'Cap Rate Implied Range', section: 'income', subsection: 'cap-rate-analysis', type: 'text', inputSource: 'calculated', required: false },
+  { id: 'caprate-low', storeId: 'caprate-low', label: 'Cap Rate Low', section: 'income', subsection: 'cap-rate-analysis', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'caprate-range', storeId: 'caprate-range', label: 'Cap Rate Range', section: 'income', subsection: 'cap-rate-analysis', type: 'text', inputSource: 'calculated', required: false },
+  { id: 'egr-proj-pct', storeId: 'egr-proj-pct', label: 'EGR Projection %', section: 'income', subsection: 'income-projections', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'ia-dircap-caprate1', storeId: 'ia-dircap-caprate1', label: 'Direct Cap Cap Rate', section: 'income', subsection: 'direct-capitalization', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'ia-dircap-expenseratio', storeId: 'ia-dircap-expenseratio', label: 'Direct Cap Expense Ratio', section: 'income', subsection: 'direct-capitalization', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'noi-proj-pct', storeId: 'noi-proj-pct', label: 'NOI Projection %', section: 'income', subsection: 'income-projections', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'pgr-proj-pct', storeId: 'pgr-proj-pct', label: 'PGR Projection %', section: 'income', subsection: 'income-projections', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'hist-pgr-pct-pgr', storeId: 'hist-pgr-pct-pgr', label: 'Historical PGR %', section: 'income', subsection: 'historical-analysis', type: 'percentage', inputSource: 'user-input', required: false },
   { id: 'income-value-indication', storeId: 'income-value-indication', label: 'Income Approach Value', section: 'income', subsection: 'income-analysis', type: 'number', inputSource: 'calculated', required: false },
 
   // ============================================================================
@@ -1531,6 +1549,16 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp1-unitmix-type', storeId: 'comp1-unitmix-type', label: 'Comp1 Unit Mix Type', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp1-utilities', storeId: 'comp1-utilities', label: 'Comp1 Utilities', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp1-year-built', storeId: 'comp1-year-built', label: 'Comp1 Year Built', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-analysispriceperunit', storeId: 'comp1-analysispriceperunit', label: 'Comp1 Analysis Price Per Unit', section: 'sales-comparison', subsection: 'comp1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp1-caprate', storeId: 'comp1-caprate', label: 'Comp1 Cap Rate', section: 'sales-comparison', subsection: 'comp1', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp1-parkingtype', storeId: 'comp1-parkingtype', label: 'Comp1 Parking Type', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-priceperunit', storeId: 'comp1-priceperunit', label: 'Comp1 Price Per Unit', section: 'sales-comparison', subsection: 'comp1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp1-projectamenities', storeId: 'comp1-projectamenities', label: 'Comp1 Project Amenities', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-propertyname', storeId: 'comp1-propertyname', label: 'Comp1 Property Name', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-saledate', storeId: 'comp1-saledate', label: 'Comp1 Sale Date', section: 'sales-comparison', subsection: 'comp1', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'comp1-saleprice', storeId: 'comp1-saleprice', label: 'Comp1 Sale Price', section: 'sales-comparison', subsection: 'comp1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp1-unitamenities', storeId: 'comp1-unitamenities', label: 'Comp1 Unit Amenities', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-yearbuilt', storeId: 'comp1-yearbuilt', label: 'Comp1 Year Built', section: 'sales-comparison', subsection: 'comp1', type: 'number', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // SECTION: SALES COMPARISON - COMP2
@@ -1565,6 +1593,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp2-utilities', storeId: 'comp2-utilities', label: 'Comp2 Utilities', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp2-year-built', storeId: 'comp2-year-built', label: 'Comp2 Year Built', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp2-zoning', storeId: 'comp2-zoning', label: 'Comp2 Zoning', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-caprate', storeId: 'comp2-caprate', label: 'Comp2 Cap Rate', section: 'sales-comparison', subsection: 'comp2', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp2-parkingtype', storeId: 'comp2-parkingtype', label: 'Comp2 Parking Type', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-priceperunit', storeId: 'comp2-priceperunit', label: 'Comp2 Price Per Unit', section: 'sales-comparison', subsection: 'comp2', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp2-propertyname', storeId: 'comp2-propertyname', label: 'Comp2 Property Name', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-saledate', storeId: 'comp2-saledate', label: 'Comp2 Sale Date', section: 'sales-comparison', subsection: 'comp2', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'comp2-saleprice', storeId: 'comp2-saleprice', label: 'Comp2 Sale Price', section: 'sales-comparison', subsection: 'comp2', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp2-unitamenities', storeId: 'comp2-unitamenities', label: 'Comp2 Unit Amenities', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-yearbuilt', storeId: 'comp2-yearbuilt', label: 'Comp2 Year Built', section: 'sales-comparison', subsection: 'comp2', type: 'number', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // SECTION: SALES COMPARISON - COMP3
@@ -1599,6 +1635,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp3-utilities', storeId: 'comp3-utilities', label: 'Comp3 Utilities', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp3-year-built', storeId: 'comp3-year-built', label: 'Comp3 Year Built', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp3-zoning', storeId: 'comp3-zoning', label: 'Comp3 Zoning', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-caprate', storeId: 'comp3-caprate', label: 'Comp3 Cap Rate', section: 'sales-comparison', subsection: 'comp3', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp3-parkingtype', storeId: 'comp3-parkingtype', label: 'Comp3 Parking Type', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-priceperunit', storeId: 'comp3-priceperunit', label: 'Comp3 Price Per Unit', section: 'sales-comparison', subsection: 'comp3', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp3-propertyname', storeId: 'comp3-propertyname', label: 'Comp3 Property Name', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-saledate', storeId: 'comp3-saledate', label: 'Comp3 Sale Date', section: 'sales-comparison', subsection: 'comp3', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'comp3-saleprice', storeId: 'comp3-saleprice', label: 'Comp3 Sale Price', section: 'sales-comparison', subsection: 'comp3', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp3-unitamenities', storeId: 'comp3-unitamenities', label: 'Comp3 Unit Amenities', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-yearbuilt', storeId: 'comp3-yearbuilt', label: 'Comp3 Year Built', section: 'sales-comparison', subsection: 'comp3', type: 'number', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // SECTION: SALES COMPARISON - COMP4
@@ -1633,6 +1677,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp4-utilities', storeId: 'comp4-utilities', label: 'Comp4 Utilities', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp4-year-built', storeId: 'comp4-year-built', label: 'Comp4 Year Built', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp4-zoning', storeId: 'comp4-zoning', label: 'Comp4 Zoning', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-caprate', storeId: 'comp4-caprate', label: 'Comp4 Cap Rate', section: 'sales-comparison', subsection: 'comp4', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp4-parkingtype', storeId: 'comp4-parkingtype', label: 'Comp4 Parking Type', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-priceperunit', storeId: 'comp4-priceperunit', label: 'Comp4 Price Per Unit', section: 'sales-comparison', subsection: 'comp4', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp4-propertyname', storeId: 'comp4-propertyname', label: 'Comp4 Property Name', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-saledate', storeId: 'comp4-saledate', label: 'Comp4 Sale Date', section: 'sales-comparison', subsection: 'comp4', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'comp4-saleprice', storeId: 'comp4-saleprice', label: 'Comp4 Sale Price', section: 'sales-comparison', subsection: 'comp4', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp4-unitamenities', storeId: 'comp4-unitamenities', label: 'Comp4 Unit Amenities', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-yearbuilt', storeId: 'comp4-yearbuilt', label: 'Comp4 Year Built', section: 'sales-comparison', subsection: 'comp4', type: 'number', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // SECTION: SALES COMPARISON - COMP5
@@ -1667,6 +1719,15 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp5-utilities', storeId: 'comp5-utilities', label: 'Comp5 Utilities', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp5-year-built', storeId: 'comp5-year-built', label: 'Comp5 Year Built', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp5-zoning', storeId: 'comp5-zoning', label: 'Comp5 Zoning', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-caprate', storeId: 'comp5-caprate', label: 'Comp5 Cap Rate', section: 'sales-comparison', subsection: 'comp5', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp5-parkingtype', storeId: 'comp5-parkingtype', label: 'Comp5 Parking Type', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-priceperunit', storeId: 'comp5-priceperunit', label: 'Comp5 Price Per Unit', section: 'sales-comparison', subsection: 'comp5', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp5-propertyname', storeId: 'comp5-propertyname', label: 'Comp5 Property Name', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-saledate', storeId: 'comp5-saledate', label: 'Comp5 Sale Date', section: 'sales-comparison', subsection: 'comp5', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'comp5-saleprice', storeId: 'comp5-saleprice', label: 'Comp5 Sale Price', section: 'sales-comparison', subsection: 'comp5', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp5-unitamenities', storeId: 'comp5-unitamenities', label: 'Comp5 Unit Amenities', section: 'sales-comparison', subsection: 'comp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-yearbuilt', storeId: 'comp5-yearbuilt', label: 'Comp5 Year Built', section: 'sales-comparison', subsection: 'comp5', type: 'number', inputSource: 'user-input', required: false },
+
   // ============================================================================
   // RENTAL COMPARABLE 1 (RENTCOMP1) - 22 Fields
   // ============================================================================
@@ -1692,6 +1753,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'rentcomp1-unit-amenities', storeId: 'rentcomp1-unit-amenities', label: 'Rentcomp1 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
   { id: 'rentcomp1-units', storeId: 'rentcomp1-units', label: 'Rentcomp1 Units', section: 'rent-analysis', subsection: 'rentcomp1', type: 'number', inputSource: 'user-input', required: false },
   { id: 'rentcomp1-utilities', storeId: 'rentcomp1-utilities', label: 'Rentcomp1 Utilities', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-avgunitsf', storeId: 'rentcomp1-avgunitsf', label: 'Rentcomp1 Avg Unit SF', section: 'rent-analysis', subsection: 'rentcomp1', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-occupancy', storeId: 'rentcomp1-occupancy', label: 'Rentcomp1 Occupancy', section: 'rent-analysis', subsection: 'rentcomp1', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-parkingincl', storeId: 'rentcomp1-parkingincl', label: 'Rentcomp1 Parking Included', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-parkingtype', storeId: 'rentcomp1-parkingtype', label: 'Rentcomp1 Parking Type', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-projectamenities', storeId: 'rentcomp1-projectamenities', label: 'Rentcomp1 Project Amenities', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-rentsfavg', storeId: 'rentcomp1-rentsfavg', label: 'Rentcomp1 Rent/SF Avg', section: 'rent-analysis', subsection: 'rentcomp1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-rentunitavg', storeId: 'rentcomp1-rentunitavg', label: 'Rentcomp1 Rent/Unit Avg', section: 'rent-analysis', subsection: 'rentcomp1', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp1-unitamenities', storeId: 'rentcomp1-unitamenities', label: 'Rentcomp1 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp1', type: 'text', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // RENTAL COMPARABLE 2 (RENTCOMP2) - 22 Fields
@@ -1718,6 +1787,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'rentcomp2-unit-amenities', storeId: 'rentcomp2-unit-amenities', label: 'Rentcomp2 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
   { id: 'rentcomp2-units', storeId: 'rentcomp2-units', label: 'Rentcomp2 Units', section: 'rent-analysis', subsection: 'rentcomp2', type: 'number', inputSource: 'user-input', required: false },
   { id: 'rentcomp2-utilities', storeId: 'rentcomp2-utilities', label: 'Rentcomp2 Utilities', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-avgunitsf', storeId: 'rentcomp2-avgunitsf', label: 'Rentcomp2 Avg Unit SF', section: 'rent-analysis', subsection: 'rentcomp2', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-occupancy', storeId: 'rentcomp2-occupancy', label: 'Rentcomp2 Occupancy', section: 'rent-analysis', subsection: 'rentcomp2', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-parkingincl', storeId: 'rentcomp2-parkingincl', label: 'Rentcomp2 Parking Included', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-parkingtype', storeId: 'rentcomp2-parkingtype', label: 'Rentcomp2 Parking Type', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-projectamenities', storeId: 'rentcomp2-projectamenities', label: 'Rentcomp2 Project Amenities', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-rentsfavg', storeId: 'rentcomp2-rentsfavg', label: 'Rentcomp2 Rent/SF Avg', section: 'rent-analysis', subsection: 'rentcomp2', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-rentunitavg', storeId: 'rentcomp2-rentunitavg', label: 'Rentcomp2 Rent/Unit Avg', section: 'rent-analysis', subsection: 'rentcomp2', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp2-unitamenities', storeId: 'rentcomp2-unitamenities', label: 'Rentcomp2 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp2', type: 'text', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // RENTAL COMPARABLE 3 (RENTCOMP3) - 22 Fields
@@ -1744,6 +1821,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'rentcomp3-unit-amenities', storeId: 'rentcomp3-unit-amenities', label: 'Rentcomp3 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
   { id: 'rentcomp3-units', storeId: 'rentcomp3-units', label: 'Rentcomp3 Units', section: 'rent-analysis', subsection: 'rentcomp3', type: 'number', inputSource: 'user-input', required: false },
   { id: 'rentcomp3-utilities', storeId: 'rentcomp3-utilities', label: 'Rentcomp3 Utilities', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-avgunitsf', storeId: 'rentcomp3-avgunitsf', label: 'Rentcomp3 Avg Unit SF', section: 'rent-analysis', subsection: 'rentcomp3', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-occupancy', storeId: 'rentcomp3-occupancy', label: 'Rentcomp3 Occupancy', section: 'rent-analysis', subsection: 'rentcomp3', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-parkingincl', storeId: 'rentcomp3-parkingincl', label: 'Rentcomp3 Parking Included', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-parkingtype', storeId: 'rentcomp3-parkingtype', label: 'Rentcomp3 Parking Type', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-projectamenities', storeId: 'rentcomp3-projectamenities', label: 'Rentcomp3 Project Amenities', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-rentsfavg', storeId: 'rentcomp3-rentsfavg', label: 'Rentcomp3 Rent/SF Avg', section: 'rent-analysis', subsection: 'rentcomp3', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-rentunitavg', storeId: 'rentcomp3-rentunitavg', label: 'Rentcomp3 Rent/Unit Avg', section: 'rent-analysis', subsection: 'rentcomp3', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp3-unitamenities', storeId: 'rentcomp3-unitamenities', label: 'Rentcomp3 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp3', type: 'text', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // RENTAL COMPARABLE 4 (RENTCOMP4) - 22 Fields
@@ -1770,6 +1855,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'rentcomp4-unit-amenities', storeId: 'rentcomp4-unit-amenities', label: 'Rentcomp4 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
   { id: 'rentcomp4-units', storeId: 'rentcomp4-units', label: 'Rentcomp4 Units', section: 'rent-analysis', subsection: 'rentcomp4', type: 'number', inputSource: 'user-input', required: false },
   { id: 'rentcomp4-utilities', storeId: 'rentcomp4-utilities', label: 'Rentcomp4 Utilities', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-avgunitsf', storeId: 'rentcomp4-avgunitsf', label: 'Rentcomp4 Avg Unit SF', section: 'rent-analysis', subsection: 'rentcomp4', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-occupancy', storeId: 'rentcomp4-occupancy', label: 'Rentcomp4 Occupancy', section: 'rent-analysis', subsection: 'rentcomp4', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-parkingincl', storeId: 'rentcomp4-parkingincl', label: 'Rentcomp4 Parking Included', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-parkingtype', storeId: 'rentcomp4-parkingtype', label: 'Rentcomp4 Parking Type', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-projectamenities', storeId: 'rentcomp4-projectamenities', label: 'Rentcomp4 Project Amenities', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-rentsfavg', storeId: 'rentcomp4-rentsfavg', label: 'Rentcomp4 Rent/SF Avg', section: 'rent-analysis', subsection: 'rentcomp4', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-rentunitavg', storeId: 'rentcomp4-rentunitavg', label: 'Rentcomp4 Rent/Unit Avg', section: 'rent-analysis', subsection: 'rentcomp4', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp4-unitamenities', storeId: 'rentcomp4-unitamenities', label: 'Rentcomp4 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp4', type: 'text', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // RENTAL COMPARABLE 5 (RENTCOMP5) - 22 Fields
@@ -1796,6 +1889,15 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'rentcomp5-unit-amenities', storeId: 'rentcomp5-unit-amenities', label: 'Rentcomp5 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
   { id: 'rentcomp5-units', storeId: 'rentcomp5-units', label: 'Rentcomp5 Units', section: 'rent-analysis', subsection: 'rentcomp5', type: 'number', inputSource: 'user-input', required: false },
   { id: 'rentcomp5-utilities', storeId: 'rentcomp5-utilities', label: 'Rentcomp5 Utilities', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-avgunitsf', storeId: 'rentcomp5-avgunitsf', label: 'Rentcomp5 Avg Unit SF', section: 'rent-analysis', subsection: 'rentcomp5', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-occupancy', storeId: 'rentcomp5-occupancy', label: 'Rentcomp5 Occupancy', section: 'rent-analysis', subsection: 'rentcomp5', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-parkingincl', storeId: 'rentcomp5-parkingincl', label: 'Rentcomp5 Parking Included', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-parkingtype', storeId: 'rentcomp5-parkingtype', label: 'Rentcomp5 Parking Type', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-projectamenities', storeId: 'rentcomp5-projectamenities', label: 'Rentcomp5 Project Amenities', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-rentsfavg', storeId: 'rentcomp5-rentsfavg', label: 'Rentcomp5 Rent/SF Avg', section: 'rent-analysis', subsection: 'rentcomp5', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-rentunitavg', storeId: 'rentcomp5-rentunitavg', label: 'Rentcomp5 Rent/Unit Avg', section: 'rent-analysis', subsection: 'rentcomp5', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'rentcomp5-unitamenities', storeId: 'rentcomp5-unitamenities', label: 'Rentcomp5 Unit Amenities', section: 'rent-analysis', subsection: 'rentcomp5', type: 'text', inputSource: 'user-input', required: false },
+
   // ============================================================================
   // ADDITIONAL SUBJECT FIELDS (7 fields)
   // ============================================================================
@@ -1807,6 +1909,15 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'subject-rent-sf-avg', storeId: 'subject-rent-sf-avg', label: 'Average Rent/SF', section: 'income-analysis', subsection: 'rent-analysis', type: 'currency', inputSource: 'user-input', required: false },
   { id: 'subject-rent-unit-avg', storeId: 'subject-rent-unit-avg', label: 'Average Rent/Unit', section: 'income-analysis', subsection: 'rent-analysis', type: 'currency', inputSource: 'user-input', required: false },
   { id: 'subject-year-built', storeId: 'subject-year-built', label: 'Year Built', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'effective-date', storeId: 'effective-date', label: 'Effective Date', section: 'property-identification', subsection: 'appraisal-details', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'exposure-time', storeId: 'exposure-time', label: 'Exposure Time', section: 'property-identification', subsection: 'appraisal-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'final-value-conclusion', storeId: 'final-value-conclusion', label: 'Final Value Conclusion', section: 'recon', subsection: 'final-value', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'hbu-conclusion-vacant', storeId: 'hbu-conclusion-vacant', label: 'HBU Conclusion Vacant', section: 'hbu-as-vacant', subsection: 'hbu-conclusion', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'property-address', storeId: 'property-address', label: 'Property Address', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'site-size', storeId: 'site-size', label: 'Site Size', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-occupancy', storeId: 'subject-occupancy', label: 'Subject Occupancy', section: 'property-identification', subsection: 'subject-property', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'valuation-scenario', storeId: 'valuation-scenario', label: 'Valuation Scenario', section: 'property-identification', subsection: 'appraisal-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'zoning-designation', storeId: 'zoning-designation', label: 'Zoning Designation', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // COMPANY FIELDS (6 fields)
@@ -1831,6 +1942,11 @@ export const fieldRegistry: FieldDefinition[] = [
   // ============================================================================
 
   { id: 'appraiser-name-credentials', storeId: 'appraiser-name-credentials', label: 'Appraiser Name & Credentials', section: 'appraiser-info', subsection: 'appraiser-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser1-email', storeId: 'appraiser1-email', label: 'Appraiser 1 Email', section: 'appraiser-info', subsection: 'appraiser-details', type: 'email', inputSource: 'user-input', required: false },
+  { id: 'appraiser1-name', storeId: 'appraiser1-name', label: 'Appraiser 1 Name', section: 'appraiser-info', subsection: 'appraiser-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser1-signature', storeId: 'appraiser1-signature', label: 'Appraiser 1 Signature', section: 'appraiser-info', subsection: 'appraiser-details', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'appraiser1-title', storeId: 'appraiser1-title', label: 'Appraiser 1 Title', section: 'appraiser-info', subsection: 'appraiser-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser2-name', storeId: 'appraiser2-name', label: 'Appraiser 2 Name', section: 'appraiser-info', subsection: 'appraiser-details', type: 'text', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // REPORT FIELDS (16 fields)
@@ -1981,6 +2097,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'vacancy-loss-year', storeId: 'vacancy-loss-year', label: 'Vacancy Loss Per Year', section: 'income-analysis', subsection: 'vacancy-loss', type: 'currency', inputSource: 'user-input', required: false },
   { id: 'vacancy-rate-concluded', storeId: 'vacancy-rate-concluded', label: 'Vacancy Rate - Concluded', section: 'income-analysis', subsection: 'vacancy-loss', type: 'percentage', inputSource: 'user-input', required: false },
 
+  // ============================================================================
+  // MISCELLANEOUS FIELDS (4 fields)
+  // ============================================================================
+
+  { id: 'comparablesmap', storeId: 'comparablesmap', label: 'Comparables Map', section: 'sales', subsection: 'sales-map', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'contract-vs-market-percentage', storeId: 'contract-vs-market-percentage', label: 'Contract vs Market %', section: 'income-analysis', subsection: 'contract-analysis', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'interest-appraised', storeId: 'interest-appraised', label: 'Interest Appraised', section: 'property-identification', subsection: 'appraisal-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'risk-premium-bp', storeId: 'risk-premium-bp', label: 'Risk Premium (BP)', section: 'income', subsection: 'cap-rate-analysis', type: 'number', inputSource: 'user-input', required: false },
 
 ];
 

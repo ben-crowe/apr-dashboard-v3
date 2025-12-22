@@ -1600,6 +1600,41 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp3-year-built', storeId: 'comp3-year-built', label: 'Comp3 Year Built', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp3-zoning', storeId: 'comp3-zoning', label: 'Comp3 Zoning', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
 
+  // ============================================================================
+  // SECTION: SALES COMPARISON - COMP4
+  // ============================================================================
+
+  { id: 'comp4-address-full', storeId: 'comp4-address-full', label: 'Comp4 Address Full', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-analysisprice', storeId: 'comp4-analysisprice', label: 'Comp4 Analysis Price', section: 'sales-comparison', subsection: 'comp4', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp4-buildings', storeId: 'comp4-buildings', label: 'Comp4 Buildings', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-buyer', storeId: 'comp4-buyer', label: 'Comp4 Buyer', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-citystatezip', storeId: 'comp4-citystatezip', label: 'Comp4 City State Zip', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-county', storeId: 'comp4-county', label: 'Comp4 County', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-distance', storeId: 'comp4-distance', label: 'Comp4 Distance', section: 'sales-comparison', subsection: 'comp4', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp4-label', storeId: 'comp4-label', label: 'Comp4 Label', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-landarea', storeId: 'comp4-landarea', label: 'Comp4 Land Area', section: 'sales-comparison', subsection: 'comp4', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp4-laundry', storeId: 'comp4-laundry', label: 'Comp4 Laundry', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-map', storeId: 'comp4-map', label: 'Comp4 Map', section: 'sales-comparison', subsection: 'comp4', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp4-marketconditions', storeId: 'comp4-marketconditions', label: 'Comp4 Market Conditions', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-nra', storeId: 'comp4-nra', label: 'Comp4 NRA', section: 'sales-comparison', subsection: 'comp4', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp4-parking', storeId: 'comp4-parking', label: 'Comp4 Parking', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-photo', storeId: 'comp4-photo', label: 'Comp4 Photo', section: 'sales-comparison', subsection: 'comp4', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp4-propertytype', storeId: 'comp4-propertytype', label: 'Comp4 Property Type', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-remarks', storeId: 'comp4-remarks', label: 'Comp4 Remarks', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-renttype', storeId: 'comp4-renttype', label: 'Comp4 Rent Type', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-rightstransferred', storeId: 'comp4-rightstransferred', label: 'Comp4 Rights Transferred', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-securityfeatures', storeId: 'comp4-securityfeatures', label: 'Comp4 Security Features', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-seller', storeId: 'comp4-seller', label: 'Comp4 Seller', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-submarket', storeId: 'comp4-submarket', label: 'Comp4 Submarket', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-transactionstatus', storeId: 'comp4-transactionstatus', label: 'Comp4 Transaction Status', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-unitmix-avgsize', storeId: 'comp4-unitmix-avgsize', label: 'Comp4 Unit Mix Avg Size', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-unitmix-count', storeId: 'comp4-unitmix-count', label: 'Comp4 Unit Mix Count', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-unitmix-type', storeId: 'comp4-unitmix-type', label: 'Comp4 Unit Mix Type', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-utilities', storeId: 'comp4-utilities', label: 'Comp4 Utilities', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-year-built', storeId: 'comp4-year-built', label: 'Comp4 Year Built', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-zoning', storeId: 'comp4-zoning', label: 'Comp4 Zoning', section: 'sales-comparison', subsection: 'comp4', type: 'text', inputSource: 'user-input', required: false },
+
+
 
 
 

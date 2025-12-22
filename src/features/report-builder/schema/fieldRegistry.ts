@@ -604,6 +604,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'cap-rate-range-low', storeId: 'cap-rate-range-low', label: 'Cap Rate Range Low', section: 'calc', subsection: 'calc-cap', type: 'percentage', inputSource: 'user-input', required: false },
   { id: 'dircap-blend', storeId: 'dircap-blend', label: 'Cap Rate Blend', section: 'calc', subsection: 'calc-cap', type: 'percentage', inputSource: 'calculated', required: false, valcreRange: 'IA_DirCap_Blend' },
   { id: 'dircap-caprate1', storeId: 'dircap-caprate1', label: 'Capitalization Rate 1', section: 'calc', subsection: 'calc-cap', type: 'percentage', inputSource: 'calculated', required: false, valcreRange: 'IA_DirCap_CapRate1' },
+  { id: 'dircap-caprate2', storeId: 'dircap-caprate2', label: 'Capitalization Rate 2', section: 'calc', subsection: 'calc-cap', type: 'percentage', inputSource: 'calculated', required: false, valcreRange: 'IA_DirCap_CapRate2' },
 
   // Calc - Adjustments Subsection
   { id: 'calc-adj-capex', storeId: 'calc-adj-capex', label: 'CapEx Adjustment', section: 'calc', subsection: 'calc-adjustments', type: 'number', inputSource: 'user-input', required: false },

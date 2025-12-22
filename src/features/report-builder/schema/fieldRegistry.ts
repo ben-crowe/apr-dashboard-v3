@@ -1566,6 +1566,41 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp2-year-built', storeId: 'comp2-year-built', label: 'Comp2 Year Built', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp2-zoning', storeId: 'comp2-zoning', label: 'Comp2 Zoning', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
 
+  // ============================================================================
+  // SECTION: SALES COMPARISON - COMP3
+  // ============================================================================
+
+  { id: 'comp3-address-full', storeId: 'comp3-address-full', label: 'Comp3 Address Full', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-analysisprice', storeId: 'comp3-analysisprice', label: 'Comp3 Analysis Price', section: 'sales-comparison', subsection: 'comp3', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp3-buildings', storeId: 'comp3-buildings', label: 'Comp3 Buildings', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-buyer', storeId: 'comp3-buyer', label: 'Comp3 Buyer', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-citystatezip', storeId: 'comp3-citystatezip', label: 'Comp3 City State Zip', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-county', storeId: 'comp3-county', label: 'Comp3 County', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-distance', storeId: 'comp3-distance', label: 'Comp3 Distance', section: 'sales-comparison', subsection: 'comp3', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp3-label', storeId: 'comp3-label', label: 'Comp3 Label', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-landarea', storeId: 'comp3-landarea', label: 'Comp3 Land Area', section: 'sales-comparison', subsection: 'comp3', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp3-laundry', storeId: 'comp3-laundry', label: 'Comp3 Laundry', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-map', storeId: 'comp3-map', label: 'Comp3 Map', section: 'sales-comparison', subsection: 'comp3', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp3-marketconditions', storeId: 'comp3-marketconditions', label: 'Comp3 Market Conditions', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-nra', storeId: 'comp3-nra', label: 'Comp3 NRA', section: 'sales-comparison', subsection: 'comp3', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp3-parking', storeId: 'comp3-parking', label: 'Comp3 Parking', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-photo', storeId: 'comp3-photo', label: 'Comp3 Photo', section: 'sales-comparison', subsection: 'comp3', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp3-propertytype', storeId: 'comp3-propertytype', label: 'Comp3 Property Type', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-remarks', storeId: 'comp3-remarks', label: 'Comp3 Remarks', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-renttype', storeId: 'comp3-renttype', label: 'Comp3 Rent Type', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-rightstransferred', storeId: 'comp3-rightstransferred', label: 'Comp3 Rights Transferred', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-securityfeatures', storeId: 'comp3-securityfeatures', label: 'Comp3 Security Features', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-seller', storeId: 'comp3-seller', label: 'Comp3 Seller', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-submarket', storeId: 'comp3-submarket', label: 'Comp3 Submarket', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-transactionstatus', storeId: 'comp3-transactionstatus', label: 'Comp3 Transaction Status', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-unitmix-avgsize', storeId: 'comp3-unitmix-avgsize', label: 'Comp3 Unit Mix Avg Size', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-unitmix-count', storeId: 'comp3-unitmix-count', label: 'Comp3 Unit Mix Count', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-unitmix-type', storeId: 'comp3-unitmix-type', label: 'Comp3 Unit Mix Type', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-utilities', storeId: 'comp3-utilities', label: 'Comp3 Utilities', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-year-built', storeId: 'comp3-year-built', label: 'Comp3 Year Built', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-zoning', storeId: 'comp3-zoning', label: 'Comp3 Zoning', section: 'sales-comparison', subsection: 'comp3', type: 'text', inputSource: 'user-input', required: false },
+
+
 
 
 ];

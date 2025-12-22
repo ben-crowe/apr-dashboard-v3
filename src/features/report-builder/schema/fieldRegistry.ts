@@ -567,6 +567,11 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'dircap-expense03-label', storeId: 'dircap-expense03-label', label: 'Expense Line 03', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense03' },
   { id: 'dircap-expense04-label', storeId: 'dircap-expense04-label', label: 'Expense Line 04', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense04' },
   { id: 'dircap-expense05-label', storeId: 'dircap-expense05-label', label: 'Expense Line 05', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense05' },
+  { id: 'dircap-expense06-label', storeId: 'dircap-expense06-label', label: 'Expense Line 06', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense06' },
+  { id: 'dircap-expense07-label', storeId: 'dircap-expense07-label', label: 'Expense Line 07', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense07' },
+  { id: 'dircap-expense08-label', storeId: 'dircap-expense08-label', label: 'Expense Line 08', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense08' },
+  { id: 'dircap-expense09-label', storeId: 'dircap-expense09-label', label: 'Expense Line 09', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense09' },
+  { id: 'dircap-expense10-label', storeId: 'dircap-expense10-label', label: 'Expense Line 10', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense10' },
 
   // Expense Breakdown - Taxes
   { id: 'calc-exp-taxes-pct-pgr', storeId: 'calc-exp-taxes-pct-pgr', label: 'Taxes % of PGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },

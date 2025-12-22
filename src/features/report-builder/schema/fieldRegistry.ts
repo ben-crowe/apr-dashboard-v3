@@ -1283,6 +1283,28 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'cert-sign-credentials', storeId: 'cert-sign-credentials', label: 'Credentials', section: 'cert', subsection: 'signature-block', type: 'text', inputSource: 'auto-filled', required: false },
   { id: 'cert-sign-date', storeId: 'cert-sign-date', label: 'Signature Date', section: 'cert', subsection: 'signature-block', type: 'date', inputSource: 'auto-filled', required: false },
 
+  // Subject Property - Basic Info
+  { id: 'subject-actualage', storeId: 'subject-actualage', label: 'Actual Age', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-city', storeId: 'subject-city', label: 'City', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-effectiveage', storeId: 'subject-effectiveage', label: 'Effective Age', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-economiclife', storeId: 'subject-economiclife', label: 'Economic Life', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-geocode', storeId: 'subject-geocode', label: 'Geocode', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-location', storeId: 'subject-location', label: 'Location', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-market', storeId: 'subject-market', label: 'Market', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-nra', storeId: 'subject-nra', label: 'Net Rentable Area', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-owner', storeId: 'subject-owner', label: 'Owner', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-propertyname', storeId: 'subject-propertyname', label: 'Property Name', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-province', storeId: 'subject-province', label: 'Province', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-remaininglife', storeId: 'subject-remaininglife', label: 'Remaining Life', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-state', storeId: 'subject-state', label: 'State', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-street', storeId: 'subject-street', label: 'Street', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-submarket', storeId: 'subject-submarket', label: 'Submarket', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-yearbuilt', storeId: 'subject-yearbuilt', label: 'Year Built', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-zip', storeId: 'subject-zip', label: 'Zip Code', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-zoning', storeId: 'subject-zoning', label: 'Zoning', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-zoningcode', storeId: 'subject-zoningcode', label: 'Zoning Code', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-zoningdescription', storeId: 'subject-zoningdescription', label: 'Zoning Description', section: 'property-identification', subsection: 'subject-property', type: 'textarea', inputSource: 'user-input', required: false },
+
 ];
 
 // ============================================================================

@@ -1532,6 +1532,41 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp1-utilities', storeId: 'comp1-utilities', label: 'Comp1 Utilities', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp1-year-built', storeId: 'comp1-year-built', label: 'Comp1 Year Built', section: 'sales-comparison', subsection: 'comp1', type: 'text', inputSource: 'user-input', required: false },
 
+  // ============================================================================
+  // SECTION: SALES COMPARISON - COMP2
+  // ============================================================================
+
+  { id: 'comp2-address-full', storeId: 'comp2-address-full', label: 'Comp2 Address Full', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-analysisprice', storeId: 'comp2-analysisprice', label: 'Comp2 Analysis Price', section: 'sales-comparison', subsection: 'comp2', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'comp2-buildings', storeId: 'comp2-buildings', label: 'Comp2 Buildings', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-buyer', storeId: 'comp2-buyer', label: 'Comp2 Buyer', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-citystatezip', storeId: 'comp2-citystatezip', label: 'Comp2 City State Zip', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-county', storeId: 'comp2-county', label: 'Comp2 County', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-distance', storeId: 'comp2-distance', label: 'Comp2 Distance', section: 'sales-comparison', subsection: 'comp2', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp2-label', storeId: 'comp2-label', label: 'Comp2 Label', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-landarea', storeId: 'comp2-landarea', label: 'Comp2 Land Area', section: 'sales-comparison', subsection: 'comp2', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp2-laundry', storeId: 'comp2-laundry', label: 'Comp2 Laundry', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-map', storeId: 'comp2-map', label: 'Comp2 Map', section: 'sales-comparison', subsection: 'comp2', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp2-marketconditions', storeId: 'comp2-marketconditions', label: 'Comp2 Market Conditions', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-nra', storeId: 'comp2-nra', label: 'Comp2 NRA', section: 'sales-comparison', subsection: 'comp2', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'comp2-parking', storeId: 'comp2-parking', label: 'Comp2 Parking', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-photo', storeId: 'comp2-photo', label: 'Comp2 Photo', section: 'sales-comparison', subsection: 'comp2', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp2-propertytype', storeId: 'comp2-propertytype', label: 'Comp2 Property Type', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-remarks', storeId: 'comp2-remarks', label: 'Comp2 Remarks', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-renttype', storeId: 'comp2-renttype', label: 'Comp2 Rent Type', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-rightstransferred', storeId: 'comp2-rightstransferred', label: 'Comp2 Rights Transferred', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-securityfeatures', storeId: 'comp2-securityfeatures', label: 'Comp2 Security Features', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-seller', storeId: 'comp2-seller', label: 'Comp2 Seller', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-submarket', storeId: 'comp2-submarket', label: 'Comp2 Submarket', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-transactionstatus', storeId: 'comp2-transactionstatus', label: 'Comp2 Transaction Status', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-unitmix-avgsize', storeId: 'comp2-unitmix-avgsize', label: 'Comp2 Unit Mix Avg Size', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-unitmix-count', storeId: 'comp2-unitmix-count', label: 'Comp2 Unit Mix Count', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-unitmix-type', storeId: 'comp2-unitmix-type', label: 'Comp2 Unit Mix Type', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-utilities', storeId: 'comp2-utilities', label: 'Comp2 Utilities', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-year-built', storeId: 'comp2-year-built', label: 'Comp2 Year Built', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-zoning', storeId: 'comp2-zoning', label: 'Comp2 Zoning', section: 'sales-comparison', subsection: 'comp2', type: 'text', inputSource: 'user-input', required: false },
+
+
 
 ];
 

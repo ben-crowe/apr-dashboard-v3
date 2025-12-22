@@ -539,6 +539,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'calc-exp-admin', storeId: 'calc-exp-admin', label: 'Admin & General', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-exp-reserves', storeId: 'calc-exp-reserves', label: 'Replacement Reserves', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'user-input', required: false },
   { id: 'calc-exp-other', storeId: 'calc-exp-other', label: 'Other Expenses', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'dircap-expense-ratio', storeId: 'dircap-expense-ratio', label: 'Expense Ratio', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false, valcreRange: 'IA_DirCap_ExpenseRatio' },
 
   // Expense Breakdown - Taxes
   { id: 'calc-exp-taxes-pct-pgr', storeId: 'calc-exp-taxes-pct-pgr', label: 'Taxes % of PGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },

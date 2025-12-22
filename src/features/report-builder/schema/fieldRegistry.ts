@@ -170,6 +170,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'property-name', storeId: 'property-name', label: 'Property Name', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
   { id: 'street-address', storeId: 'street-address', label: 'Street Address', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
   { id: 'city', storeId: 'city', label: 'City', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
+  { id: 'city-formal', storeId: 'city-formal', label: 'City (Formal Name)', section: 'cover', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_CityFormal' },
   { id: 'province', storeId: 'province', label: 'Province', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
   { id: 'province-abbr', storeId: 'province-abbr', label: 'Province Abbreviation', section: 'cover', type: 'text', inputSource: 'auto-filled', required: false },
   { id: 'property-full-address', storeId: 'property-full-address', label: 'Full Property Address', section: 'cover', type: 'text', inputSource: 'calculated', required: false },

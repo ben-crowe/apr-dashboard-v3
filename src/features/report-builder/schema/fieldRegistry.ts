@@ -259,6 +259,9 @@ export const fieldRegistry: FieldDefinition[] = [
 
   // Exec - Value Summary Subsection
   { id: 'concluded-value', storeId: 'concluded-value', label: 'Concluded Value', section: 'exec', subsection: 'value-summary', type: 'calculated', inputSource: 'calculated', required: false },
+  { id: 'value-scenario1', storeId: 'value-scenario1', label: 'Value Scenario 1', section: 'exec', subsection: 'value-summary', type: 'currency', inputSource: 'calculated', required: false, valcreRange: 'Value_Scenario1' },
+  { id: 'value-scenario1-psf', storeId: 'value-scenario1-psf', label: 'Value Scenario 1 ($/SF)', section: 'exec', subsection: 'value-summary', type: 'currency', inputSource: 'calculated', required: false, valcreRange: 'Value_Scenario1PerUofM' },
+  { id: 'value-scenario1-text', storeId: 'value-scenario1-text', label: 'Value Scenario 1 (Text)', section: 'exec', subsection: 'value-summary', type: 'text', inputSource: 'calculated', required: false, valcreRange: 'Value_Scenario1Text' },
   { id: 'hypothetical-conditions', storeId: 'hypothetical-conditions', label: 'Hypothetical Conditions', section: 'exec', subsection: 'value-summary', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'extraordinary-assumptions', storeId: 'extraordinary-assumptions', label: 'Extraordinary Assumptions', section: 'exec', subsection: 'value-summary', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'extraordinary-limiting-conditions', storeId: 'extraordinary-limiting-conditions', label: 'Extraordinary Limiting Conditions', section: 'exec', subsection: 'value-summary', type: 'textarea', inputSource: 'user-input', required: false },

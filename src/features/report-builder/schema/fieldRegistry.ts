@@ -1305,6 +1305,30 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'subject-zoningcode', storeId: 'subject-zoningcode', label: 'Zoning Code', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
   { id: 'subject-zoningdescription', storeId: 'subject-zoningdescription', label: 'Zoning Description', section: 'property-identification', subsection: 'subject-property', type: 'textarea', inputSource: 'user-input', required: false },
 
+  // Subject Property - Amenities & Features
+  { id: 'subject-amenities-laundry', storeId: 'subject-amenities-laundry', label: 'Amenities - Laundry', section: 'amenities', subsection: 'subject-amenities', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-amenities-parking', storeId: 'subject-amenities-parking', label: 'Amenities - Parking', section: 'amenities', subsection: 'subject-amenities', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-amenities-utilities', storeId: 'subject-amenities-utilities', label: 'Amenities - Utilities', section: 'amenities', subsection: 'subject-amenities', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-appeal', storeId: 'subject-appeal', label: 'Appeal', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-avgunitsf', storeId: 'subject-avgunitsf', label: 'Average Unit SF', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-concludedrent', storeId: 'subject-concludedrent', label: 'Concluded Rent', section: 'income-analysis', subsection: 'rent-conclusion', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'subject-conforminglot', storeId: 'subject-conforminglot', label: 'Conforming Lot', section: 'property-identification', subsection: 'subject-property', type: 'select', inputSource: 'user-input', required: false, options: ['Yes', 'No'] },
+  { id: 'subject-conforminguse', storeId: 'subject-conforminguse', label: 'Conforming Use', section: 'property-identification', subsection: 'subject-property', type: 'select', inputSource: 'user-input', required: false, options: ['Yes', 'No', 'Non-Conforming'] },
+  { id: 'subject-currentrent', storeId: 'subject-currentrent', label: 'Current Rent', section: 'income-analysis', subsection: 'current-rent', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'subject-density', storeId: 'subject-density', label: 'Density', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-econcharacteristics', storeId: 'subject-econcharacteristics', label: 'Economic Characteristics', section: 'property-identification', subsection: 'subject-property', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-exposuretime', storeId: 'subject-exposuretime', label: 'Exposure Time', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-hbuimproved', storeId: 'subject-hbuimproved', label: 'HBU As Improved', section: 'hbu-as-improved', subsection: 'hbu-conclusion', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-hbuvacant', storeId: 'subject-hbuvacant', label: 'HBU As Vacant', section: 'hbu-as-vacant', subsection: 'hbu-conclusion', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-introcomment', storeId: 'subject-introcomment', label: 'Introduction Comment', section: 'property-identification', subsection: 'subject-property', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-laundry', storeId: 'subject-laundry', label: 'Laundry', section: 'amenities', subsection: 'subject-amenities', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-legallypermitted', storeId: 'subject-legallypermitted', label: 'Legally Permitted', section: 'property-identification', subsection: 'subject-property', type: 'select', inputSource: 'user-input', required: false, options: ['Yes', 'No'] },
+  { id: 'subject-marketing', storeId: 'subject-marketing', label: 'Marketing Time', section: 'property-identification', subsection: 'subject-property', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-occupancy-current', storeId: 'subject-occupancy-current', label: 'Current Occupancy', section: 'property-identification', subsection: 'subject-property', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'subject-occupancystabilized', storeId: 'subject-occupancystabilized', label: 'Stabilized Occupancy', section: 'property-identification', subsection: 'subject-property', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'subject-occupiedunits', storeId: 'subject-occupiedunits', label: 'Occupied Units', section: 'property-identification', subsection: 'subject-property', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'subject-parkingincl', storeId: 'subject-parkingincl', label: 'Parking Included', section: 'amenities', subsection: 'subject-amenities', type: 'select', inputSource: 'user-input', required: false, options: ['Yes', 'No'] },
+
 ];
 
 // ============================================================================

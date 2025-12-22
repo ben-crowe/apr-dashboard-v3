@@ -561,6 +561,13 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'calc-exp-other', storeId: 'calc-exp-other', label: 'Other Expenses', section: 'calc', subsection: 'calc-expenses', type: 'number', inputSource: 'user-input', required: false },
   { id: 'dircap-expense-ratio', storeId: 'dircap-expense-ratio', label: 'Expense Ratio', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false, valcreRange: 'IA_DirCap_ExpenseRatio' },
 
+  // Expense Line Labels (Valcre Direct Capitalization)
+  { id: 'dircap-expense01-label', storeId: 'dircap-expense01-label', label: 'Expense Line 01', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense01' },
+  { id: 'dircap-expense02-label', storeId: 'dircap-expense02-label', label: 'Expense Line 02', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense02' },
+  { id: 'dircap-expense03-label', storeId: 'dircap-expense03-label', label: 'Expense Line 03', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense03' },
+  { id: 'dircap-expense04-label', storeId: 'dircap-expense04-label', label: 'Expense Line 04', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense04' },
+  { id: 'dircap-expense05-label', storeId: 'dircap-expense05-label', label: 'Expense Line 05', section: 'calc', subsection: 'calc-expenses', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'IA_DirCap_Expense05' },
+
   // Expense Breakdown - Taxes
   { id: 'calc-exp-taxes-pct-pgr', storeId: 'calc-exp-taxes-pct-pgr', label: 'Taxes % of PGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },
   { id: 'calc-exp-taxes-pct-egr', storeId: 'calc-exp-taxes-pct-egr', label: 'Taxes % of EGR', section: 'calc', subsection: 'calc-expenses', type: 'percentage', inputSource: 'calculated', required: false },

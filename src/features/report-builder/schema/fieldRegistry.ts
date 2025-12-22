@@ -207,6 +207,10 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'submarket', storeId: 'submarket', label: 'Submarket', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'latitude', storeId: 'latitude', label: 'Latitude', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false },
   { id: 'longitude', storeId: 'longitude', label: 'Longitude', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false },
+  { id: 'county', storeId: 'county', label: 'County', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_County' },
+  { id: 'msa', storeId: 'msa', label: 'MSA', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_MSA' },
+  { id: 'geocode', storeId: 'geocode', label: 'Geocode', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_Geocode' },
+  { id: 'census-tract', storeId: 'census-tract', label: 'Census Tract', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_Census' },
 
   // ============================================================================
   // SECTION: HOME (Letter of Transmittal)

@@ -1071,5 +1071,60 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "rentcomp10-comments-survey": "-",
   "rentcomp10-total-adj": 0,
   "rentcomp10-utilities": "-",
-  "rentcomp10-unitmix": "Type"
+  "rentcomp10-unitmix": "Type",
+
+  // ========================================
+  // IMAGE FIELDS (Added from IMAGE-MANIFEST.json)
+  // Path: /docs/15-Contract-review/2-Field Management/extracted-images/
+  // ========================================
+
+  // Subject Property Photos (24 photos)
+  "subject-photo-1": "/docs/15-Contract-review/2-Field Management/extracted-images/image12.jpeg",
+  "subject-photo-2": "/docs/15-Contract-review/2-Field Management/extracted-images/image13.jpeg",
+  "subject-photo-3": "/docs/15-Contract-review/2-Field Management/extracted-images/image14.jpeg",
+  "subject-photo-4": "/docs/15-Contract-review/2-Field Management/extracted-images/image15.jpeg",
+  "subject-photo-5": "/docs/15-Contract-review/2-Field Management/extracted-images/image16.jpeg",
+  "subject-photo-6": "/docs/15-Contract-review/2-Field Management/extracted-images/image17.jpeg",
+  "subject-photo-7": "/docs/15-Contract-review/2-Field Management/extracted-images/image18.jpeg",
+  "subject-photo-8": "/docs/15-Contract-review/2-Field Management/extracted-images/image19.jpeg",
+  "subject-photo-9": "/docs/15-Contract-review/2-Field Management/extracted-images/image20.jpeg",
+  "subject-photo-10": "/docs/15-Contract-review/2-Field Management/extracted-images/image21.jpeg",
+  "subject-photo-11": "/docs/15-Contract-review/2-Field Management/extracted-images/image22.jpeg",
+  "subject-photo-12": "/docs/15-Contract-review/2-Field Management/extracted-images/image23.jpeg",
+  "subject-photo-13": "/docs/15-Contract-review/2-Field Management/extracted-images/image24.jpeg",
+  "subject-photo-14": "/docs/15-Contract-review/2-Field Management/extracted-images/image25.jpeg",
+  "subject-photo-15": "/docs/15-Contract-review/2-Field Management/extracted-images/image26.jpeg",
+  "subject-photo-16": "/docs/15-Contract-review/2-Field Management/extracted-images/image27.jpeg",
+  "subject-photo-17": "/docs/15-Contract-review/2-Field Management/extracted-images/image28.jpeg",
+  "subject-photo-18": "/docs/15-Contract-review/2-Field Management/extracted-images/image29.jpeg",
+  "subject-photo-19": "/docs/15-Contract-review/2-Field Management/extracted-images/image30.jpeg",
+  "subject-photo-20": "/docs/15-Contract-review/2-Field Management/extracted-images/image31.jpeg",
+  "subject-photo-21": "/docs/15-Contract-review/2-Field Management/extracted-images/image32.jpeg",
+  "subject-photo-22": "/docs/15-Contract-review/2-Field Management/extracted-images/image33.jpeg",
+  "subject-photo-23": "/docs/15-Contract-review/2-Field Management/extracted-images/image34.jpeg",
+  "subject-photo-24": "/docs/15-Contract-review/2-Field Management/extracted-images/image35.jpeg",
+
+  // Sales Comp Photos (without -url suffix to match template)
+  "comp1-photo": "/docs/15-Contract-review/2-Field Management/extracted-images/image73.jpg",
+  "comp2-photo": "/docs/15-Contract-review/2-Field Management/extracted-images/image75.jpg",
+  "comp3-photo": "/docs/15-Contract-review/2-Field Management/extracted-images/image77.jpg",
+
+  // Location Maps
+  "map-regional": "/docs/15-Contract-review/2-Field Management/extracted-images/image1.png",
+  "map-aerial": "/docs/15-Contract-review/2-Field Management/extracted-images/image36.png",
+  "map-local": "/docs/15-Contract-review/2-Field Management/extracted-images/image37.png",
+  "comparablesmap": "/docs/15-Contract-review/2-Field Management/extracted-images/image38.png",
+
+  // Site/Zoning Maps
+  "img-zoning-map": "/docs/15-Contract-review/2-Field Management/extracted-images/image48.png",
+
+  // Rental Comp Photos (without -url suffix to match template)
+  "rental-comp1-photo": "/docs/15-Contract-review/2-Field Management/extracted-images/image44.png",
+  "rental-comp2-photo": "/docs/15-Contract-review/2-Field Management/extracted-images/image45.png",
+
+  // Cover Photo
+  "cover-photo": "/docs/15-Contract-review/2-Field Management/extracted-images/image2.jpeg",
+
+  // Company Logo
+  "company-logo": "/docs/15-Contract-review/2-Field Management/extracted-images/image1.png"
 };

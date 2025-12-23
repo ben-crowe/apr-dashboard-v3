@@ -1,7 +1,7 @@
 # Session Handoff - APR Field Registry & Valcre Mapping
 
 **Last Updated:** 2025-12-22
-**Status:** Priority 1-4 Complete ✅ | Registry: 944 fields | Coverage: 57%
+**Status:** Bulk Field Addition Phase 1 Complete ✅ | Registry: 1,146 fields | 202/640 added (32%)
 
 ---
 
@@ -16,6 +16,10 @@
 | **Priority 2 Fields (Subject Property)** | ✅ Complete | Session #27: 10 subject fields added (city-formal, county, msa, quality, condition, etc.) |
 | **Priority 3 Fields (Value Conclusion)** | ✅ Complete | Session #27: 10 value fields added (value-scenario1/2/3, -psf, -text, conclusions) |
 | **Priority 4 Fields (Expense Labels)** | ✅ Complete | Session #28: 25 expense label fields added (dircap-expense01-label through 25, Valcre IA_DirCap_Expense01-25) |
+| **Bulk Field Addition - Subject** | ✅ Complete | Session #29: 108 subject fields added (actualage through zoningchangestatus) - 5 commits |
+| **Bulk Field Addition - Market** | ✅ Complete | Session #29: 94 market rent fields added (1BR + 2BR analysis) - 2 commits |
+| **Framed Template v2.1** | ✅ Installed | Session #6: Report-MF-Template-Framed-v2.1.html installed to /public/preview-wrapper.html (552K, dev server on :8084) |
+| **Image Fields Integration** | ✅ 84% Complete | Session #7: 37 image fields added to test data (15478b8), 11 fields pending Word doc agent extraction |
 
 ---
 
@@ -43,13 +47,22 @@
 
 | File | Purpose |
 |------|---------|
-| **fieldRegistry.ts** | `/src/features/report-builder/schema/` - **944 total fields** (889 original + 30 P1-P3 Session #27 + 25 P4 Session #28) |
+| **fieldRegistry.ts** | `/src/features/report-builder/schema/` - **1,146 total fields** (889 original + 55 P1-P4 + 202 bulk additions Session #29) |
+| **REGISTRY-ADDITIONS.md** | Work order for bulk addition: 640 total fields (202 added, 438 remaining) |
 
 ### Ground Truth
 
 | File | Purpose |
 |------|---------|
 | **valcre-named-ranges-complete.json** | Original ground truth: 9,652 Valcre ranges with metadata (960 KB) |
+
+### Image Extraction (Session #7)
+
+| File | Purpose |
+|------|---------|
+| **IMAGE-MANIFEST.json** | Word doc image extraction: 50 mapped fields, 89 total images (created by Word doc agent) |
+| **extracted-images/** | 89 images extracted from VAL251012 Word document (image1.png through image89.png) |
+| **northBattlefordTestData.ts** | Test data with 37 image field paths (84% template coverage, 11 fields pending) |
 
 ---
 
@@ -204,6 +217,9 @@ git commit -m "feat(fields): add dircap-blend with Valcre mapping IA_DirCap_Blen
 
 | Date | Session | Work Done | Key Commits/Files |
 |------|---------|-----------|-------------------|
+| 2025-12-22 | #7 | **Image Field Integration (84% Coverage)** | 37 image fields added to test data (15478b8), IMAGE-MANIFEST.json mapped, 11 fields pending Word doc agent |
+| 2025-12-22 | #6 | **Frame Template Installation & System Understanding** | Installed Report-MF-Template-Framed-v2.1.html, documented toggle feature, test data flow, dev server on :8084 |
+| 2025-12-22 | #29 | **Bulk Field Addition - Phase 1 (Subject & Market)** | 7 atomic commits: 202 fields added (108 subject, 94 market rent) - d342182, 1c09c61, c91ae7d, 4db9423, 251f723, 7dbbcd3, 304ca1a |
 | 2025-12-22 | #28 | **Crosswalk-Registry Gap Analysis & Field Export** | FIELD-REGISTRY-ALL-IDS.md created (944 fields), 282 missing fields identified, gap analysis complete (56baeb0) |
 | 2025-12-22 | #27 (cont.) | **Priority 4 Field Addition (Expense Labels)** | 5 atomic commits: 25 expense label fields added (1d847ed, 1d3ae4e, 6b54280, ec45315, 64ec54a) |
 | 2025-12-22 | #27 | **Priority 1-3 Field Additions** | 12 atomic commits: 30 fields added (10 calc, 10 subject, 10 value) |
@@ -218,26 +234,28 @@ git commit -m "feat(fields): add dircap-blend with Valcre mapping IA_DirCap_Blen
 
 **Read these files in order:**
 1. This handoff file (you're reading it!)
-2. `25.12.22-27 - Priority-Fields-Addition.md` - Latest session (30 fields added)
-3. `25.12.22-26 - Valcre-Crosswalk-Registry-Validation.md` - Validation session
-4. `VALCRE-TO-TEMPLATE-CROSSWALK.md` - The Rosetta Stone
-5. `FIELD-REGISTRY-VALIDATION-REPORT.md` - Validation findings and priorities
+2. `25.12.22-7 - Image-Field-Integration.md` - Latest session (37 image fields added, 84% coverage, 11 pending)
+3. `25.12.22-6 - Frame-Template-Installation.md` - Recent session (framed template v2.1 installed, system understanding)
+4. `IMAGE-MANIFEST.json` - Image extraction manifest (50 fields mapped by Word doc agent)
+5. `REGISTRY-ADDITIONS.md` - Work order for remaining 438 fields
+6. `VALCRE-TO-TEMPLATE-CROSSWALK.md` - The Rosetta Stone
 
 **Run these searches:**
 ```bash
-/check-all-memory "Priority 1 fields"
-/check-all-memory "dircap-blend"
-/check-all-memory "expense label"
-/check-all-memory "atomic commits"
+/check-all-memory "IMAGE-MANIFEST"
+/check-all-memory "extracted-images"
+/check-all-memory "subject-photo"
+/check-all-memory "Word doc agent"
 ```
 
 **Start work on:**
-- ✅ Priority 4 Complete! (25 expense labels added in Session #27 continuation)
-- 🎯 Next: Add sales comparison fields (comp1-* through comp10-*) ~60 fields
-- 🎯 Or: Add rental comparison fields (rental-comp1-* through rental-comp10-*) ~50 fields
-- Pattern: Continue atomic commits with Valcre mapping references
+- ✅ Image Fields 84% Complete! (37/44 fields added)
+- 🎯 Next: Test image loading in browser (Load Test Data → Preview Panel)
+- 🎯 Or: Wait for Word doc agent to extract 11 missing images
+- 🎯 Or: Continue field registry bulk additions (438/640 remaining)
+- Pattern: Coordinate with Word doc agent for missing images
 
 ---
 
-**Handoff Status:** ✅ Priority 1-4 Complete (55 fields total) | 944 total fields | 62% coverage
-**Next Agent:** Consider adding sales/rental comparison fields to reach 70%+ coverage, or focus on other high-priority gaps
+**Handoff Status:** ✅ Images 84% Complete (37/44 fields) | ⏳ 11 fields pending Word doc agent | 1,146 total registry fields
+**Next Agent:** Test image loading OR wait for Word doc agent extraction of 11 missing fields (subject-photo-25, comp4-5, comp maps, rental map, site plans). Then continue bulk field additions.

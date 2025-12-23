@@ -5,7 +5,7 @@ import {
   ReportField,
   SectionGroup,
 } from "../types/reportBuilder.types";
-import { northBattlefordRealData } from "../data/northBattlefordTestData-REAL";
+import { northBattlefordTestData } from "../data/northBattlefordTestData";
 import { fieldRegistry } from "../schema/fieldRegistry";
 
 // Field ID mapping: test data ID -> store field ID (for fields that differ)
@@ -5875,9 +5875,9 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
   loadFullTestData: async () => {
     console.log("=== LOAD FULL TEST DATA CALLED ===");
-    console.log("northBattlefordRealData keys:", Object.keys(northBattlefordRealData).length);
-    // Load comprehensive North Battleford REAL test data (292 fields)
-    // Uses northBattlefordRealData which has field IDs matching store exactly
+    console.log("northBattlefordTestData keys:", Object.keys(northBattlefordTestData).length);
+    // Load comprehensive North Battleford test data with image fields
+    // Uses northBattlefordTestData which has field IDs matching store exactly
     const sections = get().sections;
     let mappedCount = 0;
     let unmappedFields: string[] = [];
@@ -5895,8 +5895,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       return false;
     };
 
-    // Load all fields from REAL data (field IDs match store exactly)
-    Object.entries(northBattlefordRealData).forEach(([fieldId, value]) => {
+    // Load all fields from test data (field IDs match store exactly)
+    Object.entries(northBattlefordTestData).forEach(([fieldId, value]) => {
       // Map test data field ID to store field ID (for any that still differ)
       const storeFieldId = testDataFieldMapping[fieldId] || fieldId;
 
@@ -5918,7 +5918,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     set({ previewHtml: html });
 
     console.log(
-      `REAL Test data loaded: ${mappedCount}/${Object.keys(northBattlefordRealData).length} fields mapped`,
+      `Test data loaded: ${mappedCount}/${Object.keys(northBattlefordTestData).length} fields mapped`,
     );
     if (unmappedFields.length > 0) {
       console.log("Unmapped fields (need store definition):", unmappedFields);

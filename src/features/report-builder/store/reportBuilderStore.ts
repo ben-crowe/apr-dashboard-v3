@@ -5558,10 +5558,9 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       });
     });
 
-    // Replace all {{field-id}} placeholders with actual values
-    fieldMap.forEach((value, fieldId) => {
-      const placeholder = `{{${fieldId}}}`;
-      html = html.replaceAll(placeholder, value);
+    // Replace all {{field-id}} placeholders with actual values (single-pass regex for performance)
+    html = html.replace(/\{\{([^}]+)\}\}/g, (match, fieldId) => {
+      return fieldMap.get(fieldId) || match; // Return value or keep placeholder if unmapped
     });
 
     // Leave unreplaced placeholders as-is (for toggle display in test mode)

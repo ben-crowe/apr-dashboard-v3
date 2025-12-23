@@ -5583,8 +5583,9 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       case 'date':
         return new Date(field.value).toISOString().split('T')[0];
       case 'image':
-        // For images, return the URL or empty
-        return Array.isArray(field.value) ? field.value[0] || '' : String(field.value);
+        // For images, return an <img> tag with the URL
+        const imageUrl = Array.isArray(field.value) ? field.value[0] || '' : String(field.value);
+        return imageUrl ? `<img src="${imageUrl}" style="width:100%; height:100%; object-fit:cover;" alt="${field.label || field.id}" />` : '';
       default:
         return String(field.value);
     }

@@ -164,6 +164,64 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'img-systems-4', storeId: 'img-systems-4', label: 'Building Systems 4 - HVAC/Furnace', section: 'image-mgt', subsection: 'systems-photos', type: 'image', inputSource: 'user-input', required: false },
   { id: 'img-systems-4-caption', storeId: 'img-systems-4-caption', label: 'Caption', section: 'image-mgt', subsection: 'systems-photos', type: 'text', inputSource: 'user-input', required: false },
 
+  // --- SUBJECT PROPERTY PHOTOS (Alternate IDs from test data) ---
+  { id: 'subject-photo', storeId: 'subject-photo', label: 'Subject Photo - Primary', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-1', storeId: 'subject-photo-1', label: 'Subject Photo 1', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-2', storeId: 'subject-photo-2', label: 'Subject Photo 2', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-3', storeId: 'subject-photo-3', label: 'Subject Photo 3', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-4', storeId: 'subject-photo-4', label: 'Subject Photo 4', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-5', storeId: 'subject-photo-5', label: 'Subject Photo 5', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-6', storeId: 'subject-photo-6', label: 'Subject Photo 6', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-7', storeId: 'subject-photo-7', label: 'Subject Photo 7', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-8', storeId: 'subject-photo-8', label: 'Subject Photo 8', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-9', storeId: 'subject-photo-9', label: 'Subject Photo 9', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-10', storeId: 'subject-photo-10', label: 'Subject Photo 10', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-11', storeId: 'subject-photo-11', label: 'Subject Photo 11', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-12', storeId: 'subject-photo-12', label: 'Subject Photo 12', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-13', storeId: 'subject-photo-13', label: 'Subject Photo 13', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-14', storeId: 'subject-photo-14', label: 'Subject Photo 14', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-15', storeId: 'subject-photo-15', label: 'Subject Photo 15', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-16', storeId: 'subject-photo-16', label: 'Subject Photo 16', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-17', storeId: 'subject-photo-17', label: 'Subject Photo 17', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-18', storeId: 'subject-photo-18', label: 'Subject Photo 18', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-19', storeId: 'subject-photo-19', label: 'Subject Photo 19', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-20', storeId: 'subject-photo-20', label: 'Subject Photo 20', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-21', storeId: 'subject-photo-21', label: 'Subject Photo 21', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-22', storeId: 'subject-photo-22', label: 'Subject Photo 22', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-23', storeId: 'subject-photo-23', label: 'Subject Photo 23', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-24', storeId: 'subject-photo-24', label: 'Subject Photo 24', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'subject-photo-25', storeId: 'subject-photo-25', label: 'Subject Photo 25', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+
+  // --- SALES COMPARABLE PHOTOS ---
+  { id: 'comp1-photo', storeId: 'comp1-photo', label: 'Comp 1 Photo', section: 'image-mgt', subsection: 'comp-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp2-photo', storeId: 'comp2-photo', label: 'Comp 2 Photo', section: 'image-mgt', subsection: 'comp-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp3-photo', storeId: 'comp3-photo', label: 'Comp 3 Photo', section: 'image-mgt', subsection: 'comp-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp4-photo', storeId: 'comp4-photo', label: 'Comp 4 Photo', section: 'image-mgt', subsection: 'comp-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp5-photo', storeId: 'comp5-photo', label: 'Comp 5 Photo', section: 'image-mgt', subsection: 'comp-photos', type: 'image', inputSource: 'user-input', required: false },
+
+  // --- SALES COMPARABLE MAPS ---
+  { id: 'comp1-map', storeId: 'comp1-map', label: 'Comp 1 Map', section: 'image-mgt', subsection: 'comp-maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp2-map', storeId: 'comp2-map', label: 'Comp 2 Map', section: 'image-mgt', subsection: 'comp-maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp3-map', storeId: 'comp3-map', label: 'Comp 3 Map', section: 'image-mgt', subsection: 'comp-maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp4-map', storeId: 'comp4-map', label: 'Comp 4 Map', section: 'image-mgt', subsection: 'comp-maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comp5-map', storeId: 'comp5-map', label: 'Comp 5 Map', section: 'image-mgt', subsection: 'comp-maps', type: 'image', inputSource: 'user-input', required: false },
+
+  // --- LOCATION MAPS (Alternate IDs from test data) ---
+  { id: 'map-regional', storeId: 'map-regional', label: 'Regional Map (Alternate ID)', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'map-aerial', storeId: 'map-aerial', label: 'Aerial Map (Alternate ID)', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'map-local', storeId: 'map-local', label: 'Local Map (Alternate ID)', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'comparablesmap', storeId: 'comparablesmap', label: 'Comparables Map', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
+
+  // --- RENTAL COMPARABLE PHOTOS ---
+  { id: 'rental-comp1-photo', storeId: 'rental-comp1-photo', label: 'Rental Comp 1 Photo', section: 'image-mgt', subsection: 'rental-comp-photos', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'rental-comp2-photo', storeId: 'rental-comp2-photo', label: 'Rental Comp 2 Photo', section: 'image-mgt', subsection: 'rental-comp-photos', type: 'image', inputSource: 'user-input', required: false },
+
+  // --- RENTAL COMPARABLE MAP ---
+  { id: 'rental-comparables-map', storeId: 'rental-comparables-map', label: 'Rental Comparables Map', section: 'image-mgt', subsection: 'rental-comp-maps', type: 'image', inputSource: 'user-input', required: false },
+
+  // --- BRANDING / COMPANY ---
+  { id: 'company-logo', storeId: 'company-logo', label: 'Company Logo', section: 'image-mgt', subsection: 'branding', type: 'image', inputSource: 'user-input', required: false },
+
   // ============================================================================
   // SECTION: COVER PAGE
   // ============================================================================

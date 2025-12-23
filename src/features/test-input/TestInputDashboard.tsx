@@ -437,8 +437,6 @@ const TestInputDashboard: React.FC = () => {
                     const freshSections = useReportBuilderStore.getState().sections;
                     const testField = freshSections[0]?.fields.find(f => f.id === 'property-name');
                     console.log('property-name field value after load:', testField?.value);
-
-                    alert('Test data loaded! Check console for details.');
                   } catch (error) {
                     console.error('Error loading test data:', error);
                     alert('Error: ' + String(error));

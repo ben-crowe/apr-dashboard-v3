@@ -1078,7 +1078,8 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   // Path: /docs/15-Contract-review/2-Field Management/extracted-images/
   // ========================================
 
-  // Subject Property Photos (24 photos)
+  // Subject Property Photos (26 photos - including generic subject-photo and subject-photo-25)
+  "subject-photo": "/docs/15-Contract-review/2-Field Management/extracted-images/image2.jpeg",
   "subject-photo-1": "/docs/15-Contract-review/2-Field Management/extracted-images/image12.jpeg",
   "subject-photo-2": "/docs/15-Contract-review/2-Field Management/extracted-images/image13.jpeg",
   "subject-photo-3": "/docs/15-Contract-review/2-Field Management/extracted-images/image14.jpeg",
@@ -1103,6 +1104,7 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "subject-photo-22": "/docs/15-Contract-review/2-Field Management/extracted-images/image33.jpeg",
   "subject-photo-23": "/docs/15-Contract-review/2-Field Management/extracted-images/image34.jpeg",
   "subject-photo-24": "/docs/15-Contract-review/2-Field Management/extracted-images/image35.jpeg",
+  "subject-photo-25": "/docs/15-Contract-review/2-Field Management/extracted-images/image89.png",
 
   // Sales Comp Photos (without -url suffix to match template)
   "comp1-photo": "/docs/15-Contract-review/2-Field Management/extracted-images/image73.jpg",
@@ -1126,5 +1128,28 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "cover-photo": "/docs/15-Contract-review/2-Field Management/extracted-images/image2.jpeg",
 
   // Company Logo
-  "company-logo": "/docs/15-Contract-review/2-Field Management/extracted-images/image1.png"
+  "company-logo": "/docs/15-Contract-review/2-Field Management/extracted-images/image1.png",
+
+  // ========================================
+  // ADDITIONAL IMAGE FIELDS (Added from updated IMAGE-MANIFEST.json - Session #7 Part 2)
+  // Word doc agent found 11 previously missing fields
+  // ========================================
+
+  // Additional Sales Comp Photos
+  "comp4-photo": "/docs/15-Contract-review/2-Field Management/extracted-images/image79.png",
+  "comp5-photo": "/docs/15-Contract-review/2-Field Management/extracted-images/image81.png",
+
+  // Sales Comp Maps (all 5 comps)
+  "comp1-map": "/docs/15-Contract-review/2-Field Management/extracted-images/image74.png",
+  "comp2-map": "/docs/15-Contract-review/2-Field Management/extracted-images/image76.png",
+  "comp3-map": "/docs/15-Contract-review/2-Field Management/extracted-images/image78.png",
+  "comp4-map": "/docs/15-Contract-review/2-Field Management/extracted-images/image80.png",
+  "comp5-map": "/docs/15-Contract-review/2-Field Management/extracted-images/image82.png",
+
+  // Rental Comparables Map
+  "rental-comparables-map": "/docs/15-Contract-review/2-Field Management/extracted-images/image57.png",
+
+  // Site Plans
+  "img-site-plan-1": "/docs/15-Contract-review/2-Field Management/extracted-images/image44.png",
+  "img-site-plan-2": "/docs/15-Contract-review/2-Field Management/extracted-images/image45.png"
 };

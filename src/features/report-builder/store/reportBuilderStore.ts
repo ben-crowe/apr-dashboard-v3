@@ -188,6 +188,95 @@ const buildImageMgtSection = (): ReportSection => {
   };
 };
 
+/**
+ * Build ALL sections dynamically from fieldRegistry (1,687 fields)
+ * Replaces hardcoded getMockData() approach with dynamic generation
+ * Groups fields by section/subsection and creates complete section structure
+ */
+const buildAllSectionsFromRegistry = (): ReportSection[] => {
+  // Group fields by section, then by subsection
+  const sectionMap = new Map<string, Map<string, ReportField[]>>();
+
+  fieldRegistry.forEach(fieldDef => {
+    const sectionId = fieldDef.section;
+    const subsectionId = fieldDef.subsection || '__root__'; // Fields without subsection go to root
+
+    // Initialize section if doesn't exist
+    if (!sectionMap.has(sectionId)) {
+      sectionMap.set(sectionId, new Map());
+    }
+
+    const subsectionMap = sectionMap.get(sectionId)!;
+
+    // Initialize subsection if doesn't exist
+    if (!subsectionMap.has(subsectionId)) {
+      subsectionMap.set(subsectionId, []);
+    }
+
+    // Add field to subsection
+    subsectionMap.get(subsectionId)!.push({
+      id: fieldDef.storeId,
+      label: fieldDef.label,
+      type: fieldDef.type as any,
+      value: fieldDef.defaultValue || '',
+      isEditable: true,
+      inputType: 'user-input',
+    });
+  });
+
+  // Build section objects from the map
+  const sections: ReportSection[] = [];
+
+  sectionMap.forEach((subsectionMap, sectionId) => {
+    const subsections: Array<{ id: string; title: string; fields: ReportField[] }> = [];
+    const rootFields: ReportField[] = [];
+
+    subsectionMap.forEach((fields, subsectionId) => {
+      if (subsectionId === '__root__') {
+        // Fields without subsection go directly to section.fields
+        rootFields.push(...fields);
+      } else {
+        // Create subsection object
+        subsections.push({
+          id: subsectionId,
+          title: formatTitle(subsectionId),
+          fields: fields,
+        });
+      }
+    });
+
+    // Create section object
+    sections.push({
+      id: sectionId,
+      name: formatTitle(sectionId),
+      shortName: formatShortName(sectionId),
+      fields: rootFields,
+      subsections: subsections.length > 0 ? subsections : undefined,
+    });
+  });
+
+  return sections;
+};
+
+/**
+ * Convert kebab-case ID to Title Case
+ * e.g., "client-intake" -> "Client Intake"
+ */
+const formatTitle = (id: string): string => {
+  return id
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
+/**
+ * Convert section ID to short name
+ * e.g., "client-intake" -> "CLIENT INTAKE"
+ */
+const formatShortName = (id: string): string => {
+  return id.toUpperCase().replace(/-/g, ' ');
+};
+
 const getMockData = (): ReportSection[] => [
   // ═══════════════════════════════════════════════════════════════════════════
   // V3 OPERATIONAL SECTIONS - These mirror the deployed V3 Dashboard
@@ -5503,7 +5592,17 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   },
 
   initializeMockData: async () => {
-    const sections = getMockData();
+    // Build ALL sections dynamically from fieldRegistry (1,687 fields)
+    const sections = buildAllSectionsFromRegistry();
+
+    console.log(`initializeMockData: Built ${sections.length} sections from fieldRegistry`);
+    const totalFields = sections.reduce((sum, section) => {
+      const sectionFields = section.fields?.length || 0;
+      const subsectionFields = section.subsections?.reduce((subSum, sub) => subSum + sub.fields.length, 0) || 0;
+      return sum + sectionFields + subsectionFields;
+    }, 0);
+    console.log(`initializeMockData: Total fields in store: ${totalFields}`);
+
     // Load template first
     const template = await get().loadPreviewTemplate();
     const html = get().interpolateTemplate(sections, template);

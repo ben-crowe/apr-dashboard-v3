@@ -79,9 +79,7 @@ const TestInputDashboard: React.FC = () => {
     // Renamed unnumbered sections
     'sales-comparison': '18 - SALES COMPS',
     'rent-analysis': '19 - RENT COMPS',
-    'rentroll': '20 - RENT ROLL',
-    // Virtual section for all calculated outputs consolidated view
-    'all-calc-outputs': '23 - ALL CALC OUTPUTS (Read-Only)'
+    'rentroll': '20 - RENT ROLL'
   };
 
   // Subsection name mapping for image-mgt
@@ -123,7 +121,6 @@ const TestInputDashboard: React.FC = () => {
     'rentroll',          // 20 - RENT ROLL
     'recon',             // 21 - RECONCILIATION
     'cert',              // 22 - CERTIFICATION
-    'all-calc-outputs',  // 23 - ALL CALC OUTPUTS (Read-Only) - consolidated view
   ];
 
   // Legacy image fields that are now managed in Image Management
@@ -623,10 +620,11 @@ const TestInputDashboard: React.FC = () => {
     navigate('/mock-builder');
   };
 
-  // Group fields by section - include virtual 'all-calc-outputs' section
-  const allSections = [...getAllSections(), 'all-calc-outputs'];
+  // Group fields by section
+  const allSections = getAllSections();
 
   // Get ALL calculated fields from the entire registry, grouped by their original section
+  // This is used for the "All Calculated Outputs" subsection within Tab 15 - VALUATIONS
   const allCalculatedFields = useMemo(() => {
     const calcFields = fieldRegistry.filter(f => f.inputSource === 'calculated');
     // Group by original section
@@ -641,16 +639,16 @@ const TestInputDashboard: React.FC = () => {
     return groupedBySection;
   }, []);
 
-  // Section labels for the All Calc Outputs view
+  // Section labels for the All Calc Outputs subsection (inside Tab 15)
   const calcOutputSectionLabels: Record<string, string> = {
-    'calc': 'Valuations (Calc Engine)',
+    'calc': 'Calc Engine (Valuations)',
     'exec': 'Executive Summary',
     'site': 'Site Details',
     'impv': 'Improvements',
     'market': 'Market Analysis',
     'income': 'Income Approach',
     'recon': 'Reconciliation',
-    'calc-output': 'Calc Output Fields',
+    'calc-output': 'Additional Outputs',
     'cost-s': 'Cost Approach',
     'sales': 'Sales Comparison',
     'land1': 'Land Value',
@@ -811,118 +809,6 @@ const TestInputDashboard: React.FC = () => {
               return 0;
             })
             .map(sectionId => {
-            // Special handling for virtual 'all-calc-outputs' section
-            if (sectionId === 'all-calc-outputs') {
-              const totalCalcFields = Object.values(allCalculatedFields).flat().length;
-              const isExpanded = expandedSections.has(sectionId);
-              const sectionName = sectionNameMapping[sectionId] || 'ALL CALC OUTPUTS';
-
-              return (
-                <Collapsible
-                  key={sectionId}
-                  open={isExpanded}
-                  onOpenChange={() => toggleSection(sectionId)}
-                >
-                  <div id={`section-${sectionId}`} className="bg-white rounded-lg shadow-sm overflow-hidden border-2 border-blue-200">
-                    <CollapsibleTrigger className="w-full">
-                      <div className="flex items-center justify-between p-4 hover:bg-blue-50 cursor-pointer bg-blue-50/50">
-                        <div className="flex items-center gap-2">
-                          {isExpanded ? (
-                            <ChevronDown className="w-5 h-5 text-blue-600" />
-                          ) : (
-                            <ChevronRight className="w-5 h-5 text-blue-600" />
-                          )}
-                          <h2 className="text-lg font-semibold text-blue-800">
-                            {sectionName}
-                          </h2>
-                          <Badge className="bg-blue-100 text-blue-800 border-blue-300">
-                            {totalCalcFields} calculated fields
-                          </Badge>
-                          <Badge variant="outline" className="text-xs bg-slate-100 text-slate-600 border-slate-300">
-                            Read-Only
-                          </Badge>
-                        </div>
-                      </div>
-                    </CollapsibleTrigger>
-
-                    <CollapsibleContent>
-                      <div className="border-t border-blue-200 p-4 space-y-3">
-                        <div className="text-sm text-slate-600 mb-4 bg-blue-50 p-3 rounded border border-blue-100">
-                          <strong>Consolidated view of ALL calculated outputs</strong> from across the entire registry.
-                          These fields update in real-time when you change input values in the Valuations tab.
-                        </div>
-
-                        {Object.entries(allCalculatedFields)
-                          .sort((a, b) => {
-                            // Sort by section order, calc first
-                            const order = ['calc', 'exec', 'income', 'recon', 'calc-output', 'site', 'impv', 'market', 'cost-s', 'sales', 'land1'];
-                            const indexA = order.indexOf(a[0]);
-                            const indexB = order.indexOf(b[0]);
-                            if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-                            if (indexA !== -1) return -1;
-                            if (indexB !== -1) return 1;
-                            return a[0].localeCompare(b[0]);
-                          })
-                          .map(([origSection, sectionFields]) => (
-                          <Collapsible
-                            key={origSection}
-                            open={expandedAllCalcOutputSections.has(origSection)}
-                            onOpenChange={() => toggleAllCalcOutputSection(origSection)}
-                          >
-                            <div className="border rounded-lg overflow-hidden">
-                              <CollapsibleTrigger className="w-full">
-                                <div className="bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
-                                  <div className="flex items-center gap-2">
-                                    {expandedAllCalcOutputSections.has(origSection) ? (
-                                      <ChevronDown className="w-4 h-4 text-slate-600" />
-                                    ) : (
-                                      <ChevronRight className="w-4 h-4 text-slate-600" />
-                                    )}
-                                    <h3 className="text-sm font-semibold text-slate-800">
-                                      {calcOutputSectionLabels[origSection] || origSection.toUpperCase()}
-                                    </h3>
-                                  </div>
-                                  <Badge variant="outline" className="text-xs">
-                                    {sectionFields.length} fields
-                                  </Badge>
-                                </div>
-                              </CollapsibleTrigger>
-                              <CollapsibleContent>
-                                <div className="p-4 bg-white">
-                                  <table className="w-full text-sm">
-                                    <tbody>
-                                      {sectionFields.map(field => {
-                                        const statusInfo = getFieldStatus(field);
-                                        const value = getStoreValue(field.storeId);
-                                        const formattedValue = field.type === 'currency'
-                                          ? (typeof value === 'number' ? `$${value.toLocaleString()}` : value || '-')
-                                          : field.type === 'percentage'
-                                          ? (typeof value === 'number' ? `${value.toFixed(2)}%` : value || '-')
-                                          : (value || '-');
-                                        return (
-                                          <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50 bg-slate-50/50">
-                                            <td className="px-2 py-1.5 text-xs font-mono text-slate-400 w-48">{field.storeId}</td>
-                                            <td className="px-2 py-1.5 text-sm text-slate-600">{field.label}</td>
-                                            <td className="px-2 py-1.5 text-sm font-medium text-slate-800 text-right w-32">
-                                              {formattedValue}
-                                            </td>
-                                          </tr>
-                                        );
-                                      })}
-                                    </tbody>
-                                  </table>
-                                </div>
-                              </CollapsibleContent>
-                            </div>
-                          </Collapsible>
-                        ))}
-                      </div>
-                    </CollapsibleContent>
-                  </div>
-                </Collapsible>
-              );
-            }
-
             const allFields = getFieldsBySection(sectionId).filter(f => f.inputSource === 'user-input');
             if (allFields.length === 0) return null;
 
@@ -964,92 +850,218 @@ const TestInputDashboard: React.FC = () => {
 
                   <CollapsibleContent>
                     <div className="border-t border-slate-200">
-                      {/* Special rendering for Calculator section - organized by subsections */}
+                      {/* Special rendering for Calculator section - INPUTS and OUTPUTS */}
                       {sectionId === 'calc' ? (
                         <div className="space-y-3 p-4">
-                          {/* Calc subsections in order */}
-                          {['calc-unit-mix', 'calc-other-income', 'calc-vacancy', 'calc-expenses', 'calc-cap', 'calc-adjustments', 'calc-results'].map(subsectionId => {
-                            const subsectionFields = getFieldsBySubsection(sectionId, subsectionId);
-                            const userInputFields = subsectionFields.filter(f => f.inputSource === 'user-input');
-                            const calculatedFields = subsectionFields.filter(f => f.inputSource === 'calculated');
-                            
-                            if (subsectionFields.length === 0) return null;
-                            
-                            const subsectionLabels: Record<string, string> = {
-                              'calc-unit-mix': 'Unit Mix',
-                              'calc-other-income': 'Other Income',
-                              'calc-vacancy': 'Vacancy & Loss',
-                              'calc-expenses': 'Operating Expenses',
-                              'calc-cap': 'Cap Rate',
-                              'calc-adjustments': 'Adjustments',
-                              'calc-results': 'Calculated Results'
-                            };
-                            
-                            return (
-                              <Collapsible
-                                key={subsectionId}
-                                open={expandedCalcSubsections.has(subsectionId)}
-                                onOpenChange={() => toggleCalcSubsection(subsectionId)}
-                              >
-                                <div className="border rounded-lg overflow-hidden">
-                                  <CollapsibleTrigger className="w-full">
-                                    <div className="bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
-                                      <div className="flex items-center gap-2">
-                                        {expandedCalcSubsections.has(subsectionId) ? (
-                                          <ChevronDown className="w-4 h-4 text-slate-600" />
-                                        ) : (
-                                          <ChevronRight className="w-4 h-4 text-slate-600" />
-                                        )}
-                                        <h3 className="text-sm font-semibold text-slate-800">{subsectionLabels[subsectionId] || subsectionId}</h3>
-                                      </div>
-                                      <div className="text-xs text-slate-500">
-                                        {userInputFields.length > 0 && `${userInputFields.length} input${userInputFields.length !== 1 ? 's' : ''}`}
-                                        {userInputFields.length > 0 && calculatedFields.length > 0 && ' • '}
-                                        {calculatedFields.length > 0 && `${calculatedFields.length} calculated`}
-                                      </div>
-                                    </div>
-                                  </CollapsibleTrigger>
-                                  <CollapsibleContent>
-                                    <div className="p-4 bg-white">
-                                      <table className="w-full text-sm">
-                                        <tbody>
-                                          {/* User input fields */}
-                                          {userInputFields.map(field => {
-                                            const statusInfo = getFieldStatus(field);
-                                            return (
-                                              <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50">
-                                                <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
-                                                <td className="px-2 py-1.5 text-sm">{field.label}</td>
-                                                <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
-                                                <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
-                                              </tr>
-                                            );
-                                          })}
-                                          {/* Calculated fields - visually distinct */}
-                                          {calculatedFields.map(field => {
-                                            const statusInfo = getFieldStatus(field);
-                                            return (
-                                              <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50 bg-slate-50">
-                                                <td className="px-2 py-1.5 text-xs font-mono text-slate-400 w-48">{field.storeId}</td>
-                                                <td className="px-2 py-1.5 text-sm text-slate-600">
-                                                  <span className="flex items-center gap-2">
-                                                    {field.label}
-                                                    <Badge variant="outline" className="text-xs bg-slate-100 text-slate-600 border-slate-300">Calculated</Badge>
-                                                  </span>
-                                                </td>
-                                                <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
-                                                <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
-                                              </tr>
-                                            );
-                                          })}
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                  </CollapsibleContent>
+                          {/* ==================== INPUTS SECTION ==================== */}
+                          <Collapsible
+                            open={expandedCalcSubsections.has('inputs-main')}
+                            onOpenChange={() => toggleCalcSubsection('inputs-main')}
+                          >
+                            <div className="border-2 border-amber-200 rounded-lg overflow-hidden">
+                              <CollapsibleTrigger className="w-full">
+                                <div className="bg-amber-50 hover:bg-amber-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                  <div className="flex items-center gap-2">
+                                    {expandedCalcSubsections.has('inputs-main') ? (
+                                      <ChevronDown className="w-5 h-5 text-amber-700" />
+                                    ) : (
+                                      <ChevronRight className="w-5 h-5 text-amber-700" />
+                                    )}
+                                    <h3 className="text-base font-bold text-amber-800">📥 INPUTS</h3>
+                                    <Badge className="bg-amber-100 text-amber-800 border-amber-300">User Entry Fields</Badge>
+                                  </div>
                                 </div>
-                              </Collapsible>
-                            );
-                          })}
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <div className="p-3 space-y-2 bg-white">
+                                  {/* Input subsections */}
+                                  {['calc-unit-mix', 'calc-other-income', 'calc-vacancy', 'calc-expenses', 'calc-cap', 'calc-adjustments'].map(subsectionId => {
+                                    const subsectionFields = getFieldsBySubsection(sectionId, subsectionId);
+                                    const userInputFields = subsectionFields.filter(f => f.inputSource === 'user-input');
+
+                                    if (userInputFields.length === 0) return null;
+
+                                    const subsectionLabels: Record<string, string> = {
+                                      'calc-unit-mix': 'Unit Mix',
+                                      'calc-other-income': 'Other Income',
+                                      'calc-vacancy': 'Vacancy & Loss',
+                                      'calc-expenses': 'Operating Expenses',
+                                      'calc-cap': 'Cap Rate',
+                                      'calc-adjustments': 'Adjustments'
+                                    };
+
+                                    return (
+                                      <Collapsible
+                                        key={subsectionId}
+                                        open={expandedCalcSubsections.has(subsectionId)}
+                                        onOpenChange={() => toggleCalcSubsection(subsectionId)}
+                                      >
+                                        <div className="border rounded-lg overflow-hidden">
+                                          <CollapsibleTrigger className="w-full">
+                                            <div className="bg-slate-50 hover:bg-slate-100 px-4 py-2 flex items-center justify-between cursor-pointer transition-colors">
+                                              <div className="flex items-center gap-2">
+                                                {expandedCalcSubsections.has(subsectionId) ? (
+                                                  <ChevronDown className="w-4 h-4 text-slate-600" />
+                                                ) : (
+                                                  <ChevronRight className="w-4 h-4 text-slate-600" />
+                                                )}
+                                                <h4 className="text-sm font-semibold text-slate-800">{subsectionLabels[subsectionId] || subsectionId}</h4>
+                                              </div>
+                                              <Badge variant="outline" className="text-xs">{userInputFields.length} inputs</Badge>
+                                            </div>
+                                          </CollapsibleTrigger>
+                                          <CollapsibleContent>
+                                            <div className="p-3 bg-white">
+                                              <table className="w-full text-sm">
+                                                <tbody>
+                                                  {userInputFields.map(field => {
+                                                    const statusInfo = getFieldStatus(field);
+                                                    return (
+                                                      <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50">
+                                                        <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
+                                                        <td className="px-2 py-1.5 text-sm">{field.label}</td>
+                                                        <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
+                                                        <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
+                                                      </tr>
+                                                    );
+                                                  })}
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                          </CollapsibleContent>
+                                        </div>
+                                      </Collapsible>
+                                    );
+                                  })}
+                                </div>
+                              </CollapsibleContent>
+                            </div>
+                          </Collapsible>
+
+                          {/* ==================== OUTPUTS SECTION ==================== */}
+                          <Collapsible
+                            open={expandedCalcSubsections.has('outputs-main')}
+                            onOpenChange={() => toggleCalcSubsection('outputs-main')}
+                          >
+                            <div className="border-2 border-blue-200 rounded-lg overflow-hidden">
+                              <CollapsibleTrigger className="w-full">
+                                <div className="bg-blue-50 hover:bg-blue-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                  <div className="flex items-center gap-2">
+                                    {expandedCalcSubsections.has('outputs-main') ? (
+                                      <ChevronDown className="w-5 h-5 text-blue-700" />
+                                    ) : (
+                                      <ChevronRight className="w-5 h-5 text-blue-700" />
+                                    )}
+                                    <h3 className="text-base font-bold text-blue-800">📤 OUTPUTS</h3>
+                                    <Badge className="bg-blue-100 text-blue-800 border-blue-300">
+                                      {Object.values(allCalculatedFields).flat().length} Calculated Fields
+                                    </Badge>
+                                    <Badge variant="outline" className="text-xs bg-slate-100 text-slate-500">Read-Only</Badge>
+                                  </div>
+                                </div>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <div className="p-3 space-y-2 bg-white">
+                                  {/* Output groups - logically organized */}
+                                  {(() => {
+                                    // Group calculated fields by functional category
+                                    const outputGroups: Record<string, { label: string; sections: string[] }> = {
+                                      'income-approach': {
+                                        label: 'Income Approach (PGR, EGR, NOI, Cap Value)',
+                                        sections: ['calc', 'calc-output', 'calc-unit-mix', 'calc-other-income', 'calc-vacancy', 'calc-expenses', 'calc-cap', 'calc-adjustments', 'calc-results', 'calc-revenue-pct']
+                                      },
+                                      'sales-comparison': {
+                                        label: 'Sales Comparison',
+                                        sections: ['sales', 'sale-comp-1', 'sale-comp-2', 'sale-comp-3', 'sale-comp-4', 'sale-comp-5', 'sca-conclusion', 'sca-analysis', 'sales-conclusion']
+                                      },
+                                      'rent-roll': {
+                                        label: 'Rent Roll',
+                                        sections: ['rentroll', 'rentroll-totals', 'rentroll-type1', 'rentroll-type2']
+                                      },
+                                      'rental-analysis': {
+                                        label: 'Rental Analysis',
+                                        sections: ['rental-revenue', 'rent-analysis-1br', 'rent-analysis-2br', 'rental-comp-1', 'rental-comp-2', 'rental-comp-3', 'rental-comp-4', 'rental-comp-5', 'contract-vs-market', 'contract-analysis', 'survey-summary']
+                                      },
+                                      'historical-data': {
+                                        label: 'Historical Data',
+                                        sections: ['hist-expenses', 'hist-revenue', 'hist-vacancy', 'hist-noi']
+                                      },
+                                      'direct-cap': {
+                                        label: 'Direct Cap Analysis',
+                                        sections: ['dca-statistics', 'dca-summary', 'direct-capitalization', 'cap-rate-analysis']
+                                      },
+                                      'value-summary': {
+                                        label: 'Value Summary',
+                                        sections: ['value-summary', 'final-value', 'calculated-values', 'income-projections']
+                                      },
+                                      'other': {
+                                        label: 'Other Outputs',
+                                        sections: ['exec', 'income', 'recon', 'impv', 'site', 'market', 'cost-s', 'land1', 'cover', 'condition', 'building-overview', 'client-intake', 'client-info-intake', 'client-info', 'property-contact-intake', 'appraiser-info']
+                                      }
+                                    };
+
+                                    return Object.entries(outputGroups).map(([groupId, { label, sections: groupSections }]) => {
+                                      // Get all calculated fields for this group
+                                      const groupFields = fieldRegistry.filter(f =>
+                                        f.inputSource === 'calculated' && groupSections.includes(f.section || '')
+                                      );
+
+                                      if (groupFields.length === 0) return null;
+
+                                      return (
+                                        <Collapsible
+                                          key={groupId}
+                                          open={expandedAllCalcOutputSections.has(groupId)}
+                                          onOpenChange={() => toggleAllCalcOutputSection(groupId)}
+                                        >
+                                          <div className="border rounded-lg overflow-hidden">
+                                            <CollapsibleTrigger className="w-full">
+                                              <div className="bg-slate-50 hover:bg-slate-100 px-4 py-2 flex items-center justify-between cursor-pointer transition-colors">
+                                                <div className="flex items-center gap-2">
+                                                  {expandedAllCalcOutputSections.has(groupId) ? (
+                                                    <ChevronDown className="w-4 h-4 text-slate-600" />
+                                                  ) : (
+                                                    <ChevronRight className="w-4 h-4 text-slate-600" />
+                                                  )}
+                                                  <h4 className="text-sm font-semibold text-slate-800">{label}</h4>
+                                                </div>
+                                                <Badge variant="outline" className="text-xs">{groupFields.length} outputs</Badge>
+                                              </div>
+                                            </CollapsibleTrigger>
+                                            <CollapsibleContent>
+                                              <div className="p-3 bg-white">
+                                                <table className="w-full text-sm">
+                                                  <tbody>
+                                                    {groupFields.map(field => {
+                                                      const value = getStoreValue(field.storeId);
+                                                      const formattedValue = field.type === 'currency'
+                                                        ? (typeof value === 'number' ? `$${value.toLocaleString()}` : value || '-')
+                                                        : field.type === 'percentage'
+                                                        ? (typeof value === 'number' ? `${value.toFixed(2)}%` : value || '-')
+                                                        : (value !== undefined && value !== null && value !== '' ? String(value) : '-');
+                                                      return (
+                                                        <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50 bg-slate-50/50">
+                                                          <td className="px-2 py-1.5 text-xs font-mono text-slate-400 w-48">{field.storeId}</td>
+                                                          <td className="px-2 py-1.5 text-sm text-slate-600">{field.label}</td>
+                                                          <td className="px-2 py-1.5 text-sm font-medium text-slate-800 text-right w-32">
+                                                            {formattedValue}
+                                                          </td>
+                                                        </tr>
+                                                      );
+                                                    })}
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </CollapsibleContent>
+                                          </div>
+                                        </Collapsible>
+                                      );
+                                    });
+                                  })()}
+                                </div>
+                              </CollapsibleContent>
+                            </div>
+                          </Collapsible>
                         </div>
                       ) : sectionId === 'image-mgt' ? (
                         <div className="space-y-4 p-4">

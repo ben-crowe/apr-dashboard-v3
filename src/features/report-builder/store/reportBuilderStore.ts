@@ -4,6 +4,7 @@ import {
   ReportSection,
   ReportField,
   SectionGroup,
+  TestMode,
 } from "../types/reportBuilder.types";
 import { northBattlefordTestData } from "../data/northBattlefordTestData";
 import { fieldRegistry } from "../schema/fieldRegistry";
@@ -5522,6 +5523,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   previewTemplate: "", // Cached PREVIEW-Master.html template
   isDirty: false,
   sidebarCollapsed: false,
+  activeTestMode: 'none', // Mutually exclusive test modes: 'none' | 'test-report' | 'designer'
 
   setActiveSection: (sectionId: string) => {
     set({ activeSection: sectionId });
@@ -5657,10 +5659,24 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       });
     });
 
-    // Replace all {{field-id}} placeholders with actual values (single-pass regex for performance)
+    // Replace all {{field-id}} placeholders with actual values
     html = html.replace(/\{\{([^}]+)\}\}/g, (match, fieldId) => {
       return fieldMap.get(fieldId) || match; // Return value or keep placeholder if unmapped
     });
+    
+    // Handle empty image URLs in cover photo - show placeholder text if img src is empty
+    html = html.replace(
+      /<img([^>]*src=")([^"]*)"([^>]*alt="Subject Property"[^>]*onerror="[^"]*")([^>]*>)/gi,
+      (match, beforeSrc, srcValue, onerrorAttr, afterSrc) => {
+        // If src is empty or still has placeholder, ensure placeholder div shows
+        if (!srcValue || srcValue.includes('{{') || srcValue.trim() === '') {
+          // Hide img and show placeholder div
+          return match.replace(/style="([^"]*)"/, 'style="$1 display:none;"') + 
+                 '<div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; color:#999; font-size:9pt;">Property Photo</div>';
+        }
+        return match;
+      }
+    );
 
     // Leave unreplaced placeholders as-is (for toggle display in test mode)
     return html;
@@ -5681,9 +5697,11 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       case 'date':
         return new Date(field.value).toISOString().split('T')[0];
       case 'image':
-        // For images, return an <img> tag with the URL
+        // For images, return the URL string
+        // The template's toggle JavaScript will convert divs with image URLs to img tags
         const imageUrl = Array.isArray(field.value) ? field.value[0] || '' : String(field.value);
-        return imageUrl ? `<img src="${imageUrl}" style="width:100%; height:100%; object-fit:cover;" alt="${field.label || field.id}" />` : '';
+        // Return URL as string - template JavaScript handles img tag creation
+        return imageUrl || '';
       default:
         return String(field.value);
     }
@@ -6022,5 +6040,67 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     if (unmappedFields.length > 0) {
       console.log("Unmapped fields (need store definition):", unmappedFields);
     }
+  },
+
+  loadUserInputsOnly: async () => {
+    console.log("=== LOAD USER INPUTS ONLY CALLED ===");
+    const sections = get().sections;
+    let mappedCount = 0;
+    let clearedCount = 0;
+
+    // Helper to check if field exists in store
+    const fieldExists = (fieldId: string): boolean => {
+      for (const section of sections) {
+        if (section.fields.find((f) => f.id === fieldId)) return true;
+        if (section.subsections) {
+          for (const sub of section.subsections) {
+            if (sub.fields.find((f) => f.id === fieldId)) return true;
+          }
+        }
+      }
+      return false;
+    };
+
+    // Helper to get field definition from registry
+    const getFieldDef = (fieldId: string) => {
+      return fieldRegistry.find(f => f.id === fieldId || f.storeId === fieldId);
+    };
+
+    // First, clear all calculated fields
+    fieldRegistry.forEach(fieldDef => {
+      if (fieldDef.inputSource === 'calculated' && fieldExists(fieldDef.storeId)) {
+        get().updateFieldValue(fieldDef.storeId, '');
+        clearedCount++;
+      }
+    });
+
+    // Then load ONLY user-input fields from test data
+    Object.entries(northBattlefordTestData).forEach(([fieldId, value]) => {
+      const storeFieldId = testDataFieldMapping[fieldId] || fieldId;
+      const fieldDef = getFieldDef(storeFieldId);
+      
+      // Only load if field exists AND is user-input
+      if (fieldExists(storeFieldId) && fieldDef && fieldDef.inputSource === 'user-input') {
+        get().updateFieldValue(storeFieldId, value);
+        mappedCount++;
+      }
+    });
+
+    // Run calculations to populate calculated fields
+    get().runCalculations();
+
+    // Regenerate preview with updated data
+    const updatedSections = get().sections;
+    const template = await get().loadPreviewTemplate();
+    const html = get().interpolateTemplate(updatedSections, template);
+    set({ previewHtml: html });
+
+    console.log(
+      `User inputs loaded: ${mappedCount} fields | Cleared ${clearedCount} calculated fields | Running calculations...`,
+    );
+  },
+
+  setTestMode: (mode: TestMode) => {
+    set({ activeTestMode: mode });
   },
 }));

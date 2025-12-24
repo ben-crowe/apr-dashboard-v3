@@ -3,6 +3,12 @@ export type FieldType = 'text' | 'number' | 'date' | 'image' | 'calculated' | 'd
 // Field input type for color coding (matches Valcre workbook)
 export type FieldInputType = 'user-input' | 'dropdown' | 'auto-filled';
 
+// Test mode - mutually exclusive modes for testing
+// 'none' = no test mode active (normal editing)
+// 'test-report' = Test Report mode (user inputs + calc engine)
+// 'designer' = Designer mode (sample data for visual review)
+export type TestMode = 'none' | 'test-report' | 'designer';
+
 export interface ReportField {
   id: string;
   label: string;
@@ -44,6 +50,7 @@ export interface ReportBuilderState {
   previewHtml: string;
   isDirty: boolean;
   sidebarCollapsed: boolean;
+  activeTestMode: TestMode; // Mutually exclusive test modes
 
   // Actions
   setActiveSection: (sectionId: string) => void;
@@ -57,4 +64,6 @@ export interface ReportBuilderState {
   loadCalcTestData: () => void;
   runCalculations: () => void;
   loadFullTestData: () => void;
+  loadUserInputsOnly: () => Promise<void>;
+  setTestMode: (mode: TestMode) => void; // Switch between test modes
 }

@@ -5912,9 +5912,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     const grm =
       totalRentalRevenue > 0 ? indicatedValue / totalRentalRevenue : 0;
 
-    // Update all calculated fields
+    // Batch all calculated field updates (don't trigger preview generation for each)
+    const calcUpdates: Array<{ fieldId: string; value: number }> = [];
     const updateField = (fieldId: string, value: number) => {
-      get().updateFieldValue(fieldId, value);
+      calcUpdates.push({ fieldId, value });
     };
 
     // Unit Mix calculated
@@ -5929,15 +5930,51 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("calc-avg-rent-per-unit", Math.round(avgRentPerUnit));
     updateField("calc-avg-rent-per-sf", Math.round(avgRentPerSf * 100) / 100);
 
+    // Per-unit type calculations (template expects these for income table)
+    // Type 1
+    updateField("calc-type1-per-unit", type1Count > 0 ? Math.round(type1Annual / type1Count) : 0);
+    updateField("calc-type1-per-sf", type1Count > 0 && type1Sf > 0 ? Math.round((type1Rent / type1Sf) * 100) / 100 : 0);
+    // Type 2
+    updateField("calc-type2-per-unit", type2Count > 0 ? Math.round(type2Annual / type2Count) : 0);
+    updateField("calc-type2-per-sf", type2Count > 0 && type2Sf > 0 ? Math.round((type2Rent / type2Sf) * 100) / 100 : 0);
+    // Type 3
+    updateField("calc-type3-per-unit", type3Count > 0 ? Math.round(type3Annual / type3Count) : 0);
+    updateField("calc-type3-per-sf", type3Count > 0 && type3Sf > 0 ? Math.round((type3Rent / type3Sf) * 100) / 100 : 0);
+    // Type 4
+    updateField("calc-type4-per-unit", type4Count > 0 ? Math.round(type4Annual / type4Count) : 0);
+    updateField("calc-type4-per-sf", type4Count > 0 && type4Sf > 0 ? Math.round((type4Rent / type4Sf) * 100) / 100 : 0);
+    // Total rental (all types combined)
+    updateField("calc-type-total-per-unit", totalUnits > 0 ? Math.round(totalRentalRevenue / totalUnits) : 0);
+    updateField("calc-type-total-per-sf", totalSf > 0 ? Math.round((totalRentalRevenue / totalSf) * 100) / 100 : 0);
+
+    // Contract rent vs market rent (need contract rent inputs - use market as placeholder)
+    const type1ContractRent = getFieldValue("calc-type1-contract-rent") || type1Rent;
+    const type2ContractRent = getFieldValue("calc-type2-contract-rent") || type2Rent;
+    updateField("calc-type1-cont-v-market", type1Rent > 0 ? Math.round((type1ContractRent / type1Rent) * 100) : 0);
+    updateField("calc-type2-cont-v-market", type2Rent > 0 ? Math.round((type2ContractRent / type2Rent) * 100) : 0);
+
     // Other Income calculated
     updateField("calc-parking-total", parkingTotal);
     updateField("calc-laundry-total", laundryTotal);
     updateField("calc-total-other-income", totalOtherIncome);
     updateField("calc-pgr", pgr);
+    // PGR per unit/sf (template expects these)
+    updateField("calc-pgr-per-unit", totalUnits > 0 ? Math.round(pgr / totalUnits) : 0);
+    updateField("calc-pgr-per-sf", totalSf > 0 ? Math.round((pgr / totalSf) * 100) / 100 : 0);
+    // Other income per unit/sf
+    updateField("calc-other-income-per-unit", totalUnits > 0 ? Math.round(totalOtherIncome / totalUnits) : 0);
+    updateField("calc-other-income-per-sf", totalSf > 0 ? Math.round((totalOtherIncome / totalSf) * 100) / 100 : 0);
+    // Rental revenue per unit (template expects this specific field)
+    updateField("calc-rental-revenue-per-unit", totalUnits > 0 ? Math.round(totalRentalRevenue / totalUnits) : 0);
 
     // Vacancy calculated
     updateField("calc-vacancy-loss", vacancyLoss);
     updateField("calc-egr", egr);
+    // Vacancy/EGR per unit/sf (template expects these)
+    updateField("calc-vacancy-per-unit", totalUnits > 0 ? Math.round(vacancyLoss / totalUnits) : 0);
+    updateField("calc-vacancy-per-sf", totalSf > 0 ? Math.round((vacancyLoss / totalSf) * 100) / 100 : 0);
+    updateField("calc-egr-per-unit", totalUnits > 0 ? Math.round(egr / totalUnits) : 0);
+    updateField("calc-egr-per-sf", totalSf > 0 ? Math.round((egr / totalSf) * 100) / 100 : 0);
 
     // Expenses calculated
     updateField("calc-expenses-total", Math.round(expensesTotal));
@@ -5980,12 +6017,39 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("calc-noi-per-sf", Math.round(noiPerSf * 100) / 100);
     updateField("calc-raw-value", Math.round(rawValue));
     updateField("calc-indicated-value", indicatedValue);
+    updateField("calc-indicated-value-rounded", roundedValue); // Template expects this rounded version
     updateField("calc-value-per-unit", Math.round(valuePerUnit));
     updateField("calc-value-per-sf", Math.round(valuePerSf * 100) / 100);
     updateField("calc-grm", Math.round(grm * 100) / 100);
 
     // Sync to RECON
     updateField("recon-income-value", indicatedValue);
+
+    // Apply all calculated field updates at once (without triggering preview generation)
+    const currentSections = get().sections;
+    const sectionsWithCalcs = currentSections.map((section) => {
+      const updatedFields = section.fields.map((field) => {
+        const update = calcUpdates.find(u => u.fieldId === field.id);
+        return update ? { ...field, value: update.value } : field;
+      });
+      
+      const updatedSubsections = section.subsections?.map((subsection) => ({
+        ...subsection,
+        fields: subsection.fields.map((field) => {
+          const update = calcUpdates.find(u => u.fieldId === field.id);
+          return update ? { ...field, value: update.value } : field;
+        }),
+      }));
+      
+      return {
+        ...section,
+        fields: updatedFields,
+        subsections: updatedSubsections,
+      };
+    });
+
+    // Update sections in store (don't trigger preview generation here - caller will do it)
+    set({ sections: sectionsWithCalcs, isDirty: true });
 
     console.log("Calculations complete. Indicated Value:", indicatedValue);
   },
@@ -6044,7 +6108,21 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
   loadUserInputsOnly: async () => {
     console.log("=== LOAD USER INPUTS ONLY CALLED ===");
-    const sections = get().sections;
+    
+    // Ensure sections are initialized
+    let sections = get().sections;
+    if (!sections || sections.length === 0) {
+      console.log("Sections not initialized, initializing...");
+      await get().initializeMockData();
+      sections = get().sections;
+    }
+    
+    if (!sections || sections.length === 0) {
+      console.error("Failed to initialize sections");
+      throw new Error("Sections not initialized");
+    }
+    
+    console.log(`Starting with ${sections.length} sections`);
     let mappedCount = 0;
     let clearedCount = 0;
 
@@ -6066,10 +6144,13 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       return fieldRegistry.find(f => f.id === fieldId || f.storeId === fieldId);
     };
 
+    // Batch all updates - don't trigger preview generation for each update
+    const updates: Array<{ fieldId: string; value: string | string[] | number }> = [];
+
     // First, clear all calculated fields
     fieldRegistry.forEach(fieldDef => {
       if (fieldDef.inputSource === 'calculated' && fieldExists(fieldDef.storeId)) {
-        get().updateFieldValue(fieldDef.storeId, '');
+        updates.push({ fieldId: fieldDef.storeId, value: '' });
         clearedCount++;
       }
     });
@@ -6081,23 +6162,95 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       
       // Only load if field exists AND is user-input
       if (fieldExists(storeFieldId) && fieldDef && fieldDef.inputSource === 'user-input') {
-        get().updateFieldValue(storeFieldId, value);
+        updates.push({ fieldId: storeFieldId, value });
         mappedCount++;
       }
     });
 
+    // Apply all updates at once (without triggering preview generation)
+    const currentSections = get().sections;
+    console.log(`Applying ${updates.length} updates to ${currentSections.length} sections`);
+    
+    const updatedSections = currentSections.map((section) => {
+      const updatedFields = section.fields.map((field) => {
+        const update = updates.find(u => u.fieldId === field.id);
+        if (update) {
+          console.log(`Updating field ${field.id} from "${field.value}" to "${update.value}"`);
+        }
+        return update ? { ...field, value: update.value } : field;
+      });
+      
+      const updatedSubsections = section.subsections?.map((subsection) => ({
+        ...subsection,
+        fields: subsection.fields.map((field) => {
+          const update = updates.find(u => u.fieldId === field.id);
+          if (update) {
+            console.log(`Updating subsection field ${field.id} from "${field.value}" to "${update.value}"`);
+          }
+          return update ? { ...field, value: update.value } : field;
+        }),
+      }));
+      
+      return {
+        ...section,
+        fields: updatedFields,
+        subsections: updatedSubsections,
+      };
+    });
+
+    // Update sections in store
+    set({ sections: updatedSections, isDirty: true });
+    console.log(`Updated sections in store. Total sections: ${updatedSections.length}`);
+
     // Run calculations to populate calculated fields
     get().runCalculations();
 
-    // Regenerate preview with updated data
-    const updatedSections = get().sections;
+    // Get final sections after calculations (ensure we have the latest)
+    const finalSections = get().sections;
+    
+    // Verify sections have data
+    const totalFieldsWithValues = finalSections.reduce((count, section) => {
+      const sectionFields = section.fields.filter(f => f.value && f.value !== '').length;
+      const subsectionFields = section.subsections?.reduce((subCount, sub) => 
+        subCount + sub.fields.filter(f => f.value && f.value !== '').length, 0) || 0;
+      return count + sectionFields + subsectionFields;
+    }, 0);
+    
+    // Sample a few fields to verify they have values
+    const sampleFields: string[] = [];
+    finalSections.forEach(section => {
+      section.fields.slice(0, 3).forEach(field => {
+        if (field.value && field.value !== '') {
+          sampleFields.push(`${field.id}: "${field.value}"`);
+        }
+      });
+    });
+    
+    console.log(`Final sections: ${finalSections.length}, Fields with values: ${totalFieldsWithValues}`);
+    console.log(`Sample fields: ${sampleFields.slice(0, 5).join(', ')}`);
+
+    // Regenerate preview with ALL updated data
     const template = await get().loadPreviewTemplate();
-    const html = get().interpolateTemplate(updatedSections, template);
+    if (!template) {
+      console.error('Failed to load preview template');
+      return;
+    }
+    
+    const html = get().interpolateTemplate(finalSections, template);
+    
+    // Verify HTML was generated
+    if (!html || html.length === 0) {
+      console.error('Failed to generate preview HTML');
+      return;
+    }
+    
     set({ previewHtml: html });
 
     console.log(
       `User inputs loaded: ${mappedCount} fields | Cleared ${clearedCount} calculated fields | Running calculations...`,
     );
+    console.log(`Preview HTML generated: ${html.length} characters, ${finalSections.length} sections`);
+    console.log(`Preview HTML preview: ${html.substring(0, 200)}...`);
   },
 
   setTestMode: (mode: TestMode) => {

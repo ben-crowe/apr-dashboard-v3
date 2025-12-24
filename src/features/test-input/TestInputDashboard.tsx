@@ -741,9 +741,12 @@ const TestInputDashboard: React.FC = () => {
                 }}
                 variant={activeTestMode === 'test-report' ? 'default' : 'outline'}
                 size="sm"
+                disabled={activeTestMode === 'designer'}
                 className={`gap-2 ${
                   activeTestMode === 'test-report'
                     ? 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600 font-semibold shadow-md'
+                    : activeTestMode === 'designer'
+                    ? 'bg-gray-300 text-gray-400 border-gray-400 opacity-50 cursor-not-allowed'
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-600 border-gray-300'
                 }`}
                 title="MODE 3: Test Report - Load ONLY user-input fields, clear calculated fields, then run calc engine for validation"
@@ -760,9 +763,12 @@ const TestInputDashboard: React.FC = () => {
                 }}
                 variant={activeTestMode === 'designer' ? 'default' : 'outline'}
                 size="sm"
+                disabled={activeTestMode === 'test-report'}
                 className={`gap-2 ${
                   activeTestMode === 'designer'
                     ? 'bg-purple-600 hover:bg-purple-700 text-white border-purple-600 font-semibold shadow-md'
+                    : activeTestMode === 'test-report'
+                    ? 'bg-gray-300 text-gray-400 border-gray-400 opacity-50 cursor-not-allowed'
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-600 border-gray-300'
                 }`}
                 title="Designer Mode - Use toggle for sample data or Load Full Test Data button in Report Builder"
@@ -775,10 +781,15 @@ const TestInputDashboard: React.FC = () => {
                 onClick={handlePreview}
                 variant="outline"
                 size="sm"
-                className="gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 border-gray-300"
+                className={`gap-2 ${
+                  activeTestMode !== 'none'
+                    ? 'bg-green-500 hover:bg-green-600 text-white border-green-500 font-semibold shadow-md'
+                    : 'bg-gray-200 hover:bg-gray-300 text-gray-800 border-gray-300'
+                }`}
               >
                 <ExternalLink className="w-3 h-3" />
                 Preview in Builder
+                {activeTestMode !== 'none' && <span className="ml-1">→</span>}
               </Button>
             </div>
           </div>

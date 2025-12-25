@@ -26,33 +26,33 @@ The APR Dashboard uses **TWO distinct interfaces** for different workflows:
 
 ### Tab Presence Matrix
 
-| Tab ID | Tab Name | TDD | Editor | Notes |
-|--------|----------|-----|--------|-------|
-| S1 | Client Intake | ✅ | ❌ | TDD-only (fields populate to 01, 02) |
-| S2 | LOE Prep | ✅ | ❌ | TDD-only (fields populate to 01, 22) |
-| S3 | Image Management | ✅ | ❌ | TDD-only (images editable in context in Editor) |
-| 01 | Cover Page | ✅ | ✅ | Fields from S1/S2 shown as links in TDD |
-| 02 | Introduction Letter | ✅ | ✅ | - |
-| 03 | Location Maps | ❌ | ❌ | Hidden (consolidated into S3 in TDD) |
-| 04 | Assignment | ✅ | ✅ | - |
-| 05 | Report Information | ✅ | ✅ | - |
-| 06 | Executive Summary | ✅ | ✅ | - |
-| 07 | Property Photographs | ❌ | ❌ | Hidden (consolidated into S3 in TDD) |
-| 08 | Site Details | ✅ | ✅ | - |
-| 09 | Location Analysis | ✅ | ✅ | - |
-| 10 | Property Taxes | ✅ | ✅ | - |
-| 11 | Market Analysis | ✅ | ✅ | - |
-| 12 | Improvements | ✅ | ✅ | - |
-| 13 | Zoning | ✅ | ✅ | Images shown as "Managed in S3" links in TDD |
-| 14 | Highest & Best Use | ✅ | ✅ | - |
-| 15 | Valuations (All 3 Approaches) | ✅ | ✅ | - |
-| 16 | Land Value | ✅ | ✅ | - |
-| 17 | Cost Approach | ❌ | ❌ | Hidden (consolidated into 15) |
-| 18 | Sales Comparison | ✅ | ✅ | Images shown as "Managed in S3" links in TDD |
-| 19 | Income Approach | ❌ | ❌ | Hidden (consolidated into 15) |
-| 20 | Rental Survey | ✅ | ✅ | Images shown as "Managed in S3" links in TDD |
-| 21 | Reconciliation | ✅ | ✅ | - |
-| 22 | Certification | ✅ | ✅ | Signature shown as "Managed in S3" link in TDD |
+| Tab Name | TDD | Editor | Notes |
+|----------|-----|--------|-------|
+| S1 - Client Intake | ✅ | ❌ | TDD-only (fields populate to 01, 02) |
+| S2 - LOE Prep | ✅ | ❌ | TDD-only (fields populate to 01, 22) |
+| S3 - Image Management | ✅ | ❌ | TDD-only (images editable in context in Editor) |
+| 01 - Cover Page | ✅ | ✅ | Fields from S1/S2 shown as links in TDD |
+| 02 - Introduction Letter | ✅ | ✅ | - |
+| 03 - Location Maps | ❌ | ❌ | Hidden (consolidated into S3 in TDD) |
+| 04 - Identification of Assignment | ✅ | ✅ | - |
+| 05 - Report Information | ✅ | ✅ | - |
+| 06 - Executive Summary | ✅ | ✅ | - |
+| 07 - Property Photographs | ❌ | ❌ | Hidden (consolidated into S3 in TDD) |
+| 08 - Site Details | ✅ | ✅ | - |
+| 09 - Location Analysis | ✅ | ✅ | - |
+| 10 - Property Taxes | ✅ | ✅ | - |
+| 11 - Market Analysis | ✅ | ✅ | - |
+| 12 - Improvements | ✅ | ✅ | - |
+| 13 - Zoning | ✅ | ✅ | Images shown as "Managed in S3" links in TDD |
+| 14 - Highest & Best Use | ✅ | ✅ | - |
+| 15 - Valuations (All 3 Approaches) | ✅ | ✅ | - |
+| 16 - Land Value | ✅ | ✅ | - |
+| 17 - Cost Approach | ❌ | ❌ | Hidden (consolidated into 15) |
+| 18 - Sales Comparison | ✅ | ✅ | Images shown as "Managed in S3" links in TDD |
+| 19 - Income Approach | ❌ | ❌ | Hidden (consolidated into 15) |
+| 20 - Rental Survey | ✅ | ✅ | Images shown as "Managed in S3" links in TDD |
+| 21 - Reconciliation | ✅ | ✅ | - |
+| 22 - Certification | ✅ | ✅ | Signature shown as "Managed in S3" link in TDD |
 
 **Hidden Tabs (neither TDD nor Editor):** 03, 07, 17, 19 - Fields consolidated elsewhere
 **TDD Total:** 21 visible tabs (S1-S3 + 18 numbered)
@@ -1004,29 +1004,29 @@ The Editor Panel shows **ONLY the numbered report page tabs (01-22 minus hidden 
 
 ### Summary Table
 
-| Tab | TDD Fields | Editor Fields | Difference |
-|-----|-----------|--------------|------------|
-| S1 | 22 | N/A | TDD-only |
-| S2 | 18 | N/A | TDD-only |
-| S3 | 70+ | N/A | TDD-only (images editable in context in Editor) |
-| 01 | 15 (7 links) | 15 (all editable) | Links → Direct edit |
-| 02 | 8 | 8 | Same |
-| 04 | 12 | 12 | Same |
-| 05 | 10 | 10 | Same |
-| 06 | 15 | 15 | Same |
-| 08 | 20 (3 image links) | 20 (all editable) | Links → Direct edit |
-| 09 | 12 | 12 | Same |
-| 10 | 7 | 7 | Same |
-| 11 | 8 | 8 | Same |
-| 12 | 25+ | 25+ | Same |
-| 13 | 8 (1 image link) | 8 (all editable) | Link → Direct edit |
-| 14 | 5 | 5 | Same |
-| 15 | 60 | 60 | Same |
-| 16 | 10 | 10 | Same |
-| 18 | 70 (10 image links) | 70 (all editable) | Links → Direct edit |
-| 20 | 33 (1 image link) | 33 (all editable) | Link → Direct edit |
-| 21 | 8 | 8 | Same |
-| 22 | 10 (3 links) | 10 (all editable) | Links → Direct edit |
+| Tab Name | TDD Fields | Editor Fields | Difference |
+|----------|-----------|--------------|------------|
+| S1 - Client Intake | 22 | N/A | TDD-only |
+| S2 - LOE Prep | 18 | N/A | TDD-only |
+| S3 - Image Management | 70+ | N/A | TDD-only (images editable in context in Editor) |
+| 01 - Cover Page | 15 (7 links) | 15 (all editable) | Links → Direct edit |
+| 02 - Introduction Letter | 8 | 8 | Same |
+| 04 - Identification of Assignment | 12 | 12 | Same |
+| 05 - Report Information | 10 | 10 | Same |
+| 06 - Executive Summary | 15 | 15 | Same |
+| 08 - Site Details | 20 (3 image links) | 20 (all editable) | Links → Direct edit |
+| 09 - Location Analysis | 12 | 12 | Same |
+| 10 - Property Taxes | 7 | 7 | Same |
+| 11 - Market Analysis | 8 | 8 | Same |
+| 12 - Improvements | 25+ | 25+ | Same |
+| 13 - Zoning | 8 (1 image link) | 8 (all editable) | Link → Direct edit |
+| 14 - Highest & Best Use | 5 | 5 | Same |
+| 15 - Valuations (All 3 Approaches) | 60 | 60 | Same |
+| 16 - Land Value | 10 | 10 | Same |
+| 18 - Sales Comparison | 70 (10 image links) | 70 (all editable) | Links → Direct edit |
+| 20 - Rental Survey | 33 (1 image link) | 33 (all editable) | Link → Direct edit |
+| 21 - Reconciliation | 8 | 8 | Same |
+| 22 - Certification | 10 (3 links) | 10 (all editable) | Links → Direct edit |
 
 **Total Field Count:**
 - **TDD:** ~450 unique fields (including S1/S2/S3)

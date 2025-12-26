@@ -32,8 +32,15 @@
  * Test data mapping field IDs to values.
  * Maps to field IDs defined in reportBuilderStore.ts and fieldRegistry.ts
  */
+import { generateAdjustmentDefaults } from '../schema/fieldGenerators';
+
 export const northBattlefordTestData: Record<string, string | number | string[]> =
 {
+  // Sales Comp Adjustment Defaults - Generated programmatically
+  // 5 comps × 8 adjustment categories = 40 defaults (all set to 0)
+  // See fieldGenerators.ts for generation logic
+  ...generateAdjustmentDefaults(),
+
   "access": "average",
   "adjacent-east": "Residential",
   "adjacent-north": "Residential",
@@ -292,14 +299,6 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "comp1-utilities": "[comp1-utilities]",
   "comp1-year": 0,
   "comp1-year-built": "2000",
-  "comp1-adj-property-rights": 0,
-  "comp1-adj-financing": 0,
-  "comp1-adj-sale-conditions": 0,
-  "comp1-adj-market-conditions": 0,
-  "comp1-adj-location": 0,
-  "comp1-adj-size": 0,
-  "comp1-adj-age-condition": 0,
-  "comp1-adj-other": 0,
   "comp10-address": "-",
   "comp10-city": "-",
   "comp10-comments-prop": "-",
@@ -406,14 +405,6 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "comp2-utilities": "[comp2-utilities]",
   "comp2-year": 0,
   "comp2-year-built": "2000",
-  "comp2-adj-property-rights": 0,
-  "comp2-adj-financing": 0,
-  "comp2-adj-sale-conditions": 0,
-  "comp2-adj-market-conditions": 0,
-  "comp2-adj-location": 0,
-  "comp2-adj-size": 0,
-  "comp2-adj-age-condition": 0,
-  "comp2-adj-other": 0,
   "comp2-zoning": "[comp2-zoning]",
   "comp3-access": "Average",
   "comp3-address": "1901 Pearson Ave",
@@ -512,14 +503,6 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "comp3-utilities": "[comp3-utilities]",
   "comp3-year": 0,
   "comp3-year-built": "1980",
-  "comp3-adj-property-rights": 0,
-  "comp3-adj-financing": 0,
-  "comp3-adj-sale-conditions": 0,
-  "comp3-adj-market-conditions": 0,
-  "comp3-adj-location": 0,
-  "comp3-adj-size": 0,
-  "comp3-adj-age-condition": 0,
-  "comp3-adj-other": 0,
   "comp3-zoning": "[comp3-zoning]",
   "comp4-access": "Average",
   "comp4-address": "1000 Parr Hill Dr",
@@ -618,14 +601,6 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "comp4-utilities": "[comp4-utilities]",
   "comp4-year": 0,
   "comp4-year-built": "2016",
-  "comp4-adj-property-rights": 0,
-  "comp4-adj-financing": 0,
-  "comp4-adj-sale-conditions": 0,
-  "comp4-adj-market-conditions": 0,
-  "comp4-adj-location": 0,
-  "comp4-adj-size": 0,
-  "comp4-adj-age-condition": 0,
-  "comp4-adj-other": 0,
   "comp4-zoning": "[comp4-zoning]",
   "comp5-access": "Average",
   "comp5-address": "1030 Parr Hill Dr",
@@ -724,14 +699,6 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "comp5-utilities": "[comp5-utilities]",
   "comp5-year": 0,
   "comp5-year-built": "2019",
-  "comp5-adj-property-rights": 0,
-  "comp5-adj-financing": 0,
-  "comp5-adj-sale-conditions": 0,
-  "comp5-adj-market-conditions": 0,
-  "comp5-adj-location": 0,
-  "comp5-adj-size": 0,
-  "comp5-adj-age-condition": 0,
-  "comp5-adj-other": 0,
   "comp5-zoning": "[comp5-zoning]",
 
   // COST APPROACH TEST DATA - New Construction Scenario

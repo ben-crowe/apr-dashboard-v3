@@ -1,0 +1,129 @@
+{
+  "id": "north-battleford-16unit",
+  "name": "North Battleford 16-Unit",
+  "description": "Multi-family property in North Battleford, SK",
+  "sourceReference": "Contract Review Report (December 2024)",
+
+  "inputs": {
+    "subject": {
+      "property-name": "North Battleford Multi-Family",
+      "property-address": "1351 107 St",
+      "property-city": "North Battleford",
+      "property-province": "SK",
+      "property-total-units": 16,
+      "property-gba": 10204,
+      "property-year-built": 1978,
+      "property-land-sf": 24400
+    },
+
+    "unitMix": {
+      "unit-1br-count": 8,
+      "unit-1br-rent": 875,
+      "unit-2br-count": 8,
+      "unit-2br-rent": 1000
+    },
+
+    "expenses": {
+      "exp-taxes": 19691,
+      "exp-insurance": 11359,
+      "exp-repairs": 13280,
+      "exp-payroll": 8000,
+      "exp-utilities": 21051,
+      "exp-management": 8266,
+      "exp-other": 3914
+    },
+
+    "vacancy": {
+      "vacancy-rate": 4.33
+    },
+
+    "capRate": {
+      "selected-cap-rate": 6.25
+    },
+
+    "comparableSales": [
+      {
+        "name": "Heritage House",
+        "address": "1351 107 St, North Battleford",
+        "salePrice": 3117383,
+        "units": 24,
+        "gba": 22754,
+        "year": 2000
+      },
+      {
+        "name": "College View Apartments",
+        "address": "1392 110 St, North Battleford",
+        "salePrice": 4590858,
+        "units": 45,
+        "gba": 33509,
+        "year": 2000
+      },
+      {
+        "name": "Woodland Estates",
+        "address": "1102 104 St, North Battleford",
+        "salePrice": 2055056,
+        "units": 24,
+        "gba": 15000,
+        "year": 1980
+      },
+      {
+        "name": "Parkside Flats 1",
+        "address": "9902 100 Ave, North Battleford",
+        "salePrice": 9310000,
+        "units": 47,
+        "gba": 47916,
+        "year": 2016
+      },
+      {
+        "name": "Parkside Flats 2",
+        "address": "9908 100 Ave, North Battleford",
+        "salePrice": 13720000,
+        "units": 64,
+        "gba": 52708,
+        "year": 2019
+      }
+    ],
+
+    "compAdjustments": {
+      "comp1": { "propertyRights": 0, "financing": 0, "saleConditions": 0, "marketConditions": 0, "location": 0, "size": 0, "ageCondition": 0, "other": 0 },
+      "comp2": { "propertyRights": 0, "financing": 0, "saleConditions": 0, "marketConditions": 0, "location": 0, "size": 0, "ageCondition": 0, "other": 0 },
+      "comp3": { "propertyRights": 0, "financing": 0, "saleConditions": 0, "marketConditions": 0, "location": 0, "size": 0, "ageCondition": 0, "other": 0 },
+      "comp4": { "propertyRights": 0, "financing": 0, "saleConditions": 0, "marketConditions": 0, "location": 0, "size": 0, "ageCondition": 0, "other": 0 },
+      "comp5": { "propertyRights": 0, "financing": 0, "saleConditions": 0, "marketConditions": 0, "location": 0, "size": 0, "ageCondition": 0, "other": 0 }
+    },
+
+    "costApproach": {
+      "applied": false,
+      "reason": "Limited applicability due to age of improvements"
+    }
+  },
+
+  "expectedOutputs": {
+    "incomeApproach": {
+      "pgr": 204240,
+      "vacancyLoss": 8848,
+      "egr": 195392,
+      "totalExpenses": 84621,
+      "noi": 111771,
+      "indicatedValue": 1790000
+    },
+    "salesComparison": {
+      "comp1PerUnit": 129891,
+      "comp2PerUnit": 102019,
+      "comp3PerUnit": 85627,
+      "comp4PerUnit": 198085,
+      "comp5PerUnit": 214375,
+      "indicatedValue": 1850000
+    },
+    "costApproach": {
+      "applied": false,
+      "indicatedValue": null
+    },
+    "reconciliation": {
+      "incomeWeight": 50,
+      "salesWeight": 50,
+      "costWeight": 0,
+      "finalValue": 1820000
+    }
+  }
+}

@@ -30,7 +30,7 @@ const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
 };
 
 export default function EditPanel() {
-  const { sections, activeSection, updateFieldValue, loadCalcTestData, loadFullTestData } = useReportBuilderStore();
+  const { sections, activeSection, updateFieldValue, loadCalcTestData } = useReportBuilderStore();
 
   const currentSection = sections.find((s) => s.id === activeSection);
   const imageMgtSection = sections.find((s) => s.id === 'image-mgt');
@@ -189,21 +189,6 @@ export default function EditPanel() {
         }}>
           {currentSection.name.toUpperCase()}
         </span>
-        <button
-          onClick={loadFullTestData}
-          style={{
-            fontSize: '12px',
-            color: 'rgba(255, 255, 255, 0.7)',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '4px 8px'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.color = '#ffffff'}
-          onMouseOut={(e) => e.currentTarget.style.color = 'rgba(255, 255, 255, 0.7)'}
-        >
-          Load Test Data
-        </button>
       </div>
 
       {/* Scrollable content */}

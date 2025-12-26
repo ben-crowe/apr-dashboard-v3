@@ -4,9 +4,17 @@ import { cn } from '@/lib/utils';
 export default function SectionSidebar() {
   const { sections, activeSection, setActiveSection } = useReportBuilderStore();
 
+  // Filter out S-tabs (client-intake, loe-prep, image-mgt) - these are TDD-only
+  // Editor Panel should only show numbered report page tabs
+  const editorSections = sections.filter(section => 
+    section.id !== 'client-intake' && 
+    section.id !== 'loe-prep' && 
+    section.id !== 'image-mgt'
+  );
+
   return (
     <div className="w-[180px] bg-[#1a365d] text-white flex flex-col h-full overflow-y-auto">
-      {sections.map((section) => (
+      {editorSections.map((section) => (
         <button
           key={section.id}
           onClick={() => setActiveSection(section.id)}

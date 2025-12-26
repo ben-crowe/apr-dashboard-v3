@@ -8,6 +8,8 @@ import {
 } from "../types/reportBuilder.types";
 import { northBattlefordTestData } from "../data/northBattlefordTestData";
 import { fieldRegistry } from "../schema/fieldRegistry";
+import { runSalesCompCalculations } from "./salesCompCalculations";
+import { runCostApproachCalculations } from "./costApproachCalculations";
 
 // Field ID mapping: test data ID -> store field ID (for fields that differ)
 const testDataFieldMapping: Record<string, string> = {
@@ -6025,7 +6027,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Sync to RECON
     updateField("recon-income-value", indicatedValue);
 
-    // Apply all calculated field updates at once (without triggering preview generation)
+    // Apply all Income Approach calculated field updates first
     const currentSections = get().sections;
     const sectionsWithCalcs = currentSections.map((section) => {
       const updatedFields = section.fields.map((field) => {
@@ -6048,8 +6050,86 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       };
     });
 
-    // Update sections in store (don't trigger preview generation here - caller will do it)
+    // Update sections in store with Income Approach calculations
     set({ sections: sectionsWithCalcs, isDirty: true });
+
+    // === SALES COMPARISON APPROACH ===
+    // Isolated in separate file to protect Income Approach
+    // Extract all field values AFTER Income Approach calculations are applied
+    const updatedSections = get().sections;
+    const fieldValues: Record<string, any> = {};
+    updatedSections.forEach(section => {
+      section.fields?.forEach(field => {
+        fieldValues[field.id] = field.value;
+      });
+      section.subsections?.forEach(subsection => {
+        subsection.fields?.forEach(field => {
+          fieldValues[field.id] = field.value;
+        });
+      });
+    });
+    
+    const salesCompOutputs = runSalesCompCalculations(fieldValues);
+    // Apply sales comp calculations to store (batch all updates)
+    const finalSections = get().sections;
+    const finalUpdatedSections = finalSections.map((section) => {
+      const updatedFields = section.fields.map((field) => {
+        const salesCompUpdate = salesCompOutputs[field.id];
+        return salesCompUpdate !== undefined ? { ...field, value: salesCompUpdate } : field;
+      });
+      const updatedSubsections = section.subsections?.map((subsection) => ({
+        ...subsection,
+        fields: subsection.fields.map((field) => {
+          const salesCompUpdate = salesCompOutputs[field.id];
+          return salesCompUpdate !== undefined ? { ...field, value: salesCompUpdate } : field;
+        }),
+      }));
+      return {
+        ...section,
+        fields: updatedFields,
+        subsections: updatedSubsections,
+      };
+    });
+    set({ sections: finalUpdatedSections, isDirty: true });
+
+    // === COST APPROACH ===
+    // Isolated in separate file to protect Income and Sales Approaches
+    // Extract all field values AFTER Income and Sales calculations are applied
+    const costFieldValues: Record<string, any> = {};
+    const costSections = get().sections;
+    costSections.forEach(section => {
+      section.fields?.forEach(field => {
+        costFieldValues[field.id] = field.value;
+      });
+      section.subsections?.forEach(subsection => {
+        subsection.fields?.forEach(field => {
+          costFieldValues[field.id] = field.value;
+        });
+      });
+    });
+    
+    const costOutputs = runCostApproachCalculations(costFieldValues);
+    // Apply cost calculations to store (batch all updates)
+    const costFinalSections = get().sections;
+    const costFinalUpdatedSections = costFinalSections.map((section) => {
+      const updatedFields = section.fields.map((field) => {
+        const costUpdate = costOutputs[field.id];
+        return costUpdate !== undefined ? { ...field, value: costUpdate } : field;
+      });
+      const updatedSubsections = section.subsections?.map((subsection) => ({
+        ...subsection,
+        fields: subsection.fields.map((field) => {
+          const costUpdate = costOutputs[field.id];
+          return costUpdate !== undefined ? { ...field, value: costUpdate } : field;
+        }),
+      }));
+      return {
+        ...section,
+        fields: updatedFields,
+        subsections: updatedSubsections,
+      };
+    });
+    set({ sections: costFinalUpdatedSections, isDirty: true });
 
     console.log("Calculations complete. Indicated Value:", indicatedValue);
   },

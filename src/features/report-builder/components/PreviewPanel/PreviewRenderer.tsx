@@ -11,6 +11,7 @@ interface PreviewRendererProps {
 const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
   ({ html, zoom = 1, onZoomChange, onPageChange }, ref) => {
     const activeSection = useReportBuilderStore((state) => state.activeSection);
+    const setActiveSection = useReportBuilderStore((state) => state.setActiveSection);
     const iframeRef = useRef<HTMLIFrameElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -39,11 +40,11 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
       }
     }, [html]);
 
-    // Track which page is visible when scrolling - debounced
+    // Track which page/section is visible when scrolling - debounced
     useEffect(() => {
       const container = containerRef.current;
       const iframe = iframeRef.current;
-      if (!container || !iframe?.contentDocument || !onPageChange) return;
+      if (!container || !iframe?.contentDocument) return;
 
       let scrollTimeout: NodeJS.Timeout;
 
@@ -54,36 +55,66 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
           const iframeDoc = iframe.contentDocument;
           if (!iframeDoc) return;
 
-          const pageSheets = iframeDoc.querySelectorAll('.page-sheet');
           const containerRect = container.getBoundingClientRect();
           const containerCenter = containerRect.top + containerRect.height / 2;
 
-          let closestPage = null;
-          let closestDistance = Infinity;
-          let closestIndex = 0;
+          // First, try to find section IDs
+          const sectionElements = iframeDoc.querySelectorAll('[id^="section-"]');
+          let closestSection = null;
+          let closestSectionDistance = Infinity;
 
-          pageSheets.forEach((sheet, index) => {
-            const pageRect = sheet.getBoundingClientRect();
-            const pageCenter = pageRect.top + pageRect.height / 2;
-            const distance = Math.abs(pageCenter - containerCenter);
+          sectionElements.forEach((sectionEl) => {
+            const sectionRect = sectionEl.getBoundingClientRect();
+            const sectionCenter = sectionRect.top + sectionRect.height / 2;
+            const distance = Math.abs(sectionCenter - containerCenter);
 
-            if (distance < closestDistance) {
-              closestDistance = distance;
-              closestPage = sheet;
-              closestIndex = index;
+            // Check if section is visible (at least partially in viewport)
+            const isVisible = sectionRect.top < containerRect.bottom && sectionRect.bottom > containerRect.top;
+
+            if (isVisible && distance < closestSectionDistance) {
+              closestSectionDistance = distance;
+              closestSection = sectionEl;
             }
           });
 
-          if (closestPage) {
-            const pageNumAttr = closestPage.getAttribute('data-page-num');
-            if (pageNumAttr) {
-              const match = pageNumAttr.match(/Page (\d+)/i);
-              if (match) {
-                onPageChange(parseInt(match[1], 10));
+          // If we found a section, update activeSection
+          if (closestSection) {
+            const sectionId = closestSection.id.replace('section-', '');
+            if (sectionId && sectionId !== activeSection) {
+              setActiveSection(sectionId);
+            }
+          }
+
+          // Also track page numbers for onPageChange callback
+          if (onPageChange) {
+            const pageSheets = iframeDoc.querySelectorAll('.page-sheet');
+            let closestPage = null;
+            let closestDistance = Infinity;
+            let closestIndex = 0;
+
+            pageSheets.forEach((sheet, index) => {
+              const pageRect = sheet.getBoundingClientRect();
+              const pageCenter = pageRect.top + pageRect.height / 2;
+              const distance = Math.abs(pageCenter - containerCenter);
+
+              if (distance < closestDistance) {
+                closestDistance = distance;
+                closestPage = sheet;
+                closestIndex = index;
               }
-            } else {
-              // No page number - use negative index (0, -1, -2, etc.)
-              onPageChange(-closestIndex);
+            });
+
+            if (closestPage) {
+              const pageNumAttr = closestPage.getAttribute('data-page-num');
+              if (pageNumAttr) {
+                const match = pageNumAttr.match(/Page (\d+)/i);
+                if (match) {
+                  onPageChange(parseInt(match[1], 10));
+                }
+              } else {
+                // No page number - use negative index (0, -1, -2, etc.)
+                onPageChange(-closestIndex);
+              }
             }
           }
         }, 150);
@@ -94,7 +125,7 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
         clearTimeout(scrollTimeout);
         container.removeEventListener('scroll', handleScroll);
       };
-    }, [html, onPageChange]);
+    }, [html, onPageChange, activeSection, setActiveSection]);
 
     // Scroll to active section when it changes
     useEffect(() => {

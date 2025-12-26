@@ -14,7 +14,7 @@ import { SigningPage } from "./pages/SigningPage";
 import TestLOE from "./pages/TestLOE";
 import MockReportBuilder from "./pages/MockReportBuilder";
 import { TestInputDashboard } from "./features/test-input";
-import { CalculatorDemoPage } from "./features/calculator-demo";
+import { CalculatorDemoPage } from "./features/calculator-demo-v4";
 import PreviewMasterWrapper from "../AGENT-HANDOFF-PreviewMaster-Wrapper";
 
 const queryClient = new QueryClient();

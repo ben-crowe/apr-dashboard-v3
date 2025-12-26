@@ -35,7 +35,10 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
 
   // Get value based on field mode
   const singleImageValue = isSingleImageField ? (field.value as string || '') : '';
-  const images = !isSingleImageField ? ((field.value as string[]) || []) : [];
+  // Ensure images is always an array - handle case where field.value might be a string
+  const images = !isSingleImageField 
+    ? (Array.isArray(field.value) ? (field.value as string[]) : (field.value ? [field.value as string] : []))
+    : [];
 
   // Handle escape key to close preview
   useEffect(() => {

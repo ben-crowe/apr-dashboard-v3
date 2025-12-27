@@ -201,28 +201,57 @@ grep "CapRate\|DirectCap" dist/docs/15-Contract-review/2-Field\ Management/valcr
 
 ## Session Checkpoints
 
-### How This Works
+### Creating a New Checkpoint (DO THIS NOW if user asked for session summary)
 
-**On activation:**
-1. Read this file (you just did)
-2. Check checkpoints below
-3. Ask user: "Continue existing topic or start fresh?"
+**Step 1: Get current session file**
+```bash
+ls -lt ~/.claude/projects/-Users-bencrowe-Development-APR-Dashboard-v3/*.jsonl | head -1
+```
 
-**When user says `/checkpoint`:**
-1. Suggest topic name based on work done (or ask)
-2. Create NEW checkpoint entry (never update old ones)
-3. Include: timestamp, topic, title, session file, search terms
+**Step 2: Ask user for topic** (or suggest based on work done)
+- Suggest: "Topic for this checkpoint? I suggest: `[topic-based-on-work]`"
+- Good topics: `valcre-mapping`, `field-indexing`, `image-fields`, `calc-engine`
 
-**When user says `/check-last-sessions`:**
-1. List last 7 checkpoints from index below
-2. Group by topic if helpful
-3. Ask which to continue (or start fresh)
+**Step 3: Write 1-2 sentence title** summarizing what was accomplished
 
-**When user says "continue [topic]":**
+**Step 4: Generate 3-5 search terms** that will find this work in the JSONL:
+- Include specific field names, commit hashes, key phrases
+- These are breadcrumbs for your future self
+
+**Step 5: ADD new entry to checkpoints array below** (never update old ones)
+
+**Step 6: Update pendingWork and keyDecisions** if needed
+
+**Step 7: Confirm to user:**
+```
+Checkpoint created:
+- Topic: [topic]
+- Title: "[title]"
+- Search terms: [terms]
+You now have [N] checkpoints ([breakdown by topic]).
+```
+
+---
+
+### Continuing from a Previous Checkpoint
+
+**When user says "continue [topic]" or asks to resume work:**
+
 1. Filter checkpoints by that topic
-2. Gather search terms from ALL matching checkpoints
-3. Run searches across those session files
-4. Synthesize context, then proceed
+2. Gather ALL search terms from matching checkpoints
+3. Run: `grep -E "term1|term2|term3" [session-file.jsonl] | head -50`
+4. Synthesize what you find into context
+5. Tell user: "Context loaded from [N] sessions. Last work: [summary]. Ready to continue."
+
+---
+
+### Listing Recent Sessions
+
+**When user says `/check-last-sessions` or "show me recent work":**
+
+List last 7 checkpoints with: topic, title, date, first 2 search terms.
+
+---
 
 ### Checkpoint Index
 
@@ -233,28 +262,40 @@ grep "CapRate\|DirectCap" dist/docs/15-Contract-review/2-Field\ Management/valcr
       "timestamp": "2025-12-27T14:00",
       "topic": "valcre-mapping",
       "title": "Added 8 registry fields, established kebab-case mapping pattern",
-      "sessionFile": "~/.claude/projects/-Users-bencrowe-Development-APR-Dashboard-v3/[find-session-id].jsonl",
+      "sessionFile": "~/.claude/projects/-Users-bencrowe-Development-APR-Dashboard-v3/[session-id].jsonl",
       "searchTerms": ["field-registry commit bfb8de1", "kebab-case mapping", "appraiser1-* fields"]
     },
     {
       "timestamp": "2025-12-27T16:00",
       "topic": "valcre-mapping",
       "title": "Applied 60+ TBD→Valcre ID mappings, established mandatory verification workflow",
-      "sessionFile": "~/.claude/projects/-Users-bencrowe-Development-APR-Dashboard-v3/[find-session-id].jsonl",
+      "sessionFile": "~/.claude/projects/-Users-bencrowe-Development-APR-Dashboard-v3/[session-id].jsonl",
       "searchTerms": ["ground truth verification", "IA_DirCap_CapRate correction", "MANDATORY cross-reference", "image fields Word doc"]
+    },
+    {
+      "timestamp": "2025-12-27T19:00",
+      "topic": "image-fields",
+      "title": "Classified all image fields: 4 sync from Valcre (maps + cover), rest are DASHBOARD-IMAGE uploader-managed",
+      "sessionFile": "~/.claude/projects/-Users-bencrowe-Development-APR-Dashboard-v3/[session-id].jsonl",
+      "searchTerms": ["DASHBOARD-IMAGE", "Map_Regional Map_Local Map_Aerial", "Subject_Photo singular", "uploader-managed", "Word doc images"]
+    },
+    {
+      "timestamp": "2025-12-27T21:30",
+      "topic": "image-fields",
+      "title": "Replaced WORD-ONLY with DASHBOARD-IMAGE/CAPTION-TEXT, fixed Haiku's incorrect labels",
+      "sessionFile": "~/.claude/projects/-Users-bencrowe-Development-APR-Dashboard-v3/[current-session].jsonl",
+      "searchTerms": ["commit 79ba181", "IMAGE-FIELD-MAPPING-CORRECTED.json", "WORD-ONLY replacement", "CAPTION-TEXT", "image12.jpeg removal"]
     }
   ],
   "pendingWork": [
-    "Decide: commit all 2,303 docs files or commit incrementally",
-    "Continue mapping remaining ~1,200+ TBD fields (use ground truth verification)",
-    "Determine source for subject-photo-1 through subject-photo-25 (Word doc? Dashboard-only?)",
-    "Update map image field Valcre IDs (img-map-regional → Map_Regional, etc.)"
+    "Continue mapping remaining TBD fields (use ground truth verification)",
+    "Verify image field uploader integration works with DASHBOARD-IMAGE fields"
   ],
   "keyDecisions": [
     "MANDATORY: Always verify Valcre IDs against ground truth JSON before applying",
     "Mapping files (.txt) may have incorrect IDs - never trust without verification",
-    "Example correction: IA_DirectCapRate → IA_DirCap_CapRate (actual)",
-    "Image fields come from Word doc, not Excel workbook",
+    "Image fields: Only 4 sync from Valcre (3 maps + Subject_Photo), all others are DASHBOARD-IMAGE",
+    "DASHBOARD-IMAGE = uploader-managed, no Valcre equivalent",
     "Maps use Map_Regional, Map_Local, Map_Aerial pattern (not Img_* pattern)"
   ]
 }
@@ -262,11 +303,12 @@ grep "CapRate\|DirectCap" dist/docs/15-Contract-review/2-Field\ Management/valcr
 
 ### Search Keywords (for JSONL lookup)
 
-`field-registry`, `valcre-mapping`, `crosswalk`, `field-ids-by-page`, `template-validation`, `naming-convention`, `kebab-case`, `source-of-truth`, `ground-truth-verification`
+`field-registry`, `valcre-mapping`, `crosswalk`, `field-ids-by-page`, `template-validation`, `naming-convention`, `kebab-case`, `source-of-truth`, `ground-truth-verification`, `DASHBOARD-IMAGE`, `image-fields`
 
 ---
 
-*Agent Version: 1.1*
+*Agent Version: 1.3*
 *Created: December 27, 2025*
-*Updated: December 27, 2025 - Converted to checkpoint-based session system*
+*Last Checkpoint: December 27, 2025 21:30 - image-fields*
+*Updated: December 27, 2025 - Added step-by-step checkpoint instructions*
 *Domain: APR Dashboard v3 - Registry & Workbook*

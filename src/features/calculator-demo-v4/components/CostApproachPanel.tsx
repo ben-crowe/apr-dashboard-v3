@@ -182,11 +182,15 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
   };
 
   const fieldsContainerStyle = {
-    flex: 1,
+    flex: 0,
+  };
+
+  const subtotalsContainerStyle = {
+    marginTop: 'auto',
+    flex: 0,
   };
 
   const totalSectionStyle = {
-    marginTop: 'auto',
     paddingTop: '0.75rem',
     borderTop: `2px solid ${colors.border}`,
   };
@@ -331,7 +335,9 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
                 style={inputStyle}
               />
             </div>
+          </div>
 
+          <div style={subtotalsContainerStyle}>
             <div style={{ ...calcValueStyle, marginTop: '0.5rem', borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
               <span style={calcLabelStyle}>Direct Costs:</span>
               <span style={calcAmountStyle}>{formatCurrency(rcnDirectCosts)}</span>
@@ -425,7 +431,9 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
                 style={inputStyle}
               />
             </div>
+          </div>
 
+          <div style={subtotalsContainerStyle}>
             <div style={{ ...calcValueStyle, marginTop: '0.5rem', borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
               <span style={calcLabelStyle}>Rem. Life:</span>
               <span style={calcAmountStyle}>{formatNumber(deprPhysicalRemainingLife)} yrs</span>
@@ -532,7 +540,9 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
                 style={inputStyle}
               />
             </div>
+          </div>
 
+          <div style={subtotalsContainerStyle}>
             <div style={{ ...calcValueStyle, marginTop: '0.5rem', borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
               <span style={calcLabelStyle}>Parking Total:</span>
               <span style={calcAmountStyle}>{formatCurrency(siteParkingTotal)}</span>

@@ -139,332 +139,423 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
     marginBottom: '0.5rem',
   };
 
+  const inputFieldStyle = {
+    marginBottom: '0.75rem',
+  };
+
+  const sectionContainerStyle = {
+    padding: '1rem',
+    backgroundColor: colors.panelBg,
+    borderRight: `1px solid ${colors.border}`,
+  };
+
+  const lastSectionStyle = {
+    padding: '1rem',
+    backgroundColor: colors.panelBg,
+  };
+
+  const calcValueStyle = {
+    fontSize: '0.75rem',
+    padding: '0.5rem 0',
+    display: 'flex',
+    justifyContent: 'space-between',
+    borderBottom: `1px solid ${colors.border}`,
+    paddingBottom: '0.5rem',
+    marginBottom: '0.5rem',
+  };
+
+  const calcLabelStyle = {
+    color: colors.textMuted,
+    fontSize: '0.7rem',
+    fontWeight: 500,
+  };
+
+  const calcAmountStyle = {
+    fontWeight: 600,
+    color: colors.text,
+  };
+
+  const totalSectionStyle = {
+    marginTop: '1rem',
+    paddingTop: '1rem',
+    borderTop: `2px solid ${colors.border}`,
+  };
+
+  const totalLabelStyle = {
+    fontSize: '0.7rem',
+    color: colors.textMuted,
+    marginBottom: '0.25rem',
+  };
+
+  const totalAmountStyle = {
+    fontSize: '0.95rem',
+    fontWeight: 700,
+    color: colors.text,
+  };
+
+  const summaryBoxStyle = {
+    padding: '1.25rem',
+    backgroundColor: colors.inputBg,
+    borderRadius: '4px',
+    border: `1px solid ${colors.border}`,
+  };
+
+  const summaryLineStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: '0.75rem',
+    fontSize: '0.8rem',
+  };
+
+  const summaryFinalStyle = {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: '0.75rem',
+    borderTop: `2px solid ${colors.border}`,
+    fontSize: '1rem',
+    fontWeight: 700,
+    color: colors.text,
+    marginTop: '0.75rem',
+  };
+
   return (
-    <div className="overflow-x-auto" style={{ color: colors.text }}>
-      <table
-        className="w-full text-xs border-collapse"
-        style={{ minWidth: '1000px', backgroundColor: colors.panelBg }}
-      >
-        <thead>
-          <tr style={{ borderBottom: `2px solid ${colors.border}` }}>
-            <th style={headerStyle}>Land Valuation</th>
-            <th style={headerStyle}>Replacement Cost New</th>
-            <th style={headerStyle}>Depreciation</th>
-            <th style={headerStyle}>Site Improvements</th>
-            <th style={headerStyle}>Value Indication</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* ROW 1: Primary inputs */}
-          <tr>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Land Area (Square Feet)">
-                Land Area (SF)
-              </label>
-              <Input
-                type="number"
-                value={landSF || ''}
-                onChange={e => updateField('cost-land-sf', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Building Gross Building Area">
-                GBA
-              </label>
-              <Input
-                type="number"
-                value={rcnGBA || ''}
-                onChange={e => updateField('cost-rcn-gba', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Actual Age">
-                Actual Age
-              </label>
-              <Input
-                type="number"
-                value={deprPhysicalAge || ''}
-                onChange={e => updateField('cost-depr-physical-age', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Parking Spaces">
-                Spaces
-              </label>
-              <Input
-                type="number"
-                value={siteParkingSpaces || ''}
-                onChange={e => updateField('cost-site-parking-spaces', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-            <td style={{ ...cellStyle, rowSpan: 8, backgroundColor: colors.panelBg }} className="align-top">
-              <div className="space-y-2 text-xs">
-                <div>
-                  <span style={labelStyle}>Land Value</span>
-                  <div style={valueStyle}>{formatCurrency(landValue)}</div>
-                </div>
-                <div>
-                  <span style={labelStyle}>+ Depr. RCN</span>
-                  <div style={valueStyle}>{formatCurrency(depreciatedValue)}</div>
-                </div>
-                <div>
-                  <span style={labelStyle}>+ Site Improv.</span>
-                  <div style={valueStyle}>{formatCurrency(siteTotal)}</div>
-                </div>
-                <div className="pt-1" style={{ borderTop: `1px solid ${colors.border}` }}>
-                  <span style={labelStyle}>= Indicated Value</span>
-                  <div style={{ fontSize: '0.875rem', fontWeight: 700, color: colors.text }}>
-                    {formatCurrency(indicatedValue)}
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
+    <div style={{ color: colors.text }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 0 }}>
+        {/* COLUMN 1: LAND VALUATION */}
+        <div style={sectionContainerStyle}>
+          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '1rem' }}>
+            Land Valuation
+          </h3>
 
-          {/* ROW 2: Secondary inputs */}
-          <tr>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Rate per Square Foot">
-                Rate/SF
-              </label>
-              <Input
-                type="number"
-                value={landRatePerSF || ''}
-                onChange={e => updateField('cost-land-rate-per-sf', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Cost per Square Foot">
-                Cost/SF
-              </label>
-              <Input
-                type="number"
-                value={rcnRatePerSF || ''}
-                onChange={e => updateField('cost-rcn-rate-per-sf', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Economic Life">
-                Econ Life
-              </label>
-              <Input
-                type="number"
-                value={deprPhysicalLife || ''}
-                onChange={e => updateField('cost-depr-physical-life', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Cost per Parking Space">
-                Cost/Space
-              </label>
-              <Input
-                type="number"
-                value={siteParkingCost || ''}
-                onChange={e => updateField('cost-site-parking-cost', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-          </tr>
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Land Area (Square Feet)">
+              Land Area (SF)
+            </label>
+            <Input
+              type="number"
+              value={landSF || ''}
+              onChange={e => updateField('cost-land-sf', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
 
-          {/* ROW 3: Tertiary inputs */}
-          <tr>
-            <td style={cellStyle}></td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Indirect Costs Percentage">
-                Indirect %
-              </label>
-              <Input
-                type="number"
-                value={rcnIndirectPct || ''}
-                onChange={e => updateField('cost-rcn-indirect-pct', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Effective Age">
-                Eff Age
-              </label>
-              <Input
-                type="number"
-                value={deprPhysicalEffectiveAge || ''}
-                onChange={e => updateField('cost-depr-physical-effective-age', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Landscaping">
-                Landscaping
-              </label>
-              <Input
-                type="number"
-                value={siteLandscaping || ''}
-                onChange={e => updateField('cost-site-landscaping', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-          </tr>
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Rate per Square Foot">
+              Rate/SF
+            </label>
+            <Input
+              type="number"
+              value={landRatePerSF || ''}
+              onChange={e => updateField('cost-land-rate-per-sf', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
 
-          {/* ROW 4: More inputs */}
-          <tr>
-            <td style={cellStyle}></td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Entrepreneur Profit Percentage">
-                Entrepreneur %
-              </label>
-              <Input
-                type="number"
-                value={rcnEntrepreneurPct || ''}
-                onChange={e => updateField('cost-rcn-entrepreneur-pct', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Functional Obsolescence">
-                Functional
-              </label>
-              <Input
-                type="number"
-                value={deprFunctionalTotal || ''}
-                onChange={e => updateField('cost-depr-functional-total', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Paving">
-                Paving
-              </label>
-              <Input
-                type="number"
-                value={sitePaving || ''}
-                onChange={e => updateField('cost-site-paving', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-          </tr>
+          <div style={totalSectionStyle}>
+            <div style={totalLabelStyle}>Land Value</div>
+            <div style={totalAmountStyle}>{formatCurrency(landValue)}</div>
+          </div>
+        </div>
 
-          {/* ROW 5: RCN Calculated values */}
-          <tr>
-            <td style={cellStyle}></td>
-            <td style={cellStyle}>
-              <div style={valueStyle}>Direct: {formatCurrency(rcnDirectCosts)}</div>
-              <div style={valueStyle}>Indirect: {formatCurrency(rcnIndirectCosts)}</div>
-              <div style={valueStyle}>Entrepreneur: {formatCurrency(rcnEntrepreneurAmt)}</div>
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="External Obsolescence">
-                External
-              </label>
-              <Input
-                type="number"
-                value={deprExternalTotal || ''}
-                onChange={e => updateField('cost-depr-external-total', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Utilities">
-                Utilities
-              </label>
-              <Input
-                type="number"
-                value={siteUtilities || ''}
-                onChange={e => updateField('cost-site-utilities', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-          </tr>
+        {/* COLUMN 2: REPLACEMENT COST NEW */}
+        <div style={sectionContainerStyle}>
+          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '1rem' }}>
+            Replacement Cost New
+          </h3>
 
-          {/* ROW 6: Depreciation calculated */}
-          <tr>
-            <td style={cellStyle}></td>
-            <td style={cellStyle}></td>
-            <td style={cellStyle}>
-              <div style={valueStyle}>Rem. Life: {formatNumber(deprPhysicalRemainingLife)} yrs</div>
-              <div style={valueStyle}>Phys Depr %: {formatPercentage(deprPhysicalPct)}</div>
-              <div style={valueStyle}>Phys Depr $: {formatCurrency(deprPhysicalAmt)}</div>
-            </td>
-            <td style={cellStyle}>
-              <label style={labelStyle} title="Other Site Improvements">
-                Other
-              </label>
-              <Input
-                type="number"
-                value={siteOther || ''}
-                onChange={e => updateField('cost-site-other', parseFloat(e.target.value) || 0)}
-                className="h-6 text-xs p-1 w-full"
-                style={inputStyle}
-              />
-            </td>
-          </tr>
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Building Gross Building Area">
+              GBA
+            </label>
+            <Input
+              type="number"
+              value={rcnGBA || ''}
+              onChange={e => updateField('cost-rcn-gba', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
 
-          {/* ROW 7: Site totals */}
-          <tr>
-            <td style={cellStyle}></td>
-            <td style={cellStyle}></td>
-            <td style={cellStyle}></td>
-            <td style={cellStyle}>
-              <div style={valueStyle}>Parking Total: {formatCurrency(siteParkingTotal)}</div>
-            </td>
-          </tr>
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Cost per Square Foot">
+              Cost/SF
+            </label>
+            <Input
+              type="number"
+              value={rcnRatePerSF || ''}
+              onChange={e => updateField('cost-rcn-rate-per-sf', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
 
-          {/* ROW 8: Spacing row */}
-          <tr style={{ height: '20px' }}>
-            <td style={cellStyle}></td>
-            <td style={cellStyle}></td>
-            <td style={cellStyle}></td>
-            <td style={cellStyle}></td>
-          </tr>
-        </tbody>
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Indirect Costs Percentage">
+              Indirect %
+            </label>
+            <Input
+              type="number"
+              value={rcnIndirectPct || ''}
+              onChange={e => updateField('cost-rcn-indirect-pct', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
 
-        {/* FOOTER: Column totals */}
-        <tfoot>
-          <tr style={{ borderTop: `2px solid ${colors.border}` }}>
-            <td style={totalCellStyle}>
-              <div style={labelStyle}>Land Value</div>
-              <div style={{ fontSize: '0.875rem', fontWeight: 700 }}>{formatCurrency(landValue)}</div>
-            </td>
-            <td style={totalCellStyle}>
-              <div style={labelStyle}>Total RCN</div>
-              <div style={{ fontSize: '0.875rem', fontWeight: 700 }}>{formatCurrency(rcnTotal)}</div>
-            </td>
-            <td style={totalCellStyle}>
-              <div style={labelStyle}>Total Depr</div>
-              <div style={{ fontSize: '0.875rem', fontWeight: 700 }}>{formatCurrency(deprTotalAmt)}</div>
-            </td>
-            <td style={totalCellStyle}>
-              <div style={labelStyle}>Total Site</div>
-              <div style={{ fontSize: '0.875rem', fontWeight: 700 }}>{formatCurrency(siteTotal)}</div>
-            </td>
-            <td style={{ ...totalCellStyle, backgroundColor: colors.panelBg }}>
-              <div style={labelStyle}>Indicated Value</div>
-              <div style={{ fontSize: '1rem', fontWeight: 700 }}>{formatCurrency(indicatedValue)}</div>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Entrepreneur Profit Percentage">
+              Entrepreneur %
+            </label>
+            <Input
+              type="number"
+              value={rcnEntrepreneurPct || ''}
+              onChange={e => updateField('cost-rcn-entrepreneur-pct', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={{ ...calcValueStyle, marginTop: '0.75rem', borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
+            <span style={calcLabelStyle}>Direct Costs:</span>
+            <span style={calcAmountStyle}>{formatCurrency(rcnDirectCosts)}</span>
+          </div>
+
+          <div style={calcValueStyle}>
+            <span style={calcLabelStyle}>Indirect Costs:</span>
+            <span style={calcAmountStyle}>{formatCurrency(rcnIndirectCosts)}</span>
+          </div>
+
+          <div style={calcValueStyle}>
+            <span style={calcLabelStyle}>Entrepreneur:</span>
+            <span style={calcAmountStyle}>{formatCurrency(rcnEntrepreneurAmt)}</span>
+          </div>
+
+          <div style={totalSectionStyle}>
+            <div style={totalLabelStyle}>Total RCN</div>
+            <div style={totalAmountStyle}>{formatCurrency(rcnTotal)}</div>
+          </div>
+        </div>
+
+        {/* COLUMN 3: DEPRECIATION */}
+        <div style={sectionContainerStyle}>
+          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '1rem' }}>
+            Depreciation
+          </h3>
+
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Actual Age">
+              Actual Age
+            </label>
+            <Input
+              type="number"
+              value={deprPhysicalAge || ''}
+              onChange={e => updateField('cost-depr-physical-age', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Economic Life">
+              Econ. Life
+            </label>
+            <Input
+              type="number"
+              value={deprPhysicalLife || ''}
+              onChange={e => updateField('cost-depr-physical-life', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Effective Age">
+              Eff. Age
+            </label>
+            <Input
+              type="number"
+              value={deprPhysicalEffectiveAge || ''}
+              onChange={e => updateField('cost-depr-physical-effective-age', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Functional Obsolescence">
+              Functional
+            </label>
+            <Input
+              type="number"
+              value={deprFunctionalTotal || ''}
+              onChange={e => updateField('cost-depr-functional-total', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="External Obsolescence">
+              External
+            </label>
+            <Input
+              type="number"
+              value={deprExternalTotal || ''}
+              onChange={e => updateField('cost-depr-external-total', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={{ ...calcValueStyle, marginTop: '0.75rem', borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
+            <span style={calcLabelStyle}>Rem. Life:</span>
+            <span style={calcAmountStyle}>{formatNumber(deprPhysicalRemainingLife)} yrs</span>
+          </div>
+
+          <div style={calcValueStyle}>
+            <span style={calcLabelStyle}>Phys. Depr %:</span>
+            <span style={calcAmountStyle}>{formatPercentage(deprPhysicalPct)}</span>
+          </div>
+
+          <div style={calcValueStyle}>
+            <span style={calcLabelStyle}>Phys. Depr $:</span>
+            <span style={calcAmountStyle}>{formatCurrency(deprPhysicalAmt)}</span>
+          </div>
+
+          <div style={totalSectionStyle}>
+            <div style={totalLabelStyle}>Total Depr</div>
+            <div style={totalAmountStyle}>{formatCurrency(deprTotalAmt)}</div>
+          </div>
+        </div>
+
+        {/* COLUMN 4: SITE IMPROVEMENTS */}
+        <div style={sectionContainerStyle}>
+          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '1rem' }}>
+            Site Improvements
+          </h3>
+
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Parking Spaces">
+              Parking Spaces
+            </label>
+            <Input
+              type="number"
+              value={siteParkingSpaces || ''}
+              onChange={e => updateField('cost-site-parking-spaces', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Cost per Parking Space">
+              Cost/Space
+            </label>
+            <Input
+              type="number"
+              value={siteParkingCost || ''}
+              onChange={e => updateField('cost-site-parking-cost', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Landscaping">
+              Landscaping
+            </label>
+            <Input
+              type="number"
+              value={siteLandscaping || ''}
+              onChange={e => updateField('cost-site-landscaping', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Paving">
+              Paving
+            </label>
+            <Input
+              type="number"
+              value={sitePaving || ''}
+              onChange={e => updateField('cost-site-paving', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Utilities">
+              Utilities
+            </label>
+            <Input
+              type="number"
+              value={siteUtilities || ''}
+              onChange={e => updateField('cost-site-utilities', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={inputFieldStyle}>
+            <label style={labelStyle} title="Other">
+              Other
+            </label>
+            <Input
+              type="number"
+              value={siteOther || ''}
+              onChange={e => updateField('cost-site-other', parseFloat(e.target.value) || 0)}
+              className="h-7 text-xs p-1.5 w-full"
+              style={inputStyle}
+            />
+          </div>
+
+          <div style={{ ...calcValueStyle, marginTop: '0.75rem', borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
+            <span style={calcLabelStyle}>Parking Total:</span>
+            <span style={calcAmountStyle}>{formatCurrency(siteParkingTotal)}</span>
+          </div>
+
+          <div style={totalSectionStyle}>
+            <div style={totalLabelStyle}>Total Site</div>
+            <div style={totalAmountStyle}>{formatCurrency(siteTotal)}</div>
+          </div>
+        </div>
+
+        {/* COLUMN 5: VALUE INDICATION */}
+        <div style={lastSectionStyle}>
+          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '1rem' }}>
+            Value Indication
+          </h3>
+
+          <div style={summaryBoxStyle}>
+            <div style={summaryLineStyle}>
+              <span style={calcLabelStyle}>Land Value</span>
+              <span style={calcAmountStyle}>{formatCurrency(landValue)}</span>
+            </div>
+
+            <div style={summaryLineStyle}>
+              <span style={calcLabelStyle}>+ Depr. RCN</span>
+              <span style={calcAmountStyle}>{formatCurrency(depreciatedValue)}</span>
+            </div>
+
+            <div style={summaryLineStyle}>
+              <span style={calcLabelStyle}>+ Site Improv.</span>
+              <span style={calcAmountStyle}>{formatCurrency(siteTotal)}</span>
+            </div>
+
+            <div style={summaryFinalStyle}>
+              <span>= Indicated Value</span>
+              <span>{formatCurrency(indicatedValue)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

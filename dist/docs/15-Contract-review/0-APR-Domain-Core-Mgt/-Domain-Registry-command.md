@@ -160,16 +160,29 @@ Mapping files (like `/tmp/valcre-field-mapping.txt`) may contain **incorrect or 
 - Reference Report: `/dist/docs/15-Contract-review/Ref.Report-VAL251012-North Battleford Apt.docx`
 - Extracted SVGs: `/dist/docs/15-Contract-review/svg-doc/Ref.Report-VAL251012-North Battleford Apt.docx_1.svg` through `_79.svg`
 
-**Image Field Mapping:**
-| Field Pattern | Source | Notes |
-|---------------|--------|-------|
-| `subject-photo-1` to `subject-photo-25` | Word template | Photo placeholders in Word doc |
-| `img-map-regional` | Word template | Maps `Map_Regional` in Valcre for data reference only |
-| `img-map-local` | Word template | Maps `Map_Local` in Valcre for data reference only |
-| `img-map-aerial` | Word template | Maps `Map_Aerial` in Valcre for data reference only |
-| `img-site-plan-*` | Word template | No Valcre equivalent |
-| `img-zoning-map` | Word template | No Valcre equivalent |
-| `img-comparables-map` | Word template | No Valcre equivalent |
+**Image Field Mapping (from IMAGE-FIELD-MAPPING-CORRECTED.json):**
+
+| Field ID | Word Doc Image | Valcre Reference |
+|----------|----------------|------------------|
+| `subject-photo-1` | `image12.jpeg` | N/A |
+| `subject-photo-2` | `image13.jpeg` | N/A |
+| `subject-photo-3` thru `24` | `image14-35.jpeg` | N/A |
+| `subject-photo-25` | `image89.png` | N/A |
+| `img-map-regional` | `image1.png` | `Map_Regional` |
+| `img-map-aerial` | `image36.png` | `Map_Aerial` |
+| `img-map-local` | `image37.png` | `Map_Local` |
+| `img-comparables-map` | `image38.png` | N/A |
+| `img-site-plan-1` | `image44.png` | N/A |
+| `img-site-plan-2` | `image45.png` | N/A |
+| `img-zoning-map` | `image48.png` | N/A |
+| `img-rental-comparables-map` | `image57.png` | N/A |
+| `cover-photo` | `image2.jpeg` | `Subject_Photo` |
+| `company-logo` | `image1.png` | N/A |
+
+**Source of Truth for Image IDs:**
+```
+/dist/docs/15-Contract-review/0-Claude Planning/IMAGE-FIELD-MAPPING-CORRECTED.json
+```
 
 **The Excel workbook only has these image-related named ranges (for reference/linking, not actual images):**
 - `Subject_Photo` (singular - cover photo reference)

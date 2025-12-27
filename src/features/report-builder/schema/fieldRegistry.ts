@@ -26,8 +26,6 @@
  * Total Fields: ~1,687 (matching all store field IDs)
  */
 
-import { generateAdjustmentFields } from './fieldGenerators';
-
 export interface FieldDefinition {
   id: string;                    // Canonical field ID (same as storeId for simplicity)
   storeId: string;               // ID used in reportBuilderStore - MUST MATCH EXACTLY
@@ -117,6 +115,10 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'appraiser-title', storeId: 'appraiser-title', label: 'Appraiser Title', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'appraiser-email', storeId: 'appraiser-email', label: 'Appraiser Email', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'appraiser-aic', storeId: 'appraiser-aic', label: 'AIC Number', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  // Appraiser 1 (for multi-appraiser reports - template uses appraiser1-* format)
+  { id: 'appraiser1-name', storeId: 'appraiser1-name', label: 'Appraiser 1 Name', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser1-title', storeId: 'appraiser1-title', label: 'Appraiser 1 Title', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser1-email', storeId: 'appraiser1-email', label: 'Appraiser 1 Email', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'valuation-date', storeId: 'valuation-date', label: 'Date of Valuation', section: 'loe-prep', subsection: 'appraiser-info', type: 'date', inputSource: 'user-input', required: true },
   { id: 'report-date', storeId: 'report-date', label: 'Date of Report', section: 'loe-prep', subsection: 'appraiser-info', type: 'date', inputSource: 'auto-filled', required: true },
 
@@ -137,8 +139,11 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'img-map-regional-title', storeId: 'img-map-regional-title', label: 'Title', section: 'image-mgt', subsection: 'maps', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-map-local', storeId: 'img-map-local', label: 'Local Area Map - City/neighborhood', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
   { id: 'img-map-local-title', storeId: 'img-map-local-title', label: 'Title', section: 'image-mgt', subsection: 'maps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'img-map-aerial', storeId: 'img-map-aerial', label: 'Aerial Overview Map', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
   { id: 'img-map-aerial-1', storeId: 'img-map-aerial-1', label: 'Aerial View - Bird\'s eye of property', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
   { id: 'img-map-aerial-1-title', storeId: 'img-map-aerial-1-title', label: 'Title', section: 'image-mgt', subsection: 'maps', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'img-comparables-map', storeId: 'img-comparables-map', label: 'Sales Comparables Location Map', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'img-rental-comparables-map', storeId: 'img-rental-comparables-map', label: 'Rental Comparables Location Map', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
   { id: 'img-map-aerial-2', storeId: 'img-map-aerial-2', label: 'Site Boundary - Property lines shown', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
   { id: 'img-map-aerial-2-title', storeId: 'img-map-aerial-2-title', label: 'Title', section: 'image-mgt', subsection: 'maps', type: 'text', inputSource: 'user-input', required: false },
   { id: 'img-zoning-map', storeId: 'img-zoning-map', label: 'Zoning Map - Municipal zoning', section: 'image-mgt', subsection: 'maps', type: 'image', inputSource: 'user-input', required: false },
@@ -947,6 +952,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'sales-value-per-sf', storeId: 'sales-value-per-sf', label: 'Sales Value Per SF', section: 'sales', subsection: 'sales-conclusion', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'sca-adjustedvaluehigh', storeId: 'sca-adjustedvaluehigh', label: 'SCA Adjusted Value High', section: 'sales', subsection: 'sca-analysis', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'sca-adjustedvaluelow', storeId: 'sca-adjustedvaluelow', label: 'SCA Adjusted Value Low', section: 'sales', subsection: 'sca-analysis', type: 'currency', inputSource: 'calculated', required: false },
+  // Kebab-case aliases (template uses this format)
+  { id: 'sca-adjusted-value-high', storeId: 'sca-adjusted-value-high', label: 'SCA Adjusted Value High', section: 'sales', subsection: 'sca-analysis', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'sca-adjusted-value-low', storeId: 'sca-adjusted-value-low', label: 'SCA Adjusted Value Low', section: 'sales', subsection: 'sca-analysis', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'sca-concluded-value-per-unit', storeId: 'sca-concluded-value-per-unit', label: 'SCA Concluded Value Per Unit', section: 'sales', subsection: 'sca-analysis', type: 'currency', inputSource: 'user-input', required: false },
 
   // Sales - Comp 1 Subsection
@@ -987,12 +995,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp1-trans-adj-price', storeId: 'comp1-trans-adj-price', label: 'Transactional Adj Price', section: 'sales', subsection: 'sale-comp-1', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'comp1-net-adj', storeId: 'comp1-net-adj', label: 'Net Adjustment %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'calculated', required: false },
   { id: 'comp1-gross-adj', storeId: 'comp1-gross-adj', label: 'Gross Adjustment %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'calculated', required: false },
-
-  // Sales Comp Adjustment Fields - Generated programmatically
-  // 5 comps × 8 adjustment categories = 40 fields
-  // See fieldGenerators.ts for generation logic
-  ...generateAdjustmentFields(),
-
+  { id: 'comp1-adj-property-rights', storeId: 'comp1-adj-property-rights', label: 'Property Rights Adj %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp1-adj-financing', storeId: 'comp1-adj-financing', label: 'Financing Adj %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp1-adj-sale-conditions', storeId: 'comp1-adj-sale-conditions', label: 'Sale Conditions Adj %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp1-adj-market-conditions', storeId: 'comp1-adj-market-conditions', label: 'Market Conditions Adj %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp1-adj-location', storeId: 'comp1-adj-location', label: 'Location Adj %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp1-adj-size', storeId: 'comp1-adj-size', label: 'Size Adj %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp1-adj-age-condition', storeId: 'comp1-adj-age-condition', label: 'Age/Condition Adj %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp1-adj-other', storeId: 'comp1-adj-other', label: 'Other Adj %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'user-input', required: false },
 
   // Sales - Comp 2 Subsection
   { id: 'comp2-name', storeId: 'comp2-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
@@ -1032,6 +1042,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp2-trans-adj-price', storeId: 'comp2-trans-adj-price', label: 'Transactional Adj Price', section: 'sales', subsection: 'sale-comp-2', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'comp2-net-adj', storeId: 'comp2-net-adj', label: 'Net Adjustment %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'calculated', required: false },
   { id: 'comp2-gross-adj', storeId: 'comp2-gross-adj', label: 'Gross Adjustment %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp2-adj-property-rights', storeId: 'comp2-adj-property-rights', label: 'Property Rights Adj %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp2-adj-financing', storeId: 'comp2-adj-financing', label: 'Financing Adj %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp2-adj-sale-conditions', storeId: 'comp2-adj-sale-conditions', label: 'Sale Conditions Adj %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp2-adj-market-conditions', storeId: 'comp2-adj-market-conditions', label: 'Market Conditions Adj %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp2-adj-location', storeId: 'comp2-adj-location', label: 'Location Adj %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp2-adj-size', storeId: 'comp2-adj-size', label: 'Size Adj %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp2-adj-age-condition', storeId: 'comp2-adj-age-condition', label: 'Age/Condition Adj %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp2-adj-other', storeId: 'comp2-adj-other', label: 'Other Adj %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'user-input', required: false },
 
   // Sales - Comp 3 Subsection
   { id: 'comp3-name', storeId: 'comp3-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
@@ -1071,6 +1089,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp3-trans-adj-price', storeId: 'comp3-trans-adj-price', label: 'Transactional Adj Price', section: 'sales', subsection: 'sale-comp-3', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'comp3-net-adj', storeId: 'comp3-net-adj', label: 'Net Adjustment %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'calculated', required: false },
   { id: 'comp3-gross-adj', storeId: 'comp3-gross-adj', label: 'Gross Adjustment %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp3-adj-property-rights', storeId: 'comp3-adj-property-rights', label: 'Property Rights Adj %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp3-adj-financing', storeId: 'comp3-adj-financing', label: 'Financing Adj %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp3-adj-sale-conditions', storeId: 'comp3-adj-sale-conditions', label: 'Sale Conditions Adj %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp3-adj-market-conditions', storeId: 'comp3-adj-market-conditions', label: 'Market Conditions Adj %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp3-adj-location', storeId: 'comp3-adj-location', label: 'Location Adj %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp3-adj-size', storeId: 'comp3-adj-size', label: 'Size Adj %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp3-adj-age-condition', storeId: 'comp3-adj-age-condition', label: 'Age/Condition Adj %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp3-adj-other', storeId: 'comp3-adj-other', label: 'Other Adj %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'user-input', required: false },
 
   // Sales - Comp 4 Subsection
   { id: 'comp4-name', storeId: 'comp4-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
@@ -1110,6 +1136,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp4-trans-adj-price', storeId: 'comp4-trans-adj-price', label: 'Transactional Adj Price', section: 'sales', subsection: 'sale-comp-4', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'comp4-net-adj', storeId: 'comp4-net-adj', label: 'Net Adjustment %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'calculated', required: false },
   { id: 'comp4-gross-adj', storeId: 'comp4-gross-adj', label: 'Gross Adjustment %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp4-adj-property-rights', storeId: 'comp4-adj-property-rights', label: 'Property Rights Adj %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp4-adj-financing', storeId: 'comp4-adj-financing', label: 'Financing Adj %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp4-adj-sale-conditions', storeId: 'comp4-adj-sale-conditions', label: 'Sale Conditions Adj %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp4-adj-market-conditions', storeId: 'comp4-adj-market-conditions', label: 'Market Conditions Adj %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp4-adj-location', storeId: 'comp4-adj-location', label: 'Location Adj %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp4-adj-size', storeId: 'comp4-adj-size', label: 'Size Adj %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp4-adj-age-condition', storeId: 'comp4-adj-age-condition', label: 'Age/Condition Adj %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp4-adj-other', storeId: 'comp4-adj-other', label: 'Other Adj %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'user-input', required: false },
 
   // Sales - Comp 5 Subsection
   { id: 'comp5-name', storeId: 'comp5-name', label: 'Property Name', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
@@ -1149,6 +1183,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp5-trans-adj-price', storeId: 'comp5-trans-adj-price', label: 'Transactional Adj Price', section: 'sales', subsection: 'sale-comp-5', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'comp5-net-adj', storeId: 'comp5-net-adj', label: 'Net Adjustment %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'calculated', required: false },
   { id: 'comp5-gross-adj', storeId: 'comp5-gross-adj', label: 'Gross Adjustment %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'comp5-adj-property-rights', storeId: 'comp5-adj-property-rights', label: 'Property Rights Adj %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp5-adj-financing', storeId: 'comp5-adj-financing', label: 'Financing Adj %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp5-adj-sale-conditions', storeId: 'comp5-adj-sale-conditions', label: 'Sale Conditions Adj %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp5-adj-market-conditions', storeId: 'comp5-adj-market-conditions', label: 'Market Conditions Adj %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp5-adj-location', storeId: 'comp5-adj-location', label: 'Location Adj %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp5-adj-size', storeId: 'comp5-adj-size', label: 'Size Adj %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp5-adj-age-condition', storeId: 'comp5-adj-age-condition', label: 'Age/Condition Adj %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'comp5-adj-other', storeId: 'comp5-adj-other', label: 'Other Adj %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'user-input', required: false },
 
   // Sales - Conclusion Subsection
   { id: 'sales-value-indication', storeId: 'sales-value-indication', label: 'Sales Comparison Value', section: 'sales', subsection: 'sales-conclusion', type: 'number', inputSource: 'user-input', required: false },

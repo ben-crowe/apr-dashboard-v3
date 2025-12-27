@@ -8,7 +8,9 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
+# Ignore dist except docs folder
+dist/*
+!dist/docs/
 dist-ssr
 *.local
 

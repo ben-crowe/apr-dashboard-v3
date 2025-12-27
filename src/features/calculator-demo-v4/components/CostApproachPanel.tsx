@@ -109,7 +109,7 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
           <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>Land Valuation</span>
         </div>
         <div className="p-2 space-y-1">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="flex items-center gap-1">
               <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Area (SF)</label>
               <Input
@@ -148,7 +148,7 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
           <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>Replacement Cost New (RCN)</span>
         </div>
         <div className="p-2 space-y-1">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="flex items-center gap-1">
               <label className="text-[10px] w-16 flex-shrink-0" style={{ color: colors.textMuted }}>GBA</label>
               <Input
@@ -219,7 +219,7 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
           <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>Depreciation</span>
         </div>
         <div className="p-2 space-y-1">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="flex items-center gap-1">
               <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Actual Age</label>
               <Input
@@ -300,7 +300,7 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
           <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>Site Improvements</span>
         </div>
         <div className="p-2 space-y-1">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="flex items-center gap-1">
               <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Spaces</label>
               <Input

@@ -47,7 +47,11 @@ export function runSalesCompCalculations(inputs: Record<string, any>): Record<st
     ) / validComps.length;
 
     const subjectUnits = parseFloat(inputs['calc-total-units']) || parseFloat(inputs['property-total-units']) || 0;
-    outputs['sales-indicated-value'] = avgAdjPrice * subjectUnits;
+    outputs['sca-indicated-value'] = avgAdjPrice * subjectUnits;
+
+    // Value per SF for template
+    const subjectSf = parseFloat(inputs['calc-total-sf']) || parseFloat(inputs['property-nra']) || parseFloat(inputs['subject-nra']) || 0;
+    outputs['sca-value-per-sf'] = subjectSf > 0 ? outputs['sca-indicated-value'] / subjectSf : 0;
   }
 
   return outputs;

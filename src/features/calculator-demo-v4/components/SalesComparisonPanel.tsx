@@ -132,15 +132,15 @@ export default function SalesComparisonPanel({ onIndicatedValueChange }: SalesCo
   const avgValue = validAdjusted.length > 0 ? validAdjusted.reduce((a, b) => a + b, 0) / validAdjusted.length : 0;
 
   // Get indicated value from store (calculated by runSalesCompCalculations)
-  const salesIndicatedValue = getFieldValueNumber('sales-indicated-value');
-  const indicatedPerUnit = subjectUnits > 0 ? salesIndicatedValue / subjectUnits : 0;
+  const scaIndicatedValue = getFieldValueNumber('sca-indicated-value');
+  const indicatedPerUnit = subjectUnits > 0 ? scaIndicatedValue / subjectUnits : 0;
 
   // Notify parent when indicated value changes
   useEffect(() => {
     if (onIndicatedValueChange) {
-      onIndicatedValueChange(salesIndicatedValue);
+      onIndicatedValueChange(scaIndicatedValue);
     }
-  }, [salesIndicatedValue, onIndicatedValueChange]);
+  }, [scaIndicatedValue, onIndicatedValueChange]);
 
   const formatCurrency = (n: number) => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
   const formatNumber = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 0 });
@@ -490,7 +490,7 @@ export default function SalesComparisonPanel({ onIndicatedValueChange }: SalesCo
         <div className="flex justify-between items-center">
           <span style={{ color: colors.textMuted }}>Indicated Value (Sales Comparison)</span>
           <span className="text-xl font-semibold" style={{ color: colors.text }}>
-            {formatCurrency(salesIndicatedValue)}
+            {formatCurrency(scaIndicatedValue)}
           </span>
         </div>
         {subjectUnits > 0 && indicatedPerUnit > 0 && (

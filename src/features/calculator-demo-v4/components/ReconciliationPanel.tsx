@@ -12,13 +12,19 @@ import { Input } from '@/components/ui/input';
 import { useTheme } from '../context/ThemeContext';
 
 interface ReconciliationPanelProps {
-  salesIndicatedValue: number;
+  incomeValue?: number;
+  salesIndicatedValue?: number;
+  costValue?: number;
 }
 
-export default function ReconciliationPanel({ salesIndicatedValue }: ReconciliationPanelProps) {
+export default function ReconciliationPanel({ 
+  incomeValue = 0, 
+  salesIndicatedValue = 0, 
+  costValue = 0 
+}: ReconciliationPanelProps) {
   const { colors } = useTheme();
 
-  // Get Income Approach value from store
+  // Get total units and SF from store for per-unit calculations
   const sections = useReportBuilderStore(state => state.sections);
   const calcSection = sections.find(s => s.id === 'calc');
 
@@ -35,31 +41,52 @@ export default function ReconciliationPanel({ salesIndicatedValue }: Reconciliat
     return 0;
   };
 
-  const incomeValue = getFieldValue('calc-indicated-value');
   const totalUnits = getFieldValue('calc-total-units');
   const totalSf = getFieldValue('calc-total-sf');
 
-  // Weight state - default 50/50
-  const [incomeWeight, setIncomeWeight] = useState<number>(50);
-  const [salesWeight, setSalesWeight] = useState<number>(50);
+  // Weight state - default 33/33/34 for 3 approaches, or 50/50 if only 2 active
+  const [incomeWeight, setIncomeWeight] = useState<number>(33);
+  const [salesWeight, setSalesWeight] = useState<number>(33);
+  const [costWeight, setCostWeight] = useState<number>(34);
 
-  // Auto-adjust weights to sum to 100%
+  // Auto-adjust weights to sum to 100% across all 3 approaches
   const handleIncomeWeightChange = (value: string) => {
     const val = parseFloat(value) || 0;
     const clamped = Math.max(0, Math.min(100, val));
+    const remaining = 100 - clamped;
     setIncomeWeight(clamped);
-    setSalesWeight(100 - clamped);
+    // Distribute remaining between sales and cost proportionally
+    const salesRatio = salesWeight / (salesWeight + costWeight || 1);
+    setSalesWeight(remaining * salesRatio);
+    setCostWeight(remaining * (1 - salesRatio));
   };
 
   const handleSalesWeightChange = (value: string) => {
     const val = parseFloat(value) || 0;
     const clamped = Math.max(0, Math.min(100, val));
+    const remaining = 100 - clamped;
     setSalesWeight(clamped);
-    setIncomeWeight(100 - clamped);
+    // Distribute remaining between income and cost proportionally
+    const incomeRatio = incomeWeight / (incomeWeight + costWeight || 1);
+    setIncomeWeight(remaining * incomeRatio);
+    setCostWeight(remaining * (1 - incomeRatio));
+  };
+
+  const handleCostWeightChange = (value: string) => {
+    const val = parseFloat(value) || 0;
+    const clamped = Math.max(0, Math.min(100, val));
+    const remaining = 100 - clamped;
+    setCostWeight(clamped);
+    // Distribute remaining between income and sales proportionally
+    const incomeRatio = incomeWeight / (incomeWeight + salesWeight || 1);
+    setIncomeWeight(remaining * incomeRatio);
+    setSalesWeight(remaining * (1 - incomeRatio));
   };
 
   // Calculate reconciled value
-  const reconciledValue = (incomeValue * incomeWeight / 100) + (salesIndicatedValue * salesWeight / 100);
+  const reconciledValue = (incomeValue * incomeWeight / 100) + 
+                         (salesIndicatedValue * salesWeight / 100) + 
+                         (costValue * costWeight / 100);
 
   const formatCurrency = (n: number) => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
   const formatNumber = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 2 });
@@ -71,7 +98,7 @@ export default function ReconciliationPanel({ salesIndicatedValue }: Reconciliat
   };
 
   // Check if weights sum to 100%
-  const weightSum = incomeWeight + salesWeight;
+  const weightSum = incomeWeight + salesWeight + costWeight;
   const weightsValid = Math.abs(weightSum - 100) < 0.01;
 
   return (
@@ -136,6 +163,27 @@ export default function ReconciliationPanel({ salesIndicatedValue }: Reconciliat
                 {formatCurrency(salesIndicatedValue * salesWeight / 100)}
               </td>
             </tr>
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1" style={{ color: colors.textMuted }}>Cost Approach</td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                {formatCurrency(costValue)}
+              </td>
+              <td className="px-2 py-1">
+                <Input
+                  type="number"
+                  step="5"
+                  min="0"
+                  max="100"
+                  value={costWeight}
+                  onChange={e => handleCostWeightChange(e.target.value)}
+                  className="h-6 w-16 text-right text-xs p-1 ml-auto"
+                  style={inputStyle}
+                />
+              </td>
+              <td className="px-2 py-1 text-right" style={{ color: colors.textMuted }}>
+                {formatCurrency(costValue * costWeight / 100)}
+              </td>
+            </tr>
           </tbody>
           <tfoot style={{ borderTop: `1px solid ${colors.border}` }}>
             <tr>
@@ -193,6 +241,12 @@ export default function ReconciliationPanel({ salesIndicatedValue }: Reconciliat
             <span>Sales Contribution:</span>
             <span style={{ color: colors.text }}>
               {formatCurrency(salesIndicatedValue)} × {salesWeight}% = {formatCurrency(salesIndicatedValue * salesWeight / 100)}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span>Cost Contribution:</span>
+            <span style={{ color: colors.text }}>
+              {formatCurrency(costValue)} × {costWeight}% = {formatCurrency(costValue * costWeight / 100)}
             </span>
           </div>
           <div className="flex justify-between pt-1" style={{ borderTop: `1px solid ${colors.border}` }}>

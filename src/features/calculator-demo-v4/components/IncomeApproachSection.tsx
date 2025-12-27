@@ -1,24 +1,26 @@
 /**
- * Sales Comparison Section - Wrapper component
+ * Income Approach Section - Wrapper component
  *
- * Manages state for Sales Comparison Panel and passes the
+ * Manages state for Income Approach Panel and passes the
  * indicated value to the Reconciliation Panel.
  */
 
 import { useState } from 'react';
-import SalesComparisonPanel from './SalesComparisonPanel';
+import IncomeApproachPanel from './IncomeApproachPanel';
 import { useTheme } from '../context/ThemeContext';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
-interface SalesComparisonSectionProps {
+interface IncomeApproachSectionProps {
   onValueChange?: (value: number) => void;
 }
 
-export default function SalesComparisonSection({ onValueChange }: SalesComparisonSectionProps) {
+export default function IncomeApproachSection({ onValueChange }: IncomeApproachSectionProps) {
   const { colors } = useTheme();
-  const [salesExpanded, setSalesExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [indicatedValue, setIndicatedValue] = useState<number>(0);
 
   const handleValueChange = (value: number) => {
+    setIndicatedValue(value);
     onValueChange?.(value);
   };
 
@@ -33,34 +35,35 @@ export default function SalesComparisonSection({ onValueChange }: SalesCompariso
       <div
         className="px-4 py-3 cursor-pointer transition-colors flex items-center justify-between"
         style={{
-          borderBottom: salesExpanded ? `1px solid ${colors.border}` : 'none',
+          borderBottom: expanded ? `1px solid ${colors.border}` : 'none',
         }}
-        onClick={() => setSalesExpanded(!salesExpanded)}
+        onClick={() => setExpanded(!expanded)}
       >
         <div className="flex items-center gap-2">
-          {salesExpanded ? (
+          {expanded ? (
             <ChevronDown className="h-4 w-4" style={{ color: colors.textDim }} />
           ) : (
             <ChevronRight className="h-4 w-4" style={{ color: colors.textDim }} />
           )}
           <div>
             <h2 className="font-medium text-sm" style={{ color: colors.text }}>
-              Sales Comparison Approach
+              Income Approach
             </h2>
             <p className="text-xs mt-0.5" style={{ color: colors.textMuted }}>
-              Comparable sales analysis with adjustments
+              Direct capitalization of net operating income
             </p>
           </div>
         </div>
         <span className="text-xs" style={{ color: colors.textDim }}>
-          {salesExpanded ? 'Collapse' : 'Expand'}
+          {expanded ? 'Collapse' : 'Expand'}
         </span>
       </div>
-      {salesExpanded && (
+      {expanded && (
         <div className="p-4">
-          <SalesComparisonPanel onIndicatedValueChange={handleValueChange} />
+          <IncomeApproachPanel onValueChange={handleValueChange} />
         </div>
       )}
     </div>
   );
 }
+

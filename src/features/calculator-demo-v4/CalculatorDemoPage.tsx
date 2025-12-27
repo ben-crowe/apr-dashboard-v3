@@ -13,12 +13,17 @@ import { ThemeProvider, useTheme } from './context/ThemeContext';
 import InputPanel from './components/InputPanel';
 import OutputPanel from './components/OutputPanel';
 import MarkdownSummary from './components/MarkdownSummary';
+import IncomeApproachSection from './components/IncomeApproachSection';
 import SalesComparisonSection from './components/SalesComparisonSection';
 import CostApproachSection from './components/CostApproachSection';
+import ReconciliationSection from './components/ReconciliationSection';
 
 function CalculatorContent() {
   const [lastRefresh, setLastRefresh] = useState(new Date().toLocaleTimeString());
   const [summaryExpanded, setSummaryExpanded] = useState(true);
+  const [incomeValue, setIncomeValue] = useState<number>(0);
+  const [salesValue, setSalesValue] = useState<number>(0);
+  const [costValue, setCostValue] = useState<number>(0);
   const initializeMockData = useReportBuilderStore(state => state.initializeMockData);
   const sections = useReportBuilderStore(state => state.sections);
   const { theme, toggleTheme, colors } = useTheme();
@@ -44,7 +49,7 @@ function CalculatorContent() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-lg font-semibold tracking-wide" style={{ color: colors.text }}>
-                Income Capitalization Calculator
+                Valuation Calculator
               </h1>
               <p className="text-xs" style={{ color: colors.textMuted }}>
                 Direct Capitalization Method · USPAP/CUSPAP · v2.1
@@ -101,7 +106,7 @@ function CalculatorContent() {
                 style={{ borderBottom: `1px solid ${colors.border}` }}
               >
                 <h2 className="font-medium text-sm" style={{ color: colors.text }}>
-                  Income Approach
+                  Input Panel
                 </h2>
                 <p className="text-xs mt-0.5" style={{ color: colors.textMuted }}>
                   Property data and assumptions
@@ -129,11 +134,21 @@ function CalculatorContent() {
           </div>
         </div>
 
-        {/* Sales Comparison and Reconciliation Sections */}
-        <SalesComparisonSection />
+        {/* Income Approach Section */}
+        <IncomeApproachSection onValueChange={setIncomeValue} />
+
+        {/* Sales Comparison Section */}
+        <SalesComparisonSection onValueChange={setSalesValue} />
 
         {/* Cost Approach Section */}
-        <CostApproachSection />
+        <CostApproachSection onValueChange={setCostValue} />
+
+        {/* Reconciliation Section */}
+        <ReconciliationSection 
+          incomeValue={incomeValue}
+          salesValue={salesValue}
+          costValue={costValue}
+        />
 
         {/* Summary - Collapsible */}
         <div

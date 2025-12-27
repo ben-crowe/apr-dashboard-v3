@@ -10,12 +10,17 @@ import CostApproachPanel from './CostApproachPanel';
 import { useTheme } from '../context/ThemeContext';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
-export default function CostApproachSection() {
+interface CostApproachSectionProps {
+  onValueChange?: (value: number) => void;
+}
+
+export default function CostApproachSection({ onValueChange }: CostApproachSectionProps) {
   const { colors } = useTheme();
   const [costExpanded, setCostExpanded] = useState(false);
 
-  // This will be lifted up from CostApproachPanel
-  const [costIndicatedValue, setCostIndicatedValue] = useState<number>(0);
+  const handleValueChange = (value: number) => {
+    onValueChange?.(value);
+  };
 
   return (
     <div
@@ -53,7 +58,7 @@ export default function CostApproachSection() {
       </div>
       {costExpanded && (
         <div className="p-4">
-          <CostApproachPanel onValueChange={setCostIndicatedValue} />
+          <CostApproachPanel onValueChange={handleValueChange} />
         </div>
       )}
     </div>

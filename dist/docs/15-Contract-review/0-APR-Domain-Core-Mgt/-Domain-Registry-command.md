@@ -160,29 +160,24 @@ Mapping files (like `/tmp/valcre-field-mapping.txt`) may contain **incorrect or 
 - Reference Report: `/dist/docs/15-Contract-review/Ref.Report-VAL251012-North Battleford Apt.docx`
 - Extracted SVGs: `/dist/docs/15-Contract-review/svg-doc/Ref.Report-VAL251012-North Battleford Apt.docx_1.svg` through `_79.svg`
 
-**Image Field Mapping (from IMAGE-FIELD-MAPPING-CORRECTED.json):**
+**Image Field Categories:**
 
-| Field ID | Word Doc Image | Valcre Reference |
-|----------|----------------|------------------|
-| `subject-photo-1` | `image12.jpeg` | N/A |
-| `subject-photo-2` | `image13.jpeg` | N/A |
-| `subject-photo-3` thru `24` | `image14-35.jpeg` | N/A |
-| `subject-photo-25` | `image89.png` | N/A |
-| `img-map-regional` | `image1.png` | `Map_Regional` |
-| `img-map-aerial` | `image36.png` | `Map_Aerial` |
-| `img-map-local` | `image37.png` | `Map_Local` |
-| `img-comparables-map` | `image38.png` | N/A |
-| `img-site-plan-1` | `image44.png` | N/A |
-| `img-site-plan-2` | `image45.png` | N/A |
-| `img-zoning-map` | `image48.png` | N/A |
-| `img-rental-comparables-map` | `image57.png` | N/A |
-| `cover-photo` | `image2.jpeg` | `Subject_Photo` |
-| `company-logo` | `image1.png` | N/A |
+| Field Pattern | Valcre ID | Source |
+|---------------|-----------|--------|
+| `img-map-regional` | `Map_Regional` | Synced from Valcre |
+| `img-map-local` | `Map_Local` | Synced from Valcre |
+| `img-map-aerial` | `Map_Aerial` | Synced from Valcre |
+| `cover-photo` / `subject-photo` | `Subject_Photo` | Synced from Valcre |
+| `subject-photo-1` thru `25` | `DASHBOARD-IMAGE` | Uploader-managed |
+| `img-site-plan-*` | `DASHBOARD-IMAGE` | Uploader-managed |
+| `img-zoning-map` | `DASHBOARD-IMAGE` | Uploader-managed |
+| `img-comparables-map` | `DASHBOARD-IMAGE` | Uploader-managed |
+| `img-rental-comparables-map` | `DASHBOARD-IMAGE` | Uploader-managed |
+| `comp*-photo`, `comp*-map` | `DASHBOARD-IMAGE` | Uploader-managed |
 
-**Source of Truth for Image IDs:**
-```
-/dist/docs/15-Contract-review/0-Claude Planning/IMAGE-FIELD-MAPPING-CORRECTED.json
-```
+**Key:**
+- `DASHBOARD-IMAGE` = No Valcre equivalent; managed by dashboard uploader
+- `CAPTION-TEXT` = Text caption fields (not images)
 
 **The Excel workbook only has these image-related named ranges (for reference/linking, not actual images):**
 - `Subject_Photo` (singular - cover photo reference)

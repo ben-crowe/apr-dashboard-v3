@@ -87,39 +87,39 @@ All image fields across the report, cross-referenced with Valcre IDs.
 | Field ID | Valcre ID | Page | Registry | Description |
 |----------|-----------|------|----------|-------------|
 | `subject-photo` | `Subject_Photo` | -4 | ✅ | Cover photo |
-| `subject-photo-1` | `WORD-ONLY` | 4 | ✅ | Subject photo 1 |
-| `subject-photo-2` | `WORD-ONLY` | 4 | ✅ | Subject photo 2 |
-| `subject-photo-3` | `WORD-ONLY` | 4 | ✅ | Subject photo 3 |
-| `subject-photo-4` | `WORD-ONLY` | 4 | ✅ | Subject photo 4 |
-| `subject-photo-5` | `WORD-ONLY` | 4 | ✅ | Subject photo 5 |
-| `subject-photo-6` | `WORD-ONLY` | 4 | ✅ | Subject photo 6 |
-| `subject-photo-7` | `WORD-ONLY` | 5 | ✅ | Subject photo 7 |
-| `subject-photo-8` | `WORD-ONLY` | 5 | ✅ | Subject photo 8 |
-| `subject-photo-9` | `WORD-ONLY` | 5 | ✅ | Subject photo 9 |
-| `subject-photo-10` | `WORD-ONLY` | 5 | ✅ | Subject photo 10 |
-| `subject-photo-11` | `WORD-ONLY` | 5 | ✅ | Subject photo 11 |
-| `subject-photo-12` | `WORD-ONLY` | 5 | ✅ | Subject photo 12 |
-| `subject-photo-13` | `WORD-ONLY` | 6 | ✅ | Subject photo 13 |
-| `subject-photo-14` | `WORD-ONLY` | 6 | ✅ | Subject photo 14 |
-| `subject-photo-15` | `WORD-ONLY` | 6 | ✅ | Subject photo 15 |
-| `subject-photo-16` | `WORD-ONLY` | 6 | ✅ | Subject photo 16 |
-| `subject-photo-17` | `WORD-ONLY` | 6 | ✅ | Subject photo 17 |
-| `subject-photo-18` | `WORD-ONLY` | 6 | ✅ | Subject photo 18 |
-| `subject-photo-19` | `WORD-ONLY` | 7 | ✅ | Subject photo 19 |
-| `subject-photo-20` | `WORD-ONLY` | 7 | ✅ | Subject photo 20 |
-| `subject-photo-21` | `WORD-ONLY` | 7 | ✅ | Subject photo 21 |
-| `subject-photo-22` | `WORD-ONLY` | 7 | ✅ | Subject photo 22 |
-| `subject-photo-23` | `WORD-ONLY` | 7 | ✅ | Subject photo 23 |
-| `subject-photo-24` | `WORD-ONLY` | 7 | ✅ | Subject photo 24 |
-| `subject-photo-25` | `WORD-ONLY` | 8 | ✅ | Subject photo 25 |
+| `subject-photo-1` | `image12.jpeg` | 4 | ✅ | Subject photo 1 |
+| `subject-photo-2` | `image13.jpeg` | 4 | ✅ | Subject photo 2 |
+| `subject-photo-3` | `image14.jpeg` | 4 | ✅ | Subject photo 3 |
+| `subject-photo-4` | `image15.jpeg` | 4 | ✅ | Subject photo 4 |
+| `subject-photo-5` | `image16.jpeg` | 4 | ✅ | Subject photo 5 |
+| `subject-photo-6` | `image17.jpeg` | 4 | ✅ | Subject photo 6 |
+| `subject-photo-7` | `image18.jpeg` | 5 | ✅ | Subject photo 7 |
+| `subject-photo-8` | `image19.jpeg` | 5 | ✅ | Subject photo 8 |
+| `subject-photo-9` | `image20.jpeg` | 5 | ✅ | Subject photo 9 |
+| `subject-photo-10` | `image21.jpeg` | 5 | ✅ | Subject photo 10 |
+| `subject-photo-11` | `image22.jpeg` | 5 | ✅ | Subject photo 11 |
+| `subject-photo-12` | `image23.jpeg` | 5 | ✅ | Subject photo 12 |
+| `subject-photo-13` | `image24.jpeg` | 6 | ✅ | Subject photo 13 |
+| `subject-photo-14` | `image25.jpeg` | 6 | ✅ | Subject photo 14 |
+| `subject-photo-15` | `image26.jpeg` | 6 | ✅ | Subject photo 15 |
+| `subject-photo-16` | `image27.jpeg` | 6 | ✅ | Subject photo 16 |
+| `subject-photo-17` | `image28.jpeg` | 6 | ✅ | Subject photo 17 |
+| `subject-photo-18` | `image29.jpeg` | 6 | ✅ | Subject photo 18 |
+| `subject-photo-19` | `image30.jpeg` | 7 | ✅ | Subject photo 19 |
+| `subject-photo-20` | `image31.jpeg` | 7 | ✅ | Subject photo 20 |
+| `subject-photo-21` | `image32.jpeg` | 7 | ✅ | Subject photo 21 |
+| `subject-photo-22` | `image33.jpeg` | 7 | ✅ | Subject photo 22 |
+| `subject-photo-23` | `image34.jpeg` | 7 | ✅ | Subject photo 23 |
+| `subject-photo-24` | `image35.jpeg` | 7 | ✅ | Subject photo 24 |
+| `subject-photo-25` | `image89.png` | 8 | ✅ | Subject photo 25 |
 | `img-map-regional` | `Map_Regional` | 9 | ✅ | Regional location map |
 | `img-map-local` | `Map_Local` | 10 | ✅ | Local area map |
 | `img-map-aerial` | `Map_Aerial` | 11 | ✅ | Aerial overview map |
-| `img-site-plan-1` | `WORD-ONLY` | 21 | ✅ | Site plan 1 |
-| `img-site-plan-2` | `WORD-ONLY` | 22 | ✅ | Site plan 2 |
-| `img-zoning-map` | `WORD-ONLY` | 25 | ✅ | Zoning map |
-| `img-rental-comparables-map` | `WORD-ONLY` | 34 | ✅ | Rental comparables location map |
-| `img-comparables-map` | `WORD-ONLY` | 48 | ✅ | Sales comparables location map |
+| `img-site-plan-1` | `image44.png` | 21 | ✅ | Site plan 1 |
+| `img-site-plan-2` | `image45.png` | 22 | ✅ | Site plan 2 |
+| `img-zoning-map` | `image48.png` | 25 | ✅ | Zoning map |
+| `img-rental-comparables-map` | `image57.png` | 34 | ✅ | Rental comparables location map |
+| `img-comparables-map` | `image38.png` | 48 | ✅ | Sales comparables location map |
 
 **Total: 34 image fields**
 
@@ -320,18 +320,18 @@ Subject property photos 1-6 with captions.
 | Field ID | Valcre ID | Registry | Status |
 |----------|-----------|----------|--------|
 | `company-jobnumber` | `Company_JobNumber` | ✅ | ⏳ Pending |
-| `subject-photo-1` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-1-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-2` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-2-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-3` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-3-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-4` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-4-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-5` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-5-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-6` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-6-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
+| `subject-photo-1` | `image12.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-1-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-2` | `image13.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-2-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-3` | `image14.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-3-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-4` | `image15.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-4-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-5` | `image16.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-5-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-6` | `image17.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-6-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
 
 ---
@@ -344,18 +344,18 @@ Subject property photos 7-12 with captions.
 | Field ID | Valcre ID | Registry | Status |
 |----------|-----------|----------|--------|
 | `company-jobnumber` | `Company_JobNumber` | ✅ | ⏳ Pending |
-| `subject-photo-10` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-10-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-11` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-11-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-12` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-12-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-7` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-7-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-8` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-8-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-9` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-9-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
+| `subject-photo-10` | `image21.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-10-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-11` | `image22.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-11-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-12` | `image23.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-12-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-7` | `image18.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-7-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-8` | `image19.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-8-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-9` | `image20.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-9-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
 
 ---
@@ -368,18 +368,18 @@ Subject property photos 13-18 with captions.
 | Field ID | Valcre ID | Registry | Status |
 |----------|-----------|----------|--------|
 | `company-jobnumber` | `Company_JobNumber` | ✅ | ⏳ Pending |
-| `subject-photo-13` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-13-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-14` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-14-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-15` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-15-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-16` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-16-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-17` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-17-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-18` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-18-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
+| `subject-photo-13` | `image24.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-13-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-14` | `image25.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-14-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-15` | `image26.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-15-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-16` | `image27.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-16-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-17` | `image28.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-17-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-18` | `image29.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-18-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
 
 ---
@@ -392,18 +392,18 @@ Subject property photos 19-24 with captions.
 | Field ID | Valcre ID | Registry | Status |
 |----------|-----------|----------|--------|
 | `company-jobnumber` | `Company_JobNumber` | ✅ | ⏳ Pending |
-| `subject-photo-19` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-19-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-20` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-20-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-21` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-21-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-22` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-22-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-23` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-23-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-24` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-24-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
+| `subject-photo-19` | `image30.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-19-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-20` | `image31.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-20-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-21` | `image32.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-21-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-22` | `image33.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-22-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-23` | `image34.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-23-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
+| `subject-photo-24` | `image35.jpeg` | ✅ | ⏳ Pending |
+| `subject-photo-24-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
 
 ---
@@ -416,8 +416,8 @@ Subject property photo 25 with caption.
 | Field ID | Valcre ID | Registry | Status |
 |----------|-----------|----------|--------|
 | `company-jobnumber` | `Company_JobNumber` | ✅ | ⏳ Pending |
-| `subject-photo-25` | `WORD-ONLY` | ✅ | ⏳ Pending |
-| `subject-photo-25-caption` | `WORD-ONLY` | ✅ | ⏳ Pending |
+| `subject-photo-25` | `image89.png` | ✅ | ⏳ Pending |
+| `subject-photo-25-caption` | `TEXT-FIELD` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
 
 ---
@@ -612,7 +612,7 @@ Site plan showing building footprints and layout.
 | Field ID | Valcre ID | Registry | Status |
 |----------|-----------|----------|--------|
 | `company-jobnumber` | `Company_JobNumber` | ✅ | ⏳ Pending |
-| `site-plan-1-title` | `WORD-ONLY` | ✅ | ⏳ Pending |
+| `site-plan-1-title` | `TEXT-FIELD` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
 | **Images:** | | | |
 | `img-site-plan-1` | `Map_Survey1` | ✅ | ⏳ Pending |
@@ -627,7 +627,7 @@ Additional site plan or survey details.
 | Field ID | Valcre ID | Registry | Status |
 |----------|-----------|----------|--------|
 | `company-jobnumber` | `Company_JobNumber` | ✅ | ⏳ Pending |
-| `site-plan-2-title` | `WORD-ONLY` | ✅ | ⏳ Pending |
+| `site-plan-2-title` | `TEXT-FIELD` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
 | **Images:** | | | |
 | `img-site-plan-2` | `Map_Survey2` | ✅ | ⏳ Pending |
@@ -682,9 +682,9 @@ Zoning map showing subject property zoning district.
 |----------|-----------|----------|--------|
 | `company-jobnumber` | `Company_JobNumber` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
-| `zoning-map-title` | `WORD-ONLY` | ✅ | ⏳ Pending |
+| `zoning-map-title` | `TEXT-FIELD` | ✅ | ⏳ Pending |
 | **Images:** | | | |
-| `img-zoning-map` | `WORD-ONLY` | ✅ | ⏳ Pending |
+| `img-zoning-map` | `image48.png` | ✅ | ⏳ Pending |
 
 ---
 
@@ -987,7 +987,7 @@ Location map of rental comparable properties.
 | `rental-comp5-label` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
 | **Images:** | | | |
-| `img-rental-comparables-map` | `WORD-ONLY` | ✅ | ⏳ Pending |
+| `img-rental-comparables-map` | `image57.png` | ✅ | ⏳ Pending |
 
 ---
 
@@ -1624,7 +1624,7 @@ Location map of sales comparable properties.
 | `company-jobnumber` | `Company_JobNumber` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
 | **Images:** | | | |
-| `img-comparables-map` | `WORD-ONLY` | ✅ | ⏳ Pending |
+| `img-comparables-map` | `image38.png` | ✅ | ⏳ Pending |
 
 ---
 

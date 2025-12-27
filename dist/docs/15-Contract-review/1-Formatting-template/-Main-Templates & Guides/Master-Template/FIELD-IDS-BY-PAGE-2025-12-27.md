@@ -87,39 +87,39 @@ All image fields across the report, cross-referenced with Valcre IDs.
 | Field ID | Valcre ID | Page | Registry | Description |
 |----------|-----------|------|----------|-------------|
 | `subject-photo` | `Subject_Photo` | -4 | ✅ | Cover photo |
-| `subject-photo-1` | `TBD` | 4 | ✅ | Subject photo 1 |
-| `subject-photo-2` | `TBD` | 4 | ✅ | Subject photo 2 |
-| `subject-photo-3` | `TBD` | 4 | ✅ | Subject photo 3 |
-| `subject-photo-4` | `TBD` | 4 | ✅ | Subject photo 4 |
-| `subject-photo-5` | `TBD` | 4 | ✅ | Subject photo 5 |
-| `subject-photo-6` | `TBD` | 4 | ✅ | Subject photo 6 |
-| `subject-photo-7` | `TBD` | 5 | ✅ | Subject photo 7 |
-| `subject-photo-8` | `TBD` | 5 | ✅ | Subject photo 8 |
-| `subject-photo-9` | `TBD` | 5 | ✅ | Subject photo 9 |
-| `subject-photo-10` | `TBD` | 5 | ✅ | Subject photo 10 |
-| `subject-photo-11` | `TBD` | 5 | ✅ | Subject photo 11 |
-| `subject-photo-12` | `TBD` | 5 | ✅ | Subject photo 12 |
-| `subject-photo-13` | `TBD` | 6 | ✅ | Subject photo 13 |
-| `subject-photo-14` | `TBD` | 6 | ✅ | Subject photo 14 |
-| `subject-photo-15` | `TBD` | 6 | ✅ | Subject photo 15 |
-| `subject-photo-16` | `TBD` | 6 | ✅ | Subject photo 16 |
-| `subject-photo-17` | `TBD` | 6 | ✅ | Subject photo 17 |
-| `subject-photo-18` | `TBD` | 6 | ✅ | Subject photo 18 |
-| `subject-photo-19` | `TBD` | 7 | ✅ | Subject photo 19 |
-| `subject-photo-20` | `TBD` | 7 | ✅ | Subject photo 20 |
-| `subject-photo-21` | `TBD` | 7 | ✅ | Subject photo 21 |
-| `subject-photo-22` | `TBD` | 7 | ✅ | Subject photo 22 |
-| `subject-photo-23` | `TBD` | 7 | ✅ | Subject photo 23 |
-| `subject-photo-24` | `TBD` | 7 | ✅ | Subject photo 24 |
-| `subject-photo-25` | `TBD` | 8 | ✅ | Subject photo 25 |
+| `subject-photo-1` | `WORD-ONLY` | 4 | ✅ | Subject photo 1 |
+| `subject-photo-2` | `WORD-ONLY` | 4 | ✅ | Subject photo 2 |
+| `subject-photo-3` | `WORD-ONLY` | 4 | ✅ | Subject photo 3 |
+| `subject-photo-4` | `WORD-ONLY` | 4 | ✅ | Subject photo 4 |
+| `subject-photo-5` | `WORD-ONLY` | 4 | ✅ | Subject photo 5 |
+| `subject-photo-6` | `WORD-ONLY` | 4 | ✅ | Subject photo 6 |
+| `subject-photo-7` | `WORD-ONLY` | 5 | ✅ | Subject photo 7 |
+| `subject-photo-8` | `WORD-ONLY` | 5 | ✅ | Subject photo 8 |
+| `subject-photo-9` | `WORD-ONLY` | 5 | ✅ | Subject photo 9 |
+| `subject-photo-10` | `WORD-ONLY` | 5 | ✅ | Subject photo 10 |
+| `subject-photo-11` | `WORD-ONLY` | 5 | ✅ | Subject photo 11 |
+| `subject-photo-12` | `WORD-ONLY` | 5 | ✅ | Subject photo 12 |
+| `subject-photo-13` | `WORD-ONLY` | 6 | ✅ | Subject photo 13 |
+| `subject-photo-14` | `WORD-ONLY` | 6 | ✅ | Subject photo 14 |
+| `subject-photo-15` | `WORD-ONLY` | 6 | ✅ | Subject photo 15 |
+| `subject-photo-16` | `WORD-ONLY` | 6 | ✅ | Subject photo 16 |
+| `subject-photo-17` | `WORD-ONLY` | 6 | ✅ | Subject photo 17 |
+| `subject-photo-18` | `WORD-ONLY` | 6 | ✅ | Subject photo 18 |
+| `subject-photo-19` | `WORD-ONLY` | 7 | ✅ | Subject photo 19 |
+| `subject-photo-20` | `WORD-ONLY` | 7 | ✅ | Subject photo 20 |
+| `subject-photo-21` | `WORD-ONLY` | 7 | ✅ | Subject photo 21 |
+| `subject-photo-22` | `WORD-ONLY` | 7 | ✅ | Subject photo 22 |
+| `subject-photo-23` | `WORD-ONLY` | 7 | ✅ | Subject photo 23 |
+| `subject-photo-24` | `WORD-ONLY` | 7 | ✅ | Subject photo 24 |
+| `subject-photo-25` | `WORD-ONLY` | 8 | ✅ | Subject photo 25 |
 | `img-map-regional` | `Map_Regional` | 9 | ✅ | Regional location map |
 | `img-map-local` | `Map_Local` | 10 | ✅ | Local area map |
 | `img-map-aerial` | `Map_Aerial` | 11 | ✅ | Aerial overview map |
-| `img-site-plan-1` | `Map_Survey1` | 21 | ✅ | Site plan 1 |
-| `img-site-plan-2` | `Map_Survey2` | 22 | ✅ | Site plan 2 |
-| `img-zoning-map` | `TBD` | 25 | ✅ | Zoning map |
-| `img-rental-comparables-map` | `TBD` | 34 | ✅ | Rental comparables location map |
-| `img-comparables-map` | `TBD` | 48 | ✅ | Sales comparables location map |
+| `img-site-plan-1` | `WORD-ONLY` | 21 | ✅ | Site plan 1 |
+| `img-site-plan-2` | `WORD-ONLY` | 22 | ✅ | Site plan 2 |
+| `img-zoning-map` | `WORD-ONLY` | 25 | ✅ | Zoning map |
+| `img-rental-comparables-map` | `WORD-ONLY` | 34 | ✅ | Rental comparables location map |
+| `img-comparables-map` | `WORD-ONLY` | 48 | ✅ | Sales comparables location map |
 
 **Total: 34 image fields**
 
@@ -222,11 +222,11 @@ All image fields across the report, cross-referenced with Valcre IDs.
 | `subject-actualage` | `Subject_Age` | ✅ | ⏳ Pending |
 | `subject-appeal-rating` | `Subject_Appeal` | ✅ | ⏳ Pending |
 | `subject-condition` | `Subject_Condition` | ✅ | ⏳ Pending |
-| `subject-density` | `TBD` | ✅ | ⏳ Pending |
+| `subject-density` | `Subject_Density` | ✅ | ⏳ Pending |
 | `subject-economiclife` | `Subject_EconomicLife` | ✅ | ⏳ Pending |
 | `subject-effectiveage` | `Subject_EffectiveAge` | ✅ | ⏳ Pending |
 | `subject-gba` | `Subject_GBA` | ✅ | ⏳ Pending |
-| `subject-geocode` | `TBD` | ✅ | ⏳ Pending |
+| `subject-geocode` | `Subject_Geocode` | ✅ | ⏳ Pending |
 | `subject-laundry` | `Subject_Laundry` | ✅ | ⏳ Pending |
 | `subject-market` | `Subject_Submarket` | ✅ | ⏳ Pending |
 | `subject-name` | `Subject_Name` | ✅ | ⏳ Pending |
@@ -238,23 +238,23 @@ All image fields across the report, cross-referenced with Valcre IDs.
 | `subject-remaininglife` | `Subject_RemainingLife` | ✅ | ⏳ Pending |
 | `subject-security-features` | `Subject_Security` | ✅ | ⏳ Pending |
 | `subject-shape` | `Subject_Shape` | ✅ | ⏳ Pending |
-| `subject-siteaccess` | `TBD` | ✅ | ⏳ Pending |
-| `subject-siteexposure` | `TBD` | ✅ | ⏳ Pending |
-| `subject-sitequality` | `TBD` | ✅ | ⏳ Pending |
-| `subject-siteutility` | `TBD` | ✅ | ⏳ Pending |
+| `subject-siteaccess` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
+| `subject-siteexposure` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
+| `subject-sitequality` | `Subject_SiteQuality` | ✅ | ⏳ Pending |
+| `subject-siteutility` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
 | `subject-state` | `Subject_State` | ✅ | ⏳ Pending |
 | `subject-stories` | `Subject_Stories` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
 | `subject-submarket` | `Subject_Submarket` | ✅ | ⏳ Pending |
 | `subject-subtype` | `Subject_Subtype` | ✅ | ⏳ Pending |
-| `subject-tenancy` | `TBD` | ✅ | ⏳ Pending |
+| `subject-tenancy` | `Subject_Tenancy` | ✅ | ⏳ Pending |
 | `subject-topography` | `Subject_Topography` | ✅ | ⏳ Pending |
 | `subject-totalacre` | `Subject_TotalAcre` | ✅ | ⏳ Pending |
 | `subject-totalbuildings` | `Subject_Buildings` | ✅ | ⏳ Pending |
 | `subject-totalsf` | `Subject_TotalSF` | ✅ | ⏳ Pending |
 | `subject-units` | `Subject_Units` | ✅ | ⏳ Pending |
-| `subject-usableacre` | `TBD` | ✅ | ⏳ Pending |
-| `subject-usablesf` | `TBD` | ✅ | ⏳ Pending |
+| `subject-usableacre` | `Subject_UsableAcre` | ✅ | ⏳ Pending |
+| `subject-usablesf` | `Subject_UsableSF` | ✅ | ⏳ Pending |
 | `subject-year-built` | `Subject_YearBuilt` | ✅ | ⏳ Pending |
 | `subject-zip` | `Subject_Zip` | ✅ | ⏳ Pending |
 | `subject-zoning` | `Subject_Zoning` | ✅ | ⏳ Pending |
@@ -271,29 +271,29 @@ Highest & Best Use conclusion and value summary table.
 |----------|-----------|----------|--------|
 | `company-jobnumber` | `Company_JobNumber` | ✅ | ⏳ Pending |
 | `ia-dircap-cap-rate1` | `TBD` | ✅ | ⏳ Pending |
-| `ia-dircap-expenseratio` | `TBD` | ✅ | ⏳ Pending |
-| `ia-dircap-noi` | `TBD` | ✅ | ⏳ Pending |
-| `ia-dircap-noi-per-unit` | `TBD` | ✅ | ⏳ Pending |
+| `ia-dircap-expenseratio` | `IA_DirCap_ExpenseRatio` | ✅ | ⏳ Pending |
+| `ia-dircap-noi` | `IA_DirCap_NOI` | ✅ | ⏳ Pending |
+| `ia-dircap-noi-per-unit` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
 | `occupancy-rate` | `Subject_Occupancy` | ✅ | ⏳ Pending |
 | `report-effectivedate` | `Report_Date` | ✅ | ⏳ Pending |
 | `report-interest` | `Report_Interest` | ✅ | ⏳ Pending |
-| `report-valuationcost` | `TBD` | ✅ | ⏳ Pending |
-| `report-valuationincome` | `TBD` | ✅ | ⏳ Pending |
-| `report-valuationsales` | `TBD` | ✅ | ⏳ Pending |
-| `report-values` | `TBD` | ✅ | ⏳ Pending |
-| `subject-concludedrent` | `TBD` | ✅ | ⏳ Pending |
-| `subject-currentrent` | `TBD` | ✅ | ⏳ Pending |
+| `report-valuationcost` | `Report_ValuationCost` | ✅ | ⏳ Pending |
+| `report-valuationincome` | `Report_ValuationIncome` | ✅ | ⏳ Pending |
+| `report-valuationsales` | `Report_ValuationSales` | ✅ | ⏳ Pending |
+| `report-values` | `Report_Values` | ✅ | ⏳ Pending |
+| `subject-concludedrent` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
+| `subject-currentrent` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
 | `subject-exposuretime` | `Report_ExposureTime` | ✅ | ⏳ Pending |
 | `subject-hbuimproved` | `Report_HBUImpv` | ✅ | ⏳ Pending |
 | `subject-hbuvacant` | `Report_HBUVacant` | ✅ | ⏳ Pending |
 | `subject-marketing` | `Report_Marketing` | ✅ | ⏳ Pending |
 | `subject-occupancystabilized` | `Subject_OccupancyStabilized` | ✅ | ⏳ Pending |
-| `subject-occupied-units` | `TBD` | ✅ | ⏳ Pending |
-| `subject-proposedconstruction` | `TBD` | ✅ | ⏳ Pending |
-| `subject-sfmultifamily` | `TBD` | ✅ | ⏳ Pending |
+| `subject-occupied-units` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
+| `subject-proposedconstruction` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
+| `subject-sfmultifamily` | `Subject_UsableSFMulti` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
-| `subject-vacancycreditloss` | `TBD` | ✅ | ⏳ Pending |
-| `subject-vacant-units` | `TBD` | ✅ | ⏳ Pending |
+| `subject-vacancycreditloss` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
+| `subject-vacant-units` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
 
 ---
 
@@ -643,11 +643,11 @@ Property taxes, assessment values, and tax analysis.
 |----------|-----------|----------|--------|
 | `company-jobnumber` | `Company_JobNumber` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
-| `subject-tax-per-sf` | `TBD` | ✅ | ⏳ Pending |
-| `subject-taxamount` | `TBD` | ✅ | ⏳ Pending |
-| `subject-taxassessment` | `TBD` | ✅ | ⏳ Pending |
-| `subject-taxrate` | `TBD` | ✅ | ⏳ Pending |
-| `subject-taxyear` | `TBD` | ✅ | ⏳ Pending |
+| `subject-tax-per-sf` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
+| `subject-taxamount` | `L_PropertyParcelAssessmentTaxes` | ✅ | ⏳ Pending |
+| `subject-taxassessment` | `L_PropertyParcelAssessmentTotalValue` | ✅ | ⏳ Pending |
+| `subject-taxrate` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
+| `subject-taxyear` | `L_TaxYear` | ✅ | ⏳ Pending |
 
 ---
 
@@ -659,17 +659,17 @@ Land use and zoning regulations analysis.
 | Field ID | Valcre ID | Registry | Status |
 |----------|-----------|----------|--------|
 | `company-jobnumber` | `Company_JobNumber` | ✅ | ⏳ Pending |
-| `subject-conforminglot` | `TBD` | ✅ | ⏳ Pending |
-| `subject-conforminguse` | `TBD` | ✅ | ⏳ Pending |
-| `subject-legally-permitted` | `TBD` | ✅ | ⏳ Pending |
-| `subject-permitteduses` | `TBD` | ✅ | ⏳ Pending |
+| `subject-conforminglot` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
+| `subject-conforminguse` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
+| `subject-legally-permitted` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
+| `subject-permitteduses` | `Subject_ZoningDef` | ✅ | ⏳ Pending |
 | `subject-street` | `Subject_Street` | ✅ | ⏳ Pending |
 | `subject-subtype` | `Subject_Subtype` | ✅ | ⏳ Pending |
 | `subject-zoning` | `Subject_Zoning` | ✅ | ⏳ Pending |
-| `subject-zoningauthority` | `TBD` | ✅ | ⏳ Pending |
-| `subject-zoningchange` | `TBD` | ✅ | ⏳ Pending |
-| `subject-zoningchangestatus` | `TBD` | ✅ | ⏳ Pending |
-| `subject-zoningdescription` | `TBD` | ✅ | ⏳ Pending |
+| `subject-zoningauthority` | `Subject_ZoningAuthority` | ✅ | ⏳ Pending |
+| `subject-zoningchange` | `Subject_ZoningChange` | ✅ | ⏳ Pending |
+| `subject-zoningchangestatus` | `DASHBOARD-ONLY` | ✅ | ⏳ Pending |
+| `subject-zoningdescription` | `Subject_ZoningConclusion` | ✅ | ⏳ Pending |
 
 ---
 

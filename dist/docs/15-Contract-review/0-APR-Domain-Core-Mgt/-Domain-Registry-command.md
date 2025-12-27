@@ -191,72 +191,74 @@ grep "CapRate\|DirectCap" dist/docs/15-Contract-review/2-Field\ Management/valcr
 
 ---
 
-## Session Continuity
+## Session Checkpoints
 
 ### How This Works
 
-When you load this agent, read the session state below. This eliminates separate handoff files - the agent carries its own context.
+**On activation:**
+1. Read this file (you just did)
+2. Check checkpoints below
+3. Ask user: "Continue existing topic or start fresh?"
 
-**At startup:** Read `lastSession` and run the searches listed in `continueWith`
-**At session end:** Update this section with current state (user will ask for "session summary")
+**When user says `/checkpoint`:**
+1. Suggest topic name based on work done (or ask)
+2. Create NEW checkpoint entry (never update old ones)
+3. Include: timestamp, topic, title, session file, search terms
 
-### Session State
+**When user says `/check-last-sessions`:**
+1. List last 7 checkpoints from index below
+2. Group by topic if helpful
+3. Ask which to continue (or start fresh)
+
+**When user says "continue [topic]":**
+1. Filter checkpoints by that topic
+2. Gather search terms from ALL matching checkpoints
+3. Run searches across those session files
+4. Synthesize context, then proceed
+
+### Checkpoint Index
 
 ```json
 {
-  "lastSession": {
-    "date": "2025-12-27",
-    "summary": "Applied ~60+ TBD→Valcre ID mappings to FIELD-IDS-BY-PAGE. Discovered mapping file had incorrect IDs - established MANDATORY cross-reference workflow. Found Valcre workbook has limited image ranges (no Subject_Photo1-25, no SitePlan).",
-    "filesModified": [
-      "dist/docs/.../FIELD-IDS-BY-PAGE-2025-12-27.md - Applied 60+ Valcre ID mappings",
-      "dist/docs/0-APR-Domain-Core-Mgt/-Domain-Registry-command.md - Added workflow documentation"
-    ],
-    "keyDecisions": [
-      "MANDATORY: Always verify Valcre IDs against ground truth JSON before applying",
-      "Mapping files (.txt) may have incorrect IDs - never trust without verification",
-      "Example correction: IA_DirectCapRate → IA_DirCap_CapRate (actual)",
-      "Image fields (subject-photo-1 to -25) may be dashboard-only - no Valcre equivalent",
-      "Maps use Map_Regional, Map_Local, Map_Aerial pattern (not Img_* pattern)"
-    ]
-  },
+  "checkpoints": [
+    {
+      "timestamp": "2025-12-27T14:00",
+      "topic": "valcre-mapping",
+      "title": "Added 8 registry fields, established kebab-case mapping pattern",
+      "sessionFile": "~/.claude/projects/-Users-bencrowe-Development-APR-Dashboard-v3/[find-session-id].jsonl",
+      "searchTerms": ["field-registry commit bfb8de1", "kebab-case mapping", "appraiser1-* fields"]
+    },
+    {
+      "timestamp": "2025-12-27T16:00",
+      "topic": "valcre-mapping",
+      "title": "Applied 60+ TBD→Valcre ID mappings, established mandatory verification workflow",
+      "sessionFile": "~/.claude/projects/-Users-bencrowe-Development-APR-Dashboard-v3/[find-session-id].jsonl",
+      "searchTerms": ["ground truth verification", "IA_DirCap_CapRate correction", "MANDATORY cross-reference", "image fields Word doc"]
+    }
+  ],
   "pendingWork": [
     "Decide: commit all 2,303 docs files or commit incrementally",
     "Continue mapping remaining ~1,200+ TBD fields (use ground truth verification)",
     "Determine source for subject-photo-1 through subject-photo-25 (Word doc? Dashboard-only?)",
     "Update map image field Valcre IDs (img-map-regional → Map_Regional, etc.)"
   ],
-  "continueWith": {
-    "workflow": [
-      "1. Read mapping suggestion",
-      "2. VERIFY against valcre-named-ranges-complete.json (grep)",
-      "3. If not found, search for pattern variations",
-      "4. Apply only VERIFIED mappings to FIELD-IDS-BY-PAGE"
-    ],
-    "groundTruth": "dist/docs/15-Contract-review/2-Field Management/valcre-named-ranges-complete.json",
-    "targetFile": "dist/docs/15-Contract-review/1-Formatting-template/-Main-Templates & Guides/Master-Template/FIELD-IDS-BY-PAGE-2025-12-27.md"
-  },
-  "verifiedMappingsApplied": [
-    "company-jobnumber → Company_JobNumber",
-    "subject-name → Subject_Name",
-    "subject-city → Subject_City",
-    "calc-pgr → IA_PGRev",
-    "calc-cap-rate → IA_DirCap_CapRate (CORRECTED from IA_DirectCapRate)",
-    "calc-exp-taxes-annual → IA_Expense01",
-    "report-date → Report_Date",
-    "Plus ~55 more (all verified against ground truth)"
-  ],
-  "incorrectMappingsFound": [
-    "IA_DirectCapRate → Does not exist, actual: IA_DirCap_CapRate",
-    "Subject_Photo1-25 → Do not exist, only Subject_Photo (singular)",
-    "Img_* pattern → Does not exist, maps use Map_* pattern"
+  "keyDecisions": [
+    "MANDATORY: Always verify Valcre IDs against ground truth JSON before applying",
+    "Mapping files (.txt) may have incorrect IDs - never trust without verification",
+    "Example correction: IA_DirectCapRate → IA_DirCap_CapRate (actual)",
+    "Image fields come from Word doc, not Excel workbook",
+    "Maps use Map_Regional, Map_Local, Map_Aerial pattern (not Img_* pattern)"
   ]
 }
 ```
 
 ### Search Keywords (for JSONL lookup)
 
-`field-registry`, `valcre-mapping`, `crosswalk`, `field-ids-by-page`, `template-validation`, `naming-convention`, `kebab-case`, `source-of-truth`
+`field-registry`, `valcre-mapping`, `crosswalk`, `field-ids-by-page`, `template-validation`, `naming-convention`, `kebab-case`, `source-of-truth`, `ground-truth-verification`
 
 ---
 
-*Last Updated: December 27, 2025 (Session 2 - Added mandatory verification workflow)*
+*Agent Version: 1.1*
+*Created: December 27, 2025*
+*Updated: December 27, 2025 - Converted to checkpoint-based session system*
+*Domain: APR Dashboard v3 - Registry & Workbook*

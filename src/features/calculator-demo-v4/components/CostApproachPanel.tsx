@@ -108,25 +108,25 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
         <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
           <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>Land Valuation</span>
         </div>
-        <div className="p-2 space-y-2">
+        <div className="p-2 space-y-1">
           <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Land Area (SF)</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Area (SF)</label>
               <Input
                 type="number"
                 value={landSF || ''}
                 onChange={e => updateField('cost-land-sf', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Rate per SF</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-16 flex-shrink-0" style={{ color: colors.textMuted }}>Rate/SF</label>
               <Input
                 type="number"
                 value={landRatePerSF || ''}
                 onChange={e => updateField('cost-land-rate-per-sf', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
@@ -147,45 +147,45 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
         <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
           <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>Replacement Cost New (RCN)</span>
         </div>
-        <div className="p-2 space-y-2">
+        <div className="p-2 space-y-1">
           <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Building GBA</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-16 flex-shrink-0" style={{ color: colors.textMuted }}>GBA</label>
               <Input
                 type="number"
                 value={rcnGBA || ''}
                 onChange={e => updateField('cost-rcn-gba', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Cost per SF</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-16 flex-shrink-0" style={{ color: colors.textMuted }}>Cost/SF</label>
               <Input
                 type="number"
                 value={rcnRatePerSF || ''}
                 onChange={e => updateField('cost-rcn-rate-per-sf', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Indirect Costs %</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-16 flex-shrink-0" style={{ color: colors.textMuted }}>Indir %</label>
               <Input
                 type="number"
                 value={rcnIndirectPct || ''}
                 onChange={e => updateField('cost-rcn-indirect-pct', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Entrepreneur Profit %</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-16 flex-shrink-0" style={{ color: colors.textMuted }}>Entrep %</label>
               <Input
                 type="number"
                 value={rcnEntrepreneurPct || ''}
                 onChange={e => updateField('cost-rcn-entrepreneur-pct', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
@@ -218,57 +218,55 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
         <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
           <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>Depreciation</span>
         </div>
-        <div className="p-2 space-y-2">
-          <div className="grid grid-cols-3 gap-2">
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Actual Age</label>
+        <div className="p-2 space-y-1">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Actual Age</label>
               <Input
                 type="number"
                 value={deprPhysicalAge || ''}
                 onChange={e => updateField('cost-depr-physical-age', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Economic Life</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Econ Life</label>
               <Input
                 type="number"
                 value={deprPhysicalLife || ''}
                 onChange={e => updateField('cost-depr-physical-life', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Effective Age</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Eff Age</label>
               <Input
                 type="number"
                 value={deprPhysicalEffectiveAge || ''}
                 onChange={e => updateField('cost-depr-physical-effective-age', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Functional Obsolescence</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Func Obs</label>
               <Input
                 type="number"
                 value={deprFunctionalTotal || ''}
                 onChange={e => updateField('cost-depr-functional-total', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>External Obsolescence</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Ext Obs</label>
               <Input
                 type="number"
                 value={deprExternalTotal || ''}
                 onChange={e => updateField('cost-depr-external-total', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
@@ -301,65 +299,65 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
         <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
           <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>Site Improvements</span>
         </div>
-        <div className="p-2 space-y-2">
+        <div className="p-2 space-y-1">
           <div className="grid grid-cols-2 gap-2">
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Parking Spaces</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Spaces</label>
               <Input
                 type="number"
                 value={siteParkingSpaces || ''}
                 onChange={e => updateField('cost-site-parking-spaces', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Cost per Space</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Cost/Spc</label>
               <Input
                 type="number"
                 value={siteParkingCost || ''}
                 onChange={e => updateField('cost-site-parking-cost', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Landscaping</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Landscape</label>
               <Input
                 type="number"
                 value={siteLandscaping || ''}
                 onChange={e => updateField('cost-site-landscaping', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Paving</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Paving</label>
               <Input
                 type="number"
                 value={sitePaving || ''}
                 onChange={e => updateField('cost-site-paving', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Utilities</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Utilities</label>
               <Input
                 type="number"
                 value={siteUtilities || ''}
                 onChange={e => updateField('cost-site-utilities', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>
-            <div>
-              <label className="text-[10px] block mb-1" style={{ color: colors.textMuted }}>Other</label>
+            <div className="flex items-center gap-1">
+              <label className="text-[10px] w-20 flex-shrink-0" style={{ color: colors.textMuted }}>Other</label>
               <Input
                 type="number"
                 value={siteOther || ''}
                 onChange={e => updateField('cost-site-other', parseFloat(e.target.value) || 0)}
-                className="h-7 text-xs p-1"
+                className="h-6 text-xs p-1 flex-1"
                 style={inputStyle}
               />
             </div>

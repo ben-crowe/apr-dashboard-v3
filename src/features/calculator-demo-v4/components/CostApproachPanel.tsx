@@ -140,18 +140,24 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
   };
 
   const inputFieldStyle = {
-    marginBottom: '0.75rem',
+    marginBottom: '0.5rem',
   };
 
   const sectionContainerStyle = {
-    padding: '1rem',
+    padding: '0.75rem',
     backgroundColor: colors.panelBg,
     borderRight: `1px solid ${colors.border}`,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    height: '100%',
   };
 
   const lastSectionStyle = {
-    padding: '1rem',
+    padding: '0.75rem',
     backgroundColor: colors.panelBg,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    height: '100%',
   };
 
   const calcValueStyle = {
@@ -175,9 +181,13 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
     color: colors.text,
   };
 
+  const fieldsContainerStyle = {
+    flex: 1,
+  };
+
   const totalSectionStyle = {
-    marginTop: '1rem',
-    paddingTop: '1rem',
+    marginTop: 'auto',
+    paddingTop: '0.75rem',
     borderTop: `2px solid ${colors.border}`,
   };
 
@@ -225,34 +235,36 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 0 }}>
         {/* COLUMN 1: LAND VALUATION */}
         <div style={sectionContainerStyle}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '1rem' }}>
+          <h3 style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '0.75rem', whiteSpace: 'nowrap' }}>
             Land Valuation
           </h3>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Land Area (Square Feet)">
-              Land Area (SF)
-            </label>
-            <Input
-              type="number"
-              value={landSF || ''}
-              onChange={e => updateField('cost-land-sf', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+          <div style={fieldsContainerStyle}>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Land Area (Square Feet)">
+                Land Area (SF)
+              </label>
+              <Input
+                type="number"
+                value={landSF || ''}
+                onChange={e => updateField('cost-land-sf', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Rate per Square Foot">
-              Rate/SF
-            </label>
-            <Input
-              type="number"
-              value={landRatePerSF || ''}
-              onChange={e => updateField('cost-land-rate-per-sf', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Rate per Square Foot">
+                Rate/SF
+              </label>
+              <Input
+                type="number"
+                value={landRatePerSF || ''}
+                onChange={e => updateField('cost-land-rate-per-sf', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
           </div>
 
           <div style={totalSectionStyle}>
@@ -263,75 +275,77 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
 
         {/* COLUMN 2: REPLACEMENT COST NEW */}
         <div style={sectionContainerStyle}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '1rem' }}>
+          <h3 style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '0.75rem', whiteSpace: 'nowrap' }}>
             Replacement Cost New
           </h3>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Building Gross Building Area">
-              GBA
-            </label>
-            <Input
-              type="number"
-              value={rcnGBA || ''}
-              onChange={e => updateField('cost-rcn-gba', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+          <div style={fieldsContainerStyle}>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Building Gross Building Area">
+                GBA
+              </label>
+              <Input
+                type="number"
+                value={rcnGBA || ''}
+                onChange={e => updateField('cost-rcn-gba', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Cost per Square Foot">
-              Cost/SF
-            </label>
-            <Input
-              type="number"
-              value={rcnRatePerSF || ''}
-              onChange={e => updateField('cost-rcn-rate-per-sf', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Cost per Square Foot">
+                Cost/SF
+              </label>
+              <Input
+                type="number"
+                value={rcnRatePerSF || ''}
+                onChange={e => updateField('cost-rcn-rate-per-sf', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Indirect Costs Percentage">
-              Indirect %
-            </label>
-            <Input
-              type="number"
-              value={rcnIndirectPct || ''}
-              onChange={e => updateField('cost-rcn-indirect-pct', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Indirect Costs Percentage">
+                Indirect %
+              </label>
+              <Input
+                type="number"
+                value={rcnIndirectPct || ''}
+                onChange={e => updateField('cost-rcn-indirect-pct', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Entrepreneur Profit Percentage">
-              Entrepreneur %
-            </label>
-            <Input
-              type="number"
-              value={rcnEntrepreneurPct || ''}
-              onChange={e => updateField('cost-rcn-entrepreneur-pct', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Entrepreneur Profit Percentage">
+                Entrepreneur %
+              </label>
+              <Input
+                type="number"
+                value={rcnEntrepreneurPct || ''}
+                onChange={e => updateField('cost-rcn-entrepreneur-pct', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={{ ...calcValueStyle, marginTop: '0.75rem', borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
-            <span style={calcLabelStyle}>Direct Costs:</span>
-            <span style={calcAmountStyle}>{formatCurrency(rcnDirectCosts)}</span>
-          </div>
+            <div style={{ ...calcValueStyle, marginTop: '0.5rem', borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
+              <span style={calcLabelStyle}>Direct Costs:</span>
+              <span style={calcAmountStyle}>{formatCurrency(rcnDirectCosts)}</span>
+            </div>
 
-          <div style={calcValueStyle}>
-            <span style={calcLabelStyle}>Indirect Costs:</span>
-            <span style={calcAmountStyle}>{formatCurrency(rcnIndirectCosts)}</span>
-          </div>
+            <div style={calcValueStyle}>
+              <span style={calcLabelStyle}>Indirect Costs:</span>
+              <span style={calcAmountStyle}>{formatCurrency(rcnIndirectCosts)}</span>
+            </div>
 
-          <div style={calcValueStyle}>
-            <span style={calcLabelStyle}>Entrepreneur:</span>
-            <span style={calcAmountStyle}>{formatCurrency(rcnEntrepreneurAmt)}</span>
+            <div style={calcValueStyle}>
+              <span style={calcLabelStyle}>Entrepreneur:</span>
+              <span style={calcAmountStyle}>{formatCurrency(rcnEntrepreneurAmt)}</span>
+            </div>
           </div>
 
           <div style={totalSectionStyle}>
@@ -342,88 +356,90 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
 
         {/* COLUMN 3: DEPRECIATION */}
         <div style={sectionContainerStyle}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '1rem' }}>
+          <h3 style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '0.75rem', whiteSpace: 'nowrap' }}>
             Depreciation
           </h3>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Actual Age">
-              Actual Age
-            </label>
-            <Input
-              type="number"
-              value={deprPhysicalAge || ''}
-              onChange={e => updateField('cost-depr-physical-age', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+          <div style={fieldsContainerStyle}>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Actual Age">
+                Actual Age
+              </label>
+              <Input
+                type="number"
+                value={deprPhysicalAge || ''}
+                onChange={e => updateField('cost-depr-physical-age', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Economic Life">
-              Econ. Life
-            </label>
-            <Input
-              type="number"
-              value={deprPhysicalLife || ''}
-              onChange={e => updateField('cost-depr-physical-life', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Economic Life">
+                Econ. Life
+              </label>
+              <Input
+                type="number"
+                value={deprPhysicalLife || ''}
+                onChange={e => updateField('cost-depr-physical-life', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Effective Age">
-              Eff. Age
-            </label>
-            <Input
-              type="number"
-              value={deprPhysicalEffectiveAge || ''}
-              onChange={e => updateField('cost-depr-physical-effective-age', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Effective Age">
+                Eff. Age
+              </label>
+              <Input
+                type="number"
+                value={deprPhysicalEffectiveAge || ''}
+                onChange={e => updateField('cost-depr-physical-effective-age', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Functional Obsolescence">
-              Functional
-            </label>
-            <Input
-              type="number"
-              value={deprFunctionalTotal || ''}
-              onChange={e => updateField('cost-depr-functional-total', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Functional Obsolescence">
+                Functional
+              </label>
+              <Input
+                type="number"
+                value={deprFunctionalTotal || ''}
+                onChange={e => updateField('cost-depr-functional-total', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="External Obsolescence">
-              External
-            </label>
-            <Input
-              type="number"
-              value={deprExternalTotal || ''}
-              onChange={e => updateField('cost-depr-external-total', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="External Obsolescence">
+                External
+              </label>
+              <Input
+                type="number"
+                value={deprExternalTotal || ''}
+                onChange={e => updateField('cost-depr-external-total', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={{ ...calcValueStyle, marginTop: '0.75rem', borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
-            <span style={calcLabelStyle}>Rem. Life:</span>
-            <span style={calcAmountStyle}>{formatNumber(deprPhysicalRemainingLife)} yrs</span>
-          </div>
+            <div style={{ ...calcValueStyle, marginTop: '0.5rem', borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
+              <span style={calcLabelStyle}>Rem. Life:</span>
+              <span style={calcAmountStyle}>{formatNumber(deprPhysicalRemainingLife)} yrs</span>
+            </div>
 
-          <div style={calcValueStyle}>
-            <span style={calcLabelStyle}>Phys. Depr %:</span>
-            <span style={calcAmountStyle}>{formatPercentage(deprPhysicalPct)}</span>
-          </div>
+            <div style={calcValueStyle}>
+              <span style={calcLabelStyle}>Phys. Depr %:</span>
+              <span style={calcAmountStyle}>{formatPercentage(deprPhysicalPct)}</span>
+            </div>
 
-          <div style={calcValueStyle}>
-            <span style={calcLabelStyle}>Phys. Depr $:</span>
-            <span style={calcAmountStyle}>{formatCurrency(deprPhysicalAmt)}</span>
+            <div style={calcValueStyle}>
+              <span style={calcLabelStyle}>Phys. Depr $:</span>
+              <span style={calcAmountStyle}>{formatCurrency(deprPhysicalAmt)}</span>
+            </div>
           </div>
 
           <div style={totalSectionStyle}>
@@ -434,91 +450,93 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
 
         {/* COLUMN 4: SITE IMPROVEMENTS */}
         <div style={sectionContainerStyle}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '1rem' }}>
+          <h3 style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '0.75rem', whiteSpace: 'nowrap' }}>
             Site Improvements
           </h3>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Parking Spaces">
-              Parking Spaces
-            </label>
-            <Input
-              type="number"
-              value={siteParkingSpaces || ''}
-              onChange={e => updateField('cost-site-parking-spaces', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+          <div style={fieldsContainerStyle}>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Parking Spaces">
+                Spaces
+              </label>
+              <Input
+                type="number"
+                value={siteParkingSpaces || ''}
+                onChange={e => updateField('cost-site-parking-spaces', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Cost per Parking Space">
-              Cost/Space
-            </label>
-            <Input
-              type="number"
-              value={siteParkingCost || ''}
-              onChange={e => updateField('cost-site-parking-cost', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Cost per Parking Space">
+                Cost/Space
+              </label>
+              <Input
+                type="number"
+                value={siteParkingCost || ''}
+                onChange={e => updateField('cost-site-parking-cost', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Landscaping">
-              Landscaping
-            </label>
-            <Input
-              type="number"
-              value={siteLandscaping || ''}
-              onChange={e => updateField('cost-site-landscaping', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Landscaping">
+                Landscaping
+              </label>
+              <Input
+                type="number"
+                value={siteLandscaping || ''}
+                onChange={e => updateField('cost-site-landscaping', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Paving">
-              Paving
-            </label>
-            <Input
-              type="number"
-              value={sitePaving || ''}
-              onChange={e => updateField('cost-site-paving', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Paving">
+                Paving
+              </label>
+              <Input
+                type="number"
+                value={sitePaving || ''}
+                onChange={e => updateField('cost-site-paving', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Utilities">
-              Utilities
-            </label>
-            <Input
-              type="number"
-              value={siteUtilities || ''}
-              onChange={e => updateField('cost-site-utilities', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Utilities">
+                Utilities
+              </label>
+              <Input
+                type="number"
+                value={siteUtilities || ''}
+                onChange={e => updateField('cost-site-utilities', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={inputFieldStyle}>
-            <label style={labelStyle} title="Other">
-              Other
-            </label>
-            <Input
-              type="number"
-              value={siteOther || ''}
-              onChange={e => updateField('cost-site-other', parseFloat(e.target.value) || 0)}
-              className="h-7 text-xs p-1.5 w-full"
-              style={inputStyle}
-            />
-          </div>
+            <div style={inputFieldStyle}>
+              <label style={labelStyle} title="Other">
+                Other
+              </label>
+              <Input
+                type="number"
+                value={siteOther || ''}
+                onChange={e => updateField('cost-site-other', parseFloat(e.target.value) || 0)}
+                className="h-6 text-xs p-1 w-full"
+                style={inputStyle}
+              />
+            </div>
 
-          <div style={{ ...calcValueStyle, marginTop: '0.75rem', borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
-            <span style={calcLabelStyle}>Parking Total:</span>
-            <span style={calcAmountStyle}>{formatCurrency(siteParkingTotal)}</span>
+            <div style={{ ...calcValueStyle, marginTop: '0.5rem', borderBottom: 'none', paddingBottom: 0, marginBottom: 0 }}>
+              <span style={calcLabelStyle}>Parking Total:</span>
+              <span style={calcAmountStyle}>{formatCurrency(siteParkingTotal)}</span>
+            </div>
           </div>
 
           <div style={totalSectionStyle}>
@@ -529,29 +547,31 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
 
         {/* COLUMN 5: VALUE INDICATION */}
         <div style={lastSectionStyle}>
-          <h3 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '1rem' }}>
+          <h3 style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '0.75rem', whiteSpace: 'nowrap' }}>
             Value Indication
           </h3>
 
-          <div style={summaryBoxStyle}>
-            <div style={summaryLineStyle}>
-              <span style={calcLabelStyle}>Land Value</span>
-              <span style={calcAmountStyle}>{formatCurrency(landValue)}</span>
-            </div>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+            <div style={summaryBoxStyle}>
+              <div style={summaryLineStyle}>
+                <span style={calcLabelStyle}>Land Value</span>
+                <span style={calcAmountStyle}>{formatCurrency(landValue)}</span>
+              </div>
 
-            <div style={summaryLineStyle}>
-              <span style={calcLabelStyle}>+ Depr. RCN</span>
-              <span style={calcAmountStyle}>{formatCurrency(depreciatedValue)}</span>
-            </div>
+              <div style={summaryLineStyle}>
+                <span style={calcLabelStyle}>+ Depr. RCN</span>
+                <span style={calcAmountStyle}>{formatCurrency(depreciatedValue)}</span>
+              </div>
 
-            <div style={summaryLineStyle}>
-              <span style={calcLabelStyle}>+ Site Improv.</span>
-              <span style={calcAmountStyle}>{formatCurrency(siteTotal)}</span>
-            </div>
+              <div style={summaryLineStyle}>
+                <span style={calcLabelStyle}>+ Site Improv.</span>
+                <span style={calcAmountStyle}>{formatCurrency(siteTotal)}</span>
+              </div>
 
-            <div style={summaryFinalStyle}>
-              <span>= Indicated Value</span>
-              <span>{formatCurrency(indicatedValue)}</span>
+              <div style={summaryFinalStyle}>
+                <span>= Indicated Value</span>
+                <span>{formatCurrency(indicatedValue)}</span>
+              </div>
             </div>
           </div>
         </div>

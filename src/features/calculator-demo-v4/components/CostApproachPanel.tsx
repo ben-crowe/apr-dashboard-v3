@@ -235,9 +235,326 @@ export default function CostApproachPanel({ onValueChange }: CostApproachPanelPr
   };
 
   return (
-    <div style={{ color: colors.text }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 0 }}>
-        {/* COLUMN 1: LAND VALUATION */}
+    <div style={{ color: colors.text, display: 'grid', gridTemplateColumns: '1fr auto', gap: '0.75rem' }}>
+      {/* MAIN TABLE */}
+      <div className="rounded-sm overflow-hidden" style={{ border: `1px solid ${colors.border}` }}>
+        <table className="w-full text-[10px] border-collapse">
+          <thead style={{ backgroundColor: colors.panelBg, borderBottom: `1px solid ${colors.border}` }}>
+            <tr>
+              <th className="px-2 py-1 text-left font-medium" style={{ color: colors.textMuted }}>Land Valuation</th>
+              <th className="px-2 py-1 text-left font-medium" style={{ color: colors.textMuted }}>RCN</th>
+              <th className="px-2 py-1 text-left font-medium" style={{ color: colors.textMuted }}>Depreciation</th>
+              <th className="px-2 py-1 text-left font-medium" style={{ color: colors.textMuted }}>Site Improvements</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* ROW 1: Land Area, GBA, Actual Age, Spaces */}
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Land Area (SF)</div>
+                <Input
+                  type="number"
+                  value={landSF || ''}
+                  onChange={e => updateField('cost-land-sf', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>GBA</div>
+                <Input
+                  type="number"
+                  value={rcnGBA || ''}
+                  onChange={e => updateField('cost-rcn-gba', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Actual Age</div>
+                <Input
+                  type="number"
+                  value={deprPhysicalAge || ''}
+                  onChange={e => updateField('cost-depr-physical-age', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Spaces</div>
+                <Input
+                  type="number"
+                  value={siteParkingSpaces || ''}
+                  onChange={e => updateField('cost-site-parking-spaces', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+            </tr>
+
+            {/* ROW 2: Rate/SF, Cost/SF, Econ Life, Cost/Space */}
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Rate/SF</div>
+                <Input
+                  type="number"
+                  value={landRatePerSF || ''}
+                  onChange={e => updateField('cost-land-rate-per-sf', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Cost/SF</div>
+                <Input
+                  type="number"
+                  value={rcnRatePerSF || ''}
+                  onChange={e => updateField('cost-rcn-rate-per-sf', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Econ. Life</div>
+                <Input
+                  type="number"
+                  value={deprPhysicalLife || ''}
+                  onChange={e => updateField('cost-depr-physical-life', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Cost/Space</div>
+                <Input
+                  type="number"
+                  value={siteParkingCost || ''}
+                  onChange={e => updateField('cost-site-parking-cost', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+            </tr>
+
+            {/* ROW 3: Indirect %, Eff Age, Landscaping */}
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1"></td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Indirect %</div>
+                <Input
+                  type="number"
+                  value={rcnIndirectPct || ''}
+                  onChange={e => updateField('cost-rcn-indirect-pct', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Eff. Age</div>
+                <Input
+                  type="number"
+                  value={deprPhysicalEffectiveAge || ''}
+                  onChange={e => updateField('cost-depr-physical-effective-age', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Landscaping</div>
+                <Input
+                  type="number"
+                  value={siteLandscaping || ''}
+                  onChange={e => updateField('cost-site-landscaping', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+            </tr>
+
+            {/* ROW 4: Entrepreneur %, Functional, Paving */}
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1"></td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Entrepreneur %</div>
+                <Input
+                  type="number"
+                  value={rcnEntrepreneurPct || ''}
+                  onChange={e => updateField('cost-rcn-entrepreneur-pct', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Functional</div>
+                <Input
+                  type="number"
+                  value={deprFunctionalTotal || ''}
+                  onChange={e => updateField('cost-depr-functional-total', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Paving</div>
+                <Input
+                  type="number"
+                  value={sitePaving || ''}
+                  onChange={e => updateField('cost-site-paving', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+            </tr>
+
+            {/* ROW 5: External, Utilities */}
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1"></td>
+              <td className="px-2 py-1"></td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>External</div>
+                <Input
+                  type="number"
+                  value={deprExternalTotal || ''}
+                  onChange={e => updateField('cost-depr-external-total', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Utilities</div>
+                <Input
+                  type="number"
+                  value={siteUtilities || ''}
+                  onChange={e => updateField('cost-site-utilities', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+            </tr>
+
+            {/* ROW 6: Other */}
+            <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <td className="px-2 py-1"></td>
+              <td className="px-2 py-1"></td>
+              <td className="px-2 py-1"></td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.65rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Other</div>
+                <Input
+                  type="number"
+                  value={siteOther || ''}
+                  onChange={e => updateField('cost-site-other', parseFloat(e.target.value) || 0)}
+                  className="h-6 text-[10px] p-1 w-full"
+                  style={inputStyle}
+                />
+              </td>
+            </tr>
+
+            {/* ROW 7: SUBTOTALS */}
+            <tr style={{ borderBottom: `1px solid ${colors.border}`, backgroundColor: colors.inputBg }}>
+              <td className="px-2 py-1" style={{ color: colors.text, fontSize: '0.75rem', fontWeight: 600 }}>Land Value</td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.7rem', color: colors.textMuted }}>Direct:</div>
+                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: colors.text }}>{formatCurrency(rcnDirectCosts)}</div>
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.7rem', color: colors.textMuted }}>Rem. Life:</div>
+                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: colors.text }}>{formatNumber(deprPhysicalRemainingLife)} yrs</div>
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.7rem', color: colors.textMuted }}>Pkg Total:</div>
+                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: colors.text }}>{formatCurrency(siteParkingTotal)}</div>
+              </td>
+            </tr>
+
+            {/* ROW 8: MORE SUBTOTALS */}
+            <tr style={{ borderBottom: `1px solid ${colors.border}`, backgroundColor: colors.inputBg }}>
+              <td className="px-2 py-1" style={{ color: colors.text, fontSize: '0.8rem', fontWeight: 600 }}>{formatCurrency(landValue)}</td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.7rem', color: colors.textMuted }}>Indirect:</div>
+                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: colors.text }}>{formatCurrency(rcnIndirectCosts)}</div>
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.7rem', color: colors.textMuted }}>Phys Depr %:</div>
+                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: colors.text }}>{formatPercentage(deprPhysicalPct)}</div>
+              </td>
+              <td className="px-2 py-1"></td>
+            </tr>
+
+            {/* ROW 9: FINAL SUBTOTALS */}
+            <tr style={{ borderBottom: `2px solid ${colors.border}`, backgroundColor: colors.inputBg }}>
+              <td className="px-2 py-1"></td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.7rem', color: colors.textMuted }}>Entrepreneur:</div>
+                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: colors.text }}>{formatCurrency(rcnEntrepreneurAmt)}</div>
+              </td>
+              <td className="px-2 py-1">
+                <div style={{ fontSize: '0.7rem', color: colors.textMuted }}>Phys Depr $:</div>
+                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: colors.text }}>{formatCurrency(deprPhysicalAmt)}</div>
+              </td>
+              <td className="px-2 py-1"></td>
+            </tr>
+
+            {/* ROW 10: TOTALS */}
+            <tr style={{ backgroundColor: colors.panelBg }}>
+              <td className="px-2 py-1" style={{ color: colors.text, fontSize: '0.8rem', fontWeight: 700 }}>
+                <div style={{ fontSize: '0.7rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Total</div>
+                {formatCurrency(landValue)}
+              </td>
+              <td className="px-2 py-1" style={{ color: colors.text, fontSize: '0.8rem', fontWeight: 700 }}>
+                <div style={{ fontSize: '0.7rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Total</div>
+                {formatCurrency(rcnTotal)}
+              </td>
+              <td className="px-2 py-1" style={{ color: colors.text, fontSize: '0.8rem', fontWeight: 700 }}>
+                <div style={{ fontSize: '0.7rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Total</div>
+                {formatCurrency(deprTotalAmt)}
+              </td>
+              <td className="px-2 py-1" style={{ color: colors.text, fontSize: '0.8rem', fontWeight: 700 }}>
+                <div style={{ fontSize: '0.7rem', color: colors.textMuted, marginBottom: '0.25rem' }}>Total</div>
+                {formatCurrency(siteTotal)}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* VALUE INDICATION SIDE */}
+      <div className="rounded-sm overflow-hidden" style={{ border: `1px solid ${colors.border}`, width: '280px', height: 'fit-content' }}>
+        <div className="px-2 py-1" style={{ borderBottom: `1px solid ${colors.border}`, backgroundColor: colors.panelBg }}>
+          <span className="text-[10px] font-medium uppercase" style={{ color: colors.textMuted }}>Value Indication</span>
+        </div>
+        <div className="px-3 py-2 space-y-2 text-[10px]">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: colors.textMuted }}>Land Value</span>
+            <span style={{ color: colors.text, fontWeight: 600 }}>{formatCurrency(landValue)}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: colors.textMuted }}>+ Depr. RCN</span>
+            <span style={{ color: colors.text, fontWeight: 600 }}>{formatCurrency(depreciatedValue)}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ color: colors.textMuted }}>+ Site Impr.</span>
+            <span style={{ color: colors.text, fontWeight: 600 }}>{formatCurrency(siteTotal)}</span>
+          </div>
+          <div
+            style={{
+              borderTop: `1px solid ${colors.border}`,
+              paddingTop: '0.5rem',
+              marginTop: '0.5rem',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              fontWeight: 700,
+              color: colors.text,
+            }}
+          >
+            <span>= Indicated</span>
+            <span style={{ fontSize: '0.85rem' }}>{formatCurrency(indicatedValue)}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
         <div style={sectionContainerStyle}>
           <h3 style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', color: colors.textMuted, marginBottom: '0.75rem', whiteSpace: 'nowrap' }}>
             Land Valuation

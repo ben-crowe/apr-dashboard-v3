@@ -181,6 +181,151 @@ export default function CalculatorWithPreview() {
     values['calc-value-per-sf'] = `$${Math.round(indicatedValue / 10200)}`;
     values['calc-indicated-value-rounded'] = formatCurrency(Math.round(indicatedValue / 10000) * 10000);
 
+    // ========================================
+    // Page 48 Direct Capitalization - NEW FIELDS
+    // Matching Page-48-Direct-Capitalization.html template
+    // ========================================
+
+    // Get total SF for per-SF calculations
+    const totalSf = getFieldValue('calc-total-sf') || 10200;
+    const rentalRevenue = getFieldValue('calc-total-rental-revenue');
+    const parkingIncome = getFieldValue('calc-parking-income') || 0;
+    const laundryIncome = getFieldValue('calc-laundry-income') || 0;
+    const totalOtherRevenue = parkingIncome + laundryIncome;
+
+    // PRR (Potential Rental Revenue) = total rental revenue
+    const prr = rentalRevenue > 0 ? rentalRevenue : 1; // Avoid division by zero
+
+    // ========================================
+    // UNIT MIX SUBTOTAL FIELDS
+    // ========================================
+    // Calculate average contract rent (weighted by count)
+    let totalCount = 0;
+    let totalContractRentWeighted = 0;
+    let totalMarketRentWeighted = 0;
+    let totalAnnual = 0;
+    let totalTypeSf = 0;
+
+    for (let i = 1; i <= 4; i++) {
+      const count = getFieldValue(`calc-type${i}-count`) || 0;
+      const contractRent = getFieldValue(`calc-type${i}-contract-rent`) || 0;
+      const marketRent = getFieldValue(`calc-type${i}-rent`) || 0;
+      const annual = getFieldValue(`calc-type${i}-annual`) || (count * marketRent * 12);
+      const sf = getFieldValue(`calc-type${i}-sf`) || 0;
+
+      totalCount += count;
+      totalContractRentWeighted += contractRent * count;
+      totalMarketRentWeighted += marketRent * count;
+      totalAnnual += annual;
+      totalTypeSf += sf * count;
+    }
+
+    const avgContractRent = totalCount > 0 ? totalContractRentWeighted / totalCount : 0;
+    const avgMarketRent = totalCount > 0 ? totalMarketRentWeighted / totalCount : 0;
+    const avgContVsMarket = avgMarketRent > 0 ? (avgContractRent / avgMarketRent) * 100 : 0;
+    const subtotalPerUnit = totalCount > 0 ? totalAnnual / totalCount / 12 : 0;
+    const subtotalPerSf = totalTypeSf > 0 ? totalAnnual / totalTypeSf : 0;
+
+    values['calc-avg-contract-rent'] = formatCurrency(avgContractRent);
+    values['calc-avg-market-rent'] = formatCurrency(avgMarketRent);
+    values['calc-avg-cont-v-market'] = formatPercent(avgContVsMarket);
+    values['calc-subtotal-per-unit'] = formatCurrency(subtotalPerUnit);
+    values['calc-subtotal-per-sf'] = `$${subtotalPerSf.toFixed(2)}`;
+    values['calc-subtotal-annual'] = formatCurrency(totalAnnual);
+
+    // ========================================
+    // RENTAL REVENUE SECTION
+    // ========================================
+    // Multifamily revenue (same as total rental revenue for multifamily properties)
+    const mfAnnual = rentalRevenue;
+    const mfPctPrr = prr > 0 ? (mfAnnual / prr) * 100 : 100;
+    const mfPctPgr = pgr > 0 ? (mfAnnual / pgr) * 100 : 0;
+    const mfPctEgr = egr > 0 ? (mfAnnual / egr) * 100 : 0;
+    const mfPerUnit = totalUnits > 0 ? mfAnnual / totalUnits : 0;
+    const mfPerSf = totalSf > 0 ? mfAnnual / totalSf : 0;
+
+    values['calc-mf-pct-prr'] = formatPercent(mfPctPrr);
+    values['calc-mf-pct-pgr'] = formatPercent(mfPctPgr);
+    values['calc-mf-pct-egr'] = formatPercent(mfPctEgr);
+    values['calc-mf-per-unit'] = formatCurrency(mfPerUnit);
+    values['calc-mf-per-sf'] = `$${mfPerSf.toFixed(2)}`;
+    values['calc-mf-annual'] = formatCurrency(mfAnnual);
+
+    // Total Rental Revenue row
+    values['calc-rental-rev-per-unit'] = formatCurrency(mfPerUnit);
+    values['calc-rental-rev-per-sf'] = `$${mfPerSf.toFixed(2)}`;
+    values['calc-rental-rev-annual'] = formatCurrency(rentalRevenue);
+
+    // ========================================
+    // OTHER REVENUE (MISCELLANEOUS) SECTION
+    // ========================================
+    // Parking Income
+    const parkingPctPrr = prr > 0 ? (parkingIncome / prr) * 100 : 0;
+    const parkingPctPgr = pgr > 0 ? (parkingIncome / pgr) * 100 : 0;
+    const parkingPctEgr = egr > 0 ? (parkingIncome / egr) * 100 : 0;
+    const parkingPerUnit = totalUnits > 0 ? parkingIncome / totalUnits : 0;
+    const parkingPerSf = totalSf > 0 ? parkingIncome / totalSf : 0;
+
+    values['calc-parking-pct-prr'] = formatPercent(parkingPctPrr);
+    values['calc-parking-pct-pgr'] = formatPercent(parkingPctPgr);
+    values['calc-parking-pct-egr'] = formatPercent(parkingPctEgr);
+    values['calc-parking-per-unit'] = formatCurrency(parkingPerUnit);
+    values['calc-parking-per-sf'] = `$${parkingPerSf.toFixed(2)}`;
+    values['calc-parking-annual'] = formatCurrency(parkingIncome);
+
+    // Laundry Income
+    const laundryPctPrr = prr > 0 ? (laundryIncome / prr) * 100 : 0;
+    const laundryPctPgr = pgr > 0 ? (laundryIncome / pgr) * 100 : 0;
+    const laundryPctEgr = egr > 0 ? (laundryIncome / egr) * 100 : 0;
+    const laundryPerUnit = totalUnits > 0 ? laundryIncome / totalUnits : 0;
+    const laundryPerSf = totalSf > 0 ? laundryIncome / totalSf : 0;
+
+    values['calc-laundry-pct-prr'] = formatPercent(laundryPctPrr);
+    values['calc-laundry-pct-pgr'] = formatPercent(laundryPctPgr);
+    values['calc-laundry-pct-egr'] = formatPercent(laundryPctEgr);
+    values['calc-laundry-per-unit'] = formatCurrency(laundryPerUnit);
+    values['calc-laundry-per-sf'] = `$${laundryPerSf.toFixed(2)}`;
+    values['calc-laundry-annual'] = formatCurrency(laundryIncome);
+
+    // Total Other Revenue (Miscellaneous)
+    const otherRevPctPrr = prr > 0 ? (totalOtherRevenue / prr) * 100 : 0;
+    const otherRevPctPgr = pgr > 0 ? (totalOtherRevenue / pgr) * 100 : 0;
+    const otherRevPctEgr = egr > 0 ? (totalOtherRevenue / egr) * 100 : 0;
+    const otherRevPerUnit = totalUnits > 0 ? totalOtherRevenue / totalUnits : 0;
+    const otherRevPerSf = totalSf > 0 ? totalOtherRevenue / totalSf : 0;
+
+    values['calc-other-rev-pct-prr'] = formatPercent(otherRevPctPrr);
+    values['calc-other-rev-pct-pgr'] = formatPercent(otherRevPctPgr);
+    values['calc-other-rev-pct-egr'] = formatPercent(otherRevPctEgr);
+    values['calc-other-rev-per-unit'] = formatCurrency(otherRevPerUnit);
+    values['calc-other-rev-per-sf'] = `$${otherRevPerSf.toFixed(2)}`;
+    values['calc-other-rev-annual'] = formatCurrency(totalOtherRevenue);
+
+    // ========================================
+    // ALL VACANCY LOSS SECTION
+    // ========================================
+    const vacancyPctPgr = pgr > 0 ? (Math.abs(vacancyLoss) / pgr) * 100 : 0;
+    const vacancyPctEgr = egr > 0 ? (Math.abs(vacancyLoss) / egr) * 100 : 0;
+
+    values['calc-vacancy-pct-pgr'] = formatPercent(vacancyPctPgr);
+    values['calc-vacancy-pct-egr'] = formatPercent(vacancyPctEgr);
+
+    // Total Vacancy & Credit Loss (same as vacancy for now)
+    values['calc-total-vacancy-pct-pgr'] = formatPercent(vacancyPctPgr);
+    values['calc-total-vacancy-pct-egr'] = formatPercent(vacancyPctEgr);
+    values['calc-total-vacancy-per-unit'] = `(${formatCurrency(Math.abs(getFieldValue('calc-vacancy-per-unit')))})`;
+    values['calc-total-vacancy-per-sf'] = `($${Math.abs(getFieldValue('calc-vacancy-per-sf')).toFixed(2)})`;
+    values['calc-total-vacancy-loss'] = `(${formatCurrency(Math.abs(vacancyLoss))})`;
+
+    // ========================================
+    // OPERATING EXPENSES - Additional fields
+    // ========================================
+    const expenseRatioPgr = pgr > 0 ? (Math.abs(expensesTotal) / pgr) * 100 : 0;
+    const expenseRatioEgr = egr > 0 ? (Math.abs(expensesTotal) / egr) * 100 : 0;
+
+    values['calc-expense-ratio-pgr'] = formatPercent(expenseRatioPgr);
+    values['calc-expense-ratio-egr'] = formatPercent(expenseRatioEgr);
+
     // Direct cap (mirrors calc values)
     values['ia-dircap-noi'] = formatCurrency(noi);
     values['ia-dircap-noi-per-unit'] = formatPerUnit(noi / 16);
@@ -234,9 +379,7 @@ export default function CalculatorWithPreview() {
     // Projection %PGR fields for Page 43 Operating History table
     // ========================================
     const projPgr = pgr > 0 ? pgr : 1; // Avoid division by zero
-    const rentalRevenue = getFieldValue('calc-total-rental-revenue');
-    const parkingIncome = getFieldValue('calc-parking-income') || 0;
-    const laundryIncome = getFieldValue('calc-laundry-income') || 0;
+    // Note: rentalRevenue, parkingIncome, laundryIncome already defined above (lines 191-194)
     const otherIncome = getFieldValue('calc-other-income') || 0;
 
     values['revenue-multifamily-proj-pct'] = formatPercent(rentalRevenue / projPgr * 100);

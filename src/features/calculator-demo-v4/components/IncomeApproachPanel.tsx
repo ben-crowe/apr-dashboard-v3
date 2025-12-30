@@ -64,7 +64,8 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
   const expUtilities = getFieldValueNumber('calc-exp-utilities-annual');
   const expManagement = getFieldValueNumber('calc-exp-management-annual');
   const expOther = getFieldValueNumber('calc-exp-other-annual');
-  const totalExpenses = getFieldValueNumber('calc-total-expenses');
+  // Calculate total dynamically to ensure it tallies
+  const totalExpenses = expTaxes + expInsurance + expRepairs + expPayroll + expUtilities + expManagement + expOther;
 
   // Value
   const noi = getFieldValueNumber('calc-noi');
@@ -348,77 +349,77 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
             <thead style={{ borderBottom: `1px solid ${colors.border}` }}>
               <tr>
                 <th className="px-2 py-1 text-left font-normal" style={{ color: colors.textMuted }}>Item</th>
-                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Annual</th>
-                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/Unit</th>
-                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/SF</th>
                 <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>% of PGR</th>
                 <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>% of EGR</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/Unit</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/SF</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Annual</th>
               </tr>
             </thead>
             <tbody>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Taxes</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expTaxes)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expTaxes / totalUnits)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expTaxesPerSF)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expTaxesPctPGR)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expTaxesPctEGR)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expTaxes / totalUnits)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expTaxesPerSF)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expTaxes)}</td>
               </tr>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Insurance</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expInsurance)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expInsurance / totalUnits)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expInsurancePerSF)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expInsurancePctPGR)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expInsurancePctEGR)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expInsurance / totalUnits)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expInsurancePerSF)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expInsurance)}</td>
               </tr>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Repairs & Maintenance</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expRepairs)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expRepairs / totalUnits)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expRepairsPerSF)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expRepairsPctPGR)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expRepairsPctEGR)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expRepairs / totalUnits)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expRepairsPerSF)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expRepairs)}</td>
               </tr>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Payroll</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expPayroll)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expPayroll / totalUnits)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expPayrollPerSF)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expPayrollPctPGR)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expPayrollPctEGR)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expPayroll / totalUnits)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expPayrollPerSF)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expPayroll)}</td>
               </tr>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Utilities</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expUtilities)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expUtilities / totalUnits)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expUtilitiesPerSF)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expUtilitiesPctPGR)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expUtilitiesPctEGR)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expUtilities / totalUnits)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expUtilitiesPerSF)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expUtilities)}</td>
               </tr>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Management</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expManagement)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expManagement / totalUnits)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expManagementPerSF)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expManagementPctPGR)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expManagementPctEGR)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expManagement / totalUnits)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expManagementPerSF)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expManagement)}</td>
               </tr>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Other</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expOther)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expOther / totalUnits)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expOtherPerSF)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expOtherPctPGR)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(expOtherPctEGR)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expOther / totalUnits)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expOtherPerSF)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(expOther)}</td>
               </tr>
               <tr style={{ borderBottom: `2px solid ${colors.border}` }}>
                 <td className="px-2 py-1 font-medium" style={{ color: colors.text }}>Total Expenses</td>
-                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatDeduction(totalExpenses)}</td>
-                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatDeduction(totalExpenses / totalUnits)}</td>
-                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatDeduction(totalExpensesPerSF)}</td>
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatDeductionPct(totalExpensesPctPGR)}</td>
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatDeductionPct(totalExpensesPctEGR)}</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatDeduction(totalExpenses / totalUnits)}</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatDeduction(totalExpensesPerSF)}</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatDeduction(totalExpenses)}</td>
               </tr>
             </tbody>
           </table>

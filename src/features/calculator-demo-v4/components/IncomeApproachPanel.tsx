@@ -73,6 +73,43 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
   const adjTotal = getFieldValueNumber('calc-adj-total');
   const indicatedValue = getFieldValueNumber('calc-indicated-value');
 
+  // Unit Mix data
+  const type1Name = getFieldValue('calc-type1-name') || '1 Bed / 1 Bath';
+  const type1Count = getFieldValueNumber('calc-type1-count');
+  const type1Sf = getFieldValueNumber('calc-type1-sf');
+  const type1Rent = getFieldValueNumber('calc-type1-rent');
+  const type1ContractRent = getFieldValueNumber('calc-type1-contract-rent') || type1Rent;
+  const type1Annual = type1Count * type1Rent * 12;
+  const type1ContVsMarket = type1Rent > 0 ? (type1ContractRent / type1Rent) * 100 : 0;
+
+  const type2Name = getFieldValue('calc-type2-name') || '2 Bed / 1 Bath';
+  const type2Count = getFieldValueNumber('calc-type2-count');
+  const type2Sf = getFieldValueNumber('calc-type2-sf');
+  const type2Rent = getFieldValueNumber('calc-type2-rent');
+  const type2ContractRent = getFieldValueNumber('calc-type2-contract-rent') || type2Rent;
+  const type2Annual = type2Count * type2Rent * 12;
+  const type2ContVsMarket = type2Rent > 0 ? (type2ContractRent / type2Rent) * 100 : 0;
+
+  const type3Name = getFieldValue('calc-type3-name') || '3 Bed / 2 Bath';
+  const type3Count = getFieldValueNumber('calc-type3-count');
+  const type3Sf = getFieldValueNumber('calc-type3-sf');
+  const type3Rent = getFieldValueNumber('calc-type3-rent');
+  const type3ContractRent = getFieldValueNumber('calc-type3-contract-rent') || type3Rent;
+  const type3Annual = type3Count * type3Rent * 12;
+  const type3ContVsMarket = type3Rent > 0 ? (type3ContractRent / type3Rent) * 100 : 0;
+
+  const type4Name = getFieldValue('calc-type4-name') || 'Studio';
+  const type4Count = getFieldValueNumber('calc-type4-count');
+  const type4Sf = getFieldValueNumber('calc-type4-sf');
+  const type4Rent = getFieldValueNumber('calc-type4-rent');
+  const type4ContractRent = getFieldValueNumber('calc-type4-contract-rent') || type4Rent;
+  const type4Annual = type4Count * type4Rent * 12;
+  const type4ContVsMarket = type4Rent > 0 ? (type4ContractRent / type4Rent) * 100 : 0;
+
+  const totalUnitCount = type1Count + type2Count + type3Count + type4Count;
+  const totalUnitSf = type1Sf + type2Sf + type3Sf + type4Sf;
+  const totalAnnualRent = type1Annual + type2Annual + type3Annual + type4Annual;
+
   // Calculate per-unit and per-SF values
   const rentalRevenuePerUnit = totalUnits > 0 ? rentalRevenue / totalUnits : 0;
   const rentalRevenuePerSF = totalSf > 0 ? rentalRevenue / totalSf : 0;
@@ -121,11 +158,91 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
   return (
     <div className="space-y-3 text-xs" style={{ color: colors.text }}>
 
-      {/* INCOME APPROACH TABLE */}
-      <div className="rounded-sm overflow-hidden" style={{ border: `1px solid ${colors.border}` }}>
+      {/* DIRECT CAPITALIZATION - UNIT MIX TABLE */}
+      <div className="rounded-sm overflow-hidden mb-3" style={{ border: `1px solid ${colors.border}` }}>
         <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
           <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>
-            Income Approach - Direct Capitalization
+            Direct Capitalization
+          </span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-[10px]">
+            <thead style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <tr>
+                <th className="px-2 py-1 text-left font-normal" style={{ color: colors.textMuted }}>Unit Type</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Count</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>SF</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Rent/Mo</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Contract</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>% Market</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Annual</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/Unit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Type 1 Row */}
+              <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+                <td className="px-2 py-1" style={{ color: colors.text }}>{type1Name}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type1Count}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type1Sf.toLocaleString()}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type1Rent)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type1ContractRent)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatPercentage(type1ContVsMarket)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type1Annual)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type1Count > 0 ? type1Annual / type1Count : 0)}</td>
+              </tr>
+              {/* Type 2 Row */}
+              <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+                <td className="px-2 py-1" style={{ color: colors.text }}>{type2Name}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type2Count}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type2Sf.toLocaleString()}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type2Rent)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type2ContractRent)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatPercentage(type2ContVsMarket)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type2Annual)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type2Count > 0 ? type2Annual / type2Count : 0)}</td>
+              </tr>
+              {/* Type 3 Row */}
+              <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+                <td className="px-2 py-1" style={{ color: colors.text }}>{type3Name}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type3Count}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type3Sf.toLocaleString()}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type3Rent)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type3ContractRent)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatPercentage(type3ContVsMarket)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type3Annual)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type3Count > 0 ? type3Annual / type3Count : 0)}</td>
+              </tr>
+              {/* Type 4 Row */}
+              <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+                <td className="px-2 py-1" style={{ color: colors.text }}>{type4Name}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type4Count}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type4Sf.toLocaleString()}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type4Rent)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type4ContractRent)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatPercentage(type4ContVsMarket)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type4Annual)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type4Count > 0 ? type4Annual / type4Count : 0)}</td>
+              </tr>
+              {/* Total Row */}
+              <tr style={{ borderTop: `2px solid ${colors.border}` }}>
+                <td className="px-2 py-1 font-medium" style={{ color: colors.text }}>TOTAL</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{totalUnitCount}</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{totalUnitSf.toLocaleString()}</td>
+                <td colSpan={3}></td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(totalAnnualRent)}</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(totalUnitCount > 0 ? totalAnnualRent / totalUnitCount : 0)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* POTENTIAL GROSS REVENUE TABLE */}
+      <div className="rounded-sm overflow-hidden mb-3" style={{ border: `1px solid ${colors.border}` }}>
+        <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
+          <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>
+            Potential Gross Revenue
           </span>
         </div>
         <div className="overflow-x-auto">
@@ -195,13 +312,31 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatPercentage(egrPctPGR)}</td>
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>100.0%</td>
               </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-              {/* EXPENSES SECTION */}
+      {/* OPERATING EXPENSES TABLE */}
+      <div className="rounded-sm overflow-hidden mb-3" style={{ border: `1px solid ${colors.border}` }}>
+        <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
+          <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>
+            Operating Expenses
+          </span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-[10px]">
+            <thead style={{ borderBottom: `1px solid ${colors.border}` }}>
               <tr>
-                <td colSpan={6} className="px-2 py-1 font-medium" style={{ color: colors.text, backgroundColor: colors.panelBgAlt }}>
-                  EXPENSES
-                </td>
+                <th className="px-2 py-1 text-left font-normal" style={{ color: colors.textMuted }}>Item</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Annual</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/Unit</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/SF</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>% of PGR</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>% of EGR</th>
               </tr>
+            </thead>
+            <tbody>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Taxes</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(expTaxes)}</td>
@@ -266,20 +401,34 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>-</td>
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatPercentage(totalExpensesPctEGR)}</td>
               </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
-              {/* VALUE INDICATION SECTION */}
+      {/* NET OPERATING INCOME TABLE */}
+      <div className="rounded-sm overflow-hidden" style={{ border: `1px solid ${colors.border}` }}>
+        <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
+          <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>
+            Net Operating Income
+          </span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-[10px]">
+            <thead style={{ borderBottom: `1px solid ${colors.border}` }}>
               <tr>
-                <td colSpan={6} className="px-2 py-1 font-medium" style={{ color: colors.text, backgroundColor: colors.panelBgAlt }}>
-                  VALUE INDICATION
-                </td>
+                <th className="px-2 py-1 text-left font-normal" style={{ color: colors.textMuted }}>Item</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Annual</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/Unit</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/SF</th>
               </tr>
+            </thead>
+            <tbody>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1 font-medium" style={{ color: colors.text }}>Net Operating Income</td>
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(noi)}</td>
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(noi / totalUnits)}</td>
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(noi / totalSf)}</td>
-                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>-</td>
-                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>-</td>
               </tr>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Cap Rate</td>
@@ -294,22 +443,22 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
                   />
                   <span className="ml-1" style={{ color: colors.textMuted }}>%</span>
                 </td>
-                <td colSpan={4}></td>
+                <td colSpan={2}></td>
               </tr>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Raw Value</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(rawValue)}</td>
-                <td colSpan={4}></td>
+                <td colSpan={2}></td>
               </tr>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Adjustments</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(adjTotal)}</td>
-                <td colSpan={4}></td>
+                <td colSpan={2}></td>
               </tr>
               <tr style={{ borderTop: `2px solid ${colors.border}` }}>
                 <td className="px-2 py-1 font-bold text-sm" style={{ color: colors.text }}>Indicated Value</td>
                 <td className="px-2 py-1 text-right font-bold text-sm" style={{ color: colors.text }}>{formatCurrency(indicatedValue)}</td>
-                <td colSpan={4}></td>
+                <td colSpan={2}></td>
               </tr>
             </tbody>
           </table>
@@ -319,4 +468,3 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
     </div>
   );
 }
-

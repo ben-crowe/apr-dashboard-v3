@@ -204,14 +204,9 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
     backgroundColor: '#f0f0f0',
   };
 
-  // Summary row styles
-  const pgrSummaryStyle = {
-    backgroundColor: '#e8eef7',
-  };
-
-  const egrSummaryStyle = {
-    backgroundColor: '#d4e6f1',
-  };
+  // Summary row styles (no background color in app - only in report template)
+  const pgrSummaryStyle = {};
+  const egrSummaryStyle = {};
 
   return (
     <div className="space-y-3 text-xs" style={{ color: colors.text }}>

@@ -207,17 +207,27 @@ export default function CalculatorWithPreview() {
       'exp-utilities', 'exp-management', 'exp-other', 'exp-total', 'noi'
     ];
 
+    // Get historical PGR for percentage calculations
+    const histPgr = getFieldValue('hist-pgr-total') || 1; // Avoid division by zero
+
     histCategories.forEach(cat => {
       const total = getFieldValue(`hist-${cat}-total`);
       const perUnit = getFieldValue(`hist-${cat}-per-unit`) || (totalUnits > 0 ? total / totalUnits : 0);
-      const pctPgr = getFieldValue(`hist-${cat}-pct-pgr`) || 0;
+
+      // Calculate %PGR dynamically instead of reading from store (store has "0%" placeholder strings)
+      let pctPgr = 0;
+      if (cat === 'pgr') {
+        pctPgr = 100; // PGR is always 100% of itself
+      } else if (histPgr > 0) {
+        pctPgr = (total / histPgr) * 100;
+      }
 
       // Revenue/summary items are positive, expenses/vacancy are negative display
       const isExpense = cat.startsWith('exp-') || cat === 'vacancy';
 
       values[`hist-${cat}-total`] = isExpense ? `(${formatCurrency(Math.abs(total))})` : formatCurrency(total);
       values[`hist-${cat}-per-unit`] = isExpense ? `(${formatCurrency(Math.abs(perUnit))})` : formatCurrency(perUnit);
-      values[`hist-${cat}-pct-pgr`] = isExpense ? `(${Math.abs(pctPgr).toFixed(0)}%)` : `${pctPgr.toFixed(0)}%`;
+      values[`hist-${cat}-pct-pgr`] = isExpense ? `(${Math.abs(pctPgr).toFixed(1)}%)` : `${pctPgr.toFixed(1)}%`;
     });
 
     // ========================================
@@ -233,6 +243,7 @@ export default function CalculatorWithPreview() {
     values['revenue-rental-proj-pct'] = formatPercent(rentalRevenue / projPgr * 100);
     values['revenue-parking-proj-pct'] = formatPercent(parkingIncome / projPgr * 100);
     values['revenue-laundry-proj-pct'] = formatPercent(laundryIncome / projPgr * 100);
+    values['revenue-laundry-proj-total'] = formatCurrency(laundryIncome); // Template uses this for laundry proj column
     values['revenue-misc-proj-pct'] = formatPercent(otherIncome / projPgr * 100);
     values['pgr-proj-pct'] = '100.00%';
     values['vacancy-proj-pct'] = formatPercent(Math.abs(vacancyLoss) / projPgr * 100);

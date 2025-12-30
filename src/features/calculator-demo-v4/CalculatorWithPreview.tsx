@@ -31,7 +31,7 @@ const formatPercent = (value: number): string => {
 };
 
 const formatPerUnit = (value: number): string => {
-  return `${formatCurrency(value)}/Unit`;
+  return formatCurrency(value);
 };
 
 const formatPerSF = (value: number): string => {

@@ -276,24 +276,28 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
             <thead style={{ borderBottom: `1px solid ${colors.border}` }}>
               <tr>
                 <th className="px-2 py-1 text-left font-normal" style={{ color: colors.textMuted }}>Item</th>
-                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Annual</th>
-                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/Unit</th>
-                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/SF</th>
                 <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>% of PGR</th>
                 <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>% of EGR</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/Unit</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/SF</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Annual</th>
               </tr>
             </thead>
             <tbody>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Rental Revenue</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(rentalRevenue)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(rentalRevenuePerUnit)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(rentalRevenuePerSF)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatPercentage(rentalRevenuePctPGR)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>-</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(rentalRevenuePerUnit)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(rentalRevenuePerSF)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(rentalRevenue)}</td>
               </tr>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Other Income</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatPercentage(otherIncomePctPGR)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>-</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(otherIncomePerUnit)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(otherIncomePerSF)}</td>
                 <td className="px-2 py-1 text-right">
                   <Input
                     type="number"
@@ -303,34 +307,30 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
                     style={inputStyle}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(otherIncomePerUnit)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(otherIncomePerSF)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatPercentage(otherIncomePctPGR)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>-</td>
               </tr>
               <tr style={{ borderBottom: `2px solid ${colors.border}` }}>
                 <td className="px-2 py-1 font-medium" style={{ color: colors.text }}>Potential Gross Revenue</td>
-                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(pgr)}</td>
-                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(pgrPerUnit)}</td>
-                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(pgrPerSF)}</td>
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>100.0%</td>
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>-</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(pgrPerUnit)}</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(pgrPerSF)}</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(pgr)}</td>
               </tr>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Vacancy</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(vacancyLoss)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(vacancyLossPerUnit)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(vacancyLossPctPGR)}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>-</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>-</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeductionPct(vacancyLossPctPGR)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(vacancyLossPerUnit)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(vacancyLossPerSF)}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatDeduction(vacancyLoss)}</td>
               </tr>
               <tr style={{ borderBottom: `2px solid ${colors.border}` }}>
                 <td className="px-2 py-1 font-medium" style={{ color: colors.text }}>Effective Gross Revenue</td>
-                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(egr)}</td>
-                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(egrPerUnit)}</td>
-                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(egrPerSF)}</td>
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatPercentage(egrPctPGR)}</td>
                 <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>100.0%</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(egrPerUnit)}</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(egrPerSF)}</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>{formatCurrency(egr)}</td>
               </tr>
             </tbody>
           </table>

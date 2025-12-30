@@ -281,13 +281,16 @@ export default function CalculationReasoning() {
     return () => window.removeEventListener('testDataLoaded', handleTestDataLoaded);
   }, [startAnimation]);
 
-  // Show all content immediately on mount (no auto-animation)
+  // Show all content immediately on mount or when data changes (no auto-animation)
   useEffect(() => {
     if (pgr > 0 && animation.completedLines.size === 0 && !animation.isAnimating) {
       // Start with all content visible
       completeAnimation();
+    } else if (lines.length > 0 && animation.completedLines.size === 0 && !animation.isAnimating) {
+      // Even if pgr is 0, show the structure if we have lines
+      completeAnimation();
     }
-  }, [pgr]);
+  }, [pgr, lines.length, animation.completedLines.size, animation.isAnimating, completeAnimation]);
 
   // Animation loop
   useEffect(() => {
@@ -449,8 +452,8 @@ export default function CalculationReasoning() {
           backgroundColor: colors.headerBg,
           scrollbarWidth: 'thin',
           scrollbarColor: `${colors.borderLight} ${colors.headerBg}`,
-          fontSize: '13px',
-          lineHeight: '1.7',
+          fontSize: '11px',
+          lineHeight: '1.6',
         }}
         title={animation.isAnimating ? 'Click to skip animation' : undefined}
       >

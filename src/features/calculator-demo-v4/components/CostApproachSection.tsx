@@ -48,7 +48,7 @@ export default function CostApproachSection({ onValueChange }: CostApproachSecti
               Cost Approach
             </h2>
             <p className="text-xs mt-0.5" style={{ color: colors.textMuted }}>
-              Land Value + (RCN - Depreciation) + Site Improvements
+              Land Value + (RCN - Depreciation) + Site Improvements - P56
             </p>
           </div>
         </div>

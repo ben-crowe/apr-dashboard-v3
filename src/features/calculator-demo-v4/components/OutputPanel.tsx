@@ -4,6 +4,7 @@
  * Simplified layout: prominent value display + detailed breakdown below.
  */
 
+import { useEffect } from 'react';
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
 import CalculationReasoning from './CalculationReasoning';
 import { useTheme } from '../context/ThemeContext';
@@ -41,6 +42,20 @@ export default function OutputPanel() {
   const indicatedValue = getFieldValue('calc-indicated-value');
   const capRate = getFieldValue('calc-cap-rate');
   const noi = getFieldValue('calc-noi');
+  const pgr = getFieldValue('calc-pgr');
+  
+  // Ensure calculations run when component mounts or data changes
+  const runCalculations = useReportBuilderStore(state => state.runCalculations);
+  
+  useEffect(() => {
+    if (calcSection && calcSection.fields.length > 0) {
+      // Run calculations if we have data but no calculated values
+      const hasCalculatedValues = indicatedValue > 0 || noi > 0 || pgr > 0;
+      if (!hasCalculatedValues) {
+        runCalculations();
+      }
+    }
+  }, [calcSection, indicatedValue, noi, pgr, runCalculations]);
 
   return (
     <div className="flex flex-col h-full">

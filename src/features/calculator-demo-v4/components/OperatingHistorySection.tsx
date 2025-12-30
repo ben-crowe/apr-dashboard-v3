@@ -40,7 +40,7 @@ export default function OperatingHistorySection() {
               Operating History
             </h2>
             <p className="text-xs mt-0.5" style={{ color: colors.textMuted }}>
-              YTD historical vs projected operating performance
+              YTD historical vs projected operating performance - P43
             </p>
           </div>
         </div>

@@ -50,7 +50,7 @@ export default function ReconciliationSection({
               Value Reconciliation
             </h2>
             <p className="text-xs mt-0.5" style={{ color: colors.textMuted }}>
-              Combine Income, Sales, and Cost approaches
+              Combine Income, Sales, and Cost approaches - P62
             </p>
           </div>
         </div>
@@ -59,7 +59,7 @@ export default function ReconciliationSection({
         </span>
       </div>
       {expanded && (
-        <div className="p-4">
+        <div className="p-4 overflow-y-auto" style={{ maxHeight: '500px' }}>
           <ReconciliationPanel
             incomeValue={incomeValue}
             salesIndicatedValue={salesValue}

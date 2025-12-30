@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Template Viewer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #555;
+            overflow: hidden;
+        }
+        
+        /* Top toolbar */
+        .toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 44px;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 16px;
+            z-index: 1000;
+        }
+        
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .zoom-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .zoom-btn:hover { background: #e5e5e5; }
+        .zoom-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        
+        .zoom-value {
+            min-width: 45px;
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .page-input {
+            width: 60px;
+            height: 28px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .page-count {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .divider {
+            width: 1px;
+            height: 24px;
+            background: #ddd;
+        }
+        
+        /* Container */
+        .container {
+            position: fixed;
+            top: 44px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .scaler {
+            transform-origin: top center;
+            transition: transform 0.1s ease;
+        }
+        
+        /* Loading */
+        .loading {
+            color: white;
+            font-size: 18px;
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <div class="toolbar-group">
+            <button class="zoom-btn" id="zoom-out">-</button>
+            <span class="zoom-value" id="zoom-value">60%</span>
+            <button class="zoom-btn" id="zoom-in">+</button>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="toolbar-group">
+            <input type="number" class="page-input" id="page-input" value="-4">
+            <span class="page-count" id="page-count">of 71</span>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="toolbar-group">
+            <label style="font-size: 13px; color: #666;">
+                <input type="checkbox" id="show-fields"> Show Field IDs
+            </label>
+        </div>
+    </div>
+    
+    <div class="container" id="container">
+        <div class="loading">Loading template...</div>
+        <div class="scaler" id="scaler"></div>
+    </div>
+
+    <script>
+        // Configuration
+        const TEMPLATE_URL = '/Report-MF-template-LIVE.html';
+        
+        // Elements
+        const container = document.getElementById('container');
+        const scaler = document.getElementById('scaler');
+        const pageInput = document.getElementById('page-input');
+        const pageCount = document.getElementById('page-count');
+        const zoomValue = document.getElementById('zoom-value');
+        const zoomIn = document.getElementById('zoom-in');
+        const zoomOut = document.getElementById('zoom-out');
+        const showFields = document.getElementById('show-fields');
+        
+        // State
+        let zoom = 0.6;
+        const minZoom = 0.25;
+        const maxZoom = 2;
+        let pageNumbers = [];
+        
+        // Zoom functions
+        function updateZoom() {
+            scaler.style.transform = `scale(${zoom})`;
+            zoomValue.textContent = Math.round(zoom * 100) + '%';
+            zoomOut.disabled = zoom <= minZoom;
+            zoomIn.disabled = zoom >= maxZoom;
+        }
+        
+        zoomIn.onclick = () => { zoom = Math.min(maxZoom, zoom + 0.1); updateZoom(); };
+        zoomOut.onclick = () => { zoom = Math.max(minZoom, zoom - 0.1); updateZoom(); };
+        
+        // Load template
+        fetch(TEMPLATE_URL)
+            .then(r => r.text())
+            .then(html => {
+                // Remove loading message
+                container.querySelector('.loading').remove();
+                
+                // Parse and extract page sheets
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const pages = doc.querySelectorAll('.page-sheet');
+                
+                // Add pages to scaler
+                pages.forEach(page => scaler.appendChild(page.cloneNode(true)));
+                
+                // Get page numbers directly from data attributes
+                const allPages = scaler.querySelectorAll('.page-sheet');
+                pageNumbers = Array.from(allPages).map(p => {
+                    const attr = p.getAttribute('data-page-num') || '';
+                    const num = parseInt(attr.replace('Page ', ''));
+                    return isNaN(num) ? 0 : num;
+                }).filter(n => n !== 0);
+                
+                pageNumbers.sort((a, b) => a - b);
+                
+                // Update UI
+                const min = Math.min(...pageNumbers);
+                const max = Math.max(...pageNumbers);
+                pageInput.min = min;
+                pageInput.max = max;
+                pageInput.value = min;
+                pageCount.textContent = `of ${pageNumbers.length}`;
+                
+                // Apply initial zoom
+                updateZoom();
+                
+                console.log('Loaded', pageNumbers.length, 'pages. Range:', min, 'to', max);
+            })
+            .catch(err => {
+                container.querySelector('.loading').textContent = 'Error: ' + err.message;
+            });
+        
+        // Page navigation
+        function goToPage(num) {
+            const target = scaler.querySelector(`[data-page-num="Page ${num}"]`);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        pageInput.addEventListener('change', () => {
+            let num = parseInt(pageInput.value);
+            if (!isNaN(num) && pageNumbers.includes(num)) {
+                goToPage(num);
+            }
+        });
+        
+        pageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                let num = parseInt(pageInput.value);
+                if (!isNaN(num) && pageNumbers.includes(num)) {
+                    goToPage(num);
+                }
+            }
+        });
+        
+        // Track scroll position
+        let scrollTimeout;
+        container.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const containerRect = container.getBoundingClientRect();
+                const centerY = containerRect.top + containerRect.height / 3;
+                
+                let closest = null;
+                let closestDist = Infinity;
+                
+                scaler.querySelectorAll('.page-sheet').forEach(page => {
+                    const rect = page.getBoundingClientRect();
+                    const dist = Math.abs(rect.top + rect.height/2 - centerY);
+                    if (dist < closestDist) {
+                        closestDist = dist;
+                        closest = page;
+                    }
+                });
+                
+                if (closest) {
+                    const attr = closest.getAttribute('data-page-num') || '';
+                    const num = parseInt(attr.replace('Page ', ''));
+                    if (!isNaN(num) && pageInput.value != num) {
+                        pageInput.value = num;
+                    }
+                }
+            }, 100);
+        });
+        
+        // Show field IDs toggle
+        showFields.addEventListener('change', () => {
+            scaler.querySelectorAll('.field-mapped').forEach(el => {
+                if (showFields.checked) {
+                    el.style.background = '#ffeb3b';
+                    el.style.border = '1px solid #f57c00';
+                } else {
+                    el.style.background = '';
+                    el.style.border = '';
+                }
+            });
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target === pageInput) return;
+            
+            const currentIdx = pageNumbers.indexOf(parseInt(pageInput.value));
+            
+            if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+                e.preventDefault();
+                if (currentIdx < pageNumbers.length - 1) {
+                    pageInput.value = pageNumbers[currentIdx + 1];
+                    goToPage(pageNumbers[currentIdx + 1]);
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+                e.preventDefault();
+                if (currentIdx > 0) {
+                    pageInput.value = pageNumbers[currentIdx - 1];
+                    goToPage(pageNumbers[currentIdx - 1]);
+                }
+            } else if (e.key === '+' || e.key === '=') {
+                zoomIn.click();
+            } else if (e.key === '-') {
+                zoomOut.click();
+            }
+        });
+    </script>
+</body>
+</html>

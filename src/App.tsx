@@ -15,6 +15,7 @@ import TestLOE from "./pages/TestLOE";
 import MockReportBuilder from "./pages/MockReportBuilder";
 import { TestInputDashboard } from "./features/test-input";
 import { CalculatorDemoPage } from "./features/calculator-demo-v4";
+import CalculatorWithPreview from "@/features/calculator-demo-v4/CalculatorWithPreview";
 import PreviewMasterWrapper from "../AGENT-HANDOFF-PreviewMaster-Wrapper";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/mock-builder" element={<MockReportBuilder />} />
             <Route path="/test-input" element={<TestInputDashboard />} />
             <Route path="/calculator-demo" element={<CalculatorDemoPage />} />
+            <Route path="/calculator-preview" element={<CalculatorWithPreview />} />
             <Route path="/preview-master-test" element={<PreviewMasterWrapper />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

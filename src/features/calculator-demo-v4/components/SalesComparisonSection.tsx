@@ -45,10 +45,10 @@ export default function SalesComparisonSection({ onValueChange }: SalesCompariso
           )}
           <div>
             <h2 className="font-medium text-sm" style={{ color: colors.text }}>
-              Sales Comparison Approach
+              Direct Comparison Approach
             </h2>
             <p className="text-xs mt-0.5" style={{ color: colors.textMuted }}>
-              Comparable sales analysis with adjustments
+              Comparable sales analysis with adjustments - P60
             </p>
           </div>
         </div>

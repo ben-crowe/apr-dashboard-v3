@@ -107,7 +107,7 @@ const PreviewRenderer = forwardRef<HTMLIFrameElement, PreviewRendererProps>(
             if (closestPage) {
               const pageNumAttr = closestPage.getAttribute('data-page-num');
               if (pageNumAttr) {
-                const match = pageNumAttr.match(/Page (\d+)/i);
+                const match = pageNumAttr.match(/Page (-?\d+)/i);
                 if (match) {
                   onPageChange(parseInt(match[1], 10));
                 }

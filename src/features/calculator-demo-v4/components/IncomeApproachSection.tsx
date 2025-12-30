@@ -50,7 +50,7 @@ export default function IncomeApproachSection({ onValueChange }: IncomeApproachS
               Income Approach
             </h2>
             <p className="text-xs mt-0.5" style={{ color: colors.textMuted }}>
-              Direct capitalization of net operating income
+              Direct capitalization of net operating income - P48
             </p>
           </div>
         </div>

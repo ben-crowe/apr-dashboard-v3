@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Calc Engine Field Test</title>
+  <style>
+    body { font-family: monospace; margin: 20px; }
+    .controls { margin-bottom: 20px; padding: 10px; background: #f0f0f0; }
+    button { padding: 10px 20px; margin-right: 10px; cursor: pointer; }
+    #results { margin-top: 20px; }
+    .pass { color: green; }
+    .fail { color: red; }
+    iframe { width: 100%; height: 800px; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>Calc Engine to Template Field Test</h1>
+
+  <div class="controls">
+    <button onclick="sendTestData()">Send Test Data</button>
+    <button onclick="checkFields()">Check Fields</button>
+    <button onclick="runFullTest()">Run Full Test</button>
+  </div>
+
+  <div id="results"></div>
+
+  <iframe id="templateFrame" src="/Report-MF-template.html"></iframe>
+
+  <script>
+    // All fields that CalculatorWithPreview.tsx sends
+    const testValues = {
+      // Revenue
+      'calc-pgr': '$204,240',
+      'calc-pgr-per-unit': '$12,765/Unit',
+      'calc-pgr-per-sf': '$20.02/SF',
+      'calc-egr': '$196,070',
+      'calc-egr-per-unit': '$12,254/Unit',
+      'calc-egr-per-sf': '$19.22/SF',
+
+      // Rental revenue
+      'calc-total-rental-revenue': '$195,840',
+      'calc-rental-revenue-per-unit': '$12,240/Unit',
+
+      // Other income
+      'calc-other-income': '$8,400',
+      'calc-other-income-per-unit': '$525/Unit',
+      'calc-other-income-per-sf': '$0.82/SF',
+
+      // Unit Type 1 (sf is internal calc, not displayed)
+      'calc-type1-count': '6',
+      'calc-type1-rent': '$1,040',
+      'calc-type1-contract-rent': '$975',
+      'calc-type1-cont-v-market': '93.75%',
+      'calc-type1-per-unit': '$12,480',
+      'calc-type1-per-sf': '$18.09/SF',
+      'calc-type1-annual': '$74,880',
+
+      // Unit Type 2 (sf is internal calc, not displayed)
+      'calc-type2-count': '10',
+      'calc-type2-rent': '$1,008',
+      'calc-type2-contract-rent': '$1,008',
+      'calc-type2-cont-v-market': '100.00%',
+      'calc-type2-per-unit': '$12,096',
+      'calc-type2-per-sf': '$16.99/SF',
+      'calc-type2-annual': '$120,960',
+
+      // Types 3-4 not used in this template
+
+      // Type totals
+      'calc-type-total-per-unit': '$12,240/Unit',
+      'calc-type-total-per-sf': '$17.19/SF',
+
+      // Vacancy
+      'calc-vacancy-loss': '($8,170)',
+      'calc-vacancy-per-unit': '($511)/Unit',
+      'calc-vacancy-per-sf': '($0.80)/SF',
+      'calc-vacancy-rate': '4.00%',
+
+      // Expenses total
+      'calc-expenses-total': '($85,569)',
+      'calc-expenses-per-unit': '($5,348)/Unit',
+      'calc-expenses-per-sf': '($8.39)',
+      'calc-expense-ratio': '43.64%',
+
+      // Taxes
+      'calc-exp-taxes-annual': '($19,688)',
+      'calc-exp-taxes-per-unit': '($1,231)',
+      'calc-exp-taxes-per-sf': '($1.93)',
+      'calc-exp-taxes-pct-pgr': '(9.64%)',
+      'calc-exp-taxes-pct-egr': '10.04%',
+
+      // Insurance
+      'calc-exp-insurance-annual': '($11,360)',
+      'calc-exp-insurance-per-unit': '($710)',
+      'calc-exp-insurance-per-sf': '($1.11)',
+      'calc-exp-insurance-pct-pgr': '(5.56%)',
+      'calc-exp-insurance-pct-egr': '5.79%',
+
+      // Repairs
+      'calc-exp-repairs-annual': '($13,280)',
+      'calc-exp-repairs-per-unit': '($830)',
+      'calc-exp-repairs-per-sf': '($1.30)',
+      'calc-exp-repairs-pct-pgr': '(6.50%)',
+      'calc-exp-repairs-pct-egr': '6.77%',
+
+      // Payroll
+      'calc-exp-payroll-annual': '($8,000)',
+      'calc-exp-payroll-per-unit': '($500)',
+      'calc-exp-payroll-per-sf': '($0.78)',
+      'calc-exp-payroll-pct-pgr': '(3.92%)',
+      'calc-exp-payroll-pct-egr': '4.08%',
+
+      // Utilities
+      'calc-exp-utilities-annual': '($21,040)',
+      'calc-exp-utilities-per-unit': '($1,315)',
+      'calc-exp-utilities-per-sf': '($2.06)',
+      'calc-exp-utilities-pct-pgr': '(10.30%)',
+      'calc-exp-utilities-pct-egr': '10.73%',
+
+      // Management
+      'calc-exp-management-annual': '($8,281)',
+      'calc-exp-management-per-unit': '($518)',
+      'calc-exp-management-per-sf': '($0.81)',
+      'calc-exp-management-pct-pgr': '(4.05%)',
+      'calc-exp-management-pct-egr': '4.22%',
+
+      // Other expenses
+      'calc-exp-other-annual': '($3,920)',
+      'calc-exp-other-per-unit': '($245)',
+      'calc-exp-other-per-sf': '($0.38)',
+      'calc-exp-other-pct-pgr': '(1.92%)',
+      'calc-exp-other-pct-egr': '2.00%',
+
+      // NOI
+      'calc-noi': '$111,771',
+      'calc-noi-per-unit': '$6,986/Unit',
+      'calc-noi-per-sf': '$10.96/SF',
+
+      // Cap rate and value
+      'calc-cap-rate': '6.25%',
+      'calc-indicated-value': '$1,788,336',
+      'calc-value-per-unit': '$111,771/Unit',
+      'calc-value-per-sf': '$175',
+      'calc-indicated-value-rounded': '$1,790,000',
+
+      // Direct cap
+      'ia-dircap-noi': '$111,771',
+      'ia-dircap-noi-per-unit': '$6,986/Unit',
+      'ia-dircap-cap-rate1': '6.25%',
+      'ia-dircap-expenseratio': '43.64%',
+
+      // Reconciliation
+      'recon-final-value': '$1,790,000',
+      'recon-final-value-per-sf': '$175',
+      'recon-effective-date': 'October 17, 2025',
+
+      // Sales comparison
+      'sca-indicated-value': '$1,790,000',
+      'sca-indicated-value-rounded': '$1,790,000',
+      'sca-value-per-sf': '$175'
+    };
+
+    function sendTestData() {
+      const iframe = document.getElementById('templateFrame');
+      iframe.contentWindow.postMessage({
+        type: 'CALCULATOR_UPDATE',
+        values: testValues
+      }, '*');
+
+      document.getElementById('results').innerHTML =
+        '<p class="pass">Sent ' + Object.keys(testValues).length + ' fields to template</p>';
+    }
+
+    function checkFields() {
+      const iframe = document.getElementById('templateFrame');
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+
+      let results = '<h3>Field Check Results:</h3>';
+      let passed = 0;
+      let failed = 0;
+      let missing = [];
+
+      for (const [fieldId, value] of Object.entries(testValues)) {
+        // Find element with title containing the field ID
+        const selector = `[title*="${fieldId}"]`;
+        const elements = doc.querySelectorAll(selector);
+
+        if (elements.length > 0) {
+          passed++;
+        } else {
+          failed++;
+          missing.push(fieldId);
+        }
+      }
+
+      results += '<p class="pass">FOUND: ' + passed + ' fields</p>';
+      results += '<p class="fail">MISSING: ' + failed + ' fields</p>';
+
+      if (missing.length > 0) {
+        results += '<h4>Missing Fields:</h4><ul>';
+        missing.forEach(f => {
+          results += '<li class="fail">' + f + '</li>';
+        });
+        results += '</ul>';
+      }
+
+      document.getElementById('results').innerHTML = results;
+    }
+
+    function runFullTest() {
+      sendTestData();
+      setTimeout(checkFields, 1000);
+    }
+
+    // Auto-run test after iframe loads
+    document.getElementById('templateFrame').onload = function() {
+      setTimeout(runFullTest, 500);
+    };
+  </script>
+</body>
+</html>

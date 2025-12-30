@@ -6,7 +6,7 @@ import path from "path";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 8082,
+    port: 8086,
     proxy: {
       '/api': {
         target: 'https://apr-dashboard-v3.vercel.app',

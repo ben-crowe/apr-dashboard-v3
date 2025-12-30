@@ -1,6 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!--
+  Report-MF-Template.html - Multi-Family Appraisal Report
+
+  VERSION: 2.4.0
+  LAST UPDATED: 2025-12-27 10:57 MST
+  UPDATED BY: Claude Code (APR Frontend Agent)
+
+  PART OF SYNC SET (3 files - must stay aligned):
+  1. fieldRegistry.ts - Field definitions & sections (v2.3.0)
+  2. northBattlefordTestData.ts - Test values (v2.3.0)
+  3. Report-MF-Template.html - Template with placeholders (THIS FILE)
+
+  RULE: When field IDs change in any file, update all three.
+
+  CHANGELOG:
+  v2.4.0 (2025-12-27) - Page numbering aligned with footer numbers
+    - Pages without footer: -4 (Cover), -3 (Letter), -2 (Limiting), -1 (TOC)
+    - Pages with footer: 1-67 (Executive Summary through end)
+    - All data-page-num attributes updated (71 pages renumbered)
+
+  v2.3.0 (2025-12-23) - Canonical field name consolidation
+    - Updated {{client-name}} → {{client-full-name}} (4 occurrences)
+    - Updated {{client-company}} → {{client-organization}} (8 occurrences)
+    - Updated {{appraiser-aic-number}} → {{appraiser-aic}} (2 occurrences)
+    - Synced with fieldRegistry.ts v2.3.0 canonical names
+  
+  v2.2.0 (2025-12-23) - Kebab-case standardization complete
+    - All field IDs converted to kebab-case
+    - img- prefix on S3-managed maps only
+    - Synced with fieldRegistry.ts v2.2.0
+  
+  v2.1.0 (2025-12-23) - Initial kebab-case conversion
+    - Full kebab-case conversion for all field IDs
+    - img- prefix only on S3-managed maps (not comp/subject photos)
+-->
     <meta charset="UTF-8">
     <title>Report-MF-Template-Framed</title>
     <style>
@@ -420,7 +455,7 @@
                         <input type="checkbox" id="preview-toggle">
                         <span class="toggle-slider"></span>
                     </span>
-                    <span id="mode-label">Designer Preview</span>
+                    <span id="mode-label">Show Field IDs</span>
                 </label>
 
                 <div class="divider"></div>
@@ -458,7 +493,7 @@
             <div class="preview-centering">
                 <div class="preview-scaler" id="preview-scaler">
                     <div class="pages-wrapper" id="pages-wrapper">
-    <div class="page-sheet" data-page-num="Page 2" style="padding:0; overflow:hidden; position:relative; font-family:'Open Sans', Arial, sans-serif;">
+    <div class="page-sheet" data-page-num="Page -4" style="padding:0; overflow:hidden; position:relative; font-family:'Open Sans', Arial, sans-serif;">
         <!-- Background with logo and diagonal -->
         <img style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover;" src="data:image/png;base64,UklGRqoWAABXRUJQVlA4WAoAAAAgAAAAYwIAFwMASUNDUMgBAAAAAAHIAAAAAAQwAABtbnRyUkdC
 IFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAA
@@ -564,7 +599,10 @@ eYZ+xMtnO9cLOvTTJPkviefTNGUDr/o7PAAFoK9Os8Ffe4AKZTFdKhuY/p2yJnRL4+0F9oy0LtEF
 eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         
         <!-- Property Photo placeholder -->
-        <div class="field-mapped" data-sample="[Property Photo]" title="{{subject-photo}}" style="position:absolute; top:230px; left:55px; width:360px; height:240px; border:1px solid #ccc; background:#f0f0f0; display:flex; align-items:center; justify-content:center; color:#999; font-size:9pt;">{{subject-photo}}</div>
+        <div class="field-mapped cover-photo-container" data-sample="[Property Photo]" title="{{subject-photo}}" style="position:absolute; top:230px; left:55px; width:360px; height:240px; border:1px solid #ccc; background:#f0f0f0; overflow:hidden;">
+          <img src="{{subject-photo}}" style="width:100%; height:100%; object-fit:cover; display:block;" alt="Subject Property" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div style="display:none; align-items:center; justify-content:center; width:100%; height:100%; color:#999; font-size:9pt;">Property Photo</div>
+        </div>
         
         <!-- Title Section (white area) -->
         <div style="position:absolute; top:230px; right:55px; text-align:right;">
@@ -578,11 +616,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         <!-- Prepared For -->
         <div style="position:absolute; top:570px; right:55px; text-align:right; color:white; font-weight:500;">
             <div style="font-size:9pt; font-weight:bold; margin-bottom:3px;">PREPARED FOR:</div>
-            <div style="font-size:11pt; font-weight:bold;"><span class="field-mapped" data-sample="Kenneth Engler" title="{{client-name}}">{{client-name}}</span></div>
+            <div style="font-size:11pt; font-weight:bold;"><span class="field-mapped" data-sample="Kenneth Engler" title="{{client-full-name}}">{{client-full-name}}</span></div>
             <div style="font-size:11pt; line-height:1.6; margin-top:12px;">
-                <span class="field-mapped" data-sample="102109845 Saskatchewan Ltd." title="{{client-company}}">{{client-company}}</span><br>
+                <span class="field-mapped" data-sample="102109845 Saskatchewan Ltd." title="{{client-organization}}">{{client-organization}}</span><br>
                 <span class="field-mapped" data-sample="1901, 1088 - 6th Ave SW" title="{{client-address}}">{{client-address}}</span><br>
-                <span class="field-mapped" data-sample="Calgary, AB T2P 5N3" title="{{client-citystatezip}}">{{client-citystatezip}}</span>
+                <span class="field-mapped" data-sample="Calgary, AB T2P 5N3" title="{{client-city-state-zip}}">{{client-city-state-zip}}</span>
             </div>
         </div>
         
@@ -592,7 +630,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
             <div style="font-size:11pt; font-weight:bold;"><span class="field-mapped" data-sample="Valta Property Valuations Ltd." title="{{company-name}}">{{company-name}}</span></div>
             <div style="font-size:11pt; line-height:1.6;">
                 <span class="field-mapped" data-sample="#300, 4838 Richard Road SW" title="{{company-address}}">{{company-address}}</span><br>
-                <span class="field-mapped" data-sample="Calgary, AB T3E 6L1" title="{{company-citystatezip}}">{{company-citystatezip}}</span><br>
+                <span class="field-mapped" data-sample="Calgary, AB T3E 6L1" title="{{company-city-state-zip}}">{{company-city-state-zip}}</span><br>
                 Office: <span class="field-mapped" data-sample="587-801-5151" title="{{company-phone}}">{{company-phone}}</span><br>
                 <span class="field-mapped" data-sample="www.valta.ca" title="{{company-website}}">{{company-website}}</span>
             </div>
@@ -612,7 +650,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 3">
+    <div class="page-sheet" data-page-num="Page -3">
         <div
             style="display:flex; justify-content:space-between; border-bottom:1px solid #e0e0e0; padding-bottom:10px; margin-bottom:20px;">
             <div>
@@ -622,7 +660,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
             <div style="text-align:right; font-size:9pt; color:#333;">
                 <b><span class="field-mapped" data-sample="Valta Property Valuations Ltd." title="{{company-name}}">{{company-name}}</span></b><br>
                 <span class="field-mapped" data-sample="#300, 4658 Richard Road SW" title="{{company-address}}">{{company-address}}</span><br>
-                <span class="field-mapped" data-sample="Calgary, AB T3E 6L1" title="{{company-citystatezip}}">{{company-citystatezip}}</span><br>
+                <span class="field-mapped" data-sample="Calgary, AB T3E 6L1" title="{{company-city-state-zip}}">{{company-city-state-zip}}</span><br>
                 Office: <span class="field-mapped" data-sample="587-801-5151" title="{{company-phone}}">{{company-phone}}</span><br>
                 www.valta.ca
             </div>
@@ -631,12 +669,12 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         <p><b><span class="field-mapped" data-sample="November 20, 2025" title="{{report-date}}">{{report-date}}</span></b></p>
 
         <p>
-            <span class="field-mapped" data-sample="102109845 Saskatchewan Ltd." title="{{client-company}}">{{client-company}}</span><br>
+            <span class="field-mapped" data-sample="102109845 Saskatchewan Ltd." title="{{client-organization}}">{{client-organization}}</span><br>
             <span class="field-mapped" data-sample="1901, 1088 - 6th Ave SW," title="{{client-address}}">{{client-address}}</span><br>
-            <span class="field-mapped" data-sample="Calgary, AB T2P 5N3" title="{{client-citystatezip}}">{{client-citystatezip}}</span>
+            <span class="field-mapped" data-sample="Calgary, AB T2P 5N3" title="{{client-city-state-zip}}">{{client-city-state-zip}}</span>
         </p>
 
-        <p>Attention: <span class="field-mapped" data-sample="Kenneth Engler" title="{{client-name}}">{{client-name}}</span></p>
+        <p>Attention: <span class="field-mapped" data-sample="Kenneth Engler" title="{{client-full-name}}">{{client-full-name}}</span></p>
 
         <p style="margin-top:20px;">
             <b>Re: <span class="field-mapped" data-sample="As Stabilized (Fee Simple Estate)" title="{{report-values}}">{{report-values}}</span> current market value
@@ -648,7 +686,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
 
         <p>
             Valta Property Valuations Ltd. is proud to present the appraisal report that satisfies the agreed upon scope
-            of work with <span class="field-mapped" data-sample="102109845 Saskatchewan Ltd." title="{{client-company}}">{{client-company}}</span>. The purpose of
+            of work with <span class="field-mapped" data-sample="102109845 Saskatchewan Ltd." title="{{client-organization}}">{{client-organization}}</span>. The purpose of
             this assignment is to provide the <b><span class="field-mapped" data-sample="As Stabilized"
                     title="{{report-valuescenario1}}">{{report-valuescenario1}}</span></b> current market value of the
             property which at the time of inspection represents the improved property.
@@ -694,7 +732,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 4">
+    <div class="page-sheet" data-page-num="Page -2">
         <div class="Header1" style="border-bottom:none;">Extraordinary Limiting Conditions</div>
 
         <p>
@@ -734,7 +772,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 5" style="padding:0; display:flex; flex-direction:row;">
+    <div class="page-sheet" data-page-num="Page -1" style="padding:0; display:flex; flex-direction:row;">
         <div style="width:180px; background-color:#0A3D62; padding:40px 20px; display:flex; align-items:flex-start;">
             <div style="color:#fff; font-size:28px; font-weight:bold; line-height:1.2; text-align:center; width:100%;">
                 Table of<br>Contents
@@ -848,7 +886,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 6">
+    <div class="page-sheet" data-page-num="Page 1">
         <div class="Header1">Introduction & Executive Summary</div>
         <div class="Header2">Property Overview</div>
 
@@ -1033,7 +1071,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
             </tr>
             <tr>
                 <td style="padding:0px 6px;">Security Features</td>
-                <td colspan="3" style="padding:0px 6px;"><span class="field-mapped" data-sample="Deadbolts, Exterior Lighting, Secured Entry" title="{{subject-securityfeatures}}">{{subject-securityfeatures}}</span></td>
+                <td colspan="3" style="padding:0px 6px;"><span class="field-mapped" data-sample="Deadbolts, Exterior Lighting, Secured Entry" title="{{subject-security-features}}">{{subject-security-features}}</span></td>
             </tr>
         </table>
 
@@ -1100,7 +1138,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 7">
+    <div class="page-sheet" data-page-num="Page 2">
         <div class="Header1">Introduction & Executive Summary</div>
 
         <!-- HIGHEST & BEST USE - 4 columns to align with INVESTMENT INDICATORS -->
@@ -1193,8 +1231,8 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
             <!-- Group 3: Occupied/Vacant Units (space above) -->
             <tr>
                 <td style="padding:8px 6px 0px 6px;">Occupied MF Units / Vacant MF Units</td>
-                <td style="padding:8px 6px 0px 6px; text-align:right;"><span class="field-mapped" data-sample="16" title="{{subject-occupiedunits}}">{{subject-occupiedunits}}</span></td>
-                <td style="padding:8px 6px 0px 6px; text-align:right;"><span class="field-mapped" data-sample="0" title="{{subject-vacantunits}}">{{subject-vacantunits}}</span></td>
+                <td style="padding:8px 6px 0px 6px; text-align:right;"><span class="field-mapped" data-sample="16" title="{{subject-occupied-units}}">{{subject-occupied-units}}</span></td>
+                <td style="padding:8px 6px 0px 6px; text-align:right;"><span class="field-mapped" data-sample="0" title="{{subject-vacant-units}}">{{subject-vacant-units}}</span></td>
                 <td></td>
             </tr>
             <tr>
@@ -1280,7 +1318,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 8">
+    <div class="page-sheet" data-page-num="Page 3">
         <div class="Header1">Introduction & Executive Summary</div>
 
         <div class="Subheader1">Hypothetical Conditions</div>
@@ -1306,7 +1344,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 9">
+    <div class="page-sheet" data-page-num="Page 4">
         <div class="Header1">Introduction & Executive Summary</div>
         <div class="Header2">Photographs</div>
 
@@ -1315,37 +1353,37 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-1}}" data-sample="Subject_Photo_1">{{subject-photo-1}}</span>]
                 </div>
-                <p style="font-size:10pt;">1101 - East Elevation</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-1-caption}}" data-sample="1101 - East Elevation">{{subject-photo-1-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-2}}" data-sample="Subject_Photo_2">{{subject-photo-2}}</span>]
                 </div>
-                <p style="font-size:10pt;">1101 - West Elevation</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-2-caption}}" data-sample="1101 - West Elevation">{{subject-photo-2-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-3}}" data-sample="Subject_Photo_3">{{subject-photo-3}}</span>]
                 </div>
-                <p style="font-size:10pt;">Street View Facing East</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-3-caption}}" data-sample="Street View Facing East">{{subject-photo-3-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-4}}" data-sample="Subject_Photo_4">{{subject-photo-4}}</span>]
                 </div>
-                <p style="font-size:10pt;">Street View Facing North</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-4-caption}}" data-sample="Street View Facing North">{{subject-photo-4-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-5}}" data-sample="Subject_Photo_5">{{subject-photo-5}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Hallway</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-5-caption}}" data-sample="Street View Facing South">{{subject-photo-5-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-6}}" data-sample="Subject_Photo_6">{{subject-photo-6}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Stairway</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-6-caption}}" data-sample="Typical Stairway">{{subject-photo-6-caption}}</span></p>
             </div>
         </div>
 
@@ -1358,44 +1396,44 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 10">
+    <div class="page-sheet" data-page-num="Page 5">
         <div class="Header1">Introduction & Executive Summary</div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-7}}" data-sample="Subject_Photo_7">{{subject-photo-7}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Bathroom</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-7-caption}}" data-sample="Typical Bathroom">{{subject-photo-7-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-8}}" data-sample="Subject_Photo_8">{{subject-photo-8}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Bedroom 1</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-8-caption}}" data-sample="Typical Bedroom 1">{{subject-photo-8-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-9}}" data-sample="Subject_Photo_9">{{subject-photo-9}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Bedroom 2</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-9-caption}}" data-sample="Typical Bedroom 2">{{subject-photo-9-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-10}}" data-sample="Subject_Photo_10">{{subject-photo-10}}</span>]
                 </div>
-                <p style="font-size:10pt;">Electrical Room</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-10-caption}}" data-sample="Electrical Room">{{subject-photo-10-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-11}}" data-sample="Subject_Photo_11">{{subject-photo-11}}</span>]
                 </div>
-                <p style="font-size:10pt;">Mechanical Room</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-11-caption}}" data-sample="Mechanical Room">{{subject-photo-11-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-12}}" data-sample="Subject_Photo_12">{{subject-photo-12}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Kitchen</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-12-caption}}" data-sample="Typical Kitchen">{{subject-photo-12-caption}}</span></p>
             </div>
         </div>
 
@@ -1408,44 +1446,44 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 11">
+    <div class="page-sheet" data-page-num="Page 6">
         <div class="Header1">Introduction & Executive Summary</div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-13}}" data-sample="Subject_Photo_13">{{subject-photo-13}}</span>]
                 </div>
-                <p style="font-size:10pt;">Living Room</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-13-caption}}" data-sample="Living Room">{{subject-photo-13-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-14}}" data-sample="Subject_Photo_14">{{subject-photo-14}}</span>]
                 </div>
-                <p style="font-size:10pt;">West Elevation</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-14-caption}}" data-sample="West Elevation">{{subject-photo-14-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-15}}" data-sample="Subject_Photo_15">{{subject-photo-15}}</span>]
                 </div>
-                <p style="font-size:10pt;">East Elevation</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-15-caption}}" data-sample="East Elevation">{{subject-photo-15-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-16}}" data-sample="Subject_Photo_16">{{subject-photo-16}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Hallway</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-16-caption}}" data-sample="Typical Hallway">{{subject-photo-16-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-17}}" data-sample="Subject_Photo_17">{{subject-photo-17}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Stairway</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-17-caption}}" data-sample="Typical Stairway">{{subject-photo-17-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-18}}" data-sample="Subject_Photo_18">{{subject-photo-18}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Living Room</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-18-caption}}" data-sample="Typical Living Room">{{subject-photo-18-caption}}</span></p>
             </div>
         </div>
 
@@ -1457,44 +1495,44 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 12">
+    <div class="page-sheet" data-page-num="Page 7">
         <div class="Header1">Introduction & Executive Summary</div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-19}}" data-sample="Subject_Photo_19">{{subject-photo-19}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Bathroom</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-19-caption}}" data-sample="Typical Bathroom">{{subject-photo-19-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-20}}" data-sample="Subject_Photo_20">{{subject-photo-20}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Kitchen</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-20-caption}}" data-sample="Typical Kitchen">{{subject-photo-20-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-21}}" data-sample="Subject_Photo_21">{{subject-photo-21}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Bedroom</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-21-caption}}" data-sample="Typical Bedroom">{{subject-photo-21-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-22}}" data-sample="Subject_Photo_22">{{subject-photo-22}}</span>]
                 </div>
-                <p style="font-size:10pt;">Laundry Room</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-22-caption}}" data-sample="Laundry Room">{{subject-photo-22-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-23}}" data-sample="Subject_Photo_23">{{subject-photo-23}}</span>]
                 </div>
-                <p style="font-size:10pt;">Electrical Room</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-23-caption}}" data-sample="Electrical Room">{{subject-photo-23-caption}}</span></p>
             </div>
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-24}}" data-sample="Subject_Photo_24">{{subject-photo-24}}</span>]
                 </div>
-                <p style="font-size:10pt;">Typical Boiler</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-24-caption}}" data-sample="Typical Boiler">{{subject-photo-24-caption}}</span></p>
             </div>
         </div>
 
@@ -1506,14 +1544,14 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 13">
+    <div class="page-sheet" data-page-num="Page 8">
         <div class="Header1">Introduction & Executive Summary</div>
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px; margin-bottom:auto;">
             <div style="text-align:center;">
                 <div class="img-placeholder" style="height:200px;">
                     [IMAGE: <span class="field-mapped" title="{{subject-photo-25}}" data-sample="Subject_Photo_25">{{subject-photo-25}}</span>]
                 </div>
-                <p style="font-size:10pt;">Utility Room</p>
+                <p style="font-size:10pt;"><span class="field-mapped" title="{{subject-photo-25-caption}}" data-sample="Utility Room">{{subject-photo-25-caption}}</span></p>
             </div>
         </div>
 
@@ -1525,12 +1563,12 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 14">
+    <div class="page-sheet" data-page-num="Page 9">
         <div class="Header1">Introduction & Executive Summary</div>
         <div class="Header2">Maps</div>
 
         <div class="img-placeholder" style="height: 450px;">
-            [IMAGE: <span class="field-mapped" title="{{map-regional}}" data-sample="Regional Context Map">{{map-regional}}</span>]
+            [IMAGE: <span class="field-mapped" title="{{img-map-regional}}" data-sample="Regional Context Map">{{img-map-regional}}</span>]
         </div>
 
         <div class="page-footer">
@@ -1541,11 +1579,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 15">
+    <div class="page-sheet" data-page-num="Page 10">
         <div class="Header1">Introduction & Executive Summary</div>
 
         <div class="img-placeholder" style="height: 500px;">
-            [IMAGE: <span class="field-mapped" title="{{map-local}}" data-sample="Local Area Map">{{map-local}}</span>]
+            [IMAGE: <span class="field-mapped" title="{{img-map-local}}" data-sample="Local Area Map">{{img-map-local}}</span>]
         </div>
 
         <div class="page-footer">
@@ -1556,11 +1594,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 16">
+    <div class="page-sheet" data-page-num="Page 11">
         <div class="Header1">Introduction & Executive Summary</div>
 
         <div class="img-placeholder" style="height: 500px;">
-            [IMAGE: <span class="field-mapped" title="{{map-aerial}}" data-sample="Aerial Overview Map">{{map-aerial}}</span>]
+            [IMAGE: <span class="field-mapped" title="{{img-map-aerial}}" data-sample="Aerial Overview Map">{{img-map-aerial}}</span>]
         </div>
 
         <div class="page-footer">
@@ -1571,7 +1609,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 17">
+    <div class="page-sheet" data-page-num="Page 12">
         <div class="Header1">Introduction & Executive Summary</div>
         <div class="Header2">Identification of Assignment</div>
 
@@ -1597,7 +1635,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         <div class="Subheader1">Authorized Client Identification</div>
         <p>
             The authorized client of this specific assignment is <span class="field-mapped" data-sample="102109845 Saskatchewan Ltd."
-                title="{{client-company}}">{{client-company}}</span>.
+                title="{{client-organization}}">{{client-organization}}</span>.
         </p>
 
         <div class="Subheader1">Authorized Use & Authorized Users</div>
@@ -1641,7 +1679,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 
-    <div class="page-sheet" data-page-num="Page 18">
+    <div class="page-sheet" data-page-num="Page 13">
         <div class="Header1">Introduction & Executive Summary</div>
 
         <div class="Subheader1">Extraordinary Assumptions</div>
@@ -1711,7 +1749,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     <!-- ========================================== -->
 
     <!-- PAGE 19 -->
-    <div class="page-sheet" data-page-num="Page 19" style="font-size:9pt; line-height:1.25;">
+    <div class="page-sheet" data-page-num="Page 14" style="font-size:9pt; line-height:1.25;">
         <div class="Header1">Introduction & Executive Summary</div>
 
         <div class="Header2" style="margin-top:6px;">Definition of Market Value</div>
@@ -1759,7 +1797,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
     <!-- PAGE 20 -->
-    <div class="page-sheet" data-page-num="Page 20" style="font-size:9pt; line-height:1.25;">
+    <div class="page-sheet" data-page-num="Page 15" style="font-size:9pt; line-height:1.25;">
         <div class="Header1">Introduction & Executive Summary</div>
 
         <p style="margin-bottom:6pt;">In selecting applicable approaches to value, the appraiser s considered the agreed upon appraisal scope and assessed the applicability of each traditional approach given the subject's characteristics and the intended use of the appraisal. As a result, this appraisal developed Direct Comparison and Income (Direct Capitalization) Approaches. The values presented represent the As Stabilized (Fee Simple Estate).</p>
@@ -1847,7 +1885,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
     <!-- PAGE 21 -->
-    <div class="page-sheet" data-page-num="Page 21" style="font-size:9pt; line-height:1.25;">
+    <div class="page-sheet" data-page-num="Page 16" style="font-size:9pt; line-height:1.25;">
         <div class="Header1">Introduction & Executive Summary</div>
 
         <div class="Header2" style="margin-bottom:8pt;">Subject Property Inspection</div>
@@ -1892,7 +1930,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
     <!-- PAGE 22 -->
-    <div class="page-sheet" data-page-num="Page 22">
+    <div class="page-sheet" data-page-num="Page 17">
         <div class="Header1">Property Analysis</div>
 
         <div class="Header2">Location</div>
@@ -1926,7 +1964,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
     <!-- PAGE 23 -->
-    <div class="page-sheet" data-page-num="Page 23">
+    <div class="page-sheet" data-page-num="Page 18">
         <div class="Header1">Property Analysis</div>
 
         <div class="Header2">Site Details</div>
@@ -2026,7 +2064,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
     <!-- PAGE 24 -->
-    <div class="page-sheet" data-page-num="Page 24">
+    <div class="page-sheet" data-page-num="Page 19">
         <div class="Header1">Property Analysis</div>
 
         <div class="Header2">Access & Frontage</div>
@@ -2143,7 +2181,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
     <!-- PAGE 25 -->
-    <div class="page-sheet" data-page-num="Page 25">
+    <div class="page-sheet" data-page-num="Page 20">
         <div class="Header1">Property Analysis</div>
 
         <div class="Header2">Exposure & Visibility</div>
@@ -2176,7 +2214,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     <!-- ========================================== -->
 
     <!-- PAGE 26 (21) -->
-    <div class="page-sheet" data-page-num="Page 26">
+    <div class="page-sheet" data-page-num="Page 21">
         <div class="Header1">Property Analysis</div>
 
         <div style="text-align:center; font-size:14pt; color:#0072CE; margin:10px 0 15px 0;"><span class="field-mapped" data-sample="Site Plans – Lot 17" title="{{site-plan-1-title}}">{{site-plan-1-title}}</span></div>
@@ -2190,7 +2228,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
     <!-- PAGE 27 (22) -->
-    <div class="page-sheet" data-page-num="Page 27">
+    <div class="page-sheet" data-page-num="Page 22">
         <div class="Header1">Property Analysis</div>
 
         <div style="text-align:center; font-size:14pt; color:#0072CE; margin:10px 0 15px 0;"><span class="field-mapped" data-sample="Site Plans – Lot 18" title="{{site-plan-2-title}}">{{site-plan-2-title}}</span></div>
@@ -2204,7 +2242,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
     <!-- PAGE 28 (23) -->
-    <div class="page-sheet" data-page-num="Page 28">
+    <div class="page-sheet" data-page-num="Page 23">
         <div class="Header1">Property Analysis</div>
 
         <div class="Header2">Property Taxes & Assessment</div>
@@ -2228,7 +2266,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
                     <td><span class="field-mapped" data-sample="$1,063,900" title="{{subject-taxassessment}}">{{subject-taxassessment}}</span></td>
                     <td><span class="field-mapped" data-sample="0.01757" title="{{subject-taxrate}}">{{subject-taxrate}}</span></td>
                     <td><span class="field-mapped" data-sample="$18,688" title="{{subject-taxamount}}">{{subject-taxamount}}</span></td>
-                    <td><span class="field-mapped" data-sample="$1.83" title="{{subject-taxpersf}}">{{subject-taxpersf}}</span></td>
+                    <td><span class="field-mapped" data-sample="$1.83" title="{{subject-tax-per-sf}}">{{subject-tax-per-sf}}</span></td>
                 </tr>
             </tbody>
         </table>
@@ -2246,7 +2284,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
     <!-- PAGE 29 (24) -->
-    <div class="page-sheet" data-page-num="Page 29">
+    <div class="page-sheet" data-page-num="Page 24">
         <div class="Header1">Property Analysis</div>
 
         <div class="Header2">Land Use & Planning</div>
@@ -2275,7 +2313,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
             </tr>
             <tr>
                 <td class="label-col">Current Use Legally Permitted</td>
-                <td class="value-col"><span class="field-mapped" data-sample="Yes" title="{{subject-legallypermitted}}">{{subject-legallypermitted}}</span></td>
+                <td class="value-col"><span class="field-mapped" data-sample="Yes" title="{{subject-legally-permitted}}">{{subject-legally-permitted}}</span></td>
             </tr>
             <tr>
                 <td class="label-col">Conforming Use</td>
@@ -2301,7 +2339,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
     <!-- PAGE 30 (25) -->
-    <div class="page-sheet" data-page-num="Page 30">
+    <div class="page-sheet" data-page-num="Page 25">
         <div class="Header1">Property Analysis</div>
 
         <div style="text-align:center; font-size:14pt; color:#0072CE; margin:10px 0 15px 0;"><span class="field-mapped" data-sample="Zoning Map" title="{{zoning-map-title}}">{{zoning-map-title}}</span></div>
@@ -2315,7 +2353,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
 <!-- PAGE 31: Multi-Family Market Overview -->
-<div class="page-sheet" data-page-num="Page 31">
+<div class="page-sheet" data-page-num="Page 26">
     <div class="Header1">Market Context</div>
     <div class="Header2" style="font-size: 16pt; font-weight: bold; color: #003B7E; margin-top: 16px;">Multi-Family Market Overview</div>
 
@@ -2398,7 +2436,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
 </div>
 
 <!-- PAGE 32: Highest & Best Use -->
-<div class="page-sheet" data-page-num="Page 32">
+<div class="page-sheet" data-page-num="Page 27">
     <div class="Header1">Valuation & Conclusions</div>
     <div class="Header2">Highest & Best Use</div>
 
@@ -2442,19 +2480,19 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
 </div>
 
     <!-- PAGE 33 (numbered 28) -->
-    <div class="page-sheet" data-page-num="Page 33">
+    <div class="page-sheet" data-page-num="Page 28">
         <div class="Header1">Property Analysis</div>
 
         <div class="Header2" style="margin-bottom: 4px;">Building Description</div>
 
         <style>
-            .page-sheet[data-page-num="Page 33"] table td {
+            .page-sheet[data-page-num="Page 28"] table td {
                 padding: 2px 4px !important;
             }
-            .page-sheet[data-page-num="Page 33"] table td.label-col {
+            .page-sheet[data-page-num="Page 28"] table td.label-col {
                 width: 18% !important;
             }
-            .page-sheet[data-page-num="Page 33"] table td:not(.label-col) {
+            .page-sheet[data-page-num="Page 28"] table td:not(.label-col) {
                 width: 82% !important;
             }
         </style>
@@ -2581,7 +2619,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
     <!-- PAGE 34 (numbered 29) -->
-    <div class="page-sheet" data-page-num="Page 34">
+    <div class="page-sheet" data-page-num="Page 29">
         <div class="Header1">Property Analysis</div>
 
         <p>materials, including (but not limited to) unseen asbestos and mold. Please refer to the Assumptions and Limiting Conditions section regarding this issue.</p>
@@ -2593,7 +2631,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     </div>
 
 <!-- PAGE 35 -->
-<div class="page-sheet" data-page-num="Page 35">
+<div class="page-sheet" data-page-num="Page 30">
     <div class="Header1">Valuation & Conclusions</div>
 
     <div class="Header2">Valuation Methodology</div>
@@ -2627,7 +2665,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
 </div>
 
 <!-- PAGE 36 -->
-<div class="page-sheet" data-page-num="Page 36">
+<div class="page-sheet" data-page-num="Page 31">
     <div class="Header1">Valuation & Conclusions</div>
 
     <p>We have undertaken the Income Approach as part of this assignment. The subject property comprises an income generating asset and as such, we consider the inclusion of this approach warranted. In undertaking this approach, we have relied on the Direct Capitalization method only as the Discounted Cash Flow method does not contribute substantially to estimating the market value of the subject property beyond the Direct Capitalization method.</p>
@@ -2673,7 +2711,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
 
 <!-- PAGE 37 -->
 <!-- PAGE 37: Income Approach -->
-<div class="page-sheet" data-page-num="Page 37">
+<div class="page-sheet" data-page-num="Page 32">
     <div class="Header1">Valuation & Conclusions</div>
     <div class="Header2">Income Approach</div>
 
@@ -2801,16 +2839,16 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
 <!-- ============================================ -->
 <!-- PAGE 38: Rent Survey Comparison Table -->
 <!-- ============================================ -->
-<div class="page-sheet" data-page-num="Page 38">
+<div class="page-sheet" data-page-num="Page 33">
     <style>
         /* Compact styling for Page 38 - 7 columns with vertical gridlines */
-        .page-sheet[data-page-num="Page 38"] .compact-table {
+        .page-sheet[data-page-num="Page 33"] .compact-table {
             font-size: 7.5pt;
             margin-bottom: 0;
             border-collapse: collapse;
         }
-        .page-sheet[data-page-num="Page 38"] .compact-table td,
-        .page-sheet[data-page-num="Page 38"] .compact-table th {
+        .page-sheet[data-page-num="Page 33"] .compact-table td,
+        .page-sheet[data-page-num="Page 33"] .compact-table th {
             padding: 4px 6px;
             line-height: 1.3;
             border-left: none;
@@ -2819,29 +2857,29 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
             border-bottom: none;
         }
         /* Column 1 (labels) and Column 2 (Subject) - left aligned, no right border on col 1 */
-        .page-sheet[data-page-num="Page 38"] .compact-table td:first-child,
-        .page-sheet[data-page-num="Page 38"] .compact-table th:first-child {
+        .page-sheet[data-page-num="Page 33"] .compact-table td:first-child,
+        .page-sheet[data-page-num="Page 33"] .compact-table th:first-child {
             text-align: left;
             border-right: none;
         }
-        .page-sheet[data-page-num="Page 38"] .compact-table td:nth-child(2),
-        .page-sheet[data-page-num="Page 38"] .compact-table th:nth-child(2) {
+        .page-sheet[data-page-num="Page 33"] .compact-table td:nth-child(2),
+        .page-sheet[data-page-num="Page 33"] .compact-table th:nth-child(2) {
             text-align: left;
             border-left: none;
             border-right: 1px solid #ddd;
         }
         /* Comp columns (3-7) - right aligned with vertical gridlines */
-        .page-sheet[data-page-num="Page 38"] .compact-table td:nth-child(n+3),
-        .page-sheet[data-page-num="Page 38"] .compact-table th:nth-child(n+3) {
+        .page-sheet[data-page-num="Page 33"] .compact-table td:nth-child(n+3),
+        .page-sheet[data-page-num="Page 33"] .compact-table th:nth-child(n+3) {
             text-align: right;
             border-left: 1px solid #ddd;
         }
         /* Remove outer right border on last column */
-        .page-sheet[data-page-num="Page 38"] .compact-table td:last-child,
-        .page-sheet[data-page-num="Page 38"] .compact-table th:last-child {
+        .page-sheet[data-page-num="Page 33"] .compact-table td:last-child,
+        .page-sheet[data-page-num="Page 33"] .compact-table th:last-child {
             border-right: none;
         }
-        .page-sheet[data-page-num="Page 38"] .table-section-header {
+        .page-sheet[data-page-num="Page 33"] .table-section-header {
             background-color: #003B7E !important;
             color: white !important;
             font-size: 8.5pt;
@@ -2850,55 +2888,55 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
             border: none !important;
         }
         /* Grouping - moderate padding after group-last rows */
-        .page-sheet[data-page-num="Page 38"] .group-last td {
+        .page-sheet[data-page-num="Page 33"] .group-last td {
             padding-bottom: 8px !important;
         }
         /* Total row - line above and below, extra space above */
-        .page-sheet[data-page-num="Page 38"] .total-row td {
+        .page-sheet[data-page-num="Page 33"] .total-row td {
             border-top: 1px solid #333 !important;
             border-bottom: 1px solid #333 !important;
             padding-top: 6px !important;
             padding-bottom: 4px !important;
         }
         /* Column headers - no vertical gridlines */
-        .page-sheet[data-page-num="Page 38"] .compact-table:first-of-type thead tr th {
+        .page-sheet[data-page-num="Page 33"] .compact-table:first-of-type thead tr th {
             border-left: none !important;
             border-right: none !important;
             border-bottom: 1px solid #ccc !important;
         }
         /* Empty corner cell */
-        .page-sheet[data-page-num="Page 38"] .empty-corner {
+        .page-sheet[data-page-num="Page 33"] .empty-corner {
             border-right: none !important;
         }
-        .page-sheet[data-page-num="Page 38"] .compact-table tbody tr:first-child td {
+        .page-sheet[data-page-num="Page 33"] .compact-table tbody tr:first-child td {
             padding-top: 6px;
         }
-        .page-sheet[data-page-num="Page 38"] .label-col {
+        .page-sheet[data-page-num="Page 33"] .label-col {
             background-color: transparent;
             width: 17%;
             border-left: none !important;
             white-space: nowrap;
         }
         /* Smaller font for address rows to prevent wrapping */
-        .page-sheet[data-page-num="Page 38"] .compact-table tbody tr:first-child td:not(.label-col) {
+        .page-sheet[data-page-num="Page 33"] .compact-table tbody tr:first-child td:not(.label-col) {
             font-size: 6.5pt;
         }
         /* City row: same small font as addresses */
-        .page-sheet[data-page-num="Page 38"] .compact-table tbody tr:nth-child(2) td:not(.label-col) {
+        .page-sheet[data-page-num="Page 33"] .compact-table tbody tr:nth-child(2) td:not(.label-col) {
             font-size: 6.5pt;
         }
         /* Multi-line amenities */
-        .page-sheet[data-page-num="Page 38"] .amenities-list {
+        .page-sheet[data-page-num="Page 33"] .amenities-list {
             font-size: 6.5pt;
             line-height: 1.3;
         }
-        .page-sheet[data-page-num="Page 38"] h1 {
+        .page-sheet[data-page-num="Page 33"] h1 {
             margin-bottom: 8px;
         }
-        .page-sheet[data-page-num="Page 38"] h2 {
+        .page-sheet[data-page-num="Page 33"] h2 {
             margin-bottom: 6px;
         }
-        .page-sheet[data-page-num="Page 38"] p {
+        .page-sheet[data-page-num="Page 33"] p {
             margin-bottom: 8px;
             font-size: 9pt;
         }
@@ -3190,16 +3228,16 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
     <!-- ============================================ -->
     <style>
         /* Page 39 - Rental Comparables Location Map */
-        .page-sheet[data-page-num="Page 39"] {
+        .page-sheet[data-page-num="Page 34"] {
             padding-bottom: 180px;
         }
 
-        .page-sheet[data-page-num="Page 39"] h1.Header1 {
+        .page-sheet[data-page-num="Page 34"] h1.Header1 {
             font-size: 18pt;
             margin-bottom: 12px;
         }
 
-        .page-sheet[data-page-num="Page 39"] .map-container {
+        .page-sheet[data-page-num="Page 34"] .map-container {
             width: 100%;
             height: 650px;
             background-color: #e8f4f8;
@@ -3212,14 +3250,14 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
             margin-bottom: 12px;
         }
 
-        .page-sheet[data-page-num="Page 39"] table.comparables-list {
+        .page-sheet[data-page-num="Page 34"] table.comparables-list {
             width: 100%;
             border-collapse: collapse;
             font-size: 8pt;
             margin-bottom: 12px;
         }
 
-        .page-sheet[data-page-num="Page 39"] table.comparables-list th {
+        .page-sheet[data-page-num="Page 34"] table.comparables-list th {
             background-color: #003B7E;
             color: white;
             font-weight: bold;
@@ -3228,25 +3266,25 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
             border: 1px solid #003B7E;
         }
 
-        .page-sheet[data-page-num="Page 39"] table.comparables-list td {
+        .page-sheet[data-page-num="Page 34"] table.comparables-list td {
             padding: 3px 6px;
             border: none;
             vertical-align: top;
             line-height: 1.3;
         }
 
-        .page-sheet[data-page-num="Page 39"] table.comparables-list td:first-child {
+        .page-sheet[data-page-num="Page 34"] table.comparables-list td:first-child {
             font-weight: 600;
             width: 20%;
         }
     </style>
 
-    <div class="page-sheet" data-page-num="Page 39">
+    <div class="page-sheet" data-page-num="Page 34">
         <h1 class="Header1">Valuation & Conclusions</h1>
 
         <!-- Map Image Placeholder -->
         <div class="map-container">
-            <span class="field-mapped" title="{{rental-comparables-map}}" data-sample="[Rental Comparables Location Map]">{{rental-comparables-map}}</span>
+            <span class="field-mapped" title="{{img-rental-comparables-map}}" data-sample="[Rental Comparables Location Map]">{{img-rental-comparables-map}}</span>
         </div>
 
         <!-- Comparables List Table -->
@@ -3302,7 +3340,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA=">
         </div>
     </div>
 <!-- PAGE 40 -->
-<div class="page-sheet" data-page-num="Page 40">
+<div class="page-sheet" data-page-num="Page 35">
     <div class="Header1" style="margin-bottom: 8px;">Valuation & Conclusions</div>
 
     <div class="Header2" style="margin-bottom: 6px;">Conclusion Of Market Rent - Multi-Family</div>
@@ -3667,7 +3705,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 </script>
 
     <!-- PAGE 41 (36) -->
-    <div class="page-sheet" data-page-num="Page 41">
+    <div class="page-sheet" data-page-num="Page 36">
         <div class="Header1">Valuation & Conclusions</div>
 
         <div class="page-footer">
@@ -3678,7 +3716,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 
 
 <!-- PAGE 47 -->
-    <div class="page-sheet" data-page-num="Page 42">
+    <div class="page-sheet" data-page-num="Page 37">
         <div class="Header1">Valuation & Conclusions</div>
         <div class="Header2">Unit Rent Discussion</div>
         <p>The subject property, <span class="field-mapped" data-sample="North Battleford Apartments" title="{{subject-name}}">{{subject-name}}</span> at <span class="field-mapped" data-sample="1101, 1121 109 Street" title="{{subject-street}}">{{subject-street}}</span>, is a <span class="field-mapped" data-sample="16" title="{{subject-units}}">{{subject-units}}</span>-unit building of <span class="field-mapped" data-sample="average" title="{{subject-quality-rating}}">{{subject-quality-rating}}</span> quality and condition with <span class="field-mapped" data-sample="heat and water included" title="{{subject-amenities-utilities}}">{{subject-amenities-utilities}}</span>, <span class="field-mapped" data-sample="surface parking" title="{{subject-amenities-parking}}">{{subject-amenities-parking}}</span>, and <span class="field-mapped" data-sample="on-site laundry" title="{{subject-amenities-laundry}}">{{subject-amenities-laundry}}</span>.</p>
@@ -3830,7 +3868,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     </div>
 
     <!-- PAGE 48 -->
-    <div class="page-sheet" data-page-num="Page 43">
+    <div class="page-sheet" data-page-num="Page 38">
         <div class="Header1">Valuation & Conclusions</div>
         <div class="Header2">Vacancy Allowance</div>
         <p>This category accounts for the time period between occupants, as well as possible prolonged vacancies under slow market conditions. Market participants typically expect a vacancy of 2% to 5% of potential gross income for similar property types. This assignment reflects the probable vacancy during the economic life of the property and not necessarily the current or short-term vacancy. The findings of the Multi-Family Market Overview section support a typical vacancy allocation. As of the effective date, the subject is <span class="field-mapped" title="{{subject-occupancy-current}}" data-sample="100.0%">{{subject-occupancy-current}}</span> occupied. Based on current and perceived long-term market conditions and the subject's anticipated tenancy over a 12-month holding period, a vacancy allowance of <span class="field-mapped" title="{{vacancy-rate-concluded}}" data-sample="3.8%">{{vacancy-rate-concluded}}</span> is concluded.</p>
@@ -3872,7 +3910,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     </div>
 
     <!-- PAGE 49 -->
-    <div class="page-sheet" data-page-num="Page 44">
+    <div class="page-sheet" data-page-num="Page 39">
         <div class="Header1">Valuation & Conclusions</div>
         <div class="table-section-header">OPERATING HISTORY</div>
         <table class="compact-table">
@@ -4091,7 +4129,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     </div>
 
     <!-- PAGE 50 -->
-    <div class="page-sheet" data-page-num="Page 45">
+    <div class="page-sheet" data-page-num="Page 40">
         <div class="Header1">Valuation & Conclusions</div>
         <div class="Header2">Expense Conclusions</div>
         <p>The individual expense conclusions for the subject are summarized below.</p>
@@ -4186,7 +4224,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     </div>
 
     <!-- PAGE 51 -->
-    <div class="page-sheet" data-page-num="Page 46">
+    <div class="page-sheet" data-page-num="Page 41">
         <div class="Header1">Valuation & Conclusions</div>
         <div class="Header2">Capitalization Rate Selection</div>
         <p>To determine the appropriate capitalization rate for the subject property, consideration is given to:</p>
@@ -4214,7 +4252,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 <!-- ============================================ -->
     <!-- PAGE 52 (Report Page 47): Capitalization Rate -->
     <!-- ============================================ -->
-    <div class="page-sheet" data-page-num="Page 47">
+    <div class="page-sheet" data-page-num="Page 42">
         <h1 class="Header1">Valuation & Conclusions</h1>
 
         <h2 class="Header2">Capitalization Rate</h2>
@@ -4223,28 +4261,28 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 
         <table class="compact-table" style="font-size: 8.5pt;">
             <style>
-                .page-sheet[data-page-num="Page 47"] .compact-table td,
-                .page-sheet[data-page-num="Page 47"] .compact-table th {
+                .page-sheet[data-page-num="Page 42"] .compact-table td,
+                .page-sheet[data-page-num="Page 42"] .compact-table th {
                     padding: 3px 3px;
                     line-height: 1.1;
                     border: none;
                 }
-                .page-sheet[data-page-num="Page 47"] .compact-table {
+                .page-sheet[data-page-num="Page 42"] .compact-table {
                     border-collapse: collapse;
                 }
-                .page-sheet[data-page-num="Page 47"] .label-col {
+                .page-sheet[data-page-num="Page 42"] .label-col {
                     background-color: transparent;
                 }
-                .page-sheet[data-page-num="Page 47"] .compact-table thead tr:last-child {
+                .page-sheet[data-page-num="Page 42"] .compact-table thead tr:last-child {
                     border-bottom: 1px solid #ccc;
                 }
-                .page-sheet[data-page-num="Page 47"] .compact-table tbody tr:first-child td {
+                .page-sheet[data-page-num="Page 42"] .compact-table tbody tr:first-child td {
                     padding-top: 12px;
                 }
-                .page-sheet[data-page-num="Page 47"] .compact-table thead tr:last-child th {
+                .page-sheet[data-page-num="Page 42"] .compact-table thead tr:last-child th {
                     text-align: left;
                 }
-                .page-sheet[data-page-num="Page 47"] .compact-table tbody tr:not(:nth-last-child(-n+4)) td {
+                .page-sheet[data-page-num="Page 42"] .compact-table tbody tr:not(:nth-last-child(-n+4)) td {
                     font-size: 7.5pt;
                 }
             </style>
@@ -4475,7 +4513,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     <!-- ============================================ -->
     <!-- PAGE 53 (Report Page 48): Capitalization Rate Analysis -->
     <!-- ============================================ -->
-    <div class="page-sheet" data-page-num="Page 48">
+    <div class="page-sheet" data-page-num="Page 43">
         <h1 class="Header1">Valuation & Conclusions</h1>
 
         <h2 class="Header2">Capitalization Rate Analysis - Multifamily</h2>
@@ -4526,7 +4564,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     <!-- ============================================ -->
     <!-- PAGE 54 (Report Page 49): Direct Capitalization -->
     <!-- ============================================ -->
-    <div class="page-sheet" data-page-num="Page 49">
+    <div class="page-sheet" data-page-num="Page 44">
         <h1 class="Header1">Valuation & Conclusions</h1>
 
         <h2 class="Header2">Direct Capitalization Conclusion</h2>
@@ -4757,7 +4795,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     <!-- ============================================ -->
     <!-- PAGE 55 (Report Page 50): Income Approach Conclusion -->
     <!-- ============================================ -->
-    <div class="page-sheet" data-page-num="Page 50">
+    <div class="page-sheet" data-page-num="Page 45">
         <h1 class="Header1">Valuation & Conclusions</h1>
 
         <h2 class="Header2">Income Approach Conclusion</h2>
@@ -4806,7 +4844,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     <!-- ============================================ -->
     <!-- PAGE 56 (Report Page 51): Direct Comparison Approach -->
     <!-- ============================================ -->
-    <div class="page-sheet" data-page-num="Page 51">
+    <div class="page-sheet" data-page-num="Page 46">
         <h1 class="Header1">Valuation & Conclusions</h1>
 
         <h2 class="Header2">Direct Comparison Approach: Multifamily</h2>
@@ -4858,23 +4896,23 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     <!-- ============================================ -->
     <style>
         /* Page 52 - Presentation Intro Page */
-        .page-sheet[data-page-num="Page 52"] {
+        .page-sheet[data-page-num="Page 47"] {
             padding-bottom: 180px;
         }
 
-        .page-sheet[data-page-num="Page 52"] h1.Header1 {
+        .page-sheet[data-page-num="Page 47"] h1.Header1 {
             font-size: 18pt;
             margin-bottom: 12px;
         }
 
-        .page-sheet[data-page-num="Page 52"] h2.Header2 {
+        .page-sheet[data-page-num="Page 47"] h2.Header2 {
             font-size: 13pt;
             color: #003B7E;
             font-weight: bold;
             margin-bottom: 12px;
         }
 
-        .page-sheet[data-page-num="Page 52"] p {
+        .page-sheet[data-page-num="Page 47"] p {
             font-size: 10pt;
             line-height: 1.5;
             text-align: justify;
@@ -4882,7 +4920,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         }
     </style>
 
-    <div class="page-sheet" data-page-num="Page 52">
+    <div class="page-sheet" data-page-num="Page 47">
         <h1 class="Header1">Valuation & Conclusions</h1>
 
         <h2 class="Header2">Presentation</h2>
@@ -4903,16 +4941,16 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     <!-- ============================================ -->
     <style>
         /* Page 53 - Comparables Location Map */
-        .page-sheet[data-page-num="Page 53"] {
+        .page-sheet[data-page-num="Page 48"] {
             padding-bottom: 180px;
         }
 
-        .page-sheet[data-page-num="Page 53"] h1.Header1 {
+        .page-sheet[data-page-num="Page 48"] h1.Header1 {
             font-size: 18pt;
             margin-bottom: 12px;
         }
 
-        .page-sheet[data-page-num="Page 53"] .map-container {
+        .page-sheet[data-page-num="Page 48"] .map-container {
             width: 100%;
             height: 650px;
             background-color: #e8f4f8;
@@ -4925,14 +4963,14 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             margin-bottom: 12px;
         }
 
-        .page-sheet[data-page-num="Page 53"] table.comparables-list {
+        .page-sheet[data-page-num="Page 48"] table.comparables-list {
             width: 100%;
             border-collapse: collapse;
             font-size: 8pt;
             margin-bottom: 12px;
         }
 
-        .page-sheet[data-page-num="Page 53"] table.comparables-list th {
+        .page-sheet[data-page-num="Page 48"] table.comparables-list th {
             background-color: #003B7E;
             color: white;
             font-weight: bold;
@@ -4941,25 +4979,25 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             border: 1px solid #003B7E;
         }
 
-        .page-sheet[data-page-num="Page 53"] table.comparables-list td {
+        .page-sheet[data-page-num="Page 48"] table.comparables-list td {
             padding: 3px 6px;
             border: none;
             vertical-align: top;
             line-height: 1.3;
         }
 
-        .page-sheet[data-page-num="Page 53"] table.comparables-list td:first-child {
+        .page-sheet[data-page-num="Page 48"] table.comparables-list td:first-child {
             font-weight: 600;
             width: 20%;
         }
     </style>
 
-    <div class="page-sheet" data-page-num="Page 53">
+    <div class="page-sheet" data-page-num="Page 48">
         <h1 class="Header1">Valuation & Conclusions</h1>
 
         <!-- Map Image Placeholder -->
         <div class="map-container">
-            <span class="field-mapped" title="{{comparablesmap}}" data-sample="[Comparables Location Map]">{{comparablesmap}}</span>
+            <span class="field-mapped" title="{{img-comparables-map}}" data-sample="[Comparables Location Map]">{{img-comparables-map}}</span>
         </div>
 
         <!-- Comparables List Table -->
@@ -5020,56 +5058,56 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     <!-- ============================================ -->
     <style>
         /* Page 54 - Sales Summary Sheet - Compact 2-column layout */
-        .page-sheet[data-page-num="Page 54"] {
+        .page-sheet[data-page-num="Page 49"] {
             padding: 54px 54px 180px 54px;
         }
 
-        .page-sheet[data-page-num="Page 54"] h1.Header1 {
+        .page-sheet[data-page-num="Page 49"] h1.Header1 {
             font-size: 18pt;
             margin-bottom: 8px;
         }
 
-        .page-sheet[data-page-num="Page 54"] h2.Header2 {
+        .page-sheet[data-page-num="Page 49"] h2.Header2 {
             font-size: 13pt;
             color: #003B7E;
             font-weight: bold;
             margin-bottom: 4px;
         }
 
-        .page-sheet[data-page-num="Page 54"] h3 {
+        .page-sheet[data-page-num="Page 49"] h3 {
             font-size: 11pt;
             font-weight: normal;
             margin-bottom: 12px;
         }
 
-        .page-sheet[data-page-num="Page 54"] .content-wrapper {
+        .page-sheet[data-page-num="Page 49"] .content-wrapper {
             display: flex;
             gap: 12px;
             margin-top: 12px;
         }
 
-        .page-sheet[data-page-num="Page 54"] .left-column {
+        .page-sheet[data-page-num="Page 49"] .left-column {
             flex: 0 0 48%;
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
 
-        .page-sheet[data-page-num="Page 54"] .right-column {
+        .page-sheet[data-page-num="Page 49"] .right-column {
             flex: 0 0 48%;
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
 
-        .page-sheet[data-page-num="Page 54"] table.comp-table {
+        .page-sheet[data-page-num="Page 49"] table.comp-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 7pt;
             margin-bottom: 0;
         }
 
-        .page-sheet[data-page-num="Page 54"] table.comp-table th {
+        .page-sheet[data-page-num="Page 49"] table.comp-table th {
             background-color: #003B7E;
             color: white;
             font-weight: bold;
@@ -5079,23 +5117,23 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             border: none;
         }
 
-        .page-sheet[data-page-num="Page 54"] table.comp-table td {
+        .page-sheet[data-page-num="Page 49"] table.comp-table td {
             padding: 2px 4px;
             border: none;
             vertical-align: top;
             line-height: 1.3;
         }
 
-        .page-sheet[data-page-num="Page 54"] table.comp-table td.label {
+        .page-sheet[data-page-num="Page 49"] table.comp-table td.label {
             font-weight: 600;
             width: 45%;
         }
 
-        .page-sheet[data-page-num="Page 54"] table.comp-table tr.highlight {
+        .page-sheet[data-page-num="Page 49"] table.comp-table tr.highlight {
             font-weight: bold;
         }
 
-        .page-sheet[data-page-num="Page 54"] .property-photo {
+        .page-sheet[data-page-num="Page 49"] .property-photo {
             width: 100%;
             height: 280px;
             background-color: #e8f4f8;
@@ -5107,20 +5145,20 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             font-size: 9pt;
         }
 
-        .page-sheet[data-page-num="Page 54"] .address-map-wrapper {
+        .page-sheet[data-page-num="Page 49"] .address-map-wrapper {
             display: flex;
             gap: 8px;
             align-items: flex-start;
         }
 
-        .page-sheet[data-page-num="Page 54"] .address-block {
+        .page-sheet[data-page-num="Page 49"] .address-block {
             flex: 0 0 38%;
             font-size: 7pt;
             line-height: 1.4;
             padding: 4px 0;
         }
 
-        .page-sheet[data-page-num="Page 54"] .location-map {
+        .page-sheet[data-page-num="Page 49"] .location-map {
             flex: 0 0 58%;
             height: 150px;
             background-color: #f0f0f0;
@@ -5132,19 +5170,19 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             font-size: 8pt;
         }
 
-        .page-sheet[data-page-num="Page 54"] .remarks-block {
+        .page-sheet[data-page-num="Page 49"] .remarks-block {
             font-size: 7pt;
             line-height: 1.5;
             text-align: justify;
         }
 
-        .page-sheet[data-page-num="Page 54"] .remarks-block strong {
+        .page-sheet[data-page-num="Page 49"] .remarks-block strong {
             display: block;
             margin-bottom: 3px;
         }
     </style>
 
-    <div class="page-sheet" data-page-num="Page 54">
+    <div class="page-sheet" data-page-num="Page 49">
         <h1 class="Header1">Valuation & Conclusions</h1>
         <h2 class="Header2">Sales Summary Sheets</h2>
         <h3><span class="field-mapped" title="{{comp1-name}}" data-sample="Heritage House">{{comp1-name}}</span><br><span style="font-size: 9pt; color: #666;">Comparable 1</span></h3>
@@ -5173,7 +5211,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                         </tr>
                         <tr>
                             <td class="label">Transaction Status</td>
-                            <td><span class="field-mapped" title="{{comp1-transactionstatus}}" data-sample="Closed">{{comp1-transactionstatus}}</span></td>
+                            <td><span class="field-mapped" title="{{comp1-transaction-status}}" data-sample="Closed">{{comp1-transaction-status}}</span></td>
                         </tr>
                         <tr class="highlight">
                             <td class="label">Sale Price</td>
@@ -5181,11 +5219,11 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                         </tr>
                         <tr class="highlight">
                             <td class="label">Analysis Price</td>
-                            <td><span class="field-mapped" title="{{comp1-analysisprice}}" data-sample="$3,117,383">{{comp1-analysisprice}}</span> | <span class="field-mapped" title="{{comp1-analysis-price-per-unit}}" data-sample="$129,891">{{comp1-analysis-price-per-unit}}</span>/Unit</td>
+                            <td><span class="field-mapped" title="{{comp1-analysis-price}}" data-sample="$3,117,383">{{comp1-analysis-price}}</span> | <span class="field-mapped" title="{{comp1-analysis-price-per-unit}}" data-sample="$129,891">{{comp1-analysis-price-per-unit}}</span>/Unit</td>
                         </tr>
                         <tr>
                             <td class="label">Rights Transferred</td>
-                            <td><span class="field-mapped" title="{{comp1-rightstransferred}}" data-sample="Fee Simple">{{comp1-rightstransferred}}</span></td>
+                            <td><span class="field-mapped" title="{{comp1-rights-transferred}}" data-sample="Fee Simple">{{comp1-rights-transferred}}</span></td>
                         </tr>
                         <tr>
                             <td class="label">Financing</td>
@@ -5193,7 +5231,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                         </tr>
                         <tr>
                             <td class="label">Conditions of Sale</td>
-                            <td><span class="field-mapped" title="{{comp1-conditionsofsale}}" data-sample="Arm's Length">{{comp1-conditionsofsale}}</span></td>
+                            <td><span class="field-mapped" title="{{comp1-conditions-of-sale}}" data-sample="Arm's Length">{{comp1-conditions-of-sale}}</span></td>
                         </tr>
                     </tbody>
                 </table>
@@ -5210,7 +5248,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                         </tr>
                         <tr>
                             <td class="label">Net Operating Income</td>
-                            <td><span class="field-mapped" title="{{comp1-noi}}" data-sample="$186,731.24">{{comp1-noi}}</span> | <span class="field-mapped" title="{{comp1-noi-perunit}}" data-sample="$7,780.47">{{comp1-noi-perunit}}</span>/Unit</td>
+                            <td><span class="field-mapped" title="{{comp1-noi}}" data-sample="$186,731.24">{{comp1-noi}}</span> | <span class="field-mapped" title="{{comp1-noi-per-unit}}" data-sample="$7,780.47">{{comp1-noi-per-unit}}</span>/Unit</td>
                         </tr>
                         <tr class="highlight">
                             <td class="label">Cap Rate</td>
@@ -5227,7 +5265,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     <tbody>
                         <tr>
                             <td class="label">Type</td>
-                            <td><span class="field-mapped" title="{{comp1-propertytype}}" data-sample="Multi-family, Walk-Up">{{comp1-propertytype}}</span></td>
+                            <td><span class="field-mapped" title="{{comp1-property-type}}" data-sample="Multi-family, Walk-Up">{{comp1-property-type}}</span></td>
                         </tr>
                         <tr>
                             <td class="label">Rent Type</td>
@@ -5267,7 +5305,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                         </tr>
                         <tr>
                             <td class="label">Security Features</td>
-                            <td><span class="field-mapped" title="{{comp1-securityfeatures}}" data-sample="Deadbolts, Exterior Lighting, Secured Entry">{{comp1-securityfeatures}}</span></td>
+                            <td><span class="field-mapped" title="{{comp1-security-features}}" data-sample="Deadbolts, Exterior Lighting, Secured Entry">{{comp1-security-features}}</span></td>
                         </tr>
                         <tr>
                             <td class="label">Laundry</td>
@@ -5321,7 +5359,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     <!-- Address Block -->
                     <div class="address-block">
                         <strong><span class="field-mapped" title="{{comp1-address}}" data-sample="1651-107 St">{{comp1-address}}</span></strong><br>
-                        <span class="field-mapped" title="{{comp1-citystatezip}}" data-sample="North Battleford, SK S9A 2A1">{{comp1-citystatezip}}</span><br>
+                        <span class="field-mapped" title="{{comp1-city-state-zip}}" data-sample="North Battleford, SK S9A 2A1">{{comp1-city-state-zip}}</span><br>
                         <br>
                         <strong>County:</strong> <span class="field-mapped" title="{{comp1-county}}" data-sample="North Battleford">{{comp1-county}}</span><br>
                         <strong>Submarket:</strong> <span class="field-mapped" title="{{comp1-submarket}}" data-sample="Saskatchewan Area">{{comp1-submarket}}</span>
@@ -5356,56 +5394,56 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     <!-- ============================================ -->
     <style>
     /* Page 55 - College View Apartments - Compact 2-column layout */
-    .page-sheet[data-page-num="Page 55"] {
+    .page-sheet[data-page-num="Page 50"] {
         padding: 54px 54px 180px 54px;
     }
 
-    .page-sheet[data-page-num="Page 55"] h1.Header1 {
+    .page-sheet[data-page-num="Page 50"] h1.Header1 {
         font-size: 18pt;
         margin-bottom: 8px;
     }
 
-    .page-sheet[data-page-num="Page 55"] h2.Header2 {
+    .page-sheet[data-page-num="Page 50"] h2.Header2 {
         font-size: 13pt;
         color: #003B7E;
         font-weight: bold;
         margin-bottom: 4px;
     }
 
-    .page-sheet[data-page-num="Page 55"] h3 {
+    .page-sheet[data-page-num="Page 50"] h3 {
         font-size: 11pt;
         font-weight: normal;
         margin-bottom: 12px;
     }
 
-    .page-sheet[data-page-num="Page 55"] .content-wrapper {
+    .page-sheet[data-page-num="Page 50"] .content-wrapper {
         display: flex;
         gap: 12px;
         margin-top: 12px;
     }
 
-    .page-sheet[data-page-num="Page 55"] .left-column {
+    .page-sheet[data-page-num="Page 50"] .left-column {
         flex: 0 0 48%;
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
 
-    .page-sheet[data-page-num="Page 55"] .right-column {
+    .page-sheet[data-page-num="Page 50"] .right-column {
         flex: 0 0 48%;
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
 
-    .page-sheet[data-page-num="Page 55"] table.comp-table {
+    .page-sheet[data-page-num="Page 50"] table.comp-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 7pt;
         margin-bottom: 0;
     }
 
-    .page-sheet[data-page-num="Page 55"] table.comp-table th {
+    .page-sheet[data-page-num="Page 50"] table.comp-table th {
         background-color: #003B7E;
         color: white;
         font-weight: bold;
@@ -5415,23 +5453,23 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         border: none;
     }
 
-    .page-sheet[data-page-num="Page 55"] table.comp-table td {
+    .page-sheet[data-page-num="Page 50"] table.comp-table td {
         padding: 2px 4px;
         border: none;
         vertical-align: top;
         line-height: 1.3;
     }
 
-    .page-sheet[data-page-num="Page 55"] table.comp-table td.label {
+    .page-sheet[data-page-num="Page 50"] table.comp-table td.label {
         font-weight: 600;
         width: 45%;
     }
 
-    .page-sheet[data-page-num="Page 55"] table.comp-table tr.highlight {
+    .page-sheet[data-page-num="Page 50"] table.comp-table tr.highlight {
         font-weight: bold;
     }
 
-    .page-sheet[data-page-num="Page 55"] .property-photo {
+    .page-sheet[data-page-num="Page 50"] .property-photo {
         width: 100%;
         height: 280px;
         background-color: #e8f4f8;
@@ -5443,20 +5481,20 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         font-size: 9pt;
     }
 
-    .page-sheet[data-page-num="Page 55"] .address-map-wrapper {
+    .page-sheet[data-page-num="Page 50"] .address-map-wrapper {
         display: flex;
         gap: 8px;
         align-items: flex-start;
     }
 
-    .page-sheet[data-page-num="Page 55"] .address-block {
+    .page-sheet[data-page-num="Page 50"] .address-block {
         flex: 0 0 38%;
         font-size: 7pt;
         line-height: 1.4;
         padding: 4px 0;
     }
 
-    .page-sheet[data-page-num="Page 55"] .location-map {
+    .page-sheet[data-page-num="Page 50"] .location-map {
         flex: 0 0 58%;
         height: 150px;
         background-color: #f0f0f0;
@@ -5468,19 +5506,19 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         font-size: 8pt;
     }
 
-    .page-sheet[data-page-num="Page 55"] .remarks-block {
+    .page-sheet[data-page-num="Page 50"] .remarks-block {
         font-size: 7pt;
         line-height: 1.5;
         text-align: justify;
     }
 
-    .page-sheet[data-page-num="Page 55"] .remarks-block strong {
+    .page-sheet[data-page-num="Page 50"] .remarks-block strong {
         display: block;
         margin-bottom: 3px;
     }
 </style>
 
-<div class="page-sheet" data-page-num="Page 55">
+<div class="page-sheet" data-page-num="Page 50">
     <h1 class="Header1">Valuation & Conclusions</h1>
     <h2 class="Header2">Sales Summary Sheets</h2>
     <h3><span class="field-mapped" title="{{comp2-name}}" data-sample="College View Apartments">{{comp2-name}}</span><br><span style="font-size: 9pt; color: #666;">Comparable 2</span></h3>
@@ -5509,7 +5547,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     </tr>
                     <tr>
                         <td class="label">Transaction Status</td>
-                        <td><span class="field-mapped" title="{{comp2-transactionstatus}}" data-sample="Closed">{{comp2-transactionstatus}}</span></td>
+                        <td><span class="field-mapped" title="{{comp2-transaction-status}}" data-sample="Closed">{{comp2-transaction-status}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Sale Price</td>
@@ -5521,15 +5559,15 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     </tr>
                     <tr>
                         <td class="label">Analysis Price</td>
-                        <td><span class="field-mapped" title="{{comp2-analysisprice}}" data-sample="$4,590,858">{{comp2-analysisprice}}</span></td>
+                        <td><span class="field-mapped" title="{{comp2-analysis-price}}" data-sample="$4,590,858">{{comp2-analysis-price}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Rights Transferred</td>
-                        <td><span class="field-mapped" title="{{comp2-rightstransferred}}" data-sample="Fee Simple">{{comp2-rightstransferred}}</span></td>
+                        <td><span class="field-mapped" title="{{comp2-rights-transferred}}" data-sample="Fee Simple">{{comp2-rights-transferred}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Market Conditions</td>
-                        <td><span class="field-mapped" title="{{comp2-marketconditions}}" data-sample="Arm's Length">{{comp2-marketconditions}}</span></td>
+                        <td><span class="field-mapped" title="{{comp2-market-conditions}}" data-sample="Arm's Length">{{comp2-market-conditions}}</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -5563,7 +5601,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 <tbody>
                     <tr>
                         <td class="label">Type</td>
-                        <td><span class="field-mapped" title="{{comp2-propertytype}}" data-sample="Multi-Family, Walk-Up">{{comp2-propertytype}}</span></td>
+                        <td><span class="field-mapped" title="{{comp2-property-type}}" data-sample="Multi-Family, Walk-Up">{{comp2-property-type}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Rent Type</td>
@@ -5603,7 +5641,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     </tr>
                     <tr>
                         <td class="label">Security Features</td>
-                        <td><span class="field-mapped" title="{{comp2-securityfeatures}}" data-sample="Deadbolts, Exterior Lighting, Secured Entry">{{comp2-securityfeatures}}</span></td>
+                        <td><span class="field-mapped" title="{{comp2-security-features}}" data-sample="Deadbolts, Exterior Lighting, Secured Entry">{{comp2-security-features}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Laundry</td>
@@ -5657,7 +5695,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 <!-- Address Block -->
                 <div class="address-block">
                     <strong><span class="field-mapped" title="{{comp2-address}}" data-sample="1010/10-1091/5 Windsor Crescent">{{comp2-address}}</span></strong><br>
-                    <span class="field-mapped" title="{{comp2-citystatezip}}" data-sample="North Battleford, SK S9A 2G3">{{comp2-citystatezip}}</span><br>
+                    <span class="field-mapped" title="{{comp2-city-state-zip}}" data-sample="North Battleford, SK S9A 2G3">{{comp2-city-state-zip}}</span><br>
                     <br>
                     <strong>County:</strong> <span class="field-mapped" title="{{comp2-county}}" data-sample="North Battleford">{{comp2-county}}</span><br>
                     <strong>Submarket:</strong> <span class="field-mapped" title="{{comp2-submarket}}" data-sample="Saskatchewan Area">{{comp2-submarket}}</span>
@@ -5692,56 +5730,56 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     <!-- ============================================ -->
     <style>
     /* Page 56 - Woodland Estates - Compact 2-column layout */
-    .page-sheet[data-page-num="Page 56"] {
+    .page-sheet[data-page-num="Page 51"] {
         padding: 54px 54px 180px 54px;
     }
 
-    .page-sheet[data-page-num="Page 56"] h1.Header1 {
+    .page-sheet[data-page-num="Page 51"] h1.Header1 {
         font-size: 18pt;
         margin-bottom: 8px;
     }
 
-    .page-sheet[data-page-num="Page 56"] h2.Header2 {
+    .page-sheet[data-page-num="Page 51"] h2.Header2 {
         font-size: 13pt;
         color: #003B7E;
         font-weight: bold;
         margin-bottom: 4px;
     }
 
-    .page-sheet[data-page-num="Page 56"] h3 {
+    .page-sheet[data-page-num="Page 51"] h3 {
         font-size: 11pt;
         font-weight: normal;
         margin-bottom: 12px;
     }
 
-    .page-sheet[data-page-num="Page 56"] .content-wrapper {
+    .page-sheet[data-page-num="Page 51"] .content-wrapper {
         display: flex;
         gap: 12px;
         margin-top: 12px;
     }
 
-    .page-sheet[data-page-num="Page 56"] .left-column {
+    .page-sheet[data-page-num="Page 51"] .left-column {
         flex: 0 0 48%;
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
 
-    .page-sheet[data-page-num="Page 56"] .right-column {
+    .page-sheet[data-page-num="Page 51"] .right-column {
         flex: 0 0 48%;
         display: flex;
         flex-direction: column;
         gap: 8px;
     }
 
-    .page-sheet[data-page-num="Page 56"] table.comp-table {
+    .page-sheet[data-page-num="Page 51"] table.comp-table {
         width: 100%;
         border-collapse: collapse;
         font-size: 7pt;
         margin-bottom: 0;
     }
 
-    .page-sheet[data-page-num="Page 56"] table.comp-table th {
+    .page-sheet[data-page-num="Page 51"] table.comp-table th {
         background-color: #003B7E;
         color: white;
         font-weight: bold;
@@ -5751,23 +5789,23 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         border: none;
     }
 
-    .page-sheet[data-page-num="Page 56"] table.comp-table td {
+    .page-sheet[data-page-num="Page 51"] table.comp-table td {
         padding: 2px 4px;
         border: none;
         vertical-align: top;
         line-height: 1.3;
     }
 
-    .page-sheet[data-page-num="Page 56"] table.comp-table td.label {
+    .page-sheet[data-page-num="Page 51"] table.comp-table td.label {
         font-weight: 600;
         width: 45%;
     }
 
-    .page-sheet[data-page-num="Page 56"] table.comp-table tr.highlight {
+    .page-sheet[data-page-num="Page 51"] table.comp-table tr.highlight {
         font-weight: bold;
     }
 
-    .page-sheet[data-page-num="Page 56"] .property-photo {
+    .page-sheet[data-page-num="Page 51"] .property-photo {
         width: 100%;
         height: 280px;
         background-color: #e8f4f8;
@@ -5779,20 +5817,20 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         font-size: 9pt;
     }
 
-    .page-sheet[data-page-num="Page 56"] .address-map-wrapper {
+    .page-sheet[data-page-num="Page 51"] .address-map-wrapper {
         display: flex;
         gap: 8px;
         align-items: flex-start;
     }
 
-    .page-sheet[data-page-num="Page 56"] .address-block {
+    .page-sheet[data-page-num="Page 51"] .address-block {
         flex: 0 0 38%;
         font-size: 7pt;
         line-height: 1.4;
         padding: 4px 0;
     }
 
-    .page-sheet[data-page-num="Page 56"] .location-map {
+    .page-sheet[data-page-num="Page 51"] .location-map {
         flex: 0 0 58%;
         height: 150px;
         background-color: #f0f0f0;
@@ -5804,19 +5842,19 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         font-size: 8pt;
     }
 
-    .page-sheet[data-page-num="Page 56"] .remarks-block {
+    .page-sheet[data-page-num="Page 51"] .remarks-block {
         font-size: 7pt;
         line-height: 1.5;
         text-align: justify;
     }
 
-    .page-sheet[data-page-num="Page 56"] .remarks-block strong {
+    .page-sheet[data-page-num="Page 51"] .remarks-block strong {
         display: block;
         margin-bottom: 3px;
     }
 </style>
 
-<div class="page-sheet" data-page-num="Page 56">
+<div class="page-sheet" data-page-num="Page 51">
     <h1 class="Header1">Valuation & Conclusions</h1>
     <h2 class="Header2">Sales Summary Sheets</h2>
     <h3><span class="field-mapped" title="{{comp3-name}}" data-sample="Woodland Estates">{{comp3-name}}</span><br><span style="font-size: 9pt; color: #666;">Comparable 3</span></h3>
@@ -5845,7 +5883,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     </tr>
                     <tr>
                         <td class="label">Transaction Status</td>
-                        <td><span class="field-mapped" title="{{comp3-transactionstatus}}" data-sample="Closed">{{comp3-transactionstatus}}</span></td>
+                        <td><span class="field-mapped" title="{{comp3-transaction-status}}" data-sample="Closed">{{comp3-transaction-status}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Sale Price</td>
@@ -5857,15 +5895,15 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     </tr>
                     <tr>
                         <td class="label">Analysis Price</td>
-                        <td><span class="field-mapped" title="{{comp3-analysisprice}}" data-sample="$2,055,056">{{comp3-analysisprice}}</span></td>
+                        <td><span class="field-mapped" title="{{comp3-analysis-price}}" data-sample="$2,055,056">{{comp3-analysis-price}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Rights Transferred</td>
-                        <td><span class="field-mapped" title="{{comp3-rightstransferred}}" data-sample="Fee Simple">{{comp3-rightstransferred}}</span></td>
+                        <td><span class="field-mapped" title="{{comp3-rights-transferred}}" data-sample="Fee Simple">{{comp3-rights-transferred}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Market Conditions</td>
-                        <td><span class="field-mapped" title="{{comp3-marketconditions}}" data-sample="Arm's Length">{{comp3-marketconditions}}</span></td>
+                        <td><span class="field-mapped" title="{{comp3-market-conditions}}" data-sample="Arm's Length">{{comp3-market-conditions}}</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -5899,7 +5937,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 <tbody>
                     <tr>
                         <td class="label">Type</td>
-                        <td><span class="field-mapped" title="{{comp3-propertytype}}" data-sample="Multi-Family, Walk-Up">{{comp3-propertytype}}</span></td>
+                        <td><span class="field-mapped" title="{{comp3-property-type}}" data-sample="Multi-Family, Walk-Up">{{comp3-property-type}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Rent Type</td>
@@ -5939,7 +5977,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     </tr>
                     <tr>
                         <td class="label">Security Features</td>
-                        <td><span class="field-mapped" title="{{comp3-securityfeatures}}" data-sample="Deck Railing, Deadbolts, Exterior Lighting, Secured Entry">{{comp3-securityfeatures}}</span></td>
+                        <td><span class="field-mapped" title="{{comp3-security-features}}" data-sample="Deck Railing, Deadbolts, Exterior Lighting, Secured Entry">{{comp3-security-features}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Laundry</td>
@@ -5993,7 +6031,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 <!-- Address Block -->
                 <div class="address-block">
                     <strong><span class="field-mapped" title="{{comp3-address}}" data-sample="1801 Pearson Ave">{{comp3-address}}</span></strong><br>
-                    <span class="field-mapped" title="{{comp3-citystatezip}}" data-sample="North Battleford, SK S9A 3L5">{{comp3-citystatezip}}</span><br>
+                    <span class="field-mapped" title="{{comp3-city-state-zip}}" data-sample="North Battleford, SK S9A 3L5">{{comp3-city-state-zip}}</span><br>
                     <br>
                     <strong>County:</strong> <span class="field-mapped" title="{{comp3-county}}" data-sample="North Battleford">{{comp3-county}}</span><br>
                     <strong>Submarket:</strong> <span class="field-mapped" title="{{comp3-submarket}}" data-sample="Saskatchewan Area">{{comp3-submarket}}</span>
@@ -6028,56 +6066,56 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 <!-- ============================================ -->
 <style>
 /* Page 57 - Parkside Flats - Compact 2-column layout */
-.page-sheet[data-page-num="Page 57"] {
+.page-sheet[data-page-num="Page 52"] {
     padding: 54px 54px 180px 54px;
 }
 
-.page-sheet[data-page-num="Page 57"] h1.Header1 {
+.page-sheet[data-page-num="Page 52"] h1.Header1 {
     font-size: 18pt;
     margin-bottom: 8px;
 }
 
-.page-sheet[data-page-num="Page 57"] h2.Header2 {
+.page-sheet[data-page-num="Page 52"] h2.Header2 {
     font-size: 13pt;
     color: #003B7E;
     font-weight: bold;
     margin-bottom: 4px;
 }
 
-.page-sheet[data-page-num="Page 57"] h3 {
+.page-sheet[data-page-num="Page 52"] h3 {
     font-size: 11pt;
     font-weight: normal;
     margin-bottom: 12px;
 }
 
-.page-sheet[data-page-num="Page 57"] .content-wrapper {
+.page-sheet[data-page-num="Page 52"] .content-wrapper {
     display: flex;
     gap: 12px;
     margin-top: 12px;
 }
 
-.page-sheet[data-page-num="Page 57"] .left-column {
+.page-sheet[data-page-num="Page 52"] .left-column {
     flex: 0 0 48%;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.page-sheet[data-page-num="Page 57"] .right-column {
+.page-sheet[data-page-num="Page 52"] .right-column {
     flex: 0 0 48%;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.page-sheet[data-page-num="Page 57"] table.comp-table {
+.page-sheet[data-page-num="Page 52"] table.comp-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 7pt;
     margin-bottom: 0;
 }
 
-.page-sheet[data-page-num="Page 57"] table.comp-table th {
+.page-sheet[data-page-num="Page 52"] table.comp-table th {
     background-color: #003B7E;
     color: white;
     font-weight: bold;
@@ -6087,23 +6125,23 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     border: none;
 }
 
-.page-sheet[data-page-num="Page 57"] table.comp-table td {
+.page-sheet[data-page-num="Page 52"] table.comp-table td {
     padding: 2px 4px;
     border: none;
     vertical-align: top;
     line-height: 1.3;
 }
 
-.page-sheet[data-page-num="Page 57"] table.comp-table td.label {
+.page-sheet[data-page-num="Page 52"] table.comp-table td.label {
     font-weight: 600;
     width: 45%;
 }
 
-.page-sheet[data-page-num="Page 57"] table.comp-table tr.highlight {
+.page-sheet[data-page-num="Page 52"] table.comp-table tr.highlight {
     font-weight: bold;
 }
 
-.page-sheet[data-page-num="Page 57"] .property-photo {
+.page-sheet[data-page-num="Page 52"] .property-photo {
     width: 100%;
     height: 280px;
     background-color: #e8f4f8;
@@ -6115,20 +6153,20 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     font-size: 9pt;
 }
 
-.page-sheet[data-page-num="Page 57"] .address-map-wrapper {
+.page-sheet[data-page-num="Page 52"] .address-map-wrapper {
     display: flex;
     gap: 8px;
     align-items: flex-start;
 }
 
-.page-sheet[data-page-num="Page 57"] .address-block {
+.page-sheet[data-page-num="Page 52"] .address-block {
     flex: 0 0 38%;
     font-size: 7pt;
     line-height: 1.4;
     padding: 4px 0;
 }
 
-.page-sheet[data-page-num="Page 57"] .location-map {
+.page-sheet[data-page-num="Page 52"] .location-map {
     flex: 0 0 58%;
     height: 150px;
     background-color: #f0f0f0;
@@ -6140,19 +6178,19 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     font-size: 8pt;
 }
 
-.page-sheet[data-page-num="Page 57"] .remarks-block {
+.page-sheet[data-page-num="Page 52"] .remarks-block {
     font-size: 7pt;
     line-height: 1.5;
     text-align: justify;
 }
 
-.page-sheet[data-page-num="Page 57"] .remarks-block strong {
+.page-sheet[data-page-num="Page 52"] .remarks-block strong {
     display: block;
     margin-bottom: 3px;
 }
 </style>
 
-<div class="page-sheet" data-page-num="Page 57">
+<div class="page-sheet" data-page-num="Page 52">
     <h1 class="Header1">Valuation & Conclusions</h1>
     <h2 class="Header2">Sales Summary Sheets</h2>
     <h3><span class="field-mapped" title="{{comp4-name}}" data-sample="Parkside Flats">{{comp4-name}}</span><br><span style="font-size: 9pt; color: #666;">Comparable 4</span></h3>
@@ -6181,7 +6219,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     </tr>
                     <tr>
                         <td class="label">Transaction Status</td>
-                        <td><span class="field-mapped" title="{{comp4-transactionstatus}}" data-sample="Closed">{{comp4-transactionstatus}}</span></td>
+                        <td><span class="field-mapped" title="{{comp4-transaction-status}}" data-sample="Closed">{{comp4-transaction-status}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Sale Price</td>
@@ -6193,15 +6231,15 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     </tr>
                     <tr>
                         <td class="label">Analysis Price</td>
-                        <td><span class="field-mapped" title="{{comp4-analysisprice}}" data-sample="$2,055,056">{{comp4-analysisprice}}</span></td>
+                        <td><span class="field-mapped" title="{{comp4-analysis-price}}" data-sample="$2,055,056">{{comp4-analysis-price}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Rights Transferred</td>
-                        <td><span class="field-mapped" title="{{comp4-rightstransferred}}" data-sample="Fee Simple">{{comp4-rightstransferred}}</span></td>
+                        <td><span class="field-mapped" title="{{comp4-rights-transferred}}" data-sample="Fee Simple">{{comp4-rights-transferred}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Market Conditions</td>
-                        <td><span class="field-mapped" title="{{comp4-marketconditions}}" data-sample="Arm's Length">{{comp4-marketconditions}}</span></td>
+                        <td><span class="field-mapped" title="{{comp4-market-conditions}}" data-sample="Arm's Length">{{comp4-market-conditions}}</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -6235,7 +6273,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 <tbody>
                     <tr>
                         <td class="label">Type</td>
-                        <td><span class="field-mapped" title="{{comp4-propertytype}}" data-sample="Multi-Family, Walk-Up">{{comp4-propertytype}}</span></td>
+                        <td><span class="field-mapped" title="{{comp4-property-type}}" data-sample="Multi-Family, Walk-Up">{{comp4-property-type}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Rent Type</td>
@@ -6275,7 +6313,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     </tr>
                     <tr>
                         <td class="label">Security Features</td>
-                        <td><span class="field-mapped" title="{{comp4-securityfeatures}}" data-sample="Deck Railing, Deadbolts, Exterior Lighting, Secured Entry">{{comp4-securityfeatures}}</span></td>
+                        <td><span class="field-mapped" title="{{comp4-security-features}}" data-sample="Deck Railing, Deadbolts, Exterior Lighting, Secured Entry">{{comp4-security-features}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Laundry</td>
@@ -6329,7 +6367,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 <!-- Address Block -->
                 <div class="address-block">
                     <strong><span class="field-mapped" title="{{comp4-address}}" data-sample="1801 Pearson Ave">{{comp4-address}}</span></strong><br>
-                    <span class="field-mapped" title="{{comp4-citystatezip}}" data-sample="North Battleford, SK S9A 3L5">{{comp4-citystatezip}}</span><br>
+                    <span class="field-mapped" title="{{comp4-city-state-zip}}" data-sample="North Battleford, SK S9A 3L5">{{comp4-city-state-zip}}</span><br>
                     <br>
                     <strong>County:</strong> <span class="field-mapped" title="{{comp4-county}}" data-sample="North Battleford">{{comp4-county}}</span><br>
                     <strong>Submarket:</strong> <span class="field-mapped" title="{{comp4-submarket}}" data-sample="Saskatchewan Area">{{comp4-submarket}}</span>
@@ -6364,56 +6402,56 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 <!-- ============================================ -->
 <style>
 /* Page 58 - Parkside Flats 2 - Compact 2-column layout */
-.page-sheet[data-page-num="Page 58"] {
+.page-sheet[data-page-num="Page 53"] {
     padding: 54px 54px 180px 54px;
 }
 
-.page-sheet[data-page-num="Page 58"] h1.Header1 {
+.page-sheet[data-page-num="Page 53"] h1.Header1 {
     font-size: 18pt;
     margin-bottom: 8px;
 }
 
-.page-sheet[data-page-num="Page 58"] h2.Header2 {
+.page-sheet[data-page-num="Page 53"] h2.Header2 {
     font-size: 13pt;
     color: #003B7E;
     font-weight: bold;
     margin-bottom: 4px;
 }
 
-.page-sheet[data-page-num="Page 58"] h3 {
+.page-sheet[data-page-num="Page 53"] h3 {
     font-size: 11pt;
     font-weight: normal;
     margin-bottom: 12px;
 }
 
-.page-sheet[data-page-num="Page 58"] .content-wrapper {
+.page-sheet[data-page-num="Page 53"] .content-wrapper {
     display: flex;
     gap: 12px;
     margin-top: 12px;
 }
 
-.page-sheet[data-page-num="Page 58"] .left-column {
+.page-sheet[data-page-num="Page 53"] .left-column {
     flex: 0 0 48%;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.page-sheet[data-page-num="Page 58"] .right-column {
+.page-sheet[data-page-num="Page 53"] .right-column {
     flex: 0 0 48%;
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.page-sheet[data-page-num="Page 58"] table.comp-table {
+.page-sheet[data-page-num="Page 53"] table.comp-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 7pt;
     margin-bottom: 0;
 }
 
-.page-sheet[data-page-num="Page 58"] table.comp-table th {
+.page-sheet[data-page-num="Page 53"] table.comp-table th {
     background-color: #003B7E;
     color: white;
     font-weight: bold;
@@ -6423,24 +6461,24 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     border: none;
 }
 
-.page-sheet[data-page-num="Page 58"] table.comp-table td {
+.page-sheet[data-page-num="Page 53"] table.comp-table td {
     padding: 2px 4px;
     border: none;
     vertical-align: top;
     line-height: 1.3;
 }
 
-.page-sheet[data-page-num="Page 58"] table.comp-table td.label {
+.page-sheet[data-page-num="Page 53"] table.comp-table td.label {
     font-weight: 600;
     width: 45%;
 }
 
-.page-sheet[data-page-num="Page 58"] table.comp-table tr.highlight {
+.page-sheet[data-page-num="Page 53"] table.comp-table tr.highlight {
     background-color: #f0f0f0;
     font-weight: bold;
 }
 
-.page-sheet[data-page-num="Page 58"] .property-photo {
+.page-sheet[data-page-num="Page 53"] .property-photo {
     width: 100%;
     height: 280px;
     background-color: #e8f4f8;
@@ -6452,20 +6490,20 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     font-size: 9pt;
 }
 
-.page-sheet[data-page-num="Page 58"] .address-map-wrapper {
+.page-sheet[data-page-num="Page 53"] .address-map-wrapper {
     display: flex;
     gap: 8px;
     align-items: flex-start;
 }
 
-.page-sheet[data-page-num="Page 58"] .address-block {
+.page-sheet[data-page-num="Page 53"] .address-block {
     flex: 0 0 38%;
     font-size: 7pt;
     line-height: 1.4;
     padding: 4px 0;
 }
 
-.page-sheet[data-page-num="Page 58"] .location-map {
+.page-sheet[data-page-num="Page 53"] .location-map {
     flex: 0 0 58%;
     height: 150px;
     background-color: #f0f0f0;
@@ -6477,19 +6515,19 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     font-size: 8pt;
 }
 
-.page-sheet[data-page-num="Page 58"] .remarks-block {
+.page-sheet[data-page-num="Page 53"] .remarks-block {
     font-size: 7pt;
     line-height: 1.5;
     text-align: justify;
 }
 
-.page-sheet[data-page-num="Page 58"] .remarks-block strong {
+.page-sheet[data-page-num="Page 53"] .remarks-block strong {
     display: block;
     margin-bottom: 3px;
 }
 </style>
 
-<div class="page-sheet" data-page-num="Page 58">
+<div class="page-sheet" data-page-num="Page 53">
     <h1 class="Header1">Valuation & Conclusions</h1>
     <h2 class="Header2">Sales Summary Sheets</h2>
     <h3><span class="field-mapped" title="{{comp5-name}}" data-sample="Parkside Flats 2">{{comp5-name}}</span><br><span style="font-size: 9pt; color: #666;">Comparable 5</span></h3>
@@ -6518,7 +6556,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     </tr>
                     <tr>
                         <td class="label">Transaction Status</td>
-                        <td><span class="field-mapped" title="{{comp5-transactionstatus}}" data-sample="Closed">{{comp5-transactionstatus}}</span></td>
+                        <td><span class="field-mapped" title="{{comp5-transaction-status}}" data-sample="Closed">{{comp5-transaction-status}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Sale Price</td>
@@ -6530,15 +6568,15 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     </tr>
                     <tr>
                         <td class="label">Analysis Price</td>
-                        <td><span class="field-mapped" title="{{comp5-analysisprice}}" data-sample="$2,055,056">{{comp5-analysisprice}}</span></td>
+                        <td><span class="field-mapped" title="{{comp5-analysis-price}}" data-sample="$2,055,056">{{comp5-analysis-price}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Rights Transferred</td>
-                        <td><span class="field-mapped" title="{{comp5-rightstransferred}}" data-sample="Fee Simple">{{comp5-rightstransferred}}</span></td>
+                        <td><span class="field-mapped" title="{{comp5-rights-transferred}}" data-sample="Fee Simple">{{comp5-rights-transferred}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Market Conditions</td>
-                        <td><span class="field-mapped" title="{{comp5-marketconditions}}" data-sample="Arm's Length">{{comp5-marketconditions}}</span></td>
+                        <td><span class="field-mapped" title="{{comp5-market-conditions}}" data-sample="Arm's Length">{{comp5-market-conditions}}</span></td>
                     </tr>
                 </tbody>
             </table>
@@ -6572,7 +6610,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 <tbody>
                     <tr>
                         <td class="label">Type</td>
-                        <td><span class="field-mapped" title="{{comp5-propertytype}}" data-sample="Multi-Family, Walk-Up">{{comp5-propertytype}}</span></td>
+                        <td><span class="field-mapped" title="{{comp5-property-type}}" data-sample="Multi-Family, Walk-Up">{{comp5-property-type}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Rent Type</td>
@@ -6612,7 +6650,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                     </tr>
                     <tr>
                         <td class="label">Security Features</td>
-                        <td><span class="field-mapped" title="{{comp5-securityfeatures}}" data-sample="Deck Railing, Deadbolts, Exterior Lighting, Secured Entry">{{comp5-securityfeatures}}</span></td>
+                        <td><span class="field-mapped" title="{{comp5-security-features}}" data-sample="Deck Railing, Deadbolts, Exterior Lighting, Secured Entry">{{comp5-security-features}}</span></td>
                     </tr>
                     <tr>
                         <td class="label">Laundry</td>
@@ -6666,7 +6704,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 <!-- Address Block -->
                 <div class="address-block">
                     <strong><span class="field-mapped" title="{{comp5-address}}" data-sample="1801 Pearson Ave">{{comp5-address}}</span></strong><br>
-                    <span class="field-mapped" title="{{comp5-citystatezip}}" data-sample="North Battleford, SK S9A 3L5">{{comp5-citystatezip}}</span><br>
+                    <span class="field-mapped" title="{{comp5-city-state-zip}}" data-sample="North Battleford, SK S9A 3L5">{{comp5-city-state-zip}}</span><br>
                     <br>
                     <strong>County:</strong> <span class="field-mapped" title="{{comp5-county}}" data-sample="North Battleford">{{comp5-county}}</span><br>
                     <strong>Submarket:</strong> <span class="field-mapped" title="{{comp5-submarket}}" data-sample="Saskatchewan Area">{{comp5-submarket}}</span>
@@ -6699,16 +6737,16 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 <!-- ============================================ -->
 <!-- PAGE 64 (Report Page 59): Direct Comparison Approach Table -->
 <!-- ============================================ -->
-<div class="page-sheet" data-page-num="Page 59">
+<div class="page-sheet" data-page-num="Page 54">
     <style>
         /* Compact styling for Page 59 - 7 columns with vertical gridlines */
-        .page-sheet[data-page-num="Page 59"] .compact-table {
+        .page-sheet[data-page-num="Page 54"] .compact-table {
             font-size: 7.5pt;
             margin-bottom: 0;
             border-collapse: collapse;
         }
-        .page-sheet[data-page-num="Page 59"] .compact-table td,
-        .page-sheet[data-page-num="Page 59"] .compact-table th {
+        .page-sheet[data-page-num="Page 54"] .compact-table td,
+        .page-sheet[data-page-num="Page 54"] .compact-table th {
             padding: 2px 3px;
             line-height: 1.1;
             border-left: 1px solid #ddd;
@@ -6716,60 +6754,60 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             border-top: none;
             border-bottom: none;
         }
-        .page-sheet[data-page-num="Page 59"] .compact-table td,
-        .page-sheet[data-page-num="Page 59"] .compact-table th:not(.table-section-header) {
+        .page-sheet[data-page-num="Page 54"] .compact-table td,
+        .page-sheet[data-page-num="Page 54"] .compact-table th:not(.table-section-header) {
             text-align: left !important;
         }
         /* Remove outer left border */
-        .page-sheet[data-page-num="Page 59"] .compact-table td:first-child,
-        .page-sheet[data-page-num="Page 59"] .compact-table th:first-child {
+        .page-sheet[data-page-num="Page 54"] .compact-table td:first-child,
+        .page-sheet[data-page-num="Page 54"] .compact-table th:first-child {
             border-left: none;
         }
         /* Remove outer right border */
-        .page-sheet[data-page-num="Page 59"] .compact-table td:last-child,
-        .page-sheet[data-page-num="Page 59"] .compact-table th:last-child {
+        .page-sheet[data-page-num="Page 54"] .compact-table td:last-child,
+        .page-sheet[data-page-num="Page 54"] .compact-table th:last-child {
             border-right: none;
         }
-        .page-sheet[data-page-num="Page 59"] .table-section-header {
+        .page-sheet[data-page-num="Page 54"] .table-section-header {
             font-size: 8.5pt;
             padding: 3px;
             text-align: center !important;
             border: none !important;
         }
         /* Column headers - no vertical gridlines, line underneath spans full width */
-        .page-sheet[data-page-num="Page 59"] .compact-table:first-of-type thead tr th {
+        .page-sheet[data-page-num="Page 54"] .compact-table:first-of-type thead tr th {
             border-left: none !important;
             border-right: none !important;
             border-bottom: 1px solid #ccc !important;
         }
         /* Empty corner cell - no right border, keep bottom border for continuous line */
-        .page-sheet[data-page-num="Page 59"] .empty-corner {
+        .page-sheet[data-page-num="Page 54"] .empty-corner {
             border-right: none !important;
         }
         /* SALE INFORMATION section - remove vertical borders from empty SUBJECT column */
-        .page-sheet[data-page-num="Page 59"] .compact-table:nth-of-type(2) tbody tr td:nth-child(2):empty {
+        .page-sheet[data-page-num="Page 54"] .compact-table:nth-of-type(2) tbody tr td:nth-child(2):empty {
             border-left: none !important;
             border-right: none !important;
         }
         /* Line above Total Physical Adjustments row - no vertical gridlines */
-        .page-sheet[data-page-num="Page 59"] .summary-separator td {
+        .page-sheet[data-page-num="Page 54"] .summary-separator td {
             border-top: 1px solid #ccc !important;
             padding-top: 10px !important;
             border-left: none !important;
             border-right: none !important;
         }
         /* Spacing above the summary line - add padding-bottom to Unit Amenities row */
-        .page-sheet[data-page-num="Page 59"] .compact-table:last-of-type tbody tr:nth-child(12) td {
+        .page-sheet[data-page-num="Page 54"] .compact-table:last-of-type tbody tr:nth-child(12) td {
             padding-bottom: 8px;
         }
         /* Thicker bottom border on last row of final table only */
-        .page-sheet[data-page-num="Page 59"] .compact-table:last-of-type tbody tr:last-child td {
+        .page-sheet[data-page-num="Page 54"] .compact-table:last-of-type tbody tr:last-child td {
             border-bottom: 2px solid #ccc !important;
         }
-        .page-sheet[data-page-num="Page 59"] .compact-table tbody tr:first-child td {
+        .page-sheet[data-page-num="Page 54"] .compact-table tbody tr:first-child td {
             padding-top: 10px;
         }
-        .page-sheet[data-page-num="Page 59"] .label-col {
+        .page-sheet[data-page-num="Page 54"] .label-col {
             background-color: transparent;
             width: 17%;
             border-left: none !important;
@@ -6777,28 +6815,28 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             white-space: nowrap;
         }
         /* Smaller font for address rows to prevent wrapping */
-        .page-sheet[data-page-num="Page 59"] .compact-table tbody tr:first-child td:not(.label-col) {
+        .page-sheet[data-page-num="Page 54"] .compact-table tbody tr:first-child td:not(.label-col) {
             font-size: 6.5pt;
         }
         /* City row: same small font as addresses, no bold */
-        .page-sheet[data-page-num="Page 59"] .compact-table tbody tr:nth-child(2) td:not(.label-col) {
+        .page-sheet[data-page-num="Page 54"] .compact-table tbody tr:nth-child(2) td:not(.label-col) {
             font-size: 6.5pt;
         }
-        .page-sheet[data-page-num="Page 59"] .compact-table tbody tr:nth-child(2) strong {
+        .page-sheet[data-page-num="Page 54"] .compact-table tbody tr:nth-child(2) strong {
             font-weight: normal;
         }
         /* Multi-line amenities */
-        .page-sheet[data-page-num="Page 59"] .amenities-list {
+        .page-sheet[data-page-num="Page 54"] .amenities-list {
             font-size: 6.5pt;
             line-height: 1.3;
         }
-        .page-sheet[data-page-num="Page 59"] h1 {
+        .page-sheet[data-page-num="Page 54"] h1 {
             margin-bottom: 8px;
         }
-        .page-sheet[data-page-num="Page 59"] h2 {
+        .page-sheet[data-page-num="Page 54"] h2 {
             margin-bottom: 6px;
         }
-        .page-sheet[data-page-num="Page 59"] p {
+        .page-sheet[data-page-num="Page 54"] p {
             margin-bottom: 8px;
             font-size: 9pt;
         }
@@ -7189,7 +7227,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 
 <!-- PAGE 60: Comparable 1 - Woodland Estates -->
 <!-- PAGE 60: Sales Comparison Approach Analysis -->
-<div class="page-sheet" data-page-num="Page 60">
+<div class="page-sheet" data-page-num="Page 55">
     <div class="Header1">Valuation & Conclusions</div>
     <div class="Header2">Sales Comparison Approach Analysis</div>
 
@@ -7199,7 +7237,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 
     <p>Based on the preceding, we have trended the subject properties projected NOI per square foot and unit against the comparable properties NOI per square foot and unit and sale price per square foot and unit to estimate a value per unit for the subject property.</p>
 
-    <p>Based on general bracketing, the comparable sales support an adjusted unit value ranges from <span class="field-mapped" data-sample="$111,914" title="{{sca-adjustedvaluelow}}">{{sca-adjustedvaluelow}}</span>/Unit to <span class="field-mapped" data-sample="$118,100" title="{{sca-adjustedvaluehigh}}">{{sca-adjustedvaluehigh}}</span>/Unit, with a unit value of <span class="field-mapped" data-sample="$112,500" title="{{sca-concludedvalueperunit}}">{{sca-concludedvalueperunit}}</span>/Unit concluded for the subject property. The following table summarizes the analysis of the comparables, reports the reconciled price per Unit value conclusion, and presents the concluded value of the subject property by the Sales Comparison Approach.</p>
+    <p>Based on general bracketing, the comparable sales support an adjusted unit value ranges from <span class="field-mapped" data-sample="$111,914" title="{{sca-adjusted-value-low}}">{{sca-adjusted-value-low}}</span>/Unit to <span class="field-mapped" data-sample="$118,100" title="{{sca-adjusted-value-high}}">{{sca-adjusted-value-high}}</span>/Unit, with a unit value of <span class="field-mapped" data-sample="$112,500" title="{{sca-concluded-value-per-unit}}">{{sca-concluded-value-per-unit}}</span>/Unit concluded for the subject property. The following table summarizes the analysis of the comparables, reports the reconciled price per Unit value conclusion, and presents the concluded value of the subject property by the Sales Comparison Approach.</p>
 
     <!-- Chart: Unadjusted & Adjusted Price -->
     <div style="margin-top: 20px;">
@@ -7297,7 +7335,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     </div>
 </div>
 <!-- PAGE 61: Sales Comparison Approach Conclusion -->
-<div class="page-sheet" data-page-num="Page 61">
+<div class="page-sheet" data-page-num="Page 56">
     <div class="Header1">Valuation & Conclusions</div>
 
     <!-- Main Comparison Table -->
@@ -7493,7 +7531,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         <div class="footer-accent"></div>
     </div>
 </div>
-<div class="page-sheet" data-page-num="Page 62">
+<div class="page-sheet" data-page-num="Page 57">
     <div class="Header1">Valuation & Conclusions</div>
     <div class="Header2">Reconciliation of Value</div>
 
@@ -7519,7 +7557,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 </div>
 
 <!-- PAGE 63: Reconciliation of Values -->
-<div class="page-sheet" data-page-num="Page 63">
+<div class="page-sheet" data-page-num="Page 58">
     <div class="Header1">Valuation & Conclusions</div>
 
     <!-- Reconciliation of Values Table -->
@@ -7620,7 +7658,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 </div>
 
 <!-- PAGE 64: Certification -->
-<div class="page-sheet" data-page-num="Page 64">
+<div class="page-sheet" data-page-num="Page 59">
     <div class="Header1">Valuation & Conclusions</div>
     <div class="Header2">Certification</div>
 
@@ -7650,7 +7688,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 </div>
 
 <!-- PAGE 65: Final Estimate of Value -->
-<div class="page-sheet" data-page-num="Page 65">
+<div class="page-sheet" data-page-num="Page 60">
     <div class="Header1">Valuation & Conclusions</div>
     <div class="Header2">Final Estimate of Value</div>
 
@@ -7706,7 +7744,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             <div><span class="field-mapped" data-sample="Chris Chornohos, AACI, MRICS" title="{{appraiser-name-credentials}}">{{appraiser-name-credentials}}</span></div>
             <div><span class="field-mapped" data-sample="Founder" title="{{appraiser-title}}">{{appraiser-title}}</span></div>
             <div><span class="field-mapped" data-sample="chris.chornohos@valta.ca" title="{{appraiser-email}}">{{appraiser-email}}</span></div>
-            <div>AIC No: <span class="field-mapped" data-sample="90209" title="{{appraiser-aic-number}}">{{appraiser-aic-number}}</span></div>
+            <div>AIC No: <span class="field-mapped" data-sample="90209" title="{{appraiser-aic}}">{{appraiser-aic}}</span></div>
         </div>
     </div>
 
@@ -7719,7 +7757,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     </div>
 </div>
 <!-- PAGE 66: Contingent & Limiting Conditions -->
-<div class="page-sheet" data-page-num="Page 66">
+<div class="page-sheet" data-page-num="Page 61">
     <div class="Header1">Appendices</div>
     <div class="Header2">Contingent & Limiting Conditions</div>
 
@@ -7753,7 +7791,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 </div>
 
 <!-- PAGE 67: Contingent & Limiting Conditions (continued) -->
-<div class="page-sheet" data-page-num="Page 67">
+<div class="page-sheet" data-page-num="Page 62">
     <div class="Header1">Appendices</div>
 
     <!-- Continuation of numbered list from Page 66 -->
@@ -7785,7 +7823,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 </div>
 
 <!-- PAGE 68: Contingent & Limiting Conditions (continued) -->
-<div class="page-sheet" data-page-num="Page 68">
+<div class="page-sheet" data-page-num="Page 63">
     <div class="Header1">Appendices</div>
 
     <!-- Continuation of numbered list from Page 67 -->
@@ -7811,7 +7849,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 </div>
 
 <!-- PAGE 69: Definition of Terms -->
-<div class="page-sheet" data-page-num="Page 69">
+<div class="page-sheet" data-page-num="Page 64">
     <div class="Header1">Appendices</div>
     <div class="Header2">Definition of Terms</div>
 
@@ -7855,7 +7893,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 </div>
 
 <!-- PAGE 70: Definition of Terms (continued) -->
-<div class="page-sheet" data-page-num="Page 70">
+<div class="page-sheet" data-page-num="Page 65">
     <div class="Header1">Appendices</div>
 
     <ul style="margin-left: 20px; margin-top: 0; line-height: 1.6; list-style-type: disc;">
@@ -7904,7 +7942,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 </div>
 
 <!-- PAGE 71: Definition of Terms (continued) -->
-<div class="page-sheet" data-page-num="Page 71">
+<div class="page-sheet" data-page-num="Page 66">
     <div class="Header1">Appendices</div>
 
     <ul style="margin-left: 20px; margin-top: 0; line-height: 1.6; list-style-type: disc;">
@@ -7947,7 +7985,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 </div>
 
 <!-- PAGE 72: Definition of Terms (continued) -->
-<div class="page-sheet" data-page-num="Page 72">
+<div class="page-sheet" data-page-num="Page 67">
     <div class="Header1">Appendices</div>
 
     <ul style="margin-left: 20px; margin-top: 0; line-height: 1.6; list-style-type: disc;">
@@ -8078,100 +8116,11 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             const fields = document.querySelectorAll('.field-mapped');
             if (this.checked) {
                 pagesWrapper.classList.add('preview-mode');
-                modeLabel.textContent = 'Designer Preview';
+                modeLabel.textContent = 'Preview Mode';
                 // Swap to sample data
                 fields.forEach(el => {
                     const sample = el.getAttribute('data-sample');
-                    const fieldId = el.getAttribute('title')?.replace(/[{}]/g, '') || '';
-                    
-                    // Check if this field has been interpolated with an actual image URL
-                    // Look for img tags that were inserted by interpolation
-                    const parent = el.parentElement;
-                    let actualImageUrl = null;
-                    
-                    // First, check if this element itself is an img tag with a valid src
-                    if (el.tagName === 'IMG' && el.src && !el.src.includes('{{') && !el.src.includes('data:image')) {
-                        // Image already interpolated and valid - skip processing
-                        return;
-                    }
-                    
-                    // Check if there's already an img tag inside this element (for containers)
-                    const existingImgInside = el.querySelector('img');
-                    if (existingImgInside && existingImgInside.src && !existingImgInside.src.includes('{{') && !existingImgInside.src.includes('data:image')) {
-                        actualImageUrl = existingImgInside.src;
-                    }
-                    
-                    // Check if there's already an img tag nearby (from interpolation)
-                    if (parent && !actualImageUrl) {
-                        const existingImg = parent.querySelector('img');
-                        if (existingImg && existingImg.src && !existingImg.src.includes('{{') && !existingImg.src.includes('data:image')) {
-                            actualImageUrl = existingImg.src;
-                        }
-                    }
-                    
-                    // Also check the title attribute for image URLs (used by cover photo)
-                    if (!actualImageUrl && el.getAttribute('title') && !el.getAttribute('title').includes('{{')) {
-                        const titleValue = el.getAttribute('title');
-                        if (titleValue.startsWith('/') || titleValue.startsWith('http')) {
-                            actualImageUrl = titleValue;
-                        }
-                    }
-                    
-                    // Handle image placeholders - check if parent is img-placeholder div (photos section)
-                    const imgPlaceholder = el.closest('.img-placeholder');
-                    if (imgPlaceholder) {
-                        if (!imgPlaceholder.dataset.originalHtml) {
-                            imgPlaceholder.dataset.originalHtml = imgPlaceholder.innerHTML;
-                        }
-                        
-                        // If there's an actual image URL, use it; otherwise show sample text
-                        if (actualImageUrl) {
-                            const img = document.createElement('img');
-                            img.src = actualImageUrl;
-                            img.style.width = '100%';
-                            img.style.height = '100%';
-                            img.style.objectFit = 'cover';
-                            img.alt = sample || fieldId || '';
-                            imgPlaceholder.innerHTML = '';
-                            imgPlaceholder.appendChild(img);
-                        } else if (sample) {
-                            // No image URL, just show sample text
-                            imgPlaceholder.textContent = sample;
-                        }
-                    } 
-                    // Check if this is a standalone image placeholder div (cover photo)
-                    else if (el.tagName === 'DIV' && el.textContent.includes('{{')) {
-                        if (!el.dataset.originalHtml) {
-                            el.dataset.originalHtml = el.outerHTML;
-                        }
-                        
-                        // If there's an actual image URL, replace with img tag
-                        if (actualImageUrl) {
-                            const img = document.createElement('img');
-                            img.src = actualImageUrl;
-                            img.style.cssText = el.style.cssText;
-                            img.style.objectFit = 'cover';
-                            img.alt = sample || fieldId || '';
-                            el.parentNode.replaceChild(img, el);
-                        } else if (sample) {
-                            // No image URL, just show sample text
-                            el.textContent = sample;
-                        }
-                    }
-                    // Handle cover-photo-container divs that already have img tags (from interpolation)
-                    else if (el.tagName === 'DIV' && el.classList.contains('cover-photo-container')) {
-                        // Check if there's already an img tag inside with a valid src
-                        const existingImg = el.querySelector('img');
-                        if (existingImg && existingImg.src && !existingImg.src.includes('{{') && !existingImg.src.includes('data:image')) {
-                            // Image already exists and has valid src - ensure it's visible
-                            existingImg.style.display = 'block';
-                            const placeholderDiv = el.querySelector('div[style*="display:none"]');
-                            if (placeholderDiv) placeholderDiv.style.display = 'none';
-                        }
-                        // Don't modify the container further - let it keep its structure
-                    } 
-                    // Handle text fields
-                    else if (sample) {
+                    if (sample) {
                         if (!el.dataset.original) {
                             el.dataset.original = el.textContent;
                         }
@@ -8182,23 +8131,8 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 pagesWrapper.classList.remove('preview-mode');
                 modeLabel.textContent = 'Show Field IDs';
                 // Swap back to field names
-                // First restore img-placeholder divs
-                const imgPlaceholders = document.querySelectorAll('.img-placeholder');
-                imgPlaceholders.forEach(placeholder => {
-                    if (placeholder.dataset.originalHtml) {
-                        placeholder.innerHTML = placeholder.dataset.originalHtml;
-                    }
-                });
-                // Then restore standalone divs and text fields
                 fields.forEach(el => {
-                    // Restore standalone image placeholder divs
-                    if (el.dataset.originalHtml && el.tagName === 'IMG') {
-                        const tempDiv = document.createElement('div');
-                        tempDiv.innerHTML = el.dataset.originalHtml;
-                        const restoredEl = tempDiv.firstElementChild;
-                        el.parentNode.replaceChild(restoredEl, el);
-                    } else if (el.dataset.original) {
-                        // Restore text fields
+                    if (el.dataset.original) {
                         el.textContent = el.dataset.original;
                     }
                 });
@@ -8215,15 +8149,18 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             parseInt(p.getAttribute('data-page-num').replace('Page ', ''))
         ).sort((a, b) => a - b);
 
-        // Template now has correct page numbers directly (-4, -3, -2, -1, 1, 2, 3...)
-        // No conversion needed - pass through
+        // Map internal page number to display number
+        // Pages 2-5 (front matter) → -4, -3, -2, -1
+        // Pages 6+ → 1, 2, 3...
         function internalToDisplay(internal) {
-            return internal;
+            if (internal <= 5) return internal - 6;
+            return internal - 5;
         }
 
-        // Map display number to internal (same - no conversion)
+        // Map display number to internal
         function displayToInternal(display) {
-            return display;
+            if (display <= -1) return display + 6;
+            return display + 5;
         }
 
         // Calculate bounds

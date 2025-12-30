@@ -99,6 +99,11 @@ export default function CalculatorWithPreview() {
     // Build financial field values object
     const values: Record<string, string> = {};
 
+    // Property info fields (total units for Page 48, Page 60 calculations)
+    values['total-units'] = String(totalUnits);
+    values['subject-units'] = String(totalUnits);
+    values['calc-total-units'] = String(totalUnits);
+
     // Revenue fields
     values['calc-pgr'] = formatCurrency(pgr);
     values['calc-pgr-per-unit'] = formatPerUnit(getFieldValue('calc-pgr-per-unit') || pgr / 16);
@@ -186,6 +191,7 @@ export default function CalculatorWithPreview() {
     values['sca-indicated-value'] = formatCurrency(indicatedValue);
     values['sca-indicated-value-rounded'] = formatCurrency(Math.round(indicatedValue / 10000) * 10000);
     values['sca-value-per-sf'] = `$${Math.round(indicatedValue / 10200)}`;
+    values['sca-concluded-value-per-unit'] = formatCurrency(indicatedValue / totalUnits);
 
     // ========================================
     // Historical fields (hist-*) for Page 43 Operating History
@@ -209,6 +215,26 @@ export default function CalculatorWithPreview() {
       values[`hist-${cat}-per-unit`] = isExpense ? `(${formatCurrency(Math.abs(perUnit))})` : formatCurrency(perUnit);
       values[`hist-${cat}-pct-pgr`] = isExpense ? `(${Math.abs(pctPgr).toFixed(0)}%)` : `${pctPgr.toFixed(0)}%`;
     });
+
+    // ========================================
+    // Projection %PGR fields for Page 43 Operating History table
+    // ========================================
+    const projPgr = pgr > 0 ? pgr : 1; // Avoid division by zero
+    const rentalRevenue = getFieldValue('calc-total-rental-revenue');
+    const parkingIncome = getFieldValue('calc-parking-income') || 0;
+    const laundryIncome = getFieldValue('calc-laundry-income') || 0;
+    const otherIncome = getFieldValue('calc-other-income') || 0;
+
+    values['revenue-multifamily-proj-pct'] = formatPercent(rentalRevenue / projPgr * 100);
+    values['revenue-rental-proj-pct'] = formatPercent(rentalRevenue / projPgr * 100);
+    values['revenue-parking-proj-pct'] = formatPercent(parkingIncome / projPgr * 100);
+    values['revenue-laundry-proj-pct'] = formatPercent(laundryIncome / projPgr * 100);
+    values['revenue-misc-proj-pct'] = formatPercent(otherIncome / projPgr * 100);
+    values['pgr-proj-pct'] = '100.00%';
+    values['vacancy-proj-pct'] = formatPercent(Math.abs(vacancyLoss) / projPgr * 100);
+    values['egr-proj-pct'] = formatPercent(egr / projPgr * 100);
+    values['exp-total-proj-pct'] = formatPercent(Math.abs(expensesTotal) / projPgr * 100);
+    values['noi-proj-pct'] = formatPercent(noi / projPgr * 100);
 
     // ========================================
     // Comparable sales fields (comp1-* through comp5-*) for Page 60

@@ -258,12 +258,6 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
               </tr>
             </thead>
             <tbody>
-              {/* REVENUE SECTION */}
-              <tr>
-                <td colSpan={6} className="px-2 py-1 font-medium" style={{ color: colors.text, backgroundColor: colors.panelBgAlt }}>
-                  REVENUE
-                </td>
-              </tr>
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.textMuted }}>Rental Revenue</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(rentalRevenue)}</td>

@@ -128,11 +128,15 @@ export default function CalculatorWithPreview() {
     // Unit mix breakdown (for unit schedule table)
     for (let i = 1; i <= 4; i++) {
       const typePrefix = `calc-type${i}`;
+      const marketRent = getFieldValue(`${typePrefix}-rent`) || 0;
+      const contractRent = getFieldValue(`${typePrefix}-contract-rent`) || marketRent; // Default to market if no contract
+      const contVsMarket = marketRent > 0 ? (contractRent / marketRent) * 100 : 0;
+
       values[`${typePrefix}-count`] = String(getFieldValue(`${typePrefix}-count`) || '');
       values[`${typePrefix}-sf`] = String(getFieldValue(`${typePrefix}-sf`) || '');
-      values[`${typePrefix}-rent`] = formatCurrency(getFieldValue(`${typePrefix}-rent`));
-      values[`${typePrefix}-contract-rent`] = formatCurrency(getFieldValue(`${typePrefix}-contract-rent`));
-      values[`${typePrefix}-cont-v-market`] = formatPercent(getFieldValue(`${typePrefix}-cont-v-market`));
+      values[`${typePrefix}-rent`] = formatCurrency(marketRent);
+      values[`${typePrefix}-contract-rent`] = formatCurrency(contractRent);
+      values[`${typePrefix}-cont-v-market`] = formatPercent(contVsMarket);
       values[`${typePrefix}-per-unit`] = formatCurrency(getFieldValue(`${typePrefix}-per-unit`));
       values[`${typePrefix}-per-sf`] = formatPerSF(getFieldValue(`${typePrefix}-per-sf`));
       values[`${typePrefix}-annual`] = formatCurrency(getFieldValue(`${typePrefix}-annual`));

@@ -43,34 +43,38 @@ export default function CalculatorWithPreview() {
   const sections = useReportBuilderStore(state => state.sections);
 
   // Extract field value from store (returns number for calculations)
+  // Searches ALL sections, not just 'calc', to find hist-*, comp-*, etc.
   const getFieldValue = useCallback((fieldId: string): number => {
-    const calcSection = sections.find(s => s.id === 'calc');
-    if (!calcSection) return 0;
+    for (const section of sections) {
+      // Check section's direct fields
+      const field = section.fields?.find((f: any) => f.id === fieldId);
+      if (field) return Number(field.value) || 0;
 
-    const field = calcSection.fields.find(f => f.id === fieldId);
-    if (field) return Number(field.value) || 0;
-
-    if (calcSection.subsections) {
-      for (const sub of calcSection.subsections) {
-        const subField = sub.fields.find(f => f.id === fieldId);
-        if (subField) return Number(subField.value) || 0;
+      // Check subsections
+      if (section.subsections) {
+        for (const sub of section.subsections) {
+          const subField = sub.fields?.find((f: any) => f.id === fieldId);
+          if (subField) return Number(subField.value) || 0;
+        }
       }
     }
     return 0;
   }, [sections]);
 
   // Extract field value as string (for text fields like names/addresses)
+  // Searches ALL sections, not just 'calc'
   const getFieldString = useCallback((fieldId: string): string => {
-    const calcSection = sections.find(s => s.id === 'calc');
-    if (!calcSection) return '';
+    for (const section of sections) {
+      // Check section's direct fields
+      const field = section.fields?.find((f: any) => f.id === fieldId);
+      if (field) return String(field.value || '');
 
-    const field = calcSection.fields.find(f => f.id === fieldId);
-    if (field) return String(field.value || '');
-
-    if (calcSection.subsections) {
-      for (const sub of calcSection.subsections) {
-        const subField = sub.fields.find(f => f.id === fieldId);
-        if (subField) return String(subField.value || '');
+      // Check subsections
+      if (section.subsections) {
+        for (const sub of section.subsections) {
+          const subField = sub.fields?.find((f: any) => f.id === fieldId);
+          if (subField) return String(subField.value || '');
+        }
       }
     }
     return '';

@@ -145,6 +145,73 @@ export default function SalesComparisonPanel({ onIndicatedValueChange }: SalesCo
   const formatCurrency = (n: number) => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
   const formatNumber = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 0 });
 
+  // === DIRECT COMPARISON SUMMARY CALCULATIONS ===
+
+  // For each comp, calculate summary values
+  const getCompSummary = (idx: number) => {
+    const comp = getCompData(idx);
+    const adj = getAdjustmentData(idx);
+
+    // Transaction adjustments (Rights + Financing + Sale Conditions + Market)
+    const transAdj = adj.propertyRights + adj.financing + adj.conditionsOfSale + adj.marketConditions;
+
+    // Trans-adjusted price = price * (1 + trans adj / 100)
+    const transAdjPrice = comp.pricePerUnit * (1 + transAdj / 100);
+
+    // Property adjustments (Location + Size + Age + Other)
+    const propAdj = adj.location + adj.size + adj.ageCondition + adj.other;
+
+    // Net adjustment (sum of all)
+    const netAdj = transAdj + propAdj;
+
+    // Gross adjustment (sum of absolute values)
+    const grossAdj = Math.abs(adj.propertyRights) + Math.abs(adj.financing) +
+                     Math.abs(adj.conditionsOfSale) + Math.abs(adj.marketConditions) +
+                     Math.abs(adj.location) + Math.abs(adj.size) +
+                     Math.abs(adj.ageCondition) + Math.abs(adj.other);
+
+    // Final adjusted price = trans-adjusted price * (1 + prop adj / 100)
+    const finalPrice = transAdjPrice * (1 + propAdj / 100);
+
+    return {
+      pricePerUnit: comp.pricePerUnit,
+      transAdj,
+      transAdjPrice,
+      propAdj,
+      finalPrice,
+      netAdj,
+      grossAdj,
+      hasData: comp.units > 0
+    };
+  };
+
+  // Get all summaries
+  const compSummaries = [0, 1, 2, 3, 4].map(getCompSummary);
+  const validSummaries = compSummaries.filter(s => s.hasData);
+
+  // Statistics calculations
+  const calcStats = (values: number[]) => {
+    if (values.length === 0) return { high: 0, avg: 0, med: 0, low: 0 };
+    const sorted = [...values].sort((a, b) => a - b);
+    return {
+      high: Math.max(...values),
+      avg: values.reduce((a, b) => a + b, 0) / values.length,
+      med: sorted.length % 2 === 0
+           ? (sorted[sorted.length/2 - 1] + sorted[sorted.length/2]) / 2
+           : sorted[Math.floor(sorted.length/2)],
+      low: Math.min(...values)
+    };
+  };
+
+  // Stats for each column
+  const priceStats = calcStats(validSummaries.map(s => s.pricePerUnit));
+  const transAdjStats = calcStats(validSummaries.map(s => s.transAdj));
+  const transAdjPriceStats = calcStats(validSummaries.map(s => s.transAdjPrice));
+  const propAdjStats = calcStats(validSummaries.map(s => s.propAdj));
+  const finalPriceStats = calcStats(validSummaries.map(s => s.finalPrice));
+  const netAdjStats = calcStats(validSummaries.map(s => s.netAdj));
+  const grossAdjStats = calcStats(validSummaries.map(s => s.grossAdj));
+
   const inputStyle = {
     backgroundColor: colors.inputBg,
     borderColor: colors.border,
@@ -435,6 +502,157 @@ export default function SalesComparisonPanel({ onIndicatedValueChange }: SalesCo
                 })}
               </tr>
             </tfoot>
+          </table>
+        </div>
+      </div>
+
+      {/* DIRECT COMPARISON SUMMARY */}
+      <div className="rounded-sm overflow-hidden" style={{ border: `1px solid ${colors.border}` }}>
+        <div className="px-2 py-1.5" style={{ borderBottom: `1px solid ${colors.border}` }}>
+          <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>
+            Direct Comparison Summary
+          </span>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-[10px]">
+            <thead style={{ borderBottom: `1px solid ${colors.border}` }}>
+              <tr>
+                <th className="px-2 py-1 text-center font-normal" style={{ color: colors.textMuted }}>#</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Trans. Price</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Trans. Adj</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Adj. Price</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Prop. Adj</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Final $/Unit</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Net Adj</th>
+                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Gross Adj</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* Comp rows */}
+              {compSummaries.map((summary, idx) => (
+                <tr key={idx} style={{ borderBottom: `1px solid ${colors.border}` }}>
+                  <td className="px-2 py-1 text-center" style={{ color: colors.textMuted }}>{idx + 1}</td>
+                  <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                    {summary.hasData ? formatCurrency(summary.pricePerUnit) : '-'}
+                  </td>
+                  <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                    {summary.hasData ? `${summary.transAdj.toFixed(1)}%` : '-'}
+                  </td>
+                  <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                    {summary.hasData ? formatCurrency(summary.transAdjPrice) : '-'}
+                  </td>
+                  <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                    {summary.hasData ? `${summary.propAdj.toFixed(1)}%` : '-'}
+                  </td>
+                  <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                    {summary.hasData ? formatCurrency(summary.finalPrice) : '-'}
+                  </td>
+                  <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                    {summary.hasData ? `${summary.netAdj.toFixed(1)}%` : '-'}
+                  </td>
+                  <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                    {summary.hasData ? `${summary.grossAdj.toFixed(1)}%` : '-'}
+                  </td>
+                </tr>
+              ))}
+              {/* Statistics rows */}
+              <tr style={{ borderBottom: `1px solid ${colors.border}`, backgroundColor: colors.panelBgAlt }}>
+                <td className="px-2 py-1 font-medium" style={{ color: colors.text }}>HIGH</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? formatCurrency(priceStats.high) : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${transAdjStats.high.toFixed(1)}%` : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? formatCurrency(transAdjPriceStats.high) : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${propAdjStats.high.toFixed(1)}%` : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? formatCurrency(finalPriceStats.high) : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${netAdjStats.high.toFixed(1)}%` : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${grossAdjStats.high.toFixed(1)}%` : '-'}
+                </td>
+              </tr>
+              <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+                <td className="px-2 py-1 font-medium" style={{ color: colors.text }}>AVG</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? formatCurrency(priceStats.avg) : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${transAdjStats.avg.toFixed(1)}%` : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? formatCurrency(transAdjPriceStats.avg) : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${propAdjStats.avg.toFixed(1)}%` : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? formatCurrency(finalPriceStats.avg) : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${netAdjStats.avg.toFixed(1)}%` : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${grossAdjStats.avg.toFixed(1)}%` : '-'}
+                </td>
+              </tr>
+              <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
+                <td className="px-2 py-1 font-medium" style={{ color: colors.text }}>MED</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? formatCurrency(priceStats.med) : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${transAdjStats.med.toFixed(1)}%` : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? formatCurrency(transAdjPriceStats.med) : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${propAdjStats.med.toFixed(1)}%` : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? formatCurrency(finalPriceStats.med) : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${netAdjStats.med.toFixed(1)}%` : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${grossAdjStats.med.toFixed(1)}%` : '-'}
+                </td>
+              </tr>
+              <tr>
+                <td className="px-2 py-1 font-medium" style={{ color: colors.text }}>LOW</td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? formatCurrency(priceStats.low) : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${transAdjStats.low.toFixed(1)}%` : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? formatCurrency(transAdjPriceStats.low) : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${propAdjStats.low.toFixed(1)}%` : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? formatCurrency(finalPriceStats.low) : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${netAdjStats.low.toFixed(1)}%` : '-'}
+                </td>
+                <td className="px-2 py-1 text-right font-medium" style={{ color: colors.text }}>
+                  {validSummaries.length > 0 ? `${grossAdjStats.low.toFixed(1)}%` : '-'}
+                </td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>

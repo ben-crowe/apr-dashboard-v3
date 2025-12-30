@@ -199,10 +199,8 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
     color: colors.text,
   };
 
-  // Section header style (gray background)
-  const sectionHeaderStyle = {
-    backgroundColor: '#f0f0f0',
-  };
+  // Section header style (no background for dark mode compatibility)
+  const sectionHeaderStyle = {};
 
   // Summary row styles (no background color in app - only in report template)
   const pgrSummaryStyle = {};

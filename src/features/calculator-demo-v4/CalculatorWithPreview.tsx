@@ -336,14 +336,34 @@ export default function CalculatorWithPreview() {
     values['ia-dircap-cap-rate1'] = formatPercent(capRate);
     values['ia-dircap-expenseratio'] = formatPercent(getFieldValue('calc-expense-ratio'));
 
-    // Reconciliation (use indicated value as final)
-    values['recon-final-value'] = formatCurrency(indicatedValue);
-    values['recon-final-value-per-sf'] = `$${Math.round(indicatedValue / 10200)}`;
+    // Reconciliation - use the weighted reconciled value from ReconciliationPanel
+    const reconciledValue = getFieldValue('recon-reconciled-value') || indicatedValue;
+    const reconIncomeValue = getFieldValue('recon-income-value') || indicatedValue;
+    const reconSalesValue = getFieldValue('recon-sales-value') || 0;
+    const reconCostValue = getFieldValue('recon-cost-value') || 0;
+    const reconIncomeWeight = getFieldValue('recon-income-weight') || 100;
+    const reconSalesWeight = getFieldValue('recon-sales-weight') || 0;
+    const reconCostWeight = getFieldValue('recon-cost-weight') || 0;
+
+    values['recon-final-value'] = formatCurrency(reconciledValue);
+    values['recon-final-value-per-sf'] = `$${Math.round(reconciledValue / totalSf)}`;
+    values['recon-final-value-per-unit'] = formatCurrency(reconciledValue / totalUnits);
+
+    // Reconciliation table values
+    values['recon-income-value'] = formatCurrency(reconIncomeValue);
+    values['recon-income-weight'] = `${Math.round(reconIncomeWeight)}`;
+    values['recon-income-weighted'] = formatCurrency(reconIncomeValue * reconIncomeWeight / 100);
+    values['recon-sales-value'] = formatCurrency(reconSalesValue);
+    values['recon-sales-weight'] = `${Math.round(reconSalesWeight)}`;
+    values['recon-sales-weighted'] = formatCurrency(reconSalesValue * reconSalesWeight / 100);
+    values['recon-cost-value'] = formatCurrency(reconCostValue);
+    values['recon-cost-weight'] = `${Math.round(reconCostWeight)}`;
+    values['recon-cost-weighted'] = formatCurrency(reconCostValue * reconCostWeight / 100);
 
     // Sales comparison (placeholder - would come from SCA section)
     values['sca-indicated-value'] = formatCurrency(indicatedValue);
     values['sca-indicated-value-rounded'] = formatCurrency(Math.round(indicatedValue / 10000) * 10000);
-    values['sca-value-per-sf'] = `$${Math.round(indicatedValue / 10200)}`;
+    values['sca-value-per-sf'] = `$${Math.round(indicatedValue / totalSf)}`;
     values['sca-concluded-value-per-unit'] = formatCurrency(indicatedValue / totalUnits);
 
     // ========================================

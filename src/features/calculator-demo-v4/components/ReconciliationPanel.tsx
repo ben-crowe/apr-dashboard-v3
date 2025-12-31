@@ -26,6 +26,7 @@ export default function ReconciliationPanel({
 
   // Get total units and SF from store for per-unit calculations
   const sections = useReportBuilderStore(state => state.sections);
+  const updateFieldValue = useReportBuilderStore(state => state.updateFieldValue);
   const calcSection = sections.find(s => s.id === 'calc');
 
   const getFieldValue = (fieldId: string): number => {
@@ -84,9 +85,20 @@ export default function ReconciliationPanel({
   };
 
   // Calculate reconciled value
-  const reconciledValue = (incomeValue * incomeWeight / 100) + 
-                         (salesIndicatedValue * salesWeight / 100) + 
+  const reconciledValue = (incomeValue * incomeWeight / 100) +
+                         (salesIndicatedValue * salesWeight / 100) +
                          (costValue * costWeight / 100);
+
+  // Store reconciled value in the store so bridge can access it
+  useEffect(() => {
+    updateFieldValue('recon-reconciled-value', reconciledValue);
+    updateFieldValue('recon-income-value', incomeValue);
+    updateFieldValue('recon-income-weight', incomeWeight);
+    updateFieldValue('recon-sales-value', salesIndicatedValue);
+    updateFieldValue('recon-sales-weight', salesWeight);
+    updateFieldValue('recon-cost-value', costValue);
+    updateFieldValue('recon-cost-weight', costWeight);
+  }, [reconciledValue, incomeValue, incomeWeight, salesIndicatedValue, salesWeight, costValue, costWeight, updateFieldValue]);
 
   const formatCurrency = (n: number) => '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
   const formatNumber = (n: number) => n.toLocaleString('en-US', { maximumFractionDigits: 2 });

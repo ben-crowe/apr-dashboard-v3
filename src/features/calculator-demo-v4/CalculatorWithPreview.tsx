@@ -360,6 +360,13 @@ export default function CalculatorWithPreview() {
     values['recon-cost-weight'] = `${Math.round(reconCostWeight)}`;
     values['recon-cost-weighted'] = formatCurrency(reconCostValue * reconCostWeight / 100);
 
+    // Property metadata fields for Page 62 Reconciliation header
+    values['value-scenario'] = getFieldString('value-scenario') || 'AS STABILIZED';
+    values['VALUE-SCENARIO'] = getFieldString('value-scenario') || 'AS STABILIZED';
+    values['property-rights'] = getFieldString('property-rights') || 'Fee Simple Estate';
+    values['recon-effective-date'] = getFieldString('recon-effective-date') || getFieldString('effective-date') || '';
+    values['effective-date'] = getFieldString('effective-date') || '';
+
     // Sales comparison (placeholder - would come from SCA section)
     values['sca-indicated-value'] = formatCurrency(indicatedValue);
     values['sca-indicated-value-rounded'] = formatCurrency(Math.round(indicatedValue / 10000) * 10000);

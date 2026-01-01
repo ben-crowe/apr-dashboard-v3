@@ -1,5 +1,4 @@
 import { useReportBuilderStore } from '../store/reportBuilderStore';
-import { cn } from '@/lib/utils';
 
 /**
  * Maps approach toggle field IDs to their associated section IDs.
@@ -11,8 +10,30 @@ const APPROACH_TO_SECTIONS_MAP: Record<string, string[]> = {
   'home-use-cost-approach': ['cost', 'cost-s'],
 };
 
+/**
+ * Helper function to get a field value from nested sections structure.
+ * Searches through all sections and their subsections to find a field by ID.
+ */
+const getFieldValueFromSections = (
+  sections: ReturnType<typeof useReportBuilderStore>['sections'],
+  fieldId: string
+): unknown => {
+  for (const section of sections) {
+    // Check top-level fields
+    const field = section.fields?.find(f => f.id === fieldId);
+    if (field) return field.value;
+
+    // Check subsection fields
+    for (const sub of section.subsections || []) {
+      const subField = sub.fields?.find(f => f.id === fieldId);
+      if (subField) return subField.value;
+    }
+  }
+  return undefined;
+};
+
 export default function SectionSidebar() {
-  const { sections, activeSection, setActiveSection, fieldValues } = useReportBuilderStore();
+  const { sections, activeSection, setActiveSection } = useReportBuilderStore();
 
   // Filter out S-tabs (client-intake, loe-prep, image-mgt) - these are TDD-only
   // Editor Panel should only show numbered report page tabs
@@ -34,7 +55,8 @@ export default function SectionSidebar() {
   for (const [toggleFieldId, sectionIds] of Object.entries(APPROACH_TO_SECTIONS_MAP)) {
     // Default behavior: if toggle value is undefined/null, treat as TRUE (enabled)
     // Only hide sections when toggle is explicitly false
-    const isEnabled = fieldValues?.[toggleFieldId] !== false;
+    const toggleValue = getFieldValueFromSections(sections, toggleFieldId);
+    const isEnabled = toggleValue !== false;
     if (!isEnabled) {
       sectionIds.forEach(id => hiddenSectionIds.add(id));
     }

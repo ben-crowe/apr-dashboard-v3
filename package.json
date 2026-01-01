@@ -10,7 +10,8 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "generate-viewer": "tsx scripts/generate-standalone-viewer.ts"
+    "generate-viewer": "tsx scripts/generate-standalone-viewer.ts",
+    "seed:test-job": "tsx scripts/seed-test-job.ts"
   },
   "dependencies": {
     "@docuseal/react": "^1.0.68",

@@ -8777,20 +8777,56 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 
         document.addEventListener('mouseup', () => clearInterval(zoomInterval));
 
-        // Auto-adjust zoom when panel resizes
+        // Auto-adjust zoom when panel resizes - PAGE-PRESERVING algorithm
         const resizeObserver = new ResizeObserver(() => {
-            // Only auto-adjust if user hasn't manually changed zoom from 100%
+            // STEP 1: Capture current visible page BEFORE any changes
+            const oldScale = fitToPanelScale * userZoomMultiplier;
+            const unscaledScrollTop = oldScale > 0 ? previewContainer.scrollTop / oldScale : 0;
+
+            // Find the page at top of viewport (in unscaled coordinates)
+            let anchorPage = null;
+            let offsetWithinPage = 0;
+
+            const pages = document.querySelectorAll('.page-sheet');
+            for (const page of pages) {
+                const pageTop = page.offsetTop;
+                const pageBottom = pageTop + page.offsetHeight;
+
+                if (pageTop <= unscaledScrollTop && pageBottom > unscaledScrollTop) {
+                    anchorPage = page;
+                    offsetWithinPage = unscaledScrollTop - pageTop;
+                    break;
+                }
+            }
+
+            // Edge case: at very top or no pages yet
+            if (!anchorPage && pages.length > 0) {
+                if (unscaledScrollTop <= 0) {
+                    anchorPage = pages[0];
+                    offsetWithinPage = 0;
+                } else {
+                    // Past the end - anchor to last page
+                    anchorPage = pages[pages.length - 1];
+                    offsetWithinPage = 0;
+                }
+            }
+
+            // STEP 2: Update zoom scale
+            // Only recalculate fitToPanelScale if at 100% user zoom
             if (Math.abs(userZoomMultiplier - 1.0) < 0.01) {
-                // Save scroll position as ratio before zoom change
-                const scaledHeight = scaler.scrollHeight * fitToPanelScale;
-                const scrollRatio = scaledHeight > 0 ? previewContainer.scrollTop / scaledHeight : 0;
-                
                 fitToPanelScale = calculateFitToPanel();
-                updateZoom();
-                
-                // Restore scroll position proportionally after zoom
-                const newScaledHeight = scaler.scrollHeight * fitToPanelScale;
-                previewContainer.scrollTop = scrollRatio * newScaledHeight;
+            }
+
+            const newScale = fitToPanelScale * userZoomMultiplier;
+            scaler.style.transform = `scale(${newScale})`;
+            zoomValue.textContent = Math.round(userZoomMultiplier * 100) + '%';
+
+            // STEP 3: Restore scroll to show same page at same offset
+            if (anchorPage && newScale > 0) {
+                requestAnimationFrame(() => {
+                    const targetUnscaled = anchorPage.offsetTop + offsetWithinPage;
+                    previewContainer.scrollTop = targetUnscaled * newScale;
+                });
             }
         });
         if (previewContainer) {

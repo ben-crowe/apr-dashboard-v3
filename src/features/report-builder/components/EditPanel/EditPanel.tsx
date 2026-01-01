@@ -37,7 +37,7 @@ type SubsectionLayout = FieldLayoutRow[];
 
 const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
   'job-setup': [
-    { fields: ['home-job-id', 'home-job-status', 'home-report-date'], widths: ['50%', '25%', '25%'] },
+    { fields: ['home-job-id', 'home-job-status', 'home-report-date'], widths: ['33.33%', '33.33%', '33.33%'] },
   ],
   'client-info': [
     { fields: ['home-client-name', 'home-client-company'], widths: ['50%', '50%'] },

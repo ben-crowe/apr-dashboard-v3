@@ -41,11 +41,11 @@ export interface FieldDefinition {
   label: string;                 // Human-readable label for UI
   section: string;               // Section ID (cover, exec, site, etc.)
   subsection?: string;           // Subsection if applicable
-  type: 'text' | 'number' | 'date' | 'image' | 'textarea' | 'select' | 'currency' | 'percentage' | 'calculated';
+  type: 'text' | 'number' | 'date' | 'image' | 'textarea' | 'select' | 'currency' | 'percentage' | 'calculated' | 'boolean';
   inputSource: 'user-input' | 'calculated' | 'api-fetch' | 'template' | 'auto-filled';
   options?: string[];            // For select fields
   required: boolean;
-  defaultValue?: string | number;
+  defaultValue?: string | number | boolean;
   placeholder?: string;
   calculationFormula?: string;   // For calculated fields
   notes?: string;                // Additional context
@@ -397,6 +397,11 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'home-extraordinary-assumptions', storeId: 'home-extraordinary-assumptions', label: 'Extraordinary Assumptions', section: 'home', subsection: 'assumptions-conditions', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'home-hypothetical-conditions', storeId: 'home-hypothetical-conditions', label: 'Hypothetical Conditions', section: 'home', subsection: 'assumptions-conditions', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'home-limiting-conditions', storeId: 'home-limiting-conditions', label: 'Extraordinary Limiting Conditions', section: 'home', subsection: 'assumptions-conditions', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // --- VALUATION APPROACHES (3 toggles) ---
+  { id: 'home-use-income-approach', storeId: 'home-use-income-approach', label: 'Include Income Approach', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
+  { id: 'home-use-sales-approach', storeId: 'home-use-sales-approach', label: 'Include Sales Comparison Approach', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
+  { id: 'home-use-cost-approach', storeId: 'home-use-cost-approach', label: 'Include Cost Approach', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
 
   // --- TRANSMITTAL LETTER (2 fields - existing) ---
   { id: 'transmittal-date', storeId: 'transmittal-date', label: 'Letter Date', section: 'home', subsection: 'transmittal-content', type: 'date', inputSource: 'auto-filled', required: true },

@@ -299,18 +299,18 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
             tabIndex={0}
           >
             {isLoading ? (
-              <Loader2 className="w-4 h-4 text-blue-500 animate-spin" />
+              <Loader2 className="w-4 h-4 text-blue-400 animate-spin" />
             ) : (
-              <ImageIcon className="w-4 h-4 text-slate-400" />
+              <ImageIcon className="w-4 h-4 text-gray-400" />
             )}
-            <span className={cn('text-sm', error ? 'text-red-500' : 'text-slate-500')}>
+            <span className={cn('text-sm', error ? 'text-red-400' : 'text-gray-300')}>
               {isLoading ? 'Uploading...' : error ? error : 'Drop image or click'}
             </span>
           </div>
         )}
 
         {/* Field ID - small */}
-        <div className="text-[10px] text-slate-400">{field.id}</div>
+        <div className="text-[10px] text-gray-400">{field.id}</div>
 
         {/* Preview Modal */}
         {previewOpen && (
@@ -342,10 +342,10 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
   // ARRAY MODE (existing behavior with file upload added)
   return (
     <div className="space-y-4">
-      <Label>{field.label}</Label>
+      <Label className="text-white">{field.label}</Label>
 
       {/* Field ID indicator */}
-      <div className="text-xs text-muted-foreground font-mono">
+      <div className="text-xs text-gray-400 font-mono">
         {field.id}
       </div>
 
@@ -377,14 +377,14 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
         tabIndex={0}
       >
         {isLoading ? (
-          <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />
+          <Loader2 className="w-5 h-5 text-blue-400 animate-spin" />
         ) : (
-          <Upload className="w-5 h-5 text-muted-foreground" />
+          <Upload className="w-5 h-5 text-gray-400" />
         )}
         <div className="flex-1">
           <p className={cn(
             'text-sm',
-            error ? 'text-red-500' : 'text-foreground'
+            error ? 'text-red-400' : 'text-white'
           )}>
             {isLoading
               ? 'Uploading...'
@@ -392,7 +392,7 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
               ? error
               : 'Upload Image File'}
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-gray-300">
             Click, drag & drop, or paste from clipboard
           </p>
         </div>
@@ -413,7 +413,7 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
                 draggedIndex === index && 'opacity-50'
               )}
             >
-              <GripVertical className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+              <GripVertical className="h-5 w-5 text-gray-400 flex-shrink-0" />
               <img
                 src={imageUrl}
                 alt={`Property ${index + 1}`}
@@ -427,7 +427,7 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
                 }}
                 title="Click to preview"
               />
-              <span className="flex-1 text-sm truncate">{imageUrl}</span>
+              <span className="flex-1 text-sm truncate text-white">{imageUrl}</span>
               <Button
                 variant="ghost"
                 size="icon"
@@ -443,7 +443,7 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
 
       {/* Add image via URL (legacy support) */}
       <div className="space-y-2">
-        <Label className="text-xs text-muted-foreground">Or add via URL:</Label>
+        <Label className="text-xs text-gray-300">Or add via URL:</Label>
         <div className="flex gap-2">
           <Input
             placeholder="Enter image URL"
@@ -463,13 +463,13 @@ export default function ImageFieldEditor({ field }: ImageFieldEditorProps) {
       </div>
 
       {images.length === 0 && (
-        <p className="text-sm text-muted-foreground text-center py-6 border border-dashed rounded-md">
+        <p className="text-sm text-gray-300 text-center py-6 border border-dashed rounded-md">
           No images added yet. Upload a file or add an image URL to get started.
         </p>
       )}
 
       {/* Mode indicator */}
-      <div className="text-[10px] text-muted-foreground">
+      <div className="text-[10px] text-gray-400">
         Mode: Array (Multiple Images) | Storage: Data URL (Supabase later)
       </div>
 

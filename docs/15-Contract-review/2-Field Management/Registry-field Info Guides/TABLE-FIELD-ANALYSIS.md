@@ -1,4 +1,4 @@
-# Table Field Analysis: Proving "Extra" Registry Fields Are Legitimate
+# Table Field Analysis:
 
 **Purpose:** Demonstrate that 329 "Extra" registry fields are NOT obsolete
 **Date:** 2025-12-15

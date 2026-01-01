@@ -23,28 +23,37 @@ export default function ReportBuilderLayout() {
   return (
     <div className="h-screen w-full flex flex-col overflow-hidden">
       {/* Navigation Header */}
-      <div className="bg-slate-800 text-white px-4 py-2 flex items-center justify-between shrink-0">
+      <div className="text-white px-4 py-2 flex items-center justify-between shrink-0 border-b" style={{ backgroundColor: '#1f1f1f', borderColor: '#4b5563' }}>
         <div className="flex items-center gap-3">
           <Button
             onClick={() => navigate('/test-input')}
             variant="ghost"
             size="sm"
-            className="gap-2 text-white hover:bg-slate-700"
+            className="gap-2 text-white hover:!bg-[#2a2a2a] hover:!text-white"
+            style={{ backgroundColor: 'transparent', color: '#ffffff' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#2a2a2a';
+              e.currentTarget.style.color = '#ffffff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = '#ffffff';
+            }}
           >
             <ArrowLeft className="w-4 h-4" />
             Back to TDD
           </Button>
-          <span className="text-slate-400">|</span>
+          <span style={{ color: '#9ca3af' }}>|</span>
           <span className="font-semibold">Report Builder</span>
         </div>
         <div className="flex items-center gap-3">
           {activeTestMode === 'test-report' && (
-            <span className="text-sm text-slate-300 italic">
+            <span className="text-sm italic" style={{ color: '#9ca3af' }}>
               Test Report Mode Active - showing calculated report
             </span>
           )}
           {activeTestMode === 'designer' && (
-            <span className="text-sm text-slate-300 italic">
+            <span className="text-sm italic" style={{ color: '#9ca3af' }}>
               Designer Mode - toggle sample data or load full test data
             </span>
           )}
@@ -53,11 +62,24 @@ export default function ReportBuilderLayout() {
             variant="ghost"
             size="sm"
             disabled={activeTestMode === 'test-report'}
-            className={`gap-2 text-white border border-slate-600 ${
-              activeTestMode === 'test-report'
-                ? 'opacity-50 cursor-not-allowed hover:bg-slate-800'
-                : 'hover:bg-slate-700'
-            }`}
+            className="gap-2 text-white border hover:!text-white"
+            style={{
+              backgroundColor: activeTestMode === 'test-report' ? '#1f1f1f' : '#2a2a2a',
+              borderColor: '#4b5563',
+              opacity: activeTestMode === 'test-report' ? 0.5 : 1,
+              cursor: activeTestMode === 'test-report' ? 'not-allowed' : 'pointer',
+              color: '#ffffff'
+            }}
+            onMouseEnter={(e) => {
+              if (activeTestMode !== 'test-report') {
+                e.currentTarget.style.backgroundColor = '#333333';
+                e.currentTarget.style.color = '#ffffff';
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = activeTestMode === 'test-report' ? '#1f1f1f' : '#2a2a2a';
+              e.currentTarget.style.color = '#ffffff';
+            }}
             title={
               activeTestMode === 'test-report'
                 ? 'Disabled in Test Report Mode'
@@ -71,7 +93,16 @@ export default function ReportBuilderLayout() {
             onClick={() => window.location.reload()}
             variant="ghost"
             size="sm"
-            className="gap-2 text-white hover:bg-slate-700"
+            className="gap-2 text-white hover:!bg-[#2a2a2a] hover:!text-white"
+            style={{ backgroundColor: 'transparent', color: '#ffffff' }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#2a2a2a';
+              e.currentTarget.style.color = '#ffffff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+              e.currentTarget.style.color = '#ffffff';
+            }}
             title="Refresh the page"
           >
             <RefreshCw className="w-4 h-4" />
@@ -85,13 +116,13 @@ export default function ReportBuilderLayout() {
         <SectionSidebar />
 
       <ResizablePanelGroup direction="horizontal" className="flex-1">
-        <ResizablePanel defaultSize={40} minSize={30} maxSize={60}>
+        <ResizablePanel defaultSize={60}>
           <EditPanel />
         </ResizablePanel>
 
         <ResizableHandle withHandle />
 
-        <ResizablePanel defaultSize={60} minSize={40}>
+        <ResizablePanel defaultSize={40}>
           <PreviewPanel />
         </ResizablePanel>
       </ResizablePanelGroup>

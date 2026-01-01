@@ -8,11 +8,11 @@ interface CalculatedFieldDisplayProps {
 export default function CalculatedFieldDisplay({ field }: CalculatedFieldDisplayProps) {
   return (
     <div className="space-y-2">
-      <Label htmlFor={field.id}>{field.label}</Label>
-      <div className="flex h-10 w-full rounded-md border border-input bg-muted px-3 py-2 text-sm text-muted-foreground">
+      <Label htmlFor={field.id} className="text-white">{field.label}</Label>
+      <div className="flex h-10 w-full rounded-md border border-input bg-muted px-3 py-2 text-sm text-gray-300">
         {field.value}
         {field.calculationFormula && (
-          <span className="ml-auto text-xs italic">
+          <span className="ml-auto text-xs italic text-gray-400">
             ({field.calculationFormula})
           </span>
         )}

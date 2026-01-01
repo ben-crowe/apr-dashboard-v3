@@ -342,6 +342,18 @@ const TestInputDashboard: React.FC = () => {
     });
   };
 
+  const togglePhotoSubsection = (subsectionId: string) => {
+    setExpandedPhotoSubsections(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(subsectionId)) {
+        newSet.delete(subsectionId);
+      } else {
+        newSet.add(subsectionId);
+      }
+      return newSet;
+    });
+  };
+
   const toggleAllCalcOutputSection = (sectionId: string) => {
     setExpandedAllCalcOutputSections(prev => {
       const newSet = new Set(prev);
@@ -656,31 +668,33 @@ const TestInputDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 px-4 pt-4 pb-12">
+    <div className="min-h-screen px-4 pt-4 pb-12" style={{ backgroundColor: '#1f1f1f' }}>
       <div className="max-w-7xl mx-auto">
-        {/* Header - Two Part Structure to Match Preview Panel */}
-        <div className="bg-white rounded-lg shadow-sm mb-4 overflow-hidden">
-          {/* Part 1: Title Bar (matches Preview's "REPORT PREVIEW") */}
+        {/* Header - Two Part Structure to Match Edit Panel */}
+        <div className="mb-4 overflow-hidden">
+          {/* Part 1: Title Bar (matches EditPanel header) */}
           <div style={{
-            backgroundColor: '#4b5563',
-            padding: '12px 16px',
-            borderBottom: '1px solid #374151'
+            backgroundColor: 'transparent',
+            padding: '12px 14px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottom: '1px solid #4b5563'
           }}>
-            <h1 style={{
-              fontSize: '15px',
-              fontWeight: '600',
+            <span style={{
               color: '#ffffff',
-              margin: 0
+              fontWeight: '600',
+              fontSize: '15px'
             }}>
               TEST DATA INPUT DASHBOARD
-            </h1>
+            </span>
           </div>
 
-          {/* Part 2: Stats & Actions Bar (matches Preview's control bar) */}
+          {/* Part 2: Stats & Actions Bar */}
           <div style={{
-            backgroundColor: '#4b5563',
-            padding: '8px 16px',
-            borderBottom: '1px solid #374151',
+            backgroundColor: 'transparent',
+            padding: '8px 14px',
+            borderBottom: '1px solid #4b5563',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -718,7 +732,10 @@ const TestInputDashboard: React.FC = () => {
                 onClick={() => window.location.reload()}
                 variant="outline"
                 size="sm"
-                className="gap-2 bg-gray-200 hover:bg-gray-300 text-gray-800 border-gray-300"
+                className="gap-2 text-white border transition-colors"
+                style={{ backgroundColor: '#2a2a2a', borderColor: '#4b5563' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#333333'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
                 title="Hard refresh the page"
               >
                 <RefreshCw className="w-3 h-3" />
@@ -740,13 +757,31 @@ const TestInputDashboard: React.FC = () => {
                 variant={activeTestMode === 'test-report' ? 'default' : 'outline'}
                 size="sm"
                 disabled={activeTestMode === 'designer'}
-                className={`gap-2 ${
+                className={`gap-2 text-white border transition-colors ${
                   activeTestMode === 'test-report'
-                    ? 'bg-blue-600 hover:bg-blue-700 text-white border-blue-600 font-semibold shadow-md'
+                    ? 'bg-blue-600 hover:bg-blue-500 font-semibold shadow-md'
                     : activeTestMode === 'designer'
-                    ? 'bg-gray-300 text-gray-400 border-gray-400 opacity-50 cursor-not-allowed'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-600 border-gray-300'
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ''
                 }`}
+                style={{
+                  backgroundColor: activeTestMode === 'test-report' ? '#2563eb' : activeTestMode === 'designer' ? '#1f1f1f' : '#2a2a2a',
+                  borderColor: activeTestMode === 'test-report' ? '#2563eb' : activeTestMode === 'designer' ? '#4b5563' : '#4b5563'
+                }}
+                onMouseEnter={(e) => {
+                  if (activeTestMode === 'test-report') {
+                    e.currentTarget.style.backgroundColor = '#3b82f6';
+                  } else if (activeTestMode !== 'designer') {
+                    e.currentTarget.style.backgroundColor = '#333333';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activeTestMode === 'test-report') {
+                    e.currentTarget.style.backgroundColor = '#2563eb';
+                  } else if (activeTestMode !== 'designer') {
+                    e.currentTarget.style.backgroundColor = '#2a2a2a';
+                  }
+                }}
                 title="MODE 3: Test Report - Load ONLY user-input fields, clear calculated fields, then run calc engine for validation"
               >
                 <Database className="w-3 h-3" />
@@ -762,13 +797,31 @@ const TestInputDashboard: React.FC = () => {
                 variant={activeTestMode === 'designer' ? 'default' : 'outline'}
                 size="sm"
                 disabled={activeTestMode === 'test-report'}
-                className={`gap-2 ${
+                className={`gap-2 text-white border transition-colors ${
                   activeTestMode === 'designer'
-                    ? 'bg-purple-600 hover:bg-purple-700 text-white border-purple-600 font-semibold shadow-md'
+                    ? 'bg-purple-600 hover:bg-purple-500 font-semibold shadow-md'
                     : activeTestMode === 'test-report'
-                    ? 'bg-gray-300 text-gray-400 border-gray-400 opacity-50 cursor-not-allowed'
-                    : 'bg-gray-100 hover:bg-gray-200 text-gray-600 border-gray-300'
+                    ? 'opacity-50 cursor-not-allowed'
+                    : ''
                 }`}
+                style={{
+                  backgroundColor: activeTestMode === 'designer' ? '#9333ea' : activeTestMode === 'test-report' ? '#1f1f1f' : '#2a2a2a',
+                  borderColor: activeTestMode === 'designer' ? '#9333ea' : activeTestMode === 'test-report' ? '#4b5563' : '#4b5563'
+                }}
+                onMouseEnter={(e) => {
+                  if (activeTestMode === 'designer') {
+                    e.currentTarget.style.backgroundColor = '#a855f7';
+                  } else if (activeTestMode !== 'test-report') {
+                    e.currentTarget.style.backgroundColor = '#333333';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activeTestMode === 'designer') {
+                    e.currentTarget.style.backgroundColor = '#9333ea';
+                  } else if (activeTestMode !== 'test-report') {
+                    e.currentTarget.style.backgroundColor = '#2a2a2a';
+                  }
+                }}
                 title="Designer Mode - Use toggle for sample data or Load Full Test Data button in Report Builder"
               >
                 <Database className="w-3 h-3" />
@@ -779,11 +832,29 @@ const TestInputDashboard: React.FC = () => {
                 onClick={handlePreview}
                 variant="outline"
                 size="sm"
-                className={`gap-2 ${
+                className={`gap-2 text-white border transition-colors ${
                   activeTestMode !== 'none'
-                    ? 'bg-green-500 hover:bg-green-600 text-white border-green-500 font-semibold shadow-md'
-                    : 'bg-gray-200 hover:bg-gray-300 text-gray-800 border-gray-300'
+                    ? 'bg-green-500 hover:bg-green-400 font-semibold shadow-md'
+                    : ''
                 }`}
+                style={{
+                  backgroundColor: activeTestMode !== 'none' ? '#22c55e' : '#2a2a2a',
+                  borderColor: activeTestMode !== 'none' ? '#22c55e' : '#4b5563'
+                }}
+                onMouseEnter={(e) => {
+                  if (activeTestMode !== 'none') {
+                    e.currentTarget.style.backgroundColor = '#4ade80';
+                  } else {
+                    e.currentTarget.style.backgroundColor = '#333333';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activeTestMode !== 'none') {
+                    e.currentTarget.style.backgroundColor = '#22c55e';
+                  } else {
+                    e.currentTarget.style.backgroundColor = '#2a2a2a';
+                  }
+                }}
               >
                 <ExternalLink className="w-3 h-3" />
                 Preview in Builder
@@ -829,19 +900,19 @@ const TestInputDashboard: React.FC = () => {
                 open={isExpanded}
                 onOpenChange={() => toggleSection(sectionId)}
               >
-                <div id={`section-${sectionId}`} className="bg-white rounded-lg shadow-sm overflow-hidden">
+                <div id={`section-${sectionId}`} className="rounded-lg overflow-hidden mb-2" style={{ backgroundColor: '#2a2a2a', border: '1px solid #4b5563' }}>
                   <CollapsibleTrigger className="w-full">
-                    <div className="flex items-center justify-between p-4 hover:bg-slate-50 cursor-pointer">
+                    <div className="flex items-center justify-between p-4 hover:bg-[#333333] cursor-pointer">
                       <div className="flex items-center gap-2">
                         {isExpanded ? (
-                          <ChevronDown className="w-5 h-5 text-slate-600" />
+                          <ChevronDown className="w-5 h-5 text-gray-300" />
                         ) : (
-                          <ChevronRight className="w-5 h-5 text-slate-600" />
+                          <ChevronRight className="w-5 h-5 text-gray-300" />
                         )}
-                        <h2 className="text-lg font-semibold text-slate-800">
+                        <h2 className="text-lg font-semibold text-white">
                           {sectionName}
                         </h2>
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-xs text-gray-300 border-gray-500">
                           {fields.length} fields
                         </Badge>
                       </div>
@@ -849,31 +920,31 @@ const TestInputDashboard: React.FC = () => {
                   </CollapsibleTrigger>
 
                   <CollapsibleContent>
-                    <div className="border-t border-slate-200">
+                    <div className="border-t" style={{ borderColor: '#4b5563' }}>
                       {/* Special rendering for Calculator section - INPUTS and OUTPUTS */}
                       {sectionId === 'calc' ? (
-                        <div className="space-y-3 p-4">
+                        <div className="space-y-3 p-4" style={{ backgroundColor: '#1f1f1f' }}>
                           {/* ==================== INPUTS SECTION ==================== */}
                           <Collapsible
                             open={expandedCalcSubsections.has('inputs-main')}
                             onOpenChange={() => toggleCalcSubsection('inputs-main')}
                           >
-                            <div className="border-2 border-amber-200 rounded-lg overflow-hidden">
+                            <div className="border-2 rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-amber-50 hover:bg-amber-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                <div className="px-4 py-3 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                   <div className="flex items-center gap-2">
                                     {expandedCalcSubsections.has('inputs-main') ? (
-                                      <ChevronDown className="w-5 h-5 text-amber-700" />
+                                      <ChevronDown className="w-5 h-5" style={{ color: '#9ca3af' }} />
                                     ) : (
-                                      <ChevronRight className="w-5 h-5 text-amber-700" />
+                                      <ChevronRight className="w-5 h-5" style={{ color: '#9ca3af' }} />
                                     )}
-                                    <h3 className="text-base font-bold text-amber-800">📥 INPUTS</h3>
-                                    <Badge className="bg-amber-100 text-amber-800 border-amber-300">User Entry Fields</Badge>
+                                    <h3 className="text-base font-bold text-white">📥 INPUTS</h3>
+                                    <Badge className="text-gray-300 border-gray-500" style={{ backgroundColor: '#1f1f1f' }}>User Entry Fields</Badge>
                                   </div>
                                 </div>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
-                                <div className="p-3 space-y-2 bg-white">
+                                <div className="p-3 space-y-2" style={{ backgroundColor: '#1f1f1f' }}>
                                   {/* Input subsections */}
                                   {['calc-unit-mix', 'calc-other-income', 'calc-vacancy', 'calc-expenses', 'calc-cap', 'calc-adjustments'].map(subsectionId => {
                                     const subsectionFields = getFieldsBySubsection(sectionId, subsectionId);
@@ -896,30 +967,30 @@ const TestInputDashboard: React.FC = () => {
                                         open={expandedCalcSubsections.has(subsectionId)}
                                         onOpenChange={() => toggleCalcSubsection(subsectionId)}
                                       >
-                                        <div className="border rounded-lg overflow-hidden">
+                                        <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                                           <CollapsibleTrigger className="w-full">
-                                            <div className="bg-slate-50 hover:bg-slate-100 px-4 py-2 flex items-center justify-between cursor-pointer transition-colors">
+                                            <div className="px-4 py-2 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                               <div className="flex items-center gap-2">
                                                 {expandedCalcSubsections.has(subsectionId) ? (
-                                                  <ChevronDown className="w-4 h-4 text-slate-600" />
+                                                  <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                                 ) : (
-                                                  <ChevronRight className="w-4 h-4 text-slate-600" />
+                                                  <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                                 )}
-                                                <h4 className="text-sm font-semibold text-slate-800">{subsectionLabels[subsectionId] || subsectionId}</h4>
+                                                <h4 className="text-sm font-semibold text-white">{subsectionLabels[subsectionId] || subsectionId}</h4>
                                               </div>
-                                              <Badge variant="outline" className="text-xs">{userInputFields.length} inputs</Badge>
+                                              <Badge variant="outline" className="text-xs text-gray-300 border-gray-500">{userInputFields.length} inputs</Badge>
                                             </div>
                                           </CollapsibleTrigger>
                                           <CollapsibleContent>
-                                            <div className="p-3 bg-white">
+                                            <div className="p-3" style={{ backgroundColor: '#1f1f1f' }}>
                                               <table className="w-full text-sm">
                                                 <tbody>
                                                   {userInputFields.map(field => {
                                                     const statusInfo = getFieldStatus(field);
                                                     return (
-                                                      <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50">
-                                                        <td className="px-2 py-1.5 text-xs font-mono text-slate-500 w-48">{field.storeId}</td>
-                                                        <td className="px-2 py-1.5 text-sm">{field.label}</td>
+                                                      <tr key={field.id} className="border-b hover:bg-[#333333]" style={{ borderColor: '#4b5563' }}>
+                                                        <td className="px-2 py-1.5 text-xs font-mono w-48" style={{ color: '#9ca3af' }}>{field.storeId}</td>
+                                                        <td className="px-2 py-1.5 text-sm text-white">{field.label}</td>
                                                         <td className="px-2 py-1.5">{renderInput(field, statusInfo)}</td>
                                                         <td className="px-2 py-1.5 w-20">{renderStatusBadge(statusInfo.status)}</td>
                                                       </tr>
@@ -943,25 +1014,25 @@ const TestInputDashboard: React.FC = () => {
                             open={expandedCalcSubsections.has('outputs-main')}
                             onOpenChange={() => toggleCalcSubsection('outputs-main')}
                           >
-                            <div className="border-2 border-blue-200 rounded-lg overflow-hidden">
+                            <div className="border-2 rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-blue-50 hover:bg-blue-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                <div className="px-4 py-3 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                   <div className="flex items-center gap-2">
                                     {expandedCalcSubsections.has('outputs-main') ? (
-                                      <ChevronDown className="w-5 h-5 text-blue-700" />
+                                      <ChevronDown className="w-5 h-5" style={{ color: '#9ca3af' }} />
                                     ) : (
-                                      <ChevronRight className="w-5 h-5 text-blue-700" />
+                                      <ChevronRight className="w-5 h-5" style={{ color: '#9ca3af' }} />
                                     )}
-                                    <h3 className="text-base font-bold text-blue-800">📤 OUTPUTS</h3>
-                                    <Badge className="bg-blue-100 text-blue-800 border-blue-300">
+                                    <h3 className="text-base font-bold text-white">📤 OUTPUTS</h3>
+                                    <Badge className="text-gray-300 border-gray-500" style={{ backgroundColor: '#1f1f1f' }}>
                                       {Object.values(allCalculatedFields).flat().length} Calculated Fields
                                     </Badge>
-                                    <Badge variant="outline" className="text-xs bg-slate-100 text-slate-500">Read-Only</Badge>
+                                    <Badge variant="outline" className="text-xs text-gray-400 border-gray-600" style={{ backgroundColor: '#1f1f1f' }}>Read-Only</Badge>
                                   </div>
                                 </div>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
-                                <div className="p-3 space-y-2 bg-white">
+                                <div className="p-3 space-y-2" style={{ backgroundColor: '#1f1f1f' }}>
                                   {/* Output groups - logically organized */}
                                   {(() => {
                                     // Group calculated fields by functional category
@@ -1014,22 +1085,22 @@ const TestInputDashboard: React.FC = () => {
                                           open={expandedAllCalcOutputSections.has(groupId)}
                                           onOpenChange={() => toggleAllCalcOutputSection(groupId)}
                                         >
-                                          <div className="border rounded-lg overflow-hidden">
+                                          <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                                             <CollapsibleTrigger className="w-full">
-                                              <div className="bg-slate-50 hover:bg-slate-100 px-4 py-2 flex items-center justify-between cursor-pointer transition-colors">
+                                              <div className="px-4 py-2 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                                 <div className="flex items-center gap-2">
                                                   {expandedAllCalcOutputSections.has(groupId) ? (
-                                                    <ChevronDown className="w-4 h-4 text-slate-600" />
+                                                    <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                                   ) : (
-                                                    <ChevronRight className="w-4 h-4 text-slate-600" />
+                                                    <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                                   )}
-                                                  <h4 className="text-sm font-semibold text-slate-800">{label}</h4>
+                                                  <h4 className="text-sm font-semibold text-white">{label}</h4>
                                                 </div>
-                                                <Badge variant="outline" className="text-xs">{groupFields.length} outputs</Badge>
+                                                <Badge variant="outline" className="text-xs text-gray-300 border-gray-500">{groupFields.length} outputs</Badge>
                                               </div>
                                             </CollapsibleTrigger>
                                             <CollapsibleContent>
-                                              <div className="p-3 bg-white">
+                                              <div className="p-3" style={{ backgroundColor: '#1f1f1f' }}>
                                                 <table className="w-full text-sm">
                                                   <tbody>
                                                     {groupFields.map(field => {
@@ -1040,10 +1111,10 @@ const TestInputDashboard: React.FC = () => {
                                                         ? (typeof value === 'number' ? `${value.toFixed(2)}%` : value || '-')
                                                         : (value !== undefined && value !== null && value !== '' ? String(value) : '-');
                                                       return (
-                                                        <tr key={field.id} className="border-b border-slate-100 hover:bg-slate-50 bg-slate-50/50">
-                                                          <td className="px-2 py-1.5 text-xs font-mono text-slate-400 w-48">{field.storeId}</td>
-                                                          <td className="px-2 py-1.5 text-sm text-slate-600">{field.label}</td>
-                                                          <td className="px-2 py-1.5 text-sm font-medium text-slate-800 text-right w-32">
+                                                        <tr key={field.id} className="border-b hover:bg-[#333333]" style={{ borderColor: '#4b5563', backgroundColor: '#2a2a2a' }}>
+                                                          <td className="px-2 py-1.5 text-xs font-mono w-48" style={{ color: '#9ca3af' }}>{field.storeId}</td>
+                                                          <td className="px-2 py-1.5 text-sm text-white">{field.label}</td>
+                                                          <td className="px-2 py-1.5 text-sm font-medium text-right w-32 text-white">
                                                             {formattedValue}
                                                           </td>
                                                         </tr>
@@ -1064,32 +1135,32 @@ const TestInputDashboard: React.FC = () => {
                           </Collapsible>
                         </div>
                       ) : sectionId === 'image-mgt' ? (
-                        <div className="space-y-4 p-4">
+                        <div className="space-y-4 p-4" style={{ backgroundColor: '#1f1f1f' }}>
                           {/* 01 - Cover & Signature */}
                           <Collapsible
                             open={expandedImageDestinations.has('cover-sig')}
                             onOpenChange={() => toggleImageDestination('cover-sig')}
                           >
-                            <div className="border rounded-lg overflow-hidden">
+                            <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                <div className="px-4 py-3 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                   <div className="flex items-center gap-2">
-                                    {expandedImageDestinations.has('cover-sig') ? <ChevronDown className="w-4 h-4 text-slate-600" /> : <ChevronRight className="w-4 h-4 text-slate-600" />}
-                                    <h3 className="text-sm font-semibold text-slate-800">01 - COVER & SIGNATURE</h3>
+                                    {expandedImageDestinations.has('cover-sig') ? <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} /> : <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />}
+                                    <h3 className="text-sm font-semibold text-white">01 - COVER & SIGNATURE</h3>
                                   </div>
-                                  <Badge variant="outline" className="text-xs ml-auto">
+                                  <Badge variant="outline" className="text-xs ml-auto text-gray-300 border-gray-500">
                                     {getFieldsBySubsection(sectionId, 'cover-images').filter(f => f.inputSource === 'user-input').length} fields
                                   </Badge>
                                 </div>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
-                                <div className="p-4 bg-white">
+                                <div className="p-4" style={{ backgroundColor: '#1f1f1f' }}>
                                   <div className="grid grid-cols-2 gap-4">
                                     {getFieldsBySubsection(sectionId, 'cover-images').filter(f => f.inputSource === 'user-input' && f.id !== 'img-signature').map(field => {
                                       const statusInfo = getFieldStatus(field);
                                       return (
                                         <div key={field.id} className="flex flex-col gap-1">
-                                          <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                          <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{field.label}</label>
                                           <div className="flex items-center gap-2">
                                             {renderInput(field, statusInfo)}
                                             {renderStatusBadge(statusInfo.status)}
@@ -1108,26 +1179,26 @@ const TestInputDashboard: React.FC = () => {
                             open={expandedImageDestinations.has('location-maps')}
                             onOpenChange={() => toggleImageDestination('location-maps')}
                           >
-                            <div className="border rounded-lg overflow-hidden">
+                            <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                <div className="px-4 py-3 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                   <div className="flex items-center gap-2">
-                                    {expandedImageDestinations.has('location-maps') ? <ChevronDown className="w-4 h-4 text-slate-600" /> : <ChevronRight className="w-4 h-4 text-slate-600" />}
-                                    <h3 className="text-sm font-semibold text-slate-800">03 - LOCATION MAPS</h3>
+                                    {expandedImageDestinations.has('location-maps') ? <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} /> : <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />}
+                                    <h3 className="text-sm font-semibold text-white">03 - LOCATION MAPS</h3>
                                   </div>
-                                  <Badge variant="outline" className="text-xs ml-auto">
+                                  <Badge variant="outline" className="text-xs ml-auto text-gray-300 border-gray-500">
                                     {getFieldsBySubsection(sectionId, 'maps').filter(f => f.inputSource === 'user-input').length} fields
                                   </Badge>
                                 </div>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
-                                <div className="p-4 bg-white">
+                                <div className="p-4" style={{ backgroundColor: '#1f1f1f' }}>
                                   <div className="grid grid-cols-2 gap-4">
                                     {getFieldsBySubsection(sectionId, 'maps').filter(f => f.inputSource === 'user-input').map(field => {
                                       const statusInfo = getFieldStatus(field);
                                       return (
                                         <div key={field.id} className="flex flex-col gap-1">
-                                          <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                          <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{field.label}</label>
                                           <div className="flex items-center gap-2">
                                             {renderInput(field, statusInfo)}
                                             {renderStatusBadge(statusInfo.status)}
@@ -1146,14 +1217,14 @@ const TestInputDashboard: React.FC = () => {
                             open={expandedImageDestinations.has('property-photos')}
                             onOpenChange={() => toggleImageDestination('property-photos')}
                           >
-                            <div className="border rounded-lg overflow-hidden">
+                            <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                <div className="px-4 py-3 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                   <div className="flex items-center gap-2">
-                                    {expandedImageDestinations.has('property-photos') ? <ChevronDown className="w-4 h-4 text-slate-600" /> : <ChevronRight className="w-4 h-4 text-slate-600" />}
-                                    <h3 className="text-sm font-semibold text-slate-800">07 - PROPERTY PHOTOGRAPHS</h3>
+                                    {expandedImageDestinations.has('property-photos') ? <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} /> : <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />}
+                                    <h3 className="text-sm font-semibold text-white">07 - PROPERTY PHOTOGRAPHS</h3>
                                   </div>
-                                  <Badge variant="outline" className="text-xs ml-auto">
+                                  <Badge variant="outline" className="text-xs ml-auto text-gray-300 border-gray-500">
                                     {getFieldsBySubsection(sectionId, 'exterior-photos').filter(f => f.inputSource === 'user-input').length +
                                      getFieldsBySubsection(sectionId, 'street-photos').filter(f => f.inputSource === 'user-input').length +
                                      getFieldsBySubsection(sectionId, 'common-photos').filter(f => f.inputSource === 'user-input').length +
@@ -1163,35 +1234,35 @@ const TestInputDashboard: React.FC = () => {
                                 </div>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
-                                <div className="p-4 bg-white space-y-4">
+                                <div className="p-4 space-y-4" style={{ backgroundColor: '#1f1f1f' }}>
                                   {/* Exterior Photos */}
                                   <Collapsible
                                     open={expandedPhotoSubsections.has('exterior-photos')}
                                     onOpenChange={() => togglePhotoSubsection('exterior-photos')}
                                   >
-                                    <div className="border rounded-lg overflow-hidden">
+                                    <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                                       <CollapsibleTrigger className="w-full">
-                                        <div className="bg-slate-50 hover:bg-slate-100 px-4 py-2 flex items-center justify-between cursor-pointer transition-colors">
+                                        <div className="px-4 py-2 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                           <div className="flex items-center gap-2">
                                             {expandedPhotoSubsections.has('exterior-photos') ? (
-                                              <ChevronDown className="w-4 h-4 text-slate-600" />
+                                              <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                             ) : (
-                                              <ChevronRight className="w-4 h-4 text-slate-600" />
+                                              <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                             )}
-                                            <h4 className="text-xs font-semibold text-slate-700">Exterior Photos</h4>
+                                            <h4 className="text-xs font-semibold text-white">Exterior Photos</h4>
                                           </div>
-                                          <Badge variant="outline" className="text-xs">
+                                          <Badge variant="outline" className="text-xs text-gray-300 border-gray-500">
                                             {getFieldsBySubsection(sectionId, 'exterior-photos').filter(f => f.inputSource === 'user-input').length} fields
                                           </Badge>
                                         </div>
                                       </CollapsibleTrigger>
                                       <CollapsibleContent>
-                                        <div className="grid grid-cols-2 gap-4 p-4">
+                                        <div className="grid grid-cols-2 gap-4 p-4" style={{ backgroundColor: '#1f1f1f' }}>
                                           {getFieldsBySubsection(sectionId, 'exterior-photos').filter(f => f.inputSource === 'user-input').map(field => {
                                             const statusInfo = getFieldStatus(field);
                                             return (
                                               <div key={field.id} className="flex flex-col gap-1">
-                                                <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                                <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{field.label}</label>
                                                 <div className="flex items-center gap-2">
                                                   {renderInput(field, statusInfo)}
                                                   {renderStatusBadge(statusInfo.status)}
@@ -1209,29 +1280,29 @@ const TestInputDashboard: React.FC = () => {
                                     open={expandedPhotoSubsections.has('street-photos')}
                                     onOpenChange={() => togglePhotoSubsection('street-photos')}
                                   >
-                                    <div className="border rounded-lg overflow-hidden">
+                                    <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                                       <CollapsibleTrigger className="w-full">
-                                        <div className="bg-slate-50 hover:bg-slate-100 px-4 py-2 flex items-center justify-between cursor-pointer transition-colors">
+                                        <div className="px-4 py-2 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                           <div className="flex items-center gap-2">
                                             {expandedPhotoSubsections.has('street-photos') ? (
-                                              <ChevronDown className="w-4 h-4 text-slate-600" />
+                                              <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                             ) : (
-                                              <ChevronRight className="w-4 h-4 text-slate-600" />
+                                              <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                             )}
-                                            <h4 className="text-xs font-semibold text-slate-700">Street Views</h4>
+                                            <h4 className="text-xs font-semibold text-white">Street Views</h4>
                                           </div>
-                                          <Badge variant="outline" className="text-xs">
+                                          <Badge variant="outline" className="text-xs text-gray-300 border-gray-500">
                                             {getFieldsBySubsection(sectionId, 'street-photos').filter(f => f.inputSource === 'user-input').length} fields
                                           </Badge>
                                         </div>
                                       </CollapsibleTrigger>
                                       <CollapsibleContent>
-                                        <div className="grid grid-cols-2 gap-4 p-4">
+                                        <div className="grid grid-cols-2 gap-4 p-4" style={{ backgroundColor: '#1f1f1f' }}>
                                           {getFieldsBySubsection(sectionId, 'street-photos').filter(f => f.inputSource === 'user-input').map(field => {
                                             const statusInfo = getFieldStatus(field);
                                             return (
                                               <div key={field.id} className="flex flex-col gap-1">
-                                                <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                                <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{field.label}</label>
                                                 <div className="flex items-center gap-2">
                                                   {renderInput(field, statusInfo)}
                                                   {renderStatusBadge(statusInfo.status)}
@@ -1249,29 +1320,29 @@ const TestInputDashboard: React.FC = () => {
                                     open={expandedPhotoSubsections.has('common-photos')}
                                     onOpenChange={() => togglePhotoSubsection('common-photos')}
                                   >
-                                    <div className="border rounded-lg overflow-hidden">
+                                    <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                                       <CollapsibleTrigger className="w-full">
-                                        <div className="bg-slate-50 hover:bg-slate-100 px-4 py-2 flex items-center justify-between cursor-pointer transition-colors">
+                                        <div className="px-4 py-2 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                           <div className="flex items-center gap-2">
                                             {expandedPhotoSubsections.has('common-photos') ? (
-                                              <ChevronDown className="w-4 h-4 text-slate-600" />
+                                              <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                             ) : (
-                                              <ChevronRight className="w-4 h-4 text-slate-600" />
+                                              <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                             )}
-                                            <h4 className="text-xs font-semibold text-slate-700">Common Areas</h4>
+                                            <h4 className="text-xs font-semibold text-white">Common Areas</h4>
                                           </div>
-                                          <Badge variant="outline" className="text-xs">
+                                          <Badge variant="outline" className="text-xs text-gray-300 border-gray-500">
                                             {getFieldsBySubsection(sectionId, 'common-photos').filter(f => f.inputSource === 'user-input').length} fields
                                           </Badge>
                                         </div>
                                       </CollapsibleTrigger>
                                       <CollapsibleContent>
-                                        <div className="grid grid-cols-2 gap-4 p-4">
+                                        <div className="grid grid-cols-2 gap-4 p-4" style={{ backgroundColor: '#1f1f1f' }}>
                                           {getFieldsBySubsection(sectionId, 'common-photos').filter(f => f.inputSource === 'user-input').map(field => {
                                             const statusInfo = getFieldStatus(field);
                                             return (
                                               <div key={field.id} className="flex flex-col gap-1">
-                                                <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                                <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{field.label}</label>
                                                 <div className="flex items-center gap-2">
                                                   {renderInput(field, statusInfo)}
                                                   {renderStatusBadge(statusInfo.status)}
@@ -1289,29 +1360,29 @@ const TestInputDashboard: React.FC = () => {
                                     open={expandedPhotoSubsections.has('unit-photos')}
                                     onOpenChange={() => togglePhotoSubsection('unit-photos')}
                                   >
-                                    <div className="border rounded-lg overflow-hidden">
+                                    <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                                       <CollapsibleTrigger className="w-full">
-                                        <div className="bg-slate-50 hover:bg-slate-100 px-4 py-2 flex items-center justify-between cursor-pointer transition-colors">
+                                        <div className="px-4 py-2 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                           <div className="flex items-center gap-2">
                                             {expandedPhotoSubsections.has('unit-photos') ? (
-                                              <ChevronDown className="w-4 h-4 text-slate-600" />
+                                              <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                             ) : (
-                                              <ChevronRight className="w-4 h-4 text-slate-600" />
+                                              <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                             )}
-                                            <h4 className="text-xs font-semibold text-slate-700">Unit Interiors</h4>
+                                            <h4 className="text-xs font-semibold text-white">Unit Interiors</h4>
                                           </div>
-                                          <Badge variant="outline" className="text-xs">
+                                          <Badge variant="outline" className="text-xs text-gray-300 border-gray-500">
                                             {getFieldsBySubsection(sectionId, 'unit-photos').filter(f => f.inputSource === 'user-input').length} fields
                                           </Badge>
                                         </div>
                                       </CollapsibleTrigger>
                                       <CollapsibleContent>
-                                        <div className="grid grid-cols-2 gap-4 p-4">
+                                        <div className="grid grid-cols-2 gap-4 p-4" style={{ backgroundColor: '#1f1f1f' }}>
                                           {getFieldsBySubsection(sectionId, 'unit-photos').filter(f => f.inputSource === 'user-input').map(field => {
                                             const statusInfo = getFieldStatus(field);
                                             return (
                                               <div key={field.id} className="flex flex-col gap-1">
-                                                <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                                <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{field.label}</label>
                                                 <div className="flex items-center gap-2">
                                                   {renderInput(field, statusInfo)}
                                                   {renderStatusBadge(statusInfo.status)}
@@ -1329,29 +1400,29 @@ const TestInputDashboard: React.FC = () => {
                                     open={expandedPhotoSubsections.has('systems-photos')}
                                     onOpenChange={() => togglePhotoSubsection('systems-photos')}
                                   >
-                                    <div className="border rounded-lg overflow-hidden">
+                                    <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                                       <CollapsibleTrigger className="w-full">
-                                        <div className="bg-slate-50 hover:bg-slate-100 px-4 py-2 flex items-center justify-between cursor-pointer transition-colors">
+                                        <div className="px-4 py-2 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                           <div className="flex items-center gap-2">
                                             {expandedPhotoSubsections.has('systems-photos') ? (
-                                              <ChevronDown className="w-4 h-4 text-slate-600" />
+                                              <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                             ) : (
-                                              <ChevronRight className="w-4 h-4 text-slate-600" />
+                                              <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />
                                             )}
-                                            <h4 className="text-xs font-semibold text-slate-700">Building Systems</h4>
+                                            <h4 className="text-xs font-semibold text-white">Building Systems</h4>
                                           </div>
-                                          <Badge variant="outline" className="text-xs">
+                                          <Badge variant="outline" className="text-xs text-gray-300 border-gray-500">
                                             {getFieldsBySubsection(sectionId, 'systems-photos').filter(f => f.inputSource === 'user-input').length} fields
                                           </Badge>
                                         </div>
                                       </CollapsibleTrigger>
                                       <CollapsibleContent>
-                                        <div className="grid grid-cols-2 gap-4 p-4">
+                                        <div className="grid grid-cols-2 gap-4 p-4" style={{ backgroundColor: '#1f1f1f' }}>
                                           {getFieldsBySubsection(sectionId, 'systems-photos').filter(f => f.inputSource === 'user-input').map(field => {
                                             const statusInfo = getFieldStatus(field);
                                             return (
                                               <div key={field.id} className="flex flex-col gap-1">
-                                                <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                                <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{field.label}</label>
                                                 <div className="flex items-center gap-2">
                                                   {renderInput(field, statusInfo)}
                                                   {renderStatusBadge(statusInfo.status)}
@@ -1373,20 +1444,20 @@ const TestInputDashboard: React.FC = () => {
                             open={expandedImageDestinations.has('subject-photos')}
                             onOpenChange={() => toggleImageDestination('subject-photos')}
                           >
-                            <div className="border rounded-lg overflow-hidden">
+                            <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                <div className="px-4 py-3 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                   <div className="flex items-center gap-2">
-                                    {expandedImageDestinations.has('subject-photos') ? <ChevronDown className="w-4 h-4 text-slate-600" /> : <ChevronRight className="w-4 h-4 text-slate-600" />}
-                                    <h3 className="text-sm font-semibold text-slate-800">08 - SUBJECT PHOTOS</h3>
+                                    {expandedImageDestinations.has('subject-photos') ? <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} /> : <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />}
+                                    <h3 className="text-sm font-semibold text-white">08 - SUBJECT PHOTOS</h3>
                                   </div>
-                                  <Badge variant="outline" className="text-xs ml-auto">
+                                  <Badge variant="outline" className="text-xs ml-auto text-gray-300 border-gray-500">
                                     {getFieldsBySubsection(sectionId, 'subject-photos').filter(f => f.inputSource === 'user-input').length} fields
                                   </Badge>
                                 </div>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
-                                <div className="p-4 bg-white">
+                                <div className="p-4" style={{ backgroundColor: '#1f1f1f' }}>
                                   <div className="grid grid-cols-2 gap-4">
                                     {groupImageFieldsWithCaptions(getFieldsBySubsection(sectionId, 'subject-photos').filter(f => f.inputSource === 'user-input')).map(({ image, caption }) => {
                                       const imageStatus = getFieldStatus(image);
@@ -1394,7 +1465,7 @@ const TestInputDashboard: React.FC = () => {
                                       return (
                                         <div key={image.id} className="flex flex-col gap-2 border rounded-lg p-3">
                                           <div className="flex flex-col gap-1">
-                                            <label className="text-xs text-slate-600 font-medium">{image.label}</label>
+                                            <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{image.label}</label>
                                             <div className="flex items-center gap-2">
                                               {renderInput(image, imageStatus)}
                                               {renderStatusBadge(imageStatus.status)}
@@ -1402,7 +1473,7 @@ const TestInputDashboard: React.FC = () => {
                                           </div>
                                           {caption && (
                                             <div className="flex flex-col gap-1">
-                                              <label className="text-xs text-slate-600 font-medium">{caption.label}</label>
+                                              <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{caption.label}</label>
                                               <div className="flex items-center gap-2">
                                                 {renderInput(caption, captionStatus!)}
                                                 {renderStatusBadge(captionStatus!.status)}
@@ -1423,20 +1494,20 @@ const TestInputDashboard: React.FC = () => {
                             open={expandedImageDestinations.has('comp-photos')}
                             onOpenChange={() => toggleImageDestination('comp-photos')}
                           >
-                            <div className="border rounded-lg overflow-hidden">
+                            <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                <div className="px-4 py-3 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                   <div className="flex items-center gap-2">
-                                    {expandedImageDestinations.has('comp-photos') ? <ChevronDown className="w-4 h-4 text-slate-600" /> : <ChevronRight className="w-4 h-4 text-slate-600" />}
-                                    <h3 className="text-sm font-semibold text-slate-800">09 - SALES COMP PHOTOS</h3>
+                                    {expandedImageDestinations.has('comp-photos') ? <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} /> : <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />}
+                                    <h3 className="text-sm font-semibold text-white">09 - SALES COMP PHOTOS</h3>
                                   </div>
-                                  <Badge variant="outline" className="text-xs ml-auto">
+                                  <Badge variant="outline" className="text-xs ml-auto text-gray-300 border-gray-500">
                                     {getFieldsBySubsection(sectionId, 'comp-photos').filter(f => f.inputSource === 'user-input').length} fields
                                   </Badge>
                                 </div>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
-                                <div className="p-4 bg-white">
+                                <div className="p-4" style={{ backgroundColor: '#1f1f1f' }}>
                                   <div className="grid grid-cols-2 gap-4">
                                     {groupImageFieldsWithCaptions(getFieldsBySubsection(sectionId, 'comp-photos').filter(f => f.inputSource === 'user-input')).map(({ image, caption }) => {
                                       const imageStatus = getFieldStatus(image);
@@ -1444,7 +1515,7 @@ const TestInputDashboard: React.FC = () => {
                                       return (
                                         <div key={image.id} className="flex flex-col gap-2 border rounded-lg p-3">
                                           <div className="flex flex-col gap-1">
-                                            <label className="text-xs text-slate-600 font-medium">{image.label}</label>
+                                            <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{image.label}</label>
                                             <div className="flex items-center gap-2">
                                               {renderInput(image, imageStatus)}
                                               {renderStatusBadge(imageStatus.status)}
@@ -1452,7 +1523,7 @@ const TestInputDashboard: React.FC = () => {
                                           </div>
                                           {caption && (
                                             <div className="flex flex-col gap-1">
-                                              <label className="text-xs text-slate-600 font-medium">{caption.label}</label>
+                                              <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{caption.label}</label>
                                               <div className="flex items-center gap-2">
                                                 {renderInput(caption, captionStatus!)}
                                                 {renderStatusBadge(captionStatus!.status)}
@@ -1473,26 +1544,26 @@ const TestInputDashboard: React.FC = () => {
                             open={expandedImageDestinations.has('comp-maps')}
                             onOpenChange={() => toggleImageDestination('comp-maps')}
                           >
-                            <div className="border rounded-lg overflow-hidden">
+                            <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                <div className="px-4 py-3 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                   <div className="flex items-center gap-2">
-                                    {expandedImageDestinations.has('comp-maps') ? <ChevronDown className="w-4 h-4 text-slate-600" /> : <ChevronRight className="w-4 h-4 text-slate-600" />}
-                                    <h3 className="text-sm font-semibold text-slate-800">10 - SALES COMP MAPS</h3>
+                                    {expandedImageDestinations.has('comp-maps') ? <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} /> : <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />}
+                                    <h3 className="text-sm font-semibold text-white">10 - SALES COMP MAPS</h3>
                                   </div>
-                                  <Badge variant="outline" className="text-xs ml-auto">
+                                  <Badge variant="outline" className="text-xs ml-auto text-gray-300 border-gray-500">
                                     {getFieldsBySubsection(sectionId, 'comp-maps').filter(f => f.inputSource === 'user-input').length} fields
                                   </Badge>
                                 </div>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
-                                <div className="p-4 bg-white">
+                                <div className="p-4" style={{ backgroundColor: '#1f1f1f' }}>
                                   <div className="grid grid-cols-2 gap-4">
                                     {getFieldsBySubsection(sectionId, 'comp-maps').filter(f => f.inputSource === 'user-input').map(field => {
                                       const statusInfo = getFieldStatus(field);
                                       return (
                                         <div key={field.id} className="flex flex-col gap-1">
-                                          <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                          <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{field.label}</label>
                                           <div className="flex items-center gap-2">
                                             {renderInput(field, statusInfo)}
                                             {renderStatusBadge(statusInfo.status)}
@@ -1511,27 +1582,27 @@ const TestInputDashboard: React.FC = () => {
                             open={expandedImageDestinations.has('rental-comp-photos')}
                             onOpenChange={() => toggleImageDestination('rental-comp-photos')}
                           >
-                            <div className="border rounded-lg overflow-hidden">
+                            <div className="border rounded-lg overflow-hidden" style={{ borderColor: '#4b5563' }}>
                               <CollapsibleTrigger className="w-full">
-                                <div className="bg-slate-50 hover:bg-slate-100 px-4 py-3 flex items-center justify-between cursor-pointer transition-colors">
+                                <div className="px-4 py-3 flex items-center justify-between cursor-pointer transition-colors hover:bg-[#333333]" style={{ backgroundColor: '#2a2a2a' }}>
                                   <div className="flex items-center gap-2">
-                                    {expandedImageDestinations.has('rental-comp-photos') ? <ChevronDown className="w-4 h-4 text-slate-600" /> : <ChevronRight className="w-4 h-4 text-slate-600" />}
-                                    <h3 className="text-sm font-semibold text-slate-800">11 - RENTAL COMP PHOTOS</h3>
+                                    {expandedImageDestinations.has('rental-comp-photos') ? <ChevronDown className="w-4 h-4" style={{ color: '#9ca3af' }} /> : <ChevronRight className="w-4 h-4" style={{ color: '#9ca3af' }} />}
+                                    <h3 className="text-sm font-semibold text-white">11 - RENTAL COMP PHOTOS</h3>
                                   </div>
-                                  <Badge variant="outline" className="text-xs ml-auto">
+                                  <Badge variant="outline" className="text-xs ml-auto text-gray-300 border-gray-500">
                                     {getFieldsBySubsection(sectionId, 'rental-comp-photos').filter(f => f.inputSource === 'user-input').length + 
                                      (getFieldsBySubsection('rent-analysis', 'rental-comps').find(f => f.id === 'rental-comparables-map' && f.inputSource === 'user-input') ? 1 : 0)} fields
                                   </Badge>
                                 </div>
                               </CollapsibleTrigger>
                               <CollapsibleContent>
-                                <div className="p-4 bg-white">
+                                <div className="p-4" style={{ backgroundColor: '#1f1f1f' }}>
                                   <div className="grid grid-cols-2 gap-4">
                                     {getFieldsBySubsection(sectionId, 'rental-comp-photos').filter(f => f.inputSource === 'user-input').map(field => {
                                       const statusInfo = getFieldStatus(field);
                                       return (
                                         <div key={field.id} className="flex flex-col gap-1">
-                                          <label className="text-xs text-slate-600 font-medium">{field.label}</label>
+                                          <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{field.label}</label>
                                           <div className="flex items-center gap-2">
                                             {renderInput(field, statusInfo)}
                                             {renderStatusBadge(statusInfo.status)}
@@ -1546,7 +1617,7 @@ const TestInputDashboard: React.FC = () => {
                                         const statusInfo = getFieldStatus(rentalMapField);
                                         return (
                                           <div key={rentalMapField.id} className="flex flex-col gap-1">
-                                            <label className="text-xs text-slate-600 font-medium">{rentalMapField.label}</label>
+                                            <label className="text-xs font-medium" style={{ color: '#9ca3af' }}>{rentalMapField.label}</label>
                                             <div className="flex items-center gap-2">
                                               {renderInput(rentalMapField, statusInfo)}
                                               {renderStatusBadge(statusInfo.status)}
@@ -1563,79 +1634,87 @@ const TestInputDashboard: React.FC = () => {
                           </Collapsible>
                         </div>
                       ) : (
-                        <table className="w-full">
-                          <thead>
-                            <tr className="bg-slate-50 border-b border-slate-200">
-                              <th className="text-left text-xs font-semibold text-slate-600 px-4 py-2 w-48">Field ID</th>
-                              <th className="text-left text-xs font-semibold text-slate-600 px-4 py-2">Label</th>
-                              <th className="text-left text-xs font-semibold text-slate-600 px-4 py-2">Value</th>
-                              <th className="text-left text-xs font-semibold text-slate-600 px-4 py-2 w-24">Status</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {/* Mapped fields first */}
-                            {mappedFields.map(field => {
-                              const statusInfo = getFieldStatus(field);
-                              return (
-                                <tr
-                                  key={field.id}
-                                  className="border-b border-slate-100 hover:bg-slate-50"
-                                >
-                                  <td className="px-4 py-2 text-xs font-mono text-slate-600">
-                                    {field.storeId}
-                                  </td>
-                                  <td className="px-4 py-2 text-sm text-slate-800">
-                                    {field.label}
-                                    {field.required && (
-                                      <span className="text-red-500 ml-1">*</span>
-                                    )}
-                                  </td>
-                                  <td className="px-4 py-2">
-                                    {renderInput(field, statusInfo)}
-                                  </td>
-                                  <td className="px-4 py-2">
-                                    {renderStatusBadge(statusInfo.status)}
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                            {/* Empty/Unused fields grouped at bottom */}
-                            {emptyFields.length > 0 && (
-                              <>
-                                <tr className="bg-slate-100 border-t-2 border-slate-300">
-                                  <td colSpan={4} className="px-4 py-2 text-xs font-semibold text-slate-600 uppercase">
-                                    Unused/Optional Fields ({emptyFields.length})
-                                  </td>
-                                </tr>
-                                {emptyFields.map(field => {
-                                  const statusInfo = getFieldStatus(field);
-                                  return (
-                                    <tr
-                                      key={field.id}
-                                      className="border-b border-slate-100 hover:bg-slate-50 bg-slate-50/50"
-                                    >
-                                      <td className="px-4 py-2 text-xs font-mono text-slate-400">
-                                        {field.storeId}
-                                      </td>
-                                      <td className="px-4 py-2 text-sm text-slate-600">
-                                        {field.label}
-                                        {field.required && (
-                                          <span className="text-red-500 ml-1">*</span>
-                                        )}
-                                      </td>
-                                      <td className="px-4 py-2">
-                                        {renderInput(field, statusInfo)}
-                                      </td>
-                                      <td className="px-4 py-2">
-                                        {renderStatusBadge(statusInfo.status)}
-                                      </td>
-                                    </tr>
-                                  );
-                                })}
-                              </>
-                            )}
-                          </tbody>
-                        </table>
+                        <div className="p-4" style={{ backgroundColor: '#1f1f1f' }}>
+                          <table className="w-full">
+                            <thead>
+                              <tr className="border-b" style={{ borderColor: '#4b5563' }}>
+                                <th className="text-left text-xs font-semibold px-4 py-2 w-48" style={{ color: '#9ca3af' }}>Field ID</th>
+                                <th className="text-left text-xs font-semibold px-4 py-2" style={{ color: '#9ca3af' }}>Label</th>
+                                <th className="text-left text-xs font-semibold px-4 py-2" style={{ color: '#9ca3af' }}>Value</th>
+                                <th className="text-left text-xs font-semibold px-4 py-2 w-24" style={{ color: '#9ca3af' }}>Status</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {/* Mapped fields first */}
+                              {mappedFields.map(field => {
+                                const statusInfo = getFieldStatus(field);
+                                return (
+                                  <tr
+                                    key={field.id}
+                                    className="border-b transition-colors"
+                                    style={{ borderColor: '#4b5563', backgroundColor: '#1f1f1f' }}
+                                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+                                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#1f1f1f'}
+                                  >
+                                    <td className="px-4 py-2 text-xs font-mono" style={{ color: '#9ca3af' }}>
+                                      {field.storeId}
+                                    </td>
+                                    <td className="px-4 py-2 text-sm text-white">
+                                      {field.label}
+                                      {field.required && (
+                                        <span className="text-red-500 ml-1">*</span>
+                                      )}
+                                    </td>
+                                    <td className="px-4 py-2">
+                                      {renderInput(field, statusInfo)}
+                                    </td>
+                                    <td className="px-4 py-2">
+                                      {renderStatusBadge(statusInfo.status)}
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                              {/* Empty/Unused fields grouped at bottom */}
+                              {emptyFields.length > 0 && (
+                                <>
+                                  <tr className="border-t-2" style={{ backgroundColor: '#2a2a2a', borderColor: '#4b5563' }}>
+                                    <td colSpan={4} className="px-4 py-2 text-xs font-semibold uppercase" style={{ color: '#9ca3af' }}>
+                                      Unused/Optional Fields ({emptyFields.length})
+                                    </td>
+                                  </tr>
+                                  {emptyFields.map(field => {
+                                    const statusInfo = getFieldStatus(field);
+                                    return (
+                                      <tr
+                                        key={field.id}
+                                        className="border-b transition-colors"
+                                        style={{ borderColor: '#4b5563', backgroundColor: '#2a2a2a' }}
+                                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#333333'}
+                                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+                                      >
+                                        <td className="px-4 py-2 text-xs font-mono" style={{ color: '#9ca3af' }}>
+                                          {field.storeId}
+                                        </td>
+                                        <td className="px-4 py-2 text-sm text-white">
+                                          {field.label}
+                                          {field.required && (
+                                            <span className="text-red-500 ml-1">*</span>
+                                          )}
+                                        </td>
+                                        <td className="px-4 py-2">
+                                          {renderInput(field, statusInfo)}
+                                        </td>
+                                        <td className="px-4 py-2">
+                                          {renderStatusBadge(statusInfo.status)}
+                                        </td>
+                                      </tr>
+                                    );
+                                  })}
+                                </>
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
                       )}
                     </div>
                   </CollapsibleContent>

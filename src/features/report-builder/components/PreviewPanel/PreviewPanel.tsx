@@ -4,7 +4,18 @@ import { useReportBuilderStore } from '../../store/reportBuilderStore';
 export default function PreviewPanel() {
   const previewHtml = useReportBuilderStore((state) => state.previewHtml);
   const activeTestMode = useReportBuilderStore((state) => state.activeTestMode);
+  const sections = useReportBuilderStore((state) => state.sections);
+  const generatePreview = useReportBuilderStore((state) => state.generatePreview);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Auto-load template when component mounts if previewHtml is empty
+  useEffect(() => {
+    if (!previewHtml && sections.length > 0) {
+      console.log('PreviewPanel: No previewHtml found, auto-loading template...');
+      generatePreview();
+      console.log('PreviewPanel: Template auto-load triggered');
+    }
+  }, [previewHtml, sections.length, generatePreview]);
 
   // Inject the report pages into the standalone viewer when HTML changes
   useEffect(() => {
@@ -55,11 +66,19 @@ export default function PreviewPanel() {
         pagesWrapper.appendChild(page.cloneNode(true));
       });
 
-      // Trigger page count update if the wrapper has that function
-      const iframeWindow = iframe.contentWindow as any;
-      if (iframeWindow && typeof iframeWindow.updatePageCount === 'function') {
-        iframeWindow.updatePageCount();
-      }
+      console.log(`PreviewPanel: Injected ${pageSheets.length} pages. First page: ${pageSheets[0]?.getAttribute('data-page-num')}, Last page: ${pageSheets[pageSheets.length - 1]?.getAttribute('data-page-num')}`);
+
+      // Trigger page count update AFTER pages are injected
+      // Use setTimeout to ensure DOM is updated
+      setTimeout(() => {
+        const iframeWindow = iframe.contentWindow as any;
+        if (iframeWindow && typeof iframeWindow.updatePageCount === 'function') {
+          iframeWindow.updatePageCount();
+          console.log('PreviewPanel: Called updatePageCount()');
+        } else {
+          console.warn('PreviewPanel: updatePageCount function not found in iframe');
+        }
+      }, 100);
 
       // Handle toggle based on test mode
       // In test-report mode: disable toggle (always show calculated report)

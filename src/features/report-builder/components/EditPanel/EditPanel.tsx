@@ -98,9 +98,9 @@ export default function EditPanel() {
       case 'user-input':
         return '';
       case 'dropdown':
-        return 'bg-blue-100 border-blue-300';
+        return 'bg-gray-700 border-gray-600';
       case 'auto-filled':
-        return 'bg-green-50 border-green-300 text-green-700';
+        return 'bg-gray-600 border-gray-500 text-gray-300';
       default:
         return '';
     }

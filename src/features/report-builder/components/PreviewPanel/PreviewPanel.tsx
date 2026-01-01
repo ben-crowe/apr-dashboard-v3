@@ -1,5 +1,6 @@
-import { useEffect, useRef, useMemo } from 'react';
+import { useEffect, useRef, useMemo, useCallback } from 'react';
 import { useReportBuilderStore } from '../../store/reportBuilderStore';
+import { ReportSection } from '../../types/reportBuilder.types';
 
 /**
  * Maps approach toggle field names to their corresponding page ranges.
@@ -12,14 +13,36 @@ const APPROACH_TO_PAGES_MAP: Record<string, { start: number; end: number }> = {
 };
 
 /**
+ * Helper function to find a field value from the sections array.
+ * Searches through all sections and their subsections.
+ */
+function getFieldValueFromSections(sections: ReportSection[], fieldId: string): unknown {
+  for (const section of sections) {
+    // Check top-level fields
+    const field = section.fields?.find(f => f.id === fieldId);
+    if (field) return field.value;
+
+    // Check subsection fields
+    for (const sub of section.subsections || []) {
+      const subField = sub.fields?.find(f => f.id === fieldId);
+      if (subField) return subField.value;
+    }
+  }
+  return undefined;
+}
+
+/**
  * Determines which page numbers should be excluded based on disabled approach toggles.
  * If a toggle value is undefined/null, it defaults to TRUE (pages shown).
  */
-function getExcludedPageNumbers(fieldValues: Record<string, unknown>): Set<number> {
+function getExcludedPageNumbers(sections: ReportSection[]): Set<number> {
   const excludedPages = new Set<number>();
 
   for (const [fieldName, pageRange] of Object.entries(APPROACH_TO_PAGES_MAP)) {
-    const isEnabled = fieldValues[fieldName] !== false;
+    const fieldValue = getFieldValueFromSections(sections, fieldName);
+    // Default to enabled (true) if field value is undefined/null
+    // Only exclude pages if explicitly set to false
+    const isEnabled = fieldValue !== false;
 
     if (!isEnabled) {
       // Add all pages in this range to the excluded set
@@ -37,13 +60,17 @@ export default function PreviewPanel() {
   const activeTestMode = useReportBuilderStore((state) => state.activeTestMode);
   const sections = useReportBuilderStore((state) => state.sections);
   const generatePreview = useReportBuilderStore((state) => state.generatePreview);
-  const fieldValues = useReportBuilderStore((state) => state.fieldValues);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Memoized helper to get field value from sections
+  const getFieldValue = useCallback((fieldId: string): unknown => {
+    return getFieldValueFromSections(sections, fieldId);
+  }, [sections]);
 
   // Calculate excluded pages based on approach toggles
   const excludedPages = useMemo(() => {
-    return getExcludedPageNumbers(fieldValues);
-  }, [fieldValues]);
+    return getExcludedPageNumbers(sections);
+  }, [sections]);
 
   // Auto-load template when component mounts if previewHtml is empty
   useEffect(() => {

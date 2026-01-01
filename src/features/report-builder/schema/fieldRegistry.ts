@@ -1,9 +1,9 @@
 /**
  * Field Registry - Single Source of Truth
  * 
- * VERSION: 2.3.0
- * LAST UPDATED: 2025-12-23 22:00 MST
- * UPDATED BY: Cursor Agent
+ * VERSION: 2.4.0
+ * LAST UPDATED: 2026-01-01 MST
+ * UPDATED BY: Claude Code Agent
  * 
  * PART OF SYNC SET (3 files - must stay aligned):
  * 1. fieldRegistry.ts - Field definitions & sections (THIS FILE)
@@ -13,6 +13,15 @@
  * RULE: When field IDs change in any file, update all three.
  * 
  * CHANGES:
+ * - 2.4.0: HOME TAB EXPANSION - Added 8 subsections with 41 fields to home section
+ *   - job-setup (3 fields): job ID, status, report date
+ *   - client-info (9 fields): client contact details and address
+ *   - appraiser-info (6 fields): lead appraiser details
+ *   - property-info (8 fields): subject property details
+ *   - assignment-details (5 fields): report type, rights, scope
+ *   - subject-contact (5 fields): property contact info
+ *   - assumptions-conditions (3 fields): EA, HC, limiting conditions
+ *   - transmittal-content (2 fields): existing transmittal letter
  * - 2.3.0: MAJOR REFACTOR - Consolidated field IDs to canonical names without prefixes
  *   - Renamed intake-* fields (18 fields) to clean names (removed intake- prefix)
  *   - Renamed loe-* fields (11 fields) to clean names (removed loe- prefix)
@@ -335,8 +344,64 @@ export const fieldRegistry: FieldDefinition[] = [
   // SECTION: HOME (Letter of Transmittal)
   // ============================================================================
 
+
+  // --- JOB SETUP (3 fields) ---
+  { id: 'home-job-id', storeId: 'home-job-id', label: 'Valcre Job ID', section: 'home', subsection: 'job-setup', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-job-status', storeId: 'home-job-status', label: 'Job Status', section: 'home', subsection: 'job-setup', type: 'select', inputSource: 'user-input', required: false, options: ['Draft', 'In Progress', 'Review', 'Complete'] },
+  { id: 'home-report-date', storeId: 'home-report-date', label: 'Effective Date of Report', section: 'home', subsection: 'job-setup', type: 'date', inputSource: 'user-input', required: false },
+
+  // --- CLIENT INFORMATION (9 fields) ---
+  { id: 'home-client-name', storeId: 'home-client-name', label: 'Client Full Name', section: 'home', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-client-company', storeId: 'home-client-company', label: 'Client Organization', section: 'home', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-client-email', storeId: 'home-client-email', label: 'Client Email', section: 'home', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-client-phone', storeId: 'home-client-phone', label: 'Client Phone', section: 'home', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-client-address-street', storeId: 'home-client-address-street', label: 'Street Address', section: 'home', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-client-address-city', storeId: 'home-client-address-city', label: 'City', section: 'home', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-client-address-state', storeId: 'home-client-address-state', label: 'Province/State', section: 'home', subsection: 'client-info', type: 'select', inputSource: 'user-input', required: false, options: ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon'] },
+  { id: 'home-client-address-postal', storeId: 'home-client-address-postal', label: 'Postal/ZIP Code', section: 'home', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-client-reference', storeId: 'home-client-reference', label: 'Client Reference Number', section: 'home', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
+
+  // --- APPRAISER INFORMATION (6 fields) ---
+  { id: 'home-appraiser-name', storeId: 'home-appraiser-name', label: 'Lead Appraiser Name', section: 'home', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-appraiser-designation', storeId: 'home-appraiser-designation', label: 'Professional Designation', section: 'home', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false, placeholder: 'AACI, CRA, MAI, etc.' },
+  { id: 'home-appraiser-license', storeId: 'home-appraiser-license', label: 'License Number', section: 'home', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-appraiser-email', storeId: 'home-appraiser-email', label: 'Appraiser Email', section: 'home', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-appraiser-phone', storeId: 'home-appraiser-phone', label: 'Appraiser Phone', section: 'home', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-appraiser-company', storeId: 'home-appraiser-company', label: 'Appraisal Firm Name', section: 'home', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+
+  // --- PROPERTY INFORMATION (8 fields) ---
+  { id: 'home-property-name', storeId: 'home-property-name', label: 'Property/Building Name', section: 'home', subsection: 'property-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-property-address-street', storeId: 'home-property-address-street', label: 'Street Address', section: 'home', subsection: 'property-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-property-address-city', storeId: 'home-property-address-city', label: 'City', section: 'home', subsection: 'property-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-property-address-province', storeId: 'home-property-address-province', label: 'Province', section: 'home', subsection: 'property-info', type: 'select', inputSource: 'user-input', required: false, options: ['Alberta', 'British Columbia', 'Manitoba', 'New Brunswick', 'Newfoundland and Labrador', 'Northwest Territories', 'Nova Scotia', 'Nunavut', 'Ontario', 'Prince Edward Island', 'Quebec', 'Saskatchewan', 'Yukon'] },
+  { id: 'home-property-address-postal', storeId: 'home-property-address-postal', label: 'Postal Code', section: 'home', subsection: 'property-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-property-type', storeId: 'home-property-type', label: 'Property Type', section: 'home', subsection: 'property-info', type: 'select', inputSource: 'user-input', required: false, options: ['Multi-Family', 'Office', 'Retail', 'Industrial', 'Mixed-Use', 'Land', 'Hospitality', 'Special Purpose'] },
+  { id: 'home-property-legal-description', storeId: 'home-property-legal-description', label: 'Legal Description', section: 'home', subsection: 'property-info', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'home-property-pid', storeId: 'home-property-pid', label: 'PID/PIN Number', section: 'home', subsection: 'property-info', type: 'text', inputSource: 'user-input', required: false },
+
+  // --- ASSIGNMENT DETAILS (5 fields) ---
+  { id: 'home-report-type', storeId: 'home-report-type', label: 'Report Type', section: 'home', subsection: 'assignment-details', type: 'select', inputSource: 'user-input', required: false, options: ['Narrative Appraisal', 'Form Report', 'Restricted Report', 'Letter Opinion'] },
+  { id: 'home-property-rights', storeId: 'home-property-rights', label: 'Property Rights Appraised', section: 'home', subsection: 'assignment-details', type: 'select', inputSource: 'user-input', required: false, options: ['Fee Simple', 'Leased Fee', 'Leasehold'] },
+  { id: 'home-intended-use', storeId: 'home-intended-use', label: 'Intended Use', section: 'home', subsection: 'assignment-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-intended-users', storeId: 'home-intended-users', label: 'Intended Users', section: 'home', subsection: 'assignment-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-scope-of-work', storeId: 'home-scope-of-work', label: 'Scope of Work', section: 'home', subsection: 'assignment-details', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // --- SUBJECT PROPERTY CONTACT (5 fields) ---
+  { id: 'home-contact-name', storeId: 'home-contact-name', label: 'Property Contact Name', section: 'home', subsection: 'subject-contact', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-contact-title', storeId: 'home-contact-title', label: 'Contact Title/Role', section: 'home', subsection: 'subject-contact', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-contact-phone', storeId: 'home-contact-phone', label: 'Contact Phone', section: 'home', subsection: 'subject-contact', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-contact-email', storeId: 'home-contact-email', label: 'Contact Email', section: 'home', subsection: 'subject-contact', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'home-inspection-date', storeId: 'home-inspection-date', label: 'Date of Property Inspection', section: 'home', subsection: 'subject-contact', type: 'date', inputSource: 'user-input', required: false },
+
+  // --- ASSUMPTIONS & CONDITIONS (3 fields) ---
+  { id: 'home-extraordinary-assumptions', storeId: 'home-extraordinary-assumptions', label: 'Extraordinary Assumptions', section: 'home', subsection: 'assumptions-conditions', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'home-hypothetical-conditions', storeId: 'home-hypothetical-conditions', label: 'Hypothetical Conditions', section: 'home', subsection: 'assumptions-conditions', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'home-limiting-conditions', storeId: 'home-limiting-conditions', label: 'Extraordinary Limiting Conditions', section: 'home', subsection: 'assumptions-conditions', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // --- TRANSMITTAL LETTER (2 fields - existing) ---
   { id: 'transmittal-date', storeId: 'transmittal-date', label: 'Letter Date', section: 'home', subsection: 'transmittal-content', type: 'date', inputSource: 'auto-filled', required: true },
   { id: 'transmittal-body', storeId: 'transmittal-body', label: 'Letter Body', section: 'home', subsection: 'transmittal-content', type: 'textarea', inputSource: 'user-input', required: true },
+
 
   // ============================================================================
   // SECTION: MAPS

@@ -866,13 +866,373 @@ const getMockData = (): ReportSection[] => [
   },
   {
     id: "home",
-    name: "Introduction Letter",
-    shortName: "02 - INTRO",
+    name: "Report Home",
+    shortName: "02 - HOME",
     fields: [],
     subsections: [
       {
+        id: "job-setup",
+        title: "JOB SETUP",
+        fields: [
+          {
+            id: "home-job-id",
+            label: "Valcre Job ID",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-job-status",
+            label: "Job Status",
+            type: "select",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+            options: ["Draft", "In Progress", "Review", "Complete"],
+          },
+          {
+            id: "home-report-date",
+            label: "Effective Date of Report",
+            type: "date",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+        ],
+      },
+      {
+        id: "client-info",
+        title: "CLIENT INFORMATION",
+        fields: [
+          {
+            id: "home-client-name",
+            label: "Client Full Name",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-client-company",
+            label: "Client Organization",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-client-email",
+            label: "Client Email",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-client-phone",
+            label: "Client Phone",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-client-address-street",
+            label: "Street Address",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-client-address-city",
+            label: "City",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-client-address-state",
+            label: "Province/State",
+            type: "select",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+            options: ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"],
+          },
+          {
+            id: "home-client-address-postal",
+            label: "Postal/ZIP Code",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-client-reference",
+            label: "Client Reference Number",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+        ],
+      },
+      {
+        id: "appraiser-info",
+        title: "APPRAISER INFORMATION",
+        fields: [
+          {
+            id: "home-appraiser-name",
+            label: "Lead Appraiser Name",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-appraiser-designation",
+            label: "Professional Designation",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-appraiser-license",
+            label: "License Number",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-appraiser-email",
+            label: "Appraiser Email",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-appraiser-phone",
+            label: "Appraiser Phone",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-appraiser-company",
+            label: "Appraisal Firm Name",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+        ],
+      },
+      {
+        id: "property-info",
+        title: "PROPERTY INFORMATION",
+        fields: [
+          {
+            id: "home-property-name",
+            label: "Property/Building Name",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-property-address-street",
+            label: "Street Address",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-property-address-city",
+            label: "City",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-property-address-province",
+            label: "Province",
+            type: "select",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+            options: ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"],
+          },
+          {
+            id: "home-property-address-postal",
+            label: "Postal Code",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-property-type",
+            label: "Property Type",
+            type: "select",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+            options: ["Multi-Family", "Office", "Retail", "Industrial", "Mixed-Use", "Land", "Hospitality", "Special Purpose"],
+          },
+          {
+            id: "home-property-legal-description",
+            label: "Legal Description",
+            type: "textarea",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-property-pid",
+            label: "PID/PIN Number",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+        ],
+      },
+      {
+        id: "assignment-details",
+        title: "ASSIGNMENT DETAILS",
+        fields: [
+          {
+            id: "home-report-type",
+            label: "Report Type",
+            type: "select",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+            options: ["Narrative Appraisal", "Form Report", "Restricted Report", "Letter Opinion"],
+          },
+          {
+            id: "home-property-rights",
+            label: "Property Rights Appraised",
+            type: "select",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+            options: ["Fee Simple", "Leased Fee", "Leasehold"],
+          },
+          {
+            id: "home-intended-use",
+            label: "Intended Use",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-intended-users",
+            label: "Intended Users",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-scope-of-work",
+            label: "Scope of Work",
+            type: "textarea",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+        ],
+      },
+      {
+        id: "subject-contact",
+        title: "SUBJECT PROPERTY CONTACT",
+        fields: [
+          {
+            id: "home-contact-name",
+            label: "Property Contact Name",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-contact-title",
+            label: "Contact Title/Role",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-contact-phone",
+            label: "Contact Phone",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-contact-email",
+            label: "Contact Email",
+            type: "text",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-inspection-date",
+            label: "Date of Property Inspection",
+            type: "date",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+        ],
+      },
+      {
+        id: "assumptions-conditions",
+        title: "ASSUMPTIONS & CONDITIONS",
+        fields: [
+          {
+            id: "home-extraordinary-assumptions",
+            label: "Extraordinary Assumptions",
+            type: "textarea",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-hypothetical-conditions",
+            label: "Hypothetical Conditions",
+            type: "textarea",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+          {
+            id: "home-limiting-conditions",
+            label: "Extraordinary Limiting Conditions",
+            type: "textarea",
+            value: "",
+            isEditable: true,
+            inputType: "user-input",
+          },
+        ],
+      },
+      {
         id: "transmittal-content",
-        title: "LETTER OF TRANSMITTAL",
+        title: "TRANSMITTAL LETTER",
         fields: [
           {
             id: "transmittal-date",
@@ -5589,8 +5949,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
   generatePreview: async () => {
     const sections = get().sections;
-    // Ensure template is loaded
-    const template = await get().loadPreviewTemplate();
+    // Force reload template to ensure we get the latest version
+    const template = await get().loadPreviewTemplate(true);
     const html = get().interpolateTemplate(sections, template);
     set({ previewHtml: html });
   },
@@ -5607,8 +5967,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     }, 0);
     console.log(`initializeMockData: Total fields in store: ${totalFields}`);
 
-    // Load template first
-    const template = await get().loadPreviewTemplate();
+    // Force reload template to ensure we get the latest version
+    const template = await get().loadPreviewTemplate(true);
     const html = get().interpolateTemplate(sections, template);
     set({ sections, sectionGroups, previewHtml: html });
   },
@@ -5618,18 +5978,26 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   },
 
   // Load PREVIEW-Master.html template (fetch once, cache)
-  loadPreviewTemplate: async () => {
+  loadPreviewTemplate: async (forceReload = false) => {
     const currentTemplate = get().previewTemplate;
-    if (currentTemplate) {
+    if (currentTemplate && !forceReload) {
       return currentTemplate; // Already loaded
     }
 
     try {
-      const response = await fetch('/Report-MF-template.html');
+      // Always use cache-busting to ensure we get the latest version
+      const url = `/Report-MF-template.html?v=${Date.now()}`;
+      const response = await fetch(url, { cache: 'no-store' });
       if (!response.ok) {
         throw new Error(`Failed to load template: ${response.statusText}`);
       }
       const html = await response.text();
+      
+      // Check template version in HTML
+      const versionMatch = html.match(/VERSION:\s*([\d.]+)/);
+      const version = versionMatch ? versionMatch[1] : 'unknown';
+      console.log(`Template loaded: v${version} (${html.match(/data-page-num="Page (-?\d+)"/) ? 'has pages' : 'no pages'})`);
+      
       set({ previewTemplate: html });
       return html;
     } catch (error) {
@@ -6174,7 +6542,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // Regenerate preview with all data
     const updatedSections = get().sections;
-    const template = await get().loadPreviewTemplate();
+    // Force reload template to ensure we get the latest version
+    const template = await get().loadPreviewTemplate(true);
     const html = get().interpolateTemplate(updatedSections, template);
     set({ previewHtml: html });
 

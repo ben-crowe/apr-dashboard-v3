@@ -8826,6 +8826,16 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 requestAnimationFrame(() => {
                     const targetUnscaled = anchorPage.offsetTop + offsetWithinPage;
                     previewContainer.scrollTop = targetUnscaled * newScale;
+
+                    // Update page number display immediately (don't wait for scroll debounce)
+                    const pageInputEl = document.getElementById('page-input');
+                    if (pageInputEl && anchorPage.hasAttribute('data-page-num')) {
+                        const internalNum = parseInt(anchorPage.getAttribute('data-page-num').replace('Page ', ''));
+                        const displayNum = internalToDisplay(internalNum);
+                        if (pageInputEl.value != displayNum) {
+                            pageInputEl.value = displayNum;
+                        }
+                    }
                 });
             }
         });

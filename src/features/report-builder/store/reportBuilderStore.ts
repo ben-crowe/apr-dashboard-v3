@@ -5880,7 +5880,7 @@ const sectionGroups: SectionGroup[] = [
 export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   sections: [],
   sectionGroups: [],
-  activeSection: "cover",
+  activeSection: "home",
   previewHtml: "",
   previewTemplate: "", // Cached PREVIEW-Master.html template
   isDirty: false,

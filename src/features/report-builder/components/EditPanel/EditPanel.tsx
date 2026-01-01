@@ -33,11 +33,11 @@ const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
 export default function EditPanel() {
   const { sections, activeSection, updateFieldValue, loadCalcTestData } = useReportBuilderStore();
 
-  // Track which subsections are collapsed (empty = all expanded by default)
-  const [collapsedSubsections, setCollapsedSubsections] = useState<Set<string>>(new Set());
+  // Track which subsections are EXPANDED (empty = all collapsed by default)
+  const [expandedSubsections, setExpandedSubsections] = useState<Set<string>>(new Set());
 
   const toggleSubsection = (subsectionId: string) => {
-    setCollapsedSubsections(prev => {
+    setExpandedSubsections(prev => {
       const next = new Set(prev);
       if (next.has(subsectionId)) {
         next.delete(subsectionId);
@@ -251,7 +251,7 @@ export default function EditPanel() {
 
         {/* Subsections as collapsible cards */}
         {currentSection.subsections?.map((subsection) => {
-          const isCollapsed = collapsedSubsections.has(subsection.id);
+          const isCollapsed = !expandedSubsections.has(subsection.id);
 
           return (
             <div

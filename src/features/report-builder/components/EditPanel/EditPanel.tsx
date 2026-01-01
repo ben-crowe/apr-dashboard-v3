@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import TextFieldEditor from './TextFieldEditor';
 import ImageFieldEditor from './ImageFieldEditor';
 import CalculatedFieldDisplay from './CalculatedFieldDisplay';
-import { ReportField } from '../../types/reportBuilder.types';
+import { ReportField, ReportSubsection } from '../../types/reportBuilder.types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
@@ -27,6 +27,55 @@ const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
     'img-common-1', 'img-common-2', 'img-common-3', 'img-common-4',
     'img-unit-1', 'img-unit-2', 'img-unit-3', 'img-unit-4', 'img-unit-5', 'img-unit-6',
     'img-systems-1', 'img-systems-2', 'img-systems-3', 'img-systems-4'
+  ],
+};
+
+// Layout configuration for Home section field groupings
+// Each row defines which fields appear together and their widths
+type FieldLayoutRow = { fields: string[]; widths: string[] };
+type SubsectionLayout = FieldLayoutRow[];
+
+const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
+  'job-setup': [
+    { fields: ['home-job-id', 'home-job-status', 'home-report-date'], widths: ['50%', '25%', '25%'] },
+  ],
+  'client-info': [
+    { fields: ['home-client-name', 'home-client-company'], widths: ['50%', '50%'] },
+    { fields: ['home-client-email', 'home-client-phone'], widths: ['50%', '50%'] },
+    { fields: ['home-client-address-street'], widths: ['100%'] },
+    { fields: ['home-client-address-city', 'home-client-address-state', 'home-client-address-postal'], widths: ['40%', '30%', '30%'] },
+    { fields: ['home-client-reference'], widths: ['100%'] },
+  ],
+  'appraiser-info': [
+    { fields: ['home-appraiser-name', 'home-appraiser-designation'], widths: ['50%', '50%'] },
+    { fields: ['home-appraiser-license', 'home-appraiser-company'], widths: ['50%', '50%'] },
+    { fields: ['home-appraiser-email', 'home-appraiser-phone'], widths: ['50%', '50%'] },
+  ],
+  'property-info': [
+    { fields: ['home-property-name'], widths: ['100%'] },
+    { fields: ['home-property-address-street'], widths: ['100%'] },
+    { fields: ['home-property-address-city', 'home-property-address-province', 'home-property-address-postal'], widths: ['40%', '30%', '30%'] },
+    { fields: ['home-property-type', 'home-property-pid'], widths: ['50%', '50%'] },
+    { fields: ['home-property-legal-description'], widths: ['100%'] },
+  ],
+  'assignment-details': [
+    { fields: ['home-report-type', 'home-property-rights'], widths: ['50%', '50%'] },
+    { fields: ['home-intended-use', 'home-intended-users'], widths: ['50%', '50%'] },
+    { fields: ['home-scope-of-work'], widths: ['100%'] },
+  ],
+  'subject-contact': [
+    { fields: ['home-contact-name', 'home-contact-title'], widths: ['50%', '50%'] },
+    { fields: ['home-contact-phone', 'home-contact-email'], widths: ['50%', '50%'] },
+    { fields: ['home-inspection-date'], widths: ['50%'] },
+  ],
+  'assumptions-conditions': [
+    { fields: ['home-extraordinary-assumptions'], widths: ['100%'] },
+    { fields: ['home-hypothetical-conditions'], widths: ['100%'] },
+    { fields: ['home-limiting-conditions'], widths: ['100%'] },
+  ],
+  'transmittal-content': [
+    { fields: ['transmittal-date'], widths: ['50%'] },
+    { fields: ['transmittal-body'], widths: ['100%'] },
   ],
 };
 
@@ -104,6 +153,106 @@ export default function EditPanel() {
       default:
         return '';
     }
+  };
+
+  // Render a single field without the outer margin (for use in row layouts)
+  const renderFieldContent = (field: ReportField) => {
+    if (field.type === 'image') {
+      return <ImageFieldEditor field={field} />;
+    }
+
+    if (field.type === 'calculated') {
+      return <CalculatedFieldDisplay field={field} />;
+    }
+
+    if (field.type === 'textarea') {
+      return <TextFieldEditor field={field} />;
+    }
+
+    if (field.type === 'dropdown' && field.options) {
+      return (
+        <>
+          <Label htmlFor={field.id} className="text-sm font-medium mb-2 block text-white">
+            {field.label}
+          </Label>
+          <Select
+            value={String(field.value)}
+            onValueChange={(value) => updateFieldValue(field.id, value)}
+            disabled={!field.isEditable}
+          >
+            <SelectTrigger
+              id={field.id}
+              className={cn('w-full', getFieldBackgroundClass(field))}
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {field.options.map((option) => (
+                <SelectItem key={option} value={option}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </>
+      );
+    }
+
+    // Handle select type fields (same as dropdown)
+    if (field.type === 'select' && field.options) {
+      return (
+        <>
+          <Label htmlFor={field.id} className="text-sm font-medium mb-2 block text-white">
+            {field.label}
+          </Label>
+          <Select
+            value={String(field.value)}
+            onValueChange={(value) => updateFieldValue(field.id, value)}
+            disabled={!field.isEditable}
+          >
+            <SelectTrigger
+              id={field.id}
+              className={cn('w-full', getFieldBackgroundClass(field))}
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {field.options.map((option) => (
+                <SelectItem key={option} value={option}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </>
+      );
+    }
+
+    return (
+      <>
+        {field.placeholder && (
+          <p className="text-sm text-red-400 mb-2 font-medium">
+            {field.placeholder}
+          </p>
+        )}
+        <Label htmlFor={field.id} className="text-sm font-medium mb-2 block text-white">
+          {field.label}
+        </Label>
+        <Input
+          id={field.id}
+          type={field.type}
+          value={String(field.value)}
+          onChange={(e) => {
+            const newValue = field.type === 'number'
+              ? parseFloat(e.target.value) || 0
+              : e.target.value;
+            updateFieldValue(field.id, newValue);
+          }}
+          disabled={!field.isEditable}
+          className={cn('w-full', getFieldBackgroundClass(field))}
+        />
+      </>
+    );
   };
 
   const renderField = (field: ReportField) => {
@@ -186,6 +335,33 @@ export default function EditPanel() {
       </div>
     );
   };
+
+  // Render subsection fields with optional row grouping layout
+  const renderSubsectionFields = (subsection: ReportSubsection, isHomeSection: boolean) => {
+    const layout = isHomeSection ? HOME_FIELD_LAYOUT[subsection.id] : undefined;
+
+    if (layout) {
+      // Render with row grouping
+      return layout.map((row, rowIndex) => (
+        <div key={rowIndex} className="flex gap-3 mb-4">
+          {row.fields.map((fieldId, fieldIndex) => {
+            const field = subsection.fields.find(f => f.id === fieldId);
+            if (!field) return null;
+            return (
+              <div key={fieldId} style={{ width: row.widths[fieldIndex], minWidth: 0 }}>
+                {renderFieldContent(field)}
+              </div>
+            );
+          })}
+        </div>
+      ));
+    }
+
+    // Fallback: render fields normally (one per line)
+    return subsection.fields.map(renderField);
+  };
+
+  const isHomeSection = currentSection.id === 'home';
 
   return (
     <div className="h-full flex flex-col" style={{ backgroundColor: '#1f1f1f' }}>
@@ -288,7 +464,7 @@ export default function EditPanel() {
                 )}
               >
                 <div className="p-4" style={{ backgroundColor: '#252525' }}>
-                  {subsection.fields.map(renderField)}
+                  {renderSubsectionFields(subsection, isHomeSection)}
                 </div>
               </div>
             </div>

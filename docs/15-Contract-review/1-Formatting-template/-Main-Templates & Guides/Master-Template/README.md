@@ -2,9 +2,15 @@
 
 ## Current Master
 
-**`Report-MF-Template-v2.6.0-integrated.html`** - Source of truth for the report template.
+**`Report-MF-Template-v2.8.0-integrated.html`** - Source of truth for the report template.
 
 This file mirrors to: `public/Report-MF-template.html` (used by the app)
+
+**`preview-wrapper-v2.8.0.html`** - Preview wrapper with navigation controls.
+
+This file mirrors to: `public/preview-wrapper.html` (used by mock-builder)
+
+**IMPORTANT:** Template and wrapper must stay synchronized. Both use the same page numbering system (Page -4, -3, -2, -1, 1, 2...) with pass-through conversion.
 
 ---
 

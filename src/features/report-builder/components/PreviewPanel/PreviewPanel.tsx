@@ -1,12 +1,49 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useMemo } from 'react';
 import { useReportBuilderStore } from '../../store/reportBuilderStore';
+
+/**
+ * Maps approach toggle field names to their corresponding page ranges.
+ * When a toggle is disabled (false), pages in that range are hidden from preview.
+ */
+const APPROACH_TO_PAGES_MAP: Record<string, { start: number; end: number }> = {
+  'home-use-income-approach': { start: 37, end: 51 },
+  'home-use-sales-approach': { start: 56, end: 61 },
+  'home-use-cost-approach': { start: 52, end: 55 },
+};
+
+/**
+ * Determines which page numbers should be excluded based on disabled approach toggles.
+ * If a toggle value is undefined/null, it defaults to TRUE (pages shown).
+ */
+function getExcludedPageNumbers(fieldValues: Record<string, unknown>): Set<number> {
+  const excludedPages = new Set<number>();
+
+  for (const [fieldName, pageRange] of Object.entries(APPROACH_TO_PAGES_MAP)) {
+    const isEnabled = fieldValues[fieldName] !== false;
+
+    if (!isEnabled) {
+      // Add all pages in this range to the excluded set
+      for (let pageNum = pageRange.start; pageNum <= pageRange.end; pageNum++) {
+        excludedPages.add(pageNum);
+      }
+    }
+  }
+
+  return excludedPages;
+}
 
 export default function PreviewPanel() {
   const previewHtml = useReportBuilderStore((state) => state.previewHtml);
   const activeTestMode = useReportBuilderStore((state) => state.activeTestMode);
   const sections = useReportBuilderStore((state) => state.sections);
   const generatePreview = useReportBuilderStore((state) => state.generatePreview);
+  const fieldValues = useReportBuilderStore((state) => state.fieldValues);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  // Calculate excluded pages based on approach toggles
+  const excludedPages = useMemo(() => {
+    return getExcludedPageNumbers(fieldValues);
+  }, [fieldValues]);
 
   // Auto-load template when component mounts if previewHtml is empty
   useEffect(() => {
@@ -53,25 +90,47 @@ export default function PreviewPanel() {
       // Extract just the page-sheet divs from the template HTML
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = previewHtml;
-      const pageSheets = tempDiv.querySelectorAll('.page-sheet');
+      const allPageSheets = tempDiv.querySelectorAll('.page-sheet');
 
-      if (pageSheets.length === 0) {
+      if (allPageSheets.length === 0) {
         console.warn('PreviewPanel: No .page-sheet elements found in previewHtml');
         return;
       }
 
-      // Clear wrapper and inject pages
+      // Filter pages based on approach toggles
+      const filteredPageSheets: Element[] = [];
+      allPageSheets.forEach(page => {
+        const pageNumAttr = page.getAttribute('data-page-num');
+        if (pageNumAttr) {
+          const pageNum = parseInt(pageNumAttr, 10);
+          if (!excludedPages.has(pageNum)) {
+            filteredPageSheets.push(page);
+          }
+        } else {
+          // Pages without data-page-num are always included
+          filteredPageSheets.push(page);
+        }
+      });
+
+      // Log filtering info if pages were excluded
+      if (excludedPages.size > 0) {
+        const excludedArray = Array.from(excludedPages).sort((a, b) => a - b);
+        console.log(`PreviewPanel: Excluding pages due to disabled approaches: [${excludedArray.join(', ')}]`);
+        console.log(`PreviewPanel: Filtered from ${allPageSheets.length} to ${filteredPageSheets.length} pages`);
+      }
+
+      // Clear wrapper and inject filtered pages
       pagesWrapper.innerHTML = '';
-      pageSheets.forEach(page => {
+      filteredPageSheets.forEach(page => {
         pagesWrapper.appendChild(page.cloneNode(true));
       });
 
-      console.log(`PreviewPanel: Injected ${pageSheets.length} pages. First page: ${pageSheets[0]?.getAttribute('data-page-num')}, Last page: ${pageSheets[pageSheets.length - 1]?.getAttribute('data-page-num')}`);
+      console.log(`PreviewPanel: Injected ${filteredPageSheets.length} pages. First page: ${filteredPageSheets[0]?.getAttribute('data-page-num')}, Last page: ${filteredPageSheets[filteredPageSheets.length - 1]?.getAttribute('data-page-num')}`);
 
       // Trigger page count update AFTER pages are injected
       // Use setTimeout to ensure DOM is updated
       setTimeout(() => {
-        const iframeWindow = iframe.contentWindow as any;
+        const iframeWindow = iframe.contentWindow as Window & { updatePageCount?: () => void };
         if (iframeWindow && typeof iframeWindow.updatePageCount === 'function') {
           iframeWindow.updatePageCount();
           console.log('PreviewPanel: Called updatePageCount()');
@@ -104,7 +163,7 @@ export default function PreviewPanel() {
             toggle.checked = true;
             pagesWrapper.classList.add('preview-mode');
             if (modeLabel) modeLabel.textContent = 'Designer Preview';
-            
+
             // Trigger the toggle change handler to update all fields
             toggle.dispatchEvent(new Event('change', { bubbles: true }));
             console.log('PreviewPanel: Auto-enabled preview mode to show interpolated values');
@@ -116,7 +175,7 @@ export default function PreviewPanel() {
         }
       }
 
-      console.log(`PreviewPanel: Injected ${pageSheets.length} pages into preview`);
+      console.log(`PreviewPanel: Injected ${filteredPageSheets.length} pages into preview`);
     };
 
     if (iframe.contentDocument?.readyState === 'complete') {
@@ -125,7 +184,7 @@ export default function PreviewPanel() {
       iframe.addEventListener('load', handleLoad);
       return () => iframe.removeEventListener('load', handleLoad);
     }
-  }, [previewHtml, activeTestMode]);
+  }, [previewHtml, activeTestMode, excludedPages]);
 
   return (
     <div className="h-full w-full">

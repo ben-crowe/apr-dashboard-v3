@@ -399,9 +399,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'home-limiting-conditions', storeId: 'home-limiting-conditions', label: 'Extraordinary Limiting Conditions', section: 'home', subsection: 'assumptions-conditions', type: 'textarea', inputSource: 'user-input', required: false },
 
   // --- VALUATION APPROACHES (3 toggles) ---
-  { id: 'home-use-income-approach', storeId: 'home-use-income-approach', label: 'Income', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
-  { id: 'home-use-sales-approach', storeId: 'home-use-sales-approach', label: 'Sales Comp', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
-  { id: 'home-use-cost-approach', storeId: 'home-use-cost-approach', label: 'Cost', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
+  { id: 'home-use-income-approach', storeId: 'home-use-income-approach', label: 'Income Approach', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
+  { id: 'home-use-sales-approach', storeId: 'home-use-sales-approach', label: 'Sales Comparison', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
+  { id: 'home-use-cost-approach', storeId: 'home-use-cost-approach', label: 'Cost Approach', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
 
   // --- TRANSMITTAL LETTER (2 fields - existing) ---
   { id: 'transmittal-date', storeId: 'transmittal-date', label: 'Letter Date', section: 'home', subsection: 'transmittal-content', type: 'date', inputSource: 'auto-filled', required: true },

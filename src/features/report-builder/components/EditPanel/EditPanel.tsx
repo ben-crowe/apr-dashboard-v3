@@ -531,11 +531,11 @@ export default function EditPanel() {
           }
         `}</style>
 
-        {/* Valuation Approaches - Always visible at top of Home section */}
+        {/* Approaches - Always visible at top of Home section */}
         {isHomeSection && approachToggleFields.length > 0 && (
-          <div className="mb-4 p-4 rounded-lg" style={{ backgroundColor: '#2a2a2a' }}>
-            <h3 className="text-white text-sm font-semibold mb-3">Valuation Approaches</h3>
-            <div className="flex gap-6 flex-wrap">
+          <div className="mb-4 p-3 rounded-lg" style={{ backgroundColor: '#2a2a2a' }}>
+            <div className="flex items-center gap-4">
+              <span className="text-white text-sm font-semibold">Approaches:</span>
               {approachToggleFields.map(renderApproachToggle)}
             </div>
           </div>

@@ -79,6 +79,9 @@ const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
   ],
 };
 
+// Approach toggle field IDs - these are rendered separately at top of Home section
+const APPROACH_TOGGLE_IDS = ['home-use-income-approach', 'home-use-sales-approach', 'home-use-cost-approach'];
+
 export default function EditPanel() {
   const { sections, activeSection, updateFieldValue, loadCalcTestData } = useReportBuilderStore();
 
@@ -99,6 +102,35 @@ export default function EditPanel() {
 
   const currentSection = sections.find((s) => s.id === activeSection);
   const imageMgtSection = sections.find((s) => s.id === 'image-mgt');
+
+  // Get approach toggle fields from the home section
+  const getApproachToggleFields = (): ReportField[] => {
+    const homeSection = sections.find(s => s.id === 'home');
+    if (!homeSection) return [];
+
+    const toggleFields: ReportField[] = [];
+
+    // Check subsections for approach toggle fields
+    for (const sub of homeSection.subsections || []) {
+      for (const field of sub.fields || []) {
+        if (APPROACH_TOGGLE_IDS.includes(field.id)) {
+          toggleFields.push(field);
+        }
+      }
+    }
+
+    // Also check main fields
+    for (const field of homeSection.fields || []) {
+      if (APPROACH_TOGGLE_IDS.includes(field.id)) {
+        toggleFields.push(field);
+      }
+    }
+
+    // Sort to maintain consistent order
+    return toggleFields.sort((a, b) =>
+      APPROACH_TOGGLE_IDS.indexOf(a.id) - APPROACH_TOGGLE_IDS.indexOf(b.id)
+    );
+  };
 
   // Get related image fields from image-mgt section for the current section
   const getRelatedImageFields = (): ReportField[] => {
@@ -228,6 +260,37 @@ export default function EditPanel() {
       );
     }
 
+    // Handle boolean/toggle fields
+    if (field.type === 'boolean') {
+      const isChecked = field.value === true || field.value === 'true' || field.value === 1;
+      return (
+        <div className="flex items-center gap-3 py-2">
+          <button
+            type="button"
+            role="switch"
+            aria-checked={isChecked}
+            onClick={() => updateFieldValue(field.id, !isChecked)}
+            disabled={!field.isEditable}
+            className={cn(
+              'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800',
+              isChecked ? 'bg-green-600' : 'bg-gray-600',
+              !field.isEditable && 'opacity-50 cursor-not-allowed'
+            )}
+          >
+            <span
+              className={cn(
+                'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+                isChecked ? 'translate-x-5' : 'translate-x-0'
+              )}
+            />
+          </button>
+          <Label htmlFor={field.id} className="text-sm font-medium text-white cursor-pointer" onClick={() => field.isEditable && updateFieldValue(field.id, !isChecked)}>
+            {field.label}
+          </Label>
+        </div>
+      );
+    }
+
     return (
       <>
         {field.placeholder && (
@@ -309,6 +372,39 @@ export default function EditPanel() {
       );
     }
 
+    // Handle boolean/toggle fields in standalone render
+    if (field.type === 'boolean') {
+      const isChecked = field.value === true || field.value === 'true' || field.value === 1;
+      return (
+        <div key={field.id} className="mb-6">
+          <div className="flex items-center gap-3 py-2">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={isChecked}
+              onClick={() => updateFieldValue(field.id, !isChecked)}
+              disabled={!field.isEditable}
+              className={cn(
+                'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800',
+                isChecked ? 'bg-green-600' : 'bg-gray-600',
+                !field.isEditable && 'opacity-50 cursor-not-allowed'
+              )}
+            >
+              <span
+                className={cn(
+                  'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+                  isChecked ? 'translate-x-5' : 'translate-x-0'
+                )}
+              />
+            </button>
+            <Label htmlFor={field.id} className="text-sm font-medium text-white cursor-pointer" onClick={() => field.isEditable && updateFieldValue(field.id, !isChecked)}>
+              {field.label}
+            </Label>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div key={field.id} className="mb-6">
         {field.placeholder && (
@@ -362,6 +458,42 @@ export default function EditPanel() {
   };
 
   const isHomeSection = currentSection.id === 'home';
+  const approachToggleFields = isHomeSection ? getApproachToggleFields() : [];
+
+  // Render approach toggle for the always-visible section
+  const renderApproachToggle = (field: ReportField) => {
+    const isChecked = field.value === true || field.value === 'true' || field.value === 1;
+    return (
+      <div key={field.id} className="flex items-center gap-3">
+        <button
+          type="button"
+          role="switch"
+          aria-checked={isChecked}
+          onClick={() => updateFieldValue(field.id, !isChecked)}
+          disabled={!field.isEditable}
+          className={cn(
+            'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800',
+            isChecked ? 'bg-green-600' : 'bg-gray-600',
+            !field.isEditable && 'opacity-50 cursor-not-allowed'
+          )}
+        >
+          <span
+            className={cn(
+              'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
+              isChecked ? 'translate-x-5' : 'translate-x-0'
+            )}
+          />
+        </button>
+        <Label
+          htmlFor={field.id}
+          className="text-sm font-medium text-white cursor-pointer"
+          onClick={() => field.isEditable && updateFieldValue(field.id, !isChecked)}
+        >
+          {field.label}
+        </Label>
+      </div>
+    );
+  };
 
   return (
     <div className="h-full flex flex-col" style={{ backgroundColor: '#1f1f1f' }}>
@@ -398,6 +530,17 @@ export default function EditPanel() {
             color: #9ca3af !important;
           }
         `}</style>
+
+        {/* Valuation Approaches - Always visible at top of Home section */}
+        {isHomeSection && approachToggleFields.length > 0 && (
+          <div className="mb-4 p-4 rounded-lg" style={{ backgroundColor: '#2a2a2a' }}>
+            <h3 className="text-white text-sm font-semibold mb-3">Valuation Approaches</h3>
+            <div className="flex gap-6 flex-wrap">
+              {approachToggleFields.map(renderApproachToggle)}
+            </div>
+          </div>
+        )}
+
         {/* Calculator Test Data Button - Only show for CALC section */}
         {currentSection.id === 'calc' && (
           <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
@@ -425,8 +568,8 @@ export default function EditPanel() {
           </div>
         )}
 
-        {/* Subsections as collapsible cards */}
-        {currentSection.subsections?.map((subsection) => {
+        {/* Subsections as collapsible cards - skip approach-selection for Home since it's rendered above */}
+        {currentSection.subsections?.filter(sub => !(isHomeSection && sub.id === 'approach-selection')).map((subsection) => {
           const isCollapsed = !expandedSubsections.has(subsection.id);
 
           return (

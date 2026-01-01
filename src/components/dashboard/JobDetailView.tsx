@@ -1,5 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { FileText } from "lucide-react";
 import JobDetailAccordion from "./JobDetailAccordion"; // Use the correct clean version
 // import JobDetailAccordion from "./JobDetailAccordionSimple"; // TEMPORARY - Testing simplified version
 // import JobDetailAccordion from "./JobDetailAccordionFixed"; // DO NOT USE - has wrong fields
@@ -16,6 +19,7 @@ interface JobDetailViewProps {
 }
 
 const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
+  const navigate = useNavigate();
   const {
     job,
     jobDetails,
@@ -37,6 +41,10 @@ const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
     refetchJobData,
   } = useJobDetail(jobId);
 
+  const handleBeginReport = () => {
+    navigate(`/dashboard/job/${jobId}/report`);
+  };
+
   if (isLoading) {
     return <JobDetailSkeleton onBack={onBack} />;
   }
@@ -50,10 +58,18 @@ const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
       <div className="flex flex-col space-y-5">
         <JobDetailHeader job={job} onBack={onBack} isSaving={isSaving} />
 
-        <div>
+        <div className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold tracking-tight">
             {formatJobNumber(job.jobNumber, job)}
           </h1>
+
+          <Button
+            onClick={handleBeginReport}
+            className="flex items-center gap-2"
+          >
+            <FileText className="h-4 w-4" />
+            Begin Report
+          </Button>
         </div>
 
         {/* JobDetailActions removed - all buttons moved to their respective sections */}

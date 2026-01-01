@@ -1,23 +1,31 @@
 import { useEffect } from 'react';
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
 import ReportBuilderLayout from '@/features/report-builder/components/ReportBuilderLayout';
+import { useLoadJobIntoReport } from '@/features/report-builder/hooks/useLoadJobIntoReport';
 
-export default function MockReportBuilder() {
+interface MockReportBuilderProps {
+  jobId?: string;
+}
+
+export default function MockReportBuilder({ jobId }: MockReportBuilderProps) {
   const sections = useReportBuilderStore((state) => state.sections);
   const initializeMockData = useReportBuilderStore((state) => state.initializeMockData);
   const generatePreview = useReportBuilderStore((state) => state.generatePreview);
+
+  // Hook to load job data into report builder when jobId is provided
+  const { isLoading: isLoadingJob, error: jobLoadError } = useLoadJobIntoReport(jobId);
 
   useEffect(() => {
     // ALWAYS clear cached template AND previewHtml FIRST to force reload of latest version
     console.log('MockReportBuilder: Clearing cached template and previewHtml to force reload...');
     const store = useReportBuilderStore.getState();
-    
+
     // Clear cache immediately
-    useReportBuilderStore.setState({ 
+    useReportBuilderStore.setState({
       previewTemplate: '' as any,
       previewHtml: ''
     });
-    
+
     // Wait a tick to ensure cache is cleared, then initialize
     setTimeout(() => {
       // Only initialize if store is empty (preserves data from Test Input Dashboard)
@@ -32,6 +40,30 @@ export default function MockReportBuilder() {
       }
     }, 100);
   }, []); // Run once on mount only
+
+  // Show loading state while job data is being loaded
+  if (jobId && isLoadingJob) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p>Loading job data into report builder...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error if job loading failed
+  if (jobId && jobLoadError) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-900 text-white">
+        <div className="text-center">
+          <p className="text-red-400 mb-2">Error loading job data:</p>
+          <p>{jobLoadError}</p>
+        </div>
+      </div>
+    );
+  }
 
   return <ReportBuilderLayout />;
 }

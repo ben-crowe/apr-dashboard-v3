@@ -5,6 +5,7 @@ import JobListView from "@/components/dashboard/JobListView";
 import JobDetailView from "@/components/dashboard/JobDetailView";
 import AppraisalTable from "@/components/dashboard/AppraisalTable";
 import { JobListProvider, useJobList } from "@/components/dashboard/job-list/JobListContext";
+import MockReportBuilder from "./MockReportBuilder";
 
 // Job List Route Component
 const JobListRoute = () => {
@@ -69,6 +70,18 @@ const JobDetailRoute = () => {
   );
 };
 
+// Job Report Route Component - Opens Report Builder with job data pre-filled
+const JobReportRoute = () => {
+  const { jobId } = useParams<{ jobId: string }>();
+
+  if (!jobId) {
+    return null;
+  }
+
+  // MockReportBuilder will use the jobId from URL params via useLoadJobIntoReport hook
+  return <MockReportBuilder jobId={jobId} />;
+};
+
 // Inner component that uses JobList context
 const JobListViewContent: React.FC<{ onSelectJob: (jobId: string) => void }> = ({ onSelectJob }) => {
   return <JobListView onSelectJob={onSelectJob} />;
@@ -93,6 +106,7 @@ const Dashboard = () => {
     <Routes>
       <Route path="/" element={<JobListRoute />} />
       <Route path="/job/:jobId" element={<JobDetailRoute />} />
+      <Route path="/job/:jobId/report" element={<JobReportRoute />} />
     </Routes>
   );
 };

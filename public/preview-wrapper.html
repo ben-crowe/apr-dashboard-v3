@@ -8687,46 +8687,74 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     </div>
 
     <script>
-        // === ZOOM CONTROLS (matches PreviewMasterWrapper) ===
-        let zoom = 0.6; // Start at 60%
-        const minZoom = 0.1;
-        const maxZoom = 1.5;
-        const zoomStep = 0.05;
+        // === DYNAMIC ZOOM CONTROLS ===
+        // fitToPanelScale = scale needed to fit report in panel (this is 100%)
+        // userZoomMultiplier = user's zoom adjustment (starts at 1.0 = 100%)
+        // Final zoom = fitToPanelScale * userZoomMultiplier
+        let fitToPanelScale = 1.0;
+        let userZoomMultiplier = 1.0;
+        const minUserZoom = 0.1;  // 10% minimum
+        const maxUserZoom = 3.0;  // 300% maximum
+        const zoomStep = 0.05;    // 5% steps
 
         const scaler = document.getElementById('preview-scaler');
         const zoomValue = document.getElementById('zoom-value');
         const zoomIn = document.getElementById('zoom-in');
         const zoomOut = document.getElementById('zoom-out');
+        const previewContainer = document.getElementById('preview-container');
+        const pagesWrapperForZoom = document.getElementById('pages-wrapper');
+
+        // Calculate scale needed to fit report in panel (100% = fits perfectly)
+        function calculateFitToPanel() {
+            if (!pagesWrapperForZoom || !previewContainer) return 0.6; // Safe default
+            const firstPage = pagesWrapperForZoom.querySelector('.page-sheet');
+            if (!firstPage) return 0.6; // Safe default
+            const pageWidth = firstPage.offsetWidth || 816;
+            const containerWidth = previewContainer.clientWidth;
+            if (containerWidth < 100) return 0.6; // Container not ready, use safe default
+            const scale = (containerWidth - 24) / pageWidth; // Reduced padding
+            return Math.max(0.1, Math.min(scale, 1.05)); // Clamp between 0.1 and 1.05
+        }
 
         function updateZoom() {
-            // Get current page before zoom (if available)
+            // Get current page from page picker - this is what should stay at top
             const pageInputEl = document.getElementById('page-input');
             const displayNum = pageInputEl ? parseInt(pageInputEl.value) : null;
-            
-            scaler.style.transform = `scale(${zoom})`;
-            zoomValue.textContent = Math.round(zoom * 100) + '%';
-            zoomOut.disabled = zoom <= minZoom;
-            zoomIn.disabled = zoom >= maxZoom;
-            
-            // After zoom, scroll back to current page
+
+            // Get anchor point from selected page
+            let anchorPoint = 0; // Default to top of document
             if (displayNum !== null && !isNaN(displayNum)) {
-                const internalNum = displayNum <= -1 ? displayNum + 6 : displayNum + 5;
-                setTimeout(() => {
-                    const targetPage = document.querySelector(`[data-page-num="Page ${internalNum}"]`);
-                    if (targetPage) {
-                        targetPage.scrollIntoView({ behavior: 'auto', block: 'start' });
-                    }
-                }, 50);
+                const internalNum = displayToInternal(displayNum);
+                const targetPage = document.querySelector(`[data-page-num="Page ${internalNum}"]`);
+                if (targetPage) {
+                    // Get page's offsetTop relative to scaler - this becomes transform origin
+                    anchorPoint = targetPage.offsetTop;
+                }
             }
+
+            // Calculate fit-to-panel scale and final zoom
+            fitToPanelScale = calculateFitToPanel();
+            const finalZoom = fitToPanelScale * userZoomMultiplier;
+
+            // Set transform origin - center horizontally, anchor vertically to selected page
+            scaler.style.transformOrigin = `center ${anchorPoint}px`;
+
+            // Apply zoom transform
+            scaler.style.transform = `scale(${finalZoom})`;
+
+            // Update UI - show userZoomMultiplier (100% = fits panel)
+            zoomValue.textContent = Math.round(userZoomMultiplier * 100) + '%';
+            zoomOut.disabled = userZoomMultiplier <= minUserZoom;
+            zoomIn.disabled = userZoomMultiplier >= maxUserZoom;
         }
 
         zoomOut.addEventListener('click', () => {
-            zoom = Math.max(minZoom, zoom - zoomStep);
+            userZoomMultiplier = Math.max(minUserZoom, userZoomMultiplier - zoomStep);
             updateZoom();
         });
 
         zoomIn.addEventListener('click', () => {
-            zoom = Math.min(maxZoom, zoom + zoomStep);
+            userZoomMultiplier = Math.min(maxUserZoom, userZoomMultiplier + zoomStep);
             updateZoom();
         });
 
@@ -8735,22 +8763,44 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 
         zoomOut.addEventListener('mousedown', () => {
             zoomInterval = setInterval(() => {
-                zoom = Math.max(minZoom, zoom - 0.025);
+                userZoomMultiplier = Math.max(minUserZoom, userZoomMultiplier - 0.025);
                 updateZoom();
             }, 100);
         });
 
         zoomIn.addEventListener('mousedown', () => {
             zoomInterval = setInterval(() => {
-                zoom = Math.min(maxZoom, zoom + 0.025);
+                userZoomMultiplier = Math.min(maxUserZoom, userZoomMultiplier + 0.025);
                 updateZoom();
             }, 100);
         });
 
         document.addEventListener('mouseup', () => clearInterval(zoomInterval));
 
-        // Initial zoom
-        updateZoom();
+        // Auto-adjust zoom when panel resizes
+        const resizeObserver = new ResizeObserver(() => {
+            // Only auto-adjust if user hasn't manually changed zoom from 100%
+            if (Math.abs(userZoomMultiplier - 1.0) < 0.01) {
+                // Save scroll position as ratio before zoom change
+                const scaledHeight = scaler.scrollHeight * fitToPanelScale;
+                const scrollRatio = scaledHeight > 0 ? previewContainer.scrollTop / scaledHeight : 0;
+                
+                fitToPanelScale = calculateFitToPanel();
+                updateZoom();
+                
+                // Restore scroll position proportionally after zoom
+                const newScaledHeight = scaler.scrollHeight * fitToPanelScale;
+                previewContainer.scrollTop = scrollRatio * newScaledHeight;
+            }
+        });
+        if (previewContainer) {
+            resizeObserver.observe(previewContainer);
+        }
+
+        // Initial zoom - delay to ensure DOM is ready
+        setTimeout(() => {
+            updateZoom();
+        }, 100);
 
         // === PREVIEW MODE TOGGLE ===
         const toggle = document.getElementById('preview-toggle');
@@ -8947,8 +8997,8 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         container.addEventListener('wheel', (e) => {
             if (e.ctrlKey) {
                 e.preventDefault();
-                zoom += e.deltaY < 0 ? 0.025 : -0.025;
-                zoom = Math.max(minZoom, Math.min(maxZoom, zoom));
+                userZoomMultiplier += e.deltaY < 0 ? 0.025 : -0.025;
+                userZoomMultiplier = Math.max(minUserZoom, Math.min(maxUserZoom, userZoomMultiplier));
                 updateZoom();
             }
         }, { passive: false });

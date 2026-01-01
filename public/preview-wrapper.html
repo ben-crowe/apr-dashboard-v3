@@ -8883,7 +8883,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 
             if (this.checked) {
                 pagesWrapper.classList.add('preview-mode');
-                modeLabel.textContent = 'Preview';
+                // Keep label as 'ID' - toggle state is visible from switch
                 // Swap non-financial fields to sample data
                 fields.forEach(el => {
                     if (isCalcField(el)) return; // Skip - calculator controls these
@@ -8897,7 +8897,6 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 });
             } else {
                 pagesWrapper.classList.remove('preview-mode');
-                modeLabel.textContent = 'ID';
                 // Swap back to field IDs (skip financial - calculator controls)
                 fields.forEach(el => {
                     if (isCalcField(el)) return;

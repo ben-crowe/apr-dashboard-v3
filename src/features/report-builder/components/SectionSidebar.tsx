@@ -1,8 +1,18 @@
 import { useReportBuilderStore } from '../store/reportBuilderStore';
 import { cn } from '@/lib/utils';
 
+/**
+ * Maps approach toggle field IDs to their associated section IDs.
+ * When a toggle is disabled (false), all sections in its array are hidden from the sidebar.
+ */
+const APPROACH_TO_SECTIONS_MAP: Record<string, string[]> = {
+  'home-use-income-approach': ['income', 'calc', 'rentroll', 'calc-output', 'hist'],
+  'home-use-sales-approach': ['sales', 'rent-analysis'],
+  'home-use-cost-approach': ['cost', 'cost-s'],
+};
+
 export default function SectionSidebar() {
-  const { sections, activeSection, setActiveSection } = useReportBuilderStore();
+  const { sections, activeSection, setActiveSection, fieldValues } = useReportBuilderStore();
 
   // Filter out S-tabs (client-intake, loe-prep, image-mgt) - these are TDD-only
   // Editor Panel should only show numbered report page tabs
@@ -13,11 +23,25 @@ export default function SectionSidebar() {
   );
 
   // Sort sections: 'home' first, then everything else in original order
-  const editorSections = [...filteredSections].sort((a, b) => {
+  const sortedSections = [...filteredSections].sort((a, b) => {
     if (a.id === 'home') return -1;
     if (b.id === 'home') return 1;
     return 0; // Maintain original order for all other sections
   });
+
+  // Build set of section IDs to hide based on disabled approach toggles
+  const hiddenSectionIds = new Set<string>();
+  for (const [toggleFieldId, sectionIds] of Object.entries(APPROACH_TO_SECTIONS_MAP)) {
+    // Default behavior: if toggle value is undefined/null, treat as TRUE (enabled)
+    // Only hide sections when toggle is explicitly false
+    const isEnabled = fieldValues?.[toggleFieldId] !== false;
+    if (!isEnabled) {
+      sectionIds.forEach(id => hiddenSectionIds.add(id));
+    }
+  }
+
+  // Filter out sections whose approach is disabled
+  const editorSections = sortedSections.filter(section => !hiddenSectionIds.has(section.id));
 
   return (
     <div className="w-[180px] text-white flex flex-col h-full overflow-y-auto" style={{ backgroundColor: '#2a2a2a' }}>

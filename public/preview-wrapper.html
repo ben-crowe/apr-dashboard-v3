@@ -299,6 +299,7 @@
         .page-count {
             font-size: 11px;
             color: #999;
+            white-space: nowrap;
         }
 
         /* Dark mode - dims pages */
@@ -542,7 +543,6 @@
             <div class="controls-bar">
                 <!-- Zoom Controls -->
                 <div class="control-group">
-                    <span class="control-label">Zoom:</span>
                     <button class="control-btn" id="zoom-out" title="Zoom out">−</button>
                     <span class="zoom-value" id="zoom-value">60%</span>
                     <button class="control-btn" id="zoom-in" title="Zoom in">+</button>
@@ -556,7 +556,7 @@
                         <input type="checkbox" id="preview-toggle">
                         <span class="toggle-slider"></span>
                     </span>
-                    <span id="mode-label">Show Field IDs</span>
+                    <span id="mode-label">ID</span>
                 </label>
 
                 <div class="divider"></div>
@@ -8883,7 +8883,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 
             if (this.checked) {
                 pagesWrapper.classList.add('preview-mode');
-                modeLabel.textContent = 'Preview Mode';
+                modeLabel.textContent = 'Preview';
                 // Swap non-financial fields to sample data
                 fields.forEach(el => {
                     if (isCalcField(el)) return; // Skip - calculator controls these
@@ -8897,7 +8897,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 });
             } else {
                 pagesWrapper.classList.remove('preview-mode');
-                modeLabel.textContent = 'Show Field IDs';
+                modeLabel.textContent = 'ID';
                 // Swap back to field IDs (skip financial - calculator controls)
                 fields.forEach(el => {
                     if (isCalcField(el)) return;

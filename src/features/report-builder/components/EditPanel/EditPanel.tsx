@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useReportBuilderStore } from '../../store/reportBuilderStore';
 import { cn } from '@/lib/utils';
 import TextFieldEditor from './TextFieldEditor';
@@ -7,7 +8,7 @@ import { ReportField } from '../../types/reportBuilder.types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Play, Image as ImageIcon } from 'lucide-react';
+import { Play, Image as ImageIcon, ChevronDown } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -31,6 +32,21 @@ const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
 
 export default function EditPanel() {
   const { sections, activeSection, updateFieldValue, loadCalcTestData } = useReportBuilderStore();
+
+  // Track which subsections are collapsed (empty = all expanded by default)
+  const [collapsedSubsections, setCollapsedSubsections] = useState<Set<string>>(new Set());
+
+  const toggleSubsection = (subsectionId: string) => {
+    setCollapsedSubsections(prev => {
+      const next = new Set(prev);
+      if (next.has(subsectionId)) {
+        next.delete(subsectionId);
+      } else {
+        next.add(subsectionId);
+      }
+      return next;
+    });
+  };
 
   const currentSection = sections.find((s) => s.id === activeSection);
   const imageMgtSection = sections.find((s) => s.id === 'image-mgt');
@@ -69,8 +85,8 @@ export default function EditPanel() {
 
   if (!currentSection) {
     return (
-      <div className="h-full flex items-center justify-center bg-background">
-        <p className="text-muted-foreground">Select a section to edit</p>
+      <div className="h-full flex items-center justify-center" style={{ backgroundColor: '#1f1f1f' }}>
+        <p className="text-white">Select a section to edit</p>
       </div>
     );
   }
@@ -80,7 +96,7 @@ export default function EditPanel() {
 
     switch (field.inputType) {
       case 'user-input':
-        return 'bg-yellow-100 border-yellow-300';
+        return '';
       case 'dropdown':
         return 'bg-blue-100 border-blue-300';
       case 'auto-filled':
@@ -118,7 +134,7 @@ export default function EditPanel() {
     if (field.type === 'dropdown' && field.options) {
       return (
         <div key={field.id} className="mb-6">
-          <Label htmlFor={field.id} className="text-sm font-medium mb-2 block">
+          <Label htmlFor={field.id} className="text-sm font-medium mb-2 block text-white">
             {field.label}
           </Label>
           <Select
@@ -147,11 +163,11 @@ export default function EditPanel() {
     return (
       <div key={field.id} className="mb-6">
         {field.placeholder && (
-          <p className="text-sm text-red-600 mb-2 font-medium">
+          <p className="text-sm text-red-400 mb-2 font-medium">
             {field.placeholder}
           </p>
         )}
-        <Label htmlFor={field.id} className="text-sm font-medium mb-2 block">
+        <Label htmlFor={field.id} className="text-sm font-medium mb-2 block text-white">
           {field.label}
         </Label>
         <Input
@@ -172,15 +188,15 @@ export default function EditPanel() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-background">
+    <div className="h-full flex flex-col" style={{ backgroundColor: '#1f1f1f' }}>
       {/* Dark gray section header - matches preview panel */}
       <div style={{
-        backgroundColor: '#4b5563',
-        padding: '12px 16px',
+        backgroundColor: 'transparent',
+        padding: '12px 14px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderBottom: '1px solid #374151'
+        borderBottom: '1px solid #4b5563'
       }}>
         <span style={{
           color: '#ffffff',
@@ -192,19 +208,32 @@ export default function EditPanel() {
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-auto p-6">
+      <div className="flex-1 overflow-auto p-6 text-white editor-panel-content" style={{ backgroundColor: '#1f1f1f' }}>
+        <style>{`
+          .editor-panel-content input:not([type="file"]),
+          .editor-panel-content textarea,
+          .editor-panel-content select {
+            background-color: #2a2a2a !important;
+            color: #ffffff !important;
+            border-color: #4b5563 !important;
+          }
+          .editor-panel-content input::placeholder,
+          .editor-panel-content textarea::placeholder {
+            color: #9ca3af !important;
+          }
+        `}</style>
         {/* Calculator Test Data Button - Only show for CALC section */}
         {currentSection.id === 'calc' && (
-          <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <h4 className="font-semibold text-blue-900">Calculator Test Mode</h4>
-                <p className="text-sm text-blue-700">Load North Battleford sample data to verify calculations</p>
+                <h4 className="font-semibold text-white">Calculator Test Mode</h4>
+                <p className="text-sm text-gray-300">Load North Battleford sample data to verify calculations</p>
               </div>
               <Button
                 onClick={loadCalcTestData}
                 variant="outline"
-                className="border-blue-300 text-blue-700 hover:bg-blue-100"
+                className="border-gray-600 text-white hover:bg-gray-700"
               >
                 <Play className="w-4 h-4 mr-2" />
                 Load Valcre Test Data
@@ -220,34 +249,55 @@ export default function EditPanel() {
           </div>
         )}
 
-        {/* Subsections with dark gray headers */}
-        {currentSection.subsections?.map((subsection) => (
-          <div key={subsection.id} className="mb-8">
-            <div style={{
-              backgroundColor: '#4b5563',
-              color: '#ffffff',
-              padding: '8px 16px',
-              fontWeight: '600',
-              fontSize: '13px',
-              marginBottom: '16px',
-              borderBottom: '1px solid #374151'
-            }}>
-              {subsection.title}
+        {/* Subsections as collapsible cards */}
+        {currentSection.subsections?.map((subsection) => {
+          const isCollapsed = collapsedSubsections.has(subsection.id);
+
+          return (
+            <div
+              key={subsection.id}
+              className="mb-4 rounded-lg border border-gray-700 overflow-hidden"
+            >
+              {/* Clickable header */}
+              <button
+                type="button"
+                onClick={() => toggleSubsection(subsection.id)}
+                className="w-full flex items-center justify-between px-4 py-3 bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer"
+              >
+                <span className="font-semibold text-sm text-white">
+                  {subsection.title}
+                </span>
+                <ChevronDown
+                  className={cn(
+                    "w-4 h-4 text-gray-400 transition-transform duration-200",
+                    isCollapsed && "-rotate-90"
+                  )}
+                />
+              </button>
+
+              {/* Collapsible content */}
+              <div
+                className={cn(
+                  "transition-all duration-200 ease-in-out overflow-hidden",
+                  isCollapsed ? "max-h-0 opacity-0" : "max-h-[5000px] opacity-100"
+                )}
+              >
+                <div className="p-4 bg-gray-800/50">
+                  {subsection.fields.map(renderField)}
+                </div>
+              </div>
             </div>
-            <div className="pl-2">
-              {subsection.fields.map(renderField)}
-            </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* Related Images from Image Management */}
         {relatedImages.length > 0 && (
           <div className="mb-8">
-            <div className="bg-emerald-700 text-white px-4 py-2 font-semibold text-sm mb-4 flex items-center gap-2">
+            <div className="text-white px-0 py-2 font-semibold text-sm mb-4 flex items-center gap-2 border-b border-[#4b5563]">
               <ImageIcon className="w-4 h-4" />
               SECTION IMAGES
             </div>
-            <p className="text-xs text-muted-foreground mb-4 px-2">
+            <p className="text-xs text-gray-300 mb-4 px-2">
               Images for this section (managed in S3 IMAGE MGT)
             </p>
             <div className="grid grid-cols-2 gap-4 pl-2">

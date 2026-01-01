@@ -2,7 +2,7 @@ import { useReportBuilderStore } from '../store/reportBuilderStore';
 
 /**
  * Maps approach toggle field IDs to their associated section IDs.
- * When a toggle is disabled (false), all sections in its array are hidden from the sidebar.
+ * When a toggle is disabled (false), all sections in its array are dimmed in the sidebar.
  */
 const APPROACH_TO_SECTIONS_MAP: Record<string, string[]> = {
   'home-use-income-approach': ['income', 'calc', 'rentroll', 'calc-output', 'hist'],
@@ -50,46 +50,53 @@ export default function SectionSidebar() {
     return 0; // Maintain original order for all other sections
   });
 
-  // Build set of section IDs to hide based on disabled approach toggles
-  const hiddenSectionIds = new Set<string>();
+  // Build set of section IDs that are DISABLED (dimmed, not hidden)
+  const disabledSectionIds = new Set<string>();
   for (const [toggleFieldId, sectionIds] of Object.entries(APPROACH_TO_SECTIONS_MAP)) {
     // Default behavior: if toggle value is undefined/null, treat as TRUE (enabled)
-    // Only hide sections when toggle is explicitly false
+    // Only disable sections when toggle is explicitly false
     const toggleValue = getFieldValueFromSections(sections, toggleFieldId);
     const isEnabled = toggleValue !== false;
     if (!isEnabled) {
-      sectionIds.forEach(id => hiddenSectionIds.add(id));
+      sectionIds.forEach(id => disabledSectionIds.add(id));
     }
   }
 
-  // Filter out sections whose approach is disabled
-  const editorSections = sortedSections.filter(section => !hiddenSectionIds.has(section.id));
+  // Keep ALL sections visible (don't filter) - disabled ones will be dimmed
+  const editorSections = sortedSections;
 
   return (
     <div className="w-[180px] text-white flex flex-col h-full overflow-y-auto" style={{ backgroundColor: '#2a2a2a' }}>
-      {editorSections.map((section) => (
-        <button
-          key={section.id}
-          onClick={() => setActiveSection(section.id)}
-          className="px-4 py-3 text-left font-semibold text-sm transition-colors border-b"
-          style={{
-            backgroundColor: activeSection === section.id ? '#333333' : '#2a2a2a',
-            borderColor: '#4b5563',
-            borderLeft: activeSection === section.id ? '4px solid #ffffff' : 'none',
-            color: '#ffffff'
-          }}
-          onMouseEnter={(e) => {
-            if (activeSection !== section.id) {
-              e.currentTarget.style.backgroundColor = '#333333';
-            }
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = activeSection === section.id ? '#333333' : '#2a2a2a';
-          }}
-        >
-          {section.shortName}
-        </button>
-      ))}
+      {editorSections.map((section) => {
+        const isDisabled = disabledSectionIds.has(section.id);
+
+        return (
+          <button
+            key={section.id}
+            onClick={() => !isDisabled && setActiveSection(section.id)}
+            disabled={isDisabled}
+            className="px-4 py-3 text-left font-semibold text-sm transition-colors border-b"
+            style={{
+              backgroundColor: activeSection === section.id ? '#333333' : '#2a2a2a',
+              borderColor: '#4b5563',
+              borderLeft: activeSection === section.id ? '4px solid #ffffff' : 'none',
+              color: isDisabled ? '#666666' : '#ffffff',
+              opacity: isDisabled ? 0.5 : 1,
+              cursor: isDisabled ? 'not-allowed' : 'pointer',
+            }}
+            onMouseEnter={(e) => {
+              if (!isDisabled && activeSection !== section.id) {
+                e.currentTarget.style.backgroundColor = '#333333';
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = activeSection === section.id ? '#333333' : '#2a2a2a';
+            }}
+          >
+            {section.shortName}
+          </button>
+        );
+      })}
     </div>
   );
 }

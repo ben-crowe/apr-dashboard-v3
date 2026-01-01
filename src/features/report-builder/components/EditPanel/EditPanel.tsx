@@ -256,22 +256,27 @@ export default function EditPanel() {
           return (
             <div
               key={subsection.id}
-              className="mb-4 rounded-lg border border-gray-700 overflow-hidden"
+              className="mb-4 rounded-lg overflow-hidden"
+              style={{ border: '1px solid #3a3a3a' }}
             >
               {/* Clickable header */}
               <button
                 type="button"
                 onClick={() => toggleSubsection(subsection.id)}
-                className="w-full flex items-center justify-between px-4 py-3 bg-gray-800 hover:bg-gray-700 transition-colors cursor-pointer"
+                className="w-full flex items-center justify-between px-4 py-3 transition-colors cursor-pointer"
+                style={{ backgroundColor: '#2a2a2a' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#333333'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
               >
                 <span className="font-semibold text-sm text-white">
                   {subsection.title}
                 </span>
                 <ChevronDown
                   className={cn(
-                    "w-4 h-4 text-gray-400 transition-transform duration-200",
+                    "w-4 h-4 transition-transform duration-200",
                     isCollapsed && "-rotate-90"
                   )}
+                  style={{ color: '#888888' }}
                 />
               </button>
 
@@ -282,7 +287,7 @@ export default function EditPanel() {
                   isCollapsed ? "max-h-0 opacity-0" : "max-h-[5000px] opacity-100"
                 )}
               >
-                <div className="p-4 bg-gray-800/50">
+                <div className="p-4" style={{ backgroundColor: '#252525' }}>
                   {subsection.fields.map(renderField)}
                 </div>
               </div>

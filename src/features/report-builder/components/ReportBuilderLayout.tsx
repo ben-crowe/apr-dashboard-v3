@@ -13,7 +13,34 @@ import { useReportBuilderStore } from '../store/reportBuilderStore';
 
 export default function ReportBuilderLayout() {
   const navigate = useNavigate();
-  const generatePreview = useReportBuilderStore((state) => state.generatePreview);
+  const sections = useReportBuilderStore((state) => state.sections);
+  const updateFieldValue = useReportBuilderStore((state) => state.updateFieldValue);
+
+  // Force sync by "touching" a field - re-setting it to its current value triggers generatePreview
+  const handleSyncPreview = () => {
+    // Find any field with a value to "touch"
+    for (const section of sections) {
+      for (const field of section.fields) {
+        if (field.value && field.value !== '') {
+          // Re-set the field to its current value - this triggers updateFieldValue → generatePreview
+          updateFieldValue(field.id, field.value);
+          console.log(`Sync Preview: touched field "${field.id}" to force preview update`);
+          return;
+        }
+      }
+      // Also check subsections
+      for (const sub of section.subsections || []) {
+        for (const field of sub.fields) {
+          if (field.value && field.value !== '') {
+            updateFieldValue(field.id, field.value);
+            console.log(`Sync Preview: touched field "${field.id}" to force preview update`);
+            return;
+          }
+        }
+      }
+    }
+    console.log('Sync Preview: No fields with values found to touch');
+  };
 
   // Note: Test data is loaded from TDD page (/test-input), not from Report Builder
   // The store persists data across navigation
@@ -46,7 +73,7 @@ export default function ReportBuilderLayout() {
         </div>
         <div className="flex items-center gap-3">
           <Button
-            onClick={() => generatePreview()}
+            onClick={handleSyncPreview}
             variant="ghost"
             size="sm"
             className="gap-2 text-white hover:!bg-[#2a2a2a] hover:!text-white"

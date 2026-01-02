@@ -77,6 +77,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'client-city', storeId: 'client-city', label: 'Client City', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
   { id: 'client-province', storeId: 'client-province', label: 'Client Province', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
   { id: 'client-full-name', storeId: 'client-full-name', label: 'Client Full Name', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
+  // Template aliases - these map to other fields but template uses these IDs
+  { id: 'client-name', storeId: 'client-name', label: 'Client Name', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'client-company', storeId: 'client-company', label: 'Client Company', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
 
   // Property Information Subsection
   { id: 'property-name', storeId: 'property-name', label: 'Property Name', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: true },
@@ -128,6 +131,10 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'appraiser-title', storeId: 'appraiser-title', label: 'Appraiser Title', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'appraiser-email', storeId: 'appraiser-email', label: 'Appraiser Email', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'appraiser-aic', storeId: 'appraiser-aic', label: 'AIC Number', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  // Template aliases - template uses these exact IDs
+  { id: 'appraiser-designation', storeId: 'appraiser-designation', label: 'Appraiser Designation', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser-license', storeId: 'appraiser-license', label: 'Appraiser License', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser-aic-number', storeId: 'appraiser-aic-number', label: 'AIC Member Number', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
   // Appraiser 1 (for multi-appraiser reports - template uses appraiser1-* format)
   { id: 'appraiser1-name', storeId: 'appraiser1-name', label: 'Appraiser 1 Name', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'appraiser1-title', storeId: 'appraiser1-title', label: 'Appraiser 1 Title', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },

@@ -83,7 +83,21 @@ const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
 const APPROACH_TOGGLE_IDS = ['home-use-income-approach', 'home-use-sales-approach', 'home-use-cost-approach'];
 
 export default function EditPanel() {
-  const { sections, activeSection, updateFieldValue, loadCalcTestData, loadHomeTestData } = useReportBuilderStore();
+  const {
+    sections,
+    activeSection,
+    updateFieldValue,
+    loadCalcTestData,
+    loadHomeTestData,
+    loadCoverTestData,
+    loadMapsTestData,
+    loadAssignmentTestData,
+    loadExecTestData,
+    loadSiteTestData,
+    loadImprovementsTestData,
+    loadSalesTestData,
+    loadIncomeTestData,
+  } = useReportBuilderStore();
 
   // Track which subsections are EXPANDED (empty = all collapsed by default)
   const [expandedSubsections, setExpandedSubsections] = useState<Set<string>>(new Set());
@@ -576,6 +590,166 @@ export default function EditPanel() {
               >
                 <Play className="w-4 h-4 mr-2" />
                 Load Valcre Test Data
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Cover Test Data Button - Only show for COVER section */}
+        {currentSection.id === 'cover' && (
+          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-white">Test Data</h4>
+                <p className="text-sm text-gray-300">Load North Battleford sample data for Cover fields</p>
+              </div>
+              <Button
+                onClick={loadCoverTestData}
+                variant="outline"
+                className="border-gray-600 text-white hover:bg-gray-700"
+              >
+                <Database className="w-4 h-4 mr-2" />
+                Load Test Data
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Maps Test Data Button - Only show for MAPS section */}
+        {currentSection.id === 'maps' && (
+          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-white">Test Data</h4>
+                <p className="text-sm text-gray-300">Load North Battleford sample data for Maps fields</p>
+              </div>
+              <Button
+                onClick={loadMapsTestData}
+                variant="outline"
+                className="border-gray-600 text-white hover:bg-gray-700"
+              >
+                <Database className="w-4 h-4 mr-2" />
+                Load Test Data
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Assignment Test Data Button - Only show for ASSIGNMENT section */}
+        {currentSection.id === 'assignment' && (
+          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-white">Test Data</h4>
+                <p className="text-sm text-gray-300">Load North Battleford sample data for Assignment fields</p>
+              </div>
+              <Button
+                onClick={loadAssignmentTestData}
+                variant="outline"
+                className="border-gray-600 text-white hover:bg-gray-700"
+              >
+                <Database className="w-4 h-4 mr-2" />
+                Load Test Data
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Exec Test Data Button - Only show for EXEC section */}
+        {currentSection.id === 'exec' && (
+          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-white">Test Data</h4>
+                <p className="text-sm text-gray-300">Load North Battleford sample data for Executive Summary fields</p>
+              </div>
+              <Button
+                onClick={loadExecTestData}
+                variant="outline"
+                className="border-gray-600 text-white hover:bg-gray-700"
+              >
+                <Database className="w-4 h-4 mr-2" />
+                Load Test Data
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Site Test Data Button - Only show for SITE section */}
+        {currentSection.id === 'site' && (
+          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-white">Test Data</h4>
+                <p className="text-sm text-gray-300">Load North Battleford sample data for Site Description fields</p>
+              </div>
+              <Button
+                onClick={loadSiteTestData}
+                variant="outline"
+                className="border-gray-600 text-white hover:bg-gray-700"
+              >
+                <Database className="w-4 h-4 mr-2" />
+                Load Test Data
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Improvements Test Data Button - Only show for IMPV section */}
+        {currentSection.id === 'impv' && (
+          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-white">Test Data</h4>
+                <p className="text-sm text-gray-300">Load North Battleford sample data for Improvements fields</p>
+              </div>
+              <Button
+                onClick={loadImprovementsTestData}
+                variant="outline"
+                className="border-gray-600 text-white hover:bg-gray-700"
+              >
+                <Database className="w-4 h-4 mr-2" />
+                Load Test Data
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Sales Test Data Button - Only show for SALES section */}
+        {currentSection.id === 'sales' && (
+          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-white">Test Data</h4>
+                <p className="text-sm text-gray-300">Load North Battleford sample data for Sales Comparison fields</p>
+              </div>
+              <Button
+                onClick={loadSalesTestData}
+                variant="outline"
+                className="border-gray-600 text-white hover:bg-gray-700"
+              >
+                <Database className="w-4 h-4 mr-2" />
+                Load Test Data
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Income Test Data Button - Only show for INCOME section */}
+        {currentSection.id === 'income' && (
+          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-white">Test Data</h4>
+                <p className="text-sm text-gray-300">Load North Battleford sample data for Income Approach fields</p>
+              </div>
+              <Button
+                onClick={loadIncomeTestData}
+                variant="outline"
+                className="border-gray-600 text-white hover:bg-gray-700"
+              >
+                <Database className="w-4 h-4 mr-2" />
+                Load Test Data
               </Button>
             </div>
           </div>

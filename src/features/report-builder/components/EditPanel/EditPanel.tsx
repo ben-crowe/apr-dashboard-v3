@@ -79,6 +79,226 @@ const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
   ],
 };
 
+// Layout configuration for Cover section field groupings
+const COVER_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
+  'client-info': [
+    { fields: ['client-contact-name', 'client-company'], widths: ['50%', '50%'] },
+    { fields: ['client-address'], widths: ['100%'] },
+    { fields: ['client-city', 'client-province', 'client-postal'], widths: ['40%', '30%', '30%'] },
+  ],
+  'appraiser-info': [
+    { fields: ['appraiser-name', 'appraiser-credentials'], widths: ['50%', '50%'] },
+    { fields: ['appraiser-title', 'appraiser-company'], widths: ['50%', '50%'] },
+    { fields: ['appraiser-address'], widths: ['100%'] },
+    { fields: ['appraiser-city', 'appraiser-phone'], widths: ['50%', '50%'] },
+    { fields: ['appraiser-website', 'appraiser-email'], widths: ['50%', '50%'] },
+    { fields: ['appraiser-aic-number'], widths: ['50%'] },
+  ],
+};
+
+// Layout configuration for Maps section - images full width
+const MAPS_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
+  'location-maps': [
+    { fields: ['img-map-regional'], widths: ['100%'] },
+    { fields: ['img-map-local'], widths: ['100%'] },
+  ],
+  'aerial-maps': [
+    { fields: ['img-map-aerial-1'], widths: ['100%'] },
+    { fields: ['img-map-aerial-2'], widths: ['100%'] },
+    { fields: ['img-zoning-map'], widths: ['100%'] },
+  ],
+  'site-plans': [
+    { fields: ['img-site-plan-1'], widths: ['100%'] },
+    { fields: ['img-site-plan-2'], widths: ['100%'] },
+  ],
+};
+
+// Layout configuration for Assignment section
+const ASSIGNMENT_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
+  'assignment-property-id': [
+    { fields: ['assignment-property-legal'], widths: ['100%'] },
+    { fields: ['assignment-property-address'], widths: ['100%'] },
+    { fields: ['assignment-property-type', 'assignment-property-interest'], widths: ['50%', '50%'] },
+  ],
+  'assignment-client': [
+    { fields: ['assignment-client-name'], widths: ['100%'] },
+    { fields: ['assignment-client-address'], widths: ['100%'] },
+    { fields: ['assignment-intended-use'], widths: ['100%'] },
+    { fields: ['assignment-intended-users'], widths: ['100%'] },
+  ],
+  'assignment-scope': [
+    { fields: ['assignment-inspection-date', 'assignment-inspection-type'], widths: ['50%', '50%'] },
+    { fields: ['assignment-inspector-name'], widths: ['50%'] },
+    { fields: ['assignment-data-sources'], widths: ['100%'] },
+    { fields: ['assignment-analysis-methods'], widths: ['100%'] },
+  ],
+  'assignment-dates': [
+    { fields: ['assignment-effective-date', 'assignment-report-date'], widths: ['50%', '50%'] },
+  ],
+  'assignment-conditions': [
+    { fields: ['assignment-hypothetical'], widths: ['100%'] },
+    { fields: ['assignment-extraordinary-assumptions'], widths: ['100%'] },
+    { fields: ['assignment-general-assumptions'], widths: ['100%'] },
+    { fields: ['assignment-limiting-conditions'], widths: ['100%'] },
+  ],
+};
+
+// Layout configuration for Exec section
+const EXEC_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
+  'property-identification': [
+    { fields: ['value-scenario', 'property-rights'], widths: ['50%', '50%'] },
+    { fields: ['building-style', 'total-buildings'], widths: ['50%', '50%'] },
+    { fields: ['total-nra', 'total-units'], widths: ['50%', '50%'] },
+    { fields: ['year-built', 'occupancy-rate'], widths: ['50%', '50%'] },
+    { fields: ['stories', 'building-format'], widths: ['50%', '50%'] },
+  ],
+  'value-summary': [
+    { fields: ['concluded-value'], widths: ['100%'] },
+    { fields: ['hypothetical-conditions'], widths: ['100%'] },
+    { fields: ['extraordinary-assumptions'], widths: ['100%'] },
+    { fields: ['extraordinary-limiting-conditions'], widths: ['100%'] },
+  ],
+};
+
+// Layout configuration for Site section
+const SITE_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
+  'site-area': [
+    { fields: ['site-total-area', 'site-acreage'], widths: ['50%', '50%'] },
+    { fields: ['site-address'], widths: ['100%'] },
+    { fields: ['site-shape', 'topography', 'accessibility'], widths: ['33.33%', '33.33%', '33.33%'] },
+    { fields: ['exposure-visibility'], widths: ['100%'] },
+  ],
+  'adjacent-uses': [
+    { fields: ['adjacent-north', 'adjacent-south'], widths: ['50%', '50%'] },
+    { fields: ['adjacent-east', 'adjacent-west'], widths: ['50%', '50%'] },
+  ],
+  'site-conditions': [
+    { fields: ['easements'], widths: ['100%'] },
+    { fields: ['soils'], widths: ['100%'] },
+    { fields: ['hazardous-waste'], widths: ['100%'] },
+    { fields: ['site-rating'], widths: ['100%'] },
+    { fields: ['site-conclusion'], widths: ['100%'] },
+  ],
+  'site-plan-images': [
+    { fields: ['site-plan-image'], widths: ['100%'] },
+  ],
+};
+
+// Layout configuration for Impv (Improvements) section
+const IMPV_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
+  'building-overview': [
+    { fields: ['impv-overview'], widths: ['100%'] },
+    { fields: ['impv-num-buildings', 'impv-nra'], widths: ['50%', '50%'] },
+    { fields: ['impv-year-built', 'impv-num-units'], widths: ['50%', '50%'] },
+    { fields: ['impv-stories', 'impv-building-format'], widths: ['50%', '50%'] },
+  ],
+  'amenities': [
+    { fields: ['project-amenities'], widths: ['100%'] },
+    { fields: ['unit-amenities'], widths: ['100%'] },
+    { fields: ['laundry'], widths: ['100%'] },
+    { fields: ['security'], widths: ['100%'] },
+  ],
+  'construction': [
+    { fields: ['foundation', 'exterior-walls', 'roof'], widths: ['33.33%', '33.33%', '33.33%'] },
+    { fields: ['impv-roof-condition', 'impv-insulation', 'elevator'], widths: ['33.33%', '33.33%', '33.33%'] },
+  ],
+  'systems': [
+    { fields: ['hvac', 'electrical'], widths: ['50%', '50%'] },
+    { fields: ['plumbing', 'fire-protection'], widths: ['50%', '50%'] },
+  ],
+  'finishes': [
+    { fields: ['interior-walls', 'ceilings'], widths: ['50%', '50%'] },
+    { fields: ['flooring', 'doors-windows'], widths: ['50%', '50%'] },
+    { fields: ['impv-interior-finish'], widths: ['100%'] },
+  ],
+  'site-improvements': [
+    { fields: ['site-impv'], widths: ['100%'] },
+    { fields: ['landscaping'], widths: ['100%'] },
+    { fields: ['parking-spaces', 'parking-ratio'], widths: ['50%', '50%'] },
+    { fields: ['impv-building-footprint', 'impv-site-coverage'], widths: ['50%', '50%'] },
+  ],
+  'condition': [
+    { fields: ['overall-condition'], widths: ['100%'] },
+    { fields: ['functional-design'], widths: ['100%'] },
+    { fields: ['hazardous-materials'], widths: ['100%'] },
+  ],
+};
+
+// Layout configuration for Sales section
+const SALES_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
+  'subject-summary': [
+    { fields: ['subject-units', 'subject-gba', 'subject-year'], widths: ['33.33%', '33.33%', '33.33%'] },
+    { fields: ['subject-site-area', 'subject-parking', 'subject-condition'], widths: ['33.33%', '33.33%', '33.33%'] },
+  ],
+  'sale-comp-1': [
+    { fields: ['comp1-name', 'comp1-address'], widths: ['50%', '50%'] },
+    { fields: ['comp1-sale-date', 'comp1-sale-price'], widths: ['50%', '50%'] },
+    { fields: ['comp1-units', 'comp1-price-per-unit'], widths: ['50%', '50%'] },
+    { fields: ['comp1-gba', 'comp1-price-per-sf'], widths: ['50%', '50%'] },
+    { fields: ['comp1-year', 'comp1-cap-rate'], widths: ['50%', '50%'] },
+    { fields: ['comp1-adj-property-rights', 'comp1-adj-financing'], widths: ['50%', '50%'] },
+    { fields: ['comp1-adj-conditions-sale', 'comp1-adj-market-time'], widths: ['50%', '50%'] },
+    { fields: ['comp1-adj-location', 'comp1-adj-size'], widths: ['50%', '50%'] },
+    { fields: ['comp1-adj-age-condition', 'comp1-adj-other'], widths: ['50%', '50%'] },
+  ],
+  'sale-comp-2': [
+    { fields: ['comp2-name', 'comp2-address'], widths: ['50%', '50%'] },
+    { fields: ['comp2-sale-date', 'comp2-sale-price'], widths: ['50%', '50%'] },
+    { fields: ['comp2-units', 'comp2-price-per-unit'], widths: ['50%', '50%'] },
+    { fields: ['comp2-gba', 'comp2-price-per-sf'], widths: ['50%', '50%'] },
+    { fields: ['comp2-year', 'comp2-cap-rate'], widths: ['50%', '50%'] },
+    { fields: ['comp2-adj-property-rights', 'comp2-adj-financing'], widths: ['50%', '50%'] },
+    { fields: ['comp2-adj-conditions-sale', 'comp2-adj-market-time'], widths: ['50%', '50%'] },
+    { fields: ['comp2-adj-location', 'comp2-adj-size'], widths: ['50%', '50%'] },
+    { fields: ['comp2-adj-age-condition', 'comp2-adj-other'], widths: ['50%', '50%'] },
+  ],
+  'sale-comp-3': [
+    { fields: ['comp3-name', 'comp3-address'], widths: ['50%', '50%'] },
+    { fields: ['comp3-sale-date', 'comp3-sale-price'], widths: ['50%', '50%'] },
+    { fields: ['comp3-units', 'comp3-price-per-unit'], widths: ['50%', '50%'] },
+    { fields: ['comp3-gba', 'comp3-price-per-sf'], widths: ['50%', '50%'] },
+    { fields: ['comp3-year', 'comp3-cap-rate'], widths: ['50%', '50%'] },
+    { fields: ['comp3-adj-property-rights', 'comp3-adj-financing'], widths: ['50%', '50%'] },
+    { fields: ['comp3-adj-conditions-sale', 'comp3-adj-market-time'], widths: ['50%', '50%'] },
+    { fields: ['comp3-adj-location', 'comp3-adj-size'], widths: ['50%', '50%'] },
+    { fields: ['comp3-adj-age-condition', 'comp3-adj-other'], widths: ['50%', '50%'] },
+  ],
+  'sales-conclusion': [
+    { fields: ['sales-value-indication'], widths: ['100%'] },
+    { fields: ['sales-adjustment-summary'], widths: ['100%'] },
+  ],
+};
+
+// Layout configuration for Income section
+const INCOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
+  'income-potential': [
+    { fields: ['income-pgi-narrative'], widths: ['100%'] },
+  ],
+  'income-expenses': [
+    { fields: ['income-expense-narrative'], widths: ['100%'] },
+  ],
+  'income-noi': [
+    { fields: ['income-noi-narrative'], widths: ['100%'] },
+  ],
+  'income-analysis': [
+    { fields: ['income-cap-rate-analysis'], widths: ['100%'] },
+    { fields: ['income-value-indication'], widths: ['100%'] },
+  ],
+};
+
+// Combined section layouts for all sections
+const SECTION_FIELD_LAYOUTS: Record<string, Record<string, SubsectionLayout>> = {
+  'home': HOME_FIELD_LAYOUT,
+  'cover': COVER_FIELD_LAYOUT,
+  'maps': MAPS_FIELD_LAYOUT,
+  'assignment': ASSIGNMENT_FIELD_LAYOUT,
+  'exec': EXEC_FIELD_LAYOUT,
+  'site': SITE_FIELD_LAYOUT,
+  'impv': IMPV_FIELD_LAYOUT,
+  'sales': SALES_FIELD_LAYOUT,
+  'income': INCOME_FIELD_LAYOUT,
+};
+
 // Approach toggle field IDs - these are rendered separately at top of Home section
 const APPROACH_TOGGLE_IDS = ['home-use-income-approach', 'home-use-sales-approach', 'home-use-cost-approach'];
 
@@ -447,11 +667,13 @@ export default function EditPanel() {
   };
 
   // Render subsection fields with optional row grouping layout
-  const renderSubsectionFields = (subsection: ReportSubsection, isHomeSection: boolean) => {
-    const layout = isHomeSection ? HOME_FIELD_LAYOUT[subsection.id] : undefined;
+  // Uses SECTION_FIELD_LAYOUTS to get layout for any section (not just home)
+  const renderSubsectionFields = (subsection: ReportSubsection, sectionId: string) => {
+    const sectionLayout = SECTION_FIELD_LAYOUTS[sectionId];
+    const layout = sectionLayout?.[subsection.id];
 
     if (layout) {
-      // Render with row grouping
+      // Render with row grouping - fields on same row share horizontal space
       return layout.map((row, rowIndex) => (
         <div key={rowIndex} className="flex gap-3 mb-4">
           {row.fields.map((fieldId, fieldIndex) => {
@@ -467,8 +689,22 @@ export default function EditPanel() {
       ));
     }
 
-    // Fallback: render fields normally (one per line)
-    return subsection.fields.map(renderField);
+    // Fallback: render fields in 2-column grid for short fields, full width for textareas
+    return (
+      <div className="grid grid-cols-2 gap-3">
+        {subsection.fields.map(field => {
+          const isWideField = field.type === 'textarea' || field.type === 'image' ||
+                              field.label?.toLowerCase().includes('description') ||
+                              field.label?.toLowerCase().includes('narrative') ||
+                              field.label?.toLowerCase().includes('address');
+          return (
+            <div key={field.id} className={isWideField ? 'col-span-2' : ''}>
+              {renderField(field)}
+            </div>
+          );
+        })}
+      </div>
+    );
   };
 
   const isHomeSection = currentSection.id === 'home';
@@ -801,7 +1037,7 @@ export default function EditPanel() {
                 )}
               >
                 <div className="p-4" style={{ backgroundColor: '#252525' }}>
-                  {renderSubsectionFields(subsection, isHomeSection)}
+                  {renderSubsectionFields(subsection, currentSection.id)}
                 </div>
               </div>
             </div>

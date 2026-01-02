@@ -76,7 +76,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'client-address', storeId: 'client-address', label: 'Client Address', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
   { id: 'client-city', storeId: 'client-city', label: 'Client City', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
   { id: 'client-province', storeId: 'client-province', label: 'Client Province', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'client-full-name', storeId: 'client-full-name', label: 'Client Full Name', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'calculated', required: false, calculationFormula: 'client-first-name + " " + client-last-name' },
+  { id: 'client-full-name', storeId: 'client-full-name', label: 'Client Full Name', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
 
   // Property Information Subsection
   { id: 'property-name', storeId: 'property-name', label: 'Property Name', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: true },

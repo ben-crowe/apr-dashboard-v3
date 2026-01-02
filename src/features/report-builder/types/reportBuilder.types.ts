@@ -63,6 +63,14 @@ export interface ReportBuilderState {
   toggleSidebar: () => void;
   loadCalcTestData: () => void;
   loadHomeTestData: () => Promise<void>;
+  loadCoverTestData: () => Promise<void>;
+  loadMapsTestData: () => Promise<void>;
+  loadAssignmentTestData: () => Promise<void>;
+  loadExecTestData: () => Promise<void>;
+  loadSiteTestData: () => Promise<void>;
+  loadImprovementsTestData: () => Promise<void>;
+  loadSalesTestData: () => Promise<void>;
+  loadIncomeTestData: () => Promise<void>;
   runCalculations: () => void;
   loadFullTestData: () => void;
   loadUserInputsOnly: () => Promise<void>;

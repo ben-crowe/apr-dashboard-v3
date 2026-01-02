@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ResizablePanelGroup,
@@ -14,13 +13,10 @@ import { useReportBuilderStore } from '../store/reportBuilderStore';
 
 export default function ReportBuilderLayout() {
   const navigate = useNavigate();
-  const generatePreview = useReportBuilderStore((state) => state.generatePreview);
   const loadFullTestData = useReportBuilderStore((state) => state.loadFullTestData);
 
-  // Generate preview on mount to show any pre-loaded data (e.g., from TDD)
-  useEffect(() => {
-    generatePreview();
-  }, [generatePreview]);
+  // Note: generatePreview is already called by MockReportBuilder.tsx after clearing cache
+  // Adding another call here would race with it and show stale data
 
   const handleLoadTestData = async () => {
     await loadFullTestData();

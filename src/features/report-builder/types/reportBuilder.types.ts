@@ -51,6 +51,7 @@ export interface ReportBuilderState {
   isDirty: boolean;
   sidebarCollapsed: boolean;
   activeTestMode: TestMode; // Mutually exclusive test modes
+  testDataLoaded: Record<string, boolean>; // Tracks which sections have had test data loaded (e.g., { home: true, cover: false })
 
   // Actions
   setActiveSection: (sectionId: string) => void;
@@ -72,7 +73,8 @@ export interface ReportBuilderState {
   loadSalesTestData: () => Promise<void>;
   loadIncomeTestData: () => Promise<void>;
   runCalculations: () => void;
-  loadFullTestData: () => void;
+  loadFullTestData: () => Promise<void>;
   loadUserInputsOnly: () => Promise<void>;
   setTestMode: (mode: TestMode) => void; // Switch between test modes
+  setTestDataLoaded: (sectionId: string, loaded: boolean) => void; // Mark section test data as loaded/unloaded
 }

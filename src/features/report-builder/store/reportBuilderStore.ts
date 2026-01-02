@@ -7061,6 +7061,21 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   loadFullTestData: async () => {
     console.log("=== LOAD FULL TEST DATA CALLED ===");
     
+    // Ensure sections are initialized first
+    let sections = get().sections;
+    if (!sections || sections.length === 0) {
+      console.log("Sections not initialized, initializing...");
+      await get().initializeMockData();
+      sections = get().sections;
+    }
+    
+    if (!sections || sections.length === 0) {
+      console.error("Failed to initialize sections");
+      return;
+    }
+    
+    console.log(`Sections initialized: ${sections.length} sections`);
+    
     // Call all section-specific loaders
     await get().loadHomeTestData();
     await get().loadCoverTestData();

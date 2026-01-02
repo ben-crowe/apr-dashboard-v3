@@ -5,22 +5,16 @@ import {
   ResizableHandle,
 } from '@/components/ui/resizable';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, RefreshCw, Database } from 'lucide-react';
+import { ArrowLeft, RefreshCw } from 'lucide-react';
 import EditPanel from './EditPanel/EditPanel';
 import PreviewPanel from './PreviewPanel/PreviewPanel';
 import SectionSidebar from './SectionSidebar';
-import { useReportBuilderStore } from '../store/reportBuilderStore';
 
 export default function ReportBuilderLayout() {
   const navigate = useNavigate();
-  const loadFullTestData = useReportBuilderStore((state) => state.loadFullTestData);
 
-  // Note: generatePreview is already called by MockReportBuilder.tsx after clearing cache
-  // Adding another call here would race with it and show stale data
-
-  const handleLoadTestData = async () => {
-    await loadFullTestData();
-  };
+  // Note: Test data is loaded from TDD page (/test-input), not from Report Builder
+  // The store persists data across navigation
 
   return (
     <div className="h-screen w-full flex flex-col overflow-hidden">
@@ -49,29 +43,6 @@ export default function ReportBuilderLayout() {
           <span className="font-semibold">Report Builder</span>
         </div>
         <div className="flex items-center gap-3">
-          <Button
-            onClick={handleLoadTestData}
-            variant="ghost"
-            size="sm"
-            className="gap-2 text-white border hover:!text-white"
-            style={{
-              backgroundColor: '#2a2a2a',
-              borderColor: '#4b5563',
-              color: '#ffffff'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#333333';
-              e.currentTarget.style.color = '#ffffff';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#2a2a2a';
-              e.currentTarget.style.color = '#ffffff';
-            }}
-            title="Load ALL fields from test data for full mapping validation"
-          >
-            <Database className="w-4 h-4" />
-            Load Full Test Data
-          </Button>
           <Button
             onClick={() => window.location.reload()}
             variant="ghost"

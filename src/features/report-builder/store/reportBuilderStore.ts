@@ -5886,6 +5886,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   isDirty: false,
   sidebarCollapsed: false,
   activeTestMode: 'none', // Mutually exclusive test modes: 'none' | 'test-report' | 'designer'
+  testDataLoaded: {}, // Tracks which sections have had test data loaded
 
   setActiveSection: (sectionId: string) => {
     set({ activeSection: sectionId });
@@ -6247,6 +6248,463 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     console.log("Maps test data loaded - regenerating preview...");
     await get().generatePreview();
     console.log("Maps test data loaded successfully");
+  },
+
+  loadAssignmentTestData: async () => {
+    console.log("=== LOAD ASSIGNMENT TEST DATA CALLED ===");
+
+    const updateField = (fieldId: string, value: string | number) => {
+      get().updateFieldValue(fieldId, value);
+    };
+
+    // North Battleford Test Data - Assignment Section Fields
+    // Maps source fields from northBattlefordTestData.ts to assignment field IDs
+
+    // Report Type & Property Rights
+    updateField("report-type", String(northBattlefordTestData["report-type"] || ""));
+    updateField("property-rights", String(northBattlefordTestData["property-rights"] || ""));
+    updateField("property-interest", String(northBattlefordTestData["property-interest"] || ""));
+
+    // Intended Use & Users
+    updateField("intended-use", String(northBattlefordTestData["intended-use"] || ""));
+    updateField("intended-user", String(northBattlefordTestData["intended-user"] || ""));
+
+    // Scope of Work
+    updateField("scope-of-work", String(northBattlefordTestData["scope-of-work"] || ""));
+
+    // Dates
+    updateField("effective-date", String(northBattlefordTestData["effective-date"] || ""));
+    updateField("report-effectivedate", String(northBattlefordTestData["report-effectivedate"] || ""));
+    updateField("inspection-date", String(northBattlefordTestData["inspection-date"] || ""));
+
+    // Valuation Details
+    updateField("valuation-premises", String(northBattlefordTestData["valuation-premises"] || ""));
+    updateField("report-values", String(northBattlefordTestData["report-values"] || ""));
+
+    // Report Guidelines & Standards
+    updateField("report-guidelines", String(northBattlefordTestData["report-guidelines"] || ""));
+    updateField("report-depth", String(northBattlefordTestData["report-depth"] || ""));
+    updateField("report-approaches", String(northBattlefordTestData["report-approaches"] || ""));
+
+    // Assumptions & Conditions
+    updateField("report-extraordinary", String(northBattlefordTestData["report-extraordinary"] || ""));
+    updateField("report-limcond", String(northBattlefordTestData["report-limcond"] || ""));
+
+    // Valuation Narratives
+    updateField("valuation-cost-narrative", String(northBattlefordTestData["valuation-cost-narrative"] || ""));
+    updateField("valuation-sales-narrative", String(northBattlefordTestData["valuation-sales-narrative"] || ""));
+    updateField("valuation-income-narrative", String(northBattlefordTestData["valuation-income-narrative"] || ""));
+    updateField("valuation-land-narrative", String(northBattlefordTestData["valuation-land-narrative"] || ""));
+
+    // Legal Description & Easements
+    updateField("report-legal", String(northBattlefordTestData["report-legal"] || ""));
+    updateField("easements-text", String(northBattlefordTestData["easements-text"] || ""));
+
+    // Regenerate preview
+    console.log("Assignment test data loaded - regenerating preview...");
+    await get().generatePreview();
+    console.log("Assignment test data loaded successfully");
+  },
+
+  loadExecTestData: async () => {
+    console.log("=== LOAD EXEC TEST DATA CALLED ===");
+
+    const updateField = (fieldId: string, value: string | number) => {
+      get().updateFieldValue(fieldId, value);
+    };
+
+    // North Battleford Test Data - Executive Summary Section Fields
+    // Maps source fields from northBattlefordTestData.ts to exec field IDs
+
+    // Property Identification
+    updateField("property-name", String(northBattlefordTestData["property-name"] || ""));
+    updateField("property-address", String(northBattlefordTestData["property-address"] || ""));
+    updateField("city", String(northBattlefordTestData["city"] || ""));
+    updateField("province", String(northBattlefordTestData["province"] || ""));
+    updateField("property-type", String(northBattlefordTestData["property-type"] || ""));
+
+    // Building Details
+    updateField("calc-total-units", String(northBattlefordTestData["calc-total-units"] || ""));
+    updateField("gba", String(northBattlefordTestData["gba"] || ""));
+    updateField("nra", String(northBattlefordTestData["nra"] || ""));
+
+    // Dates
+    updateField("effective-date", String(northBattlefordTestData["effective-date"] || ""));
+    updateField("report-date", String(northBattlefordTestData["report-date"] || ""));
+    updateField("inspection-date", String(northBattlefordTestData["inspection-date"] || ""));
+
+    // Direct Capitalization Values
+    updateField("dircap-value1", String(northBattlefordTestData["dircap-value1"] || ""));
+    updateField("dircap-value1-perunit", String(northBattlefordTestData["dircap-value1-perunit"] || ""));
+    updateField("dircap-value1-psf", String(northBattlefordTestData["dircap-value1-psf"] || ""));
+
+    // Final Value
+    updateField("final-value-conclusion", String(northBattlefordTestData["final-value-conclusion"] || ""));
+
+    // Income & Expense Summary
+    updateField("calc-pgi", String(northBattlefordTestData["calc-pgi"] || ""));
+    updateField("calc-egr", String(northBattlefordTestData["calc-egr"] || ""));
+    updateField("calc-total-expenses", String(northBattlefordTestData["calc-total-expenses"] || ""));
+    updateField("calc-noi", String(northBattlefordTestData["calc-noi"] || ""));
+
+    // Rates & Ratios
+    updateField("calc-cap-rate", String(northBattlefordTestData["calc-cap-rate"] || ""));
+    updateField("expense-ratio", String(northBattlefordTestData["expense-ratio"] || ""));
+
+    // Property Characteristics
+    updateField("site-size", String(northBattlefordTestData["site-size"] || ""));
+    updateField("year-built", String(northBattlefordTestData["year-built"] || ""));
+    updateField("building-class", String(northBattlefordTestData["building-class"] || ""));
+
+    // Ownership
+    updateField("current-owner-text", String(northBattlefordTestData["current-owner-text"] || ""));
+
+    // Regenerate preview
+    console.log("Exec test data loaded - regenerating preview...");
+    await get().generatePreview();
+    console.log("Exec test data loaded successfully");
+  },
+
+  loadSalesTestData: async () => {
+    console.log("=== LOAD SALES TEST DATA CALLED ===");
+
+    const updateField = (fieldId: string, value: string | number) => {
+      get().updateFieldValue(fieldId, value);
+    };
+
+    // North Battleford Test Data - Sales Comparison Approach Fields
+    // Maps comp1 through comp4 fields from northBattlefordTestData.ts
+
+    // Comp 1
+    updateField("comp1-name", String(northBattlefordTestData["comp1-name"] || ""));
+    updateField("comp1-address", String(northBattlefordTestData["comp1-address"] || ""));
+    updateField("comp1-city", String(northBattlefordTestData["comp1-city"] || ""));
+    updateField("comp1-province", String(northBattlefordTestData["comp1-province"] || ""));
+    updateField("comp1-postal", String(northBattlefordTestData["comp1-postal"] || ""));
+    updateField("comp1-sale-price", String(northBattlefordTestData["comp1-sale-price"] || ""));
+    updateField("comp1-sale-date", String(northBattlefordTestData["comp1-sale-date"] || ""));
+    updateField("comp1-buyer", String(northBattlefordTestData["comp1-buyer"] || ""));
+    updateField("comp1-seller", String(northBattlefordTestData["comp1-seller"] || ""));
+    updateField("comp1-financing", String(northBattlefordTestData["comp1-financing"] || ""));
+    updateField("comp1-saleconditions", String(northBattlefordTestData["comp1-saleconditions"] || ""));
+    updateField("comp1-salestatus", String(northBattlefordTestData["comp1-salestatus"] || ""));
+    updateField("comp1-units", String(northBattlefordTestData["comp1-units"] || ""));
+    updateField("comp1-gba", String(northBattlefordTestData["comp1-gba"] || ""));
+    updateField("comp1-nra", String(northBattlefordTestData["comp1-nra"] || ""));
+    updateField("comp1-year-built", String(northBattlefordTestData["comp1-year-built"] || ""));
+    updateField("comp1-condition", String(northBattlefordTestData["comp1-condition"] || ""));
+    updateField("comp1-quality", String(northBattlefordTestData["comp1-quality"] || ""));
+    updateField("comp1-location", String(northBattlefordTestData["comp1-location"] || ""));
+    updateField("comp1-price-per-unit", String(northBattlefordTestData["comp1-price-per-unit"] || ""));
+    updateField("comp1-cap-rate", String(northBattlefordTestData["comp1-cap-rate"] || ""));
+    updateField("comp1-noi-per-unit", String(northBattlefordTestData["comp1-noi-per-unit"] || ""));
+    updateField("comp1-adj-property-rights", String(northBattlefordTestData["comp1-adj-property-rights"] || ""));
+    updateField("comp1-adj-financing", String(northBattlefordTestData["comp1-adj-financing"] || ""));
+    updateField("comp1-adj-sale-conditions", String(northBattlefordTestData["comp1-adj-sale-conditions"] || ""));
+    updateField("comp1-adj-market-conditions", String(northBattlefordTestData["comp1-adj-market-conditions"] || ""));
+    updateField("comp1-adj-location", String(northBattlefordTestData["comp1-adj-location"] || ""));
+    updateField("comp1-adj-size", String(northBattlefordTestData["comp1-adj-size"] || ""));
+    updateField("comp1-adj-age-condition", String(northBattlefordTestData["comp1-adj-age-condition"] || ""));
+    updateField("comp1-adj-other", String(northBattlefordTestData["comp1-adj-other"] || ""));
+    updateField("comp1-adjprice-per-unit", String(northBattlefordTestData["comp1-adjprice-per-unit"] || ""));
+    updateField("comp1-total-adjustments", String(northBattlefordTestData["comp1-total-adjustments"] || ""));
+    updateField("comp1-overall-comparison", String(northBattlefordTestData["comp1-overall-comparison"] || ""));
+
+    // Comp 2
+    updateField("comp2-name", String(northBattlefordTestData["comp2-name"] || ""));
+    updateField("comp2-address", String(northBattlefordTestData["comp2-address"] || ""));
+    updateField("comp2-city", String(northBattlefordTestData["comp2-city"] || ""));
+    updateField("comp2-province", String(northBattlefordTestData["comp2-province"] || ""));
+    updateField("comp2-postal", String(northBattlefordTestData["comp2-postal"] || ""));
+    updateField("comp2-sale-price", String(northBattlefordTestData["comp2-sale-price"] || ""));
+    updateField("comp2-sale-date", String(northBattlefordTestData["comp2-sale-date"] || ""));
+    updateField("comp2-buyer", String(northBattlefordTestData["comp2-buyer"] || ""));
+    updateField("comp2-seller", String(northBattlefordTestData["comp2-seller"] || ""));
+    updateField("comp2-financing", String(northBattlefordTestData["comp2-financing"] || ""));
+    updateField("comp2-saleconditions", String(northBattlefordTestData["comp2-saleconditions"] || ""));
+    updateField("comp2-salestatus", String(northBattlefordTestData["comp2-salestatus"] || ""));
+    updateField("comp2-units", String(northBattlefordTestData["comp2-units"] || ""));
+    updateField("comp2-gba", String(northBattlefordTestData["comp2-gba"] || ""));
+    updateField("comp2-nra", String(northBattlefordTestData["comp2-nra"] || ""));
+    updateField("comp2-year-built", String(northBattlefordTestData["comp2-year-built"] || ""));
+    updateField("comp2-condition", String(northBattlefordTestData["comp2-condition"] || ""));
+    updateField("comp2-quality", String(northBattlefordTestData["comp2-quality"] || ""));
+    updateField("comp2-location", String(northBattlefordTestData["comp2-location"] || ""));
+    updateField("comp2-price-per-unit", String(northBattlefordTestData["comp2-price-per-unit"] || ""));
+    updateField("comp2-cap-rate", String(northBattlefordTestData["comp2-cap-rate"] || ""));
+    updateField("comp2-noi-per-unit", String(northBattlefordTestData["comp2-noi-per-unit"] || ""));
+    updateField("comp2-adj-property-rights", String(northBattlefordTestData["comp2-adj-property-rights"] || ""));
+    updateField("comp2-adj-financing", String(northBattlefordTestData["comp2-adj-financing"] || ""));
+    updateField("comp2-adj-sale-conditions", String(northBattlefordTestData["comp2-adj-sale-conditions"] || ""));
+    updateField("comp2-adj-market-conditions", String(northBattlefordTestData["comp2-adj-market-conditions"] || ""));
+    updateField("comp2-adj-location", String(northBattlefordTestData["comp2-adj-location"] || ""));
+    updateField("comp2-adj-size", String(northBattlefordTestData["comp2-adj-size"] || ""));
+    updateField("comp2-adj-age-condition", String(northBattlefordTestData["comp2-adj-age-condition"] || ""));
+    updateField("comp2-adj-other", String(northBattlefordTestData["comp2-adj-other"] || ""));
+    updateField("comp2-adjprice-per-unit", String(northBattlefordTestData["comp2-adjprice-per-unit"] || ""));
+    updateField("comp2-total-adjustments", String(northBattlefordTestData["comp2-total-adjustments"] || ""));
+    updateField("comp2-overall-comparison", String(northBattlefordTestData["comp2-overall-comparison"] || ""));
+
+    // Comp 3
+    updateField("comp3-name", String(northBattlefordTestData["comp3-name"] || ""));
+    updateField("comp3-address", String(northBattlefordTestData["comp3-address"] || ""));
+    updateField("comp3-city", String(northBattlefordTestData["comp3-city"] || ""));
+    updateField("comp3-province", String(northBattlefordTestData["comp3-province"] || ""));
+    updateField("comp3-postal", String(northBattlefordTestData["comp3-postal"] || ""));
+    updateField("comp3-sale-price", String(northBattlefordTestData["comp3-sale-price"] || ""));
+    updateField("comp3-sale-date", String(northBattlefordTestData["comp3-sale-date"] || ""));
+    updateField("comp3-buyer", String(northBattlefordTestData["comp3-buyer"] || ""));
+    updateField("comp3-seller", String(northBattlefordTestData["comp3-seller"] || ""));
+    updateField("comp3-financing", String(northBattlefordTestData["comp3-financing"] || ""));
+    updateField("comp3-saleconditions", String(northBattlefordTestData["comp3-saleconditions"] || ""));
+    updateField("comp3-salestatus", String(northBattlefordTestData["comp3-salestatus"] || ""));
+    updateField("comp3-units", String(northBattlefordTestData["comp3-units"] || ""));
+    updateField("comp3-gba", String(northBattlefordTestData["comp3-gba"] || ""));
+    updateField("comp3-nra", String(northBattlefordTestData["comp3-nra"] || ""));
+    updateField("comp3-year-built", String(northBattlefordTestData["comp3-year-built"] || ""));
+    updateField("comp3-condition", String(northBattlefordTestData["comp3-condition"] || ""));
+    updateField("comp3-quality", String(northBattlefordTestData["comp3-quality"] || ""));
+    updateField("comp3-location", String(northBattlefordTestData["comp3-location"] || ""));
+    updateField("comp3-price-per-unit", String(northBattlefordTestData["comp3-price-per-unit"] || ""));
+    updateField("comp3-cap-rate", String(northBattlefordTestData["comp3-cap-rate"] || ""));
+    updateField("comp3-noi-per-unit", String(northBattlefordTestData["comp3-noi-per-unit"] || ""));
+    updateField("comp3-adj-property-rights", String(northBattlefordTestData["comp3-adj-property-rights"] || ""));
+    updateField("comp3-adj-financing", String(northBattlefordTestData["comp3-adj-financing"] || ""));
+    updateField("comp3-adj-sale-conditions", String(northBattlefordTestData["comp3-adj-sale-conditions"] || ""));
+    updateField("comp3-adj-market-conditions", String(northBattlefordTestData["comp3-adj-market-conditions"] || ""));
+    updateField("comp3-adj-location", String(northBattlefordTestData["comp3-adj-location"] || ""));
+    updateField("comp3-adj-size", String(northBattlefordTestData["comp3-adj-size"] || ""));
+    updateField("comp3-adj-age-condition", String(northBattlefordTestData["comp3-adj-age-condition"] || ""));
+    updateField("comp3-adj-other", String(northBattlefordTestData["comp3-adj-other"] || ""));
+    updateField("comp3-adjprice-per-unit", String(northBattlefordTestData["comp3-adjprice-per-unit"] || ""));
+    updateField("comp3-total-adjustments", String(northBattlefordTestData["comp3-total-adjustments"] || ""));
+    updateField("comp3-overall-comparison", String(northBattlefordTestData["comp3-overall-comparison"] || ""));
+
+    // Comp 4
+    updateField("comp4-name", String(northBattlefordTestData["comp4-name"] || ""));
+    updateField("comp4-address", String(northBattlefordTestData["comp4-address"] || ""));
+    updateField("comp4-city", String(northBattlefordTestData["comp4-city"] || ""));
+    updateField("comp4-province", String(northBattlefordTestData["comp4-province"] || ""));
+    updateField("comp4-postal", String(northBattlefordTestData["comp4-postal"] || ""));
+    updateField("comp4-sale-price", String(northBattlefordTestData["comp4-sale-price"] || ""));
+    updateField("comp4-sale-date", String(northBattlefordTestData["comp4-sale-date"] || ""));
+    updateField("comp4-buyer", String(northBattlefordTestData["comp4-buyer"] || ""));
+    updateField("comp4-seller", String(northBattlefordTestData["comp4-seller"] || ""));
+    updateField("comp4-financing", String(northBattlefordTestData["comp4-financing"] || ""));
+    updateField("comp4-saleconditions", String(northBattlefordTestData["comp4-saleconditions"] || ""));
+    updateField("comp4-salestatus", String(northBattlefordTestData["comp4-salestatus"] || ""));
+    updateField("comp4-units", String(northBattlefordTestData["comp4-units"] || ""));
+    updateField("comp4-gba", String(northBattlefordTestData["comp4-gba"] || ""));
+    updateField("comp4-nra", String(northBattlefordTestData["comp4-nra"] || ""));
+    updateField("comp4-year-built", String(northBattlefordTestData["comp4-year-built"] || ""));
+    updateField("comp4-condition", String(northBattlefordTestData["comp4-condition"] || ""));
+    updateField("comp4-quality", String(northBattlefordTestData["comp4-quality"] || ""));
+    updateField("comp4-location", String(northBattlefordTestData["comp4-location"] || ""));
+    updateField("comp4-price-per-unit", String(northBattlefordTestData["comp4-price-per-unit"] || ""));
+    updateField("comp4-cap-rate", String(northBattlefordTestData["comp4-cap-rate"] || ""));
+    updateField("comp4-noi-per-unit", String(northBattlefordTestData["comp4-noi-per-unit"] || ""));
+    updateField("comp4-adj-property-rights", String(northBattlefordTestData["comp4-adj-property-rights"] || ""));
+    updateField("comp4-adj-financing", String(northBattlefordTestData["comp4-adj-financing"] || ""));
+    updateField("comp4-adj-sale-conditions", String(northBattlefordTestData["comp4-adj-sale-conditions"] || ""));
+    updateField("comp4-adj-market-conditions", String(northBattlefordTestData["comp4-adj-market-conditions"] || ""));
+    updateField("comp4-adj-location", String(northBattlefordTestData["comp4-adj-location"] || ""));
+    updateField("comp4-adj-size", String(northBattlefordTestData["comp4-adj-size"] || ""));
+    updateField("comp4-adj-age-condition", String(northBattlefordTestData["comp4-adj-age-condition"] || ""));
+    updateField("comp4-adj-other", String(northBattlefordTestData["comp4-adj-other"] || ""));
+    updateField("comp4-adjprice-per-unit", String(northBattlefordTestData["comp4-adjprice-per-unit"] || ""));
+    updateField("comp4-total-adjustments", String(northBattlefordTestData["comp4-total-adjustments"] || ""));
+    updateField("comp4-overall-comparison", String(northBattlefordTestData["comp4-overall-comparison"] || ""));
+
+    // DCA Statistics
+    updateField("dca-adjprice-high", String(northBattlefordTestData["dca-adjprice-high"] || ""));
+    updateField("dca-adjprice-avg", String(northBattlefordTestData["dca-adjprice-avg"] || ""));
+    updateField("dca-adjprice-low", String(northBattlefordTestData["dca-adjprice-low"] || ""));
+
+    // Regenerate preview
+    console.log("Sales test data loaded - regenerating preview...");
+    await get().generatePreview();
+    console.log("Sales test data loaded successfully");
+  },
+
+  loadIncomeTestData: async () => {
+    console.log("=== LOAD INCOME TEST DATA CALLED ===");
+
+    const updateField = (fieldId: string, value: string | number) => {
+      get().updateFieldValue(fieldId, value);
+    };
+
+    // North Battleford Test Data - Income Approach Fields
+
+    // Unit Mix
+    updateField("calc-type1-name", String(northBattlefordTestData["calc-type1-name"] || ""));
+    updateField("calc-type1-count", String(northBattlefordTestData["calc-type1-count"] || ""));
+    updateField("calc-type1-sf", String(northBattlefordTestData["calc-type1-sf"] || ""));
+    updateField("calc-type1-rent", String(northBattlefordTestData["calc-type1-rent"] || ""));
+    updateField("calc-type1-contract-rent", String(northBattlefordTestData["calc-type1-contract-rent"] || ""));
+    updateField("calc-type2-name", String(northBattlefordTestData["calc-type2-name"] || ""));
+    updateField("calc-type2-count", String(northBattlefordTestData["calc-type2-count"] || ""));
+    updateField("calc-type2-sf", String(northBattlefordTestData["calc-type2-sf"] || ""));
+    updateField("calc-type2-rent", String(northBattlefordTestData["calc-type2-rent"] || ""));
+    updateField("calc-type2-contract-rent", String(northBattlefordTestData["calc-type2-contract-rent"] || ""));
+
+    // Revenue
+    updateField("calc-total-units", String(northBattlefordTestData["calc-total-units"] || ""));
+    updateField("calc-total-rental-revenue", String(northBattlefordTestData["calc-total-rental-revenue"] || ""));
+    updateField("calc-pgi", String(northBattlefordTestData["calc-pgi"] || ""));
+    updateField("calc-pgi-perunit", String(northBattlefordTestData["calc-pgi-perunit"] || ""));
+    updateField("calc-pgi-psf", String(northBattlefordTestData["calc-pgi-psf"] || ""));
+    updateField("calc-pgr", String(northBattlefordTestData["calc-pgr"] || ""));
+    updateField("calc-other-income", String(northBattlefordTestData["calc-other-income"] || ""));
+
+    // Vacancy
+    updateField("calc-vacancy-rate", String(northBattlefordTestData["calc-vacancy-rate"] || ""));
+    updateField("calc-bad-debt-rate", String(northBattlefordTestData["calc-bad-debt-rate"] || ""));
+    updateField("calc-concessions-rate", String(northBattlefordTestData["calc-concessions-rate"] || ""));
+
+    // EGR
+    updateField("calc-egr", String(northBattlefordTestData["calc-egr"] || ""));
+    updateField("calc-egr-perunit", String(northBattlefordTestData["calc-egr-perunit"] || ""));
+    updateField("calc-egr-psf", String(northBattlefordTestData["calc-egr-psf"] || ""));
+    updateField("egr-comment", String(northBattlefordTestData["egr-comment"] || ""));
+
+    // Expenses
+    updateField("calc-exp-taxes", String(northBattlefordTestData["calc-exp-taxes"] || ""));
+    updateField("calc-exp-taxes-annual", String(northBattlefordTestData["calc-exp-taxes-annual"] || ""));
+    updateField("calc-exp-insurance", String(northBattlefordTestData["calc-exp-insurance"] || ""));
+    updateField("calc-exp-insurance-annual", String(northBattlefordTestData["calc-exp-insurance-annual"] || ""));
+    updateField("calc-exp-repairs", String(northBattlefordTestData["calc-exp-repairs"] || ""));
+    updateField("calc-exp-repairs-annual", String(northBattlefordTestData["calc-exp-repairs-annual"] || ""));
+    updateField("calc-exp-utilities", String(northBattlefordTestData["calc-exp-utilities"] || ""));
+    updateField("calc-exp-utilities-annual", String(northBattlefordTestData["calc-exp-utilities-annual"] || ""));
+    updateField("calc-exp-payroll", String(northBattlefordTestData["calc-exp-payroll"] || ""));
+    updateField("calc-exp-payroll-annual", String(northBattlefordTestData["calc-exp-payroll-annual"] || ""));
+    updateField("calc-exp-management", String(northBattlefordTestData["calc-exp-management"] || ""));
+    updateField("calc-exp-management-annual", String(northBattlefordTestData["calc-exp-management-annual"] || ""));
+    updateField("calc-exp-other", String(northBattlefordTestData["calc-exp-other"] || ""));
+    updateField("calc-exp-other-annual", String(northBattlefordTestData["calc-exp-other-annual"] || ""));
+    updateField("calc-total-expenses", String(northBattlefordTestData["calc-total-expenses"] || ""));
+    updateField("expense-ratio", String(northBattlefordTestData["expense-ratio"] || ""));
+
+    // NOI and Cap
+    updateField("calc-noi", String(northBattlefordTestData["calc-noi"] || ""));
+    updateField("calc-noi-perunit", String(northBattlefordTestData["calc-noi-perunit"] || ""));
+    updateField("calc-noi-psf", String(northBattlefordTestData["calc-noi-psf"] || ""));
+    updateField("calc-cap-rate", String(northBattlefordTestData["calc-cap-rate"] || ""));
+    updateField("dircap-value1", String(northBattlefordTestData["dircap-value1"] || ""));
+    updateField("dircap-value1-perunit", String(northBattlefordTestData["dircap-value1-perunit"] || ""));
+    updateField("dircap-value1-psf", String(northBattlefordTestData["dircap-value1-psf"] || ""));
+
+    // Regenerate preview
+    console.log("Income test data loaded - regenerating preview...");
+    await get().generatePreview();
+    console.log("Income test data loaded successfully");
+  },
+
+  loadSiteTestData: async () => {
+    console.log("=== LOAD SITE TEST DATA CALLED ===");
+
+    const updateField = (fieldId: string, value: string | number) => {
+      get().updateFieldValue(fieldId, value);
+    };
+
+    // North Battleford Test Data - Site Section Fields
+    // Maps source fields from northBattlefordTestData.ts to site-* field IDs
+
+    // Site Size and Coverage
+    updateField("site-size", String(northBattlefordTestData["site-size"] || ""));
+    updateField("site-coverage-ratio", String(northBattlefordTestData["site-coverage-ratio"] || ""));
+    updateField("site-coverage-ratio-text", String(northBattlefordTestData["site-coverage-ratio-text"] || ""));
+    updateField("land-to-building", String(northBattlefordTestData["land-to-building"] || ""));
+
+    // Site Descriptions
+    updateField("site-info", String(northBattlefordTestData["site-info"] || ""));
+    updateField("site-conclusion", String(northBattlefordTestData["site-conclusion"] || ""));
+    updateField("site-rating", String(northBattlefordTestData["site-rating"] || ""));
+
+    // Streets and Access
+    updateField("site-street1", String(northBattlefordTestData["site-street1"] || ""));
+    updateField("site-street2", String(northBattlefordTestData["site-street2"] || ""));
+    updateField("access", String(northBattlefordTestData["access"] || ""));
+    updateField("exposure", String(northBattlefordTestData["exposure"] || ""));
+
+    // Adjacent Properties
+    updateField("adjacent-north", String(northBattlefordTestData["adjacent-north"] || ""));
+    updateField("adjacent-south", String(northBattlefordTestData["adjacent-south"] || ""));
+    updateField("adjacent-east", String(northBattlefordTestData["adjacent-east"] || ""));
+    updateField("adjacent-west", String(northBattlefordTestData["adjacent-west"] || ""));
+
+    // Site Improvements
+    updateField("site-improvements", String(northBattlefordTestData["site-improvements"] || ""));
+    updateField("landscaping", String(northBattlefordTestData["landscaping"] || ""));
+    updateField("lighting", String(northBattlefordTestData["lighting"] || ""));
+
+    // Environmental
+    updateField("flood-zone", String(northBattlefordTestData["flood-zone"] || ""));
+    updateField("hazardous-text", String(northBattlefordTestData["hazardous-text"] || ""));
+
+    // Legal
+    updateField("easements-text", String(northBattlefordTestData["easements-text"] || ""));
+
+    // Site Plan Images
+    updateField("img-site-plan-1", String(northBattlefordTestData["img-site-plan-1"] || ""));
+    updateField("site-plan-1-title", String(northBattlefordTestData["site-plan-1-title"] || ""));
+    updateField("img-site-plan-2", String(northBattlefordTestData["img-site-plan-2"] || ""));
+    updateField("site-plan-2-title", String(northBattlefordTestData["site-plan-2-title"] || ""));
+
+    // Regenerate preview
+    console.log("Site test data loaded - regenerating preview...");
+    await get().generatePreview();
+    console.log("Site test data loaded successfully");
+  },
+
+  loadImprovementsTestData: async () => {
+    console.log("=== LOAD IMPROVEMENTS TEST DATA CALLED ===");
+
+    const updateField = (fieldId: string, value: string | number) => {
+      get().updateFieldValue(fieldId, value);
+    };
+
+    // North Battleford Test Data - Improvements Section Fields
+    // Maps source fields from northBattlefordTestData.ts to improvements field IDs
+
+    // Building Overview
+    updateField("year-built", String(northBattlefordTestData["year-built"] || ""));
+    updateField("building-class", String(northBattlefordTestData["building-class"] || ""));
+    updateField("gba", String(northBattlefordTestData["subject-gba"] || ""));
+    updateField("nra", String(northBattlefordTestData["subject-nra"] || ""));
+    updateField("calc-total-units", String(northBattlefordTestData["calc-total-units"] || ""));
+
+    // Design and Layout
+    updateField("functional-design", String(northBattlefordTestData["functional-design"] || ""));
+
+    // Interior Finishes
+    updateField("ceilings", String(northBattlefordTestData["ceilings"] || ""));
+    updateField("flooring", String(northBattlefordTestData["flooring"] || ""));
+    updateField("interior-walls", String(northBattlefordTestData["interior-walls"] || ""));
+    updateField("interior-buildout", String(northBattlefordTestData["interior-buildout"] || ""));
+
+    // Unit Mix
+    updateField("calc-type1-name", String(northBattlefordTestData["calc-type1-name"] || ""));
+    updateField("calc-type1-count", String(northBattlefordTestData["calc-type1-count"] || ""));
+    updateField("calc-type1-sf", String(northBattlefordTestData["calc-type1-sf"] || ""));
+
+    updateField("calc-type2-name", String(northBattlefordTestData["calc-type2-name"] || ""));
+    updateField("calc-type2-count", String(northBattlefordTestData["calc-type2-count"] || ""));
+    updateField("calc-type2-sf", String(northBattlefordTestData["calc-type2-sf"] || ""));
+
+    updateField("calc-type3-count", String(northBattlefordTestData["calc-type3-count"] || ""));
+    updateField("calc-type4-count", String(northBattlefordTestData["calc-type4-count"] || ""));
+
+    // Parking
+    updateField("calc-parking-per-unit", String(northBattlefordTestData["calc-parking-per-unit"] || ""));
+
+    // Condition
+    updateField("asset-condition", String(northBattlefordTestData["asset-condition"] || ""));
+
+    // Regenerate preview
+    console.log("Improvements test data loaded - regenerating preview...");
+    await get().generatePreview();
+    console.log("Improvements test data loaded successfully");
   },
 
   runCalculations: () => {
@@ -6616,55 +7074,31 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
   loadFullTestData: async () => {
     console.log("=== LOAD FULL TEST DATA CALLED ===");
-    console.log("northBattlefordTestData keys:", Object.keys(northBattlefordTestData).length);
-    // Load comprehensive North Battleford test data with image fields
-    // Uses northBattlefordTestData which has field IDs matching store exactly
-    const sections = get().sections;
-    let mappedCount = 0;
-    let unmappedFields: string[] = [];
-
-    // Helper to check if field exists in store
-    const fieldExists = (fieldId: string): boolean => {
-      for (const section of sections) {
-        if (section.fields.find((f) => f.id === fieldId)) return true;
-        if (section.subsections) {
-          for (const sub of section.subsections) {
-            if (sub.fields.find((f) => f.id === fieldId)) return true;
-          }
-        }
-      }
-      return false;
-    };
-
-    // Load all fields from test data (field IDs match store exactly)
-    Object.entries(northBattlefordTestData).forEach(([fieldId, value]) => {
-      // Map test data field ID to store field ID (for any that still differ)
-      const storeFieldId = testDataFieldMapping[fieldId] || fieldId;
-
-      if (fieldExists(storeFieldId)) {
-        get().updateFieldValue(storeFieldId, value);
-        mappedCount++;
-      } else {
-        unmappedFields.push(fieldId);
+    
+    // Call all section-specific loaders
+    await get().loadHomeTestData();
+    await get().loadCoverTestData();
+    await get().loadMapsTestData();
+    await get().loadAssignmentTestData();
+    await get().loadExecTestData();
+    await get().loadSiteTestData();
+    await get().loadImprovementsTestData();
+    await get().loadSalesTestData();
+    await get().loadIncomeTestData();
+    get().loadCalcTestData();
+    
+    // Mark all sections as loaded
+    set({
+      testDataLoaded: {
+        home: true, cover: true, maps: true, assignment: true,
+        exec: true, site: true, impv: true, sales: true,
+        income: true, calc: true
       }
     });
-
-    // Run calculations after loading CALC data
+    
     get().runCalculations();
-
-    // Regenerate preview with all data
-    const updatedSections = get().sections;
-    // Force reload template to ensure we get the latest version
-    const template = await get().loadPreviewTemplate(true);
-    const html = get().interpolateTemplate(updatedSections, template);
-    set({ previewHtml: html });
-
-    console.log(
-      `Test data loaded: ${mappedCount}/${Object.keys(northBattlefordTestData).length} fields mapped`,
-    );
-    if (unmappedFields.length > 0) {
-      console.log("Unmapped fields (need store definition):", unmappedFields);
-    }
+    
+    console.log("Full test data loaded for all sections");
   },
 
   loadUserInputsOnly: async () => {
@@ -6816,5 +7250,11 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
   setTestMode: (mode: TestMode) => {
     set({ activeTestMode: mode });
+  },
+
+  setTestDataLoaded: (sectionId: string, loaded: boolean) => {
+    set((state) => ({
+      testDataLoaded: { ...state.testDataLoaded, [sectionId]: loaded }
+    }));
   },
 }));

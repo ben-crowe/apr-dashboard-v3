@@ -330,16 +330,16 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'client-address', storeId: 'client-address', label: 'Client Address', section: 'cover', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'client-city', storeId: 'client-city', label: 'Client City', section: 'cover', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'client-province', storeId: 'client-province', label: 'Client Province', section: 'cover', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'client-postal', storeId: 'client-postal', label: 'Client Postal Code', section: 'cover', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'client-postal', storeId: 'client-postal', label: 'Client Postal Code', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: false },
   { id: 'client-title', storeId: 'client-title', label: 'Client Title', section: 'cover', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
 
   // Cover - Appraiser Info Subsection
-  { id: 'appraiser-company', storeId: 'appraiser-company', label: 'Company Name', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: true },
+  { id: 'appraiser-company', storeId: 'appraiser-company', label: 'Company Name', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: true },
   { id: 'appraiser-address', storeId: 'appraiser-address', label: 'Company Address', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
   { id: 'appraiser-city', storeId: 'appraiser-city', label: 'Company City', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
   { id: 'appraiser-province', storeId: 'appraiser-province', label: 'Company Province', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
   { id: 'appraiser-postal', storeId: 'appraiser-postal', label: 'Company Postal Code', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
-  { id: 'appraiser-phone', storeId: 'appraiser-phone', label: 'Company Phone', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
+  { id: 'appraiser-phone', storeId: 'appraiser-phone', label: 'Company Phone', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
   { id: 'appraiser-website', storeId: 'appraiser-website', label: 'Company Website', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
 
   // Cover - Location Fields (for Exec Summary)
@@ -356,8 +356,8 @@ export const fieldRegistry: FieldDefinition[] = [
   // ============================================================================
 
   // --- TRANSMITTAL LETTER (2 fields) ---
-  { id: 'transmittal-date', storeId: 'transmittal-date', label: 'Letter Date', section: 'home', subsection: 'transmittal-content', type: 'date', inputSource: 'auto-filled', required: true },
-  { id: 'transmittal-body', storeId: 'transmittal-body', label: 'Letter Body', section: 'home', subsection: 'transmittal-content', type: 'textarea', inputSource: 'user-input', required: true },
+  { id: 'transmittal-date', storeId: 'transmittal-date', label: 'Letter Date', section: 'loe-prep', subsection: 'transmittal-content', type: 'date', inputSource: 'auto-filled', required: true },
+  { id: 'transmittal-body', storeId: 'transmittal-body', label: 'Letter Body', section: 'loe-prep', subsection: 'transmittal-content', type: 'textarea', inputSource: 'user-input', required: true },
 
 
   // ============================================================================
@@ -2186,14 +2186,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'report-date1', storeId: 'report-date1', label: 'Report Date', section: 'report', subsection: 'report-info', type: 'date', inputSource: 'user-input', required: false },
   { id: 'report-dateinspection', storeId: 'report-dateinspection', label: 'Date of Inspection', section: 'report', subsection: 'report-info', type: 'date', inputSource: 'user-input', required: false },
   { id: 'report-effectivedate', storeId: 'report-effectivedate', label: 'Effective Date', section: 'report', subsection: 'report-info', type: 'date', inputSource: 'user-input', required: false },
-  { id: 'report-extraordinary', storeId: 'report-extraordinary', label: 'Extraordinary Assumptions', section: 'report', subsection: 'report-info', type: 'textarea', inputSource: 'user-input', required: false },
-  { id: 'report-hypothetical', storeId: 'report-hypothetical', label: 'Hypothetical Conditions', section: 'report', subsection: 'report-info', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'report-extraordinary', storeId: 'report-extraordinary', label: 'Extraordinary Assumptions', section: 'loe-prep', subsection: 'assumptions-conditions', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'report-hypothetical', storeId: 'report-hypothetical', label: 'Hypothetical Conditions', section: 'loe-prep', subsection: 'assumptions-conditions', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'report-inspectiondate', storeId: 'report-inspectiondate', label: 'Inspection Date', section: 'report', subsection: 'report-info', type: 'date', inputSource: 'user-input', required: false },
-  { id: 'report-intendeduse', storeId: 'report-intendeduse', label: 'Intended Use', section: 'report', subsection: 'report-info', type: 'textarea', inputSource: 'user-input', required: false },
-  { id: 'report-intendeduser', storeId: 'report-intendeduser', label: 'Intended User', section: 'report', subsection: 'report-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'report-intendeduse', storeId: 'report-intendeduse', label: 'Intended Use', section: 'loe-prep', subsection: 'assignment-details', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'report-intendeduser', storeId: 'report-intendeduser', label: 'Intended User', section: 'loe-prep', subsection: 'assignment-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'report-interest', storeId: 'report-interest', label: 'Interest Appraised', section: 'report', subsection: 'report-info', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'report-legal', storeId: 'report-legal', label: 'Legal Description', section: 'report', subsection: 'report-info', type: 'textarea', inputSource: 'user-input', required: false },
-  { id: 'report-limcond', storeId: 'report-limcond', label: 'Limiting Conditions', section: 'report', subsection: 'report-info', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'report-legal', storeId: 'report-legal', label: 'Legal Description', section: 'loe-prep', subsection: 'property-details', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'report-limcond', storeId: 'report-limcond', label: 'Limiting Conditions', section: 'loe-prep', subsection: 'assumptions-conditions', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'report-valuationcost', storeId: 'report-valuationcost', label: 'Valuation - Cost Approach', section: 'report', subsection: 'report-info', type: 'currency', inputSource: 'user-input', required: false },
   { id: 'report-valuationincome', storeId: 'report-valuationincome', label: 'Valuation - Income Approach', section: 'report', subsection: 'report-info', type: 'currency', inputSource: 'user-input', required: false },
   { id: 'report-valuationsales', storeId: 'report-valuationsales', label: 'Valuation - Sales Approach', section: 'report', subsection: 'report-info', type: 'currency', inputSource: 'user-input', required: false },

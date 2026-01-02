@@ -422,26 +422,36 @@ const TestInputDashboard: React.FC = () => {
       case 'date':
         // Check if this is a legacy appraiser field that's now managed in LOE Prep
         const appraiserDateMapping = legacyAppraiserFields[field.id];
-        
-        if (appraiserDateMapping) {
-          // Show link to LOE Prep section instead of date input
+
+        // Only show "Managed in S2" if field is NOT in loe-prep section
+        if (appraiserDateMapping && field.section !== 'loe-prep') {
+          // Show value (read-only) with link to LOE Prep section
           return (
-            <button
-              onClick={() => {
-                setExpandedSections(prev => new Set([...prev, 'loe-prep']));
-                setTimeout(() => {
-                  const element = document.getElementById('section-loe-prep');
-                  element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-              }}
-              className="text-xs text-blue-600 hover:underline flex flex-col items-start"
-            >
-              <span className="font-medium">Managed in S2</span>
-              <span className="text-slate-500">{appraiserDateMapping.destination}</span>
-            </button>
+            <div className="flex flex-col gap-1">
+              <Input
+                type="date"
+                value={currentValue || ''}
+                className="w-36 h-8 text-sm bg-slate-800 text-slate-400"
+                readOnly
+                disabled
+              />
+              <button
+                onClick={() => {
+                  setExpandedSections(prev => new Set([...prev, 'loe-prep']));
+                  setTimeout(() => {
+                    const element = document.getElementById('section-loe-prep');
+                    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 100);
+                }}
+                className="text-xs text-blue-600 hover:underline flex flex-col items-start"
+              >
+                <span className="font-medium">Managed in S2</span>
+                <span className="text-slate-500">{appraiserDateMapping.destination}</span>
+              </button>
+            </div>
           );
         }
-        
+
         return (
           <Input
             type="date"
@@ -545,48 +555,68 @@ const TestInputDashboard: React.FC = () => {
       default: // text
         // Check if this is a legacy client field that's now managed in Client Intake
         const clientTextMapping = legacyClientFields[field.id];
-        
-        if (clientTextMapping) {
-          // Show link to Client Intake section instead of text input
+
+        // Only show "Managed in S1" if field is NOT in client-intake section
+        if (clientTextMapping && field.section !== 'client-intake') {
+          // Show value (read-only) with link to Client Intake section
           return (
-            <button
-              onClick={() => {
-                setExpandedSections(prev => new Set([...prev, 'client-intake']));
-                setTimeout(() => {
-                  const element = document.getElementById('section-client-intake');
-                  element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-              }}
-              className="text-xs text-blue-600 hover:underline flex flex-col items-start"
-            >
-              <span className="font-medium">Managed in S1</span>
-              <span className="text-slate-500">{clientTextMapping.destination}</span>
-            </button>
+            <div className="flex flex-col gap-1">
+              <Input
+                type="text"
+                value={currentValue || ''}
+                className="w-64 h-8 text-sm bg-slate-800 text-slate-400"
+                readOnly
+                disabled
+              />
+              <button
+                onClick={() => {
+                  setExpandedSections(prev => new Set([...prev, 'client-intake']));
+                  setTimeout(() => {
+                    const element = document.getElementById('section-client-intake');
+                    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 100);
+                }}
+                className="text-xs text-blue-600 hover:underline flex flex-col items-start"
+              >
+                <span className="font-medium">Managed in S1</span>
+                <span className="text-slate-500">{clientTextMapping.destination}</span>
+              </button>
+            </div>
           );
         }
-        
+
         // Check if this is a legacy appraiser field that's now managed in LOE Prep
         const appraiserTextMapping = legacyAppraiserFields[field.id];
-        
-        if (appraiserTextMapping) {
-          // Show link to LOE Prep section instead of text input
+
+        // Only show "Managed in S2" if field is NOT in loe-prep section
+        if (appraiserTextMapping && field.section !== 'loe-prep') {
+          // Show value (read-only) with link to LOE Prep section
           return (
-            <button
-              onClick={() => {
-                setExpandedSections(prev => new Set([...prev, 'loe-prep']));
-                setTimeout(() => {
-                  const element = document.getElementById('section-loe-prep');
-                  element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-              }}
-              className="text-xs text-blue-600 hover:underline flex flex-col items-start"
-            >
-              <span className="font-medium">Managed in S2</span>
-              <span className="text-slate-500">{appraiserTextMapping.destination}</span>
-            </button>
+            <div className="flex flex-col gap-1">
+              <Input
+                type="text"
+                value={currentValue || ''}
+                className="w-64 h-8 text-sm bg-slate-800 text-slate-400"
+                readOnly
+                disabled
+              />
+              <button
+                onClick={() => {
+                  setExpandedSections(prev => new Set([...prev, 'loe-prep']));
+                  setTimeout(() => {
+                    const element = document.getElementById('section-loe-prep');
+                    element?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }, 100);
+                }}
+                className="text-xs text-blue-600 hover:underline flex flex-col items-start"
+              >
+                <span className="font-medium">Managed in S2</span>
+                <span className="text-slate-500">{appraiserTextMapping.destination}</span>
+              </button>
+            </div>
           );
         }
-        
+
         return (
           <Input
             type="text"

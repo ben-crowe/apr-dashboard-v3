@@ -6188,6 +6188,67 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     console.log("Home test data loaded successfully");
   },
 
+  loadCoverTestData: async () => {
+    console.log("=== LOAD COVER TEST DATA CALLED ===");
+
+    const updateField = (fieldId: string, value: string | number) => {
+      get().updateFieldValue(fieldId, value);
+    };
+
+    // North Battleford Test Data - Cover Section Fields
+    updateField("cover-photo", String(northBattlefordTestData["cover-photo"] || ""));
+    updateField("cover-photo-caption", String(northBattlefordTestData["cover-photo-caption"] || ""));
+    updateField("property-name", String(northBattlefordTestData["property-name"] || ""));
+    updateField("property-address", String(northBattlefordTestData["property-address"] || ""));
+    updateField("city", String(northBattlefordTestData["city"] || ""));
+    updateField("province", String(northBattlefordTestData["province"] || ""));
+    updateField("report-date", String(northBattlefordTestData["report-date"] || ""));
+    updateField("effective-date", String(northBattlefordTestData["effective-date"] || ""));
+    updateField("job-number", String(northBattlefordTestData["job-number"] || ""));
+
+    // Regenerate preview
+    console.log("Cover test data loaded - regenerating preview...");
+    await get().generatePreview();
+    console.log("Cover test data loaded successfully");
+  },
+
+  loadMapsTestData: async () => {
+    console.log("=== LOAD MAPS TEST DATA CALLED ===");
+
+    const updateField = (fieldId: string, value: string | number) => {
+      get().updateFieldValue(fieldId, value);
+    };
+
+    // North Battleford Test Data - Maps Section Fields
+    updateField("img-map-aerial", String(northBattlefordTestData["img-map-aerial"] || ""));
+    updateField("img-comparables-map", String(northBattlefordTestData["img-comparables-map"] || ""));
+    updateField("img-site-plan-1", String(northBattlefordTestData["img-site-plan-1"] || ""));
+    updateField("img-site-plan-2", String(northBattlefordTestData["img-site-plan-2"] || ""));
+    updateField("img-zoning-map", String(northBattlefordTestData["img-zoning-map"] || ""));
+
+    // Comparable Property Photos and Maps
+    updateField("comp1-photo", String(northBattlefordTestData["comp1-photo"] || ""));
+    updateField("comp1-map", String(northBattlefordTestData["comp1-map"] || ""));
+    updateField("comp1-photo-caption", String(northBattlefordTestData["comp1-photo-caption"] || ""));
+
+    updateField("comp2-photo", String(northBattlefordTestData["comp2-photo"] || ""));
+    updateField("comp2-map", String(northBattlefordTestData["comp2-map"] || ""));
+    updateField("comp2-photo-caption", String(northBattlefordTestData["comp2-photo-caption"] || ""));
+
+    updateField("comp3-photo", String(northBattlefordTestData["comp3-photo"] || ""));
+    updateField("comp3-map", String(northBattlefordTestData["comp3-map"] || ""));
+    updateField("comp3-photo-caption", String(northBattlefordTestData["comp3-photo-caption"] || ""));
+
+    updateField("comp4-photo", String(northBattlefordTestData["comp4-photo"] || ""));
+    updateField("comp4-map", String(northBattlefordTestData["comp4-map"] || ""));
+    updateField("comp4-photo-caption", String(northBattlefordTestData["comp4-photo-caption"] || ""));
+
+    // Regenerate preview
+    console.log("Maps test data loaded - regenerating preview...");
+    await get().generatePreview();
+    console.log("Maps test data loaded successfully");
+  },
+
   runCalculations: () => {
     const sections = get().sections;
 

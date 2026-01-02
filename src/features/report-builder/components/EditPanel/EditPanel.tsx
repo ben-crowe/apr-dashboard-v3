@@ -41,48 +41,67 @@ const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
 type FieldLayoutRow = { fields: string[]; widths: string[] };
 type SubsectionLayout = FieldLayoutRow[];
 
+// HOME TAB - Curated view of fields from other sections
+// These fields LIVE in other sections (client-intake, loe-prep, report, etc.)
+// HOME tab displays them for quick access - it's a dashboard view, not a section with its own fields
 const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
   'job-setup': [
-    { fields: ['home-job-id', 'home-job-status', 'home-report-date'], widths: ['33.33%', '33.33%', '33.33%'] },
+    { fields: ['company-jobnumber', 'report-date'], widths: ['50%', '50%'] },
   ],
   'client-info': [
-    { fields: ['home-client-name', 'home-client-company'], widths: ['50%', '50%'] },
-    { fields: ['home-client-email', 'home-client-phone'], widths: ['50%', '50%'] },
-    { fields: ['home-client-address-street'], widths: ['100%'] },
-    { fields: ['home-client-address-city', 'home-client-address-state', 'home-client-address-postal'], widths: ['40%', '30%', '30%'] },
-    { fields: ['home-client-reference'], widths: ['100%'] },
+    { fields: ['client-first-name', 'client-last-name'], widths: ['50%', '50%'] },
+    { fields: ['client-full-name', 'client-organization'], widths: ['50%', '50%'] },
+    { fields: ['client-email', 'client-phone'], widths: ['50%', '50%'] },
+    { fields: ['client-address'], widths: ['100%'] },
+    { fields: ['client-city', 'client-province'], widths: ['50%', '50%'] },
   ],
   'appraiser-info': [
-    { fields: ['home-appraiser-name', 'home-appraiser-designation'], widths: ['50%', '50%'] },
-    { fields: ['home-appraiser-license', 'home-appraiser-company'], widths: ['50%', '50%'] },
-    { fields: ['home-appraiser-email', 'home-appraiser-phone'], widths: ['50%', '50%'] },
+    { fields: ['appraiser-name', 'appraiser-designation'], widths: ['50%', '50%'] },
+    { fields: ['appraiser-aic', 'company-name'], widths: ['50%', '50%'] },
+    { fields: ['appraiser-email', 'appraiser-phone'], widths: ['50%', '50%'] },
   ],
   'property-info': [
-    { fields: ['home-property-name'], widths: ['100%'] },
-    { fields: ['home-property-address-street'], widths: ['100%'] },
-    { fields: ['home-property-address-city', 'home-property-address-province', 'home-property-address-postal'], widths: ['40%', '30%', '30%'] },
-    { fields: ['home-property-type', 'home-property-pid'], widths: ['50%', '50%'] },
-    { fields: ['home-property-legal-description'], widths: ['100%'] },
+    { fields: ['subject-name'], widths: ['100%'] },
+    { fields: ['subject-street'], widths: ['100%'] },
+    { fields: ['city', 'subject-state', 'subject-zip'], widths: ['40%', '30%', '30%'] },
+    { fields: ['subject-primary', 'apn'], widths: ['50%', '50%'] },
+    { fields: ['report-legal'], widths: ['100%'] },
   ],
   'assignment-details': [
-    { fields: ['home-report-type', 'home-property-rights'], widths: ['50%', '50%'] },
-    { fields: ['home-intended-use', 'home-intended-users'], widths: ['50%', '50%'] },
-    { fields: ['home-scope-of-work'], widths: ['100%'] },
+    { fields: ['report-type', 'property-rights'], widths: ['50%', '50%'] },
+    { fields: ['intended-use', 'intended-user'], widths: ['50%', '50%'] },
+    { fields: ['scope-of-work'], widths: ['100%'] },
   ],
-  'subject-contact': [
-    { fields: ['home-contact-name', 'home-contact-title'], widths: ['50%', '50%'] },
-    { fields: ['home-contact-phone', 'home-contact-email'], widths: ['50%', '50%'] },
-    { fields: ['home-inspection-date'], widths: ['50%'] },
+  'property-contact': [
+    { fields: ['contact-first-name', 'contact-last-name'], widths: ['50%', '50%'] },
+    { fields: ['contact-phone', 'contact-email'], widths: ['50%', '50%'] },
+    { fields: ['inspection-date'], widths: ['50%'] },
   ],
-  'assumptions-conditions': [
-    { fields: ['home-extraordinary-assumptions'], widths: ['100%'] },
-    { fields: ['home-hypothetical-conditions'], widths: ['100%'] },
-    { fields: ['home-limiting-conditions'], widths: ['100%'] },
+  'special-conditions': [
+    { fields: ['report-extraordinary'], widths: ['100%'] },
+    { fields: ['report-hypothetical'], widths: ['100%'] },
+    { fields: ['report-limcond'], widths: ['100%'] },
   ],
-  'transmittal-content': [
+  'approach-selection': [
+    { fields: ['use-income-approach', 'use-sales-approach', 'use-cost-approach'], widths: ['33.33%', '33.33%', '33.33%'] },
+  ],
+  'transmittal': [
     { fields: ['transmittal-date'], widths: ['50%'] },
     { fields: ['transmittal-body'], widths: ['100%'] },
   ],
+};
+
+// Subsection display titles for HOME tab
+const HOME_SUBSECTION_TITLES: Record<string, string> = {
+  'job-setup': 'Job Setup',
+  'client-info': 'Client Information',
+  'appraiser-info': 'Appraiser Information',
+  'property-info': 'Property Information',
+  'assignment-details': 'Assignment Details',
+  'property-contact': 'Property Contact',
+  'special-conditions': 'Special Conditions',
+  'approach-selection': 'Valuation Approaches',
+  'transmittal': 'Letter of Transmittal',
 };
 
 // Layout configuration for Cover section field groupings
@@ -306,31 +325,14 @@ const SECTION_FIELD_LAYOUTS: Record<string, Record<string, SubsectionLayout>> = 
 };
 
 // Approach toggle field IDs - these are rendered separately at top of Home section
-const APPROACH_TOGGLE_IDS = ['home-use-income-approach', 'home-use-sales-approach', 'home-use-cost-approach'];
-
-// Sections that have test data load functions
-const SECTIONS_WITH_LOADERS = ['home', 'cover', 'maps', 'assignment', 'exec', 'site', 'impv', 'sales', 'income', 'calc'];
+const APPROACH_TOGGLE_IDS = ['use-income-approach', 'use-sales-approach', 'use-cost-approach'];
 
 export default function EditPanel() {
   const {
     sections,
     activeSection,
     updateFieldValue,
-    loadCalcTestData,
-    loadHomeTestData,
-    loadCoverTestData,
-    loadMapsTestData,
-    loadAssignmentTestData,
-    loadExecTestData,
-    loadSiteTestData,
-    loadImprovementsTestData,
-    loadSalesTestData,
-    loadIncomeTestData,
   } = useReportBuilderStore();
-
-  // Get test data state from store
-  const testDataLoaded = useReportBuilderStore(state => state.testDataLoaded);
-  const setTestDataLoaded = useReportBuilderStore(state => state.setTestDataLoaded);
 
   // Track which subsections are EXPANDED (empty = all collapsed by default)
   const [expandedSubsections, setExpandedSubsections] = useState<Set<string>>(new Set());
@@ -338,36 +340,6 @@ export default function EditPanel() {
   // State for calculator panel value tracking (CALC section)
   const [incomeValue, setIncomeValue] = useState(0);
   const [salesValue, setSalesValue] = useState(0);
-
-  // Helper function to check if section has a load function
-  const hasLoadFunction = (sectionId: string): boolean => {
-    return SECTIONS_WITH_LOADERS.includes(sectionId);
-  };
-
-  // Toggle handler for section test data
-  const toggleSectionTestData = async (sectionId: string) => {
-    const isCurrentlyLoaded = testDataLoaded?.[sectionId] || false;
-
-    if (!isCurrentlyLoaded) {
-      // Load the test data for this section
-      switch (sectionId) {
-        case 'home': await loadHomeTestData(); break;
-        case 'cover': await loadCoverTestData(); break;
-        case 'maps': await loadMapsTestData(); break;
-        case 'assignment': await loadAssignmentTestData(); break;
-        case 'exec': await loadExecTestData(); break;
-        case 'site': await loadSiteTestData(); break;
-        case 'impv': await loadImprovementsTestData(); break;
-        case 'sales': await loadSalesTestData(); break;
-        case 'income': await loadIncomeTestData(); break;
-        case 'calc': loadCalcTestData(); break;
-      }
-      setTestDataLoaded(sectionId, true);
-    } else {
-      // Mark as unloaded (we don't clear the data, just toggle the indicator)
-      setTestDataLoaded(sectionId, false);
-    }
-  };
 
   const toggleSubsection = (subsectionId: string) => {
     setExpandedSubsections(prev => {
@@ -384,33 +356,72 @@ export default function EditPanel() {
   const currentSection = sections.find((s) => s.id === activeSection);
   const imageMgtSection = sections.find((s) => s.id === 'image-mgt');
 
-  // Get approach toggle fields from the home section
-  const getApproachToggleFields = (): ReportField[] => {
-    const homeSection = sections.find(s => s.id === 'home');
-    if (!homeSection) return [];
-
-    const toggleFields: ReportField[] = [];
-
-    // Check subsections for approach toggle fields
-    for (const sub of homeSection.subsections || []) {
-      for (const field of sub.fields || []) {
-        if (APPROACH_TOGGLE_IDS.includes(field.id)) {
-          toggleFields.push(field);
+  // Look up a field by ID across ALL sections in the store
+  const findFieldById = (fieldId: string): ReportField | undefined => {
+    for (const section of sections) {
+      // Check main fields
+      for (const field of section.fields || []) {
+        if (field.id === fieldId) return field;
+      }
+      // Check subsection fields
+      for (const sub of section.subsections || []) {
+        for (const field of sub.fields || []) {
+          if (field.id === fieldId) return field;
         }
       }
     }
+    return undefined;
+  };
 
-    // Also check main fields
-    for (const field of homeSection.fields || []) {
-      if (APPROACH_TOGGLE_IDS.includes(field.id)) {
+  // Build HOME tab subsections from hardcoded layout (fields live in other sections)
+  const buildHomeSubsections = (): ReportSubsection[] => {
+    const subsections: ReportSubsection[] = [];
+
+    for (const [subsectionId, layout] of Object.entries(HOME_FIELD_LAYOUT)) {
+      // Collect all field IDs from the layout rows
+      const fieldIds = layout.flatMap(row => row.fields);
+
+      // Look up each field from the store
+      const fields: ReportField[] = [];
+      for (const fieldId of fieldIds) {
+        const field = findFieldById(fieldId);
+        if (field) {
+          fields.push(field);
+        } else {
+          // Create placeholder for missing fields
+          fields.push({
+            id: fieldId,
+            label: fieldId.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
+            type: 'text',
+            value: '',
+            isEditable: true,
+            inputType: 'user-input',
+          });
+        }
+      }
+
+      subsections.push({
+        id: subsectionId,
+        title: HOME_SUBSECTION_TITLES[subsectionId] || subsectionId,
+        fields,
+      });
+    }
+
+    return subsections;
+  };
+
+  // Get approach toggle fields - looks up from all sections now
+  const getApproachToggleFields = (): ReportField[] => {
+    const toggleFields: ReportField[] = [];
+
+    for (const toggleId of APPROACH_TOGGLE_IDS) {
+      const field = findFieldById(toggleId);
+      if (field) {
         toggleFields.push(field);
       }
     }
 
-    // Sort to maintain consistent order
-    return toggleFields.sort((a, b) =>
-      APPROACH_TOGGLE_IDS.indexOf(a.id) - APPROACH_TOGGLE_IDS.indexOf(b.id)
-    );
+    return toggleFields;
   };
 
   // Get related image fields from image-mgt section for the current section
@@ -794,7 +805,7 @@ export default function EditPanel() {
 
   return (
     <div className="h-full flex flex-col" style={{ backgroundColor: '#1f1f1f' }}>
-      {/* Section header with discrete test data toggle */}
+      {/* Section header */}
       <div style={{
         backgroundColor: 'transparent',
         padding: '12px 14px',
@@ -806,24 +817,6 @@ export default function EditPanel() {
         <span style={{ color: '#ffffff', fontWeight: '600', fontSize: '15px' }}>
           {currentSection.name.toUpperCase()}
         </span>
-        {/* Test data toggle - only for sections with load functions */}
-        {hasLoadFunction(currentSection.id) && (
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-400">Test Data</span>
-            <button
-              onClick={() => toggleSectionTestData(currentSection.id)}
-              className={cn(
-                'relative w-9 h-5 rounded-full transition-colors',
-                testDataLoaded?.[currentSection.id] ? 'bg-green-600' : 'bg-gray-600'
-              )}
-            >
-              <span className={cn(
-                'absolute top-0.5 left-0.5 block w-4 h-4 rounded-full bg-white transition-transform',
-                testDataLoaded?.[currentSection.id] ? 'translate-x-4' : 'translate-x-0'
-              )} />
-            </button>
-          </div>
-        )}
       </div>
 
       {/* Scrollable content */}
@@ -878,8 +871,13 @@ export default function EditPanel() {
           </div>
         )}
 
-        {/* Subsections as collapsible cards - skip approach-selection for Home since it's rendered above */}
-        {currentSection.subsections?.filter(sub => !(isHomeSection && sub.id === 'approach-selection')).map((subsection) => {
+        {/* Subsections as collapsible cards
+            For HOME: use buildHomeSubsections() to get fields from all sections
+            For others: use currentSection.subsections from registry
+            Skip approach-selection for Home since it's rendered above */}
+        {(isHomeSection ? buildHomeSubsections() : currentSection.subsections || [])
+          .filter(sub => !(isHomeSection && sub.id === 'approach-selection'))
+          .map((subsection) => {
           const isCollapsed = !expandedSubsections.has(subsection.id);
 
           return (

@@ -356,8 +356,9 @@ export const fieldRegistry: FieldDefinition[] = [
   // ============================================================================
 
   // --- TRANSMITTAL LETTER (2 fields) ---
-  { id: 'transmittal-date', storeId: 'transmittal-date', label: 'Letter Date', section: 'loe-prep', subsection: 'transmittal-content', type: 'date', inputSource: 'auto-filled', required: true },
-  { id: 'transmittal-body', storeId: 'transmittal-body', label: 'Letter Body', section: 'loe-prep', subsection: 'transmittal-content', type: 'textarea', inputSource: 'user-input', required: true },
+  // These MUST stay in section: 'home' to ensure the HOME section exists in the store
+  { id: 'transmittal-date', storeId: 'transmittal-date', label: 'Letter Date', section: 'home', subsection: 'transmittal-content', type: 'date', inputSource: 'auto-filled', required: true },
+  { id: 'transmittal-body', storeId: 'transmittal-body', label: 'Letter Body', section: 'home', subsection: 'transmittal-content', type: 'textarea', inputSource: 'user-input', required: true },
 
 
   // ============================================================================

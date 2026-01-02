@@ -6534,65 +6534,82 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     };
 
     // North Battleford Test Data - Income Approach Fields
+    // IMPORTANT: Only set HUMAN INPUT fields here, NOT calculated fields.
+    // Calculated fields will be computed by runCalculations() at the end.
 
-    // Unit Mix
+    // === UNIT MIX (Human Inputs) ===
+    // Type 1
     updateField("calc-type1-name", String(northBattlefordTestData["calc-type1-name"] || ""));
     updateField("calc-type1-count", String(northBattlefordTestData["calc-type1-count"] || ""));
     updateField("calc-type1-sf", String(northBattlefordTestData["calc-type1-sf"] || ""));
     updateField("calc-type1-rent", String(northBattlefordTestData["calc-type1-rent"] || ""));
     updateField("calc-type1-contract-rent", String(northBattlefordTestData["calc-type1-contract-rent"] || ""));
+
+    // Type 2
     updateField("calc-type2-name", String(northBattlefordTestData["calc-type2-name"] || ""));
     updateField("calc-type2-count", String(northBattlefordTestData["calc-type2-count"] || ""));
     updateField("calc-type2-sf", String(northBattlefordTestData["calc-type2-sf"] || ""));
     updateField("calc-type2-rent", String(northBattlefordTestData["calc-type2-rent"] || ""));
     updateField("calc-type2-contract-rent", String(northBattlefordTestData["calc-type2-contract-rent"] || ""));
 
-    // Revenue
-    updateField("calc-total-units", String(northBattlefordTestData["calc-total-units"] || ""));
-    updateField("calc-total-rental-revenue", String(northBattlefordTestData["calc-total-rental-revenue"] || ""));
-    updateField("calc-pgi", String(northBattlefordTestData["calc-pgi"] || ""));
-    updateField("calc-pgi-perunit", String(northBattlefordTestData["calc-pgi-perunit"] || ""));
-    updateField("calc-pgi-psf", String(northBattlefordTestData["calc-pgi-psf"] || ""));
-    updateField("calc-pgr", String(northBattlefordTestData["calc-pgr"] || ""));
+    // Type 3
+    updateField("calc-type3-name", String(northBattlefordTestData["calc-type3-name"] || ""));
+    updateField("calc-type3-count", String(northBattlefordTestData["calc-type3-count"] || ""));
+    updateField("calc-type3-sf", String(northBattlefordTestData["calc-type3-sf"] || ""));
+    updateField("calc-type3-rent", String(northBattlefordTestData["calc-type3-rent"] || ""));
+
+    // Type 4
+    updateField("calc-type4-name", String(northBattlefordTestData["calc-type4-name"] || ""));
+    updateField("calc-type4-count", String(northBattlefordTestData["calc-type4-count"] || ""));
+    updateField("calc-type4-sf", String(northBattlefordTestData["calc-type4-sf"] || ""));
+    updateField("calc-type4-rent", String(northBattlefordTestData["calc-type4-rent"] || ""));
+
+    // === OTHER INCOME (Human Inputs) ===
+    updateField("calc-parking-per-unit", String(northBattlefordTestData["calc-parking-per-unit"] || ""));
+    updateField("calc-laundry-per-unit", String(northBattlefordTestData["calc-laundry-per-unit"] || ""));
     updateField("calc-other-income", String(northBattlefordTestData["calc-other-income"] || ""));
 
-    // Vacancy
+    // === VACANCY & LOSS RATES (Human Inputs) ===
     updateField("calc-vacancy-rate", String(northBattlefordTestData["calc-vacancy-rate"] || ""));
     updateField("calc-bad-debt-rate", String(northBattlefordTestData["calc-bad-debt-rate"] || ""));
     updateField("calc-concessions-rate", String(northBattlefordTestData["calc-concessions-rate"] || ""));
 
-    // EGR
-    updateField("calc-egr", String(northBattlefordTestData["calc-egr"] || ""));
-    updateField("calc-egr-perunit", String(northBattlefordTestData["calc-egr-perunit"] || ""));
-    updateField("calc-egr-psf", String(northBattlefordTestData["calc-egr-psf"] || ""));
+    // === OPERATING EXPENSES (Human Inputs - per-unit values) ===
+    // These are the input values; annual totals are CALCULATED by runCalculations()
+    updateField("calc-exp-taxes", String(northBattlefordTestData["calc-exp-taxes"] || ""));
+    updateField("calc-exp-insurance", String(northBattlefordTestData["calc-exp-insurance"] || ""));
+    updateField("calc-exp-repairs", String(northBattlefordTestData["calc-exp-repairs"] || ""));
+    updateField("calc-exp-utilities", String(northBattlefordTestData["calc-exp-utilities"] || ""));
+    updateField("calc-exp-payroll", String(northBattlefordTestData["calc-exp-payroll"] || ""));
+    updateField("calc-exp-management", String(northBattlefordTestData["calc-exp-management"] || ""));
+    updateField("calc-exp-admin", String(northBattlefordTestData["calc-exp-admin"] || ""));
+    updateField("calc-exp-reserves", String(northBattlefordTestData["calc-exp-reserves"] || ""));
+    updateField("calc-exp-other", String(northBattlefordTestData["calc-exp-other"] || ""));
+
+    // === CAP RATE (Human Input) ===
+    updateField("calc-cap-rate", String(northBattlefordTestData["calc-cap-rate"] || ""));
+
+    // === POST-VALUE ADJUSTMENTS (Human Inputs) ===
+    updateField("calc-adj-capex", String(northBattlefordTestData["calc-adj-capex"] || "0"));
+    updateField("calc-adj-leasing", String(northBattlefordTestData["calc-adj-leasing"] || "0"));
+    updateField("calc-adj-other", String(northBattlefordTestData["calc-adj-other"] || "0"));
+
+    // === COMMENTS (Human Inputs) ===
     updateField("egr-comment", String(northBattlefordTestData["egr-comment"] || ""));
 
-    // Expenses
-    updateField("calc-exp-taxes", String(northBattlefordTestData["calc-exp-taxes"] || ""));
-    updateField("calc-exp-taxes-annual", String(northBattlefordTestData["calc-exp-taxes-annual"] || ""));
-    updateField("calc-exp-insurance", String(northBattlefordTestData["calc-exp-insurance"] || ""));
-    updateField("calc-exp-insurance-annual", String(northBattlefordTestData["calc-exp-insurance-annual"] || ""));
-    updateField("calc-exp-repairs", String(northBattlefordTestData["calc-exp-repairs"] || ""));
-    updateField("calc-exp-repairs-annual", String(northBattlefordTestData["calc-exp-repairs-annual"] || ""));
-    updateField("calc-exp-utilities", String(northBattlefordTestData["calc-exp-utilities"] || ""));
-    updateField("calc-exp-utilities-annual", String(northBattlefordTestData["calc-exp-utilities-annual"] || ""));
-    updateField("calc-exp-payroll", String(northBattlefordTestData["calc-exp-payroll"] || ""));
-    updateField("calc-exp-payroll-annual", String(northBattlefordTestData["calc-exp-payroll-annual"] || ""));
-    updateField("calc-exp-management", String(northBattlefordTestData["calc-exp-management"] || ""));
-    updateField("calc-exp-management-annual", String(northBattlefordTestData["calc-exp-management-annual"] || ""));
-    updateField("calc-exp-other", String(northBattlefordTestData["calc-exp-other"] || ""));
-    updateField("calc-exp-other-annual", String(northBattlefordTestData["calc-exp-other-annual"] || ""));
-    updateField("calc-total-expenses", String(northBattlefordTestData["calc-total-expenses"] || ""));
-    updateField("expense-ratio", String(northBattlefordTestData["expense-ratio"] || ""));
-
-    // NOI and Cap
-    updateField("calc-noi", String(northBattlefordTestData["calc-noi"] || ""));
-    updateField("calc-noi-perunit", String(northBattlefordTestData["calc-noi-perunit"] || ""));
-    updateField("calc-noi-psf", String(northBattlefordTestData["calc-noi-psf"] || ""));
-    updateField("calc-cap-rate", String(northBattlefordTestData["calc-cap-rate"] || ""));
-    updateField("dircap-value1", String(northBattlefordTestData["dircap-value1"] || ""));
-    updateField("dircap-value1-perunit", String(northBattlefordTestData["dircap-value1-perunit"] || ""));
-    updateField("dircap-value1-psf", String(northBattlefordTestData["dircap-value1-psf"] || ""));
+    // === TRIGGER CALCULATIONS ===
+    // This computes all calculated fields:
+    // - calc-total-units, calc-total-sf, calc-avg-unit-sf
+    // - calc-total-rental-revenue, calc-avg-rent-per-unit, calc-avg-rent-per-sf
+    // - calc-type*-annual, calc-type*-per-unit, calc-type*-per-sf
+    // - calc-parking-total, calc-laundry-total, calc-total-other-income
+    // - calc-pgr, calc-pgr-per-unit, calc-pgr-per-sf
+    // - calc-vacancy-loss, calc-egr, calc-egr-per-unit, calc-egr-per-sf
+    // - calc-exp-*-annual (all expense annual totals)
+    // - calc-expenses-total, calc-expense-ratio, calc-expenses-per-unit, calc-expenses-per-sf
+    // - calc-noi, calc-noi-per-unit, calc-noi-per-sf
+    // - calc-indicated-value, calc-value-per-unit, calc-value-per-sf, calc-grm
+    get().runCalculations();
 
     // Regenerate preview
     console.log("Income test data loaded - regenerating preview...");

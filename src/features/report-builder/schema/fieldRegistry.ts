@@ -140,7 +140,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'appraiser1-title', storeId: 'appraiser1-title', label: 'Appraiser 1 Title', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'appraiser1-email', storeId: 'appraiser1-email', label: 'Appraiser 1 Email', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
   { id: 'valuation-date', storeId: 'valuation-date', label: 'Date of Valuation', section: 'loe-prep', subsection: 'appraiser-info', type: 'date', inputSource: 'user-input', required: true },
-  { id: 'report-date', storeId: 'report-date', label: 'Date of Report', section: 'loe-prep', subsection: 'appraiser-info', type: 'date', inputSource: 'auto-filled', required: true },
+  { id: 'report-date', storeId: 'report-date', label: 'Date of Report', section: 'loe-prep', subsection: 'appraiser-info', type: 'date', inputSource: 'user-input', required: true },
 
   // ============================================================================
   // SECTION S3: IMAGE MANAGEMENT
@@ -315,15 +315,15 @@ export const fieldRegistry: FieldDefinition[] = [
   // ============================================================================
 
   { id: 'cover-photo', storeId: 'cover-photo', label: 'Cover Photo', section: 'cover', type: 'image', inputSource: 'user-input', required: false },
-  { id: 'property-type-display', storeId: 'property-type-display', label: 'Property Type', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
-  { id: 'property-name', storeId: 'property-name', label: 'Property Name', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
-  { id: 'street-address', storeId: 'street-address', label: 'Street Address', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
-  { id: 'city', storeId: 'city', label: 'City', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
-  { id: 'city-formal', storeId: 'city-formal', label: 'City (Formal Name)', section: 'cover', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_CityFormal' },
-  { id: 'province', storeId: 'province', label: 'Province', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
-  { id: 'province-abbr', storeId: 'province-abbr', label: 'Province Abbreviation', section: 'cover', type: 'text', inputSource: 'auto-filled', required: false },
+  { id: 'property-type-display', storeId: 'property-type-display', label: 'Property Type', section: 'cover', type: 'text', inputSource: 'user-input', required: true },
+  { id: 'property-name', storeId: 'property-name', label: 'Property Name', section: 'cover', type: 'text', inputSource: 'user-input', required: true },
+  { id: 'street-address', storeId: 'street-address', label: 'Street Address', section: 'cover', type: 'text', inputSource: 'user-input', required: true },
+  { id: 'city', storeId: 'city', label: 'City', section: 'cover', type: 'text', inputSource: 'user-input', required: true },
+  { id: 'city-formal', storeId: 'city-formal', label: 'City (Formal Name)', section: 'cover', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'Subject_CityFormal' },
+  { id: 'province', storeId: 'province', label: 'Province', section: 'cover', type: 'text', inputSource: 'user-input', required: true },
+  { id: 'province-abbr', storeId: 'province-abbr', label: 'Province Abbreviation', section: 'cover', type: 'text', inputSource: 'user-input', required: false },
   { id: 'property-full-address', storeId: 'property-full-address', label: 'Full Property Address', section: 'cover', type: 'text', inputSource: 'calculated', required: false },
-  { id: 'file-number', storeId: 'file-number', label: 'File Number', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
+  { id: 'file-number', storeId: 'file-number', label: 'File Number', section: 'cover', type: 'text', inputSource: 'user-input', required: true },
 
   // Cover - Client Info Subsection (managed in S1 - client-intake)
   // These fields are reference links to client-intake section - rendered as "Managed in S1" links in UI
@@ -334,22 +334,22 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'client-title', storeId: 'client-title', label: 'Client Title', section: 'cover', subsection: 'client-info', type: 'text', inputSource: 'user-input', required: false },
 
   // Cover - Appraiser Info Subsection
-  { id: 'appraiser-company', storeId: 'appraiser-company', label: 'Company Name', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: true },
-  { id: 'appraiser-address', storeId: 'appraiser-address', label: 'Company Address', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
-  { id: 'appraiser-city', storeId: 'appraiser-city', label: 'Company City', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
-  { id: 'appraiser-province', storeId: 'appraiser-province', label: 'Company Province', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
-  { id: 'appraiser-postal', storeId: 'appraiser-postal', label: 'Company Postal Code', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
-  { id: 'appraiser-phone', storeId: 'appraiser-phone', label: 'Company Phone', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
-  { id: 'appraiser-website', storeId: 'appraiser-website', label: 'Company Website', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'auto-filled', required: false },
+  { id: 'appraiser-company', storeId: 'appraiser-company', label: 'Company Name', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: true },
+  { id: 'appraiser-address', storeId: 'appraiser-address', label: 'Company Address', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser-city', storeId: 'appraiser-city', label: 'Company City', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser-province', storeId: 'appraiser-province', label: 'Company Province', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser-postal', storeId: 'appraiser-postal', label: 'Company Postal Code', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser-phone', storeId: 'appraiser-phone', label: 'Company Phone', section: 'loe-prep', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser-website', storeId: 'appraiser-website', label: 'Company Website', section: 'cover', subsection: 'appraiser-info', type: 'text', inputSource: 'user-input', required: false },
 
   // Cover - Location Fields (for Exec Summary)
-  { id: 'postal-code', storeId: 'postal-code', label: 'Postal Code', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false },
-  { id: 'latitude', storeId: 'latitude', label: 'Latitude', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false },
-  { id: 'longitude', storeId: 'longitude', label: 'Longitude', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false },
-  { id: 'county', storeId: 'county', label: 'County', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_County' },
-  { id: 'msa', storeId: 'msa', label: 'MSA', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_MSA' },
-  { id: 'geocode', storeId: 'geocode', label: 'Geocode', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_Geocode' },
-  { id: 'census-tract', storeId: 'census-tract', label: 'Census Tract', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_Census' },
+  { id: 'postal-code', storeId: 'postal-code', label: 'Postal Code', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'latitude', storeId: 'latitude', label: 'Latitude', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'longitude', storeId: 'longitude', label: 'Longitude', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'county', storeId: 'county', label: 'County', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'Subject_County' },
+  { id: 'msa', storeId: 'msa', label: 'MSA', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'Subject_MSA' },
+  { id: 'geocode', storeId: 'geocode', label: 'Geocode', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'Subject_Geocode' },
+  { id: 'census-tract', storeId: 'census-tract', label: 'Census Tract', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'Subject_Census' },
 
   // ============================================================================
   // SECTION: HOME (Letter of Transmittal)
@@ -357,7 +357,7 @@ export const fieldRegistry: FieldDefinition[] = [
 
   // --- TRANSMITTAL LETTER (2 fields) ---
   // These MUST stay in section: 'home' to ensure the HOME section exists in the store
-  { id: 'transmittal-date', storeId: 'transmittal-date', label: 'Letter Date', section: 'home', subsection: 'transmittal-content', type: 'date', inputSource: 'auto-filled', required: true },
+  { id: 'transmittal-date', storeId: 'transmittal-date', label: 'Letter Date', section: 'home', subsection: 'transmittal-content', type: 'date', inputSource: 'user-input', required: true },
   { id: 'transmittal-body', storeId: 'transmittal-body', label: 'Letter Body', section: 'home', subsection: 'transmittal-content', type: 'textarea', inputSource: 'user-input', required: true },
 
 
@@ -369,11 +369,11 @@ export const fieldRegistry: FieldDefinition[] = [
   // ============================================================================
   // SECTION: REPORT INFORMATION
   // ============================================================================
+  // NOTE: report-type is defined in loe-prep section (line ~117) - not duplicated here
 
-  { id: 'report-type', storeId: 'report-type', label: 'Report Type', section: 'report', type: 'text', inputSource: 'auto-filled', required: true },
   { id: 'report-purpose', storeId: 'report-purpose', label: 'Purpose', section: 'report', type: 'textarea', inputSource: 'user-input', required: true },
   { id: 'report-scope', storeId: 'report-scope', label: 'Scope of Work', section: 'report', type: 'textarea', inputSource: 'user-input', required: true },
-  { id: 'report-compliance', storeId: 'report-compliance', label: 'Compliance Standard', section: 'report', type: 'text', inputSource: 'auto-filled', required: true },
+  { id: 'report-compliance', storeId: 'report-compliance', label: 'Compliance Standard', section: 'report', type: 'text', inputSource: 'user-input', required: true },
 
   // ============================================================================
   // SECTION: EXECUTIVE SUMMARY
@@ -382,19 +382,19 @@ export const fieldRegistry: FieldDefinition[] = [
   // Exec - Property Identification Subsection
   { id: 'value-scenario', storeId: 'value-scenario', label: 'Value Scenario', section: 'exec', subsection: 'property-identification', type: 'select', inputSource: 'user-input', required: true, options: ['As Is', 'As Stabilized', 'As Complete', 'As Proposed'] },
   { id: 'property-rights', storeId: 'property-rights', label: 'Property Rights', section: 'exec', subsection: 'property-identification', type: 'select', inputSource: 'user-input', required: true, options: ['Fee Simple Estate', 'Leased Fee', 'Leasehold'] },
-  { id: 'building-style', storeId: 'building-style', label: 'Building Style', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'auto-filled', required: false },
-  { id: 'total-buildings', storeId: 'total-buildings', label: 'Total Buildings', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'auto-filled', required: false },
-  { id: 'total-nra', storeId: 'total-nra', label: 'Net Rentable Area (SF)', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'auto-filled', required: false },
-  { id: 'year-built', storeId: 'year-built', label: 'Year Built', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'auto-filled', required: false },
-  { id: 'occupancy-rate', storeId: 'occupancy-rate', label: 'Occupancy Rate (%)', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'auto-filled', required: false },
-  { id: 'stabilized-occupancy', storeId: 'stabilized-occupancy', label: 'Stabilized Occupancy (%)', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_OccupancyStabilized' },
-  { id: 'quality', storeId: 'quality', label: 'Quality', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_Quality' },
-  { id: 'condition', storeId: 'condition', label: 'Condition', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_Condition' },
-  { id: 'appeal', storeId: 'appeal', label: 'Appeal', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_Appeal' },
-  { id: 'parking', storeId: 'parking', label: 'Parking', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_Parking' },
-  { id: 'total-units', storeId: 'total-units', label: 'Total Units', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'auto-filled', required: false },
-  { id: 'stories', storeId: 'stories', label: 'Number of Stories', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'auto-filled', required: false },
-  { id: 'building-format', storeId: 'building-format', label: 'Building Format', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'auto-filled', required: false },
+  { id: 'building-style', storeId: 'building-style', label: 'Building Style', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'total-buildings', storeId: 'total-buildings', label: 'Total Buildings', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'total-nra', storeId: 'total-nra', label: 'Net Rentable Area (SF)', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'year-built', storeId: 'year-built', label: 'Year Built', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'occupancy-rate', storeId: 'occupancy-rate', label: 'Occupancy Rate (%)', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'stabilized-occupancy', storeId: 'stabilized-occupancy', label: 'Stabilized Occupancy (%)', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'user-input', required: false, valcreRange: 'Subject_OccupancyStabilized' },
+  { id: 'quality', storeId: 'quality', label: 'Quality', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'Subject_Quality' },
+  { id: 'condition', storeId: 'condition', label: 'Condition', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'Subject_Condition' },
+  { id: 'appeal', storeId: 'appeal', label: 'Appeal', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'Subject_Appeal' },
+  { id: 'parking', storeId: 'parking', label: 'Parking', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'user-input', required: false, valcreRange: 'Subject_Parking' },
+  { id: 'total-units', storeId: 'total-units', label: 'Total Units', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'stories', storeId: 'stories', label: 'Number of Stories', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'building-format', storeId: 'building-format', label: 'Building Format', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'user-input', required: false },
 
   // Exec - Value Summary Subsection
   { id: 'concluded-value', storeId: 'concluded-value', label: 'Concluded Value', section: 'exec', subsection: 'value-summary', type: 'calculated', inputSource: 'calculated', required: false },

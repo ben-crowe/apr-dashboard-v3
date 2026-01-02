@@ -8,7 +8,7 @@ import { ReportField, ReportSubsection } from '../../types/reportBuilder.types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Play, Image as ImageIcon, ChevronDown } from 'lucide-react';
+import { Play, Image as ImageIcon, ChevronDown, Database } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -83,7 +83,7 @@ const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
 const APPROACH_TOGGLE_IDS = ['home-use-income-approach', 'home-use-sales-approach', 'home-use-cost-approach'];
 
 export default function EditPanel() {
-  const { sections, activeSection, updateFieldValue, loadCalcTestData } = useReportBuilderStore();
+  const { sections, activeSection, updateFieldValue, loadCalcTestData, loadHomeTestData } = useReportBuilderStore();
 
   // Track which subsections are EXPANDED (empty = all collapsed by default)
   const [expandedSubsections, setExpandedSubsections] = useState<Set<string>>(new Set());
@@ -537,6 +537,26 @@ export default function EditPanel() {
             <h3 className="text-white text-sm font-semibold mb-3">Valuation Approaches</h3>
             <div className="flex items-center gap-8">
               {approachToggleFields.map(renderApproachToggle)}
+            </div>
+          </div>
+        )}
+
+        {/* Home Test Data Button - Only show for HOME section */}
+        {isHomeSection && (
+          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-white">Test Data</h4>
+                <p className="text-sm text-gray-300">Load North Battleford sample data for Home fields</p>
+              </div>
+              <Button
+                onClick={loadHomeTestData}
+                variant="outline"
+                className="border-gray-600 text-white hover:bg-gray-700"
+              >
+                <Database className="w-4 h-4 mr-2" />
+                Load Test Data
+              </Button>
             </div>
           </div>
         )}

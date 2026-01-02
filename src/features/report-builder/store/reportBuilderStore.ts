@@ -6137,6 +6137,57 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     get().runCalculations();
   },
 
+  loadHomeTestData: async () => {
+    console.log("=== LOAD HOME TEST DATA CALLED ===");
+
+    const updateField = (fieldId: string, value: string | number) => {
+      get().updateFieldValue(fieldId, value);
+    };
+
+    // North Battleford Test Data - Home Section Fields
+    // Maps source fields from northBattlefordTestData.ts to home-* field IDs
+
+    // Job Setup
+    updateField("home-job-id", "VAL251012");
+    updateField("home-job-status", "In Progress");
+    updateField("home-report-date", "2025-01-15");
+
+    // Client Information
+    updateField("home-client-name", `${northBattlefordTestData["client-first-name"]} ${northBattlefordTestData["client-last-name"]}`);
+    updateField("home-client-company", String(northBattlefordTestData["client-organization"] || ""));
+    updateField("home-client-email", String(northBattlefordTestData["client-email"] || ""));
+    updateField("home-client-phone", String(northBattlefordTestData["client-phone"] || ""));
+    updateField("home-client-address-street", String(northBattlefordTestData["client-address"] || ""));
+    updateField("home-client-address-city", String(northBattlefordTestData["client-city"] || ""));
+    updateField("home-client-address-state", String(northBattlefordTestData["client-province"] || ""));
+
+    // Appraiser Information
+    updateField("home-appraiser-name", String(northBattlefordTestData["appraiser-name"] || ""));
+    updateField("home-appraiser-designation", String(northBattlefordTestData["appraiser-credentials"] || ""));
+    updateField("home-appraiser-email", String(northBattlefordTestData["appraiser-email"] || ""));
+    updateField("home-appraiser-company", "Valta Group Inc.");
+
+    // Property Information
+    updateField("home-property-name", String(northBattlefordTestData["property-name"] || ""));
+    updateField("home-property-address-street", String(northBattlefordTestData["street-address"] || northBattlefordTestData["property-address"] || ""));
+    updateField("home-property-address-city", String(northBattlefordTestData["city"] || ""));
+    updateField("home-property-address-province", String(northBattlefordTestData["province"] || ""));
+    updateField("home-property-type", String(northBattlefordTestData["property-type"] || ""));
+    updateField("home-property-legal-description", String(northBattlefordTestData["report-legal"] || ""));
+
+    // Assignment Details
+    updateField("home-report-type", String(northBattlefordTestData["report-type"] || "Appraisal Report"));
+    updateField("home-property-rights", String(northBattlefordTestData["property-rights"] || ""));
+    updateField("home-intended-use", String(northBattlefordTestData["intended-use"] || ""));
+    updateField("home-intended-users", String(northBattlefordTestData["intended-user"] || ""));
+    updateField("home-scope-of-work", String(northBattlefordTestData["scope-of-work"] || ""));
+
+    // Regenerate preview
+    console.log("Home test data loaded - regenerating preview...");
+    await get().generatePreview();
+    console.log("Home test data loaded successfully");
+  },
+
   runCalculations: () => {
     const sections = get().sections;
 

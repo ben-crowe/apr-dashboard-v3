@@ -62,6 +62,7 @@ export interface ReportBuilderState {
   initializeMockData: () => void;
   toggleSidebar: () => void;
   loadCalcTestData: () => void;
+  loadHomeTestData: () => Promise<void>;
   runCalculations: () => void;
   loadFullTestData: () => void;
   loadUserInputsOnly: () => Promise<void>;

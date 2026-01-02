@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ResizablePanelGroup,
@@ -13,8 +14,13 @@ import { useReportBuilderStore } from '../store/reportBuilderStore';
 
 export default function ReportBuilderLayout() {
   const navigate = useNavigate();
+  const generatePreview = useReportBuilderStore((state) => state.generatePreview);
   const loadFullTestData = useReportBuilderStore((state) => state.loadFullTestData);
-  const activeTestMode = useReportBuilderStore((state) => state.activeTestMode);
+
+  // Generate preview on mount to show any pre-loaded data (e.g., from TDD)
+  useEffect(() => {
+    generatePreview();
+  }, [generatePreview]);
 
   const handleLoadTestData = async () => {
     await loadFullTestData();
@@ -47,44 +53,25 @@ export default function ReportBuilderLayout() {
           <span className="font-semibold">Report Builder</span>
         </div>
         <div className="flex items-center gap-3">
-          {activeTestMode === 'test-report' && (
-            <span className="text-sm italic" style={{ color: '#9ca3af' }}>
-              Test Report Mode Active - showing calculated report
-            </span>
-          )}
-          {activeTestMode === 'designer' && (
-            <span className="text-sm italic" style={{ color: '#9ca3af' }}>
-              Designer Mode - toggle sample data or load full test data
-            </span>
-          )}
           <Button
             onClick={handleLoadTestData}
             variant="ghost"
             size="sm"
-            disabled={activeTestMode === 'test-report'}
             className="gap-2 text-white border hover:!text-white"
             style={{
-              backgroundColor: activeTestMode === 'test-report' ? '#1f1f1f' : '#2a2a2a',
+              backgroundColor: '#2a2a2a',
               borderColor: '#4b5563',
-              opacity: activeTestMode === 'test-report' ? 0.5 : 1,
-              cursor: activeTestMode === 'test-report' ? 'not-allowed' : 'pointer',
               color: '#ffffff'
             }}
             onMouseEnter={(e) => {
-              if (activeTestMode !== 'test-report') {
-                e.currentTarget.style.backgroundColor = '#333333';
-                e.currentTarget.style.color = '#ffffff';
-              }
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = activeTestMode === 'test-report' ? '#1f1f1f' : '#2a2a2a';
+              e.currentTarget.style.backgroundColor = '#333333';
               e.currentTarget.style.color = '#ffffff';
             }}
-            title={
-              activeTestMode === 'test-report'
-                ? 'Disabled in Test Report Mode'
-                : 'MODE 2: Load Full Test Data - Load ALL fields from test data for full mapping validation'
-            }
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#2a2a2a';
+              e.currentTarget.style.color = '#ffffff';
+            }}
+            title="Load ALL fields from test data for full mapping validation"
           >
             <Database className="w-4 h-4" />
             Load Full Test Data

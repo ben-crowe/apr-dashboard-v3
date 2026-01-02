@@ -7,8 +7,7 @@ import CalculatedFieldDisplay from './CalculatedFieldDisplay';
 import { ReportField, ReportSubsection } from '../../types/reportBuilder.types';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Play, Image as ImageIcon, ChevronDown, Database } from 'lucide-react';
+import { Image as ImageIcon, ChevronDown } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -309,6 +308,9 @@ const SECTION_FIELD_LAYOUTS: Record<string, Record<string, SubsectionLayout>> = 
 // Approach toggle field IDs - these are rendered separately at top of Home section
 const APPROACH_TOGGLE_IDS = ['home-use-income-approach', 'home-use-sales-approach', 'home-use-cost-approach'];
 
+// Sections that have test data load functions
+const SECTIONS_WITH_LOADERS = ['home', 'cover', 'maps', 'assignment', 'exec', 'site', 'impv', 'sales', 'income', 'calc'];
+
 export default function EditPanel() {
   const {
     sections,
@@ -326,12 +328,46 @@ export default function EditPanel() {
     loadIncomeTestData,
   } = useReportBuilderStore();
 
+  // Get test data state from store
+  const testDataLoaded = useReportBuilderStore(state => state.testDataLoaded);
+  const setTestDataLoaded = useReportBuilderStore(state => state.setTestDataLoaded);
+
   // Track which subsections are EXPANDED (empty = all collapsed by default)
   const [expandedSubsections, setExpandedSubsections] = useState<Set<string>>(new Set());
 
   // State for calculator panel value tracking (CALC section)
   const [incomeValue, setIncomeValue] = useState(0);
   const [salesValue, setSalesValue] = useState(0);
+
+  // Helper function to check if section has a load function
+  const hasLoadFunction = (sectionId: string): boolean => {
+    return SECTIONS_WITH_LOADERS.includes(sectionId);
+  };
+
+  // Toggle handler for section test data
+  const toggleSectionTestData = async (sectionId: string) => {
+    const isCurrentlyLoaded = testDataLoaded?.[sectionId] || false;
+
+    if (!isCurrentlyLoaded) {
+      // Load the test data for this section
+      switch (sectionId) {
+        case 'home': await loadHomeTestData(); break;
+        case 'cover': await loadCoverTestData(); break;
+        case 'maps': await loadMapsTestData(); break;
+        case 'assignment': await loadAssignmentTestData(); break;
+        case 'exec': await loadExecTestData(); break;
+        case 'site': await loadSiteTestData(); break;
+        case 'impv': await loadImprovementsTestData(); break;
+        case 'sales': await loadSalesTestData(); break;
+        case 'income': await loadIncomeTestData(); break;
+        case 'calc': loadCalcTestData(); break;
+      }
+      setTestDataLoaded(sectionId, true);
+    } else {
+      // Mark as unloaded (we don't clear the data, just toggle the indicator)
+      setTestDataLoaded(sectionId, false);
+    }
+  };
 
   const toggleSubsection = (subsectionId: string) => {
     setExpandedSubsections(prev => {
@@ -758,7 +794,7 @@ export default function EditPanel() {
 
   return (
     <div className="h-full flex flex-col" style={{ backgroundColor: '#1f1f1f' }}>
-      {/* Dark gray section header - matches preview panel */}
+      {/* Section header with discrete test data toggle */}
       <div style={{
         backgroundColor: 'transparent',
         padding: '12px 14px',
@@ -767,13 +803,27 @@ export default function EditPanel() {
         justifyContent: 'space-between',
         borderBottom: '1px solid #4b5563'
       }}>
-        <span style={{
-          color: '#ffffff',
-          fontWeight: '600',
-          fontSize: '15px'
-        }}>
+        <span style={{ color: '#ffffff', fontWeight: '600', fontSize: '15px' }}>
           {currentSection.name.toUpperCase()}
         </span>
+        {/* Test data toggle - only for sections with load functions */}
+        {hasLoadFunction(currentSection.id) && (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-400">Test Data</span>
+            <button
+              onClick={() => toggleSectionTestData(currentSection.id)}
+              className={cn(
+                'relative w-9 h-5 rounded-full transition-colors',
+                testDataLoaded?.[currentSection.id] ? 'bg-green-600' : 'bg-gray-600'
+              )}
+            >
+              <span className={cn(
+                'absolute top-0.5 left-0.5 block w-4 h-4 rounded-full bg-white transition-transform',
+                testDataLoaded?.[currentSection.id] ? 'translate-x-4' : 'translate-x-0'
+              )} />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Scrollable content */}
@@ -802,46 +852,6 @@ export default function EditPanel() {
           </div>
         )}
 
-        {/* Home Test Data Button - Only show for HOME section */}
-        {isHomeSection && (
-          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold text-white">Test Data</h4>
-                <p className="text-sm text-gray-300">Load North Battleford sample data for Home fields</p>
-              </div>
-              <Button
-                onClick={loadHomeTestData}
-                variant="outline"
-                className="border-gray-600 text-white hover:bg-gray-700"
-              >
-                <Database className="w-4 h-4 mr-2" />
-                Load Test Data
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Calculator Test Data Button - Only show for CALC section */}
-        {currentSection.id === 'calc' && (
-          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold text-white">Calculator Test Mode</h4>
-                <p className="text-sm text-gray-300">Load North Battleford sample data to verify calculations</p>
-              </div>
-              <Button
-                onClick={loadCalcTestData}
-                variant="outline"
-                className="border-gray-600 text-white hover:bg-gray-700"
-              >
-                <Play className="w-4 h-4 mr-2" />
-                Load Valcre Test Data
-              </Button>
-            </div>
-          </div>
-        )}
-
         {/* Calculator Table Panels - Only show for CALC section */}
         {currentSection.id === 'calc' && (
           <ThemeProvider>
@@ -859,166 +869,6 @@ export default function EditPanel() {
               />
             </div>
           </ThemeProvider>
-        )}
-
-        {/* Cover Test Data Button - Only show for COVER section */}
-        {currentSection.id === 'cover' && (
-          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold text-white">Test Data</h4>
-                <p className="text-sm text-gray-300">Load North Battleford sample data for Cover fields</p>
-              </div>
-              <Button
-                onClick={loadCoverTestData}
-                variant="outline"
-                className="border-gray-600 text-white hover:bg-gray-700"
-              >
-                <Database className="w-4 h-4 mr-2" />
-                Load Test Data
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Maps Test Data Button - Only show for MAPS section */}
-        {currentSection.id === 'maps' && (
-          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold text-white">Test Data</h4>
-                <p className="text-sm text-gray-300">Load North Battleford sample data for Maps fields</p>
-              </div>
-              <Button
-                onClick={loadMapsTestData}
-                variant="outline"
-                className="border-gray-600 text-white hover:bg-gray-700"
-              >
-                <Database className="w-4 h-4 mr-2" />
-                Load Test Data
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Assignment Test Data Button - Only show for ASSIGNMENT section */}
-        {currentSection.id === 'assignment' && (
-          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold text-white">Test Data</h4>
-                <p className="text-sm text-gray-300">Load North Battleford sample data for Assignment fields</p>
-              </div>
-              <Button
-                onClick={loadAssignmentTestData}
-                variant="outline"
-                className="border-gray-600 text-white hover:bg-gray-700"
-              >
-                <Database className="w-4 h-4 mr-2" />
-                Load Test Data
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Exec Test Data Button - Only show for EXEC section */}
-        {currentSection.id === 'exec' && (
-          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold text-white">Test Data</h4>
-                <p className="text-sm text-gray-300">Load North Battleford sample data for Executive Summary fields</p>
-              </div>
-              <Button
-                onClick={loadExecTestData}
-                variant="outline"
-                className="border-gray-600 text-white hover:bg-gray-700"
-              >
-                <Database className="w-4 h-4 mr-2" />
-                Load Test Data
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Site Test Data Button - Only show for SITE section */}
-        {currentSection.id === 'site' && (
-          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold text-white">Test Data</h4>
-                <p className="text-sm text-gray-300">Load North Battleford sample data for Site Description fields</p>
-              </div>
-              <Button
-                onClick={loadSiteTestData}
-                variant="outline"
-                className="border-gray-600 text-white hover:bg-gray-700"
-              >
-                <Database className="w-4 h-4 mr-2" />
-                Load Test Data
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Improvements Test Data Button - Only show for IMPV section */}
-        {currentSection.id === 'impv' && (
-          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold text-white">Test Data</h4>
-                <p className="text-sm text-gray-300">Load North Battleford sample data for Improvements fields</p>
-              </div>
-              <Button
-                onClick={loadImprovementsTestData}
-                variant="outline"
-                className="border-gray-600 text-white hover:bg-gray-700"
-              >
-                <Database className="w-4 h-4 mr-2" />
-                Load Test Data
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Sales Test Data Button - Only show for SALES section */}
-        {currentSection.id === 'sales' && (
-          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold text-white">Test Data</h4>
-                <p className="text-sm text-gray-300">Load North Battleford sample data for Sales Comparison fields</p>
-              </div>
-              <Button
-                onClick={loadSalesTestData}
-                variant="outline"
-                className="border-gray-600 text-white hover:bg-gray-700"
-              >
-                <Database className="w-4 h-4 mr-2" />
-                Load Test Data
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* Income Test Data Button - Only show for INCOME section */}
-        {currentSection.id === 'income' && (
-          <div className="mb-4 p-4 bg-gray-800 rounded-lg border border-gray-700">
-            <div className="flex items-center justify-between">
-              <div>
-                <h4 className="font-semibold text-white">Test Data</h4>
-                <p className="text-sm text-gray-300">Load North Battleford sample data for Income Approach fields</p>
-              </div>
-              <Button
-                onClick={loadIncomeTestData}
-                variant="outline"
-                className="border-gray-600 text-white hover:bg-gray-700"
-              >
-                <Database className="w-4 h-4 mr-2" />
-                Load Test Data
-              </Button>
-            </div>
-          </div>
         )}
 
         {/* Main section fields */}

@@ -17,6 +17,13 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+// Calculator panel imports for CALC section
+import { ThemeProvider } from '@/features/calculator-demo-v4/context/ThemeContext';
+import IncomeApproachPanel from '@/features/calculator-demo-v4/components/IncomeApproachPanel';
+import SalesComparisonPanel from '@/features/calculator-demo-v4/components/SalesComparisonPanel';
+import OperatingHistoryPanel from '@/features/calculator-demo-v4/components/OperatingHistoryPanel';
+import ReconciliationPanel from '@/features/calculator-demo-v4/components/ReconciliationPanel';
+
 // Mapping of which image fields should appear in which sections
 const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
   'cover': ['img-cover-photo', 'img-signature'],
@@ -321,6 +328,10 @@ export default function EditPanel() {
 
   // Track which subsections are EXPANDED (empty = all collapsed by default)
   const [expandedSubsections, setExpandedSubsections] = useState<Set<string>>(new Set());
+
+  // State for calculator panel value tracking (CALC section)
+  const [incomeValue, setIncomeValue] = useState(0);
+  const [salesValue, setSalesValue] = useState(0);
 
   const toggleSubsection = (subsectionId: string) => {
     setExpandedSubsections(prev => {
@@ -829,6 +840,25 @@ export default function EditPanel() {
               </Button>
             </div>
           </div>
+        )}
+
+        {/* Calculator Table Panels - Only show for CALC section */}
+        {currentSection.id === 'calc' && (
+          <ThemeProvider>
+            <div className="space-y-6 mb-6">
+              <div className="text-white px-0 py-2 font-semibold text-sm mb-2 border-b border-[#4b5563]">
+                CALCULATOR TABLES
+              </div>
+              <OperatingHistoryPanel />
+              <IncomeApproachPanel onValueChange={setIncomeValue} />
+              <SalesComparisonPanel onIndicatedValueChange={setSalesValue} />
+              <ReconciliationPanel
+                incomeValue={incomeValue}
+                salesIndicatedValue={salesValue}
+                costValue={0}
+              />
+            </div>
+          </ThemeProvider>
         )}
 
         {/* Cover Test Data Button - Only show for COVER section */}

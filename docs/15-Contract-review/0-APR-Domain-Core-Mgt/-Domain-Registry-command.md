@@ -64,6 +64,81 @@ Contains: Page-by-page field inventory, which fields map to Valcre vs dashboard-
 
 ---
 
+## Architecture Hierarchy (CRITICAL - READ WHEN CONFUSED)
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     fieldRegistry.ts                            │
+│                  SINGLE SOURCE OF TRUTH                         │
+│                                                                 │
+│  - Defines all field IDs, types, labels, sections              │
+│  - 1,687 fields with consistent naming conventions             │
+│  - Everything else follows the registry                        │
+└─────────────────────────────┬───────────────────────────────────┘
+                              │
+        ┌─────────────────────┼─────────────────────┐
+        │                     │                     │
+        ▼                     ▼                     ▼
+┌───────────────┐    ┌───────────────┐    ┌───────────────┐
+│   Template    │    │   TDD Page    │    │  UI/Builder   │
+│ (HTML report) │    │ (input form)  │    │ (edit panels) │
+├───────────────┤    ├───────────────┤    ├───────────────┤
+│ MUST use      │    │ Reads from    │    │ Uses registry │
+│ registry IDs  │    │ registry      │    │ IDs           │
+│               │    │ directly      │    │               │
+│ Fix template  │    │ (auto-sync)   │    │ Match to      │
+│ if wrong      │    │               │    │ registry      │
+└───────────────┘    └───────────────┘    └───────────────┘
+        │                     │                     │
+        └─────────────────────┼─────────────────────┘
+                              │
+                              ▼
+                    ┌───────────────┐
+                    │   Test Data   │
+                    ├───────────────┤
+                    │ Uses registry │
+                    │ IDs           │
+                    └───────────────┘
+```
+
+### Hierarchy Rules
+
+| Thing | Relationship to Registry |
+|-------|-------------------------|
+| **Template** | MUST use registry IDs. Fix template if it has wrong/weird IDs. |
+| **TDD Page** | Imports from fieldRegistry.ts directly. Auto-correct. |
+| **UI/Builder** | Uses registry IDs. HOME tab looks up fields across all sections. |
+| **Test Data** | Uses registry IDs. |
+
+### Workflow When IDs Don't Match
+
+1. **Registry defines the ID** (e.g., `client-city`, `client-province`)
+2. **Check template** - Does it use the registry ID?
+3. **If template has weird ID** (e.g., `client-city-state-zip`) → **Fix the template**, not the registry
+4. **Everything else follows registry** automatically
+
+### Common Confusion Points
+
+| Scenario | Wrong Approach | Correct Approach |
+|----------|---------------|------------------|
+| Template has `client-city-state-zip` but registry has `client-city` + `client-province` | Change registry to match template | Fix template to use `{{client-city}}, {{client-province}}` |
+| Template has `appraiser-name-credentials` but registry has `appraiser-name` | Add new registry field | Fix template to use `{{appraiser-name}}` or add credentials separately |
+| UI shows field not in template | Assume template is incomplete | Check if field SHOULD be in template, then add it |
+
+### Quick Decision Tree
+
+```
+Is the ID in fieldRegistry.ts?
+├── YES → Use that ID everywhere (template, UI, test data)
+│         If template has different ID → FIX TEMPLATE
+│
+└── NO → Should it exist?
+         ├── YES → Add to registry first, then use everywhere
+         └── NO → Don't use it anywhere
+```
+
+---
+
 ## Before Modifying Registry
 
 1. **Read domain knowledge** for current field counts and conventions

@@ -6146,42 +6146,46 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     };
 
     // North Battleford Test Data - HOME Section Fields
-    // Uses home-* field IDs that match the 'home' section in the registry
+    // Uses canonical field IDs from fieldRegistry
 
-    // Job Setup (home section)
-    updateField("home-job-id", "VAL251012");
-    updateField("home-job-status", "In Progress");
-    updateField("home-report-date", "2025-01-15");
+    // Job Setup (from loe-prep section)
+    updateField("job-number", "VAL251012");
+    updateField("report-date", "2025-01-15");
 
-    // Client Information (home section)
-    updateField("home-client-name", `${northBattlefordTestData["client-first-name"]} ${northBattlefordTestData["client-last-name"]}`);
-    updateField("home-client-company", String(northBattlefordTestData["client-organization"] || ""));
-    updateField("home-client-email", String(northBattlefordTestData["client-email"] || ""));
-    updateField("home-client-phone", String(northBattlefordTestData["client-phone"] || ""));
-    updateField("home-client-address-street", String(northBattlefordTestData["client-address"] || ""));
-    updateField("home-client-address-city", String(northBattlefordTestData["client-city"] || ""));
-    updateField("home-client-address-state", String(northBattlefordTestData["client-province"] || ""));
+    // Client Information (from client-intake section)
+    updateField("client-first-name", String(northBattlefordTestData["client-first-name"] || ""));
+    updateField("client-last-name", String(northBattlefordTestData["client-last-name"] || ""));
+    updateField("client-organization", String(northBattlefordTestData["client-organization"] || ""));
+    updateField("client-email", String(northBattlefordTestData["client-email"] || ""));
+    updateField("client-phone", String(northBattlefordTestData["client-phone"] || ""));
+    updateField("client-address", String(northBattlefordTestData["client-address"] || ""));
+    updateField("client-city", String(northBattlefordTestData["client-city"] || ""));
+    updateField("client-province", String(northBattlefordTestData["client-province"] || ""));
 
-    // Appraiser Information (home section)
-    updateField("home-appraiser-name", String(northBattlefordTestData["appraiser-name"] || ""));
-    updateField("home-appraiser-designation", String(northBattlefordTestData["appraiser-credentials"] || ""));
-    updateField("home-appraiser-email", String(northBattlefordTestData["appraiser-email"] || ""));
-    updateField("home-appraiser-company", "Valta Group Inc.");
+    // Appraiser Information (from loe-prep section)
+    updateField("appraiser-name", String(northBattlefordTestData["appraiser-name"] || ""));
+    updateField("appraiser-credentials", String(northBattlefordTestData["appraiser-credentials"] || ""));
+    updateField("appraiser-email", String(northBattlefordTestData["appraiser-email"] || ""));
+    updateField("appraiser-company", "Valta Group Inc.");
 
-    // Property Information (home section)
-    updateField("home-property-name", String(northBattlefordTestData["property-name"] || ""));
-    updateField("home-property-address-street", String(northBattlefordTestData["street-address"] || northBattlefordTestData["property-address"] || ""));
-    updateField("home-property-address-city", String(northBattlefordTestData["city"] || ""));
-    updateField("home-property-address-province", String(northBattlefordTestData["province"] || ""));
-    updateField("home-property-type", String(northBattlefordTestData["property-type"] || ""));
-    updateField("home-property-legal-description", String(northBattlefordTestData["report-legal"] || ""));
+    // Property Information (from client-intake section)
+    updateField("property-name", String(northBattlefordTestData["property-name"] || ""));
+    updateField("property-address", String(northBattlefordTestData["street-address"] || northBattlefordTestData["property-address"] || ""));
+    updateField("property-type", String(northBattlefordTestData["property-type"] || ""));
+    updateField("legal-description", String(northBattlefordTestData["report-legal"] || ""));
 
-    // Assignment Details (home section)
-    updateField("home-report-type", String(northBattlefordTestData["report-type"] || "Appraisal Report"));
-    updateField("home-property-rights", String(northBattlefordTestData["property-rights"] || ""));
-    updateField("home-intended-use", String(northBattlefordTestData["intended-use"] || ""));
-    updateField("home-intended-users", String(northBattlefordTestData["intended-user"] || ""));
-    updateField("home-scope-of-work", String(northBattlefordTestData["scope-of-work"] || ""));
+    // Assignment Details (from loe-prep section)
+    updateField("report-type", String(northBattlefordTestData["report-type"] || "Appraisal Report"));
+    updateField("property-rights", String(northBattlefordTestData["property-rights"] || ""));
+    updateField("intended-use", String(northBattlefordTestData["intended-use"] || ""));
+    updateField("scope-of-work", String(northBattlefordTestData["scope-of-work"] || ""));
+
+    // Contact Information (from client-intake section)
+    updateField("contact-first-name", String(northBattlefordTestData["contact-first-name"] || ""));
+    updateField("contact-last-name", String(northBattlefordTestData["contact-last-name"] || ""));
+    updateField("contact-phone", String(northBattlefordTestData["contact-phone"] || ""));
+    updateField("contact-email", String(northBattlefordTestData["contact-email"] || ""));
+    updateField("valuation-date", String(northBattlefordTestData["valuation-date"] || ""));
 
     // Regenerate preview
     console.log("Home test data loaded - regenerating preview...");

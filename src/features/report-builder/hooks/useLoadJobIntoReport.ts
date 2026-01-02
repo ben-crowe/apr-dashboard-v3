@@ -100,87 +100,65 @@ function parseAddress(address: string | undefined): {
  * Based on the field registry in /src/features/report-builder/schema/fieldRegistry.ts
  */
 const fieldMappings: JobDataMapping[] = [
-  // Job Setup
+  // Job Setup (canonical IDs from loe-prep section)
   {
-    fieldId: 'home-job-id',
+    fieldId: 'job-number',
     getValue: (job, loe) => loe?.valcre_job_id || job.job_number || job.id,
   },
   {
-    fieldId: 'home-job-status',
-    getValue: (job) => {
-      // Map job status to Report Builder status options
-      const statusMap: Record<string, string> = {
-        'submitted': 'Draft',
-        'in_progress': 'In Progress',
-        'loe_pending': 'In Progress',
-        'loe_sent': 'In Progress',
-        'loe_signed': 'In Progress',
-        'contract_generated': 'In Progress',
-        'paid': 'In Progress',
-        'active': 'In Progress',
-        'completed': 'Complete',
-      };
-      return statusMap[job.status] || 'Draft';
-    },
+    fieldId: 'report-date',
+    getValue: () => new Date().toISOString().split('T')[0], // Today's date
   },
 
-  // Client Information
+  // Client Information (canonical IDs from client-intake section)
   {
-    fieldId: 'home-client-name',
-    getValue: (job) => `${job.client_first_name} ${job.client_last_name}`.trim(),
+    fieldId: 'client-first-name',
+    getValue: (job) => job.client_first_name,
   },
   {
-    fieldId: 'home-client-email',
+    fieldId: 'client-last-name',
+    getValue: (job) => job.client_last_name,
+  },
+  {
+    fieldId: 'client-email',
     getValue: (job) => job.client_email,
   },
   {
-    fieldId: 'home-client-phone',
+    fieldId: 'client-phone',
     getValue: (job) => job.client_phone,
   },
   {
-    fieldId: 'home-client-company',
+    fieldId: 'client-organization',
     getValue: (job) => job.client_organization,
   },
   {
-    fieldId: 'home-client-address-street',
+    fieldId: 'client-address',
     getValue: (job) => parseAddress(job.client_address).street,
   },
   {
-    fieldId: 'home-client-address-city',
+    fieldId: 'client-city',
     getValue: (job) => parseAddress(job.client_address).city,
   },
   {
-    fieldId: 'home-client-address-state',
+    fieldId: 'client-province',
     getValue: (job) => parseAddress(job.client_address).province,
   },
   {
-    fieldId: 'home-client-address-postal',
+    fieldId: 'client-postal',
     getValue: (job) => parseAddress(job.client_address).postal,
   },
 
-  // Property Information
+  // Property Information (canonical IDs from client-intake section)
   {
-    fieldId: 'home-property-name',
+    fieldId: 'property-name',
     getValue: (job, _loe, property) => property?.property_name || job.property_name,
   },
   {
-    fieldId: 'home-property-address-street',
+    fieldId: 'property-address',
     getValue: (job) => parseAddress(job.property_address).street,
   },
   {
-    fieldId: 'home-property-address-city',
-    getValue: (job) => parseAddress(job.property_address).city,
-  },
-  {
-    fieldId: 'home-property-address-province',
-    getValue: (job) => parseAddress(job.property_address).province,
-  },
-  {
-    fieldId: 'home-property-address-postal',
-    getValue: (job) => parseAddress(job.property_address).postal,
-  },
-  {
-    fieldId: 'home-property-type',
+    fieldId: 'property-type',
     getValue: (job) => {
       // Map job property type to Report Builder options
       // Property types can be array or single value
@@ -207,44 +185,43 @@ const fieldMappings: JobDataMapping[] = [
     },
   },
   {
-    fieldId: 'home-property-legal-description',
+    fieldId: 'legal-description',
     getValue: (_job, _loe, property) => property?.legal_description,
   },
 
-  // Assignment Details
+  // Assignment Details (canonical IDs from loe-prep section)
   {
-    fieldId: 'home-report-type',
+    fieldId: 'report-type',
     getValue: (_job, loe) => loe?.report_type,
   },
   {
-    fieldId: 'home-property-rights',
+    fieldId: 'property-rights',
     getValue: (_job, loe) => loe?.property_rights_appraised,
   },
   {
-    fieldId: 'home-intended-use',
+    fieldId: 'intended-use',
     getValue: (job) => job.intended_use,
   },
   {
-    fieldId: 'home-scope-of-work',
+    fieldId: 'scope-of-work',
     getValue: (_job, loe) => loe?.scope_of_work,
   },
 
-  // Subject Property Contact (if different from client)
+  // Subject Property Contact (canonical IDs from client-intake section)
   {
-    fieldId: 'home-contact-name',
-    getValue: (job) => {
-      if (job.property_contact_first_name || job.property_contact_last_name) {
-        return `${job.property_contact_first_name || ''} ${job.property_contact_last_name || ''}`.trim();
-      }
-      return undefined;
-    },
+    fieldId: 'contact-first-name',
+    getValue: (job) => job.property_contact_first_name,
   },
   {
-    fieldId: 'home-contact-phone',
+    fieldId: 'contact-last-name',
+    getValue: (job) => job.property_contact_last_name,
+  },
+  {
+    fieldId: 'contact-phone',
     getValue: (job) => job.property_contact_phone,
   },
   {
-    fieldId: 'home-contact-email',
+    fieldId: 'contact-email',
     getValue: (job) => job.property_contact_email,
   },
 ];

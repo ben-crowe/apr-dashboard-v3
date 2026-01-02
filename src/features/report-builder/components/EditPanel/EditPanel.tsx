@@ -41,44 +41,44 @@ const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
 type FieldLayoutRow = { fields: string[]; widths: string[] };
 type SubsectionLayout = FieldLayoutRow[];
 
-// HOME TAB - Uses fields from the 'home' section in the store
-// All fields use 'home-' prefix except transmittal fields
+// HOME TAB - Uses canonical field IDs from fieldRegistry
+// Fields come from client-intake, loe-prep, and other sections
 const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
   'job-setup': [
-    { fields: ['home-job-id', 'home-report-date'], widths: ['50%', '50%'] },
+    { fields: ['job-number', 'report-date'], widths: ['50%', '50%'] },
   ],
   'client-info': [
-    { fields: ['home-client-name', 'home-client-company'], widths: ['50%', '50%'] },
-    { fields: ['home-client-email', 'home-client-phone'], widths: ['50%', '50%'] },
-    { fields: ['home-client-address-street'], widths: ['100%'] },
-    { fields: ['home-client-address-city', 'home-client-address-state', 'home-client-address-postal'], widths: ['40%', '30%', '30%'] },
+    { fields: ['client-first-name', 'client-last-name'], widths: ['50%', '50%'] },
+    { fields: ['client-organization'], widths: ['100%'] },
+    { fields: ['client-email', 'client-phone'], widths: ['50%', '50%'] },
+    { fields: ['client-address'], widths: ['100%'] },
+    { fields: ['client-city', 'client-province', 'client-postal'], widths: ['40%', '30%', '30%'] },
   ],
   'appraiser-info': [
-    { fields: ['home-appraiser-name', 'home-appraiser-designation'], widths: ['50%', '50%'] },
-    { fields: ['home-appraiser-license', 'home-appraiser-company'], widths: ['50%', '50%'] },
-    { fields: ['home-appraiser-email', 'home-appraiser-phone'], widths: ['50%', '50%'] },
+    { fields: ['appraiser-name', 'appraiser-credentials'], widths: ['50%', '50%'] },
+    { fields: ['appraiser-aic', 'appraiser-company'], widths: ['50%', '50%'] },
+    { fields: ['appraiser-email', 'appraiser-phone'], widths: ['50%', '50%'] },
   ],
   'property-info': [
-    { fields: ['home-property-name'], widths: ['100%'] },
-    { fields: ['home-property-address-street'], widths: ['100%'] },
-    { fields: ['home-property-address-city', 'home-property-address-province', 'home-property-address-postal'], widths: ['40%', '30%', '30%'] },
-    { fields: ['home-property-type', 'home-property-pid'], widths: ['50%', '50%'] },
-    { fields: ['home-property-legal-description'], widths: ['100%'] },
+    { fields: ['property-name'], widths: ['100%'] },
+    { fields: ['property-address'], widths: ['100%'] },
+    { fields: ['property-type'], widths: ['50%'] },
+    { fields: ['legal-description'], widths: ['100%'] },
   ],
   'assignment-details': [
-    { fields: ['home-report-type', 'home-property-rights'], widths: ['50%', '50%'] },
-    { fields: ['home-intended-use', 'home-intended-users'], widths: ['50%', '50%'] },
-    { fields: ['home-scope-of-work'], widths: ['100%'] },
+    { fields: ['report-type', 'property-rights'], widths: ['50%', '50%'] },
+    { fields: ['intended-use', 'valuation-premises'], widths: ['50%', '50%'] },
+    { fields: ['scope-of-work'], widths: ['100%'] },
   ],
   'subject-contact': [
-    { fields: ['home-contact-name', 'home-contact-title'], widths: ['50%', '50%'] },
-    { fields: ['home-contact-phone', 'home-contact-email'], widths: ['50%', '50%'] },
-    { fields: ['home-inspection-date'], widths: ['50%'] },
+    { fields: ['contact-first-name', 'contact-last-name'], widths: ['50%', '50%'] },
+    { fields: ['contact-phone', 'contact-email'], widths: ['50%', '50%'] },
+    { fields: ['valuation-date'], widths: ['50%'] },
   ],
   'assumptions-conditions': [
-    { fields: ['home-extraordinary-assumptions'], widths: ['100%'] },
-    { fields: ['home-hypothetical-conditions'], widths: ['100%'] },
-    { fields: ['home-limiting-conditions'], widths: ['100%'] },
+    { fields: ['extraordinary-assumptions'], widths: ['100%'] },
+    { fields: ['hypothetical-conditions'], widths: ['100%'] },
+    { fields: ['extraordinary-limiting-conditions'], widths: ['100%'] },
   ],
   'transmittal-content': [
     { fields: ['transmittal-date'], widths: ['50%'] },

@@ -41,14 +41,16 @@ const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
 type FieldLayoutRow = { fields: string[]; widths: string[] };
 type SubsectionLayout = FieldLayoutRow[];
 
-// HOME TAB - Uses canonical field IDs from fieldRegistry
-// Fields come from client-intake, loe-prep, and other sections
+// HOME TAB - Uses field IDs that match template placeholders
+// Verified against: Report-MF-template.html and fieldRegistry.ts
 const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
   'job-setup': [
     { fields: ['job-number', 'report-date'], widths: ['50%', '50%'] },
   ],
   'client-info': [
+    // Template uses {{client-full-name}} - calculated from first+last
     { fields: ['client-first-name', 'client-last-name'], widths: ['50%', '50%'] },
+    { fields: ['client-full-name'], widths: ['100%'] },  // Calculated field for template
     { fields: ['client-organization'], widths: ['100%'] },
     { fields: ['client-email', 'client-phone'], widths: ['50%', '50%'] },
     { fields: ['client-address'], widths: ['100%'] },
@@ -63,11 +65,13 @@ const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
     { fields: ['property-name'], widths: ['100%'] },
     { fields: ['property-address'], widths: ['100%'] },
     { fields: ['property-type'], widths: ['50%'] },
-    { fields: ['legal-description'], widths: ['100%'] },
+    // Template uses {{report-legal}} not {{legal-description}}
+    { fields: ['report-legal'], widths: ['100%'] },
   ],
   'assignment-details': [
     { fields: ['report-type', 'property-rights'], widths: ['50%', '50%'] },
-    { fields: ['intended-use', 'valuation-premises'], widths: ['50%', '50%'] },
+    // Template uses {{report-intendeduse}} and {{report-intendeduser}}
+    { fields: ['report-intendeduse', 'report-intendeduser'], widths: ['50%', '50%'] },
     { fields: ['scope-of-work'], widths: ['100%'] },
   ],
   'subject-contact': [
@@ -76,9 +80,10 @@ const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
     { fields: ['valuation-date'], widths: ['50%'] },
   ],
   'assumptions-conditions': [
-    { fields: ['extraordinary-assumptions'], widths: ['100%'] },
-    { fields: ['hypothetical-conditions'], widths: ['100%'] },
-    { fields: ['extraordinary-limiting-conditions'], widths: ['100%'] },
+    // Template uses {{report-extraordinary}}, {{report-hypothetical}}, {{report-limcond}}
+    { fields: ['report-extraordinary'], widths: ['100%'] },
+    { fields: ['report-hypothetical'], widths: ['100%'] },
+    { fields: ['report-limcond'], widths: ['100%'] },
   ],
   'transmittal-content': [
     { fields: ['transmittal-date'], widths: ['50%'] },

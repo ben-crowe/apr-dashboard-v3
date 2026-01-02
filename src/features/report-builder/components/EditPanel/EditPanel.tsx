@@ -41,51 +41,46 @@ const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
 type FieldLayoutRow = { fields: string[]; widths: string[] };
 type SubsectionLayout = FieldLayoutRow[];
 
-// HOME TAB - Curated view of fields from other sections
-// These fields LIVE in other sections (client-intake, loe-prep, report, etc.)
-// HOME tab displays them for quick access - it's a dashboard view, not a section with its own fields
+// HOME TAB - Uses fields from the 'home' section in the store
+// All fields use 'home-' prefix except transmittal fields
 const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
   'job-setup': [
-    { fields: ['company-jobnumber', 'report-date'], widths: ['50%', '50%'] },
+    { fields: ['home-job-id', 'home-report-date'], widths: ['50%', '50%'] },
   ],
   'client-info': [
-    { fields: ['client-first-name', 'client-last-name'], widths: ['50%', '50%'] },
-    { fields: ['client-full-name', 'client-organization'], widths: ['50%', '50%'] },
-    { fields: ['client-email', 'client-phone'], widths: ['50%', '50%'] },
-    { fields: ['client-address'], widths: ['100%'] },
-    { fields: ['client-city', 'client-province'], widths: ['50%', '50%'] },
+    { fields: ['home-client-name', 'home-client-company'], widths: ['50%', '50%'] },
+    { fields: ['home-client-email', 'home-client-phone'], widths: ['50%', '50%'] },
+    { fields: ['home-client-address-street'], widths: ['100%'] },
+    { fields: ['home-client-address-city', 'home-client-address-state', 'home-client-address-postal'], widths: ['40%', '30%', '30%'] },
   ],
   'appraiser-info': [
-    { fields: ['appraiser-name', 'appraiser-designation'], widths: ['50%', '50%'] },
-    { fields: ['appraiser-aic', 'company-name'], widths: ['50%', '50%'] },
-    { fields: ['appraiser-email', 'appraiser-phone'], widths: ['50%', '50%'] },
+    { fields: ['home-appraiser-name', 'home-appraiser-designation'], widths: ['50%', '50%'] },
+    { fields: ['home-appraiser-license', 'home-appraiser-company'], widths: ['50%', '50%'] },
+    { fields: ['home-appraiser-email', 'home-appraiser-phone'], widths: ['50%', '50%'] },
   ],
   'property-info': [
-    { fields: ['subject-name'], widths: ['100%'] },
-    { fields: ['subject-street'], widths: ['100%'] },
-    { fields: ['city', 'subject-state', 'subject-zip'], widths: ['40%', '30%', '30%'] },
-    { fields: ['subject-primary', 'apn'], widths: ['50%', '50%'] },
-    { fields: ['report-legal'], widths: ['100%'] },
+    { fields: ['home-property-name'], widths: ['100%'] },
+    { fields: ['home-property-address-street'], widths: ['100%'] },
+    { fields: ['home-property-address-city', 'home-property-address-province', 'home-property-address-postal'], widths: ['40%', '30%', '30%'] },
+    { fields: ['home-property-type', 'home-property-pid'], widths: ['50%', '50%'] },
+    { fields: ['home-property-legal-description'], widths: ['100%'] },
   ],
   'assignment-details': [
-    { fields: ['report-type', 'property-rights'], widths: ['50%', '50%'] },
-    { fields: ['intended-use', 'intended-user'], widths: ['50%', '50%'] },
-    { fields: ['scope-of-work'], widths: ['100%'] },
+    { fields: ['home-report-type', 'home-property-rights'], widths: ['50%', '50%'] },
+    { fields: ['home-intended-use', 'home-intended-users'], widths: ['50%', '50%'] },
+    { fields: ['home-scope-of-work'], widths: ['100%'] },
   ],
-  'property-contact': [
-    { fields: ['contact-first-name', 'contact-last-name'], widths: ['50%', '50%'] },
-    { fields: ['contact-phone', 'contact-email'], widths: ['50%', '50%'] },
-    { fields: ['inspection-date'], widths: ['50%'] },
+  'subject-contact': [
+    { fields: ['home-contact-name', 'home-contact-title'], widths: ['50%', '50%'] },
+    { fields: ['home-contact-phone', 'home-contact-email'], widths: ['50%', '50%'] },
+    { fields: ['home-inspection-date'], widths: ['50%'] },
   ],
-  'special-conditions': [
-    { fields: ['report-extraordinary'], widths: ['100%'] },
-    { fields: ['report-hypothetical'], widths: ['100%'] },
-    { fields: ['report-limcond'], widths: ['100%'] },
+  'assumptions-conditions': [
+    { fields: ['home-extraordinary-assumptions'], widths: ['100%'] },
+    { fields: ['home-hypothetical-conditions'], widths: ['100%'] },
+    { fields: ['home-limiting-conditions'], widths: ['100%'] },
   ],
-  'approach-selection': [
-    { fields: ['use-income-approach', 'use-sales-approach', 'use-cost-approach'], widths: ['33.33%', '33.33%', '33.33%'] },
-  ],
-  'transmittal': [
+  'transmittal-content': [
     { fields: ['transmittal-date'], widths: ['50%'] },
     { fields: ['transmittal-body'], widths: ['100%'] },
   ],
@@ -98,10 +93,9 @@ const HOME_SUBSECTION_TITLES: Record<string, string> = {
   'appraiser-info': 'Appraiser Information',
   'property-info': 'Property Information',
   'assignment-details': 'Assignment Details',
-  'property-contact': 'Property Contact',
-  'special-conditions': 'Special Conditions',
-  'approach-selection': 'Valuation Approaches',
-  'transmittal': 'Letter of Transmittal',
+  'subject-contact': 'Property Contact',
+  'assumptions-conditions': 'Assumptions & Conditions',
+  'transmittal-content': 'Letter of Transmittal',
 };
 
 // Layout configuration for Cover section field groupings
@@ -325,7 +319,8 @@ const SECTION_FIELD_LAYOUTS: Record<string, Record<string, SubsectionLayout>> = 
 };
 
 // Approach toggle field IDs - these are rendered separately at top of Home section
-const APPROACH_TOGGLE_IDS = ['use-income-approach', 'use-sales-approach', 'use-cost-approach'];
+// TODO: Add these fields to the store when approach selection is needed
+const APPROACH_TOGGLE_IDS: string[] = [];
 
 export default function EditPanel() {
   const {
@@ -910,11 +905,9 @@ export default function EditPanel() {
         )}
 
         {/* Subsections as collapsible cards
-            For HOME: use buildHomeSubsections() to get fields from all sections
-            For others: use currentSection.subsections from registry
-            Skip approach-selection for Home since it's rendered above */}
+            For HOME: use buildHomeSubsections() to get fields from the home section store
+            For others: use currentSection.subsections from registry */}
         {(isHomeSection ? buildHomeSubsections() : currentSection.subsections || [])
-          .filter(sub => !(isHomeSection && sub.id === 'approach-selection'))
           .map((subsection) => {
           const isCollapsed = !expandedSubsections.has(subsection.id);
 

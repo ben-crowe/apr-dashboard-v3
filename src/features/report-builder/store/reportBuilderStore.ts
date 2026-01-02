@@ -6187,6 +6187,20 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("contact-email", String(northBattlefordTestData["contact-email"] || ""));
     updateField("valuation-date", String(northBattlefordTestData["valuation-date"] || ""));
 
+    // Company Information (from client-intake section)
+    updateField("company-name", String(northBattlefordTestData["company-name"] || ""));
+    updateField("company-address", String(northBattlefordTestData["company-address"] || ""));
+    updateField("company-city-state-zip", String(northBattlefordTestData["company-city-state-zip"] || ""));
+    updateField("company-phone", String(northBattlefordTestData["company-phone"] || ""));
+    updateField("company-website", String(northBattlefordTestData["company-website"] || ""));
+    updateField("company-jobnumber", String(northBattlefordTestData["company-jobnumber"] || ""));
+
+    // Client postal (for client-city-state-zip calculation)
+    updateField("client-postal", String(northBattlefordTestData["client-postal"] || ""));
+
+    // Composite client address (calculated field fallback)
+    updateField("client-city-state-zip", String(northBattlefordTestData["client-city-state-zip"] || ""));
+
     // Regenerate preview
     console.log("Home test data loaded - regenerating preview...");
     await get().generatePreview();

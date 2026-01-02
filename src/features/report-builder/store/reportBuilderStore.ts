@@ -6315,6 +6315,9 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // North Battleford Test Data - Executive Summary Section Fields
     // Maps source fields from northBattlefordTestData.ts to exec field IDs
+    // NOTE: Calculated fields (calc-total-units, dircap-*, final-value-conclusion,
+    // calc-pgi, calc-egr, calc-total-expenses, calc-noi) are computed by runCalculations()
+    // and should NOT be loaded here to prevent overwriting calculated values.
 
     // Property Identification
     updateField("property-name", String(northBattlefordTestData["property-name"] || ""));
@@ -6323,8 +6326,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("province", String(northBattlefordTestData["province"] || ""));
     updateField("property-type", String(northBattlefordTestData["property-type"] || ""));
 
-    // Building Details
-    updateField("calc-total-units", String(northBattlefordTestData["calc-total-units"] || ""));
+    // Building Details (only human-input fields, not calc-total-units which is calculated)
     updateField("gba", String(northBattlefordTestData["gba"] || ""));
     updateField("nra", String(northBattlefordTestData["nra"] || ""));
 
@@ -6333,21 +6335,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("report-date", String(northBattlefordTestData["report-date"] || ""));
     updateField("inspection-date", String(northBattlefordTestData["inspection-date"] || ""));
 
-    // Direct Capitalization Values
-    updateField("dircap-value1", String(northBattlefordTestData["dircap-value1"] || ""));
-    updateField("dircap-value1-perunit", String(northBattlefordTestData["dircap-value1-perunit"] || ""));
-    updateField("dircap-value1-psf", String(northBattlefordTestData["dircap-value1-psf"] || ""));
-
-    // Final Value
-    updateField("final-value-conclusion", String(northBattlefordTestData["final-value-conclusion"] || ""));
-
-    // Income & Expense Summary
-    updateField("calc-pgi", String(northBattlefordTestData["calc-pgi"] || ""));
-    updateField("calc-egr", String(northBattlefordTestData["calc-egr"] || ""));
-    updateField("calc-total-expenses", String(northBattlefordTestData["calc-total-expenses"] || ""));
-    updateField("calc-noi", String(northBattlefordTestData["calc-noi"] || ""));
-
-    // Rates & Ratios
+    // Rates & Ratios (calc-cap-rate is an INPUT used by runCalculations, not a calculated output)
     updateField("calc-cap-rate", String(northBattlefordTestData["calc-cap-rate"] || ""));
     updateField("expense-ratio", String(northBattlefordTestData["expense-ratio"] || ""));
 
@@ -6406,8 +6394,6 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("comp1-adj-size", String(northBattlefordTestData["comp1-adj-size"] || ""));
     updateField("comp1-adj-age-condition", String(northBattlefordTestData["comp1-adj-age-condition"] || ""));
     updateField("comp1-adj-other", String(northBattlefordTestData["comp1-adj-other"] || ""));
-    updateField("comp1-adjprice-per-unit", String(northBattlefordTestData["comp1-adjprice-per-unit"] || ""));
-    updateField("comp1-total-adjustments", String(northBattlefordTestData["comp1-total-adjustments"] || ""));
     updateField("comp1-overall-comparison", String(northBattlefordTestData["comp1-overall-comparison"] || ""));
 
     // Comp 2
@@ -6439,10 +6425,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("comp2-adj-market-conditions", String(northBattlefordTestData["comp2-adj-market-conditions"] || ""));
     updateField("comp2-adj-location", String(northBattlefordTestData["comp2-adj-location"] || ""));
     updateField("comp2-adj-size", String(northBattlefordTestData["comp2-adj-size"] || ""));
-    updateField("comp2-adj-age-condition", String(northBattlefordTestData["comp2-adj-age-condition"] || ""));
     updateField("comp2-adj-other", String(northBattlefordTestData["comp2-adj-other"] || ""));
-    updateField("comp2-adjprice-per-unit", String(northBattlefordTestData["comp2-adjprice-per-unit"] || ""));
-    updateField("comp2-total-adjustments", String(northBattlefordTestData["comp2-total-adjustments"] || ""));
     updateField("comp2-overall-comparison", String(northBattlefordTestData["comp2-overall-comparison"] || ""));
 
     // Comp 3
@@ -6472,12 +6455,9 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("comp3-adj-financing", String(northBattlefordTestData["comp3-adj-financing"] || ""));
     updateField("comp3-adj-sale-conditions", String(northBattlefordTestData["comp3-adj-sale-conditions"] || ""));
     updateField("comp3-adj-market-conditions", String(northBattlefordTestData["comp3-adj-market-conditions"] || ""));
-    updateField("comp3-adj-location", String(northBattlefordTestData["comp3-adj-location"] || ""));
     updateField("comp3-adj-size", String(northBattlefordTestData["comp3-adj-size"] || ""));
     updateField("comp3-adj-age-condition", String(northBattlefordTestData["comp3-adj-age-condition"] || ""));
     updateField("comp3-adj-other", String(northBattlefordTestData["comp3-adj-other"] || ""));
-    updateField("comp3-adjprice-per-unit", String(northBattlefordTestData["comp3-adjprice-per-unit"] || ""));
-    updateField("comp3-total-adjustments", String(northBattlefordTestData["comp3-total-adjustments"] || ""));
     updateField("comp3-overall-comparison", String(northBattlefordTestData["comp3-overall-comparison"] || ""));
 
     // Comp 4
@@ -6505,20 +6485,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("comp4-noi-per-unit", String(northBattlefordTestData["comp4-noi-per-unit"] || ""));
     updateField("comp4-adj-property-rights", String(northBattlefordTestData["comp4-adj-property-rights"] || ""));
     updateField("comp4-adj-financing", String(northBattlefordTestData["comp4-adj-financing"] || ""));
-    updateField("comp4-adj-sale-conditions", String(northBattlefordTestData["comp4-adj-sale-conditions"] || ""));
     updateField("comp4-adj-market-conditions", String(northBattlefordTestData["comp4-adj-market-conditions"] || ""));
     updateField("comp4-adj-location", String(northBattlefordTestData["comp4-adj-location"] || ""));
-    updateField("comp4-adj-size", String(northBattlefordTestData["comp4-adj-size"] || ""));
-    updateField("comp4-adj-age-condition", String(northBattlefordTestData["comp4-adj-age-condition"] || ""));
-    updateField("comp4-adj-other", String(northBattlefordTestData["comp4-adj-other"] || ""));
-    updateField("comp4-adjprice-per-unit", String(northBattlefordTestData["comp4-adjprice-per-unit"] || ""));
-    updateField("comp4-total-adjustments", String(northBattlefordTestData["comp4-total-adjustments"] || ""));
     updateField("comp4-overall-comparison", String(northBattlefordTestData["comp4-overall-comparison"] || ""));
 
-    // DCA Statistics
-    updateField("dca-adjprice-high", String(northBattlefordTestData["dca-adjprice-high"] || ""));
-    updateField("dca-adjprice-avg", String(northBattlefordTestData["dca-adjprice-avg"] || ""));
-    updateField("dca-adjprice-low", String(northBattlefordTestData["dca-adjprice-low"] || ""));
 
     // Regenerate preview
     console.log("Sales test data loaded - regenerating preview...");
@@ -6689,7 +6659,6 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("building-class", String(northBattlefordTestData["building-class"] || ""));
     updateField("gba", String(northBattlefordTestData["subject-gba"] || ""));
     updateField("nra", String(northBattlefordTestData["subject-nra"] || ""));
-    updateField("calc-total-units", String(northBattlefordTestData["calc-total-units"] || ""));
 
     // Design and Layout
     updateField("functional-design", String(northBattlefordTestData["functional-design"] || ""));

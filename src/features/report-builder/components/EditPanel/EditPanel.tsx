@@ -341,6 +341,9 @@ export default function EditPanel() {
   const [incomeValue, setIncomeValue] = useState(0);
   const [salesValue, setSalesValue] = useState(0);
 
+  // Track if all subsections are expanded
+  const [allExpanded, setAllExpanded] = useState(false);
+
   const toggleSubsection = (subsectionId: string) => {
     setExpandedSubsections(prev => {
       const next = new Set(prev);
@@ -351,6 +354,26 @@ export default function EditPanel() {
       }
       return next;
     });
+  };
+
+  // Toggle all subsections expanded/collapsed
+  const toggleAllSubsections = () => {
+    if (allExpanded) {
+      // Collapse all
+      setExpandedSubsections(new Set());
+      setAllExpanded(false);
+    } else {
+      // Expand all - get all subsection IDs for current section
+      const currentSect = sections.find((s) => s.id === activeSection);
+      if (currentSect) {
+        const isHome = currentSect.id === 'home';
+        const subsectionIds = isHome
+          ? Object.keys(HOME_FIELD_LAYOUT)
+          : (currentSect.subsections || []).map(s => s.id);
+        setExpandedSubsections(new Set(subsectionIds));
+        setAllExpanded(true);
+      }
+    }
   };
 
   const currentSection = sections.find((s) => s.id === activeSection);
@@ -817,6 +840,21 @@ export default function EditPanel() {
         <span style={{ color: '#ffffff', fontWeight: '600', fontSize: '15px' }}>
           {currentSection.name.toUpperCase()}
         </span>
+        {/* Expand/Collapse All button */}
+        <button
+          type="button"
+          onClick={toggleAllSubsections}
+          className="p-1 rounded hover:bg-gray-700 transition-colors"
+          title={allExpanded ? 'Collapse all sections' : 'Expand all sections'}
+        >
+          <ChevronDown
+            className={cn(
+              "w-4 h-4 transition-transform duration-200",
+              allExpanded ? "rotate-180" : "-rotate-90"
+            )}
+            style={{ color: '#888888' }}
+          />
+        </button>
       </div>
 
       {/* Scrollable content */}

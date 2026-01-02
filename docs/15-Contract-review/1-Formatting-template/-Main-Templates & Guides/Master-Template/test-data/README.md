@@ -16,10 +16,16 @@ test-data/
 │
 └── sections/                     ← Field documentation by section
     ├── home-inputs.md            ← Home tab fields (37 fields)
+    ├── cover-inputs.md           ← Cover page fields (9 fields)
+    ├── maps-inputs.md            ← Maps & images fields (22 fields)
+    ├── assignment-inputs.md      ← Assignment scope fields (22 fields)
+    ├── exec-inputs.md            ← Executive summary fields (24 fields)
+    ├── site-inputs.md            ← Site description fields (24 fields)
+    ├── improvements-inputs.md    ← Building description fields (19 fields)
+    ├── sales-inputs.md           ← Sales comparison fields (~200 fields)
+    ├── income-inputs.md          ← Income approach fields (62 fields)
     ├── financial-inputs.md       ← Calculator user inputs
-    ├── property-details.md       ← Property info fields
-    ├── comparable-sales.md       ← Comp data fields
-    └── historical-data.md        ← Operating history fields
+    └── financial-inputs-v1.md    ← Financial inputs (alternate version)
 ```
 
 ---

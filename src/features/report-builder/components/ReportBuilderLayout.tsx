@@ -13,11 +13,11 @@ import { useReportBuilderStore } from '../store/reportBuilderStore';
 
 export default function ReportBuilderLayout() {
   const navigate = useNavigate();
-  const loadUserInputsOnly = useReportBuilderStore((state) => state.loadUserInputsOnly);
+  const loadFullTestData = useReportBuilderStore((state) => state.loadFullTestData);
   const activeTestMode = useReportBuilderStore((state) => state.activeTestMode);
 
   const handleLoadTestData = async () => {
-    await loadUserInputsOnly();
+    await loadFullTestData();
   };
 
   return (

@@ -15,6 +15,7 @@ test-data/
 ├── [future-property-v1.md]       ← Add new properties here
 │
 └── sections/                     ← Field documentation by section
+    ├── home-inputs.md            ← Home tab fields (37 fields)
     ├── financial-inputs.md       ← Calculator user inputs
     ├── property-details.md       ← Property info fields
     ├── comparable-sales.md       ← Comp data fields
@@ -58,6 +59,7 @@ Calculated Values
 
 | Category | Prefix | User Input? | Example |
 |----------|--------|-------------|---------|
+| Home Tab | `home-*` | YES | client, property, appraiser |
 | Unit Mix | `calc-type{N}-` | YES | count, sf, rent |
 | Expenses | `calc-exp-` | YES | per-unit amounts |
 | Rates | `calc-*-rate` | YES | vacancy, cap rate |

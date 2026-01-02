@@ -8929,12 +8929,12 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         // === PAGE NAVIGATION ===
         const pageInput = document.getElementById('page-input');
         const pageCount = document.getElementById('page-count');
-        const allPageSheets = document.querySelectorAll('.page-sheet');
-        
-        // Get actual page numbers from data attributes
-        const pageNumbers = Array.from(allPageSheets).map(p => 
-            parseInt(p.getAttribute('data-page-num').replace('Page ', ''))
-        ).sort((a, b) => a - b);
+
+        // Use let for variables that need updating when pages are re-injected
+        let allPageSheets = document.querySelectorAll('.page-sheet');
+        let pageNumbers = [];
+        let minDisplay = 0;
+        let maxDisplay = 0;
 
         // Map internal page number to display number
         // v2.4.0: Page numbers now match directly (no conversion needed)
@@ -8949,22 +8949,56 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             return display;
         }
 
-        // Calculate bounds
-        const minInternal = Math.min(...pageNumbers);
-        const maxInternal = Math.max(...pageNumbers);
-        const minDisplay = internalToDisplay(minInternal);
-        const maxDisplay = internalToDisplay(maxInternal);
-        
-        // Set input constraints
-        pageInput.min = minDisplay;
-        pageInput.max = maxDisplay;
-
         function goToPage(internalNum) {
             const targetPage = document.querySelector(`[data-page-num="Page ${internalNum}"]`);
             if (targetPage) {
                 targetPage.scrollIntoView({ behavior: 'auto', block: 'start' });
             }
         }
+
+        // Global function to update page count after pages are re-injected
+        // Called by PreviewPanel.tsx after injecting pages
+        window.updatePageCount = function() {
+            console.log('[Page Navigation] updatePageCount called - re-querying DOM');
+
+            // Re-query page sheets from DOM
+            allPageSheets = document.querySelectorAll('.page-sheet');
+
+            if (allPageSheets.length === 0) {
+                console.warn('[Page Navigation] No .page-sheet elements found');
+                return;
+            }
+
+            // Recalculate page numbers
+            pageNumbers = Array.from(allPageSheets).map(p => {
+                const attr = p.getAttribute('data-page-num');
+                return attr ? parseInt(attr.replace('Page ', '')) : 0;
+            }).sort((a, b) => a - b);
+
+            // Recalculate bounds
+            const minInternal = Math.min(...pageNumbers);
+            const maxInternal = Math.max(...pageNumbers);
+            minDisplay = internalToDisplay(minInternal);
+            maxDisplay = internalToDisplay(maxInternal);
+
+            // Update input constraints
+            pageInput.min = minDisplay;
+            pageInput.max = maxDisplay;
+
+            // Update page count display
+            pageCount.textContent = `of ${pageNumbers.length}`;
+
+            // Keep current page value if valid, otherwise reset to first page
+            let currentVal = parseInt(pageInput.value);
+            if (isNaN(currentVal) || currentVal < minDisplay || currentVal > maxDisplay) {
+                pageInput.value = internalToDisplay(pageNumbers[0]);
+            }
+
+            console.log(`[Page Navigation] Updated: ${pageNumbers.length} pages, range ${minDisplay} to ${maxDisplay}`);
+        };
+
+        // Initial page count setup
+        window.updatePageCount();
 
         // Listen for any input change (typing, arrows, etc)
         pageInput.addEventListener('input', function() {
@@ -9000,24 +9034,21 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             }
         });
 
-        // Initialize
-        const totalDisplayPages = pageNumbers.length;
-        pageCount.textContent = `of ${totalDisplayPages}`;
-        pageInput.value = internalToDisplay(pageNumbers[0]);
-
         // Track visible page on scroll
         const container = document.getElementById('preview-container');
         let scrollTimeout;
         container.addEventListener('scroll', function() {
             clearTimeout(scrollTimeout);
             scrollTimeout = setTimeout(() => {
+                // Re-query page sheets in case they were updated
+                const currentPageSheets = document.querySelectorAll('.page-sheet');
                 const containerRect = container.getBoundingClientRect();
                 const containerCenter = containerRect.top + containerRect.height / 3;
-                
+
                 let closestPage = null;
                 let closestDistance = Infinity;
-                
-                allPageSheets.forEach(page => {
+
+                currentPageSheets.forEach(page => {
                     const rect = page.getBoundingClientRect();
                     const pageCenter = rect.top + rect.height / 2;
                     const distance = Math.abs(pageCenter - containerCenter);

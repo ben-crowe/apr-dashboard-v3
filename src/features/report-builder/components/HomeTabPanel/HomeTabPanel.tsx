@@ -49,14 +49,34 @@ interface CollapsibleSectionProps {
   children: React.ReactNode;
   isCollapsed: boolean;
   onToggle: () => void;
+  isLocked?: boolean;
+  onLockToggle?: () => void;
+  showLock?: boolean;
 }
 
-function CollapsibleSection({ id, title, children, isCollapsed, onToggle }: CollapsibleSectionProps) {
+function CollapsibleSection({ id, title, children, isCollapsed, onToggle, isLocked, onLockToggle, showLock }: CollapsibleSectionProps) {
+  const handleLockClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onLockToggle?.();
+  };
+
   return (
-    <div className={`section ${isCollapsed ? 'collapsed' : ''}`} id={id}>
+    <div className={`section ${isCollapsed ? 'collapsed' : ''} ${isLocked ? 'locked' : ''}`} id={id}>
       <div className="section-header" onClick={onToggle}>
         <h3>{title}</h3>
-        <div className="collapse-icon">&#9660;</div>
+        <div className="header-controls">
+          {showLock && (
+            <label className="lock-toggle" onClick={handleLockClick} title="Persistent - data carries across appraisals">
+              <input
+                type="checkbox"
+                checked={isLocked || false}
+                onChange={() => {}}
+              />
+              <span className="lock-icon">{isLocked ? '🔒' : '🔓'}</span>
+            </label>
+          )}
+          <div className="collapse-icon">&#9660;</div>
+        </div>
       </div>
       <div className="section-content">
         {children}
@@ -119,6 +139,9 @@ export default function HomeTabPanel() {
   // Track collapsed state for each section
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
 
+  // Track locked (persistent) sections - these move to bottom and stay across appraisals
+  const [lockedSections, setLockedSections] = useState<Set<string>>(new Set(['appraisal-firm']));
+
   // Toggle section collapse
   const toggleSection = useCallback((sectionId: string) => {
     setCollapsedSections(prev => {
@@ -155,6 +178,19 @@ export default function HomeTabPanel() {
       collapseAll();
     }
   }, [allCollapsed, expandAll, collapseAll]);
+
+  // Toggle section lock (persistent)
+  const toggleLock = useCallback((sectionId: string) => {
+    setLockedSections(prev => {
+      const next = new Set(prev);
+      if (next.has(sectionId)) {
+        next.delete(sectionId);
+      } else {
+        next.add(sectionId);
+      }
+      return next;
+    });
+  }, []);
 
   // Handle reset form - reinitialize from registry
   const handleResetForm = useCallback(() => {
@@ -338,33 +374,6 @@ export default function HomeTabPanel() {
                 <option>Vacant</option>
               </select>
             </div>
-            <div className="form-group span-2">
-              <label>Property Description Prefix</label>
-              <textarea
-                placeholder="e.g., The subject property is a..."
-                value={String(getValue('property-description-prefix') || '')}
-                onChange={onInputChange('property-description-prefix')}
-              />
-            </div>
-          </div>
-        </CollapsibleSection>
-
-        {/* 3. APPRAISAL FIRM */}
-        <CollapsibleSection
-          id="appraisal-firm"
-          title="Appraisal Firm"
-          isCollapsed={collapsedSections.has('appraisal-firm')}
-          onToggle={() => toggleSection('appraisal-firm')}
-        >
-          <div className="form-grid form-grid-4">
-            <div className="form-group span-2">
-              <label>Company Name</label>
-              <input
-                type="text"
-                value={String(getValue('company-name') || '')}
-                onChange={onInputChange('company-name')}
-              />
-            </div>
             <div className="form-group">
               <label>Report Type</label>
               <select
@@ -375,6 +384,36 @@ export default function HomeTabPanel() {
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
               </select>
+            </div>
+            <div className="form-group full-width">
+              <label>Property Description Prefix</label>
+              <textarea
+                placeholder="e.g., The subject property is a..."
+                value={String(getValue('property-description-prefix') || '')}
+                onChange={onInputChange('property-description-prefix')}
+              />
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* 3. APPRAISAL FIRM - Lockable persistent section */}
+        <CollapsibleSection
+          id="appraisal-firm"
+          title="Appraisal Firm"
+          isCollapsed={collapsedSections.has('appraisal-firm')}
+          onToggle={() => toggleSection('appraisal-firm')}
+          isLocked={lockedSections.has('appraisal-firm')}
+          onLockToggle={() => toggleLock('appraisal-firm')}
+          showLock={true}
+        >
+          <div className="form-grid form-grid-4">
+            <div className="form-group span-2">
+              <label>Company Name</label>
+              <input
+                type="text"
+                value={String(getValue('company-name') || '')}
+                onChange={onInputChange('company-name')}
+              />
             </div>
             <div className="form-group">
               <label>Appraisal Status</label>

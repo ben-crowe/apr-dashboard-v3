@@ -261,6 +261,59 @@
   display: none;
 }
 
+/* Locked (Persistent) Sections */
+.section.locked {
+  background: #1e2a1e;
+  border-color: #2d4a2d;
+  opacity: 0.85;
+}
+
+.section.locked .section-header {
+  background: #1e2a1e;
+}
+
+.section.locked .section-header:hover {
+  background: #243324;
+}
+
+.section.locked .section-content {
+  background: #1a251a;
+}
+
+.section.locked .section-header h3::after {
+  content: ' (persistent)';
+  font-size: 9px;
+  font-weight: 400;
+  color: #6a9a6a;
+  text-transform: none;
+  margin-left: 6px;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lock-toggle {
+  cursor: pointer;
+  font-size: 12px;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.lock-toggle:hover {
+  opacity: 1;
+}
+
+.lock-toggle input {
+  display: none;
+}
+
+.lock-icon {
+  font-size: 11px;
+}
+
 /* Form Grid */
 .form-grid {
   display: grid;

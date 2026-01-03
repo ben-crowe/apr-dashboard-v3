@@ -140,7 +140,8 @@ export default function HomeTabPanel() {
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
 
   // Track locked (persistent) sections - these move to bottom and stay across appraisals
-  const [lockedSections, setLockedSections] = useState<Set<string>>(new Set(['appraisal-firm']));
+  // Appraisal Firm + Appraisers are persistent (names, credentials, contact info don't change per job)
+  const [lockedSections, setLockedSections] = useState<Set<string>>(new Set(['appraisal-firm', 'appraisers']));
 
   // Toggle section collapse
   const toggleSection = useCallback((sectionId: string) => {
@@ -576,259 +577,6 @@ export default function HomeTabPanel() {
                 value={String(getValue('client-salutation') || '')}
                 onChange={onInputChange('client-salutation')}
               />
-            </div>
-          </div>
-        </CollapsibleSection>
-
-        {/* 5. APPRAISERS */}
-        <CollapsibleSection
-          id="appraisers"
-          title="Appraisers"
-          isCollapsed={collapsedSections.has('appraisers')}
-          onToggle={() => toggleSection('appraisers')}
-        >
-          {/* Primary Appraiser */}
-          <div className="subsection">
-            <div className="subsection-title">Primary Appraiser</div>
-            <div className="form-grid form-grid-4">
-              <div className="form-group">
-                <label>Name</label>
-                <input
-                  type="text"
-                  value={String(getValue('appraiser-name') || '')}
-                  onChange={onInputChange('appraiser-name')}
-                />
-              </div>
-              <div className="form-group">
-                <label>Credentials</label>
-                <input
-                  type="text"
-                  placeholder="AACI, P.App"
-                  value={String(getValue('appraiser-credentials') || '')}
-                  onChange={onInputChange('appraiser-credentials')}
-                />
-              </div>
-              <div className="form-group">
-                <label>Title</label>
-                <input
-                  type="text"
-                  placeholder="Managing Partner"
-                  value={String(getValue('appraiser-title') || '')}
-                  onChange={onInputChange('appraiser-title')}
-                />
-              </div>
-              <div className="form-group">
-                <label>Role</label>
-                <select
-                  value={String(getValue('appraiser-role') || 'Primary Appraiser')}
-                  onChange={onInputChange('appraiser-role')}
-                >
-                  <option>Primary Appraiser</option>
-                  <option>Co-Appraiser</option>
-                  <option>Review Appraiser</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Phone</label>
-                <input
-                  type="tel"
-                  value={String(getValue('appraiser-phone') || '')}
-                  onChange={onInputChange('appraiser-phone')}
-                />
-              </div>
-              <div className="form-group">
-                <label>Email</label>
-                <input
-                  type="email"
-                  value={String(getValue('appraiser-email') || '')}
-                  onChange={onInputChange('appraiser-email')}
-                />
-              </div>
-              <div className="form-group">
-                <label>AIC License #</label>
-                <input
-                  type="text"
-                  value={String(getValue('appraiser-aic') || '')}
-                  onChange={onInputChange('appraiser-aic')}
-                />
-              </div>
-              <div className="form-group">
-                <label>License Expiry</label>
-                <input
-                  type="date"
-                  value={String(getValue('appraiser-license-expiry') || '')}
-                  onChange={onInputChange('appraiser-license-expiry')}
-                />
-              </div>
-            </div>
-            <div className="appraiser-extra-row">
-              <div className="toggle-group">
-                <ToggleRow
-                  checked={getValue('appraiser1-inspected') === true}
-                  onChange={onToggleChange('appraiser1-inspected')}
-                  label="Inspected Property"
-                />
-                <ToggleRow
-                  checked={getValue('appraiser1-all-units') === true}
-                  onChange={onToggleChange('appraiser1-all-units')}
-                  label="All Units Inspected"
-                />
-                <ToggleRow
-                  checked={getValue('appraiser1-ce') === true}
-                  onChange={onToggleChange('appraiser1-ce')}
-                  label="CE Completed"
-                />
-                <ToggleRow
-                  checked={getValue('appraiser1-ethics') === true}
-                  onChange={onToggleChange('appraiser1-ethics')}
-                  label="Ethics Completed"
-                />
-              </div>
-              <div className="form-group">
-                <label>Inspection Date</label>
-                <input
-                  type="date"
-                  value={String(getValue('inspection-date-1') || '')}
-                  onChange={onInputChange('inspection-date-1')}
-                />
-              </div>
-              <div className="form-group">
-                <label>Inspection Extent</label>
-                <input
-                  type="text"
-                  placeholder="Exterior and common areas"
-                  value={String(getValue('inspection-extent') || '')}
-                  onChange={onInputChange('inspection-extent')}
-                />
-              </div>
-              <div className="form-group">
-                <label>Signature</label>
-                <div className="file-upload">
-                  <button className="file-upload-btn">Upload</button>
-                  <div className="file-preview">IMG</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Secondary Appraiser */}
-          <div className="subsection">
-            <div className="subsection-title">Secondary Appraiser (Optional)</div>
-            <div className="form-grid form-grid-4">
-              <div className="form-group">
-                <label>Name</label>
-                <input
-                  type="text"
-                  value={String(getValue('appraiser2-name') || '')}
-                  onChange={onInputChange('appraiser2-name')}
-                />
-              </div>
-              <div className="form-group">
-                <label>Credentials</label>
-                <input
-                  type="text"
-                  value={String(getValue('appraiser2-credentials') || '')}
-                  onChange={onInputChange('appraiser2-credentials')}
-                />
-              </div>
-              <div className="form-group">
-                <label>Title</label>
-                <input
-                  type="text"
-                  value={String(getValue('appraiser2-title') || '')}
-                  onChange={onInputChange('appraiser2-title')}
-                />
-              </div>
-              <div className="form-group">
-                <label>Role</label>
-                <select
-                  value={String(getValue('appraiser2-role') || 'Co-Appraiser')}
-                  onChange={onInputChange('appraiser2-role')}
-                >
-                  <option>Co-Appraiser</option>
-                  <option>Primary Appraiser</option>
-                  <option>Review Appraiser</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Phone</label>
-                <input
-                  type="tel"
-                  value={String(getValue('appraiser2-phone') || '')}
-                  onChange={onInputChange('appraiser2-phone')}
-                />
-              </div>
-              <div className="form-group">
-                <label>Email</label>
-                <input
-                  type="email"
-                  value={String(getValue('appraiser2-email') || '')}
-                  onChange={onInputChange('appraiser2-email')}
-                />
-              </div>
-              <div className="form-group">
-                <label>AIC License #</label>
-                <input
-                  type="text"
-                  value={String(getValue('appraiser2-aic') || '')}
-                  onChange={onInputChange('appraiser2-aic')}
-                />
-              </div>
-              <div className="form-group">
-                <label>License Expiry</label>
-                <input
-                  type="date"
-                  value={String(getValue('appraiser2-license-expiry') || '')}
-                  onChange={onInputChange('appraiser2-license-expiry')}
-                />
-              </div>
-            </div>
-            <div className="appraiser-extra-row">
-              <div className="toggle-group">
-                <ToggleRow
-                  checked={getValue('appraiser2-inspected') === true}
-                  onChange={onToggleChange('appraiser2-inspected')}
-                  label="Inspected Property"
-                />
-                <ToggleRow
-                  checked={getValue('appraiser2-all-units') === true}
-                  onChange={onToggleChange('appraiser2-all-units')}
-                  label="All Units Inspected"
-                />
-                <ToggleRow
-                  checked={getValue('appraiser2-ce') === true}
-                  onChange={onToggleChange('appraiser2-ce')}
-                  label="CE Completed"
-                />
-                <ToggleRow
-                  checked={getValue('appraiser2-ethics') === true}
-                  onChange={onToggleChange('appraiser2-ethics')}
-                  label="Ethics Completed"
-                />
-              </div>
-              <div className="form-group">
-                <label>Inspection Date</label>
-                <input
-                  type="date"
-                  value={String(getValue('inspection-date-2') || '')}
-                  onChange={onInputChange('inspection-date-2')}
-                />
-              </div>
-              <div className="form-group">
-                <label>Inspection Extent</label>
-                <input
-                  type="text"
-                  value={String(getValue('inspection-extent-2') || '')}
-                  onChange={onInputChange('inspection-extent-2')}
-                />
-              </div>
-              <div className="form-group">
-                <label>Signature</label>
-                <div className="file-upload">
-                  <button className="file-upload-btn">Upload</button>
-                  <div className="file-preview">IMG</div>
-                </div>
-              </div>
             </div>
           </div>
         </CollapsibleSection>
@@ -1360,6 +1108,148 @@ Respectfully submitted,`}
 
         {/* LOCKED/PERSISTENT SECTIONS - render at bottom when locked */}
         {lockedSections.has('appraisal-firm') && appraisalFirmSection}
+
+        {/* APPRAISERS - always at bottom (not priority fields) */}
+        <CollapsibleSection
+          id="appraisers"
+          title="Appraisers"
+          isCollapsed={collapsedSections.has('appraisers')}
+          onToggle={() => toggleSection('appraisers')}
+          isLocked={lockedSections.has('appraisers')}
+          onLockToggle={() => toggleLock('appraisers')}
+          showLock={true}
+        >
+          {/* Primary Appraiser */}
+          <div className="subsection">
+            <div className="subsection-title">Primary Appraiser</div>
+            <div className="form-grid form-grid-4">
+              <div className="form-group">
+                <label>Name</label>
+                <input type="text" value={String(getValue('appraiser-name') || '')} onChange={onInputChange('appraiser-name')} />
+              </div>
+              <div className="form-group">
+                <label>Credentials</label>
+                <input type="text" placeholder="AACI, P.App" value={String(getValue('appraiser-credentials') || '')} onChange={onInputChange('appraiser-credentials')} />
+              </div>
+              <div className="form-group">
+                <label>Title</label>
+                <input type="text" placeholder="Managing Partner" value={String(getValue('appraiser-title') || '')} onChange={onInputChange('appraiser-title')} />
+              </div>
+              <div className="form-group">
+                <label>Role</label>
+                <select value={String(getValue('appraiser-role') || 'Primary Appraiser')} onChange={onInputChange('appraiser-role')}>
+                  <option>Primary Appraiser</option>
+                  <option>Co-Appraiser</option>
+                  <option>Review Appraiser</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Phone</label>
+                <input type="tel" value={String(getValue('appraiser-phone') || '')} onChange={onInputChange('appraiser-phone')} />
+              </div>
+              <div className="form-group">
+                <label>Email</label>
+                <input type="email" value={String(getValue('appraiser-email') || '')} onChange={onInputChange('appraiser-email')} />
+              </div>
+              <div className="form-group">
+                <label>AIC License #</label>
+                <input type="text" value={String(getValue('appraiser-aic') || '')} onChange={onInputChange('appraiser-aic')} />
+              </div>
+              <div className="form-group">
+                <label>License Expiry</label>
+                <input type="date" value={String(getValue('appraiser-license-expiry') || '')} onChange={onInputChange('appraiser-license-expiry')} />
+              </div>
+            </div>
+            <div className="appraiser-extra-row">
+              <div className="toggle-group">
+                <ToggleRow checked={getValue('appraiser1-inspected') === true} onChange={onToggleChange('appraiser1-inspected')} label="Inspected Property" />
+                <ToggleRow checked={getValue('appraiser1-all-units') === true} onChange={onToggleChange('appraiser1-all-units')} label="All Units Inspected" />
+                <ToggleRow checked={getValue('appraiser1-ce') === true} onChange={onToggleChange('appraiser1-ce')} label="CE Completed" />
+                <ToggleRow checked={getValue('appraiser1-ethics') === true} onChange={onToggleChange('appraiser1-ethics')} label="Ethics Completed" />
+              </div>
+              <div className="form-group">
+                <label>Inspection Date</label>
+                <input type="date" value={String(getValue('inspection-date-1') || '')} onChange={onInputChange('inspection-date-1')} />
+              </div>
+              <div className="form-group">
+                <label>Inspection Extent</label>
+                <input type="text" placeholder="Exterior and common areas" value={String(getValue('inspection-extent') || '')} onChange={onInputChange('inspection-extent')} />
+              </div>
+              <div className="form-group">
+                <label>Signature</label>
+                <div className="file-upload">
+                  <button className="file-upload-btn">Upload</button>
+                  <div className="file-preview">IMG</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* Secondary Appraiser */}
+          <div className="subsection">
+            <div className="subsection-title">Secondary Appraiser (Optional)</div>
+            <div className="form-grid form-grid-4">
+              <div className="form-group">
+                <label>Name</label>
+                <input type="text" value={String(getValue('appraiser2-name') || '')} onChange={onInputChange('appraiser2-name')} />
+              </div>
+              <div className="form-group">
+                <label>Credentials</label>
+                <input type="text" value={String(getValue('appraiser2-credentials') || '')} onChange={onInputChange('appraiser2-credentials')} />
+              </div>
+              <div className="form-group">
+                <label>Title</label>
+                <input type="text" value={String(getValue('appraiser2-title') || '')} onChange={onInputChange('appraiser2-title')} />
+              </div>
+              <div className="form-group">
+                <label>Role</label>
+                <select value={String(getValue('appraiser2-role') || 'Co-Appraiser')} onChange={onInputChange('appraiser2-role')}>
+                  <option>Co-Appraiser</option>
+                  <option>Primary Appraiser</option>
+                  <option>Review Appraiser</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Phone</label>
+                <input type="tel" value={String(getValue('appraiser2-phone') || '')} onChange={onInputChange('appraiser2-phone')} />
+              </div>
+              <div className="form-group">
+                <label>Email</label>
+                <input type="email" value={String(getValue('appraiser2-email') || '')} onChange={onInputChange('appraiser2-email')} />
+              </div>
+              <div className="form-group">
+                <label>AIC License #</label>
+                <input type="text" value={String(getValue('appraiser2-aic') || '')} onChange={onInputChange('appraiser2-aic')} />
+              </div>
+              <div className="form-group">
+                <label>License Expiry</label>
+                <input type="date" value={String(getValue('appraiser2-license-expiry') || '')} onChange={onInputChange('appraiser2-license-expiry')} />
+              </div>
+            </div>
+            <div className="appraiser-extra-row">
+              <div className="toggle-group">
+                <ToggleRow checked={getValue('appraiser2-inspected') === true} onChange={onToggleChange('appraiser2-inspected')} label="Inspected Property" />
+                <ToggleRow checked={getValue('appraiser2-all-units') === true} onChange={onToggleChange('appraiser2-all-units')} label="All Units Inspected" />
+                <ToggleRow checked={getValue('appraiser2-ce') === true} onChange={onToggleChange('appraiser2-ce')} label="CE Completed" />
+                <ToggleRow checked={getValue('appraiser2-ethics') === true} onChange={onToggleChange('appraiser2-ethics')} label="Ethics Completed" />
+              </div>
+              <div className="form-group">
+                <label>Inspection Date</label>
+                <input type="date" value={String(getValue('inspection-date-2') || '')} onChange={onInputChange('inspection-date-2')} />
+              </div>
+              <div className="form-group">
+                <label>Inspection Extent</label>
+                <input type="text" value={String(getValue('inspection-extent-2') || '')} onChange={onInputChange('inspection-extent-2')} />
+              </div>
+              <div className="form-group">
+                <label>Signature</label>
+                <div className="file-upload">
+                  <button className="file-upload-btn">Upload</button>
+                  <div className="file-preview">IMG</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CollapsibleSection>
 
       </div>
     </div>

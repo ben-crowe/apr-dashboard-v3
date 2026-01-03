@@ -16,7 +16,32 @@
   padding: 16px;
 }
 
-/* Page Header */
+/* Header Row with Expand/Collapse and Save/Reset buttons */
+.home-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  background: #2a2a2a;
+  border-radius: 8px;
+  border: 1px solid #353535;
+  border-bottom: 2px solid #3a3a3a;
+}
+
+.home-header-row .header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.home-header-row .header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Page Header (legacy - kept for compatibility) */
 .home-page-header {
   display: flex;
   align-items: center;
@@ -45,6 +70,7 @@
   font-weight: 600;
   cursor: pointer;
   border: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .btn-primary {
@@ -470,5 +496,16 @@
   .adjacent-grid,
   .ratings-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .home-header-row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  .home-header-row .header-left,
+  .home-header-row .header-right {
+    justify-content: center;
   }
 }

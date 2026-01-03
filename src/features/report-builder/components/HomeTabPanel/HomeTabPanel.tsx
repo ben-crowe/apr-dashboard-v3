@@ -4,7 +4,7 @@
  * 12 collapsible sections with dark theme styling
  */
 
-import { useState, useCallback, ChangeEvent } from 'react';
+import { useState, useCallback, useMemo, ChangeEvent } from 'react';
 import { useReportBuilderStore } from '../../store/reportBuilderStore';
 import { fieldRegistry } from '../../schema/fieldRegistry';
 import './HomeTabPanel.css';
@@ -20,6 +20,21 @@ const ADJACENT_TYPES = ['', 'Residential', 'Commercial', 'Industrial', 'Vacant',
 
 // Deed types
 const DEED_TYPES = ['', 'Warranty', 'Quitclaim', 'Special Warranty', 'Trustee'];
+
+// All section IDs for expand/collapse all functionality
+const ALL_SECTION_IDS = [
+  'job-setup',
+  'appraisal-firm',
+  'client-info',
+  'appraisers',
+  'key-dates',
+  'valuation-scenario',
+  'subject-property',
+  'qualitative-ratings',
+  'transaction-history',
+  'conditions',
+  'letter-of-transmittal'
+];
 
 // Get field options from registry if available
 const getFieldOptions = (fieldId: string): string[] => {
@@ -99,7 +114,7 @@ function ToggleRow({ checked, onChange, label }: ToggleRowProps) {
 }
 
 export default function HomeTabPanel() {
-  const { sections, updateFieldValue } = useReportBuilderStore();
+  const { sections, updateFieldValue, initializeMockData } = useReportBuilderStore();
 
   // Track collapsed state for each section
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(new Set());
@@ -116,6 +131,44 @@ export default function HomeTabPanel() {
       return next;
     });
   }, []);
+
+  // Check if all sections are collapsed
+  const allCollapsed = useMemo(() => {
+    return ALL_SECTION_IDS.every(id => collapsedSections.has(id));
+  }, [collapsedSections]);
+
+  // Expand all sections
+  const expandAll = useCallback(() => {
+    setCollapsedSections(new Set());
+  }, []);
+
+  // Collapse all sections
+  const collapseAll = useCallback(() => {
+    setCollapsedSections(new Set(ALL_SECTION_IDS));
+  }, []);
+
+  // Toggle all sections
+  const toggleAllSections = useCallback(() => {
+    if (allCollapsed) {
+      expandAll();
+    } else {
+      collapseAll();
+    }
+  }, [allCollapsed, expandAll, collapseAll]);
+
+  // Handle reset form - reinitialize from registry
+  const handleResetForm = useCallback(() => {
+    if (window.confirm('Are you sure you want to reset the form? All changes will be lost.')) {
+      initializeMockData();
+    }
+  }, [initializeMockData]);
+
+  // Handle save changes (placeholder - actual save logic depends on your backend)
+  const handleSaveChanges = useCallback(() => {
+    // TODO: Implement actual save logic
+    console.log('Saving changes...', sections);
+    alert('Changes saved successfully!');
+  }, [sections]);
 
   // Get field value from store
   const getValue = useCallback((fieldId: string): string | number | boolean => {
@@ -157,6 +210,33 @@ export default function HomeTabPanel() {
   return (
     <div className="home-tab-panel">
       <div className="home-tab-container">
+        {/* Header Row with Expand/Collapse All and Save/Reset buttons */}
+        <div className="home-header-row">
+          <div className="header-left">
+            <button
+              className="btn btn-secondary"
+              onClick={toggleAllSections}
+              title={allCollapsed ? 'Expand All Sections' : 'Collapse All Sections'}
+            >
+              {allCollapsed ? 'Expand All' : 'Collapse All'}
+            </button>
+          </div>
+          <div className="header-right">
+            <button
+              className="btn btn-secondary"
+              onClick={handleResetForm}
+            >
+              Reset Form
+            </button>
+            <button
+              className="btn btn-primary"
+              onClick={handleSaveChanges}
+            >
+              Save Changes
+            </button>
+          </div>
+        </div>
+
         {/* 1. VALUATION APPROACHES - Always visible */}
         <div className="approaches-bar">
           <h2>Valuation Approaches</h2>

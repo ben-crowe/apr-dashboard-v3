@@ -1,7 +1,7 @@
 /**
  * SalesTabPanel.tsx
  * Renders the SALES tab for Sales Comparison Approach
- * 5 collapsible sections: Subject Summary, 3 Comparables, Value Conclusion
+ * 5 collapsible sections: Subject Summary, 5 Comparables, Value Conclusion
  * Plus the live-updating Sales Comparison Table at the bottom
  */
 
@@ -20,6 +20,8 @@ const ALL_SECTION_IDS = [
   'sale-comp-1',
   'sale-comp-2',
   'sale-comp-3',
+  'sale-comp-4',
+  'sale-comp-5',
   'sales-conclusion'
 ];
 
@@ -410,12 +412,14 @@ export default function SalesTabPanel() {
           </div>
         </CollapsibleSection>
 
-        {/* 2-4. COMPARABLE SALES */}
+        {/* 2-6. COMPARABLE SALES (5 total) */}
         {renderComparable(1)}
         {renderComparable(2)}
         {renderComparable(3)}
+        {renderComparable(4)}
+        {renderComparable(5)}
 
-        {/* 5. VALUE CONCLUSION */}
+        {/* 7. VALUE CONCLUSION */}
         <CollapsibleSection
           id="sales-conclusion"
           title="VALUE CONCLUSION"

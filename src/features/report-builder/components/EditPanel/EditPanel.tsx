@@ -26,6 +26,9 @@ import ReconciliationPanel from '@/features/calculator-demo-v4/components/Reconc
 // HomeTabPanel for HOME section
 import { HomeTabPanel } from '../HomeTabPanel';
 
+// SiteTabPanel for SITE section
+import { SiteTabPanel } from '../SiteTabPanel';
+
 // Mapping of which image fields should appear in which sections
 const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
   'cover': ['img-cover-photo', 'img-signature'],
@@ -796,6 +799,7 @@ export default function EditPanel() {
   };
 
   const isHomeSection = currentSection.id === 'home';
+  const isSiteSection = currentSection.id === 'site';
   const isCalcSection = currentSection.id === 'calc';
 
   return (
@@ -812,8 +816,8 @@ export default function EditPanel() {
         <span style={{ color: '#ffffff', fontWeight: '600', fontSize: '15px' }}>
           {currentSection.name.toUpperCase()}
         </span>
-        {/* Expand/Collapse All button - hide for home section which has its own controls */}
-        {!isHomeSection && (
+        {/* Expand/Collapse All button - hide for home and site sections which have their own controls */}
+        {!isHomeSection && !isSiteSection && (
           <button
             type="button"
             onClick={toggleAllSubsections}
@@ -852,6 +856,11 @@ export default function EditPanel() {
           <HomeTabPanel />
         )}
 
+        {/* SITE Section - Render SiteTabPanel component */}
+        {isSiteSection && (
+          <SiteTabPanel />
+        )}
+
         {/* Calculator Table Panels - Only show for CALC section */}
         {isCalcSection && (
           <div className="p-6">
@@ -873,8 +882,8 @@ export default function EditPanel() {
           </div>
         )}
 
-        {/* Non-Home, Non-Calc sections - render standard fields and subsections */}
-        {!isHomeSection && !isCalcSection && (
+        {/* Non-Home, Non-Site, Non-Calc sections - render standard fields and subsections */}
+        {!isHomeSection && !isSiteSection && !isCalcSection && (
           <div className="p-6">
             {/* Main section fields */}
             {currentSection.fields.length > 0 && (

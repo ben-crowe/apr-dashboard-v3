@@ -5,9 +5,9 @@ import { useReportBuilderStore } from '../store/reportBuilderStore';
  * When a toggle is disabled (false), all sections in its array are dimmed in the sidebar.
  */
 const APPROACH_TO_SECTIONS_MAP: Record<string, string[]> = {
-  'home-use-income-approach': ['income', 'calc', 'rentroll', 'calc-output', 'hist'],
-  'home-use-sales-approach': ['sales', 'rent-analysis'],
-  'home-use-cost-approach': ['cost', 'cost-s'],
+  'home-use-income-approach': ['income'],
+  'home-use-sales-approach': ['sales'],
+  'home-use-cost-approach': ['cost-s'],
 };
 
 /**
@@ -35,12 +35,21 @@ const getFieldValueFromSections = (
 export default function SectionSidebar() {
   const { sections, activeSection, setActiveSection } = useReportBuilderStore();
 
-  // Filter out S-tabs (client-intake, loe-prep, image-mgt) - these are TDD-only
-  // Editor Panel should only show numbered report page tabs
+  // Only show main data entry tabs - consolidated approach tabs with tables
+  // Hidden: TDD-only tabs, redundant tabs (calc moved to approach tabs), template-driven pages
+  const VISIBLE_SECTION_IDS = new Set([
+    'home',       // Central data hub
+    'site',       // Site details
+    'impv',       // Improvements/building
+    'image-mgt',  // All images consolidated
+    'income',     // Income approach (inputs + table)
+    'sales',      // Sales comparison (inputs + table)
+    'cost-s',     // Cost approach (inputs + table)
+    'recon',      // Reconciliation
+  ]);
+
   const filteredSections = sections.filter(section =>
-    section.id !== 'client-intake' &&
-    section.id !== 'loe-prep' &&
-    section.id !== 'image-mgt'
+    VISIBLE_SECTION_IDS.has(section.id)
   );
 
   // Sort sections: 'home' first, then everything else in original order

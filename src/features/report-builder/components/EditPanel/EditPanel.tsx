@@ -41,6 +41,9 @@ import { SalesTabPanel } from '../SalesTabPanel';
 // CostTabPanel for COST section
 import { CostTabPanel } from '../CostTabPanel';
 
+// ReconTabPanel for RECON section
+import { ReconTabPanel } from '../ReconTabPanel';
+
 // Mapping of which image fields should appear in which sections
 const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
   'cover': ['img-cover-photo', 'img-signature'],
@@ -817,6 +820,7 @@ export default function EditPanel() {
   const isSalesSection = currentSection.id === 'sales';
   const isCostSection = currentSection.id === 'cost-s';
   const isCalcSection = currentSection.id === 'calc';
+  const isReconSection = currentSection.id === 'recon';
 
   return (
     <div className="h-full flex flex-col" style={{ backgroundColor: '#1f1f1f' }}>
@@ -833,7 +837,7 @@ export default function EditPanel() {
           {currentSection.name.toUpperCase()}
         </span>
         {/* Expand/Collapse All button - hide for sections with their own controls */}
-        {!isHomeSection && !isSiteSection && !isImpvSection && !isIncomeSection && !isSalesSection && !isCostSection && (
+        {!isHomeSection && !isSiteSection && !isImpvSection && !isIncomeSection && !isSalesSection && !isCostSection && !isReconSection && (
           <button
             type="button"
             onClick={toggleAllSubsections}
@@ -897,6 +901,11 @@ export default function EditPanel() {
           <CostTabPanel />
         )}
 
+        {/* RECON Section - Render ReconTabPanel component */}
+        {isReconSection && (
+          <ReconTabPanel />
+        )}
+
         {/* Calculator Table Panels - Only show for CALC section */}
         {isCalcSection && (
           <div className="p-6">
@@ -918,8 +927,8 @@ export default function EditPanel() {
           </div>
         )}
 
-        {/* Non-Home, Non-Site, Non-Impv, Non-Income, Non-Sales, Non-Cost, Non-Calc sections - render standard fields and subsections */}
-        {!isHomeSection && !isSiteSection && !isImpvSection && !isIncomeSection && !isSalesSection && !isCostSection && !isCalcSection && (
+        {/* Non-Home, Non-Site, Non-Impv, Non-Income, Non-Sales, Non-Cost, Non-Recon, Non-Calc sections - render standard fields and subsections */}
+        {!isHomeSection && !isSiteSection && !isImpvSection && !isIncomeSection && !isSalesSection && !isCostSection && !isReconSection && !isCalcSection && (
           <div className="p-6">
             {/* Main section fields */}
             {currentSection.fields.length > 0 && (

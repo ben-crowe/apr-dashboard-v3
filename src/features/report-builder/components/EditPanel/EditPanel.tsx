@@ -325,7 +325,11 @@ const SECTION_FIELD_LAYOUTS: Record<string, Record<string, SubsectionLayout>> = 
 
 // Approach toggle field IDs - these are rendered separately at top of Home section
 // TODO: Add these fields to the store when approach selection is needed
-const APPROACH_TOGGLE_IDS: string[] = [];
+const APPROACH_TOGGLE_IDS: string[] = [
+  'home-use-income-approach',
+  'home-use-sales-approach',
+  'home-use-cost-approach',
+];
 
 export default function EditPanel() {
   const {

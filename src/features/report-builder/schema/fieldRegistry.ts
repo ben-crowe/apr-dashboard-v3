@@ -67,6 +67,7 @@ export const fieldRegistry: FieldDefinition[] = [
   // ============================================================================
 
   // Client Information Subsection
+  // The person or company ordering and paying for the appraisal
   { id: 'client-first-name', storeId: 'client-first-name', label: 'Client First Name', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: true },
   { id: 'client-last-name', storeId: 'client-last-name', label: 'Client Last Name', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: true },
   { id: 'client-email', storeId: 'client-email', label: 'Client Email', section: 'client-intake', subsection: 'client-info-intake', type: 'text', inputSource: 'user-input', required: true },
@@ -90,6 +91,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'asset-condition', storeId: 'asset-condition', label: 'Asset Condition', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
 
   // Property Contact Subsection
+  // The on-site contact for property access and inspections (may be tenant, manager, or owner)
   { id: 'contact-first-name', storeId: 'contact-first-name', label: 'Contact First Name', section: 'client-intake', subsection: 'property-contact-intake', type: 'text', inputSource: 'user-input', required: false },
   { id: 'contact-last-name', storeId: 'contact-last-name', label: 'Contact Last Name', section: 'client-intake', subsection: 'property-contact-intake', type: 'text', inputSource: 'user-input', required: false },
   { id: 'contact-email', storeId: 'contact-email', label: 'Contact Email', section: 'client-intake', subsection: 'property-contact-intake', type: 'text', inputSource: 'user-input', required: false },
@@ -98,6 +100,17 @@ export const fieldRegistry: FieldDefinition[] = [
 
   // Notes Subsection
   { id: 'intake-notes', storeId: 'intake-notes', label: 'Notes', section: 'client-intake', subsection: 'notes-intake', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // Company Info Subsection (Appraiser's Company)
+  { id: 'company-name', storeId: 'company-name', label: 'Company Name', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'company-address', storeId: 'company-address', label: 'Company Address', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'company-city-state-zip', storeId: 'company-city-state-zip', label: 'Company City/State/Zip', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'company-phone', storeId: 'company-phone', label: 'Company Phone', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'company-email', storeId: 'company-email', label: 'Company Email', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'company-website', storeId: 'company-website', label: 'Company Website', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
+
+  // Job Info Subsection
+  { id: 'company-jobnumber', storeId: 'company-jobnumber', label: 'Client Job Number', section: 'client-intake', subsection: 'job-info', type: 'text', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // SECTION S2: LOE PREP (V3 Dashboard)
@@ -352,8 +365,14 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'census-tract', storeId: 'census-tract', label: 'Census Tract', section: 'cover', subsection: 'location-info', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_Census' },
 
   // ============================================================================
-  // SECTION: HOME (Letter of Transmittal)
+  // SECTION: HOME (Approach Selection & Letter of Transmittal)
   // ============================================================================
+
+  // --- APPROACH SELECTION (3 fields) ---
+  // These toggle which valuation approaches are used in the report
+  { id: 'home-use-income-approach', storeId: 'home-use-income-approach', label: 'Income Approach', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
+  { id: 'home-use-sales-approach', storeId: 'home-use-sales-approach', label: 'Sales Comparison', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
+  { id: 'home-use-cost-approach', storeId: 'home-use-cost-approach', label: 'Cost Approach', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
 
   // --- TRANSMITTAL LETTER (2 fields) ---
   // These MUST stay in section: 'home' to ensure the HOME section exists in the store
@@ -2151,19 +2170,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'zoning-designation', storeId: 'zoning-designation', label: 'Zoning Designation', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'user-input', required: false },
 
   // ============================================================================
-  // COMPANY FIELDS (6 fields)
-  // ============================================================================
-
-  { id: 'company-address', storeId: 'company-address', label: 'Company Address', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'company-city-state-zip', storeId: 'company-city-state-zip', label: 'Company City/State/Zip', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'company-jobnumber', storeId: 'company-jobnumber', label: 'Job Number', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'company-name', storeId: 'company-name', label: 'Company Name', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'company-phone', storeId: 'company-phone', label: 'Company Phone', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'company-email', storeId: 'company-email', label: 'Company Email', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'company-website', storeId: 'company-website', label: 'Company Website', section: 'client-intake', subsection: 'company-info', type: 'text', inputSource: 'user-input', required: false },
-
-  // ============================================================================
-  // CLIENT FIELDS (2 fields)
+  // CLIENT FIELDS (calculated)
   // ============================================================================
 
   { id: 'client-city-state-zip', storeId: 'client-city-state-zip', label: 'Client City/State/Zip', section: 'cover', subsection: 'client-info', type: 'text', inputSource: 'calculated', required: false, calculationFormula: 'client-city + ", " + client-province + " " + client-postal' },

@@ -229,6 +229,43 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Section Divider between inputs and tables */
+.income-tables-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0 20px 0;
+}
+
+.income-divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #3a3a3a 20%, #3a3a3a 80%, transparent);
+}
+
+.income-divider-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* Calculator Tables Container */
+.income-calculator-tables {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.income-table-section {
+  background: #2a2a2a;
+  border-radius: 8px;
+  padding: 12px;
+  border: 1px solid #353535;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .income-form-grid-2 {

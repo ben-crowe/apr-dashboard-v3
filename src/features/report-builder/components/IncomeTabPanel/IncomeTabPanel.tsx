@@ -2,10 +2,14 @@
  * IncomeTabPanel.tsx
  * Renders the INCOME tab for the Income Approach to valuation
  * 4 collapsible sections with narrative fields and value indication
+ * Plus Operating History and Income Approach calculation tables at bottom
  */
 
 import { useState, useCallback, useMemo, ChangeEvent } from 'react';
 import { useReportBuilderStore } from '../../store/reportBuilderStore';
+import { ThemeProvider } from '@/features/calculator-demo-v4/context/ThemeContext';
+import OperatingHistoryPanel from '@/features/calculator-demo-v4/components/OperatingHistoryPanel';
+import IncomeApproachPanel from '@/features/calculator-demo-v4/components/IncomeApproachPanel';
 import './IncomeTabPanel.css';
 
 // All section IDs for expand/collapse all functionality
@@ -241,6 +245,28 @@ export default function IncomeTabPanel() {
             </div>
           </div>
         </CollapsibleSection>
+
+        {/* SECTION DIVIDER */}
+        <div className="income-tables-divider">
+          <div className="income-divider-line"></div>
+          <span className="income-divider-text">Calculation Tables</span>
+          <div className="income-divider-line"></div>
+        </div>
+
+        {/* CALCULATOR TABLES - wrapped in ThemeProvider */}
+        <ThemeProvider>
+          <div className="income-calculator-tables">
+            {/* Operating History Table */}
+            <div className="income-table-section">
+              <OperatingHistoryPanel />
+            </div>
+
+            {/* Income Approach Table */}
+            <div className="income-table-section">
+              <IncomeApproachPanel />
+            </div>
+          </div>
+        </ThemeProvider>
 
       </div>
     </div>

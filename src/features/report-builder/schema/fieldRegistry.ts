@@ -1,7 +1,7 @@
 /**
  * Field Registry - Single Source of Truth
  * 
- * VERSION: 2.6.0
+ * VERSION: 2.7.0
  * LAST UPDATED: 2026-01-03 MST
  * UPDATED BY: Claude Code Agent
  * 
@@ -13,6 +13,16 @@
  * RULE: When field IDs change in any file, update all three.
  * 
  * CHANGES:
+ * - 2.7.0: INPUT TYPE UPGRADES - Added dropdown/toggle types to ~66 fields
+ *   - Added 'dropdown' and 'multi-select' types to FieldDefinition interface
+ *   - Updated ~45 fields from text to dropdown with options arrays
+ *   - Updated ~15 fields to boolean with defaultValues (toggles)
+ *   - Added 2 multi-select fields (select-modules, approaches-applied)
+ *   - Added 5 approach toggles (use-dcf, use-stabilization, use-multi-dc, use-land-dc, use-special)
+ *   - Added 6 appraiser compliance toggles (ce, ethics, inspector for both appraisers)
+ *   - Added 31 new dropdown fields for property/site/zoning/market selections
+ *   - Based on Valcre workbook UX patterns from field-input-type-upgrades.md
+ * - 2.6.0: Previous version (various field additions)
  * - 2.5.0: REMOVED DUPLICATE HOME-* FIELDS - Deleted 42 duplicate fields with 'home-' prefix
  *   - Removed all home-* prefixed fields (duplicates of client-intake and loe-prep fields)
  *   - Template uses canonical field names ({{client-full-name}}, {{subject-street}}, etc.)
@@ -45,7 +55,7 @@ export interface FieldDefinition {
   label: string;                 // Human-readable label for UI
   section: string;               // Section ID (cover, exec, site, etc.)
   subsection?: string;           // Subsection if applicable
-  type: 'text' | 'number' | 'date' | 'image' | 'textarea' | 'select' | 'currency' | 'percentage' | 'calculated' | 'boolean';
+  type: 'text' | 'number' | 'date' | 'image' | 'textarea' | 'select' | 'dropdown' | 'multi-select' | 'currency' | 'percentage' | 'calculated' | 'boolean';
   inputSource: 'user-input' | 'calculated' | 'api-fetch' | 'template' | 'auto-filled';
   options?: string[];            // For select fields
   required: boolean;
@@ -85,7 +95,7 @@ export const fieldRegistry: FieldDefinition[] = [
   // Property Information Subsection
   { id: 'property-name', storeId: 'property-name', label: 'Property Name', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: true },
   { id: 'property-address', storeId: 'property-address', label: 'Property Address', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'property-type', storeId: 'property-type', label: 'Property Type', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'property-type', storeId: 'property-type', label: 'Property Type', section: 'client-intake', subsection: 'property-info-intake', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Multi-Family', 'Office', 'Retail', 'Industrial', 'Land', 'Special Purpose'] },
   { id: 'intended-use', storeId: 'intended-use', label: 'Intended Use', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
   { id: 'valuation-premises', storeId: 'valuation-premises', label: 'Valuation Premises', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
   { id: 'asset-condition', storeId: 'asset-condition', label: 'Asset Condition', section: 'client-intake', subsection: 'property-info-intake', type: 'text', inputSource: 'user-input', required: false },
@@ -127,8 +137,8 @@ export const fieldRegistry: FieldDefinition[] = [
 
   // Delivery Details Subsection
   { id: 'delivery-date', storeId: 'delivery-date', label: 'Delivery Date', section: 'loe-prep', subsection: 'delivery-details', type: 'date', inputSource: 'user-input', required: false },
-  { id: 'report-type', storeId: 'report-type', label: 'Report Type', section: 'loe-prep', subsection: 'delivery-details', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'property-rights', storeId: 'property-rights', label: 'Property Rights Appraised', section: 'loe-prep', subsection: 'delivery-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'report-type', storeId: 'report-type', label: 'Report Type', section: 'loe-prep', subsection: 'delivery-details', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Appraisal Report', 'Restricted Appraisal', 'Desktop Appraisal'] },
+  { id: 'property-rights', storeId: 'property-rights', label: 'Property Rights Appraised', section: 'loe-prep', subsection: 'delivery-details', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Fee Simple Estate', 'Leased Fee Estate', 'Leasehold Interest'] },
 
   // Scope Subsection
   { id: 'scope-of-work', storeId: 'scope-of-work', label: 'Scope of Work', section: 'loe-prep', subsection: 'scope-loe', type: 'textarea', inputSource: 'user-input', required: false },
@@ -333,7 +343,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'street-address', storeId: 'street-address', label: 'Street Address', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
   { id: 'city', storeId: 'city', label: 'City', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
   { id: 'city-formal', storeId: 'city-formal', label: 'City (Formal Name)', section: 'cover', type: 'text', inputSource: 'auto-filled', required: false, valcreRange: 'Subject_CityFormal' },
-  { id: 'province', storeId: 'province', label: 'Province', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
+  { id: 'province', storeId: 'province', label: 'Province', section: 'cover', type: 'dropdown', inputSource: 'auto-filled', required: true, options: ['AB', 'SK', 'MB', 'BC', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL', 'NT', 'NU', 'YT'] },
   { id: 'province-abbr', storeId: 'province-abbr', label: 'Province Abbreviation', section: 'cover', type: 'text', inputSource: 'auto-filled', required: false },
   { id: 'property-full-address', storeId: 'property-full-address', label: 'Full Property Address', section: 'cover', type: 'text', inputSource: 'calculated', required: false },
   { id: 'file-number', storeId: 'file-number', label: 'File Number', section: 'cover', type: 'text', inputSource: 'auto-filled', required: true },
@@ -374,6 +384,18 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'home-use-sales-approach', storeId: 'home-use-sales-approach', label: 'Sales Comparison', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
   { id: 'home-use-cost-approach', storeId: 'home-use-cost-approach', label: 'Cost Approach', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
 
+  // --- ADDITIONAL APPROACH TOGGLES (5 fields) ---
+  // These toggle additional analysis methods
+  { id: 'use-dcf', storeId: 'use-dcf', label: 'Use DCF Analysis', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: false },
+  { id: 'use-stabilization', storeId: 'use-stabilization', label: 'Use Stabilization Tool', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: false },
+  { id: 'use-multi-dc', storeId: 'use-multi-dc', label: 'Use Multi-DC', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: false },
+  { id: 'use-land-dc', storeId: 'use-land-dc', label: 'Use Site & Land DC', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: false },
+  { id: 'use-special', storeId: 'use-special', label: 'Use Special/Hotel', section: 'home', subsection: 'approach-selection', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: false },
+
+  // --- MODULE SELECTION (multi-select) ---
+  { id: 'select-modules', storeId: 'select-modules', label: 'Select Modules', section: 'home', subsection: 'approach-selection', type: 'multi-select', inputSource: 'user-input', required: false, options: ['DC', 'Income', 'Cost', 'Land', 'DCF'] },
+  { id: 'approaches-applied', storeId: 'approaches-applied', label: 'Approaches Applied', section: 'home', subsection: 'approach-selection', type: 'multi-select', inputSource: 'user-input', required: false, options: ['Cost', 'Sales Comparison', 'Income'] },
+
   // --- TRANSMITTAL LETTER (2 fields) ---
   // These MUST stay in section: 'home' to ensure the HOME section exists in the store
   { id: 'transmittal-date', storeId: 'transmittal-date', label: 'Letter Date', section: 'home', subsection: 'transmittal-content', type: 'date', inputSource: 'auto-filled', required: true },
@@ -389,7 +411,7 @@ export const fieldRegistry: FieldDefinition[] = [
   // SECTION: REPORT INFORMATION
   // ============================================================================
 
-  { id: 'report-type', storeId: 'report-type', label: 'Report Type', section: 'report', type: 'text', inputSource: 'auto-filled', required: true },
+  { id: 'report-type', storeId: 'report-type', label: 'Report Type', section: 'report', type: 'dropdown', inputSource: 'auto-filled', required: true, options: ['Appraisal Report', 'Restricted Appraisal', 'Desktop Appraisal'] },
   { id: 'report-purpose', storeId: 'report-purpose', label: 'Purpose', section: 'report', type: 'textarea', inputSource: 'user-input', required: true },
   { id: 'report-scope', storeId: 'report-scope', label: 'Scope of Work', section: 'report', type: 'textarea', inputSource: 'user-input', required: true },
   { id: 'report-compliance', storeId: 'report-compliance', label: 'Compliance Standard', section: 'report', type: 'text', inputSource: 'auto-filled', required: true },
@@ -449,32 +471,32 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'site-total-area', storeId: 'site-total-area', label: 'Total Site Area (SF)', section: 'site', subsection: 'site-area', type: 'number', inputSource: 'auto-filled', required: false },
   { id: 'site-acreage', storeId: 'site-acreage', label: 'Site Acreage', section: 'site', subsection: 'site-area', type: 'number', inputSource: 'auto-filled', required: false },
   { id: 'site-address', storeId: 'site-address', label: 'Site Address', section: 'site', subsection: 'site-area', type: 'text', inputSource: 'auto-filled', required: false },
-  { id: 'site-shape', storeId: 'site-shape', label: 'Shape', section: 'site', subsection: 'site-area', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'topography', storeId: 'topography', label: 'Topography', section: 'site', subsection: 'site-area', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'site-shape', storeId: 'site-shape', label: 'Shape', section: 'site', subsection: 'site-area', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Rectangular', 'Square', 'Irregular', 'L-Shape', 'Triangular'] },
+  { id: 'topography', storeId: 'topography', label: 'Topography', section: 'site', subsection: 'site-area', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Level', 'Gently Sloping', 'Sloping', 'Steep', 'Rolling'] },
   { id: 'accessibility', storeId: 'accessibility', label: 'Accessibility', section: 'site', subsection: 'site-area', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'exposure-visibility', storeId: 'exposure-visibility', label: 'Exposure & Visibility', section: 'site', subsection: 'site-area', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'exposure-visibility', storeId: 'exposure-visibility', label: 'Exposure & Visibility', section: 'site', subsection: 'site-area', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
 
   // Site - Adjacent Uses Subsection
-  { id: 'adjacent-north', storeId: 'adjacent-north', label: 'North', section: 'site', subsection: 'adjacent-uses', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'adjacent-south', storeId: 'adjacent-south', label: 'South', section: 'site', subsection: 'adjacent-uses', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'adjacent-east', storeId: 'adjacent-east', label: 'East', section: 'site', subsection: 'adjacent-uses', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'adjacent-west', storeId: 'adjacent-west', label: 'West', section: 'site', subsection: 'adjacent-uses', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'adjacent-north', storeId: 'adjacent-north', label: 'North', section: 'site', subsection: 'adjacent-uses', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Residential', 'Commercial', 'Industrial', 'Vacant', 'Park', 'Road'] },
+  { id: 'adjacent-south', storeId: 'adjacent-south', label: 'South', section: 'site', subsection: 'adjacent-uses', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Residential', 'Commercial', 'Industrial', 'Vacant', 'Park', 'Road'] },
+  { id: 'adjacent-east', storeId: 'adjacent-east', label: 'East', section: 'site', subsection: 'adjacent-uses', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Residential', 'Commercial', 'Industrial', 'Vacant', 'Park', 'Road'] },
+  { id: 'adjacent-west', storeId: 'adjacent-west', label: 'West', section: 'site', subsection: 'adjacent-uses', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Residential', 'Commercial', 'Industrial', 'Vacant', 'Park', 'Road'] },
 
   // Site - Site Conditions Subsection
   { id: 'easements', storeId: 'easements', label: 'Easements & Encroachments', section: 'site', subsection: 'site-conditions', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'soils', storeId: 'soils', label: 'Soils', section: 'site', subsection: 'site-conditions', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'hazardous-waste', storeId: 'hazardous-waste', label: 'Environmental Concerns', section: 'site', subsection: 'site-conditions', type: 'textarea', inputSource: 'user-input', required: false },
-  { id: 'site-rating', storeId: 'site-rating', label: 'Site Rating', section: 'site', subsection: 'site-conditions', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'site-rating', storeId: 'site-rating', label: 'Site Rating', section: 'site', subsection: 'site-conditions', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
   { id: 'site-conclusion', storeId: 'site-conclusion', label: 'Site Conclusion', section: 'site', subsection: 'site-conditions', type: 'textarea', inputSource: 'user-input', required: false },
 
   // Site - Usable Area and Qualitative Ratings (for Exec Summary)
   { id: 'legal-description', storeId: 'legal-description', label: 'Legal Description', section: 'site', subsection: 'site-area', type: 'text', inputSource: 'user-input', required: false },
   { id: 'land-area-usable-sf', storeId: 'land-area-usable-sf', label: 'Usable Land Area (SF)', section: 'site', subsection: 'site-area', type: 'number', inputSource: 'user-input', required: false },
   { id: 'land-area-usable-acres', storeId: 'land-area-usable-acres', label: 'Usable Land Area (Acres)', section: 'site', subsection: 'site-area', type: 'number', inputSource: 'user-input', required: false },
-  { id: 'site-quality', storeId: 'site-quality', label: 'Site Quality', section: 'site', subsection: 'site-conditions', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'site-utility', storeId: 'site-utility', label: 'Site Utility', section: 'site', subsection: 'site-conditions', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'building-quality', storeId: 'building-quality', label: 'Building Quality', section: 'site', subsection: 'site-conditions', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'building-appeal', storeId: 'building-appeal', label: 'Building Appeal', section: 'site', subsection: 'site-conditions', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'site-quality', storeId: 'site-quality', label: 'Site Quality', section: 'site', subsection: 'site-conditions', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
+  { id: 'site-utility', storeId: 'site-utility', label: 'Site Utility', section: 'site', subsection: 'site-conditions', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
+  { id: 'building-quality', storeId: 'building-quality', label: 'Building Quality', section: 'site', subsection: 'site-conditions', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
+  { id: 'building-appeal', storeId: 'building-appeal', label: 'Building Appeal', section: 'site', subsection: 'site-conditions', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
 
   // Site - Site Plan Images Subsection
   { id: 'site-plan-image', storeId: 'site-plan-image', label: 'Site Plan Images', section: 'site', subsection: 'site-plan-images', type: 'image', inputSource: 'user-input', required: false },
@@ -532,7 +554,7 @@ export const fieldRegistry: FieldDefinition[] = [
   // Market - Multifamily Market Subsection
   { id: 'multifamily-overview', storeId: 'multifamily-overview', label: 'Multifamily Market Overview', section: 'market', subsection: 'market-multifamily', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'market-vacancy-rate', storeId: 'market-vacancy-rate', label: 'Market Vacancy Rate (%)', section: 'market', subsection: 'market-multifamily', type: 'number', inputSource: 'auto-filled', required: false },
-  { id: 'rent-trend', storeId: 'rent-trend', label: 'Rent Trend', section: 'market', subsection: 'market-multifamily', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'rent-trend', storeId: 'rent-trend', label: 'Rent Trend', section: 'market', subsection: 'market-multifamily', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Improving', 'Stable', 'Declining'] },
   { id: 'market-supply-pipeline', storeId: 'market-supply-pipeline', label: 'Supply Pipeline', section: 'market', subsection: 'market-multifamily', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'market-demand-drivers', storeId: 'market-demand-drivers', label: 'Demand Drivers', section: 'market', subsection: 'market-multifamily', type: 'textarea', inputSource: 'user-input', required: false },
 
@@ -556,9 +578,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'security', storeId: 'security', label: 'Security Features', section: 'impv', subsection: 'amenities', type: 'textarea', inputSource: 'user-input', required: false },
 
   // Improvements - Construction Subsection
-  { id: 'foundation', storeId: 'foundation', label: 'Foundation', section: 'impv', subsection: 'construction', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'foundation', storeId: 'foundation', label: 'Foundation', section: 'impv', subsection: 'construction', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Concrete', 'Block', 'Slab', 'Crawl Space'] },
   { id: 'exterior-walls', storeId: 'exterior-walls', label: 'Exterior Walls/Framing', section: 'impv', subsection: 'construction', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'roof', storeId: 'roof', label: 'Roof', section: 'impv', subsection: 'construction', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'roof', storeId: 'roof', label: 'Roof', section: 'impv', subsection: 'construction', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Flat', 'Pitched', 'Hip', 'Gable'] },
   { id: 'impv-roof-condition', storeId: 'impv-roof-condition', label: 'Roof Condition', section: 'impv', subsection: 'construction', type: 'text', inputSource: 'user-input', required: false },
   { id: 'impv-insulation', storeId: 'impv-insulation', label: 'Insulation', section: 'impv', subsection: 'construction', type: 'text', inputSource: 'user-input', required: false },
   { id: 'elevator', storeId: 'elevator', label: 'Elevator', section: 'impv', subsection: 'construction', type: 'text', inputSource: 'user-input', required: false },
@@ -585,7 +607,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'impv-site-coverage', storeId: 'impv-site-coverage', label: 'Site Coverage (%)', section: 'impv', subsection: 'site-improvements', type: 'number', inputSource: 'auto-filled', required: false },
 
   // Improvements - Condition Subsection
-  { id: 'overall-condition', storeId: 'overall-condition', label: 'Overall Condition', section: 'impv', subsection: 'condition', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'overall-condition', storeId: 'overall-condition', label: 'Overall Condition', section: 'impv', subsection: 'condition', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
   { id: 'functional-design', storeId: 'functional-design', label: 'Functional Design', section: 'impv', subsection: 'condition', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'hazardous-materials', storeId: 'hazardous-materials', label: 'Hazardous Materials', section: 'impv', subsection: 'condition', type: 'textarea', inputSource: 'user-input', required: false },
 
@@ -613,7 +635,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'min-setback', storeId: 'min-setback', label: 'Min Setback', section: 'zone', type: 'text', inputSource: 'auto-filled', required: false },
   { id: 'parking-requirements', storeId: 'parking-requirements', label: 'Parking Requirements', section: 'zone', type: 'text', inputSource: 'auto-filled', required: false },
   { id: 'site-coverage', storeId: 'site-coverage', label: 'Site Coverage', section: 'zone', type: 'text', inputSource: 'auto-filled', required: false },
-  { id: 'zoning-conformance', storeId: 'zoning-conformance', label: 'Conformance', section: 'zone', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'zoning-conformance', storeId: 'zoning-conformance', label: 'Conformance', section: 'zone', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Legal Conforming', 'Legal Non-Conforming', 'Illegal'] },
   { id: 'zoning-conclusion', storeId: 'zoning-conclusion', label: 'Zoning Conclusion', section: 'zone', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'zoning-map', storeId: 'zoning-map', label: 'Zoning Map', section: 'zone', type: 'image', inputSource: 'user-input', required: false },
 
@@ -1015,7 +1037,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp1-noi-per-unit', storeId: 'comp1-noi-per-unit', label: 'NOI/Unit', section: 'sales', subsection: 'sale-comp-1', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'comp1-province', storeId: 'comp1-province', label: 'Province', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp1-postal-code', storeId: 'comp1-postal-code', label: 'Postal Code', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'comp1-property-rights', storeId: 'comp1-property-rights', label: 'Property Rights', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-property-rights', storeId: 'comp1-property-rights', label: 'Property Rights', section: 'sales', subsection: 'sale-comp-1', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Fee Simple Estate', 'Leased Fee Estate', 'Leasehold Interest'] },
   { id: 'comp1-financing', storeId: 'comp1-financing', label: 'Financing', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp1-sale-conditions', storeId: 'comp1-sale-conditions', label: 'Conditions of Sale', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp1-expenditures-after', storeId: 'comp1-expenditures-after', label: 'Expenditures After Sale', section: 'sales', subsection: 'sale-comp-1', type: 'currency', inputSource: 'user-input', required: false },
@@ -1030,7 +1052,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp1-quality', storeId: 'comp1-quality', label: 'Quality Rating', section: 'sales', subsection: 'sale-comp-1', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
   { id: 'comp1-condition', storeId: 'comp1-condition', label: 'Condition Rating', section: 'sales', subsection: 'sale-comp-1', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
   { id: 'comp1-appeal', storeId: 'comp1-appeal', label: 'Appeal Rating', section: 'sales', subsection: 'sale-comp-1', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
-  { id: 'comp1-parking-type', storeId: 'comp1-parking-type', label: 'Parking Type', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp1-parking-type', storeId: 'comp1-parking-type', label: 'Parking Type', section: 'sales', subsection: 'sale-comp-1', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Surface', 'Underground', 'Structured', 'Street'] },
   { id: 'comp1-proj-amenities', storeId: 'comp1-proj-amenities', label: 'Project Amenities', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp1-unit-amenities', storeId: 'comp1-unit-amenities', label: 'Unit Amenities', section: 'sales', subsection: 'sale-comp-1', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp1-total-phys-adj', storeId: 'comp1-total-phys-adj', label: 'Total Physical Adj %', section: 'sales', subsection: 'sale-comp-1', type: 'percentage', inputSource: 'calculated', required: false },
@@ -1062,7 +1084,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp2-noi-per-unit', storeId: 'comp2-noi-per-unit', label: 'NOI/Unit', section: 'sales', subsection: 'sale-comp-2', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'comp2-province', storeId: 'comp2-province', label: 'Province', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp2-postal-code', storeId: 'comp2-postal-code', label: 'Postal Code', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'comp2-property-rights', storeId: 'comp2-property-rights', label: 'Property Rights', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-property-rights', storeId: 'comp2-property-rights', label: 'Property Rights', section: 'sales', subsection: 'sale-comp-2', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Fee Simple Estate', 'Leased Fee Estate', 'Leasehold Interest'] },
   { id: 'comp2-financing', storeId: 'comp2-financing', label: 'Financing', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp2-sale-conditions', storeId: 'comp2-sale-conditions', label: 'Conditions of Sale', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp2-expenditures-after', storeId: 'comp2-expenditures-after', label: 'Expenditures After Sale', section: 'sales', subsection: 'sale-comp-2', type: 'currency', inputSource: 'user-input', required: false },
@@ -1077,7 +1099,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp2-quality', storeId: 'comp2-quality', label: 'Quality Rating', section: 'sales', subsection: 'sale-comp-2', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
   { id: 'comp2-condition', storeId: 'comp2-condition', label: 'Condition Rating', section: 'sales', subsection: 'sale-comp-2', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
   { id: 'comp2-appeal', storeId: 'comp2-appeal', label: 'Appeal Rating', section: 'sales', subsection: 'sale-comp-2', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
-  { id: 'comp2-parking-type', storeId: 'comp2-parking-type', label: 'Parking Type', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp2-parking-type', storeId: 'comp2-parking-type', label: 'Parking Type', section: 'sales', subsection: 'sale-comp-2', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Surface', 'Underground', 'Structured', 'Street'] },
   { id: 'comp2-proj-amenities', storeId: 'comp2-proj-amenities', label: 'Project Amenities', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp2-unit-amenities', storeId: 'comp2-unit-amenities', label: 'Unit Amenities', section: 'sales', subsection: 'sale-comp-2', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp2-total-phys-adj', storeId: 'comp2-total-phys-adj', label: 'Total Physical Adj %', section: 'sales', subsection: 'sale-comp-2', type: 'percentage', inputSource: 'calculated', required: false },
@@ -1109,7 +1131,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp3-noi-per-unit', storeId: 'comp3-noi-per-unit', label: 'NOI/Unit', section: 'sales', subsection: 'sale-comp-3', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'comp3-province', storeId: 'comp3-province', label: 'Province', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp3-postal-code', storeId: 'comp3-postal-code', label: 'Postal Code', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'comp3-property-rights', storeId: 'comp3-property-rights', label: 'Property Rights', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-property-rights', storeId: 'comp3-property-rights', label: 'Property Rights', section: 'sales', subsection: 'sale-comp-3', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Fee Simple Estate', 'Leased Fee Estate', 'Leasehold Interest'] },
   { id: 'comp3-financing', storeId: 'comp3-financing', label: 'Financing', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp3-sale-conditions', storeId: 'comp3-sale-conditions', label: 'Conditions of Sale', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp3-expenditures-after', storeId: 'comp3-expenditures-after', label: 'Expenditures After Sale', section: 'sales', subsection: 'sale-comp-3', type: 'currency', inputSource: 'user-input', required: false },
@@ -1124,7 +1146,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp3-quality', storeId: 'comp3-quality', label: 'Quality Rating', section: 'sales', subsection: 'sale-comp-3', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
   { id: 'comp3-condition', storeId: 'comp3-condition', label: 'Condition Rating', section: 'sales', subsection: 'sale-comp-3', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
   { id: 'comp3-appeal', storeId: 'comp3-appeal', label: 'Appeal Rating', section: 'sales', subsection: 'sale-comp-3', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
-  { id: 'comp3-parking-type', storeId: 'comp3-parking-type', label: 'Parking Type', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp3-parking-type', storeId: 'comp3-parking-type', label: 'Parking Type', section: 'sales', subsection: 'sale-comp-3', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Surface', 'Underground', 'Structured', 'Street'] },
   { id: 'comp3-proj-amenities', storeId: 'comp3-proj-amenities', label: 'Project Amenities', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp3-unit-amenities', storeId: 'comp3-unit-amenities', label: 'Unit Amenities', section: 'sales', subsection: 'sale-comp-3', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp3-total-phys-adj', storeId: 'comp3-total-phys-adj', label: 'Total Physical Adj %', section: 'sales', subsection: 'sale-comp-3', type: 'percentage', inputSource: 'calculated', required: false },
@@ -1156,7 +1178,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp4-noi-per-unit', storeId: 'comp4-noi-per-unit', label: 'NOI/Unit', section: 'sales', subsection: 'sale-comp-4', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'comp4-province', storeId: 'comp4-province', label: 'Province', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp4-postal-code', storeId: 'comp4-postal-code', label: 'Postal Code', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'comp4-property-rights', storeId: 'comp4-property-rights', label: 'Property Rights', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-property-rights', storeId: 'comp4-property-rights', label: 'Property Rights', section: 'sales', subsection: 'sale-comp-4', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Fee Simple Estate', 'Leased Fee Estate', 'Leasehold Interest'] },
   { id: 'comp4-financing', storeId: 'comp4-financing', label: 'Financing', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp4-sale-conditions', storeId: 'comp4-sale-conditions', label: 'Conditions of Sale', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp4-expenditures-after', storeId: 'comp4-expenditures-after', label: 'Expenditures After Sale', section: 'sales', subsection: 'sale-comp-4', type: 'currency', inputSource: 'user-input', required: false },
@@ -1171,7 +1193,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp4-quality', storeId: 'comp4-quality', label: 'Quality Rating', section: 'sales', subsection: 'sale-comp-4', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
   { id: 'comp4-condition', storeId: 'comp4-condition', label: 'Condition Rating', section: 'sales', subsection: 'sale-comp-4', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
   { id: 'comp4-appeal', storeId: 'comp4-appeal', label: 'Appeal Rating', section: 'sales', subsection: 'sale-comp-4', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
-  { id: 'comp4-parking-type', storeId: 'comp4-parking-type', label: 'Parking Type', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp4-parking-type', storeId: 'comp4-parking-type', label: 'Parking Type', section: 'sales', subsection: 'sale-comp-4', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Surface', 'Underground', 'Structured', 'Street'] },
   { id: 'comp4-proj-amenities', storeId: 'comp4-proj-amenities', label: 'Project Amenities', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp4-unit-amenities', storeId: 'comp4-unit-amenities', label: 'Unit Amenities', section: 'sales', subsection: 'sale-comp-4', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp4-total-phys-adj', storeId: 'comp4-total-phys-adj', label: 'Total Physical Adj %', section: 'sales', subsection: 'sale-comp-4', type: 'percentage', inputSource: 'calculated', required: false },
@@ -1203,7 +1225,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp5-noi-per-unit', storeId: 'comp5-noi-per-unit', label: 'NOI/Unit', section: 'sales', subsection: 'sale-comp-5', type: 'currency', inputSource: 'calculated', required: false },
   { id: 'comp5-province', storeId: 'comp5-province', label: 'Province', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp5-postal-code', storeId: 'comp5-postal-code', label: 'Postal Code', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'comp5-property-rights', storeId: 'comp5-property-rights', label: 'Property Rights', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-property-rights', storeId: 'comp5-property-rights', label: 'Property Rights', section: 'sales', subsection: 'sale-comp-5', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Fee Simple Estate', 'Leased Fee Estate', 'Leasehold Interest'] },
   { id: 'comp5-financing', storeId: 'comp5-financing', label: 'Financing', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp5-sale-conditions', storeId: 'comp5-sale-conditions', label: 'Conditions of Sale', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp5-expenditures-after', storeId: 'comp5-expenditures-after', label: 'Expenditures After Sale', section: 'sales', subsection: 'sale-comp-5', type: 'currency', inputSource: 'user-input', required: false },
@@ -1218,7 +1240,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'comp5-quality', storeId: 'comp5-quality', label: 'Quality Rating', section: 'sales', subsection: 'sale-comp-5', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
   { id: 'comp5-condition', storeId: 'comp5-condition', label: 'Condition Rating', section: 'sales', subsection: 'sale-comp-5', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
   { id: 'comp5-appeal', storeId: 'comp5-appeal', label: 'Appeal Rating', section: 'sales', subsection: 'sale-comp-5', type: 'select', inputSource: 'user-input', required: false, options: ['Superior', 'Above Average', 'Average', 'Below Average', 'Inferior'] },
-  { id: 'comp5-parking-type', storeId: 'comp5-parking-type', label: 'Parking Type', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'comp5-parking-type', storeId: 'comp5-parking-type', label: 'Parking Type', section: 'sales', subsection: 'sale-comp-5', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Surface', 'Underground', 'Structured', 'Street'] },
   { id: 'comp5-proj-amenities', storeId: 'comp5-proj-amenities', label: 'Project Amenities', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp5-unit-amenities', storeId: 'comp5-unit-amenities', label: 'Unit Amenities', section: 'sales', subsection: 'sale-comp-5', type: 'text', inputSource: 'user-input', required: false },
   { id: 'comp5-total-phys-adj', storeId: 'comp5-total-phys-adj', label: 'Total Physical Adj %', section: 'sales', subsection: 'sale-comp-5', type: 'percentage', inputSource: 'calculated', required: false },
@@ -1599,7 +1621,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'subject-parking-incl', storeId: 'subject-parking-incl', label: 'Parking Included', section: 'impv', subsection: 'amenities', type: 'select', inputSource: 'user-input', required: false, options: ['Yes', 'No'] },
 
   // Subject Property - Photos & Additional Info
-  { id: 'subject-parking-type', storeId: 'subject-parking-type', label: 'Parking Type', section: 'impv', subsection: 'amenities', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-parking-type', storeId: 'subject-parking-type', label: 'Parking Type', section: 'impv', subsection: 'amenities', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Surface', 'Underground', 'Structured', 'Street'] },
   { id: 'subject-permitteduses', storeId: 'subject-permitteduses', label: 'Permitted Uses', section: 'exec', subsection: 'property-identification', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'subject-photo', storeId: 'subject-photo', label: 'Primary Photo', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
   { id: 'subject-photo-1', storeId: 'subject-photo-1', label: 'Subject Photo 1', section: 'image-mgt', subsection: 'common-photos', type: 'image', inputSource: 'user-input', required: false },
@@ -2155,7 +2177,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'subject-avg-unit-sf', storeId: 'subject-avg-unit-sf', label: 'Average Unit SF', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'user-input', required: false },
   { id: 'subject-name', storeId: 'subject-name', label: 'Property Name', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'user-input', required: false },
   { id: 'subject-parking-incl', storeId: 'subject-parking-incl', label: 'Parking Included', section: 'impv', subsection: 'amenities', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'subject-parking-type', storeId: 'subject-parking-type', label: 'Parking Type', section: 'impv', subsection: 'amenities', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-parking-type', storeId: 'subject-parking-type', label: 'Parking Type', section: 'impv', subsection: 'amenities', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Surface', 'Underground', 'Structured', 'Street'] },
   { id: 'subject-rent-sf-avg', storeId: 'subject-rent-sf-avg', label: 'Average Rent/SF', section: 'calc-output', subsection: 'rent-analysis', type: 'currency', inputSource: 'user-input', required: false },
   { id: 'subject-rent-unit-avg', storeId: 'subject-rent-unit-avg', label: 'Average Rent/Unit', section: 'calc-output', subsection: 'rent-analysis', type: 'currency', inputSource: 'user-input', required: false },
   { id: 'subject-year-built', storeId: 'subject-year-built', label: 'Year Built', section: 'exec', subsection: 'property-identification', type: 'number', inputSource: 'user-input', required: false },
@@ -2357,12 +2379,19 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'appraiser1-extent', storeId: 'appraiser1-extent', label: 'Appraiser 1 Inspection Extent', section: 'cert', subsection: 'inspection-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'appraiser1-inspected', storeId: 'appraiser1-inspected', label: 'Appraiser 1 Inspected Property', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false },
   { id: 'appraiser1-inspectiondate', storeId: 'appraiser1-inspectiondate', label: 'Appraiser 1 Inspection Date', section: 'cert', subsection: 'inspection-details', type: 'date', inputSource: 'user-input', required: false },
-  { id: 'appraiser1-role', storeId: 'appraiser1-role', label: 'Appraiser 1 Role', section: 'cert', subsection: 'inspection-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser1-role', storeId: 'appraiser1-role', label: 'Appraiser 1 Role', section: 'cert', subsection: 'inspection-details', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Primary Appraiser', 'Co-Appraiser', 'Review Appraiser'] },
   { id: 'appraiser2-allunits', storeId: 'appraiser2-allunits', label: 'Appraiser 2 Inspected All Units', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false },
   { id: 'appraiser2-extent', storeId: 'appraiser2-extent', label: 'Appraiser 2 Inspection Extent', section: 'cert', subsection: 'inspection-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'appraiser2-inspected', storeId: 'appraiser2-inspected', label: 'Appraiser 2 Inspected Property', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false },
   { id: 'appraiser2-inspectiondate', storeId: 'appraiser2-inspectiondate', label: 'Appraiser 2 Inspection Date', section: 'cert', subsection: 'inspection-details', type: 'date', inputSource: 'user-input', required: false },
-  { id: 'appraiser2-role', storeId: 'appraiser2-role', label: 'Appraiser 2 Role', section: 'cert', subsection: 'inspection-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser2-role', storeId: 'appraiser2-role', label: 'Appraiser 2 Role', section: 'cert', subsection: 'inspection-details', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Primary Appraiser', 'Co-Appraiser', 'Review Appraiser'] },
+  // --- APPRAISER COMPLIANCE TOGGLES (6 fields) ---
+  { id: 'appraiser1-inspector', storeId: 'appraiser1-inspector', label: 'Appraiser 1 Inspected Property', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
+  { id: 'appraiser1-ce', storeId: 'appraiser1-ce', label: 'Appraiser 1 CE Completed', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
+  { id: 'appraiser1-ethics', storeId: 'appraiser1-ethics', label: 'Appraiser 1 Ethics Completed', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
+  { id: 'appraiser2-inspector', storeId: 'appraiser2-inspector', label: 'Appraiser 2 Inspected Property', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: false },
+  { id: 'appraiser2-ce', storeId: 'appraiser2-ce', label: 'Appraiser 2 CE Completed', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
+  { id: 'appraiser2-ethics', storeId: 'appraiser2-ethics', label: 'Appraiser 2 Ethics Completed', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false, defaultValue: true },
 
   // ============================================================================
   // NEW FIELDS - CANADA ECONOMIC (13 fields)
@@ -2477,7 +2506,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'street1-name', storeId: 'street1-name', label: 'Street 1 Name', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street1-parking', storeId: 'street1-parking', label: 'Street 1 Parking', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street1-sidewalks', storeId: 'street1-sidewalks', label: 'Street 1 Sidewalks', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'street1-type', storeId: 'street1-type', label: 'Street 1 Type', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street1-type', storeId: 'street1-type', label: 'Street 1 Type', section: 'site', subsection: 'street-details', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Paved', 'Gravel', 'Dirt'] },
   { id: 'street2-condition', storeId: 'street2-condition', label: 'Street 2 Condition', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street2-curbs', storeId: 'street2-curbs', label: 'Street 2 Curbs', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street2-lanes', storeId: 'street2-lanes', label: 'Street 2 Lanes', section: 'site', subsection: 'street-details', type: 'number', inputSource: 'user-input', required: false },
@@ -2486,7 +2515,7 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'street2-parking', storeId: 'street2-parking', label: 'Street 2 Parking', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street2-sidewalks', storeId: 'street2-sidewalks', label: 'Street 2 Sidewalks', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street2-surface', storeId: 'street2-surface', label: 'Street 2 Surface', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'street2-type', storeId: 'street2-type', label: 'Street 2 Type', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street2-type', storeId: 'street2-type', label: 'Street 2 Type', section: 'site', subsection: 'street-details', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Paved', 'Gravel', 'Dirt'] },
 
   // ============================================================================
   // NEW FIELDS - TRAFFIC (11 fields)
@@ -2531,9 +2560,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'impv-effectiveage', storeId: 'impv-effectiveage', label: 'Effective Age', section: 'impv', subsection: 'condition', type: 'number', inputSource: 'user-input', required: false },
   { id: 'impv-economiclife', storeId: 'impv-economiclife', label: 'Economic Life', section: 'impv', subsection: 'condition', type: 'number', inputSource: 'user-input', required: false },
   { id: 'impv-remaininglife', storeId: 'impv-remaininglife', label: 'Remaining Life', section: 'impv', subsection: 'condition', type: 'number', inputSource: 'calculated', required: false },
-  { id: 'impv-appeal', storeId: 'impv-appeal', label: 'Appeal Rating', section: 'impv', subsection: 'building-overview', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'impv-condition', storeId: 'impv-condition', label: 'Condition Rating', section: 'impv', subsection: 'building-overview', type: 'text', inputSource: 'user-input', required: false },
-  { id: 'impv-quality', storeId: 'impv-quality', label: 'Quality Rating', section: 'impv', subsection: 'building-overview', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'impv-appeal', storeId: 'impv-appeal', label: 'Appeal Rating', section: 'impv', subsection: 'building-overview', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
+  { id: 'impv-condition', storeId: 'impv-condition', label: 'Condition Rating', section: 'impv', subsection: 'building-overview', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
+  { id: 'impv-quality', storeId: 'impv-quality', label: 'Quality Rating', section: 'impv', subsection: 'building-overview', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
   { id: 'impv-density', storeId: 'impv-density', label: 'Density (Units/Acre)', section: 'impv', subsection: 'building-overview', type: 'number', inputSource: 'calculated', required: false },
   { id: 'impv-landtobldg', storeId: 'impv-landtobldg', label: 'Land to Building Ratio', section: 'impv', subsection: 'building-overview', type: 'number', inputSource: 'calculated', required: false },
   { id: 'impv-parkingratio', storeId: 'impv-parkingratio', label: 'Parking Ratio', section: 'impv', subsection: 'site-improvements', type: 'number', inputSource: 'calculated', required: false },
@@ -2612,6 +2641,62 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'chart-mf-investment-indicators', storeId: 'chart-mf-investment-indicators', label: 'MF Investment Indicators Chart', section: 'market', subsection: 'market-multifamily', type: 'image', inputSource: 'user-input', required: false },
   { id: 'tax-commentary-1', storeId: 'tax-commentary-1', label: 'Tax Commentary Paragraph 1', section: 'tax', subsection: 'tax-analysis', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'tax-commentary-2', storeId: 'tax-commentary-2', label: 'Tax Commentary Paragraph 2', section: 'tax', subsection: 'tax-analysis', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - DROPDOWN SELECTIONS (Added for UX improvements)
+  // Added: 2026-01-03 - Based on field-input-type-upgrades.md
+  // ============================================================================
+
+  // Property Classification Dropdowns
+  { id: 'property-subtype', storeId: 'property-subtype', label: 'Property Subtype', section: 'client-intake', subsection: 'property-info-intake', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Apartment', 'MURB', 'Condo', 'Townhouse', 'Mixed-Use', 'Student Housing', 'Senior Living'] },
+  { id: 'valuation-type', storeId: 'valuation-type', label: 'Valuation Type', section: 'loe-prep', subsection: 'delivery-details', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Current', 'Retrospective', 'Prospective'] },
+  { id: 'occupancy-status', storeId: 'occupancy-status', label: 'Occupancy Status', section: 'exec', subsection: 'property-identification', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Multi-Tenant', 'Single-Tenant', 'Owner-Occupied', 'Vacant'] },
+  { id: 'timeframe', storeId: 'timeframe', label: 'Timeframe', section: 'exec', subsection: 'property-identification', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Current', 'As Stabilized', 'As Complete', 'As Is'] },
+  { id: 'appraisal-status', storeId: 'appraisal-status', label: 'Appraisal Status', section: 'loe-prep', subsection: 'delivery-details', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Fully Detailed', 'Summary', 'Restricted'] },
+  { id: 'scenario-name', storeId: 'scenario-name', label: 'Scenario Name', section: 'exec', subsection: 'value-summary', type: 'dropdown', inputSource: 'user-input', required: false, options: ['As Is', 'As Stabilized', 'As Complete', 'Hypothetical'] },
+  { id: 'value-component', storeId: 'value-component', label: 'Value Component', section: 'exec', subsection: 'value-summary', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Real Property', 'Real Property + FF&E', 'Going Concern'] },
+  
+  // Location & Geography Dropdowns
+  { id: 'country', storeId: 'country', label: 'Country', section: 'cover', subsection: 'location-info', type: 'dropdown', inputSource: 'auto-filled', required: false, options: ['Canada', 'United States'] },
+  
+  // Site Details Dropdowns
+  { id: 'drainage', storeId: 'drainage', label: 'Drainage', section: 'site', subsection: 'site-conditions', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Adequate', 'Inadequate', 'Poor'] },
+  { id: 'visibility', storeId: 'visibility', label: 'Visibility', section: 'site', subsection: 'site-area', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
+  
+  // Zoning & Compliance Dropdowns
+  { id: 'zoning-compliance', storeId: 'zoning-compliance', label: 'Zoning Compliance', section: 'zone', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Legal Conforming', 'Legal Non-Conforming', 'Illegal'] },
+  { id: 'conforming-use', storeId: 'conforming-use', label: 'Conforming Use', section: 'zone', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Yes', 'No', 'Non-Conforming'] },
+  { id: 'conforming-lot', storeId: 'conforming-lot', label: 'Conforming Lot', section: 'zone', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Yes', 'No'] },
+  
+  // Improvements Dropdowns
+  { id: 'construction-type', storeId: 'construction-type', label: 'Construction Type', section: 'impv', subsection: 'construction', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Wood Frame', 'Steel Frame', 'Concrete', 'Masonry'] },
+  { id: 'roof-type', storeId: 'roof-type', label: 'Roof Type', section: 'impv', subsection: 'construction', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Flat', 'Pitched', 'Hip', 'Gable'] },
+  { id: 'building-class', storeId: 'building-class', label: 'Building Class', section: 'impv', subsection: 'building-overview', type: 'dropdown', inputSource: 'user-input', required: false, options: ['A', 'B', 'C', 'D'] },
+  { id: 'parking-type', storeId: 'parking-type', label: 'Parking Type', section: 'impv', subsection: 'site-improvements', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Surface', 'Underground', 'Structured', 'Street'] },
+  
+  // Transaction Dropdowns
+  { id: 'deed-type', storeId: 'deed-type', label: 'Deed Type', section: 'report', subsection: 'transaction-details', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Warranty', 'Quitclaim', 'Special Warranty', 'Trustee'] },
+  { id: 'tax-status', storeId: 'tax-status', label: 'Tax Status', section: 'tax', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Current', 'Delinquent', 'Exempt'] },
+  { id: 'assessment-trend', storeId: 'assessment-trend', label: 'Assessment Trend', section: 'tax', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Increasing', 'Stable', 'Decreasing'] },
+  
+  // Utilities Dropdowns
+  { id: 'util-water', storeId: 'util-water', label: 'Water', section: 'site', subsection: 'utilities', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Municipal', 'Well', 'Cistern', 'None'] },
+  { id: 'util-sewer', storeId: 'util-sewer', label: 'Sewer', section: 'site', subsection: 'utilities', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Municipal', 'Septic', 'None'] },
+  { id: 'util-electric', storeId: 'util-electric', label: 'Electric', section: 'site', subsection: 'utilities', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Connected', 'Not Connected'] },
+  { id: 'util-gas', storeId: 'util-gas', label: 'Gas', section: 'site', subsection: 'utilities', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Natural Gas', 'Propane', 'None'] },
+  
+  // Market & Economic Dropdowns
+  { id: 'economic-outlook', storeId: 'economic-outlook', label: 'Economic Outlook', section: 'market', subsection: 'market-local', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Improving', 'Stable', 'Declining'] },
+  { id: 'market-outlook', storeId: 'market-outlook', label: 'Market Outlook', section: 'market', subsection: 'market-multifamily', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Improving', 'Stable', 'Declining'] },
+
+  // Qualitative Site Ratings
+  { id: 'site-appeal', storeId: 'site-appeal', label: 'Site Appeal', section: 'site', subsection: 'site-conditions', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
+  { id: 'site-exposure', storeId: 'site-exposure', label: 'Site Exposure', section: 'site', subsection: 'site-conditions', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
+  
+  // Building Qualitative Ratings
+  { id: 'building-condition', storeId: 'building-condition', label: 'Building Condition', section: 'impv', subsection: 'condition', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
+  { id: 'building-function', storeId: 'building-function', label: 'Building Function', section: 'impv', subsection: 'condition', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Excellent', 'Good', 'Average', 'Fair', 'Poor'] },
+
 
 ];
 

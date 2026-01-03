@@ -6155,6 +6155,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Client Information (from client-intake section)
     updateField("client-first-name", String(northBattlefordTestData["client-first-name"] || ""));
     updateField("client-last-name", String(northBattlefordTestData["client-last-name"] || ""));
+    updateField("client-full-name", String(northBattlefordTestData["client-full-name"] || ""));
+    updateField("client-name", String(northBattlefordTestData["client-name"] || northBattlefordTestData["client-full-name"] || ""));
+    updateField("client-company", String(northBattlefordTestData["client-company"] || northBattlefordTestData["client-organization"] || ""));
+    updateField("client-title", String(northBattlefordTestData["client-title"] || ""));
     updateField("client-organization", String(northBattlefordTestData["client-organization"] || ""));
     updateField("client-email", String(northBattlefordTestData["client-email"] || ""));
     updateField("client-phone", String(northBattlefordTestData["client-phone"] || ""));
@@ -6172,6 +6176,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("property-name", String(northBattlefordTestData["property-name"] || ""));
     updateField("property-address", String(northBattlefordTestData["street-address"] || northBattlefordTestData["property-address"] || ""));
     updateField("property-type", String(northBattlefordTestData["property-type"] || ""));
+    updateField("valuation-premises", String(northBattlefordTestData["valuation-premises"] || ""));
+    updateField("asset-condition", String(northBattlefordTestData["asset-condition"] || ""));
     updateField("legal-description", String(northBattlefordTestData["report-legal"] || ""));
 
     // Assignment Details (from loe-prep section)
@@ -6192,6 +6198,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("company-address", String(northBattlefordTestData["company-address"] || ""));
     updateField("company-city-state-zip", String(northBattlefordTestData["company-city-state-zip"] || ""));
     updateField("company-phone", String(northBattlefordTestData["company-phone"] || ""));
+    updateField("company-email", String(northBattlefordTestData["company-email"] || ""));
     updateField("company-website", String(northBattlefordTestData["company-website"] || ""));
     updateField("company-jobnumber", String(northBattlefordTestData["company-jobnumber"] || ""));
 

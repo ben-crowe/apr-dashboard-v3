@@ -157,15 +157,6 @@ export default function HomeTabPanel() {
   return (
     <div className="home-tab-panel">
       <div className="home-tab-container">
-        {/* Page Header */}
-        <div className="home-page-header">
-          <h1>HOME</h1>
-          <div className="header-actions">
-            <button className="btn btn-secondary">Reset Form</button>
-            <button className="btn btn-primary">Save Changes</button>
-          </div>
-        </div>
-
         {/* 1. VALUATION APPROACHES - Always visible */}
         <div className="approaches-bar">
           <h2>Valuation Approaches</h2>

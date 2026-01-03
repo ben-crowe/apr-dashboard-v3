@@ -11,11 +11,11 @@ This document shows each table exactly as it appears in the report template, wit
 **URL:** `http://localhost:8086/calculator-demo`
 
 Get all calculator panels working with proper tables:
-- [ ] Create `OperatingHistoryPanel.tsx` (Page 43)
-- [ ] Fix gaps in `IncomeApproachPanel.tsx` (Page 48)
-- [ ] Fix gaps in `SalesComparisonPanel.tsx` (Page 60)
-- [ ] Verify `ReconciliationPanel.tsx` (Page 62)
-- [ ] `CostApproachPanel.tsx` - optional, keep as-is
+- [x] Create `OperatingHistoryPanel.tsx` (Page 43) ✅ EXISTS (Dec 30, 2025)
+- [x] Fix gaps in `IncomeApproachPanel.tsx` (Page 48) ✅ Unit Mix added, columns fixed
+- [x] Fix gaps in `SalesComparisonPanel.tsx` (Page 60) ✅ Stats rows, trans-adj, gross-adj added
+- [x] Verify `ReconciliationPanel.tsx` (Page 62) ✅ Functional
+- [x] `CostApproachPanel.tsx` - optional, exists as-is
 
 ### Phase 2: STANDALONE REPORT PAGES (Next)
 **Location:** `public/report-pages/` (to be created)
@@ -56,6 +56,7 @@ Full report assembles:
 
 **Report Template Reference (for field IDs only):**
 `docs/15-Contract-review/1-Formatting-template/-Main-Templates & Guides/Master-Template/Report-MF-template-LIVE-2025-12-27.html` (v2.4.0)
+NOTE--need to make sure our cal has the correct id's as it seems like it used this as field id refercne
 
 
 ---
@@ -64,11 +65,11 @@ Full report assembles:
 
 | Calculator Panel | Status | Report Page | Standalone Page |
 |------------------|--------|-------------|-----------------|
-| `OperatingHistoryPanel.tsx` | **TO CREATE** | Page 43 | `page-43-operating-history.html` |
-| `IncomeApproachPanel.tsx` | Exists (gaps) | Page 48 | `page-48-direct-capitalization.html` |
-| `SalesComparisonPanel.tsx` | Exists (gaps) | Page 60 | `page-60-sales-comparison.html` |
-| `CostApproachPanel.tsx` | Exists | (optional) | `page-XX-cost-approach.html` |
-| `ReconciliationPanel.tsx` | Exists | Page 62 | `page-62-reconciliation.html` |
+| `OperatingHistoryPanel.tsx` | ✅ **Complete** | Page 43 | `page-43-operating-history.html` |
+| `IncomeApproachPanel.tsx` | ✅ **Complete** | Page 48 | `page-48-direct-capitalization.html` |
+| `SalesComparisonPanel.tsx` | ✅ **Complete** | Page 60 | `page-60-sales-comparison.html` |
+| `CostApproachPanel.tsx` | ✅ Exists (optional) | (optional) | `page-XX-cost-approach.html` |
+| `ReconciliationPanel.tsx` | ✅ **Complete** | Page 62 | `page-62-reconciliation.html` |
 
 ---
 
@@ -153,14 +154,16 @@ Full report assembles:
 
 ### Gap Analysis: Calc Panel vs Report Template
 
-| Gap | Calc Panel | Report Template | Action Needed |
-|-----|------------|-----------------|---------------|
-| Unit Mix table | Missing | Has dedicated table with Contract/Market/Cont v Mkt columns | **ADD** Unit Mix section to calc panel |
-| Column order | Annual first | Annual last | **REORDER** columns to match |
-| %PGR column | Has it | Has it | ✓ Match |
-| %EGR column | Has it | Has it | ✓ Match |
-| Raw Value / Adjustments | Has them | Not shown | Keep in calc (internal), don't send to template |
-| Indicated Value Rounded | Missing | Has it | **ADD** rounded value row |
+| Gap | Calc Panel | Report Template | Status |
+|-----|------------|-----------------|--------|
+| Unit Mix table | ✅ Has type1-4 with Contract/Market/% Market | Has dedicated table | ✅ **COMPLETE** |
+| Column order | ✅ Matches template | Annual last | ✅ **COMPLETE** |
+| %PGR column | Has it | Has it | ✅ Match |
+| %EGR column | Has it | Has it | ✅ Match |
+| Raw Value / Adjustments | Has them | Not shown | ✅ Internal only |
+| Indicated Value Rounded | Shows "Indicated Value" | Has rounded row | ⚠️ Minor - could add explicit rounded display |
+
+**Updated:** 2026-01-03 - Unit Mix and column order gaps fixed
 
 
 
@@ -242,14 +245,16 @@ Full report assembles:
 
 ### Gap Analysis: Calc Panel vs Report Template (Sales Comparison)
 
-| Gap | Calc Panel | Report Template | Action Needed |
-|-----|------------|-----------------|---------------|
-| Adjustment columns | 8 categories (Rights, Financing, etc.) | Combines into Transactional + Property adjustments | **RESTRUCTURE** - calc shows detail, template shows summary |
-| Trans-adjusted price | Missing | Has `compX-trans-adj-price` column | **ADD** intermediate calculation |
-| Statistics rows | Missing | Has HIGH/AVG/MED/LOW rows | **ADD** summary statistics |
-| Gross Adjustment | Missing | Has `compX-gross-adj` column | **ADD** gross adjustment calc |
-| Property details | In Comparable Sales table | On separate pages (52-58) | ✓ Different purpose - property info vs adjustments |
-| Value calc table | Simple indication | Full breakdown with subject units × $/unit | **ADD** explicit multiplication row |
+| Gap | Calc Panel | Report Template | Status |
+|-----|------------|-----------------|--------|
+| Adjustment columns | ✅ 8 categories + Trans/Property grouping | Combines into Transactional + Property | ✅ **COMPLETE** |
+| Trans-adjusted price | ✅ `transAdjPrice` calculated (line 159) | Has `compX-trans-adj-price` | ✅ **COMPLETE** |
+| Statistics rows | ✅ `calcStats()` function (line 193+) | HIGH/AVG/MED/LOW rows | ✅ **COMPLETE** |
+| Gross Adjustment | ✅ `grossAdj` calculation (lines 168-171) | Has `compX-gross-adj` | ✅ **COMPLETE** |
+| Property details | In Comparable Sales table | On separate pages (52-58) | ✅ Different purpose |
+| Value calc table | Shows subject units × $/unit | Full breakdown | ✅ **COMPLETE** |
+
+**Updated:** 2026-01-03 - All major gaps fixed, panel fully functional
 
 ---
 
@@ -391,9 +396,9 @@ Full report assembles:
 
 ## Page 43 - Operating History
 
-**Maps to:** `OperatingHistoryPanel.tsx` (TO BE CREATED)
+**Maps to:** `OperatingHistoryPanel.tsx` ✅ **EXISTS** (Created Dec 30, 2025)
 
-### Calculator Panel (NEEDED)
+### Calculator Panel (COMPLETE)
 
 **Structure:** Side-by-side YTD vs Projection comparison
 
@@ -437,10 +442,12 @@ Full report assembles:
 
 ### Gap Analysis: Operating History
 
-| Gap | Calc Panel | Report Template | Action Needed |
-|-----|------------|-----------------|---------------|
-| Entire panel | **MISSING** | Has full YTD vs Projection table | **CREATE** `OperatingHistoryPanel.tsx` |
-| YTD input fields | None | 45 `hist-*` fields | **ADD** input fields for historical data |
-| YTD calculations | None | $/Unit and %PGR for each row | **ADD** YTD calculation logic |
-| Side-by-side display | None | Shows YTD next to Projection | **MATCH** template column layout |
-| Year label | None | Dynamic "YTD 2025" header | **ADD** year selection or auto-detect |
+| Gap | Calc Panel | Report Template | Status |
+|-----|------------|-----------------|--------|
+| Entire panel | ✅ `OperatingHistoryPanel.tsx` exists | Has full YTD vs Projection table | ✅ **COMPLETE** |
+| YTD input fields | ✅ Has `hist-*` input fields | 45 `hist-*` fields | ✅ **COMPLETE** |
+| YTD calculations | ✅ Auto-calculates $/Unit and %PGR | $/Unit and %PGR for each row | ✅ **COMPLETE** |
+| Side-by-side display | ✅ Shows YTD next to Projection | Matches template layout | ✅ **COMPLETE** |
+| Year label | ⚠️ May need verification | Dynamic "YTD 2025" header | Verify in browser |
+
+**Updated:** 2026-01-03 - Panel created Dec 30, 2025

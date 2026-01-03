@@ -1,4 +1,9 @@
-# Report Builder - Field Registry
+# Report Builder Reference Valcre Workbook Setup
+NOTE all field ID's are Valcre and if going to use this structure for the APR Report Builder make sure
+to convert each id to correct field id from the master registry file. 
+
+This was examined for UX purposes to fully undersand how apprasers are currently using the workbook to understand 
+how they are using the workbook to create reports to then decide if we will adopt this format in our digical version report builder.  
 
 ---
 
@@ -9,7 +14,7 @@
 | **1. Home** | Setup, Firm, Client, Appraisers, Dates, Valuation Scenarios, Conditions, Occupancy |
 | **2. Introduction & Executive Summary** | Property Overview, Photographs, Maps, Identification of Assignment |
 | **3. Property Analysis** | Location, Site Details, Taxes & Assessment, Land Use & Planning, Improvements |
-| **4. Market Context** | Economic, Market Overview, HBU, Methodology, Income Approach, Direct Comparison, Reconciliation, Certification |
+| **4. Market Context** | Economic, Market Overview,HBU, Methodology, 3 Approach, Cert |
 | **5. Appendices** | Limiting Conditions, Definitions, Qualifications |
 
 ---

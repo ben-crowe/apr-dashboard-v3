@@ -12,7 +12,7 @@ Controls rental revenue calculations.
 
 | Field ID | Type | Example | Notes |
 |----------|------|---------|-------|
-| `calc-total-units` | number | 16 | Total units in property |
+| `calc-total-units` | number | 16 | Total units in property |   
 | `calc-type1-name` | string | "1BR/1BA" | Unit type label |
 | `calc-type1-count` | number | 4 | Count of this type |
 | `calc-type1-sf` | number | 550 | SF per unit |

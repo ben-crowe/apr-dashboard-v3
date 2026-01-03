@@ -164,14 +164,26 @@ Is the ID in fieldRegistry.ts?
 3. **Check MASTER-PAGE-FIELD-REFERENCE** to see which pages use the field
 4. **Request TypeScript-Pro persona** for optimal code quality
 
+### Field Verification Command
+
+**Slash command:** `/check-field-verify`
+
+**Working copy (full guide):**
+```
+/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/0-APR-Domain-Core-Mgt/command-Field-Varify.md
+```
+
+Use this command to verify field IDs exist before using in templates.
+
 ---
 
 ## Page-by-Page Field Reference (MAINTAIN THIS FILE)
 
 **Your primary deliverable file:**
 ```
-/Users/bencrowe/Development/APR-Dashboard-v3/dist/docs/15-Contract-review/1-Formatting-template/-Main-Templates & Guides/Master-Template/FIELD-IDS-BY-PAGE-2025-12-27.md
+/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/0-APR-Domain-Core-Mgt/FIELD-IDS-BY-PAGE.md
 ```
+*(Note: Create this file if it doesn't exist)*
 
 This file contains:
 - All field IDs organized by page (Pages -4 to 67)
@@ -192,7 +204,7 @@ Mapping files (like `/tmp/valcre-field-mapping.txt`) may contain **incorrect or 
 
 **Ground Truth JSON (9,652 named ranges from actual North Battleford workbook):**
 ```
-/Users/bencrowe/Development/APR-Dashboard-v3/dist/docs/15-Contract-review/2-Field Management/valcre-named-ranges-complete.json
+/Users/bencrowe/Development/APR-Dashboard-v3/docs/15-Contract-review/2-Field Management/valcre-named-ranges-complete.json
 ```
 
 ### Workflow Steps
@@ -204,12 +216,12 @@ Mapping files (like `/tmp/valcre-field-mapping.txt`) may contain **incorrect or 
 
 2. **VERIFY against ground truth JSON** (MANDATORY - never skip)
    ```bash
-   grep "IA_DirectCapRate" dist/docs/15-Contract-review/2-Field\ Management/valcre-named-ranges-complete.json
+   grep "IA_DirectCapRate" docs/15-Contract-review/2-Field\ Management/valcre-named-ranges-complete.json
    ```
 
 3. **If NOT found, search for correct pattern:**
    ```bash
-   grep "CapRate\|DirectCap" dist/docs/15-Contract-review/2-Field\ Management/valcre-named-ranges-complete.json
+   grep "CapRate\|DirectCap" docs/15-Contract-review/2-Field\ Management/valcre-named-ranges-complete.json
    ```
 
 4. **Find actual ID:**
@@ -249,9 +261,9 @@ Mapping files (like `/tmp/valcre-field-mapping.txt`) may contain **incorrect or 
 **Images do NOT come from the Excel workbook.** They are in the MS Word document.
 
 **Source Files:**
-- Master Word Doc: `/dist/docs/15-Contract-review/1-Formatting-template/REPORT Pg Img/master-word doc/VAL251012 - North Battleford Apt.docx`
-- Reference Report: `/dist/docs/15-Contract-review/Ref.Report-VAL251012-North Battleford Apt.docx`
-- Extracted SVGs: `/dist/docs/15-Contract-review/svg-doc/Ref.Report-VAL251012-North Battleford Apt.docx_1.svg` through `_79.svg`
+- Master Word Doc: `/docs/15-Contract-review/1-Formatting-template/REPORT Pg Img/master-word doc/VAL251012 - North Battleford Apt.docx`
+- Reference Report: `/docs/15-Contract-review/Ref.Report-VAL251012-North Battleford Apt.docx`
+- Extracted SVGs: `/docs/15-Contract-review/6-Souce Reports & Workbook/Ref-1-North Battleford/svg-doc/` (79 SVG files)
 
 **Image Field Categories:**
 
@@ -284,10 +296,10 @@ Mapping files (like `/tmp/valcre-field-mapping.txt`) may contain **incorrect or 
 
 ```bash
 # Verify a Valcre named range exists
-grep '"IA_YourFieldName"' dist/docs/15-Contract-review/2-Field\ Management/valcre-named-ranges-complete.json
+grep '"IA_YourFieldName"' docs/15-Contract-review/2-Field\ Management/valcre-named-ranges-complete.json
 
 # Search for pattern if exact name unknown
-grep "CapRate\|DirectCap" dist/docs/15-Contract-review/2-Field\ Management/valcre-named-ranges-complete.json
+grep "CapRate\|DirectCap" docs/15-Contract-review/2-Field\ Management/valcre-named-ranges-complete.json
 ```
 
 ---
@@ -400,8 +412,8 @@ List last 7 checkpoints with: topic, title, date, first 2 search terms.
 
 ---
 
-*Agent Version: 1.3*
+*Agent Version: 1.4*
 *Created: December 27, 2025*
 *Last Checkpoint: December 27, 2025 21:30 - image-fields*
-*Updated: December 27, 2025 - Added step-by-step checkpoint instructions*
+*Updated: January 3, 2026 - Fixed all stale dist/ paths, corrected SVG folder location*
 *Domain: APR Dashboard v3 - Registry & Workbook*

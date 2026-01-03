@@ -102,7 +102,7 @@ export default function PreviewPanel() {
         setTimeout(() => {
           pagesWrapper = iframeDoc.getElementById('pages-wrapper');
           if (!pagesWrapper) {
-            console.error('pages-wrapper not found in preview-wrapper.html after retry');
+            console.error('pages-wrapper not found in Report-MF-template.html after retry');
             return;
           }
           injectPages(pagesWrapper, iframeDoc);
@@ -218,7 +218,7 @@ export default function PreviewPanel() {
       {previewHtml ? (
         <iframe
           ref={iframeRef}
-          src="/preview-wrapper.html"
+          src="/Report-MF-template.html"
           style={{
             width: '100%',
             height: '100%',

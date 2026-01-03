@@ -299,6 +299,7 @@
         .page-count {
             font-size: 11px;
             color: #999;
+            white-space: nowrap;
         }
 
         /* Dark mode - dims pages */
@@ -542,7 +543,6 @@
             <div class="controls-bar">
                 <!-- Zoom Controls -->
                 <div class="control-group">
-                    <span class="control-label">Zoom:</span>
                     <button class="control-btn" id="zoom-out" title="Zoom out">−</button>
                     <span class="zoom-value" id="zoom-value">60%</span>
                     <button class="control-btn" id="zoom-in" title="Zoom in">+</button>
@@ -556,7 +556,7 @@
                         <input type="checkbox" id="preview-toggle">
                         <span class="toggle-slider"></span>
                     </span>
-                    <span id="mode-label">Show Field IDs</span>
+                    <span id="mode-label">ID</span>
                 </label>
 
                 <div class="divider"></div>
@@ -8687,46 +8687,74 @@ document.querySelectorAll('.field-mapped').forEach(field => {
     </div>
 
     <script>
-        // === ZOOM CONTROLS (matches PreviewMasterWrapper) ===
-        let zoom = 0.6; // Start at 60%
-        const minZoom = 0.1;
-        const maxZoom = 1.5;
-        const zoomStep = 0.05;
+        // === DYNAMIC ZOOM CONTROLS ===
+        // fitToPanelScale = scale needed to fit report in panel (this is 100%)
+        // userZoomMultiplier = user's zoom adjustment (starts at 1.0 = 100%)
+        // Final zoom = fitToPanelScale * userZoomMultiplier
+        let fitToPanelScale = 1.0;
+        let userZoomMultiplier = 1.0;
+        const minUserZoom = 0.1;  // 10% minimum
+        const maxUserZoom = 3.0;  // 300% maximum
+        const zoomStep = 0.05;    // 5% steps
 
         const scaler = document.getElementById('preview-scaler');
         const zoomValue = document.getElementById('zoom-value');
         const zoomIn = document.getElementById('zoom-in');
         const zoomOut = document.getElementById('zoom-out');
+        const previewContainer = document.getElementById('preview-container');
+        const pagesWrapperForZoom = document.getElementById('pages-wrapper');
+
+        // Calculate scale needed to fit report in panel (100% = fits perfectly)
+        function calculateFitToPanel() {
+            if (!pagesWrapperForZoom || !previewContainer) return 0.6; // Safe default
+            const firstPage = pagesWrapperForZoom.querySelector('.page-sheet');
+            if (!firstPage) return 0.6; // Safe default
+            const pageWidth = firstPage.offsetWidth || 816;
+            const containerWidth = previewContainer.clientWidth;
+            if (containerWidth < 100) return 0.6; // Container not ready, use safe default
+            const scale = (containerWidth - 24) / pageWidth; // Reduced padding
+            return Math.max(0.1, Math.min(scale, 1.05)); // Clamp between 0.1 and 1.05
+        }
 
         function updateZoom() {
-            // Get current page before zoom (if available)
+            // Get current page from page picker - this is what should stay at top
             const pageInputEl = document.getElementById('page-input');
             const displayNum = pageInputEl ? parseInt(pageInputEl.value) : null;
-            
-            scaler.style.transform = `scale(${zoom})`;
-            zoomValue.textContent = Math.round(zoom * 100) + '%';
-            zoomOut.disabled = zoom <= minZoom;
-            zoomIn.disabled = zoom >= maxZoom;
-            
-            // After zoom, scroll back to current page
+
+            // Get anchor point from selected page
+            let anchorPoint = 0; // Default to top of document
             if (displayNum !== null && !isNaN(displayNum)) {
-                const internalNum = displayNum <= -1 ? displayNum + 6 : displayNum + 5;
-                setTimeout(() => {
-                    const targetPage = document.querySelector(`[data-page-num="Page ${internalNum}"]`);
-                    if (targetPage) {
-                        targetPage.scrollIntoView({ behavior: 'auto', block: 'start' });
-                    }
-                }, 50);
+                const internalNum = displayToInternal(displayNum);
+                const targetPage = document.querySelector(`[data-page-num="Page ${internalNum}"]`);
+                if (targetPage) {
+                    // Get page's offsetTop relative to scaler - this becomes transform origin
+                    anchorPoint = targetPage.offsetTop;
+                }
             }
+
+            // Calculate fit-to-panel scale and final zoom
+            fitToPanelScale = calculateFitToPanel();
+            const finalZoom = fitToPanelScale * userZoomMultiplier;
+
+            // Set transform origin - center horizontally, anchor vertically to selected page
+            scaler.style.transformOrigin = `center ${anchorPoint}px`;
+
+            // Apply zoom transform
+            scaler.style.transform = `scale(${finalZoom})`;
+
+            // Update UI - show userZoomMultiplier (100% = fits panel)
+            zoomValue.textContent = Math.round(userZoomMultiplier * 100) + '%';
+            zoomOut.disabled = userZoomMultiplier <= minUserZoom;
+            zoomIn.disabled = userZoomMultiplier >= maxUserZoom;
         }
 
         zoomOut.addEventListener('click', () => {
-            zoom = Math.max(minZoom, zoom - zoomStep);
+            userZoomMultiplier = Math.max(minUserZoom, userZoomMultiplier - zoomStep);
             updateZoom();
         });
 
         zoomIn.addEventListener('click', () => {
-            zoom = Math.min(maxZoom, zoom + zoomStep);
+            userZoomMultiplier = Math.min(maxUserZoom, userZoomMultiplier + zoomStep);
             updateZoom();
         });
 
@@ -8735,22 +8763,90 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 
         zoomOut.addEventListener('mousedown', () => {
             zoomInterval = setInterval(() => {
-                zoom = Math.max(minZoom, zoom - 0.025);
+                userZoomMultiplier = Math.max(minUserZoom, userZoomMultiplier - 0.025);
                 updateZoom();
             }, 100);
         });
 
         zoomIn.addEventListener('mousedown', () => {
             zoomInterval = setInterval(() => {
-                zoom = Math.min(maxZoom, zoom + 0.025);
+                userZoomMultiplier = Math.min(maxUserZoom, userZoomMultiplier + 0.025);
                 updateZoom();
             }, 100);
         });
 
         document.addEventListener('mouseup', () => clearInterval(zoomInterval));
 
-        // Initial zoom
-        updateZoom();
+        // Auto-adjust zoom when panel resizes - PAGE-PRESERVING algorithm
+        const resizeObserver = new ResizeObserver(() => {
+            // STEP 1: Capture current visible page BEFORE any changes
+            const oldScale = fitToPanelScale * userZoomMultiplier;
+            const unscaledScrollTop = oldScale > 0 ? previewContainer.scrollTop / oldScale : 0;
+
+            // Find the page at top of viewport (in unscaled coordinates)
+            let anchorPage = null;
+            let offsetWithinPage = 0;
+
+            const pages = document.querySelectorAll('.page-sheet');
+            for (const page of pages) {
+                const pageTop = page.offsetTop;
+                const pageBottom = pageTop + page.offsetHeight;
+
+                if (pageTop <= unscaledScrollTop && pageBottom > unscaledScrollTop) {
+                    anchorPage = page;
+                    offsetWithinPage = unscaledScrollTop - pageTop;
+                    break;
+                }
+            }
+
+            // Edge case: at very top or no pages yet
+            if (!anchorPage && pages.length > 0) {
+                if (unscaledScrollTop <= 0) {
+                    anchorPage = pages[0];
+                    offsetWithinPage = 0;
+                } else {
+                    // Past the end - anchor to last page
+                    anchorPage = pages[pages.length - 1];
+                    offsetWithinPage = 0;
+                }
+            }
+
+            // STEP 2: Update zoom scale
+            // Only recalculate fitToPanelScale if at 100% user zoom
+            if (Math.abs(userZoomMultiplier - 1.0) < 0.01) {
+                fitToPanelScale = calculateFitToPanel();
+            }
+
+            const newScale = fitToPanelScale * userZoomMultiplier;
+            scaler.style.transform = `scale(${newScale})`;
+            zoomValue.textContent = Math.round(userZoomMultiplier * 100) + '%';
+
+            // STEP 3: Restore scroll to show same page at same offset
+            if (anchorPage && newScale > 0) {
+                requestAnimationFrame(() => {
+                    const targetUnscaled = anchorPage.offsetTop + offsetWithinPage;
+                    previewContainer.scrollTop = targetUnscaled * newScale;
+
+                    // Update page number display immediately (don't wait for scroll debounce)
+                    const pageInputEl = document.getElementById('page-input');
+                    if (pageInputEl && anchorPage.hasAttribute('data-page-num')) {
+                        const internalNum = parseInt(anchorPage.getAttribute('data-page-num').replace('Page ', ''));
+                        const displayNum = internalToDisplay(internalNum);
+                        if (pageInputEl.value != displayNum) {
+                            pageInputEl.value = displayNum;
+                        }
+                    }
+                });
+            }
+        });
+        if (previewContainer) {
+            resizeObserver.observe(previewContainer);
+        }
+
+        // Initial zoom - delay to ensure DOM is ready
+        setTimeout(() => {
+            updateZoom();
+        }, 100);
 
         // === PREVIEW MODE TOGGLE ===
         const toggle = document.getElementById('preview-toggle');
@@ -8787,7 +8883,7 @@ document.querySelectorAll('.field-mapped').forEach(field => {
 
             if (this.checked) {
                 pagesWrapper.classList.add('preview-mode');
-                modeLabel.textContent = 'Preview Mode';
+                // Keep label as 'ID' - toggle state is visible from switch
                 // Swap non-financial fields to sample data
                 fields.forEach(el => {
                     if (isCalcField(el)) return; // Skip - calculator controls these
@@ -8801,7 +8897,6 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 });
             } else {
                 pagesWrapper.classList.remove('preview-mode');
-                modeLabel.textContent = 'Show Field IDs';
                 // Swap back to field IDs (skip financial - calculator controls)
                 fields.forEach(el => {
                     if (isCalcField(el)) return;
@@ -8834,12 +8929,12 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         // === PAGE NAVIGATION ===
         const pageInput = document.getElementById('page-input');
         const pageCount = document.getElementById('page-count');
-        const allPageSheets = document.querySelectorAll('.page-sheet');
-        
-        // Get actual page numbers from data attributes
-        const pageNumbers = Array.from(allPageSheets).map(p => 
-            parseInt(p.getAttribute('data-page-num').replace('Page ', ''))
-        ).sort((a, b) => a - b);
+
+        // Use let for variables that need updating when pages are re-injected
+        let allPageSheets = document.querySelectorAll('.page-sheet');
+        let pageNumbers = [];
+        let minDisplay = 0;
+        let maxDisplay = 0;
 
         // Map internal page number to display number
         // v2.4.0: Page numbers now match directly (no conversion needed)
@@ -8854,22 +8949,56 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             return display;
         }
 
-        // Calculate bounds
-        const minInternal = Math.min(...pageNumbers);
-        const maxInternal = Math.max(...pageNumbers);
-        const minDisplay = internalToDisplay(minInternal);
-        const maxDisplay = internalToDisplay(maxInternal);
-        
-        // Set input constraints
-        pageInput.min = minDisplay;
-        pageInput.max = maxDisplay;
-
         function goToPage(internalNum) {
             const targetPage = document.querySelector(`[data-page-num="Page ${internalNum}"]`);
             if (targetPage) {
                 targetPage.scrollIntoView({ behavior: 'auto', block: 'start' });
             }
         }
+
+        // Global function to update page count after pages are re-injected
+        // Called by PreviewPanel.tsx after injecting pages
+        window.updatePageCount = function() {
+            console.log('[Page Navigation] updatePageCount called - re-querying DOM');
+
+            // Re-query page sheets from DOM
+            allPageSheets = document.querySelectorAll('.page-sheet');
+
+            if (allPageSheets.length === 0) {
+                console.warn('[Page Navigation] No .page-sheet elements found');
+                return;
+            }
+
+            // Recalculate page numbers
+            pageNumbers = Array.from(allPageSheets).map(p => {
+                const attr = p.getAttribute('data-page-num');
+                return attr ? parseInt(attr.replace('Page ', '')) : 0;
+            }).sort((a, b) => a - b);
+
+            // Recalculate bounds
+            const minInternal = Math.min(...pageNumbers);
+            const maxInternal = Math.max(...pageNumbers);
+            minDisplay = internalToDisplay(minInternal);
+            maxDisplay = internalToDisplay(maxInternal);
+
+            // Update input constraints
+            pageInput.min = minDisplay;
+            pageInput.max = maxDisplay;
+
+            // Update page count display
+            pageCount.textContent = `of ${pageNumbers.length}`;
+
+            // Keep current page value if valid, otherwise reset to first page
+            let currentVal = parseInt(pageInput.value);
+            if (isNaN(currentVal) || currentVal < minDisplay || currentVal > maxDisplay) {
+                pageInput.value = internalToDisplay(pageNumbers[0]);
+            }
+
+            console.log(`[Page Navigation] Updated: ${pageNumbers.length} pages, range ${minDisplay} to ${maxDisplay}`);
+        };
+
+        // Initial page count setup
+        window.updatePageCount();
 
         // Listen for any input change (typing, arrows, etc)
         pageInput.addEventListener('input', function() {
@@ -8905,24 +9034,21 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             }
         });
 
-        // Initialize
-        const totalDisplayPages = pageNumbers.length;
-        pageCount.textContent = `of ${totalDisplayPages}`;
-        pageInput.value = internalToDisplay(pageNumbers[0]);
-
         // Track visible page on scroll
         const container = document.getElementById('preview-container');
         let scrollTimeout;
         container.addEventListener('scroll', function() {
             clearTimeout(scrollTimeout);
             scrollTimeout = setTimeout(() => {
+                // Re-query page sheets in case they were updated
+                const currentPageSheets = document.querySelectorAll('.page-sheet');
                 const containerRect = container.getBoundingClientRect();
                 const containerCenter = containerRect.top + containerRect.height / 3;
-                
+
                 let closestPage = null;
                 let closestDistance = Infinity;
-                
-                allPageSheets.forEach(page => {
+
+                currentPageSheets.forEach(page => {
                     const rect = page.getBoundingClientRect();
                     const pageCenter = rect.top + rect.height / 2;
                     const distance = Math.abs(pageCenter - containerCenter);
@@ -8947,8 +9073,8 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         container.addEventListener('wheel', (e) => {
             if (e.ctrlKey) {
                 e.preventDefault();
-                zoom += e.deltaY < 0 ? 0.025 : -0.025;
-                zoom = Math.max(minZoom, Math.min(maxZoom, zoom));
+                userZoomMultiplier += e.deltaY < 0 ? 0.025 : -0.025;
+                userZoomMultiplier = Math.max(minUserZoom, Math.min(maxUserZoom, userZoomMultiplier));
                 updateZoom();
             }
         }, { passive: false });

@@ -23,6 +23,9 @@ import SalesComparisonPanel from '@/features/calculator-demo-v4/components/Sales
 import OperatingHistoryPanel from '@/features/calculator-demo-v4/components/OperatingHistoryPanel';
 import ReconciliationPanel from '@/features/calculator-demo-v4/components/ReconciliationPanel';
 
+// HomeTabPanel for HOME section
+import { HomeTabPanel } from '../HomeTabPanel';
+
 // Mapping of which image fields should appear in which sections
 const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
   'cover': ['img-cover-photo', 'img-signature'],
@@ -793,42 +796,7 @@ export default function EditPanel() {
   };
 
   const isHomeSection = currentSection.id === 'home';
-  const approachToggleFields = isHomeSection ? getApproachToggleFields() : [];
-
-  // Render approach toggle for the always-visible section
-  const renderApproachToggle = (field: ReportField) => {
-    const isChecked = field.value === true || field.value === 'true' || field.value === 1;
-    return (
-      <div key={field.id} className="flex items-center gap-3">
-        <button
-          type="button"
-          role="switch"
-          aria-checked={isChecked}
-          onClick={() => updateFieldValue(field.id, !isChecked)}
-          disabled={!field.isEditable}
-          className={cn(
-            'relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800',
-            isChecked ? 'bg-green-600' : 'bg-gray-600',
-            !field.isEditable && 'opacity-50 cursor-not-allowed'
-          )}
-        >
-          <span
-            className={cn(
-              'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-              isChecked ? 'translate-x-5' : 'translate-x-0'
-            )}
-          />
-        </button>
-        <Label
-          htmlFor={field.id}
-          className="text-sm font-medium text-white cursor-pointer"
-          onClick={() => field.isEditable && updateFieldValue(field.id, !isChecked)}
-        >
-          {field.label}
-        </Label>
-      </div>
-    );
-  };
+  const isCalcSection = currentSection.id === 'calc';
 
   return (
     <div className="h-full flex flex-col" style={{ backgroundColor: '#1f1f1f' }}>
@@ -844,25 +812,27 @@ export default function EditPanel() {
         <span style={{ color: '#ffffff', fontWeight: '600', fontSize: '15px' }}>
           {currentSection.name.toUpperCase()}
         </span>
-        {/* Expand/Collapse All button */}
-        <button
-          type="button"
-          onClick={toggleAllSubsections}
-          className="p-1 rounded hover:bg-gray-700 transition-colors"
-          title={allExpanded ? 'Collapse all sections' : 'Expand all sections'}
-        >
-          <ChevronDown
-            className={cn(
-              "w-4 h-4 transition-transform duration-200",
-              allExpanded ? "rotate-180" : "-rotate-90"
-            )}
-            style={{ color: '#888888' }}
-          />
-        </button>
+        {/* Expand/Collapse All button - hide for home section which has its own controls */}
+        {!isHomeSection && (
+          <button
+            type="button"
+            onClick={toggleAllSubsections}
+            className="p-1 rounded hover:bg-gray-700 transition-colors"
+            title={allExpanded ? 'Collapse all sections' : 'Expand all sections'}
+          >
+            <ChevronDown
+              className={cn(
+                "w-4 h-4 transition-transform duration-200",
+                allExpanded ? "rotate-180" : "-rotate-90"
+              )}
+              style={{ color: '#888888' }}
+            />
+          </button>
+        )}
       </div>
 
       {/* Scrollable content */}
-      <div className="flex-1 overflow-auto p-6 text-white editor-panel-content" style={{ backgroundColor: '#1f1f1f' }}>
+      <div className="flex-1 overflow-auto text-white editor-panel-content" style={{ backgroundColor: '#1f1f1f' }}>
         <style>{`
           .editor-panel-content input:not([type="file"]),
           .editor-panel-content textarea,
@@ -877,104 +847,103 @@ export default function EditPanel() {
           }
         `}</style>
 
-        {/* Valuation Approaches - Always visible at top of Home section */}
-        {isHomeSection && approachToggleFields.length > 0 && (
-          <div className="mb-4 p-4 rounded-lg" style={{ backgroundColor: '#2a2a2a' }}>
-            <h3 className="text-white text-sm font-semibold mb-3">Valuation Approaches</h3>
-            <div className="flex items-center gap-8">
-              {approachToggleFields.map(renderApproachToggle)}
-            </div>
-          </div>
+        {/* HOME Section - Render HomeTabPanel component */}
+        {isHomeSection && (
+          <HomeTabPanel />
         )}
 
         {/* Calculator Table Panels - Only show for CALC section */}
-        {currentSection.id === 'calc' && (
-          <ThemeProvider>
-            <div className="space-y-6 mb-6">
-              <div className="text-white px-0 py-2 font-semibold text-sm mb-2 border-b border-[#4b5563]">
-                CALCULATOR TABLES
+        {isCalcSection && (
+          <div className="p-6">
+            <ThemeProvider>
+              <div className="space-y-6 mb-6">
+                <div className="text-white px-0 py-2 font-semibold text-sm mb-2 border-b border-[#4b5563]">
+                  CALCULATOR TABLES
+                </div>
+                <OperatingHistoryPanel />
+                <IncomeApproachPanel onValueChange={setIncomeValue} />
+                <SalesComparisonPanel onIndicatedValueChange={setSalesValue} />
+                <ReconciliationPanel
+                  incomeValue={incomeValue}
+                  salesIndicatedValue={salesValue}
+                  costValue={0}
+                />
               </div>
-              <OperatingHistoryPanel />
-              <IncomeApproachPanel onValueChange={setIncomeValue} />
-              <SalesComparisonPanel onIndicatedValueChange={setSalesValue} />
-              <ReconciliationPanel
-                incomeValue={incomeValue}
-                salesIndicatedValue={salesValue}
-                costValue={0}
-              />
-            </div>
-          </ThemeProvider>
-        )}
-
-        {/* Main section fields */}
-        {currentSection.fields.length > 0 && (
-          <div className="mb-8">
-            {currentSection.fields.map(renderField)}
+            </ThemeProvider>
           </div>
         )}
 
-        {/* Subsections as collapsible cards
-            For HOME: use buildHomeSubsections() to get fields from the home section store
-            For others: use currentSection.subsections from registry */}
-        {(isHomeSection ? buildHomeSubsections() : currentSection.subsections || [])
-          .map((subsection) => {
-          const isCollapsed = !expandedSubsections.has(subsection.id);
+        {/* Non-Home, Non-Calc sections - render standard fields and subsections */}
+        {!isHomeSection && !isCalcSection && (
+          <div className="p-6">
+            {/* Main section fields */}
+            {currentSection.fields.length > 0 && (
+              <div className="mb-8">
+                {currentSection.fields.map(renderField)}
+              </div>
+            )}
 
-          return (
-            <div
-              key={subsection.id}
-              className="mb-4 rounded-lg overflow-hidden"
-              style={{ border: '1px solid #3a3a3a' }}
-            >
-              {/* Clickable header */}
-              <button
-                type="button"
-                onClick={() => toggleSubsection(subsection.id)}
-                className="w-full flex items-center justify-between px-4 py-3 transition-colors cursor-pointer"
-                style={{ backgroundColor: '#2a2a2a' }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#333333'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
-              >
-                <span className="font-semibold text-sm text-white">
-                  {subsection.title}
-                </span>
-                <ChevronDown
-                  className={cn(
-                    "w-4 h-4 transition-transform duration-200",
-                    isCollapsed && "-rotate-90"
-                  )}
-                  style={{ color: '#888888' }}
-                />
-              </button>
+            {/* Subsections as collapsible cards */}
+            {(currentSection.subsections || []).map((subsection) => {
+              const isCollapsed = !expandedSubsections.has(subsection.id);
 
-              {/* Collapsible content */}
-              <div
-                className={cn(
-                  "transition-all duration-200 ease-in-out overflow-hidden",
-                  isCollapsed ? "max-h-0 opacity-0" : "max-h-[5000px] opacity-100"
-                )}
-              >
-                <div className="p-4" style={{ backgroundColor: '#252525' }}>
-                  {renderSubsectionFields(subsection, currentSection.id)}
+              return (
+                <div
+                  key={subsection.id}
+                  className="mb-4 rounded-lg overflow-hidden"
+                  style={{ border: '1px solid #3a3a3a' }}
+                >
+                  {/* Clickable header */}
+                  <button
+                    type="button"
+                    onClick={() => toggleSubsection(subsection.id)}
+                    className="w-full flex items-center justify-between px-4 py-3 transition-colors cursor-pointer"
+                    style={{ backgroundColor: '#2a2a2a' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#333333'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+                  >
+                    <span className="font-semibold text-sm text-white">
+                      {subsection.title}
+                    </span>
+                    <ChevronDown
+                      className={cn(
+                        "w-4 h-4 transition-transform duration-200",
+                        isCollapsed && "-rotate-90"
+                      )}
+                      style={{ color: '#888888' }}
+                    />
+                  </button>
+
+                  {/* Collapsible content */}
+                  <div
+                    className={cn(
+                      "transition-all duration-200 ease-in-out overflow-hidden",
+                      isCollapsed ? "max-h-0 opacity-0" : "max-h-[5000px] opacity-100"
+                    )}
+                  >
+                    <div className="p-4" style={{ backgroundColor: '#252525' }}>
+                      {renderSubsectionFields(subsection, currentSection.id)}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Related Images from Image Management */}
+            {relatedImages.length > 0 && (
+              <div className="mb-8">
+                <div className="text-white px-0 py-2 font-semibold text-sm mb-4 flex items-center gap-2 border-b border-[#4b5563]">
+                  <ImageIcon className="w-4 h-4" />
+                  SECTION IMAGES
+                </div>
+                <p className="text-xs text-gray-300 mb-4 px-2">
+                  Images for this section (managed in S3 IMAGE MGT)
+                </p>
+                <div className="grid grid-cols-2 gap-4 pl-2">
+                  {relatedImages.map(renderField)}
                 </div>
               </div>
-            </div>
-          );
-        })}
-
-        {/* Related Images from Image Management */}
-        {relatedImages.length > 0 && (
-          <div className="mb-8">
-            <div className="text-white px-0 py-2 font-semibold text-sm mb-4 flex items-center gap-2 border-b border-[#4b5563]">
-              <ImageIcon className="w-4 h-4" />
-              SECTION IMAGES
-            </div>
-            <p className="text-xs text-gray-300 mb-4 px-2">
-              Images for this section (managed in S3 IMAGE MGT)
-            </p>
-            <div className="grid grid-cols-2 gap-4 pl-2">
-              {relatedImages.map(renderField)}
-            </div>
+            )}
           </div>
         )}
       </div>

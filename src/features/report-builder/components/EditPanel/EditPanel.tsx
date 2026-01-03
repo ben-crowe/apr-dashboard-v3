@@ -29,6 +29,9 @@ import { HomeTabPanel } from '../HomeTabPanel';
 // SiteTabPanel for SITE section
 import { SiteTabPanel } from '../SiteTabPanel';
 
+// IncomeTabPanel for INCOME section
+import { IncomeTabPanel } from '../IncomeTabPanel';
+
 // Mapping of which image fields should appear in which sections
 const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
   'cover': ['img-cover-photo', 'img-signature'],
@@ -800,6 +803,7 @@ export default function EditPanel() {
 
   const isHomeSection = currentSection.id === 'home';
   const isSiteSection = currentSection.id === 'site';
+  const isIncomeSection = currentSection.id === 'income';
   const isCalcSection = currentSection.id === 'calc';
 
   return (
@@ -816,8 +820,8 @@ export default function EditPanel() {
         <span style={{ color: '#ffffff', fontWeight: '600', fontSize: '15px' }}>
           {currentSection.name.toUpperCase()}
         </span>
-        {/* Expand/Collapse All button - hide for home and site sections which have their own controls */}
-        {!isHomeSection && !isSiteSection && (
+        {/* Expand/Collapse All button - hide for home, site, and income sections which have their own controls */}
+        {!isHomeSection && !isSiteSection && !isIncomeSection && (
           <button
             type="button"
             onClick={toggleAllSubsections}
@@ -861,6 +865,11 @@ export default function EditPanel() {
           <SiteTabPanel />
         )}
 
+        {/* INCOME Section - Render IncomeTabPanel component */}
+        {isIncomeSection && (
+          <IncomeTabPanel />
+        )}
+
         {/* Calculator Table Panels - Only show for CALC section */}
         {isCalcSection && (
           <div className="p-6">
@@ -882,8 +891,8 @@ export default function EditPanel() {
           </div>
         )}
 
-        {/* Non-Home, Non-Site, Non-Calc sections - render standard fields and subsections */}
-        {!isHomeSection && !isSiteSection && !isCalcSection && (
+        {/* Non-Home, Non-Site, Non-Income, Non-Calc sections - render standard fields and subsections */}
+        {!isHomeSection && !isSiteSection && !isIncomeSection && !isCalcSection && (
           <div className="p-6">
             {/* Main section fields */}
             {currentSection.fields.length > 0 && (

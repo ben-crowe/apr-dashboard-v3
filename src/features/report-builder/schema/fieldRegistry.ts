@@ -1,8 +1,8 @@
 /**
  * Field Registry - Single Source of Truth
  * 
- * VERSION: 2.5.0
- * LAST UPDATED: 2026-01-16 MST
+ * VERSION: 2.6.0
+ * LAST UPDATED: 2026-01-03 MST
  * UPDATED BY: Claude Code Agent
  * 
  * PART OF SYNC SET (3 files - must stay aligned):
@@ -2343,6 +2343,275 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'contract-vs-market-percentage', storeId: 'contract-vs-market-percentage', label: 'Contract vs Market %', section: 'calc-output', subsection: 'contract-analysis', type: 'percentage', inputSource: 'calculated', required: false },
   { id: 'interest-appraised', storeId: 'interest-appraised', label: 'Interest Appraised', section: 'exec', subsection: 'property-identification', type: 'text', inputSource: 'user-input', required: false },
   { id: 'risk-premium-bp', storeId: 'risk-premium-bp', label: 'Risk Premium (BP)', section: 'income', subsection: 'cap-rate-analysis', type: 'number', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - APPRAISER (14 fields)
+  // Added: 2026-01-03 - Missing template fields
+  // ============================================================================
+
+  { id: 'appraiser-bio-paragraph1', storeId: 'appraiser-bio-paragraph1', label: 'Appraiser Bio Paragraph 1', section: 'cert', subsection: 'appraiser-qualifications', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'appraiser-bio-paragraph2', storeId: 'appraiser-bio-paragraph2', label: 'Appraiser Bio Paragraph 2', section: 'cert', subsection: 'appraiser-qualifications', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'appraiser-headshot', storeId: 'appraiser-headshot', label: 'Appraiser Headshot', section: 'cert', subsection: 'appraiser-qualifications', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'appraiser-rics', storeId: 'appraiser-rics', label: 'RICS Membership Number', section: 'cert', subsection: 'appraiser-qualifications', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser1-allunits', storeId: 'appraiser1-allunits', label: 'Appraiser 1 Inspected All Units', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false },
+  { id: 'appraiser1-extent', storeId: 'appraiser1-extent', label: 'Appraiser 1 Inspection Extent', section: 'cert', subsection: 'inspection-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser1-inspected', storeId: 'appraiser1-inspected', label: 'Appraiser 1 Inspected Property', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false },
+  { id: 'appraiser1-inspectiondate', storeId: 'appraiser1-inspectiondate', label: 'Appraiser 1 Inspection Date', section: 'cert', subsection: 'inspection-details', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'appraiser1-role', storeId: 'appraiser1-role', label: 'Appraiser 1 Role', section: 'cert', subsection: 'inspection-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser2-allunits', storeId: 'appraiser2-allunits', label: 'Appraiser 2 Inspected All Units', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false },
+  { id: 'appraiser2-extent', storeId: 'appraiser2-extent', label: 'Appraiser 2 Inspection Extent', section: 'cert', subsection: 'inspection-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'appraiser2-inspected', storeId: 'appraiser2-inspected', label: 'Appraiser 2 Inspected Property', section: 'cert', subsection: 'inspection-details', type: 'boolean', inputSource: 'user-input', required: false },
+  { id: 'appraiser2-inspectiondate', storeId: 'appraiser2-inspectiondate', label: 'Appraiser 2 Inspection Date', section: 'cert', subsection: 'inspection-details', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'appraiser2-role', storeId: 'appraiser2-role', label: 'Appraiser 2 Role', section: 'cert', subsection: 'inspection-details', type: 'text', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - CANADA ECONOMIC (13 fields)
+  // Added: 2026-01-03 - National economic indicators
+  // ============================================================================
+
+  { id: 'ca-business-investment', storeId: 'ca-business-investment', label: 'Canada Business Investment', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'ca-gdp-growth', storeId: 'ca-gdp-growth', label: 'Canada GDP Growth', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'ca-gdp', storeId: 'ca-gdp', label: 'Canada GDP', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'ca-housing-starts', storeId: 'ca-housing-starts', label: 'Canada Housing Starts', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'ca-inflation', storeId: 'ca-inflation', label: 'Canada Inflation Rate', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'ca-natgas', storeId: 'ca-natgas', label: 'Canada Natural Gas Price', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'ca-pop-growth', storeId: 'ca-pop-growth', label: 'Canada Population Growth', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'ca-population', storeId: 'ca-population', label: 'Canada Population', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'ca-retail', storeId: 'ca-retail', label: 'Canada Retail Sales', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'ca-unemployment', storeId: 'ca-unemployment', label: 'Canada Unemployment Rate', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'ca-wcs', storeId: 'ca-wcs', label: 'Canada WCS Oil Price', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'ca-wells', storeId: 'ca-wells', label: 'Canada Oil Wells Drilled', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'ca-wti', storeId: 'ca-wti', label: 'Canada WTI Oil Price', section: 'market', subsection: 'market-national', type: 'text', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - SASKATCHEWAN ECONOMIC (12 fields)
+  // Added: 2026-01-03 - Provincial economic indicators
+  // ============================================================================
+
+  { id: 'sk-avg-home-price', storeId: 'sk-avg-home-price', label: 'SK Average Home Price', section: 'market', subsection: 'market-provincial', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'sk-avg-rent-2br', storeId: 'sk-avg-rent-2br', label: 'SK Average 2BR Rent', section: 'market', subsection: 'market-provincial', type: 'currency', inputSource: 'user-input', required: false },
+  { id: 'sk-credit-rating', storeId: 'sk-credit-rating', label: 'SK Credit Rating', section: 'market', subsection: 'market-provincial', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'sk-econ-overview', storeId: 'sk-econ-overview', label: 'SK Economic Overview', section: 'market', subsection: 'market-provincial', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'sk-gdp-growth', storeId: 'sk-gdp-growth', label: 'SK GDP Growth', section: 'market', subsection: 'market-provincial', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'sk-housing-starts', storeId: 'sk-housing-starts', label: 'SK Housing Starts', section: 'market', subsection: 'market-provincial', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'sk-inflation', storeId: 'sk-inflation', label: 'SK Inflation Rate', section: 'market', subsection: 'market-provincial', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'sk-oil-price', storeId: 'sk-oil-price', label: 'SK Oil Price', section: 'market', subsection: 'market-provincial', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'sk-pop-growth', storeId: 'sk-pop-growth', label: 'SK Population Growth', section: 'market', subsection: 'market-provincial', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'sk-potash', storeId: 'sk-potash', label: 'SK Potash Production', section: 'market', subsection: 'market-provincial', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'sk-rental-vacancy', storeId: 'sk-rental-vacancy', label: 'SK Rental Vacancy Rate', section: 'market', subsection: 'market-provincial', type: 'percentage', inputSource: 'user-input', required: false },
+  { id: 'sk-unemployment', storeId: 'sk-unemployment', label: 'SK Unemployment Rate', section: 'market', subsection: 'market-provincial', type: 'percentage', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - CALC OUTPUTS (40 fields)
+  // Added: 2026-01-03 - Income/expense calculation outputs
+  // ============================================================================
+
+  { id: 'calc-avg-cont-v-market', storeId: 'calc-avg-cont-v-market', label: 'Avg Contract vs Market %', section: 'calc', subsection: 'calc-income-summary', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-avg-contract-rent', storeId: 'calc-avg-contract-rent', label: 'Avg Contract Rent', section: 'calc', subsection: 'calc-income-summary', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-avg-market-rent', storeId: 'calc-avg-market-rent', label: 'Avg Market Rent', section: 'calc', subsection: 'calc-income-summary', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-expense-ratio-egr', storeId: 'calc-expense-ratio-egr', label: 'Expense Ratio (% of EGR)', section: 'calc', subsection: 'calc-expense-summary', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-expense-ratio-pgr', storeId: 'calc-expense-ratio-pgr', label: 'Expense Ratio (% of PGR)', section: 'calc', subsection: 'calc-expense-summary', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-laundry-annual', storeId: 'calc-laundry-annual', label: 'Laundry Revenue Annual', section: 'calc', subsection: 'calc-other-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-laundry-pct-egr', storeId: 'calc-laundry-pct-egr', label: 'Laundry % of EGR', section: 'calc', subsection: 'calc-other-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-laundry-pct-pgr', storeId: 'calc-laundry-pct-pgr', label: 'Laundry % of PGR', section: 'calc', subsection: 'calc-other-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-laundry-pct-prr', storeId: 'calc-laundry-pct-prr', label: 'Laundry % of Rental Revenue', section: 'calc', subsection: 'calc-other-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-laundry-per-sf', storeId: 'calc-laundry-per-sf', label: 'Laundry Per SF', section: 'calc', subsection: 'calc-other-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-mf-annual', storeId: 'calc-mf-annual', label: 'Multifamily Revenue Annual', section: 'calc', subsection: 'calc-rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-mf-pct-egr', storeId: 'calc-mf-pct-egr', label: 'Multifamily % of EGR', section: 'calc', subsection: 'calc-rental-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-mf-pct-pgr', storeId: 'calc-mf-pct-pgr', label: 'Multifamily % of PGR', section: 'calc', subsection: 'calc-rental-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-mf-pct-prr', storeId: 'calc-mf-pct-prr', label: 'Multifamily % of Rental Revenue', section: 'calc', subsection: 'calc-rental-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-mf-per-sf', storeId: 'calc-mf-per-sf', label: 'Multifamily Revenue Per SF', section: 'calc', subsection: 'calc-rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-mf-per-unit', storeId: 'calc-mf-per-unit', label: 'Multifamily Revenue Per Unit', section: 'calc', subsection: 'calc-rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-other-rev-annual', storeId: 'calc-other-rev-annual', label: 'Other Revenue Annual', section: 'calc', subsection: 'calc-other-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-other-rev-pct-egr', storeId: 'calc-other-rev-pct-egr', label: 'Other Revenue % of EGR', section: 'calc', subsection: 'calc-other-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-other-rev-pct-pgr', storeId: 'calc-other-rev-pct-pgr', label: 'Other Revenue % of PGR', section: 'calc', subsection: 'calc-other-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-other-rev-pct-prr', storeId: 'calc-other-rev-pct-prr', label: 'Other Revenue % of Rental Revenue', section: 'calc', subsection: 'calc-other-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-other-rev-per-sf', storeId: 'calc-other-rev-per-sf', label: 'Other Revenue Per SF', section: 'calc', subsection: 'calc-other-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-other-rev-per-unit', storeId: 'calc-other-rev-per-unit', label: 'Other Revenue Per Unit', section: 'calc', subsection: 'calc-other-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-parking-annual', storeId: 'calc-parking-annual', label: 'Parking Revenue Annual', section: 'calc', subsection: 'calc-other-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-parking-pct-egr', storeId: 'calc-parking-pct-egr', label: 'Parking % of EGR', section: 'calc', subsection: 'calc-other-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-parking-pct-pgr', storeId: 'calc-parking-pct-pgr', label: 'Parking % of PGR', section: 'calc', subsection: 'calc-other-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-parking-pct-prr', storeId: 'calc-parking-pct-prr', label: 'Parking % of Rental Revenue', section: 'calc', subsection: 'calc-other-revenue', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-parking-per-sf', storeId: 'calc-parking-per-sf', label: 'Parking Revenue Per SF', section: 'calc', subsection: 'calc-other-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-rental-rev-annual', storeId: 'calc-rental-rev-annual', label: 'Rental Revenue Annual', section: 'calc', subsection: 'calc-rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-rental-rev-per-sf', storeId: 'calc-rental-rev-per-sf', label: 'Rental Revenue Per SF', section: 'calc', subsection: 'calc-rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-rental-rev-per-unit', storeId: 'calc-rental-rev-per-unit', label: 'Rental Revenue Per Unit', section: 'calc', subsection: 'calc-rental-revenue', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-subtotal-annual', storeId: 'calc-subtotal-annual', label: 'Subtotal Revenue Annual', section: 'calc', subsection: 'calc-income-summary', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-subtotal-per-sf', storeId: 'calc-subtotal-per-sf', label: 'Subtotal Revenue Per SF', section: 'calc', subsection: 'calc-income-summary', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-subtotal-per-unit', storeId: 'calc-subtotal-per-unit', label: 'Subtotal Revenue Per Unit', section: 'calc', subsection: 'calc-income-summary', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-total-vacancy-loss', storeId: 'calc-total-vacancy-loss', label: 'Total Vacancy Loss', section: 'calc', subsection: 'calc-vacancy', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-total-vacancy-pct-egr', storeId: 'calc-total-vacancy-pct-egr', label: 'Total Vacancy % of EGR', section: 'calc', subsection: 'calc-vacancy', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-total-vacancy-pct-pgr', storeId: 'calc-total-vacancy-pct-pgr', label: 'Total Vacancy % of PGR', section: 'calc', subsection: 'calc-vacancy', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-total-vacancy-per-sf', storeId: 'calc-total-vacancy-per-sf', label: 'Total Vacancy Per SF', section: 'calc', subsection: 'calc-vacancy', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-total-vacancy-per-unit', storeId: 'calc-total-vacancy-per-unit', label: 'Total Vacancy Per Unit', section: 'calc', subsection: 'calc-vacancy', type: 'currency', inputSource: 'calculated', required: false },
+  { id: 'calc-vacancy-pct-egr', storeId: 'calc-vacancy-pct-egr', label: 'Vacancy % of EGR', section: 'calc', subsection: 'calc-vacancy', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'calc-vacancy-pct-pgr', storeId: 'calc-vacancy-pct-pgr', label: 'Vacancy % of PGR', section: 'calc', subsection: 'calc-vacancy', type: 'percentage', inputSource: 'calculated', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - LOCATION (9 fields)
+  // Added: 2026-01-03 - Location analysis fields
+  // ============================================================================
+
+  { id: 'location-description', storeId: 'location-description', label: 'Location Description', section: 'location', subsection: 'location-overview', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'location-localarea', storeId: 'location-localarea', label: 'Local Area Overview', section: 'location', subsection: 'local-area', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'location-nearbyschool-1', storeId: 'location-nearbyschool-1', label: 'Nearby School 1', section: 'location', subsection: 'local-area', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'location-nearbyschool-2', storeId: 'location-nearbyschool-2', label: 'Nearby School 2', section: 'location', subsection: 'local-area', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'location-nearbyschool-3', storeId: 'location-nearbyschool-3', label: 'Nearby School 3', section: 'location', subsection: 'local-area', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'location-nearbyschool-4', storeId: 'location-nearbyschool-4', label: 'Nearby School 4', section: 'location', subsection: 'local-area', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'location-nearbyschool-5', storeId: 'location-nearbyschool-5', label: 'Nearby School 5', section: 'location', subsection: 'local-area', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'location-publictransit', storeId: 'location-publictransit', label: 'Public Transit', section: 'location', subsection: 'location-overview', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'location-walkbikescores', storeId: 'location-walkbikescores', label: 'Walk/Bike Scores', section: 'location', subsection: 'walkability-scores', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - FRONTAGE/STREET (20 fields)
+  // Added: 2026-01-03 - Site frontage and street data
+  // ============================================================================
+
+  { id: 'frontage1-distance', storeId: 'frontage1-distance', label: 'Frontage 1 Distance (ft)', section: 'site', subsection: 'frontage', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'frontage1-street', storeId: 'frontage1-street', label: 'Frontage 1 Street', section: 'site', subsection: 'frontage', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'frontage2-distance', storeId: 'frontage2-distance', label: 'Frontage 2 Distance (ft)', section: 'site', subsection: 'frontage', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'frontage2-street', storeId: 'frontage2-street', label: 'Frontage 2 Street', section: 'site', subsection: 'frontage', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street1-condition', storeId: 'street1-condition', label: 'Street 1 Condition', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street1-curbs', storeId: 'street1-curbs', label: 'Street 1 Curbs', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street1-lanes', storeId: 'street1-lanes', label: 'Street 1 Lanes', section: 'site', subsection: 'street-details', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'street1-name', storeId: 'street1-name', label: 'Street 1 Name', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street1-parking', storeId: 'street1-parking', label: 'Street 1 Parking', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street1-sidewalks', storeId: 'street1-sidewalks', label: 'Street 1 Sidewalks', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street1-type', storeId: 'street1-type', label: 'Street 1 Type', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street2-condition', storeId: 'street2-condition', label: 'Street 2 Condition', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street2-curbs', storeId: 'street2-curbs', label: 'Street 2 Curbs', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street2-lanes', storeId: 'street2-lanes', label: 'Street 2 Lanes', section: 'site', subsection: 'street-details', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'street2-lighting', storeId: 'street2-lighting', label: 'Street 2 Lighting', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street2-name', storeId: 'street2-name', label: 'Street 2 Name', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street2-parking', storeId: 'street2-parking', label: 'Street 2 Parking', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street2-sidewalks', storeId: 'street2-sidewalks', label: 'Street 2 Sidewalks', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street2-surface', storeId: 'street2-surface', label: 'Street 2 Surface', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street2-type', storeId: 'street2-type', label: 'Street 2 Type', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - TRAFFIC (11 fields)
+  // Added: 2026-01-03 - Traffic count data
+  // ============================================================================
+
+  { id: 'traffic-total', storeId: 'traffic-total', label: 'Total Traffic Count', section: 'site', subsection: 'traffic', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'traffic1-count', storeId: 'traffic1-count', label: 'Traffic Count 1', section: 'site', subsection: 'traffic', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'traffic1-date', storeId: 'traffic1-date', label: 'Traffic Count 1 Date', section: 'site', subsection: 'traffic', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'traffic1-source', storeId: 'traffic1-source', label: 'Traffic Count 1 Source', section: 'site', subsection: 'traffic', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'traffic1-street', storeId: 'traffic1-street', label: 'Traffic Count 1 Street', section: 'site', subsection: 'traffic', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'traffic1-year', storeId: 'traffic1-year', label: 'Traffic Count 1 Year', section: 'site', subsection: 'traffic', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'traffic2-count', storeId: 'traffic2-count', label: 'Traffic Count 2', section: 'site', subsection: 'traffic', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'traffic2-date', storeId: 'traffic2-date', label: 'Traffic Count 2 Date', section: 'site', subsection: 'traffic', type: 'date', inputSource: 'user-input', required: false },
+  { id: 'traffic2-source', storeId: 'traffic2-source', label: 'Traffic Count 2 Source', section: 'site', subsection: 'traffic', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'traffic2-street', storeId: 'traffic2-street', label: 'Traffic Count 2 Street', section: 'site', subsection: 'traffic', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'traffic2-year', storeId: 'traffic2-year', label: 'Traffic Count 2 Year', section: 'site', subsection: 'traffic', type: 'number', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - INFO SOURCE (11 fields)
+  // Added: 2026-01-03 - Data source citations
+  // ============================================================================
+
+  { id: 'info-assessment-source', storeId: 'info-assessment-source', label: 'Assessment Info Source', section: 'report', subsection: 'data-sources', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'info-buildingsize-source', storeId: 'info-buildingsize-source', label: 'Building Size Info Source', section: 'report', subsection: 'data-sources', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'info-comps-source', storeId: 'info-comps-source', label: 'Comparables Info Source', section: 'report', subsection: 'data-sources', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'info-environmental-source', storeId: 'info-environmental-source', label: 'Environmental Info Source', section: 'report', subsection: 'data-sources', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'info-incomeexpense-source', storeId: 'info-incomeexpense-source', label: 'Income/Expense Info Source', section: 'report', subsection: 'data-sources', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'info-lease-source', storeId: 'info-lease-source', label: 'Lease Info Source', section: 'report', subsection: 'data-sources', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'info-legal-source', storeId: 'info-legal-source', label: 'Legal Info Source', section: 'report', subsection: 'data-sources', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'info-rentroll-source', storeId: 'info-rentroll-source', label: 'Rent Roll Info Source', section: 'report', subsection: 'data-sources', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'info-sitesize-source', storeId: 'info-sitesize-source', label: 'Site Size Info Source', section: 'report', subsection: 'data-sources', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'info-title-source', storeId: 'info-title-source', label: 'Title Info Source', section: 'report', subsection: 'data-sources', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'info-zoning-source', storeId: 'info-zoning-source', label: 'Zoning Info Source', section: 'report', subsection: 'data-sources', type: 'text', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - IMPROVEMENTS (17 fields)
+  // Added: 2026-01-03 - Building improvement details
+  // ============================================================================
+
+  { id: 'impv-actualage', storeId: 'impv-actualage', label: 'Actual Age', section: 'impv', subsection: 'condition', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'impv-effectiveage', storeId: 'impv-effectiveage', label: 'Effective Age', section: 'impv', subsection: 'condition', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'impv-economiclife', storeId: 'impv-economiclife', label: 'Economic Life', section: 'impv', subsection: 'condition', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'impv-remaininglife', storeId: 'impv-remaininglife', label: 'Remaining Life', section: 'impv', subsection: 'condition', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'impv-appeal', storeId: 'impv-appeal', label: 'Appeal Rating', section: 'impv', subsection: 'building-overview', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'impv-condition', storeId: 'impv-condition', label: 'Condition Rating', section: 'impv', subsection: 'building-overview', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'impv-quality', storeId: 'impv-quality', label: 'Quality Rating', section: 'impv', subsection: 'building-overview', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'impv-density', storeId: 'impv-density', label: 'Density (Units/Acre)', section: 'impv', subsection: 'building-overview', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'impv-landtobldg', storeId: 'impv-landtobldg', label: 'Land to Building Ratio', section: 'impv', subsection: 'building-overview', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'impv-parkingratio', storeId: 'impv-parkingratio', label: 'Parking Ratio', section: 'impv', subsection: 'site-improvements', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'impv-parkingspaces', storeId: 'impv-parkingspaces', label: 'Parking Spaces', section: 'impv', subsection: 'site-improvements', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'impv-propertytype', storeId: 'impv-propertytype', label: 'Property Type', section: 'impv', subsection: 'building-overview', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'impv-tenancy', storeId: 'impv-tenancy', label: 'Tenancy Type', section: 'impv', subsection: 'building-overview', type: 'text', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - SUBJECT PROPERTY (30 fields)
+  // Added: 2026-01-03 - Subject property construction details
+  // ============================================================================
+
+  { id: 'subject-ceilings', storeId: 'subject-ceilings', label: 'Ceilings', section: 'impv', subsection: 'finishes', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-doorswindows', storeId: 'subject-doorswindows', label: 'Doors & Windows', section: 'impv', subsection: 'finishes', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-easements', storeId: 'subject-easements', label: 'Easements Text', section: 'site', subsection: 'site-conditions', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-electrical', storeId: 'subject-electrical', label: 'Electrical', section: 'impv', subsection: 'systems', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-elevator', storeId: 'subject-elevator', label: 'Elevator', section: 'impv', subsection: 'construction', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-exteriorwalls', storeId: 'subject-exteriorwalls', label: 'Exterior Walls', section: 'impv', subsection: 'construction', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-fireprotection', storeId: 'subject-fireprotection', label: 'Fire Protection', section: 'impv', subsection: 'systems', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-floorcovering', storeId: 'subject-floorcovering', label: 'Floor Covering', section: 'impv', subsection: 'finishes', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-foundation', storeId: 'subject-foundation', label: 'Foundation', section: 'impv', subsection: 'construction', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-functionaldesign', storeId: 'subject-functionaldesign', label: 'Functional Design', section: 'impv', subsection: 'condition', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-hazardousmaterials', storeId: 'subject-hazardousmaterials', label: 'Hazardous Materials', section: 'impv', subsection: 'condition', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-hvac', storeId: 'subject-hvac', label: 'HVAC', section: 'impv', subsection: 'systems', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-insulation', storeId: 'subject-insulation', label: 'Insulation', section: 'impv', subsection: 'construction', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-interiorwalls', storeId: 'subject-interiorwalls', label: 'Interior Walls', section: 'impv', subsection: 'finishes', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-landscaping', storeId: 'subject-landscaping', label: 'Landscaping', section: 'impv', subsection: 'site-improvements', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-lighting', storeId: 'subject-lighting', label: 'Lighting', section: 'impv', subsection: 'systems', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-parkingdesc', storeId: 'subject-parkingdesc', label: 'Parking Description', section: 'impv', subsection: 'site-improvements', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-plumbing', storeId: 'subject-plumbing', label: 'Plumbing', section: 'impv', subsection: 'systems', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'subject-siteconclusion', storeId: 'subject-siteconclusion', label: 'Site Conclusion', section: 'site', subsection: 'site-conditions', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-siteimprovements', storeId: 'subject-siteimprovements', label: 'Site Improvements', section: 'impv', subsection: 'site-improvements', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-siterating', storeId: 'subject-siterating', label: 'Site Rating', section: 'site', subsection: 'site-conditions', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-soils', storeId: 'subject-soils', label: 'Soils', section: 'site', subsection: 'site-conditions', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-zoningconclusion', storeId: 'subject-zoningconclusion', label: 'Zoning Conclusion', section: 'site', subsection: 'zoning', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'subject-zoningtype', storeId: 'subject-zoningtype', label: 'Zoning Type', section: 'site', subsection: 'zoning', type: 'text', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - HBU (4 fields)
+  // Added: 2026-01-03 - Highest and best use analysis
+  // ============================================================================
+
+  { id: 'hbu-asimproved-2', storeId: 'hbu-asimproved-2', label: 'HBU As Improved Paragraph 2', section: 'hbu', subsection: 'hbu-as-improved', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'hbu-asimproved-3', storeId: 'hbu-asimproved-3', label: 'HBU As Improved Paragraph 3', section: 'hbu', subsection: 'hbu-as-improved', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'hbu-mostprobablebuyer', storeId: 'hbu-mostprobablebuyer', label: 'Most Probable Buyer', section: 'hbu', subsection: 'hbu-conclusion', type: 'textarea', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - UNIT MIX (22 fields)
+  // Added: 2026-01-03 - Unit mix summary fields
+  // ============================================================================
+
+  { id: 'unitmix-avg-size', storeId: 'unitmix-avg-size', label: 'Average Unit Size', section: 'income', subsection: 'unit-mix', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'unitmix-desc-1', storeId: 'unitmix-desc-1', label: 'Unit Mix Description 1', section: 'income', subsection: 'unit-mix', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'unitmix-desc-2', storeId: 'unitmix-desc-2', label: 'Unit Mix Description 2', section: 'income', subsection: 'unit-mix', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'unitmix-gba-1', storeId: 'unitmix-gba-1', label: 'Unit Type 1 GBA', section: 'income', subsection: 'unit-mix', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'unitmix-gba-2', storeId: 'unitmix-gba-2', label: 'Unit Type 2 GBA', section: 'income', subsection: 'unit-mix', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'unitmix-nra-1', storeId: 'unitmix-nra-1', label: 'Unit Type 1 NRA', section: 'income', subsection: 'unit-mix', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'unitmix-nra-2', storeId: 'unitmix-nra-2', label: 'Unit Type 2 NRA', section: 'income', subsection: 'unit-mix', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'unitmix-pct-1', storeId: 'unitmix-pct-1', label: 'Unit Type 1 Percentage', section: 'income', subsection: 'unit-mix', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'unitmix-pct-2', storeId: 'unitmix-pct-2', label: 'Unit Type 2 Percentage', section: 'income', subsection: 'unit-mix', type: 'percentage', inputSource: 'calculated', required: false },
+  { id: 'unitmix-size-1', storeId: 'unitmix-size-1', label: 'Unit Type 1 Size', section: 'income', subsection: 'unit-mix', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'unitmix-size-2', storeId: 'unitmix-size-2', label: 'Unit Type 2 Size', section: 'income', subsection: 'unit-mix', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'unitmix-total-gba', storeId: 'unitmix-total-gba', label: 'Total GBA', section: 'income', subsection: 'unit-mix', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'unitmix-total-nra', storeId: 'unitmix-total-nra', label: 'Total NRA', section: 'income', subsection: 'unit-mix', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'unitmix-total-units', storeId: 'unitmix-total-units', label: 'Total Units', section: 'income', subsection: 'unit-mix', type: 'number', inputSource: 'calculated', required: false },
+  { id: 'unitmix-type-1', storeId: 'unitmix-type-1', label: 'Unit Type 1 Name', section: 'income', subsection: 'unit-mix', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'unitmix-type-2', storeId: 'unitmix-type-2', label: 'Unit Type 2 Name', section: 'income', subsection: 'unit-mix', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'unitmix-units-1', storeId: 'unitmix-units-1', label: 'Unit Type 1 Count', section: 'income', subsection: 'unit-mix', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'unitmix-units-2', storeId: 'unitmix-units-2', label: 'Unit Type 2 Count', section: 'income', subsection: 'unit-mix', type: 'number', inputSource: 'user-input', required: false },
+
+  // ============================================================================
+  // NEW FIELDS - OTHER (4 fields)
+  // Added: 2026-01-03 - Miscellaneous missing fields
+  // ============================================================================
+
+  { id: 'chart-mf-investment-indicators', storeId: 'chart-mf-investment-indicators', label: 'MF Investment Indicators Chart', section: 'market', subsection: 'market-multifamily', type: 'image', inputSource: 'user-input', required: false },
+  { id: 'tax-commentary-1', storeId: 'tax-commentary-1', label: 'Tax Commentary Paragraph 1', section: 'tax', subsection: 'tax-analysis', type: 'textarea', inputSource: 'user-input', required: false },
+  { id: 'tax-commentary-2', storeId: 'tax-commentary-2', label: 'Tax Commentary Paragraph 2', section: 'tax', subsection: 'tax-analysis', type: 'textarea', inputSource: 'user-input', required: false },
 
 ];
 

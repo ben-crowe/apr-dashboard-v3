@@ -753,7 +753,7 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "cost-site-paving": 10000,
   "cost-site-utilities": 5000,
   "cost-site-other": 0,
-  "cost-approach-applied": false,  // Not applied for North Battleford (older property)
+  "cost-approach-applied": "No",  // Not applied for North Battleford (older property)
   "comp6-address": "-",
   "comp6-city": "-",
   "comp6-comments-prop": "-",
@@ -1964,4 +1964,240 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "zoning-definition": "Low Density Residential District",
   "zoning-designation": "[zoning-designation]",
   "zoning-map-title": "[zoning-map-title]"
+,
+
+  // ============================================================================
+  // NEW FIELDS - APPRAISER (14 fields) - Added 2026-01-03
+  // ============================================================================
+  "appraiser-bio-paragraph1": "Chris Chornohos, AACI, MRICS is the Founder of Valta Property Valuations Ltd. and has been providing commercial real estate valuation services since 2008. He specializes in multi-family, commercial, and industrial property valuations across Western Canada.",
+  "appraiser-bio-paragraph2": "Chris holds the AACI designation from the Appraisal Institute of Canada and is a Member of the Royal Institution of Chartered Surveyors (MRICS). He is committed to providing high-quality, objective property valuations for financing, litigation, and investment decision-making purposes.",
+  "appraiser-headshot": "/images/chris-headshot.jpg",
+  "appraiser-rics": "1234567",
+  "appraiser1-allunits": "Yes",
+  "appraiser1-extent": "Full Interior and Exterior Inspection",
+  "appraiser1-inspected": "Yes",
+  "appraiser1-inspectiondate": "2025-10-10",
+  "appraiser1-role": "Lead Appraiser",
+  "appraiser2-allunits": "No",
+  "appraiser2-extent": "Exterior Only",
+  "appraiser2-inspected": "No",
+  "appraiser2-inspectiondate": "",
+  "appraiser2-role": "",
+
+  // ============================================================================
+  // NEW FIELDS - CANADA ECONOMIC (13 fields) - Added 2026-01-03
+  // ============================================================================
+  "ca-business-investment": "Moderate growth expected in 2025-2026",
+  "ca-gdp-growth": "1.8%",
+  "ca-gdp": "$2.2 trillion",
+  "ca-housing-starts": "245,000 units",
+  "ca-inflation": "2.0%",
+  "ca-natgas": "$2.85/MMBtu",
+  "ca-pop-growth": "1.2%",
+  "ca-population": "41.2 million",
+  "ca-retail": "Stable growth at 3.5% YoY",
+  "ca-unemployment": "6.2%",
+  "ca-wcs": "$58.50/bbl",
+  "ca-wells": "4,200 wells drilled",
+  "ca-wti": "$72.00/bbl",
+
+  // ============================================================================
+  // NEW FIELDS - SASKATCHEWAN ECONOMIC (12 fields) - Added 2026-01-03
+  // ============================================================================
+  "sk-avg-home-price": 315000,
+  "sk-avg-rent-2br": 1150,
+  "sk-credit-rating": "AA",
+  "sk-econ-overview": "Saskatchewan's economy in 2025 is defined by steady growth, strong resource activity, and an improving housing sector. Real GDP is expanding at a moderate pace, supported by agriculture, potash, and oil production.",
+  "sk-gdp-growth": "1.5%",
+  "sk-housing-starts": "4,500 units",
+  "sk-inflation": "1.8%",
+  "sk-oil-price": "$58.50/bbl",
+  "sk-pop-growth": "1.0%",
+  "sk-potash": "12.5 million tonnes",
+  "sk-rental-vacancy": 5.5,
+  "sk-unemployment": 5.8,
+
+  // ============================================================================
+  // NEW FIELDS - CALC OUTPUTS (40 fields) - Added 2026-01-03
+  // ============================================================================
+  "calc-avg-cont-v-market": 0.995,
+  "calc-avg-contract-rent": 1015,
+  "calc-avg-market-rent": 1020,
+  "calc-expense-ratio-egr": 0.385,
+  "calc-expense-ratio-pgr": 0.37,
+  "calc-laundry-annual": 1920,
+  "calc-laundry-pct-egr": 0.01,
+  "calc-laundry-pct-pgr": 0.0095,
+  "calc-laundry-pct-prr": 0.0098,
+  "calc-laundry-per-sf": 0.19,
+  "calc-mf-annual": 194880,
+  "calc-mf-pct-egr": 0.98,
+  "calc-mf-pct-pgr": 0.94,
+  "calc-mf-pct-prr": 1.0,
+  "calc-mf-per-sf": 19.10,
+  "calc-mf-per-unit": 12180,
+  "calc-other-rev-annual": 1920,
+  "calc-other-rev-pct-egr": 0.01,
+  "calc-other-rev-pct-pgr": 0.0095,
+  "calc-other-rev-pct-prr": 0.0098,
+  "calc-other-rev-per-sf": 0.19,
+  "calc-other-rev-per-unit": 120,
+  "calc-parking-annual": 0,
+  "calc-parking-pct-egr": 0,
+  "calc-parking-pct-pgr": 0,
+  "calc-parking-pct-prr": 0,
+  "calc-parking-per-sf": 0,
+  "calc-rental-rev-annual": 194880,
+  "calc-rental-rev-per-sf": 19.10,
+  "calc-rental-rev-per-unit": 12180,
+  "calc-subtotal-annual": 196800,
+  "calc-subtotal-per-sf": 19.29,
+  "calc-subtotal-per-unit": 12300,
+  "calc-total-vacancy-loss": 7476,
+  "calc-total-vacancy-pct-egr": 0.038,
+  "calc-total-vacancy-pct-pgr": 0.036,
+  "calc-total-vacancy-per-sf": 0.73,
+  "calc-total-vacancy-per-unit": 467,
+  "calc-vacancy-pct-egr": 0.038,
+  "calc-vacancy-pct-pgr": 0.036,
+
+  // ============================================================================
+  // NEW FIELDS - LOCATION (9 fields) - Added 2026-01-03
+  // ============================================================================
+  "location-description": "The subject property is located in North Battleford, Saskatchewan, in a centrally situated residential area near key commercial corridors and the downtown core.",
+  "location-localarea": "The neighbourhood is a mature urban district with a mix of single-family homes, small multi-unit buildings, and local businesses.",
+  "location-nearbyschool-1": "Bready School (K-7, public)",
+  "location-nearbyschool-2": "Connaught School (K-7, public)",
+  "location-nearbyschool-3": "North Battleford Comprehensive High School (Grades 10-12, public)",
+  "location-nearbyschool-4": "John Paul II Collegiate (Grades 9-12, Catholic)",
+  "location-nearbyschool-5": "St. Mary School (K-7, Catholic)",
+  "location-publictransit": "Local bus service operates on nearby corridors such as 100th Street and Territorial Drive, providing direct access to downtown, retail centres, and community facilities.",
+  "location-walkbikescores": "Walk Score: 60, Transit Score: 35, Bike Score: 55",
+
+  // ============================================================================
+  // NEW FIELDS - FRONTAGE/STREET (20 fields) - Added 2026-01-03
+  // ============================================================================
+  "frontage1-distance": 150,
+  "frontage1-street": "109 Street",
+  "frontage2-distance": 200,
+  "frontage2-street": "11 Avenue",
+  "street1-condition": "Good",
+  "street1-curbs": "Yes",
+  "street1-lanes": 2,
+  "street1-name": "109 Street",
+  "street1-parking": "Street Parking Available",
+  "street1-sidewalks": "Yes",
+  "street1-type": "Local Residential",
+  "street2-condition": "Good",
+  "street2-curbs": "Yes",
+  "street2-lanes": 2,
+  "street2-lighting": "Standard",
+  "street2-name": "11 Avenue",
+  "street2-parking": "Street Parking Available",
+  "street2-sidewalks": "Yes",
+  "street2-surface": "Asphalt",
+  "street2-type": "Local Residential",
+
+  // ============================================================================
+  // NEW FIELDS - TRAFFIC (11 fields) - Added 2026-01-03
+  // ============================================================================
+  "traffic-total": 3500,
+  "traffic1-count": 2000,
+  "traffic1-date": "2024-06-15",
+  "traffic1-source": "City of North Battleford Traffic Study",
+  "traffic1-street": "109 Street",
+  "traffic1-year": 2024,
+  "traffic2-count": 1500,
+  "traffic2-date": "2024-06-15",
+  "traffic2-source": "City of North Battleford Traffic Study",
+  "traffic2-street": "11 Avenue",
+  "traffic2-year": 2024,
+
+  // ============================================================================
+  // NEW FIELDS - INFO SOURCE (11 fields) - Added 2026-01-03
+  // ============================================================================
+  "info-assessment-source": "Saskatchewan Assessment Management Agency (SAMA)",
+  "info-buildingsize-source": "Property owner documentation, appraiser measurements",
+  "info-comps-source": "Altus Data Studio, CoStar, local MLS",
+  "info-environmental-source": "Phase I ESA report provided by client",
+  "info-incomeexpense-source": "Property owner historical statements",
+  "info-lease-source": "Current rent roll provided by property owner",
+  "info-legal-source": "Information Services Corporation (ISC) Land Titles",
+  "info-rentroll-source": "Property owner current rent roll",
+  "info-sitesize-source": "ISC Land Titles, municipal records",
+  "info-title-source": "Information Services Corporation (ISC)",
+  "info-zoning-source": "City of North Battleford Planning Department",
+
+  // ============================================================================
+  // NEW FIELDS - IMPROVEMENTS (17 fields) - Added 2026-01-03
+  // ============================================================================
+  "impv-actualage": 55,
+  "impv-effectiveage": 30,
+  "impv-economiclife": 70,
+  "impv-remaininglife": 40,
+  "impv-appeal": "Average",
+  "impv-condition": "Average",
+  "impv-quality": "Average",
+  "impv-density": 28.56,
+  "impv-landtobldg": 2.39,
+  "impv-parkingratio": 1.5,
+  "impv-parkingspaces": 24,
+  "impv-propertytype": "Multi-Family",
+  "impv-tenancy": "Multi-Tenant",
+
+  // ============================================================================
+  // NEW FIELDS - SUBJECT PROPERTY (30 fields) - Added 2026-01-03
+  // ============================================================================
+  "subject-ceilings": "8 foot standard drywall",
+  "subject-doorswindows": "Double-pane vinyl windows, solid wood doors",
+  "subject-easements": "Standard utility easements registered on title",
+  "subject-elevator": "N/A - Walkup",
+  "subject-floorcovering": "Carpet in living areas, vinyl in kitchens/baths",
+  "subject-functionaldesign": "Standard garden-style walkup layout with units accessed from interior hallways. Functional design with no significant deficiencies noted.",
+  "subject-hazardousmaterials": "Based on the age of the property, asbestos-containing materials may be present. No Phase I ESA was provided. It is assumed that no hazardous materials adversely affect the property.",
+  "subject-insulation": "Standard insulation for era of construction",
+  "subject-interiorwalls": "Painted drywall",
+  "subject-landscaping": "Grass lawn, mature trees, shrubs",
+  "subject-lighting": "Standard interior lighting, exterior security lighting",
+  "subject-parkingdesc": "Surface parking lot with 24 spaces at rear of property, providing 1.5 spaces per unit",
+  "subject-siteconclusion": "In conclusion, the site's physical characteristics appear to be supportive of the subject's current use and there were no significant detriments discovered that would inhibit development in accordance with its highest and best use.",
+  "subject-siteimprovements": "Asphalt parking lot, concrete sidewalks, chain-link fencing",
+  "subject-siterating": "Overall, the subject site is considered average as a multi-family site in terms of its location, exposure and access.",
+  "subject-soils": "We have not undertaken a detailed soil analysis. The soils are assumed to be suitable in drainage qualities and load bearing capacity to support the existing development.",
+  "subject-zoningconclusion": "The current use for the subject property is walkup and is a permitted use based on the current zoning guidelines. No zoning change is believed to be imminent.",
+  "subject-zoningtype": "R2 - Low Density Residential District",
+
+  // ============================================================================
+  // NEW FIELDS - HBU (4 fields) - Added 2026-01-03
+  // ============================================================================
+  "hbu-asimproved-2": "The existing improvements contribute value to the site beyond land value alone. Demolition of the existing structures is not financially feasible given the current rental income and market conditions.",
+  "hbu-asimproved-3": "Redevelopment of the site would require significant capital investment and would not generate a return commensurate with the risk involved in the current market.",
+  "hbu-mostprobablebuyer": "The most probable buyer for the subject property is a local or regional multi-family investor seeking stable cash flow from existing rental properties in smaller Saskatchewan markets.",
+
+  // ============================================================================
+  // NEW FIELDS - UNIT MIX (22 fields) - Added 2026-01-03
+  // ============================================================================
+  "unitmix-desc-1": "One Bedroom / One Bathroom",
+  "unitmix-desc-2": "Two Bedroom / One Bathroom",
+  "unitmix-gba-1": 2400,
+  "unitmix-gba-2": 8800,
+  "unitmix-nra-1": 2200,
+  "unitmix-nra-2": 8004,
+  "unitmix-pct-1": 0.25,
+  "unitmix-pct-2": 0.75,
+  "unitmix-size-1": 550,
+  "unitmix-size-2": 667,
+  "unitmix-total-gba": 11200,
+  "unitmix-type-1": "1BR/1BA",
+  "unitmix-type-2": "2BR/1BA",
+  "unitmix-units-1": 4,
+  "unitmix-units-2": 12,
+
+  // ============================================================================
+  // NEW FIELDS - OTHER (4 fields) - Added 2026-01-03
+  // ============================================================================
+  "chart-mf-investment-indicators": "/test-data/images/charts/mf-investment-indicators.png",
+  "tax-commentary-1": "The assessed value is below the value concluded herein, a tax assessment appeal is not warranted.",
+  "tax-commentary-2": "The assessed value is lower than our valuation herein. Smaller markets tend to under assess real property assets in comparison to larger markets."
+
 };

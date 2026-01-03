@@ -29,6 +29,9 @@ import { HomeTabPanel } from '../HomeTabPanel';
 // SiteTabPanel for SITE section
 import { SiteTabPanel } from '../SiteTabPanel';
 
+// ImprovementsTabPanel for IMPV section
+import { ImprovementsTabPanel } from '../ImprovementsTabPanel';
+
 // IncomeTabPanel for INCOME section
 import { IncomeTabPanel } from '../IncomeTabPanel';
 
@@ -803,6 +806,7 @@ export default function EditPanel() {
 
   const isHomeSection = currentSection.id === 'home';
   const isSiteSection = currentSection.id === 'site';
+  const isImpvSection = currentSection.id === 'impv';
   const isIncomeSection = currentSection.id === 'income';
   const isCalcSection = currentSection.id === 'calc';
 
@@ -820,8 +824,8 @@ export default function EditPanel() {
         <span style={{ color: '#ffffff', fontWeight: '600', fontSize: '15px' }}>
           {currentSection.name.toUpperCase()}
         </span>
-        {/* Expand/Collapse All button - hide for home, site, and income sections which have their own controls */}
-        {!isHomeSection && !isSiteSection && !isIncomeSection && (
+        {/* Expand/Collapse All button - hide for home, site, impv, and income sections which have their own controls */}
+        {!isHomeSection && !isSiteSection && !isImpvSection && !isIncomeSection && (
           <button
             type="button"
             onClick={toggleAllSubsections}
@@ -865,6 +869,11 @@ export default function EditPanel() {
           <SiteTabPanel />
         )}
 
+        {/* IMPV Section - Render ImprovementsTabPanel component */}
+        {isImpvSection && (
+          <ImprovementsTabPanel />
+        )}
+
         {/* INCOME Section - Render IncomeTabPanel component */}
         {isIncomeSection && (
           <IncomeTabPanel />
@@ -891,8 +900,8 @@ export default function EditPanel() {
           </div>
         )}
 
-        {/* Non-Home, Non-Site, Non-Income, Non-Calc sections - render standard fields and subsections */}
-        {!isHomeSection && !isSiteSection && !isIncomeSection && !isCalcSection && (
+        {/* Non-Home, Non-Site, Non-Impv, Non-Income, Non-Calc sections - render standard fields and subsections */}
+        {!isHomeSection && !isSiteSection && !isImpvSection && !isIncomeSection && !isCalcSection && (
           <div className="p-6">
             {/* Main section fields */}
             {currentSection.fields.length > 0 && (

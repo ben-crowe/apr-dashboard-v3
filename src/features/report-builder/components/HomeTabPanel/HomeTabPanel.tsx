@@ -210,31 +210,16 @@ export default function HomeTabPanel() {
   return (
     <div className="home-tab-panel">
       <div className="home-tab-container">
-        {/* Header Row with Expand/Collapse All and Save/Reset buttons */}
-        <div className="home-header-row">
-          <div className="header-left">
-            <button
-              className="btn btn-secondary"
-              onClick={toggleAllSections}
-              title={allCollapsed ? 'Expand All Sections' : 'Collapse All Sections'}
-            >
-              {allCollapsed ? 'Expand All' : 'Collapse All'}
-            </button>
-          </div>
-          <div className="header-right">
-            <button
-              className="btn btn-secondary"
-              onClick={handleResetForm}
-            >
-              Reset Form
-            </button>
-            <button
-              className="btn btn-primary"
-              onClick={handleSaveChanges}
-            >
-              Save Changes
-            </button>
-          </div>
+        {/* Minimal controls - right aligned, no container */}
+        <div className="home-quick-controls">
+          <span className="quick-link" onClick={handleResetForm}>Reset</span>
+          <span className="quick-divider">|</span>
+          <span className="quick-link" onClick={handleSaveChanges}>Save</span>
+          <span className="quick-divider">|</span>
+          <span className="quick-link" onClick={toggleAllSections}>
+            <span className="chevron">{allCollapsed ? '▶' : '▼'}</span>
+            {allCollapsed ? 'Expand' : 'Collapse'}
+          </span>
         </div>
 
         {/* 1. VALUATION APPROACHES - Always visible */}

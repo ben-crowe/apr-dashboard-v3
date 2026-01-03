@@ -16,29 +16,33 @@
   padding: 16px;
 }
 
-/* Header Row with Expand/Collapse and Save/Reset buttons */
-.home-header-row {
+/* Minimal quick controls - right aligned text links */
+.home-quick-controls {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  margin-bottom: 12px;
-  background: #2a2a2a;
-  border-radius: 8px;
-  border: 1px solid #353535;
-  border-bottom: 2px solid #3a3a3a;
-}
-
-.home-header-row .header-left {
-  display: flex;
+  justify-content: flex-end;
   align-items: center;
   gap: 8px;
+  margin-bottom: 8px;
+  font-size: 11px;
 }
 
-.home-header-row .header-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.quick-link {
+  color: #888;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.quick-link:hover {
+  color: #ccc;
+}
+
+.quick-divider {
+  color: #444;
+}
+
+.chevron {
+  font-size: 9px;
+  margin-right: 3px;
 }
 
 /* Page Header (legacy - kept for compatibility) */

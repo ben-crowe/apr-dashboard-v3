@@ -212,6 +212,38 @@
   cursor: not-allowed;
 }
 
+/* Section Divider - between inputs and table */
+.sales-section-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0 16px 0;
+}
+
+.sales-divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #4a4a4a, transparent);
+}
+
+.sales-divider-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* Sales Comparison Table Wrapper */
+.sales-comparison-table-wrapper {
+  background: #2a2a2a;
+  border-radius: 8px;
+  border: 1px solid #353535;
+  padding: 16px;
+  margin-top: 8px;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .sales-form-grid-3,

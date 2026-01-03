@@ -2,10 +2,13 @@
  * SalesTabPanel.tsx
  * Renders the SALES tab for Sales Comparison Approach
  * 5 collapsible sections: Subject Summary, 3 Comparables, Value Conclusion
+ * Plus the live-updating Sales Comparison Table at the bottom
  */
 
 import { useState, useCallback, useMemo, ChangeEvent } from 'react';
 import { useReportBuilderStore } from '../../store/reportBuilderStore';
+import { ThemeProvider } from '@/features/calculator-demo-v4/context/ThemeContext';
+import SalesComparisonPanel from '@/features/calculator-demo-v4/components/SalesComparisonPanel';
 import './SalesTabPanel.css';
 
 // Condition options for subject property
@@ -439,6 +442,20 @@ export default function SalesTabPanel() {
             </div>
           </div>
         </CollapsibleSection>
+
+        {/* SECTION DIVIDER */}
+        <div className="sales-section-divider">
+          <div className="sales-divider-line"></div>
+          <span className="sales-divider-text">SALES COMPARISON TABLE</span>
+          <div className="sales-divider-line"></div>
+        </div>
+
+        {/* SALES COMPARISON TABLE - Live updating calculator table */}
+        <div className="sales-comparison-table-wrapper">
+          <ThemeProvider>
+            <SalesComparisonPanel />
+          </ThemeProvider>
+        </div>
       </div>
     </div>
   );

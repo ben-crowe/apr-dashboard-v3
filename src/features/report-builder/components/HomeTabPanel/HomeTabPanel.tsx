@@ -243,6 +243,85 @@ export default function HomeTabPanel() {
   const useDCF = getValue('use-dcf') === true;
   const useLandDC = getValue('use-land-dc') === true;
 
+  // Appraisal Firm section (rendered at bottom when locked)
+  const appraisalFirmSection = (
+    <CollapsibleSection
+      id="appraisal-firm"
+      title="Appraisal Firm"
+      isCollapsed={collapsedSections.has('appraisal-firm')}
+      onToggle={() => toggleSection('appraisal-firm')}
+      isLocked={lockedSections.has('appraisal-firm')}
+      onLockToggle={() => toggleLock('appraisal-firm')}
+      showLock={true}
+    >
+      <div className="form-grid form-grid-4">
+        <div className="form-group span-2">
+          <label>Company Name</label>
+          <input
+            type="text"
+            value={String(getValue('company-name') || '')}
+            onChange={onInputChange('company-name')}
+          />
+        </div>
+        <div className="form-group">
+          <label>Appraisal Status</label>
+          <select
+            value={String(getValue('appraisal-status') || '')}
+            onChange={onInputChange('appraisal-status')}
+          >
+            <option>Fully Detailed</option>
+            <option>Summary</option>
+            <option>Restricted</option>
+          </select>
+        </div>
+        <div className="form-group span-2">
+          <label>Address</label>
+          <input
+            type="text"
+            placeholder="Street Address"
+            value={String(getValue('company-address') || '')}
+            onChange={onInputChange('company-address')}
+          />
+        </div>
+        <div className="form-group">
+          <label>City</label>
+          <input
+            type="text"
+            value={String(getValue('appraiser-city') || '')}
+            onChange={onInputChange('appraiser-city')}
+          />
+        </div>
+        <div className="form-group">
+          <label>Province / Postal</label>
+          <input
+            type="text"
+            placeholder="AB T2P 1J9"
+            value={String(getValue('company-city-state-zip') || '')}
+            onChange={onInputChange('company-city-state-zip')}
+          />
+        </div>
+        <div className="form-group">
+          <label>Phone</label>
+          <input
+            type="tel"
+            placeholder="(403) 555-0100"
+            value={String(getValue('company-phone') || '')}
+            onChange={onInputChange('company-phone')}
+          />
+        </div>
+        <div className="form-group span-2">
+          <label>Email</label>
+          <input
+            type="email"
+            placeholder="info@company.com"
+            value={String(getValue('company-email') || '')}
+            onChange={onInputChange('company-email')}
+          />
+        </div>
+      </div>
+    </CollapsibleSection>
+  );
+
   return (
     <div className="home-tab-panel">
       <div className="home-tab-container">
@@ -396,82 +475,8 @@ export default function HomeTabPanel() {
           </div>
         </CollapsibleSection>
 
-        {/* 3. APPRAISAL FIRM - Lockable persistent section */}
-        <CollapsibleSection
-          id="appraisal-firm"
-          title="Appraisal Firm"
-          isCollapsed={collapsedSections.has('appraisal-firm')}
-          onToggle={() => toggleSection('appraisal-firm')}
-          isLocked={lockedSections.has('appraisal-firm')}
-          onLockToggle={() => toggleLock('appraisal-firm')}
-          showLock={true}
-        >
-          <div className="form-grid form-grid-4">
-            <div className="form-group span-2">
-              <label>Company Name</label>
-              <input
-                type="text"
-                value={String(getValue('company-name') || '')}
-                onChange={onInputChange('company-name')}
-              />
-            </div>
-            <div className="form-group">
-              <label>Appraisal Status</label>
-              <select
-                value={String(getValue('appraisal-status') || '')}
-                onChange={onInputChange('appraisal-status')}
-              >
-                <option>Fully Detailed</option>
-                <option>Summary</option>
-                <option>Restricted</option>
-              </select>
-            </div>
-            <div className="form-group span-2">
-              <label>Address</label>
-              <input
-                type="text"
-                placeholder="Street Address"
-                value={String(getValue('company-address') || '')}
-                onChange={onInputChange('company-address')}
-              />
-            </div>
-            <div className="form-group">
-              <label>City</label>
-              <input
-                type="text"
-                value={String(getValue('appraiser-city') || '')}
-                onChange={onInputChange('appraiser-city')}
-              />
-            </div>
-            <div className="form-group">
-              <label>Province / Postal</label>
-              <input
-                type="text"
-                placeholder="AB T2P 1J9"
-                value={String(getValue('company-city-state-zip') || '')}
-                onChange={onInputChange('company-city-state-zip')}
-              />
-            </div>
-            <div className="form-group">
-              <label>Phone</label>
-              <input
-                type="tel"
-                placeholder="(403) 555-0100"
-                value={String(getValue('company-phone') || '')}
-                onChange={onInputChange('company-phone')}
-              />
-            </div>
-            <div className="form-group span-2">
-              <label>Email</label>
-              <input
-                type="email"
-                placeholder="info@company.com"
-                value={String(getValue('company-email') || '')}
-                onChange={onInputChange('company-email')}
-              />
-            </div>
-          </div>
-        </CollapsibleSection>
+        {/* 3. APPRAISAL FIRM - renders here if NOT locked */}
+        {!lockedSections.has('appraisal-firm') && appraisalFirmSection}
 
         {/* 4. CLIENT INFORMATION */}
         <CollapsibleSection
@@ -1352,6 +1357,9 @@ Respectfully submitted,`}
             </div>
           </div>
         </CollapsibleSection>
+
+        {/* LOCKED/PERSISTENT SECTIONS - render at bottom when locked */}
+        {lockedSections.has('appraisal-firm') && appraisalFirmSection}
 
       </div>
     </div>

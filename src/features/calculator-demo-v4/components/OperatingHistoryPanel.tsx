@@ -221,6 +221,30 @@ export default function OperatingHistoryPanel() {
     );
   };
 
+  // Render expense comment row
+  const renderCommentRow = (label: string, commentFieldId: string) => {
+    const commentValue = getFieldValue(commentFieldId);
+    return (
+      <div className="space-y-1 px-2 py-2 border-b" style={{ borderColor: colors.border }}>
+        <label className="text-xs font-medium" style={{ color: colors.textMuted }}>
+          {label}
+        </label>
+        <textarea
+          value={commentValue || ''}
+          onChange={e => updateField(commentFieldId, e.target.value)}
+          className="w-full text-xs p-2 rounded resize-none h-16"
+          style={{
+            backgroundColor: colors.inputBg,
+            borderColor: colors.border,
+            color: colors.text,
+            border: `1px solid ${colors.border}`
+          }}
+          placeholder="Enter notes..."
+        />
+      </div>
+    );
+  };
+
   return (
     <div className="space-y-3 text-xs" style={{ color: colors.text }}>
       {/* OPERATING HISTORY TABLE */}
@@ -290,6 +314,22 @@ export default function OperatingHistoryPanel() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* EXPENSE COMMENTS SECTION */}
+      <div className="rounded-sm overflow-hidden" style={{ border: `1px solid ${colors.border}` }}>
+        <div className="px-2 py-1.5" style={{ backgroundColor: colors.panelBgAlt }}>
+          <span className="text-[10px] font-medium uppercase tracking-wider" style={{ color: colors.textMuted }}>
+            Expense Comments
+          </span>
+        </div>
+        {renderCommentRow('Taxes', 'exp-taxes-comment')}
+        {renderCommentRow('Insurance', 'exp-insurance-comment')}
+        {renderCommentRow('Repairs', 'exp-repairs-comment')}
+        {renderCommentRow('Payroll', 'exp-payroll-comment')}
+        {renderCommentRow('Utilities', 'exp-utilities-comment')}
+        {renderCommentRow('Management', 'exp-management-comment')}
+        {renderCommentRow('Other', 'exp-other-comment')}
       </div>
     </div>
   );

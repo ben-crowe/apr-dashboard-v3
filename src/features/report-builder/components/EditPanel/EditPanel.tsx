@@ -81,6 +81,10 @@ const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
     { fields: ['appraiser-name', 'appraiser-credentials'], widths: ['50%', '50%'] },
     { fields: ['appraiser-aic', 'appraiser-company'], widths: ['50%', '50%'] },
     { fields: ['appraiser-email', 'appraiser-phone'], widths: ['50%', '50%'] },
+    { fields: ['appraiser-designation', 'appraiser-license'], widths: ['50%', '50%'] },
+    { fields: ['appraiser-bio-paragraph1'], widths: ['100%'] },
+    { fields: ['appraiser-bio-paragraph2'], widths: ['100%'] },
+    { fields: ['appraiser1-inspectiondate', 'appraiser2-inspectiondate'], widths: ['50%', '50%'] },
   ],
   'property-info': [
     { fields: ['property-name'], widths: ['100%'] },

@@ -241,7 +241,7 @@ A **colored badge** indicating the field's data status:
 ```
 1. User clicks "Test Report" or "Designer Mode"
    ↓
-2. loadFullTestData() or loadUserInputsOnly() called
+2. loadDataSet1All() or loadDataSet1User() called
    ↓
 3. Test data from northBattlefordTestData.ts loaded into store
    ↓

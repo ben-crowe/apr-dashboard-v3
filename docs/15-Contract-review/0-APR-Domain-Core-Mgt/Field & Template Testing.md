@@ -51,8 +51,8 @@
 **DATA:** `TestDataSet1.ts` - Contains all test field values for sample property
 
 **SCRIPTS:** Functions that perform ACTIONS on the data
-- `loadFullTestData` - Test 2 action (loads all fields to TDD page)
-- `testScriptDataSet1` - Test 3 action (loads DataSet1 user inputs → calc)
+- `loadDataSet1All` - Test 2 action (loads ALL fields to TDD page)
+- `loadDataSet1User` - Test 3 action (loads DataSet1 user inputs → calc)
 
 ---
 
@@ -120,7 +120,7 @@ All tests use **TestDataSet1** - same data source.
 
 **Purpose:** Verify field IDs exist in TDD fields and can accept values
 
-1. Script: `loadFullTestData` reads from `TestDataSet1`
+1. Script: `loadDataSet1All` reads from `TestDataSet1`
 2. Loads ALL fields into TDD page fields for review
 3. **How to trigger:**
    - a: TDD page → 'TDD Load All Fields' button
@@ -128,7 +128,7 @@ All tests use **TestDataSet1** - same data source.
 
 **Workflow:** Review all fields have values in TDD → then proceed to Test 3
 
-**Source:** `/src/features/report-builder/store/reportBuilderStore.ts` - `loadFullTestData()`
+**Source:** `/src/features/report-builder/store/reportBuilderStore.ts` - `loadDataSet1All()`
 
 ---
 
@@ -136,13 +136,13 @@ All tests use **TestDataSet1** - same data source.
 
 **Purpose:** Verify full production flow works
 
-1. Script: `testScriptDataSet1` reads from `TestDataSet1`
+1. Script: `loadDataSet1User` reads from `TestDataSet1`
 2. Loads only USER INPUT data to TDD fields, then runs calc engine
 3. **How to trigger:**
    - a: TDD page → 'Report DataSet1' → 'View Report'
    - b: Request agent to run script
 
-**Source:** `/src/features/report-builder/store/reportBuilderStore.ts` - `testScriptDataSet1()`
+**Source:** `/src/features/report-builder/store/reportBuilderStore.ts` - `loadDataSet1User()`
 
 ---
 
@@ -190,8 +190,8 @@ grep '{{city}}' public/Report-MF-template.html
 | Button | Color | Script/Action | Purpose |
 |--------|-------|---------------|---------|
 | **Refresh** | Gray | Page reload | Hard refresh |
-| **TDD Load All Fields** | Blue | `loadFullTestData()` | Test 2 - loads ALL fields into TDD page fields for review |
-| **Report DataSet1** | Green | `testScriptDataSet1()` + filter | Loads DataSet1 user-inputs → calc engine → filters TDD to show only DataSet1 fields → brightens View Report |
+| **TDD Load All Fields** | Blue | `loadDataSet1All()` | Test 2 - loads ALL fields into TDD page fields for review |
+| **Report DataSet1** | Green | `loadDataSet1User()` + filter | Loads DataSet1 user-inputs → calc engine → filters TDD to show only DataSet1 fields → brightens View Report |
 | **View Report →** | Green (dim until dataset selected) | `navigate('/mock-builder')` | JUST navigates to Report Builder (no script - data already loaded) |
 
 **Key Design Decision:**

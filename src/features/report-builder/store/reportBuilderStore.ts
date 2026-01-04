@@ -7084,8 +7084,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     console.log("Calculations complete. Indicated Value:", indicatedValue);
   },
 
-  loadFullTestData: async () => {
-    console.log("=== LOAD FULL TEST DATA CALLED ===");
+  loadDataSet1All: async () => {
+    console.log("=== LOAD DATASET1 ALL: Loading all fields to TDD ===");
     
     // Ensure sections are initialized first
     let sections = get().sections;
@@ -7128,8 +7128,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     console.log("Full test data loaded for all sections");
   },
 
-  testScriptDataSet1: async () => {
-    console.log("=== TEST SCRIPT DATASET1: Loading user inputs, running calc ===");
+  loadDataSet1User: async () => {
+    console.log("=== LOAD DATASET1 USER: Loading user inputs, running calc ===");
     
     // Ensure sections are initialized
     let sections = get().sections;

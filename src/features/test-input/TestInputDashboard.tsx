@@ -31,7 +31,7 @@ interface FieldStatusInfo {
 
 const TestInputDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { sections, updateFieldValue, runCalculations, loadFullTestData, testScriptDataSet1, initializeMockData, activeTestMode, setTestMode } = useReportBuilderStore();
+  const { sections, updateFieldValue, runCalculations, loadDataSet1All, loadDataSet1User, initializeMockData, activeTestMode, setTestMode } = useReportBuilderStore();
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [expandedValuations, setExpandedValuations] = useState<Set<string>>(new Set());
   const [expandedImageDestinations, setExpandedImageDestinations] = useState<Set<string>>(new Set());
@@ -57,7 +57,7 @@ const TestInputDashboard: React.FC = () => {
       // Always load test data so TDD page shows actual values
       // This lets us verify: field with value = test data exists, empty = missing
       console.log('TestInputDashboard: Loading test data by default...');
-      await loadFullTestData();
+      await loadDataSet1All();
     };
     initAndLoadTestData();
   }, []); // Only run once on mount
@@ -795,7 +795,7 @@ const TestInputDashboard: React.FC = () => {
                     // Set mode FIRST to update button state immediately
                     setTestMode('test-report');
                     console.log('Test 2: Loading ALL fields direct to App Fields...');
-                    await loadFullTestData();
+                    await loadDataSet1All();
                     console.log('Load All Fields: Complete - all fields populated in TDD');
                   } catch (error) {
                     console.error('Error in Load All Fields:', error);
@@ -840,7 +840,7 @@ const TestInputDashboard: React.FC = () => {
                 onClick={async () => {
                   try {
                     console.log('Report DataSet1: Loading user-inputs, running calc engine...');
-                    await testScriptDataSet1();
+                    await loadDataSet1User();
                     setSelectedDataset('testDataSet1');
                     console.log('Report DataSet1: Data loaded, TDD filtered');
                   } catch (error) {

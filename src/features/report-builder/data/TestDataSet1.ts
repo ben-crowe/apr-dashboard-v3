@@ -5,8 +5,8 @@
  * PURPOSE: Test data - all field ID values for sample property
  *
  * USED BY SCRIPTS:
- * - loadFullTestData (Test 2) - loads all fields to TDD page
- * - testScriptDataSet1 (Test 3) - loads user inputs, runs calc engine
+ * - loadDataSet1All (Test 2) - loads ALL fields to TDD page
+ * - loadDataSet1User (Test 3) - loads user inputs, runs calc engine
  *
  * SAMPLE PROPERTY: North Battleford Apartments
  * ADDRESS: 1101, 1121 109 St, North Battleford, Saskatchewan

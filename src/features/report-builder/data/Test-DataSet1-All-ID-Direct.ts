@@ -1,48 +1,34 @@
 /**
- * Test Data - North Battleford Sample Property
- * 
- * VERSION: 2.5.0
- * LAST UPDATED: 2026-01-04 MST
- * UPDATED BY: Claude Opus Agent
- * 
- * PART OF SYNC SET (3 files - must stay aligned):
- * 1. fieldRegistry.ts - Field definitions & sections
- * 2. northBattlefordTestData.ts - Test values (THIS FILE)
- * 3. Report-MF-template.html - Template with placeholders
- * 
- * RULE: When field IDs change in any file, update all three.
- * 
- * CHANGES:
- * - 2.5.0: Added missing cover page fields for PREPARED BY section + ID aliases
- *   - Added appraiser-company, appraiser-address, appraiser-city, appraiser-province
- *   - Added appraiser-postal, appraiser-phone, appraiser-website
- *   - Added client-contact-name, property-type-display, file-number, appraiser-aic-number aliases
- * - 2.4.0: Added image and sales comp field ID aliases for template compatibility
- *   - Added img-cover-photo alias (template expects img-cover-photo, data has cover-photo)
- *   - Added img-map-aerial-1 and img-map-aerial-2 aliases (template expects numbered versions)
- *   - Added img-signature placeholder field
- *   - Added sale1-* through sale6-* aliases (template uses sale*, data has comp*)
- * - 2.3.1: Removed duplicate field ID "subject-floors" (flooring already exists)
- * - 2.3.0: Updated field IDs to match canonical names (removed intake-/loe- prefixes)
- *   - Renamed intake-* fields to clean names
- *   - Renamed loe-* fields to clean names
- *   - Updated client-name → client-full-name, client-company → client-organization
- *   - Updated appraiser-aic-number → appraiser-aic
- *   - Added test values for S1/S2 fields
- * - 2.0.0: Kebab-case IDs, property/subject duplicates populated
- * 
- * Property: North Battleford Apartments
- * Address: 1101, 1121 109 St, North Battleford, Saskatchewan
- * File: VAL251012 - 1
- * Valuation Date: October 17, 2025
- * Complete dataset with all 1,020 template field IDs filled.
+ * TEST DATA SET 1: Sample Property Test Data
+ *
+ * FILE: Test-DataSet1-All-ID-Direct.ts
+ * PURPOSE: Complete test data with ALL field IDs for a sample property
+ *
+ * USED BY TWO TEST FUNCTIONS (in reportBuilderStore.ts):
+ *
+ * TEST 2 - loadFullTestData():
+ *   - Loads ALL fields from this file (user-input + calculated + auto-filled)
+ *   - Use to verify ALL fields render correctly
+ *
+ * TEST 3 - loadUserInputsOnly():
+ *   - Uses this SAME file, but FILTERS for inputSource === 'user-input' only
+ *   - Clears calculated fields, then runs calc engine
+ *   - Use to verify calculations work from real inputs
+ *
+ * DATA FLOW:
+ *   This File → Store Fields (via updateField) → Template (via {{field-id}} matching)
+ *   NOT direct to template - goes through store first
+ *
+ * RELATED FILES:
+ * - fieldRegistry.ts - Field definitions (id must match keys here)
+ * - Report-MF-template.html - Template with {{field-id}} placeholders
+ * - reportBuilderStore.ts - Contains loadFullTestData() and loadUserInputsOnly() functions
+ *
+ * SAMPLE PROPERTY: North Battleford Apartments
+ * ADDRESS: 1101, 1121 109 St, North Battleford, Saskatchewan
+ * FILE #: VAL251012-1
  */
-
-/**
- * Test data mapping field IDs to values.
- * Maps to field IDs defined in reportBuilderStore.ts and fieldRegistry.ts
- */
-export const northBattlefordTestData: Record<string, string | number | string[]> =
+export const testDataSet1AllFields: Record<string, string | number | string[]> =
 {
   "access": "average",
   "adjacent-east": "Residential",

@@ -6,7 +6,8 @@ import {
   SectionGroup,
   TestMode,
 } from "../types/reportBuilder.types";
-import { northBattlefordTestData } from "../data/northBattlefordTestData";
+// Test 2 Script: Load ALL field IDs with test data (direct to fields)
+import { testDataSet1AllFields } from "../data/Test-DataSet1-All-ID-Direct";
 import { fieldRegistry } from "../schema/fieldRegistry";
 import { runSalesCompCalculations } from "./salesCompCalculations";
 import { runCostApproachCalculations } from "./costApproachCalculations";
@@ -6153,60 +6154,60 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("report-date", "2025-01-15");
 
     // Client Information (from client-intake section)
-    updateField("client-first-name", String(northBattlefordTestData["client-first-name"] || ""));
-    updateField("client-last-name", String(northBattlefordTestData["client-last-name"] || ""));
-    updateField("client-full-name", String(northBattlefordTestData["client-full-name"] || ""));
-    updateField("client-name", String(northBattlefordTestData["client-name"] || northBattlefordTestData["client-full-name"] || ""));
-    updateField("client-company", String(northBattlefordTestData["client-company"] || northBattlefordTestData["client-organization"] || ""));
-    updateField("client-title", String(northBattlefordTestData["client-title"] || ""));
-    updateField("client-organization", String(northBattlefordTestData["client-organization"] || ""));
-    updateField("client-email", String(northBattlefordTestData["client-email"] || ""));
-    updateField("client-phone", String(northBattlefordTestData["client-phone"] || ""));
-    updateField("client-address", String(northBattlefordTestData["client-address"] || ""));
-    updateField("client-city", String(northBattlefordTestData["client-city"] || ""));
-    updateField("client-province", String(northBattlefordTestData["client-province"] || ""));
+    updateField("client-first-name", String(testDataSet1AllFields["client-first-name"] || ""));
+    updateField("client-last-name", String(testDataSet1AllFields["client-last-name"] || ""));
+    updateField("client-full-name", String(testDataSet1AllFields["client-full-name"] || ""));
+    updateField("client-name", String(testDataSet1AllFields["client-name"] || testDataSet1AllFields["client-full-name"] || ""));
+    updateField("client-company", String(testDataSet1AllFields["client-company"] || testDataSet1AllFields["client-organization"] || ""));
+    updateField("client-title", String(testDataSet1AllFields["client-title"] || ""));
+    updateField("client-organization", String(testDataSet1AllFields["client-organization"] || ""));
+    updateField("client-email", String(testDataSet1AllFields["client-email"] || ""));
+    updateField("client-phone", String(testDataSet1AllFields["client-phone"] || ""));
+    updateField("client-address", String(testDataSet1AllFields["client-address"] || ""));
+    updateField("client-city", String(testDataSet1AllFields["client-city"] || ""));
+    updateField("client-province", String(testDataSet1AllFields["client-province"] || ""));
 
     // Appraiser Information (from loe-prep section)
-    updateField("appraiser-name", String(northBattlefordTestData["appraiser-name"] || ""));
-    updateField("appraiser-credentials", String(northBattlefordTestData["appraiser-credentials"] || ""));
-    updateField("appraiser-email", String(northBattlefordTestData["appraiser-email"] || ""));
+    updateField("appraiser-name", String(testDataSet1AllFields["appraiser-name"] || ""));
+    updateField("appraiser-credentials", String(testDataSet1AllFields["appraiser-credentials"] || ""));
+    updateField("appraiser-email", String(testDataSet1AllFields["appraiser-email"] || ""));
     updateField("appraiser-company", "Valta Group Inc.");
 
     // Property Information (from client-intake section)
-    updateField("property-name", String(northBattlefordTestData["property-name"] || ""));
-    updateField("property-address", String(northBattlefordTestData["street-address"] || northBattlefordTestData["property-address"] || ""));
-    updateField("property-type", String(northBattlefordTestData["property-type"] || ""));
-    updateField("valuation-premises", String(northBattlefordTestData["valuation-premises"] || ""));
-    updateField("asset-condition", String(northBattlefordTestData["asset-condition"] || ""));
-    updateField("legal-description", String(northBattlefordTestData["report-legal"] || ""));
+    updateField("property-name", String(testDataSet1AllFields["property-name"] || ""));
+    updateField("property-address", String(testDataSet1AllFields["street-address"] || testDataSet1AllFields["property-address"] || ""));
+    updateField("property-type", String(testDataSet1AllFields["property-type"] || ""));
+    updateField("valuation-premises", String(testDataSet1AllFields["valuation-premises"] || ""));
+    updateField("asset-condition", String(testDataSet1AllFields["asset-condition"] || ""));
+    updateField("legal-description", String(testDataSet1AllFields["report-legal"] || ""));
 
     // Assignment Details (from loe-prep section)
-    updateField("report-type", String(northBattlefordTestData["report-type"] || "Appraisal Report"));
-    updateField("property-rights", String(northBattlefordTestData["property-rights"] || ""));
-    updateField("intended-use", String(northBattlefordTestData["intended-use"] || ""));
-    updateField("scope-of-work", String(northBattlefordTestData["scope-of-work"] || ""));
+    updateField("report-type", String(testDataSet1AllFields["report-type"] || "Appraisal Report"));
+    updateField("property-rights", String(testDataSet1AllFields["property-rights"] || ""));
+    updateField("intended-use", String(testDataSet1AllFields["intended-use"] || ""));
+    updateField("scope-of-work", String(testDataSet1AllFields["scope-of-work"] || ""));
 
     // Contact Information (from client-intake section)
-    updateField("contact-first-name", String(northBattlefordTestData["contact-first-name"] || ""));
-    updateField("contact-last-name", String(northBattlefordTestData["contact-last-name"] || ""));
-    updateField("contact-phone", String(northBattlefordTestData["contact-phone"] || ""));
-    updateField("contact-email", String(northBattlefordTestData["contact-email"] || ""));
-    updateField("valuation-date", String(northBattlefordTestData["valuation-date"] || ""));
+    updateField("contact-first-name", String(testDataSet1AllFields["contact-first-name"] || ""));
+    updateField("contact-last-name", String(testDataSet1AllFields["contact-last-name"] || ""));
+    updateField("contact-phone", String(testDataSet1AllFields["contact-phone"] || ""));
+    updateField("contact-email", String(testDataSet1AllFields["contact-email"] || ""));
+    updateField("valuation-date", String(testDataSet1AllFields["valuation-date"] || ""));
 
     // Company Information (from client-intake section)
-    updateField("company-name", String(northBattlefordTestData["company-name"] || ""));
-    updateField("company-address", String(northBattlefordTestData["company-address"] || ""));
-    updateField("company-city-state-zip", String(northBattlefordTestData["company-city-state-zip"] || ""));
-    updateField("company-phone", String(northBattlefordTestData["company-phone"] || ""));
-    updateField("company-email", String(northBattlefordTestData["company-email"] || ""));
-    updateField("company-website", String(northBattlefordTestData["company-website"] || ""));
-    updateField("company-jobnumber", String(northBattlefordTestData["company-jobnumber"] || ""));
+    updateField("company-name", String(testDataSet1AllFields["company-name"] || ""));
+    updateField("company-address", String(testDataSet1AllFields["company-address"] || ""));
+    updateField("company-city-state-zip", String(testDataSet1AllFields["company-city-state-zip"] || ""));
+    updateField("company-phone", String(testDataSet1AllFields["company-phone"] || ""));
+    updateField("company-email", String(testDataSet1AllFields["company-email"] || ""));
+    updateField("company-website", String(testDataSet1AllFields["company-website"] || ""));
+    updateField("company-jobnumber", String(testDataSet1AllFields["company-jobnumber"] || ""));
 
     // Client postal (for client-city-state-zip calculation)
-    updateField("client-postal", String(northBattlefordTestData["client-postal"] || ""));
+    updateField("client-postal", String(testDataSet1AllFields["client-postal"] || ""));
 
     // Composite client address (calculated field fallback)
-    updateField("client-city-state-zip", String(northBattlefordTestData["client-city-state-zip"] || ""));
+    updateField("client-city-state-zip", String(testDataSet1AllFields["client-city-state-zip"] || ""));
 
     // Regenerate preview
     console.log("Home test data loaded - regenerating preview...");
@@ -6222,15 +6223,15 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     };
 
     // North Battleford Test Data - Cover Section Fields
-    updateField("cover-photo", String(northBattlefordTestData["cover-photo"] || ""));
-    updateField("cover-photo-caption", String(northBattlefordTestData["cover-photo-caption"] || ""));
-    updateField("property-name", String(northBattlefordTestData["property-name"] || ""));
-    updateField("property-address", String(northBattlefordTestData["property-address"] || ""));
-    updateField("city", String(northBattlefordTestData["city"] || ""));
-    updateField("province", String(northBattlefordTestData["province"] || ""));
-    updateField("report-date", String(northBattlefordTestData["report-date"] || ""));
-    updateField("effective-date", String(northBattlefordTestData["effective-date"] || ""));
-    updateField("job-number", String(northBattlefordTestData["job-number"] || ""));
+    updateField("cover-photo", String(testDataSet1AllFields["cover-photo"] || ""));
+    updateField("cover-photo-caption", String(testDataSet1AllFields["cover-photo-caption"] || ""));
+    updateField("property-name", String(testDataSet1AllFields["property-name"] || ""));
+    updateField("property-address", String(testDataSet1AllFields["property-address"] || ""));
+    updateField("city", String(testDataSet1AllFields["city"] || ""));
+    updateField("province", String(testDataSet1AllFields["province"] || ""));
+    updateField("report-date", String(testDataSet1AllFields["report-date"] || ""));
+    updateField("effective-date", String(testDataSet1AllFields["effective-date"] || ""));
+    updateField("job-number", String(testDataSet1AllFields["job-number"] || ""));
 
     // Regenerate preview
     console.log("Cover test data loaded - regenerating preview...");
@@ -6246,28 +6247,28 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     };
 
     // North Battleford Test Data - Maps Section Fields
-    updateField("img-map-aerial", String(northBattlefordTestData["img-map-aerial"] || ""));
-    updateField("img-comparables-map", String(northBattlefordTestData["img-comparables-map"] || ""));
-    updateField("img-site-plan-1", String(northBattlefordTestData["img-site-plan-1"] || ""));
-    updateField("img-site-plan-2", String(northBattlefordTestData["img-site-plan-2"] || ""));
-    updateField("img-zoning-map", String(northBattlefordTestData["img-zoning-map"] || ""));
+    updateField("img-map-aerial", String(testDataSet1AllFields["img-map-aerial"] || ""));
+    updateField("img-comparables-map", String(testDataSet1AllFields["img-comparables-map"] || ""));
+    updateField("img-site-plan-1", String(testDataSet1AllFields["img-site-plan-1"] || ""));
+    updateField("img-site-plan-2", String(testDataSet1AllFields["img-site-plan-2"] || ""));
+    updateField("img-zoning-map", String(testDataSet1AllFields["img-zoning-map"] || ""));
 
     // Comparable Property Photos and Maps
-    updateField("comp1-photo", String(northBattlefordTestData["comp1-photo"] || ""));
-    updateField("comp1-map", String(northBattlefordTestData["comp1-map"] || ""));
-    updateField("comp1-photo-caption", String(northBattlefordTestData["comp1-photo-caption"] || ""));
+    updateField("comp1-photo", String(testDataSet1AllFields["comp1-photo"] || ""));
+    updateField("comp1-map", String(testDataSet1AllFields["comp1-map"] || ""));
+    updateField("comp1-photo-caption", String(testDataSet1AllFields["comp1-photo-caption"] || ""));
 
-    updateField("comp2-photo", String(northBattlefordTestData["comp2-photo"] || ""));
-    updateField("comp2-map", String(northBattlefordTestData["comp2-map"] || ""));
-    updateField("comp2-photo-caption", String(northBattlefordTestData["comp2-photo-caption"] || ""));
+    updateField("comp2-photo", String(testDataSet1AllFields["comp2-photo"] || ""));
+    updateField("comp2-map", String(testDataSet1AllFields["comp2-map"] || ""));
+    updateField("comp2-photo-caption", String(testDataSet1AllFields["comp2-photo-caption"] || ""));
 
-    updateField("comp3-photo", String(northBattlefordTestData["comp3-photo"] || ""));
-    updateField("comp3-map", String(northBattlefordTestData["comp3-map"] || ""));
-    updateField("comp3-photo-caption", String(northBattlefordTestData["comp3-photo-caption"] || ""));
+    updateField("comp3-photo", String(testDataSet1AllFields["comp3-photo"] || ""));
+    updateField("comp3-map", String(testDataSet1AllFields["comp3-map"] || ""));
+    updateField("comp3-photo-caption", String(testDataSet1AllFields["comp3-photo-caption"] || ""));
 
-    updateField("comp4-photo", String(northBattlefordTestData["comp4-photo"] || ""));
-    updateField("comp4-map", String(northBattlefordTestData["comp4-map"] || ""));
-    updateField("comp4-photo-caption", String(northBattlefordTestData["comp4-photo-caption"] || ""));
+    updateField("comp4-photo", String(testDataSet1AllFields["comp4-photo"] || ""));
+    updateField("comp4-map", String(testDataSet1AllFields["comp4-map"] || ""));
+    updateField("comp4-photo-caption", String(testDataSet1AllFields["comp4-photo-caption"] || ""));
 
     // Regenerate preview
     console.log("Maps test data loaded - regenerating preview...");
@@ -6283,47 +6284,47 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     };
 
     // North Battleford Test Data - Assignment Section Fields
-    // Maps source fields from northBattlefordTestData.ts to assignment field IDs
+    // Maps source fields from testDataSet1AllFields.ts to assignment field IDs
 
     // Report Type & Property Rights
-    updateField("report-type", String(northBattlefordTestData["report-type"] || ""));
-    updateField("property-rights", String(northBattlefordTestData["property-rights"] || ""));
-    updateField("property-interest", String(northBattlefordTestData["property-interest"] || ""));
+    updateField("report-type", String(testDataSet1AllFields["report-type"] || ""));
+    updateField("property-rights", String(testDataSet1AllFields["property-rights"] || ""));
+    updateField("property-interest", String(testDataSet1AllFields["property-interest"] || ""));
 
     // Intended Use & Users
-    updateField("intended-use", String(northBattlefordTestData["intended-use"] || ""));
-    updateField("intended-user", String(northBattlefordTestData["intended-user"] || ""));
+    updateField("intended-use", String(testDataSet1AllFields["intended-use"] || ""));
+    updateField("intended-user", String(testDataSet1AllFields["intended-user"] || ""));
 
     // Scope of Work
-    updateField("scope-of-work", String(northBattlefordTestData["scope-of-work"] || ""));
+    updateField("scope-of-work", String(testDataSet1AllFields["scope-of-work"] || ""));
 
     // Dates
-    updateField("effective-date", String(northBattlefordTestData["effective-date"] || ""));
-    updateField("report-effectivedate", String(northBattlefordTestData["report-effectivedate"] || ""));
-    updateField("inspection-date", String(northBattlefordTestData["inspection-date"] || ""));
+    updateField("effective-date", String(testDataSet1AllFields["effective-date"] || ""));
+    updateField("report-effectivedate", String(testDataSet1AllFields["report-effectivedate"] || ""));
+    updateField("inspection-date", String(testDataSet1AllFields["inspection-date"] || ""));
 
     // Valuation Details
-    updateField("valuation-premises", String(northBattlefordTestData["valuation-premises"] || ""));
-    updateField("report-values", String(northBattlefordTestData["report-values"] || ""));
+    updateField("valuation-premises", String(testDataSet1AllFields["valuation-premises"] || ""));
+    updateField("report-values", String(testDataSet1AllFields["report-values"] || ""));
 
     // Report Guidelines & Standards
-    updateField("report-guidelines", String(northBattlefordTestData["report-guidelines"] || ""));
-    updateField("report-depth", String(northBattlefordTestData["report-depth"] || ""));
-    updateField("report-approaches", String(northBattlefordTestData["report-approaches"] || ""));
+    updateField("report-guidelines", String(testDataSet1AllFields["report-guidelines"] || ""));
+    updateField("report-depth", String(testDataSet1AllFields["report-depth"] || ""));
+    updateField("report-approaches", String(testDataSet1AllFields["report-approaches"] || ""));
 
     // Assumptions & Conditions
-    updateField("report-extraordinary", String(northBattlefordTestData["report-extraordinary"] || ""));
-    updateField("report-limcond", String(northBattlefordTestData["report-limcond"] || ""));
+    updateField("report-extraordinary", String(testDataSet1AllFields["report-extraordinary"] || ""));
+    updateField("report-limcond", String(testDataSet1AllFields["report-limcond"] || ""));
 
     // Valuation Narratives
-    updateField("valuation-cost-narrative", String(northBattlefordTestData["valuation-cost-narrative"] || ""));
-    updateField("valuation-sales-narrative", String(northBattlefordTestData["valuation-sales-narrative"] || ""));
-    updateField("valuation-income-narrative", String(northBattlefordTestData["valuation-income-narrative"] || ""));
-    updateField("valuation-land-narrative", String(northBattlefordTestData["valuation-land-narrative"] || ""));
+    updateField("valuation-cost-narrative", String(testDataSet1AllFields["valuation-cost-narrative"] || ""));
+    updateField("valuation-sales-narrative", String(testDataSet1AllFields["valuation-sales-narrative"] || ""));
+    updateField("valuation-income-narrative", String(testDataSet1AllFields["valuation-income-narrative"] || ""));
+    updateField("valuation-land-narrative", String(testDataSet1AllFields["valuation-land-narrative"] || ""));
 
     // Legal Description & Easements
-    updateField("report-legal", String(northBattlefordTestData["report-legal"] || ""));
-    updateField("easements-text", String(northBattlefordTestData["easements-text"] || ""));
+    updateField("report-legal", String(testDataSet1AllFields["report-legal"] || ""));
+    updateField("easements-text", String(testDataSet1AllFields["easements-text"] || ""));
 
     // Regenerate preview
     console.log("Assignment test data loaded - regenerating preview...");
@@ -6339,38 +6340,38 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     };
 
     // North Battleford Test Data - Executive Summary Section Fields
-    // Maps source fields from northBattlefordTestData.ts to exec field IDs
+    // Maps source fields from testDataSet1AllFields.ts to exec field IDs
     // NOTE: Calculated fields (calc-total-units, dircap-*, final-value-conclusion,
     // calc-pgi, calc-egr, calc-total-expenses, calc-noi) are computed by runCalculations()
     // and should NOT be loaded here to prevent overwriting calculated values.
 
     // Property Identification
-    updateField("property-name", String(northBattlefordTestData["property-name"] || ""));
-    updateField("property-address", String(northBattlefordTestData["property-address"] || ""));
-    updateField("city", String(northBattlefordTestData["city"] || ""));
-    updateField("province", String(northBattlefordTestData["province"] || ""));
-    updateField("property-type", String(northBattlefordTestData["property-type"] || ""));
+    updateField("property-name", String(testDataSet1AllFields["property-name"] || ""));
+    updateField("property-address", String(testDataSet1AllFields["property-address"] || ""));
+    updateField("city", String(testDataSet1AllFields["city"] || ""));
+    updateField("province", String(testDataSet1AllFields["province"] || ""));
+    updateField("property-type", String(testDataSet1AllFields["property-type"] || ""));
 
     // Building Details (only human-input fields, not calc-total-units which is calculated)
-    updateField("gba", String(northBattlefordTestData["gba"] || ""));
-    updateField("nra", String(northBattlefordTestData["nra"] || ""));
+    updateField("gba", String(testDataSet1AllFields["gba"] || ""));
+    updateField("nra", String(testDataSet1AllFields["nra"] || ""));
 
     // Dates
-    updateField("effective-date", String(northBattlefordTestData["effective-date"] || ""));
-    updateField("report-date", String(northBattlefordTestData["report-date"] || ""));
-    updateField("inspection-date", String(northBattlefordTestData["inspection-date"] || ""));
+    updateField("effective-date", String(testDataSet1AllFields["effective-date"] || ""));
+    updateField("report-date", String(testDataSet1AllFields["report-date"] || ""));
+    updateField("inspection-date", String(testDataSet1AllFields["inspection-date"] || ""));
 
     // Rates & Ratios (calc-cap-rate is an INPUT used by runCalculations, not a calculated output)
-    updateField("calc-cap-rate", String(northBattlefordTestData["calc-cap-rate"] || ""));
-    updateField("expense-ratio", String(northBattlefordTestData["expense-ratio"] || ""));
+    updateField("calc-cap-rate", String(testDataSet1AllFields["calc-cap-rate"] || ""));
+    updateField("expense-ratio", String(testDataSet1AllFields["expense-ratio"] || ""));
 
     // Property Characteristics
-    updateField("site-size", String(northBattlefordTestData["site-size"] || ""));
-    updateField("year-built", String(northBattlefordTestData["year-built"] || ""));
-    updateField("building-class", String(northBattlefordTestData["building-class"] || ""));
+    updateField("site-size", String(testDataSet1AllFields["site-size"] || ""));
+    updateField("year-built", String(testDataSet1AllFields["year-built"] || ""));
+    updateField("building-class", String(testDataSet1AllFields["building-class"] || ""));
 
     // Ownership
-    updateField("current-owner-text", String(northBattlefordTestData["current-owner-text"] || ""));
+    updateField("current-owner-text", String(testDataSet1AllFields["current-owner-text"] || ""));
 
     // Regenerate preview
     console.log("Exec test data loaded - regenerating preview...");
@@ -6386,133 +6387,133 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     };
 
     // North Battleford Test Data - Sales Comparison Approach Fields
-    // Maps comp1 through comp4 fields from northBattlefordTestData.ts
+    // Maps comp1 through comp4 fields from testDataSet1AllFields.ts
 
     // Comp 1
-    updateField("comp1-name", String(northBattlefordTestData["comp1-name"] || ""));
-    updateField("comp1-address", String(northBattlefordTestData["comp1-address"] || ""));
-    updateField("comp1-city", String(northBattlefordTestData["comp1-city"] || ""));
-    updateField("comp1-province", String(northBattlefordTestData["comp1-province"] || ""));
-    updateField("comp1-postal", String(northBattlefordTestData["comp1-postal"] || ""));
-    updateField("comp1-sale-price", String(northBattlefordTestData["comp1-sale-price"] || ""));
-    updateField("comp1-sale-date", String(northBattlefordTestData["comp1-sale-date"] || ""));
-    updateField("comp1-buyer", String(northBattlefordTestData["comp1-buyer"] || ""));
-    updateField("comp1-seller", String(northBattlefordTestData["comp1-seller"] || ""));
-    updateField("comp1-financing", String(northBattlefordTestData["comp1-financing"] || ""));
-    updateField("comp1-saleconditions", String(northBattlefordTestData["comp1-saleconditions"] || ""));
-    updateField("comp1-salestatus", String(northBattlefordTestData["comp1-salestatus"] || ""));
-    updateField("comp1-units", String(northBattlefordTestData["comp1-units"] || ""));
-    updateField("comp1-gba", String(northBattlefordTestData["comp1-gba"] || ""));
-    updateField("comp1-nra", String(northBattlefordTestData["comp1-nra"] || ""));
-    updateField("comp1-year-built", String(northBattlefordTestData["comp1-year-built"] || ""));
-    updateField("comp1-condition", String(northBattlefordTestData["comp1-condition"] || ""));
-    updateField("comp1-quality", String(northBattlefordTestData["comp1-quality"] || ""));
-    updateField("comp1-location", String(northBattlefordTestData["comp1-location"] || ""));
-    updateField("comp1-price-per-unit", String(northBattlefordTestData["comp1-price-per-unit"] || ""));
-    updateField("comp1-cap-rate", String(northBattlefordTestData["comp1-cap-rate"] || ""));
-    updateField("comp1-noi-per-unit", String(northBattlefordTestData["comp1-noi-per-unit"] || ""));
-    updateField("comp1-adj-property-rights", String(northBattlefordTestData["comp1-adj-property-rights"] || ""));
-    updateField("comp1-adj-financing", String(northBattlefordTestData["comp1-adj-financing"] || ""));
-    updateField("comp1-adj-sale-conditions", String(northBattlefordTestData["comp1-adj-sale-conditions"] || ""));
-    updateField("comp1-adj-market-conditions", String(northBattlefordTestData["comp1-adj-market-conditions"] || ""));
-    updateField("comp1-adj-location", String(northBattlefordTestData["comp1-adj-location"] || ""));
-    updateField("comp1-adj-size", String(northBattlefordTestData["comp1-adj-size"] || ""));
-    updateField("comp1-adj-age-condition", String(northBattlefordTestData["comp1-adj-age-condition"] || ""));
-    updateField("comp1-adj-other", String(northBattlefordTestData["comp1-adj-other"] || ""));
-    updateField("comp1-overall-comparison", String(northBattlefordTestData["comp1-overall-comparison"] || ""));
+    updateField("comp1-name", String(testDataSet1AllFields["comp1-name"] || ""));
+    updateField("comp1-address", String(testDataSet1AllFields["comp1-address"] || ""));
+    updateField("comp1-city", String(testDataSet1AllFields["comp1-city"] || ""));
+    updateField("comp1-province", String(testDataSet1AllFields["comp1-province"] || ""));
+    updateField("comp1-postal", String(testDataSet1AllFields["comp1-postal"] || ""));
+    updateField("comp1-sale-price", String(testDataSet1AllFields["comp1-sale-price"] || ""));
+    updateField("comp1-sale-date", String(testDataSet1AllFields["comp1-sale-date"] || ""));
+    updateField("comp1-buyer", String(testDataSet1AllFields["comp1-buyer"] || ""));
+    updateField("comp1-seller", String(testDataSet1AllFields["comp1-seller"] || ""));
+    updateField("comp1-financing", String(testDataSet1AllFields["comp1-financing"] || ""));
+    updateField("comp1-saleconditions", String(testDataSet1AllFields["comp1-saleconditions"] || ""));
+    updateField("comp1-salestatus", String(testDataSet1AllFields["comp1-salestatus"] || ""));
+    updateField("comp1-units", String(testDataSet1AllFields["comp1-units"] || ""));
+    updateField("comp1-gba", String(testDataSet1AllFields["comp1-gba"] || ""));
+    updateField("comp1-nra", String(testDataSet1AllFields["comp1-nra"] || ""));
+    updateField("comp1-year-built", String(testDataSet1AllFields["comp1-year-built"] || ""));
+    updateField("comp1-condition", String(testDataSet1AllFields["comp1-condition"] || ""));
+    updateField("comp1-quality", String(testDataSet1AllFields["comp1-quality"] || ""));
+    updateField("comp1-location", String(testDataSet1AllFields["comp1-location"] || ""));
+    updateField("comp1-price-per-unit", String(testDataSet1AllFields["comp1-price-per-unit"] || ""));
+    updateField("comp1-cap-rate", String(testDataSet1AllFields["comp1-cap-rate"] || ""));
+    updateField("comp1-noi-per-unit", String(testDataSet1AllFields["comp1-noi-per-unit"] || ""));
+    updateField("comp1-adj-property-rights", String(testDataSet1AllFields["comp1-adj-property-rights"] || ""));
+    updateField("comp1-adj-financing", String(testDataSet1AllFields["comp1-adj-financing"] || ""));
+    updateField("comp1-adj-sale-conditions", String(testDataSet1AllFields["comp1-adj-sale-conditions"] || ""));
+    updateField("comp1-adj-market-conditions", String(testDataSet1AllFields["comp1-adj-market-conditions"] || ""));
+    updateField("comp1-adj-location", String(testDataSet1AllFields["comp1-adj-location"] || ""));
+    updateField("comp1-adj-size", String(testDataSet1AllFields["comp1-adj-size"] || ""));
+    updateField("comp1-adj-age-condition", String(testDataSet1AllFields["comp1-adj-age-condition"] || ""));
+    updateField("comp1-adj-other", String(testDataSet1AllFields["comp1-adj-other"] || ""));
+    updateField("comp1-overall-comparison", String(testDataSet1AllFields["comp1-overall-comparison"] || ""));
 
     // Comp 2
-    updateField("comp2-name", String(northBattlefordTestData["comp2-name"] || ""));
-    updateField("comp2-address", String(northBattlefordTestData["comp2-address"] || ""));
-    updateField("comp2-city", String(northBattlefordTestData["comp2-city"] || ""));
-    updateField("comp2-province", String(northBattlefordTestData["comp2-province"] || ""));
-    updateField("comp2-postal", String(northBattlefordTestData["comp2-postal"] || ""));
-    updateField("comp2-sale-price", String(northBattlefordTestData["comp2-sale-price"] || ""));
-    updateField("comp2-sale-date", String(northBattlefordTestData["comp2-sale-date"] || ""));
-    updateField("comp2-buyer", String(northBattlefordTestData["comp2-buyer"] || ""));
-    updateField("comp2-seller", String(northBattlefordTestData["comp2-seller"] || ""));
-    updateField("comp2-financing", String(northBattlefordTestData["comp2-financing"] || ""));
-    updateField("comp2-saleconditions", String(northBattlefordTestData["comp2-saleconditions"] || ""));
-    updateField("comp2-salestatus", String(northBattlefordTestData["comp2-salestatus"] || ""));
-    updateField("comp2-units", String(northBattlefordTestData["comp2-units"] || ""));
-    updateField("comp2-gba", String(northBattlefordTestData["comp2-gba"] || ""));
-    updateField("comp2-nra", String(northBattlefordTestData["comp2-nra"] || ""));
-    updateField("comp2-year-built", String(northBattlefordTestData["comp2-year-built"] || ""));
-    updateField("comp2-condition", String(northBattlefordTestData["comp2-condition"] || ""));
-    updateField("comp2-quality", String(northBattlefordTestData["comp2-quality"] || ""));
-    updateField("comp2-location", String(northBattlefordTestData["comp2-location"] || ""));
-    updateField("comp2-price-per-unit", String(northBattlefordTestData["comp2-price-per-unit"] || ""));
-    updateField("comp2-cap-rate", String(northBattlefordTestData["comp2-cap-rate"] || ""));
-    updateField("comp2-noi-per-unit", String(northBattlefordTestData["comp2-noi-per-unit"] || ""));
-    updateField("comp2-adj-property-rights", String(northBattlefordTestData["comp2-adj-property-rights"] || ""));
-    updateField("comp2-adj-financing", String(northBattlefordTestData["comp2-adj-financing"] || ""));
-    updateField("comp2-adj-sale-conditions", String(northBattlefordTestData["comp2-adj-sale-conditions"] || ""));
-    updateField("comp2-adj-market-conditions", String(northBattlefordTestData["comp2-adj-market-conditions"] || ""));
-    updateField("comp2-adj-location", String(northBattlefordTestData["comp2-adj-location"] || ""));
-    updateField("comp2-adj-size", String(northBattlefordTestData["comp2-adj-size"] || ""));
-    updateField("comp2-adj-other", String(northBattlefordTestData["comp2-adj-other"] || ""));
-    updateField("comp2-overall-comparison", String(northBattlefordTestData["comp2-overall-comparison"] || ""));
+    updateField("comp2-name", String(testDataSet1AllFields["comp2-name"] || ""));
+    updateField("comp2-address", String(testDataSet1AllFields["comp2-address"] || ""));
+    updateField("comp2-city", String(testDataSet1AllFields["comp2-city"] || ""));
+    updateField("comp2-province", String(testDataSet1AllFields["comp2-province"] || ""));
+    updateField("comp2-postal", String(testDataSet1AllFields["comp2-postal"] || ""));
+    updateField("comp2-sale-price", String(testDataSet1AllFields["comp2-sale-price"] || ""));
+    updateField("comp2-sale-date", String(testDataSet1AllFields["comp2-sale-date"] || ""));
+    updateField("comp2-buyer", String(testDataSet1AllFields["comp2-buyer"] || ""));
+    updateField("comp2-seller", String(testDataSet1AllFields["comp2-seller"] || ""));
+    updateField("comp2-financing", String(testDataSet1AllFields["comp2-financing"] || ""));
+    updateField("comp2-saleconditions", String(testDataSet1AllFields["comp2-saleconditions"] || ""));
+    updateField("comp2-salestatus", String(testDataSet1AllFields["comp2-salestatus"] || ""));
+    updateField("comp2-units", String(testDataSet1AllFields["comp2-units"] || ""));
+    updateField("comp2-gba", String(testDataSet1AllFields["comp2-gba"] || ""));
+    updateField("comp2-nra", String(testDataSet1AllFields["comp2-nra"] || ""));
+    updateField("comp2-year-built", String(testDataSet1AllFields["comp2-year-built"] || ""));
+    updateField("comp2-condition", String(testDataSet1AllFields["comp2-condition"] || ""));
+    updateField("comp2-quality", String(testDataSet1AllFields["comp2-quality"] || ""));
+    updateField("comp2-location", String(testDataSet1AllFields["comp2-location"] || ""));
+    updateField("comp2-price-per-unit", String(testDataSet1AllFields["comp2-price-per-unit"] || ""));
+    updateField("comp2-cap-rate", String(testDataSet1AllFields["comp2-cap-rate"] || ""));
+    updateField("comp2-noi-per-unit", String(testDataSet1AllFields["comp2-noi-per-unit"] || ""));
+    updateField("comp2-adj-property-rights", String(testDataSet1AllFields["comp2-adj-property-rights"] || ""));
+    updateField("comp2-adj-financing", String(testDataSet1AllFields["comp2-adj-financing"] || ""));
+    updateField("comp2-adj-sale-conditions", String(testDataSet1AllFields["comp2-adj-sale-conditions"] || ""));
+    updateField("comp2-adj-market-conditions", String(testDataSet1AllFields["comp2-adj-market-conditions"] || ""));
+    updateField("comp2-adj-location", String(testDataSet1AllFields["comp2-adj-location"] || ""));
+    updateField("comp2-adj-size", String(testDataSet1AllFields["comp2-adj-size"] || ""));
+    updateField("comp2-adj-other", String(testDataSet1AllFields["comp2-adj-other"] || ""));
+    updateField("comp2-overall-comparison", String(testDataSet1AllFields["comp2-overall-comparison"] || ""));
 
     // Comp 3
-    updateField("comp3-name", String(northBattlefordTestData["comp3-name"] || ""));
-    updateField("comp3-address", String(northBattlefordTestData["comp3-address"] || ""));
-    updateField("comp3-city", String(northBattlefordTestData["comp3-city"] || ""));
-    updateField("comp3-province", String(northBattlefordTestData["comp3-province"] || ""));
-    updateField("comp3-postal", String(northBattlefordTestData["comp3-postal"] || ""));
-    updateField("comp3-sale-price", String(northBattlefordTestData["comp3-sale-price"] || ""));
-    updateField("comp3-sale-date", String(northBattlefordTestData["comp3-sale-date"] || ""));
-    updateField("comp3-buyer", String(northBattlefordTestData["comp3-buyer"] || ""));
-    updateField("comp3-seller", String(northBattlefordTestData["comp3-seller"] || ""));
-    updateField("comp3-financing", String(northBattlefordTestData["comp3-financing"] || ""));
-    updateField("comp3-saleconditions", String(northBattlefordTestData["comp3-saleconditions"] || ""));
-    updateField("comp3-salestatus", String(northBattlefordTestData["comp3-salestatus"] || ""));
-    updateField("comp3-units", String(northBattlefordTestData["comp3-units"] || ""));
-    updateField("comp3-gba", String(northBattlefordTestData["comp3-gba"] || ""));
-    updateField("comp3-nra", String(northBattlefordTestData["comp3-nra"] || ""));
-    updateField("comp3-year-built", String(northBattlefordTestData["comp3-year-built"] || ""));
-    updateField("comp3-condition", String(northBattlefordTestData["comp3-condition"] || ""));
-    updateField("comp3-quality", String(northBattlefordTestData["comp3-quality"] || ""));
-    updateField("comp3-location", String(northBattlefordTestData["comp3-location"] || ""));
-    updateField("comp3-price-per-unit", String(northBattlefordTestData["comp3-price-per-unit"] || ""));
-    updateField("comp3-cap-rate", String(northBattlefordTestData["comp3-cap-rate"] || ""));
-    updateField("comp3-noi-per-unit", String(northBattlefordTestData["comp3-noi-per-unit"] || ""));
-    updateField("comp3-adj-property-rights", String(northBattlefordTestData["comp3-adj-property-rights"] || ""));
-    updateField("comp3-adj-financing", String(northBattlefordTestData["comp3-adj-financing"] || ""));
-    updateField("comp3-adj-sale-conditions", String(northBattlefordTestData["comp3-adj-sale-conditions"] || ""));
-    updateField("comp3-adj-market-conditions", String(northBattlefordTestData["comp3-adj-market-conditions"] || ""));
-    updateField("comp3-adj-size", String(northBattlefordTestData["comp3-adj-size"] || ""));
-    updateField("comp3-adj-age-condition", String(northBattlefordTestData["comp3-adj-age-condition"] || ""));
-    updateField("comp3-adj-other", String(northBattlefordTestData["comp3-adj-other"] || ""));
-    updateField("comp3-overall-comparison", String(northBattlefordTestData["comp3-overall-comparison"] || ""));
+    updateField("comp3-name", String(testDataSet1AllFields["comp3-name"] || ""));
+    updateField("comp3-address", String(testDataSet1AllFields["comp3-address"] || ""));
+    updateField("comp3-city", String(testDataSet1AllFields["comp3-city"] || ""));
+    updateField("comp3-province", String(testDataSet1AllFields["comp3-province"] || ""));
+    updateField("comp3-postal", String(testDataSet1AllFields["comp3-postal"] || ""));
+    updateField("comp3-sale-price", String(testDataSet1AllFields["comp3-sale-price"] || ""));
+    updateField("comp3-sale-date", String(testDataSet1AllFields["comp3-sale-date"] || ""));
+    updateField("comp3-buyer", String(testDataSet1AllFields["comp3-buyer"] || ""));
+    updateField("comp3-seller", String(testDataSet1AllFields["comp3-seller"] || ""));
+    updateField("comp3-financing", String(testDataSet1AllFields["comp3-financing"] || ""));
+    updateField("comp3-saleconditions", String(testDataSet1AllFields["comp3-saleconditions"] || ""));
+    updateField("comp3-salestatus", String(testDataSet1AllFields["comp3-salestatus"] || ""));
+    updateField("comp3-units", String(testDataSet1AllFields["comp3-units"] || ""));
+    updateField("comp3-gba", String(testDataSet1AllFields["comp3-gba"] || ""));
+    updateField("comp3-nra", String(testDataSet1AllFields["comp3-nra"] || ""));
+    updateField("comp3-year-built", String(testDataSet1AllFields["comp3-year-built"] || ""));
+    updateField("comp3-condition", String(testDataSet1AllFields["comp3-condition"] || ""));
+    updateField("comp3-quality", String(testDataSet1AllFields["comp3-quality"] || ""));
+    updateField("comp3-location", String(testDataSet1AllFields["comp3-location"] || ""));
+    updateField("comp3-price-per-unit", String(testDataSet1AllFields["comp3-price-per-unit"] || ""));
+    updateField("comp3-cap-rate", String(testDataSet1AllFields["comp3-cap-rate"] || ""));
+    updateField("comp3-noi-per-unit", String(testDataSet1AllFields["comp3-noi-per-unit"] || ""));
+    updateField("comp3-adj-property-rights", String(testDataSet1AllFields["comp3-adj-property-rights"] || ""));
+    updateField("comp3-adj-financing", String(testDataSet1AllFields["comp3-adj-financing"] || ""));
+    updateField("comp3-adj-sale-conditions", String(testDataSet1AllFields["comp3-adj-sale-conditions"] || ""));
+    updateField("comp3-adj-market-conditions", String(testDataSet1AllFields["comp3-adj-market-conditions"] || ""));
+    updateField("comp3-adj-size", String(testDataSet1AllFields["comp3-adj-size"] || ""));
+    updateField("comp3-adj-age-condition", String(testDataSet1AllFields["comp3-adj-age-condition"] || ""));
+    updateField("comp3-adj-other", String(testDataSet1AllFields["comp3-adj-other"] || ""));
+    updateField("comp3-overall-comparison", String(testDataSet1AllFields["comp3-overall-comparison"] || ""));
 
     // Comp 4
-    updateField("comp4-name", String(northBattlefordTestData["comp4-name"] || ""));
-    updateField("comp4-address", String(northBattlefordTestData["comp4-address"] || ""));
-    updateField("comp4-city", String(northBattlefordTestData["comp4-city"] || ""));
-    updateField("comp4-province", String(northBattlefordTestData["comp4-province"] || ""));
-    updateField("comp4-postal", String(northBattlefordTestData["comp4-postal"] || ""));
-    updateField("comp4-sale-price", String(northBattlefordTestData["comp4-sale-price"] || ""));
-    updateField("comp4-sale-date", String(northBattlefordTestData["comp4-sale-date"] || ""));
-    updateField("comp4-buyer", String(northBattlefordTestData["comp4-buyer"] || ""));
-    updateField("comp4-seller", String(northBattlefordTestData["comp4-seller"] || ""));
-    updateField("comp4-financing", String(northBattlefordTestData["comp4-financing"] || ""));
-    updateField("comp4-saleconditions", String(northBattlefordTestData["comp4-saleconditions"] || ""));
-    updateField("comp4-salestatus", String(northBattlefordTestData["comp4-salestatus"] || ""));
-    updateField("comp4-units", String(northBattlefordTestData["comp4-units"] || ""));
-    updateField("comp4-gba", String(northBattlefordTestData["comp4-gba"] || ""));
-    updateField("comp4-nra", String(northBattlefordTestData["comp4-nra"] || ""));
-    updateField("comp4-year-built", String(northBattlefordTestData["comp4-year-built"] || ""));
-    updateField("comp4-condition", String(northBattlefordTestData["comp4-condition"] || ""));
-    updateField("comp4-quality", String(northBattlefordTestData["comp4-quality"] || ""));
-    updateField("comp4-location", String(northBattlefordTestData["comp4-location"] || ""));
-    updateField("comp4-price-per-unit", String(northBattlefordTestData["comp4-price-per-unit"] || ""));
-    updateField("comp4-cap-rate", String(northBattlefordTestData["comp4-cap-rate"] || ""));
-    updateField("comp4-noi-per-unit", String(northBattlefordTestData["comp4-noi-per-unit"] || ""));
-    updateField("comp4-adj-property-rights", String(northBattlefordTestData["comp4-adj-property-rights"] || ""));
-    updateField("comp4-adj-financing", String(northBattlefordTestData["comp4-adj-financing"] || ""));
-    updateField("comp4-adj-market-conditions", String(northBattlefordTestData["comp4-adj-market-conditions"] || ""));
-    updateField("comp4-adj-location", String(northBattlefordTestData["comp4-adj-location"] || ""));
-    updateField("comp4-overall-comparison", String(northBattlefordTestData["comp4-overall-comparison"] || ""));
+    updateField("comp4-name", String(testDataSet1AllFields["comp4-name"] || ""));
+    updateField("comp4-address", String(testDataSet1AllFields["comp4-address"] || ""));
+    updateField("comp4-city", String(testDataSet1AllFields["comp4-city"] || ""));
+    updateField("comp4-province", String(testDataSet1AllFields["comp4-province"] || ""));
+    updateField("comp4-postal", String(testDataSet1AllFields["comp4-postal"] || ""));
+    updateField("comp4-sale-price", String(testDataSet1AllFields["comp4-sale-price"] || ""));
+    updateField("comp4-sale-date", String(testDataSet1AllFields["comp4-sale-date"] || ""));
+    updateField("comp4-buyer", String(testDataSet1AllFields["comp4-buyer"] || ""));
+    updateField("comp4-seller", String(testDataSet1AllFields["comp4-seller"] || ""));
+    updateField("comp4-financing", String(testDataSet1AllFields["comp4-financing"] || ""));
+    updateField("comp4-saleconditions", String(testDataSet1AllFields["comp4-saleconditions"] || ""));
+    updateField("comp4-salestatus", String(testDataSet1AllFields["comp4-salestatus"] || ""));
+    updateField("comp4-units", String(testDataSet1AllFields["comp4-units"] || ""));
+    updateField("comp4-gba", String(testDataSet1AllFields["comp4-gba"] || ""));
+    updateField("comp4-nra", String(testDataSet1AllFields["comp4-nra"] || ""));
+    updateField("comp4-year-built", String(testDataSet1AllFields["comp4-year-built"] || ""));
+    updateField("comp4-condition", String(testDataSet1AllFields["comp4-condition"] || ""));
+    updateField("comp4-quality", String(testDataSet1AllFields["comp4-quality"] || ""));
+    updateField("comp4-location", String(testDataSet1AllFields["comp4-location"] || ""));
+    updateField("comp4-price-per-unit", String(testDataSet1AllFields["comp4-price-per-unit"] || ""));
+    updateField("comp4-cap-rate", String(testDataSet1AllFields["comp4-cap-rate"] || ""));
+    updateField("comp4-noi-per-unit", String(testDataSet1AllFields["comp4-noi-per-unit"] || ""));
+    updateField("comp4-adj-property-rights", String(testDataSet1AllFields["comp4-adj-property-rights"] || ""));
+    updateField("comp4-adj-financing", String(testDataSet1AllFields["comp4-adj-financing"] || ""));
+    updateField("comp4-adj-market-conditions", String(testDataSet1AllFields["comp4-adj-market-conditions"] || ""));
+    updateField("comp4-adj-location", String(testDataSet1AllFields["comp4-adj-location"] || ""));
+    updateField("comp4-overall-comparison", String(testDataSet1AllFields["comp4-overall-comparison"] || ""));
 
 
     // Regenerate preview
@@ -6534,63 +6535,63 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // === UNIT MIX (Human Inputs) ===
     // Type 1
-    updateField("calc-type1-name", String(northBattlefordTestData["calc-type1-name"] || ""));
-    updateField("calc-type1-count", String(northBattlefordTestData["calc-type1-count"] || ""));
-    updateField("calc-type1-sf", String(northBattlefordTestData["calc-type1-sf"] || ""));
-    updateField("calc-type1-rent", String(northBattlefordTestData["calc-type1-rent"] || ""));
-    updateField("calc-type1-contract-rent", String(northBattlefordTestData["calc-type1-contract-rent"] || ""));
+    updateField("calc-type1-name", String(testDataSet1AllFields["calc-type1-name"] || ""));
+    updateField("calc-type1-count", String(testDataSet1AllFields["calc-type1-count"] || ""));
+    updateField("calc-type1-sf", String(testDataSet1AllFields["calc-type1-sf"] || ""));
+    updateField("calc-type1-rent", String(testDataSet1AllFields["calc-type1-rent"] || ""));
+    updateField("calc-type1-contract-rent", String(testDataSet1AllFields["calc-type1-contract-rent"] || ""));
 
     // Type 2
-    updateField("calc-type2-name", String(northBattlefordTestData["calc-type2-name"] || ""));
-    updateField("calc-type2-count", String(northBattlefordTestData["calc-type2-count"] || ""));
-    updateField("calc-type2-sf", String(northBattlefordTestData["calc-type2-sf"] || ""));
-    updateField("calc-type2-rent", String(northBattlefordTestData["calc-type2-rent"] || ""));
-    updateField("calc-type2-contract-rent", String(northBattlefordTestData["calc-type2-contract-rent"] || ""));
+    updateField("calc-type2-name", String(testDataSet1AllFields["calc-type2-name"] || ""));
+    updateField("calc-type2-count", String(testDataSet1AllFields["calc-type2-count"] || ""));
+    updateField("calc-type2-sf", String(testDataSet1AllFields["calc-type2-sf"] || ""));
+    updateField("calc-type2-rent", String(testDataSet1AllFields["calc-type2-rent"] || ""));
+    updateField("calc-type2-contract-rent", String(testDataSet1AllFields["calc-type2-contract-rent"] || ""));
 
     // Type 3
-    updateField("calc-type3-name", String(northBattlefordTestData["calc-type3-name"] || ""));
-    updateField("calc-type3-count", String(northBattlefordTestData["calc-type3-count"] || ""));
-    updateField("calc-type3-sf", String(northBattlefordTestData["calc-type3-sf"] || ""));
-    updateField("calc-type3-rent", String(northBattlefordTestData["calc-type3-rent"] || ""));
+    updateField("calc-type3-name", String(testDataSet1AllFields["calc-type3-name"] || ""));
+    updateField("calc-type3-count", String(testDataSet1AllFields["calc-type3-count"] || ""));
+    updateField("calc-type3-sf", String(testDataSet1AllFields["calc-type3-sf"] || ""));
+    updateField("calc-type3-rent", String(testDataSet1AllFields["calc-type3-rent"] || ""));
 
     // Type 4
-    updateField("calc-type4-name", String(northBattlefordTestData["calc-type4-name"] || ""));
-    updateField("calc-type4-count", String(northBattlefordTestData["calc-type4-count"] || ""));
-    updateField("calc-type4-sf", String(northBattlefordTestData["calc-type4-sf"] || ""));
-    updateField("calc-type4-rent", String(northBattlefordTestData["calc-type4-rent"] || ""));
+    updateField("calc-type4-name", String(testDataSet1AllFields["calc-type4-name"] || ""));
+    updateField("calc-type4-count", String(testDataSet1AllFields["calc-type4-count"] || ""));
+    updateField("calc-type4-sf", String(testDataSet1AllFields["calc-type4-sf"] || ""));
+    updateField("calc-type4-rent", String(testDataSet1AllFields["calc-type4-rent"] || ""));
 
     // === OTHER INCOME (Human Inputs) ===
-    updateField("calc-parking-per-unit", String(northBattlefordTestData["calc-parking-per-unit"] || ""));
-    updateField("calc-laundry-per-unit", String(northBattlefordTestData["calc-laundry-per-unit"] || ""));
-    updateField("calc-other-income", String(northBattlefordTestData["calc-other-income"] || ""));
+    updateField("calc-parking-per-unit", String(testDataSet1AllFields["calc-parking-per-unit"] || ""));
+    updateField("calc-laundry-per-unit", String(testDataSet1AllFields["calc-laundry-per-unit"] || ""));
+    updateField("calc-other-income", String(testDataSet1AllFields["calc-other-income"] || ""));
 
     // === VACANCY & LOSS RATES (Human Inputs) ===
-    updateField("calc-vacancy-rate", String(northBattlefordTestData["calc-vacancy-rate"] || ""));
-    updateField("calc-bad-debt-rate", String(northBattlefordTestData["calc-bad-debt-rate"] || ""));
-    updateField("calc-concessions-rate", String(northBattlefordTestData["calc-concessions-rate"] || ""));
+    updateField("calc-vacancy-rate", String(testDataSet1AllFields["calc-vacancy-rate"] || ""));
+    updateField("calc-bad-debt-rate", String(testDataSet1AllFields["calc-bad-debt-rate"] || ""));
+    updateField("calc-concessions-rate", String(testDataSet1AllFields["calc-concessions-rate"] || ""));
 
     // === OPERATING EXPENSES (Human Inputs - per-unit values) ===
     // These are the input values; annual totals are CALCULATED by runCalculations()
-    updateField("calc-exp-taxes", String(northBattlefordTestData["calc-exp-taxes"] || ""));
-    updateField("calc-exp-insurance", String(northBattlefordTestData["calc-exp-insurance"] || ""));
-    updateField("calc-exp-repairs", String(northBattlefordTestData["calc-exp-repairs"] || ""));
-    updateField("calc-exp-utilities", String(northBattlefordTestData["calc-exp-utilities"] || ""));
-    updateField("calc-exp-payroll", String(northBattlefordTestData["calc-exp-payroll"] || ""));
-    updateField("calc-exp-management", String(northBattlefordTestData["calc-exp-management"] || ""));
-    updateField("calc-exp-admin", String(northBattlefordTestData["calc-exp-admin"] || ""));
-    updateField("calc-exp-reserves", String(northBattlefordTestData["calc-exp-reserves"] || ""));
-    updateField("calc-exp-other", String(northBattlefordTestData["calc-exp-other"] || ""));
+    updateField("calc-exp-taxes", String(testDataSet1AllFields["calc-exp-taxes"] || ""));
+    updateField("calc-exp-insurance", String(testDataSet1AllFields["calc-exp-insurance"] || ""));
+    updateField("calc-exp-repairs", String(testDataSet1AllFields["calc-exp-repairs"] || ""));
+    updateField("calc-exp-utilities", String(testDataSet1AllFields["calc-exp-utilities"] || ""));
+    updateField("calc-exp-payroll", String(testDataSet1AllFields["calc-exp-payroll"] || ""));
+    updateField("calc-exp-management", String(testDataSet1AllFields["calc-exp-management"] || ""));
+    updateField("calc-exp-admin", String(testDataSet1AllFields["calc-exp-admin"] || ""));
+    updateField("calc-exp-reserves", String(testDataSet1AllFields["calc-exp-reserves"] || ""));
+    updateField("calc-exp-other", String(testDataSet1AllFields["calc-exp-other"] || ""));
 
     // === CAP RATE (Human Input) ===
-    updateField("calc-cap-rate", String(northBattlefordTestData["calc-cap-rate"] || ""));
+    updateField("calc-cap-rate", String(testDataSet1AllFields["calc-cap-rate"] || ""));
 
     // === POST-VALUE ADJUSTMENTS (Human Inputs) ===
-    updateField("calc-adj-capex", String(northBattlefordTestData["calc-adj-capex"] || "0"));
-    updateField("calc-adj-leasing", String(northBattlefordTestData["calc-adj-leasing"] || "0"));
-    updateField("calc-adj-other", String(northBattlefordTestData["calc-adj-other"] || "0"));
+    updateField("calc-adj-capex", String(testDataSet1AllFields["calc-adj-capex"] || "0"));
+    updateField("calc-adj-leasing", String(testDataSet1AllFields["calc-adj-leasing"] || "0"));
+    updateField("calc-adj-other", String(testDataSet1AllFields["calc-adj-other"] || "0"));
 
     // === COMMENTS (Human Inputs) ===
-    updateField("egr-comment", String(northBattlefordTestData["egr-comment"] || ""));
+    updateField("egr-comment", String(testDataSet1AllFields["egr-comment"] || ""));
 
     // === TRIGGER CALCULATIONS ===
     // This computes all calculated fields:
@@ -6620,48 +6621,48 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     };
 
     // North Battleford Test Data - Site Section Fields
-    // Maps source fields from northBattlefordTestData.ts to site-* field IDs
+    // Maps source fields from testDataSet1AllFields.ts to site-* field IDs
 
     // Site Size and Coverage
-    updateField("site-size", String(northBattlefordTestData["site-size"] || ""));
-    updateField("site-coverage-ratio", String(northBattlefordTestData["site-coverage-ratio"] || ""));
-    updateField("site-coverage-ratio-text", String(northBattlefordTestData["site-coverage-ratio-text"] || ""));
-    updateField("land-to-building", String(northBattlefordTestData["land-to-building"] || ""));
+    updateField("site-size", String(testDataSet1AllFields["site-size"] || ""));
+    updateField("site-coverage-ratio", String(testDataSet1AllFields["site-coverage-ratio"] || ""));
+    updateField("site-coverage-ratio-text", String(testDataSet1AllFields["site-coverage-ratio-text"] || ""));
+    updateField("land-to-building", String(testDataSet1AllFields["land-to-building"] || ""));
 
     // Site Descriptions
-    updateField("site-info", String(northBattlefordTestData["site-info"] || ""));
-    updateField("site-conclusion", String(northBattlefordTestData["site-conclusion"] || ""));
-    updateField("site-rating", String(northBattlefordTestData["site-rating"] || ""));
+    updateField("site-info", String(testDataSet1AllFields["site-info"] || ""));
+    updateField("site-conclusion", String(testDataSet1AllFields["site-conclusion"] || ""));
+    updateField("site-rating", String(testDataSet1AllFields["site-rating"] || ""));
 
     // Streets and Access
-    updateField("site-street1", String(northBattlefordTestData["site-street1"] || ""));
-    updateField("site-street2", String(northBattlefordTestData["site-street2"] || ""));
-    updateField("access", String(northBattlefordTestData["access"] || ""));
-    updateField("exposure", String(northBattlefordTestData["exposure"] || ""));
+    updateField("site-street1", String(testDataSet1AllFields["site-street1"] || ""));
+    updateField("site-street2", String(testDataSet1AllFields["site-street2"] || ""));
+    updateField("access", String(testDataSet1AllFields["access"] || ""));
+    updateField("exposure", String(testDataSet1AllFields["exposure"] || ""));
 
     // Adjacent Properties
-    updateField("adjacent-north", String(northBattlefordTestData["adjacent-north"] || ""));
-    updateField("adjacent-south", String(northBattlefordTestData["adjacent-south"] || ""));
-    updateField("adjacent-east", String(northBattlefordTestData["adjacent-east"] || ""));
-    updateField("adjacent-west", String(northBattlefordTestData["adjacent-west"] || ""));
+    updateField("adjacent-north", String(testDataSet1AllFields["adjacent-north"] || ""));
+    updateField("adjacent-south", String(testDataSet1AllFields["adjacent-south"] || ""));
+    updateField("adjacent-east", String(testDataSet1AllFields["adjacent-east"] || ""));
+    updateField("adjacent-west", String(testDataSet1AllFields["adjacent-west"] || ""));
 
     // Site Improvements
-    updateField("site-improvements", String(northBattlefordTestData["site-improvements"] || ""));
-    updateField("landscaping", String(northBattlefordTestData["landscaping"] || ""));
-    updateField("lighting", String(northBattlefordTestData["lighting"] || ""));
+    updateField("site-improvements", String(testDataSet1AllFields["site-improvements"] || ""));
+    updateField("landscaping", String(testDataSet1AllFields["landscaping"] || ""));
+    updateField("lighting", String(testDataSet1AllFields["lighting"] || ""));
 
     // Environmental
-    updateField("flood-zone", String(northBattlefordTestData["flood-zone"] || ""));
-    updateField("hazardous-text", String(northBattlefordTestData["hazardous-text"] || ""));
+    updateField("flood-zone", String(testDataSet1AllFields["flood-zone"] || ""));
+    updateField("hazardous-text", String(testDataSet1AllFields["hazardous-text"] || ""));
 
     // Legal
-    updateField("easements-text", String(northBattlefordTestData["easements-text"] || ""));
+    updateField("easements-text", String(testDataSet1AllFields["easements-text"] || ""));
 
     // Site Plan Images
-    updateField("img-site-plan-1", String(northBattlefordTestData["img-site-plan-1"] || ""));
-    updateField("site-plan-1-title", String(northBattlefordTestData["site-plan-1-title"] || ""));
-    updateField("img-site-plan-2", String(northBattlefordTestData["img-site-plan-2"] || ""));
-    updateField("site-plan-2-title", String(northBattlefordTestData["site-plan-2-title"] || ""));
+    updateField("img-site-plan-1", String(testDataSet1AllFields["img-site-plan-1"] || ""));
+    updateField("site-plan-1-title", String(testDataSet1AllFields["site-plan-1-title"] || ""));
+    updateField("img-site-plan-2", String(testDataSet1AllFields["img-site-plan-2"] || ""));
+    updateField("site-plan-2-title", String(testDataSet1AllFields["site-plan-2-title"] || ""));
 
     // Regenerate preview
     console.log("Site test data loaded - regenerating preview...");
@@ -6677,40 +6678,40 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     };
 
     // North Battleford Test Data - Improvements Section Fields
-    // Maps source fields from northBattlefordTestData.ts to improvements field IDs
+    // Maps source fields from testDataSet1AllFields.ts to improvements field IDs
 
     // Building Overview
-    updateField("year-built", String(northBattlefordTestData["year-built"] || ""));
-    updateField("building-class", String(northBattlefordTestData["building-class"] || ""));
-    updateField("gba", String(northBattlefordTestData["subject-gba"] || ""));
-    updateField("nra", String(northBattlefordTestData["subject-nra"] || ""));
+    updateField("year-built", String(testDataSet1AllFields["year-built"] || ""));
+    updateField("building-class", String(testDataSet1AllFields["building-class"] || ""));
+    updateField("gba", String(testDataSet1AllFields["subject-gba"] || ""));
+    updateField("nra", String(testDataSet1AllFields["subject-nra"] || ""));
 
     // Design and Layout
-    updateField("functional-design", String(northBattlefordTestData["functional-design"] || ""));
+    updateField("functional-design", String(testDataSet1AllFields["functional-design"] || ""));
 
     // Interior Finishes
-    updateField("ceilings", String(northBattlefordTestData["ceilings"] || ""));
-    updateField("flooring", String(northBattlefordTestData["flooring"] || ""));
-    updateField("interior-walls", String(northBattlefordTestData["interior-walls"] || ""));
-    updateField("interior-buildout", String(northBattlefordTestData["interior-buildout"] || ""));
+    updateField("ceilings", String(testDataSet1AllFields["ceilings"] || ""));
+    updateField("flooring", String(testDataSet1AllFields["flooring"] || ""));
+    updateField("interior-walls", String(testDataSet1AllFields["interior-walls"] || ""));
+    updateField("interior-buildout", String(testDataSet1AllFields["interior-buildout"] || ""));
 
     // Unit Mix
-    updateField("calc-type1-name", String(northBattlefordTestData["calc-type1-name"] || ""));
-    updateField("calc-type1-count", String(northBattlefordTestData["calc-type1-count"] || ""));
-    updateField("calc-type1-sf", String(northBattlefordTestData["calc-type1-sf"] || ""));
+    updateField("calc-type1-name", String(testDataSet1AllFields["calc-type1-name"] || ""));
+    updateField("calc-type1-count", String(testDataSet1AllFields["calc-type1-count"] || ""));
+    updateField("calc-type1-sf", String(testDataSet1AllFields["calc-type1-sf"] || ""));
 
-    updateField("calc-type2-name", String(northBattlefordTestData["calc-type2-name"] || ""));
-    updateField("calc-type2-count", String(northBattlefordTestData["calc-type2-count"] || ""));
-    updateField("calc-type2-sf", String(northBattlefordTestData["calc-type2-sf"] || ""));
+    updateField("calc-type2-name", String(testDataSet1AllFields["calc-type2-name"] || ""));
+    updateField("calc-type2-count", String(testDataSet1AllFields["calc-type2-count"] || ""));
+    updateField("calc-type2-sf", String(testDataSet1AllFields["calc-type2-sf"] || ""));
 
-    updateField("calc-type3-count", String(northBattlefordTestData["calc-type3-count"] || ""));
-    updateField("calc-type4-count", String(northBattlefordTestData["calc-type4-count"] || ""));
+    updateField("calc-type3-count", String(testDataSet1AllFields["calc-type3-count"] || ""));
+    updateField("calc-type4-count", String(testDataSet1AllFields["calc-type4-count"] || ""));
 
     // Parking
-    updateField("calc-parking-per-unit", String(northBattlefordTestData["calc-parking-per-unit"] || ""));
+    updateField("calc-parking-per-unit", String(testDataSet1AllFields["calc-parking-per-unit"] || ""));
 
     // Condition
-    updateField("asset-condition", String(northBattlefordTestData["asset-condition"] || ""));
+    updateField("asset-condition", String(testDataSet1AllFields["asset-condition"] || ""));
 
     // Regenerate preview
     console.log("Improvements test data loaded - regenerating preview...");
@@ -7177,7 +7178,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     });
 
     // Then load ONLY user-input fields from test data
-    Object.entries(northBattlefordTestData).forEach(([fieldId, value]) => {
+    Object.entries(testDataSet1AllFields).forEach(([fieldId, value]) => {
       const storeFieldId = testDataFieldMapping[fieldId] || fieldId;
       const fieldDef = getFieldDef(storeFieldId);
       

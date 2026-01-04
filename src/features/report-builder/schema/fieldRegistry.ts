@@ -7,7 +7,7 @@
  * 
  * PART OF SYNC SET (3 files - must stay aligned):
  * 1. fieldRegistry.ts - Field definitions & sections (THIS FILE)
- * 2. northBattlefordTestData.ts - Test values
+ * 2. Test-DataSet1-All-ID-Direct.ts - Test values
  * 3. Report-MF-template.html - Template with placeholders
  * 
  * RULE: When field IDs change in any file, update all three.

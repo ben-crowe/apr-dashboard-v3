@@ -2507,6 +2507,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'street1-parking', storeId: 'street1-parking', label: 'Street 1 Parking', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street1-sidewalks', storeId: 'street1-sidewalks', label: 'Street 1 Sidewalks', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street1-type', storeId: 'street1-type', label: 'Street 1 Type', section: 'site', subsection: 'street-details', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Paved', 'Gravel', 'Dirt'] },
+  { id: 'street1-centerlane', storeId: 'street1-centerlane', label: 'Street 1 Center Lane', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street1-direction', storeId: 'street1-direction', label: 'Street 1 Direction', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street1-lighting', storeId: 'street1-lighting', label: 'Street 1 Lighting', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street2-condition', storeId: 'street2-condition', label: 'Street 2 Condition', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street2-curbs', storeId: 'street2-curbs', label: 'Street 2 Curbs', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street2-lanes', storeId: 'street2-lanes', label: 'Street 2 Lanes', section: 'site', subsection: 'street-details', type: 'number', inputSource: 'user-input', required: false },
@@ -2516,6 +2519,9 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'street2-sidewalks', storeId: 'street2-sidewalks', label: 'Street 2 Sidewalks', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street2-surface', storeId: 'street2-surface', label: 'Street 2 Surface', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
   { id: 'street2-type', storeId: 'street2-type', label: 'Street 2 Type', section: 'site', subsection: 'street-details', type: 'dropdown', inputSource: 'user-input', required: false, options: ['Paved', 'Gravel', 'Dirt'] },
+  { id: 'street2-bikelane', storeId: 'street2-bikelane', label: 'Street 2 Bike Lane', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street2-centerlane', storeId: 'street2-centerlane', label: 'Street 2 Center Lane', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
+  { id: 'street2-direction', storeId: 'street2-direction', label: 'Street 2 Direction', section: 'site', subsection: 'street-details', type: 'text', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // NEW FIELDS - TRAFFIC (11 fields)
@@ -2528,11 +2534,13 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'traffic1-source', storeId: 'traffic1-source', label: 'Traffic Count 1 Source', section: 'site', subsection: 'traffic', type: 'text', inputSource: 'user-input', required: false },
   { id: 'traffic1-street', storeId: 'traffic1-street', label: 'Traffic Count 1 Street', section: 'site', subsection: 'traffic', type: 'text', inputSource: 'user-input', required: false },
   { id: 'traffic1-year', storeId: 'traffic1-year', label: 'Traffic Count 1 Year', section: 'site', subsection: 'traffic', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'traffic1-location', storeId: 'traffic1-location', label: 'Traffic Count 1 Location', section: 'site', subsection: 'traffic', type: 'text', inputSource: 'user-input', required: false },
   { id: 'traffic2-count', storeId: 'traffic2-count', label: 'Traffic Count 2', section: 'site', subsection: 'traffic', type: 'number', inputSource: 'user-input', required: false },
   { id: 'traffic2-date', storeId: 'traffic2-date', label: 'Traffic Count 2 Date', section: 'site', subsection: 'traffic', type: 'date', inputSource: 'user-input', required: false },
   { id: 'traffic2-source', storeId: 'traffic2-source', label: 'Traffic Count 2 Source', section: 'site', subsection: 'traffic', type: 'text', inputSource: 'user-input', required: false },
   { id: 'traffic2-street', storeId: 'traffic2-street', label: 'Traffic Count 2 Street', section: 'site', subsection: 'traffic', type: 'text', inputSource: 'user-input', required: false },
   { id: 'traffic2-year', storeId: 'traffic2-year', label: 'Traffic Count 2 Year', section: 'site', subsection: 'traffic', type: 'number', inputSource: 'user-input', required: false },
+  { id: 'traffic2-location', storeId: 'traffic2-location', label: 'Traffic Count 2 Location', section: 'site', subsection: 'traffic', type: 'text', inputSource: 'user-input', required: false },
 
   // ============================================================================
   // NEW FIELDS - INFO SOURCE (11 fields)

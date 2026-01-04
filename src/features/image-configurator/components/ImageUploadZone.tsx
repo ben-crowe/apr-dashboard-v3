@@ -6,7 +6,7 @@
 
 import React, { useState, useCallback, useRef } from 'react';
 import { Upload, X, CheckCircle, AlertCircle, Loader2, Image as ImageIcon } from 'lucide-react';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/integrations/supabase/client';
 import { STORAGE_BUCKETS, storagePaths, UploadProgress } from '../types';
 import { v4 as uuid } from 'uuid';
 

@@ -4,7 +4,7 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/integrations/supabase/client';
 import type { PageLayout, PageLayoutSlot, LayoutTemplate, DEFAULT_LAYOUTS, getSlotCount } from '../types';
 import { jobImagesKeys } from './useJobImages';
 

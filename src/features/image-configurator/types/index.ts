@@ -16,6 +16,17 @@ export type ImageCategory =
   | 'Basement/Utility'
   | 'Other';
 
+// All image categories
+export const IMAGE_CATEGORIES: ImageCategory[] = [
+  'Exterior',
+  'Interior Units',
+  'Common Areas',
+  'Building Systems',
+  'Site',
+  'Basement/Utility',
+  'Other',
+];
+
 // Image subcategories by category
 export const IMAGE_SUBCATEGORIES: Record<ImageCategory, string[]> = {
   'Exterior': ['Front Facade', 'Rear', 'Left Side', 'Right Side', 'Close-up', 'Street View'],

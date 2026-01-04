@@ -784,11 +784,11 @@ const TestInputDashboard: React.FC = () => {
                   try {
                     // Set mode FIRST to update button state immediately
                     setTestMode('test-report');
-                    console.log('Test 3: Loading user-input fields, running calc engine...');
-                    await testScriptUserInputsCalc();
-                    console.log('Test Report: Calculations complete - check calculated fields');
+                    console.log('Test 2: Loading ALL fields direct to App Fields...');
+                    await loadFullTestData();
+                    console.log('Load All Fields: Complete - all fields populated in TDD');
                   } catch (error) {
-                    console.error('Error in Test Report:', error);
+                    console.error('Error in Load All Fields:', error);
                     alert('Error: ' + String(error));
                   }
                 }}
@@ -820,10 +820,10 @@ const TestInputDashboard: React.FC = () => {
                     e.currentTarget.style.backgroundColor = '#2a2a2a';
                   }
                 }}
-                title="MODE 3: Test Report - Load ONLY user-input fields, clear calculated fields, then run calc engine for validation"
+                title="Test 2: Load ALL fields from TestDataSet1 direct to App Fields for TDD review"
               >
                 <Database className="w-3 h-3" />
-                Test Report
+                Load All Fields
                 {activeTestMode === 'test-report' && <span className="ml-1">✓</span>}
               </Button>
               <Button
@@ -867,7 +867,17 @@ const TestInputDashboard: React.FC = () => {
                 {activeTestMode === 'designer' && <span className="ml-1">✓</span>}
               </Button>
               <Button
-                onClick={handlePreview}
+                onClick={async () => {
+                  try {
+                    console.log('Test 3: Loading user-input fields, running calc engine...');
+                    await testScriptUserInputsCalc();
+                    console.log('User Test: Calculations complete - navigating to mock-builder...');
+                    navigate('/mock-builder');
+                  } catch (error) {
+                    console.error('Error in User Test:', error);
+                    alert('Error: ' + String(error));
+                  }
+                }}
                 variant="outline"
                 size="sm"
                 className={`gap-2 text-white border transition-colors ${
@@ -893,9 +903,10 @@ const TestInputDashboard: React.FC = () => {
                     e.currentTarget.style.backgroundColor = '#2a2a2a';
                   }
                 }}
+                title="Test 3: Load user-inputs, run calc engine, then navigate to mock-builder"
               >
                 <ExternalLink className="w-3 h-3" />
-                Preview in Builder
+                User Test
                 {activeTestMode !== 'none' && <span className="ml-1">→</span>}
               </Button>
             </div>

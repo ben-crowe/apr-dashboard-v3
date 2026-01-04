@@ -1,7 +1,7 @@
 /**
  * Test Data - North Battleford Sample Property
  * 
- * VERSION: 2.3.1
+ * VERSION: 2.4.0
  * LAST UPDATED: 2026-01-03 MST
  * UPDATED BY: Claude Opus Agent
  * 
@@ -13,6 +13,11 @@
  * RULE: When field IDs change in any file, update all three.
  * 
  * CHANGES:
+ * - 2.4.0: Added image and sales comp field ID aliases for template compatibility
+ *   - Added img-cover-photo alias (template expects img-cover-photo, data has cover-photo)
+ *   - Added img-map-aerial-1 and img-map-aerial-2 aliases (template expects numbered versions)
+ *   - Added img-signature placeholder field
+ *   - Added sale1-* through sale6-* aliases (template uses sale*, data has comp*)
  * - 2.3.1: Removed duplicate field ID "subject-floors" (flooring already exists)
  * - 2.3.0: Updated field IDs to match canonical names (removed intake-/loe- prefixes)
  *   - Renamed intake-* fields to clean names
@@ -2198,6 +2203,104 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   // ============================================================================
   "chart-mf-investment-indicators": "/test-data/images/charts/mf-investment-indicators.png",
   "tax-commentary-1": "The assessed value is below the value concluded herein, a tax assessment appeal is not warranted.",
-  "tax-commentary-2": "The assessed value is lower than our valuation herein. Smaller markets tend to under assess real property assets in comparison to larger markets."
+  "tax-commentary-2": "The assessed value is lower than our valuation herein. Smaller markets tend to under assess real property assets in comparison to larger markets.",
+
+  // ============================================================================
+  // NEW FIELDS - IMAGE ALIASES (Template compatibility) - Added 2026-01-03
+  // ============================================================================
+  // Cover photo alias (template expects img-cover-photo, data has cover-photo)
+  "img-cover-photo": "/extracted-images/image2.jpeg",
+  
+  // Aerial map aliases (template expects img-map-aerial-1/2, data has img-map-aerial)
+  "img-map-aerial-1": "/extracted-images/image36.png",
+  "img-map-aerial-2": "/extracted-images/image36.png",
+  
+  // Signature field (template expects img-signature)
+  "img-signature": "",
+
+  // ============================================================================
+  // NEW FIELDS - SALES COMP ALIASES (Template compatibility) - Added 2026-01-03
+  // Template uses sale1-*, sale2-*, etc. but data has comp1-*, comp2-*, etc.
+  // These aliases map sale* to comp* field values
+  // ============================================================================
+  
+  // Sale 1 aliases (maps to comp1)
+  "sale1-name": "Heritage House",
+  "sale1-address": "1551 107 St",
+  "sale1-sale-date": "2024-06-17 00:00:00",
+  "sale1-sale-price": 3117383,
+  "sale1-num-units": 24,
+  "sale1-gba": 22754,
+  "sale1-year-built": "2000",
+  "sale1-cap-rate": 0.0599,
+  "sale1-site-area": 21780,
+  "sale1-condition": "Average",
+  "sale1-description": "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversity and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
+  
+  // Sale 2 aliases (maps to comp2)
+  "sale2-name": " College View Apartments",
+  "sale2-address": "10910-10912 Winder Crescent",
+  "sale2-sale-date": "2024-06-17 00:00:00",
+  "sale2-sale-price": 4590858,
+  "sale2-num-units": 45,
+  "sale2-gba": 33509,
+  "sale2-year-built": "2000",
+  "sale2-cap-rate": 0.0599,
+  "sale2-site-area": 21780,
+  "sale2-condition": "Average",
+  "sale2-description": "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversify and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
+  
+  // Sale 3 aliases (maps to comp3)
+  "sale3-name": "Woodland Estates",
+  "sale3-address": "1901 Pearson Ave",
+  "sale3-sale-date": "2024-06-17 00:00:00",
+  "sale3-sale-price": 2055056,
+  "sale3-num-units": 24,
+  "sale3-gba": 15000,
+  "sale3-year-built": "1980",
+  "sale3-cap-rate": 0.0599,
+  "sale3-site-area": 51977,
+  "sale3-condition": "Average",
+  "sale3-description": "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversity and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
+  
+  // Sale 4 aliases (maps to comp4)
+  "sale4-name": "Parkside Flats 1",
+  "sale4-address": "1000 Parr Hill Dr",
+  "sale4-sale-date": "2023-05-19 00:00:00",
+  "sale4-sale-price": 9310000,
+  "sale4-num-units": 47,
+  "sale4-gba": 47916,
+  "sale4-year-built": "2016",
+  "sale4-cap-rate": 0.0624,
+  "sale4-site-area": 47916,
+  "sale4-condition": "Average",
+  "sale4-description": "Parkside Flats, a 47-unit multifamily property located at 1000 Parr Hill Drive in Martensville, Saskatchewan, sold on May 19, 2023, for $9,310,000, reflecting a price per unit of $198,085.",
+  
+  // Sale 5 aliases (maps to comp5)
+  "sale5-name": "Parkside Flats 2",
+  "sale5-address": "1030 Parr Hill Dr",
+  "sale5-sale-date": "2023-05-19 00:00:00",
+  "sale5-sale-price": 13720000,
+  "sale5-num-units": 64,
+  "sale5-gba": 52708,
+  "sale5-year-built": "2019",
+  "sale5-cap-rate": 0.0592,
+  "sale5-site-area": 52708,
+  "sale5-condition": "Average",
+  "sale5-description": "Parkside Flats 2, a 64-unit multifamily property located at 1030 Parr Hill Drive in Martensville, Saskatchewan, sold in May 2023 for $13,720,000, reflecting a price per unit of $214,375.",
+  
+  // Sale 6 aliases (maps to comp6 - placeholder/empty)
+  "sale6-name": "-",
+  "sale6-address": "-",
+  "sale6-sale-date": "-",
+  "sale6-sale-price": "-",
+  "sale6-num-units": "-",
+  "sale6-gba": "-",
+  "sale6-year-built": "-",
+  "sale6-cap-rate": "-",
+  "sale6-site-area": "-",
+  "sale6-condition": "-",
+  "sale6-description": "-"
+
 
 };

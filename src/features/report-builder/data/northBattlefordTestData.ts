@@ -1,9 +1,9 @@
 /**
  * Test Data - North Battleford Sample Property
  * 
- * VERSION: 2.3.0
- * LAST UPDATED: 2025-12-23 22:00 MST
- * UPDATED BY: Claude Web Agent (synced)
+ * VERSION: 2.3.1
+ * LAST UPDATED: 2026-01-03 MST
+ * UPDATED BY: Claude Opus Agent
  * 
  * PART OF SYNC SET (3 files - must stay aligned):
  * 1. fieldRegistry.ts - Field definitions & sections
@@ -13,6 +13,7 @@
  * RULE: When field IDs change in any file, update all three.
  * 
  * CHANGES:
+ * - 2.3.1: Removed duplicate field ID "subject-floors" (flooring already exists)
  * - 2.3.0: Updated field IDs to match canonical names (removed intake-/loe- prefixes)
  *   - Renamed intake-* fields to clean names
  *   - Renamed loe-* fields to clean names
@@ -1769,7 +1770,6 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "subject-exposuretime": "six months",
   "subject-exteriorwalls": "1121 - Brick, 1101 Stucco/Wood frame;",
   "subject-fireprotection": "None;",
-  "subject-floors": "Combination of carpet, tile, vinyl tile and laminate hard wood;",
   "subject-foundation": "Concrete footings and walls;",
   "subject-gba": 10204,
   "subject-geocode": "52.7738945, -108.2861417",

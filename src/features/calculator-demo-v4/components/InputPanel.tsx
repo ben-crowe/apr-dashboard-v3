@@ -19,7 +19,7 @@ export default function InputPanel() {
   const sections = useReportBuilderStore(state => state.sections);
   const updateFieldValue = useReportBuilderStore(state => state.updateFieldValue);
   const runCalculations = useReportBuilderStore(state => state.runCalculations);
-  const loadFullTestData = useReportBuilderStore(state => state.loadFullTestData);
+  const loadDataSet1All = useReportBuilderStore(state => state.loadDataSet1All);
 
   const calcSection = sections.find(s => s.id === 'calc');
 
@@ -62,7 +62,7 @@ export default function InputPanel() {
   };
 
   const handleLoadTestData = () => {
-    loadFullTestData();
+    loadDataSet1All();
     // Force component to re-render after store update
     setTimeout(() => setUpdateKey(k => k + 1), 50);
     // Trigger calculation animation

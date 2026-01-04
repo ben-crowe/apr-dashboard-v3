@@ -2,91 +2,183 @@
 
 **Created:** 2026-01-04
 **Updated:** 2026-01-04
-**Purpose:** Document the three template testing methods and track field mapping verification
+**Purpose:** Document field creation, testing methods, and debugging workflow
 
 ---
 
-## Data vs Scripts
+## Key Definitions
 
-**DATA:** `TestDataSet1.ts` - Contains all test field values for sample property (North Battleford Apartments)
+### fieldRegistry.ts
+
+**Single source of truth** that defines every field in the system.
+
+| Property | Description |
+|----------|-------------|
+| `id` | Unique field identifier |
+| `label` | Display name |
+| `type` | text, number, date, dropdown, etc. |
+| `section` | Which section it belongs to (cover, site, calc, etc.) |
+| `inputSource` | 'user-input' or 'calculated' |
+| `defaultValue` | Starting value (optional) |
+
+**What it does:**
+- Tells the store what fields exist and how to build them
+- Tells the calc engine which fields are inputs vs outputs
+- Reference for TestDataSet1 to know what IDs are valid
+
+**File:** `/src/features/report-builder/schema/fieldRegistry.ts`
+
+---
+
+### Data vs Scripts
+
+**DATA:** `TestDataSet1.ts` - Contains all test field values for sample property
 
 **SCRIPTS:** Functions that perform ACTIONS on the data
-- `testScriptAllIdsDirect` - Test 2 action
-- `testScriptUserInputsCalc` - Test 3 action
+- `loadFullTestData` - Test 2 action (loads all fields to App Fields)
+- `testScriptUserInputsCalc` - Test 3 action (user inputs → calc)
 
 ---
 
-## Three Template Testing Methods
+## Step 0 - Field Creation
 
-All three tests use **TestDataSet1** - same data, three delivery methods.
+Before testing, fields must be created in three places:
+
+### Step 0a - Define Field (fieldRegistry.ts)
+```typescript
+{
+  id: 'city',
+  storeId: 'city',
+  label: 'City',
+  type: 'text',
+  section: 'cover',
+  inputSource: 'user-input'
+}
+```
+
+### Step 0b - Add to EditPanel Layout (EditPanel.tsx)
+```typescript
+const COVER_FIELD_LAYOUT = [
+  { id: 'city', label: 'City' },
+  // ...
+];
+```
+**Note:** Currently HARDCODED. If field not in layout array → won't show in Editor Panel.
+
+### Step 0c - Add to Template (Report-MF-template.html)
+```html
+<span class="field-mapped" data-sample="North Battleford">{{city}}</span>
+```
+
+**Field ID must match exactly across all three locations.**
 
 ---
 
-### Test 1 - Toggle (DataSet1 in data-sample)
+## Three Testing Methods
 
-1. Uses `TestDataSet1` values hardcoded as `data-sample` attributes in template
+All tests use **TestDataSet1** - same data source.
+
+---
+
+### Test 1 - HTML Placement/Designer Test
+
+**Purpose:** Verify field ID is placed correctly on template page
+
+1. `TestDataSet1` values hardcoded as `data-sample` attributes in template
 2. Toggle switch swaps between `{{field-id}}` and sample values
 3. **How to trigger:**
    - a: Toggle switch in template header frame
    - b: TDD page → 'Designer Mode' → 'Preview Builder'
 
-**Example field structure:**
+**Example:**
 ```html
 <span class="field-mapped" data-sample="North Battleford" title="{{city}}">{{city}}</span>
 ```
 - Toggle OFF: Shows `{{city}}`
 - Toggle ON: Shows `North Battleford`
 
-**Note:** Financial fields (calc-*, ia-*, recon-*) are excluded from toggle - controlled by calculator only.
-
 **Source:** `/public/Report-MF-template.html`
 
 ---
 
-### Test 2 - All IDs Direct to Template
+### Test 2 - TDD ID Test (Load All Fields)
 
-1. Script: `testScriptAllIdsDirect` reads from `TestDataSet1`
-2. Loads ALL field IDs direct to template (bypasses store)
+**Purpose:** Verify field IDs exist in store and can accept values
+
+1. Script: `loadFullTestData` reads from `TestDataSet1`
+2. Loads ALL fields into App Fields (TDD page) for review
 3. **How to trigger:**
-   - a: Request agent to run the script
-   - b: TDD page → 'Test 2' → 'Preview Builder' (not yet added)
+   - a: TDD page → 'Load Test Data' button
+   - b: Request agent to run script
 
-**Source:** Script TBD
+**Workflow:** Review all fields have values in TDD → then proceed to Test 3
+
+**Source:** `/src/features/report-builder/store/reportBuilderStore.ts` - `loadFullTestData()`
 
 ---
 
-### Test 3 - User Inputs + Calc
+### Test 3 - Production Flow (User Inputs + Calc)
+
+**Purpose:** Verify full production flow works
 
 1. Script: `testScriptUserInputsCalc` reads from `TestDataSet1`
-2. Loads only USER INPUT data to the App's Fields (Report Builder Editor Panel), then runs calc engine
+2. Loads only USER INPUT data to App Fields, then runs calc engine
 3. **How to trigger:**
-   - a: Request agent to run the script
-   - b: TDD page → 'Test Report' → 'Preview Builder'
+   - a: TDD page → 'Test Report' → 'View in Report'
+   - b: Request agent to run script
 
-**Source:** `/src/features/report-builder/store/reportBuilderStore.ts` - `loadUserInputsOnly()`
+**Source:** `/src/features/report-builder/store/reportBuilderStore.ts` - `testScriptUserInputsCalc()`
 
 ---
 
-### Summary: Data Flow Per Test
+### Summary: Data Flow
 
-| Test | Data Flow |
-|------|-----------|
-| Test 1 | Baked into HTML (`data-sample` attributes) |
-| Test 2 | Script → Template direct |
-| Test 3 | Script → App Fields (Editor Panel) → Calc Engine → Template |
+| Step | What it tests | Data Flow |
+|------|---------------|-----------|
+| Test 1 | ID placement on page | Baked into HTML (`data-sample`) |
+| Test 2 | ID exists in store | Script → App Fields (TDD review) |
+| Test 3 | Full production flow | Script → App Fields → Calc Engine → Template |
+
+**Two ways data reaches template:**
+- Test 1: Hardcoded in HTML
+- Test 3: App Fields → Calc → Template
+
+---
+
+## Step 4 - Debug (When Field Doesn't Work)
+
+If a field doesn't display correctly, check these three locations for the SAME field ID:
+
+| Check | File | What to look for |
+|-------|------|------------------|
+| 1. Registry | `fieldRegistry.ts` | Is ID defined? |
+| 2. Test Data | `TestDataSet1.ts` | Does test data have this ID? |
+| 3. Template | `Report-MF-template.html` | Does template have `{{field-id}}`? |
+
+**Quick debug commands:**
+```bash
+# Check all three files for a field ID
+grep "'city'" src/features/report-builder/schema/fieldRegistry.ts
+grep '"city"' src/features/report-builder/data/TestDataSet1.ts
+grep '{{city}}' public/Report-MF-template.html
+```
+
+**Common issues:**
+- ID mismatch (typo, different casing)
+- Field in registry but not in EditPanel layout
+- Field in test data but wrong key name
 
 ---
 
 ## TDD Page Control Panel (`/test-input`)
 
-**Location:** Top bar with colored buttons
-
-| Button | Color | What it does |
-|--------|-------|--------------|
+| Button | Color | Action |
+|--------|-------|--------|
 | **Refresh** | Gray | Hard page reload |
-| **Test Report** | Blue | Runs Test 3 - loads user-input fields, runs calc engine |
+| **Load Test Data** | - | Test 2 - loads all fields to App Fields |
+| **Test Report** | Blue | Test 3 - user inputs + calc engine |
 | **Designer Mode** | Purple | Enables Test 1 toggle in template |
-| **Preview in Builder** | Green | Navigates to `/mock-builder` with current data |
+| **Preview in Builder** | Green | View in `/mock-builder` |
 
 **Stats bar shows:**
 - Mapped: X (fields with values)

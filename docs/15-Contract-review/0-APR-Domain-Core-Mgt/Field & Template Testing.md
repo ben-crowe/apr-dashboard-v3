@@ -103,8 +103,7 @@ All tests use **TestDataSet1** - same data source.
 1. `TestDataSet1` values hardcoded as `data-sample` attributes in template
 2. Toggle switch swaps between `{{field-id}}` and sample values
 3. **How to trigger:**
-   - a: Toggle switch in template header frame
-   - b: TDD page → 'Designer Mode' → 'Preview Builder'
+   - Toggle switch in template header frame (in Report Builder)
 
 **Example:**
 ```html
@@ -119,12 +118,12 @@ All tests use **TestDataSet1** - same data source.
 
 ### Test 2 - TDD ID Test (Load All Fields)
 
-**Purpose:** Verify field IDs exist in App Fields and can accept values
+**Purpose:** Verify field IDs exist in TDD fields and can accept values
 
 1. Script: `loadFullTestData` reads from `TestDataSet1`
-2. Loads ALL fields into App Fields (TDD page) for review
+2. Loads ALL fields into TDD page fields for review
 3. **How to trigger:**
-   - a: TDD page → 'Load Test Data' button
+   - a: TDD page → 'TDD Load All Fields' button
    - b: Request agent to run script
 
 **Workflow:** Review all fields have values in TDD → then proceed to Test 3
@@ -138,9 +137,9 @@ All tests use **TestDataSet1** - same data source.
 **Purpose:** Verify full production flow works
 
 1. Script: `testScriptUserInputsCalc` reads from `TestDataSet1`
-2. Loads only USER INPUT data to App Fields, then runs calc engine
+2. Loads only USER INPUT data to TDD fields, then runs calc engine
 3. **How to trigger:**
-   - a: TDD page → 'Test Report' → 'View in Report'
+   - a: TDD page → 'Report DataSet1' → 'View Report'
    - b: Request agent to run script
 
 **Source:** `/src/features/report-builder/store/reportBuilderStore.ts` - `testScriptUserInputsCalc()`
@@ -188,19 +187,25 @@ grep '{{city}}' public/Report-MF-template.html
 
 ## TDD Page Control Panel (`/test-input`)
 
-| Button | Color | Action |
-|--------|-------|--------|
-| **Refresh** | Gray | Hard page reload |
-| **Load Test Data** | - | Test 2 - loads all fields to App Fields |
-| **Test Report** | Blue | Test 3 - user inputs + calc engine |
-| **Designer Mode** | Purple | Enables Test 1 toggle in template |
-| **Preview in Builder** | Green | View in `/mock-builder` |
+| Button | Color | Script/Action | Purpose |
+|--------|-------|---------------|---------|
+| **Refresh** | Gray | Page reload | Hard refresh |
+| **TDD Load All Fields** | Blue | `loadFullTestData()` | Test 2 - loads ALL fields into TDD page fields for review |
+| **Report DataSet1** | Green | `testScriptUserInputsCalc()` + filter | Loads DataSet1 user-inputs → calc engine → filters TDD to show only DataSet1 fields → brightens View Report |
+| **View Report →** | Green (dim until dataset selected) | `navigate('/mock-builder')` | JUST navigates to Report Builder (no script - data already loaded) |
+
+**Key Design Decision:**
+- Each dataset button (Report DataSet1, future DataSet2, etc.) loads its own data
+- View Report is JUST a navigation link - doesn't know/care which dataset was loaded
+- This allows multiple test datasets without changing the View Report button
 
 **Stats bar shows:**
 - Mapped: X (fields with values)
-- Empty: X (fields in App Fields but no value)
-- Missing: X (fields in registry but not in App Fields)
+- Empty: X (fields in TDD but no value)
+- Missing: X (fields in registry but not in TDD)
 - Coverage: X%
+
+**Note:** Stats update when dataset is selected - shows only that dataset's field counts.
 
 **Source:** `/src/features/test-input/TestInputDashboard.tsx`
 

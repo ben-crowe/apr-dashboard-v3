@@ -837,9 +837,16 @@ const TestInputDashboard: React.FC = () => {
                 {activeTestMode === 'test-report' && <span className="ml-1">&#10003;</span>}
               </Button>
               <Button
-                onClick={() => {
-                  setSelectedDataset('testDataSet1');
-                  console.log('Report DataSet1: Dataset filter activated');
+                onClick={async () => {
+                  try {
+                    console.log('Report DataSet1: Loading user-inputs, running calc engine...');
+                    await testScriptUserInputsCalc();
+                    setSelectedDataset('testDataSet1');
+                    console.log('Report DataSet1: Data loaded, TDD filtered');
+                  } catch (error) {
+                    console.error('Error in Report DataSet1:', error);
+                    alert('Error: ' + String(error));
+                  }
                 }}
                 variant={selectedDataset === 'testDataSet1' ? 'default' : 'outline'}
                 size="sm"
@@ -873,16 +880,9 @@ const TestInputDashboard: React.FC = () => {
                 {selectedDataset === 'testDataSet1' && <span className="ml-1">&#10003;</span>}
               </Button>
               <Button
-                onClick={async () => {
-                  try {
-                    console.log('View Report: Loading user-input fields, running calc engine...');
-                    await testScriptUserInputsCalc();
-                    console.log('View Report: Calculations complete - navigating to mock-builder...');
-                    navigate('/mock-builder');
-                  } catch (error) {
-                    console.error('Error in View Report:', error);
-                    alert('Error: ' + String(error));
-                  }
+                onClick={() => {
+                  console.log('View Report: Navigating to mock-builder...');
+                  navigate('/mock-builder');
                 }}
                 variant="outline"
                 size="sm"

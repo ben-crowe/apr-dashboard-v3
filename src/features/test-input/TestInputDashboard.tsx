@@ -9,6 +9,7 @@ import {
   FieldDefinition
 } from '../report-builder/schema/fieldRegistry';
 import { useReportBuilderStore } from '../report-builder/store/reportBuilderStore';
+import { testDataSet1 } from '../report-builder/data/TestDataSet1';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -38,6 +39,12 @@ const TestInputDashboard: React.FC = () => {
   const [expandedPhotoSubsections, setExpandedPhotoSubsections] = useState<Set<string>>(new Set());
   const [expandedAllCalcOutputSections, setExpandedAllCalcOutputSections] = useState<Set<string>>(new Set());
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
+  const [selectedDataset, setSelectedDataset] = useState<string | null>(null);
+
+  // Dataset field IDs for filtering
+  const datasetFieldIds = useMemo(() =>
+    selectedDataset ? new Set(Object.keys(testDataSet1)) : null,
+  [selectedDataset]);
 
   // Initialize store AND load test data on mount
   // Test data should load by default so we can see which fields have values vs empty
@@ -157,37 +164,37 @@ const TestInputDashboard: React.FC = () => {
     // Cover Section
     'cover-photo': { managedFieldId: 'img-cover-photo', destination: '01 - Cover & Signature', section: 'image-mgt', subsection: 'cover-images' },
     'appraiser1-signature': { managedFieldId: 'img-signature', destination: '01 - Cover & Signature', section: 'image-mgt', subsection: 'cover-images' },
-    
+
     // Photos Section (group headers - can be ignored or mapped to their subsections)
     'photos-exterior': { managedFieldId: 'img-exterior-1', destination: '07 - Property Photographs', section: 'image-mgt', subsection: 'exterior-photos' },
     'photos-street': { managedFieldId: 'img-street-1', destination: '07 - Property Photographs', section: 'image-mgt', subsection: 'street-photos' },
     'photos-common': { managedFieldId: 'img-common-1', destination: '07 - Property Photographs', section: 'image-mgt', subsection: 'common-photos' },
     'photos-units': { managedFieldId: 'img-unit-1', destination: '07 - Property Photographs', section: 'image-mgt', subsection: 'unit-photos' },
     'photos-systems': { managedFieldId: 'img-systems-1', destination: '07 - Property Photographs', section: 'image-mgt', subsection: 'systems-photos' },
-    
+
     // Site Section
     'site-plan-image': { managedFieldId: 'img-site-plan-1', destination: '03 - Location Maps', section: 'image-mgt', subsection: 'maps' },
-    
+
     // Zone Section
     'zoning-map': { managedFieldId: 'img-zoning-map', destination: '03 - Location Maps', section: 'image-mgt', subsection: 'maps' },
-    
+
     // Cert Section
     'cert-signature': { managedFieldId: 'img-signature', destination: '01 - Cover & Signature', section: 'image-mgt', subsection: 'cover-images' },
-    
+
     // Sales Comparison Section - Maps
     'comp1-map': { managedFieldId: 'comp1-map', destination: '10 - Sales Comp Maps', section: 'image-mgt', subsection: 'comp-maps' },
     'comp2-map': { managedFieldId: 'comp2-map', destination: '10 - Sales Comp Maps', section: 'image-mgt', subsection: 'comp-maps' },
     'comp3-map': { managedFieldId: 'comp3-map', destination: '10 - Sales Comp Maps', section: 'image-mgt', subsection: 'comp-maps' },
     'comp4-map': { managedFieldId: 'comp4-map', destination: '10 - Sales Comp Maps', section: 'image-mgt', subsection: 'comp-maps' },
     'comp5-map': { managedFieldId: 'comp5-map', destination: '10 - Sales Comp Maps', section: 'image-mgt', subsection: 'comp-maps' },
-    
+
     // Sales Comparison Section - Photos
     'comp1-photo': { managedFieldId: 'comp1-photo', destination: '09 - Sales Comp Photos', section: 'image-mgt', subsection: 'comp-photos' },
     'comp2-photo': { managedFieldId: 'comp2-photo', destination: '09 - Sales Comp Photos', section: 'image-mgt', subsection: 'comp-photos' },
     'comp3-photo': { managedFieldId: 'comp3-photo', destination: '09 - Sales Comp Photos', section: 'image-mgt', subsection: 'comp-photos' },
     'comp4-photo': { managedFieldId: 'comp4-photo', destination: '09 - Sales Comp Photos', section: 'image-mgt', subsection: 'comp-photos' },
     'comp5-photo': { managedFieldId: 'comp5-photo', destination: '09 - Sales Comp Photos', section: 'image-mgt', subsection: 'comp-photos' },
-    
+
     // Rent Analysis Section
     'rental-comparables-map': { managedFieldId: 'rental-comparables-map', destination: '11 - Rental Comp Photos', section: 'image-mgt', subsection: 'rental-comp-photos' }
   };
@@ -245,11 +252,11 @@ const TestInputDashboard: React.FC = () => {
     return [...fields].sort((a, b) => {
       const statusA = getFieldStatus(a);
       const statusB = getFieldStatus(b);
-      
+
       // Mapped fields come first
       if (statusA.status === 'mapped' && statusB.status !== 'mapped') return -1;
       if (statusA.status !== 'mapped' && statusB.status === 'mapped') return 1;
-      
+
       // Within same status, maintain original order
       return 0;
     });
@@ -275,12 +282,15 @@ const TestInputDashboard: React.FC = () => {
     fieldRegistry.forEach(field => {
       // Skip fields from hidden sections (consolidated into accordions)
       if (hiddenSections.includes(field.section)) return;
-      
+
       // Only count user-input fields
       if (field.inputSource !== 'user-input') return;
-      
+
       // Only count fields that exist in the store
       if (!storeFieldIds.has(field.storeId)) return;
+
+      // Filter by dataset if selected
+      if (datasetFieldIds && !datasetFieldIds.has(field.storeId)) return;
 
       total++;
       const status = getFieldStatus(field);
@@ -292,7 +302,7 @@ const TestInputDashboard: React.FC = () => {
     const percentage = total > 0 ? Math.round((mapped / total) * 100) : 0;
 
     return { total, mapped, empty, missing, percentage };
-  }, [sections]);
+  }, [sections, datasetFieldIds]);
 
   // Log on mount and stats change
   useEffect(() => {
@@ -823,91 +833,84 @@ const TestInputDashboard: React.FC = () => {
                 title="Test 2: Load ALL fields from TestDataSet1 direct to App Fields for TDD review"
               >
                 <Database className="w-3 h-3" />
-                Load All Fields
-                {activeTestMode === 'test-report' && <span className="ml-1">✓</span>}
+                TDD Load All Fields
+                {activeTestMode === 'test-report' && <span className="ml-1">&#10003;</span>}
               </Button>
               <Button
                 onClick={() => {
-                  // Set mode to update button state immediately
-                  setTestMode('designer');
-                  console.log('Designer Mode: Activated - use toggle or Load Full Test Data in Report Builder');
+                  setSelectedDataset('testDataSet1');
+                  console.log('Report DataSet1: Dataset filter activated');
                 }}
-                variant={activeTestMode === 'designer' ? 'default' : 'outline'}
+                variant={selectedDataset === 'testDataSet1' ? 'default' : 'outline'}
                 size="sm"
-                disabled={activeTestMode === 'test-report'}
                 className={`gap-2 text-white border transition-colors ${
-                  activeTestMode === 'designer'
-                    ? 'bg-purple-600 hover:bg-purple-500 font-semibold shadow-md'
-                    : activeTestMode === 'test-report'
-                    ? 'opacity-50 cursor-not-allowed'
+                  selectedDataset === 'testDataSet1'
+                    ? 'bg-green-600 hover:bg-green-500 font-semibold shadow-md'
                     : ''
                 }`}
                 style={{
-                  backgroundColor: activeTestMode === 'designer' ? '#9333ea' : activeTestMode === 'test-report' ? '#1f1f1f' : '#2a2a2a',
-                  borderColor: activeTestMode === 'designer' ? '#9333ea' : activeTestMode === 'test-report' ? '#4b5563' : '#4b5563'
+                  backgroundColor: selectedDataset === 'testDataSet1' ? '#16a34a' : '#2a2a2a',
+                  borderColor: selectedDataset === 'testDataSet1' ? '#16a34a' : '#4b5563'
                 }}
                 onMouseEnter={(e) => {
-                  if (activeTestMode === 'designer') {
-                    e.currentTarget.style.backgroundColor = '#a855f7';
-                  } else if (activeTestMode !== 'test-report') {
+                  if (selectedDataset === 'testDataSet1') {
+                    e.currentTarget.style.backgroundColor = '#22c55e';
+                  } else {
                     e.currentTarget.style.backgroundColor = '#333333';
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (activeTestMode === 'designer') {
-                    e.currentTarget.style.backgroundColor = '#9333ea';
-                  } else if (activeTestMode !== 'test-report') {
+                  if (selectedDataset === 'testDataSet1') {
+                    e.currentTarget.style.backgroundColor = '#16a34a';
+                  } else {
                     e.currentTarget.style.backgroundColor = '#2a2a2a';
                   }
                 }}
-                title="Designer Mode - Use toggle for sample data or Load Full Test Data button in Report Builder"
+                title="Filter to show only fields in TestDataSet1"
               >
                 <Database className="w-3 h-3" />
-                Designer Mode
-                {activeTestMode === 'designer' && <span className="ml-1">✓</span>}
+                Report DataSet1
+                {selectedDataset === 'testDataSet1' && <span className="ml-1">&#10003;</span>}
               </Button>
               <Button
                 onClick={async () => {
                   try {
-                    console.log('Test 3: Loading user-input fields, running calc engine...');
+                    console.log('View Report: Loading user-input fields, running calc engine...');
                     await testScriptUserInputsCalc();
-                    console.log('User Test: Calculations complete - navigating to mock-builder...');
+                    console.log('View Report: Calculations complete - navigating to mock-builder...');
                     navigate('/mock-builder');
                   } catch (error) {
-                    console.error('Error in User Test:', error);
+                    console.error('Error in View Report:', error);
                     alert('Error: ' + String(error));
                   }
                 }}
                 variant="outline"
                 size="sm"
+                disabled={selectedDataset === null}
                 className={`gap-2 text-white border transition-colors ${
-                  activeTestMode !== 'none'
+                  selectedDataset !== null
                     ? 'bg-green-500 hover:bg-green-400 font-semibold shadow-md'
-                    : ''
+                    : 'opacity-50 cursor-not-allowed'
                 }`}
                 style={{
-                  backgroundColor: activeTestMode !== 'none' ? '#22c55e' : '#2a2a2a',
-                  borderColor: activeTestMode !== 'none' ? '#22c55e' : '#4b5563'
+                  backgroundColor: selectedDataset !== null ? '#22c55e' : '#1f1f1f',
+                  borderColor: selectedDataset !== null ? '#22c55e' : '#4b5563'
                 }}
                 onMouseEnter={(e) => {
-                  if (activeTestMode !== 'none') {
+                  if (selectedDataset !== null) {
                     e.currentTarget.style.backgroundColor = '#4ade80';
-                  } else {
-                    e.currentTarget.style.backgroundColor = '#333333';
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (activeTestMode !== 'none') {
+                  if (selectedDataset !== null) {
                     e.currentTarget.style.backgroundColor = '#22c55e';
-                  } else {
-                    e.currentTarget.style.backgroundColor = '#2a2a2a';
                   }
                 }}
-                title="Test 3: Load user-inputs, run calc engine, then navigate to mock-builder"
+                title="Load user-inputs, run calc engine, then navigate to mock-builder"
               >
                 <ExternalLink className="w-3 h-3" />
-                User Test
-                {activeTestMode !== 'none' && <span className="ml-1">→</span>}
+                View Report
+                {selectedDataset !== null && <span className="ml-1">&rarr;</span>}
               </Button>
             </div>
           </div>
@@ -929,7 +932,9 @@ const TestInputDashboard: React.FC = () => {
               return 0;
             })
             .map(sectionId => {
-            const allFields = getFieldsBySection(sectionId).filter(f => f.inputSource === 'user-input');
+            const allFields = getFieldsBySection(sectionId)
+              .filter(f => f.inputSource === 'user-input')
+              .filter(f => !datasetFieldIds || datasetFieldIds.has(f.storeId));
             if (allFields.length === 0) return null;
 
             // Sort fields: mapped first, then empty/missing at bottom
@@ -987,7 +992,7 @@ const TestInputDashboard: React.FC = () => {
                                     ) : (
                                       <ChevronRight className="w-5 h-5" style={{ color: '#9ca3af' }} />
                                     )}
-                                    <h3 className="text-base font-bold text-white">📥 INPUTS</h3>
+                                    <h3 className="text-base font-bold text-white">INPUTS</h3>
                                     <Badge className="text-gray-300 border-gray-500" style={{ backgroundColor: '#1f1f1f' }}>User Entry Fields</Badge>
                                   </div>
                                 </div>
@@ -996,10 +1001,11 @@ const TestInputDashboard: React.FC = () => {
                                 <div className="p-3 space-y-2" style={{ backgroundColor: '#1f1f1f' }}>
                                   {/* Input subsections */}
                                   {['calc-unit-mix', 'calc-other-income', 'calc-vacancy', 'calc-expenses', 'calc-cap', 'calc-adjustments'].map(subsectionId => {
-                                    const subsectionFields = getFieldsBySubsection(sectionId, subsectionId);
-                                    const userInputFields = subsectionFields.filter(f => f.inputSource === 'user-input');
+                                    const subsectionFields = getFieldsBySubsection(sectionId, subsectionId)
+                                      .filter(f => f.inputSource === 'user-input')
+                                      .filter(f => !datasetFieldIds || datasetFieldIds.has(f.storeId));
 
-                                    if (userInputFields.length === 0) return null;
+                                    if (subsectionFields.length === 0) return null;
 
                                     const subsectionLabels: Record<string, string> = {
                                       'calc-unit-mix': 'Unit Mix',
@@ -1027,14 +1033,14 @@ const TestInputDashboard: React.FC = () => {
                                                 )}
                                                 <h4 className="text-sm font-semibold text-white">{subsectionLabels[subsectionId] || subsectionId}</h4>
                                               </div>
-                                              <Badge variant="outline" className="text-xs text-gray-300 border-gray-500">{userInputFields.length} inputs</Badge>
+                                              <Badge variant="outline" className="text-xs text-gray-300 border-gray-500">{subsectionFields.length} inputs</Badge>
                                             </div>
                                           </CollapsibleTrigger>
                                           <CollapsibleContent>
                                             <div className="p-3" style={{ backgroundColor: '#1f1f1f' }}>
                                               <table className="w-full text-sm">
                                                 <tbody>
-                                                  {userInputFields.map(field => {
+                                                  {subsectionFields.map(field => {
                                                     const statusInfo = getFieldStatus(field);
                                                     return (
                                                       <tr key={field.id} className="border-b hover:bg-[#333333]" style={{ borderColor: '#4b5563' }}>
@@ -1072,7 +1078,7 @@ const TestInputDashboard: React.FC = () => {
                                     ) : (
                                       <ChevronRight className="w-5 h-5" style={{ color: '#9ca3af' }} />
                                     )}
-                                    <h3 className="text-base font-bold text-white">📤 OUTPUTS</h3>
+                                    <h3 className="text-base font-bold text-white">OUTPUTS</h3>
                                     <Badge className="text-gray-300 border-gray-500" style={{ backgroundColor: '#1f1f1f' }}>
                                       {Object.values(allCalculatedFields).flat().length} Calculated Fields
                                     </Badge>
@@ -1639,7 +1645,7 @@ const TestInputDashboard: React.FC = () => {
                                     <h3 className="text-sm font-semibold text-white">11 - RENTAL COMP PHOTOS</h3>
                                   </div>
                                   <Badge variant="outline" className="text-xs ml-auto text-gray-300 border-gray-500">
-                                    {getFieldsBySubsection(sectionId, 'rental-comp-photos').filter(f => f.inputSource === 'user-input').length + 
+                                    {getFieldsBySubsection(sectionId, 'rental-comp-photos').filter(f => f.inputSource === 'user-input').length +
                                      (getFieldsBySubsection('rent-analysis', 'rental-comps').find(f => f.id === 'rental-comparables-map' && f.inputSource === 'user-input') ? 1 : 0)} fields
                                   </Badge>
                                 </div>

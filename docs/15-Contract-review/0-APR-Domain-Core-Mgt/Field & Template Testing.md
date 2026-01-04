@@ -243,6 +243,49 @@ Template uses `getFieldValue(coverSection, 'field-id')` but some fields are regi
 
 ---
 
+## The Architecture Disconnect (CRITICAL)
+
+### Original Architecture (Dynamic - Worked Well)
+```
+fieldRegistry.ts → Store → EditPanel → Template
+     ↓               ↓         ↓           ↓
+  Source of      Dynamic    Dynamic     Renders
+   Truth         build      sync        fields
+```
+- TDD page loaded test data by default
+- EditPanel auto-synced from registry
+- Adding field to registry = appears in EditPanel automatically
+- Fields guaranteed in sync
+
+### Current Architecture (Broken Sync)
+```
+fieldRegistry.ts → Store (DYNAMIC) → EditPanel (STATIC) → Template
+     ↓                  ↓                  ↓                 ↓
+  1,687 fields    buildAllSections    *_FIELD_LAYOUT      Renders
+                  FromRegistry()      hardcoded arrays
+```
+
+**The Problem:**
+- **Store:** Uses `buildAllSectionsFromRegistry()` - DYNAMIC from registry
+- **EditPanel:** Uses `HOME_FIELD_LAYOUT`, `COVER_FIELD_LAYOUT`, etc. - HARDCODED
+- Adding field to registry creates it in store but NOT in EditPanel
+- User can't see or edit fields that exist in registry but not in layout configs
+
+### Why This Happened
+Dynamic sync was disabled to allow manual field layout/positioning control.
+The trade-off: Flexibility in UI layout vs automatic field sync.
+
+### Files Involved
+| File | Role | Dynamic? |
+|------|------|----------|
+| `fieldRegistry.ts` | Source of truth (1,687 fields) | N/A |
+| `reportBuilderStore.ts` | Store sections | YES - `buildAllSectionsFromRegistry()` |
+| `EditPanel.tsx` | UI field display | NO - `*_FIELD_LAYOUT` configs |
+| `northBattlefordTestData.ts` | Test values | N/A |
+| Template (HTML) | Renders `{{field-id}}` | N/A |
+
+---
+
 ## The Verification Gap
 
 Previous agent verification checked:
@@ -253,8 +296,9 @@ Previous agent verification checked:
 - "Does template use the SAME field ID as registry?"
 - "Does test data use the SAME key as template expects?"
 - "Can the lookup function find it in the right section?"
+- **"Is the field in the EditPanel hardcoded layout?"** (NEW - Critical!)
 
-### Proper Verification Protocol
+### Proper Verification Protocol (Updated)
 
 For each field on a page:
 
@@ -262,9 +306,23 @@ For each field on a page:
 2. **Check registry** - Is that exact ID in fieldRegistry.ts?
 3. **Check test data** - Is that exact key in northBattlefordTestData.ts?
 4. **Check section alignment** - Does template lookup match registry section?
-5. **Visual verification** - Does the field show data in the actual rendered preview?
+5. **Check EditPanel layout** - Is field in the `*_FIELD_LAYOUT` config for its section?
+6. **Visual verification** - Does the field show data in the actual rendered preview?
 
-Only when ALL FIVE pass is a field truly "mapped and working."
+Only when ALL SIX pass is a field truly "mapped and working."
+
+### Quick Check Commands
+
+```bash
+# 1. Check if field exists in registry
+grep "'field-id'" src/features/report-builder/schema/fieldRegistry.ts
+
+# 2. Check if field has test data
+grep '"field-id"' src/features/report-builder/data/northBattlefordTestData.ts
+
+# 3. Check if field is in EditPanel layout (CRITICAL!)
+grep "'field-id'" src/features/report-builder/components/EditPanel/EditPanel.tsx
+```
 
 ---
 

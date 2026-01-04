@@ -15,14 +15,16 @@ import {
   DragStartEvent,
   DragEndEvent,
 } from '@dnd-kit/core';
+import { useQueryClient } from '@tanstack/react-query';
 import { ImageUploadZone } from './ImageUploadZone';
 import { FiltersPanel } from './FiltersPanel';
 import { ImageGrid } from './ImageGrid';
 import { LayoutBuilder } from './LayoutBuilder';
 import { ImageEditorModal } from './ImageEditorModal';
-import { useJobImages } from '../hooks/useJobImages';
+import { useJobImages, jobImagesKeys } from '../hooks/useJobImages';
 import { useLayouts, useAssignImageToSlot, useClearSlot } from '../hooks/useLayouts';
 import type { ImageFilters, JobImage } from '../types';
+import { useSignedImageUrl } from '@/utils/supabaseStorage';
 
 interface ImageConfiguratorDemoProps {
   jobId: string;
@@ -33,6 +35,8 @@ export function ImageConfiguratorDemo({
   jobId,
   className = '',
 }: ImageConfiguratorDemoProps) {
+  const queryClient = useQueryClient();
+
   // Filter state
   const [filters, setFilters] = useState<ImageFilters>({});
 
@@ -113,11 +117,12 @@ export function ImageConfiguratorDemo({
     setEditorImageId(null);
   }, []);
 
-  // Upload complete handler
+  // Upload complete handler - invalidate query to show new images
   const handleUploadComplete = useCallback((newIds: string[]) => {
     console.log('Uploaded images:', newIds);
-    // Optionally auto-select new uploads
-  }, []);
+    // Invalidate the images query to refresh the grid
+    queryClient.invalidateQueries({ queryKey: jobImagesKeys.lists() });
+  }, [queryClient]);
 
   // DnD handlers for cross-panel drag
   const handleDragStart = useCallback((event: DragStartEvent) => {
@@ -245,18 +250,7 @@ export function ImageConfiguratorDemo({
 
       {/* Drag overlay */}
       <DragOverlay>
-        {draggedImage && (
-          <div className="w-32 h-24 rounded-lg overflow-hidden shadow-2xl border-2 border-blue-500 opacity-80">
-            <img
-              src={getSupabasePublicUrl(
-                draggedImage.thumbnail_path || draggedImage.storage_path,
-                { width: 200 }
-              )}
-              alt={draggedImage.original_filename}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        )}
+        {draggedImage && <DragOverlayImage image={draggedImage} />}
       </DragOverlay>
 
       {/* Image editor modal */}
@@ -271,18 +265,22 @@ export function ImageConfiguratorDemo({
   );
 }
 
-// Helper for Supabase URL
-function getSupabasePublicUrl(
-  path: string,
-  options?: { width?: number }
-): string {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const bucket = path.includes('processed') ? 'appraisal-processed' : 'appraisal-raw';
-  let url = `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
-  if (options?.width) {
-    url += `?width=${options.width}`;
-  }
-  return url;
+// Helper component for drag overlay image with signed URL
+function DragOverlayImage({ image }: { image: JobImage }) {
+  const path = image.thumbnail_path || image.storage_path;
+  const imageUrl = useSignedImageUrl(path, { width: 200 });
+
+  if (!imageUrl) return null;
+
+  return (
+    <div className="w-32 h-24 rounded-lg overflow-hidden shadow-2xl border-2 border-blue-500 opacity-80">
+      <img
+        src={imageUrl}
+        alt={image.original_filename}
+        className="w-full h-full object-cover"
+      />
+    </div>
+  );
 }
 
 export default ImageConfiguratorDemo;

@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { JobImage, ImageFilters, ImageCategory } from '../types';
 import { useJobImages, getEffectiveCategory, getQualityColor, needsReview } from '../hooks/useJobImages';
+import { useSignedImageUrl } from '@/utils/supabaseStorage';
 
 interface ImageGridProps {
   jobId: string;
@@ -143,12 +144,9 @@ function DraggableImageTile({
   const showReviewBadge = needsReview(image);
   const isPlaced = !!image.page_assignment;
 
-  // Build thumbnail URL (use Supabase transform if available, otherwise use path)
-  const thumbnailUrl = image.thumbnail_path
-    ? getSupabasePublicUrl(image.thumbnail_path, { width: 300 })
-    : image.storage_path
-    ? getSupabasePublicUrl(image.storage_path, { width: 300 })
-    : '/placeholder-image.jpg';
+  // Get signed URL for thumbnail (private bucket requires signed URLs)
+  const thumbnailPath = image.thumbnail_path || image.storage_path;
+  const thumbnailUrl = useSignedImageUrl(thumbnailPath, { width: 300 }) || '/placeholder-image.jpg';
 
   return (
     <div
@@ -294,30 +292,5 @@ function DraggableImageTile({
   );
 }
 
-// Helper to build Supabase public URL with transformations
-function getSupabasePublicUrl(
-  path: string,
-  options?: { width?: number; height?: number; quality?: number }
-): string {
-  // Get Supabase URL from env
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const bucket = path.includes('processed') ? 'appraisal-processed' : 'appraisal-raw';
-
-  let url = `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
-
-  // Add transformation params if provided
-  if (options) {
-    const params = new URLSearchParams();
-    if (options.width) params.set('width', String(options.width));
-    if (options.height) params.set('height', String(options.height));
-    if (options.quality) params.set('quality', String(options.quality));
-
-    if (params.toString()) {
-      url += `?${params.toString()}`;
-    }
-  }
-
-  return url;
-}
 
 export default ImageGrid;

@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import type { JobImage } from '../types';
 import { useSaveImageEdits } from '../hooks/useJobImages';
+import { useSignedImageUrl } from '@/utils/supabaseStorage';
 
 interface ImageEditorModalProps {
   image: JobImage;
@@ -152,10 +153,8 @@ export function ImageEditorModal({
     onClose();
   }, [image.id, cropData, adjustments, saveEdits, onSave, onClose]);
 
-  // Build image URL
-  const imageUrl = image.storage_path
-    ? getSupabasePublicUrl(image.storage_path)
-    : '/placeholder-image.jpg';
+  // Get signed URL for image (private bucket requires signed URLs)
+  const imageUrl = useSignedImageUrl(image.storage_path) || '/placeholder-image.jpg';
 
   // Build CSS filter string
   const filterStyle = `
@@ -444,11 +443,5 @@ export function ImageEditorModal({
   );
 }
 
-// Helper to build Supabase public URL
-function getSupabasePublicUrl(path: string): string {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const bucket = path.includes('processed') ? 'appraisal-processed' : 'appraisal-raw';
-  return `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
-}
 
 export default ImageEditorModal;

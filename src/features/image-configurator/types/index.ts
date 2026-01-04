@@ -202,10 +202,10 @@ export const STORAGE_BUCKETS = {
 
 // Storage path helpers
 export const storagePaths = {
-  raw: (jobId: string, fileId: string) => `uploads/${jobId}/raw/${fileId}.jpg`,
-  thumb: (jobId: string, fileId: string) => `processed/${jobId}/thumb/${fileId}.jpg`,
-  web: (jobId: string, fileId: string) => `processed/${jobId}/web/${fileId}.jpg`,
-  print: (jobId: string, fileId: string) => `processed/${jobId}/print/${fileId}.jpg`,
+  raw: (jobId: string, fileId: string, ext: string = 'jpg') => `uploads/${jobId}/raw/${fileId}.${ext}`,
+  thumb: (jobId: string, fileId: string, ext: string = 'jpg') => `processed/${jobId}/thumb/${fileId}.${ext}`,
+  web: (jobId: string, fileId: string, ext: string = 'jpg') => `processed/${jobId}/web/${fileId}.${ext}`,
+  print: (jobId: string, fileId: string, ext: string = 'jpg') => `processed/${jobId}/print/${fileId}.${ext}`,
 };
 
 // Default layout templates

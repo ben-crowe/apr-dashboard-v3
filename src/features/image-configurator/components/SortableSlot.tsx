@@ -8,6 +8,7 @@ import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { X, ImagePlus, Edit3 } from 'lucide-react';
 import type { PageLayoutSlot, JobImage } from '../types';
+import { useSignedImageUrl } from '@/utils/supabaseStorage';
 
 interface SortableSlotProps {
   slot: PageLayoutSlot;
@@ -35,10 +36,9 @@ export function SortableSlot({
 
   const isHighlighted = isOverProp ?? isOverDrop;
 
-  // Build image URL if we have an image
-  const imageUrl = image
-    ? getSupabasePublicUrl(image.thumbnail_path || image.storage_path, { width: 400 })
-    : null;
+  // Get signed URL for image (private bucket requires signed URLs)
+  const imagePath = image ? (image.thumbnail_path || image.storage_path) : null;
+  const imageUrl = useSignedImageUrl(imagePath, { width: 400 });
 
   return (
     <div
@@ -140,28 +140,5 @@ export function SortableSlot({
   );
 }
 
-// Helper to build Supabase public URL with transformations
-function getSupabasePublicUrl(
-  path: string,
-  options?: { width?: number; height?: number; quality?: number }
-): string {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const bucket = path.includes('processed') ? 'appraisal-processed' : 'appraisal-raw';
-
-  let url = `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
-
-  if (options) {
-    const params = new URLSearchParams();
-    if (options.width) params.set('width', String(options.width));
-    if (options.height) params.set('height', String(options.height));
-    if (options.quality) params.set('quality', String(options.quality));
-
-    if (params.toString()) {
-      url += `?${params.toString()}`;
-    }
-  }
-
-  return url;
-}
 
 export default SortableSlot;

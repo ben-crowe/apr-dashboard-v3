@@ -4,7 +4,7 @@
  * Displays page layouts with droppable slots
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -34,6 +34,7 @@ import {
   getSlotsForLayout,
 } from '../hooks/useLayouts';
 import type { PageLayout, PageLayoutSlot, JobImage, LayoutTemplate } from '../types';
+import { getSignedImageUrl } from '@/utils/supabaseStorage';
 
 interface LayoutBuilderProps {
   jobId: string;
@@ -71,6 +72,7 @@ export function LayoutBuilder({
   // Drag state
   const [activeId, setActiveId] = useState<string | null>(null);
   const [overSlotId, setOverSlotId] = useState<string | null>(null);
+  const [dragImageUrl, setDragImageUrl] = useState<string | null>(null);
 
   // Sensors for drag detection
   const sensors = useSensors(
@@ -106,9 +108,20 @@ export function LayoutBuilder({
   }, [layouts.length]);
 
   // Drag handlers
-  const handleDragStart = useCallback((event: DragStartEvent) => {
-    setActiveId(String(event.active.id));
-  }, []);
+  const handleDragStart = useCallback(async (event: DragStartEvent) => {
+    const activeIdStr = String(event.active.id);
+    setActiveId(activeIdStr);
+    
+    // Get signed URL for dragged image
+    const draggedImage = imageMap.get(activeIdStr);
+    if (draggedImage) {
+      const path = draggedImage.thumbnail_path || draggedImage.storage_path;
+      if (path) {
+        const signedUrl = await getSignedImageUrl(path, { width: 200 });
+        setDragImageUrl(signedUrl);
+      }
+    }
+  }, [imageMap]);
 
   const handleDragOver = useCallback((event: DragOverEvent) => {
     const overId = event.over?.id;
@@ -124,6 +137,7 @@ export function LayoutBuilder({
       const { active, over } = event;
       setActiveId(null);
       setOverSlotId(null);
+      setDragImageUrl(null);
 
       if (!over) return;
 
@@ -353,13 +367,10 @@ export function LayoutBuilder({
 
       {/* Drag overlay - shows dragged image */}
       <DragOverlay>
-        {activeImage && (
+        {activeImage && dragImageUrl && (
           <div className="w-32 h-24 rounded-lg overflow-hidden shadow-2xl border-2 border-blue-500 opacity-80">
             <img
-              src={getSupabasePublicUrl(
-                activeImage.thumbnail_path || activeImage.storage_path,
-                { width: 200 }
-              )}
+              src={dragImageUrl}
               alt={activeImage.original_filename}
               className="w-full h-full object-cover"
             />
@@ -370,26 +381,5 @@ export function LayoutBuilder({
   );
 }
 
-// Helper to build Supabase public URL
-function getSupabasePublicUrl(
-  path: string,
-  options?: { width?: number; height?: number }
-): string {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const bucket = path.includes('processed') ? 'appraisal-processed' : 'appraisal-raw';
-
-  let url = `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`;
-
-  if (options) {
-    const params = new URLSearchParams();
-    if (options.width) params.set('width', String(options.width));
-    if (options.height) params.set('height', String(options.height));
-    if (params.toString()) {
-      url += `?${params.toString()}`;
-    }
-  }
-
-  return url;
-}
 
 export default LayoutBuilder;

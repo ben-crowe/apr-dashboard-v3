@@ -42,7 +42,7 @@ export function ImageUploadZone({
     async (file: File): Promise<string | null> => {
       const fileId = uuid();
       const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
-      const storagePath = storagePaths.raw(jobId, fileId);
+      const storagePath = storagePaths.raw(jobId, fileId, fileExt);
 
       // Add to uploads list
       setUploads((prev) => [
@@ -56,15 +56,22 @@ export function ImageUploadZone({
       ]);
 
       try {
+        console.log('Uploading:', { bucket: STORAGE_BUCKETS.RAW, path: storagePath, type: file.type, size: file.size });
+
         // Upload to Supabase Storage
         const { data, error: uploadError } = await supabase.storage
           .from(STORAGE_BUCKETS.RAW)
           .upload(storagePath, file, {
             cacheControl: '3600',
             upsert: false,
+            contentType: file.type,
           });
 
-        if (uploadError) throw uploadError;
+        if (uploadError) {
+          console.error('Storage upload error:', uploadError);
+          throw uploadError;
+        }
+        console.log('Upload success:', data);
 
         updateUpload(fileId, { progress: 50, status: 'processing' });
 

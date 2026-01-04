@@ -13,6 +13,7 @@ import DiagnosticForm from "./pages/DiagnosticForm";
 import { SigningPage } from "./pages/SigningPage";
 import TestLOE from "./pages/TestLOE";
 import MockReportBuilder from "./pages/MockReportBuilder";
+import ImageTest from "./pages/ImageTest";
 import { TestInputDashboard } from "./features/test-input";
 import { CalculatorDemoPage } from "./features/calculator-demo-v4";
 import CalculatorWithPreview from "@/features/calculator-demo-v4/CalculatorWithPreview";
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/calculator-demo" element={<CalculatorDemoPage />} />
             <Route path="/calculator-preview" element={<CalculatorWithPreview />} />
             <Route path="/preview-master-test" element={<PreviewMasterWrapper />} />
+            <Route path="/image-test" element={<ImageTest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

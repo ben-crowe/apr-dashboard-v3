@@ -1853,6 +1853,66 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "subject-photo-8-caption": "Typical Hallway",
   "subject-photo-9": "/extracted-images/image20.jpeg",
   "subject-photo-9-caption": "Typical Stairway",
+  // ============================================================================
+  // CATEGORIZED IMAGE FIELDS (46 fields) - Added 2026-01-03
+  // ============================================================================
+  
+  // Exterior Photos
+  "img-exterior-1": "/extracted-images/image12.jpeg",
+  "img-exterior-1-caption": "Front exterior view",
+  "img-exterior-2": "/extracted-images/image13.jpeg",
+  "img-exterior-2-caption": "Side exterior view",
+  "img-exterior-3": "/extracted-images/image14.jpeg",
+  "img-exterior-3-caption": "Rear exterior view",
+  "img-exterior-4": "/extracted-images/image15.jpeg",
+  "img-exterior-4-caption": "Exterior detail",
+  "img-exterior-5": "/extracted-images/image16.jpeg",
+  "img-exterior-5-caption": "Exterior parking",
+  "img-exterior-6": "/extracted-images/image17.jpeg",
+  "img-exterior-6-caption": "Exterior landscaping",
+
+  // Street Photos
+  "img-street-1": "/extracted-images/image18.jpeg",
+  "img-street-1-caption": "Street view north",
+  "img-street-2": "/extracted-images/image19.jpeg",
+  "img-street-2-caption": "Street view south",
+  "img-street-3": "/extracted-images/image20.jpeg",
+  "img-street-3-caption": "Street view east",
+
+  // Common Photos
+  "img-common-1": "/extracted-images/image21.jpeg",
+  "img-common-1-caption": "Common area entrance",
+  "img-common-2": "/extracted-images/image22.jpeg",
+  "img-common-2-caption": "Common area hallway",
+  "img-common-3": "/extracted-images/image23.jpeg",
+  "img-common-3-caption": "Common area lobby",
+  "img-common-4": "/extracted-images/image24.jpeg",
+  "img-common-4-caption": "Common area stairwell",
+
+  // Unit Photos
+  "img-unit-1": "/extracted-images/image25.jpeg",
+  "img-unit-1-caption": "Unit living area",
+  "img-unit-2": "/extracted-images/image26.jpeg",
+  "img-unit-2-caption": "Unit kitchen",
+  "img-unit-3": "/extracted-images/image27.jpeg",
+  "img-unit-3-caption": "Unit bedroom",
+  "img-unit-4": "/extracted-images/image28.jpeg",
+  "img-unit-4-caption": "Unit bathroom",
+  "img-unit-5": "/extracted-images/image29.jpeg",
+  "img-unit-5-caption": "Unit storage",
+  "img-unit-6": "/extracted-images/image30.jpeg",
+  "img-unit-6-caption": "Unit balcony",
+
+  // Systems Photos
+  "img-systems-1": "/extracted-images/image31.jpeg",
+  "img-systems-1-caption": "Mechanical room",
+  "img-systems-2": "/extracted-images/image32.jpeg",
+  "img-systems-2-caption": "HVAC system",
+  "img-systems-3": "/extracted-images/image33.jpeg",
+  "img-systems-3-caption": "Electrical panel",
+  "img-systems-4": "/extracted-images/image34.jpeg",
+  "img-systems-4-caption": "Plumbing systems",
+
   "subject-plumbing": "Standard;",
   "subject-primary": "Multi-Family",
   "subject-proj-amenities": "Guest Parking",

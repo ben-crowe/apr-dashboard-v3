@@ -39,13 +39,21 @@ const TestInputDashboard: React.FC = () => {
   const [expandedAllCalcOutputSections, setExpandedAllCalcOutputSections] = useState<Set<string>>(new Set());
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
 
-  // Initialize store on mount if sections are empty
+  // Initialize store AND load test data on mount
+  // Test data should load by default so we can see which fields have values vs empty
   useEffect(() => {
-    if (sections.length === 0) {
-      console.log('TestInputDashboard: Initializing store...');
-      initializeMockData();
-    }
-  }, [sections.length, initializeMockData]);
+    const initAndLoadTestData = async () => {
+      if (sections.length === 0) {
+        console.log('TestInputDashboard: Initializing store...');
+        await initializeMockData();
+      }
+      // Always load test data so TDD page shows actual values
+      // This lets us verify: field with value = test data exists, empty = missing
+      console.log('TestInputDashboard: Loading test data by default...');
+      await loadFullTestData();
+    };
+    initAndLoadTestData();
+  }, []); // Only run once on mount
 
   // Section names with numbered prefixes for easy cross-reference with Report Builder
   const sectionNameMapping: Record<string, string> = {

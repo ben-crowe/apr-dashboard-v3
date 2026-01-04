@@ -4,9 +4,9 @@
  * Centralized exports for all test data sets
  */
 
-// Test DataSet 1 - Complete test data for sample property
-// Used by: loadFullTestData() (all fields) and loadUserInputsOnly() (filtered)
-export { testDataSet1AllFields } from './Test-DataSet1-All-ID-Direct';
+// Test DataSet 1 - Test data for sample property
+// Used by: testScriptAllIdsDirect (Test 2) and testScriptUserInputsCalc (Test 3)
+export { testDataSet1 } from './TestDataSet1';
 
 // Legacy exports (northBattlefordTestData-REAL.ts) - for backward compatibility
 export {

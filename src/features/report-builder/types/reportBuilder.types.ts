@@ -73,8 +73,8 @@ export interface ReportBuilderState {
   loadSalesTestData: () => Promise<void>;
   loadIncomeTestData: () => Promise<void>;
   runCalculations: () => void;
-  loadFullTestData: () => Promise<void>;
-  loadUserInputsOnly: () => Promise<void>;
+  loadFullTestData: () => Promise<void>; // TODO: rename to testScriptAllIdsDirect
+  testScriptUserInputsCalc: () => Promise<void>; // Test 3 script
   setTestMode: (mode: TestMode) => void; // Switch between test modes
   setTestDataLoaded: (sectionId: string, loaded: boolean) => void; // Mark section test data as loaded/unloaded
 }

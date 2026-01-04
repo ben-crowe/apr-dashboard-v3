@@ -1,34 +1,18 @@
 /**
- * TEST DATA SET 1: Sample Property Test Data
+ * TEST DATA SET 1
  *
- * FILE: Test-DataSet1-All-ID-Direct.ts
- * PURPOSE: Complete test data with ALL field IDs for a sample property
+ * FILE: TestDataSet1.ts
+ * PURPOSE: Test data - all field ID values for sample property
  *
- * USED BY TWO TEST FUNCTIONS (in reportBuilderStore.ts):
- *
- * TEST 2 - loadFullTestData():
- *   - Loads ALL fields from this file (user-input + calculated + auto-filled)
- *   - Use to verify ALL fields render correctly
- *
- * TEST 3 - loadUserInputsOnly():
- *   - Uses this SAME file, but FILTERS for inputSource === 'user-input' only
- *   - Clears calculated fields, then runs calc engine
- *   - Use to verify calculations work from real inputs
- *
- * DATA FLOW:
- *   This File → Store Fields (via updateField) → Template (via {{field-id}} matching)
- *   NOT direct to template - goes through store first
- *
- * RELATED FILES:
- * - fieldRegistry.ts - Field definitions (id must match keys here)
- * - Report-MF-template.html - Template with {{field-id}} placeholders
- * - reportBuilderStore.ts - Contains loadFullTestData() and loadUserInputsOnly() functions
+ * USED BY SCRIPTS:
+ * - testScriptAllIdsDirect (Test 2) - loads all IDs direct to template
+ * - testScriptUserInputsCalc (Test 3) - loads user inputs, runs calc engine
  *
  * SAMPLE PROPERTY: North Battleford Apartments
  * ADDRESS: 1101, 1121 109 St, North Battleford, Saskatchewan
  * FILE #: VAL251012-1
  */
-export const testDataSet1AllFields: Record<string, string | number | string[]> =
+export const testDataSet1: Record<string, string | number | string[]> =
 {
   "access": "average",
   "adjacent-east": "Residential",

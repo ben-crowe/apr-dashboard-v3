@@ -30,7 +30,7 @@ interface FieldStatusInfo {
 
 const TestInputDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { sections, updateFieldValue, runCalculations, loadFullTestData, loadUserInputsOnly, initializeMockData, activeTestMode, setTestMode } = useReportBuilderStore();
+  const { sections, updateFieldValue, runCalculations, loadFullTestData, testScriptUserInputsCalc, initializeMockData, activeTestMode, setTestMode } = useReportBuilderStore();
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [expandedValuations, setExpandedValuations] = useState<Set<string>>(new Set());
   const [expandedImageDestinations, setExpandedImageDestinations] = useState<Set<string>>(new Set());
@@ -784,8 +784,8 @@ const TestInputDashboard: React.FC = () => {
                   try {
                     // Set mode FIRST to update button state immediately
                     setTestMode('test-report');
-                    console.log('Test Report: Loading user-input fields only...');
-                    await loadUserInputsOnly();
+                    console.log('Test 3: Loading user-input fields, running calc engine...');
+                    await testScriptUserInputsCalc();
                     console.log('Test Report: Calculations complete - check calculated fields');
                   } catch (error) {
                     console.error('Error in Test Report:', error);

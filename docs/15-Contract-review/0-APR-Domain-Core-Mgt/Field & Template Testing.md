@@ -1,19 +1,34 @@
 # Field & Template Testing Guide
 
 **Created:** 2026-01-04
-**Purpose:** Document the two template testing mechanisms and track field mapping verification findings
+**Updated:** 2026-01-04
+**Purpose:** Document the three template testing methods and track field mapping verification
 
 ---
 
-## Two Template Testing Mechanisms
+## Data vs Scripts
 
-### 1. Template Wrapper Toggle (Report-MF-template.html)
+**DATA:** `TestDataSet1.ts` - Contains all test field values for sample property (North Battleford Apartments)
 
-**Location:** Top control bar in the template viewer - labeled "ID" with a toggle switch
+**SCRIPTS:** Functions that perform ACTIONS on the data
+- `testScriptAllIdsDirect` - Test 2 action
+- `testScriptUserInputsCalc` - Test 3 action
 
-**What it does:**
-- **OFF (unchecked):** Shows raw field IDs like `{{subject-street}}`, `{{city}}`, `{{job-number}}`
-- **ON (checked):** Swaps to **sample data** stored in `data-sample` attributes
+---
+
+## Three Template Testing Methods
+
+All three tests use **TestDataSet1** - same data, three delivery methods.
+
+---
+
+### Test 1 - Toggle (DataSet1 in data-sample)
+
+1. Uses `TestDataSet1` values hardcoded as `data-sample` attributes in template
+2. Toggle switch swaps between `{{field-id}}` and sample values
+3. **How to trigger:**
+   - a: Toggle switch in template header frame
+   - b: TDD page → 'Designer Mode' → 'Preview Builder'
 
 **Example field structure:**
 ```html
@@ -22,24 +37,55 @@
 - Toggle OFF: Shows `{{city}}`
 - Toggle ON: Shows `North Battleford`
 
-**Purpose:**
-- **Designer view** - See what field IDs are where without needing store data
-- Quick visual check of field placement
-- **Financial fields (calc-*, ia-*, recon-*)** are excluded from toggle - they're controlled by the calculator only
+**Note:** Financial fields (calc-*, ia-*, recon-*) are excluded from toggle - controlled by calculator only.
 
-**Source:** `/public/Report-MF-template.html` lines 553-560 (toggle UI), lines 8875-8908 (toggle logic)
+**Source:** `/public/Report-MF-template.html`
 
 ---
 
-### 2. TDD Page Control Panel (`/test-input`)
+### Test 2 - All IDs Direct to Template
+
+1. Script: `testScriptAllIdsDirect` reads from `TestDataSet1`
+2. Loads ALL field IDs direct to template (bypasses store)
+3. **How to trigger:**
+   - a: Request agent to run the script
+   - b: TDD page → 'Test 2' → 'Preview Builder' (not yet added)
+
+**Source:** Script TBD
+
+---
+
+### Test 3 - User Inputs + Calc
+
+1. Script: `testScriptUserInputsCalc` reads from `TestDataSet1`
+2. Loads only USER INPUT data to the App's Fields (Report Builder Editor Panel), then runs calc engine
+3. **How to trigger:**
+   - a: Request agent to run the script
+   - b: TDD page → 'Test Report' → 'Preview Builder'
+
+**Source:** `/src/features/report-builder/store/reportBuilderStore.ts` - `loadUserInputsOnly()`
+
+---
+
+### Summary: Data Flow Per Test
+
+| Test | Data Flow |
+|------|-----------|
+| Test 1 | Baked into HTML (`data-sample` attributes) |
+| Test 2 | Script → Template direct |
+| Test 3 | Script → App Fields (Editor Panel) → Calc Engine → Template |
+
+---
+
+## TDD Page Control Panel (`/test-input`)
 
 **Location:** Top bar with colored buttons
 
 | Button | Color | What it does |
 |--------|-------|--------------|
 | **Refresh** | Gray | Hard page reload |
-| **Test Report** | Blue | Loads ONLY `user-input` fields from test data, clears calculated fields, then runs calc engine. Validates: "Do calculations work from real inputs?" |
-| **Designer Mode** | Purple | Enables the template toggle. Use with "Load Full Test Data" button in Report Builder to see all fields populated |
+| **Test Report** | Blue | Runs Test 3 - loads user-input fields, runs calc engine |
+| **Designer Mode** | Purple | Enables Test 1 toggle in template |
 | **Preview in Builder** | Green | Navigates to `/mock-builder` with current data |
 
 **Stats bar shows:**
@@ -48,35 +94,7 @@
 - Missing: X (fields in registry but not in store)
 - Coverage: X%
 
-**Source:** `/src/features/test-input/TestInputDashboard.tsx` lines 760-892
-
----
-
-### How They Work Together
-
-```
-+-------------------------------------------------------------+
-|  TDD Page (/test-input)                                     |
-|  +-----------------------------------------------------+   |
-|  | [Test Report] [Designer Mode] [Preview in Builder]  |   |
-|  +-----------------------------------------------------+   |
-|                           |                                 |
-|          Loads data into store, sets mode                   |
-|                           v                                 |
-+-------------------------------------------------------------+
-|  Report Builder (/mock-builder)                             |
-|  +-----------------------------------------------------+   |
-|  | EditPanel | PreviewPanel (iframe)                   |   |
-|  |           |  +----------------------------------+   |   |
-|  |           |  | [Toggle: ID <-> Sample]          |   |   |
-|  |           |  | Renders: Report-MF-template.html |   |   |
-|  |           |  +----------------------------------+   |   |
-|  +-----------------------------------------------------+   |
-+-------------------------------------------------------------+
-```
-
-**Test Report mode:** Toggle disabled, always shows interpolated store values
-**Designer mode:** Toggle enabled, can switch between IDs and sample data
+**Source:** `/src/features/test-input/TestInputDashboard.tsx`
 
 ---
 

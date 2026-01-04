@@ -1,8 +1,8 @@
 /**
  * Test Data - North Battleford Sample Property
  * 
- * VERSION: 2.4.0
- * LAST UPDATED: 2026-01-03 MST
+ * VERSION: 2.5.0
+ * LAST UPDATED: 2026-01-04 MST
  * UPDATED BY: Claude Opus Agent
  * 
  * PART OF SYNC SET (3 files - must stay aligned):
@@ -13,6 +13,10 @@
  * RULE: When field IDs change in any file, update all three.
  * 
  * CHANGES:
+ * - 2.5.0: Added missing cover page fields for PREPARED BY section + ID aliases
+ *   - Added appraiser-company, appraiser-address, appraiser-city, appraiser-province
+ *   - Added appraiser-postal, appraiser-phone, appraiser-website
+ *   - Added client-contact-name, property-type-display, file-number, appraiser-aic-number aliases
  * - 2.4.0: Added image and sales comp field ID aliases for template compatibility
  *   - Added img-cover-photo alias (template expects img-cover-photo, data has cover-photo)
  *   - Added img-map-aerial-1 and img-map-aerial-2 aliases (template expects numbered versions)
@@ -204,6 +208,19 @@ export const northBattlefordTestData: Record<string, string | number | string[]>
   "appraiser-name": "Chris Chornohos, AACI, MRICS",
   "appraiser-credentials": "AACI, MRICS",
   "appraiser-title": "Founder",
+  // Appraiser Company Info (for cover page PREPARED BY section)
+  "appraiser-company": "Valta Property Valuations Ltd.",
+  "appraiser-address": "#300-6858 Richard Road SW",
+  "appraiser-city": "Calgary",
+  "appraiser-province": "AB",
+  "appraiser-postal": "T3E 6L1",
+  "appraiser-phone": "587-801-5151",
+  "appraiser-website": "www.valta.ca",
+  // ID Aliases for template compatibility (template uses different IDs)
+  "client-contact-name": "Kenneth Engler",  // Template uses this, data has client-name
+  "property-type-display": "Multi-Family",  // Template uses this, data has property-type
+  "file-number": "VAL251012 - 1",           // Template uses this, data has job-number
+  "appraiser-aic-number": "A12345",         // Template uses this, data has appraiser-aic
   "comp1-access": "Average",
   "comp1-address": "1551 107 St",
   "comp1-address-full": "[comp1-address-full]",

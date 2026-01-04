@@ -26,6 +26,7 @@ const ACCESSIBILITY_OPTIONS = ['', 'Excellent', 'Good', 'Average', 'Fair', 'Poor
 // All section IDs for expand/collapse all functionality
 const ALL_SECTION_IDS = [
   'site-area',
+  'site-frontage',
   'adjacent-uses',
   'site-conditions',
   'site-plan-images'
@@ -216,7 +217,56 @@ export default function SiteTabPanel() {
           </div>
         </CollapsibleSection>
 
-        {/* 2. ADJACENT USES */}
+        {/* 2. SITE FRONTAGE */}
+        <CollapsibleSection
+          id="site-frontage"
+          title="Site Frontage"
+          isCollapsed={collapsedSections.has('site-frontage')}
+          onToggle={() => toggleSection('site-frontage')}
+        >
+          <div className="form-grid form-grid-4">
+            {/* Frontage 1 */}
+            <div className="form-group span-2">
+              <label>Frontage 1 - Street</label>
+              <input
+                type="text"
+                value={String(getValue('frontage1-street') || '')}
+                onChange={onInputChange('frontage1-street')}
+                placeholder="Street name"
+              />
+            </div>
+            <div className="form-group span-2">
+              <label>Frontage 1 - Distance</label>
+              <input
+                type="text"
+                value={String(getValue('frontage1-distance') || '')}
+                onChange={onInputChange('frontage1-distance')}
+                placeholder="e.g., 150 ft"
+              />
+            </div>
+            {/* Frontage 2 */}
+            <div className="form-group span-2">
+              <label>Frontage 2 - Street</label>
+              <input
+                type="text"
+                value={String(getValue('frontage2-street') || '')}
+                onChange={onInputChange('frontage2-street')}
+                placeholder="Street name (if applicable)"
+              />
+            </div>
+            <div className="form-group span-2">
+              <label>Frontage 2 - Distance</label>
+              <input
+                type="text"
+                value={String(getValue('frontage2-distance') || '')}
+                onChange={onInputChange('frontage2-distance')}
+                placeholder="e.g., 100 ft"
+              />
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* 3. ADJACENT USES */}
         <CollapsibleSection
           id="adjacent-uses"
           title="Adjacent Uses"
@@ -263,7 +313,7 @@ export default function SiteTabPanel() {
           </div>
         </CollapsibleSection>
 
-        {/* 3. SITE CONDITIONS */}
+        {/* 4. SITE CONDITIONS */}
         <CollapsibleSection
           id="site-conditions"
           title="Site Conditions"
@@ -316,7 +366,7 @@ export default function SiteTabPanel() {
           </div>
         </CollapsibleSection>
 
-        {/* 4. SITE PLAN IMAGES */}
+        {/* 5. SITE PLAN IMAGES */}
         <CollapsibleSection
           id="site-plan-images"
           title="Site Plan Images"

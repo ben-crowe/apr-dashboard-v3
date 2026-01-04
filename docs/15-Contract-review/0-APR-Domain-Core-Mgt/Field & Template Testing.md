@@ -51,8 +51,8 @@
 **DATA:** `TestDataSet1.ts` - Contains all test field values for sample property
 
 **SCRIPTS:** Functions that perform ACTIONS on the data
-- `loadFullTestData` - Test 2 action (loads all fields to App Fields)
-- `testScriptUserInputsCalc` - Test 3 action (user inputs → calc)
+- `loadFullTestData` - Test 2 action (loads all fields to TDD page)
+- `testScriptDataSet1` - Test 3 action (loads DataSet1 user inputs → calc)
 
 ---
 
@@ -136,13 +136,13 @@ All tests use **TestDataSet1** - same data source.
 
 **Purpose:** Verify full production flow works
 
-1. Script: `testScriptUserInputsCalc` reads from `TestDataSet1`
+1. Script: `testScriptDataSet1` reads from `TestDataSet1`
 2. Loads only USER INPUT data to TDD fields, then runs calc engine
 3. **How to trigger:**
    - a: TDD page → 'Report DataSet1' → 'View Report'
    - b: Request agent to run script
 
-**Source:** `/src/features/report-builder/store/reportBuilderStore.ts` - `testScriptUserInputsCalc()`
+**Source:** `/src/features/report-builder/store/reportBuilderStore.ts` - `testScriptDataSet1()`
 
 ---
 
@@ -191,7 +191,7 @@ grep '{{city}}' public/Report-MF-template.html
 |--------|-------|---------------|---------|
 | **Refresh** | Gray | Page reload | Hard refresh |
 | **TDD Load All Fields** | Blue | `loadFullTestData()` | Test 2 - loads ALL fields into TDD page fields for review |
-| **Report DataSet1** | Green | `testScriptUserInputsCalc()` + filter | Loads DataSet1 user-inputs → calc engine → filters TDD to show only DataSet1 fields → brightens View Report |
+| **Report DataSet1** | Green | `testScriptDataSet1()` + filter | Loads DataSet1 user-inputs → calc engine → filters TDD to show only DataSet1 fields → brightens View Report |
 | **View Report →** | Green (dim until dataset selected) | `navigate('/mock-builder')` | JUST navigates to Report Builder (no script - data already loaded) |
 
 **Key Design Decision:**

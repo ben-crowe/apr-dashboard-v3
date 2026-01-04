@@ -5,7 +5,7 @@
  */
 
 // Test DataSet 1 - Test data for sample property
-// Used by: testScriptAllIdsDirect (Test 2) and testScriptUserInputsCalc (Test 3)
+// Used by: loadFullTestData (Test 2) and testScriptDataSet1 (Test 3)
 export { testDataSet1 } from './TestDataSet1';
 
 // Legacy exports (northBattlefordTestData-REAL.ts) - for backward compatibility

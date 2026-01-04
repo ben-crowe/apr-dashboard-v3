@@ -31,7 +31,7 @@ interface FieldStatusInfo {
 
 const TestInputDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { sections, updateFieldValue, runCalculations, loadFullTestData, testScriptUserInputsCalc, initializeMockData, activeTestMode, setTestMode } = useReportBuilderStore();
+  const { sections, updateFieldValue, runCalculations, loadFullTestData, testScriptDataSet1, initializeMockData, activeTestMode, setTestMode } = useReportBuilderStore();
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [expandedValuations, setExpandedValuations] = useState<Set<string>>(new Set());
   const [expandedImageDestinations, setExpandedImageDestinations] = useState<Set<string>>(new Set());
@@ -840,7 +840,7 @@ const TestInputDashboard: React.FC = () => {
                 onClick={async () => {
                   try {
                     console.log('Report DataSet1: Loading user-inputs, running calc engine...');
-                    await testScriptUserInputsCalc();
+                    await testScriptDataSet1();
                     setSelectedDataset('testDataSet1');
                     console.log('Report DataSet1: Data loaded, TDD filtered');
                   } catch (error) {

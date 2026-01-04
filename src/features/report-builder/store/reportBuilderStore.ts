@@ -7128,8 +7128,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     console.log("Full test data loaded for all sections");
   },
 
-  testScriptUserInputsCalc: async () => {
-    console.log("=== LOAD USER INPUTS ONLY CALLED ===");
+  testScriptDataSet1: async () => {
+    console.log("=== TEST SCRIPT DATASET1: Loading user inputs, running calc ===");
     
     // Ensure sections are initialized
     let sections = get().sections;

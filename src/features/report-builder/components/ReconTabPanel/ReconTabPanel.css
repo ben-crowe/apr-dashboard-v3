@@ -1,4 +1,4 @@
-/* ReconTabPanel.css - Dark theme styling matching SalesTabPanel */
+/* ReconTabPanel.css - Dark theme styling matching IncomeTabPanel */
 
 .recon-tab-panel {
   font-family: 'Open Sans', Arial, sans-serif;
@@ -14,6 +14,31 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 16px;
+}
+
+/* Minimal quick controls - right aligned text links */
+.recon-quick-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+
+.recon-quick-link {
+  color: #888;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+
+.recon-quick-link:hover {
+  color: #ccc;
+}
+
+.recon-chevron {
+  font-size: 9px;
+  margin-right: 3px;
 }
 
 /* Header */
@@ -43,6 +68,149 @@
   border-radius: 8px;
   border: 1px solid #353535;
   padding: 16px;
+}
+
+/* Section Divider */
+.recon-divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0 20px 0;
+}
+
+.recon-divider-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #3a3a3a 20%, #3a3a3a 80%, transparent);
+}
+
+.recon-divider-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* Collapsible Sections */
+.recon-section {
+  background: #2a2a2a;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 1px solid #353535;
+  overflow: hidden;
+}
+
+.recon-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #2a2a2a;
+  border-bottom: 1px solid #3a3a3a;
+  cursor: pointer;
+  user-select: none;
+}
+
+.recon-section-header:hover {
+  background: #333;
+}
+
+.recon-section-header h3 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.recon-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.recon-collapse-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  transition: transform 0.2s;
+}
+
+.recon-section.collapsed .recon-collapse-icon {
+  transform: rotate(-90deg);
+}
+
+.recon-section-content {
+  padding: 12px 14px;
+  background: #252525;
+}
+
+.recon-section.collapsed .recon-section-content {
+  display: none;
+}
+
+/* Form Grid */
+.recon-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.recon-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.recon-form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.recon-form-group label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.recon-form-group input,
+.recon-form-group select,
+.recon-form-group textarea {
+  padding: 6px 8px;
+  border: 1px solid #3d3d3d;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: inherit;
+  background: #383838;
+  color: #e5e5e5;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.03);
+}
+
+.recon-form-group input:focus,
+.recon-form-group select:focus,
+.recon-form-group textarea:focus {
+  border-color: #4a4a4a;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
+  outline: none;
+}
+
+.recon-form-group input::placeholder,
+.recon-form-group textarea::placeholder {
+  color: #666;
+}
+
+/* Narrative Textarea - larger for text content */
+.recon-narrative-textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
 }
 
 /* Responsive */

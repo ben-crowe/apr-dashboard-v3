@@ -153,7 +153,7 @@ const testDataFieldMapping: Record<string, string> = {
   // RECON
   "recon-rounded-value": "recon-final-value",
 
-  // PHOTOS - map individual photos to consolidated arrays (special handling in loadFullTestData)
+  // PHOTOS - map individual photos to consolidated arrays (special handling in loadDataSet1All)
   // These will be handled specially since store uses arrays
 };
 

@@ -2605,6 +2605,7 @@ export const fieldRegistry: FieldDefinition[] = [
   // Added: 2026-01-03 - Highest and best use analysis
   // ============================================================================
 
+  { id: 'hbu-asimproved-1', storeId: 'hbu-asimproved-1', label: 'HBU As Improved', section: 'hbu', subsection: 'hbu-as-improved', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'hbu-asimproved-2', storeId: 'hbu-asimproved-2', label: 'HBU As Improved Paragraph 2', section: 'hbu', subsection: 'hbu-as-improved', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'hbu-asimproved-3', storeId: 'hbu-asimproved-3', label: 'HBU As Improved Paragraph 3', section: 'hbu', subsection: 'hbu-as-improved', type: 'textarea', inputSource: 'user-input', required: false },
   { id: 'hbu-mostprobablebuyer', storeId: 'hbu-mostprobablebuyer', label: 'Most Probable Buyer', section: 'hbu', subsection: 'hbu-conclusion', type: 'textarea', inputSource: 'user-input', required: false },

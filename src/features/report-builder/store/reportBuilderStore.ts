@@ -7084,6 +7084,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     console.log("Calculations complete. Indicated Value:", indicatedValue);
   },
 
+
   loadDataSet1All: async () => {
     console.log("=== LOAD DATASET1 ALL: Loading all fields to TDD ===");
     
@@ -7102,17 +7103,20 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     
     console.log(`Sections initialized: ${sections.length} sections`);
     
-    // Call all section-specific loaders
-    await get().loadHomeTestData();
-    await get().loadCoverTestData();
-    await get().loadMapsTestData();
-    await get().loadAssignmentTestData();
-    await get().loadExecTestData();
-    await get().loadSiteTestData();
-    await get().loadImprovementsTestData();
-    await get().loadSalesTestData();
-    await get().loadIncomeTestData();
-    get().loadCalcTestData();
+    // Dynamically iterate through ALL testDataSet1 fields
+    let loadedCount = 0;
+    let skippedCount = 0;
+    
+    Object.entries(testDataSet1).forEach(([fieldId, value]) => {
+      try {
+        get().updateFieldValue(fieldId, value);
+        loadedCount++;
+      } catch (e) {
+        skippedCount++;
+      }
+    });
+    
+    console.log(`Loaded ${loadedCount} fields, skipped ${skippedCount}`);
     
     // Mark all sections as loaded
     set({
@@ -7123,9 +7127,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       }
     });
     
+    // Run calculations
     get().runCalculations();
     
-    console.log("Full test data loaded for all sections");
+    console.log("=== LOAD DATASET1 ALL COMPLETE ===");
   },
 
   loadDataSet1User: async () => {

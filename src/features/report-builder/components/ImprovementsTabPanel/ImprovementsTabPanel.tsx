@@ -22,7 +22,8 @@ const ALL_SECTION_IDS = [
   'systems',
   'finishes',
   'site-improvements',
-  'condition'
+  'condition',
+  'hbu'
 ];
 
 // Collapsible Section Component
@@ -521,6 +522,53 @@ export default function ImprovementsTabPanel() {
                 value={String(getValue('hazardous-materials') || '')}
                 onChange={onInputChange('hazardous-materials')}
                 placeholder="Assumes free of hazardous waste, asbestos, mold"
+              />
+            </div>
+          </div>
+        </CollapsibleSection>
+
+        {/* 8. HIGHEST & BEST USE */}
+        <CollapsibleSection
+          id="hbu"
+          title="Highest & Best Use"
+          isCollapsed={collapsedSections.has('hbu')}
+          onToggle={() => toggleSection('hbu')}
+        >
+          <div className="form-grid form-grid-1">
+            <div className="form-group full-width">
+              <label>HBU As Improved - Paragraph 1</label>
+              <textarea
+                value={String(getValue('hbu-asimproved-1') || '')}
+                onChange={onInputChange('hbu-asimproved-1')}
+                placeholder="The legal factors influencing the highest and best use of the subject property are primarily governmental regulations such as zoning and building codes..."
+                style={{ minHeight: '100px' }}
+              />
+            </div>
+            <div className="form-group full-width">
+              <label>HBU As Improved - Paragraph 2</label>
+              <textarea
+                value={String(getValue('hbu-asimproved-2') || '')}
+                onChange={onInputChange('hbu-asimproved-2')}
+                placeholder="The existing improvements contribute value to the site beyond land value alone. Demolition of the existing structures is not financially feasible..."
+                style={{ minHeight: '100px' }}
+              />
+            </div>
+            <div className="form-group full-width">
+              <label>HBU As Improved - Paragraph 3</label>
+              <textarea
+                value={String(getValue('hbu-asimproved-3') || '')}
+                onChange={onInputChange('hbu-asimproved-3')}
+                placeholder="Among the five alternative uses, a continuation of the multifamily use is the Highest and Best Use of the subject As Improved."
+                style={{ minHeight: '80px' }}
+              />
+            </div>
+            <div className="form-group full-width">
+              <label>HBU Conclusion (As Vacant)</label>
+              <textarea
+                value={String(getValue('hbu-conclusion-vacant') || '')}
+                onChange={onInputChange('hbu-conclusion-vacant')}
+                placeholder="Multifamily apartment use..."
+                style={{ minHeight: '80px' }}
               />
             </div>
           </div>

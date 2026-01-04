@@ -22,11 +22,27 @@
 | `defaultValue` | Starting value (optional) |
 
 **What it does:**
-- Tells the store what fields exist and how to build them
+- Tells the Store (App Field Values) what fields exist and how to build them
 - Tells the calc engine which fields are inputs vs outputs
 - Reference for TestDataSet1 to know what IDs are valid
 
 **File:** `/src/features/report-builder/schema/fieldRegistry.ts`
+
+---
+
+### Terminology: App Fields vs Scripts
+
+**App Fields** = The fields in Editor Panel where values live
+**Scripts** = Functions that perform actions (load, save, calculate)
+
+**The file `reportBuilderStore.ts` contains BOTH:**
+- App Fields data structure
+- Scripts that manipulate them
+
+**DO NOT use the word "store"** - it's confusing. Say:
+- "Load data into App Fields" ✓
+- "Script reads from TestDataSet1" ✓
+- ~~"Load into store"~~ ✗
 
 ---
 
@@ -103,7 +119,7 @@ All tests use **TestDataSet1** - same data source.
 
 ### Test 2 - TDD ID Test (Load All Fields)
 
-**Purpose:** Verify field IDs exist in store and can accept values
+**Purpose:** Verify field IDs exist in App Fields and can accept values
 
 1. Script: `loadFullTestData` reads from `TestDataSet1`
 2. Loads ALL fields into App Fields (TDD page) for review
@@ -136,7 +152,7 @@ All tests use **TestDataSet1** - same data source.
 | Step | What it tests | Data Flow |
 |------|---------------|-----------|
 | Test 1 | ID placement on page | Baked into HTML (`data-sample`) |
-| Test 2 | ID exists in store | Script → App Fields (TDD review) |
+| Test 2 | ID exists in App Fields | Script → App Fields (TDD review) |
 | Test 3 | Full production flow | Script → App Fields → Calc Engine → Template |
 
 **Two ways data reaches template:**
@@ -182,8 +198,8 @@ grep '{{city}}' public/Report-MF-template.html
 
 **Stats bar shows:**
 - Mapped: X (fields with values)
-- Empty: X (fields in store but no value)
-- Missing: X (fields in registry but not in store)
+- Empty: X (fields in App Fields but no value)
+- Missing: X (fields in registry but not in App Fields)
 - Coverage: X%
 
 **Source:** `/src/features/test-input/TestInputDashboard.tsx`

@@ -45,8 +45,9 @@ import { CostTabPanel } from '../CostTabPanel';
 import { ReconTabPanel } from '../ReconTabPanel';
 
 // Mapping of which image fields should appear in which sections
+// IMPORTANT: Field IDs must match template placeholders (e.g., {{subject-photo}})
 const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
-  'cover': ['img-cover-photo', 'img-signature'],
+  'cover': ['subject-photo', 'img-signature'],  // Changed img-cover-photo → subject-photo to match template
   'maps': ['img-map-regional', 'img-map-local', 'img-map-aerial-1', 'img-map-aerial-2', 'img-zoning-map', 'img-site-plan-1', 'img-site-plan-2'],
   'photos': [
     'img-exterior-1', 'img-exterior-2', 'img-exterior-3', 'img-exterior-4', 'img-exterior-5', 'img-exterior-6',

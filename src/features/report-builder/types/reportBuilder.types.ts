@@ -5,9 +5,10 @@ export type FieldInputType = 'user-input' | 'dropdown' | 'auto-filled';
 
 // Test mode - mutually exclusive modes for testing
 // 'none' = no test mode active (normal editing)
-// 'test-report' = Test Report mode (user inputs + calc engine)
+// 'test-report' = Load ALL test data directly to template (bypasses calc)
+// 'user-input' = Load user-input fields only, run calc engine
 // 'designer' = Designer mode (sample data for visual review)
-export type TestMode = 'none' | 'test-report' | 'designer';
+export type TestMode = 'none' | 'test-report' | 'user-input' | 'designer';
 
 export interface ReportField {
   id: string;

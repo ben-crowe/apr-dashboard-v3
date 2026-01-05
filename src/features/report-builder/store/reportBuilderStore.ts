@@ -7137,35 +7137,34 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   },
 
   loadDataSet1DirectToTemplate: async () => {
-    console.log("=== DIRECT TO TEMPLATE: Bypassing calc engine for field validation ===");
-    
-    // Ensure sections are initialized first
-    let sections = get().sections;
-    if (!sections || sections.length === 0) {
-      console.log("Sections not initialized, initializing...");
-      await get().initializeMockData();
-      sections = get().sections;
+    console.log("=== DIRECT TO TEMPLATE: Rendering TestDataSet1 directly to template ===");
+
+    // Fetch template
+    const url = `/Report-MF-template.html?v=${Date.now()}`;
+    const response = await fetch(url, { cache: 'no-store' });
+    if (!response.ok) {
+      throw new Error(`Failed to load template: ${response.statusText}`);
     }
-    
-    if (!sections || sections.length === 0) {
-      console.error("Failed to initialize sections");
-      return;
-    }
-    
-    // Load ALL fields from testDataSet1 (including calculated fields)
-    // This is for FIELD ID VALIDATION only - not calculation testing
-    let loadedCount = 0;
+    let html = await response.text();
+
+    // Replace ALL {{field-id}} placeholders with TestDataSet1 values directly
+    // Does NOT load into store - just renders to preview
+    let replacedCount = 0;
     Object.entries(testDataSet1).forEach(([fieldId, value]) => {
-      try {
-        get().updateFieldValue(fieldId, value);
-        loadedCount++;
-      } catch (e) {
-        // Skip fields that don't exist
+      const placeholder = `{{${fieldId}}}`;
+      if (html.includes(placeholder)) {
+        const stringValue = value != null ? String(value) : '';
+        html = html.split(placeholder).join(stringValue);
+        replacedCount++;
       }
     });
-    
-    console.log(`Loaded ${loadedCount} fields directly (bypassed calc engine)`);
-    console.log("=== DIRECT TO TEMPLATE COMPLETE ===");
+
+    console.log(`Replaced ${replacedCount} placeholders directly in template`);
+
+    // Set preview HTML (does NOT modify store fields)
+    set({ previewHtml: html });
+
+    console.log("=== DIRECT TO TEMPLATE COMPLETE - Navigate to preview ===");
   },
 
   loadDataSet1User: async () => {

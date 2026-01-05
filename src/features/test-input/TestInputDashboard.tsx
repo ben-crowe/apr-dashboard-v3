@@ -1135,25 +1135,24 @@ const TestInputDashboard: React.FC = () => {
               <Button
                 onClick={async () => {
                   try {
-                    // Set mode and dataset for stats update
-                    setTestMode("test-report");
-                    setSelectedDataset("testDataSet1");
-                    console.log("Load Data: Loading all test data to store...");
-                    await loadDataSet1DirectToTemplate();
-                    console.log("Load Data: Complete - stats should update");
-                    // Don't auto-navigate - let user see stats first
+                    // Load user-input fields only, run calc engine
+                    setTestMode("user-input");
+                    setSelectedDataset("user-fields");
+                    console.log("Load Data: Loading user-input fields only...");
+                    await loadDataSet1User();
+                    console.log("Load Data: Complete - user data loaded with calc");
                   } catch (error) {
                     console.error("Error in Load Data:", error);
                     alert("Error: " + String(error));
                   }
                 }}
                 variant={
-                  activeTestMode === "test-report" ? "default" : "outline"
+                  activeTestMode === "user-input" ? "default" : "outline"
                 }
                 size="sm"
                 disabled={activeTestMode === "designer"}
                 className={`gap-2 text-white border transition-colors ${
-                  activeTestMode === "test-report"
+                  activeTestMode === "user-input"
                     ? "bg-blue-600 hover:bg-blue-500 font-semibold shadow-md"
                     : activeTestMode === "designer"
                       ? "opacity-50 cursor-not-allowed"
@@ -1161,90 +1160,89 @@ const TestInputDashboard: React.FC = () => {
                 }`}
                 style={{
                   backgroundColor:
-                    activeTestMode === "test-report"
+                    activeTestMode === "user-input"
                       ? "#2563eb"
                       : activeTestMode === "designer"
                         ? "#1f1f1f"
                         : "#2a2a2a",
                   borderColor:
-                    activeTestMode === "test-report"
+                    activeTestMode === "user-input"
                       ? "#2563eb"
                       : activeTestMode === "designer"
                         ? "#4b5563"
                         : "#4b5563",
                 }}
                 onMouseEnter={(e) => {
-                  if (activeTestMode === "test-report") {
+                  if (activeTestMode === "user-input") {
                     e.currentTarget.style.backgroundColor = "#3b82f6";
                   } else if (activeTestMode !== "designer") {
                     e.currentTarget.style.backgroundColor = "#333333";
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (activeTestMode === "test-report") {
+                  if (activeTestMode === "user-input") {
                     e.currentTarget.style.backgroundColor = "#2563eb";
                   } else if (activeTestMode !== "designer") {
                     e.currentTarget.style.backgroundColor = "#2a2a2a";
                   }
                 }}
-                title="Direct field validation - bypasses calc engine, maps all test data to template"
+                title="Load user-input fields only, run calc engine"
               >
                 <Database className="w-3 h-3" />
                 Load Data
-                {activeTestMode === "test-report" && (
+                {activeTestMode === "user-input" && (
                   <span className="ml-1">&#10003;</span>
                 )}
               </Button>
               <Button
                 onClick={async () => {
                   try {
-                    // Clear test-report mode so stats show user-input fields only
-                    setTestMode("none");
-                    console.log(
-                      "Report DataSet1: Loading user-inputs, running calc engine...",
-                    );
-                    await loadDataSet1User();
-                    setSelectedDataset("testDataSet1");
-                    console.log("Report DataSet1: Data loaded, TDD filtered");
+                    // ALL data direct to template (bypasses calc, bypasses store)
+                    setTestMode("test-report");
+                    setSelectedDataset("all-fields");
+                    console.log("Report DataSet1: Rendering ALL data direct to template...");
+                    await loadDataSet1DirectToTemplate();
+                    console.log("Report DataSet1: Done - navigating to preview...");
+                    navigate("/mock-builder");
                   } catch (error) {
                     console.error("Error in Report DataSet1:", error);
                     alert("Error: " + String(error));
                   }
                 }}
                 variant={
-                  selectedDataset === "testDataSet1" ? "default" : "outline"
+                  activeTestMode === "test-report" ? "default" : "outline"
                 }
                 size="sm"
                 className={`gap-2 text-white border transition-colors ${
-                  selectedDataset === "testDataSet1"
+                  activeTestMode === "test-report"
                     ? "bg-green-600 hover:bg-green-500 font-semibold shadow-md"
                     : ""
                 }`}
                 style={{
                   backgroundColor:
-                    selectedDataset === "testDataSet1" ? "#16a34a" : "#2a2a2a",
+                    activeTestMode === "test-report" ? "#16a34a" : "#2a2a2a",
                   borderColor:
-                    selectedDataset === "testDataSet1" ? "#16a34a" : "#4b5563",
+                    activeTestMode === "test-report" ? "#16a34a" : "#4b5563",
                 }}
                 onMouseEnter={(e) => {
-                  if (selectedDataset === "testDataSet1") {
+                  if (activeTestMode === "test-report") {
                     e.currentTarget.style.backgroundColor = "#22c55e";
                   } else {
                     e.currentTarget.style.backgroundColor = "#333333";
                   }
                 }}
                 onMouseLeave={(e) => {
-                  if (selectedDataset === "testDataSet1") {
+                  if (activeTestMode === "test-report") {
                     e.currentTarget.style.backgroundColor = "#16a34a";
                   } else {
                     e.currentTarget.style.backgroundColor = "#2a2a2a";
                   }
                 }}
-                title="Filter to show only fields in TestDataSet1"
+                title="ALL data direct to template (bypasses calc engine)"
               >
                 <Database className="w-3 h-3" />
                 Report DataSet1
-                {selectedDataset === "testDataSet1" && (
+                {activeTestMode === "test-report" && (
                   <span className="ml-1">&#10003;</span>
                 )}
               </Button>

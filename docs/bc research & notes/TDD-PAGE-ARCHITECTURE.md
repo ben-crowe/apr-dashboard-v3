@@ -1,6 +1,8 @@
 # APR Dashboard V3 - Master Knowledge File
 
 > **🎯 START HERE** - This is the central knowledge hub for the APR Dashboard V3 project. Read the Session Notes first, then dive into sections as needed.
+>
+> **Skill:** Run `/apr` to load APR Orchestrator role and check pending tasks automatically.
 
 ---
 
@@ -29,6 +31,7 @@
 
 | Resource | Path | Purpose |
 |----------|------|---------|
+| **`/apr` Skill** | `~/.claude/commands/apr.md` | APR Orchestrator - run this to load context |
 | **This File** | `docs/bc research & notes/TDD-PAGE-ARCHITECTURE.md` | Master knowledge hub |
 | **PENDING TASKS** | `docs/bc research & notes/PENDING-TASKS.md` | Tasks that MUST get done - check at session start |
 | **Calc Engine Map** | `docs/bc research & notes/CALC-ENGINE-FIELD-MAP.md` | Calculator field mappings |

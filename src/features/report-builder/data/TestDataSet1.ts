@@ -12,18 +12,19 @@
  * ADDRESS: 1101, 1121 109 St, North Battleford, Saskatchewan
  * FILE #: VAL251012-1
  */
-export const testDataSet1: Record<string, string | number | string[]> =
-{
-  "access": "average",
+export const testDataSet1: Record<string, string | number | string[]> = {
+  access: "average",
   "adjacent-east": "Residential",
   "adjacent-north": "Residential",
   "adjacent-south": "Residential",
   "adjacent-west": "Residential",
-  "apn": 0,
+  apn: 0,
   "appraiser-aic": "A12345",
   "appraiser-email": "chris.chornohos@valta.ca",
-  "appraiser-designation": "AACI, P.App (Accredited Appraiser Canadian Institute)",
-  "appraiser-license": "Licensed in Alberta, Saskatchewan, Manitoba, British Columbia",
+  "appraiser-designation":
+    "AACI, P.App (Accredited Appraiser Canadian Institute)",
+  "appraiser-license":
+    "Licensed in Alberta, Saskatchewan, Manitoba, British Columbia",
   "appraiser-name-credentials": "Chris Chornohos, AACI, MRICS",
   "appraiser1-email": "chris.chornohos@valta.ca",
   "appraiser1-name": "Chris Chornohos, AACI, MRICS",
@@ -145,8 +146,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "cap-rate-implied-range": "0%",
   "cap-rate-low": "0%",
   "cap-rate-range": "0%",
-  "ceilings": "Textured drywall;",
-  "city": "North Battleford",
+  ceilings: "Textured drywall;",
+  city: "North Battleford",
   "client-address": "1901, 1088 - 6th Ave SW",
   "client-city": "Calgary",
   "client-province": "Alberta",
@@ -177,7 +178,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "payment-terms": "Net 30 days upon delivery",
   "delivery-date": "2025-11-30",
   "report-type": "Appraisal Report",
-  "scope-of-work": "Complete appraisal of the subject property including all three approaches to value where applicable.",
+  "scope-of-work":
+    "Complete appraisal of the subject property including all three approaches to value where applicable.",
   "special-instructions": "Client requests digital delivery only.",
   "internal-comments": "",
   "appraiser-comments": "",
@@ -193,10 +195,10 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "appraiser-phone": "587-801-5151",
   "appraiser-website": "www.valta.ca",
   // ID Aliases for template compatibility (template uses different IDs)
-  "client-contact-name": "Kenneth Engler",  // Template uses this, data has client-name
-  "property-type-display": "Multi-Family",  // Template uses this, data has property-type
-  "file-number": "VAL251012 - 1",           // Template uses this, data has job-number
-  "appraiser-aic-number": "A12345",         // Template uses this, data has appraiser-aic
+  "client-contact-name": "Kenneth Engler", // Template uses this, data has client-name
+  "property-type-display": "Multi-Family", // Template uses this, data has property-type
+  "file-number": "VAL251012 - 1", // Template uses this, data has job-number
+  "appraiser-aic-number": "A12345", // Template uses this, data has appraiser-aic
   "comp1-access": "Average",
   "comp1-address": "1551 107 St",
   "comp1-address-full": "1551 107 St, North Battleford, SK S9A 2A1",
@@ -211,7 +213,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp1-city": "North Battleford",
   "comp1-city-state-zip": "North Battleford, SK S9A 2A1",
   "comp1-comments-prop": "-",
-  "comp1-comments-sale": "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversity and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
+  "comp1-comments-sale":
+    "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversity and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
   "comp1-condition": "Average",
   "comp1-conditions-of-sale": "Arm's Length",
   "comp1-confirmaffiliation": "Confidential",
@@ -261,7 +264,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp1-parking-type": "Surface",
   "comp1-photo": "/extracted-images/image73.jpg",
   "comp1-photo-caption": "Comp 1 - 1551 107 St, North Battleford",
-  "comp1-photo-url": "https://static-photos.valcre.com/propertyfiles/596/7c089aa3-f827-4b07-b143-a7f46af94d4d/1551%20107%20St.png?jpg740x740fit",
+  "comp1-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/7c089aa3-f827-4b07-b143-a7f46af94d4d/1551%20107%20St.png?jpg740x740fit",
   "comp1-postal": "S9A 2A1",
   "comp1-postal-code": "S9A 2A1",
   "comp1-price-per-sf": "$0",
@@ -273,7 +277,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp1-property-type": "Multi-Family",
   "comp1-province": "SK",
   "comp1-quality": "Average",
-  "comp1-remarks": "Well-maintained walkup apartment building in established residential area",
+  "comp1-remarks":
+    "Well-maintained walkup apartment building in established residential area",
   "comp1-renttype": "$0",
   "comp1-rights-transferred": 0,
   "comp1-sale-conditions": "Arm's Length",
@@ -315,7 +320,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp10-province": "-",
   "comp2-access": "Average",
   "comp2-address": "10910-10912 Winder Crescent",
-  "comp2-address-full": "10910-10912 Winder Crescent, North Battleford, SK S9A 2C3",
+  "comp2-address-full":
+    "10910-10912 Winder Crescent, North Battleford, SK S9A 2C3",
   "comp2-adj-price-per-unit": "$0",
   "comp2-adjprice-per-unit": "$116,627",
   "comp2-adjprice-per-unit-trans": "$102,019",
@@ -327,7 +333,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp2-city": "North Battleford",
   "comp2-city-state-zip": "North Battleford, SK S9A 2C3",
   "comp2-comments-prop": "-",
-  "comp2-comments-sale": "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversify and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
+  "comp2-comments-sale":
+    "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversify and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
   "comp2-condition": "Average",
   "comp2-confirmaffiliation": "Confidential",
   "comp2-confirmcompany": "Confidential",
@@ -375,7 +382,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp2-parking-type": "Surface",
   "comp2-photo": "/extracted-images/image75.jpg",
   "comp2-photo-caption": "Comp 2 - 10910 Winder Crescent",
-  "comp2-photo-url": "https://static-photos.valcre.com/propertyfiles/596/cfa7ef15-d4fa-490d-bd1a-cca4b6eceab7/10910-10912%20Winder%20Crescent.png?jpg740x740fit",
+  "comp2-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/cfa7ef15-d4fa-490d-bd1a-cca4b6eceab7/10910-10912%20Winder%20Crescent.png?jpg740x740fit",
   "comp2-postal": "S9A 2C3",
   "comp2-postal-code": "S9A 2C3",
   "comp2-price-per-sf": "$0",
@@ -387,7 +395,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp2-property-type": "Multi-Family",
   "comp2-province": "SK",
   "comp2-quality": "Average",
-  "comp2-remarks": "Garden-style apartment complex near North Battleford Comprehensive High School",
+  "comp2-remarks":
+    "Garden-style apartment complex near North Battleford Comprehensive High School",
   "comp2-renttype": "$0",
   "comp2-rights-transferred": 0,
   "comp2-sale-conditions": "Arm's Length",
@@ -432,7 +441,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp3-city": "North Battleford",
   "comp3-city-state-zip": "North Battleford, SK S9A 3L5",
   "comp3-comments-prop": "-",
-  "comp3-comments-sale": "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversity and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
+  "comp3-comments-sale":
+    "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversity and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
   "comp3-condition": "Average",
   "comp3-confirmaffiliation": "Confidential",
   "comp3-confirmcompany": "Confidential",
@@ -480,7 +490,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp3-parking-type": "Surface",
   "comp3-photo": "/extracted-images/image77.jpg",
   "comp3-photo-caption": "Comp 3 - 1901 Pearson Ave",
-  "comp3-photo-url": "https://static-photos.valcre.com/propertyfiles/596/1113a6f4-f885-4dc8-8542-a19e534c4244/1901%20Pearson%20Ave.png?jpg740x740fit",
+  "comp3-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/1113a6f4-f885-4dc8-8542-a19e534c4244/1901%20Pearson%20Ave.png?jpg740x740fit",
   "comp3-postal": "S9A 3L5",
   "comp3-postal-code": "S9A 3L5",
   "comp3-price-per-sf": "$0",
@@ -492,7 +503,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp3-property-type": "Multi-Family",
   "comp3-province": "SK",
   "comp3-quality": "Average",
-  "comp3-remarks": "Older walkup apartment building, typical for 1980s construction",
+  "comp3-remarks":
+    "Older walkup apartment building, typical for 1980s construction",
   "comp3-renttype": "$0",
   "comp3-rights-transferred": 0,
   "comp3-sale-conditions": "Arm's Length",
@@ -537,7 +549,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp4-city": "Martensville",
   "comp4-city-state-zip": "Martensville, SK S0K 2T1",
   "comp4-comments-prop": "-",
-  "comp4-comments-sale": "Parkside Flats, a 47-unit multifamily property located at 1000 Parr Hill Drive in Martensville, Saskatchewan, sold on May 19, 2023, for $9,310,000, reflecting a price per unit of $198,085. The property was purchased by 600342 Ontario Inc. from 101300036 Saskatchewan Ltd. in an arm’s-length, cash-to-seller transaction. Constructed in 2016, Parkside Flats is a wood-frame apartment building featuring 11 one-bedroom units and 36 two-bedroom units. Each suite offers modern finishes, in-suite laundry, and access to surface parking. Parkside Flats generated an estimated net operating income of $581,178, resulting in a capitalization rate of 6.24%, The transaction formed part of a larger portfolio acquisition that included two additional apartment buildings.",
+  "comp4-comments-sale":
+    "Parkside Flats, a 47-unit multifamily property located at 1000 Parr Hill Drive in Martensville, Saskatchewan, sold on May 19, 2023, for $9,310,000, reflecting a price per unit of $198,085. The property was purchased by 600342 Ontario Inc. from 101300036 Saskatchewan Ltd. in an arm’s-length, cash-to-seller transaction. Constructed in 2016, Parkside Flats is a wood-frame apartment building featuring 11 one-bedroom units and 36 two-bedroom units. Each suite offers modern finishes, in-suite laundry, and access to surface parking. Parkside Flats generated an estimated net operating income of $581,178, resulting in a capitalization rate of 6.24%, The transaction formed part of a larger portfolio acquisition that included two additional apartment buildings.",
   "comp4-condition": "Average",
   "comp4-confirmaffiliation": "Confidential",
   "comp4-confirmcompany": "Confidential",
@@ -619,7 +632,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp4-transactionaladjustments": "$0",
   "comp4-transactionprice": 9310000,
   "comp4-transaction-status": "Closed",
-  "comp4-unit-amenities": "Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring, Walk-in Closets",
+  "comp4-unit-amenities":
+    "Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring, Walk-in Closets",
   "comp4-unitmix-avgsize": 0,
   "comp4-unitmix-count": "47",
   "comp4-unitmix-type": "1BR, 2BR",
@@ -642,7 +656,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp5-city": "Martensville",
   "comp5-city-state-zip": "Martensville, SK S0K 2T1",
   "comp5-comments-prop": "-",
-  "comp5-comments-sale": "Parkside Flats 2, a 64-unit multifamily property located at 1030 Parr Hill Drive in Martensville, Saskatchewan, sold in May 2023 for $13,720,000, reflecting a price per unit of $214,375. The property was purchased by 600342 Ontario Inc. from 101300036 Saskatchewan Ltd. in an arm’s-length, cash-to-seller transaction. Completed in 2019, this wood-frame apartment building features a unit mix of 20 one-bedroom, 29 two-bedroom, and 15 three-bedroom suites. Each unit includes in-suite laundry and modern interior finishes, with a combination of surface and underground parking. Parkside Flats 2 generated an estimated net operating income of $811,585, equating to a capitalization rate of 5.92%. The transaction was part of a portfolio acquisition involving two additional multifamily properties.",
+  "comp5-comments-sale":
+    "Parkside Flats 2, a 64-unit multifamily property located at 1030 Parr Hill Drive in Martensville, Saskatchewan, sold in May 2023 for $13,720,000, reflecting a price per unit of $214,375. The property was purchased by 600342 Ontario Inc. from 101300036 Saskatchewan Ltd. in an arm’s-length, cash-to-seller transaction. Completed in 2019, this wood-frame apartment building features a unit mix of 20 one-bedroom, 29 two-bedroom, and 15 three-bedroom suites. Each unit includes in-suite laundry and modern interior finishes, with a combination of surface and underground parking. Parkside Flats 2 generated an estimated net operating income of $811,585, equating to a capitalization rate of 5.92%. The transaction was part of a portfolio acquisition involving two additional multifamily properties.",
   "comp5-condition": "Average",
   "comp5-confirmaffiliation": "Confidential",
   "comp5-confirmcompany": "Confidential",
@@ -711,7 +726,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp5-sale-status": "Closed",
   "comp5-saleconditions": "Arm's Length",
   "comp5-salestatus": "Closed",
-  "comp5-security-features": "Secured Entry, Intercom, Exterior Lighting, Camera System",
+  "comp5-security-features":
+    "Secured Entry, Intercom, Exterior Lighting, Camera System",
   "comp5-seller": "101300036 Saskatchewan Ltd.",
   "comp5-sfaverage": 0,
   "comp5-sitesize": 52708,
@@ -724,7 +740,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "comp5-transactionaladjustments": "$0",
   "comp5-transactionprice": 13720000,
   "comp5-transaction-status": "Closed",
-  "comp5-unit-amenities": "Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring, Walk-in Closets",
+  "comp5-unit-amenities":
+    "Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring, Walk-in Closets",
   "comp5-unitmix-avgsize": 0,
   "comp5-unitmix-count": "64",
   "comp5-unitmix-type": "1BR, 2BR, 3BR",
@@ -752,7 +769,7 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "cost-site-paving": 10000,
   "cost-site-utilities": 5000,
   "cost-site-other": 0,
-  "cost-approach-applied": "No",  // Not applied for North Battleford (older property)
+  "cost-approach-applied": "No", // Not applied for North Battleford (older property)
   "comp6-address": "-",
   "comp6-city": "-",
   "comp6-comments-prop": "-",
@@ -814,10 +831,11 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "contractvsmarket-total-concludedrent": "$0",
   "contractvsmarket-total-percentage": 0,
   "contractvsmarket-total-units": 0,
-  "country": "Canada",
-  "cover-photo": "/extracted-images/image2.jpeg",
+  country: "Canada",
+  // "cover-photo" removed - duplicate of "subject-photo" (template uses {{subject-photo}})
   "cover-photo-caption": "1101, 1121 109 St - North Battleford Apartments",
-  "current-owner-text": "The subject property is currently under the ownership of 102109845 Saskatchewan Ltd.",
+  "current-owner-text":
+    "The subject property is currently under the ownership of 102109845 Saskatchewan Ltd.",
   "dca-adjprice-avg": 115981,
   "dca-adjprice-high": 118100,
   "dca-adjprice-low": 111914,
@@ -904,29 +922,41 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "dircap-value1-psf": 176.40141121128968,
   "dircap-value2": 1800000,
   "dircap-value3": 1800000,
-  "easements-text": "A legal opinion regarding title information was not provided or commissioned in conjunction with this assignment. Under the scope of this appraisal, it is assumed that any legal notations and registered charges on title do not adversely affect the highest and best use of the subject property as described herein, unless otherwise noted. If there is any concern on the part of the reader with respect to the status of title, we recommend a legal opinion be obtained. A copy of the subject property title has been inserted in the appendix to this report if further information is required.",
+  "easements-text":
+    "A legal opinion regarding title information was not provided or commissioned in conjunction with this assignment. Under the scope of this appraisal, it is assumed that any legal notations and registered charges on title do not adversely affect the highest and best use of the subject property as described herein, unless otherwise noted. If there is any concern on the part of the reader with respect to the status of title, we recommend a legal opinion be obtained. A copy of the subject property title has been inserted in the appendix to this report if further information is required.",
   "effective-date": "October 17, 2025",
-  "egr-comment": "The total effective gross revenue for the subject is $196,406 which is $12,275/Unit and $19.25/SF.",
+  "egr-comment":
+    "The total effective gross revenue for the subject is $196,406 which is $12,275/Unit and $19.25/SF.",
   "egr-proj-pct": "0%",
-  "exp-insurance-comment": "Based on historical operating statements and current market rates for similar properties",
+  "exp-insurance-comment":
+    "Based on historical operating statements and current market rates for similar properties",
   "exp-management-comment": 0,
-  "exp-other-comment": "Includes miscellaneous operating costs and administrative expenses",
-  "exp-payroll-comment": "Part-time caretaker services for building maintenance and tenant relations",
-  "exp-repairs-comment": "Ongoing maintenance and capital reserve allowance for aging building systems",
-  "exp-taxes-comment": "Based on current municipal tax assessment and mill rate",
-  "exp-utilities-comment": "Includes common area electricity, water, sewer, and natural gas for heating",
+  "exp-other-comment":
+    "Includes miscellaneous operating costs and administrative expenses",
+  "exp-payroll-comment":
+    "Part-time caretaker services for building maintenance and tenant relations",
+  "exp-repairs-comment":
+    "Ongoing maintenance and capital reserve allowance for aging building systems",
+  "exp-taxes-comment":
+    "Based on current municipal tax assessment and mill rate",
+  "exp-utilities-comment":
+    "Includes common area electricity, water, sewer, and natural gas for heating",
   "expense-ratio": 0.43091911465206834,
-  "exposure": "average",
+  exposure: "average",
   "exposure-time": "3 to 6 months",
   "final-value-conclusion": "$0",
   "flood-zone": " ",
-  "flooring": "Combination of carpet, tile, vinyl tile and laminate hard wood;",
-  "functional-design": "The building features a functional Walkup design with typical site coverage and adequate off-street parking.",
-  "hazardous-text": "Based on a review of an independent investigation to determine the presence or absence of toxins on the subject property, none are present. If questions arise, the reader is strongly cautioned to seek qualified professional assistance in this matter. Please see the Assumptions and Limiting Conditions for a full disclaimer.",
-  "hbu-conclusion-vacant": "The highest and best use of the site as vacant is for multifamily residential development, consistent with current zoning.",
+  flooring: "Combination of carpet, tile, vinyl tile and laminate hard wood;",
+  "functional-design":
+    "The building features a functional Walkup design with typical site coverage and adequate off-street parking.",
+  "hazardous-text":
+    "Based on a review of an independent investigation to determine the presence or absence of toxins on the subject property, none are present. If questions arise, the reader is strongly cautioned to seek qualified professional assistance in this matter. Please see the Assumptions and Limiting Conditions for a full disclaimer.",
+  "hbu-conclusion-vacant":
+    "The highest and best use of the site as vacant is for multifamily residential development, consistent with current zoning.",
   "hbu-improved": "multifamily",
   "hbu-vacant": "multifamily",
-  "hbu-asimproved-1": "The legal factors influencing the highest and best use of the subject property are primarily governmental regulations such as zoning and building codes. The subject's improvements were constructed in 1970; (1970 weighted) and are a legal, conforming use. The physical and locational characteristics of the subject improvements have been previously discussed in this report. The project is of average quality construction and average condition, with adequate site coverage and parking ratios.",
+  "hbu-asimproved-1":
+    "The legal factors influencing the highest and best use of the subject property are primarily governmental regulations such as zoning and building codes. The subject's improvements were constructed in 1970; (1970 weighted) and are a legal, conforming use. The physical and locational characteristics of the subject improvements have been previously discussed in this report. The project is of average quality construction and average condition, with adequate site coverage and parking ratios.",
   "impv-floors": "2",
   "impv-nra": "10,204",
   "impv-sitecoverage": "12.86% (Based On Total Overall Site Area)",
@@ -991,14 +1021,17 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "img-site-plan-2": "/extracted-images/image45.png",
   "img-zoning-map": "/extracted-images/image48.png",
   "inspection-date": "October 17, 2025",
-  "report-intendeduse": "The authorized use of this report is for first mortgage financing purposes.",
-  "report-intendeduser": "102109845 Saskatchewan Ltd. is the only authorized user of this report.",
+  "report-intendeduse":
+    "The authorized use of this report is for first mortgage financing purposes.",
+  "report-intendeduser":
+    "102109845 Saskatchewan Ltd. is the only authorized user of this report.",
   "interest-appraised": "Fee Simple Estate",
   "interior-buildout": "Standard rental finishes;",
   "interior-walls": "Painted drywall;",
   "land-to-building": 2.391219129753038,
-  "landscaping": "Landscaping around the building perimeter to consist of shrubs and trees. The landscaping as proposed is well established and well maintained.",
-  "lighting": "Various;",
+  landscaping:
+    "Landscaping around the building perimeter to consist of shrubs and trees. The landscaping as proposed is well established and well maintained.",
+  lighting: "Various;",
   "img-map-aerial": "/extracted-images/image36.png",
   "img-map-aerial-1-title": "Aerial View",
   "img-map-aerial-2-title": "Site Boundary",
@@ -1098,8 +1131,9 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "market-rent-comps-count": "$0",
   "market-rent-comps-markets": "$0",
   "marketing-time": "Six Months",
-  "msa": 0,
-  "noi-comment": "The total net operating income for the subject is $111,771 which is $6,986/Unit and $10.95/SF.",
+  msa: 0,
+  "noi-comment":
+    "The total net operating income for the subject is $111,771 which is $6,986/Unit and $10.95/SF.",
   "noi-proj-pct": "0%",
   "oar-avg": 0.06026,
   "oar-comps-avg": "6.03%",
@@ -1195,14 +1229,15 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "otherrevenue-total-perunit": 450,
   "otherrevenue-total-total": 7200,
   "permitted-uses": "low and medium density residential",
-  "pgr-comment": "The potential gross revenue of the subject is calculated by multiplying the sum of market rent of $12,765/Unit and $20.02 per square foot rent and reimbursements, if any, at $0 which is $0/Unit and -/SF by the net rentable area of 10,204 square feet, which indicates a PGR of $204,240.",
+  "pgr-comment":
+    "The potential gross revenue of the subject is calculated by multiplying the sum of market rent of $12,765/Unit and $20.02 per square foot rent and reimbursements, if any, at $0 which is $0/Unit and -/SF by the net rentable area of 10,204 square feet, which indicates a PGR of $204,240.",
   "pgr-proj-pct": "0%",
   "postal-code": "S9A 2E5",
   "property-interest": "fee simple estate",
   "property-name": "North Battleford Apartments",
   "property-rights": "Fee Simple Estate",
   "valuation-date": "2025-01-15",
-  "province": "Saskatchewan",
+  province: "Saskatchewan",
   "recon-cap-rate": 0.0625,
   "recon-date": "2025-10-17 00:00:00",
   "recon-dca-summary": 1800000,
@@ -1227,7 +1262,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rental-comp1-id": 251054,
   "rental-comp1-label": "$0",
   "rental-comp1-photo": "/extracted-images/image44.png",
-  "rental-comp1-photo-url": "https://static-photos.valcre.com/propertyfiles/596/52dabf68-9396-4cd1-8bd6-f33b9f699bcc/Screenshot%202025-10-23%20102542.png?jpg740x740fit",
+  "rental-comp1-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/52dabf68-9396-4cd1-8bd6-f33b9f699bcc/Screenshot%202025-10-23%20102542.png?jpg740x740fit",
   "rental-comp1-postal": "S9A 0S6",
   "rental-comp1-province": "SK",
   "rental-comp1-total-adj": 0,
@@ -1250,7 +1286,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rental-comp2-id": 251063,
   "rental-comp2-label": "$0",
   "rental-comp2-photo": "/extracted-images/image45.png",
-  "rental-comp2-photo-url": "https://static-photos.valcre.com/propertyfiles/596/a5455173-372a-4a4e-b473-1bc015342914/Screenshot%202025-10-23%20105135.png?jpg740x740fit",
+  "rental-comp2-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/a5455173-372a-4a4e-b473-1bc015342914/Screenshot%202025-10-23%20105135.png?jpg740x740fit",
   "rental-comp2-postal": "S6V 0L9",
   "rental-comp2-province": "SK",
   "rental-comp2-total-adj": 0,
@@ -1263,7 +1300,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rental-comp3-distance": "$0",
   "rental-comp3-id": 251069,
   "rental-comp3-label": "$0",
-  "rental-comp3-photo-url": "https://static-photos.valcre.com/propertyfiles/596/b3281f19-40a7-4085-8344-e6107ea0c5c9/Screenshot%202025-10-23%20110826.png?jpg740x740fit",
+  "rental-comp3-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/b3281f19-40a7-4085-8344-e6107ea0c5c9/Screenshot%202025-10-23%20110826.png?jpg740x740fit",
   "rental-comp3-postal": "S6V 5C7",
   "rental-comp3-province": "SK",
   "rental-comp3-total-adj": 0,
@@ -1276,7 +1314,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rental-comp4-distance": "$0",
   "rental-comp4-id": 251072,
   "rental-comp4-label": "$0",
-  "rental-comp4-photo-url": "https://static-photos.valcre.com/propertyfiles/596/38f399d5-467d-4bf4-8209-6366d8df3b8a/Screenshot%202025-10-23%20111624.png?jpg740x740fit",
+  "rental-comp4-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/38f399d5-467d-4bf4-8209-6366d8df3b8a/Screenshot%202025-10-23%20111624.png?jpg740x740fit",
   "rental-comp4-postal": "S6V 7E7",
   "rental-comp4-province": "SK",
   "rental-comp4-total-adj": 0,
@@ -1289,7 +1328,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rental-comp5-distance": "$0",
   "rental-comp5-id": 251073,
   "rental-comp5-label": "$0",
-  "rental-comp5-photo-url": "https://static-photos.valcre.com/propertyfiles/596/a71aab5f-556d-49f4-af85-4569a82550fa/Screenshot%202025-10-23%20112444.png?jpg740x740fit",
+  "rental-comp5-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/a71aab5f-556d-49f4-af85-4569a82550fa/Screenshot%202025-10-23%20112444.png?jpg740x740fit",
   "rental-comp5-postal": "S6V 5Z3",
   "rental-comp5-province": "SK",
   "rental-comp5-total-adj": 0,
@@ -1383,7 +1423,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp1-parking-incl": "Carport",
   "rentcomp1-parking-type": "Surface",
   "rentcomp1-parking-type2": "Surface",
-  "rentcomp1-photo-url": "https://static-photos.valcre.com/propertyfiles/596/52dabf68-9396-4cd1-8bd6-f33b9f699bcc/Screenshot%202025-10-23%20102542.png?jpg740x740fit",
+  "rentcomp1-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/52dabf68-9396-4cd1-8bd6-f33b9f699bcc/Screenshot%202025-10-23%20102542.png?jpg740x740fit",
   "rentcomp1-pool": "No",
   "rentcomp1-postal-code": "S9A 0S6",
   "rentcomp1-proj-amenities": "$0",
@@ -1399,7 +1440,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp1-surveycomments": "$0",
   "rentcomp1-total-adj": 0,
   "rentcomp1-totaladj": "$0",
-  "rentcomp1-unit-amenities": "Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring",
+  "rentcomp1-unit-amenities":
+    "Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring",
   "rentcomp1-unitmix": "Type",
   "rentcomp1-units": 4,
   "rentcomp1-utilities": "G, Heat, I, W",
@@ -1420,7 +1462,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp2-city": "Prince Albert",
   "rentcomp2-clubhouse": "No",
   "rentcomp2-comments-prop": "-",
-  "rentcomp2-comments-survey": "-  Parking availability without the monthly parking fee",
+  "rentcomp2-comments-survey":
+    "-  Parking availability without the monthly parking fee",
   "rentcomp2-condition": "Average",
   "rentcomp2-confirmaffiliation": "Confidential",
   "rentcomp2-confirmcompany": "Confidential",
@@ -1442,7 +1485,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp2-parking-incl": "Open",
   "rentcomp2-parking-type": "Surface",
   "rentcomp2-parking-type2": "Surface",
-  "rentcomp2-photo-url": "https://static-photos.valcre.com/propertyfiles/596/a5455173-372a-4a4e-b473-1bc015342914/Screenshot%202025-10-23%20105135.png?jpg740x740fit",
+  "rentcomp2-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/a5455173-372a-4a4e-b473-1bc015342914/Screenshot%202025-10-23%20105135.png?jpg740x740fit",
   "rentcomp2-pool": "No",
   "rentcomp2-postal-code": "S6V 0L9",
   "rentcomp2-proj-amenities": "$0",
@@ -1454,11 +1498,13 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp2-renttype": "Market",
   "rentcomp2-rubsunitavg": 0,
   "rentcomp2-security": "Cameras, Exterior Lighting, Secured Entry",
-  "rentcomp2-survey-comments": "-  Parking availability without the monthly parking fee",
+  "rentcomp2-survey-comments":
+    "-  Parking availability without the monthly parking fee",
   "rentcomp2-surveycomments": "$0",
   "rentcomp2-total-adj": 0,
   "rentcomp2-totaladj": "$0",
-  "rentcomp2-unit-amenities": "Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring",
+  "rentcomp2-unit-amenities":
+    "Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring",
   "rentcomp2-unitmix": "Type",
   "rentcomp2-units": 6,
   "rentcomp2-utilities": "Heat, W",
@@ -1473,7 +1519,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp3-city": "Prince Albert",
   "rentcomp3-clubhouse": "No",
   "rentcomp3-comments-prop": "-",
-  "rentcomp3-comments-survey": "-  Parking availability without the monthly parking fee.",
+  "rentcomp3-comments-survey":
+    "-  Parking availability without the monthly parking fee.",
   "rentcomp3-condition": "Average",
   "rentcomp3-confirmaffiliation": "Confidential",
   "rentcomp3-confirmcompany": "Confidential",
@@ -1495,7 +1542,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp3-parking-incl": "Open",
   "rentcomp3-parking-type": "Surface",
   "rentcomp3-parking-type2": "Surface",
-  "rentcomp3-photo-url": "https://static-photos.valcre.com/propertyfiles/596/b3281f19-40a7-4085-8344-e6107ea0c5c9/Screenshot%202025-10-23%20110826.png?jpg740x740fit",
+  "rentcomp3-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/b3281f19-40a7-4085-8344-e6107ea0c5c9/Screenshot%202025-10-23%20110826.png?jpg740x740fit",
   "rentcomp3-pool": "No",
   "rentcomp3-postal-code": "S6V 5C7",
   "rentcomp3-proj-amenities": "$0",
@@ -1507,11 +1555,13 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp3-renttype": "Market",
   "rentcomp3-rubsunitavg": 0,
   "rentcomp3-security": "Cameras, Deadbolts, Exterior Lighting, Secured Entry",
-  "rentcomp3-survey-comments": "-  Parking availability without the monthly parking fee.",
+  "rentcomp3-survey-comments":
+    "-  Parking availability without the monthly parking fee.",
   "rentcomp3-surveycomments": "$0",
   "rentcomp3-total-adj": 0,
   "rentcomp3-totaladj": "$0",
-  "rentcomp3-unit-amenities": "Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring",
+  "rentcomp3-unit-amenities":
+    "Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring",
   "rentcomp3-unitmix": "Type",
   "rentcomp3-units": 6,
   "rentcomp3-utilities": "Heat, W",
@@ -1526,7 +1576,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp4-city": "Prince Albert",
   "rentcomp4-clubhouse": "No",
   "rentcomp4-comments-prop": "-",
-  "rentcomp4-comments-survey": "-  Parking availability without the monthly parking fee",
+  "rentcomp4-comments-survey":
+    "-  Parking availability without the monthly parking fee",
   "rentcomp4-condition": "Average",
   "rentcomp4-confirmaffiliation": "Confidential",
   "rentcomp4-confirmcompany": "Confidential",
@@ -1548,7 +1599,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp4-parking-incl": "Open",
   "rentcomp4-parking-type": "Surface",
   "rentcomp4-parking-type2": "Surface",
-  "rentcomp4-photo-url": "https://static-photos.valcre.com/propertyfiles/596/38f399d5-467d-4bf4-8209-6366d8df3b8a/Screenshot%202025-10-23%20111624.png?jpg740x740fit",
+  "rentcomp4-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/38f399d5-467d-4bf4-8209-6366d8df3b8a/Screenshot%202025-10-23%20111624.png?jpg740x740fit",
   "rentcomp4-pool": "No",
   "rentcomp4-postal-code": "S6V 7E7",
   "rentcomp4-proj-amenities": "$0",
@@ -1560,11 +1612,13 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp4-renttype": "Market",
   "rentcomp4-rubsunitavg": 0,
   "rentcomp4-security": "Cameras, Deadbolts, Exterior Lighting, Secured Entry",
-  "rentcomp4-survey-comments": "-  Parking availability without the monthly parking fee",
+  "rentcomp4-survey-comments":
+    "-  Parking availability without the monthly parking fee",
   "rentcomp4-surveycomments": "$0",
   "rentcomp4-total-adj": 0,
   "rentcomp4-totaladj": "$0",
-  "rentcomp4-unit-amenities": "Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring",
+  "rentcomp4-unit-amenities":
+    "Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring",
   "rentcomp4-unitmix": "Type",
   "rentcomp4-units": 9,
   "rentcomp4-utilities": "Heat, W",
@@ -1579,7 +1633,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp5-city": "Prince Albert",
   "rentcomp5-clubhouse": "No",
   "rentcomp5-comments-prop": "-",
-  "rentcomp5-comments-survey": "-  Parking availability without the monthly parking fee",
+  "rentcomp5-comments-survey":
+    "-  Parking availability without the monthly parking fee",
   "rentcomp5-condition": "Average",
   "rentcomp5-confirmaffiliation": "Confidential",
   "rentcomp5-confirmcompany": "Confidential",
@@ -1601,7 +1656,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp5-parking-incl": "Open",
   "rentcomp5-parking-type": "Surface",
   "rentcomp5-parking-type2": "Surface",
-  "rentcomp5-photo-url": "https://static-photos.valcre.com/propertyfiles/596/a71aab5f-556d-49f4-af85-4569a82550fa/Screenshot%202025-10-23%20112444.png?jpg740x740fit",
+  "rentcomp5-photo-url":
+    "https://static-photos.valcre.com/propertyfiles/596/a71aab5f-556d-49f4-af85-4569a82550fa/Screenshot%202025-10-23%20112444.png?jpg740x740fit",
   "rentcomp5-pool": "No",
   "rentcomp5-postal-code": "S6V 5Z3",
   "rentcomp5-proj-amenities": "$0",
@@ -1613,11 +1669,13 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentcomp5-renttype": "Market",
   "rentcomp5-rubsunitavg": 0,
   "rentcomp5-security": "Cameras, Deadbolts, Exterior Lighting, Secured Entry",
-  "rentcomp5-survey-comments": "-  Parking availability without the monthly parking fee",
+  "rentcomp5-survey-comments":
+    "-  Parking availability without the monthly parking fee",
   "rentcomp5-surveycomments": "$0",
   "rentcomp5-total-adj": 0,
   "rentcomp5-totaladj": "$0",
-  "rentcomp5-unit-amenities": "Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring",
+  "rentcomp5-unit-amenities":
+    "Air Conditioning, Deck/Patio, Premium Appliances, Premium Countertops, Premium Flooring",
   "rentcomp5-unitmix": "Type",
   "rentcomp5-units": 12,
   "rentcomp5-utilities": "Heat, W",
@@ -1685,19 +1743,24 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "rentroll-type2-total": "$0",
   "rentroll-type2-vac": "$0",
   "rentroll-type2-vac-pct": "0%",
-  "report-approaches": "Direct Comparison and Income (Direct Capitalization) Approaches",
+  "report-approaches":
+    "Direct Comparison and Income (Direct Capitalization) Approaches",
   "report-date": "2025-11-20",
   "report-date1": "2025-11-20",
   "report-dateinspection": "",
   "report-depth": "fully described",
   "report-effectivedate": "October 17, 2025",
-  "report-extraordinary": "No Extraordinary Assumptions were made for this assignment.",
-  "report-guidelines": "The report has been completed in accordance with the Canadian Uniform Standards of Professional Appraisal Practice (“CUSPAP”) adopted January 1, 2024.",
-  "report-hypothetical": "The use of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed based on the hypothetical condition that the subject property is fully leased at prevailing market rents and has achieved stabilized occupancy as of the effective date of the appraisal. Under this premise, no deductions are made for holding costs, rent loss, or lease-up expenses. In addition it is a hypothetical condition that all units could achieve current market rent levels and stabilized occupancy as of the effective date. In reality, as of the effective date, the property's existing lease terms reflect contract rents that are deemed to be below-market rents. For the purposes of this analysis, it is assumed that lease-up to market rent levels has occurred under typical market conditions, without undue delay or concessions exceeding market norms. If this assumption proves incorrect, such as market rents are not achievable the value conclusion may be materially impacted.",
+  "report-extraordinary":
+    "No Extraordinary Assumptions were made for this assignment.",
+  "report-guidelines":
+    "The report has been completed in accordance with the Canadian Uniform Standards of Professional Appraisal Practice (“CUSPAP”) adopted January 1, 2024.",
+  "report-hypothetical":
+    "The use of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed based on the hypothetical condition that the subject property is fully leased at prevailing market rents and has achieved stabilized occupancy as of the effective date of the appraisal. Under this premise, no deductions are made for holding costs, rent loss, or lease-up expenses. In addition it is a hypothetical condition that all units could achieve current market rent levels and stabilized occupancy as of the effective date. In reality, as of the effective date, the property's existing lease terms reflect contract rents that are deemed to be below-market rents. For the purposes of this analysis, it is assumed that lease-up to market rent levels has occurred under typical market conditions, without undue delay or concessions exceeding market norms. If this assumption proves incorrect, such as market rents are not achievable the value conclusion may be materially impacted.",
   "report-inspectiondate": "",
   "report-interest": "Fee Simple Estate",
   "report-legal": "Plan - C4240; Block - 95; Lot - 17,18, 19, 20",
-  "report-limcond": "No Extraordinary Limiting Conditions were made for this assignment.",
+  "report-limcond":
+    "No Extraordinary Limiting Conditions were made for this assignment.",
   "report-valuationcost": "$0",
   "report-valuationincome": "$3,980,000",
   "report-valuationsales": "$3,890,000",
@@ -1719,21 +1782,27 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "sa-psf-low": "$85,627",
   "sa-unit-of-comparison": "Unit",
   "sa-value-per-unit": "$112,500",
-  "sale-history-text": "Ownership of the subject property has not changed in the past three years. We are unaware of any pending sales or listing activity relating to the subject property.",
+  "sale-history-text":
+    "Ownership of the subject property has not changed in the past three years. We are unaware of any pending sales or listing activity relating to the subject property.",
   "sca-adjusted-value-high": "$0",
   "sca-adjusted-value-low": "$0",
   "sca-concluded-value-per-unit": "$0",
   "sca-indicated-value": "$0",
   "sca-indicated-value-rounded": "$0",
   "sca-value-per-sf": "$0",
-  "site-conclusion": "In conclusion, the site’s physical characteristics appear to be supportive of the subject’s current use and there were no significant detriments discovered that would inhibit development in accordance with its highest and best use.",
-  "site-coverage-ratio": "12.9% (3,138 SF footprint / 24,400 SF site), which is within market standards (20-35%) for similar walkup buildings in the area. ",
-  "site-coverage-ratio-text": "12.9% (3,138 SF footprint / 24,400 SF site), which is within market standards (20-35%) for similar walkup buildings in the area.",
+  "site-conclusion":
+    "In conclusion, the site’s physical characteristics appear to be supportive of the subject’s current use and there were no significant detriments discovered that would inhibit development in accordance with its highest and best use.",
+  "site-coverage-ratio":
+    "12.9% (3,138 SF footprint / 24,400 SF site), which is within market standards (20-35%) for similar walkup buildings in the area. ",
+  "site-coverage-ratio-text":
+    "12.9% (3,138 SF footprint / 24,400 SF site), which is within market standards (20-35%) for similar walkup buildings in the area.",
   "site-improvements": "Gravel parking, sidewalks, and curbs;",
-  "site-info": "The subject property consists of one parcel with a total site area of 24,400 SF (0.56 AC) which is based on information obtained from ICS. For the purposes of this report, we have relied on this site area and reserve the right to amend our analysis upon receipt of a formal legal plan.",
+  "site-info":
+    "The subject property consists of one parcel with a total site area of 24,400 SF (0.56 AC) which is based on information obtained from ICS. For the purposes of this report, we have relied on this site area and reserve the right to amend our analysis upon receipt of a formal legal plan.",
   "site-plan-1-title": "Site Plan - Building Layout",
   "site-plan-2-title": "Site Plan - Parking Configuration",
-  "site-rating": "Overall, the subject site is considered average as a multi-family site in terms of its location, exposure and access to employment, education and shopping centers, based on its location along a minor arterial.",
+  "site-rating":
+    "Overall, the subject site is considered average as a multi-family site in terms of its location, exposure and access to employment, education and shopping centers, based on its location along a minor arterial.",
   "site-size": 0,
   "site-street1": "109 Street",
   "site-street2": "11 Avenue",
@@ -1745,13 +1814,16 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "sk-rental-rate-growth": "$0",
   "sk-supply-growth-rate": "1.2%",
   "sk-vacancy-rate": "5.5%",
-  "soils-text": "We have not undertaken a detailed soil analysis and we are not qualified to comment on soil conditions. As such, the soils are assumed to be similar to other lands in the area and suitable in drainage qualities and load bearing capacity to support the existing development.",
+  "soils-text":
+    "We have not undertaken a detailed soil analysis and we are not qualified to comment on soil conditions. As such, the soils are assumed to be similar to other lands in the area and suitable in drainage qualities and load bearing capacity to support the existing development.",
   "street-address": "1101, 1121 109 St",
   "subject-access-rating": "Average",
   "subject-actualage": 55,
-  "subject-amenities-laundry": "Common area coin-operated laundry facilities in each building",
+  "subject-amenities-laundry":
+    "Common area coin-operated laundry facilities in each building",
   "subject-amenities-parking": "Surface parking with 18 stalls (1.1 per unit)",
-  "subject-amenities-utilities": "Heat and water included in rent; tenants pay electricity",
+  "subject-amenities-utilities":
+    "Heat and water included in rent; tenants pay electricity",
   "subject-appeal": "Average",
   "subject-appeal-rating": "Average",
   "subject-avg-unit-sf": 0,
@@ -1765,8 +1837,10 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "subject-county": "North Battleford ",
   "subject-currentrent": "$0",
   "subject-density": 28.563934426229505,
-  "subject-econ-characteristics": "The improvements are comprised of 2 total buildings, and consist of 10,204 square feet of net rentable area (NRA) as of the valuation date. The property, reportedly built in 1970; (1970 weighted) is approximately 100.0% occupied and features 16 units in a 2-story, garden style format.",
-  "subject-econcharacteristics": "The subject property demonstrates strong economic characteristics typical of well-maintained multifamily properties in the North Battleford market.",
+  "subject-econ-characteristics":
+    "The improvements are comprised of 2 total buildings, and consist of 10,204 square feet of net rentable area (NRA) as of the valuation date. The property, reportedly built in 1970; (1970 weighted) is approximately 100.0% occupied and features 16 units in a 2-story, garden style format.",
+  "subject-econcharacteristics":
+    "The subject property demonstrates strong economic characteristics typical of well-maintained multifamily properties in the North Battleford market.",
   "subject-economiclife": 75,
   "subject-effectiveage": 35,
   "subject-electrical": "Individually metered;",
@@ -1779,30 +1853,38 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "subject-geocode": "52.7738945, -108.2861417",
   "subject-hbuimproved": "Continued use as multifamily residential",
   "subject-hbuvacant": "Multifamily residential development",
-  "subject-hazerdous": "Based on a review of the independent investigation to determine the presence or absence of toxins on the subject property, none are present. If questions arise, the reader is strongly cautioned to seek qualified professional assistance in this matter. Please see the Assumptions and Limiting Conditions for a full disclaimer.",
-  "subject-hvac": "1101 - 8 Furnaces, 1121 - Boilers with baseboard radiant heat;",
-  "subject-intro": "The subject property, located at 1101, 1121 109 St, North Battleford, SK, is a multi-family, walkup property with improvements located in North Battleford",
-  "subject-introcomment": "This appraisal report has been prepared in accordance with the Canadian Uniform Standards of Professional Appraisal Practice (CUSPAP).",
+  "subject-hazerdous":
+    "Based on a review of the independent investigation to determine the presence or absence of toxins on the subject property, none are present. If questions arise, the reader is strongly cautioned to seek qualified professional assistance in this matter. Please see the Assumptions and Limiting Conditions for a full disclaimer.",
+  "subject-hvac":
+    "1101 - 8 Furnaces, 1121 - Boilers with baseboard radiant heat;",
+  "subject-intro":
+    "The subject property, located at 1101, 1121 109 St, North Battleford, SK, is a multi-family, walkup property with improvements located in North Battleford",
+  "subject-introcomment":
+    "This appraisal report has been prepared in accordance with the Canadian Uniform Standards of Professional Appraisal Practice (CUSPAP).",
   "subject-interiorfinish": "Standard rental finishes;",
   "subject-latitude": 52.7738945,
   "subject-laundry": "On Site",
-  "subject-legally-permitted": "Yes - R2 Low Density Residential permits multifamily use",
+  "subject-legally-permitted":
+    "Yes - R2 Low Density Residential permits multifamily use",
   "subject-location": "North Battleford, Saskatchewan",
   "subject-location-rating": "Average",
   "subject-longitude": -108.2861417,
   "subject-market": "North Battleford",
-  "subject-marketing": "The property would be marketed through commercial real estate brokerages specializing in multifamily investments, with exposure to regional and national investors.",
+  "subject-marketing":
+    "The property would be marketed through commercial real estate brokerages specializing in multifamily investments, with exposure to regional and national investors.",
   "subject-name": "North Battleford Apartments",
   "subject-nra": 10204,
   "subject-occupancy-current": "100.0%",
   "subject-occupancystabilized": 0.9616451233842538,
   "subject-occupied-units": 0,
   "subject-owner": "102109845 Saskatchewan Ltd.",
-  "subject-parking": "The subject provides 18 parking spaces and is therefore conforming to zoning requirements. The parking ratio of 1.1 per unit is within the typical range of spaces per unit and within zoning requirements.",
+  "subject-parking":
+    "The subject provides 18 parking spaces and is therefore conforming to zoning requirements. The parking ratio of 1.1 per unit is within the typical range of spaces per unit and within zoning requirements.",
   "subject-parking-incl": "Yes - included in rent",
   "subject-parking-type": "Surface",
   "subject-parkingratio": 1.125,
-  "subject-permitteduses": "Low and medium density residential including single-family, semi-detached, and multifamily dwellings",
+  "subject-permitteduses":
+    "Low and medium density residential including single-family, semi-detached, and multifamily dwellings",
   "subject-photo": "/extracted-images/image2.jpeg",
   "subject-photo-1": "/extracted-images/image12.jpeg",
   "subject-photo-1-caption": "1101 - East Elevation",
@@ -1857,7 +1939,7 @@ export const testDataSet1: Record<string, string | number | string[]> =
   // ============================================================================
   // CATEGORIZED IMAGE FIELDS (46 fields) - Added 2026-01-03
   // ============================================================================
-  
+
   // Exterior Photos
   "img-exterior-1": "/extracted-images/image12.jpeg",
   "img-exterior-1-caption": "Front exterior view",
@@ -1933,10 +2015,13 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "subject-sfmultifamily": 0,
   "subject-shape": "rectangular",
   "subject-siteaccess": "Direct access from 109 Street, a minor arterial road",
-  "subject-siteexposure": "Corner lot with visibility from 109 Street and 11 Avenue",
-  "subject-sitequality": "Average - Level, rectangular lot with adequate parking",
+  "subject-siteexposure":
+    "Corner lot with visibility from 109 Street and 11 Avenue",
+  "subject-sitequality":
+    "Average - Level, rectangular lot with adequate parking",
   "subject-siteutility": "Good - All municipal services available",
-  "subject-sitecoverageratio": "12.9% (3,138 SF footprint / 24,400 SF site), which is within market standards (20-35%) for similar walkup buildings in the area.",
+  "subject-sitecoverageratio":
+    "12.9% (3,138 SF footprint / 24,400 SF site), which is within market standards (20-35%) for similar walkup buildings in the area.",
   "subject-st": "SK",
   "subject-state": "Saskatchewan",
   "subject-stories": 2,
@@ -1945,7 +2030,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "subject-streetnumber": "1101,",
   "subject-submarket": "North Battleford",
   "subject-subtype": "Walkup",
-  "subject-surveycomments": "No survey provided; site area based on municipal records",
+  "subject-surveycomments":
+    "No survey provided; site area based on municipal records",
   "subject-taxamount": 14016,
   "subject-taxassessment": 876000,
   "subject-tax-per-sf": 0,
@@ -1974,7 +2060,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "subject-zoningchange": "No",
   "subject-zoningchangestatus": "N/A",
   "subject-zoningcode": "R2",
-  "subject-zoningdescription": "R2 - Low Density Residential District permits multifamily residential uses up to 4 storeys",
+  "subject-zoningdescription":
+    "R2 - Low Density Residential District permits multifamily residential uses up to 4 storeys",
   "tax-year": 2025,
   "total-units": 16,
   "unitmix-avg-actualrent-sf": 1.591532732261858,
@@ -2013,10 +2100,14 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "vacancy-loss-unit": 510.63,
   "vacancy-loss-year": 0,
   "vacancy-rate-concluded": 0.04,
-  "valuation-cost-narrative": "Considering the limited applicability of this approach in relation to the subject property's characteristics, we have not undertaken the Cost Approach. The Cost Approach has limited applicability due to the age of the improvements and lack of market based data to support an estimate of accrued depreciation. Based on the preceding information, the Cost Approach has not been undertaken as part of this analysis.",
-  "valuation-income-narrative": "We have undertaken the Income Approach as part of this assignment. The subject property comprises an income generating asset and as such, we consider the inclusion of this approach warranted. In undertaking this approach, we have relied on the Direct Capitalization method only as the Discounted Cash Flow method does not contribute substantially to estimating the market value of the subject property beyond the Direct Capitalization method.",
-  "valuation-land-narrative": "Characteristics specific to the subject property do not warrant that a site value is developed.",
-  "valuation-sales-narrative": "We have undertaken the Direct Comparison Approach as part of this assignment. Considering the applicability of this approach in relation to the subject property's characteristics, we consider the application of this approach to be warranted.",
+  "valuation-cost-narrative":
+    "Considering the limited applicability of this approach in relation to the subject property's characteristics, we have not undertaken the Cost Approach. The Cost Approach has limited applicability due to the age of the improvements and lack of market based data to support an estimate of accrued depreciation. Based on the preceding information, the Cost Approach has not been undertaken as part of this analysis.",
+  "valuation-income-narrative":
+    "We have undertaken the Income Approach as part of this assignment. The subject property comprises an income generating asset and as such, we consider the inclusion of this approach warranted. In undertaking this approach, we have relied on the Direct Capitalization method only as the Discounted Cash Flow method does not contribute substantially to estimating the market value of the subject property beyond the Direct Capitalization method.",
+  "valuation-land-narrative":
+    "Characteristics specific to the subject property do not warrant that a site value is developed.",
+  "valuation-sales-narrative":
+    "We have undertaken the Direct Comparison Approach as part of this assignment. Considering the applicability of this approach in relation to the subject property's characteristics, we consider the application of this approach to be warranted.",
   "valuation-scenario": "As Stabilized",
   "value-ia-conclusion": 1800000,
   "value-insurable": 0,
@@ -2036,17 +2127,18 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "word-my-our": "our",
   "word-proposed-yesno": "As Improved",
   "year-built": 0,
-  "zoning-conclusion": "The current use for the subject property is walkup and is a permitted use based on the current zoning guidelines. No zoning change is believed to be imminent.  Based on the foregoing, it appears that the subject’s improvements are a legally conforming use of the subject site.",
+  "zoning-conclusion":
+    "The current use for the subject property is walkup and is a permitted use based on the current zoning guidelines. No zoning change is believed to be imminent.  Based on the foregoing, it appears that the subject’s improvements are a legally conforming use of the subject site.",
   "zoning-definition": "Low Density Residential District",
   "zoning-designation": "R2 - Low Density Residential",
-  "zoning-map-title": "Zoning Map - Subject Property"
-,
-
+  "zoning-map-title": "Zoning Map - Subject Property",
   // ============================================================================
   // NEW FIELDS - APPRAISER (14 fields) - Added 2026-01-03
   // ============================================================================
-  "appraiser-bio-paragraph1": "Chris Chornohos, AACI, MRICS is the Founder of Valta Property Valuations Ltd. and has been providing commercial real estate valuation services since 2008. He specializes in multi-family, commercial, and industrial property valuations across Western Canada.",
-  "appraiser-bio-paragraph2": "Chris holds the AACI designation from the Appraisal Institute of Canada and is a Member of the Royal Institution of Chartered Surveyors (MRICS). He is committed to providing high-quality, objective property valuations for financing, litigation, and investment decision-making purposes.",
+  "appraiser-bio-paragraph1":
+    "Chris Chornohos, AACI, MRICS is the Founder of Valta Property Valuations Ltd. and has been providing commercial real estate valuation services since 2008. He specializes in multi-family, commercial, and industrial property valuations across Western Canada.",
+  "appraiser-bio-paragraph2":
+    "Chris holds the AACI designation from the Appraisal Institute of Canada and is a Member of the Royal Institution of Chartered Surveyors (MRICS). He is committed to providing high-quality, objective property valuations for financing, litigation, and investment decision-making purposes.",
   "appraiser-headshot": "/images/chris-headshot.jpg",
   "appraiser-rics": "1234567",
   "appraiser1-allunits": "Yes",
@@ -2083,7 +2175,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "sk-avg-home-price": 315000,
   "sk-avg-rent-2br": 1150,
   "sk-credit-rating": "AA",
-  "sk-econ-overview": "Saskatchewan's economy in 2025 is defined by steady growth, strong resource activity, and an improving housing sector. Real GDP is expanding at a moderate pace, supported by agriculture, potash, and oil production.",
+  "sk-econ-overview":
+    "Saskatchewan's economy in 2025 is defined by steady growth, strong resource activity, and an improving housing sector. Real GDP is expanding at a moderate pace, supported by agriculture, potash, and oil production.",
   "sk-gdp-growth": "1.5%",
   "sk-housing-starts": "4,500 units",
   "sk-inflation": "1.8%",
@@ -2110,7 +2203,7 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "calc-mf-pct-egr": 0.98,
   "calc-mf-pct-pgr": 0.94,
   "calc-mf-pct-prr": 1.0,
-  "calc-mf-per-sf": 19.10,
+  "calc-mf-per-sf": 19.1,
   "calc-mf-per-unit": 12180,
   "calc-other-rev-annual": 1920,
   "calc-other-rev-pct-egr": 0.01,
@@ -2124,7 +2217,7 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "calc-parking-pct-prr": 0,
   "calc-parking-per-sf": 0,
   "calc-rental-rev-annual": 194880,
-  "calc-rental-rev-per-sf": 19.10,
+  "calc-rental-rev-per-sf": 19.1,
   "calc-rental-rev-per-unit": 12180,
   "calc-subtotal-annual": 196800,
   "calc-subtotal-per-sf": 19.29,
@@ -2140,16 +2233,22 @@ export const testDataSet1: Record<string, string | number | string[]> =
   // ============================================================================
   // NEW FIELDS - LOCATION (9 fields) - Added 2026-01-03
   // ============================================================================
-  "location-description": "The subject property is located in North Battleford, Saskatchewan, in a centrally situated residential area near key commercial corridors and the downtown core.",
-  "location-localarea": "The neighbourhood is a mature urban district with a mix of single-family homes, small multi-unit buildings, and local businesses.",
+  "location-description":
+    "The subject property is located in North Battleford, Saskatchewan, in a centrally situated residential area near key commercial corridors and the downtown core.",
+  "location-localarea":
+    "The neighbourhood is a mature urban district with a mix of single-family homes, small multi-unit buildings, and local businesses.",
   "location-nearbyschool-1": "Bready School (K-7, public)",
   "location-nearbyschool-2": "Connaught School (K-7, public)",
-  "location-nearbyschool-3": "North Battleford Comprehensive High School (Grades 10-12, public)",
+  "location-nearbyschool-3":
+    "North Battleford Comprehensive High School (Grades 10-12, public)",
   "location-nearbyschool-4": "John Paul II Collegiate (Grades 9-12, Catholic)",
   "location-nearbyschool-5": "St. Mary School (K-7, Catholic)",
-  "location-publictransit": "Local bus service operates on nearby corridors such as 100th Street and Territorial Drive, providing direct access to downtown, retail centres, and community facilities.",
-  "location-walkbikescores": "Walk Score: 60, Transit Score: 35, Bike Score: 55",
-  "location-access": "The property fronts 109 Street with convenient connections to major arterials including 100th Street/Highway 4 (north-south route to downtown and Highway 16) and Territorial Drive (east-west loop connecting retail and services).",
+  "location-publictransit":
+    "Local bus service operates on nearby corridors such as 100th Street and Territorial Drive, providing direct access to downtown, retail centres, and community facilities.",
+  "location-walkbikescores":
+    "Walk Score: 60, Transit Score: 35, Bike Score: 55",
+  "location-access":
+    "The property fronts 109 Street with convenient connections to major arterials including 100th Street/Highway 4 (north-south route to downtown and Highway 16) and Territorial Drive (east-west loop connecting retail and services).",
 
   // ============================================================================
   // NEW FIELDS - FRONTAGE/STREET (20 fields) - Added 2026-01-03
@@ -2203,7 +2302,8 @@ export const testDataSet1: Record<string, string | number | string[]> =
   // NEW FIELDS - INFO SOURCE (11 fields) - Added 2026-01-03
   // ============================================================================
   "info-assessment-source": "Saskatchewan Assessment Management Agency (SAMA)",
-  "info-buildingsize-source": "Property owner documentation, appraiser measurements",
+  "info-buildingsize-source":
+    "Property owner documentation, appraiser measurements",
   "info-comps-source": "Altus Data Studio, CoStar, local MLS",
   "info-environmental-source": "Phase I ESA report provided by client",
   "info-incomeexpense-source": "Property owner historical statements",
@@ -2239,26 +2339,37 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "subject-easements": "Standard utility easements registered on title",
   "subject-elevator": "N/A - Walkup",
   "subject-floorcovering": "Carpet in living areas, vinyl in kitchens/baths",
-  "subject-functionaldesign": "Standard garden-style walkup layout with units accessed from interior hallways. Functional design with no significant deficiencies noted.",
-  "subject-hazardousmaterials": "Based on the age of the property, asbestos-containing materials may be present. No Phase I ESA was provided. It is assumed that no hazardous materials adversely affect the property.",
+  "subject-functionaldesign":
+    "Standard garden-style walkup layout with units accessed from interior hallways. Functional design with no significant deficiencies noted.",
+  "subject-hazardousmaterials":
+    "Based on the age of the property, asbestos-containing materials may be present. No Phase I ESA was provided. It is assumed that no hazardous materials adversely affect the property.",
   "subject-insulation": "Standard insulation for era of construction",
   "subject-interiorwalls": "Painted drywall",
   "subject-landscaping": "Grass lawn, mature trees, shrubs",
   "subject-lighting": "Standard interior lighting, exterior security lighting",
-  "subject-parkingdesc": "Surface parking lot with 24 spaces at rear of property, providing 1.5 spaces per unit",
-  "subject-siteconclusion": "In conclusion, the site's physical characteristics appear to be supportive of the subject's current use and there were no significant detriments discovered that would inhibit development in accordance with its highest and best use.",
-  "subject-siteimprovements": "Asphalt parking lot, concrete sidewalks, chain-link fencing",
-  "subject-siterating": "Overall, the subject site is considered average as a multi-family site in terms of its location, exposure and access.",
-  "subject-soils": "We have not undertaken a detailed soil analysis. The soils are assumed to be suitable in drainage qualities and load bearing capacity to support the existing development.",
-  "subject-zoningconclusion": "The current use for the subject property is walkup and is a permitted use based on the current zoning guidelines. No zoning change is believed to be imminent.",
+  "subject-parkingdesc":
+    "Surface parking lot with 24 spaces at rear of property, providing 1.5 spaces per unit",
+  "subject-siteconclusion":
+    "In conclusion, the site's physical characteristics appear to be supportive of the subject's current use and there were no significant detriments discovered that would inhibit development in accordance with its highest and best use.",
+  "subject-siteimprovements":
+    "Asphalt parking lot, concrete sidewalks, chain-link fencing",
+  "subject-siterating":
+    "Overall, the subject site is considered average as a multi-family site in terms of its location, exposure and access.",
+  "subject-soils":
+    "We have not undertaken a detailed soil analysis. The soils are assumed to be suitable in drainage qualities and load bearing capacity to support the existing development.",
+  "subject-zoningconclusion":
+    "The current use for the subject property is walkup and is a permitted use based on the current zoning guidelines. No zoning change is believed to be imminent.",
   "subject-zoningtype": "R2 - Low Density Residential District",
 
   // ============================================================================
   // NEW FIELDS - HBU (4 fields) - Added 2026-01-03
   // ============================================================================
-  "hbu-asimproved-2": "The existing improvements contribute value to the site beyond land value alone. Demolition of the existing structures is not financially feasible given the current rental income and market conditions.",
-  "hbu-asimproved-3": "Redevelopment of the site would require significant capital investment and would not generate a return commensurate with the risk involved in the current market.",
-  "hbu-mostprobablebuyer": "The most probable buyer for the subject property is a local or regional multi-family investor seeking stable cash flow from existing rental properties in smaller Saskatchewan markets.",
+  "hbu-asimproved-2":
+    "The existing improvements contribute value to the site beyond land value alone. Demolition of the existing structures is not financially feasible given the current rental income and market conditions.",
+  "hbu-asimproved-3":
+    "Redevelopment of the site would require significant capital investment and would not generate a return commensurate with the risk involved in the current market.",
+  "hbu-mostprobablebuyer":
+    "The most probable buyer for the subject property is a local or regional multi-family investor seeking stable cash flow from existing rental properties in smaller Saskatchewan markets.",
 
   // ============================================================================
   // NEW FIELDS - UNIT MIX (22 fields) - Added 2026-01-03
@@ -2282,20 +2393,22 @@ export const testDataSet1: Record<string, string | number | string[]> =
   // ============================================================================
   // NEW FIELDS - OTHER (4 fields) - Added 2026-01-03
   // ============================================================================
-  "chart-mf-investment-indicators": "/test-data/images/charts/mf-investment-indicators.png",
-  "tax-commentary-1": "The assessed value is below the value concluded herein, a tax assessment appeal is not warranted.",
-  "tax-commentary-2": "The assessed value is lower than our valuation herein. Smaller markets tend to under assess real property assets in comparison to larger markets.",
+  "chart-mf-investment-indicators":
+    "/test-data/images/charts/mf-investment-indicators.png",
+  "tax-commentary-1":
+    "The assessed value is below the value concluded herein, a tax assessment appeal is not warranted.",
+  "tax-commentary-2":
+    "The assessed value is lower than our valuation herein. Smaller markets tend to under assess real property assets in comparison to larger markets.",
 
   // ============================================================================
   // NEW FIELDS - IMAGE ALIASES (Template compatibility) - Added 2026-01-03
   // ============================================================================
-  // Cover photo alias (template expects img-cover-photo, data has cover-photo)
-  "img-cover-photo": "/extracted-images/image2.jpeg",
-  
+  // NOTE: img-cover-photo removed - duplicate of subject-photo (template uses {{subject-photo}})
+
   // Aerial map aliases (template expects img-map-aerial-1/2, data has img-map-aerial)
   "img-map-aerial-1": "/extracted-images/image36.png",
   "img-map-aerial-2": "/extracted-images/image36.png",
-  
+
   // Signature field (template expects img-signature)
   "img-signature": "",
 
@@ -2304,7 +2417,7 @@ export const testDataSet1: Record<string, string | number | string[]> =
   // Template uses sale1-*, sale2-*, etc. but data has comp1-*, comp2-*, etc.
   // These aliases map sale* to comp* field values
   // ============================================================================
-  
+
   // Sale 1 aliases (maps to comp1)
   "sale1-name": "Heritage House",
   "sale1-address": "1551 107 St",
@@ -2316,8 +2429,9 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "sale1-cap-rate": 0.0599,
   "sale1-site-area": 21780,
   "sale1-condition": "Average",
-  "sale1-description": "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversity and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
-  
+  "sale1-description":
+    "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversity and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
+
   // Sale 2 aliases (maps to comp2)
   "sale2-name": " College View Apartments",
   "sale2-address": "10910-10912 Winder Crescent",
@@ -2329,8 +2443,9 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "sale2-cap-rate": 0.0599,
   "sale2-site-area": 21780,
   "sale2-condition": "Average",
-  "sale2-description": "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversify and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
-  
+  "sale2-description":
+    "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversify and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
+
   // Sale 3 aliases (maps to comp3)
   "sale3-name": "Woodland Estates",
   "sale3-address": "1901 Pearson Ave",
@@ -2342,8 +2457,9 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "sale3-cap-rate": 0.0599,
   "sale3-site-area": 51977,
   "sale3-condition": "Average",
-  "sale3-description": "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversity and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
-  
+  "sale3-description":
+    "Macro Properties Toronto sold this 143-unit portfolio to Epiphany Group for $14,000,000 or $97,902.09 per unit. The buyer was drawn to purchasing these properties to diversity and strengthen their investment portfolio. The net operating income in 2024 was reported to be $838,909, yielding a 5.99% cap rate.",
+
   // Sale 4 aliases (maps to comp4)
   "sale4-name": "Parkside Flats 1",
   "sale4-address": "1000 Parr Hill Dr",
@@ -2355,8 +2471,9 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "sale4-cap-rate": 0.0624,
   "sale4-site-area": 47916,
   "sale4-condition": "Average",
-  "sale4-description": "Parkside Flats, a 47-unit multifamily property located at 1000 Parr Hill Drive in Martensville, Saskatchewan, sold on May 19, 2023, for $9,310,000, reflecting a price per unit of $198,085.",
-  
+  "sale4-description":
+    "Parkside Flats, a 47-unit multifamily property located at 1000 Parr Hill Drive in Martensville, Saskatchewan, sold on May 19, 2023, for $9,310,000, reflecting a price per unit of $198,085.",
+
   // Sale 5 aliases (maps to comp5)
   "sale5-name": "Parkside Flats 2",
   "sale5-address": "1030 Parr Hill Dr",
@@ -2368,8 +2485,9 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "sale5-cap-rate": 0.0592,
   "sale5-site-area": 52708,
   "sale5-condition": "Average",
-  "sale5-description": "Parkside Flats 2, a 64-unit multifamily property located at 1030 Parr Hill Drive in Martensville, Saskatchewan, sold in May 2023 for $13,720,000, reflecting a price per unit of $214,375.",
-  
+  "sale5-description":
+    "Parkside Flats 2, a 64-unit multifamily property located at 1030 Parr Hill Drive in Martensville, Saskatchewan, sold in May 2023 for $13,720,000, reflecting a price per unit of $214,375.",
+
   // Sale 6 aliases (maps to comp6 - placeholder/empty)
   "sale6-name": "-",
   "sale6-address": "-",
@@ -2381,7 +2499,5 @@ export const testDataSet1: Record<string, string | number | string[]> =
   "sale6-cap-rate": "-",
   "sale6-site-area": "-",
   "sale6-condition": "-",
-  "sale6-description": "-"
-
-
+  "sale6-description": "-",
 };

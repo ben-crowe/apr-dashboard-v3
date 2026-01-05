@@ -1,30 +1,33 @@
-import { useEffect, useRef, useMemo, useCallback } from 'react';
-import { useReportBuilderStore } from '../../store/reportBuilderStore';
-import { ReportSection } from '../../types/reportBuilder.types';
+import { useEffect, useRef, useMemo, useCallback } from "react";
+import { useReportBuilderStore } from "../../store/reportBuilderStore";
+import { ReportSection } from "../../types/reportBuilder.types";
 
 /**
  * Maps approach toggle field names to their corresponding page ranges.
  * When a toggle is disabled (false), pages in that range are hidden from preview.
  */
 const APPROACH_TO_PAGES_MAP: Record<string, { start: number; end: number }> = {
-  'home-use-income-approach': { start: 37, end: 51 },
-  'home-use-sales-approach': { start: 56, end: 61 },
-  'home-use-cost-approach': { start: 52, end: 55 },
+  "home-use-income-approach": { start: 37, end: 51 },
+  "home-use-sales-approach": { start: 56, end: 61 },
+  "home-use-cost-approach": { start: 52, end: 55 },
 };
 
 /**
  * Helper function to find a field value from the sections array.
  * Searches through all sections and their subsections.
  */
-function getFieldValueFromSections(sections: ReportSection[], fieldId: string): unknown {
+function getFieldValueFromSections(
+  sections: ReportSection[],
+  fieldId: string,
+): unknown {
   for (const section of sections) {
     // Check top-level fields
-    const field = section.fields?.find(f => f.id === fieldId);
+    const field = section.fields?.find((f) => f.id === fieldId);
     if (field) return field.value;
 
     // Check subsection fields
     for (const sub of section.subsections || []) {
-      const subField = sub.fields?.find(f => f.id === fieldId);
+      const subField = sub.fields?.find((f) => f.id === fieldId);
       if (subField) return subField.value;
     }
   }
@@ -59,13 +62,18 @@ export default function PreviewPanel() {
   const previewHtml = useReportBuilderStore((state) => state.previewHtml);
   const activeTestMode = useReportBuilderStore((state) => state.activeTestMode);
   const sections = useReportBuilderStore((state) => state.sections);
-  const generatePreview = useReportBuilderStore((state) => state.generatePreview);
+  const generatePreview = useReportBuilderStore(
+    (state) => state.generatePreview,
+  );
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Memoized helper to get field value from sections
-  const getFieldValue = useCallback((fieldId: string): unknown => {
-    return getFieldValueFromSections(sections, fieldId);
-  }, [sections]);
+  const getFieldValue = useCallback(
+    (fieldId: string): unknown => {
+      return getFieldValueFromSections(sections, fieldId);
+    },
+    [sections],
+  );
 
   // Calculate excluded pages based on approach toggles
   const excludedPages = useMemo(() => {
@@ -75,9 +83,11 @@ export default function PreviewPanel() {
   // Auto-load template when component mounts if previewHtml is empty
   useEffect(() => {
     if (!previewHtml && sections.length > 0) {
-      console.log('PreviewPanel: No previewHtml found, auto-loading template...');
+      console.log(
+        "PreviewPanel: No previewHtml found, auto-loading template...",
+      );
       generatePreview();
-      console.log('PreviewPanel: Template auto-load triggered');
+      console.log("PreviewPanel: Template auto-load triggered");
     }
   }, [previewHtml, sections.length, generatePreview]);
 
@@ -89,20 +99,23 @@ export default function PreviewPanel() {
 
     // Wait for iframe to load with retry logic
     const handleLoad = () => {
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+      const iframeDoc =
+        iframe.contentDocument || iframe.contentWindow?.document;
       if (!iframeDoc) {
-        console.warn('PreviewPanel: iframe document not accessible');
+        console.warn("PreviewPanel: iframe document not accessible");
         return;
       }
 
       // Find the pages wrapper in the standalone viewer (with retry)
-      let pagesWrapper = iframeDoc.getElementById('pages-wrapper');
+      let pagesWrapper = iframeDoc.getElementById("pages-wrapper");
       if (!pagesWrapper) {
         // Retry after a short delay - iframe might still be loading
         setTimeout(() => {
-          pagesWrapper = iframeDoc.getElementById('pages-wrapper');
+          pagesWrapper = iframeDoc.getElementById("pages-wrapper");
           if (!pagesWrapper) {
-            console.error('pages-wrapper not found in Report-MF-template.html after retry');
+            console.error(
+              "pages-wrapper not found in Report-MF-template.html after retry",
+            );
             return;
           }
           injectPages(pagesWrapper, iframeDoc);
@@ -115,19 +128,21 @@ export default function PreviewPanel() {
 
     const injectPages = (pagesWrapper: HTMLElement, iframeDoc: Document) => {
       // Extract just the page-sheet divs from the template HTML
-      const tempDiv = document.createElement('div');
+      const tempDiv = document.createElement("div");
       tempDiv.innerHTML = previewHtml;
-      const allPageSheets = tempDiv.querySelectorAll('.page-sheet');
+      const allPageSheets = tempDiv.querySelectorAll(".page-sheet");
 
       if (allPageSheets.length === 0) {
-        console.warn('PreviewPanel: No .page-sheet elements found in previewHtml');
+        console.warn(
+          "PreviewPanel: No .page-sheet elements found in previewHtml",
+        );
         return;
       }
 
       // Filter pages based on approach toggles
       const filteredPageSheets: Element[] = [];
-      allPageSheets.forEach(page => {
-        const pageNumAttr = page.getAttribute('data-page-num');
+      allPageSheets.forEach((page) => {
+        const pageNumAttr = page.getAttribute("data-page-num");
         if (pageNumAttr) {
           const pageNum = parseInt(pageNumAttr, 10);
           if (!excludedPages.has(pageNum)) {
@@ -142,75 +157,167 @@ export default function PreviewPanel() {
       // Log filtering info if pages were excluded
       if (excludedPages.size > 0) {
         const excludedArray = Array.from(excludedPages).sort((a, b) => a - b);
-        console.log(`PreviewPanel: Excluding pages due to disabled approaches: [${excludedArray.join(', ')}]`);
-        console.log(`PreviewPanel: Filtered from ${allPageSheets.length} to ${filteredPageSheets.length} pages`);
+        console.log(
+          `PreviewPanel: Excluding pages due to disabled approaches: [${excludedArray.join(", ")}]`,
+        );
+        console.log(
+          `PreviewPanel: Filtered from ${allPageSheets.length} to ${filteredPageSheets.length} pages`,
+        );
       }
 
       // Clear wrapper and inject filtered pages
-      pagesWrapper.innerHTML = '';
-      filteredPageSheets.forEach(page => {
+      pagesWrapper.innerHTML = "";
+      filteredPageSheets.forEach((page) => {
         pagesWrapper.appendChild(page.cloneNode(true));
       });
 
-      console.log(`PreviewPanel: Injected ${filteredPageSheets.length} pages. First page: ${filteredPageSheets[0]?.getAttribute('data-page-num')}, Last page: ${filteredPageSheets[filteredPageSheets.length - 1]?.getAttribute('data-page-num')}`);
+      console.log(
+        `PreviewPanel: Injected ${filteredPageSheets.length} pages. First page: ${filteredPageSheets[0]?.getAttribute("data-page-num")}, Last page: ${filteredPageSheets[filteredPageSheets.length - 1]?.getAttribute("data-page-num")}`,
+      );
 
       // Trigger page count update AFTER pages are injected
       // Use setTimeout to ensure DOM is updated
       setTimeout(() => {
-        const iframeWindow = iframe.contentWindow as Window & { updatePageCount?: () => void };
-        if (iframeWindow && typeof iframeWindow.updatePageCount === 'function') {
+        const iframeWindow = iframe.contentWindow as Window & {
+          updatePageCount?: () => void;
+        };
+        if (
+          iframeWindow &&
+          typeof iframeWindow.updatePageCount === "function"
+        ) {
           iframeWindow.updatePageCount();
-          console.log('PreviewPanel: Called updatePageCount()');
+          console.log("PreviewPanel: Called updatePageCount()");
         } else {
-          console.warn('PreviewPanel: updatePageCount function not found in iframe');
+          console.warn(
+            "PreviewPanel: updatePageCount function not found in iframe",
+          );
         }
       }, 100);
 
       // Handle toggle based on test mode
       // In test-report mode: disable toggle (always show calculated report)
       // In designer mode: enable toggle (user can switch between sample data and full test data)
-      const toggle = iframeDoc.getElementById('preview-toggle') as HTMLInputElement;
-      const modeLabel = iframeDoc.getElementById('mode-label');
+      const toggle = iframeDoc.getElementById(
+        "preview-toggle",
+      ) as HTMLInputElement;
+      const modeLabel = iframeDoc.getElementById("mode-label");
       if (toggle) {
-        if (activeTestMode === 'test-report') {
-          // Disable toggle in test-report mode
+        if (activeTestMode === "test-report") {
+          // Disable toggle in test-report mode - always show interpolated values
           toggle.disabled = true;
-          toggle.checked = true; // Always show interpolated values
-          pagesWrapper.classList.add('preview-mode');
-          if (modeLabel) modeLabel.textContent = 'Preview Mode (Test Report Active)';
-          toggle.style.opacity = '0.5';
-          toggle.style.cursor = 'not-allowed';
+          toggle.checked = true; // Always show interpolated values (real data)
+          pagesWrapper.classList.add("preview-mode");
+          if (modeLabel)
+            modeLabel.textContent = "Preview Mode (Test Report Active)";
+          toggle.style.opacity = "0.5";
+          toggle.style.cursor = "not-allowed";
         } else {
-          // Enable toggle in designer mode or no mode
+          // Enable toggle in all other modes (user-input, designer, none)
           toggle.disabled = false;
-          toggle.style.opacity = '1';
-          toggle.style.cursor = 'pointer';
-          if (!toggle.checked) {
-            // Enable preview mode to show interpolated values
-            toggle.checked = true;
-            pagesWrapper.classList.add('preview-mode');
-            if (modeLabel) modeLabel.textContent = 'Designer Preview';
+          toggle.style.opacity = "1";
+          toggle.style.cursor = "pointer";
 
-            // Trigger the toggle change handler to update all fields
-            toggle.dispatchEvent(new Event('change', { bubbles: true }));
-            console.log('PreviewPanel: Auto-enabled preview mode to show interpolated values');
-          } else {
-            // Already enabled, but ensure preview-mode class is set
-            pagesWrapper.classList.add('preview-mode');
-            if (modeLabel) modeLabel.textContent = 'Designer Preview';
+          // For user-input mode: Default to ON (show real interpolated data)
+          // For other modes: Check saved state or default to ON
+          const savedToggleState = sessionStorage.getItem(
+            "preview-toggle-state",
+          );
+          const shouldBeOn =
+            activeTestMode === "user-input"
+              ? true // Always default to ON for user-input (real data)
+              : savedToggleState !== null
+                ? savedToggleState === "true"
+                : true;
+
+          // Initialize toggle state and trigger handler to set up data-original
+          if (toggle.checked !== shouldBeOn) {
+            toggle.checked = shouldBeOn;
           }
+
+          // IMPORTANT: When HTML is first interpolated, textContent contains real values
+          // We need to ensure data-original is set BEFORE toggle runs
+          const fields = iframeDoc.querySelectorAll(".field-mapped");
+          fields.forEach((el: Element) => {
+            const htmlEl = el as HTMLElement;
+            // Store current interpolated value as original (if not already stored)
+            if (!htmlEl.dataset.original && htmlEl.textContent) {
+              htmlEl.dataset.original = htmlEl.textContent;
+            }
+          });
+
+          // Now trigger toggle handler to set correct display state
+          if (shouldBeOn) {
+            pagesWrapper.classList.add("preview-mode");
+            // Toggle ON = Show interpolated values (already in textContent, restore from data-original if needed)
+            fields.forEach((el: Element) => {
+              const htmlEl = el as HTMLElement;
+              if (htmlEl.dataset.original) {
+                htmlEl.textContent = htmlEl.dataset.original;
+              }
+            });
+          } else {
+            pagesWrapper.classList.remove("preview-mode");
+            // Toggle OFF = Show sample data
+            fields.forEach((el: Element) => {
+              const htmlEl = el as HTMLElement;
+              const sample = htmlEl.getAttribute("data-sample");
+              if (sample) {
+                if (!htmlEl.dataset.original) {
+                  htmlEl.dataset.original = htmlEl.textContent || "";
+                }
+                htmlEl.textContent = sample;
+              }
+            });
+          }
+
+          if (modeLabel) {
+            modeLabel.textContent = toggle.checked
+              ? activeTestMode === "user-input"
+                ? "Preview Mode (Real Data)"
+                : "Preview Mode"
+              : "Designer Mode (Sample Data)";
+          }
+
+          // Save toggle state to sessionStorage when user manually changes it
+          const toggleHandler = function () {
+            sessionStorage.setItem(
+              "preview-toggle-state",
+              String(this.checked),
+            );
+          };
+          toggle.removeEventListener("change", toggleHandler); // Remove if exists
+          toggle.addEventListener("change", toggleHandler);
         }
       }
 
-      console.log(`PreviewPanel: Injected ${filteredPageSheets.length} pages into preview`);
+      console.log(
+        `PreviewPanel: Injected ${filteredPageSheets.length} pages into preview`,
+      );
     };
 
-    if (iframe.contentDocument?.readyState === 'complete') {
+    // Try immediate injection if iframe is already loaded
+    if (iframe.contentDocument?.readyState === "complete") {
+      console.log("PreviewPanel: iframe already loaded, injecting immediately");
       handleLoad();
     } else {
-      iframe.addEventListener('load', handleLoad);
-      return () => iframe.removeEventListener('load', handleLoad);
+      console.log("PreviewPanel: waiting for iframe load event");
+      iframe.addEventListener("load", handleLoad);
+      return () => iframe.removeEventListener("load", handleLoad);
     }
+
+    // ADDITIONAL FIX: Force injection after short delay if iframe is stuck
+    // This handles edge cases where readyState check fails
+    const forceInjectTimeout = setTimeout(() => {
+      if (iframe.contentDocument?.getElementById("pages-wrapper")) {
+        console.log("PreviewPanel: Force-injecting after 300ms delay");
+        handleLoad();
+      }
+    }, 300);
+
+    return () => {
+      clearTimeout(forceInjectTimeout);
+      iframe.removeEventListener("load", handleLoad);
+    };
   }, [previewHtml, activeTestMode, excludedPages]);
 
   return (
@@ -220,10 +327,10 @@ export default function PreviewPanel() {
           ref={iframeRef}
           src="/Report-MF-template.html"
           style={{
-            width: '100%',
-            height: '100%',
-            border: 'none',
-            display: 'block'
+            width: "100%",
+            height: "100%",
+            border: "none",
+            display: "block",
           }}
           title="Report Preview"
         />

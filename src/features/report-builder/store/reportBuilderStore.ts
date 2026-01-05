@@ -13,7 +13,8 @@ import { runSalesCompCalculations } from "./salesCompCalculations";
 import { runCostApproachCalculations } from "./costApproachCalculations";
 
 // Field ID mapping: test data ID -> store field ID (for fields that differ)
-const testDataFieldMapping: Record<string, string> = {
+// Exported for use in stats calculation to map template IDs to store IDs
+export const testDataFieldMapping: Record<string, string> = {
   // CALC section - unit fields
   "calc-unit-1-type": "calc-type1-name",
   "calc-unit-1-count": "calc-type1-count",
@@ -152,6 +153,10 @@ const testDataFieldMapping: Record<string, string> = {
 
   // RECON
   "recon-rounded-value": "recon-final-value",
+
+  // IMAGE FIELD MAPPINGS - Template uses subject-photo, registry uses img-*
+  "subject-photo": "img-cover-photo", // Template cover photo → registry cover photo
+  // Note: subject-photo-1, subject-photo-2, etc. already match registry IDs, no mapping needed
 
   // PHOTOS - map individual photos to consolidated arrays (special handling in loadDataSet1All)
   // These will be handled specially since store uses arrays
@@ -6012,7 +6017,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   interpolateTemplate: (sections: ReportSection[], template: string) => {
     let html = template;
 
-    // Build field value map from all sections
+    // Build field value map from all sections (using store IDs as keys)
     const fieldMap = new Map<string, string>();
 
     sections.forEach(section => {
@@ -6031,10 +6036,49 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       });
     });
 
-    // Replace all {{field-id}} placeholders with actual values
-    html = html.replace(/\{\{([^}]+)\}\}/g, (match, fieldId) => {
-      return fieldMap.get(fieldId) || match; // Return value or keep placeholder if unmapped
+    // Create reverse mapping: template ID -> store ID (for fields that are mapped)
+    // This allows template placeholders to find values even when IDs differ
+    const templateToStoreIdMap = new Map<string, string>();
+    Object.entries(testDataFieldMapping).forEach(([templateId, storeId]) => {
+      templateToStoreIdMap.set(templateId, storeId);
     });
+
+    // Helper function to get store ID from template ID
+    const getStoreIdFromTemplateId = (templateId: string): string => {
+      return templateToStoreIdMap.get(templateId) || templateId;
+    };
+
+    // Replace all {{field-id}} placeholders with actual values
+    // FIX: Map template IDs to store IDs before looking up in fieldMap
+    let replacedCount = 0;
+    let unmappedCount = 0;
+    const unmappedIds: string[] = [];
+    
+    html = html.replace(/\{\{([^}]+)\}\}/g, (match, templateFieldId) => {
+      // Map template ID to store ID (handles testDataFieldMapping)
+      const storeFieldId = getStoreIdFromTemplateId(templateFieldId);
+      const value = fieldMap.get(storeFieldId);
+      
+      if (value !== undefined && value !== '') {
+        replacedCount++;
+        return value;
+      } else {
+        unmappedCount++;
+        if (unmappedIds.length < 10) {
+          unmappedIds.push(`${templateFieldId} → ${storeFieldId}`);
+        }
+        // Return value if found (even if empty), otherwise keep placeholder
+        return value !== undefined ? value : match;
+      }
+    });
+    
+    // Debug logging
+    if (replacedCount > 0 || unmappedCount > 0) {
+      console.log(`Template interpolation: ${replacedCount} replaced, ${unmappedCount} unmapped`);
+      if (unmappedIds.length > 0) {
+        console.log(`Sample unmapped IDs:`, unmappedIds.slice(0, 5));
+      }
+    }
     
     // Handle empty image URLs in cover photo - show placeholder text if img src is empty
     html = html.replace(
@@ -6899,9 +6943,15 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("calc-type-total-per-unit", totalUnits > 0 ? Math.round(totalRentalRevenue / totalUnits) : 0);
     updateField("calc-type-total-per-sf", totalSf > 0 ? Math.round((totalRentalRevenue / totalSf) * 100) / 100 : 0);
 
+    // Helper to get contract rent or fallback to market rent
+    const getContractRent = (typeNum: number, marketRent: number): number => {
+      const contractRent = getFieldValue(`calc-type${typeNum}-contract-rent`);
+      return contractRent > 0 ? contractRent : marketRent;
+    };
+    
     // Contract rent vs market rent (need contract rent inputs - use market as placeholder)
-    const type1ContractRent = getFieldValue("calc-type1-contract-rent") || type1Rent;
-    const type2ContractRent = getFieldValue("calc-type2-contract-rent") || type2Rent;
+    const type1ContractRent = getContractRent(1, type1Rent);
+    const type2ContractRent = getContractRent(2, type2Rent);
     updateField("calc-type1-cont-v-market", type1Rent > 0 ? Math.round((type1ContractRent / type1Rent) * 100) : 0);
     updateField("calc-type2-cont-v-market", type2Rent > 0 ? Math.round((type2ContractRent / type2Rent) * 100) : 0);
 
@@ -6973,6 +7023,68 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("calc-value-per-unit", Math.round(valuePerUnit));
     updateField("calc-value-per-sf", Math.round(valuePerSf * 100) / 100);
     updateField("calc-grm", Math.round(grm * 100) / 100);
+
+    // === RENTAL REVENUE FIELDS (for template table) ===
+    // Map unit mix data to rentalrevenue-* fields for report template
+    // Type 1 = 1 Bedroom, Type 2 = 2 Bedroom
+    // Note: type1ContractRent and type2ContractRent already declared above
+    
+    // 1 Bedroom Rental Revenue
+    updateField("rentalrevenue-1bed-units", type1Count);
+    updateField("rentalrevenue-1bed-contractrent", Math.round(type1ContractRent));
+    updateField("rentalrevenue-1bed-marketrent", Math.round(type1Rent));
+    updateField("rentalrevenue-1bed-convvmkt", type1Rent > 0 ? Math.round((type1ContractRent / type1Rent) * 100) : 0);
+    updateField("rentalrevenue-1bed-perunit", type1Count > 0 ? Math.round(type1Annual / type1Count) : 0);
+    updateField("rentalrevenue-1bed-persf", type1Sf > 0 ? Math.round((type1Rent / type1Sf) * 100) / 100 : 0);
+    updateField("rentalrevenue-1bed-peryear", Math.round(type1Annual));
+
+    // 2 Bedroom Rental Revenue (type2ContractRent already declared above)
+    updateField("rentalrevenue-2bed-units", type2Count);
+    updateField("rentalrevenue-2bed-contractrent", Math.round(type2ContractRent));
+    updateField("rentalrevenue-2bed-marketrent", Math.round(type2Rent));
+    updateField("rentalrevenue-2bed-convvmkt", type2Rent > 0 ? Math.round((type2ContractRent / type2Rent) * 100) : 0);
+    updateField("rentalrevenue-2bed-perunit", type2Count > 0 ? Math.round(type2Annual / type2Count) : 0);
+    updateField("rentalrevenue-2bed-persf", type2Sf > 0 ? Math.round((type2Rent / type2Sf) * 100) / 100 : 0);
+    updateField("rentalrevenue-2bed-peryear", Math.round(type2Annual));
+
+    // Total Rental Revenue
+    const totalContractRent = (type1ContractRent * type1Count) + (type2ContractRent * type2Count);
+    const totalMarketRent = (type1Rent * type1Count) + (type2Rent * type2Count);
+    updateField("rentalrevenue-total-contractrent", Math.round(totalContractRent));
+    updateField("rentalrevenue-total-marketrent", Math.round(totalMarketRent));
+    updateField("rentalrevenue-total-convvmkt", totalMarketRent > 0 ? Math.round((totalContractRent / totalMarketRent) * 100) : 0);
+    updateField("rentalrevenue-total-perunit", totalUnits > 0 ? Math.round(totalRentalRevenue / totalUnits) : 0);
+    updateField("rentalrevenue-total-persf", totalSf > 0 ? Math.round((totalRentalRevenue / totalSf) * 100) / 100 : 0);
+    updateField("rentalrevenue-total-peryear", Math.round(totalRentalRevenue));
+
+    // === CONTRACT VS MARKET FIELDS (for template table) ===
+    // Contract vs Market comparison table fields
+    
+    // 1 Bedroom Contract vs Market
+    updateField("contractvsmarket-1bed-units", type1Count);
+    updateField("contractvsmarket-1bed-askingrent", Math.round(type1Rent)); // Using market rent as asking
+    updateField("contractvsmarket-1bed-actualrent", Math.round(type1ContractRent));
+    updateField("contractvsmarket-1bed-concludedrent", Math.round(type1Rent)); // Concluded = market rent
+    updateField("contractvsmarket-1bed-percentage", type1Rent > 0 ? Math.round((type1ContractRent / type1Rent) * 100) : 0);
+
+    // 2 Bedroom Contract vs Market
+    updateField("contractvsmarket-2bed-units", type2Count);
+    updateField("contractvsmarket-2bed-askingrent", Math.round(type2Rent)); // Using market rent as asking
+    updateField("contractvsmarket-2bed-actualrent", Math.round(type2ContractRent));
+    updateField("contractvsmarket-2bed-concludedrent", Math.round(type2Rent)); // Concluded = market rent
+    updateField("contractvsmarket-2bed-percentage", type2Rent > 0 ? Math.round((type2ContractRent / type2Rent) * 100) : 0);
+
+    // Total Contract vs Market
+    const avgContractRent = totalUnits > 0 ? totalContractRent / totalUnits : 0;
+    const avgMarketRent = totalUnits > 0 ? totalMarketRent / totalUnits : 0;
+    updateField("contractvsmarket-total-units", totalUnits);
+    updateField("contractvsmarket-total-askingrent", Math.round(avgMarketRent));
+    updateField("contractvsmarket-total-actualrent", Math.round(avgContractRent));
+    updateField("contractvsmarket-total-concludedrent", Math.round(avgMarketRent));
+    updateField("contractvsmarket-total-percentage", avgMarketRent > 0 ? Math.round((avgContractRent / avgMarketRent) * 100) : 0);
+
+    // Overall Contract vs Market Percentage
+    updateField("contract-vs-market-percentage", avgMarketRent > 0 ? Math.round((avgContractRent / avgMarketRent) * 100) : 0);
 
     // Sync to RECON
     updateField("recon-income-value", indicatedValue);
@@ -7168,18 +7280,30 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   },
 
   loadDataSet1User: async () => {
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7170',message:'loadDataSet1User ENTRY',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
     console.log("=== LOAD DATASET1 USER: Loading user inputs, running calc ===");
     
     // Ensure sections are initialized
     let sections = get().sections;
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7175',message:'BEFORE init check',data:{sectionsLength:sections?.length||0,isEmpty:!sections||sections.length===0},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
     if (!sections || sections.length === 0) {
       console.log("Sections not initialized, initializing...");
       await get().initializeMockData();
       sections = get().sections;
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7178',message:'AFTER initializeMockData',data:{sectionsLength:sections?.length||0,firstSectionId:sections?.[0]?.id||'none',firstSectionFieldsCount:sections?.[0]?.fields?.length||0},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
     }
     
     if (!sections || sections.length === 0) {
       console.error("Failed to initialize sections");
+      // #region agent log
+      fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7182',message:'ERROR sections still empty',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
+      // #endregion
       throw new Error("Sections not initialized");
     }
     
@@ -7188,8 +7312,18 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     let clearedCount = 0;
 
     // Helper to check if field exists in store
+    // FIX: Use get().sections to get fresh state, not stale closure variable
     const fieldExists = (fieldId: string): boolean => {
-      for (const section of sections) {
+      // #region agent log
+      const storeSections = get().sections;
+      const localSectionsLength = sections.length;
+      const storeSectionsLength = storeSections.length;
+      const mismatch = localSectionsLength !== storeSectionsLength;
+      fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7191',message:'fieldExists check',data:{fieldId,localSectionsLength,storeSectionsLength,mismatch},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
+      // #endregion
+      // FIX: Use fresh sections from store, not stale closure variable
+      const freshSections = get().sections;
+      for (const section of freshSections) {
         if (section.fields.find((f) => f.id === fieldId)) return true;
         if (section.subsections) {
           for (const sub of section.subsections) {
@@ -7217,26 +7351,43 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     });
 
     // Load all test data fields EXCEPT calculated ones (calc engine computes those)
+    let sampleFieldChecks: any[] = [];
     Object.entries(testDataSet1).forEach(([fieldId, value]) => {
       const storeFieldId = testDataFieldMapping[fieldId] || fieldId;
       const fieldDef = getFieldDef(storeFieldId);
+      const exists = fieldExists(storeFieldId);
+      const isCalculated = fieldDef?.inputSource === 'calculated';
+      
+      // Sample first 5 checks for debugging
+      if (sampleFieldChecks.length < 5) {
+        sampleFieldChecks.push({fieldId, storeFieldId, exists, isCalculated, hasDef:!!fieldDef});
+      }
 
       // Load if field exists AND is NOT calculated (calc engine will compute calculated fields)
-      if (fieldExists(storeFieldId) && (!fieldDef || fieldDef.inputSource !== 'calculated')) {
+      if (exists && (!fieldDef || !isCalculated)) {
         updates.push({ fieldId: storeFieldId, value });
         mappedCount++;
       }
     });
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7229',message:'AFTER testDataSet1 loop',data:{totalTestDataFields:Object.keys(testDataSet1).length,updatesCount:updates.length,mappedCount,sampleFieldChecks},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
+    // #endregion
 
     // Apply all updates at once (without triggering preview generation)
     const currentSections = get().sections;
     console.log(`Applying ${updates.length} updates to ${currentSections.length} sections`);
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7232',message:'BEFORE applying updates',data:{updatesCount:updates.length,currentSectionsLength:currentSections.length,sampleUpdates:updates.slice(0,3)},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
+    // #endregion
     
     const updatedSections = currentSections.map((section) => {
       const updatedFields = section.fields.map((field) => {
         const update = updates.find(u => u.fieldId === field.id);
         if (update) {
           console.log(`Updating field ${field.id} from "${field.value}" to "${update.value}"`);
+          // #region agent log
+          fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7239',message:'UPDATING field',data:{fieldId:field.id,oldValue:field.value,newValue:update.value},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
+          // #endregion
         }
         return update ? { ...field, value: update.value } : field;
       });
@@ -7261,6 +7412,11 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // Update sections in store
     set({ sections: updatedSections, isDirty: true });
+    // #region agent log
+    const afterSetSections = get().sections;
+    const sampleFieldValue = afterSetSections[0]?.fields?.[0]?.value || 'none';
+    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7263',message:'AFTER set sections',data:{updatedSectionsLength:updatedSections.length,afterSetSectionsLength:afterSetSections.length,sampleFieldValue},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'E'})}).catch(()=>{});
+    // #endregion
     console.log(`Updated sections in store. Total sections: ${updatedSections.length}`);
 
     // Run calculations to populate calculated fields
@@ -7279,16 +7435,24 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     
     // Sample a few fields to verify they have values
     const sampleFields: string[] = [];
+    const sampleEmptyFields: string[] = [];
     finalSections.forEach(section => {
-      section.fields.slice(0, 3).forEach(field => {
+      section.fields.slice(0, 5).forEach(field => {
         if (field.value && field.value !== '') {
           sampleFields.push(`${field.id}: "${field.value}"`);
+        } else {
+          if (sampleEmptyFields.length < 5) {
+            sampleEmptyFields.push(`${field.id}: ""`);
+          }
         }
       });
     });
     
     console.log(`Final sections: ${finalSections.length}, Fields with values: ${totalFieldsWithValues}`);
     console.log(`Sample fields: ${sampleFields.slice(0, 5).join(', ')}`);
+    // #region agent log
+    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7270',message:'AFTER calculations - field values check',data:{finalSectionsLength:finalSections.length,totalFieldsWithValues,sampleFields:sampleFields.slice(0,5),sampleEmptyFields:sampleEmptyFields.slice(0,5)},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
+    // #endregion
 
     // Regenerate preview with ALL updated data
     const template = await get().loadPreviewTemplate();
@@ -7312,6 +7476,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     );
     console.log(`Preview HTML generated: ${html.length} characters, ${finalSections.length} sections`);
     console.log(`Preview HTML preview: ${html.substring(0, 200)}...`);
+    
+    // Force a small delay to ensure React state updates propagate before preview renders
+    // This ensures the preview updates immediately when Load Data completes
+    await new Promise(resolve => setTimeout(resolve, 100));
   },
 
   setTestMode: (mode: TestMode) => {

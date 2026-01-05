@@ -8882,26 +8882,31 @@ document.querySelectorAll('.field-mapped').forEach(field => {
             };
 
             if (this.checked) {
+                // PREVIEW MODE ON: Show interpolated values (real data)
                 pagesWrapper.classList.add('preview-mode');
-                // Keep label as 'ID' - toggle state is visible from switch
-                // Swap non-financial fields to sample data
+                // Restore interpolated values (stored in data-original when toggle was off)
+                fields.forEach(el => {
+                    if (isCalcField(el)) return; // Skip - calculator controls these
+                    if (el.dataset.original) {
+                        // Restore the interpolated value (real data)
+                        el.textContent = el.dataset.original;
+                    }
+                    // If no original stored, current textContent is already the interpolated value
+                });
+            } else {
+                // DESIGNER MODE: Show sample data (for visual design review)
+                pagesWrapper.classList.remove('preview-mode');
+                // Swap to sample data from data-sample attribute
                 fields.forEach(el => {
                     if (isCalcField(el)) return; // Skip - calculator controls these
                     const sample = el.getAttribute('data-sample');
                     if (sample) {
+                        // Store current interpolated value before swapping
                         if (!el.dataset.original) {
                             el.dataset.original = el.textContent;
                         }
+                        // Show sample data
                         el.textContent = sample;
-                    }
-                });
-            } else {
-                pagesWrapper.classList.remove('preview-mode');
-                // Swap back to field IDs (skip financial - calculator controls)
-                fields.forEach(el => {
-                    if (isCalcField(el)) return;
-                    if (el.dataset.original) {
-                        el.textContent = el.dataset.original;
                     }
                 });
             }

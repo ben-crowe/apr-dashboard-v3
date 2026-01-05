@@ -75,6 +75,7 @@ export interface ReportBuilderState {
   runCalculations: () => void;
   loadDataSet1All: () => Promise<void>; // Test 2 - loads ALL fields to TDD
   loadDataSet1User: () => Promise<void>; // Test 3 - loads user inputs, runs calc engine
+  loadDataSet1DirectToTemplate: () => Promise<void>; // Direct field validation - bypasses calc engine
   setTestMode: (mode: TestMode) => void; // Switch between test modes
   setTestDataLoaded: (sectionId: string, loaded: boolean) => void; // Mark section test data as loaded/unloaded
 }

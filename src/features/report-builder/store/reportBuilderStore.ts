@@ -7136,6 +7136,43 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     console.log("=== LOAD DATASET1 ALL COMPLETE: Calculations run, preview generated ===");
   },
 
+  loadDataSet1DirectToTemplate: async () => {
+    console.log("=== DIRECT TO TEMPLATE: Bypassing calc engine for field validation ===");
+    
+    // Ensure sections are initialized first
+    let sections = get().sections;
+    if (!sections || sections.length === 0) {
+      console.log("Sections not initialized, initializing...");
+      await get().initializeMockData();
+      sections = get().sections;
+    }
+    
+    if (!sections || sections.length === 0) {
+      console.error("Failed to initialize sections");
+      return;
+    }
+    
+    // Load ALL fields from testDataSet1 (including calculated fields)
+    // This is for FIELD ID VALIDATION only - not calculation testing
+    let loadedCount = 0;
+    Object.entries(testDataSet1).forEach(([fieldId, value]) => {
+      try {
+        get().updateFieldValue(fieldId, value);
+        loadedCount++;
+      } catch (e) {
+        // Skip fields that don't exist
+      }
+    });
+    
+    console.log(`Loaded ${loadedCount} fields directly (bypassed calc engine)`);
+    
+    // Generate preview WITHOUT running calculations
+    // This validates field IDs match between data and template
+    await get().generatePreview();
+    
+    console.log("=== DIRECT TO TEMPLATE COMPLETE: Check template for field validation ===");
+  },
+
   loadDataSet1User: async () => {
     console.log("=== LOAD DATASET1 USER: Loading user inputs, running calc ===");
     

@@ -31,7 +31,7 @@ interface FieldStatusInfo {
 
 const TestInputDashboard: React.FC = () => {
   const navigate = useNavigate();
-  const { sections, updateFieldValue, runCalculations, loadDataSet1All, loadDataSet1User, initializeMockData, activeTestMode, setTestMode } = useReportBuilderStore();
+  const { sections, updateFieldValue, runCalculations, loadDataSet1All, loadDataSet1User, loadDataSet1DirectToTemplate, initializeMockData, activeTestMode, setTestMode } = useReportBuilderStore();
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [expandedValuations, setExpandedValuations] = useState<Set<string>>(new Set());
   const [expandedImageDestinations, setExpandedImageDestinations] = useState<Set<string>>(new Set());
@@ -57,7 +57,7 @@ const TestInputDashboard: React.FC = () => {
       // Always load test data so TDD page shows actual values
       // This lets us verify: field with value = test data exists, empty = missing
       console.log('TestInputDashboard: Loading test data by default...');
-      await loadDataSet1All();
+      await loadDataSet1DirectToTemplate();
     };
     initAndLoadTestData();
   }, []); // Only run once on mount
@@ -794,9 +794,10 @@ const TestInputDashboard: React.FC = () => {
                   try {
                     // Set mode FIRST to update button state immediately
                     setTestMode('test-report');
-                    console.log('Test 2: Loading ALL fields direct to App Fields...');
-                    await loadDataSet1All();
-                    console.log('Load All Fields: Complete - all fields populated in TDD');
+                    console.log('Map All to Report: Loading fields directly to template...');
+                    await loadDataSet1DirectToTemplate();
+                    console.log('Map All to Report: Complete - navigating to template...');
+                    navigate('/mock-builder');
                   } catch (error) {
                     console.error('Error in Load All Fields:', error);
                     alert('Error: ' + String(error));
@@ -830,10 +831,10 @@ const TestInputDashboard: React.FC = () => {
                     e.currentTarget.style.backgroundColor = '#2a2a2a';
                   }
                 }}
-                title="Test 2: Load ALL fields from TestDataSet1 direct to App Fields for TDD review"
+                title="Direct field validation - bypasses calc engine, maps all test data to template"
               >
                 <Database className="w-3 h-3" />
-                TDD Load All Fields
+                Map All to Report
                 {activeTestMode === 'test-report' && <span className="ml-1">&#10003;</span>}
               </Button>
               <Button

@@ -7423,6 +7423,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       const updatedFields = section.fields.map((field) => {
         const update = updates.find(u => u.fieldId === field.id);
         if (update) {
+          // DEBUG: Extra logging for image fields
+          if (field.id.includes('cover-photo') || field.id.includes('subject-photo')) {
+            console.log(`🖼️ IMAGE UPDATE (main): ${field.id} from "${field.value}" to "${update.value}"`);
+          }
           console.log(`Updating field ${field.id} from "${field.value}" to "${update.value}"`);
           // #region agent log
           fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7239',message:'UPDATING field',data:{fieldId:field.id,oldValue:field.value,newValue:update.value},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
@@ -7436,6 +7440,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         fields: subsection.fields.map((field) => {
           const update = updates.find(u => u.fieldId === field.id);
           if (update) {
+            // DEBUG: Extra logging for image fields
+            if (field.id.includes('cover-photo') || field.id.includes('subject-photo')) {
+              console.log(`🖼️ IMAGE UPDATE: ${field.id} from "${field.value}" to "${update.value}"`);
+            }
             console.log(`Updating subsection field ${field.id} from "${field.value}" to "${update.value}"`);
           }
           return update ? { ...field, value: update.value } : field;

@@ -67,6 +67,7 @@ const TestInputDashboard: React.FC = () => {
     useState<Set<string>>(new Set());
   const [localValues, setLocalValues] = useState<Record<string, any>>({});
   const [selectedDataset, setSelectedDataset] = useState<string | null>(null);
+  const [templateFieldIds, setTemplateFieldIds] = useState<string[]>([]);
 
   // Dataset field IDs for filtering
   const datasetFieldIds = useMemo(
@@ -74,7 +75,7 @@ const TestInputDashboard: React.FC = () => {
     [selectedDataset],
   );
 
-  // Initialize store on mount - but DON'T auto-load test data
+  // Initialize store and parse template on mount
   // Stats start at 0, user presses button to load data
   useEffect(() => {
     const initStore = async () => {
@@ -88,6 +89,27 @@ const TestInputDashboard: React.FC = () => {
       );
     };
     initStore();
+
+    // Parse template for {{field-id}} placeholders
+    const parseTemplate = async () => {
+      try {
+        const response = await fetch("/Report-MF-template.html");
+        const html = await response.text();
+        // Match {{field-id}} patterns - extract unique field IDs
+        const regex = /\{\{([^}]+)\}\}/g;
+        const matches = new Set<string>();
+        let match;
+        while ((match = regex.exec(html)) !== null) {
+          matches.add(match[1]);
+        }
+        const uniqueIds = Array.from(matches);
+        setTemplateFieldIds(uniqueIds);
+        console.log(`TestInputDashboard: Found ${uniqueIds.length} unique template placeholders`);
+      } catch (error) {
+        console.error("Failed to parse template:", error);
+      }
+    };
+    parseTemplate();
   }, []); // Only run once on mount
 
   // Section names with numbered prefixes for easy cross-reference with Report Builder
@@ -488,15 +510,17 @@ const TestInputDashboard: React.FC = () => {
     });
   };
 
-  // Calculate statistics based on TestDataSet1 (Mapped Inputs)
-  // Answers: "Did all the test data inputs load correctly?"
+  // Calculate statistics based on TEMPLATE placeholders
+  // Answers: "Did all template {{field-id}} placeholders get populated?"
   const stats = useMemo(() => {
-    // DEFAULT: No dataset loaded yet - all stats at ZERO
-    if (!selectedDataset) {
-      return { total: 0, mapped: 0, empty: 0, missing: 0, percentage: 0 };
+    // Total is ALWAYS the template field count (what the report NEEDS)
+    const total = templateFieldIds.length;
+
+    // DEFAULT: No dataset loaded yet - show template total but 0 mapped
+    if (!selectedDataset || total === 0) {
+      return { total, mapped: 0, empty: 0, missing: total, percentage: 0 };
     }
 
-    let total = 0;
     let mapped = 0;
     let empty = 0;
     let missing = 0;
@@ -514,11 +538,9 @@ const TestInputDashboard: React.FC = () => {
       });
     });
 
-    // Count TestDataSet1 fields - "Did my test data load?"
-    // Total = fields in test data, Mapped = loaded with value, Empty = loaded but empty
-    Object.keys(testDataSet1).forEach((fieldId) => {
-      total++;
-
+    // Count template field IDs - "Did the template get all its data?"
+    // Total = placeholders in template, Mapped = have values, Missing = no data
+    templateFieldIds.forEach((fieldId) => {
       if (!storeValues.has(fieldId)) {
         missing++;
       } else {
@@ -535,7 +557,7 @@ const TestInputDashboard: React.FC = () => {
     const percentage = total > 0 ? Math.round((mapped / total) * 100) : 0;
 
     return { total, mapped, empty, missing, percentage };
-  }, [sections, selectedDataset]);
+  }, [sections, selectedDataset, templateFieldIds]);
 
   // Log on mount and stats change
   useEffect(() => {
@@ -1051,7 +1073,7 @@ const TestInputDashboard: React.FC = () => {
             <div className="flex items-center gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <span style={{ fontSize: "13px", fontWeight: "500" }}>
-                  Total:
+                  Template:
                 </span>
                 <span style={{ fontSize: "13px", fontWeight: "600" }}>
                   {stats.total}

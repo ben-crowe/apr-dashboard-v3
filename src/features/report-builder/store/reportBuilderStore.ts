@@ -5902,16 +5902,36 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   },
 
   updateFieldValue: (fieldId: string, value: string | string[] | number) => {
+    // DEBUG: Log specific fields
+    if (fieldId.includes('photo') || fieldId.includes('img')) {
+      console.log(`🟡🟡🟡 updateFieldValue: fieldId="${fieldId}", value=`, value);
+    }
+
     const sections = get().sections;
+    let fieldFound = false;
     const updatedSections = sections.map((section) => {
-      const updatedFields = section.fields.map((field) =>
-        field.id === fieldId ? { ...field, value } : field,
-      );
+      const updatedFields = section.fields.map((field) => {
+        if (field.id === fieldId) {
+          fieldFound = true;
+          if (fieldId.includes('photo') || fieldId.includes('img')) {
+            console.log(`🟡 updateFieldValue: Updating field in section "${section.id}" fields`);
+          }
+          return { ...field, value };
+        }
+        return field;
+      });
       const updatedSubsections = section.subsections?.map((subsection) => ({
         ...subsection,
-        fields: subsection.fields.map((field) =>
-          field.id === fieldId ? { ...field, value } : field,
-        ),
+        fields: subsection.fields.map((field) => {
+          if (field.id === fieldId) {
+            fieldFound = true;
+            if (fieldId.includes('photo') || fieldId.includes('img')) {
+              console.log(`🟡 updateFieldValue: Updating field in section "${section.id}" -> subsection "${subsection.id}"`);
+            }
+            return { ...field, value };
+          }
+          return field;
+        }),
       }));
       return {
         ...section,
@@ -5919,7 +5939,16 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         subsections: updatedSubsections,
       };
     });
+
+    if (!fieldFound && (fieldId.includes('photo') || fieldId.includes('img'))) {
+      console.warn(`🔴 updateFieldValue: Field "${fieldId}" was NOT found in any section!`);
+    }
+
     set({ sections: updatedSections, isDirty: true });
+
+    if (fieldId.includes('photo') || fieldId.includes('img')) {
+      console.log(`🟡 updateFieldValue: Set complete, calling generatePreview()`);
+    }
     // Regenerate preview HTML after field update for live sync
     get().generatePreview();
   },
@@ -5929,7 +5958,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   },
 
   addImage: (fieldId: string, imageUrl: string) => {
+    console.log(`🟢🟢🟢 addImage CALLED: fieldId="${fieldId}", imageUrl="${imageUrl.substring(0, 50)}..."`);
     const sections = get().sections;
+    console.log(`🟢 addImage: searching in ${sections.length} sections`);
+
     const field = sections
       .flatMap((s) => [
         ...s.fields,
@@ -5938,16 +5970,28 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       .find((f) => f.id === fieldId);
 
     if (!field) {
-      console.warn(`addImage: Field ${fieldId} not found in sections`);
+      console.warn(`🔴 addImage: Field ${fieldId} NOT FOUND in sections!`);
+      // Debug: List all field IDs to see what's available
+      const allFieldIds = sections.flatMap((s) => [
+        ...s.fields.map(f => f.id),
+        ...(s.subsections?.flatMap((ss) => ss.fields.map(f => f.id)) || []),
+      ]);
+      console.log(`🔴 Available field IDs (first 20):`, allFieldIds.slice(0, 20));
+      const imageFields = allFieldIds.filter(id => id.includes('photo') || id.includes('img'));
+      console.log(`🔴 Image-related field IDs:`, imageFields);
       return;
     }
+
+    console.log(`🟢 addImage: Found field "${fieldId}" with type="${field.type}", current value=`, field.value);
 
     // FIX: Handle case where field.value starts as empty string, not array
     // Initialize as array if needed, or append to existing array
     const currentImages = Array.isArray(field.value) ? field.value :
                          (field.value && field.value !== '' ? [field.value as string] : []);
-    console.log(`addImage: ${fieldId} - current images:`, currentImages, '+ new:', imageUrl);
-    get().updateFieldValue(fieldId, [...currentImages, imageUrl]);
+    const newImages = [...currentImages, imageUrl];
+    console.log(`🟢 addImage: ${fieldId} - current images:`, currentImages, '+ new:', imageUrl);
+    console.log(`🟢 addImage: calling updateFieldValue with`, newImages.length, 'images');
+    get().updateFieldValue(fieldId, newImages);
   },
 
   removeImage: (fieldId: string, imageUrl: string) => {
@@ -6033,11 +6077,21 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Build field value map from all sections (using store IDs as keys)
     const fieldMap = new Map<string, string>();
 
+    // DEBUG: Find subject-photo specifically
+    let subjectPhotoFound = false;
+    let subjectPhotoSection = '';
+    let subjectPhotoSubsection = '';
+
     sections.forEach(section => {
       // Handle section fields
       section.fields?.forEach(field => {
         const value = get().formatFieldValue(field);
         fieldMap.set(field.id, value);
+        if (field.id === 'subject-photo') {
+          subjectPhotoFound = true;
+          subjectPhotoSection = section.id;
+          console.log(`🟣🟣🟣 FOUND subject-photo in section "${section.id}" fields! raw value=`, field.value, `formatted="${value}"`);
+        }
       });
 
       // Handle subsection fields
@@ -6045,9 +6099,24 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         subsection.fields?.forEach(field => {
           const value = get().formatFieldValue(field);
           fieldMap.set(field.id, value);
+          if (field.id === 'subject-photo') {
+            subjectPhotoFound = true;
+            subjectPhotoSection = section.id;
+            subjectPhotoSubsection = subsection.id;
+            console.log(`🟣🟣🟣 FOUND subject-photo in section "${section.id}" -> subsection "${subsection.id}"! raw value=`, field.value, `formatted="${value}"`);
+          }
         });
       });
     });
+
+    if (!subjectPhotoFound) {
+      console.error(`🔴🔴🔴 subject-photo NOT FOUND in ANY section!`);
+      // List all image-related fields for debugging
+      const imageFieldsInMap = Array.from(fieldMap.entries())
+        .filter(([k, _]) => k.includes('photo') || k.includes('img'))
+        .slice(0, 10);
+      console.log(`🔴 Image fields in fieldMap (first 10):`, imageFieldsInMap);
+    }
 
     // FALLBACK: Ensure critical image fields have values in fieldMap
     // FIX: Check if value is EMPTY, not just if key is missing!
@@ -6161,7 +6230,13 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
   // Format field value based on type
   formatFieldValue: (field: ReportField) => {
-    if (!field.value && field.value !== 0) return '';
+    if (!field.value && field.value !== 0) {
+      // DEBUG: Log empty image fields
+      if (field.id.includes('photo') || field.id.includes('img')) {
+        console.log(`🟠 formatFieldValue: "${field.id}" has NO value (empty/null/undefined)`);
+      }
+      return '';
+    }
 
     switch (field.type) {
       case 'currency':
@@ -6177,6 +6252,11 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         // For images, return the URL string
         // The template's toggle JavaScript will convert divs with image URLs to img tags
         const imageUrl = Array.isArray(field.value) ? field.value[0] || '' : String(field.value);
+        // DEBUG: Log image field value extraction
+        console.log(`🟠 formatFieldValue IMAGE: "${field.id}" → isArray=${Array.isArray(field.value)}, raw=`, field.value, `→ extracted="${imageUrl.substring(0, 50)}..."`);
+        if (!imageUrl) {
+          console.warn(`🔴 formatFieldValue: "${field.id}" has value but extracted imageUrl is EMPTY!`);
+        }
         // Return URL as string - template JavaScript handles img tag creation
         return imageUrl || '';
       default:

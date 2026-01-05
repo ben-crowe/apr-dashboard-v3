@@ -283,8 +283,9 @@ const TestInputDashboard: React.FC = () => {
       // Skip fields from hidden sections (consolidated into accordions)
       if (hiddenSections.includes(field.section)) return;
 
-      // Only count user-input fields
-      if (field.inputSource !== 'user-input') return;
+      // In test-report mode (Map All to Report), count ALL fields
+      // Otherwise, only count user-input fields
+      if (activeTestMode !== 'test-report' && field.inputSource !== 'user-input') return;
 
       // Only count fields that exist in the store
       if (!storeFieldIds.has(field.storeId)) return;
@@ -302,7 +303,7 @@ const TestInputDashboard: React.FC = () => {
     const percentage = total > 0 ? Math.round((mapped / total) * 100) : 0;
 
     return { total, mapped, empty, missing, percentage };
-  }, [sections, datasetFieldIds]);
+  }, [sections, datasetFieldIds, activeTestMode]);
 
   // Log on mount and stats change
   useEffect(() => {
@@ -840,6 +841,8 @@ const TestInputDashboard: React.FC = () => {
               <Button
                 onClick={async () => {
                   try {
+                    // Clear test-report mode so stats show user-input fields only
+                    setTestMode('none');
                     console.log('Report DataSet1: Loading user-inputs, running calc engine...');
                     await loadDataSet1User();
                     setSelectedDataset('testDataSet1');

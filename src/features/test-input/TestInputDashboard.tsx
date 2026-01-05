@@ -262,36 +262,38 @@ const TestInputDashboard: React.FC = () => {
     });
   };
 
-  // Calculate statistics - only for visible sections (exclude hidden/consolidated tabs)
-  // Only count fields that actually exist in the store
+  // Calculate statistics based on TestDataSet1 (Mapped Inputs)
+  // Answers: "Did all the test data inputs load correctly?"
   const stats = useMemo(() => {
     let total = 0;
     let mapped = 0;
     let empty = 0;
     let missing = 0;
 
-    // Build set of all field IDs that exist in the store
-    const storeFieldIds = new Set<string>();
+    // Build map of field values from store
+    const storeValues = new Map<string, any>();
     sections.forEach(section => {
-      section.fields?.forEach(field => storeFieldIds.add(field.id));
+      section.fields?.forEach(field => storeValues.set(field.id, field.value));
       section.subsections?.forEach(subsection => {
-        subsection.fields.forEach(field => storeFieldIds.add(field.id));
+        subsection.fields.forEach(field => storeValues.set(field.id, field.value));
       });
     });
 
-    // Count ALL fields in registry - no filters
-    // Total = all fields, Mapped = has value, Empty = empty string, Missing = not in store
-    fieldRegistry.forEach(field => {
+    // Count TestDataSet1 fields - "Did my test data load?"
+    // Total = fields in test data, Mapped = loaded with value, Empty = loaded but empty
+    Object.keys(testDataSet1).forEach(fieldId => {
       total++;
 
-      // Check if field exists in store and has a value
-      if (!storeFieldIds.has(field.storeId)) {
+      if (!storeValues.has(fieldId)) {
         missing++;
       } else {
-        const status = getFieldStatus(field);
-        if (status.status === 'mapped') mapped++;
-        else if (status.status === 'empty') empty++;
-        else missing++;
+        const value = storeValues.get(fieldId);
+        // Check if has meaningful value
+        if (value !== undefined && value !== null && value !== '') {
+          mapped++;
+        } else {
+          empty++;
+        }
       }
     });
 
@@ -753,7 +755,7 @@ const TestInputDashboard: React.FC = () => {
                 <span style={{ fontSize: '13px', fontWeight: '600' }}>{stats.total}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span style={{ fontSize: '13px', fontWeight: '500' }}>Mapped:</span>
+                <span style={{ fontSize: '13px', fontWeight: '500' }}>Mapped Inputs:</span>
                 <Badge className="bg-green-500 text-white text-xs">{stats.mapped}</Badge>
               </div>
               <div className="flex items-center gap-2">

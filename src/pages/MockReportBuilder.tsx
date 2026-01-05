@@ -16,9 +16,18 @@ export default function MockReportBuilder({ jobId }: MockReportBuilderProps) {
   const { isLoading: isLoadingJob, error: jobLoadError } = useLoadJobIntoReport(jobId);
 
   useEffect(() => {
-    // ALWAYS clear cached template AND previewHtml FIRST to force reload of latest version
-    console.log('MockReportBuilder: Clearing cached template and previewHtml to force reload...');
     const store = useReportBuilderStore.getState();
+    const currentPreviewHtml = store.previewHtml;
+    const activeTestMode = store.activeTestMode;
+
+    // If coming from TDD page with previewHtml already set, DON'T clear it
+    if (currentPreviewHtml && currentPreviewHtml.length > 1000 && (activeTestMode === 'test-report' || activeTestMode === 'user-input')) {
+      console.log('MockReportBuilder: Using previewHtml from TDD page (not clearing)');
+      return; // Keep the existing previewHtml
+    }
+
+    // Normal flow: clear and regenerate
+    console.log('MockReportBuilder: Clearing cached template and previewHtml to force reload...');
 
     // Clear cache immediately
     useReportBuilderStore.setState({

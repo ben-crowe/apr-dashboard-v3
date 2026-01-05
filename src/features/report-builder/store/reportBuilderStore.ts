@@ -7216,13 +7216,13 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       }
     });
 
-    // Then load ONLY user-input fields from test data
+    // Load all test data fields EXCEPT calculated ones (calc engine computes those)
     Object.entries(testDataSet1).forEach(([fieldId, value]) => {
       const storeFieldId = testDataFieldMapping[fieldId] || fieldId;
       const fieldDef = getFieldDef(storeFieldId);
-      
-      // Only load if field exists AND is user-input
-      if (fieldExists(storeFieldId) && fieldDef && fieldDef.inputSource === 'user-input') {
+
+      // Load if field exists AND is NOT calculated (calc engine will compute calculated fields)
+      if (fieldExists(storeFieldId) && (!fieldDef || fieldDef.inputSource !== 'calculated')) {
         updates.push({ fieldId: storeFieldId, value });
         mappedCount++;
       }

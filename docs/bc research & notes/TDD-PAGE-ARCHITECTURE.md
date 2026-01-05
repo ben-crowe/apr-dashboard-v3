@@ -10,7 +10,15 @@
 
 *Read this section first when starting a new session. Add new entries at the top.*
 
-### 2026-01-05 - Image Debugging & Doc Foundation
+### 2026-01-05 (PM) - Ecosystem Understanding Expanded
+- **Added:** FULL-ECOSYSTEM-INTEGRATION.md to knowledge folder
+- **Key Learning:** Report Builder is STAGE 4 of a 4-stage system (Intake → LOE → E-Sign → Report)
+- **Current Gap:** Report Builder disconnected from job system, no persistence, no auto-save
+- **Future Work:** Integration bridge, `report_builder_data` table, `/dashboard/job/:jobId/report` route
+- **Added:** `/apr-orchestrator` skill and command (proper skill/command pattern)
+- **Added:** PENDING-TASKS.md for persistent task tracking
+
+### 2026-01-05 (AM) - Image Debugging & Doc Foundation
 - **Fixed:** Cover image (`subject-photo`) not rendering - template had proper `<img>` tags but issue was elsewhere
 - **Fixed:** 26 gallery images (subject-photo-1 to -25) had broken text placeholders instead of `<img>` tags (commit `d6bf37d`)
 - **Fixed:** Map images (`img-map-aerial`) same issue - text placeholder, not `<img>` tag
@@ -33,6 +41,7 @@
 |----------|------|---------|
 | **`/apr-orchestrator` Skill** | `~/.claude/skills/apr-orchestrator.md` | APR Orchestrator - run to load context & check tasks |
 | **This File** | `docs/bc research & notes/TDD-PAGE-ARCHITECTURE.md` | Master knowledge hub |
+| **FULL ECOSYSTEM** | `docs/bc research & notes/FULL-ECOSYSTEM-INTEGRATION.md` | 4-stage architecture, database schema, integration plan |
 | **PENDING TASKS** | `docs/bc research & notes/PENDING-TASKS.md` | Tasks that MUST get done - check at session start |
 | **Calc Engine Map** | `docs/bc research & notes/CALC-ENGINE-FIELD-MAP.md` | Calculator field mappings |
 | **Reference Library** | `docs/15-Contract-review/` | Extensive field guides, crosswalks, Valcre mappings |
@@ -40,6 +49,29 @@
 | **Test Data** | `src/features/report-builder/data/TestDataSet1.ts` | Test values for all fields |
 | **HTML Template** | `public/Report-MF-template.html` | Report template with placeholders |
 | **Store** | `src/features/report-builder/store/reportBuilderStore.ts` | Zustand store, all state management |
+
+---
+
+## 🌐 Ecosystem Context
+
+**APR Dashboard V3 is a 4-stage appraisal workflow system:**
+
+```
+STAGE 1: CLIENT INTAKE ───→ STAGE 2: JOB MGT & LOE ───→ STAGE 3: E-SIGNATURE ───→ STAGE 4: REPORT BUILDER
+   /                        /dashboard/job/:jobId         DocuSeal                   /mock-builder
+   job_submissions          job_loe_details               Signed LOE                 (THIS DOC COVERS)
+                            job_property_info
+```
+
+**This document focuses on Stage 4 (Report Builder)** - the final stage where appraisal reports are assembled.
+
+**Current Integration Status:**
+- ⚠️ Report Builder is currently **disconnected** from Stages 1-3
+- ⚠️ No persistence to database (data lost on close)
+- ⚠️ Missing route `/dashboard/job/:jobId/report`
+- 📋 Full integration plan in `FULL-ECOSYSTEM-INTEGRATION.md`
+
+**For full ecosystem details:** Read `FULL-ECOSYSTEM-INTEGRATION.md`
 
 ---
 

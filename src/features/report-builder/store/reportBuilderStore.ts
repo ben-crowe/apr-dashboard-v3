@@ -649,7 +649,7 @@ const getMockData = (): ReportSection[] => [
     shortName: "01 - COVER",
     fields: [
       {
-        id: "img-cover-photo",
+        id: "subject-photo",  // FIXED: Must match template {{subject-photo}}
         label: "Cover Photo - Main property image",
         type: "image",
         value: "",

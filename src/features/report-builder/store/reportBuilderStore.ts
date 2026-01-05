@@ -7165,12 +7165,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     });
     
     console.log(`Loaded ${loadedCount} fields directly (bypassed calc engine)`);
-    
-    // Generate preview WITHOUT running calculations
-    // This validates field IDs match between data and template
-    await get().generatePreview();
-    
-    console.log("=== DIRECT TO TEMPLATE COMPLETE: Check template for field validation ===");
+    console.log("=== DIRECT TO TEMPLATE COMPLETE ===");
   },
 
   loadDataSet1User: async () => {

@@ -1135,18 +1135,15 @@ const TestInputDashboard: React.FC = () => {
               <Button
                 onClick={async () => {
                   try {
-                    // Set mode FIRST to update button state immediately
+                    // Set mode and dataset for stats update
                     setTestMode("test-report");
-                    console.log(
-                      "Mapped Input: Loading fields directly to template...",
-                    );
+                    setSelectedDataset("testDataSet1");
+                    console.log("Load Data: Loading all test data to store...");
                     await loadDataSet1DirectToTemplate();
-                    console.log(
-                      "Mapped Input: Complete - navigating to template...",
-                    );
-                    navigate("/mock-builder");
+                    console.log("Load Data: Complete - stats should update");
+                    // Don't auto-navigate - let user see stats first
                   } catch (error) {
-                    console.error("Error in Load All Fields:", error);
+                    console.error("Error in Load Data:", error);
                     alert("Error: " + String(error));
                   }
                 }}
@@ -1193,7 +1190,7 @@ const TestInputDashboard: React.FC = () => {
                 title="Direct field validation - bypasses calc engine, maps all test data to template"
               >
                 <Database className="w-3 h-3" />
-                Mapped Input
+                Load Data
                 {activeTestMode === "test-report" && (
                   <span className="ml-1">&#10003;</span>
                 )}

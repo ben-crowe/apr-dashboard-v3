@@ -55,6 +55,8 @@ const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
     'img-unit-1', 'img-unit-2', 'img-unit-3', 'img-unit-4', 'img-unit-5', 'img-unit-6',
     'img-systems-1', 'img-systems-2', 'img-systems-3', 'img-systems-4'
   ],
+  'sales': ['comp1-photo', 'comp1-map', 'comp2-photo', 'comp2-map', 'comp3-photo', 'comp3-map', 'comp4-photo', 'comp4-map', 'comp5-photo', 'comp5-map'],
+  'income': ['img-rental-comparables-map'],
 };
 
 // Layout configuration for Home section field groupings

@@ -172,7 +172,8 @@ export const fieldRegistry: FieldDefinition[] = [
   // ============================================================================
 
   // --- COVER & REPORT IMAGES ---
-  { id: 'img-cover-photo', storeId: 'img-cover-photo', label: 'Cover Photo - Main property image', section: 'image-mgt', subsection: 'cover-images', type: 'image', inputSource: 'user-input', required: false },
+  // FIXED: Changed from img-cover-photo to subject-photo to match template {{subject-photo}}
+  { id: 'subject-photo', storeId: 'subject-photo', label: 'Cover Photo - Main property image', section: 'image-mgt', subsection: 'cover-images', type: 'image', inputSource: 'user-input', required: false },
   // Note: cover-photo-caption removed - cover doesn't need caption
   { id: 'img-signature', storeId: 'img-signature', label: 'Appraiser Signature', section: 'image-mgt', subsection: 'cover-images', type: 'image', inputSource: 'user-input', required: false },
   // Note: img-signature kept in registry but hidden from S3 display (hardcoded in template)
@@ -252,8 +253,8 @@ export const fieldRegistry: FieldDefinition[] = [
   { id: 'img-systems-4', storeId: 'img-systems-4', label: 'Building Systems 4 - HVAC/Furnace', section: 'image-mgt', subsection: 'systems-photos', type: 'image', inputSource: 'user-input', required: false },
   { id: 'img-systems-4-caption', storeId: 'img-systems-4-caption', label: 'Caption', section: 'image-mgt', subsection: 'systems-photos', type: 'text', inputSource: 'user-input', required: false },
 
-  // --- SUBJECT PROPERTY PHOTOS (Alternate IDs from test data) ---
-  { id: 'subject-photo', storeId: 'subject-photo', label: 'Subject Photo - Primary', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
+  // --- SUBJECT PROPERTY PHOTOS (Gallery photos, subject-photo-1 through subject-photo-25) ---
+  // NOTE: subject-photo (cover) is in cover-images subsection, NOT here
   { id: 'subject-photo-1', storeId: 'subject-photo-1', label: 'Subject Photo 1', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },
   { id: 'subject-photo-1-caption', storeId: 'subject-photo-1-caption', label: 'Caption', section: 'image-mgt', subsection: 'subject-photos', type: 'text', inputSource: 'user-input', required: false },
   { id: 'subject-photo-2', storeId: 'subject-photo-2', label: 'Subject Photo 2', section: 'image-mgt', subsection: 'subject-photos', type: 'image', inputSource: 'user-input', required: false },

@@ -5936,9 +5936,18 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         ...(s.subsections?.flatMap((ss) => ss.fields) || []),
       ])
       .find((f) => f.id === fieldId);
-    if (field && Array.isArray(field.value)) {
-      get().updateFieldValue(fieldId, [...field.value, imageUrl]);
+
+    if (!field) {
+      console.warn(`addImage: Field ${fieldId} not found in sections`);
+      return;
     }
+
+    // FIX: Handle case where field.value starts as empty string, not array
+    // Initialize as array if needed, or append to existing array
+    const currentImages = Array.isArray(field.value) ? field.value :
+                         (field.value && field.value !== '' ? [field.value as string] : []);
+    console.log(`addImage: ${fieldId} - current images:`, currentImages, '+ new:', imageUrl);
+    get().updateFieldValue(fieldId, [...currentImages, imageUrl]);
   },
 
   removeImage: (fieldId: string, imageUrl: string) => {
@@ -6018,6 +6027,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
   // Interpolate field values into template (synchronous - template must be preloaded)
   interpolateTemplate: (sections: ReportSection[], template: string) => {
+    console.log('🔴🔴🔴 interpolateTemplate CALLED! sections:', sections.length, 'template length:', template?.length);
     let html = template;
 
     // Build field value map from all sections (using store IDs as keys)

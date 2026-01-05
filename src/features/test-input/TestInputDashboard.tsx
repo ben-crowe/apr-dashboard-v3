@@ -280,12 +280,12 @@ const TestInputDashboard: React.FC = () => {
     });
 
     fieldRegistry.forEach(field => {
-      // Skip fields from hidden sections (consolidated into accordions)
-      if (hiddenSections.includes(field.section)) return;
-
-      // In test-report mode (Map All to Report), count ALL fields
-      // Otherwise, only count user-input fields
-      if (activeTestMode !== 'test-report' && field.inputSource !== 'user-input') return;
+      // In test-report mode (Map All to Report), count ALL fields from ALL sections
+      // Otherwise, skip hidden sections and only count user-input fields
+      if (activeTestMode !== 'test-report') {
+        if (hiddenSections.includes(field.section)) return;
+        if (field.inputSource !== 'user-input') return;
+      }
 
       // Only count fields that exist in the store
       if (!storeFieldIds.has(field.storeId)) return;

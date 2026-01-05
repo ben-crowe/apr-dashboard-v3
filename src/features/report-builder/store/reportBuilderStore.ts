@@ -6043,6 +6043,15 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       });
     });
 
+    // DEBUG: Log image-related fields in fieldMap
+    const imageFields = ['img-cover-photo', 'subject-photo', 'subject-photo-1', 'img-map-regional'];
+    console.log('interpolateTemplate: Image fields in fieldMap:');
+    imageFields.forEach(id => {
+      const val = fieldMap.get(id);
+      console.log(`  ${id}: ${val ? `"${val}"` : '(not found)'}`);
+    });
+    console.log(`interpolateTemplate: Total fieldMap size: ${fieldMap.size}`);
+
     // Create reverse mapping: template ID -> store ID (for fields that are mapped)
     // This allows template placeholders to find values even when IDs differ
     const templateToStoreIdMap = new Map<string, string>();
@@ -6083,7 +6092,12 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       // Map template ID to store ID (handles testDataFieldMapping)
       const storeFieldId = getStoreIdFromTemplateId(templateFieldId);
       const value = fieldMap.get(storeFieldId);
-      
+
+      // DEBUG: Log image field replacements specifically
+      if (templateFieldId.includes('photo') || templateFieldId.includes('img-')) {
+        console.log(`interpolateTemplate: Image replacement: {{${templateFieldId}}} → store:${storeFieldId} → value:"${value || '(empty)'}"`);
+      }
+
       if (value !== undefined && value !== '') {
         replacedCount++;
         return value;

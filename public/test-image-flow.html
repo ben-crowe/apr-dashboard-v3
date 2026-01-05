@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Image Flow Test</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; }
+    .container { display: flex; gap: 20px; }
+    .editor, .preview { flex: 1; padding: 20px; border: 1px solid #ccc; }
+    .preview-frame { background: #f5f5f5; padding: 20px; min-height: 300px; }
+    .image-box { width: 200px; height: 150px; border: 1px solid #999; background: #eee; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .image-box img { max-width: 100%; max-height: 100%; }
+    input[type="text"] { width: 100%; padding: 8px; margin: 10px 0; }
+    button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    .log { background: #1a1a1a; color: #0f0; padding: 10px; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Image Flow Test - Minimal Reproduction</h1>
+
+  <div class="container">
+    <div class="editor">
+      <h2>Editor Panel</h2>
+      <label>Image URL (subject-photo):</label>
+      <input type="text" id="imageInput" placeholder="/extracted-images/image2.jpeg" />
+      <br>
+      <button onclick="loadTestData()">Load Test Data</button>
+      <button onclick="updatePreview()">Update Preview</button>
+      <button onclick="clearAll()">Clear</button>
+
+      <h3>Current Store Value:</h3>
+      <pre id="storeValue">Empty</pre>
+    </div>
+
+    <div class="preview">
+      <h2>Preview Panel</h2>
+      <div class="preview-frame" id="previewFrame">
+        <!-- This simulates the template -->
+        <p>Cover Page</p>
+        <div class="image-box" id="imageContainer">
+          <span id="placeholder">{{subject-photo}}</span>
+          <img id="previewImage" style="display:none;" />
+        </div>
+        <p>Property Name: <span id="propertyName">{{property-name}}</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="log" id="logPanel">
+    === Log Output ===
+  </div>
+
+  <script>
+    // Simulated store
+    const store = {
+      fields: {
+        'subject-photo': '',
+        'property-name': ''
+      }
+    };
+
+    // Test data (like TestDataSet1)
+    const testData = {
+      'subject-photo': '/extracted-images/image2.jpeg',
+      'property-name': 'North Battleford Apartments'
+    };
+
+    // Template (raw HTML with placeholders)
+    const template = `
+      <p>Cover Page</p>
+      <div class="image-box">
+        <img src="{{subject-photo}}" style="max-width:100%; max-height:100%;" onerror="this.style.display='none'" />
+      </div>
+      <p>Property Name: {{property-name}}</p>
+    `;
+
+    function log(msg) {
+      const panel = document.getElementById('logPanel');
+      panel.innerHTML += '\n' + new Date().toLocaleTimeString() + ': ' + msg;
+      panel.scrollTop = panel.scrollHeight;
+    }
+
+    function loadTestData() {
+      log('Loading test data...');
+
+      // Simulate what loadDataSet1User does
+      Object.entries(testData).forEach(([fieldId, value]) => {
+        store.fields[fieldId] = value;
+        log(`  Set ${fieldId} = "${value}"`);
+      });
+
+      // Update input to show current value
+      document.getElementById('imageInput').value = store.fields['subject-photo'];
+      document.getElementById('storeValue').textContent = JSON.stringify(store.fields, null, 2);
+
+      log('Test data loaded. Calling updatePreview...');
+      updatePreview();
+    }
+
+    function updatePreview() {
+      log('updatePreview() called');
+
+      // Build fieldMap (like interpolateTemplate does)
+      const fieldMap = new Map();
+      Object.entries(store.fields).forEach(([id, value]) => {
+        fieldMap.set(id, value);
+        log(`  fieldMap.set("${id}", "${value}")`);
+      });
+
+      // Check for subject-photo specifically
+      const subjectPhoto = fieldMap.get('subject-photo');
+      log(`  subject-photo in fieldMap: "${subjectPhoto || '(empty)'}"`);
+
+      // Interpolate template
+      let html = template;
+      let replacedCount = 0;
+
+      html = html.replace(/\{\{([^}]+)\}\}/g, (match, fieldId) => {
+        const value = fieldMap.get(fieldId);
+        log(`  Replacing {{${fieldId}}} with "${value || '(empty)'}"`);
+        if (value) {
+          replacedCount++;
+          return value;
+        }
+        return match; // Leave placeholder if no value
+      });
+
+      log(`Interpolation complete: ${replacedCount} replacements`);
+
+      // Inject into preview
+      document.getElementById('previewFrame').innerHTML = html;
+      log('Preview updated');
+    }
+
+    function clearAll() {
+      store.fields = { 'subject-photo': '', 'property-name': '' };
+      document.getElementById('imageInput').value = '';
+      document.getElementById('storeValue').textContent = 'Empty';
+      document.getElementById('previewFrame').innerHTML = template;
+      log('Cleared all');
+    }
+
+    // Manual input handler
+    document.getElementById('imageInput').addEventListener('input', (e) => {
+      store.fields['subject-photo'] = e.target.value;
+      document.getElementById('storeValue').textContent = JSON.stringify(store.fields, null, 2);
+      log(`Manual input: subject-photo = "${e.target.value}"`);
+    });
+
+    log('Test page loaded. Click "Load Test Data" to start.');
+  </script>
+</body>
+</html>

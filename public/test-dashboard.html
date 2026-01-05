@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Dashboard - Image Flow</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, sans-serif; margin: 0; height: 100vh; display: flex; flex-direction: column; }
+    .header { background: #1a1a2e; color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { margin: 0; font-size: 18px; }
+    .toggle-container { display: flex; align-items: center; gap: 10px; }
+    .toggle { width: 50px; height: 26px; background: #444; border-radius: 13px; position: relative; cursor: pointer; }
+    .toggle.active { background: #4CAF50; }
+    .toggle::after { content: ''; position: absolute; width: 22px; height: 22px; background: #fff; border-radius: 50%; top: 2px; left: 2px; transition: 0.2s; }
+    .toggle.active::after { left: 26px; }
+    .main { display: flex; flex: 1; overflow: hidden; }
+    .editor { width: 350px; background: #2a2a3e; color: #fff; padding: 20px; overflow-y: auto; }
+    .preview { flex: 1; background: #f5f5f5; position: relative; }
+    .preview iframe { width: 100%; height: 100%; border: none; }
+    .field-group { margin-bottom: 15px; }
+    .field-group label { display: block; font-size: 12px; color: #aaa; margin-bottom: 5px; }
+    .field-group input { width: 100%; padding: 8px; border: 1px solid #444; background: #1a1a2e; color: #fff; border-radius: 4px; }
+    .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px 5px 5px 0; font-size: 14px; }
+    .btn-primary { background: #4CAF50; color: #fff; }
+    .btn-secondary { background: #666; color: #fff; }
+    .log { background: #0a0a0a; color: #0f0; padding: 10px; font-family: monospace; font-size: 11px; max-height: 150px; overflow-y: auto; margin-top: 20px; border-radius: 4px; }
+    .section-title { font-size: 14px; font-weight: bold; margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 1px solid #444; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Test Dashboard - Image Flow Reproduction</h1>
+    <div class="toggle-container">
+      <span>Show Field IDs</span>
+      <div class="toggle" id="toggleRaw" onclick="toggleView()"></div>
+      <span>Show Values</span>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="editor">
+      <div class="section-title">Actions</div>
+      <button class="btn btn-primary" onclick="loadTestData()">Load Test Data</button>
+      <button class="btn btn-secondary" onclick="updatePreview()">Refresh Preview</button>
+      <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+
+      <div class="section-title">Cover Image</div>
+      <div class="field-group">
+        <label>subject-photo</label>
+        <input type="text" id="field-subject-photo" placeholder="/extracted-images/image2.jpeg" oninput="onFieldChange('subject-photo', this.value)" />
+      </div>
+
+      <div class="section-title">Property Info</div>
+      <div class="field-group">
+        <label>property-name</label>
+        <input type="text" id="field-property-name" oninput="onFieldChange('property-name', this.value)" />
+      </div>
+      <div class="field-group">
+        <label>property-address</label>
+        <input type="text" id="field-property-address" oninput="onFieldChange('property-address', this.value)" />
+      </div>
+      <div class="field-group">
+        <label>appraiser-name</label>
+        <input type="text" id="field-appraiser-name" oninput="onFieldChange('appraiser-name', this.value)" />
+      </div>
+
+      <div class="section-title">Subject Photos</div>
+      <div class="field-group">
+        <label>subject-photo-1</label>
+        <input type="text" id="field-subject-photo-1" oninput="onFieldChange('subject-photo-1', this.value)" />
+      </div>
+      <div class="field-group">
+        <label>subject-photo-1-caption</label>
+        <input type="text" id="field-subject-photo-1-caption" oninput="onFieldChange('subject-photo-1-caption', this.value)" />
+      </div>
+      <div class="field-group">
+        <label>subject-photo-2</label>
+        <input type="text" id="field-subject-photo-2" oninput="onFieldChange('subject-photo-2', this.value)" />
+      </div>
+      <div class="field-group">
+        <label>subject-photo-2-caption</label>
+        <input type="text" id="field-subject-photo-2-caption" oninput="onFieldChange('subject-photo-2-caption', this.value)" />
+      </div>
+
+      <div class="log" id="logPanel">=== Log ===</div>
+    </div>
+
+    <div class="preview">
+      <iframe id="previewFrame" src="/test-template.html"></iframe>
+    </div>
+  </div>
+
+  <script>
+    // ============================================
+    // SIMULATED STORE (like reportBuilderStore)
+    // ============================================
+    const store = {
+      fields: {},
+      showRawIds: false,
+      previewHtml: '',
+      templateHtml: ''
+    };
+
+    // ============================================
+    // TEST DATA (like TestDataSet1)
+    // ============================================
+    const testDataSet1 = {
+      'subject-photo': '/extracted-images/image2.jpeg',
+      'property-name': 'North Battleford Apartments',
+      'property-address': '1101, 1121 109 St, North Battleford, SK',
+      'appraiser-name': 'John Smith, MAI',
+      'subject-photo-1': '/extracted-images/image12.jpeg',
+      'subject-photo-1-caption': 'East Elevation',
+      'subject-photo-2': '/extracted-images/image13.jpeg',
+      'subject-photo-2-caption': 'West Elevation'
+    };
+
+    // ============================================
+    // LOGGING
+    // ============================================
+    function log(msg) {
+      const panel = document.getElementById('logPanel');
+      const time = new Date().toLocaleTimeString();
+      panel.innerHTML += `\n${time}: ${msg}`;
+      panel.scrollTop = panel.scrollHeight;
+      console.log(msg);
+    }
+
+    // ============================================
+    // LOAD TEMPLATE (like loadPreviewTemplate)
+    // ============================================
+    async function loadTemplate() {
+      log('Loading template from /test-template.html...');
+      const response = await fetch('/test-template.html?v=' + Date.now());
+      store.templateHtml = await response.text();
+      log(`Template loaded: ${store.templateHtml.length} chars`);
+      return store.templateHtml;
+    }
+
+    // ============================================
+    // INTERPOLATE (like interpolateTemplate)
+    // ============================================
+    function interpolateTemplate(template) {
+      log('interpolateTemplate() called');
+
+      // Build fieldMap from store
+      const fieldMap = new Map();
+      Object.entries(store.fields).forEach(([id, value]) => {
+        fieldMap.set(id, value || '');
+      });
+
+      log(`fieldMap built with ${fieldMap.size} fields`);
+
+      // Check subject-photo specifically
+      const subjectPhoto = fieldMap.get('subject-photo');
+      log(`  subject-photo = "${subjectPhoto || '(empty)'}"`);
+
+      // FALLBACK (like our fix)
+      const criticalFields = ['subject-photo'];
+      criticalFields.forEach(fieldId => {
+        const currentValue = fieldMap.get(fieldId);
+        const isEmpty = !currentValue || currentValue === '';
+        if (isEmpty && testDataSet1[fieldId]) {
+          log(`  FALLBACK: ${fieldId} is empty, using testDataSet1 value`);
+          fieldMap.set(fieldId, testDataSet1[fieldId]);
+        }
+      });
+
+      // Replace placeholders
+      let html = template;
+      let replacedCount = 0;
+
+      html = html.replace(/\{\{([^}]+)\}\}/g, (match, fieldId) => {
+        const value = fieldMap.get(fieldId);
+        if (fieldId.includes('photo')) {
+          log(`  Replacing {{${fieldId}}} -> "${value || '(empty)'}"`);
+        }
+        if (value) {
+          replacedCount++;
+          return value;
+        }
+        return match;
+      });
+
+      log(`Interpolation complete: ${replacedCount} replacements`);
+      return html;
+    }
+
+    // ============================================
+    // INJECT INTO IFRAME (like PreviewPanel)
+    // ============================================
+    function injectIntoIframe(html) {
+      log('Injecting into iframe...');
+      const iframe = document.getElementById('previewFrame');
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+
+      // Parse the interpolated HTML
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+
+      // Find pages wrapper in iframe
+      const pagesWrapper = iframeDoc.getElementById('pages-wrapper');
+      if (!pagesWrapper) {
+        log('ERROR: pages-wrapper not found in iframe!');
+        return;
+      }
+
+      // Extract page-sheets from interpolated HTML
+      const pageSheets = tempDiv.querySelectorAll('.page-sheet');
+      log(`Found ${pageSheets.length} page-sheets to inject`);
+
+      // Clear and inject
+      pagesWrapper.innerHTML = '';
+      pageSheets.forEach(page => {
+        pagesWrapper.appendChild(page.cloneNode(true));
+      });
+
+      log('Injection complete');
+
+      // Check if image is in the DOM
+      const img = iframeDoc.querySelector('img[alt="Subject Photo"]');
+      if (img) {
+        log(`  Image src = "${img.src}"`);
+      }
+    }
+
+    // ============================================
+    // UPDATE PREVIEW (like generatePreview)
+    // ============================================
+    async function updatePreview() {
+      log('--- updatePreview() ---');
+
+      // Load template
+      const template = await loadTemplate();
+
+      // Interpolate
+      const html = interpolateTemplate(template);
+      store.previewHtml = html;
+
+      // Inject into iframe
+      setTimeout(() => {
+        injectIntoIframe(html);
+      }, 100);
+    }
+
+    // ============================================
+    // LOAD TEST DATA (like loadDataSet1User)
+    // ============================================
+    async function loadTestData() {
+      log('=== LOAD TEST DATA ===');
+
+      // Populate store from testDataSet1
+      Object.entries(testDataSet1).forEach(([fieldId, value]) => {
+        store.fields[fieldId] = value;
+        log(`  store.fields["${fieldId}"] = "${value}"`);
+
+        // Update input field
+        const input = document.getElementById('field-' + fieldId);
+        if (input) input.value = value;
+      });
+
+      log('Test data loaded, updating preview...');
+      await updatePreview();
+    }
+
+    // ============================================
+    // FIELD CHANGE HANDLER
+    // ============================================
+    function onFieldChange(fieldId, value) {
+      store.fields[fieldId] = value;
+      log(`Field changed: ${fieldId} = "${value}"`);
+    }
+
+    // ============================================
+    // TOGGLE VIEW (raw IDs vs values)
+    // ============================================
+    function toggleView() {
+      store.showRawIds = !store.showRawIds;
+      document.getElementById('toggleRaw').classList.toggle('active', store.showRawIds);
+      log(`Toggle: showRawIds = ${store.showRawIds}`);
+
+      // Re-render preview
+      if (store.showRawIds) {
+        // Show raw template
+        injectIntoIframe(store.templateHtml);
+      } else {
+        // Show interpolated
+        injectIntoIframe(store.previewHtml);
+      }
+    }
+
+    // ============================================
+    // CLEAR
+    // ============================================
+    function clearAll() {
+      store.fields = {};
+      store.previewHtml = '';
+      document.querySelectorAll('.editor input').forEach(input => input.value = '');
+      log('Cleared all');
+      updatePreview();
+    }
+
+    // ============================================
+    // INIT
+    // ============================================
+    window.onload = () => {
+      log('Dashboard loaded. Click "Load Test Data" to start.');
+      // Wait for iframe to load
+      document.getElementById('previewFrame').onload = () => {
+        log('Iframe loaded');
+      };
+    };
+  </script>
+</body>
+</html>

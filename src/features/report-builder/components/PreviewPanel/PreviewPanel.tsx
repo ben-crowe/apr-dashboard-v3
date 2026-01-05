@@ -271,11 +271,10 @@ export default function PreviewPanel() {
           }
 
           if (modeLabel) {
+            // Label describes what's CURRENTLY VISIBLE
             modeLabel.textContent = toggle.checked
-              ? activeTestMode === "user-input"
-                ? "Preview Mode (Real Data)"
-                : "Preview Mode"
-              : "Designer Mode (Sample Data)";
+              ? "Field IDs" // Toggle ON = showing field IDs
+              : "Test Data"; // Toggle OFF = showing test data values
           }
 
           // Save toggle state to sessionStorage when user manually changes it

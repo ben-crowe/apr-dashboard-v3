@@ -279,31 +279,26 @@ const TestInputDashboard: React.FC = () => {
       });
     });
 
+    // Count ALL fields in registry - no filters
+    // Total = all fields, Mapped = has value, Empty = empty string, Missing = not in store
     fieldRegistry.forEach(field => {
-      // In test-report mode (Map All to Report), count ALL fields from ALL sections
-      // Otherwise, skip hidden sections and only count user-input fields
-      if (activeTestMode !== 'test-report') {
-        if (hiddenSections.includes(field.section)) return;
-        if (field.inputSource !== 'user-input') return;
-      }
-
-      // Only count fields that exist in the store
-      if (!storeFieldIds.has(field.storeId)) return;
-
-      // Filter by dataset if selected
-      if (datasetFieldIds && !datasetFieldIds.has(field.storeId)) return;
-
       total++;
-      const status = getFieldStatus(field);
-      if (status.status === 'mapped') mapped++;
-      else if (status.status === 'empty') empty++;
-      else missing++;
+
+      // Check if field exists in store and has a value
+      if (!storeFieldIds.has(field.storeId)) {
+        missing++;
+      } else {
+        const status = getFieldStatus(field);
+        if (status.status === 'mapped') mapped++;
+        else if (status.status === 'empty') empty++;
+        else missing++;
+      }
     });
 
     const percentage = total > 0 ? Math.round((mapped / total) * 100) : 0;
 
     return { total, mapped, empty, missing, percentage };
-  }, [sections, datasetFieldIds, activeTestMode]);
+  }, [sections]);
 
   // Log on mount and stats change
   useEffect(() => {

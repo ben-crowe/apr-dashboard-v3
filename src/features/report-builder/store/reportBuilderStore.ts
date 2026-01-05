@@ -6039,12 +6039,15 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       });
     });
 
-    // FALLBACK: Ensure critical image fields are in fieldMap
-    // This handles edge case where subject-photo may not be in store sections
+    // FALLBACK: Ensure critical image fields have values in fieldMap
+    // FIX: Check if value is EMPTY, not just if key is missing!
+    // The field exists in registry but may not have been populated with data
     const criticalImageFields = ['subject-photo', 'img-cover-photo', 'cover-photo'];
     criticalImageFields.forEach(fieldId => {
-      if (!fieldMap.has(fieldId) && testDataSet1[fieldId]) {
-        console.log(`⚠️ ${fieldId} missing from fieldMap, adding fallback from testDataSet1`);
+      const currentValue = fieldMap.get(fieldId);
+      const isEmpty = !currentValue || currentValue === '';
+      if (isEmpty && testDataSet1[fieldId]) {
+        console.log(`⚠️ ${fieldId} has empty value in fieldMap, adding fallback from testDataSet1: "${testDataSet1[fieldId]}"`);
         fieldMap.set(fieldId, String(testDataSet1[fieldId]));
       }
     });

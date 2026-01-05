@@ -2,7 +2,7 @@
 
 **Purpose:** Knowledge file for session context - explains how the Test Data Dashboard and Report Builder system works.
 
-**Last Updated:** 2026-01-05
+**Last Updated:** 2026-01-05 (Added Image HTML patterns & iframe debugging)
 
 ---
 
@@ -225,6 +225,171 @@ const APPROACH_TO_PAGES_MAP = {
 ```
 
 When an approach toggle is disabled, those pages are excluded from preview.
+
+---
+
+## Image Fields in HTML Template
+
+### Correct Pattern (ALWAYS USE THIS)
+
+Images MUST use proper `<img>` tags with the placeholder in the `src` attribute:
+
+```html
+<!-- ✅ CORRECT - Image displays properly -->
+<div class="img-placeholder" style="width:100%; height:200px;">
+    <img src="{{subject-photo}}"
+         style="width:100%; height:100%; object-fit:cover;"
+         onerror="this.style.display='none';" />
+</div>
+```
+
+### Broken Pattern (NEVER USE THIS)
+
+Do NOT put image placeholders as text content - they will NOT render:
+
+```html
+<!-- ❌ BROKEN - Renders as text "{{subject-photo}}", not an image -->
+<div class="field-mapped" title="{{subject-photo}}">
+    {{subject-photo}}
+</div>
+```
+
+### Why This Matters
+
+The `interpolateTemplate()` function replaces `{{field-id}}` with the field value (e.g., `/extracted-images/image2.jpeg`). When this value is:
+- Inside `<img src="...">` → Browser loads the image ✅
+- As text content → Browser displays the path as text ❌
+
+### Image Field Checklist
+
+When adding or fixing image fields in the template:
+
+1. **Use `<img>` tag** - Always wrap in `<img src="{{field-id}}">`
+2. **Add onerror handler** - Hide broken images: `onerror="this.style.display='none';"`
+3. **Use object-fit** - `object-fit: cover` or `contain` for proper scaling
+4. **Container sizing** - Parent div should have explicit width/height
+5. **No duplicate class** - Don't use `class="field-mapped"` on image containers (causes issues)
+
+### Common Image Fields
+
+| Field ID | Location | Purpose |
+|----------|----------|---------|
+| `subject-photo` | Cover page | Main property photo |
+| `subject-photo-1` to `subject-photo-25` | Gallery pages | Subject property photos |
+| `img-map-regional` | Maps section | Regional context map |
+| `img-map-local` | Maps section | Local area map |
+| `img-map-aerial` | Maps section | Aerial overview |
+| `img-signature` | Certification | Appraiser signature |
+
+---
+
+## Preview Panel & Iframe Architecture
+
+### How Preview Rendering Works
+
+```
+1. Template loaded from /public/Report-MF-template.html
+   |
+2. interpolateTemplate() replaces {{field-id}} placeholders
+   |
+3. PreviewPanel.tsx injects HTML into iframe's #pages-wrapper
+   |
+4. Iframe displays rendered pages
+```
+
+### Iframe Structure
+
+```html
+<!-- PreviewPanel.tsx creates this structure -->
+<iframe id="preview-iframe" src="/Report-MF-template.html">
+    <!-- Inside iframe document: -->
+    <div id="pages-wrapper">
+        <!-- Page content injected here -->
+        <div class="page-sheet" data-page-num="1">...</div>
+        <div class="page-sheet" data-page-num="2">...</div>
+        <!-- ... more pages -->
+    </div>
+</iframe>
+```
+
+### Key Functions
+
+| Function | File | Purpose |
+|----------|------|---------|
+| `loadPreviewTemplate()` | reportBuilderStore.ts | Fetches raw template HTML |
+| `interpolateTemplate()` | reportBuilderStore.ts | Replaces placeholders with values |
+| `generatePreview()` | reportBuilderStore.ts | Full preview regeneration |
+| `injectContent()` | PreviewPanel.tsx | Inserts HTML into iframe |
+
+### Content Injection Process
+
+```typescript
+// PreviewPanel.tsx simplified flow
+const iframe = document.getElementById('preview-iframe');
+const iframeDoc = iframe.contentDocument;
+const pagesWrapper = iframeDoc.getElementById('pages-wrapper');
+
+// Extract page-sheets from interpolated HTML
+const tempDiv = document.createElement('div');
+tempDiv.innerHTML = previewHtml;
+const pages = tempDiv.querySelectorAll('.page-sheet');
+
+// Clear and inject
+pagesWrapper.innerHTML = '';
+pages.forEach(page => pagesWrapper.appendChild(page.cloneNode(true)));
+```
+
+---
+
+## Debugging: Image Display Issues
+
+### Quick Diagnosis Checklist
+
+When images aren't displaying in preview:
+
+| Check | Command/Location | What to Look For |
+|-------|-----------------|------------------|
+| 1. Template HTML | `public/Report-MF-template.html` | Is it `<img src="{{field-id}}">` or just `{{field-id}}`? |
+| 2. Field in registry | `src/.../fieldRegistry.ts` | Does field exist? Correct section/subsection? |
+| 3. Field in TestDataSet1 | `src/.../TestDataSet1.ts` | Does field have a value? |
+| 4. Browser console | F12 → Console | Look for `🖼️ IMAGE UPDATE` or `interpolateTemplate` logs |
+| 5. Network tab | F12 → Network | Is image URL being requested? 404 errors? |
+
+### Console Debug Markers
+
+The store has debug logging for image fields. Look for:
+
+```
+🖼️ IMAGE UPDATE: subject-photo from "" to "/extracted-images/image2.jpeg"
+🟣🟣🟣 FOUND subject-photo in section "image-mgt" -> subsection "cover-images"!
+interpolateTemplate: Image replacement: {{subject-photo}} → store:subject-photo → value:"/extracted-images/image2.jpeg"
+```
+
+### Common Issues & Fixes
+
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| Image shows as text path | Missing `<img>` tag | Add `<img src="{{field-id}}">` wrapper |
+| Image placeholder stays | Field not in store | Add field to fieldRegistry.ts |
+| Image 404 error | Wrong path in TestDataSet1 | Fix path in TestDataSet1.ts |
+| Image not updating | Wrong field ID | Check 4-file sync (registry, test data, template, editor) |
+
+### Historical Fix: Broken Image Placeholders (2026-01-05)
+
+**Problem:** 26 gallery images (subject-photo-1 to subject-photo-25) and map images showed as text instead of images.
+
+**Cause:** Template had text placeholders instead of `<img>` tags:
+```html
+<!-- Broken -->
+<div class="field-mapped">[IMAGE: <span class="field-mapped">{{subject-photo-1}}</span>]</div>
+
+<!-- Fixed -->
+<div class="img-placeholder"><img src="{{subject-photo-1}}" ... /></div>
+```
+
+**Commits:**
+- `d6bf37d` - Fix: Replace 26 broken image span placeholders with proper img tags
+- `2635a56` - Remove image fallback logic - empty image fields are fine
 
 ---
 

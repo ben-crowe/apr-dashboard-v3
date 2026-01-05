@@ -46,20 +46,18 @@ const TestInputDashboard: React.FC = () => {
     selectedDataset ? new Set(Object.keys(testDataSet1)) : null,
   [selectedDataset]);
 
-  // Initialize store AND load test data on mount
-  // Test data should load by default so we can see which fields have values vs empty
+  // Initialize store on mount - but DON'T auto-load test data
+  // Stats start at 0, user presses button to load data
   useEffect(() => {
-    const initAndLoadTestData = async () => {
+    const initStore = async () => {
       if (sections.length === 0) {
         console.log('TestInputDashboard: Initializing store...');
         await initializeMockData();
       }
-      // Always load test data so TDD page shows actual values
-      // This lets us verify: field with value = test data exists, empty = missing
-      console.log('TestInputDashboard: Loading test data by default...');
-      await loadDataSet1DirectToTemplate();
+      // Don't auto-load test data - let user press button
+      console.log('TestInputDashboard: Ready - press a button to load test data');
     };
-    initAndLoadTestData();
+    initStore();
   }, []); // Only run once on mount
 
   // Section names with numbered prefixes for easy cross-reference with Report Builder

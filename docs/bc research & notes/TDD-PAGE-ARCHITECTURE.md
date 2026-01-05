@@ -454,4 +454,172 @@ Tests template rendering directly:
 
 ---
 
+## Reference Documentation Library
+
+The `docs/15-Contract-review/` folder contains extensive reference documentation organized into key categories. These are invaluable for understanding the system.
+
+### Quick Reference Paths
+
+```
+docs/15-Contract-review/
+├── 0-APR-Domain-Core-Mgt/          # Domain knowledge, field naming, registry guides
+├── 2-Field Management/              # Field crosswalks, mappings, registry docs
+│   ├── Registry-field Info Guides/  # ⭐ Per-page field references
+│   ├── crosswalks/                  # Template ↔ Valcre mappings
+│   ├── valcre-mappings/             # Valcre named ranges & structure
+│   └── 01-Registry truth docs/      # Source of truth files
+├── 3-Calc Eng & Plan Agent/         # Calculator implementation
+├── Architecture/                    # System architecture docs
+└── 6-Souce Reports & Workbook/      # Reference reports
+```
+
+---
+
+### Registry & Field Guides
+
+**Location:** `docs/15-Contract-review/2-Field Management/Registry-field Info Guides/`
+
+| File | Description |
+|------|-------------|
+| **`-MASTER-PAGE-FIELD-REFERENCE.md`** | ⭐ Per-page field crosswalk (Template ID ↔ Valcre ID, 70 pages, 1,013 fields) |
+| **`VALCRE-WORKBOOK-TECHNICAL-GUIDE.md`** | ⭐ Excel workbook analysis: 88 sheets, 7,988 named ranges, calculation locations |
+| **`FIELD-ID-GUIDE-for-Agents.md`** | Agent-friendly field ID conventions and lookup patterns |
+| **`FIELD-REGISTRY-ALL-IDS.md`** | Complete list of all field IDs in registry |
+| **`FIELD-REGISTRY-VALIDATION-REPORT.md`** | Validation status of all fields |
+| **`TABLE-FIELD-ANALYSIS.md`** | Analysis of table-based fields (rental survey, comparables) |
+| **`VALCRE-GROUND-TRUTH-README.md`** | How Valcre data serves as source of truth |
+| **`DYNAMIC-CHARTS-IMPLEMENTATION.md`** | Chart/graph field implementation guide |
+
+---
+
+### Field Crosswalks & Mappings
+
+**Location:** `docs/15-Contract-review/2-Field Management/`
+
+| File | Description |
+|------|-------------|
+| **`crosswalks/template_to_valcre_mapping.json`** | JSON mapping: template field IDs → Valcre named ranges |
+| **`valcre-mappings/valcre_named_ranges.json`** | All 7,988 Valcre named ranges with cell references |
+| **`valcre-mappings/valcre_ranges_by_sheet.json`** | Named ranges organized by Excel sheet |
+| **`valcre-mappings/VALCRE_REPORT_STRUCTURE.md`** | Report structure from Valcre perspective |
+| **`valcre-mappings/VALCRE_TABLE_FIELD_MAPPING.md`** | Table-specific field mappings |
+| **`valcre-named-ranges-complete.json`** | Complete named range export (937KB) |
+
+---
+
+### Source of Truth Documents
+
+**Location:** `docs/15-Contract-review/2-Field Management/01-Registry truth docs/`
+
+| File | Description |
+|------|-------------|
+| **`APR-DASHBOARD-FILE-SYNC-OVERVIEW.md`** | 4-file sync architecture explained in detail |
+| **`IMAGE-FIELD-MAPPING-CORRECTED.json`** | Correct image field ID mappings |
+| **`IMAGE-MAPPING-ISSUES-AND-FIXES.md`** | Known image mapping issues and solutions |
+| **`HUMAN-INPUT-TEST-DATA.json`** | Test data for user-input fields |
+| **`EXTRACTION-STATUS-HANDOFF.md`** | Field extraction status from source documents |
+
+---
+
+### Domain Knowledge & Naming
+
+**Location:** `docs/15-Contract-review/0-APR-Domain-Core-Mgt/`
+
+| File | Description |
+|------|-------------|
+| **`domain knowlege-APR-25.12.26.md`** | APR domain knowledge for agents |
+| **`domain-Registry-guide.md`** | How the registry system works |
+| **`FIELD-NAMING-CONVENTION-CLEAN.md`** | ⭐ Field naming conventions and patterns |
+| **`FIELD-CONSOLIDATION-MAP.md`** | How duplicate fields are consolidated |
+| **`ID FILE-SYNC-OVERVIEW.md`** | 4-file sync with diagrams |
+| **`HARDCODED-FIELDS-TABLE.md`** | All hardcoded fields in EditPanel |
+| **`TEMPLATE-FIELD-IDS-READABLE.md`** | Human-readable field ID list |
+| **`Report-Builder-Workbook-tab-ref.md`** | Workbook tab reference for Report Builder |
+
+---
+
+### Calculator & Valuation
+
+**Location:** `docs/15-Contract-review/3-Calc Eng & Plan Agent/`
+
+| File | Description |
+|------|-------------|
+| **`Calc-to-Table.md`** | How calculator values flow to tables |
+| **`Calculator-Demo-Implementation-Plan.md`** | Calculator implementation details |
+| **`FEATURE-Sales-Comparison-Approach.md`** | Sales comparison calculation logic |
+| **`IMPLEMENTATION-Sales-Comparison.md`** | Sales comp implementation guide |
+
+---
+
+### Architecture & Planning
+
+**Location:** `docs/15-Contract-review/Architecture/`
+
+| File | Description |
+|------|-------------|
+| **`APR-V4-ARCHITECTURE.md`** | Full V4 system architecture (58KB) |
+| **`APR-V4-IMPLEMENTATION-GUIDE.md`** | Implementation guide for V4 |
+| **`ARCHITECTURE-DIAGRAM.md`** | Visual architecture diagrams |
+| **`IMPLEMENTATION-ROADMAP.md`** | Development roadmap |
+| **`MOCK-REPORT-BUILDER-IMPLEMENTATION.md`** | Mock builder implementation details |
+
+---
+
+### Reference Source Files
+
+**Location:** `docs/15-Contract-review/`
+
+| File | Description |
+|------|-------------|
+| **`Ref.Report-VAL251012 - North Battleford Apt.pdf`** | ⭐ Reference PDF (14MB) - visual source of truth |
+| **`Ref.Report-VAL251012-North Battleford Apt.docx`** | Word version of reference report |
+| **`Ref.Report-VAL251012-North Battleford Apt.html`** | HTML export of reference report |
+| **`reference-pages-viewer.html`** | Interactive page viewer tool |
+
+---
+
+### Key Concepts from Documentation
+
+#### Valcre Workbook Structure (from VALCRE-WORKBOOK-TECHNICAL-GUIDE.md)
+
+- **88 sheets** covering all appraisal methodologies
+- **7,988 named ranges** - primary data access method
+- **Key sheets:** DIRECTCAP, DCF, VALUES, COST, LAND, RENTAL
+- **Named range pattern:** `IA_DirCap_NOI`, `SCA_Comp1_Price`, etc.
+
+#### Per-Page Field Mapping (from -MASTER-PAGE-FIELD-REFERENCE.md)
+
+Each page documented with:
+- Registry Field ID (what our system uses)
+- Valcre ID (source system mapping)
+- Status (✅ Mapped, ⚠️ No Valcre, ❌ Missing)
+
+Example:
+```
+PAGE 6 - Executive Summary
+| Registry Field ID    | Valcre ID        | Status      |
+|---------------------|------------------|-------------|
+| `property-name`     | `PropertyName`   | ✅ Mapped   |
+| `assessed-value`    | `TaxAssdValue`   | ✅ Mapped   |
+| `site-area-sqft`    | ``               | ⚠️ No Valcre|
+```
+
+#### Field ID Naming Conventions (from FIELD-NAMING-CONVENTION-CLEAN.md)
+
+- **Prefix patterns:** `calc-`, `ia-`, `sca-`, `recon-`, `impv-`
+- **Numbered fields:** `-1`, `-2`, etc. for arrays
+- **Subsection prefixes:** Match section grouping
+
+---
+
+### How to Use These References
+
+1. **Finding a field mapping:** Check `-MASTER-PAGE-FIELD-REFERENCE.md` by page number
+2. **Understanding Valcre data:** Read `VALCRE-WORKBOOK-TECHNICAL-GUIDE.md`
+3. **Adding new fields:** Follow patterns in `FIELD-NAMING-CONVENTION-CLEAN.md`
+4. **Debugging data flow:** Reference `APR-DASHBOARD-FILE-SYNC-OVERVIEW.md`
+5. **Visual validation:** Compare against reference PDF
+
+---
+
 *This document serves as architectural reference for session context refresh.*

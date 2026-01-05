@@ -154,12 +154,8 @@ export const testDataFieldMapping: Record<string, string> = {
   // RECON
   "recon-rounded-value": "recon-final-value",
 
-  // IMAGE FIELD MAPPINGS - Template uses subject-photo, registry uses img-*
-  "subject-photo": "img-cover-photo", // Template cover photo → registry cover photo
-  // Note: subject-photo-1, subject-photo-2, etc. already match registry IDs, no mapping needed
-
-  // PHOTOS - map individual photos to consolidated arrays (special handling in loadDataSet1All)
-  // These will be handled specially since store uses arrays
+  // NOTE: subject-photo exists directly in registry (subsection: subject-photos)
+  // No mapping needed - template {{subject-photo}} matches registry subject-photo directly
 };
 
 // Helper to build image-mgt section from fieldRegistry
@@ -6045,12 +6041,12 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // DEBUG: Log image-related fields in fieldMap
     const imageFields = ['img-cover-photo', 'subject-photo', 'subject-photo-1', 'img-map-regional'];
-    console.log('interpolateTemplate: Image fields in fieldMap:');
+    console.log('🖼️🖼️🖼️ CRITICAL IMAGE CHECK - fieldMap contents:');
     imageFields.forEach(id => {
       const val = fieldMap.get(id);
-      console.log(`  ${id}: ${val ? `"${val}"` : '(not found)'}`);
+      console.log(`  🖼️ ${id}: ${val ? `✅ "${val}"` : '❌ NOT FOUND'}`);
     });
-    console.log(`interpolateTemplate: Total fieldMap size: ${fieldMap.size}`);
+    console.log(`🖼️ Total fieldMap size: ${fieldMap.size}`);
 
     // Create reverse mapping: template ID -> store ID (for fields that are mapped)
     // This allows template placeholders to find values even when IDs differ

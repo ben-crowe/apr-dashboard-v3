@@ -6039,6 +6039,16 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       });
     });
 
+    // FALLBACK: Ensure critical image fields are in fieldMap
+    // This handles edge case where subject-photo may not be in store sections
+    const criticalImageFields = ['subject-photo', 'img-cover-photo', 'cover-photo'];
+    criticalImageFields.forEach(fieldId => {
+      if (!fieldMap.has(fieldId) && testDataSet1[fieldId]) {
+        console.log(`⚠️ ${fieldId} missing from fieldMap, adding fallback from testDataSet1`);
+        fieldMap.set(fieldId, String(testDataSet1[fieldId]));
+      }
+    });
+
     // DEBUG: Log image-related fields in fieldMap
     const imageFields = ['img-cover-photo', 'subject-photo', 'subject-photo-1', 'img-map-regional'];
     console.log('🖼️🖼️🖼️ CRITICAL IMAGE CHECK - fieldMap contents:');

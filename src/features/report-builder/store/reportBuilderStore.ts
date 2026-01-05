@@ -7319,30 +7319,18 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   },
 
   loadDataSet1User: async () => {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7170',message:'loadDataSet1User ENTRY',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-    // #endregion
     console.log("=== LOAD DATASET1 USER: Loading user inputs, running calc ===");
     
     // Ensure sections are initialized
     let sections = get().sections;
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7175',message:'BEFORE init check',data:{sectionsLength:sections?.length||0,isEmpty:!sections||sections.length===0},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-    // #endregion
     if (!sections || sections.length === 0) {
       console.log("Sections not initialized, initializing...");
       await get().initializeMockData();
       sections = get().sections;
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7178',message:'AFTER initializeMockData',data:{sectionsLength:sections?.length||0,firstSectionId:sections?.[0]?.id||'none',firstSectionFieldsCount:sections?.[0]?.fields?.length||0},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-      // #endregion
     }
     
     if (!sections || sections.length === 0) {
       console.error("Failed to initialize sections");
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7182',message:'ERROR sections still empty',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'A'})}).catch(()=>{});
-      // #endregion
       throw new Error("Sections not initialized");
     }
     
@@ -7353,13 +7341,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Helper to check if field exists in store
     // FIX: Use get().sections to get fresh state, not stale closure variable
     const fieldExists = (fieldId: string): boolean => {
-      // #region agent log
       const storeSections = get().sections;
       const localSectionsLength = sections.length;
       const storeSectionsLength = storeSections.length;
       const mismatch = localSectionsLength !== storeSectionsLength;
-      fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7191',message:'fieldExists check',data:{fieldId,localSectionsLength,storeSectionsLength,mismatch},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
-      // #endregion
       // FIX: Use fresh sections from store, not stale closure variable
       const freshSections = get().sections;
       for (const section of freshSections) {
@@ -7408,16 +7393,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         mappedCount++;
       }
     });
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7229',message:'AFTER testDataSet1 loop',data:{totalTestDataFields:Object.keys(testDataSet1).length,updatesCount:updates.length,mappedCount,sampleFieldChecks},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
-    // #endregion
 
     // Apply all updates at once (without triggering preview generation)
     const currentSections = get().sections;
     console.log(`Applying ${updates.length} updates to ${currentSections.length} sections`);
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7232',message:'BEFORE applying updates',data:{updatesCount:updates.length,currentSectionsLength:currentSections.length,sampleUpdates:updates.slice(0,3)},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
-    // #endregion
     
     const updatedSections = currentSections.map((section) => {
       const updatedFields = section.fields.map((field) => {
@@ -7428,9 +7407,6 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
             console.log(`🖼️ IMAGE UPDATE (main): ${field.id} from "${field.value}" to "${update.value}"`);
           }
           console.log(`Updating field ${field.id} from "${field.value}" to "${update.value}"`);
-          // #region agent log
-          fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7239',message:'UPDATING field',data:{fieldId:field.id,oldValue:field.value,newValue:update.value},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
-          // #endregion
         }
         return update ? { ...field, value: update.value } : field;
       });
@@ -7459,11 +7435,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // Update sections in store
     set({ sections: updatedSections, isDirty: true });
-    // #region agent log
     const afterSetSections = get().sections;
     const sampleFieldValue = afterSetSections[0]?.fields?.[0]?.value || 'none';
-    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7263',message:'AFTER set sections',data:{updatedSectionsLength:updatedSections.length,afterSetSectionsLength:afterSetSections.length,sampleFieldValue},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'E'})}).catch(()=>{});
-    // #endregion
     console.log(`Updated sections in store. Total sections: ${updatedSections.length}`);
 
     // Run calculations to populate calculated fields
@@ -7497,9 +7470,6 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     
     console.log(`Final sections: ${finalSections.length}, Fields with values: ${totalFieldsWithValues}`);
     console.log(`Sample fields: ${sampleFields.slice(0, 5).join(', ')}`);
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'reportBuilderStore.ts:7270',message:'AFTER calculations - field values check',data:{finalSectionsLength:finalSections.length,totalFieldsWithValues,sampleFields:sampleFields.slice(0,5),sampleEmptyFields:sampleEmptyFields.slice(0,5)},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'B'})}).catch(()=>{});
-    // #endregion
 
     // Regenerate preview with ALL updated data
     const template = await get().loadPreviewTemplate();

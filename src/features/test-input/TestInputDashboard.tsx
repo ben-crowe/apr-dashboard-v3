@@ -513,18 +513,12 @@ const TestInputDashboard: React.FC = () => {
   // Calculate statistics based on TEMPLATE placeholders
   // Answers: "Did all template {{field-id}} placeholders get populated?"
   const stats = useMemo(() => {
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TestInputDashboard.tsx:515',message:'stats useMemo RUNNING',data:{selectedDataset,templateFieldIdsLength:templateFieldIds.length,sectionsLength:sections.length},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'D'})}).catch(()=>{});
-    // #endregion
     // Total is ALWAYS the template field count (what the report NEEDS)
     const total = templateFieldIds.length;
 
     // FIX: Only return early if template is empty. Allow stats to calculate even if selectedDataset is null
     // This ensures stats update when sections change, regardless of selectedDataset state
     if (total === 0) {
-      // #region agent log
-      fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TestInputDashboard.tsx:520',message:'stats EARLY RETURN - template empty',data:{total},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'D'})}).catch(()=>{});
-      // #endregion
       return { total, mapped: 0, empty: 0, missing: total, percentage: 0 };
     }
 
@@ -557,11 +551,8 @@ const TestInputDashboard: React.FC = () => {
       return templateToStoreIdMap.get(templateId) || templateId;
     };
 
-    // #region agent log
     const sampleStoreIds = Array.from(storeValues.keys()).slice(0, 5);
     const sampleTemplateIds = templateFieldIds.slice(0, 5);
-    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TestInputDashboard.tsx:539',message:'BEFORE templateFieldIds loop',data:{storeValuesSize:storeValues.size,sampleStoreIds,sampleTemplateIds},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
-    // #endregion
 
     // Count template field IDs - "Did the template get all its data?"
     // Total = placeholders in template, Mapped = have values, Missing = no data
@@ -594,9 +585,6 @@ const TestInputDashboard: React.FC = () => {
         }
       }
     });
-    // #region agent log
-    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TestInputDashboard.tsx:555',message:'AFTER templateFieldIds loop',data:{mapped,empty,missing,sampleMatches},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
-    // #endregion
 
     const percentage = total > 0 ? Math.round((mapped / total) * 100) : 0;
 
@@ -1179,31 +1167,19 @@ const TestInputDashboard: React.FC = () => {
               <Button
                 onClick={async () => {
                   console.log("🔵 Load Data button CLICKED - handler executing");
-                  // #region agent log
-                  fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TestInputDashboard.tsx:1136',message:'Load Data button clicked',data:{selectedDatasetBefore:selectedDataset,sectionsLengthBefore:sections.length,activeTestMode},timestamp:Date.now(),sessionId:'debug-session',runId:'run3',hypothesisId:'D'})}).catch((e)=>console.error('Fetch failed:',e));
-                  // #endregion
                   try {
                     // Load user-input fields only, run calc engine
                     // FIX: Set selectedDataset FIRST, then wait for React to process state update
                     console.log("🔵 Setting test mode and selectedDataset...");
                     setTestMode("user-input");
                     setSelectedDataset("user-fields");
-                    // #region agent log
-                    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TestInputDashboard.tsx:1140',message:'AFTER setSelectedDataset',data:{selectedDatasetAfter:'user-fields'},timestamp:Date.now(),sessionId:'debug-session',runId:'run3',hypothesisId:'D'})}).catch((e)=>console.error('Fetch failed:',e));
-                    // #endregion
                     console.log("🔵 Calling loadDataSet1User()...");
                     await loadDataSet1User();
                     console.log("🔵 loadDataSet1User() completed");
-                    // #region agent log
                     const afterLoadSections = useReportBuilderStore.getState().sections;
-                    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TestInputDashboard.tsx:1143',message:'AFTER loadDataSet1User',data:{sectionsLengthAfter:afterLoadSections.length,firstFieldValue:afterLoadSections[0]?.fields?.[0]?.value||'none'},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'E'})}).catch(()=>{});
-                    // #endregion
                     console.log("Load Data: Complete - user data loaded with calc");
                   } catch (error) {
                     console.error("Error in Load Data:", error);
-                    // #region agent log
-                    fetch('http://127.0.0.1:7242/ingest/2842008c-42f0-4de4-a8ba-01e98994cfed',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'TestInputDashboard.tsx:1146',message:'ERROR in Load Data',data:{error:String(error)},timestamp:Date.now(),sessionId:'debug-session',runId:'run2',hypothesisId:'A'})}).catch(()=>{});
-                    // #endregion
                     alert("Error: " + String(error));
                   }
                 }}

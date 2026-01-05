@@ -7130,7 +7130,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Run calculations
     get().runCalculations();
     
-    console.log("=== LOAD DATASET1 ALL COMPLETE ===");
+    // Generate preview to interpolate template placeholders
+    await get().generatePreview();
+
+    console.log("=== LOAD DATASET1 ALL COMPLETE: Calculations run, preview generated ===");
   },
 
   loadDataSet1User: async () => {

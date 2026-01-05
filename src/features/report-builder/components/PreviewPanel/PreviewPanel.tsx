@@ -61,6 +61,7 @@ function getExcludedPageNumbers(sections: ReportSection[]): Set<number> {
 export default function PreviewPanel() {
   const previewHtml = useReportBuilderStore((state) => state.previewHtml);
   const activeTestMode = useReportBuilderStore((state) => state.activeTestMode);
+  const showRawIds = useReportBuilderStore((state) => state.showRawIds);
   const sections = useReportBuilderStore((state) => state.sections);
   const generatePreview = useReportBuilderStore(
     (state) => state.generatePreview,
@@ -194,99 +195,85 @@ export default function PreviewPanel() {
         }
       }, 100);
 
-      // Handle toggle based on test mode
-      // In test-report mode: disable toggle (always show calculated report)
-      // In designer mode: enable toggle (user can switch between sample data and full test data)
-      const toggle = iframeDoc.getElementById(
-        "preview-toggle",
-      ) as HTMLInputElement;
+      // Pass activeTestMode to template via data attribute
+      pagesWrapper.setAttribute("data-test-mode", activeTestMode);
+
+      // Hide the toggle in the iframe (we control it from parent header)
+      const toggle = iframeDoc.getElementById("preview-toggle") as HTMLInputElement;
       const modeLabel = iframeDoc.getElementById("mode-label");
+      const toggleLabel = iframeDoc.querySelector(".toggle-label") as HTMLElement;
+      
       if (toggle) {
-        if (activeTestMode === "test-report") {
-          // Disable toggle in test-report mode - always show interpolated values
-          toggle.disabled = true;
-          toggle.checked = true; // Always show interpolated values (real data)
-          pagesWrapper.classList.add("preview-mode");
-          if (modeLabel)
-            modeLabel.textContent = "Preview Mode (Test Report Active)";
-          toggle.style.opacity = "0.5";
-          toggle.style.cursor = "not-allowed";
-        } else {
-          // Enable toggle in all other modes (user-input, designer, none)
-          toggle.disabled = false;
-          toggle.style.opacity = "1";
-          toggle.style.cursor = "pointer";
+        toggle.style.display = "none";
+        toggle.style.visibility = "hidden";
+        toggle.style.opacity = "0";
+        toggle.style.pointerEvents = "none";
+      }
+      if (modeLabel) {
+        modeLabel.style.display = "none";
+        modeLabel.style.visibility = "hidden";
+      }
+      if (toggleLabel) {
+        toggleLabel.style.display = "none";
+        toggleLabel.style.visibility = "hidden";
+      }
 
-          // For user-input mode: Default to ON (show real interpolated data)
-          // For other modes: Check saved state or default to ON
-          const savedToggleState = sessionStorage.getItem(
-            "preview-toggle-state",
-          );
-          const shouldBeOn =
-            activeTestMode === "user-input"
-              ? true // Always default to ON for user-input (real data)
-              : savedToggleState !== null
-                ? savedToggleState === "true"
-                : true;
-
-          // Initialize toggle state and trigger handler to set up data-original
-          if (toggle.checked !== shouldBeOn) {
-            toggle.checked = shouldBeOn;
-          }
-
-          // IMPORTANT: When HTML is first interpolated, textContent contains real values
-          // We need to ensure data-original is set BEFORE toggle runs
-          const fields = iframeDoc.querySelectorAll(".field-mapped");
-          fields.forEach((el: Element) => {
-            const htmlEl = el as HTMLElement;
-            // Store current interpolated value as original (if not already stored)
-            if (!htmlEl.dataset.original && htmlEl.textContent) {
-              htmlEl.dataset.original = htmlEl.textContent;
-            }
-          });
-
-          // Now trigger toggle handler to set correct display state
-          if (shouldBeOn) {
-            pagesWrapper.classList.add("preview-mode");
-            // Toggle ON = Show interpolated values (already in textContent, restore from data-original if needed)
-            fields.forEach((el: Element) => {
-              const htmlEl = el as HTMLElement;
-              if (htmlEl.dataset.original) {
-                htmlEl.textContent = htmlEl.dataset.original;
-              }
-            });
-          } else {
-            pagesWrapper.classList.remove("preview-mode");
-            // Toggle OFF = Show sample data
-            fields.forEach((el: Element) => {
-              const htmlEl = el as HTMLElement;
-              const sample = htmlEl.getAttribute("data-sample");
-              if (sample) {
-                if (!htmlEl.dataset.original) {
-                  htmlEl.dataset.original = htmlEl.textContent || "";
-                }
-                htmlEl.textContent = sample;
-              }
-            });
-          }
-
-          if (modeLabel) {
-            // Label describes what's CURRENTLY VISIBLE
-            modeLabel.textContent = toggle.checked
-              ? "Field IDs" // Toggle ON = showing field IDs
-              : "Test Data"; // Toggle OFF = showing test data values
-          }
-
-          // Save toggle state to sessionStorage when user manually changes it
-          const toggleHandler = function () {
-            sessionStorage.setItem(
-              "preview-toggle-state",
-              String(this.checked),
-            );
-          };
-          toggle.removeEventListener("change", toggleHandler); // Remove if exists
-          toggle.addEventListener("change", toggleHandler);
+      // Store interpolated values in data-original for all fields
+      const fields = pagesWrapper.querySelectorAll(".field-mapped");
+      fields.forEach((el: Element) => {
+        const htmlEl = el as HTMLElement;
+        if (!htmlEl.dataset.original && htmlEl.textContent) {
+          htmlEl.dataset.original = htmlEl.textContent;
         }
+      });
+
+      // Initial display state: showRawIds=false means show raw IDs, true means show test data
+      if (showRawIds) {
+        // Toggle ON = Show test data (interpolated values)
+        pagesWrapper.classList.add("preview-mode");
+        fields.forEach((el: Element) => {
+          const htmlEl = el as HTMLElement;
+          // Skip financial fields
+          const title = htmlEl.getAttribute("title") || "";
+          const isCalcField = ["calc-", "ia-dircap-", "recon-", "sca-"].some(
+            (prefix) => title.includes(prefix)
+          );
+          if (isCalcField) return;
+
+          // Restore interpolated value
+          if (htmlEl.dataset.original) {
+            htmlEl.textContent = htmlEl.dataset.original;
+          }
+        });
+      } else {
+        // Toggle OFF = Show raw field IDs
+        pagesWrapper.classList.remove("preview-mode");
+        fields.forEach((el: Element) => {
+          const htmlEl = el as HTMLElement;
+          // Skip financial fields
+          const title = htmlEl.getAttribute("title") || "";
+          const isCalcField = ["calc-", "ia-dircap-", "recon-", "sca-"].some(
+            (prefix) => title.includes(prefix)
+          );
+          if (isCalcField) return;
+
+          // Get field ID from data-field-id (now stores clean ID without mustaches)
+          let fieldId = htmlEl.getAttribute("data-field-id");
+          if (!fieldId) {
+            // Fallback: extract from title if data-field-id missing
+            const titleValue = htmlEl.getAttribute("title") || "";
+            const match = titleValue.match(/\{\{([^}]+)\}\}/);
+            if (match) {
+              fieldId = match[1]; // Extract clean ID from {{field-id}}
+            }
+          }
+          if (fieldId) {
+            // Display as {{field-id}} format for readability
+            htmlEl.textContent = `{{${fieldId}}}`;
+          } else {
+            htmlEl.textContent = "{{field-id}}";
+          }
+        });
       }
 
       console.log(
@@ -317,7 +304,74 @@ export default function PreviewPanel() {
       clearTimeout(forceInjectTimeout);
       iframe.removeEventListener("load", handleLoad);
     };
-  }, [previewHtml, activeTestMode, excludedPages]);
+  }, [previewHtml, activeTestMode, excludedPages, showRawIds]);
+
+  // Separate effect to update field display when showRawIds changes
+  useEffect(() => {
+    if (!iframeRef.current || !previewHtml) return;
+    
+    const iframe = iframeRef.current;
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+    if (!iframeDoc) return;
+
+    const pagesWrapper = iframeDoc.getElementById('pages-wrapper');
+    if (!pagesWrapper) return;
+
+    const updateFieldDisplay = () => {
+      const fields = pagesWrapper.querySelectorAll('.field-mapped');
+
+      if (showRawIds) {
+        // Toggle ON = Show test data (interpolated values)
+        pagesWrapper.classList.add('preview-mode');
+        fields.forEach((el: Element) => {
+          const htmlEl = el as HTMLElement;
+          // Skip financial fields
+          const title = htmlEl.getAttribute('title') || '';
+          const isCalcField = ['calc-', 'ia-dircap-', 'recon-', 'sca-'].some(
+            (prefix) => title.includes(prefix)
+          );
+          if (isCalcField) return;
+
+          // Restore interpolated value
+          if (htmlEl.dataset.original) {
+            htmlEl.textContent = htmlEl.dataset.original;
+          }
+        });
+      } else {
+        // Toggle OFF = Show raw field IDs
+        pagesWrapper.classList.remove('preview-mode');
+        fields.forEach((el: Element) => {
+          const htmlEl = el as HTMLElement;
+          // Skip financial fields
+          const title = htmlEl.getAttribute('title') || '';
+          const isCalcField = ['calc-', 'ia-dircap-', 'recon-', 'sca-'].some(
+            (prefix) => title.includes(prefix)
+          );
+          if (isCalcField) return;
+
+          // Get field ID from data-field-id (now stores clean ID without mustaches)
+          let fieldId = htmlEl.getAttribute('data-field-id');
+          if (!fieldId) {
+            // Fallback: extract from title if data-field-id missing
+            const titleValue = htmlEl.getAttribute('title') || '';
+            const match = titleValue.match(/\{\{([^}]+)\}\}/);
+            if (match) {
+              fieldId = match[1]; // Extract clean ID from {{field-id}}
+            }
+          }
+
+          if (fieldId) {
+            // Display as {{field-id}} format for readability
+            htmlEl.textContent = `{{${fieldId}}}`;
+          } else {
+            htmlEl.textContent = '{{field-id}}';
+          }
+        });
+      }
+    };
+
+    updateFieldDisplay();
+  }, [showRawIds, previewHtml]);
 
   return (
     <div className="h-full w-full">

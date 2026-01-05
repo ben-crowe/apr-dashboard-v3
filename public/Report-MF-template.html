@@ -550,13 +550,13 @@
 
                 <div style="flex: 1;"></div>
 
-                <!-- Preview Mode Toggle -->
-                <label class="toggle-label">
+                <!-- Preview Mode Toggle - Hidden, controlled from parent React component -->
+                <label class="toggle-label" style="display: none !important; visibility: hidden !important;">
                     <span class="toggle-switch">
-                        <input type="checkbox" id="preview-toggle">
+                        <input type="checkbox" id="preview-toggle" style="display: none !important;">
                         <span class="toggle-slider"></span>
                     </span>
-                    <span id="mode-label">ID</span>
+                    <span id="mode-label" style="display: none !important;">ID</span>
                 </label>
 
                 <div class="divider"></div>
@@ -8873,7 +8873,11 @@ document.querySelectorAll('.field-mapped').forEach(field => {
         });
 
         toggle.addEventListener('change', function() {
-            const fields = document.querySelectorAll('.field-mapped');
+            console.log('Toggle change event fired, checked:', this.checked);
+            // Use pagesWrapper scope to find fields (they're inside the injected pages)
+            const fields = pagesWrapper ? pagesWrapper.querySelectorAll('.field-mapped') : document.querySelectorAll('.field-mapped');
+            const modeLabel = document.getElementById('mode-label');
+            console.log(`Toggle: Found ${fields.length} field-mapped elements`);
             // Financial fields - controlled by calculator only, not toggle
             const calcPrefixes = ['calc-', 'ia-dircap-', 'recon-', 'sca-'];
             const isCalcField = (el) => {
@@ -8881,34 +8885,98 @@ document.querySelectorAll('.field-mapped').forEach(field => {
                 return calcPrefixes.some(prefix => title.includes(prefix));
             };
 
+            // Get test mode from pages-wrapper data attribute
+            const testMode = pagesWrapper.getAttribute('data-test-mode') || '';
+
             if (this.checked) {
-                // PREVIEW MODE ON: Show interpolated values (real data)
+                // Toggle ON = Show interpolated test data
                 pagesWrapper.classList.add('preview-mode');
+                
+                // Set label based on test mode
+                if (modeLabel) {
+                    if (testMode === 'user-input') {
+                        modeLabel.textContent = 'User Flow Test';
+                    } else if (testMode === 'test-report') {
+                        modeLabel.textContent = 'Template Test';
+                    } else {
+                        modeLabel.textContent = 'Preview Mode';
+                    }
+                }
+                
                 // Restore interpolated values (stored in data-original when toggle was off)
                 fields.forEach(el => {
                     if (isCalcField(el)) return; // Skip - calculator controls these
                     if (el.dataset.original) {
-                        // Restore the interpolated value (real data)
+                        // Restore the interpolated value (test data)
                         el.textContent = el.dataset.original;
                     }
                     // If no original stored, current textContent is already the interpolated value
                 });
             } else {
-                // DESIGNER MODE: Show sample data (for visual design review)
+                // Toggle OFF = Show raw field tags ({{field-id}})
+                console.log('Toggle OFF handler triggered');
                 pagesWrapper.classList.remove('preview-mode');
-                // Swap to sample data from data-sample attribute
-                fields.forEach(el => {
+                
+                // Set label to "Raw IDs"
+                if (modeLabel) {
+                    modeLabel.textContent = 'Raw IDs';
+                }
+                
+                // Show raw field tags from data-field-id attribute (preserved before interpolation)
+                // OR from title if it still contains {{}} (wasn't interpolated)
+                let foundCount = 0;
+                let missingCount = 0;
+                const totalFields = fields.length;
+                console.log(`Toggle OFF: Processing ${totalFields} fields`);
+                
+                fields.forEach((el, index) => {
                     if (isCalcField(el)) return; // Skip - calculator controls these
-                    const sample = el.getAttribute('data-sample');
-                    if (sample) {
-                        // Store current interpolated value before swapping
-                        if (!el.dataset.original) {
-                            el.dataset.original = el.textContent;
+                    
+                    // Store current interpolated value before swapping (if not already stored)
+                    const currentText = el.textContent || '';
+                    if (!el.dataset.original) {
+                        el.dataset.original = currentText;
+                    }
+                    
+                    // Get field ID from data-field-id (preserved before interpolation)
+                    let fieldId = el.getAttribute('data-field-id');
+                    
+                    // Fallback: check if title still has {{}} (wasn't interpolated)
+                    if (!fieldId) {
+                        const titleValue = el.getAttribute('title') || '';
+                        if (titleValue.includes('{{')) {
+                            fieldId = titleValue;
                         }
-                        // Show sample data
-                        el.textContent = sample;
+                    }
+                    
+                    // Show raw field tag - FORCE update
+                    if (fieldId) {
+                        el.textContent = fieldId;
+                        foundCount++;
+                        // Debug first few successful ones
+                        if (foundCount <= 3) {
+                            console.log(`Toggle OFF: Set field ${foundCount}`, {
+                                fieldId: fieldId,
+                                wasText: currentText?.substring(0, 30),
+                                nowText: el.textContent
+                            });
+                        }
+                    } else {
+                        // If no field ID found, show placeholder instead of keeping interpolated value
+                        el.textContent = '{{field-id}}';
+                        // Debug: log what we're seeing for first few missing ones
+                        if (missingCount < 5) {
+                            console.log('Toggle OFF: No field ID found, showing placeholder', {
+                                title: el.getAttribute('title'),
+                                wasText: currentText?.substring(0, 50),
+                                hasDataFieldId: el.hasAttribute('data-field-id'),
+                                className: el.className
+                            });
+                        }
+                        missingCount++;
                     }
                 });
+                console.log(`Toggle OFF: Found ${foundCount} field IDs, ${missingCount} missing/placeholder out of ${totalFields} total`);
             }
         });
 

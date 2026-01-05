@@ -6,12 +6,16 @@ import {
 } from '@/components/ui/resizable';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import { useReportBuilderStore } from '../store/reportBuilderStore';
 import EditPanel from './EditPanel/EditPanel';
 import PreviewPanel from './PreviewPanel/PreviewPanel';
 import SectionSidebar from './SectionSidebar';
 
 export default function ReportBuilderLayout() {
   const navigate = useNavigate();
+  const showRawIds = useReportBuilderStore((state) => state.showRawIds);
+  const setShowRawIds = useReportBuilderStore((state) => state.setShowRawIds);
+  const activeTestMode = useReportBuilderStore((state) => state.activeTestMode);
 
   // Note: Test data is loaded from TDD page (/test-input), not from Report Builder
   // The store persists data across navigation
@@ -41,6 +45,25 @@ export default function ReportBuilderLayout() {
           </Button>
           <span style={{ color: '#9ca3af' }}>|</span>
           <span className="font-semibold">Report Builder</span>
+        </div>
+        
+        {/* Toggle Switch - OFF=Raw IDs, ON=Test Data */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-gray-300">
+            {showRawIds ? (activeTestMode === 'user-input' ? 'User Flow Test' : activeTestMode === 'test-report' ? 'Template Test' : 'Preview Mode') : 'Raw IDs'}
+          </span>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={showRawIds}
+              onChange={(e) => {
+                console.log('Toggle clicked, new value:', e.target.checked);
+                setShowRawIds(e.target.checked);
+              }}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-gray-600 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
         </div>
       </div>
 

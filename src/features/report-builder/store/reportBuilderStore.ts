@@ -5893,6 +5893,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   sidebarCollapsed: false,
   activeTestMode: 'none', // Mutually exclusive test modes: 'none' | 'test-report' | 'designer'
   testDataLoaded: {}, // Tracks which sections have had test data loaded
+  showRawIds: true, // Toggle ON = show test data, Toggle OFF = show raw field IDs
 
   setActiveSection: (sectionId: string) => {
     set({ activeSection: sectionId });
@@ -6054,6 +6055,24 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     let unmappedCount = 0;
     const unmappedIds: string[] = [];
     
+    // STEP 1: Preserve field IDs in title attributes BEFORE interpolation
+    // Store original field IDs in data-field-id attribute so toggle can show raw IDs
+    // Match: title="{{field-id}}" or title='{{field-id}}' with optional spacing
+    // STEP 1: Preserve field IDs in title attributes BEFORE interpolation
+    // Store original field IDs in data-field-id attribute so toggle can show raw IDs
+    // CRITICAL: Store CLEAN field ID (without mustaches) so STEP 2 doesn't replace it!
+    let preservedCount = 0;
+    html = html.replace(/title\s*=\s*["']\{\{([^}]+)\}\}["']/g, (match, cleanFieldId) => {
+      // Add data-field-id attribute with CLEAN field ID (no mustaches)
+      // Preserve the original quote style
+      const quote = match.includes("'") ? "'" : '"';
+      preservedCount++;
+      // Store clean ID so STEP 2's {{...}} replacement doesn't touch it
+      return `title=${quote}{{${cleanFieldId}}}${quote} data-field-id="${cleanFieldId}"`;
+    });
+    console.log(`interpolateTemplate: Preserved ${preservedCount} field IDs in data-field-id attributes`);
+    
+    // STEP 2: Now replace placeholders in content (title attributes preserved via data-field-id)
     html = html.replace(/\{\{([^}]+)\}\}/g, (match, templateFieldId) => {
       // Map template ID to store ID (handles testDataFieldMapping)
       const storeFieldId = getStoreIdFromTemplateId(templateFieldId);
@@ -7490,5 +7509,9 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     set((state) => ({
       testDataLoaded: { ...state.testDataLoaded, [sectionId]: loaded }
     }));
+  },
+
+  setShowRawIds: (show: boolean) => {
+    set({ showRawIds: show });
   },
 }));

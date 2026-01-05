@@ -6053,12 +6053,15 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // FIX: Check if value is EMPTY, not just if key is missing!
     // The field exists in registry but may not have been populated with data
     const criticalImageFields = ['subject-photo', 'img-cover-photo', 'cover-photo'];
+    console.log('🔵🔵🔵 FALLBACK CHECK for critical image fields:');
     criticalImageFields.forEach(fieldId => {
       const currentValue = fieldMap.get(fieldId);
+      const testValue = testDataSet1[fieldId];
       const isEmpty = !currentValue || currentValue === '';
-      if (isEmpty && testDataSet1[fieldId]) {
-        console.log(`⚠️ ${fieldId} has empty value in fieldMap, adding fallback from testDataSet1: "${testDataSet1[fieldId]}"`);
-        fieldMap.set(fieldId, String(testDataSet1[fieldId]));
+      console.log(`  🔵 ${fieldId}: inFieldMap="${currentValue || '(empty)'}", testData="${testValue || '(none)'}", isEmpty=${isEmpty}`);
+      if (isEmpty && testValue) {
+        console.log(`    ➡️ APPLYING FALLBACK: ${fieldId} = "${testValue}"`);
+        fieldMap.set(fieldId, String(testValue));
       }
     });
 

@@ -172,6 +172,12 @@ const buildImageMgtSection = (): ReportSection => {
     'common-photos': { id: 'common-photos', title: 'INTERIOR COMMON AREA', fields: [] },
     'unit-photos': { id: 'unit-photos', title: 'UNIT INTERIOR PHOTOGRAPHS', fields: [] },
     'systems-photos': { id: 'systems-photos', title: 'BUILDING SYSTEMS', fields: [] },
+    // FIX: Added missing subsections that exist in fieldRegistry
+    'subject-photos': { id: 'subject-photos', title: 'SUBJECT PROPERTY PHOTOGRAPHS', fields: [] },
+    'comp-photos': { id: 'comp-photos', title: 'COMPARABLE PHOTOGRAPHS', fields: [] },
+    'comp-maps': { id: 'comp-maps', title: 'COMPARABLE LOCATION MAPS', fields: [] },
+    'rental-comp-photos': { id: 'rental-comp-photos', title: 'RENTAL COMPARABLE PHOTOGRAPHS', fields: [] },
+    'branding': { id: 'branding', title: 'COMPANY BRANDING', fields: [] },
   };
 
   // Populate fields from fieldRegistry

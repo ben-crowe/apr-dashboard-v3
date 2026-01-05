@@ -1,8 +1,64 @@
+# APR Dashboard V3 - Master Knowledge File
+
+> **🎯 START HERE** - This is the central knowledge hub for the APR Dashboard V3 project. Read the Session Notes first, then dive into sections as needed.
+
+---
+
+## 📓 Session Notes & Updates
+
+*Read this section first when starting a new session. Add new entries at the top.*
+
+### 2026-01-05 - Image Debugging & Doc Foundation
+- **Fixed:** Cover image (`subject-photo`) not rendering - template had proper `<img>` tags but issue was elsewhere
+- **Fixed:** 26 gallery images (subject-photo-1 to -25) had broken text placeholders instead of `<img>` tags (commit `d6bf37d`)
+- **Fixed:** Map images (`img-map-aerial`) same issue - text placeholder, not `<img>` tag
+- **Added:** "Image Fields in HTML Template" section with correct patterns
+- **Added:** "Preview Panel & Iframe Architecture" section
+- **Added:** "Debugging: Image Display Issues" section with checklist
+- **Started:** Building this file as central knowledge hub
+- **Key Learning:** Images MUST use `<img src="{{field-id}}">`, NOT `{{field-id}}` as text content
+
+### Document Created - 2026-01-05
+- Initial architecture documentation for TDD page and Report Builder
+- Documented 4-file sync architecture
+- Added reference library links to `docs/15-Contract-review/`
+
+---
+
+## 🔗 Quick Links (Central Hub)
+
+| Resource | Path | Purpose |
+|----------|------|---------|
+| **This File** | `docs/bc research & notes/TDD-PAGE-ARCHITECTURE.md` | Master knowledge hub |
+| **Calc Engine Map** | `docs/bc research & notes/CALC-ENGINE-FIELD-MAP.md` | Calculator field mappings |
+| **Reference Library** | `docs/15-Contract-review/` | Extensive field guides, crosswalks, Valcre mappings |
+| **Field Registry** | `src/features/report-builder/schema/fieldRegistry.ts` | Source of truth for all 1,687 fields |
+| **Test Data** | `src/features/report-builder/data/TestDataSet1.ts` | Test values for all fields |
+| **HTML Template** | `public/Report-MF-template.html` | Report template with placeholders |
+| **Store** | `src/features/report-builder/store/reportBuilderStore.ts` | Zustand store, all state management |
+
+---
+
+## 📋 Table of Contents
+
+1. [System Overview](#system-overview)
+2. [The 4-File Sync Architecture](#the-4-file-sync-architecture)
+3. [Field Registry Structure](#field-registry-structure)
+4. [Zustand Store Structure](#zustand-store-structure)
+5. [Data Flow: Load Data Button](#data-flow-load-data-button)
+6. [Data Flow: Template Interpolation](#data-flow-template-interpolation)
+7. [Editor Panel Architecture](#editor-panel-architecture)
+8. [Preview Panel Architecture](#preview-panel-architecture)
+9. [Image Fields in HTML Template](#image-fields-in-html-template)
+10. [Preview Panel & Iframe Architecture](#preview-panel--iframe-architecture)
+11. [Debugging: Image Display Issues](#debugging-image-display-issues)
+12. [Reference Documentation Library](#reference-documentation-library)
+
+---
+
 # TDD Page & Report Builder Architecture
 
 **Purpose:** Knowledge file for session context - explains how the Test Data Dashboard and Report Builder system works.
-
-**Last Updated:** 2026-01-05 (Added Image HTML patterns & iframe debugging)
 
 ---
 

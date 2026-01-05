@@ -30,6 +30,7 @@
 | Resource | Path | Purpose |
 |----------|------|---------|
 | **This File** | `docs/bc research & notes/TDD-PAGE-ARCHITECTURE.md` | Master knowledge hub |
+| **PENDING TASKS** | `docs/bc research & notes/PENDING-TASKS.md` | Tasks that MUST get done - check at session start |
 | **Calc Engine Map** | `docs/bc research & notes/CALC-ENGINE-FIELD-MAP.md` | Calculator field mappings |
 | **Reference Library** | `docs/15-Contract-review/` | Extensive field guides, crosswalks, Valcre mappings |
 | **Field Registry** | `src/features/report-builder/schema/fieldRegistry.ts` | Source of truth for all 1,687 fields |

@@ -160,40 +160,87 @@ export const testDataFieldMapping: Record<string, string> = {
 
 // Helper to build image-mgt section from fieldRegistry
 const buildImageMgtSection = (): ReportSection => {
-  const subsections: Record<string, { id: string; title: string; fields: ReportField[] }> = {
-    'cover-images': { id: 'cover-images', title: 'COVER & SIGNATURE', fields: [] },
-    'maps': { id: 'maps', title: 'MAPS', fields: [] },
-    'exterior-photos': { id: 'exterior-photos', title: 'EXTERIOR PHOTOGRAPHS', fields: [] },
-    'street-photos': { id: 'street-photos', title: 'STREET VIEW PHOTOGRAPHS', fields: [] },
-    'common-photos': { id: 'common-photos', title: 'INTERIOR COMMON AREA', fields: [] },
-    'unit-photos': { id: 'unit-photos', title: 'UNIT INTERIOR PHOTOGRAPHS', fields: [] },
-    'systems-photos': { id: 'systems-photos', title: 'BUILDING SYSTEMS', fields: [] },
+  const subsections: Record<
+    string,
+    { id: string; title: string; fields: ReportField[] }
+  > = {
+    "cover-images": {
+      id: "cover-images",
+      title: "COVER & SIGNATURE",
+      fields: [],
+    },
+    maps: { id: "maps", title: "MAPS", fields: [] },
+    "exterior-photos": {
+      id: "exterior-photos",
+      title: "EXTERIOR PHOTOGRAPHS",
+      fields: [],
+    },
+    "street-photos": {
+      id: "street-photos",
+      title: "STREET VIEW PHOTOGRAPHS",
+      fields: [],
+    },
+    "common-photos": {
+      id: "common-photos",
+      title: "INTERIOR COMMON AREA",
+      fields: [],
+    },
+    "unit-photos": {
+      id: "unit-photos",
+      title: "UNIT INTERIOR PHOTOGRAPHS",
+      fields: [],
+    },
+    "systems-photos": {
+      id: "systems-photos",
+      title: "BUILDING SYSTEMS",
+      fields: [],
+    },
     // FIX: Added missing subsections that exist in fieldRegistry
-    'subject-photos': { id: 'subject-photos', title: 'SUBJECT PROPERTY PHOTOGRAPHS', fields: [] },
-    'comp-photos': { id: 'comp-photos', title: 'COMPARABLE PHOTOGRAPHS', fields: [] },
-    'comp-maps': { id: 'comp-maps', title: 'COMPARABLE LOCATION MAPS', fields: [] },
-    'rental-comp-photos': { id: 'rental-comp-photos', title: 'RENTAL COMPARABLE PHOTOGRAPHS', fields: [] },
-    'branding': { id: 'branding', title: 'COMPANY BRANDING', fields: [] },
+    "subject-photos": {
+      id: "subject-photos",
+      title: "SUBJECT PROPERTY PHOTOGRAPHS",
+      fields: [],
+    },
+    "comp-photos": {
+      id: "comp-photos",
+      title: "COMPARABLE PHOTOGRAPHS",
+      fields: [],
+    },
+    "comp-maps": {
+      id: "comp-maps",
+      title: "COMPARABLE LOCATION MAPS",
+      fields: [],
+    },
+    "rental-comp-photos": {
+      id: "rental-comp-photos",
+      title: "RENTAL COMPARABLE PHOTOGRAPHS",
+      fields: [],
+    },
+    branding: { id: "branding", title: "COMPANY BRANDING", fields: [] },
   };
 
   // Populate fields from fieldRegistry
-  fieldRegistry.forEach(fieldDef => {
-    if (fieldDef.section === 'image-mgt' && fieldDef.subsection && subsections[fieldDef.subsection]) {
+  fieldRegistry.forEach((fieldDef) => {
+    if (
+      fieldDef.section === "image-mgt" &&
+      fieldDef.subsection &&
+      subsections[fieldDef.subsection]
+    ) {
       subsections[fieldDef.subsection].fields.push({
         id: fieldDef.storeId,
         label: fieldDef.label,
         type: fieldDef.type as any,
-        value: fieldDef.defaultValue || '',
+        value: fieldDef.defaultValue || "",
         isEditable: true,
-        inputType: 'user-input',
+        inputType: "user-input",
       });
     }
   });
 
   return {
-    id: 'image-mgt',
-    name: 'Section 3: Image Management',
-    shortName: 'S3 - IMAGE MGT',
+    id: "image-mgt",
+    name: "Section 3: Image Management",
+    shortName: "S3 - IMAGE MGT",
     fields: [],
     subsections: Object.values(subsections),
   };
@@ -208,9 +255,9 @@ const buildAllSectionsFromRegistry = (): ReportSection[] => {
   // Group fields by section, then by subsection
   const sectionMap = new Map<string, Map<string, ReportField[]>>();
 
-  fieldRegistry.forEach(fieldDef => {
+  fieldRegistry.forEach((fieldDef) => {
     const sectionId = fieldDef.section;
-    const subsectionId = fieldDef.subsection || '__root__'; // Fields without subsection go to root
+    const subsectionId = fieldDef.subsection || "__root__"; // Fields without subsection go to root
 
     // Initialize section if doesn't exist
     if (!sectionMap.has(sectionId)) {
@@ -229,9 +276,9 @@ const buildAllSectionsFromRegistry = (): ReportSection[] => {
       id: fieldDef.storeId,
       label: fieldDef.label,
       type: fieldDef.type as any,
-      value: fieldDef.defaultValue || '',
+      value: fieldDef.defaultValue || "",
       isEditable: true,
-      inputType: 'user-input',
+      inputType: "user-input",
     });
   });
 
@@ -239,11 +286,15 @@ const buildAllSectionsFromRegistry = (): ReportSection[] => {
   const sections: ReportSection[] = [];
 
   sectionMap.forEach((subsectionMap, sectionId) => {
-    const subsections: Array<{ id: string; title: string; fields: ReportField[] }> = [];
+    const subsections: Array<{
+      id: string;
+      title: string;
+      fields: ReportField[];
+    }> = [];
     const rootFields: ReportField[] = [];
 
     subsectionMap.forEach((fields, subsectionId) => {
-      if (subsectionId === '__root__') {
+      if (subsectionId === "__root__") {
         // Fields without subsection go directly to section.fields
         rootFields.push(...fields);
       } else {
@@ -275,9 +326,9 @@ const buildAllSectionsFromRegistry = (): ReportSection[] => {
  */
 const formatTitle = (id: string): string => {
   return id
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 };
 
 /**
@@ -285,7 +336,7 @@ const formatTitle = (id: string): string => {
  * e.g., "client-intake" -> "CLIENT INTAKE"
  */
 const formatShortName = (id: string): string => {
-  return id.toUpperCase().replace(/-/g, ' ');
+  return id.toUpperCase().replace(/-/g, " ");
 };
 
 const getMockData = (): ReportSection[] => [
@@ -649,7 +700,7 @@ const getMockData = (): ReportSection[] => [
     shortName: "01 - COVER",
     fields: [
       {
-        id: "subject-photo",  // FIXED: Must match template {{subject-photo}}
+        id: "subject-photo", // FIXED: Must match template {{subject-photo}}
         label: "Cover Photo - Main property image",
         type: "image",
         value: "",
@@ -968,7 +1019,21 @@ const getMockData = (): ReportSection[] => [
             value: "",
             isEditable: true,
             inputType: "user-input",
-            options: ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"],
+            options: [
+              "Alberta",
+              "British Columbia",
+              "Manitoba",
+              "New Brunswick",
+              "Newfoundland and Labrador",
+              "Northwest Territories",
+              "Nova Scotia",
+              "Nunavut",
+              "Ontario",
+              "Prince Edward Island",
+              "Quebec",
+              "Saskatchewan",
+              "Yukon",
+            ],
           },
           {
             id: "home-client-address-postal",
@@ -1077,7 +1142,21 @@ const getMockData = (): ReportSection[] => [
             value: "",
             isEditable: true,
             inputType: "user-input",
-            options: ["Alberta", "British Columbia", "Manitoba", "New Brunswick", "Newfoundland and Labrador", "Northwest Territories", "Nova Scotia", "Nunavut", "Ontario", "Prince Edward Island", "Quebec", "Saskatchewan", "Yukon"],
+            options: [
+              "Alberta",
+              "British Columbia",
+              "Manitoba",
+              "New Brunswick",
+              "Newfoundland and Labrador",
+              "Northwest Territories",
+              "Nova Scotia",
+              "Nunavut",
+              "Ontario",
+              "Prince Edward Island",
+              "Quebec",
+              "Saskatchewan",
+              "Yukon",
+            ],
           },
           {
             id: "home-property-address-postal",
@@ -1094,7 +1173,16 @@ const getMockData = (): ReportSection[] => [
             value: "",
             isEditable: true,
             inputType: "user-input",
-            options: ["Multi-Family", "Office", "Retail", "Industrial", "Mixed-Use", "Land", "Hospitality", "Special Purpose"],
+            options: [
+              "Multi-Family",
+              "Office",
+              "Retail",
+              "Industrial",
+              "Mixed-Use",
+              "Land",
+              "Hospitality",
+              "Special Purpose",
+            ],
           },
           {
             id: "home-property-legal-description",
@@ -1125,7 +1213,12 @@ const getMockData = (): ReportSection[] => [
             value: "",
             isEditable: true,
             inputType: "user-input",
-            options: ["Narrative Appraisal", "Form Report", "Restricted Report", "Letter Opinion"],
+            options: [
+              "Narrative Appraisal",
+              "Form Report",
+              "Restricted Report",
+              "Letter Opinion",
+            ],
           },
           {
             id: "home-property-rights",
@@ -1446,7 +1539,11 @@ const getMockData = (): ReportSection[] => [
             value: "",
             isEditable: true,
             inputType: "dropdown",
-            options: ["Complete Interior & Exterior", "Exterior Only", "Drive-by"],
+            options: [
+              "Complete Interior & Exterior",
+              "Exterior Only",
+              "Drive-by",
+            ],
           },
           {
             id: "assignment-inspector-name",
@@ -1512,7 +1609,8 @@ const getMockData = (): ReportSection[] => [
             id: "assignment-extraordinary-assumptions",
             label: "Extraordinary Assumptions",
             type: "textarea",
-            value: "No Extraordinary Assumptions were made for this assignment.",
+            value:
+              "No Extraordinary Assumptions were made for this assignment.",
             isEditable: true,
             inputType: "user-input",
           },
@@ -5893,7 +5991,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   previewTemplate: "", // Cached PREVIEW-Master.html template
   isDirty: false,
   sidebarCollapsed: false,
-  activeTestMode: 'none', // Mutually exclusive test modes: 'none' | 'test-report' | 'designer'
+  activeTestMode: "none", // Mutually exclusive test modes: 'none' | 'test-report' | 'designer'
   testDataLoaded: {}, // Tracks which sections have had test data loaded
   showRawIds: true, // Toggle ON = show test data, Toggle OFF = show raw field IDs
 
@@ -5903,8 +6001,11 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
   updateFieldValue: (fieldId: string, value: string | string[] | number) => {
     // DEBUG: Log specific fields
-    if (fieldId.includes('photo') || fieldId.includes('img')) {
-      console.log(`🟡🟡🟡 updateFieldValue: fieldId="${fieldId}", value=`, value);
+    if (fieldId.includes("photo") || fieldId.includes("img")) {
+      console.log(
+        `🟡🟡🟡 updateFieldValue: fieldId="${fieldId}", value=`,
+        value,
+      );
     }
 
     const sections = get().sections;
@@ -5913,8 +6014,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       const updatedFields = section.fields.map((field) => {
         if (field.id === fieldId) {
           fieldFound = true;
-          if (fieldId.includes('photo') || fieldId.includes('img')) {
-            console.log(`🟡 updateFieldValue: Updating field in section "${section.id}" fields`);
+          if (fieldId.includes("photo") || fieldId.includes("img")) {
+            console.log(
+              `🟡 updateFieldValue: Updating field in section "${section.id}" fields`,
+            );
           }
           return { ...field, value };
         }
@@ -5925,8 +6028,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         fields: subsection.fields.map((field) => {
           if (field.id === fieldId) {
             fieldFound = true;
-            if (fieldId.includes('photo') || fieldId.includes('img')) {
-              console.log(`🟡 updateFieldValue: Updating field in section "${section.id}" -> subsection "${subsection.id}"`);
+            if (fieldId.includes("photo") || fieldId.includes("img")) {
+              console.log(
+                `🟡 updateFieldValue: Updating field in section "${section.id}" -> subsection "${subsection.id}"`,
+              );
             }
             return { ...field, value };
           }
@@ -5940,14 +6045,18 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       };
     });
 
-    if (!fieldFound && (fieldId.includes('photo') || fieldId.includes('img'))) {
-      console.warn(`🔴 updateFieldValue: Field "${fieldId}" was NOT found in any section!`);
+    if (!fieldFound && (fieldId.includes("photo") || fieldId.includes("img"))) {
+      console.warn(
+        `🔴 updateFieldValue: Field "${fieldId}" was NOT found in any section!`,
+      );
     }
 
     set({ sections: updatedSections, isDirty: true });
 
-    if (fieldId.includes('photo') || fieldId.includes('img')) {
-      console.log(`🟡 updateFieldValue: Set complete, calling generatePreview()`);
+    if (fieldId.includes("photo") || fieldId.includes("img")) {
+      console.log(
+        `🟡 updateFieldValue: Set complete, calling generatePreview()`,
+      );
     }
     // Regenerate preview HTML after field update for live sync
     get().generatePreview();
@@ -5958,7 +6067,9 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   },
 
   addImage: (fieldId: string, imageUrl: string) => {
-    console.log(`🟢🟢🟢 addImage CALLED: fieldId="${fieldId}", imageUrl="${imageUrl.substring(0, 50)}..."`);
+    console.log(
+      `🟢🟢🟢 addImage CALLED: fieldId="${fieldId}", imageUrl="${imageUrl.substring(0, 50)}..."`,
+    );
     const sections = get().sections;
     console.log(`🟢 addImage: searching in ${sections.length} sections`);
 
@@ -5973,24 +6084,44 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       console.warn(`🔴 addImage: Field ${fieldId} NOT FOUND in sections!`);
       // Debug: List all field IDs to see what's available
       const allFieldIds = sections.flatMap((s) => [
-        ...s.fields.map(f => f.id),
-        ...(s.subsections?.flatMap((ss) => ss.fields.map(f => f.id)) || []),
+        ...s.fields.map((f) => f.id),
+        ...(s.subsections?.flatMap((ss) => ss.fields.map((f) => f.id)) || []),
       ]);
-      console.log(`🔴 Available field IDs (first 20):`, allFieldIds.slice(0, 20));
-      const imageFields = allFieldIds.filter(id => id.includes('photo') || id.includes('img'));
+      console.log(
+        `🔴 Available field IDs (first 20):`,
+        allFieldIds.slice(0, 20),
+      );
+      const imageFields = allFieldIds.filter(
+        (id) => id.includes("photo") || id.includes("img"),
+      );
       console.log(`🔴 Image-related field IDs:`, imageFields);
       return;
     }
 
-    console.log(`🟢 addImage: Found field "${fieldId}" with type="${field.type}", current value=`, field.value);
+    console.log(
+      `🟢 addImage: Found field "${fieldId}" with type="${field.type}", current value=`,
+      field.value,
+    );
 
     // FIX: Handle case where field.value starts as empty string, not array
     // Initialize as array if needed, or append to existing array
-    const currentImages = Array.isArray(field.value) ? field.value :
-                         (field.value && field.value !== '' ? [field.value as string] : []);
+    const currentImages = Array.isArray(field.value)
+      ? field.value
+      : field.value && field.value !== ""
+        ? [field.value as string]
+        : [];
     const newImages = [...currentImages, imageUrl];
-    console.log(`🟢 addImage: ${fieldId} - current images:`, currentImages, '+ new:', imageUrl);
-    console.log(`🟢 addImage: calling updateFieldValue with`, newImages.length, 'images');
+    console.log(
+      `🟢 addImage: ${fieldId} - current images:`,
+      currentImages,
+      "+ new:",
+      imageUrl,
+    );
+    console.log(
+      `🟢 addImage: calling updateFieldValue with`,
+      newImages.length,
+      "images",
+    );
     get().updateFieldValue(fieldId, newImages);
   },
 
@@ -6022,10 +6153,16 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Build ALL sections dynamically from fieldRegistry (1,687 fields)
     const sections = buildAllSectionsFromRegistry();
 
-    console.log(`initializeMockData: Built ${sections.length} sections from fieldRegistry`);
+    console.log(
+      `initializeMockData: Built ${sections.length} sections from fieldRegistry`,
+    );
     const totalFields = sections.reduce((sum, section) => {
       const sectionFields = section.fields?.length || 0;
-      const subsectionFields = section.subsections?.reduce((subSum, sub) => subSum + sub.fields.length, 0) || 0;
+      const subsectionFields =
+        section.subsections?.reduce(
+          (subSum, sub) => subSum + sub.fields.length,
+          0,
+        ) || 0;
       return sum + sectionFields + subsectionFields;
     }, 0);
     console.log(`initializeMockData: Total fields in store: ${totalFields}`);
@@ -6050,28 +6187,35 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     try {
       // Always use cache-busting to ensure we get the latest version
       const url = `/Report-MF-template.html?v=${Date.now()}`;
-      const response = await fetch(url, { cache: 'no-store' });
+      const response = await fetch(url, { cache: "no-store" });
       if (!response.ok) {
         throw new Error(`Failed to load template: ${response.statusText}`);
       }
       const html = await response.text();
-      
+
       // Check template version in HTML
       const versionMatch = html.match(/VERSION:\s*([\d.]+)/);
-      const version = versionMatch ? versionMatch[1] : 'unknown';
-      console.log(`Template loaded: v${version} (${html.match(/data-page-num="Page (-?\d+)"/) ? 'has pages' : 'no pages'})`);
-      
+      const version = versionMatch ? versionMatch[1] : "unknown";
+      console.log(
+        `Template loaded: v${version} (${html.match(/data-page-num="Page (-?\d+)"/) ? "has pages" : "no pages"})`,
+      );
+
       set({ previewTemplate: html });
       return html;
     } catch (error) {
-      console.error('Error loading Report-MF-template.html:', error);
+      console.error("Error loading Report-MF-template.html:", error);
       throw error;
     }
   },
 
   // Interpolate field values into template (synchronous - template must be preloaded)
   interpolateTemplate: (sections: ReportSection[], template: string) => {
-    console.log('🔴🔴🔴 interpolateTemplate CALLED! sections:', sections.length, 'template length:', template?.length);
+    console.log(
+      "🔴🔴🔴 interpolateTemplate CALLED! sections:",
+      sections.length,
+      "template length:",
+      template?.length,
+    );
     let html = template;
 
     // Build field value map from all sections (using store IDs as keys)
@@ -6079,31 +6223,39 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // DEBUG: Find subject-photo specifically
     let subjectPhotoFound = false;
-    let subjectPhotoSection = '';
-    let subjectPhotoSubsection = '';
+    let subjectPhotoSection = "";
+    let subjectPhotoSubsection = "";
 
-    sections.forEach(section => {
+    sections.forEach((section) => {
       // Handle section fields
-      section.fields?.forEach(field => {
+      section.fields?.forEach((field) => {
         const value = get().formatFieldValue(field);
         fieldMap.set(field.id, value);
-        if (field.id === 'subject-photo') {
+        if (field.id === "subject-photo") {
           subjectPhotoFound = true;
           subjectPhotoSection = section.id;
-          console.log(`🟣🟣🟣 FOUND subject-photo in section "${section.id}" fields! raw value=`, field.value, `formatted="${value}"`);
+          console.log(
+            `🟣🟣🟣 FOUND subject-photo in section "${section.id}" fields! raw value=`,
+            field.value,
+            `formatted="${value}"`,
+          );
         }
       });
 
       // Handle subsection fields
-      section.subsections?.forEach(subsection => {
-        subsection.fields?.forEach(field => {
+      section.subsections?.forEach((subsection) => {
+        subsection.fields?.forEach((field) => {
           const value = get().formatFieldValue(field);
           fieldMap.set(field.id, value);
-          if (field.id === 'subject-photo') {
+          if (field.id === "subject-photo") {
             subjectPhotoFound = true;
             subjectPhotoSection = section.id;
             subjectPhotoSubsection = subsection.id;
-            console.log(`🟣🟣🟣 FOUND subject-photo in section "${section.id}" -> subsection "${subsection.id}"! raw value=`, field.value, `formatted="${value}"`);
+            console.log(
+              `🟣🟣🟣 FOUND subject-photo in section "${section.id}" -> subsection "${subsection.id}"! raw value=`,
+              field.value,
+              `formatted="${value}"`,
+            );
           }
         });
       });
@@ -6113,35 +6265,24 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       console.error(`🔴🔴🔴 subject-photo NOT FOUND in ANY section!`);
       // List all image-related fields for debugging
       const imageFieldsInMap = Array.from(fieldMap.entries())
-        .filter(([k, _]) => k.includes('photo') || k.includes('img'))
+        .filter(([k, _]) => k.includes("photo") || k.includes("img"))
         .slice(0, 10);
       console.log(`🔴 Image fields in fieldMap (first 10):`, imageFieldsInMap);
     }
 
-    // FALLBACK: Ensure critical image fields have values in fieldMap
-    // FIX: Check if value is EMPTY, not just if key is missing!
-    // The field exists in registry but may not have been populated with data
-    const criticalImageFields = ['subject-photo', 'img-cover-photo', 'cover-photo'];
-    console.log('🔵🔵🔵 FALLBACK CHECK for critical image fields:');
-    criticalImageFields.forEach(fieldId => {
-      const currentValue = fieldMap.get(fieldId);
-      const testValue = testDataSet1[fieldId];
-      const isEmpty = !currentValue || currentValue === '';
-      console.log(`  🔵 ${fieldId}: inFieldMap="${currentValue || '(empty)'}", testData="${testValue || '(none)'}", isEmpty=${isEmpty}`);
-      if (isEmpty && testValue) {
-        console.log(`    ➡️ APPLYING FALLBACK: ${fieldId} = "${testValue}"`);
-        fieldMap.set(fieldId, String(testValue));
-      }
-    });
-
-    // DEBUG: Log image-related fields in fieldMap
-    const imageFields = ['img-cover-photo', 'subject-photo', 'subject-photo-1', 'img-map-regional'];
-    console.log('🖼️🖼️🖼️ CRITICAL IMAGE CHECK - fieldMap contents:');
-    imageFields.forEach(id => {
+    // DEBUG: Log image-related fields in fieldMap (no fallback - empty is fine)
+    const imageFields = [
+      "img-cover-photo",
+      "subject-photo",
+      "subject-photo-1",
+      "img-map-regional",
+    ];
+    console.log("🖼️ Image fields in fieldMap:");
+    imageFields.forEach((id) => {
       const val = fieldMap.get(id);
-      console.log(`  🖼️ ${id}: ${val ? `✅ "${val}"` : '❌ NOT FOUND'}`);
+      console.log(`  ${id}: ${val || "(empty)"}`);
     });
-    console.log(`🖼️ Total fieldMap size: ${fieldMap.size}`);
+    console.log(`Total fieldMap size: ${fieldMap.size}`);
 
     // Create reverse mapping: template ID -> store ID (for fields that are mapped)
     // This allows template placeholders to find values even when IDs differ
@@ -6160,7 +6301,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     let replacedCount = 0;
     let unmappedCount = 0;
     const unmappedIds: string[] = [];
-    
+
     // STEP 1: Preserve field IDs in title attributes BEFORE interpolation
     // Store original field IDs in data-field-id attribute so toggle can show raw IDs
     // Match: title="{{field-id}}" or title='{{field-id}}' with optional spacing
@@ -6168,16 +6309,21 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Store original field IDs in data-field-id attribute so toggle can show raw IDs
     // CRITICAL: Store CLEAN field ID (without mustaches) so STEP 2 doesn't replace it!
     let preservedCount = 0;
-    html = html.replace(/title\s*=\s*["']\{\{([^}]+)\}\}["']/g, (match, cleanFieldId) => {
-      // Add data-field-id attribute with CLEAN field ID (no mustaches)
-      // Preserve the original quote style
-      const quote = match.includes("'") ? "'" : '"';
-      preservedCount++;
-      // Store clean ID so STEP 2's {{...}} replacement doesn't touch it
-      return `title=${quote}{{${cleanFieldId}}}${quote} data-field-id="${cleanFieldId}"`;
-    });
-    console.log(`interpolateTemplate: Preserved ${preservedCount} field IDs in data-field-id attributes`);
-    
+    html = html.replace(
+      /title\s*=\s*["']\{\{([^}]+)\}\}["']/g,
+      (match, cleanFieldId) => {
+        // Add data-field-id attribute with CLEAN field ID (no mustaches)
+        // Preserve the original quote style
+        const quote = match.includes("'") ? "'" : '"';
+        preservedCount++;
+        // Store clean ID so STEP 2's {{...}} replacement doesn't touch it
+        return `title=${quote}{{${cleanFieldId}}}${quote} data-field-id="${cleanFieldId}"`;
+      },
+    );
+    console.log(
+      `interpolateTemplate: Preserved ${preservedCount} field IDs in data-field-id attributes`,
+    );
+
     // STEP 2: Now replace placeholders in content (title attributes preserved via data-field-id)
     html = html.replace(/\{\{([^}]+)\}\}/g, (match, templateFieldId) => {
       // Map template ID to store ID (handles testDataFieldMapping)
@@ -6185,11 +6331,16 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       const value = fieldMap.get(storeFieldId);
 
       // DEBUG: Log image field replacements specifically
-      if (templateFieldId.includes('photo') || templateFieldId.includes('img-')) {
-        console.log(`interpolateTemplate: Image replacement: {{${templateFieldId}}} → store:${storeFieldId} → value:"${value || '(empty)'}"`);
+      if (
+        templateFieldId.includes("photo") ||
+        templateFieldId.includes("img-")
+      ) {
+        console.log(
+          `interpolateTemplate: Image replacement: {{${templateFieldId}}} → store:${storeFieldId} → value:"${value || "(empty)"}"`,
+        );
       }
 
-      if (value !== undefined && value !== '') {
+      if (value !== undefined && value !== "") {
         replacedCount++;
         return value;
       } else {
@@ -6201,27 +6352,31 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         return value !== undefined ? value : match;
       }
     });
-    
+
     // Debug logging
     if (replacedCount > 0 || unmappedCount > 0) {
-      console.log(`Template interpolation: ${replacedCount} replaced, ${unmappedCount} unmapped`);
+      console.log(
+        `Template interpolation: ${replacedCount} replaced, ${unmappedCount} unmapped`,
+      );
       if (unmappedIds.length > 0) {
         console.log(`Sample unmapped IDs:`, unmappedIds.slice(0, 5));
       }
     }
-    
+
     // Handle empty image URLs in cover photo - show placeholder text if img src is empty
     html = html.replace(
       /<img([^>]*src=")([^"]*)"([^>]*alt="Subject Property"[^>]*onerror="[^"]*")([^>]*>)/gi,
       (match, beforeSrc, srcValue, onerrorAttr, afterSrc) => {
         // If src is empty or still has placeholder, ensure placeholder div shows
-        if (!srcValue || srcValue.includes('{{') || srcValue.trim() === '') {
+        if (!srcValue || srcValue.includes("{{") || srcValue.trim() === "") {
           // Hide img and show placeholder div
-          return match.replace(/style="([^"]*)"/, 'style="$1 display:none;"') + 
-                 '<div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; color:#999; font-size:9pt;">Property Photo</div>';
+          return (
+            match.replace(/style="([^"]*)"/, 'style="$1 display:none;"') +
+            '<div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; color:#999; font-size:9pt;">Property Photo</div>'
+          );
         }
         return match;
-      }
+      },
     );
 
     // Leave unreplaced placeholders as-is (for toggle display in test mode)
@@ -6232,33 +6387,43 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   formatFieldValue: (field: ReportField) => {
     if (!field.value && field.value !== 0) {
       // DEBUG: Log empty image fields
-      if (field.id.includes('photo') || field.id.includes('img')) {
-        console.log(`🟠 formatFieldValue: "${field.id}" has NO value (empty/null/undefined)`);
+      if (field.id.includes("photo") || field.id.includes("img")) {
+        console.log(
+          `🟠 formatFieldValue: "${field.id}" has NO value (empty/null/undefined)`,
+        );
       }
-      return '';
+      return "";
     }
 
     switch (field.type) {
-      case 'currency':
-        return `$${Number(field.value).toLocaleString('en-US', {
+      case "currency":
+        return `$${Number(field.value).toLocaleString("en-US", {
           minimumFractionDigits: 2,
-          maximumFractionDigits: 2
+          maximumFractionDigits: 2,
         })}`;
-      case 'percentage':
+      case "percentage":
         return `${field.value}%`;
-      case 'date':
-        return new Date(field.value).toISOString().split('T')[0];
-      case 'image':
+      case "date":
+        return new Date(field.value).toISOString().split("T")[0];
+      case "image":
         // For images, return the URL string
         // The template's toggle JavaScript will convert divs with image URLs to img tags
-        const imageUrl = Array.isArray(field.value) ? field.value[0] || '' : String(field.value);
+        const imageUrl = Array.isArray(field.value)
+          ? field.value[0] || ""
+          : String(field.value);
         // DEBUG: Log image field value extraction
-        console.log(`🟠 formatFieldValue IMAGE: "${field.id}" → isArray=${Array.isArray(field.value)}, raw=`, field.value, `→ extracted="${imageUrl.substring(0, 50)}..."`);
+        console.log(
+          `🟠 formatFieldValue IMAGE: "${field.id}" → isArray=${Array.isArray(field.value)}, raw=`,
+          field.value,
+          `→ extracted="${imageUrl.substring(0, 50)}..."`,
+        );
         if (!imageUrl) {
-          console.warn(`🔴 formatFieldValue: "${field.id}" has value but extracted imageUrl is EMPTY!`);
+          console.warn(
+            `🔴 formatFieldValue: "${field.id}" has value but extracted imageUrl is EMPTY!`,
+          );
         }
         // Return URL as string - template JavaScript handles img tag creation
-        return imageUrl || '';
+        return imageUrl || "";
       default:
         return String(field.value);
     }
@@ -6339,60 +6504,136 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("report-date", "2025-01-15");
 
     // Client Information (from client-intake section)
-    updateField("client-first-name", String(testDataSet1["client-first-name"] || ""));
-    updateField("client-last-name", String(testDataSet1["client-last-name"] || ""));
-    updateField("client-full-name", String(testDataSet1["client-full-name"] || ""));
-    updateField("client-name", String(testDataSet1["client-name"] || testDataSet1["client-full-name"] || ""));
-    updateField("client-company", String(testDataSet1["client-company"] || testDataSet1["client-organization"] || ""));
+    updateField(
+      "client-first-name",
+      String(testDataSet1["client-first-name"] || ""),
+    );
+    updateField(
+      "client-last-name",
+      String(testDataSet1["client-last-name"] || ""),
+    );
+    updateField(
+      "client-full-name",
+      String(testDataSet1["client-full-name"] || ""),
+    );
+    updateField(
+      "client-name",
+      String(
+        testDataSet1["client-name"] || testDataSet1["client-full-name"] || "",
+      ),
+    );
+    updateField(
+      "client-company",
+      String(
+        testDataSet1["client-company"] ||
+          testDataSet1["client-organization"] ||
+          "",
+      ),
+    );
     updateField("client-title", String(testDataSet1["client-title"] || ""));
-    updateField("client-organization", String(testDataSet1["client-organization"] || ""));
+    updateField(
+      "client-organization",
+      String(testDataSet1["client-organization"] || ""),
+    );
     updateField("client-email", String(testDataSet1["client-email"] || ""));
     updateField("client-phone", String(testDataSet1["client-phone"] || ""));
     updateField("client-address", String(testDataSet1["client-address"] || ""));
     updateField("client-city", String(testDataSet1["client-city"] || ""));
-    updateField("client-province", String(testDataSet1["client-province"] || ""));
+    updateField(
+      "client-province",
+      String(testDataSet1["client-province"] || ""),
+    );
 
     // Appraiser Information (from loe-prep section)
     updateField("appraiser-name", String(testDataSet1["appraiser-name"] || ""));
-    updateField("appraiser-credentials", String(testDataSet1["appraiser-credentials"] || ""));
-    updateField("appraiser-email", String(testDataSet1["appraiser-email"] || ""));
+    updateField(
+      "appraiser-credentials",
+      String(testDataSet1["appraiser-credentials"] || ""),
+    );
+    updateField(
+      "appraiser-email",
+      String(testDataSet1["appraiser-email"] || ""),
+    );
     updateField("appraiser-company", "Valta Group Inc.");
 
     // Property Information (from client-intake section)
     updateField("property-name", String(testDataSet1["property-name"] || ""));
-    updateField("property-address", String(testDataSet1["street-address"] || testDataSet1["property-address"] || ""));
+    updateField(
+      "property-address",
+      String(
+        testDataSet1["street-address"] ||
+          testDataSet1["property-address"] ||
+          "",
+      ),
+    );
     updateField("property-type", String(testDataSet1["property-type"] || ""));
-    updateField("valuation-premises", String(testDataSet1["valuation-premises"] || ""));
-    updateField("asset-condition", String(testDataSet1["asset-condition"] || ""));
-    updateField("legal-description", String(testDataSet1["report-legal"] || ""));
+    updateField(
+      "valuation-premises",
+      String(testDataSet1["valuation-premises"] || ""),
+    );
+    updateField(
+      "asset-condition",
+      String(testDataSet1["asset-condition"] || ""),
+    );
+    updateField(
+      "legal-description",
+      String(testDataSet1["report-legal"] || ""),
+    );
 
     // Assignment Details (from loe-prep section)
-    updateField("report-type", String(testDataSet1["report-type"] || "Appraisal Report"));
-    updateField("property-rights", String(testDataSet1["property-rights"] || ""));
+    updateField(
+      "report-type",
+      String(testDataSet1["report-type"] || "Appraisal Report"),
+    );
+    updateField(
+      "property-rights",
+      String(testDataSet1["property-rights"] || ""),
+    );
     updateField("intended-use", String(testDataSet1["intended-use"] || ""));
     updateField("scope-of-work", String(testDataSet1["scope-of-work"] || ""));
 
     // Contact Information (from client-intake section)
-    updateField("contact-first-name", String(testDataSet1["contact-first-name"] || ""));
-    updateField("contact-last-name", String(testDataSet1["contact-last-name"] || ""));
+    updateField(
+      "contact-first-name",
+      String(testDataSet1["contact-first-name"] || ""),
+    );
+    updateField(
+      "contact-last-name",
+      String(testDataSet1["contact-last-name"] || ""),
+    );
     updateField("contact-phone", String(testDataSet1["contact-phone"] || ""));
     updateField("contact-email", String(testDataSet1["contact-email"] || ""));
     updateField("valuation-date", String(testDataSet1["valuation-date"] || ""));
 
     // Company Information (from client-intake section)
     updateField("company-name", String(testDataSet1["company-name"] || ""));
-    updateField("company-address", String(testDataSet1["company-address"] || ""));
-    updateField("company-city-state-zip", String(testDataSet1["company-city-state-zip"] || ""));
+    updateField(
+      "company-address",
+      String(testDataSet1["company-address"] || ""),
+    );
+    updateField(
+      "company-city-state-zip",
+      String(testDataSet1["company-city-state-zip"] || ""),
+    );
     updateField("company-phone", String(testDataSet1["company-phone"] || ""));
     updateField("company-email", String(testDataSet1["company-email"] || ""));
-    updateField("company-website", String(testDataSet1["company-website"] || ""));
-    updateField("company-jobnumber", String(testDataSet1["company-jobnumber"] || ""));
+    updateField(
+      "company-website",
+      String(testDataSet1["company-website"] || ""),
+    );
+    updateField(
+      "company-jobnumber",
+      String(testDataSet1["company-jobnumber"] || ""),
+    );
 
     // Client postal (for client-city-state-zip calculation)
     updateField("client-postal", String(testDataSet1["client-postal"] || ""));
 
     // Composite client address (calculated field fallback)
-    updateField("client-city-state-zip", String(testDataSet1["client-city-state-zip"] || ""));
+    updateField(
+      "client-city-state-zip",
+      String(testDataSet1["client-city-state-zip"] || ""),
+    );
 
     // Regenerate preview
     console.log("Home test data loaded - regenerating preview...");
@@ -6409,9 +6650,15 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // North Battleford Test Data - Cover Section Fields
     updateField("cover-photo", String(testDataSet1["cover-photo"] || ""));
-    updateField("cover-photo-caption", String(testDataSet1["cover-photo-caption"] || ""));
+    updateField(
+      "cover-photo-caption",
+      String(testDataSet1["cover-photo-caption"] || ""),
+    );
     updateField("property-name", String(testDataSet1["property-name"] || ""));
-    updateField("property-address", String(testDataSet1["property-address"] || ""));
+    updateField(
+      "property-address",
+      String(testDataSet1["property-address"] || ""),
+    );
     updateField("city", String(testDataSet1["city"] || ""));
     updateField("province", String(testDataSet1["province"] || ""));
     updateField("report-date", String(testDataSet1["report-date"] || ""));
@@ -6433,27 +6680,48 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // North Battleford Test Data - Maps Section Fields
     updateField("img-map-aerial", String(testDataSet1["img-map-aerial"] || ""));
-    updateField("img-comparables-map", String(testDataSet1["img-comparables-map"] || ""));
-    updateField("img-site-plan-1", String(testDataSet1["img-site-plan-1"] || ""));
-    updateField("img-site-plan-2", String(testDataSet1["img-site-plan-2"] || ""));
+    updateField(
+      "img-comparables-map",
+      String(testDataSet1["img-comparables-map"] || ""),
+    );
+    updateField(
+      "img-site-plan-1",
+      String(testDataSet1["img-site-plan-1"] || ""),
+    );
+    updateField(
+      "img-site-plan-2",
+      String(testDataSet1["img-site-plan-2"] || ""),
+    );
     updateField("img-zoning-map", String(testDataSet1["img-zoning-map"] || ""));
 
     // Comparable Property Photos and Maps
     updateField("comp1-photo", String(testDataSet1["comp1-photo"] || ""));
     updateField("comp1-map", String(testDataSet1["comp1-map"] || ""));
-    updateField("comp1-photo-caption", String(testDataSet1["comp1-photo-caption"] || ""));
+    updateField(
+      "comp1-photo-caption",
+      String(testDataSet1["comp1-photo-caption"] || ""),
+    );
 
     updateField("comp2-photo", String(testDataSet1["comp2-photo"] || ""));
     updateField("comp2-map", String(testDataSet1["comp2-map"] || ""));
-    updateField("comp2-photo-caption", String(testDataSet1["comp2-photo-caption"] || ""));
+    updateField(
+      "comp2-photo-caption",
+      String(testDataSet1["comp2-photo-caption"] || ""),
+    );
 
     updateField("comp3-photo", String(testDataSet1["comp3-photo"] || ""));
     updateField("comp3-map", String(testDataSet1["comp3-map"] || ""));
-    updateField("comp3-photo-caption", String(testDataSet1["comp3-photo-caption"] || ""));
+    updateField(
+      "comp3-photo-caption",
+      String(testDataSet1["comp3-photo-caption"] || ""),
+    );
 
     updateField("comp4-photo", String(testDataSet1["comp4-photo"] || ""));
     updateField("comp4-map", String(testDataSet1["comp4-map"] || ""));
-    updateField("comp4-photo-caption", String(testDataSet1["comp4-photo-caption"] || ""));
+    updateField(
+      "comp4-photo-caption",
+      String(testDataSet1["comp4-photo-caption"] || ""),
+    );
 
     // Regenerate preview
     console.log("Maps test data loaded - regenerating preview...");
@@ -6473,8 +6741,14 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // Report Type & Property Rights
     updateField("report-type", String(testDataSet1["report-type"] || ""));
-    updateField("property-rights", String(testDataSet1["property-rights"] || ""));
-    updateField("property-interest", String(testDataSet1["property-interest"] || ""));
+    updateField(
+      "property-rights",
+      String(testDataSet1["property-rights"] || ""),
+    );
+    updateField(
+      "property-interest",
+      String(testDataSet1["property-interest"] || ""),
+    );
 
     // Intended Use & Users
     updateField("intended-use", String(testDataSet1["intended-use"] || ""));
@@ -6485,27 +6759,57 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // Dates
     updateField("effective-date", String(testDataSet1["effective-date"] || ""));
-    updateField("report-effectivedate", String(testDataSet1["report-effectivedate"] || ""));
-    updateField("inspection-date", String(testDataSet1["inspection-date"] || ""));
+    updateField(
+      "report-effectivedate",
+      String(testDataSet1["report-effectivedate"] || ""),
+    );
+    updateField(
+      "inspection-date",
+      String(testDataSet1["inspection-date"] || ""),
+    );
 
     // Valuation Details
-    updateField("valuation-premises", String(testDataSet1["valuation-premises"] || ""));
+    updateField(
+      "valuation-premises",
+      String(testDataSet1["valuation-premises"] || ""),
+    );
     updateField("report-values", String(testDataSet1["report-values"] || ""));
 
     // Report Guidelines & Standards
-    updateField("report-guidelines", String(testDataSet1["report-guidelines"] || ""));
+    updateField(
+      "report-guidelines",
+      String(testDataSet1["report-guidelines"] || ""),
+    );
     updateField("report-depth", String(testDataSet1["report-depth"] || ""));
-    updateField("report-approaches", String(testDataSet1["report-approaches"] || ""));
+    updateField(
+      "report-approaches",
+      String(testDataSet1["report-approaches"] || ""),
+    );
 
     // Assumptions & Conditions
-    updateField("report-extraordinary", String(testDataSet1["report-extraordinary"] || ""));
+    updateField(
+      "report-extraordinary",
+      String(testDataSet1["report-extraordinary"] || ""),
+    );
     updateField("report-limcond", String(testDataSet1["report-limcond"] || ""));
 
     // Valuation Narratives
-    updateField("valuation-cost-narrative", String(testDataSet1["valuation-cost-narrative"] || ""));
-    updateField("valuation-sales-narrative", String(testDataSet1["valuation-sales-narrative"] || ""));
-    updateField("valuation-income-narrative", String(testDataSet1["valuation-income-narrative"] || ""));
-    updateField("valuation-land-narrative", String(testDataSet1["valuation-land-narrative"] || ""));
+    updateField(
+      "valuation-cost-narrative",
+      String(testDataSet1["valuation-cost-narrative"] || ""),
+    );
+    updateField(
+      "valuation-sales-narrative",
+      String(testDataSet1["valuation-sales-narrative"] || ""),
+    );
+    updateField(
+      "valuation-income-narrative",
+      String(testDataSet1["valuation-income-narrative"] || ""),
+    );
+    updateField(
+      "valuation-land-narrative",
+      String(testDataSet1["valuation-land-narrative"] || ""),
+    );
 
     // Legal Description & Easements
     updateField("report-legal", String(testDataSet1["report-legal"] || ""));
@@ -6532,7 +6836,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // Property Identification
     updateField("property-name", String(testDataSet1["property-name"] || ""));
-    updateField("property-address", String(testDataSet1["property-address"] || ""));
+    updateField(
+      "property-address",
+      String(testDataSet1["property-address"] || ""),
+    );
     updateField("city", String(testDataSet1["city"] || ""));
     updateField("province", String(testDataSet1["province"] || ""));
     updateField("property-type", String(testDataSet1["property-type"] || ""));
@@ -6544,7 +6851,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Dates
     updateField("effective-date", String(testDataSet1["effective-date"] || ""));
     updateField("report-date", String(testDataSet1["report-date"] || ""));
-    updateField("inspection-date", String(testDataSet1["inspection-date"] || ""));
+    updateField(
+      "inspection-date",
+      String(testDataSet1["inspection-date"] || ""),
+    );
 
     // Rates & Ratios (calc-cap-rate is an INPUT used by runCalculations, not a calculated output)
     updateField("calc-cap-rate", String(testDataSet1["calc-cap-rate"] || ""));
@@ -6556,7 +6866,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("building-class", String(testDataSet1["building-class"] || ""));
 
     // Ownership
-    updateField("current-owner-text", String(testDataSet1["current-owner-text"] || ""));
+    updateField(
+      "current-owner-text",
+      String(testDataSet1["current-owner-text"] || ""),
+    );
 
     // Regenerate preview
     console.log("Exec test data loaded - regenerating preview...");
@@ -6580,32 +6893,83 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("comp1-city", String(testDataSet1["comp1-city"] || ""));
     updateField("comp1-province", String(testDataSet1["comp1-province"] || ""));
     updateField("comp1-postal", String(testDataSet1["comp1-postal"] || ""));
-    updateField("comp1-sale-price", String(testDataSet1["comp1-sale-price"] || ""));
-    updateField("comp1-sale-date", String(testDataSet1["comp1-sale-date"] || ""));
+    updateField(
+      "comp1-sale-price",
+      String(testDataSet1["comp1-sale-price"] || ""),
+    );
+    updateField(
+      "comp1-sale-date",
+      String(testDataSet1["comp1-sale-date"] || ""),
+    );
     updateField("comp1-buyer", String(testDataSet1["comp1-buyer"] || ""));
     updateField("comp1-seller", String(testDataSet1["comp1-seller"] || ""));
-    updateField("comp1-financing", String(testDataSet1["comp1-financing"] || ""));
-    updateField("comp1-saleconditions", String(testDataSet1["comp1-saleconditions"] || ""));
-    updateField("comp1-salestatus", String(testDataSet1["comp1-salestatus"] || ""));
+    updateField(
+      "comp1-financing",
+      String(testDataSet1["comp1-financing"] || ""),
+    );
+    updateField(
+      "comp1-saleconditions",
+      String(testDataSet1["comp1-saleconditions"] || ""),
+    );
+    updateField(
+      "comp1-salestatus",
+      String(testDataSet1["comp1-salestatus"] || ""),
+    );
     updateField("comp1-units", String(testDataSet1["comp1-units"] || ""));
     updateField("comp1-gba", String(testDataSet1["comp1-gba"] || ""));
     updateField("comp1-nra", String(testDataSet1["comp1-nra"] || ""));
-    updateField("comp1-year-built", String(testDataSet1["comp1-year-built"] || ""));
-    updateField("comp1-condition", String(testDataSet1["comp1-condition"] || ""));
+    updateField(
+      "comp1-year-built",
+      String(testDataSet1["comp1-year-built"] || ""),
+    );
+    updateField(
+      "comp1-condition",
+      String(testDataSet1["comp1-condition"] || ""),
+    );
     updateField("comp1-quality", String(testDataSet1["comp1-quality"] || ""));
     updateField("comp1-location", String(testDataSet1["comp1-location"] || ""));
-    updateField("comp1-price-per-unit", String(testDataSet1["comp1-price-per-unit"] || ""));
+    updateField(
+      "comp1-price-per-unit",
+      String(testDataSet1["comp1-price-per-unit"] || ""),
+    );
     updateField("comp1-cap-rate", String(testDataSet1["comp1-cap-rate"] || ""));
-    updateField("comp1-noi-per-unit", String(testDataSet1["comp1-noi-per-unit"] || ""));
-    updateField("comp1-adj-property-rights", String(testDataSet1["comp1-adj-property-rights"] || ""));
-    updateField("comp1-adj-financing", String(testDataSet1["comp1-adj-financing"] || ""));
-    updateField("comp1-adj-sale-conditions", String(testDataSet1["comp1-adj-sale-conditions"] || ""));
-    updateField("comp1-adj-market-conditions", String(testDataSet1["comp1-adj-market-conditions"] || ""));
-    updateField("comp1-adj-location", String(testDataSet1["comp1-adj-location"] || ""));
+    updateField(
+      "comp1-noi-per-unit",
+      String(testDataSet1["comp1-noi-per-unit"] || ""),
+    );
+    updateField(
+      "comp1-adj-property-rights",
+      String(testDataSet1["comp1-adj-property-rights"] || ""),
+    );
+    updateField(
+      "comp1-adj-financing",
+      String(testDataSet1["comp1-adj-financing"] || ""),
+    );
+    updateField(
+      "comp1-adj-sale-conditions",
+      String(testDataSet1["comp1-adj-sale-conditions"] || ""),
+    );
+    updateField(
+      "comp1-adj-market-conditions",
+      String(testDataSet1["comp1-adj-market-conditions"] || ""),
+    );
+    updateField(
+      "comp1-adj-location",
+      String(testDataSet1["comp1-adj-location"] || ""),
+    );
     updateField("comp1-adj-size", String(testDataSet1["comp1-adj-size"] || ""));
-    updateField("comp1-adj-age-condition", String(testDataSet1["comp1-adj-age-condition"] || ""));
-    updateField("comp1-adj-other", String(testDataSet1["comp1-adj-other"] || ""));
-    updateField("comp1-overall-comparison", String(testDataSet1["comp1-overall-comparison"] || ""));
+    updateField(
+      "comp1-adj-age-condition",
+      String(testDataSet1["comp1-adj-age-condition"] || ""),
+    );
+    updateField(
+      "comp1-adj-other",
+      String(testDataSet1["comp1-adj-other"] || ""),
+    );
+    updateField(
+      "comp1-overall-comparison",
+      String(testDataSet1["comp1-overall-comparison"] || ""),
+    );
 
     // Comp 2
     updateField("comp2-name", String(testDataSet1["comp2-name"] || ""));
@@ -6613,31 +6977,79 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("comp2-city", String(testDataSet1["comp2-city"] || ""));
     updateField("comp2-province", String(testDataSet1["comp2-province"] || ""));
     updateField("comp2-postal", String(testDataSet1["comp2-postal"] || ""));
-    updateField("comp2-sale-price", String(testDataSet1["comp2-sale-price"] || ""));
-    updateField("comp2-sale-date", String(testDataSet1["comp2-sale-date"] || ""));
+    updateField(
+      "comp2-sale-price",
+      String(testDataSet1["comp2-sale-price"] || ""),
+    );
+    updateField(
+      "comp2-sale-date",
+      String(testDataSet1["comp2-sale-date"] || ""),
+    );
     updateField("comp2-buyer", String(testDataSet1["comp2-buyer"] || ""));
     updateField("comp2-seller", String(testDataSet1["comp2-seller"] || ""));
-    updateField("comp2-financing", String(testDataSet1["comp2-financing"] || ""));
-    updateField("comp2-saleconditions", String(testDataSet1["comp2-saleconditions"] || ""));
-    updateField("comp2-salestatus", String(testDataSet1["comp2-salestatus"] || ""));
+    updateField(
+      "comp2-financing",
+      String(testDataSet1["comp2-financing"] || ""),
+    );
+    updateField(
+      "comp2-saleconditions",
+      String(testDataSet1["comp2-saleconditions"] || ""),
+    );
+    updateField(
+      "comp2-salestatus",
+      String(testDataSet1["comp2-salestatus"] || ""),
+    );
     updateField("comp2-units", String(testDataSet1["comp2-units"] || ""));
     updateField("comp2-gba", String(testDataSet1["comp2-gba"] || ""));
     updateField("comp2-nra", String(testDataSet1["comp2-nra"] || ""));
-    updateField("comp2-year-built", String(testDataSet1["comp2-year-built"] || ""));
-    updateField("comp2-condition", String(testDataSet1["comp2-condition"] || ""));
+    updateField(
+      "comp2-year-built",
+      String(testDataSet1["comp2-year-built"] || ""),
+    );
+    updateField(
+      "comp2-condition",
+      String(testDataSet1["comp2-condition"] || ""),
+    );
     updateField("comp2-quality", String(testDataSet1["comp2-quality"] || ""));
     updateField("comp2-location", String(testDataSet1["comp2-location"] || ""));
-    updateField("comp2-price-per-unit", String(testDataSet1["comp2-price-per-unit"] || ""));
+    updateField(
+      "comp2-price-per-unit",
+      String(testDataSet1["comp2-price-per-unit"] || ""),
+    );
     updateField("comp2-cap-rate", String(testDataSet1["comp2-cap-rate"] || ""));
-    updateField("comp2-noi-per-unit", String(testDataSet1["comp2-noi-per-unit"] || ""));
-    updateField("comp2-adj-property-rights", String(testDataSet1["comp2-adj-property-rights"] || ""));
-    updateField("comp2-adj-financing", String(testDataSet1["comp2-adj-financing"] || ""));
-    updateField("comp2-adj-sale-conditions", String(testDataSet1["comp2-adj-sale-conditions"] || ""));
-    updateField("comp2-adj-market-conditions", String(testDataSet1["comp2-adj-market-conditions"] || ""));
-    updateField("comp2-adj-location", String(testDataSet1["comp2-adj-location"] || ""));
+    updateField(
+      "comp2-noi-per-unit",
+      String(testDataSet1["comp2-noi-per-unit"] || ""),
+    );
+    updateField(
+      "comp2-adj-property-rights",
+      String(testDataSet1["comp2-adj-property-rights"] || ""),
+    );
+    updateField(
+      "comp2-adj-financing",
+      String(testDataSet1["comp2-adj-financing"] || ""),
+    );
+    updateField(
+      "comp2-adj-sale-conditions",
+      String(testDataSet1["comp2-adj-sale-conditions"] || ""),
+    );
+    updateField(
+      "comp2-adj-market-conditions",
+      String(testDataSet1["comp2-adj-market-conditions"] || ""),
+    );
+    updateField(
+      "comp2-adj-location",
+      String(testDataSet1["comp2-adj-location"] || ""),
+    );
     updateField("comp2-adj-size", String(testDataSet1["comp2-adj-size"] || ""));
-    updateField("comp2-adj-other", String(testDataSet1["comp2-adj-other"] || ""));
-    updateField("comp2-overall-comparison", String(testDataSet1["comp2-overall-comparison"] || ""));
+    updateField(
+      "comp2-adj-other",
+      String(testDataSet1["comp2-adj-other"] || ""),
+    );
+    updateField(
+      "comp2-overall-comparison",
+      String(testDataSet1["comp2-overall-comparison"] || ""),
+    );
 
     // Comp 3
     updateField("comp3-name", String(testDataSet1["comp3-name"] || ""));
@@ -6645,31 +7057,79 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("comp3-city", String(testDataSet1["comp3-city"] || ""));
     updateField("comp3-province", String(testDataSet1["comp3-province"] || ""));
     updateField("comp3-postal", String(testDataSet1["comp3-postal"] || ""));
-    updateField("comp3-sale-price", String(testDataSet1["comp3-sale-price"] || ""));
-    updateField("comp3-sale-date", String(testDataSet1["comp3-sale-date"] || ""));
+    updateField(
+      "comp3-sale-price",
+      String(testDataSet1["comp3-sale-price"] || ""),
+    );
+    updateField(
+      "comp3-sale-date",
+      String(testDataSet1["comp3-sale-date"] || ""),
+    );
     updateField("comp3-buyer", String(testDataSet1["comp3-buyer"] || ""));
     updateField("comp3-seller", String(testDataSet1["comp3-seller"] || ""));
-    updateField("comp3-financing", String(testDataSet1["comp3-financing"] || ""));
-    updateField("comp3-saleconditions", String(testDataSet1["comp3-saleconditions"] || ""));
-    updateField("comp3-salestatus", String(testDataSet1["comp3-salestatus"] || ""));
+    updateField(
+      "comp3-financing",
+      String(testDataSet1["comp3-financing"] || ""),
+    );
+    updateField(
+      "comp3-saleconditions",
+      String(testDataSet1["comp3-saleconditions"] || ""),
+    );
+    updateField(
+      "comp3-salestatus",
+      String(testDataSet1["comp3-salestatus"] || ""),
+    );
     updateField("comp3-units", String(testDataSet1["comp3-units"] || ""));
     updateField("comp3-gba", String(testDataSet1["comp3-gba"] || ""));
     updateField("comp3-nra", String(testDataSet1["comp3-nra"] || ""));
-    updateField("comp3-year-built", String(testDataSet1["comp3-year-built"] || ""));
-    updateField("comp3-condition", String(testDataSet1["comp3-condition"] || ""));
+    updateField(
+      "comp3-year-built",
+      String(testDataSet1["comp3-year-built"] || ""),
+    );
+    updateField(
+      "comp3-condition",
+      String(testDataSet1["comp3-condition"] || ""),
+    );
     updateField("comp3-quality", String(testDataSet1["comp3-quality"] || ""));
     updateField("comp3-location", String(testDataSet1["comp3-location"] || ""));
-    updateField("comp3-price-per-unit", String(testDataSet1["comp3-price-per-unit"] || ""));
+    updateField(
+      "comp3-price-per-unit",
+      String(testDataSet1["comp3-price-per-unit"] || ""),
+    );
     updateField("comp3-cap-rate", String(testDataSet1["comp3-cap-rate"] || ""));
-    updateField("comp3-noi-per-unit", String(testDataSet1["comp3-noi-per-unit"] || ""));
-    updateField("comp3-adj-property-rights", String(testDataSet1["comp3-adj-property-rights"] || ""));
-    updateField("comp3-adj-financing", String(testDataSet1["comp3-adj-financing"] || ""));
-    updateField("comp3-adj-sale-conditions", String(testDataSet1["comp3-adj-sale-conditions"] || ""));
-    updateField("comp3-adj-market-conditions", String(testDataSet1["comp3-adj-market-conditions"] || ""));
+    updateField(
+      "comp3-noi-per-unit",
+      String(testDataSet1["comp3-noi-per-unit"] || ""),
+    );
+    updateField(
+      "comp3-adj-property-rights",
+      String(testDataSet1["comp3-adj-property-rights"] || ""),
+    );
+    updateField(
+      "comp3-adj-financing",
+      String(testDataSet1["comp3-adj-financing"] || ""),
+    );
+    updateField(
+      "comp3-adj-sale-conditions",
+      String(testDataSet1["comp3-adj-sale-conditions"] || ""),
+    );
+    updateField(
+      "comp3-adj-market-conditions",
+      String(testDataSet1["comp3-adj-market-conditions"] || ""),
+    );
     updateField("comp3-adj-size", String(testDataSet1["comp3-adj-size"] || ""));
-    updateField("comp3-adj-age-condition", String(testDataSet1["comp3-adj-age-condition"] || ""));
-    updateField("comp3-adj-other", String(testDataSet1["comp3-adj-other"] || ""));
-    updateField("comp3-overall-comparison", String(testDataSet1["comp3-overall-comparison"] || ""));
+    updateField(
+      "comp3-adj-age-condition",
+      String(testDataSet1["comp3-adj-age-condition"] || ""),
+    );
+    updateField(
+      "comp3-adj-other",
+      String(testDataSet1["comp3-adj-other"] || ""),
+    );
+    updateField(
+      "comp3-overall-comparison",
+      String(testDataSet1["comp3-overall-comparison"] || ""),
+    );
 
     // Comp 4
     updateField("comp4-name", String(testDataSet1["comp4-name"] || ""));
@@ -6677,29 +7137,70 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("comp4-city", String(testDataSet1["comp4-city"] || ""));
     updateField("comp4-province", String(testDataSet1["comp4-province"] || ""));
     updateField("comp4-postal", String(testDataSet1["comp4-postal"] || ""));
-    updateField("comp4-sale-price", String(testDataSet1["comp4-sale-price"] || ""));
-    updateField("comp4-sale-date", String(testDataSet1["comp4-sale-date"] || ""));
+    updateField(
+      "comp4-sale-price",
+      String(testDataSet1["comp4-sale-price"] || ""),
+    );
+    updateField(
+      "comp4-sale-date",
+      String(testDataSet1["comp4-sale-date"] || ""),
+    );
     updateField("comp4-buyer", String(testDataSet1["comp4-buyer"] || ""));
     updateField("comp4-seller", String(testDataSet1["comp4-seller"] || ""));
-    updateField("comp4-financing", String(testDataSet1["comp4-financing"] || ""));
-    updateField("comp4-saleconditions", String(testDataSet1["comp4-saleconditions"] || ""));
-    updateField("comp4-salestatus", String(testDataSet1["comp4-salestatus"] || ""));
+    updateField(
+      "comp4-financing",
+      String(testDataSet1["comp4-financing"] || ""),
+    );
+    updateField(
+      "comp4-saleconditions",
+      String(testDataSet1["comp4-saleconditions"] || ""),
+    );
+    updateField(
+      "comp4-salestatus",
+      String(testDataSet1["comp4-salestatus"] || ""),
+    );
     updateField("comp4-units", String(testDataSet1["comp4-units"] || ""));
     updateField("comp4-gba", String(testDataSet1["comp4-gba"] || ""));
     updateField("comp4-nra", String(testDataSet1["comp4-nra"] || ""));
-    updateField("comp4-year-built", String(testDataSet1["comp4-year-built"] || ""));
-    updateField("comp4-condition", String(testDataSet1["comp4-condition"] || ""));
+    updateField(
+      "comp4-year-built",
+      String(testDataSet1["comp4-year-built"] || ""),
+    );
+    updateField(
+      "comp4-condition",
+      String(testDataSet1["comp4-condition"] || ""),
+    );
     updateField("comp4-quality", String(testDataSet1["comp4-quality"] || ""));
     updateField("comp4-location", String(testDataSet1["comp4-location"] || ""));
-    updateField("comp4-price-per-unit", String(testDataSet1["comp4-price-per-unit"] || ""));
+    updateField(
+      "comp4-price-per-unit",
+      String(testDataSet1["comp4-price-per-unit"] || ""),
+    );
     updateField("comp4-cap-rate", String(testDataSet1["comp4-cap-rate"] || ""));
-    updateField("comp4-noi-per-unit", String(testDataSet1["comp4-noi-per-unit"] || ""));
-    updateField("comp4-adj-property-rights", String(testDataSet1["comp4-adj-property-rights"] || ""));
-    updateField("comp4-adj-financing", String(testDataSet1["comp4-adj-financing"] || ""));
-    updateField("comp4-adj-market-conditions", String(testDataSet1["comp4-adj-market-conditions"] || ""));
-    updateField("comp4-adj-location", String(testDataSet1["comp4-adj-location"] || ""));
-    updateField("comp4-overall-comparison", String(testDataSet1["comp4-overall-comparison"] || ""));
-
+    updateField(
+      "comp4-noi-per-unit",
+      String(testDataSet1["comp4-noi-per-unit"] || ""),
+    );
+    updateField(
+      "comp4-adj-property-rights",
+      String(testDataSet1["comp4-adj-property-rights"] || ""),
+    );
+    updateField(
+      "comp4-adj-financing",
+      String(testDataSet1["comp4-adj-financing"] || ""),
+    );
+    updateField(
+      "comp4-adj-market-conditions",
+      String(testDataSet1["comp4-adj-market-conditions"] || ""),
+    );
+    updateField(
+      "comp4-adj-location",
+      String(testDataSet1["comp4-adj-location"] || ""),
+    );
+    updateField(
+      "comp4-overall-comparison",
+      String(testDataSet1["comp4-overall-comparison"] || ""),
+    );
 
     // Regenerate preview
     console.log("Sales test data loaded - regenerating preview...");
@@ -6720,60 +7221,147 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // === UNIT MIX (Human Inputs) ===
     // Type 1
-    updateField("calc-type1-name", String(testDataSet1["calc-type1-name"] || ""));
-    updateField("calc-type1-count", String(testDataSet1["calc-type1-count"] || ""));
+    updateField(
+      "calc-type1-name",
+      String(testDataSet1["calc-type1-name"] || ""),
+    );
+    updateField(
+      "calc-type1-count",
+      String(testDataSet1["calc-type1-count"] || ""),
+    );
     updateField("calc-type1-sf", String(testDataSet1["calc-type1-sf"] || ""));
-    updateField("calc-type1-rent", String(testDataSet1["calc-type1-rent"] || ""));
-    updateField("calc-type1-contract-rent", String(testDataSet1["calc-type1-contract-rent"] || ""));
+    updateField(
+      "calc-type1-rent",
+      String(testDataSet1["calc-type1-rent"] || ""),
+    );
+    updateField(
+      "calc-type1-contract-rent",
+      String(testDataSet1["calc-type1-contract-rent"] || ""),
+    );
 
     // Type 2
-    updateField("calc-type2-name", String(testDataSet1["calc-type2-name"] || ""));
-    updateField("calc-type2-count", String(testDataSet1["calc-type2-count"] || ""));
+    updateField(
+      "calc-type2-name",
+      String(testDataSet1["calc-type2-name"] || ""),
+    );
+    updateField(
+      "calc-type2-count",
+      String(testDataSet1["calc-type2-count"] || ""),
+    );
     updateField("calc-type2-sf", String(testDataSet1["calc-type2-sf"] || ""));
-    updateField("calc-type2-rent", String(testDataSet1["calc-type2-rent"] || ""));
-    updateField("calc-type2-contract-rent", String(testDataSet1["calc-type2-contract-rent"] || ""));
+    updateField(
+      "calc-type2-rent",
+      String(testDataSet1["calc-type2-rent"] || ""),
+    );
+    updateField(
+      "calc-type2-contract-rent",
+      String(testDataSet1["calc-type2-contract-rent"] || ""),
+    );
 
     // Type 3
-    updateField("calc-type3-name", String(testDataSet1["calc-type3-name"] || ""));
-    updateField("calc-type3-count", String(testDataSet1["calc-type3-count"] || ""));
+    updateField(
+      "calc-type3-name",
+      String(testDataSet1["calc-type3-name"] || ""),
+    );
+    updateField(
+      "calc-type3-count",
+      String(testDataSet1["calc-type3-count"] || ""),
+    );
     updateField("calc-type3-sf", String(testDataSet1["calc-type3-sf"] || ""));
-    updateField("calc-type3-rent", String(testDataSet1["calc-type3-rent"] || ""));
+    updateField(
+      "calc-type3-rent",
+      String(testDataSet1["calc-type3-rent"] || ""),
+    );
 
     // Type 4
-    updateField("calc-type4-name", String(testDataSet1["calc-type4-name"] || ""));
-    updateField("calc-type4-count", String(testDataSet1["calc-type4-count"] || ""));
+    updateField(
+      "calc-type4-name",
+      String(testDataSet1["calc-type4-name"] || ""),
+    );
+    updateField(
+      "calc-type4-count",
+      String(testDataSet1["calc-type4-count"] || ""),
+    );
     updateField("calc-type4-sf", String(testDataSet1["calc-type4-sf"] || ""));
-    updateField("calc-type4-rent", String(testDataSet1["calc-type4-rent"] || ""));
+    updateField(
+      "calc-type4-rent",
+      String(testDataSet1["calc-type4-rent"] || ""),
+    );
 
     // === OTHER INCOME (Human Inputs) ===
-    updateField("calc-parking-per-unit", String(testDataSet1["calc-parking-per-unit"] || ""));
-    updateField("calc-laundry-per-unit", String(testDataSet1["calc-laundry-per-unit"] || ""));
-    updateField("calc-other-income", String(testDataSet1["calc-other-income"] || ""));
+    updateField(
+      "calc-parking-per-unit",
+      String(testDataSet1["calc-parking-per-unit"] || ""),
+    );
+    updateField(
+      "calc-laundry-per-unit",
+      String(testDataSet1["calc-laundry-per-unit"] || ""),
+    );
+    updateField(
+      "calc-other-income",
+      String(testDataSet1["calc-other-income"] || ""),
+    );
 
     // === VACANCY & LOSS RATES (Human Inputs) ===
-    updateField("calc-vacancy-rate", String(testDataSet1["calc-vacancy-rate"] || ""));
-    updateField("calc-bad-debt-rate", String(testDataSet1["calc-bad-debt-rate"] || ""));
-    updateField("calc-concessions-rate", String(testDataSet1["calc-concessions-rate"] || ""));
+    updateField(
+      "calc-vacancy-rate",
+      String(testDataSet1["calc-vacancy-rate"] || ""),
+    );
+    updateField(
+      "calc-bad-debt-rate",
+      String(testDataSet1["calc-bad-debt-rate"] || ""),
+    );
+    updateField(
+      "calc-concessions-rate",
+      String(testDataSet1["calc-concessions-rate"] || ""),
+    );
 
     // === OPERATING EXPENSES (Human Inputs - per-unit values) ===
     // These are the input values; annual totals are CALCULATED by runCalculations()
     updateField("calc-exp-taxes", String(testDataSet1["calc-exp-taxes"] || ""));
-    updateField("calc-exp-insurance", String(testDataSet1["calc-exp-insurance"] || ""));
-    updateField("calc-exp-repairs", String(testDataSet1["calc-exp-repairs"] || ""));
-    updateField("calc-exp-utilities", String(testDataSet1["calc-exp-utilities"] || ""));
-    updateField("calc-exp-payroll", String(testDataSet1["calc-exp-payroll"] || ""));
-    updateField("calc-exp-management", String(testDataSet1["calc-exp-management"] || ""));
+    updateField(
+      "calc-exp-insurance",
+      String(testDataSet1["calc-exp-insurance"] || ""),
+    );
+    updateField(
+      "calc-exp-repairs",
+      String(testDataSet1["calc-exp-repairs"] || ""),
+    );
+    updateField(
+      "calc-exp-utilities",
+      String(testDataSet1["calc-exp-utilities"] || ""),
+    );
+    updateField(
+      "calc-exp-payroll",
+      String(testDataSet1["calc-exp-payroll"] || ""),
+    );
+    updateField(
+      "calc-exp-management",
+      String(testDataSet1["calc-exp-management"] || ""),
+    );
     updateField("calc-exp-admin", String(testDataSet1["calc-exp-admin"] || ""));
-    updateField("calc-exp-reserves", String(testDataSet1["calc-exp-reserves"] || ""));
+    updateField(
+      "calc-exp-reserves",
+      String(testDataSet1["calc-exp-reserves"] || ""),
+    );
     updateField("calc-exp-other", String(testDataSet1["calc-exp-other"] || ""));
 
     // === CAP RATE (Human Input) ===
     updateField("calc-cap-rate", String(testDataSet1["calc-cap-rate"] || ""));
 
     // === POST-VALUE ADJUSTMENTS (Human Inputs) ===
-    updateField("calc-adj-capex", String(testDataSet1["calc-adj-capex"] || "0"));
-    updateField("calc-adj-leasing", String(testDataSet1["calc-adj-leasing"] || "0"));
-    updateField("calc-adj-other", String(testDataSet1["calc-adj-other"] || "0"));
+    updateField(
+      "calc-adj-capex",
+      String(testDataSet1["calc-adj-capex"] || "0"),
+    );
+    updateField(
+      "calc-adj-leasing",
+      String(testDataSet1["calc-adj-leasing"] || "0"),
+    );
+    updateField(
+      "calc-adj-other",
+      String(testDataSet1["calc-adj-other"] || "0"),
+    );
 
     // === COMMENTS (Human Inputs) ===
     updateField("egr-comment", String(testDataSet1["egr-comment"] || ""));
@@ -6810,13 +7398,25 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // Site Size and Coverage
     updateField("site-size", String(testDataSet1["site-size"] || ""));
-    updateField("site-coverage-ratio", String(testDataSet1["site-coverage-ratio"] || ""));
-    updateField("site-coverage-ratio-text", String(testDataSet1["site-coverage-ratio-text"] || ""));
-    updateField("land-to-building", String(testDataSet1["land-to-building"] || ""));
+    updateField(
+      "site-coverage-ratio",
+      String(testDataSet1["site-coverage-ratio"] || ""),
+    );
+    updateField(
+      "site-coverage-ratio-text",
+      String(testDataSet1["site-coverage-ratio-text"] || ""),
+    );
+    updateField(
+      "land-to-building",
+      String(testDataSet1["land-to-building"] || ""),
+    );
 
     // Site Descriptions
     updateField("site-info", String(testDataSet1["site-info"] || ""));
-    updateField("site-conclusion", String(testDataSet1["site-conclusion"] || ""));
+    updateField(
+      "site-conclusion",
+      String(testDataSet1["site-conclusion"] || ""),
+    );
     updateField("site-rating", String(testDataSet1["site-rating"] || ""));
 
     // Streets and Access
@@ -6832,7 +7432,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("adjacent-west", String(testDataSet1["adjacent-west"] || ""));
 
     // Site Improvements
-    updateField("site-improvements", String(testDataSet1["site-improvements"] || ""));
+    updateField(
+      "site-improvements",
+      String(testDataSet1["site-improvements"] || ""),
+    );
     updateField("landscaping", String(testDataSet1["landscaping"] || ""));
     updateField("lighting", String(testDataSet1["lighting"] || ""));
 
@@ -6844,10 +7447,22 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("easements-text", String(testDataSet1["easements-text"] || ""));
 
     // Site Plan Images
-    updateField("img-site-plan-1", String(testDataSet1["img-site-plan-1"] || ""));
-    updateField("site-plan-1-title", String(testDataSet1["site-plan-1-title"] || ""));
-    updateField("img-site-plan-2", String(testDataSet1["img-site-plan-2"] || ""));
-    updateField("site-plan-2-title", String(testDataSet1["site-plan-2-title"] || ""));
+    updateField(
+      "img-site-plan-1",
+      String(testDataSet1["img-site-plan-1"] || ""),
+    );
+    updateField(
+      "site-plan-1-title",
+      String(testDataSet1["site-plan-1-title"] || ""),
+    );
+    updateField(
+      "img-site-plan-2",
+      String(testDataSet1["img-site-plan-2"] || ""),
+    );
+    updateField(
+      "site-plan-2-title",
+      String(testDataSet1["site-plan-2-title"] || ""),
+    );
 
     // Regenerate preview
     console.log("Site test data loaded - regenerating preview...");
@@ -6872,31 +7487,61 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("nra", String(testDataSet1["subject-nra"] || ""));
 
     // Design and Layout
-    updateField("functional-design", String(testDataSet1["functional-design"] || ""));
+    updateField(
+      "functional-design",
+      String(testDataSet1["functional-design"] || ""),
+    );
 
     // Interior Finishes
     updateField("ceilings", String(testDataSet1["ceilings"] || ""));
     updateField("flooring", String(testDataSet1["flooring"] || ""));
     updateField("interior-walls", String(testDataSet1["interior-walls"] || ""));
-    updateField("interior-buildout", String(testDataSet1["interior-buildout"] || ""));
+    updateField(
+      "interior-buildout",
+      String(testDataSet1["interior-buildout"] || ""),
+    );
 
     // Unit Mix
-    updateField("calc-type1-name", String(testDataSet1["calc-type1-name"] || ""));
-    updateField("calc-type1-count", String(testDataSet1["calc-type1-count"] || ""));
+    updateField(
+      "calc-type1-name",
+      String(testDataSet1["calc-type1-name"] || ""),
+    );
+    updateField(
+      "calc-type1-count",
+      String(testDataSet1["calc-type1-count"] || ""),
+    );
     updateField("calc-type1-sf", String(testDataSet1["calc-type1-sf"] || ""));
 
-    updateField("calc-type2-name", String(testDataSet1["calc-type2-name"] || ""));
-    updateField("calc-type2-count", String(testDataSet1["calc-type2-count"] || ""));
+    updateField(
+      "calc-type2-name",
+      String(testDataSet1["calc-type2-name"] || ""),
+    );
+    updateField(
+      "calc-type2-count",
+      String(testDataSet1["calc-type2-count"] || ""),
+    );
     updateField("calc-type2-sf", String(testDataSet1["calc-type2-sf"] || ""));
 
-    updateField("calc-type3-count", String(testDataSet1["calc-type3-count"] || ""));
-    updateField("calc-type4-count", String(testDataSet1["calc-type4-count"] || ""));
+    updateField(
+      "calc-type3-count",
+      String(testDataSet1["calc-type3-count"] || ""),
+    );
+    updateField(
+      "calc-type4-count",
+      String(testDataSet1["calc-type4-count"] || ""),
+    );
 
     // Parking
-    updateField("calc-parking-per-unit", String(testDataSet1["calc-parking-per-unit"] || ""));
+    updateField(
+      "calc-parking-per-unit",
+      String(testDataSet1["calc-parking-per-unit"] || ""),
+    );
 
     // Condition
-    updateField("asset-condition", String(testDataSet1["asset-condition"] || ""));
+    updateField(
+      "asset-condition",
+      String(testDataSet1["asset-condition"] || ""),
+    );
 
     // Regenerate preview
     console.log("Improvements test data loaded - regenerating preview...");
@@ -7069,32 +7714,76 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // Per-unit type calculations (template expects these for income table)
     // Type 1
-    updateField("calc-type1-per-unit", type1Count > 0 ? Math.round(type1Annual / type1Count) : 0);
-    updateField("calc-type1-per-sf", type1Count > 0 && type1Sf > 0 ? Math.round((type1Rent / type1Sf) * 100) / 100 : 0);
+    updateField(
+      "calc-type1-per-unit",
+      type1Count > 0 ? Math.round(type1Annual / type1Count) : 0,
+    );
+    updateField(
+      "calc-type1-per-sf",
+      type1Count > 0 && type1Sf > 0
+        ? Math.round((type1Rent / type1Sf) * 100) / 100
+        : 0,
+    );
     // Type 2
-    updateField("calc-type2-per-unit", type2Count > 0 ? Math.round(type2Annual / type2Count) : 0);
-    updateField("calc-type2-per-sf", type2Count > 0 && type2Sf > 0 ? Math.round((type2Rent / type2Sf) * 100) / 100 : 0);
+    updateField(
+      "calc-type2-per-unit",
+      type2Count > 0 ? Math.round(type2Annual / type2Count) : 0,
+    );
+    updateField(
+      "calc-type2-per-sf",
+      type2Count > 0 && type2Sf > 0
+        ? Math.round((type2Rent / type2Sf) * 100) / 100
+        : 0,
+    );
     // Type 3
-    updateField("calc-type3-per-unit", type3Count > 0 ? Math.round(type3Annual / type3Count) : 0);
-    updateField("calc-type3-per-sf", type3Count > 0 && type3Sf > 0 ? Math.round((type3Rent / type3Sf) * 100) / 100 : 0);
+    updateField(
+      "calc-type3-per-unit",
+      type3Count > 0 ? Math.round(type3Annual / type3Count) : 0,
+    );
+    updateField(
+      "calc-type3-per-sf",
+      type3Count > 0 && type3Sf > 0
+        ? Math.round((type3Rent / type3Sf) * 100) / 100
+        : 0,
+    );
     // Type 4
-    updateField("calc-type4-per-unit", type4Count > 0 ? Math.round(type4Annual / type4Count) : 0);
-    updateField("calc-type4-per-sf", type4Count > 0 && type4Sf > 0 ? Math.round((type4Rent / type4Sf) * 100) / 100 : 0);
+    updateField(
+      "calc-type4-per-unit",
+      type4Count > 0 ? Math.round(type4Annual / type4Count) : 0,
+    );
+    updateField(
+      "calc-type4-per-sf",
+      type4Count > 0 && type4Sf > 0
+        ? Math.round((type4Rent / type4Sf) * 100) / 100
+        : 0,
+    );
     // Total rental (all types combined)
-    updateField("calc-type-total-per-unit", totalUnits > 0 ? Math.round(totalRentalRevenue / totalUnits) : 0);
-    updateField("calc-type-total-per-sf", totalSf > 0 ? Math.round((totalRentalRevenue / totalSf) * 100) / 100 : 0);
+    updateField(
+      "calc-type-total-per-unit",
+      totalUnits > 0 ? Math.round(totalRentalRevenue / totalUnits) : 0,
+    );
+    updateField(
+      "calc-type-total-per-sf",
+      totalSf > 0 ? Math.round((totalRentalRevenue / totalSf) * 100) / 100 : 0,
+    );
 
     // Helper to get contract rent or fallback to market rent
     const getContractRent = (typeNum: number, marketRent: number): number => {
       const contractRent = getFieldValue(`calc-type${typeNum}-contract-rent`);
       return contractRent > 0 ? contractRent : marketRent;
     };
-    
+
     // Contract rent vs market rent (need contract rent inputs - use market as placeholder)
     const type1ContractRent = getContractRent(1, type1Rent);
     const type2ContractRent = getContractRent(2, type2Rent);
-    updateField("calc-type1-cont-v-market", type1Rent > 0 ? Math.round((type1ContractRent / type1Rent) * 100) : 0);
-    updateField("calc-type2-cont-v-market", type2Rent > 0 ? Math.round((type2ContractRent / type2Rent) * 100) : 0);
+    updateField(
+      "calc-type1-cont-v-market",
+      type1Rent > 0 ? Math.round((type1ContractRent / type1Rent) * 100) : 0,
+    );
+    updateField(
+      "calc-type2-cont-v-market",
+      type2Rent > 0 ? Math.round((type2ContractRent / type2Rent) * 100) : 0,
+    );
 
     // Other Income calculated
     updateField("calc-parking-total", parkingTotal);
@@ -7102,29 +7791,61 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     updateField("calc-total-other-income", totalOtherIncome);
     updateField("calc-pgr", pgr);
     // PGR per unit/sf (template expects these)
-    updateField("calc-pgr-per-unit", totalUnits > 0 ? Math.round(pgr / totalUnits) : 0);
-    updateField("calc-pgr-per-sf", totalSf > 0 ? Math.round((pgr / totalSf) * 100) / 100 : 0);
+    updateField(
+      "calc-pgr-per-unit",
+      totalUnits > 0 ? Math.round(pgr / totalUnits) : 0,
+    );
+    updateField(
+      "calc-pgr-per-sf",
+      totalSf > 0 ? Math.round((pgr / totalSf) * 100) / 100 : 0,
+    );
     // Other income per unit/sf
-    updateField("calc-other-income-per-unit", totalUnits > 0 ? Math.round(totalOtherIncome / totalUnits) : 0);
-    updateField("calc-other-income-per-sf", totalSf > 0 ? Math.round((totalOtherIncome / totalSf) * 100) / 100 : 0);
+    updateField(
+      "calc-other-income-per-unit",
+      totalUnits > 0 ? Math.round(totalOtherIncome / totalUnits) : 0,
+    );
+    updateField(
+      "calc-other-income-per-sf",
+      totalSf > 0 ? Math.round((totalOtherIncome / totalSf) * 100) / 100 : 0,
+    );
     // Rental revenue per unit (template expects this specific field)
-    updateField("calc-rental-revenue-per-unit", totalUnits > 0 ? Math.round(totalRentalRevenue / totalUnits) : 0);
+    updateField(
+      "calc-rental-revenue-per-unit",
+      totalUnits > 0 ? Math.round(totalRentalRevenue / totalUnits) : 0,
+    );
 
     // Vacancy calculated
     updateField("calc-vacancy-loss", vacancyLoss);
     updateField("calc-egr", egr);
     // Vacancy/EGR per unit/sf (template expects these)
-    updateField("calc-vacancy-per-unit", totalUnits > 0 ? Math.round(vacancyLoss / totalUnits) : 0);
-    updateField("calc-vacancy-per-sf", totalSf > 0 ? Math.round((vacancyLoss / totalSf) * 100) / 100 : 0);
-    updateField("calc-egr-per-unit", totalUnits > 0 ? Math.round(egr / totalUnits) : 0);
-    updateField("calc-egr-per-sf", totalSf > 0 ? Math.round((egr / totalSf) * 100) / 100 : 0);
+    updateField(
+      "calc-vacancy-per-unit",
+      totalUnits > 0 ? Math.round(vacancyLoss / totalUnits) : 0,
+    );
+    updateField(
+      "calc-vacancy-per-sf",
+      totalSf > 0 ? Math.round((vacancyLoss / totalSf) * 100) / 100 : 0,
+    );
+    updateField(
+      "calc-egr-per-unit",
+      totalUnits > 0 ? Math.round(egr / totalUnits) : 0,
+    );
+    updateField(
+      "calc-egr-per-sf",
+      totalSf > 0 ? Math.round((egr / totalSf) * 100) / 100 : 0,
+    );
 
     // Expenses calculated
     updateField("calc-expenses-total", Math.round(expensesTotal));
     updateField("calc-expense-ratio", Math.round(expenseRatio * 100) / 100);
-    updateField("calc-expenses-per-unit", totalUnits > 0 ? Math.round((expensesTotal / totalUnits) * 100) / 100 : 0);
-    updateField("calc-expenses-per-sf", totalSf > 0 ? Math.round((expensesTotal / totalSf) * 100) / 100 : 0);
-
+    updateField(
+      "calc-expenses-per-unit",
+      totalUnits > 0 ? Math.round((expensesTotal / totalUnits) * 100) / 100 : 0,
+    );
+    updateField(
+      "calc-expenses-per-sf",
+      totalSf > 0 ? Math.round((expensesTotal / totalSf) * 100) / 100 : 0,
+    );
 
     // Expense Breakdown - Calculate and output all 5 metrics per category (35 fields total for Page 49)
     const expenseCategories = [
@@ -7169,63 +7890,130 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Map unit mix data to rentalrevenue-* fields for report template
     // Type 1 = 1 Bedroom, Type 2 = 2 Bedroom
     // Note: type1ContractRent and type2ContractRent already declared above
-    
+
     // 1 Bedroom Rental Revenue
     updateField("rentalrevenue-1bed-units", type1Count);
-    updateField("rentalrevenue-1bed-contractrent", Math.round(type1ContractRent));
+    updateField(
+      "rentalrevenue-1bed-contractrent",
+      Math.round(type1ContractRent),
+    );
     updateField("rentalrevenue-1bed-marketrent", Math.round(type1Rent));
-    updateField("rentalrevenue-1bed-convvmkt", type1Rent > 0 ? Math.round((type1ContractRent / type1Rent) * 100) : 0);
-    updateField("rentalrevenue-1bed-perunit", type1Count > 0 ? Math.round(type1Annual / type1Count) : 0);
-    updateField("rentalrevenue-1bed-persf", type1Sf > 0 ? Math.round((type1Rent / type1Sf) * 100) / 100 : 0);
+    updateField(
+      "rentalrevenue-1bed-convvmkt",
+      type1Rent > 0 ? Math.round((type1ContractRent / type1Rent) * 100) : 0,
+    );
+    updateField(
+      "rentalrevenue-1bed-perunit",
+      type1Count > 0 ? Math.round(type1Annual / type1Count) : 0,
+    );
+    updateField(
+      "rentalrevenue-1bed-persf",
+      type1Sf > 0 ? Math.round((type1Rent / type1Sf) * 100) / 100 : 0,
+    );
     updateField("rentalrevenue-1bed-peryear", Math.round(type1Annual));
 
     // 2 Bedroom Rental Revenue (type2ContractRent already declared above)
     updateField("rentalrevenue-2bed-units", type2Count);
-    updateField("rentalrevenue-2bed-contractrent", Math.round(type2ContractRent));
+    updateField(
+      "rentalrevenue-2bed-contractrent",
+      Math.round(type2ContractRent),
+    );
     updateField("rentalrevenue-2bed-marketrent", Math.round(type2Rent));
-    updateField("rentalrevenue-2bed-convvmkt", type2Rent > 0 ? Math.round((type2ContractRent / type2Rent) * 100) : 0);
-    updateField("rentalrevenue-2bed-perunit", type2Count > 0 ? Math.round(type2Annual / type2Count) : 0);
-    updateField("rentalrevenue-2bed-persf", type2Sf > 0 ? Math.round((type2Rent / type2Sf) * 100) / 100 : 0);
+    updateField(
+      "rentalrevenue-2bed-convvmkt",
+      type2Rent > 0 ? Math.round((type2ContractRent / type2Rent) * 100) : 0,
+    );
+    updateField(
+      "rentalrevenue-2bed-perunit",
+      type2Count > 0 ? Math.round(type2Annual / type2Count) : 0,
+    );
+    updateField(
+      "rentalrevenue-2bed-persf",
+      type2Sf > 0 ? Math.round((type2Rent / type2Sf) * 100) / 100 : 0,
+    );
     updateField("rentalrevenue-2bed-peryear", Math.round(type2Annual));
 
     // Total Rental Revenue
-    const totalContractRent = (type1ContractRent * type1Count) + (type2ContractRent * type2Count);
-    const totalMarketRent = (type1Rent * type1Count) + (type2Rent * type2Count);
-    updateField("rentalrevenue-total-contractrent", Math.round(totalContractRent));
+    const totalContractRent =
+      type1ContractRent * type1Count + type2ContractRent * type2Count;
+    const totalMarketRent = type1Rent * type1Count + type2Rent * type2Count;
+    updateField(
+      "rentalrevenue-total-contractrent",
+      Math.round(totalContractRent),
+    );
     updateField("rentalrevenue-total-marketrent", Math.round(totalMarketRent));
-    updateField("rentalrevenue-total-convvmkt", totalMarketRent > 0 ? Math.round((totalContractRent / totalMarketRent) * 100) : 0);
-    updateField("rentalrevenue-total-perunit", totalUnits > 0 ? Math.round(totalRentalRevenue / totalUnits) : 0);
-    updateField("rentalrevenue-total-persf", totalSf > 0 ? Math.round((totalRentalRevenue / totalSf) * 100) / 100 : 0);
+    updateField(
+      "rentalrevenue-total-convvmkt",
+      totalMarketRent > 0
+        ? Math.round((totalContractRent / totalMarketRent) * 100)
+        : 0,
+    );
+    updateField(
+      "rentalrevenue-total-perunit",
+      totalUnits > 0 ? Math.round(totalRentalRevenue / totalUnits) : 0,
+    );
+    updateField(
+      "rentalrevenue-total-persf",
+      totalSf > 0 ? Math.round((totalRentalRevenue / totalSf) * 100) / 100 : 0,
+    );
     updateField("rentalrevenue-total-peryear", Math.round(totalRentalRevenue));
 
     // === CONTRACT VS MARKET FIELDS (for template table) ===
     // Contract vs Market comparison table fields
-    
+
     // 1 Bedroom Contract vs Market
     updateField("contractvsmarket-1bed-units", type1Count);
     updateField("contractvsmarket-1bed-askingrent", Math.round(type1Rent)); // Using market rent as asking
-    updateField("contractvsmarket-1bed-actualrent", Math.round(type1ContractRent));
+    updateField(
+      "contractvsmarket-1bed-actualrent",
+      Math.round(type1ContractRent),
+    );
     updateField("contractvsmarket-1bed-concludedrent", Math.round(type1Rent)); // Concluded = market rent
-    updateField("contractvsmarket-1bed-percentage", type1Rent > 0 ? Math.round((type1ContractRent / type1Rent) * 100) : 0);
+    updateField(
+      "contractvsmarket-1bed-percentage",
+      type1Rent > 0 ? Math.round((type1ContractRent / type1Rent) * 100) : 0,
+    );
 
     // 2 Bedroom Contract vs Market
     updateField("contractvsmarket-2bed-units", type2Count);
     updateField("contractvsmarket-2bed-askingrent", Math.round(type2Rent)); // Using market rent as asking
-    updateField("contractvsmarket-2bed-actualrent", Math.round(type2ContractRent));
+    updateField(
+      "contractvsmarket-2bed-actualrent",
+      Math.round(type2ContractRent),
+    );
     updateField("contractvsmarket-2bed-concludedrent", Math.round(type2Rent)); // Concluded = market rent
-    updateField("contractvsmarket-2bed-percentage", type2Rent > 0 ? Math.round((type2ContractRent / type2Rent) * 100) : 0);
+    updateField(
+      "contractvsmarket-2bed-percentage",
+      type2Rent > 0 ? Math.round((type2ContractRent / type2Rent) * 100) : 0,
+    );
 
     // Total Contract vs Market
     const avgContractRent = totalUnits > 0 ? totalContractRent / totalUnits : 0;
     const avgMarketRent = totalUnits > 0 ? totalMarketRent / totalUnits : 0;
     updateField("contractvsmarket-total-units", totalUnits);
     updateField("contractvsmarket-total-askingrent", Math.round(avgMarketRent));
-    updateField("contractvsmarket-total-actualrent", Math.round(avgContractRent));
-    updateField("contractvsmarket-total-concludedrent", Math.round(avgMarketRent));
-    updateField("contractvsmarket-total-percentage", avgMarketRent > 0 ? Math.round((avgContractRent / avgMarketRent) * 100) : 0);
+    updateField(
+      "contractvsmarket-total-actualrent",
+      Math.round(avgContractRent),
+    );
+    updateField(
+      "contractvsmarket-total-concludedrent",
+      Math.round(avgMarketRent),
+    );
+    updateField(
+      "contractvsmarket-total-percentage",
+      avgMarketRent > 0
+        ? Math.round((avgContractRent / avgMarketRent) * 100)
+        : 0,
+    );
 
     // Overall Contract vs Market Percentage
-    updateField("contract-vs-market-percentage", avgMarketRent > 0 ? Math.round((avgContractRent / avgMarketRent) * 100) : 0);
+    updateField(
+      "contract-vs-market-percentage",
+      avgMarketRent > 0
+        ? Math.round((avgContractRent / avgMarketRent) * 100)
+        : 0,
+    );
 
     // Sync to RECON
     updateField("recon-income-value", indicatedValue);
@@ -7234,18 +8022,18 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     const currentSections = get().sections;
     const sectionsWithCalcs = currentSections.map((section) => {
       const updatedFields = section.fields.map((field) => {
-        const update = calcUpdates.find(u => u.fieldId === field.id);
+        const update = calcUpdates.find((u) => u.fieldId === field.id);
         return update ? { ...field, value: update.value } : field;
       });
-      
+
       const updatedSubsections = section.subsections?.map((subsection) => ({
         ...subsection,
         fields: subsection.fields.map((field) => {
-          const update = calcUpdates.find(u => u.fieldId === field.id);
+          const update = calcUpdates.find((u) => u.fieldId === field.id);
           return update ? { ...field, value: update.value } : field;
         }),
       }));
-      
+
       return {
         ...section,
         fields: updatedFields,
@@ -7261,30 +8049,34 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Extract all field values AFTER Income Approach calculations are applied
     const updatedSections = get().sections;
     const fieldValues: Record<string, any> = {};
-    updatedSections.forEach(section => {
-      section.fields?.forEach(field => {
+    updatedSections.forEach((section) => {
+      section.fields?.forEach((field) => {
         fieldValues[field.id] = field.value;
       });
-      section.subsections?.forEach(subsection => {
-        subsection.fields?.forEach(field => {
+      section.subsections?.forEach((subsection) => {
+        subsection.fields?.forEach((field) => {
           fieldValues[field.id] = field.value;
         });
       });
     });
-    
+
     const salesCompOutputs = runSalesCompCalculations(fieldValues);
     // Apply sales comp calculations to store (batch all updates)
     const finalSections = get().sections;
     const finalUpdatedSections = finalSections.map((section) => {
       const updatedFields = section.fields.map((field) => {
         const salesCompUpdate = salesCompOutputs[field.id];
-        return salesCompUpdate !== undefined ? { ...field, value: salesCompUpdate } : field;
+        return salesCompUpdate !== undefined
+          ? { ...field, value: salesCompUpdate }
+          : field;
       });
       const updatedSubsections = section.subsections?.map((subsection) => ({
         ...subsection,
         fields: subsection.fields.map((field) => {
           const salesCompUpdate = salesCompOutputs[field.id];
-          return salesCompUpdate !== undefined ? { ...field, value: salesCompUpdate } : field;
+          return salesCompUpdate !== undefined
+            ? { ...field, value: salesCompUpdate }
+            : field;
         }),
       }));
       return {
@@ -7300,30 +8092,34 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Extract all field values AFTER Income and Sales calculations are applied
     const costFieldValues: Record<string, any> = {};
     const costSections = get().sections;
-    costSections.forEach(section => {
-      section.fields?.forEach(field => {
+    costSections.forEach((section) => {
+      section.fields?.forEach((field) => {
         costFieldValues[field.id] = field.value;
       });
-      section.subsections?.forEach(subsection => {
-        subsection.fields?.forEach(field => {
+      section.subsections?.forEach((subsection) => {
+        subsection.fields?.forEach((field) => {
           costFieldValues[field.id] = field.value;
         });
       });
     });
-    
+
     const costOutputs = runCostApproachCalculations(costFieldValues);
     // Apply cost calculations to store (batch all updates)
     const costFinalSections = get().sections;
     const costFinalUpdatedSections = costFinalSections.map((section) => {
       const updatedFields = section.fields.map((field) => {
         const costUpdate = costOutputs[field.id];
-        return costUpdate !== undefined ? { ...field, value: costUpdate } : field;
+        return costUpdate !== undefined
+          ? { ...field, value: costUpdate }
+          : field;
       });
       const updatedSubsections = section.subsections?.map((subsection) => ({
         ...subsection,
         fields: subsection.fields.map((field) => {
           const costUpdate = costOutputs[field.id];
-          return costUpdate !== undefined ? { ...field, value: costUpdate } : field;
+          return costUpdate !== undefined
+            ? { ...field, value: costUpdate }
+            : field;
         }),
       }));
       return {
@@ -7337,10 +8133,9 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     console.log("Calculations complete. Indicated Value:", indicatedValue);
   },
 
-
   loadDataSet1All: async () => {
     console.log("=== LOAD DATASET1 ALL: Loading all fields to TDD ===");
-    
+
     // Ensure sections are initialized first
     let sections = get().sections;
     if (!sections || sections.length === 0) {
@@ -7348,18 +8143,18 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       await get().initializeMockData();
       sections = get().sections;
     }
-    
+
     if (!sections || sections.length === 0) {
       console.error("Failed to initialize sections");
       return;
     }
-    
+
     console.log(`Sections initialized: ${sections.length} sections`);
-    
+
     // Dynamically iterate through ALL testDataSet1 fields
     let loadedCount = 0;
     let skippedCount = 0;
-    
+
     Object.entries(testDataSet1).forEach(([fieldId, value]) => {
       try {
         get().updateFieldValue(fieldId, value);
@@ -7368,33 +8163,44 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         skippedCount++;
       }
     });
-    
+
     console.log(`Loaded ${loadedCount} fields, skipped ${skippedCount}`);
-    
+
     // Mark all sections as loaded
     set({
       testDataLoaded: {
-        home: true, cover: true, maps: true, assignment: true,
-        exec: true, site: true, impv: true, sales: true,
-        income: true, calc: true
-      }
+        home: true,
+        cover: true,
+        maps: true,
+        assignment: true,
+        exec: true,
+        site: true,
+        impv: true,
+        sales: true,
+        income: true,
+        calc: true,
+      },
     });
-    
+
     // Run calculations
     get().runCalculations();
-    
+
     // Generate preview to interpolate template placeholders
     await get().generatePreview();
 
-    console.log("=== LOAD DATASET1 ALL COMPLETE: Calculations run, preview generated ===");
+    console.log(
+      "=== LOAD DATASET1 ALL COMPLETE: Calculations run, preview generated ===",
+    );
   },
 
   loadDataSet1DirectToTemplate: async () => {
-    console.log("=== DIRECT TO TEMPLATE: Rendering TestDataSet1 directly to template ===");
+    console.log(
+      "=== DIRECT TO TEMPLATE: Rendering TestDataSet1 directly to template ===",
+    );
 
     // Fetch template
     const url = `/Report-MF-template.html?v=${Date.now()}`;
-    const response = await fetch(url, { cache: 'no-store' });
+    const response = await fetch(url, { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`Failed to load template: ${response.statusText}`);
     }
@@ -7406,7 +8212,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     Object.entries(testDataSet1).forEach(([fieldId, value]) => {
       const placeholder = `{{${fieldId}}}`;
       if (html.includes(placeholder)) {
-        const stringValue = value != null ? String(value) : '';
+        const stringValue = value != null ? String(value) : "";
         html = html.split(placeholder).join(stringValue);
         replacedCount++;
       }
@@ -7421,8 +8227,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   },
 
   loadDataSet1User: async () => {
-    console.log("=== LOAD DATASET1 USER: Loading user inputs, running calc ===");
-    
+    console.log(
+      "=== LOAD DATASET1 USER: Loading user inputs, running calc ===",
+    );
+
     // Ensure sections are initialized
     let sections = get().sections;
     if (!sections || sections.length === 0) {
@@ -7430,12 +8238,12 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       await get().initializeMockData();
       sections = get().sections;
     }
-    
+
     if (!sections || sections.length === 0) {
       console.error("Failed to initialize sections");
       throw new Error("Sections not initialized");
     }
-    
+
     console.log(`Starting with ${sections.length} sections`);
     let mappedCount = 0;
     let clearedCount = 0;
@@ -7462,16 +8270,24 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // Helper to get field definition from registry
     const getFieldDef = (fieldId: string) => {
-      return fieldRegistry.find(f => f.id === fieldId || f.storeId === fieldId);
+      return fieldRegistry.find(
+        (f) => f.id === fieldId || f.storeId === fieldId,
+      );
     };
 
     // Batch all updates - don't trigger preview generation for each update
-    const updates: Array<{ fieldId: string; value: string | string[] | number }> = [];
+    const updates: Array<{
+      fieldId: string;
+      value: string | string[] | number;
+    }> = [];
 
     // First, clear all calculated fields
-    fieldRegistry.forEach(fieldDef => {
-      if (fieldDef.inputSource === 'calculated' && fieldExists(fieldDef.storeId)) {
-        updates.push({ fieldId: fieldDef.storeId, value: '' });
+    fieldRegistry.forEach((fieldDef) => {
+      if (
+        fieldDef.inputSource === "calculated" &&
+        fieldExists(fieldDef.storeId)
+      ) {
+        updates.push({ fieldId: fieldDef.storeId, value: "" });
         clearedCount++;
       }
     });
@@ -7482,11 +8298,17 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       const storeFieldId = testDataFieldMapping[fieldId] || fieldId;
       const fieldDef = getFieldDef(storeFieldId);
       const exists = fieldExists(storeFieldId);
-      const isCalculated = fieldDef?.inputSource === 'calculated';
-      
+      const isCalculated = fieldDef?.inputSource === "calculated";
+
       // Sample first 5 checks for debugging
       if (sampleFieldChecks.length < 5) {
-        sampleFieldChecks.push({fieldId, storeFieldId, exists, isCalculated, hasDef:!!fieldDef});
+        sampleFieldChecks.push({
+          fieldId,
+          storeFieldId,
+          exists,
+          isCalculated,
+          hasDef: !!fieldDef,
+        });
       }
 
       // Load if field exists AND is NOT calculated (calc engine will compute calculated fields)
@@ -7498,36 +8320,52 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     // Apply all updates at once (without triggering preview generation)
     const currentSections = get().sections;
-    console.log(`Applying ${updates.length} updates to ${currentSections.length} sections`);
-    
+    console.log(
+      `Applying ${updates.length} updates to ${currentSections.length} sections`,
+    );
+
     const updatedSections = currentSections.map((section) => {
       const updatedFields = section.fields.map((field) => {
-        const update = updates.find(u => u.fieldId === field.id);
+        const update = updates.find((u) => u.fieldId === field.id);
         if (update) {
           // DEBUG: Extra logging for image fields
-          if (field.id.includes('cover-photo') || field.id.includes('subject-photo')) {
-            console.log(`🖼️ IMAGE UPDATE (main): ${field.id} from "${field.value}" to "${update.value}"`);
+          if (
+            field.id.includes("cover-photo") ||
+            field.id.includes("subject-photo")
+          ) {
+            console.log(
+              `🖼️ IMAGE UPDATE (main): ${field.id} from "${field.value}" to "${update.value}"`,
+            );
           }
-          console.log(`Updating field ${field.id} from "${field.value}" to "${update.value}"`);
+          console.log(
+            `Updating field ${field.id} from "${field.value}" to "${update.value}"`,
+          );
         }
         return update ? { ...field, value: update.value } : field;
       });
-      
+
       const updatedSubsections = section.subsections?.map((subsection) => ({
         ...subsection,
         fields: subsection.fields.map((field) => {
-          const update = updates.find(u => u.fieldId === field.id);
+          const update = updates.find((u) => u.fieldId === field.id);
           if (update) {
             // DEBUG: Extra logging for image fields
-            if (field.id.includes('cover-photo') || field.id.includes('subject-photo')) {
-              console.log(`🖼️ IMAGE UPDATE: ${field.id} from "${field.value}" to "${update.value}"`);
+            if (
+              field.id.includes("cover-photo") ||
+              field.id.includes("subject-photo")
+            ) {
+              console.log(
+                `🖼️ IMAGE UPDATE: ${field.id} from "${field.value}" to "${update.value}"`,
+              );
             }
-            console.log(`Updating subsection field ${field.id} from "${field.value}" to "${update.value}"`);
+            console.log(
+              `Updating subsection field ${field.id} from "${field.value}" to "${update.value}"`,
+            );
           }
           return update ? { ...field, value: update.value } : field;
         }),
       }));
-      
+
       return {
         ...section,
         fields: updatedFields,
@@ -7538,29 +8376,38 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Update sections in store
     set({ sections: updatedSections, isDirty: true });
     const afterSetSections = get().sections;
-    const sampleFieldValue = afterSetSections[0]?.fields?.[0]?.value || 'none';
-    console.log(`Updated sections in store. Total sections: ${updatedSections.length}`);
+    const sampleFieldValue = afterSetSections[0]?.fields?.[0]?.value || "none";
+    console.log(
+      `Updated sections in store. Total sections: ${updatedSections.length}`,
+    );
 
     // Run calculations to populate calculated fields
     get().runCalculations();
 
     // Get final sections after calculations (ensure we have the latest)
     const finalSections = get().sections;
-    
+
     // Verify sections have data
     const totalFieldsWithValues = finalSections.reduce((count, section) => {
-      const sectionFields = section.fields.filter(f => f.value && f.value !== '').length;
-      const subsectionFields = section.subsections?.reduce((subCount, sub) => 
-        subCount + sub.fields.filter(f => f.value && f.value !== '').length, 0) || 0;
+      const sectionFields = section.fields.filter(
+        (f) => f.value && f.value !== "",
+      ).length;
+      const subsectionFields =
+        section.subsections?.reduce(
+          (subCount, sub) =>
+            subCount +
+            sub.fields.filter((f) => f.value && f.value !== "").length,
+          0,
+        ) || 0;
       return count + sectionFields + subsectionFields;
     }, 0);
-    
+
     // Sample a few fields to verify they have values
     const sampleFields: string[] = [];
     const sampleEmptyFields: string[] = [];
-    finalSections.forEach(section => {
-      section.fields.slice(0, 5).forEach(field => {
-        if (field.value && field.value !== '') {
+    finalSections.forEach((section) => {
+      section.fields.slice(0, 5).forEach((field) => {
+        if (field.value && field.value !== "") {
           sampleFields.push(`${field.id}: "${field.value}"`);
         } else {
           if (sampleEmptyFields.length < 5) {
@@ -7569,36 +8416,40 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         }
       });
     });
-    
-    console.log(`Final sections: ${finalSections.length}, Fields with values: ${totalFieldsWithValues}`);
-    console.log(`Sample fields: ${sampleFields.slice(0, 5).join(', ')}`);
+
+    console.log(
+      `Final sections: ${finalSections.length}, Fields with values: ${totalFieldsWithValues}`,
+    );
+    console.log(`Sample fields: ${sampleFields.slice(0, 5).join(", ")}`);
 
     // Regenerate preview with ALL updated data
     const template = await get().loadPreviewTemplate();
     if (!template) {
-      console.error('Failed to load preview template');
+      console.error("Failed to load preview template");
       return;
     }
-    
+
     const html = get().interpolateTemplate(finalSections, template);
-    
+
     // Verify HTML was generated
     if (!html || html.length === 0) {
-      console.error('Failed to generate preview HTML');
+      console.error("Failed to generate preview HTML");
       return;
     }
-    
+
     set({ previewHtml: html });
 
     console.log(
       `User inputs loaded: ${mappedCount} fields | Cleared ${clearedCount} calculated fields | Running calculations...`,
     );
-    console.log(`Preview HTML generated: ${html.length} characters, ${finalSections.length} sections`);
+    console.log(
+      `Preview HTML generated: ${html.length} characters, ${finalSections.length} sections`,
+    );
     console.log(`Preview HTML preview: ${html.substring(0, 200)}...`);
-    
+
     // Force a small delay to ensure React state updates propagate before preview renders
     // This ensures the preview updates immediately when Load Data completes
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 100));
   },
 
   setTestMode: (mode: TestMode) => {
@@ -7607,7 +8458,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
   setTestDataLoaded: (sectionId: string, loaded: boolean) => {
     set((state) => ({
-      testDataLoaded: { ...state.testDataLoaded, [sectionId]: loaded }
+      testDataLoaded: { ...state.testDataLoaded, [sectionId]: loaded },
     }));
   },
 

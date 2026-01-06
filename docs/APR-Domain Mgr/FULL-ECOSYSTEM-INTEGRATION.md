@@ -1,8 +1,8 @@
 # APR Dashboard v3 - Full Ecosystem Integration
 
-> **Generated:** 2025-12-31
+> **Generated:** 2025-12-31 | **Updated:** 2026-01-06
 > **Purpose:** Combined view showing complete data flow from client form to final report
-> **Source:** 3 parallel research agents analyzing Stages 1-4
+> **Source:** 3 parallel research agents analyzing Stages 1-4 + Platform Strategy merge
 
 ---
 
@@ -14,6 +14,7 @@
 4. [Integration Bridge](#integration-bridge)
 5. [Complete Field Mappings](#complete-field-mappings)
 6. [Implementation Plan](#implementation-plan)
+7. [Platform Independence Strategy](#platform-independence-strategy)
 
 ---
 
@@ -623,6 +624,112 @@ src/integrations/supabase/
 - [ ] Closing Report Builder does NOT lose data
 - [ ] "Begin Report" button in Job Detail View
 - [ ] Route: `/dashboard/job/:jobId/report` works
+
+---
+
+## Platform Independence Strategy
+
+> **Objective:** Eliminate Valcre, ClickUp, and Pipedrive dependencies. Build a complete appraisal business platform on owned infrastructure.
+
+### Strategic Direction
+
+APR Dashboard v3 is evolving from a "report builder with integrations" to a **complete appraisal business platform**. The goal is platform independence - owning the full stack rather than stitching together SaaS tools.
+
+### Target State
+
+| Function | Current | Target | Status |
+|----------|---------|--------|--------|
+| Report Generation | Valcre | Report Builder | ~80% complete |
+| Project Management | ClickUp | Job Mgt v3 | ~60% complete |
+| CRM / Pipeline | Pipedrive | Acquisition Pipeline | ~40% complete |
+| E-Signatures | DocuSeal | DocuSeal (keep) | Complete |
+| Database | Supabase | Supabase (keep) | Complete |
+| File Storage | Google Drive | Supabase Storage | Working |
+
+### Tech Stack Simplification
+
+**Before:**
+```
+Supabase + Valcre + ClickUp + Pipedrive + DocuSeal + Google Drive
+    |         |         |          |          |           |
+  Core    Reports    Tasks       CRM      E-Sign      Files
+```
+
+**After:**
+```
+Supabase + DocuSeal
+    |          |
+Everything   E-Sign
+```
+
+### Three Workstreams
+
+#### Workstream A: Report Builder (Kill Valcre)
+**Goal:** Complete Valcre replacement with specialized section editors
+
+**Done:**
+- Field registry (944 fields)
+- Calculator engine (277 metrics, validated)
+- HTML template system (70+ pages)
+- Live preview with PostMessage bridge (500+ fields)
+- Income/Sales/Cost approach panels
+
+**Remaining:**
+- Home Tab (workbook setup, common fields)
+- Image Manager (grid, reorder, layout)
+- Narrative Editor (rich text, templates)
+- Data persistence (auto-save to Supabase)
+- Job integration (pre-populate from job_submissions)
+
+#### Workstream B: Job Management (Kill ClickUp)
+**Goal:** Replace ClickUp with built-in job/task management
+
+**Done:**
+- Job list view with search/filter
+- Job detail view with accordion sections
+- Document upload and organization
+- Status tracking (basic)
+
+**Remaining:**
+- Task checklist per job
+- Pipeline view (kanban or enhanced list)
+- Activity log / notes per job
+- Due date reminders
+- Status-based automations
+
+#### Workstream C: Acquisition Pipeline (Kill Pipedrive)
+**Goal:** Replace Pipedrive with built-in lead tracking
+
+**Done:**
+- Client intake form (public)
+- Job submission to Supabase
+- LOE generation
+- DocuSeal e-signature flow
+
+**Remaining:**
+- Lead/inquiry stage (pre-submission)
+- Pipeline view for acquisition
+- Automated email triggers
+- Client history view
+
+### What We Keep
+
+| Tool | Keep? | Reason |
+|------|-------|--------|
+| Supabase | Yes | Core database, auth, storage, functions |
+| DocuSeal | Yes | E-signatures are complex, works well |
+| Resend | Yes | Email delivery API |
+| Google Drive | Optional | Could migrate to Supabase Storage |
+
+These integrations add value without creating dependency on external workflow tools.
+
+### Implementation Priority
+
+1. **Phase 1: Report Builder Completion** (Kill Valcre) - Revenue-generating
+2. **Phase 2: Job Pipeline Enhancement** (Kill ClickUp) - Workflow efficiency
+3. **Phase 3: Acquisition & CRM** (Kill Pipedrive) - Can use existing status flow initially
+
+> **Reference:** For detailed specs on Dual Calculator, Client Link Delivery, and Template Components, see `architecture-v4/README.md`
 
 ---
 

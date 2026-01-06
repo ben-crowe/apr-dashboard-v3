@@ -190,27 +190,25 @@ export function ImageConfiguratorDemo({
     >
       <div className={`flex flex-col h-full bg-slate-900 ${className}`}>
         {/* Header */}
-        <div className="px-6 py-4 border-b border-slate-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-xl font-semibold text-white">Image Page Configurator</h1>
-              <p className="text-sm text-slate-400 mt-1">
+        <div className="px-4 py-3 border-b border-slate-700">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-lg font-semibold text-white">Image Page Configurator</h1>
+              <p className="text-xs text-slate-400 mt-0.5 truncate">
                 Upload photos, organize by category, and build report pages
               </p>
             </div>
 
             {/* Report Type Selector */}
-            <div className="relative">
+            <div className="relative flex-shrink-0">
               <button
                 onClick={() => setShowReportTypeMenu(!showReportTypeMenu)}
-                className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg transition-colors"
+                className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded transition-colors text-sm whitespace-nowrap"
               >
-                <FileText className="w-4 h-4 text-slate-400" />
-                <div className="text-left">
-                  <div className="text-sm font-medium text-white">{currentTemplate.name}</div>
-                  <div className="text-xs text-slate-400">{currentTemplate.pageCount} pages</div>
-                </div>
-                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${showReportTypeMenu ? 'rotate-180' : ''}`} />
+                <FileText className="w-3.5 h-3.5 text-slate-400" />
+                <span className="font-medium text-white">{currentTemplate.name}</span>
+                <span className="text-xs text-slate-400">({currentTemplate.pageCount})</span>
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${showReportTypeMenu ? 'rotate-180' : ''}`} />
               </button>
 
               {/* Dropdown Menu */}
@@ -263,7 +261,7 @@ export function ImageConfiguratorDemo({
         {/* Main content - split view */}
         <div className="flex-1 flex overflow-hidden">
           {/* Left panel - Gallery */}
-          <div className="w-1/2 flex flex-col border-r border-slate-700">
+          <div className="w-[35%] flex flex-col border-r border-slate-700">
             {/* Upload zone */}
             <div className="p-4 border-b border-slate-700">
               <ImageUploadZone
@@ -296,7 +294,7 @@ export function ImageConfiguratorDemo({
           </div>
 
           {/* Right panel - Layout builder */}
-          <div className="w-1/2 flex flex-col">
+          <div className="flex-1 flex flex-col">
             <LayoutBuilder
               jobId={jobId}
               images={images}

@@ -5,7 +5,8 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import type { PageLayout, PageLayoutSlot, LayoutTemplate, DEFAULT_LAYOUTS, getSlotCount } from '../types';
+import type { PageLayout, PageLayoutSlot, LayoutTemplate } from '../types';
+import { DEFAULT_LAYOUTS } from '../types';
 import { jobImagesKeys } from './useJobImages';
 
 // Query key factory
@@ -16,13 +17,27 @@ export const layoutsKeys = {
   slots: (layoutId: string) => [...layoutsKeys.all, 'slots', layoutId] as const,
 };
 
-// Fetch layouts with their slots
+// Helper to get slot count (moved up for use in fetchLayouts)
+function getSlotCountForTemplate(template: LayoutTemplate): number {
+  const counts: Record<LayoutTemplate, number> = {
+    '1x1': 1,
+    '2x2': 4,
+    '2x3': 6,
+    '3x3': 9,
+    '3x4': 12,
+    '4x3': 12,
+    'custom': 0,
+  };
+  return counts[template];
+}
+
+// Fetch layouts with their slots - auto-creates from template if none exist
 async function fetchLayouts(jobId: string): Promise<{
   layouts: PageLayout[];
   slots: PageLayoutSlot[];
 }> {
   // Fetch layouts
-  const { data: layouts, error: layoutError } = await supabase
+  let { data: layouts, error: layoutError } = await supabase
     .from('page_layouts')
     .select('*')
     .eq('job_id', jobId)
@@ -30,13 +45,67 @@ async function fetchLayouts(jobId: string): Promise<{
 
   if (layoutError) throw layoutError;
 
-  // If no layouts exist, return empty
+  // AUTO-CREATE: If no layouts exist, create from template defaults
   if (!layouts || layouts.length === 0) {
-    return { layouts: [], slots: [] };
+    console.log('[useLayouts] No layouts found for job, creating from template...');
+
+    // Create all layouts from DEFAULT_LAYOUTS
+    for (const layout of DEFAULT_LAYOUTS) {
+      const { data: newLayout, error: createError } = await supabase
+        .from('page_layouts')
+        .insert({
+          job_id: jobId,
+          page_type: layout.page_type,
+          layout_template: layout.layout_template,
+          sort_order: layout.sort_order,
+          title: layout.title,
+          category_filter: layout.category_filter,
+        })
+        .select()
+        .single();
+
+      if (createError) {
+        console.error('[useLayouts] Error creating layout:', createError);
+        throw createError;
+      }
+
+      // Create slots for this layout
+      const slotCount = getSlotCountForTemplate(layout.layout_template);
+      const slots = Array.from({ length: slotCount }, (_, i) => ({
+        layout_id: newLayout.id,
+        slot_position: i + 1,
+        slot_label: `Slot ${i + 1}`,
+      }));
+
+      const { error: slotsError } = await supabase
+        .from('page_layout_slots')
+        .insert(slots);
+
+      if (slotsError) {
+        console.error('[useLayouts] Error creating slots:', slotsError);
+        throw slotsError;
+      }
+    }
+
+    console.log('[useLayouts] Created', DEFAULT_LAYOUTS.length, 'layouts from template');
+
+    // Re-fetch the newly created layouts
+    const { data: newLayouts, error: refetchError } = await supabase
+      .from('page_layouts')
+      .select('*')
+      .eq('job_id', jobId)
+      .order('sort_order', { ascending: true });
+
+    if (refetchError) throw refetchError;
+    layouts = newLayouts;
   }
 
   // Fetch slots for all layouts
-  const layoutIds = layouts.map(l => l.id);
+  const layoutIds = layouts?.map(l => l.id) || [];
+  if (layoutIds.length === 0) {
+    return { layouts: [], slots: [] };
+  }
+
   const { data: slots, error: slotsError } = await supabase
     .from('page_layout_slots')
     .select('*')
@@ -94,20 +163,6 @@ async function createDefaultLayouts(jobId: string, defaults: typeof DEFAULT_LAYO
 
     if (slotsError) throw slotsError;
   }
-}
-
-// Helper to get slot count
-function getSlotCountForTemplate(template: LayoutTemplate): number {
-  const counts: Record<LayoutTemplate, number> = {
-    '1x1': 1,
-    '2x2': 4,
-    '2x3': 6,
-    '3x3': 9,
-    '3x4': 12,
-    '4x3': 12,
-    'custom': 0,
-  };
-  return counts[template];
 }
 
 export function useCreateDefaultLayouts() {

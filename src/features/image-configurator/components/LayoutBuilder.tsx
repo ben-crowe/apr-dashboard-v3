@@ -31,9 +31,11 @@ import {
   useClearSlot,
   useSwapSlotImages,
   useAutoFillLayout,
+  useCreateDefaultLayouts,
   getSlotsForLayout,
 } from '../hooks/useLayouts';
 import type { PageLayout, PageLayoutSlot, JobImage, LayoutTemplate } from '../types';
+import { DEFAULT_LAYOUTS } from '../types';
 import { getSignedImageUrl } from '@/utils/supabaseStorage';
 
 interface LayoutBuilderProps {
@@ -65,6 +67,7 @@ export function LayoutBuilder({
   const clearSlot = useClearSlot();
   const swapImages = useSwapSlotImages();
   const autoFill = useAutoFillLayout();
+  const createLayouts = useCreateDefaultLayouts();
 
   // Current page index
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
@@ -235,11 +238,26 @@ export function LayoutBuilder({
   }
 
   if (layouts.length === 0) {
+    const handleCreateDefaults = async () => {
+      await createLayouts.mutateAsync({ jobId, defaults: DEFAULT_LAYOUTS });
+    };
+
     return (
       <div className={`flex flex-col items-center justify-center h-64 text-slate-400 ${className}`}>
         <Layers className="w-12 h-12 mb-3 opacity-50" />
-        <p>No layouts found</p>
-        <p className="text-sm text-slate-500">Create layouts to start placing images</p>
+        <p className="mb-2">No layouts found</p>
+        <p className="text-sm text-slate-500 mb-4">Create default layouts to start placing images</p>
+        <button
+          onClick={handleCreateDefaults}
+          disabled={createLayouts.isPending}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors disabled:opacity-50"
+        >
+          <Grid3X3 className="w-4 h-4" />
+          {createLayouts.isPending ? 'Creating...' : 'Create Default Layouts'}
+        </button>
+        <p className="text-xs text-slate-600 mt-3">
+          Creates: Exterior (2x2), Interior (3x3), Common (2x3), Systems (2x2), Site (2x2)
+        </p>
       </div>
     );
   }

@@ -23,8 +23,10 @@ import { LayoutBuilder } from './LayoutBuilder';
 import { ImageEditorModal } from './ImageEditorModal';
 import { useJobImages, jobImagesKeys } from '../hooks/useJobImages';
 import { useLayouts, useAssignImageToSlot, useClearSlot } from '../hooks/useLayouts';
-import type { ImageFilters, JobImage } from '../types';
+import type { ImageFilters, JobImage, ReportTypeId } from '../types';
+import { REPORT_TYPE_TEMPLATES, DEFAULT_REPORT_TYPE } from '../types';
 import { useSignedImageUrl } from '@/utils/supabaseStorage';
+import { FileText, ChevronDown } from 'lucide-react';
 
 interface ImageConfiguratorDemoProps {
   jobId: string;
@@ -48,6 +50,11 @@ export function ImageConfiguratorDemo({
 
   // Active drag state
   const [activeDragId, setActiveDragId] = useState<string | null>(null);
+
+  // Report type selector state
+  const [selectedReportType, setSelectedReportType] = useState<ReportTypeId>(DEFAULT_REPORT_TYPE);
+  const [showReportTypeMenu, setShowReportTypeMenu] = useState(false);
+  const currentTemplate = REPORT_TYPE_TEMPLATES[selectedReportType];
 
   // Fetch data
   const { data: images = [], isLoading: imagesLoading } = useJobImages(jobId, filters);
@@ -184,10 +191,73 @@ export function ImageConfiguratorDemo({
       <div className={`flex flex-col h-full bg-slate-900 ${className}`}>
         {/* Header */}
         <div className="px-6 py-4 border-b border-slate-700">
-          <h1 className="text-xl font-semibold text-white">Image Page Configurator</h1>
-          <p className="text-sm text-slate-400 mt-1">
-            Upload photos, organize by category, and build report pages
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-xl font-semibold text-white">Image Page Configurator</h1>
+              <p className="text-sm text-slate-400 mt-1">
+                Upload photos, organize by category, and build report pages
+              </p>
+            </div>
+
+            {/* Report Type Selector */}
+            <div className="relative">
+              <button
+                onClick={() => setShowReportTypeMenu(!showReportTypeMenu)}
+                className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg transition-colors"
+              >
+                <FileText className="w-4 h-4 text-blue-400" />
+                <div className="text-left">
+                  <div className="text-sm font-medium text-white">{currentTemplate.name}</div>
+                  <div className="text-xs text-slate-400">{currentTemplate.pageCount} pages</div>
+                </div>
+                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${showReportTypeMenu ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Dropdown Menu */}
+              {showReportTypeMenu && (
+                <div className="absolute right-0 mt-2 w-80 bg-slate-800 border border-slate-600 rounded-lg shadow-xl z-50">
+                  <div className="p-2 border-b border-slate-700">
+                    <div className="text-xs text-slate-500 uppercase tracking-wide px-2">Report Type</div>
+                  </div>
+                  <div className="max-h-80 overflow-y-auto p-2">
+                    {Object.values(REPORT_TYPE_TEMPLATES).map((template) => (
+                      <button
+                        key={template.id}
+                        onClick={() => {
+                          setSelectedReportType(template.id);
+                          setShowReportTypeMenu(false);
+                          // TODO: Clear existing layouts and recreate from new template
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+                          selectedReportType === template.id
+                            ? 'bg-blue-600 text-white'
+                            : 'hover:bg-slate-700 text-slate-200'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium">{template.name}</span>
+                          <span className={`text-xs px-2 py-0.5 rounded ${
+                            selectedReportType === template.id
+                              ? 'bg-blue-500'
+                              : 'bg-slate-600'
+                          }`}>
+                            {template.pageCount} pages
+                          </span>
+                        </div>
+                        <div className={`text-xs mt-0.5 ${
+                          selectedReportType === template.id
+                            ? 'text-blue-200'
+                            : 'text-slate-400'
+                        }`}>
+                          {template.description}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Main content - split view */}

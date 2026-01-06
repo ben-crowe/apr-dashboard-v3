@@ -155,7 +155,7 @@ function DraggableImageTile({
       className={`
         relative group rounded-lg overflow-hidden cursor-pointer
         border-2 transition-all duration-150
-        ${isSelected ? 'border-blue-500 ring-2 ring-blue-500/30' : 'border-transparent'}
+        ${isSelected ? 'border-green-500 ring-2 ring-green-500/30' : 'border-transparent'}
         ${isDragging ? 'shadow-xl scale-105' : 'hover:border-slate-600'}
         ${isPlaced ? 'opacity-60' : ''}
       `}
@@ -225,7 +225,7 @@ function DraggableImageTile({
             </div>
           )}
           {image.is_underexposed && (
-            <div className="bg-blue-500/80 text-white p-0.5 rounded" title="Underexposed">
+            <div className="bg-slate-500/80 text-white p-0.5 rounded" title="Underexposed">
               <SunDim className="w-3 h-3" />
             </div>
           )}
@@ -247,7 +247,7 @@ function DraggableImageTile({
         {/* Selection checkmark */}
         {isSelected && (
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center">
               <CheckCircle2 className="w-5 h-5 text-white" />
             </div>
           </div>

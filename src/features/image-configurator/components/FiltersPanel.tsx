@@ -113,7 +113,7 @@ export function FiltersPanel({
             onChange={(e) =>
               onChange({ ...filters, hideRejected: e.target.checked })
             }
-            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-blue-500"
+            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-green-500"
           />
           Hide rejected
         </label>
@@ -125,7 +125,7 @@ export function FiltersPanel({
             onChange={(e) =>
               onChange({ ...filters, hidePlaced: e.target.checked })
             }
-            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-blue-500"
+            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-green-500"
           />
           Hide placed
         </label>
@@ -137,7 +137,7 @@ export function FiltersPanel({
             onChange={(e) =>
               onChange({ ...filters, showOnlyUnreviewed: e.target.checked })
             }
-            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-blue-500"
+            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-green-500"
           />
           Needs review
         </label>
@@ -151,14 +151,14 @@ export function FiltersPanel({
         <div className="flex items-center gap-2">
           <button
             onClick={() => onBulkAction('select-all')}
-            className="text-xs text-blue-400 hover:text-blue-300"
+            className="text-xs text-slate-400 hover:text-slate-300"
           >
             Select All
           </button>
           <span className="text-slate-600">|</span>
           <button
             onClick={() => onBulkAction('select-none')}
-            className="text-xs text-blue-400 hover:text-blue-300"
+            className="text-xs text-slate-400 hover:text-slate-300"
           >
             Select None
           </button>

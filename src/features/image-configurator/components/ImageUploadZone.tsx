@@ -217,7 +217,7 @@ export function ImageUploadZone({
           relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer
           transition-all duration-200
           ${isDragging
-            ? 'border-blue-500 bg-blue-500/10'
+            ? 'border-green-500 bg-green-500/10'
             : 'border-slate-600 bg-slate-800/50 hover:border-slate-500 hover:bg-slate-800'
           }
         `}
@@ -239,8 +239,8 @@ export function ImageUploadZone({
         <div className="flex flex-col items-center gap-2">
           {isDragging ? (
             <>
-              <Upload className="w-10 h-10 text-blue-400 animate-bounce" />
-              <p className="text-blue-400 font-medium">Drop photos here</p>
+              <Upload className="w-10 h-10 text-green-400 animate-bounce" />
+              <p className="text-green-400 font-medium">Drop photos here</p>
             </>
           ) : (
             <>
@@ -267,7 +267,7 @@ export function ImageUploadZone({
             >
               <span>
                 {stats.uploading > 0 ? (
-                  <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
+                  <Loader2 className="w-4 h-4 animate-spin text-green-400" />
                 ) : stats.errors > 0 ? (
                   <AlertCircle className="w-4 h-4 text-red-400" />
                 ) : (
@@ -309,7 +309,7 @@ export function ImageUploadZone({
                   {/* Status icon */}
                   <div className="flex-shrink-0">
                     {upload.status === 'uploading' || upload.status === 'processing' ? (
-                      <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
+                      <Loader2 className="w-4 h-4 animate-spin text-green-400" />
                     ) : upload.status === 'complete' ? (
                       <CheckCircle className="w-4 h-4 text-green-400" />
                     ) : upload.status === 'error' ? (
@@ -332,7 +332,7 @@ export function ImageUploadZone({
                     {(upload.status === 'uploading' || upload.status === 'processing') && (
                       <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-blue-500 transition-all duration-300"
+                          className="h-full bg-green-500 transition-all duration-300"
                           style={{ width: `${upload.progress}%` }}
                         />
                       </div>

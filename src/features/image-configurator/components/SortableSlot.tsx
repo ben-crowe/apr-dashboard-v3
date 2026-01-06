@@ -113,7 +113,7 @@ export function SortableSlot({
         ref={setNodeRef}
         className={`
           relative aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all duration-150
-          ${isHighlighted ? 'border-blue-500 bg-blue-500/20 scale-[1.02]' : 'border-slate-600'}
+          ${isHighlighted ? 'border-green-500 bg-green-500/20 scale-[1.02]' : 'border-slate-600'}
           ${!image ? 'bg-slate-800/50' : ''}
         `}
       >
@@ -176,12 +176,12 @@ export function SortableSlot({
         ) : (
           // Empty slot
           <div className="w-full h-full flex flex-col items-center justify-center text-slate-500">
-            <ImagePlus className={`w-8 h-8 mb-1 ${isHighlighted ? 'text-blue-400' : ''}`} />
-            <span className={`text-xs ${isHighlighted ? 'text-blue-400' : ''}`}>
+            <ImagePlus className={`w-8 h-8 mb-1 ${isHighlighted ? 'text-green-400' : ''}`} />
+            <span className={`text-xs ${isHighlighted ? 'text-green-400' : ''}`}>
               {slot.slot_label || `Slot ${slot.slot_position}`}
             </span>
             {isHighlighted && (
-              <span className="text-xs text-blue-400 mt-1">Drop here</span>
+              <span className="text-xs text-green-400 mt-1">Drop here</span>
             )}
           </div>
         )}
@@ -202,7 +202,7 @@ export function SortableSlot({
             onChange={(e) => handleCaptionChange(e.target.value)}
             onBlur={handleCaptionBlur}
             onKeyDown={handleCaptionKeyDown}
-            className="w-full px-2 py-1 text-xs bg-slate-800 border border-slate-600 rounded text-slate-200 focus:outline-none focus:border-blue-500"
+            className="w-full px-2 py-1 text-xs bg-slate-800 border border-slate-600 rounded text-slate-200 focus:outline-none focus:border-green-500"
             placeholder={defaultCaption || "Add caption..."}
           />
         ) : (

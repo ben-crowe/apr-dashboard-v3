@@ -205,7 +205,7 @@ export function ImageConfiguratorDemo({
                 onClick={() => setShowReportTypeMenu(!showReportTypeMenu)}
                 className="flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded-lg transition-colors"
               >
-                <FileText className="w-4 h-4 text-blue-400" />
+                <FileText className="w-4 h-4 text-slate-400" />
                 <div className="text-left">
                   <div className="text-sm font-medium text-white">{currentTemplate.name}</div>
                   <div className="text-xs text-slate-400">{currentTemplate.pageCount} pages</div>
@@ -230,7 +230,7 @@ export function ImageConfiguratorDemo({
                         }}
                         className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
                           selectedReportType === template.id
-                            ? 'bg-blue-600 text-white'
+                            ? 'bg-green-600 text-white'
                             : 'hover:bg-slate-700 text-slate-200'
                         }`}
                       >
@@ -238,7 +238,7 @@ export function ImageConfiguratorDemo({
                           <span className="font-medium">{template.name}</span>
                           <span className={`text-xs px-2 py-0.5 rounded ${
                             selectedReportType === template.id
-                              ? 'bg-blue-500'
+                              ? 'bg-green-500'
                               : 'bg-slate-600'
                           }`}>
                             {template.pageCount} pages
@@ -246,7 +246,7 @@ export function ImageConfiguratorDemo({
                         </div>
                         <div className={`text-xs mt-0.5 ${
                           selectedReportType === template.id
-                            ? 'text-blue-200'
+                            ? 'text-green-200'
                             : 'text-slate-400'
                         }`}>
                           {template.description}
@@ -343,7 +343,7 @@ function DragOverlayImage({ image }: { image: JobImage }) {
   if (!imageUrl) return null;
 
   return (
-    <div className="w-32 h-24 rounded-lg overflow-hidden shadow-2xl border-2 border-blue-500 opacity-80">
+    <div className="w-32 h-24 rounded-lg overflow-hidden shadow-2xl border-2 border-green-500 opacity-80">
       <img
         src={imageUrl}
         alt={image.original_filename}

@@ -203,7 +203,7 @@ export function ImageEditorModal({
             <button
               onClick={handleSave}
               disabled={saveEdits.isPending}
-              className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 px-4 py-1.5 text-sm bg-green-600 hover:bg-green-500 text-white rounded transition-colors disabled:opacity-50"
             >
               <Check className="w-4 h-4" />
               Save
@@ -301,7 +301,7 @@ export function ImageEditorModal({
                         onClick={handleFlipH}
                         className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded transition-colors ${
                           cropData.flipH
-                            ? 'bg-blue-600 hover:bg-blue-500'
+                            ? 'bg-green-600 hover:bg-green-500'
                             : 'bg-slate-700 hover:bg-slate-600'
                         }`}
                       >
@@ -312,7 +312,7 @@ export function ImageEditorModal({
                         onClick={handleFlipV}
                         className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded transition-colors ${
                           cropData.flipV
-                            ? 'bg-blue-600 hover:bg-blue-500'
+                            ? 'bg-green-600 hover:bg-green-500'
                             : 'bg-slate-700 hover:bg-slate-600'
                         }`}
                       >
@@ -337,7 +337,7 @@ export function ImageEditorModal({
                       </button>
                       <div className="flex-1 bg-slate-700 rounded-full h-1.5">
                         <div
-                          className="bg-blue-500 h-full rounded-full transition-all"
+                          className="bg-green-500 h-full rounded-full transition-all"
                           style={{ width: `${((zoom - 0.5) / 2.5) * 100}%` }}
                         />
                       </div>

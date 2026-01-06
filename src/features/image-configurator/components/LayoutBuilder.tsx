@@ -215,7 +215,7 @@ export function LayoutBuilder({
                         setEditingTitle(false);
                       }
                     }}
-                    className="px-2 py-1 bg-slate-700 border-2 border-blue-500 rounded text-sm text-white focus:outline-none font-medium min-w-[200px]"
+                    className="px-2 py-1 bg-slate-700 border-2 border-green-500 rounded text-sm text-white focus:outline-none font-medium min-w-[200px]"
                     autoFocus
                   />
                   <button
@@ -235,7 +235,7 @@ export function LayoutBuilder({
                   <span className="text-sm font-medium text-white">
                     {currentLayout.title || currentLayout.page_type}
                   </span>
-                  <Edit2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-400 transition-colors" />
+                  <Edit2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-300 transition-colors" />
                 </button>
               )}
             </>
@@ -273,7 +273,7 @@ export function LayoutBuilder({
           <button
             onClick={handleAutoFill}
             disabled={autoFill.isPending}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-blue-600 hover:bg-blue-500 rounded transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-green-600 hover:bg-green-500 rounded transition-colors disabled:opacity-50"
           >
             <Wand2 className="w-3.5 h-3.5" />
             Auto-Fill
@@ -324,7 +324,7 @@ export function LayoutBuilder({
               onClick={() => setCurrentPageIndex(index)}
               className={`
                 flex-shrink-0 flex flex-col items-center p-2 rounded transition-colors
-                ${isActive ? 'bg-blue-600' : 'bg-slate-700 hover:bg-slate-600'}
+                ${isActive ? 'bg-green-600' : 'bg-slate-700 hover:bg-slate-600'}
               `}
             >
               <span className="text-xs text-white font-medium">

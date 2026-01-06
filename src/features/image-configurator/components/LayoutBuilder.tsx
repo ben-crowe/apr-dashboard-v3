@@ -187,7 +187,64 @@ export function LayoutBuilder({
 
   return (
     <div className={`flex flex-col ${className}`}>
-      {/* Header with page navigation */}
+      {/* Page Title Section */}
+      {currentLayout && (
+        <div className="px-4 py-4 bg-slate-800 border-b border-slate-700">
+          <div className="flex items-center justify-center gap-3">
+            {editingTitle ? (
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={titleValue}
+                  onChange={(e) => setTitleValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSaveTitle();
+                    if (e.key === 'Escape') {
+                      setTitleValue(currentLayout.title || currentLayout.page_type);
+                      setEditingTitle(false);
+                    }
+                  }}
+                  className="px-3 py-2 bg-slate-700 border-2 border-blue-500 rounded text-lg text-white focus:outline-none font-medium"
+                  autoFocus
+                />
+                <button
+                  onClick={handleSaveTitle}
+                  className="p-2 rounded bg-green-600 hover:bg-green-700 text-white"
+                  title="Save title"
+                >
+                  <Check className="w-5 h-5" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setEditingTitle(true)}
+                className="flex items-center gap-2 group hover:bg-slate-700 px-3 py-2 rounded transition-colors"
+                title="Click to edit page title"
+              >
+                <span className="text-lg font-semibold text-white">
+                  {currentLayout.title || currentLayout.page_type}
+                </span>
+                <Edit2 className="w-4 h-4 text-slate-400 group-hover:text-blue-400 transition-colors" />
+              </button>
+            )}
+          </div>
+
+          {/* Page metadata below title */}
+          <div className="flex items-center justify-center gap-3 mt-2">
+            {currentLayout.category_filter && (
+              <span className="text-xs bg-slate-700 px-2 py-1 rounded text-slate-300">
+                {currentLayout.category_filter}
+              </span>
+            )}
+            <span className="text-xs text-slate-500 flex items-center gap-1">
+              <Grid3X3 className="w-3 h-3" />
+              {currentLayout.layout_template}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Navigation Bar */}
       <div className="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-700">
         {/* Page nav */}
         <div className="flex items-center gap-2">
@@ -211,57 +268,6 @@ export function LayoutBuilder({
             <ChevronRight className="w-4 h-4" />
           </button>
         </div>
-
-        {/* Page title - editable */}
-        {currentLayout && (
-          <div className="flex items-center gap-3">
-            {editingTitle ? (
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={titleValue}
-                  onChange={(e) => setTitleValue(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleSaveTitle();
-                    if (e.key === 'Escape') {
-                      setTitleValue(currentLayout.title || currentLayout.page_type);
-                      setEditingTitle(false);
-                    }
-                  }}
-                  className="px-2 py-1 bg-slate-700 border border-slate-600 rounded text-sm text-white focus:outline-none focus:border-blue-500"
-                  autoFocus
-                />
-                <button
-                  onClick={handleSaveTitle}
-                  className="p-1 rounded hover:bg-slate-700 text-green-400"
-                  title="Save"
-                >
-                  <Check className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={() => setEditingTitle(true)}
-                className="flex items-center gap-2 group hover:bg-slate-700 px-2 py-1 rounded transition-colors"
-              >
-                <span className="text-sm font-medium text-white">
-                  {currentLayout.title || currentLayout.page_type}
-                </span>
-                <Edit2 className="w-3 h-3 text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity" />
-              </button>
-            )}
-
-            {currentLayout.category_filter && (
-              <span className="text-xs bg-slate-700 px-2 py-0.5 rounded text-slate-300">
-                {currentLayout.category_filter}
-              </span>
-            )}
-            <span className="text-xs text-slate-500 flex items-center gap-1">
-              <Grid3X3 className="w-3 h-3" />
-              {currentLayout.layout_template}
-            </span>
-          </div>
-        )}
 
         {/* Actions */}
         <div className="flex items-center gap-2">

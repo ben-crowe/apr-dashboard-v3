@@ -96,7 +96,7 @@ export function ImageGrid({
   }
 
   return (
-    <div className={`grid grid-cols-4 gap-2 ${className}`}>
+    <div className={`grid grid-cols-2 gap-3 ${className}`}>
       {images.map((image, index) => (
         <DraggableImageTile
           key={image.id}

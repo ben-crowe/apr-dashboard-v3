@@ -1,0 +1,8 @@
+# Tasks Folder
+
+Store PRDs and implementation plans here.
+
+After completing features:
+1. Save implementation plan to tasks/[feature-name].md
+2. Update .agent/README.md if needed
+3. Reference in future similar features

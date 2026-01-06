@@ -192,31 +192,33 @@ export function SortableSlot({
         </div>
       </div>
 
-      {/* Caption input field (always visible when image is present) */}
-      {image && (
-        <div className="relative">
-          {isEditingCaption ? (
-            <input
-              ref={captionInputRef}
-              type="text"
-              value={captionValue}
-              onChange={(e) => handleCaptionChange(e.target.value)}
-              onBlur={handleCaptionBlur}
-              onKeyDown={handleCaptionKeyDown}
-              className="w-full px-2 py-1 text-xs bg-slate-800 border border-slate-600 rounded text-slate-200 focus:outline-none focus:border-blue-500"
-              placeholder="Add caption..."
-            />
-          ) : (
-            <button
-              onClick={() => setIsEditingCaption(true)}
-              className="w-full px-2 py-1 text-xs text-left bg-slate-800/50 hover:bg-slate-800 border border-slate-700 hover:border-slate-600 rounded text-slate-300 transition-colors"
-              title="Click to edit caption"
-            >
-              {currentCaption || 'Add caption...'}
-            </button>
-          )}
-        </div>
-      )}
+      {/* Caption placeholder (always visible) */}
+      <div className="relative">
+        {image && isEditingCaption ? (
+          <input
+            ref={captionInputRef}
+            type="text"
+            value={captionValue}
+            onChange={(e) => handleCaptionChange(e.target.value)}
+            onBlur={handleCaptionBlur}
+            onKeyDown={handleCaptionKeyDown}
+            className="w-full px-2 py-1 text-xs bg-slate-800 border border-slate-600 rounded text-slate-200 focus:outline-none focus:border-blue-500"
+            placeholder={defaultCaption || "Add caption..."}
+          />
+        ) : (
+          <div
+            onClick={image ? () => setIsEditingCaption(true) : undefined}
+            className={`w-full px-2 py-1 text-xs text-left border rounded transition-colors ${
+              image
+                ? 'bg-slate-800/50 hover:bg-slate-800 border-slate-700 hover:border-slate-600 text-slate-300 cursor-pointer'
+                : 'bg-slate-900/30 border-slate-700/50 text-slate-500 italic'
+            }`}
+            title={image ? "Click to edit caption" : "Suggested caption for this slot"}
+          >
+            {currentCaption || defaultCaption || 'Caption...'}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

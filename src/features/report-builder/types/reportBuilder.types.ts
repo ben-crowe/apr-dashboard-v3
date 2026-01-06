@@ -53,6 +53,7 @@ export interface ReportBuilderState {
   sidebarCollapsed: boolean;
   activeTestMode: TestMode; // Mutually exclusive test modes
   testDataLoaded: Record<string, boolean>; // Tracks which sections have had test data loaded (e.g., { home: true, cover: false })
+  currentJobId: string | null; // Current job ID for image configurator and other job-specific features
 
   // Actions
   setActiveSection: (sectionId: string) => void;
@@ -79,4 +80,5 @@ export interface ReportBuilderState {
   loadDataSet1DirectToTemplate: () => Promise<void>; // Direct field validation - bypasses calc engine
   setTestMode: (mode: TestMode) => void; // Switch between test modes
   setTestDataLoaded: (sectionId: string, loaded: boolean) => void; // Mark section test data as loaded/unloaded
+  setCurrentJobId: (jobId: string | null) => void; // Set current job ID
 }

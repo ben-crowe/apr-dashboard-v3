@@ -5994,6 +5994,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   activeTestMode: "none", // Mutually exclusive test modes: 'none' | 'test-report' | 'designer'
   testDataLoaded: {}, // Tracks which sections have had test data loaded
   showRawIds: true, // Toggle ON = show test data, Toggle OFF = show raw field IDs
+  currentJobId: null, // Current job ID for image configurator
 
   setActiveSection: (sectionId: string) => {
     set({ activeSection: sectionId });
@@ -8464,5 +8465,9 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
   setShowRawIds: (show: boolean) => {
     set({ showRawIds: show });
+  },
+
+  setCurrentJobId: (jobId: string | null) => {
+    set({ currentJobId: jobId });
   },
 }));

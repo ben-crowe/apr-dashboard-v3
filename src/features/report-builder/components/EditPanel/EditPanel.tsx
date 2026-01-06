@@ -44,10 +44,13 @@ import { CostTabPanel } from '../CostTabPanel';
 // ReconTabPanel for RECON section
 import { ReconTabPanel } from '../ReconTabPanel';
 
+// ImageMgtTabPanel for IMAGE-MGT section
+import { ImageMgtTabPanel } from '../ImageMgtTabPanel';
+
 // Mapping of which image fields should appear in which sections
 // IMPORTANT: Field IDs must match template placeholders (e.g., {{subject-photo}})
 const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
-  'cover': ['subject-photo', 'img-signature'],  // Changed img-cover-photo → subject-photo to match template
+  'cover': ['subject-photo', 'img-signature'],  // Changed img-cover-photo -> subject-photo to match template
   'maps': ['img-map-regional', 'img-map-local', 'img-map-aerial-1', 'img-map-aerial-2', 'img-zoning-map', 'img-site-plan-1', 'img-site-plan-2'],
   'photos': [
     'img-exterior-1', 'img-exterior-2', 'img-exterior-3', 'img-exterior-4', 'img-exterior-5', 'img-exterior-6',
@@ -828,39 +831,42 @@ export default function EditPanel() {
   const isCostSection = currentSection.id === 'cost-s';
   const isCalcSection = currentSection.id === 'calc';
   const isReconSection = currentSection.id === 'recon';
+  const isImageMgtSection = currentSection.id === 'image-mgt';
 
   return (
     <div className="h-full flex flex-col" style={{ backgroundColor: '#1f1f1f' }}>
-      {/* Section header */}
-      <div style={{
-        backgroundColor: 'transparent',
-        padding: '12px 14px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderBottom: '1px solid #4b5563'
-      }}>
-        <span style={{ color: '#ffffff', fontWeight: '600', fontSize: '15px' }}>
-          {currentSection.name.toUpperCase()}
-        </span>
-        {/* Expand/Collapse All button - hide for sections with their own controls */}
-        {!isHomeSection && !isSiteSection && !isImpvSection && !isIncomeSection && !isSalesSection && !isCostSection && !isReconSection && (
-          <button
-            type="button"
-            onClick={toggleAllSubsections}
-            className="p-1 rounded hover:bg-gray-700 transition-colors"
-            title={allExpanded ? 'Collapse all sections' : 'Expand all sections'}
-          >
-            <ChevronDown
-              className={cn(
-                "w-4 h-4 transition-transform duration-200",
-                allExpanded ? "rotate-180" : "-rotate-90"
-              )}
-              style={{ color: '#888888' }}
-            />
-          </button>
-        )}
-      </div>
+      {/* Section header - hide for Image Management (it has its own header) */}
+      {!isImageMgtSection && (
+        <div style={{
+          backgroundColor: 'transparent',
+          padding: '12px 14px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderBottom: '1px solid #4b5563'
+        }}>
+          <span style={{ color: '#ffffff', fontWeight: '600', fontSize: '15px' }}>
+            {currentSection.name.toUpperCase()}
+          </span>
+          {/* Expand/Collapse All button - hide for sections with their own controls */}
+          {!isHomeSection && !isSiteSection && !isImpvSection && !isIncomeSection && !isSalesSection && !isCostSection && !isReconSection && (
+            <button
+              type="button"
+              onClick={toggleAllSubsections}
+              className="p-1 rounded hover:bg-gray-700 transition-colors"
+              title={allExpanded ? 'Collapse all sections' : 'Expand all sections'}
+            >
+              <ChevronDown
+                className={cn(
+                  "w-4 h-4 transition-transform duration-200",
+                  allExpanded ? "rotate-180" : "-rotate-90"
+                )}
+                style={{ color: '#888888' }}
+              />
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-auto text-white editor-panel-content" style={{ backgroundColor: '#1f1f1f' }}>
@@ -913,6 +919,11 @@ export default function EditPanel() {
           <ReconTabPanel />
         )}
 
+        {/* IMAGE-MGT Section - Render ImageMgtTabPanel component */}
+        {isImageMgtSection && (
+          <ImageMgtTabPanel />
+        )}
+
         {/* Calculator Table Panels - Only show for CALC section */}
         {isCalcSection && (
           <div className="p-6">
@@ -934,8 +945,8 @@ export default function EditPanel() {
           </div>
         )}
 
-        {/* Non-Home, Non-Site, Non-Impv, Non-Income, Non-Sales, Non-Cost, Non-Recon, Non-Calc sections - render standard fields and subsections */}
-        {!isHomeSection && !isSiteSection && !isImpvSection && !isIncomeSection && !isSalesSection && !isCostSection && !isReconSection && !isCalcSection && (
+        {/* Non-Home, Non-Site, Non-Impv, Non-Income, Non-Sales, Non-Cost, Non-Recon, Non-Calc, Non-ImageMgt sections - render standard fields and subsections */}
+        {!isHomeSection && !isSiteSection && !isImpvSection && !isIncomeSection && !isSalesSection && !isCostSection && !isReconSection && !isCalcSection && !isImageMgtSection && (
           <div className="p-6">
             {/* Main section fields */}
             {currentSection.fields.length > 0 && (

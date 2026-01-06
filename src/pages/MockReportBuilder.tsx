@@ -11,9 +11,19 @@ export default function MockReportBuilder({ jobId }: MockReportBuilderProps) {
   const sections = useReportBuilderStore((state) => state.sections);
   const initializeMockData = useReportBuilderStore((state) => state.initializeMockData);
   const generatePreview = useReportBuilderStore((state) => state.generatePreview);
+  const setCurrentJobId = useReportBuilderStore((state) => state.setCurrentJobId);
 
   // Hook to load job data into report builder when jobId is provided
   const { isLoading: isLoadingJob, error: jobLoadError } = useLoadJobIntoReport(jobId);
+
+  // Set currentJobId in store when jobId prop is available
+  useEffect(() => {
+    setCurrentJobId(jobId || null);
+    // Cleanup on unmount
+    return () => {
+      setCurrentJobId(null);
+    };
+  }, [jobId, setCurrentJobId]);
 
   useEffect(() => {
     const store = useReportBuilderStore.getState();

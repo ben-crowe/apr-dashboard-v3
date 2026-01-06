@@ -305,13 +305,15 @@ export function LayoutBuilder({
       </div>
 
       {/* Layout grid */}
-      <div className="flex-1 p-4 bg-slate-900 overflow-auto">
+      <div className="flex-1 p-4 bg-slate-900 overflow-auto flex items-center justify-center">
         <div
-          className="grid mx-auto"
+          className="grid w-full h-full"
           style={{
             gridTemplateColumns: `repeat(${gridConfig.cols}, 1fr)`,
-            gap: zoomLevel === 0 ? '12px' : zoomLevel === 1 ? '8px' : '6px',
-            maxWidth: zoomLevel === 0 ? '1024px' : zoomLevel === 1 ? '800px' : '600px',
+            gap: zoomLevel === 0 ? '16px' : zoomLevel === 1 ? '12px' : '8px',
+            maxWidth: zoomLevel === 0 ? '100%' : zoomLevel === 1 ? '90%' : '75%',
+            maxHeight: zoomLevel === 0 ? '100%' : zoomLevel === 1 ? '95%' : '85%',
+            gridAutoRows: `minmax(0, 1fr)`,
           }}
         >
           {currentSlots.map((slot) => {

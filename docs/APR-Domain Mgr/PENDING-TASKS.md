@@ -80,11 +80,10 @@ Map titles changed from hardcoded to field-mapped:
 3. No loose files at docs root - everything has a home
 
 **Execution:**
-- Deploy sub-agents to:
-  1. Move loose files to appropriate folders
-  2. Add README.md to each numbered folder (01-15)
-  3. Review stub folders (04, 08, 11, 12) - expand or consolidate
-  4. Create `assets/` folder for images/screenshots
+- **See deployment brief:** `docs/agent-briefs/BRIEF-docs-cleanup.md`
+- Research completed by 4 Haiku agents (analyzed all 38 files)
+- Brief contains detailed file moves, folder structure, and 5-phase plan
+- Deploy sub-agents per brief instructions
 
 **Acceptance Criteria:**
 - [ ] Zero loose files at docs/ root (except main README.md)

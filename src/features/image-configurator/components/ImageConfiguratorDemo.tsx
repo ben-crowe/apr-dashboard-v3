@@ -56,6 +56,10 @@ export function ImageConfiguratorDemo({
   const [showReportTypeMenu, setShowReportTypeMenu] = useState(false);
   const currentTemplate = REPORT_TYPE_TEMPLATES[selectedReportType];
 
+  // Resizable split state
+  const [splitPercent, setSplitPercent] = useState(35); // Gallery takes 35% by default
+  const [isDraggingDivider, setIsDraggingDivider] = useState(false);
+
   // Fetch data
   const { data: images = [], isLoading: imagesLoading } = useJobImages(jobId, filters);
   const { data: layoutData } = useLayouts(jobId);
@@ -181,6 +185,55 @@ export function ImageConfiguratorDemo({
   // Get dragged image for overlay
   const draggedImage = activeDragId ? imageMap.get(activeDragId) : null;
 
+  // Resizable divider handlers
+  const handleDividerMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDraggingDivider(true);
+  }, []);
+
+  const handleDividerMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isDraggingDivider) return;
+
+      const container = document.getElementById('image-configurator-split');
+      if (!container) return;
+
+      const rect = container.getBoundingClientRect();
+      const newPercent = ((e.clientX - rect.left) / rect.width) * 100;
+
+      // Clamp between 20% and 60%
+      const clampedPercent = Math.max(20, Math.min(60, newPercent));
+      setSplitPercent(clampedPercent);
+    },
+    [isDraggingDivider]
+  );
+
+  const handleDividerMouseUp = useCallback(() => {
+    setIsDraggingDivider(false);
+  }, []);
+
+  // Add/remove global mouse listeners for divider drag
+  React.useEffect(() => {
+    if (isDraggingDivider) {
+      document.addEventListener('mousemove', handleDividerMouseMove);
+      document.addEventListener('mouseup', handleDividerMouseUp);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    } else {
+      document.removeEventListener('mousemove', handleDividerMouseMove);
+      document.removeEventListener('mouseup', handleDividerMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleDividerMouseMove);
+      document.removeEventListener('mouseup', handleDividerMouseUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [isDraggingDivider, handleDividerMouseMove, handleDividerMouseUp]);
+
   return (
     <DndContext
       sensors={sensors}
@@ -259,9 +312,12 @@ export function ImageConfiguratorDemo({
         </div>
 
         {/* Main content - split view */}
-        <div className="flex-1 flex overflow-hidden">
+        <div id="image-configurator-split" className="flex-1 flex overflow-hidden relative">
           {/* Left panel - Gallery */}
-          <div className="w-[35%] flex flex-col border-r border-slate-700">
+          <div
+            className="flex flex-col border-r border-slate-700"
+            style={{ width: `${splitPercent}%` }}
+          >
             {/* Upload zone */}
             <div className="p-4 border-b border-slate-700">
               <ImageUploadZone
@@ -291,6 +347,19 @@ export function ImageConfiguratorDemo({
                 onOpenEditor={handleOpenEditor}
               />
             </div>
+          </div>
+
+          {/* Draggable divider */}
+          <div
+            onMouseDown={handleDividerMouseDown}
+            className={`w-1 bg-slate-700 hover:bg-green-500 cursor-col-resize transition-colors relative group ${
+              isDraggingDivider ? 'bg-green-500' : ''
+            }`}
+          >
+            {/* Wider hit area for easier grabbing */}
+            <div className="absolute inset-y-0 -left-1 -right-1" />
+            {/* Visual indicator on hover */}
+            <div className="absolute inset-y-0 left-0 right-0 bg-green-500 opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
 
           {/* Right panel - Layout builder */}

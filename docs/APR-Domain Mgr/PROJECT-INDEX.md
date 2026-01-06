@@ -110,8 +110,8 @@
 
 | File | Purpose |
 |------|---------|
-| `docs/1-API-FIELD-MAPPING-REFERENCE.md` | API field mappings |
-| `docs/3-DOCUSEAL-LOE-FIELD-MAPPING.md` | DocuSeal field map |
+| `docs/07-Valcre-Integration/1-API-FIELD-MAPPING-REFERENCE.md` | API field mappings |
+| `docs/06-LOE-Generator/3-DOCUSEAL-LOE-FIELD-MAPPING.md` | DocuSeal field map |
 | `docs/ARCHITECTURE-OVERVIEW.md` | System architecture |
 | `docs/DATA-FLOW-EXPLANATION.md` | Data flow docs |
 | `docs/API-TESTING-METHODOLOGY.md` | API testing approach |
@@ -145,9 +145,7 @@
 |-------------|-------|------------------|
 | `docs/Cursor Files/` | Legacy from Cursor era | Archive or delete |
 | `docs/archive/` | Old sessions | Keep archived |
-| `docs/NEXT-SESSION-IMAGES.md` | Orphaned note | Review - consolidate or delete |
 | `docs/README-UPDATED.md` | Duplicate? | Review |
-| `docs/Unnumbered-Tabs-TDD-Dashboard.md` | Unclear purpose | Review |
 
 ---
 

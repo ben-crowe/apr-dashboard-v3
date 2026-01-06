@@ -9,7 +9,7 @@
 
 ## Document Overview
 
-### 1. README-IMAGE-PATTERNS.md
+### 1. patterns/README-IMAGE-PATTERNS.md
 **Type:** Executive Overview + Roadmap
 **Length:** 400+ lines
 **Best For:** Project managers, architects, team leads
@@ -26,7 +26,7 @@
 
 ---
 
-### 2. PATTERN-QUICK-REFERENCE.md
+### 2. patterns/PATTERN-QUICK-REFERENCE.md
 **Type:** Developer Cheat Sheet
 **Length:** 350+ lines
 **Best For:** Developers building components
@@ -44,7 +44,7 @@
 
 ---
 
-### 3. IMAGE-GALLERY-CODE-PATTERNS.md
+### 3. patterns/patterns/IMAGE-GALLERY-CODE-PATTERNS.md
 **Type:** Copy-Paste Code Snippets
 **Length:** 600+ lines
 **Best For:** Implementation & development
@@ -64,7 +64,7 @@
 
 ---
 
-### 4. IMAGE-GRID-GALLERY-PATTERNS.md
+### 4. patterns/IMAGE-GRID-GALLERY-PATTERNS.md
 **Type:** Comprehensive Technical Analysis
 **Length:** 2,000+ lines
 **Best For:** Understanding the deep implementation
@@ -87,7 +87,7 @@
 
 ---
 
-### 5. IMAGE-SEARCH-RESULTS-SUMMARY.txt
+### 5. patterns/IMAGE-SEARCH-RESULTS-SUMMARY.txt
 **Type:** Executive Summary Report
 **Length:** 500+ lines
 **Best For:** Status tracking & decision making
@@ -113,25 +113,25 @@
 ## How to Use These Documents
 
 ### For Project Planning
-1. Read: README-IMAGE-PATTERNS.md (Week overview)
+1. Read: patterns/README-IMAGE-PATTERNS.md (Week overview)
 2. Review: Implementation readiness checklist
 3. Plan: 3-week roadmap with team
 4. Reference: Risk assessment section
 
 ### For Development
-1. Open: PATTERN-QUICK-REFERENCE.md (keep on desk)
+1. Open: patterns/PATTERN-QUICK-REFERENCE.md (keep on desk)
 2. Locate: Decision tree for your use case
-3. Copy: Code from IMAGE-GALLERY-CODE-PATTERNS.md
+3. Copy: Code from patterns/IMAGE-GALLERY-CODE-PATTERNS.md
 4. Reference: Troubleshooting section when stuck
 
 ### For Architecture Review
-1. Read: IMAGE-GRID-GALLERY-PATTERNS.md intro
+1. Read: patterns/IMAGE-GRID-GALLERY-PATTERNS.md intro
 2. Review: Implementation readiness matrix
 3. Check: Risk assessment section
 4. Validate: Store integration patterns
 
 ### For Quality Assurance
-1. Reference: PATTERN-QUICK-REFERENCE.md checklist
+1. Reference: patterns/PATTERN-QUICK-REFERENCE.md checklist
 2. Test: Common use cases section
 3. Verify: Performance expectations
 4. Document: Test results
@@ -143,48 +143,48 @@
 ### Need to...
 
 **Display images in a grid?**
-- Quick answer: PATTERN-QUICK-REFERENCE.md → Pattern 1
-- Code: IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 1
-- Details: IMAGE-GRID-GALLERY-PATTERNS.md → Pattern 1 section
+- Quick answer: patterns/PATTERN-QUICK-REFERENCE.md → Pattern 1
+- Code: patterns/IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 1
+- Details: patterns/IMAGE-GRID-GALLERY-PATTERNS.md → Pattern 1 section
 
 **Let users upload images?**
-- Quick answer: PATTERN-QUICK-REFERENCE.md → Pattern 3
-- Code: IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 3
-- Details: IMAGE-GRID-GALLERY-PATTERNS.md → Large Image Set section
+- Quick answer: patterns/PATTERN-QUICK-REFERENCE.md → Pattern 3
+- Code: patterns/IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 3
+- Details: patterns/IMAGE-GRID-GALLERY-PATTERNS.md → Large Image Set section
 
 **Add quality badges?**
-- Quick answer: PATTERN-QUICK-REFERENCE.md → Pattern 2
-- Code: IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 2
-- Details: IMAGE-GRID-GALLERY-PATTERNS.md → Quality Indicators section
+- Quick answer: patterns/PATTERN-QUICK-REFERENCE.md → Pattern 2
+- Code: patterns/IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 2
+- Details: patterns/IMAGE-GRID-GALLERY-PATTERNS.md → Quality Indicators section
 
 **Filter/search images?**
-- Quick answer: PATTERN-QUICK-REFERENCE.md → Pattern 4
-- Code: IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 4
-- Details: IMAGE-GRID-GALLERY-PATTERNS.md → Filter & Multi-Select section
+- Quick answer: patterns/PATTERN-QUICK-REFERENCE.md → Pattern 4
+- Code: patterns/IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 4
+- Details: patterns/IMAGE-GRID-GALLERY-PATTERNS.md → Filter & Multi-Select section
 
 **Reorder images by dragging?**
-- Quick answer: PATTERN-QUICK-REFERENCE.md → Pattern 5
-- Code: IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 5
-- Details: IMAGE-GRID-GALLERY-PATTERNS.md → Pattern 1 (drag logic)
+- Quick answer: patterns/PATTERN-QUICK-REFERENCE.md → Pattern 5
+- Code: patterns/IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 5
+- Details: patterns/IMAGE-GRID-GALLERY-PATTERNS.md → Pattern 1 (drag logic)
 
 **Preview images fullscreen?**
-- Quick answer: PATTERN-QUICK-REFERENCE.md → Pattern 6
-- Code: IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 6
+- Quick answer: patterns/PATTERN-QUICK-REFERENCE.md → Pattern 6
+- Code: patterns/IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 6
 - Details: ImageFieldEditor.tsx lines 476-498 (existing implementation)
 
 **Manage complex image state?**
-- Quick answer: PATTERN-QUICK-REFERENCE.md → Pattern 7
-- Code: IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 7
-- Details: IMAGE-GRID-GALLERY-PATTERNS.md → Store & State section
+- Quick answer: patterns/PATTERN-QUICK-REFERENCE.md → Pattern 7
+- Code: patterns/IMAGE-GALLERY-CODE-PATTERNS.md → Pattern 7
+- Details: patterns/IMAGE-GRID-GALLERY-PATTERNS.md → Store & State section
 
 **Know what to build first?**
-- Read: README-IMAGE-PATTERNS.md → Implementation Roadmap section
-- Quick ref: PATTERN-QUICK-REFERENCE.md → Feature Progression section
+- Read: patterns/README-IMAGE-PATTERNS.md → Implementation Roadmap section
+- Quick ref: patterns/PATTERN-QUICK-REFERENCE.md → Feature Progression section
 
 **Troubleshoot performance?**
-- Check: PATTERN-QUICK-REFERENCE.md → Troubleshooting section
-- Details: IMAGE-GRID-GALLERY-PATTERNS.md → Large Image Set Handling section
-- Code: IMAGE-GALLERY-CODE-PATTERNS.md → Performance Optimization Tips section
+- Check: patterns/PATTERN-QUICK-REFERENCE.md → Troubleshooting section
+- Details: patterns/IMAGE-GRID-GALLERY-PATTERNS.md → Large Image Set Handling section
+- Code: patterns/IMAGE-GALLERY-CODE-PATTERNS.md → Performance Optimization Tips section
 
 ---
 
@@ -198,11 +198,11 @@ All documentation files are in:
 ### Generated Documentation
 ```
 docs/
-├── README-IMAGE-PATTERNS.md              ← Start here for overview
-├── PATTERN-QUICK-REFERENCE.md            ← Developer cheat sheet
-├── IMAGE-GALLERY-CODE-PATTERNS.md        ← Copy-paste code
-├── IMAGE-GRID-GALLERY-PATTERNS.md        ← Deep technical analysis
-├── IMAGE-SEARCH-RESULTS-SUMMARY.txt      ← Executive summary
+├── patterns/README-IMAGE-PATTERNS.md              ← Start here for overview
+├── patterns/PATTERN-QUICK-REFERENCE.md            ← Developer cheat sheet
+├── patterns/IMAGE-GALLERY-CODE-PATTERNS.md        ← Copy-paste code
+├── patterns/IMAGE-GRID-GALLERY-PATTERNS.md        ← Deep technical analysis
+├── patterns/IMAGE-SEARCH-RESULTS-SUMMARY.txt      ← Executive summary
 └── DOCUMENTATION-INDEX.md                ← This file
 ```
 
@@ -227,24 +227,24 @@ src/
 ### By Role
 
 **Product Manager:**
-- README-IMAGE-PATTERNS.md (timeline, roadmap, risks)
-- IMAGE-SEARCH-RESULTS-SUMMARY.txt (status, metrics)
+- patterns/README-IMAGE-PATTERNS.md (timeline, roadmap, risks)
+- patterns/IMAGE-SEARCH-RESULTS-SUMMARY.txt (status, metrics)
 
 **Frontend Developer:**
-- PATTERN-QUICK-REFERENCE.md (decision tree, troubleshooting)
-- IMAGE-GALLERY-CODE-PATTERNS.md (implementations)
+- patterns/PATTERN-QUICK-REFERENCE.md (decision tree, troubleshooting)
+- patterns/IMAGE-GALLERY-CODE-PATTERNS.md (implementations)
 
 **Tech Lead/Architect:**
-- IMAGE-GRID-GALLERY-PATTERNS.md (technical depth)
+- patterns/IMAGE-GRID-GALLERY-PATTERNS.md (technical depth)
 - Implementation readiness matrix (README)
-- Risk assessment (IMAGE-SEARCH-RESULTS-SUMMARY.txt)
+- Risk assessment (patterns/IMAGE-SEARCH-RESULTS-SUMMARY.txt)
 
 **QA/Tester:**
-- PATTERN-QUICK-REFERENCE.md (test cases, checklist)
+- patterns/PATTERN-QUICK-REFERENCE.md (test cases, checklist)
 - Common use cases (README)
 
 **DevOps/Deployment:**
-- Performance expectations (PATTERN-QUICK-REFERENCE.md)
+- Performance expectations (patterns/PATTERN-QUICK-REFERENCE.md)
 - Dependencies (README)
 
 ---
@@ -253,7 +253,7 @@ src/
 
 ```
 Overview Documents
-├── README-IMAGE-PATTERNS.md
+├── patterns/README-IMAGE-PATTERNS.md
 │   ├── Quick Navigation
 │   ├── Search Story (what/why/how)
 │   ├── Pattern Overview (3 patterns)
@@ -269,7 +269,7 @@ Overview Documents
 │   └── Support & Maintenance
 │
 Developer Tools
-├── PATTERN-QUICK-REFERENCE.md
+├── patterns/PATTERN-QUICK-REFERENCE.md
 │   ├── Decision Tree (pattern selection)
 │   ├── Pattern Cheat Sheet (7 patterns)
 │   ├── Quick Integration (5-step guide)
@@ -286,7 +286,7 @@ Developer Tools
 │   └── Final Checklist
 │
 Implementation Resources
-├── IMAGE-GALLERY-CODE-PATTERNS.md
+├── patterns/IMAGE-GALLERY-CODE-PATTERNS.md
 │   ├── Pattern 1: ImageGrid (copy-paste ready)
 │   ├── Pattern 2: ImageWithBadge (copy-paste ready)
 │   ├── Pattern 3: DragDropUploader (copy-paste ready)
@@ -298,7 +298,7 @@ Implementation Resources
 │   └── Performance Optimization Tips
 │
 Technical Deep Dive
-├── IMAGE-GRID-GALLERY-PATTERNS.md
+├── patterns/IMAGE-GRID-GALLERY-PATTERNS.md
 │   ├── Executive Summary
 │   ├── Pattern 1: Multi-Image Array Handler (502 lines)
 │   ├── Pattern 2: Single Image Handler (125 lines)
@@ -318,7 +318,7 @@ Technical Deep Dive
 │   └── Summary
 │
 Executive Summary
-└── IMAGE-SEARCH-RESULTS-SUMMARY.txt
+└── patterns/IMAGE-SEARCH-RESULTS-SUMMARY.txt
     ├── Search Execution
     ├── Key Findings
     ├── Quality Indicators
@@ -341,11 +341,11 @@ Executive Summary
 
 | Document | Lines | Words | Code Blocks | Patterns | Effort |
 |----------|-------|-------|-------------|----------|--------|
-| README-IMAGE-PATTERNS.md | 400 | 3,500 | 15 | Overview | 2h |
-| PATTERN-QUICK-REFERENCE.md | 350 | 3,000 | 10 | Ref | 2h |
-| IMAGE-GALLERY-CODE-PATTERNS.md | 600 | 4,500 | 35 | 7 | 3h |
-| IMAGE-GRID-GALLERY-PATTERNS.md | 2,000 | 12,000 | 50 | 3 | 4h |
-| IMAGE-SEARCH-RESULTS-SUMMARY.txt | 500 | 4,000 | 10 | N/A | 2h |
+| patterns/README-IMAGE-PATTERNS.md | 400 | 3,500 | 15 | Overview | 2h |
+| patterns/PATTERN-QUICK-REFERENCE.md | 350 | 3,000 | 10 | Ref | 2h |
+| patterns/IMAGE-GALLERY-CODE-PATTERNS.md | 600 | 4,500 | 35 | 7 | 3h |
+| patterns/IMAGE-GRID-GALLERY-PATTERNS.md | 2,000 | 12,000 | 50 | 3 | 4h |
+| patterns/IMAGE-SEARCH-RESULTS-SUMMARY.txt | 500 | 4,000 | 10 | N/A | 2h |
 | DOCUMENTATION-INDEX.md | 300 | 2,500 | 5 | N/A | 1h |
 | **TOTAL** | **4,150** | **29,500** | **125** | **7** | **14h** |
 
@@ -377,10 +377,10 @@ Executive Summary
 4. Commit changes with code
 
 ### When Adding New Patterns
-1. Add to PATTERN-QUICK-REFERENCE.md (decision tree)
-2. Add code snippet to IMAGE-GALLERY-CODE-PATTERNS.md
-3. Add analysis to IMAGE-GRID-GALLERY-PATTERNS.md
-4. Update README-IMAGE-PATTERNS.md summary
+1. Add to patterns/PATTERN-QUICK-REFERENCE.md (decision tree)
+2. Add code snippet to patterns/IMAGE-GALLERY-CODE-PATTERNS.md
+3. Add analysis to patterns/IMAGE-GRID-GALLERY-PATTERNS.md
+4. Update patterns/README-IMAGE-PATTERNS.md summary
 5. Update this index file
 
 ### When Deploying Features
@@ -395,19 +395,19 @@ Executive Summary
 ## Search & Find
 
 **Need code for a specific pattern?**
-- Search: "Pattern X:" in IMAGE-GALLERY-CODE-PATTERNS.md
+- Search: "Pattern X:" in patterns/IMAGE-GALLERY-CODE-PATTERNS.md
 
 **Need to understand a decision?**
-- Search: "Key Decisions" in README-IMAGE-PATTERNS.md
+- Search: "Key Decisions" in patterns/README-IMAGE-PATTERNS.md
 
 **Need quick implementation steps?**
-- Search: "Quick Integration" in PATTERN-QUICK-REFERENCE.md
+- Search: "Quick Integration" in patterns/PATTERN-QUICK-REFERENCE.md
 
 **Need risk assessment?**
-- Search: "Risk Assessment" in IMAGE-SEARCH-RESULTS-SUMMARY.txt
+- Search: "Risk Assessment" in patterns/IMAGE-SEARCH-RESULTS-SUMMARY.txt
 
 **Need line numbers for source code?**
-- Search: "File:" in IMAGE-GRID-GALLERY-PATTERNS.md
+- Search: "File:" in patterns/IMAGE-GRID-GALLERY-PATTERNS.md
 
 ---
 
@@ -440,17 +440,17 @@ Executive Summary
 
 ## Next Steps
 
-1. **Read:** README-IMAGE-PATTERNS.md (10 min)
-2. **Skim:** PATTERN-QUICK-REFERENCE.md (5 min)
-3. **Bookmark:** IMAGE-GALLERY-CODE-PATTERNS.md (for coding)
-4. **File:** IMAGE-GRID-GALLERY-PATTERNS.md (reference)
+1. **Read:** patterns/README-IMAGE-PATTERNS.md (10 min)
+2. **Skim:** patterns/PATTERN-QUICK-REFERENCE.md (5 min)
+3. **Bookmark:** patterns/IMAGE-GALLERY-CODE-PATTERNS.md (for coding)
+4. **File:** patterns/IMAGE-GRID-GALLERY-PATTERNS.md (reference)
 5. **Share:** This index with your team
 
 ---
 
 ## Print This Page
 
-Print PATTERN-QUICK-REFERENCE.md for your desk. It's a single-page reference with everything you need during development.
+Print patterns/PATTERN-QUICK-REFERENCE.md for your desk. It's a single-page reference with everything you need during development.
 
 ---
 

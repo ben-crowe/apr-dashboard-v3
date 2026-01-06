@@ -97,7 +97,7 @@ export function FiltersPanel({
               minQuality: Number(e.target.value) / 100,
             })
           }
-          className="w-20 h-1 bg-slate-600 rounded-lg appearance-none cursor-pointer"
+          className="w-20 h-1 bg-slate-600 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-slate-400 [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-slate-400 [&::-moz-range-thumb]:border-0"
         />
         <span className="text-xs text-slate-300 w-10">
           {Math.round((filters.minQuality ?? 0) * 100)}%

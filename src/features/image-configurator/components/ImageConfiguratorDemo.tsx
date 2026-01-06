@@ -241,12 +241,12 @@ export function ImageConfiguratorDemo({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className={`flex flex-col h-full ${className}`} style={{ backgroundColor: '#ffffff' }}>
+      <div className={`flex flex-col h-full ${className}`} style={{ backgroundColor: '#1f1f1f' }}>
         {/* Top Header - Compact with report type and controls */}
-        <div className="flex items-center justify-between px-4 py-2 border-b" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb' }}>
+        <div className="flex items-center justify-between px-4 py-2 border-b" style={{ backgroundColor: '#1a1a1a', borderColor: '#333' }}>
           <div className="flex-1 min-w-0">
-            <h1 className="text-base font-semibold text-slate-900">Image Page Configurator</h1>
-            <p className="text-xs text-slate-500 truncate">
+            <h1 className="text-base font-semibold text-white">Image Page Configurator</h1>
+            <p className="text-xs text-slate-400 truncate">
               Upload photos, organize by category, and build report pages
             </p>
           </div>
@@ -256,21 +256,21 @@ export function ImageConfiguratorDemo({
             <button
               onClick={() => setShowReportTypeMenu(!showReportTypeMenu)}
               className="flex items-center gap-2 px-3 py-1.5 rounded transition-colors text-sm whitespace-nowrap"
-              style={{ backgroundColor: '#f3f4f6', borderColor: '#d1d5db', borderWidth: '1px', borderStyle: 'solid' }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e5e7eb'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+              style={{ backgroundColor: '#2a2a2a', borderColor: '#444', borderWidth: '1px', borderStyle: 'solid' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#333'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
             >
-              <FileText className="w-3.5 h-3.5 text-slate-600" />
-              <span className="font-medium text-slate-900">{currentTemplate.name}</span>
+              <FileText className="w-3.5 h-3.5 text-slate-400" />
+              <span className="font-medium text-white">{currentTemplate.name}</span>
               <span className="text-xs text-slate-500">({currentTemplate.pageCount})</span>
-              <ChevronDown className={`w-3.5 h-3.5 text-slate-600 transition-transform ${showReportTypeMenu ? 'rotate-180' : ''}`} />
+              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${showReportTypeMenu ? 'rotate-180' : ''}`} />
             </button>
 
             {/* Dropdown Menu */}
             {showReportTypeMenu && (
-              <div className="absolute right-0 mt-2 w-80 rounded-lg shadow-xl z-50" style={{ backgroundColor: '#ffffff', borderColor: '#d1d5db', borderWidth: '1px', borderStyle: 'solid' }}>
-                <div className="p-2 border-b" style={{ borderColor: '#e5e7eb' }}>
-                  <div className="text-xs text-slate-500 uppercase tracking-wide px-2">Report Type</div>
+              <div className="absolute right-0 mt-2 w-80 rounded-lg shadow-xl z-50" style={{ backgroundColor: '#1f1f1f', borderColor: '#444', borderWidth: '1px', borderStyle: 'solid' }}>
+                <div className="p-2 border-b" style={{ borderColor: '#333' }}>
+                  <div className="text-xs text-slate-400 uppercase tracking-wide px-2">Report Type</div>
                 </div>
                 <div className="max-h-80 overflow-y-auto p-2">
                   {Object.values(REPORT_TYPE_TEMPLATES).map((template) => (
@@ -284,17 +284,17 @@ export function ImageConfiguratorDemo({
                       className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
                         selectedReportType === template.id
                           ? 'bg-green-600 text-white'
-                          : 'text-slate-900 hover:text-slate-900'
+                          : 'text-slate-300 hover:text-slate-200'
                       }`}
-                      style={selectedReportType !== template.id ? { backgroundColor: '#f3f4f6' } : undefined}
+                      style={selectedReportType !== template.id ? { backgroundColor: '#2a2a2a' } : undefined}
                       onMouseEnter={(e) => {
                         if (selectedReportType !== template.id) {
-                          e.currentTarget.style.backgroundColor = '#e5e7eb';
+                          e.currentTarget.style.backgroundColor = '#333';
                         }
                       }}
                       onMouseLeave={(e) => {
                         if (selectedReportType !== template.id) {
-                          e.currentTarget.style.backgroundColor = '#f3f4f6';
+                          e.currentTarget.style.backgroundColor = '#2a2a2a';
                         }
                       }}
                     >
@@ -303,7 +303,7 @@ export function ImageConfiguratorDemo({
                         <span className={`text-xs px-2 py-0.5 rounded ${
                           selectedReportType === template.id
                             ? 'bg-green-500 text-white'
-                            : 'bg-slate-200 text-slate-700'
+                            : 'bg-slate-700 text-slate-300'
                         }`}>
                           {template.pageCount} pages
                         </span>
@@ -311,7 +311,7 @@ export function ImageConfiguratorDemo({
                       <div className={`text-xs mt-0.5 ${
                         selectedReportType === template.id
                           ? 'text-green-100'
-                          : 'text-slate-600'
+                          : 'text-slate-400'
                       }`}>
                         {template.description}
                       </div>
@@ -327,11 +327,11 @@ export function ImageConfiguratorDemo({
         <div id="image-configurator-split" className="flex-1 flex overflow-hidden relative">
           {/* Left panel - Gallery */}
           <div
-            className="flex flex-col border-r" style={{ borderColor: '#e5e7eb' }}
-            style={{ width: `${splitPercent}%` }}
+            className="flex flex-col border-r"
+            style={{ borderColor: '#333', width: `${splitPercent}%`, backgroundColor: '#1f1f1f' }}
           >
             {/* Upload zone - Compact */}
-            <div className="px-3 py-3 border-b" style={{ borderColor: '#e5e7eb' }}>
+            <div className="px-3 py-3 border-b" style={{ borderColor: '#333' }}>
               <ImageUploadZone
                 jobId={jobId}
                 onUploadComplete={handleUploadComplete}
@@ -367,7 +367,7 @@ export function ImageConfiguratorDemo({
             className={`w-1 hover:bg-green-500 cursor-col-resize transition-colors relative group ${
               isDraggingDivider ? 'bg-green-500' : ''
             }`}
-            style={{ backgroundColor: '#e5e7eb' }}
+            style={{ backgroundColor: '#333' }}
           >
             {/* Wider hit area for easier grabbing */}
             <div className="absolute inset-y-0 -left-1 -right-1" />
@@ -387,8 +387,8 @@ export function ImageConfiguratorDemo({
         </div>
 
         {/* Footer stats */}
-        <div className="px-4 py-1.5 border-t flex items-center justify-between text-xs text-slate-500" style={{ borderColor: '#e5e7eb', backgroundColor: '#ffffff' }}>
-          <div className="text-slate-600">
+        <div className="px-4 py-1.5 border-t flex items-center justify-between text-xs text-slate-400" style={{ borderColor: '#333', backgroundColor: '#1a1a1a' }}>
+          <div className="text-slate-400">
             {images.length} images | {selectedIds.length} selected | {layoutData?.layouts.length || 0} pages
           </div>
           <div className="text-slate-500">

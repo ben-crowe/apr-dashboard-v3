@@ -217,24 +217,24 @@ export function ImageUploadZone({
           relative border-2 border-dashed rounded-lg p-4 text-center cursor-pointer
           transition-all duration-200
           ${isDragging
-            ? 'border-green-500 bg-green-50'
+            ? 'border-green-500 bg-green-900/20'
             : ''
           }
         `}
         style={!isDragging ? {
-          borderColor: '#d1d5db',
-          backgroundColor: '#f9fafb'
+          borderColor: '#555',
+          backgroundColor: '#2a2a2a'
         } : undefined}
         onMouseEnter={(e) => {
           if (!isDragging) {
-            e.currentTarget.style.borderColor = '#9ca3af';
-            e.currentTarget.style.backgroundColor = '#f3f4f6';
+            e.currentTarget.style.borderColor = '#666';
+            e.currentTarget.style.backgroundColor = '#333';
           }
         }}
         onMouseLeave={(e) => {
           if (!isDragging) {
-            e.currentTarget.style.borderColor = '#d1d5db';
-            e.currentTarget.style.backgroundColor = '#f9fafb';
+            e.currentTarget.style.borderColor = '#555';
+            e.currentTarget.style.backgroundColor = '#2a2a2a';
           }
         }}
         onDragEnter={handleDragEnter}
@@ -255,16 +255,16 @@ export function ImageUploadZone({
         <div className="flex flex-col items-center gap-2">
           {isDragging ? (
             <>
-              <Upload className="w-8 h-8 text-green-500 animate-bounce" />
-              <p className="text-green-700 font-medium text-sm">Drop photos here</p>
+              <Upload className="w-8 h-8 text-green-400 animate-bounce" />
+              <p className="text-green-400 font-medium text-sm">Drop photos here</p>
             </>
           ) : (
             <>
-              <ImageIcon className="w-8 h-8 text-slate-400" />
-              <p className="text-slate-700 font-medium text-sm">
+              <ImageIcon className="w-8 h-8 text-slate-500" />
+              <p className="text-slate-300 font-medium text-sm">
                 Drop inspection photos here
               </p>
-              <p className="text-slate-500 text-xs">
+              <p className="text-slate-400 text-xs">
                 or click to browse (up to {maxFiles} images)
               </p>
             </>
@@ -276,10 +276,10 @@ export function ImageUploadZone({
       {uploads.length > 0 && (
         <div className="mt-2">
           {/* Summary bar */}
-          <div className="flex items-center justify-between px-3 py-1.5 rounded-t-lg border text-sm" style={{ backgroundColor: '#f3f4f6', borderColor: '#e5e7eb' }}>
+          <div className="flex items-center justify-between px-3 py-1.5 rounded-t-lg border text-sm" style={{ backgroundColor: '#2a2a2a', borderColor: '#444' }}>
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="flex items-center gap-2 text-slate-700"
+              className="flex items-center gap-2 text-slate-300"
             >
               <span>
                 {stats.uploading > 0 ? (
@@ -300,14 +300,14 @@ export function ImageUploadZone({
               {stats.complete > 0 && (
                 <button
                   onClick={clearCompleted}
-                  className="text-xs text-slate-600 hover:text-slate-900"
+                  className="text-xs text-slate-400 hover:text-slate-200"
                 >
                   Clear done
                 </button>
               )}
               <button
                 onClick={clearAll}
-                className="text-xs text-slate-600 hover:text-slate-900"
+                className="text-xs text-slate-400 hover:text-slate-200"
               >
                 Clear all
               </button>
@@ -316,12 +316,12 @@ export function ImageUploadZone({
 
           {/* File list */}
           {isExpanded && (
-            <div className="max-h-40 overflow-y-auto border border-t-0 rounded-b-lg text-sm" style={{ borderColor: '#e5e7eb', backgroundColor: '#ffffff' }}>
+            <div className="max-h-40 overflow-y-auto border border-t-0 rounded-b-lg text-sm" style={{ borderColor: '#444', backgroundColor: '#1f1f1f' }}>
               {uploads.map((upload) => (
                 <div
                   key={upload.fileId}
                   className="flex items-center gap-3 px-3 py-2 border-b last:border-0"
-                  style={{ borderColor: '#f3f4f6' }}
+                  style={{ borderColor: '#333' }}
                 >
                   {/* Status icon */}
                   <div className="flex-shrink-0">
@@ -338,16 +338,16 @@ export function ImageUploadZone({
 
                   {/* File name */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-slate-700 truncate">{upload.fileName}</p>
+                    <p className="text-xs text-slate-300 truncate">{upload.fileName}</p>
                     {upload.error && (
-                      <p className="text-xs text-red-600 truncate">{upload.error}</p>
+                      <p className="text-xs text-red-400 truncate">{upload.error}</p>
                     )}
                   </div>
 
                   {/* Progress bar or status */}
                   <div className="flex-shrink-0 w-16">
                     {(upload.status === 'uploading' || upload.status === 'processing') && (
-                      <div className="h-1 rounded-full overflow-hidden" style={{ backgroundColor: '#e5e7eb' }}>
+                      <div className="h-1 rounded-full overflow-hidden" style={{ backgroundColor: '#444' }}>
                         <div
                           className="h-full bg-green-500 transition-all duration-300"
                           style={{ width: `${upload.progress}%` }}
@@ -355,10 +355,10 @@ export function ImageUploadZone({
                       </div>
                     )}
                     {upload.status === 'complete' && (
-                      <span className="text-xs text-green-600 font-medium">Done</span>
+                      <span className="text-xs text-green-400 font-medium">Done</span>
                     )}
                     {upload.status === 'error' && (
-                      <span className="text-xs text-red-600 font-medium">Failed</span>
+                      <span className="text-xs text-red-400 font-medium">Failed</span>
                     )}
                   </div>
                 </div>

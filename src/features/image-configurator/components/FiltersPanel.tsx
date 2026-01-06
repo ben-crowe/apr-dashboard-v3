@@ -38,13 +38,13 @@ export function FiltersPanel({
     : [];
 
   return (
-    <div className="px-3 py-2 border-b flex flex-wrap items-center gap-3" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb' }}>
+    <div className="px-3 py-2 border-b flex flex-wrap items-center gap-3" style={{ backgroundColor: '#1f1f1f', borderColor: '#333' }}>
       {/* Category filter */}
       <div className="flex items-center gap-2">
-        <label className="text-xs text-slate-600 font-medium">Category</label>
+        <label className="text-xs text-slate-400 font-medium">Category</label>
         <select
-          className="rounded text-sm px-2 py-1 text-slate-900 min-w-[130px] focus:outline-none focus:ring-2 focus:ring-green-500"
-          style={{ backgroundColor: '#f3f4f6', borderColor: '#d1d5db', borderWidth: '1px', borderStyle: 'solid' }}
+          className="rounded text-sm px-2 py-1 text-white min-w-[130px] focus:outline-none focus:ring-2 focus:ring-green-500"
+          style={{ backgroundColor: '#2a2a2a', borderColor: '#555', borderWidth: '1px', borderStyle: 'solid' }}
           value={filters.category ?? ''}
           onChange={(e) => {
             const category = e.target.value as ImageCategory | '';
@@ -66,10 +66,10 @@ export function FiltersPanel({
       {/* Subcategory filter (only show if category selected) */}
       {subcategories.length > 0 && (
         <div className="flex items-center gap-2">
-          <label className="text-xs text-slate-600 font-medium">Subcategory</label>
+          <label className="text-xs text-slate-400 font-medium">Subcategory</label>
           <select
-            className="rounded text-sm px-2 py-1 text-slate-900 min-w-[110px] focus:outline-none focus:ring-2 focus:ring-green-500"
-            style={{ backgroundColor: '#f3f4f6', borderColor: '#d1d5db', borderWidth: '1px', borderStyle: 'solid' }}
+            className="rounded text-sm px-2 py-1 text-white min-w-[110px] focus:outline-none focus:ring-2 focus:ring-green-500"
+            style={{ backgroundColor: '#2a2a2a', borderColor: '#555', borderWidth: '1px', borderStyle: 'solid' }}
             value={filters.subcategory ?? ''}
             onChange={(e) =>
               onChange({ ...filters, subcategory: e.target.value || null })
@@ -87,7 +87,7 @@ export function FiltersPanel({
 
       {/* Quality slider */}
       <div className="flex items-center gap-2">
-        <label className="text-xs text-slate-600 font-medium">Min Quality</label>
+        <label className="text-xs text-slate-400 font-medium">Min Quality</label>
         <input
           type="range"
           min={0}
@@ -99,7 +99,7 @@ export function FiltersPanel({
               minQuality: Number(e.target.value) / 100,
             })
           }
-          className="w-16 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer
+          className="w-16 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer
             [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3
             [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-green-500 [&::-webkit-slider-thumb]:cursor-pointer
             [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:shadow-md
@@ -109,14 +109,14 @@ export function FiltersPanel({
             focus:outline-none focus:ring-2 focus:ring-green-500"
           style={{ accentColor: 'rgb(34 197 94)' }}
         />
-        <span className="text-xs text-slate-600 w-8">
+        <span className="text-xs text-slate-400 w-8">
           {Math.round((filters.minQuality ?? 0) * 100)}%
         </span>
       </div>
 
       {/* Toggle filters */}
       <div className="flex items-center gap-3">
-        <label className="flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer">
+        <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer">
           <input
             type="checkbox"
             checked={!!filters.hideRejected}
@@ -125,8 +125,8 @@ export function FiltersPanel({
             }
             className="w-3.5 h-3.5 rounded text-green-500 focus:ring-2 focus:ring-green-500"
             style={{
-              backgroundColor: '#f3f4f6',
-              borderColor: '#d1d5db',
+              backgroundColor: '#2a2a2a',
+              borderColor: '#555',
               borderWidth: '1px',
               borderStyle: 'solid',
               accentColor: 'rgb(34 197 94)'
@@ -135,7 +135,7 @@ export function FiltersPanel({
           Hide rejected
         </label>
 
-        <label className="flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer">
+        <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer">
           <input
             type="checkbox"
             checked={!!filters.hidePlaced}
@@ -144,8 +144,8 @@ export function FiltersPanel({
             }
             className="w-3.5 h-3.5 rounded text-green-500 focus:ring-2 focus:ring-green-500"
             style={{
-              backgroundColor: '#f3f4f6',
-              borderColor: '#d1d5db',
+              backgroundColor: '#2a2a2a',
+              borderColor: '#555',
               borderWidth: '1px',
               borderStyle: 'solid',
               accentColor: 'rgb(34 197 94)'
@@ -154,7 +154,7 @@ export function FiltersPanel({
           Hide placed
         </label>
 
-        <label className="flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer">
+        <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer">
           <input
             type="checkbox"
             checked={!!filters.showOnlyUnreviewed}
@@ -163,8 +163,8 @@ export function FiltersPanel({
             }
             className="w-3.5 h-3.5 rounded text-green-500 focus:ring-2 focus:ring-green-500"
             style={{
-              backgroundColor: '#f3f4f6',
-              borderColor: '#d1d5db',
+              backgroundColor: '#2a2a2a',
+              borderColor: '#555',
               borderWidth: '1px',
               borderStyle: 'solid',
               accentColor: 'rgb(34 197 94)'
@@ -182,14 +182,14 @@ export function FiltersPanel({
         <div className="flex items-center gap-2">
           <button
             onClick={() => onBulkAction('select-all')}
-            className="text-xs text-slate-600 hover:text-slate-900 font-medium"
+            className="text-xs text-slate-400 hover:text-slate-200 font-medium"
           >
             Select All
           </button>
-          <span className="text-slate-300">|</span>
+          <span className="text-slate-600">|</span>
           <button
             onClick={() => onBulkAction('select-none')}
-            className="text-xs text-slate-600 hover:text-slate-900 font-medium"
+            className="text-xs text-slate-400 hover:text-slate-200 font-medium"
           >
             Select None
           </button>
@@ -197,10 +197,10 @@ export function FiltersPanel({
       )}
 
       {/* Count display */}
-      <div className="text-xs text-slate-600">
-        <span className="text-slate-900 font-medium">{selectedCount}</span>
+      <div className="text-xs text-slate-400">
+        <span className="text-slate-300 font-medium">{selectedCount}</span>
         {' selected of '}
-        <span className="text-slate-900 font-medium">{totalCount}</span>
+        <span className="text-slate-300 font-medium">{totalCount}</span>
       </div>
     </div>
   );

@@ -192,7 +192,7 @@ export function LayoutBuilder({
   return (
     <div className={`flex flex-col ${className}`}>
       {/* Header with page navigation and title */}
-      <div className="flex items-center justify-between px-4 py-2 bg-slate-800 border-b border-slate-700">
+      <div className="flex items-center justify-between px-3 py-1.5 bg-slate-800 border-b border-slate-700">
         {/* Left: Page nav with editable title */}
         <div className="flex items-center gap-3">
           <button
@@ -305,9 +305,9 @@ export function LayoutBuilder({
       </div>
 
       {/* Layout grid */}
-      <div className="flex-1 p-4 bg-slate-900 overflow-auto flex items-center justify-center">
+      <div className="flex-1 p-2 bg-slate-900 overflow-auto flex items-center justify-center">
         <div
-          className="grid w-full h-full"
+          className="grid w-full h-full border-2 border-slate-700 rounded-lg p-3 bg-slate-800/30"
           style={{
             gridTemplateColumns: `repeat(${gridConfig.cols}, 1fr)`,
             gap: zoomLevel === 0 ? '16px' : zoomLevel === 1 ? '12px' : '8px',
@@ -339,7 +339,7 @@ export function LayoutBuilder({
       </div>
 
       {/* Page list (thumbnails) */}
-      <div className="flex items-center gap-2 px-4 py-2 bg-slate-800 border-t border-slate-700 overflow-x-auto">
+      <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-800 border-t border-slate-700 overflow-x-auto">
         {layouts.map((layout, index) => {
           const slots = getSlotsForLayout(allSlots, layout.id);
           const filledCount = slots.filter((s) => s.image_id).length;
@@ -350,7 +350,7 @@ export function LayoutBuilder({
               key={layout.id}
               onClick={() => setCurrentPageIndex(index)}
               className={`
-                flex-shrink-0 flex flex-col items-center p-2 rounded transition-colors
+                flex-shrink-0 flex flex-col items-center px-2 py-1 rounded transition-colors
                 ${isActive ? 'bg-green-600' : 'bg-slate-700 hover:bg-slate-600'}
               `}
             >
@@ -358,7 +358,7 @@ export function LayoutBuilder({
                 {layout.page_type}
               </span>
               <span className="text-[10px] text-slate-300">
-                {filledCount}/{slots.length} filled
+                {filledCount}/{slots.length}
               </span>
             </button>
           );

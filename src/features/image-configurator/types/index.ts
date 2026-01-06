@@ -208,32 +208,167 @@ export const storagePaths = {
   print: (jobId: string, fileId: string, ext: string = 'jpg') => `processed/${jobId}/print/${fileId}.${ext}`,
 };
 
-// Default layout templates - matches standard appraisal report pages
-export const DEFAULT_LAYOUTS: Omit<PageLayout, 'id' | 'job_id' | 'created_at' | 'updated_at'>[] = [
-  // === SUBJECT PROPERTY PHOTOS ===
-  { page_type: 'subject-photos-1', layout_template: '2x3', sort_order: 1, title: 'Subject Photos - Page 1', category_filter: 'Exterior' },
-  { page_type: 'subject-photos-2', layout_template: '2x3', sort_order: 2, title: 'Subject Photos - Page 2', category_filter: 'Interior Units' },
+// ═══════════════════════════════════════════════════════════════════════════
+// REPORT TYPE TEMPLATES
+// Each report type defines its required image pages
+// ═══════════════════════════════════════════════════════════════════════════
 
-  // === MAPS (Full Page Single Image) ===
-  { page_type: 'location-map', layout_template: '1x1', sort_order: 3, title: 'Location Map' },
-  { page_type: 'aerial-map', layout_template: '1x1', sort_order: 4, title: 'Aerial Map' },
-  { page_type: 'zoning-map', layout_template: '1x1', sort_order: 5, title: 'Zoning Map' },
-  { page_type: 'flood-map', layout_template: '1x1', sort_order: 6, title: 'Flood Map' },
-  { page_type: 'site-plan', layout_template: '1x1', sort_order: 7, title: 'Site Plan' },
+export type ReportTypeId =
+  | 'standard-multi-family'
+  | 'quick-residential'
+  | 'land-vacant'
+  | 'drive-by-exterior'
+  | 'desktop-review'
+  | 'commercial-full';
 
-  // === COMPARABLE SALES ===
-  { page_type: 'comp-location-map', layout_template: '1x1', sort_order: 8, title: 'Comparable Location Map' },
-  { page_type: 'comp-photos-1', layout_template: '2x3', sort_order: 9, title: 'Comparable Photos - Page 1' },
-  { page_type: 'comp-photos-2', layout_template: '2x3', sort_order: 10, title: 'Comparable Photos - Page 2' },
+export interface ReportTypeTemplate {
+  id: ReportTypeId;
+  name: string;
+  description: string;
+  pageCount: number;
+  layouts: Omit<PageLayout, 'id' | 'job_id' | 'created_at' | 'updated_at'>[];
+}
 
-  // === RENTAL COMPARABLES (if applicable) ===
-  { page_type: 'rental-comp-map', layout_template: '1x1', sort_order: 11, title: 'Rental Comparable Map' },
-  { page_type: 'rental-comp-photos', layout_template: '2x3', sort_order: 12, title: 'Rental Comparable Photos' },
+// Standard Multi-Family Report (14 pages)
+const STANDARD_MULTI_FAMILY_LAYOUTS: ReportTypeTemplate = {
+  id: 'standard-multi-family',
+  name: 'Standard Multi-Family Report',
+  description: 'Full appraisal with subject photos, maps, sales comps, and rental comps',
+  pageCount: 14,
+  layouts: [
+    // === SUBJECT PROPERTY PHOTOS ===
+    { page_type: 'subject-photos-1', layout_template: '2x3', sort_order: 1, title: 'Subject Photos - Page 1', category_filter: 'Exterior' },
+    { page_type: 'subject-photos-2', layout_template: '2x3', sort_order: 2, title: 'Subject Photos - Page 2', category_filter: 'Interior Units' },
 
-  // === ADDITIONAL ===
-  { page_type: 'building-systems', layout_template: '2x2', sort_order: 13, title: 'Building Systems', category_filter: 'Building Systems' },
-  { page_type: 'site-improvements', layout_template: '2x2', sort_order: 14, title: 'Site Improvements', category_filter: 'Site' },
-];
+    // === MAPS (Full Page Single Image) ===
+    { page_type: 'location-map', layout_template: '1x1', sort_order: 3, title: 'Location Map' },
+    { page_type: 'aerial-map', layout_template: '1x1', sort_order: 4, title: 'Aerial Map' },
+    { page_type: 'zoning-map', layout_template: '1x1', sort_order: 5, title: 'Zoning Map' },
+    { page_type: 'flood-map', layout_template: '1x1', sort_order: 6, title: 'Flood Map' },
+    { page_type: 'site-plan', layout_template: '1x1', sort_order: 7, title: 'Site Plan' },
+
+    // === COMPARABLE SALES ===
+    { page_type: 'comp-location-map', layout_template: '1x1', sort_order: 8, title: 'Comparable Location Map' },
+    { page_type: 'comp-photos-1', layout_template: '2x3', sort_order: 9, title: 'Comparable Photos - Page 1' },
+    { page_type: 'comp-photos-2', layout_template: '2x3', sort_order: 10, title: 'Comparable Photos - Page 2' },
+
+    // === RENTAL COMPARABLES ===
+    { page_type: 'rental-comp-map', layout_template: '1x1', sort_order: 11, title: 'Rental Comparable Map' },
+    { page_type: 'rental-comp-photos', layout_template: '2x3', sort_order: 12, title: 'Rental Comparable Photos' },
+
+    // === ADDITIONAL ===
+    { page_type: 'building-systems', layout_template: '2x2', sort_order: 13, title: 'Building Systems', category_filter: 'Building Systems' },
+    { page_type: 'site-improvements', layout_template: '2x2', sort_order: 14, title: 'Site Improvements', category_filter: 'Site' },
+  ],
+};
+
+// Quick Residential Report (4 pages)
+const QUICK_RESIDENTIAL_LAYOUTS: ReportTypeTemplate = {
+  id: 'quick-residential',
+  name: 'Quick Residential Report',
+  description: 'Streamlined report with essential photos and maps',
+  pageCount: 4,
+  layouts: [
+    { page_type: 'subject-photos-1', layout_template: '2x3', sort_order: 1, title: 'Subject Photos', category_filter: 'Exterior' },
+    { page_type: 'location-map', layout_template: '1x1', sort_order: 2, title: 'Location Map' },
+    { page_type: 'comp-location-map', layout_template: '1x1', sort_order: 3, title: 'Comparable Location Map' },
+    { page_type: 'comp-photos-1', layout_template: '2x3', sort_order: 4, title: 'Comparable Photos' },
+  ],
+};
+
+// Land/Vacant Report (6 pages)
+const LAND_VACANT_LAYOUTS: ReportTypeTemplate = {
+  id: 'land-vacant',
+  name: 'Land/Vacant Report',
+  description: 'Map-heavy report for vacant land appraisals',
+  pageCount: 6,
+  layouts: [
+    { page_type: 'subject-photos-1', layout_template: '2x2', sort_order: 1, title: 'Site Photos', category_filter: 'Site' },
+    { page_type: 'location-map', layout_template: '1x1', sort_order: 2, title: 'Location Map' },
+    { page_type: 'aerial-map', layout_template: '1x1', sort_order: 3, title: 'Aerial Map' },
+    { page_type: 'zoning-map', layout_template: '1x1', sort_order: 4, title: 'Zoning Map' },
+    { page_type: 'site-plan', layout_template: '1x1', sort_order: 5, title: 'Site Plan / Survey' },
+    { page_type: 'comp-location-map', layout_template: '1x1', sort_order: 6, title: 'Comparable Sales Map' },
+  ],
+};
+
+// Drive-By Exterior Report (3 pages)
+const DRIVE_BY_EXTERIOR_LAYOUTS: ReportTypeTemplate = {
+  id: 'drive-by-exterior',
+  name: 'Drive-By Exterior Report',
+  description: 'Exterior-only inspection report',
+  pageCount: 3,
+  layouts: [
+    { page_type: 'subject-photos-1', layout_template: '2x2', sort_order: 1, title: 'Exterior Photos', category_filter: 'Exterior' },
+    { page_type: 'location-map', layout_template: '1x1', sort_order: 2, title: 'Location Map' },
+    { page_type: 'comp-photos-1', layout_template: '2x2', sort_order: 3, title: 'Comparable Photos' },
+  ],
+};
+
+// Desktop Review (2 pages)
+const DESKTOP_REVIEW_LAYOUTS: ReportTypeTemplate = {
+  id: 'desktop-review',
+  name: 'Desktop Review',
+  description: 'Minimal photo requirements for desk review',
+  pageCount: 2,
+  layouts: [
+    { page_type: 'location-map', layout_template: '1x1', sort_order: 1, title: 'Location Map' },
+    { page_type: 'comp-location-map', layout_template: '1x1', sort_order: 2, title: 'Comparable Location Map' },
+  ],
+};
+
+// Commercial Full Report (18 pages)
+const COMMERCIAL_FULL_LAYOUTS: ReportTypeTemplate = {
+  id: 'commercial-full',
+  name: 'Commercial Full Report',
+  description: 'Comprehensive commercial property appraisal',
+  pageCount: 18,
+  layouts: [
+    // Subject Photos (3 pages)
+    { page_type: 'subject-photos-1', layout_template: '2x3', sort_order: 1, title: 'Exterior Photos', category_filter: 'Exterior' },
+    { page_type: 'subject-photos-2', layout_template: '2x3', sort_order: 2, title: 'Interior Photos', category_filter: 'Interior Units' },
+    { page_type: 'subject-photos-3', layout_template: '2x3', sort_order: 3, title: 'Common Areas', category_filter: 'Common Areas' },
+
+    // Maps (6 pages)
+    { page_type: 'location-map', layout_template: '1x1', sort_order: 4, title: 'Location Map' },
+    { page_type: 'aerial-map', layout_template: '1x1', sort_order: 5, title: 'Aerial Map' },
+    { page_type: 'zoning-map', layout_template: '1x1', sort_order: 6, title: 'Zoning Map' },
+    { page_type: 'flood-map', layout_template: '1x1', sort_order: 7, title: 'Flood Map' },
+    { page_type: 'site-plan', layout_template: '1x1', sort_order: 8, title: 'Site Plan' },
+    { page_type: 'floor-plan', layout_template: '1x1', sort_order: 9, title: 'Floor Plan' },
+
+    // Building Systems (2 pages)
+    { page_type: 'building-systems-1', layout_template: '2x2', sort_order: 10, title: 'Mechanical Systems', category_filter: 'Building Systems' },
+    { page_type: 'building-systems-2', layout_template: '2x2', sort_order: 11, title: 'Electrical & Plumbing', category_filter: 'Building Systems' },
+
+    // Comparables (5 pages)
+    { page_type: 'comp-location-map', layout_template: '1x1', sort_order: 12, title: 'Comparable Location Map' },
+    { page_type: 'comp-photos-1', layout_template: '2x3', sort_order: 13, title: 'Comparable Photos - Page 1' },
+    { page_type: 'comp-photos-2', layout_template: '2x3', sort_order: 14, title: 'Comparable Photos - Page 2' },
+    { page_type: 'rental-comp-map', layout_template: '1x1', sort_order: 15, title: 'Rental Comparable Map' },
+    { page_type: 'rental-comp-photos', layout_template: '2x3', sort_order: 16, title: 'Rental Comparable Photos' },
+
+    // Site
+    { page_type: 'site-improvements', layout_template: '2x2', sort_order: 17, title: 'Site Improvements', category_filter: 'Site' },
+    { page_type: 'parking-photos', layout_template: '2x2', sort_order: 18, title: 'Parking & Access', category_filter: 'Site' },
+  ],
+};
+
+// All available report type templates
+export const REPORT_TYPE_TEMPLATES: Record<ReportTypeId, ReportTypeTemplate> = {
+  'standard-multi-family': STANDARD_MULTI_FAMILY_LAYOUTS,
+  'quick-residential': QUICK_RESIDENTIAL_LAYOUTS,
+  'land-vacant': LAND_VACANT_LAYOUTS,
+  'drive-by-exterior': DRIVE_BY_EXTERIOR_LAYOUTS,
+  'desktop-review': DESKTOP_REVIEW_LAYOUTS,
+  'commercial-full': COMMERCIAL_FULL_LAYOUTS,
+};
+
+// Default template (used when no report type specified)
+export const DEFAULT_REPORT_TYPE: ReportTypeId = 'standard-multi-family';
+
+// Legacy export for backwards compatibility
+export const DEFAULT_LAYOUTS = STANDARD_MULTI_FAMILY_LAYOUTS.layouts;
 
 // Helper to get slot count for a layout template
 export function getSlotCount(template: LayoutTemplate): number {

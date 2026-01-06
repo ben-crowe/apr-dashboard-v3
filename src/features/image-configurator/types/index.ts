@@ -208,13 +208,31 @@ export const storagePaths = {
   print: (jobId: string, fileId: string, ext: string = 'jpg') => `processed/${jobId}/print/${fileId}.${ext}`,
 };
 
-// Default layout templates
+// Default layout templates - matches standard appraisal report pages
 export const DEFAULT_LAYOUTS: Omit<PageLayout, 'id' | 'job_id' | 'created_at' | 'updated_at'>[] = [
-  { page_type: 'Exterior', layout_template: '2x2', sort_order: 1, title: 'Exterior Photos', category_filter: 'Exterior' },
-  { page_type: 'Interior', layout_template: '3x3', sort_order: 2, title: 'Interior Photos', category_filter: 'Interior Units' },
-  { page_type: 'Common', layout_template: '2x3', sort_order: 3, title: 'Common Areas', category_filter: 'Common Areas' },
-  { page_type: 'Systems', layout_template: '2x2', sort_order: 4, title: 'Building Systems', category_filter: 'Building Systems' },
-  { page_type: 'Site', layout_template: '2x2', sort_order: 5, title: 'Site Photos', category_filter: 'Site' },
+  // === SUBJECT PROPERTY PHOTOS ===
+  { page_type: 'subject-photos-1', layout_template: '2x3', sort_order: 1, title: 'Subject Photos - Page 1', category_filter: 'Exterior' },
+  { page_type: 'subject-photos-2', layout_template: '2x3', sort_order: 2, title: 'Subject Photos - Page 2', category_filter: 'Interior Units' },
+
+  // === MAPS (Full Page Single Image) ===
+  { page_type: 'location-map', layout_template: '1x1', sort_order: 3, title: 'Location Map' },
+  { page_type: 'aerial-map', layout_template: '1x1', sort_order: 4, title: 'Aerial Map' },
+  { page_type: 'zoning-map', layout_template: '1x1', sort_order: 5, title: 'Zoning Map' },
+  { page_type: 'flood-map', layout_template: '1x1', sort_order: 6, title: 'Flood Map' },
+  { page_type: 'site-plan', layout_template: '1x1', sort_order: 7, title: 'Site Plan' },
+
+  // === COMPARABLE SALES ===
+  { page_type: 'comp-location-map', layout_template: '1x1', sort_order: 8, title: 'Comparable Location Map' },
+  { page_type: 'comp-photos-1', layout_template: '2x3', sort_order: 9, title: 'Comparable Photos - Page 1' },
+  { page_type: 'comp-photos-2', layout_template: '2x3', sort_order: 10, title: 'Comparable Photos - Page 2' },
+
+  // === RENTAL COMPARABLES (if applicable) ===
+  { page_type: 'rental-comp-map', layout_template: '1x1', sort_order: 11, title: 'Rental Comparable Map' },
+  { page_type: 'rental-comp-photos', layout_template: '2x3', sort_order: 12, title: 'Rental Comparable Photos' },
+
+  // === ADDITIONAL ===
+  { page_type: 'building-systems', layout_template: '2x2', sort_order: 13, title: 'Building Systems', category_filter: 'Building Systems' },
+  { page_type: 'site-improvements', layout_template: '2x2', sort_order: 14, title: 'Site Improvements', category_filter: 'Site' },
 ];
 
 // Helper to get slot count for a layout template

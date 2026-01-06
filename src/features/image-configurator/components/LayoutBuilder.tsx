@@ -255,8 +255,8 @@ export function LayoutBuilder({
           <Grid3X3 className="w-4 h-4" />
           {createLayouts.isPending ? 'Creating...' : 'Create Default Layouts'}
         </button>
-        <p className="text-xs text-slate-600 mt-3">
-          Creates: Exterior (2x2), Interior (3x3), Common (2x3), Systems (2x2), Site (2x2)
+        <p className="text-xs text-slate-600 mt-3 text-center max-w-md">
+          Creates 14 report pages: Subject Photos (2), Maps (5), Comp Photos (2), Rental Comps (2), Systems, Site
         </p>
       </div>
     );

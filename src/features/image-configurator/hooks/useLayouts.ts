@@ -329,6 +329,28 @@ export function useUpdateSlotCaption() {
   });
 }
 
+// Update page layout title
+async function updateLayoutTitle(layoutId: string, title: string): Promise<void> {
+  const { error } = await supabase
+    .from('page_layouts')
+    .update({ title, updated_at: new Date().toISOString() })
+    .eq('id', layoutId);
+
+  if (error) throw error;
+}
+
+export function useUpdateLayoutTitle() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ layoutId, title }: { layoutId: string; title: string }) =>
+      updateLayoutTitle(layoutId, title),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: layoutsKeys.all });
+    },
+  });
+}
+
 // Auto-fill layout with best quality images from matching category
 async function autoFillLayout(
   layoutId: string,

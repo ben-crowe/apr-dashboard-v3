@@ -218,7 +218,7 @@ export function ImageUploadZone({
           transition-all duration-200
           ${isDragging
             ? 'border-green-500 bg-green-500/10'
-            : 'border-slate-600 bg-slate-800/50 hover:border-slate-500 hover:bg-slate-800'
+            : 'border-slate-700 bg-slate-800/50 hover:border-slate-600 hover:bg-slate-800'
           }
         `}
         onDragEnter={handleDragEnter}

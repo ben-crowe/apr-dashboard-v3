@@ -8,6 +8,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
   Wand2,
   Layers,
   Grid3X3,

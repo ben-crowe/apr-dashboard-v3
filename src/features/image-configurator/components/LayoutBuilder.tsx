@@ -71,6 +71,9 @@ export function LayoutBuilder({
   const [editingTitle, setEditingTitle] = useState(false);
   const [titleValue, setTitleValue] = useState('');
 
+  // Zoom level state (0 = zoomed in, 1 = default/fit page, 2 = max zoom out)
+  const [zoomLevel, setZoomLevel] = useState(1);
+
   // Create image lookup map
   const imageMap = React.useMemo(() => {
     const map = new Map<string, JobImage>();
@@ -265,6 +268,25 @@ export function LayoutBuilder({
             <span className="text-xs text-slate-400">
               {currentPageIndex + 1} / {layouts.length}
             </span>
+            {/* Zoom toggle */}
+            <div className="flex items-center gap-0.5 ml-1 border-l border-slate-600 pl-2">
+              <button
+                onClick={() => setZoomLevel(Math.max(0, zoomLevel - 1))}
+                disabled={zoomLevel === 0}
+                className="p-0.5 rounded hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
+                title="Zoom in (larger)"
+              >
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 rotate-180" />
+              </button>
+              <button
+                onClick={() => setZoomLevel(Math.min(2, zoomLevel + 1))}
+                disabled={zoomLevel === 2}
+                className="p-0.5 rounded hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
+                title="Zoom out (smaller)"
+              >
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              </button>
+            </div>
           </div>
         )}
 
@@ -284,9 +306,11 @@ export function LayoutBuilder({
       {/* Layout grid */}
       <div className="flex-1 p-4 bg-slate-900 overflow-auto">
         <div
-          className="grid gap-3 max-w-4xl mx-auto"
+          className="grid mx-auto"
           style={{
             gridTemplateColumns: `repeat(${gridConfig.cols}, 1fr)`,
+            gap: zoomLevel === 0 ? '12px' : zoomLevel === 1 ? '8px' : '6px',
+            maxWidth: zoomLevel === 0 ? '1024px' : zoomLevel === 1 ? '800px' : '600px',
           }}
         >
           {currentSlots.map((slot) => {

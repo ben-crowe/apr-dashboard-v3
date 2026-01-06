@@ -241,73 +241,85 @@ export function ImageConfiguratorDemo({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className={`flex flex-col h-full bg-slate-900 ${className}`}>
-        {/* Header */}
-        <div className="px-4 py-3 border-b border-slate-700">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex-1 min-w-0">
-              <h1 className="text-lg font-semibold text-white">Image Page Configurator</h1>
-              <p className="text-xs text-slate-400 mt-0.5 truncate">
-                Upload photos, organize by category, and build report pages
-              </p>
-            </div>
+      <div className={`flex flex-col h-full ${className}`} style={{ backgroundColor: '#ffffff' }}>
+        {/* Top Header - Compact with report type and controls */}
+        <div className="flex items-center justify-between px-4 py-2 border-b" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb' }}>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-base font-semibold text-slate-900">Image Page Configurator</h1>
+            <p className="text-xs text-slate-500 truncate">
+              Upload photos, organize by category, and build report pages
+            </p>
+          </div>
 
-            {/* Report Type Selector */}
-            <div className="relative flex-shrink-0">
-              <button
-                onClick={() => setShowReportTypeMenu(!showReportTypeMenu)}
-                className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-600 rounded transition-colors text-sm whitespace-nowrap"
-              >
-                <FileText className="w-3.5 h-3.5 text-slate-400" />
-                <span className="font-medium text-white">{currentTemplate.name}</span>
-                <span className="text-xs text-slate-400">({currentTemplate.pageCount})</span>
-                <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${showReportTypeMenu ? 'rotate-180' : ''}`} />
-              </button>
+          {/* Report Type Selector */}
+          <div className="relative flex-shrink-0 ml-4">
+            <button
+              onClick={() => setShowReportTypeMenu(!showReportTypeMenu)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded transition-colors text-sm whitespace-nowrap"
+              style={{ backgroundColor: '#f3f4f6', borderColor: '#d1d5db', borderWidth: '1px', borderStyle: 'solid' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#e5e7eb'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+            >
+              <FileText className="w-3.5 h-3.5 text-slate-600" />
+              <span className="font-medium text-slate-900">{currentTemplate.name}</span>
+              <span className="text-xs text-slate-500">({currentTemplate.pageCount})</span>
+              <ChevronDown className={`w-3.5 h-3.5 text-slate-600 transition-transform ${showReportTypeMenu ? 'rotate-180' : ''}`} />
+            </button>
 
-              {/* Dropdown Menu */}
-              {showReportTypeMenu && (
-                <div className="absolute right-0 mt-2 w-80 bg-slate-800 border border-slate-600 rounded-lg shadow-xl z-50">
-                  <div className="p-2 border-b border-slate-700">
-                    <div className="text-xs text-slate-500 uppercase tracking-wide px-2">Report Type</div>
-                  </div>
-                  <div className="max-h-80 overflow-y-auto p-2">
-                    {Object.values(REPORT_TYPE_TEMPLATES).map((template) => (
-                      <button
-                        key={template.id}
-                        onClick={() => {
-                          setSelectedReportType(template.id);
-                          setShowReportTypeMenu(false);
-                          // TODO: Clear existing layouts and recreate from new template
-                        }}
-                        className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                          selectedReportType === template.id
-                            ? 'bg-green-600 text-white'
-                            : 'hover:bg-slate-700 text-slate-200'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium">{template.name}</span>
-                          <span className={`text-xs px-2 py-0.5 rounded ${
-                            selectedReportType === template.id
-                              ? 'bg-green-500'
-                              : 'bg-slate-600'
-                          }`}>
-                            {template.pageCount} pages
-                          </span>
-                        </div>
-                        <div className={`text-xs mt-0.5 ${
-                          selectedReportType === template.id
-                            ? 'text-green-200'
-                            : 'text-slate-400'
-                        }`}>
-                          {template.description}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
+            {/* Dropdown Menu */}
+            {showReportTypeMenu && (
+              <div className="absolute right-0 mt-2 w-80 rounded-lg shadow-xl z-50" style={{ backgroundColor: '#ffffff', borderColor: '#d1d5db', borderWidth: '1px', borderStyle: 'solid' }}>
+                <div className="p-2 border-b" style={{ borderColor: '#e5e7eb' }}>
+                  <div className="text-xs text-slate-500 uppercase tracking-wide px-2">Report Type</div>
                 </div>
-              )}
-            </div>
+                <div className="max-h-80 overflow-y-auto p-2">
+                  {Object.values(REPORT_TYPE_TEMPLATES).map((template) => (
+                    <button
+                      key={template.id}
+                      onClick={() => {
+                        setSelectedReportType(template.id);
+                        setShowReportTypeMenu(false);
+                        // TODO: Clear existing layouts and recreate from new template
+                      }}
+                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+                        selectedReportType === template.id
+                          ? 'bg-green-600 text-white'
+                          : 'text-slate-900 hover:text-slate-900'
+                      }`}
+                      style={selectedReportType !== template.id ? { backgroundColor: '#f3f4f6' } : undefined}
+                      onMouseEnter={(e) => {
+                        if (selectedReportType !== template.id) {
+                          e.currentTarget.style.backgroundColor = '#e5e7eb';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (selectedReportType !== template.id) {
+                          e.currentTarget.style.backgroundColor = '#f3f4f6';
+                        }
+                      }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-medium">{template.name}</span>
+                        <span className={`text-xs px-2 py-0.5 rounded ${
+                          selectedReportType === template.id
+                            ? 'bg-green-500 text-white'
+                            : 'bg-slate-200 text-slate-700'
+                        }`}>
+                          {template.pageCount} pages
+                        </span>
+                      </div>
+                      <div className={`text-xs mt-0.5 ${
+                        selectedReportType === template.id
+                          ? 'text-green-100'
+                          : 'text-slate-600'
+                      }`}>
+                        {template.description}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -315,11 +327,11 @@ export function ImageConfiguratorDemo({
         <div id="image-configurator-split" className="flex-1 flex overflow-hidden relative">
           {/* Left panel - Gallery */}
           <div
-            className="flex flex-col border-r border-slate-700"
+            className="flex flex-col border-r" style={{ borderColor: '#e5e7eb' }}
             style={{ width: `${splitPercent}%` }}
           >
-            {/* Upload zone */}
-            <div className="p-4 border-b border-slate-700">
+            {/* Upload zone - Compact */}
+            <div className="px-3 py-3 border-b" style={{ borderColor: '#e5e7eb' }}>
               <ImageUploadZone
                 jobId={jobId}
                 onUploadComplete={handleUploadComplete}
@@ -337,7 +349,7 @@ export function ImageConfiguratorDemo({
             />
 
             {/* Image grid */}
-            <div className="flex-1 overflow-auto p-4">
+            <div className="flex-1 overflow-auto p-3">
               <ImageGrid
                 jobId={jobId}
                 filters={filters}
@@ -352,9 +364,10 @@ export function ImageConfiguratorDemo({
           {/* Draggable divider */}
           <div
             onMouseDown={handleDividerMouseDown}
-            className={`w-1 bg-slate-700 hover:bg-green-500 cursor-col-resize transition-colors relative group ${
+            className={`w-1 hover:bg-green-500 cursor-col-resize transition-colors relative group ${
               isDraggingDivider ? 'bg-green-500' : ''
             }`}
+            style={{ backgroundColor: '#e5e7eb' }}
           >
             {/* Wider hit area for easier grabbing */}
             <div className="absolute inset-y-0 -left-1 -right-1" />
@@ -374,12 +387,11 @@ export function ImageConfiguratorDemo({
         </div>
 
         {/* Footer stats */}
-        <div className="px-6 py-2 border-t border-slate-700 flex items-center justify-between text-xs text-slate-500">
-          <div>
-            {images.length} images | {selectedIds.length} selected |{' '}
-            {layoutData?.layouts.length || 0} pages
+        <div className="px-4 py-1.5 border-t flex items-center justify-between text-xs text-slate-500" style={{ borderColor: '#e5e7eb', backgroundColor: '#ffffff' }}>
+          <div className="text-slate-600">
+            {images.length} images | {selectedIds.length} selected | {layoutData?.layouts.length || 0} pages
           </div>
-          <div>
+          <div className="text-slate-500">
             Drag images from gallery to slots, or use Auto-Fill
           </div>
         </div>

@@ -214,13 +214,29 @@ export function ImageUploadZone({
       {/* Drop zone */}
       <div
         className={`
-          relative border-2 border-dashed rounded-lg p-6 text-center cursor-pointer
+          relative border-2 border-dashed rounded-lg p-4 text-center cursor-pointer
           transition-all duration-200
           ${isDragging
-            ? 'border-green-500 bg-green-500/10'
-            : 'border-slate-700 bg-slate-800/50 hover:border-slate-600 hover:bg-slate-800'
+            ? 'border-green-500 bg-green-50'
+            : ''
           }
         `}
+        style={!isDragging ? {
+          borderColor: '#d1d5db',
+          backgroundColor: '#f9fafb'
+        } : undefined}
+        onMouseEnter={(e) => {
+          if (!isDragging) {
+            e.currentTarget.style.borderColor = '#9ca3af';
+            e.currentTarget.style.backgroundColor = '#f3f4f6';
+          }
+        }}
+        onMouseLeave={(e) => {
+          if (!isDragging) {
+            e.currentTarget.style.borderColor = '#d1d5db';
+            e.currentTarget.style.backgroundColor = '#f9fafb';
+          }
+        }}
         onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -239,16 +255,16 @@ export function ImageUploadZone({
         <div className="flex flex-col items-center gap-2">
           {isDragging ? (
             <>
-              <Upload className="w-10 h-10 text-green-400 animate-bounce" />
-              <p className="text-green-400 font-medium">Drop photos here</p>
+              <Upload className="w-8 h-8 text-green-500 animate-bounce" />
+              <p className="text-green-700 font-medium text-sm">Drop photos here</p>
             </>
           ) : (
             <>
-              <ImageIcon className="w-10 h-10 text-slate-500" />
-              <p className="text-slate-300 font-medium">
+              <ImageIcon className="w-8 h-8 text-slate-400" />
+              <p className="text-slate-700 font-medium text-sm">
                 Drop inspection photos here
               </p>
-              <p className="text-slate-500 text-sm">
+              <p className="text-slate-500 text-xs">
                 or click to browse (up to {maxFiles} images)
               </p>
             </>
@@ -258,20 +274,20 @@ export function ImageUploadZone({
 
       {/* Upload progress list */}
       {uploads.length > 0 && (
-        <div className="mt-3">
+        <div className="mt-2">
           {/* Summary bar */}
-          <div className="flex items-center justify-between px-3 py-2 bg-slate-800 rounded-t-lg border border-slate-700">
+          <div className="flex items-center justify-between px-3 py-1.5 rounded-t-lg border text-sm" style={{ backgroundColor: '#f3f4f6', borderColor: '#e5e7eb' }}>
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="flex items-center gap-2 text-sm text-slate-300"
+              className="flex items-center gap-2 text-slate-700"
             >
               <span>
                 {stats.uploading > 0 ? (
-                  <Loader2 className="w-4 h-4 animate-spin text-green-400" />
+                  <Loader2 className="w-4 h-4 animate-spin text-green-500" />
                 ) : stats.errors > 0 ? (
-                  <AlertCircle className="w-4 h-4 text-red-400" />
+                  <AlertCircle className="w-4 h-4 text-red-500" />
                 ) : (
-                  <CheckCircle className="w-4 h-4 text-green-400" />
+                  <CheckCircle className="w-4 h-4 text-green-500" />
                 )}
               </span>
               <span>
@@ -284,14 +300,14 @@ export function ImageUploadZone({
               {stats.complete > 0 && (
                 <button
                   onClick={clearCompleted}
-                  className="text-xs text-slate-400 hover:text-white"
+                  className="text-xs text-slate-600 hover:text-slate-900"
                 >
                   Clear done
                 </button>
               )}
               <button
                 onClick={clearAll}
-                className="text-xs text-slate-400 hover:text-white"
+                className="text-xs text-slate-600 hover:text-slate-900"
               >
                 Clear all
               </button>
@@ -300,37 +316,38 @@ export function ImageUploadZone({
 
           {/* File list */}
           {isExpanded && (
-            <div className="max-h-48 overflow-y-auto border border-t-0 border-slate-700 rounded-b-lg bg-slate-900">
+            <div className="max-h-40 overflow-y-auto border border-t-0 rounded-b-lg text-sm" style={{ borderColor: '#e5e7eb', backgroundColor: '#ffffff' }}>
               {uploads.map((upload) => (
                 <div
                   key={upload.fileId}
-                  className="flex items-center gap-3 px-3 py-2 border-b border-slate-800 last:border-0"
+                  className="flex items-center gap-3 px-3 py-2 border-b last:border-0"
+                  style={{ borderColor: '#f3f4f6' }}
                 >
                   {/* Status icon */}
                   <div className="flex-shrink-0">
                     {upload.status === 'uploading' || upload.status === 'processing' ? (
-                      <Loader2 className="w-4 h-4 animate-spin text-green-400" />
+                      <Loader2 className="w-4 h-4 animate-spin text-green-500" />
                     ) : upload.status === 'complete' ? (
-                      <CheckCircle className="w-4 h-4 text-green-400" />
+                      <CheckCircle className="w-4 h-4 text-green-500" />
                     ) : upload.status === 'error' ? (
-                      <AlertCircle className="w-4 h-4 text-red-400" />
+                      <AlertCircle className="w-4 h-4 text-red-500" />
                     ) : (
-                      <div className="w-4 h-4 rounded-full border-2 border-slate-600" />
+                      <div className="w-4 h-4 rounded-full border-2" style={{ borderColor: '#d1d5db' }} />
                     )}
                   </div>
 
                   {/* File name */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-slate-300 truncate">{upload.fileName}</p>
+                    <p className="text-xs text-slate-700 truncate">{upload.fileName}</p>
                     {upload.error && (
-                      <p className="text-xs text-red-400 truncate">{upload.error}</p>
+                      <p className="text-xs text-red-600 truncate">{upload.error}</p>
                     )}
                   </div>
 
                   {/* Progress bar or status */}
-                  <div className="flex-shrink-0 w-20">
+                  <div className="flex-shrink-0 w-16">
                     {(upload.status === 'uploading' || upload.status === 'processing') && (
-                      <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                      <div className="h-1 rounded-full overflow-hidden" style={{ backgroundColor: '#e5e7eb' }}>
                         <div
                           className="h-full bg-green-500 transition-all duration-300"
                           style={{ width: `${upload.progress}%` }}
@@ -338,10 +355,10 @@ export function ImageUploadZone({
                       </div>
                     )}
                     {upload.status === 'complete' && (
-                      <span className="text-xs text-green-400">Done</span>
+                      <span className="text-xs text-green-600 font-medium">Done</span>
                     )}
                     {upload.status === 'error' && (
-                      <span className="text-xs text-red-400">Failed</span>
+                      <span className="text-xs text-red-600 font-medium">Failed</span>
                     )}
                   </div>
                 </div>

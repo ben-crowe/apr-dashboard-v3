@@ -53,6 +53,12 @@ const DEFAULT_CAPTIONS: Record<string, string[]> = {
   'Site': ['Parking', 'Landscaping', 'Entrance', 'Signage'],
 };
 
+// Letter size in inches: 8.5" x 11"
+// Assuming 96 DPI (standard screen)
+const LETTER_WIDTH_PX = 8.5 * 96;
+const LETTER_HEIGHT_PX = 11 * 96;
+const LETTER_ASPECT_RATIO = LETTER_WIDTH_PX / LETTER_HEIGHT_PX;
+
 export function LayoutBuilder({
   jobId,
   images,
@@ -190,22 +196,119 @@ export function LayoutBuilder({
     : GRID_CONFIGS['2x2'];
 
   return (
-    <div className={`flex flex-col ${className}`}>
-      {/* Header with page navigation and title */}
-      <div className="flex items-center justify-between px-3 py-1.5 bg-slate-800 border-b border-slate-700">
-        {/* Left: Page nav with editable title */}
-        <div className="flex items-center gap-3">
+    <div className={`flex flex-col h-full ${className}`} style={{ backgroundColor: '#fafafa' }}>
+      {/* Top header - Compact with page nav and controls */}
+      <div className="flex items-center justify-between px-4 py-1 border-b" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb' }}>
+        {/* Left: Page navigation */}
+        <div className="flex items-center gap-2">
           <button
             onClick={goToPrevPage}
             disabled={currentPageIndex === 0}
-            className="p-1.5 rounded hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-1 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: 'transparent' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+            title="Previous page"
           >
-            <ChevronLeft className="w-4 h-4" />
+            <ChevronLeft className="w-4 h-4 text-slate-600" />
           </button>
 
-          {/* Editable page title */}
+          <button
+            onClick={goToNextPage}
+            disabled={currentPageIndex === layouts.length - 1}
+            className="p-1 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: 'transparent' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+            title="Next page"
+          >
+            <ChevronRight className="w-4 h-4 text-slate-600" />
+          </button>
+
+          {/* Divider */}
+          <div style={{ borderLeft: '1px solid #e5e7eb', height: '20px', margin: '0 4px' }} />
+
+          {/* Category filter badge */}
+          {currentLayout && currentLayout.category_filter && (
+            <span className="text-xs px-2 py-0.5 rounded font-medium text-slate-600" style={{ backgroundColor: '#f3f4f6' }}>
+              {currentLayout.category_filter}
+            </span>
+          )}
+
+          {/* Layout template display */}
           {currentLayout && (
-            <>
+            <span className="text-xs text-slate-500 flex items-center gap-1">
+              <Grid3X3 className="w-3 h-3" />
+              {currentLayout.layout_template}
+            </span>
+          )}
+        </div>
+
+        {/* Center: Page counter */}
+        {currentLayout && (
+          <div className="text-xs font-medium text-slate-600">
+            {currentPageIndex + 1} / {layouts.length}
+          </div>
+        )}
+
+        {/* Right: Actions */}
+        <div className="flex items-center gap-2">
+          {/* Zoom controls */}
+          <div className="flex items-center gap-0.5" style={{ borderLeft: '1px solid #e5e7eb', paddingLeft: '8px' }}>
+            <button
+              onClick={() => setZoomLevel(Math.max(0, zoomLevel - 1))}
+              disabled={zoomLevel === 0}
+              className="p-0.5 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
+              style={{ backgroundColor: 'transparent' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              title="Zoom in"
+            >
+              <ChevronDown className="w-3.5 h-3.5 text-slate-500 rotate-180" />
+            </button>
+            <button
+              onClick={() => setZoomLevel(Math.min(2, zoomLevel + 1))}
+              disabled={zoomLevel === 2}
+              className="p-0.5 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
+              style={{ backgroundColor: 'transparent' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+              title="Zoom out"
+            >
+              <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
+            </button>
+          </div>
+
+          {/* Auto-fill button */}
+          <button
+            onClick={handleAutoFill}
+            disabled={autoFill.isPending}
+            className="flex items-center gap-1 px-3 py-1 text-xs font-medium rounded transition-colors disabled:opacity-50 text-white"
+            style={{ backgroundColor: '#10b981' }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#059669'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#10b981'}
+          >
+            <Wand2 className="w-3.5 h-3.5" />
+            Auto-Fill
+          </button>
+        </div>
+      </div>
+
+      {/* White letter-size page container */}
+      <div className="flex-1 p-4 overflow-auto flex items-center justify-center" style={{ backgroundColor: '#fafafa' }}>
+        {/* Page wrapper - maintains letter aspect ratio */}
+        <div
+          className="flex flex-col rounded-lg shadow-md overflow-hidden"
+          style={{
+            backgroundColor: '#ffffff',
+            width: '100%',
+            maxWidth: `${LETTER_WIDTH_PX}px`,
+            aspectRatio: `${LETTER_ASPECT_RATIO}`,
+          }}
+        >
+          {/* Page title section */}
+          {currentLayout && (
+            <div className="px-6 pt-6 pb-4">
               {editingTitle ? (
                 <div className="flex items-center gap-2">
                   <input
@@ -219,7 +322,8 @@ export function LayoutBuilder({
                         setEditingTitle(false);
                       }
                     }}
-                    className="px-2 py-1 bg-slate-700 border-2 border-green-500 rounded text-sm text-white focus:outline-none font-medium min-w-[200px]"
+                    className="px-2 py-1 border-2 border-green-500 rounded text-sm text-slate-900 focus:outline-none font-semibold min-w-[200px]"
+                    style={{ backgroundColor: '#f9fafb' }}
                     autoFocus
                   />
                   <button
@@ -233,113 +337,66 @@ export function LayoutBuilder({
               ) : (
                 <button
                   onClick={() => setEditingTitle(true)}
-                  className="flex items-center gap-2 group hover:bg-slate-700 px-2 py-1.5 rounded transition-colors"
+                  className="flex items-center gap-2 group px-2 py-1 rounded transition-colors"
+                  style={{ backgroundColor: 'transparent' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                   title="Click to edit page title"
                 >
-                  <span className="text-sm font-medium text-white">
+                  <span className="text-base font-bold text-slate-900">
                     {currentLayout.title || currentLayout.page_type}
                   </span>
-                  <Edit2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-300 transition-colors" />
+                  <Edit2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-colors opacity-0 group-hover:opacity-100" />
                 </button>
               )}
-            </>
+            </div>
           )}
 
-          <button
-            onClick={goToNextPage}
-            disabled={currentPageIndex === layouts.length - 1}
-            className="p-1.5 rounded hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
+          {/* Image grid */}
+          <div className="flex-1 px-6 pb-4 flex items-center justify-center">
+            <div
+              className="grid w-full h-full gap-3"
+              style={{
+                gridTemplateColumns: `repeat(${gridConfig.cols}, 1fr)`,
+                gridAutoRows: `minmax(0, 1fr)`,
+              }}
+            >
+              {currentSlots.map((slot) => {
+                const image = slot.image_id ? imageMap.get(slot.image_id) : null;
+                const defaultCaption = getDefaultCaption(
+                  slot.slot_position,
+                  currentLayout?.category_filter
+                );
 
-        {/* Center: Page metadata */}
-        {currentLayout && (
-          <div className="flex items-center gap-3">
-            {currentLayout.category_filter && (
-              <span className="text-xs bg-slate-700 px-2 py-0.5 rounded text-slate-300">
-                {currentLayout.category_filter}
-              </span>
-            )}
-            <span className="text-xs text-slate-500 flex items-center gap-1">
-              <Grid3X3 className="w-3 h-3" />
-              {currentLayout.layout_template}
-            </span>
-            <span className="text-xs text-slate-400">
-              {currentPageIndex + 1} / {layouts.length}
-            </span>
-            {/* Zoom toggle */}
-            <div className="flex items-center gap-0.5 ml-1 border-l border-slate-600 pl-2">
-              <button
-                onClick={() => setZoomLevel(Math.max(0, zoomLevel - 1))}
-                disabled={zoomLevel === 0}
-                className="p-0.5 rounded hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
-                title="Zoom in (larger)"
-              >
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400 rotate-180" />
-              </button>
-              <button
-                onClick={() => setZoomLevel(Math.min(2, zoomLevel + 1))}
-                disabled={zoomLevel === 2}
-                className="p-0.5 rounded hover:bg-slate-700 disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
-                title="Zoom out (smaller)"
-              >
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-              </button>
+                return (
+                  <SortableSlot
+                    key={slot.id}
+                    slot={slot}
+                    image={image}
+                    defaultCaption={defaultCaption}
+                    onClear={() => handleClearSlot(slot)}
+                    onUpdateCaption={(caption) => handleUpdateCaption(slot.id, caption)}
+                    onEditImage={image && onOpenEditor ? () => onOpenEditor(image.id) : undefined}
+                  />
+                );
+              })}
             </div>
           </div>
-        )}
 
-        {/* Actions */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={handleAutoFill}
-            disabled={autoFill.isPending}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-green-600 hover:bg-green-500 rounded transition-colors disabled:opacity-50"
-          >
-            <Wand2 className="w-3.5 h-3.5" />
-            Auto-Fill
-          </button>
+          {/* Page footer */}
+          <div className="px-6 py-3 border-t flex justify-between items-center text-xs text-slate-500" style={{ borderColor: '#e5e7eb' }}>
+            <div className="text-slate-600 font-medium">
+              {currentLayout?.page_type}
+            </div>
+            <div className="text-slate-500">
+              Page {currentPageIndex + 1} of {layouts.length}
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Layout grid */}
-      <div className="flex-1 p-2 bg-slate-900 overflow-auto flex items-center justify-center">
-        <div
-          className="grid w-full h-full border-2 border-slate-700 rounded-lg p-3 bg-slate-800/30"
-          style={{
-            gridTemplateColumns: `repeat(${gridConfig.cols}, 1fr)`,
-            gap: zoomLevel === 0 ? '16px' : zoomLevel === 1 ? '12px' : '8px',
-            maxWidth: zoomLevel === 0 ? '100%' : zoomLevel === 1 ? '90%' : '75%',
-            maxHeight: zoomLevel === 0 ? '100%' : zoomLevel === 1 ? '95%' : '85%',
-            gridAutoRows: `minmax(0, 1fr)`,
-          }}
-        >
-          {currentSlots.map((slot) => {
-            const image = slot.image_id ? imageMap.get(slot.image_id) : null;
-            const defaultCaption = getDefaultCaption(
-              slot.slot_position,
-              currentLayout?.category_filter
-            );
-
-            return (
-              <SortableSlot
-                key={slot.id}
-                slot={slot}
-                image={image}
-                defaultCaption={defaultCaption}
-                onClear={() => handleClearSlot(slot)}
-                onUpdateCaption={(caption) => handleUpdateCaption(slot.id, caption)}
-                onEditImage={image && onOpenEditor ? () => onOpenEditor(image.id) : undefined}
-              />
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Page list (thumbnails) */}
-      <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-800 border-t border-slate-700 overflow-x-auto">
+      {/* Page tabs at bottom - Thin and scrollable */}
+      <div className="flex items-center gap-1 px-3 py-1 border-t overflow-x-auto" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', height: '36px' }}>
         {layouts.map((layout, index) => {
           const slots = getSlotsForLayout(allSlots, layout.id);
           const filledCount = slots.filter((s) => s.image_id).length;
@@ -350,14 +407,24 @@ export function LayoutBuilder({
               key={layout.id}
               onClick={() => setCurrentPageIndex(index)}
               className={`
-                flex-shrink-0 flex flex-col items-center px-2 py-1 rounded transition-colors
-                ${isActive ? 'bg-green-600' : 'bg-slate-700 hover:bg-slate-600'}
+                flex-shrink-0 flex flex-col items-center px-2 py-0.5 rounded text-xs font-medium transition-all
+                whitespace-nowrap
+                ${isActive ? 'text-white' : 'text-slate-600 hover:text-slate-900'}
               `}
+              style={isActive ? { backgroundColor: '#10b981' } : { backgroundColor: '#f3f4f6' }}
+              onMouseEnter={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = '#e5e7eb';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = '#f3f4f6';
+                }
+              }}
             >
-              <span className="text-xs text-white font-medium">
-                {layout.page_type}
-              </span>
-              <span className="text-[10px] text-slate-300">
+              <span>{layout.page_type}</span>
+              <span className={`text-[10px] ${isActive ? 'text-green-100' : 'text-slate-500'}`}>
                 {filledCount}/{slots.length}
               </span>
             </button>

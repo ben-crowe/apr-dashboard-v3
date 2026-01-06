@@ -38,12 +38,13 @@ export function FiltersPanel({
     : [];
 
   return (
-    <div className="px-4 py-3 bg-slate-800 border-b border-slate-700 flex flex-wrap items-center gap-4">
+    <div className="px-3 py-2 border-b flex flex-wrap items-center gap-3" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb' }}>
       {/* Category filter */}
       <div className="flex items-center gap-2">
-        <label className="text-xs text-slate-400">Category</label>
+        <label className="text-xs text-slate-600 font-medium">Category</label>
         <select
-          className="bg-slate-700 border border-slate-600 rounded text-sm px-2 py-1 text-white min-w-[140px] focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+          className="rounded text-sm px-2 py-1 text-slate-900 min-w-[130px] focus:outline-none focus:ring-2 focus:ring-green-500"
+          style={{ backgroundColor: '#f3f4f6', borderColor: '#d1d5db', borderWidth: '1px', borderStyle: 'solid' }}
           value={filters.category ?? ''}
           onChange={(e) => {
             const category = e.target.value as ImageCategory | '';
@@ -65,9 +66,10 @@ export function FiltersPanel({
       {/* Subcategory filter (only show if category selected) */}
       {subcategories.length > 0 && (
         <div className="flex items-center gap-2">
-          <label className="text-xs text-slate-400">Subcategory</label>
+          <label className="text-xs text-slate-600 font-medium">Subcategory</label>
           <select
-            className="bg-slate-700 border border-slate-600 rounded text-sm px-2 py-1 text-white min-w-[120px] focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            className="rounded text-sm px-2 py-1 text-slate-900 min-w-[110px] focus:outline-none focus:ring-2 focus:ring-green-500"
+            style={{ backgroundColor: '#f3f4f6', borderColor: '#d1d5db', borderWidth: '1px', borderStyle: 'solid' }}
             value={filters.subcategory ?? ''}
             onChange={(e) =>
               onChange({ ...filters, subcategory: e.target.value || null })
@@ -85,7 +87,7 @@ export function FiltersPanel({
 
       {/* Quality slider */}
       <div className="flex items-center gap-2">
-        <label className="text-xs text-slate-400">Min Quality</label>
+        <label className="text-xs text-slate-600 font-medium">Min Quality</label>
         <input
           type="range"
           min={0}
@@ -97,58 +99,76 @@ export function FiltersPanel({
               minQuality: Number(e.target.value) / 100,
             })
           }
-          className="w-20 h-1.5 bg-slate-600 rounded-lg appearance-none cursor-pointer
+          className="w-16 h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer
             [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3
             [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-green-500 [&::-webkit-slider-thumb]:cursor-pointer
             [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:shadow-md
             [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full
             [&::-moz-range-thumb]:bg-green-500 [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer
             [&::-moz-range-thumb]:shadow-md
-            focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-800"
+            focus:outline-none focus:ring-2 focus:ring-green-500"
           style={{ accentColor: 'rgb(34 197 94)' }}
         />
-        <span className="text-xs text-slate-300 w-10">
+        <span className="text-xs text-slate-600 w-8">
           {Math.round((filters.minQuality ?? 0) * 100)}%
         </span>
       </div>
 
       {/* Toggle filters */}
-      <div className="flex items-center gap-4">
-        <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer">
+      <div className="flex items-center gap-3">
+        <label className="flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer">
           <input
             type="checkbox"
             checked={!!filters.hideRejected}
             onChange={(e) =>
               onChange({ ...filters, hideRejected: e.target.checked })
             }
-            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-green-500
-              focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-800"
+            className="w-3.5 h-3.5 rounded text-green-500 focus:ring-2 focus:ring-green-500"
+            style={{
+              backgroundColor: '#f3f4f6',
+              borderColor: '#d1d5db',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              accentColor: 'rgb(34 197 94)'
+            }}
           />
           Hide rejected
         </label>
 
-        <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer">
+        <label className="flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer">
           <input
             type="checkbox"
             checked={!!filters.hidePlaced}
             onChange={(e) =>
               onChange({ ...filters, hidePlaced: e.target.checked })
             }
-            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-green-500
-              focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-800"
+            className="w-3.5 h-3.5 rounded text-green-500 focus:ring-2 focus:ring-green-500"
+            style={{
+              backgroundColor: '#f3f4f6',
+              borderColor: '#d1d5db',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              accentColor: 'rgb(34 197 94)'
+            }}
           />
           Hide placed
         </label>
 
-        <label className="flex items-center gap-1.5 text-xs text-slate-400 cursor-pointer">
+        <label className="flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer">
           <input
             type="checkbox"
             checked={!!filters.showOnlyUnreviewed}
             onChange={(e) =>
               onChange({ ...filters, showOnlyUnreviewed: e.target.checked })
             }
-            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-green-500
-              focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-800"
+            className="w-3.5 h-3.5 rounded text-green-500 focus:ring-2 focus:ring-green-500"
+            style={{
+              backgroundColor: '#f3f4f6',
+              borderColor: '#d1d5db',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              accentColor: 'rgb(34 197 94)'
+            }}
           />
           Needs review
         </label>
@@ -162,14 +182,14 @@ export function FiltersPanel({
         <div className="flex items-center gap-2">
           <button
             onClick={() => onBulkAction('select-all')}
-            className="text-xs text-slate-400 hover:text-slate-300"
+            className="text-xs text-slate-600 hover:text-slate-900 font-medium"
           >
             Select All
           </button>
-          <span className="text-slate-600">|</span>
+          <span className="text-slate-300">|</span>
           <button
             onClick={() => onBulkAction('select-none')}
-            className="text-xs text-slate-400 hover:text-slate-300"
+            className="text-xs text-slate-600 hover:text-slate-900 font-medium"
           >
             Select None
           </button>
@@ -177,10 +197,10 @@ export function FiltersPanel({
       )}
 
       {/* Count display */}
-      <div className="text-xs text-slate-400">
-        <span className="text-white font-medium">{selectedCount}</span>
+      <div className="text-xs text-slate-600">
+        <span className="text-slate-900 font-medium">{selectedCount}</span>
         {' selected of '}
-        <span className="text-white font-medium">{totalCount}</span>
+        <span className="text-slate-900 font-medium">{totalCount}</span>
       </div>
     </div>
   );

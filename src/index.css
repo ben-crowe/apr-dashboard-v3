@@ -12,7 +12,7 @@
       opacity: 0.8;
     }
   }
-  
+
   .animate-pulse-subtle {
     animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
@@ -71,7 +71,7 @@
     --popover: 223 20% 17%;          /* Popover background */
     --popover-foreground: 0 0% 100%; /* Popover text */
 
-    --primary: 212 81% 45%;          /* Primary blue accent for buttons */
+    --primary: 142 76% 36%;          /* Primary GREEN accent (changed from blue) */
     --primary-foreground: 0 0% 100%; /* Text on primary color */
 
     --secondary: 223 15% 15%;        /* Secondary background */
@@ -80,7 +80,7 @@
     --muted: 223 15% 18%;            /* Muted background - lighter for visibility */
     --muted-foreground: 220 10% 65%; /* Secondary text - slightly dimmer for better contrast */
 
-    --accent: 234 85% 65%;           /* Secondary accent */
+    --accent: 142 76% 36%;           /* Secondary accent - GREEN (changed from blue) */
     --accent-foreground: 0 0% 100%;  /* Text on accent */
 
     --destructive: 0 62.8% 30.6%;    /* Destructive actions */
@@ -88,16 +88,16 @@
 
     --border: 223 18% 28%;           /* Border color - lighter for visibility */
     --input: 223 17% 24%;            /* Input background - lighter for contrast */
-    --ring: 212 81% 45%;             /* Focus ring color */
+    --ring: 142 76% 36%;             /* Focus ring color - GREEN (changed from blue) */
 
     --sidebar-background: 220 17% 10%;
     --sidebar-foreground: 220 10% 70%;
-    --sidebar-primary: 212 81% 45%;
+    --sidebar-primary: 142 76% 36%;  /* GREEN (changed from blue) */
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 223 15% 15%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 223 18% 21%;
-    --sidebar-ring: 212 81% 45%;
+    --sidebar-ring: 142 76% 36%;     /* GREEN (changed from blue) */
   }
 }
 
@@ -113,6 +113,13 @@
 
   html {
     @apply scroll-smooth;
+  }
+
+  /* Override browser default accent color to green for form controls */
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="range"] {
+    accent-color: rgb(22 163 74); /* green-600 */
   }
 }
 
@@ -138,7 +145,7 @@
 }
 
 /* Status colors - now using a single primary color */
-.status-submitted, 
+.status-submitted,
 .status-in_progress,
 .status-loe_pending,
 .status-completed {
@@ -196,7 +203,7 @@ h4.section-heading {
   .job-list-header {
     @apply hidden;
   }
-  
+
   .job-list-item {
     @apply flex-col items-start;
   }

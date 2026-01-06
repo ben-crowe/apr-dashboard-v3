@@ -136,7 +136,7 @@ export function SortableSlot({
                       e.stopPropagation();
                       onEditImage();
                     }}
-                    className="p-1 rounded bg-white/20 hover:bg-white/30 transition-colors"
+                    className="p-1 rounded bg-white/20 hover:bg-white/30 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
                     title="Edit image"
                   >
                     <Edit3 className="w-3.5 h-3.5 text-white" />
@@ -148,7 +148,7 @@ export function SortableSlot({
                       e.stopPropagation();
                       onClear();
                     }}
-                    className="p-1 rounded bg-red-500/80 hover:bg-red-500 transition-colors"
+                    className="p-1 rounded bg-red-500/80 hover:bg-red-500 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
                     title="Remove image"
                   >
                     <X className="w-3.5 h-3.5 text-white" />
@@ -202,7 +202,8 @@ export function SortableSlot({
             onChange={(e) => handleCaptionChange(e.target.value)}
             onBlur={handleCaptionBlur}
             onKeyDown={handleCaptionKeyDown}
-            className="w-full px-2 py-1 text-xs bg-slate-800 border border-slate-600 rounded text-slate-200 focus:outline-none focus:border-green-500"
+            className="w-full px-2 py-1 text-xs bg-slate-800 border border-slate-600 rounded text-slate-200
+              focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
             placeholder={defaultCaption || "Add caption..."}
           />
         ) : (

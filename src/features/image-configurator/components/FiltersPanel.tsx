@@ -43,7 +43,7 @@ export function FiltersPanel({
       <div className="flex items-center gap-2">
         <label className="text-xs text-slate-400">Category</label>
         <select
-          className="bg-slate-700 border border-slate-600 rounded text-sm px-2 py-1 text-white min-w-[140px]"
+          className="bg-slate-700 border border-slate-600 rounded text-sm px-2 py-1 text-white min-w-[140px] focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
           value={filters.category ?? ''}
           onChange={(e) => {
             const category = e.target.value as ImageCategory | '';
@@ -67,7 +67,7 @@ export function FiltersPanel({
         <div className="flex items-center gap-2">
           <label className="text-xs text-slate-400">Subcategory</label>
           <select
-            className="bg-slate-700 border border-slate-600 rounded text-sm px-2 py-1 text-white min-w-[120px]"
+            className="bg-slate-700 border border-slate-600 rounded text-sm px-2 py-1 text-white min-w-[120px] focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
             value={filters.subcategory ?? ''}
             onChange={(e) =>
               onChange({ ...filters, subcategory: e.target.value || null })
@@ -97,7 +97,15 @@ export function FiltersPanel({
               minQuality: Number(e.target.value) / 100,
             })
           }
-          className="w-20 h-1 bg-slate-600 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-slate-400 [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-slate-400 [&::-moz-range-thumb]:border-0"
+          className="w-20 h-1.5 bg-slate-600 rounded-lg appearance-none cursor-pointer
+            [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3
+            [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-green-500 [&::-webkit-slider-thumb]:cursor-pointer
+            [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:shadow-md
+            [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full
+            [&::-moz-range-thumb]:bg-green-500 [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer
+            [&::-moz-range-thumb]:shadow-md
+            focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-800"
+          style={{ accentColor: 'rgb(34 197 94)' }}
         />
         <span className="text-xs text-slate-300 w-10">
           {Math.round((filters.minQuality ?? 0) * 100)}%
@@ -113,7 +121,8 @@ export function FiltersPanel({
             onChange={(e) =>
               onChange({ ...filters, hideRejected: e.target.checked })
             }
-            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-green-500"
+            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-green-500
+              focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-800"
           />
           Hide rejected
         </label>
@@ -125,7 +134,8 @@ export function FiltersPanel({
             onChange={(e) =>
               onChange({ ...filters, hidePlaced: e.target.checked })
             }
-            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-green-500"
+            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-green-500
+              focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-800"
           />
           Hide placed
         </label>
@@ -137,7 +147,8 @@ export function FiltersPanel({
             onChange={(e) =>
               onChange({ ...filters, showOnlyUnreviewed: e.target.checked })
             }
-            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-green-500"
+            className="w-3.5 h-3.5 rounded border-slate-600 bg-slate-700 text-green-500
+              focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-800"
           />
           Needs review
         </label>

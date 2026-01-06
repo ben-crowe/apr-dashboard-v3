@@ -377,7 +377,15 @@ export function ImageEditorModal({
                       onChange={(e) =>
                         handleAdjustmentChange('brightness', Number(e.target.value))
                       }
-                      className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer
+                        [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3
+                        [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-green-500 [&::-webkit-slider-thumb]:cursor-pointer
+                        [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:shadow-md
+                        [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full
+                        [&::-moz-range-thumb]:bg-green-500 [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer
+                        [&::-moz-range-thumb]:shadow-md
+                        focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-800"
+                      style={{ accentColor: 'rgb(34 197 94)' }}
                     />
                   </div>
 
@@ -400,7 +408,15 @@ export function ImageEditorModal({
                       onChange={(e) =>
                         handleAdjustmentChange('contrast', Number(e.target.value))
                       }
-                      className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer
+                        [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3
+                        [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-green-500 [&::-webkit-slider-thumb]:cursor-pointer
+                        [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:shadow-md
+                        [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full
+                        [&::-moz-range-thumb]:bg-green-500 [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer
+                        [&::-moz-range-thumb]:shadow-md
+                        focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-800"
+                      style={{ accentColor: 'rgb(34 197 94)' }}
                     />
                   </div>
 
@@ -423,7 +439,15 @@ export function ImageEditorModal({
                       onChange={(e) =>
                         handleAdjustmentChange('saturation', Number(e.target.value))
                       }
-                      className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer
+                        [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3
+                        [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-green-500 [&::-webkit-slider-thumb]:cursor-pointer
+                        [&::-webkit-slider-thumb]:border-0 [&::-webkit-slider-thumb]:shadow-md
+                        [&::-moz-range-thumb]:w-3 [&::-moz-range-thumb]:h-3 [&::-moz-range-thumb]:rounded-full
+                        [&::-moz-range-thumb]:bg-green-500 [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer
+                        [&::-moz-range-thumb]:shadow-md
+                        focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-slate-800"
+                      style={{ accentColor: 'rgb(34 197 94)' }}
                     />
                   </div>
                 </div>

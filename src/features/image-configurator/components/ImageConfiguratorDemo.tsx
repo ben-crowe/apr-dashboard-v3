@@ -4,7 +4,7 @@
  * Combines upload, gallery, layout builder, and editor
  */
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -26,7 +26,7 @@ import { useLayouts, useAssignImageToSlot, useClearSlot, getSlotsForLayout } fro
 import type { ImageFilters, JobImage, ReportTypeId } from '../types';
 import { REPORT_TYPE_TEMPLATES, DEFAULT_REPORT_TYPE } from '../types';
 import { useSignedImageUrl } from '@/utils/supabaseStorage';
-import { FileText, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
+import { FileText, ChevronDown, ChevronLeft, ChevronRight, Maximize2, X } from 'lucide-react';
 
 interface ImageConfiguratorDemoProps {
   jobId: string;
@@ -62,6 +62,9 @@ export function ImageConfiguratorDemo({
   // Resizable split state
   const [splitPercent, setSplitPercent] = useState(42); // Gallery takes 42% by default
   const [isDraggingDivider, setIsDraggingDivider] = useState(false);
+
+  // Expanded gallery overlay state
+  const [isGalleryExpanded, setIsGalleryExpanded] = useState(false);
 
   // Fetch data
   const { data: images = [], isLoading: imagesLoading } = useJobImages(jobId, filters);
@@ -242,6 +245,18 @@ export function ImageConfiguratorDemo({
     };
   }, [isDraggingDivider, handleDividerMouseMove, handleDividerMouseUp]);
 
+  // ESC key to close expanded gallery
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isGalleryExpanded) {
+        setIsGalleryExpanded(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isGalleryExpanded]);
+
   return (
     <DndContext
       sensors={sensors}
@@ -399,17 +414,38 @@ export function ImageConfiguratorDemo({
               />
             </div>
 
-            {/* Filters */}
-            <FiltersPanel
-              filters={filters}
-              onChange={setFilters}
-              selectedCount={selectedIds.length}
-              totalCount={images.length}
-              onBulkAction={handleBulkAction}
-            />
+            {/* Filters with expand button */}
+            <div className="flex items-center justify-between border-b" style={{ borderColor: '#333' }}>
+              <FiltersPanel
+                filters={filters}
+                onChange={setFilters}
+                selectedCount={selectedIds.length}
+                totalCount={images.length}
+                onBulkAction={handleBulkAction}
+              />
+              {/* Expand gallery button */}
+              <button
+                onClick={() => setIsGalleryExpanded(true)}
+                className="mr-3 p-1.5 rounded transition-colors"
+                style={{ backgroundColor: '#2a2a2a' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+                title="Expand gallery"
+              >
+                <Maximize2 className="w-4 h-4 text-slate-400" />
+              </button>
+            </div>
 
-            {/* Image grid */}
-            <div className="flex-1 overflow-auto p-3">
+            {/* Image grid with visible scrollbar */}
+            <div
+              className="flex-1 p-3"
+              style={{
+                overflowY: 'auto',
+                overflowX: 'hidden',
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#4a4a4a #1f1f1f'
+              }}
+            >
               <ImageGrid
                 jobId={jobId}
                 filters={filters}
@@ -472,6 +508,81 @@ export function ImageConfiguratorDemo({
           onClose={handleCloseEditor}
         />
       )}
+
+      {/* Expanded gallery overlay */}
+      {isGalleryExpanded && (
+        <div
+          className="fixed inset-0 z-50 flex flex-col"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)' }}
+        >
+          {/* Overlay header */}
+          <div
+            className="flex items-center justify-between px-6 py-3 border-b"
+            style={{ backgroundColor: '#1a1a1a', borderColor: '#333' }}
+          >
+            <div className="flex items-center gap-4">
+              <h2 className="text-lg font-semibold text-white">Image Gallery</h2>
+              <span className="text-sm text-slate-400">
+                {images.length} images | {selectedIds.length} selected
+              </span>
+            </div>
+            <button
+              onClick={() => setIsGalleryExpanded(false)}
+              className="p-2 rounded-lg transition-colors"
+              style={{ backgroundColor: '#2a2a2a' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+              title="Close expanded view"
+            >
+              <X className="w-5 h-5 text-slate-300" />
+            </button>
+          </div>
+
+          {/* Filters row */}
+          <div className="px-6 py-2 border-b" style={{ backgroundColor: '#1f1f1f', borderColor: '#333' }}>
+            <FiltersPanel
+              filters={filters}
+              onChange={setFilters}
+              selectedCount={selectedIds.length}
+              totalCount={images.length}
+              onBulkAction={handleBulkAction}
+            />
+          </div>
+
+          {/* Expanded image grid */}
+          <div
+            className="flex-1 p-6"
+            style={{
+              overflowY: 'auto',
+              scrollbarWidth: 'thin',
+              scrollbarColor: '#4a4a4a #1f1f1f'
+            }}
+          >
+            <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))' }}>
+              {images.map((image) => (
+                <ExpandedGalleryItem
+                  key={image.id}
+                  image={image}
+                  isSelected={selectedIds.includes(image.id)}
+                  onToggleSelect={() => handleToggleSelect(image.id)}
+                  onOpenEditor={() => {
+                    setIsGalleryExpanded(false);
+                    handleOpenEditor(image.id);
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Footer with action hint */}
+          <div
+            className="px-6 py-2 border-t text-center text-sm text-slate-500"
+            style={{ backgroundColor: '#1a1a1a', borderColor: '#333' }}
+          >
+            Click to select | Double-click to edit | Press ESC or click X to close
+          </div>
+        </div>
+      )}
     </DndContext>
   );
 }
@@ -490,6 +601,72 @@ function DragOverlayImage({ image }: { image: JobImage }) {
         alt={image.original_filename}
         className="w-full h-full object-cover"
       />
+    </div>
+  );
+}
+
+// Helper component for expanded gallery items
+function ExpandedGalleryItem({
+  image,
+  isSelected,
+  onToggleSelect,
+  onOpenEditor,
+}: {
+  image: JobImage;
+  isSelected: boolean;
+  onToggleSelect: () => void;
+  onOpenEditor: () => void;
+}) {
+  const path = image.thumbnail_path || image.storage_path;
+  const imageUrl = useSignedImageUrl(path, { width: 300 });
+
+  return (
+    <div
+      className={`relative rounded-lg overflow-hidden cursor-pointer transition-all ${
+        isSelected ? 'ring-2 ring-green-500 ring-offset-2 ring-offset-black' : ''
+      }`}
+      style={{ aspectRatio: '4/3', backgroundColor: '#2a2a2a' }}
+      onClick={onToggleSelect}
+      onDoubleClick={onOpenEditor}
+    >
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={image.original_filename}
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <div className="w-full h-full flex items-center justify-center text-slate-500">
+          Loading...
+        </div>
+      )}
+
+      {/* Selection indicator */}
+      {isSelected && (
+        <div className="absolute top-2 right-2 w-5 h-5 rounded-full bg-green-500 flex items-center justify-center">
+          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+        </div>
+      )}
+
+      {/* Category badge */}
+      {image.category && (
+        <div
+          className="absolute bottom-2 left-2 px-2 py-0.5 rounded text-xs font-medium"
+          style={{ backgroundColor: 'rgba(0,0,0,0.7)', color: '#fff' }}
+        >
+          {image.category}
+        </div>
+      )}
+
+      {/* Filename on hover */}
+      <div
+        className="absolute inset-x-0 bottom-0 p-2 opacity-0 hover:opacity-100 transition-opacity"
+        style={{ background: 'linear-gradient(transparent, rgba(0,0,0,0.8))' }}
+      >
+        <p className="text-xs text-white truncate">{image.original_filename}</p>
+      </div>
     </div>
   );
 }

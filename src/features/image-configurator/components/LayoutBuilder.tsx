@@ -45,6 +45,28 @@ export const PAGE_TYPE_TO_REPORT_PAGE: Record<string, number> = {
   'parking-photos': 20,
 };
 
+// Display names for page types (abbreviated for consistent dropdown width)
+export const PAGE_TYPE_DISPLAY_NAMES: Record<string, string> = {
+  'subject-photos-1': 'Subj Photos 1',
+  'subject-photos-2': 'Subj Photos 2',
+  'subject-photos-3': 'Subj Photos 3',
+  'location-map': 'Location Map',
+  'aerial-map': 'Aerial Map',
+  'zoning-map': 'Zoning Map',
+  'flood-map': 'Flood Map',
+  'site-plan': 'Site Plan',
+  'floor-plan': 'Floor Plan',
+  'building-systems-1': 'Bldg Systems 1',
+  'building-systems-2': 'Bldg Systems 2',
+  'comp-location-map': 'Comp Loc Map',
+  'comp-photos-1': 'Comp Photos 1',
+  'comp-photos-2': 'Comp Photos 2',
+  'rental-comp-map': 'Rental Map',
+  'rental-comp-photos': 'Rental Photos',
+  'site-improvements': 'Site Improve',
+  'parking-photos': 'Parking Photos',
+};
+
 interface LayoutBuilderProps {
   jobId: string;
   images: JobImage[];

@@ -608,6 +608,26 @@ export function ImageConfiguratorDemo({
           className="fixed inset-0 z-50 flex flex-col"
           style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}
         >
+          <style>{`
+            input.popup-title-input,
+            input.popup-caption-input {
+              background-color: transparent !important;
+              background: transparent !important;
+              border: none !important;
+              outline: none !important;
+              box-shadow: none !important;
+              border-radius: 0 !important;
+            }
+            input.popup-title-input:focus,
+            input.popup-caption-input:focus {
+              background-color: transparent !important;
+              background: transparent !important;
+              border: none !important;
+              outline: none !important;
+              box-shadow: none !important;
+              border-radius: 0 !important;
+            }
+          `}</style>
           {/* Overlay header */}
           <div
             className="flex items-center justify-between px-6 py-3 border-b shrink-0"
@@ -830,13 +850,14 @@ export function ImageConfiguratorDemo({
                             }
                           }}
                           onBlur={handlePopupSaveTitle}
-                          className="text-base font-semibold text-slate-500 pb-1 italic"
+                          className="popup-title-input text-base font-semibold text-slate-500 pb-1 italic"
                           style={{
                             width: 'auto',
                             minWidth: '200px',
-                            background: 'transparent',
+                            padding: 0,
+                            borderRadius: 0,
+                            backgroundColor: 'transparent',
                             border: 'none',
-                            borderBottom: '1px solid #e2e8f0',
                             outline: 'none',
                             boxShadow: 'none',
                           }}
@@ -1130,12 +1151,15 @@ function PopupSlot({
             onChange={(e) => setCaptionValue(e.target.value)}
             onBlur={handleCaptionBlur}
             onKeyDown={handleCaptionKeyDown}
-            className="w-full text-xs text-slate-600 px-1.5 py-1"
+            className="popup-caption-input w-full text-xs text-slate-600 px-1.5 py-1"
             style={{
+              backgroundColor: 'transparent',
               background: 'transparent',
               border: 'none',
               outline: 'none',
               boxShadow: 'none',
+              padding: '0.25rem 0.375rem',
+              borderRadius: 0,
             }}
             placeholder={defaultCaption || "Add caption..."}
           />

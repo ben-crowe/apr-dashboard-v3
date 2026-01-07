@@ -108,6 +108,25 @@ export function SortableSlot({
 
   return (
     <div className={`flex flex-col gap-1 min-w-0 min-h-0 ${className}`}>
+      <style>{`
+        .editor-panel-content input.caption-input {
+          background-color: transparent !important;
+          background: transparent !important;
+          border: none !important;
+          outline: none !important;
+          box-shadow: none !important;
+          padding: 0.25rem 0.375rem !important;
+          border-radius: 0 !important;
+        }
+        .editor-panel-content input.caption-input:focus {
+          background-color: transparent !important;
+          background: transparent !important;
+          border: none !important;
+          outline: none !important;
+          box-shadow: none !important;
+          border-radius: 0 !important;
+        }
+      `}</style>
       {/* Image slot */}
       <div
         ref={setNodeRef}
@@ -185,12 +204,15 @@ export function SortableSlot({
             onChange={(e) => handleCaptionChange(e.target.value)}
             onBlur={handleCaptionBlur}
             onKeyDown={handleCaptionKeyDown}
-            className="w-full text-xs text-slate-600 px-1.5 py-1"
+            className="caption-input w-full text-xs text-slate-600 px-1.5 py-1"
             style={{
+              backgroundColor: 'transparent',
               background: 'transparent',
               border: 'none',
               outline: 'none',
               boxShadow: 'none',
+              padding: '0.25rem 0.375rem',
+              borderRadius: 0,
             }}
             placeholder={defaultCaption || "Add caption..."}
           />

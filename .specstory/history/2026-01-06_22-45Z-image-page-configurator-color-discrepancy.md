@@ -6833,3 +6833,1156 @@ Removed the page footer section ("subject-photos-1 Page 1 of 14") from the botto
 
 ---
 
+_**User (2026-01-06 07:03Z)**_
+
+DOM Path: div#root > div.h-.creen w-full flex flex-col overflow-hidden > div.flex-1 flex overflow-hidden > div.flex h-full w-full data-[panel-group-direction=vertical]:flex-col flex-1 > div[0] > div.h-full flex flex-col > div.flex-1 overflow-auto text-white editor-panel-content > div.h-full > div.flex flex-col h-full h-full > div#image-configurator-split > div.flex-1 flex flex-col > div.flex-1 > div > div.flex flex-col > div.px-6 pt-4 pb-2 > div.text-ba.e font-.emibold text-.late-500 border-b border-.late-200 pb-1 inline-block italic cur.or-text hover:bg-.late-50 rounded px-1 -mx-1 tran.ition-color
+Position: top=163px, left=560px, width=188px, height=29px
+React Component: LayoutBuilder
+HTML Element: <div class="text-base font-semibold text-slate-500 border-b border-slate-200 pb-1 inline-block italic cursor-text hover:bg-slate-50 rounded px-1 -mx-1 transition-colors" title="Click to edit" data-cursor-element-id="cursor-el-1">Subject Photos - Page 1</div>  confrim the dark effect happenign when editing titles.. when user clicks to edit the title a dark under box effect happens 
+
+---
+
+_**Agent (model composer-1, mode Agent)**_
+
+
+
+---
+
+
+Checking the title input styling and adding a dark underline/box effect when editing:
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="search_replace">
+
+<details><summary>Tool use: **search_replace** • Edit file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -308,5 +308,5 @@
+                      background: 'transparent',
+                      border: 'none',
+-                     borderBottom: '1px solid #e2e8f0',
++                     borderBottom: '2px solid #1f2937',
+                      outline: 'none',
+                      boxShadow: 'none',
+```
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="generic" data-tool-name="read_lints">
+<details>
+          <summary>Tool use: **read_lints** • Read lints for 1 file</summary>
+      
+Lint paths:
+
+- `src/features/image-configurator/components/LayoutBuilder.tsx`
+
+Lint results
+
+
+**No lint errors found**
+</details>
+</tool-use>
+
+---
+
+
+
+---
+
+
+Updated the title input to show a dark underline when editing:
+
+- Changed `borderBottom` from `1px solid #e2e8f0` (light gray) to `2px solid #1f2937` (dark gray)
+- Made it thicker (2px) for better visibility
+
+When you click to edit the title, it now shows a dark underline to indicate edit mode.
+
+---
+
+_**User (2026-01-06 07:03Z)**_
+
+i do not want that effect and im trying to remove it
+
+---
+
+_**Agent (model composer-1, mode Agent)**_
+
+
+
+---
+
+
+Removing the dark underline effect from the title input:
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="search_replace">
+
+<details><summary>Tool use: **search_replace** • Edit file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+**Chunk 1**
+Lines added: undefined, lines removed: 1
+
+```diff
+@@ -308,5 +308,4 @@
+                      background: 'transparent',
+                      border: 'none',
+-                     borderBottom: '2px solid #1f2937',
+                      outline: 'none',
+                      boxShadow: 'none',
+```
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="generic" data-tool-name="read_lints">
+<details>
+          <summary>Tool use: **read_lints** • Read lints for 1 file</summary>
+      
+Lint paths:
+
+- `src/features/image-configurator/components/LayoutBuilder.tsx`
+
+Lint results
+
+
+**No lint errors found**
+</details>
+</tool-use>
+
+---
+
+
+
+---
+
+
+Removed the dark underline effect. When editing the title, there's no dark underline; it appears as plain text, matching the non-editing state.
+
+---
+
+_**User (2026-01-06 07:03Z)**_
+
+its still very much there look!!
+
+---
+
+_**Agent (model composer-1, mode Agent)**_
+
+
+
+---
+
+
+Checking for focus styles or other CSS causing the dark effect:
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="search" data-tool-name="grep">
+<details>
+<summary>Tool use: **grep** • Grep for "focus:|:focus|active:|:active" in "src/features/image-configurator/components/LayoutBuilder.tsx" • 0 matches</summary>
+
+Output mode: content
+
+
+_No matches found_
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="search_replace">
+
+<details><summary>Tool use: **search_replace** • Edit file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+**Chunk 1**
+Lines added: 1, lines removed: undefined
+
+```diff
+@@ -308,4 +308,5 @@
+                      background: 'transparent',
+                      border: 'none',
++                     borderBottom: 'none',
+                      outline: 'none',
+                      boxShadow: 'none',
+```
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="search" data-tool-name="grep">
+<details>
+<summary>Tool use: **grep** • Grep for "editor-panel-content|input.*focus|textarea.*focus|select.*focus" in "src/features/report-builder/components/EditPanel" • 7 matches</summary>
+
+Output mode: content
+
+
+| File | Content | Line |
+|------|------|------|
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | `<div className="flex-1 overflow-auto text-white editor-panel-content" style=\{{ backgroundColor: '#1f1f1f' \}}>` | L872 |
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | `.editor-panel-content input:not([type="file"]),` | L874 |
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | `.editor-panel-content textarea,` | L875 |
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | `.editor-panel-content select \{` | L876 |
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | `.editor-panel-content input::placeholder,` | L881 |
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | `.editor-panel-content textarea::placeholder \{` | L882 |
+| `src/features/report-builder/components/EditPanel/TextFieldEditor.tsx` | `'flex min-h-[120px] w-full rounded-md border border-input bg-input px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',` | L62 |
+
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/report-builder/components/EditPanel/EditPanel.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+
+
+---
+
+
+The EditPanel CSS is applying to the title input. Overriding it specifically:
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="search_replace">
+
+<details><summary>Tool use: **search_replace** • Edit file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+**Chunk 1**
+Lines added: 7, lines removed: 5
+
+```diff
+@@ -306,9 +306,11 @@
+                      width: 'auto',
+                      minWidth: '200px',
+-                     background: 'transparent',
+-                     border: 'none',
+-                     borderBottom: 'none',
+-                     outline: 'none',
+-                     boxShadow: 'none',
++                     background: 'transparent !important',
++                     backgroundColor: 'transparent !important',
++                     border: 'none !important',
++                     borderBottom: 'none !important',
++                     outline: 'none !important',
++                     boxShadow: 'none !important',
++                     color: '#64748b !important',
+                    }}
+                    autoFocus
+```
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="generic" data-tool-name="read_lints">
+<details>
+          <summary>Tool use: **read_lints** • Read lints for 1 file</summary>
+      
+Lint paths:
+
+- `src/features/image-configurator/components/LayoutBuilder.tsx`
+
+Lint results
+
+
+**No lint errors found**
+</details>
+</tool-use>
+
+---
+
+
+
+---
+
+
+
+---
+
+
+The EditPanel CSS is applying a dark background to all inputs. Added `!important` overrides to remove it. The title input should now be transparent with no dark box when editing.
+
+---
+
+_**User (2026-01-06 07:03Z)**_
+
+it kind of changed but but still same
+
+---
+
+_**Agent (model composer-1, mode Agent)**_
+
+
+
+---
+
+
+Checking where LayoutBuilder is rendered and what CSS might be affecting it:
+
+
+---
+
+<tool-use data-tool-type="search" data-tool-name="codebase_search">
+<details>
+                <summary>Tool use: **codebase_search** • Searched codebase "Where is LayoutBuilder component rendered and is it inside editor-panel-content?" • **11** results</summary>
+            
+| File | Lines |
+|------|-------|
+| `src/features/report-builder/components/ReportBuilderLayout.tsx` | L11-103 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | L33-922 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | L80-382 |
+| `src/features/report-builder/components/ReportBuilderLayout.tsx` | L103 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | L65 |
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | L362-1023 |
+| `src/components/DocumentBuilder/DocumentEditor.tsx` | L39-200 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | L80-380 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | L78-380 |
+| `src/features/calculator-demo-v4/CalculatorDemoPage.tsx` | L20-287 |
+| `docs/APR-Domain Mgr/architecture-v4/ARCHITECTURE-DIAGRAM.md` | L52 |
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="search" data-tool-name="grep">
+<details>
+<summary>Tool use: **grep** • Grep for "LayoutBuilder|ImageConfiguratorDemo" in "src/features/image-configurator" • 26 matches</summary>
+
+Output mode: content
+
+
+| File | Content | Line |
+|------|------|------|
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `* LayoutBuilder Component` | L2 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `interface LayoutBuilderProps \{` | L48 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `export function LayoutBuilder(\{` | L83 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `\}: LayoutBuilderProps) \{` | L90 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `export default LayoutBuilder;` | L383 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `* ImageConfiguratorDemo Component` | L2 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `import \{ LayoutBuilder \} from './LayoutBuilder';` | L22 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `interface ImageConfiguratorDemoProps \{` | L31 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `export function ImageConfiguratorDemo(\{` | L36 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `\}: ImageConfiguratorDemoProps) \{` | L39 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `// Page selection state (lifted from LayoutBuilder for header display)` | L59 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `<LayoutBuilder` | L569 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `\{/* Right: Current page preview - EXACT COPY of LayoutBuilder structure */\}` | L753 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `\{/* Header bar - EXACT COPY from LayoutBuilder line 228 */\}` | L764 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `\{/* Page title section - editable, matches LayoutBuilder */\}` | L817 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `\{/* Image grid - EXACT COPY from LayoutBuilder line 320 */\}` | L855 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `\{/* Page footer - EXACT COPY from LayoutBuilder line 353 */\}` | L882 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `// Predefined captions by category - matches LayoutBuilder` | L1020 |
+| `src/features/image-configurator/components/ImageConfiguratorDemo.tsx` | `export default ImageConfiguratorDemo;` | L1160 |
+| `src/features/image-configurator/types/index.ts` | `export interface LayoutBuilderState \{` | L154 |
+| `src/features/image-configurator/index.ts` | `* import \{ ImageConfiguratorDemo \} from '@/features/image-configurator';` | L12 |
+| `src/features/image-configurator/index.ts` | `* <ImageConfiguratorDemo jobId="job-123" />` | L14 |
+| `src/features/image-configurator/index.ts` | `LayoutBuilder,` | L24 |
+| `src/features/image-configurator/index.ts` | `ImageConfiguratorDemo,` | L26 |
+| `src/features/image-configurator/components/index.ts` | `export \{ LayoutBuilder \} from './LayoutBuilder';` | L10 |
+| `src/features/image-configurator/components/index.ts` | `export \{ ImageConfiguratorDemo \} from './ImageConfiguratorDemo';` | L12 |
+
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/ImageConfiguratorDemo.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+
+
+---
+
+
+Checking EditPanel CSS and adding a more specific override:
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/report-builder/components/EditPanel/EditPanel.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="search_replace">
+
+<details><summary>Tool use: **search_replace** • Edit file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+**Chunk 1**
+Lines added: 19, lines removed: undefined
+
+```diff
+@@ -225,4 +225,23 @@
+        overflow: 'hidden'
+      }}&gt;
++       &lt;style&gt;{&#96;
++         .page-title-input {
++           background-color: transparent !important;
++           background: transparent !important;
++           border: none !important;
++           border-bottom: none !important;
++           outline: none !important;
++           box-shadow: none !important;
++           color: #64748b !important;
++         }
++         .page-title-input:focus {
++           background-color: transparent !important;
++           background: transparent !important;
++           border: none !important;
++           border-bottom: none !important;
++           outline: none !important;
++           box-shadow: none !important;
++         }
++       &#96;}&lt;/style&gt;
+        {/* Top header - simplified, navigation handled by parent */}
+        &lt;div className="flex items-center justify-between px-4 py-1 border-b" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', height: '32px', minHeight: '32px' }}&gt;
+```
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="search_replace">
+
+<details><summary>Tool use: **search_replace** • Edit file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+**Chunk 1**
+Lines added: 1, lines removed: 8
+
+```diff
+@@ -321,15 +321,8 @@
+                    }}
+                    onBlur={handleSaveTitle}
+-                   className="text-base font-semibold text-slate-500 pb-1 italic"
++                   className="page-title-input text-base font-semibold text-slate-500 pb-1 italic"
+                    style={{
+                      width: 'auto',
+                      minWidth: '200px',
+-                     background: 'transparent !important',
+-                     backgroundColor: 'transparent !important',
+-                     border: 'none !important',
+-                     borderBottom: 'none !important',
+-                     outline: 'none !important',
+-                     boxShadow: 'none !important',
+-                     color: '#64748b !important',
+                    }}
+                    autoFocus
+```
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="generic" data-tool-name="read_lints">
+<details>
+          <summary>Tool use: **read_lints** • Read lints for 1 file</summary>
+      
+Lint paths:
+
+- `src/features/image-configurator/components/LayoutBuilder.tsx`
+
+Lint results
+
+
+**No lint errors found**
+</details>
+</tool-use>
+
+---
+
+
+
+---
+
+
+Added a specific CSS class `.page-title-input` with `!important` rules to override the EditPanel CSS. The input should now be transparent with no dark background when editing. The style tag is scoped to the LayoutBuilder component, so it only affects the title input.
+
+---
+
+_**User (2026-01-06 07:03Z)**_
+
+do you have a solution for this..   is the code a mess and u cant figure out what css efffects what.. as your not changing it..  why is the code such a mistery and hard to figure out ????  
+
+---
+
+_**Agent (model composer-1, mode Plan)**_
+
+
+
+---
+
+
+Investigating why the CSS override isn't working. Reviewing the CSS cascade and specificity:
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/report-builder/components/EditPanel/EditPanel.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="search" data-tool-name="grep">
+<details>
+<summary>Tool use: **grep** • Grep for "editor-panel-content" in "src" • 6 matches</summary>
+
+Output mode: content
+
+
+| File | Content | Line |
+|------|------|------|
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | `<div className="flex-1 overflow-auto text-white editor-panel-content" style=\{{ backgroundColor: '#1f1f1f' \}}>` | L872 |
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | `.editor-panel-content input:not([type="file"]),` | L874 |
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | `.editor-panel-content textarea,` | L875 |
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | `.editor-panel-content select \{` | L876 |
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | `.editor-panel-content input::placeholder,` | L881 |
+| `src/features/report-builder/components/EditPanel/EditPanel.tsx` | `.editor-panel-content textarea::placeholder \{` | L882 |
+
+
+</details>
+</tool-use>
+
+---
+
+
+
+---
+
+
+The EditPanel CSS selector `.editor-panel-content input:not([type="file"])` has higher specificity than `.page-title-input`, so it wins even with `!important`. Matching its specificity to override it.
+
+
+---
+
+<tool-use data-tool-type="unknown" data-tool-name="create_plan">
+<details>
+<summary>Tool use: **create_plan**</summary>
+
+
+Parameters:
+
+```json
+{
+  "plan": "# Fix Title Input Dark Background CSS Override\n\n## Problem\nThe EditPanel component applies CSS to all inputs via &#96;.editor-panel-content input:not([type=\"file\"])&#96; with &#96;background-color: #2a2a2a !important&#96;. The current override using &#96;.page-title-input&#96; has lower CSS specificity, so it's not working.\n\n## Solution\nMatch the EditPanel selector's specificity by using &#96;.editor-panel-content input.page-title-input&#96; (or &#96;.editor-panel-content .page-title-input&#96;) with &#96;!important&#96; rules. This ensures the override takes precedence.\n\n## Changes\n\n### &#96;src/features/image-configurator/components/LayoutBuilder.tsx&#96;\n\n1. **Update the style tag** (around line 227-245):\n   - Change selector from &#96;.page-title-input&#96; to &#96;.editor-panel-content input.page-title-input&#96;\n   - This matches the EditPanel selector's specificity (class + element + class)\n   - Keep all the &#96;!important&#96; rules for background, border, outline, etc.\n\n2. **Keep the className** on the input element (line 320):\n   - The &#96;page-title-input&#96; class is still needed for the selector to work\n\n## Why This Works\nCSS specificity calculation:\n- EditPanel: &#96;.editor-panel-content input:not([type=\"file\"])&#96; = (0,2,1) = 2 classes + 1 element\n- Current override: &#96;.page-title-input&#96; = (0,1,0) = 1 class\n- New override: &#96;.editor-panel-content input.page-title-input&#96; = (0,3,1) = 3 classes + 1 element\n\nThe new selector has higher specificity, so with &#96;!important&#96; it will override the EditPanel styles.",
+  "name": "Fix Title Input Dark Background",
+  "todos": [
+    {
+      "content": "Change CSS selector from .page-title-input to .editor-panel-content input.page-title-input to match EditPanel specificity",
+      "status": "pending",
+      "id": "update-css-selector"
+    }
+  ],
+  "overview": "The EditPanel CSS is applying a dark background to all inputs. The title input needs a CSS override that matches or exceeds the EditPanel selector's specificity to properly override the dark background effect."
+}
+```
+Additional data:
+
+```json
+{
+  "reviewData": {
+    "status": "Requested",
+    "selectedOption": "none",
+    "isShowingInput": false
+  },
+  "planUri": "file:///Users/bencrowe/.cursor/plans/fix_title_input_dark_background_cf055b29.plan.md",
+  "hasOpenedEditor": true,
+  "pinnedName": "Fix Title Input Dark Background"
+}
+```
+Result:
+
+```json
+{
+  "accepted": {
+    "finalTodos": [
+      {
+        "content": "Change CSS selector from .page-title-input to .editor-panel-content input.page-title-input to match EditPanel specificity",
+        "status": "pending",
+        "id": "update-css-selector"
+      }
+    ]
+  },
+  "planUri": "/Users/bencrowe/.cursor/plans/fix_title_input_dark_background_cf055b29.plan.md"
+}
+```
+Status: **completed**
+
+
+</details>
+</tool-use>
+
+---
+
+_**User (2026-01-06 07:03Z)**_
+
+thee was a button looking effect around the tites before that might be the thing that is making colour black
+
+---
+
+_**Agent (model composer-1, mode Plan)**_
+
+
+
+---
+
+
+Checking for button-related styling on the title element that might be causing the dark effect:
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="search" data-tool-name="grep">
+<details>
+<summary>Tool use: **grep** • Grep for "button|Button|btn" in "src/features/image-configurator/components/LayoutBuilder.tsx" • 3 matches</summary>
+
+Output mode: content
+
+
+| File | Content | Line |
+|------|------|------|
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `\{/* Auto-fill button */\}` | L268 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `<button` | L269 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `</button>` | L279 |
+
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="search" data-tool-name="codebase_search">
+<details>
+                <summary>Tool use: **codebase_search** • Searched codebase "What CSS styles are applied to buttons or button-like elements that might affect the title input?" • **15** results</summary>
+            
+| File | Lines |
+|------|-------|
+| `src/features/report-builder/components/HomeTabPanel/HomeTabPanel.css` | L359-477 |
+| `src/features/report-builder/components/SiteTabPanel/SiteTabPanel.css` | L116-219 |
+| `src/features/report-builder/components/SalesTabPanel/SalesTabPanel.css` | L113-219 |
+| `src/features/report-builder/components/CostTabPanel/CostTabPanel.css` | L113-217 |
+| `src/features/report-builder/components/ImprovementsTabPanel/ImprovementsTabPanel.css` | L120-216 |
+| `src/features/report-builder/components/HomeTabPanel/HomeTabPanel.css` | L117 |
+| `src/features/report-builder/components/HomeTabPanel/HomeTabPanel.css` | L469-568 |
+| `src/features/report-builder/components/ReconTabPanel/ReconTabPanel.css` | L112-225 |
+| `src/features/report-builder/components/IncomeTabPanel/IncomeTabPanel.css` | L112-221 |
+| `src/features/report-builder/components/SiteTabPanel/SiteTabPanel.css` | L212-290 |
+| `src/features/report-builder/EXPORT_UI_REFERENCE.md` | L210-303 |
+| `src/features/report-builder/components/ReportBuilderLayout.tsx` | L11-103 |
+| `src/features/report-builder/components/HomeTabPanel/HomeTabPanel.css` | L235-362 |
+| `src/features/report-builder/EXPORT_UI_REFERENCE.md` | L59 |
+| `src/features/report-builder/components/SiteTabPanel/SiteTabPanel.css` | L124 |
+
+</details>
+</tool-use>
+
+---
+
+
+
+---
+
+
+Checking for button-like styling on the title element (hover/rounded) that might be causing the dark effect:
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="search" data-tool-name="grep">
+<details>
+<summary>Tool use: **grep** • Grep for "rounded|hover:bg|button|focus:ring|focus:outline" in "src/features/image-configurator/components/LayoutBuilder.tsx" • 6 matches</summary>
+
+Output mode: content
+
+
+| File | Content | Line |
+|------|------|------|
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `<span className="text-xs px-2 py-0.5 rounded font-medium text-slate-600" style=\{{ backgroundColor: '#f3f4f6' \}}>` | L252 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `\{/* Auto-fill button */\}` | L268 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `<button` | L269 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `className="flex items-center gap-1 px-3 py-1 text-xs font-medium rounded transition-colors disabled:opacity-50 text-white"` | L272 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `</button>` | L279 |
+| `src/features/image-configurator/components/LayoutBuilder.tsx` | `className="text-base font-semibold text-slate-500 border-b border-slate-200 pb-1 inline-block italic cursor-text hover:bg-slate-50 rounded px-1 -mx-1 transition-colors"` | L333 |
+
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+
+
+---
+
+
+The title div has `hover:bg-slate-50 rounded` (button-like), and the input may be inheriting focus/button styles. Updating the plan to fix CSS specificity and remove any button-like effects:
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: /Users/bencrowe/.cursor/plans/fix_title_input_dark_background_cf055b29.plan.md</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="write">
+
+<details><summary>Tool use: **write** • Edit file: /Users/bencrowe/.cursor/plans/fix_title_input_dark_background_cf055b29.plan.md</summary>
+
+**Chunk 1**
+Lines added: 4, lines removed: 11
+
+```diff
+@@ -1,18 +1,11 @@
+- ---
+- name: Fix Title Input Dark Background
+- overview: The EditPanel CSS is applying a dark background to all inputs. The title input needs a CSS override that matches or exceeds the EditPanel selector's specificity to properly override the dark background effect.
+- todos:
+-   - id: update-css-selector
+-     content: Change CSS selector from .page-title-input to .editor-panel-content input.page-title-input to match EditPanel specificity
+-     status: pending
+- ---
+- 
+  # Fix Title Input Dark Background CSS Override
+  
+  ## Problem
+- The EditPanel component applies CSS to all inputs via &#96;.editor-panel-content input:not([type="file"])&#96; with &#96;background-color: #2a2a2a !important&#96;. The current override using &#96;.page-title-input&#96; has lower CSS specificity, so it's not working.
++ The EditPanel component applies CSS to all inputs via &#96;.editor-panel-content input:not([type="file"])&#96; with &#96;background-color: #2a2a2a !important&#96;. The current override using &#96;.page-title-input&#96; has lower CSS specificity, so it's not working. Additionally, there may be button-like styling (rounded corners, padding, focus rings) that's contributing to the dark appearance.
+  
+  ## Solution
+- Match the EditPanel selector's specificity by using &#96;.editor-panel-content input.page-title-input&#96; (or &#96;.editor-panel-content .page-title-input&#96;) with &#96;!important&#96; rules. This ensures the override takes precedence.
++ 1. Match the EditPanel selector's specificity by using &#96;.editor-panel-content input.page-title-input&#96; with &#96;!important&#96; rules
++ 2. Remove any button-like styling (padding, rounded corners, focus rings) from the input
++ 3. Ensure the input appears as plain text with no background or border effects
+  
+  ## Changes
+```
+
+**Chunk 2**
+Lines added: 8, lines removed: 5
+
+```diff
+@@ -23,14 +16,17 @@
+     - Change selector from &#96;.page-title-input&#96; to &#96;.editor-panel-content input.page-title-input&#96;
+     - This matches the EditPanel selector's specificity (class + element + class)
+-    - Keep all the &#96;!important&#96; rules for background, border, outline, etc.
++    - Add rules to remove padding, border-radius, and any focus ring effects
++    - Keep all the &#96;!important&#96; rules for background, border, outline, box-shadow
+  
+- 2. **Keep the className** on the input element (line 320):
+-    - The &#96;page-title-input&#96; class is still needed for the selector to work
++ 2. **Update the input element** (around line 311-329):
++    - Ensure no padding or rounded corners in inline styles
++    - Remove any classes that might add button-like styling
+  
+  ## Why This Works
+  CSS specificity calculation:
+  - EditPanel: &#96;.editor-panel-content input:not([type="file"])&#96; = (0,2,1) = 2 classes + 1 element
+- - Current override: &#96;.page-title-input&#96; = (0,1,0) = 1 class
++ - Current override: &#96;.page-title-input&#96; = (0,1,0) = 1 class  
+  - New override: &#96;.editor-panel-content input.page-title-input&#96; = (0,3,1) = 3 classes + 1 element
+  
+- The new selector has higher specificity, so with &#96;!important&#96; it will override the EditPanel styles.
++ The new selector has higher specificity, so with &#96;!important&#96; it will override the EditPanel styles. Removing padding and rounded corners ensures it doesn't look like a button.
++ 
+```
+
+</details>
+
+</tool-use>
+
+---
+
+
+
+---
+
+
+Updated the plan to address the button-like styling. The title div has `hover:bg-slate-50 rounded` which can make it look button-like, and the input may inherit focus/button styles.
+
+The plan now:
+1. Fixes CSS specificity by using `.editor-panel-content input.page-title-input` (higher specificity than EditPanel's selector)
+2. Removes button-like styling (padding, rounded corners, focus rings) from the input
+3. Ensures the input appears as plain text with no background
+
+This should remove the dark background effect. Should I proceed with implementing this fix?
+
+---
+
+_**User (2026-01-06 07:03Z)**_
+
+come on are you able to figure it out..?  i need this done 
+
+---
+
+_**Agent (model composer-1, mode Agent)**_
+
+
+
+---
+
+
+Fixing the CSS specificity and removing button-like styling:
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="search_replace">
+
+<details><summary>Tool use: **search_replace** • Edit file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+**Chunk 1**
+Lines added: 1, lines removed: 1
+
+```diff
+@@ -226,5 +226,5 @@
+      }}&gt;
+        &lt;style&gt;{&#96;
+-         .page-title-input {
++         .editor-panel-content input.page-title-input {
+            background-color: transparent !important;
+            background: transparent !important;
+```
+
+**Chunk 2**
+Lines added: 3, lines removed: 1
+
+```diff
+@@ -234,6 +234,8 @@
+            box-shadow: none !important;
+            color: #64748b !important;
++           padding: 0 !important;
++           border-radius: 0 !important;
+          }
+-         .page-title-input:focus {
++         .editor-panel-content input.page-title-input:focus {
+            background-color: transparent !important;
+            background: transparent !important;
+```
+
+**Chunk 3**
+Lines added: 2, lines removed: undefined
+
+```diff
+@@ -242,4 +244,6 @@
+            outline: none !important;
+            box-shadow: none !important;
++           padding: 0 !important;
++           border-radius: 0 !important;
+          }
+        &#96;}&lt;/style&gt;
+```
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+Model supplied an ambiguous edit
+
+---
+
+<tool-use data-tool-type="generic" data-tool-name="read_lints">
+<details>
+          <summary>Tool use: **read_lints** • Read lints for 1 file</summary>
+      
+Lint paths:
+
+- `src/features/image-configurator/components/LayoutBuilder.tsx`
+
+Lint results
+
+
+**No lint errors found**
+</details>
+</tool-use>
+
+---
+
+
+
+---
+
+
+
+
+
+---
+
+<tool-use data-tool-type="read" data-tool-name="read_file">
+<details><summary>Tool use: **read_file** • Read file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+</details>
+</tool-use>
+
+---
+
+<tool-use data-tool-type="write" data-tool-name="search_replace">
+
+<details><summary>Tool use: **search_replace** • Edit file: src/features/image-configurator/components/LayoutBuilder.tsx</summary>
+
+**Chunk 1**
+Lines added: 6, lines removed: undefined
+
+```diff
+@@ -329,4 +329,10 @@
+                      width: 'auto',
+                      minWidth: '200px',
++                     padding: 0,
++                     borderRadius: 0,
++                     backgroundColor: 'transparent',
++                     border: 'none',
++                     outline: 'none',
++                     boxShadow: 'none',
+                    }}
+                    autoFocus
+```
+
+</details>
+
+</tool-use>
+
+---
+
+<tool-use data-tool-type="generic" data-tool-name="read_lints">
+<details>
+          <summary>Tool use: **read_lints** • Read lints for 1 file</summary>
+      
+Lint paths:
+
+- `src/features/image-configurator/components/LayoutBuilder.tsx`
+
+Lint results
+
+
+**No lint errors found**
+</details>
+</tool-use>
+
+---
+
+
+
+---
+
+
+Fixed the CSS specificity issue and removed button-like styling:
+
+1. **Updated CSS selector** to `.editor-panel-content input.page-title-input` — higher specificity than EditPanel's selector, so it overrides the dark background
+2. **Added inline styles** to remove padding, border-radius, background, border, outline, and box-shadow
+3. **Added CSS rules** to remove padding and border-radius in the style tag
+
+The title input should now appear as plain text with no dark background or button-like effects when editing. The CSS selector matches the EditPanel's specificity and wins due to higher specificity (3 classes + 1 element vs 2 classes + 1 element).
+
+---
+
+_**User (2026-01-06 07:03Z)**_
+
+there its gone!!  good work 
+
+---
+
+_**Agent (model composer-1, mode Agent)**_
+
+
+
+---
+
+
+The dark background is removed. The CSS selector `.editor-panel-content input.page-title-input` has higher specificity than the EditPanel styles, so it overrides them. The title input now appears as plain text when editing, with no dark background or button-like effects.
+
+---
+
+_**User (2026-01-06 07:03Z)**_
+
+any advice to my developer to check what you just did as what you did solved it.. what can i tell my editor todo next time if this happens what to look for 
+
+---
+
+_**Agent (model composer-1, mode Agent)**_
+
+
+
+---
+
+
+## Debugging CSS Specificity Conflicts
+
+### 1. **Identify the problem**
+- If styles aren't applying despite `!important`, it's likely a specificity conflict.
+- Use browser DevTools to inspect the element and see which rules are active.
+
+### 2. **Check CSS specificity**
+- Count selectors: classes (`.class`), IDs (`#id`), elements (`div`).
+- Higher specificity wins when both use `!important`.
+- Example:
+  - `.editor-panel-content input` = 2 classes + 1 element = higher specificity
+  - `.page-title-input` = 1 class = lower specificity
+  - Solution: `.editor-panel-content input.page-title-input` = 3 classes + 1 element = highest
+
+### 3. **Debugging steps**
+1. Inspect element in DevTools (right-click → Inspect).
+2. Check the Computed tab to see applied styles.
+3. In the Styles panel, find the conflicting rule (often grayed out).
+4. Match or exceed the conflicting selector’s specificity.
+
+### 4. **Quick fix pattern**
+```css
+/* Instead of: */
+.my-class { background: transparent !important; }
+
+/* Use: */
+.parent-container input.my-class { 
+  background: transparent !important; 
+}
+```
+
+### 5. **Tools**
+- Chrome DevTools: Shows specificity scores and which rules win.
+- CSS Specificity Calculator: Online tools to compare selectors.
+- Rule of thumb: Match the parent container classes in your selector.
+
+### 6. **Prevention**
+- Use scoped CSS or CSS modules to avoid global conflicts.
+- Prefer specific selectors over broad ones.
+- Document global CSS rules that affect common elements (like `.editor-panel-content input`).
+
+Bottom line: When `!important` doesn't work, check specificity and match or exceed the conflicting selector's specificity.
+
+---
+

@@ -224,6 +224,29 @@ export function LayoutBuilder({
       height: '100%',
       overflow: 'hidden'
     }}>
+      <style>{`
+        .editor-panel-content input.page-title-input {
+          background-color: transparent !important;
+          background: transparent !important;
+          border: none !important;
+          border-bottom: none !important;
+          outline: none !important;
+          box-shadow: none !important;
+          color: #64748b !important;
+          padding: 0 !important;
+          border-radius: 0 !important;
+        }
+        .editor-panel-content input.page-title-input:focus {
+          background-color: transparent !important;
+          background: transparent !important;
+          border: none !important;
+          border-bottom: none !important;
+          outline: none !important;
+          box-shadow: none !important;
+          padding: 0 !important;
+          border-radius: 0 !important;
+        }
+      `}</style>
       {/* Top header - simplified, navigation handled by parent */}
       <div className="flex items-center justify-between px-4 py-1 border-b" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', height: '32px', minHeight: '32px' }}>
         {/* Left: Category filter and layout info */}
@@ -301,13 +324,14 @@ export function LayoutBuilder({
                     }
                   }}
                   onBlur={handleSaveTitle}
-                  className="text-base font-semibold text-slate-500 pb-1 italic"
+                  className="page-title-input text-base font-semibold text-slate-500 pb-1 italic"
                   style={{
                     width: 'auto',
                     minWidth: '200px',
-                    background: 'transparent',
+                    padding: 0,
+                    borderRadius: 0,
+                    backgroundColor: 'transparent',
                     border: 'none',
-                    borderBottom: '1px solid #e2e8f0',
                     outline: 'none',
                     boxShadow: 'none',
                   }}

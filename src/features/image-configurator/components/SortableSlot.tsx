@@ -221,7 +221,7 @@ export function SortableSlot({
         ) : image ? (
           <div
             onClick={() => setIsEditingCaption(true)}
-            className="w-full text-xs text-slate-600 cursor-text px-1.5 py-1 rounded hover:bg-slate-50 transition-colors truncate"
+            className="w-full text-xs text-slate-600 cursor-text px-1.5 py-1 rounded hover:bg-slate-50 hover:underline transition-all truncate"
             title="Click to edit caption"
           >
             {currentCaption || defaultCaption || 'Add caption...'}

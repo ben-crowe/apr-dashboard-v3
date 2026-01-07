@@ -343,7 +343,7 @@ export function LayoutBuilder({
               ) : (
                 <div
                   onClick={() => setEditingTitle(true)}
-                  className="text-base font-semibold text-slate-600 border-b border-slate-200 pb-1 inline-block cursor-text hover:bg-slate-50 rounded px-1 -mx-1 transition-colors"
+                  className="text-base font-semibold text-slate-600 border-b border-slate-200 pb-1 inline-block cursor-text hover:bg-slate-50 hover:border-slate-400 rounded px-1 -mx-1 transition-all"
                   title="Click to edit"
                 >
                   {currentLayout.title || currentLayout.page_type}

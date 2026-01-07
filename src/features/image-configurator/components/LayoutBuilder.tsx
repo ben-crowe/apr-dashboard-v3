@@ -99,14 +99,6 @@ export function LayoutBuilder({
     }
   }, [currentLayout?.id, currentLayout?.title]);
 
-  // Initialize title value when layout changes
-  useEffect(() => {
-    if (currentLayout) {
-      setTitleValue(currentLayout.title || currentLayout.page_type);
-    }
-  }, [currentLayout?.id, currentLayout?.title]);
-
-
   // Navigation handlers
   const goToPrevPage = useCallback(() => {
     setCurrentPageIndex((prev) => Math.max(0, prev - 1));

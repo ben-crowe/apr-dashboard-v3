@@ -112,11 +112,12 @@ export function SortableSlot({
       <div
         ref={setNodeRef}
         className={`
-          relative aspect-square overflow-hidden border transition-all duration-150 group
-          ${isHighlighted ? 'border-green-500 bg-green-500/20 scale-[1.02]' : 'border-slate-300'}
-          ${!image ? 'bg-slate-50' : 'bg-white shadow-sm'}
+          relative aspect-square overflow-hidden transition-all duration-150 group rounded-lg
+          ${isHighlighted ? 'border-2 border-green-500 bg-green-50 scale-[1.02]' : ''}
+          ${!image && !isHighlighted ? 'border-2 border-dashed border-slate-300 bg-slate-50/50' : ''}
+          ${image ? 'border border-slate-200 bg-white shadow-sm' : ''}
         `}
-        style={{ borderWidth: '1px', width: '100%', height: 'auto' }}
+        style={{ width: '100%', height: 'auto' }}
       >
         {image ? (
           // Filled slot
@@ -157,20 +158,19 @@ export function SortableSlot({
 
           </>
         ) : (
-          // Empty slot
-          <div className="w-full h-full flex flex-col items-center justify-center text-slate-500">
-            <ImagePlus className={`w-8 h-8 mb-1 ${isHighlighted ? 'text-green-400' : ''}`} />
-            <span className={`text-xs ${isHighlighted ? 'text-green-400' : ''}`}>
-              {slot.slot_label || `Slot ${slot.slot_position}`}
+          // Empty slot - modern drag-drop style
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className={`p-3 rounded-full mb-2 ${isHighlighted ? 'bg-green-100' : 'bg-slate-100'}`}>
+              <ImagePlus className={`w-6 h-6 ${isHighlighted ? 'text-green-500' : 'text-slate-400'}`} />
+            </div>
+            <span className={`text-[11px] font-medium ${isHighlighted ? 'text-green-600' : 'text-slate-400'}`}>
+              {isHighlighted ? 'Drop image here' : 'Drag image here'}
             </span>
-            {isHighlighted && (
-              <span className="text-xs text-green-400 mt-1">Drop here</span>
-            )}
           </div>
         )}
 
         {/* Position badge */}
-        <div className="absolute top-1 left-1 bg-white/80 text-slate-500 text-[10px] px-1 py-0.5 rounded">
+        <div className="absolute top-1.5 left-1.5 bg-white/90 text-slate-400 text-[10px] px-1.5 py-0.5 rounded-md font-medium shadow-sm">
           {slot.slot_position}
         </div>
       </div>

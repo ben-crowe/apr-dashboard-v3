@@ -56,6 +56,7 @@ export const PAGE_TYPE_DISPLAY_NAMES: Record<string, string> = {
   'flood-map': 'Flood Map',
   'site-plan': 'Site Plan',
   'floor-plan': 'Floor Plan',
+  'building-systems': 'Bldg Systems',
   'building-systems-1': 'Bldg Systems 1',
   'building-systems-2': 'Bldg Systems 2',
   'comp-location-map': 'Comp Loc Map',

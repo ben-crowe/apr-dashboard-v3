@@ -193,7 +193,7 @@ export function LayoutBuilder({
   return (
     <div className={`flex flex-col h-full ${className}`} style={{ backgroundColor: '#fafafa' }}>
       {/* Top header - Compact with page nav and controls */}
-      <div className="flex items-center justify-between px-4 py-1 border-b flex-shrink-0" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb' }}>
+      <div className="flex items-center justify-between px-4 py-1 border-b" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', flexShrink: 0 }}>
         {/* Left: Page navigation */}
         <div className="flex items-center gap-2">
           <button
@@ -263,45 +263,8 @@ export function LayoutBuilder({
         </div>
       </div>
 
-      {/* Page tabs at bottom - STICKY positioning to stay visible */}
-      <div className="flex items-center gap-1 px-3 py-1 border-t overflow-x-auto sticky bottom-0" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', height: '36px', zIndex: 100 }}>
-        {layouts.map((layout, index) => {
-          const slots = getSlotsForLayout(allSlots, layout.id);
-          const filledCount = slots.filter((s) => s.image_id).length;
-          const isActive = index === currentPageIndex;
-
-          return (
-            <button
-              key={layout.id}
-              onClick={() => setCurrentPageIndex(index)}
-              className={`
-                flex-shrink-0 flex flex-col items-center px-2 py-0.5 rounded text-xs font-medium transition-all
-                whitespace-nowrap
-                ${isActive ? 'text-white' : 'text-slate-600 hover:text-slate-900'}
-              `}
-              style={isActive ? { backgroundColor: '#10b981' } : { backgroundColor: '#f3f4f6' }}
-              onMouseEnter={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.backgroundColor = '#e5e7eb';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.backgroundColor = '#f3f4f6';
-                }
-              }}
-            >
-              <span>{layout.page_type}</span>
-              <span className={`text-[10px] ${isActive ? 'text-green-100' : 'text-slate-500'}`}>
-                {filledCount}/{slots.length}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
       {/* White letter-size page container - scrollable middle section */}
-      <div className="flex-1 p-2 overflow-y-auto overflow-x-hidden flex items-start justify-center" style={{ backgroundColor: '#f5f5f5' }}>
+      <div className="flex-1 p-2 overflow-y-auto overflow-x-hidden flex items-start justify-center" style={{ backgroundColor: '#f5f5f5', minHeight: 0 }}>
         {/* Page wrapper - maintains letter aspect ratio */}
         <div
           className="flex flex-col shadow-md overflow-hidden"
@@ -380,6 +343,43 @@ export function LayoutBuilder({
           </div>
 
         </div>
+      </div>
+
+      {/* Page tabs at bottom */}
+      <div className="flex items-center gap-1 px-3 py-1 border-t overflow-x-auto" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', height: '36px', flexShrink: 0 }}>
+        {layouts.map((layout, index) => {
+          const slots = getSlotsForLayout(allSlots, layout.id);
+          const filledCount = slots.filter((s) => s.image_id).length;
+          const isActive = index === currentPageIndex;
+
+          return (
+            <button
+              key={layout.id}
+              onClick={() => setCurrentPageIndex(index)}
+              className={`
+                flex-shrink-0 flex flex-col items-center px-2 py-0.5 rounded text-xs font-medium transition-all
+                whitespace-nowrap
+                ${isActive ? 'text-white' : 'text-slate-600 hover:text-slate-900'}
+              `}
+              style={isActive ? { backgroundColor: '#10b981' } : { backgroundColor: '#f3f4f6' }}
+              onMouseEnter={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = '#e5e7eb';
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isActive) {
+                  e.currentTarget.style.backgroundColor = '#f3f4f6';
+                }
+              }}
+            >
+              <span>{layout.page_type}</span>
+              <span className={`text-[10px] ${isActive ? 'text-green-100' : 'text-slate-500'}`}>
+                {filledCount}/{slots.length}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

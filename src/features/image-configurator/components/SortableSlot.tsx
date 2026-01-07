@@ -185,7 +185,7 @@ export function SortableSlot({
         </div>
       </div>
 
-      {/* Caption - plain editable text */}
+      {/* Caption - editable text under image */}
       <div className="relative">
         {image && isEditingCaption ? (
           <input
@@ -195,21 +195,20 @@ export function SortableSlot({
             onChange={(e) => handleCaptionChange(e.target.value)}
             onBlur={handleCaptionBlur}
             onKeyDown={handleCaptionKeyDown}
-            className="w-full text-xs text-slate-600 bg-transparent border-none outline-none focus:outline-none focus:ring-0 px-0 py-0.5 italic"
+            className="w-full text-[11px] text-slate-700 bg-white border border-slate-300 rounded px-1 py-0.5 outline-none focus:border-green-500"
             placeholder={defaultCaption || "Add caption..."}
-            style={{ borderBottom: '1px solid #cbd5e1' }}
           />
         ) : image ? (
           <div
             onClick={() => setIsEditingCaption(true)}
-            className="w-full text-xs text-slate-600 cursor-text hover:text-slate-800 transition-colors px-0 py-0.5 italic"
+            className="w-full text-[11px] text-slate-600 cursor-text px-1 py-0.5 rounded hover:bg-slate-100 transition-colors truncate"
             title="Click to edit caption"
           >
-            {currentCaption || defaultCaption || 'Click to add caption...'}
+            {currentCaption || defaultCaption || 'Add caption...'}
           </div>
         ) : (
-          <div className="w-full text-xs text-slate-500 px-0 py-0.5 italic">
-            {defaultCaption || 'Caption...'}
+          <div className="w-full text-[11px] text-slate-400 px-1 py-0.5">
+            {defaultCaption || 'Caption'}
           </div>
         )}
       </div>

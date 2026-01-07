@@ -660,11 +660,11 @@ export function ImageConfiguratorDemo({
                 )}
               </div>
 
-              {/* Page viewing area - EXACT COPY from LayoutBuilder line 265 */}
+              {/* Page viewing area - align to top */}
               <div style={{
                 flex: 1,
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 justifyContent: 'center',
                 padding: '8px',
                 backgroundColor: '#f5f5f5',
@@ -729,6 +729,19 @@ export function ImageConfiguratorDemo({
                 ) : (
                   <div className="text-slate-500 text-sm">Select a page to preview</div>
                 )}
+              </div>
+
+              {/* Panel footer - full width, dark */}
+              <div
+                className="flex items-center justify-between px-4 py-2 shrink-0"
+                style={{ backgroundColor: '#1a1a1a', borderTop: '1px solid #333' }}
+              >
+                <span className="text-xs text-slate-400">
+                  Page {currentPageIndex + 1} of {layouts.length}
+                </span>
+                <div className="flex items-center gap-2">
+                  {/* Placeholder for future controls */}
+                </div>
               </div>
             </div>
           </div>

@@ -193,13 +193,13 @@ export function LayoutBuilder({
   return (
     <div className={`${className}`} style={{
       backgroundColor: '#fafafa',
-      display: 'grid',
-      gridTemplateRows: 'auto 1fr auto',
+      display: 'flex',
+      flexDirection: 'column',
       height: '100%',
       overflow: 'hidden'
     }}>
-      {/* Top header - Compact with page nav and controls */}
-      <div className="flex items-center justify-between px-4 py-1 border-b" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb' }}>
+      {/* Top header */}
+      <div className="flex items-center justify-between px-4 py-1 border-b" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', height: '32px', minHeight: '32px' }}>
         {/* Left: Page navigation */}
         <div className="flex items-center gap-2">
           <button
@@ -269,17 +269,25 @@ export function LayoutBuilder({
         </div>
       </div>
 
-      {/* White letter-size page container - scrollable middle section */}
-      <div className="p-2 flex items-center justify-center" style={{ backgroundColor: '#f5f5f5', overflow: 'hidden' }}>
-        {/* Page wrapper - fixed letter proportions, scaled to fit */}
+      {/* Page viewing area - takes remaining space minus tabs */}
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '8px',
+        backgroundColor: '#f5f5f5',
+        overflow: 'hidden',
+        minHeight: 0
+      }}>
+        {/* Page wrapper - fixed letter proportions */}
         <div
           className="flex flex-col shadow-md"
           style={{
             backgroundColor: '#ffffff',
             aspectRatio: '8.5 / 11',
-            height: '100%',
-            maxHeight: '100%',
-            flexShrink: 0,
+            maxHeight: 'calc(100% - 16px)',
+            maxWidth: 'calc(100% - 16px)',
           }}
         >
           {/* Page title section */}
@@ -350,8 +358,21 @@ export function LayoutBuilder({
         </div>
       </div>
 
-      {/* Page tabs at bottom */}
-      <div className="flex items-center gap-1 px-3 py-1 border-t overflow-x-auto" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', height: '36px', flexShrink: 0 }}>
+      {/* Page tabs at bottom - FIXED HEIGHT */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '4px',
+        padding: '4px 12px',
+        borderTop: '1px solid #e5e7eb',
+        backgroundColor: '#ffffff',
+        height: '40px',
+        minHeight: '40px',
+        maxHeight: '40px',
+        flexShrink: 0,
+        overflowX: 'auto',
+        overflowY: 'hidden'
+      }}>
         {layouts.map((layout, index) => {
           const slots = getSlotsForLayout(allSlots, layout.id);
           const filledCount = slots.filter((s) => s.image_id).length;

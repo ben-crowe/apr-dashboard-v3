@@ -92,6 +92,9 @@ export interface TableTestCase {
   /** Input values for this test */
   inputs: Record<string, number>;
 
+  /** External dependency values for this test (e.g., subject-units from Home Tab) */
+  dependencies?: Record<string, number>;
+
   /** Expected output values */
   expectedOutputs: Record<string, number>;
 
@@ -120,6 +123,9 @@ export interface FinancialTable {
 
   /** Fields that are calculated outputs from this table */
   outputFields: TableFieldDefinition[];
+
+  /** External fields this table depends on (e.g., subject-units from Home Tab) */
+  dependencyFields?: TableFieldDefinition[];
 
   /**
    * Calculate outputs from inputs

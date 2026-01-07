@@ -268,13 +268,20 @@ const outputFields: TableFieldDefinition[] = [
 
 /**
  * Calculate all income outputs from inputs
+ * @param inputs - Unit mix data from table inputs
+ * @param dependencies - External store values (subject-units from Home Tab)
  */
-function calculate(inputs: Record<string, number>): CalculationResult {
+function calculate(
+  inputs: Record<string, number>,
+  dependencies?: Record<string, number>
+): CalculationResult {
   const steps: CalculationStep[] = [];
   const outputs: Record<string, number> = {};
 
-  // Unit mix calculations
-  let totalUnits = 0;
+  // Read total units from Home Tab (subject-units) - this is the authority
+  const totalUnits = dependencies?.['subject-units'] ?? 0;
+
+  // Unit mix calculations (for SF and revenue breakdown only)
   let totalSf = 0;
   let totalRentalRevenue = 0;
 
@@ -287,7 +294,7 @@ function calculate(inputs: Record<string, number>): CalculationResult {
     const perUnit = count > 0 ? Math.round(annual / count) : 0;
     const perSf = count > 0 && sf > 0 ? Math.round((rent / sf) * 100) / 100 : 0;
 
-    totalUnits += count;
+    // SF calculated from unit mix (not units - that comes from Home Tab)
     totalSf += count * sf;
     totalRentalRevenue += annual;
 
@@ -396,6 +403,19 @@ function calculate(inputs: Record<string, number>): CalculationResult {
 }
 
 /**
+ * External dependencies this table reads from the store
+ */
+const dependencyFields: TableFieldDefinition[] = [
+  {
+    id: 'subject-units',
+    storeId: 'subject-units',
+    label: 'Total Units (from Home Tab)',
+    type: 'number',
+    source: 'input', // External input from Home Tab
+  },
+];
+
+/**
  * Income Table Definition
  */
 export const incomeTable: FinancialTable = {
@@ -406,6 +426,7 @@ export const incomeTable: FinancialTable = {
     'Calculates rental revenue by unit type, other income sources, and Potential Gross Revenue (PGR). Foundation for all other financial calculations.',
   inputFields,
   outputFields,
+  dependencyFields,
   calculate,
   testCases: [
     {
@@ -431,6 +452,10 @@ export const incomeTable: FinancialTable = {
         'calc-parking-per-unit': 0,
         'calc-laundry-per-unit': 0,
         'calc-other-income': 0,
+      },
+      // subject-units from Home Tab (authority for total unit count)
+      dependencies: {
+        'subject-units': 20,
       },
       expectedOutputs: {
         'calc-total-units': 20,

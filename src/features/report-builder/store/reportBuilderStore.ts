@@ -6304,29 +6304,22 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     let unmappedCount = 0;
     const unmappedIds: string[] = [];
 
-    // STEP 1: Preserve field IDs in title attributes BEFORE interpolation
-    // Store original field IDs in data-field-id attribute so toggle can show raw IDs
-    // Match: title="{{field-id}}" or title='{{field-id}}' with optional spacing
-    // STEP 1: Preserve field IDs in title attributes BEFORE interpolation
-    // Store original field IDs in data-field-id attribute so toggle can show raw IDs
-    // CRITICAL: Store CLEAN field ID (without mustaches) so STEP 2 doesn't replace it!
-    let preservedCount = 0;
+    // STEP 1: Clean data-field-id attributes (template v2.9.0 has mustaches in them)
+    // Convert data-field-id="{{field-id}}" to data-field-id="field-id"
+    // This preserves the clean ID so toggle can reference it
     html = html.replace(
-      /title\s*=\s*["']\{\{([^}]+)\}\}["']/g,
-      (match, cleanFieldId) => {
-        // Add data-field-id attribute with CLEAN field ID (no mustaches)
-        // Preserve the original quote style
-        const quote = match.includes("'") ? "'" : '"';
-        preservedCount++;
-        // Store clean ID so STEP 2's {{...}} replacement doesn't touch it
-        return `title=${quote}{{${cleanFieldId}}}${quote} data-field-id="${cleanFieldId}"`;
-      },
-    );
-    console.log(
-      `interpolateTemplate: Preserved ${preservedCount} field IDs in data-field-id attributes`,
+      /data-field-id=(["'])\{\{([^}]+)\}\}\1/g,
+      'data-field-id="$2"'
     );
 
-    // STEP 2: Now replace placeholders in content (title attributes preserved via data-field-id)
+    // STEP 2: Protect title attributes from interpolation
+    // Replace {{...}} in title with __FIELD__...__FIELD__ marker
+    html = html.replace(
+      /title=(["'])\{\{([^}]+)\}\}\1/g,
+      'title=$1__FIELD__$2__FIELD__$1'
+    );
+
+    // STEP 3: Now replace placeholders in content ONLY (attributes are protected)
     html = html.replace(/\{\{([^}]+)\}\}/g, (match, templateFieldId) => {
       // Map template ID to store ID (handles testDataFieldMapping)
       const storeFieldId = getStoreIdFromTemplateId(templateFieldId);
@@ -6354,6 +6347,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         return value !== undefined ? value : match;
       }
     });
+
+    // STEP 4: Restore protected title attributes
+    // Convert __FIELD__field-id__FIELD__ back to {{field-id}}
+    html = html.replace(/__FIELD__([^_]+)__FIELD__/g, '{{$1}}');
 
     // Debug logging
     if (replacedCount > 0 || unmappedCount > 0) {

@@ -301,8 +301,16 @@ export function LayoutBuilder({
                     }
                   }}
                   onBlur={handleSaveTitle}
-                  className="text-base font-semibold text-slate-500 border-b border-slate-200 pb-1 bg-white outline-none italic focus:ring-0"
-                  style={{ width: 'auto', minWidth: '200px' }}
+                  className="text-base font-semibold text-slate-500 pb-1 italic"
+                  style={{
+                    width: 'auto',
+                    minWidth: '200px',
+                    background: 'transparent',
+                    border: 'none',
+                    borderBottom: '1px solid #e2e8f0',
+                    outline: 'none',
+                    boxShadow: 'none',
+                  }}
                   autoFocus
                 />
               ) : (

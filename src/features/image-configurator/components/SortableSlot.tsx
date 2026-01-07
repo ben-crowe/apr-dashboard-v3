@@ -185,7 +185,13 @@ export function SortableSlot({
             onChange={(e) => handleCaptionChange(e.target.value)}
             onBlur={handleCaptionBlur}
             onKeyDown={handleCaptionKeyDown}
-            className="w-full text-xs text-slate-700 bg-white border border-slate-200 rounded px-1.5 py-1 outline-none focus:border-green-500 focus:ring-0"
+            className="w-full text-xs text-slate-600 px-1.5 py-1"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              outline: 'none',
+              boxShadow: 'none',
+            }}
             placeholder={defaultCaption || "Add caption..."}
           />
         ) : image ? (

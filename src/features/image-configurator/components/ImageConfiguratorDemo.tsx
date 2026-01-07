@@ -830,8 +830,16 @@ export function ImageConfiguratorDemo({
                             }
                           }}
                           onBlur={handlePopupSaveTitle}
-                          className="text-base font-semibold text-slate-500 border-b border-slate-200 pb-1 bg-white outline-none italic focus:ring-0"
-                          style={{ width: 'auto', minWidth: '200px' }}
+                          className="text-base font-semibold text-slate-500 pb-1 italic"
+                          style={{
+                            width: 'auto',
+                            minWidth: '200px',
+                            background: 'transparent',
+                            border: 'none',
+                            borderBottom: '1px solid #e2e8f0',
+                            outline: 'none',
+                            boxShadow: 'none',
+                          }}
                         />
                       ) : (
                         <div
@@ -1122,7 +1130,13 @@ function PopupSlot({
             onChange={(e) => setCaptionValue(e.target.value)}
             onBlur={handleCaptionBlur}
             onKeyDown={handleCaptionKeyDown}
-            className="w-full text-xs text-slate-700 bg-white border border-slate-200 rounded px-1.5 py-1 outline-none focus:border-green-500 focus:ring-0"
+            className="w-full text-xs text-slate-600 px-1.5 py-1"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              outline: 'none',
+              boxShadow: 'none',
+            }}
             placeholder={defaultCaption || "Add caption..."}
           />
         ) : image ? (

@@ -338,7 +338,7 @@ export function LayoutBuilder({
           )}
 
           {/* Image grid */}
-          <div className="flex-1 px-4 pb-4 flex items-center justify-center overflow-hidden min-w-0 min-h-0">
+          <div className="flex-1 px-4 pb-2 flex items-center justify-center overflow-hidden min-w-0 min-h-0">
             <div
               className="grid w-full h-full gap-3"
               style={{
@@ -368,6 +368,19 @@ export function LayoutBuilder({
                 );
               })}
             </div>
+          </div>
+
+          {/* Page footer */}
+          <div
+            className="flex items-center justify-center px-6 py-2"
+            style={{
+              borderTop: '1px solid #e5e7eb',
+              flexShrink: 0
+            }}
+          >
+            <span className="text-xs text-slate-400">
+              Page {currentPageIndex + 1}
+            </span>
           </div>
 
         </div>

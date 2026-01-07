@@ -114,7 +114,7 @@ export function SortableSlot({
         className={`
           relative aspect-square overflow-hidden transition-all duration-150 group rounded-lg
           ${isHighlighted ? 'border-2 border-green-500 bg-green-50 scale-[1.02]' : ''}
-          ${!image && !isHighlighted ? 'border-2 border-dashed border-slate-300 bg-slate-50/50' : ''}
+          ${!image && !isHighlighted ? 'border-2 border-dashed border-slate-300 bg-gradient-to-b from-slate-50 to-slate-100' : ''}
           ${image ? 'border border-slate-200 bg-white shadow-sm' : ''}
         `}
         style={{ width: '100%', height: 'auto' }}

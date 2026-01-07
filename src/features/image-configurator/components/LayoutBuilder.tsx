@@ -232,9 +232,10 @@ export function LayoutBuilder({
           border-bottom: none !important;
           outline: none !important;
           box-shadow: none !important;
-          color: #64748b !important;
+          color: #475569 !important;
           padding: 0 !important;
           border-radius: 0 !important;
+          font-style: normal !important;
         }
         .editor-panel-content input.page-title-input:focus {
           background-color: transparent !important;
@@ -243,8 +244,10 @@ export function LayoutBuilder({
           border-bottom: none !important;
           outline: none !important;
           box-shadow: none !important;
+          color: #475569 !important;
           padding: 0 !important;
           border-radius: 0 !important;
+          font-style: normal !important;
         }
       `}</style>
       {/* Top header - simplified, navigation handled by parent */}
@@ -324,7 +327,7 @@ export function LayoutBuilder({
                     }
                   }}
                   onBlur={handleSaveTitle}
-                  className="page-title-input text-base font-semibold text-slate-500 pb-1 italic"
+                  className="page-title-input text-base font-semibold text-slate-600 pb-1"
                   style={{
                     width: 'auto',
                     minWidth: '200px',
@@ -340,7 +343,7 @@ export function LayoutBuilder({
               ) : (
                 <div
                   onClick={() => setEditingTitle(true)}
-                  className="text-base font-semibold text-slate-500 border-b border-slate-200 pb-1 inline-block italic cursor-text hover:bg-slate-50 rounded px-1 -mx-1 transition-colors"
+                  className="text-base font-semibold text-slate-600 border-b border-slate-200 pb-1 inline-block cursor-text hover:bg-slate-50 rounded px-1 -mx-1 transition-colors"
                   title="Click to edit"
                 >
                   {currentLayout.title || currentLayout.page_type}

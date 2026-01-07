@@ -616,7 +616,8 @@ export function ImageConfiguratorDemo({
               outline: none !important;
               box-shadow: none !important;
               border-radius: 0 !important;
-              color: #64748b !important;
+              color: #475569 !important;
+              font-style: normal !important;
             }
             input.popup-title-input:focus {
               background-color: transparent !important;
@@ -625,7 +626,8 @@ export function ImageConfiguratorDemo({
               outline: none !important;
               box-shadow: none !important;
               border-radius: 0 !important;
-              color: #64748b !important;
+              color: #475569 !important;
+              font-style: normal !important;
             }
             input.popup-caption-input {
               background-color: transparent !important;
@@ -868,7 +870,7 @@ export function ImageConfiguratorDemo({
                             }
                           }}
                           onBlur={handlePopupSaveTitle}
-                          className="popup-title-input text-base font-semibold text-slate-500 pb-1 italic"
+                          className="popup-title-input text-base font-semibold text-slate-600 pb-1"
                           style={{
                             width: 'auto',
                             minWidth: '200px',
@@ -883,7 +885,7 @@ export function ImageConfiguratorDemo({
                       ) : (
                         <div
                           onClick={() => setPopupEditingTitle(true)}
-                          className="text-base font-semibold text-slate-500 border-b border-slate-200 pb-1 inline-block italic cursor-text hover:bg-slate-50 rounded px-1 -mx-1 transition-colors"
+                          className="text-base font-semibold text-slate-600 border-b border-slate-200 pb-1 inline-block cursor-text hover:bg-slate-50 rounded px-1 -mx-1 transition-colors"
                           title="Click to edit"
                         >
                           {currentLayout.title || currentLayout.page_type}

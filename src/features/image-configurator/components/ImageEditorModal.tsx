@@ -273,17 +273,17 @@ export function ImageEditorModal({
                     <div className="flex items-center gap-2">
                       <button
                         onClick={handleRotateLeft}
-                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded transition-colors"
+                        className="flex-1 flex items-center justify-center gap-1 px-2 py-1 bg-slate-700 hover:bg-slate-600 rounded transition-colors whitespace-nowrap"
                       >
-                        <RotateCcw className="w-4 h-4" />
-                        <span className="text-sm">Left</span>
+                        <RotateCcw className="w-3.5 h-3.5" />
+                        <span className="text-xs">Left</span>
                       </button>
                       <button
                         onClick={handleRotateRight}
-                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-700 hover:bg-slate-600 rounded transition-colors"
+                        className="flex-1 flex items-center justify-center gap-1 px-2 py-1 bg-slate-700 hover:bg-slate-600 rounded transition-colors whitespace-nowrap"
                       >
-                        <RotateCw className="w-4 h-4" />
-                        <span className="text-sm">Right</span>
+                        <RotateCw className="w-3.5 h-3.5" />
+                        <span className="text-xs">Right</span>
                       </button>
                     </div>
                     <p className="text-xs text-slate-500 mt-1 text-center">
@@ -299,25 +299,25 @@ export function ImageEditorModal({
                     <div className="flex items-center gap-2">
                       <button
                         onClick={handleFlipH}
-                        className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded transition-colors ${
+                        className={`flex-1 flex items-center justify-center gap-1 px-2 py-1 rounded transition-colors whitespace-nowrap ${
                           cropData.flipH
                             ? 'bg-green-600 hover:bg-green-500'
                             : 'bg-slate-700 hover:bg-slate-600'
                         }`}
                       >
-                        <FlipHorizontal className="w-4 h-4" />
-                        <span className="text-sm">Horizontal</span>
+                        <FlipHorizontal className="w-3.5 h-3.5" />
+                        <span className="text-xs">Horiz</span>
                       </button>
                       <button
                         onClick={handleFlipV}
-                        className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded transition-colors ${
+                        className={`flex-1 flex items-center justify-center gap-1 px-2 py-1 rounded transition-colors whitespace-nowrap ${
                           cropData.flipV
                             ? 'bg-green-600 hover:bg-green-500'
                             : 'bg-slate-700 hover:bg-slate-600'
                         }`}
                       >
-                        <FlipVertical className="w-4 h-4" />
-                        <span className="text-sm">Vertical</span>
+                        <FlipVertical className="w-3.5 h-3.5" />
+                        <span className="text-xs">Vert</span>
                       </button>
                     </div>
                   </div>
@@ -331,9 +331,9 @@ export function ImageEditorModal({
                       <button
                         onClick={handleZoomOut}
                         disabled={zoom <= 0.5}
-                        className="p-2 bg-slate-700 hover:bg-slate-600 rounded disabled:opacity-50"
+                        className="p-1.5 bg-slate-700 hover:bg-slate-600 rounded disabled:opacity-50"
                       >
-                        <ZoomOut className="w-4 h-4" />
+                        <ZoomOut className="w-3.5 h-3.5" />
                       </button>
                       <div className="flex-1 bg-slate-700 rounded-full h-1.5">
                         <div
@@ -344,9 +344,9 @@ export function ImageEditorModal({
                       <button
                         onClick={handleZoomIn}
                         disabled={zoom >= 3}
-                        className="p-2 bg-slate-700 hover:bg-slate-600 rounded disabled:opacity-50"
+                        className="p-1.5 bg-slate-700 hover:bg-slate-600 rounded disabled:opacity-50"
                       >
-                        <ZoomIn className="w-4 h-4" />
+                        <ZoomIn className="w-3.5 h-3.5" />
                       </button>
                     </div>
                     <p className="text-xs text-slate-500 mt-1 text-center">

@@ -769,9 +769,9 @@ export function ImageConfiguratorDemo({
                       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)',
                     }}
                   >
-                    {/* Page title section - EXACT COPY from LayoutBuilder line 289 */}
+                    {/* Page title section - matches LayoutBuilder styling */}
                     <div className="px-6 pt-4 pb-2">
-                      <div className="text-base font-semibold text-slate-500 border-b border-slate-300 pb-1 inline-block italic">
+                      <div className="text-base font-semibold text-slate-500 border-b border-slate-300 pb-1 inline-block italic hover:bg-slate-100 rounded px-1 -mx-1 transition-colors">
                         {currentLayout.title || currentLayout.page_type}
                       </div>
                     </div>
@@ -1011,10 +1011,10 @@ function PopupSlot({
         </div>
       </div>
 
-      {/* Caption - EXACT COPY from SortableSlot line 178 */}
-      {/* Always visible, LEFT ALIGNED */}
+      {/* Caption - matches SortableSlot styling */}
+      {/* Always visible, LEFT ALIGNED, light hover */}
       {image ? (
-        <div className="w-full text-[11px] text-slate-600 px-1 py-0.5 truncate">
+        <div className="w-full text-[11px] text-slate-600 px-1 py-0.5 truncate rounded hover:bg-slate-100 transition-colors">
           {currentCaption || defaultCaption || 'Add caption...'}
         </div>
       ) : (

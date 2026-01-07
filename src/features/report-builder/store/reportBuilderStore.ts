@@ -6725,6 +6725,13 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       String(testDataSet1["comp4-photo-caption"] || ""),
     );
 
+    updateField("comp5-photo", String(testDataSet1["comp5-photo"] || ""));
+    updateField("comp5-map", String(testDataSet1["comp5-map"] || ""));
+    updateField(
+      "comp5-photo-caption",
+      String(testDataSet1["comp5-photo-caption"] || ""),
+    );
+
     // Regenerate preview
     console.log("Maps test data loaded - regenerating preview...");
     await get().generatePreview();

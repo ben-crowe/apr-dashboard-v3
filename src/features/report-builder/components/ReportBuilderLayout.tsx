@@ -16,6 +16,12 @@ export default function ReportBuilderLayout() {
   const showRawIds = useReportBuilderStore((state) => state.showRawIds);
   const setShowRawIds = useReportBuilderStore((state) => state.setShowRawIds);
   const activeTestMode = useReportBuilderStore((state) => state.activeTestMode);
+  const activeSection = useReportBuilderStore((state) => state.activeSection);
+
+  // Use wider editor panel (75%) for Image Configurator section
+  const isImageMgtSection = activeSection === 'image-mgt';
+  const editPanelSize = isImageMgtSection ? 75 : 60;
+  const previewPanelSize = isImageMgtSection ? 25 : 40;
 
   // Note: Test data is loaded from TDD page (/test-input), not from Report Builder
   // The store persists data across navigation
@@ -71,14 +77,24 @@ export default function ReportBuilderLayout() {
       <div className="flex-1 flex overflow-hidden">
         <SectionSidebar />
 
-      <ResizablePanelGroup direction="horizontal" className="flex-1">
-        <ResizablePanel defaultSize={60} minSize={60}>
+      <ResizablePanelGroup
+        key={isImageMgtSection ? 'image-mgt' : 'default'}
+        direction="horizontal"
+        className="flex-1"
+      >
+        <ResizablePanel
+          defaultSize={editPanelSize}
+          minSize={isImageMgtSection ? 60 : 50}
+        >
           <EditPanel />
         </ResizablePanel>
 
         <ResizableHandle withHandle />
 
-        <ResizablePanel defaultSize={40} maxSize={40}>
+        <ResizablePanel
+          defaultSize={previewPanelSize}
+          maxSize={isImageMgtSection ? 40 : 50}
+        >
           <PreviewPanel />
         </ResizablePanel>
       </ResizablePanelGroup>

@@ -112,7 +112,7 @@ export function SortableSlot({
       <div
         ref={setNodeRef}
         className={`
-          relative aspect-square overflow-hidden border transition-all duration-150
+          relative aspect-square overflow-hidden border transition-all duration-150 group
           ${isHighlighted ? 'border-green-500 bg-green-500/20 scale-[1.02]' : 'border-slate-300'}
           ${!image ? 'bg-slate-50' : 'bg-white shadow-sm'}
         `}
@@ -127,42 +127,32 @@ export function SortableSlot({
               className="w-full h-full object-contain"
             />
 
-            {/* Hover overlay with actions */}
-            <div className="absolute inset-0 bg-black/60 opacity-0 hover:opacity-100 transition-opacity flex flex-col">
-              {/* Top actions */}
-              <div className="flex justify-end p-1.5 gap-1">
-                {onEditImage && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onEditImage();
-                    }}
-                    className="p-1 rounded bg-white/20 hover:bg-white/30 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
-                    title="Edit image"
-                  >
-                    <Edit3 className="w-3.5 h-3.5 text-white" />
-                  </button>
-                )}
-                {onClear && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onClear();
-                    }}
-                    className="p-1 rounded bg-red-500/80 hover:bg-red-500 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
-                    title="Remove image"
-                  >
-                    <X className="w-3.5 h-3.5 text-white" />
-                  </button>
-                )}
-              </div>
-
-              {/* Center slot info */}
-              <div className="flex-1 flex items-center justify-center">
-                <span className="text-white text-sm font-medium">
-                  {slot.slot_label || `Slot ${slot.slot_position}`}
-                </span>
-              </div>
+            {/* Action buttons - top right, visible on hover */}
+            <div className="absolute top-1 right-1 flex gap-1 opacity-0 hover:opacity-100 transition-opacity group-hover:opacity-100">
+              {onEditImage && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onEditImage();
+                  }}
+                  className="p-1 rounded bg-slate-700/80 hover:bg-slate-600 transition-colors"
+                  title="Edit image"
+                >
+                  <Edit3 className="w-3 h-3 text-white" />
+                </button>
+              )}
+              {onClear && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClear();
+                  }}
+                  className="p-1 rounded bg-red-500/80 hover:bg-red-500 transition-colors"
+                  title="Remove image"
+                >
+                  <X className="w-3 h-3 text-white" />
+                </button>
+              )}
             </div>
 
           </>

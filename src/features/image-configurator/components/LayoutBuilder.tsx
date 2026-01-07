@@ -6,13 +6,9 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import {
-  ChevronLeft,
-  ChevronRight,
   Wand2,
   Layers,
   Grid3X3,
-  Edit2,
-  Check,
 } from 'lucide-react';
 import { SortableSlot } from './SortableSlot';
 import {
@@ -53,6 +49,8 @@ interface LayoutBuilderProps {
   jobId: string;
   images: JobImage[];
   onOpenEditor?: (imageId: string) => void;
+  currentPageIndex: number;
+  onPageChange: (index: number) => void;
   className?: string;
 }
 
@@ -86,6 +84,8 @@ export function LayoutBuilder({
   jobId,
   images,
   onOpenEditor,
+  currentPageIndex,
+  onPageChange,
   className = '',
 }: LayoutBuilderProps) {
   const { data, isLoading, error } = useLayouts(jobId);
@@ -96,9 +96,6 @@ export function LayoutBuilder({
 
   // Report builder store for syncing page scroll
   const setScrollToReportPage = useReportBuilderStore((state) => state.setScrollToReportPage);
-
-  // Current page index
-  const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
   // Title editing state
   const [editingTitle, setEditingTitle] = useState(false);
@@ -136,14 +133,6 @@ export function LayoutBuilder({
     }
   }, [currentLayout?.page_type, setScrollToReportPage]);
 
-  // Navigation handlers
-  const goToPrevPage = useCallback(() => {
-    setCurrentPageIndex((prev) => Math.max(0, prev - 1));
-  }, []);
-
-  const goToNextPage = useCallback(() => {
-    setCurrentPageIndex((prev) => Math.min(layouts.length - 1, prev + 1));
-  }, [layouts.length]);
 
   // Handle slot clear
   const handleClearSlot = useCallback(
@@ -235,37 +224,10 @@ export function LayoutBuilder({
       height: '100%',
       overflow: 'hidden'
     }}>
-      {/* Top header */}
+      {/* Top header - simplified, navigation handled by parent */}
       <div className="flex items-center justify-between px-4 py-1 border-b" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', height: '32px', minHeight: '32px' }}>
-        {/* Left: Page navigation */}
+        {/* Left: Category filter and layout info */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={goToPrevPage}
-            disabled={currentPageIndex === 0}
-            className="p-1 rounded disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ backgroundColor: 'transparent' }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-            title="Previous page"
-          >
-            <ChevronLeft className="w-4 h-4 text-slate-600" />
-          </button>
-
-          <button
-            onClick={goToNextPage}
-            disabled={currentPageIndex === layouts.length - 1}
-            className="p-1 rounded disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ backgroundColor: 'transparent' }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-            title="Next page"
-          >
-            <ChevronRight className="w-4 h-4 text-slate-600" />
-          </button>
-
-          {/* Divider */}
-          <div style={{ borderLeft: '1px solid #e5e7eb', height: '20px', margin: '0 4px' }} />
-
           {/* Category filter badge */}
           {currentLayout && currentLayout.category_filter && (
             <span className="text-xs px-2 py-0.5 rounded font-medium text-slate-600" style={{ backgroundColor: '#f3f4f6' }}>
@@ -281,25 +243,6 @@ export function LayoutBuilder({
             </span>
           )}
         </div>
-
-        {/* Center: Page selector dropdown */}
-        {layouts.length > 0 && (
-          <select
-            value={currentPageIndex}
-            onChange={(e) => setCurrentPageIndex(Number(e.target.value))}
-            className="text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 cursor-pointer hover:border-slate-400 focus:outline-none focus:ring-1 focus:ring-green-500"
-          >
-            {layouts.map((layout, index) => {
-              const slots = getSlotsForLayout(allSlots, layout.id);
-              const filledCount = slots.filter((s) => s.image_id).length;
-              return (
-                <option key={layout.id} value={index}>
-                  {layout.page_type} ({filledCount}/{slots.length})
-                </option>
-              );
-            })}
-          </select>
-        )}
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2">

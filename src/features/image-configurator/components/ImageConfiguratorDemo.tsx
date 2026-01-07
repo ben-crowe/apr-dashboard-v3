@@ -22,11 +22,11 @@ import { ImageGrid } from './ImageGrid';
 import { LayoutBuilder } from './LayoutBuilder';
 import { ImageEditorModal } from './ImageEditorModal';
 import { useJobImages, jobImagesKeys } from '../hooks/useJobImages';
-import { useLayouts, useAssignImageToSlot, useClearSlot } from '../hooks/useLayouts';
+import { useLayouts, useAssignImageToSlot, useClearSlot, getSlotsForLayout } from '../hooks/useLayouts';
 import type { ImageFilters, JobImage, ReportTypeId } from '../types';
 import { REPORT_TYPE_TEMPLATES, DEFAULT_REPORT_TYPE } from '../types';
 import { useSignedImageUrl } from '@/utils/supabaseStorage';
-import { FileText, ChevronDown } from 'lucide-react';
+import { FileText, ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ImageConfiguratorDemoProps {
   jobId: string;
@@ -56,6 +56,9 @@ export function ImageConfiguratorDemo({
   const [showReportTypeMenu, setShowReportTypeMenu] = useState(false);
   const currentTemplate = REPORT_TYPE_TEMPLATES[selectedReportType];
 
+  // Page selection state (lifted from LayoutBuilder for header display)
+  const [currentPageIndex, setCurrentPageIndex] = useState(0);
+
   // Resizable split state
   const [splitPercent, setSplitPercent] = useState(35); // Gallery takes 35% by default
   const [isDraggingDivider, setIsDraggingDivider] = useState(false);
@@ -72,6 +75,11 @@ export function ImageConfiguratorDemo({
     images.forEach((img) => map.set(img.id, img));
     return map;
   }, [images]);
+
+  // Layouts derived values for header display
+  const layouts = layoutData?.layouts || [];
+  const allSlots = layoutData?.slots || [];
+  const currentLayout = layouts[currentPageIndex];
 
   // Image being edited
   const editorImage = editorImageId ? imageMap.get(editorImageId) : null;
@@ -242,84 +250,136 @@ export function ImageConfiguratorDemo({
       onDragEnd={handleDragEnd}
     >
       <div className={`flex flex-col h-full ${className}`} style={{ backgroundColor: '#1f1f1f' }}>
-        {/* Top Header - Compact with report type and controls */}
+        {/* Top Header - Title, discrete template picker, and prominent page selector */}
         <div className="flex items-center justify-between px-4 py-2 border-b" style={{ backgroundColor: '#1a1a1a', borderColor: '#333' }}>
-          <div className="flex-1 min-w-0">
+          {/* Left: Title with discrete template picker */}
+          <div className="flex items-center gap-3">
             <h1 className="text-base font-semibold text-white">Image Page Configurator</h1>
-            <p className="text-xs text-slate-400 truncate">
-              Upload photos, organize by category, and build report pages
-            </p>
+
+            {/* Discrete Template Picker */}
+            <div className="relative">
+              <button
+                onClick={() => setShowReportTypeMenu(!showReportTypeMenu)}
+                className="flex items-center gap-1 px-2 py-0.5 rounded text-xs transition-colors"
+                style={{ backgroundColor: '#2a2a2a' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#333'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+              >
+                <FileText className="w-3 h-3 text-slate-500" />
+                <span className="text-slate-400">{currentTemplate.name}</span>
+                <ChevronDown className={`w-3 h-3 text-slate-500 transition-transform ${showReportTypeMenu ? 'rotate-180' : ''}`} />
+              </button>
+
+              {/* Template Dropdown Menu */}
+              {showReportTypeMenu && (
+                <div className="absolute left-0 mt-2 w-72 rounded-lg shadow-xl z-50" style={{ backgroundColor: '#1f1f1f', borderColor: '#444', borderWidth: '1px', borderStyle: 'solid' }}>
+                  <div className="p-2 border-b" style={{ borderColor: '#333' }}>
+                    <div className="text-xs text-slate-400 uppercase tracking-wide px-2">Report Type</div>
+                  </div>
+                  <div className="max-h-80 overflow-y-auto p-2">
+                    {Object.values(REPORT_TYPE_TEMPLATES).map((template) => (
+                      <button
+                        key={template.id}
+                        onClick={() => {
+                          setSelectedReportType(template.id);
+                          setShowReportTypeMenu(false);
+                          setCurrentPageIndex(0); // Reset to first page on template change
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
+                          selectedReportType === template.id
+                            ? 'bg-green-600 text-white'
+                            : 'text-slate-300 hover:text-slate-200'
+                        }`}
+                        style={selectedReportType !== template.id ? { backgroundColor: '#2a2a2a' } : undefined}
+                        onMouseEnter={(e) => {
+                          if (selectedReportType !== template.id) {
+                            e.currentTarget.style.backgroundColor = '#333';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (selectedReportType !== template.id) {
+                            e.currentTarget.style.backgroundColor = '#2a2a2a';
+                          }
+                        }}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium">{template.name}</span>
+                          <span className={`text-xs px-2 py-0.5 rounded ${
+                            selectedReportType === template.id
+                              ? 'bg-green-500 text-white'
+                              : 'bg-slate-700 text-slate-300'
+                          }`}>
+                            {template.pageCount} pages
+                          </span>
+                        </div>
+                        <div className={`text-xs mt-0.5 ${
+                          selectedReportType === template.id
+                            ? 'text-green-100'
+                            : 'text-slate-400'
+                        }`}>
+                          {template.description}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Report Type Selector */}
-          <div className="relative flex-shrink-0 ml-4">
+          {/* Right: Prominent Page Selector with Navigation */}
+          <div className="flex items-center gap-2">
+            {/* Previous Page */}
             <button
-              onClick={() => setShowReportTypeMenu(!showReportTypeMenu)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded transition-colors text-sm whitespace-nowrap"
-              style={{ backgroundColor: '#2a2a2a', borderColor: '#444', borderWidth: '1px', borderStyle: 'solid' }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#333'}
+              onClick={() => setCurrentPageIndex((prev) => Math.max(0, prev - 1))}
+              disabled={currentPageIndex === 0}
+              className="p-1.5 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              style={{ backgroundColor: '#2a2a2a' }}
+              onMouseEnter={(e) => { if (currentPageIndex > 0) e.currentTarget.style.backgroundColor = '#333'; }}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+              title="Previous page"
             >
-              <FileText className="w-3.5 h-3.5 text-slate-400" />
-              <span className="font-medium text-white">{currentTemplate.name}</span>
-              <span className="text-xs text-slate-500">({currentTemplate.pageCount})</span>
-              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform ${showReportTypeMenu ? 'rotate-180' : ''}`} />
+              <ChevronLeft className="w-4 h-4 text-slate-300" />
             </button>
 
-            {/* Dropdown Menu */}
-            {showReportTypeMenu && (
-              <div className="absolute right-0 mt-2 w-80 rounded-lg shadow-xl z-50" style={{ backgroundColor: '#1f1f1f', borderColor: '#444', borderWidth: '1px', borderStyle: 'solid' }}>
-                <div className="p-2 border-b" style={{ borderColor: '#333' }}>
-                  <div className="text-xs text-slate-400 uppercase tracking-wide px-2">Report Type</div>
-                </div>
-                <div className="max-h-80 overflow-y-auto p-2">
-                  {Object.values(REPORT_TYPE_TEMPLATES).map((template) => (
-                    <button
-                      key={template.id}
-                      onClick={() => {
-                        setSelectedReportType(template.id);
-                        setShowReportTypeMenu(false);
-                        // TODO: Clear existing layouts and recreate from new template
-                      }}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition-colors ${
-                        selectedReportType === template.id
-                          ? 'bg-green-600 text-white'
-                          : 'text-slate-300 hover:text-slate-200'
-                      }`}
-                      style={selectedReportType !== template.id ? { backgroundColor: '#2a2a2a' } : undefined}
-                      onMouseEnter={(e) => {
-                        if (selectedReportType !== template.id) {
-                          e.currentTarget.style.backgroundColor = '#333';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (selectedReportType !== template.id) {
-                          e.currentTarget.style.backgroundColor = '#2a2a2a';
-                        }
-                      }}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">{template.name}</span>
-                        <span className={`text-xs px-2 py-0.5 rounded ${
-                          selectedReportType === template.id
-                            ? 'bg-green-500 text-white'
-                            : 'bg-slate-700 text-slate-300'
-                        }`}>
-                          {template.pageCount} pages
-                        </span>
-                      </div>
-                      <div className={`text-xs mt-0.5 ${
-                        selectedReportType === template.id
-                          ? 'text-green-100'
-                          : 'text-slate-400'
-                      }`}>
-                        {template.description}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
+            {/* Page Dropdown - Prominent */}
+            {layouts.length > 0 && (
+              <select
+                value={currentPageIndex}
+                onChange={(e) => setCurrentPageIndex(Number(e.target.value))}
+                className="text-sm font-medium rounded px-3 py-1.5 cursor-pointer transition-colors min-w-[200px]"
+                style={{
+                  backgroundColor: '#2a2a2a',
+                  color: '#ffffff',
+                  borderColor: '#444',
+                  borderWidth: '1px',
+                  borderStyle: 'solid'
+                }}
+              >
+                {layouts.map((layout, index) => {
+                  const slots = getSlotsForLayout(allSlots, layout.id);
+                  const filledCount = slots.filter((s) => s.image_id).length;
+                  return (
+                    <option key={layout.id} value={index} style={{ backgroundColor: '#1f1f1f' }}>
+                      {layout.title || layout.page_type} ({filledCount}/{slots.length})
+                    </option>
+                  );
+                })}
+              </select>
             )}
+
+            {/* Next Page */}
+            <button
+              onClick={() => setCurrentPageIndex((prev) => Math.min(layouts.length - 1, prev + 1))}
+              disabled={currentPageIndex === layouts.length - 1 || layouts.length === 0}
+              className="p-1.5 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              style={{ backgroundColor: '#2a2a2a' }}
+              onMouseEnter={(e) => { if (currentPageIndex < layouts.length - 1) e.currentTarget.style.backgroundColor = '#333'; }}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+              title="Next page"
+            >
+              <ChevronRight className="w-4 h-4 text-slate-300" />
+            </button>
           </div>
         </div>
 
@@ -381,6 +441,8 @@ export function ImageConfiguratorDemo({
               jobId={jobId}
               images={images}
               onOpenEditor={handleOpenEditor}
+              currentPageIndex={currentPageIndex}
+              onPageChange={setCurrentPageIndex}
               className="flex-1"
             />
           </div>

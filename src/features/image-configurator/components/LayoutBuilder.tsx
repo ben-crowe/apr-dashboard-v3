@@ -378,7 +378,7 @@ export function LayoutBuilder({
               flexShrink: 0
             }}
           >
-            <span className="text-xs text-slate-400">
+            <span className="text-[10px] text-slate-400 italic">
               Page {currentPageIndex + 1}
             </span>
           </div>

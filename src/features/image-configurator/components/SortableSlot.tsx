@@ -107,15 +107,16 @@ export function SortableSlot({
   }, [currentCaption]);
 
   return (
-    <div className={`flex flex-col gap-1 ${className}`}>
+    <div className={`flex flex-col gap-1 min-w-0 min-h-0 ${className}`}>
       {/* Image slot */}
       <div
         ref={setNodeRef}
         className={`
-          relative aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all duration-150
-          ${isHighlighted ? 'border-green-500 bg-green-500/20 scale-[1.02]' : 'border-slate-600'}
-          ${!image ? 'bg-slate-800/50' : ''}
+          relative aspect-square overflow-hidden border transition-all duration-150
+          ${isHighlighted ? 'border-green-500 bg-green-500/20 scale-[1.02]' : 'border-slate-300'}
+          ${!image ? 'bg-slate-50' : 'bg-white shadow-sm'}
         `}
+        style={{ borderWidth: '1px', width: '100%', height: 'auto' }}
       >
         {image ? (
           // Filled slot
@@ -123,7 +124,7 @@ export function SortableSlot({
             <img
               src={imageUrl!}
               alt={image.original_filename}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
 
             {/* Hover overlay with actions */}
@@ -164,14 +165,6 @@ export function SortableSlot({
               </div>
             </div>
 
-            {/* Caption overlay (always visible when caption exists and not editing) */}
-            {currentCaption && !isEditingCaption && (
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                <p className="text-xs text-white truncate">
-                  {currentCaption}
-                </p>
-              </div>
-            )}
           </>
         ) : (
           // Empty slot
@@ -187,12 +180,12 @@ export function SortableSlot({
         )}
 
         {/* Position badge */}
-        <div className="absolute top-1 left-1 bg-black/70 text-white text-[10px] px-1.5 py-0.5 rounded">
+        <div className="absolute top-1 left-1 bg-white/80 text-slate-500 text-[10px] px-1 py-0.5 rounded">
           {slot.slot_position}
         </div>
       </div>
 
-      {/* Caption placeholder (always visible) */}
+      {/* Caption - plain editable text */}
       <div className="relative">
         {image && isEditingCaption ? (
           <input
@@ -202,21 +195,21 @@ export function SortableSlot({
             onChange={(e) => handleCaptionChange(e.target.value)}
             onBlur={handleCaptionBlur}
             onKeyDown={handleCaptionKeyDown}
-            className="w-full px-2 py-1 text-xs bg-slate-800 border border-slate-600 rounded text-slate-200
-              focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            className="w-full text-xs text-slate-600 bg-transparent border-none outline-none focus:outline-none focus:ring-0 px-0 py-0.5 italic"
             placeholder={defaultCaption || "Add caption..."}
+            style={{ borderBottom: '1px solid #cbd5e1' }}
           />
-        ) : (
+        ) : image ? (
           <div
-            onClick={image ? () => setIsEditingCaption(true) : undefined}
-            className={`w-full px-2 py-1 text-xs text-left border rounded transition-colors ${
-              image
-                ? 'bg-slate-800/50 hover:bg-slate-800 border-slate-700 hover:border-slate-600 text-slate-300 cursor-pointer'
-                : 'bg-slate-900/30 border-slate-700/50 text-slate-500 italic'
-            }`}
-            title={image ? "Click to edit caption" : "Suggested caption for this slot"}
+            onClick={() => setIsEditingCaption(true)}
+            className="w-full text-xs text-slate-600 cursor-text hover:text-slate-800 transition-colors px-0 py-0.5 italic"
+            title="Click to edit caption"
           >
-            {currentCaption || defaultCaption || 'Caption...'}
+            {currentCaption || defaultCaption || 'Click to add caption...'}
+          </div>
+        ) : (
+          <div className="w-full text-xs text-slate-500 px-0 py-0.5 italic">
+            {defaultCaption || 'Caption...'}
           </div>
         )}
       </div>

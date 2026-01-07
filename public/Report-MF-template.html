@@ -541,6 +541,40 @@
                 margin-bottom: 15px;
             }
 
+            /* Image field with placeholder fallback */
+            .image-field {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+            .image-field img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .image-placeholder {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: #f0f0f0;
+                border: 2px dashed #ccc;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                color: #666;
+                font-size: 9pt;
+            }
+            .image-placeholder span {
+                font-family: monospace;
+                background: #e0e0e0;
+                padding: 2px 6px;
+                border-radius: 3px;
+                font-size: 8pt;
+            }
+
             /* Special Sections */
             .definition-block {
                 margin: 10px 0;
@@ -23013,8 +23047,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                                     <!-- RIGHT COLUMN: Photo, Map, Address, Remarks -->
                                     <div class="right-column">
                                         <!-- Property Photo -->
-                                        <div class="property-photo">
-                                            <img src="{{comp1-photo}}" alt="Comp 1 Photo" style="width:100%; height:100%; object-fit:cover;" />
+                                        <div class="property-photo image-field" data-field-id="comp1-photo">
+                                            <img src="{{comp1-photo}}" alt="Comp 1 Photo" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                            <div class="image-placeholder">
+                                                <span>comp1-photo</span>
+                                            </div>
                                         </div>
 
                                         <!-- Address and Map Side by Side -->
@@ -23053,8 +23090,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                                             </div>
 
                                             <!-- Location Map -->
-                                            <div class="location-map">
-                                                <img src="{{comp1-map}}" alt="Comp 1 Map" style="width:100%; height:100%; object-fit:cover;" />
+                                            <div class="location-map image-field" data-field-id="comp1-map">
+                                                <img src="{{comp1-map}}" alt="Comp 1 Map" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                                <div class="image-placeholder">
+                                                    <span>comp1-map</span>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -23708,8 +23748,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                                     <!-- RIGHT COLUMN: Photo, Map, Address, Remarks -->
                                     <div class="right-column">
                                         <!-- Property Photo -->
-                                        <div class="property-photo">
-                                            <img src="{{comp2-photo}}" alt="Comp 2 Photo" style="width:100%; height:100%; object-fit:cover;" />
+                                        <div class="property-photo image-field" data-field-id="comp2-photo">
+                                            <img src="{{comp2-photo}}" alt="Comp 2 Photo" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                            <div class="image-placeholder">
+                                                <span>comp2-photo</span>
+                                            </div>
                                         </div>
 
                                         <!-- Address and Map Side by Side -->
@@ -23748,8 +23791,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                                             </div>
 
                                             <!-- Location Map -->
-                                            <div class="location-map">
-                                                <img src="{{comp2-map}}" alt="Comp 2 Map" style="width:100%; height:100%; object-fit:cover;" />
+                                            <div class="location-map image-field" data-field-id="comp2-map">
+                                                <img src="{{comp2-map}}" alt="Comp 2 Map" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                                <div class="image-placeholder">
+                                                    <span>comp2-map</span>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -24403,8 +24449,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                                     <!-- RIGHT COLUMN: Photo, Map, Address, Remarks -->
                                     <div class="right-column">
                                         <!-- Property Photo -->
-                                        <div class="property-photo">
-                                            <img src="{{comp3-photo}}" alt="Comp 3 Photo" style="width:100%; height:100%; object-fit:cover;" />
+                                        <div class="property-photo image-field" data-field-id="comp3-photo">
+                                            <img src="{{comp3-photo}}" alt="Comp 3 Photo" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                            <div class="image-placeholder">
+                                                <span>comp3-photo</span>
+                                            </div>
                                         </div>
 
                                         <!-- Address and Map Side by Side -->
@@ -24443,8 +24492,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                                             </div>
 
                                             <!-- Location Map -->
-                                            <div class="location-map">
-                                                <img src="{{comp3-map}}" alt="Comp 3 Map" style="width:100%; height:100%; object-fit:cover;" />
+                                            <div class="location-map image-field" data-field-id="comp3-map">
+                                                <img src="{{comp3-map}}" alt="Comp 3 Map" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                                <div class="image-placeholder">
+                                                    <span>comp3-map</span>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -25098,8 +25150,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                                     <!-- RIGHT COLUMN: Photo, Map, Address, Remarks -->
                                     <div class="right-column">
                                         <!-- Property Photo -->
-                                        <div class="property-photo">
-                                            <img src="{{comp4-photo}}" alt="Comp 4 Photo" style="width:100%; height:100%; object-fit:cover;" />
+                                        <div class="property-photo image-field" data-field-id="comp4-photo">
+                                            <img src="{{comp4-photo}}" alt="Comp 4 Photo" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                            <div class="image-placeholder">
+                                                <span>comp4-photo</span>
+                                            </div>
                                         </div>
 
                                         <!-- Address and Map Side by Side -->
@@ -25138,8 +25193,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                                             </div>
 
                                             <!-- Location Map -->
-                                            <div class="location-map">
-                                                <img src="{{comp4-map}}" alt="Comp 4 Map" style="width:100%; height:100%; object-fit:cover;" />
+                                            <div class="location-map image-field" data-field-id="comp4-map">
+                                                <img src="{{comp4-map}}" alt="Comp 4 Map" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                                <div class="image-placeholder">
+                                                    <span>comp4-map</span>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -25794,8 +25852,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                                     <!-- RIGHT COLUMN: Photo, Map, Address, Remarks -->
                                     <div class="right-column">
                                         <!-- Property Photo -->
-                                        <div class="property-photo">
-                                            <img src="{{comp5-photo}}" alt="Comp 5 Photo" style="width:100%; height:100%; object-fit:cover;" />
+                                        <div class="property-photo image-field" data-field-id="comp5-photo">
+                                            <img src="{{comp5-photo}}" alt="Comp 5 Photo" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                            <div class="image-placeholder">
+                                                <span>comp5-photo</span>
+                                            </div>
                                         </div>
 
                                         <!-- Address and Map Side by Side -->
@@ -25834,8 +25895,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                                             </div>
 
                                             <!-- Location Map -->
-                                            <div class="location-map">
-                                                <img src="{{comp5-map}}" alt="Comp 5 Map" style="width:100%; height:100%; object-fit:cover;" />
+                                            <div class="location-map image-field" data-field-id="comp5-map">
+                                                <img src="{{comp5-map}}" alt="Comp 5 Map" style="width:100%; height:100%; object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                                                <div class="image-placeholder">
+                                                    <span>comp5-map</span>
+                                                </div>
                                             </div>
                                         </div>
 

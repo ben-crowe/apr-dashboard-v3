@@ -437,8 +437,8 @@ export default function HomeTabPanel() {
               <label>Rental Units</label>
               <input
                 type="number"
-                value={String(getValue('total-units') || '')}
-                onChange={onInputChange('total-units')}
+                value={String(getValue('subject-units') || '')}
+                onChange={onInputChange('subject-units')}
                 min="0"
               />
             </div>
@@ -601,8 +601,8 @@ export default function HomeTabPanel() {
               <label>Inspection Date</label>
               <input
                 type="date"
-                value={String(getValue('inspection-date-1') || '')}
-                onChange={onInputChange('inspection-date-1')}
+                value={String(getValue('appraiser1-inspectiondate') || '')}
+                onChange={onInputChange('appraiser1-inspectiondate')}
               />
             </div>
             <div className="form-group">
@@ -680,16 +680,16 @@ export default function HomeTabPanel() {
               <label>Property Name</label>
               <input
                 type="text"
-                value={String(getValue('property-name') || '')}
-                onChange={onInputChange('property-name')}
+                value={String(getValue('subject-propertyname') || '')}
+                onChange={onInputChange('subject-propertyname')}
               />
             </div>
             <div className="form-group span-2">
               <label>Street Address</label>
               <input
                 type="text"
-                value={String(getValue('property-address') || '')}
-                onChange={onInputChange('property-address')}
+                value={String(getValue('subject-street') || '')}
+                onChange={onInputChange('subject-street')}
               />
             </div>
             <div className="form-group">
@@ -1163,17 +1163,17 @@ Respectfully submitted,`}
             <div className="appraiser-extra-row">
               <div className="toggle-group">
                 <ToggleRow checked={getValue('appraiser1-inspected') === true} onChange={onToggleChange('appraiser1-inspected')} label="Inspected Property" />
-                <ToggleRow checked={getValue('appraiser1-all-units') === true} onChange={onToggleChange('appraiser1-all-units')} label="All Units Inspected" />
+                <ToggleRow checked={getValue('appraiser1-allunits') === true} onChange={onToggleChange('appraiser1-allunits')} label="All Units Inspected" />
                 <ToggleRow checked={getValue('appraiser1-ce') === true} onChange={onToggleChange('appraiser1-ce')} label="CE Completed" />
                 <ToggleRow checked={getValue('appraiser1-ethics') === true} onChange={onToggleChange('appraiser1-ethics')} label="Ethics Completed" />
               </div>
               <div className="form-group">
                 <label>Inspection Date</label>
-                <input type="date" value={String(getValue('inspection-date-1') || '')} onChange={onInputChange('inspection-date-1')} />
+                <input type="date" value={String(getValue('appraiser1-inspectiondate') || '')} onChange={onInputChange('appraiser1-inspectiondate')} />
               </div>
               <div className="form-group">
                 <label>Inspection Extent</label>
-                <input type="text" placeholder="Exterior and common areas" value={String(getValue('inspection-extent') || '')} onChange={onInputChange('inspection-extent')} />
+                <input type="text" placeholder="Exterior and common areas" value={String(getValue('appraiser1-extent') || '')} onChange={onInputChange('appraiser1-extent')} />
               </div>
               <div className="form-group">
                 <label>Signature</label>
@@ -1228,17 +1228,17 @@ Respectfully submitted,`}
             <div className="appraiser-extra-row">
               <div className="toggle-group">
                 <ToggleRow checked={getValue('appraiser2-inspected') === true} onChange={onToggleChange('appraiser2-inspected')} label="Inspected Property" />
-                <ToggleRow checked={getValue('appraiser2-all-units') === true} onChange={onToggleChange('appraiser2-all-units')} label="All Units Inspected" />
+                <ToggleRow checked={getValue('appraiser2-allunits') === true} onChange={onToggleChange('appraiser2-allunits')} label="All Units Inspected" />
                 <ToggleRow checked={getValue('appraiser2-ce') === true} onChange={onToggleChange('appraiser2-ce')} label="CE Completed" />
                 <ToggleRow checked={getValue('appraiser2-ethics') === true} onChange={onToggleChange('appraiser2-ethics')} label="Ethics Completed" />
               </div>
               <div className="form-group">
                 <label>Inspection Date</label>
-                <input type="date" value={String(getValue('inspection-date-2') || '')} onChange={onInputChange('inspection-date-2')} />
+                <input type="date" value={String(getValue('appraiser2-inspectiondate') || '')} onChange={onInputChange('appraiser2-inspectiondate')} />
               </div>
               <div className="form-group">
                 <label>Inspection Extent</label>
-                <input type="text" value={String(getValue('inspection-extent-2') || '')} onChange={onInputChange('inspection-extent-2')} />
+                <input type="text" value={String(getValue('appraiser2-extent') || '')} onChange={onInputChange('appraiser2-extent')} />
               </div>
               <div className="form-group">
                 <label>Signature</label>

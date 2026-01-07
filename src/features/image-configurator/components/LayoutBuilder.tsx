@@ -372,7 +372,7 @@ export function LayoutBuilder({
 
           {/* Page footer */}
           <div
-            className="flex items-center justify-center px-6 py-2"
+            className="flex items-center px-6 py-2"
             style={{
               borderTop: '1px solid #e5e7eb',
               flexShrink: 0

@@ -885,7 +885,7 @@ export function ImageConfiguratorDemo({
                       ) : (
                         <div
                           onClick={() => setPopupEditingTitle(true)}
-                          className="text-base font-semibold text-slate-600 border-b border-slate-200 pb-1 inline-block cursor-text hover:bg-slate-50 hover:border-slate-400 rounded px-1 -mx-1 transition-all"
+                          className="text-base font-semibold text-slate-600 border-b border-slate-200 pb-0.5 inline-block cursor-text hover:bg-slate-50 hover:border-slate-400 rounded px-1 -mx-1 transition-all"
                           title="Click to edit"
                         >
                           {currentLayout.title || currentLayout.page_type}
@@ -1186,7 +1186,7 @@ function PopupSlot({
         ) : image ? (
           <div
             onClick={() => setIsEditingCaption(true)}
-            className="w-full text-xs text-slate-600 cursor-text px-1.5 py-1 rounded hover:bg-slate-50 hover:underline transition-all truncate"
+            className="w-full text-xs text-slate-600 cursor-text px-1.5 py-1 rounded hover:bg-slate-50 hover:underline underline-offset-4 transition-all truncate"
             title="Click to edit caption"
           >
             {currentCaption || defaultCaption || 'Add caption...'}

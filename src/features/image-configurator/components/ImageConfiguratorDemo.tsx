@@ -67,6 +67,7 @@ export function ImageConfiguratorDemo({
   const [isGalleryExpanded, setIsGalleryExpanded] = useState(false);
   const [popupSplitPercent, setPopupSplitPercent] = useState(65); // Gallery takes 65% in popup
   const [isDraggingPopupDivider, setIsDraggingPopupDivider] = useState(false);
+  const [popupThumbnailSize, setPopupThumbnailSize] = useState(140); // Thumbnail size in px
 
   // Fetch data
   const { data: images = [], isLoading: imagesLoading } = useJobImages(jobId, filters);
@@ -629,8 +630,8 @@ export function ImageConfiguratorDemo({
           <div id="popup-split-container" className="flex-1 flex overflow-hidden">
             {/* Left: Image gallery */}
             <div className="flex flex-col" style={{ width: `${popupSplitPercent}%` }}>
-              {/* Filters row */}
-              <div className="px-4 py-2 border-b shrink-0" style={{ backgroundColor: '#1f1f1f', borderColor: '#333' }}>
+              {/* Filters row with zoom controls */}
+              <div className="flex items-center justify-between px-4 py-2 border-b shrink-0" style={{ backgroundColor: '#1f1f1f', borderColor: '#333' }}>
                 <FiltersPanel
                   filters={filters}
                   onChange={setFilters}
@@ -638,18 +639,45 @@ export function ImageConfiguratorDemo({
                   totalCount={images.length}
                   onBulkAction={handleBulkAction}
                 />
+                {/* Zoom controls */}
+                <div className="flex items-center gap-2 ml-4">
+                  <button
+                    onClick={() => setPopupThumbnailSize(s => Math.max(80, s - 20))}
+                    className="p-1 rounded transition-colors"
+                    style={{ backgroundColor: '#2a2a2a' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+                    title="Smaller thumbnails"
+                  >
+                    <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                    </svg>
+                  </button>
+                  <span className="text-xs text-slate-500 w-8 text-center">{popupThumbnailSize}</span>
+                  <button
+                    onClick={() => setPopupThumbnailSize(s => Math.min(220, s + 20))}
+                    className="p-1 rounded transition-colors"
+                    style={{ backgroundColor: '#2a2a2a' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+                    title="Larger thumbnails"
+                  >
+                    <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </button>
+                </div>
               </div>
 
-              {/* Expanded image grid */}
+              {/* Expanded image grid with scroll */}
               <div
-                className="flex-1 p-4"
+                className="flex-1 p-4 overflow-y-auto overflow-x-hidden"
                 style={{
-                  overflowY: 'auto',
                   scrollbarWidth: 'thin',
                   scrollbarColor: '#4a4a4a #1f1f1f'
                 }}
               >
-                <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}>
+                <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(auto-fill, minmax(${popupThumbnailSize}px, 1fr))` }}>
                   {images.map((image) => (
                     <ExpandedGalleryItem
                       key={image.id}

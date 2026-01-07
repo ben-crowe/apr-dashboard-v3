@@ -465,13 +465,13 @@ export function ImageConfiguratorDemo({
                 }}
               >
                 {layouts.map((layout, index) => {
-                  const slots = getSlotsForLayout(allSlots, layout.id);
-                  const filledCount = slots.filter((s) => s.image_id).length;
                   const pageNum = PAGE_TYPE_TO_REPORT_PAGE[layout.page_type];
-                  const displayName = layout.title || PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type;
+                  // Use custom title only if user changed it from default, otherwise use our display name
+                  const hasCustomTitle = layout.title && layout.title !== layout.page_type;
+                  const displayName = hasCustomTitle ? layout.title : (PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type);
                   return (
                     <option key={layout.id} value={index} style={{ backgroundColor: '#1f1f1f' }}>
-                      {pageNum ? `P${pageNum} ` : ''}{displayName} ({filledCount}/{slots.length})
+                      {pageNum ? `P${pageNum} ` : ''}{displayName}
                     </option>
                   );
                 })}
@@ -680,13 +680,13 @@ export function ImageConfiguratorDemo({
                     style={{ backgroundColor: '#2a2a2a', color: '#fff', border: '1px solid #444' }}
                   >
                     {layouts.map((layout, index) => {
-                      const slots = getSlotsForLayout(allSlots, layout.id);
-                      const filledCount = slots.filter((s) => s.image_id).length;
                       const pageNum = PAGE_TYPE_TO_REPORT_PAGE[layout.page_type];
-                      const displayName = layout.title || PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type;
+                      // Use custom title only if user changed it from default, otherwise use our display name
+                      const hasCustomTitle = layout.title && layout.title !== layout.page_type;
+                      const displayName = hasCustomTitle ? layout.title : (PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type);
                       return (
                         <option key={layout.id} value={index}>
-                          {pageNum ? `P${pageNum} ` : ''}{displayName} ({filledCount}/{slots.length})
+                          {pageNum ? `P${pageNum} ` : ''}{displayName}
                         </option>
                       );
                     })}

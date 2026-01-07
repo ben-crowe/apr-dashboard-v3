@@ -23,26 +23,36 @@ import type { PageLayoutSlot, JobImage, LayoutTemplate } from '../types';
 import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
 
 // Mapping of image layout page_type to report template page numbers
-// Based on Report-MF-template.html structure where photos start at page 3
+// Based on Report-MF-template.html actual page structure (verified 2026-01-07)
 export const PAGE_TYPE_TO_REPORT_PAGE: Record<string, number> = {
-  'subject-photos-1': 3,
-  'subject-photos-2': 4,
-  'subject-photos-3': 5,
-  'location-map': 6,
-  'aerial-map': 7,
-  'zoning-map': 8,
-  'flood-map': 9,
-  'site-plan': 10,
-  'floor-plan': 11,
-  'building-systems-1': 12,
-  'building-systems-2': 13,
-  'comp-location-map': 14,
-  'comp-photos-1': 15,
-  'comp-photos-2': 16,
-  'rental-comp-map': 17,
-  'rental-comp-photos': 18,
-  'site-improvements': 19,
-  'parking-photos': 20,
+  // Subject Photos (pages 4-8)
+  'subject-photos-1': 4,   // photos 1-6
+  'subject-photos-2': 5,   // photos 7-12
+  'subject-photos-3': 6,   // photos 13-18
+  'subject-photos-4': 7,   // photos 19-24
+  'subject-photos-5': 8,   // photo 25
+  // Maps (pages 9-11)
+  'location-map': 9,       // Regional Location Map
+  'local-map': 10,         // Local Area Map
+  'aerial-map': 11,        // Aerial View
+  // Site Plans (pages 21-22)
+  'site-plan': 21,         // Site Plan 1
+  'site-plan-2': 22,       // Site Plan 2
+  // Zoning (page 25)
+  'zoning-map': 25,
+  // Comparable Maps (pages 38, 52)
+  'rental-comp-map': 38,   // Rental Comparables Map
+  'comp-location-map': 52, // Sales Comparables Map
+  // NOT IN TEMPLATE YET (commented out until pages added):
+  // 'flood-map': ??,
+  // 'floor-plan': ??,
+  // 'building-systems-1': ??,
+  // 'building-systems-2': ??,
+  // 'comp-photos-1': ??,
+  // 'comp-photos-2': ??,
+  // 'rental-comp-photos': ??,
+  // 'site-improvements': ??,
+  // 'parking-photos': ??,
 };
 
 // Display names for page types (abbreviated for consistent dropdown width)
@@ -50,19 +60,23 @@ export const PAGE_TYPE_DISPLAY_NAMES: Record<string, string> = {
   'subject-photos-1': 'Subj Photos 1',
   'subject-photos-2': 'Subj Photos 2',
   'subject-photos-3': 'Subj Photos 3',
-  'location-map': 'Location Map',
+  'subject-photos-4': 'Subj Photos 4',
+  'subject-photos-5': 'Subj Photos 5',
+  'location-map': 'Regional Map',
+  'local-map': 'Local Map',
   'aerial-map': 'Aerial Map',
   'zoning-map': 'Zoning Map',
+  'site-plan': 'Site Plan 1',
+  'site-plan-2': 'Site Plan 2',
+  'rental-comp-map': 'Rental Map',
+  'comp-location-map': 'Comp Map',
+  // NOT IN TEMPLATE YET:
   'flood-map': 'Flood Map',
-  'site-plan': 'Site Plan',
   'floor-plan': 'Floor Plan',
-  'building-systems': 'Bldg Systems',
   'building-systems-1': 'Bldg Systems 1',
   'building-systems-2': 'Bldg Systems 2',
-  'comp-location-map': 'Comp Loc Map',
   'comp-photos-1': 'Comp Photos 1',
   'comp-photos-2': 'Comp Photos 2',
-  'rental-comp-map': 'Rental Map',
   'rental-comp-photos': 'Rental Photos',
   'site-improvements': 'Site Improve',
   'parking-photos': 'Parking Photos',

@@ -12475,6 +12475,17 @@ export const fieldRegistry: FieldDefinition[] = [
     inputSource: "user-input",
     required: false,
   },
+  // Crosswalk canonical: Subject_PropertyName → subject-propertyname
+  {
+    id: "subject-propertyname",
+    storeId: "subject-propertyname",
+    label: "Property Name (Crosswalk)",
+    section: "exec",
+    subsection: "property-identification",
+    type: "text",
+    inputSource: "valcre-mapping",
+    required: false,
+  },
   {
     id: "subject-remaininglife",
     storeId: "subject-remaininglife",

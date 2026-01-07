@@ -24,6 +24,7 @@ import {
   ExternalLink,
   Database,
   RefreshCw,
+  FileText,
 } from "lucide-react";
 import ImageFieldInput from "./components/ImageFieldInput";
 
@@ -1232,56 +1233,24 @@ const TestInputDashboard: React.FC = () => {
                 )}
               </Button>
               <Button
-                onClick={async () => {
-                  try {
-                    // ALL data direct to template (bypasses calc, bypasses store)
-                    setTestMode("test-report");
-                    setSelectedDataset("all-fields");
-                    console.log("Report DataSet1: Rendering ALL data direct to template...");
-                    await loadDataSet1DirectToTemplate();
-                    console.log("Report DataSet1: Done - navigating to preview...");
-                    navigate("/mock-builder");
-                  } catch (error) {
-                    console.error("Error in Report DataSet1:", error);
-                    alert("Error: " + String(error));
-                  }
-                }}
-                variant={
-                  activeTestMode === "test-report" ? "default" : "outline"
-                }
+                onClick={() => navigate("/mock-builder")}
+                variant="outline"
                 size="sm"
-                className={`gap-2 text-white border transition-colors ${
-                  activeTestMode === "test-report"
-                    ? "bg-green-600 hover:bg-green-500 font-semibold shadow-md"
-                    : ""
-                }`}
+                className="gap-2 text-white border transition-colors"
                 style={{
-                  backgroundColor:
-                    activeTestMode === "test-report" ? "#16a34a" : "#2a2a2a",
-                  borderColor:
-                    activeTestMode === "test-report" ? "#16a34a" : "#4b5563",
+                  backgroundColor: "#2a2a2a",
+                  borderColor: "#4b5563",
                 }}
                 onMouseEnter={(e) => {
-                  if (activeTestMode === "test-report") {
-                    e.currentTarget.style.backgroundColor = "#22c55e";
-                  } else {
-                    e.currentTarget.style.backgroundColor = "#333333";
-                  }
+                  e.currentTarget.style.backgroundColor = "#333333";
                 }}
                 onMouseLeave={(e) => {
-                  if (activeTestMode === "test-report") {
-                    e.currentTarget.style.backgroundColor = "#16a34a";
-                  } else {
-                    e.currentTarget.style.backgroundColor = "#2a2a2a";
-                  }
+                  e.currentTarget.style.backgroundColor = "#2a2a2a";
                 }}
-                title="ALL data direct to template (bypasses calc engine)"
+                title="View template without any data injection"
               >
-                <Database className="w-3 h-3" />
-                Report DataSet1
-                {activeTestMode === "test-report" && (
-                  <span className="ml-1">&#10003;</span>
-                )}
+                <FileText className="w-3 h-3" />
+                View Report (No Data)
               </Button>
               <Button
                 onClick={() => {

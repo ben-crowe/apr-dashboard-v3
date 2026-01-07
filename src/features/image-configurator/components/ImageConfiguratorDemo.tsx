@@ -681,7 +681,7 @@ export function ImageConfiguratorDemo({
                       const pageNum = PAGE_TYPE_TO_REPORT_PAGE[layout.page_type];
                       const displayName = PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type;
                       return (
-                        <option key={layout.id} value={index}>
+                        <option key={layout.id} value={index} style={{ backgroundColor: '#1f1f1f' }}>
                           {pageNum ? `P${pageNum}  |  ` : ''}{displayName}
                         </option>
                       );

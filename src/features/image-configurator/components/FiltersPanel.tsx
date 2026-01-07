@@ -43,8 +43,8 @@ export function FiltersPanel({
       <div className="flex items-center gap-2">
         <label className="text-xs text-slate-400 font-medium">Category</label>
         <select
-          className="rounded text-sm px-2 py-1 text-white min-w-[130px] focus:outline-none focus:ring-2 focus:ring-green-500"
-          style={{ backgroundColor: '#2a2a2a', borderColor: '#555', borderWidth: '1px', borderStyle: 'solid' }}
+          className="rounded text-sm px-2 py-1 min-w-[130px] focus:outline-none focus:ring-2 focus:ring-green-500"
+          style={{ backgroundColor: '#2a2a2a', color: '#94a3b8', borderColor: '#555', borderWidth: '1px', borderStyle: 'solid' }}
           value={filters.category ?? ''}
           onChange={(e) => {
             const category = e.target.value as ImageCategory | '';
@@ -68,8 +68,8 @@ export function FiltersPanel({
         <div className="flex items-center gap-2">
           <label className="text-xs text-slate-400 font-medium">Subcategory</label>
           <select
-            className="rounded text-sm px-2 py-1 text-white min-w-[110px] focus:outline-none focus:ring-2 focus:ring-green-500"
-            style={{ backgroundColor: '#2a2a2a', borderColor: '#555', borderWidth: '1px', borderStyle: 'solid' }}
+            className="rounded text-sm px-2 py-1 min-w-[110px] focus:outline-none focus:ring-2 focus:ring-green-500"
+            style={{ backgroundColor: '#2a2a2a', color: '#94a3b8', borderColor: '#555', borderWidth: '1px', borderStyle: 'solid' }}
             value={filters.subcategory ?? ''}
             onChange={(e) =>
               onChange({ ...filters, subcategory: e.target.value || null })

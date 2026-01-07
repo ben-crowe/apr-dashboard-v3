@@ -24,6 +24,30 @@ import {
   getSlotsForLayout,
 } from '../hooks/useLayouts';
 import type { PageLayoutSlot, JobImage, LayoutTemplate } from '../types';
+import { useReportBuilderStore } from '@/features/report-builder/store/reportBuilderStore';
+
+// Mapping of image layout page_type to report template page numbers
+// Based on Report-MF-template.html structure where photos start at page 3
+const PAGE_TYPE_TO_REPORT_PAGE: Record<string, number> = {
+  'subject-photos-1': 3,
+  'subject-photos-2': 4,
+  'subject-photos-3': 5,
+  'location-map': 6,
+  'aerial-map': 7,
+  'zoning-map': 8,
+  'flood-map': 9,
+  'site-plan': 10,
+  'floor-plan': 11,
+  'building-systems-1': 12,
+  'building-systems-2': 13,
+  'comp-location-map': 14,
+  'comp-photos-1': 15,
+  'comp-photos-2': 16,
+  'rental-comp-map': 17,
+  'rental-comp-photos': 18,
+  'site-improvements': 19,
+  'parking-photos': 20,
+};
 
 interface LayoutBuilderProps {
   jobId: string;
@@ -70,6 +94,9 @@ export function LayoutBuilder({
   const updateTitle = useUpdateLayoutTitle();
   const autoFill = useAutoFillLayout();
 
+  // Report builder store for syncing page scroll
+  const setScrollToReportPage = useReportBuilderStore((state) => state.setScrollToReportPage);
+
   // Current page index
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
@@ -98,6 +125,16 @@ export function LayoutBuilder({
       setTitleValue(currentLayout.title || currentLayout.page_type);
     }
   }, [currentLayout?.id, currentLayout?.title]);
+
+  // Sync report preview to current image layout page
+  useEffect(() => {
+    if (currentLayout?.page_type) {
+      const reportPageNum = PAGE_TYPE_TO_REPORT_PAGE[currentLayout.page_type];
+      if (reportPageNum) {
+        setScrollToReportPage(reportPageNum);
+      }
+    }
+  }, [currentLayout?.page_type, setScrollToReportPage]);
 
   // Navigation handlers
   const goToPrevPage = useCallback(() => {

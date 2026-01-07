@@ -66,6 +66,8 @@ export default function PreviewPanel() {
   const generatePreview = useReportBuilderStore(
     (state) => state.generatePreview,
   );
+  const scrollToReportPage = useReportBuilderStore((state) => state.scrollToReportPage);
+  const setScrollToReportPage = useReportBuilderStore((state) => state.setScrollToReportPage);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   // Memoized helper to get field value from sections
@@ -80,6 +82,31 @@ export default function PreviewPanel() {
   const excludedPages = useMemo(() => {
     return getExcludedPageNumbers(sections);
   }, [sections]);
+
+  // Scroll to specific page when triggered from Image Configurator
+  useEffect(() => {
+    if (scrollToReportPage === null || !iframeRef.current) return;
+
+    const iframe = iframeRef.current;
+    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+    if (!iframeDoc) return;
+
+    // Find the page with matching data-page-num
+    const targetPage = iframeDoc.querySelector(
+      `[data-page-num="Page ${scrollToReportPage}"]`
+    );
+
+    if (targetPage) {
+      // Scroll the page into view within the iframe
+      targetPage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      console.log(`PreviewPanel: Scrolled to Page ${scrollToReportPage}`);
+    } else {
+      console.warn(`PreviewPanel: Page ${scrollToReportPage} not found in preview`);
+    }
+
+    // Clear the scroll target after scrolling
+    setScrollToReportPage(null);
+  }, [scrollToReportPage, setScrollToReportPage]);
 
   // Auto-load template when component mounts if previewHtml is empty
   useEffect(() => {

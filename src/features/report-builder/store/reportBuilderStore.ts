@@ -5995,6 +5995,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   testDataLoaded: {}, // Tracks which sections have had test data loaded
   showRawIds: true, // Toggle ON = show test data, Toggle OFF = show raw field IDs
   currentJobId: null, // Current job ID for image configurator
+  scrollToReportPage: null, // Page number to scroll to in report preview
 
   setActiveSection: (sectionId: string) => {
     set({ activeSection: sectionId });
@@ -8469,5 +8470,9 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
   setCurrentJobId: (jobId: string | null) => {
     set({ currentJobId: jobId });
+  },
+
+  setScrollToReportPage: (pageNum: number | null) => {
+    set({ scrollToReportPage: pageNum });
   },
 }));

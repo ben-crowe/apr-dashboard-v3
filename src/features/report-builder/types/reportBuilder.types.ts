@@ -54,6 +54,7 @@ export interface ReportBuilderState {
   activeTestMode: TestMode; // Mutually exclusive test modes
   testDataLoaded: Record<string, boolean>; // Tracks which sections have had test data loaded (e.g., { home: true, cover: false })
   currentJobId: string | null; // Current job ID for image configurator and other job-specific features
+  scrollToReportPage: number | null; // Page number to scroll to in report preview (null = no scroll pending)
 
   // Actions
   setActiveSection: (sectionId: string) => void;
@@ -81,4 +82,5 @@ export interface ReportBuilderState {
   setTestMode: (mode: TestMode) => void; // Switch between test modes
   setTestDataLoaded: (sectionId: string, loaded: boolean) => void; // Mark section test data as loaded/unloaded
   setCurrentJobId: (jobId: string | null) => void; // Set current job ID
+  setScrollToReportPage: (pageNum: number | null) => void; // Scroll report preview to specific page
 }

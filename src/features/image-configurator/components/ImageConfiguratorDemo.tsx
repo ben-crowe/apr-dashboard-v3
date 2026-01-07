@@ -619,33 +619,39 @@ export function ImageConfiguratorDemo({
               </div>
             </div>
 
-            {/* Right: Current page preview with frame - matches LayoutBuilder styling */}
+            {/* Right: Current page preview - EXACT COPY of LayoutBuilder structure */}
             <div
-              className="flex flex-col"
-              style={{ width: '400px', backgroundColor: '#fafafa' }}
+              style={{
+                width: '400px',
+                backgroundColor: '#fafafa',
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                overflow: 'hidden'
+              }}
             >
-              {/* Panel header - matches LayoutBuilder header exactly */}
+              {/* Header bar - EXACT COPY from LayoutBuilder line 228 */}
               <div
-                className="flex items-center justify-between px-4 py-1 border-b shrink-0"
+                className="flex items-center justify-between px-4 py-1 border-b"
                 style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', height: '32px', minHeight: '32px' }}
               >
+                {/* Left: Category filter and layout info */}
                 <div className="flex items-center gap-2">
-                  {/* Category filter badge */}
                   {currentLayout?.category_filter && (
-                    <span
-                      className="text-xs px-2 py-0.5 rounded font-medium text-slate-600"
-                      style={{ backgroundColor: '#f3f4f6' }}
-                    >
+                    <span className="text-xs px-2 py-0.5 rounded font-medium text-slate-600" style={{ backgroundColor: '#f3f4f6' }}>
                       {currentLayout.category_filter}
                     </span>
                   )}
-                  {/* Layout template */}
                   {currentLayout && (
-                    <span className="text-xs text-slate-500">
+                    <span className="text-xs text-slate-500 flex items-center gap-1">
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                      </svg>
                       {currentLayout.layout_template}
                     </span>
                   )}
                 </div>
+                {/* Right: filled count */}
                 {currentLayout && (
                   <span className="text-xs text-slate-500">
                     {getSlotsForLayout(allSlots, currentLayout.id).filter(s => s.image_id).length}/
@@ -654,22 +660,72 @@ export function ImageConfiguratorDemo({
                 )}
               </div>
 
-              {/* Page preview container - matches LayoutBuilder background */}
-              <div
-                className="flex-1 flex items-center justify-center"
-                style={{
-                  backgroundColor: '#f5f5f5',
-                  padding: '8px',
-                  overflow: 'hidden',
-                  minHeight: 0
-                }}
-              >
+              {/* Page viewing area - EXACT COPY from LayoutBuilder line 265 */}
+              <div style={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '8px',
+                backgroundColor: '#f5f5f5',
+                overflow: 'hidden',
+                minHeight: 0
+              }}>
                 {currentLayout ? (
-                  <ExpandedPagePreview
-                    layout={currentLayout}
-                    slots={getSlotsForLayout(allSlots, currentLayout.id)}
-                    imageMap={imageMap}
-                  />
+                  /* Page wrapper - EXACT COPY from LayoutBuilder line 276 */
+                  <div
+                    className="flex flex-col"
+                    style={{
+                      backgroundColor: '#ffffff',
+                      aspectRatio: '8.5 / 11',
+                      maxHeight: '100%',
+                      width: 'auto',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)',
+                    }}
+                  >
+                    {/* Page title section - EXACT COPY from LayoutBuilder line 289 */}
+                    <div className="px-6 pt-4 pb-2">
+                      <div className="text-base font-semibold text-slate-500 border-b border-slate-300 pb-1 inline-block italic">
+                        {currentLayout.title || currentLayout.page_type}
+                      </div>
+                    </div>
+
+                    {/* Image grid - EXACT COPY from LayoutBuilder line 320 */}
+                    <div className="flex-1 px-4 pb-2 flex items-center justify-center overflow-hidden min-w-0 min-h-0">
+                      <div
+                        className="grid w-full h-full gap-3"
+                        style={{
+                          gridTemplateColumns: `repeat(${(GRID_CONFIGS[currentLayout.layout_template] || GRID_CONFIGS['2x2']).cols}, minmax(0, 1fr))`,
+                          gridAutoRows: 'minmax(0, 1fr)',
+                          width: '100%',
+                          height: '100%',
+                        }}
+                      >
+                        {getSlotsForLayout(allSlots, currentLayout.id).map((slot) => {
+                          const image = slot.image_id ? imageMap.get(slot.image_id) : null;
+                          const defaultCaption = getDefaultCaption(slot.slot_position, currentLayout.category_filter);
+                          return (
+                            <PopupSlot
+                              key={slot.id}
+                              slot={slot}
+                              image={image}
+                              defaultCaption={defaultCaption}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Page footer - EXACT COPY from LayoutBuilder line 353 */}
+                    <div
+                      className="flex items-center px-6 py-2"
+                      style={{ borderTop: '1px solid #e5e7eb', flexShrink: 0 }}
+                    >
+                      <span className="text-[10px] text-slate-400 italic">
+                        Page {currentPageIndex + 1}
+                      </span>
+                    </div>
+                  </div>
                 ) : (
                   <div className="text-slate-500 text-sm">Select a page to preview</div>
                 )}
@@ -801,76 +857,9 @@ function getDefaultCaption(slotPosition: number, categoryFilter?: string): strin
   return captions[slotPosition - 1] || '';
 }
 
-// Helper component for page preview in expanded gallery - matches LayoutBuilder page styling
-function ExpandedPagePreview({
-  layout,
-  slots,
-  imageMap,
-}: {
-  layout: { id: string; layout_template: string; title?: string; page_type: string; category_filter?: string };
-  slots: Array<{ id: string; slot_position: number; image_id: string | null; caption?: string }>;
-  imageMap: Map<string, JobImage>;
-}) {
-  const gridConfig = GRID_CONFIGS[layout.layout_template] || GRID_CONFIGS['2x2'];
-
-  return (
-    <div
-      className="flex flex-col"
-      style={{
-        backgroundColor: '#ffffff',
-        aspectRatio: '8.5 / 11',
-        height: '100%',
-        maxWidth: '100%',
-        minWidth: '280px',
-        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)',
-      }}
-    >
-      {/* Page title section - matches LayoutBuilder */}
-      <div className="px-6 pt-4 pb-2">
-        <div className="text-base font-semibold text-slate-500 border-b border-slate-300 pb-1 italic">
-          {layout.title || layout.page_type}
-        </div>
-      </div>
-
-      {/* Slots grid */}
-      <div className="flex-1 px-4 pb-2 flex items-center justify-center overflow-hidden min-w-0 min-h-0">
-        <div
-          className="grid w-full h-full gap-3"
-          style={{
-            gridTemplateColumns: `repeat(${gridConfig.cols}, minmax(0, 1fr))`,
-            gridAutoRows: `minmax(0, 1fr)`,
-          }}
-        >
-          {slots.map((slot) => {
-            const image = slot.image_id ? imageMap.get(slot.image_id) : null;
-            const defaultCaption = getDefaultCaption(slot.slot_position, layout.category_filter);
-            return (
-              <ExpandedSlotPreview
-                key={slot.id}
-                slot={slot}
-                image={image}
-                defaultCaption={defaultCaption}
-              />
-            );
-          })}
-        </div>
-      </div>
-
-      {/* Page footer - matches LayoutBuilder */}
-      <div
-        className="flex items-center px-6 py-2"
-        style={{ borderTop: '1px solid #e5e7eb', flexShrink: 0 }}
-      >
-        <span className="text-[10px] text-slate-400 italic">
-          Page preview
-        </span>
-      </div>
-    </div>
-  );
-}
-
-// Helper for individual slot preview - matches SortableSlot styling exactly
-function ExpandedSlotPreview({
+// PopupSlot - EXACT COPY of SortableSlot rendering (without drag/drop)
+// Matches SortableSlot.tsx lines 109-206 exactly
+function PopupSlot({
   slot,
   image,
   defaultCaption = '',
@@ -879,50 +868,61 @@ function ExpandedSlotPreview({
   image: JobImage | null | undefined;
   defaultCaption?: string;
 }) {
-  const path = image?.thumbnail_path || image?.storage_path;
-  const imageUrl = useSignedImageUrl(path || '', { width: 200 });
+  const imagePath = image ? (image.thumbnail_path || image.storage_path) : null;
+  const imageUrl = useSignedImageUrl(imagePath, { width: 400 });
 
-  // Current caption (slot caption overrides image caption, with default fallback)
+  // Current caption value (slot caption overrides image caption, with default fallback)
   const currentCaption = slot.caption || image?.caption || defaultCaption;
 
   return (
     <div className="flex flex-col gap-1 min-w-0 min-h-0">
-      {/* Image slot - matches SortableSlot structure */}
+      {/* Image slot - EXACT COPY from SortableSlot line 112 */}
       <div
         className={`
-          relative aspect-square overflow-hidden transition-all duration-150 rounded-lg
+          relative aspect-square overflow-hidden transition-all duration-150 group rounded-lg
           ${!image ? 'border-2 border-dashed border-slate-300 bg-gradient-to-b from-slate-50 to-slate-100' : ''}
           ${image ? 'border border-slate-200 bg-white shadow-sm' : ''}
         `}
         style={{ width: '100%', height: 'auto' }}
       >
-        {image && imageUrl ? (
+        {image ? (
+          // Filled slot - EXACT COPY from SortableSlot line 122
           <img
-            src={imageUrl}
+            src={imageUrl!}
             alt={image.original_filename}
             className="w-full h-full object-contain"
           />
         ) : (
+          // Empty slot - EXACT COPY from SortableSlot line 162
           <div className="w-full h-full flex flex-col items-center justify-center">
-            <div className="p-2 rounded-full mb-1 bg-slate-100">
-              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            <div className="p-3 rounded-full mb-2 bg-slate-100">
+              <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
             </div>
-            <span className="text-[9px] text-slate-400">Empty</span>
+            <span className="text-[11px] font-medium text-slate-400">
+              Drag image here
+            </span>
           </div>
         )}
 
-        {/* Position badge - matches SortableSlot */}
-        <div className="absolute top-1 left-1 bg-white/90 text-slate-400 text-[9px] px-1 py-0.5 rounded font-medium shadow-sm">
+        {/* Position badge - EXACT COPY from SortableSlot line 173 */}
+        <div className="absolute top-1.5 left-1.5 bg-white/90 text-slate-400 text-[10px] px-1.5 py-0.5 rounded-md font-medium shadow-sm">
           {slot.slot_position}
         </div>
       </div>
 
-      {/* Caption - always visible, matches SortableSlot styling */}
-      <div className="w-full text-[10px] text-slate-600 px-1 py-0.5 truncate text-center">
-        {image ? (currentCaption || 'Caption') : (defaultCaption || 'Caption')}
-      </div>
+      {/* Caption - EXACT COPY from SortableSlot line 178 */}
+      {/* Always visible, LEFT ALIGNED */}
+      {image ? (
+        <div className="w-full text-[11px] text-slate-600 px-1 py-0.5 truncate">
+          {currentCaption || defaultCaption || 'Add caption...'}
+        </div>
+      ) : (
+        <div className="w-full text-[11px] text-slate-400 px-1 py-0.5">
+          {defaultCaption || 'Caption'}
+        </div>
+      )}
     </div>
   );
 }

@@ -185,19 +185,19 @@ export function SortableSlot({
             onChange={(e) => handleCaptionChange(e.target.value)}
             onBlur={handleCaptionBlur}
             onKeyDown={handleCaptionKeyDown}
-            className="w-full text-[11px] text-slate-700 bg-white border border-slate-300 rounded px-1 py-0.5 outline-none focus:border-green-500"
+            className="w-full text-xs text-slate-700 bg-white border border-slate-200 rounded px-1.5 py-1 outline-none focus:border-green-500 focus:ring-0"
             placeholder={defaultCaption || "Add caption..."}
           />
         ) : image ? (
           <div
             onClick={() => setIsEditingCaption(true)}
-            className="w-full text-[11px] text-slate-600 cursor-text px-1 py-0.5 rounded hover:bg-slate-100 transition-colors truncate"
+            className="w-full text-xs text-slate-600 cursor-text px-1.5 py-1 rounded hover:bg-slate-50 transition-colors truncate"
             title="Click to edit caption"
           >
             {currentCaption || defaultCaption || 'Add caption...'}
           </div>
         ) : (
-          <div className="w-full text-[11px] text-slate-400 px-1 py-0.5">
+          <div className="w-full text-xs text-slate-400 px-1.5 py-1">
             {defaultCaption || 'Caption'}
           </div>
         )}

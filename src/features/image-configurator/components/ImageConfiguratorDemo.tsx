@@ -4,7 +4,7 @@
  * Combines upload, gallery, layout builder, and editor
  */
 
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -22,7 +22,7 @@ import { ImageGrid } from './ImageGrid';
 import { LayoutBuilder } from './LayoutBuilder';
 import { ImageEditorModal } from './ImageEditorModal';
 import { useJobImages, jobImagesKeys } from '../hooks/useJobImages';
-import { useLayouts, useAssignImageToSlot, useClearSlot, getSlotsForLayout } from '../hooks/useLayouts';
+import { useLayouts, useAssignImageToSlot, useClearSlot, getSlotsForLayout, useUpdateSlotCaption, useUpdateLayoutTitle } from '../hooks/useLayouts';
 import type { ImageFilters, JobImage, ReportTypeId } from '../types';
 import { REPORT_TYPE_TEMPLATES, DEFAULT_REPORT_TYPE } from '../types';
 import { useSignedImageUrl } from '@/utils/supabaseStorage';
@@ -69,11 +69,18 @@ export function ImageConfiguratorDemo({
   const [isDraggingPopupDivider, setIsDraggingPopupDivider] = useState(false);
   const [popupThumbnailSize, setPopupThumbnailSize] = useState(140); // Thumbnail size in px
 
+  // Popup title editing state
+  const [popupEditingTitle, setPopupEditingTitle] = useState(false);
+  const [popupTitleValue, setPopupTitleValue] = useState('');
+  const popupTitleInputRef = React.useRef<HTMLInputElement>(null);
+
   // Fetch data
   const { data: images = [], isLoading: imagesLoading } = useJobImages(jobId, filters);
   const { data: layoutData } = useLayouts(jobId);
   const assignImage = useAssignImageToSlot();
   const clearSlot = useClearSlot();
+  const updateCaption = useUpdateSlotCaption();
+  const updateTitle = useUpdateLayoutTitle();
 
   // Image lookup map
   const imageMap = useMemo(() => {
@@ -304,6 +311,44 @@ export function ImageConfiguratorDemo({
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isGalleryExpanded]);
+
+  // Initialize popup title value when layout changes
+  useEffect(() => {
+    if (currentLayout) {
+      setPopupTitleValue(currentLayout.title || currentLayout.page_type);
+    }
+  }, [currentLayout?.id, currentLayout?.title]);
+
+  // Focus popup title input when editing starts
+  useEffect(() => {
+    if (popupEditingTitle && popupTitleInputRef.current) {
+      popupTitleInputRef.current.focus();
+      popupTitleInputRef.current.select();
+    }
+  }, [popupEditingTitle]);
+
+  // Handle popup title save
+  const handlePopupSaveTitle = useCallback(async () => {
+    if (!currentLayout || popupTitleValue === currentLayout.title) {
+      setPopupEditingTitle(false);
+      return;
+    }
+
+    await updateTitle.mutateAsync({
+      layoutId: currentLayout.id,
+      title: popupTitleValue,
+    });
+
+    setPopupEditingTitle(false);
+  }, [currentLayout, popupTitleValue, updateTitle]);
+
+  // Handle popup caption update
+  const handlePopupUpdateCaption = useCallback(
+    async (slotId: string, caption: string) => {
+      await updateCaption.mutateAsync({ slotId, caption });
+    },
+    [updateCaption]
+  );
 
   return (
     <DndContext
@@ -769,11 +814,34 @@ export function ImageConfiguratorDemo({
                       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)',
                     }}
                   >
-                    {/* Page title section - matches LayoutBuilder styling */}
+                    {/* Page title section - editable, matches LayoutBuilder */}
                     <div className="px-6 pt-4 pb-2">
-                      <div className="text-base font-semibold text-slate-500 border-b border-slate-300 pb-1 inline-block italic hover:bg-slate-100 rounded px-1 -mx-1 transition-colors">
-                        {currentLayout.title || currentLayout.page_type}
-                      </div>
+                      {popupEditingTitle ? (
+                        <input
+                          ref={popupTitleInputRef}
+                          type="text"
+                          value={popupTitleValue}
+                          onChange={(e) => setPopupTitleValue(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') handlePopupSaveTitle();
+                            if (e.key === 'Escape') {
+                              setPopupTitleValue(currentLayout.title || currentLayout.page_type);
+                              setPopupEditingTitle(false);
+                            }
+                          }}
+                          onBlur={handlePopupSaveTitle}
+                          className="text-base font-semibold text-slate-500 border-b border-slate-200 pb-1 bg-white outline-none italic focus:ring-0"
+                          style={{ width: 'auto', minWidth: '200px' }}
+                        />
+                      ) : (
+                        <div
+                          onClick={() => setPopupEditingTitle(true)}
+                          className="text-base font-semibold text-slate-500 border-b border-slate-200 pb-1 inline-block italic cursor-text hover:bg-slate-50 rounded px-1 -mx-1 transition-colors"
+                          title="Click to edit"
+                        >
+                          {currentLayout.title || currentLayout.page_type}
+                        </div>
+                      )}
                     </div>
 
                     {/* Image grid - EXACT COPY from LayoutBuilder line 320 */}
@@ -796,6 +864,7 @@ export function ImageConfiguratorDemo({
                               slot={slot}
                               image={image}
                               defaultCaption={defaultCaption}
+                              onUpdateCaption={handlePopupUpdateCaption}
                             />
                           );
                         })}
@@ -956,26 +1025,60 @@ function getDefaultCaption(slotPosition: number, categoryFilter?: string): strin
   return captions[slotPosition - 1] || '';
 }
 
-// PopupSlot - EXACT COPY of SortableSlot rendering (without drag/drop)
-// Matches SortableSlot.tsx lines 109-206 exactly
+// PopupSlot - Editable slot matching SortableSlot functionality
 function PopupSlot({
   slot,
   image,
   defaultCaption = '',
+  onUpdateCaption,
 }: {
   slot: { id: string; slot_position: number; caption?: string };
   image: JobImage | null | undefined;
   defaultCaption?: string;
+  onUpdateCaption?: (slotId: string, caption: string) => void;
 }) {
+  const [isEditingCaption, setIsEditingCaption] = useState(false);
+  const [captionValue, setCaptionValue] = useState('');
+  const captionInputRef = useRef<HTMLInputElement>(null);
+
   const imagePath = image ? (image.thumbnail_path || image.storage_path) : null;
   const imageUrl = useSignedImageUrl(imagePath, { width: 400 });
 
   // Current caption value (slot caption overrides image caption, with default fallback)
   const currentCaption = slot.caption || image?.caption || defaultCaption;
 
+  // Initialize caption value
+  useEffect(() => {
+    setCaptionValue(currentCaption);
+  }, [currentCaption]);
+
+  // Focus input when editing starts
+  useEffect(() => {
+    if (isEditingCaption && captionInputRef.current) {
+      captionInputRef.current.focus();
+      captionInputRef.current.select();
+    }
+  }, [isEditingCaption]);
+
+  const handleCaptionBlur = () => {
+    if (onUpdateCaption && captionValue !== currentCaption) {
+      onUpdateCaption(slot.id, captionValue);
+    }
+    setIsEditingCaption(false);
+  };
+
+  const handleCaptionKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.currentTarget.blur();
+    } else if (e.key === 'Escape') {
+      setCaptionValue(currentCaption);
+      setIsEditingCaption(false);
+    }
+  };
+
   return (
     <div className="flex flex-col gap-1 min-w-0 min-h-0">
-      {/* Image slot - EXACT COPY from SortableSlot line 112 */}
+      {/* Image slot */}
       <div
         className={`
           relative aspect-square overflow-hidden transition-all duration-150 group rounded-lg
@@ -985,43 +1088,57 @@ function PopupSlot({
         style={{ width: '100%', height: 'auto' }}
       >
         {image ? (
-          // Filled slot - EXACT COPY from SortableSlot line 122
           <img
             src={imageUrl!}
             alt={image.original_filename}
             className="w-full h-full object-contain"
           />
         ) : (
-          // Empty slot - EXACT COPY from SortableSlot line 162
           <div className="w-full h-full flex flex-col items-center justify-center">
             <div className="p-3 rounded-full mb-2 bg-slate-100">
               <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
             </div>
-            <span className="text-[11px] font-medium text-slate-400">
+            <span className="text-xs font-medium text-slate-400">
               Drag image here
             </span>
           </div>
         )}
 
-        {/* Position badge - EXACT COPY from SortableSlot line 173 */}
+        {/* Position badge */}
         <div className="absolute top-1.5 left-1.5 bg-white/90 text-slate-400 text-[10px] px-1.5 py-0.5 rounded-md font-medium shadow-sm">
           {slot.slot_position}
         </div>
       </div>
 
-      {/* Caption - matches SortableSlot styling */}
-      {/* Always visible, LEFT ALIGNED, light hover */}
-      {image ? (
-        <div className="w-full text-[11px] text-slate-600 px-1 py-0.5 truncate rounded hover:bg-slate-100 transition-colors">
-          {currentCaption || defaultCaption || 'Add caption...'}
-        </div>
-      ) : (
-        <div className="w-full text-[11px] text-slate-400 px-1 py-0.5">
-          {defaultCaption || 'Caption'}
-        </div>
-      )}
+      {/* Caption - editable, matches SortableSlot */}
+      <div className="relative">
+        {image && isEditingCaption ? (
+          <input
+            ref={captionInputRef}
+            type="text"
+            value={captionValue}
+            onChange={(e) => setCaptionValue(e.target.value)}
+            onBlur={handleCaptionBlur}
+            onKeyDown={handleCaptionKeyDown}
+            className="w-full text-xs text-slate-700 bg-white border border-slate-200 rounded px-1.5 py-1 outline-none focus:border-green-500 focus:ring-0"
+            placeholder={defaultCaption || "Add caption..."}
+          />
+        ) : image ? (
+          <div
+            onClick={() => setIsEditingCaption(true)}
+            className="w-full text-xs text-slate-600 cursor-text px-1.5 py-1 rounded hover:bg-slate-50 transition-colors truncate"
+            title="Click to edit caption"
+          >
+            {currentCaption || defaultCaption || 'Add caption...'}
+          </div>
+        ) : (
+          <div className="w-full text-xs text-slate-400 px-1.5 py-1">
+            {defaultCaption || 'Caption'}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

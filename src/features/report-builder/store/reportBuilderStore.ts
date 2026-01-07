@@ -5993,7 +5993,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
   sidebarCollapsed: false,
   activeTestMode: "none", // Mutually exclusive test modes: 'none' | 'test-report' | 'designer'
   testDataLoaded: {}, // Tracks which sections have had test data loaded
-  showRawIds: true, // Toggle ON = show test data, Toggle OFF = show raw field IDs
+  showRawIds: false, // Toggle OFF (default) = Dev Mode (raw {{field-id}}), Toggle ON = User Ready Mode
   currentJobId: null, // Current job ID for image configurator
   scrollToReportPage: null, // Page number to scroll to in report preview
 

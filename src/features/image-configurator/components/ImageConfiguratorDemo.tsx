@@ -746,7 +746,7 @@ export function ImageConfiguratorDemo({
                 )}
               </div>
 
-              {/* Page viewing area - align to top */}
+              {/* Page viewing area - consistent size */}
               <div style={{
                 flex: 1,
                 display: 'flex',
@@ -758,14 +758,14 @@ export function ImageConfiguratorDemo({
                 minHeight: 0
               }}>
                 {currentLayout ? (
-                  /* Page wrapper - EXACT COPY from LayoutBuilder line 276 */
+                  /* Page wrapper - fixed height, width from aspect ratio */
                   <div
                     className="flex flex-col"
                     style={{
                       backgroundColor: '#ffffff',
                       aspectRatio: '8.5 / 11',
-                      maxHeight: '100%',
-                      width: 'auto',
+                      height: '100%',
+                      maxWidth: '100%',
                       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)',
                     }}
                   >

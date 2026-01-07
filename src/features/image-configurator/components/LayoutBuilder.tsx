@@ -245,11 +245,23 @@ export function LayoutBuilder({
           )}
         </div>
 
-        {/* Center: Page counter */}
-        {currentLayout && (
-          <div className="text-xs font-medium text-slate-600">
-            {currentPageIndex + 1} / {layouts.length}
-          </div>
+        {/* Center: Page selector dropdown */}
+        {layouts.length > 0 && (
+          <select
+            value={currentPageIndex}
+            onChange={(e) => setCurrentPageIndex(Number(e.target.value))}
+            className="text-xs font-medium text-slate-700 bg-white border border-slate-300 rounded px-2 py-1 cursor-pointer hover:border-slate-400 focus:outline-none focus:ring-1 focus:ring-green-500"
+          >
+            {layouts.map((layout, index) => {
+              const slots = getSlotsForLayout(allSlots, layout.id);
+              const filledCount = slots.filter((s) => s.image_id).length;
+              return (
+                <option key={layout.id} value={index}>
+                  {layout.page_type} ({filledCount}/{slots.length})
+                </option>
+              );
+            })}
+          </select>
         )}
 
         {/* Right: Actions */}
@@ -361,55 +373,6 @@ export function LayoutBuilder({
         </div>
       </div>
 
-      {/* Page tabs at bottom - FIXED HEIGHT */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '4px',
-        padding: '4px 12px',
-        borderTop: '1px solid #e5e7eb',
-        backgroundColor: '#ffffff',
-        height: '40px',
-        minHeight: '40px',
-        maxHeight: '40px',
-        flexShrink: 0,
-        overflowX: 'auto',
-        overflowY: 'hidden'
-      }}>
-        {layouts.map((layout, index) => {
-          const slots = getSlotsForLayout(allSlots, layout.id);
-          const filledCount = slots.filter((s) => s.image_id).length;
-          const isActive = index === currentPageIndex;
-
-          return (
-            <button
-              key={layout.id}
-              onClick={() => setCurrentPageIndex(index)}
-              className={`
-                flex-shrink-0 flex flex-col items-center px-2 py-0.5 rounded text-xs font-medium transition-all
-                whitespace-nowrap
-                ${isActive ? 'text-white' : 'text-slate-600 hover:text-slate-900'}
-              `}
-              style={isActive ? { backgroundColor: '#10b981' } : { backgroundColor: '#f3f4f6' }}
-              onMouseEnter={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.backgroundColor = '#e5e7eb';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.backgroundColor = '#f3f4f6';
-                }
-              }}
-            >
-              <span>{layout.page_type}</span>
-              <span className={`text-[10px] ${isActive ? 'text-green-100' : 'text-slate-500'}`}>
-                {filledCount}/{slots.length}
-              </span>
-            </button>
-          );
-        })}
-      </div>
     </div>
   );
 }

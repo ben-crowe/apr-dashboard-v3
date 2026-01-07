@@ -245,7 +245,7 @@ export default function PreviewPanel() {
         toggleLabel.style.visibility = "hidden";
       }
 
-      // Store interpolated values in data-original for all fields
+      // Store interpolated values in data-original for all fields (for populated class tracking)
       const fields = pagesWrapper.querySelectorAll(".field-mapped");
       fields.forEach((el: Element) => {
         const htmlEl = el as HTMLElement;
@@ -254,54 +254,12 @@ export default function PreviewPanel() {
         }
       });
 
-      // Initial display state: showRawIds=false means show raw IDs, true means show test data
-      if (showRawIds) {
-        // Toggle ON = Show test data (interpolated values)
-        pagesWrapper.classList.add("preview-mode");
-        fields.forEach((el: Element) => {
-          const htmlEl = el as HTMLElement;
-          // Skip financial fields
-          const title = htmlEl.getAttribute("title") || "";
-          const isCalcField = ["calc-", "ia-dircap-", "recon-", "sca-"].some(
-            (prefix) => title.includes(prefix)
-          );
-          if (isCalcField) return;
-
-          // Restore interpolated value
-          if (htmlEl.dataset.original) {
-            htmlEl.textContent = htmlEl.dataset.original;
-          }
-        });
-      } else {
-        // Toggle OFF = Show raw field IDs
-        pagesWrapper.classList.remove("preview-mode");
-        fields.forEach((el: Element) => {
-          const htmlEl = el as HTMLElement;
-          // Skip financial fields
-          const title = htmlEl.getAttribute("title") || "";
-          const isCalcField = ["calc-", "ia-dircap-", "recon-", "sca-"].some(
-            (prefix) => title.includes(prefix)
-          );
-          if (isCalcField) return;
-
-          // Get field ID from data-field-id (now stores clean ID without mustaches)
-          let fieldId = htmlEl.getAttribute("data-field-id");
-          if (!fieldId) {
-            // Fallback: extract from title if data-field-id missing
-            const titleValue = htmlEl.getAttribute("title") || "";
-            const match = titleValue.match(/\{\{([^}]+)\}\}/);
-            if (match) {
-              fieldId = match[1]; // Extract clean ID from {{field-id}}
-            }
-          }
-          if (fieldId) {
-            // Display as {{field-id}} format for readability
-            htmlEl.textContent = `{{${fieldId}}}`;
-          } else {
-            htmlEl.textContent = "{{field-id}}";
-          }
-        });
-      }
+      // Sync initial toggle state to iframe via postMessage
+      // Template's toggle handler manages display (Dev Mode vs User Ready Mode)
+      iframe.contentWindow?.postMessage(
+        { type: 'TOGGLE_MODE', checked: showRawIds },
+        '*'
+      );
 
       console.log(
         `PreviewPanel: Injected ${filteredPageSheets.length} pages into preview`,
@@ -333,73 +291,14 @@ export default function PreviewPanel() {
     };
   }, [previewHtml, activeTestMode, excludedPages, showRawIds]);
 
-  // Separate effect to update field display when showRawIds changes
+  // Sync toggle state to iframe via postMessage (template handles display logic)
   useEffect(() => {
     if (!iframeRef.current || !previewHtml) return;
-    
+
     const iframe = iframeRef.current;
-    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
-    if (!iframeDoc) return;
 
-    const pagesWrapper = iframeDoc.getElementById('pages-wrapper');
-    if (!pagesWrapper) return;
-
-    const updateFieldDisplay = () => {
-      const fields = pagesWrapper.querySelectorAll('.field-mapped');
-
-      if (showRawIds) {
-        // Toggle ON = Show test data (interpolated values)
-        pagesWrapper.classList.add('preview-mode');
-        fields.forEach((el: Element) => {
-          const htmlEl = el as HTMLElement;
-          // Skip financial fields
-          const title = htmlEl.getAttribute('title') || '';
-          const isCalcField = ['calc-', 'ia-dircap-', 'recon-', 'sca-'].some(
-            (prefix) => title.includes(prefix)
-          );
-          if (isCalcField) return;
-
-          // Restore interpolated value
-          if (htmlEl.dataset.original) {
-            htmlEl.textContent = htmlEl.dataset.original;
-          }
-        });
-      } else {
-        // Toggle OFF = Show raw field IDs
-        pagesWrapper.classList.remove('preview-mode');
-        fields.forEach((el: Element) => {
-          const htmlEl = el as HTMLElement;
-          // Skip financial fields
-          const title = htmlEl.getAttribute('title') || '';
-          const isCalcField = ['calc-', 'ia-dircap-', 'recon-', 'sca-'].some(
-            (prefix) => title.includes(prefix)
-          );
-          if (isCalcField) return;
-
-          // Get field ID from data-field-id (now stores clean ID without mustaches)
-          let fieldId = htmlEl.getAttribute('data-field-id');
-          if (!fieldId) {
-            // Fallback: extract from title if data-field-id missing
-            const titleValue = htmlEl.getAttribute('title') || '';
-            const match = titleValue.match(/\{\{([^}]+)\}\}/);
-            if (match) {
-              fieldId = match[1]; // Extract clean ID from {{field-id}}
-            }
-          }
-
-          if (fieldId) {
-            // Display as {{field-id}} format for readability
-            htmlEl.textContent = `{{${fieldId}}}`;
-          } else {
-            htmlEl.textContent = '{{field-id}}';
-          }
-        });
-      }
-    };
-
-    updateFieldDisplay();
-
-    // Sync toggle state to iframe via postMessage
+    // Let template's toggle handler manage field display
+    // showRawIds: false = Dev Mode ({{field-id}}), true = User Ready Mode (data-sample)
     iframe.contentWindow?.postMessage(
       { type: 'TOGGLE_MODE', checked: showRawIds },
       '*'

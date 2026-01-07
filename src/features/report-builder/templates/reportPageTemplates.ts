@@ -203,9 +203,9 @@ export function renderPage01(sections: ReportSection[], valueScenarioType: strin
     <div class="right-section">
       <h1 class="heading">${getFieldValue(sections, 'report-title') || 'Appraisal Report'}</h1>
       <div class="property-type">${getFieldValue(sections, 'property-type')}</div>
-      <div class="property-address">${getFieldValue(sections, 'property-name')}</div>
-      <div class="property-address">${getFieldValue(sections, 'property-address-line1')}</div>
-      <div class="property-city">${getFieldValue(sections, 'property-address-line2')}</div>
+      <div class="property-address">${getFieldValue(sections, 'subject-propertyname')}</div>
+      <div class="property-address">${getFieldValue(sections, 'subject-street')}</div>
+      <div class="property-city">${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')}</div>
     </div>
 
     <div class="diagonal-section">
@@ -591,7 +591,7 @@ export function renderPage05(sections: ReportSection[], valueScenarioType: strin
   <table>
     <tr>
       <td class="label">Name</td>
-      <td class="value">${getFieldValue(sections, 'property-name')}</td>
+      <td class="value">${getFieldValue(sections, 'subject-propertyname')}</td>
     </tr>
     <tr>
       <td class="label">Property</td>
@@ -599,11 +599,11 @@ export function renderPage05(sections: ReportSection[], valueScenarioType: strin
     </tr>
     <tr>
       <td class="label">Address</td>
-      <td class="value">${getFieldValue(sections, 'property-address-line1')}</td>
+      <td class="value">${getFieldValue(sections, 'subject-street')}</td>
     </tr>
     <tr>
       <td class="label">City, Province, Postal Code</td>
-      <td class="value">${getFieldValue(sections, 'property-address-line2')}</td>
+      <td class="value">${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')}</td>
     </tr>
     <tr>
       <td class="label">Market / Submarket</td>
@@ -749,7 +749,7 @@ export function renderPage05(sections: ReportSection[], valueScenarioType: strin
 
   <div class="footer">
     <div class="footer-left">
-      1   ${getFieldValue(sections, 'property-address-line1')}. ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}
+      1   ${getFieldValue(sections, 'subject-street')}. ${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')} | File ${getFieldValue(sections, 'file-number')}
     </div>
     <div class="footer-right"></div>
   </div>
@@ -954,7 +954,7 @@ export function renderPage06(sections: ReportSection[], valueScenarioType: strin
     <div class="footer">
       <div class="footer-left">
         <span>2</span>
-        <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <span>${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')} | File ${getFieldValue(sections, 'file-number')}</span>
       </div>
       <div class="footer-right">
         <div class="logo-placeholder">[LOGO]</div>
@@ -1048,7 +1048,7 @@ export function renderPage07(sections: ReportSection[], valueScenarioType: strin
     <div class="footer">
       <div class="footer-left">
         <span class="footer-text">3</span>
-        <span class="footer-text">${getFieldValue(sections, 'property-address-line1')}. ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <span class="footer-text">${getFieldValue(sections, 'subject-street')}. ${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')} | File ${getFieldValue(sections, 'file-number')}</span>
       </div>
     </div>
   </div>
@@ -1159,7 +1159,7 @@ export function renderPage08(sections: ReportSection[], valueScenarioType: strin
   </div>
 
   <div class="footer-text">
-    <div class="page-number">4    ${getFieldValue(sections, 'property-address-line1')}. ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</div>
+    <div class="page-number">4    ${getFieldValue(sections, 'subject-street')}. ${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')} | File ${getFieldValue(sections, 'file-number')}</div>
     <div class="footer-logo"></div>
   </div>
 </body>
@@ -1269,7 +1269,7 @@ export function renderPage09(sections: ReportSection[], valueScenarioType: strin
   </div>
 
   <div class="footer-text">
-    <div class="page-number">5    ${getFieldValue(sections, 'property-address-line1')}. ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</div>
+    <div class="page-number">5    ${getFieldValue(sections, 'subject-street')}. ${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')} | File ${getFieldValue(sections, 'file-number')}</div>
     <div class="footer-logo"></div>
   </div>
 </body>
@@ -1313,7 +1313,7 @@ export function renderPage11(sections: ReportSection[], valueScenarioType: strin
       </div>
       <div class="page-footer">
         <span>6</span>
-        <span>\${getFieldValue(sections, 'property-address-line1')}, \${getFieldValue(sections, 'property-address-line2')} | File \${getFieldValue(sections, 'file-number')}</span>
+        <span>\${getFieldValue(sections, 'subject-street')}, \${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')} | File \${getFieldValue(sections, 'file-number')}</span>
       </div>
     </div>
   `;
@@ -1444,7 +1444,7 @@ export function renderPage12(sections: ReportSection[], valueScenarioType: strin
           <div class="section">
             <div class="section-label">Property Identification</div>
             <div class="section-content">
-              The subject property is located at ${getFieldValue(sections, 'property-address-line1') || '1101, 1103, 1105, 1107, 1109, 1111, 1113, 1115, 1117, 1119 & 1121, 100 St, North Battleford, SK'}, is a multi-family, walkup property with improvements located in North Battleford.
+              The subject property is located at ${getFieldValue(sections, 'subject-street') || '1101, 1103, 1105, 1107, 1109, 1111, 1113, 1115, 1117, 1119 & 1121, 100 St, North Battleford, SK'}, is a multi-family, walkup property with improvements located in North Battleford.
             </div>
             <div class="section-content" style="margin-top: 6px;">
               The improvements are comprised of 5 four-plex buildings, and consist of 10,250 square feet of net rentable area (NRA). The site area is 3.065 acres (133,508 square feet) and the land is approximately 100,425 square feet with a 2-storey, garden style format.
@@ -1505,7 +1505,7 @@ export function renderPage12(sections: ReportSection[], valueScenarioType: strin
       <!-- Footer -->
       <div class="footer">
         <span>12</span>
-        <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <span>${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')} | File ${getFieldValue(sections, 'file-number')}</span>
       </div>
     </div>
   `;
@@ -1678,7 +1678,7 @@ export function renderPage13(sections: ReportSection[], valueScenarioType: strin
       <!-- Footer -->
       <div class="footer">
         <span>13</span>
-        <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <span>${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')} | File ${getFieldValue(sections, 'file-number')}</span>
       </div>
     </div>
   `;
@@ -1841,7 +1841,7 @@ export function renderPage14(sections: ReportSection[], valueScenarioType: strin
       <!-- Footer -->
       <div class="footer">
         <span>14</span>
-        <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <span>${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')} | File ${getFieldValue(sections, 'file-number')}</span>
       </div>
     </div>
   `;
@@ -2031,7 +2031,7 @@ export function renderPage15(sections: ReportSection[], valueScenarioType: strin
       <!-- Footer -->
       <div class="footer">
         <span>15</span>
-        <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <span>${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')} | File ${getFieldValue(sections, 'file-number')}</span>
       </div>
     </div>
   `;
@@ -2171,7 +2171,7 @@ export function renderPage16(sections: ReportSection[], valueScenarioType: strin
       <!-- Footer -->
       <div class="footer">
         <span>16</span>
-        <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-address-line2')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <span>${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'city')}, ${getFieldValue(sections, 'province')} | File ${getFieldValue(sections, 'file-number')}</span>
       </div>
     </div>
   `;
@@ -2192,8 +2192,8 @@ export function renderPage17(sections: ReportSection[], valueScenarioType: strin
         <div class="section-heading">Identification of Assignment</div>
 
         <h3 class="subsection-heading">Property Identification</h3>
-        <p class="first-paragraph">The subject property, located at ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')}, is a multi-family, walkup property with approximately ${getFieldValue(sections, 'building-nra-sf')} square feet of net rentable area.</p>
-        <p>The improvements are comprised of ${getFieldValue(sections, 'number-of-buildings')} total buildings, and consist of ${getFieldValue(sections, 'building-nra-sf')} square feet of net rentable area (NRA) as of the valuation date. The property, reportedly built in ${getFieldValue(sections, 'year-built')}; (${getFieldValue(sections, 'effective-year-built')} weighted) is approximately ${getFieldValue(sections, 'occupancy-rate')}% occupied and features ${getFieldValue(sections, 'total-units')} units in a ${getFieldValue(sections, 'number-of-stories')}-story, garden style format.</p>
+        <p class="first-paragraph">The subject property, located at ${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')}, is a multi-family, walkup property with approximately ${getFieldValue(sections, 'building-nra-sf')} square feet of net rentable area.</p>
+        <p>The improvements are comprised of ${getFieldValue(sections, 'number-of-buildings')} total buildings, and consist of ${getFieldValue(sections, 'building-nra-sf')} square feet of net rentable area (NRA) as of the valuation date. The property, reportedly built in ${getFieldValue(sections, 'year-built')}; (${getFieldValue(sections, 'effective-year-built')} weighted) is approximately ${getFieldValue(sections, 'occupancy-rate')}% occupied and features ${getFieldValue(sections, 'subject-units')} units in a ${getFieldValue(sections, 'number-of-stories')}-story, garden style format.</p>
 
         <h3 class="subsection-heading">Legal Description</h3>
         <p class="first-paragraph">${getFieldValue(sections, 'legal-description')}</p>
@@ -2211,14 +2211,14 @@ export function renderPage17(sections: ReportSection[], valueScenarioType: strin
         <p class="first-paragraph">${getFieldValue(sections, 'inspection-date')}</p>
 
         <h3 class="subsection-heading">Purpose</h3>
-        <p class="first-paragraph">The purpose of this assignment is to provide the ${valueScenarioType} which at the time of inspection represents the existing improvements assuming stabilized occupancy as of the effective date for the property located at ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} (herein referred to as the Subject property).</p>
+        <p class="first-paragraph">The purpose of this assignment is to provide the ${valueScenarioType} which at the time of inspection represents the existing improvements assuming stabilized occupancy as of the effective date for the property located at ${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} (herein referred to as the Subject property).</p>
 
         <h3 class="subsection-heading">Hypothetical Conditions</h3>
         <p class="first-paragraph">${getFieldValue(sections, 'hypothetical-conditions') || 'One of a hypothetical condition(s) may have impacted the results of the assignment. The As Stabilized value has been developed based on the hypothetical condition that the subject property is fully leased at prevailing market rents and has achieved stabilized occupancy as of the effective date of the appraisal.'}</p>
       </div>
 
       <div class="page-footer">
-        <span class="footer-text">12     ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <span class="footer-text">12     ${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</span>
         <div class="footer-accent"></div>
       </div>
     </div>
@@ -2294,7 +2294,7 @@ export function renderPage18(sections: ReportSection[], valueScenarioType: strin
 
       <div class="page-footer">
         <div class="footer-left">
-          13 | ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}
+          13 | ${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}
         </div>
         <div class="footer-right">
           <div class="footer-bar"></div>
@@ -2355,7 +2355,7 @@ export function renderPage19(sections: ReportSection[], valueScenarioType: strin
       </ul>
 
       <div class="footnote">
-        <p><strong>14</strong>&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</p>
+        <p><strong>14</strong>&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</p>
       </div>
     </div>
   `;
@@ -2420,7 +2420,7 @@ export function renderPage20(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="footer-text">
-        ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}
+        ${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}
       </div>
 
       <div class="page-number">15</div>
@@ -2457,9 +2457,9 @@ export function renderPage21(sections: ReportSection[], valueScenarioType: strin
           <tr>
             <td>${getFieldValue(sections, 'inspection-appraiser-1') || getFieldValue(sections, 'appraiser-name')}<br>${getFieldValue(sections, 'inspection-appraiser-2') || ''}</td>
             <td>Yes</td>
-            <td>${getFieldValue(sections, 'inspection-extent') || 'Interior & Exterior'}</td>
+            <td>${getFieldValue(sections, 'appraiser1-extent') || 'Interior & Exterior'}</td>
             <td>${getFieldValue(sections, 'all-units-inspected') || 'No'}</td>
-            <td>${getFieldValue(sections, 'inspection-date-1') || getFieldValue(sections, 'inspection-date')}<br>${getFieldValue(sections, 'inspection-date-2') || ''}</td>
+            <td>${getFieldValue(sections, 'appraiser1-inspectiondate') || getFieldValue(sections, 'inspection-date')}<br>${getFieldValue(sections, 'appraiser2-inspectiondate') || ''}</td>
             <td>${getFieldValue(sections, 'inspection-role-1') || 'Primary Appraiser'}<br>${getFieldValue(sections, 'inspection-role-2') || 'Inspector'}</td>
           </tr>
         </tbody>
@@ -2472,7 +2472,7 @@ export function renderPage21(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="footer">
-        <div class="footer-left">16&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-left">16&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
         <div class="footer-right"></div>
       </div>
     </div>
@@ -2534,7 +2534,7 @@ export function renderPage22(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="footer">
-        <div class="footer-left">17   ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-left">17   ${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
         <div class="footer-right"></div>
       </div>
     </div>
@@ -2560,7 +2560,7 @@ export function renderPage23(sections: ReportSection[], valueScenarioType: strin
       <table class="details-table">
         <tr class="data-row">
           <td class="label-cell">Address</td>
-          <td class="value-cell" colspan="2">${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')}</td>
+          <td class="value-cell" colspan="2">${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')}</td>
         </tr>
         <tr class="data-row">
           <td class="label-cell">Legal Description</td>
@@ -2643,7 +2643,7 @@ export function renderPage23(sections: ReportSection[], valueScenarioType: strin
       </p>
 
       <div class="footer">
-        <div class="footer-left">18 &nbsp;&nbsp;&nbsp; ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-left">18 &nbsp;&nbsp;&nbsp; ${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
         <div class="footer-right"></div>
       </div>
     </div>
@@ -2757,7 +2757,7 @@ export function renderPage24(sections: ReportSection[], valueScenarioType: strin
 
       <div class="footer">
         <div class="footer-left">
-          19 | ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}
+          19 | ${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}
         </div>
         <div class="footer-right"></div>
       </div>
@@ -2807,7 +2807,7 @@ export function renderPage25(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="page-footer">
-        <div class="footer-left">20&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-left">20&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
         <div class="footer-right"></div>
       </div>
     </div>
@@ -2832,7 +2832,7 @@ export function renderPage26(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="footer">
-        <div class="footer-left">21     ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-left">21     ${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
         <div class="footer-right"></div>
       </div>
     </div>
@@ -2857,7 +2857,7 @@ export function renderPage27(sections: ReportSection[], valueScenarioType: strin
       <div class="footer">
         <div class="footer-left">
           <span>22</span>
-          <span>${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</span>
+          <span>${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</span>
         </div>
         <div class="footer-right"></div>
       </div>
@@ -2912,7 +2912,7 @@ export function renderPage28(sections: ReportSection[], valueScenarioType: strin
         </div>
 
         <div class="page-footer">
-          <div class="page-number">23 | ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+          <div class="page-number">23 | ${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
           <div class="footer-accent"></div>
         </div>
       </div>
@@ -2978,7 +2978,7 @@ export function renderPage29(sections: ReportSection[], valueScenarioType: strin
         </div>
 
         <div class="footer">
-          <div class="footer-left">24    ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+          <div class="footer-left">24    ${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
           <div class="footer-right"></div>
         </div>
       </div>
@@ -3002,7 +3002,7 @@ export function renderPage30(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="footer">
-        <div class="footer-left">25   ${getFieldValue(sections, 'property-address-line1')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-left">25   ${getFieldValue(sections, 'subject-street')}, ${getFieldValue(sections, 'property-city')}, ${getFieldValue(sections, 'property-province')} | File ${getFieldValue(sections, 'file-number')}</div>
         <div class="footer-right"></div>
       </div>
     </div>
@@ -3029,7 +3029,7 @@ export function renderPage31(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="footer" style="position: absolute; bottom: 30px; left: 36px; right: 36px; border-top: 1px solid #d0d0d0; padding-top: 10px; font-size: 9px; color: #666; display: flex; justify-content: space-between; align-items: center;">
-        <span>26 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <span>26 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
         <div style="width: 60px; height: 20px; background: linear-gradient(90deg, #5ba3d0 0%, #1a3a52 100%);"></div>
       </div>
     </div>
@@ -3100,7 +3100,7 @@ export function renderPage32(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="footer" style="position: absolute; bottom: 30px; left: 36px; right: 36px; border-top: 1px solid #d0d0d0; padding-top: 10px; font-size: 9px; color: #666; display: flex; justify-content: space-between; align-items: center;">
-        <span>27 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <span>27 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
         <div style="width: 60px; height: 20px; background: linear-gradient(90deg, #5ba3d0 0%, #1a3a52 100%);"></div>
       </div>
     </div>
@@ -3155,7 +3155,7 @@ export function renderPage33(sections: ReportSection[], valueScenarioType: strin
       </table>
 
       <div class="footer" style="position: absolute; bottom: 30px; left: 36px; right: 36px; font-size: 10px; color: #666; display: flex; justify-content: space-between; align-items: center;">
-        <span>28 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <span>28 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
         <div style="width: 60px; height: 20px; background: linear-gradient(to right, #4da6ff, #0066cc); border-radius: 3px;"></div>
       </div>
     </div>
@@ -3174,7 +3174,7 @@ export function renderPage34(sections: ReportSection[], valueScenarioType: strin
       <p style="font-size: 11px; line-height: 1.6; color: #333; text-align: justify; margin-bottom: 12px;">materials, including (but not limited to) unseen asbestos and mold. Please refer to the Assumptions and Limiting Conditions section regarding this issue.</p>
 
       <div class="footer" style="position: absolute; bottom: 20px; left: 40px; right: 40px; height: 60px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #e0e0e0;">
-        <span style="font-size: 10px; color: #666;">29 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <span style="font-size: 10px; color: #666;">29 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
         <div style="width: 120px; height: 20px; background: linear-gradient(to right, #5a9fd4, #1e3a5f); border-radius: 10px 0 0 0;"></div>
       </div>
     </div>
@@ -3219,7 +3219,7 @@ export function renderPage35(sections: ReportSection[], valueScenarioType: strin
       </table>
 
       <div class="footer" style="position: absolute; bottom: 24px; left: 36px; right: 36px; display: flex; justify-content: space-between; align-items: center; font-size: 9px; color: #666666; border-top: 1px solid #e0e0e0; padding-top: 6px;">
-        <span>30 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <span>30 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
         <div style="background: linear-gradient(90deg, #87ceeb 0%, #1a3a52 100%); width: 60px; height: 20px;"></div>
       </div>
     </div>
@@ -3261,7 +3261,7 @@ export function renderPage36(sections: ReportSection[], valueScenarioType: strin
       </table>
 
       <div class="footer" style="position: absolute; bottom: 24px; left: 36px; right: 36px; font-size: 9px; color: #666; border-top: 1px solid #ccc; padding-top: 8px; display: flex; justify-content: space-between; align-items: center;">
-        <span>31 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <span>31 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
         <div style="width: 80px; height: 20px; background-color: #d0e8f2; border-left: 4px solid #003d7a;"></div>
       </div>
     </div>
@@ -3305,7 +3305,7 @@ export function renderPage37(sections: ReportSection[], valueScenarioType: strin
 
       <div class="footer" style="position: absolute; bottom: 24px; left: 54px; right: 54px; padding-top: 8px; font-size: 9px; color: #666;">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span>32 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+          <span>32 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
           <div style="width: 60px; height: 20px; background: #003d6b;"></div>
         </div>
       </div>
@@ -3358,7 +3358,7 @@ export function renderPage38(sections: ReportSection[], valueScenarioType: strin
       <div style="position: absolute; bottom: 0; right: 0; width: 120px; height: 80px; background: linear-gradient(135deg, #b0d4e8 0%, #003f7f 100%); clip-path: polygon(100% 0, 100% 100%, 0 100%);"></div>
 
       <div style="position: absolute; bottom: 36px; left: 36px; right: 36px; font-size: 9px; color: #666; border-top: 1px solid #ccc; padding-top: 6px;">
-        33 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}
+        33 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}
       </div>
     </div>
   `;
@@ -3386,7 +3386,7 @@ export function renderPage39(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div style="position: absolute; bottom: 24px; left: 40px; right: 40px; display: flex; justify-content: space-between; align-items: flex-end; padding-top: 20px; border-top: 1px solid #e0e0e0;">
-        <span style="font-size: 11px; color: #666;">34 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <span style="font-size: 11px; color: #666;">34 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
         <div style="width: 140px; height: 40px; background: linear-gradient(to right, #7ba5d4 0%, #003d82 100%); border-radius: 4px 0 0 0;"></div>
       </div>
     </div>
@@ -3437,7 +3437,7 @@ export function renderPage40(sections: ReportSection[], valueScenarioType: strin
 
       <!-- Footer -->
       <div style="position: absolute; bottom: 20px; left: 0; right: 0; height: 40px; background: linear-gradient(to right, transparent 0%, transparent 60%, #1a5490 60%, #1a5490 100%); display: flex; align-items: center; padding: 0 50px; font-size: 10px; color: #666;">
-        <div style="flex: 1;">35 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
+        <div style="flex: 1;">35 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
       </div>
     </div>
   `;
@@ -3492,7 +3492,7 @@ export function renderPage41(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <!-- Footer -->
-      <div style="position: absolute; bottom: 15px; left: 40px; font-size: 9px; color: #666;">36 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
+      <div style="position: absolute; bottom: 15px; left: 40px; font-size: 9px; color: #666;">36 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
       <div style="position: absolute; bottom: 15px; right: 40px; width: 120px; height: 25px; background: linear-gradient(90deg, #e8f0f7 50%, #003d7a 50%); border-radius: 2px;"></div>
     </div>
   `;
@@ -3568,7 +3568,7 @@ export function renderPage42(sections: ReportSection[], valueScenarioType: strin
             <tr style="background: #f9f9f9; font-weight: bold;">
               <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: left;">TOTAL / AVERAGE</td>
               <td style="padding: 5px 4px; border: 1px solid #ccc;"></td>
-              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">${getFieldValue(sections, 'total-units') || '16'}</td>
+              <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">${getFieldValue(sections, 'subject-units') || '16'}</td>
               <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">100%</td>
               <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">6%</td>
               <td style="padding: 5px 4px; border: 1px solid #ccc; text-align: center;">94%</td>
@@ -3607,7 +3607,7 @@ export function renderPage42(sections: ReportSection[], valueScenarioType: strin
 
       <!-- Footer -->
       <div style="position: absolute; bottom: 20px; left: 0; right: 0; padding: 0 40px; border-top: 2px solid #0052A3; padding-top: 8px; font-size: 10px; display: flex; justify-content: space-between; align-items: center;">
-        <div style="flex: 1;"><strong>37</strong> | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
+        <div style="flex: 1;"><strong>37</strong> | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
         <div style="width: 80px; height: 30px; background: linear-gradient(to right, #E8F0F8 50%, #003D82 50%); margin-left: 10px;"></div>
       </div>
     </div>
@@ -3647,7 +3647,7 @@ export function renderPage43(sections: ReportSection[], valueScenarioType: strin
             <tbody>
               <tr>
                 <td style="font-weight: 600; background: #f5f9fc; padding: 3px 4px; border: 1px solid #ddd;">Address</td>
-                <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}</td>
+                <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}</td>
                 <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'comp1-address') || '2624 B-84th Ave'}</td>
                 <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'comp2-address') || '521 G-81 St'}</td>
                 <td style="padding: 3px 4px; border: 1px solid #ddd;">${getFieldValue(sections, 'comp3-address') || '2306-2 Ave W'}</td>
@@ -3815,7 +3815,7 @@ export function renderPage43(sections: ReportSection[], valueScenarioType: strin
       <!-- Footer -->
       <div style="margin-top: auto; padding-top: 0.25in; border-top: 1px solid #ccc; font-size: 9px; color: #666; display: flex; justify-content: space-between; align-items: center;">
         <span style="font-weight: bold;">38</span>
-        <span>${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
+        <span>${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</span>
         <div style="width: 60px; height: 20px; background: linear-gradient(to right, #4a7ba7 50%, #2d5a8c 50%); border-radius: 2px;"></div>
       </div>
     </div>
@@ -3887,7 +3887,7 @@ export function renderPage44(sections: ReportSection[], valueScenarioType: strin
 
       <!-- Footer -->
       <div style="margin-top: auto; font-size: 10px; color: #666; display: flex; justify-content: space-between; align-items: center; padding-top: 12px; border-top: 1px solid #ddd;">
-        <div style="flex: 1;">39 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
+        <div style="flex: 1;">39 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
         <div style="width: 100px; height: 24px; background: #0052a3; border-radius: 2px;"></div>
       </div>
     </div>
@@ -4077,7 +4077,7 @@ export function renderPage45(sections: ReportSection[], valueScenarioType: strin
 
       <!-- Footer -->
       <div style="position: absolute; bottom: 20px; left: 0; right: 0; padding: 0 40px; border-top: 1px solid #ddd; padding-top: 8px; font-size: 9px; color: #666; display: flex; align-items: center; height: 30px;">
-        <div style="flex: 1;">40 | ${getFieldValue(sections, 'property-address-line1') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
+        <div style="flex: 1;">40 | ${getFieldValue(sections, 'subject-street') || '1101, 1121 109 St'}, ${getFieldValue(sections, 'property-city') || 'North Battleford'}, ${getFieldValue(sections, 'property-province') || 'Saskatchewan'} | File ${getFieldValue(sections, 'file-number') || 'VAL251012 - 1'}</div>
         <div style="width: 40px; height: 20px; background-color: #0066cc; margin-left: auto;"></div>
       </div>
     </div>
@@ -4111,7 +4111,7 @@ export function renderPage46(sections: ReportSection[], valueScenarioType: strin
 
       <div class="page-footer">
         <div class="page-footer-left">
-          41&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}
+          41&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}
         </div>
       </div>
     </div>
@@ -4312,7 +4312,7 @@ export function renderPage47(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="footer">
-        42&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}
+        42&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}
       </div>
 
       <div class="blue-banner"></div>
@@ -4387,7 +4387,7 @@ export function renderPage48(sections: ReportSection[], valueScenarioType: strin
       <div class="page-footer">
         <div class="footer-left">
           <span>43</span>
-          <span>${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+          <span>${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}</span>
         </div>
         <div class="footer-right"></div>
       </div>
@@ -4476,7 +4476,7 @@ export function renderPage49(sections: ReportSection[], valueScenarioType: strin
 
       <div class="footer">
         <div class="footer-left">
-          44&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}
+          44&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}
         </div>
         <div class="footer-right"></div>
       </div>
@@ -4606,7 +4606,7 @@ export function renderPage50(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="footer">
-        <p>45&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</p>
+        <p>45&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}</p>
       </div>
     </div>
   `;
@@ -4656,7 +4656,7 @@ export function renderPage51(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="footer">
-        <strong>46</strong> | ${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}
+        <strong>46</strong> | ${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}
       </div>
     </div>
   `;
@@ -4757,7 +4757,7 @@ export function renderPage52(sections: ReportSection[], valueScenarioType: strin
         </div>
 
         <div class="footer">
-          <div class="footer-left">47&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</div>
+          <div class="footer-left">47&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}</div>
           <div class="footer-right"></div>
         </div>
       </div>
@@ -4832,7 +4832,7 @@ export function renderPage53(sections: ReportSection[], valueScenarioType: strin
         </div>
 
         <div class="footer">
-          <span class="footer-text">48&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+          <span class="footer-text">48&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}</span>
           <div class="footer-logo">
             <div class="logo-bar light"></div>
             <div class="logo-bar"></div>
@@ -4972,7 +4972,7 @@ export function renderPage54(sections: ReportSection[], valueScenarioType: strin
 
       <div class="footer">
         <div class="footer-left">
-          <span>49&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+          <span>49&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}</span>
         </div>
         <div class="footer-logo"></div>
       </div>
@@ -5047,7 +5047,7 @@ export function renderPage55(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="page-footer">
-        <div class="footer-left">50&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</div>
+        <div class="footer-left">50&nbsp;&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}</div>
         <div class="footer-right">
           <div class="footer-logo"></div>
         </div>
@@ -5099,7 +5099,7 @@ export function renderPage56(sections: ReportSection[], valueScenarioType: strin
       <div class="subsection-heading">Quantitative Adjustment Process</div>
       <p>In this method, we have compared the sales to the subject primarily along economic lines rather than on physical characteristics. Economic measures such as the relationship of sales price to net operating income are inclusive of all the physical and economic attributes of a property. It should be stressed that the adjustments are subjective in nature and are meant to illustrate the logic in deriving a value opinion for the subject property by the Sales Comparison Approach.</p>
 
-      <div class="footer">51&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</div>
+      <div class="footer">51&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}</div>
     </div>
   `;
 }
@@ -5134,7 +5134,7 @@ export function renderPage57(sections: ReportSection[], valueScenarioType: strin
 
       <div class="footer-info">
         <span>52</span>
-        <span>${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <span>${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}</span>
         <div class="footer-logo"></div>
       </div>
     </div>
@@ -5295,7 +5295,7 @@ export function renderPage59(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="footer-info">
-        54&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}
+        54&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}
       </div>
     </div>
   `;
@@ -5435,7 +5435,7 @@ export function renderPage60(sections: ReportSection[], valueScenarioType: strin
 
       <!-- Footer -->
       <div class="footer">
-        <span class="page-number">55&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <span class="page-number">55&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}</span>
         <span class="address"></span>
       </div>
     </div>
@@ -5559,7 +5559,7 @@ export function renderPage61(sections: ReportSection[], valueScenarioType: strin
       </div>
 
       <div class="footer">
-        <span>56&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+        <span>56&nbsp;&nbsp;&nbsp;${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}</span>
         <div class="footer-right"></div>
       </div>
     </div>
@@ -5695,7 +5695,7 @@ export function renderPage62(sections: ReportSection[], valueScenarioType: strin
         </div>
 
         <div class="footer">
-          <span>${getFieldValue(sections, 'property-address')} | File ${getFieldValue(sections, 'file-number')}</span>
+          <span>${getFieldValue(sections, 'subject-street')} | File ${getFieldValue(sections, 'file-number')}</span>
           <span>57</span>
         </div>
       </div>

@@ -8,7 +8,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
-  ChevronDown,
   Wand2,
   Layers,
   Grid3X3,
@@ -78,9 +77,6 @@ export function LayoutBuilder({
   const [editingTitle, setEditingTitle] = useState(false);
   const [titleValue, setTitleValue] = useState('');
 
-  // Zoom level state (0 = zoomed in, 1 = default/fit page, 2 = max zoom out)
-  const [zoomLevel, setZoomLevel] = useState(1);
-
   // Create image lookup map
   const imageMap = React.useMemo(() => {
     const map = new Map<string, JobImage>();
@@ -103,15 +99,21 @@ export function LayoutBuilder({
     }
   }, [currentLayout?.id, currentLayout?.title]);
 
+  // Initialize title value when layout changes
+  useEffect(() => {
+    if (currentLayout) {
+      setTitleValue(currentLayout.title || currentLayout.page_type);
+    }
+  }, [currentLayout?.id, currentLayout?.title]);
+
+
   // Navigation handlers
   const goToPrevPage = useCallback(() => {
     setCurrentPageIndex((prev) => Math.max(0, prev - 1));
-    setEditingTitle(false);
   }, []);
 
   const goToNextPage = useCallback(() => {
     setCurrentPageIndex((prev) => Math.min(layouts.length - 1, prev + 1));
-    setEditingTitle(false);
   }, [layouts.length]);
 
   // Handle slot clear
@@ -158,6 +160,7 @@ export function LayoutBuilder({
     setEditingTitle(false);
   }, [currentLayout, titleValue, updateTitle]);
 
+
   // Get default caption for a slot based on page category
   const getDefaultCaption = useCallback((slotPosition: number, categoryFilter?: string): string => {
     if (!categoryFilter) return '';
@@ -196,9 +199,9 @@ export function LayoutBuilder({
     : GRID_CONFIGS['2x2'];
 
   return (
-    <div className={`flex flex-col h-full ${className}`} style={{ backgroundColor: '#fafafa' }}>
+    <div className={`flex flex-col h-full ${className}`} style={{ backgroundColor: '#fafafa', overflow: 'hidden', display: 'flex' }}>
       {/* Top header - Compact with page nav and controls */}
-      <div className="flex items-center justify-between px-4 py-1 border-b" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb' }}>
+      <div className="flex items-center justify-between px-4 py-1 border-b flex-shrink-0" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb' }}>
         {/* Left: Page navigation */}
         <div className="flex items-center gap-2">
           <button
@@ -253,32 +256,6 @@ export function LayoutBuilder({
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2">
-          {/* Zoom controls */}
-          <div className="flex items-center gap-0.5" style={{ borderLeft: '1px solid #e5e7eb', paddingLeft: '8px' }}>
-            <button
-              onClick={() => setZoomLevel(Math.max(0, zoomLevel - 1))}
-              disabled={zoomLevel === 0}
-              className="p-0.5 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
-              style={{ backgroundColor: 'transparent' }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-              title="Zoom in"
-            >
-              <ChevronDown className="w-3.5 h-3.5 text-slate-500 rotate-180" />
-            </button>
-            <button
-              onClick={() => setZoomLevel(Math.min(2, zoomLevel + 1))}
-              disabled={zoomLevel === 2}
-              className="p-0.5 rounded disabled:opacity-30 disabled:cursor-not-allowed transition-opacity"
-              style={{ backgroundColor: 'transparent' }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-              title="Zoom out"
-            >
-              <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
-            </button>
-          </div>
-
           {/* Auto-fill button */}
           <button
             onClick={handleAutoFill}
@@ -294,71 +271,61 @@ export function LayoutBuilder({
         </div>
       </div>
 
-      {/* White letter-size page container */}
-      <div className="flex-1 p-4 overflow-auto flex items-center justify-center" style={{ backgroundColor: '#fafafa' }}>
+      {/* White letter-size page container - scrollable middle section */}
+      <div className="flex-1 p-2 overflow-y-auto overflow-x-hidden flex items-start justify-center min-h-0" style={{ backgroundColor: '#f5f5f5' }}>
         {/* Page wrapper - maintains letter aspect ratio */}
         <div
-          className="flex flex-col rounded-lg shadow-md overflow-hidden"
+          className="flex flex-col shadow-md overflow-hidden flex-shrink-0"
           style={{
             backgroundColor: '#ffffff',
             width: '100%',
             maxWidth: `${LETTER_WIDTH_PX}px`,
             aspectRatio: `${LETTER_ASPECT_RATIO}`,
+            maxHeight: '100%',
+            position: 'relative',
           }}
         >
           {/* Page title section */}
           {currentLayout && (
-            <div className="px-6 pt-6 pb-4">
+            <div className="px-6 pt-4 pb-2">
               {editingTitle ? (
-                <div className="flex items-center gap-2">
-                  <input
-                    type="text"
-                    value={titleValue}
-                    onChange={(e) => setTitleValue(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') handleSaveTitle();
-                      if (e.key === 'Escape') {
-                        setTitleValue(currentLayout.title || currentLayout.page_type);
-                        setEditingTitle(false);
-                      }
-                    }}
-                    className="px-2 py-1 border-2 border-green-500 rounded text-sm text-slate-900 focus:outline-none font-semibold min-w-[200px]"
-                    style={{ backgroundColor: '#f9fafb' }}
-                    autoFocus
-                  />
-                  <button
-                    onClick={handleSaveTitle}
-                    className="p-1 rounded bg-green-600 hover:bg-green-700 text-white"
-                    title="Save title"
-                  >
-                    <Check className="w-4 h-4" />
-                  </button>
-                </div>
+                <input
+                  type="text"
+                  value={titleValue}
+                  onChange={(e) => setTitleValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSaveTitle();
+                    if (e.key === 'Escape') {
+                      setTitleValue(currentLayout.title || currentLayout.page_type);
+                      setEditingTitle(false);
+                    }
+                  }}
+                  onBlur={handleSaveTitle}
+                  className="text-base font-semibold text-slate-500 border-b border-slate-300 pb-1 bg-transparent outline-none italic"
+                  style={{ width: 'auto', minWidth: '200px' }}
+                  autoFocus
+                />
               ) : (
-                <button
+                <div
                   onClick={() => setEditingTitle(true)}
-                  className="flex items-center gap-2 group px-2 py-1 rounded transition-colors"
-                  style={{ backgroundColor: 'transparent' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                  title="Click to edit page title"
+                  className="text-base font-semibold text-slate-500 border-b border-slate-300 pb-1 inline-block italic cursor-text hover:text-slate-700 transition-colors"
+                  title="Click to edit"
                 >
-                  <span className="text-base font-bold text-slate-900">
-                    {currentLayout.title || currentLayout.page_type}
-                  </span>
-                  <Edit2 className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-colors opacity-0 group-hover:opacity-100" />
-                </button>
+                  {currentLayout.title || currentLayout.page_type}
+                </div>
               )}
             </div>
           )}
 
           {/* Image grid */}
-          <div className="flex-1 px-6 pb-4 flex items-center justify-center">
+          <div className="flex-1 px-4 pb-4 flex items-center justify-center overflow-hidden min-w-0 min-h-0">
             <div
               className="grid w-full h-full gap-3"
               style={{
-                gridTemplateColumns: `repeat(${gridConfig.cols}, 1fr)`,
+                gridTemplateColumns: `repeat(${gridConfig.cols}, minmax(0, 1fr))`,
                 gridAutoRows: `minmax(0, 1fr)`,
+                width: '100%',
+                height: '100%',
               }}
             >
               {currentSlots.map((slot) => {
@@ -396,7 +363,7 @@ export function LayoutBuilder({
       </div>
 
       {/* Page tabs at bottom - Thin and scrollable */}
-      <div className="flex items-center gap-1 px-3 py-1 border-t overflow-x-auto" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', height: '36px' }}>
+      <div className="flex items-center gap-1 px-3 py-1 border-t overflow-x-auto flex-shrink-0" style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', height: '36px', position: 'relative', zIndex: 50, minHeight: '36px' }}>
         {layouts.map((layout, index) => {
           const slots = getSlotsForLayout(allSlots, layout.id);
           const filledCount = slots.filter((s) => s.image_id).length;

@@ -619,24 +619,30 @@ export function ImageConfiguratorDemo({
               </div>
             </div>
 
-            {/* Right: Current page preview with frame */}
+            {/* Right: Current page preview with frame - matches LayoutBuilder styling */}
             <div
               className="flex flex-col"
-              style={{ width: '400px', backgroundColor: '#1f1f1f' }}
+              style={{ width: '400px', backgroundColor: '#fafafa' }}
             >
-              {/* Panel header - matches main header style */}
+              {/* Panel header - matches LayoutBuilder header exactly */}
               <div
-                className="flex items-center justify-between px-4 py-2 border-b shrink-0"
-                style={{ backgroundColor: '#1a1a1a', borderColor: '#333' }}
+                className="flex items-center justify-between px-4 py-1 border-b shrink-0"
+                style={{ backgroundColor: '#ffffff', borderColor: '#e5e7eb', height: '32px', minHeight: '32px' }}
               >
                 <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-semibold text-white">Current Page</h3>
+                  {/* Category filter badge */}
                   {currentLayout?.category_filter && (
                     <span
-                      className="text-xs px-2 py-0.5 rounded"
-                      style={{ backgroundColor: '#2a2a2a', color: '#9ca3af' }}
+                      className="text-xs px-2 py-0.5 rounded font-medium text-slate-600"
+                      style={{ backgroundColor: '#f3f4f6' }}
                     >
                       {currentLayout.category_filter}
+                    </span>
+                  )}
+                  {/* Layout template */}
+                  {currentLayout && (
+                    <span className="text-xs text-slate-500">
+                      {currentLayout.layout_template}
                     </span>
                   )}
                 </div>
@@ -648,10 +654,15 @@ export function ImageConfiguratorDemo({
                 )}
               </div>
 
-              {/* Page preview container */}
+              {/* Page preview container - matches LayoutBuilder background */}
               <div
-                className="flex-1 flex items-center justify-center p-4"
-                style={{ backgroundColor: '#0f0f0f' }}
+                className="flex-1 flex items-center justify-center"
+                style={{
+                  backgroundColor: '#f5f5f5',
+                  padding: '8px',
+                  overflow: 'hidden',
+                  minHeight: 0
+                }}
               >
                 {currentLayout ? (
                   <ExpandedPagePreview
@@ -662,14 +673,6 @@ export function ImageConfiguratorDemo({
                 ) : (
                   <div className="text-slate-500 text-sm">Select a page to preview</div>
                 )}
-              </div>
-
-              {/* Footer hint */}
-              <div
-                className="px-4 py-2 text-xs text-slate-500 text-center border-t shrink-0"
-                style={{ backgroundColor: '#1a1a1a', borderColor: '#333' }}
-              >
-                Use page selector above to switch pages
               </div>
             </div>
           </div>
@@ -782,7 +785,7 @@ const GRID_CONFIGS: Record<string, { cols: number; rows: number }> = {
   'custom': { cols: 2, rows: 2 },
 };
 
-// Helper component for page preview in expanded gallery
+// Helper component for page preview in expanded gallery - matches LayoutBuilder page styling
 function ExpandedPagePreview({
   layout,
   slots,
@@ -801,23 +804,22 @@ function ExpandedPagePreview({
         backgroundColor: '#ffffff',
         aspectRatio: '8.5 / 11',
         height: '100%',
-        maxHeight: '500px',
-        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+        maxWidth: '100%',
+        minWidth: '280px',
+        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)',
       }}
     >
-      {/* Page title */}
-      <div className="px-4 pt-3 pb-2">
-        <div
-          className="text-sm font-semibold text-slate-500 border-b border-slate-300 pb-1 italic"
-        >
+      {/* Page title section - matches LayoutBuilder */}
+      <div className="px-6 pt-4 pb-2">
+        <div className="text-base font-semibold text-slate-500 border-b border-slate-300 pb-1 italic">
           {layout.title || layout.page_type}
         </div>
       </div>
 
       {/* Slots grid */}
-      <div className="flex-1 px-3 pb-2">
+      <div className="flex-1 px-4 pb-2 flex items-center justify-center overflow-hidden min-w-0 min-h-0">
         <div
-          className="grid w-full h-full gap-2"
+          className="grid w-full h-full gap-3"
           style={{
             gridTemplateColumns: `repeat(${gridConfig.cols}, minmax(0, 1fr))`,
             gridAutoRows: `minmax(0, 1fr)`,
@@ -832,10 +834,13 @@ function ExpandedPagePreview({
         </div>
       </div>
 
-      {/* Page footer */}
-      <div className="px-4 py-1.5 border-t border-slate-200">
-        <span className="text-[9px] text-slate-400 italic">
-          {slots.filter(s => s.image_id).length}/{slots.length} slots filled
+      {/* Page footer - matches LayoutBuilder */}
+      <div
+        className="flex items-center px-6 py-2"
+        style={{ borderTop: '1px solid #e5e7eb', flexShrink: 0 }}
+      >
+        <span className="text-[10px] text-slate-400 italic">
+          Page preview
         </span>
       </div>
     </div>

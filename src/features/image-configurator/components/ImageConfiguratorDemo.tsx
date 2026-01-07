@@ -785,13 +785,29 @@ const GRID_CONFIGS: Record<string, { cols: number; rows: number }> = {
   'custom': { cols: 2, rows: 2 },
 };
 
+// Predefined captions by category - matches LayoutBuilder
+const DEFAULT_CAPTIONS: Record<string, string[]> = {
+  'Exterior': ['Front Exterior', 'Rear Exterior', 'Left Side', 'Right Side', 'Street View', 'Close-up'],
+  'Interior Units': ['Typical Kitchen', 'Typical Bathroom', 'Typical Bedroom 1', 'Typical Bedroom 2', 'Living Room', 'Hallway'],
+  'Common Areas': ['Lobby', 'Corridor', 'Amenity Space', 'Laundry Room'],
+  'Building Systems': ['HVAC', 'Electrical Panel', 'Plumbing', 'Water Heater', 'Roof', 'Elevator'],
+  'Site': ['Parking', 'Landscaping', 'Entrance', 'Signage'],
+};
+
+// Get default caption based on slot position and category
+function getDefaultCaption(slotPosition: number, categoryFilter?: string): string {
+  if (!categoryFilter) return '';
+  const captions = DEFAULT_CAPTIONS[categoryFilter] || [];
+  return captions[slotPosition - 1] || '';
+}
+
 // Helper component for page preview in expanded gallery - matches LayoutBuilder page styling
 function ExpandedPagePreview({
   layout,
   slots,
   imageMap,
 }: {
-  layout: { id: string; layout_template: string; title?: string; page_type: string };
+  layout: { id: string; layout_template: string; title?: string; page_type: string; category_filter?: string };
   slots: Array<{ id: string; slot_position: number; image_id: string | null; caption?: string }>;
   imageMap: Map<string, JobImage>;
 }) {
@@ -827,8 +843,14 @@ function ExpandedPagePreview({
         >
           {slots.map((slot) => {
             const image = slot.image_id ? imageMap.get(slot.image_id) : null;
+            const defaultCaption = getDefaultCaption(slot.slot_position, layout.category_filter);
             return (
-              <ExpandedSlotPreview key={slot.id} slot={slot} image={image} />
+              <ExpandedSlotPreview
+                key={slot.id}
+                slot={slot}
+                image={image}
+                defaultCaption={defaultCaption}
+              />
             );
           })}
         </div>
@@ -847,46 +869,60 @@ function ExpandedPagePreview({
   );
 }
 
-// Helper for individual slot preview
+// Helper for individual slot preview - matches SortableSlot styling exactly
 function ExpandedSlotPreview({
   slot,
   image,
+  defaultCaption = '',
 }: {
   slot: { id: string; slot_position: number; caption?: string };
   image: JobImage | null | undefined;
+  defaultCaption?: string;
 }) {
   const path = image?.thumbnail_path || image?.storage_path;
   const imageUrl = useSignedImageUrl(path || '', { width: 200 });
 
+  // Current caption (slot caption overrides image caption, with default fallback)
+  const currentCaption = slot.caption || image?.caption || defaultCaption;
+
   return (
-    <div
-      className="rounded overflow-hidden flex flex-col"
-      style={{
-        backgroundColor: image ? '#f5f5f5' : '#e8e8e8',
-        border: image ? '1px solid #ddd' : '2px dashed #ccc',
-      }}
-    >
-      {/* Image area */}
-      <div className="flex-1 flex items-center justify-center overflow-hidden">
+    <div className="flex flex-col gap-1 min-w-0 min-h-0">
+      {/* Image slot - matches SortableSlot structure */}
+      <div
+        className={`
+          relative aspect-square overflow-hidden transition-all duration-150 rounded-lg
+          ${!image ? 'border-2 border-dashed border-slate-300 bg-gradient-to-b from-slate-50 to-slate-100' : ''}
+          ${image ? 'border border-slate-200 bg-white shadow-sm' : ''}
+        `}
+        style={{ width: '100%', height: 'auto' }}
+      >
         {image && imageUrl ? (
           <img
             src={imageUrl}
             alt={image.original_filename}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
           />
         ) : (
-          <span className="text-[10px] text-slate-400">Empty</span>
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className="p-2 rounded-full mb-1 bg-slate-100">
+              <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <span className="text-[9px] text-slate-400">Empty</span>
+          </div>
         )}
+
+        {/* Position badge - matches SortableSlot */}
+        <div className="absolute top-1 left-1 bg-white/90 text-slate-400 text-[9px] px-1 py-0.5 rounded font-medium shadow-sm">
+          {slot.slot_position}
+        </div>
       </div>
 
-      {/* Caption */}
-      {slot.caption && (
-        <div className="px-1 py-0.5 bg-white border-t border-slate-200">
-          <p className="text-[8px] text-slate-600 truncate text-center">
-            {slot.caption}
-          </p>
-        </div>
-      )}
+      {/* Caption - always visible, matches SortableSlot styling */}
+      <div className="w-full text-[10px] text-slate-600 px-1 py-0.5 truncate text-center">
+        {image ? (currentCaption || 'Caption') : (defaultCaption || 'Caption')}
+      </div>
     </div>
   );
 }

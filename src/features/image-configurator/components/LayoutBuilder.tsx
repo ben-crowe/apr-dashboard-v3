@@ -276,7 +276,7 @@ export function LayoutBuilder({
         alignItems: 'center',
         justifyContent: 'center',
         padding: '8px',
-        backgroundColor: '#2a2a2a',
+        backgroundColor: '#f5f5f5',
         overflow: 'hidden',
         minHeight: 0
       }}>

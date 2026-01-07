@@ -280,14 +280,16 @@ export function LayoutBuilder({
         overflow: 'hidden',
         minHeight: 0
       }}>
-        {/* Page wrapper - fixed letter proportions */}
+        {/* Page wrapper - fixed letter proportions with min size */}
         <div
           className="flex flex-col shadow-md"
           style={{
             backgroundColor: '#ffffff',
             aspectRatio: '8.5 / 11',
-            maxHeight: 'calc(100% - 16px)',
-            maxWidth: 'calc(100% - 16px)',
+            height: '100%',
+            maxWidth: '100%',
+            minWidth: '400px',
+            minHeight: '518px', // 400 * (11/8.5) to maintain ratio
           }}
         >
           {/* Page title section */}

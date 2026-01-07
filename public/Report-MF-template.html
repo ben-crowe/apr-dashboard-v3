@@ -29829,6 +29829,18 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                 }
             });
 
+            // === TOGGLE MODE postMessage BRIDGE ===
+            // Receives toggle state from PreviewPanel external control
+            window.addEventListener("message", function (event) {
+                if (event.data && event.data.type === "TOGGLE_MODE") {
+                    const toggle = document.getElementById("preview-toggle");
+                    if (toggle) {
+                        toggle.checked = event.data.checked;
+                        toggle.dispatchEvent(new Event("change"));
+                    }
+                }
+            });
+
             // === PAGE NAVIGATION ===
             const pageInput = document.getElementById("page-input");
             const pageCount = document.getElementById("page-count");

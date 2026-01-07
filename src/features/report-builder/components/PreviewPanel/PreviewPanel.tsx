@@ -398,6 +398,12 @@ export default function PreviewPanel() {
     };
 
     updateFieldDisplay();
+
+    // Sync toggle state to iframe via postMessage
+    iframe.contentWindow?.postMessage(
+      { type: 'TOGGLE_MODE', checked: showRawIds },
+      '*'
+    );
   }, [showRawIds, previewHtml]);
 
   return (

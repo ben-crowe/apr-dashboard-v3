@@ -117,6 +117,7 @@ export function SortableSlot({
           box-shadow: none !important;
           padding: 0.25rem 0.375rem !important;
           border-radius: 0 !important;
+          color: #475569 !important;
         }
         .editor-panel-content input.caption-input:focus {
           background-color: transparent !important;
@@ -125,6 +126,7 @@ export function SortableSlot({
           outline: none !important;
           box-shadow: none !important;
           border-radius: 0 !important;
+          color: #475569 !important;
         }
       `}</style>
       {/* Image slot */}

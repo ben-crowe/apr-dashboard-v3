@@ -609,7 +609,24 @@ export function ImageConfiguratorDemo({
           style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}
         >
           <style>{`
-            input.popup-title-input,
+            input.popup-title-input {
+              background-color: transparent !important;
+              background: transparent !important;
+              border: none !important;
+              outline: none !important;
+              box-shadow: none !important;
+              border-radius: 0 !important;
+              color: #64748b !important;
+            }
+            input.popup-title-input:focus {
+              background-color: transparent !important;
+              background: transparent !important;
+              border: none !important;
+              outline: none !important;
+              box-shadow: none !important;
+              border-radius: 0 !important;
+              color: #64748b !important;
+            }
             input.popup-caption-input {
               background-color: transparent !important;
               background: transparent !important;
@@ -617,8 +634,8 @@ export function ImageConfiguratorDemo({
               outline: none !important;
               box-shadow: none !important;
               border-radius: 0 !important;
+              color: #475569 !important;
             }
-            input.popup-title-input:focus,
             input.popup-caption-input:focus {
               background-color: transparent !important;
               background: transparent !important;
@@ -626,6 +643,7 @@ export function ImageConfiguratorDemo({
               outline: none !important;
               box-shadow: none !important;
               border-radius: 0 !important;
+              color: #475569 !important;
             }
           `}</style>
           {/* Overlay header */}

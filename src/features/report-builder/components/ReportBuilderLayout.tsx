@@ -72,13 +72,13 @@ export default function ReportBuilderLayout() {
         <SectionSidebar />
 
       <ResizablePanelGroup direction="horizontal" className="flex-1">
-        <ResizablePanel defaultSize={60}>
+        <ResizablePanel defaultSize={60} minSize={60}>
           <EditPanel />
         </ResizablePanel>
 
         <ResizableHandle withHandle />
 
-        <ResizablePanel defaultSize={40}>
+        <ResizablePanel defaultSize={40} maxSize={40}>
           <PreviewPanel />
         </ResizablePanel>
       </ResizablePanelGroup>

@@ -56,6 +56,10 @@ export function ImageConfiguratorDemo({
   const [showReportTypeMenu, setShowReportTypeMenu] = useState(false);
   const currentTemplate = REPORT_TYPE_TEMPLATES[selectedReportType];
 
+  // Page selector dropdown state
+  const [showPageMenu, setShowPageMenu] = useState(false);
+  const [showPopupPageMenu, setShowPopupPageMenu] = useState(false);
+
   // Page selection state (lifted from LayoutBuilder for header display)
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
@@ -374,7 +378,7 @@ export function ImageConfiguratorDemo({
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
               >
                 <FileText className="w-3 h-3 text-slate-500" />
-                <span className="text-slate-400">{currentTemplate.name}</span>
+                <span className="text-white">{currentTemplate.name}</span>
                 <ChevronDown className={`w-3 h-3 text-slate-500 transition-transform ${showReportTypeMenu ? 'rotate-180' : ''}`} />
               </button>
 
@@ -450,30 +454,67 @@ export function ImageConfiguratorDemo({
               <ChevronLeft className="w-4 h-4 text-slate-300" />
             </button>
 
-            {/* Page Dropdown - Prominent */}
+            {/* Page Dropdown - Custom Component */}
             {layouts.length > 0 && (
-              <select
-                value={currentPageIndex}
-                onChange={(e) => setCurrentPageIndex(Number(e.target.value))}
-                className="text-sm font-medium rounded px-3 py-1.5 cursor-pointer transition-colors min-w-[200px]"
-                style={{
-                  backgroundColor: '#2a2a2a',
-                  color: '#94a3b8',
-                  borderColor: '#444',
-                  borderWidth: '1px',
-                  borderStyle: 'solid'
-                }}
-              >
-                {layouts.map((layout, index) => {
-                  const pageNum = PAGE_TYPE_TO_REPORT_PAGE[layout.page_type];
-                  const displayName = PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type;
-                  return (
-                    <option key={layout.id} value={index} style={{ backgroundColor: '#1f1f1f' }}>
-                      {pageNum ? `P${pageNum}  |  ` : ''}{displayName}
-                    </option>
-                  );
-                })}
-              </select>
+              <div className="relative">
+                <button
+                  onClick={() => setShowPageMenu(!showPageMenu)}
+                  className="flex items-center gap-2 px-3 py-1.5 rounded text-sm font-medium transition-colors min-w-[200px]"
+                  style={{ backgroundColor: '#2a2a2a', borderColor: '#444', borderWidth: '1px', borderStyle: 'solid' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#333'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+                >
+                  <span className="text-slate-400 font-normal">P{PAGE_TYPE_TO_REPORT_PAGE[layouts[currentPageIndex]?.page_type]}</span>
+                  <span className="text-slate-500">·</span>
+                  <span className="text-white flex-1 text-left">{PAGE_TYPE_DISPLAY_NAMES[layouts[currentPageIndex]?.page_type] || layouts[currentPageIndex]?.page_type}</span>
+                  <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${showPageMenu ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Page Dropdown Menu */}
+                {showPageMenu && (
+                  <div className="absolute right-0 mt-2 w-56 rounded-lg shadow-xl z-50" style={{ backgroundColor: '#1f1f1f', borderColor: '#444', borderWidth: '1px', borderStyle: 'solid' }}>
+                    <div className="p-2 border-b" style={{ borderColor: '#333' }}>
+                      <div className="text-xs text-slate-400 uppercase tracking-wide px-2">Select Page</div>
+                    </div>
+                    <div className="max-h-80 overflow-y-auto p-2">
+                      {layouts.map((layout, index) => {
+                        const pageNum = PAGE_TYPE_TO_REPORT_PAGE[layout.page_type];
+                        const displayName = PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type;
+                        const isSelected = currentPageIndex === index;
+                        return (
+                          <button
+                            key={layout.id}
+                            onClick={() => {
+                              setCurrentPageIndex(index);
+                              setShowPageMenu(false);
+                            }}
+                            className={`w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+                              isSelected
+                                ? 'bg-green-600 text-white'
+                                : 'text-slate-300 hover:text-slate-200'
+                            }`}
+                            style={!isSelected ? { backgroundColor: '#2a2a2a' } : undefined}
+                            onMouseEnter={(e) => {
+                              if (!isSelected) {
+                                e.currentTarget.style.backgroundColor = '#333';
+                              }
+                            }}
+                            onMouseLeave={(e) => {
+                              if (!isSelected) {
+                                e.currentTarget.style.backgroundColor = '#2a2a2a';
+                              }
+                            }}
+                          >
+                            <span className={`font-normal ${isSelected ? 'text-green-100' : 'text-slate-500'}`}>P{pageNum}</span>
+                            <span className={isSelected ? 'text-green-200' : 'text-slate-600'}>·</span>
+                            <span className="font-medium">{displayName}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
             )}
 
             {/* Next Page */}
@@ -671,22 +712,65 @@ export function ImageConfiguratorDemo({
                   >
                     <ChevronLeft className="w-4 h-4 text-slate-300" />
                   </button>
-                  <select
-                    value={currentPageIndex}
-                    onChange={(e) => setCurrentPageIndex(Number(e.target.value))}
-                    className="text-sm font-medium rounded px-2 py-1 min-w-[180px]"
-                    style={{ backgroundColor: '#2a2a2a', color: '#94a3b8', border: '1px solid #444' }}
-                  >
-                    {layouts.map((layout, index) => {
-                      const pageNum = PAGE_TYPE_TO_REPORT_PAGE[layout.page_type];
-                      const displayName = PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type;
-                      return (
-                        <option key={layout.id} value={index} style={{ backgroundColor: '#1f1f1f' }}>
-                          {pageNum ? `P${pageNum}  |  ` : ''}{displayName}
-                        </option>
-                      );
-                    })}
-                  </select>
+                  <div className="relative">
+                    <button
+                      onClick={() => setShowPopupPageMenu(!showPopupPageMenu)}
+                      className="flex items-center gap-2 px-3 py-1.5 rounded text-sm font-medium transition-colors min-w-[180px]"
+                      style={{ backgroundColor: '#2a2a2a', borderColor: '#444', borderWidth: '1px', borderStyle: 'solid' }}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#333'}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+                    >
+                      <span className="text-slate-400 font-normal">P{PAGE_TYPE_TO_REPORT_PAGE[layouts[currentPageIndex]?.page_type]}</span>
+                      <span className="text-slate-500">·</span>
+                      <span className="text-white flex-1 text-left">{PAGE_TYPE_DISPLAY_NAMES[layouts[currentPageIndex]?.page_type] || layouts[currentPageIndex]?.page_type}</span>
+                      <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${showPopupPageMenu ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    {/* Popup Page Dropdown Menu */}
+                    {showPopupPageMenu && (
+                      <div className="absolute right-0 mt-2 w-56 rounded-lg shadow-xl z-50" style={{ backgroundColor: '#1f1f1f', borderColor: '#444', borderWidth: '1px', borderStyle: 'solid' }}>
+                        <div className="p-2 border-b" style={{ borderColor: '#333' }}>
+                          <div className="text-xs text-slate-400 uppercase tracking-wide px-2">Select Page</div>
+                        </div>
+                        <div className="max-h-80 overflow-y-auto p-2">
+                          {layouts.map((layout, index) => {
+                            const pageNum = PAGE_TYPE_TO_REPORT_PAGE[layout.page_type];
+                            const displayName = PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type;
+                            const isSelected = currentPageIndex === index;
+                            return (
+                              <button
+                                key={layout.id}
+                                onClick={() => {
+                                  setCurrentPageIndex(index);
+                                  setShowPopupPageMenu(false);
+                                }}
+                                className={`w-full text-left px-3 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+                                  isSelected
+                                    ? 'bg-green-600 text-white'
+                                    : 'text-slate-300 hover:text-slate-200'
+                                }`}
+                                style={!isSelected ? { backgroundColor: '#2a2a2a' } : undefined}
+                                onMouseEnter={(e) => {
+                                  if (!isSelected) {
+                                    e.currentTarget.style.backgroundColor = '#333';
+                                  }
+                                }}
+                                onMouseLeave={(e) => {
+                                  if (!isSelected) {
+                                    e.currentTarget.style.backgroundColor = '#2a2a2a';
+                                  }
+                                }}
+                              >
+                                <span className={`font-normal ${isSelected ? 'text-green-100' : 'text-slate-500'}`}>P{pageNum}</span>
+                                <span className={isSelected ? 'text-green-200' : 'text-slate-600'}>·</span>
+                                <span className="font-medium">{displayName}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                   <button
                     onClick={() => setCurrentPageIndex((prev) => Math.min(layouts.length - 1, prev + 1))}
                     disabled={currentPageIndex === layouts.length - 1}

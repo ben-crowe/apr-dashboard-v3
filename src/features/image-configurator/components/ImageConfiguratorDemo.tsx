@@ -65,6 +65,8 @@ export function ImageConfiguratorDemo({
 
   // Expanded gallery overlay state
   const [isGalleryExpanded, setIsGalleryExpanded] = useState(false);
+  const [popupSplitPercent, setPopupSplitPercent] = useState(65); // Gallery takes 65% in popup
+  const [isDraggingPopupDivider, setIsDraggingPopupDivider] = useState(false);
 
   // Fetch data
   const { data: images = [], isLoading: imagesLoading } = useJobImages(jobId, filters);
@@ -244,6 +246,51 @@ export function ImageConfiguratorDemo({
       document.body.style.userSelect = '';
     };
   }, [isDraggingDivider, handleDividerMouseMove, handleDividerMouseUp]);
+
+  // Popup resizable divider handlers
+  const handlePopupDividerMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDraggingPopupDivider(true);
+  }, []);
+
+  const handlePopupDividerMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isDraggingPopupDivider) return;
+
+      const container = document.getElementById('popup-split-container');
+      if (!container) return;
+
+      const rect = container.getBoundingClientRect();
+      const newPercent = ((e.clientX - rect.left) / rect.width) * 100;
+
+      // Clamp between 40% and 85%
+      const clampedPercent = Math.max(40, Math.min(85, newPercent));
+      setPopupSplitPercent(clampedPercent);
+    },
+    [isDraggingPopupDivider]
+  );
+
+  const handlePopupDividerMouseUp = useCallback(() => {
+    setIsDraggingPopupDivider(false);
+  }, []);
+
+  // Add/remove global mouse listeners for popup divider drag
+  React.useEffect(() => {
+    if (isDraggingPopupDivider) {
+      document.addEventListener('mousemove', handlePopupDividerMouseMove);
+      document.addEventListener('mouseup', handlePopupDividerMouseUp);
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+    } else {
+      document.removeEventListener('mousemove', handlePopupDividerMouseMove);
+      document.removeEventListener('mouseup', handlePopupDividerMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handlePopupDividerMouseMove);
+      document.removeEventListener('mouseup', handlePopupDividerMouseUp);
+    };
+  }, [isDraggingPopupDivider, handlePopupDividerMouseMove, handlePopupDividerMouseUp]);
 
   // ESC key to close expanded gallery
   useEffect(() => {
@@ -579,9 +626,9 @@ export function ImageConfiguratorDemo({
           </div>
 
           {/* Main content area - split view */}
-          <div className="flex-1 flex overflow-hidden">
+          <div id="popup-split-container" className="flex-1 flex overflow-hidden">
             {/* Left: Image gallery */}
-            <div className="flex-1 flex flex-col" style={{ borderRight: '1px solid #333' }}>
+            <div className="flex flex-col" style={{ width: `${popupSplitPercent}%` }}>
               {/* Filters row */}
               <div className="px-4 py-2 border-b shrink-0" style={{ backgroundColor: '#1f1f1f', borderColor: '#333' }}>
                 <FiltersPanel
@@ -619,10 +666,21 @@ export function ImageConfiguratorDemo({
               </div>
             </div>
 
+            {/* Resizable divider - discrete, no grab handle */}
+            <div
+              onMouseDown={handlePopupDividerMouseDown}
+              className="cursor-col-resize transition-colors hover:bg-green-500"
+              style={{
+                width: '3px',
+                backgroundColor: isDraggingPopupDivider ? '#10b981' : '#333',
+                flexShrink: 0
+              }}
+            />
+
             {/* Right: Current page preview - EXACT COPY of LayoutBuilder structure */}
             <div
               style={{
-                width: '400px',
+                flex: 1,
                 backgroundColor: '#fafafa',
                 display: 'flex',
                 flexDirection: 'column',

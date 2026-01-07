@@ -24,7 +24,7 @@ import { useReportBuilderStore } from '@/features/report-builder/store/reportBui
 
 // Mapping of image layout page_type to report template page numbers
 // Based on Report-MF-template.html structure where photos start at page 3
-const PAGE_TYPE_TO_REPORT_PAGE: Record<string, number> = {
+export const PAGE_TYPE_TO_REPORT_PAGE: Record<string, number> = {
   'subject-photos-1': 3,
   'subject-photos-2': 4,
   'subject-photos-3': 5,
@@ -394,7 +394,7 @@ export function LayoutBuilder({
             }}
           >
             <span className="text-[10px] text-slate-400 italic">
-              Page {currentPageIndex + 1}
+              Page {currentLayout ? PAGE_TYPE_TO_REPORT_PAGE[currentLayout.page_type] || currentPageIndex + 1 : currentPageIndex + 1}
             </span>
           </div>
 

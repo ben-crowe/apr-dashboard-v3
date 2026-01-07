@@ -19,7 +19,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ImageUploadZone } from './ImageUploadZone';
 import { FiltersPanel } from './FiltersPanel';
 import { ImageGrid } from './ImageGrid';
-import { LayoutBuilder } from './LayoutBuilder';
+import { LayoutBuilder, PAGE_TYPE_TO_REPORT_PAGE } from './LayoutBuilder';
 import { ImageEditorModal } from './ImageEditorModal';
 import { useJobImages, jobImagesKeys } from '../hooks/useJobImages';
 import { useLayouts, useAssignImageToSlot, useClearSlot, getSlotsForLayout, useUpdateSlotCaption, useUpdateLayoutTitle } from '../hooks/useLayouts';
@@ -467,9 +467,10 @@ export function ImageConfiguratorDemo({
                 {layouts.map((layout, index) => {
                   const slots = getSlotsForLayout(allSlots, layout.id);
                   const filledCount = slots.filter((s) => s.image_id).length;
+                  const pageNum = PAGE_TYPE_TO_REPORT_PAGE[layout.page_type];
                   return (
                     <option key={layout.id} value={index} style={{ backgroundColor: '#1f1f1f' }}>
-                      {layout.title || layout.page_type} ({filledCount}/{slots.length})
+                      {pageNum ? `P${pageNum} ` : ''}{layout.title || layout.page_type} ({filledCount}/{slots.length})
                     </option>
                   );
                 })}
@@ -680,9 +681,10 @@ export function ImageConfiguratorDemo({
                     {layouts.map((layout, index) => {
                       const slots = getSlotsForLayout(allSlots, layout.id);
                       const filledCount = slots.filter((s) => s.image_id).length;
+                      const pageNum = PAGE_TYPE_TO_REPORT_PAGE[layout.page_type];
                       return (
                         <option key={layout.id} value={index}>
-                          {layout.title || layout.page_type} ({filledCount}/{slots.length})
+                          {pageNum ? `P${pageNum} ` : ''}{layout.title || layout.page_type} ({filledCount}/{slots.length})
                         </option>
                       );
                     })}

@@ -469,7 +469,7 @@ export function ImageConfiguratorDemo({
                   const displayName = PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type;
                   return (
                     <option key={layout.id} value={index} style={{ backgroundColor: '#1f1f1f' }}>
-                      {pageNum ? `P${pageNum} ` : ''}{displayName}
+                      {pageNum ? `P${pageNum} | ` : ''}{displayName}
                     </option>
                   );
                 })}
@@ -682,7 +682,7 @@ export function ImageConfiguratorDemo({
                       const displayName = PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type;
                       return (
                         <option key={layout.id} value={index}>
-                          {pageNum ? `P${pageNum} ` : ''}{displayName}
+                          {pageNum ? `P${pageNum} | ` : ''}{displayName}
                         </option>
                       );
                     })}

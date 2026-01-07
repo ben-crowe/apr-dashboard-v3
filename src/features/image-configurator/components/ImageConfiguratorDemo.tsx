@@ -60,7 +60,7 @@ export function ImageConfiguratorDemo({
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
 
   // Resizable split state
-  const [splitPercent, setSplitPercent] = useState(35); // Gallery takes 35% by default
+  const [splitPercent, setSplitPercent] = useState(42); // Gallery takes 42% by default
   const [isDraggingDivider, setIsDraggingDivider] = useState(false);
 
   // Fetch data

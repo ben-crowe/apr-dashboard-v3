@@ -619,38 +619,57 @@ export function ImageConfiguratorDemo({
               </div>
             </div>
 
-            {/* Right: Current page preview */}
+            {/* Right: Current page preview with frame */}
             <div
               className="flex flex-col"
-              style={{ width: '380px', backgroundColor: '#1a1a1a' }}
+              style={{ width: '400px', backgroundColor: '#1f1f1f' }}
             >
-              {/* Page title */}
-              <div className="px-4 py-3 border-b shrink-0" style={{ borderColor: '#333' }}>
-                <h3 className="text-sm font-medium text-white">
-                  {currentLayout?.title || currentLayout?.page_type || 'Select a page'}
-                </h3>
-                {currentLayout?.category_filter && (
-                  <span className="text-xs text-slate-400">{currentLayout.category_filter}</span>
+              {/* Panel header - matches main header style */}
+              <div
+                className="flex items-center justify-between px-4 py-2 border-b shrink-0"
+                style={{ backgroundColor: '#1a1a1a', borderColor: '#333' }}
+              >
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-semibold text-white">Current Page</h3>
+                  {currentLayout?.category_filter && (
+                    <span
+                      className="text-xs px-2 py-0.5 rounded"
+                      style={{ backgroundColor: '#2a2a2a', color: '#9ca3af' }}
+                    >
+                      {currentLayout.category_filter}
+                    </span>
+                  )}
+                </div>
+                {currentLayout && (
+                  <span className="text-xs text-slate-500">
+                    {getSlotsForLayout(allSlots, currentLayout.id).filter(s => s.image_id).length}/
+                    {getSlotsForLayout(allSlots, currentLayout.id).length} filled
+                  </span>
                 )}
               </div>
 
-              {/* Page preview */}
+              {/* Page preview container */}
               <div
                 className="flex-1 flex items-center justify-center p-4"
                 style={{ backgroundColor: '#0f0f0f' }}
               >
-                {currentLayout && (
+                {currentLayout ? (
                   <ExpandedPagePreview
                     layout={currentLayout}
                     slots={getSlotsForLayout(allSlots, currentLayout.id)}
                     imageMap={imageMap}
                   />
+                ) : (
+                  <div className="text-slate-500 text-sm">Select a page to preview</div>
                 )}
               </div>
 
-              {/* Hint */}
-              <div className="px-4 py-2 text-xs text-slate-500 text-center border-t" style={{ borderColor: '#333' }}>
-                Select images and drag to slots
+              {/* Footer hint */}
+              <div
+                className="px-4 py-2 text-xs text-slate-500 text-center border-t shrink-0"
+                style={{ backgroundColor: '#1a1a1a', borderColor: '#333' }}
+              >
+                Use page selector above to switch pages
               </div>
             </div>
           </div>

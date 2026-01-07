@@ -314,9 +314,18 @@ export function ImageUploadZone({
             </div>
           </div>
 
-          {/* File list */}
+          {/* File list - constrained height to not push panel down */}
           {isExpanded && (
-            <div className="max-h-40 overflow-y-auto border border-t-0 rounded-b-lg text-sm" style={{ borderColor: '#444', backgroundColor: '#1f1f1f' }}>
+            <div
+              className="overflow-y-auto border border-t-0 rounded-b-lg text-sm"
+              style={{
+                borderColor: '#444',
+                backgroundColor: '#1f1f1f',
+                maxHeight: '96px', /* ~3 items */
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#4a4a4a #1f1f1f'
+              }}
+            >
               {uploads.map((upload) => (
                 <div
                   key={upload.fileId}

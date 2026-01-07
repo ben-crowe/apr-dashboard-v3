@@ -513,11 +513,11 @@ export function ImageConfiguratorDemo({
       {isGalleryExpanded && (
         <div
           className="fixed inset-0 z-50 flex flex-col"
-          style={{ backgroundColor: 'rgba(0, 0, 0, 0.9)' }}
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.95)' }}
         >
           {/* Overlay header */}
           <div
-            className="flex items-center justify-between px-6 py-3 border-b"
+            className="flex items-center justify-between px-6 py-3 border-b shrink-0"
             style={{ backgroundColor: '#1a1a1a', borderColor: '#333' }}
           >
             <div className="flex items-center gap-4">
@@ -526,57 +526,138 @@ export function ImageConfiguratorDemo({
                 {images.length} images | {selectedIds.length} selected
               </span>
             </div>
-            <button
-              onClick={() => setIsGalleryExpanded(false)}
-              className="p-2 rounded-lg transition-colors"
-              style={{ backgroundColor: '#2a2a2a' }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
-              title="Close expanded view"
-            >
-              <X className="w-5 h-5 text-slate-300" />
-            </button>
+            <div className="flex items-center gap-3">
+              {/* Page navigation in overlay */}
+              {layouts.length > 0 && (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCurrentPageIndex((prev) => Math.max(0, prev - 1))}
+                    disabled={currentPageIndex === 0}
+                    className="p-1.5 rounded disabled:opacity-30 transition-colors"
+                    style={{ backgroundColor: '#2a2a2a' }}
+                  >
+                    <ChevronLeft className="w-4 h-4 text-slate-300" />
+                  </button>
+                  <select
+                    value={currentPageIndex}
+                    onChange={(e) => setCurrentPageIndex(Number(e.target.value))}
+                    className="text-sm font-medium rounded px-2 py-1 min-w-[180px]"
+                    style={{ backgroundColor: '#2a2a2a', color: '#fff', border: '1px solid #444' }}
+                  >
+                    {layouts.map((layout, index) => {
+                      const slots = getSlotsForLayout(allSlots, layout.id);
+                      const filledCount = slots.filter((s) => s.image_id).length;
+                      return (
+                        <option key={layout.id} value={index}>
+                          {layout.title || layout.page_type} ({filledCount}/{slots.length})
+                        </option>
+                      );
+                    })}
+                  </select>
+                  <button
+                    onClick={() => setCurrentPageIndex((prev) => Math.min(layouts.length - 1, prev + 1))}
+                    disabled={currentPageIndex === layouts.length - 1}
+                    className="p-1.5 rounded disabled:opacity-30 transition-colors"
+                    style={{ backgroundColor: '#2a2a2a' }}
+                  >
+                    <ChevronRight className="w-4 h-4 text-slate-300" />
+                  </button>
+                </div>
+              )}
+              <div style={{ width: '1px', height: '24px', backgroundColor: '#444' }} />
+              <button
+                onClick={() => setIsGalleryExpanded(false)}
+                className="p-2 rounded-lg transition-colors"
+                style={{ backgroundColor: '#2a2a2a' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+                title="Close expanded view"
+              >
+                <X className="w-5 h-5 text-slate-300" />
+              </button>
+            </div>
           </div>
 
-          {/* Filters row */}
-          <div className="px-6 py-2 border-b" style={{ backgroundColor: '#1f1f1f', borderColor: '#333' }}>
-            <FiltersPanel
-              filters={filters}
-              onChange={setFilters}
-              selectedCount={selectedIds.length}
-              totalCount={images.length}
-              onBulkAction={handleBulkAction}
-            />
-          </div>
-
-          {/* Expanded image grid */}
-          <div
-            className="flex-1 p-6"
-            style={{
-              overflowY: 'auto',
-              scrollbarWidth: 'thin',
-              scrollbarColor: '#4a4a4a #1f1f1f'
-            }}
-          >
-            <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))' }}>
-              {images.map((image) => (
-                <ExpandedGalleryItem
-                  key={image.id}
-                  image={image}
-                  isSelected={selectedIds.includes(image.id)}
-                  onToggleSelect={() => handleToggleSelect(image.id)}
-                  onOpenEditor={() => {
-                    setIsGalleryExpanded(false);
-                    handleOpenEditor(image.id);
-                  }}
+          {/* Main content area - split view */}
+          <div className="flex-1 flex overflow-hidden">
+            {/* Left: Image gallery */}
+            <div className="flex-1 flex flex-col" style={{ borderRight: '1px solid #333' }}>
+              {/* Filters row */}
+              <div className="px-4 py-2 border-b shrink-0" style={{ backgroundColor: '#1f1f1f', borderColor: '#333' }}>
+                <FiltersPanel
+                  filters={filters}
+                  onChange={setFilters}
+                  selectedCount={selectedIds.length}
+                  totalCount={images.length}
+                  onBulkAction={handleBulkAction}
                 />
-              ))}
+              </div>
+
+              {/* Expanded image grid */}
+              <div
+                className="flex-1 p-4"
+                style={{
+                  overflowY: 'auto',
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: '#4a4a4a #1f1f1f'
+                }}
+              >
+                <div className="grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}>
+                  {images.map((image) => (
+                    <ExpandedGalleryItem
+                      key={image.id}
+                      image={image}
+                      isSelected={selectedIds.includes(image.id)}
+                      onToggleSelect={() => handleToggleSelect(image.id)}
+                      onOpenEditor={() => {
+                        setIsGalleryExpanded(false);
+                        handleOpenEditor(image.id);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Current page preview */}
+            <div
+              className="flex flex-col"
+              style={{ width: '380px', backgroundColor: '#1a1a1a' }}
+            >
+              {/* Page title */}
+              <div className="px-4 py-3 border-b shrink-0" style={{ borderColor: '#333' }}>
+                <h3 className="text-sm font-medium text-white">
+                  {currentLayout?.title || currentLayout?.page_type || 'Select a page'}
+                </h3>
+                {currentLayout?.category_filter && (
+                  <span className="text-xs text-slate-400">{currentLayout.category_filter}</span>
+                )}
+              </div>
+
+              {/* Page preview */}
+              <div
+                className="flex-1 flex items-center justify-center p-4"
+                style={{ backgroundColor: '#0f0f0f' }}
+              >
+                {currentLayout && (
+                  <ExpandedPagePreview
+                    layout={currentLayout}
+                    slots={getSlotsForLayout(allSlots, currentLayout.id)}
+                    imageMap={imageMap}
+                  />
+                )}
+              </div>
+
+              {/* Hint */}
+              <div className="px-4 py-2 text-xs text-slate-500 text-center border-t" style={{ borderColor: '#333' }}>
+                Select images and drag to slots
+              </div>
             </div>
           </div>
 
           {/* Footer with action hint */}
           <div
-            className="px-6 py-2 border-t text-center text-sm text-slate-500"
+            className="px-6 py-2 border-t text-center text-sm text-slate-500 shrink-0"
             style={{ backgroundColor: '#1a1a1a', borderColor: '#333' }}
           >
             Click to select | Double-click to edit | Press ESC or click X to close
@@ -667,6 +748,121 @@ function ExpandedGalleryItem({
       >
         <p className="text-xs text-white truncate">{image.original_filename}</p>
       </div>
+    </div>
+  );
+}
+
+// Grid configurations for page preview
+const GRID_CONFIGS: Record<string, { cols: number; rows: number }> = {
+  '1x1': { cols: 1, rows: 1 },
+  '2x2': { cols: 2, rows: 2 },
+  '2x3': { cols: 2, rows: 3 },
+  '3x3': { cols: 3, rows: 3 },
+  '3x4': { cols: 3, rows: 4 },
+  '4x3': { cols: 4, rows: 3 },
+  'custom': { cols: 2, rows: 2 },
+};
+
+// Helper component for page preview in expanded gallery
+function ExpandedPagePreview({
+  layout,
+  slots,
+  imageMap,
+}: {
+  layout: { id: string; layout_template: string; title?: string; page_type: string };
+  slots: Array<{ id: string; slot_position: number; image_id: string | null; caption?: string }>;
+  imageMap: Map<string, JobImage>;
+}) {
+  const gridConfig = GRID_CONFIGS[layout.layout_template] || GRID_CONFIGS['2x2'];
+
+  return (
+    <div
+      className="flex flex-col"
+      style={{
+        backgroundColor: '#ffffff',
+        aspectRatio: '8.5 / 11',
+        height: '100%',
+        maxHeight: '500px',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
+      }}
+    >
+      {/* Page title */}
+      <div className="px-4 pt-3 pb-2">
+        <div
+          className="text-sm font-semibold text-slate-500 border-b border-slate-300 pb-1 italic"
+        >
+          {layout.title || layout.page_type}
+        </div>
+      </div>
+
+      {/* Slots grid */}
+      <div className="flex-1 px-3 pb-2">
+        <div
+          className="grid w-full h-full gap-2"
+          style={{
+            gridTemplateColumns: `repeat(${gridConfig.cols}, minmax(0, 1fr))`,
+            gridAutoRows: `minmax(0, 1fr)`,
+          }}
+        >
+          {slots.map((slot) => {
+            const image = slot.image_id ? imageMap.get(slot.image_id) : null;
+            return (
+              <ExpandedSlotPreview key={slot.id} slot={slot} image={image} />
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Page footer */}
+      <div className="px-4 py-1.5 border-t border-slate-200">
+        <span className="text-[9px] text-slate-400 italic">
+          {slots.filter(s => s.image_id).length}/{slots.length} slots filled
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// Helper for individual slot preview
+function ExpandedSlotPreview({
+  slot,
+  image,
+}: {
+  slot: { id: string; slot_position: number; caption?: string };
+  image: JobImage | null | undefined;
+}) {
+  const path = image?.thumbnail_path || image?.storage_path;
+  const imageUrl = useSignedImageUrl(path || '', { width: 200 });
+
+  return (
+    <div
+      className="rounded overflow-hidden flex flex-col"
+      style={{
+        backgroundColor: image ? '#f5f5f5' : '#e8e8e8',
+        border: image ? '1px solid #ddd' : '2px dashed #ccc',
+      }}
+    >
+      {/* Image area */}
+      <div className="flex-1 flex items-center justify-center overflow-hidden">
+        {image && imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={image.original_filename}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span className="text-[10px] text-slate-400">Empty</span>
+        )}
+      </div>
+
+      {/* Caption */}
+      {slot.caption && (
+        <div className="px-1 py-0.5 bg-white border-t border-slate-200">
+          <p className="text-[8px] text-slate-600 truncate text-center">
+            {slot.caption}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

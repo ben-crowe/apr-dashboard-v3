@@ -458,7 +458,7 @@ export function ImageConfiguratorDemo({
                 className="text-sm font-medium rounded px-3 py-1.5 cursor-pointer transition-colors min-w-[200px]"
                 style={{
                   backgroundColor: '#2a2a2a',
-                  color: '#ffffff',
+                  color: '#94a3b8',
                   borderColor: '#444',
                   borderWidth: '1px',
                   borderStyle: 'solid'
@@ -469,7 +469,7 @@ export function ImageConfiguratorDemo({
                   const displayName = PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type;
                   return (
                     <option key={layout.id} value={index} style={{ backgroundColor: '#1f1f1f' }}>
-                      {pageNum ? `P${pageNum} | ` : ''}{displayName}
+                      {pageNum ? `P${pageNum}  |  ` : ''}{displayName}
                     </option>
                   );
                 })}
@@ -675,14 +675,14 @@ export function ImageConfiguratorDemo({
                     value={currentPageIndex}
                     onChange={(e) => setCurrentPageIndex(Number(e.target.value))}
                     className="text-sm font-medium rounded px-2 py-1 min-w-[180px]"
-                    style={{ backgroundColor: '#2a2a2a', color: '#fff', border: '1px solid #444' }}
+                    style={{ backgroundColor: '#2a2a2a', color: '#94a3b8', border: '1px solid #444' }}
                   >
                     {layouts.map((layout, index) => {
                       const pageNum = PAGE_TYPE_TO_REPORT_PAGE[layout.page_type];
                       const displayName = PAGE_TYPE_DISPLAY_NAMES[layout.page_type] || layout.page_type;
                       return (
                         <option key={layout.id} value={index}>
-                          {pageNum ? `P${pageNum} | ` : ''}{displayName}
+                          {pageNum ? `P${pageNum}  |  ` : ''}{displayName}
                         </option>
                       );
                     })}

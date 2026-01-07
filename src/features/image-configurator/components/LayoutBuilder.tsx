@@ -276,13 +276,13 @@ export function LayoutBuilder({
         alignItems: 'center',
         justifyContent: 'center',
         padding: '8px',
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#2a2a2a',
         overflow: 'hidden',
         minHeight: 0
       }}>
         {/* Page wrapper - fixed letter proportions with min size */}
         <div
-          className="flex flex-col shadow-md"
+          className="flex flex-col"
           style={{
             backgroundColor: '#ffffff',
             aspectRatio: '8.5 / 11',
@@ -290,6 +290,7 @@ export function LayoutBuilder({
             maxWidth: '100%',
             minWidth: '400px',
             minHeight: '518px', // 400 * (11/8.5) to maintain ratio
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3)',
           }}
         >
           {/* Page title section */}

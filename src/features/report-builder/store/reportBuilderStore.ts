@@ -6343,8 +6343,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
         if (unmappedIds.length < 10) {
           unmappedIds.push(`${templateFieldId} → ${storeFieldId}`);
         }
-        // Return value if found (even if empty), otherwise keep placeholder
-        return value !== undefined ? value : match;
+        // Keep placeholder - don't replace with empty string
+        return match;
       }
     });
 

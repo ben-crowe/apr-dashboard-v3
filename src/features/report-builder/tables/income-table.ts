@@ -269,7 +269,7 @@ const outputFields: TableFieldDefinition[] = [
 /**
  * Calculate all income outputs from inputs
  * @param inputs - Unit mix data from table inputs
- * @param dependencies - External store values (no longer used - unit count comes from type breakdown)
+ * @param dependencies - External store values (subject-units from Home Tab)
  */
 function calculate(
   inputs: Record<string, number>,
@@ -278,8 +278,10 @@ function calculate(
   const steps: CalculationStep[] = [];
   const outputs: Record<string, number> = {};
 
-  // Unit mix calculations - sum up counts, SF, and revenue from type breakdown
-  let totalUnits = 0;
+  // Read total units from Home Tab (subject-units) - this is the authority
+  const totalUnits = dependencies?.['subject-units'] ?? 0;
+
+  // Unit mix calculations (for SF and revenue breakdown only)
   let totalSf = 0;
   let totalRentalRevenue = 0;
 
@@ -292,8 +294,7 @@ function calculate(
     const perUnit = count > 0 ? Math.round(annual / count) : 0;
     const perSf = count > 0 && sf > 0 ? Math.round((rent / sf) * 100) / 100 : 0;
 
-    // Sum up totals from unit mix (Income Tab is the authority)
-    totalUnits += count;
+    // SF calculated from unit mix (not units - that comes from Home Tab)
     totalSf += count * sf;
     totalRentalRevenue += annual;
 
@@ -403,9 +404,16 @@ function calculate(
 
 /**
  * External dependencies this table reads from the store
- * Note: subject-units dependency removed - total units now calculated from type breakdown
  */
-const dependencyFields: TableFieldDefinition[] = [];
+const dependencyFields: TableFieldDefinition[] = [
+  {
+    id: 'subject-units',
+    storeId: 'subject-units',
+    label: 'Total Units (from Home Tab)',
+    type: 'number',
+    source: 'input', // External input from Home Tab
+  },
+];
 
 /**
  * Income Table Definition
@@ -445,8 +453,10 @@ export const incomeTable: FinancialTable = {
         'calc-laundry-per-unit': 0,
         'calc-other-income': 0,
       },
-      // No external dependencies - total units calculated from type breakdown (2+6+10+2=20)
-      dependencies: {},
+      // subject-units from Home Tab (authority for total unit count)
+      dependencies: {
+        'subject-units': 20,
+      },
       expectedOutputs: {
         'calc-total-units': 20,
         'calc-pgr': 204240, // Template expects $204,240

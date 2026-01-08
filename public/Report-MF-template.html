@@ -552,8 +552,8 @@
                 color: #cc0000;
             }
 
-            /* Legacy preview-mode support */
-            .preview-mode .field-mapped {
+            /* User Ready Mode - editing view where placeholders become real data */
+            .user-ready-mode .field-mapped {
                 background-color: transparent;
                 border-bottom: none;
                 cursor: default;
@@ -29779,7 +29779,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                 if (this.checked) {
                     // USER READY MODE: Show data-sample in gray italic
                     pageSheets.forEach(sheet => sheet.classList.add('user-ready-mode'));
-                    pagesWrapper.classList.add('preview-mode'); // legacy support
+                    pagesWrapper.classList.add('user-ready-mode');
                     if (modeLabel) modeLabel.textContent = 'User Ready';
                     
                     fields.forEach(el => {
@@ -29793,7 +29793,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                 } else {
                     // DEV MODE: Show raw {{field-id}}
                     pageSheets.forEach(sheet => sheet.classList.remove('user-ready-mode'));
-                    pagesWrapper.classList.remove('preview-mode');
+                    pagesWrapper.classList.remove('user-ready-mode');
                     if (modeLabel) modeLabel.textContent = 'Dev Mode';
 
                     fields.forEach(el => {

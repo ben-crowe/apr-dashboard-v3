@@ -234,39 +234,39 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
               {/* Type 1 Row */}
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.text }}>{type1Name}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type1Count || ''}
                     onChange={(e) => updateField('calc-type1-count', Number(e.target.value) || 0)}
-                    className="w-14 h-6 text-right text-[10px] px-1"
+                    className="w-14 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type1Sf || ''}
                     onChange={(e) => updateField('calc-type1-sf', Number(e.target.value) || 0)}
-                    className="w-16 h-6 text-right text-[10px] px-1"
+                    className="w-16 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type1Rent || ''}
                     onChange={(e) => updateField('calc-type1-rent', Number(e.target.value) || 0)}
-                    className="w-16 h-6 text-right text-[10px] px-1"
+                    className="w-16 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type1ContractRent || ''}
                     onChange={(e) => updateField('calc-type1-contract-rent', Number(e.target.value) || 0)}
-                    className="w-16 h-6 text-right text-[10px] px-1"
+                    className="w-16 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
@@ -277,39 +277,39 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
               {/* Type 2 Row */}
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.text }}>{type2Name}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type2Count || ''}
                     onChange={(e) => updateField('calc-type2-count', Number(e.target.value) || 0)}
-                    className="w-14 h-6 text-right text-[10px] px-1"
+                    className="w-14 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type2Sf || ''}
                     onChange={(e) => updateField('calc-type2-sf', Number(e.target.value) || 0)}
-                    className="w-16 h-6 text-right text-[10px] px-1"
+                    className="w-16 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type2Rent || ''}
                     onChange={(e) => updateField('calc-type2-rent', Number(e.target.value) || 0)}
-                    className="w-16 h-6 text-right text-[10px] px-1"
+                    className="w-16 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type2ContractRent || ''}
                     onChange={(e) => updateField('calc-type2-contract-rent', Number(e.target.value) || 0)}
-                    className="w-16 h-6 text-right text-[10px] px-1"
+                    className="w-16 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
@@ -320,39 +320,39 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
               {/* Type 3 Row */}
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.text }}>{type3Name}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type3Count || ''}
                     onChange={(e) => updateField('calc-type3-count', Number(e.target.value) || 0)}
-                    className="w-14 h-6 text-right text-[10px] px-1"
+                    className="w-14 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type3Sf || ''}
                     onChange={(e) => updateField('calc-type3-sf', Number(e.target.value) || 0)}
-                    className="w-16 h-6 text-right text-[10px] px-1"
+                    className="w-16 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type3Rent || ''}
                     onChange={(e) => updateField('calc-type3-rent', Number(e.target.value) || 0)}
-                    className="w-16 h-6 text-right text-[10px] px-1"
+                    className="w-16 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type3ContractRent || ''}
                     onChange={(e) => updateField('calc-type3-contract-rent', Number(e.target.value) || 0)}
-                    className="w-16 h-6 text-right text-[10px] px-1"
+                    className="w-16 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
@@ -363,39 +363,39 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
               {/* Type 4 Row */}
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.text }}>{type4Name}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type4Count || ''}
                     onChange={(e) => updateField('calc-type4-count', Number(e.target.value) || 0)}
-                    className="w-14 h-6 text-right text-[10px] px-1"
+                    className="w-14 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type4Sf || ''}
                     onChange={(e) => updateField('calc-type4-sf', Number(e.target.value) || 0)}
-                    className="w-16 h-6 text-right text-[10px] px-1"
+                    className="w-16 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type4Rent || ''}
                     onChange={(e) => updateField('calc-type4-rent', Number(e.target.value) || 0)}
-                    className="w-16 h-6 text-right text-[10px] px-1"
+                    className="w-16 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                <td className="px-2 py-1 flex justify-end" style={{ color: colors.text }}>
                   <Input
                     type="number"
                     value={type4ContractRent || ''}
                     onChange={(e) => updateField('calc-type4-contract-rent', Number(e.target.value) || 0)}
-                    className="w-16 h-6 text-right text-[10px] px-1"
+                    className="w-16 h-6 text-right text-[10px] px-1 ml-auto"
                     min={0}
                   />
                 </td>

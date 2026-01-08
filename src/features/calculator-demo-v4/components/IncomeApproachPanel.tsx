@@ -234,7 +234,15 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
               {/* Type 1 Row */}
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.text }}>{type1Name}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type1Count}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                  <Input
+                    type="number"
+                    value={type1Count || ''}
+                    onChange={(e) => updateField('calc-type1-count', Number(e.target.value) || 0)}
+                    className="w-14 h-6 text-right text-[10px] px-1"
+                    min={0}
+                  />
+                </td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type1Sf.toLocaleString()}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type1Rent)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type1ContractRent)}</td>
@@ -245,7 +253,15 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
               {/* Type 2 Row */}
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.text }}>{type2Name}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type2Count}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                  <Input
+                    type="number"
+                    value={type2Count || ''}
+                    onChange={(e) => updateField('calc-type2-count', Number(e.target.value) || 0)}
+                    className="w-14 h-6 text-right text-[10px] px-1"
+                    min={0}
+                  />
+                </td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type2Sf.toLocaleString()}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type2Rent)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type2ContractRent)}</td>
@@ -256,7 +272,15 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
               {/* Type 3 Row */}
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.text }}>{type3Name}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type3Count}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                  <Input
+                    type="number"
+                    value={type3Count || ''}
+                    onChange={(e) => updateField('calc-type3-count', Number(e.target.value) || 0)}
+                    className="w-14 h-6 text-right text-[10px] px-1"
+                    min={0}
+                  />
+                </td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type3Sf.toLocaleString()}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type3Rent)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type3ContractRent)}</td>
@@ -267,7 +291,15 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
               {/* Type 4 Row */}
               <tr style={{ borderBottom: `1px solid ${colors.border}` }}>
                 <td className="px-2 py-1" style={{ color: colors.text }}>{type4Name}</td>
-                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type4Count}</td>
+                <td className="px-2 py-1 text-right" style={{ color: colors.text }}>
+                  <Input
+                    type="number"
+                    value={type4Count || ''}
+                    onChange={(e) => updateField('calc-type4-count', Number(e.target.value) || 0)}
+                    className="w-14 h-6 text-right text-[10px] px-1"
+                    min={0}
+                  />
+                </td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{type4Sf.toLocaleString()}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type4Rent)}</td>
                 <td className="px-2 py-1 text-right" style={{ color: colors.text }}>{formatCurrency(type4ContractRent)}</td>

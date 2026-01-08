@@ -11,6 +11,7 @@ Reference documentation for APR Report Template formatting and systems.
 | `agent-mgr-progress.md` | Agent progress log, session notes, pending tasks | Tracking work done, continuing sessions |
 | `apr-system-context.md` | 4-stage system overview, architecture, key files | Getting up to speed on APR system |
 | `compact-styling-guide.md` | CSS techniques for preventing page overflow | Page content extends into footer |
+| `data-flow-explained.md` | How data flows: Input → Store → Output | Understanding why field IDs must match |
 | `field-registry-guide.md` | Field registry structure, naming, 4-file sync | Adding/fixing fields, registry errors |
 | `field-toggle-system.md` | Two-mode field display (Dev/User Ready) | Understanding or modifying toggle behavior |
 

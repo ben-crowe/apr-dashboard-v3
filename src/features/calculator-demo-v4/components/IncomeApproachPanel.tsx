@@ -221,10 +221,10 @@ export default function IncomeApproachPanel({ onValueChange }: IncomeApproachPan
             <thead style={{ borderBottom: `1px solid ${colors.border}` }}>
               <tr>
                 <th className="px-2 py-1 text-left font-normal" style={{ color: colors.textMuted }}>Unit Type</th>
-                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Count</th>
-                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>SF</th>
-                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Rent/Mo</th>
-                <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Contract</th>
+                <th className="px-2 py-1 text-center font-normal" style={{ color: colors.textMuted }}>Count</th>
+                <th className="px-2 py-1 text-center font-normal" style={{ color: colors.textMuted }}>SF</th>
+                <th className="px-2 py-1 text-center font-normal" style={{ color: colors.textMuted }}>Rent/Mo</th>
+                <th className="px-2 py-1 text-center font-normal" style={{ color: colors.textMuted }}>Contract</th>
                 <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>% Market</th>
                 <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>Annual</th>
                 <th className="px-2 py-1 text-right font-normal" style={{ color: colors.textMuted }}>$/Unit</th>

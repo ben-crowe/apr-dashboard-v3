@@ -47,6 +47,9 @@ import { ReconTabPanel } from '../ReconTabPanel';
 // ImageMgtTabPanel for IMAGE-MGT section
 import { ImageMgtTabPanel } from '../ImageMgtTabPanel';
 
+// CalcInputPanel for CALC section input fields
+import { CalcInputPanel } from '../CalcInputPanel';
+
 // Mapping of which image fields should appear in which sections
 // IMPORTANT: Field IDs must match template placeholders (e.g., {{subject-photo}})
 const SECTION_IMAGE_MAPPING: Record<string, string[]> = {
@@ -924,24 +927,34 @@ export default function EditPanel() {
           <ImageMgtTabPanel />
         )}
 
-        {/* Calculator Table Panels - Only show for CALC section */}
+        {/* CALC Section - Input Fields + Calculator Panels */}
         {isCalcSection && (
-          <div className="p-6">
-            <ThemeProvider>
-              <div className="space-y-6 mb-6">
-                <div className="text-white px-0 py-2 font-semibold text-sm mb-2 border-b border-[#4b5563]">
-                  CALCULATOR TABLES
-                </div>
-                <OperatingHistoryPanel />
-                <IncomeApproachPanel onValueChange={setIncomeValue} />
-                <SalesComparisonPanel onIndicatedValueChange={setSalesValue} />
-                <ReconciliationPanel
-                  incomeValue={incomeValue}
-                  salesIndicatedValue={salesValue}
-                  costValue={0}
-                />
+          <div>
+            {/* Input Fields Section - User enters data here */}
+            <CalcInputPanel />
+
+            {/* Divider between inputs and calculated results */}
+            <div className="px-4 py-3 border-t-2 border-[#4b5563] bg-[#1a1a1a]">
+              <div className="text-white font-semibold text-sm uppercase tracking-wide">
+                Calculated Results
               </div>
-            </ThemeProvider>
+            </div>
+
+            {/* Calculator Panels - Shows calculated results based on inputs above */}
+            <div className="p-6">
+              <ThemeProvider>
+                <div className="space-y-6 mb-6">
+                  <OperatingHistoryPanel />
+                  <IncomeApproachPanel onValueChange={setIncomeValue} />
+                  <SalesComparisonPanel onIndicatedValueChange={setSalesValue} />
+                  <ReconciliationPanel
+                    incomeValue={incomeValue}
+                    salesIndicatedValue={salesValue}
+                    costValue={0}
+                  />
+                </div>
+              </ThemeProvider>
+            </div>
           </div>
         )}
 

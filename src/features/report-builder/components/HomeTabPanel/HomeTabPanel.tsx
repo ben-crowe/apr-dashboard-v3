@@ -434,12 +434,13 @@ export default function HomeTabPanel() {
               </select>
             </div>
             <div className="form-group">
-              <label>Rental Units</label>
+              <label>Rental Units <span style={{ fontSize: '0.75em', color: '#9ca3af' }}>(from Income Tab)</span></label>
               <input
                 type="number"
-                value={String(getValue('subject-units') || '')}
-                onChange={onInputChange('subject-units')}
-                min="0"
+                value={String(getValue('calc-total-units') || getValue('subject-units') || '')}
+                disabled
+                style={{ backgroundColor: '#374151', color: '#d1d5db', cursor: 'not-allowed' }}
+                title="Computed from Income Tab unit breakdown"
               />
             </div>
             <div className="form-group">

@@ -29850,6 +29850,34 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                 }
             });
 
+            // === FIELD UPDATE postMessage BRIDGE ===
+            // Receives targeted field updates from EditPanel without full re-interpolation
+            // This prevents the glitchy editing loop where generatePreview() caused flicker
+            window.addEventListener("message", function (event) {
+                if (event.data && event.data.type === "FIELD_UPDATE") {
+                    const { fieldId, value } = event.data;
+                    // Find elements with matching data-field-id and update their textContent
+                    document.querySelectorAll(`[data-field-id="${fieldId}"]`).forEach(el => {
+                        if (value && value.trim() !== '') {
+                            el.textContent = value;
+                            el.classList.add('populated');
+                            el.classList.remove('user-ready-mode');
+                        } else {
+                            // Empty value - restore placeholder based on current mode
+                            const toggle = document.getElementById("preview-toggle");
+                            const isUserReady = toggle && toggle.checked;
+                            if (isUserReady) {
+                                el.textContent = el.getAttribute('data-sample') || `{{${fieldId}}}`;
+                                el.classList.add('user-ready-mode');
+                            } else {
+                                el.textContent = `{{${fieldId}}}`;
+                            }
+                            el.classList.remove('populated');
+                        }
+                    });
+                }
+            });
+
             // === PAGE NAVIGATION ===
             const pageInput = document.getElementById("page-input");
             const pageCount = document.getElementById("page-count");

@@ -6055,13 +6055,18 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
 
     set({ sections: updatedSections, isDirty: true });
 
-    if (fieldId.includes("photo") || fieldId.includes("img")) {
-      console.log(
-        `🟡 updateFieldValue: Set complete, calling generatePreview()`,
-      );
+    // Send targeted field update to iframe via postMessage (no full re-interpolation)
+    // This allows preview to update without flicker
+    if (typeof window !== 'undefined') {
+      const iframe = document.querySelector('iframe[src*="Report-MF-template"]') as HTMLIFrameElement;
+      if (iframe?.contentWindow) {
+        iframe.contentWindow.postMessage({
+          type: 'FIELD_UPDATE',
+          fieldId,
+          value: String(value)
+        }, '*');
+      }
     }
-    // Regenerate preview HTML after field update for live sync
-    get().generatePreview();
   },
 
   reorderImages: (fieldId: string, imageUrls: string[]) => {

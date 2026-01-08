@@ -53,10 +53,10 @@ export default function ReportBuilderLayout() {
           <span className="font-semibold">Report Builder</span>
         </div>
         
-        {/* Toggle Switch - OFF=Raw IDs, ON=Test Data */}
+        {/* Toggle Switch - OFF=Dev Mode, ON=User Ready */}
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-300">
-            {showRawIds ? (activeTestMode === 'user-input' ? 'User Flow Test' : activeTestMode === 'test-report' ? 'Template Test' : 'Preview Mode') : 'Raw IDs'}
+            {showRawIds ? (activeTestMode === 'user-input' ? 'User Flow Test' : activeTestMode === 'test-report' ? 'Template Test' : 'User Ready') : 'Dev Mode'}
           </span>
           <label className="relative inline-flex items-center cursor-pointer">
             <input

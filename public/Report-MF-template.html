@@ -29856,8 +29856,15 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
             window.addEventListener("message", function (event) {
                 if (event.data && event.data.type === "FIELD_UPDATE") {
                     const { fieldId, value } = event.data;
-                    // Find elements with matching data-field-id and update their textContent
-                    document.querySelectorAll(`[data-field-id="${fieldId}"]`).forEach(el => {
+                    // Find elements with matching data-field-id (check both clean and mustache formats)
+                    // Template has data-field-id="{{field-id}}" but EditPanel sends clean "field-id"
+                    const cleanSelector = `[data-field-id="${fieldId}"]`;
+                    const mustacheSelector = `[data-field-id="{{${fieldId}}}"]`;
+                    const elements = document.querySelectorAll(`${cleanSelector}, ${mustacheSelector}`);
+
+                    console.log(`FIELD_UPDATE: fieldId="${fieldId}", value="${value}", found ${elements.length} elements`);
+
+                    elements.forEach(el => {
                         if (value && value.trim() !== '') {
                             el.textContent = value;
                             el.classList.add('populated');

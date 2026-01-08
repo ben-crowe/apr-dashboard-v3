@@ -79,8 +79,23 @@ export default function PreviewPanel() {
   );
 
   // Calculate excluded pages based on approach toggles
+  // STABILIZED: Only update reference when actual page numbers change
+  // This prevents re-injection on every field edit
+  const excludedPagesRef = useRef<Set<number>>(new Set());
+  const excludedPagesKey = useRef<string>("");
+
   const excludedPages = useMemo(() => {
-    return getExcludedPageNumbers(sections);
+    const newExcluded = getExcludedPageNumbers(sections);
+    const newKey = Array.from(newExcluded).sort((a, b) => a - b).join(",");
+
+    // Only return new Set if actual values changed
+    if (newKey !== excludedPagesKey.current) {
+      excludedPagesKey.current = newKey;
+      excludedPagesRef.current = newExcluded;
+      console.log("PreviewPanel: excludedPages changed to:", newKey || "(none)");
+    }
+
+    return excludedPagesRef.current;
   }, [sections]);
 
   // Scroll to specific page when triggered from Image Configurator

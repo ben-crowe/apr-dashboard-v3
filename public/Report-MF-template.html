@@ -29760,9 +29760,14 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
             // Initialize: Show {{field-id}} on load (Dev Mode default)
             document.querySelectorAll('.field-mapped').forEach(el => {
                 if (isCalcField(el)) return;
-                const fieldId = el.getAttribute('data-field-id') || el.getAttribute('title');
-                if (fieldId && fieldId.includes('{{')) {
-                    el.textContent = fieldId;
+                // data-field-id is clean (no mustaches), title has mustaches
+                const cleanId = el.getAttribute('data-field-id');
+                const titleId = el.getAttribute('title');
+                if (cleanId) {
+                    // Display with mustaches for readability
+                    el.textContent = `{{${cleanId}}}`;
+                } else if (titleId && titleId.includes('{{')) {
+                    el.textContent = titleId;
                 }
             });
 
@@ -29790,13 +29795,17 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                     pageSheets.forEach(sheet => sheet.classList.remove('user-ready-mode'));
                     pagesWrapper.classList.remove('preview-mode');
                     if (modeLabel) modeLabel.textContent = 'Dev Mode';
-                    
+
                     fields.forEach(el => {
                         if (isCalcField(el)) return;
                         if (el.classList.contains('populated')) return;
-                        const fieldId = el.getAttribute('data-field-id') || el.getAttribute('title');
-                        if (fieldId && fieldId.includes('{{')) {
-                            el.textContent = fieldId;
+                        // data-field-id is clean (no mustaches), title has mustaches
+                        const cleanId = el.getAttribute('data-field-id');
+                        const titleId = el.getAttribute('title');
+                        if (cleanId) {
+                            el.textContent = `{{${cleanId}}}`;
+                        } else if (titleId && titleId.includes('{{')) {
+                            el.textContent = titleId;
                         }
                     });
                 }

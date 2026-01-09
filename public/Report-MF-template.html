@@ -29545,7 +29545,7 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
             let fitToPanelScale = 1.0;
             let userZoomMultiplier = 1.0;
             const minUserZoom = 0.1; // 10% minimum
-            const maxUserZoom = 3.0; // 300% maximum
+            const maxUserZoom = 1.0; // 100% maximum - fits container, no need to go bigger
             const zoomStep = 0.05; // 5% steps
 
             const scaler = document.getElementById("preview-scaler");
@@ -29689,15 +29689,16 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                 }
 
                 // STEP 2: Update zoom scale
-                // Only recalculate fitToPanelScale if at 100% user zoom
-                if (Math.abs(userZoomMultiplier - 1.0) < 0.01) {
-                    fitToPanelScale = calculateFitToPanel();
-                }
+                // ALWAYS recalculate fitToPanelScale on resize AND snap to 100%
+                // User wants panel resize to always fit content to container
+                fitToPanelScale = calculateFitToPanel();
+                userZoomMultiplier = 1.0; // Reset to 100% on resize - always fit to container
 
                 const newScale = fitToPanelScale * userZoomMultiplier;
                 scaler.style.transform = `scale(${newScale})`;
-                zoomValue.textContent =
-                    Math.round(userZoomMultiplier * 100) + "%";
+                zoomValue.textContent = "100%";
+                zoomOut.disabled = false;
+                zoomIn.disabled = true; // At max (100%)
 
                 // STEP 3: Restore scroll to show same page at same offset
                 if (anchorPage && newScale > 0) {

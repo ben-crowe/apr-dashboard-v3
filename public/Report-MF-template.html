@@ -21187,6 +21187,8 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
         .page-sheet[data-page-num="Page 52"] h1.Header1 {
             font-size: 18pt;
             margin-bottom: 12px;
+            border-bottom: 1px solid #003b7e;
+            padding-bottom: 5px;
         }
 
         .page-sheet[data-page-num="Page 52"] .map-container {
@@ -21304,6 +21306,8 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
         .page-sheet[data-page-num="Page 53"] h1.Header1 {
             font-size: 18pt;
             margin-bottom: 8px;
+            border-bottom: 1px solid #003b7e;
+            padding-bottom: 5px;
         }
 
         .page-sheet[data-page-num="Page 53"] h2.Header2 {
@@ -21640,6 +21644,8 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
     .page-sheet[data-page-num="Page 54"] h1.Header1 {
         font-size: 18pt;
         margin-bottom: 8px;
+        border-bottom: 1px solid #003b7e;
+        padding-bottom: 5px;
     }
 
     .page-sheet[data-page-num="Page 54"] h2.Header2 {
@@ -21976,6 +21982,8 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
     .page-sheet[data-page-num="Page 55"] h1.Header1 {
         font-size: 18pt;
         margin-bottom: 8px;
+        border-bottom: 1px solid #003b7e;
+        padding-bottom: 5px;
     }
 
     .page-sheet[data-page-num="Page 55"] h2.Header2 {
@@ -22312,6 +22320,8 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 .page-sheet[data-page-num="Page 56"] h1.Header1 {
     font-size: 18pt;
     margin-bottom: 8px;
+    border-bottom: 1px solid #003b7e;
+    padding-bottom: 5px;
 }
 
 .page-sheet[data-page-num="Page 56"] h2.Header2 {
@@ -22648,6 +22658,8 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 .page-sheet[data-page-num="Page 57"] h1.Header1 {
     font-size: 18pt;
     margin-bottom: 8px;
+    border-bottom: 1px solid #003b7e;
+    padding-bottom: 5px;
 }
 
 .page-sheet[data-page-num="Page 57"] h2.Header2 {
@@ -29776,6 +29788,26 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                     ? pagesWrapper.querySelectorAll(".field-mapped")
                     : document.querySelectorAll(".field-mapped");
                 
+                // Find all images that are field-mapped (have {{field-id}} in src or are associated with fields)
+                // After interpolation, images with real data won't have {{ in src, so we check for:
+                // 1. Images with {{ in src (not yet interpolated)
+                // 2. Images whose src was interpolated from a field (check if empty or placeholder-like)
+                const allImages = pagesWrapper
+                    ? pagesWrapper.querySelectorAll("img")
+                    : document.querySelectorAll("img");
+                
+                // Filter to field-mapped images: those with {{ in src OR those that look like they came from field interpolation
+                // Exclude hardcoded images like logos (they have data: URLs or specific paths)
+                const fieldImages = Array.from(allImages).filter(img => {
+                    const src = img.getAttribute('src') || '';
+                    // Include if src has {{ (placeholder) OR if src is empty/placeholder-like
+                    // Exclude hardcoded images (data URLs, logo paths, etc.)
+                    const isHardcoded = src.startsWith('data:image/webp') || 
+                                       src.includes('logo') || 
+                                       src.includes('signature') && !src.includes('{{');
+                    return !isHardcoded && (src.includes('{{') || src.trim() === '' || src.includes('/extracted-images/'));
+                });
+                
                 if (this.checked) {
                     // USER READY MODE: Show data-sample in gray italic
                     pageSheets.forEach(sheet => sheet.classList.add('user-ready-mode'));
@@ -29788,6 +29820,16 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                         const sample = el.getAttribute('data-sample');
                         if (sample) {
                             el.textContent = sample;
+                        }
+                    });
+                    
+                    // Show images if they have actual URLs (not placeholders)
+                    fieldImages.forEach(img => {
+                        const src = img.getAttribute('src') || '';
+                        if (src && !src.includes('{{') && src.trim() !== '') {
+                            img.style.display = '';
+                        } else {
+                            img.style.display = 'none';
                         }
                     });
                 } else {
@@ -29807,6 +29849,11 @@ eo38kJO5QrPsp3rQB+dn/EsV9ulvRqLvkAAAwUbLP4AAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
                         } else if (titleId && titleId.includes('{{')) {
                             el.textContent = titleId;
                         }
+                    });
+                    
+                    // Hide all field-mapped images in Dev Mode (showing field IDs instead)
+                    fieldImages.forEach(img => {
+                        img.style.display = 'none';
                     });
                 }
             });

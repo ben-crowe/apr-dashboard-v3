@@ -1,0 +1,325 @@
+
+The "Gold Standard" Boilerplate (Pages 3–7)
+I have processed the raw HTML files you uploaded (Pages 3, 4, 5, 6, 7).
+
+Formatting: I standardized the fonts, colors (#003B7E Blue), and layout to match your "Paper View" system.
+
+Mapping: I replaced the static data with the correct Valcre System IDs based on our Master Directory.
+
+Page 5 (TOC): I created a clean, static Table of Contents that matches the style.
+
+Instructions:
+
+Copy the code below.
+
+Paste it into your appraisal_preview.html file (replacing the previous content or appending it).
+
+Open in your browser to see the perfect split-panel preview.
+
+
+
+-----
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Appraisal Report Boilerplate (Pages 3-7)</title>
+<style>
+    /* --- 1. GLOBAL RESET & FONTS --- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { 
+        font-family: "Open Sans", Arial, sans-serif; 
+        font-size: 10pt; 
+        line-height: 1.4; 
+        background-color: #525659; /* Dark Preview Background */
+        display: flex; 
+        flex-direction: column; 
+        align-items: center; 
+        padding: 40px 0;
+    }
+
+    /* --- 2. PAPER SHEET STYLING (The "Split Panel" Look) --- */
+    .page-sheet {
+        background-color: white;
+        width: 8.5in;
+        min-height: 11in;
+        padding: 0.75in;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* --- 3. COMMON ELEMENT STYLING --- */
+    /* Headers */
+    .header-logo-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; border-bottom: 2px solid #ccc; padding-bottom: 10px; }
+    .logo-text { font-size: 20pt; font-weight: bold; color: #003B7E; }
+    .logo-sub { font-size: 9pt; color: #666; letter-spacing: 2px; }
+    .company-info { text-align: right; font-size: 9pt; color: #333; }
+
+    /* Section Headers */
+    .section-header { 
+        background-color: #003B7E; 
+        color: white; 
+        font-weight: bold; 
+        padding: 5px 10px; 
+        margin-top: 20px; 
+        margin-bottom: 10px; 
+        font-size: 10pt;
+        text-transform: uppercase;
+    }
+    
+    .page-title {
+        font-size: 16pt;
+        font-weight: bold;
+        border-bottom: 2px solid #003B7E;
+        padding-bottom: 5px;
+        margin-bottom: 20px;
+    }
+
+    /* Standard Text */
+    p { margin-bottom: 10pt; text-align: justify; }
+    
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 10pt; }
+    td, th { padding: 4px 8px; border: 1px solid #ddd; vertical-align: top; }
+    .label-col { background-color: #f0f0f0; font-weight: bold; width: 35%; }
+    .value-col { width: 65%; }
+
+    /* Signatures */
+    .signature-block { margin-top: 40px; }
+    .sig-line { width: 250px; border-top: 1px solid black; margin-top: 40px; padding-top: 5px; }
+
+    /* --- 4. MAPPING VISUALIZATION (Yellow Highlights) --- */
+    .field-mapped {
+        background-color: rgba(255, 255, 0, 0.15);
+        border-bottom: 1px dotted #999;
+        cursor: help;
+        position: relative;
+    }
+    .field-mapped:hover::before {
+        content: attr(title);
+        position: absolute;
+        top: -20px; left: 0; background: #333; color: #fff;
+        padding: 2px 5px; font-size: 8pt; border-radius: 3px;
+        white-space: nowrap; z-index: 100;
+    }
+
+    /* --- 5. PRINT SETTINGS --- */
+    @media print {
+        body { background-color: white; padding: 0; }
+        .page-sheet { width: 100%; margin: 0; box-shadow: none; page-break-after: always; min-height: auto; }
+        .field-mapped { background-color: transparent; border: none; }
+    }
+</style>
+</head>
+<body>
+
+<div class="page-sheet">
+    <div class="header-logo-row">
+        <div>
+            <div class="logo-text">VALTA</div>
+            <div class="logo-sub">PROPERTY VALUATIONS</div>
+        </div>
+        <div class="company-info">
+            <b><span class="field-mapped" title="{{Company_Name}}">{{Company_Name}}</span></b><br>
+            <span class="field-mapped" title="{{Company_Address}}">{{Company_Address}}</span><br>
+            <span class="field-mapped" title="{{Company_CityStateZip}}">{{Company_CityStateZip}}</span><br>
+            Office: <span class="field-mapped" title="{{Company_Phone}}">{{Company_Phone}}</span><br>
+            www.valta.ca
+        </div>
+    </div>
+
+    <p><b><span class="field-mapped" title="{{Report_Date}}">{{Report_Date}}</span></b></p>
+
+    <p>
+        <span class="field-mapped" title="{{Client_Company}}">{{Client_Company}}</span><br>
+        <span class="field-mapped" title="{{Client_Address}}">{{Client_Address}}</span><br>
+        <span class="field-mapped" title="{{Client_CityStateZip}}">{{Client_CityStateZip}}</span>
+    </p>
+
+    <p>Attention: <span class="field-mapped" title="{{Client_Name}}">{{Client_Name}}</span></p>
+
+    <p style="margin-top:20px;">
+        <b>Re: <span class="field-mapped" title="{{Report_Values}}">{{Report_Values}}</span> current market value for the property located at <span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span>, <span class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped" title="{{Subject_State}}">{{Subject_State}}</span>.</b>
+    </p>
+
+    <p>
+        Valta Property Valuations Ltd. is proud to present the appraisal report that satisfies the agreed upon scope of work with <span class="field-mapped" title="{{Client_Company}}">{{Client_Company}}</span>. The purpose of this assignment is to provide the <b>{{Report_ValueScenario1}}</b> current market value of the property... (Boilerplate text)... for the property located at <b>{{Subject_Street}}, {{Subject_City}}</b> (herein referred to as the ‘subject property’).
+    </p>
+
+    <p>
+        <span class="field-mapped" title="{{Subject_IntroComment}}">{{Subject_IntroComment}}</span> <span class="field-mapped" title="{{Subject_EconCharacteristics}}">{{Subject_EconCharacteristics}}</span>
+    </p>
+
+    <div class="section-header">MARKET VALUE CONCLUSION</div>
+    <table style="text-align:center;">
+        <tr style="background:#eee; font-weight:bold;">
+            <td>VALUATION SEQUENCE</td>
+            <td>INTEREST APPRAISED</td>
+            <td>EXPOSURE TIME</td>
+            <td>EFFECTIVE DATE</td>
+            <td>VALUE</td>
+        </tr>
+        <tr>
+            <td><span class="field-mapped" title="{{Report_ValueScenario1}}">{{Report_ValueScenario1}}</span></td>
+            <td><span class="field-mapped" title="{{Report_Interest}}">{{Report_Interest}}</span></td>
+            <td><span class="field-mapped" title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span></td>
+            <td><span class="field-mapped" title="{{Report_Date1}}">{{Report_Date1}}</span></td>
+            <td><b><span class="field-mapped" title="{{Report_Values}}">{{Report_Values}}</span></b></td> </tr>
+    </table>
+
+    <div class="section-header">Hypothetical Conditions</div>
+    <p style="background-color:#ffffcc; padding:5px;">
+        <span class="field-mapped" title="{{Report_Hypothetical}}">{{Report_Hypothetical}}</span>
+    </p>
+
+    <div class="section-header">Extraordinary Assumptions</div>
+    <p>
+        <span class="field-mapped" title="{{Report_Extraordinary}}">{{Report_Extraordinary}}</span>
+    </p>
+</div>
+
+<div class="page-sheet">
+    <h1 style="color:#003B7E; border-bottom:none;">Extraordinary Limiting Conditions</h1>
+
+    <p>
+        <span class="field-mapped" title="{{Report_LimCond}}">{{Report_LimCond}}</span>
+    </p>
+
+    <p>
+        The report has been completed in accordance with the Canadian Uniform Standards of Professional Appraisal Practice (“CUSPAP”)... (Boilerplate standard text).
+    </p>
+    <p>
+        If there are any specific questions or concerns regarding the attached appraisal report, or if Valta can be of additional assistance, please contact the individuals listed below.
+    </p>
+
+    <div class="signature-block">
+        <p>Respectfully Submitted,</p>
+        <p><b><span class="field-mapped" title="{{Company_Name}}">{{Company_Name}}</span></b></p>
+        
+        <div class="sig-line">
+            [IMAGE: <span class="field-mapped" title="{{Appraiser1_Signature}}">Appraiser1_Signature</span>]
+        </div>
+        <p style="margin-top:5px;">
+            <b><span class="field-mapped" title="{{Appraiser1_Name}}">{{Appraiser1_Name}}</span></b><br>
+            <span class="field-mapped" title="{{Appraiser1_Title}}">{{Appraiser1_Title}}</span><br>
+            <span class="field-mapped" title="{{Appraiser1_Email}}">{{Appraiser1_Email}}</span><br>
+            AIC No: 902097
+        </p>
+    </div>
+</div>
+
+<div class="page-sheet" style="display:flex; padding:0;">
+    <div style="width:180px; background-color:#1a3a52; padding:40px 20px; color:white; font-size:24pt; font-weight:bold; text-align:center;">
+        Table of<br>Contents
+    </div>
+    
+    <div style="flex:1; padding:40px;">
+        <h3 style="color:#1a3a52; border-bottom:1px solid #ccc; padding-bottom:5px; margin-bottom:10px;">Introduction & Executive Summary</h3>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Property Overview</span><b>1</b></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Photographs</span><b>4</b></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Maps</span><b>9</b></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Identification of Assignment</span><b>12</b></div>
+
+        <h3 style="color:#1a3a52; border-bottom:1px solid #ccc; padding-bottom:5px; margin-bottom:10px; margin-top:20px;">Property Analysis</h3>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Location</span><b>17</b></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Site Details</span><b>18</b></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Property Taxes & Assessment</span><b>23</b></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Land Use & Planning</span><b>24</b></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px;"><span>Description of Improvements</span><b>26</b></div>
+
+        </div>
+</div>
+
+<div class="page-sheet">
+    <div class="page-title">Introduction & Executive Summary</div>
+    <h2 style="font-size:12pt; color:#003B7E; text-transform:uppercase; margin-bottom:10px;">Property Overview</h2>
+
+    <div class="section-header">PROPERTY IDENTIFICATION</div>
+    <table>
+        <tr><td class="label-col">Name</td><td><span class="field-mapped" title="{{Subject_PropertyName}}">{{Subject_PropertyName}}</span></td></tr>
+        <tr><td class="label-col">Property</td><td><span class="field-mapped" title="{{Subject_Primary}}">{{Subject_Primary}}</span> - <span class="field-mapped" title="{{Subject_Subtype}}">{{Subject_Subtype}}</span></td></tr>
+        <tr><td class="label-col">Address</td><td><span class="field-mapped" title="{{Subject_Street}}">{{Subject_Street}}</span></td></tr>
+        <tr><td class="label-col">City, State, Zip</td><td><span class="field-mapped" title="{{Subject_City}}">{{Subject_City}}</span>, <span class="field-mapped" title="{{Subject_State}}">{{Subject_State}}</span> <span class="field-mapped" title="{{Subject_Zip}}">{{Subject_Zip}}</span></td></tr>
+        <tr><td class="label-col">Market / Submarket</td><td><span class="field-mapped" title="{{Subject_Market}}">{{Subject_Market}}</span> / <span class="field-mapped" title="{{Subject_Submarket}}">{{Subject_Submarket}}</span></td></tr>
+    </table>
+
+    <div class="section-header">SITE DESCRIPTION</div>
+    <table>
+        <tr><td class="label-col">Legal Description</td><td><span class="field-mapped" title="{{Report_Legal}}">{{Report_Legal}}</span></td></tr>
+        <tr><td class="label-col">Usable Area</td><td><span class="field-mapped" title="{{Subject_UsableSF}}">{{Subject_UsableSF}}</span> SF</td></tr>
+        <tr><td class="label-col">Total Area</td><td><span class="field-mapped" title="{{Subject_TotalSF}}">{{Subject_TotalSF}}</span> SF (<span class="field-mapped" title="{{Subject_TotalAcre}}">{{Subject_TotalAcre}}</span> AC)</td></tr>
+        <tr><td class="label-col">Zoning</td><td><span class="field-mapped" title="{{Subject_Zoning}}">{{Subject_Zoning}}</span> (<span class="field-mapped" title="{{Subject_ZoningCode}}">{{Subject_ZoningCode}}</span>)</td></tr>
+        <tr><td class="label-col">Shape</td><td><span class="field-mapped" title="{{Subject_Shape}}">{{Subject_Shape}}</span></td></tr>
+        <tr><td class="label-col">Topography</td><td><span class="field-mapped" title="{{Subject_Topography}}">{{Subject_Topography}}</span></td></tr>
+    </table>
+
+    <div class="section-header">IMPROVEMENT DESCRIPTION</div>
+    <table>
+        <tr><td class="label-col">Tenancy</td><td><span class="field-mapped" title="{{Subject_Tenancy}}">{{Subject_Tenancy}}</span></td></tr>
+        <tr><td class="label-col">NRA / GBA</td><td><span class="field-mapped" title="{{Subject_NRA}}">{{Subject_NRA}}</span> / <span class="field-mapped" title="{{Subject_GBA}}">{{Subject_GBA}}</span></td></tr>
+        <tr><td class="label-col">Units</td><td><span class="field-mapped" title="{{Subject_Units}}">{{Subject_Units}}</span></td></tr>
+        <tr><td class="label-col">Year Built</td><td><span class="field-mapped" title="{{Subject_YearBuilt}}">{{Subject_YearBuilt}}</span></td></tr>
+        <tr><td class="label-col">Parking</td><td><span class="field-mapped" title="{{Subject_Parking}}">{{Subject_Parking}}</span></td></tr>
+        <tr><td class="label-col">Amenities</td><td><span class="field-mapped" title="{{Subject_ProjectAmenities}}">{{Subject_ProjectAmenities}}</span></td></tr>
+    </table>
+
+    <div class="section-header">QUALITATIVE ANALYSIS</div>
+    <table>
+        <tr><td class="label-col">Site Quality</td><td><span class="field-mapped" title="{{Subject_SiteQuality}}">{{Subject_SiteQuality}}</span></td></tr>
+        <tr><td class="label-col">Building Quality</td><td><span class="field-mapped" title="{{Subject_Quality}}">{{Subject_Quality}}</span></td></tr>
+        <tr><td class="label-col">Building Condition</td><td><span class="field-mapped" title="{{Subject_Condition}}">{{Subject_Condition}}</span></td></tr>
+    </table>
+</div>
+
+<div class="page-sheet">
+    <div class="page-title">Introduction & Executive Summary (Cont.)</div>
+
+    <div class="section-header">HIGHEST & BEST USE</div>
+    <table>
+        <tr><td class="label-col">As Though Vacant</td><td><span class="field-mapped" title="{{Subject_HBUVacant}}">{{Subject_HBUVacant}}</span></td></tr>
+        <tr><td class="label-col">As Improved</td><td><span class="field-mapped" title="{{Subject_HBUImproved}}">{{Subject_HBUImproved}}</span></td></tr>
+    </table>
+
+    <div class="section-header">EXPOSURE & MARKETING TIME</div>
+    <table>
+        <tr><td class="label-col">Exposure Time</td><td><span class="field-mapped" title="{{Subject_ExposureTime}}">{{Subject_ExposureTime}}</span></td></tr>
+    </table>
+
+    <div class="section-header">INVESTMENT INDICATORS</div>
+    <table>
+        <tr><td class="label-col">Current Occupancy</td><td><span class="field-mapped" title="{{Subject_Occupancy}}">{{Subject_Occupancy}}</span></td></tr>
+        <tr><td class="label-col">Stabilized Occupancy</td><td><span class="field-mapped" title="{{Subject_OccupancyStabilized}}">{{Subject_OccupancyStabilized}}</span></td></tr>
+        <tr><td class="label-col">Expense Ratio</td><td><span class="field-mapped" title="{{IA_DirCap_ExpenseRatio}}">{{IA_DirCap_ExpenseRatio}}</span></td></tr>
+        <tr><td class="label-col">Cap Rate (OAR)</td><td><span class="field-mapped" title="{{IA_DirCap_CapRate1}}">{{IA_DirCap_CapRate1}}</span></td></tr>
+    </table>
+
+    <div class="section-header">VALUE CONCLUSION</div>
+    <table style="border: 2px solid #003B7E;">
+        <tr style="background:#003B7E; color:white; font-weight:bold;">
+            <td>VALUATION SCENARIO</td>
+            <td style="text-align:right;">VALUE</td>
+        </tr>
+        <tr>
+            <td>Cost Approach</td>
+            <td style="text-align:right;"><span class="field-mapped" title="{{Report_ValuationCost}}">{{Report_ValuationCost}}</span></td>
+        </tr>
+        <tr>
+            <td>Sales Comparison Approach</td>
+            <td style="text-align:right;"><span class="field-mapped" title="{{Report_ValuationSales}}">{{Report_ValuationSales}}</span></td>
+        </tr>
+        <tr>
+            <td>Income Approach</td>
+            <td style="text-align:right;"><span class="field-mapped" title="{{Report_ValuationIncome}}">{{Report_ValuationIncome}}</span></td>
+        </tr>
+        <tr style="background:#eee; font-weight:bold; border-top:2px solid #003B7E;">
+            <td>FINAL VALUE CONCLUSION</td>
+            <td style="text-align:right;"><span class="field-mapped" title="{{Report_Values}}">{{Report_Values}}</span></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

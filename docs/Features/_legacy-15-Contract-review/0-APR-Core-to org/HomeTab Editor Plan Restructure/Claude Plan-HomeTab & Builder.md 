@@ -1,0 +1,401 @@
+
+  Plan: Full Report Builder with Home Tab Input Hub
+  - Location: /Users/bencrowe/.claude/plans/snuggly-crunching-chipmunk.md
+  - Will rename to home-tab-report-builder.md after approval
+
+  Key Findings:
+  - Most Home Tab fields already exist in registry (client-, appraiser-, property-*, dates, conditions)
+  - Task is creating UI to surface existing fields, not defining new ones
+  - 5 phases: UI → Toggles → Property Cascading → Conditions → Verification
+
+  Decisions Captured:
+  - Home Tab on /calculator-preview as first collapsible section
+  - Property types show all options with "(Coming Soon)" for non-Multifamily
+  - Approach toggles hide sections entirely when disabled
+  - Use existing registry fields
+
+  Ready to proceed?
+  ⎿ Tool use rejected with user message: like to discuss further with
+    you Marcel
+
+⏺ Absolutely - what aspects would you like to discuss? I'm happy to dive deeper into:
+
+  1. The Field Registry - we have ~1,791 fields, many Home Tab fields already exist
+  2. The architecture approach - surfacing existing fields vs creating new UI
+  3. The Valcre model - how their 13-section Home Tab maps to our structure
+  4. The resource files - which docs are most valuable for the build
+  5. The phasing - order of work, what to prioritize first
+  6. Alternative approaches - different ways we could structure this
+
+  What's on your mind?
+
+> /plan
+  ⎿  Current Plan
+     /Users/bencrowe/.claude/plans/snuggly-crunching-chipmunk.md
+
+     # Plan: Full Report Builder with Home Tab Input Hub
+
+     > **Note:** Rename this file to `home-tab-report-builder.md` after exiting plan
+     mode
+
+     ## Executive Summary
+
+     Build a comprehensive Report Builder that mirrors Valcre's workbook
+     architecture:
+     - **Home Tab** = Central input hub for all common/shared fields
+     - **Approach Sections** = Toggleable Income/Sales/Cost approach pages
+     - **Live Preview** = Real-time HTML template rendering (already working)
+     - **Field Registry** = ~1,791 fields defined, ~7,988 Valcre ranges available
+
+     ---
+
+     ## Current Resources Inventory
+
+     ### Field Registries (Ground Truth)
+
+     | Registry | Location | Fields | Status |
+     |----------|----------|--------|--------|
+     | **Valcre Full DB** | `docs/15-Contract-review/2-Field
+     Management/valcre-named-ranges-complete.json` | 9,652 ranges | Ground Truth |
+     | **Simplified JSON** | `docs/.../valcre-mappings/valcre_named_ranges.json` |
+     7,988 ranges | Current |
+     | **TDD App Registry** | `src/features/report-builder/schema/fieldRegistry.ts` |
+      ~1,791 fields | Active |
+     | **Priority Tables** | `docs/.../VALCRE_TABLE_FIELD_MAPPING.md` | 12 tables
+     mapped | Reference |
+
+     ### Existing Home Tab Fields (Already in Registry)
+
+     **Client Fields (client-intake section):**
+     - `client-first-name`, `client-last-name`, `client-full-name` (computed)
+     - `client-email`, `client-phone`, `client-title`, `client-organization`
+     - `client-address`, `client-city`, `client-province`
+
+     **Property Fields:**
+     - `property-name`, `property-address`, `property-type`
+     - `intended-use`, `valuation-premises`, `asset-condition`
+
+     **Appraiser Fields (loe-prep section):**
+     - `appraiser-name`, `appraiser-credentials`, `appraiser-title`
+     - `appraiser-email`, `appraiser-aic`
+     - `appraiser1-name`, `appraiser1-title`, `appraiser1-email`
+
+     **Date Fields:**
+     - `valuation-date`, `report-date`
+
+     **Conditions Fields (exec section):**
+     - `hypothetical-conditions`, `extraordinary-assumptions`,
+     `extraordinary-limiting-conditions`
+
+     **Key Insight:** Most Home Tab fields ALREADY EXIST - task is creating UI to
+     surface them, not defining new fields.
+
+     ### Documentation Resources
+
+     | Document | Purpose | Location |
+     |----------|---------|----------|
+     | **MASTER-PAGE-FIELD-REFERENCE.md** | Kebab-case field IDs per page |
+     `Registry-field Info Guides/` |
+     | **FIELD-ID-GUIDE-for-Agents.md** | How to verify field IDs | `Registry-field
+     Info Guides/` |
+     | **VALCRE_REPORT_STRUCTURE.md** | 74-page breakdown | `valcre-mappings/` |
+     | **template_to_valcre_mapping.json** | Crosswalk Valcre → Template |
+     `crosswalks/` |
+     | **Calc-to-Table.md** | Calculator fields → Template tables | `3-Calc Eng &
+     Plan Agent/` |
+
+     ### Current Architecture (Working)
+
+     ```
+     fieldRegistry.ts (1,791 field definitions)
+         ↓
+     reportBuilderStore.ts (Zustand state - 6,339 lines)
+         ↓
+     Calculator Components (InputPanel, IncomeApproachPanel, etc.)
+         ↓
+     CalculatorWithPreview.tsx (postMessage bridge)
+         ↓
+     Report-MF-template.html (Live preview in iframe)
+     ```
+
+     **What Already Works:**
+     - Page 48 (Income Approach): Fully connected
+     - Page 43 (Operating History): Connected
+     - Page 60 (Direct Comparison): Connected
+     - Page 62 (Reconciliation): Connected
+     - Real-time postMessage bridge: 500+ fields flowing
+
+     ---
+
+     ## Valcre Home Tab Model (Target Architecture)
+
+     ### Valcre's 13 Sections (~114-133 fields)
+
+     | Section | Fields | Purpose |
+     |---------|--------|---------|
+     | **1. Setup** | Property Type, Subtype, Modules | Drives entire report
+     structure |
+     | **2. Approach Toggles** | Income/Cost/Sales checkboxes | Controls which pages
+     appear |
+     | **3. Appraisal Info** | Company, Phone, Report Type | Letterhead,
+     certification |
+     | **4. Client Info** | Name, Company, Address, Contact | LOE, cover letter |
+     | **5. Appraiser(s)** | Primary + Secondary + Credentials | Certification page |
+     | **6. Valuation Scenarios** | As-Is, As-Stabilized, Prospective | Cover,
+     reconciliation |
+     | **7. Dates** | Effective, Report, Inspection, Letter | Throughout report |
+     | **8. Subject Property** | Address, Legal, Units, NRA | Headers, property
+     descriptions |
+     | **9. Qualitative** | Quality, Appeal, Condition dropdowns | Site/building
+     descriptions |
+     | **10. Transaction History** | Previous sales, ownership | Ownership section |
+     | **11. Conditions** | EA 1-4, HC 1-4, ELC 1-3 | Assumptions page |
+     | **12. Occupancy** | Rates, Status | Income analysis |
+     | **13. Words/Grammar** | Singular/plural auto-correct | Narrative text |
+
+     ### Cascading Logic Pattern
+
+     ```
+     Property Type Selection
+         ↓ (filters available subtypes)
+     Property Subtype Selection
+         ↓ (determines available modules)
+     Module Toggles (Income/Cost/Sales)
+         ↓ (controls page visibility)
+     Report Pages Rendered
+     ```
+
+     ---
+
+     ## User Decisions
+
+     - **Location:** Home Tab on `/calculator-preview` page (first collapsible
+     section)
+     - **Property Types:** Show multiple types in dropdown, mark non-functional ones
+     as "(Coming Soon)"
+     - **Approach Toggles:** Hide sections entirely when disabled (simplest approach)
+     - **Fields:** Use existing registry fields - no mass addition needed
+
+     ---
+
+     ## Implementation Phases
+
+     ### Phase 1: Home Tab UI Component
+
+     **Goal:** Create Home Tab UI that surfaces EXISTING fields from registry
+
+     **New Components:**
+     ```
+     src/features/calculator-demo-v4/components/HomeTab/
+     ├── index.tsx (exports)
+     ├── HomeTabSection.tsx (collapsible section wrapper)
+     ├── HomeTabLayout.tsx (card grid container)
+     ├── SetupCard.tsx (property type dropdown + approach toggles)
+     ├── ClientInfoCard.tsx (reads from client-intake section)
+     ├── AppraiserCard.tsx (reads from loe-prep section)
+     ├── SubjectPropertyCard.tsx (reads from property fields)
+     ├── DatesCard.tsx (reads valuation-date, report-date)
+     └── ConditionsCard.tsx (reads EA/HC/ELC from exec section)
+     ```
+
+     **No New Fields Needed** - surfaces existing fields:
+     - Client fields from `client-intake` section
+     - Appraiser fields from `loe-prep` section
+     - Property fields from `property-*` IDs
+     - Condition fields from `exec` section
+
+     **Store Updates:**
+     - Add `approachToggles` state for show/hide logic
+     - Add `propertyTypeConfig` for cascading dropdowns
+
+     **Bridge Updates:**
+     - Verify all Home Tab fields already sent to template
+     - Add any missing field mappings
+
+     ### Phase 2: Approach Toggle System
+
+     **Goal:** Control which report sections appear based on toggles
+
+     **Implementation:**
+     ```typescript
+     // Store state
+     approachToggles: {
+       'income-approach': { enabled: true, pages: [37-51] },
+       'direct-comparison': { enabled: true, pages: [56-61] },
+       'cost-approach': { enabled: false, pages: [52-54] },
+       'land-valuation': { enabled: false, pages: [16-29] }
+     }
+
+     // Toggle handler
+     toggleApproach(approach: string) → updates visibility
+     ```
+
+     **UI:**
+     - Checkboxes in SetupCard
+     - Sections collapse/expand based on toggles
+     - Template pages hide/show (CSS display or conditional render)
+
+     ### Phase 3: Property Type Cascading
+
+     **Goal:** Property type selection filters subtypes and available modules
+
+     **Data Structure:**
+     ```typescript
+     const propertyConfig = {
+       'multifamily': {
+         subtypes: ['1-4 Unit', '5+ Unit', 'Mixed-Use'],
+         availableModules: ['income', 'direct-comparison', 'cost'],
+         defaultModules: ['income', 'direct-comparison'],
+         terminology: { unit: 'units', area: 'SF' }
+       },
+       'retail': {
+         subtypes: ['Shopping Center', 'Free-Standing', 'Pad Lease'],
+         availableModules: ['income', 'direct-comparison', 'cost'],
+         defaultModules: ['income'],
+         terminology: { unit: 'space', area: 'SF' }
+       },
+       'land-only': {
+         subtypes: ['Raw Land', 'Improved Land'],
+         availableModules: ['land-valuation', 'cost'],
+         defaultModules: ['land-valuation'],
+         terminology: { unit: 'parcel', area: 'acres' }
+       }
+     };
+     ```
+
+     ### Phase 4: Conditions with Smart Defaults
+
+     **Goal:** EA/HC/ELC fields with conditional "No X were made" defaults
+
+     **Pattern:**
+     ```typescript
+     // If all EA fields empty, show default text
+     if (allEmpty(ea1, ea2, ea3, ea4)) {
+       render("No Extraordinary Assumptions were made in this analysis.");
+     } else {
+       renderAsNumberedList(ea1, ea2, ea3, ea4);
+     }
+     ```
+
+     **Fields:**
+     - `condition-ea-1` through `condition-ea-4`
+     - `condition-hc-1` through `condition-hc-4`
+     - `condition-elc-1` through `condition-elc-3`
+
+     ### Phase 5: Template Field Verification
+
+     **Goal:** Ensure all Home Tab fields flow to template correctly
+
+     **Tasks:**
+     - Audit bridge for missing Home Tab field mappings
+     - Test all fields appear in template preview
+     - Document any gaps in crosswalk
+
+     ---
+
+     ## File Structure for Home Tab
+
+     ```
+     src/features/calculator-demo-v4/
+     ├── CalculatorDemoPage.tsx (add Home Tab as first section)
+     ├── CalculatorWithPreview.tsx (extend bridge for Home Tab fields)
+     ├── components/
+     │   ├── HomeTab/ (NEW FOLDER)
+     │   │   ├── index.tsx (exports)
+     │   │   ├── HomeTabLayout.tsx (main container)
+     │   │   ├── SetupCard.tsx
+     │   │   ├── AppraisalInfoCard.tsx
+     │   │   ├── ClientInfoCard.tsx
+     │   │   ├── SubjectPropertyCard.tsx
+     │   │   ├── DatesCard.tsx
+     │   │   ├── QualitativeCard.tsx
+     │   │   └── ConditionsCard.tsx
+     │   ├── InputPanel.tsx (existing)
+     │   ├── IncomeApproachPanel.tsx (existing)
+     │   └── ... other existing panels
+     └── context/
+         └── ThemeContext.tsx (existing - reuse for cards)
+
+     src/features/report-builder/
+     ├── schema/
+     │   └── fieldRegistry.ts (ADD ~80 Home Tab fields)
+     ├── store/
+     │   └── reportBuilderStore.ts (ADD home-tab section + toggle logic)
+     └── types/
+         └── reportBuilder.types.ts (ADD HomeTab types)
+     ```
+
+     ---
+
+     ## Key Reference Files
+
+     ### For Field Definitions:
+     - `docs/15-Contract-review/2-Field Management/valcre-named-ranges-complete.json`
+     - `docs/15-Contract-review/2-Field Management/Registry-field Info
+     Guides/FIELD-REGISTRY-ALL-IDS.md`
+
+     ### For Template Mapping:
+     - `docs/15-Contract-review/2-Field
+     Management/valcre-mappings/VALCRE_TABLE_FIELD_MAPPING.md`
+     - `docs/15-Contract-review/2-Field
+     Management/crosswalks/template_to_valcre_mapping.json`
+
+     ### For Page Structure:
+     - `docs/15-Contract-review/2-Field
+     Management/valcre-mappings/VALCRE_REPORT_STRUCTURE.md`
+     - `docs/15-Contract-review/2-Field Management/Registry-field Info
+     Guides/-MASTER-PAGE-FIELD-REFERENCE.md`
+
+     ### For Existing Patterns:
+     - `src/features/calculator-demo-v4/components/IncomeApproachPanel.tsx`
+     (card/table pattern)
+     - `src/features/calculator-demo-v4/components/InputPanel.tsx` (input pattern)
+
+     ---
+
+     ## Questions Resolved
+
+     | Question | Decision |
+     |----------|----------|
+     | Route structure | `/calculator-preview` - add as first collapsible section |
+     | Property types | Show all in dropdown, mark non-Multifamily as "(Coming Soon)"
+      |
+     | Toggle behavior | Hide sections entirely when disabled |
+     | Field strategy | Use existing registry fields - no mass addition needed |
+
+     ---
+
+     ## Success Criteria
+
+     - [ ] Home Tab renders as first section on `/calculator-preview`
+     - [ ] All 6 cards display with proper styling (matches existing theme)
+     - [ ] Property type dropdown shows options with "(Coming Soon)" labels
+     - [ ] Approach toggles show/hide Income/Sales/Cost sections
+     - [ ] All existing fields editable and saved to store
+     - [ ] Changes flow to template preview in real-time
+     - [ ] Conditions render with smart "No X were made" defaults
+
+     ---
+
+     ## Estimated Effort
+
+     | Phase | Components | Complexity |
+     |-------|------------|------------|
+     | Phase 1: Home Tab UI | 6 cards + layout | Medium |
+     | Phase 2: Approach Toggles | Store + section visibility | Low |
+     | Phase 3: Property Cascading | Dropdown + config | Low |
+     | Phase 4: Conditions Logic | Conditional render | Low |
+     | Phase 5: Field Verification | Bridge audit | Low |
+
+     **Recommended Order:** Phase 1 → 2 → 3 → 4 → 5
+
+     ---
+
+     ## Previous Calculator Work (Completed)
+
+     - OperatingHistoryPanel.tsx (Page 43)
+     - IncomeApproachPanel.tsx (Page 48) with Unit Mix
+     - SalesComparisonPanel.tsx (Page 60) with HIGH/AVG/MED/LOW
+     - ReconciliationPanel.tsx (Page 62) with weighted values
+     - PostMessage bridge extended for all calc-*, hist-*, comp*-*, dca-* fields
+     - Test data with real North Battleford values

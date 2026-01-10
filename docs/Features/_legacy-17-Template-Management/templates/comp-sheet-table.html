@@ -1,0 +1,140 @@
+<!-- COMPARABLE SHEET TABLE TEMPLATE -->
+<!-- Copy this template for Sales Summary Sheets (Comps 1-5) -->
+
+<style>
+    /* Comp Sheet Table Styling */
+    table.comp-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 7pt;
+        margin-bottom: 0;
+    }
+
+    table.comp-table th {
+        background-color: #003B7E;
+        color: white;
+        font-weight: bold;
+        font-size: 8pt;
+        padding: 3px 4px;
+        text-align: left;
+        border: none;
+    }
+
+    table.comp-table td {
+        padding: 2px 4px;
+        border: none;
+        vertical-align: top;
+        line-height: 1.3;
+    }
+
+    table.comp-table td.label {
+        font-weight: 600;
+        width: 45%;
+    }
+
+    table.comp-table tr.highlight {
+        font-weight: bold;
+    }
+</style>
+
+<!-- Sale Information Table -->
+<table class="comp-table">
+    <thead>
+        <tr><th colspan="2">Sale Information</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="label">Buyer</td>
+            <td>
+                <span
+                    class="field-mapped"
+                    data-field-id="{{comp1-buyer}}"
+                    title="{{comp1-buyer}}"
+                    data-sample="Epiphany Group"
+                >{{comp1-buyer}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="label">Seller</td>
+            <td>
+                <span
+                    class="field-mapped"
+                    data-field-id="{{comp1-seller}}"
+                    title="{{comp1-seller}}"
+                    data-sample="Macro Properties Toronto"
+                >{{comp1-seller}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="label">Sale Date</td>
+            <td>
+                <span
+                    class="field-mapped"
+                    data-field-id="{{comp1-sale-date}}"
+                    title="{{comp1-sale-date}}"
+                    data-sample="2024-06-17"
+                >{{comp1-sale-date}}</span>
+            </td>
+        </tr>
+        <tr class="highlight">
+            <td class="label">Sale Price</td>
+            <td>
+                <span
+                    class="field-mapped"
+                    data-field-id="{{comp1-sale-price}}"
+                    title="{{comp1-sale-price}}"
+                    data-sample="$3,117,383"
+                >{{comp1-sale-price}}</span>
+                |
+                <span
+                    class="field-mapped"
+                    data-field-id="{{comp1-price-per-unit}}"
+                    title="{{comp1-price-per-unit}}"
+                    data-sample="$129,891"
+                >{{comp1-price-per-unit}}</span>/Unit
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- Property Information Table -->
+<table class="comp-table">
+    <thead>
+        <tr><th colspan="2">Property</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="label">Type</td>
+            <td>
+                <span
+                    class="field-mapped"
+                    data-field-id="{{comp1-property-type}}"
+                    title="{{comp1-property-type}}"
+                    data-sample="Multi-family, Walk-Up"
+                >{{comp1-property-type}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="label">Units</td>
+            <td>
+                <span
+                    class="field-mapped"
+                    data-field-id="{{comp1-units}}"
+                    title="{{comp1-units}}"
+                    data-sample="24"
+                >{{comp1-units}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td class="label">Year Built</td>
+            <td>
+                <span
+                    class="field-mapped"
+                    data-field-id="{{comp1-year-built}}"
+                    title="{{comp1-year-built}}"
+                    data-sample="2000"
+                >{{comp1-year-built}}</span>
+            </td>
+        </tr>
+    </tbody>
+</table>

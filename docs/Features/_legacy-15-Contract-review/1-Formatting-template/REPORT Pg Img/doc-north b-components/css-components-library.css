@@ -1,0 +1,288 @@
+/**
+ * APR Dashboard - Reusable CSS Component Library
+ *
+ * Purpose: Centralized styles for common table headers, layouts, and UI patterns
+ * Used across all HTML pages converted from SVG
+ *
+ * Last Updated: December 16, 2025
+ */
+
+/* ============================================
+   TABLE STYLES - Blue Header Tables
+   ============================================ */
+
+/**
+ * Economic Indicators Table
+ * Usage: Tables with blue title bar + column headers + data rows
+ * Examples: Page 31 Saskatchewan Economic Indicators
+ */
+.economic-table {
+    font-size: 8pt;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.economic-table th.table-title {
+    background-color: rgb(0, 59, 126);
+    color: white;
+    padding: 8px 12px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 10pt;
+}
+
+.economic-table th {
+    background-color: rgb(0, 59, 126);
+    color: white;
+    padding: 4px 8px;
+    text-align: left;
+    font-weight: bold;
+}
+
+.economic-table td {
+    padding: 3px 8px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+    text-align: left;
+}
+
+.economic-table td:first-child {
+    font-weight: bold;
+    text-align: left;
+}
+
+/* HTML Structure Example:
+<table class="economic-table">
+    <tr class="table-title-row">
+        <th colspan="4" class="table-title">Saskatchewan Economic Indicators</th>
+    </tr>
+    <tr>
+        <th>Indicator</th>
+        <th>Estimate</th>
+        <th>Commentary</th>
+        <th>Source</th>
+    </tr>
+    <tr>
+        <td><span class="field-mapped" title="{{SK_Econ_Indicator_1_Name}}">{{SK_Econ_Indicator_1_Name}}</span></td>
+        <td><span class="field-mapped" title="{{SK_Econ_Indicator_1_Estimate}}">{{SK_Econ_Indicator_1_Estimate}}</span></td>
+        <td><span class="field-mapped" title="{{SK_Econ_Indicator_1_Commentary}}">{{SK_Econ_Indicator_1_Commentary}}</span></td>
+        <td><span class="field-mapped" title="{{SK_Econ_Indicator_1_Source}}">{{SK_Econ_Indicator_1_Source}}</span></td>
+    </tr>
+</table>
+*/
+
+/* ============================================
+   BLUE HEADER BAR VARIANTS
+   ============================================ */
+
+/**
+ * Full-width blue header bar (no table structure)
+ * Usage: Section headers that span full width
+ */
+.blue-header-bar {
+    background-color: rgb(0, 59, 126);
+    color: white;
+    padding: 8px 12px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 10pt;
+    margin: 20px 0 10px 0;
+}
+
+/**
+ * Blue header with left-aligned text
+ * Usage: Subsection headers within tables
+ */
+.blue-header-bar.left-align {
+    text-align: left;
+}
+
+/**
+ * Blue header with larger font
+ * Usage: Major section dividers
+ */
+.blue-header-bar.large {
+    font-size: 12pt;
+    padding: 10px 15px;
+}
+
+/* ============================================
+   FIELD MAPPING STYLES
+   ============================================ */
+
+/**
+ * Field-mapped spans
+ * Usage: Wraps dynamic field IDs for preview mode toggle
+ */
+.field-mapped {
+    background-color: #fff3cd;
+    border-bottom: 2px dotted #856404;
+    cursor: help;
+    transition: all 0.2s ease;
+}
+
+.field-mapped:hover {
+    background-color: #ffeaa7;
+}
+
+/* Preview mode active - hide field mapping indicators */
+body.preview-mode .field-mapped {
+    background-color: transparent;
+    border-bottom: none;
+    cursor: default;
+}
+
+/* ============================================
+   COMMON TABLE PATTERNS
+   ============================================ */
+
+/**
+ * Two-column key-value table
+ * Usage: Property details, specifications
+ */
+.key-value-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+.key-value-table td.label-col {
+    font-weight: bold;
+    width: 40%;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    background-color: #f8f9fa;
+}
+
+.key-value-table td.value-col {
+    width: 60%;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+}
+
+/* ============================================
+   PAGE LAYOUT STANDARDS
+   ============================================ */
+
+/**
+ * Standard page sheet
+ * Usage: Each page container in multi-page HTML
+ */
+.page-sheet {
+    width: 8.5in;
+    min-height: 11in;
+    padding: 0.75in;
+    padding-bottom: 180px;
+    margin: 0 auto 30px auto;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+/**
+ * Page footer
+ * Usage: Bottom of each page with page number and file info
+ */
+.page-footer {
+    position: absolute;
+    bottom: 0.5in;
+    left: 0.75in;
+    right: 0.75in;
+    font-size: 8pt;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-footer .page-num {
+    font-weight: bold;
+    color: rgb(0, 59, 126);
+}
+
+.footer-accent {
+    height: 3px;
+    background: linear-gradient(to right, rgb(0, 59, 126), transparent);
+    flex-grow: 1;
+    margin-left: 20px;
+}
+
+/* ============================================
+   TYPOGRAPHY STANDARDS
+   ============================================ */
+
+/**
+ * Header 1 - Major sections
+ */
+.Header1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 14.6pt;
+    margin-bottom: 27px;
+}
+
+/**
+ * Header 2 - Subsections
+ */
+.Header2 {
+    font-family: 'Helvetica', Arial, sans-serif;
+    font-size: 14.6pt;
+    color: rgb(0, 59, 126);
+    margin-bottom: 23px;
+}
+
+/**
+ * Subheader 1 - Minor sections
+ */
+.Subheader1 {
+    font-family: 'Helvetica', Arial, sans-serif;
+    font-size: 11.5pt;
+    margin-bottom: 14.5px;
+}
+
+/**
+ * Standard paragraph
+ */
+p {
+    font-family: 'Helvetica', Arial, sans-serif;
+    font-size: 10.4pt;
+    margin-bottom: 14.2px;
+    line-height: 1.36;
+}
+
+/* ============================================
+   COLOR PALETTE
+   ============================================ */
+
+:root {
+    --apr-blue: rgb(0, 59, 126);
+    --apr-blue-hex: #003B7E;
+    --apr-light-gray: #f8f9fa;
+    --apr-border-gray: #ddd;
+    --apr-text-gray: #666;
+    --apr-field-highlight: #fff3cd;
+    --apr-field-border: #856404;
+}
+
+/* ============================================
+   USAGE NOTES
+   ============================================
+
+   1. Import this file in PREVIEW-Master.html:
+      <link rel="stylesheet" href="css-components-library.css">
+
+   2. Replace page-specific styles with component classes
+
+   3. For new table headers:
+      - Use .economic-table class
+      - Add table-title row with colspan
+      - Follows consistent blue header pattern
+
+   4. Field Mapping Pattern:
+      <span class="field-mapped" title="{{Field_ID}}">{{Field_ID}}</span>
+
+   5. Preview Mode Toggle:
+      JavaScript replaces field IDs with sample data when toggle is ON
+
+   ============================================ */

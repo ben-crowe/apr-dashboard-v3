@@ -1,0 +1,116 @@
+================================================================================
+        INCOME CAPITALIZATION APPROACH - 14 PAGE STRUCTURE
+================================================================================
+
+📄 PAGE 1: INCOME APPROACH METHODOLOGY
+   ├── Income Approach overview
+   ├── Direct Capitalization Method explanation
+   └── Fields: income-approach-methodology, direct-cap-methodology
+
+   🔹 PAGE BREAK 🔹
+
+📄 PAGES 2-3: RENTAL ANALYSIS
+   ├── Multi-Family Market Rent Survey Analysis
+   ├── Rental Comparables analysis
+   ├── Conclusion of Market Rent
+   └── Fields: income-market-rent-survey, income-rent-comparables, 
+       income-rent-conclusion
+
+   🔹 PAGE BREAK 🔹
+
+📄 PAGE 4: UNIT MIX & RENTAL INCOME
+   ├── Unit breakdown table
+   ├── Rental income analysis
+   ├── Total Rental Revenue table
+   └── Fields: income-unit-mix, income-rental-analysis, 
+       potential-gross-income, other-income
+
+   🔹 PAGE BREAK 🔹
+
+📄 PAGE 5: VACANCY & COLLECTION LOSS
+   ├── Vacancy analysis narrative
+   ├── Market vacancy data
+   ├── Vacancy allowance table
+   └── Fields: income-vacancy-analysis, income-market-vacancy,
+       vacancy-percent, vacancy-amount
+
+📄 PAGE 6: EFFECTIVE GROSS INCOME
+   ├── EGI summary narrative
+   ├── EGI calculation table
+   └── Fields: income-egi-summary, effective-gross-income
+
+   🔹 PAGE BREAK 🔹
+
+📄 PAGES 7-9: OPERATING EXPENSES (3 PAGES)
+   ├── Operating expenses overview
+   ├── MANAGEMENT (with narrative & table)
+   │   └── Fields: income-management-narrative, management-fee, 
+   │       management-percent
+   ├── PROPERTY TAXES (with narrative & table)
+   │   └── Fields: income-property-tax-narrative, property-taxes,
+   │       property-taxes-percent
+   ├── 🔹 PAGE BREAK 🔹
+   ├── INSURANCE (with narrative & table)
+   │   └── Fields: income-insurance-narrative, insurance, insurance-percent
+   ├── REPAIRS & MAINTENANCE (with narrative & table)
+   │   └── Fields: income-repairs-narrative, repairs-maintenance,
+   │       repairs-maintenance-percent
+   ├── UTILITIES (with narrative & table)
+   │   └── Fields: income-utilities-narrative, utilities, utilities-percent
+   ├── 🔹 PAGE BREAK 🔹
+   ├── LANDSCAPING (with table)
+   ├── PAYROLL/ON-SITE MANAGEMENT (narrative)
+   │   └── Fields: income-payroll-narrative
+   ├── OTHER EXPENSES (narrative)
+   │   └── Fields: income-other-expenses
+   ├── RESERVES FOR REPLACEMENT (narrative)
+   │   └── Fields: income-reserves-narrative
+   └── Additional expenses table (advertising, legal, misc)
+
+   🔹 PAGE BREAK 🔹
+
+📄 PAGE 10: NET OPERATING INCOME
+   ├── NOI summary narrative
+   ├── Complete Pro Forma Operating Statement
+   └── Fields: income-noi-summary, net-operating-income, noi-percent
+
+   🔹 PAGE BREAK 🔹
+
+📄 PAGES 11-12: CAPITALIZATION RATE (2 PAGES)
+   ├── Cap Rate Selection overview
+   ├── ALTERNATIVE INVESTMENT RATES
+   │   └── Fields: income-alternative-investments
+   ├── INVESTMENT ACTIVITY AND TRENDS
+   │   └── Fields: income-investment-trends
+   ├── 🔹 PAGE BREAK 🔹
+   ├── CAP RATE MARKET SURVEY
+   │   └── Fields: income-cap-rate-survey, cap-rate-analysis
+   ├── BAND OF INVESTMENT (optional)
+   │   └── Fields: income-band-investment
+   ├── CAP RATE CONCLUSION
+   │   └── Fields: income-cap-rate-conclusion, cap-rate
+   └── Concluded Cap Rate table
+
+   🔹 PAGE BREAK 🔹
+
+📄 PAGE 13: DIRECT CAPITALIZATION
+   ├── Direct capitalization methodology
+   ├── Calculation table (NOI ÷ Cap Rate = Value)
+   ├── Indicated value statement
+   └── Fields: noi-value, cap-rate, indicated-value
+
+   🔹 PAGE BREAK 🔹
+
+📄 PAGE 14: INCOME APPROACH CONCLUSION
+   ├── Income Approach conclusion narrative
+   ├── Income Approach Summary table
+   ├── Final value conclusion with context
+   └── Fields: income-approach-conclusion
+
+================================================================================
+TOTALS:
+- Pages: 14
+- Page Breaks: 9
+- Field References: 26 income-* fields + 18 calc-* fields = 44 total
+- Lines of Code: 709 lines
+================================================================================

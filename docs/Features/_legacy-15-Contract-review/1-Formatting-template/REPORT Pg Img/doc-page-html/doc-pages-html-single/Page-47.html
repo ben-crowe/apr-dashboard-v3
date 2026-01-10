@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appraisal Report - Page 47</title>
+    <link rel="stylesheet" href="master-appraisal-styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: 8.5in 11in;
+            margin: 0.5in;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11px;
+            line-height: 1.4;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .page {
+            width: 8.5in;
+            height: 11in;
+            background: white;
+            margin: 10px auto;
+            padding: 0.5in;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            page-break-after: always;
+        }
+
+        h1 {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid #0066cc;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 13px;
+            font-weight: bold;
+            color: #0066cc;
+            margin-top: 12px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            margin-bottom: 10px;
+            line-height: 1.5;
+            text-align: justify;
+        }
+
+        .table-container {
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            margin-bottom: 12px;
+        }
+
+        table thead {
+            background-color: #003d7a;
+            color: white;
+            font-weight: bold;
+        }
+
+        table thead th {
+            padding: 6px 4px;
+            text-align: left;
+            border: 1px solid #003d7a;
+            vertical-align: middle;
+            font-size: 9px;
+        }
+
+        table tbody td {
+            padding: 5px 4px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        .data-row-label {
+            font-weight: bold;
+            background-color: #e8e8e8;
+            width: 20%;
+        }
+
+        .numeric {
+            text-align: right;
+        }
+
+        .chart-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .chart-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 200px;
+            margin: 20px 0;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .chart-bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 15px;
+        }
+
+        .chart-bar {
+            width: 40px;
+            background-color: #1a3d66;
+            margin-bottom: 5px;
+        }
+
+        .chart-label {
+            font-size: 9px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+            font-size: 9px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            background-color: #1a3d66;
+        }
+
+        .chart-axis-label {
+            font-size: 9px;
+            margin-top: 5px;
+        }
+
+        .summary-text {
+            font-size: 10px;
+            margin-top: 12px;
+            line-height: 1.5;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 0.25in;
+            left: 0.5in;
+            right: 0.5in;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 9px;
+            color: #666;
+            border-top: 1px solid #ccc;
+            padding-top: 8px;
+        }
+
+        .footer-left {
+            flex: 1;
+        }
+
+        .footer-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .page {
+            position: relative;
+            padding-bottom: 0.5in;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .page {
+                margin: 0;
+                box-shadow: none;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <h1>Valuation & Conclusions</h1>
+
+        <h2>Capitalization Rate</h2>
+
+        <p>In this section, a capitalization rate for the subject is developed based upon the comparable properties in the following table.</p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th colspan="6" style="text-align: center; background-color: #003d7a; color: white; padding: 8px;">COMPARABLE SALES</th>
+                    </tr>
+                    <tr>
+                        <th>Data Point</th>
+                        <th>COMP 1</th>
+                        <th>COMP 2</th>
+                        <th>COMP 3</th>
+                        <th>COMP 4</th>
+                        <th>COMP 5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="data-row-label">Name</td>
+                        <td>Heritage House</td>
+                        <td>Parkside View Apartments</td>
+                        <td>Woodland Estates</td>
+                        <td>Parkside Flats 1</td>
+                        <td>Parkside Flats 2</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">Address</td>
+                        <td>1501 102 St</td>
+                        <td>1070-1092 Ferguson Ave</td>
+                        <td>1901 Pearson Ave</td>
+                        <td>1030 Parr Hill Dr</td>
+                        <td>1030 Parr Hill Dr</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">City</td>
+                        <td>North Battleford</td>
+                        <td>North Battleford</td>
+                        <td>North Battleford</td>
+                        <td>Martensville</td>
+                        <td>Martensville</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">Province</td>
+                        <td>SK</td>
+                        <td>SK</td>
+                        <td>SK</td>
+                        <td>SK</td>
+                        <td>SK</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">NRA (SF)</td>
+                        <td class="numeric">22,754</td>
+                        <td class="numeric">33,309</td>
+                        <td class="numeric">15,000</td>
+                        <td class="numeric">47,916</td>
+                        <td class="numeric">52,708</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label"># Units</td>
+                        <td class="numeric">24</td>
+                        <td class="numeric">45</td>
+                        <td class="numeric">24</td>
+                        <td class="numeric">47</td>
+                        <td class="numeric">52</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">Year Built</td>
+                        <td class="numeric">2006</td>
+                        <td class="numeric">2002</td>
+                        <td class="numeric">1980</td>
+                        <td class="numeric">2016</td>
+                        <td class="numeric">2019</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">Sale Date</td>
+                        <td>2024-06-17</td>
+                        <td>2024-04-17</td>
+                        <td>2024-05-27</td>
+                        <td>2023-05-19</td>
+                        <td>2023-05-19</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">Sale Price</td>
+                        <td class="numeric">$3,750,000</td>
+                        <td class="numeric">$2,650,000</td>
+                        <td class="numeric">$1,500,000</td>
+                        <td class="numeric">$3,650,000</td>
+                        <td class="numeric">$4,200,000</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">Price/SF</td>
+                        <td class="numeric">$137</td>
+                        <td class="numeric">$137</td>
+                        <td class="numeric">$137</td>
+                        <td class="numeric">$194</td>
+                        <td class="numeric">$286</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">NOI/Unit</td>
+                        <td class="numeric">$129,891</td>
+                        <td class="numeric">$102,019</td>
+                        <td class="numeric">$82,827</td>
+                        <td class="numeric">$189,400</td>
+                        <td class="numeric">$214,375</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">NOI/Unit</td>
+                        <td class="numeric">$7,780.02</td>
+                        <td class="numeric">$6,111.00</td>
+                        <td class="numeric">$5,129.00</td>
+                        <td class="numeric">$12,389.00</td>
+                        <td class="numeric">$12,891.00</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">Capitalization Rate</td>
+                        <td class="numeric">5.98%</td>
+                        <td class="numeric">5.98%</td>
+                        <td class="numeric">5.99%</td>
+                        <td class="numeric">6.24%</td>
+                        <td class="numeric">5.92%</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">AVERAGE</td>
+                        <td colspan="5" class="numeric">6.03%</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">HIGH</td>
+                        <td colspan="5" class="numeric">6.24%</td>
+                    </tr>
+                    <tr>
+                        <td class="data-row-label">LOW</td>
+                        <td colspan="5" class="numeric">5.92%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="chart-container">
+            <h3 style="font-size: 11px; margin-bottom: 15px;">NOI & CAPITALIZATION RATE</h3>
+
+            <div style="display: flex; align-items: flex-end; justify-content: center; height: 220px; margin: 20px 0; position: relative;">
+                <!-- Y-axis labels -->
+                <div style="position: absolute; left: 0; top: 0; height: 220px; display: flex; flex-direction: column; justify-content: space-between; font-size: 9px; width: 40px; text-align: right; padding-right: 10px;">
+                    <span>$14,000</span>
+                    <span>$12,000</span>
+                    <span>$10,000</span>
+                    <span>$8,000</span>
+                    <span>$6,000</span>
+                    <span>$4,000</span>
+                    <span>$2,000</span>
+                    <span>$0</span>
+                </div>
+
+                <!-- Bars -->
+                <div style="display: flex; align-items: flex-end; justify-content: center; gap: 20px; margin-left: 50px; flex: 1; height: 100%;">
+                    <div style="display: flex; flex-direction: column; align-items: center; height: 100%;">
+                        <div style="width: 35px; height: 135px; background-color: #1a3d66;"></div>
+                        <span style="font-size: 9px; font-weight: bold; margin-top: 5px;">COMP 1</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; height: 100%;">
+                        <div style="width: 35px; height: 103px; background-color: #1a3d66;"></div>
+                        <span style="font-size: 9px; font-weight: bold; margin-top: 5px;">COMP 2</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; height: 100%;">
+                        <div style="width: 35px; height: 83px; background-color: #1a3d66;"></div>
+                        <span style="font-size: 9px; font-weight: bold; margin-top: 5px;">COMP 3</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; height: 100%;">
+                        <div style="width: 35px; height: 189px; background-color: #1a3d66;"></div>
+                        <span style="font-size: 9px; font-weight: bold; margin-top: 5px;">COMP 4</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; height: 100%;">
+                        <div style="width: 35px; height: 214px; background-color: #1a3d66;"></div>
+                        <span style="font-size: 9px; font-weight: bold; margin-top: 5px;">COMP 5</span>
+                    </div>
+                </div>
+
+                <!-- Right side cap rates -->
+                <div style="position: absolute; right: 0; top: 0; height: 220px; display: flex; flex-direction: column; justify-content: space-between; font-size: 9px; width: 50px; padding-left: 10px;">
+                    <span style="font-size: 8px;">6.3%</span>
+                    <span style="font-size: 8px;">6.3%</span>
+                    <span style="font-size: 8px;">6.2%</span>
+                    <span style="font-size: 8px;">6.2%</span>
+                    <span style="font-size: 8px;">6.1%</span>
+                    <span style="font-size: 8px;">6.0%</span>
+                    <span style="font-size: 8px;">6.0%</span>
+                    <span style="font-size: 8px;">5.9%</span>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: center; gap: 30px; margin-top: 20px; font-size: 9px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 15px; height: 15px; background-color: #1a3d66;"></div>
+                    <span>NOI/Unit</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-weight: bold;">6.3%</span>
+                    <span>CAP</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="summary-text">
+            The comparable capitalization rates indicate a range from 5.92% to 6.24% with an average of 6.03%.
+        </div>
+
+        <div class="footer">
+            <div class="footer-left">
+                47    1101, 1121 109 St, North Battleford, Saskatchewan | File VAL251012 - 1
+            </div>
+            <div class="footer-right">
+                <div style="width: 80px; height: 20px; background: linear-gradient(to right, #1a3d66 50%, #0099cc 50%);"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+Page,Field_ID,Display_Value,Context,Occurrences
+46,Bond_Yield_10yr,3.2%,Investment Activity and Trends paragraph (second occurrence),1
+48,Subject_City,North Battleford,First paragraph - market analysis,1
+48,COMP_4_City,Martensville,First paragraph - market analysis,1
+48,COMP_4_City,Martensville,Second paragraph - property comparison,1
+48,COMP_4_Name,Parkside Flats 1,Second paragraph - newer properties,1
+48,COMP_5_Name,Parkside Flats 2,Second paragraph - newer properties,1
+48,Subject_City,North Battleford,Second paragraph - older assets location,1
+48,COMP_1_Name,Heritage House,Second paragraph - older assets example,1
+48,COMP_2_Name,Parkside View Apartments,Second paragraph - older assets example,1
+48,CapRate_Range,5.92% to 6.24%,Second paragraph - cap rate range narrative,1
+48,Subject_City,North Battleford,Third paragraph - subject location context,1

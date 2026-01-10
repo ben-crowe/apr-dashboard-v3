@@ -1,0 +1,272 @@
+// EXPANDED renderZoneSection function - READY TO COPY/PASTE
+// Replace lines 428-522 in reportHtmlTemplate.ts with this code
+
+  // Helper function to render the ZONE section with EXPANDED custom template (2-3 pages)
+  const renderZoneSection = (section: ReportSection): string => {
+    // Get field values from subsections
+    const zoningClassification = getFieldValue(section, 'zoning-classification');
+    const zoningDescription = getFieldValue(section, 'zoning-description');
+    const permittedUses = getFieldValue(section, 'permitted-uses');
+    const conditionalUses = getFieldValue(section, 'zone-conditional-uses');
+    const maxHeight = getFieldValue(section, 'max-height');
+    const maxDensity = getFieldValue(section, 'max-density');
+    const minSetback = getFieldValue(section, 'zone-setbacks');
+    const minLotSize = getFieldValue(section, 'zone-minimum-lot-size');
+    const parkingRequirements = getFieldValue(section, 'parking-requirements');
+    const zoningConformance = getFieldValue(section, 'zoning-conformance');
+    const zoningConclusion = getFieldValue(section, 'zoning-conclusion');
+    const zoningMap = getFieldValue(section, 'zoning-map');
+
+    // Parse permitted uses if it's a comma-separated string or array
+    let permittedUsesList: string[] = [];
+    if (permittedUses) {
+      if (typeof permittedUses === 'string') {
+        permittedUsesList = permittedUses.split(',').map(use => use.trim()).filter(use => use);
+      } else if (Array.isArray(permittedUses)) {
+        permittedUsesList = permittedUses;
+      }
+    }
+
+    // Parse conditional uses
+    let conditionalUsesList: string[] = [];
+    if (conditionalUses) {
+      if (typeof conditionalUses === 'string') {
+        conditionalUsesList = conditionalUses.split(',').map(use => use.trim()).filter(use => use);
+      } else if (Array.isArray(conditionalUses)) {
+        conditionalUsesList = conditionalUses;
+      }
+    }
+
+    // Check if we have zoning map images
+    let zoningMapUrls: string[] = [];
+    if (zoningMap) {
+      if (typeof zoningMap === 'string') {
+        zoningMapUrls = [zoningMap];
+      } else if (Array.isArray(zoningMap)) {
+        zoningMapUrls = zoningMap;
+      }
+    }
+
+    const hasDevelopmentStandards = maxHeight || maxDensity || minSetback || minLotSize || parkingRequirements;
+
+    return `
+    <div class="section">
+      <h2 class="section-title">Land Use & Planning</h2>
+
+      <!-- 1. LAND USE OVERVIEW (0.5 page) -->
+      ${zoningDescription || zoningClassification ? `
+        <h3 class="subsection-title">Land Use Overview</h3>
+        ${zoningClassification ? `
+          <p class="site-narrative-text" style="margin-bottom: 1rem;">
+            <strong>Zoning Designation:</strong> ${zoningClassification}
+          </p>
+        ` : ''}
+        ${zoningDescription ? `
+          <p class="site-narrative-text" style="line-height: 1.8;">
+            ${zoningDescription}
+          </p>
+        ` : ''}
+        <div style="page-break-after: avoid; margin-bottom: 2rem;"></div>
+      ` : ''}
+
+      <!-- 2. ZONING CLASSIFICATION TABLE (0.5 page) -->
+      ${zoningClassification || permittedUsesList.length > 0 || zoningDescription ? `
+        <h3 class="subsection-title" style="margin-top: 2rem;">Zoning Classification</h3>
+        <p class="site-narrative-text" style="margin-bottom: 1rem;">
+          The following table summarizes the zoning designation and permitted uses for the subject property:
+        </p>
+
+        <table class="site-table" style="margin-top: 1rem; margin-bottom: 2rem;">
+          <thead>
+            <tr style="background-color: #f3f4f6;">
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb;">Classification</th>
+              <th style="padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb;">Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${zoningClassification ? `
+              <tr>
+                <td class="site-table-label" style="vertical-align: top; width: 35%;">Current Zoning</td>
+                <td class="site-table-value">${zoningClassification}</td>
+              </tr>
+            ` : ''}
+            ${zoningDescription ? `
+              <tr>
+                <td class="site-table-label" style="vertical-align: top;">Zoning Description</td>
+                <td class="site-table-value">${zoningDescription}</td>
+              </tr>
+            ` : ''}
+            ${permittedUsesList.length > 0 ? `
+              <tr>
+                <td class="site-table-label" style="vertical-align: top;">Permitted Uses</td>
+                <td class="site-table-value">
+                  <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
+                    ${permittedUsesList.map(use => `<li>${use}</li>`).join('')}
+                  </ul>
+                </td>
+              </tr>
+            ` : permittedUses ? `
+              <tr>
+                <td class="site-table-label" style="vertical-align: top;">Permitted Uses</td>
+                <td class="site-table-value">${permittedUses}</td>
+              </tr>
+            ` : ''}
+            ${conditionalUsesList.length > 0 ? `
+              <tr>
+                <td class="site-table-label" style="vertical-align: top;">Conditional Uses</td>
+                <td class="site-table-value">
+                  <ul style="margin: 0; padding-left: 1.5rem; line-height: 1.8;">
+                    ${conditionalUsesList.map(use => `<li>${use}</li>`).join('')}
+                  </ul>
+                </td>
+              </tr>
+            ` : conditionalUses ? `
+              <tr>
+                <td class="site-table-label" style="vertical-align: top;">Conditional Uses</td>
+                <td class="site-table-value">${conditionalUses}</td>
+              </tr>
+            ` : ''}
+          </tbody>
+        </table>
+        <div style="page-break-after: avoid; margin-bottom: 2rem;"></div>
+      ` : ''}
+
+      <!-- PAGE BREAK AFTER CLASSIFICATION TABLE -->
+      <div style="page-break-before: auto; margin-top: 2rem;"></div>
+
+      <!-- 3. ZONING COMPLIANCE ANALYSIS (0.5 page) -->
+      ${hasDevelopmentStandards || zoningConformance ? `
+        <h3 class="subsection-title" style="margin-top: 2rem;">Zoning Compliance Analysis</h3>
+
+        ${zoningConformance ? `
+          <p class="site-narrative-text" style="margin-bottom: 1.5rem;">
+            <strong>Conformance Status:</strong> ${zoningConformance}
+          </p>
+        ` : ''}
+
+        ${hasDevelopmentStandards ? `
+          <p class="site-narrative-text" style="margin-bottom: 1rem;">
+            The subject property's compliance with zoning requirements is analyzed below:
+          </p>
+
+          <table class="site-table" style="margin-top: 1rem; margin-bottom: 2rem;">
+            <thead>
+              <tr style="background-color: #f3f4f6;">
+                <th style="padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb; width: 40%;">Zoning Requirement</th>
+                <th style="padding: 0.75rem; text-align: left; font-weight: 600; border-bottom: 2px solid #e5e7eb;">Standard</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${minLotSize ? `
+                <tr>
+                  <td class="site-table-label">Minimum Lot Size</td>
+                  <td class="site-table-value">${minLotSize}</td>
+                </tr>
+              ` : ''}
+              ${minSetback ? `
+                <tr>
+                  <td class="site-table-label">Setback Requirements</td>
+                  <td class="site-table-value">${minSetback}</td>
+                </tr>
+              ` : ''}
+              ${maxHeight ? `
+                <tr>
+                  <td class="site-table-label">Maximum Height</td>
+                  <td class="site-table-value">${maxHeight}</td>
+                </tr>
+              ` : ''}
+              ${maxDensity ? `
+                <tr>
+                  <td class="site-table-label">Maximum Density</td>
+                  <td class="site-table-value">${maxDensity}</td>
+                </tr>
+              ` : ''}
+              ${parkingRequirements ? `
+                <tr>
+                  <td class="site-table-label">Parking Requirements</td>
+                  <td class="site-table-value">${parkingRequirements}</td>
+                </tr>
+              ` : ''}
+            </tbody>
+          </table>
+        ` : ''}
+
+        <p class="site-narrative-text" style="line-height: 1.8; margin-bottom: 2rem;">
+          ${zoningConformance === 'Legally Conforming' || zoningConformance?.toLowerCase().includes('conforming')
+            ? 'Based on the analysis of the current zoning requirements, the subject property is in compliance with applicable development standards. The current use is a legally permitted use under the current zoning designation.'
+            : zoningConformance
+              ? `The subject property's conformance status is: ${zoningConformance}. Additional details regarding any non-conforming aspects are detailed in the zoning conclusion below.`
+              : 'The subject property's zoning compliance has been evaluated against the applicable municipal bylaws and development standards.'}
+        </p>
+        <div style="page-break-after: avoid; margin-bottom: 2rem;"></div>
+      ` : ''}
+
+      <!-- 4. FUTURE LAND USE (0.5 page) -->
+      <h3 class="subsection-title" style="margin-top: 2rem;">Future Land Use</h3>
+      <p class="site-narrative-text" style="line-height: 1.8; margin-bottom: 1rem;">
+        The subject property's current zoning and permitted uses align with the municipality's long-term planning objectives. Based on review of available planning documents, no immediate zoning changes are anticipated for this area.
+      </p>
+
+      ${zoningClassification ? `
+        <table class="site-table" style="margin-top: 1rem; margin-bottom: 2rem;">
+          <tbody>
+            <tr>
+              <td class="site-table-label" style="width: 40%;">Official Community Plan Designation</td>
+              <td class="site-table-value">${zoningClassification.includes('Residential') ? 'Residential' : zoningClassification.includes('Commercial') ? 'Commercial' : zoningClassification.includes('Industrial') ? 'Industrial' : 'Mixed Use'}</td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Future Development Potential</td>
+              <td class="site-table-value">
+                ${permittedUses || zoningDescription
+                  ? 'The property retains development potential consistent with its current zoning designation. Additional development or intensification would be subject to municipal approval and compliance with current bylaws.'
+                  : 'Development potential subject to municipal regulations and approval.'}
+              </td>
+            </tr>
+            <tr>
+              <td class="site-table-label">Anticipated Zoning Changes</td>
+              <td class="site-table-value">No zoning change is believed to be imminent based on current municipal planning initiatives.</td>
+            </tr>
+          </tbody>
+        </table>
+      ` : `
+        <p class="site-narrative-text" style="line-height: 1.8; margin-bottom: 2rem;">
+          The property is anticipated to remain under its current zoning designation. Future development potential exists within the parameters of the existing zoning framework, subject to municipal approval processes and compliance with applicable regulations.
+        </p>
+      `}
+      <div style="page-break-after: avoid; margin-bottom: 2rem;"></div>
+
+      <!-- PAGE BREAK BEFORE CONCLUSION -->
+      <div style="page-break-before: auto; margin-top: 2rem;"></div>
+
+      <!-- 5. ZONING CONCLUSION (0.5 page) -->
+      ${zoningConclusion ? `
+        <h3 class="subsection-title" style="margin-top: 2rem;">Zoning Conclusion</h3>
+        <p class="site-narrative-text" style="line-height: 1.8; margin-bottom: 2rem;">
+          ${zoningConclusion}
+        </p>
+      ` : `
+        <h3 class="subsection-title" style="margin-top: 2rem;">Zoning Conclusion</h3>
+        <p class="site-narrative-text" style="line-height: 1.8; margin-bottom: 2rem;">
+          Based on the foregoing analysis, the subject property appears to be a legally conforming use of the subject site under the current zoning designation. The property's existing improvements and use align with the permitted uses outlined in the applicable zoning bylaw. No significant zoning impediments or non-conforming aspects were identified that would adversely impact the property's marketability or highest and best use.
+        </p>
+      `}
+
+      <!-- ZONING MAP (if available) -->
+      ${zoningMapUrls.length > 0 ? `
+        <h3 class="subsection-title" style="margin-top: 2rem;">Zoning Map</h3>
+        <div style="margin-top: 1rem; margin-bottom: 2rem;">
+          ${zoningMapUrls.map(url => `
+            <div style="border: 1px solid #e5e7eb; border-radius: 4px; overflow: hidden; margin-bottom: 1rem;">
+              <img src="${url}" alt="Zoning Map" style="width: 100%; height: auto; max-height: 600px; object-fit: contain;" />
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+
+      ${!zoningClassification && !zoningDescription && !permittedUses && !hasDevelopmentStandards && !zoningConformance && !zoningConclusion ? `
+        <div class="empty-state">No zoning information provided</div>
+      ` : ''}
+    </div>
+    `;
+  };
+

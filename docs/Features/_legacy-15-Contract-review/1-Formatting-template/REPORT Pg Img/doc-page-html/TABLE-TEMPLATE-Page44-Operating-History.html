@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Template: Operating History Table (Page 44)</title>
+    <style>
+        /* COMPACT TABLE TEMPLATE - Based on Page 44 */
+
+        table.compact-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 8pt;
+            margin-bottom: 8px;
+        }
+
+        table.compact-table td,
+        table.compact-table th {
+            padding: 3px 6px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+
+        table.compact-table th {
+            background-color: #f0f0f0;
+            color: #333;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .table-section-header {
+            background-color: #003B7E;
+            color: white;
+            font-weight: bold;
+            font-size: 9pt;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            text-align: center;
+        }
+
+        .text-right { text-align: right; }
+        .negative { color: #c0392b; }
+    </style>
+</head>
+<body>
+    <h1>Operating History Table Template</h1>
+    <p><strong>Source:</strong> Page 44 of PREVIEW-Master.html</p>
+    <p><strong>Use Case:</strong> Financial operating history tables with multi-column headers and category sections</p>
+
+    <h2>Template Structure</h2>
+
+    <div class="table-section-header">OPERATING HISTORY</div>
+    <table class="compact-table">
+        <thead>
+            <tr>
+                <th rowspan="2" style="width: 30%;">CATEGORY</th>
+                <th colspan="3" style="text-align: center;">YTD 2025</th>
+                <th colspan="3" style="text-align: center;">PROJECTION - DCAP</th>
+            </tr>
+            <tr>
+                <th>TOTAL</th>
+                <th>$/UNIT</th>
+                <th>%/PGR</th>
+                <th>TOTAL</th>
+                <th>$/UNIT</th>
+                <th>%/PGR</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- SECTION HEADER ROW -->
+            <tr style="background-color: #e8eef7; font-weight: bold;">
+                <td>RENTAL REVENUE</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <!-- DATA ROW with indent -->
+            <tr>
+                <td style="padding-left: 16px;">Total Multifamily Revenue</td>
+                <td class="text-right">$195,060</td>
+                <td class="text-right">$12,191</td>
+                <td class="text-right">96%</td>
+                <td class="text-right">$194,400</td>
+                <td class="text-right">$12,150</td>
+                <td class="text-right">95%</td>
+            </tr>
+            <!-- SUBTOTAL ROW -->
+            <tr style="background-color: #e8eef7; font-weight: bold;">
+                <td>TOTAL RENTAL REVENUE</td>
+                <td class="text-right">$195,060</td>
+                <td class="text-right">$12,191</td>
+                <td class="text-right">96%</td>
+                <td class="text-right">$194,400</td>
+                <td class="text-right">$12,150</td>
+                <td class="text-right">95%</td>
+            </tr>
+
+            <!-- SECTION HEADER ROW -->
+            <tr style="background-color: #e8eef7; font-weight: bold;">
+                <td>MISCELLANEOUS REVENUE</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <!-- DATA ROWS -->
+            <tr>
+                <td style="padding-left: 16px;">Parking Income</td>
+                <td class="text-right">$6,000</td>
+                <td class="text-right">$375</td>
+                <td class="text-right">3%</td>
+                <td class="text-right">$6,000</td>
+                <td class="text-right">$375</td>
+                <td class="text-right">3%</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 16px;">Laundry</td>
+                <td class="text-right">$2,400</td>
+                <td class="text-right">$150</td>
+                <td class="text-right">1%</td>
+                <td class="text-right">$2,400</td>
+                <td class="text-right">$150</td>
+                <td class="text-right">1%</td>
+            </tr>
+            <!-- SUBTOTAL ROW -->
+            <tr style="background-color: #e8eef7; font-weight: bold;">
+                <td>TOTAL MISCELLANEOUS REVENUE</td>
+                <td class="text-right">$8,400</td>
+                <td class="text-right">$525</td>
+                <td class="text-right">4%</td>
+                <td class="text-right">$8,400</td>
+                <td class="text-right">$525</td>
+                <td class="text-right">4%</td>
+            </tr>
+
+            <!-- GRAND TOTAL ROW -->
+            <tr style="background-color: #e8eef7; font-weight: bold;">
+                <td>POTENTIAL GROSS REVENUE</td>
+                <td class="text-right">$203,460</td>
+                <td class="text-right">$12,716</td>
+                <td class="text-right">100%</td>
+                <td class="text-right">$202,800</td>
+                <td class="text-right">$12,675</td>
+                <td class="text-right">100%</td>
+            </tr>
+
+            <!-- SECTION HEADER ROW -->
+            <tr style="background-color: #e8eef7; font-weight: bold;">
+                <td>OPERATING EXPENSES</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <!-- EXPENSE ROWS (negative values in red) -->
+            <tr>
+                <td style="padding-left: 16px;">Taxes</td>
+                <td class="text-right negative">($18,600)</td>
+                <td class="text-right negative">($1,163)</td>
+                <td class="text-right negative">(10%)</td>
+                <td class="text-right negative">($19,688)</td>
+                <td class="text-right negative">($1,231)</td>
+                <td class="text-right negative">(10%)</td>
+            </tr>
+            <tr>
+                <td style="padding-left: 16px;">Insurance</td>
+                <td class="text-right negative">($11,314)</td>
+                <td class="text-right negative">($707)</td>
+                <td class="text-right negative">(6%)</td>
+                <td class="text-right negative">($11,360)</td>
+                <td class="text-right negative">($710)</td>
+                <td class="text-right negative">(6%)</td>
+            </tr>
+            <!-- FINAL TOTAL ROW (highlighted) -->
+            <tr style="background-color: #d4e6f1; font-weight: bold; font-size: 10pt;">
+                <td>NET OPERATING INCOME</td>
+                <td class="text-right">$109,301</td>
+                <td class="text-right">$6,831</td>
+                <td class="text-right">54%</td>
+                <td class="text-right">$109,445</td>
+                <td class="text-right">$6,840</td>
+                <td class="text-right">54%</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>CSS Classes Used</h2>
+    <ul>
+        <li><code>.compact-table</code> - Main table class (8pt font, 3px 6px padding)</li>
+        <li><code>.table-section-header</code> - Blue header bar above table</li>
+        <li><code>.text-right</code> - Right-aligned numbers</li>
+        <li><code>.negative</code> - Red text for negative values/expenses</li>
+    </ul>
+
+    <h2>Row Styling Patterns</h2>
+    <ul>
+        <li><strong>Section headers:</strong> <code>background-color: #e8eef7; font-weight: bold;</code> with empty cells</li>
+        <li><strong>Data rows:</strong> <code>padding-left: 16px;</code> on first cell for indentation</li>
+        <li><strong>Subtotals:</strong> Same as section headers but with data</li>
+        <li><strong>Final total:</strong> <code>background-color: #d4e6f1; font-weight: bold; font-size: 10pt;</code></li>
+    </ul>
+
+    <h2>Header Structure</h2>
+    <ul>
+        <li><strong>Row 1:</strong> Category column with <code>rowspan="2"</code>, then <code>colspan="3"</code> for each data section</li>
+        <li><strong>Row 2:</strong> Individual column headers (TOTAL, $/UNIT, %/PGR) repeated for each section</li>
+    </ul>
+</body>
+</html>

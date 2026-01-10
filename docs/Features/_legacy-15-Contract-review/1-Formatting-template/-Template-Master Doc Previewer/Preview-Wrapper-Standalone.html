@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document Preview Wrapper</title>
+    <style>
+        /* === RESET === */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        /* === APP CONTAINER === */
+        .app-container {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+        }
+
+        /* === HEADER CONTROLS BAR === */
+        .header-controls {
+            border-bottom: 1px solid #ccc;
+            background: #e0e0e0;
+            flex-shrink: 0;
+        }
+
+        .controls-bar {
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .control-label {
+            font-size: 12px;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .control-btn {
+            width: 28px;
+            height: 28px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .control-btn:hover { background: #f0f0f0; }
+        .control-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .zoom-value {
+            font-size: 12px;
+            font-weight: 500;
+            width: 40px;
+            text-align: center;
+        }
+
+        .divider {
+            width: 1px;
+            height: 20px;
+            background: #ddd;
+        }
+
+        /* === TOGGLE SWITCH === */
+        .toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 36px;
+            height: 20px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: 0.3s;
+            border-radius: 20px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: #003B7E;
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(16px);
+        }
+
+        /* === PAGE INPUT === */
+        .page-input {
+            width: 55px;
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+            text-align: center;
+            height: 28px;
+            background: white;
+        }
+
+        .page-input::-webkit-inner-spin-button {
+            transform: scaleY(-1);
+            width: 18px;
+            height: 24px;
+            cursor: pointer;
+            background: white;
+        }
+
+        .page-count {
+            font-size: 11px;
+            color: #999;
+        }
+
+        /* === DARK MODE BUTTON === */
+        .dark-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            color: #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .dark-btn:hover { color: #333; }
+
+        /* === DARK MODE EFFECT === */
+        .pages-wrapper.dark-mode .page-sheet {
+            filter: brightness(0.8);
+        }
+
+        /* === PREVIEW CONTAINER === */
+        .preview-container {
+            flex: 1;
+            overflow: auto;
+            background-color: #525659;
+            cursor: grab;
+        }
+
+        .preview-container:active {
+            cursor: grabbing;
+        }
+
+        .preview-centering {
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100%;
+        }
+
+        .preview-scaler {
+            transform-origin: top center;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .pages-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* === PAGE SHEET BASE STYLES === */
+        /* Your pages should have class="page-sheet" and data-page-num="Page X" */
+        .page-sheet {
+            font-family: "Open Sans", Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            color: black;
+            background-color: white;
+            width: 8.5in;
+            height: 11in;
+            padding: 0.75in;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        /* === FIELD MAPPING STYLES === */
+        /* Fields with class="field-mapped" toggle between placeholder and data-sample */
+        .field-mapped {
+            background-color: #e8f4fc;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+
+        .preview-mode .field-mapped {
+            background-color: transparent;
+        }
+
+        /* === PRINT STYLES === */
+        @media print {
+            .header-controls { display: none; }
+            .preview-container { overflow: visible; background: white; }
+            .preview-centering { padding: 0; }
+            .preview-scaler { transform: none !important; }
+            .page-sheet { margin: 0; box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- HEADER CONTROLS -->
+        <div class="header-controls">
+            <div class="controls-bar">
+                <!-- Zoom Controls -->
+                <div class="control-group">
+                    <span class="control-label">Zoom:</span>
+                    <button class="control-btn" id="zoom-out" title="Zoom out">−</button>
+                    <span class="zoom-value" id="zoom-value">60%</span>
+                    <button class="control-btn" id="zoom-in" title="Zoom in">+</button>
+                </div>
+
+                <div style="flex: 1;"></div>
+
+                <!-- Preview Mode Toggle -->
+                <label class="toggle-label">
+                    <span class="toggle-switch">
+                        <input type="checkbox" id="preview-toggle">
+                        <span class="toggle-slider"></span>
+                    </span>
+                    <span id="mode-label">Show Field IDs</span>
+                </label>
+
+                <div class="divider"></div>
+
+                <!-- Page Navigation -->
+                <div class="control-group">
+                    <input type="number" class="page-input" id="page-input" placeholder="-4">
+                    <span class="page-count" id="page-count"></span>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Dark Mode Toggle -->
+                <button class="dark-btn" id="dark-toggle" title="Toggle dark mode">
+                    <svg id="moon-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- PREVIEW AREA -->
+        <div class="preview-container" id="preview-container">
+            <div class="preview-centering">
+                <div class="preview-scaler" id="preview-scaler">
+                    <div class="pages-wrapper" id="pages-wrapper">
+
+<!-- ============================================================== -->
+<!-- INSERT YOUR PAGES HERE                                          -->
+<!-- Each page needs: class="page-sheet" data-page-num="Page X"     -->
+<!-- Example:                                                        -->
+<!--   <div class="page-sheet" data-page-num="Page 2">Cover</div>   -->
+<!--   <div class="page-sheet" data-page-num="Page 3">Letter</div>  -->
+<!--   <div class="page-sheet" data-page-num="Page 6">Page 1</div>  -->
+<!--                                                                 -->
+<!-- Page numbering:                                                 -->
+<!--   Internal 2-5  = Display -4 to -1 (front matter)              -->
+<!--   Internal 6+   = Display 1+ (content pages)                   -->
+<!-- ============================================================== -->
+
+<!-- SAMPLE PAGES FOR TESTING - DELETE THESE -->
+<div class="page-sheet" data-page-num="Page 2" style="display:flex; align-items:center; justify-content:center;">
+    <div style="text-align:center; color:#999;">
+        <div style="font-size:24pt; margin-bottom:10px;">Page -4 (Cover)</div>
+        <div>data-page-num="Page 2"</div>
+    </div>
+</div>
+<div class="page-sheet" data-page-num="Page 3" style="display:flex; align-items:center; justify-content:center;">
+    <div style="text-align:center; color:#999;">
+        <div style="font-size:24pt; margin-bottom:10px;">Page -3 (Letter)</div>
+        <div>data-page-num="Page 3"</div>
+    </div>
+</div>
+<div class="page-sheet" data-page-num="Page 4" style="display:flex; align-items:center; justify-content:center;">
+    <div style="text-align:center; color:#999;">
+        <div style="font-size:24pt; margin-bottom:10px;">Page -2</div>
+        <div>data-page-num="Page 4"</div>
+    </div>
+</div>
+<div class="page-sheet" data-page-num="Page 5" style="display:flex; align-items:center; justify-content:center;">
+    <div style="text-align:center; color:#999;">
+        <div style="font-size:24pt; margin-bottom:10px;">Page -1 (TOC)</div>
+        <div>data-page-num="Page 5"</div>
+    </div>
+</div>
+<div class="page-sheet" data-page-num="Page 6" style="display:flex; align-items:center; justify-content:center;">
+    <div style="text-align:center; color:#999;">
+        <div style="font-size:24pt; margin-bottom:10px;">Page 1</div>
+        <div>data-page-num="Page 6"</div>
+    </div>
+</div>
+<div class="page-sheet" data-page-num="Page 7" style="display:flex; align-items:center; justify-content:center;">
+    <div style="text-align:center; color:#999;">
+        <div style="font-size:24pt; margin-bottom:10px;">Page 2</div>
+        <div>data-page-num="Page 7"</div>
+    </div>
+</div>
+<!-- END SAMPLE PAGES -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === ZOOM CONTROLS ===
+        let zoom = 0.6;
+        const minZoom = 0.1;
+        const maxZoom = 1.5;
+        const zoomStep = 0.1;
+        
+        const scaler = document.getElementById('preview-scaler');
+        const zoomValue = document.getElementById('zoom-value');
+        const zoomInBtn = document.getElementById('zoom-in');
+        const zoomOutBtn = document.getElementById('zoom-out');
+
+        function updateZoom() {
+            scaler.style.transform = `scale(${zoom})`;
+            zoomValue.textContent = Math.round(zoom * 100) + '%';
+            zoomOutBtn.disabled = zoom <= minZoom;
+            zoomInBtn.disabled = zoom >= maxZoom;
+        }
+
+        // Click handlers
+        zoomInBtn.addEventListener('click', () => {
+            zoom = Math.min(maxZoom, zoom + zoomStep);
+            updateZoom();
+        });
+
+        zoomOutBtn.addEventListener('click', () => {
+            zoom = Math.max(minZoom, zoom - zoomStep);
+            updateZoom();
+        });
+
+        // Click and hold for continuous zoom
+        let zoomInterval;
+        zoomInBtn.addEventListener('mousedown', () => {
+            zoomInterval = setInterval(() => {
+                zoom = Math.min(maxZoom, zoom + zoomStep);
+                updateZoom();
+            }, 150);
+        });
+        zoomOutBtn.addEventListener('mousedown', () => {
+            zoomInterval = setInterval(() => {
+                zoom = Math.max(minZoom, zoom - zoomStep);
+                updateZoom();
+            }, 150);
+        });
+        document.addEventListener('mouseup', () => clearInterval(zoomInterval));
+
+        updateZoom();
+
+        // === PREVIEW MODE TOGGLE ===
+        const previewToggle = document.getElementById('preview-toggle');
+        const modeLabel = document.getElementById('mode-label');
+        const pagesWrapper = document.getElementById('pages-wrapper');
+
+        previewToggle.addEventListener('change', function() {
+            if (this.checked) {
+                pagesWrapper.classList.add('preview-mode');
+                modeLabel.textContent = 'Show Sample Data';
+                // Show data-sample values
+                document.querySelectorAll('.field-mapped').forEach(el => {
+                    if (!el.dataset.original) {
+                        el.dataset.original = el.textContent;
+                    }
+                    el.textContent = el.dataset.sample || el.dataset.original;
+                });
+            } else {
+                pagesWrapper.classList.remove('preview-mode');
+                modeLabel.textContent = 'Show Field IDs';
+                // Show original placeholders
+                document.querySelectorAll('.field-mapped').forEach(el => {
+                    if (el.dataset.original) {
+                        el.textContent = el.dataset.original;
+                    }
+                });
+            }
+        });
+
+        // === DARK MODE ===
+        const darkToggle = document.getElementById('dark-toggle');
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
+
+        darkToggle.addEventListener('click', () => {
+            pagesWrapper.classList.toggle('dark-mode');
+            const isDark = pagesWrapper.classList.contains('dark-mode');
+            moonIcon.style.display = isDark ? 'none' : 'block';
+            sunIcon.style.display = isDark ? 'block' : 'none';
+        });
+
+        // === PAGE NAVIGATION ===
+        const pageInput = document.getElementById('page-input');
+        const pageCount = document.getElementById('page-count');
+        const allPageSheets = document.querySelectorAll('.page-sheet');
+        
+        // Get actual page numbers from data attributes
+        const pageNumbers = Array.from(allPageSheets).map(p => 
+            parseInt(p.getAttribute('data-page-num').replace('Page ', ''))
+        ).sort((a, b) => a - b);
+
+        // Map internal page number to display number
+        // Pages 2-5 (front matter) → -4, -3, -2, -1
+        // Pages 6+ → 1, 2, 3...
+        function internalToDisplay(internal) {
+            if (internal <= 5) return internal - 6;
+            return internal - 5;
+        }
+
+        // Map display number to internal
+        function displayToInternal(display) {
+            if (display <= -1) return display + 6;
+            return display + 5;
+        }
+
+        // Calculate bounds
+        const minInternal = Math.min(...pageNumbers);
+        const maxInternal = Math.max(...pageNumbers);
+        const minDisplay = internalToDisplay(minInternal);
+        const maxDisplay = internalToDisplay(maxInternal);
+
+        // Set input constraints
+        pageInput.min = minDisplay;
+        pageInput.max = maxDisplay;
+
+        function goToPage(internalNum) {
+            const targetPage = document.querySelector(`[data-page-num="Page ${internalNum}"]`);
+            if (targetPage) {
+                targetPage.scrollIntoView({ behavior: 'auto', block: 'start' });
+            }
+        }
+
+        // Listen for any input change (typing, arrows, etc)
+        pageInput.addEventListener('input', function() {
+            let displayNum = parseInt(pageInput.value);
+            if (!isNaN(displayNum)) {
+                // Clamp to valid range
+                displayNum = Math.max(minDisplay, Math.min(maxDisplay, displayNum));
+                const internalNum = displayToInternal(displayNum);
+                if (pageNumbers.includes(internalNum)) {
+                    goToPage(internalNum);
+                }
+            }
+        });
+
+        // On blur, enforce bounds visually
+        pageInput.addEventListener('blur', function() {
+            let displayNum = parseInt(pageInput.value);
+            if (!isNaN(displayNum)) {
+                displayNum = Math.max(minDisplay, Math.min(maxDisplay, displayNum));
+                pageInput.value = displayNum;
+            }
+        });
+
+        pageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                let displayNum = parseInt(pageInput.value);
+                if (!isNaN(displayNum)) {
+                    displayNum = Math.max(minDisplay, Math.min(maxDisplay, displayNum));
+                    pageInput.value = displayNum;
+                    goToPage(displayToInternal(displayNum));
+                }
+            }
+        });
+
+        // Initialize
+        const totalDisplayPages = pageNumbers.length;
+        pageCount.textContent = `of ${totalDisplayPages} (${minDisplay} to ${maxDisplay})`;
+        pageInput.value = internalToDisplay(pageNumbers[0]);
+
+        // Track visible page on scroll
+        const container = document.getElementById('preview-container');
+        let scrollTimeout;
+        container.addEventListener('scroll', function() {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const containerRect = container.getBoundingClientRect();
+                const containerCenter = containerRect.top + containerRect.height / 3;
+                
+                let closestPage = null;
+                let closestDistance = Infinity;
+                
+                allPageSheets.forEach(page => {
+                    const rect = page.getBoundingClientRect();
+                    const pageCenter = rect.top + rect.height / 2;
+                    const distance = Math.abs(pageCenter - containerCenter);
+                    
+                    if (distance < closestDistance) {
+                        closestDistance = distance;
+                        closestPage = page;
+                    }
+                });
+                
+                if (closestPage) {
+                    const internalNum = parseInt(closestPage.getAttribute('data-page-num').replace('Page ', ''));
+                    const displayNum = internalToDisplay(internalNum);
+                    if (pageInput.value != displayNum) {
+                        pageInput.value = displayNum;
+                    }
+                }
+            }, 100);
+        });
+
+        // Pinch-to-zoom on trackpad
+        container.addEventListener('wheel', (e) => {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                zoom += e.deltaY < 0 ? 0.025 : -0.025;
+                zoom = Math.max(minZoom, Math.min(maxZoom, zoom));
+                updateZoom();
+            }
+        }, { passive: false });
+
+        // === DRAG TO PAN ===
+        let isDragging = false;
+        let startX, startY, scrollLeft, scrollTop;
+
+        container.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            container.style.cursor = 'grabbing';
+            startX = e.pageX - container.offsetLeft;
+            startY = e.pageY - container.offsetTop;
+            scrollLeft = container.scrollLeft;
+            scrollTop = container.scrollTop;
+        });
+
+        container.addEventListener('mouseleave', () => {
+            isDragging = false;
+            container.style.cursor = 'grab';
+        });
+
+        container.addEventListener('mouseup', () => {
+            isDragging = false;
+            container.style.cursor = 'grab';
+        });
+
+        container.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - container.offsetLeft;
+            const y = e.pageY - container.offsetTop;
+            container.scrollLeft = scrollLeft - (x - startX);
+            container.scrollTop = scrollTop - (y - startY);
+        });
+    </script>
+</body>
+</html>

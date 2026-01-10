@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Appraisal Report - Pages 19-25 (Formatted)</title>
+    <style>
+        /* --- 1. GLOBAL RESET & FONTS --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Open Sans", Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            background-color: #525659; /* Preview Mode Background */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 0;
+            color: black;
+        }
+
+        /* --- 2. PAPER SHEET STYLING (TRUE WYSIWYG) --- */
+        .page-sheet {
+            background-color: white;
+            width: 8.5in;
+            height: 11in;
+            padding: 0.75in;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            page-break-after: always;
+        }
+
+        /* --- 3. HEADERS & TYPOGRAPHY --- */
+        .Header1 {
+            font-size: 18pt;
+            color: #003B7E;
+            border-bottom: 1px solid #003B7E;
+            padding-bottom: 5px;
+            margin-bottom: 12px;
+            font-weight: normal;
+        }
+
+        .Header2 {
+            font-size: 12pt;
+            color: #003B7E;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        .Subheader1 {
+            font-size: 11pt;
+            color: #003B7E;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Standard Text */
+        p { margin-bottom: 8pt; text-align: justify; }
+
+        /* Lists */
+        ol, ul { margin-left: 20px; margin-bottom: 10px; }
+        li { margin-bottom: 6px; text-align: justify; line-height: 1.5; }
+
+        /* Blue subsection header bar */
+        .subsection-header {
+            background-color: #003B7E;
+            color: white;
+            font-weight: bold;
+            font-size: 11pt;
+            text-transform: uppercase;
+            padding: 8px 12px;
+            margin: 16px 0 12px 0;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        /* Subsection label (bold, not a header bar) */
+        .subsection-label {
+            font-weight: bold;
+            font-size: 10pt;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            color: #000;
+        }
+
+        /* --- 4. TABLES --- */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 10px; font-size: 10pt; }
+        td, th { padding: 4px 8px; border: 1px solid #ddd; vertical-align: top; }
+        th { background-color: #f0f0f0; color: #333; font-weight: bold; text-align: left; }
+        .label-col { background-color: #f0f0f0; font-weight: bold; width: 35%; color: #333; }
+        .value-col { width: 65%; }
+        tr:nth-child(even) td { background-color: #f9f9f9; }
+        .numeric-cell { text-align: right; font-family: monospace; }
+        .centered-text { text-align: center; }
+
+        /* --- 5. FIELD MAPPING HIGHLIGHTER --- */
+        .field-mapped {
+            background-color: rgba(255, 255, 0, 0.15);
+            border-bottom: 1px dotted #999;
+            cursor: help;
+            font-weight: inherit;
+            display: inline;
+        }
+        .field-mapped:hover::before {
+            content: attr(title);
+            position: absolute;
+            transform: translateY(-100%);
+            background: #333; color: white;
+            padding: 4px 8px; font-size: 8pt;
+            border-radius: 4px; white-space: nowrap;
+            z-index: 1000;
+        }
+
+        /* --- 6. SPECIAL SECTIONS --- */
+        .definition-block {
+            margin: 10px 0;
+            padding: 8px;
+            background: #f9f9f9;
+            border-left: 2px solid #003B7E;
+        }
+        .definition-block p {
+            margin-bottom: 6px;
+            font-size: 10pt;
+        }
+        .definition-block em {
+            font-style: italic;
+        }
+
+        /* --- 7. FOOTER STYLING (Pinned to Bottom) --- */
+        .page-footer {
+            margin-top: auto;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            font-size: 9pt;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .footer-accent {
+            width: 60px;
+            height: 10px;
+            background: linear-gradient(to right, #4a9fd8, #003d7a);
+            border-radius: 2px;
+        }
+        .page-num {
+            color: #003B7E;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        /* --- 8. PRINT SETTINGS --- */
+        @media print {
+            body { background-color: white; padding: 0; display: block; }
+            .page-sheet { width: 100%; margin: 0; box-shadow: none; padding: 0.75in; height: 11in; overflow: hidden; }
+            .field-mapped { background-color: transparent; border: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- PAGE 19 -->
+    <div class="page-sheet" data-page-num="Page 19">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <div class="Header2">Definition of Market Value</div>
+        <p>According to the January 1, 2024 version of the Canadian Uniform Standards of Professional Appraisal Practice (CUSPAP), market value is defined as:</p>
+
+        <div class="definition-block">
+            <p><em>"The most probable price, as of a specified date, in cash, or in terms equivalent to cash, or in other precisely revealed terms, for which the specified property rights should sell after reasonable exposure in a competitive market under all conditions requisite to a fair sale, with the buyer and the seller each acting prudently, knowledgeably, and for self-interest, and assuming that neither is under duress."</em></p>
+        </div>
+
+        <p>Implicit in this definition are the consumption of a sale of the specified date and the passing of title from seller to buyer under the following conditions whereby:</p>
+
+        <ol>
+            <li>the seller and buyer are typically motivated;</li>
+            <li>both parties are well informed or well advised, and acting in what they consider their best interests;</li>
+            <li>a reasonable time is allowed for exposure in the open market;</li>
+            <li>payment is made in terms of cash in Canadian dollars or in terms of financial arrangements comparable thereto;</li>
+            <li>the price represents the normal consideration for the property sold unaffected by special or creative financing or sales concessions granted by anyone associated with the sale.</li>
+        </ol>
+
+        <div class="Header2">Property Rights Appraised</div>
+        <p>The property rights appraised constitute the fee simple estate interest.</p>
+
+        <div class="Subheader1">Fee Simple Interest</div>
+        <p>Absolute ownership unencumbered by any other interest or estate, subject only to the limitations imposed by the governmental powers of taxation, eminent domain, police power and escheat. The subject multifamily property is appraised under the fee simple interest, as residential tenancies are typically short-term in nature and do not constitute long-term encumbrances on the estate that would give rise to a leased fee interest.</p>
+
+        <div class="Header2">Value Scenarios</div>
+
+        <div class="Subheader1">Current Value</div>
+        <p>Current Value Opinion refers to an effective date at the time of inspection or, at some other date within a reasonably short period of time from the date of inspection when market conditions have not or are not expected to have changed.</p>
+
+        <div class="Subheader1">Scope of Work</div>
+        <p>The scope of work for this appraisal assignment is outlined below:</p>
+
+        <ul>
+            <li>The appraisal analyzes legal and physical features of the subject including site size, improvement size, site zoning, easements, encumbrances, site access and site exposure.</li>
+            <li>The appraisal includes a market analysis for the North Battleford market and North Battleford submarket using vacancy and rent data. Conclusions were drawn for the subject's competitive position and its physical and locational features, current market conditions and external influences.</li>
+            <li>Research of recent sale and rent comparables. Examined market conditions and analyzed their potential effect on the various properties.</li>
+            <li>The appraisal includes a Highest and Best Use analysis and conclusions have been completed for the highest and best use of the subject property As Though Vacant and As Improved. The analysis considered legal, locational, physical and financial feasibility characteristics of the subject site and existing improvements.</li>
+        </ul>
+
+        <div class="page-footer">
+            <div><span class="page-num">14</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 20 -->
+    <div class="page-sheet" data-page-num="Page 20">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <p>In selecting applicable approaches to value, the appraiser's considered the agreed upon appraisal scope and assessed the applicability of each traditional approach given the subject's characteristics and the intended use of the appraisal. As a result, this appraisal developed Direct Comparison and Income (Direct Capitalization) Approaches. The values presented represent the As Stabilized (see Appraisal Exhibits).</p>
+
+        <p>The assignment was prepared as an Appraisal Report in accordance with CUSPAP, with the analysis stated within the document and representing a fully described scope of analysis.</p>
+
+        <p>The author of this report has the knowledge and experience to complete this assignment competently. The following work was not undertaken as it was not required for credible results within the scope of this appraisal.</p>
+
+        <p>Environmental reports, building condition assessments, and title searches were not reviewed by the appraiser and are assumed to be satisfactory unless otherwise stated.</p>
+
+        <p>The appraiser did not review title documents or legal encumbrances other than zoning information provided by municipal sources.</p>
+
+        <p>No verification of building permits, code compliance, or outstanding orders was undertaken. Rent rolls, leases and operating statements, were accepted as accurate without audit or verification.</p>
+
+        <p>Discussions with market participants were limited to informal inquiries and published sources.</p>
+
+        <p>This appraisal was completed in conformity with the CUSPAP 2024 Appraisal Standard and the Reporting Standard for a Concise Report, which requires inclusion of all relevant information necessary to produce a credible result, summarized in narrative form with supporting detail in the work file.</p>
+
+        <div class="Header2">Assistance Provided</div>
+        <p>Paul Liboiron of Insight Home Inspections Ltd., a member of Alberta Professional Home Inspectors Society provided real property appraisal assistance to the appraisers signing this certification. Assistance provided included property inspection. Paul Liboiron is registered as a non-member with the AIC to provide professional assistance with real property inspection.</p>
+
+        <div class="Header2">Sources of Information</div>
+        <p>The following sources were contacted to obtain relevant information:</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>INFORMATION PROVIDED</th>
+                    <th>SOURCE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Property Assessment & Tax</td>
+                    <td>SAMA</td>
+                </tr>
+                <tr>
+                    <td>Zoning & Land Use Planning</td>
+                    <td>City of North Battleford Zoning</td>
+                </tr>
+                <tr>
+                    <td>Site Size</td>
+                    <td>ICS</td>
+                </tr>
+                <tr>
+                    <td>Building Size</td>
+                    <td>Client</td>
+                </tr>
+                <tr>
+                    <td>Comparable Information</td>
+                    <td>CoStar | Confirmed by Local Agents</td>
+                </tr>
+                <tr>
+                    <td>Legal Description</td>
+                    <td>Client</td>
+                </tr>
+                <tr>
+                    <td>Rent Roll</td>
+                    <td>Client</td>
+                </tr>
+                <tr>
+                    <td>Income/Expense Budget</td>
+                    <td>Not Provided</td>
+                </tr>
+                <tr>
+                    <td>Title</td>
+                    <td>Not Provided</td>
+                </tr>
+                <tr>
+                    <td>Phase I Environmental Report</td>
+                    <td>Not Provided</td>
+                </tr>
+                <tr>
+                    <td>Lease Documents</td>
+                    <td>Not Provided</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>The lack of the unavailable items could affect the results of this analysis. As part of the general assumptions and limiting conditions, the subject is assumed to have no adverse easements, significant items of deferred maintenance, or be impacted by adverse environmental conditions.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">15</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 21 -->
+    <div class="page-sheet" data-page-num="Page 21">
+        <div class="Header1">Introduction & Executive Summary</div>
+
+        <div class="Header2">Subject Property Inspection</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>APPRAISER</th>
+                    <th>INSPECTED</th>
+                    <th>EXTENT</th>
+                    <th>ALL UNITS INSPECTED</th>
+                    <th>DATE</th>
+                    <th>ROLE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="field-mapped" title="{{Appraiser1_Name}}">Chris Choinocski, AAC, MRICS</span><br><span class="field-mapped" title="{{Appraiser2_Name}}">Paul Leblanc</span></td>
+                    <td>Yes</td>
+                    <td>Interior & Exterior</td>
+                    <td>No</td>
+                    <td><span class="field-mapped" title="{{Report_InspectionDate}}">October 17, 2025</span><br><span class="field-mapped" title="{{Report_InspectionDate}}">October 17, 2025</span></td>
+                    <td>Primary Appraiser<br>Inspector</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="Header2">Personal Property & Business Intangible</div>
+        <p>There is no personal property (FF&E) included in this valuation. There is not any business or intangible value included in the value conclusion reported here.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">16</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 22 -->
+    <div class="page-sheet" data-page-num="Page 22">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="Header2">Location</div>
+        <p>The subject property is located in North Battleford, Saskatchewan, in a centrally situated residential area near key commercial corridors and the downtown core.</p>
+
+        <div class="Header2">Access</div>
+        <p>The property fronts 109 Street with convenient connections to major arterials including 100th Street/Highway 4 (north-south route to downtown and Highway 16) and Territorial Drive (east-west loop connecting retail and services).</p>
+
+        <div class="Header2">Public Transportation</div>
+        <p>Local bus service operates on nearby corridors such as 100th Street and Territorial Drive, providing direct access to downtown, retail centres, and community facilities.</p>
+
+        <div class="Header2">Walk/Bike/Transit Scores</div>
+        <p>The immediate area offers moderate walkability and cycling potential, with an estimated Walk Score around 60, Transit Score near 35, and Bike Score around 55, reflecting car-optional access for daily needs.</p>
+
+        <div class="Header2">Local Area</div>
+        <p>The neighborhood is a mature urban district with a mix of single-family homes, small multi-unit buildings, and local businesses. Residents are close to grocery, cafes, and parks, with recreation and services clustered along 100th Street and Territorial Drive. The location balances neighborhood livability with quick access to city amenities and employment nodes.</p>
+
+        <div class="Header2">Nearby Schools</div>
+        <ul>
+            <li>Bready School (K-7, public)</li>
+            <li>Connaught School (K-7, public)</li>
+            <li>North Battleford Comprehensive High School (Grades 10-12, public)</li>
+            <li>John Paul II Collegiate (Grades 9-12, Catholic)</li>
+            <li>St. Mary School (K-7, Catholic)</li>
+        </ul>
+
+        <div class="page-footer">
+            <div><span class="page-num">17</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 23 -->
+    <div class="page-sheet" data-page-num="Page 23">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="Header2">Site Details</div>
+
+        <p>The subject property consists of one parcel with a total site area of 24,400 SF (0.56 AC) which is based on information obtained from ICS. For the purposes of this report, we have relied on this site area and reserve the right to amend our analysis upon receipt of a formal legal plan. The following summarizes the salient characteristics of the subject site.</p>
+
+        <table>
+            <tr>
+                <td class="label-col">Address</td>
+                <td class="value-col"><span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Legal Description</td>
+                <td class="value-col"><span class="field-mapped" title="{{Report_Legal}}">Plan - C4240, Block - 95; Lot - 17, 18, 19, 20</span></td>
+            </tr>
+            <tr style="background-color: #f0f0f0; font-weight: bold;">
+                <td></td>
+                <td style="text-align: center;">Square Feet</td>
+                <td style="text-align: center;">Acres</td>
+            </tr>
+            <tr>
+                <td class="label-col">Economic Unit (Primary) Site Size</td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_UsableSF}}">24,400</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_UsableAcres}}">0.56</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Usable Site Size</td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_UsableSF}}">24,400</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_UsableAcres}}">0.56</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Total Land Area</td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_TotalSF}}">24,400</span></td>
+                <td class="numeric-cell"><span class="field-mapped" title="{{Subject_TotalAcre}}">0.56</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Excess/Surplus Land</td>
+                <td class="value-col" colspan="2">No</td>
+            </tr>
+            <tr>
+                <td class="label-col">Corner</td>
+                <td class="value-col" colspan="2">No</td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Topography</td>
+                <td class="value-col" colspan="2"><span class="field-mapped" title="{{Subject_Topography}}">Level</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Shape</td>
+                <td class="value-col" colspan="2"><span class="field-mapped" title="{{Subject_Shape}}">Rectangular</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Grade</td>
+                <td class="value-col" colspan="2">At street grade</td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Quality</td>
+                <td class="value-col" colspan="2"><span class="field-mapped" title="{{Subject_SiteQuality}}">Average</span></td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Access</td>
+                <td class="value-col" colspan="2">Average</td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Exposure</td>
+                <td class="value-col" colspan="2">Average</td>
+            </tr>
+            <tr>
+                <td class="label-col">Site Utility</td>
+                <td class="value-col" colspan="2">Average</td>
+            </tr>
+            <tr>
+                <td class="label-col">Municipal Services</td>
+                <td class="value-col" colspan="2">Full Municipal Services</td>
+            </tr>
+        </table>
+
+        <div class="Subheader1">Adjacent Properties</div>
+        <table>
+            <tr>
+                <td class="label-col">North</td>
+                <td class="value-col">Residential</td>
+            </tr>
+            <tr>
+                <td class="label-col">South</td>
+                <td class="value-col">Residential</td>
+            </tr>
+            <tr>
+                <td class="label-col">East</td>
+                <td class="value-col">Residential</td>
+            </tr>
+            <tr>
+                <td class="label-col">West</td>
+                <td class="value-col">Residential</td>
+            </tr>
+        </table>
+
+        <p><strong>Accessibility:</strong> Access to the subject site is considered average overall.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">18</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 24 -->
+    <div class="page-sheet" data-page-num="Page 24">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="subsection-header">Access & Frontage</div>
+
+        <div class="subsection-label">Street Improvements</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Street</th>
+                    <th>Type</th>
+                    <th>Direction</th>
+                    <th>Lanes</th>
+                    <th>Lit</th>
+                    <th>Curb</th>
+                    <th>Gutter</th>
+                    <th>Sidewalk</th>
+                    <th>Parking</th>
+                    <th>Bike Lane</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>108 Street</td>
+                    <td>Minor arterial</td>
+                    <td>Two-Way</td>
+                    <td class="centered-text">2</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text"></td>
+                    <td class="centered-text"></td>
+                    <td class="centered-text"></td>
+                </tr>
+                <tr>
+                    <td>11 Avenue</td>
+                    <td>Minor arterial</td>
+                    <td>Two-Way</td>
+                    <td class="centered-text">4</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text">x</td>
+                    <td class="centered-text"></td>
+                    <td class="centered-text"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="subsection-label">Frontage</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Street</th>
+                    <th>Type</th>
+                    <th>Distance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>108 Street</td>
+                    <td>200 feet</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>11 Avenue</td>
+                    <td>125 feet</td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="subsection-label">Traffic Counts</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Source</th>
+                    <th>Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>108 Street</td>
+                    <td class="centered-text">0</td>
+                    <td class="centered-text">Jan-00</td>
+                    <td class="numeric-cell">0</td>
+                </tr>
+                <tr>
+                    <td>11 Avenue</td>
+                    <td class="centered-text">0</td>
+                    <td class="centered-text">Jan-00</td>
+                    <td class="numeric-cell">0</td>
+                </tr>
+                <tr style="font-weight: bold;">
+                    <td>TOTAL</td>
+                    <td></td>
+                    <td></td>
+                    <td class="numeric-cell">0</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="page-footer">
+            <div><span class="page-num">19</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+    <!-- PAGE 25 -->
+    <div class="page-sheet" data-page-num="Page 25">
+        <div class="Header1">Property Analysis</div>
+
+        <div class="Header2">Exposure & Visibility</div>
+        <p>Exposure of the subject is average noting frontage on 109 Street & 11 Avenue</p>
+
+        <div class="Header2">Easements</div>
+        <p>A legal opinion regarding title information was not provided or commissioned in conjunction with this assignment. Under the scope of this appraisal, it is assumed that any legal notations and registered charges on the do not adversely affect the highest and best use of the subject property as described herein, unless otherwise noted. If there is any concern on the part of the reader with respect to the status of title, we recommend a legal opinion be obtained. Copy of the subject property deed has been inserted in the appendix to this report if further information is required.</p>
+
+        <div class="Header2">Soils</div>
+        <p>We have not undertaken a detailed soil analysis and we are not qualified to comment on soil conditions. As such, the soils are assumed to be similar to other lands in the area and suitable to drainage qualities and load bearing capacity to support the existing development.</p>
+
+        <div class="Header2">Hazardous Waste</div>
+        <p>Based on a review of the independent investigation to determine the presence or absence of toxins on the subject property, none are present. If questions arise, the reader is strongly cautioned to seek qualified professional assistance in this matter. Please see the Assumptions and Limiting Conditions for a full disclaimer.</p>
+
+        <div class="Header2">Site Rating</div>
+        <p>Overall, the subject site is considered average as a multi-family site in terms of its location, exposure and access to employment, education and shopping centers, based on its location along a minor arterial.</p>
+
+        <div class="Header2">Site Conclusion</div>
+        <p>In conclusion, the site's physical characteristics appear to be supportive of the subject's current use and there were no significant detriments discovered that would inhibit development in accordance with its highest and best use.</p>
+
+        <div class="page-footer">
+            <div><span class="page-num">20</span> <span class="field-mapped" title="{{Subject_Street}}">1101, 1121 109 St, North Battleford, Saskatchewan</span> | File <span class="field-mapped" title="{{Company_JobNumber}}">VAL251012 - 1</span></div>
+            <div class="footer-accent"></div>
+        </div>
+    </div>
+
+</body>
+</html>

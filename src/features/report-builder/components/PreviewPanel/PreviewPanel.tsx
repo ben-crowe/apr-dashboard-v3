@@ -320,12 +320,16 @@ export default function PreviewPanel() {
     );
   }, [showRawIds, previewHtml]);
 
+  // Cache-busting for iframe - stable per mount, ensures latest template CSS
+  const templateVersion = useRef(Date.now());
+  const templateUrl = `/Report-MF-template.html?v=${templateVersion.current}`;
+
   return (
     <div className="h-full w-full">
       {previewHtml ? (
         <iframe
           ref={iframeRef}
-          src="/Report-MF-template.html"
+          src={templateUrl}
           style={{
             width: "100%",
             height: "100%",

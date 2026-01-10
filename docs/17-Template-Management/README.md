@@ -369,20 +369,25 @@ table.comp-table th {
 ### Issue: Blue borders missing on headers
 **Solution**: Ensure all `.Header1` elements have `border-bottom: 1px solid #003b7e;`
 **Pages affected**: 52-57 (fixed 2026-01-09)
+**Reference**: DESIGN-STANDARDS.md
 
 ### Issue: Field IDs showing in User Ready mode
 **Solution**: Add `data-sample="example"` to all field-mapped spans
 **Pages affected**: 36-37 (pending fix)
+**Reference**: FIELD-TOGGLE-SYSTEM.md
 
-### Issue: Content pushing past footer
-**Solution**: Verify `padding-bottom: 180px;` on page-sheet
-**Common on**: Custom layout pages
+### Issue: Content pushing past footer (page overflow)
+**Solution**: Apply progressive CSS compression
+**Reference**: COMPACT-STYLING-GUIDE.md
+**Quick fix**: Add `.compact-table` class, reduce font-size, tighten line-height
 
 ### Issue: Table headers not blue
 **Solution**: Check for local CSS overrides removing `background-color: #003B7E;`
+**Reference**: DESIGN-STANDARDS.md
 
 ### Issue: Images not displaying
 **Solution**: Ensure `<img>` tags used, not `<span>` with field-mapped class
+**Reference**: templates/comp-sheet-table.html
 
 ---
 
@@ -429,13 +434,15 @@ docs/17-Template-Management/
 ├── README.md                    (this file)
 ├── CHANGELOG.md                 (version history)
 ├── DESIGN-STANDARDS.md          (detailed specs)
-├── FIELD-MAPPING-GUIDE.md       (field-mapped spans)
-├── ISSUE-001-*.md               (issue tracking)
+├── COMPACT-STYLING-GUIDE.md     (CSS compression for page overflow)
+├── FIELD-TOGGLE-SYSTEM.md       (Dev Mode vs User Ready toggle)
+├── REORGANIZATION-PLAN.md       (migration from Phase 15)
+├── ISSUE-001-*.md               (issue tracking - future)
 ├── ISSUE-002-*.md
 └── templates/
     ├── table-standard.html      (reusable table templates)
     ├── header-standard.html     (header templates)
-    └── page-layout.html         (page structure templates)
+    └── comp-sheet-table.html    (comparable sheet templates)
 ```
 
 ---

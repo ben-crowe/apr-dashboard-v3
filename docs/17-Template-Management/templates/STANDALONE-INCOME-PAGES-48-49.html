@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standalone Income Approach Pages (48-49) - Calculator Output Preview</title>
+
+    <style>
+        /* === GLOBAL STYLES === */
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: "Open Sans", Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-sheet {
+            font-family: "Open Sans", Arial, sans-serif;
+            font-size: 10pt;
+            line-height: 1.4;
+            color: black;
+            background-color: white;
+            width: 8.5in;
+            height: 11in;
+            padding: 54px;
+            padding-bottom: 180px;
+            margin: 20px auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            page-break-after: always;
+        }
+
+        /* === HEADERS === */
+        .Header1 {
+            font-size: 18pt;
+            color: #003b7e;
+            border-bottom: 1px solid #003b7e;
+            padding-bottom: 5px;
+            margin-bottom: 12px;
+            font-weight: normal;
+        }
+
+        .Header2 {
+            font-size: 11pt;
+            color: #003b7e;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 15px;
+            margin-bottom: 12px;
+        }
+
+        /* === FIELD TOGGLE SYSTEM === */
+        .field-mapped {
+            background-color: rgba(255, 255, 0, 0.2);
+            border-bottom: 1px dotted #999;
+        }
+
+        .page-sheet.user-ready-mode .field-mapped {
+            background-color: transparent;
+            border-bottom: 1px dashed #ccc;
+            color: #999;
+            font-style: italic;
+        }
+
+        .page-sheet.user-ready-mode .field-mapped.populated {
+            background-color: transparent;
+            border-bottom: none;
+            color: inherit;
+            font-style: normal;
+        }
+
+        /* === PAGE FOOTER === */
+        .page-footer {
+            position: absolute;
+            bottom: 54px;
+            left: 54px;
+            right: 54px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-num {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .footer-accent {
+            height: 3px;
+            width: 100%;
+            background: linear-gradient(to right, #003b7e, transparent);
+            margin-top: 4px;
+        }
+
+        /* === CONTROL PANEL === */
+        .control-panel {
+            position: sticky;
+            top: 0;
+            background: white;
+            border-bottom: 2px solid #003b7e;
+            padding: 15px;
+            margin-bottom: 20px;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .control-panel h2 {
+            margin: 0 0 10px 0;
+            color: #003b7e;
+        }
+
+        .toggle-btn {
+            background: #003b7e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .toggle-btn:hover {
+            background: #005ba3;
+        }
+
+        .info-text {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- CONTROL PANEL -->
+        <div class="control-panel">
+            <h2>Standalone Income Approach Calculator Pages (48-49)</h2>
+            <p><strong>Purpose:</strong> Update these pages with v2 spec (6 unit types), then copy back into main template</p>
+            <button class="toggle-btn" onclick="toggleMode()">Toggle User Ready Mode</button>
+            <div class="info-text">
+                <strong>Current Mode:</strong> <span id="mode-status">Dev Mode (Yellow highlights)</span><br>
+                <strong>Instructions:</strong> Update this file to v2 spec, test calculator integration, then replace Pages 48-49 in Report-MF-template.html
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- PAGE 48: DIRECT CAPITALIZATION -->
+        <!-- ============================================ -->
+        <div class="page-sheet" data-page-num="Page 48" id="page48">
+            <h1 class="Header1">Valuation & Conclusions</h1>
+
+            <h2 class="Header2">Direct Capitalization Conclusion</h2>
+
+            <p>The table below summarizes the Direct Capitalization Method and its value conclusion.</p>
+
+            <!-- DIRECT CAPITALIZATION TABLE -->
+            <table style="width: 100%; border-collapse: collapse; font-size: 9pt;">
+                <!-- Blue Header: DIRECT CAPITALIZATION -->
+                <tr>
+                    <td colspan="9" style="background-color: #003b7e; color: white; font-weight: bold; font-size: 10pt; text-transform: uppercase; padding: 4px 6px; text-align: center;">
+                        DIRECT CAPITALIZATION
+                    </td>
+                </tr>
+
+                <!-- Gray Header: UNIT MIX with all columns -->
+                <tr style="background: #f0f0f0; border-bottom: 0.5px solid #333;">
+                    <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; white-space: nowrap;">UNIT MIX</td>
+                    <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center; white-space: nowrap;">UNITS</td>
+                    <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center; white-space: nowrap;">SF</td>
+                    <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center; white-space: nowrap;">CONTRACT</td>
+                    <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center; white-space: nowrap;">MARKET</td>
+                    <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center; white-space: nowrap;">CONT V MKT</td>
+                    <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: right; white-space: nowrap;">$/UNIT</td>
+                    <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: right; white-space: nowrap;">$/SF(yr)</td>
+                    <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: right; white-space: nowrap;">$/YR</td>
+                </tr>
+
+                <!-- Unit Type 1 Row -->
+                <tr>
+                    <td style="padding: 2px 4px; font-size: 7pt;">
+                        <span class="field-mapped" data-field-id="{{calc-type1-name}}" title="{{calc-type1-name}}" data-sample="1 Bed / 1 Bath">{{calc-type1-name}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-type1-count}}" title="{{calc-type1-count}}" data-sample="4">{{calc-type1-count}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-type1-sf}}" title="{{calc-type1-sf}}" data-sample="650">{{calc-type1-sf}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-type1-contract-rent}}" title="{{calc-type1-contract-rent}}" data-sample="$1,150">{{calc-type1-contract-rent}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-type1-rent}}" title="{{calc-type1-rent}}" data-sample="$1,200">{{calc-type1-rent}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-type1-cont-v-market}}" title="{{calc-type1-cont-v-market}}" data-sample="95.8%">{{calc-type1-cont-v-market}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: right;">
+                        <span class="field-mapped" data-field-id="{{calc-type1-per-unit}}" title="{{calc-type1-per-unit}}" data-sample="$14,400">{{calc-type1-per-unit}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: right;">
+                        <span class="field-mapped" data-field-id="{{calc-type1-per-sf}}" title="{{calc-type1-per-sf}}" data-sample="$22.15">{{calc-type1-per-sf}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: right;">
+                        <span class="field-mapped" data-field-id="{{calc-type1-annual}}" title="{{calc-type1-annual}}" data-sample="$57,600">{{calc-type1-annual}}</span>
+                    </td>
+                </tr>
+
+                <!-- Unit Type 2 Row -->
+                <tr>
+                    <td style="padding: 2px 4px; font-size: 7pt;">
+                        <span class="field-mapped" data-field-id="{{calc-type2-name}}" title="{{calc-type2-name}}" data-sample="2 Bed / 1 Bath">{{calc-type2-name}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-type2-count}}" title="{{calc-type2-count}}" data-sample="8">{{calc-type2-count}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-type2-sf}}" title="{{calc-type2-sf}}" data-sample="850">{{calc-type2-sf}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-type2-contract-rent}}" title="{{calc-type2-contract-rent}}" data-sample="$1,450">{{calc-type2-contract-rent}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-type2-rent}}" title="{{calc-type2-rent}}" data-sample="$1,500">{{calc-type2-rent}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-type2-cont-v-market}}" title="{{calc-type2-cont-v-market}}" data-sample="96.7%">{{calc-type2-cont-v-market}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: right;">
+                        <span class="field-mapped" data-field-id="{{calc-type2-per-unit}}" title="{{calc-type2-per-unit}}" data-sample="$18,000">{{calc-type2-per-unit}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: right;">
+                        <span class="field-mapped" data-field-id="{{calc-type2-per-sf}}" title="{{calc-type2-per-sf}}" data-sample="$21.18">{{calc-type2-per-sf}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: right;">
+                        <span class="field-mapped" data-field-id="{{calc-type2-annual}}" title="{{calc-type2-annual}}" data-sample="$144,000">{{calc-type2-annual}}</span>
+                    </td>
+                </tr>
+
+                <!-- NOTE: Add Type 3-6 rows here following same pattern -->
+                <!-- These rows will be added in v2 spec update -->
+
+                <!-- Subtotal Row -->
+                <tr style="font-weight: bold; border-top: 2px solid #003B7E;">
+                    <td style="padding: 2px 4px; font-size: 7pt;">SUBTOTAL</td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-total-units}}" title="{{calc-total-units}}" data-sample="12">{{calc-total-units}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-total-sf}}" title="{{calc-total-sf}}" data-sample="9,400">{{calc-total-sf}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-avg-contract-rent}}" title="{{calc-avg-contract-rent}}" data-sample="$1,350">{{calc-avg-contract-rent}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-avg-market-rent}}" title="{{calc-avg-market-rent}}" data-sample="$1,400">{{calc-avg-market-rent}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: center;">
+                        <span class="field-mapped" data-field-id="{{calc-avg-cont-v-market}}" title="{{calc-avg-cont-v-market}}" data-sample="96.4%">{{calc-avg-cont-v-market}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: right;">
+                        <span class="field-mapped" data-field-id="{{calc-subtotal-per-unit}}" title="{{calc-subtotal-per-unit}}" data-sample="$16,800">{{calc-subtotal-per-unit}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: right;">
+                        <span class="field-mapped" data-field-id="{{calc-subtotal-per-sf}}" title="{{calc-subtotal-per-sf}}" data-sample="$21.45">{{calc-subtotal-per-sf}}</span>
+                    </td>
+                    <td style="padding: 2px 4px; font-size: 7pt; text-align: right;">
+                        <span class="field-mapped" data-field-id="{{calc-subtotal-annual}}" title="{{calc-subtotal-annual}}" data-sample="$201,600">{{calc-subtotal-annual}}</span>
+                    </td>
+                </tr>
+            </table>
+
+            <p style="margin-top: 20px; font-size: 9pt;"><strong>Note:</strong> This standalone file currently shows 2 unit types. Update to 6 types following Desktop's v2 spec, then copy back into main template.</p>
+
+            <!-- Page Footer -->
+            <div class="page-footer">
+                <div>
+                    <span class="page-num">48</span>
+                    <span class="field-mapped" data-field-id="{{subject-street}}" title="{{subject-street}}" data-sample="1101, 1121 109 St, North Battleford, Saskatchewan">{{subject-street}}</span>
+                    | File
+                    <span class="field-mapped" data-field-id="{{job-number}}" title="{{job-number}}" data-sample="VAL251012 - 1">{{job-number}}</span>
+                </div>
+                <div class="footer-accent"></div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- PAGE 49: INCOME APPROACH CONCLUSION -->
+        <!-- ============================================ -->
+        <div class="page-sheet" data-page-num="Page 49" id="page49">
+            <h1 class="Header1">Valuation & Conclusions</h1>
+
+            <h2 class="Header2">Income Approach Conclusion</h2>
+
+            <p>Based on the Direct Capitalization Method, the indicated value of the subject property is:</p>
+
+            <table style="width: 60%; margin: 20px 0; border-collapse: collapse;">
+                <tr>
+                    <td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #003b7e;">Net Operating Income:</td>
+                    <td style="padding: 8px; text-align: right; border-bottom: 1px solid #003b7e;">
+                        <span class="field-mapped" data-field-id="{{calc-noi}}" title="{{calc-noi}}" data-sample="$89,280">{{calc-noi}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 8px; font-weight: bold; border-bottom: 1px solid #003b7e;">Capitalization Rate:</td>
+                    <td style="padding: 8px; text-align: right; border-bottom: 1px solid #003b7e;">
+                        <span class="field-mapped" data-field-id="{{calc-cap-rate}}" title="{{calc-cap-rate}}" data-sample="5.5%">{{calc-cap-rate}}</span>
+                    </td>
+                </tr>
+                <tr style="background: #f0f0f0;">
+                    <td style="padding: 8px; font-weight: bold; font-size: 12pt; color: #003b7e; border-top: 2px solid #003b7e;">INDICATED VALUE:</td>
+                    <td style="padding: 8px; text-align: right; font-weight: bold; font-size: 12pt; color: #003b7e; border-top: 2px solid #003b7e;">
+                        <span class="field-mapped" data-field-id="{{calc-indicated-value}}" title="{{calc-indicated-value}}" data-sample="$1,623,000">{{calc-indicated-value}}</span>
+                    </td>
+                </tr>
+            </table>
+
+            <p>The Income Approach provides a reliable indication of value for income-producing properties, as it directly reflects the property's income-generating potential and market expectations.</p>
+
+            <!-- Page Footer -->
+            <div class="page-footer">
+                <div>
+                    <span class="page-num">49</span>
+                    <span class="field-mapped" data-field-id="{{subject-street}}" title="{{subject-street}}" data-sample="1101, 1121 109 St, North Battleford, Saskatchewan">{{subject-street}}</span>
+                    | File
+                    <span class="field-mapped" data-field-id="{{job-number}}" title="{{job-number}}" data-sample="VAL251012 - 1">{{job-number}}</span>
+                </div>
+                <div class="footer-accent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toggle between Dev Mode and User Ready Mode
+        function toggleMode() {
+            const pages = document.querySelectorAll('.page-sheet');
+            const statusText = document.getElementById('mode-status');
+
+            pages.forEach(page => {
+                page.classList.toggle('user-ready-mode');
+            });
+
+            if (pages[0].classList.contains('user-ready-mode')) {
+                statusText.textContent = 'User Ready Mode (Sample data visible)';
+            } else {
+                statusText.textContent = 'Dev Mode (Yellow highlights)';
+            }
+        }
+
+        // Message listener for calculator updates (when integrated)
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'FIELD_UPDATE') {
+                const elements = document.querySelectorAll(
+                    `[data-field-id*="${event.data.fieldId}"]`
+                );
+                elements.forEach(el => {
+                    el.textContent = event.data.value;
+                    el.classList.add('populated');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

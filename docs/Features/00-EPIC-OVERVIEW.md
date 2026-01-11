@@ -8,17 +8,19 @@
 
 ## Quick Navigation
 
-| Epic | Features | Duration | Status |
-|------|----------|----------|--------|
-| [Epic 1: Foundation](#epic-1-foundation--infrastructure) | F01-F02 | 24-40h | 📋 Not Started |
-| [Epic 2: Data Entry](#epic-2-data-entry--field-management) | F03-F05 | 96-152h | 📋 Not Started |
-| [Epic 3: Calculations](#epic-3-calculation-engine) | F06-F10 | 168-240h | 📋 Not Started |
-| [Epic 4: Preview & Export](#epic-4-preview--export) | F11-F13 | 88-136h | 📋 Not Started |
-| [Epic 5: Client Delivery](#epic-5-client-delivery) | F14-F16 | 64-96h | 📋 Not Started |
-| [Epic 6: Integration](#epic-6-integration--workflow) | F17-F19 | 72-112h | 📋 Not Started |
-| [Epic 7: Testing & Deploy](#epic-7-testing--deployment) | F21-F23 | 80-128h | 📋 Not Started |
+| Epic | Features | Scope | Status |
+|------|----------|-------|--------|
+| [Epic 1: Foundation](#epic-1-foundation--infrastructure) | F01-F02 | 2M | 📋 Not Started |
+| [Epic 2: Data Entry](#epic-2-data-entry--field-management) | F03-F05 | 1XL + 2L | 📋 Not Started |
+| [Epic 3: Calculations](#epic-3-calculation-engine) | F06-F10 | 1XL + 2L + 2M | 📋 Not Started |
+| [Epic 4: Preview & Export](#epic-4-preview--export) | F11-F13 | 1XL + 2L | 📋 Not Started |
+| [Epic 5: Client Delivery](#epic-5-client-delivery) | F14-F16 | 1L + 2M | 📋 Not Started |
+| [Epic 6: Integration](#epic-6-integration--workflow) | F17-F19 | 1XL + 1M + 1S | 📋 Not Started |
+| [Epic 7: Testing & Deploy](#epic-7-testing--deployment) | F21-F23 | 1L + 2M | 📋 Not Started |
 
-**Total**: 23 features, **592-904 hours** (15-23 weeks @ 40h/week)
+**Total**: 23 features, **4 XL + 10 L + 11 M + 1 S**
+
+See [00-SIZING-GUIDE.md](00-SIZING-GUIDE.md) for complexity sizing (XS/S/M/L/XL)
 
 ---
 
@@ -39,10 +41,11 @@ Each feature is a **complete vertical slice** containing:
 4. **Clear ownership** - Cursor gets complete scope per feature
 5. **Reduced side effects** - changes localized to one slice
 
-### Granularity Guidelines
-- Each feature: **8-80 hours** (industry best practice)
-- Completable within: **1-2 weeks max**
-- Independently testable and deployable
+### Sizing Guidelines
+- Features sized **XS to XL** based on scope complexity (NOT time)
+- Each feature is **independently testable and deployable**
+- Size indicates code volume, integrations, unknowns, dependencies
+- See [00-SIZING-GUIDE.md](00-SIZING-GUIDE.md) for details
 
 ---
 
@@ -50,10 +53,10 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Establish technical foundation for V4 build
 
 ### Features
-| ID | Feature | Duration | Priority |
-|----|---------|----------|----------|
-| F01 | [Foundation-Infrastructure](01-Foundation-Infrastructure/) | 8-16h | P0 - Blocking |
-| F02 | [Database-Schema](02-Database-Schema/) | 16-24h | P0 - Blocking |
+| ID | Feature | Size | Priority |
+|----|---------|------|----------|
+| F01 | [Foundation-Infrastructure](01-Foundation-Infrastructure/) | M | P0 - Blocking |
+| F02 | [Database-Schema](02-Database-Schema/) | M | P0 - Blocking |
 
 **Deliverables**:
 - Next.js 15 + React 19 + TypeScript setup
@@ -70,11 +73,11 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Unified interface for all 944+ fields
 
 ### Features
-| ID | Feature | Duration | Priority |
+| ID | Feature | Size | Priority |
 |----|---------|----------|----------|
-| F03 | [Core-Sections](03-Core-Sections/) | 24-40h | P0 - High Reuse |
-| F04 | [Narrative-Sections](04-Narrative-Sections/) | 40-64h | P1 - New Build |
-| F05 | [Media-Management](05-Media-Management/) | 32-48h | P1 - Images |
+| F03 | [Core-Sections](03-Core-Sections/) | M | P0 - High Reuse |
+| F04 | [Narrative-Sections](04-Narrative-Sections/) | XL | P1 - New Build |
+| F05 | [Media-Management](05-Media-Management/) | L | P1 - Images |
 
 **Deliverables**:
 - 72 fields (Cover, Transmittal, Executive, Property ID, Certification)
@@ -92,13 +95,13 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Dual calculator system with Excel import
 
 ### Features
-| ID | Feature | Duration | Priority |
+| ID | Feature | Size | Priority |
 |----|---------|----------|----------|
-| F06 | [Income-Calculator](06-Income-Calculator/) | 32-56h | P0 - Critical |
-| F07 | [Sales-Comparison](07-Sales-Comparison/) | 40-64h | P0 - Critical |
-| F08 | [Cost-Approach](08-Cost-Approach/) | 24-40h | P1 - Required |
-| F09 | [Reconciliation](09-Reconciliation/) | 16-24h | P0 - Critical |
-| F10 | [Excel-Import](10-Excel-Import/) | 40-56h | P0 - Trust Building |
+| F06 | [Income-Calculator](06-Income-Calculator/) | L | P0 - Critical |
+| F07 | [Sales-Comparison](07-Sales-Comparison/) | XL | P0 - Critical |
+| F08 | [Cost-Approach](08-Cost-Approach/) | M | P1 - Required |
+| F09 | [Reconciliation](09-Reconciliation/) | M | P0 - Critical |
+| F10 | [Excel-Import](10-Excel-Import/) | L | P0 - Trust Building |
 
 **Deliverables**:
 - Income Approach: 24 inputs → 85 outputs
@@ -116,11 +119,11 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Live HTML preview and export functionality
 
 ### Features
-| ID | Feature | Duration | Priority |
+| ID | Feature | Size | Priority |
 |----|---------|----------|----------|
-| F11 | [Live-Preview](11-Live-Preview/) | 32-48h | P0 - Critical UX |
-| F12 | [Template-System](12-Template-System/) | 24-40h | P0 - Required |
-| F13 | [Export-Engine](13-Export-Engine/) | 32-48h | P1 - Client Delivery |
+| F11 | [Live-Preview](11-Live-Preview/) | L | P0 - Critical UX |
+| F12 | [Template-System](12-Template-System/) | M | P0 - Required |
+| F13 | [Export-Engine](13-Export-Engine/) | L | P1 - Client Delivery |
 
 **Deliverables**:
 - Split-screen layout (builder | preview)
@@ -137,11 +140,11 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Shareable links replacing 23MB email attachments
 
 ### Features
-| ID | Feature | Duration | Priority |
+| ID | Feature | Size | Priority |
 |----|---------|----------|----------|
-| F14 | [Share-Links](14-Share-Links/) | 24-40h | P0 - Core Value |
-| F15 | [Client-Portal](15-Client-Portal/) | 24-32h | P0 - Core Value |
-| F16 | [Email-Delivery](16-Email-Delivery/) | 16-24h | P1 - Automation |
+| F14 | [Share-Links](14-Share-Links/) | M | P0 - Core Value |
+| F15 | [Client-Portal](15-Client-Portal/) | M | P0 - Core Value |
+| F16 | [Email-Delivery](16-Email-Delivery/) | M | P1 - Automation |
 
 **Deliverables**:
 - Secure token generation (32-byte tokens)
@@ -160,11 +163,11 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Connect V4 with existing V3 systems
 
 ### Features
-| ID | Feature | Duration | Priority |
+| ID | Feature | Size | Priority |
 |----|---------|----------|----------|
-| F17 | [Valcre-Integration](17-Valcre-Integration/) | 32-48h | P0 - Required |
-| F18 | [ClickUp-Stage-2](18-ClickUp-Stage-2/) | 16-24h | P1 - Workflow |
-| F19 | [Dashboard-UX](19-Dashboard-UX/) | 24-40h | P1 - Polish |
+| F17 | [Valcre-Integration](17-Valcre-Integration/) | L | P0 - Required |
+| F18 | [ClickUp-Stage-2](18-ClickUp-Stage-2/) | M | P1 - Workflow |
+| F19 | [Dashboard-UX](19-Dashboard-UX/) | M | P1 - Polish |
 
 **Deliverables**:
 - Import job data from Valcre (two-way sync)
@@ -182,11 +185,11 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Production-ready with confidence
 
 ### Features
-| ID | Feature | Duration | Priority |
+| ID | Feature | Size | Priority |
 |----|---------|----------|----------|
-| F21 | [Testing](21-Testing/) | 40-64h | P0 - Quality |
-| F22 | [Performance](22-Performance/) | 24-40h | P1 - UX |
-| F23 | [Deployment](23-Deployment/) | 16-24h | P0 - Go-Live |
+| F21 | [Testing](21-Testing/) | XL | P0 - Quality |
+| F22 | [Performance](22-Performance/) | M | P1 - UX |
+| F23 | [Deployment](23-Deployment/) | M | P0 - Go-Live |
 
 **Deliverables**:
 - Unit tests (Vitest) for calculations

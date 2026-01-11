@@ -2,7 +2,7 @@
 
 **Epic**: EPIC 3 - Calculation Engine
 **Feature ID**: F06
-**Estimated Duration**: 32-56 hours
+**Complexity Size**: L (Large)
 **Status**: 📋 Not Started
 
 ---

@@ -2,7 +2,7 @@
 
 **Epic**: EPIC 1 - Foundation & Infrastructure
 **Feature ID**: F02
-**Estimated Duration**: 16-24 hours
+**Complexity Size**: M (Medium)
 **Status**: 📋 Not Started
 
 ---

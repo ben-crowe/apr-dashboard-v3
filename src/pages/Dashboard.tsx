@@ -29,7 +29,7 @@ const JobListRoute = () => {
               <h1 className="text-2xl font-bold">Appraisal Submissions</h1>
               <button
                 onClick={toggleViewMode}
-                className="px-3 py-1 rounded bg-primary text-primary-foreground text-sm"
+                className="px-2.5 py-1.5 rounded-md border border-slate-400/50 dark:border-slate-700/50 bg-transparent text-foreground hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-slate-500/60 dark:hover:border-slate-600/60 text-sm font-normal transition-colors"
               >
                 Switch to {viewMode === 'list' ? 'Table' : 'List'} View
               </button>

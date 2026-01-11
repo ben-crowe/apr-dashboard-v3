@@ -30,6 +30,7 @@ const StatusFilter: React.FC<StatusFilterProps> = ({
         <SelectItem value="submitted">Submitted</SelectItem>
         <SelectItem value="in_progress">In Progress</SelectItem>
         <SelectItem value="loe_pending">LOE Pending</SelectItem>
+        <SelectItem value="loe_signed">LOE Signed</SelectItem>
         <SelectItem value="completed">Completed</SelectItem>
       </SelectContent>
     </Select>

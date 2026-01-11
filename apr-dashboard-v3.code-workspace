@@ -3,7 +3,37 @@
 		{
 			"name": "apr-dashboard-v3",
 			"path": "."
+		},
+		{
+			"path": "../00-Systems-Management"
+		},
+		{
+			"path": "../02-Project-Planning"
 		}
 	],
-	"settings": {}
+	"settings": {
+		// SpecStory Configuration
+		// Ensures SpecStory captures AI conversations in this workspace
+		"specstory.enabled": true,
+		"specstory.autoSave": true,
+		"specstory.outputDirectory": ".specstory/history",
+		"specstory.projectIdentityFile": ".specstory/.project.json",
+		
+		// File associations for SpecStory
+		"files.associations": {
+			"*.specstory.md": "markdown"
+		},
+		
+		// Exclude SpecStory history from file search (but allow @ references)
+		"search.exclude": {
+			"**/.specstory/history/**": false,
+			"**/.specstory/features/**": false
+		},
+		"editor.wordWrap": "on"
+	},
+	"extensions": {
+		"recommendations": [
+			"agsoft.claude-history-viewer"
+		]
+	}
 }

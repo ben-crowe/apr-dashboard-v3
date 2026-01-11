@@ -117,7 +117,7 @@ export const JobListProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
   // Helper function to validate and cast status to JobStatus type
   const validateJobStatus = (status: string): JobStatus => {
-    const validStatuses: JobStatus[] = ["submitted", "in_progress", "loe_pending", "completed"];
+    const validStatuses: JobStatus[] = ["submitted", "in_progress", "loe_pending", "loe_signed", "completed"];
     
     if (validStatuses.includes(status as JobStatus)) {
       return status as JobStatus;

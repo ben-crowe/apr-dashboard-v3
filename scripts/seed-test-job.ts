@@ -43,8 +43,9 @@ if (!SUPABASE_URL || !SUPABASE_KEY) {
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// Test job ID - using a predictable ID for easy testing
-const TEST_JOB_ID = 'test-job-report-builder-001';
+// Test job ID - using a predictable UUID for easy testing
+// Format: test-job-report-builder-001 -> UUID format
+const TEST_JOB_ID = '00000000-0000-0000-0000-000000000001';
 
 // ============================================================================
 // TEST DATA
@@ -79,12 +80,14 @@ const testJobSubmission = {
 
   // Status
   status: 'in_progress',
-  job_number: 'VAL-2025-TEST-001'
+  // job_number intentionally null - should be created via "Create Valcre Job" button
+  job_number: null
 };
 
 const testLoeDetails = {
   job_id: TEST_JOB_ID,
-  job_number: 'VAL-2025-TEST-001',
+  // job_number intentionally null - should be created via "Create Valcre Job" button
+  job_number: null,
   property_rights_appraised: 'Fee Simple',
   valuation_premises: 'Market Value',
   delivery_date: '2025-02-15',

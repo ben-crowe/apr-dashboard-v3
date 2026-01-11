@@ -135,6 +135,12 @@ const useFormSubmission = () => {
           property_contact_phone: formData.propertyContactPhone || null,
           notes: formData.notes,
           status: "submitted",
+          source: "webform",  // Track that this came from webform submission
+          tags: [],  // Empty tags array (can be added later)
+          source_metadata: {
+            referrer: typeof document !== 'undefined' ? document.referrer : null,
+            user_agent: typeof navigator !== 'undefined' ? navigator.userAgent : null
+          }
         })
         .select('*')
         .single();

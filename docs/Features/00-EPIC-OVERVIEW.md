@@ -8,19 +8,17 @@
 
 ## Quick Navigation
 
-| Epic | Features | Scope | Status |
-|------|----------|-------|--------|
-| [Epic 1: Foundation](#epic-1-foundation--infrastructure) | F01-F02 | 2M | 📋 Not Started |
-| [Epic 2: Data Entry](#epic-2-data-entry--field-management) | F03-F05 | 1XL + 2L | 📋 Not Started |
-| [Epic 3: Calculations](#epic-3-calculation-engine) | F06-F10 | 1XL + 2L + 2M | 📋 Not Started |
-| [Epic 4: Preview & Export](#epic-4-preview--export) | F11-F13 | 1XL + 2L | 📋 Not Started |
-| [Epic 5: Client Delivery](#epic-5-client-delivery) | F14-F16 | 1L + 2M | 📋 Not Started |
-| [Epic 6: Integration](#epic-6-integration--workflow) | F17-F19 | 1XL + 1M + 1S | 📋 Not Started |
-| [Epic 7: Testing & Deploy](#epic-7-testing--deployment) | F21-F23 | 1L + 2M | 📋 Not Started |
+| Epic | Features | Status |
+|------|----------|--------|
+| [Epic 1: Foundation](#epic-1-foundation--infrastructure) | F01-F02 | 📋 Not Started |
+| [Epic 2: Data Entry](#epic-2-data-entry--field-management) | F03-F05 | 📋 Not Started |
+| [Epic 3: Calculations](#epic-3-calculation-engine) | F06-F10 | 📋 Not Started |
+| [Epic 4: Preview & Export](#epic-4-preview--export) | F11-F13 | 📋 Not Started |
+| [Epic 5: Client Delivery](#epic-5-client-delivery) | F14-F16 | 📋 Not Started |
+| [Epic 6: Integration](#epic-6-integration--workflow) | F17-F19 | 📋 Not Started |
+| [Epic 7: Testing & Deploy](#epic-7-testing--deployment) | F21-F23 | 📋 Not Started |
 
-**Total**: 23 features, **4 XL + 10 L + 11 M + 1 S**
-
-See [00-SIZING-GUIDE.md](00-SIZING-GUIDE.md) for complexity sizing (XS/S/M/L/XL)
+**Total**: 23 features across 7 epics
 
 ---
 
@@ -41,11 +39,10 @@ Each feature is a **complete vertical slice** containing:
 4. **Clear ownership** - Cursor gets complete scope per feature
 5. **Reduced side effects** - changes localized to one slice
 
-### Sizing Guidelines
-- Features sized **XS to XL** based on scope complexity (NOT time)
-- Each feature is **independently testable and deployable**
-- Size indicates code volume, integrations, unknowns, dependencies
-- See [00-SIZING-GUIDE.md](00-SIZING-GUIDE.md) for details
+### Feature Guidelines
+- Each feature is a **complete, independently testable and deployable** unit
+- Features grouped by strategic goal (Epic level)
+- Dependencies clearly documented
 
 ---
 
@@ -53,10 +50,10 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Establish technical foundation for V4 build
 
 ### Features
-| ID | Feature | Size | Priority |
+| ID | Feature | Priority |
 |----|---------|------|----------|
-| F01 | [Foundation-Infrastructure](01-Foundation-Infrastructure/) | M | P0 - Blocking |
-| F02 | [Database-Schema](02-Database-Schema/) | M | P0 - Blocking |
+| F01 | [Foundation-Infrastructure](01-Foundation-Infrastructure/) | P0 - Blocking |
+| F02 | [Database-Schema](02-Database-Schema/) | P0 - Blocking |
 
 **Deliverables**:
 - Next.js 15 + React 19 + TypeScript setup
@@ -73,11 +70,11 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Unified interface for all 944+ fields
 
 ### Features
-| ID | Feature | Size | Priority |
+| ID | Feature | Priority |
 |----|---------|----------|----------|
-| F03 | [Core-Sections](03-Core-Sections/) | M | P0 - High Reuse |
-| F04 | [Narrative-Sections](04-Narrative-Sections/) | XL | P1 - New Build |
-| F05 | [Media-Management](05-Media-Management/) | L | P1 - Images |
+| F03 | [Core-Sections](03-Core-Sections/) | P0 - High Reuse |
+| F04 | [Narrative-Sections](04-Narrative-Sections/) | P1 - New Build |
+| F05 | [Media-Management](05-Media-Management/) | P1 - Images |
 
 **Deliverables**:
 - 72 fields (Cover, Transmittal, Executive, Property ID, Certification)
@@ -95,13 +92,13 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Dual calculator system with Excel import
 
 ### Features
-| ID | Feature | Size | Priority |
+| ID | Feature | Priority |
 |----|---------|----------|----------|
-| F06 | [Income-Calculator](06-Income-Calculator/) | L | P0 - Critical |
-| F07 | [Sales-Comparison](07-Sales-Comparison/) | XL | P0 - Critical |
-| F08 | [Cost-Approach](08-Cost-Approach/) | M | P1 - Required |
-| F09 | [Reconciliation](09-Reconciliation/) | M | P0 - Critical |
-| F10 | [Excel-Import](10-Excel-Import/) | L | P0 - Trust Building |
+| F06 | [Income-Calculator](06-Income-Calculator/) | P0 - Critical |
+| F07 | [Sales-Comparison](07-Sales-Comparison/) | P0 - Critical |
+| F08 | [Cost-Approach](08-Cost-Approach/) | P1 - Required |
+| F09 | [Reconciliation](09-Reconciliation/) | P0 - Critical |
+| F10 | [Excel-Import](10-Excel-Import/) | P0 - Trust Building |
 
 **Deliverables**:
 - Income Approach: 24 inputs → 85 outputs
@@ -119,11 +116,11 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Live HTML preview and export functionality
 
 ### Features
-| ID | Feature | Size | Priority |
+| ID | Feature | Priority |
 |----|---------|----------|----------|
-| F11 | [Live-Preview](11-Live-Preview/) | L | P0 - Critical UX |
-| F12 | [Template-System](12-Template-System/) | M | P0 - Required |
-| F13 | [Export-Engine](13-Export-Engine/) | L | P1 - Client Delivery |
+| F11 | [Live-Preview](11-Live-Preview/) | P0 - Critical UX |
+| F12 | [Template-System](12-Template-System/) | P0 - Required |
+| F13 | [Export-Engine](13-Export-Engine/) | P1 - Client Delivery |
 
 **Deliverables**:
 - Split-screen layout (builder | preview)
@@ -140,11 +137,11 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Shareable links replacing 23MB email attachments
 
 ### Features
-| ID | Feature | Size | Priority |
+| ID | Feature | Priority |
 |----|---------|----------|----------|
-| F14 | [Share-Links](14-Share-Links/) | M | P0 - Core Value |
-| F15 | [Client-Portal](15-Client-Portal/) | M | P0 - Core Value |
-| F16 | [Email-Delivery](16-Email-Delivery/) | M | P1 - Automation |
+| F14 | [Share-Links](14-Share-Links/) | P0 - Core Value |
+| F15 | [Client-Portal](15-Client-Portal/) | P0 - Core Value |
+| F16 | [Email-Delivery](16-Email-Delivery/) | P1 - Automation |
 
 **Deliverables**:
 - Secure token generation (32-byte tokens)
@@ -163,11 +160,11 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Connect V4 with existing V3 systems
 
 ### Features
-| ID | Feature | Size | Priority |
+| ID | Feature | Priority |
 |----|---------|----------|----------|
-| F17 | [Valcre-Integration](17-Valcre-Integration/) | L | P0 - Required |
-| F18 | [ClickUp-Stage-2](18-ClickUp-Stage-2/) | M | P1 - Workflow |
-| F19 | [Dashboard-UX](19-Dashboard-UX/) | M | P1 - Polish |
+| F17 | [Valcre-Integration](17-Valcre-Integration/) | P0 - Required |
+| F18 | [ClickUp-Stage-2](18-ClickUp-Stage-2/) | P1 - Workflow |
+| F19 | [Dashboard-UX](19-Dashboard-UX/) | P1 - Polish |
 
 **Deliverables**:
 - Import job data from Valcre (two-way sync)
@@ -185,11 +182,11 @@ Each feature is a **complete vertical slice** containing:
 **Strategic Goal**: Production-ready with confidence
 
 ### Features
-| ID | Feature | Size | Priority |
+| ID | Feature | Priority |
 |----|---------|----------|----------|
-| F21 | [Testing](21-Testing/) | XL | P0 - Quality |
-| F22 | [Performance](22-Performance/) | M | P1 - UX |
-| F23 | [Deployment](23-Deployment/) | M | P0 - Go-Live |
+| F21 | [Testing](21-Testing/) | P0 - Quality |
+| F22 | [Performance](22-Performance/) | P1 - UX |
+| F23 | [Deployment](23-Deployment/) | P0 - Go-Live |
 
 **Deliverables**:
 - Unit tests (Vitest) for calculations

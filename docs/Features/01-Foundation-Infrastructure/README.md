@@ -2,7 +2,6 @@
 
 **Epic**: EPIC 1 - Foundation & Infrastructure
 **Feature ID**: F01
-**Complexity Size**: M (Medium)
 **Status**: 📋 Not Started
 
 ---

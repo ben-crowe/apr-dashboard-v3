@@ -3,11 +3,25 @@ import { Button } from "@/components/ui/button";
 import SubmissionForm from "@/components/SubmissionForm";
 import { useTheme } from "@/hooks/use-theme"; // We'll create this hook
 import { Moon, Sun, LayoutDashboard } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 
 const Index = () => {
   const { theme, setTheme } = useTheme();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Handle OAuth callback redirect from ClickUp
+  // ClickUp redirects to base URL with ?code=xxx&state=xxx
+  useEffect(() => {
+    const code = searchParams.get('code');
+    const state = searchParams.get('state');
+    
+    // If we have OAuth params, redirect to callback handler
+    if (code && state) {
+      navigate(`/clickup/callback?code=${code}&state=${state}`, { replace: true });
+    }
+  }, [searchParams, navigate]);
 
   return (
     <div className="min-h-screen flex flex-col pb-20">

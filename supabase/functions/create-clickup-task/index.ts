@@ -10,8 +10,8 @@ const corsHeaders = {
 // ClickUp Configuration - DEVELOPMENT ENVIRONMENT (Ben's test workspace)
 // Use for safe testing before production deployment
 // Switch to production credentials after Dev testing passes
-const CLICKUP_API_TOKEN = Deno.env.get('CLICKUP_API_TOKEN') || 'pk_63967834_W45TQXNS33YE9O1CA0K8RZDLGIM5B2FU'
-const CLICKUP_LIST_ID = Deno.env.get('CLICKUP_LIST_ID') || '901703694310' // Ben's test list in BC Workspace
+const CLICKUP_API_TOKEN = Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY'
+const CLICKUP_LIST_ID = Deno.env.get('CLICKUP_LIST_ID') || '901706896375' // New Submission - BC Workspace (Dev.Projects)
 const CLICKUP_TEMPLATE_ID = null // Skip template for Dev testing (or create test template)
 const CLICKUP_WORKSPACE_ID = '8555561' // BC Workspace (Development)
 
@@ -22,6 +22,15 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Debug: Log token status
+    const envToken = Deno.env.get('CLICKUP_API_TOKEN')
+    console.log('🔍 Token check:', {
+      hasEnvToken: !!envToken,
+      tokenPrefix: envToken ? envToken.substring(0, 12) : 'none',
+      usingFallback: !envToken,
+      listId: CLICKUP_LIST_ID
+    })
+
     const { jobId } = await req.json()
 
     if (!jobId) {
@@ -100,13 +109,26 @@ Deno.serve(async (req) => {
     hours = hours % 12 || 12
     const formattedDateTime = `${year}.${month}.${day} / ${hours}:${minutes} ${ampm}`
 
+    // Determine label based on source
+    const jobSource = job.source || 'webform' // Default to webform for backward compatibility
+    let sourceLabel = 'New Client Request Received'
+    if (jobSource === 'manual') {
+      sourceLabel = 'Job Created Manually'
+    } else if (jobSource === 'api') {
+      sourceLabel = 'Job Created via API'
+    } else if (jobSource === 'import') {
+      sourceLabel = 'Job Imported'
+    } else if (jobSource === 'crm') {
+      sourceLabel = 'Job Created via CRM'
+    }
+
     // Build task description with new format (Stage 1)
     const description = `📍 **NEW APPRAISAL REQUEST:** [APR Dashboard](${jobUrl})
 📍 **VALCRE JOB NUMBER:**
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-**RECEIVED DATE:**  ${formattedDateTime}
-  ▸ LOE Sent:
-  ▸ LOE Signed:
+**${sourceLabel}:**  ${formattedDateTime}
+▸ LOE Sent:
+▸ LOE Signed:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 **CLIENT INFORMATION**

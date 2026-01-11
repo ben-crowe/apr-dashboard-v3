@@ -33,12 +33,15 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   const [showEmailEdit, setShowEmailEdit] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(75); // Default zoom 75%
 
-  // Initialize recipient email with client's email
+  // Initialize recipient email - Default to bc@crowestudio.com for testing (developer's email)
+  // Users can change it via "Change Recipient" button if needed
   useEffect(() => {
-    if (job.clientEmail) {
-      setRecipientEmail(job.clientEmail);
-    }
-  }, [job.clientEmail]);
+    // For testing: Default to developer's email (bc@crowestudio.com)
+    // Users can override via "Change Recipient" button
+    const testEmail = 'bc@crowestudio.com';
+    setRecipientEmail(testEmail);
+    console.log('📧 Default email set to:', testEmail, '(testing mode)');
+  }, []);
 
   useEffect(() => {
     // Create a blob URL for the preview with proper scaling CSS
@@ -222,8 +225,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
             </div>
           </div>
           {recipientEmail !== job.clientEmail && (
-            <p className="text-xs text-orange-600 mt-2 px-1">
-              ⚠️ Note: Sending to different email than client's original ({job.clientEmail})
+            <p className="text-xs text-blue-600 mt-2 px-1 bg-blue-50 px-2 py-1 rounded">
+              ℹ️ Testing mode: Email will be sent to <strong>{recipientEmail}</strong> (client's email: {job.clientEmail})
             </p>
           )}
         </div>

@@ -21,7 +21,10 @@ const JobListTitle: React.FC<JobListTitleProps> = ({ onSelectJob }) => {
           client_phone: "",
           property_address: "",
           property_type: "",  // Empty so dropdown shows "Select"
-          status: "submitted"
+          status: "submitted",
+          source: "manual",  // Track that this was manually created
+          tags: [],  // Empty tags array
+          source_metadata: {}  // No additional metadata for manual creation
         })
         .select('*')
         .single();
@@ -57,8 +60,13 @@ const JobListTitle: React.FC<JobListTitleProps> = ({ onSelectJob }) => {
   return (
     <div className="flex justify-between items-center">
       <h1 className="text-xl font-semibold tracking-tight">Jobs</h1>
-      <Button onClick={handleCreateNewJob} size="sm">
-        <Plus className="mr-2 h-4 w-4" /> New Job
+      <Button 
+        onClick={handleCreateNewJob} 
+        variant="outline"
+        size="sm"
+        className="px-2.5 py-1.5 border-slate-400/50 dark:border-slate-700/50 text-foreground hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-slate-500/60 dark:hover:border-slate-600/60"
+      >
+        <Plus className="mr-1.5 h-3.5 w-3.5" /> New Job
       </Button>
     </div>
   );

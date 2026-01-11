@@ -1,0 +1,22 @@
+#!/bin/bash
+# Quick guide to fix Google OAuth access issues
+
+echo "=========================================="
+echo "Google OAuth Access Fix Guide"
+echo "=========================================="
+echo ""
+echo "If Google is blocking Gmail API access, follow these steps:"
+echo ""
+echo "1. Enable Gmail API:"
+echo "   https://console.cloud.google.com/apis/library/gmail.googleapis.com"
+echo ""
+echo "2. Configure OAuth Consent Screen:"
+echo "   https://console.cloud.google.com/apis/credentials/consent"
+echo "   - Add scope: gmail.readonly"
+echo "   - Add test user: bc@crowestudio.com"
+echo ""
+echo "3. Full guide:"
+echo "   docs/03-ClickUp-Integration/40-GOOGLE-OAUTH-CONSENT-SETUP.md"
+echo ""
+echo "Opening Google Cloud Console..."
+open "https://console.cloud.google.com/apis/credentials/consent?project=gen-lang-client-0262970848"

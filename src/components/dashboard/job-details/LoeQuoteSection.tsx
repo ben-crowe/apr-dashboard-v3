@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { SectionProps } from "./types";
-import { isValcreJobNumber, isPendingValcreJob, VALCRE_JOB_PREFIX } from "@/config/valcre";
+import { isValcreJobNumber, isPendingValcreJob, hasRealValcreJob, VALCRE_JOB_PREFIX } from "@/config/valcre";
 import JobNumberField from "./loe-quote/JobNumberField";
 import { sendToValcre } from "@/utils/webhooks";
 import { supabase } from "@/integrations/supabase/client";
@@ -833,8 +833,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               </TooltipProvider>
             )}
 
-            {/* E-Signature Button - Always visible but dims when inactive */}
-            {isValcreJobNumber(jobDetails?.jobNumber) ? (
+            {/* E-Signature Button - Only visible when REAL Valcre job exists (has valcre_job_id) */}
+            {hasRealValcreJob(jobDetails) ? (
               validation.missingFields.length > 0 && !alreadySent ? (
                 <TooltipProvider>
                   <Tooltip>

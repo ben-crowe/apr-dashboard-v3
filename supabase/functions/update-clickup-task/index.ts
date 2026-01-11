@@ -8,7 +8,7 @@ const corsHeaders = {
 }
 
 // ClickUp Configuration - DEVELOPMENT ENVIRONMENT (Ben's test workspace)
-const CLICKUP_API_TOKEN = Deno.env.get('CLICKUP_API_TOKEN') || 'pk_63967834_W45TQXNS33YE9O1CA0K8RZDLGIM5B2FU'
+const CLICKUP_API_TOKEN = Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY'
 
 Deno.serve(async (req) => {
   // Handle CORS
@@ -117,11 +117,36 @@ Deno.serve(async (req) => {
     )
 
     // Replace Valcre Job Number line with link
+    // Handle multiple formats: with/without bold, with/without existing number
     if (valcreJobUrl) {
+      console.log('🔍 Before replacement - Stage 1 VALCRE line:', updatedStage1.split('\n').find(l => l.includes('VALCRE JOB NUMBER')) || 'NOT FOUND')
+      
+      // Pattern 1: With bold markers (original format) - no number yet
       updatedStage1 = updatedStage1.replace(
-        /📍 VALCRE JOB NUMBER:[^\n]*/,
+        /📍 \*\*VALCRE JOB NUMBER:\*\*\s*$/m,
         `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`
       )
+      // Pattern 2: Without bold markers - no number yet
+      updatedStage1 = updatedStage1.replace(
+        /📍 VALCRE JOB NUMBER:\s*$/m,
+        `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`
+      )
+      // Pattern 3: Already has number but no link (most common case after Stage 2 runs)
+      updatedStage1 = updatedStage1.replace(
+        /📍 VALCRE JOB NUMBER:\s*[^\n]*/,
+        `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`
+      )
+      // Pattern 4: With bold but has number already
+      updatedStage1 = updatedStage1.replace(
+        /📍 \*\*VALCRE JOB NUMBER:\*\*\s*[^\n]*/,
+        `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`
+      )
+      
+      console.log('🔍 After replacement - Stage 1 VALCRE line:', updatedStage1.split('\n').find(l => l.includes('VALCRE JOB NUMBER')) || 'NOT FOUND')
+      console.log('✅ Valcre link added to Stage 1')
+      console.log('🔍 Link in description:', updatedStage1.includes(valcreJobUrl) ? 'YES' : 'NO')
+    } else {
+      console.log('⚠️ No Valcre job URL - valcre_job_id:', loeDetails.valcre_job_id, 'job_number:', valcreJobNumber)
     }
 
     // Build Stage 2 LOE section

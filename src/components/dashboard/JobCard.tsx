@@ -12,16 +12,18 @@ interface JobCardProps {
 }
 
 const statusColors = {
-  submitted: "bg-blue-500",
-  in_progress: "bg-amber-500",
-  loe_pending: "bg-purple-500",
-  completed: "bg-green-500",
+  submitted: "bg-slate-400",
+  in_progress: "bg-amber-400",
+  loe_pending: "bg-purple-400",
+  loe_signed: "bg-emerald-500",
+  completed: "bg-emerald-600",
 };
 
 const statusLabels = {
   submitted: "Submitted",
   in_progress: "In Progress",
   loe_pending: "LOE Pending",
+  loe_signed: "LOE Signed",
   completed: "Completed",
 };
 
@@ -40,7 +42,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSelect }) => {
         <div className="flex items-start gap-2 mb-1.5">
           <div
             className={cn(
-              "w-2 h-2 rounded-sm mt-1.5",
+              "w-1.5 h-1.5 rounded-sm mt-1.5 opacity-70",
               statusColors[job.status as keyof typeof statusColors] || "bg-gray-400"
             )}
           />

@@ -2,7 +2,6 @@
 
 **Epic**: EPIC 3 - Calculation Engine
 **Feature ID**: F06
-**Complexity Size**: L (Large)
 **Status**: 📋 Not Started
 
 ---

@@ -8,7 +8,7 @@ const corsHeaders = {
 }
 
 // ClickUp Configuration
-const CLICKUP_API_TOKEN = Deno.env.get('CLICKUP_API_TOKEN') || 'pk_63967834_W45TQXNS33YE9O1CA0K8RZDLGIM5B2FU'
+const CLICKUP_API_TOKEN = Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY'
 
 interface DocuSealWebhookPayload {
   event_type: 'submission.completed' | 'submission.created';
@@ -87,19 +87,20 @@ async function updateClickUpLOEStatus(
 
   if (eventType === 'sent') {
     // Stage 2.5: Replace blank LOE Sent line with actual timestamp
-    const sentLine = `  ▸ LOE Sent:   ${formattedTime}`
+    const sentLine = `▸ LOE Sent:   ${formattedTime}`
 
-    // Replace blank LOE Sent line
+    // Replace blank LOE Sent line (handle both with and without leading spaces)
     if (existingDescription.includes('▸ LOE Sent:')) {
+      // Match: "▸ LOE Sent:" or "  ▸ LOE Sent:" followed by optional whitespace and newline
       updatedDescription = existingDescription.replace(
-        /  ▸ LOE Sent:\s+$/m,
+        /^\s*▸ LOE Sent:\s*$/m,
         sentLine
       )
     } else {
-      // Fallback: Insert after "Received Date:" line if not found
-      if (existingDescription.includes('Received Date:')) {
+      // Fallback: Insert after form submission date line if not found
+      if (existingDescription.includes('New Client Request Received:') || existingDescription.includes('FORM SUBMITTED:') || existingDescription.includes('REQUEST RECEIVED:') || existingDescription.includes('RECEIVED DATE:')) {
         updatedDescription = existingDescription.replace(
-          /(Received Date:.*?\n)/,
+          /(New Client Request Received:.*?\n|FORM SUBMITTED:.*?\n|REQUEST RECEIVED:.*?\n|RECEIVED DATE:.*?\n)/,
           `$1${sentLine}\n`
         )
       } else {
@@ -109,27 +110,29 @@ async function updateClickUpLOEStatus(
     }
   } else if (eventType === 'signed') {
     // Stage 3: Replace blank LOE Signed line with actual timestamp and signer name
-    const signedLine = `  ▸ LOE Signed: ${formattedTime} by ${signerName || 'Client'}`
+    const signedLine = `▸ LOE Signed: ${formattedTime} by ${signerName || 'Client'}`
 
-    // Replace blank LOE Signed line
+    // Replace blank LOE Signed line (handle both with and without leading spaces)
     if (existingDescription.includes('▸ LOE Signed:')) {
+      // Match: "▸ LOE Signed:" or "  ▸ LOE Signed:" followed by optional whitespace and newline
       updatedDescription = existingDescription.replace(
-        /  ▸ LOE Signed:\s+$/m,
+        /^\s*▸ LOE Signed:\s*$/m,
         signedLine
       )
     } else {
       // Fallback: Insert after "LOE Sent" line if not found
       if (existingDescription.includes('▸ LOE Sent:')) {
+        // Match "LOE Sent:" line (with or without leading spaces) and insert after it
         updatedDescription = existingDescription.replace(
-          /(  ▸ LOE Sent:.*?\n)/,
+          /(^\s*▸ LOE Sent:.*?\n)/m,
           `$1${signedLine}\n`
         )
       } else {
-        // If no "LOE Sent" line, add both after Received Date
-        const sentLine = `  ▸ LOE Sent:   ${formattedTime}`
-        if (existingDescription.includes('Received Date:')) {
+        // If no "LOE Sent" line, add both after form submission date
+        const sentLine = `▸ LOE Sent:   ${formattedTime}`
+        if (existingDescription.includes('New Client Request Received:') || existingDescription.includes('FORM SUBMITTED:') || existingDescription.includes('REQUEST RECEIVED:') || existingDescription.includes('RECEIVED DATE:')) {
           updatedDescription = existingDescription.replace(
-            /(Received Date:.*?\n)/,
+            /(New Client Request Received:.*?\n|FORM SUBMITTED:.*?\n|REQUEST RECEIVED:.*?\n|RECEIVED DATE:.*?\n)/,
             `$1${sentLine}\n${signedLine}\n`
           )
         } else {

@@ -13,16 +13,18 @@ interface AppraisalTableProps {
 }
 
 const statusColors = {
-  submitted: "bg-blue-500",
-  in_progress: "bg-amber-500",
-  loe_pending: "bg-purple-500",
-  completed: "bg-green-500",
+  submitted: "bg-slate-50 text-slate-600 border-slate-200 dark:bg-slate-800/50 dark:text-slate-400 dark:border-slate-700",
+  in_progress: "bg-amber-50/80 text-amber-600 border-amber-200 dark:bg-amber-900/10 dark:text-amber-500 dark:border-amber-800/50",
+  loe_pending: "bg-purple-50/80 text-purple-600 border-purple-200 dark:bg-purple-900/10 dark:text-purple-500 dark:border-purple-800/50",
+  loe_signed: "bg-emerald-50/80 text-emerald-600 border-emerald-200 dark:bg-emerald-900/10 dark:text-emerald-500 dark:border-emerald-800/50",
+  completed: "bg-emerald-50/80 text-emerald-600 border-emerald-200 dark:bg-emerald-900/10 dark:text-emerald-500 dark:border-emerald-800/50",
 };
 
 const statusLabels = {
   submitted: "Submitted",
   in_progress: "In Progress",
   loe_pending: "LOE Pending",
+  loe_signed: "LOE Signed",
   completed: "Completed",
 };
 
@@ -65,7 +67,7 @@ const AppraisalTable: React.FC<AppraisalTableProps> = ({ jobs, isLoading, onSele
               <TableCell>{job.propertyAddress}</TableCell>
               <TableCell>{job.propertyType}</TableCell>
               <TableCell>
-                <Badge variant="outline" className={`${statusColors[job.status as keyof typeof statusColors]} text-white`}>
+                <Badge variant="outline" className={`${statusColors[job.status as keyof typeof statusColors]} !rounded-md text-xs px-2 py-0.5 font-normal border`}>
                   {statusLabels[job.status as keyof typeof statusLabels]}
                 </Badge>
               </TableCell>

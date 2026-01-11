@@ -122,4 +122,69 @@ npm run preview      # Preview production build
 
 ---
 
-Last Updated: October 10, 2025
+## Supabase Deployment Guide
+
+### CRITICAL: ALWAYS USE CLOUD - NEVER LOCAL
+
+**DO NOT use local Supabase.** There is no reason to run Supabase locally for this project.
+
+### How to Detect Local Supabase (BAD)
+If you see ANY of these in `.env.local` or config files, it's WRONG:
+```
+VITE_SUPABASE_URL="http://127.0.0.1:54321"
+VITE_SUPABASE_URL="http://localhost:54321"
+```
+
+### Correct Cloud Config (GOOD)
+```
+VITE_SUPABASE_URL="https://ngovnamnjmexdpjtcnky.supabase.co"
+VITE_SUPABASE_PUBLISHABLE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nb3ZuYW1uam1leGRwanRjbmt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE3MTk0NzAsImV4cCI6MjA1NzI5NTQ3MH0.i5pxHZ6Uvo1kcyws-C0tSegs35pA7tMO287_gYXIkGQ"
+```
+
+### Why This Matters
+- **Local Supabase keys regenerate on every restart** - causes 401 errors
+- Agents waste sessions debugging "invalid API key" when the key format is valid but stale
+- Cloud keys are **stable and permanent**
+
+### If You Get 401/403 Auth Errors
+1. Check `.env.local` for `127.0.0.1` or `localhost` - if found, switch to cloud URL above
+2. Restart dev server after changing env
+3. DO NOT debug the key itself - just switch to cloud
+
+### Deployment Methods
+
+**Credentials:**
+```
+Project Ref: ngovnamnjmexdpjtcnky
+Access Token: sbp_3f05698a35727ca9b51e8d6e18f07533d12a9314
+Database URL: https://ngovnamnjmexdpjtcnky.supabase.co
+```
+
+**Method 1: Management API (RECOMMENDED)**
+```bash
+TOKEN="sbp_3f05698a35727ca9b51e8d6e18f07533d12a9314"
+PROJECT_REF="ngovnamnjmexdpjtcnky"
+
+curl -X POST \
+  "https://api.supabase.com/v1/projects/$PROJECT_REF/database/query" \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"query": "YOUR SQL HERE"}'
+```
+
+**Method 2: Supabase CLI**
+```bash
+supabase link --project-ref ngovnamnjmexdpjtcnky
+supabase db push
+```
+
+**Method 3: Direct psql**
+```bash
+psql "your-connection-string" -f migration.sql
+```
+
+**Deploy using ANY method. Don't ask Ben to do it.**
+
+---
+
+Last Updated: January 8, 2026

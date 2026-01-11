@@ -15,14 +15,16 @@ const JobDetailHeader: React.FC<JobDetailHeaderProps> = ({ job, onBack, isSaving
     submitted: "Submitted",
     in_progress: "In Progress",
     loe_pending: "LOE Pending",
+    loe_signed: "LOE Signed",
     completed: "Completed",
   }[job.status] || "Unknown";
 
   const statusColor = {
-    submitted: "bg-blue-500",
-    in_progress: "bg-amber-500",
-    loe_pending: "bg-purple-500",
-    completed: "bg-green-500",
+    submitted: "bg-slate-400",
+    in_progress: "bg-amber-400",
+    loe_pending: "bg-purple-400",
+    loe_signed: "bg-emerald-500",
+    completed: "bg-emerald-600",
   }[job.status] || "bg-gray-400";
 
   // Extract just the CAL###### part for the header
@@ -30,8 +32,13 @@ const JobDetailHeader: React.FC<JobDetailHeaderProps> = ({ job, onBack, isSaving
 
   return (
     <div className="flex items-center space-x-4">
-      <Button variant="ghost" onClick={onBack}>
-        <ArrowLeft className="mr-2 h-4 w-4" />
+      <Button 
+        variant="outline"
+        size="sm"
+        onClick={onBack}
+        className="px-2.5 py-1.5 border-slate-400/50 dark:border-slate-700/50 text-foreground hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-slate-500/60 dark:hover:border-slate-600/60"
+      >
+        <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
         Back
       </Button>
       <div className="flex items-center space-x-2">

@@ -195,17 +195,23 @@ Endpoint: https://crowestudio.app.n8n.cloud
 
 ---
 
-## 9. Gmail (Valta Admin)
+## 9. Microsoft Email (Valta Admin)
 
-**Purpose:** Email sender for LOE and payment communications via Resend
+**Purpose:** Email inbox for receiving LOE and payment communications  
+**Provider:** Microsoft Outlook / Office 365  
+**Migration:** Moved from Gmail to Microsoft
 
 **Login:**
-- Email: `admin@valta.ca`
-- Password: `Emailcircle1estates!`
+- **URL:** https://login.microsoftonline.com/
+- **Email:** `admin@valta.ca`
+- **Password:** `Superbotheredlady@2`
 
 **Configuration:**
-- Used as sender in Resend API (`FROM: admin@valta.ca`)
-- Domain verified in Resend
+- Used as recipient for Resend sandbox emails
+- Receives test emails from LOE e-signature flow
+- Receives form submission notifications
+
+**Note:** Client migrated from Gmail to Microsoft Outlook/Office 365
 
 ---
 

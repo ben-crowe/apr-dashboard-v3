@@ -17,7 +17,7 @@ import ImageTest from "./pages/ImageTest";
 import { TestInputDashboard } from "./features/test-input";
 import { CalculatorDemoPage } from "./features/calculator-demo-v4";
 import CalculatorWithPreview from "@/features/calculator-demo-v4/CalculatorWithPreview";
-import PreviewMasterWrapper from "../AGENT-HANDOFF-PreviewMaster-Wrapper";
+import ClickUpCallback from "./pages/ClickUpCallback";
 
 const queryClient = new QueryClient();
 
@@ -44,8 +44,8 @@ const App = () => (
             <Route path="/test-input" element={<TestInputDashboard />} />
             <Route path="/calculator-demo" element={<CalculatorDemoPage />} />
             <Route path="/calculator-preview" element={<CalculatorWithPreview />} />
-            <Route path="/preview-master-test" element={<PreviewMasterWrapper />} />
             <Route path="/image-test" element={<ImageTest />} />
+            <Route path="/clickup/callback" element={<ClickUpCallback />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

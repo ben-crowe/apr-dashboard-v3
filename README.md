@@ -1,6 +1,6 @@
-# APR Dashboard V3 
+# APR Dashboard V3
 
-Modern web application for managing appraisal job submissions, quotes, and workflow automation.
+Modern web application for managing appraisal job submissions, quotes, workflow automation, and report generation.
 
 ## Tech Stack
 
@@ -47,7 +47,19 @@ See `.env.example` for required environment variables:
 - **Valcre API**: Job management integration
 - **ClickUp**: Task automation (optional)
 
-Get Supabase credentials from: Dashboard → Settings → API
+Get Supabase credentials from: Dashboard -> Settings -> API
+
+### Required Environment Variables
+
+```
+VITE_SUPABASE_URL=https://[project-id].supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=eyJ...
+VITE_SUPABASE_PROJECT_ID=[project-id]
+VITE_CLICKUP_ENV=production
+VALCRE_API_KEY=[your-key]
+CLICKUP_API_KEY=[your-key]
+CLICKUP_LIST_ID=[list-id]
+```
 
 ## Development
 
@@ -62,32 +74,44 @@ npm run lint     # Run ESLint
 
 ```
 apr-dashboard-v3/
-├── .docs/                    # Documentation
-│   ├── field-mapping.md     # Valcre API field mappings
-│   ├── api-reference.md     # API integration docs
-│   └── deployment.md        # Deployment guide
-├── src/
-│   ├── components/          # React components
-│   │   ├── ui/             # Shadcn UI components
-│   │   ├── dashboard/      # Dashboard views
-│   │   └── submission-form/ # Form components
-│   ├── hooks/              # Custom React hooks
-│   ├── utils/              # Utility functions
-│   │   └── webhooks/       # Integration services
-│   ├── pages/              # Route pages
-│   └── integrations/
-│       └── supabase/       # Supabase client
-├── public/                  # Static assets
-├── supabase/
-│   └── migrations/         # Database migrations
-└── api/                    # API routes
+|-- docs/                         # Documentation
+|   |-- Features/                 # Feature documentation (01-13)
+|   |   |-- 00-FEATURES-OVERVIEW.md
+|   |   |-- 07-Report-Builder/
+|   |   |-- 09-Template-Management/
+|   |   +-- ...
+|   +-- Architecture/             # Architecture docs
+|       |-- APR-V4-ARCHITECTURE.md
+|       +-- ...
+|-- src/
+|   |-- components/               # React components
+|   |   |-- ui/                   # Shadcn UI components
+|   |   |-- dashboard/            # Dashboard views
+|   |   +-- submission-form/      # Form components
+|   |-- features/                 # Feature modules
+|   |   +-- report-builder/       # Report Builder system
+|   |       |-- schema/           # Field registry
+|   |       +-- store/            # Zustand store
+|   |-- hooks/                    # Custom React hooks
+|   |-- utils/                    # Utility functions
+|   +-- integrations/
+|       +-- supabase/             # Supabase client
+|-- public/                       # Static assets
+|   +-- Report-MF-template.html   # 79-page report template
+|-- supabase/
+|   +-- migrations/               # Database migrations
++-- api/                          # API routes
 ```
 
 ## Key Documentation
 
-- **Field Mapping**: `.docs/field-mapping.md` - Master reference for Valcre API field names
-- **API Reference**: `.docs/api-reference.md` - Integration endpoints and conventions
-- **Deployment**: `.docs/deployment.md` - Deployment procedures and troubleshooting
+| Topic | Location |
+|-------|----------|
+| Features Overview | `docs/Features/00-FEATURES-OVERVIEW.md` |
+| Report Builder | `docs/Features/07-Report-Builder/` |
+| Template Management | `docs/Features/09-Template-Management/` |
+| Field Registry | `docs/Features/08-Field-Input-Output-Mapping/` |
+| Architecture | `docs/Architecture/APR-V4-ARCHITECTURE.md` |
 
 ## Database Schema
 
@@ -95,12 +119,16 @@ Two-table architecture:
 - `job_submissions` - Main job data
 - `job_loe_details` - Line of Effort / Quote details
 
-Most form data persists to both tables. See `.docs/api-reference.md` for schema details.
-
 ## Deployment
 
 ### Vercel (Recommended)
 
+**Auto-Deploy from GitHub:**
+1. Push to `main` branch
+2. Vercel automatically detects changes
+3. Builds and deploys
+
+**Manual Deployment:**
 ```bash
 # Install Vercel CLI
 npm i -g vercel
@@ -109,43 +137,43 @@ npm i -g vercel
 vercel --prod
 ```
 
-Or connect GitHub repository to Vercel for automatic deployments on push to `main`.
-
 ### Environment Variables (Vercel Dashboard)
 
-Set all variables from `.env.example` in Vercel Dashboard → Settings → Environment Variables.
+Set all variables from `.env.example` in Vercel Dashboard -> Settings -> Environment Variables.
 
-See `.docs/deployment.md` for detailed deployment guide.
+### Supabase Setup
 
-## Common Issues
+```bash
+cd supabase
+supabase db push
+```
 
-### Retainer Amount Not Syncing
-- Ensure using field name `Retainer` (not `RetainerAmount`)
-- Strip $ and commas from currency values before API calls
+## Troubleshooting
 
 ### Build Fails
-- Verify all environment variables are set
-- Run `npm install` to update dependencies
-- Check `npm run build` locally first
+1. Check all environment variables are set
+2. Run `npm install` to ensure dependencies are current
+3. Check `npm run build` locally first
 
-### Field Mapping Questions
-- Always reference `.docs/field-mapping.md`
-- Never guess Valcre API field names
-- Use exact PascalCase as documented
+### Deployment Works But App Doesn't Load
+1. Check browser console for errors
+2. Verify Supabase URL and keys are correct
+3. Check CORS settings in Supabase dashboard
+
+### Field Mapping Issues
+- See `docs/Features/08-Field-Input-Output-Mapping/` for field references
+- Field IDs use kebab-case (e.g., `calc-type1-rent`)
+- Check `src/features/report-builder/schema/fieldRegistry.ts` for source of truth
 
 ## Contributing
 
-1. Check `.docs/field-mapping.md` for Valcre field names
-2. Consider two-table pattern impact for data changes
-3. Test currency formatting if touching payment fields
+1. Check field registry for existing field IDs
+2. Follow kebab-case naming for new fields
+3. Maintain 4-file sync: fieldRegistry, TestDataSet, template, EditPanel
 4. Run `npm run build` before committing
 5. Follow TypeScript strict mode conventions
 
-## Support
-
-For issues or questions, see `.docs/` directory for detailed documentation.
-
 ---
 
-**Version**: 3.0
-**Last Updated**: October 10, 2025
+**Version**: 3.x
+**Last Updated**: January 2026

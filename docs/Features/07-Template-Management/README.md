@@ -1,7 +1,7 @@
 # 07-Template-Management
 
 **Status**: ACTIVE
-**Last Updated**: 2026-01-11
+**Last Updated**: 2026-01-12
 **Template Version**: v3.0
 
 ---
@@ -47,6 +47,7 @@ All 4 Report Builder tabs now have complete builder-to-store-to-template pipelin
 ├── 05-AGENT-PROMPT-SALES-STORE-FIX.md     # Comp 4-5 store fix (COMPLETED)
 ├── 06-AGENT-PROMPT-INCOME-TEMPLATE-FIX.md # Type 3-6 + SF column (COMPLETED)
 ├── 07-AGENT-PROMPT-COST-TEMPLATE-CREATE.md # New Cost page (COMPLETED)
+├── 08-FIELD-REGISTRY-GUIDE.md             # Field naming conventions, 4-file sync
 │
 ├── templates/                             # Reusable HTML snippets
 │   ├── Template-Page-Field-Mapping.md     # Page-to-field reference
@@ -153,6 +154,22 @@ Reusable HTML/CSS snippets for consistency:
 - **comp-sheet-table.html** - Standard comparable property table
 - **header-standard.html** - Page header with blue border
 - **table-standard.html** - Financial data table
+
+---
+
+## Field Statistics (from Phase 16)
+
+**Total Calculator Fields Verified**: 218 fields
+
+| Approach | Input Fields | Output Fields | Total |
+|----------|--------------|---------------|-------|
+| Income | 29 | 29 | 58 |
+| Sales Comparison | 77 | 38 | 115 |
+| Cost | 17 | 14 | 31 |
+| Reconciliation | 7 | 7 | 14 |
+| **Total** | **130** | **88** | **218** |
+
+**Source**: `06-Field-Input-Output-Mapping/05-FIELD-ALIGNMENT-VERIFICATION.md`
 
 ---
 

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Page 48 - Direct Capitalization</title>
+    <style>
+        /* Essential CSS from Report-MF-template.html */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "Open Sans", Arial, sans-serif;
+            background: white;
+            padding: 54px;
+            padding-bottom: 180px;
+        }
+        
+        .page-sheet {
+            width: 8.5in;
+            min-height: 11in;
+            background-color: white;
+            page-break-after: always;
+        }
+        
+        .Header1 {
+            font-size: 18pt;
+            color: #003b7e;
+            border-bottom: 1px solid #003b7e;
+            padding-bottom: 5px;
+            margin-bottom: 12px;
+            font-weight: normal;
+        }
+        
+        .Header2 {
+            font-size: 11pt;
+            color: #003b7e;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 15px;
+            margin-bottom: 12px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7pt;
+            margin-bottom: 12px;
+        }
+        
+        th {
+            background-color: #003B7E;
+            color: white;
+            font-weight: bold;
+            font-size: 8pt;
+            padding: 3px 6px;
+            text-align: left;
+            border: 1px solid #003B7E;
+        }
+        
+        td {
+            padding: 2px 4px;
+            border: none;
+            vertical-align: top;
+            line-height: 1.3;
+        }
+        
+        .field-mapped {
+            background-color: rgba(255, 255, 0, 0.2);
+            border: 1px dashed #ff0000;
+            padding: 1px 2px;
+        }
+        
+        .field-mapped.populated {
+            background: none;
+            border: none;
+        }
+        
+        .page-footer {
+            position: absolute;
+            bottom: 54px;
+            left: 54px;
+            right: 54px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8pt;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-sheet" data-page-num="48">
+        <h1 class="Header1">Valuation & Conclusions</h1>
+        
+        <h2 class="Header2">Direct Capitalization Conclusion</h2>
+        
+        <p>
+            The table below summarizes the Direct Capitalization Method and its value conclusion.
+        </p>
+        
+        <!-- DIRECT CAPITALIZATION TABLE -->
+        <table>
+            <tr>
+                <td colspan="9" style="background-color: #003b7e; color: white; font-weight: bold; font-size: 10pt; text-transform: uppercase; padding: 4px 6px; text-align: center;">
+                    DIRECT CAPITALIZATION
+                </td>
+            </tr>
+            <!-- UNIT MIX Section -->
+            <tr style="background: #f0f0f0; border-bottom: 0.5px solid #333;">
+                <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt;">UNIT MIX</td>
+                <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center;">UNITS</td>
+                <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center;">CATEGORY</td>
+                <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center;">CONTRACT</td>
+                <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center;">MARKET</td>
+                <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center;">CONT V MKT</td>
+                <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center;">$/UNIT</td>
+                <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center;">$/SF(yr)</td>
+                <td style="padding: 3px 6px; font-weight: bold; font-size: 8pt; text-align: center;">$/YR</td>
+            </tr>
+            <!-- Type 1 Row -->
+            <tr>
+                <td><span class="field-mapped" data-field-id="{{calc-type1-name}}" title="{{calc-type1-name}}">Type 1</span></td>
+                <td style="text-align: center;"><span class="field-mapped" data-field-id="{{calc-type1-count}}" title="{{calc-type1-count}}">0</span></td>
+                <td style="text-align: center;">-</td>
+                <td style="text-align: right;"><span class="field-mapped" data-field-id="{{calc-type1-contract-rent}}" title="{{calc-type1-contract-rent}}">$0</span></td>
+                <td style="text-align: right;"><span class="field-mapped" data-field-id="{{calc-type1-rent}}" title="{{calc-type1-rent}}">$0</span></td>
+                <td style="text-align: center;"><span class="field-mapped" data-field-id="{{calc-type1-cont-v-market}}" title="{{calc-type1-cont-v-market}}">0%</span></td>
+                <td style="text-align: right;"><span class="field-mapped" data-field-id="{{calc-type1-per-unit}}" title="{{calc-type1-per-unit}}">$0</span></td>
+                <td style="text-align: right;"><span class="field-mapped" data-field-id="{{calc-type1-per-sf}}" title="{{calc-type1-per-sf}}">$0</span></td>
+                <td style="text-align: right;"><span class="field-mapped" data-field-id="{{calc-type1-annual}}" title="{{calc-type1-annual}}">$0</span></td>
+            </tr>
+            <!-- Add rows for types 2-6 similarly -->
+            <!-- PGR Section -->
+            <tr style="background: #f0f0f0; border-top: 2px solid #003B7E;">
+                <td colspan="8" style="font-weight: bold; padding: 6px;">POTENTIAL GROSS REVENUE</td>
+                <td style="text-align: right; font-weight: bold;"><span class="field-mapped" data-field-id="{{calc-pgr}}" title="{{calc-pgr}}">$0</span></td>
+            </tr>
+            <!-- Vacancy Loss -->
+            <tr>
+                <td colspan="8">Vacancy & Loss</td>
+                <td style="text-align: right;"><span class="field-mapped" data-field-id="{{calc-total-vacancy-loss}}" title="{{calc-total-vacancy-loss}}">$0</span></td>
+            </tr>
+            <!-- EGR -->
+            <tr style="background: #f0f0f0; border-top: 2px solid #003B7E;">
+                <td colspan="8" style="font-weight: bold; padding: 6px;">EFFECTIVE GROSS REVENUE</td>
+                <td style="text-align: right; font-weight: bold;"><span class="field-mapped" data-field-id="{{calc-egr}}" title="{{calc-egr}}">$0</span></td>
+            </tr>
+            <!-- Operating Expenses -->
+            <tr>
+                <td colspan="8">Operating Expenses</td>
+                <td style="text-align: right;"><span class="field-mapped" data-field-id="{{calc-expenses-total}}" title="{{calc-expenses-total}}">$0</span></td>
+            </tr>
+            <!-- NOI -->
+            <tr style="background: #f0f0f0; border-top: 2px solid #003B7E;">
+                <td colspan="8" style="font-weight: bold; padding: 6px;">NET OPERATING INCOME</td>
+                <td style="text-align: right; font-weight: bold;"><span class="field-mapped" data-field-id="{{calc-noi}}" title="{{calc-noi}}">$0</span></td>
+            </tr>
+            <!-- Cap Rate -->
+            <tr>
+                <td colspan="8">Cap Rate</td>
+                <td style="text-align: right;"><span class="field-mapped" data-field-id="{{calc-cap-rate}}" title="{{calc-cap-rate}}">0%</span></td>
+            </tr>
+            <!-- Indicated Value -->
+            <tr style="background: #f0f0f0; border-top: 2px solid #003B7E;">
+                <td colspan="8" style="font-weight: bold; padding: 6px;">INDICATED VALUE</td>
+                <td style="text-align: right; font-weight: bold;"><span class="field-mapped" data-field-id="{{calc-indicated-value}}" title="{{calc-indicated-value}}">$0</span></td>
+            </tr>
+        </table>
+        
+        <div class="page-footer">
+            <div>Page 48</div>
+        </div>
+    </div>
+    
+    <script>
+        // Listen for postMessage from parent window
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'UPDATE_FIELDS') {
+                event.data.fields.forEach(({ id, value }) => {
+                    // Find all elements with this field ID
+                    const selectors = [
+                        `[data-field-id="{{${id}}}"]`,
+                        `[title="{{${id}}}"]`,
+                    ];
+                    
+                    selectors.forEach(selector => {
+                        const elements = document.querySelectorAll(selector);
+                        elements.forEach(element => {
+                            element.textContent = value;
+                            element.classList.add('populated');
+                        });
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

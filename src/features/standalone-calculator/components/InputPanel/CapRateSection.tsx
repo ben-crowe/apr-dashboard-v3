@@ -30,7 +30,7 @@ export function CapRateSection() {
         <AccordionContent>
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium mb-1 block">Cap Rate (%)</label>
+              <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">Cap Rate (%)</label>
               <Input
                 type="number"
                 step="0.25"
@@ -39,13 +39,13 @@ export function CapRateSection() {
                 onChange={(e) => handleChange('calc-cap-rate', e.target.value)}
               />
               {devMode && (
-                <div className="text-xs text-yellow-600 mt-1 font-mono">
+                <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                   calc-cap-rate
                 </div>
               )}
             </div>
             <div>
-              <label className="text-sm font-medium mb-1 block">Cap Rate 2 (%)</label>
+              <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">Cap Rate 2 (%)</label>
               <Input
                 type="number"
                 step="0.25"
@@ -54,16 +54,16 @@ export function CapRateSection() {
                 onChange={(e) => handleChange('calc-cap-rate-2', e.target.value)}
               />
               {devMode && (
-                <div className="text-xs text-yellow-600 mt-1 font-mono">
+                <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                   calc-cap-rate-2
                 </div>
               )}
             </div>
-            <div className="pt-2 border-t">
-              <h4 className="text-sm font-semibold mb-3">Adjustments</h4>
+            <div className="pt-2 border-t dark:border-gray-700">
+              <h4 className="text-sm font-semibold mb-3 text-gray-900 dark:text-gray-100">Adjustments</h4>
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium mb-1 block">CapEx Adjustment</label>
+                  <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">CapEx Adjustment</label>
                   <Input
                     type="number"
                     placeholder="0"
@@ -71,13 +71,13 @@ export function CapRateSection() {
                     onChange={(e) => handleChange('calc-adj-capex', e.target.value)}
                   />
                   {devMode && (
-                    <div className="text-xs text-yellow-600 mt-1 font-mono">
+                    <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                       calc-adj-capex
                     </div>
                   )}
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-1 block">Leasing Costs</label>
+                  <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">Leasing Costs</label>
                   <Input
                     type="number"
                     placeholder="0"
@@ -85,13 +85,13 @@ export function CapRateSection() {
                     onChange={(e) => handleChange('calc-adj-leasing', e.target.value)}
                   />
                   {devMode && (
-                    <div className="text-xs text-yellow-600 mt-1 font-mono">
+                    <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                       calc-adj-leasing
                     </div>
                   )}
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-1 block">Other Adjustments</label>
+                  <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">Other Adjustments</label>
                   <Input
                     type="number"
                     placeholder="0"
@@ -99,7 +99,7 @@ export function CapRateSection() {
                     onChange={(e) => handleChange('calc-adj-other', e.target.value)}
                   />
                   {devMode && (
-                    <div className="text-xs text-yellow-600 mt-1 font-mono">
+                    <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                       calc-adj-other
                     </div>
                   )}

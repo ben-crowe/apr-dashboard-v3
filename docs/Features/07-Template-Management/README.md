@@ -2,7 +2,7 @@
 
 **Status**: ACTIVE
 **Last Updated**: 2026-01-11
-**Template Version**: v3.0.0
+**Template Version**: v3.0
 
 ---
 
@@ -37,7 +37,7 @@ All 4 Report Builder tabs now have complete builder-to-store-to-template pipelin
 ```
 07-Template-Management/
 ├── README.md                              # This file - overview and navigation
-├── CHANGELOG.md                           # Version history (v2.6.0 → v3.0.0)
+├── CHANGELOG.md                           # Version history (v2.6 → v3.0)
 │
 ├── 01-DESIGN-STANDARDS.md                 # Typography, colors, spacing specs
 ├── 02-FIELD-TOGGLE-SYSTEM.md              # Dev Mode vs User Ready toggle
@@ -94,7 +94,7 @@ All 4 Report Builder tabs now have complete builder-to-store-to-template pipelin
 
 ---
 
-## Recent Changes (v3.0.0)
+## Recent Changes (v3.0)
 
 **Date**: 2026-01-11
 **Commit**: `b34bff2`

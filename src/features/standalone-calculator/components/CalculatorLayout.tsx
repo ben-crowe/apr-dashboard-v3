@@ -13,11 +13,11 @@ import { DevModeToggle } from './Controls/DevModeToggle';
 
 export function CalculatorLayout() {
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col dark">
       {/* Top Controls Bar */}
-      <div className="flex items-center justify-between p-4 border-b bg-gray-50">
+      <div className="flex items-center justify-between p-4 border-b bg-gray-50 dark:bg-gray-900 dark:border-gray-800">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl font-semibold">APR Valuation Calculator</h1>
+          <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">APR Valuation Calculator</h1>
         </div>
         <div className="flex items-center gap-2">
           <CalculateButton />

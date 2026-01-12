@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Page 49 - Income Approach Conclusion</title>
+    <style>
+        /* Essential CSS from Report-MF-template.html */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: "Open Sans", Arial, sans-serif;
+            background: white;
+            padding: 54px;
+            padding-bottom: 180px;
+        }
+        
+        .page-sheet {
+            width: 8.5in;
+            min-height: 11in;
+            background-color: white;
+            page-break-after: always;
+        }
+        
+        .Header1 {
+            font-size: 18pt;
+            color: #003b7e;
+            border-bottom: 1px solid #003b7e;
+            padding-bottom: 5px;
+            margin-bottom: 12px;
+            font-weight: normal;
+        }
+        
+        .Header2 {
+            font-size: 11pt;
+            color: #003b7e;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 15px;
+            margin-bottom: 12px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9pt;
+            margin-bottom: 12px;
+        }
+        
+        td {
+            padding: 6px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .numeric-cell {
+            text-align: right;
+        }
+        
+        .field-mapped {
+            background-color: rgba(255, 255, 0, 0.2);
+            border: 1px dashed #ff0000;
+            padding: 1px 2px;
+        }
+        
+        .field-mapped.populated {
+            background: none;
+            border: none;
+        }
+        
+        .page-footer {
+            position: absolute;
+            bottom: 54px;
+            left: 54px;
+            right: 54px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 8pt;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-sheet" data-page-num="49">
+        <h1 class="Header1">Valuation & Conclusions</h1>
+        
+        <h2 class="Header2">Income Approach Conclusion</h2>
+        
+        <table class="compact-table">
+            <tr>
+                <td colspan="2" style="background-color: #003b7e; color: white; font-weight: bold; font-size: 10pt; text-transform: uppercase; padding: 4px 6px; text-align: center;">
+                    INCOME APPROACH
+                </td>
+            </tr>
+            <tbody>
+                <tr>
+                    <td style="padding: 6px; font-weight: bold; border-bottom: 1px solid #eee;">
+                        INCOME APPROACH - DIRECT CAPITALIZATION
+                    </td>
+                    <td style="padding: 6px; border-bottom: 1px solid #eee;"></td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px; border-bottom: 1px solid #eee;">NOI</td>
+                    <td class="numeric-cell" style="padding: 6px; border-bottom: 1px solid #eee;">
+                        <span class="field-mapped" data-field-id="{{calc-noi}}" title="{{calc-noi}}" data-sample="$111,771">{{calc-noi}}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px 6px 6px 20px; border-bottom: 1px solid #eee;">NOI $/SF NRA</td>
+                    <td class="numeric-cell" style="padding: 6px; border-bottom: 1px solid #eee;">
+                        <span class="field-mapped" data-field-id="{{calc-noi-per-sf}}" title="{{calc-noi-per-sf}}">$0</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px 6px 6px 20px; border-bottom: 1px solid #eee;">NOI $/Unit</td>
+                    <td class="numeric-cell" style="padding: 6px; border-bottom: 1px solid #eee;">
+                        <span class="field-mapped" data-field-id="{{calc-noi-per-unit}}" title="{{calc-noi-per-unit}}">$0</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px; font-weight: bold; border-bottom: 1px solid #eee;">Cap Rate</td>
+                    <td class="numeric-cell" style="padding: 6px; border-bottom: 1px solid #eee;">
+                        <span class="field-mapped" data-field-id="{{calc-cap-rate}}" title="{{calc-cap-rate}}">0%</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px; font-weight: bold; border-bottom: 1px solid #eee;">Indicated Value</td>
+                    <td class="numeric-cell" style="padding: 6px; border-bottom: 1px solid #eee;">
+                        <span class="field-mapped" data-field-id="{{calc-indicated-value}}" title="{{calc-indicated-value}}">$0</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px 6px 6px 20px; border-bottom: 1px solid #eee;">Value $/SF</td>
+                    <td class="numeric-cell" style="padding: 6px; border-bottom: 1px solid #eee;">
+                        <span class="field-mapped" data-field-id="{{calc-value-per-sf}}" title="{{calc-value-per-sf}}">$0</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding: 6px 6px 6px 20px; border-bottom: 1px solid #eee;">Value $/Unit</td>
+                    <td class="numeric-cell" style="padding: 6px; border-bottom: 1px solid #eee;">
+                        <span class="field-mapped" data-field-id="{{calc-value-per-unit}}" title="{{calc-value-per-unit}}">$0</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="page-footer">
+            <div>Page 49</div>
+        </div>
+    </div>
+    
+    <script>
+        // Listen for postMessage from parent window
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'UPDATE_FIELDS') {
+                event.data.fields.forEach(({ id, value }) => {
+                    // Find all elements with this field ID
+                    const selectors = [
+                        `[data-field-id="{{${id}}}"]`,
+                        `[title="{{${id}}}"]`,
+                    ];
+                    
+                    selectors.forEach(selector => {
+                        const elements = document.querySelectorAll(selector);
+                        elements.forEach(element => {
+                            element.textContent = value;
+                            element.classList.add('populated');
+                        });
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

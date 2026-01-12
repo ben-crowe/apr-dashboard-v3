@@ -42,7 +42,7 @@ export function ExpensesSection() {
           <div className="space-y-4">
             {expenseFields.map((field) => (
               <div key={field.id}>
-                <label className="text-sm font-medium mb-1 block">{field.label}</label>
+                <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">{field.label}</label>
                 <Input
                   type="number"
                   placeholder="0"
@@ -50,7 +50,7 @@ export function ExpensesSection() {
                   onChange={(e) => handleChange(field.id, e.target.value)}
                 />
                 {devMode && (
-                  <div className="text-xs text-yellow-600 mt-1 font-mono">
+                  <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                     {field.id}
                   </div>
                 )}

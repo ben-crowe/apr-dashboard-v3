@@ -4,7 +4,7 @@
  * Manages 127 fields:
  * - 49 input fields (user-entered)
  * - 78 calculated output fields
- * - UI state (devMode, selectedPage, zoomLevel)
+ * - UI state (devMode, selectedPage)
  */
 
 import { create } from 'zustand';
@@ -187,7 +187,6 @@ export interface CalculatorState {
   // UI state
   devMode: boolean;
   selectedPage: 'page-48' | 'page-49';
-  zoomLevel: 'fit' | '100%' | '150%';
 }
 
 // Store actions
@@ -196,7 +195,6 @@ export interface CalculatorActions {
   runCalculations: () => void;
   toggleDevMode: () => void;
   setSelectedPage: (page: 'page-48' | 'page-49') => void;
-  setZoomLevel: (zoom: 'fit' | '100%' | '150%') => void;
 }
 
 // Initial input state (all zeros/empty)
@@ -370,7 +368,6 @@ export const useCalculatorStore = create<CalculatorState & CalculatorActions>((s
   outputs: initialOutputs,
   devMode: false,
   selectedPage: 'page-48',
-  zoomLevel: 'fit',
   
   // Actions
   updateInput: (fieldId, value) => {
@@ -394,9 +391,5 @@ export const useCalculatorStore = create<CalculatorState & CalculatorActions>((s
   
   setSelectedPage: (page) => {
     set({ selectedPage: page });
-  },
-  
-  setZoomLevel: (zoom) => {
-    set({ zoomLevel: zoom });
   },
 }));

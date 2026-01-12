@@ -7,7 +7,7 @@ All changes to the Report-MF-template.html file must be logged here.
 
 ---
 
-## [v3.0.0] - 2026-01-11
+## [v3.0] - 2026-01-11
 
 ### Added
 - **Page 61: Cost Approach** - Complete new template page with:

@@ -27,18 +27,10 @@ export function ExportButton() {
     const page = pageMap[selectedPage];
     
     try {
-      // Fetch the page HTML
-      const response = await fetch(`/src/features/standalone-calculator/pages/${page.filename}`);
+      // Fetch the page HTML from public folder
+      const response = await fetch(`/standalone-calculator-pages/${page.filename}`);
       if (!response.ok) {
-        // Fallback: try public folder
-        const publicResponse = await fetch(`/pages/${page.filename}`);
-        if (!publicResponse.ok) {
-          throw new Error('Page not found');
-        }
-        const html = await publicResponse.text();
-        const blob = new Blob([html], { type: 'text/html' });
-        saveAs(blob, page.filename);
-        return;
+        throw new Error('Page not found');
       }
       const html = await response.text();
       const blob = new Blob([html], { type: 'text/html' });

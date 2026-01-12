@@ -1,5 +1,8 @@
 # APR Dashboard V4 - Features Directory
 
+NOTE: NEEDS MAJOR UPDATE.. 
+
+
 **Project**: APR Dashboard V3 → V4 Migration
 **Organization**: Vertical Slice Architecture
 **Last Updated**: 2026-01-10

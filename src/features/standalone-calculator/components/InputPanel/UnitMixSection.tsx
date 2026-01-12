@@ -35,17 +35,17 @@ export function UnitMixSection() {
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead>
-                <tr className="border-b">
-                  <th className="text-left p-2 font-semibold">Unit Type</th>
-                  <th className="text-center p-2 font-semibold">Count</th>
-                  <th className="text-center p-2 font-semibold">Avg SF</th>
-                  <th className="text-right p-2 font-semibold">Contract $/Mo</th>
-                  <th className="text-right p-2 font-semibold">Market $/Mo</th>
+                <tr className="border-b dark:border-gray-700">
+                  <th className="text-left p-2 font-semibold text-gray-900 dark:text-gray-100">Unit Type</th>
+                  <th className="text-center p-2 font-semibold text-gray-900 dark:text-gray-100">Count</th>
+                  <th className="text-center p-2 font-semibold text-gray-900 dark:text-gray-100">Avg SF</th>
+                  <th className="text-right p-2 font-semibold text-gray-900 dark:text-gray-100">Contract $/Mo</th>
+                  <th className="text-right p-2 font-semibold text-gray-900 dark:text-gray-100">Market $/Mo</th>
                 </tr>
               </thead>
               <tbody>
                 {[1, 2, 3, 4, 5, 6].map((type) => (
-                  <tr key={type} className="border-b">
+                  <tr key={type} className="border-b dark:border-gray-700">
                     <td className="p-2">
                       <Input
                         type="text"
@@ -55,7 +55,7 @@ export function UnitMixSection() {
                         className="w-full"
                       />
                       {devMode && (
-                        <div className="text-xs text-yellow-600 mt-1 font-mono">
+                        <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                           calc-type{type}-name
                         </div>
                       )}
@@ -69,7 +69,7 @@ export function UnitMixSection() {
                         className="w-20 text-center"
                       />
                       {devMode && (
-                        <div className="text-xs text-yellow-600 mt-1 font-mono text-center">
+                        <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono text-center">
                           calc-type{type}-count
                         </div>
                       )}
@@ -83,7 +83,7 @@ export function UnitMixSection() {
                         className="w-20 text-center"
                       />
                       {devMode && (
-                        <div className="text-xs text-yellow-600 mt-1 font-mono text-center">
+                        <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono text-center">
                           calc-type{type}-sf
                         </div>
                       )}
@@ -97,7 +97,7 @@ export function UnitMixSection() {
                         className="w-24 text-right"
                       />
                       {devMode && (
-                        <div className="text-xs text-yellow-600 mt-1 font-mono text-right">
+                        <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono text-right">
                           calc-type{type}-contract-rent
                         </div>
                       )}
@@ -111,7 +111,7 @@ export function UnitMixSection() {
                         className="w-24 text-right"
                       />
                       {devMode && (
-                        <div className="text-xs text-yellow-600 mt-1 font-mono text-right">
+                        <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono text-right">
                           calc-type{type}-rent
                         </div>
                       )}

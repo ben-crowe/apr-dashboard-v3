@@ -30,7 +30,7 @@ export function OtherIncomeSection() {
         <AccordionContent>
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium mb-1 block">Parking $/Unit/Mo</label>
+              <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">Parking $/Unit/Mo</label>
               <Input
                 type="number"
                 placeholder="0"
@@ -38,13 +38,13 @@ export function OtherIncomeSection() {
                 onChange={(e) => handleChange('calc-parking-per-unit', e.target.value)}
               />
               {devMode && (
-                <div className="text-xs text-yellow-600 mt-1 font-mono">
+                <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                   calc-parking-per-unit
                 </div>
               )}
             </div>
             <div>
-              <label className="text-sm font-medium mb-1 block">Laundry $/Unit/Mo</label>
+              <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">Laundry $/Unit/Mo</label>
               <Input
                 type="number"
                 placeholder="0"
@@ -52,13 +52,13 @@ export function OtherIncomeSection() {
                 onChange={(e) => handleChange('calc-laundry-per-unit', e.target.value)}
               />
               {devMode && (
-                <div className="text-xs text-yellow-600 mt-1 font-mono">
+                <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                   calc-laundry-per-unit
                 </div>
               )}
             </div>
             <div>
-              <label className="text-sm font-medium mb-1 block">Other Income (Annual)</label>
+              <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">Other Income (Annual)</label>
               <Input
                 type="number"
                 placeholder="0"

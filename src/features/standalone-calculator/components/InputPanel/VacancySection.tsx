@@ -30,7 +30,7 @@ export function VacancySection() {
         <AccordionContent>
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium mb-1 block">Vacancy Rate (%)</label>
+              <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">Vacancy Rate (%)</label>
               <Input
                 type="number"
                 step="0.1"
@@ -39,13 +39,13 @@ export function VacancySection() {
                 onChange={(e) => handleChange('calc-vacancy-rate', e.target.value)}
               />
               {devMode && (
-                <div className="text-xs text-yellow-600 mt-1 font-mono">
+                <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                   calc-vacancy-rate
                 </div>
               )}
             </div>
             <div>
-              <label className="text-sm font-medium mb-1 block">Concessions Rate (%)</label>
+              <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">Concessions Rate (%)</label>
               <Input
                 type="number"
                 step="0.1"
@@ -54,13 +54,13 @@ export function VacancySection() {
                 onChange={(e) => handleChange('calc-concessions-rate', e.target.value)}
               />
               {devMode && (
-                <div className="text-xs text-yellow-600 mt-1 font-mono">
+                <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                   calc-concessions-rate
                 </div>
               )}
             </div>
             <div>
-              <label className="text-sm font-medium mb-1 block">Credit Loss Rate (%)</label>
+              <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">Credit Loss Rate (%)</label>
               <Input
                 type="number"
                 step="0.1"
@@ -69,13 +69,13 @@ export function VacancySection() {
                 onChange={(e) => handleChange('calc-credit-loss-rate', e.target.value)}
               />
               {devMode && (
-                <div className="text-xs text-yellow-600 mt-1 font-mono">
+                <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                   calc-credit-loss-rate
                 </div>
               )}
             </div>
             <div>
-              <label className="text-sm font-medium mb-1 block">Other Loss Rate (%)</label>
+              <label className="text-sm font-medium mb-1 block text-gray-900 dark:text-gray-100">Other Loss Rate (%)</label>
               <Input
                 type="number"
                 step="0.1"
@@ -84,7 +84,7 @@ export function VacancySection() {
                 onChange={(e) => handleChange('calc-other-loss-rate', e.target.value)}
               />
               {devMode && (
-                <div className="text-xs text-yellow-600 mt-1 font-mono">
+                <div className="text-xs text-yellow-600 dark:text-yellow-400 mt-1 font-mono">
                   calc-other-loss-rate
                 </div>
               )}

@@ -18,6 +18,7 @@ import { TestInputDashboard } from "./features/test-input";
 import { CalculatorDemoPage } from "./features/calculator-demo-v4";
 import CalculatorWithPreview from "@/features/calculator-demo-v4/CalculatorWithPreview";
 import ClickUpCallback from "./pages/ClickUpCallback";
+import StandaloneCalculator from "./features/standalone-calculator";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/test-input" element={<TestInputDashboard />} />
             <Route path="/calculator-demo" element={<CalculatorDemoPage />} />
             <Route path="/calculator-preview" element={<CalculatorWithPreview />} />
+            <Route path="/standalone-calculator" element={<StandaloneCalculator />} />
             <Route path="/image-test" element={<ImageTest />} />
             <Route path="/clickup/callback" element={<ClickUpCallback />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

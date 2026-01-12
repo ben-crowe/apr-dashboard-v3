@@ -1,6 +1,6 @@
 # Template Page → Calculator Field Mapping
 
-## Report-MF-Template v2.9.0
+## Report-MF-Template v3.0.0
 
 This document maps which template pages contain which calculator fields.
 **Use this to wire up the CalcInputPanel → Store → Template injection.**

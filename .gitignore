@@ -60,6 +60,10 @@ dist-ssr
 .playwright-mcp/
 supabase/functions/.env
 
+# Temp test data
+*-logs.json
+test-results.txt
+
 # Credentials and sensitive test data
 docs/03-ClickUp-Integration/20-VALCRE-CREDENTIALS.md
 docs/03-ClickUp-Integration/28-RESEND-EMAIL-CREDENTIALS.md

@@ -235,11 +235,26 @@ export async function generateAndSendLOE(
       })
       .select()
       .single();
-    
+
     if (saveError) {
       console.error('Failed to save LOE submission:', saveError);
     } else {
       console.log('✅ LOE submission saved with ID:', loeSubmission.id);
+    }
+
+    // CRITICAL: Also update job_loe_details table with DocuSeal submission ID
+    // This is needed for the webhook handler to find the job when DocuSeal sends events
+    const { error: loeDetailsError } = await supabase
+      .from('job_loe_details')
+      .update({
+        docuseal_submission_id: submissionData.id
+      })
+      .eq('job_id', job.id) // Use internal job ID, not job number
+
+    if (loeDetailsError) {
+      console.error('Failed to update job_loe_details with submission ID:', loeDetailsError);
+    } else {
+      console.log('✅ job_loe_details updated with DocuSeal submission ID:', submissionData.id);
     }
     
     // Generate the signing link - NOW IT GOES TO OUR SITE

@@ -37,11 +37,28 @@ function parseSections(html: string): EditableSection[] {
   // 4. Closing statement
   // 5. Terms & Conditions (LAST)
   
-  // 1. Extract subject line (FIRST)
+  // 1. Extract subject line (FIRST) - Only the boilerplate part before field placeholders
   const subjectLineMatch = html.match(/(<div class="subject-line">)([\s\S]*?)(<\/div>)/);
   if (subjectLineMatch) {
-    const content = stripHTMLTags(subjectLineMatch[2]);
-    const placeholders = extractPlaceholders(content);
+    const fullContent = stripHTMLTags(subjectLineMatch[2]);
+
+    // Split at "Identified as:" - everything after that is field placeholders
+    const splitPattern = /Identified as:\s*/i;
+    const match = fullContent.match(splitPattern);
+
+    let content = fullContent;
+    let placeholders: string[] = [];
+
+    if (match && match.index !== undefined) {
+      // Extract only the boilerplate part (up to and including "Identified as:")
+      content = fullContent.substring(0, match.index! + match[0].length).trim();
+      // Field placeholders are everything after
+      const fieldPart = fullContent.substring(match.index! + match[0].length);
+      placeholders = extractPlaceholders(fieldPart);
+    } else {
+      placeholders = extractPlaceholders(content);
+    }
+
     sections.push({
       id: 'subject-line',
       label: 'Subject Line',
@@ -259,9 +276,28 @@ function reconstructSections(
   let reconstructed = html;
 
   // Update subject line section
-  if (editedSections.has('subject-line')) {
+  if (editedSections.has('subject-line') && parsedSections) {
     const editedContent = editedSections.get('subject-line')!;
-    const htmlContent = escapeAndFormatHTML(editedContent);
+    const section = parsedSections.find(s => s.id === 'subject-line');
+
+    // Get the field placeholders part from the original HTML
+    const originalMatch = reconstructed.match(/<div class="subject-line">([\s\S]*?)<\/div>/);
+    let fieldPlaceholdersPart = '';
+
+    if (originalMatch && section) {
+      const originalFullContent = stripHTMLTags(originalMatch[1]);
+      // Extract everything after "Identified as:" from original
+      const splitPattern = /Identified as:\s*/i;
+      const match = originalFullContent.match(splitPattern);
+      if (match && match.index !== undefined) {
+        fieldPlaceholdersPart = originalFullContent.substring(match.index! + match[0].length);
+      }
+    }
+
+    // Combine edited boilerplate + original field placeholders
+    const fullContent = editedContent + (fieldPlaceholdersPart ? ' ' + fieldPlaceholdersPart : '');
+    const htmlContent = escapeAndFormatHTML(fullContent);
+
     reconstructed = reconstructed.replace(
       /<div class="subject-line">[\s\S]*?<\/div>/,
       `<div class="subject-line">\n        ${htmlContent}\n    </div>`

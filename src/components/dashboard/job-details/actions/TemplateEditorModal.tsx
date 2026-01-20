@@ -340,20 +340,27 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 </div>
               </div>
 
-              {/* Subject Line - Editable */}
+              {/* Subject Line - Editable boilerplate + read-only field placeholders */}
               {editableSections.find(s => s.id === 'subject-line') && (() => {
                 const section = editableSections.find(s => s.id === 'subject-line')!;
                 const currentValue = sections.get(section.id) || '';
                 return (
                   <div className="mb-3">
                     <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Subject Line</div>
-                    <Textarea
-                      value={currentValue}
-                      onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                      className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500 focus:ring-1 focus:ring-gray-300 dark:focus:ring-gray-600"
-                      rows={2}
-                      style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
-                    />
+                    <div className="space-y-1">
+                      <Textarea
+                        value={currentValue}
+                        onChange={(e) => handleSectionChange(section.id, e.target.value)}
+                        className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500 focus:ring-1 focus:ring-gray-300 dark:focus:ring-gray-600"
+                        rows={2}
+                        style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                      />
+                      {section.placeholders.length > 0 && (
+                        <div className="text-xs text-gray-400 dark:text-gray-500 italic select-none px-2">
+                          {section.placeholders.join(', ')}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 );
               })()}

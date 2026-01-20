@@ -394,14 +394,14 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                     .map((section) => {
                       const currentValue = sections.get(section.id) || '';
                       return (
-                        <div key={section.id} className="px-2 py-1.5">
-                          <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{section.label}</div>
+                        <div key={section.id} className="px-2 py-1">
+                          <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-0.5">{section.label}</div>
                           <Textarea
                             value={currentValue}
                             onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                            className="w-full text-xs p-1 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500"
+                            className="w-full text-xs p-1 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500 min-h-0"
                             rows={1}
-                            style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                            style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px`, minHeight: 'auto' }}
                           />
                         </div>
                       );

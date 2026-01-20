@@ -400,7 +400,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                             value={currentValue}
                             onChange={(e) => handleSectionChange(section.id, e.target.value)}
                             className="text-xs p-1 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500"
-                            rows={2}
+                            rows={1}
                             style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
                           />
                         </div>

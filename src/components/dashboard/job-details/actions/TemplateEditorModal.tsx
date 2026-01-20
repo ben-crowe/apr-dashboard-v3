@@ -41,18 +41,24 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
     textarea.style.height = textarea.scrollHeight + 'px';
   };
 
-  // Auto-resize all textareas on initial load
+  // Auto-resize all textareas on initial load and when sections change
   useEffect(() => {
     if (isOpen) {
-      setTimeout(() => {
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
         const textareas = document.querySelectorAll('textarea');
         textareas.forEach((textarea: HTMLTextAreaElement) => {
-          textarea.style.height = 'auto';
-          textarea.style.height = textarea.scrollHeight + 'px';
+          if (textarea.value) {
+            // Reset to minimal height first
+            textarea.style.height = '0px';
+            // Then expand to fit content
+            const scrollHeight = textarea.scrollHeight;
+            textarea.style.height = scrollHeight + 'px';
+          }
         });
-      }, 100);
+      });
     }
-  }, [isOpen, sections]);
+  }, [isOpen, sections, fontSize]);
 
   // Parse template into editable sections when modal opens
   const editableSections = useMemo(() => {

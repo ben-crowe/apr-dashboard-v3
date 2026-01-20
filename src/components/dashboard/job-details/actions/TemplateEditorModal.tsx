@@ -399,9 +399,9 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                           <Textarea
                             value={currentValue}
                             onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                            className="w-full text-xs p-1 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500 min-h-0"
+                            className="w-full text-xs p-1 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500 min-h-0 overflow-y-hidden"
                             rows={1}
-                            style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px`, minHeight: 'auto' }}
+                            style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px`, minHeight: 'auto', maxHeight: `${fontSize * 1.3 + 8}px` }}
                           />
                         </div>
                       );

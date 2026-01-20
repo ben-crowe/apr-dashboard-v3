@@ -68,6 +68,7 @@ test-results.txt
 docs/03-ClickUp-Integration/20-VALCRE-CREDENTIALS.md
 docs/03-ClickUp-Integration/28-RESEND-EMAIL-CREDENTIALS.md
 credentials/
+Password Manager/
 *.json
 !package.json
 !package-lock.json

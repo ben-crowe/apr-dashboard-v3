@@ -7,8 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DetailJob, JobDetails } from "@/types/job";
-import { Send, X, Download, Mail, Plus, ZoomIn, ZoomOut, RotateCcw } from "lucide-react";
+import { Send, X, Download, Mail, Plus, ZoomIn, ZoomOut, RotateCcw, Edit } from "lucide-react";
 import { toast } from "sonner";
+import TemplateEditorModal from './TemplateEditorModal';
+import { saveTemplate } from '@/utils/loe/saveTemplate';
+import { supabase } from '@/integrations/supabase/client';
 
 interface LOEPreviewModalProps {
   isOpen: boolean;
@@ -32,6 +35,9 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   const [recipientEmail, setRecipientEmail] = useState<string>('');
   const [showEmailEdit, setShowEmailEdit] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(75); // Default zoom 75%
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [editedHTML, setEditedHTML] = useState<string>('');
+  const [templateModified, setTemplateModified] = useState(false);
 
   // Initialize recipient email - Default to bc@crowestudio.com for testing (developer's email)
   // Users can change it via "Change Recipient" button if needed
@@ -45,12 +51,13 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
 
   useEffect(() => {
     // Create a blob URL for the preview with proper scaling CSS
-    if (documentHTML) {
+    const htmlToUse = editedHTML || documentHTML;
+    if (htmlToUse) {
       // Add CSS to scale the document based on zoom level
       const zoomDecimal = zoomLevel / 100;
       const scaleValue = 0.9 + (zoomDecimal - 0.75) * 0.5; // Adjust scale proportionally
       
-      const scaledHTML = documentHTML.replace(
+      const scaledHTML = htmlToUse.replace(
         '</head>',
         `<style>
           body {
@@ -84,9 +91,15 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
       // Cleanup on unmount
       return () => URL.revokeObjectURL(url);
     }
-  }, [documentHTML, zoomLevel]);
+  }, [documentHTML, editedHTML, zoomLevel]);
 
   const handleSend = async () => {
+    // Check if template was edited but not saved
+    if (templateModified) {
+      toast.error('Please save your template before sending to client');
+      return;
+    }
+
     // Validate email before sending with proper regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!recipientEmail || !emailRegex.test(recipientEmail)) {
@@ -170,6 +183,19 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
                 <RotateCcw className="h-3 w-3" />
               </Button>
             </div>
+            
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setEditedHTML(documentHTML);
+                setIsEditMode(true);
+              }}
+              className="gap-2"
+            >
+              <Edit className="h-4 w-4" />
+              Edit Template
+            </Button>
             
             <Button
               variant="ghost"
@@ -280,6 +306,43 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
             </Button>
           </div>
         </div>
+
+        {/* Template Editor Modal */}
+        <TemplateEditorModal
+          isOpen={isEditMode}
+          onClose={() => setIsEditMode(false)}
+          initialHTML={editedHTML || documentHTML}
+          onSave={async (templateName, html, setAsDefault) => {
+            // Get current user ID from auth
+            const { data: { user } } = await supabase.auth.getUser();
+            const userId = user?.id;
+            
+            if (!userId) {
+              toast.error('Please log in to use template features');
+              return;
+            }
+            
+            const result = await saveTemplate({
+              templateName,
+              templateHTML: html,
+              setAsDefault,
+              userId
+            });
+
+            if (result.success) {
+              toast.success(`Template "${templateName}" saved successfully!`);
+              setEditedHTML(html);
+              setTemplateModified(false);
+              
+              // Update preview with edited HTML
+              const blob = new Blob([html], { type: 'text/html' });
+              const url = URL.createObjectURL(blob);
+              setPreviewUrl(url);
+            } else {
+              toast.error(`Failed to save template: ${result.error}`);
+            }
+          }}
+        />
       </DialogContent>
     </Dialog>
   );

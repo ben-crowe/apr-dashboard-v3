@@ -36,7 +36,7 @@ docs/Features/
 +-- 01-Foundation-Infrastructure/    # Base technical setup
 +-- 02-CRM-Email-Integration/        # CRM (Pipedrive now, internal Phase 3)
 +-- 03-Database-Document-Hub/        # Supabase, document management
-+-- 04-ClickUp-Integration/          # ClickUp tasks (Phase 3 = internal PM)
++-- 04-Job & Client Mgt./            # Client intake, job workflow, ClickUp (Phase 3 = internal PM)
 +-- 05-APR-Dashboard-v3/             # V3 Intake: Client intake, Valcre prep
 +-- 06-User-Interface/               # UX for whole APR system (all phases)
 +-- 07-Report-Builder/               # Report Builder (active development)
@@ -58,7 +58,7 @@ docs/Features/
 | 01 | Foundation-Infrastructure | Next.js, Vite, Zustand, base setup | Reference |
 | 02 | CRM-Email-Integration | Pipedrive CRM, email management | Active V3 |
 | 03 | Database-Document-Hub | Supabase database, document storage | Active V3 |
-| 04 | ClickUp-Integration | Task automation, stage management | Active V3 |
+| 04 | Job & Client Mgt. | Client intake, job workflow, task automation | Active V3 |
 
 ### V3 Intake System
 | # | Folder | Description | Status |
@@ -110,7 +110,7 @@ Production ready:
 
 ### For V3 Intake Work
 1. Start with `05-APR-Dashboard-v3/`
-2. Reference `04-ClickUp-Integration/` for task automation
+2. Reference `04-Job & Client Mgt./` for client intake and task automation
 3. Reference `12-LOE-Esign/` for LOE/signing flow
 
 ### For UX/UI Planning

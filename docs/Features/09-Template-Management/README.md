@@ -157,6 +157,27 @@ Reusable HTML/CSS snippets for consistency:
 
 ---
 
+## Relationship to Feature 08: Field Input-Output Mapping
+
+**This folder (Feature 09)** focuses on **template integration** - WHERE fields appear:
+- Template design standards
+- Field registry conventions
+- Page-to-field mapping
+- Store-to-template pipelines
+
+**Feature 08: Field Input-Output Mapping** focuses on **calculator logic** - HOW calculations work:
+- INPUT → OUTPUT mappings
+- Calculation formulas
+- Cross-section dependencies
+
+**Cross-References**:
+- Calculation formulas: `../08-Master-Field-Registry/03-06-*-INPUT-OUTPUT-MAP.md`
+- Field alignment verification: `../08-Master-Field-Registry/07-FIELD-ALIGNMENT-VERIFICATION.md`
+- Methodology: `../08-Master-Field-Registry/02-METHODOLOGY-AND-ORGANIZATION.md`
+- Registry guide: `../08-Master-Field-Registry/09-REGISTRY-GUIDE.md`
+
+---
+
 ## Field Statistics (from Phase 16)
 
 **Total Calculator Fields Verified**: 218 fields
@@ -169,7 +190,7 @@ Reusable HTML/CSS snippets for consistency:
 | Reconciliation | 7 | 7 | 14 |
 | **Total** | **130** | **88** | **218** |
 
-**Source**: `06-Field-Input-Output-Mapping/05-FIELD-ALIGNMENT-VERIFICATION.md`
+**Source**: `08-Master-Field-Registry/07-FIELD-ALIGNMENT-VERIFICATION.md`
 
 ---
 
@@ -207,3 +228,12 @@ Before finalizing template changes:
 
 **Maintained by**: Claude Opus 4.5 + Ben
 **Go-to folder for**: Template modifications, field mapping, design standards
+
+---
+
+## Quick Navigation
+
+- **Adding a field to template?** See `08-FIELD-REGISTRY-GUIDE.md` for conventions
+- **Need calculation formulas?** See `../08-Master-Field-Registry/`
+- **Finding page locations?** See `templates/Template-Page-Field-Mapping.md`
+- **Design standards?** See `01-DESIGN-STANDARDS.md`

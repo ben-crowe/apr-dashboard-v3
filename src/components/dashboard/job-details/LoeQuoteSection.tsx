@@ -593,15 +593,19 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     setIsGenerating(true);
 
     try {
+      // Get current user ID from auth
+      const { data: { user } } = await supabase.auth.getUser();
+      const userId = user?.id;
+
       // If already sent, we're resending - generate fresh HTML
       if (alreadySent) {
-        const html = await generateLOEHTML(job, jobDetails);
+        const html = await generateLOEHTML(job, jobDetails, userId);
         setPreviewHTML(html);
         setShowPreview(true);
         toast.info("Ready to resend LOE - please review recipient email");
       } else {
         // First time sending - generate preview
-        const html = await generateLOEHTML(job, jobDetails);
+        const html = await generateLOEHTML(job, jobDetails, userId);
         setPreviewHTML(html);
         setShowPreview(true);
         toast.info("Preview generated - please review before sending");
@@ -631,6 +635,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     setIsSending(true);
 
     try {
+      // Get current user ID from auth
+      const { data: { user } } = await supabase.auth.getUser();
+      const userId = user?.id;
+
       // Use override email if provided, otherwise use client's email
       const recipientEmail = overrideEmail || job.clientEmail;
 
@@ -643,7 +651,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       const jobToSend = overrideEmail ? { ...job, clientEmail: overrideEmail } : job;
 
       // Send to DocuSeal with the already generated HTML
-      const result = await generateAndSendLOE(jobToSend, jobDetails, previewHTML);
+      const result = await generateAndSendLOE(jobToSend, jobDetails, previewHTML, userId);
 
       if (result.success && result.submissionId && result.signingLink) {
         // Send custom email with signing link

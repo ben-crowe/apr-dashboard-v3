@@ -1,5 +1,8 @@
 # APR Dashboard V3 - Cursor AI Configuration
 
+**Note**: This file supplements the Development-level `.cursorrules` at `/Users/bencrowe/Development/.cursorrules`.  
+The Development-level rules apply universally. This file contains APR Dashboard V3-specific configuration.
+
 ## Project Context
 
 This is the production APR Dashboard application - a clean, focused codebase containing only essential application files.
@@ -187,88 +190,8 @@ psql "your-connection-string" -f migration.sql
 
 ---
 
-## Feature Documentation Maintenance
-
-### CRITICAL: Always Update Feature Specs When Making Changes
-
-**When ANY change is made to a feature**, you MUST update the feature specification file:
-
-1. **Feature Spec Location**: `docs/Features/[Feature-Name]/00-FEATURE-SPECIFICATION.md`
-2. **README Location**: `docs/Features/[Feature-Name]/README.md` (if exists)
-
-### Update Checklist
-
-When making changes, update:
-
-**Feature Spec (`00-FEATURE-SPECIFICATION.md`)**:
-- [ ] **Current Status** section - Update stage status, health indicators
-- [ ] **Stage Status Matrix** - Update status for affected stages
-- [ ] **Critical Issues** - Remove resolved issues, add new ones
-- [ ] **Recent Achievements** - Add new accomplishments with date
-- [ ] **Where We Left Off** - Update current blocker and next priority
-- [ ] **Change Log** - Add entry with date, changes, and status
-- [ ] **Last Updated** date in header
-
-**README (`README.md`)**:
-- [ ] **Status** - Update current status if changed
-- [ ] **Package Updates** - Add new update entry with date
-- [ ] **Test Results** - Update test status if applicable
-- [ ] **Known Issues** - Update issue list
-
-### Update Format
-
-**Change Log Entry Format**:
-```markdown
-**January 13, 2026**:
-- ✅ [What was done]
-- ✅ [Another change]
-- ⚠️ [Known issue or limitation]
-```
-
-**Recent Achievements Format**:
-```markdown
-- ✅ **Jan 13, 2026**: [Achievement description]
-```
-
-**Critical Issues Format**:
-```markdown
-1. **🔴 HIGH**: [Issue title]
-   - **Impact**: [What this affects]
-   - **Root Cause**: [Why it's happening]
-   - **Status**: [Current status - Resolved/In Progress/Needs Investigation]
-```
-
-### When to Update
-
-**ALWAYS update when**:
-- Database migrations applied
-- Code changes deployed
-- Bugs fixed
-- New features added
-- Test results change
-- Configuration changes
-- Status changes (Working → Blocked, etc.)
-
-**Update immediately after**:
-- Committing code changes
-- Applying database migrations
-- Completing testing
-- Resolving issues
-
-### Example Update Flow
-
-1. Make code change (e.g., apply migration)
-2. Test the change
-3. Commit the code
-4. **IMMEDIATELY update feature spec**:
-   - Update Current Status
-   - Update Change Log
-   - Update Recent Achievements
-   - Update Critical Issues (if resolved)
-5. Update README if needed
-6. Commit documentation updates
-
-**DO NOT skip documentation updates. They are as important as code changes.**
+**Note**: Feature Documentation Maintenance rules are defined at the Development level (`/Users/bencrowe/Development/.cursorrules`).  
+See that file for universal documentation update requirements.
 
 ---
 

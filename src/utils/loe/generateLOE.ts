@@ -6,12 +6,35 @@
 import { DetailJob, JobDetails } from '@/types/job';
 import { V3_TEMPLATE } from './v3Template';
 import { testEnvironmentVariables } from '@/utils/testEnv';
+import { supabase } from '@/integrations/supabase/client';
 
 // API key now handled in Edge Function for security
 // const DOCUSEAL_API_KEY removed - using proxy instead
 
 // Load and prepare the V3 template
-async function loadV3Template(): Promise<string> {
+// Tries to load user's default template from database, falls back to embedded template
+async function loadV3Template(userId?: string): Promise<string> {
+  // Try to load user's default template from DB
+  if (userId) {
+    try {
+      const { data: template, error } = await supabase
+        .from('loe_templates')
+        .select('template_html')
+        .eq('created_by', userId)
+        .eq('is_default', true)
+        .eq('is_active', true)
+        .single();
+
+      if (!error && template) {
+        console.log('✅ Loaded user default template from database');
+        return template.template_html;
+      }
+    } catch (err) {
+      console.warn('⚠️ Failed to load user template, falling back to V3_TEMPLATE', err);
+    }
+  }
+
+  // Fallback to embedded template
   console.log('✅ Loading embedded V3 template (4 pages with all legal terms)');
   return V3_TEMPLATE;
 }
@@ -80,10 +103,11 @@ function mapDataToV3Fields(job: DetailJob, jobDetails: JobDetails) {
  */
 export async function generateLOEHTML(
   job: DetailJob,
-  jobDetails: JobDetails
+  jobDetails: JobDetails,
+  userId?: string
 ): Promise<string> {
   // Load the V3 template
-  let templateHTML = await loadV3Template();
+  let templateHTML = await loadV3Template(userId);
   
   // Get the field mappings
   const fieldMappings = mapDataToV3Fields(job, jobDetails);
@@ -110,7 +134,8 @@ export async function generateLOEHTML(
 export async function generateAndSendLOE(
   job: DetailJob, 
   jobDetails: JobDetails,
-  htmlTemplate?: string // Optional: provide pre-generated HTML
+  htmlTemplate?: string, // Optional: provide pre-generated HTML
+  userId?: string // Optional: user ID for loading custom template
 ): Promise<{
   success: boolean;
   submissionId?: string;
@@ -130,7 +155,7 @@ export async function generateAndSendLOE(
       templateHTML = htmlTemplate;
     } else {
       // Generate fresh (backward compatibility)
-      templateHTML = await generateLOEHTML(job, jobDetails);
+      templateHTML = await generateLOEHTML(job, jobDetails, userId);
     }
     
     // Verify DocuSeal field tags are present

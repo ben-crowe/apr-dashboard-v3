@@ -88,13 +88,7 @@ function parseSections(html: string): EditableSection[] {
     });
   }
 
-  // 2. Extract ONLY specific table rows with real boilerplate text (whitelist approach)
-  // These are the ONLY table cells that should be editable - all others are just field placeholders
-  const editableTableHeaders = [
-    'Authorized Users',
-    'Authorized Use'
-  ];
-
+  // 2. Extract ALL table rows - users can override any field value
   const tableRowMatches = Array.from(html.matchAll(/<tr>\s*<td[^>]*>([\s\S]*?)<\/td>\s*<td[^>]*>([\s\S]*?)<\/td>\s*<\/tr>/g));
   let tableRowIndex = 1;
   for (const rowMatch of tableRowMatches) {
@@ -102,30 +96,28 @@ function parseSections(html: string): EditableSection[] {
     const valueCellHTML = rowMatch[2];
     const valueCellContent = stripHTMLTags(valueCellHTML).trim();
 
-    // WHITELIST: Only extract rows that are explicitly marked as editable boilerplate
-    if (editableTableHeaders.includes(headerCell)) {
-      const placeholders = extractPlaceholders(valueCellContent);
-      const rowId = `table-row-${tableRowIndex}`;
+    // Extract all rows - users can override field placeholders if needed
+    const placeholders = extractPlaceholders(valueCellContent);
+    const rowId = `table-row-${tableRowIndex}`;
 
-      // Store the full row HTML for reconstruction
-      const fullRowMatch = rowMatch[0];
-      const rowStart = fullRowMatch.indexOf('<tr>');
-      const rowEnd = fullRowMatch.lastIndexOf('</tr>') + 5;
-      const fullRowHTML = fullRowMatch.substring(rowStart, rowEnd);
+    // Store the full row HTML for reconstruction
+    const fullRowMatch = rowMatch[0];
+    const rowStart = fullRowMatch.indexOf('<tr>');
+    const rowEnd = fullRowMatch.lastIndexOf('</tr>') + 5;
+    const fullRowHTML = fullRowMatch.substring(rowStart, rowEnd);
 
-      sections.push({
-        id: rowId,
-        label: `${headerCell}`,
-        content: valueCellContent, // Only the value cell content is editable
-        placeholders,
-        htmlStart: fullRowHTML.substring(0, fullRowHTML.indexOf('</td>') + 5), // Up to end of first <td>
-        htmlEnd: fullRowHTML.substring(fullRowHTML.lastIndexOf('<td'), fullRowHTML.length), // From second <td> to end
-        selector: `.property-table tr:nth-child(${tableRowIndex})`,
-        type: 'table-cell',
-        originalHTML: valueCellHTML // Store original HTML for accurate reconstruction
-      });
-      tableRowIndex++;
-    }
+    sections.push({
+      id: rowId,
+      label: `${headerCell}`,
+      content: valueCellContent, // Only the value cell content is editable
+      placeholders,
+      htmlStart: fullRowHTML.substring(0, fullRowHTML.indexOf('</td>') + 5), // Up to end of first <td>
+      htmlEnd: fullRowHTML.substring(fullRowHTML.lastIndexOf('<td'), fullRowHTML.length), // From second <td> to end
+      selector: `.property-table tr:nth-child(${tableRowIndex})`,
+      type: 'table-cell',
+      originalHTML: valueCellHTML // Store original HTML for accurate reconstruction
+    });
+    tableRowIndex++;
   }
 
   // 3. Extract action/closing section

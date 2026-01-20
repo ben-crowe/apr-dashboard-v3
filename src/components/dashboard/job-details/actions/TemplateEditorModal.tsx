@@ -383,90 +383,29 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 );
               })()}
 
-              {/* Property Details Table - Mixed editable/readonly */}
+              {/* Property Details Table - All fields editable */}
               <div className="mb-3 text-sm border border-gray-200 dark:border-gray-700 rounded overflow-hidden">
                 <div className="text-xs font-semibold bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 border-b border-gray-200 dark:border-gray-700">Property Details</div>
 
-                {/* Read-only rows */}
                 <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
-                    <div className="text-xs font-medium">Property Identification</div>
-                    <div className="text-xs">[name], [addressstreet]</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
-                    <div className="text-xs font-medium">Property Type</div>
-                    <div className="text-xs">[purposes]</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
-                    <div className="text-xs font-medium">Authorized Client</div>
-                    <div className="text-xs">[propertycontact.company]</div>
-                  </div>
-
-                  {/* Authorized Users - Editable */}
-                  {editableSections.find(s => s.label === 'Authorized Users') && (() => {
-                    const section = editableSections.find(s => s.label === 'Authorized Users')!;
-                    const currentValue = sections.get(section.id) || '';
-                    return (
-                      <div className="px-2 py-1.5">
-                        <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Authorized Users</div>
-                        <Textarea
-                          value={currentValue}
-                          onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                          className="w-full text-xs p-1 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500"
-                          rows={2}
-                          style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
-                        />
-                      </div>
-                    );
-                  })()}
-
-                  {/* Authorized Use - Editable */}
-                  {editableSections.find(s => s.label === 'Authorized Use') && (() => {
-                    const section = editableSections.find(s => s.label === 'Authorized Use')!;
-                    const currentValue = sections.get(section.id) || '';
-                    return (
-                      <div className="px-2 py-1.5">
-                        <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Authorized Use</div>
-                        <Textarea
-                          value={currentValue}
-                          onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                          className="w-full text-xs p-1 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500"
-                          rows={2}
-                          style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
-                        />
-                      </div>
-                    );
-                  })()}
-
-                  {/* More read-only rows */}
-                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
-                    <div className="text-xs font-medium">Effective Date of Value</div>
-                    <div className="text-xs">Date of Property Inspection</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
-                    <div className="text-xs font-medium">Value to be Appraised</div>
-                    <div className="text-xs">[requestedvalues]</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
-                    <div className="text-xs font-medium">Property Rights Appraised</div>
-                    <div className="text-xs">[propertyrights]</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
-                    <div className="text-xs font-medium">Report Type</div>
-                    <div className="text-xs">[reportformat]</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
-                    <div className="text-xs font-medium">Fee</div>
-                    <div className="text-xs">[fee] plus applicable taxes</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
-                    <div className="text-xs font-medium">Scope of Work</div>
-                    <div className="text-xs">[scopes]</div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
-                    <div className="text-xs font-medium">Delivery Date</div>
-                    <div className="text-xs">[duedate] from receipt of signed LOE and payment</div>
-                  </div>
+                  {/* All table rows are editable - users can override field values */}
+                  {editableSections
+                    .filter(s => s.id.startsWith('table-row-'))
+                    .map((section) => {
+                      const currentValue = sections.get(section.id) || '';
+                      return (
+                        <div key={section.id} className="px-2 py-1.5">
+                          <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">{section.label}</div>
+                          <Textarea
+                            value={currentValue}
+                            onChange={(e) => handleSectionChange(section.id, e.target.value)}
+                            className="w-full text-xs p-1 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500"
+                            rows={2}
+                            style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                          />
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
 

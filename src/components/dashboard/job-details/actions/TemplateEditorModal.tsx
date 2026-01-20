@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Save, X } from "lucide-react";
+import { Save, X, ZoomIn, ZoomOut, RotateCcw, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import { parseTemplate, reconstructHTML, EditableSection } from "@/utils/loe/templateParser";
 
@@ -29,6 +29,10 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
   const [templateName, setTemplateName] = useState('');
   const [setAsDefault, setSetAsDefault] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(75); // Default zoom 75%
+  const [fontSize, setFontSize] = useState(12); // Default font size 12px
+  const [leftPanelWidth, setLeftPanelWidth] = useState(50); // Default 50% width
+  const [isResizing, setIsResizing] = useState(false);
 
   // Parse template into editable sections when modal opens
   const editableSections = useMemo(() => {
@@ -50,16 +54,48 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
     }
   }, [isOpen, editableSections]);
 
-  // Update preview when sections change
+  // Update preview when sections change or zoom changes
   useEffect(() => {
     if (sections.size > 0 && initialHTML && editableSections.length > 0) {
       const reconstructed = reconstructHTML(initialHTML, sections, editableSections);
-      const blob = new Blob([reconstructed], { type: 'text/html' });
+      
+      // Inject zoom CSS into the HTML (exactly like LOEPreviewModal does)
+      const zoomDecimal = zoomLevel / 100;
+      const scaleValue = 0.9 + (zoomDecimal - 0.75) * 0.5; // Adjust scale proportionally
+      
+      const scaledHTML = reconstructed.replace(
+        '</head>',
+        `<style>
+          body {
+            zoom: ${zoomDecimal};
+            transform: scale(${scaleValue});
+            transform-origin: top center;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 20px;
+            overflow-x: hidden;
+          }
+          .document {
+            max-width: 850px;
+            margin: 0 auto;
+          }
+          @media print {
+            body {
+              zoom: 1;
+              transform: none;
+              max-width: 100%;
+            }
+          }
+        </style>
+        </head>`
+      );
+      
+      const blob = new Blob([scaledHTML], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
       setPreviewUrl(url);
       return () => URL.revokeObjectURL(url);
     }
-  }, [sections, initialHTML, editableSections]);
+  }, [sections, initialHTML, editableSections, zoomLevel]);
 
   const handleSectionChange = (sectionId: string, value: string) => {
     setSections(prev => {
@@ -112,83 +148,435 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
     }
   };
 
+  const handleZoomIn = () => {
+    setZoomLevel(prev => Math.min(200, prev + 10)); // Max 200%
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel(prev => Math.max(25, prev - 10)); // Min 25%
+  };
+
+  const handleZoomReset = () => {
+    setZoomLevel(75); // Reset to 75%
+  };
+
+  const handleFontSizeIncrease = () => {
+    setFontSize(prev => Math.min(prev + 1, 20)); // Max 20px
+  };
+
+  const handleFontSizeDecrease = () => {
+    setFontSize(prev => Math.max(prev - 1, 10)); // Min 10px
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsResizing(true);
+  };
+
+  useEffect(() => {
+    if (!isResizing) return;
+
+    let isDragging = true;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const container = document.querySelector('[data-resize-container]') as HTMLElement;
+      if (!container) return;
+      
+      const containerRect = container.getBoundingClientRect();
+      const newLeftWidth = ((e.clientX - containerRect.left) / containerRect.width) * 100;
+      
+      // Constrain between 25% and 75%
+      const constrainedWidth = Math.max(25, Math.min(75, newLeftWidth));
+      setLeftPanelWidth(constrainedWidth);
+    };
+
+    const handleMouseUp = (e: MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      isDragging = false;
+      setIsResizing(false);
+    };
+
+    const handleMouseLeave = () => {
+      isDragging = false;
+      setIsResizing(false);
+    };
+
+    // Use capture phase to ensure we catch the event
+    document.addEventListener('mousemove', handleMouseMove, { passive: false, capture: true });
+    document.addEventListener('mouseup', handleMouseUp, { passive: false, capture: true });
+    document.addEventListener('mouseleave', handleMouseLeave, { passive: false, capture: true });
+    
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+
+    return () => {
+      isDragging = false;
+      document.removeEventListener('mousemove', handleMouseMove, { capture: true });
+      document.removeEventListener('mouseup', handleMouseUp, { capture: true });
+      document.removeEventListener('mouseleave', handleMouseLeave, { capture: true });
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+  }, [isResizing]);
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="!max-w-[95vw] !max-h-[95vh] w-[95vw] h-[95vh] overflow-hidden flex flex-col">
-        <DialogHeader>
-          <DialogTitle>Edit LOE Template</DialogTitle>
-        </DialogHeader>
+      <DialogContent className="!max-w-[95vw] !max-h-[95vh] w-[95vw] h-[95vh] overflow-hidden flex flex-col p-4 [&>button]:hidden">
+        {/* Header - Matching LOEPreviewModal */}
+        <div className="flex justify-between items-center pb-2 border-b">
+          <div>
+            <h2 className="text-lg font-semibold">Edit LOE Template</h2>
+            <p className="text-sm text-gray-600">Edit template content and preview changes</p>
+          </div>
+          
+          {/* Zoom Controls */}
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleZoomOut}
+              className="h-6 w-6 p-0 hover:bg-transparent dark:hover:bg-transparent text-gray-600 dark:text-gray-400"
+              title="Zoom Out"
+            >
+              <ZoomOut className="h-3 w-3" />
+            </Button>
+            
+            <span className="text-xs font-medium px-2 min-w-[45px] text-center text-gray-600 dark:text-gray-400">
+              {zoomLevel}%
+            </span>
+            
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleZoomIn}
+              className="h-6 w-6 p-0 hover:bg-transparent dark:hover:bg-transparent text-gray-600 dark:text-gray-400"
+              title="Zoom In"
+            >
+              <ZoomIn className="h-3 w-3" />
+            </Button>
+            
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleZoomReset}
+              className="h-6 w-6 p-0 hover:bg-transparent dark:hover:bg-transparent text-gray-600 dark:text-gray-400"
+              title="Reset Zoom"
+            >
+              <RotateCcw className="h-3 w-3" />
+            </Button>
+            
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              className="h-8 w-8 p-0"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
 
-        <div className="flex gap-4 flex-1 min-h-0 overflow-hidden">
+        <div className="flex flex-1 min-h-0 overflow-hidden pt-4 gap-2" data-resize-container>
           {/* Form Editor Side */}
-          <div className="flex-1 flex flex-col min-w-0 overflow-y-auto pr-2">
-            <div className="space-y-1 p-2">
-              {editableSections.map((section) => {
-                // Calculate appropriate rows based on content length
-                const contentLength = section.content.length;
-                const rows = section.type === 'intro' 
-                  ? 4 
-                  : section.type === 'term' 
-                    ? Math.max(3, Math.min(8, Math.ceil(contentLength / 80)))
-                    : section.type === 'table-cell'
-                      ? Math.max(2, Math.min(6, Math.ceil(contentLength / 100)))
-                      : 4;
+          <div 
+            className="flex flex-col min-w-0 border rounded-lg bg-white dark:bg-gray-900 relative"
+            style={{ width: `calc(${leftPanelWidth}% - 8px)`, minWidth: '300px' }}
+          >
+            {/* Resizer Divider - Part of editor panel border */}
+            <div
+              className="absolute right-0 top-0 bottom-0 w-1 bg-transparent hover:bg-gray-400 dark:hover:bg-gray-500 cursor-col-resize transition-colors z-30"
+              onMouseDown={handleMouseDown}
+              style={{ marginRight: '-4px' }}
+            />
+            
+            {/* Container with padding for content */}
+            <div className="flex flex-col flex-1 min-h-0 overflow-hidden p-3">
+              {/* Font Size Control - Fixed Position Header */}
+              <div className="flex items-center justify-end gap-1 sticky top-0 z-20 border-b border-gray-200 dark:border-gray-700 mb-2 -mx-3 px-3 py-2 bg-white dark:bg-gray-900 shadow-sm">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleFontSizeDecrease}
+                className="h-5 w-5 p-0 hover:bg-transparent dark:hover:bg-transparent text-gray-600 dark:text-gray-400"
+                title="Decrease Font Size"
+              >
+                <ChevronDown className="h-3 w-3" />
+              </Button>
+              
+              <span className="text-xs font-medium px-1 min-w-[30px] text-center text-gray-600 dark:text-gray-400">
+                {fontSize}px
+              </span>
+              
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleFontSizeIncrease}
+                className="h-5 w-5 p-0 hover:bg-transparent dark:hover:bg-transparent text-gray-600 dark:text-gray-400"
+                title="Increase Font Size"
+              >
+                <ChevronUp className="h-3 w-3" />
+              </Button>
+              </div>
+              
+              {/* Scrollable content container */}
+              <div className="flex-1 overflow-y-auto min-h-0">
+                <div className="space-y-2 px-2 pt-1 pb-4" style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}>
 
+              {/* DOCUMENT ORDER RENDERING - Shows both editable and read-only sections */}
+
+              {/* Header - Read-only */}
+              <div className="text-gray-400 text-xs mb-2 pb-2 border-b border-gray-200 select-none">
+                [Company Logo]
+                <div className="text-right">
+                  [Date]<br/>
+                  [Client Name] | [Client Contact]<br/>
+                  [Client Address]
+                </div>
+              </div>
+
+              {/* Subject Line - Editable */}
+              {editableSections.find(s => s.id === 'subject-line') && (() => {
+                const section = editableSections.find(s => s.id === 'subject-line')!;
+                const currentValue = sections.get(section.id) || '';
                 return (
-                  <div key={section.id} className="border rounded p-2 bg-white dark:bg-gray-900 shadow-sm">
+                  <div className="mb-3">
+                    <div className="text-xs font-medium text-gray-500 mb-1">Subject Line</div>
                     <Textarea
-                      value={sections.get(section.id) || ''}
+                      value={currentValue}
                       onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                      rows={rows}
-                      className="border-gray-300 dark:border-gray-700 resize-y min-h-[60px]"
-                      placeholder={`Enter ${section.label.toLowerCase()}...`}
+                      className="w-full p-2 border border-gray-300 rounded resize-y bg-white focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+                      rows={2}
+                      style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
                     />
-                    {section.placeholders.length > 0 && (
-                      <div className="mt-1">
-                        <div className="flex flex-wrap gap-1">
-                          {section.placeholders.map((placeholder) => (
-                            <Badge 
-                              key={placeholder} 
-                              variant="secondary"
-                              className="text-xs"
-                            >
-                              {placeholder}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </div>
                 );
-              })}
-            </div>
+              })()}
 
-            <div className="flex gap-2 mt-4 p-4 border-t sticky bottom-0 bg-white dark:bg-gray-900 z-10">
-              <Button onClick={handleSaveClick} className="gap-2" disabled={isSaving}>
-                <Save className="h-4 w-4" />
+              {/* Introduction - Editable */}
+              {editableSections.find(s => s.id === 'intro') && (() => {
+                const section = editableSections.find(s => s.id === 'intro')!;
+                const currentValue = sections.get(section.id) || '';
+                return (
+                  <div className="mb-3">
+                    <div className="text-xs font-medium text-gray-500 mb-1">Introduction Paragraph</div>
+                    <Textarea
+                      value={currentValue}
+                      onChange={(e) => handleSectionChange(section.id, e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded resize-y bg-white focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+                      rows={3}
+                      style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                    />
+                  </div>
+                );
+              })()}
+
+              {/* Property Details Table - Mixed editable/readonly */}
+              <div className="mb-3 text-sm border border-gray-200 rounded overflow-hidden">
+                <div className="text-xs font-semibold bg-gray-50 px-2 py-1 border-b">Property Details</div>
+
+                {/* Read-only rows */}
+                <div className="divide-y divide-gray-200">
+                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
+                    <div className="text-xs font-medium">Property Identification</div>
+                    <div className="text-xs">[name], [addressstreet]</div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
+                    <div className="text-xs font-medium">Property Type</div>
+                    <div className="text-xs">[purposes]</div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
+                    <div className="text-xs font-medium">Authorized Client</div>
+                    <div className="text-xs">[propertycontact.company]</div>
+                  </div>
+
+                  {/* Authorized Users - Editable */}
+                  {editableSections.find(s => s.label === 'Authorized Users') && (() => {
+                    const section = editableSections.find(s => s.label === 'Authorized Users')!;
+                    const currentValue = sections.get(section.id) || '';
+                    return (
+                      <div className="grid grid-cols-2 gap-2 px-2 py-1.5">
+                        <div className="text-xs font-medium text-gray-700">Authorized Users</div>
+                        <Textarea
+                          value={currentValue}
+                          onChange={(e) => handleSectionChange(section.id, e.target.value)}
+                          className="text-xs p-1 border border-gray-300 rounded resize-y bg-white focus:border-gray-400"
+                          rows={2}
+                          style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                        />
+                      </div>
+                    );
+                  })()}
+
+                  {/* Authorized Use - Editable */}
+                  {editableSections.find(s => s.label === 'Authorized Use') && (() => {
+                    const section = editableSections.find(s => s.label === 'Authorized Use')!;
+                    const currentValue = sections.get(section.id) || '';
+                    return (
+                      <div className="grid grid-cols-2 gap-2 px-2 py-1.5">
+                        <div className="text-xs font-medium text-gray-700">Authorized Use</div>
+                        <Textarea
+                          value={currentValue}
+                          onChange={(e) => handleSectionChange(section.id, e.target.value)}
+                          className="text-xs p-1 border border-gray-300 rounded resize-y bg-white focus:border-gray-400"
+                          rows={2}
+                          style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                        />
+                      </div>
+                    );
+                  })()}
+
+                  {/* More read-only rows */}
+                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
+                    <div className="text-xs font-medium">Effective Date of Value</div>
+                    <div className="text-xs">Date of Property Inspection</div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
+                    <div className="text-xs font-medium">Value to be Appraised</div>
+                    <div className="text-xs">[requestedvalues]</div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
+                    <div className="text-xs font-medium">Property Rights Appraised</div>
+                    <div className="text-xs">[propertyrights]</div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
+                    <div className="text-xs font-medium">Report Type</div>
+                    <div className="text-xs">[reportformat]</div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
+                    <div className="text-xs font-medium">Fee</div>
+                    <div className="text-xs">[fee] plus applicable taxes</div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
+                    <div className="text-xs font-medium">Scope of Work</div>
+                    <div className="text-xs">[scopes]</div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
+                    <div className="text-xs font-medium">Delivery Date</div>
+                    <div className="text-xs">[duedate] from receipt of signed LOE and payment</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Terms & Conditions - Editable */}
+              {editableSections.find(s => s.id === 'terms') && (() => {
+                const section = editableSections.find(s => s.id === 'terms')!;
+                const currentValue = sections.get(section.id) || '';
+                return (
+                  <div className="mb-3">
+                    <div className="text-xs font-medium text-gray-500 mb-1">Terms & Conditions</div>
+                    <Textarea
+                      value={currentValue}
+                      onChange={(e) => handleSectionChange(section.id, e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded resize-y bg-white focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+                      rows={12}
+                      style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                    />
+                  </div>
+                );
+              })()}
+
+              {/* Closing Statement - Editable */}
+              {editableSections.find(s => s.id === 'action') && (() => {
+                const section = editableSections.find(s => s.id === 'action')!;
+                const currentValue = sections.get(section.id) || '';
+                return (
+                  <div className="mb-3">
+                    <div className="text-xs font-medium text-gray-500 mb-1">Closing Statement</div>
+                    <Textarea
+                      value={currentValue}
+                      onChange={(e) => handleSectionChange(section.id, e.target.value)}
+                      className="w-full p-2 border border-gray-300 rounded resize-y bg-white focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+                      rows={2}
+                      style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                    />
+                  </div>
+                );
+              })()}
+
+              {/* Signature Block - Read-only */}
+              <div className="text-gray-400 text-xs select-none mt-4 pt-2 border-t border-gray-200">
+                <div>Sincerely,</div>
+                <div className="font-semibold">Valta Property Valuations Ltd.</div>
+                <div className="mt-2">[Signature Image]</div>
+                <div className="mt-4">
+                  <div>Client Signature: _________________</div>
+                  <div className="mt-2">Date: _________________</div>
+                </div>
+              </div>
+
+                </div>
+              </div>
+
+              {/* Footer with save buttons */}
+              <div className="flex gap-2 mt-2 px-2 py-2 border-t sticky bottom-0 bg-white dark:bg-gray-900 z-10 -mx-3 px-3">
+              <Button 
+                onClick={handleSaveClick} 
+                variant="outline" 
+                size="sm"
+                className="h-7 px-2 text-xs gap-1" 
+                disabled={isSaving}
+              >
+                <Save className="h-3 w-3" />
                 Save Template
               </Button>
-              <Button variant="outline" onClick={onClose} disabled={isSaving}>
-                <X className="h-4 w-4" />
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={onClose} 
+                className="h-7 px-2 text-xs"
+                disabled={isSaving}
+              >
+                <X className="h-3 w-3" />
                 Cancel
               </Button>
+              </div>
             </div>
           </div>
 
           {/* Preview Side */}
-          <div className="flex-1 border rounded-lg overflow-y-auto min-w-0 bg-gray-50 dark:bg-gray-800">
-            {previewUrl ? (
-              <iframe
-                src={previewUrl}
-                className="w-full h-full min-h-[600px]"
-                title="Template Preview"
-                sandbox="allow-same-origin"
-              />
-            ) : (
-              <div className="flex items-center justify-center h-full text-gray-500">
-                Loading preview...
-              </div>
-            )}
+          <div 
+            className="border rounded-lg overflow-hidden min-w-0 bg-gray-50 dark:bg-gray-800 flex flex-col"
+            style={{ width: `calc(${100 - leftPanelWidth}% - 8px)`, minWidth: '300px' }}
+          >
+            
+            {/* Preview Container with Zoom */}
+            <div className="flex-1 overflow-auto min-h-0">
+              {previewUrl ? (
+                <div 
+                  className="w-full flex justify-center"
+                  style={{
+                    padding: '16px',
+                    minHeight: '100%'
+                  }}
+                >
+                  <iframe
+                    src={previewUrl}
+                    className="border"
+                    style={{
+                      width: '100%',
+                      height: '2000px',
+                      minHeight: '2000px',
+                      display: 'block',
+                      border: '1px solid #e5e7eb',
+                      margin: 0,
+                      padding: 0
+                    }}
+                    title="Template Preview"
+                    sandbox="allow-same-origin"
+                  />
+                </div>
+              ) : (
+                <div className="flex items-center justify-center h-full text-gray-500">
+                  Loading preview...
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

@@ -331,7 +331,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
               {/* DOCUMENT ORDER RENDERING - Shows both editable and read-only sections */}
 
               {/* Header - Read-only */}
-              <div className="text-gray-400 text-xs mb-2 pb-2 border-b border-gray-200 select-none">
+              <div className="text-gray-400 dark:text-gray-500 text-xs mb-2 pb-2 border-b border-gray-200 dark:border-gray-700 select-none">
                 [Company Logo]
                 <div className="text-right">
                   [Date]<br/>
@@ -346,11 +346,11 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 const currentValue = sections.get(section.id) || '';
                 return (
                   <div className="mb-3">
-                    <div className="text-xs font-medium text-gray-500 mb-1">Subject Line</div>
+                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Subject Line</div>
                     <Textarea
                       value={currentValue}
                       onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded resize-y bg-white focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+                      className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500 focus:ring-1 focus:ring-gray-300 dark:focus:ring-gray-600"
                       rows={2}
                       style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
                     />
@@ -364,11 +364,11 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 const currentValue = sections.get(section.id) || '';
                 return (
                   <div className="mb-3">
-                    <div className="text-xs font-medium text-gray-500 mb-1">Introduction Paragraph</div>
+                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Introduction Paragraph</div>
                     <Textarea
                       value={currentValue}
                       onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded resize-y bg-white focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+                      className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500 focus:ring-1 focus:ring-gray-300 dark:focus:ring-gray-600"
                       rows={3}
                       style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
                     />
@@ -377,11 +377,11 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
               })()}
 
               {/* Property Details Table - Mixed editable/readonly */}
-              <div className="mb-3 text-sm border border-gray-200 rounded overflow-hidden">
-                <div className="text-xs font-semibold bg-gray-50 px-2 py-1 border-b">Property Details</div>
+              <div className="mb-3 text-sm border border-gray-200 dark:border-gray-700 rounded overflow-hidden">
+                <div className="text-xs font-semibold bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 border-b border-gray-200 dark:border-gray-700">Property Details</div>
 
                 {/* Read-only rows */}
-                <div className="divide-y divide-gray-200">
+                <div className="divide-y divide-gray-200 dark:divide-gray-700">
                   <div className="grid grid-cols-2 gap-2 px-2 py-1.5 text-gray-400 select-none">
                     <div className="text-xs font-medium">Property Identification</div>
                     <div className="text-xs">[name], [addressstreet]</div>
@@ -400,12 +400,12 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                     const section = editableSections.find(s => s.label === 'Authorized Users')!;
                     const currentValue = sections.get(section.id) || '';
                     return (
-                      <div className="grid grid-cols-2 gap-2 px-2 py-1.5">
-                        <div className="text-xs font-medium text-gray-700">Authorized Users</div>
+                      <div className="px-2 py-1.5">
+                        <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Authorized Users</div>
                         <Textarea
                           value={currentValue}
                           onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                          className="text-xs p-1 border border-gray-300 rounded resize-y bg-white focus:border-gray-400"
+                          className="w-full text-xs p-1 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500"
                           rows={2}
                           style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
                         />
@@ -418,12 +418,12 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                     const section = editableSections.find(s => s.label === 'Authorized Use')!;
                     const currentValue = sections.get(section.id) || '';
                     return (
-                      <div className="grid grid-cols-2 gap-2 px-2 py-1.5">
-                        <div className="text-xs font-medium text-gray-700">Authorized Use</div>
+                      <div className="px-2 py-1.5">
+                        <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">Authorized Use</div>
                         <Textarea
                           value={currentValue}
                           onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                          className="text-xs p-1 border border-gray-300 rounded resize-y bg-white focus:border-gray-400"
+                          className="w-full text-xs p-1 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500"
                           rows={2}
                           style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
                         />
@@ -469,11 +469,11 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 const currentValue = sections.get(section.id) || '';
                 return (
                   <div className="mb-3">
-                    <div className="text-xs font-medium text-gray-500 mb-1">Terms & Conditions</div>
+                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Terms & Conditions</div>
                     <Textarea
                       value={currentValue}
                       onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded resize-y bg-white focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+                      className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500 focus:ring-1 focus:ring-gray-300 dark:focus:ring-gray-600"
                       rows={12}
                       style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
                     />
@@ -487,11 +487,11 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 const currentValue = sections.get(section.id) || '';
                 return (
                   <div className="mb-3">
-                    <div className="text-xs font-medium text-gray-500 mb-1">Closing Statement</div>
+                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Closing Statement</div>
                     <Textarea
                       value={currentValue}
                       onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                      className="w-full p-2 border border-gray-300 rounded resize-y bg-white focus:border-gray-400 focus:ring-1 focus:ring-gray-300"
+                      className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus:border-gray-400 dark:focus:border-gray-500 focus:ring-1 focus:ring-gray-300 dark:focus:ring-gray-600"
                       rows={2}
                       style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
                     />
@@ -500,7 +500,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
               })()}
 
               {/* Signature Block - Read-only */}
-              <div className="text-gray-400 text-xs select-none mt-4 pt-2 border-t border-gray-200">
+              <div className="text-gray-400 dark:text-gray-500 text-xs select-none mt-4 pt-2 border-t border-gray-200 dark:border-gray-700">
                 <div>Sincerely,</div>
                 <div className="font-semibold">Valta Property Valuations Ltd.</div>
                 <div className="mt-2">[Signature Image]</div>

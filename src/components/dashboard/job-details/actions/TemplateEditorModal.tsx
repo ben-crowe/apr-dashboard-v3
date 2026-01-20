@@ -34,6 +34,26 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
   const [leftPanelWidth, setLeftPanelWidth] = useState(50); // Default 50% width
   const [isResizing, setIsResizing] = useState(false);
 
+  // Auto-resize textarea based on content
+  const handleTextareaResize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const textarea = e.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  };
+
+  // Auto-resize all textareas on initial load
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        const textareas = document.querySelectorAll('textarea');
+        textareas.forEach((textarea: HTMLTextAreaElement) => {
+          textarea.style.height = 'auto';
+          textarea.style.height = textarea.scrollHeight + 'px';
+        });
+      }, 100);
+    }
+  }, [isOpen, sections]);
+
   // Parse template into editable sections when modal opens
   const editableSections = useMemo(() => {
     if (!isOpen || !initialHTML) return [];
@@ -350,9 +370,12 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                     <div className="space-y-1">
                       <Textarea
                         value={currentValue}
-                        onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                        className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0"
-                        rows={2}
+                        onChange={(e) => {
+                          handleSectionChange(section.id, e.target.value);
+                          handleTextareaResize(e);
+                        }}
+                        className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                        rows={1}
                         style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
                       />
                       {section.placeholders.length > 0 && (
@@ -374,9 +397,12 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                     <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Introduction Paragraph</div>
                     <Textarea
                       value={currentValue}
-                      onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                      className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0"
-                      rows={3}
+                      onChange={(e) => {
+                        handleSectionChange(section.id, e.target.value);
+                        handleTextareaResize(e);
+                      }}
+                      className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                      rows={1}
                       style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
                     />
                   </div>
@@ -399,7 +425,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                           <Textarea
                             value={currentValue}
                             onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                            className="w-full text-xs p-1 border border-gray-200 dark:border-gray-700 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 min-h-0 overflow-y-hidden"
+                            className="w-full text-xs p-1 border border-gray-200 dark:border-gray-700 rounded resize-y bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 min-h-0 overflow-y-hidden"
                             rows={1}
                             style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px`, minHeight: 'auto', maxHeight: `${fontSize * 1.3 + 8}px` }}
                           />
@@ -418,9 +444,12 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                     <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Terms & Conditions</div>
                     <Textarea
                       value={currentValue}
-                      onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                      className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0"
-                      rows={12}
+                      onChange={(e) => {
+                        handleSectionChange(section.id, e.target.value);
+                        handleTextareaResize(e);
+                      }}
+                      className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                      rows={1}
                       style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
                     />
                   </div>
@@ -436,9 +465,12 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                     <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Closing Statement</div>
                     <Textarea
                       value={currentValue}
-                      onChange={(e) => handleSectionChange(section.id, e.target.value)}
-                      className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-y bg-white dark:bg-gray-800 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0"
-                      rows={2}
+                      onChange={(e) => {
+                        handleSectionChange(section.id, e.target.value);
+                        handleTextareaResize(e);
+                      }}
+                      className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                      rows={1}
                       style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
                     />
                   </div>

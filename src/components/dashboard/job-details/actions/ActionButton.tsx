@@ -9,7 +9,7 @@ type ActionButtonProps = {
   onClick: () => void;
   disabled?: boolean;
   isLoading?: boolean;
-  variant?: "primary" | "outline";
+  variant?: "primary" | "outline" | "success";
   className?: string;
 };
 
@@ -22,13 +22,20 @@ const ActionButton: React.FC<ActionButtonProps> = ({
   variant = "outline",
   className = "",
 }) => {
+  // Map variants to standardized gray styling
+  const variantClasses = {
+    primary: "bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700",
+    success: "bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/30 border-green-200 dark:border-green-800",
+    outline: "bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700"
+  };
+
   return (
-    <Button 
-      variant={variant}
+    <Button
+      variant="outline"
       onClick={onClick}
       disabled={disabled || isLoading}
       size="sm"
-      className={`flex-1 ${className}`}
+      className={`flex-1 ${variantClasses[variant]} ${className}`}
     >
       <Icon className="h-4 w-4 mr-1" />
       {isLoading ? `${label.split(' ')[0]}...` : label}

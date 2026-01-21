@@ -23,6 +23,12 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
   initialHTML,
   onSave
 }) => {
+  console.log('TemplateEditorModal: Component rendered', {
+    isOpen,
+    hasInitialHTML: !!initialHTML,
+    initialHTMLLength: initialHTML?.length || 0
+  });
+  
   const [sections, setSections] = useState<Map<string, string>>(new Map());
   const [previewUrl, setPreviewUrl] = useState('');
   const [showSaveDialog, setShowSaveDialog] = useState(false);
@@ -34,37 +40,42 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
   const [leftPanelWidth, setLeftPanelWidth] = useState(50); // Default 50% width
   const [isResizing, setIsResizing] = useState(false);
 
-  // Auto-resize textarea based on content
-  const handleTextareaResize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textarea = e.target;
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
-  };
-
-  // Auto-resize all textareas on initial load and when sections change
-  useEffect(() => {
-    if (isOpen) {
-      // Use requestAnimationFrame to ensure DOM is ready
-      requestAnimationFrame(() => {
-        const textareas = document.querySelectorAll('textarea');
-        textareas.forEach((textarea: HTMLTextAreaElement) => {
-          if (textarea.value) {
-            // Reset to minimal height first
-            textarea.style.height = '0px';
-            // Then expand to fit content
-            const scrollHeight = textarea.scrollHeight;
-            textarea.style.height = scrollHeight + 'px';
-          }
-        });
-      });
-    }
-  }, [isOpen, sections, fontSize]);
-
   // Parse template into editable sections when modal opens
   const editableSections = useMemo(() => {
     if (!isOpen || !initialHTML) return [];
     return parseTemplate(initialHTML);
   }, [isOpen, initialHTML]);
+
+  // Auto-resize textarea based on content
+  const handleTextareaResize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const textarea = e.target;
+    // Reset height to auto to get accurate scrollHeight
+    textarea.style.height = 'auto';
+    // Calculate minimum height based on padding (p-2 = 8px top + 8px bottom = 16px, p-1 = 4px top + 4px bottom = 8px)
+    const padding = textarea.classList.contains('p-1') ? 8 : 16;
+    const minHeight = fontSize * 1.3 + padding; // Single line height + padding
+    // Set height to scrollHeight (content height), but at least one line
+    const newHeight = Math.max(textarea.scrollHeight, minHeight);
+    textarea.style.height = newHeight + 'px';
+  };
+
+  // Auto-resize all textareas on initial load and when sections change
+  useEffect(() => {
+    if (isOpen && editableSections.length > 0) {
+      // Use requestAnimationFrame to ensure DOM is ready
+      requestAnimationFrame(() => {
+        const textareas = document.querySelectorAll('textarea[data-auto-resize="true"]');
+        textareas.forEach((textarea: HTMLTextAreaElement) => {
+          // Reset to minimal height first
+          textarea.style.height = 'auto';
+          // Calculate height based on content or default to single line
+          const minHeight = fontSize * 1.3; // Single line height
+          const contentHeight = textarea.scrollHeight;
+          textarea.style.height = Math.max(minHeight, contentHeight) + 'px';
+        });
+      });
+    }
+  }, [isOpen, sections, fontSize, editableSections.length]);
 
   // Initialize sections from parsed template
   useEffect(() => {
@@ -80,18 +91,12 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
     }
   }, [isOpen, editableSections]);
 
-  // Update preview when sections change or zoom changes
-  useEffect(() => {
-    if (sections.size > 0 && initialHTML && editableSections.length > 0) {
-      const reconstructed = reconstructHTML(initialHTML, sections, editableSections);
-      
-      // Inject zoom CSS into the HTML (exactly like LOEPreviewModal does)
-      const zoomDecimal = zoomLevel / 100;
-      const scaleValue = 0.9 + (zoomDecimal - 0.75) * 0.5; // Adjust scale proportionally
-      
-      const scaledHTML = reconstructed.replace(
-        '</head>',
-        `<style>
+  // Generate preview HTML with zoom CSS
+  const generatePreviewHTML = (html: string): string => {
+    const zoomDecimal = zoomLevel / 100;
+    const scaleValue = 0.9 + (zoomDecimal - 0.75) * 0.5;
+    
+    const styleCSS = `<style>
           body {
             zoom: ${zoomDecimal};
             transform: scale(${scaleValue});
@@ -112,16 +117,81 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
               max-width: 100%;
             }
           }
-        </style>
-        </head>`
-      );
-      
+        </style>`;
+    
+    if (html.includes('</head>')) {
+      return html.replace('</head>', `${styleCSS}\n        </head>`);
+    } else if (html.includes('</html>')) {
+      return html.replace('</html>', `${styleCSS}\n        </html>`);
+    } else {
+      return styleCSS + '\n' + html;
+    }
+  };
+
+  // Update preview when modal opens, sections change, or zoom changes
+  useEffect(() => {
+    console.log('TemplateEditorModal: Preview useEffect triggered', {
+      isOpen,
+      hasInitialHTML: !!initialHTML,
+      initialHTMLLength: initialHTML?.length || 0,
+      currentPreviewUrl: previewUrl ? 'exists' : 'none'
+    });
+    
+    if (!isOpen) {
+      // Clean up when modal closes
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+        setPreviewUrl('');
+      }
+      return;
+    }
+    
+    if (!initialHTML || initialHTML.trim().length === 0) {
+      console.error('TemplateEditorModal: No initialHTML provided or empty');
+      setPreviewUrl('');
+      return;
+    }
+    
+    // Always generate preview - use original HTML if reconstruction fails
+    let htmlToUse = initialHTML;
+    
+    try {
+      if (editableSections.length > 0 && sections.size > 0) {
+        htmlToUse = reconstructHTML(initialHTML, sections, editableSections);
+      } else if (editableSections.length > 0) {
+        const sectionsToUse = new Map(editableSections.map(s => [s.id, s.content]));
+        htmlToUse = reconstructHTML(initialHTML, sectionsToUse, editableSections);
+      }
+    } catch (reconstructError) {
+      console.warn('TemplateEditorModal: Reconstruction failed, using original HTML:', reconstructError);
+      htmlToUse = initialHTML;
+    }
+    
+    // Always generate preview HTML with zoom CSS
+    try {
+      const scaledHTML = generatePreviewHTML(htmlToUse);
       const blob = new Blob([scaledHTML], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
+      
+      // Revoke old URL before setting new one
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+      
       setPreviewUrl(url);
-      return () => URL.revokeObjectURL(url);
+      console.log('TemplateEditorModal: Preview URL created successfully');
+      
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    } catch (error) {
+      console.error('TemplateEditorModal: Failed to create preview blob:', error);
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+      setPreviewUrl('');
     }
-  }, [sections, initialHTML, editableSections, zoomLevel]);
+  }, [isOpen, sections, initialHTML, editableSections, zoomLevel]);
 
   const handleSectionChange = (sectionId: string, value: string) => {
     setSections(prev => {
@@ -380,9 +450,15 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                           handleSectionChange(section.id, e.target.value);
                           handleTextareaResize(e);
                         }}
+                        data-auto-resize="true"
                         className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                         rows={1}
-                        style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                        style={{ 
+                          fontSize: `${fontSize}px`, 
+                          lineHeight: `${fontSize * 1.3}px`,
+                          height: 'auto',
+                          minHeight: `${fontSize * 1.3 + 16}px` // Single line + padding
+                        }}
                       />
                       {section.placeholders.length > 0 && (
                         <div className="text-xs text-gray-400 dark:text-gray-500 italic select-none px-2">
@@ -407,9 +483,15 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                         handleSectionChange(section.id, e.target.value);
                         handleTextareaResize(e);
                       }}
+                      data-auto-resize="true"
                       className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                       rows={1}
-                      style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                      style={{ 
+                        fontSize: `${fontSize}px`, 
+                        lineHeight: `${fontSize * 1.3}px`,
+                        height: 'auto',
+                        minHeight: `${fontSize * 1.3 + 16}px` // Single line + padding
+                      }}
                     />
                   </div>
                 );
@@ -434,9 +516,15 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                               handleSectionChange(section.id, e.target.value);
                               handleTextareaResize(e);
                             }}
+                            data-auto-resize="true"
                             className="w-full text-xs p-1 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                             rows={1}
-                            style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                            style={{ 
+                              fontSize: `${fontSize}px`, 
+                              lineHeight: `${fontSize * 1.3}px`,
+                              height: 'auto',
+                              minHeight: `${fontSize * 1.3 + 8}px` // Single line + padding (smaller for table cells)
+                            }}
                           />
                         </div>
                       );
@@ -457,9 +545,15 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                         handleSectionChange(section.id, e.target.value);
                         handleTextareaResize(e);
                       }}
+                      data-auto-resize="true"
                       className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                       rows={1}
-                      style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                      style={{ 
+                        fontSize: `${fontSize}px`, 
+                        lineHeight: `${fontSize * 1.3}px`,
+                        height: 'auto',
+                        minHeight: `${fontSize * 1.3 + 16}px` // Single line + padding
+                      }}
                     />
                   </div>
                 );
@@ -478,9 +572,15 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                         handleSectionChange(section.id, e.target.value);
                         handleTextareaResize(e);
                       }}
+                      data-auto-resize="true"
                       className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                       rows={1}
-                      style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}
+                      style={{ 
+                        fontSize: `${fontSize}px`, 
+                        lineHeight: `${fontSize * 1.3}px`,
+                        height: 'auto',
+                        minHeight: `${fontSize * 1.3 + 16}px` // Single line + padding
+                      }}
                     />
                   </div>
                 );
@@ -533,36 +633,67 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
           >
             
             {/* Preview Container with Zoom */}
-            <div className="flex-1 overflow-auto min-h-0">
-              {previewUrl ? (
-                <div 
-                  className="w-full flex justify-center"
-                  style={{
-                    padding: '16px',
-                    minHeight: '100%'
-                  }}
-                >
-                  <iframe
-                    src={previewUrl}
-                    className="border"
-                    style={{
-                      width: '100%',
-                      height: '2000px',
-                      minHeight: '2000px',
-                      display: 'block',
-                      border: '1px solid #e5e7eb',
-                      margin: 0,
-                      padding: 0
-                    }}
-                    title="Template Preview"
-                    sandbox="allow-same-origin"
-                  />
-                </div>
-              ) : (
-                <div className="flex items-center justify-center h-full text-gray-500">
-                  Loading preview...
-                </div>
-              )}
+            <div className="flex-1 overflow-auto min-h-0 bg-gray-50 dark:bg-gray-800">
+              {(() => {
+                console.log('TemplateEditorModal: Rendering preview panel', {
+                  hasPreviewUrl: !!previewUrl,
+                  previewUrlLength: previewUrl.length,
+                  hasInitialHTML: !!initialHTML
+                });
+                
+                if (previewUrl) {
+                  return (
+                    <div 
+                      className="w-full h-full flex justify-center items-start"
+                      style={{
+                        padding: '16px'
+                      }}
+                    >
+                      <iframe
+                        key={previewUrl} // Force re-render when URL changes
+                        src={previewUrl}
+                        className="border bg-white shadow-sm"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          minHeight: '2000px',
+                          display: 'block',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '4px',
+                          margin: 0,
+                          padding: 0
+                        }}
+                        title="Template Preview"
+                        sandbox="allow-same-origin allow-scripts"
+                        onLoad={() => {
+                          console.log('TemplateEditorModal: Preview iframe loaded successfully');
+                          console.log('TemplateEditorModal: Iframe src:', previewUrl.substring(0, 100));
+                        }}
+                        onError={(e) => {
+                          console.error('TemplateEditorModal: Preview iframe error:', e);
+                          console.error('TemplateEditorModal: Failed URL:', previewUrl);
+                        }}
+                      />
+                    </div>
+                  );
+                } else if (initialHTML) {
+                  return (
+                    <div className="flex items-center justify-center h-full text-gray-500">
+                      <div className="text-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-gray-100 mx-auto mb-2"></div>
+                        <div>Generating preview...</div>
+                        <div className="text-xs mt-2">HTML length: {initialHTML.length}</div>
+                      </div>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <div className="flex items-center justify-center h-full text-gray-500">
+                      <div>No template available</div>
+                    </div>
+                  );
+                }
+              })()}
             </div>
           </div>
         </div>

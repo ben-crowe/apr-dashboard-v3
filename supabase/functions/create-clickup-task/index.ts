@@ -7,13 +7,41 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// ClickUp Configuration - DEVELOPMENT ENVIRONMENT (Ben's test workspace)
-// Use for safe testing before production deployment
-// Switch to production credentials after Dev testing passes
-const CLICKUP_API_TOKEN = Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY'
-const CLICKUP_LIST_ID = Deno.env.get('CLICKUP_LIST_ID') || '901706896375' // New Submission - BC Workspace (Dev.Projects)
-const CLICKUP_TEMPLATE_ID = null // Skip template for Dev testing (or create test template)
-const CLICKUP_WORKSPACE_ID = '8555561' // BC Workspace (Development)
+// ClickUp Configuration - Environment Detection and Switching
+// Supports both dev (BC workspace) and production (Valta workspace)
+
+// Environment detection
+const CLICKUP_ENV = Deno.env.get('CLICKUP_ENV') || 'dev'
+
+// Development configuration (BC Workspace)
+const DEV_CONFIG = {
+  token: Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY',
+  listId: Deno.env.get('CLICKUP_LIST_ID') || '901706896375', // New Submission - BC Workspace (Dev.Projects)
+  workspaceId: '8555561', // BC Workspace (Development)
+  templateId: null // Skip template for Dev testing
+}
+
+// Production configuration (Valta Workspace)
+const PROD_CONFIG = {
+  token: Deno.env.get('CLICKUP_API_TOKEN_VALTA'),
+  listId: '901402094744', // Chris's list in Valta
+  workspaceId: '9014181018', // Valta workspace
+  templateId: 't-86b3exqe8' // LOE New Template 2025.01.09
+}
+
+// Select configuration based on environment
+const config = CLICKUP_ENV === 'production' ? PROD_CONFIG : DEV_CONFIG
+
+// Use config values throughout the function
+const CLICKUP_API_TOKEN = config.token
+const CLICKUP_LIST_ID = config.listId
+const CLICKUP_WORKSPACE_ID = config.workspaceId
+const CLICKUP_TEMPLATE_ID = config.templateId
+
+// Log active environment for debugging
+console.log('🔧 ClickUp Environment:', CLICKUP_ENV)
+console.log('🔧 Using workspace:', CLICKUP_WORKSPACE_ID)
+console.log('🔧 Using list ID:', CLICKUP_LIST_ID)
 
 Deno.serve(async (req) => {
   // Handle CORS
@@ -23,12 +51,16 @@ Deno.serve(async (req) => {
 
   try {
     // Debug: Log token status
-    const envToken = Deno.env.get('CLICKUP_API_TOKEN')
+    const envToken = CLICKUP_ENV === 'production' 
+      ? Deno.env.get('CLICKUP_API_TOKEN_VALTA')
+      : Deno.env.get('CLICKUP_API_TOKEN')
     console.log('🔍 Token check:', {
+      environment: CLICKUP_ENV,
       hasEnvToken: !!envToken,
       tokenPrefix: envToken ? envToken.substring(0, 12) : 'none',
       usingFallback: !envToken,
-      listId: CLICKUP_LIST_ID
+      listId: CLICKUP_LIST_ID,
+      workspaceId: CLICKUP_WORKSPACE_ID
     })
 
     const { jobId } = await req.json()

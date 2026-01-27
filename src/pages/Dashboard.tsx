@@ -24,22 +24,26 @@ const JobListRoute = () => {
     <DashboardLayout>
       <div className="animate-fade-in bento-shadow">
         <JobListProvider>
-          <div>
-            <div className="flex justify-between items-center mb-4">
-              <h1 className="text-2xl font-bold">Appraisal Submissions</h1>
-              <button
-                onClick={toggleViewMode}
-                className="px-2.5 py-1.5 rounded-md border border-slate-400/50 dark:border-slate-700/50 bg-transparent text-foreground hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-slate-500/60 dark:hover:border-slate-600/60 text-sm font-normal transition-colors"
-              >
-                Switch to {viewMode === 'list' ? 'Table' : 'List'} View
-              </button>
-            </div>
+          <div className="space-y-6">
+            {/* OAuth removed - using personal API token */}
 
-            {viewMode === 'list' ? (
-              <JobListViewContent onSelectJob={handleSelectJob} />
-            ) : (
-              <AppraisalTableWrapper onSelectJob={handleSelectJob} />
-            )}
+            <div>
+              <div className="flex justify-between items-center mb-4">
+                <h1 className="text-2xl font-bold">Appraisal Submissions</h1>
+                <button
+                  onClick={toggleViewMode}
+                  className="px-2.5 py-1.5 rounded-md border border-slate-400/50 dark:border-slate-700/50 bg-transparent text-foreground hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-slate-500/60 dark:hover:border-slate-600/60 text-sm font-normal transition-colors"
+                >
+                  Switch to {viewMode === 'list' ? 'Table' : 'List'} View
+                </button>
+              </div>
+
+              {viewMode === 'list' ? (
+                <JobListViewContent onSelectJob={handleSelectJob} />
+              ) : (
+                <AppraisalTableWrapper onSelectJob={handleSelectJob} />
+              )}
+            </div>
           </div>
         </JobListProvider>
       </div>

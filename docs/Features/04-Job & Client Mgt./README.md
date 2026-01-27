@@ -22,6 +22,82 @@ Form Submitted → Auto-Create ClickUp Task → Team Notification → Dashboard 
 
 ---
 
+## 📁 Session Management & Organization
+
+**Agents: See `/session-management` command for full protocol details.**
+
+### Folder Structure
+
+This project follows the standard **Root = Finals, session-notes/ = Work** pattern:
+
+```
+04-Job & Client Mgt./
+├── README.md                           ← Root: Operational documentation
+├── DOMAIN-CLICKUP-EXPERT.md           ← Root: Production reference
+├── SOP-CREATE-CLICKUP-SUBTASKS.md     ← Root: Final procedures
+└── session-notes/                      ← ALL session work (112 files)
+    ├── 96-LOE-TESTING-CONTINUATION.md
+    ├── 99-TESTING-TOOLS-INVENTORY.md
+    ├── 100-CHECKPOINT.md
+    ├── 101-CHECKPOINT-next-phase.md    ← Latest checkpoint
+    └── [108 other numbered session files]
+```
+
+### Key Principles
+
+**Root Directory Contains:**
+- Final operational documentation (README, SOPs, domain experts)
+- Production-ready reference materials
+- Stable specifications and guides
+
+**session-notes/ Contains:**
+- ALL numbered session files (00-101+)
+- ALL checkpoints (`{NN}-CHECKPOINT-next-phase.md`)
+- Work in progress and session continuity documents
+- Historical decision context
+
+### Checkpoint Pattern
+
+**Format:** `{NN}-CHECKPOINT-next-phase.md` (all caps CHECKPOINT for easy visibility)
+
+**When to Use:**
+- When picking up work after session break
+- When new agent needs to understand recent decisions
+- Before major context compaction
+- After completing major work phase (milestone-based, not frequent)
+
+**Current Checkpoint:** `session-notes/101-CHECKPOINT-next-phase.md`
+
+### Continuing Work in This Feature
+
+**Method 1: Read Latest Checkpoint**
+```bash
+# Checkpoint stands out in all-caps
+ls session-notes/*CHECKPOINT*.md | tail -1
+```
+
+**Method 2: Read Recent Session Files**
+```bash
+# Read last 2-3 numbered files for recent context
+ls session-notes/ | tail -3
+```
+
+**Method 3: Use Memory Search**
+```bash
+/check-all-memory LOE testing ClickUp Edge Functions
+```
+
+### For Other Projects
+
+This same pattern applies across all project folders. When creating new project documentation:
+
+1. Keep root directory clean - only finals
+2. Create `session-notes/` folder for all session work
+3. Use consistent checkpoint naming: `{NN}-CHECKPOINT-next-phase.md`
+4. Run `/session-management` command for protocol details
+
+---
+
 ## Package Updates
 
 ### January 13, 2026 - ✅ DOCUSEAL MIGRATION APPLIED

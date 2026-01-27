@@ -85,14 +85,21 @@ Deno.serve(async (req) => {
 
     console.log(`Found ${workspaces.length} authorized workspace(s)`)
 
-    // Get Supabase client
+    // Get Supabase client with Service Role (bypasses RLS)
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    const supabase = createClient(supabaseUrl, supabaseServiceKey)
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, {
+      auth: {
+        autoRefreshToken: false,
+        persistSession: false
+      }
+    })
 
     // Store access token for each authorized workspace
     const connectionPromises = workspaces.map(async (workspace: any) => {
-      const { error } = await supabase
+      console.log(`Storing connection for workspace ${workspace.id} (${workspace.name})`)
+
+      const { data, error } = await supabase
         .from('clickup_connections')
         .upsert({
           user_id: userId,
@@ -106,11 +113,15 @@ Deno.serve(async (req) => {
         }, {
           onConflict: 'user_id,workspace_id',
         })
+        .select()
 
       if (error) {
         console.error(`Failed to store connection for workspace ${workspace.id}:`, error)
+        console.error('Error details:', JSON.stringify(error, null, 2))
         throw error
       }
+
+      console.log(`✅ Stored connection for workspace ${workspace.id}`)
 
       return {
         workspaceId: workspace.id,

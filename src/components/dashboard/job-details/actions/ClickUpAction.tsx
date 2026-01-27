@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { isValcreJobNumber } from '@/config/valcre';
+import { supabase } from '@/integrations/supabase/client';
 
 interface ClickUpActionProps {
   job: DetailJob;
@@ -57,12 +58,29 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
     setError(null);
 
     try {
+      // Get current user for OAuth token lookup
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      
+      if (authError) {
+        console.warn('⚠️ [ClickUp] User authentication check failed:', authError.message);
+        console.warn('⚠️ [ClickUp] Edge Function will use fallback token');
+      } else if (!user) {
+        console.warn('⚠️ [ClickUp] User not authenticated - Edge Function will use fallback token');
+      } else {
+        console.log('✅ [ClickUp] User authenticated:', user.id);
+      }
+
       // Call Supabase Edge Function
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ngovnamnjmexdpjtcnky.supabase.co';
       const endpoint = `${supabaseUrl}/functions/v1/create-clickup-task`;
 
+      const requestBody = {
+        jobId: job.id,
+        userId: user?.id  // OAuth lookup, falls back to env var if null
+      };
+
       console.log('📡 [ClickUp] Calling edge function:', endpoint);
-      console.log('📡 [ClickUp] Request body:', { jobId: job.id });
+      console.log('📡 [ClickUp] Request body:', requestBody);
 
       const response = await fetch(endpoint, {
         method: 'POST',
@@ -70,7 +88,7 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`
         },
-        body: JSON.stringify({ jobId: job.id })
+        body: JSON.stringify(requestBody)
       });
 
       console.log('📡 [ClickUp] Response status:', response.status);
@@ -99,7 +117,7 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
   // Show status indicator
   const getStatusIcon = () => {
     if (job.clickup_task_id) {
-      return <CheckCircle2 className="w-4 h-4 text-green-500" />;
+      return <CheckCircle2 className="w-4 h-4 text-gray-600 dark:text-gray-400" />;
     }
     if (error) {
       return <AlertCircle className="w-4 h-4 text-red-500" />;
@@ -115,28 +133,33 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
       {hasClickUpTask ? (
         // Task exists - show View button
         <Button
+          type="button"
+          variant="outline"
+          size="sm"
           onClick={handleClick}
-          variant="default"
-          className="bg-blue-600 hover:bg-blue-700 text-white"
+          className="border-gray-200 dark:border-slate-700/50 bg-white dark:bg-secondary text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-400 dark:hover:border-slate-600/60 hover:bg-transparent dark:hover:bg-transparent transition-colors text-sm font-medium"
         >
-          <ExternalLink className="w-4 h-4 mr-2" />
+          <ExternalLink className="w-4 h-4" />
           View in ClickUp
         </Button>
       ) : hasJobNumber ? (
         // Has job number - can create task
         <Button
+          type="button"
+          variant="outline"
+          size="sm"
           onClick={handleClick}
           disabled={isCreating}
-          variant="outline"
+          className="border-gray-200 dark:border-slate-700/50 bg-white dark:bg-secondary text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-400 dark:hover:border-slate-600/60 hover:bg-transparent dark:hover:bg-transparent transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed"
         >
           {isCreating ? (
             <>
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" />
               Creating Task...
             </>
           ) : (
             <>
-              <ExternalLink className="w-4 h-4 mr-2" />
+              <ExternalLink className="w-4 h-4" />
               Create ClickUp Task
             </>
           )}
@@ -148,11 +171,13 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
             <TooltipTrigger asChild>
               <div>
                 <Button
+                  type="button"
                   variant="outline"
+                  size="sm"
                   disabled={true}
-                  className="opacity-50 cursor-not-allowed"
+                  className="border-gray-200 dark:border-slate-700/50 bg-white dark:bg-secondary text-gray-400 dark:text-gray-600 cursor-not-allowed text-sm font-medium"
                 >
-                  <ExternalLink className="w-4 h-4 mr-2" />
+                  <ExternalLink className="w-4 h-4" />
                   Create ClickUp Task
                 </Button>
               </div>

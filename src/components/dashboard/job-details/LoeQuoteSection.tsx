@@ -293,10 +293,25 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           // Update ClickUp task with Section 2 (LOE details)
           console.log('🔄 Updating ClickUp task with LOE section...');
           try {
+            // Get current user for OAuth token lookup
+            const { data: { user }, error: authError } = await supabase.auth.getUser();
+            
+            if (authError) {
+              console.warn('⚠️ User authentication check failed:', authError.message);
+              console.warn('⚠️ Edge Function will use fallback token');
+            } else if (!user) {
+              console.warn('⚠️ User not authenticated - Edge Function will use fallback token');
+            } else {
+              console.log('✅ User authenticated for ClickUp update:', user.id);
+            }
+
             const { data: updateResult, error: updateError } = await supabase.functions.invoke(
               'update-clickup-task',
               {
-                body: { jobId: job.id }
+                body: { 
+                  jobId: job.id,
+                  userId: user?.id  // OAuth lookup, falls back to env var if null
+                }
               }
             );
 
@@ -593,19 +608,15 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     setIsGenerating(true);
 
     try {
-      // Get current user ID from auth
-      const { data: { user } } = await supabase.auth.getUser();
-      const userId = user?.id;
-
       // If already sent, we're resending - generate fresh HTML
       if (alreadySent) {
-        const html = await generateLOEHTML(job, jobDetails, userId);
+        const html = await generateLOEHTML(job, jobDetails);
         setPreviewHTML(html);
         setShowPreview(true);
         toast.info("Ready to resend LOE - please review recipient email");
       } else {
         // First time sending - generate preview
-        const html = await generateLOEHTML(job, jobDetails, userId);
+        const html = await generateLOEHTML(job, jobDetails);
         setPreviewHTML(html);
         setShowPreview(true);
         toast.info("Preview generated - please review before sending");
@@ -635,10 +646,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     setIsSending(true);
 
     try {
-      // Get current user ID from auth
-      const { data: { user } } = await supabase.auth.getUser();
-      const userId = user?.id;
-
       // Use override email if provided, otherwise use client's email
       const recipientEmail = overrideEmail || job.clientEmail;
 
@@ -651,7 +658,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       const jobToSend = overrideEmail ? { ...job, clientEmail: overrideEmail } : job;
 
       // Send to DocuSeal with the already generated HTML
-      const result = await generateAndSendLOE(jobToSend, jobDetails, previewHTML, userId);
+      const result = await generateAndSendLOE(jobToSend, jobDetails, previewHTML);
 
       if (result.success && result.submissionId && result.signingLink) {
         // Send custom email with signing link
@@ -741,7 +748,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full border rounded-lg">
-      <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800`}>
+      <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700`}>
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
             {isOpen ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}
@@ -776,10 +783,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 // We have the full job ID - show clickable button
                 <Button
                   type="button"
-                  variant="default"
+                  variant="outline"
                   size="sm"
                   onClick={() => window.open(`https://app.valcre.com/job/edit/${jobDetails.valcreJobId}#job`, '_blank')}
-                  className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+                  className="border-gray-200 dark:border-slate-700/50 bg-white dark:bg-secondary text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-400 dark:hover:border-slate-600/60 hover:bg-transparent dark:hover:bg-transparent transition-colors text-sm font-medium"
                 >
                   <ExternalLink className="h-4 w-4 mr-1" />
                   View in Valcre
@@ -791,7 +798,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   variant="secondary"
                   size="sm"
                   disabled
-                  className="bg-gray-100 text-gray-600 border border-gray-300"
+                  className="text-gray-400 dark:text-gray-600 cursor-not-allowed text-sm font-medium"
                 >
                   <ExternalLink className="h-4 w-4 mr-1" />
                   Valcre Job: {jobDetails.jobNumber}
@@ -804,7 +811,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 variant="default"
                 size="sm"
                 onClick={handleCreateValcreJob}
-                className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+                className="text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:underline transition-colors text-sm font-medium"
                 disabled={isCreatingJob}
               >
                 {isCreatingJob ? 'Creating...' : 'Create Valcre Job'}
@@ -820,7 +827,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                         variant="default"
                         size="sm"
                         disabled={true}
-                        className="bg-gray-100 text-gray-500 border border-gray-300 shadow-sm opacity-75 cursor-not-allowed"
+                        className="text-gray-400 dark:text-gray-600 cursor-not-allowed text-sm font-medium"
                       >
                         Create Valcre Job
                       </Button>
@@ -854,7 +861,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           size="sm"
                           onClick={handleGeneratePreview}
                           disabled={true}
-                          className="bg-gray-100 text-gray-500 border border-gray-300 shadow-sm opacity-75 cursor-not-allowed"
+                          className="text-gray-400 dark:text-gray-600 cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
                           {alreadySent ? "LOE Sent" : "Preview & Send LOE"}
@@ -884,7 +891,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           variant="outline"
                           size="sm"
                           disabled={true}
-                          className="bg-gray-50 text-gray-500 border-gray-300 shadow-sm opacity-75 cursor-not-allowed"
+                          className="text-gray-400 dark:text-gray-600 cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
                           Preview & Send LOE
@@ -899,13 +906,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               ) : (
                 <Button
                   type="button"
-                  variant={alreadySent ? "outline" : "default"}
+                  variant="outline"
                   size="sm"
                   onClick={handleGeneratePreview}
                   disabled={!validation.isValid || isSending || isGenerating}
                   className={alreadySent
-                    ? "bg-amber-50 hover:bg-amber-100 text-amber-700 border-amber-200"
-                    : "bg-blue-600 hover:bg-blue-700 text-white"}
+                    ? "border-gray-200 dark:border-slate-700/50 bg-white dark:bg-secondary text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 hover:border-gray-400 dark:hover:border-slate-600/60 hover:bg-transparent dark:hover:bg-transparent transition-colors text-sm font-medium"
+                    : "border-gray-200 dark:border-slate-700/50 bg-white dark:bg-secondary text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-400 dark:hover:border-slate-600/60 hover:bg-transparent dark:hover:bg-transparent transition-colors text-sm font-medium"}
                 >
                   <FileSignature className="h-4 w-4 mr-1" />
                   {alreadySent ? "Resend LOE" : isGenerating ? "Generating..." : "Preview & Send LOE"}
@@ -917,7 +924,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 variant="outline"
                 size="sm"
                 disabled={true}
-                className="bg-gray-50 text-gray-500 border-gray-300 shadow-sm opacity-75 cursor-not-allowed"
+                className="text-gray-400 dark:text-gray-600 cursor-not-allowed text-sm font-medium"
               >
                 <FileSignature className="h-4 w-4 mr-1" />
                 Preview & Send LOE
@@ -947,7 +954,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 value={jobDetails?.jobNumber || ''}
                 readOnly
                 placeholder={isPendingValcreJob(jobDetails?.jobNumber) ? 'Pending...' : 'Awaiting Valcre job'}
-                className="h-7 text-sm w-full bg-gray-50 dark:bg-gray-800"
+                className="h-7 text-sm w-full"
               />
             </CompactField>
             <CompactField label="ClickUp Task">

@@ -84,7 +84,7 @@ ls session-notes/ | tail -3
 
 **Method 3: Use Memory Search**
 ```bash
-/check-all-memory LOE testing ClickUp Edge Functions
+/search-all LOE testing ClickUp Edge Functions
 ```
 
 ### For Other Projects

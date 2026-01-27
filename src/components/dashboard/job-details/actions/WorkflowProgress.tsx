@@ -96,7 +96,7 @@ const WorkflowProgress: React.FC<WorkflowProgressProps> = ({ status, jobDetails 
                   className={cn(
                     "w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all",
                     step.isComplete 
-                      ? "bg-green-500 border-green-500 text-white" 
+                      ? "bg-gray-600 border-gray-600 text-white" 
                       : step.isCurrent
                       ? "bg-blue-500 border-blue-500 text-white animate-pulse"
                       : step.isAvailable
@@ -111,7 +111,7 @@ const WorkflowProgress: React.FC<WorkflowProgressProps> = ({ status, jobDetails 
                 <div className="mt-2 text-center">
                   <div className={cn(
                     "text-xs font-medium",
-                    step.isComplete ? "text-green-600" :
+                    step.isComplete ? "text-gray-600 dark:text-gray-400" :
                     step.isCurrent ? "text-blue-600" :
                     step.isAvailable ? "text-gray-700" :
                     "text-gray-400"

@@ -18,7 +18,7 @@ const GoogleFolderButton: React.FC<GoogleFolderButtonProps> = ({
       disabled
       className={`flex-1 ${
         status 
-          ? 'bg-green-500/10 text-green-500 hover:bg-green-500/10 hover:text-green-500' 
+          ? 'bg-gray-500/10 text-gray-600 dark:text-gray-400 hover:bg-gray-500/10 hover:text-gray-700 dark:hover:text-gray-300' 
           : 'bg-amber-500/10 text-amber-500 hover:bg-amber-500/10 hover:text-amber-500'
       }`}
     >

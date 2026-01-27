@@ -12,26 +12,29 @@ import { supabase } from '@/integrations/supabase/client';
 // const DOCUSEAL_API_KEY removed - using proxy instead
 
 // Load and prepare the V3 template
-// Tries to load user's default template from database, falls back to embedded template
-async function loadV3Template(userId?: string): Promise<string> {
-  // Try to load user's default template from DB
-  if (userId) {
-    try {
-      const { data: template, error } = await supabase
-        .from('loe_templates')
-        .select('template_html')
-        .eq('created_by', userId)
-        .eq('is_default', true)
-        .eq('is_active', true)
-        .single();
+// Tries to load app-wide default template from database, falls back to embedded template
+async function loadV3Template(templateHTML?: string): Promise<string> {
+  // If template HTML provided directly, use it
+  if (templateHTML) {
+    console.log('✅ Using provided template HTML');
+    return templateHTML;
+  }
 
-      if (!error && template) {
-        console.log('✅ Loaded user default template from database');
-        return template.template_html;
-      }
-    } catch (err) {
-      console.warn('⚠️ Failed to load user template, falling back to V3_TEMPLATE', err);
+  // Try to load app-wide default template from DB
+  try {
+    const { data: template, error } = await supabase
+      .from('loe_templates')
+      .select('template_html')
+      .eq('is_default', true)
+      .eq('is_active', true)
+      .single();
+
+    if (!error && template) {
+      console.log('✅ Loaded app-wide default template from database');
+      return template.template_html;
     }
+  } catch (err) {
+    console.warn('⚠️ Failed to load default template, falling back to V3_TEMPLATE', err);
   }
 
   // Fallback to embedded template
@@ -104,10 +107,10 @@ function mapDataToV3Fields(job: DetailJob, jobDetails: JobDetails) {
 export async function generateLOEHTML(
   job: DetailJob,
   jobDetails: JobDetails,
-  userId?: string
+  templateHTML?: string // Optional: provide template HTML directly
 ): Promise<string> {
-  // Load the V3 template
-  let templateHTML = await loadV3Template(userId);
+  // Load the V3 template (or use provided template)
+  let htmlTemplate = await loadV3Template(templateHTML);
   
   // Get the field mappings
   const fieldMappings = mapDataToV3Fields(job, jobDetails);
@@ -115,7 +118,7 @@ export async function generateLOEHTML(
   // Replace all bracketed fields with actual data
   for (const [field, value] of Object.entries(fieldMappings)) {
     const escapedField = field.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    templateHTML = templateHTML.replace(
+    htmlTemplate = htmlTemplate.replace(
       new RegExp(escapedField, 'g'), 
       value as string
     );
@@ -124,7 +127,7 @@ export async function generateLOEHTML(
   // Leave anchor tags untouched - DocuSeal will handle them
   // {{First Party_signature_1}} and {{First Party_date_1}} stay in the HTML
   
-  return templateHTML;
+  return htmlTemplate;
 }
 
 /**
@@ -134,8 +137,7 @@ export async function generateLOEHTML(
 export async function generateAndSendLOE(
   job: DetailJob, 
   jobDetails: JobDetails,
-  htmlTemplate?: string, // Optional: provide pre-generated HTML
-  userId?: string // Optional: user ID for loading custom template
+  htmlTemplate?: string // Optional: provide pre-generated HTML or template HTML
 ): Promise<{
   success: boolean;
   submissionId?: string;
@@ -151,11 +153,17 @@ export async function generateAndSendLOE(
     let templateHTML: string;
     
     if (htmlTemplate) {
-      // Use provided HTML (from preview)
-      templateHTML = htmlTemplate;
+      // Use provided HTML (from preview) - check if it's template HTML or generated HTML
+      // If it contains placeholders like [name], it's template HTML - generate it
+      // Otherwise it's already generated HTML
+      if (htmlTemplate.includes('[name]') || htmlTemplate.includes('[addressstreet]')) {
+        templateHTML = await generateLOEHTML(job, jobDetails, htmlTemplate);
+      } else {
+        templateHTML = htmlTemplate;
+      }
     } else {
       // Generate fresh (backward compatibility)
-      templateHTML = await generateLOEHTML(job, jobDetails, userId);
+      templateHTML = await generateLOEHTML(job, jobDetails);
     }
     
     // Verify DocuSeal field tags are present

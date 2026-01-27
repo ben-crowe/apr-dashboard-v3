@@ -15,21 +15,19 @@ const CLICKUP_ENV = Deno.env.get('CLICKUP_ENV') || 'dev'
 
 // Development configuration (BC Workspace)
 const DEV_CONFIG = {
-  token: Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY',
   workspaceId: '8555561' // BC Workspace (Development)
 }
 
 // Production configuration (Valta Workspace)
 const PROD_CONFIG = {
-  token: Deno.env.get('CLICKUP_API_TOKEN_VALTA'),
-  workspaceId: '9014181018' // Valta workspace
+  workspaceId: '9014181018', // Valta workspace
+  priority: 4 // Low priority (hides in collapsed section)
 }
 
 // Select configuration based on environment
 const config = CLICKUP_ENV === 'production' ? PROD_CONFIG : DEV_CONFIG
 
 // Use config values throughout the function
-const CLICKUP_API_TOKEN = config.token
 const CLICKUP_WORKSPACE_ID = config.workspaceId
 
 // Log active environment for debugging
@@ -43,7 +41,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { jobId } = await req.json()
+    const { jobId, userId } = await req.json()
 
     if (!jobId) {
       throw new Error('Job ID is required')
@@ -55,6 +53,33 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+    // Get OAuth access token from database - try OAuth first for workspace
+    let CLICKUP_API_TOKEN: string | null = null
+
+    console.log('🔍 Looking up OAuth token for workspace:', CLICKUP_WORKSPACE_ID)
+    const { data: connection, error: connectionError } = await supabase
+      .from('clickup_connections')
+      .select('access_token')
+      .eq('workspace_id', CLICKUP_WORKSPACE_ID)
+      .limit(1)
+      .single()
+
+    if (!connectionError && connection?.access_token) {
+      CLICKUP_API_TOKEN = connection.access_token
+      console.log('✅ Using OAuth token from database')
+    } else {
+      console.log('⚠️ No OAuth connection found, will fall back to env var')
+    }
+
+    // Fall back to environment variable token if no OAuth connection
+    if (!CLICKUP_API_TOKEN) {
+      const envToken = CLICKUP_ENV === 'production' 
+        ? Deno.env.get('CLICKUP_API_TOKEN_VALTA')
+        : Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY'
+      CLICKUP_API_TOKEN = envToken
+      console.log('🔧 Using fallback token from environment variable')
+    }
 
     // Fetch job and LOE details from database
     const { data: job, error: jobError } = await supabase
@@ -227,9 +252,14 @@ ${loeDetails.internal_comments || loeDetails.delivery_comments || loeDetails.pay
     // UPDATE task to ClickUp
     // CRITICAL: Use ONLY markdown_description field for clickable links to work
     // ClickUp processes markdown [text](url) syntax in markdown_description field
-    const updatePayload = {
+    const updatePayload: any = {
       name: updatedTaskName,
       markdown_description: combinedDescription
+    }
+
+    // Add priority for production (Low = 4)
+    if (config.priority) {
+      updatePayload.priority = config.priority
     }
 
     console.log('Updating ClickUp task with payload:', JSON.stringify(updatePayload, null, 2))

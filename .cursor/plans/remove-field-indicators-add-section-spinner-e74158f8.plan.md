@@ -1,4 +1,22 @@
-<!-- e74158f8-a655-4b05-bb92-b9d8b3cb5cc3 0218ec4a-471a-4e1c-97ab-43f8fbaf0e92 -->
+---
+name: Fix PropertyType and PropertyContact Valcre Mapping
+overview: ""
+todos:
+  - id: 60bab24a-d683-4229-87f4-7e09f2e8ea7c
+    content: Add comprehensive logging to webhook and API without changing functionality
+    status: pending
+  - id: e1fd1dd4-f938-4f87-be0b-7413be88816f
+    content: Create test job and analyze logs to identify root cause for both issues
+    status: pending
+  - id: 7499e294-c7ef-44c5-8d0a-d0c8d0f111a9
+    content: Fix PropertyType field mapping based on log analysis (high priority - creation-only)
+    status: pending
+  - id: 5d200fa8-1b5d-48d8-8f62-4f54fc40a37c
+    content: Fix PropertyContact object construction if PropertyType succeeded (lower priority - updateable)
+    status: pending
+isProject: false
+---
+
 # Fix PropertyType and PropertyContact Valcre Mapping
 
 ## CRITICAL SAFETY REQUIREMENTS
@@ -258,10 +276,3 @@ git checkout api/valcre.ts src/utils/webhooks/valcre.ts
 - PropertyContactId links to Job entity
 - Job creation never fails (graceful degradation if fields fail)
 - Client Contact still works (no regression)
-
-### To-dos
-
-- [ ] Add comprehensive logging to webhook and API without changing functionality
-- [ ] Create test job and analyze logs to identify root cause for both issues
-- [ ] Fix PropertyType field mapping based on log analysis (high priority - creation-only)
-- [ ] Fix PropertyContact object construction if PropertyType succeeded (lower priority - updateable)

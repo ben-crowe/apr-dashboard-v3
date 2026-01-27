@@ -33,10 +33,10 @@ const JobDetailHeader: React.FC<JobDetailHeaderProps> = ({ job, onBack, isSaving
   return (
     <div className="flex items-center space-x-4">
       <Button 
-        variant="outline"
+        variant="ghost"
         size="sm"
         onClick={onBack}
-        className="px-2.5 py-1.5 border-slate-400/50 dark:border-slate-700/50 text-foreground hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:border-slate-500/60 dark:hover:border-slate-600/60"
+        className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors text-sm font-medium hover:bg-transparent dark:hover:bg-transparent"
       >
         <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
         Back

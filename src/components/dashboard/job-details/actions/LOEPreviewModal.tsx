@@ -6,12 +6,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DetailJob, JobDetails } from "@/types/job";
-import { Send, X, Download, Mail, Plus, ZoomIn, ZoomOut, RotateCcw, Edit } from "lucide-react";
+import { Send, X, Download, Mail, Plus, ZoomIn, ZoomOut, RotateCcw, Edit, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import TemplateEditorModal from './TemplateEditorModal';
-import { saveTemplate } from '@/utils/loe/saveTemplate';
-import { supabase } from '@/integrations/supabase/client';
+import { saveTemplate, loadAllTemplates, loadTemplateById, setDefaultTemplate, LOETemplate } from '@/utils/loe/saveTemplate';
+import { generateLOEHTML } from '@/utils/loe/generateLOE';
 
 interface LOEPreviewModalProps {
   isOpen: boolean;
@@ -38,6 +39,13 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedHTML, setEditedHTML] = useState<string>('');
   const [templateModified, setTemplateModified] = useState(false);
+  
+  // Template picker state
+  const [templates, setTemplates] = useState<LOETemplate[]>([]);
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
+  const [isLoadingTemplates, setIsLoadingTemplates] = useState(false);
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [currentDocumentHTML, setCurrentDocumentHTML] = useState<string>(documentHTML);
 
   // Initialize recipient email - Default to bc@crowestudio.com for testing (developer's email)
   // Users can change it via "Change Recipient" button if needed
@@ -49,9 +57,80 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
     console.log('📧 Default email set to:', testEmail, '(testing mode)');
   }, []);
 
+  // Load templates when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      loadTemplates();
+      setCurrentDocumentHTML(documentHTML);
+    }
+  }, [isOpen]);
+
+  // Update currentDocumentHTML when documentHTML prop changes
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentDocumentHTML(documentHTML);
+    }
+  }, [documentHTML, isOpen]);
+
+  const loadTemplates = async () => {
+    setIsLoadingTemplates(true);
+    try {
+      const loadedTemplates = await loadAllTemplates();
+      setTemplates(loadedTemplates);
+      
+      // Find default template
+      const defaultTemplate = loadedTemplates.find(t => t.is_default);
+      if (defaultTemplate) {
+        setSelectedTemplateId(defaultTemplate.id);
+      }
+    } catch (error) {
+      console.error('Failed to load templates:', error);
+      toast.error('Failed to load templates');
+    } finally {
+      setIsLoadingTemplates(false);
+    }
+  };
+
+  const handleTemplateChange = async (templateId: string) => {
+    if (templateId === selectedTemplateId) return;
+    
+    setIsRegenerating(true);
+    try {
+      const template = await loadTemplateById(templateId);
+      if (!template) {
+        toast.error('Template not found');
+        return;
+      }
+
+      // Regenerate LOE with selected template
+      const regeneratedHTML = await generateLOEHTML(job, jobDetails, template.template_html);
+      setCurrentDocumentHTML(regeneratedHTML);
+      setEditedHTML(''); // Clear any edited HTML
+      setTemplateModified(false);
+      setSelectedTemplateId(templateId);
+      
+      toast.success(`Loaded template: ${template.name}`);
+    } catch (error) {
+      console.error('Failed to load template:', error);
+      toast.error('Failed to load template');
+    } finally {
+      setIsRegenerating(false);
+    }
+  };
+
+  const handleSetDefault = async (templateId: string) => {
+    const success = await setDefaultTemplate(templateId);
+    if (success) {
+      toast.success('Default template updated');
+      loadTemplates(); // Reload to refresh UI
+    } else {
+      toast.error('Failed to set default template');
+    }
+  };
+
   useEffect(() => {
     // Create a blob URL for the preview with proper scaling CSS
-    const htmlToUse = editedHTML || documentHTML;
+    const htmlToUse = editedHTML || currentDocumentHTML;
     if (htmlToUse) {
       // Add CSS to scale the document based on zoom level
       const zoomDecimal = zoomLevel / 100;
@@ -91,7 +170,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
       // Cleanup on unmount
       return () => URL.revokeObjectURL(url);
     }
-  }, [documentHTML, editedHTML, zoomLevel]);
+  }, [currentDocumentHTML, editedHTML, zoomLevel]);
 
   const handleSend = async () => {
     // Check if template was edited but not saved
@@ -124,7 +203,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
 
   const handleDownloadPreview = () => {
     // Create a download link for the HTML
-    const blob = new Blob([documentHTML], { type: 'text/html' });
+    const htmlToDownload = editedHTML || currentDocumentHTML;
+    const blob = new Blob([htmlToDownload], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -139,9 +219,58 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
       <DialogContent className="max-w-5xl w-[90vw] h-[95vh] flex flex-col p-4">
         {/* Minimal Header */}
         <div className="flex justify-between items-center pb-2 border-b">
-          <div>
+          <div className="flex-1">
             <h2 className="text-lg font-semibold">LOE Preview</h2>
             <p className="text-sm text-gray-600">Review Letter of Engagement before sending to client</p>
+          </div>
+          
+          {/* Template Picker */}
+          <div className="flex items-center gap-2 mr-4">
+            <Label htmlFor="template-select" className="text-sm font-medium whitespace-nowrap">
+              Template:
+            </Label>
+            <Select
+              value={selectedTemplateId || 'default'}
+              onValueChange={handleTemplateChange}
+              disabled={isLoadingTemplates || isRegenerating}
+            >
+              <SelectTrigger id="template-select" className="w-[200px] h-8 text-sm bg-white border border-gray-300 text-gray-900 hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
+                {isRegenerating ? (
+                  <div className="flex items-center gap-2">
+                    <Loader2 className="h-3 w-3 animate-spin" />
+                    <span>Loading...</span>
+                  </div>
+                ) : (
+                  <SelectValue placeholder="Select template">
+                    {templates.find(t => t.id === selectedTemplateId)?.name || 'Default Template'}
+                  </SelectValue>
+                )}
+              </SelectTrigger>
+              <SelectContent className="bg-white border border-gray-300">
+                <SelectItem value="default">Default Template</SelectItem>
+                {templates.map((template) => (
+                  <SelectItem key={template.id} value={template.id}>
+                    <div className="flex items-center justify-between w-full">
+                      <span>{template.name}</span>
+                      {template.is_default && (
+                        <span className="ml-2 text-xs text-blue-600">(Default)</span>
+                      )}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {selectedTemplateId && templates.find(t => t.id === selectedTemplateId) && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => handleSetDefault(selectedTemplateId)}
+                className="h-7 text-xs"
+                title="Set as default template"
+              >
+                Set Default
+              </Button>
+            )}
           </div>
           
           {/* Zoom Controls */}
@@ -188,7 +317,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               variant="outline"
               size="sm"
               onClick={() => {
-                setEditedHTML(documentHTML);
+                setEditedHTML(currentDocumentHTML);
                 setIsEditMode(true);
               }}
               className="gap-2"
@@ -209,51 +338,45 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
         </div>
 
         {/* Email Recipient Section */}
-        <div className="py-2">
-          <div className="flex items-center gap-3 py-3 px-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <Mail className="h-4 w-4 text-blue-600" />
-            <div className="flex-1">
-              {showEmailEdit ? (
-                <div className="flex items-center gap-2">
-                  <Label className="text-sm font-medium text-blue-900">Send to:</Label>
-                  <Input
-                    type="email"
-                    value={recipientEmail}
-                    onChange={(e) => setRecipientEmail(e.target.value)}
-                    className="flex-1 h-8 text-sm"
-                    placeholder="Enter recipient email"
-                  />
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => setShowEmailEdit(false)}
-                    className="h-8 text-xs"
-                  >
-                    Done
-                  </Button>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-blue-900">E-signature will be sent to:</span>
-                    <span className="text-sm font-semibold text-blue-700">{recipientEmail || 'No email specified'}</span>
-                  </div>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => setShowEmailEdit(true)}
-                    className="h-7 text-xs text-blue-600 hover:text-blue-700 hover:bg-blue-100"
-                  >
-                    Change Recipient
-                  </Button>
-                </div>
-              )}
+        <div className="flex items-center gap-3 py-2 px-4">
+          <Mail className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+          {showEmailEdit ? (
+            <div className="flex items-center gap-2 flex-1">
+              <span className="text-sm font-medium text-gray-900 dark:text-white">Send to:</span>
+              <Input
+                type="email"
+                value={recipientEmail}
+                onChange={(e) => setRecipientEmail(e.target.value)}
+                className="w-64 h-8 text-sm bg-white dark:bg-secondary border border-gray-300 dark:border-border text-gray-900 dark:text-foreground placeholder:text-gray-500 dark:placeholder:text-muted-foreground hover:border-gray-400 dark:hover:border-border focus-visible:border-gray-400 dark:focus-visible:border-border focus-visible:outline-none focus-visible:ring-0"
+                placeholder="Enter recipient email"
+              />
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setShowEmailEdit(false)}
+                className="h-8 text-xs text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:underline"
+              >
+                Done
+              </Button>
             </div>
-          </div>
-          {recipientEmail !== job.clientEmail && (
-            <p className="text-xs text-blue-600 mt-2 px-1 bg-blue-50 px-2 py-1 rounded">
-              ℹ️ Testing mode: Email will be sent to <strong>{recipientEmail}</strong> (client's email: {job.clientEmail})
-            </p>
+          ) : (
+            <div className="flex items-center gap-2 flex-1">
+              <span className="text-sm font-medium text-gray-900 dark:text-white">E-signature will be sent to:</span>
+              <span className="text-sm font-semibold text-gray-900 dark:text-white">{recipientEmail || 'No email specified'}</span>
+              {recipientEmail !== job.clientEmail && (
+                <span className="text-xs text-gray-600 dark:text-gray-400">
+                  (Testing: {recipientEmail}, Client: {job.clientEmail})
+                </span>
+              )}
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setShowEmailEdit(true)}
+                className="h-7 text-xs text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:underline ml-auto"
+              >
+                Change Recipient
+              </Button>
+            </div>
           )}
         </div>
 
@@ -289,21 +412,20 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               <Download className="h-4 w-4 mr-1" />
               Download
             </Button>
-            <Button
+            <button
               onClick={handleSend}
               disabled={isSending}
-              size="sm"
-              className="bg-green-600 hover:bg-green-700 h-8"
+              className="text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:underline transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed disabled:no-underline flex items-center gap-1"
             >
               {isSending ? (
                 'Sending...'
               ) : (
                 <>
-                  <Send className="h-4 w-4 mr-1" />
+                  <Send className="h-4 w-4" />
                   Send to Client
                 </>
               )}
-            </Button>
+            </button>
           </div>
         </div>
 
@@ -311,28 +433,22 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
         <TemplateEditorModal
           isOpen={isEditMode}
           onClose={() => setIsEditMode(false)}
-          initialHTML={editedHTML || documentHTML}
+          initialHTML={editedHTML || currentDocumentHTML}
           onSave={async (templateName, html, setAsDefault) => {
-            // Get current user ID from auth
-            const { data: { user } } = await supabase.auth.getUser();
-            const userId = user?.id;
-            
-            if (!userId) {
-              toast.error('Please log in to use template features');
-              return;
-            }
-            
+            // Save template (app-wide, no user requirement)
             const result = await saveTemplate({
               templateName,
               templateHTML: html,
-              setAsDefault,
-              userId
+              setAsDefault
             });
 
             if (result.success) {
               toast.success(`Template "${templateName}" saved successfully!`);
               setEditedHTML(html);
               setTemplateModified(false);
+              
+              // Reload templates to include the new one
+              await loadTemplates();
               
               // Update preview with edited HTML
               const blob = new Blob([html], { type: 'text/html' });

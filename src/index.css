@@ -29,7 +29,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 10% 20%;
 
-    --primary: 142 76% 36%;
+    --primary: 220 13% 18%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 20% 96%;
@@ -38,26 +38,26 @@
     --muted: 210 20% 94%;
     --muted-foreground: 220 10% 40%;
 
-    --accent: 142 76% 36%;
-    --accent-foreground: 220 40% 20%;
+    --accent: 220 13% 18%;
+    --accent-foreground: 210 40% 98%;
 
     --destructive: 0 70% 50%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 220 15% 90%;
     --input: 220 15% 90%;
-    --ring: 142 76% 36%;
+    --ring: 220 13% 18%;
 
     --radius: 0.5rem;
 
     --sidebar-background: 210 20% 98%;
     --sidebar-foreground: 220 10% 40%;
-    --sidebar-primary: 142 76% 36%;
+    --sidebar-primary: 220 13% 18%;
     --sidebar-primary-foreground: 210 40% 98%;
     --sidebar-accent: 220 20% 94%;
     --sidebar-accent-foreground: 220 10% 20%;
     --sidebar-border: 220 15% 90%;
-    --sidebar-ring: 142 76% 36%;
+    --sidebar-ring: 220 13% 18%;
   }
 
   .dark {
@@ -71,7 +71,7 @@
     --popover: 223 20% 17%;          /* Popover background */
     --popover-foreground: 0 0% 100%; /* Popover text */
 
-    --primary: 142 76% 36%;          /* Primary GREEN accent (changed from blue) */
+    --primary: 220 13% 18%;          /* Primary - neutral dark gray */
     --primary-foreground: 0 0% 100%; /* Text on primary color */
 
     --secondary: 223 15% 15%;        /* Secondary background */
@@ -80,7 +80,7 @@
     --muted: 223 15% 18%;            /* Muted background - lighter for visibility */
     --muted-foreground: 220 10% 65%; /* Secondary text - slightly dimmer for better contrast */
 
-    --accent: 142 76% 36%;           /* Secondary accent - GREEN (changed from blue) */
+    --accent: 220 13% 18%;           /* Accent - neutral dark gray */
     --accent-foreground: 0 0% 100%;  /* Text on accent */
 
     --destructive: 0 62.8% 30.6%;    /* Destructive actions */
@@ -88,16 +88,16 @@
 
     --border: 223 18% 28%;           /* Border color - lighter for visibility */
     --input: 223 17% 24%;            /* Input background - lighter for contrast */
-    --ring: 142 76% 36%;             /* Focus ring color - GREEN (changed from blue) */
+    --ring: 220 13% 18%;             /* Focus ring color - neutral dark gray */
 
     --sidebar-background: 220 17% 10%;
     --sidebar-foreground: 220 10% 70%;
-    --sidebar-primary: 142 76% 36%;  /* GREEN (changed from blue) */
+    --sidebar-primary: 220 13% 18%;  /* Neutral dark gray */
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 223 15% 15%;
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 223 18% 21%;
-    --sidebar-ring: 142 76% 36%;     /* GREEN (changed from blue) */
+    --sidebar-ring: 220 13% 18%;     /* Neutral dark gray */
   }
 }
 
@@ -115,11 +115,61 @@
     @apply scroll-smooth;
   }
 
-  /* Override browser default accent color to green for form controls */
+  /* Override browser default accent color to neutral gray for form controls */
   input[type="checkbox"],
   input[type="radio"],
   input[type="range"] {
-    accent-color: rgb(22 163 74); /* green-600 */
+    accent-color: rgb(55 65 81); /* gray-700 */
+  }
+
+  /* Scrollbar styling for textareas and inputs */
+  textarea::-webkit-scrollbar,
+  input::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  textarea::-webkit-scrollbar-track,
+  input::-webkit-scrollbar-track {
+    background: #f3f4f6; /* light gray-100 */
+    border-radius: 4px;
+  }
+
+  textarea::-webkit-scrollbar-thumb,
+  input::-webkit-scrollbar-thumb {
+    background: #d1d5db; /* light gray-300 */
+    border-radius: 4px;
+  }
+
+  textarea::-webkit-scrollbar-thumb:hover,
+  input::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af; /* light gray-400 */
+  }
+
+  /* Dark mode scrollbars */
+  .dark textarea::-webkit-scrollbar-track,
+  .dark input::-webkit-scrollbar-track {
+    background: #1f2937; /* dark gray-800 */
+  }
+
+  .dark textarea::-webkit-scrollbar-thumb,
+  .dark input::-webkit-scrollbar-thumb {
+    background: #4b5563; /* dark gray-600 */
+  }
+
+  .dark textarea::-webkit-scrollbar-thumb:hover,
+  .dark input::-webkit-scrollbar-thumb:hover {
+    background: #6b7280; /* dark gray-500 */
+  }
+
+  /* Firefox scrollbar */
+  textarea {
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db #f3f4f6; /* thumb track */
+  }
+
+  .dark textarea {
+    scrollbar-color: #4b5563 #1f2937; /* thumb track */
   }
 }
 

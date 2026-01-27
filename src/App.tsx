@@ -19,6 +19,7 @@ import { CalculatorDemoPage } from "./features/calculator-demo-v4";
 import CalculatorWithPreview from "@/features/calculator-demo-v4/CalculatorWithPreview";
 import ClickUpCallback from "./pages/ClickUpCallback";
 import StandaloneCalculator from "./features/standalone-calculator";
+import StyleGuide from "./pages/StyleGuide";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/standalone-calculator" element={<StandaloneCalculator />} />
             <Route path="/image-test" element={<ImageTest />} />
             <Route path="/clickup/callback" element={<ClickUpCallback />} />
+            <Route path="/style-guide" element={<StyleGuide />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

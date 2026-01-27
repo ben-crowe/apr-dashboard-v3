@@ -44,7 +44,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               name="propertyName"
               value={formData.propertyName}
               onChange={handleChange}
-              className={cn(errors.propertyName && "border-destructive")}
+              className={cn(
+                "bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0",
+                errors.propertyName && "border-destructive"
+              )}
               placeholder="Riverside Apartments"
             />
             {errors.propertyName && (
@@ -61,7 +64,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               name="propertyAddress"
               value={formData.propertyAddress}
               onChange={handleChange}
-              className={cn(errors.propertyAddress && "border-destructive")}
+              className={cn(
+                "bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0",
+                errors.propertyAddress && "border-destructive"
+              )}
               placeholder="456 River Road, Calgary, AB T2P 2B2"
             />
             {errors.propertyAddress && (
@@ -89,6 +95,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                   name="propertyContactFirstName"
                   value={formData.propertyContactFirstName || ""}
                   onChange={handleChange}
+                  className="bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
                   placeholder="Marcus / Property Management"
                 />
               </div>
@@ -100,6 +107,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                   name="propertyContactLastName"
                   value={formData.propertyContactLastName || ""}
                   onChange={handleChange}
+                  className="bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
                   placeholder="Johnson"
                 />
               </div>
@@ -114,6 +122,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                   type="email"
                   value={formData.propertyContactEmail || ""}
                   onChange={handleChange}
+                  className="bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
                   placeholder="property.manager@example.com"
                 />
               </div>
@@ -126,6 +135,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                   type="tel"
                   value={formData.propertyContactPhone || ""}
                   onChange={handleChange}
+                  className="bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
                   placeholder="(403) 555-0123"
                 />
               </div>
@@ -141,10 +151,13 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={formData.propertyType}
               onValueChange={(value) => handleSelectChange(value, "propertyType")}
             >
-              <SelectTrigger className={errors.propertyType ? "border-destructive" : ""}>
+              <SelectTrigger className={cn(
+                "bg-white border border-gray-300 text-gray-900 hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0",
+                errors.propertyType && "border-destructive"
+              )}>
                 <SelectValue placeholder="Please Select" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border-gray-300">
                 <SelectItem value="Agriculture">Agriculture</SelectItem>
                 <SelectItem value="Building">Building</SelectItem>
                 <SelectItem value="Healthcare">Healthcare</SelectItem>
@@ -172,10 +185,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={formData.intendedUse}
               onValueChange={(value) => handleSelectChange(value, "intendedUse")}
             >
-              <SelectTrigger>
+              <SelectTrigger className="bg-white border border-gray-300 text-gray-900 hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
                 <SelectValue placeholder="Please Select" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border-gray-300">
                 <SelectItem value="Financing/Refinancing">Financing/Refinancing</SelectItem>
                 <SelectItem value="Acquisition">Acquisition</SelectItem>
                 <SelectItem value="Disposition">Disposition</SelectItem>
@@ -197,10 +210,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                 handleSelectChange(value, "valuationPremises")
               }
             >
-              <SelectTrigger id="valuationPremises">
+              <SelectTrigger id="valuationPremises" className="bg-white border border-gray-300 text-gray-900 hover:border-gray-400 focus:border-gray-400 focus:ring-gray-300">
                 <SelectValue placeholder="Select valuation premises" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border-gray-300">
                 <SelectItem value="Market Value">Market Value</SelectItem>
                 <SelectItem value="Market Rent">Market Rent</SelectItem>
                 <SelectItem value="Investment Value">Investment Value</SelectItem>
@@ -218,10 +231,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                 handleSelectChange(value, "assetCondition")
               }
             >
-              <SelectTrigger id="assetCondition">
+              <SelectTrigger id="assetCondition" className="bg-white border border-gray-300 text-gray-900 hover:border-gray-400 focus:border-gray-400 focus:ring-gray-300">
                 <SelectValue placeholder="Select asset condition" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border-gray-300">
                 <SelectItem value="Excellent">Excellent</SelectItem>
                 <SelectItem value="Very Good">Very Good</SelectItem>
                 <SelectItem value="Good">Good</SelectItem>
@@ -242,7 +255,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
             value={formData.notes}
             onChange={handleChange}
             placeholder="Please provide any additional details about the property, special circumstances, timeline requirements, or other relevant information..."
-            className="min-h-[120px]"
+            className="min-h-[120px] bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
           />
         </div>
       </div>

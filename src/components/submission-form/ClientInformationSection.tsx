@@ -37,7 +37,10 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             name="clientFirstName"
             value={formData.clientFirstName}
             onChange={handleChange}
-            className={cn(errors.clientFirstName && "border-destructive")}
+            className={cn(
+              "bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0",
+              errors.clientFirstName && "border-destructive"
+            )}
             placeholder="John"
           />
           {errors.clientFirstName && (
@@ -57,7 +60,10 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             name="clientLastName"
             value={formData.clientLastName}
             onChange={handleChange}
-            className={cn(errors.clientLastName && "border-destructive")}
+            className={cn(
+              "bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0",
+              errors.clientLastName && "border-destructive"
+            )}
             placeholder="Smith"
           />
           {errors.clientLastName && (
@@ -72,6 +78,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             name="clientTitle"
             value={formData.clientTitle}
             onChange={handleChange}
+            className="bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
             placeholder="Development Manager"
           />
         </div>
@@ -83,6 +90,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             name="clientOrganization"
             value={formData.clientOrganization}
             onChange={handleChange}
+            className="bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
             placeholder="ABC Development Corp"
           />
         </div>
@@ -94,6 +102,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             name="clientAddress"
             value={formData.clientAddress}
             onChange={handleChange}
+            className="bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
             placeholder="123 Main Street, Calgary, AB T2P 1A1"
           />
         </div>
@@ -110,7 +119,10 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             name="clientPhone"
             value={formData.clientPhone}
             onChange={handleChange}
-            className={cn(errors.clientPhone && "border-destructive")}
+            className={cn(
+              "bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0",
+              errors.clientPhone && "border-destructive"
+            )}
             placeholder="(587) 801-5151"
           />
           {errors.clientPhone && (
@@ -131,7 +143,10 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             type="email"
             value={formData.clientEmail}
             onChange={handleChange}
-            className={cn(errors.clientEmail && "border-destructive")}
+            className={cn(
+              "bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0",
+              errors.clientEmail && "border-destructive"
+            )}
             placeholder="john@abcdevelopment.com"
           />
           {errors.clientEmail && (

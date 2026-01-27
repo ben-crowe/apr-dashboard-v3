@@ -1,13 +1,24 @@
-<!-- 7b06ccba-03cf-490d-a1ba-56e3cdfacb84 125e5c49-1ee9-406c-9fc8-05101d376266 -->
+---
+name: ClickUp Integration - Comprehensive Test Plan
+overview: ""
+todos: []
+isProject: false
+---
+
 # ClickUp Integration - Comprehensive Test Plan
 
 **Status**: ⚠️ **PARTIAL IMPLEMENTATION**
 
-**Last Updated**: Based on codebase review and planning documentation
+**Last Updated**: January 25, 2026 - Enhanced with domain expertise and integration status
 
 **Component**: APR Dashboard v3 → ClickUp Integration
 
-**Reference Docs**: `/Section Plans/03-ClickUp-Integration/`
+**Reference Docs**:
+
+- `/Section Plans/03-ClickUp-Integration/`
+- `/docs/Features/04-Job & Client Mgt./95-CLICKUP-DOMAIN-EXPERT-SUMMARY.md`
+- `/docs/Features/04-Job & Client Mgt./96-LOE-TESTING-CONTINUATION.md`
+- `/docs/Features/04-Job & Client Mgt./99-TESTING-TOOLS-INVENTORY.md`
 
 ---
 
@@ -127,10 +138,15 @@ test('Create ClickUp task via dashboard button', async ({ page }) => {
 
 **Reference**: Template ID `t-86b3exqe8` (LOE New Template 2025.01.09)
 
-**Checklist**:
+**Critical Distinction**: Subtasks vs Checklists
+
+- ✅ **Subtasks**: Real child tasks with own IDs, can be assigned, have due dates, show in hierarchy
+- ❌ **Checklists**: Simple checkboxes, cannot be assigned, no due dates, no hierarchy
+
+**Verification Checklist**:
 
 - [ ] Open task in ClickUp
-- [ ] Verify 9 subtasks added automatically:
+- [ ] Verify 9 **subtasks** added automatically (NOT checklists):
 
   1. [ ] Create & Send LOE
   2. [ ] Plan Job
@@ -144,6 +160,8 @@ test('Create ClickUp task via dashboard button', async ({ page }) => {
 
 - [ ] Verify all subtasks are unchecked (initial state)
 - [ ] Verify subtask names match template exactly
+- [ ] Verify subtasks appear in task hierarchy (not as checkboxes)
+- [ ] Verify subtasks have own task IDs (can be assigned individually)
 
 #### Manual Test 1.1.4: Button State Persistence
 
@@ -196,6 +214,16 @@ test('View in ClickUp button opens task', async ({ page, context }) => {
 ### Test Suite 2.1: ClickUp API Direct Testing
 
 **Purpose**: Verify API integration using test scripts
+
+**Critical Pattern**: "3 Lookups + 1 API Call" for Subtasks
+
+When creating subtasks, NEVER assume values. Always perform 3 lookups:
+
+1. Get parent task's list ID (from parent task)
+2. Get valid status from list (from list statuses)
+3. Create subtask with `parent` field (using looked-up values)
+
+**Reference**: `95-CLICKUP-DOMAIN-EXPERT-SUMMARY.md` - Mastered pattern
 
 #### API Test 2.1.1: Test Script Execution
 
@@ -267,6 +295,43 @@ node 03-get-template-details.js
 - [ ] 9 subtasks listed
 - [ ] Subtask names match expected list
 
+#### API Test 2.1.4: Subtask Creation Pattern Verification
+
+**Purpose**: Verify Edge Function follows "3 lookups + 1 API call" pattern
+
+**Reference**: `95-CLICKUP-DOMAIN-EXPERT-SUMMARY.md`
+
+**Verification Steps**:
+
+1. **Check Edge Function Code** (`supabase/functions/create-clickup-task/index.ts`):
+
+   - [ ] Does NOT hardcode list ID
+   - [ ] Does NOT hardcode status name
+   - [ ] Looks up list ID from parent task: `GET /task/{parent_id}`
+   - [ ] Looks up valid status from list: `GET /list/{list_id}`
+   - [ ] Creates subtasks with `parent` field: `POST /list/{list_id}/task` with `{"parent": "...", "status": "..."}`
+
+2. **Verify Subtask Creation**:
+
+   - [ ] Create task via dashboard button
+   - [ ] Check ClickUp API response for subtasks
+   - [ ] Verify subtasks have `parent` field set correctly
+   - [ ] Verify subtasks use looked-up status (not hardcoded)
+
+**Expected Pattern**:
+
+```typescript
+// CORRECT: 3 lookups + 1 API call
+const parentTask = await getTask(parentId);
+const listId = parentTask.list.id;
+const list = await getList(listId);
+const status = list.statuses[0].status;
+await createSubtask({ parent: parentId, status, ... });
+
+// WRONG: Assuming values
+await createSubtask({ parent: parentId, status: "to do", ... }); // ❌
+```
+
 ---
 
 ## Part 3: Edge Function Testing
@@ -316,6 +381,51 @@ curl -X POST 'https://ngovnamnjmexdpjtcnky.supabase.co/functions/v1/create-click
 - [ ] Call with missing jobId parameter → Returns 400 error
 - [ ] Call with job that already has task → Should return existing task (idempotency)
 - [ ] Call with invalid API key → Returns 401 error
+
+#### Manual Test 3.1.3: Edge Function Production Readiness
+
+**Purpose**: Verify Edge Functions support production credentials
+
+**Reference**: `96-LOE-TESTING-CONTINUATION.md`, `99-TESTING-TOOLS-INVENTORY.md`
+
+**Current Issue**: Edge Functions use dev credentials (`CLICKUP_API_TOKEN`)
+
+**Required Updates**:
+
+| Function | Current State | Fix Required |
+
+|----------|---------------|--------------|
+
+| `create-clickup-task` | Uses `CLICKUP_API_TOKEN` (dev) | Add `CLICKUP_API_TOKEN_VALTA` env var support |
+
+| `update-clickup-task` | Uses `CLICKUP_API_TOKEN` (dev) | Add `CLICKUP_API_TOKEN_VALTA` env var support |
+
+**Verification Checklist**:
+
+- [ ] Check Edge Function code for credential selection logic
+- [ ] Verify environment variable detection (test vs production)
+- [ ] Test with `CLICKUP_API_TOKEN` (dev workspace: BC)
+- [ ] Test with `CLICKUP_API_TOKEN_VALTA` (production workspace: Valta)
+- [ ] Verify correct workspace used per environment
+- [ ] Verify tasks created in correct list:
+  - Dev: List ID `901706896375` (BC workspace)
+  - Production: List ID `901402094744` (Valta workspace)
+
+**Test Commands**:
+
+```bash
+# Test dev credentials
+curl -X POST 'https://ngovnamnjmexdpjtcnky.supabase.co/functions/v1/create-clickup-task' \
+  -H 'Authorization: Bearer {anon_key}' \
+  -H 'Content-Type: application/json' \
+  -d '{"jobId": "{testJobId}", "environment": "dev"}'
+
+# Test production credentials (after update)
+curl -X POST 'https://ngovnamnjmexdpjtcnky.supabase.co/functions/v1/create-clickup-task' \
+  -H 'Authorization: Bearer {anon_key}' \
+  -H 'Content-Type: application/json' \
+  -d '{"jobId": "{testJobId}", "environment": "production"}'
+```
 
 ---
 
@@ -595,14 +705,37 @@ test('ClickUp creation handles network errors', async ({ page, context }) => {
 
 #### Manual Test 7.1.1: Test vs Production
 
+**Reference**: `96-LOE-TESTING-CONTINUATION.md` - Integration Status
+
+**Integration Status Summary**:
+
+| Integration | Status | Details |
+
+|-------------|--------|---------|
+
+| ClickUp BC Workspace | ✅ **WORKING** | Dev testing, List ID: `901706896375` |
+
+| ClickUp Valta Workspace | ⚠️ **PARTIAL** | Edge Functions use dev creds, production creds documented |
+
+| Resend Sandbox | ✅ **WORKING** | Sends to admin@valta.ca |
+
+| Resend valta.ca | ❌ **NOT DONE** | Domain not verified, can't send from noreply@valta.ca |
+
+| DocuSeal | ✅ **WORKING** | LOE generation + signing |
+
+| Email Checker | ✅ **WORKING** | bc@crowestudio.com OAuth |
+
 **Checklist**:
 
 - [ ] Verify `VITE_CLICKUP_ENV` environment variable
-- [ ] Test environment uses: List ID `901703694310`
-- [ ] Production environment uses: List ID `901402094744`
-- [ ] Verify correct API key used per environment
+- [ ] Test environment uses: List ID `901703694310` (old test) OR `901706896375` (BC workspace)
+- [ ] Production environment uses: List ID `901402094744` (Valta workspace)
+- [ ] Verify correct API key used per environment:
+  - Dev: `CLICKUP_API_TOKEN` (BC workspace)
+  - Production: `CLICKUP_API_TOKEN_VALTA` (Valta workspace - needs Edge Function update)
 - [ ] Test task creation in test environment
 - [ ] Verify tasks don't appear in production list
+- [ ] Verify Edge Functions support both credentials (see Test 3.1.3)
 
 #### Manual Test 7.1.2: Configuration Verification
 
@@ -615,6 +748,43 @@ test('ClickUp creation handles network errors', async ({ page, context }) => {
 - [ ] Template ID correct (`t-86b3exqe8`)
 - [ ] Workspace IDs correct
 - [ ] Dashboard URL format correct
+
+#### Manual Test 7.1.3: Testing Tools Inventory
+
+**Reference**: `99-TESTING-TOOLS-INVENTORY.md`
+
+**Available Testing Scripts**:
+
+**ClickUp CLI Library** (46 Production-Ready Scripts):
+
+- Location: `/Users/bencrowe/Development/00-Systems-Management/CLI-Libraries/clickup-cli/`
+- Categories: Task Operations (15), Time Tracking (6), List Management (5), Folder Management (4), Tag Management (6), Member Management (2), Document Management (7), Workspace (1)
+
+**Test Scripts**:
+
+- Location: `/Users/bencrowe/Development/APR-Dashboard-v3/docs/Features/04-Job & Client Mgt./test-scripts/`
+- `01-create-test-task-v2.js` - Create test task
+- `02-get-clickup-templates.js` - List templates
+- `03-get-template-details.js` - Template details
+
+**Quick Test Commands**:
+
+```bash
+# Test ClickUp task creation
+cd /Users/bencrowe/Development/00-Systems-Management/CLI-Libraries/clickup-cli
+./scripts/create-task.py "Test Task" --list-id 901706896375
+
+# Test email checker
+cd /Users/bencrowe/Development/APR-Dashboard-v3
+python3 scripts/check-bc-email.py
+```
+
+**Checklist**:
+
+- [ ] Verify CLI library accessible
+- [ ] Test script execution works
+- [ ] Verify script outputs match expected format
+- [ ] Test with both dev and production credentials (when available)
 
 ---
 
@@ -657,17 +827,53 @@ test('ClickUp creation handles network errors', async ({ page, context }) => {
 
 ---
 
+## Testing Approach: Dev Config vs Production
+
+### Current Testing Strategy
+
+**Reference**: `96-LOE-TESTING-CONTINUATION.md`
+
+**Testing Can Proceed With Dev Config**:
+
+- ✅ **ClickUp**: BC workspace (dev) - List ID `901706896375`
+- ✅ **Email**: Sandbox - sends to admin@valta.ca
+- ✅ **DocuSeal**: Production - fully working
+
+This allows **full workflow testing** while production domain/workspace setup is pending.
+
+**Production Blockers** (testing can proceed without):
+
+- ⚠️ ClickUp Valta workspace credentials in Edge Functions (can test with BC workspace)
+- ⚠️ Resend valta.ca domain verification (can test with sandbox)
+- ⚠️ Microsoft 365 license (not needed for ClickUp integration testing)
+
+**Recommendation**: Execute Phase 1 tests with dev config, then update Edge Functions and verify Resend domain before production deployment.
+
+---
+
 ## Test Execution Checklist
 
 ### Pre-Testing Setup
 
-- [ ] Access to ClickUp test workspace (`901703694310`)
-- [ ] Access to ClickUp production workspace (`901402094744`)
-- [ ] Valid API keys configured
+**Environment Access**:
+
+- [ ] Access to ClickUp BC workspace (dev) - List ID `901706896375`
+- [ ] Access to ClickUp Valta workspace (production) - List ID `901402094744`
+- [ ] Valid API keys configured:
+  - `CLICKUP_API_TOKEN` (dev/BC workspace)
+  - `CLICKUP_API_TOKEN_VALTA` (production/Valta workspace - for Edge Functions)
 - [ ] Test job with VAL number available
 - [ ] Test job without VAL number available
 - [ ] Browser console open for debugging
 - [ ] Supabase logs accessible
+
+**Testing Tools**:
+
+- [ ] ClickUp CLI library accessible (`/00-Systems-Management/CLI-Libraries/clickup-cli/`)
+- [ ] Test scripts accessible (`/docs/Features/04-Job & Client Mgt./test-scripts/`)
+- [ ] Email checker script accessible (`scripts/check-bc-email.py`)
+
+**Note**: Testing can proceed with dev config (BC workspace, sandbox email) while production setup (Valta workspace, domain verification) is pending. See `96-LOE-TESTING-CONTINUATION.md` for details.
 
 ### Phase 1: Current Implementation (Week 1)
 
@@ -731,6 +937,8 @@ test('ClickUp creation handles network errors', async ({ page, context }) => {
 2. **No Status Sync**: ClickUp status doesn't update automatically on workflow events
 3. **No Custom Field**: Dashboard URL button not yet implemented in ClickUp
 4. **Partial Idempotency**: Button disabled but no database check prevents duplicates
+5. **Edge Functions Use Dev Credentials**: Production workspace (Valta) credentials not yet supported in Edge Functions
+6. **Resend Domain Not Verified**: Cannot send from noreply@valta.ca, using sandbox (redirects to admin@valta.ca)
 
 ### Planned Improvements
 
@@ -738,6 +946,8 @@ test('ClickUp creation handles network errors', async ({ page, context }) => {
 2. **Status Sync**: Auto-update on LOE signed, payment received
 3. **Custom Field**: Bidirectional navigation button
 4. **Full Idempotency**: Database check before task creation
+5. **Edge Function Production Support**: Add `CLICKUP_API_TOKEN_VALTA` env var support to Edge Functions
+6. **Resend Domain Verification**: Verify valta.ca domain to enable noreply@valta.ca sending
 
 ---
 
@@ -783,10 +993,23 @@ test('ClickUp creation handles network errors', async ({ page, context }) => {
 - Frontend Component: `src/components/dashboard/job-details/actions/ClickUpAction.tsx`
 - Utility Functions: `src/utils/webhooks/clickup.ts`
 
+### Additional Reference Documents
+
+- `95-CLICKUP-DOMAIN-EXPERT-SUMMARY.md` - Mastered "3 lookups + 1 API call" pattern, subtasks vs checklists
+- `96-LOE-TESTING-CONTINUATION.md` - Integration status, production readiness blockers
+- `99-TESTING-TOOLS-INVENTORY.md` - Complete testing tools inventory, script locations
+- `DOMAIN-CLICKUP-EXPERT.md` - Comprehensive ClickUp domain knowledge
+- `CLICKUP-SCRIPTS-REFERENCE.md` - 46 CLI scripts inventory
+
 ---
 
-**Last Updated**: Based on comprehensive codebase review
+**Last Updated**: January 25, 2026 - Enhanced with domain expertise and integration status
 
 **Status**: Ready for execution (current features)
 
-**Next Steps**: Execute Phase 1 tests, then implement planned features
+**Next Steps**:
+
+1. Execute Phase 1 tests with dev config (BC workspace)
+2. Update Edge Functions for production credential support
+3. Verify Resend domain status
+4. Implement planned features (automatic creation, status sync, custom fields)

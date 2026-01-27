@@ -170,43 +170,43 @@ const PropertyInfoSectionIndependent: React.FC<SectionProps> = ({
           <SectionGroup title="Property Site">
             <TwoColumnFields>
               <CompactField label="Zoning Classification">
-                <Input id="zoningClassification" name="zoningClassification" value={jobDetails.zoningClassification || ''} onChange={handleChange} placeholder="e.g., Commercial Mixed-Use" className="h-7 text-sm" />
+                <Input id="zoningClassification" name="zoningClassification" value={jobDetails.zoningClassification || ''} onChange={handleChange} placeholder="e.g., Commercial Mixed-Use" className="h-7 text-sm bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Zone Abbreviation">
-                <Input id="zoneAbbreviation" name="zoneAbbreviation" value={jobDetails.zoneAbbreviation || ''} onChange={handleChange} placeholder="e.g., C-2" className="h-7 text-sm max-w-[100px]" />
+                <Input id="zoneAbbreviation" name="zoneAbbreviation" value={jobDetails.zoneAbbreviation || ''} onChange={handleChange} placeholder="e.g., C-2" className="h-7 text-sm max-w-[100px] bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Land Use Designation">
-                <Input id="landUseDesignation" name="landUseDesignation" value={jobDetails.landUseDesignation || ''} onChange={handleChange} placeholder="e.g., Mixed Residential/Commercial" className="h-7 text-sm" />
+                <Input id="landUseDesignation" name="landUseDesignation" value={jobDetails.landUseDesignation || ''} onChange={handleChange} placeholder="e.g., Mixed Residential/Commercial" className="h-7 text-sm bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Flood Zone">
-                <Input id="floodZone" name="floodZone" value={jobDetails.floodZone || ''} onChange={handleChange} placeholder="e.g., Zone X" className="h-7 text-sm max-w-[150px]" />
+                <Input id="floodZone" name="floodZone" value={jobDetails.floodZone || ''} onChange={handleChange} placeholder="e.g., Zone X" className="h-7 text-sm max-w-[150px] bg-white border border-gray-300" />
               </CompactField>
             </TwoColumnFields>
             <CompactField label="Utilities">
-              <Input id="utilities" name="utilities" value={jobDetails.utilities || ''} onChange={handleChange} placeholder="e.g., All public utilities available" className="h-7 text-sm" />
+              <Input id="utilities" name="utilities" value={jobDetails.utilities || ''} onChange={handleChange} placeholder="e.g., All public utilities available" className="h-7 text-sm bg-white border border-gray-300" />
             </CompactField>
           </SectionGroup>
 
           {/* Parcels Summary Section */}
           <SectionGroup title="Parcels Summary">
             <CompactField label="Parcel Number">
-              <Input id="parcelNumber" name="parcelNumber" value={jobDetails.parcelNumber || ''} onChange={handleChange} placeholder="e.g., 123-456-789" className="h-7 text-sm" />
+              <Input id="parcelNumber" name="parcelNumber" value={jobDetails.parcelNumber || ''} onChange={handleChange} placeholder="e.g., 123-456-789" className="h-7 text-sm bg-white border border-gray-300" />
             </CompactField>
             <TwoColumnFields>
               <CompactField label="Gross Building Area (SF)">
-                <Input id="grossBuildingAreaSf" name="grossBuildingAreaSf" type="number" value={jobDetails.grossBuildingAreaSf || ''} onChange={handleChange} placeholder="e.g., 185908" className="h-7 text-sm max-w-[150px]" />
+                <Input id="grossBuildingAreaSf" name="grossBuildingAreaSf" type="number" value={jobDetails.grossBuildingAreaSf || ''} onChange={handleChange} placeholder="e.g., 185908" className="h-7 text-sm max-w-[150px] bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Net Rentable Area (SF)">
-                <Input id="netRentableAreaSf" name="netRentableAreaSf" type="number" value={jobDetails.netRentableAreaSf || ''} onChange={handleChange} placeholder="e.g., 145394" className="h-7 text-sm max-w-[150px]" />
+                <Input id="netRentableAreaSf" name="netRentableAreaSf" type="number" value={jobDetails.netRentableAreaSf || ''} onChange={handleChange} placeholder="e.g., 145394" className="h-7 text-sm max-w-[150px] bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Year Built">
-                <Input id="yearBuilt" name="yearBuilt" type="number" value={jobDetails.yearBuilt || ''} onChange={handleChange} placeholder="e.g., 2027" className="h-7 text-sm max-w-[150px]" />
+                <Input id="yearBuilt" name="yearBuilt" type="number" value={jobDetails.yearBuilt || ''} onChange={handleChange} placeholder="e.g., 2027" className="h-7 text-sm max-w-[150px] bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Buildable Land (SF)">
-                <Input id="usableLandSf" name="usableLandSf" type="number" value={jobDetails.usableLandSf || ''} onChange={handleChange} placeholder="e.g., 15000" className="h-7 text-sm max-w-[150px]" />
+                <Input id="usableLandSf" name="usableLandSf" type="number" value={jobDetails.usableLandSf || ''} onChange={handleChange} placeholder="e.g., 15000" className="h-7 text-sm max-w-[150px] bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Total Site Area (SF)">
-                <Input id="grossLandSf" name="grossLandSf" type="number" value={jobDetails.grossLandSf || ''} onChange={handleChange} placeholder="e.g., 18500" className="h-7 text-sm max-w-[150px]" />
+                <Input id="grossLandSf" name="grossLandSf" type="number" value={jobDetails.grossLandSf || ''} onChange={handleChange} placeholder="e.g., 18500" className="h-7 text-sm max-w-[150px] bg-white border border-gray-300" />
               </CompactField>
             </TwoColumnFields>
           </SectionGroup>
@@ -215,30 +215,30 @@ const PropertyInfoSectionIndependent: React.FC<SectionProps> = ({
           <SectionGroup title="Assessments & Taxes">
             <TwoColumnFields>
               <CompactField label="Assessment Year">
-                <Input id="assessmentYear" name="assessmentYear" value={jobDetails.assessmentYear || ''} onChange={handleChange} placeholder="e.g., 2024" className="h-7 text-sm max-w-[100px]" />
+                <Input id="assessmentYear" name="assessmentYear" value={jobDetails.assessmentYear || ''} onChange={handleChange} placeholder="e.g., 2024" className="h-7 text-sm max-w-[100px] bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Taxes">
-                <Input id="taxes" name="taxes" type="number" value={jobDetails.taxes || ''} onChange={handleChange} placeholder="e.g., 12500" className="h-7 text-sm max-w-[150px]" />
+                <Input id="taxes" name="taxes" type="number" value={jobDetails.taxes || ''} onChange={handleChange} placeholder="e.g., 12500" className="h-7 text-sm max-w-[150px] bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Land Assessment">
-                <Input id="landAssessmentValue" name="landAssessmentValue" type="number" value={jobDetails.landAssessmentValue || ''} onChange={handleChange} placeholder="e.g., 250000" className="h-7 text-sm max-w-[150px]" />
+                <Input id="landAssessmentValue" name="landAssessmentValue" type="number" value={jobDetails.landAssessmentValue || ''} onChange={handleChange} placeholder="e.g., 250000" className="h-7 text-sm max-w-[150px] bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Improved Assessment">
-                <Input id="improvedAssessmentValue" name="improvedAssessmentValue" type="number" value={jobDetails.improvedAssessmentValue || ''} onChange={handleChange} placeholder="e.g., 600000" className="h-7 text-sm max-w-[150px]" />
+                <Input id="improvedAssessmentValue" name="improvedAssessmentValue" type="number" value={jobDetails.improvedAssessmentValue || ''} onChange={handleChange} placeholder="e.g., 600000" className="h-7 text-sm max-w-[150px] bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Total Assessment">
-                <Input id="totalAssessmentValue" name="totalAssessmentValue" type="number" value={jobDetails.totalAssessmentValue || ''} onChange={handleChange} placeholder="e.g., 850000" className="h-7 text-sm max-w-[150px]" />
+                <Input id="totalAssessmentValue" name="totalAssessmentValue" type="number" value={jobDetails.totalAssessmentValue || ''} onChange={handleChange} placeholder="e.g., 850000" className="h-7 text-sm max-w-[150px] bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Assessed Value">
-                <Input id="assessedValue" name="assessedValue" type="number" value={jobDetails.assessedValue || ''} onChange={handleChange} placeholder="e.g., 850000" className="h-7 text-sm max-w-[150px]" />
+                <Input id="assessedValue" name="assessedValue" type="number" value={jobDetails.assessedValue || ''} onChange={handleChange} placeholder="e.g., 850000" className="h-7 text-sm max-w-[150px] bg-white border border-gray-300" />
               </CompactField>
             </TwoColumnFields>
             <TwoColumnFields>
               <CompactField label="Land Value Split">
-                <Input id="assessment_split_land_value" name="assessment_split_land_value" type="number" value={jobDetails.assessment_split_land_value || ''} onChange={handleChange} placeholder="e.g., 250000" className="h-7 text-sm max-w-[200px]" />
+                <Input id="assessment_split_land_value" name="assessment_split_land_value" type="number" value={jobDetails.assessment_split_land_value || ''} onChange={handleChange} placeholder="e.g., 250000" className="h-7 text-sm max-w-[200px] bg-white border border-gray-300" />
               </CompactField>
               <CompactField label="Building Value Split">
-                <Input id="assessment_split_building_value" name="assessment_split_building_value" type="number" value={jobDetails.assessment_split_building_value || ''} onChange={handleChange} placeholder="e.g., 750000" className="h-7 text-sm max-w-[200px]" />
+                <Input id="assessment_split_building_value" name="assessment_split_building_value" type="number" value={jobDetails.assessment_split_building_value || ''} onChange={handleChange} placeholder="e.g., 750000" className="h-7 text-sm max-w-[200px] bg-white border border-gray-300" />
               </CompactField>
             </TwoColumnFields>
           </SectionGroup>

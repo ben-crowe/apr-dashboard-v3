@@ -29,15 +29,13 @@ const Index = () => {
         <div className="container flex h-16 items-center justify-between">
           <div className="font-medium">Appraisal Management System</div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="default"
-              size="default"
+            <button
               onClick={() => navigate('/dashboard')}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
+              className="text-gray-800 hover:text-gray-600 hover:underline transition-colors text-sm font-medium flex items-center gap-2"
             >
-              <LayoutDashboard className="h-4 w-4 mr-2" />
+              <LayoutDashboard className="h-4 w-4" />
               Go to Dashboard
-            </Button>
+            </button>
             <Button
               variant="ghost"
               size="icon"

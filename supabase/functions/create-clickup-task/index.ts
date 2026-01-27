@@ -15,7 +15,6 @@ const CLICKUP_ENV = Deno.env.get('CLICKUP_ENV') || 'dev'
 
 // Development configuration (BC Workspace)
 const DEV_CONFIG = {
-  token: Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY',
   listId: Deno.env.get('CLICKUP_LIST_ID') || '901706896375', // New Submission - BC Workspace (Dev.Projects)
   workspaceId: '8555561', // BC Workspace (Development)
   templateId: null // Skip template for Dev testing
@@ -23,17 +22,16 @@ const DEV_CONFIG = {
 
 // Production configuration (Valta Workspace)
 const PROD_CONFIG = {
-  token: Deno.env.get('CLICKUP_API_TOKEN_VALTA'),
   listId: '901402094744', // Chris's list in Valta
   workspaceId: '9014181018', // Valta workspace
-  templateId: 't-86b3exqe8' // LOE New Template 2025.01.09
+  templateId: 't-86b3exqe8', // LOE New Template 2025.01.09
+  priority: 4 // Low priority (hides in collapsed section)
 }
 
 // Select configuration based on environment
 const config = CLICKUP_ENV === 'production' ? PROD_CONFIG : DEV_CONFIG
 
 // Use config values throughout the function
-const CLICKUP_API_TOKEN = config.token
 const CLICKUP_LIST_ID = config.listId
 const CLICKUP_WORKSPACE_ID = config.workspaceId
 const CLICKUP_TEMPLATE_ID = config.templateId
@@ -50,20 +48,7 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Debug: Log token status
-    const envToken = CLICKUP_ENV === 'production' 
-      ? Deno.env.get('CLICKUP_API_TOKEN_VALTA')
-      : Deno.env.get('CLICKUP_API_TOKEN')
-    console.log('🔍 Token check:', {
-      environment: CLICKUP_ENV,
-      hasEnvToken: !!envToken,
-      tokenPrefix: envToken ? envToken.substring(0, 12) : 'none',
-      usingFallback: !envToken,
-      listId: CLICKUP_LIST_ID,
-      workspaceId: CLICKUP_WORKSPACE_ID
-    })
-
-    const { jobId } = await req.json()
+    const { jobId, userId } = await req.json()
 
     if (!jobId) {
       throw new Error('Job ID is required')
@@ -75,6 +60,41 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+    // Get OAuth access token from database - try OAuth first for workspace
+    let CLICKUP_API_TOKEN: string | null = null
+
+    console.log('🔍 Looking up OAuth token for workspace:', CLICKUP_WORKSPACE_ID)
+    const { data: connection, error: connectionError } = await supabase
+      .from('clickup_connections')
+      .select('access_token')
+      .eq('workspace_id', CLICKUP_WORKSPACE_ID)
+      .limit(1)
+      .single()
+
+    if (!connectionError && connection?.access_token) {
+      CLICKUP_API_TOKEN = connection.access_token
+      console.log('✅ Using OAuth token from database')
+    } else {
+      console.log('⚠️ No OAuth connection found, will fall back to env var')
+    }
+
+    // Fall back to environment variable token if no OAuth connection
+    if (!CLICKUP_API_TOKEN) {
+      const envToken = CLICKUP_ENV === 'production' 
+        ? Deno.env.get('CLICKUP_API_TOKEN_VALTA')
+        : Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY'
+      CLICKUP_API_TOKEN = envToken
+      console.log('🔧 Using fallback token from environment variable')
+    }
+
+    console.log('🔍 Token check:', {
+      environment: CLICKUP_ENV,
+      hasOAuthToken: !!CLICKUP_API_TOKEN && CLICKUP_API_TOKEN !== Deno.env.get('CLICKUP_API_TOKEN'),
+      tokenPrefix: CLICKUP_API_TOKEN ? CLICKUP_API_TOKEN.substring(0, 12) : 'none',
+      listId: CLICKUP_LIST_ID,
+      workspaceId: CLICKUP_WORKSPACE_ID
+    })
 
     // Fetch job details from database
     const { data: job, error: jobError } = await supabase
@@ -191,7 +211,7 @@ Deno.serve(async (req) => {
     const taskPayload: any = {
       name: taskName,
       markdown_description: description,
-      priority: 3, // Normal priority (1=urgent, 2=high, 3=normal, 4=low)
+      priority: config.priority || null, // Use config priority (4=low for production, null for dev)
       status: 'to do', // Put in "to do" status (default open status)
       notify_all: false
     }

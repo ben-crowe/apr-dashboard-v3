@@ -51,7 +51,7 @@ const JobNumberField: React.FC<JobNumberFieldProps> = ({ job, jobDetails }) => {
             }}
           />
           {job.clickup_task_id && (
-            <div className="flex items-center text-sm text-green-600">
+            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
               <CheckCircle className="w-4 h-4 mr-1" />
               Task created
             </div>

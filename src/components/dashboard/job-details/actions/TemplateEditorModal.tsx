@@ -451,7 +451,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                           handleTextareaResize(e);
                         }}
                         data-auto-resize="true"
-                        className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                        className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded resize-none bg-white dark:bg-gray-800/50 text-gray-900 dark:text-gray-100 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                         rows={1}
                         style={{ 
                           fontSize: `${fontSize}px`, 
@@ -517,7 +517,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                               handleTextareaResize(e);
                             }}
                             data-auto-resize="true"
-                            className="w-full text-xs p-1 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                            className="w-full text-xs p-1 border border-gray-300 dark:border-gray-700 rounded resize-none bg-white dark:bg-gray-800/50 text-gray-900 dark:text-gray-100 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                             rows={1}
                             style={{ 
                               fontSize: `${fontSize}px`, 
@@ -712,7 +712,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                     value={templateName}
                     onChange={(e) => setTemplateName(e.target.value)}
                     placeholder="e.g., Standard LOE, Commercial LOE"
-                    className="mt-1"
+                    className="mt-1 bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
                   />
                 </div>
 

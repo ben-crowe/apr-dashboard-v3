@@ -146,10 +146,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={cleanQuotedString(job.valuationPremises)}
               onValueChange={value => handleSelectChange(value, 'valuationPremises')}
             >
-              <SelectTrigger id="valuationPremises">
+              <SelectTrigger id="valuationPremises" className="bg-white border border-gray-300 text-gray-900 hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border-gray-300">
                 <SelectItem value="As-Is">As-Is</SelectItem>
                 <SelectItem value="Prospective at Completion">Prospective at Completion</SelectItem>
                 <SelectItem value="Prospective at Stabilization">Prospective at Stabilization</SelectItem>
@@ -178,10 +178,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={cleanQuotedString(job.assetCondition)}
               onValueChange={value => handleSelectChange(value, 'assetCondition')}
             >
-              <SelectTrigger id="assetCondition">
+              <SelectTrigger id="assetCondition" className="bg-white border border-gray-300 text-gray-900 hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white border-gray-300">
                 <SelectItem value="Excellent">Excellent</SelectItem>
                 <SelectItem value="Very Good">Very Good</SelectItem>
                 <SelectItem value="Good">Good</SelectItem>
@@ -258,7 +258,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
           placeholder="e.g., Client requests focus on retail comparables, property has pending zoning change..."
           rows={4}
           onChange={(e) => onUpdateJob?.({ notes: e.target.value })}
-          className="placeholder:text-gray-500"
+          className="bg-white border border-gray-300 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
         />
       </div>
     </div>

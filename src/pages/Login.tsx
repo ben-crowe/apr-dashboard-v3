@@ -43,11 +43,11 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="max-w-md w-full p-8 space-y-8 bg-card rounded-xl shadow-lg animate-fade-in">
+    <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-900">
+      <div className="max-w-md w-full p-8 space-y-8 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">APR Dashboard</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">APR Dashboard</h1>
+          <p className="text-slate-600 dark:text-slate-400 mt-2">
             {mode === 'login' ? 'Sign in to access your dashboard' : 'Create your account'}
           </p>
         </div>
@@ -55,7 +55,7 @@ const Login = () => {
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium">
+              <label htmlFor="email" className="block text-sm font-medium text-slate-900 dark:text-white mb-2">
                 Email
               </label>
               <Input
@@ -64,13 +64,13 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="mt-1"
-                placeholder="your@email.com"
+                className="bg-white border-slate-300 text-black placeholder:text-slate-400"
+                placeholder="valta@apr.local"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium">
+              <label htmlFor="password" className="block text-sm font-medium text-slate-900 dark:text-white mb-2">
                 Password
               </label>
               <Input
@@ -79,7 +79,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="mt-1"
+                className="bg-white border-slate-300 text-black placeholder:text-slate-400"
                 placeholder="••••••••"
                 minLength={6}
               />
@@ -88,7 +88,7 @@ const Login = () => {
 
           <Button
             type="submit"
-            className="w-full"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Loading..." : mode === 'login' ? 'Sign In' : 'Create Account'}
@@ -99,11 +99,17 @@ const Login = () => {
           <button
             type="button"
             onClick={() => setMode(mode === 'login' ? 'signup' : 'login')}
-            className="text-primary hover:underline"
+            className="text-blue-600 dark:text-blue-400 hover:underline"
           >
             {mode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
           </button>
         </div>
+
+        {mode === 'signup' && (
+          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded text-sm text-slate-700 dark:text-slate-300">
+            Use: <strong>valta@apr.local</strong> / <strong>apr2024</strong>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -2,30 +2,24 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 // Define types for our auth context
-type User = {
-  email: string;
-  role: "appraiser";
-};
-
 interface AuthContextType {
-  user: User | null;
+  user: SupabaseUser | null;
   isLoading: boolean;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  signUp: (email: string, password: string) => Promise<void>;
 }
 
 // Create the context with a default value
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Hard-coded test credentials for simplicity
-const TEST_EMAIL = "test@appraisalflow.com";
-const TEST_PASSWORD = "testpassword123";
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<SupabaseUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -33,12 +27,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const checkSession = async () => {
       try {
-        // Check if we have a saved session in localStorage
-        const savedUser = localStorage.getItem("appraisal_user");
-        
-        if (savedUser) {
-          setUser(JSON.parse(savedUser));
-        }
+        const { data: { user } } = await supabase.auth.getUser();
+        setUser(user);
       } catch (error) {
         console.error("Session restoration error:", error);
       } finally {
@@ -47,33 +37,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     checkSession();
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   // Login function
   const login = async (email: string, password: string) => {
     setIsLoading(true);
-    
+
     try {
-      // Simple validation for demo purposes
-      if (email !== TEST_EMAIL || password !== TEST_PASSWORD) {
-        throw new Error("Invalid credentials");
-      }
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-      // Create a user object
-      const loggedInUser: User = {
-        email: TEST_EMAIL,
-        role: "appraiser"
-      };
+      if (error) throw error;
 
-      // Save to state and localStorage
-      setUser(loggedInUser);
-      localStorage.setItem("appraisal_user", JSON.stringify(loggedInUser));
-      
+      setUser(data.user);
       toast.success("Login successful!");
       navigate("/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Login error:", error);
-      toast.error("Login failed: Invalid credentials");
+      toast.error(error.message || "Login failed");
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Sign up function
+  const signUp = async (email: string, password: string) => {
+    setIsLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+
+      toast.success("Account created! Please check your email to verify.");
+    } catch (error: any) {
+      console.error("Sign up error:", error);
+      toast.error(error.message || "Sign up failed");
       throw error;
     } finally {
       setIsLoading(false);
@@ -81,11 +95,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Logout function
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("appraisal_user");
-    toast.info("You have been logged out");
-    navigate("/login");
+  const logout = async () => {
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+      toast.info("You have been logged out");
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Logout failed");
+    }
   };
 
   return (
@@ -95,7 +114,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isLoading,
         isAuthenticated: !!user,
         login,
-        logout
+        logout,
+        signUp
       }}
     >
       {children}

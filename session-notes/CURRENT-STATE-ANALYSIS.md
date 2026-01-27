@@ -47,18 +47,26 @@
 
 ## Current ClickUp Integration State
 
-### How It Works NOW:
+### How It Actually Works (VERIFIED):
 ```typescript
-// Edge Function: supabase/functions/create-clickup-task/index.ts
-// Uses environment variable CLICKUP_API_TOKEN
-const apiToken = Deno.env.get('CLICKUP_API_TOKEN');
+// Edge Function: supabase/functions/create-clickup-task/index.ts (lines 84-89)
+
+// 1. Try OAuth token from database (lines 68-80)
+// 2. If not found, fall back to environment variables:
+if (!CLICKUP_API_TOKEN) {
+  const envToken = CLICKUP_ENV === 'production'
+    ? Deno.env.get('CLICKUP_API_TOKEN_VALTA')  // Production: Valta token
+    : Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY' // Dev: BC token (hardcoded fallback)
+  CLICKUP_API_TOKEN = envToken
+}
 ```
 
-### What's Broken:
-- OAuth UI removed from dashboard (correct)
-- OAuth Edge Functions still exist but unused (harmless)
-- Database has `clickup_connections` table (unused, harmless)
-- Personal API token should work but needs verification
+### Current State:
+✅ OAuth UI removed from dashboard (correct)
+✅ OAuth Edge Functions check database first, then fall back to env vars (backward compatible)
+✅ Dev environment has hardcoded fallback token (will always work)
+⚠️ Production environment needs `CLICKUP_API_TOKEN_VALTA` set as Supabase secret
+⚠️ Database has empty `clickup_connections` table (OAuth not configured, falls back to env var)
 
 ---
 
@@ -96,18 +104,38 @@ If app should be fully anonymous:
 
 ## Immediate Next Steps
 
-1. **Verify environment variables are set:**
+### For Production (Valta Workspace):
+1. **Set Valta API token as Supabase secret:**
    ```bash
-   supabase secrets list --project-ref ngovnamnjmexdpjtcnky
+   supabase secrets set CLICKUP_API_TOKEN_VALTA="[valta-personal-token]" --project-ref ngovnamnjmexdpjtcnky
    ```
 
-2. **Test job creation:**
-   - Go to dashboard
-   - Click "Test Job" button
-   - Check Edge Function logs
+2. **Verify CLICKUP_ENV is set to "production":**
+   ```bash
+   supabase secrets list --project-ref ngovnamnjmexdpjtcnky | grep CLICKUP_ENV
+   ```
+   Should show: `CLICKUP_ENV=production`
 
-3. **If it works:** Remove all authentication code (optional cleanup)
-4. **If it fails:** Check logs and debug API token
+3. **Test job creation:**
+   - Go to http://localhost:8088/dashboard
+   - Click "Test Job" button
+   - Check Edge Function logs:
+     ```bash
+     supabase functions logs create-clickup-task --project-ref ngovnamnjmexdpjtcnky
+     ```
+   - Should see: "🔧 Using fallback token from environment variable"
+   - Should see: "🔧 ClickUp Environment: production"
+   - Should see: "🔧 Using workspace: 9014181018"
+   - Task should be created in Valta workspace with Priority=Low (4)
+
+### For Dev (BC Workspace):
+Already working - has hardcoded fallback token in Edge Function code.
+
+### Optional Cleanup:
+If production works, consider removing authentication code:
+- `src/contexts/AuthContext.tsx`
+- `src/pages/Login.tsx`
+- `src/components/auth/ProtectedRoute.tsx`
 
 ---
 

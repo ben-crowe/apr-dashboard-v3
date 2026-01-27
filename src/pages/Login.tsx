@@ -42,6 +42,23 @@ const Login = () => {
     }
   };
 
+  const inputStyle: React.CSSProperties = {
+    width: '100%',
+    padding: '0.75rem',
+    border: '1px solid #cbd5e1',
+    borderRadius: '0.375rem',
+    fontSize: '1rem',
+    backgroundColor: '#ffffff',
+    color: '#000000',
+    outline: 'none',
+  };
+
+  const inputFocusStyle = {
+    ...inputStyle,
+    borderColor: '#3b82f6',
+    boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.1)',
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-900">
       <div className="max-w-md w-full p-8 space-y-8 bg-white dark:bg-slate-800 rounded-xl shadow-lg">
@@ -58,14 +75,16 @@ const Login = () => {
               <label htmlFor="email" className="block text-sm font-medium text-slate-900 dark:text-white mb-2">
                 Email
               </label>
-              <Input
+              <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="bg-white border-slate-300 text-black placeholder:text-slate-400"
                 placeholder="valta@apr.local"
+                style={inputStyle}
+                onFocus={(e) => Object.assign(e.target.style, inputFocusStyle)}
+                onBlur={(e) => Object.assign(e.target.style, inputStyle)}
               />
             </div>
 
@@ -73,15 +92,17 @@ const Login = () => {
               <label htmlFor="password" className="block text-sm font-medium text-slate-900 dark:text-white mb-2">
                 Password
               </label>
-              <Input
+              <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="bg-white border-slate-300 text-black placeholder:text-slate-400"
                 placeholder="••••••••"
                 minLength={6}
+                style={inputStyle}
+                onFocus={(e) => Object.assign(e.target.style, inputFocusStyle)}
+                onBlur={(e) => Object.assign(e.target.style, inputStyle)}
               />
             </div>
           </div>

@@ -386,8 +386,26 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
               console.warn('Failed to update ClickUp task:', updateResult.error);
             }
           } else {
-            // DISABLED: Automatic ClickUp task creation - now manual only via button
-            console.log('ClickUp task not created automatically - use button when ready');
+            // Create ClickUp task automatically after Valcre job is created
+            console.log('Creating ClickUp task automatically with VAL number:', result.jobNumber);
+
+            const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ngovnamnjmexdpjtcnky.supabase.co';
+            const createResponse = await fetch(`${supabaseUrl}/functions/v1/create-clickup-task`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`
+              },
+              body: JSON.stringify({ jobId: data.jobId })
+            });
+
+            const createResult = await createResponse.json();
+
+            if (createResult.success) {
+              console.log('ClickUp task created successfully:', createResult.taskId);
+            } else {
+              console.warn('Failed to create ClickUp task:', createResult.error);
+            }
           }
 
           // Always update job with Valcre number

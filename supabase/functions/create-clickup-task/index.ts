@@ -36,7 +36,7 @@ const CLICKUP_LIST_ID = config.listId
 const CLICKUP_WORKSPACE_ID = config.workspaceId
 const CLICKUP_TEMPLATE_ID = config.templateId
 
-// Log active environment for debugging
+// Log active environment for debugging (v3)
 console.log('🔧 ClickUp Environment:', CLICKUP_ENV)
 console.log('🔧 Using workspace:', CLICKUP_WORKSPACE_ID)
 console.log('🔧 Using list ID:', CLICKUP_LIST_ID)
@@ -86,12 +86,23 @@ Deno.serve(async (req) => {
         : Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY'
       CLICKUP_API_TOKEN = envToken
       console.log('🔧 Using fallback token from environment variable')
+      
+      // Validate token format
+      if (!CLICKUP_API_TOKEN || !CLICKUP_API_TOKEN.startsWith('pk_')) {
+        throw new Error('Invalid ClickUp API token format - must start with pk_')
+      }
+      if (CLICKUP_API_TOKEN.length < 40) {
+        throw new Error('Invalid ClickUp API token - too short')
+      }
     }
 
     console.log('🔍 Token check:', {
       environment: CLICKUP_ENV,
       hasOAuthToken: !!CLICKUP_API_TOKEN && CLICKUP_API_TOKEN !== Deno.env.get('CLICKUP_API_TOKEN'),
       tokenPrefix: CLICKUP_API_TOKEN ? CLICKUP_API_TOKEN.substring(0, 12) : 'none',
+      tokenLength: CLICKUP_API_TOKEN ? CLICKUP_API_TOKEN.length : 0,
+      envVarValta: Deno.env.get('CLICKUP_API_TOKEN_VALTA') ? 'SET' : 'NOT SET',
+      envVarValtaPrefix: Deno.env.get('CLICKUP_API_TOKEN_VALTA')?.substring(0, 12),
       listId: CLICKUP_LIST_ID,
       workspaceId: CLICKUP_WORKSPACE_ID
     })
@@ -205,7 +216,7 @@ Deno.serve(async (req) => {
 **CLIENT COMMENTS**
 • ${job.notes || job.additionalComments || ''}`
 
-    // Build task payload (conditionally include template_id)
+    // Build task payload
     // CRITICAL: Use ONLY markdown_description field for clickable links to work
     // ClickUp processes markdown [text](url) syntax in markdown_description field
     const taskPayload: any = {
@@ -216,13 +227,23 @@ Deno.serve(async (req) => {
       notify_all: false
     }
 
-    // Only include template_id if it's set (Production uses template, Dev may skip)
+    // Determine API endpoint - use template endpoint if template_id is set
+    // IMPORTANT: Creating from template uses a DIFFERENT endpoint than regular task creation
+    // Template endpoint: POST /list/{list_id}/taskTemplate/{template_id}
+    // Regular endpoint:  POST /list/{list_id}/task
+    let clickupApiUrl: string
     if (CLICKUP_TEMPLATE_ID) {
-      taskPayload.template_id = CLICKUP_TEMPLATE_ID
+      clickupApiUrl = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/taskTemplate/${CLICKUP_TEMPLATE_ID}`
+      console.log('📋 Creating task FROM TEMPLATE:', CLICKUP_TEMPLATE_ID)
+    } else {
+      clickupApiUrl = `https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`
+      console.log('📋 Creating task WITHOUT template')
     }
 
     // Create task with or without template
-    const clickupResponse = await fetch(`https://api.clickup.com/api/v2/list/${CLICKUP_LIST_ID}/task`, {
+    console.log('🔑 Making ClickUp API call with token prefix:', CLICKUP_API_TOKEN?.substring(0, 15))
+    console.log('🔗 API URL:', clickupApiUrl)
+    const clickupResponse = await fetch(clickupApiUrl, {
       method: 'POST',
       headers: {
         'Authorization': CLICKUP_API_TOKEN,
@@ -230,11 +251,29 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify(taskPayload)
     })
+    console.log('📡 ClickUp API response status:', clickupResponse.status)
 
     if (!clickupResponse.ok) {
       const errorText = await clickupResponse.text()
-      console.error('ClickUp API error:', errorText)
-      throw new Error(`ClickUp API error: ${clickupResponse.status}`)
+      console.error('❌ ClickUp API error response:', errorText)
+      console.error('❌ ClickUp API status:', clickupResponse.status)
+      console.error('❌ Token used (first 20 chars):', CLICKUP_API_TOKEN?.substring(0, 20))
+      console.error('❌ List ID:', CLICKUP_LIST_ID)
+      console.error('❌ Workspace ID:', CLICKUP_WORKSPACE_ID)
+      
+      // Parse error for better messaging
+      let errorMessage = `ClickUp API error: ${clickupResponse.status}`
+      try {
+        const errorJson = JSON.parse(errorText)
+        if (errorJson.err) {
+          errorMessage = `ClickUp API error: ${clickupResponse.status} - ${errorJson.err}`
+        }
+      } catch (e) {
+        // Not JSON, use text as-is
+        errorMessage = `ClickUp API error: ${clickupResponse.status} - ${errorText.substring(0, 200)}`
+      }
+      
+      throw new Error(errorMessage)
     }
 
     const clickupTask = await clickupResponse.json()

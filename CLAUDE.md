@@ -104,12 +104,13 @@ CRITICAL: `report_builder_data` table DOES NOT EXIST. Must be created before Rep
 | LOE E-Signature | `docs/Features/12-LOE-Esign/LOE-DOCUSEAL-ARCHITECTURE.md` |
 | ClickUp Patterns | `docs/Features/04-Job & Client Mgt./` |
 | Architecture | `docs/Architecture/APR-V4-ARCHITECTURE.md` |
-| Feature Commits | `docs/Feature-Commits.md` |
+| UX Documentation | `docs/-uxui/` |
+| UX Feature Commits | `docs/-uxui/UX-Feature-Commits.md` |
 
 ## Workflow Rules
 
 1. **Check docs freshness** — use `/audit-docs` if you suspect stale documentation
 2. **Clean environment** — remove console.logs, unused imports after work
 3. **Plan before refactoring** — write step-by-step plan, get user approval for multi-file changes
-4. **Feature Commits** — update `docs/Feature-Commits.md` after every feature session
+4. **UX Feature Commits** — update `docs/-uxui/UX-Feature-Commits.md` after every feature session
 5. **README.md** is the single source of truth for project state

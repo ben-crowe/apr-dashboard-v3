@@ -2,6 +2,19 @@
 
 Modern web application for managing appraisal job submissions, quotes, workflow automation, and report generation.
 
+## Project Status
+
+- **Current Phase:** Report Builder integration — connecting the standalone builder to the live pipeline.
+- **Working Features:** Stages 1-3 (Client Intake, Job Management via ClickUp/Valcre, E-Signature via DocuSeal) are fully functional and deployed on Vercel.
+- **Database:** Supabase (PostgreSQL) — live with 20 job submissions, 104 client profiles, 12 LOE details.
+- **Deployment:** Vercel auto-deploy from GitHub main branch.
+- **Last Active Session:** March 23, 2026 — documentation audit, CLAUDE.md enrichment, Feature-Commits tracking.
+- **Next Priorities:**
+  1. Create `report_builder_data` database table (does not exist yet — blocks all persistence).
+  2. Implement route integration (`/dashboard/job/:jobId/report`).
+  3. Bridge job data into the Report Builder "Home" section.
+  4. Auto-save functionality (2-second debounce).
+
 ## Tech Stack
 
 - **Frontend**: React 18 + TypeScript + Vite
@@ -176,4 +189,4 @@ supabase db push
 ---
 
 **Version**: 3.x
-**Last Updated**: January 2026
+**Last Updated**: March 2026

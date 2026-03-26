@@ -21,6 +21,28 @@ npm run dev
 - **API Proxy:** `/api` requests proxy to `https://apr-dashboard-v3.vercel.app` (production Vercel)
 - **Hot reload:** Yes (Vite HMR)
 
+### CRITICAL: Local vs Production Architecture
+
+```
+LOCAL DEV (port 8086)          PRODUCTION (Vercel)
++------------------+          +------------------+
+|  Vite Frontend   |  /api →  |  Vercel Backend   |
+|  (UI changes     |  proxy   |  (serverless fns)  |
+|   local only)    | -------> |                    |
++------------------+          +--------+-----------+
+                                       |
+                              +--------v-----------+
+                              |  Supabase (LIVE)    |
+                              |  SAME DB as client  |
+                              +---------------------+
+```
+
+- **UI changes are local-only** until pushed to Vercel. Safe to iterate.
+- **ALL API calls hit live Vercel backend** via the proxy. Data is REAL.
+- **Database is LIVE Supabase** -- the same DB the client uses.
+- **DO NOT modify client data during testing.** Use test records or read-only queries.
+- This means: **safe to touch UI, dangerous to touch data.**
+
 ### Vercel Dev Server (Frontend + Serverless Functions)
 
 ```bash
@@ -49,15 +71,49 @@ If the port is already in use, Vite will auto-increment. Always check the termin
 - `npm install` (run if `node_modules/` is missing or stale)
 - `.env.local` with Supabase credentials (3 env vars: `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID`)
 
-### Key Routes to Verify
+### IMPORTANT: Two Separate UIs
 
+APR has two distinct interfaces at different routes. When delegating work, **always specify which one**.
+
+| UI | Routes | Audience | Purpose |
+|----|--------|----------|---------|
+| **Intake Form** | `/`, `/appraisal-request-form` | Client-facing | Appraisal request submission |
+| **Dashboard** | `/dashboard` | Internal (requires auth) | Job management, LOE, actions |
+
+**Never say "the dashboard" when you mean the intake form.** They are separate UIs.
+
+### Complete Route Map
+
+**Client-Facing:**
 | Route | What You Should See |
 |-------|-------------------|
 | `/` | Client intake submission form |
+| `/appraisal-request-form` | Same intake form (alternate route) |
+| `/sign/:id` | DocuSeal signing page |
+
+**Internal (Auth Required):**
+| Route | What You Should See |
+|-------|-------------------|
 | `/login` | Supabase auth login page |
-| `/dashboard` | Main dashboard (requires auth) |
+| `/dashboard` | Main dashboard -- jobs, details, actions |
+
+**Report Builder / Tools:**
+| Route | What You Should See |
+|-------|-------------------|
 | `/mock-builder` | Standalone Report Builder (79-page preview) |
 | `/calculator-demo` | Calculator engine demo |
+| `/calculator-preview` | Calculator preview mode |
+| `/standalone-calculator` | Standalone calculator |
+| `/test-input` | Field input testing page |
+| `/test-loe` | LOE testing page |
+| `/image-test` | Image configurator testing |
+
+**System / Utility:**
+| Route | What You Should See |
+|-------|-------------------|
+| `/diagnostic` | System diagnostic page |
+| `/style-guide` | UI style guide reference |
+| `/clickup/callback` | ClickUp OAuth callback handler |
 
 ---
 
@@ -176,6 +232,8 @@ curl -s -X POST "http://127.0.0.1:$PORT/api/browser-fill" \
 
 ### Supabase -- Verify Tables
 
+**WARNING: This is a LIVE production database. The same DB the client uses. DO NOT insert, update, or delete real client data. Use read-only queries for verification. Create test records only in clearly marked test rows.**
+
 **Direct query via Supabase dashboard:**
 Instance: `ngovnamnjmexdpjtcnky.supabase.co`
 
@@ -190,6 +248,13 @@ Instance: `ngovnamnjmexdpjtcnky.supabase.co`
 | `job_property_info` | 7+ | Property details linked to jobs |
 
 **CRITICAL:** `report_builder_data` table DOES NOT EXIST. Any test expecting this table will fail until it's created (Priority #1 blocker).
+
+### Valta Master Field Spec
+
+The client's field specification is at `docs/VALTA-FIELD-SPEC.md`:
+- 65 fields, 22+ dropdowns, 26 business rules, narrative templates
+- This is the CLIENT's specification -- what the app needs to match
+- The internal field registry (2,082 fields) is the implementation; this spec is the requirement
 
 ### Field Sync Verification
 

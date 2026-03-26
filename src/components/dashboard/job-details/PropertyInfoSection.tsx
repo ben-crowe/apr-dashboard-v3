@@ -107,7 +107,7 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
 
 
   return <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full border rounded-lg">
-      <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700`}>
+      <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 bg-gray-200 dark:bg-gray-800`}>
         <div className="flex items-center gap-2">
           {isOpen ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}
           <SectionTitle title="Data Gathering - Property Research" />

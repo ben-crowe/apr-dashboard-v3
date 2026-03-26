@@ -746,7 +746,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full border rounded-lg">
-      <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700`}>
+      <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 bg-gray-200 dark:bg-gray-800`}>
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
             {isOpen ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}
@@ -784,7 +784,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   variant="outline"
                   size="sm"
                   onClick={() => window.open(`https://app.valcre.com/job/edit/${jobDetails.valcreJobId}#job`, '_blank')}
-                  className="border-gray-200 dark:border-slate-700/50 bg-white dark:bg-secondary text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-400 dark:hover:border-slate-600/60 hover:bg-transparent dark:hover:bg-transparent transition-colors text-sm font-medium"
+                  className="border border-gray-300 dark:border-white/30 bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 transition-colors text-sm font-medium"
                 >
                   <ExternalLink className="h-4 w-4 mr-1" />
                   View in Valcre
@@ -796,7 +796,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   variant="secondary"
                   size="sm"
                   disabled
-                  className="text-gray-400 dark:text-gray-600 cursor-not-allowed text-sm font-medium"
+                  className="border border-gray-200 dark:border-white/15 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm font-medium"
                 >
                   <ExternalLink className="h-4 w-4 mr-1" />
                   Valcre Job: {jobDetails.jobNumber}
@@ -809,7 +809,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 variant="default"
                 size="sm"
                 onClick={handleCreateValcreJob}
-                className="text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:underline transition-colors text-sm font-medium"
+                className="border border-gray-300 dark:border-white/30 bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 transition-colors text-sm font-medium"
                 disabled={isCreatingJob}
               >
                 {isCreatingJob ? 'Creating...' : 'Create Valcre Job'}
@@ -825,7 +825,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                         variant="default"
                         size="sm"
                         disabled={true}
-                        className="text-gray-400 dark:text-gray-600 cursor-not-allowed text-sm font-medium"
+                        className="border border-gray-200 dark:border-white/15 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm font-medium"
                       >
                         Create Valcre Job
                       </Button>
@@ -859,7 +859,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           size="sm"
                           onClick={handleGeneratePreview}
                           disabled={true}
-                          className="text-gray-400 dark:text-gray-600 cursor-not-allowed text-sm font-medium"
+                          className="border border-gray-200 dark:border-white/15 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
                           {alreadySent ? "LOE Sent" : "Preview & Send LOE"}
@@ -889,7 +889,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           variant="outline"
                           size="sm"
                           disabled={true}
-                          className="text-gray-400 dark:text-gray-600 cursor-not-allowed text-sm font-medium"
+                          className="border border-gray-200 dark:border-white/15 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
                           Preview & Send LOE
@@ -909,8 +909,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   onClick={handleGeneratePreview}
                   disabled={!validation.isValid || isSending || isGenerating}
                   className={alreadySent
-                    ? "border-gray-200 dark:border-slate-700/50 bg-white dark:bg-secondary text-amber-700 dark:text-amber-400 hover:text-amber-800 dark:hover:text-amber-300 hover:border-gray-400 dark:hover:border-slate-600/60 hover:bg-transparent dark:hover:bg-transparent transition-colors text-sm font-medium"
-                    : "border-gray-200 dark:border-slate-700/50 bg-white dark:bg-secondary text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-400 dark:hover:border-slate-600/60 hover:bg-transparent dark:hover:bg-transparent transition-colors text-sm font-medium"}
+                    ? "border border-amber-300 dark:border-amber-500/30 bg-transparent text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:border-amber-400 dark:hover:border-amber-500/50 transition-colors text-sm font-medium"
+                    : "border border-gray-300 dark:border-white/30 bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 transition-colors text-sm font-medium"}
                 >
                   <FileSignature className="h-4 w-4 mr-1" />
                   {alreadySent ? "Resend LOE" : isGenerating ? "Generating..." : "Preview & Send LOE"}
@@ -922,7 +922,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 variant="outline"
                 size="sm"
                 disabled={true}
-                className="text-gray-400 dark:text-gray-600 cursor-not-allowed text-sm font-medium"
+                className="border border-gray-200 dark:border-white/15 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm font-medium"
               >
                 <FileSignature className="h-4 w-4 mr-1" />
                 Preview & Send LOE
@@ -1105,7 +1105,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           <SectionGroup title="Comments">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-4">
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-gray-400">General:</label>
+                <label className="text-sm text-gray-600 dark:text-gray-400">General:</label>
                 <Textarea
                   name="appraiserComments"
                   value={jobDetails.appraiserComments || ''}
@@ -1118,7 +1118,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-gray-400">Delivery:</label>
+                <label className="text-sm text-gray-600 dark:text-gray-400">Delivery:</label>
                 <Textarea
                   name="deliveryComments"
                   value={jobDetails.deliveryComments || ''}
@@ -1131,7 +1131,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm text-gray-400">Payment:</label>
+                <label className="text-sm text-gray-600 dark:text-gray-400">Payment:</label>
                 <Textarea
                   name="paymentComments"
                   value={jobDetails.paymentComments || ''}

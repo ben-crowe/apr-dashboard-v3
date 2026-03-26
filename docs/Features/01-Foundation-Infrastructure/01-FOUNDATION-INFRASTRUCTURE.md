@@ -2,7 +2,9 @@
 
 **Epic**: EPIC 1 - Foundation & Infrastructure
 **Feature ID**: F01
-**Status**: 📋 Not Started
+**Status**: 📋 Not Started / AUDITED & CLEANED
+**Last Updated**: 2026-03-03
+**Purpose**: Definitive standalone reference for Foundation & Infrastructure.
 
 ---
 

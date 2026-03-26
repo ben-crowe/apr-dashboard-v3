@@ -137,7 +137,7 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
           variant="outline"
           size="sm"
           onClick={handleClick}
-          className="border-gray-200 dark:border-slate-700/50 bg-white dark:bg-secondary text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-400 dark:hover:border-slate-600/60 hover:bg-transparent dark:hover:bg-transparent transition-colors text-sm font-medium"
+          className="border border-gray-300 dark:border-white/30 bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 transition-colors text-sm font-medium"
         >
           <ExternalLink className="w-4 h-4" />
           View in ClickUp
@@ -150,7 +150,7 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
           size="sm"
           onClick={handleClick}
           disabled={isCreating}
-          className="border-gray-200 dark:border-slate-700/50 bg-white dark:bg-secondary text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-400 dark:hover:border-slate-600/60 hover:bg-transparent dark:hover:bg-transparent transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed"
+          className="border border-gray-300 dark:border-white/30 bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed"
         >
           {isCreating ? (
             <>
@@ -175,7 +175,7 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
                   variant="outline"
                   size="sm"
                   disabled={true}
-                  className="border-gray-200 dark:border-slate-700/50 bg-white dark:bg-secondary text-gray-400 dark:text-gray-600 cursor-not-allowed text-sm font-medium"
+                  className="border border-gray-200 dark:border-white/15 bg-transparent text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm font-medium"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Create ClickUp Task

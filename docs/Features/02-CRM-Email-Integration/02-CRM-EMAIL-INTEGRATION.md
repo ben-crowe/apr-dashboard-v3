@@ -1,9 +1,9 @@
 # Pipedrive CRM Integration - APR Dashboard
 
-**Status:** ❌ **NOT IMPLEMENTED** (Despite Systems Guide stating "DEPLOYED")
-**Last Updated:** November 6, 2025 (Research Session Complete)
+**Status:** ❌ **NOT IMPLEMENTED** (Despite Systems Guide stating "DEPLOYED") / AUDITED & CLEANED
+**Last Updated:** 2026-03-03
 **Project:** APR Dashboard v3
-**Research Status:** Complete - Credentials Found, Architecture Defined, Awaiting Requirements
+**Purpose:** Definitive standalone reference for the CRM Email Integration feature block. (Legacy session notes have been moved to `_Archive/`).
 
 ---
 

@@ -784,7 +784,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   variant="outline"
                   size="sm"
                   onClick={() => window.open(`https://app.valcre.com/job/edit/${jobDetails.valcreJobId}#job`, '_blank')}
-                  className="border border-gray-300 dark:border-white/30 bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 transition-colors text-sm font-medium"
+                  className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-gray-900 transition-colors text-sm font-medium"
                 >
                   <ExternalLink className="h-4 w-4 mr-1" />
                   View in Valcre
@@ -796,7 +796,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   variant="secondary"
                   size="sm"
                   disabled
-                  className="border border-gray-200 dark:border-white/15 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm font-medium"
+                  className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white cursor-not-allowed text-sm font-medium"
                 >
                   <ExternalLink className="h-4 w-4 mr-1" />
                   Valcre Job: {jobDetails.jobNumber}
@@ -806,10 +806,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               // Can create job - show active button
               <Button
                 type="button"
-                variant="default"
+                variant="outline"
                 size="sm"
                 onClick={handleCreateValcreJob}
-                className="border border-gray-300 dark:border-white/30 bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 transition-colors text-sm font-medium"
+                className="!border !border-gray-300 dark:!border-white/30 !bg-transparent !text-gray-900 dark:!text-white hover:!bg-gray-100 dark:hover:!bg-white/10 hover:!border-gray-400 dark:hover:!border-white/50 transition-colors text-sm font-medium"
                 disabled={isCreatingJob}
               >
                 {isCreatingJob ? 'Creating...' : 'Create Valcre Job'}
@@ -822,10 +822,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                     <div>
                       <Button
                         type="button"
-                        variant="default"
+                        variant="outline"
                         size="sm"
                         disabled={true}
-                        className="border border-gray-200 dark:border-white/15 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm font-medium"
+                        className="!border !border-gray-300 dark:!border-white/30 !bg-transparent !text-gray-900 dark:!text-white cursor-not-allowed text-sm font-medium"
                       >
                         Create Valcre Job
                       </Button>
@@ -859,7 +859,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           size="sm"
                           onClick={handleGeneratePreview}
                           disabled={true}
-                          className="border border-gray-200 dark:border-white/15 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm font-medium"
+                          className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
                           {alreadySent ? "LOE Sent" : "Preview & Send LOE"}
@@ -889,7 +889,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           variant="outline"
                           size="sm"
                           disabled={true}
-                          className="border border-gray-200 dark:border-white/15 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm font-medium"
+                          className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
                           Preview & Send LOE
@@ -910,7 +910,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   disabled={!validation.isValid || isSending || isGenerating}
                   className={alreadySent
                     ? "border border-amber-300 dark:border-amber-500/30 bg-transparent text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:border-amber-400 dark:hover:border-amber-500/50 transition-colors text-sm font-medium"
-                    : "border border-gray-300 dark:border-white/30 bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 transition-colors text-sm font-medium"}
+                    : "border-2 border-gray-800 dark:border-white/50 bg-gray-800 dark:bg-transparent text-white dark:text-white hover:bg-gray-700 dark:hover:bg-white/10 transition-colors text-sm font-medium"}
                 >
                   <FileSignature className="h-4 w-4 mr-1" />
                   {alreadySent ? "Resend LOE" : isGenerating ? "Generating..." : "Preview & Send LOE"}
@@ -922,7 +922,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 variant="outline"
                 size="sm"
                 disabled={true}
-                className="border border-gray-200 dark:border-white/15 text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm font-medium"
+                className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white cursor-not-allowed text-sm font-medium"
               >
                 <FileSignature className="h-4 w-4 mr-1" />
                 Preview & Send LOE

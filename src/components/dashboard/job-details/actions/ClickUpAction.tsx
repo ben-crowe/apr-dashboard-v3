@@ -137,7 +137,7 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
           variant="outline"
           size="sm"
           onClick={handleClick}
-          className="border border-gray-300 dark:border-white/30 bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 transition-colors text-sm font-medium"
+          className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-gray-900 transition-colors text-sm font-medium"
         >
           <ExternalLink className="w-4 h-4" />
           View in ClickUp
@@ -150,7 +150,7 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
           size="sm"
           onClick={handleClick}
           disabled={isCreating}
-          className="border border-gray-300 dark:border-white/30 bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed"
+          className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-gray-900 transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed"
         >
           {isCreating ? (
             <>

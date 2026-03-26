@@ -3,6 +3,44 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Invisible scrollbar track, subtle thumb */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(128, 128, 128, 0.2) transparent;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background: transparent;
+}
+::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+::-webkit-scrollbar-track:hover {
+  background: transparent !important;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(128, 128, 128, 0.35);
+}
+textarea::-webkit-scrollbar {
+  width: 4px;
+  background: transparent !important;
+}
+textarea::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+textarea::-webkit-scrollbar-thumb {
+  background: rgba(128, 128, 128, 0.15);
+  border-radius: 2px;
+}
+
 @layer utilities {
   @keyframes pulse-subtle {
     0%, 100% {

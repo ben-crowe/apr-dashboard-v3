@@ -115,12 +115,10 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         if (!result.success) {
           console.warn(`Failed to sync ${fieldName} to Valcre:`, result.error);
           toast.error(`Failed to sync ${getFieldDisplayName(fieldName)} to Valcre`);
-        } else {
-          toast.success(`${getFieldDisplayName(fieldName)} saved and synced to Valcre`);
         }
       } else {
         // Field saved but not synced (no Valcre job yet)
-        toast.success(`${getFieldDisplayName(fieldName)} saved`);
+        // Silent save — no toast for routine field updates
       }
     } catch (error) {
       console.error(`Error saving ${fieldName}:`, error);

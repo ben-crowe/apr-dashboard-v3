@@ -76,9 +76,9 @@ function mapDataToV3Fields(job: DetailJob, jobDetails: JobDetails) {
     '[addressstreet]': job.propertyAddress || 'Property Address Not Specified',
     
     // Appraisal Details
-    '[purposes]': job.intendedUse || 'Not Specified',
+    '[purposes]': job.propertyType || 'Not Specified',
     '[intendeduses]': job.intendedUse || 'Not Specified',
-    '[requestedvalues]': jobDetails.valuationPremises || 'Market Value',
+    '[requestedvalues]': jobDetails.valuationPremises || 'Not Specified',
     '[propertyrights]': jobDetails.propertyRightsAppraised || 'Fee Simple',
     '[reportformat]': jobDetails.reportType || 'Full Narrative Report',
     

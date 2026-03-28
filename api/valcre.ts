@@ -107,25 +107,31 @@ const SCOPE_OF_WORK_MAP: Record<string, string> = {
 // NOTE: Valcre has both "Scope" and "Authorized Use" fields - they are DIFFERENT
 // Dashboard "Intended Use" maps to "Authorized Use" (IntendedUses), NOT "Scope"
 const INTENDED_USES_MAP: Record<string, string> = {
-  // Dashboard values:
+  // Current dashboard values (matching Chris's Master Field Registry):
+  "First Mortgage Financing": "Financing",
+  "Financial Reporting": "FinancialReporting",
+  Insurance: "Financing",
+  "Internal Decision-Making": "DecisionMakingInternal",
+  "Acquisition-Disposition": "AcquisitionDisposition",
+  "Estate Planning": "EstatePlanning",
+  Litigation: "Litigation",
+  GST: "Other", // No dedicated Valcre enum — maps to Other
+
+  // Legacy dashboard values (backwards compatibility for existing jobs):
   "Financing/Refinancing": "Financing",
   Financing: "Financing",
-  Insurance: "Financing",
   Acquisition: "AcquisitionDisposition",
   Disposition: "AcquisitionDisposition",
-  Litigation: "Litigation",
-  "Estate Planning": "EstatePlanning",
   "Tax Appeal": "PropertyTaxAppeal",
   "Internal Valuation": "DecisionMakingInternal",
 
-  // Complete Valcre "Scope" dropdown options:
+  // Additional Valcre dropdown options (for completeness):
   "Acquisition/Disposition": "AcquisitionDisposition",
   Consulting: "Consulting",
   "Decision-Making/Internal": "DecisionMakingInternal",
   "Dispute Resolution": "DisputeResolution",
   Divorce: "Divorce",
   "Establish Sales Price": "EstablishSalesPrice",
-  "Financial Reporting": "FinancialReporting",
   Other: "Other",
   "Property Tax Appeal": "PropertyTaxAppeal",
   Review: "Review",

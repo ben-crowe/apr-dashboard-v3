@@ -117,7 +117,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     const hasPropertyType = !!(job?.propertyType && job?.propertyType.trim());
     if (!hasPropertyType) missingFields.push('Property Type');
 
-    if (!job?.intendedUse) missingFields.push('Intended Use');
+    if (!job?.intendedUse) missingFields.push('Authorized Use');
     if (!jobDetails?.appraisalFee) missingFields.push('Appraisal Fee');
     if (!jobDetails?.scopeOfWork) missingFields.push('Scope of Work');
     if (!jobDetails?.valuationPremises) missingFields.push('Valuation Premises');

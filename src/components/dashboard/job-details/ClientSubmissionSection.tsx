@@ -47,7 +47,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
     const fieldNames: Record<string, string> = {
       notes: 'Client Comments',
       valuationPremises: 'Valuation Premises',
-      intendedUse: 'Intended Use',
+      intendedUse: 'Authorized Use',
       assetCondition: 'Asset Condition',
       propertyTypes: 'Property Types',
       propertyName: 'Property Name',
@@ -575,7 +575,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
-            <CompactField label="Intended Use">
+            <CompactField label="Authorized Use">
               <Select
                 value={job.intendedUse || ''}
                 onValueChange={(value) => {
@@ -587,12 +587,14 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Financing/Refinancing">Financing/Refinancing</SelectItem>
-                  <SelectItem value="Acquisition">Acquisition</SelectItem>
-                  <SelectItem value="Disposition">Disposition</SelectItem>
+                  <SelectItem value="First Mortgage Financing">First Mortgage Financing</SelectItem>
+                  <SelectItem value="Financial Reporting">Financial Reporting</SelectItem>
                   <SelectItem value="Insurance">Insurance</SelectItem>
-                  <SelectItem value="Litigation">Litigation</SelectItem>
+                  <SelectItem value="Internal Decision-Making">Internal Decision-Making</SelectItem>
+                  <SelectItem value="Acquisition-Disposition">Acquisition-Disposition</SelectItem>
                   <SelectItem value="Estate Planning">Estate Planning</SelectItem>
+                  <SelectItem value="Litigation">Litigation</SelectItem>
+                  <SelectItem value="GST">GST</SelectItem>
                 </SelectContent>
               </Select>
             </CompactField>

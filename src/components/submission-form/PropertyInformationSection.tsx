@@ -180,7 +180,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="intendedUse">Intended Use</Label>
+            <Label htmlFor="intendedUse">Authorized Use</Label>
             <Select
               value={formData.intendedUse}
               onValueChange={(value) => handleSelectChange(value, "intendedUse")}
@@ -189,12 +189,14 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                 <SelectValue placeholder="Please Select" />
               </SelectTrigger>
               <SelectContent className="bg-white border-gray-300">
-                <SelectItem value="Financing/Refinancing">Financing/Refinancing</SelectItem>
-                <SelectItem value="Acquisition">Acquisition</SelectItem>
-                <SelectItem value="Disposition">Disposition</SelectItem>
+                <SelectItem value="First Mortgage Financing">First Mortgage Financing</SelectItem>
+                <SelectItem value="Financial Reporting">Financial Reporting</SelectItem>
                 <SelectItem value="Insurance">Insurance</SelectItem>
-                <SelectItem value="Litigation">Litigation</SelectItem>
+                <SelectItem value="Internal Decision-Making">Internal Decision-Making</SelectItem>
+                <SelectItem value="Acquisition-Disposition">Acquisition-Disposition</SelectItem>
                 <SelectItem value="Estate Planning">Estate Planning</SelectItem>
+                <SelectItem value="Litigation">Litigation</SelectItem>
+                <SelectItem value="GST">GST</SelectItem>
               </SelectContent>
             </Select>
           </div>

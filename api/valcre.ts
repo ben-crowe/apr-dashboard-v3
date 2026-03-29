@@ -528,10 +528,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const clientEmail = jobData.ClientEmail || "";
     const contactCompany = jobData.ClientCompany || "Direct Client";
 
-    // Parse the property address for contact/property creation
+    // Parse the property address for property creation
     const addressParts = parseAddress(
       jobData.PropertyAddress || jobData.Street || "",
     );
+
+    // Parse the client address separately for contact creation
+    // Falls back to property address if no client address provided
+    const clientAddressParts = jobData.ClientAddress
+      ? parseAddress(jobData.ClientAddress)
+      : addressParts;
 
     // Try to find existing contact by email (if provided)
     if (clientEmail) {
@@ -572,10 +578,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         Company: contactCompany,
         FirstName: clientFirstName,
         LastName: clientLastName,
-        AddressStreet: addressParts.street,
-        AddressCity: addressParts.city,
-        AddressState: addressParts.province || "AB",
-        AddressPostalCode: addressParts.postalCode || "",
+        AddressStreet: clientAddressParts.street,
+        AddressCity: clientAddressParts.city,
+        AddressState: clientAddressParts.province || "AB",
+        AddressPostalCode: clientAddressParts.postalCode || "",
         PhoneNumber: jobData.ClientPhone || "",
         Email: clientEmail,
         Title: jobData.ClientTitle || "Client",

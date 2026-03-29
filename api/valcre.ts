@@ -301,7 +301,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           const rawValue = jobData.scopeOfWork || jobData.ScopeOfWork;
           const converted = SCOPE_OF_WORK_MAP[rawValue];
           if (converted) {
-            updateData.ScopeOfWork = converted;
+            updateData.Scopes = converted;
             console.log(
               `✅ Scope of Work mapped: "${rawValue}" → "${converted}"`,
             );
@@ -1176,13 +1176,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
-    // Scope of Work → ScopeOfWork field (Nov 13, 2025 - Added)
+    // Scope of Work → Scopes field (Valcre API field name is "Scopes", not "ScopeOfWork")
     if (jobData.scopeOfWork || jobData.ScopeOfWork) {
       const rawValue = jobData.scopeOfWork || jobData.ScopeOfWork;
       const converted = SCOPE_OF_WORK_MAP[rawValue];
       console.log(`🟣 Scope of Work: "${rawValue}" → "${converted}"`);
       if (converted) {
-        jobCreateData.ScopeOfWork = converted;
+        jobCreateData.Scopes = converted;
       } else {
         console.log(
           `⚠️ WARNING: Scope of Work value "${rawValue}" not in SCOPE_OF_WORK_MAP, skipping`,

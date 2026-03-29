@@ -227,6 +227,8 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       ClientEmail: formData.clientEmail,
       ClientPhone: formData.clientPhone,
       ClientCompany: formData.clientOrganization || formData.organizationName || 'Direct Client',
+      ClientTitle: formData.clientTitle || '',
+      ClientAddress: formData.clientAddress || '',
 
       // Property address for parsing
       PropertyAddress: formData.propertyAddress,
@@ -285,6 +287,7 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       // ========== CRITICAL ENUM FIELDS ==========
       // These go directly to Valcre Job entity - must use camelCase from dashboard
       intendedUse: formData.intendedUse || 'Financing',
+      scopeOfWork: formData.scopeOfWork || '',
       reportType: formData.reportType || 'Appraisal Report',
       propertyRightsAppraised: formData.propertyRightsAppraised || 'Fee Simple Interest',
       valuationPremises: formData.valuationPremises || 'As-Is',

@@ -48,20 +48,22 @@ const ValcreAction: React.FC<ValcreActionProps> = ({
           // Property Information
           propertyName: job.propertyName || '',
           propertyAddress: job.propertyAddress,
-          propertyType: job.propertyType || 'Office',  // FIX: Use valid Valcre value
+          propertyType: job.propertyType || 'Office',
+          clientAddress: job.clientAddress || '',
 
           // LOE Fields (from form submission)
-          intendedUse: job.intendedUse || 'Financing/Refinancing',
-          valuationPremises: job.valuationPremises || 'Market Value',
+          intendedUse: job.intendedUse || '',
+          valuationPremises: job.valuationPremises || '',
 
-          // LOE Fields (defaults - not collected in initial form)
-          reportType: 'Appraisal Report',
-          propertyRightsAppraised: 'Fee Simple Interest',
-          analysisLevel: 'Comprehensive',
+          // LOE Fields — WARNING: this component does NOT have access to jobDetails (LOE data).
+          // Use LoeQuoteSection's handleCreateValcreJob instead — it reads real LOE values.
+          reportType: '',
+          propertyRightsAppraised: '',
+          analysisLevel: '',
 
-          // Financial (defaults)
-          appraisalFee: 3500,
-          retainerAmount: 350,
+          // Financial — DO NOT hardcode defaults, use 0 to signal "not set"
+          appraisalFee: 0,
+          retainerAmount: 0,
 
           // Other
           assetCondition: job.assetCondition || '',

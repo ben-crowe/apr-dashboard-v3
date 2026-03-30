@@ -140,6 +140,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         clientPhone: job.clientPhone,
         clientTitle: job.clientTitle,
         clientOrganization: job.clientOrganization,
+        clientAddress: job.clientAddress || '',  // Client address for contact entity (separate from property)
         propertyName: job.propertyName,  // Include property name for Valcre job title
         propertyAddress: job.propertyAddress,
         propertyType: job.propertyType,  // Comma-separated string: "Healthcare, Manufactured Housing"

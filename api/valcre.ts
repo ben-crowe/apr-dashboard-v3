@@ -328,11 +328,12 @@ function parseAddress(address: string): {
   province: string;
   postalCode: string;
 } {
-  // Default values for Alberta
+  // Default values - empty strings instead of assumed location
+  // Previously defaulted to Calgary/AB which caused incorrect data for non-Alberta properties
   let result = {
     street: address,
-    city: "Calgary",
-    province: "AB",
+    city: "",
+    province: "",
     postalCode: "",
   };
 
@@ -775,7 +776,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         LastName: clientLastName,
         AddressStreet: clientAddressParts.street,
         AddressCity: clientAddressParts.city,
-        AddressState: clientAddressParts.province || "AB",
+        AddressState: clientAddressParts.province || "",
         AddressPostalCode: clientAddressParts.postalCode || "",
         PhoneNumber: jobData.ClientPhone || "",
         Email: clientEmail,
@@ -863,7 +864,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         AddressStreet:
           jobData.PropertyContact.AddressStreet || addressParts.street,
         AddressCity: addressParts.city,
-        AddressState: addressParts.province || "AB",
+        AddressState: addressParts.province || "",
         AddressPostalCode: addressParts.postalCode || "",
         PhoneNumber: jobData.PropertyContact.PhoneNumber || "",
         Email: jobData.PropertyContact.Email || "",
@@ -944,7 +945,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         ? `${jobData.PropertyStreet || addressParts.street}, ${jobData.PropertyUnit}`
         : jobData.PropertyStreet || addressParts.street,
       AddressCity: jobData.PropertyCity || addressParts.city,
-      AddressState: jobData.PropertyState || addressParts.province || "AB",
+      AddressState: jobData.PropertyState || addressParts.province || "",
       AddressPostalCode:
         jobData.PropertyPostalCode || addressParts.postalCode || "",
     };
@@ -1287,7 +1288,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       PropertyContactId: propertyContactId, // This links the property contact!
 
       // Job-specific fields
-      Fee: parseDollarAmount(jobData.Fee || jobData.AppraisalFee) || 3500.0,
+      Fee: parseDollarAmount(jobData.Fee || jobData.AppraisalFee) || 0,
       Retainer:
         parseDollarAmount(jobData.Retainer || jobData.RetainerAmount) || 350.0,
 

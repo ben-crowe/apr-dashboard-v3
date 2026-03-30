@@ -30,11 +30,11 @@ function mapIntendedUse(value: string): string {
 
 // Helper function to parse city and province from address
 function parseAddress(address: string): { street: string; city: string; province: string } {
-  // Default values for Alberta
+  // Default values - empty instead of assumed location
   let result = {
     street: address,
-    city: 'Calgary',
-    province: 'AB'
+    city: '',
+    province: ''
   };
 
   // Try to parse the address

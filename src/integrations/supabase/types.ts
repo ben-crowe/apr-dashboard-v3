@@ -585,6 +585,19 @@ export type Database = {
           year_built: string | null
           zone_abbreviation: string | null
           zoning_classification: string | null
+          tenancy: string | null
+          state_of_improvements: string | null
+          status_of_improvements: string | null
+          property_subtype: string | null
+          land_metric: string | null
+          environmental_assessment: string | null
+          heritage_conservation: string | null
+          assignment_type: string | null
+          desktop_report: string | null
+          value_timeframe: string | null
+          approaches_to_value: string | null
+          transaction_status: string | null
+          zoning_status: string | null
         }
         Insert: {
           assessed_value?: number | null
@@ -612,6 +625,19 @@ export type Database = {
           year_built?: string | null
           zone_abbreviation?: string | null
           zoning_classification?: string | null
+          tenancy?: string | null
+          state_of_improvements?: string | null
+          status_of_improvements?: string | null
+          property_subtype?: string | null
+          land_metric?: string | null
+          environmental_assessment?: string | null
+          heritage_conservation?: string | null
+          assignment_type?: string | null
+          desktop_report?: string | null
+          value_timeframe?: string | null
+          approaches_to_value?: string | null
+          transaction_status?: string | null
+          zoning_status?: string | null
         }
         Update: {
           assessed_value?: number | null
@@ -639,6 +665,19 @@ export type Database = {
           year_built?: string | null
           zone_abbreviation?: string | null
           zoning_classification?: string | null
+          tenancy?: string | null
+          state_of_improvements?: string | null
+          status_of_improvements?: string | null
+          property_subtype?: string | null
+          land_metric?: string | null
+          environmental_assessment?: string | null
+          heritage_conservation?: string | null
+          assignment_type?: string | null
+          desktop_report?: string | null
+          value_timeframe?: string | null
+          approaches_to_value?: string | null
+          transaction_status?: string | null
+          zoning_status?: string | null
         }
         Relationships: [
           {

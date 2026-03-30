@@ -173,7 +173,21 @@ export function useJobData(jobId: string) {
               assessmentYear: propertyData.assessment_year,
               landAssessmentValue: propertyData.land_assessment_value,
               improvedAssessmentValue: propertyData.improved_assessment_value,
-              totalAssessmentValue: propertyData.total_assessment_value
+              totalAssessmentValue: propertyData.total_assessment_value,
+              // VALTA-FIELD-SPEC fields
+              tenancy: propertyData.tenancy,
+              stateOfImprovements: propertyData.state_of_improvements,
+              statusOfImprovements: propertyData.status_of_improvements,
+              propertySubtype: propertyData.property_subtype,
+              landMetric: propertyData.land_metric,
+              environmentalAssessment: propertyData.environmental_assessment,
+              heritageConservation: propertyData.heritage_conservation,
+              assignmentType: propertyData.assignment_type,
+              desktopReport: propertyData.desktop_report,
+              valueTimeframe: propertyData.value_timeframe,
+              approachesToValue: propertyData.approaches_to_value,
+              transactionStatus: propertyData.transaction_status,
+              zoningStatus: propertyData.zoning_status
             });
           }
 

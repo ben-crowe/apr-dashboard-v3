@@ -23,13 +23,18 @@ export function useSaveJobDetails(jobId: string) {
         ];
         
         const propertyInfoFields = [
-          'yearBuilt', 'buildingSize', 'legalDescription', 
-          'numberOfUnits', 'parkingSpaces', 'zoningClassification', 
-          'zoneAbbreviation', 'landUseDesignation', 'floodZone', 
-          'utilities', 'parcelNumber', 'usableLandSf', 
-          'usableLandAcres', 'grossLandSf', 'grossLandAcres', 
-          'assessedValue', 'taxes', 'assessmentYear', 
-          'landAssessmentValue', 'improvedAssessmentValue', 'totalAssessmentValue'
+          'yearBuilt', 'buildingSize', 'legalDescription',
+          'numberOfUnits', 'parkingSpaces', 'zoningClassification',
+          'zoneAbbreviation', 'landUseDesignation', 'floodZone',
+          'utilities', 'parcelNumber', 'usableLandSf',
+          'usableLandAcres', 'grossLandSf', 'grossLandAcres',
+          'assessedValue', 'taxes', 'assessmentYear',
+          'landAssessmentValue', 'improvedAssessmentValue', 'totalAssessmentValue',
+          // VALTA-FIELD-SPEC fields (13 new)
+          'tenancy', 'stateOfImprovements', 'statusOfImprovements',
+          'propertySubtype', 'landMetric', 'environmentalAssessment', 'heritageConservation',
+          'assignmentType', 'desktopReport', 'valueTimeframe',
+          'approachesToValue', 'transactionStatus', 'zoningStatus'
         ];
         
         // Check if we need to update job_loe_details

@@ -326,8 +326,8 @@ export const V3_TEMPLATE = `<!DOCTYPE html>
         <div class="header-content">
             <div class="date">[date.created]</div>
             <div class="address-block">
-                <div class="company-line">[propertycontact.company] | [propertycontact.firstname] [propertycontact.lastname], [propertycontact.title]</div>
-                <div class="address-line">[propertycontact.addressstreet]</div>
+                <div class="company-line">[client.company] | [client.firstname] [client.lastname], [client.title]</div>
+                <div class="address-line">[client.addressstreet]</div>
             </div>
         </div>
     </div>
@@ -352,7 +352,7 @@ export const V3_TEMPLATE = `<!DOCTYPE html>
             </tr>
             <tr>
                 <td>Authorized Client</td>
-                <td>[propertycontact.company]</td>
+                <td>[client.company]</td>
             </tr>
             <tr>
                 <td>Authorized Users</td>
@@ -444,8 +444,8 @@ export const V3_TEMPLATE = `<!DOCTYPE html>
             
             <div class="signature-field">
                 <div class="signature-label">Signed By</div>
-                <div>[propertycontact.firstname] [propertycontact.lastname], [propertycontact.title]</div>
-                <div style="font-size: 12px; color: #666; margin-top: 5px;">[propertycontact.company]</div>
+                <div>[client.firstname] [client.lastname], [client.title]</div>
+                <div style="font-size: 12px; color: #666; margin-top: 5px;">[client.company]</div>
             </div>
         </div>
     </div>

@@ -64,12 +64,12 @@ function mapDataToV3Fields(job: DetailJob, jobDetails: JobDetails) {
     // Date
     '[date.created]': currentDate,
     
-    // Client/Property Contact Information
-    '[propertycontact.company]': job.clientOrganization || 'Not Specified',
-    '[propertycontact.firstname]': job.clientFirstName || '',
-    '[propertycontact.lastname]': job.clientLastName || '',
-    '[propertycontact.title]': job.clientTitle || 'Not Specified',
-    '[propertycontact.addressstreet]': job.clientAddress || 'Not Specified',
+    // Client Contact Information
+    '[client.company]': job.clientOrganization || 'Not Specified',
+    '[client.firstname]': job.clientFirstName || '',
+    '[client.lastname]': job.clientLastName || '',
+    '[client.title]': job.clientTitle || 'Not Specified',
+    '[client.addressstreet]': job.clientAddress || 'Not Specified',
     
     // Property Details
     '[name]': jobDetails.jobNumber || 'PENDING-' + Date.now().toString().slice(-6),

@@ -7,6 +7,7 @@ import {
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SectionProps } from "./types";
 import { toast } from "sonner";
 import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField } from "./ValcreStyles";
@@ -54,6 +55,11 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
     onUpdateDetails({
       [name]: processedValue
     });
+  };
+
+  const handleSelectChange = (value: string, name: string) => {
+    if (!onUpdateDetails) return;
+    onUpdateDetails({ [name]: value });
   };
 
   // Handle currency field changes
@@ -129,6 +135,84 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
               <span>Test Data</span>
             </button>
           </div>
+
+          {/* Appraisal Assignment Section — VALTA fields */}
+          <SectionGroup title="Appraisal Assignment">
+            <TwoColumnFields>
+              <CompactField label="Assignment Type">
+                <Select value={jobDetails.assignmentType || ''} onValueChange={value => handleSelectChange(value, 'assignmentType')}>
+                  <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Standard">Standard</SelectItem>
+                    <SelectItem value="Update">Update</SelectItem>
+                    <SelectItem value="Retrospective">Retrospective</SelectItem>
+                    <SelectItem value="Desktop">Desktop</SelectItem>
+                  </SelectContent>
+                </Select>
+              </CompactField>
+
+              <CompactField label="Desktop Report">
+                <Select value={jobDetails.desktopReport || ''} onValueChange={value => handleSelectChange(value, 'desktopReport')}>
+                  <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Yes">Yes</SelectItem>
+                    <SelectItem value="No">No</SelectItem>
+                  </SelectContent>
+                </Select>
+              </CompactField>
+
+              <CompactField label="Value Timeframe">
+                <Select value={jobDetails.valueTimeframe || ''} onValueChange={value => handleSelectChange(value, 'valueTimeframe')}>
+                  <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Current">Current</SelectItem>
+                    <SelectItem value="Retrospective">Retrospective</SelectItem>
+                    <SelectItem value="Prospective">Prospective</SelectItem>
+                  </SelectContent>
+                </Select>
+              </CompactField>
+
+              <CompactField label="Approaches to Value">
+                <Select value={jobDetails.approachesToValue || ''} onValueChange={value => handleSelectChange(value, 'approachesToValue')}>
+                  <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="All Applicable">All Applicable</SelectItem>
+                    <SelectItem value="Cost Approach">Cost Approach</SelectItem>
+                    <SelectItem value="Direct Comparison">Direct Comparison</SelectItem>
+                    <SelectItem value="Income Approach">Income Approach</SelectItem>
+                    <SelectItem value="Cost + Direct Comparison">Cost + Direct Comparison</SelectItem>
+                    <SelectItem value="Cost + Income">Cost + Income</SelectItem>
+                    <SelectItem value="Direct Comparison + Income">Direct Comparison + Income</SelectItem>
+                  </SelectContent>
+                </Select>
+              </CompactField>
+
+              <CompactField label="Transaction Status">
+                <Select value={jobDetails.transactionStatus || ''} onValueChange={value => handleSelectChange(value, 'transactionStatus')}>
+                  <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Arm's Length">Arm's Length</SelectItem>
+                    <SelectItem value="Non-Arm's Length">Non-Arm's Length</SelectItem>
+                    <SelectItem value="Listing">Listing</SelectItem>
+                    <SelectItem value="Under Contract">Under Contract</SelectItem>
+                    <SelectItem value="REO/Bank Sale">REO/Bank Sale</SelectItem>
+                  </SelectContent>
+                </Select>
+              </CompactField>
+
+              <CompactField label="Zoning Status">
+                <Select value={jobDetails.zoningStatus || ''} onValueChange={value => handleSelectChange(value, 'zoningStatus')}>
+                  <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Legal Conforming">Legal Conforming</SelectItem>
+                    <SelectItem value="Legal Non-Conforming">Legal Non-Conforming</SelectItem>
+                    <SelectItem value="Illegal">Illegal</SelectItem>
+                    <SelectItem value="No Zoning">No Zoning</SelectItem>
+                  </SelectContent>
+                </Select>
+              </CompactField>
+            </TwoColumnFields>
+          </SectionGroup>
 
           {/* Property Site Section */}
           <SectionGroup title="Property Site">

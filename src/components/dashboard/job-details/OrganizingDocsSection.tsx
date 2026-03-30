@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField } from "./ValcreStyles";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SectionProps } from "./types";
 import { sendToValcre } from "@/utils/webhooks";
 import { supabase } from "@/integrations/supabase/client";
@@ -128,6 +129,13 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
     autoSaveField(name, processedValue);
   };
 
+  const handleSelectChange = (value: string, name: string) => {
+    if (onUpdateDetails) {
+      onUpdateDetails({ [name]: value });
+    }
+    autoSaveField(name, value);
+  };
+
   // Fill test data for Section 3A
   const fillTestData = () => {
     if (!onUpdateDetails) return;
@@ -219,6 +227,91 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
                 value={jobDetails.parkingSpaces || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                className="h-7 text-sm max-w-[200px]"
+              />
+            </CompactField>
+
+            <CompactField label="Tenancy">
+              <Select value={jobDetails.tenancy || ''} onValueChange={value => handleSelectChange(value, 'tenancy')}>
+                <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Owner-Occupied">Owner-Occupied</SelectItem>
+                  <SelectItem value="Single-Tenant">Single-Tenant</SelectItem>
+                  <SelectItem value="Multi-Tenant">Multi-Tenant</SelectItem>
+                  <SelectItem value="Vacant">Vacant</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+
+            <CompactField label="State of Improvements">
+              <Select value={jobDetails.stateOfImprovements || ''} onValueChange={value => handleSelectChange(value, 'stateOfImprovements')}>
+                <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Proposed">Proposed</SelectItem>
+                  <SelectItem value="Under Construction">Under Construction</SelectItem>
+                  <SelectItem value="Complete">Complete</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+
+            <CompactField label="Status of Improvements">
+              <Select value={jobDetails.statusOfImprovements || ''} onValueChange={value => handleSelectChange(value, 'statusOfImprovements')}>
+                <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="As Is">As Is</SelectItem>
+                  <SelectItem value="As Complete">As Complete</SelectItem>
+                  <SelectItem value="As Stabilized">As Stabilized</SelectItem>
+                  <SelectItem value="As Proposed">As Proposed</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+
+            <CompactField label="Property Subtype">
+              <Select value={jobDetails.propertySubtype || ''} onValueChange={value => handleSelectChange(value, 'propertySubtype')}>
+                <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Low-Rise">Low-Rise</SelectItem>
+                  <SelectItem value="Mid-Rise">Mid-Rise</SelectItem>
+                  <SelectItem value="High-Rise">High-Rise</SelectItem>
+                  <SelectItem value="Garden">Garden</SelectItem>
+                  <SelectItem value="Walk-Up">Walk-Up</SelectItem>
+                  <SelectItem value="Townhouse">Townhouse</SelectItem>
+                  <SelectItem value="Mixed-Use">Mixed-Use</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+
+            <CompactField label="Land Metric">
+              <Select value={jobDetails.landMetric || ''} onValueChange={value => handleSelectChange(value, 'landMetric')}>
+                <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Square Feet">Square Feet</SelectItem>
+                  <SelectItem value="Acres">Acres</SelectItem>
+                  <SelectItem value="Hectares">Hectares</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+
+            <CompactField label="Environmental Assessment">
+              <Input
+                id="environmentalAssessment"
+                name="environmentalAssessment"
+                value={jobDetails.environmentalAssessment || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                placeholder="EA reference..."
+                className="h-7 text-sm max-w-[200px]"
+              />
+            </CompactField>
+
+            <CompactField label="Heritage / Conservation">
+              <Input
+                id="heritageConservation"
+                name="heritageConservation"
+                value={jobDetails.heritageConservation || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                placeholder="HC designation..."
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>

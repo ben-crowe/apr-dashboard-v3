@@ -195,60 +195,15 @@ Deno.serve(async (req) => {
     const hubUrl = 'https://apr-dashboard-v3.vercel.app'
     const jobUrl = `${hubUrl}/dashboard/job/${job.id}`
 
-    // Format submission date/time as YY.MM.DD / H:MM AM/PM
-    const submissionDate = new Date(job.created_at)
-    const year = String(submissionDate.getFullYear()).slice(-2)
-    const month = String(submissionDate.getMonth() + 1).padStart(2, '0')
-    const day = String(submissionDate.getDate()).padStart(2, '0')
-    let hours = submissionDate.getHours()
-    const minutes = String(submissionDate.getMinutes()).padStart(2, '0')
-    const ampm = hours >= 12 ? 'PM' : 'AM'
-    hours = hours % 12 || 12
-    const formattedDateTime = `${year}.${month}.${day} / ${hours}:${minutes} ${ampm}`
-
-    // Determine label based on source
-    const jobSource = job.source || 'webform' // Default to webform for backward compatibility
-    let sourceLabel = 'New Client Request Received'
-    if (jobSource === 'manual') {
-      sourceLabel = 'Job Created Manually'
-    } else if (jobSource === 'api') {
-      sourceLabel = 'Job Created via API'
-    } else if (jobSource === 'import') {
-      sourceLabel = 'Job Imported'
-    } else if (jobSource === 'crm') {
-      sourceLabel = 'Job Created via CRM'
-    }
-
-    // Build task description with new format (Stage 1)
-    const description = `📍 **NEW APPRAISAL REQUEST:** [APR Dashboard](${jobUrl})
-📍 **VALCRE JOB NUMBER:**
+    // Build task description — MUST match production format from src/utils/webhooks/clickup.ts
+    const clientName = `${job.client_first_name || ''} ${job.client_last_name || ''}`.trim()
+    const notesLine = job.notes ? `\n**Notes:** ${job.notes}` : ''
+    const description = `📍 **NEW JOB ARRIVED - [View in APR Hub](${jobUrl})**
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-**${sourceLabel}:**  ${formattedDateTime}
-▸ LOE Sent:
-▸ LOE Signed:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-**CLIENT INFORMATION**
-• Name:    ${job.client_first_name || job.clientFirstName || ''} ${job.client_last_name || job.clientLastName || ''}
-• Org:     ${job.client_organization || job.clientOrganization || ''}
-• Email:   ${job.client_email || job.clientEmail || ''}
-• Phone:   ${job.client_phone || job.clientPhone || ''}
-
-**PROPERTY INFORMATION**
-• Property:  ${propertyName || ''}
-• Address:   ${propertyAddress || ''}
-• Type:      ${job.property_type || job.propertyType || ''}
-• Use:       ${job.intended_use || job.intendedUse || ''}
-• Condition: ${job.asset_condition || job.assetCondition || ''}
-• Premise:   ${job.valuation_premises || job.valuationPremises || ''}
-
-**PROPERTY CONTACT**
-• Name:  ${job.property_contact_first_name || job.propertyContactFirstName || ''} ${job.property_contact_last_name || job.propertyContactLastName || ''}
-• Email: ${job.property_contact_email || job.propertyContactEmail || ''}
-• Phone: ${job.property_contact_phone || job.propertyContactPhone || ''}
-
-**CLIENT COMMENTS**
-• ${job.notes || job.additionalComments || ''}`
+**Client:** ${clientName}
+**Property:** ${propertyAddress}
+**Type:** ${job.property_type || job.propertyType || ''}
+**Intended Use:** ${job.intended_use || job.intendedUse || ''}${notesLine}`
 
     // Build custom_fields array for Valta production
     // Maps Supabase job data to ClickUp custom field IDs
@@ -327,6 +282,7 @@ Deno.serve(async (req) => {
       priority: config.priority || null, // Use config priority (4=low for production, null for dev)
       status: 'to do', // Put in "to do" status (default open status)
       notify_all: false,
+      tags: ['NEW ARRIVAL', 'APR Hub'],
       custom_fields: customFields.length > 0 ? customFields : undefined,
     }
 

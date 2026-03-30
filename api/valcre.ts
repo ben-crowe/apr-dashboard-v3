@@ -245,29 +245,36 @@ async function setValtaCustomFields(
       let endpoint: string;
       let body: any;
 
-      if (config.type === "SingleOption" || config.type === "MultiOption") {
-        // Select fields use AvailableValueId references
+      if (config.type === "SingleOption") {
+        // SingleOption uses AvailableValueId (single object)
         endpoint = `${API_BASE}/CustomFields/UpdateSelectFieldValue`;
-
-        // Resolve text values to AvailableValueIds
-        const textValues = config.type === "MultiOption" && typeof value === "string"
-          ? value.split(",").map((v: string) => v.trim())
-          : [String(value)];
-
-        const selectedValues = textValues
-          .map((v) => config.options?.[v])
-          .filter((id): id is number => id !== undefined)
-          .map((id) => ({ AvailableValueId: id }));
-
-        if (selectedValues.length === 0) {
+        const optionId = config.options?.[String(value)];
+        if (!optionId) {
           console.log(`  Custom field ${fieldName}: no matching option for "${value}", skipping`);
           continue;
         }
-
         body = {
           EntityId: jobId,
           CustomFieldId: fieldDefId,
-          SelectedValues: selectedValues,
+          AvailableValueId: optionId,
+        };
+      } else if (config.type === "MultiOption") {
+        // MultiOption uses SelectedIds as a STRING (not array — Valcre OData quirk)
+        endpoint = `${API_BASE}/CustomFields/UpdateSelectFieldValue`;
+        const textValues = typeof value === "string"
+          ? value.split(",").map((v: string) => v.trim())
+          : [String(value)];
+        const ids = textValues
+          .map((v) => config.options?.[v])
+          .filter((id): id is number => id !== undefined);
+        if (ids.length === 0) {
+          console.log(`  Custom field ${fieldName}: no matching options for "${value}", skipping`);
+          continue;
+        }
+        body = {
+          EntityId: jobId,
+          CustomFieldId: fieldDefId,
+          SelectedIds: ids.join(","), // Must be string, not array
         };
       } else {
         // String, Boolean — use UpdateFieldValue

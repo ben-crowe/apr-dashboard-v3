@@ -31,6 +31,40 @@ const PROD_CONFIG = {
 // Select configuration based on environment
 const config = CLICKUP_ENV === 'production' ? PROD_CONFIG : DEV_CONFIG
 
+// ClickUp Custom Field IDs — per-list (Valta production)
+// Fetched 2026-03-30 via GET /api/v2/list/901402094744/field
+const VALTA_CUSTOM_FIELD_IDS: Record<string, string> = {
+  jobNumber:          'f2ea22ec-519d-458c-bcb5-753987673cd0',
+  clientName:         '5f6e2e64-e5e6-4813-aeda-fa670093d024',
+  clientTitle:        '85fdaf24-e43b-4b24-82f5-17c6e7fc37cd',
+  clientOrganization: '65ebb5d0-6f75-41e8-a1d4-7acbfe056bd6',
+  clientAddress:      '783add3d-2750-497e-9c7c-34db10386433',
+  clientPhone:        'ec2175d8-8e77-4159-83b2-2893e1df1423',
+  clientEmail:        '27ce749d-10a1-4156-befc-72fc49ded05d',
+  propertyName:       '19f3541a-9ec6-4121-9629-da6d46727100',
+  propertyAddress:    '24eac8e4-7f41-447b-827e-9091a5865218',
+  propertyType:       '8afec821-c806-4c66-8a4d-9ffeb3321323',
+  propertySubtype:    '75e40c0c-9152-431e-9f4e-09cd5b43790a',
+  stateOfImprovements:'50fc4268-b555-4f21-8734-379ba8709fa8',
+  statusOfImprovements:'34d2fa85-b62d-40cc-925a-48f767e6e0d3',
+  intendedUse:        'd879f9bc-797d-44e4-a4a4-50b01dcb755b',
+  interestAppraised:  '6499e6a2-9a4d-406f-9387-178ded86d6a8',
+  reportType:         '9712f537-cffa-4779-9bbf-5fb6e2275933',
+  paymentTerms:       '5cc27228-1686-4cff-8e92-9c6861f3b544',
+  zoningStatus:       '0654ea5e-c4cd-4ed0-82e9-3bf213ae8600',
+  desktopReport:      '34204fa5-872b-4227-b446-10f056a1a6ee',
+  fee:                'f7ebc840-da7f-48fc-864d-e3b60f8ff0fa',
+  retainer:           'a40716f8-3f19-4051-b71e-23ca08ed88de',
+  deliveryDate:       'e1a3b51c-e8cd-40bc-ab15-f6eae99ddbd7',
+  notes:              '5a1ed0aa-ecb5-48d3-9919-565da2c4a76b',
+  comments:           'e1e15216-d3c8-42ea-a978-aea442d78fec',
+  valcreLink:         '4d555148-c2a8-4d39-b475-80821d5c6058',
+  dashboardLink:      'de43430c-e269-4d36-92e8-504b26a4cd57', // APR Dashboard Link (dev list)
+  inspectionDate:     '5a745535-f90f-4b62-be29-5d2df8abb453',
+  dateReceived:       '84f34dd2-2a22-4d2a-a3f6-89a631a00fe4',
+  dateContractCreated:'387d8f85-fe24-472c-bc27-c63939e6b45f',
+}
+
 // Use config values throughout the function
 const CLICKUP_LIST_ID = config.listId
 const CLICKUP_WORKSPACE_ID = config.workspaceId
@@ -216,6 +250,74 @@ Deno.serve(async (req) => {
 **CLIENT COMMENTS**
 • ${job.notes || job.additionalComments || ''}`
 
+    // Build custom_fields array for Valta production
+    // Maps Supabase job data to ClickUp custom field IDs
+    const customFields: Array<{id: string, value: any}> = []
+    const F = VALTA_CUSTOM_FIELD_IDS
+
+    // Helper: add field if value exists
+    const addField = (fieldId: string | undefined, value: any) => {
+      if (fieldId && value !== undefined && value !== null && value !== '') {
+        customFields.push({ id: fieldId, value })
+      }
+    }
+
+    // Get LOE details (joined via select)
+    const loe = Array.isArray(job.job_loe_details) ? job.job_loe_details[0] : job.job_loe_details
+    const propInfo = Array.isArray(job.job_property_info) ? job.job_property_info[0] : job.job_property_info
+
+    // Client fields
+    const clientFullName = `${job.client_first_name || ''} ${job.client_last_name || ''}`.trim()
+    addField(F.clientName, clientFullName)
+    addField(F.clientTitle, job.client_title)
+    addField(F.clientOrganization, job.client_organization)
+    addField(F.clientAddress, job.client_address)
+    addField(F.clientPhone, job.client_phone)
+    addField(F.clientEmail, job.client_email)
+
+    // Property fields
+    addField(F.propertyName, job.property_name)
+    addField(F.propertyAddress, job.property_address)
+    addField(F.propertyType, job.property_type)
+
+    // Appraisal fields (from job_loe_details)
+    addField(F.intendedUse, job.intended_use)
+    if (loe) {
+      addField(F.reportType, loe.report_type)
+      addField(F.interestAppraised, loe.property_rights_appraised)
+      addField(F.paymentTerms, loe.payment_terms)
+      addField(F.deliveryDate, loe.delivery_date)
+      // Fee: ClickUp currency fields store in cents
+      if (loe.appraisal_fee) {
+        addField(F.fee, loe.appraisal_fee * 100)
+      }
+      if (loe.retainer_amount) {
+        addField(F.retainer, parseFloat(String(loe.retainer_amount).replace(/[$,]/g, '')))
+      }
+    }
+
+    // Property info fields (from job_property_info — VALTA fields)
+    if (propInfo) {
+      addField(F.propertySubtype, propInfo.property_subtype)
+      addField(F.stateOfImprovements, propInfo.state_of_improvements)
+      addField(F.statusOfImprovements, propInfo.status_of_improvements)
+      addField(F.zoningStatus, propInfo.zoning_status)
+      addField(F.desktopReport, propInfo.desktop_report)
+    }
+
+    // Job number and links
+    addField(F.jobNumber, valcreJobNumber !== 'PENDING' ? valcreJobNumber : undefined)
+    addField(F.dashboardLink, jobUrl)
+    if (job.job_number) {
+      addField(F.valcreLink, `https://app.valcre.com`)
+    }
+
+    // Notes
+    addField(F.notes, job.notes)
+    addField(F.dateReceived, new Date(job.created_at).getTime())
+
+    console.log(`📋 Custom fields to populate: ${customFields.length}`)
+
     // Build task payload
     // CRITICAL: Use ONLY markdown_description field for clickable links to work
     // ClickUp processes markdown [text](url) syntax in markdown_description field
@@ -224,7 +326,8 @@ Deno.serve(async (req) => {
       markdown_description: description,
       priority: config.priority || null, // Use config priority (4=low for production, null for dev)
       status: 'to do', // Put in "to do" status (default open status)
-      notify_all: false
+      notify_all: false,
+      custom_fields: customFields.length > 0 ? customFields : undefined,
     }
 
     // Determine API endpoint - use template endpoint if template_id is set

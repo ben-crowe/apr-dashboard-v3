@@ -248,7 +248,7 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
                 <Input id="netRentableAreaSf" name="netRentableAreaSf" type="text" value={formatNumber(jobDetails.netRentableAreaSf || '')} onChange={handleNumberChange} className="h-7 text-sm max-w-[200px]" />
               </CompactField>
               <CompactField label="Year Built">
-                <Input id="yearBuilt" name="yearBuilt" type="number" value={jobDetails.yearBuilt || ''} onChange={handleChange} className="h-7 text-sm max-w-[200px]" />
+                <Input id="yearBuilt" name="yearBuilt" type="number" min={1800} max={2099} placeholder="e.g. 2005" value={jobDetails.yearBuilt || ''} onChange={handleChange} className="h-7 text-sm max-w-[200px]" />
               </CompactField>
               <CompactField label="Buildable Land (SF)">
                 <Input id="usableLandSf" name="usableLandSf" type="text" value={formatNumber(jobDetails.usableLandSf || '')} onChange={handleNumberChange} className="h-7 text-sm max-w-[200px]" />

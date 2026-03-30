@@ -151,6 +151,21 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       if (formData.paymentTerms) syncPayload.PaymentTerms = formData.paymentTerms;
       // REMOVED: disbursementPercentage - legacy field no longer used (client is now independent appraiser)
 
+      // VALTA custom fields — synced to Valcre as custom fields (IDs 12042-12054)
+      if (formData.tenancy) syncPayload.tenancy = formData.tenancy;
+      if (formData.stateOfImprovements) syncPayload.stateOfImprovements = formData.stateOfImprovements;
+      if (formData.statusOfImprovements) syncPayload.statusOfImprovements = formData.statusOfImprovements;
+      if (formData.propertySubtype) syncPayload.propertySubtype = formData.propertySubtype;
+      if (formData.landMetric) syncPayload.landMetric = formData.landMetric;
+      if (formData.environmentalAssessment) syncPayload.environmentalAssessment = formData.environmentalAssessment;
+      if (formData.heritageConservation) syncPayload.heritageConservation = formData.heritageConservation;
+      if (formData.assignmentType) syncPayload.assignmentType = formData.assignmentType;
+      if (formData.desktopReport) syncPayload.desktopReport = formData.desktopReport;
+      if (formData.valueTimeframe) syncPayload.valueTimeframe = formData.valueTimeframe;
+      if (formData.approachesToValue) syncPayload.approachesToValue = formData.approachesToValue;
+      if (formData.transactionStatus) syncPayload.transactionStatus = formData.transactionStatus;
+      if (formData.zoningStatus) syncPayload.zoningStatus = formData.zoningStatus;
+
       console.log('📤 Sync payload prepared:', syncPayload);
 
       // Use Vercel serverless function endpoint
@@ -297,6 +312,21 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       YearBuilt: formData.yearBuilt || 0,
       GrossBuildingAreaSf: formData.grossBuildingAreaSf || 0,
       NetRentableAreaSf: formData.netRentableAreaSf || 0,
+
+      // VALTA custom fields — synced to Valcre as custom fields (IDs 12042-12054)
+      tenancy: formData.tenancy || '',
+      stateOfImprovements: formData.stateOfImprovements || '',
+      statusOfImprovements: formData.statusOfImprovements || '',
+      propertySubtype: formData.propertySubtype || '',
+      landMetric: formData.landMetric || '',
+      environmentalAssessment: formData.environmentalAssessment || '',
+      heritageConservation: formData.heritageConservation || '',
+      assignmentType: formData.assignmentType || '',
+      desktopReport: formData.desktopReport || '',
+      valueTimeframe: formData.valueTimeframe || '',
+      approachesToValue: formData.approachesToValue || '',
+      transactionStatus: formData.transactionStatus || '',
+      zoningStatus: formData.zoningStatus || '',
 
       // Include update type if present (for sync operations)
       updateType: data.updateType,

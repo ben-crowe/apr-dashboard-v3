@@ -137,6 +137,112 @@ const INTENDED_USES_MAP: Record<string, string> = {
   Review: "Review",
 };
 
+// VALTA Custom Field IDs — created 2026-03-30 via POST /api/v1/CustomFields
+// These are Job-level custom fields visible in Valcre's custom fields section
+const VALTA_CUSTOM_FIELD_IDS: Record<string, number> = {
+  tenancy: 12042,
+  stateOfImprovements: 12043,
+  statusOfImprovements: 12044,
+  propertySubtype: 12045,
+  landMetric: 12046,
+  environmentalAssessment: 12047,
+  heritageConservation: 12048,
+  assignmentType: 12049,
+  desktopReport: 12050,
+  valueTimeframe: 12051,
+  approachesToValue: 12052,
+  transactionStatus: 12053,
+  zoningStatus: 12054,
+};
+
+// Custom field types — determines which API endpoint to use
+const VALTA_FIELD_TYPES: Record<string, string> = {
+  tenancy: "SingleOption",
+  stateOfImprovements: "SingleOption",
+  statusOfImprovements: "SingleOption",
+  propertySubtype: "SingleOption",
+  landMetric: "SingleOption",
+  environmentalAssessment: "String",
+  heritageConservation: "String",
+  assignmentType: "SingleOption",
+  desktopReport: "Boolean",
+  valueTimeframe: "SingleOption",
+  approachesToValue: "MultiOption",
+  transactionStatus: "SingleOption",
+  zoningStatus: "SingleOption",
+};
+
+// Set VALTA custom field values on a Valcre job
+// Called after job creation or update when VALTA fields are present
+async function setValtaCustomFields(
+  token: string,
+  jobId: number,
+  jobData: any,
+): Promise<{ success: number; failed: number; errors: string[] }> {
+  const results = { success: 0, failed: 0, errors: [] as string[] };
+  const API_BASE = "https://api-core.valcre.com/api/v1";
+
+  for (const [fieldName, fieldDefId] of Object.entries(VALTA_CUSTOM_FIELD_IDS)) {
+    const value = jobData[fieldName];
+    if (value === undefined || value === null || value === "") continue;
+
+    const fieldType = VALTA_FIELD_TYPES[fieldName];
+
+    try {
+      let endpoint: string;
+      let body: any;
+
+      if (fieldType === "SingleOption" || fieldType === "MultiOption") {
+        endpoint = `${API_BASE}/CustomFields/UpdateSelectFieldValue`;
+        // For select fields, value is sent as an array of selected option strings
+        const values = fieldType === "MultiOption" && typeof value === "string"
+          ? value.split(",").map((v: string) => v.trim())
+          : [value];
+        body = {
+          entityId: jobId,
+          fieldDefinitionId: fieldDefId,
+          type: 6, // 6 = Job entity
+          values: values,
+        };
+      } else {
+        // String, Boolean, etc.
+        endpoint = `${API_BASE}/CustomFields/UpdateFieldValue`;
+        body = {
+          entityId: jobId,
+          fieldDefinitionId: fieldDefId,
+          type: 6,
+          value: fieldType === "Boolean" ? (value === "Yes" || value === true) : String(value),
+        };
+      }
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (response.ok || response.status === 204) {
+        console.log(`  Custom field ${fieldName}=${value} → OK`);
+        results.success++;
+      } else {
+        const errText = await response.text();
+        console.error(`  Custom field ${fieldName} FAILED: ${errText}`);
+        results.errors.push(`${fieldName}: ${errText}`);
+        results.failed++;
+      }
+    } catch (err: any) {
+      console.error(`  Custom field ${fieldName} ERROR: ${err.message}`);
+      results.errors.push(`${fieldName}: ${err.message}`);
+      results.failed++;
+    }
+  }
+
+  return results;
+}
+
 // Helper function to parse dollar amounts (strip $ and commas)
 function parseDollarAmount(value: string | number | undefined): number {
   if (!value) return 0;
@@ -392,10 +498,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             : paymentSection;
         }
 
-        // VALTA-FIELD-SPEC fields — NOT in Valcre native schema.
-        // These 13 fields live in Supabase job_property_info only.
-        // Sending them to Valcre causes 500 error: "property does not exist on type Job".
-        // TODO: When Valcre custom fields are created, map to custom field IDs here.
+        // VALTA-FIELD-SPEC fields — stored as Valcre custom fields (IDs 12042-12054).
+        // NOT in Valcre native Job schema — set via CustomFields/UpdateFieldValue after PATCH.
+        // See setValtaCustomFields() call after successful update response.
 
         console.log(
           "Sending update to Valcre:",
@@ -447,6 +552,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.log("Update response:", updateResponseText);
 
         if (updateResponse.ok || updateResponse.status === 204) {
+          // Set VALTA custom fields if any are present in the update
+          let customFieldResults = { success: 0, failed: 0, errors: [] as string[] };
+          const hasValtaFields = Object.keys(VALTA_CUSTOM_FIELD_IDS).some(
+            (key) => jobData[key] !== undefined && jobData[key] !== null && jobData[key] !== "",
+          );
+          if (hasValtaFields) {
+            console.log("Setting VALTA custom fields on job update...");
+            customFieldResults = await setValtaCustomFields(token, jobData.jobId, jobData);
+            console.log(
+              `VALTA custom fields: ${customFieldResults.success} set, ${customFieldResults.failed} failed`,
+            );
+          }
+
           return res
             .status(200)
             .setHeader("Access-Control-Allow-Origin", "*")
@@ -456,6 +574,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               updateType: jobData.updateType,
               updatedFields: Object.keys(updateData),
               valcreResponse: updateResponseText || "No content (success)",
+              customFields: hasValtaFields ? customFieldResults : undefined,
             });
         } else {
           console.error("Update failed:", updateResponseText);
@@ -1200,10 +1319,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       jobCreateData.AnalysisLevel = ANALYSIS_LEVEL_MAP[jobData.analysisLevel];
     }
 
-    // VALTA-FIELD-SPEC fields — NOT in Valcre native schema.
-    // These 13 fields live in Supabase job_property_info only.
-    // Sending them crashes Valcre job creation with 500 error.
-    // TODO: When Valcre custom fields are created, map to custom field IDs here.
+    // VALTA-FIELD-SPEC fields — stored as Valcre custom fields (IDs 12042-12054).
+    // NOT in Valcre native Job schema — set via CustomFields/UpdateFieldValue after creation.
+    // See setValtaCustomFields() call after successful job creation response.
 
     console.log(
       "Sending Job data to Valcre:",
@@ -1256,6 +1374,21 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.log("✅ VAL Number:", valNumber);
       console.log("✅ Job ID:", jobId);
 
+      // Set VALTA custom fields on the newly created job
+      let customFieldResults = { success: 0, failed: 0, errors: [] as string[] };
+      if (jobId) {
+        const hasValtaFields = Object.keys(VALTA_CUSTOM_FIELD_IDS).some(
+          (key) => jobData[key] !== undefined && jobData[key] !== null && jobData[key] !== "",
+        );
+        if (hasValtaFields) {
+          console.log("Setting VALTA custom fields on new job...");
+          customFieldResults = await setValtaCustomFields(token, jobId, jobData);
+          console.log(
+            `VALTA custom fields: ${customFieldResults.success} set, ${customFieldResults.failed} failed`,
+          );
+        }
+      }
+
       if (valNumber) {
         return res
           .status(200)
@@ -1271,6 +1404,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               name: createdJob.Name,
               status: createdJob.Status || "Lead",
             },
+            customFields: customFieldResults.success > 0 ? customFieldResults : undefined,
           });
       } else {
         // Job was created but no number returned - still success

@@ -392,20 +392,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             : paymentSection;
         }
 
-        // VALTA-FIELD-SPEC fields — direct mapping to Valcre API (PascalCase)
-        if (jobData.assignmentType) updateData.AssignmentType = jobData.assignmentType;
-        if (jobData.tenancy) updateData.Tenancy = jobData.tenancy;
-        if (jobData.stateOfImprovements) updateData.StateofImprovements = jobData.stateOfImprovements;
-        if (jobData.statusOfImprovements) updateData.StatusofImprovements = jobData.statusOfImprovements;
-        if (jobData.approachesToValue) updateData.ApproachestoValue = jobData.approachesToValue;
-        if (jobData.desktopReport) updateData.DesktopReport = jobData.desktopReport === 'Yes';
-        if (jobData.valueTimeframe) updateData.Valuetimeframe = jobData.valueTimeframe;
-        if (jobData.transactionStatus) updateData.TransactionStatus = jobData.transactionStatus;
-        if (jobData.zoningStatus) updateData.ZoningStatus = jobData.zoningStatus;
-        if (jobData.landMetric) updateData.LandMetric = jobData.landMetric;
-        if (jobData.environmentalAssessment) updateData.EA = jobData.environmentalAssessment;
-        if (jobData.heritageConservation) updateData.HC = jobData.heritageConservation;
-        if (jobData.propertySubtype) updateData.SecondaryType = jobData.propertySubtype;
+        // VALTA-FIELD-SPEC fields — NOT in Valcre native schema.
+        // These 13 fields live in Supabase job_property_info only.
+        // Sending them to Valcre causes 500 error: "property does not exist on type Job".
+        // TODO: When Valcre custom fields are created, map to custom field IDs here.
 
         console.log(
           "Sending update to Valcre:",
@@ -1210,19 +1200,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       jobCreateData.AnalysisLevel = ANALYSIS_LEVEL_MAP[jobData.analysisLevel];
     }
 
-    // VALTA-FIELD-SPEC fields — include in creation payload
-    if (jobData.assignmentType) jobCreateData.AssignmentType = jobData.assignmentType;
-    if (jobData.tenancy) jobCreateData.Tenancy = jobData.tenancy;
-    if (jobData.stateOfImprovements) jobCreateData.StateofImprovements = jobData.stateOfImprovements;
-    if (jobData.statusOfImprovements) jobCreateData.StatusofImprovements = jobData.statusOfImprovements;
-    if (jobData.approachesToValue) jobCreateData.ApproachestoValue = jobData.approachesToValue;
-    if (jobData.desktopReport) jobCreateData.DesktopReport = jobData.desktopReport === 'Yes';
-    if (jobData.valueTimeframe) jobCreateData.Valuetimeframe = jobData.valueTimeframe;
-    if (jobData.transactionStatus) jobCreateData.TransactionStatus = jobData.transactionStatus;
-    if (jobData.zoningStatus) jobCreateData.ZoningStatus = jobData.zoningStatus;
-    if (jobData.landMetric) jobCreateData.LandMetric = jobData.landMetric;
-    if (jobData.environmentalAssessment) jobCreateData.EA = jobData.environmentalAssessment;
-    if (jobData.heritageConservation) jobCreateData.HC = jobData.heritageConservation;
+    // VALTA-FIELD-SPEC fields — NOT in Valcre native schema.
+    // These 13 fields live in Supabase job_property_info only.
+    // Sending them crashes Valcre job creation with 500 error.
+    // TODO: When Valcre custom fields are created, map to custom field IDs here.
 
     console.log(
       "Sending Job data to Valcre:",

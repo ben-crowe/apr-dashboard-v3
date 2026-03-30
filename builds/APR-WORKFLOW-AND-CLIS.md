@@ -22,36 +22,6 @@ Client fills the intake form at the root URL. 18 content fields covering client 
 | `form-success-page` | Gotcha: success page promises email that never sends |
 | `form-roundtrip-test` | QA: verify all 18 fields land correctly on dashboard |
 
-### Field Mapping: Intake Form
-
-| Field Label | Field Name (code) | Type | Options | DB Column | Valcre Field |
-|-------------|-------------------|------|---------|-----------|-------------|
-| First Name | clientFirstName | text | — | client_first_name | Contact.FirstName |
-| Last Name | clientLastName | text | — | client_last_name | Contact.LastName |
-| Client Title | clientTitle | text | — | client_title | Contact.Title |
-| Client Company Name | clientOrganization | text | — | client_organization | Contact.Company |
-| Client Address | clientAddress | text | — | client_address | Contact.AddressStreet (via parseAddress) |
-| Client Phone | clientPhone | text | — | client_phone | Contact.PhoneNumber |
-| Client Email | clientEmail | text | — | client_email | Contact.Email |
-| Property Name | propertyName | text | — | property_name | Property.Name |
-| Property Address | propertyAddress | text | — | property_address | Property.AddressStreet (via parseAddress) |
-| Property Type | propertyType | dropdown | Agriculture, Building, Healthcare, Hospitality, Industrial, Land, Manufactured Housing, Multi-Family, Office, Retail, Self-Storage, Single-Family, Special Purpose | property_type | Property.PropertyType (via PROPERTY_TYPE_MAP) + Property.Types (via TYPES_FIELD_MAP) |
-| Authorized Use | intendedUse | dropdown | First Mortgage Financing, Financial Reporting, Insurance, Internal Decision-Making, Acquisition-Disposition, Estate Planning, Litigation, GST | intended_use | Job.IntendedUses (via INTENDED_USES_MAP) |
-| Valuation Premises | valuationPremises | dropdown | Market Value, As-Is, Market Rent, Liquidation Value, Investment Value, Insurable Value, Prospective at Completion, Prospective at Stabilization | valuation_premises | Job.RequestedValues (via REQUESTED_VALUES_MAP) |
-| Asset Condition | assetCondition | dropdown | Excellent, Good, Average, Poor | asset_condition | Property.InvestmentGrade (via gradeMap: Excellent=1, Good=2, Average=3, Poor=4) |
-| Property Contact First Name | propertyContactFirstName | text | — | property_contact_first_name | PropertyContact.FirstName |
-| Property Contact Last Name | propertyContactLastName | text | — | property_contact_last_name | PropertyContact.LastName |
-| Property Contact Email | propertyContactEmail | text | — | property_contact_email | PropertyContact.Email |
-| Property Contact Phone | propertyContactPhone | text | — | property_contact_phone | PropertyContact.PhoneNumber |
-| Notes / Special Instructions | notes | textarea | — | notes | — |
-| File Upload | files | file | — | job_files (separate table) | — |
-| *(auto)* status | — | — | — | status | — |
-| *(auto)* source | — | — | — | source (="webform") | — |
-| *(auto)* tags | — | — | — | tags (=[]) | — |
-| *(auto)* source_metadata | — | — | — | source_metadata (referrer/UA) | — |
-
-**Gotcha:** Property Type is single-select on form but multi-select on dashboard. Form submits string, dashboard stores comma-separated.
-
 ---
 
 ## Stage 2: Dashboard Receives Form
@@ -96,36 +66,6 @@ Appraiser reviews the job detail and fills LOE fields: appraisal fee, retainer, 
 | `form-loe-gate` | Reference: 4 required fields for LOE preview/send |
 | `qa-workflow-gates` | QA: test both gates with missing fields |
 | `qa-test-data-coverage` | QA: assess Test Data button field coverage |
-
-### Field Mapping: LOE Fields
-
-These fields live in the `job_loe_details` Supabase table (not `job_submissions`). The appraiser fills them on the dashboard job detail page. Each field auto-saves on blur and triggers a Valcre PATCH if a job exists.
-
-| Field Label | Field Name (code) | Type | Options | DB Column | Valcre Field |
-|-------------|-------------------|------|---------|-----------|-------------|
-| Appraisal Fee | appraisalFee | number | — | appraisal_fee | Job.Fee (via parseDollarAmount, strips $ and commas) |
-| Retainer Amount | retainerAmount | number | — | retainer_amount | Job.Retainer (strips $ and commas) |
-| Delivery Date | deliveryDate | date | — | delivery_date | Job.DueDate (split at T) |
-| Intended Use | intendedUse | dropdown | First Mortgage Financing, Financial Reporting, Insurance, Internal Decision-Making, Acquisition-Disposition, Estate Planning, Litigation, GST, Financing/Refinancing, Consulting, Dispute Resolution, Divorce, Establish Sales Price, Property Tax Appeal, Review, Other | intended_use | Job.IntendedUses (via INTENDED_USES_MAP, 23 values) |
-| Scope of Work | scopeOfWork | dropdown | All Applicable, Best One Approach, Best Two Approaches, Cost Approach, Direct Comparison Approach, Discounted Cash Flow, Feasibility Study, Income Approach, Land Value, Litigation, Market Research, Market Study, Net Rent Review, Update | scope_of_work | Job.Scopes (via SCOPE_OF_WORK_MAP, 14 values). **Gotcha:** Valcre field is `Scopes` NOT `ScopeOfWork` |
-| Valuation Premises | valuationPremises | dropdown | Market Value, As-Is, Market Rent, Liquidation Value, Investment Value, Insurable Value, Prospective at Completion, Prospective at Stabilization, As-Vacant, Insurable Replacement Cost, Bulk Value, Disposition, Go Dark, Hypothetical, In Use, Lots, Lots to Houses, Market Rent Study, Retrospective, Tax Credits, Other | valuation_premises | Job.RequestedValues (via REQUESTED_VALUES_MAP, 22 values) |
-| Property Rights Appraised | propertyRightsAppraised | dropdown | Fee Simple Interest, Leased Fee Interest, Leasehold Interest, Undivided Interest, Partial Interest, Partial Interest Taking, Total Taking, Rent Restricted, Market Study, Going Concern, Condominium Ownership, Cost Segregation Study, ASC 805, None, Other | property_rights_appraised | Job.Purposes (via PURPOSES_MAP, 15 values) |
-| Report Type | reportType | dropdown | Comprehensive, Summary, Restricted, Form, Appraisal Report, Amendment Letter, Broker Opinion of Value, Completion Report, Consultation, Desk Review, Evaluation, Peer Review, Rent Study, Restricted Appraisal Report | report_type | Job.ReportFormat (via REPORT_FORMAT_MAP, 14 values). **Note:** "Form" is skipped (not valid Valcre enum) |
-| Analysis Level | analysisLevel | dropdown | Comprehensive, Concise, Form | analysis_level | Job.AnalysisLevel (via ANALYSIS_LEVEL_MAP: Comprehensive=Detailed, Concise=Concise, Form=Form) |
-| Payment Terms | paymentTerms | text | — | payment_terms | Job.Comments (appended as "Payment Terms: {value}") — **no dedicated Valcre field** |
-| Special Instructions | specialInstructions | textarea | — | special_instructions | Job.ClientComments (direct) |
-| Internal Comments | internalComments | textarea | — | internal_comments | Job.Comments (direct) |
-| Delivery Comments | deliveryComments | textarea | — | delivery_comments | Job.DeliveryComments (direct) |
-| Payment Comments | paymentComments | textarea | — | payment_comments | Job.PaymentComments (direct) |
-
-### Workflow Gates
-
-| Gate | Required Fields | Enables |
-|------|----------------|---------|
-| Valcre Gate | Property Address + Property Type + Intended Use + Appraisal Fee + Scope of Work + Valuation Premises | "Create Valcre Job" button |
-| LOE Gate | Valid VAL number + Client First Name + Client Last Name + Client Email + Property Address | "Preview & Send LOE" button |
-
-**Gotcha:** Valcre gate checks `valuation_premises` from `job_loe_details` table, but the intake form writes it to `job_submissions`. New jobs show the value on screen but the gate fails until the LOE details record is created.
 
 ---
 

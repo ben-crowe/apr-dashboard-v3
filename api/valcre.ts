@@ -155,25 +155,77 @@ const VALTA_CUSTOM_FIELD_IDS: Record<string, number> = {
   zoningStatus: 12054,
 };
 
-// Custom field types — determines which API endpoint to use
-const VALTA_FIELD_TYPES: Record<string, string> = {
-  tenancy: "SingleOption",
-  stateOfImprovements: "SingleOption",
-  statusOfImprovements: "SingleOption",
-  propertySubtype: "SingleOption",
-  landMetric: "SingleOption",
-  environmentalAssessment: "String",
-  heritageConservation: "String",
-  assignmentType: "SingleOption",
-  desktopReport: "Boolean",
-  valueTimeframe: "SingleOption",
-  approachesToValue: "MultiOption",
-  transactionStatus: "SingleOption",
-  zoningStatus: "SingleOption",
+// Custom field types and AvailableValue IDs for dropdown fields
+// AvailableValueIds map: dashboard display value → Valcre AvailableValue ID
+const VALTA_FIELD_CONFIG: Record<
+  string,
+  { type: string; options?: Record<string, number> }
+> = {
+  tenancy: {
+    type: "SingleOption",
+    options: {
+      "Multi-Tenant": 5949, "Single-Tenant": 5950, "Owner-Occupied": 5951,
+      "Partial Owner Occupied": 5952, "Vacant": 5953, "Unknown": 5954,
+    },
+  },
+  stateOfImprovements: {
+    type: "SingleOption",
+    options: { "Proposed": 5955, "Under Construction": 5956, "Complete": 5957 },
+  },
+  statusOfImprovements: {
+    type: "SingleOption",
+    options: { "As Is": 5958, "As Complete": 5959, "As Stabilized": 5960, "As Proposed": 5961 },
+  },
+  propertySubtype: {
+    type: "SingleOption",
+    options: {
+      "Low-Rise": 5962, "Mid-Rise": 5963, "High-Rise": 5964, "Garden": 5965,
+      "Walk-Up": 5966, "Townhouse": 5967, "Mixed-Use": 5968,
+    },
+  },
+  landMetric: {
+    type: "SingleOption",
+    options: { "Square Feet": 5969, "Acres": 5970, "Hectares": 5971 },
+  },
+  environmentalAssessment: { type: "String" },
+  heritageConservation: { type: "String" },
+  assignmentType: {
+    type: "SingleOption",
+    options: { "Standard": 5972, "Update": 5973, "Retrospective": 5974, "Desktop": 5975 },
+  },
+  desktopReport: { type: "Boolean" },
+  valueTimeframe: {
+    type: "SingleOption",
+    options: { "Current": 5976, "Retrospective": 5977, "Prospective": 5978 },
+  },
+  approachesToValue: {
+    type: "MultiOption",
+    options: {
+      "All Applicable": 5979, "Cost Approach": 5980, "Direct Comparison": 5981,
+      "Income Approach": 5982, "Cost + Direct Comparison": 5983,
+      "Cost + Income": 5984, "Direct Comparison + Income": 5985,
+    },
+  },
+  transactionStatus: {
+    type: "SingleOption",
+    options: {
+      "Arms Length": 5986, "Arm's Length": 5986, // Handle both apostrophe variants
+      "Non-Arms Length": 5987, "Non-Arm's Length": 5987,
+      "Listing": 5988, "Under Contract": 5989, "REO/Bank Sale": 5990,
+    },
+  },
+  zoningStatus: {
+    type: "SingleOption",
+    options: {
+      "Legal Conforming": 5991, "Legal Non-Conforming": 5992,
+      "Illegal": 5993, "No Zoning": 5994,
+    },
+  },
 };
 
 // Set VALTA custom field values on a Valcre job
 // Called after job creation or update when VALTA fields are present
+// Uses correct Valcre API property names: EntityId, CustomFieldId, Value/SelectedValues
 async function setValtaCustomFields(
   token: string,
   jobId: number,
@@ -186,32 +238,44 @@ async function setValtaCustomFields(
     const value = jobData[fieldName];
     if (value === undefined || value === null || value === "") continue;
 
-    const fieldType = VALTA_FIELD_TYPES[fieldName];
+    const config = VALTA_FIELD_CONFIG[fieldName];
+    if (!config) continue;
 
     try {
       let endpoint: string;
       let body: any;
 
-      if (fieldType === "SingleOption" || fieldType === "MultiOption") {
+      if (config.type === "SingleOption" || config.type === "MultiOption") {
+        // Select fields use AvailableValueId references
         endpoint = `${API_BASE}/CustomFields/UpdateSelectFieldValue`;
-        // For select fields, value is sent as an array of selected option strings
-        const values = fieldType === "MultiOption" && typeof value === "string"
+
+        // Resolve text values to AvailableValueIds
+        const textValues = config.type === "MultiOption" && typeof value === "string"
           ? value.split(",").map((v: string) => v.trim())
-          : [value];
+          : [String(value)];
+
+        const selectedValues = textValues
+          .map((v) => config.options?.[v])
+          .filter((id): id is number => id !== undefined)
+          .map((id) => ({ AvailableValueId: id }));
+
+        if (selectedValues.length === 0) {
+          console.log(`  Custom field ${fieldName}: no matching option for "${value}", skipping`);
+          continue;
+        }
+
         body = {
-          entityId: jobId,
-          fieldDefinitionId: fieldDefId,
-          type: 6, // 6 = Job entity
-          values: values,
+          EntityId: jobId,
+          CustomFieldId: fieldDefId,
+          SelectedValues: selectedValues,
         };
       } else {
-        // String, Boolean, etc.
+        // String, Boolean — use UpdateFieldValue
         endpoint = `${API_BASE}/CustomFields/UpdateFieldValue`;
         body = {
-          entityId: jobId,
-          fieldDefinitionId: fieldDefId,
-          type: 6,
-          value: fieldType === "Boolean" ? (value === "Yes" || value === true) : String(value),
+          EntityId: jobId,
+          CustomFieldId: fieldDefId,
+          Value: config.type === "Boolean" ? (value === "Yes" || value === true) : String(value),
         };
       }
 

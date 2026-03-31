@@ -219,7 +219,7 @@ textarea::-webkit-scrollbar-thumb {
 
 @layer utilities {
   .glass-card {
-    @apply bg-white/80 dark:bg-black/30 backdrop-blur-md border border-white/20 dark:border-white/10 shadow-md;
+    @apply bg-white/80 dark:bg-black/30 backdrop-blur-md border border-gray-200 dark:border-white/15 shadow-md;
   }
 
   .text-balance {

@@ -34,7 +34,7 @@ const SubmissionForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-3xl mx-auto space-y-8 glass-card p-6 rounded-xl animate-fade-in"
+      className="max-w-3xl mx-auto space-y-8 glass-card px-10 py-6 rounded-xl animate-fade-in"
     >
       <div className="text-center mb-6">
         <div className="flex items-center justify-between mb-4">

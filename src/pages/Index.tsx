@@ -56,7 +56,7 @@ const Index = () => {
         <SubmissionForm />
       </main>
 
-      <footer className="py-6">
+      <footer className="py-6 border-t border-gray-200 dark:border-white/10">
       </footer>
     </div>
   );

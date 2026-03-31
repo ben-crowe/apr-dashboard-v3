@@ -400,7 +400,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         {/* Client Information Group */}
         <SectionGroup title="Client Information">
-          <TwoColumnFields className="md:!grid-cols-[3fr_2fr]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-0.5">
             <CompactField label="First Name">
               <Input
                 value={job.clientFirstName || ''}
@@ -458,15 +458,15 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.clientAddress || ''}
                 onChange={(e) => onUpdateJob?.({clientAddress: e.target.value})}
                 onBlur={(e) => handleBlur('clientAddress', e.target.value)}
-                className="h-7 text-sm max-w-[280px]"
+                className="h-7 text-sm max-w-[350px]"
               />
             </CompactField>
-          </TwoColumnFields>
+          </div>
         </SectionGroup>
 
         {/* Property Information Group */}
         <SectionGroup title="Property Information">
-          <TwoColumnFields className="md:!grid-cols-[3fr_2fr]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-0.5">
             <CompactField label="Property Name">
               <Input
                 value={job.propertyName || ''}
@@ -513,7 +513,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.propertyAddress || ''}
                 onChange={(e) => onUpdateJob?.({propertyAddress: e.target.value})}
                 onBlur={(e) => handleBlur('propertyAddress', e.target.value)}
-                className="h-7 text-sm max-w-[280px]"
+                className="h-7 text-sm max-w-[350px]"
               />
             </CompactField>
             <CompactField label="Authorized Use">
@@ -587,7 +587,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 </SelectContent>
               </Select>
             </CompactField>
-          </TwoColumnFields>
+          </div>
 
           {/* Property Contact Information */}
           <div className="mt-3">

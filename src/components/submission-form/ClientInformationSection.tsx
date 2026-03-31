@@ -38,7 +38,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             value={formData.clientFirstName}
             onChange={handleChange}
             className={cn(
-              "bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0",
+              "bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0",
               errors.clientFirstName && "border-destructive"
             )}
             placeholder="John"
@@ -61,7 +61,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             value={formData.clientLastName}
             onChange={handleChange}
             className={cn(
-              "bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0",
+              "bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0",
               errors.clientLastName && "border-destructive"
             )}
             placeholder="Smith"
@@ -78,7 +78,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             name="clientTitle"
             value={formData.clientTitle}
             onChange={handleChange}
-            className="bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
+            className="bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
             placeholder="Development Manager"
           />
         </div>
@@ -90,7 +90,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             name="clientOrganization"
             value={formData.clientOrganization}
             onChange={handleChange}
-            className="bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
+            className="bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
             placeholder="ABC Development Corp"
           />
         </div>
@@ -102,7 +102,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             name="clientAddress"
             value={formData.clientAddress}
             onChange={handleChange}
-            className="bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
+            className="bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
             placeholder="123 Main Street, Calgary, AB T2P 1A1"
           />
         </div>
@@ -120,7 +120,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             value={formData.clientPhone}
             onChange={handleChange}
             className={cn(
-              "bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0",
+              "bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0",
               errors.clientPhone && "border-destructive"
             )}
             placeholder="(587) 801-5151"
@@ -144,7 +144,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
             value={formData.clientEmail}
             onChange={handleChange}
             className={cn(
-              "bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0",
+              "bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0",
               errors.clientEmail && "border-destructive"
             )}
             placeholder="john@abcdevelopment.com"

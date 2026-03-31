@@ -153,6 +153,12 @@ textarea::-webkit-scrollbar-thumb {
     @apply scroll-smooth;
   }
 
+  /* Placeholder styling — italic to distinguish from real input */
+  input::placeholder,
+  textarea::placeholder {
+    font-style: italic;
+  }
+
   /* Override browser default accent color to neutral gray for form controls */
   input[type="checkbox"],
   input[type="radio"],

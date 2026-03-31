@@ -67,7 +67,7 @@ const SubmissionForm = () => {
         </div>
       </div>
 
-      <Separator />
+      <Separator className="bg-gray-300 dark:bg-white/15" />
 
       <ClientInformationSection
         formData={formData}
@@ -75,7 +75,7 @@ const SubmissionForm = () => {
         handleChange={handleChange}
       />
 
-      <Separator />
+      <Separator className="bg-gray-300 dark:bg-white/15" />
 
       <PropertyInformationSection
         formData={formData}
@@ -84,7 +84,7 @@ const SubmissionForm = () => {
         handleSelectChange={handleSelectChange}
       />
 
-      <Separator />
+      <Separator className="bg-gray-300 dark:bg-white/15" />
 
       <DocumentsSection
         files={formData.files}

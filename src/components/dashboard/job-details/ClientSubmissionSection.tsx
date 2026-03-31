@@ -374,8 +374,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   };
 
   return (
-    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full border rounded-lg">
-      <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 bg-gray-200 dark:bg-gray-800`}>
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full border border-gray-400 dark:border-white/20 rounded-lg dark:bg-black/15">
+      <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 bg-gray-200 dark:bg-gray-800 rounded-t-lg`}>
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
             {isOpen ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}

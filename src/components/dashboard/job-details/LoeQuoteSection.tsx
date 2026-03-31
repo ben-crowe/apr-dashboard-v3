@@ -1112,8 +1112,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   value={jobDetails.appraiserComments || ''}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  rows={4}
-                  className="text-sm resize-y min-h-[80px] w-full"
+                  rows={1}
+                  className="text-sm resize-none min-h-0 h-7 w-full !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0 py-1"
                   placeholder="Internal appraiser notes..."
                 />
               </div>
@@ -1125,8 +1125,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   value={jobDetails.deliveryComments || ''}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  rows={4}
-                  className="text-sm resize-y min-h-[80px] w-full"
+                  rows={1}
+                  className="text-sm resize-none min-h-0 h-7 w-full !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0 py-1"
                   placeholder="Delivery instructions..."
                 />
               </div>
@@ -1138,8 +1138,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   value={jobDetails.paymentComments || ''}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  rows={4}
-                  className="text-sm resize-y min-h-[80px] w-full"
+                  rows={1}
+                  className="text-sm resize-none min-h-0 h-7 w-full !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0 py-1"
                   placeholder="Payment terms and notes..."
                 />
               </div>

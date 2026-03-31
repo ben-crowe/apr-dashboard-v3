@@ -641,8 +641,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.notes || ''}
                 onChange={(e) => onUpdateJob?.({notes: e.target.value})}
                 onBlur={(e) => handleBlur('notes', e.target.value)}
-                rows={3}
-                className="text-sm resize-y min-h-[60px]"
+                rows={2}
+                className="text-sm resize-none min-h-[40px]"
                 style={{ maxWidth: '400px' }}
               />
             </CompactField>

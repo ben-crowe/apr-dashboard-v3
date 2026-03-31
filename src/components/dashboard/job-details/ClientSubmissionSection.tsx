@@ -414,7 +414,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.clientLastName || ''}
                 onChange={(e) => onUpdateJob?.({clientLastName: e.target.value})}
                 onBlur={(e) => handleBlur('clientLastName', e.target.value)}
-                className="h-7 text-sm max-w-[280px]"
+                className="h-7 text-sm max-w-[160px]"
               />
             </CompactField>
             <CompactField label="Title">
@@ -430,7 +430,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.clientOrganization || ''}
                 onChange={(e) => onUpdateJob?.({clientOrganization: e.target.value})}
                 onBlur={(e) => handleBlur('clientOrganization', e.target.value)}
-                className="h-7 text-sm max-w-[280px]"
+                className="h-7 text-sm max-w-[160px]"
               />
             </CompactField>
             <CompactField label="Phone">
@@ -450,7 +450,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.clientEmail || ''}
                 onChange={(e) => onUpdateJob?.({clientEmail: e.target.value})}
                 onBlur={(e) => handleBlur('clientEmail', e.target.value)}
-                className="h-7 text-sm max-w-[280px]"
+                className="h-7 text-sm max-w-[160px]"
               />
             </CompactField>
             <CompactField label="Address">
@@ -484,7 +484,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('propertyType', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[280px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -525,7 +525,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('intendedUse', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[280px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -574,7 +574,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('assetCondition', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[280px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>

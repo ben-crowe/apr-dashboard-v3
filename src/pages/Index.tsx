@@ -56,11 +56,7 @@ const Index = () => {
         <SubmissionForm />
       </main>
 
-      <footer className="py-6 border-t">
-        <div className="container text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} Appraisal Management System. All rights
-          reserved.
-        </div>
+      <footer className="py-6">
       </footer>
     </div>
   );

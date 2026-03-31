@@ -31,7 +31,7 @@ const Index = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => navigate('/dashboard')}
-              className="text-gray-800 hover:text-gray-600 hover:underline transition-colors text-sm font-medium flex items-center gap-2"
+              className="text-gray-800 dark:text-gray-300 hover:text-gray-600 dark:hover:text-gray-100 hover:underline transition-colors text-sm font-medium flex items-center gap-2"
             >
               <LayoutDashboard className="h-4 w-4" />
               Go to Dashboard

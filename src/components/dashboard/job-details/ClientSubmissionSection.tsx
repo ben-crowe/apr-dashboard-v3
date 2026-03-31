@@ -400,7 +400,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         {/* Client Information Group */}
         <SectionGroup title="Client Information">
-          <TwoColumnFields>
+          <TwoColumnFields className="md:!grid-cols-[3fr_2fr]">
             <CompactField label="First Name">
               <Input
                 value={job.clientFirstName || ''}
@@ -466,7 +466,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         {/* Property Information Group */}
         <SectionGroup title="Property Information">
-          <TwoColumnFields>
+          <TwoColumnFields className="md:!grid-cols-[3fr_2fr]">
             <CompactField label="Property Name">
               <Input
                 value={job.propertyName || ''}

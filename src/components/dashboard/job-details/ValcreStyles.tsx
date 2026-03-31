@@ -49,8 +49,8 @@ export const SectionGroup = ({
 );
 
 // Two-column field container for better vertical spacing
-export const TwoColumnFields = ({ children }: { children: React.ReactNode }) => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-0.5">
+export const TwoColumnFields = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <div className={`grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-0.5 ${className}`}>
     {children}
   </div>
 );

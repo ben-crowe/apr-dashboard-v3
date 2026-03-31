@@ -33,42 +33,24 @@ const DocumentsSection: React.FC<DocumentsSectionProps> = ({
     >
       <div className="space-y-6">
         {/* Required Documents List */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-semibold text-blue-900 mb-3">Please upload the following documents:</h4>
-          <ul className="space-y-2 text-sm text-blue-800">
-            <li className="flex items-start gap-2">
-              <div className="h-1.5 w-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0"></div>
-              <span>Full Property Details or Prior Appraisal</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="h-1.5 w-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0"></div>
-              <span>Proforma</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="h-1.5 w-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0"></div>
-              <span>Unit Mix (MF/SS) or Rent Roll (Retail/Office/Industrial)</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="h-1.5 w-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0"></div>
-              <span>Operating Expenses (1-3 Years Historical and Budget)</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="h-1.5 w-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0"></div>
-              <span>Drawings/Plans (New Developments only)</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="h-1.5 w-1.5 rounded-full bg-blue-600 mt-2 flex-shrink-0"></div>
-              <span>Contact for property tour (Existing Buildings only)</span>
-            </li>
+        <div className="bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg px-6 py-4">
+          <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Please upload the following documents:</h4>
+          <ul className="space-y-2 text-sm text-gray-700 dark:text-white/80 list-disc pl-6">
+            <li>Full Property Details or Prior Appraisal</li>
+            <li>Proforma</li>
+            <li>Unit Mix (MF/SS) or Rent Roll (Retail/Office/Industrial)</li>
+            <li>Operating Expenses (1-3 Years Historical and Budget)</li>
+            <li>Drawings/Plans (New Developments only)</li>
+            <li>Contact for property tour (Existing Buildings only)</li>
           </ul>
         </div>
 
         {/* File Upload Zone */}
-        <div className="relative border-2 border-dashed border-slate-300 rounded-lg p-8 text-center hover:border-blue-400 transition-colors">
-          <Upload className="h-12 w-12 text-slate-400 mx-auto mb-4" />
+        <div className="relative border-2 border-dashed border-slate-300 dark:border-white/15 rounded-lg p-8 text-center hover:border-blue-400 dark:hover:border-blue-500/40 transition-colors">
+          <Upload className="h-12 w-12 text-slate-400 dark:text-white/30 mx-auto mb-4" />
           <div className="space-y-2">
-            <p className="text-lg font-medium text-slate-700">Drop files here or click to upload</p>
-            <p className="text-sm text-slate-500">
+            <p className="text-lg font-medium text-slate-700 dark:text-white/70">Drop files here or click to upload</p>
+            <p className="text-sm text-slate-500 dark:text-white/40">
               Supported formats: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG (Max 10MB per file)
             </p>
           </div>
@@ -84,10 +66,10 @@ const DocumentsSection: React.FC<DocumentsSectionProps> = ({
         {/* Uploaded Files List */}
         {files.length > 0 && (
           <div className="space-y-2">
-            <h4 className="font-medium text-slate-900">Uploaded Files:</h4>
+            <h4 className="font-medium text-slate-900 dark:text-white/80">Uploaded Files:</h4>
             <div className="space-y-2">
               {files.map((file, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
+                <div key={index} className="flex items-center justify-between p-3 bg-slate-50 dark:bg-white/5 rounded-lg">
                   <div className="flex items-center gap-2">
                     <FileText className="h-4 w-4 text-slate-500" />
                     <span className="text-sm text-slate-700">{file.name}</span>

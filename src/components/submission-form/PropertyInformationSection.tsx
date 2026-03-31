@@ -45,7 +45,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={formData.propertyName}
               onChange={handleChange}
               className={cn(
-                "bg-white dark:bg-[hsl(223,17%,24%)] border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/40 hover:border-gray-400 dark:hover:border-white/30 focus-visible:border-gray-400 dark:focus-visible:border-white/40 focus-visible:outline-none focus-visible:ring-0",
+                "bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0",
                 errors.propertyName && "border-destructive"
               )}
               placeholder="Riverside Apartments"
@@ -65,7 +65,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={formData.propertyAddress}
               onChange={handleChange}
               className={cn(
-                "bg-white dark:bg-[hsl(223,17%,24%)] border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/40 hover:border-gray-400 dark:hover:border-white/30 focus-visible:border-gray-400 dark:focus-visible:border-white/40 focus-visible:outline-none focus-visible:ring-0",
+                "bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0",
                 errors.propertyAddress && "border-destructive"
               )}
               placeholder="456 River Road, Calgary, AB T2P 2B2"
@@ -95,7 +95,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                   name="propertyContactFirstName"
                   value={formData.propertyContactFirstName || ""}
                   onChange={handleChange}
-                  className="bg-white dark:bg-[hsl(223,17%,24%)] border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/40 hover:border-gray-400 dark:hover:border-white/30 focus-visible:border-gray-400 dark:focus-visible:border-white/40 focus-visible:outline-none focus-visible:ring-0"
+                  className="bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
                   placeholder="Marcus / Property Management"
                 />
               </div>
@@ -107,7 +107,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                   name="propertyContactLastName"
                   value={formData.propertyContactLastName || ""}
                   onChange={handleChange}
-                  className="bg-white dark:bg-[hsl(223,17%,24%)] border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/40 hover:border-gray-400 dark:hover:border-white/30 focus-visible:border-gray-400 dark:focus-visible:border-white/40 focus-visible:outline-none focus-visible:ring-0"
+                  className="bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
                   placeholder="Johnson"
                 />
               </div>
@@ -122,7 +122,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                   type="email"
                   value={formData.propertyContactEmail || ""}
                   onChange={handleChange}
-                  className="bg-white dark:bg-[hsl(223,17%,24%)] border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/40 hover:border-gray-400 dark:hover:border-white/30 focus-visible:border-gray-400 dark:focus-visible:border-white/40 focus-visible:outline-none focus-visible:ring-0"
+                  className="bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
                   placeholder="property.manager@example.com"
                 />
               </div>
@@ -135,7 +135,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                   type="tel"
                   value={formData.propertyContactPhone || ""}
                   onChange={handleChange}
-                  className="bg-white dark:bg-[hsl(223,17%,24%)] border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/40 hover:border-gray-400 dark:hover:border-white/30 focus-visible:border-gray-400 dark:focus-visible:border-white/40 focus-visible:outline-none focus-visible:ring-0"
+                  className="bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 text-gray-900 dark:text-foreground rounded-none px-1 max-w-[240px] placeholder:text-gray-400 dark:placeholder:text-white/25 hover:border-b-gray-500 dark:hover:border-b-white/40 focus-visible:border-b-gray-600 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
                   placeholder="(403) 555-0123"
                 />
               </div>
@@ -152,12 +152,12 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               onValueChange={(value) => handleSelectChange(value, "propertyType")}
             >
               <SelectTrigger className={cn(
-                "bg-white dark:bg-[hsl(223,17%,24%)] border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:border-gray-400 dark:hover:border-white/30 focus:border-gray-400 dark:focus:border-white/40 focus:outline-none focus:ring-0",
-                errors.propertyType && "border-destructive"
+                "!bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 !rounded-none max-w-[240px] hover:border-b-gray-500 dark:hover:border-b-white/40 focus:ring-0 [&>span]:text-gray-500 dark:[&>span]:text-white/60",
+                errors.propertyType && "border-b-destructive"
               )}>
                 <SelectValue placeholder="Please Select" />
               </SelectTrigger>
-              <SelectContent className="bg-white dark:bg-[hsl(223,17%,24%)] border-gray-300 dark:border-white/20">
+              <SelectContent>
                 <SelectItem value="Agriculture">Agriculture</SelectItem>
                 <SelectItem value="Building">Building</SelectItem>
                 <SelectItem value="Healthcare">Healthcare</SelectItem>
@@ -185,10 +185,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={formData.intendedUse}
               onValueChange={(value) => handleSelectChange(value, "intendedUse")}
             >
-              <SelectTrigger className="bg-white dark:bg-[hsl(223,17%,24%)] border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:border-gray-400 dark:hover:border-white/30 focus:border-gray-400 dark:focus:border-white/40 focus:outline-none focus:ring-0">
+              <SelectTrigger className="!bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 !rounded-none max-w-[240px] hover:border-b-gray-500 dark:hover:border-b-white/40 focus:ring-0 [&>span]:text-gray-500 dark:[&>span]:text-white/60">
                 <SelectValue placeholder="Please Select" />
               </SelectTrigger>
-              <SelectContent className="bg-white dark:bg-[hsl(223,17%,24%)] border-gray-300 dark:border-white/20">
+              <SelectContent>
                 <SelectItem value="First Mortgage Financing">First Mortgage Financing</SelectItem>
                 <SelectItem value="Financial Reporting">Financial Reporting</SelectItem>
                 <SelectItem value="Insurance">Insurance</SelectItem>
@@ -212,10 +212,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                 handleSelectChange(value, "valuationPremises")
               }
             >
-              <SelectTrigger id="valuationPremises" className="bg-white dark:bg-[hsl(223,17%,24%)] border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:border-gray-400 dark:hover:border-white/30 focus:border-gray-400 dark:focus:border-white/40 focus:ring-gray-300 dark:focus:ring-white/20">
+              <SelectTrigger id="valuationPremises" className="!bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 !rounded-none max-w-[240px] hover:border-b-gray-500 dark:hover:border-b-white/40 focus:ring-0 [&>span]:text-gray-500 dark:[&>span]:text-white/60">
                 <SelectValue placeholder="Select valuation premises" />
               </SelectTrigger>
-              <SelectContent className="bg-white dark:bg-[hsl(223,17%,24%)] border-gray-300 dark:border-white/20">
+              <SelectContent>
                 <SelectItem value="Market Value">Market Value</SelectItem>
                 <SelectItem value="Market Rent">Market Rent</SelectItem>
                 <SelectItem value="Investment Value">Investment Value</SelectItem>
@@ -233,10 +233,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                 handleSelectChange(value, "assetCondition")
               }
             >
-              <SelectTrigger id="assetCondition" className="bg-white dark:bg-[hsl(223,17%,24%)] border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white hover:border-gray-400 dark:hover:border-white/30 focus:border-gray-400 dark:focus:border-white/40 focus:ring-gray-300 dark:focus:ring-white/20">
+              <SelectTrigger id="assetCondition" className="!bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 !rounded-none max-w-[240px] hover:border-b-gray-500 dark:hover:border-b-white/40 focus:ring-0 [&>span]:text-gray-500 dark:[&>span]:text-white/60">
                 <SelectValue placeholder="Select asset condition" />
               </SelectTrigger>
-              <SelectContent className="bg-white dark:bg-[hsl(223,17%,24%)] border-gray-300 dark:border-white/20">
+              <SelectContent>
                 <SelectItem value="Excellent">Excellent</SelectItem>
                 <SelectItem value="Very Good">Very Good</SelectItem>
                 <SelectItem value="Good">Good</SelectItem>
@@ -250,14 +250,14 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
 
 
         <div className="space-y-2">
-          <Label htmlFor="notes">Additional Information</Label>
+          <Label htmlFor="notes" className="text-base">Additional Information</Label>
+          <p className="text-sm text-gray-500 dark:text-white/70 mb-1">Please provide any additional details about the property, special circumstances,<br />timeline requirements, or other relevant information.</p>
           <Textarea
             id="notes"
             name="notes"
             value={formData.notes}
             onChange={handleChange}
-            placeholder="Please provide any additional details about the property, special circumstances, timeline requirements, or other relevant information..."
-            className="min-h-[120px] bg-white dark:bg-[hsl(223,17%,24%)] border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-white/40 hover:border-gray-400 dark:hover:border-white/30 focus-visible:border-gray-400 dark:focus-visible:border-white/40 focus-visible:outline-none focus-visible:ring-0"
+            className="min-h-[120px] bg-transparent border border-gray-200 dark:border-white/20 text-gray-900 dark:text-foreground rounded-md px-3 py-2 hover:border-gray-300 dark:hover:border-white/30 focus-visible:border-gray-400 dark:focus-visible:border-white/40 focus-visible:outline-none focus-visible:ring-0"
           />
         </div>
       </div>

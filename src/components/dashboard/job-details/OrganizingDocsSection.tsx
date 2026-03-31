@@ -241,7 +241,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
 
             <CompactField label="Tenancy">
               <Select value={jobDetails.tenancy || ''} onValueChange={value => handleSelectChange(value, 'tenancy')}>
-                <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Owner-Occupied">Owner-Occupied</SelectItem>
                   <SelectItem value="Single-Tenant">Single-Tenant</SelectItem>
@@ -253,7 +253,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
 
             <CompactField label="State of Improvements">
               <Select value={jobDetails.stateOfImprovements || ''} onValueChange={value => handleSelectChange(value, 'stateOfImprovements')}>
-                <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Proposed">Proposed</SelectItem>
                   <SelectItem value="Under Construction">Under Construction</SelectItem>
@@ -264,7 +264,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
 
             <CompactField label="Status of Improvements">
               <Select value={jobDetails.statusOfImprovements || ''} onValueChange={value => handleSelectChange(value, 'statusOfImprovements')}>
-                <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="As Is">As Is</SelectItem>
                   <SelectItem value="As Complete">As Complete</SelectItem>
@@ -276,7 +276,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
 
             <CompactField label="Property Subtype">
               <Select value={jobDetails.propertySubtype || ''} onValueChange={value => handleSelectChange(value, 'propertySubtype')}>
-                <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Low-Rise">Low-Rise</SelectItem>
                   <SelectItem value="Mid-Rise">Mid-Rise</SelectItem>
@@ -291,7 +291,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
 
             <CompactField label="Land Metric">
               <Select value={jobDetails.landMetric || ''} onValueChange={value => handleSelectChange(value, 'landMetric')}>
-                <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Square Feet">Square Feet</SelectItem>
                   <SelectItem value="Acres">Acres</SelectItem>

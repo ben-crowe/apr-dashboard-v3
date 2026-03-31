@@ -982,7 +982,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           {/* Row 1 */}
           <CompactField label="Property Rights">
             <Select value={jobDetails.propertyRightsAppraised || ''} onValueChange={value => handleSelectChange(value, 'propertyRightsAppraised')}>
-              <SelectTrigger className="h-7 text-sm w-full text-center">
+              <SelectTrigger className="h-7 text-sm w-full !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
               <SelectContent>
@@ -1005,7 +1005,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
           <CompactField label="Scope of Work">
             <Select value={jobDetails.scopeOfWork || ''} onValueChange={value => handleSelectChange(value, 'scopeOfWork')}>
-              <SelectTrigger className="h-7 text-sm w-full text-center">
+              <SelectTrigger className="h-7 text-sm w-full !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
               <SelectContent>
@@ -1030,7 +1030,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           {/* Row 2 */}
           <CompactField label="Payment Terms">
             <Select value={jobDetails.paymentTerms || ''} onValueChange={value => handleSelectChange(value, 'paymentTerms')}>
-              <SelectTrigger className="h-7 text-sm w-full text-center">
+              <SelectTrigger className="h-7 text-sm w-full !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
               <SelectContent>
@@ -1057,7 +1057,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           {/* Row 3 */}
           <CompactField label="Report Type">
             <Select value={jobDetails.reportType || ''} onValueChange={value => handleSelectChange(value, 'reportType')}>
-              <SelectTrigger className="h-7 text-sm w-full text-center">
+              <SelectTrigger className="h-7 text-sm w-full !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
               <SelectContent>

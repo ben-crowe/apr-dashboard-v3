@@ -141,7 +141,7 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
             <TwoColumnFields>
               <CompactField label="Assignment Type">
                 <Select value={jobDetails.assignmentType || ''} onValueChange={value => handleSelectChange(value, 'assignmentType')}>
-                  <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Standard">Standard</SelectItem>
                     <SelectItem value="Update">Update</SelectItem>
@@ -153,7 +153,7 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
 
               <CompactField label="Desktop Report">
                 <Select value={jobDetails.desktopReport || ''} onValueChange={value => handleSelectChange(value, 'desktopReport')}>
-                  <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Yes">Yes</SelectItem>
                     <SelectItem value="No">No</SelectItem>
@@ -163,7 +163,7 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
 
               <CompactField label="Value Timeframe">
                 <Select value={jobDetails.valueTimeframe || ''} onValueChange={value => handleSelectChange(value, 'valueTimeframe')}>
-                  <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Current">Current</SelectItem>
                     <SelectItem value="Retrospective">Retrospective</SelectItem>
@@ -174,7 +174,7 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
 
               <CompactField label="Approaches to Value">
                 <Select value={jobDetails.approachesToValue || ''} onValueChange={value => handleSelectChange(value, 'approachesToValue')}>
-                  <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="All Applicable">All Applicable</SelectItem>
                     <SelectItem value="Cost Approach">Cost Approach</SelectItem>
@@ -189,7 +189,7 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
 
               <CompactField label="Transaction Status">
                 <Select value={jobDetails.transactionStatus || ''} onValueChange={value => handleSelectChange(value, 'transactionStatus')}>
-                  <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Arm's Length">Arm's Length</SelectItem>
                     <SelectItem value="Non-Arm's Length">Non-Arm's Length</SelectItem>
@@ -202,7 +202,7 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
 
               <CompactField label="Zoning Status">
                 <Select value={jobDetails.zoningStatus || ''} onValueChange={value => handleSelectChange(value, 'zoningStatus')}>
-                  <SelectTrigger className="h-7 text-sm max-w-[200px]"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Legal Conforming">Legal Conforming</SelectItem>
                     <SelectItem value="Legal Non-Conforming">Legal Non-Conforming</SelectItem>

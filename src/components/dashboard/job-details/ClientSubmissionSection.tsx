@@ -453,13 +453,16 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[280px]"
               />
             </CompactField>
-            <CompactField label="Address" fullWidth>
-              <Input
-                value={job.clientAddress || ''}
-                onChange={(e) => onUpdateJob?.({clientAddress: e.target.value})}
-                onBlur={(e) => handleBlur('clientAddress', e.target.value)}
-                className="h-7 text-sm max-w-[500px]"
-              />
+            <CompactField label="Address">
+              <div className="relative w-[280px]">
+                <div className="absolute bottom-0 left-0 w-full border-b border-b-gray-400 dark:border-b-white/20" />
+                <Input
+                  value={job.clientAddress || ''}
+                  onChange={(e) => onUpdateJob?.({clientAddress: e.target.value})}
+                  onBlur={(e) => handleBlur('clientAddress', e.target.value)}
+                  className="h-7 text-sm w-[500px] border-0 !border-b-0"
+                />
+              </div>
             </CompactField>
           </div>
         </SectionGroup>
@@ -508,13 +511,16 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 </SelectContent>
               </Select>
             </CompactField>
-            <CompactField label="Address" fullWidth>
-              <Input
-                value={job.propertyAddress || ''}
-                onChange={(e) => onUpdateJob?.({propertyAddress: e.target.value})}
-                onBlur={(e) => handleBlur('propertyAddress', e.target.value)}
-                className="h-7 text-sm max-w-[500px]"
-              />
+            <CompactField label="Address">
+              <div className="relative w-[280px]">
+                <div className="absolute bottom-0 left-0 w-full border-b border-b-gray-400 dark:border-b-white/20" />
+                <Input
+                  value={job.propertyAddress || ''}
+                  onChange={(e) => onUpdateJob?.({propertyAddress: e.target.value})}
+                  onBlur={(e) => handleBlur('propertyAddress', e.target.value)}
+                  className="h-7 text-sm w-[500px] border-0 !border-b-0"
+                />
+              </div>
             </CompactField>
             <CompactField label="Authorized Use">
               <Select

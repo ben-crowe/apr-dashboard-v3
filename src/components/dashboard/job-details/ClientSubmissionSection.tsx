@@ -400,7 +400,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         {/* Client Information Group */}
         <SectionGroup title="Client Information">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-0.5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-0.5 [&_label]:min-w-[120px]">
             <CompactField label="First Name">
               <Input
                 value={job.clientFirstName || ''}
@@ -414,7 +414,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.clientLastName || ''}
                 onChange={(e) => onUpdateJob?.({clientLastName: e.target.value})}
                 onBlur={(e) => handleBlur('clientLastName', e.target.value)}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[280px]"
               />
             </CompactField>
             <CompactField label="Title">
@@ -430,7 +430,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.clientOrganization || ''}
                 onChange={(e) => onUpdateJob?.({clientOrganization: e.target.value})}
                 onBlur={(e) => handleBlur('clientOrganization', e.target.value)}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[280px]"
               />
             </CompactField>
             <CompactField label="Phone">
@@ -450,15 +450,15 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.clientEmail || ''}
                 onChange={(e) => onUpdateJob?.({clientEmail: e.target.value})}
                 onBlur={(e) => handleBlur('clientEmail', e.target.value)}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[280px]"
               />
             </CompactField>
-            <CompactField label="Address">
+            <CompactField label="Address" fullWidth>
               <Input
                 value={job.clientAddress || ''}
                 onChange={(e) => onUpdateJob?.({clientAddress: e.target.value})}
                 onBlur={(e) => handleBlur('clientAddress', e.target.value)}
-                className="h-7 text-sm max-w-[350px]"
+                className="h-7 text-sm max-w-[500px]"
               />
             </CompactField>
           </div>
@@ -466,7 +466,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         {/* Property Information Group */}
         <SectionGroup title="Property Information">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-0.5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-0.5 [&_label]:min-w-[120px]">
             <CompactField label="Property Name">
               <Input
                 value={job.propertyName || ''}
@@ -484,7 +484,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('propertyType', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -508,12 +508,12 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 </SelectContent>
               </Select>
             </CompactField>
-            <CompactField label="Address">
+            <CompactField label="Address" fullWidth>
               <Input
                 value={job.propertyAddress || ''}
                 onChange={(e) => onUpdateJob?.({propertyAddress: e.target.value})}
                 onBlur={(e) => handleBlur('propertyAddress', e.target.value)}
-                className="h-7 text-sm max-w-[350px]"
+                className="h-7 text-sm max-w-[500px]"
               />
             </CompactField>
             <CompactField label="Authorized Use">
@@ -525,7 +525,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('intendedUse', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -574,7 +574,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('assetCondition', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>

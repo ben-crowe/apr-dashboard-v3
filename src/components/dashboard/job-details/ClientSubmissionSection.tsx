@@ -475,97 +475,36 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
-            <CompactField label="Property Types">
-              <div className="flex items-center gap-2 flex-wrap">
-                {/* "Add more" button at the front */}
-                <Select
-                  value=""
-                  onValueChange={(value) => {
-                    if (value) {
-                      // Parse existing comma-separated string into array
-                      const currentTypesStr = job.propertyType || '';
-                      const currentTypes = currentTypesStr ? currentTypesStr.split(',').map(t => t.trim()).filter(Boolean) : [];
-                      let newTypes;
-                      if (currentTypes.includes(value)) {
-                        // Remove if already selected
-                        newTypes = currentTypes.filter(t => t !== value);
-                      } else {
-                        // Add if not selected
-                        newTypes = [...currentTypes, value];
-                      }
-
-                      // Convert array back to comma-separated string for storage
-                      const newTypesStr = newTypes.join(', ');
-
-                      // Update UI immediately
-                      onUpdateJob?.({ propertyType: newTypesStr });
-
-                      // Auto-save to database (property_type column) and sync to Valcre
-                      autoSaveField('propertyType', newTypesStr);
-                    }
-                  }}
-                >
-                  <SelectTrigger className="h-7 text-sm w-[100px]">
-                    <SelectValue placeholder="Add more..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {['Agriculture', 'Building', 'Healthcare', 'Hospitality', 'Industrial', 'Land',
-                      'Manufactured Housing', 'Multi-Family', 'Office', 'Retail', 'Self-Storage',
-                      'Single-Family', 'Special Purpose', 'Unknown']
-                      .map((type) => {
-                        const currentTypesStr = job.propertyType || '';
-                        const currentTypes = currentTypesStr ? currentTypesStr.split(',').map(t => t.trim()).filter(Boolean) : [];
-                        const isSelected = currentTypes.includes(type);
-                        return (
-                          <SelectItem key={type} value={type}>
-                            <div className="flex items-center gap-2">
-                              <Checkbox
-                                checked={isSelected}
-                                onCheckedChange={() => {}} // Handled by SelectItem's onValueChange
-                                className="pointer-events-none"
-                              />
-                              <span>{type}</span>
-                            </div>
-                          </SelectItem>
-                        );
-                      })}
-                  </SelectContent>
-                </Select>
-
-                {/* Selected Types Display - inline after the button */}
-                {(() => {
-                  const currentTypesStr = job.propertyType || '';
-                  const currentTypes = currentTypesStr ? currentTypesStr.split(',').map(t => t.trim()).filter(Boolean) : [];
-                  return currentTypes.length > 0 && (
-                    <>
-                      {currentTypes.map((type) => (
-                        <span
-                          key={type}
-                          className="inline-flex items-center gap-1.5 text-sm text-gray-700 dark:text-gray-300"
-                          style={{ textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)' }}
-                        >
-                          {type}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const newTypes = currentTypes.filter(t => t !== type);
-                              const newTypesStr = newTypes.join(', ');
-                              // Update UI immediately
-                              onUpdateJob?.({ propertyType: newTypesStr });
-                              // Auto-save to database and sync to Valcre
-                              autoSaveField('propertyType', newTypesStr);
-                            }}
-                            className="text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 font-bold text-base leading-none"
-                          title="Remove"
-                        >
-                          ×
-                        </button>
-                      </span>
-                    ))}
-                  </>
-                )
-              })()}
-              </div>
+            <CompactField label="Property Type">
+              <Select
+                value={job.propertyType?.split(',')[0]?.trim() || ''}
+                onValueChange={(value) => {
+                  const v = value === '__clear__' ? '' : value;
+                  onUpdateJob?.({ propertyType: v });
+                  autoSaveField('propertyType', v);
+                }}
+              >
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
+                  <SelectItem value="Agriculture">Agriculture</SelectItem>
+                  <SelectItem value="Building">Building</SelectItem>
+                  <SelectItem value="Healthcare">Healthcare</SelectItem>
+                  <SelectItem value="Hospitality">Hospitality</SelectItem>
+                  <SelectItem value="Industrial">Industrial</SelectItem>
+                  <SelectItem value="Land">Land</SelectItem>
+                  <SelectItem value="Manufactured Housing">Manufactured Housing</SelectItem>
+                  <SelectItem value="Multi-Family">Multi-Family</SelectItem>
+                  <SelectItem value="Office">Office</SelectItem>
+                  <SelectItem value="Retail">Retail</SelectItem>
+                  <SelectItem value="Self-Storage">Self-Storage</SelectItem>
+                  <SelectItem value="Single-Family">Single-Family</SelectItem>
+                  <SelectItem value="Special Purpose">Special Purpose</SelectItem>
+                  <SelectItem value="Unknown">Unknown</SelectItem>
+                </SelectContent>
+              </Select>
             </CompactField>
             <CompactField label="Address">
               <Input
@@ -579,14 +518,16 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               <Select
                 value={job.intendedUse || ''}
                 onValueChange={(value) => {
-                  onUpdateJob?.({intendedUse: value});
-                  autoSaveField('intendedUse', value);
+                  const v = value === '__clear__' ? '' : value;
+                  onUpdateJob?.({intendedUse: v});
+                  autoSaveField('intendedUse', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[200px] text-center">
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
                   <SelectItem value="First Mortgage Financing">First Mortgage Financing</SelectItem>
                   <SelectItem value="Financial Reporting">Financial Reporting</SelectItem>
                   <SelectItem value="Insurance">Insurance</SelectItem>
@@ -602,14 +543,16 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               <Select
                 value={job.valuationPremises || ''}
                 onValueChange={(value) => {
-                  onUpdateJob?.({valuationPremises: value});
-                  autoSaveField('valuationPremises', value);
+                  const v = value === '__clear__' ? '' : value;
+                  onUpdateJob?.({valuationPremises: v});
+                  autoSaveField('valuationPremises', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[200px] text-center">
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
                   <SelectItem value="Market Value">Market Value</SelectItem>
                   <SelectItem value="Market Rent">Market Rent</SelectItem>
                   <SelectItem value="Investment Value">Investment Value</SelectItem>
@@ -622,14 +565,16 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               <Select
                 value={job.assetCondition || ''}
                 onValueChange={(value) => {
-                  onUpdateJob?.({assetCondition: value});
-                  autoSaveField('assetCondition', value);
+                  const v = value === '__clear__' ? '' : value;
+                  onUpdateJob?.({assetCondition: v});
+                  autoSaveField('assetCondition', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[200px] text-center">
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/20 !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
                   <SelectItem value="Excellent">Excellent</SelectItem>
                   <SelectItem value="Very Good">Very Good</SelectItem>
                   <SelectItem value="Good">Good</SelectItem>

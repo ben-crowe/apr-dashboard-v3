@@ -598,7 +598,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           {/* Property Contact Information */}
           <div className="mt-3">
             <h4 className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">Property Contact</h4>
-            <TwoColumnFields>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-0.5 [&_label]:min-w-[120px]">
               <CompactField label="First Name">
                 <Input
                   value={job.propertyContactFirstName || ''}
@@ -635,7 +635,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   className="h-7 text-sm max-w-[280px]"
                 />
               </CompactField>
-            </TwoColumnFields>
+            </div>
           </div>
         </SectionGroup>
 

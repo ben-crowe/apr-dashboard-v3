@@ -953,7 +953,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 value={jobDetails?.jobNumber || ''}
                 readOnly
                 placeholder={isPendingValcreJob(jobDetails?.jobNumber) ? 'Pending...' : 'Awaiting Valcre job'}
-                className="h-7 text-sm w-full"
+                className="h-7 text-sm max-w-[160px]"
               />
             </CompactField>
             <CompactField label="ClickUp Task">
@@ -1050,7 +1050,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               onChange={handleCurrencyChange}
               onBlur={handleCurrencyBlur}
               onFocus={() => setEditingAppraisalFee(jobDetails.appraisalFee ? jobDetails.appraisalFee.toString() : '')}
-              className="h-7 text-sm w-full"
+              className="h-7 text-sm max-w-[160px]"
             />
           </CompactField>
 
@@ -1083,7 +1083,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               onChange={handleCurrencyChange}
               onBlur={handleCurrencyBlur}
               onFocus={() => setEditingRetainerAmount(jobDetails.retainerAmount || '')}
-              className="h-7 text-sm w-full"
+              className="h-7 text-sm max-w-[160px]"
             />
           </CompactField>
 
@@ -1095,7 +1095,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               value={jobDetails.deliveryDate || ''}
               onChange={handleChange}
               onBlur={handleBlur}
-              className="h-7 text-sm w-full"
+              className="h-7 text-sm max-w-[160px]"
             />
           </CompactField>
         </TwoColumnFields>

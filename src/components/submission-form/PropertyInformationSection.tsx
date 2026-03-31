@@ -170,8 +170,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                 <SelectItem value="Retail">Retail</SelectItem>
                 <SelectItem value="Self-Storage">Self-Storage</SelectItem>
                 <SelectItem value="Single-Family">Single-Family</SelectItem>
+                <SelectItem value="Senior">Senior</SelectItem>
                 <SelectItem value="Special Purpose">Special Purpose</SelectItem>
                 <SelectItem value="Unknown">Unknown</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
               </SelectContent>
             </Select>
             {errors.propertyType && (
@@ -196,7 +198,9 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                 <SelectItem value="Acquisition-Disposition">Acquisition-Disposition</SelectItem>
                 <SelectItem value="Estate Planning">Estate Planning</SelectItem>
                 <SelectItem value="Litigation">Litigation</SelectItem>
+                <SelectItem value="Underwriting Decisions">Underwriting Decisions</SelectItem>
                 <SelectItem value="GST">GST</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
               </SelectContent>
             </Select>
           </div>

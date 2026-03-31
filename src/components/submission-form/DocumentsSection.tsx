@@ -46,11 +46,11 @@ const DocumentsSection: React.FC<DocumentsSectionProps> = ({
         </div>
 
         {/* File Upload Zone */}
-        <div className="relative border-2 border-dashed border-slate-300 dark:border-white/15 rounded-lg p-8 text-center hover:border-blue-400 dark:hover:border-blue-500/40 transition-colors">
-          <Upload className="h-12 w-12 text-slate-400 dark:text-white/30 mx-auto mb-4" />
+        <div className="group relative border-2 border-dashed border-slate-300 dark:border-white/15 rounded-lg p-8 text-center hover:border-gray-600 dark:hover:border-white/40 transition-colors">
+          <Upload className="h-12 w-12 text-slate-400 dark:text-white/30 mx-auto mb-4 group-hover:text-gray-700 dark:group-hover:text-white/60 transition-colors" />
           <div className="space-y-2">
-            <p className="text-lg font-medium text-slate-700 dark:text-white/70">Drop files here or click to upload</p>
-            <p className="text-sm text-slate-500 dark:text-white/40">
+            <p className="text-lg font-medium text-slate-700 dark:text-white/70 group-hover:text-gray-900 dark:group-hover:text-white/90 transition-colors">Drop files here or click to upload</p>
+            <p className="text-sm text-slate-500 dark:text-white/70 group-hover:text-gray-700 dark:group-hover:text-white/90 transition-colors">
               Supported formats: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG (Max 10MB per file)
             </p>
           </div>

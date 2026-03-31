@@ -2,7 +2,7 @@
 import React from "react";
 
 export const sectionTriggerStyle = "hover:no-underline py-3";
-export const sectionContentStyle = "px-3 py-4";
+export const sectionContentStyle = "px-4 py-4";
 
 // Section header with optional number
 export const SectionTitle = ({ number, title }: { number?: string; title: string }) => (

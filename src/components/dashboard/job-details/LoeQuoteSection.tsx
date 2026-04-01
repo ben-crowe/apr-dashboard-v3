@@ -1116,7 +1116,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 <div key={name} className="flex flex-col gap-2">
                   <label className="text-sm text-gray-600 dark:text-gray-400">{label}:</label>
                   <div className="flex items-start gap-1">
-                    {((jobDetails as any)[name] || '').length > 80 ? (
+                    {name === 'appraiserComments' && ((jobDetails as any).appraiserComments || '').length + ((jobDetails as any).deliveryComments || '').length + ((jobDetails as any).paymentComments || '').length > 80 ? (
                       <button
                         type="button"
                         onClick={() => setCommentsExpanded(!commentsExpanded)}

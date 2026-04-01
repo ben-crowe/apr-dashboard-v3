@@ -18,15 +18,19 @@ const JobListViewContent: React.FC<JobListViewProps> = ({ onSelectJob }) => {
     <div className="space-y-4">
       <JobListTitle onSelectJob={onSelectJob} />
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <JobSearch 
-          searchQuery={searchQuery}
-          onSearchChange={handleSearchChange}
-        />
-        <StatusFilter
-          statusFilter={statusFilter}
-          onStatusFilterChange={setStatusFilter}
-        />
+      <div className="flex flex-col sm:flex-row gap-3 items-center">
+        <div className="max-w-[400px] flex-1">
+          <JobSearch
+            searchQuery={searchQuery}
+            onSearchChange={handleSearchChange}
+          />
+        </div>
+        <div className="flex items-center gap-2 ml-auto">
+          <StatusFilter
+            statusFilter={statusFilter}
+            onStatusFilterChange={setStatusFilter}
+          />
+        </div>
       </div>
 
       <JobList

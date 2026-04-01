@@ -1107,22 +1107,24 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
           {/* Comments Section - Three columns (responsive) */}
           <SectionGroup title="Comments">
-            <div className="flex items-start gap-2 ml-2">
-              <button
-                type="button"
-                onClick={() => setCommentsExpanded(!commentsExpanded)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 mt-0.5 flex-shrink-0"
-              >
-                {commentsExpanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
-              </button>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
-                {[
-                  { label: 'General', name: 'appraiserComments', placeholder: 'Internal appraiser notes...' },
-                  { label: 'Delivery', name: 'deliveryComments', placeholder: 'Delivery instructions...' },
-                  { label: 'Payment', name: 'paymentComments', placeholder: 'Payment terms and notes...' },
-                ].map(({ label, name, placeholder }) => (
-                  <div key={name} className="flex flex-col gap-2">
-                    <label className="text-sm text-gray-600 dark:text-gray-400">{label}:</label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-4">
+              {[
+                { label: 'General', name: 'appraiserComments', placeholder: 'Internal appraiser notes...' },
+                { label: 'Delivery', name: 'deliveryComments', placeholder: 'Delivery instructions...' },
+                { label: 'Payment', name: 'paymentComments', placeholder: 'Payment terms and notes...' },
+              ].map(({ label, name, placeholder }) => (
+                <div key={name} className="flex flex-col gap-2">
+                  <label className="text-sm text-gray-600 dark:text-gray-400">{label}:</label>
+                  <div className="flex items-start gap-1">
+                    {((jobDetails as any)[name] || '').length > 80 ? (
+                      <button
+                        type="button"
+                        onClick={() => setCommentsExpanded(!commentsExpanded)}
+                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 mt-0.5 flex-shrink-0"
+                      >
+                        {commentsExpanded ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
+                      </button>
+                    ) : null}
                     <Textarea
                       name={name}
                       value={(jobDetails as any)[name] || ''}
@@ -1135,8 +1137,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                       placeholder={placeholder}
                     />
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </SectionGroup>
 

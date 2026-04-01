@@ -16,7 +16,7 @@
       --gap-row: 10px;
       --transition-gap: 16px;
       --label-gap: 8px;
-      --content-max-w: 720px;
+      --content-max-w: 960px;
 
       --text-base: #111827;
       --text-label: #4b5563;
@@ -58,6 +58,7 @@
     .content-center {
       max-width: var(--content-max-w);
       margin: 0 auto;
+      padding: 0 32px;          /* px-8 — inset from edges at narrow viewports */
     }
 
     .section-group {
@@ -115,23 +116,37 @@
       min-width: 0;
     }
 
+    .underline-input-wrap {
+      position: relative;
+      max-width: 220px;
+      width: 100%;
+    }
+
+    .underline-input-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: var(--underline-w);
+      height: 1px;
+      background: var(--line-color);
+    }
+
+    .underline-input-wrap:focus-within::after {
+      background: var(--focus-color);
+      box-shadow: 0 1px 0 0 var(--focus-color);
+    }
+
     .underline-input {
       font-size: 14px;
       color: var(--text-base);
       border: none;
-      border-bottom: 1px solid var(--line-color);
       border-radius: 0;
       background: transparent;
-      max-width: var(--underline-w);
       width: 100%;
       height: var(--row-h);
       padding: 0;
       outline: none;
-    }
-
-    .underline-input:focus {
-      border-bottom-color: var(--focus-color);
-      box-shadow: 0 1px 0 0 var(--focus-color);
     }
 
     .underline-input::placeholder {
@@ -292,27 +307,27 @@
       <div class="two-col">
         <div class="field">
           <label class="field-label">First Name</label>
-          <div class="field-value"><input type="text" class="underline-input" value="Michael"></div>
+          <div class="field-value"><div class="underline-input-wrap"><input type="text" class="underline-input" value="Michael"></div></div>
         </div>
         <div class="field">
           <label class="field-label">Last Name</label>
-          <div class="field-value"><input type="text" class="underline-input" value="Johnson"></div>
+          <div class="field-value"><div class="underline-input-wrap"><input type="text" class="underline-input" value="Johnson"></div></div>
         </div>
         <div class="field">
           <label class="field-label">Title</label>
-          <div class="field-value"><input type="text" class="underline-input" value="VP of Real Estate"></div>
+          <div class="field-value"><div class="underline-input-wrap"><input type="text" class="underline-input" value="VP of Real Estate"></div></div>
         </div>
         <div class="field">
           <label class="field-label">Organization</label>
-          <div class="field-value"><input type="text" class="underline-input" value="Premier Properties"></div>
+          <div class="field-value"><div class="underline-input-wrap"><input type="text" class="underline-input" value="Premier Properties"></div></div>
         </div>
         <div class="field">
           <label class="field-label">Phone</label>
-          <div class="field-value"><input type="tel" class="underline-input" value="(403) 555-0100"></div>
+          <div class="field-value"><div class="underline-input-wrap"><input type="tel" class="underline-input" value="(403) 555-0100"></div></div>
         </div>
         <div class="field">
           <label class="field-label">Email</label>
-          <div class="field-value"><input type="email" class="underline-input" value="michael@premier.ca"></div>
+          <div class="field-value"><div class="underline-input-wrap"><input type="email" class="underline-input" value="michael@premier.ca"></div></div>
         </div>
       </div>
 
@@ -335,7 +350,7 @@
       <div class="two-col">
         <div class="field">
           <label class="field-label">Property Name</label>
-          <div class="field-value"><input type="text" class="underline-input" value="Riverside Complex"></div>
+          <div class="field-value"><div class="underline-input-wrap"><input type="text" class="underline-input" value="Riverside Complex"></div></div>
         </div>
         <div class="field">
           <label class="field-label">Property Type</label>
@@ -424,19 +439,19 @@
       <div class="two-col">
         <div class="field">
           <label class="field-label">First Name</label>
-          <div class="field-value"><input type="text" class="underline-input" value="Marcus"></div>
+          <div class="field-value"><div class="underline-input-wrap"><input type="text" class="underline-input" value="Marcus"></div></div>
         </div>
         <div class="field">
           <label class="field-label">Email</label>
-          <div class="field-value"><input type="email" class="underline-input" value="property.mgr@harbour.ca"></div>
+          <div class="field-value"><div class="underline-input-wrap"><input type="email" class="underline-input" value="property.mgr@harbour.ca"></div></div>
         </div>
         <div class="field">
           <label class="field-label">Last Name</label>
-          <div class="field-value"><input type="text" class="underline-input" value="Johnson"></div>
+          <div class="field-value"><div class="underline-input-wrap"><input type="text" class="underline-input" value="Johnson"></div></div>
         </div>
         <div class="field">
           <label class="field-label">Phone</label>
-          <div class="field-value"><input type="tel" class="underline-input" value="(416) 555-0456"></div>
+          <div class="field-value"><div class="underline-input-wrap"><input type="tel" class="underline-input" value="(416) 555-0456"></div></div>
         </div>
       </div>
     </div>

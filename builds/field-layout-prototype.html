@@ -17,7 +17,7 @@
       --gap-row: 10px;         /* Breathing room between rows */
       --transition-gap: 16px;  /* Tailwind: mt-4 — between row type changes */
       --label-gap: 8px;        /* Tailwind: gap-2 — CompactField flex gap */
-      --content-max-w: 720px;  /* Content-driven: 2×(160+8+160) + 16 gap + breathing room */
+      --content-max-w: 960px;
 
       /* Colors — light mode (matches existing Tailwind theme) */
       --text-base: #111827;       /* gray-900 */
@@ -68,6 +68,7 @@
     .content-center {
       max-width: var(--content-max-w);
       margin: 0 auto;
+      padding: 0 32px;          /* px-8 — inset from edges at narrow viewports */
     }
 
     /* ── Section Group ───────────────────────────────
@@ -157,23 +158,38 @@
        React: <Input className="h-7 text-sm max-w-[160px]" />
        Styling: !bg-transparent border-0 border-b border-b-gray-400
                 dark:border-b-white/20 !rounded-none px-0 ── */
+    /* Text input wrapper — underline is 160px, input extends to 220px */
+    .underline-input-wrap {
+      position: relative;
+      max-width: 220px;
+      width: 100%;
+    }
+
+    .underline-input-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: var(--underline-w);
+      height: 1px;
+      background: var(--line-color);
+    }
+
+    .underline-input-wrap:focus-within::after {
+      background: var(--focus-color);
+      box-shadow: 0 1px 0 0 var(--focus-color);
+    }
+
     .underline-input {
       font-size: 14px;
       color: var(--text-base);
       border: none;
-      border-bottom: 1px solid var(--line-color);
       border-radius: 0;
       background: transparent;
-      max-width: var(--underline-w);
       width: 100%;
       height: var(--row-h);
       padding: 0;
       outline: none;
-    }
-
-    .underline-input:focus {
-      border-bottom-color: var(--focus-color);
-      box-shadow: 0 1px 0 0 var(--focus-color);
     }
 
     .underline-input::placeholder {
@@ -428,13 +444,13 @@
         <div class="field">
           <label class="field-label">First Name</label>
           <div class="field-value">
-            <input type="text" class="underline-input" value="Michael">
+            <div class="underline-input-wrap"><input type="text" class="underline-input" value="Michael"></div>
           </div>
         </div>
         <div class="field">
           <label class="field-label">Last Name</label>
           <div class="field-value">
-            <input type="text" class="underline-input" value="Johnson">
+            <div class="underline-input-wrap"><input type="text" class="underline-input" value="Johnson"></div>
           </div>
         </div>
 
@@ -442,13 +458,13 @@
         <div class="field">
           <label class="field-label">Title</label>
           <div class="field-value">
-            <input type="text" class="underline-input" value="VP of Real Estate">
+            <div class="underline-input-wrap"><input type="text" class="underline-input" value="VP of Real Estate"></div>
           </div>
         </div>
         <div class="field">
           <label class="field-label">Organization</label>
           <div class="field-value">
-            <input type="text" class="underline-input" value="Premier Properties">
+            <div class="underline-input-wrap"><input type="text" class="underline-input" value="Premier Properties"></div>
           </div>
         </div>
 
@@ -456,13 +472,13 @@
         <div class="field">
           <label class="field-label">Phone</label>
           <div class="field-value">
-            <input type="tel" class="underline-input" value="(403) 555-0100">
+            <div class="underline-input-wrap"><input type="tel" class="underline-input" value="(403) 555-0100"></div>
           </div>
         </div>
         <div class="field">
           <label class="field-label">Email</label>
           <div class="field-value">
-            <input type="email" class="underline-input" value="michael@premier.ca">
+            <div class="underline-input-wrap"><input type="email" class="underline-input" value="michael@premier.ca"></div>
           </div>
         </div>
 
@@ -499,7 +515,7 @@
         <div class="field">
           <label class="field-label">Property Name</label>
           <div class="field-value">
-            <input type="text" class="underline-input" value="Riverside Complex">
+            <div class="underline-input-wrap"><input type="text" class="underline-input" value="Riverside Complex"></div>
           </div>
         </div>
         <div class="field">
@@ -611,13 +627,13 @@
         <div class="field">
           <label class="field-label">First Name</label>
           <div class="field-value">
-            <input type="text" class="underline-input" value="Marcus">
+            <div class="underline-input-wrap"><input type="text" class="underline-input" value="Marcus"></div>
           </div>
         </div>
         <div class="field">
           <label class="field-label">Email</label>
           <div class="field-value">
-            <input type="email" class="underline-input" value="property.mgr@harbour.ca">
+            <div class="underline-input-wrap"><input type="email" class="underline-input" value="property.mgr@harbour.ca"></div>
           </div>
         </div>
 
@@ -625,13 +641,13 @@
         <div class="field">
           <label class="field-label">Last Name</label>
           <div class="field-value">
-            <input type="text" class="underline-input" value="Johnson">
+            <div class="underline-input-wrap"><input type="text" class="underline-input" value="Johnson"></div>
           </div>
         </div>
         <div class="field">
           <label class="field-label">Phone</label>
           <div class="field-value">
-            <input type="tel" class="underline-input" value="(416) 555-0456">
+            <div class="underline-input-wrap"><input type="tel" class="underline-input" value="(416) 555-0456"></div>
           </div>
         </div>
 

@@ -399,7 +399,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         {/* Client Information Group */}
         <SectionGroup title="Client Information">
-          <TwoColumnFields>
+          <TwoColumnFields className="md:!grid-cols-[420px_420px]">
             <CompactField label="First Name">
               <div className="relative">
                 <Input value={job.clientFirstName || ''} onChange={(e) => onUpdateJob?.({clientFirstName: e.target.value})} onBlur={(e) => handleBlur('clientFirstName', e.target.value)} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
@@ -453,7 +453,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         {/* Property Information Group */}
         <SectionGroup title="Property Information">
-          <TwoColumnFields>
+          <TwoColumnFields className="md:!grid-cols-[420px_420px]">
             <CompactField label="Property Name">
               <div className="relative">
                 <Input value={job.propertyName || ''} onChange={(e) => onUpdateJob?.({propertyName: e.target.value})} onBlur={(e) => handleBlur('propertyName', e.target.value)} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
@@ -507,7 +507,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
             </CompactField>
           </div>
           {/* Three selects — use same TwoColumnFields grid so edges align */}
-          <TwoColumnFields>
+          <TwoColumnFields className="md:!grid-cols-[420px_420px]">
             <CompactField label="Authorized Use">
               <Select
                 value={job.intendedUse || ''}
@@ -584,7 +584,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         {/* Property Contact */}
         <SectionGroup title="Property Contact">
-          <TwoColumnFields>
+          <TwoColumnFields className="md:!grid-cols-[420px_420px]">
             <CompactField label="First Name">
               <div className="relative">
                 <Input value={job.propertyContactFirstName || ''} onChange={(e) => onUpdateJob?.({propertyContactFirstName: e.target.value})} onBlur={(e) => handleBlur('propertyContactFirstName', e.target.value)} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />

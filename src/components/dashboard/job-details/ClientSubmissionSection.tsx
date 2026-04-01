@@ -525,8 +525,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               />
             </CompactField>
           </div>
-          {/* Three selects — label on top, like Comments section. ml-[168px] aligns with CompactField value start (160px label + 8px gap) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-[168px]">
+          {/* Three selects — label on top, like Comments section. pl-[168px] aligns with CompactField value start (160px label + 8px gap) while keeping right edge aligned with two-column grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pl-[168px]">
             <div className="flex flex-col gap-2">
               <label className="text-sm text-gray-600 dark:text-gray-400">Authorized Use:</label>
               <Select

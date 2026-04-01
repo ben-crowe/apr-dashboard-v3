@@ -627,8 +627,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         {/* Uploaded Documents Section */}
         <SectionGroup title="Uploaded Documents">
-          <div 
-            className="space-y-3"
+          <div
+            className="space-y-3 ml-8"
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}
             onDragOver={handleDrag}

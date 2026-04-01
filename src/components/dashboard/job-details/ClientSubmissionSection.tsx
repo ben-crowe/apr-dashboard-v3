@@ -525,10 +525,9 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               />
             </CompactField>
           </div>
-          {/* Three selects — label on top, like Comments section. pl-[168px] aligns with CompactField value start (160px label + 8px gap) while keeping right edge aligned with two-column grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 pl-[168px]">
-            <div className="flex flex-col gap-2">
-              <label className="text-sm text-gray-600 dark:text-gray-400">Authorized Use:</label>
+          {/* Three selects — use same TwoColumnFields grid so edges align */}
+          <TwoColumnFields>
+            <CompactField label="Authorized Use">
               <Select
                 value={job.intendedUse || ''}
                 onValueChange={(value) => {
@@ -554,9 +553,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   <SelectItem value="Other">Other</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-sm text-gray-600 dark:text-gray-400">Valuation Premises:</label>
+            </CompactField>
+            <CompactField label="Valuation Premises">
               <Select
                 value={job.valuationPremises || ''}
                 onValueChange={(value) => {
@@ -577,9 +575,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   <SelectItem value="Liquidation Value">Liquidation Value</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="text-sm text-gray-600 dark:text-gray-400">Asset Condition:</label>
+            </CompactField>
+            <CompactField label="Asset Condition">
               <Select
                 value={job.assetCondition || ''}
                 onValueChange={(value) => {
@@ -600,8 +597,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   <SelectItem value="Poor">Poor</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-          </div>
+            </CompactField>
+          </TwoColumnFields>
         </SectionGroup>
 
         {/* Property Contact */}

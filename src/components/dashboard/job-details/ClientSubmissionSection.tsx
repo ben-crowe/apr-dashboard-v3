@@ -614,7 +614,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         {/* Client Comments Section */}
         <SectionGroup title="Client Comments">
-          <div className="ml-4">
+          <div className="ml-8">
             <Textarea
               value={job.notes || ''}
               onChange={(e) => onUpdateJob?.({notes: e.target.value})}

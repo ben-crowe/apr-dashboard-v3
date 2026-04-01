@@ -475,7 +475,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('propertyType', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none !px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none !px-0 !justify-start !gap-1">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -523,7 +523,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('intendedUse', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none !px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none !px-0 !justify-start !gap-1">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -550,7 +550,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('valuationPremises', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none !px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none !px-0 !justify-start !gap-1">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -572,7 +572,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('assetCondition', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none !px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none !px-0 !justify-start !gap-1">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>

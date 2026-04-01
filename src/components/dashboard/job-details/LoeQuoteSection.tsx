@@ -1106,7 +1106,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
           {/* Comments Section - Three columns (responsive) */}
           <SectionGroup title="Comments">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-4 items-stretch">
               <div className="flex flex-col gap-2">
                 <label className="text-sm text-gray-600 dark:text-gray-400">General:</label>
                 <Textarea
@@ -1115,9 +1115,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   onChange={handleChange}
                   onBlur={handleBlur}
                   rows={1}
-                  className="text-sm resize-none min-h-[28px] w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1 overflow-hidden"
-                  style={{ height: 'auto' }}
-                  ref={(el) => { if (el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; } }}
+                  className="text-sm resize-none min-h-[28px] h-full w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1"
                   placeholder="Internal appraiser notes..."
                 />
               </div>
@@ -1130,9 +1128,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   onChange={handleChange}
                   onBlur={handleBlur}
                   rows={1}
-                  className="text-sm resize-none min-h-[28px] w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1 overflow-hidden"
-                  style={{ height: 'auto' }}
-                  ref={(el) => { if (el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; } }}
+                  className="text-sm resize-none min-h-[28px] h-full w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1"
                   placeholder="Delivery instructions..."
                 />
               </div>
@@ -1145,9 +1141,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   onChange={handleChange}
                   onBlur={handleBlur}
                   rows={1}
-                  className="text-sm resize-none min-h-[28px] w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1 overflow-hidden"
-                  style={{ height: 'auto' }}
-                  ref={(el) => { if (el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; } }}
+                  className="text-sm resize-none min-h-[28px] h-full w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1"
                   placeholder="Payment terms and notes..."
                 />
               </div>

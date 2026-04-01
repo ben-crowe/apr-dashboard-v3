@@ -154,6 +154,36 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   const [dragActive, setDragActive] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Parse address string into parts: "123 Main St, Calgary, AB T2P 1A1" → {street, city, provincePostal}
+  const parseAddress = (address: string) => {
+    if (!address) return { street: '', city: '', provincePostal: '' };
+    const parts = address.split(',').map(s => s.trim());
+    if (parts.length >= 3) {
+      return { street: parts.slice(0, -2).join(', '), city: parts[parts.length - 2], provincePostal: parts[parts.length - 1] };
+    }
+    if (parts.length === 2) {
+      return { street: parts[0], city: parts[1], provincePostal: '' };
+    }
+    return { street: address, city: '', provincePostal: '' };
+  };
+
+  const joinAddress = (street: string, city: string, provincePostal: string) => {
+    return [street, city, provincePostal].filter(Boolean).join(', ');
+  };
+
+  // Client address parts
+  const [clientAddrParts, setClientAddrParts] = useState(() => parseAddress(job.clientAddress || ''));
+  // Property address parts
+  const [propertyAddrParts, setPropertyAddrParts] = useState(() => parseAddress(job.propertyAddress || ''));
+
+  // Sync when job data changes externally (e.g. test data button)
+  useEffect(() => {
+    setClientAddrParts(parseAddress(job.clientAddress || ''));
+  }, [job.clientAddress]);
+  useEffect(() => {
+    setPropertyAddrParts(parseAddress(job.propertyAddress || ''));
+  }, [job.propertyAddress]);
+
   // Format phone number as (XXX) XXX-XXXX
   const formatPhoneNumber = (value: string): string => {
     if (!value) return '';
@@ -201,7 +231,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       clientLastName: lastName,
       clientTitle: title,
       clientOrganization: company,
-      clientAddress: `${buildingNum} ${street}, Suite ${suiteNum}, Calgary, AB T2P 3H7`,
+      clientAddress: `${buildingNum} ${street} Suite ${suiteNum}, Calgary, AB T2P 3H7`,
       clientPhone: `403-555-0100`,
       clientEmail: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${company.toLowerCase().replace(/ /g, '')}.ca`,
       propertyName: propertyName,
@@ -453,16 +483,32 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[280px]"
               />
             </CompactField>
-            <CompactField label="Address">
-              <div className="relative w-[280px]">
-                <div className="absolute bottom-0 left-0 w-full border-b border-b-gray-400 dark:border-b-white/20" />
-                <Input
-                  value={job.clientAddress || ''}
-                  onChange={(e) => onUpdateJob?.({clientAddress: e.target.value})}
-                  onBlur={(e) => handleBlur('clientAddress', e.target.value)}
-                  className="h-7 text-sm w-[500px] border-0 !border-b-0"
-                />
-              </div>
+            <CompactField label="Street" fullWidth>
+              <Input
+                value={clientAddrParts.street}
+                onChange={(e) => setClientAddrParts(prev => ({ ...prev, street: e.target.value }))}
+                onBlur={() => handleBlur('clientAddress', joinAddress(clientAddrParts.street, clientAddrParts.city, clientAddrParts.provincePostal))}
+                placeholder="123 Main Street, Suite 500"
+                className="h-7 text-sm max-w-[280px]"
+              />
+            </CompactField>
+            <CompactField label="City">
+              <Input
+                value={clientAddrParts.city}
+                onChange={(e) => setClientAddrParts(prev => ({ ...prev, city: e.target.value }))}
+                onBlur={() => handleBlur('clientAddress', joinAddress(clientAddrParts.street, clientAddrParts.city, clientAddrParts.provincePostal))}
+                placeholder="Calgary"
+                className="h-7 text-sm max-w-[280px]"
+              />
+            </CompactField>
+            <CompactField label="Province/Postal">
+              <Input
+                value={clientAddrParts.provincePostal}
+                onChange={(e) => setClientAddrParts(prev => ({ ...prev, provincePostal: e.target.value }))}
+                onBlur={() => handleBlur('clientAddress', joinAddress(clientAddrParts.street, clientAddrParts.city, clientAddrParts.provincePostal))}
+                placeholder="AB T2P 1A1"
+                className="h-7 text-sm max-w-[280px]"
+              />
             </CompactField>
           </div>
         </SectionGroup>
@@ -511,16 +557,32 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 </SelectContent>
               </Select>
             </CompactField>
-            <CompactField label="Address">
-              <div className="relative w-[280px]">
-                <div className="absolute bottom-0 left-0 w-full border-b border-b-gray-400 dark:border-b-white/20" />
-                <Input
-                  value={job.propertyAddress || ''}
-                  onChange={(e) => onUpdateJob?.({propertyAddress: e.target.value})}
-                  onBlur={(e) => handleBlur('propertyAddress', e.target.value)}
-                  className="h-7 text-sm w-[500px] border-0 !border-b-0"
-                />
-              </div>
+            <CompactField label="Street" fullWidth>
+              <Input
+                value={propertyAddrParts.street}
+                onChange={(e) => setPropertyAddrParts(prev => ({ ...prev, street: e.target.value }))}
+                onBlur={() => handleBlur('propertyAddress', joinAddress(propertyAddrParts.street, propertyAddrParts.city, propertyAddrParts.provincePostal))}
+                placeholder="2800 Bayview Avenue"
+                className="h-7 text-sm max-w-[280px]"
+              />
+            </CompactField>
+            <CompactField label="City">
+              <Input
+                value={propertyAddrParts.city}
+                onChange={(e) => setPropertyAddrParts(prev => ({ ...prev, city: e.target.value }))}
+                onBlur={() => handleBlur('propertyAddress', joinAddress(propertyAddrParts.street, propertyAddrParts.city, propertyAddrParts.provincePostal))}
+                placeholder="Calgary"
+                className="h-7 text-sm max-w-[280px]"
+              />
+            </CompactField>
+            <CompactField label="Province/Postal">
+              <Input
+                value={propertyAddrParts.provincePostal}
+                onChange={(e) => setPropertyAddrParts(prev => ({ ...prev, provincePostal: e.target.value }))}
+                onBlur={() => handleBlur('propertyAddress', joinAddress(propertyAddrParts.street, propertyAddrParts.city, propertyAddrParts.provincePostal))}
+                placeholder="AB T2P 1A1"
+                className="h-7 text-sm max-w-[280px]"
+              />
             </CompactField>
             <CompactField label="Authorized Use">
               <Select

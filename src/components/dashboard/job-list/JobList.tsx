@@ -25,7 +25,7 @@ const JobList: React.FC<JobListProps> = ({ jobs, isLoading, onSelectJob }) => {
   return (
     <>
       <JobListHeader />
-      <div className="border border-border/50 rounded-md bg-card divide-y divide-border/30">
+      <div className="border border-border/50 rounded-md bg-card divide-y divide-border/60">
         {jobs.map((job) => (
           <JobListItem
             key={job.id}

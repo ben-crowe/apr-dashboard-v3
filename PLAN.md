@@ -18,6 +18,14 @@ Single source of truth for the project's roadmap, to-dos, and next steps. Histor
 - Field registry backup files (fieldRegistry.ts.backup, fieldRegistry.ts.bak) — remove or archive
 - reportBuilderStore.ts.bak-before-assignment — remove
 
+### Interactive Field Mapping Tool (HTML Prototype)
+- Extend the HTML dashboard prototype into a field mapping reference tool
+- Click any field → popup shows: source (client form / Valcre API / manual), data type (text, currency, date, sqft), DB column, downstream targets (Valcre, DocuSeal, ClickUp)
+- "Client Form Overlay" button → intake form hovers over dashboard with numbered fields showing where each maps to
+- Data source: existing field audit markdown files (`builds/apr-field-audit/phase1-4`)
+- UI designer builds from markdown field mapping docs → visual HTML output replaces spreadsheet cross-referencing
+- Shareable with client/team as a visual data flow reference
+
 ### UI/UX Polish — Pending
 - Select trigger text indent on long values (e.g. "First Mortgage Financing" pushes right) — needs deeper SelectTrigger component fix
 - Client Comments textarea not editable — investigate

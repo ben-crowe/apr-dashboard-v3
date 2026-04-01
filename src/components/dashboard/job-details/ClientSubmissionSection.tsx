@@ -455,7 +455,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
             </CompactField>
           </TwoColumnFields>
           {/* Address — single line, no underline */}
-          <div className="mt-4 mb-5 ml-4">
+          <div className="mt-4 mb-5">
             <CompactField label="Address">
               <Input
                 value={job.clientAddress || ''}
@@ -514,7 +514,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
             </CompactField>
           </TwoColumnFields>
           {/* Address — single line, no underline */}
-          <div className="mt-4 mb-5 ml-4">
+          <div className="mt-4 mb-5">
             <CompactField label="Address">
               <Input
                 value={job.propertyAddress || ''}
@@ -526,7 +526,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
             </CompactField>
           </div>
           {/* Three selects — label on top, like Comments section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex flex-col gap-2">
               <label className="text-sm text-gray-600 dark:text-gray-400">Authorized Use:</label>
               <Select

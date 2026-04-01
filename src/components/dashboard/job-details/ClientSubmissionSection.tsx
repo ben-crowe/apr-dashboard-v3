@@ -210,11 +210,10 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       intendedUse: intendedUse,
       assetCondition: condition,
       notes: `Property is a ${sqft.toLocaleString()} sq ft ${propertyType} complex. Need appraisal for ${intendedUse}.`,
-      // Initialize property contact fields as empty (defaults to client contact if left blank)
-      propertyContactFirstName: '',
-      propertyContactLastName: '',
-      propertyContactEmail: '',
-      propertyContactPhone: ''
+      propertyContactFirstName: ['Marcus', 'Lisa', 'Kevin', 'Amanda', 'Derek'][Math.floor(Math.random() * 5)],
+      propertyContactLastName: ['Thompson', 'Chen', 'Park', 'Rivera', 'O\'Brien'][Math.floor(Math.random() * 5)],
+      propertyContactEmail: `property.manager@${propertyName.toLowerCase().replace(/ /g, '')}.ca`,
+      propertyContactPhone: `403-555-${String(Math.floor(Math.random() * 9000) + 1000)}`
     };
 
     onUpdateJob(testData);

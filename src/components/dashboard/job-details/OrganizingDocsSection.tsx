@@ -344,7 +344,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
                 onChange={handleChange}
                 onBlur={handleBlur}
                 rows={1}
-                className="resize-none text-sm w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1 placeholder:italic placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                className="resize-none text-sm max-w-[400px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1 placeholder:italic placeholder:text-gray-400 dark:placeholder:text-gray-500"
                 placeholder=""
               />
             </CompactField>

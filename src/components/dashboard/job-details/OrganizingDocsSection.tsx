@@ -145,6 +145,13 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
       buildingSize: '25000',
       numberOfUnits: 24,
       parkingSpaces: 48,
+      tenancy: 'Multi-Tenant',
+      stateOfImprovements: 'Complete',
+      statusOfImprovements: 'As Is',
+      propertySubtype: 'Mid-Rise',
+      landMetric: 'Acres',
+      environmentalAssessment: 'Phase I ESA completed 2024 — no concerns identified',
+      heritageConservation: 'No heritage designation',
       legalDescription: 'Lot 15, Block 3, Plan 1234, City of Calgary, Province of Alberta'
     };
     

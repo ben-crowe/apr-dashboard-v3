@@ -223,14 +223,74 @@ All 13 wired into `api/valcre.ts` create+update paths. Verified with QA (26/26 P
 
 ---
 
-## Related Files
+## Client Field Registry (Source of Truth from Chris)
 
 | File | Purpose |
 |------|---------|
-| `builds/apr-field-audit/SUMMARY.md` | Full 4-phase audit summary |
-| `builds/apr-field-audit/phase1-4` | Detailed per-phase field mapping |
+| `Valta Field Reg-cc.xlsx` | Chris's original field registry spreadsheet — the client request that drove all field mapping |
+| `docs/VALTA-FIELD-SPEC.md` | Markdown version of the VALTA field spec — 37 fields with types, options, and Valcre mapping |
+
+---
+
+## Current Field Mapping Files (Co-Architect + QA, 2026-03-30)
+
+Complete field-by-field mapping across every system in the pipeline:
+
+| File | Scope |
+|------|-------|
+| `builds/field-mapping/1-client-form.md` | Intake form fields and where they go |
+| `builds/field-mapping/2-dashboard.md` | Dashboard field layout and data sources |
+| `builds/field-mapping/3-valcre-job.md` | Dashboard to Valcre job field mapping |
+| `builds/field-mapping/4-loe-esignature.md` | LOE/DocuSeal field mapping |
+| `builds/field-mapping/5-clickup-task-clean.md` | ClickUp task field mapping (clean version) |
+| `builds/field-mapping/6-dropdown-options.md` | All dropdown/select option values |
+| `builds/field-mapping/7-file-uploads.md` | File upload handling and storage |
+| `builds/field-mapping/8-client-communication.md` | Email and notification mapping |
+| `builds/field-mapping/9-dashboard-to-valcre-mapping.md` | Detailed dashboard-to-Valcre field crosswalk |
+| `builds/field-mapping/10-clickup-workflow-sync-spec.md` | ClickUp workflow sync specification |
+
+---
+
+## Valcre Custom Fields Specs
+
+| File | Purpose |
+|------|---------|
+| `builds/valcre-custom-fields-spec.md` | Spec for the 13 VALTA custom fields (pre-creation) |
+| `builds/VALCRE-CUSTOM-FIELDS-AUDIT.md` | Audit confirming all 13 fields created and wired |
+
+---
+
+## QA Audit Files
+
+| File | Purpose |
+|------|---------|
+| `builds/apr-field-audit/SUMMARY.md` | Full 4-phase audit summary (62 fields, 10 issues) |
+| `builds/apr-field-audit/phase1-intake-to-dashboard.md` | Phase 1: Form to DB to Dashboard |
+| `builds/apr-field-audit/phase2-dashboard-to-valcre.md` | Phase 2: Dashboard to Valcre API |
+| `builds/apr-field-audit/phase3-dashboard-to-docuseal.md` | Phase 3: Dashboard to DocuSeal |
+| `builds/apr-field-audit/phase4-integrations.md` | Phase 4: ClickUp, Email, Webhooks |
+| `builds/APR-DASHBOARD-FIELD-AUDIT.md` | Earlier field audit document |
+
+---
+
+## UX & Design Files
+
+| File | Purpose |
+|------|---------|
 | `docs/-uxui/UX-Feature-Commits.md` | All UI commits with revert hashes |
-| `docs/-uxui/dashboard-field-style-guide.md` | Field layout style guide |
-| `docs/-uxui/dashboard-field-design-brief.md` | Design brief with grid math |
-| `PLAN.md` | Project roadmap and pending work |
+| `docs/-uxui/dashboard-field-style-guide.md` | Field layout style guide (three field types, spacing rules) |
+| `docs/-uxui/dashboard-field-design-brief.md` | Design brief with grid math and colon alignment |
+| `builds/field-layout-prototype-v2.html` | Approved dashboard HTML prototype |
+| `builds/field-layout-form-v1-current.html` | Intake form HTML — current stacked layout |
+| `builds/field-layout-form-v2-dashboard-style.html` | Intake form HTML — dashboard CompactField style |
+
+---
+
+## Project Files
+
+| File | Purpose |
+|------|---------|
+| `PLAN.md` | Project roadmap, pending work, backlog |
 | `CLAUDE.md` | Agent instructions and project context |
+| `README.md` | Project overview and setup |
+| `docs/Features/08-Master-Field-Registry/` | Report Builder field registry docs (2084 fields) |

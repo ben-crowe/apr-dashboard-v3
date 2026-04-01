@@ -336,7 +336,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
         {/* Legal Description Section */}
         <SectionGroup title="Legal Description">
           <TwoColumnFields>
-            <CompactField label="Description" fullWidth className="!items-start">
+            <CompactField label="Description" fullWidth className="!items-start mt-2">
               <Textarea
                 id="legalDescription"
                 name="legalDescription"

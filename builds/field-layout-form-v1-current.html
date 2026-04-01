@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APR Submission Form — V1 Current Layout</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --text-base: #111827;
+      --text-label: #374151;
+      --text-muted: #6b7280;
+      --text-placeholder: #9ca3af;
+      --border-color: #9ca3af;
+      --border-hover: #374151;
+      --focus-color: #6366f1;
+      --error-color: #ef4444;
+      --bg-page: #f9fafb;
+      --bg-card: #ffffff;
+      --bg-subtle: #f3f4f6;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-base);
+      background: var(--bg-page);
+      padding: 32px;
+    }
+
+    .form-container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 32px;
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .form-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-base);
+      margin-bottom: 4px;
+    }
+
+    .form-header p {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* ── Form Section ──────────────────────────── */
+    .form-section {
+      margin-bottom: 32px;
+    }
+
+    .form-section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-base);
+      margin-bottom: 4px;
+    }
+
+    .form-section-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* ── Grid: label above input, 2-col ────────── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-field.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-label);
+    }
+
+    .form-label .req {
+      color: var(--error-color);
+      margin-left: 2px;
+    }
+
+    /* ── Bottom-border input (current style) ───── */
+    .form-input {
+      font-size: 14px;
+      color: var(--text-base);
+      border: none;
+      border-bottom: 1px solid var(--border-color);
+      border-radius: 0;
+      background: transparent;
+      max-width: 240px;
+      width: 100%;
+      height: 32px;
+      padding: 0 0 2px 4px;
+      outline: none;
+    }
+
+    .form-input:hover { border-bottom-color: var(--border-hover); }
+
+    .form-input:focus {
+      border-bottom-color: var(--focus-color);
+      box-shadow: 0 1px 0 0 var(--focus-color);
+    }
+
+    .form-input::placeholder { color: var(--text-placeholder); }
+
+    /* ── Select (current style) ────────────────── */
+    .form-select {
+      font-size: 14px;
+      color: var(--text-base);
+      border: none;
+      border-bottom: 1px solid var(--border-color);
+      border-radius: 0;
+      background: transparent;
+      max-width: 240px;
+      width: 100%;
+      height: 32px;
+      padding: 0 20px 2px 4px;
+      outline: none;
+      cursor: pointer;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 4px center;
+    }
+
+    .form-select:hover { border-bottom-color: var(--border-hover); }
+
+    .form-select:focus {
+      border-bottom-color: var(--focus-color);
+      box-shadow: 0 1px 0 0 var(--focus-color);
+    }
+
+    /* ── Address input (full width, no max-w cap) ─ */
+    .form-input-wide {
+      max-width: 100%;
+    }
+
+    /* ── Textarea ──────────────────────────────── */
+    .form-textarea {
+      font-size: 14px;
+      font-family: inherit;
+      color: var(--text-base);
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      background: transparent;
+      width: 100%;
+      min-height: 120px;
+      padding: 8px 12px;
+      outline: none;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    .form-textarea:hover { border-color: #d1d5db; }
+
+    .form-textarea:focus {
+      border-color: var(--focus-color);
+      box-shadow: 0 0 0 1px var(--focus-color);
+    }
+
+    .form-helper {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ── Property Contact subsection ──────────── */
+    .subsection {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+
+    .subsection-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-label);
+      margin-bottom: 4px;
+    }
+
+    .subsection-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    /* ── Required Documents Info Box ──────────── */
+    .info-box {
+      background: var(--bg-subtle);
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .info-box-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-label);
+      margin-bottom: 8px;
+    }
+
+    .info-box ul {
+      list-style: disc;
+      margin-left: 20px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* ── Upload Zone ─────────────────────────────── */
+    .upload-zone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 32px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      cursor: pointer;
+      transition: border-color 150ms;
+    }
+
+    .upload-zone:hover {
+      border-color: #94a3b8;
+      background: #fafafa;
+    }
+
+    .upload-formats {
+      font-size: 11px;
+      color: var(--text-placeholder);
+      margin-top: 8px;
+    }
+
+    /* ── Submit Button ───────────────────────────── */
+    .submit-btn {
+      display: block;
+      width: 100%;
+      max-width: 240px;
+      margin: 32px auto 0;
+      padding: 12px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, #6366f1, #818cf8);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+      transition: all 150ms;
+    }
+
+    .submit-btn:hover {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+    }
+
+    /* ── Version Label ───────────────────────────── */
+    .version-bar {
+      max-width: 720px;
+      margin: 0 auto 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .version-label {
+      font-size: 11px;
+      color: var(--text-placeholder);
+    }
+
+    .compare-link {
+      font-size: 11px;
+      color: var(--focus-color);
+      text-decoration: none;
+    }
+
+    .compare-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<div class="version-bar">
+  <span class="version-label">V1 — Current Layout (label above input)</span>
+  <div style="display:flex;gap:16px;">
+    <a href="field-layout-form-v2-dashboard-style.html" class="compare-link">V2 Dashboard Style ></a>
+    <a href="field-layout-prototype-v2.html" class="compare-link" style="color:#059669;">Dashboard Prototype ></a>
+  </div>
+</div>
+
+<div class="form-container">
+
+  <div class="form-header">
+    <h1>Appraisal Request</h1>
+    <p>Submit your property appraisal request below</p>
+  </div>
+
+  <!-- CLIENT INFORMATION -->
+  <div class="form-section">
+    <div class="form-section-title">Client Information</div>
+    <div class="form-section-desc">Contact details for the client requesting the appraisal</div>
+    <div class="form-grid">
+      <div class="form-field">
+        <label class="form-label">First Name<span class="req">*</span></label>
+        <input type="text" class="form-input" placeholder="John">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Last Name<span class="req">*</span></label>
+        <input type="text" class="form-input" placeholder="Smith">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Client Title</label>
+        <input type="text" class="form-input" placeholder="Development Manager">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Client Company Name</label>
+        <input type="text" class="form-input" placeholder="ABC Development Corp">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Client Phone<span class="req">*</span></label>
+        <input type="tel" class="form-input" placeholder="(587) 801-5151">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Client Email<span class="req">*</span></label>
+        <input type="email" class="form-input" placeholder="john@abcdevelopment.com">
+      </div>
+      <div class="form-field full-width">
+        <label class="form-label">Client Organization Address</label>
+        <input type="text" class="form-input form-input-wide" placeholder="123 Main Street, Calgary, AB T2P 1A1">
+      </div>
+    </div>
+  </div>
+
+  <!-- PROPERTY & JOB INFORMATION -->
+  <div class="form-section">
+    <div class="form-section-title">Property & Job Information</div>
+    <div class="form-section-desc">Details about the property to be appraised</div>
+    <div class="form-grid">
+      <div class="form-field">
+        <label class="form-label">Property Name<span class="req">*</span></label>
+        <input type="text" class="form-input" placeholder="Riverside Apartments">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Property Address</label>
+        <input type="text" class="form-input" placeholder="456 River Road, Calgary, AB T2P 2B2">
+      </div>
+    </div>
+
+    <!-- Optional Property Contact -->
+    <div class="subsection">
+      <div class="subsection-title">Optional Property Contact</div>
+      <div class="subsection-desc">Leave blank if same as client contact above</div>
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">First Name / Department</label>
+          <input type="text" class="form-input" placeholder="Marcus / Property Management">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Last Name</label>
+          <input type="text" class="form-input" placeholder="Johnson">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" placeholder="property.manager@example.com">
+        </div>
+        <div class="form-field">
+          <label class="form-label">Phone</label>
+          <input type="tel" class="form-input" placeholder="(403) 555-0123">
+        </div>
+      </div>
+    </div>
+
+    <!-- Property Details -->
+    <div style="margin-top: 20px;">
+      <div class="form-grid">
+        <div class="form-field">
+          <label class="form-label">Property Type<span class="req">*</span></label>
+          <select class="form-select">
+            <option value="" disabled selected>Please Select</option>
+            <option>Agriculture</option><option>Building</option><option>Healthcare</option>
+            <option>Hospitality</option><option>Industrial</option><option>Land</option>
+            <option>Manufactured Housing</option><option>Multi-Family</option><option>Office</option>
+            <option>Retail</option><option>Self-Storage</option><option>Single-Family</option>
+            <option>Senior</option><option>Special Purpose</option><option>Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Authorized Use</label>
+          <select class="form-select">
+            <option value="" disabled selected>Please Select</option>
+            <option>First Mortgage Financing</option><option>Financial Reporting</option>
+            <option>Insurance</option><option>Internal Decision-Making</option>
+            <option>Acquisition-Disposition</option><option>Estate Planning</option>
+            <option>Litigation</option><option>Underwriting Decisions</option><option>GST</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Valuation Premises</label>
+          <select class="form-select">
+            <option value="" disabled selected>Select valuation premises</option>
+            <option>Market Value</option><option>Market Rent</option>
+            <option>Investment Value</option><option>Insurable Value</option>
+            <option>Liquidation Value</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label class="form-label">Asset Current Condition</label>
+          <select class="form-select">
+            <option value="" disabled selected>Select asset condition</option>
+            <option>Excellent</option><option>Very Good</option><option>Good</option>
+            <option>Fair</option><option>Poor</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Information -->
+    <div style="margin-top: 20px;">
+      <div class="form-field full-width">
+        <label class="form-label">Additional Information</label>
+        <textarea class="form-textarea" placeholder=""></textarea>
+        <div class="form-helper">Please provide any additional details about the property, special circumstances, timeline requirements, or other relevant information.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REQUIRED DOCUMENTS -->
+  <div class="form-section">
+    <div class="form-section-title">Required Documents</div>
+    <div class="info-box">
+      <div class="info-box-title">The following documents are typically required:</div>
+      <ul>
+        <li>Full Property Details or Prior Appraisal</li>
+        <li>Proforma</li>
+        <li>Unit Mix (MF/SS) or Rent Roll (Retail/Office/Industrial)</li>
+        <li>Operating Expenses (1-3 Years Historical and Budget)</li>
+        <li>Drawings/Plans (New Developments only)</li>
+        <li>Contact for property tour (Existing Buildings only)</li>
+      </ul>
+    </div>
+    <div class="upload-zone">
+      Drop files here or click to upload
+      <div class="upload-formats">PDF, DOC, DOCX, XLS, XLSX, JPG, PNG — Max 10MB per file</div>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <button class="submit-btn">Submit Appraisal Request</button>
+
+</div>
+
+</body>
+</html>

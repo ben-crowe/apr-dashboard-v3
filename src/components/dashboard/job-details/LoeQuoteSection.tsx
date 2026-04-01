@@ -733,7 +733,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       valuationPremises: getRandom(valuationTypes),  // Dynamic for variety
       deliveryDate: staticDeliveryDate,  // STATIC - always 14 days out
       scopeOfWork: getRandom(scopes),  // Dynamic for variety
-      reportType: getRandom(reportTypes),  // Dynamic for variety - matches dropdown exactly
+      reportType: 'Appraisal Report',  // Always Appraisal Report per Ben
       paymentTerms: 'On LOE Signature',  // STATIC payment terms - matches dropdown value
       appraisalFee: STATIC_FEE,  // STATIC fee - $3500
       retainerAmount: STATIC_RETAINER.toFixed(2),  // STATIC retainer - $350

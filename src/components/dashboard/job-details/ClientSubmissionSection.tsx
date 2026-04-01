@@ -399,8 +399,9 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         </div>
 
         {/* Client Information Group */}
-        <SectionGroup title="Client Information">
+        <div className="mb-6 mt-4">
           <div className="max-w-[960px] mx-auto px-8">
+          <h3 className="text-xs font-semibold text-gray-900 dark:text-gray-400 uppercase tracking-wider mb-3">Client Information</h3>
           <TwoColumnFields className="!gap-x-4 !gap-y-[10px]">
             <CompactField label="First Name">
               <div className="relative max-w-[220px]">
@@ -486,11 +487,12 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
             </CompactField>
           </div>
           </div>
-        </SectionGroup>
+        </div>
 
         {/* Property Information Group */}
-        <SectionGroup title="Property Information">
+        <div className="mb-6 mt-4">
           <div className="max-w-[960px] mx-auto px-8">
+          <h3 className="text-xs font-semibold text-gray-900 dark:text-gray-400 uppercase tracking-wider mb-3">Property Information</h3>
           <TwoColumnFields className="!gap-x-4 !gap-y-[10px]">
             <CompactField label="Property Name">
               <div className="relative max-w-[220px]">
@@ -623,11 +625,12 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
             </CompactField>
           </TwoColumnFields>
           </div>
-        </SectionGroup>
+        </div>
 
         {/* Property Contact */}
-        <SectionGroup title="Property Contact">
+        <div className="mb-6 mt-4">
           <div className="max-w-[960px] mx-auto px-8">
+          <h3 className="text-xs font-semibold text-gray-900 dark:text-gray-400 uppercase tracking-wider mb-3">Property Contact</h3>
           <TwoColumnFields className="!gap-x-4 !gap-y-[10px]">
             <CompactField label="First Name">
               <div className="relative max-w-[220px]">
@@ -679,7 +682,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
             </CompactField>
           </TwoColumnFields>
           </div>
-        </SectionGroup>
+        </div>
 
         {/* Client Comments Section */}
         <SectionGroup title="Client Comments">

@@ -196,7 +196,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
               <Input
                 id="yearBuilt"
                 name="yearBuilt"
-                type="number"
+                type="text" inputMode="numeric"
                 min={1800}
                 max={2099}
                 maxLength={4}
@@ -212,7 +212,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
               <Input
                 id="buildingSize"
                 name="buildingSize"
-                type="number"
+                type="text" inputMode="numeric"
                 min={0}
                 placeholder="e.g. 25000"
                 value={jobDetails.buildingSize || ''}
@@ -226,7 +226,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
               <Input
                 id="numberOfUnits"
                 name="numberOfUnits"
-                type="number"
+                type="text" inputMode="numeric"
                 value={jobDetails.numberOfUnits || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -238,7 +238,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
               <Input
                 id="parkingSpaces"
                 name="parkingSpaces"
-                type="number"
+                type="text" inputMode="numeric"
                 value={jobDetails.parkingSpaces || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}

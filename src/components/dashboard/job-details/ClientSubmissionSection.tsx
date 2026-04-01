@@ -178,7 +178,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
     const propertyNames = ['Downtown Plaza', 'Riverside Complex', 'Tech Center Building'];
     const streets = ['17th Avenue SW', '8th Avenue SW', 'Centre Street', 'Macleod Trail'];
     const propertyTypes = ['Multi-Family', 'Office', 'Retail', 'Industrial', 'Building'];
-    const intendedUses = ['Financing/Refinancing', 'Acquisition', 'Disposition', 'Insurance'];
+    const intendedUses = ['First Mortgage Financing', 'Financial Reporting', 'Insurance', 'Acquisition-Disposition'];
     const conditions = ['Excellent', 'Very Good', 'Good', 'Fair'];
 
     const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
@@ -206,8 +206,9 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       clientEmail: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${company.toLowerCase().replace(/ /g, '')}.ca`,
       propertyName: propertyName,
       propertyAddress: `${propNum} ${street}, Calgary, AB T2R 1M5`,
-      propertyTypes: [propertyType], // FIX: Use array format for multi-select
+      propertyType: propertyType,
       intendedUse: intendedUse,
+      valuationPremises: 'Market Value',
       assetCondition: condition,
       notes: `Property is a ${sqft.toLocaleString()} sq ft ${propertyType} complex. Need appraisal for ${intendedUse}.`,
       propertyContactFirstName: ['Marcus', 'Lisa', 'Kevin', 'Amanda', 'Derek'][Math.floor(Math.random() * 5)],

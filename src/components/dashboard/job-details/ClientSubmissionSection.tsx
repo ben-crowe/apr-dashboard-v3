@@ -406,7 +406,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.clientFirstName || ''}
                 onChange={(e) => onUpdateJob?.({clientFirstName: e.target.value})}
                 onBlur={(e) => handleBlur('clientFirstName', e.target.value)}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[220px] border-b border-gray-300 dark:border-white/[0.12]"
               />
             </CompactField>
             <CompactField label="Last Name">
@@ -414,7 +414,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.clientLastName || ''}
                 onChange={(e) => onUpdateJob?.({clientLastName: e.target.value})}
                 onBlur={(e) => handleBlur('clientLastName', e.target.value)}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[220px] border-b border-gray-300 dark:border-white/[0.12]"
               />
             </CompactField>
             <CompactField label="Title">
@@ -422,7 +422,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.clientTitle || ''}
                 onChange={(e) => onUpdateJob?.({clientTitle: e.target.value})}
                 onBlur={(e) => handleBlur('clientTitle', e.target.value)}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[220px] border-b border-gray-300 dark:border-white/[0.12]"
               />
             </CompactField>
             <CompactField label="Organization">
@@ -430,7 +430,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.clientOrganization || ''}
                 onChange={(e) => onUpdateJob?.({clientOrganization: e.target.value})}
                 onBlur={(e) => handleBlur('clientOrganization', e.target.value)}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[220px] border-b border-gray-300 dark:border-white/[0.12]"
               />
             </CompactField>
             <CompactField label="Phone">
@@ -442,7 +442,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   onUpdateJob?.({clientPhone: numbersOnly});
                 }}
                 onBlur={(e) => handleBlur('clientPhone', e.target.value.replace(/\D/g, ''))}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[220px] border-b border-gray-300 dark:border-white/[0.12]"
               />
             </CompactField>
             <CompactField label="Email">
@@ -450,7 +450,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.clientEmail || ''}
                 onChange={(e) => onUpdateJob?.({clientEmail: e.target.value})}
                 onBlur={(e) => handleBlur('clientEmail', e.target.value)}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[220px] border-b border-gray-300 dark:border-white/[0.12]"
               />
             </CompactField>
           </TwoColumnFields>
@@ -476,7 +476,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.propertyName || ''}
                 onChange={(e) => onUpdateJob?.({propertyName: e.target.value})}
                 onBlur={(e) => handleBlur('propertyName', e.target.value)}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[220px] border-b border-gray-300 dark:border-white/[0.12]"
               />
             </CompactField>
             <CompactField label="Property Type">
@@ -488,7 +488,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('propertyType', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -536,7 +536,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('intendedUse', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -563,7 +563,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('valuationPremises', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -585,7 +585,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('assetCondition', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -609,7 +609,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.propertyContactFirstName || ''}
                 onChange={(e) => onUpdateJob?.({propertyContactFirstName: e.target.value})}
                 onBlur={(e) => handleBlur('propertyContactFirstName', e.target.value)}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[220px] border-b border-gray-300 dark:border-white/[0.12]"
               />
             </CompactField>
             <CompactField label="Email">
@@ -617,7 +617,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.propertyContactEmail || ''}
                 onChange={(e) => onUpdateJob?.({propertyContactEmail: e.target.value})}
                 onBlur={(e) => handleBlur('propertyContactEmail', e.target.value)}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[220px] border-b border-gray-300 dark:border-white/[0.12]"
               />
             </CompactField>
             <CompactField label="Last Name">
@@ -625,7 +625,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={job.propertyContactLastName || ''}
                 onChange={(e) => onUpdateJob?.({propertyContactLastName: e.target.value})}
                 onBlur={(e) => handleBlur('propertyContactLastName', e.target.value)}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[220px] border-b border-gray-300 dark:border-white/[0.12]"
               />
             </CompactField>
             <CompactField label="Phone">
@@ -637,7 +637,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   onUpdateJob?.({propertyContactPhone: numbersOnly});
                 }}
                 onBlur={(e) => handleBlur('propertyContactPhone', e.target.value.replace(/\D/g, ''))}
-                className="h-7 text-sm max-w-[160px]"
+                className="h-7 text-sm max-w-[220px] border-b border-gray-300 dark:border-white/[0.12]"
               />
             </CompactField>
           </TwoColumnFields>

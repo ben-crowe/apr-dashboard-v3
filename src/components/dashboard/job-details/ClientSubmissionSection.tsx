@@ -614,18 +614,15 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         {/* Client Comments Section */}
         <SectionGroup title="Client Comments">
-          <TwoColumnFields>
-            <CompactField label="">
-              <Textarea
-                value={job.notes || ''}
-                onChange={(e) => onUpdateJob?.({notes: e.target.value})}
-                onBlur={(e) => handleBlur('notes', e.target.value)}
-                rows={2}
-                className="text-sm resize-none min-h-[40px]"
-                style={{ maxWidth: '400px' }}
-              />
-            </CompactField>
-          </TwoColumnFields>
+          <div className="ml-[168px]">
+            <Textarea
+              value={job.notes || ''}
+              onChange={(e) => onUpdateJob?.({notes: e.target.value})}
+              onBlur={(e) => handleBlur('notes', e.target.value)}
+              rows={2}
+              className="text-sm resize-none min-h-[40px] max-w-[400px]"
+            />
+          </div>
         </SectionGroup>
 
         {/* Uploaded Documents Section */}

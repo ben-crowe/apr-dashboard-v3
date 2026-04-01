@@ -712,7 +712,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     const propertyRights = ['Fee Simple Interest', 'Leasehold Interest', 'Leased Fee Interest', 'Partial Interest'];
     const valuationTypes = ['Market Value As Is', 'Market Value As Is And Stabilized', 'Market Value As Complete And Stabilized', 'Market Value Land As Is'];
     const scopes = ['All Applicable', 'Direct Comparison Approach', 'Income Approach', 'Cost Approach', 'Best Two Approaches'];
-    const reportTypes = ['Comprehensive', 'Summary', 'Restricted', 'Form', 'Letter'];
+    const reportTypes = ['Appraisal Report', 'Restricted Appraisal Report', 'Desk Review', 'Evaluation', 'Consultation'];
 
     // Helper to get random element
     const getRandom = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];

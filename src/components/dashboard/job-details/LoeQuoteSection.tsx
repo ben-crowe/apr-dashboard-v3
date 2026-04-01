@@ -1107,36 +1107,36 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
           {/* Comments Section - Three columns (responsive) */}
           <SectionGroup title="Comments">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-4">
-              {[
-                { label: 'General', name: 'appraiserComments', placeholder: 'Internal appraiser notes...' },
-                { label: 'Delivery', name: 'deliveryComments', placeholder: 'Delivery instructions...' },
-                { label: 'Payment', name: 'paymentComments', placeholder: 'Payment terms and notes...' },
-              ].map(({ label, name, placeholder }) => (
-                <div key={name} className="flex flex-col gap-2">
-                  <label className="text-sm text-gray-600 dark:text-gray-400">{label}:</label>
-                  <Textarea
-                    name={name}
-                    value={(jobDetails as any)[name] || ''}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    rows={3}
-                    className={`text-sm resize-none w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1 ${
-                      !commentsExpanded ? 'max-h-[60px] overflow-hidden' : ''
-                    }`}
-                    placeholder={placeholder}
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="ml-4 mt-1">
+            <div className="flex items-start gap-2 ml-2">
               <button
                 type="button"
                 onClick={() => setCommentsExpanded(!commentsExpanded)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 mt-0.5 flex-shrink-0"
               >
-                {commentsExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+                {commentsExpanded ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
               </button>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 flex-1">
+                {[
+                  { label: 'General', name: 'appraiserComments', placeholder: 'Internal appraiser notes...' },
+                  { label: 'Delivery', name: 'deliveryComments', placeholder: 'Delivery instructions...' },
+                  { label: 'Payment', name: 'paymentComments', placeholder: 'Payment terms and notes...' },
+                ].map(({ label, name, placeholder }) => (
+                  <div key={name} className="flex flex-col gap-2">
+                    <label className="text-sm text-gray-600 dark:text-gray-400">{label}:</label>
+                    <Textarea
+                      name={name}
+                      value={(jobDetails as any)[name] || ''}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      rows={3}
+                      className={`text-sm resize-none w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1 ${
+                        !commentsExpanded ? 'max-h-[60px] overflow-hidden' : ''
+                      }`}
+                      placeholder={placeholder}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </SectionGroup>
 

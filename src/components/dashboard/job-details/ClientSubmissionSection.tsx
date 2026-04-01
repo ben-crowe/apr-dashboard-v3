@@ -213,7 +213,12 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       propertyContactFirstName: ['Marcus', 'Lisa', 'Kevin', 'Amanda', 'Derek'][Math.floor(Math.random() * 5)],
       propertyContactLastName: ['Thompson', 'Chen', 'Park', 'Rivera', 'O\'Brien'][Math.floor(Math.random() * 5)],
       propertyContactEmail: `property.manager@${propertyName.toLowerCase().replace(/ /g, '')}.ca`,
-      propertyContactPhone: `403-555-${String(Math.floor(Math.random() * 9000) + 1000)}`
+      propertyContactPhone: `403-555-${String(Math.floor(Math.random() * 9000) + 1000)}`,
+      files: [
+        { id: 'mock-1', fileName: 'Site_Survey_Map.pdf', filePath: 'mock/site-survey.pdf', fileType: 'application/pdf', fileSize: 2457600 },
+        { id: 'mock-2', fileName: 'Environmental_Assessment_Report.pdf', filePath: 'mock/env-assessment.pdf', fileType: 'application/pdf', fileSize: 1843200 },
+        { id: 'mock-3', fileName: 'Property_Photos.zip', filePath: 'mock/photos.zip', fileType: 'application/zip', fileSize: 15728640 },
+      ]
     };
 
     onUpdateJob(testData);

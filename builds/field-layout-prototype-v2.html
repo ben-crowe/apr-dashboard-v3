@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APR Dashboard — Field Layout Prototype v2 (Single-Line Address)</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --label-min-w: 160px;
+      --underline-w: 160px;
+      --row-h: 24px;
+      --gap-2col: 16px;
+      --gap-row: 10px;
+      --transition-gap: 16px;
+      --label-gap: 8px;
+      --content-max-w: 720px;
+
+      --text-base: #111827;
+      --text-label: #4b5563;
+      --text-section: #111827;
+      --line-color: #d1d5db;
+      --bg-card: #ffffff;
+      --bg-page: #f3f4f6;
+      --text-placeholder: #9ca3af;
+      --focus-color: #6366f1;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--text-base);
+      background: var(--bg-page);
+      padding: 32px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .page-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-base);
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 16px;
+    }
+
+    .content-center {
+      max-width: var(--content-max-w);
+      margin: 0 auto;
+    }
+
+    .section-group {
+      margin-bottom: 24px;
+      margin-top: 16px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-section);
+      margin-bottom: 12px;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap-row) var(--gap-2col);
+    }
+
+    .row-transition {
+      margin-top: var(--transition-gap);
+    }
+
+    .address-row {
+      margin-top: 16px;
+      margin-bottom: 20px;
+    }
+
+    .field {
+      display: flex;
+      align-items: center;
+      gap: var(--label-gap);
+      padding: 3px 0;
+      height: var(--row-h);
+    }
+
+    .field-label {
+      font-size: 14px;
+      color: var(--text-label);
+      white-space: nowrap;
+      min-width: var(--label-min-w);
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .field-label::after {
+      content: ':';
+    }
+
+    .field-value {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .underline-input {
+      font-size: 14px;
+      color: var(--text-base);
+      border: none;
+      border-bottom: 1px solid var(--line-color);
+      border-radius: 0;
+      background: transparent;
+      max-width: var(--underline-w);
+      width: 100%;
+      height: var(--row-h);
+      padding: 0;
+      outline: none;
+    }
+
+    .underline-input:focus {
+      border-bottom-color: var(--focus-color);
+      box-shadow: 0 1px 0 0 var(--focus-color);
+    }
+
+    .underline-input::placeholder {
+      color: var(--text-placeholder);
+    }
+
+    .underline-select-wrap {
+      position: relative;
+      max-width: var(--underline-w);
+      width: 100%;
+    }
+
+    .underline-select {
+      font-size: 14px;
+      color: var(--text-base);
+      border: none;
+      border-bottom: 1px solid var(--line-color);
+      border-radius: 0;
+      background: transparent;
+      width: 100%;
+      height: var(--row-h);
+      padding: 0 20px 0 0;
+      outline: none;
+      cursor: pointer;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+
+    .underline-select:focus {
+      border-bottom-color: var(--focus-color);
+      box-shadow: 0 1px 0 0 var(--focus-color);
+    }
+
+    .underline-select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--text-label);
+      pointer-events: none;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    /* ── Address — Single-line input, no underline ───
+       One long input. No border. Text flows freely.
+       max-width uncapped — fills available space. ── */
+    .address-input {
+      font-size: 14px;
+      color: var(--text-base);
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      width: 100%;
+      height: var(--row-h);
+      padding: 0;
+      outline: none;
+    }
+
+    /* ── Debug Guides ────────────────────────────── */
+    .debug-guides { display: none; }
+    .card.show-guides .debug-guides { display: block; }
+
+    .debug-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .debug-label {
+      position: absolute;
+      top: 4px;
+      font-size: 9px;
+      font-family: monospace;
+      white-space: nowrap;
+      transform: translateX(-50%);
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+
+    /* ── Toolbar ─────────────────────────────────── */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .toolbar-left { font-size: 11px; color: #9ca3af; }
+    .toolbar-right { display: flex; gap: 8px; }
+
+    .toolbar button {
+      font-size: 11px;
+      padding: 4px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      color: #6b7280;
+    }
+
+    .toolbar button:hover { background: #f9fafb; }
+
+    .toolbar button.active {
+      background: #eef2ff;
+      border-color: #6366f1;
+      color: #4f46e5;
+    }
+
+    .comparison-note {
+      max-width: 1280px;
+      margin: 24px auto 0;
+      padding: 12px 16px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #1e40af;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="toolbar-left">
+    v2 — Single-Line Address (compare with v1: two-line split)
+  </div>
+  <div class="toolbar-right">
+    <button onclick="toggleGuides()" id="guide-btn">Show Colon Guides</button>
+    <button onclick="toggleDark()" id="dark-btn">Dark Mode</button>
+  </div>
+</div>
+
+<div class="card" id="card" style="position: relative; overflow: hidden;">
+  <div class="debug-guides" id="guides"></div>
+  <div class="page-title">Client Submission</div>
+  <div class="content-center">
+
+    <!-- CLIENT INFORMATION -->
+    <div class="section-group">
+      <div class="section-title">Client Information</div>
+      <div class="two-col">
+        <div class="field">
+          <label class="field-label">First Name</label>
+          <div class="field-value"><input type="text" class="underline-input" value="Michael"></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Last Name</label>
+          <div class="field-value"><input type="text" class="underline-input" value="Johnson"></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Title</label>
+          <div class="field-value"><input type="text" class="underline-input" value="VP of Real Estate"></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Organization</label>
+          <div class="field-value"><input type="text" class="underline-input" value="Premier Properties"></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Phone</label>
+          <div class="field-value"><input type="tel" class="underline-input" value="(403) 555-0100"></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Email</label>
+          <div class="field-value"><input type="email" class="underline-input" value="michael@premier.ca"></div>
+        </div>
+      </div>
+
+      <!-- Address — single-line input, no underline -->
+      <div class="address-row">
+        <div class="two-col">
+          <div class="field full-width">
+            <label class="field-label">Address</label>
+            <div class="field-value">
+              <input type="text" class="address-input" value="289 Centre Street Suite 352, Calgary, AB T2P 3H7">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROPERTY INFORMATION -->
+    <div class="section-group">
+      <div class="section-title">Property Information</div>
+      <div class="two-col">
+        <div class="field">
+          <label class="field-label">Property Name</label>
+          <div class="field-value"><input type="text" class="underline-input" value="Riverside Complex"></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Property Type</label>
+          <div class="field-value">
+            <div class="underline-select-wrap">
+              <select class="underline-select">
+                <option value="" disabled>Select...</option>
+                <option value="Multi-Family" selected>Multi-Family</option>
+                <option value="Office">Office</option>
+                <option value="Retail">Retail</option>
+                <option value="Industrial">Industrial</option>
+                <option value="Land">Land</option>
+                <option value="Building">Building</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Address — single-line input, no underline -->
+      <div class="address-row">
+        <div class="two-col">
+          <div class="field full-width">
+            <label class="field-label">Address</label>
+            <div class="field-value">
+              <input type="text" class="address-input" value="373 Centre Street, Calgary, AB T2R 1M5">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="two-col">
+          <div class="field">
+            <label class="field-label">Authorized Use</label>
+            <div class="field-value">
+              <div class="underline-select-wrap">
+                <select class="underline-select">
+                  <option value="" disabled>Select...</option>
+                  <option value="First Mortgage Financing" selected>First Mortgage</option>
+                  <option value="Financial Reporting">Financial Reporting</option>
+                  <option value="Insurance">Insurance</option>
+                  <option value="Internal Decision-Making">Internal Decision-Making</option>
+                  <option value="Acquisition-Disposition">Acquisition-Disposition</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">Valuation Premises</label>
+            <div class="field-value">
+              <div class="underline-select-wrap">
+                <select class="underline-select">
+                  <option value="" disabled>Select...</option>
+                  <option value="Market Value" selected>Market Value</option>
+                  <option value="Market Rent">Market Rent</option>
+                  <option value="Investment Value">Investment Value</option>
+                  <option value="Insurable Value">Insurable Value</option>
+                  <option value="Liquidation Value">Liquidation Value</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">Asset Condition</label>
+            <div class="field-value">
+              <div class="underline-select-wrap">
+                <select class="underline-select">
+                  <option value="" disabled>Select...</option>
+                  <option value="Good" selected>Good</option>
+                  <option value="Excellent">Excellent</option>
+                  <option value="Very Good">Very Good</option>
+                  <option value="Fair">Fair</option>
+                  <option value="Poor">Poor</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROPERTY CONTACT -->
+    <div class="section-group">
+      <div class="section-title">Property Contact</div>
+      <div class="two-col">
+        <div class="field">
+          <label class="field-label">First Name</label>
+          <div class="field-value"><input type="text" class="underline-input" value="Marcus"></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Email</label>
+          <div class="field-value"><input type="email" class="underline-input" value="property.mgr@harbour.ca"></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Last Name</label>
+          <div class="field-value"><input type="text" class="underline-input" value="Johnson"></div>
+        </div>
+        <div class="field">
+          <label class="field-label">Phone</label>
+          <div class="field-value"><input type="tel" class="underline-input" value="(416) 555-0456"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="comparison-note">
+  <strong>This is v2 (single-line address).</strong> Compare with <a href="field-layout-prototype.html">v1 (two-line split address)</a>. Everything else is identical.
+</div>
+
+<script>
+  function toggleGuides() {
+    const card = document.getElementById('card');
+    const btn = document.getElementById('guide-btn');
+    card.classList.toggle('show-guides');
+    btn.classList.toggle('active');
+    const container = document.getElementById('guides');
+    container.innerHTML = '';
+    const centerEl = card.querySelector('.content-center');
+    const centerRect = centerEl.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    const centerOffset = centerRect.left - cardRect.left;
+    const contentWidth = centerEl.clientWidth;
+    const colWidth = (contentWidth - 16) / 2;
+    const leftColon = centerOffset + 160;
+    const rightColon = centerOffset + colWidth + 16 + 160;
+    [
+      { x: leftColon, label: 'L colon', color: 'rgba(239,68,68,0.35)' },
+      { x: rightColon, label: 'R colon', color: 'rgba(239,68,68,0.35)' },
+    ].forEach(g => {
+      const line = document.createElement('div');
+      line.className = 'debug-line';
+      line.style.left = g.x + 'px';
+      line.style.background = g.color;
+      const lbl = document.createElement('div');
+      lbl.className = 'debug-label';
+      lbl.style.left = g.x + 'px';
+      lbl.style.color = g.color.replace('0.35', '0.8');
+      lbl.textContent = g.label;
+      container.appendChild(line);
+      container.appendChild(lbl);
+    });
+  }
+
+  function toggleDark() {
+    const btn = document.getElementById('dark-btn');
+    btn.classList.toggle('active');
+    const isDark = document.body.style.background === 'rgb(17, 24, 39)';
+    if (isDark) {
+      document.body.style.background = '#f3f4f6';
+      document.documentElement.style.setProperty('--text-base', '#111827');
+      document.documentElement.style.setProperty('--text-label', '#4b5563');
+      document.documentElement.style.setProperty('--text-section', '#111827');
+      document.documentElement.style.setProperty('--line-color', '#9ca3af');
+      document.documentElement.style.setProperty('--bg-card', '#ffffff');
+      document.documentElement.style.setProperty('--bg-page', '#f3f4f6');
+    } else {
+      document.body.style.background = '#111827';
+      document.documentElement.style.setProperty('--text-base', '#f3f4f6');
+      document.documentElement.style.setProperty('--text-label', '#9ca3af');
+      document.documentElement.style.setProperty('--text-section', '#9ca3af');
+      document.documentElement.style.setProperty('--line-color', 'rgba(255,255,255,0.12)');
+      document.documentElement.style.setProperty('--bg-card', '#1f2937');
+      document.documentElement.style.setProperty('--bg-page', '#111827');
+    }
+  }
+</script>
+
+</body>
+</html>

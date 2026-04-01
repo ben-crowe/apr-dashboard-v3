@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APR Dashboard — Field Layout Prototype v2</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --label-min-w: 160px;    /* Tailwind: min-w-[160px] */
+      --underline-w: 160px;    /* Tailwind: max-w-[160px] */
+      --address-input-w: 320px;/* Address input visible width (2x underline) */
+      --row-h: 24px;           /* Tighter — line hugs text baseline */
+      --gap-2col: 16px;        /* Tailwind: gap-x-4 — tighter two-column gap */
+      --gap-row: 10px;         /* Breathing room between rows */
+      --transition-gap: 16px;  /* Tailwind: mt-4 — between row type changes */
+      --label-gap: 8px;        /* Tailwind: gap-2 — CompactField flex gap */
+      --content-max-w: 720px;  /* Content-driven: 2×(160+8+160) + 16 gap + breathing room */
+
+      /* Colors — light mode (matches existing Tailwind theme) */
+      --text-base: #111827;       /* gray-900 */
+      --text-label: #4b5563;      /* gray-600, dark: gray-400 */
+      --text-section: #111827;    /* gray-900, dark: gray-400 */
+      --line-color: #d1d5db;      /* gray-300 — subtle hint, not hard border */
+      --bg-card: #ffffff;
+      --bg-page: #f3f4f6;        /* gray-100 */
+      --text-placeholder: #9ca3af;
+      --focus-color: #6366f1;     /* indigo-500 */
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;           /* text-sm */
+      line-height: 1.5;
+      color: var(--text-base);
+      background: var(--bg-page);
+      padding: 32px;
+    }
+
+    /* ── Card Container ──────────────────────────────
+       React: The card wrapper already exists in the dashboard.
+       max-width 1280px simulates the dashboard viewport. ── */
+    .card {
+      background: var(--bg-card);
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px;            /* px-4 py-4 — sectionContentStyle */
+    }
+
+    .page-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-base);
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 16px;
+    }
+
+    /* ── Content Wrapper — Centers the grid ──────────
+       Constrains field grids to a balanced width and centers
+       them within the card. Equal whitespace on both sides.
+       As viewport narrows, it compresses from both edges.
+       React: <div className="max-w-[880px] mx-auto"> ── */
+    .content-center {
+      max-width: var(--content-max-w);
+      margin: 0 auto;
+    }
+
+    /* ── Section Group ───────────────────────────────
+       React: <SectionGroup title="...">
+       Tailwind: mb-6 mt-4 ── */
+    .section-group {
+      margin-bottom: 24px;      /* mb-6 */
+      margin-top: 16px;         /* mt-4 */
+    }
+
+    /* React: <h3> inside SectionGroup
+       Tailwind: text-xs font-semibold text-gray-900 dark:text-gray-400
+                 uppercase tracking-wider mb-3 */
+    .section-title {
+      font-size: 11px;          /* text-xs */
+      font-weight: 600;         /* font-semibold */
+      text-transform: uppercase;
+      letter-spacing: 0.05em;   /* tracking-wider */
+      color: var(--text-section);
+      margin-bottom: 12px;      /* mb-3 */
+    }
+
+    /* ── Two-Column Grid ─────────────────────────────
+       React: <TwoColumnFields> (ValcreStyles.tsx)
+       Tailwind: grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-0.5 ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--gap-row) var(--gap-2col);
+    }
+
+    /* ── Row Type Transition Spacing ─────────────────
+       Tailwind: mt-4 on wrapper div between different row types ── */
+    .row-transition {
+      margin-top: var(--transition-gap);
+    }
+
+    /* Extra breathing room AFTER address rows (before next double row)
+       Tailwind: mb-6 (24px) ── */
+    .row-transition-wide {
+      margin-top: 24px;
+    }
+
+    /* Address row — extra top gap (row-type transition), breathes below */
+    .address-row {
+      margin-top: 16px;        /* More space above — different row type */
+      margin-bottom: 20px;     /* Breathing room before next row type */
+    }
+
+    /* ── Compact Field (label : value) ───────────────
+       React: <CompactField label="...">
+       Tailwind: flex items-center gap-2 py-0.5 ── */
+    .field {
+      display: flex;
+      align-items: center;
+      gap: var(--label-gap);
+      padding: 3px 0;          /* Compensates for shorter row-h, keeps row spacing */
+      height: var(--row-h);
+    }
+
+    /* React: <label> inside CompactField
+       Tailwind: text-sm text-gray-600 dark:text-gray-400
+                 whitespace-nowrap min-w-[160px] text-right ── */
+    .field-label {
+      font-size: 14px;          /* text-sm */
+      color: var(--text-label);
+      white-space: nowrap;
+      min-width: var(--label-min-w);
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* CompactField auto-appends colon via template literal:
+       {typeof label === 'string' ? `${label}:` : label} */
+    .field-label::after {
+      content: ':';
+    }
+
+    /* ── Value Area ──────────────────────────────────
+       React: <div className="flex-1"> inside CompactField ── */
+    .field-value {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ── Underline Input ─────────────────────────────
+       React: <Input className="h-7 text-sm max-w-[160px]" />
+       Styling: !bg-transparent border-0 border-b border-b-gray-400
+                dark:border-b-white/20 !rounded-none px-0 ── */
+    .underline-input {
+      font-size: 14px;
+      color: var(--text-base);
+      border: none;
+      border-bottom: 1px solid var(--line-color);
+      border-radius: 0;
+      background: transparent;
+      max-width: var(--underline-w);
+      width: 100%;
+      height: var(--row-h);
+      padding: 0;
+      outline: none;
+    }
+
+    .underline-input:focus {
+      border-bottom-color: var(--focus-color);
+      box-shadow: 0 1px 0 0 var(--focus-color);
+    }
+
+    .underline-input::placeholder {
+      color: var(--text-placeholder);
+    }
+
+    /* ── Select (styled as underline + chevron) ──────
+       React: <SelectTrigger className="h-7 text-sm max-w-[160px]
+              !bg-transparent border-0 border-b border-b-gray-400
+              dark:border-b-white/20 !rounded-none px-0"> ── */
+    .underline-select-wrap {
+      position: relative;
+      max-width: var(--underline-w);
+      width: 100%;
+    }
+
+    .underline-select {
+      font-size: 14px;
+      color: var(--text-base);
+      border: none;
+      border-bottom: 1px solid var(--line-color);
+      border-radius: 0;
+      background: transparent;
+      width: 100%;
+      height: var(--row-h);
+      padding: 0 20px 0 0;
+      outline: none;
+      cursor: pointer;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+
+    .underline-select:focus {
+      border-bottom-color: var(--focus-color);
+      box-shadow: 0 1px 0 0 var(--focus-color);
+    }
+
+    /* Chevron — Shadcn SelectTrigger renders its own SVG chevron */
+    .underline-select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--text-label);
+      pointer-events: none;
+    }
+
+    /* ── Full-Width Field (spans all grid columns) ───
+       React: <CompactField fullWidth> adds md:col-span-2 ── */
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    /* ── Address Block — Two stacked inputs ─────────────
+       Line 1: Street (label visible)
+       Line 2: City, Province, Postal (no label, indented to match)
+       2px gap between lines. Looks like one address block.
+       On submit, concatenate: `${street}, ${cityProvPostal}`
+
+       React: Two inputs in a flex-col wrapper. Line 1 gets the
+       label via CompactField. Line 2 is a bare input with
+       margin-left matching label-width + gap (168px). ── */
+    .address-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0;                  /* No gap — lines sit flush, one block */
+      padding: 1px 0;
+    }
+
+    .address-line1 {
+      display: flex;
+      align-items: center;
+      gap: var(--label-gap);
+    }
+
+    .address-line2 {
+      /* Indent to match line 1 value position: label-min-w + gap */
+      margin-left: calc(var(--label-min-w) + var(--label-gap));
+    }
+
+    .address-input {
+      font-size: 14px;
+      color: var(--text-base);
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      max-width: 280px;
+      width: 100%;
+      height: var(--row-h);
+      padding: 0;
+      outline: none;
+    }
+
+    /* ── Single Field in Two-Col Grid ────────────────
+       When a two-col row has only ONE field (e.g. Asset Condition),
+       the field occupies col 1 and col 2 is empty.
+       React: Just render one <CompactField> — grid auto-places it. ── */
+
+    /* ── Debug: Colon Alignment Guides ───────────────
+       Toggle with toolbar button. Red = colon positions.
+       Verifies global colon alignment across all sections. ── */
+    .debug-guides { display: none; }
+    .card.show-guides .debug-guides { display: block; }
+
+    .debug-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .debug-label {
+      position: absolute;
+      top: 4px;
+      font-size: 9px;
+      font-family: monospace;
+      white-space: nowrap;
+      transform: translateX(-50%);
+      padding: 1px 3px;
+      border-radius: 2px;
+    }
+
+    /* ── Toolbar ─────────────────────────────────── */
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .toolbar-left {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .toolbar-right {
+      display: flex;
+      gap: 8px;
+    }
+
+    .toolbar button {
+      font-size: 11px;
+      padding: 4px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      background: white;
+      cursor: pointer;
+      color: #6b7280;
+    }
+
+    .toolbar button:hover { background: #f9fafb; }
+
+    .toolbar button.active {
+      background: #eef2ff;
+      border-color: #6366f1;
+      color: #4f46e5;
+    }
+
+    /* ── React Conversion Notes (bottom of page) ──── */
+    .conversion-notes {
+      max-width: 1280px;
+      margin: 24px auto 0;
+      padding: 16px;
+      background: #fefce8;
+      border: 1px solid #fde68a;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #92400e;
+      line-height: 1.6;
+    }
+
+    .conversion-notes h3 {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .conversion-notes code {
+      background: rgba(0,0,0,0.06);
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 11px;
+    }
+
+    .conversion-notes ul { margin-left: 16px; }
+    .conversion-notes li { margin-bottom: 4px; }
+
+    .revision-tag {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 1px 5px;
+      border-radius: 3px;
+      margin-right: 4px;
+    }
+    .revision-tag.changed { background: #fef3c7; color: #92400e; }
+    .revision-tag.new { background: #d1fae5; color: #065f46; }
+    .revision-tag.removed { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body>
+
+<div class="toolbar">
+  <div class="toolbar-left">
+    APR Dashboard Field Layout — Design Brief Prototype v2.5
+  </div>
+  <div class="toolbar-right">
+    <button onclick="toggleGuides()" id="guide-btn">Show Colon Guides</button>
+    <button onclick="toggleDark()" id="dark-btn">Dark Mode</button>
+  </div>
+</div>
+
+<div class="card" id="card" style="position: relative; overflow: hidden;">
+
+  <!-- Debug: vertical alignment guides (toggled via toolbar) -->
+  <div class="debug-guides" id="guides"></div>
+
+  <div class="page-title">Client Submission</div>
+
+  <!-- Centered content wrapper — balances whitespace on both sides -->
+  <div class="content-center">
+
+    <!-- ════════════════════════════════════════════════
+         CLIENT INFORMATION
+         React: <SectionGroup title="Client Information">
+                <TwoColumnFields>
+         ════════════════════════════════════════════════ -->
+    <div class="section-group">
+      <div class="section-title">Client Information</div>
+
+      <!-- Rows 1–3: Two-column pairs -->
+      <!-- React: <TwoColumnFields> wraps all paired rows -->
+      <div class="two-col">
+
+        <!-- Row 1: First Name + Last Name -->
+        <div class="field">
+          <label class="field-label">First Name</label>
+          <div class="field-value">
+            <input type="text" class="underline-input" value="Michael">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Last Name</label>
+          <div class="field-value">
+            <input type="text" class="underline-input" value="Johnson">
+          </div>
+        </div>
+
+        <!-- Row 2: Title + Organization -->
+        <div class="field">
+          <label class="field-label">Title</label>
+          <div class="field-value">
+            <input type="text" class="underline-input" value="VP of Real Estate">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Organization</label>
+          <div class="field-value">
+            <input type="text" class="underline-input" value="Premier Properties">
+          </div>
+        </div>
+
+        <!-- Row 3: Phone + Email -->
+        <div class="field">
+          <label class="field-label">Phone</label>
+          <div class="field-value">
+            <input type="tel" class="underline-input" value="(403) 555-0100">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Email</label>
+          <div class="field-value">
+            <input type="email" class="underline-input" value="michael@premier.ca">
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Row 4: Address — two stacked inputs, one block
+           Close to row above, breathing room below -->
+      <div class="address-row">
+        <div class="two-col">
+          <div class="address-block full-width">
+            <div class="address-line1">
+              <label class="field-label">Address</label>
+              <input type="text" class="address-input" value="289 Centre Street Suite 352">
+            </div>
+            <div class="address-line2">
+              <input type="text" class="address-input" value="Calgary, AB T2P 3H7">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════════════════════
+         PROPERTY INFORMATION
+         React: <SectionGroup title="Property Information">
+         ════════════════════════════════════════════════ -->
+    <div class="section-group">
+      <div class="section-title">Property Information</div>
+
+      <!-- Row 1: Property Name (text) + Property Type (select) -->
+      <!-- React: <TwoColumnFields> -->
+      <div class="two-col">
+        <div class="field">
+          <label class="field-label">Property Name</label>
+          <div class="field-value">
+            <input type="text" class="underline-input" value="Riverside Complex">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Property Type</label>
+          <div class="field-value">
+            <div class="underline-select-wrap">
+              <select class="underline-select">
+                <option value="" disabled>Select...</option>
+                <option value="Multi-Family" selected>Multi-Family</option>
+                <option value="Office">Office</option>
+                <option value="Retail">Retail</option>
+                <option value="Industrial">Industrial</option>
+                <option value="Land">Land</option>
+                <option value="Building">Building</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Address — two stacked inputs, one block
+           Close to row above, breathing room below -->
+      <div class="address-row">
+        <div class="two-col">
+          <div class="address-block full-width">
+            <div class="address-line1">
+              <label class="field-label">Address</label>
+              <input type="text" class="address-input" value="373 Centre Street">
+            </div>
+            <div class="address-line2">
+              <input type="text" class="address-input" value="Calgary, AB T2R 1M5">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rows 3–4: Selects in TWO-COLUMN (not three)
+           Address block above provides the breathing room via mb -->
+      <div>
+        <div class="two-col">
+
+          <!-- Row 3: Authorized Use + Valuation Premises -->
+          <div class="field">
+            <label class="field-label">Authorized Use</label>
+            <div class="field-value">
+              <div class="underline-select-wrap">
+                <select class="underline-select">
+                  <option value="" disabled>Select...</option>
+                  <option value="First Mortgage Financing" selected>First Mortgage</option>
+                  <option value="Financial Reporting">Financial Reporting</option>
+                  <option value="Insurance">Insurance</option>
+                  <option value="Internal Decision-Making">Internal Decision-Making</option>
+                  <option value="Acquisition-Disposition">Acquisition-Disposition</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label">Valuation Premises</label>
+            <div class="field-value">
+              <div class="underline-select-wrap">
+                <select class="underline-select">
+                  <option value="" disabled>Select...</option>
+                  <option value="Market Value" selected>Market Value</option>
+                  <option value="Market Rent">Market Rent</option>
+                  <option value="Investment Value">Investment Value</option>
+                  <option value="Insurable Value">Insurable Value</option>
+                  <option value="Liquidation Value">Liquidation Value</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 4: Asset Condition (alone — col 2 empty) -->
+          <div class="field">
+            <label class="field-label">Asset Condition</label>
+            <div class="field-value">
+              <div class="underline-select-wrap">
+                <select class="underline-select">
+                  <option value="" disabled>Select...</option>
+                  <option value="Good" selected>Good</option>
+                  <option value="Excellent">Excellent</option>
+                  <option value="Very Good">Very Good</option>
+                  <option value="Fair">Fair</option>
+                  <option value="Poor">Poor</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- Empty col 2 — grid auto-places this correctly -->
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ════════════════════════════════════════════════
+         PROPERTY CONTACT
+         React: <SectionGroup title="Property Contact">
+                <TwoColumnFields>
+         ════════════════════════════════════════════════ -->
+    <div class="section-group">
+      <div class="section-title">Property Contact</div>
+
+      <!-- React: <TwoColumnFields> -->
+      <div class="two-col">
+
+        <!-- Row 1: First Name + Email -->
+        <div class="field">
+          <label class="field-label">First Name</label>
+          <div class="field-value">
+            <input type="text" class="underline-input" value="Marcus">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Email</label>
+          <div class="field-value">
+            <input type="email" class="underline-input" value="property.mgr@harbour.ca">
+          </div>
+        </div>
+
+        <!-- Row 2: Last Name + Phone -->
+        <div class="field">
+          <label class="field-label">Last Name</label>
+          <div class="field-value">
+            <input type="text" class="underline-input" value="Johnson">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">Phone</label>
+          <div class="field-value">
+            <input type="tel" class="underline-input" value="(416) 555-0456">
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /.content-center -->
+
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     REACT CONVERSION REFERENCE — v2
+     ════════════════════════════════════════════════════ -->
+<div class="conversion-notes">
+  <h3>React Conversion Reference — v1 (Two-Line Address) | <a href="field-layout-prototype-v2.html" style="color: #1e40af;">Compare v2 (Single-Line)</a></h3>
+  <ul>
+    <li><span class="revision-tag new">NEW</span> <code>.content-center</code> = <code>&lt;div className="max-w-[880px] mx-auto"&gt;</code> — wraps all section groups. Centers the grid with equal whitespace on both sides.</li>
+    <li><span class="revision-tag changed">CHANGED</span> <code>.address-input</code> — Input area <strong>320px</strong> wide (text visible), <strong>NO underline</strong>. React: <code>&lt;Input className="h-7 text-sm max-w-[320px] border-0 !bg-transparent !rounded-none px-0"&gt;</code> — no border-b at all.</li>
+    <li><span class="revision-tag removed">REMOVED</span> Three-column layout. <code>ThreeColumnFields</code> component is <strong>NOT needed</strong>. Auth Use + Val Premises share a two-col row; Asset Condition sits alone on the next row.</li>
+    <li><span class="revision-tag changed">CHANGED</span> <code>.two-col</code> = <code>&lt;TwoColumnFields&gt;</code> — keep <strong>gap-x-4</strong> (16px). The existing gap-x-4 was correct for a centered layout. Do NOT widen to gap-x-8.</li>
+    <li><code>.field</code> = <code>&lt;CompactField label="..."&gt;</code> — remove all <code>[&amp;_label]:min-w-[120px]</code> overrides from parent divs.</li>
+    <li><code>.full-width</code> = <code>&lt;CompactField fullWidth&gt;</code> — already adds <code>md:col-span-2</code>.</li>
+    <li><code>.row-transition</code> = wrapper <code>&lt;div className="mt-4"&gt;</code> between different row-type containers. <code>.row-transition-wide</code> = <code>&lt;div className="mt-6"&gt;</code> after address rows for extra breathing room.</li>
+    <li><code>.underline-input</code> = <code>&lt;Input className="h-7 text-sm max-w-[160px]"&gt;</code> — change all 280px/200px to <strong>160px</strong>.</li>
+    <li><code>.underline-select</code> = <code>&lt;SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"&gt;</code></li>
+    <li>Property Contact: Replace nested <code>&lt;div&gt; + &lt;h4&gt;</code> with <code>&lt;SectionGroup title="Property Contact"&gt;</code></li>
+  </ul>
+</div>
+
+<script>
+  // Toggle colon alignment guide lines
+  function toggleGuides() {
+    const card = document.getElementById('card');
+    const btn = document.getElementById('guide-btn');
+    card.classList.toggle('show-guides');
+    btn.classList.toggle('active');
+
+    const container = document.getElementById('guides');
+    // Clear and redraw (content-center changes positions)
+    container.innerHTML = '';
+
+    // Find the content-center wrapper to get its offset
+    const centerEl = card.querySelector('.content-center');
+    const centerRect = centerEl.getBoundingClientRect();
+    const cardRect = card.getBoundingClientRect();
+    const centerOffset = centerRect.left - cardRect.left;
+
+    // Two-column colon positions relative to content-center
+    const contentWidth = centerEl.clientWidth;
+    const colWidth = (contentWidth - 16) / 2;  // 16 = gap-x-4
+    const leftColon = centerOffset + 160;       // label min-width
+    const rightColon = centerOffset + colWidth + 16 + 160;
+
+    const guides = [
+      { x: leftColon, label: 'L colon', color: 'rgba(239,68,68,0.35)' },
+      { x: rightColon, label: 'R colon', color: 'rgba(239,68,68,0.35)' },
+    ];
+
+    guides.forEach(g => {
+      const line = document.createElement('div');
+      line.className = 'debug-line';
+      line.style.left = g.x + 'px';
+      line.style.background = g.color;
+
+      const lbl = document.createElement('div');
+      lbl.className = 'debug-label';
+      lbl.style.left = g.x + 'px';
+      lbl.style.color = g.color.replace('0.35', '0.8');
+      lbl.textContent = g.label;
+
+      container.appendChild(line);
+      container.appendChild(lbl);
+    });
+  }
+
+  // Toggle dark mode
+  function toggleDark() {
+    const btn = document.getElementById('dark-btn');
+    btn.classList.toggle('active');
+    const isDark = document.body.style.background === 'rgb(17, 24, 39)';
+    if (isDark) {
+      document.body.style.background = '#f3f4f6';
+      document.documentElement.style.setProperty('--text-base', '#111827');
+      document.documentElement.style.setProperty('--text-label', '#4b5563');
+      document.documentElement.style.setProperty('--text-section', '#111827');
+      document.documentElement.style.setProperty('--line-color', '#9ca3af');
+      document.documentElement.style.setProperty('--bg-card', '#ffffff');
+      document.documentElement.style.setProperty('--bg-page', '#f3f4f6');
+    } else {
+      document.body.style.background = '#111827';
+      document.documentElement.style.setProperty('--text-base', '#f3f4f6');
+      document.documentElement.style.setProperty('--text-label', '#9ca3af');
+      document.documentElement.style.setProperty('--text-section', '#9ca3af');
+      document.documentElement.style.setProperty('--line-color', 'rgba(255,255,255,0.12)');
+      document.documentElement.style.setProperty('--bg-card', '#1f2937');
+      document.documentElement.style.setProperty('--bg-page', '#111827');
+    }
+  }
+</script>
+
+</body>
+</html>

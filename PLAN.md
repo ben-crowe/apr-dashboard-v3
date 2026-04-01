@@ -18,6 +18,22 @@ Single source of truth for the project's roadmap, to-dos, and next steps. Histor
 - Field registry backup files (fieldRegistry.ts.backup, fieldRegistry.ts.bak) — remove or archive
 - reportBuilderStore.ts.bak-before-assignment — remove
 
+### UI/UX Polish — Pending
+- Select trigger text indent on long values (e.g. "First Mortgage Financing" pushes right) — needs deeper SelectTrigger component fix
+- Client Comments textarea not editable — investigate
+- File preview pane in Uploaded Documents — half-width file list + preview box, click to preview
+- Form intake page — apply same field layout (CompactField, TwoColumnFields, decoupled underlines) as dashboard
+- Comments section — consider stacking vertically like description fields instead of three-column
+- Dark mode full verification pass
+
+### Recent Completions (Apr 2026)
+- Dashboard field layout redesign — style guide, design brief, HTML prototype, React conversion (50+ commits)
+- Decoupled underlines (160px line, w-full input), SectionGroup titles, address single-line no underline
+- Test data fills all fields including Property Contact, Building Info VALTA dropdowns, mock files
+- Report Type always Appraisal Report, spinbutton arrows removed, placeholders cleaned
+- Dashboard list page — search bar shortened, table view button removed, job dividers visible, DATE/STATUS aligned
+- Legal Description changed to single-line input no underline
+
 ### Recent Completions (Jan 2026)
 - Real Supabase authentication (replaced fake auth)
 - ClickUp production environment (Valta workspace)

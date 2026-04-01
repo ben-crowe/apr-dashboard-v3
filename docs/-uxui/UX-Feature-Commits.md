@@ -386,6 +386,55 @@ Two commits on the same day both touched login form text visibility (`92a0d5b` t
 
 ---
 
+## Dashboard Field Layout Redesign (2026-04-01)
+
+> Marathon session: style guide → design brief → HTML prototype (6+ iterations with UI designer) → React conversion → polish.
+
+| Commit | Date | Description | Status |
+|--------|------|-------------|--------|
+| `07f3042` | 2026-04-01 | Revert address split — single long address field matching Valcre UI | Done |
+| `d42b63a` | 2026-04-01 | Add dashboard field style guide — line widths, column layout, three field types | Done |
+| `b942642` | 2026-04-01 | Add approved field layout prototype and design brief | Done |
+| `a046369` | 2026-04-01 | Apply approved field layout to Client Info, Property Info, Property Contact | Done |
+| `99572c9` | 2026-04-01 | Move section titles inside centered content wrapper for alignment | Done |
+| `2d67f0f` | 2026-04-01 | Match LOE section layout — SectionGroup, TwoColumnFields, three-col label-on-top | Done |
+| `064b47a` | 2026-04-01 | Put three selects back in TwoColumnFields for edge alignment | Done |
+| `c09dbf6` | 2026-04-01 | Decouple underlines from inputs — 160px line, w-full input field | Done |
+| `a1cb9a8` | 2026-04-01 | Fill Property Contact with test data when Test Data button pressed | Done |
+| `8036eef` | 2026-04-01 | Cap grid columns at max-w-[1100px] with pr-8 right padding | Done |
+| `0b12815` | 2026-04-01 | Fix test data — Property Type, Intended Use, add Valuation Premises | Done |
+| `5325197` | 2026-04-01 | Fix Report Type test data — values match dropdown options | Done |
+| `619291c` | 2026-04-01 | Always select Appraisal Report for test data | Done |
+| `161e438` | 2026-04-01 | Fill delivery/payment comments, auto-expand textareas | Done |
+| `242b579` | 2026-04-01 | Single expand/collapse toggle for all three comment fields | Done |
+| `ec0b24a` | 2026-04-01 | Fill all Building Info fields in test data — VALTA dropdowns | Done |
+| `dd1fbbc` | 2026-04-01 | Shorten long Building Info labels for alignment | Done |
+| `a656263` | 2026-04-01 | Remove spinbutton arrows from numeric fields | Done |
+| `ce91226` | 2026-04-01 | Remove Year Built placeholder and spinbutton in Data Gathering | Done |
+| `24d2f95` | 2026-04-01 | Legal Description — single-line input, no underline | Done |
+| `dd37440` | 2026-04-01 | Fix chevron position on select triggers — right edge of 160px | Done |
+| `dad017f` | 2026-04-01 | Add padding to dashboard main container | Done |
+| `43f90fc` | 2026-04-01 | Add p-6 inside dashboard list card for breathing room | Done |
+| `b0b0a35` | 2026-04-01 | Remove Switch to Table View button from dashboard | Done |
+| `d9a3489` | 2026-04-01 | Make job list divider lines more visible | Done |
+| `b90260d` | 2026-04-01 | Shorten search bar to 400px, group filter buttons right | Done |
+| `2c46a7c` | 2026-04-01 | Align DATE/STATUS headers with row values | Done |
+
+### Design Artifacts
+- Style guide: `docs/-uxui/dashboard-field-style-guide.md`
+- Design brief: `docs/-uxui/dashboard-field-design-brief.md`
+- HTML prototype v1 (two-line address): `builds/field-layout-prototype.html`
+- HTML prototype v2 (single-line, approved): `builds/field-layout-prototype-v2.html`
+
+### Known Issues (Pending)
+- Select trigger text indent on long values (e.g. "First Mortgage Financing" pushes right)
+- Client Comments textarea not editable — needs investigation
+- File preview pane concept — half-width file list + preview box
+- Form intake page needs same field layout treatment
+- Comments section — consider stacking vertically like description fields
+
+---
+
 ## Pending Work (Current Sprint)
 
 1. Create `report_builder_data` table + migration in Supabase

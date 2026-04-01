@@ -343,8 +343,9 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
                 value={jobDetails.legalDescription || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                rows={3}
-                className="resize-none text-sm w-full"
+                rows={1}
+                className="resize-none text-sm w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1 placeholder:italic placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                placeholder="Enter legal description — e.g. Lot 15, Block 3, Plan 1234, City of Calgary"
               />
             </CompactField>
           </TwoColumnFields>

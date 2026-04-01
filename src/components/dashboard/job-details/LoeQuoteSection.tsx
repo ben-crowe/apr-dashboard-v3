@@ -739,7 +739,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       appraisalFee: STATIC_FEE,  // STATIC fee - $3500
       retainerAmount: STATIC_RETAINER.toFixed(2),  // STATIC retainer - $350
       deliveryTimeframe: '14 days',  // STATIC timeframe
-      appraiserComments: `${getRandom(appraisers)} assigned. ${getRandom(internalNotes)}\n\nInclude detailed analysis of comparable properties within 1km radius. Focus on recent sales from Q3/Q4 2024.`,
+      appraiserComments: `${getRandom(appraisers)} assigned. ${getRandom(internalNotes)}`,
       deliveryComments: 'Draft report due 7 days prior to final delivery. Client to confirm inspection access 48 hours in advance.',
       paymentComments: 'Retainer due on LOE signature. Balance due on report delivery. Late payments subject to 2% monthly interest.'
     };
@@ -1107,15 +1107,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
           {/* Comments Section - Three columns (responsive) */}
           <SectionGroup title="Comments">
-            <div className="flex items-center gap-2 mb-2 ml-4">
-              <button
-                type="button"
-                onClick={() => setCommentsExpanded(!commentsExpanded)}
-                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-              >
-                {commentsExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
-              </button>
-            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ml-4">
               {[
                 { label: 'General', name: 'appraiserComments', placeholder: 'Internal appraiser notes...' },
@@ -1137,6 +1128,15 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   />
                 </div>
               ))}
+            </div>
+            <div className="ml-4 mt-1">
+              <button
+                type="button"
+                onClick={() => setCommentsExpanded(!commentsExpanded)}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+              >
+                {commentsExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+              </button>
             </div>
           </SectionGroup>
 

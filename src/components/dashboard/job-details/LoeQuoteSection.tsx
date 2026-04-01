@@ -738,7 +738,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       appraisalFee: STATIC_FEE,  // STATIC fee - $3500
       retainerAmount: STATIC_RETAINER.toFixed(2),  // STATIC retainer - $350
       deliveryTimeframe: '14 days',  // STATIC timeframe
-      appraiserComments: `${getRandom(appraisers)} assigned. ${getRandom(internalNotes)}\n\nInclude detailed analysis of comparable properties within 1km radius. Focus on recent sales from Q3/Q4 2024.`  // Combined comments
+      appraiserComments: `${getRandom(appraisers)} assigned. ${getRandom(internalNotes)}\n\nInclude detailed analysis of comparable properties within 1km radius. Focus on recent sales from Q3/Q4 2024.`,
+      deliveryComments: 'Draft report due 7 days prior to final delivery. Client to confirm inspection access 48 hours in advance.',
+      paymentComments: 'Retainer due on LOE signature. Balance due on report delivery. Late payments subject to 2% monthly interest.'
     };
 
     onUpdateDetails(testData);
@@ -1113,7 +1115,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   onChange={handleChange}
                   onBlur={handleBlur}
                   rows={1}
-                  className="text-sm resize-none min-h-0 h-7 w-full !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0 py-1"
+                  className="text-sm resize-none min-h-[28px] w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1 overflow-hidden"
+                  style={{ height: 'auto' }}
+                  ref={(el) => { if (el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; } }}
                   placeholder="Internal appraiser notes..."
                 />
               </div>
@@ -1126,7 +1130,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   onChange={handleChange}
                   onBlur={handleBlur}
                   rows={1}
-                  className="text-sm resize-none min-h-0 h-7 w-full !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0 py-1"
+                  className="text-sm resize-none min-h-[28px] w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1 overflow-hidden"
+                  style={{ height: 'auto' }}
+                  ref={(el) => { if (el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; } }}
                   placeholder="Delivery instructions..."
                 />
               </div>
@@ -1139,7 +1145,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   onChange={handleChange}
                   onBlur={handleBlur}
                   rows={1}
-                  className="text-sm resize-none min-h-0 h-7 w-full !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0 py-1"
+                  className="text-sm resize-none min-h-[28px] w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1 overflow-hidden"
+                  style={{ height: 'auto' }}
+                  ref={(el) => { if (el) { el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px'; } }}
                   placeholder="Payment terms and notes..."
                 />
               </div>

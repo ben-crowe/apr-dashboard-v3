@@ -200,7 +200,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
                 min={1800}
                 max={2099}
                 maxLength={4}
-                placeholder="e.g. 2005"
+                placeholder=""
                 value={jobDetails.yearBuilt || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -214,7 +214,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
                 name="buildingSize"
                 type="text" inputMode="numeric"
                 min={0}
-                placeholder="e.g. 25000"
+                placeholder=""
                 value={jobDetails.buildingSize || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -314,7 +314,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
                 value={jobDetails.environmentalAssessment || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder="EA reference..."
+                placeholder=""
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
@@ -326,7 +326,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
                 value={jobDetails.heritageConservation || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder="HC designation..."
+                placeholder=""
                 className="h-7 text-sm max-w-[200px]"
               />
             </CompactField>
@@ -345,7 +345,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
                 onBlur={handleBlur}
                 rows={1}
                 className="resize-none text-sm w-full !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none px-0 py-1 placeholder:italic placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                placeholder="Enter legal description — e.g. Lot 15, Block 3, Plan 1234, City of Calgary"
+                placeholder=""
               />
             </CompactField>
           </TwoColumnFields>

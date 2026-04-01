@@ -3,11 +3,11 @@ import React from "react";
 
 const JobListHeader: React.FC = () => {
   return (
-    <div className="hidden sm:flex items-center px-4 py-2 text-xs font-medium text-muted-foreground pr-10">
+    <div className="hidden sm:flex items-center px-4 py-2 text-xs font-medium text-muted-foreground pr-20">
       <div className="w-2 mr-3"></div>
       <div className="flex-grow">JOB & PROPERTY</div>
       <div className="px-4 ml-2 text-right">DATE</div>
-      <div className="w-24 text-right pr-2">STATUS</div>
+      <div className="w-24 text-right">STATUS</div>
     </div>
   );
 };

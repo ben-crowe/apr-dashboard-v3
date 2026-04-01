@@ -83,7 +83,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           </div>
         </div>
       </header>
-      <main className="container py-4 md:py-6 px-6 sm:px-8 lg:px-12">{children}</main>
+      <main className="container py-4 md:py-6 px-4 sm:px-6">{children}</main>
     </div>;
 };
 

@@ -22,7 +22,7 @@ const JobListRoute = () => {
 
   return (
     <DashboardLayout>
-      <div className="animate-fade-in bento-shadow">
+      <div className="animate-fade-in bento-shadow p-6">
         <JobListProvider>
           <div className="space-y-6">
             {/* OAuth removed - using personal API token */}

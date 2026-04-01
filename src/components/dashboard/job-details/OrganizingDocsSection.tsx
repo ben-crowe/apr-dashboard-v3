@@ -307,7 +307,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
               </Select>
             </CompactField>
 
-            <CompactField label="Environmental Assessment">
+            <CompactField label="Env. Assessment">
               <Input
                 id="environmentalAssessment"
                 name="environmentalAssessment"
@@ -319,7 +319,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
               />
             </CompactField>
 
-            <CompactField label="Heritage / Conservation">
+            <CompactField label="Heritage / Conserv.">
               <Input
                 id="heritageConservation"
                 name="heritageConservation"

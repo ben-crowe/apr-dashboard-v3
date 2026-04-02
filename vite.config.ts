@@ -21,8 +21,6 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      // report-builder is a symlink locally → resolve to actual path for Vercel
-      "@/features/report-builder": path.resolve(__dirname, "./src/features/image-configurator/report-builder"),
     },
   },
   define: {

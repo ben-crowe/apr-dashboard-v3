@@ -216,7 +216,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-5xl w-[90vw] h-[95vh] flex flex-col p-4">
+      <DialogContent className="max-w-5xl w-[90vw] h-[95vh] flex flex-col p-4 [&>button]:hidden">
         {/* Minimal Header */}
         <div className="flex justify-between items-center pb-2 border-b">
           <div className="flex-1">
@@ -246,7 +246,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
                   </SelectValue>
                 )}
               </SelectTrigger>
-              <SelectContent className="bg-white border border-gray-300">
+              <SelectContent className="bg-background border border-border">
                 <SelectItem value="default">Default Template</SelectItem>
                 {templates.map((template) => (
                   <SelectItem key={template.id} value={template.id}>

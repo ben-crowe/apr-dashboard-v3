@@ -489,10 +489,13 @@ export type Database = {
           internal_comments: string | null
           job_id: string | null
           job_number: string | null
+          payment_amount: number | null
+          payment_paid_date: string | null
           payment_terms: string | null
           property_rights_appraised: string | null
           report_type: string | null
           retainer_amount: string | null
+          retainer_paid_date: string | null
           scope_of_work: string | null
           special_instructions: string | null
           updated_at: string

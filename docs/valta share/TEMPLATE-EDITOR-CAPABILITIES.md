@@ -149,3 +149,29 @@ The save flow:
 | Change signature block | NO | YES — modify v3Template.ts |
 | Reorder table rows | NO | YES — modify v3Template.ts |
 | Add/remove T&C terms | RISKY | YES — safer via code |
+
+---
+
+## Cross-Reference: LOE-DOCUSEAL-ARCHITECTURE.md
+
+Verified against the architecture doc (docs/Features/12-LOE-Esign/LOE-DOCUSEAL-ARCHITECTURE.md). Key alignments and additions:
+
+### Field Count
+Architecture doc lists **20 mapped placeholders** in `mapDataToV3Fields()`. The editor's save guard compares these 20 against edited content. Any change to this set requires updating both v3Template.ts AND generateLOE.ts (the `mapDataToV3Fields` function).
+
+### Template Source vs Saved Templates
+- **v3Template.ts** = source template with `[bracket]` placeholders (static code constant)
+- **generateLOEHTML()** = replaces placeholders with real job data, producing final HTML
+- **loe_templates DB** = stores edited copies of the FINAL HTML (placeholders already replaced), not the source template
+- **Editor edits FINAL HTML** (post-replacement), so what's in the editor textareas is rendered text, not template source
+
+This means: if the editor saves a template, it saves a snapshot of the generated HTML with that job's data baked in. When loading a saved template for a different job, `generateLOEHTML()` is called again with the saved template HTML — but the old job's data is already in the HTML text. The re-generation step re-runs placeholder replacement, but since placeholders were already replaced in the saved copy, it only affects placeholders that were preserved in the editor.
+
+### DocuSeal Signature Tags
+Architecture doc confirms `<signature-field>` and `<date-field>` tags are in the signature section (pages 2-3). The parser does NOT extract this section — it's read-only in the editor. These tags are safe from editor modifications.
+
+### Architecture Doc's Own Recommendation
+Section 9.1 flags the hardcoded template as tech debt and recommends "database-driven template system." Section 10.2 proposes a `loe_template_sections` table for per-section editing. The current editor is a partial implementation of this vision — it parses sections from HTML but doesn't use a sections table. The `loe_templates` table exists but stores full HTML, not decomposed sections.
+
+### No Contradictions Found
+All findings in the capabilities doc above are consistent with the architecture doc. The architecture doc provides additional context but does not contradict any capability or limitation described above.

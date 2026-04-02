@@ -12,11 +12,11 @@ import DocumentBuilderTest from "./pages/DocumentBuilderTest";
 import DiagnosticForm from "./pages/DiagnosticForm";
 import { SigningPage } from "./pages/SigningPage";
 import TestLOE from "./pages/TestLOE";
-// import MockReportBuilder from "./pages/MockReportBuilder"; // Disabled — report-builder not in git, breaks Vercel build
+import MockReportBuilder from "./pages/MockReportBuilder";
 import ImageTest from "./pages/ImageTest";
-// import { TestInputDashboard } from "./features/test-input"; // Disabled — report-builder not in git, breaks Vercel build
-// import { CalculatorDemoPage } from "./features/calculator-demo-v4"; // Disabled — depends on report-builder (not in git)
-// import CalculatorWithPreview from "@/features/calculator-demo-v4/CalculatorWithPreview"; // Disabled — depends on report-builder (not in git)
+import { TestInputDashboard } from "./features/test-input";
+import { CalculatorDemoPage } from "./features/calculator-demo-v4";
+import CalculatorWithPreview from "@/features/calculator-demo-v4/CalculatorWithPreview";
 import ClickUpCallback from "./pages/ClickUpCallback";
 import StandaloneCalculator from "./features/standalone-calculator";
 import StyleGuide from "./pages/StyleGuide";
@@ -42,10 +42,10 @@ const App = () => (
             <Route path="/diagnostic" element={<DiagnosticForm />} />
             <Route path="/sign/:id" element={<SigningPage />} />
             <Route path="/test-loe" element={<TestLOE />} />
-            {/* <Route path="/mock-builder" element={<MockReportBuilder />} /> */}
-            {/* <Route path="/test-input" element={<TestInputDashboard />} /> */}
-            {/* <Route path="/calculator-demo" element={<CalculatorDemoPage />} /> */}
-            {/* <Route path="/calculator-preview" element={<CalculatorWithPreview />} /> */}
+            <Route path="/mock-builder" element={<MockReportBuilder />} />
+            <Route path="/test-input" element={<TestInputDashboard />} />
+            <Route path="/calculator-demo" element={<CalculatorDemoPage />} />
+            <Route path="/calculator-preview" element={<CalculatorWithPreview />} />
             <Route path="/standalone-calculator" element={<StandaloneCalculator />} />
             <Route path="/image-test" element={<ImageTest />} />
             <Route path="/clickup/callback" element={<ClickUpCallback />} />

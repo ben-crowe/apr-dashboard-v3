@@ -717,8 +717,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     if (!onUpdateDetails) return;
 
     // STATIC VALUES for critical business fields
-    const STATIC_FEE = 3500;  // Fixed fee amount for testing
-    const STATIC_RETAINER = 350;  // Fixed 10% retainer
+    const STATIC_FEE = 6000;  // Fixed fee amount for testing
+    const STATIC_RETAINER = STATIC_FEE * 0.20;  // 20% retainer
 
     // STATIC delivery date - always 14 days from today
     const deliveryDate = new Date();

@@ -8,8 +8,8 @@ import {
   getFieldsBySubsection,
   FieldDefinition,
 } from "@/features/report-builder/schema/fieldRegistry";
-import { useReportBuilderStore, testDataFieldMapping } from "../report-builder/store/reportBuilderStore";
-import { testDataSet1 } from "../report-builder/data/TestDataSet1";
+import { useReportBuilderStore, testDataFieldMapping } from "@/features/report-builder/store/reportBuilderStore";
+import { testDataSet1 } from "@/features/report-builder/data/TestDataSet1";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";

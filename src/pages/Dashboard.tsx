@@ -5,7 +5,7 @@ import JobListView from "@/components/dashboard/JobListView";
 import JobDetailView from "@/components/dashboard/JobDetailView";
 import AppraisalTable from "@/components/dashboard/AppraisalTable";
 import { JobListProvider, useJobList } from "@/components/dashboard/job-list/JobListContext";
-import MockReportBuilder from "./MockReportBuilder";
+// import MockReportBuilder from "./MockReportBuilder"; // TODO: consolidate report-builder location (symlink issue)
 
 // Job List Route Component
 const JobListRoute = () => {
@@ -76,8 +76,8 @@ const JobReportRoute = () => {
     return null;
   }
 
-  // MockReportBuilder will use the jobId from URL params via useLoadJobIntoReport hook
-  return <MockReportBuilder jobId={jobId} />;
+  // TODO: Report Builder disabled until report-builder directory is consolidated (symlink issue)
+  return <div style={{padding: '40px', textAlign: 'center', color: '#999'}}>Report Builder — coming soon</div>;
 };
 
 // Inner component that uses JobList context

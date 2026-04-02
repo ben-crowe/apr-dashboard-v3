@@ -78,8 +78,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       scopeOfWork: 'Scope of Work',
       valuationPremises: 'Valuation Premises',
       reportType: 'Report Type',
-      paymentAmount: 'Payment Amount',
-      paymentPaidDate: 'Payment Paid Date',
+      paymentAmount: 'Amount Paid',
+      paymentPaidDate: 'Paid Date',
       retainerPaidDate: 'Retainer Paid Date'
     };
     return fieldNames[fieldName] || fieldName;
@@ -1121,7 +1121,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             />
           </CompactField>
 
-          <CompactField label="Payment Amount">
+          <CompactField label="Amount Paid">
             <Input
               type="text"
               name="paymentAmount"
@@ -1145,7 +1145,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             />
           </CompactField>
 
-          <CompactField label="Payment Paid">
+          <CompactField label="Paid Date">
             <Input
               type="date"
               name="paymentPaidDate"

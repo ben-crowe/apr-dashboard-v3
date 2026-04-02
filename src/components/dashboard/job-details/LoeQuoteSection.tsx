@@ -55,13 +55,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // Local state for currency fields during editing (prevents controlled input issues)
   const [editingAppraisalFee, setEditingAppraisalFee] = useState<string | null>(null);
   const [editingRetainerAmount, setEditingRetainerAmount] = useState<string | null>(null);
+  const [editingPaymentAmount, setEditingPaymentAmount] = useState<string | null>(null);
   const [commentsExpanded, setCommentsExpanded] = useState(false);
 
   // Debounce timers
   const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
 
   // Fields that sync to Valcre (from valcre.ts lines 231-248)
-  const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments', 'deliveryComments', 'paymentComments', 'propertyRightsAppraised', 'scopeOfWork', 'valuationPremises', 'reportType'];
+  const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments', 'deliveryComments', 'paymentComments', 'propertyRightsAppraised', 'scopeOfWork', 'valuationPremises', 'reportType', 'paymentAmount', 'paymentPaidDate'];
 
   // Helper function to get user-friendly field names for toast messages
   const getFieldDisplayName = (fieldName: string): string => {
@@ -76,7 +77,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       propertyRightsAppraised: 'Property Rights Appraised',
       scopeOfWork: 'Scope of Work',
       valuationPremises: 'Valuation Premises',
-      reportType: 'Report Type'
+      reportType: 'Report Type',
+      paymentAmount: 'Payment Amount',
+      paymentPaidDate: 'Payment Paid Date',
+      retainerPaidDate: 'Retainer Paid Date'
     };
     return fieldNames[fieldName] || fieldName;
   };
@@ -282,6 +286,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               internal_comments: jobDetails?.appraiserComments || '',
               delivery_comments: jobDetails?.deliveryComments || '',
               payment_comments: jobDetails?.paymentComments || '',
+              payment_amount: jobDetails?.paymentAmount || null,
+              payment_paid_date: jobDetails?.paymentPaidDate || '',
+              retainer_paid_date: jobDetails?.retainerPaidDate || '',
               updated_at: new Date().toISOString()
             })
             .eq('job_id', job.id);
@@ -391,6 +398,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           paymentTerms: 'payment_terms',
           valuationPremises: 'valuation_premises',
           deliveryDate: 'delivery_date',
+          paymentAmount: 'payment_amount',
+          paymentPaidDate: 'payment_paid_date',
+          retainerPaidDate: 'retainer_paid_date',
         };
         
         // Use mapped field name if exists, otherwise use original
@@ -441,6 +451,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           if (fieldName === 'scopeOfWork') syncData.scopeOfWork = value;
           if (fieldName === 'valuationPremises') syncData.valuationPremises = value;
           if (fieldName === 'reportType') syncData.reportType = value;
+          if (fieldName === 'paymentAmount') syncData.paymentAmount = value;
+          if (fieldName === 'paymentPaidDate') syncData.paymentPaidDate = value;
 
           console.log(`Syncing ${fieldName} to Valcre:`, syncData);
           const result = await sendToValcre(syncData);
@@ -498,13 +510,15 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       setEditingAppraisalFee(value);
     } else if (name === 'retainerAmount') {
       setEditingRetainerAmount(value);
+    } else if (name === 'paymentAmount') {
+      setEditingPaymentAmount(value);
     }
-    
+
     // Update the underlying value
     const rawValue = unformatCurrency(value);
     const numericValue = rawValue ? parseFloat(rawValue) : 0;
-    
-    // CRITICAL: retainerAmount stored as string in DB, appraisalFee as number
+
+    // CRITICAL: retainerAmount stored as string in DB, appraisalFee/paymentAmount as number
     const processedValue = name === 'retainerAmount' ? numericValue.toString() : numericValue;
     
     onUpdateDetails({
@@ -520,13 +534,15 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       setEditingAppraisalFee(null);
     } else if (name === 'retainerAmount') {
       setEditingRetainerAmount(null);
+    } else if (name === 'paymentAmount') {
+      setEditingPaymentAmount(null);
     }
-    
+
     const rawValue = unformatCurrency(value);
     const numericValue = rawValue ? parseFloat(rawValue) : 0;
-    
-    // CRITICAL: retainerAmount must be saved as string, appraisalFee as number
-    // Database schema: retainer_amount is text, appraisal_fee is numeric
+
+    // CRITICAL: retainerAmount must be saved as string, appraisalFee/paymentAmount as number
+    // Database schema: retainer_amount is text, appraisal_fee/payment_amount is numeric
     const processedValue = name === 'retainerAmount' ? numericValue.toString() : numericValue;
     autoSaveField(name, processedValue);
   };
@@ -741,7 +757,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       deliveryTimeframe: '14 days',  // STATIC timeframe
       appraiserComments: `${getRandom(appraisers)} assigned. ${getRandom(internalNotes)}`,
       deliveryComments: 'Draft report due 7 days prior to final delivery. Client to confirm inspection access 48 hours in advance.',
-      paymentComments: 'Retainer due on LOE signature. Balance due on report delivery. Late payments subject to 2% monthly interest.'
+      paymentComments: 'Retainer due on LOE signature. Balance due on report delivery. Late payments subject to 2% monthly interest.',
+      paymentAmount: '7500.00',
+      paymentPaidDate: '2026-04-15',
+      retainerPaidDate: '2026-04-01'
     };
 
     onUpdateDetails(testData);
@@ -1090,12 +1109,47 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             />
           </CompactField>
 
-          {/* Row 4 */}
+          {/* Row 4 - Payment Tracking */}
+          <CompactField label="Retainer Paid">
+            <Input
+              type="date"
+              name="retainerPaidDate"
+              value={jobDetails.retainerPaidDate || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="h-7 text-sm max-w-[160px]"
+            />
+          </CompactField>
+
+          <CompactField label="Payment Amount">
+            <Input
+              type="text"
+              name="paymentAmount"
+              value={editingPaymentAmount !== null ? editingPaymentAmount : (jobDetails.paymentAmount ? `$${formatCurrency(jobDetails.paymentAmount)}` : '')}
+              onChange={handleCurrencyChange}
+              onBlur={handleCurrencyBlur}
+              onFocus={() => setEditingPaymentAmount(jobDetails.paymentAmount ? jobDetails.paymentAmount.toString() : '')}
+              className="h-7 text-sm max-w-[160px]"
+            />
+          </CompactField>
+
+          {/* Row 5 */}
           <CompactField label="Delivery Date">
             <Input
               type="date"
               name="deliveryDate"
               value={jobDetails.deliveryDate || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="h-7 text-sm max-w-[160px]"
+            />
+          </CompactField>
+
+          <CompactField label="Payment Paid">
+            <Input
+              type="date"
+              name="paymentPaidDate"
+              value={jobDetails.paymentPaidDate || ''}
               onChange={handleChange}
               onBlur={handleBlur}
               className="h-7 text-sm max-w-[160px]"

@@ -506,6 +506,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           updateData.DeliveryComments = jobData.deliveryComments;
         if (jobData.paymentComments)
           updateData.PaymentComments = jobData.paymentComments;
+        if (jobData.paymentAmount || jobData.PaymentAmount)
+          updateData.AmountPaid = jobData.paymentAmount || jobData.PaymentAmount;
+        if (jobData.paymentPaidDate || jobData.PaymentPaidDate) {
+          const date = jobData.paymentPaidDate || jobData.PaymentPaidDate;
+          updateData.PaidDate = date.split("T")[0];
+        }
 
         // Map Report fields to proper Valcre enum fields (Nov 13, 2025 - Fixed)
 
@@ -1291,6 +1297,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       Fee: parseDollarAmount(jobData.Fee || jobData.AppraisalFee) || 0,
       Retainer:
         parseDollarAmount(jobData.Retainer || jobData.RetainerAmount) || 350.0,
+
+      // Payment tracking
+      AmountPaid: parseDollarAmount(jobData.AmountPaid || jobData.paymentAmount) || 0,
+      PaidDate: jobData.paymentPaidDate ? jobData.paymentPaidDate.split("T")[0] : null,
 
       // Due Date - Valcre expects just date format like "2025-10-31"
       DueDate: jobData.DeliveryDate ? jobData.DeliveryDate.split("T")[0] : null,

@@ -76,7 +76,11 @@ export interface JobDetails {
   retainerPaidDate?: string;
   disbursementPercentage?: string;
   internalComments?: string;
-  
+  valueScenarios?: string;
+  approachesToValue?: string;
+  deliveryTime?: string;
+  clientDocuments?: string;
+
   // Section 3A: Organizing Client Docs
   yearBuilt?: string;
   buildingSize?: string;

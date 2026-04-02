@@ -1,10 +1,10 @@
 /**
- * Generate LOE Document with V3 Template
- * Maps APR Hub data to your 22-field LOE template
+ * Generate LOE Document with V4 Template
+ * Maps APR Hub data to LOE template fields
  */
 
 import { DetailJob, JobDetails } from '@/types/job';
-import { V3_TEMPLATE } from './v3Template';
+import { V4_TEMPLATE } from './v4Template';
 import { testEnvironmentVariables } from '@/utils/testEnv';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -34,69 +34,63 @@ async function loadV3Template(templateHTML?: string): Promise<string> {
       return template.template_html;
     }
   } catch (err) {
-    console.warn('⚠️ Failed to load default template, falling back to V3_TEMPLATE', err);
+    console.warn('⚠️ Failed to load default template, falling back to V4_TEMPLATE', err);
   }
 
   // Fallback to embedded template
-  console.log('✅ Loading embedded V3 template (4 pages with all legal terms)');
-  return V3_TEMPLATE;
+  console.log('✅ Loading embedded V4 template');
+  return V4_TEMPLATE;
 }
 
 /**
- * Map APR Hub data to the 22 V3 template fields
- * Based on 01-Field-Map3.md specifications
+ * Map APR Hub data to V4 template fields
  */
 function mapDataToV3Fields(job: DetailJob, jobDetails: JobDetails) {
   const currentDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
-    month: 'long', 
+    month: 'long',
     day: 'numeric'
   });
 
-  console.log('🔍 Mapping data for job:', job.id, 'Client:', job.clientFirstName, job.clientLastName);
-  console.log('📊 Job Details available:', {
-    jobNumber: jobDetails.jobNumber,
-    appraisalFee: jobDetails.appraisalFee,
-    scopeOfWork: jobDetails.scopeOfWork
-  });
+  console.log('Mapping data for job:', job.id, 'Client:', job.clientFirstName, job.clientLastName);
 
   return {
     // Date
     '[date.created]': currentDate,
-    
+
     // Client Contact Information
     '[client.company]': job.clientOrganization || 'Not Specified',
     '[client.firstname]': job.clientFirstName || '',
     '[client.lastname]': job.clientLastName || '',
     '[client.title]': job.clientTitle || 'Not Specified',
     '[client.addressstreet]': job.clientAddress || 'Not Specified',
-    
+    '[client.phone]': job.clientPhone || '',
+    '[client.email]': job.clientEmail || '',
+
     // Property Details
     '[name]': jobDetails.jobNumber || 'PENDING-' + Date.now().toString().slice(-6),
     '[addressstreet]': job.propertyAddress || 'Property Address Not Specified',
-    
+
     // Appraisal Details
     '[purposes]': job.propertyType || 'Not Specified',
     '[intendeduses]': job.intendedUse || 'Not Specified',
-    '[requestedvalues]': jobDetails.valuationPremises || 'Not Specified',
     '[propertyrights]': jobDetails.propertyRightsAppraised || 'Fee Simple',
     '[reportformat]': jobDetails.reportType || 'Full Narrative Report',
-    
+
+    // V4 new fields
+    '[valuetimeframe]': jobDetails.valuationPremises || 'Current',
+    '[valuescenarios]': jobDetails.valueScenarios || 'As Is',
+    '[approachestovalue]': jobDetails.approachesToValue || 'Direct Comparison, Income, Cost',
+    '[deliverytime]': jobDetails.deliveryTime || '4',
+    '[clientdocuments]': jobDetails.clientDocuments || '',
+
     // Financial
     '[fee]': jobDetails.appraisalFee
       ? `$${jobDetails.appraisalFee.toLocaleString()}`
       : '$TBD',
 
-    // Administrative
-    '[scopes]': jobDetails.scopeOfWork || 'All Applicable',
-    '[duedate]': jobDetails.deliveryDate || '15 business days',
-
-    // Additional fields that might be in template
+    // Additional fields
     '[jobnumber]': jobDetails.jobNumber || 'PENDING-' + Date.now().toString().slice(-6),
-    '[paymentterms]': jobDetails.paymentTerms || 'Net 30 days',
-    '[retainer]': jobDetails.retainerAmount
-      ? `$${Number(jobDetails.retainerAmount).toLocaleString()}`
-      : '$TBD',
     '[notes]': job.notes || jobDetails.specialInstructions || '',
   };
 }

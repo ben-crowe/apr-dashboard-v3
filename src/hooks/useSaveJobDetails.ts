@@ -18,8 +18,10 @@ export function useSaveJobDetails(jobId: string) {
           'jobNumber', 'valcreJobId',  // Add these critical fields!
           'propertyRightsAppraised', 'valuationPremises', 'deliveryDate', 
           'scopeOfWork', 'specialInstructions', 'reportType', 
-          'paymentTerms', 'appraisalFee', 'retainerAmount', 
-          'disbursementPercentage', 'internalComments', 'appraiserComments'
+          'paymentTerms', 'appraisalFee', 'retainerAmount',
+          'disbursementPercentage', 'internalComments', 'appraiserComments',
+          'deliveryComments', 'paymentComments',
+          'paymentAmount', 'paymentPaidDate', 'retainerPaidDate'
         ];
         
         const propertyInfoFields = [

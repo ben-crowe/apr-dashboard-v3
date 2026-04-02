@@ -147,7 +147,10 @@ export function useJobData(jobId: string) {
               internalComments: loeData.internal_comments,
               appraiserComments: loeData.internal_comments,  // FIX: Alias for component compatibility (Nov 18)
               deliveryComments: loeData.delivery_comments,  // FIX: Add delivery comments (Nov 18 - regression fix)
-              paymentComments: loeData.payment_comments  // FIX: Add payment comments (Nov 18 - regression fix)
+              paymentComments: loeData.payment_comments,  // FIX: Add payment comments (Nov 18 - regression fix)
+              paymentAmount: loeData.payment_amount,
+              paymentPaidDate: loeData.payment_paid_date,
+              retainerPaidDate: loeData.retainer_paid_date
             });
           }
 

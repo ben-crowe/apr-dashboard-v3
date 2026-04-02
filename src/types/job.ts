@@ -71,6 +71,9 @@ export interface JobDetails {
   paymentTerms?: string;
   appraisalFee?: number;
   retainerAmount?: string;
+  paymentAmount?: number;
+  paymentPaidDate?: string;
+  retainerPaidDate?: string;
   disbursementPercentage?: string;
   internalComments?: string;
   

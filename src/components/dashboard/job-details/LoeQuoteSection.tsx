@@ -758,9 +758,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       appraiserComments: `${getRandom(appraisers)} assigned. ${getRandom(internalNotes)}`,
       deliveryComments: 'Draft report due 7 days prior to final delivery. Client to confirm inspection access 48 hours in advance.',
       paymentComments: 'Retainer due on LOE signature. Balance due on report delivery. Late payments subject to 2% monthly interest.',
-      paymentAmount: '7500.00',
-      paymentPaidDate: '2026-04-15',
-      retainerPaidDate: '2026-04-01'
+      paymentAmount: (STATIC_FEE - STATIC_RETAINER).toFixed(2),
+      retainerPaidDate: (() => { const d = new Date(); d.setDate(d.getDate() + 1); return d.toISOString().split('T')[0]; })(),
+      paymentPaidDate: (() => { const d = new Date(deliveryDate); d.setDate(d.getDate() + 5); return d.toISOString().split('T')[0]; })()
     };
 
     onUpdateDetails(testData);

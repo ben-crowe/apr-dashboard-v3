@@ -4,23 +4,42 @@
  */
 
 import { DetailJob, JobDetails } from '@/types/job';
+import { V3_TEMPLATE } from './v3Template';
 import { V4_TEMPLATE } from './v4Template';
 import { testEnvironmentVariables } from '@/utils/testEnv';
 import { supabase } from '@/integrations/supabase/client';
 
-// API key now handled in Edge Function for security
-// const DOCUSEAL_API_KEY removed - using proxy instead
+// Seed both V3 and V4 templates to DB if no templates exist
+// This ensures the template picker dropdown has both options on first load
+async function seedTemplatesIfEmpty(): Promise<void> {
+  try {
+    const { data: existing, error: countError } = await supabase
+      .from('loe_templates')
+      .select('id')
+      .eq('is_active', true)
+      .limit(1);
 
-// Load and prepare the V3 template
-// Tries to load app-wide default template from database, falls back to embedded template
+    if (countError || (existing && existing.length > 0)) return;
+
+    // No templates in DB — seed both
+    console.log('Seeding V3 + V4 templates to loe_templates...');
+    await supabase.from('loe_templates').insert([
+      { name: 'V3 - Original Template', template_html: V3_TEMPLATE, is_default: false, is_active: true, version: 3 },
+      { name: 'V4 - Updated Template', template_html: V4_TEMPLATE, is_default: true, is_active: true, version: 4 },
+    ]);
+    console.log('Seeded V3 + V4 templates');
+  } catch (err) {
+    console.warn('Template seeding failed (non-fatal):', err);
+  }
+}
+
+// Load template: DB default first, seed if empty, fallback to embedded V4
 async function loadV3Template(templateHTML?: string): Promise<string> {
-  // If template HTML provided directly, use it
   if (templateHTML) {
-    console.log('✅ Using provided template HTML');
     return templateHTML;
   }
 
-  // Try to load app-wide default template from DB
+  // Try to load default template from DB
   try {
     const { data: template, error } = await supabase
       .from('loe_templates')
@@ -30,15 +49,16 @@ async function loadV3Template(templateHTML?: string): Promise<string> {
       .single();
 
     if (!error && template) {
-      console.log('✅ Loaded app-wide default template from database');
       return template.template_html;
     }
+
+    // No default found — seed both templates then return V4
+    await seedTemplatesIfEmpty();
+    return V4_TEMPLATE;
   } catch (err) {
-    console.warn('⚠️ Failed to load default template, falling back to V4_TEMPLATE', err);
+    console.warn('Failed to load template from DB, using embedded V4:', err);
   }
 
-  // Fallback to embedded template
-  console.log('✅ Loading embedded V4 template');
   return V4_TEMPLATE;
 }
 

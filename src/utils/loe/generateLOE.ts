@@ -1,16 +1,16 @@
 /**
- * Generate LOE Document with V4 Template
+ * Generate LOE Document with V5 Template (Chris's V03)
  * Maps APR Hub data to LOE template fields
  */
 
 import { DetailJob, JobDetails } from '@/types/job';
 import { V3_TEMPLATE } from './v3Template';
 import { V4_TEMPLATE } from './v4Template';
+import { V5_TEMPLATE } from './v5Template';
 import { testEnvironmentVariables } from '@/utils/testEnv';
 import { supabase } from '@/integrations/supabase/client';
 
-// Seed both V3 and V4 templates to DB if no templates exist
-// This ensures the template picker dropdown has both options on first load
+// Seed all template versions to DB if no templates exist
 async function seedTemplatesIfEmpty(): Promise<void> {
   try {
     const { data: existing, error: countError } = await supabase
@@ -21,25 +21,24 @@ async function seedTemplatesIfEmpty(): Promise<void> {
 
     if (countError || (existing && existing.length > 0)) return;
 
-    // No templates in DB — seed both
-    console.log('Seeding V3 + V4 templates to loe_templates...');
+    console.log('Seeding V3 + V4 + V5 templates to loe_templates...');
     await supabase.from('loe_templates').insert([
-      { name: 'V3 - Original Template', template_html: V3_TEMPLATE, is_default: false, is_active: true, version: 3 },
-      { name: 'V4 - Updated Template', template_html: V4_TEMPLATE, is_default: true, is_active: true, version: 4 },
+      { name: 'V1 - Original Template', template_html: V3_TEMPLATE, is_default: false, is_active: true, version: 1 },
+      { name: 'V2 - Updated Template', template_html: V4_TEMPLATE, is_default: false, is_active: true, version: 2 },
+      { name: 'V3 - Current Template', template_html: V5_TEMPLATE, is_default: true, is_active: true, version: 3 },
     ]);
-    console.log('Seeded V3 + V4 templates');
+    console.log('Seeded all templates');
   } catch (err) {
     console.warn('Template seeding failed (non-fatal):', err);
   }
 }
 
-// Load template: DB default first, seed if empty, fallback to embedded V4
+// Load template: DB default first, seed if empty, fallback to embedded V5
 async function loadV3Template(templateHTML?: string): Promise<string> {
   if (templateHTML) {
     return templateHTML;
   }
 
-  // Try to load default template from DB
   try {
     const { data: template, error } = await supabase
       .from('loe_templates')
@@ -52,18 +51,17 @@ async function loadV3Template(templateHTML?: string): Promise<string> {
       return template.template_html;
     }
 
-    // No default found — seed both templates then return V4
     await seedTemplatesIfEmpty();
-    return V4_TEMPLATE;
+    return V5_TEMPLATE;
   } catch (err) {
-    console.warn('Failed to load template from DB, using embedded V4:', err);
+    console.warn('Failed to load template from DB, using embedded V5:', err);
   }
 
-  return V4_TEMPLATE;
+  return V5_TEMPLATE;
 }
 
 /**
- * Map APR Hub data to V4 template fields
+ * Map APR Hub data to V5 template fields
  */
 function mapDataToV3Fields(job: DetailJob, jobDetails: JobDetails) {
   const currentDate = new Date().toLocaleDateString('en-US', {
@@ -97,12 +95,17 @@ function mapDataToV3Fields(job: DetailJob, jobDetails: JobDetails) {
     '[propertyrights]': jobDetails.propertyRightsAppraised || 'Fee Simple',
     '[reportformat]': jobDetails.reportType || 'Full Narrative Report',
 
-    // V4 new fields
+    // V4/V5 fields
     '[valuetimeframe]': jobDetails.valuationPremises || 'Current',
     '[valuescenarios]': jobDetails.valueScenarios || 'As Is',
     '[approachestovalue]': jobDetails.approachesToValue || 'Direct Comparison, Income, Cost',
     '[deliverytime]': jobDetails.deliveryTime || '4',
     '[clientdocuments]': jobDetails.clientDocuments || '',
+
+    // V5 new fields
+    '[currentuse]': jobDetails.currentUse || '',
+    '[proposeduse]': jobDetails.proposedUse || '',
+    '[assignmenttype]': jobDetails.assignmentType || 'Standard',
 
     // Financial
     '[fee]': jobDetails.appraisalFee

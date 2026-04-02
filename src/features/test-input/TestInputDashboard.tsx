@@ -7,7 +7,7 @@ import {
   getSubsectionsForSection,
   getFieldsBySubsection,
   FieldDefinition,
-} from "../report-builder/schema/fieldRegistry";
+} from "@/features/report-builder/schema/fieldRegistry";
 import { useReportBuilderStore, testDataFieldMapping } from "../report-builder/store/reportBuilderStore";
 import { testDataSet1 } from "../report-builder/data/TestDataSet1";
 import { Button } from "@/components/ui/button";

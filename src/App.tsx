@@ -12,9 +12,9 @@ import DocumentBuilderTest from "./pages/DocumentBuilderTest";
 import DiagnosticForm from "./pages/DiagnosticForm";
 import { SigningPage } from "./pages/SigningPage";
 import TestLOE from "./pages/TestLOE";
-import MockReportBuilder from "./pages/MockReportBuilder";
+// import MockReportBuilder from "./pages/MockReportBuilder"; // Disabled — report-builder not in git, breaks Vercel build
 import ImageTest from "./pages/ImageTest";
-import { TestInputDashboard } from "./features/test-input";
+// import { TestInputDashboard } from "./features/test-input"; // Disabled — report-builder not in git, breaks Vercel build
 import { CalculatorDemoPage } from "./features/calculator-demo-v4";
 import CalculatorWithPreview from "@/features/calculator-demo-v4/CalculatorWithPreview";
 import ClickUpCallback from "./pages/ClickUpCallback";
@@ -42,8 +42,8 @@ const App = () => (
             <Route path="/diagnostic" element={<DiagnosticForm />} />
             <Route path="/sign/:id" element={<SigningPage />} />
             <Route path="/test-loe" element={<TestLOE />} />
-            <Route path="/mock-builder" element={<MockReportBuilder />} />
-            <Route path="/test-input" element={<TestInputDashboard />} />
+            {/* <Route path="/mock-builder" element={<MockReportBuilder />} /> */}
+            {/* <Route path="/test-input" element={<TestInputDashboard />} /> */}
             <Route path="/calculator-demo" element={<CalculatorDemoPage />} />
             <Route path="/calculator-preview" element={<CalculatorWithPreview />} />
             <Route path="/standalone-calculator" element={<StandaloneCalculator />} />

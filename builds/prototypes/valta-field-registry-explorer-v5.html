@@ -476,17 +476,13 @@ E  Authorized Use          ──┘</div>
 <div class="panel" id="panel-index">
 <div class="sec"><div class="sec-title" style="cursor:default;">Field Registry</div><div class="sec-body">
   <input class="fi-search" id="fiSearch" placeholder="Search all fields..." oninput="filterFields()">
-  <!-- Filter bar: three labeled dropdowns -->
+  <!-- Filter bar: scope toggle + dropdown filters -->
   <div style="display:flex;gap:16px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
-    <div style="display:flex;align-items:center;gap:6px;">
-      <label style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">Show:</label>
-      <select id="filterOrigin" onchange="applyFilters()" style="font:inherit;font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);cursor:pointer;">
-        <option value="all">All Fields</option>
-        <option value="dashboard">Dashboard Only (45)</option>
-        <option value="valcre-only">Valcre Only</option>
-        <option value="both-only">In Both Systems</option>
-      </select>
+    <div class="seg" style="margin:0;">
+      <button class="active" onclick="setScope('all',this)">Valcre (All)</button>
+      <button onclick="setScope('dashboard',this)">Dashboard</button>
     </div>
+    <input type="hidden" id="filterOrigin" value="all">
     <div style="display:flex;align-items:center;gap:6px;">
       <label style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">Location:</label>
       <select id="filterLocation" onchange="applyFilters()" style="font:inherit;font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);cursor:pointer;">
@@ -1043,10 +1039,8 @@ function renderFields() {
   let filtered = [];
   ALLFIELDS.forEach((f, i) => {
     const role = getRole(f.n);
-    // Origin filter
+    // Scope filter: 'all' = everything (Valcre All), 'dashboard' = just our 45
     if (fOrigin === 'dashboard' && f.origin === 'valcre') return;
-    if (fOrigin === 'valcre-only' && f.origin !== 'valcre') return;
-    if (fOrigin === 'both-only' && f.origin !== 'both') return;
     // Location filter
     if (fLocation !== 'all' && f.vr !== fLocation) return;
     // Type filter
@@ -1176,7 +1170,14 @@ function sortFields(th, key) {
   renderFields();
 }
 
-/* ═══ FILTER LOGIC — three dropdown selectors ═══ */
+/* ═══ FILTER LOGIC ═══ */
+function setScope(val, btn) {
+  document.getElementById('filterOrigin').value = val;
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  expandedRow = null;
+  renderFields();
+}
 function applyFilters() {
   expandedRow = null;
   renderFields();
@@ -1186,6 +1187,7 @@ function resetFilters() {
   document.getElementById('filterLocation').value = 'all';
   document.getElementById('filterType').value = 'all';
   document.getElementById('fiSearch').value = '';
+  document.querySelectorAll('.seg button').forEach((b,i) => b.classList.toggle('active', i===0));
   expandedRow = null;
   renderFields();
 }

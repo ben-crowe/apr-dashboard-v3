@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Field Registry — Cascading Rules</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --label-w: 155px;
+    --input-w: 280px;
+    --row-h: 28px;
+    --gap-col: 32px;
+    --gap-row: 6px;
+    --text: #111827;
+    --text-label: #4b5563;
+    --text-muted: #9ca3af;
+    --line: #d1d5db;
+    --focus: #2563eb;
+    --bg: #f3f4f6;
+    --card: #ffffff;
+    --border: #e5e7eb;
+    --accent: #2563eb;
+    --accent-bg: #eff6ff;
+    --accent-border: #bfdbfe;
+    --amber: #d97706;
+    --amber-bg: #fffbeb;
+    --amber-border: #fde68a;
+    --red: #dc2626;
+    --red-bg: #fef2f2;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.5; color: var(--text); background: var(--bg); padding: 24px 32px; }
+
+  /* Header */
+  .hdr { max-width: 900px; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .hdr h1 { font-size: 20px; font-weight: 700; }
+  .hdr .sub { font-size: 13px; color: var(--text-muted); }
+  .hdr-btns { display: flex; gap: 8px; }
+  .hdr-btns button { font: 500 12px/1 system-ui, sans-serif; padding: 7px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); color: var(--text-label); cursor: pointer; }
+  .hdr-btns button:hover { border-color: #ccc; color: var(--text); }
+  .hdr-btns .primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+  /* Section card */
+  .sec { max-width: 900px; margin: 0 auto 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+  .sec-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text); padding: 12px 24px; background: #f9fafb; border-bottom: 1px solid var(--border); border-radius: 8px 8px 0 0; }
+  .sec-body { padding: 16px 24px 20px; }
+
+  /* Two-col grid of field rows */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-row) var(--gap-col); }
+  .grid.full { grid-template-columns: 1fr; }
+  .span2 { grid-column: 1 / -1; }
+
+  /* Field row: label left, input right */
+  .f { display: flex; align-items: center; gap: 8px; min-height: var(--row-h); position: relative; }
+  .f-lbl { font-size: 13px; color: var(--text-label); white-space: nowrap; min-width: var(--label-w); text-align: right; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: flex-end; gap: 0; }
+  .f-lbl::after { content: ':'; }
+  .f-val { flex: 1; min-width: 0; }
+
+  /* Underline text input */
+  .u-wrap { position: relative; }
+  .u-wrap::after { content: ''; position: absolute; bottom: 0; left: 0; width: var(--input-w); height: 1px; background: var(--line); }
+  .u-wrap:focus-within::after { background: var(--focus); }
+  .u-inp { font: inherit; font-size: 12px; color: var(--text); border: none; background: transparent; width: 100%; height: var(--row-h); padding: 0; outline: none; }
+  .u-inp::placeholder { color: var(--text-muted); font-style: italic; }
+
+  /* Underline select */
+  .u-sel-wrap { position: relative; width: var(--input-w); }
+  .u-sel { font: inherit; font-size: 12px; color: var(--text); border: none; border-bottom: 1px solid var(--line); background: transparent; width: 100%; height: var(--row-h); padding: 0; outline: none; cursor: pointer; appearance: none; }
+  .u-sel:focus { border-bottom-color: var(--focus); }
+  .u-sel-wrap::after { content: ''; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--text-label); pointer-events: none; }
+  .u-sel.ph { color: var(--text-muted); }
+
+
+  .f.smart-field { }
+
+  /* Auto-fill source text (receive fields) */
+  .auto-src { font-size: 9px; color: #b0b5bc; font-weight: 400; margin-top: 2px; font-style: italic; white-space: nowrap; display: block; }
+  /* Number marker — subtle, inline */
+  .f-num:empty { display: none; }
+  .f-num { font-size: 10px; color: #9ca3af; margin-right: 4px; cursor: pointer; }
+  .f-num:hover { color: #6b7280; }
+
+  /* Highlight target field — thin border frame, text brightens */
+  .f.highlight { border: 1px solid #ccc; border-radius: 6px; padding: 4px 8px; margin: -5px -8px; transition: all .15s ease; background: transparent; }
+  .f.highlight .auto-src { color: #1d4ed8; }
+  .f.highlight .smart.empty { color: #1d4ed8; font-style: normal; font-weight: 600; }
+
+  /* Bottom panel */
+  /* Rule Explorer */
+  .rule-panel { max-width: 900px; margin: 24px auto 0; background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,.06); padding: 24px 28px; }
+  .rule-panel-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 20px; }
+  .re-group { margin-bottom: 28px; }
+  .re-group:last-child { margin-bottom: 0; }
+  .re-diagram { font-family: 'SF Mono', 'Cascadia Code', monospace; font-size: 12px; color: var(--text-label); line-height: 1.6; white-space: pre; background: #f9fafb; border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; margin-bottom: 12px; overflow-x: auto; }
+  .re-section { margin-bottom: 8px; }
+  .re-section:last-child { margin-bottom: 0; }
+  .re-section-hdr { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px; padding: 4px 0; border-bottom: 1px solid var(--border); }
+  .re-section-hdr .re-let { color: #6b7280; margin-right: 6px; }
+  .re-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-left: 12px; }
+  .re-table td { padding: 4px 10px; border-bottom: 1px solid #f0f1f3; color: var(--text-label); vertical-align: top; }
+  .re-table td:last-child { color: var(--text-label); }
+  .re-table tr:last-child td { border-bottom: none; }
+  .re-title-row td { font-size: 13px; font-weight: 700; color: var(--text); padding: 10px 10px 6px; border-bottom: 2px solid var(--border); }
+  .re-title-row .re-let { color: #6b7280; margin-right: 6px; font-weight: 700; }
+  .re-note { font-size: 11px; color: var(--text-muted); margin-top: 10px; font-style: italic; }
+
+  /* Lightning bolt — small, inline, no bg */
+  .zap { display: inline-flex; align-items: center; justify-content: center; width: 12px; height: 12px; cursor: pointer; position: relative; color: var(--accent); opacity: .5; margin-left: 3px; }
+  .zap:hover { opacity: 1; }
+  .zap svg { width: 9px; height: 9px; }
+  .tip { display: none; position: absolute; bottom: calc(100% + 8px); right: 0; background: #1e1e1e; color: #ccc; font: 400 11px/1.7 'SF Mono', 'Cascadia Code', monospace; padding: 10px 12px; border-radius: 6px; white-space: pre; z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,.2); min-width: 280px; pointer-events: none; border: 1px solid #333; }
+  .tip::after { content: ''; position: absolute; top: 100%; right: 12px; border: 5px solid transparent; border-top-color: #1e1e1e; }
+  .tip .k { color: #569cd6; } .tip .v { color: #ce9178; } .tip .d { color: #555; }
+  .zap:hover .tip, .zap.open .tip { display: block; }
+
+  /* Smart field value area — stacks value + source */
+  .smart-val { display: flex; flex-direction: column; gap: 1px; min-height: var(--row-h); justify-content: center; }
+
+  /* Textarea */
+  .u-ta { font: inherit; font-size: 12px; color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 6px 8px; width: 100%; max-width: 400px; resize: vertical; min-height: 36px; outline: none; }
+  .u-ta:focus { border-color: var(--focus); }
+  .u-ta::placeholder { color: var(--text-muted); font-style: italic; }
+
+  /* Doc slot */
+  .doc { border: 1px dashed var(--border); border-radius: 4px; padding: 6px 10px; font-size: 12px; color: var(--text-muted); }
+
+  /* View toggle */
+  .view-toggle { max-width: 900px; margin: 0 auto 16px; display: flex; gap: 0; }
+  .view-btn { font: 600 13px/1 system-ui, sans-serif; padding: 9px 20px; border: 1px solid var(--border); background: var(--card); color: var(--text-label); cursor: pointer; transition: all .15s; }
+  .view-btn:first-child { border-radius: 6px 0 0 6px; }
+  .view-btn:last-child { border-radius: 0 6px 6px 0; border-left: none; }
+  .view-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .view-btn:not(.active):hover { background: #f9fafb; color: var(--text); }
+
+  /* Logic-only view */
+  .logic-only-card { display: none; max-width: 900px; margin: 0 auto 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+  .logic-only-card .sec-title { border-radius: 8px 8px 0 0; }
+  .logic-only-card .sec-body { padding: 16px 20px 20px; }
+  .logic-only-card .grp { margin-bottom: 16px; }
+  .logic-only-card .grp:last-child { margin-bottom: 0; }
+  .logic-only-card .grp-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid #eee; }
+  /* Logic view: 4-column grid — label | dropdown | label | dropdown */
+  .lo-flow { display: grid; grid-template-columns: 140px 250px 155px 1fr; gap: 6px 8px; align-items: center; }
+  .lo-flow .f { display: contents; }
+  .lo-flow .f-lbl { min-width: 0 !important; text-align: right; font-size: 12px; }
+  .lo-flow .f-lbl::after { content: ':'; }
+  .lo-flow .f-val { min-width: 0; }
+  .lo-flow .u-sel-wrap { width: 100%; }
+  .lo-flow .u-sel { width: 100%; font-size: 11px; }
+  body.view-logic .sec { display: none; }
+  body.view-logic .logic-only-card { display: block; }
+
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <h1>Field Registry</h1>
+    <div class="sub">Cascading rules demo &middot; Pick dropdowns to see auto-fill</div>
+  </div>
+  <div class="hdr-btns">
+    <button onclick="fillTest()">Fill Test Data</button>
+    <button onclick="resetAll()">Reset</button>
+    <button class="primary">Save</button>
+  </div>
+</div>
+
+<!-- View Toggle -->
+<div class="view-toggle">
+  <button class="view-btn active" id="btn-full" onclick="setView('full')">Full Dashboard</button>
+  <button class="view-btn" id="btn-logic" onclick="setView('logic')">Logic Fields Only</button>
+</div>
+
+<!-- Logic-Only Card (hidden by default) -->
+<div class="logic-only-card" id="logicCard">
+  <div class="sec-title">Cascade Logic Fields</div>
+  <div class="sec-body">
+
+    <div class="grp">
+      <div class="grp-label">Rule Group 1 — Property Rights</div>
+      <div class="lo-flow">
+        <div class="f" id="lo-propertyType"><span class="f-lbl">Property Type</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" onchange="document.getElementById('propertyType').value=this.value;cascade()"><option value="">Choose...</option><option>Multifamily</option><option>Self-Storage</option><option>Retail</option><option>Industrial</option><option>Office</option><option>Land</option><option>Hotel</option><option>Seniors</option><option>Other</option></select></div></div></div>
+        <div class="f smart-field" id="lo-interest"><span class="f-lbl">Property Rights</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" id="lo-sel-interest"><option value="">Auto</option><option>Fee Simple</option><option>Leased Fee Interest</option><option>Leasehold Estate</option><option>Going Concern</option></select></div></div></div>
+        <div class="f" id="lo-subtype"><span class="f-lbl">Property Subtype</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" onchange="document.getElementById('propertySubtype').value=this.value;cascade()"><option value="">Choose...</option><option>Apartment</option><option>Townhouse</option><option>Mixed Use</option></select></div></div></div>
+        <span></span><span></span>
+        <div class="f" id="lo-tenancy"><span class="f-lbl">Tenancy</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" onchange="document.getElementById('tenancy').value=this.value;cascade()"><option value="">Choose...</option><option>Multi-Tenant</option><option>Owner Occupied</option><option>Partial Owner Occupied</option><option>Single-Tenant</option><option>Unknown</option><option>Vacant</option></select></div></div></div>
+        <span></span><span></span>
+      </div>
+    </div>
+
+    <div class="grp">
+      <div class="grp-label">Rule Group 2 — Value Scenarios &amp; Approaches</div>
+      <div class="lo-flow">
+        <div class="f" id="lo-status"><span class="f-lbl">Status of Improvements</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" onchange="document.getElementById('statusOfImprovements').value=this.value;cascade()"><option value="">Choose...</option><option>Existing - Completed</option><option>Existing - Renovated</option><option>Existing - Under Renovation</option><option>Existing - To Be Renovated</option><option>Proposed - Vacant Land</option><option>Proposed - Improved Land (Demolition Required)</option><option>Proposed - Under Construction</option></select></div></div></div>
+        <div class="f smart-field" id="lo-scenarios"><span class="f-lbl">Value Scenarios</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" id="lo-sel-scenarios"><option value="">Auto</option><option>As Is Vacant Land</option><option>As If Vacant Land</option><option>As If Complete &amp; Stabilized</option><option>As-Is</option><option>As Stabilized</option><option>As If Complete &amp; Stabilized - Renovated</option><option>Insurable Replacement Cost</option></select></div></div></div>
+        <div class="f" id="lo-authorizedUse"><span class="f-lbl">Authorized Use</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" onchange="document.getElementById('authorizedUse').value=this.value;cascade()"><option value="">Choose...</option><option>First Mortgage Financing</option><option>Financial Reporting</option><option>Insurance</option></select></div></div></div>
+        <div class="f smart-field" id="lo-approaches"><span class="f-lbl">Approaches to Value</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" id="lo-sel-approaches"><option value="">Auto</option><option>Land Direct Comparison Approach</option><option>Cost Approach</option><option>Direct Comparison Approach</option><option>Income Approach</option></select></div></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── Section 1: Client Information ── -->
+<div class="sec">
+  <div class="sec-title">Client Information</div>
+  <div class="sec-body">
+    <div class="grid">
+      <div class="f"><span class="f-lbl">First Name</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="Sarah"></div></div></div>
+      <div class="f"><span class="f-lbl">Last Name</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="Williams"></div></div></div>
+      <div class="f"><span class="f-lbl">Title</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="VP of Real Estate"></div></div></div>
+      <div class="f"><span class="f-lbl">Organization</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="Skyline Investments Ltd."></div></div></div>
+      <div class="f"><span class="f-lbl">Phone</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="(403) 555-0147"></div></div></div>
+      <div class="f"><span class="f-lbl">Email</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="s.williams@skylineinv.ca"></div></div></div>
+      <div class="f span2"><span class="f-lbl">Address</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="300 5th Ave SW, Suite 1200, Calgary, AB T2P 3C4"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 2: Property Information ── -->
+<div class="sec">
+  <div class="sec-title">Property Information</div>
+  <div class="sec-body">
+    <div class="grid">
+      <div class="f"><span class="f-lbl">Property Name</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="Riverside Terrace"></div></div></div>
+      <div class="f" id="row-propertyType"><span class="f-lbl"><span class="f-num" onmouseenter="hlRule(1)" onmouseleave="unhlRule()">1</span>Property Type</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" id="propertyType" onchange="cascade()"><option value="">Choose...</option><option>Multifamily</option><option>Self-Storage</option><option>Retail</option><option>Industrial</option><option>Office</option><option>Land</option><option>Hotel</option><option>Seniors</option><option>Other</option></select></div></div></div>
+      <div class="f span2"><span class="f-lbl">Address</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="4200 Bow Trail SW, Calgary, AB T3C 2G2"></div></div></div>
+      <div class="f" id="row-authorizedUse"><span class="f-lbl"><span class="f-num" onmouseenter="hlRule(5)" onmouseleave="unhlRule()">5</span>Authorized Use</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" id="authorizedUse" onchange="cascade()"><option value="">Choose...</option><option>First Mortgage Financing</option><option>Financial Reporting</option><option>Insurance</option><option>Internal Decision-Making</option><option>Acquisition-Disposition</option><option>Estate Planning</option><option>Litigation</option><option>GST</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">Valuation Premises</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>Market Value</option><option>Market Rent</option><option>Investment Value</option><option>Insurable Value</option><option>Liquidation Value</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">Asset Condition</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>Excellent</option><option>Very Good</option><option>Good</option><option>Fair</option><option>Poor</option></select></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 3: Property Contact ── -->
+<div class="sec">
+  <div class="sec-title">Property Contact</div>
+  <div class="sec-body">
+    <div class="grid">
+      <div class="f"><span class="f-lbl">First Name</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="Marcus"></div></div></div>
+      <div class="f"><span class="f-lbl">Last Name</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="Thompson"></div></div></div>
+      <div class="f"><span class="f-lbl">Email</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="m.thompson@riverside.ca"></div></div></div>
+      <div class="f"><span class="f-lbl">Phone</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="(403) 555-0299"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 4: LOE Quote — Job Info ── -->
+<div class="sec">
+  <div class="sec-title">LOE Quote &amp; Job Information</div>
+  <div class="sec-body">
+    <div class="grid">
+      <div class="f"><span class="f-lbl">Job Number</span><div class="f-val"><div class="u-wrap"><input class="u-inp" value="VAL-2026-0147" readonly style="color:var(--text-muted);"></div></div></div>
+      <div class="f"><span class="f-lbl">Job Status</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>Draft</option><option>In Progress</option><option>Under Review</option><option>Completed</option><option>On Hold</option><option>Cancelled</option></select></div></div></div>
+      <div class="f smart-field" id="row-interest"><span class="f-lbl">Property Rights</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" id="sel-interest"><option value="">Auto</option><option>Fee Simple</option><option>Leased Fee Interest</option><option>Leasehold Estate</option><option>Going Concern</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">Scope of Work</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>All Applicable</option><option>Best One Approach</option><option>Best Two Approaches</option><option>Cost Approach</option><option>Direct Comparison Approach</option><option>Discounted Cash Flow</option><option>Feasibility Study</option><option>Income Approach</option><option>Land Value</option><option>Litigation</option><option>Market Research</option><option>Market Study</option><option>Net Rent Review</option><option>Update</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">Payment Terms</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>On LOE Signature</option><option>NET 30 Days</option><option>On Completion</option><option>50% Upfront</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">Appraisal Fee</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="$12,500"></div></div></div>
+      <div class="f"><span class="f-lbl">Report Type</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>Appraisal Report</option><option>Amendment Letter</option><option>Broker Opinion of Value</option><option>Completion Report</option><option>Consultation</option><option>Desk Review</option><option>Evaluation</option><option>Peer Review</option><option>Rent Study</option><option>Restricted Appraisal Report</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">Retainer Amount</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="$5,000"></div></div></div>
+      <div class="f"><span class="f-lbl">Delivery Date</span><div class="f-val"><div class="u-wrap"><input class="u-inp" type="date"></div></div></div>
+      <div class="f"><span class="f-lbl">Paid Date</span><div class="f-val"><div class="u-wrap"><input class="u-inp" type="date"></div></div></div>
+      <div class="f"><span class="f-lbl">Request Date</span><div class="f-val"><div class="u-wrap"><input class="u-inp" type="date"></div></div></div>
+      <div class="f"><span class="f-lbl">Signed Date</span><div class="f-val"><div class="u-wrap"><input class="u-inp" type="date"></div></div></div>
+      <div class="f"><span class="f-lbl">Due Date</span><div class="f-val"><div class="u-wrap"><input class="u-inp" type="date"></div></div></div>
+      <div class="f"><span class="f-lbl">Amount Paid</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="$12,500"></div></div></div>
+      <div class="f"><span class="f-lbl">CMHC Financing</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>Yes</option><option>No</option></select></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 5: Building Information ── -->
+<div class="sec">
+  <div class="sec-title">Building Information</div>
+  <div class="sec-body">
+    <div class="grid">
+      <div class="f"><span class="f-lbl">Year Built</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="2004"></div></div></div>
+      <div class="f"><span class="f-lbl">Building Size (SF)</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="62,400"></div></div></div>
+      <div class="f"><span class="f-lbl">Number of Units</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="72"></div></div></div>
+      <div class="f"><span class="f-lbl">Parking Spaces</span><div class="f-val"><div class="u-wrap"><input class="u-inp" data-fill="88"></div></div></div>
+      <div class="f" id="row-tenancy"><span class="f-lbl"><span class="f-num" onmouseenter="hlRule(3)" onmouseleave="unhlRule()">3</span>Tenancy</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" id="tenancy" onchange="cascade()"><option value="">Choose...</option><option>Multi-Tenant</option><option>Owner Occupied</option><option>Partial Owner Occupied</option><option>Single-Tenant</option><option>Unknown</option><option>Vacant</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">State of Improvements</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>Proposed</option><option>Under Construction</option><option>Complete</option></select></div></div></div>
+      <div class="f" id="row-status"><span class="f-lbl"><span class="f-num" onmouseenter="hlRule(4)" onmouseleave="unhlRule()">4</span>Status of Improvements</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" id="statusOfImprovements" onchange="cascade()"><option value="">Choose...</option><option>Existing - Completed</option><option>Existing - Renovated</option><option>Existing - Under Renovation</option><option>Existing - To Be Renovated</option><option>Proposed - Vacant Land</option><option>Proposed - Improved Land (Demolition Required)</option><option>Proposed - Under Construction</option></select></div></div></div>
+      <div class="f smart-field" id="row-scenarios"><span class="f-lbl">Value Scenarios</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" id="sel-scenarios"><option value="">Auto</option><option>As Is Vacant Land</option><option>As If Vacant Land</option><option>As If Complete &amp; Stabilized</option><option>As-Is</option><option>As Stabilized</option><option>As If Complete &amp; Stabilized - Renovated</option><option>As If Complete - Rezoned</option><option>As If Complete - Serviced</option><option>As If Complete - Subdivided</option><option>Insurable Replacement Cost</option></select></div></div></div>
+      <div class="f" id="row-subtype"><span class="f-lbl"><span class="f-num" onmouseenter="hlRule(2)" onmouseleave="unhlRule()">2</span>Property Subtype</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" id="propertySubtype" onchange="cascade()"><option value="">Choose...</option><option>Apartment</option><option>Townhouse</option><option>Mixed Use</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">Land Metric</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>Square Feet</option><option>Acres</option><option>Hectares</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">Env. Assessment</span><div class="f-val"><div class="u-wrap"><input class="u-inp"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 6: Appraisal Assignment ── -->
+<div class="sec">
+  <div class="sec-title">Appraisal Assignment</div>
+  <div class="sec-body">
+    <div class="grid">
+      <div class="f"><span class="f-lbl">Assignment Type</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>Standard</option><option>Update</option><option>Retrospective</option><option>Desktop</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">Desktop Report</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>Yes</option><option>No</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">Value Timeframe</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>Current</option><option>Retrospective</option><option>Prospective</option></select></div></div></div>
+      <div class="f smart-field" id="row-approaches"><span class="f-lbl">Approaches to Value</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel" id="sel-approaches"><option value="">Auto</option><option>Land Direct Comparison Approach</option><option>Cost Approach</option><option>Direct Comparison Approach</option><option>Income Approach</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">Transaction Status</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>Arm's Length</option><option>Non-Arm's Length</option><option>Listing</option><option>Under Contract</option><option>REO/Bank Sale</option></select></div></div></div>
+      <div class="f"><span class="f-lbl">Zoning Status</span><div class="f-val"><div class="u-sel-wrap"><select class="u-sel"><option value="">Choose...</option><option>Legal Conforming</option><option>Legal Non-Conforming</option><option>Illegal</option><option>No Zoning</option></select></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 7: Property Site ── -->
+<div class="sec">
+  <div class="sec-title">Property Site &amp; Parcels</div>
+  <div class="sec-body">
+    <div class="grid">
+      <div class="f"><span class="f-lbl">Zoning</span><div class="f-val"><div class="u-wrap"><input class="u-inp"></div></div></div>
+      <div class="f"><span class="f-lbl">Zone Code</span><div class="f-val"><div class="u-wrap"><input class="u-inp"></div></div></div>
+      <div class="f"><span class="f-lbl">Land Use</span><div class="f-val"><div class="u-wrap"><input class="u-inp"></div></div></div>
+      <div class="f"><span class="f-lbl">Flood Zone</span><div class="f-val"><div class="u-wrap"><input class="u-inp"></div></div></div>
+      <div class="f"><span class="f-lbl">Gross Building Area</span><div class="f-val"><div class="u-wrap"><input class="u-inp"></div></div></div>
+      <div class="f"><span class="f-lbl">Net Rentable Area</span><div class="f-val"><div class="u-wrap"><input class="u-inp"></div></div></div>
+      <div class="f"><span class="f-lbl">Total Site Area</span><div class="f-val"><div class="u-wrap"><input class="u-inp"></div></div></div>
+      <div class="f"><span class="f-lbl">Assessed Value</span><div class="f-val"><div class="u-wrap"><input class="u-inp"></div></div></div>
+      <div class="f"><span class="f-lbl">Taxes</span><div class="f-val"><div class="u-wrap"><input class="u-inp"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Section 8: Document Uploads ── -->
+<div class="sec">
+  <div class="sec-title">Document Uploads</div>
+  <div class="sec-body">
+    <div class="grid">
+      <div class="f"><span class="f-lbl">Land Title</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
+      <div class="f"><span class="f-lbl">Survey / RPR</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
+      <div class="f"><span class="f-lbl">Tax Notice</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
+      <div class="f"><span class="f-lbl">Aerial Photo</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
+      <div class="f"><span class="f-lbl">Zoning Map</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
+      <div class="f"><span class="f-lbl">Flood Map</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
+      <div class="f"><span class="f-lbl">Building Permits</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
+      <div class="f"><span class="f-lbl">Site Plan</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Rule Explorer -->
+<div class="rule-panel">
+  <div class="rule-panel-title">Rule Explorer</div>
+
+  <!-- GROUP 1 -->
+  <div class="re-group">
+    <div class="re-diagram">A  Property Type        ──┐
+B  Property Subtype     ──┼──→  Property Rights
+C  Tenancy              ──┘</div>
+    <table class="re-table">
+      <tr><td style="padding:0 10px 2px;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#9ca3af;border-bottom:none">User Choice</td><td style="padding:0 10px 2px;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#9ca3af;border-bottom:none">Outcome</td></tr>
+      <tr class="re-title-row"><td><span class="re-let">A</span>Property Type</td><td>Property Rights</td></tr>
+      <tr><td>Multifamily, Self-Storage, Land, Hotel, Seniors</td><td>Fee Simple</td></tr>
+      <tr><td>Retail, Industrial, Office</td><td>Leased Fee Interest</td></tr>
+      <tr class="re-title-row"><td><span class="re-let">B</span>Property Subtype (override)</td><td></td></tr>
+      <tr><td>Mixed Use</td><td>Fee Simple &amp; Leased Fee</td></tr>
+      <tr class="re-title-row"><td><span class="re-let">C</span>Tenancy (override)</td><td></td></tr>
+      <tr><td>Owner Occupied</td><td>Fee Simple</td></tr>
+      <tr><td>Multi-Tenant</td><td>Leased Fee Interest</td></tr>
+      <tr><td>Partial Owner Occupied</td><td>Leasehold Estate</td></tr>
+      <tr><td>Single-Tenant</td><td>Going Concern</td></tr>
+    </table>
+    <div class="re-note">Last picked wins. C overrides B overrides A.</div>
+  </div>
+
+  <!-- GROUP 2 -->
+  <div class="re-group">
+    <div class="re-diagram">D  Status of Improvements  ──┐
+                              ├──→  Value Scenarios  ──→  Approaches to Value
+E  Authorized Use          ──┘</div>
+    <table class="re-table">
+      <tr><td style="padding:0 10px 2px;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#9ca3af;border-bottom:none">User Choice</td><td style="padding:0 10px 2px;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#9ca3af;border-bottom:none">Outcome</td><td style="padding:0 10px 2px;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#9ca3af;border-bottom:none">Outcome</td></tr>
+      <tr class="re-title-row"><td><span class="re-let">D</span>Status of Improvements</td><td>Value Scenarios</td><td>Approaches</td></tr>
+      <tr><td>Existing - Completed</td><td>As Stabilized</td><td>Direct Comparison + Income</td></tr>
+      <tr><td>Existing - Under Renovation</td><td>As-Is + As If Complete</td><td>Direct Comparison + Income + Cost</td></tr>
+      <tr><td>Existing - To Be Renovated</td><td>As-Is + As If Complete</td><td>Direct Comparison + Income + Cost</td></tr>
+      <tr><td>Proposed - Vacant Land</td><td>As Is Vacant Land + As If Complete</td><td>Land Direct Comparison + Cost</td></tr>
+      <tr><td>Proposed - Improved Land</td><td>As If Vacant Land + As If Complete</td><td>Land Direct Comparison + Cost</td></tr>
+      <tr><td>Proposed - Under Construction</td><td>As If Vacant Land + As If Complete</td><td>Land Direct Comparison + Cost</td></tr>
+      <tr class="re-title-row"><td><span class="re-let">E</span>Authorized Use (override)</td><td></td><td></td></tr>
+      <tr><td>Insurance</td><td>Insurable Replacement Cost</td><td>Cost Approach</td></tr>
+    </table>
+    <div class="re-note">Pick Status → Value Scenarios auto-sets → Approaches auto-sets. Three fields from one pick.</div>
+  </div>
+</div>
+
+<div style="height:40px;"></div>
+
+<script>
+const INTEREST_BY_PROPERTY = {'Multifamily':'Fee Simple','Self-Storage':'Fee Simple','Retail':'Leased Fee Interest','Industrial':'Leased Fee Interest','Office':'Leased Fee Interest','Land':'Fee Simple','Hotel':'Fee Simple','Seniors':'Fee Simple'};
+const INTEREST_BY_SUBTYPE = {'Mixed Use':'Fee Simple & Leased Fee'};
+const INTEREST_BY_TENANCY = {'Multi-Tenant':'Leased Fee Interest','Owner Occupied':'Fee Simple','Partial Owner Occupied':'Leasehold Estate','Single-Tenant':'Going Concern'};
+const SCENARIOS_BY_STATUS = {
+  'Existing - Completed':['As Stabilized'],
+  'Existing - Renovated':['As Stabilized'],
+  'Existing - Under Renovation':['As-Is','As If Complete & Stabilized'],
+  'Existing - To Be Renovated':['As-Is','As If Complete & Stabilized'],
+  'Proposed - Vacant Land':['As Is Vacant Land','As If Complete & Stabilized'],
+  'Proposed - Improved Land (Demolition Required)':['As If Vacant Land','As If Complete & Stabilized'],
+  'Proposed - Under Construction':['As If Vacant Land','As If Complete & Stabilized'],
+};
+const APPROACHES_BY_SCENARIO = {
+  'As Stabilized':['Direct Comparison Approach','Income Approach'],
+  'As-Is':['Direct Comparison Approach','Income Approach'],
+  'As Is Vacant Land':['Land Direct Comparison Approach'],
+  'As If Vacant Land':['Land Direct Comparison Approach'],
+  'As If Complete & Stabilized':['Cost Approach'],
+  'As If Complete & Stabilized - Renovated':['Cost Approach'],
+  'Insurable Replacement Cost':['Cost Approach'],
+};
+
+function cascade() {
+  const pt = g('propertyType'), sub = g('propertySubtype'), tn = g('tenancy'), au = g('authorizedUse'), st = g('statusOfImprovements');
+
+  // Rule Set 1: Interest — Property Type, then Subtype overrides, then Tenancy overrides
+  let interest = null;
+  if (pt && INTEREST_BY_PROPERTY[pt]) { interest = INTEREST_BY_PROPERTY[pt]; }
+  if (sub && INTEREST_BY_SUBTYPE[sub]) { interest = INTEREST_BY_SUBTYPE[sub]; }
+  if (tn && INTEREST_BY_TENANCY[tn]) { interest = INTEREST_BY_TENANCY[tn]; }
+  const si = document.getElementById('sel-interest');
+  if (interest) { setSelVal(si, interest); } else { si.selectedIndex = 0; }
+  si.classList.toggle('ph', !interest);
+
+  // Rule Set 2: Scenarios
+  let scenarios = [];
+  if (au === 'Insurance') { scenarios = ['Insurable Replacement Cost']; }
+  else if (st && SCENARIOS_BY_STATUS[st]) { scenarios = SCENARIOS_BY_STATUS[st]; }
+  const ss = document.getElementById('sel-scenarios');
+  if (scenarios.length) { setSelVal(ss, scenarios.join(', ')); } else { ss.selectedIndex = 0; }
+  ss.classList.toggle('ph', !scenarios.length);
+
+  // Rule Set 3: Approaches (from Scenarios)
+  const apprSet = new Set();
+  scenarios.forEach(s => { (APPROACHES_BY_SCENARIO[s]||[]).forEach(a => apprSet.add(a)); });
+  const appr = [...apprSet];
+  const sa = document.getElementById('sel-approaches');
+  if (appr.length) { setSelVal(sa, appr.join(', ')); } else { sa.selectedIndex = 0; }
+  sa.classList.toggle('ph', !appr.length);
+
+  // Sync logic-only view
+  try { syncLogicView(); } catch(e) {}
+}
+
+function setTip(id, d) {
+  const el = document.getElementById(id);
+  if (!d) { el.innerHTML = '<span class="d">// no rule active</span>'; return; }
+  el.innerHTML = '<span class="k">trigger</span><span class="d">:</span> <span class="v">'+d.t+'</span>\n<span class="k">result </span><span class="d">:</span> <span class="v">'+d.r+'</span>\n<span class="d">---</span>\n<span class="k">valcre </span><span class="d">:</span> '+d.v+'\n<span class="k">api_key</span><span class="d">:</span> <span class="v">'+d.a+'</span>';
+}
+
+function zapToggle(el) { const w = el.classList.contains('open'); document.querySelectorAll('.zap.open').forEach(z => z.classList.remove('open')); if (!w) el.classList.add('open'); }
+document.addEventListener('click', e => { if (!e.target.closest('.zap')) document.querySelectorAll('.zap.open').forEach(z => z.classList.remove('open')); });
+
+// Rule groups and panel data
+const RULES_INFO = {
+  'row-propertyType': { num:1, title:'Property Type \u2192 Property Rights',
+    lines:['Multifamily, Self-Storage, Land, Hotel, Seniors = Fee Simple','Retail, Industrial, Office = Leased Fee Interest'], targets:['row-interest'] },
+  'row-subtype': { num:2, title:'Property Subtype \u2192 Property Rights',
+    lines:['Mixed Use = Fee Simple & Leased Fee Interest'], targets:['row-interest'] },
+  'row-tenancy': { num:3, title:'Tenancy \u2192 Property Rights (override)',
+    lines:['Owner-Occupied = Fee Simple','Multi-Tenant = Leased Fee Interest','Partial Owner Occupied = Leasehold Estate'], targets:['row-interest'] },
+  'row-status': { num:4, title:'Status of Improvements \u2192 Value Scenarios',
+    lines:['Existing Completed = As Stabilized','Under Renovation = As Is + As If Complete & Stabilized','Vacant Land = As Is Vacant Land + As If Complete & Stabilized','Under Construction = As If Vacant + As If Complete & Stabilized'], targets:['row-scenarios','row-approaches'] },
+  'row-authorizedUse': { num:5, title:'Authorized Use \u2192 Value Scenarios (override)',
+    lines:['Insurance = Insurable Replacement Cost'], targets:['row-scenarios','row-approaches'] },
+};
+
+// Rule Explorer — toggle expand + hover highlight
+function toggleRule(head) { head.closest('.rule-card').classList.toggle('open'); }
+function hlRule(num) {
+  const letters = {1:'A',2:'B',3:'C',4:'D',5:'E'};
+  const letter = letters[num];
+  if (!letter) return;
+  document.querySelectorAll('.rule-card').forEach(c => {
+    if (c.querySelector('.r-num').textContent.trim() === letter) c.classList.add('highlight');
+  });
+}
+function unhlRule() { document.querySelectorAll('.rule-card.highlight').forEach(c => c.classList.remove('highlight')); }
+
+// View toggle
+function setView(view) {
+  document.getElementById('btn-full').classList.toggle('active', view === 'full');
+  document.getElementById('btn-logic').classList.toggle('active', view === 'logic');
+  document.body.classList.toggle('view-logic', view === 'logic');
+}
+
+// Mirror cascade results to logic-only view
+function syncLogicView() {
+  ['interest','scenarios','approaches'].forEach(key => {
+    const sel = document.getElementById('sel-' + key);
+    const loSel = document.getElementById('lo-sel-' + key);
+    const srcTxt = document.getElementById('src-' + key);
+    const dstTxt = document.getElementById('lo-src-' + key);
+    if (sel && loSel) { loSel.innerHTML = sel.innerHTML; loSel.selectedIndex = sel.selectedIndex; loSel.classList.toggle('ph', sel.classList.contains('ph')); }
+    if (srcTxt && dstTxt) dstTxt.textContent = srcTxt.textContent;
+  });
+}
+
+// Set select value by matching option text
+function setSelVal(sel, val) {
+  for (let i = 0; i < sel.options.length; i++) {
+    if (sel.options[i].text === val || sel.options[i].value === val) { sel.selectedIndex = i; return; }
+  }
+  // If no exact match, add a temporary option
+  const opt = new Option(val, val); sel.add(opt); sel.value = val;
+}
+
+function fillTest() { document.querySelectorAll('[data-fill]').forEach(el => { el.value = el.dataset.fill; }); }
+
+function resetAll() {
+  document.querySelectorAll('.u-inp,.u-ta').forEach(i => { if (!i.readOnly) i.value = ''; });
+  document.querySelectorAll('.u-sel:not([disabled])').forEach(s => s.selectedIndex = 0);
+  ['sel-interest','sel-scenarios','sel-approaches'].forEach(id => { const s = document.getElementById(id); s.selectedIndex = 0; s.classList.add('ph'); });
+}
+
+function g(id) { return document.getElementById(id)?.value || ''; }
+document.querySelectorAll('.u-sel').forEach(s => { function c(){s.classList.toggle('ph',s.value==='');} s.addEventListener('change',c); c(); });
+
+// Pre-select first scenario on load
+window.addEventListener('load', function() {
+  var pt = document.getElementById('propertyType');
+  if (pt) { pt.value = 'Multifamily'; pt.classList.remove('ph'); }
+  cascade();
+  document.querySelectorAll('.u-sel').forEach(function(s) { s.classList.toggle('ph', s.value === ''); });
+});
+</script>
+</body>
+</html>

@@ -479,8 +479,8 @@ E  Authorized Use          ──┘</div>
   <!-- Filter bar: scope toggle + dropdown filters -->
   <div style="display:flex;gap:16px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
     <div class="seg" style="margin:0;">
+      <button class="active" onclick="setScope('dashboard',this)">Valta Dashboard</button>
       <button class="active" onclick="setScope('all',this)">Valcre (All)</button>
-      <button class="active" onclick="setScope('dashboard',this)">Dashboard</button>
     </div>
     <input type="hidden" id="filterOrigin" value="all">
     <div style="display:flex;align-items:center;gap:6px;">
@@ -1174,16 +1174,16 @@ function sortFields(th, key) {
 function setScope(val, btn) {
   document.getElementById('filterOrigin').value = val;
   const buttons = btn.parentElement.querySelectorAll('button');
-  const valcreBtn = buttons[0]; // Valcre (All)
-  const dashBtn = buttons[1];   // Dashboard
+  const dashBtn = buttons[0];   // Valta Dashboard
+  const valcreBtn = buttons[1]; // Valcre (All)
   if (val === 'all') {
     // Valcre All = superset, both active
-    valcreBtn.classList.add('active');
     dashBtn.classList.add('active');
+    valcreBtn.classList.add('active');
   } else {
     // Dashboard only
-    valcreBtn.classList.remove('active');
     dashBtn.classList.add('active');
+    valcreBtn.classList.remove('active');
   }
   expandedRow = null;
   renderFields();

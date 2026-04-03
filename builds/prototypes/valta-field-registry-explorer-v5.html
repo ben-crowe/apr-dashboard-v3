@@ -126,8 +126,8 @@
   .f.dimmed .dd-trigger { opacity: .35; }
 
   /* Panels */
-  .panel { display: none; max-width: 1200px; margin: 0 auto; }
-  #panel-full, #panel-logic, #panel-audit { max-width: 960px; }
+  .panel { display: none; max-width: 960px; margin: 0 auto; }
+  #panel-index, #panel-options { max-width: none; }
   .panel.active { display: block; }
 
   /* Logic view */
@@ -190,7 +190,7 @@
   .fi-table th { text-align: left; padding: 6px 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); border-bottom: 2px solid var(--border); cursor: pointer; transition: color .1s; user-select: none; }
   .fi-table th:hover { color: var(--text); }
   .fi-table th.sorted { color: var(--text); }
-  .fi-table td { padding: 5px 10px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; }
+  .fi-table td { padding: 5px 10px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; white-space: nowrap; }
   .fi-table tr:hover td { background: var(--hover); }
   .fi-table .fn { font-weight: 600; color: var(--text); font-family: 'SF Mono','Consolas', monospace; font-size: 11px; }
   .fi-group-hdr td { background: var(--hover); font-weight: 600; color: var(--text); font-size: 11px; padding: 8px 10px 4px; border-bottom: 2px solid var(--border); }

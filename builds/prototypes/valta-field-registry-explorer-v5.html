@@ -129,6 +129,8 @@
   .panel { display: none; max-width: 960px; margin: 0 auto; }
   #panel-index .sec, #panel-options .sec { max-width: none; width: 100%; min-width: 800px; position: relative; }
   #panel-index .sec .sec-title, #panel-options .sec .sec-title { position: relative; }
+  .expand-btn { font-size: 16px; color: var(--text-3); cursor: pointer; padding: 0 6px; transition: color .12s; user-select: none; }
+  .expand-btn:hover { color: var(--text); }
   .resize-edge { position: absolute; top: 0; right: -4px; width: 9px; height: 100%; cursor: ew-resize; z-index: 10; }
   .resize-edge::before { content: ''; position: absolute; top: 8px; right: 3px; width: 1px; height: calc(100% - 16px); background: transparent; transition: background .15s; }
   .resize-edge:hover::before, .resize-edge.dragging::before { background: var(--border-focus); }
@@ -491,7 +493,7 @@ E  Authorized Use          ──┘</div>
 
 <!-- ═══ FIELD INDEX ═══ -->
 <div class="panel" id="panel-index">
-<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;">Field Registry</div><div class="sec-body">
+<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⟷</span></div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
     <div class="seg" style="margin:0;flex-shrink:0;">
@@ -1499,6 +1501,19 @@ function showNarrative(idx) {
 
 renderFields();
 cascade();
+
+/* ═══ FULL WIDTH TOGGLE ═══ */
+let isFullWidth = false;
+function toggleFullWidth(e) {
+  e.stopPropagation();
+  const sec = document.getElementById('registrySec');
+  isFullWidth = !isFullWidth;
+  if (isFullWidth) {
+    sec.style.width = (window.innerWidth - 40) + 'px';
+  } else {
+    sec.style.width = '';
+  }
+}
 
 /* ═══ RESIZE HANDLE — drag from top-right corner ═══ */
 (function() {

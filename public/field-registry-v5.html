@@ -1502,14 +1502,19 @@ function setDashActive(el) {
 function fillTest() {
   // Fill text inputs
   document.querySelectorAll('[data-fill]').forEach(el => el.value = el.dataset.fill);
-  // Fill dropdowns with a realistic scenario
-  const testPicks = {
+  // Fill date inputs
+  document.querySelectorAll('input[type="date"]').forEach(el => {
+    if (!el.value) el.value = '2026-04-15';
+  });
+  // Fill cascade dropdowns
+  const cascadePicks = {
     propertyType: 'Retail',
+    propertySubtype: 'Apartment',
     tenancy: 'Multi-Tenant',
     statusOfImprovements: 'Existing - Completed',
     authorizedUse: 'First Mortgage Financing'
   };
-  Object.entries(testPicks).forEach(([field, value]) => {
+  Object.entries(cascadePicks).forEach(([field, value]) => {
     STATE[field] = value;
     document.querySelectorAll('.dd[data-field="'+field+'"]').forEach(dd => {
       const trigger = dd.querySelector('.dd-trigger');
@@ -1521,6 +1526,43 @@ function fillTest() {
     });
   });
   cascade();
+  // Fill all non-cascade dropdowns by label matching
+  const ddFills = {
+    'Job Status': 'In Progress',
+    'Scope of Work': 'All Applicable',
+    'Report Type': 'Appraisal Report',
+    'CMHC Financing': 'No',
+    'Valuation Premises': 'As-Is',
+    'Asset Condition': 'Good',
+    'Land Metric': 'Per Acre',
+    'Assignment Type': 'Single Property',
+    'Desktop Report': 'No',
+    'Value Timeframe': 'Current',
+    'Transaction Status': 'Not Applicable',
+    'Zoning Status': 'Conforming',
+  };
+  // Find dropdowns inside the full dashboard panel only
+  document.querySelectorAll('#panel-full .dd:not([data-field])').forEach(dd => {
+    // Find the label for this dropdown
+    const field = dd.closest('.f');
+    if (!field) return;
+    const lbl = field.querySelector('.f-lbl');
+    if (!lbl) return;
+    const labelText = lbl.textContent.replace(':','').trim();
+    const fillVal = ddFills[labelText];
+    if (!fillVal) return;
+    // Find matching option
+    const items = dd.querySelectorAll('.dd-item');
+    items.forEach(item => {
+      if (item.textContent === fillVal) {
+        const trigger = dd.querySelector('.dd-trigger');
+        trigger.childNodes[0].textContent = fillVal;
+        trigger.classList.remove('ph');
+        items.forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+      }
+    });
+  });
 }
 
 /* ═══ SCENARIOS ═══ */

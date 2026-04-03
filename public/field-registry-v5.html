@@ -1155,7 +1155,7 @@ function renderFields() {
   const dashCount = filtered.filter(x=>x.f.origin!=='valcre').length;
   const valcreCount = filtered.filter(x=>x.f.origin==='valcre').length;
   const sortNames = {n:'Field Name',l:'Label',c:'Control Type',s:'Source',role:'Role',d:'Dropdown List',vr:'Valcre Location',v:'Valcre API Key',nf:'New',req:'Required',origin:'Origin'};
-  let countText = 'Showing '+filtered.length+' of '+scopeTotal+' fields';
+  let countText = filtered.length < scopeTotal ? 'Showing '+filtered.length+' of '+scopeTotal+' fields' : scopeTotal+' fields';
   if (fOriginVal === 'all' && dashCount > 0 && valcreCount > 0) countText += ' ('+dashCount+' dashboard, '+valcreCount+' Valcre)';
   if (currentSort !== 'idx') countText += ' <span style="color:var(--border-focus);margin:0 4px;">|</span> <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--text);vertical-align:middle;margin-right:5px;"></span>Sorted by ' + (sortNames[currentSort] || currentSort) + ' <span class="sort-clear" onclick="clearSort()">✕</span>';
   document.getElementById('fiCount').innerHTML = countText;

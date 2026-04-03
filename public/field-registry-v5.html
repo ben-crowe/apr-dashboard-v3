@@ -245,6 +245,12 @@
 
   .doc { border: 1px dashed var(--border); border-radius: calc(var(--radius) - 2px); padding: 5px 10px; font-size: 12px; color: var(--text-4); }
 
+  /* Scenario buttons */
+  .scenario-btn { font-size: 11px; color: var(--text-3); cursor: pointer; padding: 3px 8px; transition: all .12s; border-radius: calc(var(--radius) - 2px); }
+  .scenario-btn:hover { color: var(--text-2); background: var(--hover); }
+  .scenario-btn.active { color: var(--text); background: var(--active-bg); }
+  .scenario-btn.active::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--text); margin-right: 5px; vertical-align: middle; }
+
   /* Checkbox filters */
   .cb-filter { display:flex; align-items:center; gap:5px; cursor:pointer; font-size:12px; color:var(--text-2); user-select:none; }
   .cb-filter:hover { color:var(--text); }
@@ -391,6 +397,13 @@
 
 <!-- ═══ LOGIC FIELDS ═══ -->
 <div class="panel" id="panel-logic">
+<div style="max-width:960px;margin:0 auto 8px;display:flex;align-items:center;gap:10px;">
+  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">Scenarios:</span>
+  <span class="scenario-btn" onclick="runScenario(1,this)">Standard</span>
+  <span class="scenario-btn" onclick="runScenario(2,this)">Override</span>
+  <span class="scenario-btn" onclick="runScenario(3,this)">Full Cascade</span>
+  <span class="scenario-btn" onclick="runScenario(4,this)">Insurance</span>
+</div>
 <div class="lo-card"><div class="sec-title">Cascade Logic — Interactive</div><div class="sec-body">
 
   <div class="grp">
@@ -1471,6 +1484,37 @@ function setDashActive(el) {
   el.classList.add('active');
 }
 function fillTest() { document.querySelectorAll('[data-fill]').forEach(el => el.value = el.dataset.fill); }
+
+/* ═══ SCENARIOS ═══ */
+const SCENARIOS = {
+  1: { name:'Standard', picks: {propertyType:'Multifamily', statusOfImprovements:'Existing - Completed'} },
+  2: { name:'Override', picks: {propertyType:'Retail', tenancy:'Owner Occupied', statusOfImprovements:'Existing - Completed'} },
+  3: { name:'Full Cascade', picks: {propertyType:'Land', statusOfImprovements:'Proposed - Vacant Land'} },
+  4: { name:'Insurance', picks: {propertyType:'Industrial', statusOfImprovements:'Existing - Under Renovation', authorizedUse:'Insurance'} },
+};
+function runScenario(num, btn) {
+  // Reset first
+  resetAll();
+  // Highlight active scenario button
+  document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // Apply picks
+  const scenario = SCENARIOS[num];
+  if (!scenario) return;
+  Object.entries(scenario.picks).forEach(([field, value]) => {
+    STATE[field] = value;
+    // Update all dropdowns for this field
+    document.querySelectorAll('.dd[data-field="'+field+'"]').forEach(dd => {
+      const trigger = dd.querySelector('.dd-trigger');
+      trigger.childNodes[0].textContent = value;
+      trigger.classList.remove('ph');
+      dd.querySelectorAll('.dd-item').forEach(item => {
+        item.classList.toggle('selected', item.textContent === value);
+      });
+    });
+  });
+  cascade();
+}
 function resetAll() {
   document.querySelectorAll('.u-inp').forEach(i => { if (!i.readOnly) i.value=''; });
   document.querySelectorAll('.dd-trigger').forEach(t => { const dd=t.closest('.dd'); if(dd.dataset.field){STATE[dd.dataset.field]='';} t.classList.add('ph'); const ph=t.dataset.ph||'Choose...'; t.childNodes[0].textContent=ph; });

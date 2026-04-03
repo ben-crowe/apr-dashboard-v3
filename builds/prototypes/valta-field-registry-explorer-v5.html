@@ -1099,21 +1099,9 @@ function renderFields() {
   }
 
   const COL_COUNT = 9;
-  // Render with group headers when sorted
-  let lastGroup = null;
   filtered.forEach(item => {
     const f = item.f;
     const role = item.role;
-    // Group header
-    if (currentSort !== 'idx') {
-      let groupVal;
-      if (currentSort === 'role') groupVal = role;
-      else groupVal = f[currentSort] || '—';
-      if (groupVal !== lastGroup) {
-        lastGroup = groupVal;
-        tb.innerHTML += '<tr class="fi-group-hdr"><td colspan="'+COL_COUNT+'">' + groupVal + '</td></tr>';
-      }
-    }
     // Dropdown cell — clickable if has options
     let ddCell;
     if (f.d && DROPDOWN_OPTIONS[f.d]) {

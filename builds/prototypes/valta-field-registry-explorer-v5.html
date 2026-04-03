@@ -127,7 +127,11 @@
 
   /* Panels */
   .panel { display: none; max-width: 960px; margin: 0 auto; }
-  #panel-index .sec, #panel-options .sec { max-width: none; width: 100%; resize: horizontal; overflow: auto; min-width: 800px; }
+  #panel-index .sec, #panel-options .sec { max-width: none; width: 100%; min-width: 800px; position: relative; }
+  #panel-index .sec .sec-title, #panel-options .sec .sec-title { position: relative; }
+  .resize-handle { position: absolute; top: 0; right: 0; width: 20px; height: 100%; cursor: ew-resize; display: flex; align-items: center; justify-content: center; opacity: 0.3; transition: opacity .15s; }
+  .resize-handle:hover { opacity: 0.7; }
+  .resize-handle::after { content: '⋮'; font-size: 14px; color: var(--text-3); }
   #panel-index .sec-body, #panel-options .sec-body { overflow-x: auto; }
   .panel.active { display: block; }
 
@@ -487,7 +491,7 @@ E  Authorized Use          ──┘</div>
 
 <!-- ═══ FIELD INDEX ═══ -->
 <div class="panel" id="panel-index">
-<div class="sec"><div class="sec-title" style="cursor:default;">Field Registry</div><div class="sec-body">
+<div class="sec" id="registrySec"><div class="sec-title" style="cursor:default;">Field Registry<div class="resize-handle" id="regResize"></div></div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
     <div class="seg" style="margin:0;flex-shrink:0;">
@@ -1494,6 +1498,28 @@ function showNarrative(idx) {
 
 renderFields();
 cascade();
+
+/* ═══ RESIZE HANDLE — drag from top-right corner ═══ */
+(function() {
+  const handle = document.getElementById('regResize');
+  const sec = document.getElementById('registrySec');
+  if (!handle || !sec) return;
+  let dragging = false, startX, startW;
+  handle.addEventListener('mousedown', e => {
+    dragging = true; startX = e.clientX; startW = sec.offsetWidth;
+    document.body.style.cursor = 'ew-resize'; document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const newW = Math.max(800, startW + (e.clientX - startX));
+    sec.style.width = newW + 'px';
+  });
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false; document.body.style.cursor = ''; document.body.style.userSelect = '';
+  });
+})();
 </script>
 </body>
 </html>

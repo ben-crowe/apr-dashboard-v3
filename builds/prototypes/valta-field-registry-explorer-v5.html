@@ -1093,8 +1093,8 @@ function renderFields() {
       let va, vb;
       if (currentSort === 'role') { va = a.role; vb = b.role; }
       else if (currentSort === 'origin') {
-        const order = {dashboard:0, both:1, valcre:2};
-        va = order[a.f.origin] ?? 2; vb = order[b.f.origin] ?? 2;
+        const order = {dashboard:0, both:0, valcre:1};
+        va = order[a.f.origin] ?? 1; vb = order[b.f.origin] ?? 1;
         if (va !== vb) return va - vb;
         va = a.f.n; vb = b.f.n; // alphabetical within group
       }
@@ -1133,7 +1133,7 @@ function renderFields() {
 
     tb.innerHTML += '<tr'+rowClass+' title="'+(f.desc||'')+'">' +
       '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+item.idx+'</td>' +
-      '<td style="font-size:11px;color:var(--text-2);">'+(f.origin==='both'?'Both':f.origin==='dashboard'?'Valta':'Valcre')+'</td>' +
+      '<td style="font-size:11px;color:var(--text-2);">'+(f.origin==='valcre'?'Valcre':'Valta')+'</td>' +
       '<td class="fn">'+f.n+'</td>' +
       '<td>'+f.l+'</td>' +
       '<td style="font-size:11px;color:var(--text-2);">'+(f.c||'—')+'</td>' +

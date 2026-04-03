@@ -198,7 +198,10 @@
   .fi-count.updating { opacity: 0; }
   .fi-count.updating::before { opacity: 0; }
   .fi-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-  .fi-table th { text-align: left; padding: 6px 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); border-bottom: 2px solid var(--border); cursor: pointer; transition: color .1s; user-select: none; white-space: nowrap; }
+  .fi-table th { text-align: left; padding: 6px 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); border-bottom: 2px solid var(--border); cursor: pointer; transition: color .1s; user-select: none; white-space: nowrap; position: relative; }
+  .col-resize { position: absolute; top: 0; right: -3px; width: 6px; height: 100%; cursor: col-resize; z-index: 5; }
+  .col-resize::after { content: ''; position: absolute; top: 4px; right: 2px; width: 1px; height: calc(100% - 8px); background: transparent; transition: background .12s; }
+  .col-resize:hover::after, .col-resize.dragging::after { background: var(--border-focus); }
   .fi-table th:hover { color: var(--text); }
   .fi-table th.sorted { color: var(--text); }
   .fi-table td { padding: 5px 10px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; white-space: nowrap; }
@@ -524,7 +527,7 @@ E  Authorized Use          ──┘</div>
   </div>
   <div class="fi-count" id="fiCount"></div>
   <div id="fiTableWrap" style="overflow-x:auto;">
-    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th></tr></thead><tbody id="fiBody"></tbody></table>
+    <table class="fi-table" id="fiTable" style="table-layout:fixed;"><thead><tr><th style="width:40px;" data-sort="idx" onclick="sortFields(this,'idx')">#<div class="col-resize" onmousedown="colResizeStart(event)"></div></th><th data-sort="n" onclick="sortFields(this,'n')">Field Name<div class="col-resize" onmousedown="colResizeStart(event)"></div></th><th data-sort="l" onclick="sortFields(this,'l')">Label<div class="col-resize" onmousedown="colResizeStart(event)"></div></th><th data-sort="c" onclick="sortFields(this,'c')">Control Type<div class="col-resize" onmousedown="colResizeStart(event)"></div></th><th data-sort="s" onclick="sortFields(this,'s')">Source<div class="col-resize" onmousedown="colResizeStart(event)"></div></th><th data-sort="role" onclick="sortFields(this,'role')">Role<div class="col-resize" onmousedown="colResizeStart(event)"></div></th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List<div class="col-resize" onmousedown="colResizeStart(event)"></div></th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location<div class="col-resize" onmousedown="colResizeStart(event)"></div></th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th></tr></thead><tbody id="fiBody"></tbody></table>
   </div>
   <div id="narTableWrap" style="display:none;">
     <table class="fi-table" id="narTable">
@@ -1503,6 +1506,47 @@ function showNarrative(idx) {
 
 renderFields();
 cascade();
+// Lock in auto-sized column widths after first paint
+requestAnimationFrame(() => initColWidths());
+
+/* ═══ COLUMN RESIZE ═══ */
+let colResizing = false, colTh = null, colStartX = 0, colStartW = 0;
+function colResizeStart(e) {
+  e.stopPropagation(); e.preventDefault();
+  colResizing = true;
+  const handle = e.target;
+  handle.classList.add('dragging');
+  colTh = handle.parentElement;
+  colStartX = e.clientX;
+  colStartW = colTh.offsetWidth;
+  document.body.style.cursor = 'col-resize';
+  document.body.style.userSelect = 'none';
+
+  function onMove(ev) {
+    if (!colResizing) return;
+    const newW = Math.max(30, colStartW + (ev.clientX - colStartX));
+    colTh.style.width = newW + 'px';
+  }
+  function onUp() {
+    colResizing = false;
+    handle.classList.remove('dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+  }
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onUp);
+}
+
+// Set initial column widths from auto-sized content on first render
+let colWidthsInitialized = false;
+function initColWidths() {
+  if (colWidthsInitialized) return;
+  const ths = document.querySelectorAll('#fiTable thead th');
+  ths.forEach(th => { th.style.width = th.offsetWidth + 'px'; });
+  colWidthsInitialized = true;
+}
 
 /* ═══ FULL WIDTH TOGGLE ═══ */
 let isFullWidth = false;

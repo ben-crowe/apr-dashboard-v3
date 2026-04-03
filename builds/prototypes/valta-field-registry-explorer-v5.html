@@ -397,13 +397,15 @@
 
 <!-- ═══ LOGIC FIELDS ═══ -->
 <div class="panel" id="panel-logic">
-<div style="max-width:960px;margin:0 auto 8px;display:flex;align-items:center;gap:10px;">
-  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">Scenarios:</span>
-  <span class="scenario-btn" onclick="runScenario(1,this)">1 — A only</span>
-  <span class="scenario-btn" onclick="runScenario(2,this)">2 — A + B</span>
-  <span class="scenario-btn" onclick="runScenario(3,this)">3 — A + C</span>
-  <span class="scenario-btn" onclick="runScenario(4,this)">4 — D chain</span>
-  <span class="scenario-btn" onclick="runScenario(5,this)">5 — D + E</span>
+<div style="max-width:960px;margin:0 auto 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">Group 1:</span>
+  <span class="scenario-btn" onclick="runScenario(1,this)">1. A</span>
+  <span class="scenario-btn" onclick="runScenario(2,this)">2. A, B</span>
+  <span class="scenario-btn" onclick="runScenario(3,this)">3. A, C</span>
+  <span style="color:var(--border);margin:0 6px;">|</span>
+  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">Group 2:</span>
+  <span class="scenario-btn" onclick="runScenario(4,this)">1. D</span>
+  <span class="scenario-btn" onclick="runScenario(5,this)">2. D, E</span>
 </div>
 <div class="lo-card"><div class="sec-title">Cascade Logic — Interactive</div><div class="sec-body">
 
@@ -1493,8 +1495,8 @@ const SCENARIOS = {
   1: { name:'Standard', picks: {propertyType:'Multifamily', statusOfImprovements:'Existing - Completed'} },
   2: { name:'Subtype Override', picks: {propertyType:'Retail', propertySubtype:'Mixed Use', statusOfImprovements:'Existing - Completed'} },
   3: { name:'Tenancy Override', picks: {propertyType:'Retail', tenancy:'Owner Occupied', statusOfImprovements:'Existing - Completed'} },
-  4: { name:'Full Cascade', picks: {propertyType:'Land', statusOfImprovements:'Proposed - Vacant Land'} },
-  5: { name:'Insurance', picks: {propertyType:'Industrial', statusOfImprovements:'Existing - Under Renovation', authorizedUse:'Insurance'} },
+  4: { name:'D only', picks: {statusOfImprovements:'Proposed - Vacant Land'} },
+  5: { name:'D, E', picks: {statusOfImprovements:'Existing - Under Renovation', authorizedUse:'Insurance'} },
 };
 function runScenario(num, btn) {
   // Reset first

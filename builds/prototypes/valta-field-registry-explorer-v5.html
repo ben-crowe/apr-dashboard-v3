@@ -52,7 +52,8 @@
   .seg { max-width: 960px; margin: 0 auto 16px; display: inline-flex; align-items: center; background: var(--seg-bg); border: 1px solid var(--seg-border); border-radius: var(--radius); padding: 3px; gap: 2px; box-shadow: var(--shadow); }
   .seg button { font: 500 12px/1 system-ui, sans-serif; padding: 6px 14px; border: none; border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .15s ease; white-space: nowrap; }
   .seg button:hover { color: var(--text-2); background: var(--hover); }
-  .seg button.active { color: var(--text); background: var(--seg-active); box-shadow: var(--shadow); border: 1px solid var(--text); }
+  .seg button.active { color: var(--text); background: var(--seg-active); box-shadow: var(--shadow); }
+  .seg.scope-toggle button.active { border: 1px solid var(--text); }
 
   /* Section card */
   .sec { max-width: 960px; margin: 0 auto 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
@@ -499,7 +500,7 @@ E  Authorized Use          ──┘</div>
 <div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
-    <div class="seg" style="margin:0;flex-shrink:0;">
+    <div class="seg scope-toggle" style="margin:0;flex-shrink:0;">
       <button class="active" onclick="setScope('dashboard',this)">Valta Dashboard</button>
       <button onclick="setScope('all',this)">Valcre (All)</button>
     </div>

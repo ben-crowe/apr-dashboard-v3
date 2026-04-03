@@ -488,6 +488,7 @@ E  Authorized Use          ──┘</div>
     <button onclick="setFilter('result',this)">Results (3)</button>
     <button onclick="setFilter('has-dropdown',this)">Has Dropdown (17)</button>
     <button onclick="setFilter('new-field',this)">New Fields (22)</button>
+    <button onclick="setFilter('all-options',this)">All Options (~100)</button>
     <span style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
     <button onclick="setFilter('vr-Job',this)">Job (30)</button>
     <button onclick="setFilter('vr-Contact',this)">Contact (6)</button>
@@ -498,6 +499,19 @@ E  Authorized Use          ──┘</div>
   <div class="fi-count" id="fiCount"></div>
   <div id="fiTableWrap" style="overflow-x:auto;">
     <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th><th data-sort="nf" onclick="sortFields(this,'nf')">New</th><th data-sort="req" onclick="sortFields(this,'req')">Req</th></tr></thead><tbody id="fiBody"></tbody></table>
+  </div>
+  <div id="optionsTableWrap" style="display:none;overflow-x:auto;">
+    <table class="fi-table"><thead><tr>
+      <th style="width:30px;" data-sort="oidx" onclick="sortOptions(this,'oidx')">#</th>
+      <th data-sort="oval" onclick="sortOptions(this,'oval')">Option Value</th>
+      <th data-sort="olist" onclick="sortOptions(this,'olist')">Dropdown List</th>
+      <th data-sort="ofield" onclick="sortOptions(this,'ofield')">Used By Field</th>
+      <th data-sort="ofieldlbl" onclick="sortOptions(this,'ofieldlbl')">Field Label</th>
+      <th data-sort="ocontrol" onclick="sortOptions(this,'ocontrol')">Control Type</th>
+      <th data-sort="ocascade" onclick="sortOptions(this,'ocascade')">Cascade</th>
+      <th data-sort="oresult" onclick="sortOptions(this,'oresult')">Result</th>
+      <th data-sort="ovr" onclick="sortOptions(this,'ovr')">Valcre Location</th>
+    </tr></thead><tbody id="optBody"></tbody></table>
   </div>
   <div id="narTableWrap" style="display:none;">
     <table class="fi-table" id="narTable">
@@ -899,14 +913,139 @@ function setFilter(f, el) {
   el.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
   const isNar = (f === 'narratives');
-  document.getElementById('fiTableWrap').style.display = isNar ? 'none' : '';
+  const isOpts = (f === 'all-options');
+  document.getElementById('fiTableWrap').style.display = (isNar || isOpts) ? 'none' : '';
+  document.getElementById('optionsTableWrap').style.display = isOpts ? '' : 'none';
   document.getElementById('narTableWrap').style.display = isNar ? '' : 'none';
   document.getElementById('narInfoBlock').style.display = isNar ? '' : 'none';
   document.getElementById('fiSearch').style.display = isNar ? 'none' : '';
+  document.getElementById('fiSearch').placeholder = isOpts ? 'Search options...' : 'Search fields...';
   document.getElementById('fiCount').style.display = isNar ? 'none' : '';
-  if (!isNar) renderFields();
+  if (isOpts) renderOptions();
+  else if (!isNar) renderFields();
 }
-function filterFields() { renderFields(); }
+function filterFields() {
+  if (activeFilter === 'all-options') renderOptions();
+  else renderFields();
+}
+
+/* ═══ OPTIONS INDEX — every dropdown option as its own row ═══ */
+let optionsSort = 'oidx';
+function buildOptionsData() {
+  const rows = [];
+  let idx = 0;
+  // Iterate fields that have dropdowns, flatten their options
+  FIELDS.forEach(f => {
+    if (!f.d || !DROPDOWN_OPTIONS[f.d]) return;
+    const opts = DROPDOWN_OPTIONS[f.d];
+    const role = getRole(f.n);
+    opts.forEach(opt => {
+      idx++;
+      // Determine cascade info
+      let cascade = '—', result = '';
+      if (f.n === 'PropertyType' && INT_PT[opt]) { cascade = 'Trigger'; result = INT_PT[opt]; }
+      else if (f.n === 'PropertySubtype' && INT_SUB[opt]) { cascade = 'Override'; result = INT_SUB[opt]; }
+      else if (f.n === 'Tenancy' && INT_TN[opt]) { cascade = 'Override'; result = INT_TN[opt]; }
+      else if (f.n === 'Tenancy' && (opt === 'Unknown' || opt === 'Vacant')) { cascade = 'No change'; }
+      else if (f.n === 'StatusofImprovements' && SCEN[opt]) { cascade = 'Trigger'; result = SCEN[opt].join(', '); }
+      else if (f.n === 'AuthorizedUse' && opt === 'Insurance') { cascade = 'Override'; result = 'Insurable Replacement Cost'; }
+      // Check if this option IS a cascade result value
+      else if (f.n === 'InterestAppraised') { cascade = 'Result'; }
+      else if (f.n === 'ValueScenarios') {
+        cascade = 'Result';
+        if (APPR[opt]) result = APPR[opt].join(', ');
+      }
+      else if (f.n === 'ApproachestoValue') { cascade = 'Result'; }
+
+      rows.push({
+        idx: idx,
+        val: opt,
+        list: f.d,
+        field: f.n,
+        fieldLabel: f.l,
+        control: f.c,
+        cascade: cascade,
+        result: result,
+        vr: f.vr || ''
+      });
+    });
+  });
+  return rows;
+}
+
+function renderOptions() {
+  const q = document.getElementById('fiSearch').value.toLowerCase();
+  const tb = document.getElementById('optBody');
+  tb.innerHTML = '';
+  let rows = buildOptionsData();
+
+  // Filter by search
+  if (q) {
+    rows = rows.filter(r =>
+      r.val.toLowerCase().includes(q) ||
+      r.list.toLowerCase().includes(q) ||
+      r.field.toLowerCase().includes(q) ||
+      r.fieldLabel.toLowerCase().includes(q) ||
+      r.result.toLowerCase().includes(q)
+    );
+  }
+
+  // Sort
+  if (optionsSort !== 'oidx') {
+    const keyMap = {oval:'val',olist:'list',ofield:'field',ofieldlbl:'fieldLabel',ocontrol:'control',ocascade:'cascade',oresult:'result',ovr:'vr'};
+    const key = keyMap[optionsSort] || 'val';
+    rows.sort((a, b) => (a[key]||'').localeCompare(b[key]||''));
+  }
+
+  // Group headers when sorted
+  let lastGroup = null;
+  rows.forEach(r => {
+    if (optionsSort !== 'oidx') {
+      const keyMap = {oval:'val',olist:'list',ofield:'field',ofieldlbl:'fieldLabel',ocontrol:'control',ocascade:'cascade',oresult:'result',ovr:'vr'};
+      const key = keyMap[optionsSort] || 'val';
+      const groupVal = r[key] || '—';
+      if (groupVal !== lastGroup) {
+        lastGroup = groupVal;
+        tb.innerHTML += '<tr class="fi-group-hdr"><td colspan="9">' + groupVal + '</td></tr>';
+      }
+    }
+
+    // Cascade badge
+    let cascBadge = '<span style="font-size:11px;color:var(--text-3);">—</span>';
+    if (r.cascade === 'Trigger') cascBadge = '<span class="badge" style="font-size:9px;background:#fef3c7;color:#92400e;border:1px solid #fde68a;">Trigger</span>';
+    else if (r.cascade === 'Override') cascBadge = '<span class="badge" style="font-size:9px;background:#fed7aa;color:#9a3412;border:1px solid #fdba74;">Override</span>';
+    else if (r.cascade === 'Result') cascBadge = '<span class="badge badge-solid" style="font-size:9px;">Result</span>';
+    else if (r.cascade === 'No change') cascBadge = '<span style="font-size:10px;color:var(--text-3);">no change</span>';
+
+    // Valcre location
+    let vrCell = '<td style="font-size:11px;color:var(--text-3);">—</td>';
+    if (r.vr) {
+      const vrColor = r.vr==='Job'?'#3b82f6':r.vr==='Contact'?'#8b5cf6':r.vr==='Property'?'#10b981':'var(--text-3)';
+      vrCell = '<td><span style="font-size:10px;font-weight:600;color:'+vrColor+';">'+r.vr+'</span></td>';
+    }
+
+    tb.innerHTML += '<tr>' +
+      '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+r.idx+'</td>' +
+      '<td style="font-weight:600;color:var(--text);">'+r.val+'</td>' +
+      '<td style="font-size:11px;color:var(--text-2);">'+r.list+'</td>' +
+      '<td class="fn">'+r.field+'</td>' +
+      '<td style="font-size:11px;color:var(--text-2);">'+r.fieldLabel+'</td>' +
+      '<td style="font-size:11px;color:var(--text-2);">'+r.control+'</td>' +
+      '<td>'+cascBadge+'</td>' +
+      '<td style="font-size:11px;color:'+(r.result?'var(--amber)':'var(--text-3)')+';">'+(r.result||'—')+'</td>' +
+      vrCell +
+    '</tr>';
+  });
+  document.getElementById('fiCount').textContent = 'Showing '+rows.length+' options across '+Object.keys(DROPDOWN_OPTIONS).filter(k=>DROPDOWN_OPTIONS[k].length>0).length+' dropdown lists' + (optionsSort !== 'oidx' ? ' · grouped by ' + optionsSort.replace('o','') : '');
+}
+
+function sortOptions(th, key) {
+  if (optionsSort === key) { optionsSort = 'oidx'; }
+  else { optionsSort = key; }
+  th.closest('tr').querySelectorAll('th').forEach(h => h.classList.remove('sorted'));
+  if (optionsSort !== 'oidx') th.classList.add('sorted');
+  renderOptions();
+}
 
 /* ═══ RULE AUDIT ═══ */
 const RULES = [

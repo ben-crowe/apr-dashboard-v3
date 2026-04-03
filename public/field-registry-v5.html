@@ -193,6 +193,10 @@
   .chips button:hover { color: var(--text-2); background: var(--hover); }
   .chips button.active { border-color: var(--border-focus); color: var(--text); background: var(--active-bg); }
   .fi-count { font-size: 12px; color: var(--text-2); font-weight: 500; font-style: italic; margin-bottom: 8px; margin-left: 20px; transition: color .15s; }
+  .fi-sort-indicator { font-size: 11px; color: var(--text-2); font-style: italic; margin-bottom: 6px; margin-left: 20px; }
+  .fi-sort-indicator strong { color: var(--text); font-style: normal; }
+  .sort-clear { display: inline-block; margin-left: 6px; color: var(--text-3); cursor: pointer; font-style: normal; font-size: 12px; }
+  .sort-clear:hover { color: var(--text); }
   .fi-count { transition: opacity .15s; }
   .fi-count::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #16a34a; margin-right: 7px; vertical-align: middle; transition: opacity .15s; }
   .fi-count.updating { opacity: 0; }
@@ -524,6 +528,7 @@ E  Authorized Use          ──┘</div>
     </div>
   </div>
   <div class="fi-count" id="fiCount"></div>
+  <div class="fi-sort-indicator" id="fiSortIndicator" style="display:none;"></div>
   <div id="fiTableWrap" style="overflow-x:auto;">
     <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th></tr></thead><tbody id="fiBody"></tbody></table>
   </div>
@@ -1153,8 +1158,15 @@ function renderFields() {
   const sortNames = {n:'Field Name',l:'Label',c:'Control Type',s:'Source',role:'Role',d:'Dropdown List',vr:'Valcre Location',v:'Valcre API Key',nf:'New',req:'Required',origin:'Origin'};
   let countText = 'Showing '+filtered.length+' of '+scopeTotal+' fields';
   if (fOriginVal === 'all' && dashCount > 0 && valcreCount > 0) countText += ' ('+dashCount+' dashboard, '+valcreCount+' Valcre)';
-  if (currentSort !== 'idx') countText += ' · grouped by ' + (sortNames[currentSort] || currentSort);
   document.getElementById('fiCount').textContent = countText;
+  // Sort indicator with clear button
+  const sortEl = document.getElementById('fiSortIndicator');
+  if (currentSort !== 'idx') {
+    sortEl.innerHTML = 'Sorted by: <strong>' + (sortNames[currentSort] || currentSort) + '</strong> <span class="sort-clear" onclick="clearSort()">✕</span>';
+    sortEl.style.display = '';
+  } else {
+    sortEl.style.display = 'none';
+  }
 }
 
 function toggleDropdownRow(fieldName) {
@@ -1169,6 +1181,12 @@ document.addEventListener('click', function(e) {
   renderFields();
 });
 
+function clearSort() {
+  currentSort = 'idx';
+  document.querySelectorAll('.fi-table th').forEach(h => h.classList.remove('sorted'));
+  renderFields();
+  flashCount();
+}
 function sortFields(th, key) {
   if (currentSort === key) { currentSort = 'idx'; }
   else { currentSort = key; }

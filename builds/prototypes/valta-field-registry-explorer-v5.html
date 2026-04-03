@@ -1082,12 +1082,17 @@ function renderFields() {
     filtered.push({f:f, idx:i+1, role:role});
   });
 
-  // Sort
+  // Sort — non-empty values first, then alphabetical. Empty/dash to bottom.
   if (currentSort !== 'idx') {
     filtered.sort((a, b) => {
       let va, vb;
       if (currentSort === 'role') { va = a.role; vb = b.role; }
       else { va = a.f[currentSort] || ''; vb = b.f[currentSort] || ''; }
+      // Empty values go to bottom
+      const aEmpty = !va || va === '—' || va === 'independent';
+      const bEmpty = !vb || vb === '—' || vb === 'independent';
+      if (aEmpty && !bEmpty) return 1;
+      if (!aEmpty && bEmpty) return -1;
       return va.localeCompare(vb);
     });
   }

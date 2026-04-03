@@ -132,7 +132,7 @@ export function generateClientTestData(): TestClientData {
     clientLastName: lastName,
     clientTitle: getRandomElement(['Owner', 'Property Manager', 'CEO', 'VP Operations', 'Director', 'Asset Manager']),
     clientOrganization: company,
-    clientAddress: `${suite}${streetNumber} ${streetName} ${streetType}, Calgary, AB T2X ${getRandomNumber(0, 9)}Y${getRandomNumber(0, 9)}`,
+    clientAddress: `${suite}${streetNumber} ${streetName} ${streetType}, Calgary, AB T${getRandomNumber(0, 9)}${String.fromCharCode(65 + getRandomNumber(0, 25))} ${getRandomNumber(0, 9)}${String.fromCharCode(65 + getRandomNumber(0, 25))}${getRandomNumber(0, 9)}`,
     clientPhone: formatPhoneNumber(phoneNumber),
     clientEmail: `${firstName.toLowerCase()}.${lastName.toLowerCase()}.${uniqueId}@test.com`
   };

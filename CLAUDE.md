@@ -54,6 +54,8 @@ Stages 1-3: Working in production. Stage 4: Standalone only, needs DB integratio
 
 Instance: `ngovnamnjmexdpjtcnky.supabase.co` — LIVE, not paused.
 
+**Agent Access:** react-specialist (and any builder agent) has FULL Supabase access — can run migrations, query data, modify schema directly via the Supabase MCP or CLI. No need to route migrations through Ben or CoArch. Agents can apply their own SQL migrations.
+
 Core tables with data:
 - `job_submissions` (20 rows) — main job records
 - `job_loe_details` (12) — LOE/quote line items + DocuSeal columns
@@ -106,6 +108,92 @@ CRITICAL: `report_builder_data` table DOES NOT EXIST. Must be created before Rep
 | Architecture | `docs/Architecture/APR-V4-ARCHITECTURE.md` |
 | UX Documentation | `docs/-uxui/` |
 | UX Feature Commits | `docs/-uxui/UX-Feature-Commits.md` |
+
+## Browser Testing — Agent-Browser First
+
+**MANDATORY: Use agent-browser CLI as the default for all browser testing.**
+
+Load the skill first, then use the CLI:
+
+```bash
+# Load the skill FIRST
+/cli-browser-auto
+
+# Then use agent-browser
+agent-browser open http://localhost:5173/dashboard
+agent-browser snapshot -i
+agent-browser click @e42
+agent-browser screenshot /tmp/qa-check.png
+```
+
+**When to use which tool:**
+
+| Task | Tool | Why |
+|------|------|-----|
+| Visual QA, screenshots | agent-browser | Screenshots work reliably, compact output, less context |
+| Navigation, clicking, scrolling | agent-browser | Simple CLI syntax, @ref-based, fast |
+| Filling React controlled inputs | Playwright MCP | Native input setter handles React state correctly |
+| Arbitrary DOM queries, React state | Playwright MCP | JS evaluate bypasses ref system |
+| Default for any new QA task | agent-browser | Start here, escalate to Playwright only when needed |
+
+agent-browser is the default. Playwright MCP is the escape hatch for raw JS and React controlled input filling.
+
+**Deploying agents must include this in every brief:** "Load `/cli-browser-auto` skill before any browser testing. Use agent-browser, not Playwright MCP."
+
+## GitHub Auth — Agent Self-Service
+
+**Agents have CLI access to GitHub. Do NOT ask Ben to authenticate.**
+
+If `git push` fails with auth errors:
+1. Check: `gh auth status`
+2. If expired, switch remote to HTTPS and re-auth:
+   ```bash
+   git remote set-url origin https://github.com/ben-crowe/apr-dashboard-v3.git
+   gh auth logout -h github.com -u ben-crowe <<< "Y"
+   gh auth login --hostname github.com --git-protocol https --web
+   ```
+3. The device flow opens a browser — Ben approves once, token persists in keyring
+4. Push: `git push origin main`
+
+**Remote protocol:** HTTPS with gh credential helper (configured in global git config). No SSH keys on this machine.
+
+## Deployment — Vercel
+
+**Use Vercel CLI for all deploys. Do NOT just push to main and wait.**
+
+```bash
+cd ~/Development/APR-Dashboard-v3
+vercel --prod
+```
+
+This builds and deploys in one command with live output. You see errors immediately instead of checking the Vercel dashboard.
+
+**Vercel project:** `prj_VkmkFydnDLN6l2EWAX7H1tuY8B4A`
+**Framework:** Vite (NOT Next.js)
+**Production URL:** `https://apr-dashboard-v3.vercel.app`
+
+**Deploy checklist:**
+1. `npm run build` locally first — catch TypeScript errors before deploying
+2. `vercel --prod` — deploy with live output
+3. Verify production URL loads after deploy completes
+
+**NEVER create workarounds for build failures.** If the build breaks:
+- Read the error message
+- Fix the root cause
+- Do NOT add symlinks, aliases, or disable routes as band-aids
+- If unsure, ask before hacking around it
+
+## No Workarounds Rule
+
+**Fix root causes. Do not create band-aids.**
+
+Examples of what NOT to do:
+- Symlinks to make duplicate code paths work (breaks Vercel)
+- Vite aliases to paper over broken imports
+- Disabling routes to avoid build errors
+- Commenting out imports instead of fixing paths
+
+If a build breaks, the fix is: update the imports, move the files, or fix the code. One canonical location for every module. No duplicates, no symlinks, no aliases.
 
 ## Workflow Rules
 

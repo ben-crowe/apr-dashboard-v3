@@ -25,9 +25,18 @@
 **Status:** Awaiting Ben's input on 10 questions (Q1-Q10)
 **Summary:** Property Rights and Scope of Work misplaced in payment section. Proposed regrouping. Retainer fields to be de-emphasized. Comment blocks may reduce from 3 to 2.
 
-### Conditional Fields System
-**Status:** Discussion starting — Ben and Chris identified need for conditional field logic
-**Details:** TBD — upcoming discussion
+### Conditional Fields System / Field Registry Explorer
+**Status:** Prototype built (v2.2) — interactive HTML with 4 tabs, 28 rules verified, cascade logic working
+**Prototype:** `builds/prototypes/valta-field-registry-explorer-v2.2.html`
+**Controls stylesheet:** `builds/prototypes/valta-controls-v3.html`
+**Logic reference:** `docs/valta share/CONDITIONAL-FIELD-LOGIC.md`
+**Next iteration:**
+- Replace tab bar with dropdown menu categories (Dashboard, Fields, Rules, Tools) — tabs don't scale
+- Add Text Library / Narratives view (EA/HC paragraphs that auto-populate based on Value Scenarios)
+- Add search/filter that works across all views (type "client" → shows all client fields)
+- Add override dimming visual (pick Tenancy → Property Type dims)
+- Add change request / ClickUp chat integration concept
+- Custom glass dropdowns (attempted, needs careful implementation)
 
 ### Report Builder Integration
 **Status:** Blocked — `report_builder_data` table does not exist
@@ -102,6 +111,15 @@
 | `builds/field-mapping/8-client-communication.md` | Notification timeline |
 | `builds/field-mapping/9-dashboard-to-valcre-mapping.md` | 68 fields: 36 mapped, 30 not, 2 no destination |
 | `builds/field-mapping/10-clickup-workflow-sync-spec.md` | 48 ClickUp fields, 4-phase plan |
+
+---
+
+## Design Rules
+
+- **No pill-shaped buttons or rounded chips.** Flat, tight, text-driven controls. Engineering tooling aesthetic, not consumer SaaS / Notion-lite.
+- Active state = subtle background tint or thin underline/border, NOT colored pills
+- Think Chrome DevTools, database admin panels — flat and precise
+- Applies to all prototypes, dashboards, and UI designer work on APR
 
 ---
 

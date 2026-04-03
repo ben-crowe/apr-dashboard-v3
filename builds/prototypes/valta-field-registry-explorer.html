@@ -12,17 +12,28 @@
     --row-h: 28px;
     --gap-col: 32px;
     --gap-row: 6px;
-    --text: #111827;
-    --text-label: #4b5563;
-    --text-muted: #9ca3af;
-    --line: #d1d5db;
-    --focus: #2563eb;
-    --bg: #f3f4f6;
+    --radius: 8px;
+    --shadow: 0 1px 2px rgba(0,0,0,.05);
+    --text: #18181b;
+    --text-2: #52525b;
+    --text-3: #a1a1aa;
+    --text-4: #d4d4d8;
+    --text-label: #52525b;
+    --text-muted: #a1a1aa;
+    --line: #e4e4e7;
+    --focus: #18181b;
+    --bg: #f4f4f5;
     --card: #ffffff;
-    --border: #e5e7eb;
-    --accent: #2563eb;
-    --accent-bg: #eff6ff;
-    --accent-border: #bfdbfe;
+    --border: #e4e4e7;
+    --border-focus: #a1a1aa;
+    --hover: rgba(0,0,0,.04);
+    --active-bg: rgba(0,0,0,.06);
+    --seg-bg: #f4f4f5;
+    --seg-active: #ffffff;
+    --seg-border: #e4e4e7;
+    --accent: #18181b;
+    --accent-bg: rgba(0,0,0,.04);
+    --accent-border: #e4e4e7;
     --green: #059669;
     --green-bg: #ecfdf5;
     --amber: #d97706;
@@ -30,15 +41,16 @@
     --red: #dc2626;
     --red-bg: #fef2f2;
   }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.5; color: var(--text); background: var(--bg); padding: 24px 32px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.5; color: var(--text); background: var(--bg); padding: 24px 32px 100px; }
 
   .hdr { max-width: 960px; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: flex-end; }
   .hdr h1 { font-size: 20px; font-weight: 700; }
   .hdr .sub { font-size: 13px; color: var(--text-muted); }
   .hdr-btns { display: flex; gap: 8px; }
-  .hdr-btns button { font: 500 12px/1 system-ui, sans-serif; padding: 7px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); color: var(--text-label); cursor: pointer; }
-  .hdr-btns button:hover { border-color: #ccc; color: var(--text); }
-  .hdr-btns .primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .hdr-btns button { font: 500 12px/1 system-ui, sans-serif; padding: 7px 16px; border-radius: var(--radius); border: 1px solid var(--border); background: transparent; color: var(--text-2); cursor: pointer; transition: all .12s; box-shadow: var(--shadow); }
+  .hdr-btns button:hover { border-color: var(--border-focus); color: var(--text); background: var(--hover); }
+  .hdr-btns .primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .hdr-btns .primary:hover { opacity: .85; }
 
   .sec { max-width: 960px; margin: 0 auto 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
   .sec-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text); padding: 12px 24px; background: #f9fafb; border-bottom: 1px solid var(--border); border-radius: 8px 8px 0 0; }
@@ -59,8 +71,10 @@
   .u-inp::placeholder { color: var(--text-muted); font-style: italic; }
 
   .u-sel-wrap { position: relative; width: var(--input-w); }
-  .u-sel { font: inherit; font-size: 12px; color: var(--text); border: none; border-bottom: 1px solid var(--line); background: transparent; width: 100%; height: var(--row-h); padding: 0; outline: none; cursor: pointer; appearance: none; }
+  .u-sel { font: inherit; font-size: 12px; color: var(--text); border: none; border-bottom: 1px solid var(--line); background: var(--card); width: 100%; height: var(--row-h); padding: 0 4px; outline: none; cursor: pointer; -webkit-appearance: none; -moz-appearance: none; appearance: none; border-radius: 0; }
   .u-sel:focus { border-bottom-color: var(--focus); }
+  .u-sel option { background: #fff; color: var(--text); padding: 6px 8px; }
+  .u-sel option:hover, .u-sel option:checked { background: #f4f4f5; color: var(--text); }
   .u-sel-wrap::after { content: ''; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--text-label); pointer-events: none; }
   .u-sel.ph { color: var(--text-muted); }
 
@@ -76,13 +90,11 @@
   .f.dimmed .u-sel { opacity: .4; }
 
   /* View toggle */
-  .view-toggle { max-width: 960px; margin: 0 auto 16px; display: flex; gap: 0; }
-  .view-btn { font: 600 12px/1 system-ui, sans-serif; padding: 9px 16px; border: 1px solid var(--border); background: var(--card); color: var(--text-label); cursor: pointer; transition: all .15s; }
-  .view-btn:first-child { border-radius: 6px 0 0 6px; }
-  .view-btn:last-child { border-radius: 0 6px 6px 0; }
-  .view-btn:not(:first-child) { border-left: none; }
-  .view-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .view-btn:not(.active):hover { background: #f9fafb; color: var(--text); }
+  .view-toggle { max-width: 960px; margin: 0 auto 16px; }
+  .view-toggle .seg { display: inline-flex; align-items: center; background: var(--seg-bg); border: 1px solid var(--seg-border); border-radius: var(--radius); padding: 3px; gap: 2px; box-shadow: var(--shadow); }
+  .view-btn { font: 500 12px/1 system-ui, sans-serif; padding: 6px 14px; border: none; border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .15s ease; white-space: nowrap; }
+  .view-btn:hover { color: var(--text-2); background: var(--hover); }
+  .view-btn.active { color: var(--text); background: var(--seg-active); box-shadow: var(--shadow); }
 
   /* Panel containers */
   .panel { display: none; max-width: 960px; margin: 0 auto 16px; }
@@ -106,6 +118,11 @@
   .rule-panel-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 20px; }
   .re-group { margin-bottom: 28px; }
   .re-group:last-child { margin-bottom: 0; }
+  .re-group-title { font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer; user-select: none; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .re-group-title:hover { color: var(--text-label); }
+  .re-group-title .chevron { font-size: 10px; color: var(--text-muted); transition: transform .15s; }
+  .re-group.collapsed .chevron { transform: rotate(-90deg); }
+  .re-group.collapsed .re-group-body { display: none; }
   .re-diagram { font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace; font-size: 12px; color: var(--text-label); line-height: 1.6; white-space: pre; background: #f9fafb; border: 1px solid var(--border); border-radius: 6px; padding: 14px 18px; margin-bottom: 12px; overflow-x: auto; }
   .re-table { width: 100%; border-collapse: collapse; font-size: 12px; }
   .re-table td { padding: 4px 10px; border-bottom: 1px solid #f0f1f3; color: var(--text-label); vertical-align: top; }
@@ -121,29 +138,29 @@
   .fi-filters { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
   .fi-chip { font: 500 11px/1 system-ui, sans-serif; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--card); color: var(--text-label); cursor: pointer; transition: all .15s; }
   .fi-chip:hover { border-color: #ccc; }
-  .fi-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .fi-chip.active { border-color: var(--border-focus); color: var(--text); background: var(--active-bg); }
   .fi-table { width: 100%; border-collapse: collapse; font-size: 12px; }
   .fi-table th { text-align: left; padding: 8px 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); border-bottom: 2px solid var(--border); position: sticky; top: 0; background: var(--card); }
   .fi-table td { padding: 6px 10px; border-bottom: 1px solid #f0f1f3; color: var(--text-label); vertical-align: top; }
   .fi-table tr:hover td { background: #f9fafb; }
   .fi-table .fn { font-weight: 600; color: var(--text); font-family: 'SF Mono', 'Consolas', monospace; font-size: 11px; }
-  .fi-badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; line-height: 1.4; }
-  .fi-badge.user { background: #dbeafe; color: #1e40af; }
-  .fi-badge.logic { background: #fef3c7; color: #92400e; }
-  .fi-badge.api { background: #d1fae5; color: #065f46; }
-  .fi-badge.calc { background: #e0e7ff; color: #3730a3; }
-  .fi-role { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; }
-  .fi-role.trigger { background: #fef3c7; color: #92400e; }
-  .fi-role.result { background: #dbeafe; color: #1e40af; }
-  .fi-role.independent { background: #f3f4f6; color: #6b7280; }
+  .fi-badge { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: calc(var(--radius) - 4px); line-height: 1.4; }
+  .fi-badge.user { border: 1px solid var(--border); color: var(--text-2); }
+  .fi-badge.logic { background: var(--active-bg); color: var(--text-2); }
+  .fi-badge.api { border: 1px solid var(--border); color: var(--text-2); }
+  .fi-badge.calc { background: var(--active-bg); color: var(--text-2); }
+  .fi-role { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: calc(var(--radius) - 4px); }
+  .fi-role.trigger { background: var(--active-bg); color: var(--text-2); }
+  .fi-role.result { border: 1px solid var(--border); color: var(--text-2); }
+  .fi-role.independent { background: transparent; color: var(--text-3); }
   .fi-count { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
 
   /* ── Rule Audit ── */
   .audit-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
   .audit-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: #f9fafb; border-bottom: 1px solid var(--border); }
   .audit-header h3 { font-size: 14px; font-weight: 700; }
-  .audit-run-btn { font: 600 12px/1 system-ui, sans-serif; padding: 8px 18px; border-radius: 6px; border: none; background: var(--accent); color: #fff; cursor: pointer; }
-  .audit-run-btn:hover { background: #1d4ed8; }
+  .audit-run-btn { font: 500 12px/1 system-ui, sans-serif; padding: 7px 16px; border-radius: var(--radius); border: 1px solid var(--text); background: var(--text); color: var(--bg); cursor: pointer; box-shadow: var(--shadow); transition: opacity .12s; }
+  .audit-run-btn:hover { opacity: .85; }
   .audit-summary { display: flex; gap: 16px; padding: 16px 24px; border-bottom: 1px solid var(--border); }
   .audit-stat { text-align: center; }
   .audit-stat .num { font-size: 28px; font-weight: 700; line-height: 1; }
@@ -179,10 +196,12 @@
 
 <!-- View Toggle — 4 tabs -->
 <div class="view-toggle">
-  <button class="view-btn active" onclick="setView('full')">Full Dashboard</button>
-  <button class="view-btn" onclick="setView('logic')">Logic Fields</button>
-  <button class="view-btn" onclick="setView('index')">Field Index</button>
-  <button class="view-btn" onclick="setView('audit')">Rule Audit</button>
+  <div class="seg">
+    <button class="view-btn active" onclick="setView('full')">Full Dashboard</button>
+    <button class="view-btn" onclick="setView('logic')">Logic Fields</button>
+    <button class="view-btn" onclick="setView('index')">Field Index</button>
+    <button class="view-btn" onclick="setView('audit')">Rule Audit</button>
+  </div>
 </div>
 
 <!-- ════════════════════════════════════════ -->
@@ -343,7 +362,9 @@
 <!-- Rule Explorer below logic view -->
 <div class="rule-panel">
   <div class="rule-panel-title">Rule Explorer</div>
-  <div class="re-group">
+  <div class="re-group" id="re-g1">
+    <div class="re-group-title" onclick="toggleREGroup('re-g1')"><span class="chevron">&#x25BE;</span>Group 1 — Property Rights</div>
+    <div class="re-group-body">
     <div class="re-diagram">A  Property Type        ──┐
 B  Property Subtype     ──┼──→  Property Rights
 C  Tenancy              ──┘</div>
@@ -361,8 +382,11 @@ C  Tenancy              ──┘</div>
       <tr><td>Single-Tenant</td><td>Going Concern</td></tr>
     </table>
     <div class="re-note">Last picked wins. C overrides B overrides A. Unknown &amp; Vacant = no change.</div>
+    </div>
   </div>
-  <div class="re-group">
+  <div class="re-group" id="re-g2">
+    <div class="re-group-title" onclick="toggleREGroup('re-g2')"><span class="chevron">&#x25BE;</span>Group 2 — Value Scenarios &amp; Approaches</div>
+    <div class="re-group-body">
     <div class="re-diagram">D  Status of Improvements  ──┐
                               ├──→  Value Scenarios  ──→  Approaches to Value
 E  Authorized Use          ──┘</div>
@@ -380,6 +404,7 @@ E  Authorized Use          ──┘</div>
       <tr><td>Insurance</td><td>Insurable Replacement Cost</td><td>Cost Approach</td></tr>
     </table>
     <div class="re-note">One pick updates three fields. Insurance overrides everything in this group.</div>
+    </div>
   </div>
 </div>
 
@@ -544,6 +569,10 @@ function g(id) { return document.getElementById(id)?.value || ''; }
 /* ═══════════════════════════════════════════
    VIEW TOGGLE
    ═══════════════════════════════════════════ */
+function toggleREGroup(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
 function setView(view) {
   document.querySelectorAll('.view-btn').forEach((b,i) => {
     const views = ['full','logic','index','audit'];

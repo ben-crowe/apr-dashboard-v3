@@ -1,0 +1,19 @@
+Id: 26254318
+Name: Harbourfront Tower
+AddressStreet: 250 Queens Quay W
+AddressCity: Toronto
+AddressState: ON
+AddressPostalCode: M5J 2N3
+Types: MultiFamily
+PropertyType: Building
+ParkingTypes: None
+BuildingsCount: 1
+Amenities: None
+UnitAmenities: None
+IncludedLaundryAmenities: None
+SecurityFeatures: None
+StorageFacilityFeatures: None
+StorageSecurityFeatures: None
+HotelGuestAmenities: None
+HotelRoomAmenities: None
+InvestmentGrade: B

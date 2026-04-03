@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APR Dashboard — Field Reference</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #111118;
+    color: #e4e4e7;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+    padding: 0;
+    line-height: 1.5;
+  }
+
+  /* Top bar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 20px;
+    background: #0d0d12;
+    border-bottom: 1px solid #252530;
+    font-size: 12px;
+    color: #888899;
+  }
+  .topbar-brand {
+    font-weight: 600;
+    color: #6d9fff;
+    font-size: 13px;
+  }
+  .topbar-nav {
+    display: flex;
+    gap: 16px;
+    margin-left: 20px;
+  }
+  .topbar-nav span { cursor: pointer; }
+  .topbar-nav span:hover { color: #a1a1aa; }
+  .topbar-nav span.active { color: #e4e4e7; }
+  .topbar-right { margin-left: auto; color: #3f3f46; }
+
+  /* Job header */
+  .job-header {
+    padding: 14px 24px;
+    background: #111118;
+    border-bottom: 1px solid #252530;
+  }
+  .job-header-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .job-back {
+    font-size: 11px;
+    color: #52525b;
+    cursor: pointer;
+  }
+  .job-status {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: #1a2332;
+    color: #6d9fff;
+  }
+  .job-number {
+    font-size: 11px;
+    color: #52525b;
+    font-family: 'SF Mono', monospace;
+  }
+  .job-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #d4d4d8;
+  }
+
+  /* Main content */
+  .main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px 24px;
+  }
+
+  /* Section card */
+  .section-card {
+    background: #161620;
+    border: 1px solid #252530;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .section-title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid #252530;
+    cursor: pointer;
+  }
+  .section-title-bar:hover { background: #1a1a1a; }
+  .section-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e0e0e8;
+  }
+  .section-badge {
+    font-size: 9px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: #1a2332;
+    color: #6d9fff;
+  }
+  .section-body {
+    padding: 16px;
+  }
+
+  /* Sub-section */
+  .subsection {
+    margin-bottom: 16px;
+  }
+  .subsection:last-child { margin-bottom: 0; }
+  .subsection-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #8a8a99;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #252530;
+  }
+
+  /* Field grid */
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 24px;
+  }
+  .field-grid.three-col {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  .field-grid.full {
+    grid-template-columns: 1fr;
+  }
+
+  /* Field row */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px 0;
+  }
+  .field-label {
+    font-size: 10px;
+    color: #888899;
+  }
+  .field-value {
+    font-size: 12px;
+    color: #d0d0d8;
+    padding: 6px 0 4px 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #333340;
+    border-radius: 0;
+    min-height: 28px;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+  .field-value:hover {
+    border-bottom-color: #444;
+  }
+  .field-value.select {
+    position: relative;
+  }
+  .field-value.select::after {
+    content: '\25BE';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #3f3f46;
+    font-size: 10px;
+  }
+  .field-value.empty {
+    color: #3f3f46;
+    font-style: italic;
+  }
+  .field-value.tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #1a2332;
+    border-color: #2d4a6f;
+    color: #6d9fff;
+    width: fit-content;
+    font-size: 11px;
+  }
+  .field-value.currency {
+    color: #22c55e;
+  }
+  .field-value.link {
+    color: #6d9fff;
+    cursor: pointer;
+  }
+
+  /* Status indicators for field mapping */
+  .field-status {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .field-status.done { background: #22c55e; }
+  .field-status.partial { background: #f59e0b; }
+  .field-status.missing { background: #ef4444; }
+
+  /* Buttons row */
+  .btn-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .btn {
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    border: 1px solid #2a2a2a;
+    background: #1e1e28;
+    color: #a0a0aa;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn:hover { border-color: #444; color: #d4d4d8; }
+  .btn.primary {
+    background: #1a2332;
+    border-color: #2d4a6f;
+    color: #6d9fff;
+  }
+
+  /* Upload grid */
+  .upload-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .upload-slot {
+    border: 1px dashed #333340;
+    border-radius: 6px;
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 10px;
+    color: #3f3f46;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .upload-slot:hover { border-color: #444; }
+  .upload-label {
+    font-size: 10px;
+    color: #52525b;
+    margin-bottom: 6px;
+  }
+  .upload-icon {
+    font-size: 16px;
+    color: #2a2a2a;
+    margin-bottom: 4px;
+  }
+
+  /* Comment fields */
+  .comment-field {
+    width: 100%;
+    min-height: 48px;
+    padding: 6px 8px;
+    font-size: 11px;
+    color: #a1a1aa;
+    background: #111118;
+    border: 1px solid #252530;
+    border-radius: 4px;
+    resize: vertical;
+    font-family: inherit;
+  }
+
+  /* Separator between sections */
+  .section-sep {
+    height: 1px;
+    background: #252530;
+    margin: 0 16px;
+  }
+
+  /* Select dropdowns */
+  select.field-value {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%233f3f46'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0 center;
+    background-color: transparent;
+    padding-right: 20px;
+    cursor: pointer;
+  }
+  select.field-value option {
+    background: #161620;
+    color: #d0d0d8;
+  }
+
+  /* Input fields */
+  input.field-value, select.field-value {
+    outline: none;
+    font-family: inherit;
+  }
+  input.field-value:focus, select.field-value:focus, textarea.comment-field:focus {
+    border-bottom-color: #6d9fff;
+  }
+
+  /* Subsection collapsible */
+  .subsection-title {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .subsection-title::before {
+    content: '\25BC';
+    font-size: 8px;
+    color: #555566;
+    transition: transform 0.2s;
+  }
+  .subsection-title.collapsed::before {
+    transform: rotate(-90deg);
+  }
+  .subsection-body {
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+  }
+  .subsection-body.collapsed {
+    max-height: 0 !important;
+  }
+
+  /* NEW field indicator */
+  .new-badge {
+    font-size: 8px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: #052e16;
+    color: #22c55e;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .missing-badge {
+    font-size: 8px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: #2a0a0a;
+    color: #ef4444;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="topbar">
+  <span class="topbar-brand">Appraisal Dashboard</span>
+  <div class="topbar-nav">
+    <span>Search...</span>
+  </div>
+  <div class="topbar-right">Appraiser</div>
+</div>
+
+<!-- Job Header -->
+<div class="job-header">
+  <div class="job-header-top">
+    <span class="job-back">Back</span>
+    <span class="job-status">Submitted</span>
+    <span class="job-number">#VAL261029</span>
+  </div>
+  <div class="job-title">VAL261029 - Harbourfront Tower, 250 Queens Quay W, Toronto</div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 1: Client Information & Property Details            -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-title-bar">
+    <span class="section-label">Client Information & Property Details</span>
+    <span class="section-badge">Test Data</span>
+  </div>
+  <div class="section-body">
+
+    <!-- Client Information -->
+    <div class="subsection">
+      <div class="subsection-title">Client Information</div>
+      <div class="subsection-body">
+      <div class="field-grid">
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>First Name:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Last Name:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Title:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Organization:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Phone:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Email:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <span class="field-label"><span class="field-status done"></span>Address:</span>
+          <input class="field-value" placeholder="">
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- Property Information -->
+    <div class="subsection" style="margin-top: 16px;">
+      <div class="subsection-title">Property Information</div>
+      <div class="subsection-body">
+      <div class="field-grid">
+        <div class="field" style="grid-column: 1 / -1;">
+          <span class="field-label"><span class="field-status done"></span>Property Name:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Property Types:</span>
+          <select class="field-value"><option value=""></option><option>Multi-Family</option><option>Office</option><option>Retail</option><option>Industrial</option><option>Mixed-Use</option><option>Land</option><option>Special Purpose</option><option>Hospitality</option><option>Healthcare</option><option>Agricultural</option><option>Residential</option></select>
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Authorized Use:</span>
+          <select class="field-value"><option value=""></option><option>First Mortgage Financing</option><option>Acquisition/Disposition</option><option>Insurance</option><option>Tax Assessment</option><option>Financial Reporting</option><option>Litigation</option><option>Portfolio Valuation</option><option>Estate Planning</option></select>
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <span class="field-label"><span class="field-status done"></span>Address:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Valuation Premises:</span>
+          <select class="field-value"><option value=""></option><option>Market Value</option><option>As Is</option><option>Liquidation</option><option>Insurable Value</option><option>Going Concern</option><option>Prospective Value</option><option>Retrospective Value</option></select>
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Asset Condition:</span>
+          <select class="field-value"><option value=""></option><option>Excellent</option><option>Good</option><option>Average</option><option>Fair</option><option>Poor</option></select>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- Property Contact -->
+    <div class="subsection" style="margin-top: 16px;">
+      <div class="subsection-title">Property Contact</div>
+      <div class="subsection-body">
+      <div class="field-grid">
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>First Name:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Email:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Last Name:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Phone:</span>
+          <input class="field-value" placeholder="">
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- Client Comments -->
+    <div class="subsection" style="margin-top: 16px;">
+      <div class="subsection-title">Client Comments</div>
+      <textarea class="comment-field">QA Round 5 verification test - manual entry</textarea>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- Uploaded Documents -->
+    <div class="subsection" style="margin-top: 16px;">
+      <div class="subsection-title">Uploaded Documents</div>
+      <div class="btn-row">
+        <div class="btn">Upload Files</div>
+      </div>
+      <div style="font-size: 11px; color: #3f3f46;">No files uploaded yet</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 2: LOE Quote & Valuation Details                   -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-title-bar">
+    <span class="section-label">LOE Quote & Valuation Details</span>
+    <div style="display: flex; gap: 8px;">
+      <span class="btn">View in Valcre</span>
+      <span class="btn primary">Preview & Send LOE</span>
+    </div>
+  </div>
+  <div class="section-body">
+
+    <div class="btn-row">
+      <span class="section-badge">Test Data</span>
+    </div>
+
+    <!-- Job Information -->
+    <div class="subsection">
+      <div class="subsection-title">Job Information</div>
+      <div class="subsection-body">
+      <div class="field-grid">
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Job Number:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>ClickUp Task:</span>
+          <input class="field-value" placeholder="">
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- Job Details -->
+    <div class="subsection" style="margin-top: 16px;">
+      <div class="subsection-title">Job Details</div>
+      <div class="subsection-body">
+      <div class="field-grid">
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Property Rights:</span>
+          <select class="field-value"><option value=""></option><option>Fee Simple Interest</option><option>Leased Fee</option><option>Leasehold</option><option>Partial Interest</option></select>
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Scope of Work:</span>
+          <select class="field-value"><option value=""></option><option>All Applicable</option><option>Cost Approach</option><option>Sales Comparison</option><option>Income Approach</option><option>Restricted</option></select>
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Payment Terms:</span>
+          <select class="field-value"><option value=""></option><option>On LOE Signature</option><option>On Report Delivery</option><option>Net 30</option><option>Net 60</option><option>50/50 Split</option></select>
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Appraisal Fee:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Report Type:</span>
+          <select class="field-value"><option value=""></option><option>Appraisal Report</option><option>Restricted Appraisal Report</option><option>Desktop Report</option><option>Update Report</option></select>
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Retainer Amount:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <span class="field-label"><span class="field-status done"></span>Delivery Date:</span>
+          <input class="field-value" placeholder="">
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- Comments -->
+    <div class="subsection" style="margin-top: 16px;">
+      <div class="subsection-title">Comments</div>
+      <div class="field-grid three-col">
+        <div class="field">
+          <span class="field-label">General:</span>
+          <textarea class="comment-field">Internal appraiser notes...</textarea>
+        </div>
+        <div class="field">
+          <span class="field-label">Delivery:</span>
+          <textarea class="comment-field">Delivery instructions...</textarea>
+        </div>
+        <div class="field">
+          <span class="field-label">Payment:</span>
+          <textarea class="comment-field">Payment terms and notes...</textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 3: Building Information & Client Documents          -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-title-bar">
+    <span class="section-label">Building Information & Client Documents</span>
+  </div>
+  <div class="section-body">
+
+    <!-- Building Information -->
+    <div class="subsection">
+      <div class="subsection-title">Building Information</div>
+      <div class="subsection-body">
+      <div class="btn-row">
+        <span class="section-badge">Test Data</span>
+      </div>
+      <div class="field-grid">
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Year Built:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Building Size (SF):</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Number of Units:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Parking Spaces:</span>
+          <input class="field-value" placeholder="">
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- Legal Description -->
+    <div class="subsection" style="margin-top: 16px;">
+      <div class="subsection-title">Legal Description</div>
+      <div class="field-grid full">
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Description:</span>
+          <textarea class="comment-field"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 4: Data Gathering — Property Research               -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-title-bar">
+    <span class="section-label">Data Gathering — Property Research</span>
+    <span class="section-badge">Test Data</span>
+  </div>
+  <div class="section-body">
+
+    <!-- Property Site -->
+    <div class="subsection">
+      <div class="subsection-title">Property Site</div>
+      <div class="subsection-body">
+      <div class="field-grid">
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Zoning:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Zone Code:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Land Use:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Flood Zone:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field" style="grid-column: 1 / -1;">
+          <span class="field-label"><span class="field-status done"></span>Utilities:</span>
+          <input class="field-value" placeholder="">
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- Parcels Summary -->
+    <div class="subsection" style="margin-top: 16px;">
+      <div class="subsection-title">Parcels Summary</div>
+      <div class="subsection-body">
+      <div class="field-grid">
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Parcel Number:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Gross Building Area (SF):</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Net Rentable Area (SF):</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Year Built:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Buildable Land (SF):</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Total Site Area (SF):</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Assessed Value:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Taxes:</span>
+          <input class="field-value" placeholder="">
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <div class="section-sep"></div>
+
+    <!-- Assessments & Taxes -->
+    <div class="subsection" style="margin-top: 16px;">
+      <div class="subsection-title">Assessments & Taxes</div>
+      <div class="field-grid">
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Assessment Year:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Land Value:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Land Split *:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Improved Value:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Total Value:</span>
+          <input class="field-value" placeholder="">
+        </div>
+        <div class="field">
+          <span class="field-label"><span class="field-status done"></span>Building Split *:</span>
+          <input class="field-value" placeholder="">
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 5: Document Upload & Organization                   -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="section-card">
+  <div class="section-title-bar">
+    <span class="section-label">Document Upload & Organization</span>
+  </div>
+  <div class="section-body">
+    <div class="upload-grid">
+      <div class="upload-slot">
+        <div class="upload-label">Land Title Certificate*</div>
+        <div class="upload-icon">&#8593;</div>
+        <div>Upload</div>
+      </div>
+      <div class="upload-slot">
+        <div class="upload-label">Survey Certificate/RPR</div>
+        <div class="upload-icon">&#8593;</div>
+        <div>Upload</div>
+      </div>
+      <div class="upload-slot">
+        <div class="upload-label">Tax Assessment Notice</div>
+        <div class="upload-icon">&#8593;</div>
+        <div>Upload</div>
+      </div>
+      <div class="upload-slot">
+        <div class="upload-label">Aerial Photo</div>
+        <div class="upload-icon">&#8593;</div>
+        <div>Upload</div>
+      </div>
+      <div class="upload-slot">
+        <div class="upload-label">Zoning Map*</div>
+        <div class="upload-icon">&#8593;</div>
+        <div>Upload</div>
+      </div>
+      <div class="upload-slot">
+        <div class="upload-label">Flood Map*</div>
+        <div class="upload-icon">&#8593;</div>
+        <div>Upload</div>
+      </div>
+      <div class="upload-slot">
+        <div class="upload-label">Building Permits</div>
+        <div class="upload-icon">&#8593;</div>
+        <div>Upload</div>
+      </div>
+      <div class="upload-slot">
+        <div class="upload-label">Site Plan</div>
+        <div class="upload-icon">&#8593;</div>
+        <div>Upload</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+
+<script>
+  document.querySelectorAll('.subsection-title').forEach(title => {
+    title.addEventListener('click', () => {
+      title.classList.toggle('collapsed');
+      const body = title.nextElementSibling;
+      if (body && body.classList.contains('subsection-body')) {
+        body.classList.toggle('collapsed');
+      }
+    });
+  });
+</script>
+</body>
+</html>

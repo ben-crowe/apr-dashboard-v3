@@ -129,10 +129,9 @@
   .panel { display: none; max-width: 960px; margin: 0 auto; }
   #panel-index .sec, #panel-options .sec { max-width: none; width: 100%; min-width: 800px; position: relative; }
   #panel-index .sec .sec-title, #panel-options .sec .sec-title { position: relative; }
-  .resize-edge { position: absolute; top: 0; right: 0; width: 10px; height: 100%; cursor: ew-resize; z-index: 10; }
-  #registrySec { transition: border-color .15s; }
-  #registrySec.resize-hover { border-right-color: var(--text); }
-  .resize-chevrons { position: absolute; top: 8px; right: 6px; z-index: 11; font-size: 13px; font-weight: 700; color: var(--text-3); letter-spacing: -3px; cursor: ew-resize; pointer-events: none; }
+  .resize-edge { position: absolute; top: 0; right: -4px; width: 9px; height: 100%; cursor: ew-resize; z-index: 10; display: flex; align-items: center; justify-content: center; }
+  .resize-edge::before { content: ''; width: 3px; height: 32px; border-radius: 2px; background: var(--border); transition: background .15s, height .15s; }
+  .resize-edge:hover::before, .resize-edge.dragging::before { background: var(--text); height: 48px; }
   #panel-index .sec-body, #panel-options .sec-body { overflow-x: auto; }
   .panel.active { display: block; }
 
@@ -492,7 +491,7 @@ E  Authorized Use          ──┘</div>
 
 <!-- ═══ FIELD INDEX ═══ -->
 <div class="panel" id="panel-index">
-<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><span class="resize-chevrons">››</span><div class="sec-title" style="cursor:default;">Field Registry</div><div class="sec-body">
+<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;">Field Registry</div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
     <div class="seg" style="margin:0;flex-shrink:0;">
@@ -1506,11 +1505,9 @@ cascade();
   const sec = document.getElementById('registrySec');
   if (!handle || !sec) return;
   let dragging = false, startX, startW;
-  handle.addEventListener('mouseenter', () => sec.classList.add('resize-hover'));
-  handle.addEventListener('mouseleave', () => { if (!dragging) sec.classList.remove('resize-hover'); });
   handle.addEventListener('mousedown', e => {
     dragging = true; startX = e.clientX; startW = sec.offsetWidth;
-    handle.classList.add('active');
+    handle.classList.add('dragging');
     document.body.style.cursor = 'ew-resize'; document.body.style.userSelect = 'none';
     e.preventDefault();
   });
@@ -1521,7 +1518,7 @@ cascade();
   });
   document.addEventListener('mouseup', () => {
     if (!dragging) return;
-    dragging = false; sec.classList.remove('resize-hover');
+    dragging = false; handle.classList.remove('dragging');
     document.body.style.cursor = ''; document.body.style.userSelect = '';
   });
 })();

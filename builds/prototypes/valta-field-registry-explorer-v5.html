@@ -246,7 +246,7 @@
   .doc { border: 1px dashed var(--border); border-radius: calc(var(--radius) - 2px); padding: 5px 10px; font-size: 12px; color: var(--text-4); }
 
   /* Scenario buttons */
-  .scenario-btn { font-size: 11px; color: var(--text-3); cursor: pointer; padding: 3px 8px; transition: all .12s; border-radius: calc(var(--radius) - 2px); }
+  .scenario-btn { font-size: 12px; color: var(--text-3); cursor: pointer; padding: 3px 8px; transition: all .12s; border-radius: calc(var(--radius) - 2px); }
   .scenario-btn:hover { color: var(--text-2); background: var(--hover); }
   .scenario-btn.active { color: var(--text); background: var(--active-bg); }
   .scenario-btn.active::before { content: ''; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--text); margin-right: 5px; vertical-align: middle; }
@@ -398,14 +398,14 @@
 <!-- ═══ LOGIC FIELDS ═══ -->
 <div class="panel" id="panel-logic">
 <div style="max-width:960px;margin:0 auto 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">Group 1:</span>
-  <span class="scenario-btn" onclick="runScenario(1,this)">1. A</span>
-  <span class="scenario-btn" onclick="runScenario(2,this)">2. A, B</span>
-  <span class="scenario-btn" onclick="runScenario(3,this)">3. A, C</span>
+  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">Scenario Group 1:</span>
+  <span class="scenario-btn" onclick="runScenario(1,this)"><b>1]</b> A</span>
+  <span class="scenario-btn" onclick="runScenario(2,this)"><b>2]</b> A + B</span>
+  <span class="scenario-btn" onclick="runScenario(3,this)"><b>3]</b> A + C</span>
   <span style="color:var(--border);margin:0 6px;">|</span>
-  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">Group 2:</span>
-  <span class="scenario-btn" onclick="runScenario(4,this)">1. D</span>
-  <span class="scenario-btn" onclick="runScenario(5,this)">2. D, E</span>
+  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">Scenario Group 2:</span>
+  <span class="scenario-btn" onclick="runScenario(4,this)"><b>1]</b> D</span>
+  <span class="scenario-btn" onclick="runScenario(5,this)"><b>2]</b> D + E</span>
 </div>
 <div class="lo-card"><div class="sec-title">Cascade Logic — Interactive</div><div class="sec-body">
 

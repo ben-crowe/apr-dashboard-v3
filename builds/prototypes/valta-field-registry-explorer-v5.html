@@ -513,7 +513,7 @@ E  Authorized Use          ──┘</div>
   </div>
   <div class="fi-count" id="fiCount"></div>
   <div id="fiTableWrap" style="overflow-x:auto;">
-    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="origin" onclick="sortFields(this,'origin')">Origin</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th><th data-sort="nf" onclick="sortFields(this,'nf')">New</th><th data-sort="req" onclick="sortFields(this,'req')">Req</th></tr></thead><tbody id="fiBody"></tbody></table>
+    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th><th data-sort="nf" onclick="sortFields(this,'nf')">New Field</th></tr></thead><tbody id="fiBody"></tbody></table>
   </div>
   <div id="narTableWrap" style="display:none;">
     <table class="fi-table" id="narTable">
@@ -1081,7 +1081,7 @@ function renderFields() {
     });
   }
 
-  const COL_COUNT = 12;
+  const COL_COUNT = 10;
   // Render with group headers when sorted
   let lastGroup = null;
   filtered.forEach(item => {
@@ -1091,55 +1091,43 @@ function renderFields() {
     if (currentSort !== 'idx') {
       let groupVal;
       if (currentSort === 'role') groupVal = role;
-      else if (currentSort === 'origin') groupVal = f.origin || '—';
       else groupVal = f[currentSort] || '—';
       if (groupVal !== lastGroup) {
         lastGroup = groupVal;
         tb.innerHTML += '<tr class="fi-group-hdr"><td colspan="'+COL_COUNT+'">' + groupVal + '</td></tr>';
       }
     }
-    // Origin badge
-    let originBadge;
-    if (f.origin === 'both') originBadge = '<span class="badge" style="font-size:9px;background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;">Both</span>';
-    else if (f.origin === 'dashboard') originBadge = '<span class="badge" style="font-size:9px;background:#f0fdf4;color:#166534;border:1px solid #86efac;">Dashboard</span>';
-    else originBadge = '<span class="badge" style="font-size:9px;background:#faf5ff;color:#6b21a8;border:1px solid #d8b4fe;">Valcre</span>';
-
     // Dropdown cell — clickable if has options
     let ddCell;
     if (f.d && DROPDOWN_OPTIONS[f.d]) {
       const opts = DROPDOWN_OPTIONS[f.d];
       const count = opts.length;
-      ddCell = '<td class="dd-expand" style="font-size:11px;color:var(--text);cursor:pointer;" onclick="toggleDropdownRow(\''+f.n+'\')" title="Click to see '+count+' options"><span style="color:var(--text-2);">'+f.d+'</span> <span style="font-size:10px;color:var(--text-3);">('+count+')</span> <span style="font-size:9px;color:var(--text-3);">'+( expandedRow===f.n ? '▲' : '▼')+'</span></td>';
+      ddCell = '<td class="dd-expand" style="font-size:11px;color:var(--text);cursor:pointer;" onclick="toggleDropdownRow(\''+f.n+'\')" title="Click to see '+count+' options"><span style="color:var(--text-2);">'+f.d+'</span> <span style="font-size:10px;color:var(--text-3);">('+count+')</span> <span style="font-size:9px;color:var(--text-3);">'+(expandedRow===f.n ? '▲' : '▼')+'</span></td>';
     } else {
       ddCell = '<td style="font-size:11px;color:var(--text-3);">—</td>';
     }
-    // Valcre location badge
-    let vrCell = '<td style="font-size:11px;color:var(--text-3);">—</td>';
-    if (f.vr) {
-      const vrColors = {Job:'#3b82f6',Contact:'#8b5cf6',Property:'#10b981',Building:'#f59e0b','Parcel Assessment':'#ef4444',Parcel:'#ec4899'};
-      const vrColor = vrColors[f.vr] || 'var(--text-3)';
-      vrCell = '<td><span style="font-size:10px;font-weight:600;color:'+vrColor+';">'+f.vr+'</span></td>';
-    }
-    // New / Required badges (only for dashboard fields)
-    const nfCell = f.nf==='Yes' ? '<td><span class="badge badge-muted" style="font-size:9px;">NEW</span></td>' : '<td style="font-size:11px;color:var(--text-3);">'+(f.nf||'—')+'</td>';
-    const reqCell = f.req==='Yes' ? '<td style="font-size:11px;color:var(--text);">Yes</td>' : '<td style="font-size:11px;color:var(--text-3);">'+(f.req||'—')+'</td>';
+    // Plain text cells — no colors, no badges
+    const vrCell = '<td style="font-size:11px;color:var(--text-2);">'+(f.vr||'—')+'</td>';
+    const srcCell = '<td style="font-size:11px;color:var(--text-2);">'+(f.s||'—')+'</td>';
+    const roleText = role === 'trigger' ? 'Trigger' : role === 'result' ? 'Result' : '—';
+    const roleCell = '<td style="font-size:11px;color:var(--text-2);">'+roleText+'</td>';
+    const nfCell = '<td style="font-size:11px;color:var(--text-2);">'+(f.nf||'—')+'</td>';
+    const reqCell = '<td style="font-size:11px;color:var(--text-2);">'+(f.req||'—')+'</td>';
 
     // Row styling — dim Valcre-only rows slightly
-    const rowClass = f.origin === 'valcre' ? ' style="opacity:0.7;"' : '';
+    const rowClass = f.origin === 'valcre' ? ' style="opacity:0.65;"' : '';
 
     tb.innerHTML += '<tr'+rowClass+' title="'+(f.desc||'')+'">' +
       '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+item.idx+'</td>' +
-      '<td>'+originBadge+'</td>' +
       '<td class="fn">'+f.n+'</td>' +
       '<td>'+f.l+'</td>' +
-      '<td>'+(f.c || '<span style="color:var(--text-4);">—</span>')+'</td>' +
-      '<td>'+(f.s ? srcBadge(f.s) : '<span style="color:var(--text-4);">—</span>')+'</td>' +
-      '<td>'+roleBadge(role)+'</td>' +
+      '<td style="font-size:11px;color:var(--text-2);">'+(f.c||'—')+'</td>' +
+      srcCell +
+      roleCell +
       ddCell +
       vrCell +
       '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+(f.v||'—')+'</td>' +
       nfCell +
-      reqCell +
     '</tr>';
 
     // Expanded dropdown options row

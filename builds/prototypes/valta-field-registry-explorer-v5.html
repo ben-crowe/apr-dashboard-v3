@@ -491,9 +491,9 @@ E  Authorized Use          ──┘</div>
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
     <div class="seg" style="margin:0;flex-shrink:0;">
       <button class="active" onclick="setScope('dashboard',this)">Valta Dashboard</button>
-      <button class="active" onclick="setScope('all',this)">Valcre (All)</button>
+      <button onclick="setScope('all',this)">Valcre (All)</button>
     </div>
-    <input type="hidden" id="filterOrigin" value="all">
+    <input type="hidden" id="filterOrigin" value="dashboard">
     <input class="fi-search" id="fiSearch" placeholder="Search fields..." oninput="filterFields()" style="margin-bottom:0;">
   </div>
   <!-- Checkbox filters: two rows -->

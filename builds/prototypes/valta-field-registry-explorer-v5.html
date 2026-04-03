@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valta Field Registry Explorer</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --radius: 8px;
+    --shadow: 0 1px 2px rgba(0,0,0,.05);
+    --text: #18181b;
+    --text-2: #52525b;
+    --text-3: #a1a1aa;
+    --text-4: #d4d4d8;
+    --bg: #f4f4f5;
+    --card: #ffffff;
+    --border: #e4e4e7;
+    --border-focus: #a1a1aa;
+    --hover: rgba(0,0,0,.04);
+    --active-bg: rgba(0,0,0,.06);
+    --seg-bg: #f4f4f5;
+    --seg-active: #ffffff;
+    --seg-border: #e4e4e7;
+    --dd-bg: rgba(255,255,255,.95);
+    --dd-border: rgba(0,0,0,.18);
+    --dd-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 24px rgba(0,0,0,.06);
+    --green: #22c55e;
+    --red: #ef4444;
+    --amber: #d97706;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 14px; color: var(--text); background: var(--bg); padding: 24px 32px; line-height: 1.5; }
+
+  /* Header */
+  .hdr { max-width: 960px; margin: 0 auto 16px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .hdr h1 { font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+  .hdr .sub { font-size: 12px; color: var(--text-3); }
+  .hdr-btns { display: flex; gap: 8px; }
+
+  /* Buttons */
+  .btn { font: 500 12px/1 system-ui, sans-serif; padding: 7px 16px; border-radius: var(--radius); cursor: pointer; transition: all .12s; white-space: nowrap; }
+  .btn-primary { background: var(--text); color: var(--bg); border: 1px solid var(--text); box-shadow: var(--shadow); }
+  .btn-primary:hover { opacity: .85; }
+  .btn-outline { background: transparent; color: var(--text-2); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .btn-outline:hover { border-color: var(--border-focus); color: var(--text); background: var(--hover); }
+  .btn-outline.disabled { cursor: default; pointer-events: none; }
+  .btn-ghost { background: transparent; color: var(--text-3); border: 1px solid transparent; font: 500 12px/1 system-ui, sans-serif; padding: 7px 16px; border-radius: var(--radius); cursor: pointer; }
+  .btn-ghost:hover { background: var(--hover); color: var(--text-2); }
+
+  /* Segmented tabs */
+  .seg { max-width: 960px; margin: 0 auto 16px; display: inline-flex; align-items: center; background: var(--seg-bg); border: 1px solid var(--seg-border); border-radius: var(--radius); padding: 3px; gap: 2px; box-shadow: var(--shadow); }
+  .seg button { font: 500 12px/1 system-ui, sans-serif; padding: 6px 14px; border: none; border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .15s ease; white-space: nowrap; }
+  .seg button:hover { color: var(--text-2); background: var(--hover); }
+  .seg button.active { color: var(--text); background: var(--seg-active); box-shadow: var(--shadow); }
+
+  /* Section card */
+  .sec { max-width: 960px; margin: 0 auto 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .sec-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-2); padding: 10px 20px; background: #fafafa; border-bottom: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0; display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
+  .sec-title:hover { background: #f0f0ef; }
+  .sec-chevron { font-size: 18px; color: var(--text-2); transition: transform .15s; line-height: 1; }
+  .sec.closed .sec-chevron { transform: rotate(-90deg); }
+  .sec.closed .sec-body { display: none; }
+  .sec.closed .sec-title { border-bottom: none; border-radius: var(--radius); }
+  .sec-body { padding: 14px 20px 18px; }
+  .sec-num { font-size: 10px; color: var(--text-3); font-weight: 500; margin-right: 6px; font-family: 'SF Mono','Consolas', monospace; }
+
+  /* Section reference table */
+  .sec-ref { max-width: 960px; margin: 32px auto 0; padding-top: 20px; border-top: 1px solid var(--border); }
+  .sec-ref-title { font-size: 11px; font-weight: 600; color: var(--text); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+  .sec-ref-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .sec-ref-table td { padding: 4px 10px 4px 24px; border-bottom: 1px solid var(--border); color: var(--text-3); }
+  .sec-ref-table td:first-child { font-family: 'SF Mono','Consolas', monospace; font-weight: 500; color: var(--text-3); width: 50px; }
+  .sec-ref-table td:nth-child(2) { font-weight: 400; color: var(--text-2); }
+  .sec-ref-table td:nth-child(3) { color: var(--text-3); font-size: 11px; }
+  .sec-ref-stage { font-size: 12px; font-weight: 700; color: var(--text) !important; padding: 10px 10px 5px 10px !important; border-bottom: 2px solid var(--border) !important; }
+
+  /* Dashboard filter — small text links, right-aligned */
+  .dash-controls { display: flex; gap: 12px; align-items: center; }
+  .dash-link { font: 400 11px/1 system-ui, sans-serif; color: var(--text-3); cursor: pointer; border: none; background: none; padding: 0; transition: color .1s; }
+  .dash-link:hover { color: var(--text); }
+  .dash-link.active { color: var(--text); font-weight: 600; }
+  .dash-link.disabled { cursor: default; pointer-events: none; }
+  .dash-sep { color: var(--text-4); font-size: 11px; }
+
+  /* Grid */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 28px; }
+  .span2 { grid-column: 1 / -1; }
+
+  /* Field row */
+  .f { display: flex; align-items: center; gap: 8px; min-height: 28px; position: relative; }
+  .f-lbl { font-size: 12px; color: var(--text-2); white-space: nowrap; min-width: 145px; text-align: right; flex-shrink: 0; }
+  .f-lbl::after { content: ':'; }
+  .f-val { flex: 1; min-width: 0; }
+
+  /* Text input */
+  .u-inp { font: inherit; font-size: 12px; color: var(--text); border: none; border-bottom: 1px solid var(--border); background: transparent; width: 100%; height: 28px; padding: 0 2px; outline: none; transition: border-color .12s; }
+  .u-inp:focus { border-bottom-color: var(--text); }
+  .u-inp::placeholder { color: var(--text-4); }
+  /* Address: full width input, short underline */
+  .span2 .u-inp { border-bottom: none; background-image: linear-gradient(var(--border), var(--border)); background-size: 220px 1px; background-position: bottom left; background-repeat: no-repeat; }
+  .span2 .u-inp:focus { background-image: linear-gradient(var(--text), var(--text)); }
+
+  /* Custom dropdown */
+  .dd { position: relative; user-select: none; }
+  .dd-trigger { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 2px; height: 28px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text); cursor: pointer; transition: border-color .12s; }
+  .dd-trigger:hover { border-bottom-color: var(--border-focus); }
+  .dd-trigger.open { border-bottom-color: var(--text); }
+  .dd-trigger.ph { color: var(--text-3); }
+  .dd-arrow { width: 0; height: 0; border-left: 3.5px solid transparent; border-right: 3.5px solid transparent; border-top: 4px solid var(--text-3); transition: transform .15s; flex-shrink: 0; }
+  .dd-trigger.open .dd-arrow { transform: rotate(180deg); }
+  .dd-menu { position: absolute; top: calc(100% + 3px); left: 0; right: 0; background: var(--dd-bg); backdrop-filter: blur(20px) saturate(1.2); -webkit-backdrop-filter: blur(20px) saturate(1.2); border: 1px solid var(--dd-border); border-radius: var(--radius); box-shadow: var(--dd-shadow); z-index: 100; display: none; overflow: hidden; padding: 3px; }
+  .dd-menu.open { display: block; }
+  .dd-item { padding: 5px 9px; font-size: 12px; color: var(--text-2); cursor: pointer; transition: all .08s; border-radius: calc(var(--radius) - 4px); }
+  .dd-item:hover { background: var(--hover); color: var(--text); }
+  .dd-item.selected { background: var(--active-bg); color: var(--text); font-weight: 500; }
+
+  /* Trigger marker */
+  .f-num { font-size: 10px; color: var(--text-3); font-weight: 600; margin-right: 3px; cursor: help; }
+
+  /* Cascade feedback */
+  .cascade-info { font-size: 10px; color: var(--text-3); margin-top: 1px; display: block; font-weight: 500; line-height: 1.2; min-height: 12px; }
+  .cascade-info.override { color: var(--amber); }
+  .cascade-info:empty { display: none; }
+  .smart-wrap { display: flex; flex-direction: column; }
+  .f.dimmed .f-lbl { opacity: .35; }
+  .f.dimmed .dd-trigger { opacity: .35; }
+
+  /* Panels */
+  .panel { display: none; max-width: 1200px; margin: 0 auto; }
+  #panel-full, #panel-logic { max-width: 960px; }
+  .panel.active { display: block; }
+
+  /* Logic view */
+  .lo-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .lo-card .sec-body { padding: 14px 20px 18px; }
+  .grp { margin-bottom: 22px; }
+  .grp:last-child { margin-bottom: 0; }
+  .grp-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); margin-bottom: 10px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+
+  /* Vertical line-aligned trigger/result layout — result on right */
+  .lo-row { display: grid; grid-template-columns: 20px 1px 150px 200px 20px 120px 1fr; gap: 0 8px; align-items: center; min-height: 38px; }
+  .lo-letter { font-size: 11px; font-weight: 700; color: var(--text-3); text-align: center; }
+  .lo-line { background: var(--border); width: 1px; height: 100%; justify-self: center; }
+  .lo-row .f-lbl { min-width: 0; text-align: left; font-size: 12px; }
+  .lo-row .f-lbl::after { content: ':'; }
+  .lo-row .f-val { min-width: 0; }
+  .lo-spacer { }
+  .lo-result-lbl { font-size: 11px; color: var(--text-2); text-align: right; white-space: nowrap; }
+  .lo-result-lbl::after { content: ':'; }
+
+  /* Collapsible Rule Explorer */
+  /* Rule Groups — each gets own card with shaded title bar + big toggle */
+  .re-section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 14px; overflow: hidden; max-width: 960px; margin-left: auto; margin-right: auto; }
+  .re-section-bar { display: flex; align-items: center; gap: 10px; padding: 10px 20px; background: #fafafa; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+  .re-section-bar:hover { background: #f0f0ef; }
+  .re-chevron { font-size: 20px; color: var(--text); transition: transform .15s; width: 22px; text-align: center; line-height: 1; flex-shrink: 0; }
+  .re-section.closed .re-chevron { transform: rotate(-90deg); }
+  .re-section-name { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-2); }
+  .re-section-body { padding: 14px 20px 18px; }
+  .re-section.closed .re-section-body { display: none; }
+  .re-label { max-width: 960px; margin: 16px auto 8px; font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; }
+
+  /* Rule Explorer tables */
+  .re-group { margin-bottom: 24px; }
+  .re-group:last-child { margin-bottom: 0; }
+  .re-diagram { font-family: 'SF Mono','Consolas', monospace; font-size: 11px; color: var(--text-3); line-height: 1.6; white-space: pre; background: #fafafa; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px); padding: 12px 16px; margin-bottom: 10px; overflow-x: auto; }
+  .re-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .re-table td { padding: 3px 10px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; }
+  .re-table td:first-child { padding-left: 28px; }
+  .re-table tr:last-child td { border-bottom: none; }
+  .re-title-row td { font-size: 12px; font-weight: 700; color: var(--text); padding: 8px 10px 4px; border-bottom: 2px solid var(--border); }
+  .re-title-row td:first-child { padding-left: 10px; }
+  .re-let { color: var(--text-3); margin-right: 5px; font-weight: 700; }
+  .re-col-hdr { padding: 0 10px 2px !important; font-size: 9px !important; font-weight: 600 !important; text-transform: uppercase; letter-spacing: .08em; color: var(--text-3) !important; border-bottom: none !important; }
+  .re-note { font-size: 11px; color: var(--text-2); margin-top: 8px; font-style: italic; }
+
+  /* Field Index */
+  .fi-search { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius); font: inherit; font-size: 12px; outline: none; margin-bottom: 10px; background: transparent; color: var(--text); transition: border-color .12s; }
+  .fi-search:focus { border-color: var(--text); }
+  .chips { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 10px; }
+  .chips button { font: 400 11px/1 system-ui, sans-serif; padding: 5px 11px; border: 1px solid transparent; border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .12s; }
+  .chips button:hover { color: var(--text-2); background: var(--hover); }
+  .chips button.active { border-color: var(--border-focus); color: var(--text); background: var(--active-bg); }
+  .fi-count { font-size: 11px; color: var(--text-3); margin-bottom: 6px; }
+  .fi-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .fi-table th { text-align: left; padding: 6px 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); border-bottom: 2px solid var(--border); cursor: pointer; transition: color .1s; user-select: none; }
+  .fi-table th:hover { color: var(--text); }
+  .fi-table th.sorted { color: var(--text); }
+  .fi-table td { padding: 5px 10px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; }
+  .fi-table tr:hover td { background: var(--hover); }
+  .fi-table .fn { font-weight: 600; color: var(--text); font-family: 'SF Mono','Consolas', monospace; font-size: 11px; }
+  .fi-group-hdr td { background: var(--hover); font-weight: 600; color: var(--text); font-size: 11px; padding: 8px 10px 4px; border-bottom: 2px solid var(--border); }
+  .badge { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: calc(var(--radius) - 4px); letter-spacing: .02em; display: inline-block; }
+  .badge-outline { border: 1px solid var(--border); color: var(--text-2); }
+  .badge-muted { background: var(--active-bg); color: var(--text-2); }
+  .badge-solid { background: var(--text); color: var(--bg); }
+
+  /* Audit */
+  .audit-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+  .audit-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: #fafafa; border-bottom: 1px solid var(--border); }
+  .audit-header h3 { font-size: 13px; font-weight: 700; }
+  .audit-summary { display: flex; gap: 16px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+  .audit-stat { text-align: center; }
+  .audit-stat .num { font-size: 24px; font-weight: 700; line-height: 1; }
+  .audit-stat .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); margin-top: 3px; }
+  .audit-stat.pass .num { color: var(--green); }
+  .audit-stat.fail .num { color: var(--red); }
+  .audit-results { max-height: 600px; overflow-y: auto; }
+  .audit-row { padding: 10px 20px; border-bottom: 1px solid var(--border); font-size: 12px; }
+  .audit-row:last-child { border-bottom: none; }
+  .audit-row-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+  .audit-row .rid { font-family: 'SF Mono','Consolas', monospace; font-weight: 700; font-size: 11px; color: var(--text); }
+  .audit-row .rdesc { color: var(--text); font-weight: 500; }
+  .audit-row .rarrow { color: var(--text-3); }
+  .audit-row .routput { color: var(--text-2); }
+  .audit-detail { padding-left: 60px; font-size: 11px; line-height: 1.7; }
+  .audit-detail .ad-label { color: var(--text-3); min-width: 65px; display: inline-block; }
+  .audit-detail .ad-value { color: var(--text-2); font-family: 'SF Mono','Consolas', monospace; }
+  .audit-detail .ad-match { color: var(--green); font-family: 'SF Mono','Consolas', monospace; }
+  .audit-detail .ad-mismatch { color: var(--red); font-family: 'SF Mono','Consolas', monospace; font-weight: 600; }
+  .audit-row.fail-row { background: #fef2f2; }
+  .audit-status { font-weight: 700; font-size: 11px; margin-left: auto; }
+  .audit-status.pass { color: var(--green); }
+  .audit-status.fail { color: var(--red); }
+
+  .doc { border: 1px dashed var(--border); border-radius: calc(var(--radius) - 2px); padding: 5px 10px; font-size: 12px; color: var(--text-4); }
+
+  /* Expanded dropdown options row */
+  .fi-options-row td { padding: 0 !important; }
+  .fi-options-row td[colspan] { padding: 8px 10px 10px !important; }
+  .dd-expand:hover { background: var(--hover); }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <h1>Valta Field Registry Explorer</h1>
+    <div class="sub">45 fields · 23 dropdown lists · 28 rules · 2 cascade groups · 315 Valcre API fields</div>
+  </div>
+  <div class="hdr-btns">
+    <button class="btn btn-outline" id="btnFill" onclick="fillTest()">Fill Test Data</button>
+    <button class="btn btn-outline" id="btnReset" onclick="resetAll()">Reset</button>
+  </div>
+</div>
+
+<div style="max-width:960px;margin:0 auto 6px;">
+  <div class="seg">
+    <button class="active" onclick="setView('full',this)">Full Dashboard</button>
+    <button onclick="setView('logic',this)">Logic Fields</button>
+    <button onclick="setView('index',this)">Field Index</button>
+    <button onclick="setView('audit',this)">Rule Audit</button>
+  </div>
+</div>
+<div style="max-width:960px;margin:0 auto 14px;display:flex;justify-content:flex-end;">
+  <div class="dash-controls" id="dashControls">
+    <button class="dash-link active" onclick="dashShowAll(this)">All</button>
+    <span class="dash-sep">·</span>
+    <button class="dash-link" onclick="dashLogicOnly(this)">Logic Only</button>
+    <span class="dash-sep">·</span>
+    <button class="dash-link" onclick="dashCollapseAll(this)">Collapse All</button>
+  </div>
+</div>
+
+<!-- ═══ FULL DASHBOARD ═══ -->
+<div class="panel active" id="panel-full">
+
+<div class="sec" id="sec-client" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">1.1</span>Client Information</div><div class="sec-body"><div class="grid">
+  <div class="f"><span class="f-lbl">First Name</span><div class="f-val"><input class="u-inp" data-fill="Sarah"></div></div>
+  <div class="f"><span class="f-lbl">Last Name</span><div class="f-val"><input class="u-inp" data-fill="Williams"></div></div>
+  <div class="f"><span class="f-lbl">Title</span><div class="f-val"><input class="u-inp" data-fill="VP of Real Estate"></div></div>
+  <div class="f"><span class="f-lbl">Organization</span><div class="f-val"><input class="u-inp" data-fill="Skyline Investments Ltd."></div></div>
+  <div class="f"><span class="f-lbl">Phone</span><div class="f-val"><input class="u-inp" data-fill="(403) 555-0147"></div></div>
+  <div class="f"><span class="f-lbl">Email</span><div class="f-val"><input class="u-inp" data-fill="s.williams@skylineinv.ca"></div></div>
+  <div class="f span2"><span class="f-lbl">Address</span><div class="f-val"><input class="u-inp" data-fill="300 5th Ave SW, Suite 1200, Calgary, AB T2P 3C4"></div></div>
+</div></div></div>
+
+<div class="sec" id="sec-property" data-logic="1" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">1.2</span>Property Information</div><div class="sec-body"><div class="grid">
+  <div class="f"><span class="f-lbl">Property Name</span><div class="f-val"><input class="u-inp" data-fill="Riverside Terrace"></div></div>
+  <div class="f" id="row-pt"><span class="f-lbl">Property Type</span><div class="f-val"><div class="dd" data-field="propertyType"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">Multifamily</div><div class="dd-item" onclick="pickField(this)">Self-Storage</div><div class="dd-item" onclick="pickField(this)">Retail</div><div class="dd-item" onclick="pickField(this)">Industrial</div><div class="dd-item" onclick="pickField(this)">Office</div><div class="dd-item" onclick="pickField(this)">Land</div><div class="dd-item" onclick="pickField(this)">Hotel</div><div class="dd-item" onclick="pickField(this)">Seniors</div><div class="dd-item" onclick="pickField(this)">Other</div></div></div></div></div>
+  <div class="f span2"><span class="f-lbl">Address</span><div class="f-val"><input class="u-inp" data-fill="4200 Bow Trail SW, Calgary, AB T3C 2G2"></div></div>
+  <div class="f" id="row-au"><span class="f-lbl">Authorized Use</span><div class="f-val"><div class="dd" data-field="authorizedUse"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">First Mortgage Financing</div><div class="dd-item" onclick="pickField(this)">Financial Reporting</div><div class="dd-item" onclick="pickField(this)">Insurance</div><div class="dd-item" onclick="pickField(this)">Internal Decision-Making</div><div class="dd-item" onclick="pickField(this)">Acquisition-Disposition</div><div class="dd-item" onclick="pickField(this)">Estate Planning</div><div class="dd-item" onclick="pickField(this)">Litigation</div><div class="dd-item" onclick="pickField(this)">GST</div></div></div></div></div>
+  <div class="f"><span class="f-lbl">Valuation Premises</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Market Value</div><div class="dd-item" onclick="pickDD(this)">Market Rent</div><div class="dd-item" onclick="pickDD(this)">Investment Value</div><div class="dd-item" onclick="pickDD(this)">Insurable Value</div></div></div></div></div>
+  <div class="f"><span class="f-lbl">Asset Condition</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Excellent</div><div class="dd-item" onclick="pickDD(this)">Very Good</div><div class="dd-item" onclick="pickDD(this)">Good</div><div class="dd-item" onclick="pickDD(this)">Fair</div><div class="dd-item" onclick="pickDD(this)">Poor</div></div></div></div></div>
+</div></div></div>
+
+<div class="sec" id="sec-contact" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">1.3</span>Property Contact</div><div class="sec-body"><div class="grid">
+  <div class="f"><span class="f-lbl">First Name</span><div class="f-val"><input class="u-inp" data-fill="Marcus"></div></div>
+  <div class="f"><span class="f-lbl">Last Name</span><div class="f-val"><input class="u-inp" data-fill="Thompson"></div></div>
+  <div class="f"><span class="f-lbl">Email</span><div class="f-val"><input class="u-inp" data-fill="m.thompson@riverside.ca"></div></div>
+  <div class="f"><span class="f-lbl">Phone</span><div class="f-val"><input class="u-inp" data-fill="(403) 555-0299"></div></div>
+</div></div></div>
+
+<div class="sec" id="sec-loe" data-logic="1" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">2.1</span>LOE Quote & Job Information</div><div class="sec-body"><div class="grid">
+  <div class="f"><span class="f-lbl">Job Number</span><div class="f-val"><input class="u-inp" value="VAL-2026-0147" readonly style="color:var(--text-3);"></div></div>
+  <div class="f"><span class="f-lbl">Job Status</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Draft</div><div class="dd-item" onclick="pickDD(this)">In Progress</div><div class="dd-item" onclick="pickDD(this)">Under Review</div><div class="dd-item" onclick="pickDD(this)">Completed</div><div class="dd-item" onclick="pickDD(this)">On Hold</div></div></div></div></div>
+  <div class="f" id="row-interest"><span class="f-lbl">Property Rights</span><div class="f-val"><div class="smart-wrap"><div class="dd" data-field="interest"><div class="dd-trigger ph" onclick="toggleDD(this)" id="t-interest">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item">Fee Simple</div><div class="dd-item">Leased Fee Interest</div><div class="dd-item">Leasehold Estate</div><div class="dd-item">Going Concern</div><div class="dd-item">Fee Simple & Leased Fee</div></div></div><span class="cascade-info" id="info-interest"></span></div></div></div>
+  <div class="f"><span class="f-lbl">Scope of Work</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">All Applicable</div><div class="dd-item" onclick="pickDD(this)">Best One Approach</div><div class="dd-item" onclick="pickDD(this)">Direct Comparison Approach</div><div class="dd-item" onclick="pickDD(this)">Income Approach</div><div class="dd-item" onclick="pickDD(this)">Cost Approach</div></div></div></div></div>
+  <div class="f"><span class="f-lbl">Appraisal Fee</span><div class="f-val"><input class="u-inp" data-fill="$12,500"></div></div>
+  <div class="f"><span class="f-lbl">Report Type</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Appraisal Report</div><div class="dd-item" onclick="pickDD(this)">Completion Report</div><div class="dd-item" onclick="pickDD(this)">Evaluation</div><div class="dd-item" onclick="pickDD(this)">Restricted Appraisal Report</div></div></div></div></div>
+  <div class="f"><span class="f-lbl">Delivery Date</span><div class="f-val"><input class="u-inp" type="date"></div></div>
+  <div class="f"><span class="f-lbl">Due Date</span><div class="f-val"><input class="u-inp" type="date"></div></div>
+  <div class="f"><span class="f-lbl">CMHC Financing</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Yes</div><div class="dd-item" onclick="pickDD(this)">No</div></div></div></div></div>
+  <div class="f"><span class="f-lbl">Retainer Amount</span><div class="f-val"><input class="u-inp" data-fill="$5,000"></div></div>
+</div></div></div>
+
+<div class="sec" id="sec-building" data-logic="1" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">2.2</span>Building Information</div><div class="sec-body"><div class="grid">
+  <div class="f"><span class="f-lbl">Year Built</span><div class="f-val"><input class="u-inp" data-fill="2004"></div></div>
+  <div class="f"><span class="f-lbl">Building Size (SF)</span><div class="f-val"><input class="u-inp" data-fill="62,400"></div></div>
+  <div class="f"><span class="f-lbl">Number of Units</span><div class="f-val"><input class="u-inp" data-fill="72"></div></div>
+  <div class="f"><span class="f-lbl">Parking Spaces</span><div class="f-val"><input class="u-inp" data-fill="88"></div></div>
+  <div class="f" id="row-tn"><span class="f-lbl">Tenancy</span><div class="f-val"><div class="dd" data-field="tenancy"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">Multi-Tenant</div><div class="dd-item" onclick="pickField(this)">Owner Occupied</div><div class="dd-item" onclick="pickField(this)">Partial Owner Occupied</div><div class="dd-item" onclick="pickField(this)">Single-Tenant</div><div class="dd-item" onclick="pickField(this)">Unknown</div><div class="dd-item" onclick="pickField(this)">Vacant</div></div></div></div></div>
+  <div class="f"><span class="f-lbl">State of Improvements</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Existing</div><div class="dd-item" onclick="pickDD(this)">Proposed</div><div class="dd-item" onclick="pickDD(this)">Vacant Land</div></div></div></div></div>
+  <div class="f" id="row-st"><span class="f-lbl">Status of Improvements</span><div class="f-val"><div class="dd" data-field="statusOfImprovements"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">Existing - Completed</div><div class="dd-item" onclick="pickField(this)">Existing - Renovated</div><div class="dd-item" onclick="pickField(this)">Existing - Under Renovation</div><div class="dd-item" onclick="pickField(this)">Existing - To Be Renovated</div><div class="dd-item" onclick="pickField(this)">Proposed - Vacant Land</div><div class="dd-item" onclick="pickField(this)">Proposed - Improved Land (Demolition Required)</div><div class="dd-item" onclick="pickField(this)">Proposed - Under Construction</div></div></div></div></div>
+  <div class="f" id="row-scenarios"><span class="f-lbl">Value Scenarios</span><div class="f-val"><div class="smart-wrap"><div class="dd" data-field="scenarios"><div class="dd-trigger ph" id="t-scenarios">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"></div></div><span class="cascade-info" id="info-scenarios"></span></div></div></div>
+  <div class="f" id="row-sub"><span class="f-lbl">Property Subtype</span><div class="f-val"><div class="dd" data-field="propertySubtype"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">Apartment</div><div class="dd-item" onclick="pickField(this)">Townhouse</div><div class="dd-item" onclick="pickField(this)">Mixed Use</div></div></div></div></div>
+  <div class="f"><span class="f-lbl">Land Metric</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Square Feet</div><div class="dd-item" onclick="pickDD(this)">Acres</div><div class="dd-item" onclick="pickDD(this)">Hectares</div></div></div></div></div>
+</div></div></div>
+
+<div class="sec" id="sec-assignment" data-logic="1" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">2.3</span>Appraisal Assignment</div><div class="sec-body"><div class="grid">
+  <div class="f"><span class="f-lbl">Assignment Type</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Single Property</div><div class="dd-item" onclick="pickDD(this)">Multiple Properties</div></div></div></div></div>
+  <div class="f"><span class="f-lbl">Desktop Report</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Yes</div><div class="dd-item" onclick="pickDD(this)">No</div></div></div></div></div>
+  <div class="f"><span class="f-lbl">Value Timeframe</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Current</div><div class="dd-item" onclick="pickDD(this)">Retrospective</div><div class="dd-item" onclick="pickDD(this)">Prospective</div></div></div></div></div>
+  <div class="f" id="row-approaches"><span class="f-lbl">Approaches to Value</span><div class="f-val"><div class="smart-wrap"><div class="dd" data-field="approaches"><div class="dd-trigger ph" id="t-approaches">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"></div></div><span class="cascade-info" id="info-approaches"></span></div></div></div>
+  <div class="f"><span class="f-lbl">Transaction Status</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Not Applicable</div><div class="dd-item" onclick="pickDD(this)">Listed</div><div class="dd-item" onclick="pickDD(this)">Under Contract</div></div></div></div></div>
+  <div class="f"><span class="f-lbl">Zoning Status</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Legal Conforming</div><div class="dd-item" onclick="pickDD(this)">Legal Non-Conforming</div><div class="dd-item" onclick="pickDD(this)">Illegal</div><div class="dd-item" onclick="pickDD(this)">No Zoning</div></div></div></div></div>
+</div></div></div>
+
+<div class="sec" id="sec-site" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">3.1</span>Property Site & Parcels</div><div class="sec-body"><div class="grid">
+  <div class="f"><span class="f-lbl">Zoning</span><div class="f-val"><input class="u-inp"></div></div>
+  <div class="f"><span class="f-lbl">Zone Code</span><div class="f-val"><input class="u-inp"></div></div>
+  <div class="f"><span class="f-lbl">Land Use</span><div class="f-val"><input class="u-inp"></div></div>
+  <div class="f"><span class="f-lbl">Flood Zone</span><div class="f-val"><input class="u-inp"></div></div>
+  <div class="f"><span class="f-lbl">Total Site Area</span><div class="f-val"><input class="u-inp"></div></div>
+  <div class="f"><span class="f-lbl">Assessed Value</span><div class="f-val"><input class="u-inp"></div></div>
+  <div class="f"><span class="f-lbl">Taxes</span><div class="f-val"><input class="u-inp"></div></div>
+</div></div></div>
+
+<div class="sec" id="sec-docs" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">3.2</span>Document Uploads</div><div class="sec-body"><div class="grid">
+  <div class="f"><span class="f-lbl">Land Title</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
+  <div class="f"><span class="f-lbl">Survey / RPR</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
+  <div class="f"><span class="f-lbl">Tax Notice</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
+  <div class="f"><span class="f-lbl">Site Plan</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
+</div></div></div>
+
+<div class="sec-ref">
+  <div class="sec-ref-title">Section Reference</div>
+  <table class="sec-ref-table">
+    <tr><td colspan="3" class="sec-ref-stage">Stage 1 — Client Submission</td></tr>
+    <tr><td>1.1</td><td>Client Information</td><td>Client name, contact, address</td></tr>
+    <tr><td>1.2</td><td>Property Information</td><td>Property details, type, authorized use</td></tr>
+    <tr><td>1.3</td><td>Property Contact</td><td>On-site contact for property access</td></tr>
+    <tr><td colspan="3" class="sec-ref-stage">Stage 2 — Quote Preparation</td></tr>
+    <tr><td>2.1</td><td>LOE Quote & Job Information</td><td>Job setup, fees, property rights outcome</td></tr>
+    <tr><td>2.2</td><td>Building Information</td><td>Building details, tenancy, status, value scenarios outcome</td></tr>
+    <tr><td>2.3</td><td>Appraisal Assignment</td><td>Assignment config, approaches outcome</td></tr>
+    <tr><td colspan="3" class="sec-ref-stage">Stage 3 — Job Execution</td></tr>
+    <tr><td>3.1</td><td>Property Site & Parcels</td><td>Zoning, land use, site details</td></tr>
+    <tr><td>3.2</td><td>Document Uploads</td><td>Supporting documents and files</td></tr>
+  </table>
+</div>
+</div>
+
+<!-- ═══ LOGIC FIELDS ═══ -->
+<div class="panel" id="panel-logic">
+<div class="lo-card"><div class="sec-title">Cascade Logic — Interactive</div><div class="sec-body">
+
+  <div class="grp">
+    <div class="grp-label">Group 1 — Property Rights (3 triggers → 1 result)</div>
+    <div class="lo-row">
+      <span class="lo-letter">A</span><span class="lo-line"></span>
+      <span class="f-lbl" style="min-width:0;text-align:left;">Property Type</span>
+      <div class="f-val"><div class="dd" data-field="propertyType" data-sync="1"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">Multifamily</div><div class="dd-item" onclick="pickField(this)">Self-Storage</div><div class="dd-item" onclick="pickField(this)">Retail</div><div class="dd-item" onclick="pickField(this)">Industrial</div><div class="dd-item" onclick="pickField(this)">Office</div><div class="dd-item" onclick="pickField(this)">Land</div><div class="dd-item" onclick="pickField(this)">Hotel</div><div class="dd-item" onclick="pickField(this)">Seniors</div><div class="dd-item" onclick="pickField(this)">Other</div></div></div></div>
+      <span class="lo-spacer"></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="lo-row">
+      <span class="lo-letter">B</span><span class="lo-line"></span>
+      <span class="f-lbl" style="min-width:0;text-align:left;">Property Subtype</span>
+      <div class="f-val"><div class="dd" data-field="propertySubtype" data-sync="1"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">Apartment</div><div class="dd-item" onclick="pickField(this)">Townhouse</div><div class="dd-item" onclick="pickField(this)">Mixed Use</div></div></div></div>
+      <span class="lo-spacer"></span>
+      <span class="lo-result-lbl">Property Rights</span>
+      <div class="f-val"><div class="dd" id="lo-dd-interest"><div class="dd-trigger ph" onclick="toggleDD(this)" id="lo-interest">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item">Fee Simple</div><div class="dd-item">Leased Fee Interest</div><div class="dd-item">Leasehold Estate</div><div class="dd-item">Going Concern</div><div class="dd-item">Fee Simple & Leased Fee</div></div></div></div>
+    </div>
+    <div class="lo-row">
+      <span class="lo-letter">C</span><span class="lo-line"></span>
+      <span class="f-lbl" style="min-width:0;text-align:left;">Tenancy</span>
+      <div class="f-val"><div class="dd" data-field="tenancy" data-sync="1"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">Multi-Tenant</div><div class="dd-item" onclick="pickField(this)">Owner Occupied</div><div class="dd-item" onclick="pickField(this)">Partial Owner Occupied</div><div class="dd-item" onclick="pickField(this)">Single-Tenant</div><div class="dd-item" onclick="pickField(this)">Unknown</div><div class="dd-item" onclick="pickField(this)">Vacant</div></div></div></div>
+      <span class="lo-spacer"></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+
+  <div class="grp">
+    <div class="grp-label">Group 2 — Value Scenarios & Approaches (2 triggers → 2 results, chained)</div>
+    <div class="lo-row">
+      <span class="lo-letter">D</span><span class="lo-line"></span>
+      <span class="f-lbl" style="min-width:0;text-align:left;">Status of Improvements</span>
+      <div class="f-val"><div class="dd" data-field="statusOfImprovements" data-sync="1"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">Existing - Completed</div><div class="dd-item" onclick="pickField(this)">Existing - Renovated</div><div class="dd-item" onclick="pickField(this)">Existing - Under Renovation</div><div class="dd-item" onclick="pickField(this)">Existing - To Be Renovated</div><div class="dd-item" onclick="pickField(this)">Proposed - Vacant Land</div><div class="dd-item" onclick="pickField(this)">Proposed - Improved Land (Demolition Required)</div><div class="dd-item" onclick="pickField(this)">Proposed - Under Construction</div></div></div></div>
+      <span class="lo-spacer"></span>
+      <span class="lo-result-lbl">Value Scenarios</span>
+      <div class="f-val"><div class="dd" id="lo-dd-scenarios"><div class="dd-trigger ph" onclick="toggleDD(this)" id="lo-scenarios">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item">As Stabilized</div><div class="dd-item">As-Is</div><div class="dd-item">As Is Vacant Land</div><div class="dd-item">As If Vacant Land</div><div class="dd-item">As If Complete & Stabilized</div><div class="dd-item">Insurable Replacement Cost</div></div></div></div>
+    </div>
+    <div class="lo-row">
+      <span class="lo-letter">E</span><span class="lo-line"></span>
+      <span class="f-lbl" style="min-width:0;text-align:left;">Authorized Use</span>
+      <div class="f-val"><div class="dd" data-field="authorizedUse" data-sync="1"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">First Mortgage Financing</div><div class="dd-item" onclick="pickField(this)">Financial Reporting</div><div class="dd-item" onclick="pickField(this)">Insurance</div><div class="dd-item" onclick="pickField(this)">Internal Decision-Making</div><div class="dd-item" onclick="pickField(this)">Acquisition-Disposition</div><div class="dd-item" onclick="pickField(this)">Estate Planning</div><div class="dd-item" onclick="pickField(this)">Litigation</div><div class="dd-item" onclick="pickField(this)">GST</div></div></div></div>
+      <span class="lo-spacer"></span>
+      <span class="lo-result-lbl">Approaches</span>
+      <div class="f-val"><div class="dd" id="lo-dd-approaches"><div class="dd-trigger ph" onclick="toggleDD(this)" id="lo-approaches">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item">Land Direct Comparison Approach</div><div class="dd-item">Cost Approach</div><div class="dd-item">Direct Comparison Approach</div><div class="dd-item">Income Approach</div></div></div></div>
+    </div>
+  </div>
+
+</div></div>
+
+<div class="re-label">Rule Explorer</div>
+
+<div class="re-section" id="re-g1">
+  <div class="re-section-bar" onclick="toggleSection('re-g1')">
+    <span class="re-chevron">▾</span>
+    <span class="re-section-name">Group 1 — Property Rights</span>
+  </div>
+  <div class="re-section-body">
+    <div class="re-diagram">A  Property Type        ──┐
+B  Property Subtype     ──┼──→  Property Rights
+C  Tenancy              ──┘</div>
+    <div class="re-note" style="margin-top:0;margin-bottom:14px;">Tenancy overrides Subtype, which overrides Property Type. Unknown & Vacant leave the outcome unchanged.</div>
+    <table class="re-table">
+    <tr><td class="re-col-hdr">User Choice</td><td class="re-col-hdr">Outcome</td></tr>
+    <tr class="re-title-row"><td><span class="re-let">A</span>Property Type</td><td>Property Rights</td></tr>
+    <tr><td>Multifamily, Self-Storage, Land, Hotel, Seniors</td><td>Fee Simple</td></tr>
+    <tr><td>Retail, Industrial, Office</td><td>Leased Fee Interest</td></tr>
+    <tr class="re-title-row"><td><span class="re-let">B</span>Property Subtype (override)</td><td></td></tr>
+    <tr><td>Mixed Use</td><td>Fee Simple & Leased Fee</td></tr>
+    <tr class="re-title-row"><td><span class="re-let">C</span>Tenancy (override)</td><td></td></tr>
+    <tr><td>Owner Occupied</td><td>Fee Simple</td></tr>
+    <tr><td>Multi-Tenant</td><td>Leased Fee Interest</td></tr>
+    <tr><td>Partial Owner Occupied</td><td>Leasehold Estate</td></tr>
+    <tr><td>Single-Tenant</td><td>Going Concern</td></tr>
+    </table>
+    <div style="height:16px;"></div>
+  </div>
+</div>
+
+<div class="re-section" id="re-g2">
+  <div class="re-section-bar" onclick="toggleSection('re-g2')">
+    <span class="re-chevron">▾</span>
+    <span class="re-section-name">Group 2 — Value Scenarios & Approaches</span>
+  </div>
+  <div class="re-section-body">
+    <div class="re-diagram">D  Status of Improvements  ──┐
+                              ├──→  Value Scenarios  ──→  Approaches to Value
+E  Authorized Use          ──┘</div>
+    <div class="re-note" style="margin-top:0;margin-bottom:14px;">One pick sets Value Scenarios and Approaches together. Insurance overrides Status of Improvements.</div>
+    <table class="re-table">
+    <tr><td class="re-col-hdr">User Choice</td><td class="re-col-hdr">Outcome</td><td class="re-col-hdr">Outcome</td></tr>
+    <tr class="re-title-row"><td><span class="re-let">D</span>Status of Improvements</td><td>Value Scenarios</td><td>Approaches to Value</td></tr>
+    <tr><td>Existing - Completed</td><td>As Stabilized</td><td>Direct Comparison + Income</td></tr>
+    <tr><td>Existing - Renovated</td><td>As Stabilized</td><td>Direct Comparison + Income</td></tr>
+    <tr><td>Existing - Under Renovation</td><td>As-Is + As If Complete</td><td>Direct Comp + Income + Cost</td></tr>
+    <tr><td>Existing - To Be Renovated</td><td>As-Is + As If Complete</td><td>Direct Comp + Income + Cost</td></tr>
+    <tr><td>Proposed - Vacant Land</td><td>As Is Vacant + As If Complete</td><td>Land Direct Comp + Cost</td></tr>
+    <tr><td>Proposed - Improved Land</td><td>As If Vacant + As If Complete</td><td>Land Direct Comp + Cost</td></tr>
+    <tr><td>Proposed - Under Construction</td><td>As If Vacant + As If Complete</td><td>Land Direct Comp + Cost</td></tr>
+    <tr class="re-title-row"><td><span class="re-let">E</span>Authorized Use (override)</td><td></td><td></td></tr>
+    <tr><td>Insurance</td><td>Insurable Replacement Cost</td><td>Cost Approach</td></tr>
+    </table>
+    <div style="height:16px;"></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ FIELD INDEX ═══ -->
+<div class="panel" id="panel-index">
+<div class="sec"><div class="sec-title" style="cursor:default;">Field Index</div><div class="sec-body">
+  <input class="fi-search" id="fiSearch" placeholder="Search fields..." oninput="filterFields()">
+  <div class="chips" id="fiFilters">
+    <button class="active" onclick="setFilter('all',this)">All (45)</button>
+    <span style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
+    <button onclick="setFilter('User Input',this)">User Input (28)</button>
+    <button onclick="setFilter('Logic',this)">Logic (14)</button>
+    <button onclick="setFilter('Valcre API',this)">Valcre API (2)</button>
+    <button onclick="setFilter('Calculated',this)">Calculated (1)</button>
+    <span style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
+    <button onclick="setFilter('trigger',this)">Triggers (5)</button>
+    <button onclick="setFilter('result',this)">Results (3)</button>
+    <button onclick="setFilter('has-dropdown',this)">Has Dropdown (17)</button>
+    <button onclick="setFilter('new-field',this)">New Fields (22)</button>
+    <span style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
+    <button onclick="setFilter('vr-Job',this)">Job (30)</button>
+    <button onclick="setFilter('vr-Contact',this)">Contact (6)</button>
+    <button onclick="setFilter('vr-Property',this)">Property (4)</button>
+    <span style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
+    <button onclick="setFilter('narratives',this)">Narratives (2)</button>
+  </div>
+  <div class="fi-count" id="fiCount"></div>
+  <div id="fiTableWrap" style="overflow-x:auto;">
+    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th><th data-sort="nf" onclick="sortFields(this,'nf')">New</th><th data-sort="req" onclick="sortFields(this,'req')">Req</th></tr></thead><tbody id="fiBody"></tbody></table>
+  </div>
+  <div id="narTableWrap" style="display:none;">
+    <table class="fi-table" id="narTable">
+      <thead><tr>
+        <th style="width:70px;">ID</th>
+        <th style="width:170px;">Type</th>
+        <th>Name</th>
+        <th style="width:100px;">Trigger</th>
+        <th style="width:90px;">Used In</th>
+      </tr></thead>
+      <tbody>
+        <tr class="nar-row" onclick="showNarrative(0)" style="cursor:pointer;">
+          <td class="fn">EA-001</td>
+          <td>Extraordinary Assumption</td>
+          <td>As If Vacant — Demolition</td>
+          <td style="font-size:11px;color:var(--text-3);">Value Scenarios</td>
+          <td style="font-size:11px;color:var(--text-3);">Report | LOE</td>
+        </tr>
+        <tr class="nar-row" onclick="showNarrative(1)" style="cursor:pointer;">
+          <td class="fn">EA-002</td>
+          <td>Extraordinary Assumption</td>
+          <td>As If Vacant — Demolition (variant)</td>
+          <td style="font-size:11px;color:var(--text-3);">Value Scenarios</td>
+          <td style="font-size:11px;color:var(--text-3);">Report | LOE</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:16px;padding:14px 16px;background:#fafafa;border:1px solid var(--border);border-radius:var(--radius);">
+      <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:4px;">Preview</div>
+      <div id="narPreview" style="font-size:12px;color:var(--text-2);line-height:1.6;min-height:40px;">Click a row above to preview the narrative text.</div>
+    </div>
+  </div>
+</div></div>
+
+<div id="narInfoBlock" style="display:none;">
+  <div class="sec-ref" style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
+    <div class="sec-ref-title">About Narratives</div>
+    <table class="sec-ref-table">
+      <tr><td colspan="3" class="sec-ref-stage">What are narratives?</td></tr>
+      <tr><td></td><td colspan="2" style="color:var(--text-2);font-weight:400;padding-left:24px;">Auto-generated legal text inserted into appraisal reports and LOE documents. Each narrative is triggered by a specific field value in the cascade logic.</td></tr>
+      <tr><td colspan="3" class="sec-ref-stage">How do they connect to the cascade?</td></tr>
+      <tr><td></td><td colspan="2" style="color:var(--text-2);font-weight:400;padding-left:24px;">When Value Scenarios is set to a specific outcome (e.g. "As If Vacant Land"), the system looks up matching narratives and inserts them into the report. The trigger field determines which text appears.</td></tr>
+      <tr><td colspan="3" class="sec-ref-stage">What's next?</td></tr>
+      <tr><td></td><td colspan="2" style="color:var(--text-2);font-weight:400;padding-left:24px;">Chris is building out the Text Library with additional types: Hypothetical Conditions, scope statements, market condition narratives, and more. Each will follow the same pattern — triggered by field values, auto-inserted into documents.</td></tr>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ═══ RULE AUDIT ═══ -->
+<div class="panel" id="panel-audit">
+<div class="audit-card">
+  <div class="audit-header"><h3>Rule Audit — 28 Rules vs Cascade Engine</h3></div>
+  <div class="audit-summary"><div class="audit-stat"><div class="num" id="auditTotal">28</div><div class="lbl">Rules</div></div><div class="audit-stat pass"><div class="num" id="auditPass">—</div><div class="lbl">Pass</div></div><div class="audit-stat fail"><div class="num" id="auditFail">—</div><div class="lbl">Fail</div></div></div>
+  <div class="audit-results" id="auditResults"><div style="padding:20px;color:var(--text-3);text-align:center;font-size:12px;">Results will appear when you open this tab.</div></div>
+</div>
+</div>
+
+<div style="height:100px;"></div>
+
+<script>
+/* ═══ STATE ═══ */
+const STATE = { propertyType:'', propertySubtype:'', tenancy:'', authorizedUse:'', statusOfImprovements:'' };
+
+/* ═══ CASCADE RULES ═══ */
+const INT_PT = {'Multifamily':'Fee Simple','Self-Storage':'Fee Simple','Retail':'Leased Fee Interest','Industrial':'Leased Fee Interest','Office':'Leased Fee Interest','Land':'Fee Simple','Hotel':'Fee Simple','Seniors':'Fee Simple'};
+const INT_SUB = {'Mixed Use':'Fee Simple & Leased Fee'};
+const INT_TN = {'Multi-Tenant':'Leased Fee Interest','Owner Occupied':'Fee Simple','Partial Owner Occupied':'Leasehold Estate','Single-Tenant':'Going Concern'};
+const SCEN = {
+  'Existing - Completed':['As Stabilized'],'Existing - Renovated':['As Stabilized'],
+  'Existing - Under Renovation':['As-Is','As If Complete & Stabilized'],'Existing - To Be Renovated':['As-Is','As If Complete & Stabilized'],
+  'Proposed - Vacant Land':['As Is Vacant Land','As If Complete & Stabilized'],
+  'Proposed - Improved Land (Demolition Required)':['As If Vacant Land','As If Complete & Stabilized'],
+  'Proposed - Under Construction':['As If Vacant Land','As If Complete & Stabilized'],
+};
+const APPR = {
+  'As Stabilized':['Direct Comparison Approach','Income Approach'],
+  'As-Is':['Direct Comparison Approach','Income Approach'],
+  'As Is Vacant Land':['Land Direct Comparison Approach'],
+  'As If Vacant Land':['Land Direct Comparison Approach'],
+  'As If Complete & Stabilized':['Cost Approach'],
+  'Insurable Replacement Cost':['Cost Approach'],
+};
+
+function cascade() {
+  const {propertyType:pt, propertySubtype:sub, tenancy:tn, authorizedUse:au, statusOfImprovements:st} = STATE;
+  let interest = null, driver = '';
+  if (pt && INT_PT[pt]) { interest = INT_PT[pt]; driver = 'A: '+pt; }
+  if (sub && INT_SUB[sub]) { interest = INT_SUB[sub]; driver = 'B: '+sub+' (override)'; }
+  if (tn && INT_TN[tn]) { interest = INT_TN[tn]; driver = 'C: '+tn+' (override)'; }
+
+  setResult('t-interest', interest, 'Outcome');
+  setInfo('info-interest', driver);
+  setResult('lo-interest', interest, 'Outcome');
+
+  const ptRow = document.getElementById('row-pt');
+  const subRow = document.getElementById('row-sub');
+  if (ptRow) ptRow.classList.toggle('dimmed', !!(tn && INT_TN[tn]) || !!(sub && INT_SUB[sub]));
+  if (subRow) subRow.classList.toggle('dimmed', !!(tn && INT_TN[tn]));
+
+  let scenarios = [], sDriver = '';
+  if (au === 'Insurance') { scenarios = ['Insurable Replacement Cost']; sDriver = 'E: Insurance (override)'; }
+  else if (st && SCEN[st]) { scenarios = SCEN[st]; sDriver = 'D: '+st; }
+
+  const sText = scenarios.join(', ');
+  setResult('t-scenarios', sText, 'Outcome');
+  setInfo('info-scenarios', sDriver);
+  setResult('lo-scenarios', sText, 'Outcome');
+
+  const stRow = document.getElementById('row-st');
+  if (stRow) stRow.classList.toggle('dimmed', au === 'Insurance');
+
+  const apprSet = new Set();
+  scenarios.forEach(s => (APPR[s]||[]).forEach(a => apprSet.add(a)));
+  const aText = [...apprSet].join(', ');
+  setResult('t-approaches', aText, 'Outcome');
+  setInfo('info-approaches', aText ? 'Chained from Value Scenarios' : '');
+  setResult('lo-approaches', aText, 'Outcome');
+}
+
+function setResult(id, val, placeholder) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.childNodes[0].textContent = val || placeholder;
+  el.classList.toggle('ph', !val);
+}
+function setInfo(id, text) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = text ? '← '+text : '';
+  el.classList.toggle('override', text.includes('override'));
+}
+function setText(id, text) { const el = document.getElementById(id); if (el) el.textContent = text; }
+
+/* ═══ DROPDOWN ═══ */
+function toggleDD(trigger) {
+  const dd = trigger.closest('.dd'), menu = dd.querySelector('.dd-menu'), isOpen = menu.classList.contains('open');
+  closeAllDD();
+  if (!isOpen) { menu.classList.add('open'); trigger.classList.add('open'); }
+}
+function closeAllDD() {
+  document.querySelectorAll('.dd-menu.open').forEach(m => { m.classList.remove('open'); m.closest('.dd').querySelector('.dd-trigger').classList.remove('open'); });
+}
+function pickDD(item) {
+  const dd = item.closest('.dd'), trigger = dd.querySelector('.dd-trigger'), menu = dd.querySelector('.dd-menu');
+  menu.querySelectorAll('.dd-item').forEach(i => i.classList.remove('selected'));
+  item.classList.add('selected');
+  trigger.childNodes[0].textContent = item.textContent;
+  trigger.classList.remove('ph');
+  menu.classList.remove('open'); trigger.classList.remove('open');
+}
+function pickField(item) {
+  const dd = item.closest('.dd'), field = dd.dataset.field, val = item.textContent;
+  pickDD(item);
+  STATE[field] = val;
+  // Sync other dropdowns with same field
+  document.querySelectorAll('.dd[data-field="'+field+'"]').forEach(otherDD => {
+    if (otherDD === dd) return;
+    const t = otherDD.querySelector('.dd-trigger');
+    t.childNodes[0].textContent = val;
+    t.classList.remove('ph');
+    otherDD.querySelectorAll('.dd-item').forEach(i => { i.classList.toggle('selected', i.textContent === val); });
+  });
+  cascade();
+}
+document.addEventListener('click', e => { if (!e.target.closest('.dd')) closeAllDD(); });
+
+/* ═══ VIEW TOGGLE ═══ */
+function setView(view, btn) {
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-'+view).classList.add('active');
+  if (view === 'audit') runAudit();
+  // Enable/disable dash controls — only active on tabs with collapsible sections
+  const hasCollapsible = (view === 'full' || view === 'logic');
+  document.querySelectorAll('.dash-link').forEach(l => {
+    if (hasCollapsible) { l.classList.remove('disabled'); }
+    else { l.classList.add('disabled'); l.classList.remove('active'); }
+  });
+  // Enable/disable header buttons — only active on tabs with interactive fields
+  const hasFields = (view === 'full' || view === 'logic');
+  document.getElementById('btnFill').classList.toggle('disabled', !hasFields);
+  document.getElementById('btnReset').classList.toggle('disabled', !hasFields);
+}
+
+/* ═══ DROPDOWN OPTIONS — from Chris's Dropdown Lists tab ═══ */
+const DROPDOWN_OPTIONS = {
+  'ListPropertyType': ['Multifamily','Self-Storage','Retail','Industrial','Office','Land','Hotel','Seniors','Other'],
+  'ListPropertySubtype': ['Apartment','Townhouse','Mixed Use'],
+  'ListTenancy': ['Multi-Tenant','Owner Occupied','Partial Owner Occupied','Single-Tenant','Unknown','Vacant'],
+  'ListInterestAppraised': ['Fee Simple','Leased Fee Interest','Leasehold Estate','Going Concern'],
+  'ListAuthorizedUse': ['First Mortgage Financing','Financial Reporting','Insurance','Internal Decision-Making','Acquisition-Disposition','Estate Planning','Litigation','GST'],
+  'ListValueTimeFrame': ['Current','Prospective','Retrospective'],
+  'ListStateofImprovements': ['Existing','Proposed','Vacant Land'],
+  'ListStatusofImprovements': ['Existing - Completed','Existing - Renovated','Existing - Under Renovation','Existing - To Be Renovated','Proposed - Vacant Land','Proposed - Improved Land (Demolition Required)','Proposed - Under Construction'],
+  'ListValueScenarios': ['As Is Vacant Land','As If Vacant Land','As If Complete & Stabilized','As-Is','As Stabilized','As If Complete & Stabilized - Renovated','As If Complete - Rezoned','As If Complete - Serviced','As If Complete - Subdivided','Insurable Replacement Cost'],
+  'ListApproachestoValue': ['Land Direct Comparison Approach','Cost Approach','Direct Comparison Approach','Income Approach'],
+  'ListMethod': ['Direct Capitalization Method','Discounted Cash Flow Method'],
+  'ListReportType': ['Comprehensive','Concise','Form'],
+  'ListAssignmentType': ['Single Property','Multiple Properties'],
+  'ListTransactionStatus': ['Not Applicable','Listed','Under Contract'],
+  'ListClientDocuments': ['Previous Appraisal','Property Details','Proforma','Unit Mix','Rent Roll','Historical Operating Expenses','Development Permit Drawings','Contact for Property Tour','Purchase & Sale Agreement','Environmental Reports','Property Condition Reports'],
+  'ListZoningStatus': [],
+  'ListLand$/Metric': [],
+  'ListSourceType': ['User Input','Valcre API','Calculated','Logic'],
+  'ListOutputType': ['LOE','Excel','Word','LOR','ClickUP','QBO'],
+  'ListValcreRecordLocation': ['Job','Contact','Property','Building','Parcel'],
+  'ListDataControlType': ['Text','Multiple lines of text','Whole Number','Decimal','Select one option','Select multiple options','Checkbox','Date','Calculation','Alpha Numeric'],
+  'ListYes/No': ['Yes','No'],
+};
+
+/* ═══ FIELD INDEX ═══ */
+const TRIGGERS = ['PropertyType','PropertySubtype','Tenancy','StatusofImprovements','AuthorizedUse'];
+const RESULTS = ['InterestAppraised','ValueScenarios','ApproachestoValue'];
+/* n=name, l=label, c=control, s=source, d=dropdown, v=valcre API key, vr=valcre record location, nf=new field, req=required, desc=description */
+const FIELDS = [
+  {n:"JobNumber",l:"Job Number",c:"Alpha Numeric",s:"Valcre API",d:"",v:"Job.Number",vr:"Job",nf:"No",req:"Yes",desc:"Unique job identifier from Valcre"},
+  {n:"JobName",l:"Job Name",c:"Alpha Numeric",s:"User Input",d:"",v:"Job.Name",vr:"Job",nf:"No",req:"Yes",desc:"Job/project name"},
+  {n:"JobStatus",l:"Job Status",c:"Select one",s:"User Input",d:"",v:"Job.Status",vr:"Job",nf:"No",req:"Yes",desc:"Current job status"},
+  {n:"SubjectProperty",l:"Subject Property",c:"Alpha Numeric",s:"Valcre API",d:"",v:"Job.Property._DisplayName",vr:"Job",nf:"No",req:"Yes",desc:"Property display name from Valcre"},
+  {n:"ClientCompanyName",l:"Client Company Name",c:"Alpha Numeric",s:"User Input",d:"",v:"Job.Client._DisplayName",vr:"Job",nf:"No",req:"Yes",desc:"Client company display name"},
+  {n:"ClientOrganizationAddress",l:"Client Organization Address",c:"Alpha Numeric",s:"User Input",d:"",v:"Contact.FullAddress",vr:"Contact",nf:"No",req:"Yes",desc:"Full mailing address"},
+  {n:"ClientFirstName",l:"Client First Name",c:"Text",s:"User Input",d:"",v:"Contact.FirstName",vr:"Contact",nf:"No",req:"Yes",desc:""},
+  {n:"ClientLastName",l:"Client Last Name",c:"Text",s:"User Input",d:"",v:"Contact.LastName",vr:"Contact",nf:"No",req:"Yes",desc:""},
+  {n:"ClientTitle",l:"Client Title",c:"Text",s:"User Input",d:"",v:"Contact.Title",vr:"Contact",nf:"No",req:"Yes",desc:""},
+  {n:"ClientPhone",l:"Client Phone",c:"Text",s:"User Input",d:"",v:"Contact.PhoneNumber",vr:"Contact",nf:"No",req:"Yes",desc:""},
+  {n:"ClientEmail",l:"Client Email",c:"Text",s:"User Input",d:"",v:"Contact.Email",vr:"Contact",nf:"No",req:"Yes",desc:""},
+  {n:"PropertyName",l:"Property Name",c:"Alpha Numeric",s:"User Input",d:"",v:"Property.Name",vr:"Property",nf:"No",req:"Yes",desc:""},
+  {n:"PropertyAddress",l:"Property Address",c:"Alpha Numeric",s:"User Input",d:"",v:"Property.AddressStreet",vr:"Property",nf:"No",req:"Yes",desc:""},
+  {n:"PropertyType",l:"Property Type",c:"Select one",s:"User Input",d:"ListPropertyType",v:"Property.Types",vr:"Property",nf:"No",req:"Yes",desc:"Primary property classification — cascade trigger"},
+  {n:"PropertySubtype",l:"Property Subtype",c:"Select one",s:"User Input",d:"ListPropertySubtype",v:"Property.SecondaryType",vr:"Property",nf:"Yes",req:"Yes",desc:"Secondary type — overrides Property Rights"},
+  {n:"Tenancy",l:"Tenancy",c:"Select one",s:"User Input",d:"ListTenancy",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:"Occupancy type — highest priority override for Property Rights"},
+  {n:"StateofImprovements",l:"State of Improvements",c:"Select one",s:"Logic",d:"ListStateofImprovements",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:"Derived from Status of Improvements"},
+  {n:"StatusofImprovements",l:"Status of Improvements",c:"Select one",s:"User Input",d:"ListStatusofImprovements",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:"Drives Value Scenarios + Approaches cascade"},
+  {n:"InterestAppraised",l:"Interest Appraised (Property Rights)",c:"Select multiple",s:"User Input",d:"ListInterestAppraised",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:"Set by cascade from PropertyType/Subtype/Tenancy"},
+  {n:"AuthorizedUse",l:"Authorized Use",c:"Select one",s:"User Input",d:"ListAuthorizedUse",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:"Insurance overrides Value Scenarios"},
+  {n:"ValueScenarios",l:"Value Scenarios",c:"Select multiple",s:"User Input",d:"ListValueScenarios",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:"Set by cascade from Status of Improvements"},
+  {n:"ApproachestoValue",l:"Approaches to Value",c:"Select multiple",s:"Logic",d:"ListApproachestoValue",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:"Chained from Value Scenarios"},
+  {n:"AssignmentType",l:"Assignment Type",c:"Select one",s:"User Input",d:"ListAssignmentType",v:"",vr:"Job",nf:"No",req:"Yes",desc:"Single or multiple property"},
+  {n:"ReportType",l:"Report Type",c:"Select one",s:"User Input",d:"ListReportType",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:"Comprehensive, Concise, or Form"},
+  {n:"DesktopReport",l:"Desktop Report",c:"Select one",s:"User Input",d:"ListYes/No",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:"Desktop-only report flag"},
+  {n:"Valuetimeframe",l:"Value Timeframe",c:"Select one",s:"User Input",d:"ListValueTimeFrame",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:"Current, Prospective, or Retrospective"},
+  {n:"InspectionDate",l:"Inspection Date",c:"Date",s:"User Input",d:"",v:"Job.InspectionDate",vr:"Job",nf:"No",req:"Yes",desc:""},
+  {n:"Fee",l:"Fee",c:"Whole Number",s:"Calculated",d:"",v:"Job.Fee",vr:"Job",nf:"No",req:"Yes",desc:"Appraisal fee amount"},
+  {n:"DeliveryTime",l:"Delivery Time",c:"Whole Number",s:"User Input",d:"",v:"",vr:"",nf:"Yes",req:"No",desc:"Business days for delivery"},
+  {n:"PaidDate",l:"Paid Date",c:"Date",s:"Logic",d:"",v:"Job.PaidDate",vr:"Job",nf:"No",req:"No",desc:"Date payment received"},
+  {n:"Paid",l:"Paid",c:"Checkbox",s:"Logic",d:"",v:"",vr:"",nf:"No",req:"No",desc:"Payment received flag"},
+  {n:"RequestDate",l:"Request Date",c:"Date",s:"Logic",d:"",v:"Job.BidDate",vr:"Job",nf:"No",req:"No",desc:"Date job was requested (Bid Date in Valcre)"},
+  {n:"SignedDate",l:"Signed Date",c:"Date",s:"Logic",d:"",v:"Job.AwardDate",vr:"Job",nf:"No",req:"No",desc:"LOE signed date (Award Date in Valcre)"},
+  {n:"DueDate",l:"Due Date",c:"Date",s:"Logic",d:"",v:"Job.DueDate",vr:"Job",nf:"No",req:"No",desc:"Report due date"},
+  {n:"AmountPaid",l:"Amount Paid",c:"Decimal",s:"Logic",d:"",v:"Job.AmountPaid",vr:"Job",nf:"No",req:"No",desc:"Total amount paid to date"},
+  {n:"ClientDocuments",l:"Client Documents",c:"Select multiple",s:"Logic",d:"ListClientDocuments",v:"",vr:"",nf:"Yes",req:"Yes",desc:"Documents provided by client"},
+  {n:"TransactionStatus",l:"Transaction Status",c:"Select multiple",s:"User Input",d:"ListTransactionStatus",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:"Property transaction status"},
+  {n:"ZoningStatus",l:"Zoning Status",c:"Select one",s:"User Input",d:"ListZoningStatus",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:""},
+  {n:"LandMetric",l:"Land $/Metric",c:"Select one",s:"User Input",d:"ListLand$/Metric",v:"",vr:"Job",nf:"Yes",req:"Yes",desc:"Land valuation metric"},
+  {n:"CMHCFinancing",l:"CMHC Financing",c:"Select one",s:"User Input",d:"ListYes/No",v:"",vr:"",nf:"Yes",req:"Yes",desc:"CMHC insured financing flag"},
+  {n:"EA1",l:"Extraordinary Assumption 1",c:"Multi-line",s:"Logic",d:"",v:"",vr:"",nf:"Yes",req:"No",desc:"Auto-populated from cascade/text library"},
+  {n:"EA2",l:"Extraordinary Assumption 2",c:"Multi-line",s:"Logic",d:"",v:"",vr:"",nf:"Yes",req:"No",desc:""},
+  {n:"EA3",l:"Extraordinary Assumption 3",c:"Multi-line",s:"Logic",d:"",v:"",vr:"",nf:"Yes",req:"No",desc:""},
+  {n:"EA4",l:"Extraordinary Assumption 4",c:"Multi-line",s:"Logic",d:"",v:"",vr:"",nf:"Yes",req:"No",desc:""},
+  {n:"EA5",l:"Extraordinary Assumption 5",c:"Multi-line",s:"Logic",d:"",v:"",vr:"",nf:"Yes",req:"No",desc:""},
+];
+let expandedRow = null; // track which row has dropdown options expanded
+let activeFilter = 'all';
+function getRole(n) { return TRIGGERS.includes(n)?'trigger':RESULTS.includes(n)?'result':'independent'; }
+function srcBadge(s) {
+  if (s==='User Input') return '<span class="badge badge-outline">User Input</span>';
+  if (s==='Logic') return '<span class="badge badge-muted">Logic</span>';
+  if (s==='Valcre API') return '<span class="badge badge-outline">Valcre API</span>';
+  if (s==='Calculated') return '<span class="badge badge-muted">Calculated</span>';
+  return s;
+}
+function roleBadge(r) {
+  if (r==='trigger') return '<span class="badge badge-muted">Trigger</span>';
+  if (r==='result') return '<span class="badge badge-solid">Result</span>';
+  return '<span style="font-size:11px;color:var(--text-3);">—</span>';
+}
+let currentSort = 'idx';
+
+function renderFields() {
+  const q = document.getElementById('fiSearch').value.toLowerCase();
+  const tb = document.getElementById('fiBody'); tb.innerHTML = '';
+
+  // Build filtered list
+  let filtered = [];
+  FIELDS.forEach((f, i) => {
+    const role = getRole(f.n);
+    if (activeFilter!=='all' && activeFilter!=='narratives') {
+      if (activeFilter==='trigger'&&role!=='trigger') return;
+      if (activeFilter==='result'&&role!=='result') return;
+      if (activeFilter==='has-dropdown'&&!f.d) return;
+      if (activeFilter==='new-field'&&f.nf!=='Yes') return;
+      if (activeFilter.startsWith('vr-')&&f.vr!==activeFilter.slice(3)) return;
+      if (!['trigger','result','has-dropdown','new-field'].includes(activeFilter)&&!activeFilter.startsWith('vr-')&&f.s!==activeFilter) return;
+    }
+    if (q && !f.n.toLowerCase().includes(q) && !f.l.toLowerCase().includes(q) && !(f.d && f.d.toLowerCase().includes(q)) && !(f.v && f.v.toLowerCase().includes(q)) && !(f.desc && f.desc.toLowerCase().includes(q))) return;
+    filtered.push({f:f, idx:i+1, role:role});
+  });
+
+  // Sort
+  if (currentSort !== 'idx') {
+    filtered.sort((a, b) => {
+      let va, vb;
+      if (currentSort === 'role') { va = a.role; vb = b.role; }
+      else { va = a.f[currentSort] || ''; vb = b.f[currentSort] || ''; }
+      return va.localeCompare(vb);
+    });
+  }
+
+  const COL_COUNT = 11;
+  // Render with group headers when sorted
+  let lastGroup = null;
+  filtered.forEach(item => {
+    const f = item.f;
+    const role = item.role;
+    // Group header
+    if (currentSort !== 'idx') {
+      let groupVal;
+      if (currentSort === 'role') groupVal = role;
+      else groupVal = f[currentSort] || '—';
+      if (groupVal !== lastGroup) {
+        lastGroup = groupVal;
+        tb.innerHTML += '<tr class="fi-group-hdr"><td colspan="'+COL_COUNT+'">' + groupVal + '</td></tr>';
+      }
+    }
+    // Dropdown cell — clickable if has options
+    let ddCell;
+    if (f.d && DROPDOWN_OPTIONS[f.d]) {
+      const opts = DROPDOWN_OPTIONS[f.d];
+      const count = opts.length;
+      ddCell = '<td class="dd-expand" style="font-size:11px;color:var(--text);cursor:pointer;" onclick="toggleDropdownRow(\''+f.n+'\')" title="Click to see '+count+' options"><span style="color:var(--text-2);">'+f.d+'</span> <span style="font-size:10px;color:var(--text-3);">('+count+')</span> <span style="font-size:9px;color:var(--text-3);">'+( expandedRow===f.n ? '▲' : '▼')+'</span></td>';
+    } else {
+      ddCell = '<td style="font-size:11px;color:var(--text-3);">—</td>';
+    }
+    // Valcre location badge
+    let vrCell = '<td style="font-size:11px;color:var(--text-3);">—</td>';
+    if (f.vr) {
+      const vrColor = f.vr==='Job'?'#3b82f6':f.vr==='Contact'?'#8b5cf6':f.vr==='Property'?'#10b981':'var(--text-3)';
+      vrCell = '<td><span style="font-size:10px;font-weight:600;color:'+vrColor+';">'+f.vr+'</span></td>';
+    }
+    // New / Required badges
+    const nfCell = f.nf==='Yes' ? '<td><span class="badge badge-muted" style="font-size:9px;">NEW</span></td>' : '<td style="font-size:11px;color:var(--text-3);">—</td>';
+    const reqCell = f.req==='Yes' ? '<td style="font-size:11px;color:var(--text);">Yes</td>' : '<td style="font-size:11px;color:var(--text-3);">No</td>';
+
+    tb.innerHTML += '<tr title="'+(f.desc||'')+'">' +
+      '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+item.idx+'</td>' +
+      '<td class="fn">'+f.n+'</td>' +
+      '<td>'+f.l+'</td>' +
+      '<td>'+f.c+'</td>' +
+      '<td>'+srcBadge(f.s)+'</td>' +
+      '<td>'+roleBadge(role)+'</td>' +
+      ddCell +
+      vrCell +
+      '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+(f.v||'—')+'</td>' +
+      nfCell +
+      reqCell +
+    '</tr>';
+
+    // Expanded dropdown options row
+    if (expandedRow === f.n && f.d && DROPDOWN_OPTIONS[f.d]) {
+      const opts = DROPDOWN_OPTIONS[f.d];
+      // Check which options are cascade triggers
+      let optRows = opts.map(opt => {
+        let cascadeInfo = '';
+        // Check if this option triggers a cascade rule
+        if (f.n === 'PropertyType' && INT_PT[opt]) cascadeInfo = '→ ' + INT_PT[opt];
+        else if (f.n === 'PropertySubtype' && INT_SUB[opt]) cascadeInfo = '→ ' + INT_SUB[opt] + ' (override)';
+        else if (f.n === 'Tenancy' && INT_TN[opt]) cascadeInfo = '→ ' + INT_TN[opt] + ' (override)';
+        else if (f.n === 'StatusofImprovements' && SCEN[opt]) cascadeInfo = '→ ' + SCEN[opt].join(', ');
+        else if (f.n === 'AuthorizedUse' && opt === 'Insurance') cascadeInfo = '→ Insurable Replacement Cost (override)';
+        return '<div style="display:flex;gap:12px;align-items:baseline;padding:2px 0;"><span style="font-size:11px;color:var(--text);">'+opt+'</span>' +
+          (cascadeInfo ? '<span style="font-size:10px;color:var(--amber);font-weight:500;">'+cascadeInfo+'</span>' : '') +
+        '</div>';
+      }).join('');
+      tb.innerHTML += '<tr class="fi-options-row"><td></td><td colspan="'+(COL_COUNT-1)+'" style="padding:8px 10px 10px;background:#fafafa;border-bottom:2px solid var(--border);"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:4px;">'+f.d+' — '+opts.length+' options</div>'+optRows+'</td></tr>';
+    }
+  });
+  document.getElementById('fiCount').textContent = 'Showing '+filtered.length+' of '+FIELDS.length+' fields' + (currentSort !== 'idx' ? ' · grouped by ' + currentSort : '');
+}
+
+function toggleDropdownRow(fieldName) {
+  expandedRow = (expandedRow === fieldName) ? null : fieldName;
+  renderFields();
+}
+
+function sortFields(th, key) {
+  // Toggle: if already sorted by this, go back to default
+  if (currentSort === key) { currentSort = 'idx'; }
+  else { currentSort = key; }
+  // Update header highlight
+  th.closest('tr').querySelectorAll('th').forEach(h => h.classList.remove('sorted'));
+  if (currentSort !== 'idx') th.classList.add('sorted');
+  renderFields();
+}
+function setFilter(f, el) {
+  activeFilter=f;
+  expandedRow = null; // collapse any expanded dropdown
+  el.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  const isNar = (f === 'narratives');
+  document.getElementById('fiTableWrap').style.display = isNar ? 'none' : '';
+  document.getElementById('narTableWrap').style.display = isNar ? '' : 'none';
+  document.getElementById('narInfoBlock').style.display = isNar ? '' : 'none';
+  document.getElementById('fiSearch').style.display = isNar ? 'none' : '';
+  document.getElementById('fiCount').style.display = isNar ? 'none' : '';
+  if (!isNar) renderFields();
+}
+function filterFields() { renderFields(); }
+
+/* ═══ RULE AUDIT ═══ */
+const RULES = [
+  {id:'R001',t:'PropertyType',i:'Multifamily',f:'int',e:'Fee Simple'},
+  {id:'R002',t:'PropertyType',i:'Self-Storage',f:'int',e:'Fee Simple'},
+  {id:'R003',t:'PropertyType',i:'Retail',f:'int',e:'Leased Fee Interest'},
+  {id:'R004',t:'PropertyType',i:'Industrial',f:'int',e:'Leased Fee Interest'},
+  {id:'R005',t:'PropertyType',i:'Office',f:'int',e:'Leased Fee Interest'},
+  {id:'R006',t:'PropertyType',i:'Land',f:'int',e:'Fee Simple'},
+  {id:'R007',t:'PropertyType',i:'Hotel',f:'int',e:'Fee Simple'},
+  {id:'R008',t:'PropertyType',i:'Seniors',f:'int',e:'Fee Simple'},
+  {id:'R009',t:'Tenancy',i:'Owner Occupied',f:'int',e:'Fee Simple'},
+  {id:'R010',t:'Tenancy',i:'Multi-Tenant',f:'int',e:'Leased Fee Interest'},
+  {id:'R010b',t:'Tenancy',i:'Partial Owner Occupied',f:'int',e:'Leasehold Estate'},
+  {id:'R010c',t:'Tenancy',i:'Single-Tenant',f:'int',e:'Going Concern'},
+  {id:'R014',t:'PropertySubtype',i:'Mixed Use',f:'int',e:'Fee Simple & Leased Fee'},
+  {id:'R011',t:'StatusofImprovements',i:'Existing - Completed',f:'scen',e:'As Stabilized'},
+  {id:'R012',t:'StatusofImprovements',i:'Existing - Renovated',f:'scen',e:'As Stabilized'},
+  {id:'R013',t:'StatusofImprovements',i:'Existing - Under Renovation',f:'scen',e:'As-Is, As If Complete & Stabilized'},
+  {id:'R015',t:'StatusofImprovements',i:'Existing - To Be Renovated',f:'scen',e:'As-Is, As If Complete & Stabilized'},
+  {id:'R017',t:'StatusofImprovements',i:'Proposed - Vacant Land',f:'scen',e:'As Is Vacant Land, As If Complete & Stabilized'},
+  {id:'R019',t:'StatusofImprovements',i:'Proposed - Improved Land (Demolition Required)',f:'scen',e:'As If Vacant Land, As If Complete & Stabilized'},
+  {id:'R021',t:'StatusofImprovements',i:'Proposed - Under Construction',f:'scen',e:'As If Vacant Land, As If Complete & Stabilized'},
+  {id:'R023',t:'AuthorizedUse',i:'Insurance',f:'scen',e:'Insurable Replacement Cost'},
+  {id:'R024',t:'Scenario',i:'As Stabilized',f:'appr',e:'Direct Comparison Approach, Income Approach'},
+  {id:'R026',t:'Scenario',i:'As Is Vacant Land',f:'appr',e:'Land Direct Comparison Approach'},
+  {id:'R027',t:'Scenario',i:'As If Vacant Land',f:'appr',e:'Land Direct Comparison Approach'},
+  {id:'R028',t:'Scenario',i:'As If Complete & Stabilized',f:'appr',e:'Cost Approach'},
+  {id:'R023b',t:'AuthorizedUse',i:'Insurance',f:'appr',e:'Cost Approach'},
+  {id:'R013b',t:'StatusofImprovements',i:'Existing - Under Renovation',f:'appr',e:'Direct Comparison Approach, Income Approach, Cost Approach'},
+  {id:'R017b',t:'StatusofImprovements',i:'Proposed - Vacant Land',f:'appr',e:'Land Direct Comparison Approach, Cost Approach'},
+];
+function testRule(r) {
+  const s = {propertyType:'',propertySubtype:'',tenancy:'',authorizedUse:'',statusOfImprovements:''};
+  const map = {PropertyType:'propertyType',PropertySubtype:'propertySubtype',Tenancy:'tenancy',AuthorizedUse:'authorizedUse',StatusofImprovements:'statusOfImprovements'};
+  if (map[r.t]) s[map[r.t]] = r.i;
+  let interest = null;
+  if (s.propertyType && INT_PT[s.propertyType]) interest = INT_PT[s.propertyType];
+  if (s.propertySubtype && INT_SUB[s.propertySubtype]) interest = INT_SUB[s.propertySubtype];
+  if (s.tenancy && INT_TN[s.tenancy]) interest = INT_TN[s.tenancy];
+  let scenarios = [];
+  if (s.authorizedUse==='Insurance') scenarios=['Insurable Replacement Cost'];
+  else if (s.statusOfImprovements && SCEN[s.statusOfImprovements]) scenarios=SCEN[s.statusOfImprovements];
+  if (r.t==='Scenario') { const a=APPR[r.i]||[]; return {ok: a.join(', ')===r.e, actual: a.join(', ')}; }
+  const apprSet=new Set(); scenarios.forEach(sc=>(APPR[sc]||[]).forEach(a=>apprSet.add(a)));
+  let actual='';
+  if (r.f==='int') actual=interest||'';
+  if (r.f==='scen') actual=scenarios.join(', ');
+  if (r.f==='appr') actual=[...apprSet].join(', ');
+  return {ok: actual===r.e, actual: actual};
+}
+
+const OUTPUT_NAMES = {int:'Interest Appraised', scen:'Value Scenarios', appr:'Approaches to Value'};
+
+function runAudit() {
+  let pass=0, fail=0;
+  const res = document.getElementById('auditResults');
+  res.innerHTML = '';
+  RULES.forEach(r => {
+    const result = testRule(r);
+    const ok = result.ok;
+    const actual = result.actual || '(empty)';
+    ok ? pass++ : fail++;
+    const outputName = OUTPUT_NAMES[r.f] || r.f;
+    const valClass = ok ? 'ad-match' : 'ad-mismatch';
+    res.innerHTML += '<div class="audit-row' + (ok ? '' : ' fail-row') + '">' +
+      '<div class="audit-row-hdr">' +
+        '<span class="rid">' + r.id + '</span>' +
+        '<span class="rdesc">' + r.t + ' = ' + r.i + '</span>' +
+        '<span class="rarrow">→</span>' +
+        '<span class="routput">' + outputName + '</span>' +
+        '<span class="audit-status ' + (ok ? 'pass' : 'fail') + '">' + (ok ? '✓ PASS' : '✗ FAIL') + '</span>' +
+      '</div>' +
+      '<div class="audit-detail">' +
+        '<div><span class="ad-label">Expected:</span> <span class="ad-value">' + r.e + '</span></div>' +
+        '<div><span class="ad-label">Got:</span> <span class="' + valClass + '">' + actual + '</span></div>' +
+      '</div>' +
+    '</div>';
+  });
+  document.getElementById('auditPass').textContent = pass;
+  document.getElementById('auditFail').textContent = fail;
+  document.getElementById('auditTotal').textContent = RULES.length;
+}
+
+/* ═══ UTILS ═══ */
+function toggleCollapse(id) {
+  document.getElementById(id).classList.toggle('closed');
+}
+function toggleSection(id) {
+  document.getElementById(id).classList.toggle('closed');
+}
+function toggleSec(sec, event) {
+  // Only toggle if clicking the title bar, not fields inside
+  if (event.target.closest('.sec-title') || event.target.classList.contains('sec-chevron')) {
+    sec.classList.toggle('closed');
+  }
+}
+function dashShowAll(el) {
+  document.querySelectorAll('#panel-full .sec').forEach(s => { s.style.display = ''; s.classList.remove('closed'); });
+  setDashActive(el);
+}
+function dashCollapseAll(el) {
+  document.querySelectorAll('#panel-full .sec').forEach(s => { s.style.display = ''; s.classList.add('closed'); });
+  setDashActive(el);
+}
+function dashLogicOnly(el) {
+  document.querySelectorAll('#panel-full .sec').forEach(s => {
+    if (s.dataset.logic) { s.style.display = ''; s.classList.remove('closed'); }
+    else { s.style.display = 'none'; }
+  });
+  setDashActive(el);
+}
+function setDashActive(el) {
+  if (!el) return;
+  document.querySelectorAll('.dash-link').forEach(l => l.classList.remove('active'));
+  el.classList.add('active');
+}
+function fillTest() { document.querySelectorAll('[data-fill]').forEach(el => el.value = el.dataset.fill); }
+function resetAll() {
+  document.querySelectorAll('.u-inp').forEach(i => { if (!i.readOnly) i.value=''; });
+  document.querySelectorAll('.dd-trigger').forEach(t => { const dd=t.closest('.dd'); if(dd.dataset.field){STATE[dd.dataset.field]='';} t.classList.add('ph'); const ph=t.dataset.ph||'Choose...'; t.childNodes[0].textContent=ph; });
+  document.querySelectorAll('.dd-item.selected').forEach(i => i.classList.remove('selected'));
+  document.querySelectorAll('.dimmed').forEach(el => el.classList.remove('dimmed'));
+  cascade();
+}
+
+/* ═══ NARRATIVES ═══ */
+const NARRATIVES = [
+  {
+    id: 'EA-001',
+    type: 'Extraordinary Assumption',
+    name: 'As If Vacant — Demolition',
+    trigger: 'Value Scenarios = "As If Vacant Land"',
+    usedIn: 'Report | LOE',
+    text: 'The As If Vacant market land value is developed under the hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date of the appraisal. This condition is contrary to the known physical state of the property and is made for the purpose of estimating the underlying land value.'
+  },
+  {
+    id: 'EA-002',
+    type: 'Extraordinary Assumption',
+    name: 'As If Vacant — Demolition (variant)',
+    trigger: 'Value Scenarios = "As If Vacant Land"',
+    usedIn: 'Report | LOE',
+    text: 'The As If Vacant market land value is developed under the hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date. This condition is contrary to the known physical state of the property and is made for the purpose of estimating the underlying land value.'
+  }
+];
+
+function showNarrative(idx) {
+  const n = NARRATIVES[idx];
+  if (!n) return;
+  document.querySelectorAll('.nar-row').forEach(r => r.style.background = '');
+  document.querySelectorAll('.nar-row')[idx].style.background = 'var(--hover)';
+  document.getElementById('narPreview').innerHTML = '<div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:6px;">' + n.id + ' — ' + n.name + '</div><div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Trigger: ' + n.trigger + ' · Used in: ' + n.usedIn + '</div><div style="font-size:12px;color:var(--text-2);line-height:1.7;">' + n.text + '</div>';
+}
+
+renderFields();
+cascade();
+</script>
+</body>
+</html>

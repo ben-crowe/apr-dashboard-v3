@@ -1161,11 +1161,13 @@ function renderFields() {
       tb.innerHTML += '<tr class="fi-options-row"><td></td><td colspan="'+(COL_COUNT-1)+'" style="padding:8px 10px 10px;background:#fafafa;border-bottom:2px solid var(--border);"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:4px;">'+f.d+' — '+opts.length+' options</div>'+optRows+'</td></tr>';
     }
   });
+  const fOriginVal = document.getElementById('filterOrigin').value;
+  const scopeTotal = fOriginVal === 'dashboard' ? ALLFIELDS.filter(f=>f.origin!=='valcre').length : ALLFIELDS.length;
   const dashCount = filtered.filter(x=>x.f.origin!=='valcre').length;
   const valcreCount = filtered.filter(x=>x.f.origin==='valcre').length;
   const sortNames = {n:'Field Name',l:'Label',c:'Control Type',s:'Source',role:'Role',d:'Dropdown List',vr:'Valcre Location',v:'Valcre API Key',nf:'New',req:'Required',origin:'Origin'};
-  let countText = 'Showing '+filtered.length+' of '+ALLFIELDS.length+' fields';
-  if (dashCount > 0 && valcreCount > 0) countText += ' ('+dashCount+' dashboard, '+valcreCount+' Valcre)';
+  let countText = 'Showing '+filtered.length+' of '+scopeTotal+' fields';
+  if (fOriginVal === 'all' && dashCount > 0 && valcreCount > 0) countText += ' ('+dashCount+' dashboard, '+valcreCount+' Valcre)';
   if (currentSort !== 'idx') countText += ' · grouped by ' + (sortNames[currentSort] || currentSort);
   document.getElementById('fiCount').textContent = countText;
 }

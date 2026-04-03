@@ -236,7 +236,7 @@
 <div class="hdr">
   <div>
     <h1>Valta Field Registry Explorer</h1>
-    <div class="sub">45 fields · 23 dropdown lists · 28 rules · 2 cascade groups · 315 Valcre API fields</div>
+    <div class="sub">45 dashboard fields + 315 Valcre API fields · 23 dropdown lists · 28 cascade rules</div>
   </div>
   <div class="hdr-btns">
     <button class="btn btn-outline" id="btnFill" onclick="fillTest()">Fill Test Data</button>
@@ -476,29 +476,34 @@ E  Authorized Use          ──┘</div>
 <div class="panel" id="panel-index">
 <div class="sec"><div class="sec-title" style="cursor:default;">Field Index</div><div class="sec-body">
   <input class="fi-search" id="fiSearch" placeholder="Search fields..." oninput="filterFields()">
+  <!-- Row 1: View switcher -->
+  <div class="chips" id="fiViewSwitcher" style="margin-bottom:4px;">
+    <span style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);padding:5px 4px 5px 0;">View:</span>
+    <button class="active" onclick="setView2('fields',this)">Fields</button>
+    <button onclick="setView2('options',this)">Options</button>
+    <button onclick="setView2('narratives',this)">Narratives</button>
+  </div>
+  <!-- Row 2: Filters (context-sensitive, changes per view) -->
   <div class="chips" id="fiFilters">
-    <button class="active" onclick="setFilter('all',this)">All (45)</button>
-    <span style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
-    <button onclick="setFilter('User Input',this)">User Input (28)</button>
-    <button onclick="setFilter('Logic',this)">Logic (14)</button>
-    <button onclick="setFilter('Valcre API',this)">Valcre API (2)</button>
-    <button onclick="setFilter('Calculated',this)">Calculated (1)</button>
-    <span style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
-    <button onclick="setFilter('trigger',this)">Triggers (5)</button>
-    <button onclick="setFilter('result',this)">Results (3)</button>
-    <button onclick="setFilter('has-dropdown',this)">Has Dropdown (17)</button>
-    <button onclick="setFilter('new-field',this)">New Fields (22)</button>
-    <button onclick="setFilter('all-options',this)">All Options (~100)</button>
-    <span style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
-    <button onclick="setFilter('vr-Job',this)">Job (30)</button>
-    <button onclick="setFilter('vr-Contact',this)">Contact (6)</button>
-    <button onclick="setFilter('vr-Property',this)">Property (4)</button>
-    <span style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
-    <button onclick="setFilter('narratives',this)">Narratives (2)</button>
+    <button class="active" onclick="setFilter('all',this)" id="filterAll">All</button>
+    <span class="fi-sep" style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
+    <button onclick="setFilter('dashboard',this)">Dashboard (45)</button>
+    <button onclick="setFilter('valcre-only',this)">Valcre Only</button>
+    <button onclick="setFilter('mapped',this)">Mapped</button>
+    <span class="fi-sep" style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
+    <button onclick="setFilter('vr-Job',this)">Job</button>
+    <button onclick="setFilter('vr-Contact',this)">Contact</button>
+    <button onclick="setFilter('vr-Property',this)">Property</button>
+    <button onclick="setFilter('vr-Building',this)">Building</button>
+    <button onclick="setFilter('vr-Parcel',this)">Parcel</button>
+    <span class="fi-sep" style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
+    <button onclick="setFilter('has-dropdown',this)">Has Dropdown</button>
+    <button onclick="setFilter('trigger',this)">Triggers</button>
+    <button onclick="setFilter('result',this)">Results</button>
   </div>
   <div class="fi-count" id="fiCount"></div>
   <div id="fiTableWrap" style="overflow-x:auto;">
-    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th><th data-sort="nf" onclick="sortFields(this,'nf')">New</th><th data-sort="req" onclick="sortFields(this,'req')">Req</th></tr></thead><tbody id="fiBody"></tbody></table>
+    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="origin" onclick="sortFields(this,'origin')">Origin</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th><th data-sort="nf" onclick="sortFields(this,'nf')">New</th><th data-sort="req" onclick="sortFields(this,'req')">Req</th></tr></thead><tbody id="fiBody"></tbody></table>
   </div>
   <div id="optionsTableWrap" style="display:none;overflow-x:auto;">
     <table class="fi-table"><thead><tr>
@@ -724,10 +729,184 @@ const DROPDOWN_OPTIONS = {
   'ListYes/No': ['Yes','No'],
 };
 
+/* ═══ VALCRE API FIELDS — full inventory from Chris's Valcre Fields tab ═══ */
+/* vn=valcre field name, vk=valcre API key, vr=record location */
+const VALCRE_FIELDS = [
+  // Job (63)
+  {vn:"Job ID",vk:"Id",vr:"Job"},{vn:"Job Number",vk:"Number",vr:"Job"},{vn:"Job Name",vk:"Name",vr:"Job"},
+  {vn:"Client File Number",vk:"ClientRef",vr:"Job"},{vn:"Borrower",vk:"Borrower",vr:"Job"},{vn:"Status",vk:"Status",vr:"Job"},
+  {vn:"Fee",vk:"Fee",vr:"Job"},{vn:"Retainer",vk:"Retainer",vr:"Job"},{vn:"Amount Paid",vk:"AmountPaid",vr:"Job"},
+  {vn:"Check Number",vk:"CheckNumber",vr:"Job"},{vn:"Appraised Value",vk:"AppraisedValue",vr:"Job"},
+  {vn:"Bid Date",vk:"BidDate",vr:"Job"},{vn:"Awarded Date",vk:"AwardDate",vr:"Job"},{vn:"Due Date",vk:"DueDate",vr:"Job"},
+  {vn:"Internal Due Date",vk:"InternalDueDate",vr:"Job"},{vn:"Invoice Date",vk:"InvoiceDate",vr:"Job"},
+  {vn:"Inspection Date",vk:"InspectionDate",vr:"Job"},{vn:"Paid Date",vk:"PaidDate",vr:"Job"},
+  {vn:"Date of Value",vk:"EffectiveDate",vr:"Job"},{vn:"Format",vk:"ReportFormat",vr:"Job"},
+  {vn:"Authorized Use",vk:"IntendedUses",vr:"Job"},{vn:"Scope",vk:"Scopes",vr:"Job"},
+  {vn:"Analysis Level",vk:"AnalysisLevel",vr:"Job"},{vn:"Purpose",vk:"Purposes",vr:"Job"},
+  {vn:"Values",vk:"RequestedValues",vr:"Job"},{vn:"Staff 1 Role",vk:"Staff1Role",vr:"Job"},
+  {vn:"Staff 2 Role",vk:"Staff2Role",vr:"Job"},{vn:"Staff 3 Role",vk:"Staff3Role",vr:"Job"},
+  {vn:"Confidential",vk:"Privacy",vr:"Job"},{vn:"General Comments",vk:"Comments",vr:"Job"},
+  {vn:"Client Comments",vk:"ClientComments",vr:"Job"},{vn:"Delivery Comments",vk:"DeliveryComments",vr:"Job"},
+  {vn:"Payment Comments",vk:"PaymentComments",vr:"Job"},{vn:"Amount Outstanding",vk:"AmountOutstanding",vr:"Job"},
+  {vn:"Days Sales Outstanding",vk:"DaysToPaid",vr:"Job"},{vn:"Aging",vk:"DaysSinceInvoiced",vr:"Job"},
+  {vn:"Appraisers",vk:"StaffAppraisers",vr:"Job"},{vn:"Assistants",vk:"StaffAssistants",vr:"Job"},
+  {vn:"Procurers",vk:"StaffProcurers",vr:"Job"},{vn:"Reviewers",vk:"StaffReviewers",vr:"Job"},
+  {vn:"Created",vk:"CreatedTime",vr:"Job"},{vn:"Updated",vk:"ModifiedTime",vr:"Job"},
+  {vn:"Display Name",vk:"_DisplayName",vr:"Job"},{vn:"Subject Property",vk:"Property._DisplayName",vr:"Job"},
+  {vn:"Property Contact",vk:"PropertyContact._DisplayName",vr:"Job"},{vn:"Client",vk:"Client._DisplayName",vr:"Job"},
+  {vn:"Primary Appraiser",vk:"Owner._DisplayName",vr:"Job"},{vn:"Office",vk:"Office._DisplayName",vr:"Job"},
+  {vn:"Staff1",vk:"Staff1._DisplayName",vr:"Job"},{vn:"Staff2",vk:"Staff2._DisplayName",vr:"Job"},
+  {vn:"Staff3",vk:"Staff3._DisplayName",vr:"Job"},{vn:"Sets",vk:"Sets._DisplayName",vr:"Job"},
+  {vn:"Files",vk:"Files._DisplayName",vr:"Job"},{vn:"Linked Property Expenses",vk:"JobLinkedPropertyExpenses._DisplayName",vr:"Job"},
+  {vn:"Linked Property Leases",vk:"JobLinkedPropertyLeases._DisplayName",vr:"Job"},
+  {vn:"Linked Property Sales",vk:"JobLinkedPropertySales._DisplayName",vr:"Job"},
+  {vn:"Linked Property Surveys",vk:"JobLinkedPropertySurveys._DisplayName",vr:"Job"},
+  {vn:"Leases",vk:"Leases._DisplayName",vr:"Job"},{vn:"Expenses",vk:"Expenses._DisplayName",vr:"Job"},
+  {vn:"Sales",vk:"Sales._DisplayName",vr:"Job"},{vn:"Surveys",vk:"Surveys._DisplayName",vr:"Job"},
+  {vn:"Discounted Cash Flows",vk:"DiscountedCashFlows._DisplayName",vr:"Job"},{vn:"Custom Fields",vk:"CustomFields._DisplayName",vr:"Job"},
+  // Contact (35)
+  {vn:"Contact ID",vk:"Id",vr:"Contact"},{vn:"Company Name",vk:"Company",vr:"Contact"},
+  {vn:"Main Phone",vk:"CompanyPhoneNumber",vr:"Contact"},{vn:"Main Fax",vk:"CompanyFaxNumber",vr:"Contact"},
+  {vn:"Website",vk:"CompanyWebsite",vr:"Contact"},{vn:"Company Type",vk:"CompanyType",vr:"Contact"},
+  {vn:"Street Address",vk:"AddressStreet",vr:"Contact"},{vn:"Unit",vk:"AddressStreet2",vr:"Contact"},
+  {vn:"City",vk:"AddressCity",vr:"Contact"},{vn:"State/Province",vk:"AddressState",vr:"Contact"},
+  {vn:"ZIP/Postal",vk:"AddressPostalCode",vr:"Contact"},{vn:"First Name",vk:"FirstName",vr:"Contact"},
+  {vn:"Last Name",vk:"LastName",vr:"Contact"},{vn:"Title",vk:"Title",vr:"Contact"},
+  {vn:"Phone",vk:"PhoneNumber",vr:"Contact"},{vn:"Mobile",vk:"CellNumber",vr:"Contact"},
+  {vn:"Email",vk:"Email",vr:"Contact"},{vn:"Salutation",vk:"Salutation",vr:"Contact"},
+  {vn:"Suffix",vk:"Suffix",vr:"Contact"},{vn:"Division",vk:"Division",vr:"Contact"},
+  {vn:"Extension",vk:"Extension",vr:"Contact"},{vn:"Fax",vk:"FaxNumber",vr:"Contact"},
+  {vn:"Notes",vk:"Comments",vr:"Contact"},{vn:"Confidential",vk:"Privacy",vr:"Contact"},
+  {vn:"Name",vk:"Name",vr:"Contact"},{vn:"Address",vk:"FullAddress",vr:"Contact"},
+  {vn:"Full Address Multi-Line",vk:"FullAddressMultiLine",vr:"Contact"},{vn:"Full Contact Info",vk:"FullContactInformation",vr:"Contact"},
+  {vn:"Created",vk:"CreatedTime",vr:"Contact"},{vn:"Updated",vk:"ModifiedTime",vr:"Contact"},
+  {vn:"Display Name",vk:"_DisplayName",vr:"Contact"},{vn:"Office",vk:"Office._DisplayName",vr:"Contact"},
+  {vn:"Relationship Owner",vk:"Owner._DisplayName",vr:"Contact"},{vn:"Files",vk:"Files._DisplayName",vr:"Contact"},
+  {vn:"Custom Fields",vk:"CustomFields._DisplayName",vr:"Contact"},
+  // Property (133)
+  {vn:"Property ID",vk:"Id",vr:"Property"},{vn:"Name",vk:"Name",vr:"Property"},
+  {vn:"Street Address",vk:"AddressStreet",vr:"Property"},{vn:"Unit",vk:"AddressStreet2",vr:"Property"},
+  {vn:"City",vk:"AddressCity",vr:"Property"},{vn:"State/Province",vk:"AddressState",vr:"Property"},
+  {vn:"ZIP/Postal",vk:"AddressPostalCode",vr:"Property"},{vn:"Country",vk:"AddressCountry",vr:"Property"},
+  {vn:"Region",vk:"AddressCounty",vr:"Property"},{vn:"Market Name",vk:"Market",vr:"Property"},
+  {vn:"Submarket",vk:"SubmarketName",vr:"Property"},{vn:"Latitude",vk:"Latitude",vr:"Property"},
+  {vn:"Longitude",vk:"Longitude",vr:"Property"},{vn:"Property Type",vk:"Types",vr:"Property"},
+  {vn:"Subtype",vk:"SecondaryType",vr:"Property"},{vn:"Parcel ID",vk:"ParcelNumbers",vr:"Property"},
+  {vn:"Number of Parcels",vk:"ParcelCount",vr:"Property"},{vn:"Land Area (AC)",vk:"LandAreaAC",vr:"Property"},
+  {vn:"Land Area (SF)",vk:"LandAreaSF",vr:"Property"},{vn:"Buildable Area",vk:"BuildableArea",vr:"Property"},
+  {vn:"Zone Name",vk:"ZoningName",vr:"Property"},{vn:"Zoning",vk:"Zoning",vr:"Property"},
+  {vn:"Shape",vk:"SiteShape",vr:"Property"},{vn:"Topography",vk:"SiteTopography",vr:"Property"},
+  {vn:"Site Grade",vk:"SiteGrade",vr:"Property"},{vn:"Corner",vk:"SiteCorner",vr:"Property"},
+  {vn:"Density",vk:"Density",vr:"Property"},{vn:"Permitted FAR",vk:"PermittedFAR",vr:"Property"},
+  {vn:"Permitted Building Height",vk:"PermittedBuildingHeight",vr:"Property"},{vn:"Proposed Land Use",vk:"ProposedLandUse",vr:"Property"},
+  {vn:"Site H&BU",vk:"SiteHBU",vr:"Property"},{vn:"Off-Site Improvements",vk:"OffSiteImprovements",vr:"Property"},
+  {vn:"View",vk:"SiteView",vr:"Property"},{vn:"Utilities",vk:"Utilities",vr:"Property"},
+  {vn:"Easements",vk:"Easements",vr:"Property"},{vn:"Entitlements",vk:"Entitlements",vr:"Property"},
+  {vn:"Environmental",vk:"EnvironmentalIssues",vr:"Property"},{vn:"Frontage",vk:"Frontage",vr:"Property"},
+  {vn:"Flood Zones",vk:"SiteFloodZone",vr:"Property"},{vn:"Project Design",vk:"ProjectDesign",vr:"Property"},
+  {vn:"Gross Building Area (GBA)",vk:"GrossBuildingArea",vr:"Property"},{vn:"Net Rentable Area (NRA)",vk:"NetRentableArea",vr:"Property"},
+  {vn:"First Floor Footprint (SF)",vk:"BuildingFootprint",vr:"Property"},{vn:"Site Coverage Ratio",vk:"SiteCoverageRatio",vr:"Property"},
+  {vn:"Land to Building Ratio",vk:"LandToBuildingRatio",vr:"Property"},{vn:"Units",vk:"UnitsCount",vr:"Property"},
+  {vn:"Parking Spaces",vk:"ParkingSpacesCount",vr:"Property"},{vn:"Parking Ratio",vk:"ParkingRatio",vr:"Property"},
+  {vn:"Parking Type",vk:"ParkingTypes",vr:"Property"},{vn:"Number of Buildings",vk:"BuildingsCount",vr:"Property"},
+  {vn:"Number of Floors",vk:"FloorsCount",vr:"Property"},{vn:"Year Built",vk:"YearBuilt",vr:"Property"},
+  {vn:"Year Renovated",vk:"YearRenovated",vr:"Property"},{vn:"Tenancy",vk:"BuildingTenancy",vr:"Property"},
+  {vn:"Foundation",vk:"BuildingMaterials",vr:"Property"},{vn:"Fire Sprinkler",vk:"FireSprinkler",vr:"Property"},
+  {vn:"Building Class",vk:"BuildingClass",vr:"Property"},{vn:"FAR",vk:"FloorAreaRatio",vr:"Property"},
+  {vn:"Elevators",vk:"Elevator",vr:"Property"},{vn:"Loss Factor",vk:"BuildingLossFactor",vr:"Property"},
+  {vn:"Grade Doors",vk:"BuildingGradeDoorsCount",vr:"Property"},{vn:"Dock Doors",vk:"BuildingDockDoorsCount",vr:"Property"},
+  {vn:"Warehouse Area (SF)",vk:"WarehouseSF",vr:"Property"},{vn:"Office Area (SF)",vk:"OfficeSF",vr:"Property"},
+  {vn:"Office Buildout",vk:"BuildingOfficeBuildout",vr:"Property"},{vn:"Rail Doors",vk:"BuildingRailDoorsCount",vr:"Property"},
+  {vn:"Cross Docks",vk:"BuildingCrossDocksCount",vr:"Property"},{vn:"Clear Height",vk:"ClearHeight",vr:"Property"},
+  {vn:"Clear Span (Columns)",vk:"ClearSpan",vr:"Property"},{vn:"Truck Maneuverability",vk:"Maneuverability",vr:"Property"},
+  {vn:"Power",vk:"Power",vr:"Property"},{vn:"Cranes",vk:"Cranes",vr:"Property"},
+  {vn:"Average Bay Depth",vk:"BuildingAverageBayDepth",vr:"Property"},{vn:"Anchor Tenants",vk:"BuildingAnchorTenants",vr:"Property"},
+  {vn:"Anchor Ratio",vk:"BuildingAnchorRatio",vr:"Property"},{vn:"Project Amenities",vk:"Amenities",vr:"Property"},
+  {vn:"Unit Amenities",vk:"UnitAmenities",vr:"Property"},{vn:"Laundry",vk:"IncludedLaundryAmenities",vr:"Property"},
+  {vn:"Security Features",vk:"SecurityFeatures",vr:"Property"},{vn:"Storage Amenities",vk:"StorageFacilityFeatures",vr:"Property"},
+  {vn:"Storage Security",vk:"StorageSecurityFeatures",vr:"Property"},{vn:"Vehicle Storage",vk:"VehicleStorageCount",vr:"Property"},
+  {vn:"Retail Area",vk:"StorageRetailArea",vr:"Property"},{vn:"Hotel Type",vk:"HotelServiceType",vr:"Property"},
+  {vn:"Access Type",vk:"HotelAccessType",vr:"Property"},{vn:"Chain Scale",vk:"HotelChainScale",vr:"Property"},
+  {vn:"Hotel Amenities",vk:"HotelGuestAmenities",vr:"Property"},{vn:"Room Amenities",vk:"HotelRoomAmenities",vr:"Property"},
+  {vn:"Meeting Space",vk:"HotelMeetingSpaceArea",vr:"Property"},{vn:"Restaurant (SF)",vk:"HotelRestaurantArea",vr:"Property"},
+  {vn:"Lobby Common Area (SF)",vk:"HotelLobbyArea",vr:"Property"},{vn:"Back Office (SF)",vk:"HotelBackOfficeArea",vr:"Property"},
+  {vn:"Flag",vk:"HotelFlag",vr:"Property"},{vn:"Date Opened",vk:"OpenedDate",vr:"Property"},
+  {vn:"Landscaping",vk:"LandscapingComments",vr:"Property"},{vn:"Signage",vk:"SignageComments",vr:"Property"},
+  {vn:"Functional Design",vk:"FunctionalDesignComments",vr:"Property"},{vn:"Yard Storage",vk:"YardStorageComments",vr:"Property"},
+  {vn:"Investment Grade",vk:"InvestmentGrade",vr:"Property"},{vn:"Geographic Location",vk:"PopulationArea",vr:"Property"},
+  {vn:"Adjacent North",vk:"AdjacentNorthComments",vr:"Property"},{vn:"Adjacent South",vk:"AdjacentSouthComments",vr:"Property"},
+  {vn:"Adjacent East",vk:"AdjacentEastComments",vr:"Property"},{vn:"Adjacent West",vk:"AdjacentWestComments",vr:"Property"},
+  {vn:"Location Quality",vk:"QualitativeLocation",vr:"Property"},{vn:"Access Quality",vk:"QualitativeAccess",vr:"Property"},
+  {vn:"Exposure",vk:"QualitativeExposure",vr:"Property"},{vn:"Building Quality",vk:"QualitativeBuilding",vr:"Property"},
+  {vn:"Condition",vk:"QualitativeCondition",vr:"Property"},{vn:"Appeal",vk:"QualitativeAppeal",vr:"Property"},
+  {vn:"Property Comments",vk:"DescriptionText",vr:"Property"},{vn:"Comments (Private)",vk:"CommentsPrivate",vr:"Property"},
+  {vn:"Utility",vk:"SiteUtility",vr:"Property"},{vn:"Address",vk:"FullAddress",vr:"Property"},
+  {vn:"Full Address Multi-Line",vk:"FullAddressMultiLine",vr:"Property"},{vn:"Created",vk:"CreatedTime",vr:"Property"},
+  {vn:"Updated",vk:"ModifiedTime",vr:"Property"},{vn:"Display Name",vk:"_DisplayName",vr:"Property"},
+  {vn:"Office",vk:"Office._DisplayName",vr:"Property"},{vn:"Latest Survey",vk:"LatestSurvey._DisplayName",vr:"Property"},
+  {vn:"Primary Photo",vk:"PrimaryImage._DisplayName",vr:"Property"},{vn:"Leases",vk:"Leases._DisplayName",vr:"Property"},
+  {vn:"Expenses",vk:"Expenses._DisplayName",vr:"Property"},{vn:"Sales",vk:"Sales._DisplayName",vr:"Property"},
+  {vn:"Surveys",vk:"Surveys._DisplayName",vr:"Property"},{vn:"Files",vk:"Files._DisplayName",vr:"Property"},
+  {vn:"Units",vk:"Units._DisplayName",vr:"Property"},{vn:"Buildings",vk:"Buildings._DisplayName",vr:"Property"},
+  {vn:"Streets",vk:"Streets._DisplayName",vr:"Property"},{vn:"Parcels",vk:"Parcels._DisplayName",vr:"Property"},
+  {vn:"Linked Contacts",vk:"LinkedContacts._DisplayName",vr:"Property"},{vn:"Images",vk:"Images._DisplayName",vr:"Property"},
+  {vn:"Custom Fields",vk:"CustomFields._DisplayName",vr:"Property"},
+  // Building (49)
+  {vn:"Building ID",vk:"Id",vr:"Building"},{vn:"Building Name",vk:"Name",vr:"Building"},
+  {vn:"Comments",vk:"Comments",vr:"Building"},{vn:"Year Built",vk:"YearBuilt",vr:"Building"},
+  {vn:"Year Renovated",vk:"YearRenovated",vr:"Building"},{vn:"Dock Doors",vk:"DockDoorCount",vr:"Building"},
+  {vn:"Grade Doors",vk:"GradeDoorCount",vr:"Building"},{vn:"Rail Doors",vk:"RailDoorCount",vr:"Building"},
+  {vn:"Cross Docks",vk:"CrossDockCount",vr:"Building"},{vn:"Levelers",vk:"HasLevelers",vr:"Building"},
+  {vn:"Clear Height",vk:"ClearHeightComments",vr:"Building"},{vn:"Clear Span",vk:"ClearSpanComments",vr:"Building"},
+  {vn:"Maneuverability",vk:"ManeuverabilityComments",vr:"Building"},{vn:"Number of Floors",vk:"FloorCount",vr:"Building"},
+  {vn:"Building Class",vk:"ClassComments",vr:"Building"},{vn:"Foundation",vk:"FoundationComments",vr:"Building"},
+  {vn:"Exterior Walls/Framing",vk:"ExteriorWallComments",vr:"Building"},{vn:"Roof",vk:"RoofComments",vr:"Building"},
+  {vn:"Elevators",vk:"ElevatorComments",vr:"Building"},{vn:"HVAC",vk:"HvacComments",vr:"Building"},
+  {vn:"Insulation",vk:"InsulationComments",vr:"Building"},{vn:"Lighting",vk:"LightingComments",vr:"Building"},
+  {vn:"Electrical",vk:"ElectricalComments",vr:"Building"},{vn:"Interior Walls",vk:"InteriorWallComments",vr:"Building"},
+  {vn:"Doors and Windows",vk:"DoorAndWindowComments",vr:"Building"},{vn:"Ceilings",vk:"CeilingComments",vr:"Building"},
+  {vn:"Plumbing",vk:"PlumbingComments",vr:"Building"},{vn:"Floor Coverings",vk:"FloorComments",vr:"Building"},
+  {vn:"Fire Safety",vk:"SafetyFeaturesComments",vr:"Building"},{vn:"Interior Finish",vk:"InteriorFinishComments",vr:"Building"},
+  {vn:"Site Improvements",vk:"SiteImprovementComments",vr:"Building"},{vn:"Deferred Maintenance",vk:"DeferredMaintenanceComments",vr:"Building"},
+  {vn:"Gross Building Area (GBA)",vk:"GrossBuildingArea",vr:"Building"},{vn:"Net Rentable Area (NRA)",vk:"NetRentableArea",vr:"Building"},
+  {vn:"First Floor Footprint (SF)",vk:"FootprintArea",vr:"Building"},{vn:"Finished Basement (SF)",vk:"FinishedBasementArea",vr:"Building"},
+  {vn:"Unfinished Basement (SF)",vk:"UnfinishedBasementArea",vr:"Building"},{vn:"Warehouse Area (SF)",vk:"WarehouseArea",vr:"Building"},
+  {vn:"Office Area (SF)",vk:"OfficeArea",vr:"Building"},{vn:"Office Buildout",vk:"OfficeBuildoutRatio",vr:"Building"},
+  {vn:"Refrigeration Ratio",vk:"WarehouseRefrigerationRatio",vr:"Building"},{vn:"A/C Ratio",vk:"WarehouseACRatio",vr:"Building"},
+  {vn:"Cranes",vk:"Cranes",vr:"Building"},{vn:"Property ID",vk:"PropertyId",vr:"Building"},
+  {vn:"Created",vk:"CreatedTime",vr:"Building"},{vn:"Updated",vk:"ModifiedTime",vr:"Building"},
+  {vn:"Display Name",vk:"_DisplayName",vr:"Building"},{vn:"Property",vk:"Property._DisplayName",vr:"Building"},
+  {vn:"Custom Fields",vk:"CustomFields._DisplayName",vr:"Building"},
+  // Parcel Assessment (13)
+  {vn:"Assessment ID",vk:"Id",vr:"Parcel Assessment"},{vn:"Year",vk:"Year",vr:"Parcel Assessment"},
+  {vn:"Land Value",vk:"LandValue",vr:"Parcel Assessment"},{vn:"Improved Value",vk:"ImprovedValue",vr:"Parcel Assessment"},
+  {vn:"Exemptions",vk:"Exemptions",vr:"Parcel Assessment"},{vn:"Total Value",vk:"TotalValue",vr:"Parcel Assessment"},
+  {vn:"Taxes",vk:"Taxes",vr:"Parcel Assessment"},{vn:"Parcel ID",vk:"ParcelId",vr:"Parcel Assessment"},
+  {vn:"Created",vk:"CreatedTime",vr:"Parcel Assessment"},{vn:"Updated",vk:"ModifiedTime",vr:"Parcel Assessment"},
+  {vn:"Display Name",vk:"_DisplayName",vr:"Parcel Assessment"},{vn:"Parcel",vk:"Parcel._DisplayName",vr:"Parcel Assessment"},
+  {vn:"Custom Fields",vk:"CustomFields._DisplayName",vr:"Parcel Assessment"},
+  // Parcel (22)
+  {vn:"Parcel ID",vk:"Id",vr:"Parcel"},{vn:"Parcel Number",vk:"Number",vr:"Parcel"},
+  {vn:"Legal Description",vk:"LegalDescription",vr:"Parcel"},{vn:"Primary Land",vk:"PrimaryArea",vr:"Parcel"},
+  {vn:"Excess Land",vk:"ExcessArea",vr:"Parcel"},{vn:"Surplus Land",vk:"SurplusArea",vr:"Parcel"},
+  {vn:"Unusable Land",vk:"UnusableArea",vr:"Parcel"},{vn:"Usable Area",vk:"UsableArea",vr:"Parcel"},
+  {vn:"Gross Area",vk:"GrossArea",vr:"Parcel"},{vn:"Assessed Value",vk:"AssessedValue",vr:"Parcel"},
+  {vn:"Taxes",vk:"Taxes",vr:"Parcel"},{vn:"Comments",vk:"Comments",vr:"Parcel"},
+  {vn:"Property ID",vk:"PropertyId",vr:"Parcel"},{vn:"Created",vk:"CreatedTime",vr:"Parcel"},
+  {vn:"Updated",vk:"ModifiedTime",vr:"Parcel"},{vn:"Display Name",vk:"_DisplayName",vr:"Parcel"},
+  {vn:"Latest Assessment",vk:"LatestAssessment._DisplayName",vr:"Parcel"},{vn:"Property",vk:"Property._DisplayName",vr:"Parcel"},
+  {vn:"Assessments",vk:"Assessments._DisplayName",vr:"Parcel"},{vn:"Demographics",vk:"PropertyDemographics._DisplayName",vr:"Parcel"},
+  {vn:"Files",vk:"Files._DisplayName",vr:"Parcel"},{vn:"Custom Fields",vk:"CustomFields._DisplayName",vr:"Parcel"},
+];
+
+// Build mapping: Valcre API key → dashboard field (for "mapped" detection)
+const VALCRE_KEY_MAP = {};
+// Built after FIELDS is defined — see bottom of script
+
 /* ═══ FIELD INDEX ═══ */
 const TRIGGERS = ['PropertyType','PropertySubtype','Tenancy','StatusofImprovements','AuthorizedUse'];
 const RESULTS = ['InterestAppraised','ValueScenarios','ApproachestoValue'];
-/* n=name, l=label, c=control, s=source, d=dropdown, v=valcre API key, vr=valcre record location, nf=new field, req=required, desc=description */
+/* n=name, l=label, c=control, s=source, d=dropdown, v=valcre API key, vr=valcre record location, nf=new field, req=required, desc=description, origin=dashboard|valcre|both */
 const FIELDS = [
   {n:"JobNumber",l:"Job Number",c:"Alpha Numeric",s:"Valcre API",d:"",v:"Job.Number",vr:"Job",nf:"No",req:"Yes",desc:"Unique job identifier from Valcre"},
   {n:"JobName",l:"Job Name",c:"Alpha Numeric",s:"User Input",d:"",v:"Job.Name",vr:"Job",nf:"No",req:"Yes",desc:"Job/project name"},
@@ -777,6 +956,46 @@ const FIELDS = [
 ];
 let expandedRow = null; // track which row has dropdown options expanded
 let activeFilter = 'all';
+let activeView = 'fields'; // fields | options | narratives
+
+// Build merged ALLFIELDS: dashboard fields + unmapped Valcre fields
+// Dashboard fields that have a Valcre key get origin='both' or 'dashboard'
+// Valcre fields not used by dashboard get origin='valcre'
+const ALLFIELDS = [];
+const mappedValcreKeys = new Set();
+FIELDS.forEach(f => {
+  f.origin = 'dashboard';
+  if (f.v) {
+    // Parse "Job.Number" → vr=Job, vk=Number — build full key for matching
+    const fullKey = f.v; // e.g. "Job.Number", "Contact.FirstName", "Property.Types"
+    mappedValcreKeys.add(fullKey);
+    f.origin = 'both'; // exists in both systems
+  }
+  ALLFIELDS.push(f);
+});
+// Add Valcre-only fields
+VALCRE_FIELDS.forEach(vf => {
+  const fullKey = vf.vr + '.' + vf.vk;
+  if (mappedValcreKeys.has(fullKey)) return; // already in dashboard fields
+  // Also check partial matches (some dashboard fields use nested keys like Property._DisplayName)
+  let found = false;
+  mappedValcreKeys.forEach(mk => { if (mk === fullKey || mk.endsWith('.'+vf.vk)) found = true; });
+  if (found) return;
+  ALLFIELDS.push({
+    n: vf.vk, // API key as field name
+    l: vf.vn, // Valcre's human label
+    c: '', // no control type — Valcre doesn't specify
+    s: 'Valcre API',
+    d: '',
+    v: vf.vr + '.' + vf.vk,
+    vr: vf.vr,
+    nf: '',
+    req: '',
+    desc: '',
+    origin: 'valcre'
+  });
+});
+
 function getRole(n) { return TRIGGERS.includes(n)?'trigger':RESULTS.includes(n)?'result':'independent'; }
 function srcBadge(s) {
   if (s==='User Input') return '<span class="badge badge-outline">User Input</span>';
@@ -796,19 +1015,30 @@ function renderFields() {
   const q = document.getElementById('fiSearch').value.toLowerCase();
   const tb = document.getElementById('fiBody'); tb.innerHTML = '';
 
-  // Build filtered list
+  // Build filtered list from ALLFIELDS (merged dashboard + Valcre)
   let filtered = [];
-  FIELDS.forEach((f, i) => {
+  ALLFIELDS.forEach((f, i) => {
     const role = getRole(f.n);
-    if (activeFilter!=='all' && activeFilter!=='narratives') {
-      if (activeFilter==='trigger'&&role!=='trigger') return;
-      if (activeFilter==='result'&&role!=='result') return;
-      if (activeFilter==='has-dropdown'&&!f.d) return;
-      if (activeFilter==='new-field'&&f.nf!=='Yes') return;
-      if (activeFilter.startsWith('vr-')&&f.vr!==activeFilter.slice(3)) return;
-      if (!['trigger','result','has-dropdown','new-field'].includes(activeFilter)&&!activeFilter.startsWith('vr-')&&f.s!==activeFilter) return;
+    // Apply filters
+    if (activeFilter !== 'all') {
+      if (activeFilter === 'dashboard' && f.origin === 'valcre') return;
+      else if (activeFilter === 'valcre-only' && f.origin !== 'valcre') return;
+      else if (activeFilter === 'mapped' && f.origin !== 'both') return;
+      else if (activeFilter === 'trigger' && role !== 'trigger') return;
+      else if (activeFilter === 'result' && role !== 'result') return;
+      else if (activeFilter === 'has-dropdown' && !f.d) return;
+      else if (activeFilter.startsWith('vr-') && f.vr !== activeFilter.slice(3)) return;
     }
-    if (q && !f.n.toLowerCase().includes(q) && !f.l.toLowerCase().includes(q) && !(f.d && f.d.toLowerCase().includes(q)) && !(f.v && f.v.toLowerCase().includes(q)) && !(f.desc && f.desc.toLowerCase().includes(q))) return;
+    // Search
+    if (q) {
+      const haystack = [f.n, f.l, f.d, f.v, f.desc, f.vr, f.origin].filter(Boolean).join(' ').toLowerCase();
+      // Also search inside dropdown options if this field has them
+      let ddMatch = false;
+      if (f.d && DROPDOWN_OPTIONS[f.d]) {
+        ddMatch = DROPDOWN_OPTIONS[f.d].some(opt => opt.toLowerCase().includes(q));
+      }
+      if (!haystack.includes(q) && !ddMatch) return;
+    }
     filtered.push({f:f, idx:i+1, role:role});
   });
 
@@ -822,7 +1052,7 @@ function renderFields() {
     });
   }
 
-  const COL_COUNT = 11;
+  const COL_COUNT = 12;
   // Render with group headers when sorted
   let lastGroup = null;
   filtered.forEach(item => {
@@ -832,12 +1062,19 @@ function renderFields() {
     if (currentSort !== 'idx') {
       let groupVal;
       if (currentSort === 'role') groupVal = role;
+      else if (currentSort === 'origin') groupVal = f.origin || '—';
       else groupVal = f[currentSort] || '—';
       if (groupVal !== lastGroup) {
         lastGroup = groupVal;
         tb.innerHTML += '<tr class="fi-group-hdr"><td colspan="'+COL_COUNT+'">' + groupVal + '</td></tr>';
       }
     }
+    // Origin badge
+    let originBadge;
+    if (f.origin === 'both') originBadge = '<span class="badge" style="font-size:9px;background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;">Both</span>';
+    else if (f.origin === 'dashboard') originBadge = '<span class="badge" style="font-size:9px;background:#f0fdf4;color:#166534;border:1px solid #86efac;">Dashboard</span>';
+    else originBadge = '<span class="badge" style="font-size:9px;background:#faf5ff;color:#6b21a8;border:1px solid #d8b4fe;">Valcre</span>';
+
     // Dropdown cell — clickable if has options
     let ddCell;
     if (f.d && DROPDOWN_OPTIONS[f.d]) {
@@ -850,19 +1087,24 @@ function renderFields() {
     // Valcre location badge
     let vrCell = '<td style="font-size:11px;color:var(--text-3);">—</td>';
     if (f.vr) {
-      const vrColor = f.vr==='Job'?'#3b82f6':f.vr==='Contact'?'#8b5cf6':f.vr==='Property'?'#10b981':'var(--text-3)';
+      const vrColors = {Job:'#3b82f6',Contact:'#8b5cf6',Property:'#10b981',Building:'#f59e0b','Parcel Assessment':'#ef4444',Parcel:'#ec4899'};
+      const vrColor = vrColors[f.vr] || 'var(--text-3)';
       vrCell = '<td><span style="font-size:10px;font-weight:600;color:'+vrColor+';">'+f.vr+'</span></td>';
     }
-    // New / Required badges
-    const nfCell = f.nf==='Yes' ? '<td><span class="badge badge-muted" style="font-size:9px;">NEW</span></td>' : '<td style="font-size:11px;color:var(--text-3);">—</td>';
-    const reqCell = f.req==='Yes' ? '<td style="font-size:11px;color:var(--text);">Yes</td>' : '<td style="font-size:11px;color:var(--text-3);">No</td>';
+    // New / Required badges (only for dashboard fields)
+    const nfCell = f.nf==='Yes' ? '<td><span class="badge badge-muted" style="font-size:9px;">NEW</span></td>' : '<td style="font-size:11px;color:var(--text-3);">'+(f.nf||'—')+'</td>';
+    const reqCell = f.req==='Yes' ? '<td style="font-size:11px;color:var(--text);">Yes</td>' : '<td style="font-size:11px;color:var(--text-3);">'+(f.req||'—')+'</td>';
 
-    tb.innerHTML += '<tr title="'+(f.desc||'')+'">' +
+    // Row styling — dim Valcre-only rows slightly
+    const rowClass = f.origin === 'valcre' ? ' style="opacity:0.7;"' : '';
+
+    tb.innerHTML += '<tr'+rowClass+' title="'+(f.desc||'')+'">' +
       '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+item.idx+'</td>' +
+      '<td>'+originBadge+'</td>' +
       '<td class="fn">'+f.n+'</td>' +
       '<td>'+f.l+'</td>' +
-      '<td>'+f.c+'</td>' +
-      '<td>'+srcBadge(f.s)+'</td>' +
+      '<td>'+(f.c || '<span style="color:var(--text-4);">—</span>')+'</td>' +
+      '<td>'+(f.s ? srcBadge(f.s) : '<span style="color:var(--text-4);">—</span>')+'</td>' +
       '<td>'+roleBadge(role)+'</td>' +
       ddCell +
       vrCell +
@@ -890,7 +1132,12 @@ function renderFields() {
       tb.innerHTML += '<tr class="fi-options-row"><td></td><td colspan="'+(COL_COUNT-1)+'" style="padding:8px 10px 10px;background:#fafafa;border-bottom:2px solid var(--border);"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:4px;">'+f.d+' — '+opts.length+' options</div>'+optRows+'</td></tr>';
     }
   });
-  document.getElementById('fiCount').textContent = 'Showing '+filtered.length+' of '+FIELDS.length+' fields' + (currentSort !== 'idx' ? ' · grouped by ' + currentSort : '');
+  const dashCount = filtered.filter(x=>x.f.origin!=='valcre').length;
+  const valcreCount = filtered.filter(x=>x.f.origin==='valcre').length;
+  let countText = 'Showing '+filtered.length+' of '+ALLFIELDS.length+' fields';
+  if (dashCount > 0 && valcreCount > 0) countText += ' ('+dashCount+' dashboard, '+valcreCount+' Valcre-only)';
+  if (currentSort !== 'idx') countText += ' · grouped by ' + currentSort;
+  document.getElementById('fiCount').textContent = countText;
 }
 
 function toggleDropdownRow(fieldName) {
@@ -899,33 +1146,51 @@ function toggleDropdownRow(fieldName) {
 }
 
 function sortFields(th, key) {
-  // Toggle: if already sorted by this, go back to default
   if (currentSort === key) { currentSort = 'idx'; }
   else { currentSort = key; }
-  // Update header highlight
   th.closest('tr').querySelectorAll('th').forEach(h => h.classList.remove('sorted'));
   if (currentSort !== 'idx') th.classList.add('sorted');
   renderFields();
 }
-function setFilter(f, el) {
-  activeFilter=f;
-  expandedRow = null; // collapse any expanded dropdown
-  el.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');
-  const isNar = (f === 'narratives');
-  const isOpts = (f === 'all-options');
-  document.getElementById('fiTableWrap').style.display = (isNar || isOpts) ? 'none' : '';
-  document.getElementById('optionsTableWrap').style.display = isOpts ? '' : 'none';
-  document.getElementById('narTableWrap').style.display = isNar ? '' : 'none';
-  document.getElementById('narInfoBlock').style.display = isNar ? '' : 'none';
-  document.getElementById('fiSearch').style.display = isNar ? 'none' : '';
-  document.getElementById('fiSearch').placeholder = isOpts ? 'Search options...' : 'Search fields...';
-  document.getElementById('fiCount').style.display = isNar ? 'none' : '';
-  if (isOpts) renderOptions();
-  else if (!isNar) renderFields();
+
+/* ═══ VIEW SWITCHER (Fields / Options / Narratives) ═══ */
+function setView2(view, btn) {
+  activeView = view;
+  expandedRow = null;
+  // Update view switcher buttons
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // Reset filter to 'all' when switching views
+  activeFilter = 'all';
+  document.querySelectorAll('#fiFilters button').forEach(b => b.classList.remove('active'));
+  const allBtn = document.querySelector('#fiFilters button');
+  if (allBtn) allBtn.classList.add('active');
+  // Show/hide filter row based on view
+  document.getElementById('fiFilters').style.display = (view === 'narratives') ? 'none' : '';
+  // Toggle table visibility
+  document.getElementById('fiTableWrap').style.display = (view === 'fields') ? '' : 'none';
+  document.getElementById('optionsTableWrap').style.display = (view === 'options') ? '' : 'none';
+  document.getElementById('narTableWrap').style.display = (view === 'narratives') ? '' : 'none';
+  document.getElementById('narInfoBlock').style.display = (view === 'narratives') ? '' : 'none';
+  document.getElementById('fiSearch').style.display = (view === 'narratives') ? 'none' : '';
+  document.getElementById('fiSearch').placeholder = (view === 'options') ? 'Search options...' : 'Search all fields...';
+  document.getElementById('fiCount').style.display = (view === 'narratives') ? 'none' : '';
+  // Render active view
+  if (view === 'fields') renderFields();
+  else if (view === 'options') renderOptions();
 }
+
+function setFilter(f, el) {
+  activeFilter = f;
+  expandedRow = null;
+  el.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  if (activeView === 'fields') renderFields();
+  else if (activeView === 'options') renderOptions();
+}
+
 function filterFields() {
-  if (activeFilter === 'all-options') renderOptions();
+  if (activeView === 'options') renderOptions();
   else renderFields();
 }
 

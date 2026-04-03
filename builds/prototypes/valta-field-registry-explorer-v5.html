@@ -1151,7 +1151,8 @@ function renderFields() {
           (cascadeInfo ? '<span style="font-size:10px;color:var(--amber);font-weight:500;">'+cascadeInfo+'</span>' : '') +
         '</div>';
       }).join('');
-      tb.innerHTML += '<tr class="fi-options-row"><td></td><td colspan="'+(COL_COUNT-1)+'" style="padding:8px 10px 10px;background:#fafafa;border-bottom:2px solid var(--border);"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:4px;">'+f.d+' — '+opts.length+' options</div>'+optRows+'</td></tr>';
+      // Skip first 6 columns (#, Field Name, Label, Control Type, Source, Role) so options appear under Dropdown List column
+      tb.innerHTML += '<tr class="fi-options-row"><td colspan="6" style="border-bottom:none;"></td><td colspan="'+(COL_COUNT-6)+'" style="padding:8px 10px 10px;background:#fafafa;border-bottom:2px solid var(--border);"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:4px;">'+f.d+' — '+opts.length+' options</div>'+optRows+'</td></tr>';
     }
   });
   const fOriginVal = document.getElementById('filterOrigin').value;

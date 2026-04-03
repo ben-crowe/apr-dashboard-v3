@@ -400,9 +400,10 @@
 <div style="max-width:960px;margin:0 auto 8px;display:flex;align-items:center;gap:10px;">
   <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);">Scenarios:</span>
   <span class="scenario-btn" onclick="runScenario(1,this)">Standard</span>
-  <span class="scenario-btn" onclick="runScenario(2,this)">Override</span>
-  <span class="scenario-btn" onclick="runScenario(3,this)">Full Cascade</span>
-  <span class="scenario-btn" onclick="runScenario(4,this)">Insurance</span>
+  <span class="scenario-btn" onclick="runScenario(2,this)">Subtype Override</span>
+  <span class="scenario-btn" onclick="runScenario(3,this)">Tenancy Override</span>
+  <span class="scenario-btn" onclick="runScenario(4,this)">Full Cascade</span>
+  <span class="scenario-btn" onclick="runScenario(5,this)">Insurance</span>
 </div>
 <div class="lo-card"><div class="sec-title">Cascade Logic — Interactive</div><div class="sec-body">
 
@@ -1488,9 +1489,10 @@ function fillTest() { document.querySelectorAll('[data-fill]').forEach(el => el.
 /* ═══ SCENARIOS ═══ */
 const SCENARIOS = {
   1: { name:'Standard', picks: {propertyType:'Multifamily', statusOfImprovements:'Existing - Completed'} },
-  2: { name:'Override', picks: {propertyType:'Retail', tenancy:'Owner Occupied', statusOfImprovements:'Existing - Completed'} },
-  3: { name:'Full Cascade', picks: {propertyType:'Land', statusOfImprovements:'Proposed - Vacant Land'} },
-  4: { name:'Insurance', picks: {propertyType:'Industrial', statusOfImprovements:'Existing - Under Renovation', authorizedUse:'Insurance'} },
+  2: { name:'Subtype Override', picks: {propertyType:'Retail', propertySubtype:'Mixed Use', statusOfImprovements:'Existing - Completed'} },
+  3: { name:'Tenancy Override', picks: {propertyType:'Retail', tenancy:'Owner Occupied', statusOfImprovements:'Existing - Completed'} },
+  4: { name:'Full Cascade', picks: {propertyType:'Land', statusOfImprovements:'Proposed - Vacant Land'} },
+  5: { name:'Insurance', picks: {propertyType:'Industrial', statusOfImprovements:'Existing - Under Renovation', authorizedUse:'Insurance'} },
 };
 function runScenario(num, btn) {
   // Reset first

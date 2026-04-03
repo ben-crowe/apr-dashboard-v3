@@ -1140,10 +1140,13 @@ function renderFields() {
       const opts = DROPDOWN_OPTIONS[f.d];
       // Check which options are cascade triggers
       let optRows = opts.map(opt => {
-        return '<div style="padding:2px 0;font-size:11px;color:var(--text);">'+opt+'</div>';
+        return '<div style="padding:2px 0 2px 16px;font-size:11px;color:var(--text);">'+opt+'</div>';
       }).join('');
-      // Skip first 6 columns (#, Field Name, Label, Control Type, Source, Role) so options appear under Dropdown List column
-      tb.innerHTML += '<tr class="fi-options-row"><td colspan="6" style="border-bottom:none;"></td><td colspan="'+(COL_COUNT-6)+'" style="padding:8px 10px 10px;background:#fafafa;border-bottom:2px solid var(--border);"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:4px;">'+f.d+' — '+opts.length+' options</div>'+optRows+'</td></tr>';
+      tb.innerHTML += '<tr class="fi-options-row"><td colspan="6" style="border-bottom:none;"></td><td colspan="'+(COL_COUNT-6)+'" style="padding:10px 12px 12px;background:#fafafa;border-bottom:2px solid var(--border);">' +
+        '<div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px;">'+f.l+'</div>' +
+        '<div style="font-size:10px;color:var(--text-3);margin-bottom:6px;">'+f.d+' · '+opts.length+' options</div>' +
+        optRows +
+      '</td></tr>';
     }
   });
   const fOriginVal = document.getElementById('filterOrigin').value;

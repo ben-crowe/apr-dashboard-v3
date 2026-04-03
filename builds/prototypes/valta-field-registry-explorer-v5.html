@@ -129,10 +129,14 @@
   .panel { display: none; max-width: 960px; margin: 0 auto; }
   #panel-index .sec, #panel-options .sec { max-width: none; width: 100%; min-width: 800px; position: relative; }
   #panel-index .sec .sec-title, #panel-options .sec .sec-title { position: relative; }
-  .resize-edge { position: absolute; top: 0; right: -4px; width: 8px; height: 100%; cursor: ew-resize; z-index: 10; transition: background .15s; border-radius: 0 4px 4px 0; }
-  .resize-edge:hover, .resize-edge.active { background: rgba(0,0,0,.08); }
-  .resize-edge::after { content: ''; position: absolute; top: 50%; right: 2px; transform: translateY(-50%); width: 2px; height: 24px; background: var(--border); border-radius: 1px; transition: background .15s; }
-  .resize-edge:hover::after, .resize-edge.active::after { background: var(--text-3); }
+  .resize-edge { position: absolute; top: 0; right: -6px; width: 14px; height: 100%; cursor: ew-resize; z-index: 10; transition: background .15s; }
+  .resize-edge:hover, .resize-edge.active { background: rgba(0,0,0,.04); }
+  /* Thin dark line down the edge */
+  .resize-edge::after { content: ''; position: absolute; top: 0; right: 6px; width: 1px; height: 100%; background: transparent; transition: background .15s; }
+  .resize-edge:hover::after, .resize-edge.active::after { background: var(--text-2); }
+  /* Double chevron marker at top corner */
+  .resize-edge::before { content: '››'; position: absolute; top: 8px; right: 2px; font-size: 13px; font-weight: 700; color: var(--text-3); letter-spacing: -3px; transition: color .15s; }
+  .resize-edge:hover::before, .resize-edge.active::before { color: var(--text); }
   #panel-index .sec-body, #panel-options .sec-body { overflow-x: auto; }
   .panel.active { display: block; }
 

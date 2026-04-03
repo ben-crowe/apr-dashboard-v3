@@ -529,7 +529,7 @@ E  Authorized Use          ──┘</div>
   </div>
   <div class="fi-count" id="fiCount"></div>
   <div id="fiTableWrap" style="overflow-x:auto;">
-    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th></tr></thead><tbody id="fiBody"></tbody></table>
+    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="origin" onclick="sortFields(this,'origin')">System</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th></tr></thead><tbody id="fiBody"></tbody></table>
   </div>
   <div id="narTableWrap" style="display:none;">
     <table class="fi-table" id="narTable">
@@ -1092,6 +1092,12 @@ function renderFields() {
     filtered.sort((a, b) => {
       let va, vb;
       if (currentSort === 'role') { va = a.role; vb = b.role; }
+      else if (currentSort === 'origin') {
+        const order = {dashboard:0, both:1, valcre:2};
+        va = order[a.f.origin] ?? 2; vb = order[b.f.origin] ?? 2;
+        if (va !== vb) return va - vb;
+        va = a.f.n; vb = b.f.n; // alphabetical within group
+      }
       else { va = a.f[currentSort] || ''; vb = b.f[currentSort] || ''; }
       // Empty values go to bottom
       const aEmpty = !va || va === '—' || va === 'independent';
@@ -1102,7 +1108,7 @@ function renderFields() {
     });
   }
 
-  const COL_COUNT = 9;
+  const COL_COUNT = 10;
   filtered.forEach(item => {
     const f = item.f;
     const role = item.role;
@@ -1127,6 +1133,7 @@ function renderFields() {
 
     tb.innerHTML += '<tr'+rowClass+' title="'+(f.desc||'')+'">' +
       '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+item.idx+'</td>' +
+      '<td style="font-size:11px;color:var(--text-2);">'+(f.origin==='both'?'Both':f.origin==='dashboard'?'Valta':'Valcre')+'</td>' +
       '<td class="fn">'+f.n+'</td>' +
       '<td>'+f.l+'</td>' +
       '<td style="font-size:11px;color:var(--text-2);">'+(f.c||'—')+'</td>' +
@@ -1144,10 +1151,10 @@ function renderFields() {
       let optRows = opts.map(opt => {
         return '<div style="padding:2px 0 2px 16px;font-size:11px;color:var(--text);">'+opt+'</div>';
       }).join('');
-      tb.innerHTML += '<tr class="fi-options-row"><td colspan="6" style="border-bottom:none;background:transparent;"></td><td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);">' +
+      tb.innerHTML += '<tr class="fi-options-row"><td colspan="7" style="border-bottom:none;background:transparent;"></td><td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);">' +
         '<div style="font-size:11px;font-weight:600;color:var(--text-3);margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);">'+f.l+'</div>' +
         optRows +
-      '</td><td colspan="'+(COL_COUNT-7)+'" style="border-bottom:none;background:transparent;"></td></tr>';
+      '</td><td colspan="'+(COL_COUNT-8)+'" style="border-bottom:none;background:transparent;"></td></tr>';
     }
   });
   const fOriginVal = document.getElementById('filterOrigin').value;

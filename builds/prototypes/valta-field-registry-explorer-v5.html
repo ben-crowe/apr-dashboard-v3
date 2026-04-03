@@ -129,14 +129,10 @@
   .panel { display: none; max-width: 960px; margin: 0 auto; }
   #panel-index .sec, #panel-options .sec { max-width: none; width: 100%; min-width: 800px; position: relative; }
   #panel-index .sec .sec-title, #panel-options .sec .sec-title { position: relative; }
-  .resize-edge { position: absolute; top: 0; right: -6px; width: 14px; height: 100%; cursor: ew-resize; z-index: 10; transition: background .15s; }
-  .resize-edge:hover, .resize-edge.active { background: rgba(0,0,0,.04); }
-  /* Thin dark line down the edge */
+  .resize-edge { position: absolute; top: 0; right: -3px; width: 14px; height: 100%; cursor: ew-resize; z-index: 10; }
+  /* Thin line only — no wide background highlight */
   .resize-edge::after { content: ''; position: absolute; top: 0; right: 6px; width: 1px; height: 100%; background: transparent; transition: background .15s; }
   .resize-edge:hover::after, .resize-edge.active::after { background: var(--text-2); }
-  /* Double chevron marker at top corner */
-  .resize-edge::before { content: '››'; position: absolute; top: 8px; right: 2px; font-size: 13px; font-weight: 700; color: var(--text-3); letter-spacing: -3px; transition: color .15s; }
-  .resize-edge:hover::before, .resize-edge.active::before { color: var(--text); }
   #panel-index .sec-body, #panel-options .sec-body { overflow-x: auto; }
   .panel.active { display: block; }
 
@@ -496,7 +492,7 @@ E  Authorized Use          ──┘</div>
 
 <!-- ═══ FIELD INDEX ═══ -->
 <div class="panel" id="panel-index">
-<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;">Field Registry</div><div class="sec-body">
+<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<span style="font-size:14px;color:var(--text-3);cursor:ew-resize;letter-spacing:-2px;padding-right:4px;" onmousedown="document.getElementById('regResize').dispatchEvent(new MouseEvent('mousedown',{clientX:event.clientX}))">››</span></div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
     <div class="seg" style="margin:0;flex-shrink:0;">

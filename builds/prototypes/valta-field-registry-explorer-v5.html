@@ -507,7 +507,7 @@ E  Authorized Use          ──┘</div>
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
     <div class="seg scope-toggle" style="margin:0;flex-shrink:0;">
       <button class="active" onclick="setScope('dashboard',this)">Valta Dashboard</button>
-      <button onclick="setScope('all',this)">Valcre (All)</button>
+      <button onclick="setScope('all',this)">Valcre</button>
     </div>
     <input type="hidden" id="filterOrigin" value="dashboard">
     <input class="fi-search" id="fiSearch" placeholder="Search fields..." oninput="filterFields()" style="margin-bottom:0;">
@@ -1063,8 +1063,9 @@ function renderFields() {
   let filtered = [];
   ALLFIELDS.forEach((f, i) => {
     const role = getRole(f.n);
-    // Scope filter: 'all' = everything (Valcre All), 'dashboard' = just our 45
+    // Scope filter: exclusive toggle
     if (fOrigin === 'dashboard' && f.origin === 'valcre') return;
+    if (fOrigin === 'all' && f.origin !== 'valcre') return;
     // Location checkboxes (if any checked, field must match one)
     if (locChecked.length > 0 && !locChecked.includes(f.vr)) return;
     // Type checkboxes (if any checked, field must match one)
@@ -1158,7 +1159,7 @@ function renderFields() {
     }
   });
   const fOriginVal = document.getElementById('filterOrigin').value;
-  const scopeTotal = fOriginVal === 'dashboard' ? ALLFIELDS.filter(f=>f.origin!=='valcre').length : ALLFIELDS.length;
+  const scopeTotal = fOriginVal === 'dashboard' ? ALLFIELDS.filter(f=>f.origin!=='valcre').length : ALLFIELDS.filter(f=>f.origin==='valcre').length;
   const dashCount = filtered.filter(x=>x.f.origin!=='valcre').length;
   const valcreCount = filtered.filter(x=>x.f.origin==='valcre').length;
   const sortNames = {n:'Field Name',l:'Label',c:'Control Type',s:'Source',role:'Role',d:'Dropdown List',vr:'Valcre Location',v:'Valcre API Key',nf:'New',req:'Required',origin:'Origin'};
@@ -1166,8 +1167,7 @@ function renderFields() {
   if (fOriginVal === 'dashboard') {
     countText = filtered.length < scopeTotal ? 'Showing '+filtered.length+' of '+scopeTotal+' Valta Dashboard fields' : scopeTotal+' Valta Dashboard fields';
   } else {
-    const dashInView = filtered.filter(x=>x.f.origin!=='valcre').length;
-    countText = filtered.length < scopeTotal ? 'Showing '+filtered.length+' of '+scopeTotal+' Valcre fields, including '+dashInView+' Valta Dashboard' : scopeTotal+' Valcre fields, including '+FIELDS.length+' Valta Dashboard';
+    countText = filtered.length < scopeTotal ? 'Showing '+filtered.length+' of '+scopeTotal+' Valcre fields' : scopeTotal+' Valcre fields';
   }
   if (currentSort !== 'idx') countText += ' <span style="color:var(--border-focus);margin:0 4px;">|</span> <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--text);vertical-align:middle;margin-right:5px;"></span>Sorted by ' + (sortNames[currentSort] || currentSort) + ' <span class="sort-clear" onclick="clearSort()">✕</span>';
   document.getElementById('fiCount').innerHTML = countText;
@@ -1202,18 +1202,8 @@ function sortFields(th, key) {
 /* ═══ FILTER LOGIC ═══ */
 function setScope(val, btn) {
   document.getElementById('filterOrigin').value = val;
-  const buttons = btn.parentElement.querySelectorAll('button');
-  const dashBtn = buttons[0];   // Valta Dashboard
-  const valcreBtn = buttons[1]; // Valcre (All)
-  if (val === 'all') {
-    // Valcre All = superset, both active
-    dashBtn.classList.add('active');
-    valcreBtn.classList.add('active');
-  } else {
-    // Dashboard only
-    dashBtn.classList.add('active');
-    valcreBtn.classList.remove('active');
-  }
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
   expandedRow = null;
   renderFields();
   flashCount();

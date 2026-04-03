@@ -10,6 +10,10 @@
       "destination": "/api/$1"
     },
     {
+      "source": "/field-registry.html",
+      "destination": "/field-registry.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

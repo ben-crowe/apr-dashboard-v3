@@ -1140,16 +1140,7 @@ function renderFields() {
       const opts = DROPDOWN_OPTIONS[f.d];
       // Check which options are cascade triggers
       let optRows = opts.map(opt => {
-        let cascadeInfo = '';
-        // Check if this option triggers a cascade rule
-        if (f.n === 'PropertyType' && INT_PT[opt]) cascadeInfo = '→ ' + INT_PT[opt];
-        else if (f.n === 'PropertySubtype' && INT_SUB[opt]) cascadeInfo = '→ ' + INT_SUB[opt] + ' (override)';
-        else if (f.n === 'Tenancy' && INT_TN[opt]) cascadeInfo = '→ ' + INT_TN[opt] + ' (override)';
-        else if (f.n === 'StatusofImprovements' && SCEN[opt]) cascadeInfo = '→ ' + SCEN[opt].join(', ');
-        else if (f.n === 'AuthorizedUse' && opt === 'Insurance') cascadeInfo = '→ Insurable Replacement Cost (override)';
-        return '<div style="display:flex;gap:12px;align-items:baseline;padding:2px 0;"><span style="font-size:11px;color:var(--text);">'+opt+'</span>' +
-          (cascadeInfo ? '<span style="font-size:10px;color:var(--amber);font-weight:500;">'+cascadeInfo+'</span>' : '') +
-        '</div>';
+        return '<div style="padding:2px 0;font-size:11px;color:var(--text);">'+opt+'</div>';
       }).join('');
       // Skip first 6 columns (#, Field Name, Label, Control Type, Source, Role) so options appear under Dropdown List column
       tb.innerHTML += '<tr class="fi-options-row"><td colspan="6" style="border-bottom:none;"></td><td colspan="'+(COL_COUNT-6)+'" style="padding:8px 10px 10px;background:#fafafa;border-bottom:2px solid var(--border);"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-3);margin-bottom:4px;">'+f.d+' — '+opts.length+' options</div>'+optRows+'</td></tr>';

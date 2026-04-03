@@ -686,7 +686,7 @@ function cascade() {
 
   const apprSet = new Set();
   scenarios.forEach(s => (APPR[s]||[]).forEach(a => apprSet.add(a)));
-  const aText = [...apprSet].join(', ');
+  const aText = [...apprSet].map(a => a.replace(' Approach','')).join(', ');
   setResult('t-approaches', aText, 'Outcome');
   setInfo('info-approaches', aText ? 'Chained from Value Scenarios' : '');
   setResult('lo-approaches', aText, 'Outcome');

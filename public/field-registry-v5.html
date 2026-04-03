@@ -523,7 +523,7 @@ E  Authorized Use          ──┘</div>
   </div>
   <div class="fi-count" id="fiCount"></div>
   <div id="fiTableWrap" style="overflow-x:auto;">
-    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th><th data-sort="nf" onclick="sortFields(this,'nf')">New Field</th></tr></thead><tbody id="fiBody"></tbody></table>
+    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th></tr></thead><tbody id="fiBody"></tbody></table>
   </div>
   <div id="narTableWrap" style="display:none;">
     <table class="fi-table" id="narTable">
@@ -1091,7 +1091,7 @@ function renderFields() {
     });
   }
 
-  const COL_COUNT = 10;
+  const COL_COUNT = 9;
   // Render with group headers when sorted
   let lastGroup = null;
   filtered.forEach(item => {
@@ -1121,7 +1121,6 @@ function renderFields() {
     const srcCell = '<td style="font-size:11px;color:var(--text-2);">'+(f.s||'—')+'</td>';
     const roleText = role === 'trigger' ? 'Trigger' : role === 'result' ? 'Result' : '—';
     const roleCell = '<td style="font-size:11px;color:var(--text-2);">'+roleText+'</td>';
-    const nfCell = '<td style="font-size:11px;color:var(--text-2);">'+(f.nf||'—')+'</td>';
     const reqCell = '<td style="font-size:11px;color:var(--text-2);">'+(f.req||'—')+'</td>';
 
     // Row styling — dim Valcre-only rows slightly
@@ -1137,7 +1136,6 @@ function renderFields() {
       ddCell +
       vrCell +
       '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+(f.v||'—')+'</td>' +
-      nfCell +
     '</tr>';
 
     // Expanded dropdown options row

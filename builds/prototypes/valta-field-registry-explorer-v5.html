@@ -129,10 +129,9 @@
   .panel { display: none; max-width: 960px; margin: 0 auto; }
   #panel-index .sec, #panel-options .sec { max-width: none; width: 100%; min-width: 800px; position: relative; }
   #panel-index .sec .sec-title, #panel-options .sec .sec-title { position: relative; }
-  .resize-edge { position: absolute; top: 0; right: -3px; width: 14px; height: 100%; cursor: ew-resize; z-index: 10; transition: background .15s; }
-  .resize-edge:hover, .resize-edge.active { background: rgba(0,0,0,.03); }
-  .resize-edge::after { content: ''; position: absolute; top: 0; right: 6px; width: 1px; height: 100%; background: transparent; transition: background .15s; }
-  .resize-edge:hover::after, .resize-edge.active::after { background: var(--text-2); }
+  .resize-edge { position: absolute; top: 0; right: 0; width: 10px; height: 100%; cursor: ew-resize; z-index: 10; }
+  #registrySec { transition: border-color .15s; }
+  #registrySec.resize-hover { border-right-color: var(--text); }
   #panel-index .sec-body, #panel-options .sec-body { overflow-x: auto; }
   .panel.active { display: block; }
 
@@ -1506,6 +1505,8 @@ cascade();
   const sec = document.getElementById('registrySec');
   if (!handle || !sec) return;
   let dragging = false, startX, startW;
+  handle.addEventListener('mouseenter', () => sec.classList.add('resize-hover'));
+  handle.addEventListener('mouseleave', () => { if (!dragging) sec.classList.remove('resize-hover'); });
   handle.addEventListener('mousedown', e => {
     dragging = true; startX = e.clientX; startW = sec.offsetWidth;
     handle.classList.add('active');
@@ -1519,7 +1520,7 @@ cascade();
   });
   document.addEventListener('mouseup', () => {
     if (!dragging) return;
-    dragging = false; handle.classList.remove('active');
+    dragging = false; sec.classList.remove('resize-hover');
     document.body.style.cursor = ''; document.body.style.userSelect = '';
   });
 })();

@@ -1499,7 +1499,29 @@ function setDashActive(el) {
   document.querySelectorAll('.dash-link').forEach(l => l.classList.remove('active'));
   el.classList.add('active');
 }
-function fillTest() { document.querySelectorAll('[data-fill]').forEach(el => el.value = el.dataset.fill); }
+function fillTest() {
+  // Fill text inputs
+  document.querySelectorAll('[data-fill]').forEach(el => el.value = el.dataset.fill);
+  // Fill dropdowns with a realistic scenario
+  const testPicks = {
+    propertyType: 'Retail',
+    tenancy: 'Multi-Tenant',
+    statusOfImprovements: 'Existing - Completed',
+    authorizedUse: 'First Mortgage Financing'
+  };
+  Object.entries(testPicks).forEach(([field, value]) => {
+    STATE[field] = value;
+    document.querySelectorAll('.dd[data-field="'+field+'"]').forEach(dd => {
+      const trigger = dd.querySelector('.dd-trigger');
+      trigger.childNodes[0].textContent = value;
+      trigger.classList.remove('ph');
+      dd.querySelectorAll('.dd-item').forEach(item => {
+        item.classList.toggle('selected', item.textContent === value);
+      });
+    });
+  });
+  cascade();
+}
 
 /* ═══ SCENARIOS ═══ */
 const GROUP1_FIELDS = ['propertyType','propertySubtype','tenancy'];

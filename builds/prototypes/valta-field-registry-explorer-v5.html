@@ -751,12 +751,9 @@ function setView(view, btn) {
   if (view === 'audit') runAudit();
   if (view === 'options') renderOptions();
   if (view === 'index') renderFields();
-  // Enable/disable dash controls — only active on tabs with collapsible sections
-  const hasCollapsible = (view === 'full' || view === 'logic');
-  document.querySelectorAll('.dash-link').forEach(l => {
-    if (hasCollapsible) { l.classList.remove('disabled'); }
-    else { l.classList.add('disabled'); l.classList.remove('active'); }
-  });
+  // Show dash controls only on Full Dashboard
+  const dashControls = document.getElementById('dashControls').parentElement;
+  dashControls.style.display = (view === 'full') ? '' : 'none';
   // Show buttons only on Full Dashboard
   const showBtns = (view === 'full');
   document.getElementById('btnFill').style.display = showBtns ? '' : 'none';

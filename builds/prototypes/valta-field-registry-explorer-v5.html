@@ -483,20 +483,18 @@ E  Authorized Use          ──┘</div>
     <button onclick="setView2('options',this)">Options</button>
     <button onclick="setView2('narratives',this)">Narratives</button>
   </div>
-  <!-- Row 2: Filters (context-sensitive, changes per view) -->
+  <!-- Row 2: Filters — grouped by vertical separators: scope | location | traits -->
   <div class="chips" id="fiFilters">
-    <button class="active" onclick="setFilter('all',this)" id="filterAll">All</button>
-    <span class="fi-sep" style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
     <button onclick="setFilter('dashboard',this)">Dashboard (45)</button>
     <button onclick="setFilter('valcre-only',this)">Valcre Only</button>
     <button onclick="setFilter('mapped',this)">Mapped</button>
-    <span class="fi-sep" style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
+    <span style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
     <button onclick="setFilter('vr-Job',this)">Job</button>
     <button onclick="setFilter('vr-Contact',this)">Contact</button>
     <button onclick="setFilter('vr-Property',this)">Property</button>
     <button onclick="setFilter('vr-Building',this)">Building</button>
     <button onclick="setFilter('vr-Parcel',this)">Parcel</button>
-    <span class="fi-sep" style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
+    <span style="color:var(--text-4);font-size:10px;padding:0 2px;">|</span>
     <button onclick="setFilter('has-dropdown',this)">Has Dropdown</button>
     <button onclick="setFilter('trigger',this)">Triggers</button>
     <button onclick="setFilter('result',this)">Results</button>
@@ -1160,11 +1158,9 @@ function setView2(view, btn) {
   // Update view switcher buttons
   btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  // Reset filter to 'all' when switching views
+  // Reset filter when switching views — nothing selected = show all
   activeFilter = 'all';
   document.querySelectorAll('#fiFilters button').forEach(b => b.classList.remove('active'));
-  const allBtn = document.querySelector('#fiFilters button');
-  if (allBtn) allBtn.classList.add('active');
   // Show/hide filter row based on view
   document.getElementById('fiFilters').style.display = (view === 'narratives') ? 'none' : '';
   // Toggle table visibility
@@ -1181,10 +1177,16 @@ function setView2(view, btn) {
 }
 
 function setFilter(f, el) {
-  activeFilter = f;
   expandedRow = null;
-  el.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
+  // Toggle: click active filter again to deselect (back to all)
+  if (activeFilter === f) {
+    activeFilter = 'all';
+    el.classList.remove('active');
+  } else {
+    activeFilter = f;
+    el.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+  }
   if (activeView === 'fields') renderFields();
   else if (activeView === 'options') renderOptions();
 }

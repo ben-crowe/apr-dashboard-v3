@@ -399,16 +399,18 @@
 <div class="panel" id="panel-logic">
 <div style="max-width:960px;margin:0 auto 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
   <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text);">Scenario Group 1:</span>
-  <span class="scenario-btn" onclick="runScenario(1,this)">A</span>
+  <span class="scenario-btn" onclick="runScenario(1,this)" title="Multifamily → Fee Simple">A</span>
   <span style="color:var(--text-3);">|</span>
-  <span class="scenario-btn" onclick="runScenario(2,this)">A + B</span>
+  <span class="scenario-btn" onclick="runScenario(2,this)" title="Retail + Mixed Use → Fee Simple &amp; Leased Fee">A + B</span>
   <span style="color:var(--text-3);">|</span>
-  <span class="scenario-btn" onclick="runScenario(3,this)">A + C</span>
+  <span class="scenario-btn" onclick="runScenario(3,this)" title="Retail + Owner Occupied → Fee Simple (override)">A + C</span>
   <span style="margin:0 20px;"></span>
   <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text);">Scenario Group 2:</span>
-  <span class="scenario-btn" onclick="runScenario(4,this)">D</span>
+  <span class="scenario-btn" onclick="runScenario(4,this)" title="Existing - Completed → As Stabilized">D</span>
   <span style="color:var(--text-3);">|</span>
-  <span class="scenario-btn" onclick="runScenario(5,this)">D + E</span>
+  <span class="scenario-btn" onclick="runScenario(6,this)" title="Under Renovation → As-Is + As If Complete">D</span>
+  <span style="color:var(--text-3);">|</span>
+  <span class="scenario-btn" onclick="runScenario(5,this)" title="Under Renovation + Insurance → Insurable Replacement Cost">D + E</span>
 </div>
 <div class="lo-card"><div class="sec-title">Cascade Logic — Interactive</div><div class="sec-body">
 
@@ -1507,6 +1509,7 @@ const SCENARIOS = {
   3: { group:1, picks: {propertyType:'Retail', tenancy:'Owner Occupied'} },
   4: { group:2, picks: {statusOfImprovements:'Proposed - Vacant Land'} },
   5: { group:2, picks: {statusOfImprovements:'Existing - Under Renovation', authorizedUse:'Insurance'} },
+  6: { group:2, picks: {statusOfImprovements:'Existing - Under Renovation'} },
 };
 function clearGroupFields(group) {
   const fields = group === 1 ? GROUP1_FIELDS : GROUP2_FIELDS;

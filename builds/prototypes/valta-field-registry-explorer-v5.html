@@ -131,7 +131,7 @@
   #panel-index .sec .sec-title, #panel-options .sec .sec-title { position: relative; }
   #registrySec .sec-title { cursor: default; background: #fafafa; }
   #registrySec .sec-title:hover { background: #fafafa; }
-  .expand-btn { font-size: 16px; color: var(--text-3); cursor: pointer; padding: 4px 10px; transition: all .12s; user-select: none; border-left: 1px solid var(--border); margin-left: auto; }
+  .expand-btn { font-size: 14px; color: var(--text-3); cursor: ew-resize; padding: 4px 8px; transition: all .12s; user-select: none; border-left: 1px solid var(--border); margin-left: auto; letter-spacing: 1px; }
   .expand-btn:hover { color: var(--text); background: var(--hover); }
   .resize-edge { position: absolute; top: 0; right: -4px; width: 9px; height: 100%; cursor: ew-resize; z-index: 10; }
   .resize-edge::before { content: ''; position: absolute; top: 8px; right: 3px; width: 1px; height: calc(100% - 16px); background: transparent; transition: background .15s; }
@@ -495,7 +495,7 @@ E  Authorized Use          ──┘</div>
 
 <!-- ═══ FIELD INDEX ═══ -->
 <div class="panel" id="panel-index">
-<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⟷</span></div><div class="sec-body">
+<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
     <div class="seg" style="margin:0;flex-shrink:0;">

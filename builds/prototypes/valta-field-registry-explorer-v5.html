@@ -275,6 +275,7 @@
   <div class="hdr-btns">
     <button class="btn btn-outline" id="btnFill" onclick="fillTest()">Fill Test Data</button>
     <button class="btn btn-outline" id="btnReset" onclick="resetAll()">Reset</button>
+
   </div>
 </div>
 
@@ -756,10 +757,10 @@ function setView(view, btn) {
     if (hasCollapsible) { l.classList.remove('disabled'); }
     else { l.classList.add('disabled'); l.classList.remove('active'); }
   });
-  // Enable/disable header buttons — only active on tabs with interactive fields
-  const hasFields = (view === 'full' || view === 'logic');
-  document.getElementById('btnFill').classList.toggle('disabled', !hasFields);
-  document.getElementById('btnReset').classList.toggle('disabled', !hasFields);
+  // Show buttons only on Full Dashboard
+  const showBtns = (view === 'full');
+  document.getElementById('btnFill').style.display = showBtns ? '' : 'none';
+  document.getElementById('btnReset').style.display = showBtns ? '' : 'none';
 }
 
 /* ═══ DROPDOWN OPTIONS — from Chris's Dropdown Lists tab ═══ */

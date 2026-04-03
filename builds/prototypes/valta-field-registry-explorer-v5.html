@@ -182,7 +182,10 @@
   .chips button:hover { color: var(--text-2); background: var(--hover); }
   .chips button.active { border-color: var(--border-focus); color: var(--text); background: var(--active-bg); }
   .fi-count { font-size: 12px; color: var(--text-2); font-weight: 500; font-style: italic; margin-bottom: 8px; margin-left: 20px; transition: color .15s; }
-  .fi-count::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #16a34a; margin-right: 7px; vertical-align: middle; }
+  .fi-count { transition: opacity .15s; }
+  .fi-count::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #16a34a; margin-right: 7px; vertical-align: middle; transition: opacity .15s; }
+  .fi-count.updating { opacity: 0; }
+  .fi-count.updating::before { opacity: 0; }
   .fi-table { width: 100%; border-collapse: collapse; font-size: 12px; }
   .fi-table th { text-align: left; padding: 6px 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); border-bottom: 2px solid var(--border); cursor: pointer; transition: color .1s; user-select: none; }
   .fi-table th:hover { color: var(--text); }
@@ -1197,8 +1200,12 @@ function applyFilters() {
 }
 function flashCount() {
   const el = document.getElementById('fiCount');
-  el.classList.add('flash');
-  setTimeout(() => el.classList.remove('flash'), 1200);
+  // Fade out dot + text
+  el.classList.add('updating');
+  // After fade out, update is already done (renderFields ran instantly), fade back in
+  setTimeout(() => {
+    el.classList.remove('updating');
+  }, 250);
 }
 function resetFilters() {
   document.getElementById('filterOrigin').value = 'all';

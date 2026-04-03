@@ -129,9 +129,10 @@
   .panel { display: none; max-width: 960px; margin: 0 auto; }
   #panel-index .sec, #panel-options .sec { max-width: none; width: 100%; min-width: 800px; position: relative; }
   #panel-index .sec .sec-title, #panel-options .sec .sec-title { position: relative; }
-  .resize-handle { position: absolute; top: 0; right: 0; width: 20px; height: 100%; cursor: ew-resize; display: flex; align-items: center; justify-content: center; opacity: 0.3; transition: opacity .15s; }
-  .resize-handle:hover { opacity: 0.7; }
-  .resize-handle::after { content: '⋮'; font-size: 14px; color: var(--text-3); }
+  .resize-edge { position: absolute; top: 0; right: -4px; width: 8px; height: 100%; cursor: ew-resize; z-index: 10; transition: background .15s; border-radius: 0 4px 4px 0; }
+  .resize-edge:hover, .resize-edge.active { background: rgba(0,0,0,.08); }
+  .resize-edge::after { content: ''; position: absolute; top: 50%; right: 2px; transform: translateY(-50%); width: 2px; height: 24px; background: var(--border); border-radius: 1px; transition: background .15s; }
+  .resize-edge:hover::after, .resize-edge.active::after { background: var(--text-3); }
   #panel-index .sec-body, #panel-options .sec-body { overflow-x: auto; }
   .panel.active { display: block; }
 
@@ -491,7 +492,7 @@ E  Authorized Use          ──┘</div>
 
 <!-- ═══ FIELD INDEX ═══ -->
 <div class="panel" id="panel-index">
-<div class="sec" id="registrySec"><div class="sec-title" style="cursor:default;">Field Registry<div class="resize-handle" id="regResize"></div></div><div class="sec-body">
+<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;">Field Registry</div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
     <div class="seg" style="margin:0;flex-shrink:0;">
@@ -1507,6 +1508,7 @@ cascade();
   let dragging = false, startX, startW;
   handle.addEventListener('mousedown', e => {
     dragging = true; startX = e.clientX; startW = sec.offsetWidth;
+    handle.classList.add('active');
     document.body.style.cursor = 'ew-resize'; document.body.style.userSelect = 'none';
     e.preventDefault();
   });
@@ -1517,7 +1519,8 @@ cascade();
   });
   document.addEventListener('mouseup', () => {
     if (!dragging) return;
-    dragging = false; document.body.style.cursor = ''; document.body.style.userSelect = '';
+    dragging = false; handle.classList.remove('active');
+    document.body.style.cursor = ''; document.body.style.userSelect = '';
   });
 })();
 </script>

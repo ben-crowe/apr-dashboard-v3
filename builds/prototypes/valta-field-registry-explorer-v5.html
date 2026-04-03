@@ -729,6 +729,8 @@ function pickField(item) {
     otherDD.querySelectorAll('.dd-item').forEach(i => { i.classList.toggle('selected', i.textContent === val); });
   });
   cascade();
+  // Clear active scenario — user is now manually picking
+  document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
 }
 document.addEventListener('click', e => { if (!e.target.closest('.dd')) closeAllDD(); });
 

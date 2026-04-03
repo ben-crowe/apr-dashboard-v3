@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valta Controls — v3</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --radius: 8px;
+    --shadow: 0 1px 2px rgba(0,0,0,.05);
+    --text: #18181b;
+    --text-2: #52525b;
+    --text-3: #a1a1aa;
+    --text-4: #d4d4d8;
+    --bg: #f4f4f5;
+    --card: #ffffff;
+    --border: #e4e4e7;
+    --border-focus: #a1a1aa;
+    --hover: rgba(0,0,0,.04);
+    --active-bg: rgba(0,0,0,.06);
+    --seg-bg: #f4f4f5;
+    --seg-active: #ffffff;
+    --seg-border: #e4e4e7;
+    --dd-bg: rgba(255,255,255,.95);
+    --dd-border: rgba(0,0,0,.18);
+    --dd-border-outer: none;
+    --dd-shadow: 0 2px 8px rgba(0,0,0,.08), 0 8px 24px rgba(0,0,0,.06);
+  }
+  .dark {
+    --text: #fafafa;
+    --text-2: #a1a1aa;
+    --text-3: #71717a;
+    --text-4: #52525b;
+    --bg: #09090b;
+    --card: #18181b;
+    --border: #27272a;
+    --border-focus: #52525b;
+    --hover: rgba(255,255,255,.06);
+    --active-bg: rgba(255,255,255,.08);
+    --seg-bg: #18181b;
+    --seg-active: #27272a;
+    --seg-border: #27272a;
+    --dd-bg: rgba(22,22,24,.7);
+    --dd-border: rgba(255,255,255,.15);
+    --dd-border-outer: rgba(255,255,255,.05);
+    --dd-shadow: 0 4px 20px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.04);
+    --shadow: 0 1px 2px rgba(0,0,0,.3);
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 14px; color: var(--text); background: var(--bg); line-height: 1.5; }
+
+  .split { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+  .pane { padding: 36px 40px; }
+  .pane.dark { background: #09090b; color: #fafafa; }
+  .pane:first-child { border-right: 1px solid var(--border); }
+
+  h2 { font-size: 13px; font-weight: 700; letter-spacing: -.01em; margin-bottom: 2px; }
+  .mode-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-3); margin-bottom: 28px; }
+  .section { margin-bottom: 32px; }
+  .section-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-3); margin-bottom: 12px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
+
+  .seg { display: inline-flex; align-items: center; background: var(--seg-bg); border: 1px solid var(--seg-border); border-radius: var(--radius); padding: 3px; gap: 2px; box-shadow: var(--shadow); }
+  .seg button { font: 500 12px/1 system-ui, sans-serif; padding: 6px 14px; border: none; border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .15s ease; white-space: nowrap; }
+  .seg button:hover { color: var(--text-2); background: var(--hover); }
+  .seg button.active { color: var(--text); background: var(--seg-active); box-shadow: var(--shadow); }
+
+  /* Custom dropdown */
+  .dd { position: relative; user-select: none; }
+  .dd-trigger { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 2px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text); cursor: pointer; transition: border-color .12s; }
+  .dd-trigger:hover { border-bottom-color: var(--border-focus); }
+  .dd-trigger.open { border-bottom-color: var(--text); }
+  .dd-trigger.ph { color: var(--text-3); }
+  .dd-arrow { width: 0; height: 0; border-left: 3.5px solid transparent; border-right: 3.5px solid transparent; border-top: 4px solid var(--text-3); transition: transform .15s; flex-shrink: 0; }
+  .dd-trigger.open .dd-arrow { transform: rotate(180deg); }
+
+  .dd-menu { position: absolute; top: calc(100% + 3px); left: 0; right: 0; background: var(--dd-bg); backdrop-filter: blur(20px) saturate(1.2); -webkit-backdrop-filter: blur(20px) saturate(1.2); border: 1px solid var(--dd-border); border-radius: var(--radius); box-shadow: var(--dd-shadow); z-index: 100; display: none; overflow: hidden; padding: 3px; }
+  .dd-menu.open { display: block; }
+  .dd-item { padding: 5px 9px; font-size: 12px; color: var(--text-2); cursor: pointer; transition: all .08s; border-radius: calc(var(--radius) - 4px); }
+  .dd-item:hover { background: var(--hover); color: var(--text); }
+  .dd-item.selected { background: var(--active-bg); color: var(--text); font-weight: 500; }
+
+  .chips { display: flex; gap: 4px; flex-wrap: wrap; }
+  .chips button { font: 400 11px/1 system-ui, sans-serif; padding: 5px 11px; border: 1px solid transparent; border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .12s; }
+  .chips button:hover { color: var(--text-2); background: var(--hover); }
+  .chips button.active { border-color: var(--border-focus); color: var(--text); background: var(--active-bg); }
+
+  .btns { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .btn { font: 500 12px/1 system-ui, sans-serif; padding: 7px 16px; border-radius: var(--radius); cursor: pointer; transition: all .12s; white-space: nowrap; }
+  .btn-primary { background: var(--text); color: var(--bg); border: 1px solid var(--text); box-shadow: var(--shadow); }
+  .btn-primary:hover { opacity: .85; }
+  .btn-outline { background: transparent; color: var(--text-2); border: 1px solid var(--border); box-shadow: var(--shadow); }
+  .btn-outline:hover { border-color: var(--border-focus); color: var(--text); background: var(--hover); }
+  .btn-ghost { background: transparent; color: var(--text-3); border: 1px solid transparent; }
+  .btn-ghost:hover { background: var(--hover); color: var(--text-2); }
+
+  .badges { display: flex; gap: 5px; flex-wrap: wrap; }
+  .badge { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: calc(var(--radius) - 4px); letter-spacing: .02em; }
+  .badge-outline { border: 1px solid var(--border); color: var(--text-2); }
+  .badge-muted { background: var(--active-bg); color: var(--text-2); }
+  .badge-solid { background: var(--text); color: var(--bg); }
+
+  /* Form — stacked tight so dropdown overlaps content */
+  .form-stack { display: flex; flex-direction: column; gap: 12px; }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field-label { font-size: 11px; font-weight: 500; color: var(--text-2); text-transform: uppercase; letter-spacing: .04em; }
+  .field input { font: inherit; font-size: 12px; padding: 7px 2px; border: none; border-bottom: 1px solid var(--border); background: transparent; color: var(--text); outline: none; transition: border-color .12s; }
+  .field input:focus { border-bottom-color: var(--text); }
+  .field input::placeholder { color: var(--text-4); }
+
+  .audit-box { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+  .audit-row { display: grid; grid-template-columns: 56px 1fr 170px 64px; gap: 8px; padding: 7px 14px; border-bottom: 1px solid var(--border); align-items: center; font-size: 12px; }
+  .audit-row:last-child { border-bottom: none; }
+  .audit-row .rid { font-family: 'SF Mono','Consolas', monospace; font-weight: 600; font-size: 11px; color: var(--text); }
+  .audit-row .rdesc { color: var(--text-2); }
+  .audit-row .rval { font-family: 'SF Mono','Consolas', monospace; font-size: 11px; color: var(--text-3); }
+  .pass-lbl { color: #22c55e; font-weight: 700; font-size: 11px; }
+  .fail-lbl { color: #ef4444; font-weight: 700; font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="split">
+
+<!-- ════════════ LIGHT MODE ════════════ -->
+<div class="pane">
+  <h2>Valta Controls</h2>
+  <div class="mode-label">Light Mode</div>
+
+  <div class="section">
+    <div class="section-label">Tabs</div>
+    <div class="seg">
+      <button class="active" onclick="pickTab(this)">Full Dashboard</button>
+      <button onclick="pickTab(this)">Logic Fields</button>
+      <button onclick="pickTab(this)">Field Index</button>
+      <button onclick="pickTab(this)">Rule Audit</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Glass Dropdown — click to see transparency over fields below</div>
+    <div class="form-stack">
+      <div class="field" style="z-index:10;position:relative;">
+        <span class="field-label">Property Type</span>
+        <div class="dd">
+          <div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div>
+          <div class="dd-menu">
+            <div class="dd-item" onclick="pickDD(this)">Multifamily</div>
+            <div class="dd-item" onclick="pickDD(this)">Self-Storage</div>
+            <div class="dd-item" onclick="pickDD(this)">Retail</div>
+            <div class="dd-item" onclick="pickDD(this)">Industrial</div>
+            <div class="dd-item" onclick="pickDD(this)">Office</div>
+            <div class="dd-item" onclick="pickDD(this)">Land</div>
+            <div class="dd-item" onclick="pickDD(this)">Hotel</div>
+            <div class="dd-item" onclick="pickDD(this)">Seniors</div>
+          </div>
+        </div>
+      </div>
+      <div class="field"><span class="field-label">Property Name</span><input value="Riverside Terrace Apartments"></div>
+      <div class="field"><span class="field-label">Address</span><input value="4200 Bow Trail SW, Calgary, AB T3C 2G2"></div>
+      <div class="field"><span class="field-label">Year Built</span><input value="2004"></div>
+      <div class="field"><span class="field-label">Building Size</span><input value="62,400 SF"></div>
+      <div class="field"><span class="field-label">Number of Units</span><input value="72"></div>
+      <div class="field"><span class="field-label">Parking Spaces</span><input value="88"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Chips</div>
+    <div class="chips">
+      <button class="active" onclick="pickChip(this)">All (45)</button>
+      <button onclick="pickChip(this)">User Input</button>
+      <button onclick="pickChip(this)">Logic</button>
+      <button onclick="pickChip(this)">Valcre API</button>
+      <button onclick="pickChip(this)">Triggers</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Buttons</div>
+    <div class="btns">
+      <button class="btn btn-primary">Run All Tests</button>
+      <button class="btn btn-outline">Fill Test Data</button>
+      <button class="btn btn-outline">Reset</button>
+      <button class="btn btn-ghost">Export</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Badges</div>
+    <div class="badges">
+      <span class="badge badge-outline">User Input</span>
+      <span class="badge badge-muted">Logic</span>
+      <span class="badge badge-outline">Valcre API</span>
+      <span class="badge badge-solid">Result</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Audit Rows</div>
+    <div class="audit-box">
+      <div class="audit-row"><span class="rid">R001</span><span class="rdesc">PropertyType = Multifamily</span><span class="rval">→ Fee Simple</span><span class="pass-lbl">✓ PASS</span></div>
+      <div class="audit-row"><span class="rid">R003</span><span class="rdesc">PropertyType = Retail</span><span class="rval">→ Leased Fee</span><span class="pass-lbl">✓ PASS</span></div>
+      <div class="audit-row"><span class="rid">R023</span><span class="rdesc">AuthUse = Insurance</span><span class="rval">→ Insurable RC</span><span class="pass-lbl">✓ PASS</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════ DARK MODE ════════════ -->
+<div class="pane dark">
+  <h2>Valta Controls</h2>
+  <div class="mode-label">Dark Mode</div>
+
+  <div class="section">
+    <div class="section-label">Tabs</div>
+    <div class="seg">
+      <button class="active" onclick="pickTab(this)">Full Dashboard</button>
+      <button onclick="pickTab(this)">Logic Fields</button>
+      <button onclick="pickTab(this)">Field Index</button>
+      <button onclick="pickTab(this)">Rule Audit</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Glass Dropdown — click to see transparency over fields below</div>
+    <div class="form-stack">
+      <div class="field" style="z-index:10;position:relative;">
+        <span class="field-label">Property Type</span>
+        <div class="dd">
+          <div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div>
+          <div class="dd-menu">
+            <div class="dd-item" onclick="pickDD(this)">Multifamily</div>
+            <div class="dd-item" onclick="pickDD(this)">Self-Storage</div>
+            <div class="dd-item" onclick="pickDD(this)">Retail</div>
+            <div class="dd-item" onclick="pickDD(this)">Industrial</div>
+            <div class="dd-item" onclick="pickDD(this)">Office</div>
+            <div class="dd-item" onclick="pickDD(this)">Land</div>
+            <div class="dd-item" onclick="pickDD(this)">Hotel</div>
+            <div class="dd-item" onclick="pickDD(this)">Seniors</div>
+          </div>
+        </div>
+      </div>
+      <div class="field"><span class="field-label">Property Name</span><input value="Riverside Terrace Apartments"></div>
+      <div class="field"><span class="field-label">Address</span><input value="4200 Bow Trail SW, Calgary, AB T3C 2G2"></div>
+      <div class="field"><span class="field-label">Year Built</span><input value="2004"></div>
+      <div class="field"><span class="field-label">Building Size</span><input value="62,400 SF"></div>
+      <div class="field"><span class="field-label">Number of Units</span><input value="72"></div>
+      <div class="field"><span class="field-label">Parking Spaces</span><input value="88"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Chips</div>
+    <div class="chips">
+      <button class="active" onclick="pickChip(this)">All (45)</button>
+      <button onclick="pickChip(this)">User Input</button>
+      <button onclick="pickChip(this)">Logic</button>
+      <button onclick="pickChip(this)">Valcre API</button>
+      <button onclick="pickChip(this)">Triggers</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Buttons</div>
+    <div class="btns">
+      <button class="btn btn-primary">Run All Tests</button>
+      <button class="btn btn-outline">Fill Test Data</button>
+      <button class="btn btn-outline">Reset</button>
+      <button class="btn btn-ghost">Export</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Badges</div>
+    <div class="badges">
+      <span class="badge badge-outline">User Input</span>
+      <span class="badge badge-muted">Logic</span>
+      <span class="badge badge-outline">Valcre API</span>
+      <span class="badge badge-solid">Result</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Audit Rows</div>
+    <div class="audit-box">
+      <div class="audit-row"><span class="rid">R001</span><span class="rdesc">PropertyType = Multifamily</span><span class="rval">→ Fee Simple</span><span class="pass-lbl">✓ PASS</span></div>
+      <div class="audit-row"><span class="rid">R003</span><span class="rdesc">PropertyType = Retail</span><span class="rval">→ Leased Fee</span><span class="pass-lbl">✓ PASS</span></div>
+      <div class="audit-row"><span class="rid">R023</span><span class="rdesc">AuthUse = Insurance</span><span class="rval">→ Insurable RC</span><span class="pass-lbl">✓ PASS</span></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+function toggleDD(trigger) {
+  const dd = trigger.closest('.dd');
+  const menu = dd.querySelector('.dd-menu');
+  const isOpen = menu.classList.contains('open');
+  document.querySelectorAll('.dd-menu.open').forEach(m => { m.classList.remove('open'); m.closest('.dd').querySelector('.dd-trigger').classList.remove('open'); });
+  if (!isOpen) { menu.classList.add('open'); trigger.classList.add('open'); }
+}
+function pickDD(item) {
+  const dd = item.closest('.dd');
+  const trigger = dd.querySelector('.dd-trigger');
+  const menu = dd.querySelector('.dd-menu');
+  menu.querySelectorAll('.dd-item').forEach(i => i.classList.remove('selected'));
+  item.classList.add('selected');
+  trigger.childNodes[0].textContent = item.textContent;
+  trigger.classList.remove('ph');
+  menu.classList.remove('open');
+  trigger.classList.remove('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.dd')) {
+    document.querySelectorAll('.dd-menu.open').forEach(m => { m.classList.remove('open'); m.closest('.dd').querySelector('.dd-trigger').classList.remove('open'); });
+  }
+});
+function pickTab(btn) { btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+function pickChip(btn) { btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
+</script>
+</body>
+</html>

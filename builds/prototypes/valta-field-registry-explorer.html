@@ -12,17 +12,28 @@
     --row-h: 28px;
     --gap-col: 32px;
     --gap-row: 6px;
-    --text: #111827;
-    --text-label: #4b5563;
-    --text-muted: #9ca3af;
-    --line: #d1d5db;
-    --focus: #2563eb;
-    --bg: #f3f4f6;
+    --radius: 8px;
+    --shadow: 0 1px 2px rgba(0,0,0,.05);
+    --text: #18181b;
+    --text-2: #52525b;
+    --text-3: #a1a1aa;
+    --text-4: #d4d4d8;
+    --text-label: #52525b;
+    --text-muted: #a1a1aa;
+    --line: #e4e4e7;
+    --focus: #18181b;
+    --bg: #f4f4f5;
     --card: #ffffff;
-    --border: #e5e7eb;
-    --accent: #2563eb;
-    --accent-bg: #eff6ff;
-    --accent-border: #bfdbfe;
+    --border: #e4e4e7;
+    --border-focus: #a1a1aa;
+    --hover: rgba(0,0,0,.04);
+    --active-bg: rgba(0,0,0,.06);
+    --seg-bg: #f4f4f5;
+    --seg-active: #ffffff;
+    --seg-border: #e4e4e7;
+    --accent: #18181b;
+    --accent-bg: rgba(0,0,0,.04);
+    --accent-border: #e4e4e7;
     --green: #059669;
     --green-bg: #ecfdf5;
     --amber: #d97706;
@@ -30,25 +41,26 @@
     --red: #dc2626;
     --red-bg: #fef2f2;
   }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 14px; line-height: 1.5; color: var(--text); background: var(--bg); padding: 24px 32px; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 13px; line-height: 1.5; color: var(--text); background: var(--bg); padding: 24px 32px; }
 
   .hdr { max-width: 960px; margin: 0 auto 20px; display: flex; justify-content: space-between; align-items: flex-end; }
   .hdr h1 { font-size: 20px; font-weight: 700; }
   .hdr .sub { font-size: 13px; color: var(--text-muted); }
   .hdr-btns { display: flex; gap: 8px; }
-  .hdr-btns button { font: 500 12px/1 system-ui, sans-serif; padding: 7px 14px; border-radius: 6px; border: 1px solid var(--border); background: var(--card); color: var(--text-label); cursor: pointer; }
-  .hdr-btns button:hover { border-color: #ccc; color: var(--text); }
-  .hdr-btns .primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .hdr-btns button { font: 500 12px/1 system-ui, sans-serif; padding: 7px 16px; border-radius: var(--radius); border: 1px solid var(--border); background: transparent; color: var(--text-2); cursor: pointer; transition: all .12s; box-shadow: var(--shadow); }
+  .hdr-btns button:hover { border-color: var(--border-focus); color: var(--text); background: var(--hover); }
+  .hdr-btns .primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .hdr-btns .primary:hover { opacity: .85; }
 
-  .sec { max-width: 960px; margin: 0 auto 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
-  .sec-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text); padding: 12px 24px; background: #f9fafb; border-bottom: 1px solid var(--border); border-radius: 8px 8px 0 0; }
+  .sec { max-width: 960px; margin: 0 auto 16px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .sec-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-3); padding: 12px 24px; border-bottom: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0; }
   .sec-body { padding: 16px 24px 20px; }
 
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-row) var(--gap-col); }
   .span2 { grid-column: 1 / -1; }
 
   .f { display: flex; align-items: center; gap: 8px; min-height: var(--row-h); position: relative; }
-  .f-lbl { font-size: 13px; color: var(--text-label); white-space: nowrap; min-width: var(--label-w); text-align: right; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: flex-end; gap: 0; }
+  .f-lbl { font-size: 12px; color: var(--text-2); white-space: nowrap; min-width: var(--label-w); text-align: right; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: flex-end; gap: 0; }
   .f-lbl::after { content: ':'; }
   .f-val { flex: 1; min-width: 0; }
 
@@ -59,41 +71,40 @@
   .u-inp::placeholder { color: var(--text-muted); font-style: italic; }
 
   .u-sel-wrap { position: relative; width: var(--input-w); }
-  .u-sel { font: inherit; font-size: 12px; color: var(--text); border: none; border-bottom: 1px solid var(--line); background: transparent; width: 100%; height: var(--row-h); padding: 0; outline: none; cursor: pointer; appearance: none; }
-  .u-sel:focus { border-bottom-color: var(--focus); }
+  .u-sel { font: inherit; font-size: 12px; color: var(--text); border: none; border-bottom: 1px solid var(--border); background: transparent; width: 100%; height: var(--row-h); padding: 0; outline: none; cursor: pointer; appearance: none; transition: border-color .12s; }
+  .u-sel:hover { border-bottom-color: var(--border-focus); }
+  .u-sel:focus { border-bottom-color: var(--text); }
   .u-sel-wrap::after { content: ''; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid var(--text-label); pointer-events: none; }
   .u-sel.ph { color: var(--text-muted); }
 
   .f-num:empty { display: none; }
-  .f-num { font-size: 10px; color: var(--accent); font-weight: 600; margin-right: 4px; cursor: help; }
+  .f-num { font-size: 10px; color: var(--text-3); font-weight: 600; margin-right: 4px; cursor: help; }
 
   /* Live feedback annotation */
-  .cascade-info { font-size: 10px; color: var(--accent); margin-top: 1px; display: block; font-weight: 500; line-height: 1.3; min-height: 13px; }
+  .cascade-info { font-size: 10px; color: var(--text-3); margin-top: 1px; display: block; font-weight: 500; line-height: 1.3; min-height: 13px; }
   .cascade-info.override { color: var(--amber); }
   .cascade-info:empty { display: none; }
   .smart-wrap { display: flex; flex-direction: column; }
   .f.dimmed .f-lbl { opacity: .4; }
   .f.dimmed .u-sel { opacity: .4; }
 
-  /* View toggle */
-  .view-toggle { max-width: 960px; margin: 0 auto 16px; display: flex; gap: 0; }
-  .view-btn { font: 600 12px/1 system-ui, sans-serif; padding: 9px 16px; border: 1px solid var(--border); background: var(--card); color: var(--text-label); cursor: pointer; transition: all .15s; }
-  .view-btn:first-child { border-radius: 6px 0 0 6px; }
-  .view-btn:last-child { border-radius: 0 6px 6px 0; }
-  .view-btn:not(:first-child) { border-left: none; }
-  .view-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .view-btn:not(.active):hover { background: #f9fafb; color: var(--text); }
+  /* View toggle — segmented control */
+  .view-toggle { max-width: 960px; margin: 0 auto 16px; }
+  .seg { display: inline-flex; align-items: center; background: var(--seg-bg); border: 1px solid var(--seg-border); border-radius: var(--radius); padding: 3px; gap: 2px; box-shadow: var(--shadow); }
+  .seg button { font: 500 12px/1 system-ui, sans-serif; padding: 6px 14px; border: none; border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .15s ease; white-space: nowrap; }
+  .seg button:hover { color: var(--text-2); background: var(--hover); }
+  .seg button.active { color: var(--text); background: var(--seg-active); box-shadow: var(--shadow); }
 
   /* Panel containers */
   .panel { display: none; max-width: 960px; margin: 0 auto 16px; }
   .panel.active { display: block; }
 
   /* Logic-only view */
-  .logic-only-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+  .logic-only-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); }
   .logic-only-card .sec-body { padding: 16px 20px 20px; }
   .logic-only-card .grp { margin-bottom: 20px; }
   .logic-only-card .grp:last-child { margin-bottom: 0; }
-  .logic-only-card .grp-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid #eee; }
+  .logic-only-card .grp-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-3); margin-bottom: 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border); }
   .lo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
   .lo-grid .f { min-height: 32px; }
   .lo-grid .f-lbl { min-width: 140px; font-size: 12px; }
@@ -102,7 +113,7 @@
   .lo-arrow { grid-column: 1 / -1; text-align: center; font-size: 11px; color: var(--text-muted); padding: 2px 0; font-family: monospace; }
 
   /* Rule Explorer */
-  .rule-panel { background: var(--card); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,.06); padding: 24px 28px; margin-top: 16px; }
+  .rule-panel { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px 28px; margin-top: 16px; }
   .rule-panel-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 20px; }
   .re-group { margin-bottom: 28px; }
   .re-group:last-child { margin-bottom: 0; }
@@ -119,31 +130,31 @@
   .fi-search { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; font: inherit; font-size: 13px; outline: none; margin-bottom: 12px; }
   .fi-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.08); }
   .fi-filters { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-  .fi-chip { font: 500 11px/1 system-ui, sans-serif; padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border); background: var(--card); color: var(--text-label); cursor: pointer; transition: all .15s; }
-  .fi-chip:hover { border-color: #ccc; }
-  .fi-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .fi-chip { font: 400 11px/1 system-ui, sans-serif; padding: 5px 11px; border: 1px solid transparent; border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .12s; }
+  .fi-chip:hover { color: var(--text-2); background: var(--hover); }
+  .fi-chip.active { border-color: var(--border-focus); color: var(--text); background: var(--active-bg); }
   .fi-table { width: 100%; border-collapse: collapse; font-size: 12px; }
   .fi-table th { text-align: left; padding: 8px 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); border-bottom: 2px solid var(--border); position: sticky; top: 0; background: var(--card); }
   .fi-table td { padding: 6px 10px; border-bottom: 1px solid #f0f1f3; color: var(--text-label); vertical-align: top; }
   .fi-table tr:hover td { background: #f9fafb; }
   .fi-table .fn { font-weight: 600; color: var(--text); font-family: 'SF Mono', 'Consolas', monospace; font-size: 11px; }
-  .fi-badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; line-height: 1.4; }
-  .fi-badge.user { background: #dbeafe; color: #1e40af; }
-  .fi-badge.logic { background: #fef3c7; color: #92400e; }
-  .fi-badge.api { background: #d1fae5; color: #065f46; }
-  .fi-badge.calc { background: #e0e7ff; color: #3730a3; }
-  .fi-role { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; }
-  .fi-role.trigger { background: #fef3c7; color: #92400e; }
-  .fi-role.result { background: #dbeafe; color: #1e40af; }
-  .fi-role.independent { background: #f3f4f6; color: #6b7280; }
+  .fi-badge { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: calc(var(--radius) - 4px); line-height: 1.4; letter-spacing: .02em; }
+  .fi-badge.user { border: 1px solid var(--border); color: var(--text-2); }
+  .fi-badge.logic { background: var(--active-bg); color: var(--text-2); }
+  .fi-badge.api { border: 1px solid var(--border); color: var(--text-2); }
+  .fi-badge.calc { background: var(--active-bg); color: var(--text-2); }
+  .fi-role { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: calc(var(--radius) - 4px); }
+  .fi-role.trigger { background: var(--active-bg); color: var(--text-2); }
+  .fi-role.result { border: 1px solid var(--border); color: var(--text-2); }
+  .fi-role.independent { background: transparent; color: var(--text-3); }
   .fi-count { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
 
   /* ── Rule Audit ── */
   .audit-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
   .audit-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: #f9fafb; border-bottom: 1px solid var(--border); }
   .audit-header h3 { font-size: 14px; font-weight: 700; }
-  .audit-run-btn { font: 600 12px/1 system-ui, sans-serif; padding: 8px 18px; border-radius: 6px; border: none; background: var(--accent); color: #fff; cursor: pointer; }
-  .audit-run-btn:hover { background: #1d4ed8; }
+  .audit-run-btn { font: 500 12px/1 system-ui, sans-serif; padding: 7px 16px; border-radius: var(--radius); border: 1px solid var(--text); background: var(--text); color: var(--bg); cursor: pointer; box-shadow: var(--shadow); transition: opacity .12s; }
+  .audit-run-btn:hover { opacity: .85; }
   .audit-summary { display: flex; gap: 16px; padding: 16px 24px; border-bottom: 1px solid var(--border); }
   .audit-stat { text-align: center; }
   .audit-stat .num { font-size: 28px; font-weight: 700; line-height: 1; }
@@ -179,10 +190,12 @@
 
 <!-- View Toggle — 4 tabs -->
 <div class="view-toggle">
-  <button class="view-btn active" onclick="setView('full')">Full Dashboard</button>
-  <button class="view-btn" onclick="setView('logic')">Logic Fields</button>
-  <button class="view-btn" onclick="setView('index')">Field Index</button>
-  <button class="view-btn" onclick="setView('audit')">Rule Audit</button>
+  <div class="seg">
+    <button class="active" onclick="setView('full',this)">Full Dashboard</button>
+    <button onclick="setView('logic',this)">Logic Fields</button>
+    <button onclick="setView('index',this)">Field Index</button>
+    <button onclick="setView('audit',this)">Rule Audit</button>
+  </div>
 </div>
 
 <!-- ════════════════════════════════════════ -->
@@ -544,11 +557,9 @@ function g(id) { return document.getElementById(id)?.value || ''; }
 /* ═══════════════════════════════════════════
    VIEW TOGGLE
    ═══════════════════════════════════════════ */
-function setView(view) {
-  document.querySelectorAll('.view-btn').forEach((b,i) => {
-    const views = ['full','logic','index','audit'];
-    b.classList.toggle('active', views[i] === view);
-  });
+function setView(view, btn) {
+  document.querySelectorAll('.seg button').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById('panel-' + view).classList.add('active');
 }

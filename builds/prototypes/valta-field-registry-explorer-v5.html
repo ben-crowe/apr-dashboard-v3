@@ -480,7 +480,7 @@ E  Authorized Use          ──┘</div>
   <div style="display:flex;gap:16px;align-items:center;margin-bottom:10px;flex-wrap:wrap;">
     <div class="seg" style="margin:0;">
       <button class="active" onclick="setScope('all',this)">Valcre (All)</button>
-      <button onclick="setScope('dashboard',this)">Dashboard</button>
+      <button class="active" onclick="setScope('dashboard',this)">Dashboard</button>
     </div>
     <input type="hidden" id="filterOrigin" value="all">
     <div style="display:flex;align-items:center;gap:6px;">
@@ -1173,8 +1173,18 @@ function sortFields(th, key) {
 /* ═══ FILTER LOGIC ═══ */
 function setScope(val, btn) {
   document.getElementById('filterOrigin').value = val;
-  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+  const buttons = btn.parentElement.querySelectorAll('button');
+  const valcreBtn = buttons[0]; // Valcre (All)
+  const dashBtn = buttons[1];   // Dashboard
+  if (val === 'all') {
+    // Valcre All = superset, both active
+    valcreBtn.classList.add('active');
+    dashBtn.classList.add('active');
+  } else {
+    // Dashboard only
+    valcreBtn.classList.remove('active');
+    dashBtn.classList.add('active');
+  }
   expandedRow = null;
   renderFields();
 }

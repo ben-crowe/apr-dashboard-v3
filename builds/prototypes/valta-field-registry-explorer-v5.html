@@ -1163,9 +1163,10 @@ function renderFields() {
   });
   const dashCount = filtered.filter(x=>x.f.origin!=='valcre').length;
   const valcreCount = filtered.filter(x=>x.f.origin==='valcre').length;
+  const sortNames = {n:'Field Name',l:'Label',c:'Control Type',s:'Source',role:'Role',d:'Dropdown List',vr:'Valcre Location',v:'Valcre API Key',nf:'New',req:'Required',origin:'Origin'};
   let countText = 'Showing '+filtered.length+' of '+ALLFIELDS.length+' fields';
-  if (dashCount > 0 && valcreCount > 0) countText += ' ('+dashCount+' dashboard, '+valcreCount+' Valcre-only)';
-  if (currentSort !== 'idx') countText += ' · grouped by ' + currentSort;
+  if (dashCount > 0 && valcreCount > 0) countText += ' ('+dashCount+' dashboard, '+valcreCount+' Valcre)';
+  if (currentSort !== 'idx') countText += ' · grouped by ' + (sortNames[currentSort] || currentSort);
   document.getElementById('fiCount').textContent = countText;
 }
 

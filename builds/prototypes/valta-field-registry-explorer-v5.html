@@ -751,9 +751,8 @@ function setView(view, btn) {
   if (view === 'audit') runAudit();
   if (view === 'options') renderOptions();
   if (view === 'index') renderFields();
-  // Show dash controls only on Full Dashboard
-  const dashControls = document.getElementById('dashControls').parentElement;
-  dashControls.style.display = (view === 'full') ? '' : 'none';
+  // Show dash controls only on Full Dashboard — keep right-aligned
+  document.getElementById('dashControls').parentElement.style.display = (view === 'full') ? 'flex' : 'none';
   // Show buttons only on Full Dashboard
   const showBtns = (view === 'full');
   document.getElementById('btnFill').style.display = showBtns ? '' : 'none';
@@ -1531,13 +1530,33 @@ function fillTest() {
     'CMHC Financing': 'No',
     'Valuation Premises': 'As-Is',
     'Asset Condition': 'Good',
-    'Land Metric': 'Per Acre',
+    'State of Improvements': 'Existing',
+    'Land Metric': 'Square Feet',
     'Assignment Type': 'Single Property',
     'Desktop Report': 'No',
     'Value Timeframe': 'Current',
     'Transaction Status': 'Not Applicable',
     'Zoning Status': 'Conforming',
   };
+  // Fill plain text inputs that don't have data-fill
+  const textFills = {
+    'Zoning': 'C-COR2',
+    'Zone Code': 'DC-15Z2006',
+    'Land Use': 'Commercial Mixed-Use',
+    'Flood Zone': 'Zone X — Minimal Risk',
+    'Total Site Area': '42,500 SF (0.98 AC)',
+    'Assessed Value': '$8,450,000',
+    'Taxes': '$112,350',
+  };
+  document.querySelectorAll('#panel-full .f').forEach(field => {
+    const lbl = field.querySelector('.f-lbl');
+    if (!lbl) return;
+    const labelText = lbl.textContent.replace(':','').trim();
+    const val = textFills[labelText];
+    if (!val) return;
+    const inp = field.querySelector('.u-inp');
+    if (inp && !inp.value) inp.value = val;
+  });
   // Find dropdowns inside the full dashboard panel only
   document.querySelectorAll('#panel-full .dd:not([data-field])').forEach(dd => {
     // Find the label for this dropdown

@@ -101,8 +101,8 @@
   /* Address: underline matches single-column field line length exactly. Input spans full width for long text. */
   .span2 { position: relative; }
   .span2 .u-inp { border-bottom: none; }
-  .span2::after { content: ''; position: absolute; bottom: 0; left: 153px; width: calc(50% - 153px - 14px); height: 1px; background: var(--border); pointer-events: none; }
-  .span2:focus-within::after { background: var(--text); }
+  .span2::after { content: ''; position: absolute; bottom: 0; left: 153px; width: calc(50% - 153px - 14px); height: 0; border-bottom: 1px solid var(--border); pointer-events: none; }
+  .span2:focus-within::after { border-bottom-color: var(--text); }
 
   /* Custom dropdown */
   .dd { position: relative; user-select: none; }

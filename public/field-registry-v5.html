@@ -668,10 +668,11 @@ function cascade() {
   setInfo('info-interest', driver);
   setResult('lo-interest', interest, 'Outcome');
 
-  const ptRow = document.getElementById('row-pt');
-  const subRow = document.getElementById('row-sub');
-  if (ptRow) ptRow.classList.toggle('dimmed', !!(tn && INT_TN[tn]) || !!(sub && INT_SUB[sub]));
-  if (subRow) subRow.classList.toggle('dimmed', !!(tn && INT_TN[tn]));
+  // Dimming only on Logic Fields panel rows (lo- prefixed), not Full Dashboard
+  document.querySelectorAll('#panel-logic .lo-row').forEach(row => {
+    if (row.querySelector('[data-field="propertyType"]')) row.classList.toggle('dimmed', !!(tn && INT_TN[tn]) || !!(sub && INT_SUB[sub]));
+    if (row.querySelector('[data-field="propertySubtype"]')) row.classList.toggle('dimmed', !!(tn && INT_TN[tn]));
+  });
 
   let scenarios = [], sDriver = '';
   if (au === 'Insurance') { scenarios = ['Insurable Replacement Cost']; sDriver = 'E: Insurance (override)'; }
@@ -682,8 +683,10 @@ function cascade() {
   setInfo('info-scenarios', sDriver);
   setResult('lo-scenarios', sText, 'Outcome');
 
-  const stRow = document.getElementById('row-st');
-  if (stRow) stRow.classList.toggle('dimmed', au === 'Insurance');
+  // Dim Status of Improvements only on Logic Fields panel
+  document.querySelectorAll('#panel-logic .lo-row').forEach(row => {
+    if (row.querySelector('[data-field="statusOfImprovements"]')) row.classList.toggle('dimmed', au === 'Insurance');
+  });
 
   const apprSet = new Set();
   scenarios.forEach(s => (APPR[s]||[]).forEach(a => apprSet.add(a)));
@@ -1528,7 +1531,7 @@ function fillTest() {
     'Scope of Work': 'All Applicable',
     'Report Type': 'Appraisal Report',
     'CMHC Financing': 'No',
-    'Valuation Premises': 'As-Is',
+    'Valuation Premises': 'Market Value',
     'Asset Condition': 'Good',
     'State of Improvements': 'Existing',
     'Land Metric': 'Square Feet',
@@ -1536,7 +1539,7 @@ function fillTest() {
     'Desktop Report': 'No',
     'Value Timeframe': 'Current',
     'Transaction Status': 'Not Applicable',
-    'Zoning Status': 'Conforming',
+    'Zoning Status': 'Legal Conforming',
   };
   // Fill plain text inputs that don't have data-fill
   const textFills = {

@@ -98,9 +98,9 @@
   .u-inp { font: inherit; font-size: 12px; color: var(--text); border: none; border-bottom: 1px solid var(--border); background: transparent; width: 100%; height: 28px; padding: 0 2px; outline: none; transition: border-color .12s; }
   .u-inp:focus { border-bottom-color: var(--text); }
   .u-inp::placeholder { color: var(--text-4); }
-  /* Address: full width input, short underline */
-  .span2 .u-inp { border-bottom: none; background-image: linear-gradient(#b4b4bd, #b4b4bd); background-size: 220px 1px; background-position: bottom left; background-repeat: no-repeat; }
-  .span2 .u-inp:focus { background-image: linear-gradient(var(--text), var(--text)); }
+  /* Address: same underline as other fields */
+  .span2 .u-inp { border-bottom: 1px solid var(--border); }
+  .span2 .u-inp:focus { border-bottom-color: var(--text); }
 
   /* Custom dropdown */
   .dd { position: relative; user-select: none; }

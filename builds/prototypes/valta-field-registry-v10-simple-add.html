@@ -1774,9 +1774,10 @@ function csGoToLogic(fieldName) {
 function csInjectCascadeRow(fieldName) {
   const f = FIELDS.find(x => x.n === fieldName);
   if (!f) return;
-  // Remove any previously injected rows
-  document.querySelectorAll('.cs-injected-row').forEach(el => el.remove());
-  // Determine next letter: existing are A-E, next is F, G, etc.
+  // Remove any previously injected elements
+  document.querySelectorAll('.cs-injected-row, .cs-injected-section').forEach(el => el.remove());
+
+  // Determine next letter
   const existingLetters = document.querySelectorAll('#panel-logic .lo-letter');
   const usedLetters = new Set();
   existingLetters.forEach(el => usedLetters.add(el.textContent.trim()));
@@ -1784,41 +1785,75 @@ function csInjectCascadeRow(fieldName) {
   let nextLetter = 'F';
   for (const ch of alphabet) { if (!usedLetters.has(ch)) { nextLetter = ch; break; } }
 
-  // Determine which group to add to based on role
   const role = getRole(f.n);
-  // Add to Group 1 by default (Property Rights group), or Group 2 if it looks value-related
-  const targetGroup = document.querySelector('#panel-logic .grp:first-child');
-  if (!targetGroup) return;
+  const isResult = (role === 'result');
 
-  // Find the last lo-row in the group and insert after it
-  const loRows = targetGroup.querySelectorAll('.lo-row');
-  const lastRow = loRows[loRows.length - 1];
-
-  // Build the new cascade row
-  const newRow = document.createElement('div');
-  newRow.className = 'lo-row cs-injected-row';
-  newRow.style.background = '#fefce8';
-  newRow.style.borderRadius = '4px';
-  newRow.style.padding = '2px 0';
-  newRow.innerHTML =
-    '<span class="lo-letter" style="color:var(--amber);font-weight:800;">'+nextLetter+'</span>' +
-    '<span class="lo-line" style="background:var(--amber);"></span>' +
-    '<span class="f-lbl" style="min-width:0;text-align:left;color:var(--text);font-weight:600;">'+f.l+'</span>' +
-    '<div class="f-val"><div class="dd" data-field="'+f.n+'"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu">' +
-    (f.d && DROPDOWN_OPTIONS[f.d] ? DROPDOWN_OPTIONS[f.d].map(o => '<div class="dd-item" onclick="pickDD(this)">'+o+'</div>').join('') : '') +
-    '</div></div></div>' +
-    '<span class="lo-spacer"></span>' +
-    '<span style="font-size:10px;color:var(--amber);font-weight:600;">NEW — wire up trigger</span>' +
-    '<span></span>';
-
-  if (lastRow) {
-    lastRow.parentNode.insertBefore(newRow, lastRow.nextSibling);
-  } else {
-    targetGroup.appendChild(newRow);
+  // Build dropdown menu HTML if the field has options
+  let ddMenuHTML = '';
+  if (f.d && DROPDOWN_OPTIONS[f.d]) {
+    ddMenuHTML = DROPDOWN_OPTIONS[f.d].map(o => '<div class="dd-item" onclick="pickDD(this)">'+o+'</div>').join('');
   }
 
-  // Scroll to the new row
-  setTimeout(() => newRow.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+  // Create a new cascade group section (matches re-section pattern)
+  const section = document.createElement('div');
+  section.className = 're-section cs-injected-section';
+  section.style.outline = '2px solid var(--amber)';
+  section.style.outlineOffset = '2px';
+  section.innerHTML =
+    '<div class="re-section-bar" onclick="this.parentElement.classList.toggle(\'closed\')">' +
+      '<span class="re-chevron">▾</span>' +
+      '<span class="re-section-name" style="color:var(--amber);">New — ' + f.l + ' (' + (isResult ? 'Result' : 'Trigger') + ')</span>' +
+      '<span style="font-size:9px;color:var(--amber);margin-left:auto;font-weight:600;">PENDING CONFIGURATION</span>' +
+    '</div>' +
+    '<div class="re-section-body">' +
+      '<div class="re-diagram">' + nextLetter + '  ' + f.l + (f.d ? '        ──┐\n' + ' '.repeat(nextLetter.length + 2 + f.l.length) + '          ├──→  Connect to result...' : '        ──→  Connect to result...') + '</div>' +
+      '<table class="re-table">' +
+        '<tr><td class="re-col-hdr">User Choice</td><td class="re-col-hdr">Outcome</td></tr>' +
+        '<tr class="re-title-row"><td><span class="re-let">' + nextLetter + '</span>' + f.l + '</td><td style="color:var(--text-3);font-style:italic;">Wire logic here</td></tr>' +
+        (f.d && DROPDOWN_OPTIONS[f.d] ? DROPDOWN_OPTIONS[f.d].map(o =>
+          '<tr><td>' + o + '</td><td style="color:var(--text-4);font-style:italic;">→ ?</td></tr>'
+        ).join('') : '<tr><td style="color:var(--text-3);font-style:italic;">Add options to define trigger values</td><td></td></tr>') +
+      '</table>' +
+    '</div>';
+
+  // Also add a trigger row into the interactive cascade card (lo-card)
+  const loCard = document.querySelector('#panel-logic .lo-card .sec-body');
+  if (loCard) {
+    // Add a new group inside the lo-card
+    const grpDiv = document.createElement('div');
+    grpDiv.className = 'grp cs-injected-row';
+    grpDiv.style.background = '#fefce8';
+    grpDiv.style.borderRadius = '6px';
+    grpDiv.style.padding = '8px 12px';
+    grpDiv.style.marginTop = '16px';
+    grpDiv.innerHTML =
+      '<div class="grp-label" style="color:var(--amber);border-bottom-color:var(--amber);">New — ' + f.l + ' (' + (isResult ? 'Result' : 'Trigger') + ')</div>' +
+      '<div class="lo-row">' +
+        '<span class="lo-letter" style="color:var(--amber);font-weight:800;">' + nextLetter + '</span>' +
+        '<span class="lo-line" style="background:var(--amber);"></span>' +
+        '<span class="f-lbl" style="min-width:0;text-align:left;color:var(--text);font-weight:600;">' + f.l + '</span>' +
+        '<div class="f-val"><div class="dd" data-field="' + f.n + '"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu">' + ddMenuHTML + '</div></div></div>' +
+        '<span class="lo-spacer"></span>' +
+        '<span class="lo-result-lbl" style="color:var(--amber);">Result</span>' +
+        '<div class="f-val"><div class="dd"><div class="dd-trigger ph" style="color:var(--text-4);font-style:italic;">Connect to result...<span class="dd-arrow"></span></div><div class="dd-menu"></div></div></div>' +
+      '</div>';
+    loCard.appendChild(grpDiv);
+  }
+
+  // Insert the Rule Explorer section after existing re-sections
+  const lastReSection = document.querySelector('#panel-logic .re-section:last-of-type');
+  if (lastReSection) {
+    lastReSection.parentNode.insertBefore(section, lastReSection.nextSibling);
+  }
+
+  // Scroll to the interactive cascade row first
+  const injectedRow = document.querySelector('.cs-injected-row');
+  if (injectedRow) {
+    setTimeout(() => injectedRow.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
+  }
+
+  // Fade the outline after 3s
+  setTimeout(() => { section.style.outline = ''; }, 3000);
 }
 function csLabelToFieldName(label) {
   return label.replace(/[^a-zA-Z0-9\s]/g,'').split(/\s+/).map((w,i) => i===0 ? w.charAt(0).toLowerCase()+w.slice(1) : w.charAt(0).toUpperCase()+w.slice(1)).join('');
@@ -1886,7 +1921,7 @@ function insertAddRow(e) {
     '<td><span class="cs-status cs-status-pending">Pending</span></td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">Valta</td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-4);font-style:italic;font-family:SF Mono,Consolas,monospace;" id="csAutoName">auto</td>' +
-    '<td><input name="l" placeholder="Step 2..." autocomplete="off" disabled oninput="csOnLabelInput(this)"></td>' +
+    '<td><input name="l" placeholder="Label..." autocomplete="off" disabled oninput="csOnLabelInput(this)"></td>' +
     '<td><select name="cs-type" onchange="csOnTypeStep(this.closest(\'tr\'))">'+typeOpts+'</select></td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">User Input</td>' +
     '<td><select name="role" disabled>'+roleOpts+'</select></td>' +
@@ -1912,7 +1947,7 @@ function csOnTypeStep(tr) {
     ddSel.style.color = '';
     ddSel.innerHTML = csBuildFriendlyDDOptions();
     labelInp.disabled = true;
-    labelInp.placeholder = 'Step 3 — auto-fills from list...';
+    labelInp.placeholder = 'Auto-fills from list...';
     roleSel.disabled = true;
     // Flash the dropdown list cell
     ddSel.closest('td').style.transition = 'background .3s';
@@ -1925,7 +1960,7 @@ function csOnTypeStep(tr) {
     ddSel.style.color = 'var(--text-3)';
     hideNewDdPopover();
     labelInp.disabled = false;
-    labelInp.placeholder = 'Step 2 — type label...';
+    labelInp.placeholder = 'Type label...';
     labelInp.focus();
     roleSel.disabled = true;
     // Flash the label cell
@@ -1945,7 +1980,7 @@ function csOnDdStep(sel) {
     // Unlock label for typing the new list name manually
     const labelInp = tr.querySelector('input[name="l"]');
     labelInp.disabled = false;
-    labelInp.placeholder = 'Type label for new list...';
+    labelInp.placeholder = 'Type label...';
     labelInp.focus();
     const roleSel = tr.querySelector('select[name="role"]');
     roleSel.disabled = true; // still locked until label filled
@@ -2077,7 +2112,8 @@ function renderNewDdExpand(expandTr) {
         '<span style="font-size:10px;color:var(--text-3);">'+newDdOptions.filter(o=>o.trim()).length+' options</span>' +
       '</div>' +
       optsHtml +
-      '<div style="padding:2px 0 2px 16px;"><span style="font:400 11px/1 system-ui,sans-serif;color:var(--text-3);cursor:pointer;" onclick="addNewDdOpt()">+ Add option</span></div>' +
+      '<div style="padding:2px 0 2px 16px;display:flex;align-items:center;justify-content:space-between;"><span style="font:400 11px/1 system-ui,sans-serif;color:var(--text-3);cursor:pointer;" onclick="addNewDdOpt()">+ Add option</span>' +
+      '<button onclick="csConfirmDdOptions(this)" style="font:500 10px/1 system-ui,sans-serif;padding:3px 10px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-2);cursor:pointer;transition:all .12s;" id="csDdConfirmBtn">Confirm Options</button></div>' +
     '</td>' +
     '<td colspan="3" style="border-bottom:none;background:transparent;"></td>';
 }
@@ -2104,6 +2140,25 @@ function removeNewDdOpt(i) {
   const expandTr = document.getElementById('fiNewDdExpandRow');
   if (expandTr) renderNewDdExpand(expandTr);
 }
+// Confirm options button — shows saved state, keeps expand open
+function csConfirmDdOptions(btn) {
+  const validOpts = newDdOptions.filter(o => o.trim());
+  if (validOpts.length === 0) return;
+  // Visual confirmation: green border + checkmark on the cell
+  const cell = btn.closest('.dd-options-cell');
+  if (cell) {
+    cell.style.borderColor = '#22c55e';
+    cell.style.transition = 'border-color .3s';
+  }
+  btn.textContent = '✓ Options Saved';
+  btn.style.color = '#15803d';
+  btn.style.borderColor = '#22c55e';
+  btn.style.background = '#f0fdf4';
+  btn.disabled = true;
+  // Reset border after 3s but keep button in saved state
+  setTimeout(() => { if (cell) cell.style.borderColor = ''; }, 3000);
+}
+
 // FIX 3: Auto-sync new list name → Label (if label is empty)
 function csNewListAutoLabel() {
   const expandTr = document.getElementById('fiNewDdExpandRow');

@@ -357,24 +357,24 @@
 <div class="hdr">
   <div>
     <h1>Valta Field Registry Explorer</h1>
-    <div class="sub">Field Registry · Cascade Logic · Rule Audit</div>
+    <div class="sub">Field Registry · Cascade Logic · Rule Audit · Dashboard</div>
   </div>
   <div class="hdr-btns">
-    <button class="btn btn-outline" id="btnFill" onclick="fillTest()">Fill Test Data</button>
-    <button class="btn btn-outline" id="btnReset" onclick="resetAll()">Reset</button>
+    <button class="btn btn-outline" id="btnFill" onclick="fillTest()" style="display:none;">Fill Test Data</button>
+    <button class="btn btn-outline" id="btnReset" onclick="resetAll()" style="display:none;">Reset</button>
 
   </div>
 </div>
 
 <div style="max-width:960px;margin:0 auto 6px;">
   <div class="seg">
-    <button class="active" onclick="setView('full',this)">Full Dashboard</button>
+    <button class="active" onclick="setView('index',this)">Field Registry</button>
     <button onclick="setView('logic',this)">Logic Fields</button>
-    <button onclick="setView('index',this)">Field Registry</button>
     <button onclick="setView('audit',this)">Rule Audit</button>
+    <button onclick="setView('full',this)">Full Dashboard</button>
   </div>
 </div>
-<div style="max-width:960px;margin:0 auto 14px;display:flex;justify-content:flex-end;">
+<div style="max-width:960px;margin:0 auto 14px;display:none;justify-content:flex-end;">
   <div class="dash-controls" id="dashControls">
     <button class="dash-link active" onclick="dashShowAll(this)">All</button>
     <span class="dash-sep">·</span>
@@ -385,7 +385,7 @@
 </div>
 
 <!-- ═══ FULL DASHBOARD ═══ -->
-<div class="panel active" id="panel-full">
+<div class="panel" id="panel-full">
 
 <div class="sec" id="sec-client" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">1.1</span>Client Information</div><div class="sec-body"><div class="grid">
   <div class="f"><span class="f-lbl">First Name</span><div class="f-val"><input class="u-inp" data-fill="Sarah"></div></div>
@@ -648,7 +648,7 @@ E  Authorized Use          ──┘</div>
 </div><!-- close panel-logic -->
 
 <!-- ═══ FIELD INDEX ═══ -->
-<div class="panel" id="panel-index">
+<div class="panel active" id="panel-index">
 <div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;align-items:center;gap:0;margin-left:auto;"><button class="btn btn-outline" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="insertAddRow(event)">+ New Field</button><span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></div></div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">

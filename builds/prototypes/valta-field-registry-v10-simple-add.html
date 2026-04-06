@@ -312,9 +312,12 @@
   .cs-status { font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 4px; letter-spacing: .03em; display: inline-block; }
   .cs-status-pending { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
   .cs-status-active { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
-  /* Configure Logic button */
+  /* Configure Logic button — outline for in-edit-row */
   .cs-logic-btn { font: 500 10px/1 system-ui,sans-serif; padding: 3px 8px; border-radius: 4px; cursor: pointer; background: transparent; color: var(--amber); border: 1px solid var(--amber); transition: all .12s; white-space: nowrap; }
   .cs-logic-btn:hover { background: #fffbeb; }
+  /* Configure Logic button — prominent filled style for saved rows */
+  .cs-logic-btn-prominent { font: 600 11px/1 system-ui,sans-serif; padding: 5px 12px; border-radius: 4px; cursor: pointer; background: #fef3c7; color: #92400e; border: 1px solid #fde68a; transition: all .12s; white-space: nowrap; box-shadow: 0 1px 2px rgba(0,0,0,.05); }
+  .cs-logic-btn-prominent:hover { background: #fde68a; color: #78350f; }
   /* Read-only display in edit row */
   .cs-readonly { font-size: 11px; color: var(--text-3); border-bottom: none !important; }
 </style>
@@ -1230,7 +1233,7 @@ function renderFields() {
       ddCell +
       vrCell +
       '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+(f.v||'—')+'</td>' +
-      (f._hasLogic ? '<td><button class="cs-logic-btn" onclick="event.stopPropagation();csGoToLogic(\''+f.n.replace(/'/g,"\\'")+'\')">Configure Logic</button></td>' : '<td></td>') +
+      (f._hasLogic ? '<td><button class="cs-logic-btn-prominent" onclick="event.stopPropagation();csGoToLogic(\''+f.n.replace(/'/g,"\\'")+'\')">Configure Logic ▸</button></td>' : '<td></td>') +
     '</tr>';
 
     // Expanded dropdown options row
@@ -2155,8 +2158,29 @@ function csConfirmDdOptions(btn) {
   btn.style.borderColor = '#22c55e';
   btn.style.background = '#f0fdf4';
   btn.disabled = true;
-  // Reset border after 3s but keep button in saved state
+  // Reset cell border after 3s
   setTimeout(() => { if (cell) cell.style.borderColor = ''; }, 3000);
+
+  // Lock Label if it was auto-synced from list name
+  const addRow = document.getElementById('fiAddRow');
+  if (addRow) {
+    const labelInp = addRow.querySelector('input[name="l"]');
+    if (labelInp && labelInp.dataset.autoSynced === 'true') {
+      labelInp.disabled = true;
+      labelInp.style.color = 'var(--text-3)';
+      labelInp.title = 'Locked — synced from list name';
+    }
+    // Flash-highlight the Role dropdown
+    const roleSel = addRow.querySelector('select[name="role"]');
+    if (roleSel && !roleSel.disabled) {
+      const roleTd = roleSel.closest('td');
+      roleTd.style.transition = 'background .2s, box-shadow .2s';
+      roleTd.style.background = '#fefce8';
+      roleTd.style.boxShadow = 'inset 0 0 0 2px var(--amber)';
+      roleSel.focus();
+      setTimeout(() => { roleTd.style.background = ''; roleTd.style.boxShadow = ''; }, 1500);
+    }
+  }
 }
 
 // FIX 3: Auto-sync new list name → Label (if label is empty)

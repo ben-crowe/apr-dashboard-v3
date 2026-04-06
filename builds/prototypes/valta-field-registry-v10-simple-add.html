@@ -1240,10 +1240,10 @@ function renderFields() {
       let optRows = opts.map(opt => {
         return '<div style="padding:2px 0 2px 16px;font-size:11px;color:var(--text);">'+opt+'</div>';
       }).join('');
-      tb.innerHTML += '<tr class="fi-options-row"><td colspan="7" style="border-bottom:none;background:transparent;"></td><td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);">' +
+      tb.innerHTML += '<tr class="fi-options-row"><td colspan="8" style="border-bottom:none;background:transparent;"></td><td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);">' +
         '<div style="font-size:11px;font-weight:600;color:var(--text-3);margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);">'+f.l+'</div>' +
         optRows +
-      '</td><td colspan="'+(COL_COUNT-8)+'" style="border-bottom:none;background:transparent;"></td></tr>';
+      '</td><td colspan="'+(COL_COUNT-9)+'" style="border-bottom:none;background:transparent;"></td></tr>';
     }
   });
   const fOriginVal = document.getElementById('filterOrigin').value;
@@ -2040,44 +2040,87 @@ function onDdListChange(sel) {
 }
 function showNewDdPopover(sel) {
   newDdPopoverOpen = true;
-  newDdOptions = [];
-  const pop = sel.closest('td').querySelector('.fi-dd-popover');
-  if (!pop) return;
-  pop.style.display = 'block';
-  renderNewDdPopover(pop);
+  newDdOptions = [''];
+  // Insert an expand row below the current add/edit row — matches existing dropdown expand style
+  hideNewDdPopover();
+  const tr = sel.closest('tr');
+  const expandTr = document.createElement('tr');
+  expandTr.className = 'fi-options-row';
+  expandTr.id = 'fiNewDdExpandRow';
+  renderNewDdExpand(expandTr);
+  tr.parentNode.insertBefore(expandTr, tr.nextSibling);
 }
 function hideNewDdPopover() {
   newDdPopoverOpen = false;
+  const row = document.getElementById('fiNewDdExpandRow');
+  if (row) row.remove();
+  // Legacy popover cleanup
   const pop = document.getElementById('fiNewDdPopover');
   if (pop) pop.style.display = 'none';
-  // Also check edit row popover
   const pop2 = document.getElementById('fiEditDdPopover');
   if (pop2) pop2.style.display = 'none';
 }
-function renderNewDdPopover(pop) {
+function renderNewDdExpand(expandTr) {
+  if (!expandTr) expandTr = document.getElementById('fiNewDdExpandRow');
+  if (!expandTr) return;
   let optsHtml = '';
   newDdOptions.forEach((o,i) => {
-    optsHtml += '<div class="fi-dd-opt"><span>'+o+'</span><span class="fi-dd-opt-rm" onclick="removeNewDdOpt('+i+')">x</span></div>';
+    optsHtml += '<div style="padding:2px 0 2px 16px;display:flex;align-items:center;gap:6px;">' +
+      '<input style="font:inherit;font-size:11px;color:var(--text);border:none;border-bottom:1px solid var(--border);background:transparent;flex:1;padding:2px 0;outline:none;height:20px;" value="'+(o||'')+'" placeholder="Option '+(i+1)+'..." oninput="newDdOptions['+i+']=this.value;csNewListAutoLabel()" onfocus="this.style.borderBottomColor=\'var(--text)\'" onblur="this.style.borderBottomColor=\'\'">' +
+      '<span style="color:var(--text-3);cursor:pointer;font-size:12px;" onclick="removeNewDdOpt('+i+')" title="Remove">✕</span></div>';
   });
-  pop.innerHTML =
-    '<div style="font-size:10px;font-weight:600;color:var(--text-3);margin-bottom:4px;">NEW DROPDOWN LIST</div>' +
-    '<input id="fiNewDdName" placeholder="List name (e.g. ListMyList)" value="'+(pop.dataset.listName||'')+'" oninput="this.closest(\'.fi-dd-popover\').dataset.listName=this.value">' +
-    '<div style="font-size:10px;color:var(--text-3);margin-bottom:2px;">Options:</div>' +
-    '<div class="fi-dd-opts">'+optsHtml+'</div>' +
-    '<div style="display:flex;gap:4px;"><input id="fiNewDdOptInput" placeholder="Add option..." onkeydown="if(event.key===\'Enter\'){addNewDdOpt(this);event.preventDefault();}"><button class="fi-save-btn" style="flex-shrink:0;" onclick="addNewDdOpt(this.previousElementSibling)">+</button></div>';
+  expandTr.innerHTML =
+    '<td colspan="8" style="border-bottom:none;background:transparent;"></td>' +
+    '<td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);background:#fafafa !important;">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);">' +
+        '<input id="fiNewDdName" style="font:inherit;font-size:11px;font-weight:600;color:var(--text);border:none;background:transparent;flex:1;outline:none;" placeholder="List name..." value="'+(expandTr.dataset?.listName||'')+'" oninput="this.closest(\'tr\').dataset.listName=this.value;csNewListAutoLabel()">' +
+        '<span style="font-size:10px;color:var(--text-3);">'+newDdOptions.filter(o=>o.trim()).length+' options</span>' +
+      '</div>' +
+      optsHtml +
+      '<div style="padding:2px 0 2px 16px;"><span style="font:400 11px/1 system-ui,sans-serif;color:var(--text-3);cursor:pointer;" onclick="addNewDdOpt()">+ Add option</span></div>' +
+    '</td>' +
+    '<td colspan="3" style="border-bottom:none;background:transparent;"></td>';
 }
 function addNewDdOpt(inp) {
-  const v = inp.value.trim();
-  if (!v) return;
-  newDdOptions.push(v);
-  inp.value = '';
-  const pop = inp.closest('.fi-dd-popover');
-  renderNewDdPopover(pop);
+  if (inp && inp.value) {
+    // Called from old popover style with input element
+    newDdOptions.push(inp.value.trim());
+    inp.value = '';
+  } else {
+    // Called from expand row — just add blank
+    newDdOptions.push('');
+  }
+  const expandTr = document.getElementById('fiNewDdExpandRow');
+  if (expandTr) {
+    renderNewDdExpand(expandTr);
+    // Focus last input
+    const inputs = expandTr.querySelectorAll('input:not(#fiNewDdName)');
+    if (inputs.length) inputs[inputs.length-1].focus();
+  }
 }
 function removeNewDdOpt(i) {
   newDdOptions.splice(i,1);
-  const pop = document.getElementById('fiNewDdPopover') || document.getElementById('fiEditDdPopover');
-  if (pop && pop.style.display !== 'none') renderNewDdPopover(pop);
+  if (newDdOptions.length === 0) newDdOptions.push('');
+  const expandTr = document.getElementById('fiNewDdExpandRow');
+  if (expandTr) renderNewDdExpand(expandTr);
+}
+// FIX 3: Auto-sync new list name → Label (if label is empty)
+function csNewListAutoLabel() {
+  const expandTr = document.getElementById('fiNewDdExpandRow');
+  if (!expandTr) return;
+  const nameInp = expandTr.querySelector('#fiNewDdName');
+  if (!nameInp) return;
+  const addRow = document.getElementById('fiAddRow');
+  if (!addRow) return;
+  const labelInp = addRow.querySelector('input[name="l"]');
+  if (!labelInp || labelInp.disabled) return;
+  // Only auto-fill if label is empty or was previously auto-filled
+  if (!labelInp.value.trim() || labelInp.dataset.autoSynced === 'true') {
+    labelInp.value = nameInp.value;
+    labelInp.dataset.autoSynced = 'true';
+    document.getElementById('csAutoName').textContent = csLabelToFieldName(nameInp.value) || 'auto';
+    csUpdateSaveBtn(addRow);
+  }
 }
 
 function saveAddRow() {
@@ -2108,10 +2151,11 @@ function saveAddRow() {
 
   // Handle new dropdown list creation
   if (d === '__new__' && newDdPopoverOpen) {
-    const pop = tr.querySelector('.fi-dd-popover');
-    const listName = pop ? (pop.dataset.listName || '').trim() : '';
-    if (listName && newDdOptions.length > 0) {
-      DROPDOWN_OPTIONS[listName] = [...newDdOptions];
+    const expandRow = document.getElementById('fiNewDdExpandRow');
+    const listName = expandRow ? (expandRow.dataset.listName || '').trim() : '';
+    const validOpts = newDdOptions.filter(o => o.trim());
+    if (listName && validOpts.length > 0) {
+      DROPDOWN_OPTIONS[listName] = validOpts;
       d = listName;
     } else { d = ''; }
   }
@@ -2254,10 +2298,11 @@ function saveEditRow(origName) {
 
   // Handle new dropdown list
   if (d === '__new__') {
-    const pop = tr.querySelector('.fi-dd-popover');
-    const listName = pop ? (pop.dataset.listName || '').trim() : '';
-    if (listName && newDdOptions.length > 0) {
-      DROPDOWN_OPTIONS[listName] = [...newDdOptions];
+    const expandRow = document.getElementById('fiNewDdExpandRow');
+    const listName = expandRow ? (expandRow.dataset.listName || '').trim() : '';
+    const validOpts = newDdOptions.filter(o => o.trim());
+    if (listName && validOpts.length > 0) {
+      DROPDOWN_OPTIONS[listName] = validOpts;
       d = listName;
     } else { d = ''; }
   }

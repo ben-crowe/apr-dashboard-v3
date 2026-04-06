@@ -633,9 +633,12 @@ E  Authorized Use          ──┘</div>
 
 </div></div>
 
-<div class="re-label">Rule Explorer</div>
+<div style="max-width:960px;margin:20px auto 0;padding-top:16px;border-top:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;">
+  <div class="re-label" style="margin:0;">Rule Explorer</div>
+  <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px;" onclick="leEnterEditMode()">Edit Mode</button>
+</div>
 
-<div class="re-section" id="re-g1">
+<div class="re-section closed" id="re-g1">
   <div class="re-section-bar" onclick="toggleSection('re-g1')">
     <span class="re-chevron">▾</span>
     <span class="re-section-name">Group 1 — Property Rights</span>
@@ -662,7 +665,7 @@ C  Tenancy              ──┘</div>
   </div>
 </div>
 
-<div class="re-section" id="re-g2">
+<div class="re-section closed" id="re-g2">
   <div class="re-section-bar" onclick="toggleSection('re-g2')">
     <span class="re-chevron">▾</span>
     <span class="re-section-name">Group 2 — Value Scenarios & Approaches</span>
@@ -690,10 +693,6 @@ E  Authorized Use          ──┘</div>
 </div>
 </div><!-- close leNormalView -->
 
-<!-- Edit Mode button (shows in normal view) -->
-<div style="max-width:960px;margin:8px auto 0;text-align:right;" id="leEditBtn">
-  <button class="btn btn-outline" onclick="leEnterEditMode()" style="font-size:11px;">Edit Mode</button>
-</div>
 
 </div><!-- close panel-logic -->
 
@@ -1943,7 +1942,7 @@ function leEnterEditMode(fieldName) {
   // Show edit mode, hide normal view
   document.getElementById('leContainer').classList.add('active');
   document.getElementById('leNormalView').style.display = 'none';
-  document.getElementById('leEditBtn').style.display = 'none';
+
 
   // Build SOP
   const sopEl = document.getElementById('leSop');
@@ -1966,7 +1965,6 @@ function leEnterEditMode(fieldName) {
 function leExitEditMode() {
   document.getElementById('leContainer').classList.remove('active');
   document.getElementById('leNormalView').style.display = '';
-  document.getElementById('leEditBtn').style.display = '';
   // Clean up any injected rows from previous attempts
   document.querySelectorAll('.cs-injected-row, .cs-injected-section').forEach(el => el.remove());
   leEditField = null;

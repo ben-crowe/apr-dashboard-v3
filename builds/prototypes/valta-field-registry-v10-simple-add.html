@@ -1837,24 +1837,31 @@ function buildSelectHtml(options, selected, name, extraAttr) {
   return html;
 }
 
+// Client-visible dropdown lists only. Exclude system/internal/cascade result lists.
+const CS_ALLOWED_LISTS = {
+  'ListPropertyType':'Property Type','ListPropertySubtype':'Property Subtype','ListTenancy':'Tenancy',
+  'ListAuthorizedUse':'Authorized Use','ListValueTimeFrame':'Value Timeframe',
+  'ListStatusofImprovements':'Status of Improvements','ListReportType':'Report Type',
+  'ListAssignmentType':'Assignment Type','ListTransactionStatus':'Transaction Status',
+  'ListClientDocuments':'Client Documents','ListYes/No':'Yes/No'
+};
 function csBuildFriendlyDDOptions() {
-  // Map internal List* names to friendly labels with counts. Dashboard lists only.
-  const friendly = {
-    'ListPropertyType':'Property Type','ListPropertySubtype':'Property Subtype','ListTenancy':'Tenancy',
-    'ListInterestAppraised':'Interest Appraised','ListAuthorizedUse':'Authorized Use',
-    'ListValueTimeFrame':'Value Timeframe','ListStateofImprovements':'State of Improvements',
-    'ListStatusofImprovements':'Status of Improvements','ListValueScenarios':'Value Scenarios',
-    'ListApproachestoValue':'Approaches to Value','ListMethod':'Method','ListReportType':'Report Type',
-    'ListAssignmentType':'Assignment Type','ListTransactionStatus':'Transaction Status',
-    'ListClientDocuments':'Client Documents','ListYes/No':'Yes/No',
-    'ListDataControlType':'Data Control Type','ListSourceType':'Source Type',
-    'ListOutputType':'Output Type','ListValcreRecordLocation':'Valcre Record Location'
-  };
   let html = '<option value="" style="color:var(--text-3);">Select...</option>';
-  Object.keys(DROPDOWN_OPTIONS).forEach(k => {
+  // Show allowed lists
+  Object.entries(CS_ALLOWED_LISTS).forEach(([k, label]) => {
     const opts = DROPDOWN_OPTIONS[k];
     if (!opts || opts.length === 0) return;
-    const label = friendly[k] || k.replace(/^List/,'');
+    html += '<option value="'+k+'">'+label+' ('+opts.length+')</option>';
+  });
+  // Show user-created lists (keys not in original DROPDOWN_OPTIONS set)
+  Object.keys(DROPDOWN_OPTIONS).forEach(k => {
+    if (CS_ALLOWED_LISTS[k]) return; // already shown
+    // Check if this is an original system list we're excluding
+    const systemLists = ['ListInterestAppraised','ListValueScenarios','ListApproachestoValue','ListStateofImprovements','ListMethod','ListOutputType','ListValcreRecordLocation','ListDataControlType','ListSourceType','ListZoningStatus','ListLand$/Metric'];
+    if (systemLists.includes(k)) return;
+    const opts = DROPDOWN_OPTIONS[k];
+    if (!opts || opts.length === 0) return;
+    const label = k.replace(/^List/,'');
     html += '<option value="'+k+'">'+label+' ('+opts.length+')</option>';
   });
   html += '<option value="__new__">+ New List</option>';
@@ -1873,22 +1880,121 @@ function insertAddRow(e) {
   tr.id = 'fiAddRow';
   const typeOpts = '<option value="" style="color:var(--text-3);">Select...</option>' + CS_SIMPLE_TYPES.map(t=>'<option value="'+t+'">'+t+'</option>').join('');
   const roleOpts = '<option value="" style="color:var(--text-3);">Select...</option><option value="Independent">Independent</option><option value="Trigger">Trigger</option><option value="Result">Result</option>';
+  // Step 1: Only Control Type is active. Everything else locked.
   tr.innerHTML =
     '<td style="font-size:11px;color:var(--text-3);">—</td>' +
     '<td><span class="cs-status cs-status-pending">Pending</span></td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">Valta</td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-4);font-style:italic;font-family:SF Mono,Consolas,monospace;" id="csAutoName">auto</td>' +
-    '<td><input name="l" placeholder="TYPE LABEL HERE..." autocomplete="off" oninput="document.getElementById(\'csAutoName\').textContent=csLabelToFieldName(this.value)||\'auto\'"></td>' +
-    '<td><select name="cs-type" onchange="csOnSimpleTypeChange(this.closest(\'tr\'))">'+typeOpts+'</select></td>' +
+    '<td><input name="l" placeholder="Step 2..." autocomplete="off" disabled oninput="csOnLabelInput(this)"></td>' +
+    '<td><select name="cs-type" onchange="csOnTypeStep(this.closest(\'tr\'))">'+typeOpts+'</select></td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">User Input</td>' +
-    '<td><select name="role">'+roleOpts+'</select></td>' +
-    '<td style="position:relative;"><select name="d" onchange="onDdListChange(this)" disabled style="color:var(--text-3);">'+csBuildFriendlyDDOptions()+'</select><div id="fiNewDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
+    '<td><select name="role" disabled>'+roleOpts+'</select></td>' +
+    '<td style="position:relative;"><select name="d" onchange="csOnDdStep(this)" disabled style="color:var(--text-3);">'+csBuildFriendlyDDOptions()+'</select><div id="fiNewDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">—</td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">—</td>' +
-    '<td style="white-space:nowrap;"><div class="fi-actions"><button class="fi-save-btn" onclick="saveAddRow()">Save</button><button class="fi-cancel-btn" onclick="removeAddRow()">Cancel</button></div></td>';
+    '<td style="white-space:nowrap;"><div class="fi-actions"><button class="fi-save-btn" onclick="saveAddRow()" disabled style="opacity:.4;">Save</button><button class="fi-cancel-btn" onclick="removeAddRow()">Cancel</button></div></td>';
   tb.insertBefore(tr, tb.firstChild);
-  tr.querySelector('input[name="l"]').focus();
+  tr.querySelector('select[name="cs-type"]').focus();
 }
+
+// Step 1 handler: Control Type chosen → unlock next step
+function csOnTypeStep(tr) {
+  const t = tr.querySelector('select[name="cs-type"]').value;
+  if (!t) return;
+  const labelInp = tr.querySelector('input[name="l"]');
+  const ddSel = tr.querySelector('select[name="d"]');
+  const roleSel = tr.querySelector('select[name="role"]');
+
+  if (t === 'Dropdown') {
+    // Step 2 for Dropdown: unlock dropdown list picker, keep label locked until list chosen
+    ddSel.disabled = false;
+    ddSel.style.color = '';
+    ddSel.innerHTML = csBuildFriendlyDDOptions();
+    labelInp.disabled = true;
+    labelInp.placeholder = 'Step 3 — auto-fills from list...';
+    roleSel.disabled = true;
+    // Flash the dropdown list cell
+    ddSel.closest('td').style.transition = 'background .3s';
+    ddSel.closest('td').style.background = '#fefce8';
+    setTimeout(() => { ddSel.closest('td').style.background = ''; }, 800);
+  } else {
+    // Step 2 for non-Dropdown: unlock label
+    ddSel.disabled = true;
+    ddSel.value = '';
+    ddSel.style.color = 'var(--text-3)';
+    hideNewDdPopover();
+    labelInp.disabled = false;
+    labelInp.placeholder = 'Step 2 — type label...';
+    labelInp.focus();
+    roleSel.disabled = true;
+    // Flash the label cell
+    labelInp.closest('td').style.transition = 'background .3s';
+    labelInp.closest('td').style.background = '#fefce8';
+    setTimeout(() => { labelInp.closest('td').style.background = ''; }, 800);
+  }
+  csUpdateSaveBtn(tr);
+}
+
+// Step 2 handler for Dropdown: list chosen → auto-fill label, unlock role
+function csOnDdStep(sel) {
+  const tr = sel.closest('tr');
+  const val = sel.value;
+  if (val === '__new__') {
+    showNewDdPopover(sel);
+    // Unlock label for typing the new list name manually
+    const labelInp = tr.querySelector('input[name="l"]');
+    labelInp.disabled = false;
+    labelInp.placeholder = 'Type label for new list...';
+    labelInp.focus();
+    const roleSel = tr.querySelector('select[name="role"]');
+    roleSel.disabled = true; // still locked until label filled
+    return;
+  }
+  if (!val) return;
+  hideNewDdPopover();
+  const labelInp = tr.querySelector('input[name="l"]');
+  const roleSel = tr.querySelector('select[name="role"]');
+  // Auto-fill label from friendly list name
+  const friendlyName = CS_ALLOWED_LISTS[val] || val.replace(/^List/,'');
+  labelInp.value = friendlyName;
+  labelInp.disabled = false;
+  labelInp.placeholder = 'Edit if needed...';
+  document.getElementById('csAutoName').textContent = csLabelToFieldName(friendlyName) || 'auto';
+  // Unlock role (Step 3)
+  roleSel.disabled = false;
+  roleSel.closest('td').style.transition = 'background .3s';
+  roleSel.closest('td').style.background = '#fefce8';
+  setTimeout(() => { roleSel.closest('td').style.background = ''; }, 800);
+  csUpdateSaveBtn(tr);
+}
+
+// Label input handler: update auto-name + unlock role when label has content
+function csOnLabelInput(inp) {
+  const tr = inp.closest('tr');
+  document.getElementById('csAutoName').textContent = csLabelToFieldName(inp.value) || 'auto';
+  const roleSel = tr.querySelector('select[name="role"]');
+  if (inp.value.trim() && roleSel.disabled) {
+    // Step 3: unlock role
+    roleSel.disabled = false;
+    roleSel.closest('td').style.transition = 'background .3s';
+    roleSel.closest('td').style.background = '#fefce8';
+    setTimeout(() => { roleSel.closest('td').style.background = ''; }, 800);
+  }
+  csUpdateSaveBtn(tr);
+}
+
+// Check if all required fields are filled → enable/disable Save
+function csUpdateSaveBtn(tr) {
+  const type = tr.querySelector('select[name="cs-type"]').value;
+  const label = tr.querySelector('input[name="l"]').value.trim();
+  const saveBtn = tr.querySelector('.fi-save-btn');
+  const ready = type && label;
+  saveBtn.disabled = !ready;
+  saveBtn.style.opacity = ready ? '1' : '.4';
+}
+
+// Keep csOnSimpleTypeChange for edit rows (non-guided)
 function csOnSimpleTypeChange(tr) {
   const t = tr.querySelector('select[name="cs-type"]').value;
   const ddSel = tr.querySelector('select[name="d"]');
@@ -2039,19 +2145,31 @@ function saveAddRow() {
 function fillSimpleExample(e) {
   if (e) e.stopPropagation();
   if (!addRowActive) insertAddRow();
+  const tr = document.getElementById('fiAddRow');
+  if (!tr) return;
+  // Step 1: Pick Control Type = Dropdown
   setTimeout(() => {
-    const tr = document.getElementById('fiAddRow');
-    if (!tr) return;
-    tr.querySelector('input[name="l"]').value = 'Financing Type';
-    document.getElementById('csAutoName').textContent = 'financingType';
     tr.querySelector('select[name="cs-type"]').value = 'Dropdown';
-    csOnSimpleTypeChange(tr);
-    tr.querySelector('select[name="role"]').value = 'Trigger';
+    csOnTypeStep(tr);
+    // Step 2: Pick dropdown list = Authorized Use → label auto-fills
     setTimeout(() => {
       const ddSel = tr.querySelector('select[name="d"]');
-      if (ddSel) { ddSel.disabled = false; ddSel.value = 'ListAuthorizedUse'; }
-    }, 20);
-  }, 20);
+      ddSel.value = 'ListAuthorizedUse';
+      csOnDdStep(ddSel);
+      // Step 2b: Override label to 'Financing Type'
+      setTimeout(() => {
+        const labelInp = tr.querySelector('input[name="l"]');
+        labelInp.value = 'Financing Type';
+        document.getElementById('csAutoName').textContent = 'financingType';
+        csUpdateSaveBtn(tr);
+        // Step 3: Pick Role = Trigger
+        setTimeout(() => {
+          tr.querySelector('select[name="role"]').value = 'Trigger';
+          csUpdateSaveBtn(tr);
+        }, 200);
+      }, 200);
+    }, 300);
+  }, 50);
 }
 
 function editTableRow(fieldName) {

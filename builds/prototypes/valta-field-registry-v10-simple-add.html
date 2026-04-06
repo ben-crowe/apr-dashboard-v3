@@ -320,6 +320,36 @@
   .cs-logic-btn-prominent:hover { background: #fde68a; color: #78350f; }
   /* Read-only display in edit row */
   .cs-readonly { font-size: 11px; color: var(--text-3); border-bottom: none !important; }
+
+  /* Logic Edit Mode */
+  .le-container { display: none; max-width: 960px; margin: 0 auto; }
+  .le-container.active { display: block; }
+  .le-header { background: var(--text); color: var(--bg); padding: 12px 20px; border-radius: var(--radius) var(--radius) 0 0; display: flex; justify-content: space-between; align-items: center; }
+  .le-header h3 { font-size: 14px; font-weight: 700; }
+  .le-done-btn { font: 600 12px/1 system-ui,sans-serif; padding: 6px 16px; border-radius: var(--radius); cursor: pointer; background: var(--bg); color: var(--text); border: none; transition: opacity .12s; }
+  .le-done-btn:hover { opacity: .85; }
+  .le-body { background: var(--card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); padding: 20px; box-shadow: var(--shadow); }
+  .le-sop { background: #fefce8; border: 1px solid #fde68a; border-radius: calc(var(--radius) - 2px); padding: 12px 16px; margin-bottom: 20px; font-size: 12px; color: #92400e; line-height: 1.6; }
+  .le-sop strong { font-weight: 600; }
+  .le-sop ol { margin: 6px 0 0 16px; padding: 0; }
+  .le-sop li { margin-bottom: 3px; }
+  .le-ref { margin-bottom: 20px; }
+  .le-ref-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); margin-bottom: 8px; }
+  .le-ref-diagram { font-family: 'SF Mono','Consolas',monospace; font-size: 11px; color: var(--text-3); line-height: 1.6; white-space: pre; background: #fafafa; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px); padding: 10px 14px; margin-bottom: 6px; }
+  .le-new-group { background: #fffbeb; border: 2px solid var(--amber); border-radius: var(--radius); padding: 16px 20px; margin-top: 16px; }
+  .le-new-group-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--amber); margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #fde68a; }
+  .le-trigger-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .le-letter { font-size: 16px; font-weight: 800; color: var(--amber); width: 24px; text-align: center; }
+  .le-arrow { color: var(--text-3); font-family: 'SF Mono',monospace; }
+  .le-mapping { margin-top: 16px; }
+  .le-mapping-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-2); margin-bottom: 8px; }
+  .le-map-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .le-map-table th { text-align: left; padding: 6px 10px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); border-bottom: 2px solid var(--border); }
+  .le-map-table td { padding: 5px 10px; border-bottom: 1px solid var(--border); }
+  .le-map-table td:first-child { font-weight: 500; color: var(--text); }
+  .le-map-table select, .le-map-table input { font: inherit; font-size: 12px; border: none; border-bottom: 1px solid var(--border); background: transparent; padding: 2px 0; outline: none; width: 100%; }
+  .le-map-table select:focus, .le-map-table input:focus { border-bottom-color: var(--text); }
+  .le-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
 </style>
 </head>
 <body>
@@ -455,6 +485,37 @@
 
 <!-- ═══ LOGIC FIELDS ═══ -->
 <div class="panel" id="panel-logic">
+
+<!-- Edit Mode Container (hidden by default) -->
+<div class="le-container" id="leContainer">
+  <div class="le-header">
+    <h3>Cascade Logic — Edit Mode</h3>
+    <button class="le-done-btn" onclick="leExitEditMode()">Done</button>
+  </div>
+  <div class="le-body">
+    <div class="le-sop" id="leSop"></div>
+    <div class="le-ref">
+      <div class="le-ref-title">Existing Cascade Groups (reference)</div>
+      <div class="le-ref-diagram">Group 1 — Property Rights:
+A  Property Type        ──┐
+B  Property Subtype     ──┼──→  Property Rights
+C  Tenancy              ──┘
+
+Group 2 — Value Scenarios &amp; Approaches:
+D  Status of Improvements  ──┐
+                              ├──→  Value Scenarios  ──→  Approaches to Value
+E  Authorized Use          ──┘</div>
+    </div>
+    <div class="le-new-group" id="leNewGroup"></div>
+    <div class="le-actions">
+      <button class="btn btn-ghost" onclick="leExitEditMode()">Cancel</button>
+      <button class="btn btn-primary" onclick="leSaveLogic()">Save Logic</button>
+    </div>
+  </div>
+</div>
+
+<!-- Normal Logic View (hidden when edit mode active) -->
+<div id="leNormalView">
 <div style="max-width:960px;margin:0 auto 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
   <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text);">Scenario Group 1:</span>
   <span class="scenario-btn" onclick="runScenario(1,this)" title="Multifamily → Fee Simple">A</span>
@@ -577,7 +638,14 @@ E  Authorized Use          ──┘</div>
     <div style="height:16px;"></div>
   </div>
 </div>
+</div><!-- close leNormalView -->
+
+<!-- Edit Mode button (shows in normal view) -->
+<div style="max-width:960px;margin:8px auto 0;text-align:right;" id="leEditBtn">
+  <button class="btn btn-outline" onclick="leEnterEditMode()" style="font-size:11px;">Edit Mode</button>
 </div>
+
+</div><!-- close panel-logic -->
 
 <!-- ═══ FIELD INDEX ═══ -->
 <div class="panel" id="panel-index"><div style="max-width:960px;margin:0 auto 12px;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:#18181b;border-radius:8px;"><span style="font:700 13px/1 system-ui,sans-serif;color:#fff;">v10 — Simple Add Row</span><div style="display:flex;gap:6px;"><a href="valta-field-registry-NEW-FIELD-mockup.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v6</a><a href="valta-field-registry-v7-inline-row.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v7</a><a href="valta-field-registry-v8-grouped.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v8</a><a href="valta-field-registry-v9-modal.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v9</a><a href="valta-field-registry-v10-simple-add.html" style="font:600 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#fff;background:#3f3f46;">v10</a><a href="valta-field-registry-v11-client-simple.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v11</a></div></div>
@@ -1767,6 +1835,12 @@ CS_TYPE_REVERSE['Select multiple options'] = 'Dropdown'; CS_TYPE_REVERSE['Select
 CS_TYPE_REVERSE['Alpha Numeric'] = 'Text'; CS_TYPE_REVERSE['Decimal'] = 'Number';
 CS_TYPE_REVERSE['Calculation'] = 'Number'; CS_TYPE_REVERSE['Multi-line'] = 'Multi-line';
 
+/* ═══ LOGIC EDIT MODE ═══ */
+let leEditField = null; // field being configured
+let leResultField = ''; // chosen result field name
+let leMappings = []; // [{trigger:'Option1', result:'Outcome1'}, ...]
+let leNextLetter = 'F';
+
 function csGoToLogic(fieldName) {
   // Switch to Logic Fields tab
   const tabBtns = document.querySelectorAll('.seg:not(.scope-toggle) button');
@@ -1777,93 +1851,197 @@ function csGoToLogic(fieldName) {
   document.getElementById('dashControls').parentElement.style.display = 'none';
   document.getElementById('btnFill').style.display = 'none';
   document.getElementById('btnReset').style.display = 'none';
-
-  // Pre-load new field into cascade layout as next letter
-  if (fieldName) csInjectCascadeRow(fieldName);
+  // Auto-enter edit mode with the field
+  if (fieldName) leEnterEditMode(fieldName);
 }
-function csInjectCascadeRow(fieldName) {
-  const f = FIELDS.find(x => x.n === fieldName);
-  if (!f) return;
-  // Remove any previously injected elements
-  document.querySelectorAll('.cs-injected-row, .cs-injected-section').forEach(el => el.remove());
+
+function leEnterEditMode(fieldName) {
+  const f = fieldName ? FIELDS.find(x => x.n === fieldName) : null;
+  leEditField = f;
+  leResultField = '';
+  leMappings = [];
 
   // Determine next letter
-  const existingLetters = document.querySelectorAll('#panel-logic .lo-letter');
-  const usedLetters = new Set();
-  existingLetters.forEach(el => usedLetters.add(el.textContent.trim()));
+  const usedLetters = new Set(['A','B','C','D','E']);
   const alphabet = 'FGHIJKLMNOPQRSTUVWXYZ';
-  let nextLetter = 'F';
-  for (const ch of alphabet) { if (!usedLetters.has(ch)) { nextLetter = ch; break; } }
+  leNextLetter = 'F';
+  for (const ch of alphabet) { if (!usedLetters.has(ch)) { leNextLetter = ch; break; } }
 
-  const role = getRole(f.n);
-  const isResult = (role === 'result');
+  // Show edit mode, hide normal view
+  document.getElementById('leContainer').classList.add('active');
+  document.getElementById('leNormalView').style.display = 'none';
+  document.getElementById('leEditBtn').style.display = 'none';
 
-  // Build dropdown menu HTML if the field has options
-  let ddMenuHTML = '';
-  if (f.d && DROPDOWN_OPTIONS[f.d]) {
-    ddMenuHTML = DROPDOWN_OPTIONS[f.d].map(o => '<div class="dd-item" onclick="pickDD(this)">'+o+'</div>').join('');
+  // Build SOP
+  const sopEl = document.getElementById('leSop');
+  if (f) {
+    sopEl.innerHTML = '<strong>Configuring: ' + f.l + '</strong><ol>' +
+      '<li>Your new field "' + f.l + '" is the <strong>trigger</strong> (letter ' + leNextLetter + ')</li>' +
+      '<li>Pick a <strong>result field</strong> — what does your trigger control?</li>' +
+      '<li>Map each trigger option to a result outcome in the table</li>' +
+      '<li>Click <strong>Save Logic</strong> or <strong>Done</strong> when finished</li></ol>';
+  } else {
+    sopEl.innerHTML = '<strong>Edit Mode</strong> — Click existing cascade groups to modify, or create new logic groups.';
   }
 
-  // Create a new cascade group section (matches re-section pattern)
-  const section = document.createElement('div');
-  section.className = 're-section cs-injected-section';
-  section.style.outline = '2px solid var(--amber)';
-  section.style.outlineOffset = '2px';
-  section.innerHTML =
-    '<div class="re-section-bar" onclick="this.parentElement.classList.toggle(\'closed\')">' +
-      '<span class="re-chevron">▾</span>' +
-      '<span class="re-section-name" style="color:var(--amber);">New — ' + f.l + ' (' + (isResult ? 'Result' : 'Trigger') + ')</span>' +
-      '<span style="font-size:9px;color:var(--amber);margin-left:auto;font-weight:600;">PENDING CONFIGURATION</span>' +
-    '</div>' +
-    '<div class="re-section-body">' +
-      '<div class="re-diagram">' + nextLetter + '  ' + f.l + (f.d ? '        ──┐\n' + ' '.repeat(nextLetter.length + 2 + f.l.length) + '          ├──→  Connect to result...' : '        ──→  Connect to result...') + '</div>' +
-      '<table class="re-table">' +
-        '<tr><td class="re-col-hdr">User Choice</td><td class="re-col-hdr">Outcome</td></tr>' +
-        '<tr class="re-title-row"><td><span class="re-let">' + nextLetter + '</span>' + f.l + '</td><td style="color:var(--text-3);font-style:italic;">Wire logic here</td></tr>' +
-        (f.d && DROPDOWN_OPTIONS[f.d] ? DROPDOWN_OPTIONS[f.d].map(o =>
-          '<tr><td>' + o + '</td><td style="color:var(--text-4);font-style:italic;">→ ?</td></tr>'
-        ).join('') : '<tr><td style="color:var(--text-3);font-style:italic;">Add options to define trigger values</td><td></td></tr>') +
-      '</table>' +
-    '</div>';
+  // Build new group area
+  leRenderNewGroup();
 
-  // Also add a trigger row into the interactive cascade card (lo-card)
-  const loCard = document.querySelector('#panel-logic .lo-card .sec-body');
+  setTimeout(() => document.getElementById('leNewGroup').scrollIntoView({ behavior: 'smooth', block: 'center' }), 200);
+}
+
+function leExitEditMode() {
+  document.getElementById('leContainer').classList.remove('active');
+  document.getElementById('leNormalView').style.display = '';
+  document.getElementById('leEditBtn').style.display = '';
+  // Clean up any injected rows from previous attempts
+  document.querySelectorAll('.cs-injected-row, .cs-injected-section').forEach(el => el.remove());
+  leEditField = null;
+}
+
+function leRenderNewGroup() {
+  const grp = document.getElementById('leNewGroup');
+  if (!leEditField) {
+    grp.innerHTML = '<div style="font-size:12px;color:var(--text-3);font-style:italic;">No field selected. Click Configure Logic on a field in the registry, or add a new trigger here.</div>';
+    return;
+  }
+  const f = leEditField;
+  const opts = (f.d && DROPDOWN_OPTIONS[f.d]) ? DROPDOWN_OPTIONS[f.d] : [];
+
+  // Result field picker
+  const resultOpts = '<option value="" style="color:var(--text-3);">Select result field...</option>' +
+    '<option value="InterestAppraised">Interest Appraised</option>' +
+    '<option value="ValueScenarios">Value Scenarios</option>' +
+    '<option value="ApproachestoValue">Approaches to Value</option>' +
+    '<option value="__new__">+ Create New Result Field</option>';
+
+  let html = '<div class="le-new-group-title">New: Group 3 — ' + f.l + '</div>';
+
+  // Trigger row
+  html += '<div class="le-trigger-row">' +
+    '<span class="le-letter">' + leNextLetter + '</span>' +
+    '<span style="font-size:13px;font-weight:600;color:var(--text);">' + f.l + '</span>' +
+    '<span class="le-arrow">──→</span>' +
+    '<select id="leResultPicker" onchange="leOnResultPick(this)" style="font:inherit;font-size:12px;border:1px solid var(--border);border-radius:4px;padding:4px 8px;outline:none;min-width:200px;">' + resultOpts + '</select>' +
+  '</div>';
+
+  // If result is picked, show mapping table
+  if (leResultField) {
+    const resultLabel = leResultField === '__new__' ? 'New Result' :
+      (FIELDS.find(x=>x.n===leResultField)||{}).l || leResultField;
+
+    // Initialize mappings from trigger options if empty
+    if (leMappings.length === 0 && opts.length > 0) {
+      leMappings = opts.map(o => ({ trigger: o, result: '' }));
+    }
+
+    html += '<div class="le-mapping">' +
+      '<div class="le-mapping-title">Mapping: ' + f.l + ' → ' + resultLabel + '</div>' +
+      '<table class="le-map-table"><thead><tr><th>Trigger Option</th><th>Result</th></tr></thead><tbody>';
+
+    leMappings.forEach((m, i) => {
+      html += '<tr><td>' + m.trigger + '</td>' +
+        '<td><input value="' + (m.result||'') + '" placeholder="Select outcome..." oninput="leMappings['+i+'].result=this.value"></td></tr>';
+    });
+
+    html += '</tbody></table>' +
+      '<div style="margin-top:6px;"><span style="font:400 11px/1 system-ui,sans-serif;color:var(--text-3);cursor:pointer;" onclick="leAddMapping()">+ Add mapping rule</span></div>' +
+    '</div>';
+  }
+
+  // New result field input (if + Create New chosen)
+  if (leResultField === '__new__') {
+    html += '<div style="margin-top:12px;padding:10px;background:#fafafa;border:1px solid var(--border);border-radius:4px;">' +
+      '<div style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">New Result Field</div>' +
+      '<input id="leNewResultName" placeholder="Result field name..." style="font:inherit;font-size:12px;border:none;border-bottom:1px solid var(--border);background:transparent;width:100%;padding:2px 0;outline:none;" oninput="leResultField=this.value;leRenderNewGroup()">' +
+    '</div>';
+  }
+
+  grp.innerHTML = html;
+
+  // Re-set the result picker value
+  const picker = document.getElementById('leResultPicker');
+  if (picker && leResultField) {
+    if (leResultField === '__new__' || ['InterestAppraised','ValueScenarios','ApproachestoValue'].includes(leResultField)) {
+      picker.value = leResultField;
+    }
+  }
+}
+
+function leOnResultPick(sel) {
+  leResultField = sel.value;
+  leMappings = []; // reset mappings when result changes
+  leRenderNewGroup();
+}
+
+function leAddMapping() {
+  leMappings.push({ trigger: '', result: '' });
+  leRenderNewGroup();
+  // Focus the last trigger input
+  const inputs = document.querySelectorAll('.le-map-table input');
+  if (inputs.length) inputs[inputs.length-1].focus();
+}
+
+function leSaveLogic() {
+  if (!leEditField) { leExitEditMode(); return; }
+  const f = leEditField;
+
+  // Mark field as logic configured
+  f._hasLogic = true;
+  f._logicConfigured = true;
+
+  // Inject into normal view: add group to lo-card and Rule Explorer
+  const loCard = document.querySelector('#leNormalView .lo-card .sec-body');
   if (loCard) {
-    // Add a new group inside the lo-card
+    document.querySelectorAll('.cs-injected-row, .cs-injected-section').forEach(el => el.remove());
+    const opts = (f.d && DROPDOWN_OPTIONS[f.d]) ? DROPDOWN_OPTIONS[f.d] : [];
+    const ddMenuHTML = opts.map(o => '<div class="dd-item" onclick="pickDD(this)">'+o+'</div>').join('');
+    const resultLabel = leResultField && leResultField !== '__new__' ?
+      ((FIELDS.find(x=>x.n===leResultField)||{}).l || leResultField) : (leResultField || 'Result');
+
     const grpDiv = document.createElement('div');
     grpDiv.className = 'grp cs-injected-row';
-    grpDiv.style.background = '#fefce8';
-    grpDiv.style.borderRadius = '6px';
-    grpDiv.style.padding = '8px 12px';
-    grpDiv.style.marginTop = '16px';
     grpDiv.innerHTML =
-      '<div class="grp-label" style="color:var(--amber);border-bottom-color:var(--amber);">New — ' + f.l + ' (' + (isResult ? 'Result' : 'Trigger') + ')</div>' +
+      '<div class="grp-label">Group 3 — ' + f.l + ' → ' + resultLabel + ' (1 trigger → 1 result)</div>' +
       '<div class="lo-row">' +
-        '<span class="lo-letter" style="color:var(--amber);font-weight:800;">' + nextLetter + '</span>' +
-        '<span class="lo-line" style="background:var(--amber);"></span>' +
-        '<span class="f-lbl" style="min-width:0;text-align:left;color:var(--text);font-weight:600;">' + f.l + '</span>' +
+        '<span class="lo-letter">' + leNextLetter + '</span><span class="lo-line"></span>' +
+        '<span class="f-lbl" style="min-width:0;text-align:left;">' + f.l + '</span>' +
         '<div class="f-val"><div class="dd" data-field="' + f.n + '"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu">' + ddMenuHTML + '</div></div></div>' +
         '<span class="lo-spacer"></span>' +
-        '<span class="lo-result-lbl" style="color:var(--amber);">Result</span>' +
-        '<div class="f-val"><div class="dd"><div class="dd-trigger ph" style="color:var(--text-4);font-style:italic;">Connect to result...<span class="dd-arrow"></span></div><div class="dd-menu"></div></div></div>' +
+        '<span class="lo-result-lbl">' + resultLabel + '</span>' +
+        '<div class="f-val"><div class="dd"><div class="dd-trigger ph">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"></div></div></div>' +
       '</div>';
     loCard.appendChild(grpDiv);
+
+    // Add Rule Explorer section
+    let mapRows = leMappings.filter(m=>m.trigger && m.result).map(m =>
+      '<tr><td>'+m.trigger+'</td><td>'+m.result+'</td></tr>'
+    ).join('');
+    if (!mapRows) mapRows = '<tr><td style="color:var(--text-3);font-style:italic;">No mappings configured</td><td></td></tr>';
+
+    const reSection = document.createElement('div');
+    reSection.className = 're-section cs-injected-section';
+    reSection.innerHTML =
+      '<div class="re-section-bar" onclick="this.parentElement.classList.toggle(\'closed\')">' +
+        '<span class="re-chevron">▾</span>' +
+        '<span class="re-section-name">Group 3 — ' + f.l + ' → ' + resultLabel + '</span>' +
+      '</div>' +
+      '<div class="re-section-body">' +
+        '<div class="re-diagram">' + leNextLetter + '  ' + f.l + '  ──→  ' + resultLabel + '</div>' +
+        '<table class="re-table">' +
+          '<tr><td class="re-col-hdr">User Choice</td><td class="re-col-hdr">Outcome</td></tr>' +
+          '<tr class="re-title-row"><td><span class="re-let">' + leNextLetter + '</span>' + f.l + '</td><td>' + resultLabel + '</td></tr>' +
+          mapRows +
+        '</table>' +
+      '</div>';
+
+    const lastRe = document.querySelector('#leNormalView .re-section:last-of-type');
+    if (lastRe) lastRe.parentNode.insertBefore(reSection, lastRe.nextSibling);
   }
 
-  // Insert the Rule Explorer section after existing re-sections
-  const lastReSection = document.querySelector('#panel-logic .re-section:last-of-type');
-  if (lastReSection) {
-    lastReSection.parentNode.insertBefore(section, lastReSection.nextSibling);
-  }
-
-  // Scroll to the interactive cascade row first
-  const injectedRow = document.querySelector('.cs-injected-row');
-  if (injectedRow) {
-    setTimeout(() => injectedRow.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
-  }
-
-  // Fade the outline after 3s
-  setTimeout(() => { section.style.outline = ''; }, 3000);
+  // Update field registry display
+  renderFields();
+  leExitEditMode();
 }
 function csLabelToFieldName(label) {
   return label.replace(/[^a-zA-Z0-9\s]/g,'').split(/\s+/).map((w,i) => i===0 ? w.charAt(0).toLowerCase()+w.slice(1) : w.charAt(0).toUpperCase()+w.slice(1)).join('');
@@ -2091,10 +2269,10 @@ function csConfirmExistOpts(btn) {
   const addRow = document.getElementById('fiAddRow');
   if (addRow) {
     const labelInp = addRow.querySelector('input[name="l"]');
-    if (labelInp && labelInp.dataset.autoSynced === 'true') {
-      labelInp.disabled = true;
-      labelInp.style.color = 'var(--text-3)';
-      labelInp.title = 'Locked — synced from list name';
+    if (labelInp) {
+      labelInp.disabled = false;
+      labelInp.style.color = 'var(--text)';
+      labelInp.title = '';
     }
     const roleSel = addRow.querySelector('select[name="role"]');
     if (roleSel) {
@@ -2154,9 +2332,16 @@ onDdListChange = function(sel) {
 function csOnLabelInput(inp) {
   const tr = inp.closest('tr');
   document.getElementById('csAutoName').textContent = csLabelToFieldName(inp.value) || 'auto';
+  // Two-way sync: label → list name (if new list editor is open)
+  const expandTr = document.getElementById('fiNewDdExpandRow');
+  if (expandTr && inp.dataset.autoSynced === 'true') {
+    const nameInp = expandTr.querySelector('#fiNewDdName');
+    if (nameInp) { nameInp.value = inp.value; expandTr.dataset.listName = inp.value; }
+  }
+  // If user manually edits, break the auto-sync
+  if (inp.dataset.autoSynced === 'true') inp.dataset.autoSynced = 'false';
   const roleSel = tr.querySelector('select[name="role"]');
   if (inp.value.trim() && roleSel.disabled) {
-    // Step 3: unlock role
     roleSel.disabled = false;
     roleSel.closest('td').style.transition = 'background .3s';
     roleSel.closest('td').style.background = '#fefce8';
@@ -2313,10 +2498,10 @@ function csConfirmDdOptions(btn) {
   const addRow = document.getElementById('fiAddRow');
   if (addRow) {
     const labelInp = addRow.querySelector('input[name="l"]');
-    if (labelInp && labelInp.dataset.autoSynced === 'true') {
-      labelInp.disabled = true;
-      labelInp.style.color = 'var(--text-3)';
-      labelInp.title = 'Locked — synced from list name';
+    if (labelInp) {
+      labelInp.disabled = false;
+      labelInp.style.color = 'var(--text)';
+      labelInp.title = '';
     }
     // Unlock + flash-highlight the Role dropdown
     const roleSel = addRow.querySelector('select[name="role"]');
@@ -2334,6 +2519,7 @@ function csConfirmDdOptions(btn) {
 
 // FIX 3: Auto-sync new list name → Label (if label is empty)
 function csNewListAutoLabel() {
+  // Two-way sync: list name → label (if label empty or previously synced)
   const expandTr = document.getElementById('fiNewDdExpandRow');
   if (!expandTr) return;
   const nameInp = expandTr.querySelector('#fiNewDdName');
@@ -2341,8 +2527,7 @@ function csNewListAutoLabel() {
   const addRow = document.getElementById('fiAddRow');
   if (!addRow) return;
   const labelInp = addRow.querySelector('input[name="l"]');
-  if (!labelInp || labelInp.disabled) return;
-  // Only auto-fill if label is empty or was previously auto-filled
+  if (!labelInp) return;
   if (!labelInp.value.trim() || labelInp.dataset.autoSynced === 'true') {
     labelInp.value = nameInp.value;
     labelInp.dataset.autoSynced = 'true';

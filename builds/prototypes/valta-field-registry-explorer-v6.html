@@ -675,7 +675,7 @@ E  Authorized Use          ──┘</div>
 
 <!-- ═══ FIELD INDEX ═══ -->
 <div class="panel active" id="panel-index">
-<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;align-items:center;gap:0;margin-left:auto;"><button class="btn btn-outline" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="insertAddRow(event)">+ New Field</button><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="event.stopPropagation();toggleAuditSection()">Audit</button><span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></div></div><div class="sec-body">
+<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;align-items:center;gap:0;margin-left:auto;"><button class="btn btn-outline" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="insertAddRow(event)">+ New Field</button><button class="btn btn-ghost" id="auditBtn" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="event.stopPropagation();toggleAuditView()">Audit</button><span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></div></div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
     <div class="seg scope-toggle" style="margin:0;flex-shrink:0;">
@@ -703,6 +703,13 @@ E  Authorized Use          ──┘</div>
   <div class="fi-count" id="fiCount"></div>
   <div id="fiTableWrap" style="overflow-x:auto;">
     <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="status" onclick="sortFields(this,'status')">Status</th><th data-sort="origin" onclick="sortFields(this,'origin')">System</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre Field ID</th><th style="width:90px;cursor:default;"></th></tr></thead><tbody id="fiBody"></tbody></table>
+  </div>
+  <div id="auditView" style="display:none;">
+    <div class="audit-card">
+      <div class="audit-header"><h3>Rule Audit — 28 Rules vs Cascade Engine</h3><button class="btn btn-ghost" style="font-size:11px;padding:3px 8px;" onclick="toggleAuditView()">Back to Registry</button></div>
+      <div class="audit-summary"><div class="audit-stat"><div class="num" id="auditTotal">28</div><div class="lbl">Rules</div></div><div class="audit-stat pass"><div class="num" id="auditPass">—</div><div class="lbl">Pass</div></div><div class="audit-stat fail"><div class="num" id="auditFail">—</div><div class="lbl">Fail</div></div></div>
+      <div class="audit-results" id="auditResults"><div style="padding:20px;color:var(--text-3);text-align:center;font-size:12px;">Running audit...</div></div>
+    </div>
   </div>
   <div id="narTableWrap" style="display:none;">
     <table class="fi-table" id="narTable">
@@ -772,14 +779,6 @@ E  Authorized Use          ──┘</div>
   </div>
 </div></div>
 
-<!-- Audit section (collapsible, inside Field Registry) -->
-<div id="auditSection" style="display:none;max-width:960px;margin:16px auto 0;">
-<div class="audit-card">
-  <div class="audit-header"><h3>Rule Audit — 28 Rules vs Cascade Engine</h3><button class="btn btn-ghost" style="font-size:11px;padding:3px 8px;" onclick="toggleAuditSection()">Close</button></div>
-  <div class="audit-summary"><div class="audit-stat"><div class="num" id="auditTotal">28</div><div class="lbl">Rules</div></div><div class="audit-stat pass"><div class="num" id="auditPass">—</div><div class="lbl">Pass</div></div><div class="audit-stat fail"><div class="num" id="auditFail">—</div><div class="lbl">Fail</div></div></div>
-  <div class="audit-results" id="auditResults"><div style="padding:20px;color:var(--text-3);text-align:center;font-size:12px;">Click Audit to run validation.</div></div>
-</div>
-</div>
 
 </div>
 
@@ -1604,16 +1603,32 @@ function testRule(r) {
 
 const OUTPUT_NAMES = {int:'Interest Appraised', scen:'Value Scenarios', appr:'Approaches to Value'};
 
-function toggleAuditSection() {
-  const sec = document.getElementById('auditSection');
-  if (sec.style.display === 'none') {
-    sec.style.display = '';
+let auditActive = false;
+function toggleAuditView() {
+  auditActive = !auditActive;
+  const tableWrap = document.getElementById('fiTableWrap');
+  const auditView = document.getElementById('auditView');
+  const fiCount = document.getElementById('fiCount');
+  // Also hide/show filters and search
+  const filterRows = document.querySelectorAll('#registrySec .sec-body > div:not(#fiTableWrap):not(#auditView):not(#narTableWrap):not(#narInfoBlock)');
+  const btn = document.getElementById('auditBtn');
+  if (auditActive) {
+    tableWrap.style.display = 'none';
+    fiCount.style.display = 'none';
+    filterRows.forEach(el => el.style.display = 'none');
+    auditView.style.display = '';
+    if (btn) btn.textContent = 'Registry';
     runAudit();
-    setTimeout(() => sec.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
   } else {
-    sec.style.display = 'none';
+    tableWrap.style.display = '';
+    fiCount.style.display = '';
+    filterRows.forEach(el => el.style.display = '');
+    auditView.style.display = 'none';
+    if (btn) btn.textContent = 'Audit';
   }
 }
+// Keep old name as alias for the header button
+function toggleAuditSection() { toggleAuditView(); }
 function runAudit() {
   let pass=0, fail=0;
   const res = document.getElementById('auditResults');

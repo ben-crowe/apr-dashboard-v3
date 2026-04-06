@@ -350,6 +350,23 @@
   .le-map-table select, .le-map-table input { font: inherit; font-size: 12px; border: none; border-bottom: 1px solid var(--border); background: transparent; padding: 2px 0; outline: none; width: 100%; }
   .le-map-table select:focus, .le-map-table input:focus { border-bottom-color: var(--text); }
   .le-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+  /* Intake form edit mode */
+  .in-edit-bar { display: none; max-width: 960px; margin: 0 auto 8px; padding: 8px 14px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius); font-size: 12px; color: #1e40af; }
+  .in-edit-bar.active { display: flex; align-items: center; justify-content: space-between; }
+  .in-field-handle { cursor: grab; color: var(--text-4); margin-right: 6px; font-size: 14px; user-select: none; display: none; }
+  .in-editing .in-field-handle { display: inline; }
+  .in-editing .f { position: relative; border-radius: 4px; transition: background .12s; padding: 2px 4px; margin: -2px -4px; }
+  .in-editing .f:hover { background: rgba(59,130,246,.06); }
+  .in-remove { display: none; position: absolute; right: -8px; top: -4px; width: 16px; height: 16px; border-radius: 50%; background: var(--red); color: #fff; font-size: 10px; border: none; cursor: pointer; align-items: center; justify-content: center; line-height: 1; }
+  .in-editing .in-remove { display: flex; }
+  .in-add-field-row { display: none; margin-top: 8px; padding: 8px 12px; border: 1px dashed var(--border); border-radius: calc(var(--radius) - 2px); cursor: pointer; text-align: center; font-size: 11px; color: var(--text-3); transition: all .12s; }
+  .in-add-field-row:hover { border-color: var(--text-3); color: var(--text-2); background: var(--hover); }
+  .in-editing .in-add-field-row { display: block; }
+  .in-field-picker { position: absolute; top: 100%; left: 0; right: 0; z-index: 150; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--dd-shadow); padding: 6px; max-height: 200px; overflow-y: auto; }
+  .in-field-picker-item { padding: 4px 8px; font-size: 11px; color: var(--text-2); cursor: pointer; border-radius: calc(var(--radius) - 4px); }
+  .in-field-picker-item:hover { background: var(--hover); color: var(--text); }
+  .in-field-picker-item .fn { font-weight: 600; color: var(--text); font-family: 'SF Mono','Consolas',monospace; font-size: 10px; margin-right: 6px; }
 </style>
 </head>
 <body>
@@ -370,7 +387,7 @@
   <div class="seg">
     <button class="active" onclick="setView('index',this)">Field Registry</button>
     <button onclick="setView('logic',this)">Logic Fields</button>
-    <button onclick="setView('full',this)">Full Dashboard</button>
+    <button onclick="setView('full',this)">Dashboard & Forms</button>
   </div>
 </div>
 <div style="max-width:960px;margin:0 auto 14px;display:none;justify-content:flex-end;">
@@ -380,12 +397,20 @@
     <button class="dash-link" onclick="dashLogicOnly(this)">Logic Only</button>
     <span class="dash-sep">·</span>
     <button class="dash-link" onclick="dashCollapseAll(this)">Collapse All</button>
+    <span class="dash-sep">·</span>
+    <button class="dash-link" id="inEditBtn" onclick="inToggleEdit()">Edit Layout</button>
   </div>
 </div>
 
 <!-- ═══ FULL DASHBOARD ═══ -->
 <div class="panel" id="panel-full">
 
+<div class="in-edit-bar" id="inEditBar">
+  <span>Edit Layout — drag to reorder, click + to add fields from registry, ✕ to remove</span>
+  <button class="btn btn-primary" style="font-size:11px;padding:4px 12px;" onclick="inToggleEdit()">Done Editing</button>
+</div>
+
+<div id="inFormContainer">
 <div class="sec" id="sec-client" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">1.1</span>Client Information</div><div class="sec-body"><div class="grid">
   <div class="f"><span class="f-lbl">First Name</span><div class="f-val"><input class="u-inp" data-fill="Sarah"></div></div>
   <div class="f"><span class="f-lbl">Last Name</span><div class="f-val"><input class="u-inp" data-fill="Williams"></div></div>
@@ -463,6 +488,7 @@
   <div class="f"><span class="f-lbl">Tax Notice</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
   <div class="f"><span class="f-lbl">Site Plan</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
 </div></div></div>
+</div><!-- close inFormContainer -->
 
 <div class="sec-ref">
   <div class="sec-ref-title">Section Reference</div>
@@ -481,6 +507,7 @@
   </table>
 </div>
 </div>
+
 
 <!-- ═══ LOGIC FIELDS ═══ -->
 <div class="panel" id="panel-logic">
@@ -2742,6 +2769,128 @@ function cancelEditRow() {
 
 renderFields();
 cascade();
+
+/* ═══ DASHBOARD LAYOUT EDIT MODE ═══ */
+let inEditMode = false;
+
+function inToggleEdit() {
+  inEditMode = !inEditMode;
+  const container = document.getElementById('inFormContainer');
+  const bar = document.getElementById('inEditBar');
+  const btn = document.getElementById('inEditBtn');
+  bar.classList.toggle('active', inEditMode);
+  btn.textContent = inEditMode ? 'Done Editing' : 'Edit Layout';
+  btn.classList.toggle('active', inEditMode);
+
+  if (inEditMode) {
+    container.classList.add('in-editing');
+    // Inject edit affordances into each field
+    container.querySelectorAll('.sec .grid').forEach(grid => {
+      grid.querySelectorAll('.f').forEach(f => {
+        if (!f.querySelector('.in-field-handle')) {
+          const handle = document.createElement('span');
+          handle.className = 'in-field-handle';
+          handle.textContent = '⠿';
+          f.insertBefore(handle, f.firstChild);
+        }
+        if (!f.querySelector('.in-remove')) {
+          const rm = document.createElement('button');
+          rm.className = 'in-remove';
+          rm.textContent = '✕';
+          rm.title = 'Remove';
+          rm.onclick = function(e) { e.stopPropagation(); inRemoveField(rm); };
+          f.appendChild(rm);
+        }
+      });
+      // Add "add field" row after each grid
+      const secBody = grid.closest('.sec-body');
+      if (secBody && !secBody.querySelector('.in-add-field-row')) {
+        const addRow = document.createElement('div');
+        addRow.className = 'in-add-field-row';
+        addRow.textContent = '+ Add field from registry';
+        addRow.onclick = function() { inShowFieldPicker(addRow); };
+        secBody.appendChild(addRow);
+      }
+    });
+  } else {
+    container.classList.remove('in-editing');
+    // Remove edit affordances
+    container.querySelectorAll('.in-field-handle').forEach(h => h.remove());
+    container.querySelectorAll('.in-remove').forEach(r => r.remove());
+    container.querySelectorAll('.in-add-field-row').forEach(a => a.remove());
+    document.querySelectorAll('.in-field-picker').forEach(p => p.remove());
+  }
+}
+
+function inRemoveField(btn) {
+  if (!inEditMode) return;
+  const field = btn.closest('.f');
+  if (field) {
+    field.style.transition = 'opacity .2s';
+    field.style.opacity = '0';
+    setTimeout(() => field.remove(), 200);
+  }
+}
+
+function inShowFieldPicker(addBtn) {
+  document.querySelectorAll('.in-field-picker').forEach(p => p.remove());
+  // Get fields already on the entire dashboard
+  const usedLabels = new Set();
+  document.querySelectorAll('#inFormContainer .f .f-lbl').forEach(lbl => {
+    usedLabels.add(lbl.textContent.replace(':','').trim());
+  });
+  const picker = document.createElement('div');
+  picker.className = 'in-field-picker';
+  picker.style.position = 'relative';
+  let hasItems = false;
+  FIELDS.forEach(f => {
+    if (usedLabels.has(f.l)) return;
+    hasItems = true;
+    const item = document.createElement('div');
+    item.className = 'in-field-picker-item';
+    item.innerHTML = '<span class="fn">' + f.n + '</span>' + f.l + (f.c ? ' <span style="color:var(--text-3);font-size:10px;">(' + f.c + ')</span>' : '');
+    item.onclick = function() { inAddField(addBtn, f); picker.remove(); };
+    picker.appendChild(item);
+  });
+  if (!hasItems) {
+    picker.innerHTML = '<div style="padding:8px;font-size:11px;color:var(--text-3);text-align:center;">All registry fields are on this form</div>';
+  }
+  addBtn.style.position = 'relative';
+  addBtn.appendChild(picker);
+}
+
+function inAddField(addBtn, f) {
+  const grid = addBtn.closest('.sec-body').querySelector('.grid');
+  if (!grid) return;
+  const fieldDiv = document.createElement('div');
+  fieldDiv.className = 'f';
+  // Build field based on control type
+  let valHTML;
+  if (f.d && DROPDOWN_OPTIONS[f.d] && f.c && f.c.includes('Select')) {
+    const opts = DROPDOWN_OPTIONS[f.d].map(o => '<div class="dd-item" onclick="pickDD(this)">' + o + '</div>').join('');
+    valHTML = '<div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu">' + opts + '</div></div>';
+  } else if (f.c === 'Checkbox') {
+    valHTML = '<label class="cb-filter"><input type="checkbox"><span>' + f.l + '</span></label>';
+  } else if (f.c === 'Date') {
+    valHTML = '<input class="u-inp" type="date">';
+  } else {
+    valHTML = '<input class="u-inp">';
+  }
+  // Include edit affordances since we're in edit mode
+  fieldDiv.innerHTML = '<span class="in-field-handle">⠿</span><span class="f-lbl">' + f.l + '</span><div class="f-val">' + valHTML + '</div><button class="in-remove" onclick="event.stopPropagation();inRemoveField(this)" title="Remove">✕</button>';
+  grid.appendChild(fieldDiv);
+  fieldDiv.style.background = '#fefce8';
+  fieldDiv.style.borderRadius = '4px';
+  fieldDiv.style.transition = 'background .5s';
+  setTimeout(() => { fieldDiv.style.background = ''; }, 1000);
+}
+
+// Close field picker on outside click
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.in-field-picker') && !e.target.closest('.in-add-field-row')) {
+    document.querySelectorAll('.in-field-picker').forEach(p => p.remove());
+  }
+});
 
 /* ═══ FULL WIDTH TOGGLE ═══ */
 let isFullWidth = false;

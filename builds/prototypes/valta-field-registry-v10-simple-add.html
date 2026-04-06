@@ -1230,7 +1230,7 @@ function renderFields() {
       ddCell +
       vrCell +
       '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+(f.v||'—')+'</td>' +
-      (f._hasLogic ? '<td><button class="cs-logic-btn" onclick="event.stopPropagation();csGoToLogic()">Configure Logic</button></td>' : '<td></td>') +
+      (f._hasLogic ? '<td><button class="cs-logic-btn" onclick="event.stopPropagation();csGoToLogic(\''+f.n.replace(/'/g,"\\'")+'\')">Configure Logic</button></td>' : '<td></td>') +
     '</tr>';
 
     // Expanded dropdown options row
@@ -1757,7 +1757,8 @@ CS_TYPE_REVERSE['Select multiple options'] = 'Dropdown'; CS_TYPE_REVERSE['Select
 CS_TYPE_REVERSE['Alpha Numeric'] = 'Text'; CS_TYPE_REVERSE['Decimal'] = 'Number';
 CS_TYPE_REVERSE['Calculation'] = 'Number'; CS_TYPE_REVERSE['Multi-line'] = 'Multi-line';
 
-function csGoToLogic() {
+function csGoToLogic(fieldName) {
+  // Switch to Logic Fields tab
   const tabBtns = document.querySelectorAll('.seg:not(.scope-toggle) button');
   tabBtns.forEach(b => b.classList.remove('active'));
   tabBtns[1].classList.add('active');
@@ -1766,6 +1767,58 @@ function csGoToLogic() {
   document.getElementById('dashControls').parentElement.style.display = 'none';
   document.getElementById('btnFill').style.display = 'none';
   document.getElementById('btnReset').style.display = 'none';
+
+  // Pre-load new field into cascade layout as next letter
+  if (fieldName) csInjectCascadeRow(fieldName);
+}
+function csInjectCascadeRow(fieldName) {
+  const f = FIELDS.find(x => x.n === fieldName);
+  if (!f) return;
+  // Remove any previously injected rows
+  document.querySelectorAll('.cs-injected-row').forEach(el => el.remove());
+  // Determine next letter: existing are A-E, next is F, G, etc.
+  const existingLetters = document.querySelectorAll('#panel-logic .lo-letter');
+  const usedLetters = new Set();
+  existingLetters.forEach(el => usedLetters.add(el.textContent.trim()));
+  const alphabet = 'FGHIJKLMNOPQRSTUVWXYZ';
+  let nextLetter = 'F';
+  for (const ch of alphabet) { if (!usedLetters.has(ch)) { nextLetter = ch; break; } }
+
+  // Determine which group to add to based on role
+  const role = getRole(f.n);
+  // Add to Group 1 by default (Property Rights group), or Group 2 if it looks value-related
+  const targetGroup = document.querySelector('#panel-logic .grp:first-child');
+  if (!targetGroup) return;
+
+  // Find the last lo-row in the group and insert after it
+  const loRows = targetGroup.querySelectorAll('.lo-row');
+  const lastRow = loRows[loRows.length - 1];
+
+  // Build the new cascade row
+  const newRow = document.createElement('div');
+  newRow.className = 'lo-row cs-injected-row';
+  newRow.style.background = '#fefce8';
+  newRow.style.borderRadius = '4px';
+  newRow.style.padding = '2px 0';
+  newRow.innerHTML =
+    '<span class="lo-letter" style="color:var(--amber);font-weight:800;">'+nextLetter+'</span>' +
+    '<span class="lo-line" style="background:var(--amber);"></span>' +
+    '<span class="f-lbl" style="min-width:0;text-align:left;color:var(--text);font-weight:600;">'+f.l+'</span>' +
+    '<div class="f-val"><div class="dd" data-field="'+f.n+'"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu">' +
+    (f.d && DROPDOWN_OPTIONS[f.d] ? DROPDOWN_OPTIONS[f.d].map(o => '<div class="dd-item" onclick="pickDD(this)">'+o+'</div>').join('') : '') +
+    '</div></div></div>' +
+    '<span class="lo-spacer"></span>' +
+    '<span style="font-size:10px;color:var(--amber);font-weight:600;">NEW — wire up trigger</span>' +
+    '<span></span>';
+
+  if (lastRow) {
+    lastRow.parentNode.insertBefore(newRow, lastRow.nextSibling);
+  } else {
+    targetGroup.appendChild(newRow);
+  }
+
+  // Scroll to the new row
+  setTimeout(() => newRow.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
 }
 function csLabelToFieldName(label) {
   return label.replace(/[^a-zA-Z0-9\s]/g,'').split(/\s+/).map((w,i) => i===0 ? w.charAt(0).toLowerCase()+w.slice(1) : w.charAt(0).toUpperCase()+w.slice(1)).join('');
@@ -1964,8 +2017,8 @@ function saveAddRow() {
   if (roleVal === 'Result' && !RESULTS.includes(n)) RESULTS.push(n);
 
   const newField = { n, l, c, s:'User Input', d, v:'', vr:'', nf:'Yes', req:'No', desc:'', origin:'dashboard', _status:'pending', _hasLogic:hasLogic };
-  FIELDS.push(newField);
-  ALLFIELDS.push(newField);
+  FIELDS.unshift(newField);
+  ALLFIELDS.unshift(newField);
 
   removeAddRow();
   renderFields();
@@ -1989,14 +2042,14 @@ function fillSimpleExample(e) {
   setTimeout(() => {
     const tr = document.getElementById('fiAddRow');
     if (!tr) return;
-    tr.querySelector('input[name="l"]').value = 'Market Condition';
-    document.getElementById('csAutoName').textContent = 'marketCondition';
+    tr.querySelector('input[name="l"]').value = 'Financing Type';
+    document.getElementById('csAutoName').textContent = 'financingType';
     tr.querySelector('select[name="cs-type"]').value = 'Dropdown';
     csOnSimpleTypeChange(tr);
     tr.querySelector('select[name="role"]').value = 'Trigger';
     setTimeout(() => {
       const ddSel = tr.querySelector('select[name="d"]');
-      if (ddSel) { ddSel.disabled = false; ddSel.value = 'ListPropertyType'; }
+      if (ddSel) { ddSel.disabled = false; ddSel.value = 'ListAuthorizedUse'; }
     }, 20);
   }, 20);
 }

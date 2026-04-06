@@ -822,7 +822,7 @@ E  Authorized Use          ──┘</div>
         </div>
       </div>
     </div>
-    <div class="nf-group">
+    <div class="nf-group" id="nfSectionGroup">
       <div class="nf-group-title">Suggested Section</div>
       <div class="nf-row">
         <span class="nf-lbl">Section</span>
@@ -838,6 +838,15 @@ E  Authorized Use          ──┘</div>
             <button onclick="pickNfSeg(this,'3.2')">3.2</button>
           </div>
           <div class="nf-hint" id="nfSectionName" style="margin-top:4px;">LOE Quote & Job Information</div>
+        </div>
+      </div>
+    </div>
+    <div class="nf-group" id="nfSectionReadonly" style="display:none;">
+      <div class="nf-group-title">Location</div>
+      <div class="nf-row">
+        <span class="nf-lbl">Section</span>
+        <div class="nf-val">
+          <span id="nfSectionReadonlyText" style="font-size:12px;color:var(--text-2);"></span>
         </div>
       </div>
     </div>
@@ -2108,7 +2117,7 @@ function submitField() {
     else if (nfState.newListName) { ddListName = nfState.newListName; DROPDOWN_OPTIONS[ddListName] = nfState.ddOptions.filter(o=>o.trim()); }
   }
   const cShort = control==='Select one option'?'Select one':control==='Select multiple options'?'Select multiple':control;
-  const newField = { n:name, l:label, c:cShort, s:source, d:ddListName, v:nfState.valcreKey||document.getElementById('nfValcreKey').value.trim(), vr:'', nf:'Yes', req:nfState.required, desc:document.getElementById('nfDesc').value.trim(), origin:'dashboard' };
+  const newField = { n:name, l:label, c:cShort, s:source, d:ddListName, v:nfState.valcreKey||document.getElementById('nfValcreKey').value.trim(), vr:'', nf:'Yes', req:nfState.required, desc:document.getElementById('nfDesc').value.trim(), origin:'dashboard', _section:nfState.section };
   if (nfState.mode==='edit' && nfState.editIndex!==null) {
     const oldName = FIELDS[nfState.editIndex].n;
     FIELDS[nfState.editIndex] = newField;
@@ -2203,8 +2212,16 @@ const _origOpen = openFieldPanel;
 openFieldPanel = function(mode, editIdx) {
   hideNfSuccess();
   _origOpen(mode, editIdx);
-  // Hide fill button in edit mode
-  document.getElementById('nfFillBtn').style.display = (mode === 'edit') ? 'none' : '';
+  const isEdit = (mode === 'edit');
+  document.getElementById('nfFillBtn').style.display = isEdit ? 'none' : '';
+  document.getElementById('nfSectionGroup').style.display = isEdit ? 'none' : '';
+  document.getElementById('nfSectionReadonly').style.display = isEdit ? '' : 'none';
+  if (isEdit && editIdx !== null) {
+    const f = FIELDS[editIdx];
+    const sec = f && f._section ? f._section : '—';
+    const secName = NF_SECTIONS[sec] || '';
+    document.getElementById('nfSectionReadonlyText').textContent = sec !== '—' ? sec + ' ' + secName : 'Not assigned';
+  }
 };
 
 document.addEventListener('keydown', function(e) { if (e.key==='Escape' && document.getElementById('nfPanel').classList.contains('open')) closeFieldPanel(); });

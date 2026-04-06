@@ -2097,7 +2097,8 @@ function csConfirmExistOpts(btn) {
       labelInp.title = 'Locked — synced from list name';
     }
     const roleSel = addRow.querySelector('select[name="role"]');
-    if (roleSel && !roleSel.disabled) {
+    if (roleSel) {
+      roleSel.disabled = false;
       const roleTd = roleSel.closest('td');
       roleTd.style.transition = 'background .2s, box-shadow .2s';
       roleTd.style.background = '#fefce8';
@@ -2317,9 +2318,10 @@ function csConfirmDdOptions(btn) {
       labelInp.style.color = 'var(--text-3)';
       labelInp.title = 'Locked — synced from list name';
     }
-    // Flash-highlight the Role dropdown
+    // Unlock + flash-highlight the Role dropdown
     const roleSel = addRow.querySelector('select[name="role"]');
-    if (roleSel && !roleSel.disabled) {
+    if (roleSel) {
+      roleSel.disabled = false;
       const roleTd = roleSel.closest('td');
       roleTd.style.transition = 'background .2s, box-shadow .2s';
       roleTd.style.background = '#fefce8';

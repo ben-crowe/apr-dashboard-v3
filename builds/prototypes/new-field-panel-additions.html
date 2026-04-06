@@ -1,0 +1,834 @@
+<!--
+  NEW FIELD REGISTRATION PANEL — Additions to valta-field-registry-explorer-v5.html
+
+  Three blocks to add:
+  1. CSS (append inside <style> block, before </style>)
+  2. HTML (insert inside #panel-index, after the narInfoBlock div)
+  3. JS (append inside <script> block, before </script>)
+
+  Plus two small edits to existing code.
+-->
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOCK 1: CSS — Append inside <style>, before </style>
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<style>
+  /* ── Slide-out Panel ── */
+  .nf-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.08); z-index: 200; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .nf-overlay.open { opacity: 1; pointer-events: auto; }
+  .nf-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 400px; background: var(--card); border-left: 1px solid var(--border); box-shadow: -4px 0 24px rgba(0,0,0,.08); z-index: 210; transform: translateX(100%); transition: transform .2s ease; display: flex; flex-direction: column; }
+  .nf-panel.open { transform: translateX(0); }
+
+  /* Panel header */
+  .nf-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: #fafafa; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .nf-header h3 { font-size: 13px; font-weight: 700; color: var(--text); }
+  .nf-header .nf-mode { font-size: 10px; font-weight: 500; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; margin-left: 8px; }
+  .nf-close { width: 28px; height: 28px; border: none; background: transparent; color: var(--text-3); cursor: pointer; font-size: 16px; border-radius: calc(var(--radius) - 2px); display: flex; align-items: center; justify-content: center; transition: all .12s; }
+  .nf-close:hover { background: var(--hover); color: var(--text); }
+
+  /* Panel body — scrollable */
+  .nf-body { flex: 1; overflow-y: auto; padding: 16px 20px 20px; }
+
+  /* Panel footer */
+  .nf-footer { display: flex; gap: 8px; justify-content: flex-end; padding: 12px 20px; border-top: 1px solid var(--border); background: #fafafa; flex-shrink: 0; }
+
+  /* Form groups */
+  .nf-group { margin-bottom: 18px; }
+  .nf-group-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); margin-bottom: 10px; padding-bottom: 4px; border-bottom: 1px solid var(--border); }
+  .nf-row { display: flex; align-items: center; gap: 8px; min-height: 30px; margin-bottom: 6px; }
+  .nf-lbl { font-size: 11px; color: var(--text-2); width: 110px; text-align: right; flex-shrink: 0; }
+  .nf-lbl::after { content: ':'; }
+  .nf-lbl .nf-req { color: var(--red); margin-left: 2px; }
+  .nf-val { flex: 1; min-width: 0; }
+  .nf-inp { font: inherit; font-size: 12px; color: var(--text); border: none; border-bottom: 1px solid var(--border); background: transparent; width: 100%; height: 28px; padding: 0 2px; outline: none; transition: border-color .12s; }
+  .nf-inp:focus { border-bottom-color: var(--text); }
+  .nf-inp::placeholder { color: var(--text-4); }
+  .nf-inp.invalid { border-bottom-color: var(--red); }
+  .nf-hint { font-size: 10px; color: var(--text-3); margin-top: 2px; line-height: 1.3; }
+  .nf-error { font-size: 10px; color: var(--red); margin-top: 2px; line-height: 1.3; display: none; }
+  .nf-error.show { display: block; }
+
+  /* Toggle (Yes/No) */
+  .nf-toggle { display: flex; align-items: center; gap: 0; }
+  .nf-toggle button { font: 500 11px/1 system-ui, sans-serif; padding: 5px 12px; border: 1px solid var(--border); background: transparent; color: var(--text-3); cursor: pointer; transition: all .12s; }
+  .nf-toggle button:first-child { border-radius: calc(var(--radius) - 2px) 0 0 calc(var(--radius) - 2px); border-right: none; }
+  .nf-toggle button:last-child { border-radius: 0 calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0; }
+  .nf-toggle button.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  /* Section selector (segmented) */
+  .nf-seg { display: inline-flex; align-items: center; gap: 2px; background: var(--seg-bg); border: 1px solid var(--seg-border); border-radius: var(--radius); padding: 3px; flex-wrap: wrap; }
+  .nf-seg button { font: 400 10px/1 system-ui, sans-serif; padding: 4px 8px; border: none; border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .12s; white-space: nowrap; }
+  .nf-seg button:hover { color: var(--text-2); background: var(--hover); }
+  .nf-seg button.active { color: var(--text); background: var(--seg-active); box-shadow: var(--shadow); font-weight: 500; }
+
+  /* Column position radio */
+  .nf-cols { display: flex; gap: 6px; }
+  .nf-cols button { font: 400 11px/1 system-ui, sans-serif; padding: 5px 10px; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .12s; }
+  .nf-cols button:hover { border-color: var(--border-focus); color: var(--text-2); }
+  .nf-cols button.active { border-color: var(--text); color: var(--text); font-weight: 500; }
+
+  /* Conditional sections — hidden by default */
+  .nf-cond { display: none; }
+  .nf-cond.show { display: block; }
+
+  /* Dropdown list builder */
+  .nf-dd-pick { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
+  .nf-dd-pick select { font: inherit; font-size: 11px; color: var(--text); border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px); padding: 4px 8px; background: var(--card); outline: none; flex: 1; }
+  .nf-dd-pick select:focus { border-color: var(--text); }
+  .nf-opt-editor { border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px); background: #fafafa; padding: 8px 10px; }
+  .nf-opt-title { font-size: 10px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+  .nf-opt-list { list-style: none; margin: 0; padding: 0; }
+  .nf-opt-list li { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+  .nf-opt-list li input { font: inherit; font-size: 11px; color: var(--text); border: none; border-bottom: 1px solid var(--border); background: transparent; flex: 1; padding: 2px 0; outline: none; height: 22px; }
+  .nf-opt-list li input:focus { border-bottom-color: var(--text); }
+  .nf-opt-rm { width: 18px; height: 18px; border: none; background: transparent; color: var(--text-3); cursor: pointer; font-size: 13px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 3px; flex-shrink: 0; }
+  .nf-opt-rm:hover { background: #fef2f2; color: var(--red); }
+  .nf-opt-add { font: 400 11px/1 system-ui, sans-serif; color: var(--text-3); cursor: pointer; border: none; background: none; padding: 4px 0; transition: color .1s; }
+  .nf-opt-add:hover { color: var(--text); }
+
+  /* Live preview */
+  .nf-preview { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-top: 4px; }
+  .nf-preview-hdr { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); padding: 8px 12px; background: #fafafa; border-bottom: 1px solid var(--border); }
+  .nf-preview-body { padding: 12px 14px; background: var(--card); min-height: 44px; }
+  .nf-preview-empty { font-size: 11px; color: var(--text-4); font-style: italic; }
+
+  /* New Field button in registry header */
+  .nf-btn-add { font: 500 11px/1 system-ui, sans-serif; padding: 5px 12px; border-radius: calc(var(--radius) - 2px); cursor: pointer; transition: all .12s; white-space: nowrap; background: var(--text); color: var(--bg); border: 1px solid var(--text); box-shadow: var(--shadow); margin-right: 4px; }
+  .nf-btn-add:hover { opacity: .85; }
+
+  /* Row click hint on table */
+  .fi-table tbody tr[data-editable] { cursor: pointer; }
+  .fi-table tbody tr[data-editable]:hover td { background: rgba(0,0,0,.03); }
+  .fi-table tbody tr[data-editable]:active td { background: rgba(0,0,0,.06); }
+</style>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOCK 2: HTML — Insert after the closing </div> of #narInfoBlock
+     (line ~603, before the closing </div> of #panel-index)
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<!-- Overlay -->
+<div class="nf-overlay" id="nfOverlay" onclick="closeFieldPanel()"></div>
+
+<!-- Slide-out Panel -->
+<div class="nf-panel" id="nfPanel">
+  <div class="nf-header">
+    <div style="display:flex;align-items:baseline;">
+      <h3 id="nfTitle">New Field</h3>
+      <span class="nf-mode" id="nfMode">Creating</span>
+    </div>
+    <button class="nf-close" onclick="closeFieldPanel()" title="Close">✕</button>
+  </div>
+
+  <div class="nf-body">
+    <!-- ── Identity ── -->
+    <div class="nf-group">
+      <div class="nf-group-title">Identity</div>
+      <div class="nf-row">
+        <span class="nf-lbl">Field Name<span class="nf-req">*</span></span>
+        <div class="nf-val">
+          <input class="nf-inp" id="nfName" placeholder="e.g. MarketCondition" oninput="onNfNameInput(this)">
+          <div class="nf-hint" id="nfNameHint">camelCase, must be unique</div>
+          <div class="nf-error" id="nfNameError">Field name already exists</div>
+        </div>
+      </div>
+      <div class="nf-row">
+        <span class="nf-lbl">Label<span class="nf-req">*</span></span>
+        <div class="nf-val">
+          <input class="nf-inp" id="nfLabel" placeholder="e.g. Market Condition" oninput="updateNfPreview()">
+        </div>
+      </div>
+      <div class="nf-row">
+        <span class="nf-lbl">Description</span>
+        <div class="nf-val">
+          <input class="nf-inp" id="nfDesc" placeholder="What this field represents">
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Data Type ── -->
+    <div class="nf-group">
+      <div class="nf-group-title">Data Type</div>
+      <div class="nf-row">
+        <span class="nf-lbl">Control Type<span class="nf-req">*</span></span>
+        <div class="nf-val">
+          <div class="dd" id="nfControlDD">
+            <div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div>
+            <div class="dd-menu">
+              <div class="dd-item" onclick="pickNfControl(this)">Text</div>
+              <div class="dd-item" onclick="pickNfControl(this)">Multiple lines of text</div>
+              <div class="dd-item" onclick="pickNfControl(this)">Whole Number</div>
+              <div class="dd-item" onclick="pickNfControl(this)">Decimal</div>
+              <div class="dd-item" onclick="pickNfControl(this)">Select one option</div>
+              <div class="dd-item" onclick="pickNfControl(this)">Select multiple options</div>
+              <div class="dd-item" onclick="pickNfControl(this)">Checkbox</div>
+              <div class="dd-item" onclick="pickNfControl(this)">Date</div>
+              <div class="dd-item" onclick="pickNfControl(this)">Calculation</div>
+              <div class="dd-item" onclick="pickNfControl(this)">Alpha Numeric</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nf-row">
+        <span class="nf-lbl">Source<span class="nf-req">*</span></span>
+        <div class="nf-val">
+          <div class="dd" id="nfSourceDD">
+            <div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div>
+            <div class="dd-menu">
+              <div class="dd-item" onclick="pickNfSource(this)">User Input</div>
+              <div class="dd-item" onclick="pickNfSource(this)">Valcre API</div>
+              <div class="dd-item" onclick="pickNfSource(this)">Calculated</div>
+              <div class="dd-item" onclick="pickNfSource(this)">Logic</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nf-row">
+        <span class="nf-lbl">Required</span>
+        <div class="nf-val">
+          <div class="nf-toggle" id="nfRequired">
+            <button class="active" onclick="pickNfToggle(this,'Yes')">Yes</button>
+            <button onclick="pickNfToggle(this,'No')">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Conditional: Dropdown List (when Select one/multiple) ── -->
+    <div class="nf-group nf-cond" id="nfCondDropdown">
+      <div class="nf-group-title">Dropdown Options</div>
+      <div class="nf-dd-pick">
+        <select id="nfDDSelect" onchange="onNfDDSelect(this)">
+          <option value="">— Pick existing list —</option>
+        </select>
+        <button class="btn-ghost" style="font-size:11px;padding:4px 8px;" onclick="startNewDDList()">+ New List</button>
+      </div>
+      <div class="nf-cond" id="nfOptEditorWrap">
+        <div class="nf-opt-editor">
+          <div class="nf-opt-title">
+            <span id="nfOptListName">New List</span>
+            <span style="font-size:10px;color:var(--text-3);font-weight:400;" id="nfOptCount">0 options</span>
+          </div>
+          <ul class="nf-opt-list" id="nfOptList"></ul>
+          <button class="nf-opt-add" onclick="addNfOption()">+ Add option</button>
+        </div>
+      </div>
+      <div class="nf-row" id="nfNewListNameRow" style="display:none;margin-top:8px;">
+        <span class="nf-lbl" style="width:80px;">List Name</span>
+        <div class="nf-val">
+          <input class="nf-inp" id="nfNewListName" placeholder="e.g. ListMarketCondition" oninput="updateNfOptListName()">
+          <div class="nf-hint">Convention: List{FieldName}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Conditional: Valcre API Key (when Source = Valcre API) ── -->
+    <div class="nf-group nf-cond" id="nfCondValcre">
+      <div class="nf-group-title">Valcre Integration</div>
+      <div class="nf-row">
+        <span class="nf-lbl">API Key<span class="nf-req">*</span></span>
+        <div class="nf-val">
+          <input class="nf-inp" id="nfValcreKey" placeholder="e.g. Property.CustomField1" oninput="updateNfPreview()">
+          <div class="nf-hint">Format: {Location}.{Key}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Conditional: Cascade Role (when Source = Logic or Calculated) ── -->
+    <div class="nf-group nf-cond" id="nfCondCascade">
+      <div class="nf-group-title">Cascade Role</div>
+      <div class="nf-row">
+        <span class="nf-lbl">Role</span>
+        <div class="nf-val">
+          <div class="nf-cols" id="nfCascadeRole">
+            <button class="active" onclick="pickNfCol(this,'nfCascadeRole','independent')">Independent</button>
+            <button onclick="pickNfCol(this,'nfCascadeRole','trigger')">Trigger</button>
+            <button onclick="pickNfCol(this,'nfCascadeRole','result')">Result</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Placement ── -->
+    <div class="nf-group">
+      <div class="nf-group-title">Dashboard Placement</div>
+      <div class="nf-row">
+        <span class="nf-lbl">Valcre Location</span>
+        <div class="nf-val">
+          <div class="dd" id="nfVrDD">
+            <div class="dd-trigger ph" onclick="toggleDD(this)">None<span class="dd-arrow"></span></div>
+            <div class="dd-menu">
+              <div class="dd-item" onclick="pickNfVr(this)">Job</div>
+              <div class="dd-item" onclick="pickNfVr(this)">Contact</div>
+              <div class="dd-item" onclick="pickNfVr(this)">Property</div>
+              <div class="dd-item" onclick="pickNfVr(this)">Building</div>
+              <div class="dd-item" onclick="pickNfVr(this)">Parcel</div>
+              <div class="dd-item" onclick="pickNfVr(this)">None</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="nf-row">
+        <span class="nf-lbl">Section</span>
+        <div class="nf-val">
+          <div class="nf-seg" id="nfSection">
+            <button onclick="pickNfSeg(this,'1.1')">1.1</button>
+            <button onclick="pickNfSeg(this,'1.2')">1.2</button>
+            <button onclick="pickNfSeg(this,'1.3')">1.3</button>
+            <button class="active" onclick="pickNfSeg(this,'2.1')">2.1</button>
+            <button onclick="pickNfSeg(this,'2.2')">2.2</button>
+            <button onclick="pickNfSeg(this,'2.3')">2.3</button>
+            <button onclick="pickNfSeg(this,'3.1')">3.1</button>
+            <button onclick="pickNfSeg(this,'3.2')">3.2</button>
+          </div>
+          <div class="nf-hint" id="nfSectionName" style="margin-top:4px;">LOE Quote & Job Information</div>
+        </div>
+      </div>
+      <div class="nf-row">
+        <span class="nf-lbl">Grid Position</span>
+        <div class="nf-val">
+          <div class="nf-cols" id="nfGridPos">
+            <button class="active" onclick="pickNfCol(this,'nfGridPos','left')">Left</button>
+            <button onclick="pickNfCol(this,'nfGridPos','right')">Right</button>
+            <button onclick="pickNfCol(this,'nfGridPos','span2')">Full Width</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Live Preview ── -->
+    <div class="nf-group">
+      <div class="nf-preview">
+        <div class="nf-preview-hdr">Live Preview</div>
+        <div class="nf-preview-body" id="nfPreviewBody">
+          <div class="nf-preview-empty">Fill in Label and Control Type to see preview</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nf-footer">
+    <button class="btn btn-ghost" onclick="closeFieldPanel()">Cancel</button>
+    <button class="btn btn-primary" id="nfSubmit" onclick="submitField()">Add Field</button>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BLOCK 3: JS — Append inside <script>, before </script>
+     ═══════════════════════════════════════════════════════════════════ -->
+
+<script>
+/* ═══ NEW FIELD PANEL ═══ */
+
+const NF_SECTIONS = {
+  '1.1':'Client Information','1.2':'Property Information','1.3':'Property Contact',
+  '2.1':'LOE Quote & Job Information','2.2':'Building Information','2.3':'Appraisal Assignment',
+  '3.1':'Property Site & Parcels','3.2':'Document Uploads'
+};
+
+let nfState = {
+  mode: 'create',     // 'create' | 'edit'
+  editIndex: null,     // index in FIELDS array when editing
+  name: '',
+  label: '',
+  desc: '',
+  control: '',
+  source: '',
+  required: 'Yes',
+  vr: '',
+  valcreKey: '',
+  ddList: '',          // existing list name or new
+  ddOptions: [],       // option values for new list
+  newListName: '',
+  cascadeRole: 'independent',
+  section: '2.1',
+  gridPos: 'left'
+};
+
+/* ── Open / Close ── */
+function openFieldPanel(mode, editIdx) {
+  nfState.mode = mode || 'create';
+  nfState.editIndex = (mode === 'edit') ? editIdx : null;
+
+  // Reset form
+  resetNfForm();
+
+  if (mode === 'edit' && editIdx !== null) {
+    populateNfFromField(editIdx);
+  }
+
+  document.getElementById('nfTitle').textContent = (mode === 'edit') ? 'Edit Field' : 'New Field';
+  document.getElementById('nfMode').textContent = (mode === 'edit') ? 'Editing' : 'Creating';
+  document.getElementById('nfSubmit').textContent = (mode === 'edit') ? 'Save Changes' : 'Add Field';
+
+  document.getElementById('nfOverlay').classList.add('open');
+  document.getElementById('nfPanel').classList.add('open');
+
+  // Populate dropdown list picker
+  populateNfDDPicker();
+
+  // Focus first field after transition
+  setTimeout(() => document.getElementById('nfName').focus(), 250);
+}
+
+function closeFieldPanel() {
+  document.getElementById('nfOverlay').classList.remove('open');
+  document.getElementById('nfPanel').classList.remove('open');
+}
+
+function resetNfForm() {
+  nfState = { ...nfState, name:'', label:'', desc:'', control:'', source:'', required:'Yes', vr:'', valcreKey:'', ddList:'', ddOptions:[], newListName:'', cascadeRole:'independent', section:'2.1', gridPos:'left' };
+
+  document.getElementById('nfName').value = '';
+  document.getElementById('nfLabel').value = '';
+  document.getElementById('nfDesc').value = '';
+  document.getElementById('nfValcreKey').value = '';
+  document.getElementById('nfName').classList.remove('invalid');
+  document.getElementById('nfNameError').classList.remove('show');
+  document.getElementById('nfNameHint').style.display = '';
+
+  // Reset dropdowns
+  ['nfControlDD','nfSourceDD','nfVrDD'].forEach(id => {
+    const dd = document.getElementById(id);
+    const t = dd.querySelector('.dd-trigger');
+    t.childNodes[0].textContent = id === 'nfVrDD' ? 'None' : 'Choose...';
+    t.classList.toggle('ph', id !== 'nfVrDD');
+    dd.querySelectorAll('.dd-item').forEach(i => i.classList.remove('selected'));
+  });
+
+  // Reset toggles
+  document.querySelectorAll('#nfRequired button').forEach((b,i) => b.classList.toggle('active', i === 0));
+  document.querySelectorAll('#nfGridPos button').forEach((b,i) => b.classList.toggle('active', i === 0));
+  document.querySelectorAll('#nfCascadeRole button').forEach((b,i) => b.classList.toggle('active', i === 0));
+  document.querySelectorAll('#nfSection button').forEach(b => b.classList.toggle('active', b.textContent === '2.1'));
+  document.getElementById('nfSectionName').textContent = NF_SECTIONS['2.1'];
+
+  // Hide conditionals
+  document.querySelectorAll('.nf-cond').forEach(el => el.classList.remove('show'));
+
+  // Reset preview
+  updateNfPreview();
+
+  // Reset option editor
+  document.getElementById('nfOptList').innerHTML = '';
+  document.getElementById('nfOptCount').textContent = '0 options';
+  document.getElementById('nfNewListNameRow').style.display = 'none';
+  document.getElementById('nfNewListName').value = '';
+}
+
+function populateNfFromField(idx) {
+  const f = FIELDS[idx];
+  if (!f) return;
+
+  nfState.name = f.n;
+  nfState.label = f.l;
+  nfState.desc = f.desc || '';
+  nfState.control = f.c;
+  nfState.source = f.s;
+  nfState.required = f.req || 'No';
+  nfState.vr = f.vr || '';
+  nfState.valcreKey = f.v || '';
+  nfState.ddList = f.d || '';
+  nfState.cascadeRole = getRole(f.n);
+
+  // Fill inputs
+  document.getElementById('nfName').value = f.n;
+  document.getElementById('nfLabel').value = f.l;
+  document.getElementById('nfDesc').value = f.desc || '';
+  document.getElementById('nfValcreKey').value = f.v || '';
+
+  // Set dropdown displays
+  setNfDD('nfControlDD', f.c);
+  setNfDD('nfSourceDD', f.s);
+  setNfDD('nfVrDD', f.vr || 'None');
+
+  // Set toggles
+  document.querySelectorAll('#nfRequired button').forEach(b => b.classList.toggle('active', b.textContent === nfState.required));
+  document.querySelectorAll('#nfCascadeRole button').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === nfState.cascadeRole));
+
+  // Guess section from field placement (use vr as hint)
+  // In edit mode, keep section as 2.1 default since prototype doesn't track placement
+  document.querySelectorAll('#nfSection button').forEach(b => b.classList.toggle('active', b.textContent === nfState.section));
+  document.getElementById('nfSectionName').textContent = NF_SECTIONS[nfState.section] || '';
+
+  // Show conditionals
+  updateNfConditionals();
+  updateNfPreview();
+}
+
+function setNfDD(ddId, value) {
+  const dd = document.getElementById(ddId);
+  const trigger = dd.querySelector('.dd-trigger');
+  trigger.childNodes[0].textContent = value || 'Choose...';
+  trigger.classList.toggle('ph', !value || value === 'Choose...');
+  dd.querySelectorAll('.dd-item').forEach(i => i.classList.toggle('selected', i.textContent === value));
+}
+
+/* ── Dropdown List Picker ── */
+function populateNfDDPicker() {
+  const sel = document.getElementById('nfDDSelect');
+  sel.innerHTML = '<option value="">— Pick existing list —</option>';
+  Object.keys(DROPDOWN_OPTIONS).forEach(listName => {
+    const count = DROPDOWN_OPTIONS[listName].length;
+    const opt = document.createElement('option');
+    opt.value = listName;
+    opt.textContent = listName + ' (' + count + ')';
+    if (nfState.ddList === listName) opt.selected = true;
+    sel.appendChild(opt);
+  });
+
+  // If editing and has an existing list, show its options
+  if (nfState.ddList && DROPDOWN_OPTIONS[nfState.ddList]) {
+    showExistingDDOptions(nfState.ddList);
+  }
+}
+
+function onNfDDSelect(sel) {
+  const listName = sel.value;
+  nfState.ddList = listName;
+  nfState.ddOptions = [];
+  nfState.newListName = '';
+  document.getElementById('nfNewListNameRow').style.display = 'none';
+
+  if (listName && DROPDOWN_OPTIONS[listName]) {
+    showExistingDDOptions(listName);
+  } else {
+    document.getElementById('nfOptEditorWrap').classList.remove('show');
+  }
+  updateNfPreview();
+}
+
+function showExistingDDOptions(listName) {
+  const opts = DROPDOWN_OPTIONS[listName] || [];
+  document.getElementById('nfOptEditorWrap').classList.add('show');
+  document.getElementById('nfOptListName').textContent = listName;
+  document.getElementById('nfOptCount').textContent = opts.length + ' options';
+  const ul = document.getElementById('nfOptList');
+  ul.innerHTML = '';
+  opts.forEach(opt => {
+    const li = document.createElement('li');
+    li.innerHTML = '<input value="' + opt + '" disabled style="color:var(--text-2);"><span style="font-size:10px;color:var(--text-4);">locked</span>';
+    ul.appendChild(li);
+  });
+}
+
+function startNewDDList() {
+  nfState.ddList = '';
+  nfState.ddOptions = [''];
+  nfState.newListName = '';
+  document.getElementById('nfDDSelect').value = '';
+  document.getElementById('nfOptEditorWrap').classList.add('show');
+  document.getElementById('nfNewListNameRow').style.display = '';
+  document.getElementById('nfOptListName').textContent = 'New List';
+  renderNfOptions();
+}
+
+function renderNfOptions() {
+  const ul = document.getElementById('nfOptList');
+  ul.innerHTML = '';
+  nfState.ddOptions.forEach((opt, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = '<input value="' + (opt||'') + '" placeholder="Option ' + (i+1) + '" oninput="nfState.ddOptions['+i+']=this.value;updateNfOptCount()" onfocus="this.style.borderBottomColor=\'var(--text)\'" onblur="this.style.borderBottomColor=\'\'">' +
+      '<button class="nf-opt-rm" onclick="removeNfOption('+i+')" title="Remove">✕</button>';
+    ul.appendChild(li);
+  });
+  updateNfOptCount();
+}
+
+function addNfOption() {
+  nfState.ddOptions.push('');
+  renderNfOptions();
+  // Focus last input
+  const inputs = document.querySelectorAll('#nfOptList input');
+  if (inputs.length) inputs[inputs.length - 1].focus();
+}
+
+function removeNfOption(i) {
+  nfState.ddOptions.splice(i, 1);
+  renderNfOptions();
+}
+
+function updateNfOptCount() {
+  const filled = nfState.ddOptions.filter(o => o.trim()).length;
+  document.getElementById('nfOptCount').textContent = filled + ' option' + (filled !== 1 ? 's' : '');
+}
+
+function updateNfOptListName() {
+  nfState.newListName = document.getElementById('nfNewListName').value;
+  document.getElementById('nfOptListName').textContent = nfState.newListName || 'New List';
+}
+
+/* ── Field Pickers ── */
+function pickNfControl(item) {
+  pickDD(item);
+  nfState.control = item.textContent;
+  updateNfConditionals();
+  updateNfPreview();
+}
+
+function pickNfSource(item) {
+  pickDD(item);
+  nfState.source = item.textContent;
+  updateNfConditionals();
+  updateNfPreview();
+}
+
+function pickNfVr(item) {
+  pickDD(item);
+  nfState.vr = item.textContent === 'None' ? '' : item.textContent;
+  updateNfPreview();
+}
+
+function pickNfToggle(btn, val) {
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  nfState.required = val;
+}
+
+function pickNfSeg(btn, val) {
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  nfState.section = val;
+  document.getElementById('nfSectionName').textContent = NF_SECTIONS[val] || '';
+}
+
+function pickNfCol(btn, groupId, val) {
+  document.querySelectorAll('#' + groupId + ' button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (groupId === 'nfGridPos') nfState.gridPos = val;
+  if (groupId === 'nfCascadeRole') nfState.cascadeRole = val;
+}
+
+/* ── Conditional Visibility ── */
+function updateNfConditionals() {
+  const c = nfState.control;
+  const s = nfState.source;
+
+  // Dropdown options: show when Select one/multiple
+  const showDD = (c === 'Select one option' || c === 'Select multiple options');
+  document.getElementById('nfCondDropdown').classList.toggle('show', showDD);
+  if (showDD) populateNfDDPicker();
+
+  // Valcre key: show when Source = Valcre API
+  document.getElementById('nfCondValcre').classList.toggle('show', s === 'Valcre API');
+
+  // Cascade role: show when Source = Logic or Calculated
+  document.getElementById('nfCondCascade').classList.toggle('show', s === 'Logic' || s === 'Calculated');
+}
+
+/* ── Name Validation ── */
+function onNfNameInput(inp) {
+  const val = inp.value;
+  nfState.name = val;
+
+  // Check uniqueness (skip self in edit mode)
+  const isDuplicate = FIELDS.some((f, i) => {
+    if (nfState.mode === 'edit' && i === nfState.editIndex) return false;
+    return f.n.toLowerCase() === val.toLowerCase();
+  });
+
+  const errEl = document.getElementById('nfNameError');
+  const hintEl = document.getElementById('nfNameHint');
+  if (isDuplicate && val) {
+    inp.classList.add('invalid');
+    errEl.classList.add('show');
+    hintEl.style.display = 'none';
+  } else {
+    inp.classList.remove('invalid');
+    errEl.classList.remove('show');
+    hintEl.style.display = '';
+  }
+  updateNfPreview();
+}
+
+/* ── Live Preview ── */
+function updateNfPreview() {
+  const body = document.getElementById('nfPreviewBody');
+  const label = nfState.label || document.getElementById('nfLabel').value;
+  const control = nfState.control;
+
+  if (!label) {
+    body.innerHTML = '<div class="nf-preview-empty">Fill in Label and Control Type to see preview</div>';
+    return;
+  }
+
+  // Build preview using actual dashboard field markup
+  const isSpan2 = nfState.gridPos === 'span2';
+  let fieldHTML = '';
+
+  if (control === 'Checkbox') {
+    fieldHTML = '<label class="cb-filter" style="pointer-events:none;"><input type="checkbox"><span style="font-size:12px;">' + label + '</span></label>';
+  } else if (control === 'Select one option' || control === 'Select multiple options') {
+    // Show dropdown with first few options
+    let optPreview = 'Choose...';
+    const listName = nfState.ddList || nfState.newListName;
+    if (listName && DROPDOWN_OPTIONS[listName] && DROPDOWN_OPTIONS[listName].length) {
+      optPreview = 'Choose... (' + DROPDOWN_OPTIONS[listName].length + ')';
+    } else if (nfState.ddOptions.filter(o=>o.trim()).length) {
+      optPreview = 'Choose... (' + nfState.ddOptions.filter(o=>o.trim()).length + ')';
+    }
+    fieldHTML = '<div class="f' + (isSpan2 ? ' span2' : '') + '" style="pointer-events:none;">' +
+      '<span class="f-lbl">' + label + '</span>' +
+      '<div class="f-val"><div class="dd"><div class="dd-trigger ph">' + optPreview + '<span class="dd-arrow"></span></div></div></div></div>';
+  } else if (control === 'Multiple lines of text') {
+    fieldHTML = '<div class="f' + (isSpan2 ? ' span2' : '') + '" style="pointer-events:none;">' +
+      '<span class="f-lbl">' + label + '</span>' +
+      '<div class="f-val"><textarea class="u-inp" style="height:48px;resize:none;border:none;border-bottom:1px solid var(--border);" readonly></textarea></div></div>';
+  } else if (control === 'Date') {
+    fieldHTML = '<div class="f' + (isSpan2 ? ' span2' : '') + '" style="pointer-events:none;">' +
+      '<span class="f-lbl">' + label + '</span>' +
+      '<div class="f-val"><input class="u-inp" type="date" readonly></div></div>';
+  } else {
+    // Default: text/number/etc
+    const ph = control === 'Whole Number' ? '0' : control === 'Decimal' ? '0.00' : '';
+    fieldHTML = '<div class="f' + (isSpan2 ? ' span2' : '') + '" style="pointer-events:none;">' +
+      '<span class="f-lbl">' + label + '</span>' +
+      '<div class="f-val"><input class="u-inp" placeholder="' + ph + '" readonly></div></div>';
+  }
+
+  // Wrap in grid context
+  const sectionLabel = NF_SECTIONS[nfState.section] || '';
+  body.innerHTML =
+    '<div style="font-size:10px;color:var(--text-3);margin-bottom:8px;">Section ' + nfState.section + ' · ' + sectionLabel + '</div>' +
+    '<div class="grid" style="gap:6px 28px;">' + fieldHTML + '</div>';
+}
+
+/* ── Submit ── */
+function submitField() {
+  // Validate required fields
+  const name = document.getElementById('nfName').value.trim();
+  const label = document.getElementById('nfLabel').value.trim();
+  const control = nfState.control;
+  const source = nfState.source;
+
+  if (!name || !label || !control || !source) {
+    // Flash first empty required field
+    if (!name) document.getElementById('nfName').focus();
+    else if (!label) document.getElementById('nfLabel').focus();
+    return;
+  }
+
+  // Check name uniqueness
+  const isDuplicate = FIELDS.some((f, i) => {
+    if (nfState.mode === 'edit' && i === nfState.editIndex) return false;
+    return f.n.toLowerCase() === name.toLowerCase();
+  });
+  if (isDuplicate) {
+    document.getElementById('nfName').classList.add('invalid');
+    document.getElementById('nfNameError').classList.add('show');
+    document.getElementById('nfName').focus();
+    return;
+  }
+
+  // Build dropdown list name
+  let ddListName = '';
+  if (control === 'Select one option' || control === 'Select multiple options') {
+    if (nfState.ddList) {
+      ddListName = nfState.ddList;
+    } else if (nfState.newListName) {
+      // Register new list
+      ddListName = nfState.newListName;
+      DROPDOWN_OPTIONS[ddListName] = nfState.ddOptions.filter(o => o.trim());
+    }
+  }
+
+  // Build field object
+  const newField = {
+    n: name,
+    l: label,
+    c: control === 'Select one option' ? 'Select one' : control === 'Select multiple options' ? 'Select multiple' : control,
+    s: source,
+    d: ddListName,
+    v: nfState.valcreKey || document.getElementById('nfValcreKey').value.trim(),
+    vr: nfState.vr || '',
+    nf: 'Yes',
+    req: nfState.required,
+    desc: document.getElementById('nfDesc').value.trim(),
+    origin: 'dashboard'
+  };
+
+  if (nfState.mode === 'edit' && nfState.editIndex !== null) {
+    // Update existing
+    FIELDS[nfState.editIndex] = newField;
+    // Update ALLFIELDS too
+    const allIdx = ALLFIELDS.findIndex(f => f === FIELDS[nfState.editIndex] || f.n === nfState.name);
+    if (allIdx >= 0) ALLFIELDS[allIdx] = newField;
+  } else {
+    // Add new
+    FIELDS.push(newField);
+    ALLFIELDS.push(newField);
+  }
+
+  // Re-render and close
+  renderFields();
+  closeFieldPanel();
+
+  // Flash the count to confirm
+  flashCount();
+}
+
+/* ── Edit from table row click ── */
+function editFieldFromRow(fieldName) {
+  const idx = FIELDS.findIndex(f => f.n === fieldName);
+  if (idx < 0) return;
+  openFieldPanel('edit', idx);
+}
+
+
+/* ═══ EDITS TO EXISTING FUNCTIONS ═══ */
+
+/*
+  EDIT 1: Add "New Field" button to the registry sec-title.
+
+  In the existing HTML, change:
+    <div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<span class="expand-btn" ...>⋮⋮</span></div>
+  To:
+    <div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;align-items:center;gap:0;margin-left:auto;"><button class="nf-btn-add" onclick="event.stopPropagation();openFieldPanel('create')">+ New Field</button><span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></div></div>
+*/
+
+/*
+  EDIT 2: Make dashboard-origin field rows clickable for editing.
+
+  In the renderFields() function, change the row creation line from:
+    tb.innerHTML += '<tr'+rowClass+' title="'+(f.desc||'')+'">' +
+  To:
+    const editAttr = f.origin !== 'valcre' ? ' data-editable onclick="editFieldFromRow(\''+f.n.replace(/'/g,"\\'")+'\');event.stopPropagation()"' : '';
+    tb.innerHTML += '<tr'+rowClass+editAttr+' title="'+(f.desc||'')+'">' +
+*/
+
+/* ── Keyboard: Escape closes panel ── */
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('nfPanel').classList.contains('open')) {
+    closeFieldPanel();
+  }
+});
+</script>
+
+
+<!--
+  ═══════════════════════════════════════════════════════════════════
+  INTEGRATION INSTRUCTIONS — Two edits to existing code:
+  ═══════════════════════════════════════════════════════════════════
+
+  EDIT 1 — Add "New Field" button to registry header (line ~529):
+
+  FIND:
+    <div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></div>
+
+  REPLACE WITH:
+    <div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;align-items:center;gap:0;margin-left:auto;"><button class="nf-btn-add" onclick="event.stopPropagation();openFieldPanel('create')">+ New Field</button><span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></div></div>
+
+
+  EDIT 2 — Make rows clickable for editing, in renderFields() (line ~1160):
+
+  FIND:
+    tb.innerHTML += '<tr'+rowClass+' title="'+(f.desc||'')+'">' +
+
+  REPLACE WITH:
+    const editAttr = f.origin !== 'valcre' ? ' data-editable onclick="editFieldFromRow(\''+f.n.replace(/'/g,"\\'")+'\');event.stopPropagation()"' : '';
+    tb.innerHTML += '<tr'+rowClass+editAttr+' title="'+(f.desc||'')+'">' +
+-->

@@ -1989,8 +1989,10 @@ function csOnDdStep(sel) {
     roleSel.disabled = true; // still locked until label filled
     return;
   }
-  if (!val) return;
+  if (!val) { hideNewDdPopover(); return; }
+  // Show existing list options in expand row (editable)
   hideNewDdPopover();
+  csShowExistingListExpand(val, tr);
   const labelInp = tr.querySelector('input[name="l"]');
   const roleSel = tr.querySelector('select[name="role"]');
   // Auto-fill label from friendly list name
@@ -1998,14 +2000,134 @@ function csOnDdStep(sel) {
   labelInp.value = friendlyName;
   labelInp.disabled = false;
   labelInp.placeholder = 'Edit if needed...';
-  document.getElementById('csAutoName').textContent = csLabelToFieldName(friendlyName) || 'auto';
-  // Unlock role (Step 3)
+  const autoNameEl = document.getElementById('csAutoName');
+  if (autoNameEl) autoNameEl.textContent = csLabelToFieldName(friendlyName) || 'auto';
+  // Unlock role
   roleSel.disabled = false;
   roleSel.closest('td').style.transition = 'background .3s';
   roleSel.closest('td').style.background = '#fefce8';
   setTimeout(() => { roleSel.closest('td').style.background = ''; }, 800);
   csUpdateSaveBtn(tr);
 }
+
+// Show existing dropdown list options as editable expand row
+let csEditingListName = null; // track which list is being edited
+let csEditingListOpts = []; // working copy of options
+function csShowExistingListExpand(listName, parentTr) {
+  hideNewDdPopover(); // clean up any new-list expand
+  // Remove any previous existing-list expand
+  const prev = document.getElementById('fiExistDdExpandRow');
+  if (prev) prev.remove();
+  csEditingListName = listName;
+  csEditingListOpts = [...(DROPDOWN_OPTIONS[listName] || [])];
+  const expandTr = document.createElement('tr');
+  expandTr.className = 'fi-options-row';
+  expandTr.id = 'fiExistDdExpandRow';
+  csRenderExistingListExpand(expandTr);
+  parentTr.parentNode.insertBefore(expandTr, parentTr.nextSibling);
+}
+function csRenderExistingListExpand(expandTr) {
+  if (!expandTr) expandTr = document.getElementById('fiExistDdExpandRow');
+  if (!expandTr) return;
+  const friendlyName = CS_ALLOWED_LISTS[csEditingListName] || csEditingListName.replace(/^List/,'');
+  let optsHtml = '';
+  csEditingListOpts.forEach((o, i) => {
+    optsHtml += '<div style="padding:2px 0 2px 16px;display:flex;align-items:center;gap:6px;">' +
+      '<input style="font:inherit;font-size:11px;color:var(--text);border:none;border-bottom:1px solid var(--border);background:transparent;flex:1;padding:2px 0;outline:none;height:20px;" value="'+(o||'')+'" oninput="csEditingListOpts['+i+']=this.value" onfocus="this.style.borderBottomColor=\'var(--text)\'" onblur="this.style.borderBottomColor=\'\'">' +
+      '<span style="color:var(--text-3);cursor:pointer;font-size:12px;" onclick="csRemoveExistOpt('+i+')" title="Remove">✕</span></div>';
+  });
+  expandTr.innerHTML =
+    '<td colspan="8" style="border-bottom:none;background:transparent;"></td>' +
+    '<td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);background:#fafafa !important;">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);">' +
+        '<span style="font-size:11px;font-weight:600;color:var(--text-3);">'+friendlyName+'</span>' +
+        '<span style="font-size:10px;color:var(--text-3);">'+csEditingListOpts.length+' options</span>' +
+      '</div>' +
+      optsHtml +
+      '<div style="padding:2px 0 2px 16px;display:flex;align-items:center;justify-content:space-between;">' +
+        '<span style="font:400 11px/1 system-ui,sans-serif;color:var(--text-3);cursor:pointer;" onclick="csAddExistOpt()">+ Add option</span>' +
+        '<button onclick="csConfirmExistOpts(this)" style="font:500 10px/1 system-ui,sans-serif;padding:3px 10px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-2);cursor:pointer;transition:all .12s;">Confirm Options</button>' +
+      '</div>' +
+    '</td>' +
+    '<td colspan="3" style="border-bottom:none;background:transparent;"></td>';
+}
+function csAddExistOpt() {
+  csEditingListOpts.push('');
+  const expandTr = document.getElementById('fiExistDdExpandRow');
+  if (expandTr) {
+    csRenderExistingListExpand(expandTr);
+    const inputs = expandTr.querySelectorAll('.dd-options-cell input');
+    if (inputs.length) inputs[inputs.length-1].focus();
+  }
+}
+function csRemoveExistOpt(i) {
+  csEditingListOpts.splice(i, 1);
+  const expandTr = document.getElementById('fiExistDdExpandRow');
+  if (expandTr) csRenderExistingListExpand(expandTr);
+}
+function csConfirmExistOpts(btn) {
+  const validOpts = csEditingListOpts.filter(o => o.trim());
+  if (validOpts.length === 0) return;
+  // Save back to DROPDOWN_OPTIONS
+  DROPDOWN_OPTIONS[csEditingListName] = validOpts;
+  csEditingListOpts = validOpts;
+  // Visual confirmation
+  const cell = btn.closest('.dd-options-cell');
+  if (cell) { cell.style.borderColor = '#22c55e'; cell.style.transition = 'border-color .3s'; }
+  btn.textContent = '✓ Options Saved';
+  btn.style.color = '#15803d';
+  btn.style.borderColor = '#22c55e';
+  btn.style.background = '#f0fdf4';
+  btn.disabled = true;
+  setTimeout(() => { if (cell) cell.style.borderColor = ''; }, 3000);
+  // Flash Role dropdown on add row
+  const addRow = document.getElementById('fiAddRow');
+  if (addRow) {
+    const labelInp = addRow.querySelector('input[name="l"]');
+    if (labelInp && labelInp.dataset.autoSynced === 'true') {
+      labelInp.disabled = true;
+      labelInp.style.color = 'var(--text-3)';
+      labelInp.title = 'Locked — synced from list name';
+    }
+    const roleSel = addRow.querySelector('select[name="role"]');
+    if (roleSel && !roleSel.disabled) {
+      const roleTd = roleSel.closest('td');
+      roleTd.style.transition = 'background .2s, box-shadow .2s';
+      roleTd.style.background = '#fefce8';
+      roleTd.style.boxShadow = 'inset 0 0 0 2px var(--amber)';
+      roleSel.focus();
+      setTimeout(() => { roleTd.style.background = ''; roleTd.style.boxShadow = ''; }, 1500);
+    }
+  }
+  // Update the select display to show new count
+  const ddSel = addRow ? addRow.querySelector('select[name="d"]') : document.querySelector('.fi-edit-row select[name="d"]');
+  if (ddSel && ddSel.value === csEditingListName) {
+    const opt = ddSel.querySelector('option[value="'+csEditingListName+'"]');
+    if (opt) {
+      const fn = CS_ALLOWED_LISTS[csEditingListName] || csEditingListName.replace(/^List/,'');
+      opt.textContent = fn + ' (' + validOpts.length + ')';
+    }
+  }
+}
+
+// Also hook existing list expand into edit row's dropdown change
+const _origOnDdListChange = onDdListChange;
+onDdListChange = function(sel) {
+  const tr = sel.closest('tr');
+  if (sel.value === '__new__') {
+    // Remove any existing-list expand
+    const prev = document.getElementById('fiExistDdExpandRow');
+    if (prev) prev.remove();
+    showNewDdPopover(sel);
+  } else if (sel.value && DROPDOWN_OPTIONS[sel.value]) {
+    hideNewDdPopover();
+    csShowExistingListExpand(sel.value, tr);
+  } else {
+    hideNewDdPopover();
+    const prev = document.getElementById('fiExistDdExpandRow');
+    if (prev) prev.remove();
+  }
+};
 
 // Label input handler: update auto-name + unlock role when label has content
 function csOnLabelInput(inp) {
@@ -2051,6 +2173,7 @@ function csOnSimpleTypeChange(tr) {
 function removeAddRow() {
   const row = document.getElementById('fiAddRow');
   if (row) row.remove();
+  hideNewDdPopover();
   addRowActive = false;
   newDdPopoverOpen = false;
   newDdOptions = [];
@@ -2092,6 +2215,10 @@ function hideNewDdPopover() {
   newDdPopoverOpen = false;
   const row = document.getElementById('fiNewDdExpandRow');
   if (row) row.remove();
+  const existRow = document.getElementById('fiExistDdExpandRow');
+  if (existRow) existRow.remove();
+  csEditingListName = null;
+  csEditingListOpts = [];
   // Legacy popover cleanup
   const pop = document.getElementById('fiNewDdPopover');
   if (pop) pop.style.display = 'none';

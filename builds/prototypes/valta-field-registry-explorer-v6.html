@@ -1642,26 +1642,39 @@ function runAudit() {
   let pass=0, fail=0;
   const res = document.getElementById('auditResults');
   res.innerHTML = '';
+  // Short names to prevent wrapping
+  const SHORT = {'PropertyType':'PropType','PropertySubtype':'Subtype','StatusofImprovements':'Status','AuthorizedUse':'AuthUse','Tenancy':'Tenancy','Scenario':'Scenario'};
+  const SHORT_OUT = {'Interest Appraised':'Interest','Value Scenarios':'Scenarios','Approaches to Value':'Approaches'};
   RULES.forEach(r => {
     const result = testRule(r);
     const ok = result.ok;
     const actual = result.actual || '(empty)';
     ok ? pass++ : fail++;
-    const outputName = OUTPUT_NAMES[r.f] || r.f;
-    const valClass = ok ? 'ad-match' : 'ad-mismatch';
-    res.innerHTML += '<div class="audit-row' + (ok ? '' : ' fail-row') + '">' +
-      '<div class="audit-row-hdr">' +
-        '<span class="rid">' + r.id + '</span>' +
-        '<span class="rdesc">' + r.t + ' = ' + r.i + '</span>' +
-        '<span class="rarrow">→</span>' +
-        '<span class="routput">' + outputName + '</span>' +
-        '<span class="audit-status ' + (ok ? 'pass' : 'fail') + '">' + (ok ? 'pass' : 'FAIL') + '</span>' +
-      '</div>' +
-      '<div class="audit-detail">' +
-        '<div><span class="ad-label">Expected:</span> <span class="ad-value">' + r.e + '</span></div>' +
-        '<div><span class="ad-label">Got:</span> <span class="' + valClass + '">' + actual + '</span></div>' +
-      '</div>' +
-    '</div>';
+    const trigger = SHORT[r.t] || r.t;
+    const outputName = SHORT_OUT[OUTPUT_NAMES[r.f]] || OUTPUT_NAMES[r.f] || r.f;
+    // Shorten input value for display
+    const inputShort = r.i.length > 20 ? r.i.slice(0,18) + '…' : r.i;
+    if (ok) {
+      // Pass: single compact line
+      res.innerHTML += '<div style="display:flex;align-items:center;gap:4px;padding:3px 16px;border-bottom:1px solid var(--border);font-size:10px;">' +
+        '<span style="color:var(--text-3);font-family:SF Mono,Consolas,monospace;width:36px;flex-shrink:0;">'+r.id+'</span>' +
+        '<span style="color:var(--text-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;">'+trigger+' = '+inputShort+' → '+outputName+'</span>' +
+        '<span style="color:var(--text-4);flex-shrink:0;">pass</span>' +
+      '</div>';
+    } else {
+      // Fail: two lines — rule + expected vs got
+      res.innerHTML += '<div style="padding:6px 16px;border-bottom:1px solid var(--border);background:#fef8f8;">' +
+        '<div style="display:flex;align-items:center;gap:4px;font-size:10px;margin-bottom:3px;">' +
+          '<span style="color:var(--text);font-family:SF Mono,Consolas,monospace;font-weight:600;width:36px;flex-shrink:0;">'+r.id+'</span>' +
+          '<span style="color:var(--text);flex:1;">'+trigger+' = '+r.i+' → '+outputName+'</span>' +
+          '<span style="color:var(--red);font-weight:600;flex-shrink:0;">FAIL</span>' +
+        '</div>' +
+        '<div style="font-size:9px;padding-left:40px;color:var(--text-3);line-height:1.4;">' +
+          '<div>expected: <span style="color:var(--text-2);">'+r.e+'</span></div>' +
+          '<div>got: <span style="color:var(--red);">'+actual+'</span></div>' +
+        '</div>' +
+      '</div>';
+    }
   });
   document.getElementById('auditPass').textContent = pass;
   document.getElementById('auditFail').textContent = fail;

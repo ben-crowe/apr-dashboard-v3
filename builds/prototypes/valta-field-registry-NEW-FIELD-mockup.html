@@ -297,10 +297,6 @@
   .nf-toggle button:first-child { border-radius: calc(var(--radius) - 2px) 0 0 calc(var(--radius) - 2px); border-right: none; }
   .nf-toggle button:last-child { border-radius: 0 calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0; }
   .nf-toggle button.active { background: var(--text); color: var(--bg); border-color: var(--text); }
-  .nf-seg { display: inline-flex; align-items: center; gap: 2px; background: var(--seg-bg); border: 1px solid var(--seg-border); border-radius: var(--radius); padding: 3px; flex-wrap: wrap; }
-  .nf-seg button { font: 400 10px/1 system-ui, sans-serif; padding: 4px 8px; border: none; border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .12s; white-space: nowrap; }
-  .nf-seg button:hover { color: var(--text-2); background: var(--hover); }
-  .nf-seg button.active { color: var(--text); background: var(--seg-active); box-shadow: var(--shadow); font-weight: 500; }
   .nf-cols { display: flex; gap: 6px; }
   .nf-cols button { font: 400 11px/1 system-ui, sans-serif; padding: 5px 10px; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .12s; }
   .nf-cols button:hover { border-color: var(--border-focus); color: var(--text-2); }
@@ -339,14 +335,6 @@
   .nf-success-actions { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 260px; }
   .nf-success-actions .btn { width: 100%; text-align: center; padding: 9px 16px; font-size: 12px; }
 
-  /* Section highlight pulse */
-  .sec.nf-highlight { outline: 2px dashed var(--amber); outline-offset: 2px; transition: outline-color .3s; }
-  @keyframes nf-pulse { 0% { outline-color: var(--amber); } 50% { outline-color: transparent; } 100% { outline-color: var(--amber); } }
-  .sec.nf-highlight { animation: nf-pulse .6s ease 2; }
-
-  /* New field highlight in dashboard */
-  @keyframes nf-field-pulse { 0% { border-left: 3px solid var(--amber); padding-left: 5px; background: #fffbeb; } 100% { border-left: 3px solid transparent; padding-left: 5px; background: transparent; } }
-  .f.nf-new-field { animation: nf-field-pulse 2s ease forwards; border-radius: 4px; }
 
   /* New row highlight in registry */
   @keyframes nf-row-pulse { 0% { background: #fffbeb; } 100% { background: transparent; } }
@@ -711,9 +699,8 @@ E  Authorized Use          ──┘</div>
     <h4 id="nfSuccessTitle">Field Added</h4>
     <div class="nf-success-sub" id="nfSuccessSub">MarketCondition added to Section 2.2</div>
     <div class="nf-success-actions">
-      <button class="btn btn-primary" onclick="nfViewInDashboard()">View in Dashboard</button>
-      <button class="btn btn-outline" onclick="nfViewInRegistry()">View in Registry</button>
-      <button class="btn btn-ghost" onclick="nfAddAnother()">+ Add Another</button>
+      <button class="btn btn-primary" onclick="nfViewInRegistry()">View in Registry</button>
+      <button class="btn btn-outline" onclick="nfAddAnother()">+ Add Another</button>
     </div>
   </div>
   <div class="nf-body" id="nfBody">
@@ -831,51 +818,6 @@ E  Authorized Use          ──┘</div>
             <button class="active" onclick="pickNfCol(this,'nfCascadeRole','independent')">Independent</button>
             <button onclick="pickNfCol(this,'nfCascadeRole','trigger')">Trigger</button>
             <button onclick="pickNfCol(this,'nfCascadeRole','result')">Result</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="nf-group">
-      <div class="nf-group-title">Dashboard Placement</div>
-      <div class="nf-row">
-        <span class="nf-lbl">Valcre Location</span>
-        <div class="nf-val">
-          <div class="dd" id="nfVrDD">
-            <div class="dd-trigger ph" onclick="toggleDD(this)">None<span class="dd-arrow"></span></div>
-            <div class="dd-menu">
-              <div class="dd-item" onclick="pickNfVr(this)">Job</div>
-              <div class="dd-item" onclick="pickNfVr(this)">Contact</div>
-              <div class="dd-item" onclick="pickNfVr(this)">Property</div>
-              <div class="dd-item" onclick="pickNfVr(this)">Building</div>
-              <div class="dd-item" onclick="pickNfVr(this)">Parcel</div>
-              <div class="dd-item" onclick="pickNfVr(this)">None</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="nf-row">
-        <span class="nf-lbl">Section</span>
-        <div class="nf-val">
-          <div class="nf-seg" id="nfSection">
-            <button onclick="pickNfSeg(this,'1.1')">1.1</button>
-            <button onclick="pickNfSeg(this,'1.2')">1.2</button>
-            <button onclick="pickNfSeg(this,'1.3')">1.3</button>
-            <button class="active" onclick="pickNfSeg(this,'2.1')">2.1</button>
-            <button onclick="pickNfSeg(this,'2.2')">2.2</button>
-            <button onclick="pickNfSeg(this,'2.3')">2.3</button>
-            <button onclick="pickNfSeg(this,'3.1')">3.1</button>
-            <button onclick="pickNfSeg(this,'3.2')">3.2</button>
-          </div>
-          <div class="nf-hint" id="nfSectionName" style="margin-top:4px;">LOE Quote & Job Information</div>
-        </div>
-      </div>
-      <div class="nf-row">
-        <span class="nf-lbl">Grid Position</span>
-        <div class="nf-val">
-          <div class="nf-cols" id="nfGridPos">
-            <button class="active" onclick="pickNfCol(this,'nfGridPos','left')">Left</button>
-            <button onclick="pickNfCol(this,'nfGridPos','right')">Right</button>
-            <button onclick="pickNfCol(this,'nfGridPos','span2')">Full Width</button>
           </div>
         </div>
       </div>
@@ -2007,12 +1949,7 @@ function toggleFullWidth(e) {
 })();
 
 /* ═══ NEW FIELD PANEL ═══ */
-const NF_SECTIONS = {
-  '1.1':'Client Information','1.2':'Property Information','1.3':'Property Contact',
-  '2.1':'LOE Quote & Job Information','2.2':'Building Information','2.3':'Appraisal Assignment',
-  '3.1':'Property Site & Parcels','3.2':'Document Uploads'
-};
-let nfState = { mode:'create', editIndex:null, name:'', label:'', desc:'', control:'', source:'', required:'Yes', vr:'', valcreKey:'', ddList:'', ddOptions:[], newListName:'', cascadeRole:'independent', section:'2.1', gridPos:'left' };
+let nfState = { mode:'create', editIndex:null, name:'', label:'', desc:'', control:'', source:'', required:'Yes', valcreKey:'', ddList:'', ddOptions:[], newListName:'', cascadeRole:'independent' };
 
 function openFieldPanel(mode, editIdx) {
   nfState.mode = mode || 'create';
@@ -2032,7 +1969,7 @@ function closeFieldPanel() {
   document.getElementById('nfPanel').classList.remove('open');
 }
 function resetNfForm() {
-  nfState = { ...nfState, name:'', label:'', desc:'', control:'', source:'', required:'Yes', vr:'', valcreKey:'', ddList:'', ddOptions:[], newListName:'', cascadeRole:'independent', section:'2.1', gridPos:'left' };
+  nfState = { ...nfState, name:'', label:'', desc:'', control:'', source:'', required:'Yes', valcreKey:'', ddList:'', ddOptions:[], newListName:'', cascadeRole:'independent' };
   document.getElementById('nfName').value = '';
   document.getElementById('nfLabel').value = '';
   document.getElementById('nfDesc').value = '';
@@ -2040,17 +1977,14 @@ function resetNfForm() {
   document.getElementById('nfName').classList.remove('invalid');
   document.getElementById('nfNameError').classList.remove('show');
   document.getElementById('nfNameHint').style.display = '';
-  ['nfControlDD','nfSourceDD','nfVrDD'].forEach(id => {
+  ['nfControlDD','nfSourceDD'].forEach(id => {
     const dd = document.getElementById(id), t = dd.querySelector('.dd-trigger');
-    t.childNodes[0].textContent = id === 'nfVrDD' ? 'None' : 'Choose...';
-    t.classList.toggle('ph', id !== 'nfVrDD');
+    t.childNodes[0].textContent = 'Choose...';
+    t.classList.add('ph');
     dd.querySelectorAll('.dd-item').forEach(i => i.classList.remove('selected'));
   });
   document.querySelectorAll('#nfRequired button').forEach((b,i) => b.classList.toggle('active', i === 0));
-  document.querySelectorAll('#nfGridPos button').forEach((b,i) => b.classList.toggle('active', i === 0));
   document.querySelectorAll('#nfCascadeRole button').forEach((b,i) => b.classList.toggle('active', i === 0));
-  document.querySelectorAll('#nfSection button').forEach(b => b.classList.toggle('active', b.textContent === '2.1'));
-  document.getElementById('nfSectionName').textContent = NF_SECTIONS['2.1'];
   document.querySelectorAll('.nf-cond').forEach(el => el.classList.remove('show'));
   updateNfPreview();
   document.getElementById('nfOptList').innerHTML = '';
@@ -2061,17 +1995,15 @@ function resetNfForm() {
 function populateNfFromField(idx) {
   const f = FIELDS[idx]; if (!f) return;
   nfState.name = f.n; nfState.label = f.l; nfState.desc = f.desc||''; nfState.control = f.c; nfState.source = f.s;
-  nfState.required = f.req||'No'; nfState.vr = f.vr||''; nfState.valcreKey = f.v||''; nfState.ddList = f.d||'';
+  nfState.required = f.req||'No'; nfState.valcreKey = f.v||''; nfState.ddList = f.d||'';
   nfState.cascadeRole = getRole(f.n);
   document.getElementById('nfName').value = f.n;
   document.getElementById('nfLabel').value = f.l;
   document.getElementById('nfDesc').value = f.desc||'';
   document.getElementById('nfValcreKey').value = f.v||'';
-  setNfDD('nfControlDD', f.c); setNfDD('nfSourceDD', f.s); setNfDD('nfVrDD', f.vr||'None');
+  setNfDD('nfControlDD', f.c); setNfDD('nfSourceDD', f.s);
   document.querySelectorAll('#nfRequired button').forEach(b => b.classList.toggle('active', b.textContent === nfState.required));
   document.querySelectorAll('#nfCascadeRole button').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === nfState.cascadeRole));
-  document.querySelectorAll('#nfSection button').forEach(b => b.classList.toggle('active', b.textContent === nfState.section));
-  document.getElementById('nfSectionName').textContent = NF_SECTIONS[nfState.section]||'';
   updateNfConditionals(); updateNfPreview();
 }
 function setNfDD(ddId, value) {
@@ -2129,10 +2061,8 @@ function updateNfOptCount() { const filled = nfState.ddOptions.filter(o=>o.trim(
 function updateNfOptListName() { nfState.newListName = document.getElementById('nfNewListName').value; document.getElementById('nfOptListName').textContent = nfState.newListName || 'New List'; }
 function pickNfControl(item) { pickDD(item); nfState.control = item.textContent; updateNfConditionals(); updateNfPreview(); }
 function pickNfSource(item) { pickDD(item); nfState.source = item.textContent; updateNfConditionals(); updateNfPreview(); }
-function pickNfVr(item) { pickDD(item); nfState.vr = item.textContent === 'None' ? '' : item.textContent; updateNfPreview(); }
 function pickNfToggle(btn, val) { btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); nfState.required = val; }
-function pickNfSeg(btn, val) { btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); nfState.section = val; document.getElementById('nfSectionName').textContent = NF_SECTIONS[val]||''; }
-function pickNfCol(btn, groupId, val) { document.querySelectorAll('#'+groupId+' button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if (groupId==='nfGridPos') nfState.gridPos=val; if (groupId==='nfCascadeRole') nfState.cascadeRole=val; }
+function pickNfCol(btn, groupId, val) { document.querySelectorAll('#'+groupId+' button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); if (groupId==='nfCascadeRole') nfState.cascadeRole=val; }
 function updateNfConditionals() {
   const c = nfState.control, s = nfState.source;
   const showDD = (c === 'Select one option' || c === 'Select multiple options' || c === 'Select one' || c === 'Select multiple');
@@ -2154,7 +2084,6 @@ function updateNfPreview() {
   const label = nfState.label || (document.getElementById('nfLabel') ? document.getElementById('nfLabel').value : '');
   const control = nfState.control;
   if (!label) { body.innerHTML = '<div class="nf-preview-empty">Fill in Label and Control Type to see preview</div>'; return; }
-  const isSpan2 = nfState.gridPos === 'span2';
   let fieldHTML = '';
   if (control === 'Checkbox') {
     fieldHTML = '<label class="cb-filter" style="pointer-events:none;"><input type="checkbox"><span style="font-size:12px;">'+label+'</span></label>';
@@ -2163,17 +2092,16 @@ function updateNfPreview() {
     const listName = nfState.ddList || nfState.newListName;
     if (listName && DROPDOWN_OPTIONS[listName] && DROPDOWN_OPTIONS[listName].length) optPreview = 'Choose... ('+DROPDOWN_OPTIONS[listName].length+')';
     else if (nfState.ddOptions.filter(o=>o.trim()).length) optPreview = 'Choose... ('+nfState.ddOptions.filter(o=>o.trim()).length+')';
-    fieldHTML = '<div class="f'+(isSpan2?' span2':'')+'" style="pointer-events:none;"><span class="f-lbl">'+label+'</span><div class="f-val"><div class="dd"><div class="dd-trigger ph">'+optPreview+'<span class="dd-arrow"></span></div></div></div></div>';
+    fieldHTML = '<div class="f" style="pointer-events:none;"><span class="f-lbl">'+label+'</span><div class="f-val"><div class="dd"><div class="dd-trigger ph">'+optPreview+'<span class="dd-arrow"></span></div></div></div></div>';
   } else if (control === 'Multiple lines of text') {
-    fieldHTML = '<div class="f'+(isSpan2?' span2':'')+'" style="pointer-events:none;"><span class="f-lbl">'+label+'</span><div class="f-val"><textarea class="u-inp" style="height:48px;resize:none;border:none;border-bottom:1px solid var(--border);" readonly></textarea></div></div>';
+    fieldHTML = '<div class="f" style="pointer-events:none;"><span class="f-lbl">'+label+'</span><div class="f-val"><textarea class="u-inp" style="height:48px;resize:none;border:none;border-bottom:1px solid var(--border);" readonly></textarea></div></div>';
   } else if (control === 'Date') {
-    fieldHTML = '<div class="f'+(isSpan2?' span2':'')+'" style="pointer-events:none;"><span class="f-lbl">'+label+'</span><div class="f-val"><input class="u-inp" type="date" readonly></div></div>';
+    fieldHTML = '<div class="f" style="pointer-events:none;"><span class="f-lbl">'+label+'</span><div class="f-val"><input class="u-inp" type="date" readonly></div></div>';
   } else {
     const ph = control==='Whole Number'?'0':control==='Decimal'?'0.00':'';
-    fieldHTML = '<div class="f'+(isSpan2?' span2':'')+'" style="pointer-events:none;"><span class="f-lbl">'+label+'</span><div class="f-val"><input class="u-inp" placeholder="'+ph+'" readonly></div></div>';
+    fieldHTML = '<div class="f" style="pointer-events:none;"><span class="f-lbl">'+label+'</span><div class="f-val"><input class="u-inp" placeholder="'+ph+'" readonly></div></div>';
   }
-  const sectionLabel = NF_SECTIONS[nfState.section]||'';
-  body.innerHTML = '<div style="font-size:10px;color:var(--text-3);margin-bottom:8px;">Section '+nfState.section+' · '+sectionLabel+'</div><div class="grid" style="gap:6px 28px;">'+fieldHTML+'</div>';
+  body.innerHTML = '<div class="grid" style="gap:6px 28px;">'+fieldHTML+'</div>';
 }
 let lastCreatedField = null; // track for post-creation navigation
 function submitField() {
@@ -2188,7 +2116,7 @@ function submitField() {
     else if (nfState.newListName) { ddListName = nfState.newListName; DROPDOWN_OPTIONS[ddListName] = nfState.ddOptions.filter(o=>o.trim()); }
   }
   const cShort = control==='Select one option'?'Select one':control==='Select multiple options'?'Select multiple':control;
-  const newField = { n:name, l:label, c:cShort, s:source, d:ddListName, v:nfState.valcreKey||document.getElementById('nfValcreKey').value.trim(), vr:nfState.vr||'', nf:'Yes', req:nfState.required, desc:document.getElementById('nfDesc').value.trim(), origin:'dashboard', _section:nfState.section, _gridPos:nfState.gridPos };
+  const newField = { n:name, l:label, c:cShort, s:source, d:ddListName, v:nfState.valcreKey||document.getElementById('nfValcreKey').value.trim(), vr:'', nf:'Yes', req:nfState.required, desc:document.getElementById('nfDesc').value.trim(), origin:'dashboard' };
   if (nfState.mode==='edit' && nfState.editIndex!==null) {
     const oldName = FIELDS[nfState.editIndex].n;
     FIELDS[nfState.editIndex] = newField;
@@ -2199,9 +2127,9 @@ function submitField() {
   }
   // Create mode — show success state
   FIELDS.push(newField); ALLFIELDS.push(newField);
-  lastCreatedField = { name: name, label: label, section: nfState.section, gridPos: nfState.gridPos };
+  lastCreatedField = { name: name, label: label };
   renderFields(); flashCount();
-  showNfSuccess(name, label, nfState.section);
+  showNfSuccess(name, label);
 }
 function editFieldFromRow(fieldName) { const idx = FIELDS.findIndex(f => f.n === fieldName); if (idx<0) return; openFieldPanel('edit', idx); }
 
@@ -2215,12 +2143,6 @@ function fillNfExample() {
   nfState.source = 'User Input'; setNfDD('nfSourceDD', 'User Input');
   nfState.required = 'Yes';
   document.querySelectorAll('#nfRequired button').forEach(b => b.classList.toggle('active', b.textContent === 'Yes'));
-  nfState.vr = 'Property'; setNfDD('nfVrDD', 'Property');
-  nfState.section = '2.2';
-  document.querySelectorAll('#nfSection button').forEach(b => b.classList.toggle('active', b.textContent === '2.2'));
-  document.getElementById('nfSectionName').textContent = NF_SECTIONS['2.2'];
-  nfState.gridPos = 'left';
-  document.querySelectorAll('#nfGridPos button').forEach((b,i) => b.classList.toggle('active', i === 0));
   updateNfConditionals();
   // Pick ListPropertyType as dropdown
   nfState.ddList = 'ListPropertyType';
@@ -2228,13 +2150,11 @@ function fillNfExample() {
   document.getElementById('nfDDSelect').value = 'ListPropertyType';
   showExistingDDOptions('ListPropertyType');
   updateNfPreview();
-  // Trigger section highlight behind panel
-  highlightDashboardSection('2.2');
   onNfNameInput(document.getElementById('nfName'));
 }
 
 /* ── Problem 2: Success State ── */
-function showNfSuccess(name, label, section) {
+function showNfSuccess(name, label) {
   document.getElementById('nfBody').style.display = 'none';
   document.getElementById('nfFooter').style.display = 'none';
   document.getElementById('nfFillBtn').style.display = 'none';
@@ -2242,40 +2162,13 @@ function showNfSuccess(name, label, section) {
   const successEl = document.getElementById('nfSuccess');
   successEl.classList.add('show');
   document.getElementById('nfSuccessTitle').textContent = 'Field Added';
-  document.getElementById('nfSuccessSub').textContent = name + ' added to Section ' + section + ' · ' + (NF_SECTIONS[section]||'');
+  document.getElementById('nfSuccessSub').textContent = label + ' (' + name + ') registered in the field index';
 }
 function hideNfSuccess() {
   document.getElementById('nfSuccess').classList.remove('show');
   document.getElementById('nfBody').style.display = '';
   document.getElementById('nfFooter').style.display = '';
   document.getElementById('nfFillBtn').style.display = '';
-}
-function nfViewInDashboard() {
-  if (!lastCreatedField) return;
-  closeFieldPanel(); hideNfSuccess();
-  // Switch to Full Dashboard tab
-  const tabBtns = document.querySelectorAll('.seg:not(.scope-toggle) button');
-  tabBtns.forEach(b => b.classList.remove('active'));
-  tabBtns[0].classList.add('active'); // Full Dashboard is first
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-full').classList.add('active');
-  document.getElementById('dashControls').parentElement.style.display = 'flex';
-  document.getElementById('btnFill').style.display = '';
-  document.getElementById('btnReset').style.display = '';
-  // Find target section by number
-  const secMap = {'1.1':'sec-client','1.2':'sec-property','1.3':'sec-contact','2.1':'sec-loe','2.2':'sec-building','2.3':'sec-assignment','3.1':'sec-site','3.2':'sec-docs'};
-  const secId = secMap[lastCreatedField.section];
-  if (secId) {
-    const sec = document.getElementById(secId);
-    if (sec) {
-      sec.classList.remove('closed');
-      setTimeout(() => {
-        sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        sec.classList.add('nf-highlight');
-        setTimeout(() => sec.classList.remove('nf-highlight'), 3000);
-      }, 100);
-    }
-  }
 }
 function nfViewInRegistry() {
   if (!lastCreatedField) return;
@@ -2300,42 +2193,6 @@ function nfAddAnother() {
   document.getElementById('nfMode').textContent = 'Creating';
   setTimeout(() => document.getElementById('nfName').focus(), 100);
 }
-
-/* ── Problem 1: Visual Section Feedback ── */
-const NF_SEC_MAP = {'1.1':'sec-client','1.2':'sec-property','1.3':'sec-contact','2.1':'sec-loe','2.2':'sec-building','2.3':'sec-assignment','3.1':'sec-site','3.2':'sec-docs'};
-function highlightDashboardSection(sectionNum) {
-  // Switch page behind panel to Full Dashboard view
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-full').classList.add('active');
-  // Show dashboard controls
-  document.getElementById('dashControls').parentElement.style.display = 'flex';
-  document.getElementById('btnFill').style.display = '';
-  document.getElementById('btnReset').style.display = '';
-  // Update tab buttons to show Full Dashboard as active (visual only, panel is still open)
-  const tabBtns = document.querySelectorAll('.seg:not(.scope-toggle) button');
-  tabBtns.forEach(b => b.classList.remove('active'));
-  tabBtns[0].classList.add('active');
-  // Remove any existing highlights
-  document.querySelectorAll('.sec.nf-highlight').forEach(s => s.classList.remove('nf-highlight'));
-  // Find and highlight the target section
-  const secId = NF_SEC_MAP[sectionNum];
-  if (!secId) return;
-  const sec = document.getElementById(secId);
-  if (!sec) return;
-  sec.classList.remove('closed');
-  setTimeout(() => {
-    sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    sec.classList.add('nf-highlight');
-    setTimeout(() => sec.classList.remove('nf-highlight'), 2500);
-  }, 100);
-}
-
-/* Override pickNfSeg to add visual feedback */
-const _origPickNfSeg = pickNfSeg;
-pickNfSeg = function(btn, val) {
-  _origPickNfSeg(btn, val);
-  highlightDashboardSection(val);
-};
 
 /* Override closeFieldPanel to also hide success state */
 const _origClose = closeFieldPanel;

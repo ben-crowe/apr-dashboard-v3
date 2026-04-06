@@ -307,13 +307,23 @@
   .fi-dd-popover .fi-dd-opt { display: flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 0; color: var(--text-2); }
   .fi-dd-popover .fi-dd-opt-rm { color: var(--text-3); cursor: pointer; font-size: 13px; }
   .fi-dd-popover .fi-dd-opt-rm:hover { color: var(--red); }
+
+  /* Status badges */
+  .cs-status { font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 4px; letter-spacing: .03em; display: inline-block; }
+  .cs-status-pending { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+  .cs-status-active { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+  /* Configure Logic button */
+  .cs-logic-btn { font: 500 10px/1 system-ui,sans-serif; padding: 3px 8px; border-radius: 4px; cursor: pointer; background: transparent; color: var(--amber); border: 1px solid var(--amber); transition: all .12s; white-space: nowrap; }
+  .cs-logic-btn:hover { background: #fffbeb; }
+  /* Read-only display in edit row */
+  .cs-readonly { font-size: 11px; color: var(--text-3); border-bottom: none !important; }
 </style>
 </head>
 <body>
 
 <div class="hdr">
   <div>
-    <h1>Valta Field Registry Explorer</h1>
+    <h1>Valta Field Registry Explorer <span style="font-size:12px;font-weight:500;color:#a1a1aa;margin-left:8px;">v10 — Simple Add Row</span></h1>
     <div class="sub">Field Registry · Cascade Logic · Rule Audit</div>
   </div>
   <div class="hdr-btns">
@@ -567,7 +577,7 @@ E  Authorized Use          ──┘</div>
 </div>
 
 <!-- ═══ FIELD INDEX ═══ -->
-<div class="panel" id="panel-index">
+<div class="panel" id="panel-index"><div style="max-width:960px;margin:0 auto 12px;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:#18181b;border-radius:8px;"><span style="font:700 13px/1 system-ui,sans-serif;color:#fff;">v10 — Simple Add Row</span><div style="display:flex;gap:6px;"><a href="valta-field-registry-NEW-FIELD-mockup.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v6</a><a href="valta-field-registry-v7-inline-row.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v7</a><a href="valta-field-registry-v8-grouped.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v8</a><a href="valta-field-registry-v9-modal.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v9</a><a href="valta-field-registry-v10-simple-add.html" style="font:600 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#fff;background:#3f3f46;">v10</a><a href="valta-field-registry-v11-client-simple.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v11</a></div></div>
 <div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;gap:6px;align-items:center;margin-left:auto;margin-right:8px;"><button class="btn btn-primary" style="font-size:11px;padding:5px 12px;" onclick="insertAddRow(event)">+ New Field</button><button class="btn btn-ghost" style="font-size:11px;padding:5px 12px;" onclick="fillSimpleExample(event)">Fill Example</button></div><span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
@@ -595,7 +605,7 @@ E  Authorized Use          ──┘</div>
   </div>
   <div class="fi-count" id="fiCount"></div>
   <div id="fiTableWrap" style="overflow-x:auto;">
-    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="origin" onclick="sortFields(this,'origin')">System</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th><th style="width:90px;cursor:default;"></th></tr></thead><tbody id="fiBody"></tbody></table>
+    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="status" onclick="sortFields(this,'status')">Status</th><th data-sort="origin" onclick="sortFields(this,'origin')">System</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th><th style="width:90px;cursor:default;"></th></tr></thead><tbody id="fiBody"></tbody></table>
   </div>
   <div id="narTableWrap" style="display:none;">
     <table class="fi-table" id="narTable">
@@ -1057,6 +1067,12 @@ const FIELDS = [
   {n:"EA4",l:"Extraordinary Assumption 4",c:"Multi-line",s:"Logic",d:"",v:"",vr:"",nf:"Yes",req:"No",desc:""},
   {n:"EA5",l:"Extraordinary Assumption 5",c:"Multi-line",s:"Logic",d:"",v:"",vr:"",nf:"Yes",req:"No",desc:""},
 ];
+// v11 enhancements: add status + hasLogic to existing fields
+FIELDS.forEach(f => {
+  if (!f._status) f._status = 'active';
+  if (f._hasLogic === undefined) f._hasLogic = (TRIGGERS.includes(f.n) || RESULTS.includes(f.n));
+});
+
 let expandedRow = null; // track which row has dropdown options expanded
 let activeFilter = 'all';
 let activeView = 'fields'; // fields | options | narratives
@@ -1176,7 +1192,7 @@ function renderFields() {
     });
   }
 
-  const COL_COUNT = 11;
+  const COL_COUNT = 12;
   filtered.forEach(item => {
     const f = item.f;
     const role = item.role;
@@ -1204,12 +1220,13 @@ function renderFields() {
     const clickHandler = isEditable ? ' onclick="editTableRow(\''+f.n+'\')"' : '';
     tb.innerHTML += '<tr'+(isEditable ? clickAttr : rowClass)+clickHandler+' title="'+(f.desc ? f.desc + (isEditable ? ' · Click to edit' : '') : (isEditable ? 'Click to edit' : ''))+'">' +
       '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+item.idx+'</td>' +
+      '<td>'+(f._status==='pending'?'<span class="cs-status cs-status-pending">Pending</span>':'<span class="cs-status cs-status-active">Active</span>')+'</td>' +
       '<td style="font-size:11px;color:var(--text-2);">'+(f.origin==='valcre'?'Valcre':'Valta')+'</td>' +
       '<td class="fn">'+f.n+'</td>' +
       '<td>'+f.l+'</td>' +
       '<td style="font-size:11px;color:var(--text-2);">'+(f.c||'—')+'</td>' +
       srcCell +
-      roleCell +
+      (f._hasLogic ? '<td><button class="cs-logic-btn" onclick="event.stopPropagation();csGoToLogic()">Configure Logic</button></td>' : roleCell) +
       ddCell +
       vrCell +
       '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+(f.v||'—')+'</td>' +
@@ -1730,6 +1747,30 @@ const SOURCE_TYPES = ['User Input','Valcre API','Calculated','Logic'];
 const ROLE_TYPES = ['Independent','Trigger','Result'];
 const VALCRE_LOCATIONS = ['—','Job','Contact','Property','Building','Parcel'];
 
+// v11: simplified type mapping for client-facing add row
+const CS_TYPE_MAP = {'Text':'Text','Number':'Whole Number','Date':'Date','Dropdown':'Select one','Yes/No':'Checkbox','Multi-line':'Multiple lines of text'};
+const CS_SIMPLE_TYPES = Object.keys(CS_TYPE_MAP);
+const CS_TYPE_REVERSE = {};
+Object.entries(CS_TYPE_MAP).forEach(([k,v]) => CS_TYPE_REVERSE[v] = k);
+CS_TYPE_REVERSE['Select one'] = 'Dropdown'; CS_TYPE_REVERSE['Select multiple'] = 'Dropdown';
+CS_TYPE_REVERSE['Select multiple options'] = 'Dropdown'; CS_TYPE_REVERSE['Select one option'] = 'Dropdown';
+CS_TYPE_REVERSE['Alpha Numeric'] = 'Text'; CS_TYPE_REVERSE['Decimal'] = 'Number';
+CS_TYPE_REVERSE['Calculation'] = 'Number'; CS_TYPE_REVERSE['Multi-line'] = 'Multi-line';
+
+function csGoToLogic() {
+  const tabBtns = document.querySelectorAll('.seg:not(.scope-toggle) button');
+  tabBtns.forEach(b => b.classList.remove('active'));
+  tabBtns[1].classList.add('active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-logic').classList.add('active');
+  document.getElementById('dashControls').parentElement.style.display = 'none';
+  document.getElementById('btnFill').style.display = 'none';
+  document.getElementById('btnReset').style.display = 'none';
+}
+function csLabelToFieldName(label) {
+  return label.replace(/[^a-zA-Z0-9\s]/g,'').split(/\s+/).map((w,i) => i===0 ? w.charAt(0).toLowerCase()+w.slice(1) : w.charAt(0).toUpperCase()+w.slice(1)).join('');
+}
+
 function buildDropdownListOptions() {
   let html = '<option value="">— None —</option>';
   Object.keys(DROPDOWN_OPTIONS).forEach(k => { html += '<option value="'+k+'">'+k+'</option>'; });
@@ -1745,28 +1786,38 @@ function buildSelectHtml(options, selected, name, extraAttr) {
 
 function insertAddRow(e) {
   if (e) e.stopPropagation();
-  if (addRowActive) return; // already showing
-  if (editRowField) cancelEditRow(); // close any edit first
+  if (addRowActive) return;
+  if (editRowField) cancelEditRow();
   addRowActive = true;
   newDdOptions = [];
   const tb = document.getElementById('fiBody');
   const tr = document.createElement('tr');
   tr.className = 'fi-add-row';
   tr.id = 'fiAddRow';
+  // Simplified client-facing add row: Category, Label editable. Type simplified. Others auto-filled.
+  const catOpts = VALCRE_LOCATIONS.filter(v=>v!=='—').map(v=>'<option value="'+v+'">'+v+'</option>').join('');
+  const typeOpts = CS_SIMPLE_TYPES.map(t=>'<option value="'+t+'">'+t+'</option>').join('');
   tr.innerHTML =
     '<td><span class="fi-new-label">NEW</span></td>' +
+    '<td><span class="cs-status cs-status-pending">Pending</span></td>' +
     '<td style="font-size:11px;color:var(--text-2);">Valta</td>' +
-    '<td><input class="fi-mono" name="n" placeholder="FieldName" autocomplete="off"></td>' +
-    '<td><input name="l" placeholder="Field Label" autocomplete="off"></td>' +
-    '<td>'+buildSelectHtml(CONTROL_TYPES,'','c',' onchange="onControlTypeChange(this.closest(\'tr\'))"')+'</td>' +
-    '<td>'+buildSelectHtml(SOURCE_TYPES,'','s',' onchange="onSourceChange(this.closest(\'tr\'))"')+'</td>' +
-    '<td>'+buildSelectHtml(ROLE_TYPES,'','role')+'</td>' +
+    '<td class="cs-readonly" style="font-size:10px;color:var(--text-4);font-style:italic;font-family:SF Mono,Consolas,monospace;" id="csAutoName">auto</td>' +
+    '<td><input name="l" placeholder="Field Label" autocomplete="off" oninput="document.getElementById(\'csAutoName\').textContent=csLabelToFieldName(this.value)||\'auto\'"></td>' +
+    '<td><select name="cs-type" onchange="csOnSimpleTypeChange(this.closest(\'tr\'))" style="min-width:80px;">'+typeOpts+'</select></td>' +
+    '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);">User Input</td>' +
+    '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);">—</td>' +
     '<td style="position:relative;"><select name="d" onchange="onDdListChange(this)" disabled>'+buildDropdownListOptions()+'</select><div id="fiNewDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
-    '<td>'+buildSelectHtml(VALCRE_LOCATIONS,'','vr')+'</td>' +
-    '<td><input class="fi-mono" name="v" placeholder="Key" disabled autocomplete="off"></td>' +
-    '<td style="white-space:nowrap;"><div class="fi-actions"><button class="fi-save-btn" onclick="saveAddRow()">Save</button><button class="fi-cancel-btn" onclick="removeAddRow()">Cancel</button></div></td>';
+    '<td><select name="vr" style="min-width:70px;">'+catOpts+'</select></td>' +
+    '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);">—</td>' +
+    '<td style="white-space:nowrap;"><div class="fi-actions"><select name="req" style="width:40px;"><option value="Yes">Yes</option><option value="No">No</option></select> <select name="hasLogic" style="width:40px;"><option value="No">No</option><option value="Yes">Yes</option></select> <button class="fi-save-btn" onclick="saveAddRow()">Save</button><button class="fi-cancel-btn" onclick="removeAddRow()">Cancel</button></div></td>';
   tb.insertBefore(tr, tb.firstChild);
-  tr.querySelector('input[name="n"]').focus();
+  tr.querySelector('input[name="l"]').focus();
+}
+function csOnSimpleTypeChange(tr) {
+  const t = tr.querySelector('select[name="cs-type"]').value;
+  const ddSel = tr.querySelector('select[name="d"]');
+  ddSel.disabled = (t !== 'Dropdown');
+  if (t !== 'Dropdown') { ddSel.value = ''; hideNewDdPopover(); }
 }
 
 function removeAddRow() {
@@ -1842,30 +1893,29 @@ function removeNewDdOpt(i) {
 function saveAddRow() {
   const tr = document.getElementById('fiAddRow');
   if (!tr) return;
-  const n = tr.querySelector('input[name="n"]').value.trim();
   const l = tr.querySelector('input[name="l"]').value.trim();
-  const c = tr.querySelector('select[name="c"]').value;
-  const s = tr.querySelector('select[name="s"]').value;
-  const roleVal = tr.querySelector('select[name="role"]').value;
-  let d = tr.querySelector('select[name="d"]').value;
+  const simpleType = tr.querySelector('select[name="cs-type"]').value;
   const vr = tr.querySelector('select[name="vr"]').value;
-  const v = tr.querySelector('input[name="v"]').value.trim();
+  const req = tr.querySelector('select[name="req"]').value;
+  const hasLogic = tr.querySelector('select[name="hasLogic"]').value === 'Yes';
+  let d = tr.querySelector('select[name="d"]').value;
 
   // Validation
-  let valid = true;
-  const nInp = tr.querySelector('input[name="n"]');
   const lInp = tr.querySelector('input[name="l"]');
-  nInp.classList.remove('fi-invalid');
   lInp.classList.remove('fi-invalid');
-  if (!n) { nInp.classList.add('fi-invalid'); valid = false; }
-  if (!l) { lInp.classList.add('fi-invalid'); valid = false; }
-  // Check unique field name
-  if (n && FIELDS.some(f => f.n.toLowerCase() === n.toLowerCase())) {
-    nInp.classList.add('fi-invalid');
-    nInp.title = 'Field name already exists';
-    valid = false;
+  if (!l) { lInp.classList.add('fi-invalid'); lInp.focus(); return; }
+
+  // Auto-generate field name from label
+  const n = csLabelToFieldName(l);
+  if (!n) { lInp.classList.add('fi-invalid'); return; }
+  if (FIELDS.some(f => f.n.toLowerCase() === n.toLowerCase())) {
+    lInp.classList.add('fi-invalid');
+    lInp.title = 'A field with this name already exists';
+    return;
   }
-  if (!valid) return;
+
+  // Map simplified type to real control type
+  const c = CS_TYPE_MAP[simpleType] || 'Text';
 
   // Handle new dropdown list creation
   if (d === '__new__' && newDdPopoverOpen) {
@@ -1874,19 +1924,11 @@ function saveAddRow() {
     if (listName && newDdOptions.length > 0) {
       DROPDOWN_OPTIONS[listName] = [...newDdOptions];
       d = listName;
-    } else {
-      d = '';
-    }
+    } else { d = ''; }
   }
 
-  // Add role to triggers/results arrays
-  if (roleVal === 'Trigger' && !TRIGGERS.includes(n)) TRIGGERS.push(n);
-  if (roleVal === 'Result' && !RESULTS.includes(n)) RESULTS.push(n);
-
-  const newField = { n, l, c, s, d, v: v ? (vr ? vr+'.'+v : v) : '', vr, nf: 'Yes', req: 'No', desc: '', origin: 'dashboard' };
+  const newField = { n, l, c, s:'User Input', d, v:'', vr, nf:'Yes', req, desc:'', origin:'dashboard', _status:'pending', _hasLogic:hasLogic };
   FIELDS.push(newField);
-  // Also add to ALLFIELDS
-  newField.origin = v ? 'both' : 'dashboard';
   ALLFIELDS.push(newField);
 
   removeAddRow();
@@ -1911,18 +1953,18 @@ function fillSimpleExample(e) {
   setTimeout(() => {
     const tr = document.getElementById('fiAddRow');
     if (!tr) return;
-    tr.querySelector('input[name="n"]').value = 'MarketCondition';
     tr.querySelector('input[name="l"]').value = 'Market Condition';
-    tr.querySelector('select[name="c"]').value = 'Select one';
-    tr.querySelector('select[name="s"]').value = 'User Input';
-    tr.querySelector('select[name="role"]').value = 'Independent';
-    // Enable and set dropdown list
-    const ddSel = tr.querySelector('select[name="d"]');
-    ddSel.disabled = false;
-    ddSel.value = 'ListPropertyType';
-    // Set Valcre location
+    document.getElementById('csAutoName').textContent = 'marketCondition';
+    tr.querySelector('select[name="cs-type"]').value = 'Dropdown';
+    csOnSimpleTypeChange(tr);
     tr.querySelector('select[name="vr"]').value = 'Property';
-    // Leave API key disabled
+    tr.querySelector('select[name="req"]').value = 'Yes';
+    tr.querySelector('select[name="hasLogic"]').value = 'No';
+    // Enable and set dropdown list
+    setTimeout(() => {
+      const ddSel = tr.querySelector('select[name="d"]');
+      if (ddSel) { ddSel.disabled = false; ddSel.value = 'ListPropertyType'; }
+    }, 20);
   }, 20);
 }
 
@@ -1949,53 +1991,55 @@ function editTableRow(fieldName) {
   // Extract bare API key (strip location prefix like "Job.")
   const bareKey = f.v ? (f.v.includes('.') ? f.v.split('.').slice(1).join('.') : f.v) : '';
 
+  const currentSimpleType = CS_TYPE_REVERSE[f.c] || 'Text';
+  const simpleTypeOpts = CS_SIMPLE_TYPES.map(t=>'<option value="'+t+'"'+(t===currentSimpleType?' selected':'')+'>'+t+'</option>').join('');
+  const catOpts = VALCRE_LOCATIONS.filter(v=>v!=='—').map(v=>'<option value="'+v+'"'+(f.vr===v?' selected':'')+'>'+v+'</option>').join('');
+  const rowIdx = targetRow.querySelector('td')?.textContent || '';
+
   targetRow.className = 'fi-edit-row';
   targetRow.dataset.origField = fieldName;
   targetRow.innerHTML =
-    '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+targetRow.querySelector('td')?.textContent+'</td>' +
+    '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+rowIdx+'</td>' +
+    '<td>'+(f._status==='pending'?'<span class="cs-status cs-status-pending">Pending</span>':'<span class="cs-status cs-status-active">Active</span>')+'</td>' +
     '<td style="font-size:11px;color:var(--text-2);">Valta</td>' +
-    '<td><input class="fi-mono" name="n" value="'+f.n+'" autocomplete="off"></td>' +
+    '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+f.n+'</td>' +
     '<td><input name="l" value="'+f.l+'" autocomplete="off"></td>' +
-    '<td>'+buildSelectHtml(CONTROL_TYPES, f.c, 'c', ' onchange="onControlTypeChange(this.closest(\'tr\'))"')+'</td>' +
-    '<td>'+buildSelectHtml(SOURCE_TYPES, f.s, 's', ' onchange="onSourceChange(this.closest(\'tr\'))"')+'</td>' +
-    '<td>'+buildSelectHtml(ROLE_TYPES, roleVal, 'role')+'</td>' +
-    '<td style="position:relative;"><select name="d" onchange="onDdListChange(this)"'+(isSelect?'':' disabled')+'>'+buildDropdownListOptions().replace('value="'+(f.d||'')+'"','value="'+(f.d||'')+'" selected')+'</select><div id="fiEditDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
-    '<td>'+buildSelectHtml(VALCRE_LOCATIONS, f.vr||'', 'vr')+'</td>' +
-    '<td><input class="fi-mono" name="v" value="'+bareKey+'"'+(isValcre?'':' disabled')+' autocomplete="off"></td>' +
-    '<td style="white-space:nowrap;"><div class="fi-actions"><button class="fi-save-btn" onclick="saveEditRow(\''+fieldName+'\')">Save</button><button class="fi-cancel-btn" onclick="cancelEditRow()">Cancel</button></div></td>';
+    '<td><select name="cs-type" onchange="csOnSimpleTypeChangeEdit(this.closest(\'tr\'))" style="min-width:80px;">'+simpleTypeOpts+'</select></td>' +
+    '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);">'+(f.s||'User Input')+'</td>' +
+    '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);">'+(f._hasLogic?'<button class="cs-logic-btn" onclick="event.stopPropagation();csGoToLogic()">Logic</button>':roleVal)+'</td>' +
+    '<td style="position:relative;"><select name="d" onchange="onDdListChange(this)"'+(isSelect?'':' disabled')+'>'+buildDropdownListOptions()+'</select><div id="fiEditDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
+    '<td><select name="vr" style="min-width:70px;">'+catOpts+'</select></td>' +
+    '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+(f.v||'—')+'</td>' +
+    '<td style="white-space:nowrap;"><div class="fi-actions"><select name="req" style="width:40px;"><option value="Yes"'+(f.req==='Yes'?' selected':'')+'>Yes</option><option value="No"'+(f.req!=='Yes'?' selected':'')+'>No</option></select> <select name="hasLogic" style="width:40px;"><option value="No"'+(!f._hasLogic?' selected':'')+'>No</option><option value="Yes"'+(f._hasLogic?' selected':'')+'>Yes</option></select> <button class="fi-save-btn" onclick="saveEditRow(\''+fieldName+'\')">Save</button><button class="fi-cancel-btn" onclick="cancelEditRow()">Cancel</button></div></td>';
 
-  // Fix the dropdown list select — need to properly set selected value
+  // Fix the dropdown list select
   const ddSel = targetRow.querySelector('select[name="d"]');
   if (ddSel && f.d) ddSel.value = f.d;
 }
 
+function csOnSimpleTypeChangeEdit(tr) {
+  const t = tr.querySelector('select[name="cs-type"]').value;
+  const ddSel = tr.querySelector('select[name="d"]');
+  ddSel.disabled = (t !== 'Dropdown');
+  if (t !== 'Dropdown') { ddSel.value = ''; hideNewDdPopover(); }
+}
 function saveEditRow(origName) {
   const tr = document.querySelector('.fi-edit-row');
   if (!tr) return;
-  const n = tr.querySelector('input[name="n"]').value.trim();
   const l = tr.querySelector('input[name="l"]').value.trim();
-  const c = tr.querySelector('select[name="c"]').value;
-  const s = tr.querySelector('select[name="s"]').value;
-  const roleVal = tr.querySelector('select[name="role"]').value;
+  const simpleType = tr.querySelector('select[name="cs-type"]').value;
   let d = tr.querySelector('select[name="d"]').value;
   const vr = tr.querySelector('select[name="vr"]').value;
-  const v = tr.querySelector('input[name="v"]').value.trim();
+  const req = tr.querySelector('select[name="req"]').value;
+  const hasLogic = tr.querySelector('select[name="hasLogic"]').value === 'Yes';
 
   // Validation
-  let valid = true;
-  const nInp = tr.querySelector('input[name="n"]');
   const lInp = tr.querySelector('input[name="l"]');
-  nInp.classList.remove('fi-invalid');
   lInp.classList.remove('fi-invalid');
-  if (!n) { nInp.classList.add('fi-invalid'); valid = false; }
-  if (!l) { lInp.classList.add('fi-invalid'); valid = false; }
-  // Check unique (exclude self)
-  if (n && FIELDS.some(f => f.n.toLowerCase() === n.toLowerCase() && f.n !== origName)) {
-    nInp.classList.add('fi-invalid');
-    nInp.title = 'Field name already exists';
-    valid = false;
-  }
-  if (!valid) return;
+  if (!l) { lInp.classList.add('fi-invalid'); lInp.focus(); return; }
+
+  // Map simplified type to real control type
+  const c = CS_TYPE_MAP[simpleType] || 'Text';
 
   // Handle new dropdown list
   if (d === '__new__') {
@@ -2004,29 +2048,14 @@ function saveEditRow(origName) {
     if (listName && newDdOptions.length > 0) {
       DROPDOWN_OPTIONS[listName] = [...newDdOptions];
       d = listName;
-    } else {
-      d = '';
-    }
+    } else { d = ''; }
   }
 
-  // Update field in FIELDS and ALLFIELDS
+  // Update field — only client-facing properties. Keep system fields (n, s, v) unchanged.
   const fi = FIELDS.findIndex(f => f.n === origName);
   const ai = ALLFIELDS.findIndex(f => f.n === origName && f.origin !== 'valcre');
-  const update = { n, l, c, s, d, v: v ? (vr ? vr+'.'+v : v) : '', vr, origin: v ? 'both' : 'dashboard' };
-  if (fi >= 0) Object.assign(FIELDS[fi], update);
-  if (ai >= 0) Object.assign(ALLFIELDS[ai], update);
-
-  // Update role arrays
-  const tidx = TRIGGERS.indexOf(origName);
-  const ridx = RESULTS.indexOf(origName);
-  if (roleVal === 'Trigger') { if (tidx < 0) TRIGGERS.push(n); if (ridx >= 0) RESULTS.splice(ridx,1); }
-  else if (roleVal === 'Result') { if (ridx < 0) RESULTS.push(n); if (tidx >= 0) TRIGGERS.splice(tidx,1); }
-  else { if (tidx >= 0) TRIGGERS.splice(tidx,1); if (ridx >= 0) RESULTS.splice(ridx,1); }
-  // If name changed, update arrays
-  if (origName !== n) {
-    const ti2 = TRIGGERS.indexOf(origName); if (ti2 >= 0) TRIGGERS[ti2] = n;
-    const ri2 = RESULTS.indexOf(origName); if (ri2 >= 0) RESULTS[ri2] = n;
-  }
+  if (fi >= 0) { Object.assign(FIELDS[fi], { l, c, d, vr, req, _hasLogic:hasLogic }); }
+  if (ai >= 0) { Object.assign(ALLFIELDS[ai], { l, c, d, vr, req, _hasLogic:hasLogic }); }
 
   editRowField = null;
   newDdPopoverOpen = false;
@@ -2093,5 +2122,5 @@ function toggleFullWidth(e) {
   });
 })();
 </script>
-</body>
+<div style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#18181b;padding:8px 16px;display:flex;gap:8px;align-items:center;justify-content:center;box-shadow:0 -2px 8px rgba(0,0,0,.15);"><span style="font-size:11px;color:#a1a1aa;margin-right:8px;">Compare:</span><a href="valta-field-registry-NEW-FIELD-mockup.html" id="nav-v6" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v6 Panel</a><a href="valta-field-registry-v7-inline-row.html" id="nav-v7" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v7 Inline Row</a><a href="valta-field-registry-v8-grouped.html" id="nav-v8" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v8 Grouped</a><a href="valta-field-registry-v9-modal.html" id="nav-v9" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v9 Modal</a><a href="valta-field-registry-v10-simple-add.html" id="nav-v10" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v10 Simple</a></div><script>document.querySelectorAll("[id^=nav-]").forEach(a=>{if(location.pathname.includes(a.href.split("/").pop().replace(".html","")))a.style.background="#3f3f46",a.style.color="#fff",a.style.fontWeight="700"});</script><div style="height:44px;"></div></body>
 </html>

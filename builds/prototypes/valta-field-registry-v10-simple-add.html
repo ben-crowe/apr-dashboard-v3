@@ -1270,10 +1270,17 @@ function toggleDropdownRow(fieldName) {
 }
 // Click anywhere outside expanded dropdown closes it, and deselects active scenario
 document.addEventListener('click', function(e) {
-  // Close dropdown expansion
+  // Close dropdown expansion (read-only expand)
   if (expandedRow && !e.target.closest('.dd-expand') && !e.target.closest('.dd-options-cell')) {
     expandedRow = null;
     renderFields();
+  }
+  // Close editable options editor (new or existing list) on outside click — dismiss without saving
+  const newExpand = document.getElementById('fiNewDdExpandRow');
+  const existExpand = document.getElementById('fiExistDdExpandRow');
+  if ((newExpand || existExpand) && !e.target.closest('.dd-options-cell') && !e.target.closest('select[name="d"]') && !e.target.closest('.fi-add-row select[name="d"]') && !e.target.closest('.fi-edit-row select[name="d"]')) {
+    if (newExpand) { newExpand.remove(); newDdPopoverOpen = false; }
+    if (existExpand) { existExpand.remove(); csEditingListName = null; csEditingListOpts = []; }
   }
   // Deselect scenario if clicking outside scenario buttons
   if (!e.target.closest('.scenario-btn')) {
@@ -1928,7 +1935,7 @@ function insertAddRow(e) {
     '<td><select name="cs-type" onchange="csOnTypeStep(this.closest(\'tr\'))">'+typeOpts+'</select></td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">User Input</td>' +
     '<td><select name="role" disabled>'+roleOpts+'</select></td>' +
-    '<td style="position:relative;"><select name="d" onchange="csOnDdStep(this)" disabled style="color:var(--text-3);">'+csBuildFriendlyDDOptions()+'</select><div id="fiNewDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
+    '<td style="position:relative;"><select name="d" onchange="csOnDdStep(this)" onclick="csReopenDdExpand(this)" disabled style="color:var(--text-3);">'+csBuildFriendlyDDOptions()+'</select><div id="fiNewDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">—</td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">—</td>' +
     '<td style="white-space:nowrap;"><div class="fi-actions"><button class="fi-save-btn" onclick="saveAddRow()" disabled style="opacity:.4;">Save</button><button class="fi-cancel-btn" onclick="removeAddRow()">Cancel</button></div></td>';
@@ -2107,6 +2114,19 @@ function csConfirmExistOpts(btn) {
       const fn = CS_ALLOWED_LISTS[csEditingListName] || csEditingListName.replace(/^List/,'');
       opt.textContent = fn + ' (' + validOpts.length + ')';
     }
+  }
+}
+
+// Re-expand dropdown editor when clicking a select that already has a value (re-edit after save)
+function csReopenDdExpand(sel) {
+  const val = sel.value;
+  if (!val || val === '__new__') return;
+  // If expand is already open for this list, do nothing
+  const existExpand = document.getElementById('fiExistDdExpandRow');
+  if (existExpand && csEditingListName === val) return;
+  // If expand is closed and a list is selected, re-open it
+  if (!existExpand && DROPDOWN_OPTIONS[val]) {
+    csShowExistingListExpand(val, sel.closest('tr'));
   }
 }
 
@@ -2462,7 +2482,7 @@ function editTableRow(fieldName) {
     '<td><select name="cs-type" onchange="csOnSimpleTypeChangeEdit(this.closest(\'tr\'))">'+simpleTypeOpts+'</select></td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">'+(f.s||'User Input')+'</td>' +
     '<td><select name="role">'+roleOpts+'</select></td>' +
-    '<td style="position:relative;"><select name="d" onchange="onDdListChange(this)"'+(isSelect?'':' disabled')+' style="'+(isSelect?'':'color:var(--text-3);')+'">'+csBuildFriendlyDDOptions()+'</select><div id="fiEditDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
+    '<td style="position:relative;"><select name="d" onchange="onDdListChange(this)" onclick="csReopenDdExpand(this)"'+(isSelect?'':' disabled')+' style="'+(isSelect?'':'color:var(--text-3);')+'">'+csBuildFriendlyDDOptions()+'</select><div id="fiEditDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">'+(f.vr||'—')+'</td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;font-family:SF Mono,Consolas,monospace;">'+(f.v||'—')+'</td>' +
     '<td style="white-space:nowrap;"><div class="fi-actions"><button class="fi-save-btn" onclick="saveEditRow(\''+fieldName+'\')">Save</button><button class="fi-cancel-btn" onclick="cancelEditRow()">Cancel</button></div></td>';

@@ -351,6 +351,20 @@
   .le-map-table select:focus, .le-map-table input:focus { border-bottom-color: var(--text); }
   .le-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
 
+  /* Audit slide-out panel */
+  .audit-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.06); z-index: 200; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .audit-overlay.open { opacity: 1; pointer-events: auto; }
+  .audit-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 420px; background: var(--card); border-left: 1px solid var(--border); box-shadow: -4px 0 24px rgba(0,0,0,.08); z-index: 210; transform: translateX(100%); transition: transform .2s ease; display: flex; flex-direction: column; }
+  .audit-panel.open { transform: translateX(0); }
+  .audit-panel-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; background: #fafafa; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .audit-panel-header h3 { font-size: 13px; font-weight: 700; }
+  .audit-panel-close { width: 28px; height: 28px; border: none; background: transparent; color: var(--text-3); cursor: pointer; font-size: 16px; border-radius: calc(var(--radius) - 2px); display: flex; align-items: center; justify-content: center; transition: all .12s; }
+  .audit-panel-close:hover { background: var(--hover); color: var(--text); }
+  .audit-panel-body { flex: 1; overflow-y: auto; padding: 0; }
+  .audit-panel .audit-summary { padding: 14px 20px; border-bottom: 1px solid var(--border); }
+  .audit-panel .audit-results { padding: 0; }
+  .audit-panel .audit-row { padding: 10px 20px; }
+
   /* Intake form edit mode */
   .in-edit-bar { display: none; max-width: 960px; margin: 0 auto 8px; padding: 8px 14px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius); font-size: 12px; color: #1e40af; }
   .in-edit-bar.active { display: flex; align-items: center; justify-content: space-between; }
@@ -703,13 +717,6 @@ E  Authorized Use          ──┘</div>
   <div class="fi-count" id="fiCount"></div>
   <div id="fiTableWrap" style="overflow-x:auto;">
     <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="status" onclick="sortFields(this,'status')">Status</th><th data-sort="origin" onclick="sortFields(this,'origin')">System</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre Field ID</th><th style="width:90px;cursor:default;"></th></tr></thead><tbody id="fiBody"></tbody></table>
-  </div>
-  <div id="auditView" style="display:none;">
-    <div class="audit-card">
-      <div class="audit-header"><h3>Rule Audit — 28 Rules vs Cascade Engine</h3><button class="btn btn-ghost" style="font-size:11px;padding:3px 8px;" onclick="toggleAuditView()">Back to Registry</button></div>
-      <div class="audit-summary"><div class="audit-stat"><div class="num" id="auditTotal">28</div><div class="lbl">Rules</div></div><div class="audit-stat pass"><div class="num" id="auditPass">—</div><div class="lbl">Pass</div></div><div class="audit-stat fail"><div class="num" id="auditFail">—</div><div class="lbl">Fail</div></div></div>
-      <div class="audit-results" id="auditResults"><div style="padding:20px;color:var(--text-3);text-align:center;font-size:12px;">Running audit...</div></div>
-    </div>
   </div>
   <div id="narTableWrap" style="display:none;">
     <table class="fi-table" id="narTable">
@@ -1603,32 +1610,24 @@ function testRule(r) {
 
 const OUTPUT_NAMES = {int:'Interest Appraised', scen:'Value Scenarios', appr:'Approaches to Value'};
 
-let auditActive = false;
-function toggleAuditView() {
-  auditActive = !auditActive;
-  const tableWrap = document.getElementById('fiTableWrap');
-  const auditView = document.getElementById('auditView');
-  const fiCount = document.getElementById('fiCount');
-  // Also hide/show filters and search
-  const filterRows = document.querySelectorAll('#registrySec .sec-body > div:not(#fiTableWrap):not(#auditView):not(#narTableWrap):not(#narInfoBlock)');
-  const btn = document.getElementById('auditBtn');
-  if (auditActive) {
-    tableWrap.style.display = 'none';
-    fiCount.style.display = 'none';
-    filterRows.forEach(el => el.style.display = 'none');
-    auditView.style.display = '';
-    if (btn) btn.textContent = 'Registry';
-    runAudit();
-  } else {
-    tableWrap.style.display = '';
-    fiCount.style.display = '';
-    filterRows.forEach(el => el.style.display = '');
-    auditView.style.display = 'none';
-    if (btn) btn.textContent = 'Audit';
-  }
+function openAuditPanel() {
+  document.getElementById('auditOverlay').classList.add('open');
+  document.getElementById('auditPanel').classList.add('open');
+  runAudit();
 }
-// Keep old name as alias for the header button
+function closeAuditPanel() {
+  document.getElementById('auditOverlay').classList.remove('open');
+  document.getElementById('auditPanel').classList.remove('open');
+}
+function toggleAuditView() {
+  const panel = document.getElementById('auditPanel');
+  if (panel.classList.contains('open')) closeAuditPanel();
+  else openAuditPanel();
+}
 function toggleAuditSection() { toggleAuditView(); }
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('auditPanel').classList.contains('open')) closeAuditPanel();
+});
 function runAudit() {
   let pass=0, fail=0;
   const res = document.getElementById('auditResults');
@@ -2944,5 +2943,19 @@ function toggleFullWidth(e) {
   });
 })();
 </script>
+
+<!-- Audit slide-out panel -->
+<div class="audit-overlay" id="auditOverlay" onclick="closeAuditPanel()"></div>
+<div class="audit-panel" id="auditPanel">
+  <div class="audit-panel-header">
+    <h3>Rule Audit</h3>
+    <button class="audit-panel-close" onclick="closeAuditPanel()" title="Close">✕</button>
+  </div>
+  <div class="audit-panel-body">
+    <div class="audit-summary"><div class="audit-stat"><div class="num" id="auditTotal">28</div><div class="lbl">Rules</div></div><div class="audit-stat pass"><div class="num" id="auditPass">—</div><div class="lbl">Pass</div></div><div class="audit-stat fail"><div class="num" id="auditFail">—</div><div class="lbl">Fail</div></div></div>
+    <div class="audit-results" id="auditResults"></div>
+  </div>
+</div>
+
 </body>
 </html>

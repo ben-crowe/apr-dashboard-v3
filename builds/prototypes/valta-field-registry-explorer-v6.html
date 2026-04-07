@@ -536,36 +536,6 @@
 <!-- ═══ LOGIC FIELDS ═══ -->
 <div class="panel" id="panel-logic">
 
-<!-- Edit Mode Container (hidden by default) -->
-<div class="le-container" id="leContainer">
-  <div class="le-header">
-    <h3>Cascade Logic — Edit Mode</h3>
-    <button class="le-done-btn" onclick="leExitEditMode()">Done</button>
-  </div>
-  <div class="le-body">
-    <div class="le-sop" id="leSop"></div>
-    <div class="le-ref">
-      <div class="le-ref-title">Existing Cascade Groups (reference)</div>
-      <div class="le-ref-diagram">Group 1 — Property Rights:
-A  Property Type        ──┐
-B  Property Subtype     ──┼──→  Property Rights
-C  Tenancy              ──┘
-
-Group 2 — Value Scenarios &amp; Approaches:
-D  Status of Improvements  ──┐
-                              ├──→  Value Scenarios  ──→  Approaches to Value
-E  Authorized Use          ──┘</div>
-    </div>
-    <div class="le-new-group" id="leNewGroup"></div>
-    <div class="le-actions">
-      <button class="btn btn-ghost" onclick="leExitEditMode()">Cancel</button>
-      <button class="btn btn-primary" onclick="leSaveLogic()">Save Logic</button>
-    </div>
-  </div>
-</div>
-
-<!-- Normal Logic View (hidden when edit mode active) -->
-<div id="leNormalView">
 <div style="max-width:960px;margin:0 auto 8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
   <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text);">Scenario Group 1:</span>
   <span class="scenario-btn" onclick="runScenario(1,this)" title="Multifamily → Fee Simple">A</span>
@@ -584,7 +554,7 @@ E  Authorized Use          ──┘</div>
 <div class="lo-card"><div class="sec-title">Cascade Logic — Interactive</div><div class="sec-body">
 
   <div class="grp">
-    <div class="grp-label">Group 1 — Property Rights (3 triggers → 1 result)</div>
+    <div class="grp-label" style="display:flex;justify-content:space-between;align-items:center;">Group 1 — Property Rights (3 triggers → 1 result)<button class="btn-ghost" style="font:400 10px/1 system-ui,sans-serif;color:var(--text-3);border:none;background:none;cursor:pointer;padding:2px 6px;" onclick="event.stopPropagation()">edit</button></div>
     <div class="lo-row">
       <span class="lo-letter">A</span><span class="lo-line"></span>
       <span class="f-lbl" style="min-width:0;text-align:left;">Property Type</span>
@@ -612,7 +582,7 @@ E  Authorized Use          ──┘</div>
   </div>
 
   <div class="grp">
-    <div class="grp-label">Group 2 — Value Scenarios & Approaches (2 triggers → 2 results, chained)</div>
+    <div class="grp-label" style="display:flex;justify-content:space-between;align-items:center;">Group 2 — Value Scenarios & Approaches (2 triggers → 2 results, chained)<button class="btn-ghost" style="font:400 10px/1 system-ui,sans-serif;color:var(--text-3);border:none;background:none;cursor:pointer;padding:2px 6px;" onclick="event.stopPropagation()">edit</button></div>
     <div class="lo-row">
       <span class="lo-letter">D</span><span class="lo-line"></span>
       <span class="f-lbl" style="min-width:0;text-align:left;">Status of Improvements</span>
@@ -631,11 +601,18 @@ E  Authorized Use          ──┘</div>
     </div>
   </div>
 
+  <div class="grp" id="loGroup3" style="margin-top:16px;">
+    <div class="grp-label" style="color:var(--text-3);border-bottom-style:dashed;">Group 3 — (empty, waiting for configuration)</div>
+    <div id="loGroup3Content" style="padding:12px 0;text-align:center;">
+      <div style="font-size:11px;color:var(--text-3);margin-bottom:10px;">No logic configured. Create a trigger field in the Field Registry to add a new cascade group.</div>
+      <button class="btn btn-outline" style="font-size:11px;padding:5px 14px;" onclick="csCreateLogicField()">+ Create Logic Field</button>
+    </div>
+  </div>
+
 </div></div>
 
-<div style="max-width:960px;margin:20px auto 0;padding-top:16px;border-top:1px solid var(--border);display:flex;align-items:baseline;justify-content:space-between;">
-  <div class="re-label" style="margin:0;">Rule Explorer</div>
-  <button class="btn btn-ghost" style="font-size:11px;padding:3px 8px;" onclick="leEnterEditMode()">Edit Mode</button>
+<div style="max-width:960px;margin:20px auto 0;padding-top:16px;border-top:1px solid var(--border);">
+  <div class="re-label" style="margin:0 0 8px;">Rule Explorer</div>
 </div>
 
 <div class="re-section closed" id="re-g1">
@@ -691,8 +668,6 @@ E  Authorized Use          ──┘</div>
     <div style="height:16px;"></div>
   </div>
 </div>
-</div><!-- close leNormalView -->
-
 
 </div><!-- close panel-logic -->
 
@@ -1907,14 +1882,12 @@ CS_TYPE_REVERSE['Select multiple options'] = 'Dropdown'; CS_TYPE_REVERSE['Select
 CS_TYPE_REVERSE['Alpha Numeric'] = 'Text'; CS_TYPE_REVERSE['Decimal'] = 'Number';
 CS_TYPE_REVERSE['Calculation'] = 'Number'; CS_TYPE_REVERSE['Multi-line'] = 'Multi-line';
 
-/* ═══ LOGIC EDIT MODE ═══ */
-let leEditField = null; // field being configured
-let leResultField = ''; // chosen result field name
-let leMappings = []; // [{trigger:'Option1', result:'Outcome1'}, ...]
-let leNextLetter = 'F';
+/* ═══ LOGIC — PER-GROUP + GROUP 3 ═══ */
+let g3ResultField = '';
+let g3Mappings = [];
+/* old le* vars removed */
 
 function csGoToLogic(fieldName) {
-  // Switch to Logic Fields tab
   const tabBtns = document.querySelectorAll('.seg:not(.scope-toggle) button');
   tabBtns.forEach(b => b.classList.remove('active'));
   tabBtns[1].classList.add('active');
@@ -1923,15 +1896,80 @@ function csGoToLogic(fieldName) {
   document.getElementById('dashControls').parentElement.style.display = 'none';
   document.getElementById('btnFill').style.display = 'none';
   document.getElementById('btnReset').style.display = 'none';
-  // Auto-enter edit mode with the field
-  if (fieldName) leEnterEditMode(fieldName);
+  if (fieldName) csPopulateGroup3(fieldName);
 }
 
-function leEnterEditMode(fieldName) {
-  const f = fieldName ? FIELDS.find(x => x.n === fieldName) : null;
-  leEditField = f;
-  leResultField = '';
-  leMappings = [];
+function csPopulateGroup3(fieldName) {
+  const f = FIELDS.find(x => x.n === fieldName);
+  if (!f) return;
+  g3ResultField = '';
+  g3Mappings = [];
+  const opts = (f.d && DROPDOWN_OPTIONS[f.d]) ? DROPDOWN_OPTIONS[f.d] : [];
+  const ddMenuHTML = opts.map(o => '<div class="dd-item" onclick="pickDD(this)">'+o+'</div>').join('');
+  const resultOpts = '<option value="" style="color:var(--text-3);">Select result field...</option><option value="InterestAppraised">Interest Appraised</option><option value="ValueScenarios">Value Scenarios</option><option value="ApproachestoValue">Approaches to Value</option><option value="__new__">+ Create New Result</option>';
+  const grpLabel = document.querySelector('#loGroup3 .grp-label');
+  grpLabel.textContent = 'Group 3 — ' + f.l;
+  grpLabel.style.color = ''; grpLabel.style.borderBottomStyle = 'solid';
+  document.getElementById('loGroup3Content').innerHTML =
+    '<div class="lo-row" style="background:#fefce8;border-radius:4px;padding:2px 0;"><span class="lo-letter" style="color:var(--amber);font-weight:800;">F</span><span class="lo-line" style="background:var(--amber);"></span><span class="f-lbl" style="min-width:0;text-align:left;color:var(--text);font-weight:600;">'+f.l+'</span><div class="f-val"><div class="dd" data-field="'+f.n+'"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu">'+ddMenuHTML+'</div></div></div><span class="lo-spacer"></span><span class="lo-result-lbl" style="color:var(--amber);">Result</span><div class="f-val"><select onchange="g3OnResultPick(this,\''+f.n.replace(/'/g,"\\'")+'\')" style="font:inherit;font-size:12px;border:1px solid var(--border);border-radius:4px;padding:3px 6px;outline:none;width:100%;">'+resultOpts+'</select></div></div>' +
+    '<div id="g3MappingArea"></div>' +
+    '<div style="margin-top:10px;display:flex;gap:6px;justify-content:flex-end;"><button class="btn btn-ghost" style="font-size:11px;padding:3px 8px;" onclick="g3Reset()">Cancel</button><button class="btn btn-primary" style="font-size:11px;padding:3px 10px;opacity:.4;" id="g3SaveBtn" disabled onclick="g3Save(\''+f.n.replace(/'/g,"\\'")+'\')" >Save Group</button></div>';
+  setTimeout(() => document.getElementById('loGroup3').scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
+}
+function g3OnResultPick(sel, fieldName) {
+  g3ResultField = sel.value;
+  const f = FIELDS.find(x => x.n === fieldName);
+  const opts = (f && f.d && DROPDOWN_OPTIONS[f.d]) ? DROPDOWN_OPTIONS[f.d] : [];
+  if (g3ResultField && g3ResultField !== '__new__') {
+    g3Mappings = opts.map(o => ({ trigger: o, result: '' }));
+    g3RenderMappings(fieldName);
+    const saveBtn = document.getElementById('g3SaveBtn');
+    if (saveBtn) { saveBtn.disabled = false; saveBtn.style.opacity = '1'; }
+  } else { document.getElementById('g3MappingArea').innerHTML = ''; }
+}
+function g3RenderMappings(fieldName) {
+  const f = FIELDS.find(x => x.n === fieldName);
+  const resultLabel = (FIELDS.find(x=>x.n===g3ResultField)||{}).l || g3ResultField;
+  let html = '<div style="margin-top:12px;"><div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text-2);margin-bottom:6px;">Mapping: '+(f?f.l:'')+' → '+resultLabel+'</div><table class="le-map-table"><thead><tr><th>Trigger Option</th><th>Result</th></tr></thead><tbody>';
+  g3Mappings.forEach((m,i) => { html += '<tr><td style="font-size:11px;">'+m.trigger+'</td><td><input value="'+(m.result||'')+'" placeholder="Outcome..." style="font-size:11px;" oninput="g3Mappings['+i+'].result=this.value"></td></tr>'; });
+  html += '</tbody></table></div>';
+  document.getElementById('g3MappingArea').innerHTML = html;
+}
+function g3Reset() {
+  g3ResultField = ''; g3Mappings = [];
+  const grpLabel = document.querySelector('#loGroup3 .grp-label');
+  grpLabel.textContent = 'Group 3 — (empty, waiting for configuration)';
+  grpLabel.style.color = 'var(--text-3)'; grpLabel.style.borderBottomStyle = 'dashed';
+  document.getElementById('loGroup3Content').innerHTML = '<div style="padding:12px 0;text-align:center;"><div style="font-size:11px;color:var(--text-3);margin-bottom:10px;">No logic configured. Create a trigger field in the Field Registry to add a new cascade group.</div><button class="btn btn-outline" style="font-size:11px;padding:5px 14px;" onclick="csCreateLogicField()">+ Create Logic Field</button></div>';
+}
+function g3Save(fieldName) {
+  const f = FIELDS.find(x => x.n === fieldName); if (!f) return;
+  f._hasLogic = true; f._logicConfigured = true;
+  const resultLabel = (FIELDS.find(x=>x.n===g3ResultField)||{}).l || g3ResultField;
+  document.querySelectorAll('.cs-injected-section').forEach(el => el.remove());
+  let mapRows = g3Mappings.filter(m=>m.trigger&&m.result).map(m=>'<tr><td>'+m.trigger+'</td><td>'+m.result+'</td></tr>').join('');
+  if (!mapRows) mapRows = '<tr><td style="color:var(--text-3);font-style:italic;">No mappings</td><td></td></tr>';
+  const reSection = document.createElement('div'); reSection.className = 're-section cs-injected-section';
+  reSection.innerHTML = '<div class="re-section-bar" onclick="this.parentElement.classList.toggle(\'closed\')"><span class="re-chevron">▾</span><span class="re-section-name">Group 3 — '+f.l+' → '+resultLabel+'</span></div><div class="re-section-body"><div class="re-diagram">F  '+f.l+'  ──→  '+resultLabel+'</div><table class="re-table"><tr><td class="re-col-hdr">User Choice</td><td class="re-col-hdr">Outcome</td></tr><tr class="re-title-row"><td><span class="re-let">F</span>'+f.l+'</td><td>'+resultLabel+'</td></tr>'+mapRows+'</table></div>';
+  const lastRe = document.querySelector('#panel-logic .re-section:last-of-type');
+  if (lastRe) lastRe.parentNode.insertBefore(reSection, lastRe.nextSibling);
+  document.querySelector('#loGroup3 .grp-label').textContent = 'Group 3 — '+f.l+' → '+resultLabel+' (1 trigger → 1 result)';
+  const ma = document.getElementById('g3MappingArea'); if (ma) ma.innerHTML = '';
+  const btns = document.querySelector('#loGroup3Content > div:last-child'); if (btns && btns.querySelector('.btn')) btns.remove();
+  renderFields();
+}
+function csCreateLogicField() {
+  const tabBtns = document.querySelectorAll('.seg:not(.scope-toggle) button');
+  tabBtns.forEach(b => b.classList.remove('active')); tabBtns[0].classList.add('active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-index').classList.add('active');
+  document.getElementById('dashControls').parentElement.style.display = 'none';
+  document.getElementById('btnFill').style.display = 'none'; document.getElementById('btnReset').style.display = 'none';
+  insertAddRow();
+  setTimeout(() => { const tr = document.getElementById('fiAddRow'); if (!tr) return; const typeSel = tr.querySelector('select[name="cs-type"]'); if (typeSel) { typeSel.value = 'Dropdown'; typeSel.disabled = true; csOnTypeStep(tr); } const roleSel = tr.querySelector('select[name="role"]'); if (roleSel) { roleSel.value = 'Trigger'; roleSel.disabled = true; } }, 100);
+}
+/* old le* functions removed — replaced by g3* and csPopulateGroup3 above */
+if(false){let leEditField,leResultField,leMappings,leNextLetter; // dead code block start
 
   // Determine next letter
   const usedLetters = new Set(['A','B','C','D','E']);
@@ -2111,9 +2149,7 @@ function leSaveLogic() {
   }
 
   // Update field registry display
-  renderFields();
-  leExitEditMode();
-}
+} // dead code block end
 function csLabelToFieldName(label) {
   return label.replace(/[^a-zA-Z0-9\s]/g,'').split(/\s+/).map((w,i) => i===0 ? w.charAt(0).toLowerCase()+w.slice(1) : w.charAt(0).toUpperCase()+w.slice(1)).join('');
 }

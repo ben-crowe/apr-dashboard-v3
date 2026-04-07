@@ -398,8 +398,8 @@
 
   /* Tooltips */
   .tip-wrap { position: relative; display: inline-flex; }
-  .tip-wrap .tip { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); font: 500 10px/1 system-ui,sans-serif; padding: 4px 8px; border-radius: 4px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 50; }
-  .tip-wrap .tip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 4px solid transparent; border-top-color: var(--text); }
+  .tip-wrap .tip { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--card); color: var(--text-3); border: 1px solid var(--border); font: 400 10px/1 system-ui,sans-serif; padding: 4px 8px; border-radius: 4px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 50; }
+  .tip-wrap .tip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 4px solid transparent; border-top-color: var(--border); }
   .tip-wrap:hover .tip { opacity: 1; }
 
   /* Intake form edit mode */

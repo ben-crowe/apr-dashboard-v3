@@ -700,7 +700,7 @@ E  Authorized Use          ──┘</div>
   </div>
   <div class="fi-count" id="fiCount"></div>
   <div id="fiTableWrap" style="overflow-x:auto;">
-    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="status" onclick="sortFields(this,'status')">Status</th><th data-sort="origin" onclick="sortFields(this,'origin')">System</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre Field ID</th><th style="width:90px;cursor:default;"></th></tr></thead><tbody id="fiBody"></tbody></table>
+    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="status" onclick="sortFields(this,'status')">Status</th><th data-sort="origin" onclick="sortFields(this,'origin')">System</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre Field ID</th><th style="width:90px;cursor:default;"></th></tr></thead><tbody id="fiBody"></tbody></table>
   </div>
   <div id="narTableWrap" style="display:none;">
     <table class="fi-table" id="narTable">
@@ -1279,7 +1279,7 @@ function renderFields() {
     });
   }
 
-  const COL_COUNT = 12;
+  const COL_COUNT = 11;
   filtered.forEach(item => {
     const f = item.f;
     const role = item.role;
@@ -1293,7 +1293,6 @@ function renderFields() {
       ddCell = '<td style="font-size:11px;color:var(--text-3);">—</td>';
     }
     // Plain text cells — no colors, no badges
-    const vrCell = '<td style="font-size:11px;color:var(--text-2);">'+(f.vr||'—')+'</td>';
     const srcCell = '<td style="font-size:11px;color:var(--text-2);">'+(f.s||'—')+'</td>';
     const roleText = role === 'trigger' ? 'Trigger' : role === 'result' ? 'Result' : '—';
     const roleCell = '<td style="font-size:11px;color:var(--text-2);">'+roleText+'</td>';
@@ -1315,7 +1314,6 @@ function renderFields() {
       srcCell +
       roleCell +
       ddCell +
-      vrCell +
       '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+(f.v||'—')+'</td>' +
       (f._hasLogic ? '<td><button class="cs-logic-btn-prominent" onclick="event.stopPropagation();csGoToLogic(\''+f.n.replace(/'/g,"\\'")+'\')">Configure Logic ▸</button></td>' : '<td></td>') +
     '</tr>';
@@ -2222,7 +2220,6 @@ function insertAddRow(e) {
     '<td><select name="role" disabled>'+roleOpts+'</select></td>' +
     '<td style="position:relative;"><select name="d" onchange="csOnDdStep(this)" onclick="csReopenDdExpand(this)" disabled style="color:var(--text-3);">'+csBuildFriendlyDDOptions()+'</select><div id="fiNewDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">—</td>' +
-    '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">—</td>' +
     '<td style="white-space:nowrap;"><div class="fi-actions"><button class="fi-save-btn" onclick="saveAddRow()" disabled style="opacity:.4;">Save</button><button class="fi-cancel-btn" onclick="removeAddRow()">Cancel</button></div></td>';
   tb.insertBefore(tr, tb.firstChild);
   tr.querySelector('select[name="cs-type"]').focus();
@@ -2341,7 +2338,7 @@ function csRenderExistingListExpand(expandTr) {
         '<button onclick="csConfirmExistOpts(this)" style="font:500 10px/1 system-ui,sans-serif;padding:3px 10px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-2);cursor:pointer;transition:all .12s;">Confirm Options</button>' +
       '</div>' +
     '</td>' +
-    '<td colspan="3" style="border-bottom:none;background:transparent;"></td>';
+    '<td colspan="2" style="border-bottom:none;background:transparent;"></td>';
 }
 function csAddExistOpt() {
   csEditingListOpts.push('');
@@ -2558,7 +2555,7 @@ function renderNewDdExpand(expandTr) {
       '<div style="padding:2px 0 2px 16px;display:flex;align-items:center;justify-content:space-between;"><span style="font:400 11px/1 system-ui,sans-serif;color:var(--text-3);cursor:pointer;" onclick="addNewDdOpt()">+ Add option</span>' +
       '<button onclick="csConfirmDdOptions(this)" style="font:500 10px/1 system-ui,sans-serif;padding:3px 10px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-2);cursor:pointer;transition:all .12s;" id="csDdConfirmBtn">Confirm Options</button></div>' +
     '</td>' +
-    '<td colspan="3" style="border-bottom:none;background:transparent;"></td>';
+    '<td colspan="2" style="border-bottom:none;background:transparent;"></td>';
 }
 function addNewDdOpt(inp) {
   if (inp && inp.value) {
@@ -2747,7 +2744,6 @@ function editTableRow(fieldName) {
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">'+(f.s||'User Input')+'</td>' +
     '<td><select name="role">'+roleOpts+'</select></td>' +
     '<td style="position:relative;"><select name="d" onchange="onDdListChange(this)" onclick="csReopenDdExpand(this)"'+(isSelect?'':' disabled')+' style="'+(isSelect?'':'color:var(--text-3);')+'">'+csBuildFriendlyDDOptions()+'</select><div id="fiEditDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
-    '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;">'+(f.vr||'—')+'</td>' +
     '<td class="cs-readonly" style="font-size:11px;color:var(--text-3);font-style:italic;font-family:SF Mono,Consolas,monospace;">'+(f.v||'—')+'</td>' +
     '<td style="white-space:nowrap;"><div class="fi-actions"><button class="fi-save-btn" onclick="saveEditRow(\''+fieldName+'\')">Save</button><button class="fi-cancel-btn" onclick="cancelEditRow()">Cancel</button></div></td>';
 

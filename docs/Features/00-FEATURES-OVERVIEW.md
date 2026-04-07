@@ -81,6 +81,13 @@ Each feature is a **complete vertical slice** containing:
 | F04 | Narrative-Sections | P1 | Not Started |
 | F05 | Media-Management | P1 | Not Started |
 
+**Field Registry Explorer** (prototype, production-ready):
+- Live: https://apr-dashboard-v3.vercel.app/field-registry-v6.html
+- Source: `builds/prototypes/valta-field-registry-explorer-v6.html`
+- 45 dashboard fields, 21 dropdown lists, 2 cascade groups, inline add/edit with guided sequence
+- Spec: `builds/prototypes/v10-field-edit-spec.md`
+- Index: `builds/prototypes/PROTOTYPES-INDEX.md`
+
 **Deliverables**:
 - 72 fields (Cover, Transmittal, Executive, Property ID, Certification)
 - 91 fields (Scope, Location, Site, Taxes, Zoning, Market, HBU, Improvements)

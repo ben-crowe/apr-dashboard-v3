@@ -390,6 +390,11 @@
   .col-item label { font-size: 11px; color: var(--text-2); cursor: pointer; flex: 1; }
   .col-item.col-locked label { color: var(--text-4); }
   .col-item.col-locked input { opacity: .3; pointer-events: none; }
+  .col-handle { cursor: grab; color: var(--text-4); font-size: 12px; user-select: none; flex-shrink: 0; padding: 0 2px; }
+  .col-handle:hover { color: var(--text-3); }
+  .col-item.col-locked .col-handle { visibility: hidden; }
+  .col-item.col-dragging { opacity: .5; background: var(--hover); border-radius: 4px; }
+  .col-item.col-dragover { border-top: 2px solid var(--text); padding-top: 4px; }
 
   /* Intake form edit mode */
   .in-edit-bar { display: none; max-width: 960px; margin: 0 auto 8px; padding: 8px 14px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius); font-size: 12px; color: #1e40af; }
@@ -689,7 +694,7 @@ E  Authorized Use          ──┘</div>
 
 <!-- ═══ FIELD INDEX ═══ -->
 <div class="panel active" id="panel-index">
-<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;align-items:center;gap:0;margin-left:auto;"><button class="btn btn-outline" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="insertAddRow(event)">+ New Field</button><button class="btn btn-ghost" id="auditBtn" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="event.stopPropagation();toggleAuditView()">Audit</button><span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span><span class="expand-btn" onclick="event.stopPropagation();toggleColPanel()" title="Column settings" style="font-size:14px;margin-left:2px;">⚙</span></div></div><div class="sec-body">
+<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;align-items:center;gap:0;margin-left:auto;"><button class="btn btn-outline" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="insertAddRow(event)">+ New Field</button><button class="btn btn-ghost" id="auditBtn" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="event.stopPropagation();toggleAuditView()">Audit</button><span class="expand-btn" onclick="event.stopPropagation();toggleColPanel()" title="Column settings" style="font-size:13px;">⚙</span><span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></div></div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
     <div class="seg scope-toggle" style="margin:0;flex-shrink:0;">
@@ -2855,7 +2860,7 @@ renderFields();
 cascade();
 
 /* ═══ COLUMN VISIBILITY ═══ */
-const COL_DEFS = [
+const COL_DEFS_DEFAULT = [
   { key: 'idx', label: '#', locked: true },
   { key: 'status', label: 'Status' },
   { key: 'origin', label: 'System' },
@@ -2868,15 +2873,21 @@ const COL_DEFS = [
   { key: 'v', label: 'Valcre Field ID' },
   { key: 'actions', label: 'Actions', locked: true }
 ];
-// Load saved visibility or default all on
-let colVisible = JSON.parse(localStorage.getItem('valta-col-visible') || 'null') || {};
-COL_DEFS.forEach(c => { if (colVisible[c.key] === undefined) colVisible[c.key] = true; });
+// Load saved order + visibility, or use defaults
+let colState = JSON.parse(localStorage.getItem('valta-col-state') || 'null');
+if (!colState) {
+  colState = COL_DEFS_DEFAULT.map(c => ({ key: c.key, label: c.label, locked: !!c.locked, visible: true }));
+}
+// Ensure any new columns from defaults are added
+COL_DEFS_DEFAULT.forEach(d => {
+  if (!colState.find(c => c.key === d.key)) colState.push({ key: d.key, label: d.label, locked: !!d.locked, visible: true });
+});
+function saveColState() { localStorage.setItem('valta-col-state', JSON.stringify(colState)); }
 
+let colDragIdx = null;
 function toggleColPanel() {
   const panel = document.getElementById('colPanel');
-  const overlay = document.getElementById('colOverlay');
-  const isOpen = panel.classList.contains('open');
-  if (isOpen) { closeColPanel(); } else { openColPanel(); }
+  panel.classList.contains('open') ? closeColPanel() : openColPanel();
 }
 function openColPanel() {
   document.getElementById('colOverlay').classList.add('open');
@@ -2889,38 +2900,73 @@ function closeColPanel() {
 }
 function renderColPanel() {
   const body = document.getElementById('colPanelBody');
-  body.innerHTML = COL_DEFS.map(c => {
+  body.innerHTML = colState.map((c, i) => {
     const locked = c.locked ? ' col-locked' : '';
-    const checked = colVisible[c.key] ? ' checked' : '';
-    return '<div class="col-item'+locked+'"><input type="checkbox" id="colChk-'+c.key+'"'+checked+(c.locked?' disabled':'')+' onchange="toggleColVisibility(\''+c.key+'\',this.checked)"><label for="colChk-'+c.key+'">'+c.label+'</label></div>';
+    const checked = c.visible ? ' checked' : '';
+    const draggable = c.locked ? '' : ' draggable="true"';
+    return '<div class="col-item'+locked+'" data-col-idx="'+i+'"'+draggable+' ondragstart="colDragStart(event,'+i+')" ondragover="colDragOver(event,'+i+')" ondragleave="colDragLeave(event)" ondrop="colDrop(event,'+i+')" ondragend="colDragEnd(event)">' +
+      '<span class="col-handle">⠿</span>' +
+      '<input type="checkbox" id="colChk-'+c.key+'"'+checked+(c.locked?' disabled':'')+' onchange="toggleColVisibility(\''+c.key+'\',this.checked)">' +
+      '<label for="colChk-'+c.key+'">'+c.label+'</label></div>';
   }).join('');
 }
 function toggleColVisibility(key, visible) {
-  colVisible[key] = visible;
-  localStorage.setItem('valta-col-visible', JSON.stringify(colVisible));
-  applyColVisibility();
+  const c = colState.find(x => x.key === key);
+  if (c) c.visible = visible;
+  saveColState();
+  applyColState();
 }
-function applyColVisibility() {
-  // Hide/show columns by index in the fi-table
+function colDragStart(e, idx) { if (colState[idx].locked) { e.preventDefault(); return; } colDragIdx = idx; e.target.classList.add('col-dragging'); e.dataTransfer.effectAllowed = 'move'; }
+function colDragOver(e, idx) { e.preventDefault(); if (colDragIdx === null || colState[idx].locked) return; document.querySelectorAll('.col-item').forEach(el => el.classList.remove('col-dragover')); e.currentTarget.classList.add('col-dragover'); }
+function colDragLeave(e) { e.currentTarget.classList.remove('col-dragover'); }
+function colDrop(e, idx) {
+  e.preventDefault();
+  document.querySelectorAll('.col-item').forEach(el => el.classList.remove('col-dragover'));
+  if (colDragIdx === null || colDragIdx === idx || colState[idx].locked) return;
+  const item = colState.splice(colDragIdx, 1)[0];
+  colState.splice(idx, 0, item);
+  saveColState();
+  renderColPanel();
+  applyColState();
+}
+function colDragEnd(e) { colDragIdx = null; document.querySelectorAll('.col-item').forEach(el => { el.classList.remove('col-dragging'); el.classList.remove('col-dragover'); }); }
+
+function applyColState() {
+  // Reorder + hide/show columns in the fi-table
   const table = document.querySelector('#fiTableWrap .fi-table');
   if (!table) return;
-  COL_DEFS.forEach((c, i) => {
-    const display = colVisible[c.key] ? '' : 'none';
-    // Header
-    const th = table.querySelector('thead tr').children[i];
-    if (th) th.style.display = display;
-    // Body rows
-    table.querySelectorAll('tbody tr:not(.fi-options-row)').forEach(tr => {
-      const td = tr.children[i];
-      if (td) td.style.display = display;
+  // Build a mapping: current DOM index for each key
+  const keyToDefaultIdx = {};
+  COL_DEFS_DEFAULT.forEach((c, i) => keyToDefaultIdx[c.key] = i);
+
+  // Reorder header
+  const thead = table.querySelector('thead tr');
+  const thCells = Array.from(thead.children);
+  // Clear and re-append in new order
+  while (thead.firstChild) thead.removeChild(thead.firstChild);
+  colState.forEach(c => {
+    const origIdx = keyToDefaultIdx[c.key];
+    const th = thCells[origIdx];
+    if (th) { th.style.display = c.visible ? '' : 'none'; thead.appendChild(th); }
+  });
+
+  // Reorder body rows
+  table.querySelectorAll('tbody tr:not(.fi-options-row)').forEach(tr => {
+    const cells = Array.from(tr.children);
+    if (cells.length < COL_DEFS_DEFAULT.length) return; // skip malformed rows
+    while (tr.firstChild) tr.removeChild(tr.firstChild);
+    colState.forEach(c => {
+      const origIdx = keyToDefaultIdx[c.key];
+      const td = cells[origIdx];
+      if (td) { td.style.display = c.visible ? '' : 'none'; tr.appendChild(td); }
     });
   });
 }
 // Apply on page load
-document.addEventListener('DOMContentLoaded', function() { setTimeout(applyColVisibility, 100); });
-// Re-apply after renderFields (hook into existing function)
+document.addEventListener('DOMContentLoaded', function() { setTimeout(applyColState, 100); });
+// Re-apply after renderFields
 const _origRenderFields = renderFields;
-renderFields = function() { _origRenderFields(); applyColVisibility(); };
+renderFields = function() { _origRenderFields(); applyColState(); };
 
 /* ═══ DASHBOARD LAYOUT EDIT MODE ═══ */
 let inEditMode = false;

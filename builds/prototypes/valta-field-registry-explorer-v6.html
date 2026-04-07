@@ -396,6 +396,12 @@
   .col-item.col-dragging { opacity: .5; background: var(--hover); border-radius: 4px; }
   .col-item.col-dragover { border-top: 2px solid var(--text); padding-top: 4px; }
 
+  /* Tooltips */
+  .tip-wrap { position: relative; display: inline-flex; }
+  .tip-wrap .tip { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); font: 500 10px/1 system-ui,sans-serif; padding: 4px 8px; border-radius: 4px; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .15s; z-index: 50; }
+  .tip-wrap .tip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 4px solid transparent; border-top-color: var(--text); }
+  .tip-wrap:hover .tip { opacity: 1; }
+
   /* Intake form edit mode */
   .in-edit-bar { display: none; max-width: 960px; margin: 0 auto 8px; padding: 8px 14px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius); font-size: 12px; color: #1e40af; }
   .in-edit-bar.active { display: flex; align-items: center; justify-content: space-between; }
@@ -694,7 +700,7 @@ E  Authorized Use          ──┘</div>
 
 <!-- ═══ FIELD INDEX ═══ -->
 <div class="panel active" id="panel-index">
-<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;align-items:center;gap:0;margin-left:auto;"><button class="btn btn-outline" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="insertAddRow(event)">+ New Field</button><button class="btn btn-ghost" id="auditBtn" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="event.stopPropagation();toggleAuditView()">Audit</button><span class="expand-btn" onclick="event.stopPropagation();toggleColPanel()" title="Manage Columns" style="font-size:13px;">⚙</span><span class="expand-btn" onclick="toggleFullWidth(event)" title="Expand">⋮⋮</span></div></div><div class="sec-body">
+<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;align-items:center;gap:0;margin-left:auto;"><button class="btn btn-outline" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="insertAddRow(event)">+ New Field</button><button class="btn btn-ghost" id="auditBtn" style="font-size:11px;padding:4px 10px;margin-right:6px;" onclick="event.stopPropagation();toggleAuditView()">Audit</button><span class="tip-wrap"><span class="expand-btn" onclick="event.stopPropagation();toggleColPanel()" style="font-size:13px;">⚙</span><span class="tip">Manage Columns</span></span><span class="tip-wrap"><span class="expand-btn" onclick="toggleFullWidth(event)">⋮⋮</span><span class="tip">Expand</span></span></div></div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
     <div class="seg scope-toggle" style="margin:0;flex-shrink:0;">

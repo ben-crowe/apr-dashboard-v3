@@ -3097,7 +3097,20 @@ function toggleFullWidth(e) {
   const sec = document.getElementById('registrySec');
   isFullWidth = !isFullWidth;
   if (isFullWidth) {
-    sec.style.width = Math.min(1400, window.innerWidth - 40) + 'px';
+    // Measure actual table content width needed
+    const table = document.querySelector('#fiTableWrap .fi-table');
+    if (table) {
+      // Temporarily remove width constraint so table renders at natural size
+      const oldWidth = sec.style.width;
+      sec.style.width = '9999px';
+      const naturalWidth = table.scrollWidth + 44; // 44 = sec-body padding (20+20) + border (2+2)
+      sec.style.width = oldWidth;
+      // Use natural width, capped at viewport, floored at default 960
+      const targetWidth = Math.max(960, Math.min(naturalWidth, window.innerWidth - 40));
+      sec.style.width = targetWidth + 'px';
+    } else {
+      sec.style.width = Math.min(1400, window.innerWidth - 40) + 'px';
+    }
   } else {
     sec.style.width = '';
   }

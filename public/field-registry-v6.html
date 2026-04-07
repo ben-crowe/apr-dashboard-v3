@@ -3106,19 +3106,20 @@ function toggleFullWidth(e) {
     // Measure actual table content width needed
     const table = document.querySelector('#fiTableWrap .fi-table');
     if (table) {
-      // Temporarily remove width constraint so table renders at natural size
       const oldWidth = sec.style.width;
       sec.style.width = '9999px';
-      const naturalWidth = table.scrollWidth + 44; // 44 = sec-body padding (20+20) + border (2+2)
+      const naturalWidth = table.scrollWidth + 44;
       sec.style.width = oldWidth;
-      // Use natural width, capped at viewport, floored at default 960
       const targetWidth = Math.max(960, Math.min(naturalWidth, window.innerWidth - 40));
       sec.style.width = targetWidth + 'px';
     } else {
       sec.style.width = Math.min(1400, window.innerWidth - 40) + 'px';
     }
+    // Center the expanded card so it grows from both sides
+    sec.style.margin = '0 auto 14px';
   } else {
     sec.style.width = '';
+    sec.style.margin = '';
   }
 }
 

@@ -713,7 +713,7 @@ E  Authorized Use          ──┘</div>
   <!-- Checkbox filters: two rows -->
   <div style="display:flex;gap:20px;margin-bottom:10px;flex-wrap:wrap;">
     <div style="display:flex;align-items:center;gap:12px;">
-      <label class="cb-filter"><input type="checkbox" value="has-dropdown" onchange="applyFilters()"><span>Has Dropdown</span></label>
+      <label class="cb-filter"><input type="checkbox" value="has-dropdown" onchange="applyFilters()"><span>Dropdown List</span></label>
       <label class="cb-filter"><input type="checkbox" value="logic" onchange="applyFilters()"><span>Logic Fields</span></label>
     </div>
     <div style="display:flex;align-items:center;gap:12px;">
@@ -1350,10 +1350,11 @@ function renderFields() {
       let optRows = opts.map(opt => {
         return '<div style="padding:2px 0 2px 16px;font-size:11px;color:var(--text);">'+opt+'</div>';
       }).join('');
+      const valcreId = f.v || '';
       tb.innerHTML += '<tr class="fi-options-row"><td colspan="8" style="border-bottom:none;background:transparent;"></td><td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);">' +
         '<div style="font-size:11px;font-weight:600;color:var(--text-3);margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);">'+f.l+'</div>' +
         optRows +
-      '</td><td colspan="'+(COL_COUNT-9)+'" style="border-bottom:none;background:transparent;"></td></tr>';
+      '</td><td style="border-bottom:none;background:transparent;vertical-align:top;padding-top:8px;">'+(valcreId ? '<div style="font-size:10px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+valcreId+'</div>' : '')+'</td><td style="border-bottom:none;background:transparent;"></td></tr>';
     }
   });
   const fOriginVal = document.getElementById('filterOrigin').value;

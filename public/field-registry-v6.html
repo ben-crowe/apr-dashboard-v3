@@ -1350,11 +1350,18 @@ function renderFields() {
       let optRows = opts.map(opt => {
         return '<div style="padding:2px 0 2px 16px;font-size:11px;color:var(--text);">'+opt+'</div>';
       }).join('');
+      // Find current position of Dropdown List column after reordering
+      const ddColIdx = colState.findIndex(c => c.key === 'd');
+      const colsBefore = ddColIdx >= 0 ? ddColIdx : 8;
+      const colsAfter = colState.length - colsBefore - 1;
       const valcreId = f.v || '';
-      tb.innerHTML += '<tr class="fi-options-row"><td colspan="8" style="border-bottom:none;background:transparent;"></td><td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);">' +
-        '<div style="font-size:11px;font-weight:600;color:var(--text-3);margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);">'+f.l+'</div>' +
-        optRows +
-      '</td><td style="border-bottom:none;background:transparent;vertical-align:top;padding-top:8px;">'+(valcreId ? '<div style="font-size:10px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+valcreId+'</div>' : '')+'</td><td style="border-bottom:none;background:transparent;"></td></tr>';
+      // Build cells: empty before | dropdown options | valcre id + empty after
+      let expandCells = '';
+      for (let ci = 0; ci < colsBefore; ci++) expandCells += '<td style="border-bottom:none;background:transparent;'+(colState[ci] && !colState[ci].visible?'display:none;':'')+'"></td>';
+      expandCells += '<td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);'+(colState[ddColIdx] && !colState[ddColIdx].visible?'display:none;':'')+'">' +
+        '<div style="font-size:11px;font-weight:600;color:var(--text-3);margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);">'+f.l+'</div>' + optRows + '</td>';
+      for (let ci = colsBefore + 1; ci < colState.length; ci++) expandCells += '<td style="border-bottom:none;background:transparent;'+(colState[ci] && !colState[ci].visible?'display:none;':'')+'"></td>';
+      tb.innerHTML += '<tr class="fi-options-row">' + expandCells + '</tr>';
     }
   });
   const fOriginVal = document.getElementById('filterOrigin').value;
@@ -2352,9 +2359,7 @@ function csRenderExistingListExpand(expandTr) {
       '<input style="font:inherit;font-size:11px;color:var(--text);border:none;border-bottom:1px solid var(--border);background:transparent;flex:1;padding:2px 0;outline:none;height:20px;" value="'+(o||'')+'" oninput="csEditingListOpts['+i+']=this.value" onfocus="this.style.borderBottomColor=\'var(--text)\'" onblur="this.style.borderBottomColor=\'\'">' +
       '<span style="color:var(--text-3);cursor:pointer;font-size:12px;" onclick="csRemoveExistOpt('+i+')" title="Remove">✕</span></div>';
   });
-  expandTr.innerHTML =
-    '<td colspan="8" style="border-bottom:none;background:transparent;"></td>' +
-    '<td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);background:#fafafa !important;">' +
+  const contentHtml =
       '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);">' +
         '<span style="font-size:11px;font-weight:600;color:var(--text-3);">'+friendlyName+'</span>' +
         '<span style="font-size:10px;color:var(--text-3);">'+csEditingListOpts.length+' options</span>' +
@@ -2363,9 +2368,8 @@ function csRenderExistingListExpand(expandTr) {
       '<div style="padding:2px 0 2px 16px;display:flex;align-items:center;justify-content:space-between;">' +
         '<span style="font:400 11px/1 system-ui,sans-serif;color:var(--text-3);cursor:pointer;" onclick="csAddExistOpt()">+ Add option</span>' +
         '<button onclick="csConfirmExistOpts(this)" style="font:500 10px/1 system-ui,sans-serif;padding:3px 10px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-2);cursor:pointer;transition:all .12s;">Confirm Options</button>' +
-      '</div>' +
-    '</td>' +
-    '<td colspan="2" style="border-bottom:none;background:transparent;"></td>';
+      '</div>';
+  expandTr.innerHTML = ddExpandCells(contentHtml);
 }
 function csAddExistOpt() {
   csEditingListOpts.push('');
@@ -2536,6 +2540,21 @@ function onDdListChange(sel) {
     hideNewDdPopover();
   }
 }
+// Helper: build expand row cells aligned to current Dropdown List column position
+function ddExpandCells(contentHtml) {
+  const ddIdx = colState.findIndex(c => c.key === 'd');
+  let cells = '';
+  for (let i = 0; i < colState.length; i++) {
+    const hidden = !colState[i].visible ? 'display:none;' : '';
+    if (i === ddIdx) {
+      cells += '<td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);background:#fafafa !important;'+hidden+'">' + contentHtml + '</td>';
+    } else {
+      cells += '<td style="border-bottom:none;background:transparent;'+hidden+'"></td>';
+    }
+  }
+  return cells;
+}
+
 function showNewDdPopover(sel) {
   newDdPopoverOpen = true;
   newDdOptions = [''];
@@ -2571,18 +2590,15 @@ function renderNewDdExpand(expandTr) {
       '<input style="font:inherit;font-size:11px;color:var(--text);border:none;border-bottom:1px solid var(--border);background:transparent;flex:1;padding:2px 0;outline:none;height:20px;" value="'+(o||'')+'" placeholder="Option '+(i+1)+'..." oninput="newDdOptions['+i+']=this.value;csNewListAutoLabel()" onfocus="this.style.borderBottomColor=\'var(--text)\'" onblur="this.style.borderBottomColor=\'\'">' +
       '<span style="color:var(--text-3);cursor:pointer;font-size:12px;" onclick="removeNewDdOpt('+i+')" title="Remove">✕</span></div>';
   });
-  expandTr.innerHTML =
-    '<td colspan="8" style="border-bottom:none;background:transparent;"></td>' +
-    '<td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);background:#fafafa !important;">' +
+  const contentHtml =
       '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);">' +
         '<input id="fiNewDdName" style="font:inherit;font-size:11px;font-weight:600;color:var(--text);border:none;background:transparent;flex:1;outline:none;" placeholder="List name..." value="'+(expandTr.dataset?.listName||'')+'" oninput="this.closest(\'tr\').dataset.listName=this.value;csNewListAutoLabel()">' +
         '<span style="font-size:10px;color:var(--text-3);">'+newDdOptions.filter(o=>o.trim()).length+' options</span>' +
       '</div>' +
       optsHtml +
       '<div style="padding:2px 0 2px 16px;display:flex;align-items:center;justify-content:space-between;"><span style="font:400 11px/1 system-ui,sans-serif;color:var(--text-3);cursor:pointer;" onclick="addNewDdOpt()">+ Add option</span>' +
-      '<button onclick="csConfirmDdOptions(this)" style="font:500 10px/1 system-ui,sans-serif;padding:3px 10px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-2);cursor:pointer;transition:all .12s;" id="csDdConfirmBtn">Confirm Options</button></div>' +
-    '</td>' +
-    '<td colspan="2" style="border-bottom:none;background:transparent;"></td>';
+      '<button onclick="csConfirmDdOptions(this)" style="font:500 10px/1 system-ui,sans-serif;padding:3px 10px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-2);cursor:pointer;transition:all .12s;" id="csDdConfirmBtn">Confirm Options</button></div>';
+  expandTr.innerHTML = ddExpandCells(contentHtml);
 }
 function addNewDdOpt(inp) {
   if (inp && inp.value) {

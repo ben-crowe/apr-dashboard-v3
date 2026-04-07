@@ -3136,7 +3136,10 @@ function toggleFullWidth(e) {
   });
   document.addEventListener('mousemove', e => {
     if (!dragging) return;
-    const newW = Math.max(800, startW + (e.clientX - startX));
+    // Cap at table's natural content width
+    const table = sec.querySelector('.fi-table');
+    const maxW = table ? table.scrollWidth + 44 : 9999;
+    const newW = Math.min(maxW, Math.max(800, startW + (e.clientX - startX)));
     sec.style.width = newW + 'px';
   });
   document.addEventListener('mouseup', () => {

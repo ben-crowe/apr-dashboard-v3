@@ -3102,22 +3102,29 @@ function toggleFullWidth(e) {
   e.stopPropagation();
   const sec = document.getElementById('registrySec');
   isFullWidth = !isFullWidth;
+  const panel = document.getElementById('panel-index');
   if (isFullWidth) {
     // Measure actual table content width needed
     const table = document.querySelector('#fiTableWrap .fi-table');
+    let targetWidth;
     if (table) {
-      const oldWidth = sec.style.width;
+      // Temporarily unconstrain to measure natural table width
+      const oldPanelMax = panel.style.maxWidth;
+      const oldSecWidth = sec.style.width;
+      panel.style.maxWidth = 'none';
       sec.style.width = '9999px';
       const naturalWidth = table.scrollWidth + 44;
-      sec.style.width = oldWidth;
-      const targetWidth = Math.max(960, Math.min(naturalWidth, window.innerWidth - 40));
-      sec.style.width = targetWidth + 'px';
+      panel.style.maxWidth = oldPanelMax;
+      sec.style.width = oldSecWidth;
+      targetWidth = Math.max(960, Math.min(naturalWidth, window.innerWidth - 40));
     } else {
-      sec.style.width = Math.min(1400, window.innerWidth - 40) + 'px';
+      targetWidth = Math.min(1400, window.innerWidth - 40);
     }
-    // Center the expanded card so it grows from both sides
-    sec.style.margin = '0 auto 14px';
+    // Widen the panel container — it has the max-width:960px + margin:auto that centers
+    panel.style.maxWidth = targetWidth + 'px';
+    sec.style.width = '';
   } else {
+    panel.style.maxWidth = '';
     sec.style.width = '';
     sec.style.margin = '';
   }

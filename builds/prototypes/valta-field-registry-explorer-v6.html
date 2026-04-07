@@ -2336,13 +2336,15 @@ function csOnDdStep(sel) {
 // Show existing dropdown list options as editable expand row
 let csEditingListName = null; // track which list is being edited
 let csEditingListOpts = []; // working copy of options
+let csExistListEditing = false; // view vs edit mode for existing list expand
+
 function csShowExistingListExpand(listName, parentTr) {
-  hideNewDdPopover(); // clean up any new-list expand
-  // Remove any previous existing-list expand
+  hideNewDdPopover();
   const prev = document.getElementById('fiExistDdExpandRow');
   if (prev) prev.remove();
   csEditingListName = listName;
   csEditingListOpts = [...(DROPDOWN_OPTIONS[listName] || [])];
+  csExistListEditing = false; // start in view mode
   const expandTr = document.createElement('tr');
   expandTr.className = 'fi-options-row';
   expandTr.id = 'fiExistDdExpandRow';
@@ -2353,13 +2355,17 @@ function csRenderExistingListExpand(expandTr) {
   if (!expandTr) expandTr = document.getElementById('fiExistDdExpandRow');
   if (!expandTr) return;
   const friendlyName = CS_ALLOWED_LISTS[csEditingListName] || csEditingListName.replace(/^List/,'');
-  let optsHtml = '';
-  csEditingListOpts.forEach((o, i) => {
-    optsHtml += '<div style="padding:2px 0 2px 16px;display:flex;align-items:center;gap:6px;">' +
-      '<input style="font:inherit;font-size:11px;color:var(--text);border:none;border-bottom:1px solid var(--border);background:transparent;flex:1;padding:2px 0;outline:none;height:20px;" value="'+(o||'')+'" oninput="csEditingListOpts['+i+']=this.value" onfocus="this.style.borderBottomColor=\'var(--text)\'" onblur="this.style.borderBottomColor=\'\'">' +
-      '<span style="color:var(--text-3);cursor:pointer;font-size:12px;" onclick="csRemoveExistOpt('+i+')" title="Remove">✕</span></div>';
-  });
-  const contentHtml =
+  let contentHtml;
+
+  if (csExistListEditing) {
+    // Edit mode — inputs, add/remove, confirm
+    let optsHtml = '';
+    csEditingListOpts.forEach((o, i) => {
+      optsHtml += '<div style="padding:2px 0 2px 16px;display:flex;align-items:center;gap:6px;">' +
+        '<input style="font:inherit;font-size:11px;color:var(--text);border:none;border-bottom:1px solid var(--border);background:transparent;flex:1;padding:2px 0;outline:none;height:20px;" value="'+(o||'')+'" oninput="csEditingListOpts['+i+']=this.value" onfocus="this.style.borderBottomColor=\'var(--text)\'" onblur="this.style.borderBottomColor=\'\'">' +
+        '<span style="color:var(--text-3);cursor:pointer;font-size:12px;" onclick="csRemoveExistOpt('+i+')" title="Remove">✕</span></div>';
+    });
+    contentHtml =
       '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);">' +
         '<span style="font-size:11px;font-weight:600;color:var(--text-3);">'+friendlyName+'</span>' +
         '<span style="font-size:10px;color:var(--text-3);">'+csEditingListOpts.length+' options</span>' +
@@ -2369,6 +2375,17 @@ function csRenderExistingListExpand(expandTr) {
         '<span style="font:400 11px/1 system-ui,sans-serif;color:var(--text-3);cursor:pointer;" onclick="csAddExistOpt()">+ Add option</span>' +
         '<button onclick="csConfirmExistOpts(this)" style="font:500 10px/1 system-ui,sans-serif;padding:3px 10px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text-2);cursor:pointer;transition:all .12s;">Confirm Options</button>' +
       '</div>';
+  } else {
+    // View mode — plain text list with edit link at bottom
+    let optsHtml = '';
+    csEditingListOpts.forEach(o => {
+      optsHtml += '<div style="padding:2px 0 2px 16px;font-size:11px;color:var(--text);">'+o+'</div>';
+    });
+    contentHtml =
+      '<div style="font-size:11px;font-weight:600;color:var(--text-3);margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);">'+friendlyName+'</div>' +
+      optsHtml +
+      '<div style="padding:4px 0 0 16px;"><span style="font:400 10px/1 system-ui,sans-serif;color:var(--text-3);cursor:pointer;" onclick="csExistListEditing=true;csRenderExistingListExpand()">edit options</span></div>';
+  }
   expandTr.innerHTML = ddExpandCells(contentHtml);
 }
 function csAddExistOpt() {

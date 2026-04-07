@@ -2970,7 +2970,7 @@ function toggleFullWidth(e) {
   const sec = document.getElementById('registrySec');
   isFullWidth = !isFullWidth;
   if (isFullWidth) {
-    sec.style.width = (window.innerWidth - 40) + 'px';
+    sec.style.width = Math.min(1400, window.innerWidth - 40) + 'px';
   } else {
     sec.style.width = '';
   }

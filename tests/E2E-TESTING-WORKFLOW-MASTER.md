@@ -22,7 +22,19 @@ Reconciled live with Ben + qa-agent CLI inventory (`tests/CLI-INVENTORY-PREFLIGH
 7. **Codex Computer Use is IN the team** (Ben on GPT-5.5, confirmed). Role = OPERATOR for the two human-action phases: intake **form-fill** (Phase 1/2 trigger) + DocuSeal **portal-sign** (Phase 6). It drives the real logged-in browser. Requires one-time setup: GPT-5.5 + Chrome "Always allow" + portals left logged in. Primary verification stays PROGRAMMATIC (DB row / API status) — Codex acts, the data trail proves; capturer ≠ verifier still holds. Codex capability notes: `~/.claude/learnings/codex.txt`.
 8. **Valcre has NO test env** — every call is prod-as-Chris. `valcre-auth.sh` initially errored (exit 3) then was used successfully for the pin-job cross-check. Treat auth as fragile; re-verify before a run. Missing scripts: `valcre-get-by-number`, `valcre-delete-job` (prod-risk; rely on modify-not-create), `valcre-reset-test-job`.
 
+**Test surface / URLs (locked):**
+- **Shared testing zone = the HOSTED Vercel app** `https://apr-dashboard-v3.vercel.app` (confirmed live HTTP 200). Stable URL that Ben, Codex, and agents all hit — no local-server drift. Local Vite (5173) is for code-change work only (e.g. the clickup.ts:11 fix), not workflow runs.
+- **Intake form (our test stand-in for the client's website form) = `/appraisal-request-form`** (also `/`). We submit HERE, never the client's actual site. Submissions land in our live Supabase and flow the chain.
+- **No custom Valta domain is configured for the app** — it's the `.vercel.app` host. (The `valta.ca` strings in code are report-template appraiser contact content, not the app host.) If a Valta custom domain gets added later, update this line.
+- Both hosted and local hit the SAME live backend (Supabase + Valcre prod-as-Chris + ClickUp test list 901709622357 + DocuSeal/Resend sandbox) — reinforces the pin-job + name-match guardrails.
+
+**ClickUp environment path (test → promote, locked):**
+- **ALL testing creates tasks in BEN'S BC ClickUp** — test workspace `8555561`, list `901709622357` ("APR Test - Valta Mirror"). It LOOKS like we're filling Ben's ClickUp, by design. NEVER the client's Valta ClickUp during testing.
+- **Promotion to the client's Valta ClickUp** (workspace `9014181018`, prod list `901402094744`) is a deliberate, BEN-GATED switch done only AFTER a flow is dialed — mechanically just retargeting the list ID + token in `clickup.ts`.
+- **Mirror fidelity matters for "dialed in":** the test list has 27 fields, prod Valta has 49. Testing in BC ClickUp only fully represents the Valta result if the mirror list carries the same fields — so either bring "APR Test - Valta Mirror" up to the 49 prod fields, or accept a final Valta-side validation at promotion. (Follow-up.)
+
 **Follow-ups logged (not blocking the first run):**
+- Bring the test "Valta Mirror" list (901709622357) up to the full 49 prod fields so BC-ClickUp testing truly mirrors the Valta result (else flag a promotion-time Valta check).
 - Clean up STALE DB records whose VAL numbers no longer match Valcre (261028→Bentley, 251031→Barrie, 261029/251032 deleted) so no agent ever touches a real client job. Delete/flag in our app.
 - Archive the 2 duplicate "Valta Mirror" lists (`901709621852`, `901709621790`); keep `901709622357`.
 - Stand up a dedicated **"E2E TEST — DO NOT DELETE"** Valcre job to permanently end the reassignment hazard.

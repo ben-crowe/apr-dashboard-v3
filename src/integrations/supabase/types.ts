@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      clickup_connections: {
+        Row: {
+          access_token: string
+          authorized_workspaces: Json | null
+          created_at: string | null
+          id: string
+          refresh_token: string | null
+          updated_at: string | null
+          user_id: string
+          workspace_id: string
+        }
+        Insert: {
+          access_token: string
+          authorized_workspaces?: Json | null
+          created_at?: string | null
+          id?: string
+          refresh_token?: string | null
+          updated_at?: string | null
+          user_id: string
+          workspace_id: string
+        }
+        Update: {
+          access_token?: string
+          authorized_workspaces?: Json | null
+          created_at?: string | null
+          id?: string
+          refresh_token?: string | null
+          updated_at?: string | null
+          user_id?: string
+          workspace_id?: string
+        }
+        Relationships: []
+      }
       client_profiles: {
         Row: {
           address: string | null
@@ -477,85 +510,259 @@ export type Database = {
           },
         ]
       }
+      job_images: {
+        Row: {
+          adjustments: Json | null
+          ai_category: string | null
+          ai_confidence: number | null
+          ai_labels: Json | null
+          ai_subcategory: string | null
+          caption: string | null
+          captured_at: string | null
+          created_at: string | null
+          crop_data: Json | null
+          exif_data: Json | null
+          file_size: number | null
+          gps_lat: number | null
+          gps_lng: number | null
+          height: number | null
+          id: string
+          is_blurry: boolean | null
+          is_overexposed: boolean | null
+          is_underexposed: boolean | null
+          job_id: string
+          original_filename: string
+          page_assignment: string | null
+          print_path: string | null
+          quality_score: number | null
+          selected_for_report: boolean | null
+          slot_position: number | null
+          status: string | null
+          storage_path: string
+          thumbnail_path: string | null
+          updated_at: string | null
+          user_category: string | null
+          user_subcategory: string | null
+          web_path: string | null
+          width: number | null
+        }
+        Insert: {
+          adjustments?: Json | null
+          ai_category?: string | null
+          ai_confidence?: number | null
+          ai_labels?: Json | null
+          ai_subcategory?: string | null
+          caption?: string | null
+          captured_at?: string | null
+          created_at?: string | null
+          crop_data?: Json | null
+          exif_data?: Json | null
+          file_size?: number | null
+          gps_lat?: number | null
+          gps_lng?: number | null
+          height?: number | null
+          id?: string
+          is_blurry?: boolean | null
+          is_overexposed?: boolean | null
+          is_underexposed?: boolean | null
+          job_id: string
+          original_filename: string
+          page_assignment?: string | null
+          print_path?: string | null
+          quality_score?: number | null
+          selected_for_report?: boolean | null
+          slot_position?: number | null
+          status?: string | null
+          storage_path: string
+          thumbnail_path?: string | null
+          updated_at?: string | null
+          user_category?: string | null
+          user_subcategory?: string | null
+          web_path?: string | null
+          width?: number | null
+        }
+        Update: {
+          adjustments?: Json | null
+          ai_category?: string | null
+          ai_confidence?: number | null
+          ai_labels?: Json | null
+          ai_subcategory?: string | null
+          caption?: string | null
+          captured_at?: string | null
+          created_at?: string | null
+          crop_data?: Json | null
+          exif_data?: Json | null
+          file_size?: number | null
+          gps_lat?: number | null
+          gps_lng?: number | null
+          height?: number | null
+          id?: string
+          is_blurry?: boolean | null
+          is_overexposed?: boolean | null
+          is_underexposed?: boolean | null
+          job_id?: string
+          original_filename?: string
+          page_assignment?: string | null
+          print_path?: string | null
+          quality_score?: number | null
+          selected_for_report?: boolean | null
+          slot_position?: number | null
+          status?: string | null
+          storage_path?: string
+          thumbnail_path?: string | null
+          updated_at?: string | null
+          user_category?: string | null
+          user_subcategory?: string | null
+          web_path?: string | null
+          width?: number | null
+        }
+        Relationships: []
+      }
       job_loe_details: {
         Row: {
+          analysis_level: string | null
           appraisal_fee: number | null
+          assignment_type: string | null
+          authorized_use: string | null
           clickup_task_id: string | null
           clickup_task_url: string | null
+          cmhc_financing: string | null
           created_at: string
+          delivery_comments: string | null
           delivery_date: string | null
+          desktop_report: string | null
           disbursement_percentage: string | null
+          docuseal_submission_id: string | null
+          effective_date: string | null
           id: string
           internal_comments: string | null
           job_id: string | null
           job_number: string | null
+          job_status: string | null
+          lead_appraiser: string | null
           payment_amount: number | null
+          payment_comments: string | null
           payment_paid_date: string | null
           payment_terms: string | null
           property_rights_appraised: string | null
+          purpose: string | null
+          report_format: string | null
           report_type: string | null
+          request_date: string | null
           retainer_amount: string | null
           retainer_paid_date: string | null
           scope_of_work: string | null
+          signed_at: string | null
+          signed_date: string | null
+          signed_document_url: string | null
           special_instructions: string | null
+          transaction_status: string | null
           updated_at: string
           valcre_job_id: number | null
           valuation_premises: string | null
+          value_scenarios: string | null
+          zoning_status: string | null
         }
         Insert: {
+          analysis_level?: string | null
           appraisal_fee?: number | null
+          assignment_type?: string | null
+          authorized_use?: string | null
           clickup_task_id?: string | null
           clickup_task_url?: string | null
+          cmhc_financing?: string | null
           created_at?: string
+          delivery_comments?: string | null
           delivery_date?: string | null
+          desktop_report?: string | null
           disbursement_percentage?: string | null
+          docuseal_submission_id?: string | null
+          effective_date?: string | null
           id?: string
           internal_comments?: string | null
           job_id?: string | null
           job_number?: string | null
+          job_status?: string | null
+          lead_appraiser?: string | null
+          payment_amount?: number | null
+          payment_comments?: string | null
+          payment_paid_date?: string | null
           payment_terms?: string | null
           property_rights_appraised?: string | null
+          purpose?: string | null
+          report_format?: string | null
           report_type?: string | null
+          request_date?: string | null
           retainer_amount?: string | null
+          retainer_paid_date?: string | null
           scope_of_work?: string | null
+          signed_at?: string | null
+          signed_date?: string | null
+          signed_document_url?: string | null
           special_instructions?: string | null
+          transaction_status?: string | null
           updated_at?: string
           valcre_job_id?: number | null
           valuation_premises?: string | null
+          value_scenarios?: string | null
+          zoning_status?: string | null
         }
         Update: {
+          analysis_level?: string | null
           appraisal_fee?: number | null
+          assignment_type?: string | null
+          authorized_use?: string | null
           clickup_task_id?: string | null
           clickup_task_url?: string | null
+          cmhc_financing?: string | null
           created_at?: string
+          delivery_comments?: string | null
           delivery_date?: string | null
+          desktop_report?: string | null
           disbursement_percentage?: string | null
+          docuseal_submission_id?: string | null
+          effective_date?: string | null
           id?: string
           internal_comments?: string | null
           job_id?: string | null
           job_number?: string | null
+          job_status?: string | null
+          lead_appraiser?: string | null
+          payment_amount?: number | null
+          payment_comments?: string | null
+          payment_paid_date?: string | null
           payment_terms?: string | null
           property_rights_appraised?: string | null
+          purpose?: string | null
+          report_format?: string | null
           report_type?: string | null
+          request_date?: string | null
           retainer_amount?: string | null
+          retainer_paid_date?: string | null
           scope_of_work?: string | null
+          signed_at?: string | null
+          signed_date?: string | null
+          signed_document_url?: string | null
           special_instructions?: string | null
+          transaction_status?: string | null
           updated_at?: string
           valcre_job_id?: number | null
           valuation_premises?: string | null
+          value_scenarios?: string | null
+          zoning_status?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "job_loe_details_job_id_fkey"
             columns: ["job_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "job_submissions"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "job_loe_details_job_id_fkey"
             columns: ["job_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "property_job_history"
             referencedColumns: ["job_id"]
           },
@@ -563,123 +770,123 @@ export type Database = {
       }
       job_property_info: {
         Row: {
+          approaches_to_value: string | null
           assessed_value: number | null
           assessment_year: string | null
+          assignment_type: string | null
           building_size: string | null
           created_at: string
+          desktop_report: string | null
+          environmental_assessment: string | null
           flood_zone: string | null
           gross_land_acres: number | null
           gross_land_sf: number | null
+          heritage_conservation: string | null
           id: string
           improved_assessment_value: number | null
           job_id: string | null
           land_assessment_value: number | null
+          land_metric: string | null
           land_use_designation: string | null
           legal_description: string | null
           number_of_units: number | null
           parcel_number: string | null
           parking_spaces: number | null
+          property_subtype: string | null
+          state_of_improvements: string | null
+          status_of_improvements: string | null
           taxes: number | null
+          tenancy: string | null
           total_assessment_value: number | null
+          transaction_status: string | null
           updated_at: string
           usable_land_acres: number | null
           usable_land_sf: number | null
           utilities: string | null
+          value_timeframe: string | null
           year_built: string | null
           zone_abbreviation: string | null
           zoning_classification: string | null
-          tenancy: string | null
-          state_of_improvements: string | null
-          status_of_improvements: string | null
-          property_subtype: string | null
-          land_metric: string | null
-          environmental_assessment: string | null
-          heritage_conservation: string | null
-          assignment_type: string | null
-          desktop_report: string | null
-          value_timeframe: string | null
-          approaches_to_value: string | null
-          transaction_status: string | null
           zoning_status: string | null
         }
         Insert: {
+          approaches_to_value?: string | null
           assessed_value?: number | null
           assessment_year?: string | null
+          assignment_type?: string | null
           building_size?: string | null
           created_at?: string
+          desktop_report?: string | null
+          environmental_assessment?: string | null
           flood_zone?: string | null
           gross_land_acres?: number | null
           gross_land_sf?: number | null
+          heritage_conservation?: string | null
           id?: string
           improved_assessment_value?: number | null
           job_id?: string | null
           land_assessment_value?: number | null
+          land_metric?: string | null
           land_use_designation?: string | null
           legal_description?: string | null
           number_of_units?: number | null
           parcel_number?: string | null
           parking_spaces?: number | null
+          property_subtype?: string | null
+          state_of_improvements?: string | null
+          status_of_improvements?: string | null
           taxes?: number | null
+          tenancy?: string | null
           total_assessment_value?: number | null
+          transaction_status?: string | null
           updated_at?: string
           usable_land_acres?: number | null
           usable_land_sf?: number | null
           utilities?: string | null
+          value_timeframe?: string | null
           year_built?: string | null
           zone_abbreviation?: string | null
           zoning_classification?: string | null
-          tenancy?: string | null
-          state_of_improvements?: string | null
-          status_of_improvements?: string | null
-          property_subtype?: string | null
-          land_metric?: string | null
-          environmental_assessment?: string | null
-          heritage_conservation?: string | null
-          assignment_type?: string | null
-          desktop_report?: string | null
-          value_timeframe?: string | null
-          approaches_to_value?: string | null
-          transaction_status?: string | null
           zoning_status?: string | null
         }
         Update: {
+          approaches_to_value?: string | null
           assessed_value?: number | null
           assessment_year?: string | null
+          assignment_type?: string | null
           building_size?: string | null
           created_at?: string
+          desktop_report?: string | null
+          environmental_assessment?: string | null
           flood_zone?: string | null
           gross_land_acres?: number | null
           gross_land_sf?: number | null
+          heritage_conservation?: string | null
           id?: string
           improved_assessment_value?: number | null
           job_id?: string | null
           land_assessment_value?: number | null
+          land_metric?: string | null
           land_use_designation?: string | null
           legal_description?: string | null
           number_of_units?: number | null
           parcel_number?: string | null
           parking_spaces?: number | null
+          property_subtype?: string | null
+          state_of_improvements?: string | null
+          status_of_improvements?: string | null
           taxes?: number | null
+          tenancy?: string | null
           total_assessment_value?: number | null
+          transaction_status?: string | null
           updated_at?: string
           usable_land_acres?: number | null
           usable_land_sf?: number | null
           utilities?: string | null
+          value_timeframe?: string | null
           year_built?: string | null
           zone_abbreviation?: string | null
           zoning_classification?: string | null
-          tenancy?: string | null
-          state_of_improvements?: string | null
-          status_of_improvements?: string | null
-          property_subtype?: string | null
-          land_metric?: string | null
-          environmental_assessment?: string | null
-          heritage_conservation?: string | null
-          assignment_type?: string | null
-          desktop_report?: string | null
-          value_timeframe?: string | null
-          approaches_to_value?: string | null
-          transaction_status?: string | null
           zoning_status?: string | null
         }
         Relationships: [
@@ -751,16 +958,20 @@ export type Database = {
           property_id: string | null
           property_name: string | null
           property_type: string
+          property_types: string[] | null
           recent_improvements: string | null
           same_as_client_contact: boolean | null
           section_4_status: string | null
           site_plan_status: string | null
           site_plan_uploaded_at: string | null
           site_plan_url: string | null
+          source: string | null
+          source_metadata: Json | null
           status: string
           survey_certificate_status: string | null
           survey_certificate_uploaded_at: string | null
           survey_certificate_url: string | null
+          tags: Json | null
           tax_notice_status: string | null
           tax_notice_uploaded_at: string | null
           tax_notice_url: string | null
@@ -824,16 +1035,20 @@ export type Database = {
           property_id?: string | null
           property_name?: string | null
           property_type: string
+          property_types?: string[] | null
           recent_improvements?: string | null
           same_as_client_contact?: boolean | null
           section_4_status?: string | null
           site_plan_status?: string | null
           site_plan_uploaded_at?: string | null
           site_plan_url?: string | null
+          source?: string | null
+          source_metadata?: Json | null
           status?: string
           survey_certificate_status?: string | null
           survey_certificate_uploaded_at?: string | null
           survey_certificate_url?: string | null
+          tags?: Json | null
           tax_notice_status?: string | null
           tax_notice_uploaded_at?: string | null
           tax_notice_url?: string | null
@@ -897,16 +1112,20 @@ export type Database = {
           property_id?: string | null
           property_name?: string | null
           property_type?: string
+          property_types?: string[] | null
           recent_improvements?: string | null
           same_as_client_contact?: boolean | null
           section_4_status?: string | null
           site_plan_status?: string | null
           site_plan_uploaded_at?: string | null
           site_plan_url?: string | null
+          source?: string | null
+          source_metadata?: Json | null
           status?: string
           survey_certificate_status?: string | null
           survey_certificate_uploaded_at?: string | null
           survey_certificate_url?: string | null
+          tags?: Json | null
           tax_notice_status?: string | null
           tax_notice_uploaded_at?: string | null
           tax_notice_url?: string | null
@@ -970,6 +1189,129 @@ export type Database = {
             referencedColumns: ["property_id"]
           },
         ]
+      }
+      loe_templates: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_active: boolean | null
+          is_default: boolean | null
+          name: string
+          template_html: string
+          updated_at: string | null
+          version: number
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          name: string
+          template_html: string
+          updated_at?: string | null
+          version?: number
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          name?: string
+          template_html?: string
+          updated_at?: string | null
+          version?: number
+        }
+        Relationships: []
+      }
+      page_layout_slots: {
+        Row: {
+          caption: string | null
+          created_at: string | null
+          height: string | null
+          id: string
+          image_id: string | null
+          layout_id: string
+          slot_label: string | null
+          slot_position: number
+          width: string | null
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string | null
+          height?: string | null
+          id?: string
+          image_id?: string | null
+          layout_id: string
+          slot_label?: string | null
+          slot_position: number
+          width?: string | null
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string | null
+          height?: string | null
+          id?: string
+          image_id?: string | null
+          layout_id?: string
+          slot_label?: string | null
+          slot_position?: number
+          width?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_layout_slots_image_id_fkey"
+            columns: ["image_id"]
+            isOneToOne: false
+            referencedRelation: "job_images"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "page_layout_slots_layout_id_fkey"
+            columns: ["layout_id"]
+            isOneToOne: false
+            referencedRelation: "page_layouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      page_layouts: {
+        Row: {
+          category_filter: string | null
+          created_at: string | null
+          id: string
+          job_id: string
+          layout_template: string
+          page_type: string
+          sort_order: number
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          category_filter?: string | null
+          created_at?: string | null
+          id?: string
+          job_id: string
+          layout_template: string
+          page_type: string
+          sort_order?: number
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          category_filter?: string | null
+          created_at?: string | null
+          id?: string
+          job_id?: string
+          layout_template?: string
+          page_type?: string
+          sort_order?: number
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       portfolio_properties: {
         Row: {
@@ -1256,10 +1598,6 @@ export type Database = {
       }
     }
     Functions: {
-      binary_quantize: {
-        Args: { "": string } | { "": unknown }
-        Returns: unknown
-      }
       get_client_properties: {
         Args: { p_client_name: string }
         Returns: {
@@ -1272,7 +1610,7 @@ export type Database = {
         }[]
       }
       get_database_stats: {
-        Args: Record<PropertyKey, never>
+        Args: never
         Returns: {
           avg_chunks_per_conversation: number
           newest_conversation: string
@@ -1306,58 +1644,6 @@ export type Database = {
           message_type: string
           metadata: Json
         }[]
-      }
-      halfvec_avg: {
-        Args: { "": number[] }
-        Returns: unknown
-      }
-      halfvec_out: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      halfvec_send: {
-        Args: { "": unknown }
-        Returns: string
-      }
-      halfvec_typmod_in: {
-        Args: { "": unknown[] }
-        Returns: number
-      }
-      hnsw_bit_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      hnsw_halfvec_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      hnsw_sparsevec_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      hnswhandler: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      ivfflat_bit_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      ivfflat_halfvec_support: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      ivfflathandler: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      l2_norm: {
-        Args: { "": unknown } | { "": unknown }
-        Returns: number
-      }
-      l2_normalize: {
-        Args: { "": string } | { "": unknown } | { "": unknown }
-        Returns: string
       }
       match_chunks_by_timeframe: {
         Args: {
@@ -1400,6 +1686,7 @@ export type Database = {
           similarity: number
         }[]
       }
+      migrate_property_type_to_array: { Args: never; Returns: undefined }
       search_conversations: {
         Args: {
           max_results?: number
@@ -1420,18 +1707,6 @@ export type Database = {
           similarity: number
         }[]
       }
-      sparsevec_out: {
-        Args: { "": unknown }
-        Returns: unknown
-      }
-      sparsevec_send: {
-        Args: { "": unknown }
-        Returns: string
-      }
-      sparsevec_typmod_in: {
-        Args: { "": unknown[] }
-        Returns: number
-      }
       upsert_property: {
         Args: {
           p_city: string
@@ -1440,30 +1715,6 @@ export type Database = {
           p_street: string
         }
         Returns: string
-      }
-      vector_avg: {
-        Args: { "": number[] }
-        Returns: string
-      }
-      vector_dims: {
-        Args: { "": string } | { "": unknown }
-        Returns: number
-      }
-      vector_norm: {
-        Args: { "": string }
-        Returns: number
-      }
-      vector_out: {
-        Args: { "": string }
-        Returns: unknown
-      }
-      vector_send: {
-        Args: { "": string }
-        Returns: string
-      }
-      vector_typmod_in: {
-        Args: { "": unknown[] }
-        Returns: number
       }
     }
     Enums: {

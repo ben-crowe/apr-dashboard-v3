@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField } from "./ValcreStyles";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MultiSelect } from "@/components/ui/multi-select";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { SectionProps } from "./types";
@@ -401,6 +402,22 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           paymentAmount: 'payment_amount',
           paymentPaidDate: 'payment_paid_date',
           retainerPaidDate: 'retainer_paid_date',
+          // New Valta loe-prep fields (app-side only — NOT synced to Valcre yet)
+          jobStatus: 'job_status',
+          authorizedUse: 'authorized_use',
+          assignmentType: 'assignment_type',
+          desktopReport: 'desktop_report',
+          cmhcFinancing: 'cmhc_financing',
+          valueScenarios: 'value_scenarios',
+          transactionStatus: 'transaction_status',
+          zoningStatus: 'zoning_status',
+          purpose: 'purpose',
+          effectiveDate: 'effective_date',
+          analysisLevel: 'analysis_level',
+          reportFormat: 'report_format',
+          leadAppraiser: 'lead_appraiser',
+          requestDate: 'request_date',
+          signedDate: 'signed_date',
         };
         
         // Use mapped field name if exists, otherwise use original
@@ -600,6 +617,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     onUpdateDetails({
       [name]: stringValue
     });
+    autoSaveField(name, stringValue);
   };
 
   // Helper function to ensure scopeOfWork is properly formatted
@@ -1003,26 +1021,25 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         <TwoColumnFields>
           {/* Row 1 */}
           <CompactField label="Property Rights">
-            <Select value={jobDetails.propertyRightsAppraised || ''} onValueChange={value => handleSelectChange(value, 'propertyRightsAppraised')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ASC 805">ASC 805</SelectItem>
-                <SelectItem value="Condominium Ownership">Condominium Ownership</SelectItem>
-                <SelectItem value="Cost Segregation Study">Cost Segregation Study</SelectItem>
-                <SelectItem value="Fee Simple Interest">Fee Simple Interest</SelectItem>
-                <SelectItem value="Going Concern">Going Concern</SelectItem>
-                <SelectItem value="Leased Fee Interest">Leased Fee Interest</SelectItem>
-                <SelectItem value="Leasehold Interest">Leasehold Interest</SelectItem>
-                <SelectItem value="Market Study">Market Study</SelectItem>
-                <SelectItem value="Other">Other</SelectItem>
-                <SelectItem value="Partial Interest">Partial Interest</SelectItem>
-                <SelectItem value="Partial Interest Taking">Partial Interest Taking</SelectItem>
-                <SelectItem value="Rent Restricted">Rent Restricted</SelectItem>
-                <SelectItem value="Total Taking">Total Taking</SelectItem>
-              </SelectContent>
-            </Select>
+            <MultiSelect
+              value={jobDetails.propertyRightsAppraised || ''}
+              onChange={values => handleMultiSelectChange(values, 'propertyRightsAppraised')}
+              options={[
+                'ASC 805',
+                'Condominium Ownership',
+                'Cost Segregation Study',
+                'Fee Simple Interest',
+                'Going Concern',
+                'Leased Fee Interest',
+                'Leasehold Interest',
+                'Market Study',
+                'Other',
+                'Partial Interest',
+                'Partial Interest Taking',
+                'Rent Restricted',
+                'Total Taking',
+              ]}
+            />
           </CompactField>
 
           <CompactField label="Scope of Work">
@@ -1150,6 +1167,206 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               type="date"
               name="paymentPaidDate"
               value={jobDetails.paymentPaidDate || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="h-7 text-sm max-w-[160px]"
+            />
+          </CompactField>
+
+          {/* ── New Valta loe-prep fields (added 2026-06-03; app-side only, not Valcre-synced) ── */}
+
+          <CompactField label="Job Status">
+            {/* No v6 DROPDOWN_OPTIONS list for Job Status — text input (options not invented) */}
+            <Input
+              type="text"
+              name="jobStatus"
+              value={jobDetails.jobStatus || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Status..."
+              className="h-7 text-sm max-w-[160px]"
+            />
+          </CompactField>
+
+          <CompactField label="Authorized Use">
+            <Select value={jobDetails.authorizedUse || ''} onValueChange={value => handleSelectChange(value, 'authorizedUse')}>
+              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectValue placeholder="Select..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Acquisition-Disposition">Acquisition-Disposition</SelectItem>
+                <SelectItem value="Estate Planning">Estate Planning</SelectItem>
+                <SelectItem value="Financial Reporting">Financial Reporting</SelectItem>
+                <SelectItem value="First Mortgage Financing">First Mortgage Financing</SelectItem>
+                <SelectItem value="GST">GST</SelectItem>
+                <SelectItem value="Insurance">Insurance</SelectItem>
+                <SelectItem value="Internal Decision-Making">Internal Decision-Making</SelectItem>
+                <SelectItem value="Litigation">Litigation</SelectItem>
+              </SelectContent>
+            </Select>
+          </CompactField>
+
+          <CompactField label="Assignment Type">
+            <Select value={jobDetails.assignmentType || ''} onValueChange={value => handleSelectChange(value, 'assignmentType')}>
+              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectValue placeholder="Select..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Multiple Properties">Multiple Properties</SelectItem>
+                <SelectItem value="Single Property">Single Property</SelectItem>
+              </SelectContent>
+            </Select>
+          </CompactField>
+
+          <CompactField label="Report Format">
+            {/* Valcre "Format" (Comprehensive/Concise/Form) — distinct from existing "Report Type" */}
+            <Select value={jobDetails.reportFormat || ''} onValueChange={value => handleSelectChange(value, 'reportFormat')}>
+              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectValue placeholder="Select..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Comprehensive">Comprehensive</SelectItem>
+                <SelectItem value="Concise">Concise</SelectItem>
+                <SelectItem value="Form">Form</SelectItem>
+              </SelectContent>
+            </Select>
+          </CompactField>
+
+          <CompactField label="Value Scenarios">
+            <MultiSelect
+              value={jobDetails.valueScenarios || ''}
+              onChange={values => handleMultiSelectChange(values, 'valueScenarios')}
+              options={[
+                'As If Complete & Stabilized',
+                'As If Complete & Stabilized - Renovated',
+                'As If Complete - Rezoned',
+                'As If Complete - Serviced',
+                'As If Complete - Subdivided',
+                'As If Vacant Land',
+                'As Is Vacant Land',
+                'As Stabilized',
+                'As-Is',
+                'Insurable Replacement Cost',
+              ]}
+            />
+          </CompactField>
+
+          <CompactField label="Transaction Status">
+            <Select value={jobDetails.transactionStatus || ''} onValueChange={value => handleSelectChange(value, 'transactionStatus')}>
+              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectValue placeholder="Select..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Listed">Listed</SelectItem>
+                <SelectItem value="Not Applicable">Not Applicable</SelectItem>
+                <SelectItem value="Under Contract">Under Contract</SelectItem>
+              </SelectContent>
+            </Select>
+          </CompactField>
+
+          <CompactField label="Zoning Status">
+            {/* v6 ListZoningStatus is empty — text input (options not invented) */}
+            <Input
+              type="text"
+              name="zoningStatus"
+              value={jobDetails.zoningStatus || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Zoning status..."
+              className="h-7 text-sm max-w-[160px]"
+            />
+          </CompactField>
+
+          <CompactField label="Analysis Level">
+            {/* No v6 options — text input (not invented) */}
+            <Input
+              type="text"
+              name="analysisLevel"
+              value={jobDetails.analysisLevel || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Analysis level..."
+              className="h-7 text-sm max-w-[160px]"
+            />
+          </CompactField>
+
+          <CompactField label="Purpose">
+            {/* No v6 options — text input (not invented) */}
+            <Input
+              type="text"
+              name="purpose"
+              value={jobDetails.purpose || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Purpose..."
+              className="h-7 text-sm max-w-[160px]"
+            />
+          </CompactField>
+
+          <CompactField label="Lead Appraiser">
+            {/* No v6 options — text input (not invented) */}
+            <Input
+              type="text"
+              name="leadAppraiser"
+              value={jobDetails.leadAppraiser || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              placeholder="Lead appraiser..."
+              className="h-7 text-sm max-w-[160px]"
+            />
+          </CompactField>
+
+          <CompactField label="Desktop Report">
+            <Select value={jobDetails.desktopReport || ''} onValueChange={value => handleSelectChange(value, 'desktopReport')}>
+              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectValue placeholder="Select..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Yes">Yes</SelectItem>
+                <SelectItem value="No">No</SelectItem>
+              </SelectContent>
+            </Select>
+          </CompactField>
+
+          <CompactField label="CMHC Financing">
+            <Select value={jobDetails.cmhcFinancing || ''} onValueChange={value => handleSelectChange(value, 'cmhcFinancing')}>
+              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectValue placeholder="Select..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Yes">Yes</SelectItem>
+                <SelectItem value="No">No</SelectItem>
+              </SelectContent>
+            </Select>
+          </CompactField>
+
+          <CompactField label="Effective Date">
+            <Input
+              type="date"
+              name="effectiveDate"
+              value={jobDetails.effectiveDate || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="h-7 text-sm max-w-[160px]"
+            />
+          </CompactField>
+
+          <CompactField label="Request Date">
+            <Input
+              type="date"
+              name="requestDate"
+              value={jobDetails.requestDate || ''}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              className="h-7 text-sm max-w-[160px]"
+            />
+          </CompactField>
+
+          <CompactField label="Signed Date">
+            <Input
+              type="date"
+              name="signedDate"
+              value={jobDetails.signedDate || ''}
               onChange={handleChange}
               onBlur={handleBlur}
               className="h-7 text-sm max-w-[160px]"

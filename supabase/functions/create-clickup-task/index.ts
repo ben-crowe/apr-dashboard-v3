@@ -94,9 +94,10 @@ Deno.serve(async (req) => {
 
     // Fall back to environment variable token if no OAuth connection
     if (!CLICKUP_API_TOKEN) {
-      const envToken = CLICKUP_ENV === 'production' 
+      // No hardcoded token fallbacks — stale literals caused 401s twice (2026-06-03). Read from secrets only.
+      const envToken = CLICKUP_ENV === 'production'
         ? Deno.env.get('CLICKUP_API_TOKEN_VALTA')
-        : Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY'
+        : Deno.env.get('CLICKUP_API_TOKEN')
       CLICKUP_API_TOKEN = envToken
       console.log('🔧 Using fallback token from environment variable')
       

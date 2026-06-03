@@ -1,5 +1,5 @@
 import { ValcreWebhookData, FinalDataWebhookData, PandadocWebhookData } from './types';
-import { createClickUpTask, updateClickUpWithValcreJob } from './clickup';
+import { updateClickUpWithValcreJob } from './clickup';
 import { supabase } from '@/integrations/supabase/client';
 
 // Field mapping for Valcre sync - prevents silent failures when field names differ

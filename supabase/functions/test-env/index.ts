@@ -9,13 +9,22 @@ Deno.serve(async (req) => {
   }
 
   const clickupEnv = Deno.env.get('CLICKUP_ENV')
+  const clickupListId = Deno.env.get('CLICKUP_LIST_ID')
   const valtaToken = Deno.env.get('CLICKUP_API_TOKEN_VALTA')
+
+  // Replicate create-clickup-task list-resolution logic EXACTLY
+  const DEV_LIST = clickupListId || '901706896375'
+  const PROD_LIST = '901402094744'
+  const resolvedListId = clickupEnv === 'production' ? PROD_LIST : DEV_LIST
 
   return new Response(
     JSON.stringify({
-      clickupEnv,
+      clickupEnv: clickupEnv ?? '(unset → defaults to dev)',
+      clickupListIdSecret: clickupListId ?? '(unset → DEV falls back to 901706896375)',
+      resolvedListId,
+      willHitChrisProd: resolvedListId === PROD_LIST,
+      isBensTestList: resolvedListId === '901706896375',
       valtaTokenSet: !!valtaToken,
-      valtaTokenPrefix: valtaToken?.substring(0, 15)
     }),
     {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }

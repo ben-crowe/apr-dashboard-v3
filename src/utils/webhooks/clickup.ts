@@ -50,93 +50,20 @@ export function mapJobToClickUpFields(job: DetailJob): Array<{id: string; value:
   ];
 }
 
-// Create a ClickUp task from APR job submission
-// NOTE: This should be called AFTER Valcre job is created so we have the job number
+// RETIRED 2026-06-03 (CoArch dedup): Stage-1 ClickUp task creation is now owned SOLELY by the
+// Supabase edge function `create-clickup-task` (supabase/functions/create-clickup-task/index.ts),
+// which builds the RICH Summit-Tower card and wires into the Stage-2 + status-tracker chain.
+// This lean client-side builder produced a divergent card and is no longer wired to anything.
+// Do NOT re-introduce a client-side builder — call the edge function instead (see ClickUpAction.tsx).
+/** @deprecated Use the `create-clickup-task` Supabase edge function. This stub exists only to fail loudly. */
 export async function createClickUpTask(
-  job: DetailJob,
-  valcreJobNumber?: string,
-  useTemplate: boolean = true
+  _job: DetailJob,
+  _valcreJobNumber?: string,
+  _useTemplate: boolean = true
 ): Promise<{ success: boolean; taskId?: string; taskUrl?: string; error?: string }> {
-  try {
-    console.log(`Creating ClickUp task in ${ENV} environment`);
-    
-    // Build task data - Use Valcre job number if available
-    // Format: "CAL250137 - Sparwood McDonalds, 2100 Middletown Place, Sparwood, BC"
-    // Use property name if available, otherwise just address
-    // Handle both camelCase and snake_case field names
-    const propertyName = job.propertyName || job.property_name;
-    const propertyAddress = job.propertyAddress || job.property_address;
-    const propertyIdentifier = propertyName || propertyAddress;
-    const fullAddress = propertyName 
-      ? `${propertyName}, ${propertyAddress}`
-      : propertyAddress;
-    
-    // Use "NEW" initially if no CAL number yet
-    const taskName = valcreJobNumber 
-      ? `${valcreJobNumber} - ${fullAddress}`
-      : `NEW - ${fullAddress}`;
-    
-    // Simplified task data - just the essentials with a link to the hub
-    const hubUrl = process.env.VITE_APP_URL || 'http://localhost:8080';
-    const jobUrl = `${hubUrl}/#/dashboard?jobId=${job.id}`;
-    
-    // ENHANCED: Use markdown_description for better formatting
-    const taskData: ClickUpTaskData = {
-      name: taskName,
-      markdown_description: `
-📍 **NEW JOB ARRIVED - [View in APR Hub](${jobUrl})**
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-**Client:** ${job.clientFirstName || job.client_first_name} ${job.clientLastName || job.client_last_name}
-**Property:** ${fullAddress}
-**Type:** ${job.propertyType || job.property_type}
-**Intended Use:** ${job.intendedUse || job.intended_use}${(job.additionalComments || job.notes) ? `
-**Notes:** ${job.additionalComments || job.notes}` : ''}
-      `.trim(),
-      // No priority field = "No Priority" in ClickUp (team can set priority when reviewing)
-      tags: ['NEW ARRIVAL', 'APR Hub']  // Add NEW ARRIVAL tag for easy filtering
-    };
-
-    // If using template, add template_id to the request
-    const requestBody = useTemplate 
-      ? { ...taskData, template_id: config.templateId }
-      : taskData;
-
-    console.log('Creating task with data:', requestBody);
-
-    // Create task via ClickUp API
-    const response = await fetch(`${CLICKUP_API_BASE}/list/${config.listId}/task`, {
-      method: 'POST',
-      headers: {
-        'Authorization': CLICKUP_API_TOKEN,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestBody)
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('ClickUp API error:', errorText);
-      throw new Error(`ClickUp API error: ${response.status}`);
-    }
-
-    const result = await response.json();
-    console.log('ClickUp task created successfully:', result);
-
-    // Generate task URL
-    const taskUrl = `https://app.clickup.com/${config.workspaceId}/t/${result.id}`;
-
-    return {
-      success: true,
-      taskId: result.id,
-      taskUrl: taskUrl
-    };
-  } catch (error: any) {
-    console.error('Error creating ClickUp task:', error);
-    return {
-      success: false,
-      error: error.message || 'Failed to create ClickUp task'
-    };
-  }
+  const msg = 'createClickUpTask (client) is retired. Call the create-clickup-task edge function (see ClickUpAction.tsx).';
+  console.error(`❌ ${msg}`);
+  return { success: false, error: msg };
 }
 
 // Update ClickUp task status

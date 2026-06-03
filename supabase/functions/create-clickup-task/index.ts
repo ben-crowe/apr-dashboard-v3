@@ -11,7 +11,14 @@ const corsHeaders = {
 // Supports both dev (BC workspace) and production (Valta workspace)
 
 // Environment detection
-const CLICKUP_ENV = Deno.env.get('CLICKUP_ENV') || 'dev'
+// PINNED TO DEV 2026-06-03 (react-spec, Ben-approved): the global CLICKUP_ENV secret is set to
+// 'production' on this project to drive Chris's live pipeline (update-clickup-task, docuseal-webhook).
+// Ben wants the restored RICH Stage-1 card created on HIS test list (901706896375 / BC Workspace),
+// NOT Chris's prod list (901402094744). Pinning ONLY this function to dev keeps the card on the test
+// list (list + workspace + OAuth token all BC) while leaving Chris's prod flow completely untouched.
+// To restore env-driven behavior, revert this line to: Deno.env.get('CLICKUP_ENV') || 'dev'.
+const CLICKUP_ENV = 'dev'
+const CLICKUP_ENV_GLOBAL = Deno.env.get('CLICKUP_ENV') || 'dev' // actual secret, logged for visibility
 
 // Development configuration (BC Workspace)
 const DEV_CONFIG = {
@@ -43,7 +50,7 @@ const CLICKUP_WORKSPACE_ID = config.workspaceId
 const CLICKUP_TEMPLATE_ID = config.templateId
 
 // Log active environment for debugging (v3)
-console.log('🔧 ClickUp Environment:', CLICKUP_ENV)
+console.log('🔧 ClickUp Environment (PINNED for this fn):', CLICKUP_ENV, '| global secret:', CLICKUP_ENV_GLOBAL)
 console.log('🔧 Using workspace:', CLICKUP_WORKSPACE_ID)
 console.log('🔧 Using list ID:', CLICKUP_LIST_ID)
 
@@ -167,15 +174,50 @@ Deno.serve(async (req) => {
     const hubUrl = 'https://apr-dashboard-v3.vercel.app'
     const jobUrl = `${hubUrl}/dashboard/job/${job.id}`
 
-    // Build task description — MUST match production format from src/utils/webhooks/clickup.ts
-    const clientName = `${job.client_first_name || ''} ${job.client_last_name || ''}`.trim()
-    const notesLine = job.notes ? `\n**Notes:** ${job.notes}` : ''
-    const description = `📍 **NEW JOB ARRIVED - [View in APR Hub](${jobUrl})**
+    // Format submission date/time as YY.MM.DD / H:MM AM/PM (job.created_at)
+    const submissionDate = new Date(job.created_at)
+    const year = String(submissionDate.getFullYear()).slice(-2)
+    const month = String(submissionDate.getMonth() + 1).padStart(2, '0')
+    const day = String(submissionDate.getDate()).padStart(2, '0')
+    let hours = submissionDate.getHours()
+    const minutes = String(submissionDate.getMinutes()).padStart(2, '0')
+    const ampm = hours >= 12 ? 'PM' : 'AM'
+    hours = hours % 12 || 12
+    const formattedDateTime = `${year}.${month}.${day} / ${hours}:${minutes} ${ampm}`
+
+    // Build RICH Stage-1 task description (restored from commit 669659c — matches Summit Tower reference).
+    // Creates the blank "▸ LOE Sent / ▸ LOE Signed" tracker scaffold that docuseal-webhook later fills,
+    // and the Stage-1 block that update-clickup-task preserves (everything before the first LOE section).
+    const description = `📍 **NEW APPRAISAL REQUEST:** [APR Dashboard](${jobUrl})
+📍 **VALCRE JOB NUMBER:**
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-**Client:** ${clientName}
-**Property:** ${propertyAddress}
-**Type:** ${job.property_type || job.propertyType || ''}
-**Intended Use:** ${job.intended_use || job.intendedUse || ''}${notesLine}`
+
+**RECEIVED DATE:**  ${formattedDateTime}
+  ▸ LOE Sent:
+  ▸ LOE Signed:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**CLIENT INFORMATION**
+• Name:    ${job.client_first_name || job.clientFirstName || ''} ${job.client_last_name || job.clientLastName || ''}
+• Org:     ${job.client_organization || job.clientOrganization || ''}
+• Email:   ${job.client_email || job.clientEmail || ''}
+• Phone:   ${job.client_phone || job.clientPhone || ''}
+
+**PROPERTY INFORMATION**
+• Property:  ${propertyName || ''}
+• Address:   ${propertyAddress || ''}
+• Type:      ${job.property_type || job.propertyType || ''}
+• Use:       ${job.intended_use || job.intendedUse || ''}
+• Condition: ${job.asset_condition || job.assetCondition || ''}
+• Premise:   ${job.valuation_premises || job.valuationPremises || ''}
+
+**PROPERTY CONTACT**
+• Name:  ${job.property_contact_first_name || job.propertyContactFirstName || ''} ${job.property_contact_last_name || job.propertyContactLastName || ''}
+• Email: ${job.property_contact_email || job.propertyContactEmail || ''}
+• Phone: ${job.property_contact_phone || job.propertyContactPhone || ''}
+
+**CLIENT COMMENTS**
+• ${job.notes || job.additionalComments || ''}`
 
     // Custom fields are NOT populated on task creation.
     // Team populates fields manually in ClickUp as work progresses.

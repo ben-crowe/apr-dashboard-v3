@@ -23,7 +23,7 @@ Stages 1-3: Working in production. Stage 4: Standalone only, needs DB integratio
 
 ## Stack
 
-- Frontend: React 18 + TypeScript + Vite (port 5173)
+- Frontend: React 18 + TypeScript + Vite (dev port **8086** — set in vite.config.ts. NOT 5173; 5173 is KM-Exp's dev server)
 - UI: Tailwind CSS + Shadcn UI
 - Backend: Supabase (PostgreSQL) + Vercel serverless functions
 - Integrations: Valcre API, ClickUp (personal API token), DocuSeal, Resend (email)
@@ -120,7 +120,7 @@ Load the skill first, then use the CLI:
 /cli-browser-auto
 
 # Then use agent-browser
-agent-browser open http://localhost:5173/dashboard
+agent-browser open http://localhost:8086/dashboard   # APR dev port = 8086 (vite.config.ts). HEADLESS only — never --headed, never computer-use. 5173 = KM-Exp, not APR.
 agent-browser snapshot -i
 agent-browser click @e42
 agent-browser screenshot /tmp/qa-check.png

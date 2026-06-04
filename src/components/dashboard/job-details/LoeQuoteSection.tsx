@@ -78,7 +78,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // requestDate→Job.BidDate (#1 PASS), signedDate→Job.AwardDate (#2 PASS), effectiveDate→Job.EffectiveDate (#3 PASS).
   // Desktop Report (#4) was REVERTED — Valcre custom field 12050 does NOT exist on this tenant
   //   (confirmed live API + QA readback + Ben's admin list). Stays Supabase/LOE-only until/unless a CF is created.
-  const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments', 'deliveryComments', 'paymentComments', 'propertyRightsAppraised', 'scopeOfWork', 'valuationPremises', 'reportType', 'paymentAmount', 'paymentPaidDate', 'requestDate', 'signedDate', 'effectiveDate'];
+  const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments', 'deliveryComments', 'paymentComments', 'propertyRightsAppraised', 'scopeOfWork', 'valuationPremises', 'reportType', 'paymentAmount', 'paymentPaidDate', 'requestDate', 'signedDate', 'effectiveDate',
+    // Auto-sync wiring (2026-06-04, AUTO-SYNC-WIRING-MAP) — new job-prep fields with VERIFIED Valcre targets.
+    // authorizedUse→IntendedUses, analysisLevel→AnalysisLevel, transactionStatus→CF12053, zoningStatus→CF12054,
+    // valueScenarios→CF11563/11564. (propertyRightsAppraised→Purposes is already above.) Do-NOT-wire list excluded:
+    // reportFormat, assignmentType, cmhcFinancing, desktopReport, purpose, leadAppraiser, approachesToValue.
+    'authorizedUse', 'analysisLevel', 'transactionStatus', 'zoningStatus', 'valueScenarios'];
 
   // Helper function to get user-friendly field names for toast messages
   const getFieldDisplayName = (fieldName: string): string => {
@@ -497,6 +502,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           if (fieldName === 'requestDate') syncData.requestDate = value;     // PRD-A #1 → Job.BidDate
           if (fieldName === 'signedDate') syncData.signedDate = value;       // PRD-A #2 → Job.AwardDate
           if (fieldName === 'effectiveDate') syncData.effectiveDate = value; // PRD-A #3 → Job.EffectiveDate
+          // Auto-sync wiring (2026-06-04, AUTO-SYNC-WIRING-MAP) — server routes each to its verified target
+          if (fieldName === 'authorizedUse') syncData.authorizedUse = value;         // → Job.IntendedUses (INTENDED_USES_MAP)
+          if (fieldName === 'analysisLevel') syncData.analysisLevel = value;         // → Job.AnalysisLevel (ANALYSIS_LEVEL_MAP)
+          if (fieldName === 'transactionStatus') syncData.transactionStatus = value; // → Custom 12053 (UpdateSelectFieldValue)
+          if (fieldName === 'zoningStatus') syncData.zoningStatus = value;           // → Custom 12054 (UpdateSelectFieldValue)
+          if (fieldName === 'valueScenarios') syncData.valueScenarios = value;       // → Custom 11563/11564 (manual, verified values only)
 
           console.log(`Syncing ${fieldName} to Valcre:`, syncData);
           const result = await sendToValcre(syncData);

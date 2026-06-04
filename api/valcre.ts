@@ -219,6 +219,45 @@ const VALTA_FIELD_CONFIG: Record<
   },
 };
 
+// Value Scenarios → Valcre "Valuation Premise" custom fields (CF11563 Premise-1 / CF11564 Premise-2).
+// MANUAL mapping — the app does NOT implement the Status-of-Improvements → scenario cascade (not built here).
+// Only QA-verified scenario→option mappings are included; unverified values are SKIPPED (no guessing).
+const VALUE_SCENARIO_PREMISE_MAP: Record<string, { fieldId: number; valueId: number }> = {
+  "As-Is": { fieldId: 11563, valueId: 5128 },          // Premise-1 — verified QA 2026-06-04
+  "As Is": { fieldId: 11563, valueId: 5128 },
+  "As Stabilized": { fieldId: 11564, valueId: 5138 },  // Premise-2 — verified QA 2026-06-04
+};
+
+// GetValues readback — Valcre UpdateSelectFieldValue returns HTTP 200 even on internal failure, so the
+// ONLY proof a custom-field write landed is reading it back (AUTO-SYNC-WIRING-MAP gotcha 1). type=6 = Job.
+async function getJobCustomFieldValues(token: string, jobId: number): Promise<any[]> {
+  try {
+    const r = await fetch(
+      `https://api-core.valcre.com/api/v1/CustomFields/GetValues?entityId=${jobId}&type=6`,
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+    if (!r.ok) return [];
+    const d = await r.json();
+    return Array.isArray(d) ? d : d?.value || d?.Values || [];
+  } catch {
+    return [];
+  }
+}
+
+// Confirm a single-option custom field holds the expected AvailableValueId (tolerant of shape/casing variants).
+function customFieldHasValue(values: any[], fieldId: number, expectedValueId: number): boolean {
+  const item = values.find(
+    (v) => (v?.CustomFieldId ?? v?.customFieldId ?? v?.FieldId) === fieldId,
+  );
+  if (!item) return false;
+  const av = item.AvailableValueId ?? item.availableValueId ?? item.SelectedAvailableValueId;
+  if (av === expectedValueId) return true;
+  const sel = String(item.SelectedIds ?? item.selectedIds ?? "")
+    .split(",")
+    .map((s) => s.trim());
+  return sel.includes(String(expectedValueId));
+}
+
 // Set VALTA custom field values on a Valcre job
 // Called after job creation or update when VALTA fields are present
 // Uses correct Valcre API property names: EntityId, CustomFieldId, Value/SelectedValues
@@ -292,8 +331,22 @@ async function setValtaCustomFields(
       });
 
       if (response.ok || response.status === 204) {
-        console.log(`  Custom field ${fieldName}=${value} → OK`);
-        results.success++;
+        // Gotcha 1: HTTP 200 != success. For SingleOption, verify the write via GetValues readback.
+        if (config.type === "SingleOption") {
+          const expectedId = config.options?.[String(value)];
+          const vals = await getJobCustomFieldValues(token, jobId);
+          if (expectedId && customFieldHasValue(vals, fieldDefId, expectedId)) {
+            console.log(`  Custom field ${fieldName}=${value} → VERIFIED (readback)`);
+            results.success++;
+          } else {
+            console.error(`  Custom field ${fieldName}=${value} → HTTP 200 but READBACK FAILED (value not set)`);
+            results.errors.push(`${fieldName}: 200 but readback failed`);
+            results.failed++;
+          }
+        } else {
+          console.log(`  Custom field ${fieldName}=${value} → OK (${config.type})`);
+          results.success++;
+        }
       } else {
         const errText = await response.text();
         console.error(`  Custom field ${fieldName} FAILED: ${errText}`);
@@ -488,6 +541,29 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           }
         }
 
+        // Authorized Use → Job.IntendedUses (AUTO-SYNC-WIRING-MAP 2026-06-04). Same native target as
+        // intendedUse (last-writer-wins). INTENDED_USES_MAP keys only — non-key values silently skip (gotcha b).
+        if (jobData.authorizedUse) {
+          const converted = INTENDED_USES_MAP[jobData.authorizedUse];
+          if (converted) {
+            updateData.IntendedUses = converted;
+            console.log(`✅ Authorized Use mapped: "${jobData.authorizedUse}" → "${converted}"`);
+          } else {
+            console.log(`⚠️ WARNING: Authorized Use value "${jobData.authorizedUse}" not in INTENDED_USES_MAP, skipping`);
+          }
+        }
+
+        // Analysis Level → Job.AnalysisLevel (AUTO-SYNC-WIRING-MAP 2026-06-04). ANALYSIS_LEVEL_MAP keys only.
+        if (jobData.analysisLevel) {
+          const converted = ANALYSIS_LEVEL_MAP[jobData.analysisLevel];
+          if (converted) {
+            updateData.AnalysisLevel = converted;
+            console.log(`✅ Analysis Level mapped: "${jobData.analysisLevel}" → "${converted}"`);
+          } else {
+            console.log(`⚠️ WARNING: Analysis Level value "${jobData.analysisLevel}" not in ANALYSIS_LEVEL_MAP, skipping`);
+          }
+        }
+
         // Scope of Work → ScopeOfWork field (Nov 13, 2025 - Added)
         if (jobData.scopeOfWork || jobData.ScopeOfWork) {
           const rawValue = jobData.scopeOfWork || jobData.ScopeOfWork;
@@ -655,6 +731,45 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             console.log(
               `VALTA custom fields: ${customFieldResults.success} set, ${customFieldResults.failed} failed`,
             );
+          }
+
+          // Value Scenarios → CF11563 (Premise-1) / CF11564 (Premise-2). MANUAL mapping, verified values
+          // only (AUTO-SYNC-WIRING-MAP 2026-06-04 — no cascade built). Each write is readback-verified.
+          if (jobData.valueScenarios) {
+            const scenarios = String(jobData.valueScenarios)
+              .split(",")
+              .map((s: string) => s.trim())
+              .filter(Boolean);
+            for (const sc of scenarios) {
+              const m = VALUE_SCENARIO_PREMISE_MAP[sc];
+              if (!m) {
+                console.log(`  Value Scenario "${sc}": no verified Valcre option — skipped (needs QA verification)`);
+                continue;
+              }
+              try {
+                const resp = await fetch(
+                  `https://api-core.valcre.com/api/v1/CustomFields/UpdateSelectFieldValue`,
+                  {
+                    method: "POST",
+                    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+                    body: JSON.stringify({ EntityId: jobData.jobId, CustomFieldId: m.fieldId, AvailableValueId: m.valueId }),
+                  },
+                );
+                const vals = await getJobCustomFieldValues(token, jobData.jobId);
+                if ((resp.ok || resp.status === 204) && customFieldHasValue(vals, m.fieldId, m.valueId)) {
+                  console.log(`  Value Scenario "${sc}" → CF${m.fieldId}=${m.valueId}: VERIFIED (readback)`);
+                  customFieldResults.success++;
+                } else {
+                  console.error(`  Value Scenario "${sc}" → CF${m.fieldId}: HTTP ${resp.status} but READBACK FAILED`);
+                  customFieldResults.errors.push(`valueScenario ${sc}: readback failed`);
+                  customFieldResults.failed++;
+                }
+              } catch (e: any) {
+                console.error(`  Value Scenario "${sc}" ERROR: ${e.message}`);
+                customFieldResults.errors.push(`valueScenario ${sc}: ${e.message}`);
+                customFieldResults.failed++;
+              }
+            }
           }
 
           return res

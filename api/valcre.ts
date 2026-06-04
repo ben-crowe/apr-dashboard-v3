@@ -720,6 +720,33 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.log("Update response:", updateResponseText);
 
         if (updateResponse.ok || updateResponse.status === 204) {
+          // NATIVE readback (2026-06-04): the per-field native bug hid behind a 200, so verify the PATCH
+          // actually landed by reading the native fields back — don't trust updateResponse.ok alone.
+          const nativeVerify: Record<string, { sent: any; actual: any; ok: boolean }> = {};
+          const nativeKeys = Object.keys(updateData);
+          if (nativeKeys.length > 0) {
+            try {
+              const gr = await fetch(
+                `https://api-core.valcre.com/api/v1/Jobs(${jobData.jobId})?$select=${nativeKeys.join(",")}`,
+                { headers: { Authorization: `Bearer ${token}` } },
+              );
+              if (gr.ok) {
+                const jobRow = await gr.json();
+                for (const k of nativeKeys) {
+                  const sent = String(updateData[k] ?? "");
+                  const actual = String(jobRow?.[k] ?? "");
+                  const ok = actual === sent || actual.split("T")[0] === sent.split("T")[0];
+                  nativeVerify[k] = { sent: updateData[k], actual: jobRow?.[k], ok };
+                  console.log(`  Native ${k}: sent="${sent}" actual="${actual}" → ${ok ? "VERIFIED" : "MISMATCH"}`);
+                }
+              } else {
+                console.warn(`  Native readback GET failed: ${gr.status}`);
+              }
+            } catch (e: any) {
+              console.warn(`  Native readback error: ${e.message}`);
+            }
+          }
+
           // Set VALTA custom fields if any are present in the update
           let customFieldResults = { success: 0, failed: 0, errors: [] as string[] };
           const hasValtaFields = Object.keys(VALTA_CUSTOM_FIELD_IDS).some(
@@ -782,6 +809,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               updatedFields: Object.keys(updateData),
               valcreResponse: updateResponseText || "No content (success)",
               customFields: hasValtaFields ? customFieldResults : undefined,
+              nativeVerified: nativeKeys.length > 0 ? nativeVerify : undefined,
             });
         } else {
           console.error("Update failed:", updateResponseText);

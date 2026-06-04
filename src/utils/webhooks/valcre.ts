@@ -105,6 +105,16 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       if (formData.reportType) syncPayload.reportType = formData.reportType;
       if (formData.paymentAmount) syncPayload.paymentAmount = formData.paymentAmount;
       if (formData.paymentPaidDate) syncPayload.paymentPaidDate = formData.paymentPaidDate;
+      // ROOT-CAUSE FIX (2026-06-04): these native-target sync fields were MISSING from this whitelist,
+      // so the per-field auto-save dropped them BEFORE the request — the server's PATCH /Jobs branches
+      // (authorizedUse→IntendedUses, analysisLevel→AnalysisLevel, dates→Bid/Award/Effective) never saw a
+      // value and never ran. (The custom fields below WERE forwarded — why custom synced but native didn't.)
+      if (formData.requestDate) syncPayload.requestDate = formData.requestDate;        // → Job.BidDate
+      if (formData.signedDate) syncPayload.signedDate = formData.signedDate;           // → Job.AwardDate
+      if (formData.effectiveDate) syncPayload.effectiveDate = formData.effectiveDate;  // → Job.EffectiveDate
+      if (formData.authorizedUse) syncPayload.authorizedUse = formData.authorizedUse;  // → Job.IntendedUses
+      if (formData.analysisLevel) syncPayload.analysisLevel = formData.analysisLevel;  // → Job.AnalysisLevel
+      if (formData.valueScenarios) syncPayload.valueScenarios = formData.valueScenarios; // → CF11563/11564
 
       // Handle property types (convert array to comma-separated string for Valcre)
       if (formData.propertyTypes && formData.propertyTypes.length > 0) {

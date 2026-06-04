@@ -1325,16 +1325,18 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </CompactField>
 
           <CompactField label="Analysis Level">
-            {/* No v6 options — text input (not invented) */}
-            <Input
-              type="text"
-              name="analysisLevel"
-              value={jobDetails.analysisLevel || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="Analysis level..."
-              className="h-7 text-sm max-w-[160px]"
-            />
+            {/* Options = KEYS of ANALYSIS_LEVEL_MAP (api/valcre.ts:82-86). Syncs to Valcre.AnalysisLevel —
+                free-typed values that aren't a map key silently fail to push. Keep in lockstep with the map. */}
+            <Select value={jobDetails.analysisLevel || ''} onValueChange={value => handleSelectChange(value, 'analysisLevel')}>
+              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectValue placeholder="Select..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Comprehensive">Comprehensive</SelectItem>
+                <SelectItem value="Concise">Concise</SelectItem>
+                <SelectItem value="Form">Form</SelectItem>
+              </SelectContent>
+            </Select>
           </CompactField>
 
           <CompactField label="Purpose">

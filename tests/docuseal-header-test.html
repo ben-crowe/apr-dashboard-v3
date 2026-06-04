@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page { size: Letter; margin: 1in 0.9in 1in 0.9in; }
+  * { box-sizing: border-box; }
+  body { font-family: 'Helvetica', Arial, sans-serif; font-size: 11pt; color: #1a1a1a; margin: 0; }
+
+  /* UNIFIED TEST: one table with BOTH a repeating <thead> (logo + rule) and a
+     repeating <tfoot> (full-width rule + 3-part footer text). The table
+     header/footer-group repeat trick is supposed to put BOTH on every page,
+     even when CSS @page running-elements are unsupported. */
+  table.doc { width: 100%; border-collapse: collapse; }
+
+  thead.repeat-header { display: table-header-group; }
+  tfoot.repeat-footer { display: table-footer-group; }
+
+  thead.repeat-header td { padding: 0 0 6pt 0; border: none; }
+  tfoot.repeat-footer td { padding: 6pt 0 0 0; border: none; }
+
+  /* COMPACT header (repeats every page incl. page 1) */
+  .vlogo {
+    font-size: 11pt; font-weight: 700; letter-spacing: 2px;
+    color: #0A3D62; text-transform: uppercase;
+  }
+  .vrule  { border-bottom: 1pt solid #0A3D62; height: 0; margin-top: 3pt; }
+
+  /* FULL letterhead — page-1 body banner only (first-page-different) */
+  .letterhead { display: table; width: 100%; margin-bottom: 14pt; }
+  .lh-left  { display: table-cell; vertical-align: bottom; }
+  .lh-right { display: table-cell; vertical-align: bottom; text-align: right; font-size: 8.5pt; color: #555; line-height: 1.4; }
+  .lh-logo  { font-size: 26pt; font-weight: 700; letter-spacing: 5px; color: #0A3D62; text-transform: uppercase; }
+  .lh-sub   { font-size: 8pt; letter-spacing: 3px; color: #0A3D62; }
+  .lh-bigrule { border-bottom: 2px solid #0A3D62; height: 0; margin: 8pt 0 0; }
+
+  /* footer: thin full-width rule ABOVE the 3-part text */
+  .frule  { border-bottom: 0.75pt solid #0A3D62; height: 0; margin-bottom: 4pt; }
+  .ftext  { font-size: 8pt; color: #555; letter-spacing: 0.5px; }
+
+  tbody td { padding: 0; border: none; vertical-align: top; }
+  h1 { color: #0A3D62; font-size: 18pt; margin: 4pt 0 12pt; }
+  p { margin: 0 0 10pt; line-height: 1.5; }
+  .pagebreak { page-break-before: always; }
+</style>
+</head>
+<body>
+<table class="doc">
+  <thead class="repeat-header">
+    <tr><td>
+      <div class="vlogo">VALTA</div>
+      <div class="vrule"></div>
+    </td></tr>
+  </thead>
+  <tfoot class="repeat-footer">
+    <tr><td>
+      <div class="frule"></div>
+      <div class="ftext">VALTA PROPERTY VALUATIONS LTD.&nbsp;&nbsp;|&nbsp;&nbsp;Page &nbsp;|&nbsp;&nbsp;LETTER OF ENGAGEMENT</div>
+    </td></tr>
+  </tfoot>
+  <tbody>
+    <tr><td>
+      <div class="letterhead">
+        <div class="lh-left">
+          <div class="lh-logo">VALTA</div>
+          <div class="lh-sub">PROPERTY VALUATIONS LTD.</div>
+        </div>
+        <div class="lh-right">
+          Suite 100, 123 Example Ave<br>
+          Calgary, AB&nbsp; T2P 1A1<br>
+          403.555.0199&nbsp; |&nbsp; valta.ca
+        </div>
+      </div>
+      <div class="lh-bigrule"></div>
+
+      <h1>HEADER + FOOTER REPEAT TEST — PAGE 1 (FULL letterhead above)</h1>
+      <p><strong>What to check:</strong> (A) the "VALTA" wordmark + navy rule should
+      appear at the TOP of pages 2 and 3 automatically; (B) the thin full-width rule +
+      "VALTA PROPERTY VALUATIONS LTD. | Page | LETTER OF ENGAGEMENT" footer should
+      appear at the BOTTOM of EVERY page, rule included. Neither is typed into the body
+      below — anything at top/bottom came from the repeating thead/tfoot.</p>
+      <p>Method: one table, <code>thead{display:table-header-group}</code> +
+      <code>tfoot{display:table-footer-group}</code>. (Page N-of-M auto-count via
+      <code>@page</code> counters is already confirmed working separately; this test is
+      purely about whether the header/footer + their rules REPEAT on every page.)</p>
+      <p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+
+      <div class="pagebreak"></div>
+
+      <h1>PAGE 2 — header above? footer-with-rule below?</h1>
+      <p><strong>CHECK:</strong> top of this page = VALTA wordmark + rule; bottom of
+      this page = thin rule + footer text. Both came from the repeating table groups.</p>
+      <p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+
+      <div class="pagebreak"></div>
+
+      <h1>PAGE 3 — confirm both repeat a third time</h1>
+      <p><strong>CHECK:</strong> header at top, footer-with-rule at bottom. Three pages
+      of agreement = reliable, not a fluke.</p>
+      <p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and the repeating header/footer positions are unambiguous. Not part of header or footer.</p>
+
+    </td></tr>
+  </tbody>
+</table>
+</body>
+</html>

@@ -29,10 +29,27 @@
   /* VERIFIED automatic paged-media running footer (DocuSeal-honored, submission 8146815) */
   @page {
     size: 8.5in 11in;
-    margin: 0.75in;
-    @bottom-left   { content: "VALTA PROPERTY VALUATIONS LTD."; font-family: var(--font); font-size: 9px; color: var(--footer); letter-spacing: 0.04em; }
-    @bottom-center { content: "Page " counter(page) " of " counter(pages); font-family: var(--font); font-size: 9px; color: var(--footer); letter-spacing: 0.04em; }
-    @bottom-right  { content: "LETTER OF ENGAGEMENT"; font-family: var(--font); font-size: 9px; color: var(--footer); letter-spacing: 0.04em; }
+    margin: 1.1in 0.75in 0.75in 0.75in;   /* taller top holds the compact continuation header */
+
+    /* COMPACT continuation header (pages 2+) — VALTA wordmark + thin full-width rule.
+       @page @top margin-boxes (static content) ARE honored by DocuSeal's Chromium renderer
+       — verified submission 8153409. (position:running()/element() is NOT — different mechanism.) */
+    @top-left   { content: "VALTA"; font-family: var(--font); font-size: 11px; font-weight: 600; letter-spacing: 0.16em; color: var(--navy); vertical-align: bottom; padding-bottom: 5px; border-bottom: 0.75px solid var(--navy); }
+    @top-center { content: ""; border-bottom: 0.75px solid var(--navy); }
+    @top-right  { content: ""; border-bottom: 0.75px solid var(--navy); }
+
+    /* FOOTER (every page) — full-width rule (border-top, contiguous across 3 boxes) + 3-part text w/ auto count */
+    @bottom-left   { content: "VALTA PROPERTY VALUATIONS LTD."; font-family: var(--font); font-size: 9px; color: var(--footer); letter-spacing: 0.04em; border-top: 0.75px solid var(--navy); padding-top: 5px; vertical-align: top; }
+    @bottom-center { content: "Page " counter(page) " of " counter(pages); font-family: var(--font); font-size: 9px; color: var(--footer); letter-spacing: 0.04em; border-top: 0.75px solid var(--navy); padding-top: 5px; vertical-align: top; }
+    @bottom-right  { content: "LETTER OF ENGAGEMENT"; font-family: var(--font); font-size: 9px; color: var(--footer); letter-spacing: 0.04em; border-top: 0.75px solid var(--navy); padding-top: 5px; vertical-align: top; }
+  }
+
+  /* PAGE 1 = full letterhead (body banner) ONLY — suppress the compact header + restore top margin */
+  @page:first {
+    margin-top: 0.75in;
+    @top-left   { content: none; border: none; }
+    @top-center { content: none; border: none; }
+    @top-right  { content: none; border: none; }
   }
 
   body {

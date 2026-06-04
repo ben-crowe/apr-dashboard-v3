@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page {
+    size: Letter;
+    margin: 1.2in 0.9in 1in 0.9in;   /* top margin holds the compact header */
+
+    /* COMPACT continuation header — repeats via @page @top margin boxes */
+    @top-left   { content: "VALTA"; font: 700 11pt Helvetica, Arial; letter-spacing: 2px; color: #0A3D62; vertical-align: bottom; padding-bottom: 4pt; border-bottom: 1pt solid #0A3D62; }
+    @top-center { content: ""; border-bottom: 1pt solid #0A3D62; }
+    @top-right  { content: ""; border-bottom: 1pt solid #0A3D62; }
+
+    /* FOOTER — repeats every page, full-width rule (border-top) + 3-part text w/ auto count */
+    @bottom-left   { content: "VALTA PROPERTY VALUATIONS LTD."; font: 8pt Helvetica, Arial; color: #555; vertical-align: top; padding-top: 4pt; border-top: 0.75pt solid #0A3D62; }
+    @bottom-center { content: "Page " counter(page) " of " counter(pages); font: 8pt Helvetica, Arial; color: #555; vertical-align: top; padding-top: 4pt; border-top: 0.75pt solid #0A3D62; }
+    @bottom-right  { content: "LETTER OF ENGAGEMENT"; font: 8pt Helvetica, Arial; color: #555; vertical-align: top; padding-top: 4pt; border-top: 0.75pt solid #0A3D62; }
+  }
+
+  /* FIRST PAGE = full letterhead only: suppress the compact top header + its rule */
+  @page:first {
+    margin-top: 1in;
+    @top-left   { content: none; border: none; }
+    @top-center { content: none; border: none; }
+    @top-right  { content: none; border: none; }
+  }
+
+  * { box-sizing: border-box; }
+  body { font-family: Helvetica, Arial, sans-serif; font-size: 11pt; color: #1a1a1a; margin: 0; }
+
+  /* FULL letterhead — page-1 body banner only */
+  .letterhead { display: table; width: 100%; margin-bottom: 14pt; }
+  .lh-left  { display: table-cell; vertical-align: bottom; }
+  .lh-right { display: table-cell; vertical-align: bottom; text-align: right; font-size: 8.5pt; color: #555; line-height: 1.4; }
+  .lh-logo  { font-size: 26pt; font-weight: 700; letter-spacing: 5px; color: #0A3D62; }
+  .lh-sub   { font-size: 8pt; letter-spacing: 3px; color: #0A3D62; }
+  .lh-bigrule { border-bottom: 2px solid #0A3D62; height: 0; margin: 8pt 0 0; }
+
+  h1 { color: #0A3D62; font-size: 18pt; margin: 4pt 0 12pt; }
+  p { margin: 0 0 10pt; line-height: 1.5; }
+  .pagebreak { page-break-before: always; }
+</style>
+</head>
+<body>
+  <div class="letterhead">
+    <div class="lh-left">
+      <div class="lh-logo">VALTA</div>
+      <div class="lh-sub">PROPERTY VALUATIONS LTD.</div>
+    </div>
+    <div class="lh-right">
+      Suite 100, 123 Example Ave<br>
+      Calgary, AB&nbsp; T2P 1A1<br>
+      403.555.0199&nbsp; |&nbsp; valta.ca
+    </div>
+  </div>
+  <div class="lh-bigrule"></div>
+
+  <h1>PAGE 1 — should show FULL letterhead ONLY (no compact header at very top)</h1>
+  <p><strong>Test of @page @top margin-box header + @page:first suppression.</strong>
+  If this works: page 1 has ONLY the full letterhead above (no small "VALTA" line at the
+  very top edge); pages 2 and 3 show the COMPACT "VALTA" + thin rule at the top margin;
+  the footer (full-width rule + "VALTA PROPERTY VALUATIONS LTD. | Page N of M | LETTER OF
+  ENGAGEMENT") shows on EVERY page with a real page number.</p>
+  <p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+
+  <div class="pagebreak"></div>
+
+  <h1>PAGE 2 — compact "VALTA" + rule at top margin? footer with REAL page number?</h1>
+  <p><strong>CHECK:</strong> top edge = compact VALTA + thin full-width rule; bottom =
+  rule + "Page 2 of 3". No full letterhead here.</p>
+  <p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+
+  <div class="pagebreak"></div>
+
+  <h1>PAGE 3 — confirm compact header + numbered footer repeat</h1>
+  <p><strong>CHECK:</strong> compact header top, "Page 3 of 3" footer bottom.</p>
+  <p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+
+</body>
+</html>

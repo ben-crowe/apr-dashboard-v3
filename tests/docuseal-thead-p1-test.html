@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  @page {
+    size: Letter; margin: 1in 0.9in 1in 0.9in;
+    /* FOOTER via proven @page @bottom margin-boxes: full-width rule (border-top) + auto count */
+    @bottom-left   { content: "VALTA PROPERTY VALUATIONS LTD."; font: 8pt Helvetica, Arial; color: #555; vertical-align: top; padding-top: 4pt; border-top: 0.75pt solid #0A3D62; }
+    @bottom-center { content: "Page " counter(page) " of " counter(pages); font: 8pt Helvetica, Arial; color: #555; vertical-align: top; padding-top: 4pt; border-top: 0.75pt solid #0A3D62; }
+    @bottom-right  { content: "LETTER OF ENGAGEMENT"; font: 8pt Helvetica, Arial; color: #555; vertical-align: top; padding-top: 4pt; border-top: 0.75pt solid #0A3D62; }
+  }
+  * { box-sizing: border-box; }
+  body { font-family: Helvetica, Arial, sans-serif; font-size: 11pt; color: #1a1a1a; margin: 0; }
+
+  table.doc { width: 100%; border-collapse: collapse; }
+  thead.repeat-header { display: table-header-group; }
+  thead.repeat-header td { padding: 0 0 5pt 0; border: none; }
+  .vlogo { font-size: 11pt; font-weight: 700; letter-spacing: 2px; color: #0A3D62; }
+  .vrule { border-bottom: 1pt solid #0A3D62; height: 0; margin-top: 3pt; }
+  tbody td { padding: 0; border: none; vertical-align: top; }
+
+  /* PAGE-1 overlay: white-bg letterhead slides UP over the compact thead to hide it on p1.
+     Negative margin pulls it into the thead band; matching padding pushes content back down;
+     opaque white bg covers the compact header underneath. Pages 2+ have no letterhead → thead shows. */
+  .letterhead-wrap { background:#fff; margin-top:-22pt; padding-top:22pt; }
+  .letterhead { display: table; width: 100%; margin-bottom: 12pt; }
+  .lh-left  { display: table-cell; vertical-align: bottom; }
+  .lh-right { display: table-cell; vertical-align: bottom; text-align: right; font-size: 8.5pt; color: #555; line-height: 1.4; }
+  .lh-logo  { font-size: 26pt; font-weight: 700; letter-spacing: 5px; color: #0A3D62; }
+  .lh-sub   { font-size: 8pt; letter-spacing: 3px; color: #0A3D62; }
+  .lh-bigrule { border-bottom: 2px solid #0A3D62; height: 0; margin: 8pt 0 0; }
+
+  h1 { color: #0A3D62; font-size: 18pt; margin: 4pt 0 12pt; }
+  p { margin: 0 0 10pt; line-height: 1.5; }
+  .pagebreak { page-break-before: always; }
+</style>
+</head>
+<body>
+<table class="doc">
+  <thead class="repeat-header">
+    <tr><td><div class="vlogo">VALTA</div><div class="vrule"></div></td></tr>
+  </thead>
+  <tbody>
+    <tr><td>
+      <div class="letterhead-wrap">
+        <div class="letterhead">
+          <div class="lh-left"><div class="lh-logo">VALTA</div><div class="lh-sub">PROPERTY VALUATIONS LTD.</div></div>
+          <div class="lh-right">Suite 100, 123 Example Ave<br>Calgary, AB&nbsp; T2P 1A1<br>403.555.0199&nbsp; |&nbsp; valta.ca</div>
+        </div>
+        <div class="lh-bigrule"></div>
+      </div>
+
+      <h1>PAGE 1 — FULL letterhead only (compact thead should be HIDDEN behind white overlay)</h1>
+      <p><strong>Test A: thead header + white-bg letterhead overlay on p1.</strong> If it
+      works: NO small "VALTA" + rule at the very top edge of page 1 — only the full
+      letterhead. Pages 2/3 show the compact VALTA + rule. Footer rule + "Page N of M"
+      every page with a real number.</p>
+      <p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+
+      <div class="pagebreak"></div>
+
+      <h1>PAGE 2 — compact VALTA + rule at top? footer "Page 2 of 3"?</h1>
+      <p><strong>CHECK:</strong> compact header top, numbered footer bottom, no letterhead.</p>
+      <p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+
+      <div class="pagebreak"></div>
+
+      <h1>PAGE 3 — compact header + "Page 3 of 3" footer</h1>
+      <p><strong>CHECK:</strong> third confirmation, no drift.</p>
+      <p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+<p>Body filler line to occupy vertical space so the page is visibly full and header/footer positions are unambiguous.</p>
+
+    </td></tr>
+  </tbody>
+</table>
+</body>
+</html>

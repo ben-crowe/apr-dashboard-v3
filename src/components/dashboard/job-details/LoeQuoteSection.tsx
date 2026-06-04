@@ -1310,16 +1310,18 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </CompactField>
 
           <CompactField label="Zoning Status">
-            {/* v6 ListZoningStatus is empty — text input (options not invented) */}
-            <Input
-              type="text"
-              name="zoningStatus"
-              value={jobDetails.zoningStatus || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="Zoning status..."
-              className="h-7 text-sm max-w-[160px]"
-            />
+            {/* Registry ListZoningStatus (field-registry-v6.html:523) — Select one, vr:Job. Options verbatim. */}
+            <Select value={jobDetails.zoningStatus || ''} onValueChange={value => handleSelectChange(value, 'zoningStatus')}>
+              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectValue placeholder="Select..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Legal Conforming">Legal Conforming</SelectItem>
+                <SelectItem value="Legal Non-Conforming">Legal Non-Conforming</SelectItem>
+                <SelectItem value="Illegal">Illegal</SelectItem>
+                <SelectItem value="No Zoning">No Zoning</SelectItem>
+              </SelectContent>
+            </Select>
           </CompactField>
 
           <CompactField label="Analysis Level">
@@ -1432,7 +1434,24 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <Input type="text" name="deliveryTime" value={(jobDetails as any).deliveryTime || ''} onChange={handleChange} onBlur={handleBlur} placeholder="e.g. 4" className="h-7 text-sm max-w-[160px]" />
           </CompactField>
           <CompactField label="Client Documents">
-            <Input type="text" name="clientDocuments" value={(jobDetails as any).clientDocuments || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Docs requested..." className="h-7 text-sm max-w-[160px]" />
+            {/* Registry ListClientDocuments (field-registry-v6.html:948) — Select multiple. Options verbatim (11). */}
+            <MultiSelect
+              value={(jobDetails as any).clientDocuments || ''}
+              onChange={values => handleMultiSelectChange(values, 'clientDocuments')}
+              options={[
+                'Previous Appraisal',
+                'Property Details',
+                'Proforma',
+                'Unit Mix',
+                'Rent Roll',
+                'Historical Operating Expenses',
+                'Development Permit Drawings',
+                'Contact for Property Tour',
+                'Purchase & Sale Agreement',
+                'Environmental Reports',
+                'Property Condition Reports',
+              ]}
+            />
           </CompactField>
           <CompactField label="Previously Appraised">
             <Select value={(jobDetails as any).previouslyAppraised || ''} onValueChange={value => handleSelectChange(value, 'previouslyAppraised')}>

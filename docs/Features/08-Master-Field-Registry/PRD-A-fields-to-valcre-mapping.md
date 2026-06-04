@@ -44,3 +44,56 @@ with a screenshot per verification, on VAL261101. No new jobs created.
 - Pin job VAL261101 only; name-match guard before ANY Valcre write.
 - Isolated --session for any browser capture; save to data/screenshots; never /tmp.
 - Screenshot-and-read before any "done" claim.
+
+## Agent Fill Method — CANONICAL (this belonged in the deploy brief from the start)
+
+> Added 2026-06-04 after QA's field fills "succeeded" in chat but came back blank on reload.
+> Root cause: wrong fill method. This section is the standing answer — load it into every
+> field-testing deploy brief. Use OUR OWN CLI suite, not Playwright-as-first-resort.
+
+**Reference skills (load before any fill testing):** `/cli-browser-auto` · `/agent-fill-fields` ·
+`/agent-click` · `/agent-screenshot`. `/agent-fill-fields` is the canonical TYPE-method authority.
+
+### The one correct method — Method 1 (agent-browser CLI over CDP)
+```bash
+agent-browser --session <name> fill @<field-ref> "value"   # text / date inputs
+agent-browser --session <name> press Tab                   # force blur → triggers save
+agent-browser --session <name> click @<ref>                # dropdowns (Radix Select)
+```
+**Why it works:** `fill` drives the real Chromium keyboard pipeline through React's monkey-patched
+native value-setter → synthetic `onChange` fires → focus/blur fires → the 500ms debounce in
+`LoeQuoteSection.tsx` (handleChange/handleBlur → autoSaveField, ~lines 1180-1230, 254/293) runs →
+`supabase.update`. Both halves (state update + blur-save) happen. **The field actually persists.**
+
+### The trap — Method 3 (JS value-assign) — BANNED for testing
+```javascript
+input.value = 'foo'; input.dispatchEvent(new Event('input'))   // ❌ React rejects this
+```
+Sets `.value` directly, bypassing React's patched setter. UI shows the value for one tick, then
+the next render reverts it. **This is exactly why QA's text/date fills looked set but saved blank.**
+Dropdowns survived only because a real `click` on a Radix Select fires `onValueChange` legitimately.
+
+### Method 2 (osascript / cliclick) — native OS keystroke
+Only for native macOS apps. Not for this browser/Electron work. Method 1 is faster + no perms.
+
+### Playwright MCP — escape hatch ONLY, not the default
+APR CLAUDE.md lists Playwright as a fallback for React controlled inputs. It works, but our
+**canonical default is `agent-browser fill`** (Method 1). Reach for Playwright only if agent-browser
+fill genuinely can't target the element — never as the first move.
+
+### The full real-user chain (don't skip a link)
+1. `agent-browser ... click @<ref>` — focus the field (or open the dropdown)
+2. `agent-browser ... fill @<ref> "value"` — real keystrokes into the focused field
+3. `agent-browser ... press Tab` — blur to fire the debounce-save (text/date fields)
+4. `/agent-screenshot` before AND after — visual proof, never trust "value set" in chat
+5. Reload the tab, read the value back — ground-truth that it persisted to the DB
+
+### Verdict rule
+Any agent reporting a fill PASS must STATE THE METHOD. "agent-browser fill" / "Input.insertText" =
+trust. "input.value = …" / "dispatchEvent" / ambiguous = RE-RUN with Method 1. No method named = not
+a pass.
+
+### Test-Data button — FORBIDDEN on the pinned job
+The LOE Quote section's "Test Data" button bulk-populates the whole section and OVERRIDES fields
+already set + synced on VAL261101. Never click it during sync testing — it destroys the one-field-
+at-a-time verification this PRD exists for. Fill only the empty in-scope fields, individually.

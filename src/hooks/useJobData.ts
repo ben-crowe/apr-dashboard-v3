@@ -166,7 +166,21 @@ export function useJobData(jobId: string) {
               proposedUse: loeData.proposed_use,
               deliveryTime: loeData.delivery_time,
               clientDocuments: loeData.client_documents,
-              previouslyAppraised: loeData.previously_appraised
+              previouslyAppraised: loeData.previously_appraised,
+              // Read-back fix (2026-06-04, CoArch ruling): job_loe_details is the SINGLE canonical home
+              // for ALL LoeQuoteSection job-prep fields — autoSaveField (LoeQuoteSection) writes them all
+              // here. These were previously read from the wrong table (job_property_info) or not at all,
+              // so job-prep edits reverted on reload. Now read from the same table they're written to.
+              analysisLevel: (loeData as any).analysis_level,
+              purpose: (loeData as any).purpose,
+              leadAppraiser: (loeData as any).lead_appraiser,
+              cmhcFinancing: (loeData as any).cmhc_financing,
+              assignmentType: (loeData as any).assignment_type,
+              desktopReport: (loeData as any).desktop_report,
+              valueTimeframe: (loeData as any).value_timeframe,
+              approachesToValue: (loeData as any).approaches_to_value,
+              transactionStatus: (loeData as any).transaction_status,
+              zoningStatus: (loeData as any).zoning_status
             });
           }
 
@@ -200,13 +214,12 @@ export function useJobData(jobId: string) {
               propertySubtype: propertyData.property_subtype,
               landMetric: propertyData.land_metric,
               environmentalAssessment: propertyData.environmental_assessment,
-              heritageConservation: propertyData.heritage_conservation,
-              assignmentType: propertyData.assignment_type,
-              desktopReport: propertyData.desktop_report,
-              valueTimeframe: propertyData.value_timeframe,
-              approachesToValue: propertyData.approaches_to_value,
-              transactionStatus: propertyData.transaction_status,
-              zoningStatus: propertyData.zoning_status
+              heritageConservation: propertyData.heritage_conservation
+              // NOTE (2026-06-04, CoArch ruling): the 6 fields assignmentType / desktopReport /
+              // valueTimeframe / approachesToValue / transactionStatus / zoningStatus were MOVED out of
+              // this block. They are LoeQuoteSection job-prep fields written to job_loe_details by
+              // autoSaveField, so they are now read from the loeData block above (single canonical table).
+              // Guard-grep confirmed no other consumer reads these 6 from job_property_info.
             });
           }
 

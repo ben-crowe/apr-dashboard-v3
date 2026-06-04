@@ -21,9 +21,14 @@ export function useSaveJobDetails(jobId: string) {
           'paymentTerms', 'appraisalFee', 'retainerAmount',
           'disbursementPercentage', 'internalComments', 'appraiserComments',
           'deliveryComments', 'paymentComments',
-          'paymentAmount', 'paymentPaidDate', 'retainerPaidDate'
+          'paymentAmount', 'paymentPaidDate', 'retainerPaidDate',
+          // Moved here from propertyInfoFields (2026-06-04, CoArch canonical-table ruling): these are
+          // LoeQuoteSection job-prep fields. autoSaveField writes them to job_loe_details, so this
+          // Save-path must target the same table (no split-brain write A / read B).
+          'assignmentType', 'desktopReport', 'valueTimeframe',
+          'approachesToValue', 'transactionStatus', 'zoningStatus'
         ];
-        
+
         const propertyInfoFields = [
           'yearBuilt', 'buildingSize', 'legalDescription',
           'numberOfUnits', 'parkingSpaces', 'zoningClassification',
@@ -32,11 +37,11 @@ export function useSaveJobDetails(jobId: string) {
           'usableLandAcres', 'grossLandSf', 'grossLandAcres',
           'assessedValue', 'taxes', 'assessmentYear',
           'landAssessmentValue', 'improvedAssessmentValue', 'totalAssessmentValue',
-          // VALTA-FIELD-SPEC fields (13 new)
+          // VALTA-FIELD-SPEC property fields. (assignmentType / desktopReport / valueTimeframe /
+          // approachesToValue / transactionStatus / zoningStatus were moved to loeFields above —
+          // they belong to job_loe_details per the canonical-table ruling 2026-06-04.)
           'tenancy', 'stateOfImprovements', 'statusOfImprovements',
-          'propertySubtype', 'landMetric', 'environmentalAssessment', 'heritageConservation',
-          'assignmentType', 'desktopReport', 'valueTimeframe',
-          'approachesToValue', 'transactionStatus', 'zoningStatus'
+          'propertySubtype', 'landMetric', 'environmentalAssessment', 'heritageConservation'
         ];
         
         // Check if we need to update job_loe_details

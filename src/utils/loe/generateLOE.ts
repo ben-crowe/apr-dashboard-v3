@@ -33,31 +33,40 @@ async function seedTemplatesIfEmpty(): Promise<void> {
   }
 }
 
-// Load template: DB default first, seed if empty, fallback to embedded V5
-async function loadV3Template(templateHTML?: string): Promise<string> {
-  if (templateHTML) {
-    return templateHTML;
+interface LoadedTemplate { html: string; version: number; templateId: string | null }
+
+// Version-aware template loader (PRD-B versioning).
+// Order: explicit HTML > job's chosen templateId > NEWEST active version > seed/fallback V5.
+async function loadTemplateRow(opts?: { templateHTML?: string; templateId?: string | null }): Promise<LoadedTemplate> {
+  if (opts?.templateHTML) {
+    return { html: opts.templateHTML, version: 0, templateId: null };
   }
-
   try {
-    const { data: template, error } = await supabase
-      .from('loe_templates')
-      .select('template_html')
-      .eq('is_default', true)
-      .eq('is_active', true)
-      .single();
-
-    if (!error && template) {
-      return template.template_html;
+    if (opts?.templateId) {
+      const { data, error } = await supabase
+        .from('loe_templates')
+        .select('id, template_html, version')
+        .eq('id', opts.templateId)
+        .eq('is_active', true)
+        .single();
+      if (!error && data) return { html: data.template_html, version: data.version, templateId: data.id };
     }
+    // Default = NEWEST active version (not is_default flag — see DECISIONS-2026-06-04)
+    const { data: newest, error: newestErr } = await supabase
+      .from('loe_templates')
+      .select('id, template_html, version')
+      .eq('is_active', true)
+      .order('version', { ascending: false })
+      .limit(1)
+      .single();
+    if (!newestErr && newest) return { html: newest.template_html, version: newest.version, templateId: newest.id };
 
     await seedTemplatesIfEmpty();
-    return V5_TEMPLATE;
+    return { html: V5_TEMPLATE, version: 5, templateId: null };
   } catch (err) {
     console.warn('Failed to load template from DB, using embedded V5:', err);
+    return { html: V5_TEMPLATE, version: 5, templateId: null };
   }
-
-  return V5_TEMPLATE;
 }
 
 /**
@@ -119,31 +128,97 @@ function mapDataToV3Fields(job: DetailJob, jobDetails: JobDetails) {
 }
 
 /**
+ * Map APR Hub data to LOE-07 (V07) template fields.
+ * V07 uses PascalCase [Token] placeholders (distinct vocabulary from V3/V5).
+ * Field routing per DECISIONS-2026-06-04.md. Gap fields fall back gracefully
+ * (job-prep inputs being added incrementally; EA/HC summaries = narrative Text Library, TODO).
+ */
+function mapDataToV07Fields(job: DetailJob, jobDetails: JobDetails): Record<string, string> {
+  const jd = jobDetails as any;
+  const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  const fmtCurrency = (v: any) => (v ? `$${Number(String(v).replace(/[^0-9.]/g, '')).toLocaleString()}` : '$TBD');
+  const fmtDate = (v: any) => (v ? String(v).split('T')[0] : '');
+  const propName = job.propertyName || 'Unnamed Property';
+
+  const map: Record<string, string> = {
+    "[Today's Date]": today,
+    '[ClientFirstName]': job.clientFirstName || '',
+    '[ClientLastName]': job.clientLastName || '',
+    '[ClientCompanyName]': job.clientOrganization || '',
+    '[ClientOrganizationAddress]': job.clientAddress || '',
+    '[ClientPhone]': job.clientPhone || '',
+    '[ClientEmail]': job.clientEmail || '',
+    '[JobNumber]': jobDetails.jobNumber || 'Awaiting Valcre job',
+    '[JobName]': [propName, job.propertyAddress].filter(Boolean).join(', '),
+    '[PropertyName]': propName,
+    '[PropertyAddress]': job.propertyAddress || '',
+    '[PropertyType]': job.propertyType || '',
+    '[InterestAppraised]': jobDetails.propertyRightsAppraised || '',
+    '[CurrentUseImprovements]': jd.currentUse || jd.currentUseImprovements || '',
+    '[ProposedUseImprovements]': jd.proposedUse || jd.proposedUseImprovements || '',
+    '[AuthorizedUse]': jd.authorizedUse || job.intendedUse || '',
+    '[Valuetimeframe]': jd.valueTimeframe || jobDetails.valuationPremises || '',
+    '[ValueScenarios]': jd.valueScenarios || '',
+    '[ReportType]': jobDetails.reportType || '',
+    '[AssignmentType]': jd.assignmentType || '',
+    '[ApproachestoValue]': jd.approachesToValue || '',
+    '[Fee]': fmtCurrency(jobDetails.appraisalFee),
+    '[DeliveryTime]': jd.deliveryTime || jd.deliveryTimeWeeks || '',
+    '[ClientDocuments]': jd.clientDocuments || '',
+    '[PreviouslyAppraised]': jd.previouslyAppraised || '',
+    '[ScheduleAPropertyList]': jd.scheduleAPropertyList || '',
+  };
+  // EA/HC table rows (narrative Text Library — TODO wire to library; empty = row blank)
+  for (let i = 1; i <= 6; i++) {
+    map[`[ValueScenario${i}]`] = jd[`valueScenario${i}`] || '';
+    map[`[EA/HCSummary${i}]`] = jd[`eaHcSummary${i}`] || '';
+  }
+  return map;
+}
+
+// Pair a template version with its placeholder mapper (each version owns its vocabulary).
+function getMapperForVersion(version: number): (j: DetailJob, d: JobDetails) => Record<string, string> {
+  return version >= 6 ? mapDataToV07Fields : mapDataToV3Fields;
+}
+
+/**
  * Generate LOE HTML without sending (for preview)
  */
+// Strip the conditional Schedule "A" block unless AssignmentType = Multiple Properties (V07).
+// The template marks the block with HTML comment fences so we can remove it cleanly.
+function applyConditionalScheduleA(html: string, jobDetails: JobDetails): string {
+  const isMultiple = String((jobDetails as any).assignmentType || '').toLowerCase().includes('multiple');
+  if (isMultiple) return html;
+  return html.replace(/<!-- SCHEDULE-A:START -->[\s\S]*?<!-- SCHEDULE-A:END -->/g, '');
+}
+
 export async function generateLOEHTML(
   job: DetailJob,
   jobDetails: JobDetails,
-  templateHTML?: string // Optional: provide template HTML directly
+  templateHTML?: string, // Optional: provide template HTML directly (preview path)
+  templateId?: string | null // Optional: explicit version choice; else job's choice / newest
 ): Promise<string> {
-  // Load the V3 template (or use provided template)
-  let htmlTemplate = await loadV3Template(templateHTML);
-  
-  // Get the field mappings
-  const fieldMappings = mapDataToV3Fields(job, jobDetails);
-  
-  // Replace all bracketed fields with actual data
+  // Version-aware load: explicit HTML > given templateId > job's chosen version > newest active
+  const chosenId = templateId ?? (jobDetails as any).loeTemplateId ?? null;
+  const loaded = await loadTemplateRow({ templateHTML, templateId: chosenId });
+  let htmlTemplate = loaded.html;
+
+  // Pair the template version with its placeholder vocabulary
+  const mapper = getMapperForVersion(loaded.version);
+  const fieldMappings = mapper(job, jobDetails);
+
+  // V07: strip conditional Schedule A unless Multiple Properties
+  if (loaded.version >= 6) {
+    htmlTemplate = applyConditionalScheduleA(htmlTemplate, jobDetails);
+  }
+
+  // Replace all bracketed placeholders with actual data (global)
   for (const [field, value] of Object.entries(fieldMappings)) {
     const escapedField = field.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    htmlTemplate = htmlTemplate.replace(
-      new RegExp(escapedField, 'g'), 
-      value as string
-    );
+    htmlTemplate = htmlTemplate.replace(new RegExp(escapedField, 'g'), value as string);
   }
-  
-  // Leave anchor tags untouched - DocuSeal will handle them
-  // {{First Party_signature_1}} and {{First Party_date_1}} stay in the HTML
-  
+
+  // Anchor tags (<signature-field>/<date-field>) left untouched — DocuSeal converts them.
   return htmlTemplate;
 }
 
@@ -270,15 +345,30 @@ export async function generateAndSendLOE(
     
     console.log('✅ DocuSeal submission created with slug:', docusealSlug);
     
-    // Save LOE submission to database with HTML and slug
+    // Resolve which template version was used (for version reproducibility)
     const { supabase } = await import('@/integrations/supabase/client');
+    const chosenTplId = (jobDetails as any).loeTemplateId ?? null;
+    let loeVersion: number | null = null;
+    let loeTemplateId: string | null = chosenTplId;
+    try {
+      const base = supabase.from('loe_templates').select('id, version').eq('is_active', true);
+      const { data: tpl } = chosenTplId
+        ? await base.eq('id', chosenTplId).single()
+        : await base.order('version', { ascending: false }).limit(1).single();
+      if (tpl) { loeVersion = tpl.version; loeTemplateId = tpl.id; }
+    } catch (e) { console.warn('Could not resolve LOE template version for persistence:', e); }
+
+    // Persist the filled HTML snapshot (keystone for version reproducibility).
     const { data: loeSubmission, error: saveError } = await supabase
       .from('loe_submissions')
       .insert({
-        job_id: job.jobNumber || `temp-${Date.now()}`,
+        job_id: job.id,                       // UUID FK — was job.jobNumber (broke the FK)
+        job_number: jobDetails.jobNumber || null,
+        loe_version: loeVersion != null ? String(loeVersion) : null,
+        template_id: loeTemplateId,
         client_name: clientName,
         client_email: clientEmail,
-        loe_html: templateHTML, // The complete V3-LOE with all fields filled
+        loe_html: templateHTML,               // complete filled LOE snapshot
         docuseal_slug: docusealSlug,
         docuseal_submission_id: submissionData.id || '',
         status: 'pending'
@@ -287,9 +377,10 @@ export async function generateAndSendLOE(
       .single();
 
     if (saveError) {
-      console.error('Failed to save LOE submission:', saveError);
+      // FAIL-LOUD: persistence is the keystone for versioning/reproducibility.
+      console.error('🔴 CRITICAL: failed to persist loe_submissions (version reproducibility at risk):', saveError);
     } else {
-      console.log('✅ LOE submission saved with ID:', loeSubmission.id);
+      console.log('✅ LOE submission persisted:', loeSubmission.id, '(version', loeVersion, ')');
     }
 
     // CRITICAL: Also update job_loe_details table with DocuSeal submission ID

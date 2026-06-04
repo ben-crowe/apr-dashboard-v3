@@ -78,11 +78,25 @@ const REPORT_FORMAT_MAP: Record<string, string> = {
   "Restricted Appraisal Report": "RestrictedAppraisal",
 };
 
-// ANALYSIS LEVEL - Valcre values (Oct 5, 2025)
+// ANALYSIS LEVEL → Job.AnalysisLevel (native enum JobAnalysisLevel). Re-optioned 2026-06-04 (Option-b):
+// dashboard now offers the REAL enum members verbatim (from live $metadata), so this map is 1:1 identity.
+// Live metadata members: Detailed, Summary, Brief, RentalAssessmentLetter, RentalSubmission,
+// RentalDetermination, ValuationAssessmentLetter, DetailedResidential, PropertyPro, RestrictedAccessReport,
+// ProgressReport. (Old Concise/Form were NOT members — the API 400'd "Requested value 'Concise' was not found".)
 const ANALYSIS_LEVEL_MAP: Record<string, string> = {
-  Comprehensive: "Detailed", // Verified from job 706542
-  Concise: "Concise",
-  Form: "Form",
+  Detailed: "Detailed",
+  Summary: "Summary",
+  Brief: "Brief",
+  RentalAssessmentLetter: "RentalAssessmentLetter",
+  RentalSubmission: "RentalSubmission",
+  RentalDetermination: "RentalDetermination",
+  ValuationAssessmentLetter: "ValuationAssessmentLetter",
+  DetailedResidential: "DetailedResidential",
+  PropertyPro: "PropertyPro",
+  RestrictedAccessReport: "RestrictedAccessReport",
+  ProgressReport: "ProgressReport",
+  // Legacy dashboard value (pre-re-option) — keep so existing jobs that stored "Comprehensive" still sync.
+  Comprehensive: "Detailed",
 };
 
 // SCOPE OF WORK MAP - Dashboard "Scope of Work" → Valcre "Scope" field (Nov 13, 2025)

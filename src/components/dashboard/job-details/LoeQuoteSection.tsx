@@ -1308,14 +1308,19 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </CompactField>
 
           <CompactField label="Transaction Status">
+            {/* Options re-optioned VERBATIM to Valcre CF12053 value set (api/valcre.ts VALTA_FIELD_CONFIG.transactionStatus:
+                Arm's Length=5986, Non-Arm's Length=5987, Listing=5988, Under Contract=5989, REO/Bank Sale=5990).
+                Old labels (Listed/Not Applicable) didn't resolve to an AvailableValueId → silently skipped. */}
             <Select value={jobDetails.transactionStatus || ''} onValueChange={value => handleSelectChange(value, 'transactionStatus')}>
               <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Listed">Listed</SelectItem>
-                <SelectItem value="Not Applicable">Not Applicable</SelectItem>
+                <SelectItem value="Arm's Length">Arm's Length</SelectItem>
+                <SelectItem value="Non-Arm's Length">Non-Arm's Length</SelectItem>
+                <SelectItem value="Listing">Listing</SelectItem>
                 <SelectItem value="Under Contract">Under Contract</SelectItem>
+                <SelectItem value="REO/Bank Sale">REO/Bank Sale</SelectItem>
               </SelectContent>
             </Select>
           </CompactField>
@@ -1336,16 +1341,25 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </CompactField>
 
           <CompactField label="Analysis Level">
-            {/* Options = KEYS of ANALYSIS_LEVEL_MAP (api/valcre.ts:82-86). Syncs to Valcre.AnalysisLevel —
-                free-typed values that aren't a map key silently fail to push. Keep in lockstep with the map. */}
+            {/* Re-optioned to Valcre's REAL JobAnalysisLevel enum members (from live $metadata). VALUE = exact
+                enum member name (what Job.AnalysisLevel accepts); label = friendly. Old options (Comprehensive/
+                Concise/Form) were NOT valid enum members — only "Detailed" was, so Concise/Form 400'd. Maps 1:1. */}
             <Select value={jobDetails.analysisLevel || ''} onValueChange={value => handleSelectChange(value, 'analysisLevel')}>
               <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Comprehensive">Comprehensive</SelectItem>
-                <SelectItem value="Concise">Concise</SelectItem>
-                <SelectItem value="Form">Form</SelectItem>
+                <SelectItem value="Detailed">Detailed</SelectItem>
+                <SelectItem value="Summary">Summary</SelectItem>
+                <SelectItem value="Brief">Brief</SelectItem>
+                <SelectItem value="DetailedResidential">Detailed Residential</SelectItem>
+                <SelectItem value="RestrictedAccessReport">Restricted Access Report</SelectItem>
+                <SelectItem value="ProgressReport">Progress Report</SelectItem>
+                <SelectItem value="ValuationAssessmentLetter">Valuation Assessment Letter</SelectItem>
+                <SelectItem value="RentalAssessmentLetter">Rental Assessment Letter</SelectItem>
+                <SelectItem value="RentalSubmission">Rental Submission</SelectItem>
+                <SelectItem value="RentalDetermination">Rental Determination</SelectItem>
+                <SelectItem value="PropertyPro">Property Pro</SelectItem>
               </SelectContent>
             </Select>
           </CompactField>

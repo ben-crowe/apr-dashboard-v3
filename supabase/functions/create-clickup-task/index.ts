@@ -1,6 +1,7 @@
 // Supabase Edge Function for ClickUp Task Creation
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 import { createClient } from 'jsr:@supabase/supabase-js@2'
+import { fetchListFields, buildHubCustomFields, applyTaskFields } from '../_shared/clickup-fields.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -320,12 +321,29 @@ Deno.serve(async (req) => {
 
     console.log('✅ ClickUp task saved successfully to both tables')
 
+    // Populate the JOB-HUB custom fields (typed slots, set-replaces — no dup possible). Dynamic byName
+    // resolution against the target list; absent fields + unmatched dropdowns are skipped. Non-fatal:
+    // the task already exists, so field-population failure must not fail the create.
+    let customFields = { set: 0, failed: 0, verified: 0, total: 0 }
+    try {
+      const listFields = await fetchListFields(CLICKUP_API_TOKEN, CLICKUP_LIST_ID)
+      const hubFields = buildHubCustomFields(job, listFields)
+      if (hubFields.length) {
+        customFields = await applyTaskFields(CLICKUP_API_TOKEN, clickupTask.id, hubFields)
+      } else {
+        console.log('ℹ️ No matching hub custom fields on list', CLICKUP_LIST_ID)
+      }
+    } catch (cfErr) {
+      console.error('Custom-field population failed (non-fatal):', (cfErr as any)?.message || cfErr)
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
         taskId: clickupTask.id,
         taskName: taskName,
-        taskUrl: clickupTask.url
+        taskUrl: clickupTask.url,
+        customFields
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

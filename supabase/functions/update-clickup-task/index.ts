@@ -1,6 +1,7 @@
 // Supabase Edge Function for ClickUp Task Update (Stage 2: LOE Section)
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 import { createClient } from 'jsr:@supabase/supabase-js@2'
+import { fetchListFields, buildHubCustomFields, applyTaskFields } from '../_shared/clickup-fields.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -320,10 +321,29 @@ ${loeDetails.internal_comments || loeDetails.delivery_comments || loeDetails.pay
     }
     console.log('🔁 Readback verified:', verified)
 
+    // Populate the JOB-HUB custom fields from FRESH job data (set-replaces — no dup). Resolve byName
+    // against the task's OWN list, so it works on the mirror now and on Valta after replication. Non-fatal.
+    let customFields = { set: 0, failed: 0, verified: 0, total: 0 }
+    try {
+      const listId = existingTask?.list?.id
+      if (listId) {
+        const listFields = await fetchListFields(CLICKUP_API_TOKEN, listId)
+        const hubFields = buildHubCustomFields(job, listFields)
+        if (hubFields.length) {
+          customFields = await applyTaskFields(CLICKUP_API_TOKEN, taskId, hubFields)
+        }
+      } else {
+        console.log('ℹ️ No list id on task — skipping custom-field population')
+      }
+    } catch (cfErr) {
+      console.error('Custom-field population failed (non-fatal):', (cfErr as any)?.message || cfErr)
+    }
+
     return new Response(
       JSON.stringify({
         success: true,
         verified,
+        customFields,
         taskId: updatedTask.id,
         taskName: updatedTaskName,
         taskUrl: updatedTask.url || `https://app.clickup.com/t/${taskId}`

@@ -11,7 +11,14 @@ const corsHeaders = {
 // Supports both dev (BC workspace) and production (Valta workspace)
 
 // Environment detection
-const CLICKUP_ENV = Deno.env.get('CLICKUP_ENV') || 'dev'
+// PINNED TO DEV 2026-06-04 (react-spec, CoArch-directed): MUST mirror create-clickup-task, which is
+// also pinned to 'dev'. The global CLICKUP_ENV secret is 'production' on this project, but the Stage-1
+// task is CREATED on the BC workspace (8555561 / list 901706896375). Stage-2 must update that SAME
+// task, so it must read the SAME BC workspace + token create used. Following the global secret sent
+// update to the Valta workspace (9014181018) and a stale Valta OAuth token → 401. Pinning to dev makes
+// create + update consistent. Chris's prod flow is untouched (this fn only ran against the BC card).
+// To restore env-driven behavior, revert to: Deno.env.get('CLICKUP_ENV') || 'dev'.
+const CLICKUP_ENV = 'dev'
 
 // Development configuration (BC Workspace)
 const DEV_CONFIG = {
@@ -74,11 +81,21 @@ Deno.serve(async (req) => {
 
     // Fall back to environment variable token if no OAuth connection
     if (!CLICKUP_API_TOKEN) {
-      const envToken = CLICKUP_ENV === 'production' 
+      // No hardcoded token fallbacks — stale literals caused 401s twice (2026-06-03). Read from secrets only.
+      // Mirrors create-clickup-task exactly so Stage-1 + Stage-2 use the identical token source.
+      const envToken = CLICKUP_ENV === 'production'
         ? Deno.env.get('CLICKUP_API_TOKEN_VALTA')
-        : Deno.env.get('CLICKUP_API_TOKEN') || 'pk_10791838_TPNA2KDR3VDVGMT3UHF6AZ66AN4NOIAY'
+        : Deno.env.get('CLICKUP_API_TOKEN')
       CLICKUP_API_TOKEN = envToken
       console.log('🔧 Using fallback token from environment variable')
+
+      // Validate token format
+      if (!CLICKUP_API_TOKEN || !CLICKUP_API_TOKEN.startsWith('pk_')) {
+        throw new Error('Invalid ClickUp API token format - must start with pk_')
+      }
+      if (CLICKUP_API_TOKEN.length < 40) {
+        throw new Error('Invalid ClickUp API token - too short')
+      }
     }
 
     // Fetch job and LOE details from database

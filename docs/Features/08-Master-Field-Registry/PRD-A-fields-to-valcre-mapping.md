@@ -97,3 +97,34 @@ a pass.
 The LOE Quote section's "Test Data" button bulk-populates the whole section and OVERRIDES fields
 already set + synced on VAL261101. Never click it during sync testing — it destroys the one-field-
 at-a-time verification this PRD exists for. Fill only the empty in-scope fields, individually.
+
+## Testing Toolkit — the repeatable loop (load these, don't reinvent)
+
+> Added 2026-06-04. This is the standing kit for running the dashboard→Valcre→ClickUp→DocuSeal
+> verification loop over and over. Every tester deploy brief should reference this section.
+
+### The toolkit (skills to load)
+| Need | Skill / tool | What it is |
+|---|---|---|
+| Fill app fields like a human | `/agent-fill-fields` | Method-1 real-keystroke fill (`agent-browser fill` over CDP). NEVER JS `.value`. |
+| Drive / screenshot the app | `/cli-browser-auto` + `/agent-screenshot` | agent-browser (127 cmds) + the 3 screenshot methods (isolated `--session`, never default 9222). |
+| Read/write/verify ClickUp | `/cli-clickup-tools` | 60-command ClickUp CLI (task CRUD, custom fields, lists, folders, tags, time, docs, bulk). Search first: `python3 ~/.claude/skills/cli-clickup-tools/scripts/search.py "<intent>"`. Sources: 6 APR CLIs + 49 general CLI lib + 5 refs. |
+| Deeper ClickUp nav / OAuth / troubleshoot | `/agent-clickup-expert` | The ClickUp domain agent for setup, custom fields, board automation, API debugging. |
+| Supabase (edge fns, migrations, SQL) | `/supabase-deploy` | CLI auto-authed (no-expiry PAT persisted 3 places). Cloud project ngovnamnjmexdpjtcnky. Never local. |
+| Valcre verification | direct API GetValues readback | Confirm the value LANDED — never trust HTTP 200 (Valcre returns 200 on silent failure). |
+
+### Auth (where the real tokens live — never hardcode in code)
+- **ClickUp (agent CLI session):** `export CLICKUP_API_TOKEN=<documented token>` + `CLICKUP_TEAM_ID` (8555561 BC / 9014181018 Valta). Tokens documented in `/cli-clickup-tools` + CRITICAL-API-KEYS.md (pk_10791838… = test writes, pk_54774263… = production reads).
+- **ClickUp (code/edge functions):** read the Supabase SECRET `CLICKUP_API_TOKEN` — NEVER a hardcoded fallback (that's the recurring stale-token 401 trap, killed 2026-06-03).
+- **Supabase:** auto-authed via `/supabase-deploy` — do not ask for or paste a token.
+- ClickUp lists: test 901706896375 (BC), production Valta 901402094744, template t-86b3exqe8.
+
+### The repeatable test loop (one field at a time)
+1. **Deploy** the change to prod (v07 stays dormant; verify prod 200 + new alias by asset-hash).
+2. **Fill** the field on the pinned test job (VAL261101 / Valcre Id 784140, name-match guard FIRST) — real click, Method 1, never Test Data.
+3. **Trigger** the per-field auto-save (it debounces 500ms → Supabase → Valcre/ClickUp).
+4. **Verify it LANDED** — readback from Valcre (GetValues) and/or the ClickUp card; screenshot the destination side. Never trust the 200.
+5. **Log** PASS/FAIL per field with the destination-side proof.
+6. **Fix → redeploy → re-verify** until the per-field table is all green.
+
+This loop is destination-agnostic: same pattern for Valcre custom/native fields, the ClickUp rich card, and (next) the DocuSeal signable fields.

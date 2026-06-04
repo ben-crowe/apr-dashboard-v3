@@ -610,8 +610,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           jobData.propertyRightsAppraised ||
           jobData.PropertyRightsAppraised
         ) {
-          const rawValue =
-            jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised;
+          // Job.Purposes is a SINGLE enum but the dashboard field is multi-select (comma-joined).
+          // House pattern for multi-select → single-enum = "First value only" (matches PropertyType,
+          // 1-API-FIELD-MAPPING-REFERENCE.md). Take the primary selection so multi-select degrades
+          // gracefully instead of silently skipping (whole comma string never matches a map key).
+          const rawValue = String(
+            jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised,
+          )
+            .split(",")[0]
+            .trim();
           const converted = PURPOSES_MAP[rawValue];
           if (converted) {
             updateData.Purposes = converted;
@@ -719,6 +726,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.log("Update response status:", updateResponse.status);
         console.log("Update response:", updateResponseText);
 
+        // Valcre can return HTTP 200 with a FAILURE body for the native PATCH
+        // (e.g. {"status":"400","success":false,"error":["Requested value 'Concise' was not found."]}).
+        // Detect it so a rejected native write is NOT reported as success (the 200-not-success trap that
+        // hid the AnalysisLevel bug — invalid enum value silently accepted at the HTTP layer).
+        let nativePatchError: string | null = null;
+        try {
+          const parsed = JSON.parse(updateResponseText);
+          if (parsed && (parsed.success === false || parsed.status === "400" || parsed.status === 400 || parsed.error)) {
+            nativePatchError = Array.isArray(parsed.error)
+              ? parsed.error.join("; ")
+              : String(parsed.error ?? parsed.status ?? "native PATCH rejected");
+            console.error(`🔴 Native PATCH returned HTTP ${updateResponse.status} but body indicates FAILURE: ${nativePatchError}`);
+          }
+        } catch {
+          /* non-JSON body (empty 204 etc.) = no in-body error */
+        }
+
         if (updateResponse.ok || updateResponse.status === 204) {
           // NATIVE readback (2026-06-04): the per-field native bug hid behind a 200, so verify the PATCH
           // actually landed by reading the native fields back — don't trust updateResponse.ok alone.
@@ -810,6 +834,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
               valcreResponse: updateResponseText || "No content (success)",
               customFields: hasValtaFields ? customFieldResults : undefined,
               nativeVerified: nativeKeys.length > 0 ? nativeVerify : undefined,
+              nativePatchError: nativePatchError || undefined,
             });
         } else {
           console.error("Update failed:", updateResponseText);

@@ -299,9 +299,31 @@ ${loeDetails.internal_comments || loeDetails.delivery_comments || loeDetails.pay
     const updatedTask = await updateResponse.json()
     console.log('✅ ClickUp task updated successfully:', updatedTask.id)
 
+    // READBACK VERIFY (HTTP 200 ≠ persisted) — re-GET the task and confirm our description
+    // actually landed. Exact-match on the description we sent; header marker as a softer fallback.
+    let verified = false
+    try {
+      const verifyResponse = await fetch(`https://api.clickup.com/api/v2/task/${taskId}`, {
+        method: 'GET',
+        headers: { 'Authorization': CLICKUP_API_TOKEN, 'Content-Type': 'application/json' }
+      })
+      if (verifyResponse.ok) {
+        const verifyTask = await verifyResponse.json()
+        const liveDesc = verifyTask.markdown_description || verifyTask.description || ''
+        verified = liveDesc.trim() === combinedDescription.trim()
+          || liveDesc.includes('LOE QUOTE & VALUATION DETAILS')
+      } else {
+        console.warn('Readback GET non-200:', verifyResponse.status)
+      }
+    } catch (e) {
+      console.warn('Readback verify failed (non-fatal):', e?.message || e)
+    }
+    console.log('🔁 Readback verified:', verified)
+
     return new Response(
       JSON.stringify({
         success: true,
+        verified,
         taskId: updatedTask.id,
         taskName: updatedTaskName,
         taskUrl: updatedTask.url || `https://app.clickup.com/t/${taskId}`

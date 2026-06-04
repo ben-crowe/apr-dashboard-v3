@@ -85,6 +85,45 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     // reportFormat, assignmentType, cmhcFinancing, desktopReport, purpose, leadAppraiser, approachesToValue.
     'authorizedUse', 'analysisLevel', 'transactionStatus', 'zoningStatus', 'valueScenarios'];
 
+  // Fields that ALSO push to the ClickUp card (additive to Valcre sync — Ben-confirmed 2026-06-04).
+  // These are EXACTLY the Stage-2 LOE-QUOTE fields that update-clickup-task renders into the card
+  // (per QA's tests/MAPPING-dashboard-to-clickup.md Stage-2 + docs/FIELD-ROUTING-dashboard-clickup-loe.md).
+  // update-clickup-task re-reads job_loe_details FRESH from the DB and rebuilds the section, so we only
+  // need to fire it (by jobId) after the field persists — no per-field value payload. Internal-only
+  // tracking fields (retainerPaidDate / paymentAmount-paid / paymentPaidDate) are NOT-on-card → excluded.
+  const CLICKUP_CARD_FIELDS = ['propertyRightsAppraised', 'scopeOfWork', 'reportType', 'appraisalFee',
+    'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments', 'deliveryComments', 'paymentComments'];
+
+  // Debounced card refresh: rapid edits across several card fields coalesce into ONE update-clickup-task
+  // call (it rebuilds the whole section from DB anyway). Reuses the saved clickup_task_id — never creates.
+  const clickupPushTimer = useRef<NodeJS.Timeout | null>(null);
+  const pushCardUpdate = useCallback(() => {
+    const taskId = (jobDetails as any)?.clickupTaskId || (job as any)?.clickupTaskId
+      || (job as any)?.clickup_task_id;
+    if (!taskId) return; // no card yet (Stage-1 hasn't created one) — nothing to update
+    if (clickupPushTimer.current) clearTimeout(clickupPushTimer.current);
+    clickupPushTimer.current = setTimeout(async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        const { data: result, error } = await supabase.functions.invoke('update-clickup-task', {
+          body: { jobId: job.id, userId: user?.id },
+        });
+        // Readback, not 200: the edge fn re-GETs the card and returns `verified`.
+        if (error || !result?.success) {
+          console.error('ClickUp card update failed:', error || result?.error);
+          toast.warning('ClickUp card update failed — refresh ClickUp');
+        } else if (result.verified === false) {
+          console.warn('ClickUp card update unverified (PUT 200 but readback mismatch):', result);
+          toast.warning('ClickUp card update unverified');
+        } else {
+          console.log('✅ ClickUp card updated + verified:', result.taskId);
+        }
+      } catch (e) {
+        console.error('ClickUp card push error:', e);
+      }
+    }, 1500); // coalesce window
+  }, [job, jobDetails]);
+
   // Helper function to get user-friendly field names for toast messages
   const getFieldDisplayName = (fieldName: string): string => {
     const fieldNames: Record<string, string> = {
@@ -474,6 +513,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         // Persisted to Supabase — baseline 'saved' (grey check). Upgraded to 'synced'/'sync-failed' below.
         setFieldStates(prev => ({ ...prev, [fieldName]: 'saved' }));
 
+        // Additive ClickUp-card push: if this is a card-routed field, refresh the existing card
+        // (debounced, reuses saved clickup_task_id — never creates). Independent of the Valcre sync below.
+        if (CLICKUP_CARD_FIELDS.includes(fieldName)) {
+          pushCardUpdate();
+        }
+
         // Check if this field should also sync to Valcre
         const shouldSyncToValcre = VALCRE_SYNC_FIELDS.includes(fieldName) &&
                                     isValcreJobNumber(jobDetails?.jobNumber) &&
@@ -544,12 +589,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         setIsSectionSaving(false);
       }
     }, 500); // 500ms debounce
-  }, [job, jobDetails, onUpdateDetails, VALCRE_SYNC_FIELDS]);
+  }, [job, jobDetails, onUpdateDetails, VALCRE_SYNC_FIELDS, pushCardUpdate]);
 
   // Cleanup timers on unmount
   useEffect(() => {
     return () => {
       Object.values(debounceTimers.current).forEach(timer => clearTimeout(timer));
+      if (clickupPushTimer.current) clearTimeout(clickupPushTimer.current);
     };
   }, []);
 

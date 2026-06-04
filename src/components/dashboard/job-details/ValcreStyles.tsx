@@ -1,5 +1,25 @@
 // Valcre-style consistent design for all sections
 import React from "react";
+import { Loader2, Check, AlertTriangle } from "lucide-react";
+
+// Per-field sync status indicator (PRD: saving → saved-local → synced-to-Valcre → sync-failed).
+// 'saved' = persisted to Supabase (grey); 'synced' = readback-CONFIRMED in Valcre (blue);
+// 'sync-failed' = Valcre rejected/failed (amber !) — surfaces the silent-200 rejections.
+export type FieldSyncStatus = 'idle' | 'saving' | 'saved' | 'synced' | 'sync-failed';
+export const FieldStatusIcon = ({ status }: { status?: FieldSyncStatus }) => {
+  switch (status) {
+    case 'saving':
+      return <Loader2 className="h-3.5 w-3.5 text-gray-400 animate-spin shrink-0" aria-label="Saving…" />;
+    case 'saved':
+      return <Check className="h-3.5 w-3.5 text-gray-400 shrink-0" aria-label="Saved locally" />;
+    case 'synced':
+      return <Check className="h-3.5 w-3.5 text-blue-500 shrink-0" aria-label="Synced to Valcre" />;
+    case 'sync-failed':
+      return <AlertTriangle className="h-3.5 w-3.5 text-amber-500 shrink-0" aria-label="Valcre sync failed" />;
+    default:
+      return null;
+  }
+};
 
 export const sectionTriggerStyle = "hover:no-underline py-3";
 export const sectionContentStyle = "px-4 py-4";
@@ -64,16 +84,18 @@ export const SingleFieldWrapper = ({ children }: { children: React.ReactNode }) 
 );
 
 // Compact field for two-column layout
-export const CompactField = ({ 
-  label, 
+export const CompactField = ({
+  label,
   children,
   fullWidth = false,
-  className = "" 
-}: { 
-  label?: string | React.ReactNode; 
+  className = "",
+  status
+}: {
+  label?: string | React.ReactNode;
   children: React.ReactNode;
   fullWidth?: boolean;
   className?: string;
+  status?: FieldSyncStatus;
 }) => (
   <div className={`flex items-center gap-2 py-0.5 ${fullWidth ? 'md:col-span-2' : ''} ${className}`}>
     {label && (
@@ -84,5 +106,6 @@ export const CompactField = ({
     <div className="flex-1">
       {children}
     </div>
+    <FieldStatusIcon status={status} />
   </div>
 );

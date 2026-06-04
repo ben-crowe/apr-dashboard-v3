@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/collapsible";
 import { ChevronDown, ChevronRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField } from "./ValcreStyles";
+import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField, FieldSyncStatus } from "./ValcreStyles";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MultiSelect } from "@/components/ui/multi-select";
@@ -51,7 +51,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
   // Section-level save state for visual feedback
   const [isSectionSaving, setIsSectionSaving] = useState(false);
-  const [fieldStates, setFieldStates] = useState<Record<string, 'idle' | 'saving' | 'success'>>({});
+  const [fieldStates, setFieldStates] = useState<Record<string, FieldSyncStatus>>({});
   
   // Local state for currency fields during editing (prevents controlled input issues)
   const [editingAppraisalFee, setEditingAppraisalFee] = useState<string | null>(null);
@@ -471,6 +471,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           return;
         }
 
+        // Persisted to Supabase — baseline 'saved' (grey check). Upgraded to 'synced'/'sync-failed' below.
+        setFieldStates(prev => ({ ...prev, [fieldName]: 'saved' }));
+
         // Check if this field should also sync to Valcre
         const shouldSyncToValcre = VALCRE_SYNC_FIELDS.includes(fieldName) &&
                                     isValcreJobNumber(jobDetails?.jobNumber) &&
@@ -512,17 +515,26 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           console.log(`Syncing ${fieldName} to Valcre:`, syncData);
           const result = await sendToValcre(syncData);
 
-          if (!result.success) {
-            console.error('Valcre sync failed:', result.error);
+          // Determine per-field sync outcome from the readback-backed response (HTTP 200 ≠ success):
+          // a native-PATCH rejection (nativePatchError), a readback mismatch, or a failed custom write
+          // all count as sync-failed — the amber state surfaces the otherwise-silent rejection.
+          const nativeBad = result.nativeVerified
+            ? Object.values(result.nativeVerified).some((v: any) => v && v.ok === false)
+            : false;
+          const customBad = !!result.customFields && result.customFields.failed > 0;
+          const syncFailed = !result.success || !!result.nativePatchError || nativeBad || customBad;
+          if (syncFailed) {
+            console.error('Valcre sync failed:', result.nativePatchError || result.error, result);
             toast.error(`Failed to sync ${getFieldDisplayName(fieldName)} to Valcre`);
+            setFieldStates(prev => ({ ...prev, [fieldName]: 'sync-failed' }));
+          } else {
+            setFieldStates(prev => ({ ...prev, [fieldName]: 'synced' }));
           }
         } else {
-          // Field saved to Supabase but no Valcre job yet
-          // Silent save — no toast for routine field updates
+          // Field saved to Supabase but no Valcre job yet — stays 'saved' (grey check).
         }
 
-        // Clear field and section saving states
-        setFieldStates(prev => ({ ...prev, [fieldName]: 'idle' }));
+        // Section spinner off — leave the per-field state (saved/synced/sync-failed) intact for the indicator.
         setIsSectionSaving(false);
 
       } catch (error: any) {
@@ -1076,7 +1088,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         {/* Valuation Details Section */}
         <TwoColumnFields>
           {/* Row 1 */}
-          <CompactField label="Property Rights">
+          <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']}>
             <MultiSelect
               value={jobDetails.propertyRightsAppraised || ''}
               onChange={values => handleMultiSelectChange(values, 'propertyRightsAppraised')}
@@ -1244,7 +1256,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             />
           </CompactField>
 
-          <CompactField label="Authorized Use">
+          <CompactField label="Authorized Use" status={fieldStates['authorizedUse']}>
             <Select value={jobDetails.authorizedUse || ''} onValueChange={value => handleSelectChange(value, 'authorizedUse')}>
               <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                 <SelectValue placeholder="Select..." />
@@ -1288,7 +1300,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             </Select>
           </CompactField>
 
-          <CompactField label="Value Scenarios">
+          <CompactField label="Value Scenarios" status={fieldStates['valueScenarios']}>
             <MultiSelect
               value={jobDetails.valueScenarios || ''}
               onChange={values => handleMultiSelectChange(values, 'valueScenarios')}
@@ -1307,7 +1319,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             />
           </CompactField>
 
-          <CompactField label="Transaction Status">
+          <CompactField label="Transaction Status" status={fieldStates['transactionStatus']}>
             {/* Options re-optioned VERBATIM to Valcre CF12053 value set (api/valcre.ts VALTA_FIELD_CONFIG.transactionStatus:
                 Arm's Length=5986, Non-Arm's Length=5987, Listing=5988, Under Contract=5989, REO/Bank Sale=5990).
                 Old labels (Listed/Not Applicable) didn't resolve to an AvailableValueId → silently skipped. */}
@@ -1325,7 +1337,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             </Select>
           </CompactField>
 
-          <CompactField label="Zoning Status">
+          <CompactField label="Zoning Status" status={fieldStates['zoningStatus']}>
             {/* Registry ListZoningStatus (field-registry-v6.html:523) — Select one, vr:Job. Options verbatim. */}
             <Select value={jobDetails.zoningStatus || ''} onValueChange={value => handleSelectChange(value, 'zoningStatus')}>
               <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
@@ -1340,7 +1352,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             </Select>
           </CompactField>
 
-          <CompactField label="Analysis Level">
+          <CompactField label="Analysis Level" status={fieldStates['analysisLevel']}>
             {/* Re-optioned to Valcre's REAL JobAnalysisLevel enum members (from live $metadata). VALUE = exact
                 enum member name (what Job.AnalysisLevel accepts); label = friendly. Old options (Comprehensive/
                 Concise/Form) were NOT valid enum members — only "Detailed" was, so Concise/Form 400'd. Maps 1:1. */}
@@ -1414,7 +1426,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             </Select>
           </CompactField>
 
-          <CompactField label="Effective Date">
+          <CompactField label="Effective Date" status={fieldStates['effectiveDate']}>
             <Input
               type="date"
               name="effectiveDate"
@@ -1425,7 +1437,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             />
           </CompactField>
 
-          <CompactField label="Request Date">
+          <CompactField label="Request Date" status={fieldStates['requestDate']}>
             <Input
               type="date"
               name="requestDate"
@@ -1436,7 +1448,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             />
           </CompactField>
 
-          <CompactField label="Signed Date">
+          <CompactField label="Signed Date" status={fieldStates['signedDate']}>
             <Input
               type="date"
               name="signedDate"

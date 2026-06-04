@@ -68,7 +68,7 @@ function parseAddress(address: string): { street: string; city: string; province
 }
 
 // Function to send data to Valcre via Vercel serverless function
-export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: boolean; jobNumber?: string; jobId?: number; error?: string}> => {
+export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: boolean; jobNumber?: string; jobId?: number; error?: string; nativeVerified?: Record<string, {sent: any; actual: any; ok: boolean}>; customFields?: {success: number; failed: number; errors: string[]}; nativePatchError?: string}> => {
   try {
     console.log('Sending data to Valcre:', data);
 
@@ -208,7 +208,12 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
         return {
           success: true,
           jobNumber: data.jobNumber,
-          jobId: data.jobId
+          jobId: data.jobId,
+          // Per-field verification detail (for the sync indicator). A 'success:true' overall can still
+          // carry a rejected native field (nativePatchError) or a failed custom write — surface it.
+          nativeVerified: result.nativeVerified,
+          customFields: result.customFields,
+          nativePatchError: result.nativePatchError,
         };
       } else {
         console.error('❌ LOE sync failed:', result);

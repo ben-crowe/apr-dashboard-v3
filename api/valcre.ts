@@ -145,10 +145,9 @@ const VALTA_CUSTOM_FIELD_IDS: Record<string, number> = {
   statusOfImprovements: 12044,
   propertySubtype: 12045,
   landMetric: 12046,
-  environmentalAssessment: 12047,
-  heritageConservation: 12048,
+  // 12047 environmentalAssessment, 12048 heritageConservation, 12050 desktopReport REMOVED —
+  // these IDs do NOT exist on the tenant (verified live API + admin screenshot 2026-06-03); writes silently 400'd.
   assignmentType: 12049,
-  desktopReport: 12050,
   valueTimeframe: 12051,
   approachesToValue: 12052,
   transactionStatus: 12053,
@@ -187,13 +186,10 @@ const VALTA_FIELD_CONFIG: Record<
     type: "SingleOption",
     options: { "Square Feet": 5969, "Acres": 5970, "Hectares": 5971 },
   },
-  environmentalAssessment: { type: "String" },
-  heritageConservation: { type: "String" },
   assignmentType: {
     type: "SingleOption",
     options: { "Standard": 5972, "Update": 5973, "Retrospective": 5974, "Desktop": 5975 },
   },
-  desktopReport: { type: "Boolean" },
   valueTimeframe: {
     type: "SingleOption",
     options: { "Current": 5976, "Retrospective": 5977, "Prospective": 5978 },
@@ -457,6 +453,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         if (jobData.deliveryDate || jobData.DeliveryDate) {
           const date = jobData.deliveryDate || jobData.DeliveryDate;
           updateData.DueDate = date.split("T")[0];
+        }
+
+        // PRD-A clean native-Job-field mappings — verified live on VAL261101.
+        // Only native prop names are sent to updateData (OData 500s on unknown props).
+        // Request Date → Job.BidDate (#1)
+        if (jobData.requestDate) {
+          updateData.BidDate = String(jobData.requestDate).split("T")[0];
+          console.log(`✅ Request Date → BidDate: "${updateData.BidDate}"`);
+        }
+        // Signed Date → Job.AwardDate (#2)
+        if (jobData.signedDate) {
+          updateData.AwardDate = String(jobData.signedDate).split("T")[0];
+          console.log(`✅ Signed Date → AwardDate: "${updateData.AwardDate}"`);
+        }
+        // Effective Date → Job.EffectiveDate (#3)
+        if (jobData.effectiveDate) {
+          updateData.EffectiveDate = String(jobData.effectiveDate).split("T")[0];
+          console.log(`✅ Effective Date → EffectiveDate: "${updateData.EffectiveDate}"`);
         }
 
         // Intended Use → Authorized Use field (IntendedUses)

@@ -59,6 +59,17 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const [editingPaymentAmount, setEditingPaymentAmount] = useState<string | null>(null);
   const [commentsExpanded, setCommentsExpanded] = useState(false);
 
+  // LOE template versions (PRD-B version selector) — default newest active
+  const [loeTemplates, setLoeTemplates] = useState<Array<{ id: string; name: string; version: number }>>([]);
+  useEffect(() => {
+    supabase
+      .from('loe_templates')
+      .select('id, name, version')
+      .eq('is_active', true)
+      .order('version', { ascending: false })
+      .then(({ data }) => { if (data) setLoeTemplates(data as any); });
+  }, []);
+
   // Debounce timers
   const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
 
@@ -422,6 +433,15 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           leadAppraiser: 'lead_appraiser',
           requestDate: 'request_date',
           signedDate: 'signed_date',
+          // LOE-07 version selector + gap fields
+          loeTemplateId: 'loe_template_id',
+          currentUse: 'current_use',
+          proposedUse: 'proposed_use',
+          valueTimeframe: 'value_timeframe',
+          approachesToValue: 'approaches_to_value',
+          deliveryTime: 'delivery_time',
+          clientDocuments: 'client_documents',
+          previouslyAppraised: 'previously_appraised',
         };
         
         // Use mapped field name if exists, otherwise use original
@@ -1018,6 +1038,24 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 }}
               />
             </CompactField>
+            <CompactField label="LOE Version">
+              {/* PRD-B version selector — default = newest active; old versions stay selectable */}
+              <Select
+                value={jobDetails.loeTemplateId || (loeTemplates[0]?.id ?? '')}
+                onValueChange={value => handleSelectChange(value, 'loeTemplateId')}
+              >
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Newest" />
+                </SelectTrigger>
+                <SelectContent>
+                  {loeTemplates.map((t, idx) => (
+                    <SelectItem key={t.id} value={t.id}>
+                      {t.name}{idx === 0 ? ' (newest)' : ''}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </CompactField>
           </TwoColumnFields>
         </SectionGroup>
 
@@ -1378,6 +1416,34 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               onBlur={handleBlur}
               className="h-7 text-sm max-w-[160px]"
             />
+          </CompactField>
+
+          {/* ── LOE-07 gap fields (feed the v07 contract template) ── */}
+          <CompactField label="Current Use">
+            <Input type="text" name="currentUse" value={(jobDetails as any).currentUse || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Current use..." className="h-7 text-sm max-w-[160px]" />
+          </CompactField>
+          <CompactField label="Proposed Use">
+            <Input type="text" name="proposedUse" value={(jobDetails as any).proposedUse || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Proposed use..." className="h-7 text-sm max-w-[160px]" />
+          </CompactField>
+          <CompactField label="Approaches to Value">
+            <Input type="text" name="approachesToValue" value={(jobDetails as any).approachesToValue || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Approaches..." className="h-7 text-sm max-w-[160px]" />
+          </CompactField>
+          <CompactField label="Delivery Time (wks)">
+            <Input type="text" name="deliveryTime" value={(jobDetails as any).deliveryTime || ''} onChange={handleChange} onBlur={handleBlur} placeholder="e.g. 4" className="h-7 text-sm max-w-[160px]" />
+          </CompactField>
+          <CompactField label="Client Documents">
+            <Input type="text" name="clientDocuments" value={(jobDetails as any).clientDocuments || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Docs requested..." className="h-7 text-sm max-w-[160px]" />
+          </CompactField>
+          <CompactField label="Previously Appraised">
+            <Select value={(jobDetails as any).previouslyAppraised || ''} onValueChange={value => handleSelectChange(value, 'previouslyAppraised')}>
+              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                <SelectValue placeholder="Select..." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Yes">Yes</SelectItem>
+                <SelectItem value="No">No</SelectItem>
+              </SelectContent>
+            </Select>
           </CompactField>
         </TwoColumnFields>
 

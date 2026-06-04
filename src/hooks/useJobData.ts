@@ -150,7 +150,23 @@ export function useJobData(jobId: string) {
               paymentComments: loeData.payment_comments,  // FIX: Add payment comments (Nov 18 - regression fix)
               paymentAmount: loeData.payment_amount,
               paymentPaidDate: loeData.payment_paid_date,
-              retainerPaidDate: loeData.retainer_paid_date
+              retainerPaidDate: loeData.retainer_paid_date,
+              // Version selector (PRD-B): which LOE template version this job uses
+              loeTemplateId: loeData.loe_template_id,
+              // PRD-A job-prep fields (saved to job_loe_details by LoeQuoteSection)
+              jobStatus: loeData.job_status,
+              authorizedUse: loeData.authorized_use,
+              valueScenarios: loeData.value_scenarios,
+              reportFormat: loeData.report_format,
+              effectiveDate: loeData.effective_date,
+              requestDate: loeData.request_date,
+              signedDate: loeData.signed_date,
+              // LOE-07 gap fields
+              currentUse: loeData.current_use,
+              proposedUse: loeData.proposed_use,
+              deliveryTime: loeData.delivery_time,
+              clientDocuments: loeData.client_documents,
+              previouslyAppraised: loeData.previously_appraised
             });
           }
 

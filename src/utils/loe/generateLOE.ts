@@ -193,12 +193,21 @@ function getMapperForVersion(version: number): (j: DetailJob, d: JobDetails) => 
 /**
  * Generate LOE HTML without sending (for preview)
  */
+// Generic conditional-section drop. Any block fenced with <!-- NAME:START -->...<!-- NAME:END -->
+// vanishes when shouldRemove is true. Because the template's section numbers AND page numbers are
+// CSS-counter driven, the document RENUMBERS + REFLOWS on its own once a block is removed —
+// "if it does not apply, the page is not added and the page number adjusts" (Chris's rule).
+// Reuse this for ANY fully-conditional section (Schedule A, §10 EA/HC, future sections).
+function applyConditionalSection(html: string, fenceName: string, shouldRemove: boolean): string {
+  if (!shouldRemove) return html;
+  const re = new RegExp(`<!-- ${fenceName}:START -->[\\s\\S]*?<!-- ${fenceName}:END -->`, 'g');
+  return html.replace(re, '');
+}
+
 // Strip the conditional Schedule "A" block unless AssignmentType = Multiple Properties (V07).
-// The template marks the block with HTML comment fences so we can remove it cleanly.
 function applyConditionalScheduleA(html: string, jobDetails: JobDetails): string {
   const isMultiple = String((jobDetails as any).assignmentType || '').toLowerCase().includes('multiple');
-  if (isMultiple) return html;
-  return html.replace(/<!-- SCHEDULE-A:START -->[\s\S]*?<!-- SCHEDULE-A:END -->/g, '');
+  return applyConditionalSection(html, 'SCHEDULE-A', !isMultiple);
 }
 
 // §10 row suppression: each EA/HC row is fenced with <!-- EAHC-ROW-n:START/END -->. Remove any row whose
@@ -230,10 +239,21 @@ export async function generateLOEHTML(
   const mapper = getMapperForVersion(loaded.version);
   const fieldMappings = mapper(job, jobDetails);
 
-  // V07: strip conditional Schedule A unless Multiple Properties, then suppress empty §10 EA/HC rows
+  // V07 conditional sections (each drops + reflows + renumbers via the CSS-counter template):
   if (loaded.version >= 6) {
+    // (1) Schedule A — only for Multiple Properties.
     htmlTemplate = applyConditionalScheduleA(htmlTemplate, jobDetails);
-    htmlTemplate = applyEahcRowSuppression(htmlTemplate, job, jobDetails);
+    // (2) §10 EA/HC — if the cascade yields ZERO scenarios, drop the WHOLE section
+    //     (heading + intro + table + Example legend); else keep it and suppress only the empty rows.
+    const eahcScenarios = deriveValueScenarios(
+      (jobDetails as any).statusOfImprovements,
+      (jobDetails as any).authorizedUse || job.intendedUse,
+    );
+    if (eahcScenarios.length === 0) {
+      htmlTemplate = applyConditionalSection(htmlTemplate, 'SECTION-EAHC', true);
+    } else {
+      htmlTemplate = applyEahcRowSuppression(htmlTemplate, job, jobDetails);
+    }
   }
 
   // Replace all bracketed placeholders with actual data (global)

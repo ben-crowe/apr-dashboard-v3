@@ -58,6 +58,7 @@
     line-height: 19px;
     color: var(--ink);
     margin: 0;
+    counter-reset: section;
   }
 
   /* Letterhead — big logo lockup left, contact block right (page 1 only) */
@@ -74,6 +75,9 @@
     margin: 14px 0 6px 0;
     page-break-after: avoid;
   }
+  /* Numbered sections auto-number via CSS counter — drop any section and the
+     rest renumber on their own (Schedule A / Appendix are class="section" only). */
+  h2.section.numbered::before { counter-increment: section; content: counter(section) ". "; }
   h3.sub { font-size: 13px; font-weight: 700; color: var(--ink); line-height: 17px; margin: 10px 0 3px 0; page-break-after: avoid; }
   p { margin: 5px 0; text-align: justify; }
   .ref { margin: 4px 0 12px 0; font-weight: 700; color: var(--navy); }
@@ -138,7 +142,7 @@
 
 <hr class="intro-rule" />
 
-<h2 class="section">1. Assignment Identification</h2>
+<h2 class="section numbered">Assignment Identification</h2>
 <p class="meta-label">Property Name</p>
 <p>[PropertyName]</p>
 <p class="meta-label">Property Address</p>
@@ -148,7 +152,7 @@
 <p class="meta-label">Interest Appraised</p>
 <p>[InterestAppraised] (assumed to be free and clear)</p>
 
-<h2 class="section">2. Property Description</h2>
+<h2 class="section numbered">Property Description</h2>
 <p class="meta-label">Current Use of the Property</p>
 <p>[CurrentUseImprovements]</p>
 <p>The current use of the property is identified for context and analysis purposes only and does not imply that such use represents the highest and best use.</p>
@@ -156,7 +160,7 @@
 <p>[ProposedUseImprovements]</p>
 <p>Where a proposed use is identified, the valuation may consider the property on a hypothetical basis, subject to Extraordinary Assumptions and or Hypothetical Conditions as outlined in this Agreement and the report.</p>
 
-<h2 class="section">3. Authorized Client, Users &amp; Use</h2>
+<h2 class="section numbered">Authorized Client, Users &amp; Use</h2>
 <p class="meta-label">Authorized Client</p>
 <p>[ClientCompanyName]</p>
 <p>The appraisal will be prepared for the above-mentioned Authorized Client identified above.</p>
@@ -166,35 +170,36 @@
 <p>[AuthorizedUse]</p>
 <p>No other use is authorized. Any reliance or use for purposes other than those stated is expressly prohibited and considered unreasonable.</p>
 
-<h2 class="section">4. Purpose of the Assignment</h2>
+<h2 class="section numbered">Purpose of the Assignment</h2>
 <p>To estimate the [Valuetimeframe] market value of the subject property.</p>
 
-<h2 class="section">5. Value Scenarios</h2>
+<h2 class="section numbered">Value Scenarios</h2>
 <p>The Appraisal in accordance with Canadian Uniform Standards of Professional Appraisal (CUSPAP), anticipates developing the following valuation approaches:</p>
 <p>[ValueScenarios]</p>
 
-<h2 class="section">6. Effective Date &amp; Report Date</h2>
+<h2 class="section numbered">Effective Date &amp; Report Date</h2>
 <p class="meta-label">Effective Date</p>
 <p>Date of inspection.</p>
 <p class="meta-label">Date of Report</p>
 <p>Date the report is completed.</p>
 
-<h2 class="section">7. Report Type &amp; Assignment Type</h2>
+<h2 class="section numbered">Report Type &amp; Assignment Type</h2>
 <p class="meta-label">Report Type</p>
 <p>[ReportType]</p>
 <p class="meta-label">Assignment Type</p>
 <p>[AssignmentType]</p>
 
-<h2 class="section">8. Scope of Work</h2>
+<h2 class="section numbered">Scope of Work</h2>
 <p>The Scope of Work includes inspection of the subject property and surrounding area, review of physical, legal, economic, and market factors, collection of municipal and regulatory information, review of client-provided documents, market research including comparable sales and rental data, highest and best use analysis, application of appropriate valuation approaches, and reconciliation to a final value conclusion.</p>
 <p>The Scope of Work is developed in accordance with CUSPAP and is sufficient to produce credible results for the Authorized Use.</p>
 
-<h2 class="section">9. Approaches to Value</h2>
+<h2 class="section numbered">Approaches to Value</h2>
 <p>The Appraiser anticipates developing the following approaches to value.<br/>
 [ApproachestoValue]</p>
 <p>The inclusion or exclusion of any approach will be explained in the report.</p>
 
-<h2 class="section">10. Extraordinary Assumptions &amp; Hypothetical Conditions</h2>
+<!-- SECTION-EAHC:START -->
+<h2 class="section numbered">Extraordinary Assumptions &amp; Hypothetical Conditions</h2>
 <p>This assignment may rely on Extraordinary Assumptions and/or Hypothetical Conditions, including:</p>
 <div class="eahc">
 <!-- EAHC-ROW-1:START --><div class="eahc-row"><div class="eahc-l">[ValueScenario1]</div><div class="eahc-r">[EA/HCSummary1]</div></div><!-- EAHC-ROW-1:END -->
@@ -210,7 +215,8 @@
 <div class="eahc-row"><div class="eahc-l">As If Vacant Land</div><div class="eahc-r">current market value of the subject property based on the extraordinary assumption and hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date.</div></div>
 </div>
 
-<h2 class="section">11. Professional Fees &amp; Terms</h2>
+<!-- SECTION-EAHC:END -->
+<h2 class="section numbered">Professional Fees &amp; Terms</h2>
 <p class="meta-label">Professional Fee</p>
 <p>[Fee] + GST</p>
 <p class="meta-label">Expenses</p>
@@ -222,11 +228,11 @@
 <p class="meta-label">Number of Reports</p>
 <p>One (1) Electronic Final Appraisal</p>
 
-<h2 class="section">12. Property Information Request</h2>
+<h2 class="section numbered">Property Information Request</h2>
 <p>The client agrees to provide the following information:</p>
 <p>[ClientDocuments]</p>
 
-<h2 class="section">13. Inspection Requirements</h2>
+<h2 class="section numbered">Inspection Requirements</h2>
 <p>The client agrees to provide the following:</p>
 <ul>
   <li>Access to the subject property, including contact details for on-site personnel</li>
@@ -236,7 +242,7 @@
 </ul>
 
 <div class="terms">
-<h2 class="section">14. Terms of Engagement</h2>
+<h2 class="section numbered">Terms of Engagement</h2>
 <h3 class="sub">14.1 Entire Agreement</h3>
 <p>This Agreement constitutes the entire agreement between the parties with respect to the assignment and supersedes all prior discussions, negotiations, or agreements, whether written or oral. Any changes must be agreed to in writing.</p>
 <h3 class="sub">14.2 Changes to Scope of Work</h3>
@@ -259,14 +265,14 @@
 <p>The report may not be altered, reproduced, or distributed without prior written consent of the Appraiser.</p>
 </div>
 
-<h2 class="section">15. Prior Services &amp; Conflict of Interest</h2>
+<h2 class="section numbered">Prior Services &amp; Conflict of Interest</h2>
 <p>Under Canadian Uniform Standards of Professional Appraisal Practice (CUSPAP) disclosure requirements, the Appraiser confirms whether any prior services have been provided on the subject property within the prescribed period, including the nature of those services, to ensure transparency and compliance with professional standards.</p>
 <ul>
   <li>Valta previously appraised this property — [PreviouslyAppraised]</li>
 </ul>
 <p>We value our client relationships and will not provide a valuation or consulting report on the subject property for another client for three months following delivery of the final report without your written consent.</p>
 
-<h2 class="section">16. Acceptance</h2>
+<h2 class="section numbered">Acceptance</h2>
 <p>I agree to the stated terms contained in this Agreement and authorize Valta Property Valuations Ltd. to prepare the above referenced appraisal.</p>
 
 <!-- VISUAL SPEC PLUGS IN HERE: sig-block design. DocuSeal signature/date tags wired in Phase-2. -->

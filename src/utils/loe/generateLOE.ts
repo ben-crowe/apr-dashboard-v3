@@ -9,6 +9,7 @@ import { V4_TEMPLATE } from './v4Template';
 import { V5_TEMPLATE } from './v5Template';
 import { testEnvironmentVariables } from '@/utils/testEnv';
 import { supabase } from '@/integrations/supabase/client';
+import { deriveValueScenarios, resolveNarrative } from './loeCascade';
 
 // Seed all template versions to DB if no templates exist
 async function seedTemplatesIfEmpty(): Promise<void> {
@@ -168,10 +169,18 @@ function mapDataToV07Fields(job: DetailJob, jobDetails: JobDetails): Record<stri
     '[PreviouslyAppraised]': jd.previouslyAppraised || '',
     '[ScheduleAPropertyList]': jd.scheduleAPropertyList || '',
   };
-  // EA/HC table rows (narrative Text Library — TODO wire to library; empty = row blank)
+  // §10 cascade (LOE-07-RENDER-TWEAKS): LEFT = scenarios derived from Status of Improvements
+  // (Authorized Use = Insurance overrides), RIGHT = the matching EA/HC narrative (exact-trigger lookup).
+  const scenarios = deriveValueScenarios(jd.statusOfImprovements, jd.authorizedUse || job.intendedUse);
   for (let i = 1; i <= 6; i++) {
-    map[`[ValueScenario${i}]`] = jd[`valueScenario${i}`] || '';
-    map[`[EA/HCSummary${i}]`] = jd[`eaHcSummary${i}`] || '';
+    const scenario = scenarios[i - 1];
+    map[`[ValueScenario${i}]`] = scenario || ''; // empty → row suppressed in generateLOEHTML
+    if (scenario) {
+      // Resolved narrative text, else keep the LITERAL bracket so the row degrades cleanly (never blank).
+      map[`[EA/HCSummary${i}]`] = resolveNarrative(scenario) || `[EA/HCSummary${i}]`;
+    } else {
+      map[`[EA/HCSummary${i}]`] = ''; // no scenario → no row at all
+    }
   }
   return map;
 }
@@ -192,6 +201,20 @@ function applyConditionalScheduleA(html: string, jobDetails: JobDetails): string
   return html.replace(/<!-- SCHEDULE-A:START -->[\s\S]*?<!-- SCHEDULE-A:END -->/g, '');
 }
 
+// §10 row suppression: each EA/HC row is fenced with <!-- EAHC-ROW-n:START/END -->. Remove any row whose
+// derived scenario is empty so NO blank rows ship (spec A2 row-suppression). Derivation matches the mapper.
+function applyEahcRowSuppression(html: string, job: DetailJob, jobDetails: JobDetails): string {
+  const jd = jobDetails as any;
+  const scenarios = deriveValueScenarios(jd.statusOfImprovements, jd.authorizedUse || job.intendedUse);
+  let out = html;
+  for (let i = 1; i <= 6; i++) {
+    if (!scenarios[i - 1]) {
+      out = out.replace(new RegExp(`<!-- EAHC-ROW-${i}:START -->[\\s\\S]*?<!-- EAHC-ROW-${i}:END -->`, 'g'), '');
+    }
+  }
+  return out;
+}
+
 export async function generateLOEHTML(
   job: DetailJob,
   jobDetails: JobDetails,
@@ -207,9 +230,10 @@ export async function generateLOEHTML(
   const mapper = getMapperForVersion(loaded.version);
   const fieldMappings = mapper(job, jobDetails);
 
-  // V07: strip conditional Schedule A unless Multiple Properties
+  // V07: strip conditional Schedule A unless Multiple Properties, then suppress empty §10 EA/HC rows
   if (loaded.version >= 6) {
     htmlTemplate = applyConditionalScheduleA(htmlTemplate, jobDetails);
+    htmlTemplate = applyEahcRowSuppression(htmlTemplate, job, jobDetails);
   }
 
   // Replace all bracketed placeholders with actual data (global)

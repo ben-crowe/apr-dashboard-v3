@@ -3,6 +3,7 @@ content_type: master-dashboard
 title: APR Dashboard — Master Navigation & Status
 status: living front-door — keep current as work lands
 updated: 2026-06-05
+tags: [apr-workflow, apr-dashboard, master-index, navigation, home]
 note: THE single front door. Open this first. Every active workflow, PRD, test doc, and reference links from here. As new docs get added, link them here so nothing scatters.
 ---
 
@@ -10,6 +11,8 @@ note: THE single front door. Open this first. Every active workflow, PRD, test d
 
 **This is the front door.** One page that links to every current area. Open here, navigate out.
 If you add a doc, add a link here.
+
+`#apr-workflow` `#apr-dashboard` `#master-index` — search any of these to surface the connected APR doc set.
 
 _Last updated 2026-06-05. Supersedes the prior `APR-MASTER-DASHBOARD.md` (archived — was stale to April)._
 

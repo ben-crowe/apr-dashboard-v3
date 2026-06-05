@@ -1,3 +1,12 @@
+---
+content_type: test-plan
+title: LOE End-to-End Testing Workflow — Master Plan
+status: v2 — decisions locked with Ben (2026-06-03)
+home: 00-APR-MASTER-DASHBOARD.md
+tags: [apr-workflow, apr-testing, e2e, loe, docuseal, clickup, valcre, cli-tools]
+related: [LOE-END-TO-END-TEST-PLAN.md, LOE-E2E-AGENT-AUTONOMOUS-PRD.md, CLI-INVENTORY-PREFLIGHT-2026-06-03.md, ../docs/AGENT-CLI-TOOLING-SOP.md]
+---
+
 # LOE End-to-End Testing Workflow — Master Plan
 
 **Status:** v2 (2026-06-03) — reality-reconciled with Ben, decisions LOCKED (see block below). Ready to author the runnable protocol.

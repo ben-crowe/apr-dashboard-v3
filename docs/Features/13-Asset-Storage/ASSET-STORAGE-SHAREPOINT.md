@@ -4,6 +4,8 @@ title: Asset Storage — MS SharePoint (client-facing) + Supabase buckets (app-s
 status: draft — SharePoint specifics pending Ben
 created: 2026-06-05
 owner: co-architect documents; to be organized into the Clients area later
+home: 00-APR-MASTER-DASHBOARD.md
+tags: [apr-workflow, asset-storage, sharepoint, supabase-storage, intake-chain, msgraph]
 related: [11-Image-Configurator/, 04-Job & Client Mgt./]
 note: Captures where appraisal assets/documents actually live for the Valta APR workflow. SharePoint is the client/business asset home; Supabase buckets are the in-app image pipeline.
 ---

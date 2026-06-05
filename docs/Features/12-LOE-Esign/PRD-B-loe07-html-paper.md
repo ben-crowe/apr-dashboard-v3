@@ -7,6 +7,8 @@ source_odt: ~/Development/KM-Exp/data/tasks/content/task_015q1z37/attachments/LO
 source_pdf: ~/Development/KM-Exp/data/tasks/content/task_015q1z37/attachments/LOE-Template-V07.pdf (visual reference / page-images for canvas)
 source: LOE-07-INTAKE-2026-06-03.md (structure + placeholder coverage)
 related: [LOE-07-INTAKE-2026-06-03.md, workflow-graphic-paper, html-first-phase]
+home: 00-APR-MASTER-DASHBOARD.md
+tags: [apr-workflow, loe, loe-07, docuseal, html-render, section-10, cascade]
 ---
 
 # PRD-B — LOE-07 Build via Paper → HTML
@@ -41,11 +43,18 @@ pages? Do NOT assume the paged-media model is what's in place — verify against
 checkpoints). The page-and-footer-per-page structure of the V07 PDF must be preserved — that's a
 hard requirement, and how we keep it depends on what the current system actually does.
 
-## Phase 1 — Design on Paper (Ben + co-architect)
+## Phase 1 — Design on Paper (Ben + co-architect + ui-designer)
+**Canvas:** https://app.paper.design/file/01KM85Z8ET0BX23R3XH3H75YGN/2-0 (the standing Valta Paper board — same canvas the graphic-paper workflow uses). NOTE: LOE = multi-page flowing text contract, NOT the single-page graphic-recreation pipeline — design the look (letterhead, type, section styling, page frame + auto @page footer) → export to HTML. Do NOT run the 01→08 box-fit chain.
 - Lay out LOE-07's structure on the Paper canvas: 16 sections + Schedule A (conditional) +
   Appendix A (24 limiting conditions). Letterhead, typography, section styling.
 - Reference: LOE-07-INTAKE-2026-06-03.md (full structure + placeholder list).
 - Export the canvas to an editable HTML template (the deliverable shell).
+
+## VERSIONING (hard requirement — Ben, 2026-06-03)
+LOE-07 is added as a NEW VERSION — do NOT override or delete the current live template.
+- New template registered ALONGSIDE the existing (the gen path is version-keyed: generateLOE.ts → vXTemplate; add `v7Template` / LOE-template-v07.html, keep v3/v5 + LOE-template.html intact).
+- Provide a VERSION SELECTOR so a job can choose which LOE version to use (default = newest, but old versions stay selectable + reproducible). Know-how-to-choose is part of the deliverable.
+- Rationale: keep history; never lose a contract version a prior job was generated against.
 
 ## Phase 2 — Wire fields + signing (agent, in code, AFTER export)
 - Map every placeholder to its APR-job source (coverage table already in the intake doc).

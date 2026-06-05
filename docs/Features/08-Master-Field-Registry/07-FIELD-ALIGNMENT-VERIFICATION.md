@@ -1,6 +1,8 @@
+<!-- Updated 2026-05-14: field count reframed per _AUDIT-2026-05-14.md §2 -->
 # Field Alignment Verification
 
-**Document**: Master Cross-Verification for Docs 03-06
+**Scope**: Cross-verification for the 218-field calculator subset (Docs 03-06). Full registry is 2,082 fields — see `09-REGISTRY-GUIDE.md`.
+**Document**: Cross-Verification for Docs 03-06
 **Status**: ✅ Complete
 **Last Updated**: 2026-01-09
 **Purpose**: Validate all field IDs exist, cross-check dependencies, identify gaps
@@ -484,7 +486,7 @@ This document verifies field ID alignment across all four valuation approaches (
 **Phase 16 Field Alignment Verification**: ✅ **COMPLETE**
 
 ### Summary Statistics:
-- **Total Fields Verified**: 218 unique fields
+- **Calculator-Subset Fields Verified**: 218 unique fields (full registry: 2,082)
 - **Registry Coverage**: 100% (all documented fields exist)
 - **Cross-Section Dependencies**: 5 dependencies, all valid
 - **Missing Fields**: 0 identified

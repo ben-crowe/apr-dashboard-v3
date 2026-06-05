@@ -1,3 +1,4 @@
+<!-- Updated 2026-05-14: field count reframed per _AUDIT-2026-05-14.md §2 -->
 # Field Registry Guide: Master Reference
 
 **Location**: Feature 08 - Field Input-Output Mapping
@@ -19,7 +20,7 @@
 ```
 
 **Current Stats:**
-- ~1,687 field definitions
+- 2,082 field definitions (verified via `grep -cE "^\s+id: ['\"]" fieldRegistry.ts`)
 - Source of truth for ALL field IDs
 - Organized by section/subsection
 

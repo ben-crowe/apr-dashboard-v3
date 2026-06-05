@@ -1,7 +1,8 @@
+<!-- Updated 2026-05-14: field count reframed per _AUDIT-2026-05-14.md §2 -->
 # Master Field Reference Index
 
-**Purpose**: Complete index and master reference guide for all field-related work
-**Status**: ✅ Master Reference Guide
+**Purpose**: Index for the 218-field calculator subset (Income, Sales, Cost, Reconciliation). Full registry is 2,082 fields — see `09-REGISTRY-GUIDE.md`.
+**Status**: Active reference
 **Last Updated**: 2026-01-12
 
 ---
@@ -91,7 +92,7 @@
 #### `07-FIELD-ALIGNMENT-VERIFICATION.md`
 - **Purpose**: Master cross-verification document
 - **Contains**:
-  - Registry verification (all 218 fields checked)
+  - Registry verification (all 218 calculator-subset fields checked; full registry: 2,082)
   - Cross-section dependencies validated
   - Missing fields identified (0 found)
   - Orphaned fields identified (1 found: `cost-depr-physical-age`)
@@ -171,7 +172,7 @@
 
 ## FIELD STATISTICS SUMMARY
 
-### Total Fields Documented: 218
+### Calculator-Subset Fields Documented: 218 (full registry total: 2,082)
 
 | Approach | Input Fields | Output Fields | Total |
 |----------|--------------|---------------|-------|
@@ -182,8 +183,8 @@
 | **Total** | **130** | **88** | **218** |
 
 ### Registry Status
-- **Total Registry Fields**: ~1,687 fields
-- **Calculator Fields Verified**: 218 fields (100% verified)
+- **Total Registry Fields**: 2,082 fields (verified via `grep -cE "^\s+id: ['\"]" fieldRegistry.ts`)
+- **Calculator Fields Documented Here**: 218 fields
 - **Registry Coverage**: All documented fields exist in registry ✅
 
 ---

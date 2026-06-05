@@ -6,6 +6,8 @@ created: 2026-06-03
 owner: agents (react-spec + QA), co-architect coordinates
 test_job: VAL261101 "Westside Mall" (pinned — name-match guard before any write)
 related: [JOB-PREP-FIELDS-MAP-2026-06-03.md, VALTA-MASTER-DELTA-2026-05-14.md, MAPPING-dashboard-to-clickup.md]
+home: 00-APR-MASTER-DASHBOARD.md
+tags: [apr-workflow, field-registry, valcre, field-mapping, job-prep, clickup, sync]
 ---
 
 # PRD-A — Job-Prep Fields → Valcre Mapping + Sync Testing

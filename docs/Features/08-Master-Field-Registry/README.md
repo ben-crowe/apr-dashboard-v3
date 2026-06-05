@@ -1,7 +1,8 @@
+<!-- Updated 2026-05-14: field count reframed per _AUDIT-2026-05-14.md §2 -->
 # Master Field Registry
 
 **Phase Type**: Foundation Work Block
-**Status**: COMPLETE (Reference Only)
+**Status**: Active reference — registry receives ongoing updates
 **Created**: 2026-01-09
 **Completed**: 2026-01-09
 **Last Reorganized**: 2026-01-12
@@ -12,7 +13,7 @@
 
 This phase created comprehensive INPUT → OUTPUT field mappings for all calculator sections. The work documented here enabled the v3.0 template and store updates.
 
-**Key Deliverable**: 218 unique fields documented and verified across 4 valuation approaches.
+**Key Deliverable**: 2,082 total fields in the registry. This folder documents the 218-field calculator subset (Income, Sales, Cost, Reconciliation). See `09-REGISTRY-GUIDE.md` for full registry navigation.
 
 ---
 
@@ -116,7 +117,7 @@ This phase created comprehensive INPUT → OUTPUT field mappings for all calcula
 
 ## Phase 16 Outcomes
 
-- All 218 fields verified in `fieldRegistry.ts`
+- All 218 calculator-subset fields verified in `fieldRegistry.ts` (registry total: 2,082)
 - Cross-section dependencies mapped (Income → Sales → Recon)
 - 2 minor issues identified (documented, low impact)
 - Foundation laid for v3.0 template updates
@@ -125,7 +126,7 @@ This phase created comprehensive INPUT → OUTPUT field mappings for all calcula
 
 **Phase Status**: COMPLETE - **MASTER FIELD REFERENCE GUIDE**
 **Go-to folder for**: 
-- ✅ Complete field mappings (all 218 calculator fields)
+- ✅ Complete field mappings for the 218 calculator fields (full registry: 2,082 — see `09-REGISTRY-GUIDE.md`)
 - ✅ Registry search methods and validation commands
 - ✅ Field management workflows (adding, verifying, updating)
 - ✅ Calculation formulas and dependencies

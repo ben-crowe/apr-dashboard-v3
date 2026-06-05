@@ -1,16 +1,17 @@
+<!-- Updated 2026-05-14: field count reframed per _AUDIT-2026-05-14.md §2 -->
 # Master Field Registry - START HERE
 
 **Feature**: 08-Master-Field-Registry
-**Status**: ✅ Complete Master Reference Guide
+**Status**: Active reference — registry receives ongoing updates
 **Last Updated**: 2026-01-12
 
 ---
 
 ## What This Feature Contains
 
-This is **THE master field reference guide** for all calculator fields in the APR Dashboard. It provides:
+This folder is the deep reference for the **218-field calculator subset** of the APR field registry (Income, Sales, Cost, Reconciliation approaches). The full registry contains **2,082 fields** — see `09-REGISTRY-GUIDE.md` for navigation across the entire registry.
 
-- ✅ **Complete registry** of all 218 calculator fields
+- ✅ **Complete coverage** of the 218 calculator fields
 - ✅ **Field mappings** (INPUT → OUTPUT) for all 4 valuation approaches
 - ✅ **Calculation formulas** and dependencies
 - ✅ **Registry search methods** (grep commands for finding fields)
@@ -38,7 +39,7 @@ This is **THE master field reference guide** for all calculator fields in the AP
 
 ## Field Statistics
 
-**Total Calculator Fields**: 218 fields (100% verified)
+**Calculator-Subset Field Count**: 218 fields (verified at time of authoring). Full registry total: 2,082 — see `09-REGISTRY-GUIDE.md`. Note: active inbox work ("VALTA Field Spec — 13 missing fields") means the registry is not frozen.
 
 | Approach | Input Fields | Output Fields | Total |
 |----------|--------------|---------------|-------|
@@ -48,7 +49,7 @@ This is **THE master field reference guide** for all calculator fields in the AP
 | Reconciliation | 7 | 7 | 14 |
 | **Total** | **130** | **88** | **218** |
 
-**Registry Status**: All 218 fields verified in `fieldRegistry.ts` ✅
+**Registry Status**: All 218 calculator-subset fields verified in `fieldRegistry.ts` (registry total: 2,082).
 
 ---
 
@@ -89,7 +90,7 @@ This is **THE master field reference guide** for all calculator fields in the AP
 - **`06-RECONCILIATION-INPUT-OUTPUT-MAP.md`** - Reconciliation (14 fields)
 
 ### Verification
-- **`07-FIELD-ALIGNMENT-VERIFICATION.md`** - Master cross-verification of all 218 fields
+- **`07-FIELD-ALIGNMENT-VERIFICATION.md`** - Cross-verification of the 218-field calculator subset
 
 ### Integration
 - **`Valcre-Integration/`** - Valcre API field mapping documentation

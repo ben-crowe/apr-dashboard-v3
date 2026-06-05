@@ -65,6 +65,34 @@ describes every entity, field, type, and enum Valcre exposes. This is the author
 
 ---
 
+## ⭐ SOURCE OF TRUTH — the V6 Client Registry (read this before changing any field/option)
+
+**The canonical source of truth for field names + dropdown options is the client's Valta Field
+Registry V6** (`field-registry-v6.html`, the 218-field client-facing registry):
+https://apr-dashboard-v3.vercel.app/field-registry-v6.html
+
+The flow + the rule:
+- **Registry → app → Valcre.** The registry defines the canonical field + its valid options. The
+  **app's dropdowns must MATCH the registry.** The mapped value then flows out to Valcre (e.g.
+  Authorized Use → `IntendedUses`).
+- **If the app disagrees with the registry → the APP is wrong** — fix the app to match the registry.
+- **If the registry itself seems wrong → that's a registry change request to discuss with the
+  client (Chris)** — "our app matches the registry; tell us what in the registry needs to change."
+  We never silently diverge the app from the registry.
+- **Options NOT in the registry silently fail to sync.** A dropdown value that isn't a registry/
+  Valcre-valid value won't reach Valcre (no error) — that's why "match the registry" is the rule,
+  not "add whatever options seem useful."
+
+> **Tiebreaker in practice:** when option lists disagree across the app (intake vs job-prep vs the
+> client form), the **registry's set wins** — not the longest list. (See the diary: Authorized Use
+> standardizes on the registry's 8, NOT the form's 10.)
+
+A full **dropdown-vs-registry audit** (every dashboard dropdown's options checked against the
+registry canonical set → one mismatch punch-list for react-spec) is in progress (ui-designer) —
+its result lands in the diary below.
+
+---
+
 ## Table of Contents
 
 1. [⚡ Quick Reference Cheat Sheet](#-quick-reference-cheat-sheet)
@@ -1100,12 +1128,14 @@ updateData.DueDate = date.split("T")[0];
 Ben copy-pasted how the client's live Valcre app actually presents fields (fast, no screenshots) →
 surfaced mapping gaps invisible from our side alone. Findings:
 
-- **Authorized Use = a true DUPLICATE** across Client Intake AND Job-Prep, with three disagreeing option lists (client submission form = 10 options incl. Underwriting Decisions / GST / Other; intake view = 8; job-prep = 8 — each missing different ones). **Decision:** canonical home = **Client Intake** (it originates from the client submission form); match it to the form's full 10 options; **delete the job-prep copy**; re-point the Valcre `IntendedUses` sync to read the intake field. → packaged as a react-spec spec (sync re-route handed to react-spec + readback-verify after).
+- **Authorized Use = a true DUPLICATE** across Client Intake AND Job-Prep (three disagreeing lists in the app). Dedup to ONE. **CANONICAL OPTION SET = the REGISTRY's 8** (ui-designer correction from V6, supersedes the earlier "use the form's 10"): First Mortgage Financing · Financial Reporting · Insurance · Internal Decision-Making · Acquisition-Disposition · Estate Planning · Litigation · GST. Single-select, maps to Valcre `IntendedUses`. **The client form's "10" (adds Underwriting Decisions + Other) is WRONG** — those two aren't registry options AND aren't valid Valcre IntendedUses values, so they'd silently fail to sync. **Decision:** keep ONE Authorized Use field standardized to the registry's 8; **delete the job-prep copy** (it originates from the client form so its home is Client Intake); re-point the `IntendedUses` sync. → react-spec spec (corrected to the registry's 8 before finalize; readback-verify after).
 - **Scope of Work regressed to single-select** — used to be multi-pick. **NEW RULE (Ben):** any field Valcre shows as a CHECKBOX, ours should be a checkbox/multi-pick — Valcre offering multi is the signal the user wants >1. Scope multi-pick rebuild **parked** (do later). Scope is appraiser-entered (job-prep), NOT from the client form.
-- **Valuation Premises vs Value Scenarios — HELD for Ben/Chris confirm.** Likely DISTINCT, not a duplicate: Premises = basis of value (Market / Liquidation); Scenarios = scenario/timing (As Is / As Stabilized). Valcre confusingly stores the scenarios in a custom field literally named "Valuation Premise." V6 favors **"Value Scenarios"** as canonical (21 mentions vs 2). Do NOT merge without confirm.
+- **Valuation Premises vs Value Scenarios — REGISTRY SETTLES IT: two DISTINCT fields, do NOT merge** (ui-designer, V6). Valuation Premises = basis of value (Market Value / Market Rent / Investment Value / Insurable Value); Value Scenarios = As Is / As Stabilized / … (multi-select, cascade-driven). Different options, different concepts. QA's hold was correct. **Side-flag (separate cleanup):** the dashboard's current Valuation Premises options don't match the registry (test job shows "Liquidation Value", not a registry option) — fix the app to the registry set.
 - **Field-hygiene rule reinforced:** a field that originates from the client submission form belongs in the **Client Intake** phase, NOT duplicated into LOE/Job-Prep — an editable downstream copy drifts. Trace each field back to its origin (client form?) before deciding its home.
 - **Lesson:** checking the client's live Valcre app is high-value — it catches mapping/option gaps we can't see from our code alone. Good standing practice.
-- **Open / next:** react-spec executes the Authorized Use dedup + sync re-route → QA readback-verifies (Field-Sync playbook). Confirm Valuation Premises vs Value Scenarios with Ben/Chris. Park: Scope multi-pick rebuild + the "match Valcre checkboxes" audit across all fields.
+- **Source-of-truth rule established (Ben + ui-designer):** the V6 client registry is canonical; app dropdowns MUST match it; if the app's wrong → fix the app; if the registry's wrong → registry change request to Chris. (Documented in the Source of Truth section above.)
+- **In progress:** ui-designer's full **dropdown-vs-registry audit** — every dashboard dropdown vs the registry canonical set → one mismatch punch-list for react-spec. Fold the result into this diary when it lands.
+- **Open / next:** react-spec executes the Authorized Use dedup (to the registry's 8) + sync re-route → QA readback-verifies (Field-Sync playbook). Fix Valuation Premises options to the registry set. Park: Scope multi-pick rebuild + the "match Valcre checkboxes" audit across all fields.
 
 ---
 

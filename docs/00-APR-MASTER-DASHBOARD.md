@@ -76,6 +76,19 @@ This is the testing home Ben asked about — it already existed; it's linked her
 
 ---
 
+## Fields, Cascade & Registry (the field-options category)
+
+The source of truth for what fields exist, their dropdown options, the cascade rules, and how it
+all feeds the LOE. **The Valta Registry V6 is the live source:** https://apr-dashboard-v3.vercel.app/field-registry-v6.html
+
+| Doc | What it is |
+|---|---|
+| [Cascade Field Options → LOE](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/loe07-build/CASCADE-TO-LOE-CONTRACT-NOTES.md) | **Source of truth** for how cascade picks feed the LOE contract (value scenarios, §10 EA/HC). Links to Registry V6. |
+| [Conditional Field Logic — Complete Reference](~/Development/APR-Dashboard-v3/docs/valta%20share/CONDITIONAL-FIELD-LOGIC.md) | The authoritative cascade rule set — predefined fields that auto-fill on option combos. |
+| [Field Catalog & Dropdown Reference](~/Development/APR-Dashboard-v3/docs/DASHBOARD-FIELD-CATALOG.md) | Every dashboard field + its dropdown options, mapped to Registry V6. |
+| [Field Routing (dashboard→ClickUp→LOE)](~/Development/APR-Dashboard-v3/docs/FIELD-ROUTING-dashboard-clickup-loe.md) | Where each field flows. |
+| [PRD-A — Fields → Valcre Mapping](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/PRD-A-fields-to-valcre-mapping.md) | The field→Valcre mapping + sync testing PRD. |
+
 ## Key Reference Docs
 
 | Topic | Doc |

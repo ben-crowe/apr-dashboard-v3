@@ -1,16 +1,47 @@
+---
+content_type: cascade-spec
+title: Cascade Field Options → LOE Contract — Special Instructions (SOURCE OF TRUTH)
+status: active — source of truth for this category; deeper reconcile in progress (2026-06-05)
+owner: co-architect (consolidates) · ui-designer + react-spec (build)
+home: 00-APR-MASTER-DASHBOARD.md
+registry_v6: "https://apr-dashboard-v3.vercel.app/field-registry-v6.html (the Valta Registry V6 Rule Explorer — the live cascade rules). Local: public/field-registry-v6.html · prototype: builds/prototypes/valta-field-registry-explorer-v6.html"
+tags: [apr-workflow, cascade, cascade-to-loe, conditional-field-logic, value-scenarios, section-10, ea-hc, loe-07, registry-v6, source-of-truth]
+keywords: [cascade field options to LOE, conditional field logic, predefined fields on option combo, value scenarios approaches, status of improvements trigger, EA HC section 10, valta registry v6 rule explorer]
+related: [../../../valta share/CONDITIONAL-FIELD-LOGIC.md, SPECIAL-NOTES-future-deep-dives.md, LOE-07-RENDER-TWEAKS-2026-06-04.md, ../../08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md]
+---
+
 # Cascade → LOE Contract — Special Instructions (EA/HC table + value scenarios)
 
-**Status:** notes / thinking banked · refine later
-**Author:** ui-designer (dev-4), from the field-registry cross-check session
-**Created:** 2026-06-04
+**Status:** SOURCE OF TRUTH for "Cascade field options → LOE." Deeper reconcile in progress.
+**Author:** ui-designer (dev-4), from the field-registry cross-check session · co-architect consolidating.
 **Companion:** co-architect's `SPECIAL-NOTES-future-deep-dives.md` (same folder) — this doc is the focused cascade→contract picture.
-**Sources of truth:** registry cascade = `public/field-registry-v6.html` (Rule Explorer) · contract = `loe07-build/LOE-template-v07.html`
+
+> ## ⭐ The Valta Registry (V6) — go here for the live cascade rules
+> **Live:** https://apr-dashboard-v3.vercel.app/field-registry-v6.html (the Rule Explorer)
+> Local copy: `public/field-registry-v6.html` · prototype: `builds/prototypes/valta-field-registry-explorer-v6.html`
+> Full cascade rule reference (plain): [CONDITIONAL-FIELD-LOGIC.md](~/Development/APR-Dashboard-v3/docs/valta%20share/CONDITIONAL-FIELD-LOGIC.md)
+
+> ## 🔧 Reconcile note (Ben, 2026-06-05) — simpler than "a playbook"
+> Ben's clarification: this is NOT a complicated separate "playbook." It's **predefined fields
+> that auto-fill when certain option combinations are chosen** — i.e. plain **conditional field
+> logic** (see CONDITIONAL-FIELD-LOGIC.md). A trigger pick (Status of Improvements, Authorized
+> Use, Property Type/Tenancy) sets downstream fields automatically; for §10 the matching
+> assumption text is a predefined fill keyed to the resulting value scenario. **This doc may
+> still describe it as a "narrative library/playbook" below — treat that framing as
+> over-complicated and being corrected. The authoritative rule set is CONDITIONAL-FIELD-LOGIC.md
+> + the Registry V6 Rule Explorer.** Deeper reconcile underway (within the hour).
+
+**Sources of truth:** cascade rules = Registry V6 Rule Explorer (link above) + `CONDITIONAL-FIELD-LOGIC.md` · contract = `loe07-build/LOE-template-v07.html` · build status = `LOE-07-RENDER-TWEAKS-2026-06-04.md`.
 
 ---
 
 ## What this is
 
-How the dashboard's **cascade logic** drives parts of the **LOE-07 contract** — specifically the value-scenario / approaches fields and the Section 10 EA/HC table. The headline: some contract sections aren't typed in per job — a client's upstream property choice **triggers** which scenarios appear, and one half of the EA/HC table then **pulls narrative text from a separate library** (the "playbook"), not from a normal field.
+How the dashboard's **cascade logic** (conditional field logic) drives parts of the **LOE-07
+contract** — the value-scenario / approaches fields and the Section 10 EA/HC table. The headline:
+some contract sections aren't typed per job — a client's upstream pick (e.g. Status of
+Improvements) **auto-fills** which scenarios appear, and §10's assumption text is a **predefined
+fill keyed to the resulting value scenario** (per the Registry V6 rules), not a hand-typed field.
 
 ---
 

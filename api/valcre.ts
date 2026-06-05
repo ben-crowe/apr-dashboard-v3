@@ -153,84 +153,56 @@ const INTENDED_USES_MAP: Record<string, string> = {
 
 // VALTA Custom Field IDs — created 2026-03-30 via POST /api/v1/CustomFields
 // These are Job-level custom fields visible in Valcre's custom fields section
+// v3.1 custom fields (CF12407-12427) — IDs + AvailableValue option IDs read LIVE from
+// Valcre /CustomFields defs 2026-06-05. Field name = app camelCase key the sync reads from jobData.
 const VALTA_CUSTOM_FIELD_IDS: Record<string, number> = {
-  tenancy: 12042,
-  stateOfImprovements: 12043,
-  statusOfImprovements: 12044,
-  propertySubtype: 12045,
-  landMetric: 12046,
-  // 12047 environmentalAssessment, 12048 heritageConservation, 12050 desktopReport REMOVED —
-  // these IDs do NOT exist on the tenant (verified live API + admin screenshot 2026-06-03); writes silently 400'd.
-  assignmentType: 12049,
-  valueTimeframe: 12051,
-  approachesToValue: 12052,
-  transactionStatus: 12053,
-  zoningStatus: 12054,
+  statusOfImprovements: 12407,
+  tenancy: 12408,
+  stateOfImprovements: 12409,
+  currentUseImprovements: 12410,
+  proposedUseImprovements: 12411,
+  interestAppraised: 12412,
+  authorizedUse: 12413,
+  intendedUse: 12413, // D1: deduped Authorized Use intake field → same custom field (app sends `intendedUse`)
+  valueScenarios: 12414,
+  approachesToValue: 12415,
+  assignmentType: 12416,
+  reportType: 12417,
+  desktopReport: 12418,
+  valueTimeframe: 12419,
+  deliveryTime: 12420,
+  paid: 12421,
+  clientDocuments: 12422,
+  previouslyAppraised: 12423,
+  transactionStatus: 12424,
+  zoningStatus: 12425,
+  landMetric: 12426,
+  cmhcFinancing: 12427,
 };
 
-// Custom field types and AvailableValue IDs for dropdown fields
-// AvailableValueIds map: dashboard display value → Valcre AvailableValue ID
-const VALTA_FIELD_CONFIG: Record<
-  string,
-  { type: string; options?: Record<string, number> }
-> = {
-  tenancy: {
-    type: "SingleOption",
-    options: {
-      "Multi-Tenant": 5949, "Single-Tenant": 5950, "Owner-Occupied": 5951,
-      "Partial Owner Occupied": 5952, "Vacant": 5953, "Unknown": 5954,
-    },
-  },
-  stateOfImprovements: {
-    type: "SingleOption",
-    options: { "Proposed": 5955, "Under Construction": 5956, "Complete": 5957 },
-  },
-  statusOfImprovements: {
-    type: "SingleOption",
-    options: { "As Is": 5958, "As Complete": 5959, "As Stabilized": 5960, "As Proposed": 5961 },
-  },
-  propertySubtype: {
-    type: "SingleOption",
-    options: {
-      "Low-Rise": 5962, "Mid-Rise": 5963, "High-Rise": 5964, "Garden": 5965,
-      "Walk-Up": 5966, "Townhouse": 5967, "Mixed-Use": 5968,
-    },
-  },
-  landMetric: {
-    type: "SingleOption",
-    options: { "Square Feet": 5969, "Acres": 5970, "Hectares": 5971 },
-  },
-  assignmentType: {
-    type: "SingleOption",
-    options: { "Standard": 5972, "Update": 5973, "Retrospective": 5974, "Desktop": 5975 },
-  },
-  valueTimeframe: {
-    type: "SingleOption",
-    options: { "Current": 5976, "Retrospective": 5977, "Prospective": 5978 },
-  },
-  approachesToValue: {
-    type: "MultiOption",
-    options: {
-      "All Applicable": 5979, "Cost Approach": 5980, "Direct Comparison": 5981,
-      "Income Approach": 5982, "Cost + Direct Comparison": 5983,
-      "Cost + Income": 5984, "Direct Comparison + Income": 5985,
-    },
-  },
-  transactionStatus: {
-    type: "SingleOption",
-    options: {
-      "Arms Length": 5986, "Arm's Length": 5986, // Handle both apostrophe variants
-      "Non-Arms Length": 5987, "Non-Arm's Length": 5987,
-      "Listing": 5988, "Under Contract": 5989, "REO/Bank Sale": 5990,
-    },
-  },
-  zoningStatus: {
-    type: "SingleOption",
-    options: {
-      "Legal Conforming": 5991, "Legal Non-Conforming": 5992,
-      "Illegal": 5993, "No Zoning": 5994,
-    },
-  },
+const VALTA_FIELD_CONFIG: Record<string, { type: string; options?: Record<string, number> }> = {
+  statusOfImprovements: { type: "SingleOption", options: { "Improved - Completed": 7432, "Improved - Renovated": 7433, "Improved - Under Renovation": 7434, "Improved - Proposed Renovation": 7435, "Proposed - Vacant Land": 7436, "Proposed - Improved Land (Demolition Required)": 7437, "Proposed - Under Construction": 7438 } },
+  tenancy: { type: "SingleOption", options: { "Multi-Tenant": 7418, "Owner Occupied": 7419, "Partial Owner Occupied": 7420, "Single-Tenant": 7421, "Unkown": 7422, "Vacant": 7423 } },
+  stateOfImprovements: { type: "SingleOption", options: { "Improved": 7428, "Proposed": 7429, "Vacant Land": 7430, "Improved Development Land": 7431 } },
+  currentUseImprovements: { type: "SingleOption", options: { "Vacant Land": 7445, "Single Family": 7446, "Multifamily": 7447, "Retail": 7448, "Industrial": 7449, "Office": 7450 } },
+  proposedUseImprovements: { type: "SingleOption", options: { "Not Applicable": 7458, "Single Family": 7459, "Multifamily": 7460, "Mixed Use": 7461, "Retail": 7462, "Industrial": 7463, "Office": 7464 } },
+  interestAppraised: { type: "MultiOption", options: { "Fee Simple": 7469, "Leased Fee Interest": 7470, "Leasehold Estate": 7471, "Going Concern": 7472 } },
+  authorizedUse: { type: "SingleOption", options: { "First Mortgage Financing": 7481, "Litigation": 7482, "Estate Planning": 7483, "Acquisition-Disposition": 7484, "Internal Decision-Making": 7485, "Insurance": 7486, "Financial Reporting": 7487, "GST": 7488 } },
+  intendedUse: { type: "SingleOption", options: { "First Mortgage Financing": 7481, "Litigation": 7482, "Estate Planning": 7483, "Acquisition-Disposition": 7484, "Internal Decision-Making": 7485, "Insurance": 7486, "Financial Reporting": 7487, "GST": 7488 } },
+  valueScenarios: { type: "MultiOption", options: { "As Is Vacant Land": 7499, "As If Complete - Subdivided": 7500, "As If Complete - Serviced": 7501, "As If Complete - Rezoned": 7502, "As If Complete & Stabilized - Renovated": 7503, "As Stabilized": 7504, "As-Is": 7505, "As If Complete & Stabilized": 7506, "As If Vacant Land": 7507, "Insurable Replacement Cost": 7508 } },
+  approachesToValue: { type: "MultiOption", options: { "Land Direct Comparison Approach": 7513, "Cost Approach": 7514, "Direct Comparison Approach": 7515, "Income Approach": 7516 } },
+  assignmentType: { type: "SingleOption", options: { "Single Property": 7519, "Multiple Properties": 7520 } },
+  reportType: { type: "SingleOption", options: { "Comprehensive": 7524, "Concise": 7525, "Form": 7526 } },
+  desktopReport: { type: "SingleOption", options: { "Yes": 7529, "No": 7530 } },
+  valueTimeframe: { type: "SingleOption", options: { "Current": 7534, "Prospective": 7535, "Retrospective": 7536 } },
+  deliveryTime: { type: "Integer" },
+  paid: { type: "Boolean" },
+  clientDocuments: { type: "MultiOption", options: { "Previous Appraisal": 7548, "Environmental Reports": 7549, "Purchase & Sale Agreement": 7550, "Contact for Property Tour": 7551, "Development Permit Drawings": 7552, "Historical Operating Expenses": 7553, "Rent Roll": 7554, "Unit Mix": 7555, "Proforma": 7556, "Property Details": 7557, "Property Condition Reports": 7558 } },
+  previouslyAppraised: { type: "SingleOption", options: { "Yes": 7561, "No": 7562 } },
+  transactionStatus: { type: "MultiOption", options: { "Not Applicable": 7566, "Listed": 7567, "Under Contract": 7568 } },
+  zoningStatus: { type: "SingleOption", options: { "In Place": 7571, "To Be Rezoned": 7572 } },
+  landMetric: { type: "SingleOption", options: { "$/Unit": 7577, "$/FAR": 7578, "$/SF": 7579, "$/Acre": 7580 } },
+  cmhcFinancing: { type: "SingleOption", options: { "Yes": 7583, "No": 7584 } },
 };
 
 // Value Scenarios → Valcre "Valuation Premise" custom fields (CF11563 Premise-1 / CF11564 Premise-2).
@@ -258,18 +230,31 @@ async function getJobCustomFieldValues(token: string, jobId: number): Promise<an
   }
 }
 
-// Confirm a single-option custom field holds the expected AvailableValueId (tolerant of shape/casing variants).
+// Confirm a select custom field holds the expected AvailableValueId.
+// GetValues(type=6) returns FIELD-DEFINITION entries keyed by `Id` (= the custom field id), with the
+// job's chosen value(s) nested in `SelectedValues[]` (each `{ CustomFieldId, AvailableValueId, SelectedIds }`).
+// Verified live against VAL261101/CF12407 2026-06-05. Tolerant of the older flat shape too.
 function customFieldHasValue(values: any[], fieldId: number, expectedValueId: number): boolean {
-  const item = values.find(
+  // New shape: the def entry whose Id === fieldId, value(s) under SelectedValues.
+  const def = values.find((v) => (v?.Id ?? v?.id) === fieldId);
+  if (def && Array.isArray(def.SelectedValues)) {
+    for (const sv of def.SelectedValues) {
+      if ((sv?.AvailableValueId ?? sv?.availableValueId) === expectedValueId) return true;
+      const ids = String(sv?.SelectedIds ?? "").split(",").map((s) => s.trim());
+      if (ids.includes(String(expectedValueId))) return true;
+    }
+  }
+  // Legacy flat shape: entry keyed by CustomFieldId with the value inline.
+  const flat = values.find(
     (v) => (v?.CustomFieldId ?? v?.customFieldId ?? v?.FieldId) === fieldId,
   );
-  if (!item) return false;
-  const av = item.AvailableValueId ?? item.availableValueId ?? item.SelectedAvailableValueId;
-  if (av === expectedValueId) return true;
-  const sel = String(item.SelectedIds ?? item.selectedIds ?? "")
-    .split(",")
-    .map((s) => s.trim());
-  return sel.includes(String(expectedValueId));
+  if (flat) {
+    const av = flat.AvailableValueId ?? flat.availableValueId ?? flat.SelectedAvailableValueId;
+    if (av === expectedValueId) return true;
+    const sel = String(flat.SelectedIds ?? flat.selectedIds ?? "").split(",").map((s) => s.trim());
+    if (sel.includes(String(expectedValueId))) return true;
+  }
+  return false;
 }
 
 // Set VALTA custom field values on a Valcre job
@@ -540,32 +525,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           console.log(`✅ Effective Date → EffectiveDate: "${updateData.EffectiveDate}"`);
         }
 
-        // Intended Use → Authorized Use field (IntendedUses)
-        if (jobData.intendedUse) {
-          const converted = INTENDED_USES_MAP[jobData.intendedUse];
-          if (converted) {
-            updateData.IntendedUses = converted;
-            console.log(
-              `✅ Intended Use mapped: "${jobData.intendedUse}" → "${converted}"`,
-            );
-          } else {
-            console.log(
-              `⚠️ WARNING: Intended Use value "${jobData.intendedUse}" not in INTENDED_USES_MAP, skipping`,
-            );
-          }
-        }
-
-        // Authorized Use → Job.IntendedUses (AUTO-SYNC-WIRING-MAP 2026-06-04). Same native target as
-        // intendedUse (last-writer-wins). INTENDED_USES_MAP keys only — non-key values silently skip (gotcha b).
-        if (jobData.authorizedUse) {
-          const converted = INTENDED_USES_MAP[jobData.authorizedUse];
-          if (converted) {
-            updateData.IntendedUses = converted;
-            console.log(`✅ Authorized Use mapped: "${jobData.authorizedUse}" → "${converted}"`);
-          } else {
-            console.log(`⚠️ WARNING: Authorized Use value "${jobData.authorizedUse}" not in INTENDED_USES_MAP, skipping`);
-          }
-        }
+        // Authorized Use — D1 (v3.1, 2026-06-05): MOVED OFF native Job.IntendedUses ONTO the new
+        // CUSTOM field CF12413. Per the v3.1 master AuthorizedUse = "New Custom Valcre Field = Yes",
+        // so the native IntendedUses writes (intendedUse + authorizedUse) are removed. The value now
+        // flows through setValtaCustomFields via the `intendedUse` key (the deduped intake field) →
+        // CF12413 with the 8 ListAuthorizedUse option IDs. INTENDED_USES_MAP is retained only for the
+        // create path's legacy fallback until that's migrated too.
 
         // Analysis Level → Job.AnalysisLevel (AUTO-SYNC-WIRING-MAP 2026-06-04). ANALYSIS_LEVEL_MAP keys only.
         if (jobData.analysisLevel) {
@@ -687,7 +652,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             : paymentSection;
         }
 
-        // VALTA-FIELD-SPEC fields — stored as Valcre custom fields (IDs 12042-12054).
+        // VALTA-FIELD-SPEC fields — stored as Valcre custom fields (v3.1 IDs 12407-12427, re-pointed 2026-06-05).
         // NOT in Valcre native Job schema — set via CustomFields/UpdateFieldValue after PATCH.
         // See setValtaCustomFields() call after successful update response.
 
@@ -1597,7 +1562,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       jobCreateData.AnalysisLevel = ANALYSIS_LEVEL_MAP[jobData.analysisLevel];
     }
 
-    // VALTA-FIELD-SPEC fields — stored as Valcre custom fields (IDs 12042-12054).
+    // VALTA-FIELD-SPEC fields — stored as Valcre custom fields (v3.1 IDs 12407-12427, re-pointed 2026-06-05).
     // NOT in Valcre native Job schema — set via CustomFields/UpdateFieldValue after creation.
     // See setValtaCustomFields() call after successful job creation response.
 

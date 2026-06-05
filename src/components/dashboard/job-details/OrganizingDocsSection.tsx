@@ -147,7 +147,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
       parkingSpaces: 48,
       tenancy: 'Multi-Tenant',
       stateOfImprovements: 'Complete',
-      statusOfImprovements: 'As Is',
+      statusOfImprovements: 'Improved - Under Renovation', // valid v3.1 master status (yields §10 scenarios)
       propertySubtype: 'Mid-Rise',
       landMetric: 'Acres',
       environmentalAssessment: 'Phase I ESA completed 2024 — no concerns identified',
@@ -273,10 +273,15 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
               <Select value={jobDetails.statusOfImprovements || ''} onValueChange={value => handleSelectChange(value, 'statusOfImprovements')}>
                 <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="As Is">As Is</SelectItem>
-                  <SelectItem value="As Complete">As Complete</SelectItem>
-                  <SelectItem value="As Stabilized">As Stabilized</SelectItem>
-                  <SelectItem value="As Proposed">As Proposed</SelectItem>
+                  {/* v3.1 master ListStatusofImprovements — EXACT strings the §10 cascade keys on
+                      (src/utils/loe/loeCascade.ts STATUS_TO_SCENARIOS). Do not abbreviate. */}
+                  <SelectItem value="Improved - Completed">Improved - Completed</SelectItem>
+                  <SelectItem value="Improved - Renovated">Improved - Renovated</SelectItem>
+                  <SelectItem value="Improved - Under Renovation">Improved - Under Renovation</SelectItem>
+                  <SelectItem value="Improved - Proposed Renovation">Improved - Proposed Renovation</SelectItem>
+                  <SelectItem value="Proposed - Vacant Land">Proposed - Vacant Land</SelectItem>
+                  <SelectItem value="Proposed - Improved Land (Demolition Required)">Proposed - Improved Land (Demolition Required)</SelectItem>
+                  <SelectItem value="Proposed - Under Construction">Proposed - Under Construction</SelectItem>
                 </SelectContent>
               </Select>
             </CompactField>

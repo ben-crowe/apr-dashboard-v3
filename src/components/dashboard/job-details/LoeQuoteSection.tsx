@@ -1354,34 +1354,30 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </CompactField>
 
           <CompactField label="Transaction Status" status={fieldStates['transactionStatus']}>
-            {/* Options re-optioned VERBATIM to Valcre CF12053 value set (api/valcre.ts VALTA_FIELD_CONFIG.transactionStatus:
-                Arm's Length=5986, Non-Arm's Length=5987, Listing=5988, Under Contract=5989, REO/Bank Sale=5990).
-                Old labels (Listed/Not Applicable) didn't resolve to an AvailableValueId → silently skipped. */}
+            {/* v3.1 master ListTransactionStatus — re-optioned to the new CUSTOM field CF12424 value set
+                (Not Applicable / Listed / Under Contract). Old 5-option set didn't match the new field. */}
             <Select value={jobDetails.transactionStatus || ''} onValueChange={value => handleSelectChange(value, 'transactionStatus')}>
               <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Arm's Length">Arm's Length</SelectItem>
-                <SelectItem value="Non-Arm's Length">Non-Arm's Length</SelectItem>
-                <SelectItem value="Listing">Listing</SelectItem>
+                <SelectItem value="Not Applicable">Not Applicable</SelectItem>
+                <SelectItem value="Listed">Listed</SelectItem>
                 <SelectItem value="Under Contract">Under Contract</SelectItem>
-                <SelectItem value="REO/Bank Sale">REO/Bank Sale</SelectItem>
               </SelectContent>
             </Select>
           </CompactField>
 
           <CompactField label="Zoning Status" status={fieldStates['zoningStatus']}>
-            {/* Registry ListZoningStatus (field-registry-v6.html:523) — Select one, vr:Job. Options verbatim. */}
+            {/* v3.1 master ListZoningStatus — re-optioned to the new CUSTOM field CF12425 value set
+                (In Place / To Be Rezoned). Old 4 legal-* options didn't match the new field. */}
             <Select value={jobDetails.zoningStatus || ''} onValueChange={value => handleSelectChange(value, 'zoningStatus')}>
               <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Legal Conforming">Legal Conforming</SelectItem>
-                <SelectItem value="Legal Non-Conforming">Legal Non-Conforming</SelectItem>
-                <SelectItem value="Illegal">Illegal</SelectItem>
-                <SelectItem value="No Zoning">No Zoning</SelectItem>
+                <SelectItem value="In Place">In Place</SelectItem>
+                <SelectItem value="To Be Rezoned">To Be Rezoned</SelectItem>
               </SelectContent>
             </Select>
           </CompactField>

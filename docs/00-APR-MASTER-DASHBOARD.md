@@ -42,6 +42,8 @@ This is the testing home Ben asked about — it already existed; it's linked her
 | Doc | What it is |
 |---|---|
 | [**E2E Testing Workflow — Master Plan**](~/Development/APR-Dashboard-v3/tests/E2E-TESTING-WORKFLOW-MASTER.md) | THE end-to-end test plan (v2, decisions locked with Ben). The full walk-through of the whole pipeline. |
+| [**Data-Flow Visual Verification Workflow**](~/Development/APR-Dashboard-v3/Data-Flow%20Visuals/01-Data-Flow-Diagram.md) | **QA-owned.** Proves a job's data travels intact through every system via filled-in screenshots laid side-by-side on the Paper canvas. Fires whenever we need visual/end-to-end proof. **Living board:** Paper file `Build Workflow Testing` › page `APR Workflow` › board `DATA-FLOW BOARD — VAL261101`. |
+| [Generic Visual Verification SOP](~/Development/APR-Dashboard-v3/tests/Testing-Visual-Verification-Workflow.md) | The capturer≠verifier screenshot discipline (multimodal read). Underlies the data-flow workflow above. |
 | [LOE E2E test plan (8-phase source)](~/Development/APR-Dashboard-v3/tests/LOE-END-TO-END-TEST-PLAN.md) | The source eight-phase plan the master wraps. |
 | [LOE E2E autonomous-agent PRD](~/Development/APR-Dashboard-v3/tests/LOE-E2E-AGENT-AUTONOMOUS-PRD.md) | The autonomy PRD for running it agent-driven. |
 | [**Agent CLI & Browser Tooling SOP**](~/Development/APR-Dashboard-v3/docs/AGENT-CLI-TOOLING-SOP.md) | How an agent logs in, fills fields, screenshots, verifies sync — the CLI-capabilities doc. |

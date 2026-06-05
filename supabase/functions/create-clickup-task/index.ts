@@ -154,6 +154,7 @@ Deno.serve(async (req) => {
     // Format: "PENDING - Property Name, Street, City"
     // NO client name, province, or postal code in the task name
     const valcreJobNumber = job.job_number || job.valcre_job_id || 'PENDING'
+    const valcreId = (Array.isArray(job.job_loe_details) ? job.job_loe_details[0]?.valcre_job_id : job.job_loe_details?.valcre_job_id) || job.valcre_job_id
     const propertyName = job.property_name || job.propertyName || 'Property'
     const propertyAddress = job.property_address || job.propertyAddress || 'Unknown Address'
 
@@ -187,43 +188,26 @@ Deno.serve(async (req) => {
     hours = hours % 12 || 12
     const formattedDateTime = `${year}.${month}.${day} / ${hours}:${minutes} ${ampm}`
 
-    // Build RICH Stage-1 task description (restored from commit 669659c — matches Summit Tower reference).
-    // Creates the blank "▸ LOE Sent / ▸ LOE Signed" tracker scaffold that docuseal-webhook later fills,
-    // and the Stage-1 block that update-clickup-task preserves (everything before the first LOE section).
-    const description = `📍 **NEW APPRAISAL REQUEST:** [APR Dashboard](${jobUrl})
-📍 **VALCRE JOB NUMBER:**
+    // TITLE BLOCK ONLY (card redesign 2026-06-05, BRIEF-reactspec-clickup-card-redesign).
+    // Principle: each datum lives ONCE. All client/property/contact/assignment/financial/notes data
+    // now lives in CUSTOM FIELDS (buildHubCustomFields below) — NOT duplicated in the body. The
+    // description is a short, linkable header only: the two links + Job# + Date Ordered + the LOE
+    // tracker scaffold ("▸ LOE Sent / ▸ LOE Signed") that docuseal-webhook fills + update-clickup-task
+    // preserves (everything before the first LOE section). Do NOT re-add a data body here.
+    const valcreLink = valcreId
+      ? `[VAL Job ${valcreJobNumber}](https://app.valcre.com/job/edit/${valcreId}#job)`
+      : '_(pending Valcre job)_'
+    const description = `📍 **NEW APPRAISAL REQUEST** — [APR Dashboard](${jobUrl})
+📍 **VALCRE JOB:** ${valcreLink}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**RECEIVED DATE:**  ${formattedDateTime}
+**Job #:** ${valcreJobNumber}
+**Date Ordered:** ${formattedDateTime}
   ▸ LOE Sent:
-  ▸ LOE Signed:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ▸ LOE Signed:`
 
-**CLIENT INFORMATION**
-• Name:    ${job.client_first_name || job.clientFirstName || ''} ${job.client_last_name || job.clientLastName || ''}
-• Org:     ${job.client_organization || job.clientOrganization || ''}
-• Email:   ${job.client_email || job.clientEmail || ''}
-• Phone:   ${job.client_phone || job.clientPhone || ''}
-
-**PROPERTY INFORMATION**
-• Property:  ${propertyName || ''}
-• Address:   ${propertyAddress || ''}
-• Type:      ${job.property_type || job.propertyType || ''}
-• Use:       ${job.intended_use || job.intendedUse || ''}
-• Condition: ${job.asset_condition || job.assetCondition || ''}
-• Premise:   ${job.valuation_premises || job.valuationPremises || ''}
-
-**PROPERTY CONTACT**
-• Name:  ${job.property_contact_first_name || job.propertyContactFirstName || ''} ${job.property_contact_last_name || job.propertyContactLastName || ''}
-• Email: ${job.property_contact_email || job.propertyContactEmail || ''}
-• Phone: ${job.property_contact_phone || job.propertyContactPhone || ''}
-
-**CLIENT COMMENTS**
-• ${job.notes || job.additionalComments || ''}`
-
-    // Custom fields are NOT populated on task creation.
-    // Team populates fields manually in ClickUp as work progresses.
-    // Field IDs available via cli-clickup-tools skill if automation is needed later.
+    // Data is set as CUSTOM FIELDS (idempotent — set REPLACES, never appends → no dup bug).
+    // See buildHubCustomFields + applyTaskFields below.
 
     // Build task payload
     // CRITICAL: Use ONLY markdown_description field for clickable links to work

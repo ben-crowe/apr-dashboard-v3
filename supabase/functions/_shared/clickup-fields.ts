@@ -32,38 +32,49 @@ export async function fetchListFields(token: string, listId: string): Promise<Cl
   return (data.fields || []) as ClickUpFieldDef[]
 }
 
-// The Job-Hub KEEP set: hub field NAME (must match ClickUp exactly) → value extractor over the joined
-// job row (job_submissions.* + nested job_loe_details(*) + job_property_info(*)). Only the structured
-// hub fields; REMOVE-set fields (Client Title/Phone/Address, Property Contact*, Job Status, Asset
-// Condition, Valuation Premises, Additional Info) are intentionally NOT here.
+// Card-redesign KEEP set (2026-06-05, BRIEF-reactspec-clickup-card-redesign): the GROUPED data fields.
+// Each datum lives ONCE — the two links + Job# + Date Ordered + the LOE tracker live in the DESCRIPTION
+// title block (create-clickup-task), so they are NOT custom fields here. This map closes QA's subset gap
+// (Asset Condition, Client Phone, Property Contact*, Valuation Premise, Status of Improvements were
+// missing). REMOVED noise: Intended Use (dup of Authorized Use), Client Title, Client Address, Job Status,
+// Additional Info. QA_PROBE_DELETE_ME is a stray ClickUp test field the API CANNOT delete — flag for
+// manual removal in the ClickUp UI; do not fight the API. byName resolver SKIPS any field not yet on the
+// list, so the 7 ADD fields self-populate the moment their defs exist (create in the UI or via API).
 function hubValueMap(job: any): Record<string, any> {
   const loe = (Array.isArray(job.job_loe_details) ? job.job_loe_details[0] : job.job_loe_details) || {}
-  const hubUrl = 'https://apr-dashboard-v3.vercel.app'
-  const valcreId = loe.valcre_job_id || job.valcre_job_id
+  const pi = (Array.isArray(job.job_property_info) ? job.job_property_info[0] : job.job_property_info) || {}
+  const propContact = [job.property_contact_first_name, job.property_contact_last_name].filter(Boolean).join(' ')
   return {
-    // Links
-    'APR Dashboard Link': `${hubUrl}/dashboard/job/${job.id}`,
-    'Valcre Job Link': valcreId ? `https://app.valcre.com/job/edit/${valcreId}#job` : '',
-    // Job summary
-    'Job Number': job.job_number || loe.job_number || '',
+    // CLIENT
+    'Client Organization': job.client_organization || '',
     'Client First Name': job.client_first_name || '',
     'Client Last Name': job.client_last_name || '',
-    'Client Organization': job.client_organization || '',
     'Client Email': job.client_email || '',
+    'Client Phone': job.client_phone || '',
+    // PROPERTY
     'Property Name': job.property_name || '',
     'Property Address': job.property_address || '',
     'Property Type': job.property_type || '',
-    'Report Type': loe.report_type || '',                                   // HOLD — option-set align pending
-    'Intended Use': loe.authorized_use || job.intended_use || '',           // HOLD — option-set align pending
+    'Authorized Use': loe.authorized_use || job.intended_use || '',         // canonical (replaces Intended Use dup)
+    'Asset Condition': job.asset_condition || pi.asset_condition || '',
+    'Valuation Premise': loe.valuation_premises || job.valuation_premises || '',
+    // PROPERTY CONTACT
+    'Property Contact Name': propContact,
+    'Property Contact Email': job.property_contact_email || '',
+    'Property Contact Phone': job.property_contact_phone || '',
+    // ASSIGNMENT
     'Property Rights Appraised': loe.property_rights_appraised || '',
     'Scope of Work': loe.scope_of_work || '',
-    'Payment Terms': loe.payment_terms || '',
-    'Appraisal Fee': loe.appraisal_fee ?? '',                               // ADD pending on mirror
-    // Status / dates
+    'Report Type': loe.report_type || '',
+    'Status of Improvements': pi.status_of_improvements || '',
+    // FINANCIAL
+    'Appraisal Fee': loe.appraisal_fee ?? '',
+    'Retainer': loe.retainer_amount ?? '',
     'Delivery Date': loe.delivery_date || '',
-    'Received Date': job.created_at || '',                                  // ADD pending
-    'LOE Sent': loe.loe_sent_at || '',                                      // ADD pending
-    'LOE Signed': loe.signed_at || loe.signed_date || '',                   // ADD pending
+    'Payment Terms': loe.payment_terms || '',
+    // NOTES
+    'Appraiser Notes': loe.internal_comments || loe.appraiser_comments || '',
+    'Client Comments': job.notes || '',
   }
 }
 

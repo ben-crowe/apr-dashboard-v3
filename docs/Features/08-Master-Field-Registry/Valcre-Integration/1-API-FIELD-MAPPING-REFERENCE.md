@@ -1139,4 +1139,28 @@ surfaced mapping gaps invisible from our side alone. Findings:
 
 ---
 
+## ⏸ PENDING — Unanswered Questions (parked for Ben/Chris)
+
+> Parked here so they're not forgotten and not answered in chat under pressure. **None of these
+> are decided.** Source: [Dropdown vs Registry Audit](~/Development/APR-Dashboard-v3/docs/DROPDOWN-VS-REGISTRY-AUDIT.md)
+> (ui-designer, 2026-06-05) — every dashboard dropdown vs the V6 registry.
+>
+> **The framing for EACH (don't assume "app ahead → update registry"):** three possibilities — (a)
+> the APP is wrong (fix app to registry), (b) the REGISTRY is wrong/incomplete (registry change
+> request to Chris), or (c) **the app shouldn't have that field at all.** Ben/Chris decide which.
+
+Open items from the audit (each needs a ruling):
+
+- **Zoning Status** — registry list is EMPTY; the app has 4 (Legal Conforming / Non-Conforming / Illegal / No Zoning) that sync to Valcre. Update the registry to adopt these, OR should the app even have this field? → Ben/Chris.
+- **Property Rights** — registry list has 4 but its own cascade produces a 5th ("Fee Simple & Leased Fee"). Internal registry gap — confirm the 5th belongs.
+- **Property Type** — app has 16 options (with renamed entries, e.g. Multi-Family vs Multifamily); registry has 9. Which set is canonical?
+- **Valuation Premises** — app adds "Liquidation Value," not in the registry. App fix, or registry add?
+- **Transaction Status** — app shows a sale-type-style set vs the registry's (Not Applicable / Listed / Under Contract). Which is right?
+- **Naming collision (needs a human ruling):** registry's "Report Type" = Comprehensive/Concise/Form, but the app calls that trio "Report Format," and the app's "Report Type" is a different list. **Report Type / Report Format / Analysis Level need one naming decision.**
+- **Authorized Use (clearer):** the intake copy has 2 extras (Underwriting Decisions, Other) not in the registry; the job-prep copy already matches the registry's 8. Leaning app-fix (strip the 2 extras, keep the registry 8) — but folds into the dedup decision above.
+
+⚠ A couple of the field↔options mappings in the audit are flagged to confirm against the live UI (the extraction loses which dropdown a cluster belongs to) — verify before acting.
+
+---
+
 **End of API & Field Mapping Reference**

@@ -91,7 +91,8 @@ all feeds the LOE. **The Valta Registry V6 is the live source:** https://apr-das
 | [Field Catalog & Dropdown Reference](~/Development/APR-Dashboard-v3/docs/DASHBOARD-FIELD-CATALOG.md) | Every dashboard field + its dropdown options, mapped to Registry V6. |
 | [Field Routing (dashboard→ClickUp→LOE)](~/Development/APR-Dashboard-v3/docs/FIELD-ROUTING-dashboard-clickup-loe.md) | Where each field flows. |
 | [PRD-A — Fields → Valcre Mapping](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/PRD-A-fields-to-valcre-mapping.md) | The field→Valcre mapping + sync testing PRD. |
-| [**API & Field Mapping Reference**](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/1-API-FIELD-MAPPING-REFERENCE.md) | **Source of truth** for field→Valcre mappings + enum conversions. PRIME-FIRST mini-SOP at top + a **Field-Mapping Work Diary** at the bottom (read it before any mapping work). |
+| [**API & Field Mapping Reference**](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/1-API-FIELD-MAPPING-REFERENCE.md) | **Source of truth** for field→Valcre mappings + enum conversions. PRIME-FIRST mini-SOP at top + a **Field-Mapping Work Diary** + a **PENDING Questions** park at the bottom. The V6 client registry is canonical; app mirrors it. |
+| [Dropdown vs Registry Audit](~/Development/APR-Dashboard-v3/docs/DROPDOWN-VS-REGISTRY-AUDIT.md) | Every dashboard dropdown's options vs the V6 registry — the mismatch punch-list. Its open items are parked in the mapping reference's PENDING Questions (await Ben/Chris). |
 
 ## Key Reference Docs
 

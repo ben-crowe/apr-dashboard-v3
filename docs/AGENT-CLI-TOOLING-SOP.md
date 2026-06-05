@@ -14,6 +14,10 @@ related: [APR-TESTING-PLAYBOOK.md, APR-TESTING-REFERENCE.md, ../tests/E2E-TESTIN
 **Created:** 2026-06-04
 **Use when:** any agent needs to log into the APR Dashboard, fill fields, switch pages/tabs, capture screenshots, or verify data sync (Valcre / ClickUp / LOE).
 
+> **Pairs with the [Agent Access, Login & Priming sheet](~/Development/APR-Dashboard-v3/docs/01-AGENT-ACCESS-LOGIN-PRIMING.md).** That sheet = WHERE to get in (logins, access, CLIs for the APR Dashboard, ClickUp, Supabase, Valcre) + the startup skill set. THIS doc = HOW to drive once you're in (fill method, screenshots, isolation, gotchas). Read the access sheet first, then this. No duplication — two halves of one startup.
+>
+> **General pattern:** although written for APR, the shape generalizes to ANY app/project — load the canonical skills, ground via search, isolate your session, fill with real keystrokes, verify by reload. Reuse the structure when onboarding to a new surface.
+
 ---
 
 ## What this is
@@ -157,4 +161,5 @@ Running log of what's been done, so we keep track together. Append as it progres
 
 ## Refinement log
 
+- **2026-06-05** — added frontmatter + tags (searchable), linked to the Agent Access/Login/Priming sheet as its paired half (access there, driving mechanics here), and noted the pattern generalizes to any app/project.
 - **2026-06-04** — v0.1 created from the qa-agent app-driving session. Captures the skill suite, the Golden Rule (real keystrokes vs JS trap), field-type cheatsheet, isolation safety, and the running tally.

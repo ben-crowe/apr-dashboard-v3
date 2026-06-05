@@ -2,6 +2,8 @@
 content_type: access-priming-sheet
 title: Agent Access, Login & Priming — APR Dashboard, ClickUp, Supabase, Valcre
 status: living — the single startup/handover sheet
+created: 2026-06-05
+updated: 2026-06-05
 home: 00-APR-MASTER-DASHBOARD.md
 owner: co-architect (maintains) · used by every agent before touching any APR system
 tags: [apr-workflow, access, login, priming, startup, agent-handover, clickup, supabase, valcre, cli-tools, agent-browser, master-document]

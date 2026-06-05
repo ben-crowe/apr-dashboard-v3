@@ -221,7 +221,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
         <div className="flex justify-between items-center pb-2 border-b">
           <div className="flex-1">
             <h2 className="text-lg font-semibold">LOE Preview</h2>
-            <p className="text-sm text-gray-600">Review Letter of Engagement before sending to client</p>
+            <p className="text-sm text-muted-foreground">Review Letter of Engagement before sending to client</p>
           </div>
           
           {/* Template Picker */}
@@ -234,7 +234,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               onValueChange={handleTemplateChange}
               disabled={isLoadingTemplates || isRegenerating}
             >
-              <SelectTrigger id="template-select" className="w-[200px] h-8 text-sm bg-white border border-gray-300 text-gray-900 hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
+              <SelectTrigger id="template-select" className="w-[200px] h-8 text-sm bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
                 {isRegenerating ? (
                   <div className="flex items-center gap-2">
                     <Loader2 className="h-3 w-3 animate-spin" />
@@ -275,7 +275,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
           
           {/* Zoom Controls */}
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-md">
+            <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-md">
               <Button
                 variant="ghost"
                 size="sm"
@@ -339,32 +339,32 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
 
         {/* Email Recipient Section */}
         <div className="flex items-center gap-3 py-2 px-4">
-          <Mail className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+          <Mail className="h-4 w-4 text-muted-foreground" />
           {showEmailEdit ? (
             <div className="flex items-center gap-2 flex-1">
-              <span className="text-sm font-medium text-gray-900 dark:text-white">Send to:</span>
+              <span className="text-sm font-medium text-foreground">Send to:</span>
               <Input
                 type="email"
                 value={recipientEmail}
                 onChange={(e) => setRecipientEmail(e.target.value)}
-                className="w-64 h-8 text-sm bg-white dark:bg-secondary border border-gray-300 dark:border-border text-gray-900 dark:text-foreground placeholder:text-gray-500 dark:placeholder:text-muted-foreground hover:border-gray-400 dark:hover:border-border focus-visible:border-gray-400 dark:focus-visible:border-border focus-visible:outline-none focus-visible:ring-0"
+                className="w-64 h-8 text-sm bg-card dark:bg-secondary border border-border dark:border-border text-foreground dark:text-foreground placeholder:text-muted-foreground dark:placeholder:text-muted-foreground hover:border-gray-400 dark:hover:border-border focus-visible:border-gray-400 dark:focus-visible:border-border focus-visible:outline-none focus-visible:ring-0"
                 placeholder="Enter recipient email"
               />
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={() => setShowEmailEdit(false)}
-                className="h-8 text-xs text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:underline"
+                className="h-8 text-xs text-foreground hover:text-foreground dark:hover:text-gray-300 hover:underline"
               >
                 Done
               </Button>
             </div>
           ) : (
             <div className="flex items-center gap-2 flex-1">
-              <span className="text-sm font-medium text-gray-900 dark:text-white">E-signature will be sent to:</span>
-              <span className="text-sm font-semibold text-gray-900 dark:text-white">{recipientEmail || 'No email specified'}</span>
+              <span className="text-sm font-medium text-foreground">E-signature will be sent to:</span>
+              <span className="text-sm font-semibold text-foreground">{recipientEmail || 'No email specified'}</span>
               {recipientEmail !== job.clientEmail && (
-                <span className="text-xs text-gray-600 dark:text-gray-400">
+                <span className="text-xs text-muted-foreground">
                   (Testing: {recipientEmail}, Client: {job.clientEmail})
                 </span>
               )}
@@ -372,7 +372,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
                 size="sm"
                 variant="ghost"
                 onClick={() => setShowEmailEdit(true)}
-                className="h-7 text-xs text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:underline ml-auto"
+                className="h-7 text-xs text-foreground hover:text-foreground dark:hover:text-gray-300 hover:underline ml-auto"
               >
                 Change Recipient
               </Button>
@@ -381,17 +381,17 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
         </div>
 
         {/* Preview Frame - Maximum space */}
-        <div className="flex-1 border rounded-lg overflow-auto bg-gray-100 my-2">
+        <div className="flex-1 border rounded-lg overflow-auto bg-muted my-2">
           {previewUrl ? (
             <iframe
               src={previewUrl}
-              className="w-full h-full bg-white"
+              className="w-full h-full bg-card"
               title="LOE Document Preview"
               sandbox="allow-same-origin"
               style={{ border: 'none', minHeight: '100%' }}
             />
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-500">
+            <div className="flex items-center justify-center h-full text-muted-foreground">
               Loading preview...
             </div>
           )}
@@ -399,7 +399,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
 
         {/* Minimal Footer */}
         <div className="flex justify-between items-center pt-2 border-t">
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-muted-foreground">
             Verify all details are correct before sending
           </p>
           <div className="flex gap-2">
@@ -415,7 +415,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
             <button
               onClick={handleSend}
               disabled={isSending}
-              className="text-gray-900 dark:text-white hover:text-gray-700 dark:hover:text-gray-300 hover:underline transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed disabled:no-underline flex items-center gap-1"
+              className="text-foreground hover:text-foreground dark:hover:text-gray-300 hover:underline transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed disabled:no-underline flex items-center gap-1"
             >
               {isSending ? (
                 'Sending...'

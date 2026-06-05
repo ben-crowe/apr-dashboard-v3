@@ -71,7 +71,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={job.propertyName || ""}
               placeholder="e.g., Parkview Apartments"
               onChange={(e) => onUpdateJob?.({ propertyName: e.target.value })}
-              className="placeholder:text-gray-500"
+              className="placeholder:text-muted-foreground"
             />
           </div>
           
@@ -83,7 +83,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={job.propertyAddress || ""}
               placeholder="e.g., 456 17th Avenue SW, Calgary, AB T2S 0A1"
               onChange={(e) => onUpdateJob?.({ propertyAddress: e.target.value })}
-              className="placeholder:text-gray-500"
+              className="placeholder:text-muted-foreground"
             />
           </div>
           
@@ -146,10 +146,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={cleanQuotedString(job.valuationPremises)}
               onValueChange={value => handleSelectChange(value, 'valuationPremises')}
             >
-              <SelectTrigger id="valuationPremises" className="bg-white border border-gray-300 text-gray-900 hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
+              <SelectTrigger id="valuationPremises" className="bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
-              <SelectContent className="bg-white border-gray-300">
+              <SelectContent className="bg-card border-border">
                 <SelectItem value="As-Is">As-Is</SelectItem>
                 <SelectItem value="Prospective at Completion">Prospective at Completion</SelectItem>
                 <SelectItem value="Prospective at Stabilization">Prospective at Stabilization</SelectItem>
@@ -178,10 +178,10 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={cleanQuotedString(job.assetCondition)}
               onValueChange={value => handleSelectChange(value, 'assetCondition')}
             >
-              <SelectTrigger id="assetCondition" className="bg-white border border-gray-300 text-gray-900 hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
+              <SelectTrigger id="assetCondition" className="bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
                 <SelectValue placeholder="Select..." />
               </SelectTrigger>
-              <SelectContent className="bg-white border-gray-300">
+              <SelectContent className="bg-card border-border">
                 <SelectItem value="Excellent">Excellent</SelectItem>
                 <SelectItem value="Very Good">Very Good</SelectItem>
                 <SelectItem value="Good">Good</SelectItem>
@@ -205,7 +205,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={job.propertyContactFirstName || ""}
               placeholder="Enter name"
               onChange={(e) => onUpdateJob?.({ propertyContactFirstName: e.target.value })}
-              className="placeholder:text-gray-500"
+              className="placeholder:text-muted-foreground"
             />
           </div>
 
@@ -217,7 +217,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={job.propertyContactLastName || ""}
               placeholder="Enter last name"
               onChange={(e) => onUpdateJob?.({ propertyContactLastName: e.target.value })}
-              className="placeholder:text-gray-500"
+              className="placeholder:text-muted-foreground"
             />
           </div>
 
@@ -230,7 +230,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={job.propertyContactEmail || ""}
               placeholder="Enter email address"
               onChange={(e) => onUpdateJob?.({ propertyContactEmail: e.target.value })}
-              className="placeholder:text-gray-500"
+              className="placeholder:text-muted-foreground"
             />
           </div>
 
@@ -243,7 +243,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
               value={formatPhoneNumber(job.propertyContactPhone || "")}
               placeholder="(403) 555-0100"
               onChange={handlePhoneChange}
-              className="placeholder:text-gray-500"
+              className="placeholder:text-muted-foreground"
             />
           </div>
         </div>
@@ -258,7 +258,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
           placeholder="e.g., Client requests focus on retail comparables, property has pending zoning change..."
           rows={4}
           onChange={(e) => onUpdateJob?.({ notes: e.target.value })}
-          className="bg-white border border-gray-300 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
+          className="bg-card border border-border placeholder:text-muted-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
         />
       </div>
     </div>

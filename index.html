@@ -8,6 +8,18 @@
     <meta name="author" content="Valta Appraisals" />
     <meta property="og:image" content="/og-image.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- No-flash theme boot: apply the saved theme to <html> BEFORE React paints (default light).
+         Must stay in sync with ThemeProvider (src/components/theme-provider.tsx). -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('theme') || 'light';
+          var dark = t === 'dark' || (t === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.classList.toggle('dark', dark);
+          document.documentElement.classList.toggle('light', !dark);
+        } catch (e) {}
+      })();
+    </script>
   </head>
 
   <body>

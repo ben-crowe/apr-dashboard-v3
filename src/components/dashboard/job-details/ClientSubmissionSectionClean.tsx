@@ -112,7 +112,7 @@ const ClientSubmissionSectionClean: React.FC<SectionProps> = ({
             <button
               type="button"
               onClick={fillClientTestData}
-              className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              className="text-xs text-gray-400 hover:text-muted-foreground dark:hover:text-gray-300 transition-colors"
             >
               Test Data
             </button>

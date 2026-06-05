@@ -383,11 +383,11 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 bg-gray-200 dark:bg-gray-800 rounded-t-lg`}>
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
-            {isOpen ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}
+            {isOpen ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
             <SectionTitle title="Client Information & Property Details" />
           </div>
           {isSectionSaving && (
-            <Loader2 className="h-4 w-4 text-gray-400 dark:text-gray-500 animate-spin mr-2" />
+            <Loader2 className="h-4 w-4 text-gray-400 dark:text-muted-foreground animate-spin mr-2" />
           )}
         </div>
       </CollapsibleTrigger>
@@ -397,7 +397,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           <button
             type="button"
             onClick={fillClientTestData}
-            className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
+            className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
           >
             Test Data
           </button>
@@ -679,16 +679,16 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 job.files.map((file) => (
                   <div
                     key={file.id}
-                    className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-750 transition-colors"
+                    className="flex items-center justify-between p-2 bg-muted rounded border border-border hover:bg-muted dark:hover:bg-gray-750 transition-colors"
                   >
                     <div className="flex items-center gap-2 flex-1 min-w-0">
                       <FileText className="h-4 w-4 text-blue-600 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm text-gray-900 dark:text-gray-100 truncate">
+                        <p className="text-sm text-foreground truncate">
                           {file.fileName}
                         </p>
                       </div>
-                      <span className="text-xs text-gray-500 dark:text-gray-400 flex-shrink-0">
+                      <span className="text-xs text-muted-foreground flex-shrink-0">
                         {(file.fileSize / 1024).toFixed(0)} KB
                       </span>
                     </div>
@@ -759,7 +759,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   </div>
                 ))
               ) : (
-                <div className="text-center py-4 text-gray-500 dark:text-gray-400">
+                <div className="text-center py-4 text-muted-foreground">
                   <p className="text-sm">No files uploaded yet</p>
                 </div>
               )}

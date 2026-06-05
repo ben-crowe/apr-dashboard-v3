@@ -886,11 +886,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 bg-gray-200 dark:bg-gray-800 rounded-t-lg`}>
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
-            {isOpen ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}
+            {isOpen ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
             <SectionTitle title="LOE Quote & Valuation Details" />
           </div>
           {isSectionSaving && (
-            <Loader2 className="h-4 w-4 text-gray-400 dark:text-gray-500 animate-spin mr-2" />
+            <Loader2 className="h-4 w-4 text-gray-400 dark:text-muted-foreground animate-spin mr-2" />
           )}
         </div>
       </CollapsibleTrigger>
@@ -921,7 +921,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   variant="outline"
                   size="sm"
                   onClick={() => window.open(`https://app.valcre.com/job/edit/${jobDetails.valcreJobId}#job`, '_blank')}
-                  className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-gray-900 transition-colors text-sm font-medium"
+                  className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground hover:bg-muted dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-foreground transition-colors text-sm font-medium"
                 >
                   <ExternalLink className="h-4 w-4 mr-1" />
                   View in Valcre
@@ -933,7 +933,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   variant="secondary"
                   size="sm"
                   disabled
-                  className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white cursor-not-allowed text-sm font-medium"
+                  className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
                 >
                   <ExternalLink className="h-4 w-4 mr-1" />
                   Valcre Job: {jobDetails.jobNumber}
@@ -946,7 +946,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={handleCreateValcreJob}
-                className="!border !border-gray-300 dark:!border-white/30 !bg-transparent !text-gray-900 dark:!text-white hover:!bg-gray-100 dark:hover:!bg-white/10 hover:!border-gray-400 dark:hover:!border-white/50 transition-colors text-sm font-medium"
+                className="!border !border-border dark:!border-white/30 !bg-transparent !text-foreground dark:!text-white hover:!bg-muted dark:hover:!bg-white/10 hover:!border-gray-400 dark:hover:!border-white/50 transition-colors text-sm font-medium"
                 disabled={isCreatingJob}
               >
                 {isCreatingJob ? 'Creating...' : 'Create Valcre Job'}
@@ -962,7 +962,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                         variant="outline"
                         size="sm"
                         disabled={true}
-                        className="!border !border-gray-300 dark:!border-white/30 !bg-transparent !text-gray-900 dark:!text-white cursor-not-allowed text-sm font-medium"
+                        className="!border !border-border dark:!border-white/30 !bg-transparent !text-foreground dark:!text-white cursor-not-allowed text-sm font-medium"
                       >
                         Create Valcre Job
                       </Button>
@@ -996,7 +996,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           size="sm"
                           onClick={handleGeneratePreview}
                           disabled={true}
-                          className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white cursor-not-allowed text-sm font-medium"
+                          className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
                           {alreadySent ? "LOE Sent" : "Preview & Send LOE"}
@@ -1026,7 +1026,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           variant="outline"
                           size="sm"
                           disabled={true}
-                          className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white cursor-not-allowed text-sm font-medium"
+                          className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
                           Preview & Send LOE
@@ -1059,7 +1059,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 variant="outline"
                 size="sm"
                 disabled={true}
-                className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white cursor-not-allowed text-sm font-medium"
+                className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
               >
                 <FileSignature className="h-4 w-4 mr-1" />
                 Preview & Send LOE
@@ -1071,7 +1071,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           <button
             type="button"
             onClick={fillTestData}
-            className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1 transition-colors"
+            className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
             title="Fill test data for development"
           >
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1562,13 +1562,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 { label: 'Payment', name: 'paymentComments', placeholder: 'Payment terms and notes...' },
               ].map(({ label, name, placeholder }) => (
                 <div key={name} className="flex flex-col gap-2">
-                  <label className="text-sm text-gray-600 dark:text-gray-400">{label}:</label>
+                  <label className="text-sm text-muted-foreground">{label}:</label>
                   <div className="flex items-start gap-1">
                     {name === 'appraiserComments' && ((jobDetails as any).appraiserComments || '').length + ((jobDetails as any).deliveryComments || '').length + ((jobDetails as any).paymentComments || '').length > 80 ? (
                       <button
                         type="button"
                         onClick={() => setCommentsExpanded(!commentsExpanded)}
-                        className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 mt-0.5 flex-shrink-0"
+                        className="text-gray-400 hover:text-muted-foreground dark:hover:text-gray-300 mt-0.5 flex-shrink-0"
                       >
                         {commentsExpanded ? <ChevronDown className="h-3 w-3" /> : <ChevronRight className="h-3 w-3" />}
                       </button>

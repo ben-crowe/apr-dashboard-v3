@@ -148,14 +148,14 @@ const Section4CompactIndependent: React.FC<SectionProps> = ({
     return (
       <div 
         className={`border-2 border-dashed rounded-lg p-4 transition-all ${
-          dragActive === fieldName ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-gray-50'
+          dragActive === fieldName ? 'border-blue-500 bg-blue-50' : 'border-border bg-muted'
         } ${documentUrl ? 'bg-green-50' : ''}`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         <div className="flex justify-between items-start mb-2">
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-sm font-medium text-foreground">
             {label}
             {required && <span className="text-red-500 ml-1">*</span>}
           </label>
@@ -178,10 +178,10 @@ const Section4CompactIndependent: React.FC<SectionProps> = ({
         {!documentUrl ? (
           <div 
             onClick={() => fileInputRef.current?.click()}
-            className="text-center py-8 cursor-pointer hover:bg-gray-100 rounded transition-colors"
+            className="text-center py-8 cursor-pointer hover:bg-muted rounded transition-colors"
           >
             <Upload className="h-8 w-8 mx-auto text-gray-400 mb-2" />
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-muted-foreground">
               {uploading === fieldName ? "Uploading..." : "Drag and drop or click to upload"}
             </p>
           </div>
@@ -215,10 +215,10 @@ const Section4CompactIndependent: React.FC<SectionProps> = ({
 
   // COMPLETELY INDEPENDENT COMPONENT
   return (
-    <div className="w-full border rounded-lg bg-white shadow-sm">
+    <div className="w-full border rounded-lg bg-card shadow-sm">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors border-b"
+        className="w-full px-4 py-3 flex items-center justify-between hover:bg-muted transition-colors border-b"
       >
         <div className="flex items-center gap-2">
           {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}

@@ -26,7 +26,7 @@ export const sectionContentStyle = "px-4 py-4";
 
 // Section header with optional number
 export const SectionTitle = ({ number, title }: { number?: string; title: string }) => (
-  <span className="text-base font-medium text-gray-900 dark:text-gray-100">
+  <span className="text-base font-medium text-foreground">
     {number && <span className="mr-2">{number}</span>}
     {title}
   </span>
@@ -43,7 +43,7 @@ export const FieldRow = ({
   className?: string;
 }) => (
   <div className={`grid grid-cols-3 gap-2 py-0.5 ${className}`}>
-    <div className="text-sm text-gray-600 dark:text-gray-400 text-right">
+    <div className="text-sm text-muted-foreground text-right">
       {label}
     </div>
     <div className="col-span-2">
@@ -61,7 +61,7 @@ export const SectionGroup = ({
   children: React.ReactNode;
 }) => (
   <div className="mb-6 mt-4">
-    <h3 className="text-xs font-semibold text-gray-900 dark:text-gray-400 uppercase tracking-wider mb-3">
+    <h3 className="text-xs font-semibold text-foreground dark:text-gray-400 uppercase tracking-wider mb-3">
       {title}
     </h3>
     {children}
@@ -99,7 +99,7 @@ export const CompactField = ({
 }) => (
   <div className={`flex items-center gap-2 py-0.5 ${fullWidth ? 'md:col-span-2' : ''} ${className}`}>
     {label && (
-      <label className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap min-w-[160px] text-right">
+      <label className="text-sm text-muted-foreground whitespace-nowrap min-w-[160px] text-right">
         {typeof label === 'string' ? `${label}:` : label}
       </label>
     )}

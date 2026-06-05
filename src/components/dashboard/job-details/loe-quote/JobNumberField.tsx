@@ -33,13 +33,13 @@ const JobNumberField: React.FC<JobNumberFieldProps> = ({ job, jobDetails }) => {
             value={hasValcreJob ? displayValue : ''} 
             placeholder={isPendingValcreJob(jobNumber) ? 'Pending...' : `e.g., ${VALCRE_JOB_EXAMPLE}`}
             readOnly 
-            className={`bg-background font-mono text-sm w-40 ${!hasValcreJob ? 'placeholder:text-gray-500' : ''}`}
+            className={`bg-background font-mono text-sm w-40 ${!hasValcreJob ? 'placeholder:text-muted-foreground' : ''}`}
           />
         </div>
         
         {/* ClickUp Integration */}
         <div className="flex items-center gap-2">
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-muted-foreground">
             ClickUp Integration:
           </div>
           <ClickUpAction 
@@ -51,7 +51,7 @@ const JobNumberField: React.FC<JobNumberFieldProps> = ({ job, jobDetails }) => {
             }}
           />
           {job.clickup_task_id && (
-            <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex items-center text-sm text-muted-foreground">
               <CheckCircle className="w-4 h-4 mr-1" />
               Task created
             </div>

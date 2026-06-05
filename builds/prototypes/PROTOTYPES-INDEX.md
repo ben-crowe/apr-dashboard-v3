@@ -29,6 +29,19 @@
 |------|-------------|
 | `v10-field-edit-spec.md` | Visual states spec for field add/edit behavior (States 1-13). |
 
+## Supporting Files
+
+Files present in this folder that are not part of the v6 production lineage. Kept for reference.
+
+| File | Description |
+|------|-------------|
+| `conditional-field-picker.html` | Standalone cascade logic demo showing Field Registry with cascading rules (Property Type → Property Rights, Status of Improvements → Value Scenarios chain). Early exploration of the cascade behavior that eventually informed the Logic tab. |
+| `new-field-panel-additions.html` | CSS/HTML/JS snippet file — additive code blocks intended to graft a slide-out "New Field Registration" panel onto v5. Not a standalone page; parts were superseded by the inline row approach in v6. |
+| `sc-component-library.html` | Dark-theme SC component library reference page (title: "SC Component Library"). Three-panel layout showing UI components used across the Valta design system. |
+| `sc-lib-screenshot.png` | Screenshot of `sc-component-library.html` — visual reference for the SC component library. |
+| `sc-verify.png` | Verification screenshot; likely a QA capture confirming a design or layout state. Exact context not determinable from the image filename alone. |
+| `valta-controls-v3.html` | Standalone control-type component library (title: "Valta Controls — v3") showing light and dark theme variants of form controls used in the Valta UI. |
+
 ## Key Decisions
 
 1. **v10 won** — spreadsheet-style inline add/edit is the most direct and natural.

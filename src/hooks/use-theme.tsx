@@ -1,30 +1,4 @@
-
-import { useState, useEffect } from "react";
-
-type Theme = "light" | "dark" | "system";
-
-export function useTheme() {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem("theme") as Theme) || "system"
-  );
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    
-    root.classList.remove("light", "dark");
-    
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light";
-      root.classList.add(systemTheme);
-      return;
-    }
-    
-    root.classList.add(theme);
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  return { theme, setTheme };
-}
+// Back-compat shim: the hook now delegates to the single ThemeProvider context
+// (src/components/theme-provider.tsx). Existing imports of "@/hooks/use-theme" keep working.
+export { useTheme } from "@/components/theme-provider";
+export type { Theme } from "@/components/theme-provider";

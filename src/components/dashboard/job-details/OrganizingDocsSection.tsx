@@ -164,11 +164,11 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
       <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 bg-gray-200 dark:bg-gray-800 rounded-t-lg`}>
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center gap-2">
-            {isOpen ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}
+            {isOpen ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
             <SectionTitle title="Building Information & Client Documents" />
           </div>
           {isSectionSaving && (
-            <Loader2 className="h-4 w-4 text-gray-400 dark:text-gray-500 animate-spin mr-2" />
+            <Loader2 className="h-4 w-4 text-gray-400 dark:text-muted-foreground animate-spin mr-2" />
           )}
         </div>
       </CollapsibleTrigger>
@@ -181,7 +181,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
             <button
               type="button"
               onClick={fillTestData}
-              className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1 transition-colors"
+              className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
               title="Fill test data for development"
             >
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

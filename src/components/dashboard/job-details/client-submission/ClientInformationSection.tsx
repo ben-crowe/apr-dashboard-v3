@@ -57,7 +57,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({ job
                 value={job.clientFirstName || ''}
                 onChange={handleChange}
                 placeholder="e.g., John"
-                className={onUpdateJob ? "h-9 border border-gray-300 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 border border-gray-300 placeholder:text-gray-500"}
+                className={onUpdateJob ? "h-9 border border-border placeholder:text-muted-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 border border-border placeholder:text-muted-foreground"}
                 readOnly={!onUpdateJob}
               />
             </div>
@@ -70,7 +70,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({ job
                 value={job.clientLastName || ''}
                 onChange={handleChange}
                 placeholder="e.g., Smith"
-                className={onUpdateJob ? "h-9 border border-gray-300 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 border border-gray-300 placeholder:text-gray-500"}
+                className={onUpdateJob ? "h-9 border border-border placeholder:text-muted-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 border border-border placeholder:text-muted-foreground"}
                 readOnly={!onUpdateJob}
               />
             </div>
@@ -84,7 +84,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({ job
               value={job.clientTitle || ""}
               onChange={handleChange}
               placeholder="e.g., VP of Real Estate"
-              className={onUpdateJob ? "h-9 bg-white border border-gray-300 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 bg-white border border-gray-300 placeholder:text-gray-500"}
+              className={onUpdateJob ? "h-9 bg-card border border-border placeholder:text-muted-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 bg-card border border-border placeholder:text-muted-foreground"}
               readOnly={!onUpdateJob}
             />
           </div>
@@ -97,7 +97,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({ job
               value={job.clientOrganization || ""}
               onChange={handleChange}
               placeholder="e.g., ABC Properties Inc."
-              className={onUpdateJob ? "h-9 bg-white border border-gray-300 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 bg-white border border-gray-300 placeholder:text-gray-500"}
+              className={onUpdateJob ? "h-9 bg-card border border-border placeholder:text-muted-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 bg-card border border-border placeholder:text-muted-foreground"}
               readOnly={!onUpdateJob}
             />
           </div>
@@ -113,7 +113,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({ job
               value={job.clientAddress || ""}
               onChange={handleChange}
               placeholder="e.g., 123 8th Avenue SW, Suite 500, Calgary, AB T2P 1B3"
-              className={onUpdateJob ? "h-9 bg-white border border-gray-300 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 bg-white border border-gray-300 placeholder:text-gray-500"}
+              className={onUpdateJob ? "h-9 bg-card border border-border placeholder:text-muted-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 bg-card border border-border placeholder:text-muted-foreground"}
               readOnly={!onUpdateJob}
             />
           </div>
@@ -127,7 +127,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({ job
               value={formatPhoneNumber(job.clientPhone || '')}
               onChange={handlePhoneChange}
               placeholder="(403) 555-0100"
-              className={onUpdateJob ? "h-9 bg-white border border-gray-300 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 bg-white border border-gray-300 placeholder:text-gray-500"}
+              className={onUpdateJob ? "h-9 bg-card border border-border placeholder:text-muted-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 bg-card border border-border placeholder:text-muted-foreground"}
               readOnly={!onUpdateJob}
             />
           </div>
@@ -141,7 +141,7 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({ job
               value={job.clientEmail || ''}
               onChange={handleChange}
               placeholder="e.g., john.smith@example.com"
-              className={onUpdateJob ? "h-9 bg-white border border-gray-300 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 bg-white border border-gray-300 placeholder:text-gray-500"}
+              className={onUpdateJob ? "h-9 bg-card border border-border placeholder:text-muted-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0" : "h-9 bg-card border border-border placeholder:text-muted-foreground"}
               readOnly={!onUpdateJob}
             />
           </div>

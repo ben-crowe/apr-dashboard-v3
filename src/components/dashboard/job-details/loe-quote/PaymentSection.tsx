@@ -122,7 +122,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({
           value={formattedAppraisalFee}
           onChange={handleAppraisalFeeChange}
           placeholder="$3,500"
-          className="placeholder:text-gray-500"
+          className="placeholder:text-muted-foreground"
         />
       </div>
 
@@ -135,7 +135,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({
           value={formattedRetainerAmount}
           onChange={handleRetainerAmountChange}
           placeholder="$350"
-          className="placeholder:text-gray-500"
+          className="placeholder:text-muted-foreground"
         />
         <p className="text-xs text-muted-foreground">
           Typical retainer: 10% of appraisal fee

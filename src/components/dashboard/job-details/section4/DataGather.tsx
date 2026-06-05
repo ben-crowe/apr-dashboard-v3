@@ -70,7 +70,7 @@ const DataGather: React.FC<DataGatherProps> = ({
   return (
     <div className="space-y-2">
       {/* Main Data Row */}
-      <div className="flex items-center justify-between p-3 bg-white border rounded-lg hover:bg-gray-50/50 transition-colors">
+      <div className="flex items-center justify-between p-3 bg-card border rounded-lg hover:bg-muted/50 transition-colors">
         <div className="flex items-center gap-3 flex-1">
           {/* Status Icon */}
           <div className="flex items-center justify-center w-8 h-8">
@@ -79,7 +79,7 @@ const DataGather: React.FC<DataGatherProps> = ({
                 <Check className="h-3 w-3 text-green-600" />
               </div>
             ) : (
-              <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center">
+              <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center">
                 <Database className="h-3 w-3 text-gray-400" />
               </div>
             )}
@@ -148,11 +148,11 @@ const DataGather: React.FC<DataGatherProps> = ({
       {/* Assessment Data Details */}
       {data && showDetails && (
         <div className="ml-11">
-          <Card className="p-4 bg-gray-50 border-gray-200">
+          <Card className="p-4 bg-muted border-border">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {/* Land Value */}
               <div className="space-y-1">
-                <div className="flex items-center gap-1 text-xs text-gray-600">
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <TrendingUp className="h-3 w-3" />
                   <span>Land Value</span>
                 </div>
@@ -163,7 +163,7 @@ const DataGather: React.FC<DataGatherProps> = ({
 
               {/* Building Value */}
               <div className="space-y-1">
-                <div className="flex items-center gap-1 text-xs text-gray-600">
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Building className="h-3 w-3" />
                   <span>Building Value</span>
                 </div>
@@ -174,7 +174,7 @@ const DataGather: React.FC<DataGatherProps> = ({
 
               {/* Total Value */}
               <div className="space-y-1">
-                <div className="flex items-center gap-1 text-xs text-gray-600">
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <DollarSign className="h-3 w-3" />
                   <span>Total Assessment</span>
                 </div>
@@ -185,7 +185,7 @@ const DataGather: React.FC<DataGatherProps> = ({
 
               {/* Year */}
               <div className="space-y-1">
-                <div className="flex items-center gap-1 text-xs text-gray-600">
+                <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Calendar className="h-3 w-3" />
                   <span>Year</span>
                 </div>
@@ -197,9 +197,9 @@ const DataGather: React.FC<DataGatherProps> = ({
 
             {/* Additional Info */}
             {data.splitRatio && (
-              <div className="mt-4 pt-3 border-t border-gray-200">
+              <div className="mt-4 pt-3 border-t border-border">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-600">Land/Building Split:</span>
+                  <span className="text-xs text-muted-foreground">Land/Building Split:</span>
                   <div className="flex gap-2">
                     <Badge variant="outline" className="text-xs">
                       Land: {Math.round((data.landValue / data.totalValue) * 100)}%

@@ -94,7 +94,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
   };
 
   return (
-    <div className="flex items-center justify-between p-3 bg-white border rounded-lg hover:bg-gray-50/50 transition-colors">
+    <div className="flex items-center justify-between p-3 bg-card border rounded-lg hover:bg-muted/50 transition-colors">
       <div className="flex items-center gap-3 flex-1">
         {/* Status Icon */}
         <div className="flex items-center justify-center w-8 h-8">
@@ -103,7 +103,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
               <Check className="h-3 w-3 text-green-600" />
             </div>
           ) : (
-            <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center">
+            <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center">
               <FileText className="h-3 w-3 text-gray-400" />
             </div>
           )}

@@ -347,7 +347,7 @@
 
 <div class="hdr">
   <div>
-    <h1>Valta Field Registry Explorer</h1>
+    <h1>Valta Field Registry Explorer <span style="font-size:12px;font-weight:500;color:#a1a1aa;margin-left:8px;">v7 — Inline Row Edit</span></h1>
     <div class="sub">Field Registry · Cascade Logic · Rule Audit</div>
   </div>
   <div class="hdr-btns">
@@ -601,7 +601,7 @@ E  Authorized Use          ──┘</div>
 </div>
 
 <!-- ═══ FIELD INDEX ═══ -->
-<div class="panel" id="panel-index">
+<div class="panel" id="panel-index"><div style="max-width:960px;margin:0 auto 12px;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:#18181b;border-radius:8px;"><span style="font:700 13px/1 system-ui,sans-serif;color:#fff;">v7 — Inline Row Edit</span><div style="display:flex;gap:6px;"><a href="valta-field-registry-NEW-FIELD-mockup.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v6</a><a href="valta-field-registry-v7-inline-row.html" style="font:600 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#fff;background:#3f3f46;">v7</a><a href="valta-field-registry-v8-grouped.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v8</a><a href="valta-field-registry-v9-modal.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v9</a><a href="valta-field-registry-v10-simple-add.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v10</a><a href="valta-field-registry-v11-client-simple.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v11</a></div></div>
 <div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<span style="display:flex;align-items:center;gap:6px;margin-left:auto;"><button class="btn btn-primary" style="font-size:11px;padding:5px 12px;" onclick="addNewFieldRow();event.stopPropagation();">+ New Field</button><span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></span></div><div class="sec-body">
   <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
@@ -2047,5 +2047,5 @@ function toggleFullWidth(e) {
   });
 })();
 </script>
-</body>
+<div style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#18181b;padding:8px 16px;display:flex;gap:8px;align-items:center;justify-content:center;box-shadow:0 -2px 8px rgba(0,0,0,.15);"><span style="font-size:11px;color:#a1a1aa;margin-right:8px;">Compare:</span><a href="valta-field-registry-NEW-FIELD-mockup.html" id="nav-v6" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v6 Panel</a><a href="valta-field-registry-v7-inline-row.html" id="nav-v7" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v7 Inline Row</a><a href="valta-field-registry-v8-grouped.html" id="nav-v8" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v8 Grouped</a><a href="valta-field-registry-v9-modal.html" id="nav-v9" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v9 Modal</a><a href="valta-field-registry-v10-simple-add.html" id="nav-v10" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v10 Simple</a></div><script>document.querySelectorAll("[id^=nav-]").forEach(a=>{if(location.pathname.includes(a.href.split("/").pop().replace(".html","")))a.style.background="#3f3f46",a.style.color="#fff",a.style.fontWeight="700"});</script><div style="height:44px;"></div></body>
 </html>

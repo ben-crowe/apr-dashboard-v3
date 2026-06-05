@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2318181b'/><text x='16' y='22' font-family='system-ui,sans-serif' font-size='14' font-weight='700' fill='%23e4e4e7' text-anchor='middle'>SC</text></svg>">
+<title>SC Component Library</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --radius: 8px;
+    --shadow: 0 1px 2px rgba(0,0,0,.3);
+    --text: #e4e4e7;
+    --text-2: #a1a1aa;
+    --text-3: #71717a;
+    --text-4: #52525b;
+    --bg: #1a1a1e;
+    --card: #222226;
+    --border: #2e2e33;
+    --border-focus: #52525b;
+    --hover: rgba(255,255,255,.05);
+    --active-bg: rgba(255,255,255,.07);
+    --seg-bg: #1a1a1e;
+    --seg-active: #2e2e33;
+    --seg-border: #2e2e33;
+    --dd-bg: rgba(30,30,34,.9);
+    --dd-border: rgba(255,255,255,.12);
+    --dd-shadow: 0 4px 20px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.04);
+    --sidebar-w: 200px;
+    --viewer-w: 380px;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 13px; color: var(--text); background: var(--bg); line-height: 1.5; height: 100vh; overflow: hidden; color-scheme: dark; }
+
+  /* Scrollbars */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-focus); }
+
+  /* ═══ 3-PANEL LAYOUT ═══ */
+  .app { display: flex; height: 100vh; }
+
+  /* ── LEFT: Category Sidebar ── */
+  .sidebar { width: var(--sidebar-w); flex-shrink: 0; background: var(--card); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+  .sidebar-hdr { padding: 16px 16px 12px; border-bottom: 1px solid var(--border); }
+  .sidebar-hdr h1 { font-size: 14px; font-weight: 700; letter-spacing: -.02em; }
+  .sidebar-hdr .sub { font-size: 10px; color: var(--text-3); margin-top: 2px; }
+  .sidebar-body { flex: 1; overflow-y: auto; padding: 8px 0; }
+
+  /* Category accordion */
+  .cat { border-bottom: 1px solid var(--border); }
+  .cat:last-child { border-bottom: none; }
+  .cat-hdr { display: flex; align-items: center; gap: 6px; padding: 8px 14px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-2); cursor: pointer; user-select: none; transition: background .1s; }
+  .cat-hdr:hover { background: var(--hover); }
+  .cat-chevron { font-size: 10px; color: var(--text-3); transition: transform .15s; width: 12px; text-align: center; }
+  .cat.closed .cat-chevron { transform: rotate(-90deg); }
+  .cat.closed .cat-items { display: none; }
+  .cat-count { font-size: 9px; color: var(--text-4); font-weight: 400; margin-left: auto; }
+
+  .cat-items { padding: 0 0 4px; }
+  .cat-item { display: flex; align-items: center; gap: 6px; padding: 5px 14px 5px 28px; font-size: 12px; color: var(--text-3); cursor: pointer; transition: all .1s; }
+  .cat-item:hover { color: var(--text-2); background: var(--hover); }
+  .cat-item.active { color: var(--text); font-weight: 500; background: var(--active-bg); }
+
+  /* ── CENTER: Component List ── */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; position: relative; }
+  .main-toolbar { padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--card); display: flex; gap: 10px; align-items: center; }
+  .search { flex: 1; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius); font: inherit; font-size: 12px; outline: none; background: transparent; transition: border-color .12s; }
+  .search:focus { border-color: var(--text); }
+  .search::placeholder { color: var(--text-4); }
+  .view-mode { display: flex; gap: 2px; }
+  .view-mode button { font-size: 14px; padding: 4px 8px; border: none; border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .12s; }
+  .view-mode button:hover { background: var(--hover); color: var(--text-2); }
+  .view-mode button.active { background: var(--active-bg); color: var(--text); }
+  .detail-toggle { font: 500 11px/1 system-ui; padding: 5px 10px; border-radius: calc(var(--radius) - 2px); border: 1px solid var(--border); background: transparent; color: var(--text-3); cursor: pointer; transition: all .12s; margin-left: auto; }
+  .detail-toggle:hover { border-color: var(--border-focus); color: var(--text); }
+  .detail-toggle.open { color: var(--text); background: var(--active-bg); }
+
+  .main-count { padding: 8px 16px 0; font-size: 11px; color: var(--text-3); font-weight: 500; }
+  .main-count::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); margin-right: 6px; vertical-align: middle; }
+
+  .main-body { flex: 1; overflow-y: auto; padding: 8px 16px 24px; }
+
+  /* Component cards in list view */
+  .comp-list { display: flex; flex-direction: column; gap: 6px; }
+  .comp-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: all .12s; }
+  .comp-row:hover { border-color: var(--border-focus); box-shadow: var(--shadow); }
+  .comp-row.active { border-color: var(--text); }
+  .comp-icon { width: 32px; height: 32px; border-radius: calc(var(--radius) - 2px); background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 14px; color: var(--text-3); flex-shrink: 0; }
+  .comp-info { flex: 1; min-width: 0; }
+  .comp-name { font-size: 12px; font-weight: 600; color: var(--text); }
+  .comp-desc { font-size: 11px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .comp-badge { font-size: 9px; font-weight: 500; padding: 2px 7px; border-radius: calc(var(--radius) - 4px); border: 1px solid var(--border); color: var(--text-3); flex-shrink: 0; }
+  .comp-source { font-size: 10px; color: var(--text-4); font-family: 'SF Mono','Consolas', monospace; flex-shrink: 0; }
+
+  /* Component cards in grid view */
+  .comp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .comp-grid .comp-card { padding: 14px; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); cursor: pointer; transition: all .12s; }
+  .comp-grid .comp-card:hover { border-color: var(--border-focus); box-shadow: var(--shadow); }
+  .comp-grid .comp-card.active { border-color: var(--text); }
+  .comp-grid .comp-preview { height: 80px; background: var(--bg); border-radius: calc(var(--radius) - 2px); margin-bottom: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 8px; }
+  .comp-grid .comp-name { font-size: 12px; font-weight: 600; }
+  .comp-grid .comp-desc { font-size: 10px; color: var(--text-3); margin-top: 2px; }
+
+  /* Gallery view */
+  .gallery-section { margin-bottom: 16px; }
+  .gallery-section:last-child { margin-bottom: 0; }
+  .gallery-hdr { display: none; }
+  .gallery-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .gallery-wrap { cursor: pointer; }
+  .gallery-wrap:hover .gallery-card { box-shadow: 0 4px 16px rgba(0,0,0,.3); transform: translateY(-4px); }
+  .gallery-card { background: #0a0a0b; border: none; border-radius: 12px; transition: all .15s; overflow: hidden; }
+  .gallery-card.active { box-shadow: 0 0 0 1px var(--text-3); }
+  .gallery-preview { aspect-ratio: 4 / 3; background: #0a0a0b; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 12px; position: relative; }
+  .gallery-preview > div { transform: scale(0.8); transform-origin: center; }
+  .gallery-label { padding: 0 4px; margin-top: 10px; opacity: 0; transition: opacity .15s; }
+  .gallery-wrap:hover .gallery-label { opacity: 1; }
+  .gallery-label .comp-name { font-size: 11px; font-weight: 500; color: #a1a1aa; }
+  .gallery-label .comp-desc { display: none; }
+
+  /* ── MODAL OVERLAY ── */
+  .modal-backdrop { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: transparent; z-index: 50; align-items: center; justify-content: center; }
+  .modal-backdrop.open { display: flex; }
+  .modal { border-radius: 14px; box-shadow: 0 0 12px rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.2); background: linear-gradient(145deg, #111114 0%, #0a0a0b 50%, #0e0e11 100%); width: 65%; aspect-ratio: 4 / 3; max-height: 75%; display: flex; flex-direction: column; overflow: hidden; }
+  .modal-hdr { padding: 24px 28px 12px; display: flex; justify-content: space-between; align-items: flex-start; }
+  .modal-hdr h2 { font-size: 16px; font-weight: 700; }
+  .modal-hdr .modal-meta { font-size: 10px; color: var(--text-3); margin-top: 3px; }
+  .modal-btn { font-size: 14px; color: var(--text-3); cursor: pointer; border: none; background: none; padding: 4px 8px; border-radius: 6px; line-height: 1; }
+  .modal-btn:hover { background: var(--hover); color: var(--text); }
+  .modal-close { font-size: 20px; }
+  .modal.fullsize { width: 90% !important; max-height: 90% !important; }
+
+  /* Modal preview — large, interactive */
+  .modal-preview { background: #0a0a0b; padding: 40px; flex: 1; display: flex; align-items: center; justify-content: center; border-radius: 10px; margin: 8px; }
+  .modal-preview > div { transform: scale(var(--modal-zoom, 1.2)); transform-origin: center; transition: transform .15s ease; }
+
+  /* Modal tabs */
+  .modal-tabs { display: flex; gap: 0; padding: 0 20px; border-bottom: 1px solid var(--border); background: var(--card); }
+  .viewer-tab { font: 500 12px/1 system-ui, sans-serif; padding: 10px 14px; color: var(--text-3); cursor: pointer; border-bottom: 2px solid transparent; transition: all .12s; }
+  .viewer-tab:hover { color: var(--text-2); }
+  .viewer-tab.active { color: var(--text); border-bottom-color: var(--text); }
+
+  .modal-body { flex: 1; overflow-y: auto; padding: 20px; }
+
+  /* ── RIGHT: Detail Panel ── */
+  .detail { width: 0; flex-shrink: 0; background: var(--card); border-left: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; transition: width .2s; }
+  .detail.open { width: 360px; }
+  .detail-hdr { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; }
+  .detail-hdr h2 { font-size: 14px; font-weight: 700; }
+  .detail-close { font-size: 16px; color: var(--text-3); cursor: pointer; border: none; background: none; padding: 2px 6px; border-radius: 4px; }
+  .detail-close:hover { background: var(--hover); color: var(--text); }
+  .detail-meta { padding: 0 16px; font-size: 10px; color: var(--text-3); margin-bottom: 8px; }
+  .detail-desc { padding: 0 16px 12px; font-size: 12px; color: var(--text-2); line-height: 1.6; border-bottom: 1px solid var(--border); margin-bottom: 0; }
+  .detail-body { flex: 1; overflow-y: auto; padding: 14px 16px; }
+  .detail-section { margin-bottom: 14px; }
+  .detail-section-title { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--text-3); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; }
+  .copy-btn { font: 500 10px/1 system-ui; padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border); background: transparent; color: var(--text-3); cursor: pointer; transition: all .12s; text-transform: none; letter-spacing: 0; }
+  .copy-btn:hover { border-color: var(--border-focus); color: var(--text); }
+  .copy-btn.copied { color: #22c55e; border-color: #22c55e; }
+
+  /* Code area */
+  .code-area { display: none; }
+  .code-area.active { display: block; }
+  .code-block { background: var(--card); border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px); padding: 12px 14px; font-family: 'SF Mono','Consolas', monospace; font-size: 11px; line-height: 1.6; color: var(--text-2); overflow-x: auto; white-space: pre; margin-bottom: 10px; }
+  .code-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: var(--text-3); margin-bottom: 4px; }
+  .copy-btn { font: 500 10px/1 system-ui, sans-serif; padding: 4px 10px; border-radius: calc(var(--radius) - 2px); border: 1px solid var(--border); background: transparent; color: var(--text-3); cursor: pointer; float: right; transition: all .12s; }
+  .copy-btn:hover { border-color: var(--border-focus); color: var(--text); }
+
+  /* Anti-pattern area */
+  .anti-area { display: none; }
+  .anti-area.active { display: block; }
+  .anti-split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .anti-box { border-radius: var(--radius); padding: 16px; }
+  .anti-box.dont { background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.2); }
+  .anti-box.do { background: rgba(34,197,94,.08); border: 1px solid rgba(34,197,94,.2); }
+  .anti-label { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .anti-label.dont { color: #dc2626; }
+  .anti-label.do { color: #16a34a; }
+
+  /* Empty state */
+  .empty-viewer { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-4); font-size: 12px; gap: 8px; }
+  .empty-viewer .icon { font-size: 32px; }
+
+  /* Interactive checkbox demo */
+  .cb-demo { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #71717a; cursor: pointer; user-select: none; transition: color .12s; }
+  .cb-demo:hover { color: #a1a1aa; }
+  .cb-demo:has(.checked) { color: #e4e4e7; }
+  .cb-box { width: 14px; height: 14px; border: 1.5px solid #3f3f46; border-radius: 3px; flex-shrink: 0; position: relative; transition: all .12s; }
+  .cb-box.checked { background: #e4e4e7; border-color: #e4e4e7; }
+  .cb-box.checked::after { content: ''; position: absolute; top: 1px; left: 4px; width: 4px; height: 8px; border: solid #18181b; border-width: 0 1.5px 1.5px 0; transform: rotate(45deg); }
+
+  /* Custom dropdown — for preview demos */
+  .dd { position: relative; user-select: none; }
+  .dd-trigger { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 2px; height: 28px; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text); cursor: pointer; transition: border-color .12s; }
+  .dd-trigger:hover { border-bottom-color: var(--border-focus); }
+  .dd-trigger.open { border-bottom-color: var(--text); }
+  .dd-trigger.ph { color: var(--text-3); }
+  .dd-arrow { width: 0; height: 0; border-left: 3.5px solid transparent; border-right: 3.5px solid transparent; border-top: 4px solid var(--text-3); transition: transform .15s; flex-shrink: 0; }
+  .dd-trigger.open .dd-arrow { transform: rotate(180deg); }
+  .dd-menu { position: absolute; top: calc(100% + 3px); left: 0; right: 0; background: var(--dd-bg); backdrop-filter: blur(20px) saturate(1.2); -webkit-backdrop-filter: blur(20px) saturate(1.2); border: 1px solid var(--dd-border); border-radius: var(--radius); box-shadow: var(--dd-shadow); z-index: 100; display: none; overflow: hidden; padding: 3px; }
+  .dd-menu.open { display: block; }
+  .dd-item { padding: 5px 9px; font-size: 12px; color: var(--text-2); cursor: pointer; transition: all .08s; border-radius: calc(var(--radius) - 4px); }
+  .dd-item:hover { background: var(--hover); color: var(--text); }
+  .dd-item.selected { background: var(--active-bg); color: var(--text); font-weight: 500; }
+
+  /* Segmented tabs — for preview demos */
+  .seg-demo { display: inline-flex; align-items: center; background: var(--seg-bg); border: 1px solid var(--seg-border); border-radius: var(--radius); padding: 3px; gap: 2px; box-shadow: var(--shadow); }
+  .seg-demo button { font: 500 12px/1 system-ui, sans-serif; padding: 6px 14px; border: none; border-radius: calc(var(--radius) - 2px); background: transparent; color: var(--text-3); cursor: pointer; transition: all .15s; }
+  .seg-demo button:hover { color: var(--text-2); background: var(--hover); }
+  .seg-demo button.active { color: var(--text); background: var(--seg-active); box-shadow: var(--shadow); }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ═══ LEFT: Category Sidebar ═══ -->
+  <div class="sidebar">
+    <div class="sidebar-hdr">
+      <h1>SC Component Library</h1>
+      <div class="sub">Design System</div>
+    </div>
+    <div class="sidebar-body">
+
+      <div class="cat" id="sidebarCats"></div>
+
+    </div>
+  </div>
+
+  <!-- ═══ CENTER: Component List ═══ -->
+  <div class="main">
+    <div class="main-toolbar">
+      <input class="search" placeholder="Search components..." oninput="filterComps(this.value)">
+      <div class="view-mode">
+        <button onclick="setViewMode('list',this)" title="List">&#x2630;</button>
+        <button class="active" onclick="setViewMode('gallery',this)" title="Gallery">&#x25A3;</button>
+        <button onclick="setViewMode('grid',this)" title="Grid">&#x25A6;</button>
+      </div>
+      <button class="detail-toggle" id="detailToggle" onclick="toggleDetail()" title="Toggle detail panel">Details &#x25B8;</button>
+    </div>
+    <div class="main-count" id="compCount">6 components</div>
+    <div class="main-body">
+      <div class="comp-list" id="compContainer"></div>
+    </div>
+
+    <!-- Modal inside main panel only — covers center only -->
+    <div class="modal-backdrop" id="modalBackdrop" onclick="if(event.target===this)closeModal()">
+      <div class="modal" id="modal"></div>
+    </div>
+  </div>
+
+  <!-- ═══ RIGHT: Detail Panel ═══ -->
+  <div class="detail" id="detailPanel"></div>
+
+</div>
+
+<script>
+// ═══ COMPONENT DATA ═══
+const COMPONENTS = [
+  { id:'glass-dropdown', name:'Glass Dropdown', cat:'Field Controls', desc:'Underline trigger, backdrop-blur glass menu, no native select', source:'v5', tags:['dropdown','select','form','glass','blur'], ready:true,
+    about:'Replaces native <select> elements which have uncontrollable OS styling (blue highlights on macOS). Uses an underline trigger that darkens on hover/focus, and a backdrop-blur glass menu that floats over content. Menu items highlight with a subtle gray tint, never blue. Supports placeholder state, selected state, and keyboard dismiss.' },
+  { id:'underline-input', name:'Underline Input', cat:'Field Controls', desc:'Bottom-border text input with focus transition', source:'v5', tags:['input','text','form','underline'], ready:true,
+    about:'A minimal text input styled with only a bottom border — no box, no border-radius. On focus, the underline transitions from border color to text color, giving clear feedback without visual noise. Transparent background lets it blend into any card surface. Height is compact at 28px.' },
+  { id:'custom-checkbox', name:'Custom Checkbox', cat:'Field Controls', desc:'Styled checkbox with custom checkmark, no native appearance', source:'v5', tags:['checkbox','filter','form'], ready:true,
+    about:'Removes native checkbox appearance and renders a custom 14px box with rounded corners. Checked state fills with text color and shows a CSS-drawn checkmark via ::after pseudo-element. Consistent across all browsers and OS themes. Click to toggle.' },
+  { id:'segmented-tabs', name:'Segmented Tabs', cat:'Navigation', desc:'Pill-in-tray tab switcher with shadow on active', source:'v3', tags:['tabs','navigation','segmented','toggle'], ready:true,
+    about:'A segmented control where tabs sit inside a recessed tray. The active tab gets a raised surface with shadow, creating depth without color. Inactive tabs are transparent text. No blue, no filled backgrounds — just elevation as the indicator. Used for view switching.' },
+  { id:'filter-chips', name:'Filter Chips', cat:'Navigation', desc:'Transparent chips with border-on-active, not filled', source:'v5', tags:['chips','filter','pills','tags'], ready:true,
+    about:'Filter toggles that are transparent by default and show a border + subtle background tint when active. The border is the indicator, not a fill color. Avoids the common AI pattern of bright colored pill buttons. Counts can be shown inline.' },
+  { id:'buttons', name:'Buttons', cat:'Buttons & Badges', desc:'Primary dark, outline, ghost — flat with subtle borders', source:'v3', tags:['button','primary','outline','ghost'], ready:true,
+    about:'Three button variants. Primary uses dark text color as background (inverted). Outline is transparent with a subtle border. Ghost has no border at all — just text. All use 8px radius, no gradients, no shadows beyond the outline variant subtle shadow. Click to see feedback.' },
+];
+
+// ═══ PREVIEW CONTENT ═══
+const PREVIEWS = {
+  'glass-dropdown': `<div style="width:240px;">
+    <div style="font-size:11px;color:#52525b;margin-bottom:5px;">Property Type</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px;height:26px;border-bottom:1px solid #3f3f46;font-size:11px;color:#d4d4d8;margin-bottom:4px;">Multifamily<span style="border-left:3px solid transparent;border-right:3px solid transparent;border-top:4px solid #52525b;"></span></div>
+    <div style="background:rgba(30,30,33,.95);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);border-radius:6px;padding:3px;box-shadow:0 4px 16px rgba(0,0,0,.6);">
+      <div style="padding:4px 8px;font-size:10px;color:#e4e4e7;background:rgba(255,255,255,.06);border-radius:4px;font-weight:500;">Multifamily</div>
+      <div style="padding:4px 8px;font-size:10px;color:#71717a;">Self-Storage</div>
+      <div style="padding:4px 8px;font-size:10px;color:#71717a;">Retail</div>
+      <div style="padding:4px 8px;font-size:10px;color:#71717a;">Industrial</div>
+    </div>
+  </div>`,
+  'underline-input': `<div style="width:240px;display:flex;flex-direction:column;gap:10px;">
+    <div><div style="font-size:10px;color:#52525b;margin-bottom:3px;">Property Name</div><div style="font-size:11px;color:#d4d4d8;padding:2px 2px;border-bottom:1px solid #3f3f46;">Riverside Terrace</div></div>
+    <div><div style="font-size:10px;color:#52525b;margin-bottom:3px;">Year Built</div><div style="font-size:11px;color:#d4d4d8;padding:2px 2px;border-bottom:1px solid #3f3f46;">2004</div></div>
+    <div><div style="font-size:10px;color:#52525b;margin-bottom:3px;">Building Size</div><div style="font-size:11px;color:#d4d4d8;padding:2px 2px;border-bottom:1px solid #3f3f46;">62,400 SF</div></div>
+  </div>`,
+  'custom-checkbox': `<div style="display:flex;flex-direction:column;gap:10px;">
+    <label class="cb-demo" onclick="toggleCB(this)"><span class="cb-box checked"></span>Rent Roll</label>
+    <label class="cb-demo" onclick="toggleCB(this)"><span class="cb-box checked"></span>Operating Statements</label>
+    <label class="cb-demo" onclick="toggleCB(this)"><span class="cb-box"></span>Lease Abstracts</label>
+    <label class="cb-demo" onclick="toggleCB(this)"><span class="cb-box"></span>Floor Plans</label>
+  </div>`,
+  'segmented-tabs': `<div style="display:inline-flex;align-items:center;background:#1a1a1e;border:1px solid #2e2e33;border-radius:7px;padding:2px;gap:2px;">
+    <button onclick="pickSeg(this)" style="font:500 10px/1 system-ui;padding:5px 12px;border:none;border-radius:5px;background:#2e2e33;color:#d4d4d8;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.3);">Dashboard</button>
+    <button onclick="pickSeg(this)" style="font:500 10px/1 system-ui;padding:5px 12px;border:none;border-radius:5px;background:transparent;color:#52525b;cursor:pointer;">Logic</button>
+    <button onclick="pickSeg(this)" style="font:500 10px/1 system-ui;padding:5px 12px;border:none;border-radius:5px;background:transparent;color:#52525b;cursor:pointer;">Registry</button>
+    <button onclick="pickSeg(this)" style="font:500 10px/1 system-ui;padding:5px 12px;border:none;border-radius:5px;background:transparent;color:#52525b;cursor:pointer;">Audit</button>
+  </div>`,
+  'filter-chips': `<div style="display:flex;gap:4px;flex-wrap:wrap;">
+    <span onclick="pickChip(this)" style="font:400 10px/1 system-ui;padding:4px 10px;border:1px solid #3f3f46;border-radius:5px;background:rgba(255,255,255,.05);color:#d4d4d8;cursor:pointer;">All (45)</span>
+    <span onclick="pickChip(this)" style="font:400 10px/1 system-ui;padding:4px 10px;border:1px solid transparent;border-radius:5px;color:#52525b;cursor:pointer;">User Input</span>
+    <span onclick="pickChip(this)" style="font:400 10px/1 system-ui;padding:4px 10px;border:1px solid transparent;border-radius:5px;color:#52525b;cursor:pointer;">Logic</span>
+    <span onclick="pickChip(this)" style="font:400 10px/1 system-ui;padding:4px 10px;border:1px solid transparent;border-radius:5px;color:#52525b;cursor:pointer;">Valcre API</span>
+  </div>`,
+  'buttons': `<div style="display:flex;gap:8px;align-items:center;">
+    <button onclick="this.style.opacity=this.style.opacity==='0.7'?'1':'0.7'" style="font:500 11px/1 system-ui;padding:6px 14px;border-radius:7px;background:#d4d4d8;color:#18181b;border:1px solid #d4d4d8;cursor:pointer;">Primary</button>
+    <button onclick="this.style.background=this.style.background?'':'rgba(255,255,255,.05)'" style="font:500 11px/1 system-ui;padding:6px 14px;border-radius:7px;background:transparent;color:#71717a;border:1px solid #3f3f46;cursor:pointer;">Outline</button>
+    <button style="font:500 11px/1 system-ui;padding:6px 14px;border-radius:7px;background:transparent;color:#52525b;border:1px solid transparent;cursor:pointer;">Ghost</button>
+  </div>`,
+};
+
+// ═══ CODE SNIPPETS ═══
+const CODE = {
+  'glass-dropdown': {
+    html: `<div class="dd">
+  <div class="dd-trigger ph" onclick="toggleDD(this)">
+    Choose...<span class="dd-arrow"></span>
+  </div>
+  <div class="dd-menu">
+    <div class="dd-item" onclick="pickDD(this)">Option 1</div>
+    <div class="dd-item" onclick="pickDD(this)">Option 2</div>
+    <div class="dd-item" onclick="pickDD(this)">Option 3</div>
+  </div>
+</div>`,
+    css: `.dd { position: relative; user-select: none; }
+.dd-trigger {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding: 0 2px; height: 28px;
+  border-bottom: 1px solid var(--border);
+  font-size: 12px; cursor: pointer;
+  transition: border-color .12s;
+}
+.dd-trigger:hover { border-bottom-color: var(--border-focus); }
+.dd-trigger.open { border-bottom-color: var(--text); }
+.dd-trigger.ph { color: var(--text-3); }
+.dd-menu {
+  position: absolute; top: calc(100% + 3px);
+  left: 0; right: 0;
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(20px) saturate(1.2);
+  border: 1px solid rgba(0,0,0,.18);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08),
+              0 8px 24px rgba(0,0,0,.06);
+  padding: 3px; display: none;
+}
+.dd-menu.open { display: block; }
+.dd-item {
+  padding: 5px 9px; font-size: 12px;
+  color: var(--text-2); cursor: pointer;
+  border-radius: 4px; transition: all .08s;
+}
+.dd-item:hover { background: var(--hover); }
+.dd-item.selected {
+  background: var(--active-bg);
+  font-weight: 500;
+}`,
+    js: `function toggleDD(trigger) {
+  const dd = trigger.closest('.dd');
+  const menu = dd.querySelector('.dd-menu');
+  const isOpen = menu.classList.contains('open');
+  closeAllDD();
+  if (!isOpen) {
+    menu.classList.add('open');
+    trigger.classList.add('open');
+  }
+}
+function pickDD(item) {
+  const dd = item.closest('.dd');
+  const trigger = dd.querySelector('.dd-trigger');
+  const menu = dd.querySelector('.dd-menu');
+  menu.querySelectorAll('.dd-item')
+    .forEach(i => i.classList.remove('selected'));
+  item.classList.add('selected');
+  trigger.childNodes[0].textContent = item.textContent;
+  trigger.classList.remove('ph');
+  menu.classList.remove('open');
+  trigger.classList.remove('open');
+}`
+  },
+  'underline-input': {
+    html: `<div class="f">
+  <span class="f-lbl">Field Name</span>
+  <div class="f-val">
+    <input class="u-inp" value="Value here">
+  </div>
+</div>`,
+    css: `.u-inp {
+  font: inherit; font-size: 12px;
+  color: var(--text);
+  border: none;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  width: 100%; height: 28px;
+  padding: 0 2px; outline: none;
+  transition: border-color .12s;
+}
+.u-inp:focus {
+  border-bottom-color: var(--text);
+}
+.u-inp::placeholder {
+  color: var(--text-4);
+}`,
+    js: '// No JS required — pure CSS component'
+  }
+};
+
+// ═══ ANTI-PATTERNS ═══
+const ANTI = {
+  'glass-dropdown': {
+    dont: 'Native <select> element. OS-controlled blue highlight on hover. Cannot style the dropdown menu. Blue focus ring. Rounded pill shape.',
+    do: 'Custom .dd with underline trigger. Glass backdrop-blur menu. Gray hover (--hover). No blue anywhere. Consistent dark/light theme via CSS variables.'
+  },
+  'underline-input': {
+    dont: 'Bordered box input with border-radius. Blue focus ring (outline: 2px solid blue). Placeholder text that disappears and confuses users. Fat padding making inputs oversized.',
+    do: 'Bottom-border only. Focus darkens the underline to --text color. Minimal height (28px). Transparent background blends with card surface. No box, no radius.'
+  },
+  'custom-checkbox': {
+    dont: 'Native checkbox with OS styling. Blue checked state. Inconsistent size across browsers. No control over checkmark shape.',
+    do: 'appearance:none with custom border, border-radius:3px. Checked state uses --text background with CSS ::after checkmark. Consistent across all browsers.'
+  },
+  'segmented-tabs': {
+    dont: 'Pill buttons with blue active background. Separate bordered buttons in a row. Colored active states. Gap between buttons.',
+    do: 'Inset tray (--seg-bg) with pill children. Active pill gets white/light background + shadow. No color — just elevation change. 3px padding, 2px gap.'
+  },
+  'filter-chips': {
+    dont: 'Filled colored pills (blue active, gray inactive). Rounded-full border-radius. Bold text on active. Background color as the indicator.',
+    do: 'Transparent background. Border appears on active (--border-focus). Subtle bg tint (--active-bg). No color, no filled pills. Border is the indicator.'
+  },
+  'buttons': {
+    dont: 'Blue primary button. Rounded pill shapes. Gradient backgrounds. Heavy box-shadow. Colored outline buttons.',
+    do: 'Primary = dark text color as bg (--text). Outline = transparent with subtle border. Ghost = no border, text only. All flat, no gradients, 8px radius.'
+  }
+};
+
+// ═══ RENDER ═══
+let currentView = 'gallery';
+let activeComp = 'glass-dropdown';
+
+function renderComps(filter) {
+  const container = document.getElementById('compContainer');
+  const q = (filter || '').toLowerCase();
+  const filtered = COMPONENTS.filter(c => !q || c.name.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q) || c.tags.some(t => t.includes(q)) || c.cat.toLowerCase().includes(q));
+
+  document.getElementById('compCount').textContent = filtered.length + ' component' + (filtered.length !== 1 ? 's' : '');
+
+  if (currentView === 'list') {
+    container.className = 'comp-list';
+    container.innerHTML = filtered.map(c =>
+      `<div class="comp-row ${c.id === activeComp ? 'active' : ''}" onclick="selectComp(event,'${c.id}')">
+        <div class="comp-icon">&#x25A3;</div>
+        <div class="comp-info"><div class="comp-name">${c.name}</div><div class="comp-desc">${c.desc}</div></div>
+        <span class="comp-badge">${c.cat}</span>
+        <span class="comp-source">${c.source}</span>
+      </div>`
+    ).join('');
+  } else if (currentView === 'gallery') {
+    container.className = '';
+    // Group by category
+    const cats = {};
+    filtered.forEach(c => { if (!cats[c.cat]) cats[c.cat] = []; cats[c.cat].push(c); });
+    container.innerHTML = Object.entries(cats).map(([cat, comps]) =>
+      `<div class="gallery-section">
+        <div class="gallery-hdr"><span class="gallery-title">${cat}</span><span class="gallery-count">${comps.length}</span></div>
+        <div class="gallery-row">${comps.map(c =>
+          `<div class="gallery-wrap" onclick="selectComp(event,'${c.id}')">
+            <div class="gallery-card ${c.id === activeComp ? 'active' : ''}">
+              <div class="gallery-preview">${PREVIEWS[c.id] || '<span style="color:var(--text-4);font-size:11px;">Preview</span>'}</div>
+            </div>
+            <div class="gallery-label"><div class="comp-name">${c.name}</div></div>
+          </div>`
+        ).join('')}</div>
+      </div>`
+    ).join('');
+  } else {
+    container.className = 'comp-grid';
+    container.innerHTML = filtered.map(c =>
+      `<div class="comp-card ${c.id === activeComp ? 'active' : ''}" onclick="selectComp(event,'${c.id}')">
+        <div class="comp-preview">${PREVIEWS[c.id] || '<span style="color:var(--text-4);">Preview</span>'}</div>
+        <div class="comp-name">${c.name}</div>
+        <div class="comp-desc">${c.desc}</div>
+      </div>`
+    ).join('');
+  }
+}
+
+function selectComp(e, id) {
+  e.stopPropagation();
+  activeComp = id;
+  const c = COMPONENTS.find(x => x.id === id);
+  if (!c) return;
+
+  // Update sidebar active
+  document.querySelectorAll('.cat-item').forEach(i => i.classList.remove('active'));
+  document.querySelectorAll('.cat-item').forEach(i => { if (i.textContent.trim() === c.name) i.classList.add('active'); });
+
+  // Update list active
+  renderComps(document.querySelector('.search').value);
+
+  // Render modal
+  const modal = document.getElementById('modal');
+  const preview = PREVIEWS[id] || '<div style="color:var(--text-4);text-align:center;">Preview coming soon</div>';
+  const code = CODE[id];
+  const anti = ANTI[id];
+
+  let codeHtml = '';
+  if (code) {
+    codeHtml += '<div class="code-label">HTML</div><pre class="code-block">' + escHtml(code.html) + '</pre>';
+    codeHtml += '<div class="code-label">CSS</div><pre class="code-block">' + escHtml(code.css) + '</pre>';
+    if (code.js && code.js !== '// No JS required — pure CSS component') {
+      codeHtml += '<div class="code-label">JavaScript</div><pre class="code-block">' + escHtml(code.js) + '</pre>';
+    } else if (code.js) {
+      codeHtml += '<div style="font-size:10px;color:var(--text-3);font-style:italic;margin-top:8px;">' + code.js + '</div>';
+    }
+  } else {
+    codeHtml = '<div style="color:var(--text-4);font-size:11px;text-align:center;padding:24px;">Code not yet extracted</div>';
+  }
+
+  let antiHtml = '';
+  if (anti) {
+    antiHtml = `<div class="anti-split">
+      <div class="anti-box dont"><div class="anti-label dont">Don't</div><div style="font-size:11px;color:var(--text-2);">${anti.dont}</div></div>
+      <div class="anti-box do"><div class="anti-label do">Do</div><div style="font-size:11px;color:var(--text-2);">${anti.do}</div></div>
+    </div>`;
+  } else {
+    antiHtml = '<div style="color:var(--text-4);font-size:11px;text-align:center;padding:24px;">Anti-patterns not yet documented</div>';
+  }
+
+  modal.innerHTML = `
+    <div class="modal-hdr">
+      <div><h2>${c.name}</h2><div class="modal-meta">${c.cat} &middot; Source: ${c.source}</div></div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <button style="font:500 11px/1 system-ui;padding:5px 10px;border-radius:5px;border:1px solid var(--border);background:transparent;color:var(--text-3);cursor:pointer;" onclick="openDetail('${id}');closeModal()">Details</button>
+        <button class="modal-btn" onclick="toggleFullsize()" title="Full size">&#x26F6;</button>
+        <button class="modal-btn modal-close" onclick="closeModal()">&times;</button>
+      </div>
+    </div>
+    <div class="modal-preview">${preview}</div>
+  `;
+  document.getElementById('modalBackdrop').classList.add('open');
+
+  // If detail panel is open, update it too
+  if (document.getElementById('detailPanel').classList.contains('open')) {
+    openDetail(id);
+  }
+}
+
+function switchTab(tab, name) {
+  tab.parentElement.querySelectorAll('.viewer-tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.querySelector(`.tab-content[data-tab="${name}"]`).classList.add('active');
+}
+
+function toggleFullsize() {
+  document.getElementById('modal').classList.toggle('fullsize');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('fullsize');
+  document.getElementById('modalBackdrop').classList.remove('open');
+}
+function openDetail(id) {
+  const c = COMPONENTS.find(x => x.id === id);
+  if (!c) return;
+  activeComp = id;
+  const code = CODE[id];
+  const anti = ANTI[id];
+  const dp = document.getElementById('detailPanel');
+  const btn = document.getElementById('detailToggle');
+  btn.classList.add('open');
+  btn.innerHTML = 'Details &#x25C2;';
+  dp.classList.add('open');
+  dp.innerHTML = `
+    <div class="detail-hdr">
+      <h2>${c.name}</h2>
+      <button class="detail-close" onclick="closeDetail()">&times;</button>
+    </div>
+    <div class="detail-meta">${c.cat} &middot; ${c.source} &middot; ${c.tags.join(', ')}</div>
+    <div class="detail-desc">${c.about || ''}</div>
+    <div class="detail-body">
+      ${code ? `
+        <div class="detail-section">
+          <div class="detail-section-title">HTML <button class="copy-btn" onclick="copyCode(this,'html','${id}')">Copy</button></div>
+          <pre class="code-block">${escHtml(code.html)}</pre>
+        </div>
+        <div class="detail-section">
+          <div class="detail-section-title">CSS <button class="copy-btn" onclick="copyCode(this,'css','${id}')">Copy</button></div>
+          <pre class="code-block">${escHtml(code.css)}</pre>
+        </div>
+        ${code.js && code.js !== '// No JS required — pure CSS component' ? `
+          <div class="detail-section">
+            <div class="detail-section-title">JavaScript <button class="copy-btn" onclick="copyCode(this,'js','${id}')">Copy</button></div>
+            <pre class="code-block">${escHtml(code.js)}</pre>
+          </div>
+        ` : code.js ? '<div style="font-size:10px;color:var(--text-3);font-style:italic;padding:4px 0;">' + code.js + '</div>' : ''}
+        <div class="detail-section">
+          <div class="detail-section-title"><span></span><button class="copy-btn" onclick="copyAll(this,'${id}')">Copy All Code</button></div>
+        </div>
+      ` : '<div style="color:var(--text-4);font-size:11px;padding:16px 0;">Code not yet extracted</div>'}
+      ${anti ? `
+        <div class="detail-section">
+          <div class="detail-section-title">Anti-Pattern</div>
+          <div class="anti-split">
+            <div class="anti-box dont"><div class="anti-label dont">Don't</div><div style="font-size:11px;color:var(--text-2);">${anti.dont}</div></div>
+            <div class="anti-box do"><div class="anti-label do">Do</div><div style="font-size:11px;color:var(--text-2);">${anti.do}</div></div>
+          </div>
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+function closeDetail() {
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('detailToggle').classList.remove('open');
+  document.getElementById('detailToggle').innerHTML = 'Details &#x25B8;';
+}
+function toggleDetail() {
+  const dp = document.getElementById('detailPanel');
+  const btn = document.getElementById('detailToggle');
+  if (dp.classList.contains('open')) {
+    closeDetail();
+  } else {
+    if (activeComp) openDetail(activeComp);
+    btn.classList.add('open');
+    btn.innerHTML = 'Details &#x25C2;';
+  }
+}
+function copyCode(btn, type, id) {
+  const code = CODE[id]; if (!code || !code[type]) return;
+  navigator.clipboard.writeText(code[type]).then(() => {
+    btn.textContent = 'Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+function copyAll(btn, id) {
+  const code = CODE[id]; if (!code) return;
+  const all = '/* HTML */\n' + code.html + '\n\n/* CSS */\n' + code.css + (code.js && code.js !== '// No JS required — pure CSS component' ? '\n\n/* JS */\n' + code.js : '');
+  navigator.clipboard.writeText(all).then(() => {
+    btn.textContent = 'Copied'; btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy All Code'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); } });
+
+// Scroll zoom on modal preview — 20% range (0.9 to 1.5)
+let modalZoom = 1.5;
+document.addEventListener('wheel', e => {
+  const preview = e.target.closest('.modal-preview');
+  if (!preview) return;
+  e.preventDefault();
+  modalZoom = Math.min(1.5, Math.max(0.9, modalZoom + (e.deltaY > 0 ? -0.05 : 0.05)));
+  preview.querySelector(':scope > div').style.setProperty('--modal-zoom', modalZoom);
+  preview.querySelector(':scope > div').style.transform = 'scale(' + modalZoom + ')';
+}, { passive: false });
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ═══ SIDEBAR ═══
+function toggleCat(cat) {
+  // Only toggle if clicking the header, not an item
+  if (event.target.closest('.cat-item')) return;
+  cat.classList.toggle('closed');
+}
+
+// ═══ SEARCH & VIEW ═══
+function filterComps(q) { renderComps(q); }
+function setViewMode(mode, btn) {
+  currentView = mode;
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderComps(document.querySelector('.search').value);
+}
+
+// ═══ INTERACTIVE DEMOS ═══
+function pickSeg(btn) {
+  btn.parentElement.querySelectorAll('button').forEach(b => { b.style.background='transparent'; b.style.color='#71717a'; b.style.boxShadow='none'; });
+  btn.style.background='#2e2e33'; btn.style.color='#e4e4e7'; btn.style.boxShadow='0 1px 2px rgba(0,0,0,.3)';
+}
+function pickChip(chip) {
+  chip.parentElement.querySelectorAll('span').forEach(s => { s.style.borderColor='transparent'; s.style.background='transparent'; s.style.color='#71717a'; });
+  chip.style.borderColor='#52525b'; chip.style.background='rgba(255,255,255,.07)'; chip.style.color='#e4e4e7';
+}
+
+// ═══ CHECKBOX DEMO ═══
+function toggleCB(label) { label.querySelector('.cb-box').classList.toggle('checked'); }
+
+// ═══ DROPDOWN DEMO ═══
+function toggleDD(trigger) {
+  const dd = trigger.closest('.dd'), menu = dd.querySelector('.dd-menu'), isOpen = menu.classList.contains('open');
+  document.querySelectorAll('.dd-menu.open').forEach(m => { m.classList.remove('open'); m.closest('.dd').querySelector('.dd-trigger').classList.remove('open'); });
+  if (!isOpen) { menu.classList.add('open'); trigger.classList.add('open'); }
+}
+function pickDD(item) {
+  const dd = item.closest('.dd'), trigger = dd.querySelector('.dd-trigger'), menu = dd.querySelector('.dd-menu');
+  menu.querySelectorAll('.dd-item').forEach(i => i.classList.remove('selected'));
+  item.classList.add('selected');
+  trigger.childNodes[0].textContent = item.textContent;
+  trigger.classList.remove('ph');
+  menu.classList.remove('open'); trigger.classList.remove('open');
+}
+document.addEventListener('click', e => { if (!e.target.closest('.dd')) { document.querySelectorAll('.dd-menu.open').forEach(m => { m.classList.remove('open'); m.closest('.dd').querySelector('.dd-trigger').classList.remove('open'); }); }});
+
+// ═══ BUILD SIDEBAR ═══
+function buildSidebar() {
+  const cats = {};
+  COMPONENTS.forEach(c => { if (!cats[c.cat]) cats[c.cat] = []; cats[c.cat].push(c); });
+  const container = document.getElementById('sidebarCats');
+  container.innerHTML = Object.entries(cats).map(([cat, comps]) =>
+    `<div class="cat" onclick="toggleCat(this)">
+      <div class="cat-hdr"><span class="cat-chevron">&#x25BE;</span>${cat}<span class="cat-count">${comps.length}</span></div>
+      <div class="cat-items">${comps.map(c =>
+        `<div class="cat-item ${c.id === activeComp ? 'active' : ''}" onclick="selectComp(event,'${c.id}')">${c.name}</div>`
+      ).join('')}</div>
+    </div>`
+  ).join('');
+}
+
+// ═══ INIT ═══
+buildSidebar();
+renderComps();
+openDetail('glass-dropdown');
+</script>
+
+</body>
+</html>

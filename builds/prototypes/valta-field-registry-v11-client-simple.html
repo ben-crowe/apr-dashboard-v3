@@ -266,68 +266,74 @@
   .fi-options-row td.dd-options-cell { background: #fafafa !important; }
   .dd-expand:hover { background: var(--hover); }
 
-  /* ── v11: Client-Simple Field Registration ── */
-  /* Add row styling */
-  .cs-add-row td { background: #fefce8 !important; border-bottom: 2px solid var(--amber) !important; }
-  .cs-add-row input, .cs-add-row select { font: inherit; font-size: 11px; color: var(--text); border: none; border-bottom: 1px solid var(--border); background: transparent; padding: 2px 0; outline: none; width: 100%; height: 24px; transition: border-color .12s; }
-  .cs-add-row input:focus, .cs-add-row select:focus { border-bottom-color: var(--text); }
-  .cs-add-row input::placeholder { color: var(--text-4); }
-  .cs-add-row select { appearance: none; -webkit-appearance: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23a1a1aa'/%3E%3C/svg%3E") no-repeat right 2px center; padding-right: 14px; cursor: pointer; }
-  .cs-add-row .cs-disabled { opacity: .3; pointer-events: none; }
+  /* Add/Edit row — inline spreadsheet style */
+  .fi-add-row td, .fi-edit-row td { background: #fefce8 !important; padding: 4px 6px !important; vertical-align: middle; }
+  .fi-add-row input, .fi-add-row select,
+  .fi-edit-row input, .fi-edit-row select {
+    font: inherit; font-size: 11px; color: var(--text); background: transparent;
+    border: none; border-bottom: 1px solid #d4d4d8; outline: none;
+    height: 24px; padding: 0 2px; width: 100%; min-width: 60px;
+    transition: border-color .12s;
+  }
+  .fi-add-row input:focus, .fi-add-row select:focus,
+  .fi-edit-row input:focus, .fi-edit-row select:focus { border-bottom-color: var(--text); }
+  .fi-add-row input::placeholder, .fi-edit-row input::placeholder { color: var(--text-4); }
+  .fi-add-row input.fi-mono, .fi-edit-row input.fi-mono { font-family: 'SF Mono','Consolas', monospace; font-size: 11px; }
+  .fi-add-row select, .fi-edit-row select {
+    -webkit-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='8' height='5' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23a1a1aa'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 4px center; background-size: 8px 5px;
+    padding-right: 16px; cursor: pointer;
+  }
+  .fi-add-row select:disabled, .fi-edit-row select:disabled,
+  .fi-add-row input:disabled, .fi-edit-row input:disabled { opacity: .35; cursor: default; border-bottom-color: transparent; }
+  .fi-add-row .fi-actions, .fi-edit-row .fi-actions { display: flex; gap: 4px; white-space: nowrap; }
+  .fi-save-btn { font: 500 11px/1 system-ui, sans-serif; padding: 4px 10px; border-radius: 4px; border: 1px solid #22c55e; background: #f0fdf4; color: #15803d; cursor: pointer; transition: all .12s; }
+  .fi-save-btn:hover { background: #dcfce7; }
+  .fi-cancel-btn { font: 500 11px/1 system-ui, sans-serif; padding: 4px 8px; border-radius: 4px; border: 1px solid transparent; background: transparent; color: var(--text-3); cursor: pointer; transition: all .12s; }
+  .fi-cancel-btn:hover { background: var(--hover); color: var(--text); }
+  .fi-add-row input.fi-invalid { border-bottom-color: var(--red); }
+  .fi-new-label { font-size: 10px; font-weight: 600; color: var(--amber); letter-spacing: .04em; }
 
-  /* Edit row — same as add but white bg */
-  .cs-edit-row td { background: #f0f9ff !important; }
-  .cs-edit-row input, .cs-edit-row select { font: inherit; font-size: 11px; color: var(--text); border: none; border-bottom: 1px solid var(--border); background: transparent; padding: 2px 0; outline: none; width: 100%; height: 24px; transition: border-color .12s; }
-  .cs-edit-row input:focus, .cs-edit-row select:focus { border-bottom-color: var(--text); }
-  .cs-edit-row select { appearance: none; -webkit-appearance: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%23a1a1aa'/%3E%3C/svg%3E") no-repeat right 2px center; padding-right: 14px; cursor: pointer; }
-  .cs-edit-row .cs-disabled { opacity: .3; pointer-events: none; }
+  /* New row pulse after save */
+  @keyframes fi-pulse { 0%{background:#fef3c7;} 100%{background:transparent;} }
+  .fi-new-pulse td { animation: fi-pulse 2s ease-out forwards; }
 
-  /* Action buttons */
-  .cs-save { font: 600 10px/1 system-ui,sans-serif; padding: 4px 10px; border-radius: calc(var(--radius) - 2px); cursor: pointer; background: var(--text); color: var(--bg); border: 1px solid var(--text); transition: opacity .12s; }
-  .cs-save:hover { opacity: .85; }
-  .cs-cancel { font: 400 10px/1 system-ui,sans-serif; padding: 4px 8px; border: none; background: none; color: var(--text-3); cursor: pointer; transition: color .12s; }
-  .cs-cancel:hover { color: var(--text); }
-  .cs-logic-btn { font: 500 10px/1 system-ui,sans-serif; padding: 3px 8px; border-radius: calc(var(--radius) - 2px); cursor: pointer; background: transparent; color: var(--amber); border: 1px solid var(--amber); transition: all .12s; white-space: nowrap; }
-  .cs-logic-btn:hover { background: #fffbeb; }
+  /* New dropdown popover */
+  .fi-dd-popover { position: absolute; top: 100%; left: 0; right: 0; z-index: 200; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--dd-shadow); padding: 8px 10px; margin-top: 2px; }
+  .fi-dd-popover input { font: inherit; font-size: 11px; border: 1px solid var(--border); border-radius: 4px; padding: 4px 6px; width: 100%; margin-bottom: 4px; outline: none; }
+  .fi-dd-popover input:focus { border-color: var(--text); }
+  .fi-dd-popover .fi-dd-opts { max-height: 120px; overflow-y: auto; margin-bottom: 4px; }
+  .fi-dd-popover .fi-dd-opt { display: flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 0; color: var(--text-2); }
+  .fi-dd-popover .fi-dd-opt-rm { color: var(--text-3); cursor: pointer; font-size: 13px; }
+  .fi-dd-popover .fi-dd-opt-rm:hover { color: var(--red); }
 
-  /* Validation */
-  .cs-invalid { border-bottom-color: var(--red) !important; }
-
-  /* Status badge */
-  .cs-status { font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: calc(var(--radius) - 4px); letter-spacing: .03em; display: inline-block; }
+  /* v11: Status badges */
+  .cs-status { font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 4px; letter-spacing: .03em; display: inline-block; }
   .cs-status-pending { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
   .cs-status-active { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
-
-  /* New row pulse */
-  @keyframes cs-pulse { 0% { background: #fef3c7; } 100% { background: transparent; } }
-  .cs-new-pulse td { animation: cs-pulse 2.5s ease forwards; }
-
-  /* Inline options editor popover */
-  .cs-opts-pop { position: absolute; top: 100%; left: 0; right: 0; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--dd-shadow); z-index: 120; padding: 8px 10px; }
-  .cs-opts-pop .cs-opt-item { display: flex; align-items: center; gap: 4px; margin-bottom: 3px; }
-  .cs-opts-pop .cs-opt-item input { font: inherit; font-size: 11px; color: var(--text); border: none; border-bottom: 1px solid var(--border); background: transparent; flex: 1; padding: 2px 0; outline: none; height: 20px; }
-  .cs-opts-pop .cs-opt-item input:focus { border-bottom-color: var(--text); }
-  .cs-opts-pop .cs-opt-rm { width: 16px; height: 16px; border: none; background: transparent; color: var(--text-3); cursor: pointer; font-size: 12px; padding: 0; display: flex; align-items: center; justify-content: center; }
-  .cs-opts-pop .cs-opt-rm:hover { color: var(--red); }
-  .cs-opts-add { font: 400 10px/1 system-ui,sans-serif; color: var(--text-3); cursor: pointer; border: none; background: none; padding: 3px 0; }
-  .cs-opts-add:hover { color: var(--text); }
-
-  /* Header button */
-  .cs-add-btn { font: 500 11px/1 system-ui,sans-serif; padding: 5px 12px; border-radius: calc(var(--radius) - 2px); cursor: pointer; transition: all .12s; white-space: nowrap; background: var(--text); color: var(--bg); border: 1px solid var(--text); box-shadow: var(--shadow); margin-right: 4px; }
-  .cs-add-btn:hover { opacity: .85; }
-  .cs-fill-btn { font: 400 10px/1 system-ui,sans-serif; color: var(--text-3); cursor: pointer; border: 1px solid var(--border); background: transparent; padding: 3px 8px; border-radius: calc(var(--radius) - 2px); transition: all .12s; margin-right: 4px; }
-  .cs-fill-btn:hover { color: var(--text-2); border-color: var(--border-focus); }
-
-  /* Clickable rows */
-  .cs-clickable { cursor: pointer; }
-  .cs-clickable:hover td { background: rgba(0,0,0,.02); }
+  /* v11: Configure Logic button */
+  .cs-logic-btn { font: 500 10px/1 system-ui,sans-serif; padding: 3px 8px; border-radius: 4px; cursor: pointer; background: transparent; color: var(--amber); border: 1px solid var(--amber); transition: all .12s; white-space: nowrap; }
+  .cs-logic-btn:hover { background: #fffbeb; }
+  /* v11: Read-only cells in edit row */
+  .fi-edit-row .cs-readonly { font-size: 11px; color: var(--text-3); font-style: italic; border-bottom: none !important; background: transparent !important; cursor: default; }
+  /* v11: Simplified type select */
+  .fi-add-row .cs-type-simple { min-width: 80px; }
+  /* v11: Auto-gen field name hint */
+  .cs-autogen { font-size: 9px; color: var(--text-3); font-style: italic; display: block; margin-top: 1px; }
+  /* v11: Has Logic toggle in add/edit rows */
+  .cs-logic-toggle { display: flex; gap: 0; }
+  .cs-logic-toggle button { font: 500 10px/1 system-ui,sans-serif; padding: 3px 8px; border: 1px solid var(--border); background: transparent; color: var(--text-3); cursor: pointer; transition: all .1s; }
+  .cs-logic-toggle button:first-child { border-radius: 4px 0 0 4px; border-right: none; }
+  .cs-logic-toggle button:last-child { border-radius: 0 4px 4px 0; }
+  .cs-logic-toggle button.active { background: var(--text); color: var(--bg); border-color: var(--text); }
 </style>
 </head>
 <body>
 
 <div class="hdr">
   <div>
-    <h1>Valta Field Registry Explorer</h1>
+    <h1>Valta Field Registry Explorer <span style="font-size:12px;font-weight:500;color:#a1a1aa;margin-left:8px;">v10 — Simple Add Row</span></h1>
     <div class="sub">Field Registry · Cascade Logic · Rule Audit</div>
   </div>
   <div class="hdr-btns">
@@ -581,30 +587,35 @@ E  Authorized Use          ──┘</div>
 </div>
 
 <!-- ═══ FIELD INDEX ═══ -->
-<div class="panel" id="panel-index">
-<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;align-items:center;gap:0;margin-left:auto;"><button class="cs-fill-btn" onclick="event.stopPropagation();csFilllExample()">Fill Example</button><button class="cs-add-btn" onclick="event.stopPropagation();csInsertAddRow()">+ New Field</button><span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></div></div><div class="sec-body">
-  <!-- Top row: search only (simplified) -->
+<div class="panel" id="panel-index"><div style="max-width:960px;margin:0 auto 12px;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:#18181b;border-radius:8px;"><span style="font:700 13px/1 system-ui,sans-serif;color:#fff;">v10 — Simple Add Row</span><div style="display:flex;gap:6px;"><a href="valta-field-registry-NEW-FIELD-mockup.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v6</a><a href="valta-field-registry-v7-inline-row.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v7</a><a href="valta-field-registry-v8-grouped.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v8</a><a href="valta-field-registry-v9-modal.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v9</a><a href="valta-field-registry-v10-simple-add.html" style="font:600 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#fff;background:#3f3f46;">v10</a><a href="valta-field-registry-v11-client-simple.html" style="font:500 11px/1 system-ui,sans-serif;padding:4px 10px;border-radius:5px;text-decoration:none;color:#a1a1aa;border:1px solid #3f3f46;">v11</a></div></div>
+<div class="sec" id="registrySec" style="position:relative;"><div class="resize-edge" id="regResize"></div><div class="sec-title" style="cursor:default;justify-content:space-between;">Field Registry<div style="display:flex;gap:6px;align-items:center;margin-left:auto;margin-right:8px;"><button class="btn btn-primary" style="font-size:11px;padding:5px 12px;" onclick="insertAddRow(event)">+ New Field</button><button class="btn btn-ghost" style="font-size:11px;padding:5px 12px;" onclick="fillSimpleExample(event)">Fill Example</button></div><span class="expand-btn" onclick="toggleFullWidth(event)" title="Toggle full width">⋮⋮</span></div><div class="sec-body">
+  <!-- Top row: scope toggle + search -->
   <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
+    <div class="seg scope-toggle" style="margin:0;flex-shrink:0;">
+      <button class="active" onclick="setScope('dashboard',this)">Valta Dashboard</button>
+      <button onclick="setScope('all',this)">Valcre</button>
+    </div>
     <input type="hidden" id="filterOrigin" value="dashboard">
-    <input class="fi-search" id="fiSearch" placeholder="Search fields..." oninput="csRenderFields()" style="margin-bottom:0;flex:1;">
-    <div style="display:flex;gap:6px;align-items:center;">
-      <label class="cb-filter"><input type="checkbox" id="csFilterPending" onchange="csRenderFields()"><span>Pending only</span></label>
-      <label class="cb-filter"><input type="checkbox" id="csFilterLogic" onchange="csRenderFields()"><span>Has Logic</span></label>
+    <input class="fi-search" id="fiSearch" placeholder="Search fields..." oninput="filterFields()" style="margin-bottom:0;">
+  </div>
+  <!-- Checkbox filters: two rows -->
+  <div style="display:flex;gap:20px;margin-bottom:10px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <label class="cb-filter"><input type="checkbox" value="has-dropdown" onchange="applyFilters()"><span>Has Dropdown</span></label>
+      <label class="cb-filter"><input type="checkbox" value="trigger" onchange="applyFilters()"><span>Triggers</span></label>
+      <label class="cb-filter"><input type="checkbox" value="result" onchange="applyFilters()"><span>Results</span></label>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <label class="cb-filter"><input type="checkbox" value="vr-Job" onchange="applyFilters()"><span>Job</span></label>
+      <label class="cb-filter"><input type="checkbox" value="vr-Contact" onchange="applyFilters()"><span>Contact</span></label>
+      <label class="cb-filter"><input type="checkbox" value="vr-Property" onchange="applyFilters()"><span>Property</span></label>
+      <label class="cb-filter"><input type="checkbox" value="vr-Building" onchange="applyFilters()"><span>Building</span></label>
+      <label class="cb-filter"><input type="checkbox" value="vr-Parcel" onchange="applyFilters()"><span>Parcel</span></label>
     </div>
   </div>
   <div class="fi-count" id="fiCount"></div>
   <div id="fiTableWrap" style="overflow-x:auto;">
-    <table class="fi-table"><thead><tr>
-      <th style="width:30px;">#</th>
-      <th>Status</th>
-      <th>Category</th>
-      <th>Label</th>
-      <th>Type</th>
-      <th>Options</th>
-      <th>Required</th>
-      <th>Logic</th>
-      <th style="width:60px;"></th>
-    </tr></thead><tbody id="fiBody"></tbody></table>
+    <table class="fi-table"><thead><tr><th style="width:30px;" data-sort="idx" onclick="sortFields(this,'idx')">#</th><th data-sort="status" onclick="sortFields(this,'status')">Status</th><th data-sort="origin" onclick="sortFields(this,'origin')">System</th><th data-sort="n" onclick="sortFields(this,'n')">Field Name</th><th data-sort="l" onclick="sortFields(this,'l')">Label</th><th data-sort="c" onclick="sortFields(this,'c')">Control Type</th><th data-sort="s" onclick="sortFields(this,'s')">Source</th><th data-sort="role" onclick="sortFields(this,'role')">Role</th><th data-sort="d" onclick="sortFields(this,'d')">Dropdown List</th><th data-sort="vr" onclick="sortFields(this,'vr')">Valcre Location</th><th data-sort="v" onclick="sortFields(this,'v')">Valcre API Key</th><th style="width:90px;cursor:default;"></th></tr></thead><tbody id="fiBody"></tbody></table>
   </div>
   <div id="narTableWrap" style="display:none;">
     <table class="fi-table" id="narTable">
@@ -1066,410 +1077,204 @@ const FIELDS = [
   {n:"EA4",l:"Extraordinary Assumption 4",c:"Multi-line",s:"Logic",d:"",v:"",vr:"",nf:"Yes",req:"No",desc:""},
   {n:"EA5",l:"Extraordinary Assumption 5",c:"Multi-line",s:"Logic",d:"",v:"",vr:"",nf:"Yes",req:"No",desc:""},
 ];
-/* ═══ v11: CLIENT-SIMPLE FIELD REGISTRY ═══ */
+let expandedRow = null; // track which row has dropdown options expanded
+let activeFilter = 'all';
+let activeView = 'fields'; // fields | options | narratives
 
-// Type mapping: simplified client labels → real control types
-const CS_TYPE_MAP = {
-  'Text': 'Text',
-  'Number': 'Whole Number',
-  'Date': 'Date',
-  'Dropdown': 'Select one option',
-  'Yes/No': 'Checkbox',
-  'Multi-line': 'Multiple lines of text'
-};
-const CS_TYPE_LABELS = Object.keys(CS_TYPE_MAP);
-const CS_CATEGORIES = ['Job','Contact','Property','Building','Parcel'];
-
-// Reverse map: real control type → simplified label
-const CS_TYPE_REVERSE = {};
-Object.entries(CS_TYPE_MAP).forEach(([k,v]) => CS_TYPE_REVERSE[v] = k);
-// Handle extra mappings
-CS_TYPE_REVERSE['Select one'] = 'Dropdown';
-CS_TYPE_REVERSE['Select multiple'] = 'Dropdown';
-CS_TYPE_REVERSE['Select multiple options'] = 'Dropdown';
-CS_TYPE_REVERSE['Alpha Numeric'] = 'Text';
-CS_TYPE_REVERSE['Decimal'] = 'Number';
-CS_TYPE_REVERSE['Calculation'] = 'Number';
-CS_TYPE_REVERSE['Multi-line'] = 'Multi-line';
-
-// Add status + hasLogic to existing FIELDS
+// Build merged ALLFIELDS: dashboard fields + unmapped Valcre fields
+// Dashboard fields that have a Valcre key get origin='both' or 'dashboard'
+// Valcre fields not used by dashboard get origin='valcre'
+const ALLFIELDS = [];
+const mappedValcreKeys = new Set();
 FIELDS.forEach(f => {
-  if (!f._status) f._status = 'active';
-  if (f._hasLogic === undefined) {
-    const role = TRIGGERS.includes(f.n) || RESULTS.includes(f.n);
-    f._hasLogic = role ? true : false;
+  f.origin = 'dashboard';
+  if (f.v) {
+    // Parse "Job.Number" → vr=Job, vk=Number — build full key for matching
+    const fullKey = f.v; // e.g. "Job.Number", "Contact.FirstName", "Property.Types"
+    mappedValcreKeys.add(fullKey);
+    f.origin = 'both'; // exists in both systems
   }
+  ALLFIELDS.push(f);
+});
+// Add Valcre-only fields
+VALCRE_FIELDS.forEach(vf => {
+  const fullKey = vf.vr + '.' + vf.vk;
+  if (mappedValcreKeys.has(fullKey)) return; // already in dashboard fields
+  // Also check partial matches (some dashboard fields use nested keys like Property._DisplayName)
+  let found = false;
+  mappedValcreKeys.forEach(mk => { if (mk === fullKey || mk.endsWith('.'+vf.vk)) found = true; });
+  if (found) return;
+  ALLFIELDS.push({
+    n: vf.vk, // API key as field name
+    l: vf.vn, // Valcre's human label
+    c: '', // no control type — Valcre doesn't specify
+    s: 'Valcre API',
+    d: '',
+    v: vf.vr + '.' + vf.vk,
+    vr: vf.vr,
+    nf: '',
+    req: '',
+    desc: '',
+    origin: 'valcre'
+  });
 });
 
 function getRole(n) { return TRIGGERS.includes(n)?'trigger':RESULTS.includes(n)?'result':'independent'; }
+function srcBadge(s) {
+  if (s==='User Input') return '<span class="badge badge-outline">User Input</span>';
+  if (s==='Logic') return '<span class="badge badge-muted">Logic</span>';
+  if (s==='Valcre API') return '<span class="badge badge-outline">Valcre API</span>';
+  if (s==='Calculated') return '<span class="badge badge-muted">Calculated</span>';
+  return s;
+}
+function roleBadge(r) {
+  if (r==='trigger') return '<span class="badge badge-muted">Trigger</span>';
+  if (r==='result') return '<span class="badge badge-solid">Result</span>';
+  return '<span style="font-size:11px;color:var(--text-3);">—</span>';
+}
+let currentSort = 'idx';
 
-let csEditingRow = null; // field name being edited, or '__new__' for add row
-let csOptsPopField = null; // which field's options popover is open
-let csNewOpts = []; // options being built for a new dropdown list
-let csNewListName = ''; // name for new dropdown list
+function renderFields() {
+  const q = document.getElementById('fiSearch').value.toLowerCase();
+  const tb = document.getElementById('fiBody'); tb.innerHTML = '';
 
-function csRenderFields() {
-  const q = (document.getElementById('fiSearch').value || '').toLowerCase();
-  const tb = document.getElementById('fiBody');
-  const pendingOnly = document.getElementById('csFilterPending').checked;
-  const logicOnly = document.getElementById('csFilterLogic').checked;
+  // Read filter values
+  const fOrigin = document.getElementById('filterOrigin').value;
 
-  // Build rows (skip any add/edit rows — those are injected separately)
-  let html = '';
-  let count = 0;
-  FIELDS.forEach((f, i) => {
-    // Filters
-    if (pendingOnly && f._status !== 'pending') return;
-    if (logicOnly && !f._hasLogic) return;
+  // Read checked checkboxes
+  const checked = [...document.querySelectorAll('.cb-filter input:checked')].map(cb => cb.value);
+  const locChecked = checked.filter(v => v.startsWith('vr-')).map(v => v.slice(3));
+  const typeChecked = checked.filter(v => !v.startsWith('vr-'));
+
+  // Build filtered list from ALLFIELDS (merged dashboard + Valcre)
+  let filtered = [];
+  ALLFIELDS.forEach((f, i) => {
+    const role = getRole(f.n);
+    // Scope filter: exclusive toggle
+    if (fOrigin === 'dashboard' && f.origin === 'valcre') return;
+    if (fOrigin === 'all' && f.origin !== 'valcre') return;
+    // Location checkboxes (if any checked, field must match one)
+    if (locChecked.length > 0 && !locChecked.includes(f.vr)) return;
+    // Type checkboxes (if any checked, field must match one)
+    if (typeChecked.length > 0) {
+      let typeMatch = false;
+      if (typeChecked.includes('has-dropdown') && f.d) typeMatch = true;
+      if (typeChecked.includes('trigger') && role === 'trigger') typeMatch = true;
+      if (typeChecked.includes('result') && role === 'result') typeMatch = true;
+      if (!typeMatch) return;
+    }
+    // Search
     if (q) {
-      const haystack = [f.n, f.l, f.vr, f.c, f.desc].filter(Boolean).join(' ').toLowerCase();
-      if (!haystack.includes(q)) return;
-    }
-    count++;
-
-    // Status badge
-    const status = f._status || 'active';
-    const statusBadge = status === 'pending'
-      ? '<span class="cs-status cs-status-pending">Pending</span>'
-      : '<span class="cs-status cs-status-active">Active</span>';
-
-    // Simplified type label
-    const typeLabel = CS_TYPE_REVERSE[f.c] || f.c || '—';
-
-    // Options cell
-    let optsCell = '<td style="font-size:11px;color:var(--text-3);">—</td>';
-    if (f.d && DROPDOWN_OPTIONS[f.d]) {
-      const optCount = DROPDOWN_OPTIONS[f.d].length;
-      optsCell = '<td style="font-size:11px;color:var(--text-2);">' + optCount + ' options</td>';
-    }
-
-    // Required cell
-    const reqCell = f.req === 'Yes'
-      ? '<td style="font-size:11px;font-weight:500;color:var(--text);">Yes</td>'
-      : '<td style="font-size:11px;color:var(--text-3);">No</td>';
-
-    // Logic cell
-    let logicCell;
-    if (f._hasLogic) {
-      logicCell = '<td><button class="cs-logic-btn" onclick="event.stopPropagation();csGoToLogic(\''+f.n+'\')">Configure Logic</button></td>';
-    } else {
-      logicCell = '<td style="font-size:11px;color:var(--text-3);">—</td>';
-    }
-
-    // Actions
-    const actionsCell = '<td></td>';
-
-    // Row — clickable for edit
-    const isEditing = (csEditingRow === f.n);
-    if (isEditing) {
-      html += csEditRowHTML(f, i);
-    } else {
-      html += '<tr class="cs-clickable" onclick="csEditRow(\''+f.n.replace(/'/g,"\\'")+'\')" title="Click to edit">' +
-        '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+(i+1)+'</td>' +
-        '<td>'+statusBadge+'</td>' +
-        '<td style="font-size:11px;color:var(--text-2);">'+(f.vr||'—')+'</td>' +
-        '<td style="font-weight:500;color:var(--text);">'+f.l+'</td>' +
-        '<td style="font-size:11px;color:var(--text-2);">'+typeLabel+'</td>' +
-        optsCell +
-        reqCell +
-        logicCell +
-        actionsCell +
-      '</tr>';
-    }
-  });
-
-  // If we're adding a new row, prepend it
-  if (csEditingRow === '__new__') {
-    html = csAddRowHTML() + html;
-  }
-
-  tb.innerHTML = html;
-  document.getElementById('fiCount').innerHTML = count + ' field' + (count !== 1 ? 's' : '') + ' in registry';
-}
-
-function csAddRowHTML() {
-  const catOpts = CS_CATEGORIES.map(c => '<option value="'+c+'">'+c+'</option>').join('');
-  const typeOpts = CS_TYPE_LABELS.map(t => '<option value="'+t+'">'+t+'</option>').join('');
-  const ddListOpts = '<option value="">—</option>' +
-    Object.keys(DROPDOWN_OPTIONS).filter(k => DROPDOWN_OPTIONS[k].length > 0).map(k =>
-      '<option value="'+k+'">'+k+' ('+DROPDOWN_OPTIONS[k].length+')</option>'
-    ).join('') +
-    '<option value="__new__">+ New List...</option>';
-
-  return '<tr class="cs-add-row">' +
-    '<td style="font-size:10px;color:var(--amber);font-weight:700;text-align:center;">NEW</td>' +
-    '<td><span class="cs-status cs-status-pending">Pending</span></td>' +
-    '<td><select id="csNewCat" style="width:90px;">' + catOpts + '</select></td>' +
-    '<td><input id="csNewLabel" placeholder="Field Label" style="font-weight:500;"></td>' +
-    '<td><select id="csNewType" onchange="csOnTypeChange()" style="width:80px;">' + typeOpts + '</select></td>' +
-    '<td style="position:relative;"><select id="csNewOpts" class="cs-disabled" onchange="csOnOptsChange(this)" disabled style="width:100%;"><option value="">—</option></select><div id="csOptsPopNew" style="display:none;" class="cs-opts-pop"></div></td>' +
-    '<td><select id="csNewReq" style="width:50px;"><option value="Yes">Yes</option><option value="No">No</option></select></td>' +
-    '<td><select id="csNewLogic" style="width:50px;"><option value="No">No</option><option value="Yes">Yes</option></select></td>' +
-    '<td style="white-space:nowrap;"><button class="cs-save" onclick="csSaveNew()">Save</button> <button class="cs-cancel" onclick="csCancelEdit()">✕</button></td>' +
-  '</tr>';
-}
-
-function csEditRowHTML(f, idx) {
-  const catOpts = CS_CATEGORIES.map(c => '<option value="'+c+'"'+(f.vr===c?' selected':'')+'>'+c+'</option>').join('');
-  const currentType = CS_TYPE_REVERSE[f.c] || 'Text';
-  const typeOpts = CS_TYPE_LABELS.map(t => '<option value="'+t+'"'+(t===currentType?' selected':'')+'>'+t+'</option>').join('');
-  const isDropdown = (currentType === 'Dropdown');
-
-  const ddListOpts = '<option value="">—</option>' +
-    Object.keys(DROPDOWN_OPTIONS).filter(k => DROPDOWN_OPTIONS[k].length > 0).map(k =>
-      '<option value="'+k+'"'+(f.d===k?' selected':'')+'>'+k+' ('+DROPDOWN_OPTIONS[k].length+')</option>'
-    ).join('') +
-    '<option value="__new__">+ New List...</option>';
-
-  const logicVal = f._hasLogic ? 'Yes' : 'No';
-
-  return '<tr class="cs-edit-row" data-editing="'+f.n+'">' +
-    '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+(idx+1)+'</td>' +
-    '<td><span class="cs-status cs-status-'+(f._status||'active')+'">'+(f._status==='pending'?'Pending':'Active')+'</span></td>' +
-    '<td><select id="csEditCat" style="width:90px;">' + catOpts + '</select></td>' +
-    '<td><input id="csEditLabel" value="'+f.l+'" style="font-weight:500;"></td>' +
-    '<td><select id="csEditType" onchange="csOnTypeChangeEdit()" style="width:80px;">' + typeOpts + '</select></td>' +
-    '<td style="position:relative;"><select id="csEditOpts"'+(isDropdown?'':' class="cs-disabled" disabled')+' onchange="csOnOptsChangeEdit(this)" style="width:100%;">' + ddListOpts + '</select><div id="csOptsPopEdit" style="display:none;" class="cs-opts-pop"></div></td>' +
-    '<td><select id="csEditReq" style="width:50px;"><option value="Yes"'+(f.req==='Yes'?' selected':'')+'>Yes</option><option value="No"'+(f.req!=='Yes'?' selected':'')+'>No</option></select></td>' +
-    '<td><select id="csEditLogic" style="width:50px;"><option value="No"'+(!f._hasLogic?' selected':'')+'>No</option><option value="Yes"'+(f._hasLogic?' selected':'')+'>Yes</option></select></td>' +
-    '<td style="white-space:nowrap;"><button class="cs-save" onclick="csSaveEdit(\''+f.n.replace(/'/g,"\\'") +'\')">Save</button> <button class="cs-cancel" onclick="csCancelEdit()">✕</button></td>' +
-  '</tr>';
-}
-
-/* ── Add / Edit actions ── */
-function csInsertAddRow() {
-  if (csEditingRow) csCancelEdit();
-  csEditingRow = '__new__';
-  csNewOpts = [];
-  csNewListName = '';
-  csRenderFields();
-  setTimeout(() => { const el = document.getElementById('csNewLabel'); if (el) el.focus(); }, 50);
-}
-
-function csEditRow(fieldName) {
-  if (csEditingRow) csCancelEdit();
-  csEditingRow = fieldName;
-  csNewOpts = [];
-  csNewListName = '';
-  csRenderFields();
-}
-
-function csCancelEdit() {
-  csEditingRow = null;
-  csNewOpts = [];
-  csNewListName = '';
-  csRenderFields();
-}
-
-function csSaveNew() {
-  const label = (document.getElementById('csNewLabel').value || '').trim();
-  if (!label) { document.getElementById('csNewLabel').classList.add('cs-invalid'); document.getElementById('csNewLabel').focus(); return; }
-
-  const cat = document.getElementById('csNewCat').value;
-  const typeLabel = document.getElementById('csNewType').value;
-  const realType = CS_TYPE_MAP[typeLabel] || 'Text';
-  const req = document.getElementById('csNewReq').value;
-  const hasLogic = document.getElementById('csNewLogic').value === 'Yes';
-
-  // Auto-generate field name from label
-  const fieldName = label.replace(/[^a-zA-Z0-9\s]/g, '').split(/\s+/).map((w, i) => i === 0 ? w.charAt(0).toLowerCase() + w.slice(1) : w.charAt(0).toUpperCase() + w.slice(1)).join('');
-
-  // Check uniqueness
-  if (FIELDS.some(f => f.n.toLowerCase() === fieldName.toLowerCase())) {
-    document.getElementById('csNewLabel').classList.add('cs-invalid');
-    return;
-  }
-
-  // Handle dropdown list
-  let ddList = '';
-  if (typeLabel === 'Dropdown') {
-    const sel = document.getElementById('csNewOpts');
-    if (sel && sel.value && sel.value !== '__new__') {
-      ddList = sel.value;
-    } else if (csNewListName && csNewOpts.filter(o => o.trim()).length > 0) {
-      ddList = csNewListName;
-      DROPDOWN_OPTIONS[ddList] = csNewOpts.filter(o => o.trim());
-    }
-  }
-
-  const newField = {
-    n: fieldName, l: label, c: realType === 'Select one option' ? 'Select one' : realType,
-    s: 'User Input', d: ddList, v: '', vr: cat, nf: 'Yes', req: req,
-    desc: '', origin: 'dashboard', _status: 'pending', _hasLogic: hasLogic
-  };
-
-  FIELDS.push(newField);
-  csEditingRow = null;
-  csRenderFields();
-
-  // Pulse the new row
-  setTimeout(() => {
-    const rows = document.querySelectorAll('#fiBody tr');
-    rows.forEach(row => {
-      const labelCell = row.querySelector('td:nth-child(4)');
-      if (labelCell && labelCell.textContent === label) {
-        row.classList.add('cs-new-pulse');
-        setTimeout(() => row.classList.remove('cs-new-pulse'), 2500);
+      const haystack = [f.n, f.l, f.d, f.v, f.desc, f.vr, f.origin].filter(Boolean).join(' ').toLowerCase();
+      let ddMatch = false;
+      if (f.d && DROPDOWN_OPTIONS[f.d]) {
+        ddMatch = DROPDOWN_OPTIONS[f.d].some(opt => opt.toLowerCase().includes(q));
       }
-    });
-  }, 50);
-}
-
-function csSaveEdit(fieldName) {
-  const f = FIELDS.find(x => x.n === fieldName);
-  if (!f) return;
-
-  const label = (document.getElementById('csEditLabel').value || '').trim();
-  if (!label) { document.getElementById('csEditLabel').classList.add('cs-invalid'); return; }
-
-  const cat = document.getElementById('csEditCat').value;
-  const typeLabel = document.getElementById('csEditType').value;
-  const realType = CS_TYPE_MAP[typeLabel] || f.c;
-  const req = document.getElementById('csEditReq').value;
-  const hasLogic = document.getElementById('csEditLogic').value === 'Yes';
-
-  // Handle dropdown list
-  let ddList = f.d;
-  if (typeLabel === 'Dropdown') {
-    const sel = document.getElementById('csEditOpts');
-    if (sel && sel.value && sel.value !== '__new__') {
-      ddList = sel.value;
-    } else if (csNewListName && csNewOpts.filter(o => o.trim()).length > 0) {
-      ddList = csNewListName;
-      DROPDOWN_OPTIONS[ddList] = csNewOpts.filter(o => o.trim());
+      if (!haystack.includes(q) && !ddMatch) return;
     }
-  } else {
-    ddList = '';
-  }
-
-  f.l = label;
-  f.vr = cat;
-  f.c = realType === 'Select one option' ? 'Select one' : realType;
-  f.req = req;
-  f.d = ddList;
-  f._hasLogic = hasLogic;
-
-  csEditingRow = null;
-  csRenderFields();
-}
-
-/* ── Type change: enable/disable options column ── */
-function csOnTypeChange() {
-  const sel = document.getElementById('csNewType');
-  const optsSel = document.getElementById('csNewOpts');
-  if (sel.value === 'Dropdown') {
-    optsSel.classList.remove('cs-disabled');
-    optsSel.disabled = false;
-    // Populate dropdown list options
-    optsSel.innerHTML = '<option value="">— Pick list —</option>' +
-      Object.keys(DROPDOWN_OPTIONS).filter(k => DROPDOWN_OPTIONS[k].length > 0).map(k =>
-        '<option value="'+k+'">'+k+' ('+DROPDOWN_OPTIONS[k].length+')</option>'
-      ).join('') +
-      '<option value="__new__">+ New List...</option>';
-  } else {
-    optsSel.classList.add('cs-disabled');
-    optsSel.disabled = true;
-    optsSel.innerHTML = '<option value="">—</option>';
-    // Hide any open popover
-    const pop = document.getElementById('csOptsPopNew');
-    if (pop) pop.style.display = 'none';
-  }
-}
-
-function csOnTypeChangeEdit() {
-  const sel = document.getElementById('csEditType');
-  const optsSel = document.getElementById('csEditOpts');
-  if (sel.value === 'Dropdown') {
-    optsSel.classList.remove('cs-disabled');
-    optsSel.disabled = false;
-    optsSel.innerHTML = '<option value="">— Pick list —</option>' +
-      Object.keys(DROPDOWN_OPTIONS).filter(k => DROPDOWN_OPTIONS[k].length > 0).map(k =>
-        '<option value="'+k+'">'+k+' ('+DROPDOWN_OPTIONS[k].length+')</option>'
-      ).join('') +
-      '<option value="__new__">+ New List...</option>';
-  } else {
-    optsSel.classList.add('cs-disabled');
-    optsSel.disabled = true;
-    optsSel.innerHTML = '<option value="">—</option>';
-    const pop = document.getElementById('csOptsPopEdit');
-    if (pop) pop.style.display = 'none';
-  }
-}
-
-/* ── Options popover (new list creation) ── */
-function csOnOptsChange(sel) {
-  const pop = document.getElementById('csOptsPopNew');
-  if (sel.value === '__new__') {
-    csNewOpts = [''];
-    csNewListName = '';
-    csRenderOptsPop(pop);
-    pop.style.display = 'block';
-  } else {
-    pop.style.display = 'none';
-  }
-}
-
-function csOnOptsChangeEdit(sel) {
-  const pop = document.getElementById('csOptsPopEdit');
-  if (sel.value === '__new__') {
-    csNewOpts = [''];
-    csNewListName = '';
-    csRenderOptsPop(pop);
-    pop.style.display = 'block';
-  } else {
-    pop.style.display = 'none';
-  }
-}
-
-function csRenderOptsPop(popEl) {
-  let html = '<div style="margin-bottom:6px;"><input style="font:inherit;font-size:11px;width:100%;border:none;border-bottom:1px solid var(--border);background:transparent;padding:2px 0;outline:none;" placeholder="List name (e.g. ListMarketCondition)" value="'+csNewListName+'" oninput="csNewListName=this.value"></div>';
-  html += '<div style="font-size:9px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Options</div>';
-  csNewOpts.forEach((opt, i) => {
-    html += '<div class="cs-opt-item"><input value="'+(opt||'')+'" placeholder="Option '+(i+1)+'" oninput="csNewOpts['+i+']=this.value"><button class="cs-opt-rm" onclick="csNewOpts.splice('+i+',1);csRenderOptsPop(this.closest(\'.cs-opts-pop\'))">✕</button></div>';
+    filtered.push({f:f, idx:i+1, role:role});
   });
-  html += '<button class="cs-opts-add" onclick="csNewOpts.push(\'\');csRenderOptsPop(this.closest(\'.cs-opts-pop\'))">+ Add option</button>';
-  popEl.innerHTML = html;
+
+  // Sort — non-empty values first, then alphabetical. Empty/dash to bottom.
+  if (currentSort !== 'idx') {
+    filtered.sort((a, b) => {
+      let va, vb;
+      if (currentSort === 'role') { va = a.role; vb = b.role; }
+      else if (currentSort === 'origin') {
+        const order = {dashboard:0, both:0, valcre:1};
+        va = order[a.f.origin] ?? 1; vb = order[b.f.origin] ?? 1;
+        if (va !== vb) return va - vb;
+        va = a.f.n; vb = b.f.n; // alphabetical within group
+      }
+      else { va = a.f[currentSort] || ''; vb = b.f[currentSort] || ''; }
+      // Empty values go to bottom
+      const aEmpty = !va || va === '—' || va === 'independent';
+      const bEmpty = !vb || vb === '—' || vb === 'independent';
+      if (aEmpty && !bEmpty) return 1;
+      if (!aEmpty && bEmpty) return -1;
+      return va.localeCompare(vb);
+    });
+  }
+
+  const COL_COUNT = 12;
+  filtered.forEach(item => {
+    const f = item.f;
+    const role = item.role;
+    // Dropdown cell — clickable if has options
+    let ddCell;
+    if (f.d && DROPDOWN_OPTIONS[f.d]) {
+      const opts = DROPDOWN_OPTIONS[f.d];
+      const count = opts.length;
+      ddCell = '<td class="dd-expand" style="font-size:11px;color:var(--text);cursor:pointer;" onclick="toggleDropdownRow(\''+f.n+'\')" title="Click to see '+count+' options"><span style="color:var(--text-2);">'+f.d+'</span> <span style="font-size:10px;color:var(--text-3);">('+count+')</span> <span style="font-size:9px;color:var(--text-3);">'+(expandedRow===f.n ? '▲' : '▼')+'</span></td>';
+    } else {
+      ddCell = '<td style="font-size:11px;color:var(--text-3);">—</td>';
+    }
+    // Plain text cells — no colors, no badges
+    const vrCell = '<td style="font-size:11px;color:var(--text-2);">'+(f.vr||'—')+'</td>';
+    const srcCell = '<td style="font-size:11px;color:var(--text-2);">'+(f.s||'—')+'</td>';
+    const roleText = role === 'trigger' ? 'Trigger' : role === 'result' ? 'Result' : '—';
+    const roleCell = '<td style="font-size:11px;color:var(--text-2);">'+roleText+'</td>';
+    const reqCell = '<td style="font-size:11px;color:var(--text-2);">'+(f.req||'—')+'</td>';
+
+    // Row styling — dim Valcre-only rows slightly
+    const rowClass = f.origin === 'valcre' ? ' style="opacity:0.65;"' : '';
+
+    const isEditable = f.origin !== 'valcre';
+    const clickAttr = isEditable ? ' style="cursor:pointer;"' : rowClass;
+    const clickHandler = isEditable ? ' onclick="editTableRow(\''+f.n+'\')"' : '';
+    tb.innerHTML += '<tr'+(isEditable ? clickAttr : rowClass)+clickHandler+' title="'+(f.desc ? f.desc + (isEditable ? ' · Click to edit' : '') : (isEditable ? 'Click to edit' : ''))+'">' +
+      '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+item.idx+'</td>' +
+      '<td>'+(f._status==='pending'?'<span class="cs-status cs-status-pending">Pending</span>':'<span class="cs-status cs-status-active">Active</span>')+'</td>' +
+      '<td style="font-size:11px;color:var(--text-2);">'+(f.origin==='valcre'?'Valcre':'Valta')+'</td>' +
+      '<td class="fn">'+f.n+'</td>' +
+      '<td>'+f.l+'</td>' +
+      '<td style="font-size:11px;color:var(--text-2);">'+(f.c||'—')+'</td>' +
+      srcCell +
+      (f._hasLogic ? '<td><button class="cs-logic-btn" onclick="event.stopPropagation();csGoToLogic()">Configure Logic</button></td>' : roleCell) +
+      ddCell +
+      vrCell +
+      '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+(f.v||'—')+'</td>' +
+      '<td></td>' +
+    '</tr>';
+
+    // Expanded dropdown options row
+    if (expandedRow === f.n && f.d && DROPDOWN_OPTIONS[f.d]) {
+      const opts = DROPDOWN_OPTIONS[f.d];
+      // Check which options are cascade triggers
+      let optRows = opts.map(opt => {
+        return '<div style="padding:2px 0 2px 16px;font-size:11px;color:var(--text);">'+opt+'</div>';
+      }).join('');
+      tb.innerHTML += '<tr class="fi-options-row"><td colspan="7" style="border-bottom:none;background:transparent;"></td><td class="dd-options-cell" style="padding:6px 12px 8px;border-bottom:2px solid var(--border);border-left:1px solid var(--border);border-right:1px solid var(--border);">' +
+        '<div style="font-size:11px;font-weight:600;color:var(--text-3);margin-bottom:4px;padding-bottom:3px;border-bottom:1px solid var(--border);">'+f.l+'</div>' +
+        optRows +
+      '</td><td colspan="'+(COL_COUNT-8)+'" style="border-bottom:none;background:transparent;"></td></tr>';
+    }
+  });
+  const fOriginVal = document.getElementById('filterOrigin').value;
+  const scopeTotal = fOriginVal === 'dashboard' ? ALLFIELDS.filter(f=>f.origin!=='valcre').length : ALLFIELDS.filter(f=>f.origin==='valcre').length;
+  const dashCount = filtered.filter(x=>x.f.origin!=='valcre').length;
+  const valcreCount = filtered.filter(x=>x.f.origin==='valcre').length;
+  const sortNames = {n:'Field Name',l:'Label',c:'Control Type',s:'Source',role:'Role',d:'Dropdown List',vr:'Valcre Location',v:'Valcre API Key',nf:'New',req:'Required',origin:'Origin'};
+  let countText;
+  if (fOriginVal === 'dashboard') {
+    countText = filtered.length < scopeTotal ? 'Showing '+filtered.length+' of '+scopeTotal+' Valta Dashboard fields' : scopeTotal+' Valta Dashboard fields';
+  } else {
+    countText = filtered.length < scopeTotal ? 'Showing '+filtered.length+' of '+scopeTotal+' Valcre fields' : scopeTotal+' Valcre fields';
+  }
+  if (currentSort !== 'idx') countText += ' <span style="color:var(--border-focus);margin:0 4px;">|</span> <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--text);vertical-align:middle;margin-right:5px;"></span>Sorted by ' + (sortNames[currentSort] || currentSort) + ' <span class="sort-clear" onclick="clearSort()">✕</span>';
+  document.getElementById('fiCount').innerHTML = countText;
 }
 
-/* ── Navigate to Logic tab ── */
-function csGoToLogic(fieldName) {
-  // Switch to Logic Fields tab
-  const tabBtns = document.querySelectorAll('.seg:not(.scope-toggle) button');
-  tabBtns.forEach(b => b.classList.remove('active'));
-  tabBtns[1].classList.add('active'); // Logic Fields is second
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.getElementById('panel-logic').classList.add('active');
-  document.getElementById('dashControls').parentElement.style.display = 'none';
-  document.getElementById('btnFill').style.display = 'none';
-  document.getElementById('btnReset').style.display = 'none';
+function toggleDropdownRow(fieldName) {
+  expandedRow = (expandedRow === fieldName) ? null : fieldName;
+  renderFields();
 }
-
-/* ── Fill Example ── */
-function csFilllExample() {
-  csInsertAddRow();
-  setTimeout(() => {
-    const catSel = document.getElementById('csNewCat');
-    const labelInp = document.getElementById('csNewLabel');
-    const typeSel = document.getElementById('csNewType');
-    const reqSel = document.getElementById('csNewReq');
-    const logicSel = document.getElementById('csNewLogic');
-    if (catSel) catSel.value = 'Property';
-    if (labelInp) labelInp.value = 'Market Condition';
-    if (typeSel) { typeSel.value = 'Dropdown'; csOnTypeChange(); }
-    if (reqSel) reqSel.value = 'Yes';
-    if (logicSel) logicSel.value = 'No';
-    // Pick ListPropertyType after type change populates the select
-    setTimeout(() => {
-      const optsSel = document.getElementById('csNewOpts');
-      if (optsSel) optsSel.value = 'ListPropertyType';
-    }, 50);
-  }, 100);
-}
-
-/* ── Close options popover on outside click ── */
+// Click anywhere outside expanded dropdown closes it, and deselects active scenario
 document.addEventListener('click', function(e) {
-  if (!e.target.closest('.cs-opts-pop') && !e.target.closest('select')) {
-    document.querySelectorAll('.cs-opts-pop').forEach(p => p.style.display = 'none');
+  // Close dropdown expansion
+  if (expandedRow && !e.target.closest('.dd-expand') && !e.target.closest('.dd-options-cell')) {
+    expandedRow = null;
+    renderFields();
   }
   // Deselect scenario if clicking outside scenario buttons
   if (!e.target.closest('.scenario-btn')) {
@@ -1477,20 +1282,54 @@ document.addEventListener('click', function(e) {
   }
 });
 
-/* ── Escape to cancel ── */
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape' && csEditingRow) csCancelEdit();
-});
-
-function flashCount() {
-  const el = document.getElementById('fiCount');
-  el.classList.add('updating');
-  setTimeout(() => el.classList.remove('updating'), 250);
+function clearSort() {
+  currentSort = 'idx';
+  document.querySelectorAll('.fi-table th').forEach(h => h.classList.remove('sorted'));
+  renderFields();
+  flashCount();
+}
+function sortFields(th, key) {
+  if (currentSort === key) { currentSort = 'idx'; }
+  else { currentSort = key; }
+  th.closest('tr').querySelectorAll('th').forEach(h => h.classList.remove('sorted'));
+  if (currentSort !== 'idx') th.classList.add('sorted');
+  renderFields();
 }
 
-/* Keep renderFields as alias for csRenderFields (called by other tabs) */
-function renderFields() { csRenderFields(); }
-function filterFields() { csRenderFields(); }
+/* ═══ FILTER LOGIC ═══ */
+function setScope(val, btn) {
+  document.getElementById('filterOrigin').value = val;
+  btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  expandedRow = null;
+  renderFields();
+  flashCount();
+}
+function applyFilters() {
+  expandedRow = null;
+  renderFields();
+  flashCount();
+}
+function flashCount() {
+  const el = document.getElementById('fiCount');
+  // Fade out dot + text
+  el.classList.add('updating');
+  // After fade out, update is already done (renderFields ran instantly), fade back in
+  setTimeout(() => {
+    el.classList.remove('updating');
+  }, 250);
+}
+function resetFilters() {
+  document.getElementById('filterOrigin').value = 'all';
+  document.getElementById('fiSearch').value = '';
+  document.querySelectorAll('.cb-filter input').forEach(cb => cb.checked = false);
+  // Reset scope buttons to both active
+  const scopeBtns = document.querySelectorAll('.seg button');
+  scopeBtns.forEach(b => b.classList.add('active'));
+  expandedRow = null;
+  renderFields();
+}
+function filterFields() { renderFields(); }
 
 /* ═══ OPTIONS INDEX — every dropdown option as its own row ═══ */
 let optionsSort = 'oidx';
@@ -1901,6 +1740,340 @@ function showNarrative(idx) {
   document.getElementById('narPreview').innerHTML = '<div style="font-size:11px;font-weight:600;color:var(--text);margin-bottom:6px;">' + n.id + ' — ' + n.name + '</div><div style="font-size:11px;color:var(--text-3);margin-bottom:8px;">Trigger: ' + n.trigger + ' · Used in: ' + n.usedIn + '</div><div style="font-size:12px;color:var(--text-2);line-height:1.7;">' + n.text + '</div>';
 }
 
+/* ═══ INLINE ADD / EDIT ROW ═══ */
+let addRowActive = false;
+let editRowField = null; // field name currently being edited
+let newDdPopoverOpen = false;
+let newDdOptions = [];
+
+const CONTROL_TYPES = ['Text','Multiple lines of text','Whole Number','Decimal','Select one','Select multiple','Checkbox','Date','Calculation','Alpha Numeric'];
+const SOURCE_TYPES = ['User Input','Valcre API','Calculated','Logic'];
+const ROLE_TYPES = ['Independent','Trigger','Result'];
+const VALCRE_LOCATIONS = ['—','Job','Contact','Property','Building','Parcel'];
+
+function buildDropdownListOptions() {
+  let html = '<option value="">— None —</option>';
+  Object.keys(DROPDOWN_OPTIONS).forEach(k => { html += '<option value="'+k+'">'+k+'</option>'; });
+  html += '<option value="__new__">+ New...</option>';
+  return html;
+}
+function buildSelectHtml(options, selected, name, extraAttr) {
+  let html = '<select name="'+name+'"'+(extraAttr||'')+'>';
+  options.forEach(o => { const v = (o==='—')?'':o; html += '<option value="'+v+'"'+(selected===v?' selected':'')+'>'+o+'</option>'; });
+  html += '</select>';
+  return html;
+}
+
+function insertAddRow(e) {
+  if (e) e.stopPropagation();
+  if (addRowActive) return; // already showing
+  if (editRowField) cancelEditRow(); // close any edit first
+  addRowActive = true;
+  newDdOptions = [];
+  const tb = document.getElementById('fiBody');
+  const tr = document.createElement('tr');
+  tr.className = 'fi-add-row';
+  tr.id = 'fiAddRow';
+  tr.innerHTML =
+    '<td><span class="fi-new-label">NEW</span></td>' +
+    '<td style="font-size:11px;color:var(--text-2);">Valta</td>' +
+    '<td><input class="fi-mono" name="n" placeholder="FieldName" autocomplete="off"></td>' +
+    '<td><input name="l" placeholder="Field Label" autocomplete="off"></td>' +
+    '<td>'+buildSelectHtml(CONTROL_TYPES,'','c',' onchange="onControlTypeChange(this.closest(\'tr\'))"')+'</td>' +
+    '<td>'+buildSelectHtml(SOURCE_TYPES,'','s',' onchange="onSourceChange(this.closest(\'tr\'))"')+'</td>' +
+    '<td>'+buildSelectHtml(ROLE_TYPES,'','role')+'</td>' +
+    '<td style="position:relative;"><select name="d" onchange="onDdListChange(this)" disabled>'+buildDropdownListOptions()+'</select><div id="fiNewDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
+    '<td>'+buildSelectHtml(VALCRE_LOCATIONS,'','vr')+'</td>' +
+    '<td><input class="fi-mono" name="v" placeholder="Key" disabled autocomplete="off"></td>' +
+    '<td style="white-space:nowrap;"><div class="fi-actions"><button class="fi-save-btn" onclick="saveAddRow()">Save</button><button class="fi-cancel-btn" onclick="removeAddRow()">Cancel</button></div></td>';
+  tb.insertBefore(tr, tb.firstChild);
+  tr.querySelector('input[name="n"]').focus();
+}
+
+function removeAddRow() {
+  const row = document.getElementById('fiAddRow');
+  if (row) row.remove();
+  addRowActive = false;
+  newDdPopoverOpen = false;
+  newDdOptions = [];
+}
+
+function onControlTypeChange(tr) {
+  const ct = tr.querySelector('select[name="c"]').value;
+  const ddSel = tr.querySelector('select[name="d"]');
+  const isSelect = (ct === 'Select one' || ct === 'Select multiple');
+  ddSel.disabled = !isSelect;
+  if (!isSelect) { ddSel.value = ''; hideNewDdPopover(); }
+}
+function onSourceChange(tr) {
+  const src = tr.querySelector('select[name="s"]').value;
+  const vInp = tr.querySelector('input[name="v"]');
+  vInp.disabled = (src !== 'Valcre API');
+  if (src !== 'Valcre API') vInp.value = '';
+}
+function onDdListChange(sel) {
+  if (sel.value === '__new__') {
+    showNewDdPopover(sel);
+  } else {
+    hideNewDdPopover();
+  }
+}
+function showNewDdPopover(sel) {
+  newDdPopoverOpen = true;
+  newDdOptions = [];
+  const pop = sel.closest('td').querySelector('.fi-dd-popover');
+  if (!pop) return;
+  pop.style.display = 'block';
+  renderNewDdPopover(pop);
+}
+function hideNewDdPopover() {
+  newDdPopoverOpen = false;
+  const pop = document.getElementById('fiNewDdPopover');
+  if (pop) pop.style.display = 'none';
+  // Also check edit row popover
+  const pop2 = document.getElementById('fiEditDdPopover');
+  if (pop2) pop2.style.display = 'none';
+}
+function renderNewDdPopover(pop) {
+  let optsHtml = '';
+  newDdOptions.forEach((o,i) => {
+    optsHtml += '<div class="fi-dd-opt"><span>'+o+'</span><span class="fi-dd-opt-rm" onclick="removeNewDdOpt('+i+')">x</span></div>';
+  });
+  pop.innerHTML =
+    '<div style="font-size:10px;font-weight:600;color:var(--text-3);margin-bottom:4px;">NEW DROPDOWN LIST</div>' +
+    '<input id="fiNewDdName" placeholder="List name (e.g. ListMyList)" value="'+(pop.dataset.listName||'')+'" oninput="this.closest(\'.fi-dd-popover\').dataset.listName=this.value">' +
+    '<div style="font-size:10px;color:var(--text-3);margin-bottom:2px;">Options:</div>' +
+    '<div class="fi-dd-opts">'+optsHtml+'</div>' +
+    '<div style="display:flex;gap:4px;"><input id="fiNewDdOptInput" placeholder="Add option..." onkeydown="if(event.key===\'Enter\'){addNewDdOpt(this);event.preventDefault();}"><button class="fi-save-btn" style="flex-shrink:0;" onclick="addNewDdOpt(this.previousElementSibling)">+</button></div>';
+}
+function addNewDdOpt(inp) {
+  const v = inp.value.trim();
+  if (!v) return;
+  newDdOptions.push(v);
+  inp.value = '';
+  const pop = inp.closest('.fi-dd-popover');
+  renderNewDdPopover(pop);
+}
+function removeNewDdOpt(i) {
+  newDdOptions.splice(i,1);
+  const pop = document.getElementById('fiNewDdPopover') || document.getElementById('fiEditDdPopover');
+  if (pop && pop.style.display !== 'none') renderNewDdPopover(pop);
+}
+
+function saveAddRow() {
+  const tr = document.getElementById('fiAddRow');
+  if (!tr) return;
+  const n = tr.querySelector('input[name="n"]').value.trim();
+  const l = tr.querySelector('input[name="l"]').value.trim();
+  const c = tr.querySelector('select[name="c"]').value;
+  const s = tr.querySelector('select[name="s"]').value;
+  const roleVal = tr.querySelector('select[name="role"]').value;
+  let d = tr.querySelector('select[name="d"]').value;
+  const vr = tr.querySelector('select[name="vr"]').value;
+  const v = tr.querySelector('input[name="v"]').value.trim();
+
+  // Validation
+  let valid = true;
+  const nInp = tr.querySelector('input[name="n"]');
+  const lInp = tr.querySelector('input[name="l"]');
+  nInp.classList.remove('fi-invalid');
+  lInp.classList.remove('fi-invalid');
+  if (!n) { nInp.classList.add('fi-invalid'); valid = false; }
+  if (!l) { lInp.classList.add('fi-invalid'); valid = false; }
+  // Check unique field name
+  if (n && FIELDS.some(f => f.n.toLowerCase() === n.toLowerCase())) {
+    nInp.classList.add('fi-invalid');
+    nInp.title = 'Field name already exists';
+    valid = false;
+  }
+  if (!valid) return;
+
+  // Handle new dropdown list creation
+  if (d === '__new__' && newDdPopoverOpen) {
+    const pop = tr.querySelector('.fi-dd-popover');
+    const listName = pop ? (pop.dataset.listName || '').trim() : '';
+    if (listName && newDdOptions.length > 0) {
+      DROPDOWN_OPTIONS[listName] = [...newDdOptions];
+      d = listName;
+    } else {
+      d = '';
+    }
+  }
+
+  // Add role to triggers/results arrays
+  if (roleVal === 'Trigger' && !TRIGGERS.includes(n)) TRIGGERS.push(n);
+  if (roleVal === 'Result' && !RESULTS.includes(n)) RESULTS.push(n);
+
+  const newField = { n, l, c, s, d, v: v ? (vr ? vr+'.'+v : v) : '', vr, nf: 'Yes', req: 'No', desc: '', origin: 'dashboard' };
+  FIELDS.push(newField);
+  // Also add to ALLFIELDS
+  newField.origin = v ? 'both' : 'dashboard';
+  ALLFIELDS.push(newField);
+
+  removeAddRow();
+  renderFields();
+
+  // Pulse the new row
+  setTimeout(() => {
+    const rows = document.querySelectorAll('#fiBody tr');
+    rows.forEach(row => {
+      const fnCell = row.querySelector('.fn');
+      if (fnCell && fnCell.textContent === n) {
+        row.classList.add('fi-new-pulse');
+        setTimeout(() => row.classList.remove('fi-new-pulse'), 2000);
+      }
+    });
+  }, 50);
+}
+
+function fillSimpleExample(e) {
+  if (e) e.stopPropagation();
+  if (!addRowActive) insertAddRow();
+  setTimeout(() => {
+    const tr = document.getElementById('fiAddRow');
+    if (!tr) return;
+    tr.querySelector('input[name="n"]').value = 'MarketCondition';
+    tr.querySelector('input[name="l"]').value = 'Market Condition';
+    tr.querySelector('select[name="c"]').value = 'Select one';
+    tr.querySelector('select[name="s"]').value = 'User Input';
+    tr.querySelector('select[name="role"]').value = 'Independent';
+    // Enable and set dropdown list
+    const ddSel = tr.querySelector('select[name="d"]');
+    ddSel.disabled = false;
+    ddSel.value = 'ListPropertyType';
+    // Set Valcre location
+    tr.querySelector('select[name="vr"]').value = 'Property';
+    // Leave API key disabled
+  }, 20);
+}
+
+function editTableRow(fieldName) {
+  if (addRowActive) removeAddRow();
+  if (editRowField) cancelEditRow();
+  const f = FIELDS.find(x => x.n === fieldName);
+  if (!f) return;
+  editRowField = fieldName;
+
+  // Find the row in the table
+  const rows = document.querySelectorAll('#fiBody tr');
+  let targetRow = null;
+  rows.forEach(row => {
+    const fnCell = row.querySelector('.fn');
+    if (fnCell && fnCell.textContent === fieldName) targetRow = row;
+  });
+  if (!targetRow) return;
+
+  const role = getRole(f.n);
+  const roleVal = role === 'trigger' ? 'Trigger' : role === 'result' ? 'Result' : 'Independent';
+  const isSelect = (f.c === 'Select one' || f.c === 'Select multiple');
+  const isValcre = (f.s === 'Valcre API');
+  // Extract bare API key (strip location prefix like "Job.")
+  const bareKey = f.v ? (f.v.includes('.') ? f.v.split('.').slice(1).join('.') : f.v) : '';
+
+  targetRow.className = 'fi-edit-row';
+  targetRow.dataset.origField = fieldName;
+  targetRow.innerHTML =
+    '<td style="font-size:11px;color:var(--text-3);font-family:SF Mono,Consolas,monospace;">'+targetRow.querySelector('td')?.textContent+'</td>' +
+    '<td style="font-size:11px;color:var(--text-2);">Valta</td>' +
+    '<td><input class="fi-mono" name="n" value="'+f.n+'" autocomplete="off"></td>' +
+    '<td><input name="l" value="'+f.l+'" autocomplete="off"></td>' +
+    '<td>'+buildSelectHtml(CONTROL_TYPES, f.c, 'c', ' onchange="onControlTypeChange(this.closest(\'tr\'))"')+'</td>' +
+    '<td>'+buildSelectHtml(SOURCE_TYPES, f.s, 's', ' onchange="onSourceChange(this.closest(\'tr\'))"')+'</td>' +
+    '<td>'+buildSelectHtml(ROLE_TYPES, roleVal, 'role')+'</td>' +
+    '<td style="position:relative;"><select name="d" onchange="onDdListChange(this)"'+(isSelect?'':' disabled')+'>'+buildDropdownListOptions().replace('value="'+(f.d||'')+'"','value="'+(f.d||'')+'" selected')+'</select><div id="fiEditDdPopover" class="fi-dd-popover" style="display:none;"></div></td>' +
+    '<td>'+buildSelectHtml(VALCRE_LOCATIONS, f.vr||'', 'vr')+'</td>' +
+    '<td><input class="fi-mono" name="v" value="'+bareKey+'"'+(isValcre?'':' disabled')+' autocomplete="off"></td>' +
+    '<td style="white-space:nowrap;"><div class="fi-actions"><button class="fi-save-btn" onclick="saveEditRow(\''+fieldName+'\')">Save</button><button class="fi-cancel-btn" onclick="cancelEditRow()">Cancel</button></div></td>';
+
+  // Fix the dropdown list select — need to properly set selected value
+  const ddSel = targetRow.querySelector('select[name="d"]');
+  if (ddSel && f.d) ddSel.value = f.d;
+}
+
+function saveEditRow(origName) {
+  const tr = document.querySelector('.fi-edit-row');
+  if (!tr) return;
+  const n = tr.querySelector('input[name="n"]').value.trim();
+  const l = tr.querySelector('input[name="l"]').value.trim();
+  const c = tr.querySelector('select[name="c"]').value;
+  const s = tr.querySelector('select[name="s"]').value;
+  const roleVal = tr.querySelector('select[name="role"]').value;
+  let d = tr.querySelector('select[name="d"]').value;
+  const vr = tr.querySelector('select[name="vr"]').value;
+  const v = tr.querySelector('input[name="v"]').value.trim();
+
+  // Validation
+  let valid = true;
+  const nInp = tr.querySelector('input[name="n"]');
+  const lInp = tr.querySelector('input[name="l"]');
+  nInp.classList.remove('fi-invalid');
+  lInp.classList.remove('fi-invalid');
+  if (!n) { nInp.classList.add('fi-invalid'); valid = false; }
+  if (!l) { lInp.classList.add('fi-invalid'); valid = false; }
+  // Check unique (exclude self)
+  if (n && FIELDS.some(f => f.n.toLowerCase() === n.toLowerCase() && f.n !== origName)) {
+    nInp.classList.add('fi-invalid');
+    nInp.title = 'Field name already exists';
+    valid = false;
+  }
+  if (!valid) return;
+
+  // Handle new dropdown list
+  if (d === '__new__') {
+    const pop = tr.querySelector('.fi-dd-popover');
+    const listName = pop ? (pop.dataset.listName || '').trim() : '';
+    if (listName && newDdOptions.length > 0) {
+      DROPDOWN_OPTIONS[listName] = [...newDdOptions];
+      d = listName;
+    } else {
+      d = '';
+    }
+  }
+
+  // Update field in FIELDS and ALLFIELDS
+  const fi = FIELDS.findIndex(f => f.n === origName);
+  const ai = ALLFIELDS.findIndex(f => f.n === origName && f.origin !== 'valcre');
+  const update = { n, l, c, s, d, v: v ? (vr ? vr+'.'+v : v) : '', vr, origin: v ? 'both' : 'dashboard' };
+  if (fi >= 0) Object.assign(FIELDS[fi], update);
+  if (ai >= 0) Object.assign(ALLFIELDS[ai], update);
+
+  // Update role arrays
+  const tidx = TRIGGERS.indexOf(origName);
+  const ridx = RESULTS.indexOf(origName);
+  if (roleVal === 'Trigger') { if (tidx < 0) TRIGGERS.push(n); if (ridx >= 0) RESULTS.splice(ridx,1); }
+  else if (roleVal === 'Result') { if (ridx < 0) RESULTS.push(n); if (tidx >= 0) TRIGGERS.splice(tidx,1); }
+  else { if (tidx >= 0) TRIGGERS.splice(tidx,1); if (ridx >= 0) RESULTS.splice(ridx,1); }
+  // If name changed, update arrays
+  if (origName !== n) {
+    const ti2 = TRIGGERS.indexOf(origName); if (ti2 >= 0) TRIGGERS[ti2] = n;
+    const ri2 = RESULTS.indexOf(origName); if (ri2 >= 0) RESULTS[ri2] = n;
+  }
+
+  editRowField = null;
+  newDdPopoverOpen = false;
+  newDdOptions = [];
+  renderFields();
+
+  // Pulse
+  setTimeout(() => {
+    const rows = document.querySelectorAll('#fiBody tr');
+    rows.forEach(row => {
+      const fnCell = row.querySelector('.fn');
+      if (fnCell && fnCell.textContent === n) {
+        row.classList.add('fi-new-pulse');
+        setTimeout(() => row.classList.remove('fi-new-pulse'), 2000);
+      }
+    });
+  }, 50);
+}
+
+function cancelEditRow() {
+  editRowField = null;
+  newDdPopoverOpen = false;
+  newDdOptions = [];
+  renderFields();
+}
+
 renderFields();
 cascade();
 
@@ -1941,5 +2114,5 @@ function toggleFullWidth(e) {
   });
 })();
 </script>
-</body>
+<div style="position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#18181b;padding:8px 16px;display:flex;gap:8px;align-items:center;justify-content:center;box-shadow:0 -2px 8px rgba(0,0,0,.15);"><span style="font-size:11px;color:#a1a1aa;margin-right:8px;">Compare:</span><a href="valta-field-registry-NEW-FIELD-mockup.html" id="nav-v6" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v6 Panel</a><a href="valta-field-registry-v7-inline-row.html" id="nav-v7" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v7 Inline Row</a><a href="valta-field-registry-v8-grouped.html" id="nav-v8" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v8 Grouped</a><a href="valta-field-registry-v9-modal.html" id="nav-v9" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v9 Modal</a><a href="valta-field-registry-v10-simple-add.html" id="nav-v10" style="font:500 11px/1 system-ui,sans-serif;padding:5px 12px;border-radius:6px;text-decoration:none;color:#e4e4e7;border:1px solid #3f3f46;transition:all .12s;">v10 Simple</a></div><script>document.querySelectorAll("[id^=nav-]").forEach(a=>{if(location.pathname.includes(a.href.split("/").pop().replace(".html","")))a.style.background="#3f3f46",a.style.color="#fff",a.style.fontWeight="700"});</script><div style="height:44px;"></div></body>
 </html>

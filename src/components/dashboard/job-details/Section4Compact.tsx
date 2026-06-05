@@ -304,7 +304,7 @@ const Section4Compact: React.FC<SectionProps> = ({
         className={`relative border rounded-lg p-3 transition-all ${
           isDragging
             ? "border-blue-400 bg-blue-50/50 dark:bg-blue-950/50 border-dashed border-2"
-            : "border-gray-200 dark:border-gray-700 bg-gray-50/30 dark:bg-gray-900/30 hover:border-gray-300 dark:hover:border-gray-600"
+            : "border-border bg-muted/30 dark:bg-gray-900/30 hover:border-border dark:hover:border-gray-600"
         }`}
         onDragEnter={(e) => handleDrag(e, fieldName)}
         onDragLeave={(e) => handleDrag(e, fieldName)}
@@ -314,12 +314,12 @@ const Section4Compact: React.FC<SectionProps> = ({
         {/* Compact header */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <h4 className="font-medium text-sm text-gray-700 dark:text-gray-300">
+            <h4 className="font-medium text-sm text-foreground">
               {label}
               {required && <span className="text-red-500 ml-1">*</span>}
             </h4>
             {displayCount > 0 && (
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-muted-foreground">
                 ({displayCount} file{displayCount !== 1 ? 's' : ''})
               </span>
             )}
@@ -337,12 +337,12 @@ const Section4Compact: React.FC<SectionProps> = ({
                 const filename = extractFilename(url);
                 const FileIcon = getFileIcon(filename);
                 return (
-                  <div key={index} className="flex items-center gap-2 p-2 bg-white dark:bg-gray-800 rounded border text-xs">
+                  <div key={index} className="flex items-center gap-2 p-2 bg-card rounded border text-xs">
                     {/* File Icon */}
-                    <FileIcon className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                    <FileIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                     
                     {/* File Name */}
-                    <span className="flex-1 truncate text-gray-700 dark:text-gray-300">
+                    <span className="flex-1 truncate text-foreground">
                       {filename}
                     </span>
                     
@@ -393,12 +393,12 @@ const Section4Compact: React.FC<SectionProps> = ({
               const filename = extractFilename(jobDetails[fieldName]);
               const FileIcon = getFileIcon(filename);
               return (
-                <div className="flex items-center gap-2 p-2 bg-white dark:bg-gray-800 rounded border text-xs">
+                <div className="flex items-center gap-2 p-2 bg-card rounded border text-xs">
                   {/* File Icon */}
-                  <FileIcon className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                  <FileIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                   
                   {/* File Name */}
-                  <span className="flex-1 truncate text-gray-700 dark:text-gray-300">
+                  <span className="flex-1 truncate text-foreground">
                     {filename}
                   </span>
                   
@@ -509,7 +509,7 @@ const Section4Compact: React.FC<SectionProps> = ({
       <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full border border-gray-400 dark:border-white/20 rounded-lg dark:bg-black/15">
         <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 bg-gray-200 dark:bg-gray-800 rounded-t-lg`}>
           <div className="flex items-center gap-2">
-            {isOpen ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronRight className="h-4 w-4 text-gray-500" />}
+            {isOpen ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
             <SectionTitle title="Document Upload & Organization" />
           </div>
         </CollapsibleTrigger>

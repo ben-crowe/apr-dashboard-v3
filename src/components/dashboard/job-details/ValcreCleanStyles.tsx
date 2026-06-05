@@ -10,7 +10,7 @@ export const SectionTitle = ({
   number?: string; 
   title: string 
 }) => (
-  <span className="text-base font-medium text-gray-900 dark:text-gray-100">
+  <span className="text-base font-medium text-foreground">
     {number && <span className="mr-2">{number}</span>}
     {title}
   </span>
@@ -25,9 +25,9 @@ export const CleanInput = React.forwardRef<
     <input
       ref={ref}
       className={cn(
-        "w-full bg-transparent border-0 border-b border-gray-200 dark:border-gray-700",
+        "w-full bg-transparent border-0 border-b border-border",
         "px-0 py-1 text-sm",
-        "placeholder:text-gray-400 dark:placeholder:text-gray-500",
+        "placeholder:text-gray-400 dark:placeholder:text-muted-foreground",
         "focus:outline-none focus:border-primary dark:focus:border-primary",
         "transition-colors duration-200",
         "disabled:opacity-50 disabled:cursor-not-allowed",
@@ -48,7 +48,7 @@ export const CleanSelect = React.forwardRef<
     <select
       ref={ref}
       className={cn(
-        "w-full bg-transparent border-0 border-b border-gray-200 dark:border-gray-700",
+        "w-full bg-transparent border-0 border-b border-border",
         "px-0 py-1 text-sm cursor-pointer",
         "focus:outline-none focus:border-primary dark:focus:border-primary",
         "transition-colors duration-200",
@@ -72,9 +72,9 @@ export const CleanTextarea = React.forwardRef<
     <textarea
       ref={ref}
       className={cn(
-        "w-full bg-transparent border-0 border-b border-gray-200 dark:border-gray-700",
+        "w-full bg-transparent border-0 border-b border-border",
         "px-0 py-1 text-sm resize-none",
-        "placeholder:text-gray-400 dark:placeholder:text-gray-500",
+        "placeholder:text-gray-400 dark:placeholder:text-muted-foreground",
         "focus:outline-none focus:border-primary dark:focus:border-primary",
         "transition-colors duration-200",
         "disabled:opacity-50 disabled:cursor-not-allowed",
@@ -99,7 +99,7 @@ export const CleanFieldRow = ({
   className?: string;
 }) => (
   <div className={cn("grid grid-cols-3 gap-4 py-1.5", className)}>
-    <label className="text-sm text-gray-600 dark:text-gray-400 text-right pt-1">
+    <label className="text-sm text-muted-foreground text-right pt-1">
       {label}
       {required && <span className="text-red-500 ml-1">*</span>}
     </label>
@@ -128,7 +128,7 @@ export const CleanCompactField = ({
     fullWidth ? 'md:col-span-2' : '',
     className
   )}>
-    <label className="text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap min-w-[120px] text-right">
+    <label className="text-sm text-muted-foreground whitespace-nowrap min-w-[120px] text-right">
       {label}
       {required && <span className="text-red-500 ml-1">*</span>}
     </label>
@@ -150,7 +150,7 @@ export const CleanFieldGroup = ({
 }) => (
   <div className={cn("space-y-1", className)}>
     {title && (
-      <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+      <h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-3">
         {title}
       </h3>
     )}
@@ -185,7 +185,7 @@ export const CleanSection = ({
   className?: string;
 }) => (
   <div className={cn(
-    "bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800",
+    "bg-background rounded-lg border border-border",
     "p-6 space-y-6",
     className
   )}>
@@ -225,7 +225,7 @@ export const CleanStatusBadge = ({
     warning: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400',
     error: 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400',
     info: 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400',
-    default: 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
+    default: 'bg-muted text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
   };
 
   return (
@@ -249,8 +249,8 @@ export const CleanButton = React.forwardRef<
 >(({ className, variant = 'secondary', size = 'md', ...props }, ref) => {
   const variants = {
     primary: 'bg-primary text-white hover:bg-primary/90',
-    secondary: 'bg-transparent border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800',
-    ghost: 'bg-transparent hover:bg-gray-50 dark:hover:bg-gray-800'
+    secondary: 'bg-transparent border border-border hover:bg-muted dark:hover:bg-gray-800',
+    ghost: 'bg-transparent hover:bg-muted dark:hover:bg-gray-800'
   };
 
   const sizes = {

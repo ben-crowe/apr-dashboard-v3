@@ -123,7 +123,7 @@ const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
   return (
     <div className="space-y-2">
       {/* Main Capture Row */}
-      <div className="flex items-center justify-between p-3 bg-white border rounded-lg hover:bg-gray-50/50 transition-colors">
+      <div className="flex items-center justify-between p-3 bg-card border rounded-lg hover:bg-muted/50 transition-colors">
         <div className="flex items-center gap-3 flex-1">
           {/* Status Icon */}
           <div className="flex items-center justify-center w-8 h-8">
@@ -132,7 +132,7 @@ const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
                 <Check className={`h-3 w-3 ${mapInfo.color}`} />
               </div>
             ) : (
-              <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center">
+              <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center">
                 {getMapIcon()}
               </div>
             )}
@@ -241,7 +241,7 @@ const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
       {/* Image Preview */}
       {currentImage && showPreview && (
         <div className="ml-11">
-          <div className="relative bg-gray-100 border border-gray-200 rounded-lg overflow-hidden">
+          <div className="relative bg-muted border border-border rounded-lg overflow-hidden">
             <img 
               src={currentImage} 
               alt={label}
@@ -251,7 +251,7 @@ const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
               <Button
                 variant="secondary"
                 size="icon"
-                className="h-7 w-7 bg-white/90 hover:bg-white"
+                className="h-7 w-7 bg-white/90 hover:bg-card"
                 onClick={() => window.open(currentImage, '_blank')}
                 title="View full size"
               >
@@ -260,7 +260,7 @@ const ScreenshotCapture: React.FC<ScreenshotCaptureProps> = ({
               <Button
                 variant="secondary"
                 size="icon"
-                className="h-7 w-7 bg-white/90 hover:bg-white"
+                className="h-7 w-7 bg-white/90 hover:bg-card"
                 title="Download image"
               >
                 <Download className="h-3 w-3" />

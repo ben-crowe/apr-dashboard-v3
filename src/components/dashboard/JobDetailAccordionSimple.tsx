@@ -20,10 +20,10 @@ const IndependentSection = ({
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
-    <div className="w-full border-2 border-blue-500 rounded-lg bg-white mb-4">
+    <div className="w-full border-2 border-blue-500 rounded-lg bg-card mb-4">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+        className="w-full px-4 py-3 flex items-center justify-between hover:bg-muted transition-colors"
       >
         <span className="text-base font-medium">{title}</span>
         <svg
@@ -36,7 +36,7 @@ const IndependentSection = ({
         </svg>
       </button>
       {isOpen && (
-        <div className="px-4 py-4 border-t border-gray-200">
+        <div className="px-4 py-4 border-t border-border">
           {children}
         </div>
       )}

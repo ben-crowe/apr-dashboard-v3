@@ -100,8 +100,8 @@ const WorkflowProgress: React.FC<WorkflowProgressProps> = ({ status, jobDetails 
                       : step.isCurrent
                       ? "bg-blue-500 border-blue-500 text-white animate-pulse"
                       : step.isAvailable
-                      ? "bg-white border-gray-300 text-gray-500"
-                      : "bg-gray-100 border-gray-200 text-gray-400"
+                      ? "bg-card border-border text-muted-foreground"
+                      : "bg-muted border-border text-gray-400"
                   )}
                 >
                   <Icon className="h-5 w-5" />
@@ -111,16 +111,16 @@ const WorkflowProgress: React.FC<WorkflowProgressProps> = ({ status, jobDetails 
                 <div className="mt-2 text-center">
                   <div className={cn(
                     "text-xs font-medium",
-                    step.isComplete ? "text-gray-600 dark:text-gray-400" :
+                    step.isComplete ? "text-muted-foreground" :
                     step.isCurrent ? "text-blue-600" :
-                    step.isAvailable ? "text-gray-700" :
+                    step.isAvailable ? "text-foreground" :
                     "text-gray-400"
                   )}>
                     {step.label}
                   </div>
                   <div className={cn(
                     "text-xs mt-0.5",
-                    step.isCurrent ? "text-blue-500 font-medium" : "text-gray-500"
+                    step.isCurrent ? "text-blue-500 font-medium" : "text-muted-foreground"
                   )}>
                     {step.description}
                   </div>

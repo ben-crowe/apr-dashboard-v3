@@ -106,7 +106,7 @@ const MultiDocumentUpload: React.FC<MultiDocumentUploadProps> = ({
   return (
     <div className="space-y-2">
       {/* Main Upload Area */}
-      <div className="flex items-center justify-between p-3 bg-white border rounded-lg hover:bg-gray-50/50 transition-colors">
+      <div className="flex items-center justify-between p-3 bg-card border rounded-lg hover:bg-muted/50 transition-colors">
         <div className="flex items-center gap-3 flex-1">
           {/* Status Icon */}
           <div className="flex items-center justify-center w-8 h-8">
@@ -115,7 +115,7 @@ const MultiDocumentUpload: React.FC<MultiDocumentUploadProps> = ({
                 <Check className="h-3 w-3 text-green-600" />
               </div>
             ) : (
-              <div className="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center">
+              <div className="w-5 h-5 rounded-full bg-muted flex items-center justify-center">
                 <FileText className="h-3 w-3 text-gray-400" />
               </div>
             )}
@@ -176,9 +176,9 @@ const MultiDocumentUpload: React.FC<MultiDocumentUploadProps> = ({
             const year = fileName.match(/\d{4}/)?.[0];
             
             return (
-              <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded text-xs">
+              <div key={index} className="flex items-center justify-between p-2 bg-muted rounded text-xs">
                 <div className="flex items-center gap-2">
-                  <FileText className="h-3 w-3 text-gray-500" />
+                  <FileText className="h-3 w-3 text-muted-foreground" />
                   <span>{fileName}</span>
                   {year && <Badge variant="secondary" className="h-4 text-xs">{year}</Badge>}
                 </div>
@@ -202,7 +202,7 @@ const MultiDocumentUpload: React.FC<MultiDocumentUploadProps> = ({
       {/* Newly Uploaded Files (before save) */}
       {uploadedFiles.length > 0 && (
         <div className="ml-11 space-y-1">
-          <p className="text-xs font-medium text-gray-600 mb-1">Ready to upload:</p>
+          <p className="text-xs font-medium text-muted-foreground mb-1">Ready to upload:</p>
           {uploadedFiles.map((file, index) => (
             <div key={index} className="flex items-center justify-between p-2 bg-blue-50 border border-blue-200 rounded text-xs">
               <div className="flex items-center gap-2">

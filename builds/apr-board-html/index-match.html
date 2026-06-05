@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>APR Board (MATCH v4 — locked card layout)</title>
+<style>
+  * { box-sizing: border-box }
+  html, body { margin: 0; padding: 0; background: #0b0f17; font-family: -apple-system, system-ui, sans-serif; color: #cbd5e1; }
+  body { padding: 80px 200px; }
+
+  /* Row container — stretch cards to same height so card bottoms align across row */
+  main {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 40px;
+    flex-wrap: nowrap;
+  }
+
+  /* Card — column flex so number can be pushed to bottom */
+  figure {
+    margin: 0;
+    width: 280px;
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Image slot — fixed height, image bottom-aligned (image tops float per aspect) */
+  .img-wrap {
+    height: 240px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    margin-bottom: 28px;            /* image-bottom → line   (tldraw: 163) */
+  }
+  figure img {
+    display: block;
+    max-width: 100%;
+    max-height: 240px;
+    object-fit: contain;
+    border-radius: 3px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+
+  /* Horizontal white line — unified row divider */
+  figure hr {
+    border: 0;
+    border-top: 1px solid #ffffff;
+    margin: 0 0 12px 0;              /* line → title  (tldraw: 50) */
+    width: 100%;
+  }
+
+  /* Title — green, bold */
+  figure h2 {
+    margin: 0 0 16px 0;              /* title → body  (tldraw: 75) */
+    font-size: 14px;
+    color: #34D399;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  /* Body — gray, wraps */
+  figure figcaption {
+    font-size: 11px;
+    color: #94a3b8;
+    line-height: 1.55;
+  }
+
+  /* Big number — pushed to bottom of card (aligns across row regardless of body length) */
+  figure .num {
+    margin-top: auto;
+    padding-top: 24px;
+    font-size: 56px;
+    color: #34D399;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1;
+  }
+</style>
+</head>
+<body>
+<main>
+    <figure>
+      <div class="img-wrap"><img src="assets/00-htmlcap-fieldreg.png" alt="Annotated DOM"></div>
+      <hr>
+      <h2>1. Annotated DOM (--annotate)</h2>
+      <figcaption>agent-browser screenshot --annotate. Overlays numbered red boxes on every ARIA element. Use for DOM mapping + handing refs to a peer.</figcaption>
+      <div class="num">1</div>
+    </figure>
+    <figure>
+      <div class="img-wrap"><img src="assets/01-htmlcap-fieldreg-clean.png" alt="Clean capture"></div>
+      <hr>
+      <h2>2. Clean capture (no flags)</h2>
+      <figcaption>Default agent-browser screenshot. 1280×577 viewport. Pure pixels, no overlay. Visual baseline.</figcaption>
+      <div class="num">2</div>
+    </figure>
+    <figure>
+      <div class="img-wrap"><img src="assets/02-htmlcap-fieldreg-zoom.png" alt="Zoom region"></div>
+      <hr>
+      <h2>3. Zoom region (PIL-crop)</h2>
+      <figcaption>Post-process crop on a clean shot. PIL src.crop((x1,y1,x2,y2)). Focus one region without re-shooting.</figcaption>
+      <div class="num">3</div>
+    </figure>
+    <figure>
+      <div class="img-wrap"><img src="assets/03-htmlcap-fieldreg-fullscreen.png" alt="Fullscreen-app size"></div>
+      <hr>
+      <h2>4. Fullscreen-app size</h2>
+      <figcaption>set viewport 1920 1080 → screenshot. Simulates HD desktop. BANNED against --cdp 9222 (resizes live KM-Exp).</figcaption>
+      <div class="num">4</div>
+    </figure>
+    <figure>
+      <div class="img-wrap"><img src="assets/04-htmlcap-fieldreg-fullpage.png" alt="Full scrollable page"></div>
+      <hr>
+      <h2>5. Full scrollable page (--full)</h2>
+      <figcaption>agent-browser screenshot --full. Captures entire document beyond the fold. Output is tall.</figcaption>
+      <div class="num">5</div>
+    </figure>
+    <figure>
+      <div class="img-wrap"><img src="assets/05-htmlcap-logic-tab-tophalf.png" alt="Multi-step DOM"></div>
+      <hr>
+      <h2>6. Multi-step DOM (click → capture)</h2>
+      <figcaption>open → snapshot -i → click @eN → re-snapshot → screenshot. Refs are session-scoped — always snapshot before click.</figcaption>
+      <div class="num">6</div>
+    </figure>
+    <figure>
+      <div class="img-wrap"><img src="assets/06-lf-section.png" alt="Size: Section"></div>
+      <hr>
+      <h2>7. Size: Section (1280×577)</h2>
+      <figcaption>Default viewport. Above-the-fold view. Vocabulary anchor — "Section" = standard headless capture.</figcaption>
+      <div class="num">7</div>
+    </figure>
+    <figure>
+      <div class="img-wrap"><img src="assets/07-lf-monitor.png" alt="Size: Monitor"></div>
+      <hr>
+      <h2>8. Size: Monitor (1920×1080)</h2>
+      <figcaption>Full HD desktop viewport. Vocabulary anchor — "Monitor" = HD display preview. Requires set viewport.</figcaption>
+      <div class="num">8</div>
+    </figure>
+    <figure>
+      <div class="img-wrap"><img src="assets/08-lf-full.png" alt="Size: Full"></div>
+      <hr>
+      <h2>9. Size: Full (entire scroll)</h2>
+      <figcaption>Entire scrollable document regardless of viewport. Vocabulary anchor — "Full" = top-to-bottom everything. Requires --full.</figcaption>
+      <div class="num">9</div>
+    </figure>
+</main>
+</body>
+</html>

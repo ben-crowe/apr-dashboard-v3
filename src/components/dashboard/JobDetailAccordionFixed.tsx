@@ -25,8 +25,8 @@ const JobDetailAccordionFixed: React.FC<JobDetailAccordionFixedProps> = ({
 
   return (
     // MASTER CONTAINER - Contains all sections
-    <div className="w-full border-2 border-gray-300 rounded-lg bg-white shadow-lg p-4">
-      <h2 className="text-lg font-bold mb-4 text-gray-700">All Job Details</h2>
+    <div className="w-full border-2 border-border rounded-lg bg-card shadow-lg p-4">
+      <h2 className="text-lg font-bold mb-4 text-foreground">All Job Details</h2>
       
       {/* Section 1 - Client Submission (Independent) */}
       <div className="mb-4">

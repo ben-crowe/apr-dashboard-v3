@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>APR Board (FIXED 400px panels)</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --border: #334155;
+  }
+  * { box-sizing: border-box }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, system-ui, "SF Pro Display", sans-serif; }
+  header.board-head {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0;
+    background: rgba(15,23,42,0.92);
+    backdrop-filter: blur(8px);
+    z-index: 10;
+  }
+  header.board-head h1 { margin: 0 0 6px; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
+  header.board-head p { margin: 0; color: var(--muted); font-size: 13px; }
+  main.board {
+    display: grid;
+    grid-template-columns: repeat(9, 400px);
+    gap: 20px;
+    padding: 28px 40px;
+    width: max-content;
+  }
+  article.panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    width: 400px;
+  }
+  .panel-head {
+    padding: 10px 14px;
+    border-bottom: 1px solid;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .panel-head h3 { margin: 0; font-size: 13px; font-weight: 600; color: #0f172a; line-height: 1.3; }
+  .panel-num { font-size: 11px; font-weight: 700; color: rgba(0,0,0,0.55); padding: 2px 6px; background: rgba(255,255,255,0.5); border-radius: 4px; }
+  .panel-img-wrap {
+    background: #0a0f1c;
+    border-bottom: 1px solid var(--border);
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .panel-img-wrap img { width: 100%; height: 100%; object-fit: contain; }
+  .panel-desc {
+    padding: 12px 14px 16px;
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.55;
+    color: #cbd5e1;
+    flex: 1;
+  }
+  /* Fixed-width — no responsive reflow. */
+</style>
+</head>
+<body>
+<header class="board-head">
+  <h1>APR Field Registry — Capture Methods Board</h1>
+  <p>9-panel reference of headless screenshot capture techniques. FIXED-width variant — panels stay 400px regardless of viewer size. Whitespace fills extra space.</p>
+</header>
+<main class="board">
+
+  <article class="panel" data-cat="cap">
+    <header class="panel-head" style="background:#dbeafe;border-color:#1e40af">
+      <span class="panel-num">#1</span>
+      <h3>Headless capture: field-registry-v6</h3>
+    </header>
+    <div class="panel-img-wrap">
+      <img src="assets/00-htmlcap-fieldreg.png" alt="Headless capture: field-registry-v6" loading="lazy">
+    </div>
+    <p class="panel-desc">Source: https://apr-dashboard-v3.vercel.app/field-registry-v6.html (headless agent-browser open + screenshot --annotate, NOT km-shot). Page title: &#x27;Valta Field Registry Explorer&#x27;. DOM snapshot: 552 ARIA elements — 17 buttons, 3 headings (Valta Field Registry Explorer / Columns / Rule Audit), 8 form inputs (textbox/combobox/checkbox), 0 links. Two modal panels detected via close-button (✕) heuristic: &#x27;Columns&#x27; panel @e7 + &#x27;Rule Audit&#x27; panel @e9. Screenshot dims: 1280×577 px (viewport-only — page is much taller, full body scroll content not captured by default; pass --full for full scrollable). Annotate flag drew 552 red boxes mapping every clickable + landmark element to @eN refs. Console: clean (no errors). Workflow: agent-browser open URL → snapshot -i (DOM with refs) → screenshot --annotate (visual + refs) → console (errors) → close.</p>
+  </article>
+  <article class="panel" data-cat="cap">
+    <header class="panel-head" style="background:#dbeafe;border-color:#1e40af">
+      <span class="panel-num">#2</span>
+      <h3>Headless capture: clean (no annotate)</h3>
+    </header>
+    <div class="panel-img-wrap">
+      <img src="assets/01-htmlcap-fieldreg-clean.png" alt="Headless capture: clean (no annotate)" loading="lazy">
+    </div>
+    <p class="panel-desc">Source: same URL, agent-browser open + screenshot (no flags). Pure visual — no red boxes, no element refs. Screenshot dims: 1280x577. Use case: client preview, design review, before/after compare. Audience: designer + client. Workflow: agent-browser open URL → screenshot &lt;path&gt; → close. Note: viewport-only by default; pass --full for entire scrollable page.</p>
+  </article>
+  <article class="panel" data-cat="zoom">
+    <header class="panel-head" style="background:#fef3c7;border-color:#b45309">
+      <span class="panel-num">#3</span>
+      <h3>Headless capture: zoom region</h3>
+    </header>
+    <div class="panel-img-wrap">
+      <img src="assets/02-htmlcap-fieldreg-zoom.png" alt="Headless capture: zoom region" loading="lazy">
+    </div>
+    <p class="panel-desc">Source: PIL-crop on the clean screenshot. Crop bounds (640x288 logical viewport): x=140-1120, y=130-530 → 980x400 cropped pixels. Use case: highlight a specific section (here: FIELD REGISTRY data grid) without distracting top chrome. Workflow: agent-browser open URL → screenshot full → PIL crop (left,top,right,bottom) → save. Alternative: agent-browser snapshot to find element ref, get bounding rect via eval, then PIL-crop using those coords (precise pinpoint).</p>
+  </article>
+  <article class="panel" data-cat="cap">
+    <header class="panel-head" style="background:#dbeafe;border-color:#1e40af">
+      <span class="panel-num">#4</span>
+      <h3>Headless capture: full-screen app size</h3>
+    </header>
+    <div class="panel-img-wrap">
+      <img src="assets/03-htmlcap-fieldreg-fullscreen.png" alt="Headless capture: full-screen app size" loading="lazy">
+    </div>
+    <p class="panel-desc">Source: same URL. agent-browser open URL → set viewport 1920 1080 → screenshot → close. Screenshot dims: 1920x1080. Native desktop viewport. Sees the whole field-registry table with many more rows than the default 1280x577 viewport. Note: set viewport is SAFE in standalone agent-browser (its own isolated headless Chrome). BANNED against --cdp 9222 (would resize the live KM-Exp app). Use case: realistic full-page client preview at full HD, marketing demos, what-the-app-looks-like-on-a-laptop captures.</p>
+  </article>
+  <article class="panel" data-cat="cap">
+    <header class="panel-head" style="background:#dbeafe;border-color:#1e40af">
+      <span class="panel-num">#5</span>
+      <h3>Headless capture: full page (--full)</h3>
+    </header>
+    <div class="panel-img-wrap">
+      <img src="assets/04-htmlcap-fieldreg-fullpage.png" alt="Headless capture: full page (--full)" loading="lazy">
+    </div>
+    <p class="panel-desc">Source: agent-browser open URL → screenshot --full → close. Captures the ENTIRE scrollable document, not just the viewport. Native dims: 1265x1906 — page is ~3.3x taller than the default 577px viewport. Shows all 45 Valta Dashboard fields from JobNumber to the bottom of the table in one image. Use case: full page reviews for clients (&#x27;here&#x27;s the whole page top to bottom&#x27;), long landing pages, scrollable dashboards, multi-fold marketing pages where the fold-only capture is misleading. Trade-off: very tall image — display at 1200 wide → 1808 tall on canvas. Use this when content height matters more than visual compactness.</p>
+  </article>
+  <article class="panel" data-cat="multi">
+    <header class="panel-head" style="background:#fce7f3;border-color:#be185d">
+      <span class="panel-num">#6</span>
+      <h3>Multi-step: click tab → capture section</h3>
+    </header>
+    <div class="panel-img-wrap">
+      <img src="assets/05-htmlcap-logic-tab-tophalf.png" alt="Multi-step: click tab → capture section" loading="lazy">
+    </div>
+    <p class="panel-desc">Delegation: &#x27;open URL, click Logic Fields tab, capture top half of viewport&#x27;. Workflow (no coordinate guessing): (1) agent-browser open URL. (2) snapshot -i → DOM tree with refs. Found 3 matches for &#x27;Logic Fields&#x27; — picked @e5 (button, the tab), ignored @e15 (filter label) + @e26 (filter checkbox) by role. (3) agent-browser click @e5 → click by REF, not pixel coords; browser handles the mapping. (4) snapshot -i again to confirm new DOM state — tab is now active, content swapped to Cascade Logic with Scenario Groups + Group 1 Property Rights triggers. (5) screenshot /tmp/...png — 1280x577 viewport. (6) PIL-crop top half → 1280x288. (7) close. Key principle: read DOM → identify by role+text → click ref → re-snapshot to verify → capture. Never guess coords. Never click without verifying the AFTER state.</p>
+  </article>
+  <article class="panel" data-cat="size">
+    <header class="panel-head" style="background:#dcfce7;border-color:#15803d">
+      <span class="panel-num">#7</span>
+      <h3>Size: Section (1280×577)</h3>
+    </header>
+    <div class="panel-img-wrap">
+      <img src="assets/06-lf-section.png" alt="Size: Section (1280×577)" loading="lazy">
+    </div>
+    <p class="panel-desc">Section size = default viewport, 1280×577. Above-the-fold view. Same dims as Card 2 (clean viewport on Field Registry tab). Captured AFTER clicking Logic Fields tab — shows the Cascade Logic content. Cmd: agent-browser screenshot &lt;path&gt; (no flags). Use when: &#x27;show me the section&#x27;, &#x27;above the fold&#x27;, &#x27;first screen view&#x27;.</p>
+  </article>
+  <article class="panel" data-cat="size">
+    <header class="panel-head" style="background:#dcfce7;border-color:#15803d">
+      <span class="panel-num">#8</span>
+      <h3>Size: Monitor (1920×1080)</h3>
+    </header>
+    <div class="panel-img-wrap">
+      <img src="assets/07-lf-monitor.png" alt="Size: Monitor (1920×1080)" loading="lazy">
+    </div>
+    <p class="panel-desc">Monitor size = full HD desktop viewport. Cmd: agent-browser set viewport 1920 1080 → screenshot. Sees significantly more content than Section since the viewport is bigger — Group 3 &#x27;No logic configured&#x27; + the &#x27;+ Create Logic Field&#x27; button + the RULE EXPLORER section at the bottom are all visible now. Use when: &#x27;monitor size&#x27;, &#x27;desktop preview&#x27;, &#x27;show me what a laptop user sees&#x27;. Reminder: set viewport is safe on standalone agent-browser. BANNED against --cdp 9222.</p>
+  </article>
+  <article class="panel" data-cat="size">
+    <header class="panel-head" style="background:#dcfce7;border-color:#15803d">
+      <span class="panel-num">#9</span>
+      <h3>Size: Full (entire scrollable doc)</h3>
+    </header>
+    <div class="panel-img-wrap">
+      <img src="assets/08-lf-full.png" alt="Size: Full (entire scrollable doc)" loading="lazy">
+    </div>
+    <p class="panel-desc">Full size = entire scrollable document, regardless of viewport. Cmd: agent-browser screenshot --full &lt;path&gt;. Edge case observed here: --full returned 1920×1080 — SAME as Monitor — because the Logic Fields page CONTENT fits within the 1920×1080 viewport (no scroll required). So Full == Monitor for short pages, but Full &gt;&gt; Monitor on tall pages like the Field Registry tab (Card 5 = 1265×1906). Use when: &#x27;full page&#x27;, &#x27;top to bottom&#x27;, &#x27;all of it&#x27;. Don&#x27;t assume Full is always bigger than Monitor — depends on page content height.</p>
+  </article>
+</main>
+</body>
+</html>

@@ -146,10 +146,10 @@ const OrganizingDocsSectionIndependent: React.FC<SectionProps> = ({
 
   // COMPLETELY INDEPENDENT COMPONENT
   return (
-    <div className="w-full border rounded-lg bg-white shadow-sm">
+    <div className="w-full border rounded-lg bg-card shadow-sm">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors border-b"
+        className="w-full px-4 py-3 flex items-center justify-between hover:bg-muted transition-colors border-b"
       >
         <div className="flex items-center gap-2">
           {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
@@ -213,7 +213,7 @@ const OrganizingDocsSectionIndependent: React.FC<SectionProps> = ({
               variant="ghost"
               size="sm"
               onClick={fillTestData}
-              className="text-gray-600"
+              className="text-muted-foreground"
             >
               Fill Test Data
             </Button>

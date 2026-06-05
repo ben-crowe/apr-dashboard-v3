@@ -151,7 +151,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           <button
             type="button"
             onClick={fillClientTestData}
-            className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1 transition-colors"
+            className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
             title="Fill test data for development"
           >
             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

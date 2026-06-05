@@ -137,10 +137,10 @@ const LoeQuoteSectionIndependent: React.FC<SectionProps> = ({
 
   // COMPLETELY INDEPENDENT COMPONENT
   return (
-    <div className="w-full border rounded-lg bg-white shadow-sm">
+    <div className="w-full border rounded-lg bg-card shadow-sm">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-3 flex items-center justify-between hover:bg-gray-50 transition-colors border-b"
+        className="w-full px-4 py-3 flex items-center justify-between hover:bg-muted transition-colors border-b"
       >
         <div className="flex items-center gap-2">
           {isOpen ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
@@ -199,7 +199,7 @@ const LoeQuoteSectionIndependent: React.FC<SectionProps> = ({
               variant="ghost"
               size="sm"
               onClick={fillTestData}
-              className="text-gray-600"
+              className="text-muted-foreground"
             >
               Fill Test Data
             </Button>
@@ -256,7 +256,7 @@ const LoeQuoteSectionIndependent: React.FC<SectionProps> = ({
                 value={jobDetails.retainerAmount || ''}
                 onChange={handleChange}
                 placeholder="Auto-calculated"
-                className="h-7 text-sm bg-gray-50"
+                className="h-7 text-sm bg-muted"
                 readOnly
               />
             </CompactField>
@@ -265,7 +265,7 @@ const LoeQuoteSectionIndependent: React.FC<SectionProps> = ({
           {/* Valcre Integration Status */}
           {jobDetails.valcreJobId && (
             <SectionGroup title="Valcre Integration">
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-muted-foreground">
                 <p>Valcre Job ID: <span className="font-mono">{jobDetails.valcreJobId}</span></p>
                 {jobDetails.lastValcreSync && (
                   <p>Last Sync: {new Date(jobDetails.lastValcreSync).toLocaleString()}</p>
@@ -280,7 +280,7 @@ const LoeQuoteSectionIndependent: React.FC<SectionProps> = ({
               <div className="text-sm text-green-600">
                 ✅ LOE Generated and Sent
                 {jobDetails.loeSentAt && (
-                  <span className="text-gray-500 ml-2">
+                  <span className="text-muted-foreground ml-2">
                     ({new Date(jobDetails.loeSentAt).toLocaleString()})
                   </span>
                 )}

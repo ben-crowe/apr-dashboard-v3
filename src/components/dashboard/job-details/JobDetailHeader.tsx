@@ -36,7 +36,7 @@ const JobDetailHeader: React.FC<JobDetailHeaderProps> = ({ job, onBack, isSaving
         variant="ghost"
         size="sm"
         onClick={onBack}
-        className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors text-sm font-medium hover:bg-transparent dark:hover:bg-transparent"
+        className="text-muted-foreground hover:text-foreground dark:hover:text-gray-200 transition-colors text-sm font-medium hover:bg-transparent dark:hover:bg-transparent"
       >
         <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
         Back

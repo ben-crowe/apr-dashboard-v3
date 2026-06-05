@@ -328,7 +328,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
         <div className="flex justify-between items-center pb-2 border-b">
           <div>
             <h2 className="text-lg font-semibold">Edit LOE Template</h2>
-            <p className="text-sm text-gray-600">Edit template content and preview changes</p>
+            <p className="text-sm text-muted-foreground">Edit template content and preview changes</p>
           </div>
           
           {/* Zoom Controls */}
@@ -337,13 +337,13 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
               variant="ghost"
               size="sm"
               onClick={handleZoomOut}
-              className="h-6 w-6 p-0 hover:bg-transparent dark:hover:bg-transparent text-gray-600 dark:text-gray-400"
+              className="h-6 w-6 p-0 hover:bg-transparent dark:hover:bg-transparent text-muted-foreground"
               title="Zoom Out"
             >
               <ZoomOut className="h-3 w-3" />
             </Button>
             
-            <span className="text-xs font-medium px-2 min-w-[45px] text-center text-gray-600 dark:text-gray-400">
+            <span className="text-xs font-medium px-2 min-w-[45px] text-center text-muted-foreground">
               {zoomLevel}%
             </span>
             
@@ -351,7 +351,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
               variant="ghost"
               size="sm"
               onClick={handleZoomIn}
-              className="h-6 w-6 p-0 hover:bg-transparent dark:hover:bg-transparent text-gray-600 dark:text-gray-400"
+              className="h-6 w-6 p-0 hover:bg-transparent dark:hover:bg-transparent text-muted-foreground"
               title="Zoom In"
             >
               <ZoomIn className="h-3 w-3" />
@@ -361,7 +361,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
               variant="ghost"
               size="sm"
               onClick={handleZoomReset}
-              className="h-6 w-6 p-0 hover:bg-transparent dark:hover:bg-transparent text-gray-600 dark:text-gray-400"
+              className="h-6 w-6 p-0 hover:bg-transparent dark:hover:bg-transparent text-muted-foreground"
               title="Reset Zoom"
             >
               <RotateCcw className="h-3 w-3" />
@@ -381,7 +381,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
         <div className="flex flex-1 min-h-0 overflow-hidden pt-4 gap-2" data-resize-container>
           {/* Form Editor Side */}
           <div 
-            className="flex flex-col min-w-0 border rounded-lg bg-white dark:bg-gray-900 relative"
+            className="flex flex-col min-w-0 border rounded-lg bg-background relative"
             style={{ width: `calc(${leftPanelWidth}% - 8px)`, minWidth: '300px' }}
           >
             {/* Resizer Divider - Part of editor panel border */}
@@ -394,18 +394,18 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
             {/* Container with padding for content */}
             <div className="flex flex-col flex-1 min-h-0 overflow-hidden p-3">
               {/* Font Size Control - Fixed Position Header */}
-              <div className="flex items-center justify-end gap-1 sticky top-0 z-20 border-b border-gray-200 dark:border-gray-700 mb-2 -mx-3 px-3 py-2 bg-white dark:bg-gray-900 shadow-sm">
+              <div className="flex items-center justify-end gap-1 sticky top-0 z-20 border-b border-border mb-2 -mx-3 px-3 py-2 bg-background shadow-sm">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleFontSizeDecrease}
-                className="h-5 w-5 p-0 hover:bg-transparent dark:hover:bg-transparent text-gray-600 dark:text-gray-400"
+                className="h-5 w-5 p-0 hover:bg-transparent dark:hover:bg-transparent text-muted-foreground"
                 title="Decrease Font Size"
               >
                 <ChevronDown className="h-3 w-3" />
               </Button>
               
-              <span className="text-xs font-medium px-1 min-w-[30px] text-center text-gray-600 dark:text-gray-400">
+              <span className="text-xs font-medium px-1 min-w-[30px] text-center text-muted-foreground">
                 {fontSize}px
               </span>
               
@@ -413,7 +413,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={handleFontSizeIncrease}
-                className="h-5 w-5 p-0 hover:bg-transparent dark:hover:bg-transparent text-gray-600 dark:text-gray-400"
+                className="h-5 w-5 p-0 hover:bg-transparent dark:hover:bg-transparent text-muted-foreground"
                 title="Increase Font Size"
               >
                 <ChevronUp className="h-3 w-3" />
@@ -427,7 +427,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
               {/* DOCUMENT ORDER RENDERING - Shows both editable and read-only sections */}
 
               {/* Header - Read-only */}
-              <div className="text-gray-400 dark:text-gray-500 text-xs mb-2 pb-2 border-b border-gray-200 dark:border-gray-700 select-none">
+              <div className="text-gray-400 dark:text-muted-foreground text-xs mb-2 pb-2 border-b border-border select-none">
                 [Company Logo]
                 <div className="text-right">
                   [Date]<br/>
@@ -442,7 +442,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 const currentValue = sections.get(section.id) || '';
                 return (
                   <div className="mb-3">
-                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Subject Line</div>
+                    <div className="text-xs font-medium text-muted-foreground mb-1">Subject Line</div>
                     <div className="space-y-1">
                       <Textarea
                         value={currentValue}
@@ -451,7 +451,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                           handleTextareaResize(e);
                         }}
                         data-auto-resize="true"
-                        className="w-full p-2 border border-gray-300 dark:border-gray-700 rounded resize-none bg-white dark:bg-gray-800/50 text-gray-900 dark:text-gray-100 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                        className="w-full p-2 border border-border rounded resize-none bg-card text-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                         rows={1}
                         style={{ 
                           fontSize: `${fontSize}px`, 
@@ -461,7 +461,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                         }}
                       />
                       {section.placeholders.length > 0 && (
-                        <div className="text-xs text-gray-400 dark:text-gray-500 italic select-none px-2">
+                        <div className="text-xs text-gray-400 dark:text-muted-foreground italic select-none px-2">
                           {section.placeholders.join(', ')}
                         </div>
                       )}
@@ -476,7 +476,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 const currentValue = sections.get(section.id) || '';
                 return (
                   <div className="mb-3">
-                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Introduction Paragraph</div>
+                    <div className="text-xs font-medium text-muted-foreground mb-1">Introduction Paragraph</div>
                     <Textarea
                       value={currentValue}
                       onChange={(e) => {
@@ -484,7 +484,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                         handleTextareaResize(e);
                       }}
                       data-auto-resize="true"
-                      className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                      className="w-full p-2 border border-border rounded resize-none bg-muted dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                       rows={1}
                       style={{ 
                         fontSize: `${fontSize}px`, 
@@ -498,10 +498,10 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
               })()}
 
               {/* Property Details Table - All fields editable */}
-              <div className="mb-3 text-sm border border-gray-200 dark:border-gray-700 rounded overflow-hidden">
-                <div className="text-xs font-semibold bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 px-2 py-1 border-b border-gray-200 dark:border-gray-700">Property Details</div>
+              <div className="mb-3 text-sm border border-border rounded overflow-hidden">
+                <div className="text-xs font-semibold bg-muted text-foreground px-2 py-1 border-b border-border">Property Details</div>
 
-                <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                <div className="divide-y divide-border">
                   {/* All table rows are editable - users can override field values */}
                   {editableSections
                     .filter(s => s.id.startsWith('table-row-'))
@@ -509,7 +509,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                       const currentValue = sections.get(section.id) || '';
                       return (
                         <div key={section.id} className="px-2 py-1">
-                          <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-0.5">{section.label}</div>
+                          <div className="text-xs font-medium text-foreground mb-0.5">{section.label}</div>
                           <Textarea
                             value={currentValue}
                             onChange={(e) => {
@@ -517,7 +517,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                               handleTextareaResize(e);
                             }}
                             data-auto-resize="true"
-                            className="w-full text-xs p-1 border border-gray-300 dark:border-gray-700 rounded resize-none bg-white dark:bg-gray-800/50 text-gray-900 dark:text-gray-100 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                            className="w-full text-xs p-1 border border-border rounded resize-none bg-card text-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                             rows={1}
                             style={{ 
                               fontSize: `${fontSize}px`, 
@@ -538,7 +538,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 const currentValue = sections.get(section.id) || '';
                 return (
                   <div className="mb-3">
-                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Terms & Conditions</div>
+                    <div className="text-xs font-medium text-muted-foreground mb-1">Terms & Conditions</div>
                     <Textarea
                       value={currentValue}
                       onChange={(e) => {
@@ -546,7 +546,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                         handleTextareaResize(e);
                       }}
                       data-auto-resize="true"
-                      className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                      className="w-full p-2 border border-border rounded resize-none bg-muted dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                       rows={1}
                       style={{ 
                         fontSize: `${fontSize}px`, 
@@ -565,7 +565,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 const currentValue = sections.get(section.id) || '';
                 return (
                   <div className="mb-3">
-                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Closing Statement</div>
+                    <div className="text-xs font-medium text-muted-foreground mb-1">Closing Statement</div>
                     <Textarea
                       value={currentValue}
                       onChange={(e) => {
@@ -573,7 +573,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                         handleTextareaResize(e);
                       }}
                       data-auto-resize="true"
-                      className="w-full p-2 border border-gray-200 dark:border-gray-700 rounded resize-none bg-gray-50 dark:bg-gray-800/50 dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                      className="w-full p-2 border border-border rounded resize-none bg-muted dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                       rows={1}
                       style={{ 
                         fontSize: `${fontSize}px`, 
@@ -587,7 +587,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
               })()}
 
               {/* Signature Block - Read-only */}
-              <div className="text-gray-400 dark:text-gray-500 text-xs select-none mt-4 pt-2 border-t border-gray-200 dark:border-gray-700">
+              <div className="text-gray-400 dark:text-muted-foreground text-xs select-none mt-4 pt-2 border-t border-border">
                 <div>Sincerely,</div>
                 <div className="font-semibold">Valta Property Valuations Ltd.</div>
                 <div className="mt-2">[Signature Image]</div>
@@ -601,7 +601,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
               </div>
 
               {/* Footer with save buttons */}
-              <div className="flex gap-2 mt-2 px-2 py-2 border-t sticky bottom-0 bg-white dark:bg-gray-900 z-10 -mx-3 px-3">
+              <div className="flex gap-2 mt-2 px-2 py-2 border-t sticky bottom-0 bg-background z-10 -mx-3 px-3">
               <Button 
                 onClick={handleSaveClick} 
                 variant="outline" 
@@ -628,12 +628,12 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
 
           {/* Preview Side */}
           <div 
-            className="border rounded-lg overflow-hidden min-w-0 bg-gray-50 dark:bg-gray-800 flex flex-col"
+            className="border rounded-lg overflow-hidden min-w-0 bg-muted flex flex-col"
             style={{ width: `calc(${100 - leftPanelWidth}% - 8px)`, minWidth: '300px' }}
           >
             
             {/* Preview Container with Zoom */}
-            <div className="flex-1 overflow-auto min-h-0 bg-gray-50 dark:bg-gray-800">
+            <div className="flex-1 overflow-auto min-h-0 bg-muted">
               {(() => {
                 console.log('TemplateEditorModal: Rendering preview panel', {
                   hasPreviewUrl: !!previewUrl,
@@ -652,7 +652,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                       <iframe
                         key={previewUrl} // Force re-render when URL changes
                         src={previewUrl}
-                        className="border bg-white shadow-sm"
+                        className="border bg-card shadow-sm"
                         style={{
                           width: '100%',
                           height: '100%',
@@ -678,7 +678,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                   );
                 } else if (initialHTML) {
                   return (
-                    <div className="flex items-center justify-center h-full text-gray-500">
+                    <div className="flex items-center justify-center h-full text-muted-foreground">
                       <div className="text-center">
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-gray-100 mx-auto mb-2"></div>
                         <div>Generating preview...</div>
@@ -688,7 +688,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                   );
                 } else {
                   return (
-                    <div className="flex items-center justify-center h-full text-gray-500">
+                    <div className="flex items-center justify-center h-full text-muted-foreground">
                       <div>No template available</div>
                     </div>
                   );
@@ -701,7 +701,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
         {/* Save Dialog */}
         {showSaveDialog && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
+            <div className="bg-card p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
               <h3 className="text-lg font-semibold mb-4">Save Template</h3>
               
               <div className="space-y-4">
@@ -712,7 +712,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                     value={templateName}
                     onChange={(e) => setTemplateName(e.target.value)}
                     placeholder="e.g., Standard LOE, Commercial LOE"
-                    className="mt-1 bg-white border border-gray-300 text-gray-900 placeholder:text-gray-500 hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
+                    className="mt-1 bg-card border border-border text-foreground placeholder:text-muted-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
                   />
                 </div>
 

@@ -232,3 +232,19 @@ Pre-select Property Type = Multifamily and fire the cascade so Property Rights s
 - The Rule Explorer monospace diagrams (the prong/fork ASCII art) serve as visual headers for each rule group
 - Section title rows in the Rule Explorer tables are bold; data rows are normal weight
 - The entire page is a single HTML file with inline CSS and JS — no build step, no dependencies
+
+---
+
+## Status & Outcome
+
+**Current production realization:** `valta-field-registry-explorer-v6.html`. The cascade logic this brief describes is surfaced on the Logic Fields tab via the Group 3 configuration pattern (see PROTOTYPES-INDEX.md Key Decision #8).
+
+**What was kept:**
+- The cascade concept: trigger fields drive result fields through explicit rule mappings.
+- The Group 3 placeholder pattern: new user-defined cascade groups slot in alongside the existing Groups 1 and 2.
+
+**What was changed or dropped:**
+- The original brief assumed a full-dashboard form layout with a standalone "Logic Fields Only" view and inline field pickers. The inline-row spreadsheet pattern won instead (Key Decision #1 in PROTOTYPES-INDEX.md) — users edit fields directly in the registry table, not via a modal or picker overlay.
+- The "Stitch" picker UI (column-pair grid: TRIGGER LABEL / TRIGGER DROPDOWN / RESULT LABEL / RESULT DROPDOWN) was not carried forward. Logic configuration now happens via the Logic Fields tab after field creation, not inline on the dashboard form.
+
+**Superseding spec:** `v10-field-edit-spec.md` (States 10-13) is the current design contract for how logic configuration works in v6.

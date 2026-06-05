@@ -117,7 +117,7 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
   // Show status indicator
   const getStatusIcon = () => {
     if (job.clickup_task_id) {
-      return <CheckCircle2 className="w-4 h-4 text-gray-600 dark:text-gray-400" />;
+      return <CheckCircle2 className="w-4 h-4 text-muted-foreground" />;
     }
     if (error) {
       return <AlertCircle className="w-4 h-4 text-red-500" />;
@@ -137,7 +137,7 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
           variant="outline"
           size="sm"
           onClick={handleClick}
-          className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-gray-900 transition-colors text-sm font-medium"
+          className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground hover:bg-muted dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-foreground transition-colors text-sm font-medium"
         >
           <ExternalLink className="w-4 h-4" />
           View in ClickUp
@@ -150,7 +150,7 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
           size="sm"
           onClick={handleClick}
           disabled={isCreating}
-          className="border border-gray-300 dark:border-white/30 bg-background dark:bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-gray-900 transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed"
+          className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground hover:bg-muted dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-foreground transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed"
         >
           {isCreating ? (
             <>
@@ -175,7 +175,7 @@ const ClickUpAction: React.FC<ClickUpActionProps> = ({ job, jobDetails, onTaskCr
                   variant="outline"
                   size="sm"
                   disabled={true}
-                  className="border border-gray-200 dark:border-white/15 bg-transparent text-gray-400 dark:text-gray-500 cursor-not-allowed text-sm font-medium"
+                  className="border border-border dark:border-white/15 bg-transparent text-gray-400 dark:text-muted-foreground cursor-not-allowed text-sm font-medium"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Create ClickUp Task

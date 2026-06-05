@@ -24,9 +24,9 @@ const ActionButton: React.FC<ActionButtonProps> = ({
 }) => {
   // Map variants to standardized gray styling
   const variantClasses = {
-    primary: "bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700",
+    primary: "bg-muted hover:bg-muted dark:hover:bg-gray-700",
     success: "bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/30 border-green-200 dark:border-green-800",
-    outline: "bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700"
+    outline: "bg-muted hover:bg-muted dark:hover:bg-gray-700"
   };
 
   return (

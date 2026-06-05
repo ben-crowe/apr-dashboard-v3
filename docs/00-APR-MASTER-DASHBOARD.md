@@ -12,6 +12,8 @@ note: THE single front door. Open this first. Every active workflow, PRD, test d
 **This is the front door.** One page that links to every current area. Open here, navigate out.
 If you add a doc, add a link here.
 
+> **Agents start here:** [01-AGENT-ACCESS-LOGIN-PRIMING](~/Development/APR-Dashboard-v3/docs/01-AGENT-ACCESS-LOGIN-PRIMING.md) — the single login/access/CLI/priming sheet for the APR Dashboard, ClickUp, Supabase, and Valcre. Load the skills, log in, drive — never a guess.
+
 `#apr-workflow` `#apr-dashboard` `#master-index` — search any of these to surface the connected APR doc set.
 
 _Last updated 2026-06-05. Supersedes the prior `APR-MASTER-DASHBOARD.md` (archived — was stale to April)._

@@ -228,19 +228,24 @@ export async function generateLOEHTML(
   job: DetailJob,
   jobDetails: JobDetails,
   templateHTML?: string, // Optional: provide template HTML directly (preview path)
-  templateId?: string | null // Optional: explicit version choice; else job's choice / newest
+  templateId?: string | null, // Optional: explicit version choice; else job's choice / newest
+  templateVersion?: number // Optional: version that owns `templateHTML` (preview path) — picks the right mapper
 ): Promise<string> {
   // Version-aware load: explicit HTML > given templateId > job's chosen version > newest active
   const chosenId = templateId ?? (jobDetails as any).loeTemplateId ?? null;
   const loaded = await loadTemplateRow({ templateHTML, templateId: chosenId });
   let htmlTemplate = loaded.html;
 
+  // When previewing by raw HTML, loadTemplateRow can't know the version (returns 0) → the caller
+  // passes the row's version so we still pick the correct mapper (V07 tokens vs V3 tokens).
+  const effectiveVersion = (templateHTML && templateVersion != null) ? templateVersion : loaded.version;
+
   // Pair the template version with its placeholder vocabulary
-  const mapper = getMapperForVersion(loaded.version);
+  const mapper = getMapperForVersion(effectiveVersion);
   const fieldMappings = mapper(job, jobDetails);
 
   // V07 conditional sections (each drops + reflows + renumbers via the CSS-counter template):
-  if (loaded.version >= 6) {
+  if (effectiveVersion >= 6) {
     // (1) Schedule A — only for Multiple Properties.
     htmlTemplate = applyConditionalScheduleA(htmlTemplate, jobDetails);
     // (2) §10 EA/HC — if the cascade yields ZERO scenarios, drop the WHOLE section

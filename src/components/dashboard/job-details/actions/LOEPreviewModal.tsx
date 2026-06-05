@@ -72,16 +72,36 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
     }
   }, [documentHTML, isOpen]);
 
+  // Render a chosen template into the preview — passes the row's VERSION so the generator picks
+  // the right token mapper (V07 PascalCase vs V3 lowercase) + fires the version-gated cascade/
+  // suppression. Used both on open (default) and on dropdown change. View/edit ONLY — does not
+  // change which template the send path ships.
+  const renderTemplate = async (templateId: string): Promise<string | null> => {
+    const template = await loadTemplateById(templateId);
+    if (!template) {
+      toast.error('Template not found');
+      return null;
+    }
+    const regeneratedHTML = await generateLOEHTML(
+      job, jobDetails, template.template_html, template.id, (template as any).version,
+    );
+    setCurrentDocumentHTML(regeneratedHTML);
+    setEditedHTML(''); // Clear any edited HTML
+    setTemplateModified(false);
+    setSelectedTemplateId(templateId);
+    return template.name;
+  };
+
   const loadTemplates = async () => {
     setIsLoadingTemplates(true);
     try {
       const loadedTemplates = await loadAllTemplates();
       setTemplates(loadedTemplates);
-      
-      // Find default template
-      const defaultTemplate = loadedTemplates.find(t => t.is_default);
+
+      // Open on the default template (render it so the preview matches the picker selection).
+      const defaultTemplate = loadedTemplates.find(t => t.is_default) ?? loadedTemplates[0];
       if (defaultTemplate) {
-        setSelectedTemplateId(defaultTemplate.id);
+        await renderTemplate(defaultTemplate.id);
       }
     } catch (error) {
       console.error('Failed to load templates:', error);
@@ -93,23 +113,11 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
 
   const handleTemplateChange = async (templateId: string) => {
     if (templateId === selectedTemplateId) return;
-    
+
     setIsRegenerating(true);
     try {
-      const template = await loadTemplateById(templateId);
-      if (!template) {
-        toast.error('Template not found');
-        return;
-      }
-
-      // Regenerate LOE with selected template
-      const regeneratedHTML = await generateLOEHTML(job, jobDetails, template.template_html);
-      setCurrentDocumentHTML(regeneratedHTML);
-      setEditedHTML(''); // Clear any edited HTML
-      setTemplateModified(false);
-      setSelectedTemplateId(templateId);
-      
-      toast.success(`Loaded template: ${template.name}`);
+      const name = await renderTemplate(templateId);
+      if (name) toast.success(`Loaded template: ${name}`);
     } catch (error) {
       console.error('Failed to load template:', error);
       toast.error('Failed to load template');

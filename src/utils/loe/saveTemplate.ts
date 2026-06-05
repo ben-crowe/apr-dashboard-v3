@@ -73,12 +73,15 @@ export async function saveTemplate({
  */
 export async function loadAllTemplates(): Promise<LOETemplate[]> {
   try {
+    // PREVIEW PICKER: surface ALL templates (active or not) so every version — incl. a
+    // staged-but-not-live one (e.g. V07 default-but-inactive) — is selectable to view/edit.
+    // The SEND path is a SEPARATE loader (loadTemplateRow, newest-ACTIVE in generateLOE.ts)
+    // and is unaffected: making a template visible here does NOT put it in the send path.
     const { data, error } = await supabase
       .from('loe_templates')
       .select('*')
-      .eq('is_active', true)
       .order('is_default', { ascending: false })
-      .order('created_at', { ascending: false });
+      .order('version', { ascending: false });
 
     if (error) {
       console.error('Failed to load templates:', error);
@@ -120,11 +123,12 @@ export async function loadDefaultTemplate(): Promise<string | null> {
  */
 export async function loadTemplateById(templateId: string): Promise<LOETemplate | null> {
   try {
+    // No is_active filter — the preview picker can load ANY template (incl. a staged
+    // not-yet-live one) to view/edit. Send path is separate (loadTemplateRow), so this is safe.
     const { data, error } = await supabase
       .from('loe_templates')
       .select('*')
       .eq('id', templateId)
-      .eq('is_active', true)
       .single();
 
     if (error || !data) {

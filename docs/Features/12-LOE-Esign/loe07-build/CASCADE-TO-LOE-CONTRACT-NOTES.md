@@ -3,11 +3,11 @@ content_type: cascade-spec
 title: Cascade Field Options → LOE Contract — Special Instructions (SOURCE OF TRUTH)
 status: active — source of truth for this category; deeper reconcile in progress (2026-06-05)
 owner: co-architect (consolidates) · ui-designer + react-spec (build)
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 registry_v6: "https://apr-dashboard-v3.vercel.app/field-registry-v6.html (the Valta Registry V6 Rule Explorer — the live cascade rules). Local: public/field-registry-v6.html · prototype: builds/prototypes/valta-field-registry-explorer-v6.html"
 tags: [apr-workflow, cascade, cascade-to-loe, conditional-field-logic, value-scenarios, section-10, ea-hc, loe-07, registry-v6, source-of-truth]
 keywords: [cascade field options to LOE, conditional field logic, predefined fields on option combo, value scenarios approaches, status of improvements trigger, EA HC section 10, valta registry v6 rule explorer]
-related: [../../../valta share/CONDITIONAL-FIELD-LOGIC.md, SPECIAL-NOTES-future-deep-dives.md, LOE-07-RENDER-TWEAKS-2026-06-04.md, ../../08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md]
+related: ["~/Development/APR-Dashboard-v3/docs/valta share/CONDITIONAL-FIELD-LOGIC.md", ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/loe07-build/SPECIAL-NOTES-future-deep-dives.md, ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/loe07-build/LOE-07-RENDER-TWEAKS-2026-06-04.md, ~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md]
 ---
 
 # Cascade → LOE Contract — Special Instructions (EA/HC table + value scenarios)
@@ -19,7 +19,7 @@ related: [../../../valta share/CONDITIONAL-FIELD-LOGIC.md, SPECIAL-NOTES-future-
 > ## ⭐ The Valta Registry (V6) — go here for the live cascade rules
 > **Live:** https://apr-dashboard-v3.vercel.app/field-registry-v6.html (the Rule Explorer)
 > Local copy: `public/field-registry-v6.html` · prototype: `builds/prototypes/valta-field-registry-explorer-v6.html`
-> Full cascade rule reference (plain): [CONDITIONAL-FIELD-LOGIC.md](~/Development/APR-Dashboard-v3/docs/valta%20share/CONDITIONAL-FIELD-LOGIC.md)
+> Full cascade rule reference (plain): [CONDITIONAL-FIELD-LOGIC.md](~/Development/APR-Dashboard-v3/docs/valta share/CONDITIONAL-FIELD-LOGIC.md)
 
 > ## 🔧 Reconcile note (Ben, 2026-06-05) — simpler than "a playbook"
 > Ben's clarification: this is NOT a complicated separate "playbook." It's **predefined fields

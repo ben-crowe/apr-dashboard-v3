@@ -2,9 +2,9 @@
 content_type: sop
 title: Agent CLI & Browser Tooling — SOP for Driving the APR App
 status: living reference
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 tags: [apr-workflow, apr-testing, cli-tools, agent-browser, app-driving, screenshots, sync-verify]
-related: [APR-TESTING-PLAYBOOK.md, APR-TESTING-REFERENCE.md, ../tests/E2E-TESTING-WORKFLOW-MASTER.md]
+related: [~/Development/APR-Dashboard-v3/docs/APR-TESTING-PLAYBOOK.md, ~/Development/APR-Dashboard-v3/docs/APR-TESTING-REFERENCE.md, ~/Development/APR-Dashboard-v3/tests/E2E-TESTING-WORKFLOW-MASTER.md]
 ---
 
 # Agent CLI & Browser Tooling — SOP for Driving the APR App

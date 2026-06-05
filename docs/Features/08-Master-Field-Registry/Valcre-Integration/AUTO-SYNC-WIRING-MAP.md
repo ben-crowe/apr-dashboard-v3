@@ -3,16 +3,16 @@ content_type: wiring-map
 title: Auto-Sync Wiring Map — Job-Prep Fields → Valcre
 status: active — input for wiring, paired with the Sync Verification Report
 owner: qa-agent (verified) · react-spec (wires from it)
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 pairs_with: "Data-Flow Visuals/02-SYNC-VERIFICATION-RESULT.md — this map says HOW each field is wired/routed; the report PROVES it landed. Use them together."
 tags: [apr-workflow, apr-testing, sync-verification, auto-sync-wiring, valcre, field-mapping, VALCRE_SYNC_FIELDS, qa-verified, e2e]
 keywords: [auto sync wiring map, valcre sync fields, field to valcre target, native custom field routing, wire job-prep fields, sync verification pair]
-related: [../../../../Data-Flow Visuals/02-SYNC-VERIFICATION-RESULT.md, ../PRD-A-fields-to-valcre-mapping.md, 1-API-FIELD-MAPPING-REFERENCE.md]
+related: ["~/Development/APR-Dashboard-v3/Data-Flow Visuals/02-SYNC-VERIFICATION-RESULT.md", ~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/PRD-A-fields-to-valcre-mapping.md, ~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/1-API-FIELD-MAPPING-REFERENCE.md]
 ---
 
 # Auto-Sync Wiring Map — new job-prep fields → Valcre
 
-> **Pairs with the [Sync Verification Report](~/Development/APR-Dashboard-v3/Data-Flow%20Visuals/02-SYNC-VERIFICATION-RESULT.md).**
+> **Pairs with the [Sync Verification Report](~/Development/APR-Dashboard-v3/Data-Flow Visuals/02-SYNC-VERIFICATION-RESULT.md).**
 > This map = HOW each dashboard field is wired + routed to its Valcre target. The report = the
 > readback PROOF each one landed. Wiring map first (react-spec wires from it), verification
 > report second (QA proves it). Both QA-verified, both part of end-to-end sync testing.

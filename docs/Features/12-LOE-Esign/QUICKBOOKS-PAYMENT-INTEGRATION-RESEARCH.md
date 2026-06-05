@@ -2,9 +2,9 @@
 content_type: research
 title: QuickBooks Payment Integration — research findings (for the closing sequence)
 status: research (forked-agent findings 2026-06-04)
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 tags: [apr-workflow, quickbooks, payments, invoice-link, webhook, closing-sequence]
-related: [CLIENT-CLOSING-SEQUENCE-ROADMAP.md, LOE-DOCUSEAL-ARCHITECTURE.md]
+related: [~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/CLIENT-CLOSING-SEQUENCE-ROADMAP.md, ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/LOE-DOCUSEAL-ARCHITECTURE.md]
 note: Part 2 (flow architecture) landed. Part 1 (which QB product + CANADA availability) still pending.
 ---
 

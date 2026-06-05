@@ -5,7 +5,7 @@ phase1_prep: true
 ingest_proposed: true
 ingested: false
 tags: [apr-workflow, field-routing, clickup-card, loe-07, dashboard, job-prep, intake, APR]
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 created: 2026-06-03
 author: qa-agent
 sources:

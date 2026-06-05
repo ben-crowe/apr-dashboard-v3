@@ -4,10 +4,10 @@ title: QuickBooks Sandbox — Payment Closing Path (unblocks building now)
 status: proposal — ready to build against sandbox
 owner: qa-agent
 created: 2026-06-05
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 tags: [apr-workflow, closing-sequence, loe-closing, payment, quickbooks, sandbox, intuit, webhook, clickup, unblock]
 keywords: [quickbooks sandbox, intuit developer sandbox, build closing flow without merchant account, invoice only model, sign to paid sandbox, payment closing path]
-related: [CLIENT-CLOSING-SEQUENCE-ROADMAP.md, LOE-CLOSING-INFOGRAPHIC-PLAN.md, QUICKBOOKS-PAYMENT-INTEGRATION-RESEARCH.md, QUICKBOOKS-MERCHANT-APPLICATION-HOWTO.md, LOE-DOCUSEAL-ARCHITECTURE.md]
+related: [~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/CLIENT-CLOSING-SEQUENCE-ROADMAP.md, ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/LOE-CLOSING-INFOGRAPHIC-PLAN.md, ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/QUICKBOOKS-PAYMENT-INTEGRATION-RESEARCH.md, ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/QUICKBOOKS-MERCHANT-APPLICATION-HOWTO.md, ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/LOE-DOCUSEAL-ARCHITECTURE.md]
 ---
 
 # QuickBooks Sandbox — Payment Closing Path

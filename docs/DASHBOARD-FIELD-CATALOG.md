@@ -3,11 +3,11 @@ content_type: field-catalog
 title: APR Dashboard — Field Catalog & Dropdown Reference
 status: living reference
 owner: ui-designer (authors) · co-architect (organizes)
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 registry_v6: "https://apr-dashboard-v3.vercel.app/field-registry-v6.html (Valta Registry V6 — source of truth; 218-field client-facing subset)"
 tags: [apr-workflow, fields, field-catalog, dropdowns, registry-v6, cascade, source-of-truth]
 keywords: [dashboard field catalog, dropdown reference, valta field registry v6, field options, source of truth fields, cascade field reference]
-related: [Features/12-LOE-Esign/loe07-build/CASCADE-TO-LOE-CONTRACT-NOTES.md, "valta share/CONDITIONAL-FIELD-LOGIC.md", FIELD-ROUTING-dashboard-clickup-loe.md, Features/08-Master-Field-Registry/PRD-A-fields-to-valcre-mapping.md]
+related: [~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/loe07-build/CASCADE-TO-LOE-CONTRACT-NOTES.md, "~/Development/APR-Dashboard-v3/docs/valta share/CONDITIONAL-FIELD-LOGIC.md", ~/Development/APR-Dashboard-v3/docs/FIELD-ROUTING-dashboard-clickup-loe.md, ~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/PRD-A-fields-to-valcre-mapping.md]
 ---
 
 # APR Dashboard — Field Catalog & Dropdown Reference

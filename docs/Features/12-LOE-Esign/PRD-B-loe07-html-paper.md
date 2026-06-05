@@ -7,7 +7,7 @@ source_odt: ~/Development/KM-Exp/data/tasks/content/task_015q1z37/attachments/LO
 source_pdf: ~/Development/KM-Exp/data/tasks/content/task_015q1z37/attachments/LOE-Template-V07.pdf (visual reference / page-images for canvas)
 source: LOE-07-INTAKE-2026-06-03.md (structure + placeholder coverage)
 related: [LOE-07-INTAKE-2026-06-03.md, workflow-graphic-paper, html-first-phase]
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 tags: [apr-workflow, loe, loe-07, docuseal, html-render, section-10, cascade]
 ---
 

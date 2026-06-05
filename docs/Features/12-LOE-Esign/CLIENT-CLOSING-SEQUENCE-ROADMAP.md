@@ -3,9 +3,9 @@ content_type: roadmap
 title: Client Closing Sequence — sign → thank-you → QuickBooks payment → paid trigger
 status: roadmap (Ben vision 2026-06-04)
 owner: co-architect coordinates
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 tags: [apr-workflow, closing-sequence, docuseal, quickbooks, thank-you-page, paid-trigger]
-related: [LOE-DOCUSEAL-ARCHITECTURE.md, WIRING-SPEC-intake-clickup-chain-2026-06-04.md, CLIENT-CLOSING-SEQUENCE-ROADMAP.md]
+related: [~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/LOE-DOCUSEAL-ARCHITECTURE.md, WIRING-SPEC-intake-clickup-chain-2026-06-04.md, ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/CLIENT-CLOSING-SEQUENCE-ROADMAP.md]
 ---
 
 # Client Closing Sequence — Roadmap

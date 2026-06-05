@@ -3,10 +3,10 @@ content_type: roadmap-infographic
 title: LOE Closing Sequence — Canvas Infographic Plan (the closing roadmap visual)
 status: active — living roadmap; sandbox path unblocks the build
 owner: ui-designer (canvas) · co-architect (roadmap) · react-spec (wiring)
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 tags: [apr-workflow, closing-sequence, loe, docuseal, quickbooks, sandbox, thank-you-page, paid-trigger, data-flow, paper-canvas]
 keywords: [LOE closing sequence, sign to thank-you to quickbooks to paid, closing infographic, payment portal, paid webhook trigger, quickbooks sandbox reenact flow]
-related: [CLIENT-CLOSING-SEQUENCE-ROADMAP.md, QUICKBOOKS-PAYMENT-INTEGRATION-RESEARCH.md, QUICKBOOKS-MERCHANT-APPLICATION-HOWTO.md, "../../../Data-Flow Visuals/01-Data-Flow-Diagram.md"]
+related: [~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/CLIENT-CLOSING-SEQUENCE-ROADMAP.md, ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/QUICKBOOKS-PAYMENT-INTEGRATION-RESEARCH.md, ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/QUICKBOOKS-MERCHANT-APPLICATION-HOWTO.md, "~/Development/APR-Dashboard-v3/Data-Flow Visuals/01-Data-Flow-Diagram.md"]
 ---
 
 # LOE Closing Sequence — Canvas Infographic Plan
@@ -18,7 +18,7 @@ related: [CLIENT-CLOSING-SEQUENCE-ROADMAP.md, QUICKBOOKS-PAYMENT-INTEGRATION-RES
 > **Sandbox unblock (per QA):** a QuickBooks SANDBOX can reenact the full sign→thank-you→pay→paid
 > flow WITHOUT waiting on the real merchant-account approval — so the build isn't gated on Ben's
 > application. (Sandbox specifics being captured from QA → folded into the QB research doc.)
-> It extends the [data-flow board](~/Development/APR-Dashboard-v3/Data-Flow%20Visuals/01-Data-Flow-Diagram.md) to the right of the LOE stop.
+> It extends the [data-flow board](~/Development/APR-Dashboard-v3/Data-Flow Visuals/01-Data-Flow-Diagram.md) to the right of the LOE stop.
 
 **By:** ui-designer (dev-4) · **Date:** 2026-06-04
 **Source of truth:** `CLIENT-CLOSING-SEQUENCE-ROADMAP.md` (Ben's vision) + the live data-flow board (page 4-0, below the "APR Dashboard Below" divider).

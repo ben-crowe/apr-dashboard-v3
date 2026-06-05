@@ -3,11 +3,11 @@ content_type: build-spec
 title: LOE-07 Build-Ready Spec — §10 Cascade Wiring + 4 Visual Fixes
 status: BUILT — react-spec wired it (Section 10 cascade + de-table + footer/logo/spacing); see git
 owner: ui-designer (authored spec) · react-spec (built it)
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 pairs_with: "CASCADE-TO-LOE-CONTRACT-NOTES.md — those are the CONCEPT notes; THIS is the build-ready execution spec (the current, more-updated version). Read the notes for why, this for exactly how it was built."
 tags: [apr-workflow, cascade, cascade-to-loe, loe-07, section-10, ea-hc, build-spec, value-scenarios, narrative-library, registry-v6, footer, logo]
 keywords: [LOE-07 build-ready spec, section 10 cascade wiring, de-table, EA HC narrative lookup, value scenario fill, footer logo spacing fixes, generateLOE, build ready]
-related: [CASCADE-TO-LOE-CONTRACT-NOTES.md, "../../../valta share/CONDITIONAL-FIELD-LOGIC.md", SPECIAL-NOTES-future-deep-dives.md, "../../08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md"]
+related: [~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/loe07-build/CASCADE-TO-LOE-CONTRACT-NOTES.md, "~/Development/APR-Dashboard-v3/docs/valta share/CONDITIONAL-FIELD-LOGIC.md", ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/loe07-build/SPECIAL-NOTES-future-deep-dives.md, ~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md]
 ---
 
 # LOE-07 BUILD-READY SPEC → react-spec (§10 cascade wiring + 4 visual fixes)

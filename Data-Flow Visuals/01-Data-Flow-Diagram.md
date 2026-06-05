@@ -3,11 +3,11 @@ content_type: workflow-sop
 title: Data-Flow Visual Verification Workflow — Methodology + Shot Plan
 status: active — living document
 owner: qa-agent
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 paper_canvas: "Paper file: 'Build Workflow Testing' › page: 'APR Workflow' › board: 'DATA-FLOW BOARD — VAL261101 (Westside Mall)' (LOE assets sit above it on the same page). This is the living layout home."
 tags: [apr-workflow, apr-testing, data-flow-visual-verification, visual-verification, shot-plan, paper-canvas, e2e, qa-owned]
 keywords: [data flow diagram, visual data verification, scene by scene screenshot, shot plan per phase, data travels intact, intake to LOE, paper canvas data-flow board, fields filled all apps, client-presentable plumbing]
-related: [../tests/Testing-Visual-Verification-Workflow.md, ../tests/E2E-TESTING-WORKFLOW-MASTER.md, 02-SYNC-VERIFICATION-RESULT.md, 03-CLICKUP-JOB-HUB-SPEC.md, 04-CLICKUP-CUSTOMFIELD-SYNC-RESULT.md]
+related: [~/Development/APR-Dashboard-v3/tests/Testing-Visual-Verification-Workflow.md, ~/Development/APR-Dashboard-v3/tests/E2E-TESTING-WORKFLOW-MASTER.md, "~/Development/APR-Dashboard-v3/Data-Flow Visuals/02-SYNC-VERIFICATION-RESULT.md", "~/Development/APR-Dashboard-v3/Data-Flow Visuals/03-CLICKUP-JOB-HUB-SPEC.md", "~/Development/APR-Dashboard-v3/Data-Flow Visuals/04-CLICKUP-CUSTOMFIELD-SYNC-RESULT.md"]
 ---
 
 # 01 — Data-Flow Diagram (Methodology + Shot Plan)
@@ -104,7 +104,7 @@ each field actually *landed* in its correct destination — the rigorous, readba
 end-to-end testing. Two paired docs, both QA-owned, run together:
 
 - **[Auto-Sync Wiring Map](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md)** — HOW each dashboard field is wired + routed to its Valcre target (react-spec wires from it).
-- **[Sync Verification Report](~/Development/APR-Dashboard-v3/Data-Flow%20Visuals/02-SYNC-VERIFICATION-RESULT.md)** — the per-field PASS/FAIL scorecard with Valcre `GetValues` readback proving it landed (never trust HTTP 200). The ClickUp leg = `04-CLICKUP-CUSTOMFIELD-SYNC-RESULT.md`.
+- **[Sync Verification Report](~/Development/APR-Dashboard-v3/Data-Flow Visuals/02-SYNC-VERIFICATION-RESULT.md)** — the per-field PASS/FAIL scorecard with Valcre `GetValues` readback proving it landed (never trust HTTP 200). The ClickUp leg = `04-CLICKUP-CUSTOMFIELD-SYNC-RESULT.md`.
 
 Run order: wire from the map → change the field on the dashboard → readback from the destination →
 record PASS/FAIL + screenshot in the report. Re-run the report whenever sync wiring changes — it's

@@ -4,11 +4,11 @@ title: Agent Access, Login & Priming — APR Dashboard, ClickUp, Supabase, Valcr
 status: living — the single startup/handover sheet
 created: 2026-06-05
 updated: 2026-06-05
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 owner: co-architect (maintains) · used by every agent before touching any APR system
 tags: [apr-workflow, access, login, priming, startup, agent-handover, clickup, supabase, valcre, cli-tools, agent-browser, master-document]
 keywords: [how to log in APR dashboard, agent access sheet, priming sheet, startup skills to load, clickup login token cli, supabase access, valcre login cli, agent handover, dashboard credentials, isolated session apr-qa, this is how you do it]
-related: [00-APR-MASTER-DASHBOARD.md, AGENT-CLI-TOOLING-SOP.md, ../Data-Flow Visuals/01-Data-Flow-Diagram.md, ../tests/E2E-TESTING-WORKFLOW-MASTER.md]
+related: [~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md, ~/Development/APR-Dashboard-v3/docs/AGENT-CLI-TOOLING-SOP.md, "~/Development/APR-Dashboard-v3/Data-Flow Visuals/01-Data-Flow-Diagram.md", ~/Development/APR-Dashboard-v3/tests/E2E-TESTING-WORKFLOW-MASTER.md]
 ---
 
 # Agent Access, Login & Priming Sheet
@@ -127,7 +127,7 @@ agent-browser --session apr-qa snapshot -i # get @refN interactive refs
 This sheet is the access/priming hub. These point back here for login + CLI usage:
 - [Master Dashboard](~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md) — the navigation front door.
 - [Agent CLI & Browser Tooling SOP](~/Development/APR-Dashboard-v3/docs/AGENT-CLI-TOOLING-SOP.md) — deeper driving mechanics + the session tally.
-- [Data-Flow Visual Verification Workflow](~/Development/APR-Dashboard-v3/Data-Flow%20Visuals/01-Data-Flow-Diagram.md) — QA's screenshot workflow (uses this access).
+- [Data-Flow Visual Verification Workflow](~/Development/APR-Dashboard-v3/Data-Flow Visuals/01-Data-Flow-Diagram.md) — QA's screenshot workflow (uses this access).
 - [E2E Testing Workflow Master](~/Development/APR-Dashboard-v3/tests/E2E-TESTING-WORKFLOW-MASTER.md) — the full pipeline test.
 
 ---

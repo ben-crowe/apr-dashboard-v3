@@ -2,9 +2,9 @@
 content_type: how-to
 title: QuickBooks Payments — Merchant Account Application (Canada)
 status: action-for-Ben
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 tags: [apr-workflow, quickbooks, payments, merchant-account, closing-sequence, canada]
-related: [QUICKBOOKS-PAYMENT-INTEGRATION-RESEARCH.md, CLIENT-CLOSING-SEQUENCE-ROADMAP.md]
+related: [~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/QUICKBOOKS-PAYMENT-INTEGRATION-RESEARCH.md, ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/CLIENT-CLOSING-SEQUENCE-ROADMAP.md]
 note: Overview only — no pricing. Confirms this is a real application you complete, not an instant click.
 ---
 

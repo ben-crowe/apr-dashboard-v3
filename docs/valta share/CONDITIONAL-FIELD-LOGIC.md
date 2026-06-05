@@ -3,11 +3,11 @@ content_type: cascade-rules
 title: Conditional Field Logic — Complete Reference (the cascade rule set)
 status: active — authoritative cascade rules
 owner: co-architect
-home: 00-APR-MASTER-DASHBOARD.md
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 registry_v6: "https://apr-dashboard-v3.vercel.app/field-registry-v6.html (Rule Explorer — live source)"
 tags: [apr-workflow, cascade, conditional-field-logic, cascade-to-loe, value-scenarios, property-rights, approaches-to-value, registry-v6]
 keywords: [conditional field logic, cascade rules, predefined fields on option combo, status of improvements, value scenarios approaches, property rights tenancy override]
-related: [../Features/12-LOE-Esign/loe07-build/CASCADE-TO-LOE-CONTRACT-NOTES.md]
+related: [~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/loe07-build/CASCADE-TO-LOE-CONTRACT-NOTES.md]
 ---
 
 # Conditional Field Logic — Complete Reference

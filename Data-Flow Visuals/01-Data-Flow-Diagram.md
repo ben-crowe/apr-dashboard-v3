@@ -97,6 +97,19 @@ Client Intake  →  APR Dashboard  →  ClickUp     →  Valcre
 
 ---
 
+## Sync Verification (the field-level proof step)
+
+The visual board proves the data *appears* in each system. The **Sync Verification Report** proves
+each field actually *landed* in its correct destination — the rigorous, readback-verified layer of
+end-to-end testing. Two paired docs, both QA-owned, run together:
+
+- **[Auto-Sync Wiring Map](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md)** — HOW each dashboard field is wired + routed to its Valcre target (react-spec wires from it).
+- **[Sync Verification Report](~/Development/APR-Dashboard-v3/Data-Flow%20Visuals/02-SYNC-VERIFICATION-RESULT.md)** — the per-field PASS/FAIL scorecard with Valcre `GetValues` readback proving it landed (never trust HTTP 200). The ClickUp leg = `04-CLICKUP-CUSTOMFIELD-SYNC-RESULT.md`.
+
+Run order: wire from the map → change the field on the dashboard → readback from the destination →
+record PASS/FAIL + screenshot in the report. Re-run the report whenever sync wiring changes — it's
+a living report, same as the canvas board.
+
 ## Canvas Home (the living board)
 
 The assembled data-flow board lives on Paper:

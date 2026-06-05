@@ -1,4 +1,23 @@
+---
+content_type: verification-report
+title: Sync Verification Report — Dashboard → Valcre (Official Result)
+status: active — living report format, re-run per sync change
+owner: qa-agent
+home: 00-APR-MASTER-DASHBOARD.md
+report_type: "Sync Verification Report — the per-field scorecard QA produces to prove a dashboard field lands in its correct destination (Valcre native/custom, ClickUp). Readback-verified, never trust HTTP 200. This file = the established format; re-run + update it each sync change."
+tags: [apr-workflow, apr-testing, sync-verification, sync-verification-report, valcre, clickup, readback, qa-owned, e2e, per-field-scorecard]
+keywords: [sync verification report, per-field scorecard, dashboard to valcre readback, GetValues verify, native custom field sync proof, end-to-end sync test, qa verification artifact]
+pairs_with: "docs/Features/08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md — the wiring map says HOW each field routes; this report PROVES it landed."
+related: [01-Data-Flow-Diagram.md, 04-CLICKUP-CUSTOMFIELD-SYNC-RESULT.md, ../docs/Features/08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md, ../docs/00-APR-MASTER-DASHBOARD.md, ../tests/E2E-TESTING-WORKFLOW-MASTER.md]
+---
+
 # 02 — Dashboard → Valcre Sync Verification (Official Result)
+
+> **This is the canonical "Sync Verification Report" format (QA-owned).** It's the field-level
+> proof step of end-to-end testing: change a field on the dashboard → read it back from the
+> destination (Valcre `GetValues` / the ClickUp card) → PASS/FAIL per field with screenshot
+> evidence, never trusting HTTP 200. Re-run and update this report whenever sync wiring changes.
+> The ClickUp leg of the same format lives in `04-CLICKUP-CUSTOMFIELD-SYNC-RESULT.md`.
 
 **Date:** 2026-06-04
 **Tester:** qa-agent (dev-2)

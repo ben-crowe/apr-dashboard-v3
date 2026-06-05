@@ -43,7 +43,6 @@ export async function fetchListFields(token: string, listId: string): Promise<Cl
 function hubValueMap(job: any): Record<string, any> {
   const loe = (Array.isArray(job.job_loe_details) ? job.job_loe_details[0] : job.job_loe_details) || {}
   const pi = (Array.isArray(job.job_property_info) ? job.job_property_info[0] : job.job_property_info) || {}
-  const propContact = [job.property_contact_first_name, job.property_contact_last_name].filter(Boolean).join(' ')
   return {
     // CLIENT
     'Client Organization': job.client_organization || '',
@@ -58,10 +57,7 @@ function hubValueMap(job: any): Record<string, any> {
     'Authorized Use': loe.authorized_use || job.intended_use || '',         // canonical (replaces Intended Use dup)
     'Asset Condition': job.asset_condition || pi.asset_condition || '',
     'Valuation Premise': loe.valuation_premises || job.valuation_premises || '',
-    // PROPERTY CONTACT
-    'Property Contact Name': propContact,
-    'Property Contact Email': job.property_contact_email || '',
-    'Property Contact Phone': job.property_contact_phone || '',
+    // PROPERTY CONTACT group DROPPED 2026-06-05 (Ben, locked mock MK9-0) — duplicates Client (same person).
     // ASSIGNMENT
     'Property Rights Appraised': loe.property_rights_appraised || '',
     'Scope of Work': loe.scope_of_work || '',

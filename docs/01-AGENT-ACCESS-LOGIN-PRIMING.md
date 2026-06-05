@@ -110,6 +110,16 @@ agent-browser --session apr-qa snapshot -i # get @refN interactive refs
 - **No test env** — every call is prod-as-Chris. Modify the one test job; batch any creates.
 - **GOLDEN: HTTP 200 ≠ success.** Valcre returns 200 even on silent internal failure (custom-field AND native PATCH). ALWAYS GetValues readback to confirm the value landed.
 
+**Valcre WEB-UI login (for SCREENSHOTS only — a DIFFERENT credential than the API):**
+> The Valcre *website* login is NOT the same as the API creds above. It's needed only to capture live Valcre UI screenshots. With it, the agent is NOT blocked — it can take real Valcre screenshots.
+> - Site: `app.valcre.com` (login at `auth.valcre.com`)
+> - Email: `chris.chornohos@valta.ca`
+> - Password: `Valvalta1!`  (current as of 2026-06-02)
+>
+> **Warm-session rule:** a named `--session valcre-qa` PERSISTS the login — log in ONCE, then reuse that session for all captures (no re-login per shot).
+> **If a fresh login is rejected despite this correct password:** it's almost certainly a 2FA / security challenge or a short cooldown from prior failed attempts — NOT a wrong password. Then: Ben logs in once on the session, or wait it out. **NEVER hammer** (live prod account, lockout risk — 2 tries max).
+> **Fallback:** render the tile from verified API data (GetValues) when no web session is available — accurate, labeled as a render vs the live UI.
+
 ---
 
 ## THE GOLDEN RULE — fill with real keystrokes, never raw JS

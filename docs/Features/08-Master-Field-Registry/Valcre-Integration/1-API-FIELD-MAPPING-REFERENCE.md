@@ -1,3 +1,17 @@
+---
+content_type: field-mapping-reference
+title: APR Dashboard V3 — API & Field Mapping Reference (SOURCE OF TRUTH + work diary)
+status: active — living source of truth; diary at bottom
+owner: react-spec (code) · qa-agent (verifies) · co-architect (coordinates)
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
+registry_v6: "https://apr-dashboard-v3.vercel.app/field-registry-v6.html (Valta Registry V6 — canonical field + option source)"
+tags: [ground-truth, doctrine-decision]
+keywords: [field mapping reference, dashboard to valcre mapping, enum conversion, intended uses purposes, field mapping diary, registry v6, authorized use duplicate, scope multi-pick]
+related: [~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md, "[[field-sync-verification-workflow]]", ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md]
+---
+
+<!-- facets --> #ground-truth #doctrine-decision
+
 # APR Dashboard V3 - API & Field Mapping Reference
 
 **Version:** 2.1 (Production)
@@ -17,6 +31,25 @@ This is the **single source of truth** for all field mappings between APR Dashbo
 - Verify enum value conversions
 - Troubleshoot integration issues
 - Plan new feature implementations (Section 3 & 4)
+
+---
+
+## ⭐ Before any field-mapping / registry work — PRIME FIRST (mini-SOP)
+
+This is the field-mapping source of truth. When you return to do mapping or registry work, get up
+to speed FIRST — don't guess:
+
+1. **Load skills:** your domain persona (e.g. `/agent-apr-domain-agent`) + the access sheet ([01-AGENT-ACCESS-LOGIN-PRIMING](~/Development/APR-Dashboard-v3/docs/01-AGENT-ACCESS-LOGIN-PRIMING.md)) for the Valcre CLIs/logins.
+2. **SS12 two-phase search:**
+   ```bash
+   ~/.claude/scripts/context-search --agent <name> --topic "field mapping valcre dashboard registry"
+   /search-all "dashboard to valcre field mapping registry options enum conversion"
+   ```
+3. **Reference the Valta Registry V6** (canonical field + option source): https://apr-dashboard-v3.vercel.app/field-registry-v6.html — when option lists disagree, V6 is the tiebreaker.
+4. **Read the Field-Mapping Work Diary at the bottom of THIS doc** — what was done last + what's open, so you don't redo or regress it.
+5. **Then work.** After: update the diary (bottom), write a checkpoint.
+
+Pairs with the **Field-Sync Verification** playbook (`#playbook-field-sync`) for proving a mapping actually lands (readback, never trust HTTP 200), and the [Auto-Sync Wiring Map](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md) for how each field routes.
 
 ---
 
@@ -1042,6 +1075,25 @@ updateData.DueDate = date.split("T")[0];
 - [PROPERTY-TYPE-FIELD-MAPPING.md](07-Valcre-Integration/PROPERTY-TYPE-FIELD-MAPPING.md) - Complete property type mapping guide
 - [4-SINGLE-TO-MULTI-SELECT-PATTERN.md](4-SINGLE-TO-MULTI-SELECT-PATTERN.md) - Multi-select implementation pattern
 - [IMPLEMENTATION-STATUS.md](IMPLEMENTATION-STATUS.md) - Known issues and bug tracking
+
+---
+
+## Field-Mapping Work Diary
+
+> Append a dated entry after ANY field-mapping / registry work — what changed, what was found,
+> what's still open. This is the running history; the priming mini-SOP at the top tells the next
+> agent to READ it before new mapping work. Append, never overwrite.
+
+### 2026-06-05 — QA + Ben live-mapping session vs the real Valcre app
+Ben copy-pasted how the client's live Valcre app actually presents fields (fast, no screenshots) →
+surfaced mapping gaps invisible from our side alone. Findings:
+
+- **Authorized Use = a true DUPLICATE** across Client Intake AND Job-Prep, with three disagreeing option lists (client submission form = 10 options incl. Underwriting Decisions / GST / Other; intake view = 8; job-prep = 8 — each missing different ones). **Decision:** canonical home = **Client Intake** (it originates from the client submission form); match it to the form's full 10 options; **delete the job-prep copy**; re-point the Valcre `IntendedUses` sync to read the intake field. → packaged as a react-spec spec (sync re-route handed to react-spec + readback-verify after).
+- **Scope of Work regressed to single-select** — used to be multi-pick. **NEW RULE (Ben):** any field Valcre shows as a CHECKBOX, ours should be a checkbox/multi-pick — Valcre offering multi is the signal the user wants >1. Scope multi-pick rebuild **parked** (do later). Scope is appraiser-entered (job-prep), NOT from the client form.
+- **Valuation Premises vs Value Scenarios — HELD for Ben/Chris confirm.** Likely DISTINCT, not a duplicate: Premises = basis of value (Market / Liquidation); Scenarios = scenario/timing (As Is / As Stabilized). Valcre confusingly stores the scenarios in a custom field literally named "Valuation Premise." V6 favors **"Value Scenarios"** as canonical (21 mentions vs 2). Do NOT merge without confirm.
+- **Field-hygiene rule reinforced:** a field that originates from the client submission form belongs in the **Client Intake** phase, NOT duplicated into LOE/Job-Prep — an editable downstream copy drifts. Trace each field back to its origin (client form?) before deciding its home.
+- **Lesson:** checking the client's live Valcre app is high-value — it catches mapping/option gaps we can't see from our code alone. Good standing practice.
+- **Open / next:** react-spec executes the Authorized Use dedup + sync re-route → QA readback-verifies (Field-Sync playbook). Confirm Valuation Premises vs Value Scenarios with Ben/Chris. Park: Scope multi-pick rebuild + the "match Valcre checkboxes" audit across all fields.
 
 ---
 

@@ -13,6 +13,8 @@ note: THE single front door. Open this first. Every active workflow, PRD, test d
 If you add a doc, add a link here.
 
 > **Agents start here:** [01-AGENT-ACCESS-LOGIN-PRIMING](~/Development/APR-Dashboard-v3/docs/01-AGENT-ACCESS-LOGIN-PRIMING.md) — the single login/access/CLI/priming sheet for the APR Dashboard, ClickUp, Supabase, and Valcre. Load the skills, log in, drive — never a guess.
+>
+> **Reusable process Playbooks** (global, any project): [Playbook Library](~/.claude/knowledge/playbooks/00-PLAYBOOK-INDEX.md) — standalone "how we do this perfectly" sheets, searchable by `#playbook`. Includes the **Visual Data Verification (screenshot)** workflow and the **HTML Document Build** workflow. Each carries a cross-project session tally that primes the next run.
 
 `#apr-workflow` `#apr-dashboard` `#master-index` — search any of these to surface the connected APR doc set.
 

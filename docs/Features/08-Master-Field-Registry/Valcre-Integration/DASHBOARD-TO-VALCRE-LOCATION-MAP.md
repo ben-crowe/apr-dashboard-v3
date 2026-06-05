@@ -185,6 +185,34 @@ where Chris populates a field our sync ignores, or uses a NATIVE field while we 
 
 ---
 
+## Field-hygiene cleanup spec (for react-spec) — V6-registry-verified 2026-06-05
+
+**New rule (locked):** if Valcre presents a field as a **checkbox/multi-select**, our app should match it as
+a checkbox too. First case = **Scope of Work** (Valcre Scope is a checkbox; ours regressed to single — a
+plain `<Select>`, `text` column). **PARKED** for a later day; logged as the rule.
+
+**Authorized Use — DEDUP (canonical = V6 registry, NOT the client form).**
+- Currently duplicated in **Client Intake** AND **Job-Prep**. It originates on the client submission form,
+  so its home is **Client Intake**. **Action:** ONE Authorized Use field, in Client Intake, **single-select**
+  (registry `c:'Select one'`), synced to native `Job.IntendedUses`. **Remove the Job-Prep copy** and re-point
+  the IntendedUses sync to read the intake field.
+- **Canonical options = `ListAuthorizedUse` (registry line 938) — EXACTLY 8:** First Mortgage Financing ·
+  Financial Reporting · Insurance · Internal Decision-Making · Acquisition-Disposition · Estate Planning ·
+  Litigation · GST.
+- 🚩 **Do NOT use the client form's 10.** "Underwriting Decisions" and "Other" are NOT in the registry and
+  are NOT valid IntendedUses values → they'd **silently fail the map sync** (this is gotcha (d), the
+  native-map-key silent-skip). **Trim the submission form to these 8 too** — it's the origin, so it must match.
+- Cascade note: `Insurance` overrides Value Scenarios.
+
+**Valuation Premises vs Value Scenarios — DISTINCT registry fields, do NOT merge.**
+- **Valuation Premises** (registry 480) = Market Value / Market Rent / Investment Value / Insurable Value
+  (the *basis of value*).
+- **Value Scenarios** (registry 1157, `ListValueScenarios`, **multi-select**, cascade-driven) = As Is /
+  As Stabilized / etc. Different concept + option set.
+- Separate fix: the dashboard's current **Valuation Premises** options don't match the registry set.
+
+---
+
 ## Dashboard fields that DO NOT go to Valcre
 **LOE-contract-only** (live in the APR app + flow to the LOE, never Valcre): Report Format*, Assignment Type (held), CMHC Financing (no Valcre field), Desktop Report (phantom CF), the **Purpose text field** (Property Rights owns `Job.Purposes`, not this).
 **Dashboard-only:** Lead Appraiser (Valcre Staff needs a real account).

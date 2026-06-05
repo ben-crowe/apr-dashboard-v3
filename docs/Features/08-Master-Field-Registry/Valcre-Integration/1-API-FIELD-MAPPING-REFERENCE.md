@@ -51,6 +51,18 @@ to speed FIRST — don't guess:
 
 Pairs with the **Field-Sync Verification** playbook (`#playbook-field-sync`) for proving a mapping actually lands (readback, never trust HTTP 200), and the [Auto-Sync Wiring Map](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md) for how each field routes.
 
+### 📎 Added resource — Valcre API schema ("Swagger" / source of how their API is built)
+Valcre's API is **OData** (base `https://api-core.valcre.com/api/v1`). For an OData API, the
+machine-readable schema endpoint **`$metadata`** is the equivalent of a Swagger/OpenAPI spec — it
+describes every entity, field, type, and enum Valcre exposes. This is the authoritative source for
+"how Valcre actually set up their API," so field names + valid values come from here, not guesses:
+- **Valcre OData schema (the "Swagger"):** https://api-core.valcre.com/api/v1/$metadata *(requires auth; pull via the Valcre CLIs in the access sheet)*
+- **OData query examples + response format:** [VALCRE-API-EVALUATION.md](~/Development/APR-Dashboard-v3/docs/Features/07-Report-Builder/VALCRE-API-EVALUATION.md) (Appendix C)
+- **Integration guide (auth, endpoints):** [VALCRE-API-INTEGRATION-GUIDE.md](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/VALCRE-API-INTEGRATION-GUIDE.md)
+- **Swagger/OpenAPI pattern library (Ben's KBPR):** `~/Development/_02-KBPR Framework/.../Pattern-Libraries/Swagger-OpenAPI-Mapping/` — indexed API-mapping patterns to reference when wiring an integration.
+
+> If Valcre also exposes a hosted Swagger UI page, confirm its URL once and add it here — don't invent it. The `$metadata` endpoint above is the confirmed schema source.
+
 ---
 
 ## Table of Contents

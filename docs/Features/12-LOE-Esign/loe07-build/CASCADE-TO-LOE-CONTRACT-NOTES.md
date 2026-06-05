@@ -31,7 +31,7 @@ related: [../../../valta share/CONDITIONAL-FIELD-LOGIC.md, SPECIAL-NOTES-future-
 > over-complicated and being corrected. The authoritative rule set is CONDITIONAL-FIELD-LOGIC.md
 > + the Registry V6 Rule Explorer.** Deeper reconcile underway (within the hour).
 
-**Sources of truth:** cascade rules = Registry V6 Rule Explorer (link above) + `CONDITIONAL-FIELD-LOGIC.md` · contract = `loe07-build/LOE-template-v07.html` · build status = `LOE-07-RENDER-TWEAKS-2026-06-04.md`.
+**Sources of truth:** cascade rules = Registry V6 Rule Explorer (link above) + `CONDITIONAL-FIELD-LOGIC.md` · contract = `loe07-build/LOE-template-v07.html` · **build-ready execution spec (more-updated, what shipped) = [LOE-07-RENDER-TWEAKS-2026-06-04.md](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/loe07-build/LOE-07-RENDER-TWEAKS-2026-06-04.md)** — pair these two: this doc = concept, that = exact build.
 
 ---
 

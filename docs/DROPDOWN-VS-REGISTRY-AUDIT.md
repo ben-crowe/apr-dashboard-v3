@@ -20,6 +20,18 @@ parent: "~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/V
 
 ---
 
+## Verification method — it's a THREE-way check, and Valcre is the tie-breaker
+
+This audit is app vs registry. But for any field that **syncs to Valcre**, the real authority chain is **app vs registry vs Valcre-real** — and **QA is the verifier** (he has live Valcre access and pulls Valcre's actual option set side-by-side). Two rules govern what a discrepancy *means*:
+
+- **Native Valcre enum fields** (Authorized Use → `IntendedUses`, Property Rights → `Purposes`, Analysis Level → `AnalysisLevel`): options are **locked by Valcre's platform — we cannot add to them.** The app + registry MUST use only what Valcre offers. A registry/app option Valcre lacks = **hard ceiling → flag to the client** ("the registry info doesn't match Valcre's only allowed options").
+- **Custom Valcre fields** (Transaction Status → CF12053, Zoning → CF12054, Valuation Premise → CF11563/11564): options are a list **Valta defined in Valcre** — so if the registry wants one Valcre lacks, the fix could be **"add it in Valcre,"** not "drop it from the app." That's a client choice, not an automatic trim.
+- **Fields that don't map to Valcre at all** (the DO-NOT-SYNC set — Report Format, Purpose, Lead Appraiser, etc.): Valcre is NOT the verifier here. They're allowed to differ — APR→LOE only. "Not in Valcre" does NOT mean wrong for these.
+
+So when a dropdown's options are in question: route it to QA → he marks each as **hard ceiling (native, must match Valcre)** or **addable gap (custom, client decides)** — unless it's a non-sync field, in which case Valcre cross-ref doesn't apply.
+
+---
+
 ## A. REGISTRY needs updating (the registry is incomplete, app is ahead)
 
 - **Zoning Status** — registry `ListZoningStatus` is **EMPTY `[]`**. The app has the real set: **Legal Conforming · Legal Non-Conforming · Illegal · No Zoning** (and it syncs to Valcre CF 12054). → **Populate the registry** with these 4. App is correct.

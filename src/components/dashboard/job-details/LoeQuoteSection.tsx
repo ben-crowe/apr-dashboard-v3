@@ -79,11 +79,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // Desktop Report (#4) was REVERTED — Valcre custom field 12050 does NOT exist on this tenant
   //   (confirmed live API + QA readback + Ben's admin list). Stays Supabase/LOE-only until/unless a CF is created.
   const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments', 'deliveryComments', 'paymentComments', 'propertyRightsAppraised', 'scopeOfWork', 'valuationPremises', 'reportType', 'paymentAmount', 'paymentPaidDate', 'requestDate', 'signedDate', 'effectiveDate',
-    // Auto-sync wiring (2026-06-04, AUTO-SYNC-WIRING-MAP) — new job-prep fields with VERIFIED Valcre targets.
-    // authorizedUse→IntendedUses, analysisLevel→AnalysisLevel, transactionStatus→CF12053, zoningStatus→CF12054,
-    // valueScenarios→CF11563/11564. (propertyRightsAppraised→Purposes is already above.) Do-NOT-wire list excluded:
-    // reportFormat, assignmentType, cmhcFinancing, desktopReport, purpose, leadAppraiser, approachesToValue.
-    'authorizedUse', 'analysisLevel', 'transactionStatus', 'zoningStatus', 'valueScenarios'];
+    // Auto-sync wiring (2026-06-04, AUTO-SYNC-WIRING-MAP) — job-prep fields with VERIFIED Valcre targets.
+    // analysisLevel→AnalysisLevel, transactionStatus→CF12053, zoningStatus→CF12054, valueScenarios→CF11563/11564.
+    // (propertyRightsAppraised→Purposes is already above.) Do-NOT-wire list excluded: reportFormat, assignmentType,
+    // cmhcFinancing, desktopReport, purpose, leadAppraiser, approachesToValue.
+    // authorizedUse REMOVED 2026-06-05 (field-hygiene dedup) — Authorized Use now lives once on Client Intake
+    // as `intendedUse`, which already syncs to native Job.IntendedUses. See DASHBOARD-TO-VALCRE-LOCATION-MAP.
+    'analysisLevel', 'transactionStatus', 'zoningStatus', 'valueScenarios'];
 
   // Fields that ALSO push to the ClickUp card (additive to Valcre sync — Ben-confirmed 2026-06-04).
   // These are EXACTLY the Stage-2 LOE-QUOTE fields that update-clickup-task renders into the card
@@ -1302,23 +1304,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             />
           </CompactField>
 
-          <CompactField label="Authorized Use" status={fieldStates['authorizedUse']}>
-            <Select value={jobDetails.authorizedUse || ''} onValueChange={value => handleSelectChange(value, 'authorizedUse')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Acquisition-Disposition">Acquisition-Disposition</SelectItem>
-                <SelectItem value="Estate Planning">Estate Planning</SelectItem>
-                <SelectItem value="Financial Reporting">Financial Reporting</SelectItem>
-                <SelectItem value="First Mortgage Financing">First Mortgage Financing</SelectItem>
-                <SelectItem value="GST">GST</SelectItem>
-                <SelectItem value="Insurance">Insurance</SelectItem>
-                <SelectItem value="Internal Decision-Making">Internal Decision-Making</SelectItem>
-                <SelectItem value="Litigation">Litigation</SelectItem>
-              </SelectContent>
-            </Select>
-          </CompactField>
+          {/* Authorized Use removed 2026-06-05 (field-hygiene dedup) — it now lives ONCE on the Client
+              Intake form (its origin), wired there to native Job.IntendedUses. The §10 LOE cascade reads
+              job.intendedUse as the canonical source. See DASHBOARD-TO-VALCRE-LOCATION-MAP "Field-hygiene cleanup spec". */}
 
           <CompactField label="Assignment Type">
             <Select value={jobDetails.assignmentType || ''} onValueChange={value => handleSelectChange(value, 'assignmentType')}>

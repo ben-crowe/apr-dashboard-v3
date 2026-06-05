@@ -535,9 +535,9 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   <SelectItem value="Acquisition-Disposition">Acquisition-Disposition</SelectItem>
                   <SelectItem value="Estate Planning">Estate Planning</SelectItem>
                   <SelectItem value="Litigation">Litigation</SelectItem>
-                  <SelectItem value="Underwriting Decisions">Underwriting Decisions</SelectItem>
                   <SelectItem value="GST">GST</SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
+                  {/* Canonical 8 = registry ListAuthorizedUse. "Underwriting Decisions" + "Other" removed
+                      2026-06-05 — not valid IntendedUses, silently fail the native map (gotcha d). */}
                 </SelectContent>
               </Select>
             </CompactField>

@@ -45,11 +45,11 @@ function fmtCur(v: any) { const n = String(v ?? '').replace(/[^0-9.]/g, ''); ret
   const statuses = Object.keys(STATUS_TO_SCENARIOS);
   for (const st of statuses) {
     const scen = deriveValueScenarios(st, '');
-    const right = scen.map(s => (resolveNarrative(s) ? 'RESOLVES(EA-001)' : '[bracket]'));
+    const right = scen.map(s => (resolveNarrative(s) ? 'RESOLVES(summary)' : '[bracket]'));
     console.log(`  ${st}`);
     scen.forEach((s, i) => console.log(`      ${i + 1}. ${s}  →  ${right[i]}`));
   }
-  const ovr = deriveValueScenarios('Existing - Completed', 'Insurance');
+  const ovr = deriveValueScenarios('Improved - Completed', 'Insurance');
   console.log(`  OVERRIDE Authorized Use=Insurance  →  ${ovr.join(' | ')}`);
 
   // ── Render the PROVING case: Proposed - Improved Land (Demolition Required) ──

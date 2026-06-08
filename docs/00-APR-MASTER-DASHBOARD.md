@@ -65,7 +65,8 @@ The live readout: each pipeline part as a check item. `[x]` proven · `[~]` part
     4. `4. CLIENT BILLING (Invoice, LOE)` — signed LOE + invoice land here
     5. `5. LETTER OF RELIANCE (LOR)`
   - **Confirmed from Ben's live SharePoint 2026-06-08** (screenshot review, not Codex). Folder spec is LOCKED.
-  - **Still OPEN — the wiring:** needs **write** access via Microsoft Graph. **Unresolved permission question:** can we wire it with Ben's OWN access (delegated, acting as Ben — he has write on the site), or does it require an Azure AD app registration on the client tenant (Client ID + Secret + `Sites.ReadWrite.All` admin-consented)? Determine via the Entra/Azure portal check. (Tracked as an open question below.)
+  - **PERMISSION RESOLVED 2026-06-08 — NO LONGER CLIENT-BLOCKED.** Ben is **Global Administrator** on the Valta tenant (`valtapropertyvaluations.onmicrosoft.com`, account `ben.crowe@valta.ca`). He can self-register the app AND grant admin consent — the entire integration is his to wire, no external ask. Confirmed via Entra → his user → Assigned roles.
+  - **Wiring plan (all doable by Ben/agents now):** register an Entra app (single-tenant) → capture Tenant ID + Client ID + create a Client Secret → add `Sites.ReadWrite.All` **application** permission + Ben grants admin consent → store the 3 creds server-side (Vercel env, like Valcre) → build the Graph call that creates the parent job folder + the 5 subfolders at intake. Then `[ ]` → `[x]`.
 - `[x]` **3. LOE generation (V07)** — LIVE 2026-06-05, cascade verified.
 - `[~]` **3-DocuSeal. E-sign flow** — MORE BUILT than "trivial": full flow implemented — `generateLOE` → `docuseal-proxy` edge fn → `POST /submissions/html` (`send_email:false`) → branded Resend email (`send-loe-email-fixed`) → `signature`/`date` anchor tags → `docuseal-webhook` updates DB + ClickUp on completed. **OPEN before a live send:** re-anchor the V07 signature field; sync template selectors (job-area "LOE Version" dropdown AND e-sign modal both list V07); resolve template-ID / API-key discrepancy. **By design:** Stage-6 client signing is manual via Codex Computer Use. **Risk:** `docuseal-webhook` returns HTTP 200 even on error.
 - `[~]` **3-EA/HC. Narrative library** — Chris building; §10 right column fills as entries land.
@@ -212,7 +213,7 @@ The source of truth for what fields exist, their options, the cascade rules, and
 - **DocuSeal e-sign wiring** — re-anchor V07 + sync template selectors + resolve template-ID discrepancy before a live send.
 
 ### Open questions for Ben
-- **SharePoint:** Azure AD app registration on the client tenant — Tenant ID + Client ID + Client Secret with `Sites.ReadWrite.All` admin-consented (or a delegated-OAuth login). Until provided, folder-create stays unwired.
+- ~~**SharePoint:** Azure AD app registration on the client tenant…~~ **RESOLVED 2026-06-08 — not a blocker.** Ben is Global Administrator on the Valta tenant; he can self-register the app and self-consent `Sites.ReadWrite.All`. Folder-create is now buildable with no external dependency (see Live Parts Checklist 2b for the wiring plan + locked folder spec).
 - **Dashboard login password:** still `__PENDING__` in the access sheet.
 - **Email:** keep Resend for production LOE email, or send direct from the Valta MS 365 admin mailbox? (Transactional, so Resend isn't required.)
 - **Codex browser tasks:** the job-folder-structure capture + the ClickUp template-save both need Ben to open the relevant browser/SharePoint, then Codex executes.

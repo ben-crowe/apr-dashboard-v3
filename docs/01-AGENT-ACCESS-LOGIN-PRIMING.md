@@ -122,6 +122,22 @@ agent-browser --session apr-qa snapshot -i # get @refN interactive refs
 
 ---
 
+## Microsoft 365 / Entra — access (SharePoint folders + email send)
+
+- **Ben's account:** `ben.crowe@valta.ca` · tenant `valtapropertyvaluations.onmicrosoft.com`.
+- **Role: GLOBAL ADMINISTRATOR** (confirmed 2026-06-08, Entra → his user → Assigned roles). This means Ben can **self-register an Entra app AND grant admin consent** — no client/IT dependency for either the SharePoint folder integration or the email send. This tenant already IS the client's (Valta), so there is no separate test→prod tenant cutover for M365.
+- **Powers two features via ONE Entra app** (see dashboard feature 2b): SharePoint per-job folder creation (`Sites.ReadWrite.All`) + outbound email send from a `valta.ca` mailbox via Graph `sendMail` (`Mail.Send`). Retires Resend.
+- **SharePoint site:** `valtapropertyvaluations.sharepoint.com/sites/V` → `Shared Documents/2.Jobs/{YEAR}/{JOB#} - {PROPERTY}/` (folder spec locked in the dashboard).
+- **CREDENTIAL SLOT — fill when the app is created (do NOT commit secrets to git; store as Supabase Edge secrets + reference here):**
+  - `GRAPH_TENANT_ID`: `__PENDING__`
+  - `GRAPH_CLIENT_ID`: `__PENDING__`
+  - `GRAPH_CLIENT_SECRET`: `__PENDING__` (Supabase secret only)
+  - Sending mailbox address: `__PENDING__` (e.g. an `appraisals@valta.ca` or no-reply `valta.ca` address — Ben's call)
+  - **Guardrail:** scope sending with an Application Access Policy to that single mailbox.
+- **Agent email verification (keep):** agents read `bc@crowestudio.com` via the EPA BC-Support CLI to confirm delivery during testing — independent of how the app sends.
+
+---
+
 ## THE GOLDEN RULE — fill with real keystrokes, never raw JS
 
 - **Method 1 (CORRECT):** `agent-browser --session <name> fill @ref "value"` — real CDP keystrokes, fires React `onChange` + real `blur` → `handleBlur → autoSaveField → debounce → supabase.update`. Persists.

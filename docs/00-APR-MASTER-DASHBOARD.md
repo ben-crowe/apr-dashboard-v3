@@ -100,9 +100,10 @@ Every integration runs on **Ben's own test account** today and migrates to the *
 | Channel | Testing on (Ben's) | Production (client's) | Cutover step |
 |---|---|---|---|
 | **ClickUp** | BC workspace, "Valta Mirror" test list `901703694310` | Client's **Valta workspace**, list `901402094744` | Move/create the job task on the client's Valta list |
-| **Email** | Ben's test email + Resend (automated) | Client's **MS 365** mailbox | Switch the LOE/thank-you send target to the client's MS 365 address |
+| **Email** | Ben's inbox via Resend sandbox (`onboarding@resend.dev`, interim) | **Direct via Microsoft Graph `sendMail` from a `valta.ca` mailbox — Resend RETIRED** | Stand up the Entra app + `valta.ca` sender, swap the one edge-fn send call |
+| **Microsoft 365** (SharePoint folders + email send) | Ben's `valta.ca` account — **Global Administrator** on the Valta tenant | Same tenant (it already IS the client's) — one Entra app, Ben self-consents | Create the Entra app; grant `Sites.ReadWrite.All` + `Mail.Send`; store IDs/secret in the access sheet |
 | **Valcre** | _confirm against access sheet_ | Client's Valcre account | _confirm_ |
-| **Other accounts** | — | — | Add as identified (SharePoint/Graph, QuickBooks merchant, etc.) |
+| **Other accounts** | — | — | QuickBooks merchant (later), etc. |
 
 > Nothing migrates to the client's accounts until the corresponding part is verified on Ben's accounts first — `[ ]` item 5 in the checklist tracks it.
 

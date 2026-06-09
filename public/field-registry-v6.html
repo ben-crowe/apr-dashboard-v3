@@ -1279,8 +1279,10 @@ const PROPOSED_BASE = {
 const PROPOSED_VERSIONS = {
   1: { statusOfImprovements:'Improved - Completed', authorizedUse:'Financial Reporting' },
   2: { statusOfImprovements:'Improved - Under Renovation', authorizedUse:'Financial Reporting' },
-  3: { statusOfImprovements:'Proposed - Improved Land (Demolition Required)', authorizedUse:'Financial Reporting' },
-  4: { statusOfImprovements:'Improved - Completed', authorizedUse:'Insurance' },
+  3: { statusOfImprovements:'Proposed - Improved Land (Demolition Required)', authorizedUse:'Financial Reporting',
+       assetCondition:'Poor', currentUse:'Aging single-story warehouse — demolition required', proposedUse:'Proposed Class-A multi-tenant industrial development', propertyRights:'Fee Simple Interest', scopeOfWork:'Direct Comparison Approach', purpose:'Acquisition-Disposition' },
+  4: { statusOfImprovements:'Improved - Completed', authorizedUse:'Insurance',
+       valuationPremises:'Insurable Value', scopeOfWork:'Cost Approach', propertyRights:'Fee Simple Interest', valueTimeframe:'Current' },
 };
 function applyProposedVersion(v, item) {
   pickDD(item);

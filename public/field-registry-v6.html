@@ -915,6 +915,20 @@
   <div class="f"><span class="f-lbl"><span class="f-num">5.8</span>Site Plan</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
 </div></div></div>
 
+<div class="sec" id="pa-sec-map" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">&#9638;</span>Field Mapping &amp; Wiring</div><div class="sec-body">
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px;" onclick="event.stopPropagation();">
+    <button class="btn btn-outline fm-filter active" data-filter="all" onclick="filterFieldMap('all',this)">All</button>
+    <button class="btn btn-outline fm-filter" data-filter="wired" onclick="filterFieldMap('wired',this)">Wired</button>
+    <button class="btn btn-outline fm-filter" data-filter="notwired" onclick="filterFieldMap('notwired',this)">Not wired</button>
+    <button class="btn btn-outline fm-filter" data-filter="valcre" onclick="filterFieldMap('valcre',this)">&#8594; Valcre</button>
+    <button class="btn btn-outline fm-filter" data-filter="clickup" onclick="filterFieldMap('clickup',this)">&#8594; ClickUp</button>
+    <button class="btn btn-outline fm-filter" data-filter="loe" onclick="filterFieldMap('loe',this)">&#8594; LOE</button>
+  </div>
+  <div style="overflow-x:auto;"><table class="fi-table"><thead><tr>
+    <th>Field</th><th>Source</th><th>Control</th><th>Maps To</th><th>Valcre Field ID</th><th>Wired</th>
+  </tr></thead><tbody id="fmBody"></tbody></table></div>
+</div></div>
+
 </div>
 
 
@@ -1337,6 +1351,110 @@ function pickField(item) {
 }
 document.addEventListener('click', e => { if (!e.target.closest('.dd')) closeAllDD(); });
 
+/* ═══ FIELD MAPPING TABLE ═══ */
+const DASHBOARD_FIELDMAP = [
+ {f:'First Name',src:'User Input',ctrl:'Text',valcre:'Contact.FirstName',clickup:'Yes',loe:'[ClientFirstName]',wired:'yes'},
+ {f:'Last Name',src:'User Input',ctrl:'Text',valcre:'Contact.LastName',clickup:'Yes',loe:'[ClientLastName]',wired:'yes'},
+ {f:'Title',src:'User Input',ctrl:'Text',valcre:'Contact.Title',clickup:'',loe:'',wired:'held'},
+ {f:'Organization',src:'User Input',ctrl:'Text',valcre:'Contact.Company',clickup:'Yes',loe:'[CompanyName]',wired:'yes'},
+ {f:'Phone',src:'User Input',ctrl:'Text',valcre:'Contact.Phone',clickup:'',loe:'[Phone]',wired:'yes'},
+ {f:'Email',src:'User Input',ctrl:'Text',valcre:'Contact.Email',clickup:'Yes',loe:'[Email]',wired:'yes'},
+ {f:'Address',src:'User Input',ctrl:'Text',valcre:'Contact.Address',clickup:'',loe:'[OrganizationAddress]',wired:'yes'},
+ {f:'Property Name',src:'User Input',ctrl:'Text',valcre:'Property.Name',clickup:'Yes',loe:'[PropertyName]',wired:'yes'},
+ {f:'Property Type',src:'User Input',ctrl:'Select',valcre:'Property.Type',clickup:'Yes',loe:'[PropertyType]',wired:'yes'},
+ {f:'Property Address',src:'User Input',ctrl:'Text',valcre:'Property.StreetAddress',clickup:'Yes',loe:'[PropertyAddress]',wired:'yes'},
+ {f:'Authorized Use',src:'User Input',ctrl:'Select',valcre:'Job.IntendedUses',clickup:'',loe:'[AuthorizedUse]',wired:'yes'},
+ {f:'Valuation Premises',src:'User Input',ctrl:'Select',valcre:'',clickup:'',loe:'[Valuetimeframe]',wired:'held'},
+ {f:'Asset Condition',src:'User Input',ctrl:'Select',valcre:'Property.Condition',clickup:'',loe:'',wired:'no'},
+ {f:'Property Contact',src:'User Input',ctrl:'Text',valcre:'Contact (property)',clickup:'',loe:'',wired:'held'},
+ {f:'Client Comments',src:'User Input',ctrl:'Text',valcre:'Job.Comments',clickup:'',loe:'',wired:'yes'},
+ {f:'Job Number',src:'Valcre',ctrl:'Text',valcre:'Job.Number',clickup:'Yes',loe:'[JobNumber]',wired:'yes'},
+ {f:'Job Status',src:'User Input',ctrl:'Select',valcre:'Job.Status',clickup:'',loe:'',wired:'held'},
+ {f:'Purpose',src:'User Input',ctrl:'Text',valcre:'',clickup:'',loe:'',wired:'no'},
+ {f:'Status of Improvements',src:'User Input',ctrl:'Select',valcre:'',clickup:'',loe:'(cascade)',wired:'held'},
+ {f:'Value Scenarios',src:'Logic',ctrl:'Derived',valcre:'CF11563/11564 (Valuation Premise 1/2)',clickup:'',loe:'[ValueScenarios]',wired:'yes'},
+ {f:'Property Subtype',src:'User Input',ctrl:'Text',valcre:'',clickup:'',loe:'',wired:'held'},
+ {f:'Tenancy',src:'User Input',ctrl:'Select',valcre:'',clickup:'',loe:'',wired:'held'},
+ {f:'Property Rights',src:'Logic',ctrl:'Multi-select',valcre:'Job.Purposes',clickup:'Yes',loe:'[InterestAppraised]',wired:'yes'},
+ {f:'Approaches to Value',src:'Logic',ctrl:'Derived',valcre:'',clickup:'',loe:'[ApproachestoValue]',wired:'held'},
+ {f:'Value Timeframe',src:'User Input',ctrl:'Select',valcre:'',clickup:'',loe:'[Valuetimeframe]',wired:'held'},
+ {f:'Scope of Work',src:'User Input',ctrl:'Select',valcre:'Job.Scopes',clickup:'Yes',loe:'',wired:'yes'},
+ {f:'Report Type',src:'User Input',ctrl:'Select',valcre:'Job.ReportFormat',clickup:'Yes',loe:'[ReportType]',wired:'held'},
+ {f:'Report Format',src:'User Input',ctrl:'Select',valcre:'',clickup:'',loe:'',wired:'held'},
+ {f:'Assignment Type',src:'User Input',ctrl:'Select',valcre:'CF12049',clickup:'',loe:'[AssignmentType]',wired:'held'},
+ {f:'Analysis Level',src:'User Input',ctrl:'Select',valcre:'Job.AnalysisLevel',clickup:'',loe:'',wired:'held'},
+ {f:'Appraisal Fee',src:'Calculated',ctrl:'Text',valcre:'Job.Fee',clickup:'Yes',loe:'[Fee]',wired:'yes'},
+ {f:'Retainer Amount',src:'User Input',ctrl:'Text',valcre:'Job.Retainer',clickup:'',loe:'',wired:'yes'},
+ {f:'Payment Terms',src:'User Input',ctrl:'Select',valcre:'Job.Comments (appended)',clickup:'',loe:'',wired:'yes'},
+ {f:'Retainer Paid',src:'User Input',ctrl:'Date',valcre:'',clickup:'',loe:'',wired:'no'},
+ {f:'Amount Paid',src:'Logic',ctrl:'Text',valcre:'',clickup:'',loe:'',wired:'no'},
+ {f:'Paid Date',src:'Logic',ctrl:'Date',valcre:'',clickup:'',loe:'',wired:'no'},
+ {f:'Signed Date',src:'Logic',ctrl:'Date',valcre:'Job.AwardDate',clickup:'',loe:'',wired:'yes'},
+ {f:'Effective Date',src:'User Input',ctrl:'Date',valcre:'Job.EffectiveDate',clickup:'',loe:'',wired:'yes'},
+ {f:'Request Date',src:'User Input',ctrl:'Date',valcre:'Job.BidDate',clickup:'',loe:'',wired:'yes'},
+ {f:'Delivery Date',src:'User Input',ctrl:'Date',valcre:'Job.DueDate',clickup:'',loe:'',wired:'yes'},
+ {f:'Delivery Time (wks)',src:'User Input',ctrl:'Number',valcre:'',clickup:'',loe:'[DeliveryTime]',wired:'held'},
+ {f:'Client Documents',src:'User Input',ctrl:'Select',valcre:'',clickup:'',loe:'[ClientDocuments]',wired:'held'},
+ {f:'Previously Appraised',src:'User Input',ctrl:'Select',valcre:'',clickup:'',loe:'[PreviouslyAppraised]',wired:'held'},
+ {f:'Current Use',src:'User Input',ctrl:'Text',valcre:'',clickup:'',loe:'[CurrentUseImprovements]',wired:'held'},
+ {f:'Proposed Use',src:'User Input',ctrl:'Text',valcre:'',clickup:'',loe:'[ProposedUseImprovements]',wired:'held'},
+ {f:'CMHC Financing',src:'User Input',ctrl:'Select',valcre:'',clickup:'',loe:'',wired:'no'},
+ {f:'Transaction Status',src:'User Input',ctrl:'Select',valcre:'CF12053',clickup:'',loe:'',wired:'yes'},
+ {f:'Zoning Status',src:'User Input',ctrl:'Select',valcre:'CF12054',clickup:'',loe:'',wired:'yes'},
+ {f:'General 1',src:'User Input',ctrl:'Text',valcre:'',clickup:'',loe:'',wired:'no'},
+ {f:'General 2',src:'User Input',ctrl:'Text',valcre:'',clickup:'',loe:'',wired:'no'},
+ {f:'Year Built',src:'User Input',ctrl:'Number',valcre:'Property (research)',clickup:'',loe:'',wired:'no'},
+ {f:'Building Size (SF)',src:'User Input',ctrl:'Number',valcre:'Property (research)',clickup:'',loe:'',wired:'no'},
+ {f:'Number of Units',src:'User Input',ctrl:'Number',valcre:'',clickup:'',loe:'',wired:'no'},
+ {f:'State of Improvements',src:'User Input',ctrl:'Select',valcre:'',clickup:'',loe:'',wired:'no'},
+ {f:'Zoning',src:'User Input',ctrl:'Text',valcre:'Property (research)',clickup:'',loe:'',wired:'no'},
+ {f:'Flood Zone',src:'User Input',ctrl:'Text',valcre:'Property (research)',clickup:'',loe:'',wired:'no'},
+ {f:'Parcel Number',src:'User Input',ctrl:'Text',valcre:'Parcel (research)',clickup:'',loe:'',wired:'no'},
+ {f:'Assessed Value',src:'User Input',ctrl:'Text',valcre:'Property (research)',clickup:'',loe:'',wired:'no'}
+];
+
+function renderFieldMap() {
+  var tbody = document.getElementById('fmBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  DASHBOARD_FIELDMAP.forEach(function(r) {
+    var chips = '';
+    if (r.valcre) chips += '<span style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;font-size:10px;padding:1px 6px;margin-right:4px;">Valcre</span>';
+    if (r.clickup === 'Yes') chips += '<span style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;font-size:10px;padding:1px 6px;margin-right:4px;">ClickUp</span>';
+    if (r.loe) chips += '<span style="background:var(--bg-card);border:1px solid var(--border);border-radius:4px;font-size:10px;padding:1px 6px;margin-right:4px;">LOE</span>';
+    var dotColor = r.wired === 'yes' ? '#16a34a' : r.wired === 'held' ? '#d97706' : 'var(--text-3)';
+    var dotLabel = r.wired === 'yes' ? 'Wired' : r.wired === 'held' ? 'Held' : 'Internal';
+    var wiredCell = '<span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:' + dotColor + ';margin-right:6px;"></span>' + dotLabel;
+    var valcreCell = r.valcre ? '<span style="font-family:SF Mono,Consolas,monospace;font-size:11px;">' + r.valcre + '</span>' : '&#8212;';
+    var tr = '<tr data-wired="' + r.wired + '" data-valcre="' + (r.valcre ? '1' : '') + '" data-clickup="' + (r.clickup === 'Yes' ? '1' : '') + '" data-loe="' + (r.loe ? '1' : '') + '">'
+      + '<td class="fn">' + r.f + '</td>'
+      + '<td>' + r.src + '</td>'
+      + '<td>' + r.ctrl + '</td>'
+      + '<td>' + chips + '</td>'
+      + '<td>' + valcreCell + '</td>'
+      + '<td>' + wiredCell + '</td>'
+      + '</tr>';
+    tbody.insertAdjacentHTML('beforeend', tr);
+  });
+}
+
+function filterFieldMap(mode, btn) {
+  var sec = document.getElementById('pa-sec-map');
+  if (sec) sec.querySelectorAll('.fm-filter').forEach(function(b) { b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  var rows = document.querySelectorAll('#fmBody tr');
+  rows.forEach(function(tr) {
+    var show = false;
+    if (mode === 'all') { show = true; }
+    else if (mode === 'wired') { show = tr.dataset.wired === 'yes'; }
+    else if (mode === 'notwired') { show = tr.dataset.wired !== 'yes'; }
+    else if (mode === 'valcre') { show = tr.dataset.valcre === '1'; }
+    else if (mode === 'clickup') { show = tr.dataset.clickup === '1'; }
+    else if (mode === 'loe') { show = tr.dataset.loe === '1'; }
+    tr.style.display = show ? '' : 'none';
+  });
+}
+
 /* ═══ VIEW TOGGLE ═══ */
 function setView(view, btn) {
   btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
@@ -1346,7 +1464,7 @@ function setView(view, btn) {
   if (view === 'options') renderOptions();
   if (view === 'index') renderFields();
   if (view === 'currentapr') requestAnimationFrame(tagCurrentAprColumns);
-  if (view === 'proposedapr') requestAnimationFrame(tagCurrentAprColumns);
+  if (view === 'proposedapr') { requestAnimationFrame(tagCurrentAprColumns); renderFieldMap(); }
   // Show dash controls only on Full Dashboard — keep right-aligned
   document.getElementById('dashControls').parentElement.style.display = (view === 'full') ? 'flex' : 'none';
   // Show buttons only on Full Dashboard
@@ -3338,6 +3456,7 @@ function cancelEditRow() {
 
 renderFields();
 cascade();
+renderFieldMap();
 
 /* ═══ COLUMN VISIBILITY ═══ */
 const COL_DEFS_DEFAULT = [

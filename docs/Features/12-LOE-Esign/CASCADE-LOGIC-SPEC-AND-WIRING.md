@@ -15,10 +15,15 @@ tags: [apr-workflow, cascade, conditional-field-logic, value-scenarios, approach
 
 # Cascade Logic — Full Spec + Wiring Pass-Off
 
+**Tags:** #cascade #ground-truth #doctrine-decision #loose-end #value-scenarios #property-rights #loe
+**Entities:** [[Cascade-Logic]] [[LOE]] [[Valta-Registry-V6]]
+
 **Read this if you are wiring the cascade.** It states every rule exactly as the Rule Explorer
 defines it, and marks each cascade **BUILT** (live in code) or **PLANNED** (designed, not wired).
-The interactive source of truth is the **Rule Explorer** in `public/field-registry-v6.html` →
-"Logic Fields" tab. This doc is the static, code-verified mirror of it.
+The interactive source of truth is the **Rule Explorer** in the mock — [field-registry-v6.html](~/Development/APR-Dashboard-v3/public/field-registry-v6.html) →
+"Logic Fields" tab. This doc is the static, code-verified mirror of it. The cascade engine lives in
+[loeCascade.ts](~/Development/APR-Dashboard-v3/src/utils/loe/loeCascade.ts); the LOE token fill in
+[generateLOE.ts](~/Development/APR-Dashboard-v3/src/utils/loe/generateLOE.ts).
 
 ---
 
@@ -171,3 +176,9 @@ existing `deriveValueScenarios`), so the dashboard and the LOE generator both co
   built-vs-planned status per group (Value Scenarios = live; Approaches + Property Rights = planned),
   corrected the companion doc's stale "Existing -" keys to the live "Improved -" keys, and wrote the
   two wiring tasks. Source of truth for the cascade going forward.
+
+---
+
+**Last reviewed:** 2026-06-10 by co-architect — authored + verified every rule against the live code
+(loeCascade.ts, generateLOE.ts) and the mock Rule Explorer; linked from the
+[APR Master Dashboard](~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md).

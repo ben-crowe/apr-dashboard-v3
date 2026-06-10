@@ -163,7 +163,7 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       if (formData.paymentTerms) syncPayload.PaymentTerms = formData.paymentTerms;
       // REMOVED: disbursementPercentage - legacy field no longer used (client is now independent appraiser)
 
-      // VALTA custom fields — synced to Valcre as custom fields (IDs 12042-12054)
+      // VALTA custom fields — synced as Valcre custom fields (live block 12407–12451 + valuation premises 11563/11564). Routing IDs live in VALTA_CUSTOM_FIELD_IDS (api/valcre.ts); resolved by field NAME, not here. (corrected 2026-06-10, was stale "12042-12054")
       if (formData.tenancy) syncPayload.tenancy = formData.tenancy;
       if (formData.stateOfImprovements) syncPayload.stateOfImprovements = formData.stateOfImprovements;
       if (formData.statusOfImprovements) syncPayload.statusOfImprovements = formData.statusOfImprovements;
@@ -330,7 +330,7 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       GrossBuildingAreaSf: formData.grossBuildingAreaSf || 0,
       NetRentableAreaSf: formData.netRentableAreaSf || 0,
 
-      // VALTA custom fields — synced to Valcre as custom fields (IDs 12042-12054)
+      // VALTA custom fields — synced as Valcre custom fields (live block 12407–12451 + valuation premises 11563/11564). Routing IDs live in VALTA_CUSTOM_FIELD_IDS (api/valcre.ts); resolved by field NAME, not here. (corrected 2026-06-10, was stale "12042-12054")
       tenancy: formData.tenancy || '',
       stateOfImprovements: formData.stateOfImprovements || '',
       statusOfImprovements: formData.statusOfImprovements || '',

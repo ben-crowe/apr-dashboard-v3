@@ -1229,30 +1229,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         <SectionGroup title="Value Scenarios & Approaches">
           <TwoColumnFields>
             <CompactField label="Value Scenarios" status={fieldStates['valueScenarios']}>
-              {/* RULE 2: editable multi-select by DEFAULT. Locks to the derived read-only
-                  display ONLY after a cascade scenario has been picked (cascadePicked). */}
-              {cascadePicked ? (
-                <div style={derivedFieldStyle} className="max-w-[240px]">
-                  {jobDetails.valueScenarios || <span style={{ opacity: 0.4 }}>Derived from cascade</span>}
-                </div>
-              ) : (
-                <MultiSelect
-                  value={jobDetails.valueScenarios || ''}
-                  onChange={values => handleMultiSelectChange(values, 'valueScenarios')}
-                  options={[
-                    'As If Complete & Stabilized',
-                    'As If Complete & Stabilized - Renovated',
-                    'As If Complete - Rezoned',
-                    'As If Complete - Serviced',
-                    'As If Complete - Subdivided',
-                    'As If Vacant Land',
-                    'As Is Vacant Land',
-                    'As Stabilized',
-                    'As-Is',
-                    'Insurable Replacement Cost',
-                  ]}
-                />
-              )}
+              {/* Locked derived result — matches the mock: NO in-field picker. Value Scenarios is
+                  driven by the cascade (Status of Improvements via the separate Cascade Options
+                  picker), never selected here. Always italic + non-editable. */}
+              <div style={derivedFieldStyle} className="max-w-[240px]">
+                {jobDetails.valueScenarios || <span style={{ opacity: 0.4 }}>Derived from cascade</span>}
+              </div>
             </CompactField>
             <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']}>
               {/* CORRECTION: locked result display (no live compute yet). Always read-only; tooltip

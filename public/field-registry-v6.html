@@ -83,6 +83,8 @@
   .sec-ref-stage { font-size: 12px; font-weight: 700; color: var(--text) !important; padding: 10px 10px 5px 10px !important; border-bottom: 2px solid var(--border) !important; }
   @keyframes cascadePulse { 0%,100% { box-shadow: 0 0 0 0 rgba(245,158,11,.55); } 50% { box-shadow: 0 0 0 7px rgba(245,158,11,0); } }
   #cascadePicker.pulse .dd-trigger { animation: cascadePulse 1.2s ease-in-out infinite; border-color: #f59e0b !important; color: #92400e; font-weight: 600; }
+  #cascadePicker .dd-menu { width: max-content; min-width: 100%; right: auto; }
+  #cascadePicker .dd-item { font-size: 10px; white-space: nowrap; padding: 5px 10px; }
 
   /* Dashboard filter — small text links, right-aligned */
   .dash-controls { display: flex; gap: 12px; align-items: center; }
@@ -675,7 +677,7 @@
     <label class="cb-filter"><input type="checkbox" data-fm="logic" onchange="fmCheck()"> Logic/Cascade</label>
     <span style="width:1px;height:16px;background:var(--border);margin:0 4px;display:inline-block;"></span>
     <label class="cb-filter"><input type="checkbox" data-fm="notwired" id="fmNotWired" onchange="fmCheck()"> Not wired <span class="fm-nw-count" id="fmNwCount">0</span></label>
-    <a class="fm-test" href="../tests/registry03.html" target="_blank" style="margin-left:auto;" title="Open Chris's client registry (Valta Master Field Registry v03) — the source of truth for fields, options, and Valcre targets">Client Source</a>
+    <a class="fm-test" href="registry03.html" target="_blank" style="margin-left:auto;" title="Open Chris's client registry (Valta Master Field Registry v03) — the source of truth for fields, options, and Valcre targets">Client Source</a>
     <a class="fm-test" href="../tests/RUNBOOK-verify-valcre.md" target="_blank" title="Open the Valcre verification runbook — how each field was checked, when, and the re-runnable CLI">Testing</a>
   </div>
   <div style="overflow-x:auto;"><table class="fi-table"><thead><tr>
@@ -1066,6 +1068,7 @@ function fillTestBase() {
   // open every toggle so the filled data is visible
   document.querySelectorAll('#panel-proposedapr .sec[onclick*="toggleSec"]').forEach(function(s){ s.classList.remove('closed'); });
   var tgl = document.getElementById('paToggleAll'); if (tgl) tgl.textContent = 'Collapse all';
+  requestAnimationFrame(tagCurrentAprColumns);
   // carry the user down to the Cascade Options picker and make it glow until they pick
   var picker = document.getElementById('cascadePicker');
   if (picker) { picker.classList.add('pulse'); picker.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
@@ -1075,6 +1078,7 @@ function toggleAllProposed(btn) {
   var anyClosed = Array.prototype.some.call(secs, function(s){ return s.classList.contains('closed'); });
   secs.forEach(function(s){ s.classList.toggle('closed', !anyClosed); });
   if (btn) btn.textContent = anyClosed ? 'Collapse all' : 'Expand all';
+  requestAnimationFrame(tagCurrentAprColumns);
 }
 
 function applyProposedVersion(v, item) {

@@ -12,6 +12,13 @@ related: ["~/Development/APR-Dashboard-v3/docs/valta share/CONDITIONAL-FIELD-LOG
 
 # Cascade → LOE Contract — Special Instructions (EA/HC table + value scenarios)
 
+> ## ⭐ For the cascade RULES + WIRING, see the canonical doc
+> The full, code-verified cascade rule set + built-vs-planned status + wiring tasks now live in
+> **[CASCADE-LOGIC-SPEC-AND-WIRING.md](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/CASCADE-LOGIC-SPEC-AND-WIRING.md)**.
+> This doc is the **contract-side view** — how the cascade OUTPUTS land in the LOE sections/pages and
+> the §10 narrative-library detail. NOTE: the "Existing –" status keys in the lookup below are STALE
+> (legacy); the live keys are "Improved –" (see the canonical doc + `loeCascade.ts`).
+
 **Status:** SOURCE OF TRUTH for "Cascade field options → LOE." Deeper reconcile in progress.
 **Author:** ui-designer (dev-4), from the field-registry cross-check session · co-architect consolidating.
 **Companion:** co-architect's `SPECIAL-NOTES-future-deep-dives.md` (same folder) — this doc is the focused cascade→contract picture.

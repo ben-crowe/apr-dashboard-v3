@@ -1148,13 +1148,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 straight in on the one template. (Document-not-version-picker direction —
                 see JOB-DOCUMENT-PICKER-DECISION-TREE.md.) */}
             <CompactField label="Job Status">
-              {/* Auto-set by workflow stage (triggers not wired yet) — locked display, NOT editable,
-                  NOT a dropdown. Same locked-pending family as Property Rights/Approaches. jobStatus
-                  is job-record-only (not in any sync array), so locking the display is wiring-safe. */}
+              {/* Reflects Valcre's native Status field (single-select) — NOT human free-text, NOT a
+                  pipeline tracker. Live two-way sync to/from Valcre is not wired yet (set to 'Lead'
+                  at job-create only), so render it locked (not editable) until that sync is built.
+                  jobStatus is job-record-only here (not in any sync array) — locking display is safe. */}
               <div
                 style={derivedFieldStyle}
                 className="max-w-[240px]"
-                title="Auto-set by job stage; updates as the job progresses (New/Received → LOE Sent → Signed → In Progress). Triggers not connected yet."
+                title="Reflects Valcre's Status. Live two-way sync to/from Valcre is not wired yet — shows the status set at job creation."
               >
                 {jobDetails.jobStatus || <span style={{ opacity: 0.4 }}>—</span>}
               </div>

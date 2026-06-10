@@ -544,6 +544,7 @@
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">↗ View in ClickUp</button>
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">Preview &amp; Send LOE</button>
     <div class="dd" id="cascadePicker" style="margin-left:auto;min-width:230px;"><div class="dd-trigger" onclick="toggleDD(this)" style="font-size:11px;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);">Cascade Options &mdash; pick a scenario<span class="dd-arrow" style="position:static;margin-left:6px;"></span></div><div class="dd-menu">
+      <div class="dd-item" onclick="clearCascade()" style="color:var(--text-3);border-bottom:1px solid var(--border);margin-bottom:3px;padding-bottom:6px;">Clear &mdash; back to nothing</div>
       <div class="dd-item" onclick="applyProposedVersion(1,this)">V1 &mdash; Completed (baseline &middot; As Stabilized)</div>
       <div class="dd-item" onclick="applyProposedVersion(2,this)">V2 &mdash; Under Renovation (As-Is + As If Complete &amp; Stabilized)</div>
       <div class="dd-item" onclick="applyProposedVersion(3,this)">V3 &mdash; Improved Land / Demolition (As If Vacant + As If Complete)</div>
@@ -1126,6 +1127,31 @@ function applyProposedVersion(v, item) {
       el.querySelectorAll('.dd-item').forEach(i => i.classList.toggle('selected', i.textContent.trim() === val));
     }
   });
+}
+
+// Scoped Clear — resets ONLY the cascade section (Status of Improvements / Value Scenarios / Approaches)
+// + the picker label. Leaves all other dashboard fields untouched. Distinct from the global ribbon Clear.
+function clearCascade() {
+  var setDD = function(key, empty){
+    var el = document.querySelector('#panel-proposedapr [data-fill="'+key+'"]');
+    if(!el) return;
+    var t = el.querySelector('.dd-trigger');
+    if(t){ t.childNodes[0].textContent = empty; t.classList.add('ph'); }
+    el.querySelectorAll('.dd-item').forEach(function(i){ i.classList.remove('selected'); });
+  };
+  setDD('statusOfImprovements','Choose');   // user-choice driver
+  setDD('valueScenarios','Pending');        // derived
+  var appr = document.querySelector('#panel-proposedapr [data-fill="approachesToValue"]');
+  if(appr) appr.value = '';                 // derived input -> Pending placeholder
+  // reset the picker trigger label + selection
+  var cp = document.getElementById('cascadePicker');
+  if(cp){
+    var t = cp.querySelector('.dd-trigger');
+    if(t) t.childNodes[0].textContent = 'Cascade Options \u2014 pick a scenario';
+    cp.querySelectorAll('.dd-item').forEach(function(i){ i.classList.remove('selected'); });
+    cp.classList.remove('pulse');
+  }
+  closeAllDD();
 }
 
 /* ═══ DROPDOWN ═══ */

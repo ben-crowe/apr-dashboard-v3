@@ -868,6 +868,16 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // The cascade useEffect above then derives and writes valueScenarios.
   const handleCascadeVersion = (version: string) => {
     if (!onUpdateDetails) return;
+    if (version === '__CLEAR__') {
+      // Scoped Clear — resets ONLY the cascade section, leaves all other fields untouched.
+      setCascadeVersion('');
+      setCascadePicked(false);
+      onUpdateDetails({ statusOfImprovements: '', valueScenarios: '', approachesToValue: '' } as any);
+      autoSaveField('statusOfImprovements', '');
+      autoSaveField('valueScenarios', '');
+      autoSaveField('approachesToValue', '');
+      return;
+    }
     setCascadePicked(true); // lock Value Scenarios display to derived result
     setCascadeVersion(version); // hold the picked version so the picker label persists (e.g. "V2 — Under Renovation")
 
@@ -1149,6 +1159,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   <SelectValue placeholder="Cascade Options — pick a scenario" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="__CLEAR__" className="text-muted-foreground border-b border-border mb-1">Clear — back to nothing</SelectItem>
                   <SelectItem value="V1">V1 — Completed</SelectItem>
                   <SelectItem value="V2">V2 — Under Renovation</SelectItem>
                   <SelectItem value="V3">V3 — Improved Land / Demolition</SelectItem>

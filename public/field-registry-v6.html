@@ -148,7 +148,8 @@
   .smart-wrap { display: flex; flex-direction: column; }
   /* Derived "results" fields — auto-filled by the cascade logic; locked output, distinct look */
   .dd.derived { pointer-events: none; }
-  .dd.derived .dd-trigger, input.u-inp.derived { font-style: italic; color: #5b6b8c; cursor: default; }
+  .dd.derived .dd-trigger, input.u-inp.derived { font-style: italic; cursor: default; }
+  .dd.derived .dd-trigger:not(.ph) { color: var(--text); }  /* filled = bright/readable (like a set Valcre Job Number) */
   .dd.derived .dd-arrow { display: none; }
   input.u-inp.derived { pointer-events: none; }
   .f.dimmed .f-lbl { opacity: .35; }
@@ -548,18 +549,18 @@
 
   <div class="subgrp">Job Info</div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.1</span>Job Number</span><div class="f-val"><input class="u-inp" data-fill="jobNumber" readonly style="color:var(--text-3);"></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.2</span>Job Status</span><div class="f-val" style="position:relative;"><input class="u-inp derived" data-fill="jobStatus" readonly placeholder="From Valcre"></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.2</span>Job Status</span><div class="f-val" style="position:relative;"><input class="u-inp derived" data-fill="jobStatus" readonly placeholder="Pending"></div></div>
 
   <div class="subgrp">Purpose of the Assignment</div>
   <div class="f span2"><span class="f-lbl"><span class="f-num">2.3</span>Purpose</span><div class="f-val"><input class="u-inp" data-fill="purpose"></div></div>
 
   <div class="subgrp">Value Scenarios &amp; Approaches</div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.4</span>Status of Improvements</span><div class="f-val"><div class="dd" data-fill="statusOfImprovements"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Improved - Completed</div><div class="dd-item" onclick="pickDD(this)">Improved - Renovated</div><div class="dd-item" onclick="pickDD(this)">Improved - Under Renovation</div><div class="dd-item" onclick="pickDD(this)">Improved - Proposed Renovation</div><div class="dd-item" onclick="pickDD(this)">Proposed - Vacant Land</div><div class="dd-item" onclick="pickDD(this)">Proposed - Improved Land (Demolition Required)</div><div class="dd-item" onclick="pickDD(this)">Proposed - Under Construction</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.5</span>Value Scenarios</span><div class="f-val"><div class="dd derived" data-fill="valueScenarios"><div class="dd-trigger ph">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">As Is Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As If Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As-Is</div><div class="dd-item" onclick="pickDD(this)">As If Complete &amp; Stabilized</div><div class="dd-item" onclick="pickDD(this)">As Stabilized</div></div></div></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.5</span>Value Scenarios</span><div class="f-val"><div class="dd derived" data-fill="valueScenarios"><div class="dd-trigger ph">Pending<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">As Is Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As If Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As-Is</div><div class="dd-item" onclick="pickDD(this)">As If Complete &amp; Stabilized</div><div class="dd-item" onclick="pickDD(this)">As Stabilized</div></div></div></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.6</span>Property Subtype</span><div class="f-val"><input class="u-inp" data-fill="propertySubtype"></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.7</span>Tenancy</span><div class="f-val"><div class="dd" data-fill="tenancy"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Owner-Occupied</div><div class="dd-item" onclick="pickDD(this)">Single-Tenant</div><div class="dd-item" onclick="pickDD(this)">Multi-Tenant</div><div class="dd-item" onclick="pickDD(this)">Vacant</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.8</span>Property Rights</span><div class="f-val"><div class="dd derived" data-fill="propertyRights"><div class="dd-trigger ph">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Fee Simple Interest</div><div class="dd-item" onclick="pickDD(this)">Leasehold Interest</div><div class="dd-item" onclick="pickDD(this)">Leased Fee Interest</div><div class="dd-item" onclick="pickDD(this)">Partial Interest</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.9</span>Approaches to Value</span><div class="f-val" style="position:relative;"><input class="u-inp derived" data-fill="approachesToValue" readonly placeholder="Outcome"></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.8</span>Property Rights</span><div class="f-val"><div class="dd derived" data-fill="propertyRights"><div class="dd-trigger ph">Pending<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Fee Simple Interest</div><div class="dd-item" onclick="pickDD(this)">Leasehold Interest</div><div class="dd-item" onclick="pickDD(this)">Leased Fee Interest</div><div class="dd-item" onclick="pickDD(this)">Partial Interest</div></div></div></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.9</span>Approaches to Value</span><div class="f-val" style="position:relative;"><input class="u-inp derived" data-fill="approachesToValue" readonly placeholder="Pending"></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.10</span>Value Timeframe</span><div class="f-val"><div class="dd" data-fill="valueTimeframe"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Current</div><div class="dd-item" onclick="pickDD(this)">Retrospective</div><div class="dd-item" onclick="pickDD(this)">Prospective</div></div></div></div></div>
 
   <div class="subgrp">Scope of Work</div>
@@ -1086,7 +1087,7 @@ function clearFields() {
     else {
       var t = el.querySelector('.dd-trigger');
       var isDerived = el.classList.contains('derived');
-      if (t) { t.childNodes[0].textContent = isDerived ? 'Outcome' : 'Choose...'; t.classList.add('ph'); }
+      if (t) { t.childNodes[0].textContent = isDerived ? 'Pending' : 'Choose...'; t.classList.add('ph'); }
       el.querySelectorAll('.dd-item').forEach(function(i){ i.classList.remove('selected'); });
     }
   });

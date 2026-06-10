@@ -153,6 +153,7 @@
   .dd.derived .dd-trigger:not(.ph) { color: var(--text); }  /* filled = bright/readable (like a set Valcre Job Number) */
   .dd.derived .dd-arrow { display: none; }
   input.u-inp.derived { pointer-events: none; }
+  input.u-inp.derived::placeholder { color: var(--text-3); opacity: 1; }  /* match the dd "Pending" shade (text-3), not the lighter text-4 */
   .f.dimmed .f-lbl { opacity: .35; }
   .f.dimmed .dd-trigger { opacity: .35; }
 

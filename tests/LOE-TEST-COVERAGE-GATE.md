@@ -65,6 +65,13 @@ Schedule A slipped, 2026-06-10). Run the LOE against this gate every time; recor
 11. **Any template / HTML / spatial fix → Codex.** Schedule A markers, Example-block removal, narrative
     text, layout — all Codex's template work, NOT a code change. QA flags + routes; Codex fixes; QA
     re-verifies.
+12. **The Supabase push of the template — Codex CAN do it (verified 2026-06-10), our agent is the
+    fallback.** The active template is a `loe_templates` DB row, so the fix must be pushed to Supabase.
+    Codex can write it; if Codex gets stuck, QA/any agent pushes it directly — agents have FULL Supabase
+    access (auth persisted) via the [`/supabase-deploy`](~/.claude/skills/supabase-deploy/SKILL.md) skill
+    (project `ngovnamnjmexdpjtcnky`). EITHER WAY: NEVER trust the "success" claim — VERIFY the write by
+    reading the live DB row back (Codex's network errors were read-backs, not the write). Markers
+    existing ≠ behavior working — render single + multi property and prove the suppression fires.
 
 ---
 

@@ -177,7 +177,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
                 name="buildingSize"
                 type="text" inputMode="numeric"
                 min={0}
-                placeholder=""
+                placeholder="sq ft"
                 value={jobDetails.buildingSize || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -190,6 +190,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
                 id="numberOfUnits"
                 name="numberOfUnits"
                 type="text" inputMode="numeric"
+                placeholder="Units"
                 value={jobDetails.numberOfUnits || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -202,6 +203,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
                 id="parkingSpaces"
                 name="parkingSpaces"
                 type="text" inputMode="numeric"
+                placeholder="Spaces"
                 value={jobDetails.parkingSpaces || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}

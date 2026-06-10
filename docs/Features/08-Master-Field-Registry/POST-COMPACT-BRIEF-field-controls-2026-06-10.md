@@ -224,3 +224,15 @@ finalized; it's a separate verification pass.
 9. **Payment Terms options** — Ben unsure the option list is real. Check registry for a defined list; if none → Chris confirms.
 10. **Payment section (Retainer Paid / Amount Paid / Paid Date)** — possibly over-built / Ben's own phase-trigger idea, not client-asked. "Amount Paid" likely duplicates Retainer Amount. Review whether the section belongs.
 11. **Effective Date origin** — confirm client-required/mapped vs Ben's own addition.
+
+## SYNC popup regression (Ben, 2026-06-10) — investigate + fix
+
+**REQUIREMENT (Ben, locked):** when a job has NO connected Valcre job (no valcre job number / valcreJobId) AND no ClickUp task, editing a field must NOT throw any "didn't sync" popup. Nothing's connected → nothing to sync → no failure notification. A quiet Supabase save only.
+
+**What changed:** the quiet debounced auto-save (spinner → done) regressed to a popup on every edit. Finding: the code has NO success toast — every toast in the save path is an ERROR toast (toast.error "Failed to save X" [Supabase] or "Failed to sync X to Valcre" [LoeQuoteSection L595 / ClientSubmissionSection L117]). A recent change made sync verification STRICT (readback, HTTP 200 ≠ success; nativePatchError/nativeBad/customBad → sync-failed). So the popup = a real failure surfacing that used to be silent.
+
+**Diagnose (the exact popup WORDING tells which):**
+- "Failed to save [field]" → Supabase save itself failing.
+- "Failed to sync [field] to Valcre" → the shouldSyncToValcre guard (VALCRE_SYNC_FIELDS + isValcreJobNumber + valcreJobId) is firing when it shouldn't, OR a genuine Valcre sync failure.
+
+**Desired end state:** quiet spinner on success (still in code via fieldStates saving→saved→synced); popup ONLY on a genuine failure of a genuinely-connected job. No popup on unconnected jobs. QA (owns sync readback verification) confirms whether connected-job syncs actually land or the strict check over-fires.

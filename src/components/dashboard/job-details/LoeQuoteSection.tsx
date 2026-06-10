@@ -1186,7 +1186,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   <SelectValue placeholder="Cascade Options — pick a scenario" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="__CLEAR__" className="text-muted-foreground border-b border-border mb-1">Clear — back to nothing</SelectItem>
+                  <SelectItem value="__CLEAR__" className="text-muted-foreground border-b border-border mb-1">Clear — reset to empty</SelectItem>
                   <SelectItem value="V1">V1 — Completed</SelectItem>
                   <SelectItem value="V2">V2 — Under Renovation</SelectItem>
                   <SelectItem value="V3">V3 — Improved Land / Demolition</SelectItem>
@@ -1221,7 +1221,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 value={jobDetails.jobStatus || ''}
                 readOnly
                 placeholder="Pending Valcre job status"
-                className="h-7 text-sm max-w-[240px] italic !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0 cursor-default focus-visible:ring-0"
+                className="h-7 text-sm max-w-[220px] italic !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0 cursor-default focus-visible:ring-0"
               />
             </CompactField>
           </TwoColumnFields>
@@ -1280,8 +1280,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               {/* Locked derived result — matches the mock: NO in-field picker. Value Scenarios is
                   driven by the cascade (Status of Improvements via the separate Cascade Options
                   picker), never selected here. Always italic + non-editable. */}
-              <div style={derivedFieldStyle} className="max-w-[240px]">
-                {jobDetails.valueScenarios || <span style={{ opacity: 0.4 }}>Pending</span>}
+              <div style={derivedFieldStyle} className="max-w-[220px]">
+                {deriveValueScenarios(statusOfImprovements, authorizedUse).join(', ') || <span className="text-zinc-400">Pending</span>}
               </div>
             </CompactField>
             <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']}>
@@ -1289,10 +1289,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   signals it auto-fills from triggers TBD. Still binds to jobDetails key. */}
               <div
                 style={derivedFieldStyle}
-                className="max-w-[240px]"
+                className="max-w-[220px]"
                 title="Pending — auto-fills from triggers (to be determined)"
               >
-                {jobDetails.propertyRightsAppraised || <span style={{ opacity: 0.4 }}>Pending</span>}
+                {derivePropertyRights(primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy) || <span className="text-zinc-400">Pending</span>}
               </div>
             </CompactField>
             <CompactField label="Approaches to Value">
@@ -1300,10 +1300,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   signals it auto-fills from triggers TBD. Still binds to jobDetails key. */}
               <div
                 style={derivedFieldStyle}
-                className="max-w-[240px]"
+                className="max-w-[220px]"
                 title="Pending — auto-fills from triggers (to be determined)"
               >
-                {(jobDetails as any).approachesToValue || <span style={{ opacity: 0.4 }}>Pending</span>}
+                {deriveApproaches(statusOfImprovements, authorizedUse).join(', ') || <span className="text-zinc-400">Pending</span>}
               </div>
             </CompactField>
             {/* MOVED 2026-06-10 from Building Info (OrganizingDocsSection) — binding/handler/options preserved verbatim. */}
@@ -1455,6 +1455,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               <Input
                 type="text"
                 name="appraisalFee"
+                placeholder="$ amount"
                 value={editingAppraisalFee !== null ? editingAppraisalFee : (jobDetails.appraisalFee ? `$${formatCurrency(jobDetails.appraisalFee)}` : '')}
                 onChange={handleCurrencyChange}
                 onBlur={handleCurrencyBlur}
@@ -1466,6 +1467,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               <Input
                 type="text"
                 name="retainerAmount"
+                placeholder="$ amount"
                 value={editingRetainerAmount !== null ? editingRetainerAmount : (jobDetails.retainerAmount ? `$${formatCurrency(parseFloat(jobDetails.retainerAmount))}` : '')}
                 onChange={handleCurrencyChange}
                 onBlur={handleCurrencyBlur}

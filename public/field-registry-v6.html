@@ -107,7 +107,7 @@
   /* Text input */
   .u-inp { font: inherit; font-size: 12px; color: var(--text); border: none; border-bottom: 1px solid var(--border); background: transparent; width: 100%; height: 28px; padding: 0 2px; outline: none; transition: border-color .12s; }
   .u-inp:focus { border-bottom-color: var(--text); }
-  .u-inp::placeholder { color: var(--text-4); }
+  .u-inp::placeholder { color: var(--text-3); }  /* unified dim shade (matches dropdowns + Pending) */
   /* Native date inputs: dim the yyyy-mm-dd placeholder digits until a real value is entered (empty sub-fields lack aria-valuenow). */
   input[type="date"]::-webkit-datetime-edit-year-field:not([aria-valuenow]),
   input[type="date"]::-webkit-datetime-edit-month-field:not([aria-valuenow]),
@@ -549,7 +549,7 @@
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">↗ View in ClickUp</button>
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">Preview &amp; Send LOE</button>
     <div class="dd" id="cascadePicker" style="margin-left:auto;min-width:230px;"><div class="dd-trigger" onclick="toggleDD(this)" style="font-size:11px;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);">Cascade Options &mdash; pick a scenario<span class="dd-arrow" style="position:static;margin-left:6px;"></span></div><div class="dd-menu">
-      <div class="dd-item" onclick="clearCascade()" style="color:var(--text-3);border-bottom:1px solid var(--border);margin-bottom:3px;padding-bottom:6px;">Clear &mdash; back to nothing</div>
+      <div class="dd-item" onclick="clearCascade()" style="color:var(--text-3);border-bottom:1px solid var(--border);margin-bottom:3px;padding-bottom:6px;">Clear &mdash; reset to empty</div>
       <div class="dd-item" onclick="applyProposedVersion(1,this)">V1 &mdash; Completed (baseline &middot; As Stabilized)</div>
       <div class="dd-item" onclick="applyProposedVersion(2,this)">V2 &mdash; Under Renovation (As-Is + As If Complete &amp; Stabilized)</div>
       <div class="dd-item" onclick="applyProposedVersion(3,this)">V3 &mdash; Improved Land / Demolition (As If Vacant + As If Complete)</div>

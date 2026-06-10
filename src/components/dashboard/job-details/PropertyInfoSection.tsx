@@ -92,83 +92,11 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
       <CollapsibleContent className={sectionContentStyle}>
           {/* Inner 'Test Data' button removed — global top 'Fill Test Data' (JobDetailAccordion) fills all sections. */}
 
-          {/* Appraisal Assignment Section — VALTA fields */}
-          <SectionGroup title="Appraisal Assignment">
-            <TwoColumnFields>
-              <CompactField label="Assignment Type">
-                <Select value={jobDetails.assignmentType || ''} onValueChange={value => handleSelectChange(value, 'assignmentType')}>
-                  <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Standard">Standard</SelectItem>
-                    <SelectItem value="Update">Update</SelectItem>
-                    <SelectItem value="Retrospective">Retrospective</SelectItem>
-                    <SelectItem value="Desktop">Desktop</SelectItem>
-                  </SelectContent>
-                </Select>
-              </CompactField>
-
-              <CompactField label="Desktop Report">
-                <Select value={jobDetails.desktopReport || ''} onValueChange={value => handleSelectChange(value, 'desktopReport')}>
-                  <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Yes">Yes</SelectItem>
-                    <SelectItem value="No">No</SelectItem>
-                  </SelectContent>
-                </Select>
-              </CompactField>
-
-              <CompactField label="Value Timeframe">
-                <Select value={jobDetails.valueTimeframe || ''} onValueChange={value => handleSelectChange(value, 'valueTimeframe')}>
-                  <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Current">Current</SelectItem>
-                    <SelectItem value="Retrospective">Retrospective</SelectItem>
-                    <SelectItem value="Prospective">Prospective</SelectItem>
-                  </SelectContent>
-                </Select>
-              </CompactField>
-
-              <CompactField label="Approaches to Value">
-                <Select value={jobDetails.approachesToValue || ''} onValueChange={value => handleSelectChange(value, 'approachesToValue')}>
-                  <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="All Applicable">All Applicable</SelectItem>
-                    <SelectItem value="Cost Approach">Cost Approach</SelectItem>
-                    <SelectItem value="Direct Comparison">Direct Comparison</SelectItem>
-                    <SelectItem value="Income Approach">Income Approach</SelectItem>
-                    <SelectItem value="Cost + Direct Comparison">Cost + Direct Comparison</SelectItem>
-                    <SelectItem value="Cost + Income">Cost + Income</SelectItem>
-                    <SelectItem value="Direct Comparison + Income">Direct Comparison + Income</SelectItem>
-                  </SelectContent>
-                </Select>
-              </CompactField>
-
-              <CompactField label="Transaction Status">
-                <Select value={jobDetails.transactionStatus || ''} onValueChange={value => handleSelectChange(value, 'transactionStatus')}>
-                  <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Arm's Length">Arm's Length</SelectItem>
-                    <SelectItem value="Non-Arm's Length">Non-Arm's Length</SelectItem>
-                    <SelectItem value="Listing">Listing</SelectItem>
-                    <SelectItem value="Under Contract">Under Contract</SelectItem>
-                    <SelectItem value="REO/Bank Sale">REO/Bank Sale</SelectItem>
-                  </SelectContent>
-                </Select>
-              </CompactField>
-
-              <CompactField label="Zoning Status">
-                <Select value={jobDetails.zoningStatus || ''} onValueChange={value => handleSelectChange(value, 'zoningStatus')}>
-                  <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Legal Conforming">Legal Conforming</SelectItem>
-                    <SelectItem value="Legal Non-Conforming">Legal Non-Conforming</SelectItem>
-                    <SelectItem value="Illegal">Illegal</SelectItem>
-                    <SelectItem value="No Zoning">No Zoning</SelectItem>
-                  </SelectContent>
-                </Select>
-              </CompactField>
-            </TwoColumnFields>
-          </SectionGroup>
+          {/* "Appraisal Assignment" group REMOVED 2026-06-10 migration — all LOE-prep fields now live ONCE in
+              Section 2 (LoeQuoteSection): Assignment Type, Transaction Status + Zoning Status (Section 2 carries
+              the current CF12424/CF12425 option sets), Approaches to Value (locked/derived display per mock),
+              Value Timeframe (moved up). Desktop Report deleted (Chris; CF12050 not on tenant). Same jobDetails
+              keys + handlers throughout — no VALCRE_SYNC_FIELDS / if-chain change. */}
 
           {/* Property Site Section */}
           <SectionGroup title="Property Site">
@@ -203,9 +131,8 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
               <CompactField label="Net Rentable Area (SF)">
                 <Input id="netRentableAreaSf" name="netRentableAreaSf" type="text" value={formatNumber(jobDetails.netRentableAreaSf || '')} onChange={handleNumberChange} className="h-7 text-sm max-w-[200px]" />
               </CompactField>
-              <CompactField label="Year Built">
-                <Input id="yearBuilt" name="yearBuilt" type="text" inputMode="numeric" placeholder="" value={jobDetails.yearBuilt || ''} onChange={handleChange} className="h-7 text-sm max-w-[200px]" />
-              </CompactField>
+              {/* Year Built REMOVED here 2026-06-10 (co-arch call) — duplicate; the kept copy is in Building
+                  Information (OrganizingDocsSection), its real home. Same yearBuilt key; no sync change. */}
               <CompactField label="Buildable Land (SF)">
                 <Input id="usableLandSf" name="usableLandSf" type="text" value={formatNumber(jobDetails.usableLandSf || '')} onChange={handleNumberChange} className="h-7 text-sm max-w-[200px]" />
               </CompactField>

@@ -115,6 +115,13 @@ export function buildHubCustomFields(job: any, listFields: ClickUpFieldDef[]): A
   return out
 }
 
+// Diagnostic: which hub field NAMES have no column on this list (byName miss). Independent of value —
+// answers "which fields need a one-time column created in the ClickUp UI". Logged by create-clickup-task.
+export function hubFieldsMissingColumns(job: any, listFields: ClickUpFieldDef[]): string[] {
+  const have = new Set(listFields.map(f => f.name))
+  return Object.keys(hubValueMap(job)).filter(name => !have.has(name))
+}
+
 // Apply custom fields to a task via the per-field endpoint (POST /task/{id}/field/{fieldId}).
 // Set-replaces semantics = no duplication possible. Then a single GET readback confirms persistence
 // (not trusting the 200 alone — the session-long doctrine). Returns counts for the caller's response.

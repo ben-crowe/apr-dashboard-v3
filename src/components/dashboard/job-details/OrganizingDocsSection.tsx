@@ -246,17 +246,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
               />
             </CompactField>
 
-            <CompactField label="Tenancy">
-              <Select value={jobDetails.tenancy || ''} onValueChange={value => handleSelectChange(value, 'tenancy')}>
-                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Owner-Occupied">Owner-Occupied</SelectItem>
-                  <SelectItem value="Single-Tenant">Single-Tenant</SelectItem>
-                  <SelectItem value="Multi-Tenant">Multi-Tenant</SelectItem>
-                  <SelectItem value="Vacant">Vacant</SelectItem>
-                </SelectContent>
-              </Select>
-            </CompactField>
+            {/* Tenancy MOVED to Section 2 (LoeQuoteSection, Value Scenarios & Approaches) 2026-06-10 migration. */}
 
             <CompactField label="State of Improvements">
               <Select value={jobDetails.stateOfImprovements || ''} onValueChange={value => handleSelectChange(value, 'stateOfImprovements')}>
@@ -269,37 +259,9 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
               </Select>
             </CompactField>
 
-            <CompactField label="Status of Improvements">
-              <Select value={jobDetails.statusOfImprovements || ''} onValueChange={value => handleSelectChange(value, 'statusOfImprovements')}>
-                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>
-                  {/* v3.1 master ListStatusofImprovements — EXACT strings the §10 cascade keys on
-                      (src/utils/loe/loeCascade.ts STATUS_TO_SCENARIOS). Do not abbreviate. */}
-                  <SelectItem value="Improved - Completed">Improved - Completed</SelectItem>
-                  <SelectItem value="Improved - Renovated">Improved - Renovated</SelectItem>
-                  <SelectItem value="Improved - Under Renovation">Improved - Under Renovation</SelectItem>
-                  <SelectItem value="Improved - Proposed Renovation">Improved - Proposed Renovation</SelectItem>
-                  <SelectItem value="Proposed - Vacant Land">Proposed - Vacant Land</SelectItem>
-                  <SelectItem value="Proposed - Improved Land (Demolition Required)">Proposed - Improved Land (Demolition Required)</SelectItem>
-                  <SelectItem value="Proposed - Under Construction">Proposed - Under Construction</SelectItem>
-                </SelectContent>
-              </Select>
-            </CompactField>
-
-            <CompactField label="Property Subtype">
-              <Select value={jobDetails.propertySubtype || ''} onValueChange={value => handleSelectChange(value, 'propertySubtype')}>
-                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Low-Rise">Low-Rise</SelectItem>
-                  <SelectItem value="Mid-Rise">Mid-Rise</SelectItem>
-                  <SelectItem value="High-Rise">High-Rise</SelectItem>
-                  <SelectItem value="Garden">Garden</SelectItem>
-                  <SelectItem value="Walk-Up">Walk-Up</SelectItem>
-                  <SelectItem value="Townhouse">Townhouse</SelectItem>
-                  <SelectItem value="Mixed-Use">Mixed-Use</SelectItem>
-                </SelectContent>
-              </Select>
-            </CompactField>
+            {/* Status of Improvements REMOVED (duplicate) 2026-06-10 — the wired copy lives in Section 2
+                (LoeQuoteSection Cascade Options). Property Subtype MOVED to Section 2 (Value Scenarios &
+                Approaches). Same jobDetails keys + handlers; no sync changed. */}
 
             <CompactField label="Land Metric">
               <Select value={jobDetails.landMetric || ''} onValueChange={value => handleSelectChange(value, 'landMetric')}>

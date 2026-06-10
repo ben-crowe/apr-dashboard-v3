@@ -38,4 +38,29 @@ Where **Chris's registry** (the source of truth) and **our live code / the live 
 
 ---
 
-**Last reviewed:** 2026-06-10 by qa-agent — created the divergence register; entry #1 (Value Scenarios → 12414 vs premise 11563/11564) logged from live-tenant verification.
+---
+
+## Pending validations (queued, not yet run)
+
+### PV-1 — Property Subtype: do Chris's 4 options land in Valcre's native Subtype?
+
+| | |
+|---|---|
+| **Field** | Property Subtype → Valcre native `Property.SecondaryType` (registry ValcreName=`Subtype`, RecordLoc=Property, NewCustom=No). |
+| **Chris's curated options** | Apartment · Townhouse · Mixed Use · Shopping Centre (registry `ListPropertySubtype`). |
+| **Risk** | Same silent-no-write trap as Transaction Status labels — a native enum write that doesn't match an accepted value lands as nothing (HTTP 200, no change). |
+| **To confirm** | Per-option write→readback on a test Property: which of the 4 actually land in `SecondaryType`. |
+| **ALSO** | Valcre Subtype is **nested under Property Type**. Chris's 4 are residential/retail — **no industrial option**. Flag whether an industrial Property can even accept these (Type↔Subtype validity). |
+| **Status** | Step 1 (read-only) DONE 2026-06-10. Steps 2-3 (write-readback) held for Ben's go. |
+| **Resolver** | qa (validate) → Ben/Chris (client-review trail). |
+
+**Step 1 read-only findings (sampled 100 live Properties):**
+- The live native field is **`SecondaryType`**. A second field `SubType` exists but is **empty/unused** across the sample.
+- **SecondaryType values actually in use:** `Apartments`, `Low-rise`, `Multifamily`, `Warehouse`.
+- **None of Chris's 4** (Apartment / Townhouse / Mixed Use / Shopping Centre) appear in the sample. ⚠ **`Apartment` (Chris) vs `Apartments` (Valcre) is a singular/plural near-miss** — the exact silent-no-write trap if SecondaryType is enum-validated.
+- **Industrial gap CONFIRMED:** Industrial properties DO carry a subtype (`Warehouse` seen), so Valcre supports industrial subtypes — but Chris's curated 4 contain **no industrial option**. An industrial property (like our test property 25802872, currently SecondaryType=None) has no valid Chris-option to pick.
+- **NOT yet proven:** whether Chris's exact 4 strings LAND or silently no-write. A 100-property sample shows what's *used*, not the accepted enum. The per-option write→readback (step 2, Ben-gated) is what settles "which land."
+
+---
+
+**Last reviewed:** 2026-06-10 by qa-agent — created the divergence register; entry #1 (Value Scenarios → 12414 vs premise 11563/11564) logged from live-tenant verification. PV-1 (Property Subtype native-value validation) queued from co-arch.

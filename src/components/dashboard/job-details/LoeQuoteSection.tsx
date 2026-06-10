@@ -36,8 +36,8 @@ import { deriveValueScenarios, STATUS_TO_SCENARIOS } from "@/utils/loe/loeCascad
 // Derived field read-only style (Value Scenarios, Property Rights, Approaches to Value)
 const derivedFieldStyle: React.CSSProperties = {
   fontStyle: 'italic',
-  color: '#5b6b8c',
-  border: 'none',
+  color: 'inherit',                                   // bright/readable when filled — the Valcre Job Number reference look
+  borderBottom: '1px solid rgba(148,163,184,0.45)',   // persistent underline (reads in light + dark)
   padding: '2px 0',
   fontSize: '0.8rem',
   minHeight: '28px',
@@ -1129,6 +1129,34 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </div>
         </div>
 
+        {/* Cascade Options — scenario picker strip (TEST tool, NOT a client-facing field).
+            Top of Section 2, pushed to the side, matches the mock #cascadePicker. Disabled on a live Valcre job. */}
+        <div className="flex justify-end mb-2">
+          <div id="cascade-options-anchor">
+            {isLiveValcreJob ? (
+              <div
+                onClick={liveJobToast}
+                className="h-8 px-3 text-xs flex items-center gap-1 rounded-md border border-border bg-background opacity-50 cursor-not-allowed text-muted-foreground"
+                title="Not available — this job is connected to a live Valcre job."
+              >
+                Cascade Options — pick a scenario
+              </div>
+            ) : (
+              <Select value="" onValueChange={handleCascadeVersion}>
+                <SelectTrigger className="h-8 px-3 text-xs gap-1 rounded-md border border-border bg-background min-w-[230px]">
+                  <SelectValue placeholder="Cascade Options — pick a scenario" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="V1">V1 — Completed</SelectItem>
+                  <SelectItem value="V2">V2 — Under Renovation</SelectItem>
+                  <SelectItem value="V3">V3 — Improved Land / Demolition</SelectItem>
+                  <SelectItem value="V4">V4 — Insurance</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          </div>
+        </div>
+
         {/* 1. Job Info */}
         <SectionGroup title="Job Info">
           <TwoColumnFields>
@@ -1149,9 +1177,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               {/* Reflects Valcre's native Status field. Two-way Valcre Status sync is a real TODO
                   (next wiring pass: api/valcre.ts push + a pull path) — for now render locked/italic,
                   non-editable, no tooltip. jobStatus is job-record-only (not in any sync array). */}
-              <div style={derivedFieldStyle} className="max-w-[240px]">
-                {jobDetails.jobStatus || <span style={{ opacity: 0.4 }}>—</span>}
-              </div>
+              <Input
+                value={jobDetails.jobStatus || ''}
+                readOnly
+                placeholder="Pending Valcre job status"
+                className="h-7 text-sm max-w-[240px] italic !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0 cursor-default focus-visible:ring-0"
+              />
             </CompactField>
           </TwoColumnFields>
         </SectionGroup>
@@ -1160,26 +1191,32 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         <SectionGroup title="Purpose of the Assignment">
           <TwoColumnFields>
             <CompactField label="Purpose">
-              {/* No v6 options — text input (not invented) */}
+              {/* Free-text (user input). Placeholder is self-describing — says it's free text + where it maps —
+                  rather than pre-filling a fake purpose sentence. Matches the mock. */}
               <Input
                 type="text"
                 name="purpose"
                 value={jobDetails.purpose || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                placeholder="Purpose..."
-                className="h-7 text-sm max-w-[160px]"
+                placeholder="Purpose of the assignment (free text)"
+                title="Free text — fills the LOE 'Purpose of the Assignment' paragraph (wiring pending)."
+                className="h-7 text-sm max-w-[300px]"
               />
             </CompactField>
           </TwoColumnFields>
         </SectionGroup>
 
-        {/* 3. Cascade Options — Part B */}
-        <SectionGroup title="Cascade Options">
+        {/* Body "Cascade Options" group REMOVED 2026-06-10 — matches the mock: the V1–V4 scenario picker
+            is now the side strip at the top of Section 2 (test tool), and Status of Improvements moved into
+            "Value Scenarios & Approaches" as a normal field. */}
+
+        {/* 4. Value Scenarios & Approaches */}
+        <SectionGroup title="Value Scenarios & Approaches">
           <TwoColumnFields>
+            {/* Status of Improvements — moved here 2026-06-10 (was in body "Cascade Options" group, now matches mock 2.4).
+                Real user field + the cascade driver. Starts blank (no preset). */}
             <CompactField label="Status of Improvements">
-              {/* Anchor for top Fill button scroll-to */}
-              <span id="cascade-options-anchor" />
               <Select
                 value={(jobDetails as any).statusOfImprovements || ''}
                 onValueChange={value => {
@@ -1199,35 +1236,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 </SelectContent>
               </Select>
             </CompactField>
-            <CompactField label="Cascade Version">
-              {isLiveValcreJob ? (
-                <div
-                  onClick={liveJobToast}
-                  className="h-7 text-sm max-w-[220px] flex items-center border-0 border-b border-b-gray-400 dark:border-b-white/20 opacity-50 cursor-not-allowed text-muted-foreground"
-                  title="Not available — this job is connected to a live Valcre job."
-                >
-                  Pick version...
-                </div>
-              ) : (
-                <Select value="" onValueChange={handleCascadeVersion}>
-                  <SelectTrigger className="h-7 text-sm max-w-[220px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                    <SelectValue placeholder="Pick version..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="V1">V1 — Completed</SelectItem>
-                    <SelectItem value="V2">V2 — Under Renovation</SelectItem>
-                    <SelectItem value="V3">V3 — Improved Land / Demolition</SelectItem>
-                    <SelectItem value="V4">V4 — Insurance</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-            </CompactField>
-          </TwoColumnFields>
-        </SectionGroup>
-
-        {/* 4. Value Scenarios & Approaches */}
-        <SectionGroup title="Value Scenarios & Approaches">
-          <TwoColumnFields>
             <CompactField label="Value Scenarios" status={fieldStates['valueScenarios']}>
               {/* Locked derived result — matches the mock: NO in-field picker. Value Scenarios is
                   driven by the cascade (Status of Improvements via the separate Cascade Options
@@ -1257,6 +1265,44 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               >
                 {(jobDetails as any).approachesToValue || <span style={{ opacity: 0.4 }}>—</span>}
               </div>
+            </CompactField>
+            {/* MOVED 2026-06-10 from Building Info (OrganizingDocsSection) — binding/handler/options preserved verbatim. */}
+            <CompactField label="Property Subtype">
+              <Select value={jobDetails.propertySubtype || ''} onValueChange={value => handleSelectChange(value, 'propertySubtype')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Low-Rise">Low-Rise</SelectItem>
+                  <SelectItem value="Mid-Rise">Mid-Rise</SelectItem>
+                  <SelectItem value="High-Rise">High-Rise</SelectItem>
+                  <SelectItem value="Garden">Garden</SelectItem>
+                  <SelectItem value="Walk-Up">Walk-Up</SelectItem>
+                  <SelectItem value="Townhouse">Townhouse</SelectItem>
+                  <SelectItem value="Mixed-Use">Mixed-Use</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+            {/* MOVED 2026-06-10 from Building Info (OrganizingDocsSection) — binding/handler/options preserved verbatim. */}
+            <CompactField label="Tenancy">
+              <Select value={jobDetails.tenancy || ''} onValueChange={value => handleSelectChange(value, 'tenancy')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Owner-Occupied">Owner-Occupied</SelectItem>
+                  <SelectItem value="Single-Tenant">Single-Tenant</SelectItem>
+                  <SelectItem value="Multi-Tenant">Multi-Tenant</SelectItem>
+                  <SelectItem value="Vacant">Vacant</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+            {/* MOVED 2026-06-10 from Data Gathering (PropertyInfoSection Appraisal Assignment) — binding/handler/options preserved verbatim. */}
+            <CompactField label="Value Timeframe">
+              <Select value={jobDetails.valueTimeframe || ''} onValueChange={value => handleSelectChange(value, 'valueTimeframe')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Current">Current</SelectItem>
+                  <SelectItem value="Retrospective">Retrospective</SelectItem>
+                  <SelectItem value="Prospective">Prospective</SelectItem>
+                </SelectContent>
+              </Select>
             </CompactField>
           </TwoColumnFields>
         </SectionGroup>
@@ -1493,10 +1539,39 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         <SectionGroup title="Property Use & Other">
           <TwoColumnFields>
             <CompactField label="Current Use">
-              <Input type="text" name="currentUse" value={(jobDetails as any).currentUse || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Current use..." className="h-7 text-sm max-w-[160px]" />
+              {/* Registry ListCurrentUseImprovements — converted from free-text to Select (2026-06-10 migration).
+                  Binding preserved: same jobDetails.currentUse key, now via handleSelectChange (same save+sync path). */}
+              <Select value={(jobDetails as any).currentUse || ''} onValueChange={value => handleSelectChange(value, 'currentUse')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Vacant Land">Vacant Land</SelectItem>
+                  <SelectItem value="Single Family">Single Family</SelectItem>
+                  <SelectItem value="Multifamily">Multifamily</SelectItem>
+                  <SelectItem value="Retail">Retail</SelectItem>
+                  <SelectItem value="Industrial">Industrial</SelectItem>
+                  <SelectItem value="Office">Office</SelectItem>
+                </SelectContent>
+              </Select>
             </CompactField>
             <CompactField label="Proposed Use">
-              <Input type="text" name="proposedUse" value={(jobDetails as any).proposedUse || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Proposed use..." className="h-7 text-sm max-w-[160px]" />
+              {/* Registry ListProposedUseImprovements — converted from free-text to Select (2026-06-10 migration).
+                  Binding preserved: same jobDetails.proposedUse key, now via handleSelectChange (same save+sync path). */}
+              <Select value={(jobDetails as any).proposedUse || ''} onValueChange={value => handleSelectChange(value, 'proposedUse')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Not Applicable">Not Applicable</SelectItem>
+                  <SelectItem value="Single Family">Single Family</SelectItem>
+                  <SelectItem value="Multifamily">Multifamily</SelectItem>
+                  <SelectItem value="Mixed Use">Mixed Use</SelectItem>
+                  <SelectItem value="Retail">Retail</SelectItem>
+                  <SelectItem value="Industrial">Industrial</SelectItem>
+                  <SelectItem value="Office">Office</SelectItem>
+                </SelectContent>
+              </Select>
             </CompactField>
             <CompactField label="CMHC Financing">
               <Select value={jobDetails.cmhcFinancing || ''} onValueChange={value => handleSelectChange(value, 'cmhcFinancing')}>
@@ -1576,37 +1651,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </TwoColumnFields>
         </SectionGroup>
 
-        {/* 12. Other */}
-        {/* Authorized Use removed 2026-06-05 (field-hygiene dedup) — it now lives ONCE on the Client
-            Intake form (its origin), wired there to native Job.IntendedUses. The §10 LOE cascade reads
-            job.intendedUse as the canonical source. See DASHBOARD-TO-VALCRE-LOCATION-MAP "Field-hygiene cleanup spec". */}
-        <SectionGroup title="Other">
-          <TwoColumnFields>
-            <CompactField label="Lead Appraiser">
-              {/* No v6 options — text input (not invented) */}
-              <Input
-                type="text"
-                name="leadAppraiser"
-                value={jobDetails.leadAppraiser || ''}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="Lead appraiser..."
-                className="h-7 text-sm max-w-[160px]"
-              />
-            </CompactField>
-            <CompactField label="Desktop Report">
-              <Select value={jobDetails.desktopReport || ''} onValueChange={value => handleSelectChange(value, 'desktopReport')}>
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Yes">Yes</SelectItem>
-                  <SelectItem value="No">No</SelectItem>
-                </SelectContent>
-              </Select>
-            </CompactField>
-          </TwoColumnFields>
-        </SectionGroup>
+        {/* "Other" SectionGroup REMOVED 2026-06-10 migration — Lead Appraiser (not in registry) +
+            Desktop Report (Chris: delete; Valcre CF12050 doesn't exist on tenant) both removed.
+            Authorized Use was already removed 2026-06-05 (lives once on Client Intake → Job.IntendedUses).
+            State keys (leadAppraiser/desktopReport) left harmless; not in VALCRE_SYNC_FIELDS. */}
 
           {/* Comments Section - Three columns (responsive) */}
           <SectionGroup title="Comments">

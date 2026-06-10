@@ -33,7 +33,7 @@ One realistic fictional job fills **every** field. The version picker flips ONLY
 
 ### Section 2 — LOE Quote (the LOE gate)
 - **Job Number:** VAL261142 · **Job Status:** In Progress
-- **Purpose:** Financial Reporting
+- **Purpose:** *(free text — prose for the LOE "Purpose of the Assignment" paragraph. The test value should be SELF-DESCRIBING — explain the field rather than fake a purpose)* → "User can type anything here — free text that maps to the LOE 'Purpose of the Assignment' paragraph."
 - **Status of Improvements:** ⚡ SWITCHES — see versions below
 - **Value Scenarios:** ⚙ DERIVED — leave blank, the cascade fills it
 - **Property Subtype:** Multi-Tenant Industrial · **Tenancy:** Multi-Tenant
@@ -84,4 +84,27 @@ One realistic fictional job fills **every** field. The version picker flips ONLY
 
 Everything else in the base set stays identical. Pick a version → the cascade re-runs → §5 / §9 / §10 of the LOE change → a different PDF, same job.
 
-> Note for V3/V4 realism (optional later): a demolition-land or insurance job would in reality also shift Current/Proposed Use and Property Rights — but per Ben, keep the base constant for now; only the logic input flips. We can add per-version field overrides later if the variants need to read fully real.
+---
+
+## Per-version OVERRIDES — make V3 & V4 read fully realistic
+
+For V1 and V2 the base set already reads true (a completed / under-renovation income property). V3 and V4 are a different *kind* of job, so a few non-logic fields should shift too. Apply these deltas ON TOP of the base when that version is picked (everything else stays base):
+
+### V3 — Demolition Land (redevelopment)
+*The subject's existing building is being demolished and redeveloped — so it's a land + proposed-development valuation, not an income property.*
+- **Asset Condition:** Poor *(improvements slated for demolition)*
+- **Current Use:** Aging single-story warehouse — demolition required
+- **Proposed Use:** Proposed Class-A multi-tenant industrial development
+- **Property Rights:** Fee Simple Interest *(redevelopment land — not Leased Fee)*
+- **Scope of Work:** Direct Comparison Approach *(land value driver)*
+- **Purpose:** Acquisition-Disposition *(optional — typical for redevelopment)*
+
+### V4 — Insurance (Insurable Replacement Cost)
+*An insurance valuation is the cost to rebuild the structure — not market value — so the premise, approach and rights shift.*
+- **Authorized Use:** Insurance *(the switch — drives the cascade override)*
+- **Valuation Premises:** Insurable Value
+- **Scope of Work:** Cost Approach *(replacement-cost basis)*
+- **Property Rights:** Fee Simple Interest *(insuring the physical asset)*
+- **Value Timeframe:** Current
+
+*(V1 + V2 take NO overrides — base set is already realistic for them.)*

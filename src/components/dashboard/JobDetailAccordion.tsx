@@ -66,8 +66,8 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
     if (onUpdateDetails) {
       onUpdateDetails({
         // Section 2 — LOE Quote (base, no cascade inputs)
-        jobStatus: 'In Progress',
-        purpose: "To estimate the current market value of the subject property in support of the client's refinancing application.",
+        // jobStatus intentionally omitted — locked Valcre-native display, not a test value
+        // purpose intentionally omitted — free-text user input, starts empty (self-describing placeholder)
         // statusOfImprovements intentionally omitted — set by Cascade Options
         // valueScenarios intentionally omitted — derived by cascade
         // authorizedUse intentionally omitted — set by Cascade Options

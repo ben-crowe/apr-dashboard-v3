@@ -142,7 +142,8 @@ function mapDataToV07Fields(job: DetailJob, jobDetails: JobDetails): Record<stri
   const propName = job.propertyName || 'Unnamed Property';
 
   const map: Record<string, string> = {
-    "[Today's Date]": today,
+    "[Today's Date]": today,   // legacy V07 (May-25) token — curly apostrophe
+    '[TodaysDate]': today,     // V07-1 normalized token (straight, fill-safe)
     '[ClientFirstName]': job.clientFirstName || '',
     '[ClientLastName]': job.clientLastName || '',
     '[ClientCompanyName]': job.clientOrganization || '',

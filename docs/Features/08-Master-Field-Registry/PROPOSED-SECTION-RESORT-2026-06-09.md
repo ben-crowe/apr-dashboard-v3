@@ -340,8 +340,8 @@ These are the specific things co-architect flagged when cross-checking the mock 
 
 | Field | The question |
 |---|---|
-| **Current Use** / **Proposed Use** | The client registry already has dropdown lists for these, but the app shows a blank text box. Wire the dropdowns — confirm that's what you want. |
-| **Job Status** | **DECIDED (Ben 2026-06-10): NOT a dropdown, NOT human-entered.** It auto-changes by workflow stage (New/Received → LOE Sent → Signed → Job in Progress), driven by actions not yet wired. For now: display **locked/italic** (computed-field look) with a hover "?" explaining *"Auto-set by job stage; triggers not connected yet."* Same family as Value Scenarios (self-computing), just stage-driven. Supersedes the earlier "make it a dropdown" note. |
+| **Current Use** / **Proposed Use** | RESOLVED 2026-06-10 — registry HAS the lists (`ListCurrentUseImprovements` = Vacant Land/Single Family/Multifamily/Retail/Industrial/Office · `ListProposedUseImprovements` = Not Applicable/Single Family/Multifamily/Mixed Use/Retail/Industrial/Office). NOT a Chris block — just wire the dropdowns from these. |
+| **Job Status** | **DECIDED (Ben 2026-06-10): wire it to VALCRE'S native Status, exactly as Chris's registry asks** (registry row 4: JobStatus → Valcre native `Status`, single-select). NOT a human free-text box; it reflects Valcre's status. **Current state:** Valcre Status is set to "Lead" at job-create, but live two-way status sync (push updates / pull current value for arbitrary states) was NEVER proven — that's the wiring to build. **NOTE:** the earlier "locked/italic pipeline-tracker" idea is a SEPARATE future concept (Ben's client/workflow pipeline: new form received → in progress → signed) — that is NOT this field and lives elsewhere; do not conflate. |
 | **Purpose (2.3)** | **Orphan field** — it's a free-text box the test-fill populates, but Purpose does NOT feed Valcre (Property Rights → Job.Purposes owns that). So it's a typed box that goes nowhere. Decide: give it a real dropdown + destination, or reconsider keeping it. |
 | **Flood Zone** | Free text today. FEMA zones are a fixed list — make it a dropdown? Confirm with Chris. |
 | **Report Type** vs **Report Format** | The client's sheet calls "Report Type" what our app calls "Report Format." Naming swap to reconcile so we both mean the same thing. |
@@ -364,6 +364,8 @@ These are the specific things co-architect flagged when cross-checking the mock 
 |---|---|
 | **Move ClickUp Task button up** | Bring the "Create ClickUp Task" button up to sit with the other action buttons — three buttons together in one row. |
 | **Job Number + Job Status side by side** | Currently stacked one on top of the other; put them on the same row, side by side. |
+| **Remove leftover inner "Test Data" button** | The old per-section Test Data button in ClientSubmissionSection.tsx (~L399-402 + fillClientTestData ~L171) must go — only the GLOBAL top "Fill Test Data" (JobDetailAccordion.tsx ~L132) stays. Remove any other lingering per-section ones too. |
+| **Valuation Premises not filling (routing bug)** | Global fill sets `valuationPremises:'Market Value'` (JobDetailAccordion.tsx:97) but the Client Info field reads `job.valuationPremises` via onUpdateJob (ClientSubmissionSection.tsx:544-550). Value lands on the wrong state object → shows blank. Route Client-section fields (valuationPremises, assetCondition, etc.) through the `job`/onUpdateJob object so they display. |
 
 ### 🧪 Test-data tool behavior (Ben, 2026-06-10) — the live Fill/Cascade port rules
 

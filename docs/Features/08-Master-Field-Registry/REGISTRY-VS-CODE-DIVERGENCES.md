@@ -36,7 +36,7 @@ Where **Chris's registry** (the source of truth) and **our live code / the live 
 
 **Resolver:** Ben → Chris. Discovered 2026-06-10 during the live-tenant re-baseline.
 
----
+> **CORRECTION (2026-06-10, later same day) — 12414 is NOT empty.** A fresh readback on 784140 during punch-list baselining shows **CF12414 `ValueScenarios` = [7505, 7506] POPULATED**, alongside legacy premise CF11563=[5128]/CF11564=[5138]. So the code is **dual-writing to BOTH** the registry field (12414, handles all scenarios) AND the legacy premise fields (11563/11564, only understand 2 → throws the false "Failed to sync" on a 3rd). The original "12414 unused / values land only in premise" framing above was WRONG. The real divergence is the **dual-write**, not a mis-route. Fix in flight (co-arch punch-list #1): drop the legacy premise write, keep 12414. The Chris question (is Value Scenario == Valuation Premise?) still stands for the *native* `RequestedValues` field (separately = "None").
 
 ---
 

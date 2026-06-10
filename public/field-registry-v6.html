@@ -1042,8 +1042,8 @@ const PROPOSED_BASE = {
   // intentionally NOT filled by test data; they hold their no-job state ('Waiting…'/'Pending…').
   authorizedUse:'First Mortgage Financing', // carries from intake Intended Use — NOT a cascade-blanked field
   purpose:'User can type anything here — free text that maps to the LOE Purpose of the Assignment paragraph.',
-  propertySubtype:'Mixed Use', tenancy:'Multi-Tenant',
-  propertyRights:'Leased Fee Interest', valueTimeframe:'Current',
+  // propertySubtype / tenancy / propertyRights omitted — cascade triggers + output; cascade section starts empty after Fill
+  valueTimeframe:'Current',
   scopeOfWork:'Income Approach', reportType:'Appraisal Report',
   reportFormat:'Comprehensive', assignmentType:'Single Property',
   analysisLevel:'Detailed', appraisalFee:'$6,500', retainerAmount:'$1,500',

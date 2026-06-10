@@ -47,3 +47,21 @@ I did NOT generate LOE exceptions. The LOE statuses are mapper-derived (token fi
 ## Confidence
 
 Items 1–8 are READBACK-VERIFIED exceptions (Valcre GetValues / independent ClickUp API). Items 9–10 are build-gaps (free-text where a mapped dropdown was intended) — confirmed by the field state, not a readback. The excluded list is intent-gated out on purpose.
+
+---
+
+## UPDATE 2026-06-10 (fresh live readback + round-trip, co-arch+qa)
+
+**RETIRED (now confirmed WIRED via fresh readback / round-trip on 784140):**
+- **Transaction Status** — TRUE round-trip PASS (wrote 7567 Listed → readback exact → restored 7568). Dropdown now offers only the 3 mapped labels. Fully wired.
+- **Scope of Work** — readback `Scopes:"IncomeApproach"` lands (update path maps it).
+- **Analysis Level** — readback `AnalysisLevel:"Detailed"` lands (2026-06-04 re-option fixed it).
+- **Zoning Status** — readback CF12425 `In Place` lands.
+
+**STILL NOT WIRED (the real remaining punch-list):**
+- Valuation Premises — `RequestedValues:"None"` (create-payload gap).
+- Client Title / Client Address — mapping bug (not re-verifiable on 784140; contact fields empty).
+- Current Use / Proposed Use — custom 12410/12411 empty; dropdowns built but not sending to Valcre.
+- Value Scenarios — DUAL-WRITE: legacy premise map (CF11563/11564, 3 scenarios only) throws "Failed to sync" for unmapped scenarios while CF12414 (all 10) holds the data. FIX = drop legacy premise path, keep CF12414.
+
+**LATENT GAP (code-hardening, not a current failure):** setValtaCustomFields readback-verifies SingleOption only (api/valcre.ts:334); MultiOption writes (transactionStatus, clientDocuments) trust HTTP 200 with NO readback. They land today but won't catch a future silent no-write if Valcre re-ids the enum. Extend the readback gate to MultiOption.

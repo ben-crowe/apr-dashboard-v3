@@ -55,7 +55,7 @@ const LoeQuoteSectionIndependent: React.FC<SectionProps> = ({
   // ListProposedUseImprovements). Registry shows NO Valcre target → dashboard-only fields
   // (save to job record; the LOE reads them from there). Do NOT add a Valcre mapping.
   const CURRENT_USE_OPTIONS = ['Vacant Land', 'Single Family', 'Multifamily', 'Retail', 'Industrial', 'Office'];
-  const PROPOSED_USE_OPTIONS = ['Single Family', 'Multifamily', 'Mixed Use', 'Retail', 'Industrial', 'Office'];
+  const PROPOSED_USE_OPTIONS = ['Not Applicable', 'Single Family', 'Multifamily', 'Mixed Use', 'Retail', 'Industrial', 'Office'];
 
   const fillTestData = () => {
     if (!onUpdateDetails) return;

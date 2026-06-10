@@ -931,7 +931,6 @@
     <span style="font-weight:600;color:var(--text-3);">Manage by exception &mdash;</span>
     <span><mark class="fm-flag">highlighted</mark> = should be wired but isn&rsquo;t (a fix to clear)</span>
     <span style="color:var(--text-3);">no highlight = working &middot; a clean page = everything wired</span>
-    <span style="color:var(--text-3);">&dagger; LOE column is token-mapped &mdash; not readback-verified, so un-flagged</span>
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px;" onclick="event.stopPropagation();">
     <label class="cb-filter"><input type="checkbox" data-fm="intake" onchange="fmCheck()"> Client Intake</label>
@@ -947,9 +946,8 @@
     <a class="fm-test" href="../tests/RUNBOOK-verify-valcre.md" target="_blank" style="margin-left:auto;" title="Open the Valcre verification runbook — how each field was checked, when, and the re-runnable CLI">Testing</a>
   </div>
   <div style="overflow-x:auto;"><table class="fi-table"><thead><tr>
-    <th style="width:34px;">#</th><th>Field</th><th>Source</th><th>Control</th><th>Options</th><th>Intake</th><th>Valcre</th><th>ClickUp</th><th>LOE †</th>
+    <th style="width:34px;">#</th><th>Field</th><th>Control</th><th>Source</th><th>Options</th><th>Routes To</th>
   </tr></thead><tbody id="fmBody"></tbody></table></div>
-  <div style="font-size:10px;color:var(--text-3);margin-top:10px;">† LOE column is token-mapped — the value fills the contract, but is not field-by-field readback-verified like Valcre and ClickUp.</div>
 </div></div>
 
 </div>
@@ -1484,6 +1482,60 @@ function _fmDot(t, s) {
 
 var FM_ROW_OPTIONS = [];
 
+/* ── shared row-inner builder (used by both renderFieldMap and fmCheck) ── */
+function fmRowInner(r, idx) {
+  var exc = FM_EXCEPTIONS[r.f];
+
+  /* # cell */
+  var numCell = '<td style="color:var(--text-3);font-size:11px;font-family:SF Mono,Consolas,monospace;">' + (idx + 1) + '</td>';
+
+  /* Field cell */
+  var fieldCell = r.f;
+  if (exc && exc.dest === 'field') {
+    var tip0 = exc.reason.replace(/"/g, '&quot;');
+    fieldCell = '<mark class="fm-flag" title="' + tip0 + '">' + r.f + '</mark>';
+  }
+
+  /* Options cell */
+  var opts = FM_ROW_OPTIONS[idx] || [];
+  var optCell = opts.length > 0
+    ? '<span style="cursor:pointer;color:var(--text);" onclick="toggleFmOptions(' + idx + ',event)">' + opts.length + ' options &#9662;</span>'
+    : '<span style="color:var(--text-3);">&#8212;</span>';
+
+  /* Routes To cell */
+  var DEST_KEYS = ['intake','valcre','clickup','loe'];
+  var DEST_LABELS = {intake:'Intake', valcre:'Valcre', clickup:'ClickUp', loe:'LOE'};
+  var chipStyle = 'background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:4px;font-size:10px;padding:1px 6px;margin-right:4px;';
+  var chips = [];
+  DEST_KEYS.forEach(function(key) {
+    var hasT = r[key] && r[key].t;
+    var isExcDest = exc && exc.dest === key;
+    if (!hasT && !isExcDest) return;
+    var label = DEST_LABELS[key];
+    var chip = '<span style="' + chipStyle + '">' + label + '</span>';
+    if (isExcDest) {
+      var tipC = exc.reason.replace(/"/g, '&quot;');
+      chip = '<mark class="fm-flag" title="' + tipC + '" style="border-radius:4px;font-size:10px;padding:1px 6px;margin-right:4px;cursor:help;">' + label + '</mark>';
+    }
+    chips.push(chip);
+  });
+
+  var routesCell;
+  if (chips.length) {
+    routesCell = '<span style="cursor:pointer;" onclick="toggleFmRoutes(' + idx + ',event)">'
+      + chips.join('') + ' &#9662;</span>';
+  } else {
+    routesCell = '<span style="color:var(--text-3);">&#8212;</span>';
+  }
+
+  return numCell
+    + '<td class="fn">' + fieldCell + '</td>'
+    + '<td>' + r.ctrl + '</td>'
+    + '<td>' + r.src + '</td>'
+    + '<td>' + optCell + '</td>'
+    + '<td>' + routesCell + '</td>';
+}
+
 function renderFieldMap() {
   var tbody = document.getElementById('fmBody');
   if (!tbody) return;
@@ -1508,16 +1560,9 @@ function renderFieldMap() {
       lastSec = r.sec;
       var hdr = document.createElement('tr');
       hdr.className = 'fm-sec-row';
-      hdr.innerHTML = '<td colspan="9" style="font-weight:600;font-size:11px;color:var(--text-2);padding:14px 0 4px;">' + FM_SEC_TITLES[r.sec] + '</td>';
+      hdr.innerHTML = '<td colspan="6" style="font-weight:600;font-size:11px;color:var(--text-2);padding:14px 0 4px;">' + FM_SEC_TITLES[r.sec] + '</td>';
       tbody.appendChild(hdr);
     }
-    var hasLiveDest = (r.valcre.s === 'live') || (r.clickup.s === 'live') || (r.loe.s === 'live');
-    var hasAnyDest  = !!r.valcre.t || !!r.clickup.t || !!r.loe.t;
-    var valcreCell = r.valcre.t
-      ? '<span style="font-family:\'SF Mono\',Consolas,monospace;font-size:11px;">' + _fmDot(r.valcre.t, r.valcre.s) + '</span>'
-      : '<span style="color:var(--text-3);">—</span>';
-    var clickupCell = _fmDot(r.clickup.t, r.clickup.s);
-    var loeCell     = '<span style="opacity:0.65;">' + _fmDot(r.loe.t, r.loe.s) + '</span>';
 
     /* Collect options from the corresponding .f DOM element (by position, not label) */
     var opts = [];
@@ -1530,17 +1575,12 @@ function renderFieldMap() {
     }
     FM_ROW_OPTIONS[rowIdx] = opts;
 
-    var optCell;
-    if (opts.length > 0) {
-      optCell = '<span style="cursor:pointer;color:var(--text);" onclick="toggleFmOptions(' + rowIdx + ',event)">'
-        + opts.length + ' options &#9662;</span>';
-    } else {
-      optCell = '<span style="color:var(--text-3);">&#8212;</span>';
-    }
+    var hasLiveDest = (r.valcre.s === 'live') || (r.clickup.s === 'live') || (r.loe.s === 'live');
+    var hasAnyDest  = !!r.valcre.t || !!r.clickup.t || !!r.loe.t;
+    var exc = FM_EXCEPTIONS[r.f];
 
     var tr = document.createElement('tr');
     tr.id = 'fmrow-' + rowIdx;
-    var exc = FM_EXCEPTIONS[r.f];
     tr.dataset.sec       = r.sec;
     tr.dataset.valcre    = r.valcre.t ? '1' : '';
     tr.dataset.clickup   = r.clickup.t ? '1' : '';
@@ -1550,47 +1590,7 @@ function renderFieldMap() {
     tr.dataset.hasany    = hasAnyDest ? '1' : '';
     tr.dataset.exception = exc ? '1' : '';
 
-    /* Wrap flagged cells */
-    var fieldCell   = r.f;
-    var intakeOut   = _fmDot(r.intake.t, r.intake.s);
-    var valcreOut   = valcreCell;
-    var clickupOut  = clickupCell;
-    var loeOut      = loeCell;
-    if (exc) {
-      var tip = exc.reason.replace(/"/g, '&quot;');
-      if (exc.dest === 'field') {
-        fieldCell = '<mark class="fm-flag" title="' + tip + '">' + r.f + '</mark>';
-      } else if (exc.dest === 'valcre') {
-        var inner = r.valcre.t
-          ? '<span style="font-family:\'SF Mono\',Consolas,monospace;font-size:11px;"><mark class="fm-flag" title="' + tip + '">' + r.valcre.t + '</mark></span>'
-          : '<mark class="fm-flag" title="' + tip + '" style="font-style:italic;">not mapped</mark>';
-        valcreOut = inner;
-      } else if (exc.dest === 'clickup') {
-        var inner2 = r.clickup.t
-          ? '<mark class="fm-flag" title="' + tip + '">' + r.clickup.t + '</mark>'
-          : '<mark class="fm-flag" title="' + tip + '" style="font-style:italic;">not mapped</mark>';
-        clickupOut = inner2;
-      } else if (exc.dest === 'intake') {
-        var inner3 = r.intake.t
-          ? '<mark class="fm-flag" title="' + tip + '">' + r.intake.t + '</mark>'
-          : '<span style="color:var(--text-3);">—</span>';
-        intakeOut = inner3;
-      } else if (exc.dest === 'loe') {
-        var inner4 = r.loe.t
-          ? '<span style="opacity:0.65;"><mark class="fm-flag" title="' + tip + '">' + r.loe.t + '</mark></span>'
-          : '<span style="color:var(--text-3);">—</span>';
-        loeOut = inner4;
-      }
-    }
-    tr.innerHTML = '<td style="color:var(--text-3);font-size:11px;font-family:SF Mono,Consolas,monospace;">' + (rowIdx + 1) + '</td>'
-      + '<td class="fn">' + fieldCell + '</td>'
-      + '<td>' + r.src + '</td>'
-      + '<td>' + r.ctrl + '</td>'
-      + '<td>' + optCell + '</td>'
-      + '<td>' + intakeOut + '</td>'
-      + '<td>' + valcreOut + '</td>'
-      + '<td>' + clickupOut + '</td>'
-      + '<td>' + loeOut + '</td>';
+    tr.innerHTML = fmRowInner(r, rowIdx);
     tbody.appendChild(tr);
     rowIdx++;
   });
@@ -1601,7 +1601,9 @@ function toggleFmOptions(idx, event) {
   var existingExp = document.getElementById('fmopt-' + idx);
   var fieldRow = document.getElementById('fmrow-' + idx);
   if (!fieldRow) return;
-  var trigger = fieldRow.querySelector('td > span[onclick]');
+  /* Find the options trigger — it's in the 5th td (index 4) */
+  var optTd = fieldRow.querySelectorAll('td')[4];
+  var trigger = optTd ? optTd.querySelector('span[onclick]') : null;
   if (existingExp) {
     existingExp.remove();
     if (trigger) {
@@ -1618,37 +1620,87 @@ function toggleFmOptions(idx, event) {
     }).join('');
     var expTr = document.createElement('tr');
     expTr.id = 'fmopt-' + idx;
-    expTr.innerHTML = '<td colspan="9" style="background:var(--bg-card);padding:6px 12px 8px 28px;font-size:11px;">'
+    expTr.innerHTML = '<td colspan="6" style="background:var(--bg-card);padding:6px 12px 8px 28px;font-size:11px;">'
       + optRows + '</td>';
     fieldRow.insertAdjacentElement('afterend', expTr);
     if (trigger) trigger.innerHTML = opts.length + ' options &#9652;';
   }
 }
-function jumpToFieldMap() {
-  var sec = document.getElementById('pa-sec-map');
-  if (!sec) return;
-  if (sec.classList.contains('closed')) {
-    sec.classList.remove('closed');
-  }
-  sec.scrollIntoView({behavior:'smooth', block:'start'});
-}
 
-function toggleAllProposed(btn) {
-  var ids = ['pa-sec-1','pa-sec-2','pa-sec-3','pa-sec-4','pa-sec-5'];
-  var label = btn.textContent.trim();
-  if (label === 'Collapse all') {
-    ids.forEach(function(id) {
-      var s = document.getElementById(id);
-      if (s) s.classList.add('closed');
-    });
-    btn.textContent = 'Expand all';
-  } else {
-    ids.forEach(function(id) {
-      var s = document.getElementById(id);
-      if (s) s.classList.remove('closed');
-    });
-    btn.textContent = 'Collapse all';
+function toggleFmRoutes(idx, event) {
+  event.stopPropagation();
+  var existingExp = document.getElementById('fmroutes-' + idx);
+  var fieldRow = document.getElementById('fmrow-' + idx);
+  if (!fieldRow) return;
+  /* Find the routes trigger — it's in the 6th td (index 5) */
+  var routesTd = fieldRow.querySelectorAll('td')[5];
+  var trigger = routesTd ? routesTd.querySelector('span[onclick]') : null;
+  if (existingExp) {
+    existingExp.remove();
+    if (trigger) trigger.innerHTML = trigger.innerHTML.replace('&#9652;','&#9662;');
+    return;
   }
+  /* Build detail panel */
+  var r = DASHBOARD_FIELDMAP[idx];
+  if (!r) return;
+  var exc = FM_EXCEPTIONS[r.f];
+  var lines = [];
+  var labelStyle = 'font-weight:600;color:var(--text);min-width:80px;display:inline-block;';
+  var noteStyle  = 'color:var(--text-3);font-style:italic;';
+
+  if (r.intake.t) {
+    lines.push('<div><span style="' + labelStyle + '">From:</span> Client form</div>');
+  }
+
+  var valcreStatus = '';
+  if (exc && exc.dest === 'valcre') {
+    valcreStatus = ' &mdash; <mark class="fm-flag">not wired</mark> &mdash; ' + exc.reason.replace(/</g,'&lt;');
+  } else if (r.valcre.s === 'live') {
+    valcreStatus = ' &mdash; <span style="color:var(--green,#22c55e);">&#10003; wired</span>';
+  } else if (r.valcre.t) {
+    valcreStatus = ' &mdash; <span style="' + noteStyle + '">mapped, unverified</span>';
+  }
+  if (r.valcre.t || (exc && exc.dest === 'valcre')) {
+    var vt = r.valcre.t
+      ? '<span style="font-family:SF Mono,Consolas,monospace;font-size:11px;">' + r.valcre.t.replace(/</g,'&lt;') + '</span>'
+      : '<span style="' + noteStyle + '">—</span>';
+    lines.push('<div><span style="' + labelStyle + '">&rarr; Valcre:</span> ' + vt + valcreStatus + '</div>');
+  }
+
+  var clickupStatus = '';
+  if (exc && exc.dest === 'clickup') {
+    clickupStatus = ' &mdash; <mark class="fm-flag">not wired</mark> &mdash; ' + exc.reason.replace(/</g,'&lt;');
+  } else if (r.clickup.s === 'live') {
+    clickupStatus = ' &mdash; <span style="color:var(--green,#22c55e);">&#10003; wired</span>';
+  } else if (r.clickup.t) {
+    clickupStatus = ' &mdash; <span style="' + noteStyle + '">mapped, unverified</span>';
+  }
+  if (r.clickup.t || (exc && exc.dest === 'clickup')) {
+    var ct = r.clickup.t
+      ? r.clickup.t.replace(/</g,'&lt;')
+      : '<span style="' + noteStyle + '">—</span>';
+    lines.push('<div><span style="' + labelStyle + '">&rarr; ClickUp:</span> ' + ct + clickupStatus + '</div>');
+  }
+
+  if (r.loe.t) {
+    var lt = '<span style="font-family:SF Mono,Consolas,monospace;font-size:11px;">' + r.loe.t.replace(/</g,'&lt;') + '</span>';
+    var loeNote = ' &mdash; <span style="' + noteStyle + '">token-mapped (not readback-verified)</span>';
+    lines.push('<div><span style="' + labelStyle + '">&rarr; LOE:</span> ' + lt + loeNote + '</div>');
+  }
+
+  if (!lines.length) {
+    lines.push('<div style="' + noteStyle + '">No routes configured.</div>');
+  }
+
+  var expTr = document.createElement('tr');
+  expTr.id = 'fmroutes-' + idx;
+  expTr.innerHTML = '<td colspan="6" style="background:#fafafa;padding:8px 14px 10px 28px;font-size:11px;line-height:1.8;">'
+    + lines.join('') + '</td>';
+
+  /* Insert after fmrow, but after any existing fmopt row too */
+  var insertAfter = document.getElementById('fmopt-' + idx) || fieldRow;
+  insertAfter.insertAdjacentElement('afterend', expTr);
+  if (trigger) trigger.innerHTML = trigger.innerHTML.replace('&#9662;','&#9652;');
 }
 
 function fmCheck() {
@@ -1700,20 +1752,10 @@ function fmCheck() {
 
     var hasLiveDest = (r.valcre.s === 'live') || (r.clickup.s === 'live') || (r.loe.s === 'live');
     var hasAnyDest  = !!r.valcre.t || !!r.clickup.t || !!r.loe.t;
-    var valcreCell = r.valcre.t
-      ? '<span style="font-family:\'SF Mono\',Consolas,monospace;font-size:11px;">' + _fmDot(r.valcre.t, r.valcre.s) + '</span>'
-      : '<span style="color:var(--text-3);">—</span>';
-    var clickupCell = _fmDot(r.clickup.t, r.clickup.s);
-    var loeCell     = '<span style="opacity:0.65;">' + _fmDot(r.loe.t, r.loe.s) + '</span>';
-
-    var opts = FM_ROW_OPTIONS[i] || [];
-    var optCell = opts.length > 0
-      ? '<span style="cursor:pointer;color:var(--text);" onclick="toggleFmOptions(' + i + ',event)">' + opts.length + ' options &#9662;</span>'
-      : '<span style="color:var(--text-3);">&#8212;</span>';
+    var exc = FM_EXCEPTIONS[r.f];
 
     var tr = document.createElement('tr');
     tr.id = 'fmrow-' + i;
-    var exc = FM_EXCEPTIONS[r.f];
     tr.dataset.sec       = r.sec;
     tr.dataset.valcre    = r.valcre.t ? '1' : '';
     tr.dataset.clickup   = r.clickup.t ? '1' : '';
@@ -1723,42 +1765,7 @@ function fmCheck() {
     tr.dataset.hasany    = hasAnyDest ? '1' : '';
     tr.dataset.exception = exc ? '1' : '';
 
-    var fieldCell  = r.f;
-    var intakeOut  = _fmDot(r.intake.t, r.intake.s);
-    var valcreOut  = valcreCell;
-    var clickupOut = clickupCell;
-    var loeOut     = loeCell;
-    if (exc) {
-      var tip = exc.reason.replace(/"/g, '&quot;');
-      if (exc.dest === 'field') {
-        fieldCell = '<mark class="fm-flag" title="' + tip + '">' + r.f + '</mark>';
-      } else if (exc.dest === 'valcre') {
-        valcreOut = r.valcre.t
-          ? '<span style="font-family:\'SF Mono\',Consolas,monospace;font-size:11px;"><mark class="fm-flag" title="' + tip + '">' + r.valcre.t + '</mark></span>'
-          : '<mark class="fm-flag" title="' + tip + '" style="font-style:italic;">not mapped</mark>';
-      } else if (exc.dest === 'clickup') {
-        clickupOut = r.clickup.t
-          ? '<mark class="fm-flag" title="' + tip + '">' + r.clickup.t + '</mark>'
-          : '<mark class="fm-flag" title="' + tip + '" style="font-style:italic;">not mapped</mark>';
-      } else if (exc.dest === 'intake') {
-        intakeOut = r.intake.t
-          ? '<mark class="fm-flag" title="' + tip + '">' + r.intake.t + '</mark>'
-          : '<span style="color:var(--text-3);">—</span>';
-      } else if (exc.dest === 'loe') {
-        loeOut = r.loe.t
-          ? '<span style="opacity:0.65;"><mark class="fm-flag" title="' + tip + '">' + r.loe.t + '</mark></span>'
-          : '<span style="color:var(--text-3);">—</span>';
-      }
-    }
-    tr.innerHTML = '<td style="color:var(--text-3);font-size:11px;font-family:SF Mono,Consolas,monospace;">' + (i + 1) + '</td>'
-      + '<td class="fn">' + fieldCell + '</td>'
-      + '<td>' + r.src + '</td>'
-      + '<td>' + r.ctrl + '</td>'
-      + '<td>' + optCell + '</td>'
-      + '<td>' + intakeOut + '</td>'
-      + '<td>' + valcreOut + '</td>'
-      + '<td>' + clickupOut + '</td>'
-      + '<td>' + loeOut + '</td>';
+    tr.innerHTML = fmRowInner(r, i);
     tbody.appendChild(tr);
   });
 }

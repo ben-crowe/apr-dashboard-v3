@@ -37,10 +37,8 @@ import { deriveValueScenarios, STATUS_TO_SCENARIOS } from "@/utils/loe/loeCascad
 const derivedFieldStyle: React.CSSProperties = {
   fontStyle: 'italic',
   color: '#5b6b8c',
-  background: 'rgba(91,107,140,0.08)',
-  borderRadius: '4px',
   border: 'none',
-  padding: '2px 6px',
+  padding: '2px 0',
   fontSize: '0.8rem',
   minHeight: '28px',
   display: 'flex',
@@ -1148,15 +1146,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 straight in on the one template. (Document-not-version-picker direction —
                 see JOB-DOCUMENT-PICKER-DECISION-TREE.md.) */}
             <CompactField label="Job Status">
-              {/* Reflects Valcre's native Status field (single-select) — NOT human free-text, NOT a
-                  pipeline tracker. Live two-way sync to/from Valcre is not wired yet (set to 'Lead'
-                  at job-create only), so render it locked (not editable) until that sync is built.
-                  jobStatus is job-record-only here (not in any sync array) — locking display is safe. */}
-              <div
-                style={derivedFieldStyle}
-                className="max-w-[240px]"
-                title="Reflects Valcre's Status. Live two-way sync to/from Valcre is not wired yet — shows the status set at job creation."
-              >
+              {/* Reflects Valcre's native Status field. Two-way Valcre Status sync is a real TODO
+                  (next wiring pass: api/valcre.ts push + a pull path) — for now render locked/italic,
+                  non-editable, no tooltip. jobStatus is job-record-only (not in any sync array). */}
+              <div style={derivedFieldStyle} className="max-w-[240px]">
                 {jobDetails.jobStatus || <span style={{ opacity: 0.4 }}>—</span>}
               </div>
             </CompactField>

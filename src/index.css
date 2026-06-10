@@ -151,6 +151,8 @@ textarea::-webkit-scrollbar-thumb {
 
   html {
     @apply scroll-smooth;
+    /* Base font 16px -> 14px to match the mock dashboard density. App-wide (Tailwind rem units scale with this). */
+    font-size: 14px;
   }
 
   /* Placeholder styling — italic to distinguish from real input */

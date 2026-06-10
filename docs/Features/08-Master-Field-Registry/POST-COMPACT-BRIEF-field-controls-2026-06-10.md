@@ -207,3 +207,20 @@ finalized; it's a separate verification pass.
 - **Address fields need an underline** — on live they're still the boxed h-9 inputs from the migration (no underline). Convert to underline-style like every other field (this is the mixed-input POLISH offender).
 - **Sizing may not have deployed** — Ben says the live site still isn't tighter (max-w-[960px] + density). Verify it actually landed on live; re-push if not.
 - **WORKING MODEL reaffirmed:** perfect ALL small detail on the mock → ONE clean deploy so live matches mock in a single push → THEN Ben combs the live site. No half-synced live combing.
+
+## Comb session 2 (Ben, live+mock 2026-06-10 PM) — batch for next ui-designer pass
+
+**VISUAL (ui-designer batch):**
+1. **Cascade Clear entry rename** — "back to nothing" → **"Clear — reset to empty"** (current wording reads like a joke).
+2. **Empty-state is HALF-APPLIED** — dim placeholder reached Section 1 text fields + dropdowns ("Select…"), but MISSED: (a) DERIVED fields (Value Scenarios, Property Rights, Approaches to Value) show BLANK instead of dim "Pending"; (b) NUMBER fields (Appraisal Fee, Retainer, Building Size, Units, Parking, all parcel/assessment/tax numbers) — blank, no placeholder; (c) RESEARCH fields (Zoning, Zone Code, Land Use, Flood Zone, etc.) — blank. Apply the dim placeholder to ALL field types.
+3. **Default-empty ≠ cleared-empty** — Ben had to press Clear to make the scenario section "properly empty"; the DEFAULT load state looks different from the cleared state. They should be identical. (Bug.)
+4. **Value Scenarios group width inconsistency** — uneven underline lengths (Status of Improvements longer, others shorter) + a stray checkbox/icon at the end of the multi-select lines. Make line widths consistent.
+5. **Dim-shade inconsistency** — "Select…" dim vs text-placeholder dim vs "Pending" dim are DIFFERENT grays. Unify to ONE dim shade for all empty states.
+6. **Address full-width line + underline** — address input still stretches edge-to-edge and (on some) lacks an underline. Constrain to normal column width + underline like every other field. LOW PRIORITY (finicky — one clean attempt during wiring, don't overdo).
+7. **Currency formatting** — Appraisal Fee, Retainer etc. should DISPLAY as currency ($6,500.00 — $, commas, 2 decimals) while STORING the raw number for Valcre. Confirm no sync reason it must stay unformatted.
+
+**INVESTIGATE / CONFIRM (logic + registry trace, not visual):**
+8. **Retainer Amount = formula** — it's a % of the Appraisal Fee, auto-calculated (has logic). Find the % in code/registry; if absent → Chris question.
+9. **Payment Terms options** — Ben unsure the option list is real. Check registry for a defined list; if none → Chris confirms.
+10. **Payment section (Retainer Paid / Amount Paid / Paid Date)** — possibly over-built / Ben's own phase-trigger idea, not client-asked. "Amount Paid" likely duplicates Retainer Amount. Review whether the section belongs.
+11. **Effective Date origin** — confirm client-required/mapped vs Ben's own addition.

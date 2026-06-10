@@ -146,12 +146,15 @@
   .cascade-info.override { color: var(--amber); }
   .cascade-info:empty { display: none; }
   .smart-wrap { display: flex; flex-direction: column; }
-  /* Derived "results" fields — auto-filled by the cascade logic; styled as an output, NOT human-editable */
-  .dd.derived { position: relative; pointer-events: none; }
-  .dd.derived .dd-trigger { font-style: italic; color: var(--text-2); cursor: default; }
+  /* Derived "results" fields — auto-filled by the cascade logic; locked output, distinct look */
+  .dd.derived { pointer-events: none; }
+  .dd.derived .dd-trigger, input.u-inp.derived {
+    font-style: italic; color: #5b6b8c; cursor: default;
+    background: rgba(91,107,140,0.08); border-bottom-color: transparent;
+    border-radius: 4px; padding: 0 6px;
+  }
   .dd.derived .dd-arrow { display: none; }
-  input.u-inp.derived { font-style: italic; color: var(--text-2); pointer-events: none; }
-  .derived-dot { position: absolute; right: 3px; bottom: 6px; width: 4px; height: 4px; border-radius: 50%; background: var(--text-3); pointer-events: none; }
+  input.u-inp.derived { pointer-events: none; }
   .f.dimmed .f-lbl { opacity: .35; }
   .f.dimmed .dd-trigger { opacity: .35; }
 
@@ -555,11 +558,11 @@
 
   <div class="subgrp">Value Scenarios &amp; Approaches</div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.4</span>Status of Improvements</span><div class="f-val"><div class="dd" data-fill="statusOfImprovements"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Improved - Completed</div><div class="dd-item" onclick="pickDD(this)">Improved - Renovated</div><div class="dd-item" onclick="pickDD(this)">Improved - Under Renovation</div><div class="dd-item" onclick="pickDD(this)">Improved - Proposed Renovation</div><div class="dd-item" onclick="pickDD(this)">Proposed - Vacant Land</div><div class="dd-item" onclick="pickDD(this)">Proposed - Improved Land (Demolition Required)</div><div class="dd-item" onclick="pickDD(this)">Proposed - Under Construction</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.5</span>Value Scenarios</span><div class="f-val"><div class="dd derived" data-fill="valueScenarios"><span class="derived-dot"></span><div class="dd-trigger ph">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">As Is Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As If Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As-Is</div><div class="dd-item" onclick="pickDD(this)">As If Complete &amp; Stabilized</div><div class="dd-item" onclick="pickDD(this)">As Stabilized</div></div></div></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.5</span>Value Scenarios</span><div class="f-val"><div class="dd derived" data-fill="valueScenarios"><div class="dd-trigger ph">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">As Is Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As If Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As-Is</div><div class="dd-item" onclick="pickDD(this)">As If Complete &amp; Stabilized</div><div class="dd-item" onclick="pickDD(this)">As Stabilized</div></div></div></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.6</span>Property Subtype</span><div class="f-val"><input class="u-inp" data-fill="propertySubtype"></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.7</span>Tenancy</span><div class="f-val"><div class="dd" data-fill="tenancy"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Owner-Occupied</div><div class="dd-item" onclick="pickDD(this)">Single-Tenant</div><div class="dd-item" onclick="pickDD(this)">Multi-Tenant</div><div class="dd-item" onclick="pickDD(this)">Vacant</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.8</span>Property Rights</span><div class="f-val"><div class="dd derived" data-fill="propertyRights"><span class="derived-dot"></span><div class="dd-trigger ph">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Fee Simple Interest</div><div class="dd-item" onclick="pickDD(this)">Leasehold Interest</div><div class="dd-item" onclick="pickDD(this)">Leased Fee Interest</div><div class="dd-item" onclick="pickDD(this)">Partial Interest</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.9</span>Approaches to Value</span><div class="f-val" style="position:relative;"><input class="u-inp derived" data-fill="approachesToValue" readonly placeholder="Outcome"><span class="derived-dot"></span></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.8</span>Property Rights</span><div class="f-val"><div class="dd derived" data-fill="propertyRights"><div class="dd-trigger ph">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Fee Simple Interest</div><div class="dd-item" onclick="pickDD(this)">Leasehold Interest</div><div class="dd-item" onclick="pickDD(this)">Leased Fee Interest</div><div class="dd-item" onclick="pickDD(this)">Partial Interest</div></div></div></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.9</span>Approaches to Value</span><div class="f-val" style="position:relative;"><input class="u-inp derived" data-fill="approachesToValue" readonly placeholder="Outcome"></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.10</span>Value Timeframe</span><div class="f-val"><div class="dd" data-fill="valueTimeframe"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Current</div><div class="dd-item" onclick="pickDD(this)">Retrospective</div><div class="dd-item" onclick="pickDD(this)">Prospective</div></div></div></div></div>
 
   <div class="subgrp">Scope of Work</div>

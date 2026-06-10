@@ -933,17 +933,21 @@
     <span style="color:var(--text-3);">no highlight = working &middot; a clean page = everything wired</span>
     <span style="color:var(--text-3);">&dagger; LOE column is token-mapped &mdash; not readback-verified, so un-flagged</span>
   </div>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:0 0 12px;" onclick="event.stopPropagation();">
-    <button class="btn btn-outline fm-filter active" data-filter="all" onclick="filterFieldMap('all',this)">All</button>
-    <button class="btn btn-outline fm-filter" data-filter="intake" onclick="filterFieldMap('intake',this)">Client Intake</button>
-    <button class="btn btn-outline fm-filter" data-filter="valcre" onclick="filterFieldMap('valcre',this)">Valcre</button>
-    <button class="btn btn-outline fm-filter" data-filter="clickup" onclick="filterFieldMap('clickup',this)">ClickUp</button>
-    <button class="btn btn-outline fm-filter" data-filter="loe" onclick="filterFieldMap('loe',this)">LOE</button>
-    <a class="fm-test" href="../tests/RUNBOOK-verify-valcre.md" target="_blank" style="margin-left:auto;" title="Open the Valcre verification runbook — how each field was checked, when, and the re-runnable CLI">Testing &#8599;</a>
-    <label style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-3);cursor:pointer;user-select:none;"><input type="checkbox" id="fmNotWired" onchange="toggleNotWired(this)" style="cursor:pointer;margin:0;"> Not wired</label>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px;" onclick="event.stopPropagation();">
+    <label class="cb-filter"><input type="checkbox" data-fm="intake" onchange="fmCheck()"> Client Intake</label>
+    <label class="cb-filter"><input type="checkbox" data-fm="valcre" onchange="fmCheck()"> Valcre</label>
+    <label class="cb-filter"><input type="checkbox" data-fm="clickup" onchange="fmCheck()"> ClickUp</label>
+    <label class="cb-filter"><input type="checkbox" data-fm="loe" onchange="fmCheck()"> LOE</label>
+    <span style="width:1px;height:16px;background:var(--border);margin:0 4px;display:inline-block;"></span>
+    <label class="cb-filter"><input type="checkbox" data-fm="dropdown" onchange="fmCheck()"> Dropdown</label>
+    <label class="cb-filter"><input type="checkbox" data-fm="multi" onchange="fmCheck()"> Multi-select</label>
+    <label class="cb-filter"><input type="checkbox" data-fm="logic" onchange="fmCheck()"> Logic/Cascade</label>
+    <span style="width:1px;height:16px;background:var(--border);margin:0 4px;display:inline-block;"></span>
+    <label class="cb-filter"><input type="checkbox" data-fm="notwired" id="fmNotWired" onchange="fmCheck()"> Not wired</label>
+    <a class="fm-test" href="../tests/RUNBOOK-verify-valcre.md" target="_blank" style="margin-left:auto;" title="Open the Valcre verification runbook — how each field was checked, when, and the re-runnable CLI">Testing</a>
   </div>
   <div style="overflow-x:auto;"><table class="fi-table"><thead><tr>
-    <th>Field</th><th>Source</th><th>Control</th><th>Options</th><th>Intake</th><th>Valcre</th><th>ClickUp</th><th>LOE †</th>
+    <th style="width:34px;">#</th><th>Field</th><th>Source</th><th>Control</th><th>Options</th><th>Intake</th><th>Valcre</th><th>ClickUp</th><th>LOE †</th>
   </tr></thead><tbody id="fmBody"></tbody></table></div>
   <div style="font-size:10px;color:var(--text-3);margin-top:10px;">† LOE column is token-mapped — the value fills the contract, but is not field-by-field readback-verified like Valcre and ClickUp.</div>
 </div></div>
@@ -1504,7 +1508,7 @@ function renderFieldMap() {
       lastSec = r.sec;
       var hdr = document.createElement('tr');
       hdr.className = 'fm-sec-row';
-      hdr.innerHTML = '<td colspan="8" style="font-weight:600;font-size:11px;color:var(--text-2);padding:14px 0 4px;">' + FM_SEC_TITLES[r.sec] + '</td>';
+      hdr.innerHTML = '<td colspan="9" style="font-weight:600;font-size:11px;color:var(--text-2);padding:14px 0 4px;">' + FM_SEC_TITLES[r.sec] + '</td>';
       tbody.appendChild(hdr);
     }
     var hasLiveDest = (r.valcre.s === 'live') || (r.clickup.s === 'live') || (r.loe.s === 'live');
@@ -1578,7 +1582,8 @@ function renderFieldMap() {
         loeOut = inner4;
       }
     }
-    tr.innerHTML = '<td class="fn">' + fieldCell + '</td>'
+    tr.innerHTML = '<td style="color:var(--text-3);font-size:11px;font-family:SF Mono,Consolas,monospace;">' + (rowIdx + 1) + '</td>'
+      + '<td class="fn">' + fieldCell + '</td>'
       + '<td>' + r.src + '</td>'
       + '<td>' + r.ctrl + '</td>'
       + '<td>' + optCell + '</td>'
@@ -1613,7 +1618,7 @@ function toggleFmOptions(idx, event) {
     }).join('');
     var expTr = document.createElement('tr');
     expTr.id = 'fmopt-' + idx;
-    expTr.innerHTML = '<td colspan="8" style="background:var(--bg-card);padding:6px 12px 8px 28px;font-size:11px;">'
+    expTr.innerHTML = '<td colspan="9" style="background:var(--bg-card);padding:6px 12px 8px 28px;font-size:11px;">'
       + optRows + '</td>';
     fieldRow.insertAdjacentElement('afterend', expTr);
     if (trigger) trigger.innerHTML = opts.length + ' options &#9652;';
@@ -1646,58 +1651,114 @@ function toggleAllProposed(btn) {
   }
 }
 
-function toggleNotWired(cb) {
-  if (cb.checked) {
-    filterFieldMap('notwired', null);
-  } else {
-    filterFieldMap('all', document.querySelector('#pa-sec-map [data-filter="all"]'));
-  }
-}
-function filterFieldMap(mode, btn) {
-  var sec = document.getElementById('pa-sec-map');
-  if (sec) sec.querySelectorAll('.fm-filter').forEach(function(b) { b.classList.remove('active'); });
-  if (btn) btn.classList.add('active');
-  // keep the Not-wired checkbox in sync — any non-exception filter clears it
-  var nw = document.getElementById('fmNotWired');
-  if (nw && mode !== 'notwired') nw.checked = false;
-
-  if (mode === 'all') {
+function fmCheck() {
+  var keys = Array.from(document.querySelectorAll('#pa-sec-map [data-fm]:checked')).map(function(cb) { return cb.dataset.fm; });
+  if (!keys.length) {
     renderFieldMap();
     return;
   }
 
-  /* For non-all modes: reorder — matching rows float to top, non-matching dimmed below */
-  var tbody = document.getElementById('fmBody');
-  if (!tbody) return;
-
-  /* Collect only data rows (not section headers) */
-  var allRows = Array.from(tbody.querySelectorAll('tr:not(.fm-sec-row)'));
-
-  function isMatch(tr) {
-    if (mode === 'intake')    return tr.dataset.intake === '1';
-    if (mode === 'valcre')    return tr.dataset.valcre === '1';
-    if (mode === 'clickup')   return tr.dataset.clickup === '1';
-    if (mode === 'loe')       return tr.dataset.loe === '1';
-    if (mode === 'wired')     return tr.dataset.exception !== '1' && tr.dataset.hasany === '1';
-    if (mode === 'notwired')  return tr.dataset.exception === '1';
-    return true;
-  }
-
-  var matching = allRows.filter(function(tr) { return isMatch(tr); });
-  var dimmed   = allRows.filter(function(tr) { return !isMatch(tr); });
-
-  /* Remove all rows + section headers */
-  tbody.innerHTML = '';
-
-  /* Append matching rows (full opacity, no section headers) */
-  matching.forEach(function(tr) {
-    tr.style.opacity = '1';
-    tbody.appendChild(tr);
+  /* Build the same ordered row set renderFieldMap uses */
+  var panelFBlocks = [];
+  ['pa-sec-1','pa-sec-2','pa-sec-3','pa-sec-4'].forEach(function(sid) {
+    var sec = document.getElementById(sid);
+    if (sec) sec.querySelectorAll('.f').forEach(function(fEl) { panelFBlocks.push(fEl); });
   });
 
-  /* Append dimmed rows */
-  dimmed.forEach(function(tr) {
-    tr.style.opacity = '0.4';
+  /* Rebuild FM_ROW_OPTIONS in sync if not already populated */
+  if (!FM_ROW_OPTIONS.length) {
+    panelFBlocks.forEach(function(fEl, i) {
+      var opts = [];
+      fEl.querySelectorAll('.dd-menu .dd-item').forEach(function(item) {
+        var txt = item.textContent.trim();
+        if (txt) opts.push(txt);
+      });
+      FM_ROW_OPTIONS[i] = opts;
+    });
+  }
+
+  function rowMatches(r, i) {
+    return keys.some(function(key) {
+      if (key === 'intake')   return !!r.intake.t;
+      if (key === 'valcre')   return !!r.valcre.t;
+      if (key === 'clickup')  return !!r.clickup.t;
+      if (key === 'loe')      return !!r.loe.t;
+      if (key === 'dropdown') return FM_ROW_OPTIONS[i] && FM_ROW_OPTIONS[i].length > 0 && r.ctrl === 'Select';
+      if (key === 'multi')    return r.ctrl && r.ctrl.indexOf('Multi') !== -1;
+      if (key === 'logic')    return r.src === 'Logic' || r.ctrl === 'Derived';
+      if (key === 'notwired') return !!FM_EXCEPTIONS[r.f];
+      return false;
+    });
+  }
+
+  var tbody = document.getElementById('fmBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  DASHBOARD_FIELDMAP.forEach(function(r, i) {
+    if (!rowMatches(r, i)) return;
+
+    var hasLiveDest = (r.valcre.s === 'live') || (r.clickup.s === 'live') || (r.loe.s === 'live');
+    var hasAnyDest  = !!r.valcre.t || !!r.clickup.t || !!r.loe.t;
+    var valcreCell = r.valcre.t
+      ? '<span style="font-family:\'SF Mono\',Consolas,monospace;font-size:11px;">' + _fmDot(r.valcre.t, r.valcre.s) + '</span>'
+      : '<span style="color:var(--text-3);">—</span>';
+    var clickupCell = _fmDot(r.clickup.t, r.clickup.s);
+    var loeCell     = '<span style="opacity:0.65;">' + _fmDot(r.loe.t, r.loe.s) + '</span>';
+
+    var opts = FM_ROW_OPTIONS[i] || [];
+    var optCell = opts.length > 0
+      ? '<span style="cursor:pointer;color:var(--text);" onclick="toggleFmOptions(' + i + ',event)">' + opts.length + ' options &#9662;</span>'
+      : '<span style="color:var(--text-3);">&#8212;</span>';
+
+    var tr = document.createElement('tr');
+    tr.id = 'fmrow-' + i;
+    var exc = FM_EXCEPTIONS[r.f];
+    tr.dataset.sec       = r.sec;
+    tr.dataset.valcre    = r.valcre.t ? '1' : '';
+    tr.dataset.clickup   = r.clickup.t ? '1' : '';
+    tr.dataset.loe       = r.loe.t ? '1' : '';
+    tr.dataset.intake    = r.intake.t ? '1' : '';
+    tr.dataset.haslive   = hasLiveDest ? '1' : '';
+    tr.dataset.hasany    = hasAnyDest ? '1' : '';
+    tr.dataset.exception = exc ? '1' : '';
+
+    var fieldCell  = r.f;
+    var intakeOut  = _fmDot(r.intake.t, r.intake.s);
+    var valcreOut  = valcreCell;
+    var clickupOut = clickupCell;
+    var loeOut     = loeCell;
+    if (exc) {
+      var tip = exc.reason.replace(/"/g, '&quot;');
+      if (exc.dest === 'field') {
+        fieldCell = '<mark class="fm-flag" title="' + tip + '">' + r.f + '</mark>';
+      } else if (exc.dest === 'valcre') {
+        valcreOut = r.valcre.t
+          ? '<span style="font-family:\'SF Mono\',Consolas,monospace;font-size:11px;"><mark class="fm-flag" title="' + tip + '">' + r.valcre.t + '</mark></span>'
+          : '<mark class="fm-flag" title="' + tip + '" style="font-style:italic;">not mapped</mark>';
+      } else if (exc.dest === 'clickup') {
+        clickupOut = r.clickup.t
+          ? '<mark class="fm-flag" title="' + tip + '">' + r.clickup.t + '</mark>'
+          : '<mark class="fm-flag" title="' + tip + '" style="font-style:italic;">not mapped</mark>';
+      } else if (exc.dest === 'intake') {
+        intakeOut = r.intake.t
+          ? '<mark class="fm-flag" title="' + tip + '">' + r.intake.t + '</mark>'
+          : '<span style="color:var(--text-3);">—</span>';
+      } else if (exc.dest === 'loe') {
+        loeOut = r.loe.t
+          ? '<span style="opacity:0.65;"><mark class="fm-flag" title="' + tip + '">' + r.loe.t + '</mark></span>'
+          : '<span style="color:var(--text-3);">—</span>';
+      }
+    }
+    tr.innerHTML = '<td style="color:var(--text-3);font-size:11px;font-family:SF Mono,Consolas,monospace;">' + (i + 1) + '</td>'
+      + '<td class="fn">' + fieldCell + '</td>'
+      + '<td>' + r.src + '</td>'
+      + '<td>' + r.ctrl + '</td>'
+      + '<td>' + optCell + '</td>'
+      + '<td>' + intakeOut + '</td>'
+      + '<td>' + valcreOut + '</td>'
+      + '<td>' + clickupOut + '</td>'
+      + '<td>' + loeOut + '</td>';
     tbody.appendChild(tr);
   });
 }

@@ -134,6 +134,7 @@ The E2E workflow + how to drive the app.
 | Doc | What it is |
 |---|---|
 | [**E2E Testing Workflow — Master Plan**](~/Development/APR-Dashboard-v3/tests/E2E-TESTING-WORKFLOW-MASTER.md) | THE end-to-end test plan (v2, decisions locked). Full walk-through of the whole pipeline. |
+| [**★ LOE Test Coverage Gate**](~/Development/APR-Dashboard-v3/tests/LOE-TEST-COVERAGE-GATE.md) | **The documented "what to verify on EVERY LOE test"** — cascade, §10 cleanliness, Schedule A / multiple properties, Example-block leak, token leaks, render gotcha. Run the LOE against this so nothing's missed (the Schedule-A-miss fix). |
 | [**Data-Flow Visual Verification Workflow**](~/Development/APR-Dashboard-v3/Data-Flow%20Visuals/01-Data-Flow-Diagram.md) | **QA-owned.** Proves a job's data travels intact via filled-in screenshots side-by-side on Paper. Living board: `Build Workflow Testing` › `APR Workflow` › `DATA-FLOW BOARD — VAL261101`. |
 | [Generic Visual Verification SOP](~/Development/APR-Dashboard-v3/tests/Testing-Visual-Verification-Workflow.md) | The capturer≠verifier screenshot discipline. |
 | [**Sync Verification Report**](~/Development/APR-Dashboard-v3/Data-Flow%20Visuals/02-SYNC-VERIFICATION-RESULT.md) + [Auto-Sync Wiring Map](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md) | **QA-owned pair.** Wiring map = how each field routes; report = per-field readback PROOF (never trust HTTP 200). |

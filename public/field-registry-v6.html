@@ -939,8 +939,8 @@
     <button class="btn btn-outline fm-filter" data-filter="valcre" onclick="filterFieldMap('valcre',this)">Valcre</button>
     <button class="btn btn-outline fm-filter" data-filter="clickup" onclick="filterFieldMap('clickup',this)">ClickUp</button>
     <button class="btn btn-outline fm-filter" data-filter="loe" onclick="filterFieldMap('loe',this)">LOE</button>
-    <button class="fm-test fm-filter" data-filter="wired" style="margin-left:auto;" onclick="filterFieldMap('wired',this)">Wired</button>
-    <button class="fm-test fm-filter" data-filter="notwired" onclick="filterFieldMap('notwired',this)">Not wired</button>
+    <a class="fm-test" href="../tests/RUNBOOK-verify-valcre.md" target="_blank" style="margin-left:auto;" title="Open the Valcre verification runbook — how each field was checked, when, and the re-runnable CLI">Testing &#8599;</a>
+    <label style="display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--text-3);cursor:pointer;user-select:none;"><input type="checkbox" id="fmNotWired" onchange="toggleNotWired(this)" style="cursor:pointer;margin:0;"> Not wired</label>
   </div>
   <div style="overflow-x:auto;"><table class="fi-table"><thead><tr>
     <th>Field</th><th>Source</th><th>Control</th><th>Options</th><th>Intake</th><th>Valcre</th><th>ClickUp</th><th>LOE †</th>
@@ -1646,10 +1646,20 @@ function toggleAllProposed(btn) {
   }
 }
 
+function toggleNotWired(cb) {
+  if (cb.checked) {
+    filterFieldMap('notwired', null);
+  } else {
+    filterFieldMap('all', document.querySelector('#pa-sec-map [data-filter="all"]'));
+  }
+}
 function filterFieldMap(mode, btn) {
   var sec = document.getElementById('pa-sec-map');
   if (sec) sec.querySelectorAll('.fm-filter').forEach(function(b) { b.classList.remove('active'); });
   if (btn) btn.classList.add('active');
+  // keep the Not-wired checkbox in sync — any non-exception filter clears it
+  var nw = document.getElementById('fmNotWired');
+  if (nw && mode !== 'notwired') nw.checked = false;
 
   if (mode === 'all') {
     renderFieldMap();

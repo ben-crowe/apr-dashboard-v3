@@ -160,6 +160,16 @@ const TN_TO_RIGHTS: Record<string, string> = {
   'Single-Tenant': 'Going Concern',
 };
 
+// Live dashboard Property Type option labels → cascade keys (PT_TO_RIGHTS). Audited 2026-06-10 against
+// the full ClientSubmissionSection option list; these 3 are the only near-misses (label variants of an
+// existing key). Non-cascade types (Agriculture, Building, Healthcare, Manufactured Housing, Single-Family,
+// Special Purpose, Unknown, Other) have NO PT_TO_RIGHTS equivalent and correctly yield no base result.
+const PT_ALIAS: Record<string, string> = {
+  'Multi-Family': 'Multifamily',
+  'Hospitality': 'Hotel',
+  'Senior': 'Seniors',
+};
+
 /**
  * Derive the Property Rights Appraised value.
  * Override order: Property Type (base) → Subtype (Mixed Use) → Tenancy (beats both).
@@ -170,7 +180,8 @@ const TN_TO_RIGHTS: Record<string, string> = {
  * Mismatched types yield '' (field stays "Pending"). Do NOT invent mappings — reconcile with Chris.
  */
 export function derivePropertyRights(propertyType?: string, propertySubtype?: string, tenancy?: string): string {
-  let result = PT_TO_RIGHTS[(propertyType || '').trim()] || '';
+  const pt = (propertyType || '').trim();
+  let result = PT_TO_RIGHTS[PT_ALIAS[pt] || pt] || '';
   if (SUB_TO_RIGHTS[(propertySubtype || '').trim()]) result = SUB_TO_RIGHTS[(propertySubtype || '').trim()];
   const tn = (tenancy || '').trim();
   if (TN_TO_RIGHTS[tn]) result = TN_TO_RIGHTS[tn]; // Unknown/Vacant simply aren't keys -> no change

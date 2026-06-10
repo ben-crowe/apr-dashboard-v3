@@ -221,3 +221,19 @@ same field). Standardize the dashboard label to "Authorized Use."
 
 *Append new entries above this line as they come up. Keep each one pinpointed to tab + row/column +
 exact text, so the question is always clear.*
+
+## 8 — Property Type labels: live dashboard vs cascade/Valcre keys (handled in code; flag only)
+
+**Status:** RESOLVED in code 2026-06-10 (alias normalization) · underlying label reconcile optional
+
+**What looks off:** the live dashboard's Property Type options use different spellings than the
+cascade's Valcre-aligned keys — `Multi-Family` vs `Multifamily`, `Senior` vs `Seniors`,
+`Hospitality` vs `Hotel`. Because the Property Rights cascade is exact-string keyed, those types
+silently wouldn't derive until reconciled.
+
+**Fix applied:** a normalization/alias layer inside `derivePropertyRights` maps the live strings to
+the cascade keys — no user-facing change, derivation now fires for all types.
+
+**Optional deeper reconcile (decide later):** standardize the dashboard Property Type option labels
+to the Valcre-aligned values so the two lists match natively (removes the need for the alias layer).
+Not urgent — the alias handles it. Track alongside the other registry-vs-live divergences.

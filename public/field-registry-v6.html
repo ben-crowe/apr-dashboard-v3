@@ -493,6 +493,7 @@
 <div style="display:flex;align-items:center;gap:8px;margin:0 0 14px;padding:8px 0;border-bottom:1px solid var(--border);">
   <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;" onclick="jumpToFieldMap()">Field Mapping &#8595;</button>
   <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;margin-left:auto;" onclick="fillTestBase()">Fill Test Data</button>
+  <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;" onclick="clearFields()">Clear</button>
   <button class="btn btn-outline" id="paToggleAll" style="font-size:11px;padding:5px 12px;" onclick="toggleAllProposed(this)">Expand all</button>
 </div>
 
@@ -551,7 +552,7 @@
 
   <div class="subgrp">Job Info</div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.1</span>Job Number</span><div class="f-val"><input class="u-inp" data-fill="jobNumber" readonly style="color:var(--text-3);"></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.2</span>Job Status</span><div class="f-val"><input class="u-inp" data-fill="jobStatus"></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.2</span>Job Status</span><div class="f-val" style="position:relative;"><input class="u-inp derived" data-fill="jobStatus" readonly placeholder="Auto by stage" title="Auto-set by job stage; updates as the job progresses (New/Received &rarr; LOE Sent &rarr; Signed &rarr; In Progress). Triggers not connected yet."></div></div>
 
   <div class="subgrp">Purpose of the Assignment</div>
   <div class="f span2"><span class="f-lbl"><span class="f-num">2.3</span>Purpose</span><div class="f-val"><input class="u-inp" data-fill="purpose"></div></div>
@@ -1081,6 +1082,20 @@ function fillTestBase() {
   // carry the user down to the Cascade Options picker and make it glow until they pick
   var picker = document.getElementById('cascadePicker');
   if (picker) { picker.classList.add('pulse'); picker.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+}
+// Inverse of fillTestBase — empty every field back to blank so you can view fresh.
+function clearFields() {
+  document.querySelectorAll('#panel-proposedapr [data-fill]').forEach(function(el){
+    if (el.tagName === 'INPUT') { el.value = ''; }
+    else {
+      var t = el.querySelector('.dd-trigger');
+      var isDerived = el.classList.contains('derived');
+      if (t) { t.childNodes[0].textContent = isDerived ? 'Outcome' : 'Choose...'; t.classList.add('ph'); }
+      el.querySelectorAll('.dd-item').forEach(function(i){ i.classList.remove('selected'); });
+    }
+  });
+  var picker = document.getElementById('cascadePicker');
+  if (picker) picker.classList.remove('pulse');
 }
 function toggleAllProposed(btn) {
   var secs = document.querySelectorAll('#panel-proposedapr .sec[onclick*="toggleSec"]');

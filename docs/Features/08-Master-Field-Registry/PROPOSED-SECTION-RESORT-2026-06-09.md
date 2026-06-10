@@ -341,7 +341,8 @@ These are the specific things co-architect flagged when cross-checking the mock 
 | Field | The question |
 |---|---|
 | **Current Use** / **Proposed Use** | The client registry already has dropdown lists for these, but the app shows a blank text box. Wire the dropdowns — confirm that's what you want. |
-| **Job Status** | Same story — it's a real registry dropdown that maps to Valcre's Status, but renders as free text today. Wire it. |
+| **Job Status** | **DECIDED (Ben 2026-06-10): NOT a dropdown, NOT human-entered.** It auto-changes by workflow stage (New/Received → LOE Sent → Signed → Job in Progress), driven by actions not yet wired. For now: display **locked/italic** (computed-field look) with a hover "?" explaining *"Auto-set by job stage; triggers not connected yet."* Same family as Value Scenarios (self-computing), just stage-driven. Supersedes the earlier "make it a dropdown" note. |
+| **Purpose (2.3)** | **Orphan field** — it's a free-text box the test-fill populates, but Purpose does NOT feed Valcre (Property Rights → Job.Purposes owns that). So it's a typed box that goes nowhere. Decide: give it a real dropdown + destination, or reconsider keeping it. |
 | **Flood Zone** | Free text today. FEMA zones are a fixed list — make it a dropdown? Confirm with Chris. |
 | **Report Type** vs **Report Format** | The client's sheet calls "Report Type" what our app calls "Report Format." Naming swap to reconcile so we both mean the same thing. |
 | **Lead Appraiser** | Not in the client registry at all — no clear reason it's there. Keep or remove? |
@@ -356,6 +357,30 @@ These are the specific things co-architect flagged when cross-checking the mock 
 | **Authorized Use** | Also a duplicate (Client Intake + Job-Prep). Canonical = Client Intake; remove the Job-Prep copy. |
 | **Valuation Premise** vs **Value Scenarios** | Confirmed DIFFERENT things — do NOT merge them. |
 | **Scope of Work** | Becomes a multi-select checkbox (Valcre treats it as a checkbox), not a single pick. |
+
+### 🔧 Pending layout tweaks (Ben, 2026-06-10) — bundle with the lower-sections pass
+
+| Tweak | Detail |
+|---|---|
+| **Move ClickUp Task button up** | Bring the "Create ClickUp Task" button up to sit with the other action buttons — three buttons together in one row. |
+| **Job Number + Job Status side by side** | Currently stacked one on top of the other; put them on the same row, side by side. |
+
+### 🧪 Test-data tool behavior (Ben, 2026-06-10) — the live Fill/Cascade port rules
+
+**1. Test tools disable on a real Valcre job.** Once a job has a real synced Valcre job number,
+the top **Fill Test Data** button AND the **Cascade Options** picker go **inactive but still
+visible** (greyed). Clicking a disabled one shows a reason: *"Not available — this job is connected
+to a live Valcre job."* Rationale: those fields auto-sync to Valcre, so an accidental click could
+mass-overwrite the real job. Do NOT change auto-sync — only gate the test tools. (Gate = presence of
+a real Valcre job number; no formal "test mode" toggle needed. Future: may remove test buttons
+entirely.)
+
+**2. Locking is a RESULT of picking, never the default.** Default state = every field editable,
+nothing locked, picker idle. A derived field shows **locked only the moment a cascade scenario is
+actually picked**, and only for fields that genuinely derive (today: **Value Scenarios only** —
+Property Rights + Approaches do NOT auto-compute live, so they stay editable). A user who skips the
+picker fills everything by hand normally. Optional: a hover "?" on logic fields explaining
+"computed from the situation you pick."
 
 ---
 

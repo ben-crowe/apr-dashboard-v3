@@ -234,6 +234,9 @@ silently wouldn't derive until reconciled.
 **Fix applied:** a normalization/alias layer inside `derivePropertyRights` maps the live strings to
 the cascade keys — no user-facing change, derivation now fires for all types.
 
-**Optional deeper reconcile (decide later):** standardize the dashboard Property Type option labels
-to the Valcre-aligned values so the two lists match natively (removes the need for the alias layer).
-Not urgent — the alias handles it. Track alongside the other registry-vs-live divergences.
+**Deeper reconcile — DECIDED (Ben 2026-06-10):** standardize the dashboard Property Type labels to
+Valcre's wording (`Multi-Family`→`Multifamily`, `Senior`→`Seniors`, `Hospitality`→`Hotel`).
+Rationale: Valcre's spellings are canonical/correct ("Hospitality" isn't a building type — it's
+"Hotel"); the dashboard versions were errors. Once standardized, the live labels match the cascade
+keys natively and the alias layer becomes redundant. Applied in ClientSubmissionSection; QA verifies
+the native Property Type sync still holds.

@@ -160,10 +160,12 @@ const TN_TO_RIGHTS: Record<string, string> = {
   'Single-Tenant': 'Going Concern',
 };
 
-// Live dashboard Property Type option labels → cascade keys (PT_TO_RIGHTS). Audited 2026-06-10 against
-// the full ClientSubmissionSection option list; these 3 are the only near-misses (label variants of an
-// existing key). Non-cascade types (Agriculture, Building, Healthcare, Manufactured Housing, Single-Family,
-// Special Purpose, Unknown, Other) have NO PT_TO_RIGHTS equivalent and correctly yield no base result.
+// Back-compat safety net (2026-06-10): the user-facing Property Type labels were STANDARDIZED to Valcre's
+// canonical spellings (Multifamily / Hotel / Seniors) in ClientSubmissionSection, so NEW picks already match
+// PT_TO_RIGHTS keys natively. This alias is retained ONLY so jobs saved with the OLD strings
+// ('Multi-Family' / 'Hospitality' / 'Senior') still derive Property Rights correctly. Harmless pass-through
+// for canonical values. Non-cascade types (Agriculture, Building, Healthcare, Manufactured Housing,
+// Single-Family, Special Purpose, Unknown, Other) have no PT_TO_RIGHTS equivalent and correctly stay "Pending".
 const PT_ALIAS: Record<string, string> = {
   'Multi-Family': 'Multifamily',
   'Hospitality': 'Hotel',

@@ -1290,7 +1290,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   driven by the cascade (Status of Improvements via the separate Cascade Options
                   picker), never selected here. Always italic + non-editable. */}
               <div style={derivedFieldStyle} className="max-w-[220px]" title="Computed from Status of Improvements + your Authorized Use (from Section 1).">
-                {deriveValueScenarios(statusOfImprovements, authorizedUse).join(', ') || <span className="text-zinc-400">Pending</span>}
+                {deriveValueScenarios(statusOfImprovements, authorizedUse).join(', ') || <span className="text-zinc-400">from Status</span>}
               </div>
             </CompactField>
             <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']}>
@@ -1301,7 +1301,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="max-w-[220px]"
                 title="Auto-derived from Property Type, Subtype & Tenancy."
               >
-                {derivePropertyRights(primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy) || <span className="text-zinc-400">Pending</span>}
+                {derivePropertyRights(primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy) || <span className="text-zinc-400">from Property Type</span>}
               </div>
             </CompactField>
             <CompactField label="Approaches to Value">
@@ -1312,7 +1312,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="max-w-[220px]"
                 title="Auto-derived from Status of Improvements."
               >
-                {deriveApproaches(statusOfImprovements, authorizedUse).join(', ') || <span className="text-zinc-400">Pending</span>}
+                {deriveApproaches(statusOfImprovements, authorizedUse).join(', ') || <span className="text-zinc-400">from Status</span>}
               </div>
             </CompactField>
             {/* MOVED 2026-06-10 from Building Info (OrganizingDocsSection) — binding/handler/options preserved verbatim. */}

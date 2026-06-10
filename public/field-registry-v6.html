@@ -1502,28 +1502,19 @@ function fmRowInner(r, idx) {
     ? '<span style="cursor:pointer;color:var(--text);" onclick="toggleFmOptions(' + idx + ',event)">' + opts.length + ' options &#9662;</span>'
     : '<span style="color:var(--text-3);">&#8212;</span>';
 
-  /* Routes To cell */
+  /* Routes To cell — compact "N routes" trigger like Options; expands to detail. Lit when a route is broken. */
   var DEST_KEYS = ['intake','valcre','clickup','loe'];
-  var DEST_LABELS = {intake:'Intake', valcre:'Valcre', clickup:'ClickUp', loe:'LOE'};
-  var chipStyle = 'background:var(--bg-card,#fff);border:1px solid var(--border);border-radius:4px;font-size:10px;padding:1px 6px;margin-right:4px;';
-  var chips = [];
+  var routeCount = 0;
   DEST_KEYS.forEach(function(key) {
-    var hasT = r[key] && r[key].t;
-    var isExcDest = exc && exc.dest === key;
-    if (!hasT && !isExcDest) return;
-    var label = DEST_LABELS[key];
-    var chip = '<span style="' + chipStyle + '">' + label + '</span>';
-    if (isExcDest) {
-      var tipC = exc.reason.replace(/"/g, '&quot;');
-      chip = '<mark class="fm-flag" title="' + tipC + '" style="border-radius:4px;font-size:10px;padding:1px 6px;margin-right:4px;cursor:help;">' + label + '</mark>';
-    }
-    chips.push(chip);
+    if ((r[key] && r[key].t) || (exc && exc.dest === key)) routeCount++;
   });
-
   var routesCell;
-  if (chips.length) {
-    routesCell = '<span style="cursor:pointer;" onclick="toggleFmRoutes(' + idx + ',event)">'
-      + chips.join('') + ' &#9662;</span>';
+  if (routeCount > 0) {
+    var rlabel = routeCount + ' route' + (routeCount === 1 ? '' : 's');
+    var inner = (exc && exc.dest !== 'field')
+      ? '<mark class="fm-flag" title="' + exc.reason.replace(/"/g, '&quot;') + '">' + rlabel + '</mark>'
+      : rlabel;
+    routesCell = '<span style="cursor:pointer;color:var(--text);" onclick="toggleFmRoutes(' + idx + ',event)">' + inner + ' &#9662;</span>';
   } else {
     routesCell = '<span style="color:var(--text-3);">&#8212;</span>';
   }

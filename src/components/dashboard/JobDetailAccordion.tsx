@@ -67,7 +67,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
       onUpdateDetails({
         // Section 2 — LOE Quote (base, no cascade inputs)
         jobStatus: 'In Progress',
-        purpose: 'Financial Reporting',
+        purpose: "To estimate the current market value of the subject property in support of the client's refinancing application.",
         // statusOfImprovements intentionally omitted — set by Cascade Options
         // valueScenarios intentionally omitted — derived by cascade
         // authorizedUse intentionally omitted — set by Cascade Options

@@ -108,6 +108,10 @@
   .u-inp { font: inherit; font-size: 12px; color: var(--text); border: none; border-bottom: 1px solid var(--border); background: transparent; width: 100%; height: 28px; padding: 0 2px; outline: none; transition: border-color .12s; }
   .u-inp:focus { border-bottom-color: var(--text); }
   .u-inp::placeholder { color: var(--text-4); }
+  /* Native date inputs: dim the yyyy-mm-dd placeholder digits until a real value is entered (empty sub-fields lack aria-valuenow). */
+  input[type="date"]::-webkit-datetime-edit-year-field:not([aria-valuenow]),
+  input[type="date"]::-webkit-datetime-edit-month-field:not([aria-valuenow]),
+  input[type="date"]::-webkit-datetime-edit-day-field:not([aria-valuenow]) { color: var(--text-4); }
   /* Address: underline matches single-column field line length exactly. Input spans full width for long text. */
   .span2 { position: relative; }
   .span2 .u-inp { border-bottom: none; }

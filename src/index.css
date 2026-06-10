@@ -302,3 +302,12 @@ h4.section-heading {
     @apply flex-col items-start;
   }
 }
+
+
+/* Native date inputs: dim the yyyy-mm-dd placeholder digits until a real value is entered.
+   Empty date sub-fields lack aria-valuenow; filled ones have it -> normal color. (matches empty=dim language) */
+input[type="date"]::-webkit-datetime-edit-year-field:not([aria-valuenow]),
+input[type="date"]::-webkit-datetime-edit-month-field:not([aria-valuenow]),
+input[type="date"]::-webkit-datetime-edit-day-field:not([aria-valuenow]) {
+  color: hsl(var(--muted-foreground));
+}

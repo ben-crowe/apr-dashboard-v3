@@ -50,6 +50,7 @@
   .fm-test { background: none; border: none; box-shadow: none; padding: 5px 2px; font-size: 11px; color: var(--text-3); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
   .fm-test:hover { color: var(--text); }
   .fm-test.active { color: var(--text); font-weight: 600; }
+  mark.fm-flag { background:#fde68a; color:#7c2d12; padding:1px 5px; border-radius:3px; cursor:help; font-weight:500; }
   .btn-ghost { background: transparent; color: var(--text-3); border: 1px solid transparent; font: 500 12px/1 system-ui, sans-serif; padding: 7px 16px; border-radius: var(--radius); cursor: pointer; }
   .btn-ghost:hover { background: var(--hover); color: var(--text-2); }
 
@@ -927,12 +928,10 @@
 
 <div class="sec" id="pa-sec-map" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">&#9638;</span>Field Mapping &amp; Wiring</div><div class="sec-body">
   <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin:0 0 12px;font-size:11px;color:var(--text-2);" onclick="event.stopPropagation();">
-    <span style="font-weight:600;color:var(--text-3);">Each cell — where the field flows + how live:</span>
-    <span><span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;background:#16a34a;"></span>Live — verified</span>
-    <span><span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;background:#d97706;"></span>Partial — some values don't land</span>
-    <span><span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;border:1.5px solid var(--text-3);background:transparent;"></span>Not wired</span>
-    <span style="color:var(--text-3);">&mdash; not a destination</span>
-    <span style="color:var(--text-3);">&dagger; LOE = token-mapped (lower confidence)</span>
+    <span style="font-weight:600;color:var(--text-3);">Manage by exception &mdash;</span>
+    <span><mark class="fm-flag">highlighted</mark> = should be wired but isn&rsquo;t (a fix to clear)</span>
+    <span style="color:var(--text-3);">no highlight = working &middot; a clean page = everything wired</span>
+    <span style="color:var(--text-3);">&dagger; LOE column is token-mapped &mdash; not readback-verified, so un-flagged</span>
   </div>
   <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:0 0 12px;" onclick="event.stopPropagation();">
     <button class="btn btn-outline fm-filter active" data-filter="all" onclick="filterFieldMap('all',this)">All</button>
@@ -1459,15 +1458,24 @@ const DASHBOARD_FIELDMAP = [
  {f:'Building Split',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
 ];
 
+const FM_EXCEPTIONS = {
+  'Scope of Work':      {dest:'valcre',  reason:"Sent on job-create but lands 'None' — not in the create payload (only the update path maps it)."},
+  'Transaction Status': {dest:'valcre',  reason:"Option labels don't reconcile with Valcre's; a non-matching pick (e.g. 'Listed') silently doesn't save."},
+  'Analysis Level':     {dest:'valcre',  reason:"Options are mis-mapped Report-Format values, not valid AnalysisLevel enums; only 'Comprehensive' reconciles. (Parked — Ben's product call.)"},
+  'Valuation Premises': {dest:'valcre',  reason:"Sent on job-create but lands 'None' — RequestedValues not in the create payload."},
+  'Title':              {dest:'valcre',  reason:"Field-name mapping bug — falls back to 'Client' instead of the sent title."},
+  'Address':            {dest:'valcre',  reason:"Client contact gets the PROPERTY address (mapping bug); postal code dropped."},
+  'Authorized Use':     {dest:'clickup', reason:"Option labels don't reconcile ('Estate Planning' ≠ any ClickUp option) → lands empty. (Valcre side IS wired.)"},
+  'Report Type':        {dest:'clickup', reason:"Option labels don't reconcile ('Appraisal Report' ≠ any ClickUp option) → lands empty."},
+  'Current Use':        {dest:'field',   reason:"Never built — free-text today; registry has the option list, field was never wired to it."},
+  'Proposed Use':       {dest:'field',   reason:"Never built — free-text today; registry has the option list, field was never wired to it."}
+};
+
 var FM_SEC_TITLES = {1:'Section 1 — Client &amp; Property',2:'Section 2 — LOE Quote',3:'Section 3 — Building Information',4:'Section 4 — Property Research'};
 
 function _fmDot(t, s) {
   if (!t) return '<span style="color:var(--text-3);">—</span>';
-  var dotStyle;
-  if (s === 'live')    dotStyle = 'display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;background:#16a34a;';
-  else if (s === 'partial') dotStyle = 'display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;background:#d97706;';
-  else                 dotStyle = 'display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;border:1.5px solid var(--text-3);background:transparent;';
-  return '<span style="' + dotStyle + '"></span>' + t;
+  return t;
 }
 
 var FM_ROW_OPTIONS = [];
@@ -1528,21 +1536,56 @@ function renderFieldMap() {
 
     var tr = document.createElement('tr');
     tr.id = 'fmrow-' + rowIdx;
-    tr.dataset.sec      = r.sec;
-    tr.dataset.valcre   = r.valcre.t ? '1' : '';
-    tr.dataset.clickup  = r.clickup.t ? '1' : '';
-    tr.dataset.loe      = r.loe.t ? '1' : '';
-    tr.dataset.intake   = r.intake.t ? '1' : '';
-    tr.dataset.haslive  = hasLiveDest ? '1' : '';
-    tr.dataset.hasany   = hasAnyDest ? '1' : '';
-    tr.innerHTML = '<td class="fn">' + r.f + '</td>'
+    var exc = FM_EXCEPTIONS[r.f];
+    tr.dataset.sec       = r.sec;
+    tr.dataset.valcre    = r.valcre.t ? '1' : '';
+    tr.dataset.clickup   = r.clickup.t ? '1' : '';
+    tr.dataset.loe       = r.loe.t ? '1' : '';
+    tr.dataset.intake    = r.intake.t ? '1' : '';
+    tr.dataset.haslive   = hasLiveDest ? '1' : '';
+    tr.dataset.hasany    = hasAnyDest ? '1' : '';
+    tr.dataset.exception = exc ? '1' : '';
+
+    /* Wrap flagged cells */
+    var fieldCell   = r.f;
+    var intakeOut   = _fmDot(r.intake.t, r.intake.s);
+    var valcreOut   = valcreCell;
+    var clickupOut  = clickupCell;
+    var loeOut      = loeCell;
+    if (exc) {
+      var tip = exc.reason.replace(/"/g, '&quot;');
+      if (exc.dest === 'field') {
+        fieldCell = '<mark class="fm-flag" title="' + tip + '">' + r.f + '</mark>';
+      } else if (exc.dest === 'valcre') {
+        var inner = r.valcre.t
+          ? '<span style="font-family:\'SF Mono\',Consolas,monospace;font-size:11px;"><mark class="fm-flag" title="' + tip + '">' + r.valcre.t + '</mark></span>'
+          : '<mark class="fm-flag" title="' + tip + '" style="font-style:italic;">not mapped</mark>';
+        valcreOut = inner;
+      } else if (exc.dest === 'clickup') {
+        var inner2 = r.clickup.t
+          ? '<mark class="fm-flag" title="' + tip + '">' + r.clickup.t + '</mark>'
+          : '<mark class="fm-flag" title="' + tip + '" style="font-style:italic;">not mapped</mark>';
+        clickupOut = inner2;
+      } else if (exc.dest === 'intake') {
+        var inner3 = r.intake.t
+          ? '<mark class="fm-flag" title="' + tip + '">' + r.intake.t + '</mark>'
+          : '<span style="color:var(--text-3);">—</span>';
+        intakeOut = inner3;
+      } else if (exc.dest === 'loe') {
+        var inner4 = r.loe.t
+          ? '<span style="opacity:0.65;"><mark class="fm-flag" title="' + tip + '">' + r.loe.t + '</mark></span>'
+          : '<span style="color:var(--text-3);">—</span>';
+        loeOut = inner4;
+      }
+    }
+    tr.innerHTML = '<td class="fn">' + fieldCell + '</td>'
       + '<td>' + r.src + '</td>'
       + '<td>' + r.ctrl + '</td>'
       + '<td>' + optCell + '</td>'
-      + '<td>' + _fmDot(r.intake.t, r.intake.s) + '</td>'
-      + '<td>' + valcreCell + '</td>'
-      + '<td>' + clickupCell + '</td>'
-      + '<td>' + loeCell + '</td>';
+      + '<td>' + intakeOut + '</td>'
+      + '<td>' + valcreOut + '</td>'
+      + '<td>' + clickupOut + '</td>'
+      + '<td>' + loeOut + '</td>';
     tbody.appendChild(tr);
     rowIdx++;
   });
@@ -1625,8 +1668,8 @@ function filterFieldMap(mode, btn) {
     if (mode === 'valcre')    return tr.dataset.valcre === '1';
     if (mode === 'clickup')   return tr.dataset.clickup === '1';
     if (mode === 'loe')       return tr.dataset.loe === '1';
-    if (mode === 'wired')     return tr.dataset.haslive === '1';
-    if (mode === 'notwired')  return tr.dataset.haslive !== '1';
+    if (mode === 'wired')     return tr.dataset.exception !== '1' && tr.dataset.hasany === '1';
+    if (mode === 'notwired')  return tr.dataset.exception === '1';
     return true;
   }
 

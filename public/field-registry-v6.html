@@ -762,7 +762,7 @@
 </div>
 
 <!-- ═════════ SECTION 1 — CLIENT INFORMATION & PROPERTY DETAILS ═════════ -->
-<div class="sec" id="pa-sec-1" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">1</span>Client Information &amp; Property Details</div><div class="sec-body"><div class="grid">
+<div class="sec closed" id="pa-sec-1" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">1</span>Client Information &amp; Property Details</div><div class="sec-body"><div class="grid">
 
   <div class="subgrp">Client Information</div>
   <div class="f"><span class="f-lbl"><span class="f-num">1.1</span>First Name</span><div class="f-val"><input class="u-inp" data-fill="clientFirstName"></div></div>
@@ -793,7 +793,7 @@
 </div></div></div>
 
 <!-- ═════════ SECTION 2 — LOE QUOTE & VALUATION DETAILS (the LOE gate) ═════════ -->
-<div class="sec" id="pa-sec-2" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">2</span>LOE Quote &amp; Valuation Details</div><div class="sec-body">
+<div class="sec closed" id="pa-sec-2" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">2</span>LOE Quote &amp; Valuation Details</div><div class="sec-body">
   <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 14px;" onclick="event.stopPropagation();">
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">↗ View in Valcre</button>
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">↗ View in ClickUp</button>
@@ -867,7 +867,7 @@
 </div></div></div>
 
 <!-- ═════════ SECTION 3 — BUILDING INFORMATION ═════════ -->
-<div class="sec" id="pa-sec-3" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">3</span>Building Information</div><div class="sec-body"><div class="grid">
+<div class="sec closed" id="pa-sec-3" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">3</span>Building Information</div><div class="sec-body"><div class="grid">
 
   <div class="subgrp">Building Information</div>
   <div class="f"><span class="f-lbl"><span class="f-num">3.1</span>Year Built</span><div class="f-val"><input class="u-inp" data-fill="yearBuilt"></div></div>
@@ -885,7 +885,7 @@
 </div></div></div>
 
 <!-- ═════════ SECTION 4 — DATA GATHERING – PROPERTY RESEARCH ═════════ -->
-<div class="sec" id="pa-sec-4" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">4</span>Data Gathering – Property Research</div><div class="sec-body"><div class="grid">
+<div class="sec closed" id="pa-sec-4" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">4</span>Data Gathering – Property Research</div><div class="sec-body"><div class="grid">
 
   <div class="subgrp">Property Site</div>
   <div class="f"><span class="f-lbl"><span class="f-num">4.1</span>Zoning</span><div class="f-val"><input class="u-inp" data-fill="zoning"></div></div>
@@ -915,7 +915,7 @@
 </div></div></div>
 
 <!-- ═════════ SECTION 5 — DOCUMENT UPLOAD & ORGANIZATION ═════════ -->
-<div class="sec" id="pa-sec-5" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">5</span>Document Upload &amp; Organization</div><div class="sec-body"><div class="grid">
+<div class="sec closed" id="pa-sec-5" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">5</span>Document Upload &amp; Organization</div><div class="sec-body"><div class="grid">
   <div class="f"><span class="f-lbl"><span class="f-num">5.1</span>Land Title Certificate</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">5.2</span>Survey / RPR</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">5.3</span>Tax Assessment Notice</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
@@ -2573,6 +2573,7 @@ function toggleSec(sec, event) {
   // Only toggle if clicking the title bar, not fields inside
   if (event.target.closest('.sec-title') || event.target.classList.contains('sec-chevron')) {
     sec.classList.toggle('closed');
+    if (typeof tagCurrentAprColumns === 'function') requestAnimationFrame(tagCurrentAprColumns);
   }
 }
 function dashShowAll(el) {

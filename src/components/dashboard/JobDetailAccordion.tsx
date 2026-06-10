@@ -50,7 +50,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         clientAddress: '350 7th Avenue SW, Suite 1800, Calgary, AB T2P 3N9',
         propertyName: 'Riverside Commerce Centre',
         propertyAddress: '4820 Macleod Trail SE, Calgary, AB T2G 0A5',
-        // propertyType intentionally omitted — Group-1 cascade trigger; left empty so the cascade section starts blank after Fill
+        propertyType: 'Industrial',
         intendedUse: 'Financial Reporting',
         assetCondition: 'Good',
         valuationPremises: 'Market Value', // Client-section field reads from `job` (display); also kept on jobDetails below for the Valcre sync
@@ -70,8 +70,9 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         // statusOfImprovements intentionally omitted — set by Cascade Options
         // valueScenarios intentionally omitted — derived by cascade
         // authorizedUse intentionally omitted — set by Cascade Options
-        // propertySubtype / tenancy / propertyRightsAppraised intentionally omitted — cascade Group-1 triggers + output;
-        // left empty so the whole cascade section reads 'Pending' after Fill (start-empty-then-watch-it-work)
+        propertySubtype: 'Multi-Tenant Industrial',
+        tenancy: 'Multi-Tenant',
+        // propertyRightsAppraised intentionally omitted — auto-derives from Property Type/Subtype/Tenancy (don't double-set)
         // approachesToValue intentionally omitted — derived field
         valueTimeframe: 'Current',
         scopeOfWork: 'Income Approach',

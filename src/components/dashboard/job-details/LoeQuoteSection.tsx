@@ -1289,7 +1289,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               {/* Locked derived result — matches the mock: NO in-field picker. Value Scenarios is
                   driven by the cascade (Status of Improvements via the separate Cascade Options
                   picker), never selected here. Always italic + non-editable. */}
-              <div style={derivedFieldStyle} className="max-w-[220px]">
+              <div style={derivedFieldStyle} className="max-w-[220px]" title="Computed from Status of Improvements + your Authorized Use (from Section 1).">
                 {deriveValueScenarios(statusOfImprovements, authorizedUse).join(', ') || <span className="text-zinc-400">Pending</span>}
               </div>
             </CompactField>
@@ -1299,7 +1299,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               <div
                 style={derivedFieldStyle}
                 className="max-w-[220px]"
-                title="Pending — auto-fills from triggers (to be determined)"
+                title="Auto-derived from Property Type, Subtype & Tenancy."
               >
                 {derivePropertyRights(primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy) || <span className="text-zinc-400">Pending</span>}
               </div>
@@ -1310,7 +1310,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               <div
                 style={derivedFieldStyle}
                 className="max-w-[220px]"
-                title="Pending — auto-fills from triggers (to be determined)"
+                title="Auto-derived from Status of Improvements."
               >
                 {deriveApproaches(statusOfImprovements, authorizedUse).join(', ') || <span className="text-zinc-400">Pending</span>}
               </div>

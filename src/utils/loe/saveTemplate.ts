@@ -73,13 +73,15 @@ export async function saveTemplate({
  */
 export async function loadAllTemplates(): Promise<LOETemplate[]> {
   try {
-    // PREVIEW PICKER: surface ALL templates (active or not) so every version — incl. a
-    // staged-but-not-live one (e.g. V07 default-but-inactive) — is selectable to view/edit.
-    // The SEND path is a SEPARATE loader (loadTemplateRow, newest-ACTIVE in generateLOE.ts)
-    // and is unaffected: making a template visible here does NOT put it in the send path.
+    // PREVIEW PICKER: surface only ACTIVE templates (Ben 2026-06-10 — the picker must offer
+    // ONLY the current default LOE-07-1, not stale versions). Old versions are is_active=false
+    // (hidden, NOT deleted — still recoverable + still loadable by id via loadTemplateById for
+    // reproducibility of already-sent LOEs). The SEND path is a SEPARATE loader (loadTemplateRow,
+    // newest-ACTIVE in generateLOE.ts) and is unaffected by this filter.
     const { data, error } = await supabase
       .from('loe_templates')
       .select('*')
+      .eq('is_active', true)
       .order('is_default', { ascending: false })
       .order('version', { ascending: false });
 

@@ -13,6 +13,11 @@ import { toast } from "sonner";
 import TemplateEditorModal from './TemplateEditorModal';
 import { saveTemplate, loadAllTemplates, loadTemplateById, setDefaultTemplate, LOETemplate } from '@/utils/loe/saveTemplate';
 import { generateLOEHTML } from '@/utils/loe/generateLOE';
+// Paged.js polyfill is vendored into /public (from the pagedjs npm package) and loaded
+// only when Download is clicked. It renders CSS @page margin-boxes (the running
+// Page X of Y + VALTA footer) that bare Chrome print silently drops — so the downloaded
+// PDF carries the footer on every page.
+const PAGED_POLYFILL_PATH = '/paged.polyfill.js';
 
 interface LOEPreviewModalProps {
   isOpen: boolean;
@@ -210,16 +215,57 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   };
 
   const handleDownloadPreview = () => {
-    // Create a download link for the HTML
+    // Download as a TRUE paged PDF (not raw HTML). Open a clean print window, run the
+    // Paged.js polyfill so the @page footer (Page X of Y + VALTA) is rendered onto every
+    // page, then auto-open the print dialog -> client picks "Save as PDF".
+    // (Bare Chrome print drops @page margin-box content; Paged.js restores it.)
     const htmlToDownload = editedHTML || currentDocumentHTML;
-    const blob = new Blob([htmlToDownload], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `LOE-Preview-${job.clientLastName}-${jobDetails.jobNumber || 'DRAFT'}.html`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success('Preview downloaded');
+    if (!htmlToDownload) {
+      toast.error('Nothing to download yet — generate the preview first');
+      return;
+    }
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      toast.error('Please allow pop-ups for this site to download the PDF');
+      return;
+    }
+
+    const polyfillSrc = new URL(PAGED_POLYFILL_PATH, window.location.origin).href;
+    const docTitle = `LOE-${job.clientLastName || 'Client'}-${jobDetails.jobNumber || 'DRAFT'}`;
+    // Point the download tab at the app's VA favicon. Without this the new window falls
+    // back to /favicon.ico (the stale Lovable heart) instead of the VA mark.
+    const faviconTag = `<link rel="icon" type="image/svg+xml" href="${window.location.origin}/favicon.svg">`;
+    const titleTag = `<title>${docTitle}</title>${faviconTag}`;
+    // White-paper guard: Paged.js paginates in SCREEN context, where the template's
+    // @media screen grey backdrop would tint the page boxes. Force every Paged.js page
+    // box (and the paper) white so the downloaded PDF is uniform white edge-to-edge.
+    const whitePaperStyle =
+      `<style>html,body{background:#fff !important}` +
+      `.pagedjs_pages,.pagedjs_page,.pagedjs_sheet,.pagedjs_pagebox{background:#fff !important}` +
+      `@media print{html,body,.pagedjs_page{background:#fff !important}}</style>`;
+    // PagedConfig must be set BEFORE the polyfill loads; .after fires once pagination completes.
+    const pagedHooks =
+      `<script>window.PagedConfig={auto:true,after:function(){setTimeout(function(){window.focus();window.print();},400);}};</scr` + `ipt>` +
+      `<script src="${polyfillSrc}"></scr` + `ipt>`;
+
+    let doc = htmlToDownload;
+    doc = /<\/title>/i.test(doc)
+      ? doc.replace(/<title>[\s\S]*?<\/title>/i, titleTag)
+      : /<\/head>/i.test(doc)
+        ? doc.replace(/<\/head>/i, `${titleTag}</head>`)
+        : titleTag + doc;
+    // inject the white-paper guard as the LAST thing in <head> so it wins the cascade
+    doc = /<\/head>/i.test(doc)
+      ? doc.replace(/<\/head>/i, `${whitePaperStyle}</head>`)
+      : whitePaperStyle + doc;
+    doc = /<\/body>/i.test(doc)
+      ? doc.replace(/<\/body>/i, `${pagedHooks}</body>`)
+      : doc + pagedHooks;
+
+    printWindow.document.open();
+    printWindow.document.write(doc);
+    printWindow.document.close();
+    toast.success('Preparing PDF — choose "Save as PDF" in the print dialog');
   };
 
   return (
@@ -255,7 +301,6 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
                 )}
               </SelectTrigger>
               <SelectContent className="bg-background border border-border">
-                <SelectItem value="default">Default Template</SelectItem>
                 {templates.map((template) => (
                   <SelectItem key={template.id} value={template.id}>
                     <div className="flex items-center justify-between w-full">

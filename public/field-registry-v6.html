@@ -81,6 +81,8 @@
   .sec-ref-table td:nth-child(2) { font-weight: 400; color: var(--text-2); }
   .sec-ref-table td:nth-child(3) { color: var(--text-3); font-size: 11px; }
   .sec-ref-stage { font-size: 12px; font-weight: 700; color: var(--text) !important; padding: 10px 10px 5px 10px !important; border-bottom: 2px solid var(--border) !important; }
+  @keyframes cascadePulse { 0%,100% { box-shadow: 0 0 0 0 rgba(245,158,11,.55); } 50% { box-shadow: 0 0 0 7px rgba(245,158,11,0); } }
+  #cascadePicker.pulse .dd-trigger { animation: cascadePulse 1.2s ease-in-out infinite; border-color: #f59e0b !important; color: #92400e; font-weight: 600; }
 
   /* Dashboard filter — small text links, right-aligned */
   .dash-controls { display: flex; gap: 12px; align-items: center; }
@@ -274,6 +276,7 @@
 
   /* Checkbox filters */
   .cb-filter { display:flex; align-items:center; gap:5px; cursor:pointer; font-size:12px; color:var(--text-2); user-select:none; }
+  .fm-nw-count { color:var(--text-3); font-size:10px; font-weight:600; min-width:12px; text-align:center; }
   .cb-filter:hover { color:var(--text); }
   .cb-filter input[type="checkbox"] { appearance:none; -webkit-appearance:none; width:14px; height:14px; border:1.5px solid var(--border); border-radius:3px; cursor:pointer; position:relative; transition:all .12s; flex-shrink:0; }
   .cb-filter input[type="checkbox"]:hover { border-color:var(--text-3); }
@@ -478,12 +481,7 @@
 
 <div style="display:flex;align-items:center;gap:8px;margin:0 0 14px;padding:8px 0;border-bottom:1px solid var(--border);">
   <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;" onclick="jumpToFieldMap()">Field Mapping &#8595;</button>
-  <div class="dd" style="margin-left:auto;min-width:210px;"><div class="dd-trigger" onclick="toggleDD(this)" style="font-size:11px;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);">Fill Test Data &mdash; pick a version<span class="dd-arrow" style="position:static;margin-left:6px;"></span></div><div class="dd-menu">
-    <div class="dd-item" onclick="applyProposedVersion(1,this)">V1 &mdash; Completed (baseline &middot; As Stabilized)</div>
-    <div class="dd-item" onclick="applyProposedVersion(2,this)">V2 &mdash; Under Renovation (As-Is + As If Complete &amp; Stabilized)</div>
-    <div class="dd-item" onclick="applyProposedVersion(3,this)">V3 &mdash; Improved Land / Demolition (As If Vacant + As If Complete)</div>
-    <div class="dd-item" onclick="applyProposedVersion(4,this)">V4 &mdash; Insurance override (Insurable Replacement Cost)</div>
-  </div></div>
+  <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;margin-left:auto;" onclick="fillTestBase()">Fill Test Data</button>
   <button class="btn btn-outline" id="paToggleAll" style="font-size:11px;padding:5px 12px;" onclick="toggleAllProposed(this)">Expand all</button>
 </div>
 
@@ -531,6 +529,12 @@
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">↗ View in Valcre</button>
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">↗ View in ClickUp</button>
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">Preview &amp; Send LOE</button>
+    <div class="dd" id="cascadePicker" style="margin-left:auto;min-width:230px;"><div class="dd-trigger" onclick="toggleDD(this)" style="font-size:11px;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);">Cascade Options &mdash; pick a scenario<span class="dd-arrow" style="position:static;margin-left:6px;"></span></div><div class="dd-menu">
+      <div class="dd-item" onclick="applyProposedVersion(1,this)">V1 &mdash; Completed (baseline &middot; As Stabilized)</div>
+      <div class="dd-item" onclick="applyProposedVersion(2,this)">V2 &mdash; Under Renovation (As-Is + As If Complete &amp; Stabilized)</div>
+      <div class="dd-item" onclick="applyProposedVersion(3,this)">V3 &mdash; Improved Land / Demolition (As If Vacant + As If Complete)</div>
+      <div class="dd-item" onclick="applyProposedVersion(4,this)">V4 &mdash; Insurance override (Insurable Replacement Cost)</div>
+    </div></div>
   </div>
   <div class="grid">
 
@@ -670,7 +674,7 @@
     <label class="cb-filter"><input type="checkbox" data-fm="multi" onchange="fmCheck()"> Multi-select</label>
     <label class="cb-filter"><input type="checkbox" data-fm="logic" onchange="fmCheck()"> Logic/Cascade</label>
     <span style="width:1px;height:16px;background:var(--border);margin:0 4px;display:inline-block;"></span>
-    <label class="cb-filter"><input type="checkbox" data-fm="notwired" id="fmNotWired" onchange="fmCheck()"> Not wired</label>
+    <label class="cb-filter"><input type="checkbox" data-fm="notwired" id="fmNotWired" onchange="fmCheck()"> Not wired <span class="fm-nw-count" id="fmNwCount">0</span></label>
     <a class="fm-test" href="../tests/registry03.html" target="_blank" style="margin-left:auto;" title="Open Chris's client registry (Valta Master Field Registry v03) — the source of truth for fields, options, and Valcre targets">Client Source</a>
     <a class="fm-test" href="../tests/RUNBOOK-verify-valcre.md" target="_blank" title="Open the Valcre verification runbook — how each field was checked, when, and the re-runnable CLI">Testing</a>
   </div>
@@ -680,24 +684,7 @@
 </div></div>
 
 
-<div class="sec closed" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span>Section Reference — what each part is</div><div class="sec-body">
-    <div class="sec-ref">
-  <div class="sec-ref-title">Section Reference</div>
-  <table class="sec-ref-table">
-    <tr><td colspan="3" class="sec-ref-stage">Stage 1 — Client Submission</td></tr>
-    <tr><td>1.1</td><td>Client Information</td><td>Client name, contact, address</td></tr>
-    <tr><td>1.2</td><td>Property Information</td><td>Property details, type, authorized use</td></tr>
-    <tr><td>1.3</td><td>Property Contact</td><td>On-site contact for property access</td></tr>
-    <tr><td colspan="3" class="sec-ref-stage">Stage 2 — Quote Preparation</td></tr>
-    <tr><td>2.1</td><td>LOE Quote & Job Information</td><td>Job setup, fees, property rights outcome</td></tr>
-    <tr><td>2.2</td><td>Building Information</td><td>Building details, tenancy, status, value scenarios outcome</td></tr>
-    <tr><td>2.3</td><td>Appraisal Assignment</td><td>Assignment config, approaches outcome</td></tr>
-    <tr><td colspan="3" class="sec-ref-stage">Stage 3 — Job Execution</td></tr>
-    <tr><td>3.1</td><td>Property Site & Parcels</td><td>Zoning, land use, site details</td></tr>
-    <tr><td>3.2</td><td>Document Uploads</td><td>Supporting documents and files</td></tr>
-  </table>
-</div>
-  </div></div>
+
 
 </div>
 
@@ -1066,6 +1053,23 @@ const PROPOSED_VERSIONS = {
   4: { statusOfImprovements:'Improved - Completed', authorizedUse:'Insurance',
        valuationPremises:'Insurable Value', scopeOfWork:'Cost Approach', propertyRights:'Fee Simple Interest', valueTimeframe:'Current' },
 };
+function fillTestBase() {
+  // Fill ONLY the shared base data — leave the cascade fields (statusOfImprovements,
+  // authorizedUse, valueScenarios, approachesToValue) blank for the user's Cascade Options pick.
+  var data = PROPOSED_BASE;
+  document.querySelectorAll('#panel-proposedapr [data-fill]').forEach(function(el){
+    var key = el.getAttribute('data-fill'); if (!(key in data)) return;
+    var val = data[key];
+    if (el.tagName === 'INPUT') { el.value = val; }
+    else { var t = el.querySelector('.dd-trigger'); if (t){ t.childNodes[0].textContent = val || 'Choose...'; t.classList.toggle('ph', !val); } el.querySelectorAll('.dd-item').forEach(function(i){ i.classList.toggle('selected', i.textContent.trim() === val); }); }
+  });
+  // open every toggle so the filled data is visible
+  document.querySelectorAll('#panel-proposedapr .sec[onclick*="toggleSec"]').forEach(function(s){ s.classList.remove('closed'); });
+  var tgl = document.getElementById('paToggleAll'); if (tgl) tgl.textContent = 'Collapse all';
+  // carry the user down to the Cascade Options picker and make it glow until they pick
+  var picker = document.getElementById('cascadePicker');
+  if (picker) { picker.classList.add('pulse'); picker.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+}
 function toggleAllProposed(btn) {
   var secs = document.querySelectorAll('#panel-proposedapr .sec[onclick*="toggleSec"]');
   var anyClosed = Array.prototype.some.call(secs, function(s){ return s.classList.contains('closed'); });
@@ -1075,6 +1079,7 @@ function toggleAllProposed(btn) {
 
 function applyProposedVersion(v, item) {
   pickDD(item);
+  var _cp = document.getElementById('cascadePicker'); if (_cp) _cp.classList.remove('pulse');
   const data = Object.assign({}, PROPOSED_BASE, PROPOSED_VERSIONS[v]);
   // derive scenarios + approaches from cascade source
   const scen = (data.authorizedUse === 'Insurance') ? ['Insurable Replacement Cost'] : (SCEN[data.statusOfImprovements] || []);
@@ -1294,6 +1299,8 @@ function fmRowInner(r, idx) {
 function renderFieldMap() {
   var tbody = document.getElementById('fmBody');
   if (!tbody) return;
+  var nwCount = document.getElementById('fmNwCount');
+  if (nwCount) nwCount.textContent = Object.keys(FM_EXCEPTIONS).length;
   tbody.innerHTML = '';
   FM_ROW_OPTIONS = [];
 

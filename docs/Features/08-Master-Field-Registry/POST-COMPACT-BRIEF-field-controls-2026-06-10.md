@@ -170,3 +170,28 @@ finalized; it's a separate verification pass.
   the mock-catch-up (B) makes the mock match live.
 - Do NOT touch the VALCRE_SYNC_FIELDS / CLICKUP_CARD_FIELDS arrays, the sync if-chain, or the
   file-upload section. Preserve every field binding. Type-check + build clean. QA readback-verifies.
+
+## Comb-through polish notes (Ben, mock review 2026-06-10) — batch into ONE polish pass
+
+**Full-width single-control rows → constrain to left-column width.** When a dropdown/input sits ALONE on a row (no second field beside it), its control + underline currently stretches edge-to-edge across the full page width — looks goofy. Should sit at the normal left-aligned column width, same as paired-row inputs.
+- Confirmed offenders: **Scope of Work**, **Payment Terms** (+ "a couple more" — audit all solo-on-a-row controls).
+- **Correct reference already in the layout: Value Timeframe** — its dropdown stays tucked to one side at proper width. Match that treatment exactly.
+- Fix on the mock (source of truth) → carries to live on sync.
+
+**REGRESSION — field-table (bottom of mock) expanded dropdown options jumped back to far-left.** In the mock's bottom field-registry TABLE, when you click a row's toggle to reveal its dropdown options, the options should render directly UNDER the toggle/sub-option name (so the eye doesn't travel). They regressed to appearing flush at the far left (the old behavior). Restore the under-the-toggle drop position — it was the nicer, no-scan version. (Mock-page field table, not the dashboard field rows.)
+
+**Top-ribbon test-data control → frameless text links + add a Clear (Ben 2026-06-10).** Remove the button FRAME around the test-data control in the very top ribbon — it should be subtle/hidden, not in-your-face. No button boxes at all, just text words. Add a "Clear" action (wipes the test data back to empty). Layout, left→right: **Clear** · thin vertical divider · **Fill with Test Data** — all frameless text, subtle styling. Clear first, then the divider, then Fill.
+
+**Empty-state for plain dropdowns → shaded dash "—" (Ben 2026-06-10).** Select dropdowns currently have only word options, so an unchosen one still displays a word and looks filled. Unchosen/empty dropdowns should show a shaded dash "—" placeholder (the empty state), so empty reads as empty and only a real selection shows a solid word. Consistency goal: one visual language dashboard-wide — shaded dash / "Pending" = empty, solid bright = filled. Apply to all plain Select fields that can be unselected.
+
+**Empty-state language — TWO meanings, refine (Ben 2026-06-10):**
+- **"Pending"** (shaded) = a DERIVED field that auto-fills once an upstream choice is made (the cascade). Applies to **Value Scenarios** AND **Approaches to Value**. (Approaches currently shows a "—" — change it to "Pending" to match its sibling.)
+- **"—"** (shaded dash) = a USER-CHOICE dropdown that simply hasn't been picked yet (Property Subtype, Tenancy, etc.).
+- Rationale: the empty state itself signals whether the user must act. Pending = it fills itself; dash = you pick it. Keep the two distinct everywhere.
+
+**Empty-state language — FINAL (Ben 2026-06-10, supersedes the dash):** Use a WORD that signals whose job it is — NOT a bare "—" (a dash doesn't say whether to act).
+- **"Choose"** (shaded) = USER-CHOICE empty — the user must pick. Property Subtype, Tenancy, Scope of Work, Status of Improvements (cascade DRIVER is a user pick), and all plain user dropdowns.
+- **"Pending"** (shaded) = DERIVED empty — auto-fills from the cascade, not the user's job. Value Scenarios, Approaches to Value.
+- DROP the bare-dash empty state entirely; replace any "—" empty with "Choose" (user) or "Pending" (derived) as appropriate.
+
+**Cascade Options picker → add a scoped "Clear" entry (Ben 2026-06-10).** The cascade section is where a user will experiment repeatedly, so it needs its own discoverable reset. Add **Clear** as an entry INSIDE the Cascade Options dropdown — set off from V1-V4, placed at the TOP (before V1) as the "back to nothing" reset. Picking it resets ONLY the cascade: Status of Improvements → "Choose", Value Scenarios + Approaches → "Pending", picker label → back to "pick a scenario". Leaves the rest of the dashboard untouched. (Distinct scope from the global top-ribbon Clear, which wipes ALL test data.)

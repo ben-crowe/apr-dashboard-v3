@@ -5,7 +5,6 @@ import LoeQuoteSection from "./job-details/LoeQuoteSection";
 import OrganizingDocsSection from "./job-details/OrganizingDocsSection";
 import PropertyInfoSection from "./job-details/PropertyInfoSection";
 import Section4Compact from "./job-details/Section4Compact";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { isValcreJobNumber } from "@/config/valcre";
 
@@ -128,23 +127,46 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
     }, 150);
   };
 
+  // Clear — inverse of Fill Test Data. Wipes the test-filled fields back to empty (placeholder state).
+  // Gated identically: never fires on a live Valcre job.
+  const handleClearTestData = () => {
+    if (isLiveValcreJob) {
+      toast.info('Not available — this job is connected to a live Valcre job.');
+      return;
+    }
+    const jobKeys = ['clientFirstName','clientLastName','clientTitle','clientOrganization','clientPhone','clientEmail','clientAddress','propertyName','propertyAddress','propertyType','intendedUse','assetCondition','valuationPremises','propertyContactFirstName','propertyContactLastName','propertyContactEmail','propertyContactPhone','notes'];
+    const detailKeys = ['propertySubtype','tenancy','propertyRightsAppraised','valueTimeframe','scopeOfWork','reportType','reportFormat','assignmentType','analysisLevel','appraisalFee','retainerAmount','paymentTerms','effectiveDate','requestDate','deliveryDate','deliveryTime','clientDocuments','previouslyAppraised','currentUse','proposedUse','cmhcFinancing','transactionStatus','zoningStatus','valuationPremises','statusOfImprovements','authorizedUse','valueScenarios','approachesToValue','yearBuilt','buildingSize','numberOfUnits','parkingSpaces','legalDescription','zoningClassification','zoneAbbreviation','landUseDesignation','floodZone','utilities','parcelNumber','grossLandSf','assessedValue','taxes','assessmentYear','landAssessmentValue','improvedAssessmentValue','totalAssessmentValue'];
+    if (onUpdateJob) onUpdateJob(Object.fromEntries(jobKeys.map(k => [k, ''])) as any);
+    if (onUpdateDetails) onUpdateDetails(Object.fromEntries(detailKeys.map(k => [k, ''])) as any);
+    toast.success('Test data cleared.');
+  };
+
   return (
     <div className="space-y-2">
-      {/* Fill Test Data — top-of-accordion button, fills all base fields */}
-      <div className="flex justify-end px-1 pb-1">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={handleFillTestData}
-          aria-disabled={isLiveValcreJob}
+      {/* Test-data control — subtle frameless text links (NOT buttons). Layout: Clear · | · Fill with Test Data.
+          Both gated: disabled/muted on a live Valcre job. */}
+      <div className="flex justify-end items-center gap-2.5 px-1 pb-1 text-xs">
+        <span
+          role="button"
+          onClick={handleClearTestData}
           title={isLiveValcreJob ? 'Not available — this job is connected to a live Valcre job.' : undefined}
-          className={`text-xs border border-dashed border-gray-400 dark:border-white/20 text-muted-foreground hover:text-foreground hover:border-gray-600 dark:hover:border-white/40 transition-colors ${
-            isLiveValcreJob ? 'opacity-50 cursor-not-allowed' : ''
+          className={`text-muted-foreground hover:text-foreground transition-colors ${
+            isLiveValcreJob ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
           }`}
         >
-          Fill Test Data
-        </Button>
+          Clear
+        </span>
+        <span className="w-px h-3 bg-gray-300 dark:bg-white/20" />
+        <span
+          role="button"
+          onClick={handleFillTestData}
+          title={isLiveValcreJob ? 'Not available — this job is connected to a live Valcre job.' : undefined}
+          className={`text-muted-foreground hover:text-foreground transition-colors ${
+            isLiveValcreJob ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+          }`}
+        >
+          Fill with Test Data
+        </span>
       </div>
 
       {/* All sections are now independent Collapsibles */}

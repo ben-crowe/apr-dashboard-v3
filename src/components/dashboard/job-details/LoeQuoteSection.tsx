@@ -75,6 +75,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const [commentsExpanded, setCommentsExpanded] = useState(false);
   // RULE 2 — Value Scenarios locks ONLY after a cascade pick (default: editable multi-select).
   const [cascadePicked, setCascadePicked] = useState(false);
+  const [cascadeVersion, setCascadeVersion] = useState(''); // held selection for the top cascade picker (so the label persists, not resets)
 
   // LOE template versions (PRD-B version selector) — default newest active
   const [loeTemplates, setLoeTemplates] = useState<Array<{ id: string; name: string; version: number }>>([]);
@@ -868,6 +869,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const handleCascadeVersion = (version: string) => {
     if (!onUpdateDetails) return;
     setCascadePicked(true); // lock Value Scenarios display to derived result
+    setCascadeVersion(version); // hold the picked version so the picker label persists (e.g. "V2 — Under Renovation")
 
     if (version === 'V1') {
       onUpdateDetails({
@@ -1142,7 +1144,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 Cascade Options — pick a scenario
               </div>
             ) : (
-              <Select value="" onValueChange={handleCascadeVersion}>
+              <Select value={cascadeVersion} onValueChange={handleCascadeVersion}>
                 <SelectTrigger className="h-8 px-3 text-xs gap-1 rounded-md border border-border bg-background min-w-[230px]">
                   <SelectValue placeholder="Cascade Options — pick a scenario" />
                 </SelectTrigger>
@@ -1227,7 +1229,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 }}
               >
                 <SelectTrigger className="h-7 text-sm max-w-[220px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   {Object.keys(STATUS_TO_SCENARIOS).map(key => (
@@ -1241,7 +1243,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   driven by the cascade (Status of Improvements via the separate Cascade Options
                   picker), never selected here. Always italic + non-editable. */}
               <div style={derivedFieldStyle} className="max-w-[240px]">
-                {jobDetails.valueScenarios || <span style={{ opacity: 0.4 }}>Derived from cascade</span>}
+                {jobDetails.valueScenarios || <span style={{ opacity: 0.4 }}>Pending</span>}
               </div>
             </CompactField>
             <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']}>
@@ -1252,7 +1254,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="max-w-[240px]"
                 title="Pending — auto-fills from triggers (to be determined)"
               >
-                {jobDetails.propertyRightsAppraised || <span style={{ opacity: 0.4 }}>—</span>}
+                {jobDetails.propertyRightsAppraised || <span style={{ opacity: 0.4 }}>Pending</span>}
               </div>
             </CompactField>
             <CompactField label="Approaches to Value">
@@ -1263,13 +1265,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="max-w-[240px]"
                 title="Pending — auto-fills from triggers (to be determined)"
               >
-                {(jobDetails as any).approachesToValue || <span style={{ opacity: 0.4 }}>—</span>}
+                {(jobDetails as any).approachesToValue || <span style={{ opacity: 0.4 }}>Pending</span>}
               </div>
             </CompactField>
             {/* MOVED 2026-06-10 from Building Info (OrganizingDocsSection) — binding/handler/options preserved verbatim. */}
             <CompactField label="Property Subtype">
               <Select value={jobDetails.propertySubtype || ''} onValueChange={value => handleSelectChange(value, 'propertySubtype')}>
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Choose" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Low-Rise">Low-Rise</SelectItem>
                   <SelectItem value="Mid-Rise">Mid-Rise</SelectItem>
@@ -1284,7 +1286,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             {/* MOVED 2026-06-10 from Building Info (OrganizingDocsSection) — binding/handler/options preserved verbatim. */}
             <CompactField label="Tenancy">
               <Select value={jobDetails.tenancy || ''} onValueChange={value => handleSelectChange(value, 'tenancy')}>
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Choose" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Owner-Occupied">Owner-Occupied</SelectItem>
                   <SelectItem value="Single-Tenant">Single-Tenant</SelectItem>
@@ -1296,7 +1298,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             {/* MOVED 2026-06-10 from Data Gathering (PropertyInfoSection Appraisal Assignment) — binding/handler/options preserved verbatim. */}
             <CompactField label="Value Timeframe">
               <Select value={jobDetails.valueTimeframe || ''} onValueChange={value => handleSelectChange(value, 'valueTimeframe')}>
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Choose" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Current">Current</SelectItem>
                   <SelectItem value="Retrospective">Retrospective</SelectItem>
@@ -1313,7 +1315,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <CompactField label="Scope of Work">
               <Select value={jobDetails.scopeOfWork || ''} onValueChange={value => handleSelectChange(value, 'scopeOfWork')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="All Applicable">All Applicable</SelectItem>
@@ -1342,7 +1344,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <CompactField label="Report Type">
               <Select value={jobDetails.reportType || ''} onValueChange={value => handleSelectChange(value, 'reportType')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Amendment Letter">Amendment Letter</SelectItem>
@@ -1362,7 +1364,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               {/* Valcre "Format" (Comprehensive/Concise/Form) — distinct from existing "Report Type" */}
               <Select value={jobDetails.reportFormat || ''} onValueChange={value => handleSelectChange(value, 'reportFormat')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Comprehensive">Comprehensive</SelectItem>
@@ -1374,7 +1376,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <CompactField label="Assignment Type">
               <Select value={jobDetails.assignmentType || ''} onValueChange={value => handleSelectChange(value, 'assignmentType')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Multiple Properties">Multiple Properties</SelectItem>
@@ -1388,7 +1390,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   Concise/Form) were NOT valid enum members — only "Detailed" was, so Concise/Form 400'd. Maps 1:1. */}
               <Select value={jobDetails.analysisLevel || ''} onValueChange={value => handleSelectChange(value, 'analysisLevel')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Detailed">Detailed</SelectItem>
@@ -1436,7 +1438,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <CompactField label="Payment Terms">
               <Select value={jobDetails.paymentTerms || ''} onValueChange={value => handleSelectChange(value, 'paymentTerms')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="On LOE Signature">On LOE Signature</SelectItem>
@@ -1543,7 +1545,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   Binding preserved: same jobDetails.currentUse key, now via handleSelectChange (same save+sync path). */}
               <Select value={(jobDetails as any).currentUse || ''} onValueChange={value => handleSelectChange(value, 'currentUse')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Vacant Land">Vacant Land</SelectItem>
@@ -1560,7 +1562,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   Binding preserved: same jobDetails.proposedUse key, now via handleSelectChange (same save+sync path). */}
               <Select value={(jobDetails as any).proposedUse || ''} onValueChange={value => handleSelectChange(value, 'proposedUse')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Not Applicable">Not Applicable</SelectItem>
@@ -1576,7 +1578,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <CompactField label="CMHC Financing">
               <Select value={jobDetails.cmhcFinancing || ''} onValueChange={value => handleSelectChange(value, 'cmhcFinancing')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Yes">Yes</SelectItem>
@@ -1589,7 +1591,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   (Not Applicable / Listed / Under Contract). Old 5-option set didn't match the new field. */}
               <Select value={jobDetails.transactionStatus || ''} onValueChange={value => handleSelectChange(value, 'transactionStatus')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Not Applicable">Not Applicable</SelectItem>
@@ -1603,7 +1605,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   (In Place / To Be Rezoned). Old 4 legal-* options didn't match the new field. */}
               <Select value={jobDetails.zoningStatus || ''} onValueChange={value => handleSelectChange(value, 'zoningStatus')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="In Place">In Place</SelectItem>
@@ -1640,7 +1642,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <CompactField label="Previously Appraised">
               <Select value={(jobDetails as any).previouslyAppraised || ''} onValueChange={value => handleSelectChange(value, 'previouslyAppraised')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Yes">Yes</SelectItem>

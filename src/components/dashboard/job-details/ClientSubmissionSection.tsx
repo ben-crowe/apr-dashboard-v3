@@ -409,7 +409,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 }}
               >
                 <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
@@ -457,7 +457,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 }}
               >
                 <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
@@ -484,7 +484,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 }}
               >
                 <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
@@ -506,7 +506,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 }}
               >
                 <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
-                  <SelectValue placeholder="Select..." />
+                  <SelectValue placeholder="Choose" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>

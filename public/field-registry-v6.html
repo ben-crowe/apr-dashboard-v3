@@ -457,9 +457,8 @@
   <div class="seg">
     <button class="active" onclick="setView('index',this)">Field Registry</button>
     <button onclick="setView('logic',this)">Logic Fields</button>
-    <button onclick="setView('full',this)">Dashboard & Forms</button>
-    <button onclick="setView('currentapr',this)">current APR dashboard</button>
-    <button onclick="setView('proposedapr',this)">proposed APR dashboard</button>
+    <button onclick="setView('proposedapr',this)">Mock Dashboard</button>
+    <button onclick="window.open('https://apr-dashboard-v3.vercel.app/dashboard','_blank')">Live Dashboard</button>
   </div>
 </div>
 <div style="max-width:960px;margin:0 auto 14px;display:none;justify-content:flex-end;">
@@ -474,287 +473,18 @@
   </div>
 </div>
 
-<!-- ═══ FULL DASHBOARD ═══ -->
-<div class="panel" id="panel-full">
-
-<div class="in-edit-bar" id="inEditBar">
-  <span>Edit Layout — drag to reorder, click + to add fields from registry, ✕ to remove</span>
-  <button class="btn btn-primary" style="font-size:11px;padding:4px 12px;" onclick="inToggleEdit()">Done Editing</button>
-</div>
-
-<div id="inFormContainer">
-<div class="sec" id="sec-client" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">1.1</span>Client Information</div><div class="sec-body"><div class="grid">
-  <div class="f"><span class="f-lbl">First Name</span><div class="f-val"><input class="u-inp" data-fill="Sarah"></div></div>
-  <div class="f"><span class="f-lbl">Last Name</span><div class="f-val"><input class="u-inp" data-fill="Williams"></div></div>
-  <div class="f"><span class="f-lbl">Title</span><div class="f-val"><input class="u-inp" data-fill="VP of Real Estate"></div></div>
-  <div class="f"><span class="f-lbl">Organization</span><div class="f-val"><input class="u-inp" data-fill="Skyline Investments Ltd."></div></div>
-  <div class="f"><span class="f-lbl">Phone</span><div class="f-val"><input class="u-inp" data-fill="(403) 555-0147"></div></div>
-  <div class="f"><span class="f-lbl">Email</span><div class="f-val"><input class="u-inp" data-fill="s.williams@skylineinv.ca"></div></div>
-  <div class="f span2"><span class="f-lbl">Address</span><div class="f-val"><input class="u-inp" data-fill="300 5th Ave SW, Suite 1200, Calgary, AB T2P 3C4"></div></div>
-</div></div></div>
-
-<div class="sec" id="sec-property" data-logic="1" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">1.2</span>Property Information</div><div class="sec-body"><div class="grid">
-  <div class="f"><span class="f-lbl">Property Name</span><div class="f-val"><input class="u-inp" data-fill="Riverside Terrace"></div></div>
-  <div class="f" id="row-pt"><span class="f-lbl">Property Type</span><div class="f-val"><div class="dd" data-field="propertyType"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">Multifamily</div><div class="dd-item" onclick="pickField(this)">Self-Storage</div><div class="dd-item" onclick="pickField(this)">Retail</div><div class="dd-item" onclick="pickField(this)">Industrial</div><div class="dd-item" onclick="pickField(this)">Office</div><div class="dd-item" onclick="pickField(this)">Land</div><div class="dd-item" onclick="pickField(this)">Hotel</div><div class="dd-item" onclick="pickField(this)">Seniors</div><div class="dd-item" onclick="pickField(this)">Other</div></div></div></div></div>
-  <div class="f span2"><span class="f-lbl">Address</span><div class="f-val"><input class="u-inp" data-fill="4200 Bow Trail SW, Calgary, AB T3C 2G2"></div></div>
-  <div class="f" id="row-au"><span class="f-lbl">Authorized Use</span><div class="f-val"><div class="dd" data-field="authorizedUse"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">First Mortgage Financing</div><div class="dd-item" onclick="pickField(this)">Financial Reporting</div><div class="dd-item" onclick="pickField(this)">Insurance</div><div class="dd-item" onclick="pickField(this)">Internal Decision-Making</div><div class="dd-item" onclick="pickField(this)">Acquisition-Disposition</div><div class="dd-item" onclick="pickField(this)">Estate Planning</div><div class="dd-item" onclick="pickField(this)">Litigation</div><div class="dd-item" onclick="pickField(this)">GST</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">Valuation Premises</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Market Value</div><div class="dd-item" onclick="pickDD(this)">Market Rent</div><div class="dd-item" onclick="pickDD(this)">Investment Value</div><div class="dd-item" onclick="pickDD(this)">Insurable Value</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">Asset Condition</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Excellent</div><div class="dd-item" onclick="pickDD(this)">Very Good</div><div class="dd-item" onclick="pickDD(this)">Good</div><div class="dd-item" onclick="pickDD(this)">Fair</div><div class="dd-item" onclick="pickDD(this)">Poor</div></div></div></div></div>
-</div></div></div>
-
-<div class="sec" id="sec-contact" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">1.3</span>Property Contact</div><div class="sec-body"><div class="grid">
-  <div class="f"><span class="f-lbl">First Name</span><div class="f-val"><input class="u-inp" data-fill="Marcus"></div></div>
-  <div class="f"><span class="f-lbl">Last Name</span><div class="f-val"><input class="u-inp" data-fill="Thompson"></div></div>
-  <div class="f"><span class="f-lbl">Email</span><div class="f-val"><input class="u-inp" data-fill="m.thompson@riverside.ca"></div></div>
-  <div class="f"><span class="f-lbl">Phone</span><div class="f-val"><input class="u-inp" data-fill="(403) 555-0299"></div></div>
-</div></div></div>
-
-<div class="sec" id="sec-loe" data-logic="1" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">2.1</span>LOE Quote & Job Information</div><div class="sec-body"><div class="grid">
-  <div class="f"><span class="f-lbl">Job Number</span><div class="f-val"><input class="u-inp" value="VAL-2026-0147" readonly style="color:var(--text-3);"></div></div>
-  <div class="f"><span class="f-lbl">Job Status</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Draft</div><div class="dd-item" onclick="pickDD(this)">In Progress</div><div class="dd-item" onclick="pickDD(this)">Under Review</div><div class="dd-item" onclick="pickDD(this)">Completed</div><div class="dd-item" onclick="pickDD(this)">On Hold</div></div></div></div></div>
-  <div class="f" id="row-interest"><span class="f-lbl">Property Rights</span><div class="f-val"><div class="smart-wrap"><div class="dd" data-field="interest"><div class="dd-trigger ph" onclick="toggleDD(this)" id="t-interest">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item">Fee Simple</div><div class="dd-item">Leased Fee Interest</div><div class="dd-item">Leasehold Estate</div><div class="dd-item">Going Concern</div><div class="dd-item">Fee Simple & Leased Fee</div></div></div><span class="cascade-info" id="info-interest" style="display:none;"></span></div></div></div>
-  <div class="f"><span class="f-lbl">Scope of Work</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">All Applicable</div><div class="dd-item" onclick="pickDD(this)">Best One Approach</div><div class="dd-item" onclick="pickDD(this)">Direct Comparison Approach</div><div class="dd-item" onclick="pickDD(this)">Income Approach</div><div class="dd-item" onclick="pickDD(this)">Cost Approach</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">Appraisal Fee</span><div class="f-val"><input class="u-inp" data-fill="$12,500"></div></div>
-  <div class="f"><span class="f-lbl">Report Type</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Appraisal Report</div><div class="dd-item" onclick="pickDD(this)">Completion Report</div><div class="dd-item" onclick="pickDD(this)">Evaluation</div><div class="dd-item" onclick="pickDD(this)">Restricted Appraisal Report</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">Delivery Date</span><div class="f-val"><input class="u-inp" type="date"></div></div>
-  <div class="f"><span class="f-lbl">Due Date</span><div class="f-val"><input class="u-inp" type="date"></div></div>
-  <div class="f"><span class="f-lbl">CMHC Financing</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Yes</div><div class="dd-item" onclick="pickDD(this)">No</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">Retainer Amount</span><div class="f-val"><input class="u-inp" data-fill="$5,000"></div></div>
-</div></div></div>
-
-<div class="sec" id="sec-building" data-logic="1" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">2.2</span>Building Information</div><div class="sec-body"><div class="grid">
-  <div class="f"><span class="f-lbl">Year Built</span><div class="f-val"><input class="u-inp" data-fill="2004"></div></div>
-  <div class="f"><span class="f-lbl">Building Size (SF)</span><div class="f-val"><input class="u-inp" data-fill="62,400"></div></div>
-  <div class="f"><span class="f-lbl">Number of Units</span><div class="f-val"><input class="u-inp" data-fill="72"></div></div>
-  <div class="f"><span class="f-lbl">Parking Spaces</span><div class="f-val"><input class="u-inp" data-fill="88"></div></div>
-  <div class="f" id="row-tn"><span class="f-lbl">Tenancy</span><div class="f-val"><div class="dd" data-field="tenancy"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">Multi-Tenant</div><div class="dd-item" onclick="pickField(this)">Owner Occupied</div><div class="dd-item" onclick="pickField(this)">Partial Owner Occupied</div><div class="dd-item" onclick="pickField(this)">Single-Tenant</div><div class="dd-item" onclick="pickField(this)">Unknown</div><div class="dd-item" onclick="pickField(this)">Vacant</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">State of Improvements</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Improved</div><div class="dd-item" onclick="pickDD(this)">Proposed</div><div class="dd-item" onclick="pickDD(this)">Vacant Land</div><div class="dd-item" onclick="pickDD(this)">Improved Development Land</div></div></div></div></div>
-  <div class="f" id="row-st"><span class="f-lbl">Status of Improvements</span><div class="f-val"><div class="dd" data-field="statusOfImprovements"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">Improved - Completed</div><div class="dd-item" onclick="pickField(this)">Improved - Renovated</div><div class="dd-item" onclick="pickField(this)">Improved - Under Renovation</div><div class="dd-item" onclick="pickField(this)">Improved - Proposed Renovation</div><div class="dd-item" onclick="pickField(this)">Proposed - Vacant Land</div><div class="dd-item" onclick="pickField(this)">Proposed - Improved Land (Demolition Required)</div><div class="dd-item" onclick="pickField(this)">Proposed - Under Construction</div></div></div></div></div>
-  <div class="f" id="row-scenarios"><span class="f-lbl">Value Scenarios</span><div class="f-val"><div class="smart-wrap"><div class="dd" data-field="scenarios"><div class="dd-trigger ph" id="t-scenarios">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"></div></div><span class="cascade-info" id="info-scenarios" style="display:none;"></span></div></div></div>
-  <div class="f" id="row-sub"><span class="f-lbl">Property Subtype</span><div class="f-val"><div class="dd" data-field="propertySubtype"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickField(this)">Apartment</div><div class="dd-item" onclick="pickField(this)">Townhouse</div><div class="dd-item" onclick="pickField(this)">Mixed Use</div><div class="dd-item" onclick="pickField(this)">Shopping Centre</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">Land Metric</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Square Feet</div><div class="dd-item" onclick="pickDD(this)">Acres</div><div class="dd-item" onclick="pickDD(this)">Hectares</div></div></div></div></div>
-</div></div></div>
-
-<div class="sec" id="sec-assignment" data-logic="1" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">2.3</span>Appraisal Assignment</div><div class="sec-body"><div class="grid">
-  <div class="f"><span class="f-lbl">Assignment Type</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Single Property</div><div class="dd-item" onclick="pickDD(this)">Multiple Properties</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">Desktop Report</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Yes</div><div class="dd-item" onclick="pickDD(this)">No</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">Value Timeframe</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Current</div><div class="dd-item" onclick="pickDD(this)">Retrospective</div><div class="dd-item" onclick="pickDD(this)">Prospective</div></div></div></div></div>
-  <div class="f" id="row-approaches"><span class="f-lbl">Approaches to Value</span><div class="f-val"><div class="smart-wrap"><div class="dd" data-field="approaches"><div class="dd-trigger ph" id="t-approaches">Outcome<span class="dd-arrow"></span></div><div class="dd-menu"></div></div><span class="cascade-info" id="info-approaches" style="display:none;"></span></div></div></div>
-  <div class="f"><span class="f-lbl">Transaction Status</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Not Applicable</div><div class="dd-item" onclick="pickDD(this)">Listed</div><div class="dd-item" onclick="pickDD(this)">Under Contract</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">Zoning Status</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Legal Conforming</div><div class="dd-item" onclick="pickDD(this)">Legal Non-Conforming</div><div class="dd-item" onclick="pickDD(this)">Illegal</div><div class="dd-item" onclick="pickDD(this)">No Zoning</div></div></div></div></div>
-</div></div></div>
-
-<div class="sec" id="sec-site" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">3.1</span>Property Site & Parcels</div><div class="sec-body"><div class="grid">
-  <div class="f"><span class="f-lbl">Zoning</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Zone Code</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Land Use</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Flood Zone</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Total Site Area</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Assessed Value</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Taxes</span><div class="f-val"><input class="u-inp"></div></div>
-</div></div></div>
-
-<div class="sec" id="sec-docs" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">3.2</span>Document Uploads</div><div class="sec-body"><div class="grid">
-  <div class="f"><span class="f-lbl">Land Title</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
-  <div class="f"><span class="f-lbl">Survey / RPR</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
-  <div class="f"><span class="f-lbl">Tax Notice</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
-  <div class="f"><span class="f-lbl">Site Plan</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
-</div></div></div>
-</div><!-- close inFormContainer -->
-
-<div class="sec-ref">
-  <div class="sec-ref-title">Section Reference</div>
-  <table class="sec-ref-table">
-    <tr><td colspan="3" class="sec-ref-stage">Stage 1 — Client Submission</td></tr>
-    <tr><td>1.1</td><td>Client Information</td><td>Client name, contact, address</td></tr>
-    <tr><td>1.2</td><td>Property Information</td><td>Property details, type, authorized use</td></tr>
-    <tr><td>1.3</td><td>Property Contact</td><td>On-site contact for property access</td></tr>
-    <tr><td colspan="3" class="sec-ref-stage">Stage 2 — Quote Preparation</td></tr>
-    <tr><td>2.1</td><td>LOE Quote & Job Information</td><td>Job setup, fees, property rights outcome</td></tr>
-    <tr><td>2.2</td><td>Building Information</td><td>Building details, tenancy, status, value scenarios outcome</td></tr>
-    <tr><td>2.3</td><td>Appraisal Assignment</td><td>Assignment config, approaches outcome</td></tr>
-    <tr><td colspan="3" class="sec-ref-stage">Stage 3 — Job Execution</td></tr>
-    <tr><td>3.1</td><td>Property Site & Parcels</td><td>Zoning, land use, site details</td></tr>
-    <tr><td>3.2</td><td>Document Uploads</td><td>Supporting documents and files</td></tr>
-  </table>
-</div>
-</div>
-
-
-<!-- ═══ CURRENT APR DASHBOARD — exact mirror of the live app ═══ -->
-<div class="panel" id="panel-currentapr">
-
-<div class="sec" style="cursor:default;">
-  <div class="sec-title" style="cursor:default;"><span class="sec-num" style="font-size:12px;">★</span>Current APR Dashboard — exact mirror of the live app (reviewed 2026-06-09)</div>
-  <div class="sec-body" style="display:block;">
-    <p style="font-size:12px;color:var(--text-3);margin:2px 0 0;line-height:1.5;">This is our dashboard exactly as it is today. The proposed/revised version will be added beneath each section later.</p>
-  </div>
-</div>
-
-<!-- ═════════ BLOCK 1 — CLIENT INFORMATION & PROPERTY DETAILS ═════════ -->
-<div class="sec" id="ca-block-1" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">1</span>Client Information &amp; Property Details</div><div class="sec-body"><div class="grid">
-
-  <div class="subgrp">Client Information</div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.1.1</span>First Name</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.1.2</span>Last Name</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.1.3</span>Title</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.1.4</span>Organization</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.1.5</span>Phone</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.1.6</span>Email</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f span2"><span class="f-lbl"><span class="f-num">1.1.7</span>Address</span><div class="f-val"><input class="u-inp"></div></div>
-
-  <div class="subgrp">Property Information</div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.2.1</span>Property Name</span><div class="f-val"><input class="u-inp"><span class="route">→ Valcre (Property)</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.2.3</span>Property Type</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Multifamily</div><div class="dd-item" onclick="pickDD(this)">Self-Storage</div><div class="dd-item" onclick="pickDD(this)">Retail</div><div class="dd-item" onclick="pickDD(this)">Industrial</div><div class="dd-item" onclick="pickDD(this)">Office</div><div class="dd-item" onclick="pickDD(this)">Land</div><div class="dd-item" onclick="pickDD(this)">Hotel</div><div class="dd-item" onclick="pickDD(this)">Seniors</div><div class="dd-item" onclick="pickDD(this)">Other</div></div></div><span class="route">→ Valcre · matches client list (9)</span></div></div>
-  <div class="f span2"><span class="f-lbl"><span class="f-num">1.2.2</span>Address</span><div class="f-val"><input class="u-inp"><span class="route">→ Valcre (Property)</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.2.4</span>Authorized Use</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">First Mortgage Financing</div><div class="dd-item" onclick="pickDD(this)">Financial Reporting</div><div class="dd-item" onclick="pickDD(this)">Insurance</div><div class="dd-item" onclick="pickDD(this)">Internal Decision-Making</div><div class="dd-item" onclick="pickDD(this)">Acquisition-Disposition</div><div class="dd-item" onclick="pickDD(this)">Estate Planning</div><div class="dd-item" onclick="pickDD(this)">Litigation</div><div class="dd-item" onclick="pickDD(this)">GST</div></div></div><span class="route">→ Valcre (Job.IntendedUses) · Insurance overrides cascade</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.2.5</span>Valuation Premises</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Market Value</div><div class="dd-item" onclick="pickDD(this)">Market Rent</div><div class="dd-item" onclick="pickDD(this)">Investment Value</div><div class="dd-item" onclick="pickDD(this)">Insurable Value</div><div class="dd-item" onclick="pickDD(this)">Liquidation Value</div></div></div><span class="route">DISTINCT from Value Scenarios</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.2.6</span>Asset Condition</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Excellent</div><div class="dd-item" onclick="pickDD(this)">Very Good</div><div class="dd-item" onclick="pickDD(this)">Good</div><div class="dd-item" onclick="pickDD(this)">Fair</div><div class="dd-item" onclick="pickDD(this)">Poor</div></div></div></div></div>
-
-  <div class="subgrp">Property Contact</div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.3.1</span>First Name</span><div class="f-val"><input class="u-inp"><span class="route">→ Valcre (Property Contact)</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.3.2</span>Last Name</span><div class="f-val"><input class="u-inp"><span class="route">→ Valcre (Property Contact)</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.3.3</span>Email</span><div class="f-val"><input class="u-inp"><span class="route">→ Valcre (Property Contact)</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.3.4</span>Phone</span><div class="f-val"><input class="u-inp"><span class="route">→ Valcre (Property Contact)</span></div></div>
-
-  <div class="subgrp">Client Comments</div>
-  <div class="f span2"><span class="f-lbl">Comments</span><div class="f-val"><input class="u-inp"></div></div>
-
-</div></div></div>
-
-<!-- ═════════ BLOCK 2 — LOE QUOTE & VALUATION DETAILS ═════════ -->
-<div class="sec" id="ca-block-2" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">2</span>LOE Quote &amp; Valuation Details</div><div class="sec-body">
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px;" onclick="event.stopPropagation();">
-  <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">View in Valcre</button>
-  <button class="btn btn-primary" style="font-size:11px;padding:5px 12px;">Preview &amp; Send LOE</button>
-  <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">Test Data</button>
-</div>
-<div class="grid">
-
-  <div class="subgrp">Job Information</div>
-  <div class="f"><span class="f-lbl">Job Number</span><div class="f-val"><input class="u-inp" readonly style="color:var(--text-3);"><span class="route">→ Valcre (Job.Number)</span></div></div>
-  <div class="f"><span class="f-lbl">ClickUp Task</span><div class="f-val"><input class="u-inp"><span class="route">→ ClickUp (link)</span></div></div>
-  <div class="f"><span class="f-lbl">LOE Version</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">LOE-07-1<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">LOE-07-1</div><div class="dd-item" onclick="pickDD(this)">LOE-07-2</div></div></div></div></div>
-
-  <div class="subgrp">Job Details</div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.1</span>Property Rights</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose... (multi)<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Fee Simple Interest</div><div class="dd-item" onclick="pickDD(this)">Leasehold Interest</div><div class="dd-item" onclick="pickDD(this)">Leased Fee Interest</div><div class="dd-item" onclick="pickDD(this)">Partial Interest</div></div></div><span class="route">→ Valcre (Job.Purposes) · ClickUp · multi</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.10</span>Scope of Work</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">All Applicable</div><div class="dd-item" onclick="pickDD(this)">Best One Approach</div><div class="dd-item" onclick="pickDD(this)">Best Two Approaches</div><div class="dd-item" onclick="pickDD(this)">Cost Approach</div><div class="dd-item" onclick="pickDD(this)">Direct Comparison Approach</div><div class="dd-item" onclick="pickDD(this)">Discounted Cash Flow</div><div class="dd-item" onclick="pickDD(this)">Feasibility Study</div><div class="dd-item" onclick="pickDD(this)">Income Approach</div><div class="dd-item" onclick="pickDD(this)">Land Value</div><div class="dd-item" onclick="pickDD(this)">Litigation</div><div class="dd-item" onclick="pickDD(this)">Market Research</div><div class="dd-item" onclick="pickDD(this)">Market Study</div><div class="dd-item" onclick="pickDD(this)">Net Rent Review</div><div class="dd-item" onclick="pickDD(this)">Update</div></div></div><span class="route">→ Valcre · single-pick today</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.2</span>Payment Terms</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">On LOE Signature</div><div class="dd-item" onclick="pickDD(this)">NET 30 Days</div><div class="dd-item" onclick="pickDD(this)">On Completion</div><div class="dd-item" onclick="pickDD(this)">50% Upfront</div></div></div><span class="route">→ Valcre (Comments)</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.11</span>Appraisal Fee</span><div class="f-val"><input class="u-inp"><span class="route">→ Valcre (Fee)</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.3</span>Report Type</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Amendment Letter</div><div class="dd-item" onclick="pickDD(this)">Appraisal Report</div><div class="dd-item" onclick="pickDD(this)">Broker Opinion of Value</div><div class="dd-item" onclick="pickDD(this)">Completion Report</div><div class="dd-item" onclick="pickDD(this)">Consultation</div><div class="dd-item" onclick="pickDD(this)">Desk Review</div><div class="dd-item" onclick="pickDD(this)">Evaluation</div><div class="dd-item" onclick="pickDD(this)">Peer Review</div><div class="dd-item" onclick="pickDD(this)">Rent Study</div><div class="dd-item" onclick="pickDD(this)">Restricted Appraisal Report</div></div></div><span class="route">→ Valcre · ClickUp</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.12</span>Retainer Amount</span><div class="f-val"><input class="u-inp"><span class="route">→ Valcre (Retainer)</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.4</span>Retainer Paid</span><div class="f-val"><input class="u-inp" type="date"><span class="route">internal only</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.13</span>Amount Paid</span><div class="f-val"><input class="u-inp"><span class="route">internal only</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.5</span>Delivery Date</span><div class="f-val"><input class="u-inp" type="date"><span class="route">→ Valcre (Due Date)</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.14</span>Paid Date</span><div class="f-val"><input class="u-inp" type="date"><span class="route">internal only</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.6</span>Job Status</span><div class="f-val"><input class="u-inp"><span class="route">FREE-TEXT (options not invented)</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.15</span>Assignment Type</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Single Property</div><div class="dd-item" onclick="pickDD(this)">Multiple Properties</div></div></div><span class="route">NOT wired to Valcre (held) · canonical set</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.7</span>Report Format</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Comprehensive</div><div class="dd-item" onclick="pickDD(this)">Concise</div><div class="dd-item" onclick="pickDD(this)">Form</div></div></div><span class="route">NOT wired to Valcre</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.16</span>Value Scenarios</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose... (derived)<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">As Is Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As If Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As-Is</div><div class="dd-item" onclick="pickDD(this)">As If Complete &amp; Stabilized</div><div class="dd-item" onclick="pickDD(this)">As Stabilized</div></div></div><span class="route">DERIVED (cascade ← Status of Improvements) · → Valcre</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.8</span>Transaction Status</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Not Applicable</div><div class="dd-item" onclick="pickDD(this)">Listed</div><div class="dd-item" onclick="pickDD(this)">Under Contract</div></div></div><span class="route">→ Valcre · canonical (Block 4 copy is stale)</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.17</span>Zoning Status</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">In Place</div><div class="dd-item" onclick="pickDD(this)">To Be Rezoned</div></div></div><span class="route">→ Valcre · canonical (Block 4 copy is stale)</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.9</span>Analysis Level</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Detailed</div><div class="dd-item" onclick="pickDD(this)">Summary</div><div class="dd-item" onclick="pickDD(this)">Brief</div><div class="dd-item" onclick="pickDD(this)">Detailed Residential</div><div class="dd-item" onclick="pickDD(this)">Restricted Access Report</div><div class="dd-item" onclick="pickDD(this)">Progress Report</div><div class="dd-item" onclick="pickDD(this)">Valuation Assessment Letter</div><div class="dd-item" onclick="pickDD(this)">Rental Assessment Letter</div><div class="dd-item" onclick="pickDD(this)">Rental Submission</div><div class="dd-item" onclick="pickDD(this)">Rental Determination</div><div class="dd-item" onclick="pickDD(this)">Property Pro</div></div></div><span class="route">→ Valcre</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.1.18</span>Purpose</span><div class="f-val"><input class="u-inp"><span class="route">FREE-TEXT · does NOT go to Valcre</span></div></div>
-  <div class="f"><span class="f-lbl">Lead Appraiser</span><div class="f-val"><input class="u-inp"><span class="route">free-text · dashboard-only</span></div></div>
-  <div class="f"><span class="f-lbl">Desktop Report</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Yes</div><div class="dd-item" onclick="pickDD(this)">No</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">CMHC Financing</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Yes</div><div class="dd-item" onclick="pickDD(this)">No</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">Effective Date</span><div class="f-val"><input class="u-inp" type="date"><span class="route">→ Valcre (EffectiveDate)</span></div></div>
-  <div class="f"><span class="f-lbl">Request Date</span><div class="f-val"><input class="u-inp" type="date"></div></div>
-  <div class="f"><span class="f-lbl">Signed Date</span><div class="f-val"><input class="u-inp" type="date"><span class="route">→ DocuSeal webhook</span></div></div>
-  <div class="f"><span class="f-lbl">Current Use</span><div class="f-val"><input class="u-inp"><span class="route">free-text GAP (registry has a list)</span></div></div>
-  <div class="f"><span class="f-lbl">Proposed Use</span><div class="f-val"><input class="u-inp"><span class="route">free-text GAP (registry has a list)</span></div></div>
-  <div class="f"><span class="f-lbl">Approaches to Value</span><div class="f-val"><input class="u-inp"><span class="route">free-text · DERIVED (wrong control)</span></div></div>
-  <div class="f"><span class="f-lbl">Delivery Time (wks)</span><div class="f-val"><input class="u-inp"><span class="route">free-text</span></div></div>
-  <div class="f"><span class="f-lbl">Client Documents</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Previous Appraisal</div><div class="dd-item" onclick="pickDD(this)">Property Details</div><div class="dd-item" onclick="pickDD(this)">Proforma</div><div class="dd-item" onclick="pickDD(this)">Unit Mix</div><div class="dd-item" onclick="pickDD(this)">Rent Roll</div><div class="dd-item" onclick="pickDD(this)">Historical Operating Expenses</div><div class="dd-item" onclick="pickDD(this)">Development Permit Drawings</div><div class="dd-item" onclick="pickDD(this)">Contact for Property Tour</div><div class="dd-item" onclick="pickDD(this)">Purchase &amp; Sale Agreement</div><div class="dd-item" onclick="pickDD(this)">Environmental Reports</div><div class="dd-item" onclick="pickDD(this)">Property Condition Reports</div></div></div></div></div>
-  <div class="f"><span class="f-lbl">Previously Appraised</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Yes</div><div class="dd-item" onclick="pickDD(this)">No</div></div></div></div></div>
-
-  <div class="subgrp">Comments</div>
-  <div class="f span2"><span class="f-lbl">General</span><div class="f-val"><input class="u-inp"><span class="route">→ ClickUp (Appraiser Notes)</span></div></div>
-  <div class="f span2"><span class="f-lbl">Delivery</span><div class="f-val"><input class="u-inp"><span class="route">→ ClickUp (Appraiser Notes)</span></div></div>
-  <div class="f span2"><span class="f-lbl">Payment</span><div class="f-val"><input class="u-inp"><span class="route">→ ClickUp (Appraiser Notes)</span></div></div>
-
-</div></div></div>
-
-<!-- ═════════ BLOCK 3 — BUILDING INFORMATION & CLIENT DOCUMENTS ═════════ -->
-<div class="sec" id="ca-block-3" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">3</span>Building Information &amp; Client Documents</div><div class="sec-body"><div class="grid">
-
-  <div class="subgrp">Building Information</div>
-  <div class="f"><span class="f-lbl">Year Built</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Building Size (SF)</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Number of Units</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Parking Spaces</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Tenancy</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Owner-Occupied</div><div class="dd-item" onclick="pickDD(this)">Single-Tenant</div><div class="dd-item" onclick="pickDD(this)">Multi-Tenant</div><div class="dd-item" onclick="pickDD(this)">Vacant</div></div></div><span class="route">client list has 6 — mismatch</span></div></div>
-  <div class="f"><span class="f-lbl">State of Improvements</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Status of Improvements</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Improved - Completed</div><div class="dd-item" onclick="pickDD(this)">Improved - Renovated</div><div class="dd-item" onclick="pickDD(this)">Improved - Under Renovation</div><div class="dd-item" onclick="pickDD(this)">Improved - Proposed Renovation</div><div class="dd-item" onclick="pickDD(this)">Proposed - Vacant Land</div><div class="dd-item" onclick="pickDD(this)">Proposed - Improved Land (Demolition Required)</div><div class="dd-item" onclick="pickDD(this)">Proposed - Under Construction</div></div></div><span class="route">cascade TRIGGER (drives Value Scenarios)</span></div></div>
-  <div class="f"><span class="f-lbl">Property Subtype</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Land Metric</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Env. Assessment</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Heritage / Conserv.</span><div class="f-val"><input class="u-inp"></div></div>
-
-  <div class="subgrp">Legal Description</div>
-  <div class="f span2"><span class="f-lbl">Description</span><div class="f-val"><input class="u-inp"><span class="route">free-text (jurisdiction-specific)</span></div></div>
-
-</div></div></div>
-
-<!-- ═════════ BLOCK 4 — DATA GATHERING – PROPERTY RESEARCH ═════════ -->
-<div class="sec" id="ca-block-4" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">4</span>Data Gathering – Property Research</div><div class="sec-body"><div class="grid">
-
-  <div class="subgrp">Appraisal Assignment <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-3);">⚠ stale-option duplicates of Block 2</span></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">3.1.1</span>Assignment Type</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Standard</div><div class="dd-item" onclick="pickDD(this)">Update</div><div class="dd-item" onclick="pickDD(this)">Retrospective</div><div class="dd-item" onclick="pickDD(this)">Desktop</div></div></div><span class="route">STALE · different concept from 2.1.15</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">3.1.2</span>Desktop Report</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Yes</div><div class="dd-item" onclick="pickDD(this)">No</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">3.1.3</span>Value Timeframe</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Current</div><div class="dd-item" onclick="pickDD(this)">Retrospective</div><div class="dd-item" onclick="pickDD(this)">Prospective</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">3.1.4</span>Approaches to Value</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">All Applicable</div><div class="dd-item" onclick="pickDD(this)">Cost Approach</div><div class="dd-item" onclick="pickDD(this)">Direct Comparison</div><div class="dd-item" onclick="pickDD(this)">Income Approach</div><div class="dd-item" onclick="pickDD(this)">Cost + Direct Comparison</div><div class="dd-item" onclick="pickDD(this)">Cost + Income</div><div class="dd-item" onclick="pickDD(this)">Direct Comparison + Income</div></div></div><span class="route">STALE dropdown · DERIVED concept</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">3.1.5</span>Transaction Status</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Arm's Length</div><div class="dd-item" onclick="pickDD(this)">Non-Arm's Length</div><div class="dd-item" onclick="pickDD(this)">Listing</div><div class="dd-item" onclick="pickDD(this)">Under Contract</div><div class="dd-item" onclick="pickDD(this)">REO/Bank Sale</div></div></div><span class="route">STALE · same DB column as 2.1.8</span></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">3.1.6</span>Zoning Status</span><div class="f-val"><div class="dd"><div class="dd-trigger ph" onclick="toggleDD(this)">Choose...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Legal Conforming</div><div class="dd-item" onclick="pickDD(this)">Legal Non-Conforming</div><div class="dd-item" onclick="pickDD(this)">Illegal</div><div class="dd-item" onclick="pickDD(this)">No Zoning</div></div></div><span class="route">STALE · same DB column as 2.1.17</span></div></div>
-
-  <div class="subgrp">Property Site</div>
-  <div class="f"><span class="f-lbl">Zoning</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Zone Code</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Land Use</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Flood Zone</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Utilities</span><div class="f-val"><input class="u-inp"></div></div>
-
-  <div class="subgrp">Parcels Summary</div>
-  <div class="f"><span class="f-lbl">Parcel Number</span><div class="f-val"><input class="u-inp"><span class="route">→ Valcre (ParcelNumbers)</span></div></div>
-  <div class="f"><span class="f-lbl">Gross Building Area (SF)</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Net Rentable Area (SF)</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Year Built</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Buildable Land (SF)</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Total Site Area (SF)</span><div class="f-val"><input class="u-inp"><span class="route">→ Valcre (LandAreaSF)</span></div></div>
-  <div class="f"><span class="f-lbl">Assessed Value</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Taxes</span><div class="f-val"><input class="u-inp"></div></div>
-
-  <div class="subgrp">Assessments &amp; Taxes</div>
-  <div class="f"><span class="f-lbl">Assessment Year</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Land Value</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Land Split</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Improved Value</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Total Value</span><div class="f-val"><input class="u-inp"></div></div>
-  <div class="f"><span class="f-lbl">Building Split</span><div class="f-val"><input class="u-inp"></div></div>
-
-</div></div></div>
-
-<!-- ═════════ BLOCK 5 — DOCUMENT UPLOAD & ORGANIZATION ═════════ -->
-<div class="sec" id="ca-block-5" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">5</span>Document Upload &amp; Organization</div><div class="sec-body"><div class="grid">
-  <div class="f"><span class="f-lbl">Land Title Certificate</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
-  <div class="f"><span class="f-lbl">Survey Certificate/RPR</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
-  <div class="f"><span class="f-lbl">Tax Assessment Notice</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
-  <div class="f"><span class="f-lbl">Aerial Photo</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
-  <div class="f"><span class="f-lbl">Zoning Map</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
-  <div class="f"><span class="f-lbl">Flood Map</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
-  <div class="f"><span class="f-lbl">Building Permits</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
-  <div class="f"><span class="f-lbl">Site Plan</span><div class="f-val"><div class="doc">Upload file...</div></div></div>
-</div></div></div>
-
-</div>
-
-
 <!-- ═══ PROPOSED APR DASHBOARD — re-sorted by the LOE test ═══ -->
 <div class="panel" id="panel-proposedapr">
 
 <div style="display:flex;align-items:center;gap:8px;margin:0 0 14px;padding:8px 0;border-bottom:1px solid var(--border);">
   <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;" onclick="jumpToFieldMap()">Field Mapping &#8595;</button>
-  <button class="btn btn-outline" id="paToggleAll" style="font-size:11px;padding:5px 12px;margin-left:auto;" onclick="toggleAllProposed(this)">Collapse all</button>
+  <div class="dd" style="margin-left:auto;min-width:210px;"><div class="dd-trigger" onclick="toggleDD(this)" style="font-size:11px;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);">Fill Test Data &mdash; pick a version<span class="dd-arrow" style="position:static;margin-left:6px;"></span></div><div class="dd-menu">
+    <div class="dd-item" onclick="applyProposedVersion(1,this)">V1 &mdash; Completed (baseline &middot; As Stabilized)</div>
+    <div class="dd-item" onclick="applyProposedVersion(2,this)">V2 &mdash; Under Renovation (As-Is + As If Complete &amp; Stabilized)</div>
+    <div class="dd-item" onclick="applyProposedVersion(3,this)">V3 &mdash; Improved Land / Demolition (As If Vacant + As If Complete)</div>
+    <div class="dd-item" onclick="applyProposedVersion(4,this)">V4 &mdash; Insurance override (Insurable Replacement Cost)</div>
+  </div></div>
+  <button class="btn btn-outline" id="paToggleAll" style="font-size:11px;padding:5px 12px;" onclick="toggleAllProposed(this)">Expand all</button>
 </div>
 
 <div class="sec" style="cursor:default;">
@@ -801,12 +531,6 @@
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">↗ View in Valcre</button>
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">↗ View in ClickUp</button>
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">Preview &amp; Send LOE</button>
-    <div class="dd" style="margin-left:auto;min-width:210px;"><div class="dd-trigger" onclick="toggleDD(this)" style="font-size:11px;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);">Test Data — pick a version<span class="dd-arrow" style="position:static;margin-left:6px;"></span></div><div class="dd-menu">
-      <div class="dd-item" onclick="applyProposedVersion(1,this)">V1 — Completed (baseline · As Stabilized)</div>
-      <div class="dd-item" onclick="applyProposedVersion(2,this)">V2 — Under Renovation (As-Is + As If Complete & Stabilized)</div>
-      <div class="dd-item" onclick="applyProposedVersion(3,this)">V3 — Improved Land / Demolition (As If Vacant + As If Complete)</div>
-      <div class="dd-item" onclick="applyProposedVersion(4,this)">V4 — Insurance override (Insurable Replacement Cost)</div>
-    </div></div>
   </div>
   <div class="grid">
 
@@ -954,6 +678,26 @@
     <th style="width:34px;">#</th><th>Field</th><th>Control</th><th>Source</th><th>Options</th><th>Routes To</th>
   </tr></thead><tbody id="fmBody"></tbody></table></div>
 </div></div>
+
+
+<div class="sec closed" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span>Section Reference — what each part is</div><div class="sec-body">
+    <div class="sec-ref">
+  <div class="sec-ref-title">Section Reference</div>
+  <table class="sec-ref-table">
+    <tr><td colspan="3" class="sec-ref-stage">Stage 1 — Client Submission</td></tr>
+    <tr><td>1.1</td><td>Client Information</td><td>Client name, contact, address</td></tr>
+    <tr><td>1.2</td><td>Property Information</td><td>Property details, type, authorized use</td></tr>
+    <tr><td>1.3</td><td>Property Contact</td><td>On-site contact for property access</td></tr>
+    <tr><td colspan="3" class="sec-ref-stage">Stage 2 — Quote Preparation</td></tr>
+    <tr><td>2.1</td><td>LOE Quote & Job Information</td><td>Job setup, fees, property rights outcome</td></tr>
+    <tr><td>2.2</td><td>Building Information</td><td>Building details, tenancy, status, value scenarios outcome</td></tr>
+    <tr><td>2.3</td><td>Appraisal Assignment</td><td>Assignment config, approaches outcome</td></tr>
+    <tr><td colspan="3" class="sec-ref-stage">Stage 3 — Job Execution</td></tr>
+    <tr><td>3.1</td><td>Property Site & Parcels</td><td>Zoning, land use, site details</td></tr>
+    <tr><td>3.2</td><td>Document Uploads</td><td>Supporting documents and files</td></tr>
+  </table>
+</div>
+  </div></div>
 
 </div>
 
@@ -1322,6 +1066,13 @@ const PROPOSED_VERSIONS = {
   4: { statusOfImprovements:'Improved - Completed', authorizedUse:'Insurance',
        valuationPremises:'Insurable Value', scopeOfWork:'Cost Approach', propertyRights:'Fee Simple Interest', valueTimeframe:'Current' },
 };
+function toggleAllProposed(btn) {
+  var secs = document.querySelectorAll('#panel-proposedapr .sec[onclick*="toggleSec"]');
+  var anyClosed = Array.prototype.some.call(secs, function(s){ return s.classList.contains('closed'); });
+  secs.forEach(function(s){ s.classList.toggle('closed', !anyClosed); });
+  if (btn) btn.textContent = anyClosed ? 'Collapse all' : 'Expand all';
+}
+
 function applyProposedVersion(v, item) {
   pickDD(item);
   const data = Object.assign({}, PROPOSED_BASE, PROPOSED_VERSIONS[v]);

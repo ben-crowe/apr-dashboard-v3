@@ -45,6 +45,11 @@
   .btn-outline { background: transparent; color: var(--text-2); border: 1px solid var(--border); box-shadow: var(--shadow); }
   .btn-outline:hover { border-color: var(--border-focus); color: var(--text); background: var(--hover); }
   .btn-outline.disabled { cursor: default; pointer-events: none; }
+  /* fold-out filter ribbon: left = category buttons (boxed), right = testing toggles (underline text) */
+  .fm-filter.active { border-color: var(--text); color: var(--text); font-weight: 600; }
+  .fm-test { background: none; border: none; box-shadow: none; padding: 5px 2px; font-size: 11px; color: var(--text-3); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .fm-test:hover { color: var(--text); }
+  .fm-test.active { color: var(--text); font-weight: 600; }
   .btn-ghost { background: transparent; color: var(--text-3); border: 1px solid transparent; font: 500 12px/1 system-ui, sans-serif; padding: 7px 16px; border-radius: var(--radius); cursor: pointer; }
   .btn-ghost:hover { background: var(--hover); color: var(--text-2); }
 
@@ -929,17 +934,17 @@
     <span style="color:var(--text-3);">&mdash; not a destination</span>
     <span style="color:var(--text-3);">&dagger; LOE = token-mapped (lower confidence)</span>
   </div>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px;" onclick="event.stopPropagation();">
+  <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:0 0 12px;" onclick="event.stopPropagation();">
     <button class="btn btn-outline fm-filter active" data-filter="all" onclick="filterFieldMap('all',this)">All</button>
     <button class="btn btn-outline fm-filter" data-filter="intake" onclick="filterFieldMap('intake',this)">Client Intake</button>
-    <button class="btn btn-outline fm-filter" data-filter="wired" onclick="filterFieldMap('wired',this)">Wired</button>
-    <button class="btn btn-outline fm-filter" data-filter="notwired" onclick="filterFieldMap('notwired',this)">Not wired</button>
-    <button class="btn btn-outline fm-filter" data-filter="valcre" onclick="filterFieldMap('valcre',this)">&#8594; Valcre</button>
-    <button class="btn btn-outline fm-filter" data-filter="clickup" onclick="filterFieldMap('clickup',this)">&#8594; ClickUp</button>
-    <button class="btn btn-outline fm-filter" data-filter="loe" onclick="filterFieldMap('loe',this)">&#8594; LOE</button>
+    <button class="btn btn-outline fm-filter" data-filter="valcre" onclick="filterFieldMap('valcre',this)">Valcre</button>
+    <button class="btn btn-outline fm-filter" data-filter="clickup" onclick="filterFieldMap('clickup',this)">ClickUp</button>
+    <button class="btn btn-outline fm-filter" data-filter="loe" onclick="filterFieldMap('loe',this)">LOE</button>
+    <button class="fm-test fm-filter" data-filter="wired" style="margin-left:auto;" onclick="filterFieldMap('wired',this)">Wired</button>
+    <button class="fm-test fm-filter" data-filter="notwired" onclick="filterFieldMap('notwired',this)">Not wired</button>
   </div>
   <div style="overflow-x:auto;"><table class="fi-table"><thead><tr>
-    <th>Field</th><th>Source</th><th>Control</th><th>Intake</th><th>Valcre</th><th>ClickUp</th><th>LOE †</th>
+    <th>Field</th><th>Source</th><th>Control</th><th>Options</th><th>Intake</th><th>Valcre</th><th>ClickUp</th><th>LOE †</th>
   </tr></thead><tbody id="fmBody"></tbody></table></div>
   <div style="font-size:10px;color:var(--text-3);margin-top:10px;">† LOE column is token-mapped — the value fills the contract, but is not field-by-field readback-verified like Valcre and ClickUp.</div>
 </div></div>
@@ -1465,17 +1470,33 @@ function _fmDot(t, s) {
   return '<span style="' + dotStyle + '"></span>' + t;
 }
 
+var FM_ROW_OPTIONS = [];
+
 function renderFieldMap() {
   var tbody = document.getElementById('fmBody');
   if (!tbody) return;
   tbody.innerHTML = '';
+  FM_ROW_OPTIONS = [];
+
+  /* Collect all .f elements from sections 1-4 in DOM order, zipped 1:1 with DASHBOARD_FIELDMAP */
+  var panelFBlocks = [];
+  ['pa-sec-1','pa-sec-2','pa-sec-3','pa-sec-4'].forEach(function(sid) {
+    var sec = document.getElementById(sid);
+    if (sec) {
+      sec.querySelectorAll('.f').forEach(function(fEl) {
+        panelFBlocks.push(fEl);
+      });
+    }
+  });
+
   var lastSec = null;
+  var rowIdx = 0;
   DASHBOARD_FIELDMAP.forEach(function(r) {
     if (r.sec !== lastSec) {
       lastSec = r.sec;
       var hdr = document.createElement('tr');
       hdr.className = 'fm-sec-row';
-      hdr.innerHTML = '<td colspan="7" style="font-weight:600;font-size:11px;color:var(--text-2);padding:14px 0 4px;">' + FM_SEC_TITLES[r.sec] + '</td>';
+      hdr.innerHTML = '<td colspan="8" style="font-weight:600;font-size:11px;color:var(--text-2);padding:14px 0 4px;">' + FM_SEC_TITLES[r.sec] + '</td>';
       tbody.appendChild(hdr);
     }
     var hasLiveDest = (r.valcre.s === 'live') || (r.clickup.s === 'live') || (r.loe.s === 'live');
@@ -1485,7 +1506,28 @@ function renderFieldMap() {
       : '<span style="color:var(--text-3);">—</span>';
     var clickupCell = _fmDot(r.clickup.t, r.clickup.s);
     var loeCell     = '<span style="opacity:0.65;">' + _fmDot(r.loe.t, r.loe.s) + '</span>';
+
+    /* Collect options from the corresponding .f DOM element (by position, not label) */
+    var opts = [];
+    var fEl = panelFBlocks[rowIdx];
+    if (fEl) {
+      fEl.querySelectorAll('.dd-menu .dd-item').forEach(function(item) {
+        var txt = item.textContent.trim();
+        if (txt) opts.push(txt);
+      });
+    }
+    FM_ROW_OPTIONS[rowIdx] = opts;
+
+    var optCell;
+    if (opts.length > 0) {
+      optCell = '<span style="cursor:pointer;color:var(--text);" onclick="toggleFmOptions(' + rowIdx + ',event)">'
+        + opts.length + ' options &#9662;</span>';
+    } else {
+      optCell = '<span style="color:var(--text-3);">&#8212;</span>';
+    }
+
     var tr = document.createElement('tr');
+    tr.id = 'fmrow-' + rowIdx;
     tr.dataset.sec      = r.sec;
     tr.dataset.valcre   = r.valcre.t ? '1' : '';
     tr.dataset.clickup  = r.clickup.t ? '1' : '';
@@ -1496,14 +1538,44 @@ function renderFieldMap() {
     tr.innerHTML = '<td class="fn">' + r.f + '</td>'
       + '<td>' + r.src + '</td>'
       + '<td>' + r.ctrl + '</td>'
+      + '<td>' + optCell + '</td>'
       + '<td>' + _fmDot(r.intake.t, r.intake.s) + '</td>'
       + '<td>' + valcreCell + '</td>'
       + '<td>' + clickupCell + '</td>'
       + '<td>' + loeCell + '</td>';
     tbody.appendChild(tr);
+    rowIdx++;
   });
 }
 
+function toggleFmOptions(idx, event) {
+  event.stopPropagation();
+  var existingExp = document.getElementById('fmopt-' + idx);
+  var fieldRow = document.getElementById('fmrow-' + idx);
+  if (!fieldRow) return;
+  var trigger = fieldRow.querySelector('td > span[onclick]');
+  if (existingExp) {
+    existingExp.remove();
+    if (trigger) {
+      var cnt = FM_ROW_OPTIONS[idx] ? FM_ROW_OPTIONS[idx].length : 0;
+      trigger.innerHTML = cnt + ' options &#9662;';
+    }
+  } else {
+    var opts = FM_ROW_OPTIONS[idx] || [];
+    if (!opts.length) return;
+    var optRows = opts.map(function(o) {
+      return '<div style="padding:2px 0;color:var(--text-2);">'
+        + o.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        + '</div>';
+    }).join('');
+    var expTr = document.createElement('tr');
+    expTr.id = 'fmopt-' + idx;
+    expTr.innerHTML = '<td colspan="8" style="background:var(--bg-card);padding:6px 12px 8px 28px;font-size:11px;">'
+      + optRows + '</td>';
+    fieldRow.insertAdjacentElement('afterend', expTr);
+    if (trigger) trigger.innerHTML = opts.length + ' options &#9652;';
+  }
+}
 function jumpToFieldMap() {
   var sec = document.getElementById('pa-sec-map');
   if (!sec) return;

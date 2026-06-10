@@ -195,3 +195,15 @@ finalized; it's a separate verification pass.
 - DROP the bare-dash empty state entirely; replace any "—" empty with "Choose" (user) or "Pending" (derived) as appropriate.
 
 **Cascade Options picker → add a scoped "Clear" entry (Ben 2026-06-10).** The cascade section is where a user will experiment repeatedly, so it needs its own discoverable reset. Add **Clear** as an entry INSIDE the Cascade Options dropdown — set off from V1-V4, placed at the TOP (before V1) as the "back to nothing" reset. Picking it resets ONLY the cascade: Status of Improvements → "Choose", Value Scenarios + Approaches → "Pending", picker label → back to "pick a scenario". Leaves the rest of the dashboard untouched. (Distinct scope from the global top-ribbon Clear, which wipes ALL test data.)
+
+**Empty-state — CORRECTION (Ben 2026-06-10, supersedes "Choose"):**
+- User-choice empty word = **"Select…"** (with trailing ellipsis), NOT "Choose". "Select" is the correct dropdown convention.
+- CRITICAL: the empty placeholder (both "Select…" and "Pending") must render **shaded/dim gray, NOT bright white** — bright made empty fields read as filled. Reference treatment already correct in-app: "Client Documents: Select…" (dim + ellipsis). Match it.
+- Rule: empty = DIM (Select… / Pending); only a REAL selected value is bright.
+- Dates ("yyyy-mm-dd") + Year Built: dim when empty, brighten once set.
+
+**More mock-comb items (Ben 2026-06-10) — perfect on MOCK, then ONE push to live:**
+- **Section 1 client fields** (First/Last Name, Phone, Email, Title, Org) have NO empty-state view — give them the dim placeholder treatment, consistent with the empty-reads-as-empty rule.
+- **Address fields need an underline** — on live they're still the boxed h-9 inputs from the migration (no underline). Convert to underline-style like every other field (this is the mixed-input POLISH offender).
+- **Sizing may not have deployed** — Ben says the live site still isn't tighter (max-w-[960px] + density). Verify it actually landed on live; re-push if not.
+- **WORKING MODEL reaffirmed:** perfect ALL small detail on the mock → ONE clean deploy so live matches mock in a single push → THEN Ben combs the live site. No half-synced live combing.

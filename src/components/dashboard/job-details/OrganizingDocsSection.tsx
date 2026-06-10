@@ -213,7 +213,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
 
             <CompactField label="State of Improvements">
               <Select value={jobDetails.stateOfImprovements || ''} onValueChange={value => handleSelectChange(value, 'stateOfImprovements')}>
-                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Choose" /></SelectTrigger>
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Proposed">Proposed</SelectItem>
                   <SelectItem value="Under Construction">Under Construction</SelectItem>
@@ -228,7 +228,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
 
             <CompactField label="Land Metric">
               <Select value={jobDetails.landMetric || ''} onValueChange={value => handleSelectChange(value, 'landMetric')}>
-                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Choose" /></SelectTrigger>
+                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Square Feet">Square Feet</SelectItem>
                   <SelectItem value="Acres">Acres</SelectItem>

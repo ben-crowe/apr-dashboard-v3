@@ -341,37 +341,37 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           <TwoColumnFields className="md:!grid-cols-[1fr_1fr] md:!max-w-[1100px] pr-8">
             <CompactField label="First Name">
               <div className="relative">
-                <Input value={job.clientFirstName || ''} onChange={(e) => onUpdateJob?.({clientFirstName: e.target.value})} onBlur={(e) => handleBlur('clientFirstName', e.target.value)} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
+                <Input value={job.clientFirstName || ''} onChange={(e) => onUpdateJob?.({clientFirstName: e.target.value})} onBlur={(e) => handleBlur('clientFirstName', e.target.value)} placeholder="First name" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
             <CompactField label="Last Name">
               <div className="relative">
-                <Input value={job.clientLastName || ''} onChange={(e) => onUpdateJob?.({clientLastName: e.target.value})} onBlur={(e) => handleBlur('clientLastName', e.target.value)} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
+                <Input value={job.clientLastName || ''} onChange={(e) => onUpdateJob?.({clientLastName: e.target.value})} onBlur={(e) => handleBlur('clientLastName', e.target.value)} placeholder="Last name" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
             <CompactField label="Title">
               <div className="relative">
-                <Input value={job.clientTitle || ''} onChange={(e) => onUpdateJob?.({clientTitle: e.target.value})} onBlur={(e) => handleBlur('clientTitle', e.target.value)} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
+                <Input value={job.clientTitle || ''} onChange={(e) => onUpdateJob?.({clientTitle: e.target.value})} onBlur={(e) => handleBlur('clientTitle', e.target.value)} placeholder="Title" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
             <CompactField label="Organization">
               <div className="relative">
-                <Input value={job.clientOrganization || ''} onChange={(e) => onUpdateJob?.({clientOrganization: e.target.value})} onBlur={(e) => handleBlur('clientOrganization', e.target.value)} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
+                <Input value={job.clientOrganization || ''} onChange={(e) => onUpdateJob?.({clientOrganization: e.target.value})} onBlur={(e) => handleBlur('clientOrganization', e.target.value)} placeholder="Organization" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
             <CompactField label="Phone">
               <div className="relative">
-                <Input type="tel" value={job.clientPhone ? formatPhoneNumber(job.clientPhone) : ''} onChange={(e) => { const numbersOnly = e.target.value.replace(/\D/g, ''); onUpdateJob?.({clientPhone: numbersOnly}); }} onBlur={(e) => handleBlur('clientPhone', e.target.value.replace(/\D/g, ''))} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
+                <Input type="tel" value={job.clientPhone ? formatPhoneNumber(job.clientPhone) : ''} onChange={(e) => { const numbersOnly = e.target.value.replace(/\D/g, ''); onUpdateJob?.({clientPhone: numbersOnly}); }} onBlur={(e) => handleBlur('clientPhone', e.target.value.replace(/\D/g, ''))} placeholder="Phone" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
             <CompactField label="Email">
               <div className="relative">
-                <Input value={job.clientEmail || ''} onChange={(e) => onUpdateJob?.({clientEmail: e.target.value})} onBlur={(e) => handleBlur('clientEmail', e.target.value)} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
+                <Input value={job.clientEmail || ''} onChange={(e) => onUpdateJob?.({clientEmail: e.target.value})} onBlur={(e) => handleBlur('clientEmail', e.target.value)} placeholder="Email" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
@@ -384,7 +384,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 onChange={(e) => onUpdateJob?.({clientAddress: e.target.value})}
                 onBlur={(e) => handleBlur('clientAddress', e.target.value)}
                 placeholder="123 Main Street, Suite 500, Calgary, AB T2P 1A1"
-                className="h-7 text-sm border-0 rounded-none bg-transparent px-0 w-full"
+                className="h-7 text-sm border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] rounded-none bg-transparent px-0 w-full"
               />
             </CompactField>
           </div>
@@ -395,7 +395,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           <TwoColumnFields className="md:!grid-cols-[1fr_1fr] md:!max-w-[1100px] pr-8">
             <CompactField label="Property Name">
               <div className="relative">
-                <Input value={job.propertyName || ''} onChange={(e) => onUpdateJob?.({propertyName: e.target.value})} onBlur={(e) => handleBlur('propertyName', e.target.value)} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
+                <Input value={job.propertyName || ''} onChange={(e) => onUpdateJob?.({propertyName: e.target.value})} onBlur={(e) => handleBlur('propertyName', e.target.value)} placeholder="Property name" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
@@ -409,7 +409,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 }}
               >
                 <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
-                  <SelectValue placeholder="Choose" />
+                  <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
@@ -441,7 +441,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 onChange={(e) => onUpdateJob?.({propertyAddress: e.target.value})}
                 onBlur={(e) => handleBlur('propertyAddress', e.target.value)}
                 placeholder="2800 Bayview Avenue, Calgary, AB T2P 1A1"
-                className="h-7 text-sm border-0 rounded-none bg-transparent px-0 w-full"
+                className="h-7 text-sm border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] rounded-none bg-transparent px-0 w-full"
               />
             </CompactField>
           </div>
@@ -457,7 +457,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 }}
               >
                 <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
-                  <SelectValue placeholder="Choose" />
+                  <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
@@ -484,7 +484,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 }}
               >
                 <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
-                  <SelectValue placeholder="Choose" />
+                  <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
@@ -506,7 +506,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 }}
               >
                 <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
-                  <SelectValue placeholder="Choose" />
+                  <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
@@ -526,25 +526,25 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           <TwoColumnFields className="md:!grid-cols-[1fr_1fr] md:!max-w-[1100px] pr-8">
             <CompactField label="First Name">
               <div className="relative">
-                <Input value={job.propertyContactFirstName || ''} onChange={(e) => onUpdateJob?.({propertyContactFirstName: e.target.value})} onBlur={(e) => handleBlur('propertyContactFirstName', e.target.value)} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
+                <Input value={job.propertyContactFirstName || ''} onChange={(e) => onUpdateJob?.({propertyContactFirstName: e.target.value})} onBlur={(e) => handleBlur('propertyContactFirstName', e.target.value)} placeholder="Contact first name" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
             <CompactField label="Email">
               <div className="relative">
-                <Input value={job.propertyContactEmail || ''} onChange={(e) => onUpdateJob?.({propertyContactEmail: e.target.value})} onBlur={(e) => handleBlur('propertyContactEmail', e.target.value)} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
+                <Input value={job.propertyContactEmail || ''} onChange={(e) => onUpdateJob?.({propertyContactEmail: e.target.value})} onBlur={(e) => handleBlur('propertyContactEmail', e.target.value)} placeholder="Contact email" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
             <CompactField label="Last Name">
               <div className="relative">
-                <Input value={job.propertyContactLastName || ''} onChange={(e) => onUpdateJob?.({propertyContactLastName: e.target.value})} onBlur={(e) => handleBlur('propertyContactLastName', e.target.value)} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
+                <Input value={job.propertyContactLastName || ''} onChange={(e) => onUpdateJob?.({propertyContactLastName: e.target.value})} onBlur={(e) => handleBlur('propertyContactLastName', e.target.value)} placeholder="Contact last name" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
             <CompactField label="Phone">
               <div className="relative">
-                <Input type="tel" value={job.propertyContactPhone ? formatPhoneNumber(job.propertyContactPhone) : ''} onChange={(e) => { const numbersOnly = e.target.value.replace(/\D/g, ''); onUpdateJob?.({propertyContactPhone: numbersOnly}); }} onBlur={(e) => handleBlur('propertyContactPhone', e.target.value.replace(/\D/g, ''))} className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
+                <Input type="tel" value={job.propertyContactPhone ? formatPhoneNumber(job.propertyContactPhone) : ''} onChange={(e) => { const numbersOnly = e.target.value.replace(/\D/g, ''); onUpdateJob?.({propertyContactPhone: numbersOnly}); }} onBlur={(e) => handleBlur('propertyContactPhone', e.target.value.replace(/\D/g, ''))} placeholder="Contact phone" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
@@ -558,6 +558,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               value={job.notes || ''}
               onChange={(e) => onUpdateJob?.({notes: e.target.value})}
               onBlur={(e) => handleBlur('notes', e.target.value)}
+              placeholder="Notes"
               rows={2}
               className="text-sm resize-none min-h-[40px] max-w-[400px]"
             />

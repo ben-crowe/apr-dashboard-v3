@@ -46,7 +46,7 @@ const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
   }
 
   return (
-    <div className="space-y-8 px-6 md:px-10 py-6 pb-32">
+    <div className="max-w-[960px] mx-auto space-y-6 px-6 md:px-10 py-6 pb-32">
       <div className="flex flex-col space-y-5">
         <JobDetailHeader job={job} onBack={onBack} isSaving={isSaving} />
 

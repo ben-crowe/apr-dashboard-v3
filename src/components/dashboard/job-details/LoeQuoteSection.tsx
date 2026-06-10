@@ -555,9 +555,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           // Auto-sync wiring (2026-06-04, AUTO-SYNC-WIRING-MAP) — server routes each to its verified target
           if (fieldName === 'authorizedUse') syncData.authorizedUse = value;         // → Job.IntendedUses (INTENDED_USES_MAP)
           if (fieldName === 'analysisLevel') syncData.analysisLevel = value;         // → Job.AnalysisLevel (ANALYSIS_LEVEL_MAP)
-          if (fieldName === 'transactionStatus') syncData.transactionStatus = value; // → Custom 12053 (UpdateSelectFieldValue)
-          if (fieldName === 'zoningStatus') syncData.zoningStatus = value;           // → Custom 12054 (UpdateSelectFieldValue)
-          if (fieldName === 'valueScenarios') syncData.valueScenarios = value;       // → Custom 11563/11564 (manual, verified values only)
+          if (fieldName === 'transactionStatus') syncData.transactionStatus = value; // → Custom 12424 (server resolves NAME→ID via VALTA_CUSTOM_FIELD_IDS in api/valcre.ts; live-verified 2026-06-10)
+          if (fieldName === 'zoningStatus') syncData.zoningStatus = value;           // → Custom 12425 (server resolves NAME→ID via VALTA_CUSTOM_FIELD_IDS in api/valcre.ts; live-verified 2026-06-10)
+          if (fieldName === 'valueScenarios') syncData.valueScenarios = value;       // → lands in ValuationPremise 11563/11564 (live-verified). NOTE: registry maps ValueScenarios→12414 but 12414 is unused; flagged to co-arch 2026-06-10
 
           console.log(`Syncing ${fieldName} to Valcre:`, syncData);
           const result = await sendToValcre(syncData);
@@ -1083,8 +1083,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </button>
         </div>
 
-        {/* Job Information Section - After buttons, properly indented */}
-        <SectionGroup title="Job Information">
+        {/* 1. Job Info */}
+        <SectionGroup title="Job Info">
           <TwoColumnFields>
             <CompactField label="Job Number">
               <Input
@@ -1109,432 +1109,436 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 }}
               />
             </CompactField>
-            <CompactField label="LOE Version">
-              {/* PRD-B version selector — default = newest active; old versions stay selectable */}
-              <Select
-                value={jobDetails.loeTemplateId || (loeTemplates[0]?.id ?? '')}
-                onValueChange={value => handleSelectChange(value, 'loeTemplateId')}
-              >
-                <SelectTrigger className="h-7 text-sm max-w-[200px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Newest" />
+            {/* LOE Version picker removed 2026-06-09 — single active template (LOE-07-1); the
+                send path defaults to the newest active template, so "Preview & Send LOE" goes
+                straight in on the one template. (Document-not-version-picker direction —
+                see JOB-DOCUMENT-PICKER-DECISION-TREE.md.) */}
+            <CompactField label="Job Status">
+              {/* No v6 DROPDOWN_OPTIONS list for Job Status — text input (options not invented) */}
+              <Input
+                type="text"
+                name="jobStatus"
+                value={jobDetails.jobStatus || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                placeholder="Status..."
+                className="h-7 text-sm max-w-[160px]"
+              />
+            </CompactField>
+          </TwoColumnFields>
+        </SectionGroup>
+
+        {/* 2. Purpose of the Assignment */}
+        <SectionGroup title="Purpose of the Assignment">
+          <TwoColumnFields>
+            <CompactField label="Purpose">
+              {/* No v6 options — text input (not invented) */}
+              <Input
+                type="text"
+                name="purpose"
+                value={jobDetails.purpose || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                placeholder="Purpose..."
+                className="h-7 text-sm max-w-[160px]"
+              />
+            </CompactField>
+          </TwoColumnFields>
+        </SectionGroup>
+
+        {/* 3. Value Scenarios & Approaches */}
+        <SectionGroup title="Value Scenarios & Approaches">
+          <TwoColumnFields>
+            <CompactField label="Value Scenarios" status={fieldStates['valueScenarios']}>
+              <MultiSelect
+                value={jobDetails.valueScenarios || ''}
+                onChange={values => handleMultiSelectChange(values, 'valueScenarios')}
+                options={[
+                  'As If Complete & Stabilized',
+                  'As If Complete & Stabilized - Renovated',
+                  'As If Complete - Rezoned',
+                  'As If Complete - Serviced',
+                  'As If Complete - Subdivided',
+                  'As If Vacant Land',
+                  'As Is Vacant Land',
+                  'As Stabilized',
+                  'As-Is',
+                  'Insurable Replacement Cost',
+                ]}
+              />
+            </CompactField>
+            <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']}>
+              <MultiSelect
+                value={jobDetails.propertyRightsAppraised || ''}
+                onChange={values => handleMultiSelectChange(values, 'propertyRightsAppraised')}
+                options={[
+                  'ASC 805',
+                  'Condominium Ownership',
+                  'Cost Segregation Study',
+                  'Fee Simple Interest',
+                  'Going Concern',
+                  'Leased Fee Interest',
+                  'Leasehold Interest',
+                  'Market Study',
+                  'Other',
+                  'Partial Interest',
+                  'Partial Interest Taking',
+                  'Rent Restricted',
+                  'Total Taking',
+                ]}
+              />
+            </CompactField>
+            <CompactField label="Approaches to Value">
+              <Input type="text" name="approachesToValue" value={(jobDetails as any).approachesToValue || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Approaches..." className="h-7 text-sm max-w-[160px]" />
+            </CompactField>
+          </TwoColumnFields>
+        </SectionGroup>
+
+        {/* 4. Scope of Work */}
+        <SectionGroup title="Scope of Work">
+          <TwoColumnFields>
+            <CompactField label="Scope of Work">
+              <Select value={jobDetails.scopeOfWork || ''} onValueChange={value => handleSelectChange(value, 'scopeOfWork')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
-                  {loeTemplates.map((t, idx) => (
-                    <SelectItem key={t.id} value={t.id}>
-                      {t.name}{idx === 0 ? ' (newest)' : ''}
-                    </SelectItem>
-                  ))}
+                  <SelectItem value="All Applicable">All Applicable</SelectItem>
+                  <SelectItem value="Best One Approach">Best One Approach</SelectItem>
+                  <SelectItem value="Best Two Approaches">Best Two Approaches</SelectItem>
+                  <SelectItem value="Cost Approach">Cost Approach</SelectItem>
+                  <SelectItem value="Direct Comparison Approach">Direct Comparison Approach</SelectItem>
+                  <SelectItem value="Discounted Cash Flow">Discounted Cash Flow</SelectItem>
+                  <SelectItem value="Feasibility Study">Feasibility Study</SelectItem>
+                  <SelectItem value="Income Approach">Income Approach</SelectItem>
+                  <SelectItem value="Land Value">Land Value</SelectItem>
+                  <SelectItem value="Litigation">Litigation</SelectItem>
+                  <SelectItem value="Market Research">Market Research</SelectItem>
+                  <SelectItem value="Market Study">Market Study</SelectItem>
+                  <SelectItem value="Net Rent Review">Net Rent Review</SelectItem>
+                  <SelectItem value="Update">Update</SelectItem>
                 </SelectContent>
               </Select>
             </CompactField>
           </TwoColumnFields>
         </SectionGroup>
 
-        {/* Job Details Section - Valuation fields */}
-        <SectionGroup title="Job Details">
+        {/* 5. Report Type & Assignment Type */}
+        <SectionGroup title="Report Type & Assignment Type">
+          <TwoColumnFields>
+            <CompactField label="Report Type">
+              <Select value={jobDetails.reportType || ''} onValueChange={value => handleSelectChange(value, 'reportType')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Amendment Letter">Amendment Letter</SelectItem>
+                  <SelectItem value="Appraisal Report">Appraisal Report</SelectItem>
+                  <SelectItem value="Broker Opinion of Value">Broker Opinion of Value</SelectItem>
+                  <SelectItem value="Completion Report">Completion Report</SelectItem>
+                  <SelectItem value="Consultation">Consultation</SelectItem>
+                  <SelectItem value="Desk Review">Desk Review</SelectItem>
+                  <SelectItem value="Evaluation">Evaluation</SelectItem>
+                  <SelectItem value="Peer Review">Peer Review</SelectItem>
+                  <SelectItem value="Rent Study">Rent Study</SelectItem>
+                  <SelectItem value="Restricted Appraisal Report">Restricted Appraisal Report</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+            <CompactField label="Report Format">
+              {/* Valcre "Format" (Comprehensive/Concise/Form) — distinct from existing "Report Type" */}
+              <Select value={jobDetails.reportFormat || ''} onValueChange={value => handleSelectChange(value, 'reportFormat')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Comprehensive">Comprehensive</SelectItem>
+                  <SelectItem value="Concise">Concise</SelectItem>
+                  <SelectItem value="Form">Form</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+            <CompactField label="Assignment Type">
+              <Select value={jobDetails.assignmentType || ''} onValueChange={value => handleSelectChange(value, 'assignmentType')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Multiple Properties">Multiple Properties</SelectItem>
+                  <SelectItem value="Single Property">Single Property</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+            <CompactField label="Analysis Level" status={fieldStates['analysisLevel']}>
+              {/* Re-optioned to Valcre's REAL JobAnalysisLevel enum members (from live $metadata). VALUE = exact
+                  enum member name (what Job.AnalysisLevel accepts); label = friendly. Old options (Comprehensive/
+                  Concise/Form) were NOT valid enum members — only "Detailed" was, so Concise/Form 400'd. Maps 1:1. */}
+              <Select value={jobDetails.analysisLevel || ''} onValueChange={value => handleSelectChange(value, 'analysisLevel')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Detailed">Detailed</SelectItem>
+                  <SelectItem value="Summary">Summary</SelectItem>
+                  <SelectItem value="Brief">Brief</SelectItem>
+                  <SelectItem value="DetailedResidential">Detailed Residential</SelectItem>
+                  <SelectItem value="RestrictedAccessReport">Restricted Access Report</SelectItem>
+                  <SelectItem value="ProgressReport">Progress Report</SelectItem>
+                  <SelectItem value="ValuationAssessmentLetter">Valuation Assessment Letter</SelectItem>
+                  <SelectItem value="RentalAssessmentLetter">Rental Assessment Letter</SelectItem>
+                  <SelectItem value="RentalSubmission">Rental Submission</SelectItem>
+                  <SelectItem value="RentalDetermination">Rental Determination</SelectItem>
+                  <SelectItem value="PropertyPro">Property Pro</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+          </TwoColumnFields>
+        </SectionGroup>
 
-        {/* Valuation Details Section */}
-        <TwoColumnFields>
-          {/* Row 1 */}
-          <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']}>
-            <MultiSelect
-              value={jobDetails.propertyRightsAppraised || ''}
-              onChange={values => handleMultiSelectChange(values, 'propertyRightsAppraised')}
-              options={[
-                'ASC 805',
-                'Condominium Ownership',
-                'Cost Segregation Study',
-                'Fee Simple Interest',
-                'Going Concern',
-                'Leased Fee Interest',
-                'Leasehold Interest',
-                'Market Study',
-                'Other',
-                'Partial Interest',
-                'Partial Interest Taking',
-                'Rent Restricted',
-                'Total Taking',
-              ]}
-            />
-          </CompactField>
+        {/* 6. Fees & Terms */}
+        <SectionGroup title="Fees & Terms">
+          <TwoColumnFields>
+            <CompactField label="Appraisal Fee">
+              <Input
+                type="text"
+                name="appraisalFee"
+                value={editingAppraisalFee !== null ? editingAppraisalFee : (jobDetails.appraisalFee ? `$${formatCurrency(jobDetails.appraisalFee)}` : '')}
+                onChange={handleCurrencyChange}
+                onBlur={handleCurrencyBlur}
+                onFocus={() => setEditingAppraisalFee(jobDetails.appraisalFee ? jobDetails.appraisalFee.toString() : '')}
+                className="h-7 text-sm max-w-[160px]"
+              />
+            </CompactField>
+            <CompactField label="Retainer Amount">
+              <Input
+                type="text"
+                name="retainerAmount"
+                value={editingRetainerAmount !== null ? editingRetainerAmount : (jobDetails.retainerAmount ? `$${formatCurrency(parseFloat(jobDetails.retainerAmount))}` : '')}
+                onChange={handleCurrencyChange}
+                onBlur={handleCurrencyBlur}
+                onFocus={() => setEditingRetainerAmount(jobDetails.retainerAmount || '')}
+                className="h-7 text-sm max-w-[160px]"
+              />
+            </CompactField>
+            <CompactField label="Payment Terms">
+              <Select value={jobDetails.paymentTerms || ''} onValueChange={value => handleSelectChange(value, 'paymentTerms')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="On LOE Signature">On LOE Signature</SelectItem>
+                  <SelectItem value="NET 30 Days">NET 30 Days</SelectItem>
+                  <SelectItem value="On Completion">On Completion</SelectItem>
+                  <SelectItem value="50% Upfront">50% Upfront</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+          </TwoColumnFields>
+        </SectionGroup>
 
-          <CompactField label="Scope of Work">
-            <Select value={jobDetails.scopeOfWork || ''} onValueChange={value => handleSelectChange(value, 'scopeOfWork')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All Applicable">All Applicable</SelectItem>
-                <SelectItem value="Best One Approach">Best One Approach</SelectItem>
-                <SelectItem value="Best Two Approaches">Best Two Approaches</SelectItem>
-                <SelectItem value="Cost Approach">Cost Approach</SelectItem>
-                <SelectItem value="Direct Comparison Approach">Direct Comparison Approach</SelectItem>
-                <SelectItem value="Discounted Cash Flow">Discounted Cash Flow</SelectItem>
-                <SelectItem value="Feasibility Study">Feasibility Study</SelectItem>
-                <SelectItem value="Income Approach">Income Approach</SelectItem>
-                <SelectItem value="Land Value">Land Value</SelectItem>
-                <SelectItem value="Litigation">Litigation</SelectItem>
-                <SelectItem value="Market Research">Market Research</SelectItem>
-                <SelectItem value="Market Study">Market Study</SelectItem>
-                <SelectItem value="Net Rent Review">Net Rent Review</SelectItem>
-                <SelectItem value="Update">Update</SelectItem>
-              </SelectContent>
-            </Select>
-          </CompactField>
+        {/* 7. Payment */}
+        <SectionGroup title="Payment">
+          <TwoColumnFields>
+            <CompactField label="Retainer Paid">
+              <Input
+                type="date"
+                name="retainerPaidDate"
+                value={jobDetails.retainerPaidDate || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="h-7 text-sm max-w-[160px]"
+              />
+            </CompactField>
+            <CompactField label="Amount Paid">
+              <Input
+                type="text"
+                name="paymentAmount"
+                value={editingPaymentAmount !== null ? editingPaymentAmount : (jobDetails.paymentAmount ? `$${formatCurrency(jobDetails.paymentAmount)}` : '')}
+                onChange={handleCurrencyChange}
+                onBlur={handleCurrencyBlur}
+                onFocus={() => setEditingPaymentAmount(jobDetails.paymentAmount ? jobDetails.paymentAmount.toString() : '')}
+                className="h-7 text-sm max-w-[160px]"
+              />
+            </CompactField>
+            <CompactField label="Paid Date">
+              <Input
+                type="date"
+                name="paymentPaidDate"
+                value={jobDetails.paymentPaidDate || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="h-7 text-sm max-w-[160px]"
+              />
+            </CompactField>
+            <CompactField label="Signed Date" status={fieldStates['signedDate']}>
+              <Input
+                type="date"
+                name="signedDate"
+                value={jobDetails.signedDate || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="h-7 text-sm max-w-[160px]"
+              />
+            </CompactField>
+          </TwoColumnFields>
+        </SectionGroup>
 
-          {/* Row 2 */}
-          <CompactField label="Payment Terms">
-            <Select value={jobDetails.paymentTerms || ''} onValueChange={value => handleSelectChange(value, 'paymentTerms')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="On LOE Signature">On LOE Signature</SelectItem>
-                <SelectItem value="NET 30 Days">NET 30 Days</SelectItem>
-                <SelectItem value="On Completion">On Completion</SelectItem>
-                <SelectItem value="50% Upfront">50% Upfront</SelectItem>
-              </SelectContent>
-            </Select>
-          </CompactField>
+        {/* 8. Effective Date & Report Date */}
+        <SectionGroup title="Effective Date & Report Date">
+          <TwoColumnFields>
+            <CompactField label="Effective Date" status={fieldStates['effectiveDate']}>
+              <Input
+                type="date"
+                name="effectiveDate"
+                value={jobDetails.effectiveDate || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="h-7 text-sm max-w-[160px]"
+              />
+            </CompactField>
+            <CompactField label="Request Date" status={fieldStates['requestDate']}>
+              <Input
+                type="date"
+                name="requestDate"
+                value={jobDetails.requestDate || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="h-7 text-sm max-w-[160px]"
+              />
+            </CompactField>
+            <CompactField label="Delivery Date">
+              <Input
+                type="date"
+                name="deliveryDate"
+                value={jobDetails.deliveryDate || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="h-7 text-sm max-w-[160px]"
+              />
+            </CompactField>
+            <CompactField label="Delivery Time (wks)">
+              <Input type="text" name="deliveryTime" value={(jobDetails as any).deliveryTime || ''} onChange={handleChange} onBlur={handleBlur} placeholder="e.g. 4" className="h-7 text-sm max-w-[160px]" />
+            </CompactField>
+          </TwoColumnFields>
+        </SectionGroup>
 
-          <CompactField label="Appraisal Fee">
-            <Input
-              type="text"
-              name="appraisalFee"
-              value={editingAppraisalFee !== null ? editingAppraisalFee : (jobDetails.appraisalFee ? `$${formatCurrency(jobDetails.appraisalFee)}` : '')}
-              onChange={handleCurrencyChange}
-              onBlur={handleCurrencyBlur}
-              onFocus={() => setEditingAppraisalFee(jobDetails.appraisalFee ? jobDetails.appraisalFee.toString() : '')}
-              className="h-7 text-sm max-w-[160px]"
-            />
-          </CompactField>
+        {/* 9. Property Use & Other */}
+        <SectionGroup title="Property Use & Other">
+          <TwoColumnFields>
+            <CompactField label="Current Use">
+              <Input type="text" name="currentUse" value={(jobDetails as any).currentUse || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Current use..." className="h-7 text-sm max-w-[160px]" />
+            </CompactField>
+            <CompactField label="Proposed Use">
+              <Input type="text" name="proposedUse" value={(jobDetails as any).proposedUse || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Proposed use..." className="h-7 text-sm max-w-[160px]" />
+            </CompactField>
+            <CompactField label="CMHC Financing">
+              <Select value={jobDetails.cmhcFinancing || ''} onValueChange={value => handleSelectChange(value, 'cmhcFinancing')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Yes">Yes</SelectItem>
+                  <SelectItem value="No">No</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+            <CompactField label="Transaction Status" status={fieldStates['transactionStatus']}>
+              {/* v3.1 master ListTransactionStatus — re-optioned to the new CUSTOM field CF12424 value set
+                  (Not Applicable / Listed / Under Contract). Old 5-option set didn't match the new field. */}
+              <Select value={jobDetails.transactionStatus || ''} onValueChange={value => handleSelectChange(value, 'transactionStatus')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Not Applicable">Not Applicable</SelectItem>
+                  <SelectItem value="Listed">Listed</SelectItem>
+                  <SelectItem value="Under Contract">Under Contract</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+            <CompactField label="Zoning Status" status={fieldStates['zoningStatus']}>
+              {/* v3.1 master ListZoningStatus — re-optioned to the new CUSTOM field CF12425 value set
+                  (In Place / To Be Rezoned). Old 4 legal-* options didn't match the new field. */}
+              <Select value={jobDetails.zoningStatus || ''} onValueChange={value => handleSelectChange(value, 'zoningStatus')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="In Place">In Place</SelectItem>
+                  <SelectItem value="To Be Rezoned">To Be Rezoned</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+          </TwoColumnFields>
+        </SectionGroup>
 
-          {/* Row 3 */}
-          <CompactField label="Report Type">
-            <Select value={jobDetails.reportType || ''} onValueChange={value => handleSelectChange(value, 'reportType')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Amendment Letter">Amendment Letter</SelectItem>
-                <SelectItem value="Appraisal Report">Appraisal Report</SelectItem>
-                <SelectItem value="Broker Opinion of Value">Broker Opinion of Value</SelectItem>
-                <SelectItem value="Completion Report">Completion Report</SelectItem>
-                <SelectItem value="Consultation">Consultation</SelectItem>
-                <SelectItem value="Desk Review">Desk Review</SelectItem>
-                <SelectItem value="Evaluation">Evaluation</SelectItem>
-                <SelectItem value="Peer Review">Peer Review</SelectItem>
-                <SelectItem value="Rent Study">Rent Study</SelectItem>
-                <SelectItem value="Restricted Appraisal Report">Restricted Appraisal Report</SelectItem>
-              </SelectContent>
-            </Select>
-          </CompactField>
+        {/* 10. Property Information Request */}
+        <SectionGroup title="Property Information Request">
+          <TwoColumnFields>
+            <CompactField label="Client Documents">
+              {/* Registry ListClientDocuments (field-registry-v6.html:948) — Select multiple. Options verbatim (11). */}
+              <MultiSelect
+                value={(jobDetails as any).clientDocuments || ''}
+                onChange={values => handleMultiSelectChange(values, 'clientDocuments')}
+                options={[
+                  'Previous Appraisal',
+                  'Property Details',
+                  'Proforma',
+                  'Unit Mix',
+                  'Rent Roll',
+                  'Historical Operating Expenses',
+                  'Development Permit Drawings',
+                  'Contact for Property Tour',
+                  'Purchase & Sale Agreement',
+                  'Environmental Reports',
+                  'Property Condition Reports',
+                ]}
+              />
+            </CompactField>
+            <CompactField label="Previously Appraised">
+              <Select value={(jobDetails as any).previouslyAppraised || ''} onValueChange={value => handleSelectChange(value, 'previouslyAppraised')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Yes">Yes</SelectItem>
+                  <SelectItem value="No">No</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+          </TwoColumnFields>
+        </SectionGroup>
 
-          <CompactField label="Retainer Amount">
-            <Input
-              type="text"
-              name="retainerAmount"
-              value={editingRetainerAmount !== null ? editingRetainerAmount : (jobDetails.retainerAmount ? `$${formatCurrency(parseFloat(jobDetails.retainerAmount))}` : '')}
-              onChange={handleCurrencyChange}
-              onBlur={handleCurrencyBlur}
-              onFocus={() => setEditingRetainerAmount(jobDetails.retainerAmount || '')}
-              className="h-7 text-sm max-w-[160px]"
-            />
-          </CompactField>
-
-          {/* Row 4 - Payment Tracking */}
-          <CompactField label="Retainer Paid">
-            <Input
-              type="date"
-              name="retainerPaidDate"
-              value={jobDetails.retainerPaidDate || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="h-7 text-sm max-w-[160px]"
-            />
-          </CompactField>
-
-          <CompactField label="Amount Paid">
-            <Input
-              type="text"
-              name="paymentAmount"
-              value={editingPaymentAmount !== null ? editingPaymentAmount : (jobDetails.paymentAmount ? `$${formatCurrency(jobDetails.paymentAmount)}` : '')}
-              onChange={handleCurrencyChange}
-              onBlur={handleCurrencyBlur}
-              onFocus={() => setEditingPaymentAmount(jobDetails.paymentAmount ? jobDetails.paymentAmount.toString() : '')}
-              className="h-7 text-sm max-w-[160px]"
-            />
-          </CompactField>
-
-          {/* Row 5 */}
-          <CompactField label="Delivery Date">
-            <Input
-              type="date"
-              name="deliveryDate"
-              value={jobDetails.deliveryDate || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="h-7 text-sm max-w-[160px]"
-            />
-          </CompactField>
-
-          <CompactField label="Paid Date">
-            <Input
-              type="date"
-              name="paymentPaidDate"
-              value={jobDetails.paymentPaidDate || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="h-7 text-sm max-w-[160px]"
-            />
-          </CompactField>
-
-          {/* ── New Valta loe-prep fields (added 2026-06-03; app-side only, not Valcre-synced) ── */}
-
-          <CompactField label="Job Status">
-            {/* No v6 DROPDOWN_OPTIONS list for Job Status — text input (options not invented) */}
-            <Input
-              type="text"
-              name="jobStatus"
-              value={jobDetails.jobStatus || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="Status..."
-              className="h-7 text-sm max-w-[160px]"
-            />
-          </CompactField>
-
-          {/* Authorized Use removed 2026-06-05 (field-hygiene dedup) — it now lives ONCE on the Client
-              Intake form (its origin), wired there to native Job.IntendedUses. The §10 LOE cascade reads
-              job.intendedUse as the canonical source. See DASHBOARD-TO-VALCRE-LOCATION-MAP "Field-hygiene cleanup spec". */}
-
-          <CompactField label="Assignment Type">
-            <Select value={jobDetails.assignmentType || ''} onValueChange={value => handleSelectChange(value, 'assignmentType')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Multiple Properties">Multiple Properties</SelectItem>
-                <SelectItem value="Single Property">Single Property</SelectItem>
-              </SelectContent>
-            </Select>
-          </CompactField>
-
-          <CompactField label="Report Format">
-            {/* Valcre "Format" (Comprehensive/Concise/Form) — distinct from existing "Report Type" */}
-            <Select value={jobDetails.reportFormat || ''} onValueChange={value => handleSelectChange(value, 'reportFormat')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Comprehensive">Comprehensive</SelectItem>
-                <SelectItem value="Concise">Concise</SelectItem>
-                <SelectItem value="Form">Form</SelectItem>
-              </SelectContent>
-            </Select>
-          </CompactField>
-
-          <CompactField label="Value Scenarios" status={fieldStates['valueScenarios']}>
-            <MultiSelect
-              value={jobDetails.valueScenarios || ''}
-              onChange={values => handleMultiSelectChange(values, 'valueScenarios')}
-              options={[
-                'As If Complete & Stabilized',
-                'As If Complete & Stabilized - Renovated',
-                'As If Complete - Rezoned',
-                'As If Complete - Serviced',
-                'As If Complete - Subdivided',
-                'As If Vacant Land',
-                'As Is Vacant Land',
-                'As Stabilized',
-                'As-Is',
-                'Insurable Replacement Cost',
-              ]}
-            />
-          </CompactField>
-
-          <CompactField label="Transaction Status" status={fieldStates['transactionStatus']}>
-            {/* v3.1 master ListTransactionStatus — re-optioned to the new CUSTOM field CF12424 value set
-                (Not Applicable / Listed / Under Contract). Old 5-option set didn't match the new field. */}
-            <Select value={jobDetails.transactionStatus || ''} onValueChange={value => handleSelectChange(value, 'transactionStatus')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Not Applicable">Not Applicable</SelectItem>
-                <SelectItem value="Listed">Listed</SelectItem>
-                <SelectItem value="Under Contract">Under Contract</SelectItem>
-              </SelectContent>
-            </Select>
-          </CompactField>
-
-          <CompactField label="Zoning Status" status={fieldStates['zoningStatus']}>
-            {/* v3.1 master ListZoningStatus — re-optioned to the new CUSTOM field CF12425 value set
-                (In Place / To Be Rezoned). Old 4 legal-* options didn't match the new field. */}
-            <Select value={jobDetails.zoningStatus || ''} onValueChange={value => handleSelectChange(value, 'zoningStatus')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="In Place">In Place</SelectItem>
-                <SelectItem value="To Be Rezoned">To Be Rezoned</SelectItem>
-              </SelectContent>
-            </Select>
-          </CompactField>
-
-          <CompactField label="Analysis Level" status={fieldStates['analysisLevel']}>
-            {/* Re-optioned to Valcre's REAL JobAnalysisLevel enum members (from live $metadata). VALUE = exact
-                enum member name (what Job.AnalysisLevel accepts); label = friendly. Old options (Comprehensive/
-                Concise/Form) were NOT valid enum members — only "Detailed" was, so Concise/Form 400'd. Maps 1:1. */}
-            <Select value={jobDetails.analysisLevel || ''} onValueChange={value => handleSelectChange(value, 'analysisLevel')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Detailed">Detailed</SelectItem>
-                <SelectItem value="Summary">Summary</SelectItem>
-                <SelectItem value="Brief">Brief</SelectItem>
-                <SelectItem value="DetailedResidential">Detailed Residential</SelectItem>
-                <SelectItem value="RestrictedAccessReport">Restricted Access Report</SelectItem>
-                <SelectItem value="ProgressReport">Progress Report</SelectItem>
-                <SelectItem value="ValuationAssessmentLetter">Valuation Assessment Letter</SelectItem>
-                <SelectItem value="RentalAssessmentLetter">Rental Assessment Letter</SelectItem>
-                <SelectItem value="RentalSubmission">Rental Submission</SelectItem>
-                <SelectItem value="RentalDetermination">Rental Determination</SelectItem>
-                <SelectItem value="PropertyPro">Property Pro</SelectItem>
-              </SelectContent>
-            </Select>
-          </CompactField>
-
-          <CompactField label="Purpose">
-            {/* No v6 options — text input (not invented) */}
-            <Input
-              type="text"
-              name="purpose"
-              value={jobDetails.purpose || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="Purpose..."
-              className="h-7 text-sm max-w-[160px]"
-            />
-          </CompactField>
-
-          <CompactField label="Lead Appraiser">
-            {/* No v6 options — text input (not invented) */}
-            <Input
-              type="text"
-              name="leadAppraiser"
-              value={jobDetails.leadAppraiser || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="Lead appraiser..."
-              className="h-7 text-sm max-w-[160px]"
-            />
-          </CompactField>
-
-          <CompactField label="Desktop Report">
-            <Select value={jobDetails.desktopReport || ''} onValueChange={value => handleSelectChange(value, 'desktopReport')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Yes">Yes</SelectItem>
-                <SelectItem value="No">No</SelectItem>
-              </SelectContent>
-            </Select>
-          </CompactField>
-
-          <CompactField label="CMHC Financing">
-            <Select value={jobDetails.cmhcFinancing || ''} onValueChange={value => handleSelectChange(value, 'cmhcFinancing')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Yes">Yes</SelectItem>
-                <SelectItem value="No">No</SelectItem>
-              </SelectContent>
-            </Select>
-          </CompactField>
-
-          <CompactField label="Effective Date" status={fieldStates['effectiveDate']}>
-            <Input
-              type="date"
-              name="effectiveDate"
-              value={jobDetails.effectiveDate || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="h-7 text-sm max-w-[160px]"
-            />
-          </CompactField>
-
-          <CompactField label="Request Date" status={fieldStates['requestDate']}>
-            <Input
-              type="date"
-              name="requestDate"
-              value={jobDetails.requestDate || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="h-7 text-sm max-w-[160px]"
-            />
-          </CompactField>
-
-          <CompactField label="Signed Date" status={fieldStates['signedDate']}>
-            <Input
-              type="date"
-              name="signedDate"
-              value={jobDetails.signedDate || ''}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              className="h-7 text-sm max-w-[160px]"
-            />
-          </CompactField>
-
-          {/* ── LOE-07 gap fields (feed the v07 contract template) ── */}
-          <CompactField label="Current Use">
-            <Input type="text" name="currentUse" value={(jobDetails as any).currentUse || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Current use..." className="h-7 text-sm max-w-[160px]" />
-          </CompactField>
-          <CompactField label="Proposed Use">
-            <Input type="text" name="proposedUse" value={(jobDetails as any).proposedUse || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Proposed use..." className="h-7 text-sm max-w-[160px]" />
-          </CompactField>
-          <CompactField label="Approaches to Value">
-            <Input type="text" name="approachesToValue" value={(jobDetails as any).approachesToValue || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Approaches..." className="h-7 text-sm max-w-[160px]" />
-          </CompactField>
-          <CompactField label="Delivery Time (wks)">
-            <Input type="text" name="deliveryTime" value={(jobDetails as any).deliveryTime || ''} onChange={handleChange} onBlur={handleBlur} placeholder="e.g. 4" className="h-7 text-sm max-w-[160px]" />
-          </CompactField>
-          <CompactField label="Client Documents">
-            {/* Registry ListClientDocuments (field-registry-v6.html:948) — Select multiple. Options verbatim (11). */}
-            <MultiSelect
-              value={(jobDetails as any).clientDocuments || ''}
-              onChange={values => handleMultiSelectChange(values, 'clientDocuments')}
-              options={[
-                'Previous Appraisal',
-                'Property Details',
-                'Proforma',
-                'Unit Mix',
-                'Rent Roll',
-                'Historical Operating Expenses',
-                'Development Permit Drawings',
-                'Contact for Property Tour',
-                'Purchase & Sale Agreement',
-                'Environmental Reports',
-                'Property Condition Reports',
-              ]}
-            />
-          </CompactField>
-          <CompactField label="Previously Appraised">
-            <Select value={(jobDetails as any).previouslyAppraised || ''} onValueChange={value => handleSelectChange(value, 'previouslyAppraised')}>
-              <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                <SelectValue placeholder="Select..." />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Yes">Yes</SelectItem>
-                <SelectItem value="No">No</SelectItem>
-              </SelectContent>
-            </Select>
-          </CompactField>
-        </TwoColumnFields>
-
+        {/* 11. Other */}
+        {/* Authorized Use removed 2026-06-05 (field-hygiene dedup) — it now lives ONCE on the Client
+            Intake form (its origin), wired there to native Job.IntendedUses. The §10 LOE cascade reads
+            job.intendedUse as the canonical source. See DASHBOARD-TO-VALCRE-LOCATION-MAP "Field-hygiene cleanup spec". */}
+        <SectionGroup title="Other">
+          <TwoColumnFields>
+            <CompactField label="Lead Appraiser">
+              {/* No v6 options — text input (not invented) */}
+              <Input
+                type="text"
+                name="leadAppraiser"
+                value={jobDetails.leadAppraiser || ''}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                placeholder="Lead appraiser..."
+                className="h-7 text-sm max-w-[160px]"
+              />
+            </CompactField>
+            <CompactField label="Desktop Report">
+              <Select value={jobDetails.desktopReport || ''} onValueChange={value => handleSelectChange(value, 'desktopReport')}>
+                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Yes">Yes</SelectItem>
+                  <SelectItem value="No">No</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+          </TwoColumnFields>
         </SectionGroup>
 
           {/* Comments Section - Three columns (responsive) */}

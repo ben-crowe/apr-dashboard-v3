@@ -1,0 +1,397 @@
+<!doctype html><html><head><meta charset="utf-8">
+<title>Valta Master Field Registry v03 — Chris's source (reviewed 2026-06-09)</title>
+<style>
+:root{--bd:#e3e6ea;--hd:#0f172a;--mut:#64748b;--accent:#2563eb;--hover:#f1f5f9;--gut:#eef2f6;}
+*{box-sizing:border-box} body{font:13px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;margin:0;color:#0f172a;background:#f8fafc}
+header{padding:14px 18px;background:#fff;border-bottom:1px solid var(--bd)}
+h1{font-size:15px;margin:0 0 2px} .sub{color:var(--mut);font-size:12px}
+.src{margin-top:6px;font-size:11px;color:var(--mut)} .src code{background:#f1f5f9;padding:1px 5px;border-radius:4px}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;padding:10px 18px 0;background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:8}
+.tab{padding:6px 12px;border:1px solid var(--bd);border-bottom:none;border-radius:6px 6px 0 0;cursor:pointer;background:#f1f5f9;font-weight:500;color:#475569}
+.tab.active{background:#fff;color:var(--accent);border-color:var(--accent);border-bottom:1px solid #fff;margin-bottom:-1px}
+.panel{display:none;padding:14px 18px 40px} .panel.active{display:block}
+table{border-collapse:collapse;width:100%;background:#fff;font-size:12px}
+th,td{border:1px solid var(--bd);padding:4px 8px;text-align:left;vertical-align:top;max-width:320px;overflow-wrap:anywhere}
+th{background:var(--hd);color:#fff;position:sticky;top:46px;font-weight:600;white-space:nowrap;z-index:4}
+tr:nth-child(even) td{background:#fafbfc} tr:hover td{background:var(--hover)}
+/* Excel-true row-number gutter — sticky on horizontal scroll */
+td.rownum{position:sticky;left:0;background:var(--gut);color:var(--mut);font-weight:600;text-align:right;min-width:38px;white-space:nowrap;z-index:3}
+tr:hover td.rownum{background:#e2e8f0}
+th.rownum{position:sticky;left:0;top:46px;background:var(--hd);color:#fff;text-align:right;min-width:38px;z-index:6}
+.count{color:var(--mut);font-weight:400;font-size:11px;margin-left:6px}
+</style></head><body>
+<header><h1>Valta Master Field Registry — v03 <span class="count">Chris's source · reviewed 2026-06-09</span></h1>
+<div class="sub">Read-only mirror of the client's SharePoint workbook. Source of truth for which options a field shows and which fields map to Valcre. Left gutter = Excel-true row number (header = row 1).</div>
+<div class="src">Source file: <code>docs/Features/08-Master-Field-Registry/client-source/Valta Master Field Registry v03 - reviewed 2026-06-09.xlsx</code></div></header>
+<div class="tabs">
+<div class="tab active" onclick="show(0)">Field Registry</div>
+<div class="tab" onclick="show(1)">Dropdown Lists</div>
+<div class="tab" onclick="show(2)">EA-HC Text</div>
+<div class="tab" onclick="show(3)">Types</div>
+<div class="tab" onclick="show(4)">Valcre Fields</div>
+<div class="tab" onclick="show(5)">TBD</div>
+</div>
+<div class="panel active" id="p0">
+<table>
+<tr><th class="rownum">1</th><th></th><th></th><th>VALTA Field Name</th><th>VALTA Field Label/UI</th><th>Data Control Type</th><th>Source Type</th><th>Dropdown List</th><th>New Custom Valcre Field</th><th>Required</th><th>App Location</th><th>Valcre Field Name</th><th>Valcre Field Label/UI</th><th>Valcre Field ID</th><th>Valcre Record Location</th><th>Valcre Field Key (API)</th><th>Used In Outputs</th><th>Description</th><th>Owner</th><th>Status</th></tr>
+<tr><td class="rownum">2</td><td></td><td></td><td>JobNumber</td><td>Job Number</td><td>Alpha Numeric</td><td>Valcre API</td><td></td><td>No</td><td>Yes</td><td></td><td>Number</td><td>Job Number</td><td></td><td>Job</td></tr>
+<tr><td class="rownum">3</td><td></td><td></td><td>JobName</td><td>Job Name</td><td>Alpha Numeric</td><td>User Input</td><td></td><td>No</td><td>Yes</td><td></td><td>Name</td><td>Job Name</td><td></td><td>Job</td></tr>
+<tr><td class="rownum">4</td><td></td><td></td><td>JobStatus</td><td>Job Status</td><td>Select one option</td><td>User Input</td><td></td><td>No</td><td>Yes</td><td></td><td>Status</td><td>Status</td><td></td><td>Job</td></tr>
+<tr><td class="rownum">5</td><td></td><td></td><td>SubjectProperty</td><td>Subject Property</td><td>Alpha Numeric</td><td>Valcre API</td><td></td><td>No</td><td>Yes</td><td></td><td>Subject Property</td><td>Property._DisplayName</td><td></td><td>Job</td></tr>
+<tr><td class="rownum">6</td><td></td><td></td><td>ClientCompanyName</td><td>Client Company Name</td><td>Alpha Numeric</td><td>User Input</td><td></td><td>No</td><td>Yes</td><td></td><td>Client</td><td>Client._DisplayName</td><td></td><td>Job</td></tr>
+<tr><td class="rownum">7</td><td></td><td></td><td>ClientOrganizationAddress</td><td>Client Organization Address</td><td>Alpha Numeric</td><td>User Input</td><td></td><td>No</td><td>Yes</td><td></td><td>Various</td><td>Various</td><td></td><td>Contact</td></tr>
+<tr><td class="rownum">8</td><td></td><td></td><td>ClientFirstName</td><td>Client First Name</td><td>Text</td><td>User Input</td><td></td><td>No</td><td>Yes</td><td></td><td>First Name</td><td>FirstName</td><td></td><td>Contact</td></tr>
+<tr><td class="rownum">9</td><td></td><td></td><td>ClientLastName</td><td>Client Last Name</td><td>Text</td><td>User Input</td><td></td><td>No</td><td>Yes</td><td></td><td>Last Name</td><td>LastName</td><td></td><td>Contact</td></tr>
+<tr><td class="rownum">10</td><td></td><td></td><td>ClientTitle</td><td>Client Title</td><td>Text</td><td>User Input</td><td></td><td>No</td><td>Yes</td><td></td><td>Title</td><td>Title</td><td></td><td>Contact</td></tr>
+<tr><td class="rownum">11</td><td></td><td></td><td>ClientPhone</td><td>Client Phone</td><td>Text</td><td>User Input</td><td></td><td>No</td><td>Yes</td><td></td><td>Phone</td><td>PhoneNumber</td><td></td><td>Contact</td></tr>
+<tr><td class="rownum">12</td><td></td><td></td><td>ClientEmail</td><td>Client Email</td><td>Text</td><td>User Input</td><td></td><td>No</td><td>Yes</td><td></td><td>Email</td><td>Email</td><td></td><td>Contact</td></tr>
+<tr><td class="rownum">13</td><td></td><td></td><td>PropertyName</td><td>Property Name</td><td>Alpha Numeric</td><td>User Input</td><td></td><td>No</td><td>Yes</td><td></td><td>Name</td><td>Name</td><td></td><td>Property</td></tr>
+<tr><td class="rownum">14</td><td></td><td></td><td>PropertyAddress</td><td>Property Address</td><td>Alpha Numeric</td><td>User Input</td><td></td><td>No</td><td>Yes</td><td></td><td>Street Address</td><td>AddressStreet</td><td></td><td>Property</td></tr>
+<tr><td class="rownum">15</td><td></td><td></td><td>PropertyType</td><td>Property Type</td><td>Select one option</td><td>User Input</td><td></td><td>No</td><td>Yes</td><td></td><td>Property Type</td><td>Types</td><td></td><td>Property</td></tr>
+<tr><td class="rownum">16</td><td></td><td></td><td>PropertySubtype</td><td>Property Subtype</td><td>Select one option</td><td>User Input</td><td></td><td>No</td><td>No</td><td></td><td>Subtype</td><td>SecondaryType</td><td></td><td>Property</td></tr>
+<tr><td class="rownum">17</td><td></td><td></td><td>Tenancy</td><td>Tenancy</td><td>Select one option</td><td>User Input</td><td>ListTenancy</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">18</td><td></td><td></td><td>StateofImprovements</td><td>State of Improvements</td><td>Select one option</td><td>User Input</td><td>ListSateofImprovements</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">19</td><td></td><td></td><td>StatusofImprovements</td><td>Status of Improvements</td><td>Select one option</td><td>User Input</td><td>ListSatusofImprovements</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">20</td><td></td><td></td><td>CurrentUseImprovements</td><td>Current Use Improvements</td><td>Select one option</td><td>User Input</td><td>ListCurrentUseImprovements</td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">21</td><td></td><td></td><td>ProposedUseImprovements</td><td>Proposed Use Improvements</td><td>Select one option</td><td>User Input</td><td>ListProposedUseImprovements</td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">22</td><td></td><td></td><td>InterestAppraised</td><td>Interest Appraised</td><td>Select multiple options</td><td>User Input</td><td>ListInterestAppraised</td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">23</td><td></td><td></td><td>AuthorizedUse</td><td>Authorized Use</td><td>Select one option</td><td>User Input</td><td>ListAuthorizedUse</td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">24</td><td></td><td></td><td>ValueScenarios</td><td>Value Scenario (s)</td><td>Select multiple options</td><td>User Input</td><td>ListValueScenarios</td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">25</td><td></td><td></td><td>ApproachestoValue</td><td>Approaches to Value</td><td>Select multiple options</td><td>User Input</td><td>ListApproachestoValue</td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">26</td><td></td><td></td><td>AssignmentType</td><td>Assignment Type</td><td>Select one option</td><td>User Input</td><td>ListAssignmentType</td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">27</td><td></td><td></td><td>ReportType</td><td>Report Type</td><td>Select one option</td><td>User Input</td><td>ListReportType</td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">28</td><td></td><td>Delete</td><td>DesktopReport</td><td>Desktop Report</td><td>Select one option</td><td>User Input</td><td>ListYes/No</td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">29</td><td></td><td></td><td>Valuetimeframe</td><td>Value Timeframe</td><td>Select one option</td><td>User Input</td><td>ListValueTimeFrame</td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">30</td><td></td><td></td><td>InspectionDate</td><td>Inspection Date</td><td>Date</td><td>User Input</td><td></td><td>No</td><td>No</td><td></td><td>InspectionDate</td><td>Inspection Date</td><td></td><td>Job</td></tr>
+<tr><td class="rownum">31</td><td></td><td></td><td>Fee</td><td>Fee</td><td>Whole Number</td><td>Calculated</td><td></td><td>No</td><td>Yes</td><td></td><td>Fee</td><td>Fee</td><td></td><td>Job</td></tr>
+<tr><td class="rownum">32</td><td></td><td></td><td>DeliveryTime</td><td>Delivery Time</td><td>Whole Number</td><td>User Input</td><td></td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">33</td><td></td><td></td><td>PaidDate</td><td>Paid Date</td><td>Date</td><td>Logic</td><td></td><td>No</td><td>No</td><td></td><td>PaidDate</td><td>Paid Date</td><td></td><td>Job</td></tr>
+<tr><td class="rownum">34</td><td></td><td></td><td>Paid </td><td>Paid  </td><td>Checkbox</td><td>Logic</td><td></td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">35</td><td></td><td></td><td>RequestDate</td><td>Request Date</td><td>Date</td><td>Logic</td><td></td><td>No</td><td>No</td><td></td><td>BidDate</td><td>Bid Date</td><td></td><td>Job</td></tr>
+<tr><td class="rownum">36</td><td></td><td></td><td>SignedDate</td><td>Signed Date</td><td>Date</td><td>Logic</td><td></td><td>No</td><td>No</td><td></td><td>AwardDate</td><td>Awarded Date</td><td></td><td>Job</td></tr>
+<tr><td class="rownum">37</td><td></td><td></td><td>DueDate</td><td>Due Date</td><td>Date</td><td>Logic</td><td></td><td>No</td><td>No</td><td></td><td>DueDate</td><td>Due Date</td><td></td><td>Job</td></tr>
+<tr><td class="rownum">38</td><td></td><td></td><td>AmountPaid</td><td>Amount Paid</td><td>Decimal</td><td>Logic</td><td></td><td>No</td><td>No</td><td></td><td>AmountPaid</td><td>Amount Paid</td><td></td><td>Job</td></tr>
+<tr><td class="rownum">39</td><td></td><td></td><td>ClientDocuments</td><td>Client Documents</td><td>Select multiple options</td><td>Logic</td><td>ListClientDocuments</td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">40</td><td></td><td></td><td>PreviouslyAppraised</td><td>Previously Appraised</td><td>Select one option</td><td>User Input</td><td>ListYes/No</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">41</td><td></td><td></td><td>TransactionStatus</td><td>Transaction Status</td><td>Select multiple options</td><td>User Input</td><td>ListTransactionStatus</td><td>Yes</td><td>Yes</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">42</td><td></td><td></td><td>ZoningStatus</td><td>Zoning Status</td><td>Select one option</td><td>User Input</td><td>ListZoningStatus</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">43</td><td></td><td></td><td>LandMetric</td><td>Land $/Metric</td><td>Select one option</td><td>User Input</td><td>ListLand$/Metric</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">44</td><td></td><td></td><td>CMHCFinancing</td><td>CMHC Financing</td><td>Select one option</td><td>User Input</td><td>ListYes/No</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">45</td><td></td><td></td><td>ValueScenario1</td><td>Value Scenario 1</td><td>Select one option</td><td>User Input</td><td>ListValueScenarios</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">46</td><td></td><td></td><td>ValueScenario2</td><td>Value Scenario 2</td><td>Select one option</td><td>User Input</td><td>ListValueScenarios</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Data Control Type</td></tr>
+<tr><td class="rownum">47</td><td></td><td></td><td>ValueScenario3</td><td>Value Scenario 3</td><td>Select one option</td><td>User Input</td><td>ListValueScenarios</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">48</td><td></td><td></td><td>ValueScenario4</td><td>Value Scenario 4</td><td>Select one option</td><td>User Input</td><td>ListValueScenarios</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Contact</td></tr>
+<tr><td class="rownum">49</td><td></td><td></td><td>ValueScenario5</td><td>Value Scenario 5</td><td>Select one option</td><td>User Input</td><td>ListValueScenarios</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Property</td></tr>
+<tr><td class="rownum">50</td><td></td><td></td><td>ValueScenario6</td><td>Value Scenario 6</td><td>Select one option</td><td>User Input</td><td>ListValueScenarios</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Building</td></tr>
+<tr><td class="rownum">51</td><td></td><td></td><td>EA/HCSummary1</td><td>EA/HC Summary 1</td><td>Select one option</td><td>User Input</td><td>ListEA/HCSummary</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Parcel</td></tr>
+<tr><td class="rownum">52</td><td></td><td></td><td>EA/HCSummary2</td><td>EA/HC Summary 2</td><td>Select one option</td><td>User Input</td><td>ListEA/HCSummary</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">53</td><td></td><td></td><td>EA/HCSummary3</td><td>EA/HC Summary 3</td><td>Select one option</td><td>User Input</td><td>ListEA/HCSummary</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">54</td><td></td><td></td><td>EA/HCSummary4</td><td>EA/HC Summary 4</td><td>Select one option</td><td>User Input</td><td>ListEA/HCSummary</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Type</td></tr>
+<tr><td class="rownum">55</td><td></td><td></td><td>EA/HCSummary5</td><td>EA/HC Summary 5</td><td>Select one option</td><td>User Input</td><td>ListEA/HCSummary</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Text</td></tr>
+<tr><td class="rownum">56</td><td></td><td></td><td>EA/HCSummary6</td><td>EA/HC Summary 6</td><td>Select one option</td><td>User Input</td><td>ListEA/HCSummary</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Multiple lines of text</td></tr>
+<tr><td class="rownum">57</td><td></td><td></td><td>EADetail1</td><td>EA Detail 1</td><td>Select one option</td><td>User Input</td><td>ListEADetail</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Whole Number</td></tr>
+<tr><td class="rownum">58</td><td></td><td></td><td>EADetail2</td><td>EA Detail 2</td><td>Select one option</td><td>User Input</td><td>ListEADetail</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Decimal</td></tr>
+<tr><td class="rownum">59</td><td></td><td></td><td>EADetail3</td><td>EA Detail 3</td><td>Select one option</td><td>User Input</td><td>ListEADetail</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Select one option</td></tr>
+<tr><td class="rownum">60</td><td></td><td></td><td>EADetail4</td><td>EA Detail 4</td><td>Select one option</td><td>User Input</td><td>ListEADetail</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Select multiple options</td></tr>
+<tr><td class="rownum">61</td><td></td><td></td><td>EADetail5</td><td>EA Detail 5</td><td>Select one option</td><td>User Input</td><td>ListEADetail</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Checkbox</td></tr>
+<tr><td class="rownum">62</td><td></td><td></td><td>EADetail6</td><td>EA Detail 6</td><td>Select one option</td><td>User Input</td><td>ListEADetail</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Date</td></tr>
+<tr><td class="rownum">63</td><td></td><td></td><td>HCDetail1</td><td>HC Detail 1</td><td>Select one option</td><td>User Input</td><td>ListHCDetail</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Calculation</td></tr>
+<tr><td class="rownum">64</td><td></td><td></td><td>HCDetail2</td><td>HC Detail 2</td><td>Select one option</td><td>User Input</td><td>ListHCDetail</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Label</td></tr>
+<tr><td class="rownum">65</td><td></td><td></td><td>HCDetail3</td><td>HC Detail 3</td><td>Select one option</td><td>User Input</td><td>ListHCDetail</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Text</td></tr>
+<tr><td class="rownum">66</td><td></td><td></td><td>HCDetail4</td><td>HC Detail 4</td><td>Select one option</td><td>User Input</td><td>ListHCDetail</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">67</td><td></td><td></td><td>HCDetail5</td><td>HC Detail 5</td><td>Select one option</td><td>User Input</td><td>ListHCDetail</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td></tr>
+<tr><td class="rownum">68</td><td></td><td></td><td>HCDetail6</td><td>HC Detail 6</td><td>Select one option</td><td>User Input</td><td>ListHCDetail</td><td>Yes</td><td>No</td><td></td><td></td><td></td><td></td><td>Job</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Custom Field</td></tr>
+<tr><td class="rownum">69</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Yes</td></tr>
+<tr><td class="rownum">70</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>No</td></tr>
+</table></div>
+<div class="panel" id="p1">
+<table>
+<tr><th class="rownum">1</th><th>DropdownLists</th><th>ListPropertyType</th><th>ListPropertySubtype</th><th>ListTenancy</th><th>ListInterestAppraised</th><th>ListAuthorizedUse</th><th>ListValueTimeFrame</th><th>ListSateofImprovements</th><th>ListSatusofImprovements</th><th>ListStateText</th><th>ListCurrentUseImprovements</th><th>ListProposedUseImprovements</th><th>ListValueScenarios</th><th>ListApproachestoValue</th><th>ListMethod</th><th>ListReportType</th><th>ListAssignmentType</th><th>ListTransactionStatus</th><th>ListClientDocuments</th><th>ListZoningStatus</th><th>ListLand$/Metric</th><th></th><th></th><th></th><th>ListSourceType</th><th>ListOutputType</th><th>ListValcreRecordLocation</th><th>ListDataControlType</th><th>ListYes/No</th><th>ListOutputLocation</th><th>Used In Excel</th><th>Used In Word</th></tr>
+<tr><td class="rownum">2</td><td>ListApproachestoValue</td><td>Multifamily</td><td>Apartment</td><td>Multi-Tenant</td><td>Fee Simple </td><td>First Mortgage Financing</td><td>Current</td><td>Improved</td><td>Improved - Completed</td><td>as improved</td><td>Vacant Land</td><td>Not Applicable</td><td>As Is Vacant Land</td><td>Land Direct Comparison Approach</td><td>Direct Capitalization Method</td><td>Comprehensive</td><td>Single Property</td><td>Not Applicable</td><td>Previous Appraisal</td><td>In Place</td><td>$/Unit</td><td></td><td></td><td></td><td>User Input</td><td>LOE</td><td>Job</td><td>Text</td><td>Yes</td><td></td><td>HOME</td><td>LOT</td></tr>
+<tr><td class="rownum">3</td><td>ListAssignmentType</td><td>Self-Storage</td><td>Townhouse</td><td>Owner Occupied</td><td>Leased Fee Interest</td><td>Financial Reporting</td><td>Prospective</td><td>Proposed</td><td>Improved - Renovated</td><td>as proposed</td><td>Single Family</td><td>Single Family</td><td>As If Vacant Land</td><td>Cost Approach</td><td>Discounted Cash Flow Method</td><td>Concise</td><td>Multiple Properties</td><td>Listed</td><td>Property Details</td><td>To Be Rezoned</td><td>$/FAR</td><td></td><td></td><td></td><td>Valcre API</td><td>Excel</td><td>Contact</td><td>Multiple lines of text</td><td>No</td><td></td><td>EXEC</td><td>Exec Summ</td></tr>
+<tr><td class="rownum">4</td><td>ListAuthorizedUse</td><td>Retail</td><td>Mixed Use</td><td>Partial Owner Occupied</td><td>Leasehold Estate</td><td>Insurance</td><td>Retrospective</td><td>Vacant Land</td><td>Improved - Under Renovation</td><td></td><td>Multifamily</td><td>Multifamily</td><td>As If Complete &amp; Stabilized</td><td>Direct Comparison Approach</td><td></td><td>Form</td><td></td><td>Under Contract</td><td>Proforma</td><td></td><td>$/SF</td><td></td><td></td><td></td><td>Calculated</td><td>Word</td><td>Property</td><td>Whole Number</td><td></td><td></td><td>MAP</td></tr>
+<tr><td class="rownum">5</td><td>ListClientDocuments</td><td>Industrial</td><td>Shopping Centre</td><td>Single-Tenant</td><td>Going Concern</td><td>Internal Decision-Making</td><td></td><td>Improved Development Land</td><td>Improved - Proposed Renovation</td><td></td><td>Retail</td><td>Mixed Use</td><td>As-Is</td><td>Income Approach</td><td></td><td></td><td></td><td></td><td>Unit Mix</td><td></td><td>$/Acre</td><td></td><td></td><td></td><td>Logic</td><td>LOR</td><td>Building</td><td>Decimal</td><td></td><td></td><td>IMPRV</td></tr>
+<tr><td class="rownum">6</td><td>ListDataControlType</td><td>Office</td><td></td><td>Unkown</td><td></td><td>Acquisition-Disposition</td><td></td><td></td><td>Proposed - Vacant Land</td><td></td><td>Industrial</td><td>Retail</td><td>As Stabilized</td><td></td><td></td><td></td><td></td><td></td><td>Rent Roll</td><td></td><td></td><td></td><td></td><td></td><td></td><td>ClickUP</td><td>Parcel</td><td>Select one option</td></tr>
+<tr><td class="rownum">7</td><td>ListInterestAppraised</td><td>Land</td><td></td><td>Vacant</td><td></td><td>Estate Planning</td><td></td><td></td><td>Proposed - Improved Land (Demolition Required) </td><td></td><td>Office</td><td>Industrial</td><td>As If Complete &amp; Stabilized - Renovated</td><td></td><td></td><td></td><td></td><td></td><td>Historical Operating Expenses</td><td></td><td></td><td></td><td></td><td></td><td></td><td>QBO</td><td></td><td>Select multiple options</td></tr>
+<tr><td class="rownum">8</td><td>ListLand$/Metric</td><td>Hotel</td><td></td><td></td><td></td><td>Litigation</td><td></td><td></td><td>Proposed - Under Construction</td><td></td><td></td><td>Office</td><td>As If Complete - Rezoned</td><td></td><td></td><td></td><td></td><td></td><td>Development Permit Drawings</td><td></td><td></td><td></td><td></td><td></td><td></td><td>LOE, Excel, Word</td><td></td><td>Checkbox</td></tr>
+<tr><td class="rownum">9</td><td>ListMethod</td><td>Seniors </td><td></td><td></td><td></td><td>GST</td><td></td><td></td><td></td><td></td><td></td><td></td><td>As If Complete - Serviced</td><td></td><td></td><td></td><td></td><td></td><td>Contact for Property Tour</td><td></td><td></td><td></td><td></td><td></td><td></td><td>LOR, Excel, Word, CU</td><td></td><td>Date</td></tr>
+<tr><td class="rownum">10</td><td>ListOutputLocation</td><td>Other</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>As If Complete - Subdivided</td><td></td><td></td><td></td><td></td><td></td><td>Purchase &amp; Sale Agreement</td><td></td><td></td><td></td><td></td><td></td><td></td><td>LOE, Excel, Word, LOR, CU</td><td></td><td>Calculation</td></tr>
+<tr><td class="rownum">11</td><td>ListOutputType</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Insurable Replacement Cost</td><td></td><td></td><td></td><td></td><td></td><td>Environmental Reports</td><td></td><td></td><td></td><td></td><td></td><td></td><td>LOE, Excel, Word, LOR, CU, QBO</td><td></td><td>Alpha Numeric</td></tr>
+<tr><td class="rownum">12</td><td>ListPropertySubtype</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Property Condition Reports</td></tr>
+<tr><td class="rownum">13</td><td>ListPropertyType</td></tr>
+<tr><td class="rownum">14</td><td>ListReportType</td></tr>
+<tr><td class="rownum">15</td><td>ListSateofImprovements</td></tr>
+<tr><td class="rownum">16</td><td>ListSatusofImprovements</td></tr>
+<tr><td class="rownum">17</td><td>ListSourceType</td></tr>
+<tr><td class="rownum">18</td><td>ListTenancy</td></tr>
+<tr><td class="rownum">19</td><td>ListTransactionStatus</td></tr>
+<tr><td class="rownum">20</td><td>ListValcreRecordLocation</td></tr>
+<tr><td class="rownum">21</td><td>ListValueScenarios</td></tr>
+<tr><td class="rownum">22</td><td>ListValueTimeFrame</td></tr>
+<tr><td class="rownum">23</td><td>ListYes/No</td></tr>
+<tr><td class="rownum">24</td><td>ListZoningStatus</td></tr>
+<tr><td class="rownum">25</td><td></td></tr>
+<tr><td class="rownum">26</td><td></td></tr>
+<tr><td class="rownum">27</td><td></td></tr>
+<tr><td class="rownum">28</td><td></td></tr>
+<tr><td class="rownum">29</td><td></td></tr>
+<tr><td class="rownum">30</td><td></td></tr>
+<tr><td class="rownum">31</td><td></td></tr>
+<tr><td class="rownum">32</td><td></td></tr>
+<tr><td class="rownum">33</td><td></td></tr>
+<tr><td class="rownum">34</td><td></td></tr>
+<tr><td class="rownum">35</td><td></td></tr>
+</table></div>
+<div class="panel" id="p2">
+<table>
+<tr><th class="rownum">1</th><th>Number</th><th>ValueScenarios</th><th>ListEA/HCSummary</th><th>ListEADetail</th><th>ListHCDetail</th></tr>
+<tr><td class="rownum">2</td><td>1</td><td>As Is Vacant Land</td><td>current market value of the subject property as of the effective date</td><td>None</td><td>None</td></tr>
+<tr><td class="rownum">3</td><td>2</td><td>As If Vacant Land</td><td>current makret value based on the extraordinary assumption and hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date.</td><td>The As If Vacant market land value is developed under the extraordinary assumption that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date. This assumption is contrary to the known physical state of the property and is made for the purpose of estimating the underlying land value.</td><td>The As If Vacant market land value is developed under the hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date. This condition is contrary to the known physical state of the property and is made for the purpose of estimating the underlying land value.</td></tr>
+<tr><td class="rownum">4</td><td>3</td><td>As If Complete &amp; Stabilized</td><td>current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the project is 100% complete and fully leased at market rents and is at stabilized occupancy, as of the effective date.</td><td>The As If Vacant market land value is developed under the extraordinary assumption that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date. This assumption is contrary to the known physical state of the property and is made for the purpose of estimating the underlying land value.</td><td>The As If Vacant market land value is developed under the hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date. This condition is contrary to the known physical state of the property and is made for the purpose of estimating the underlying land value.</td></tr>
+<tr><td class="rownum">5</td><td>4</td><td>As-Is</td><td>current market value of the subject property as improved as of the effective date</td><td>None</td><td>None</td></tr>
+<tr><td class="rownum">6</td><td>5</td><td>As Stabilized</td><td>current market value of the subject property based on the extraordinary assumption that the subject property is fully leased at market rents and is at stabilized occupancy as of the effective date.</td><td>The As Stabilized value has been developed based on the extraordinary assumption that the subject property is fully leased at prevailing market rents and has achieved stabilized occupancy as of the effective date of the appraisal. Under this premise, no deductions are made for holding costs, rent loss, or lease-up expenses. In addition it is an extraordinary assumption that all units could achieve current market rent levels and stabilized occupancy as of the effective date. In reality, as of the effective date, the property&#x27;s existing lease terms reflect contract rents that are deemed to be below-market rents. For the purposes of this analysis, it is assumed that lease-up to market rent levels has occurred under typical market conditions, without undue delay or concessions exceeding market norms. If this assumption proves incorrect, such as market rents are not achievable the value conclusion may be materially impacted.</td><td>The As Stabilized value has been developed based on the hypothetical condition that the subject property is fully leased at prevailing market rents and has achieved stabilized occupancy as of the effective date of the appraisal. Under this premise, no deductions are made for holding costs, rent loss, or lease-up expenses. In addition it is a hypothetical condition that all units could achieve current market rent levels and stabilized occupancy as of the effective date. In reality, as of the effective date, the property&#x27;s existing lease terms reflect contract rents that are deemed to be below-market rents. For the purposes of this analysis, it is assumed that lease-up to market rent levels has occurred under typical market conditions, without undue delay or concessions exceeding market norms. If this hypothetical condition proves incorrect, such as market rents are not achievable the value conclusion may be materially impacted.</td></tr>
+<tr><td class="rownum">7</td><td>6</td><td>As If Complete &amp; Stabilized - Renovated</td><td>current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the renovation is 100% complete and the property is fully leased and is at stabilized occupancy, as of the effective date.</td><td>The As If Renovated &amp; Stabilized market value concluded herein has been developed under the extraordinary assumption that the existing improvements, as described in this report, have been fully renovated and have been leased at market rents with stabilized occupancy as of the effective date. In reality, the renovations are not complete as of the effective date. This appraisal does not consider unforeseeable events that could affect the timing, cost, or outcome of the renovation and lease-up process. If the stated hypothetical condition does not hold true, the value conclusion presented herein may be materially affected.</td><td>The As If Renovated &amp; Stabilized market value concluded herein has been developed under the hypothetical condition that the existing improvements, as described in this report, have been fully renovated and have been leased at market rents with stabilized occupancy as of the effective date. In reality, the renovations are not complete as of the effective date. This appraisal does not consider unforeseeable events that could affect the timing, cost, or outcome of the renovation and lease-up process. If the stated hypothetical condition does not hold true, the value conclusion presented herein may be materially affected. </td></tr>
+<tr><td class="rownum">8</td><td></td><td>As If Complete - Rezoned</td></tr>
+<tr><td class="rownum">9</td><td></td><td>As If Complete - Serviced</td></tr>
+<tr><td class="rownum">10</td><td></td><td>As If Complete - Subdivided</td></tr>
+<tr><td class="rownum">11</td><td></td><td>Insurable Replacement Cost</td></tr>
+<tr><td class="rownum">12</td><td></td></tr>
+<tr><td class="rownum">13</td><td></td></tr>
+<tr><td class="rownum">14</td><td></td></tr>
+<tr><td class="rownum">15</td><td></td></tr>
+<tr><td class="rownum">16</td><td></td></tr>
+<tr><td class="rownum">17</td><td></td></tr>
+<tr><td class="rownum">18</td><td></td></tr>
+<tr><td class="rownum">19</td><td></td></tr>
+<tr><td class="rownum">20</td><td></td></tr>
+<tr><td class="rownum">21</td><td></td></tr>
+<tr><td class="rownum">22</td><td></td></tr>
+<tr><td class="rownum">23</td><td></td></tr>
+<tr><td class="rownum">24</td><td></td></tr>
+<tr><td class="rownum">25</td><td></td></tr>
+<tr><td class="rownum">26</td><td></td></tr>
+<tr><td class="rownum">27</td><td></td></tr>
+<tr><td class="rownum">28</td><td></td></tr>
+<tr><td class="rownum">29</td><td></td></tr>
+<tr><td class="rownum">30</td><td></td></tr>
+<tr><td class="rownum">31</td><td></td></tr>
+<tr><td class="rownum">32</td><td></td></tr>
+<tr><td class="rownum">33</td><td></td></tr>
+<tr><td class="rownum">34</td><td></td></tr>
+<tr><td class="rownum">35</td><td></td></tr>
+</table></div>
+<div class="panel" id="p3">
+<table>
+<tr><th class="rownum">1</th><th>Operator</th><th>Meaning</th><th>Example</th><th></th><th></th><th>Rule Role</th><th></th><th>Logic Type</th><th>Rule Types</th><th>Purpose</th><th></th><th>Rule Groups</th></tr>
+<tr><td class="rownum">2</td><td>=</td><td>Equals</td><td>Property Type = Multifamily</td><td></td><td></td><td>Condition</td><td>IF</td><td>And</td><td>Set Value</td><td>Calculate or assign values based on inputs</td><td></td><td>Property Identification</td></tr>
+<tr><td class="rownum">3</td><td>≠</td><td>Not Equal</td><td>Property Type ≠ Industrial</td><td></td><td></td><td>Output</td><td>Then</td><td>Or</td><td>Add Value ✅</td><td>Force a value (overwrite)</td><td></td><td>State of Improvements</td></tr>
+<tr><td class="rownum">4</td><td>IN</td><td>One of several values</td><td>Property Type IN (Multifamily, Self Storage)</td><td></td><td></td><td>Condition + Output</td><td>If Then</td><td></td><td>Remove Value</td><td>Add to multi-select field</td><td></td><td>Valuation Premise</td></tr>
+<tr><td class="rownum">5</td><td>NOT IN</td><td>Not one of several values</td><td>Property Type NOT IN (Retail, Office)</td><td></td><td></td><td></td><td></td><td></td><td>Replace Text</td><td>Remove from multi-select</td><td></td><td>Valuation Scenario</td></tr>
+<tr><td class="rownum">6</td><td>&gt;</td><td>Greater than</td><td>Unit Count &gt; 100</td><td></td><td></td><td></td><td></td><td></td><td>Append Text</td><td></td><td></td><td>Approaches to Value</td></tr>
+<tr><td class="rownum">7</td><td>&lt;</td><td>Less than</td><td>Building Size &lt; 10,000</td><td></td><td></td><td></td><td></td><td></td><td>Calculate</td><td></td><td></td><td>EA / HC Logic</td></tr>
+<tr><td class="rownum">8</td><td>≥</td><td>Greater than or equal</td><td>Site Area ≥ 1 acre</td><td></td><td></td><td></td><td></td><td></td><td>Show</td><td></td><td></td><td>Inspection Logic</td></tr>
+<tr><td class="rownum">9</td><td>≤</td><td>Less than or equal</td><td>Vacancy Rate ≤ 5%</td><td></td><td></td><td></td><td></td><td></td><td>Hide</td><td></td><td></td><td>Scope of Work (LOE)</td></tr>
+<tr><td class="rownum">10</td><td>CONTAINS</td><td>Text contains value</td><td>Address CONTAINS “Calgary”</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Report Narrative</td></tr>
+<tr><td class="rownum">11</td><td>IS EMPTY</td><td>No value entered</td><td>Pro Forma IS EMPTY</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Data Collection</td></tr>
+<tr><td class="rownum">12</td><td>IS NOT EMPTY</td><td>Value exists</td><td>Inspection Date IS NOT EMPTY</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Fee Calculation</td></tr>
+<tr><td class="rownum">13</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Invoice Generation</td></tr>
+<tr><td class="rownum">14</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Workflow Automation</td></tr>
+<tr><td class="rownum">15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>System Integration</td></tr>
+<tr><td class="rownum">16</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Validation</td></tr>
+<tr><td class="rownum">17</td><td></td></tr>
+<tr><td class="rownum">18</td><td></td><td></td><td></td><td></td><td>Action</td></tr>
+<tr><td class="rownum">19</td><td></td><td></td><td></td><td></td><td>Set</td><td></td><td></td><td></td><td>Show</td></tr>
+<tr><td class="rownum">20</td><td></td><td></td><td></td><td></td><td>Add</td><td></td><td></td><td></td><td>Hide</td></tr>
+<tr><td class="rownum">21</td><td></td><td></td><td></td><td></td><td>Remove</td><td></td><td></td><td></td><td>Trigger</td></tr>
+<tr><td class="rownum">22</td><td></td><td></td><td></td><td></td><td>Append Text</td><td></td><td></td><td></td><td>Validation Rule</td><td>Enforce correctness / block submission</td></tr>
+<tr><td class="rownum">23</td><td></td><td></td><td></td><td></td><td>Replace Text</td><td></td><td></td><td></td><td>Conditional Required</td><td>Make a field required</td></tr>
+<tr><td class="rownum">24</td><td></td><td></td><td></td><td></td><td>Calculate</td></tr>
+<tr><td class="rownum">25</td><td></td><td></td><td></td><td></td><td>Show</td><td></td><td></td><td></td><td>Workflow Trigger</td><td>Create tasks, statuses, notifications</td></tr>
+<tr><td class="rownum">26</td><td></td><td></td><td></td><td></td><td>Hide</td><td></td><td></td><td></td><td>Narrative Generation</td><td>Output text</td></tr>
+<tr><td class="rownum">27</td><td></td><td></td><td></td><td></td><td>Trigger</td><td></td><td></td><td></td><td>Document Output</td><td>Control what appears in LOE/report</td></tr>
+<tr><td class="rownum">28</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Integration Trigger</td><td>Push to external systems</td></tr>
+</table></div>
+<div class="panel" id="p4">
+<table>
+<tr><th class="rownum">1</th><th>Job Field Name</th><th>Job Field Label</th><th>Contact Field Name</th><th>Contact Field Label</th><th>Property Field Name</th><th>Property Field Label</th><th>Building Field Name</th><th>Building Field Label</th><th>Parcel Assessment Field Name</th><th>Parcel Assessment Field Label</th><th>Parcel Field Name</th><th>Parcel Field Label</th></tr>
+<tr><td class="rownum">2</td><td>Job ID</td><td>Id</td><td>Contact ID</td><td>Id</td><td>Property ID</td><td>Id</td><td>Id</td><td>Id</td><td>Id</td><td>Id</td><td>Id</td><td>Id</td></tr>
+<tr><td class="rownum">3</td><td>Job Number</td><td>Number</td><td>Company Name</td><td>Company</td><td>Name</td><td>Name</td><td>Building Name</td><td>Name</td><td>Year</td><td>Year</td><td>Parcel number</td><td>Number</td></tr>
+<tr><td class="rownum">4</td><td>Job Name</td><td>Name</td><td>Main Phone</td><td>CompanyPhoneNumber</td><td>Street Address</td><td>AddressStreet</td><td>Comments</td><td>Comments</td><td>Land</td><td>LandValue</td><td>Legal description</td><td>LegalDescription</td></tr>
+<tr><td class="rownum">5</td><td>Client File Number</td><td>ClientRef</td><td>Main Fax</td><td>CompanyFaxNumber</td><td>Unit</td><td>AddressStreet2</td><td>Year Built</td><td>YearBuilt</td><td>Improved</td><td>ImprovedValue</td><td>Primary land</td><td>PrimaryArea</td></tr>
+<tr><td class="rownum">6</td><td>Borrower</td><td>Borrower</td><td>Website</td><td>CompanyWebsite</td><td>City</td><td>AddressCity</td><td>Year Renovated</td><td>YearRenovated</td><td>Exemptions</td><td>Exemptions</td><td>Excess land</td><td>ExcessArea</td></tr>
+<tr><td class="rownum">7</td><td>Status</td><td>Status</td><td>Company Type</td><td>CompanyType</td><td>State/Province</td><td>AddressState</td><td>Dock Doors</td><td>DockDoorCount</td><td>Total</td><td>TotalValue</td><td>Surplus land</td><td>SurplusArea</td></tr>
+<tr><td class="rownum">8</td><td>Fee</td><td>Fee</td><td>Street Address</td><td>AddressStreet</td><td>ZIP/Postal</td><td>AddressPostalCode</td><td>Grade Doors</td><td>GradeDoorCount</td><td>Taxes</td><td>Taxes</td><td>Unusable land</td><td>UnusableArea</td></tr>
+<tr><td class="rownum">9</td><td>Retainer</td><td>Retainer</td><td>Unit</td><td>AddressStreet2</td><td>Country</td><td>AddressCountry</td><td>Rail Doors</td><td>RailDoorCount</td><td>ParcelId</td><td>ParcelId</td><td>UsableArea</td><td>UsableArea</td></tr>
+<tr><td class="rownum">10</td><td>Amount Paid</td><td>AmountPaid</td><td>City</td><td>AddressCity</td><td>Region</td><td>AddressCounty</td><td>Cross Docks</td><td>CrossDockCount</td><td>Created</td><td>CreatedTime</td><td>GrossArea</td><td>GrossArea</td></tr>
+<tr><td class="rownum">11</td><td>Check Number</td><td>CheckNumber</td><td>State/Province</td><td>AddressState</td><td>Market Name</td><td>Market</td><td>Levelers</td><td>HasLevelers</td><td>Updated</td><td>ModifiedTime</td><td>AssessedValue</td><td>AssessedValue</td></tr>
+<tr><td class="rownum">12</td><td>Appraised Value</td><td>AppraisedValue</td><td>ZIP/Postal</td><td>AddressPostalCode</td><td>Submarket</td><td>SubmarketName</td><td>Clear Height</td><td>ClearHeightComments</td><td>Display Name</td><td>_DisplayName</td><td>Taxes</td><td>Taxes</td></tr>
+<tr><td class="rownum">13</td><td>Bid Date</td><td>BidDate</td><td>First Name</td><td>FirstName</td><td>Latitude</td><td>Latitude</td><td>Clear Span (Columns)</td><td>ClearSpanComments</td><td>Parcel</td><td>Parcel._DisplayName</td><td>Comments</td><td>Comments</td></tr>
+<tr><td class="rownum">14</td><td>Awarded Date</td><td>AwardDate</td><td>Last Name</td><td>LastName</td><td>Longitude</td><td>Longitude</td><td>Maneuverability</td><td>ManeuverabilityComments</td><td>CustomFields</td><td>_DisplayName</td><td>PropertyId</td><td>PropertyId</td></tr>
+<tr><td class="rownum">15</td><td>Due Date</td><td>DueDate</td><td>Title</td><td>Title</td><td>Property Type</td><td>Types</td><td>Number of Floors</td><td>FloorCount</td><td></td><td></td><td>Created</td><td>CreatedTime</td></tr>
+<tr><td class="rownum">16</td><td>Internal Due Date</td><td>InternalDueDate</td><td>Phone</td><td>PhoneNumber</td><td>Subtype</td><td>SecondaryType</td><td>Building Class</td><td>ClassComments</td><td></td><td></td><td>Updated</td><td>ModifiedTime</td></tr>
+<tr><td class="rownum">17</td><td>Invoice Date</td><td>InvoiceDate</td><td>Mobile</td><td>CellNumber</td><td>Parcel ID</td><td>ParcelNumbers</td><td>Foundation</td><td>FoundationComments</td><td></td><td></td><td>Display Name</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">18</td><td>Inspection Date</td><td>InspectionDate</td><td>Email</td><td>Email</td><td>Number of Parcels</td><td>ParcelCount</td><td>Exterior Walls/Framing</td><td>ExteriorWallComments</td><td></td><td></td><td>LatestAssessment</td><td>LatestAssessment._DisplayName</td></tr>
+<tr><td class="rownum">19</td><td>Paid Date</td><td>PaidDate</td><td>Salutation</td><td>Salutation</td><td>Land Area (AC)</td><td>LandAreaAC</td><td>Roof</td><td>RoofComments</td><td></td><td></td><td>Property</td><td>Property._DisplayName</td></tr>
+<tr><td class="rownum">20</td><td>Date of Value</td><td>EffectiveDate</td><td>Suffix</td><td>Suffix</td><td>Land Area</td><td>LandAreaSF</td><td>Elevators</td><td>ElevatorComments</td><td></td><td></td><td>Assessments</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">21</td><td>Format</td><td>ReportFormat</td><td>Division</td><td>Division</td><td>Buildable Area</td><td>BuildableArea</td><td>HVAC</td><td>HvacComments</td><td></td><td></td><td>PropertyDemographics</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">22</td><td>Authorized Use</td><td>IntendedUses</td><td>Extension</td><td>Extension</td><td>Zone Name</td><td>ZoningName</td><td>Insulation</td><td>InsulationComments</td><td></td><td></td><td>Files</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">23</td><td>Scope</td><td>Scopes</td><td>Fax</td><td>FaxNumber</td><td>Zoning</td><td>Zoning</td><td>Lighting</td><td>LightingComments</td><td></td><td></td><td>CustomFields</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">24</td><td>Analysis Level</td><td>AnalysisLevel</td><td>Notes</td><td>Comments</td><td>Shape</td><td>SiteShape</td><td>Electrical</td><td>ElectricalComments</td></tr>
+<tr><td class="rownum">25</td><td>Purpose</td><td>Purposes</td><td>Confidential</td><td>Privacy</td><td>Topography</td><td>SiteTopography</td><td>Interior Walls</td><td>InteriorWallComments</td></tr>
+<tr><td class="rownum">26</td><td>Values</td><td>RequestedValues</td><td>Name</td><td>Name</td><td>Site Grade</td><td>SiteGrade</td><td>Doors and Windows</td><td>DoorAndWindowComments</td></tr>
+<tr><td class="rownum">27</td><td>Staff 1 Role</td><td>Staff1Role</td><td>Address</td><td>FullAddress</td><td>Corner</td><td>SiteCorner</td><td>Ceilings</td><td>CeilingComments</td></tr>
+<tr><td class="rownum">28</td><td>Staff 2 Role</td><td>Staff2Role</td><td>Address</td><td>FullAddressMultiLine</td><td>Density</td><td>Density</td><td>Plumbing</td><td>PlumbingComments</td></tr>
+<tr><td class="rownum">29</td><td>Staff 3 Role</td><td>Staff3Role</td><td>Contact</td><td>FullContactInformation</td><td>Permitted FAR</td><td>PermittedFAR</td><td>Floor Coverings</td><td>FloorComments</td></tr>
+<tr><td class="rownum">30</td><td>Confidential</td><td>Privacy</td><td>Created</td><td>CreatedTime</td><td>Permitted Building Height</td><td>PermittedBuildingHeight</td><td>Fire Safety</td><td>SafetyFeaturesComments</td></tr>
+<tr><td class="rownum">31</td><td>General</td><td>Comments</td><td>Updated</td><td>ModifiedTime</td><td>Proposed Land Use</td><td>ProposedLandUse</td><td>Interior Finish/Build-Out</td><td>InteriorFinishComments</td></tr>
+<tr><td class="rownum">32</td><td>Client</td><td>ClientComments</td><td>Display Name</td><td>_DisplayName</td><td>Site H&amp;BU</td><td>SiteHBU</td><td>Site Improvements</td><td>SiteImprovementComments</td></tr>
+<tr><td class="rownum">33</td><td>Delivery</td><td>DeliveryComments</td><td>Office</td><td>Office._DisplayName</td><td>Off-Site Improvements</td><td>OffSiteImprovements</td><td>Deferred Maintenance</td><td>DeferredMaintenanceComments</td></tr>
+<tr><td class="rownum">34</td><td>Payment</td><td>PaymentComments</td><td>Relationship Owner</td><td>Owner._DisplayName</td><td>View</td><td>SiteView</td><td>Gross Building Area (GBA)</td><td>GrossBuildingArea</td></tr>
+<tr><td class="rownum">35</td><td>Amount Outstanding</td><td>AmountOutstanding</td><td>Files</td><td>_DisplayName</td><td>Utilities</td><td>Utilities</td><td>Net Rentable Area (NRA)</td><td>NetRentableArea</td></tr>
+<tr><td class="rownum">36</td><td>Days Sales Outstanding</td><td>DaysToPaid</td><td>CustomFields</td><td>_DisplayName</td><td>Easements</td><td>Easements</td><td>First Floor Footprint (SF)</td><td>FootprintArea</td></tr>
+<tr><td class="rownum">37</td><td>Aging</td><td>DaysSinceInvoiced</td><td></td><td></td><td>Entitlements</td><td>Entitlements</td><td>Finished Basement (SF)</td><td>FinishedBasementArea</td></tr>
+<tr><td class="rownum">38</td><td>Appraisers</td><td>StaffAppraisers</td><td></td><td></td><td>Environmental</td><td>EnvironmentalIssues</td><td>Unfinished Basement (SF)</td><td>UnfinishedBasementArea</td></tr>
+<tr><td class="rownum">39</td><td>Assistants</td><td>StaffAssistants</td><td></td><td></td><td>Frontage</td><td>Frontage</td><td>Warehouse Area (SF)</td><td>WarehouseArea</td></tr>
+<tr><td class="rownum">40</td><td>Procurers</td><td>StaffProcurers</td><td></td><td></td><td>Flood Zones</td><td>SiteFloodZone</td><td>Office Area (SF)</td><td>OfficeArea</td></tr>
+<tr><td class="rownum">41</td><td>Reviewers</td><td>StaffReviewers</td><td></td><td></td><td>Project Design</td><td>ProjectDesign</td><td>Office Buildout</td><td>OfficeBuildoutRatio</td></tr>
+<tr><td class="rownum">42</td><td>Created</td><td>CreatedTime</td><td></td><td></td><td>Gross Building Area (GBA)</td><td>GrossBuildingArea</td><td>Refrigeration Ratio</td><td>WarehouseRefrigerationRatio</td></tr>
+<tr><td class="rownum">43</td><td>Updated</td><td>ModifiedTime</td><td></td><td></td><td>Net Rentable Area (NRA)</td><td>NetRentableArea</td><td>A/C Ratio</td><td>WarehouseACRatio</td></tr>
+<tr><td class="rownum">44</td><td>Display Name</td><td>_DisplayName</td><td></td><td></td><td>First Floor Footprint (SF)</td><td>BuildingFootprint</td><td>Cranes</td><td>Cranes</td></tr>
+<tr><td class="rownum">45</td><td>Subject Property</td><td>Property._DisplayName</td><td></td><td></td><td>Site Coverage Ratio</td><td>SiteCoverageRatio</td><td>PropertyId</td><td>PropertyId</td></tr>
+<tr><td class="rownum">46</td><td>Property Contact</td><td>PropertyContact._DisplayName</td><td></td><td></td><td>Land to Building Ratio</td><td>LandToBuildingRatio</td><td>Created</td><td>CreatedTime</td></tr>
+<tr><td class="rownum">47</td><td>Client</td><td>Client._DisplayName</td><td></td><td></td><td>Units</td><td>UnitsCount</td><td>Updated</td><td>ModifiedTime</td></tr>
+<tr><td class="rownum">48</td><td>Primary Appraiser</td><td>Owner._DisplayName</td><td></td><td></td><td>Parking Spaces</td><td>ParkingSpacesCount</td><td>Display Name</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">49</td><td>Office</td><td>Office._DisplayName</td><td></td><td></td><td>Parking Ratio</td><td>ParkingRatio</td><td>Property</td><td>Property._DisplayName</td></tr>
+<tr><td class="rownum">50</td><td>Staff1</td><td>Staff1._DisplayName</td><td></td><td></td><td>Parking Type</td><td>ParkingTypes</td><td>CustomFields</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">51</td><td>Staff2</td><td>Staff2._DisplayName</td><td></td><td></td><td>Number of Buildings</td><td>BuildingsCount</td></tr>
+<tr><td class="rownum">52</td><td>Staff3</td><td>Staff3._DisplayName</td><td></td><td></td><td>Number of Floors</td><td>FloorsCount</td></tr>
+<tr><td class="rownum">53</td><td>Sets</td><td>_DisplayName</td><td></td><td></td><td>Year Built</td><td>YearBuilt</td></tr>
+<tr><td class="rownum">54</td><td>Files</td><td>_DisplayName</td><td></td><td></td><td>Year Renovated</td><td>YearRenovated</td></tr>
+<tr><td class="rownum">55</td><td>JobLinkedPropertyExpenses</td><td>_DisplayName</td><td></td><td></td><td>Tenancy</td><td>BuildingTenancy</td></tr>
+<tr><td class="rownum">56</td><td>JobLinkedPropertyLeases</td><td>_DisplayName</td><td></td><td></td><td>Foundation</td><td>BuildingMaterials</td></tr>
+<tr><td class="rownum">57</td><td>JobLinkedPropertySales</td><td>_DisplayName</td><td></td><td></td><td>Fire Sprinkler</td><td>FireSprinkler</td></tr>
+<tr><td class="rownum">58</td><td>JobLinkedPropertySurveys</td><td>_DisplayName</td><td></td><td></td><td>Building Class</td><td>BuildingClass</td></tr>
+<tr><td class="rownum">59</td><td>Leases</td><td>_DisplayName</td><td></td><td></td><td>FAR</td><td>FloorAreaRatio</td></tr>
+<tr><td class="rownum">60</td><td>Expenses</td><td>_DisplayName</td><td></td><td></td><td>Elevators</td><td>Elevator</td></tr>
+<tr><td class="rownum">61</td><td>Sales</td><td>_DisplayName</td><td></td><td></td><td>Loss Factor</td><td>BuildingLossFactor</td></tr>
+<tr><td class="rownum">62</td><td>Surveys</td><td>_DisplayName</td><td></td><td></td><td>Grade Doors</td><td>BuildingGradeDoorsCount</td></tr>
+<tr><td class="rownum">63</td><td>DiscountedCashFlows</td><td>_DisplayName</td><td></td><td></td><td>Dock Doors</td><td>BuildingDockDoorsCount</td></tr>
+<tr><td class="rownum">64</td><td>CustomFields</td><td>_DisplayName</td><td></td><td></td><td>Warehouse Area (SF)</td><td>WarehouseSF</td></tr>
+<tr><td class="rownum">65</td><td></td><td></td><td></td><td></td><td>Office Area (SF)</td><td>OfficeSF</td></tr>
+<tr><td class="rownum">66</td><td></td><td></td><td></td><td></td><td>Office Buildout</td><td>BuildingOfficeBuildout</td></tr>
+<tr><td class="rownum">67</td><td></td><td></td><td></td><td></td><td>Rail Doors</td><td>BuildingRailDoorsCount</td></tr>
+<tr><td class="rownum">68</td><td></td><td></td><td></td><td></td><td>Cross Docks</td><td>BuildingCrossDocksCount</td></tr>
+<tr><td class="rownum">69</td><td></td><td></td><td></td><td></td><td>Clear Height</td><td>ClearHeight</td></tr>
+<tr><td class="rownum">70</td><td></td><td></td><td></td><td></td><td>Clear Span (Columns)</td><td>ClearSpan</td></tr>
+<tr><td class="rownum">71</td><td></td><td></td><td></td><td></td><td>Truck Maneuverability</td><td>Maneuverability</td></tr>
+<tr><td class="rownum">72</td><td></td><td></td><td></td><td></td><td>Power</td><td>Power</td></tr>
+<tr><td class="rownum">73</td><td></td><td></td><td></td><td></td><td>Cranes</td><td>Cranes</td></tr>
+<tr><td class="rownum">74</td><td></td><td></td><td></td><td></td><td>Average Bay Depth</td><td>BuildingAverageBayDepth</td></tr>
+<tr><td class="rownum">75</td><td></td><td></td><td></td><td></td><td>Anchor Tenants</td><td>BuildingAnchorTenants</td></tr>
+<tr><td class="rownum">76</td><td></td><td></td><td></td><td></td><td>Anchor Ratio</td><td>BuildingAnchorRatio</td></tr>
+<tr><td class="rownum">77</td><td></td><td></td><td></td><td></td><td>Project Amenities</td><td>Amenities</td></tr>
+<tr><td class="rownum">78</td><td></td><td></td><td></td><td></td><td>Unit Amenities</td><td>UnitAmenities</td></tr>
+<tr><td class="rownum">79</td><td></td><td></td><td></td><td></td><td>Laundry</td><td>IncludedLaundryAmenities</td></tr>
+<tr><td class="rownum">80</td><td></td><td></td><td></td><td></td><td>Security Features</td><td>SecurityFeatures</td></tr>
+<tr><td class="rownum">81</td><td></td><td></td><td></td><td></td><td>Amenities</td><td>StorageFacilityFeatures</td></tr>
+<tr><td class="rownum">82</td><td></td><td></td><td></td><td></td><td>Security</td><td>StorageSecurityFeatures</td></tr>
+<tr><td class="rownum">83</td><td></td><td></td><td></td><td></td><td>Vehicle Storage Spaces</td><td>VehicleStorageCount</td></tr>
+<tr><td class="rownum">84</td><td></td><td></td><td></td><td></td><td>Retail Area</td><td>StorageRetailArea</td></tr>
+<tr><td class="rownum">85</td><td></td><td></td><td></td><td></td><td>Hotel Type</td><td>HotelServiceType</td></tr>
+<tr><td class="rownum">86</td><td></td><td></td><td></td><td></td><td>Access Type</td><td>HotelAccessType</td></tr>
+<tr><td class="rownum">87</td><td></td><td></td><td></td><td></td><td>Chain Scale</td><td>HotelChainScale</td></tr>
+<tr><td class="rownum">88</td><td></td><td></td><td></td><td></td><td>Hotel Amenities</td><td>HotelGuestAmenities</td></tr>
+<tr><td class="rownum">89</td><td></td><td></td><td></td><td></td><td>Room Amenities</td><td>HotelRoomAmenities</td></tr>
+<tr><td class="rownum">90</td><td></td><td></td><td></td><td></td><td>Meeting Space</td><td>HotelMeetingSpaceArea</td></tr>
+<tr><td class="rownum">91</td><td></td><td></td><td></td><td></td><td>Restaurant (SF)</td><td>HotelRestaurantArea</td></tr>
+<tr><td class="rownum">92</td><td></td><td></td><td></td><td></td><td>Lobby Common Area (SF)</td><td>HotelLobbyArea</td></tr>
+<tr><td class="rownum">93</td><td></td><td></td><td></td><td></td><td>Back Office (SF)</td><td>HotelBackOfficeArea</td></tr>
+<tr><td class="rownum">94</td><td></td><td></td><td></td><td></td><td>Flag</td><td>HotelFlag</td></tr>
+<tr><td class="rownum">95</td><td></td><td></td><td></td><td></td><td>Date Opened</td><td>OpenedDate</td></tr>
+<tr><td class="rownum">96</td><td></td><td></td><td></td><td></td><td>Landscaping</td><td>LandscapingComments</td></tr>
+<tr><td class="rownum">97</td><td></td><td></td><td></td><td></td><td>Signage</td><td>SignageComments</td></tr>
+<tr><td class="rownum">98</td><td></td><td></td><td></td><td></td><td>Functional Design</td><td>FunctionalDesignComments</td></tr>
+<tr><td class="rownum">99</td><td></td><td></td><td></td><td></td><td>Yard Storage</td><td>YardStorageComments</td></tr>
+<tr><td class="rownum">100</td><td></td><td></td><td></td><td></td><td>Investment Grade</td><td>InvestmentGrade</td></tr>
+<tr><td class="rownum">101</td><td></td><td></td><td></td><td></td><td>Geographic Location</td><td>PopulationArea</td></tr>
+<tr><td class="rownum">102</td><td></td><td></td><td></td><td></td><td>Adjacent North</td><td>AdjacentNorthComments</td></tr>
+<tr><td class="rownum">103</td><td></td><td></td><td></td><td></td><td>Adjacent South</td><td>AdjacentSouthComments</td></tr>
+<tr><td class="rownum">104</td><td></td><td></td><td></td><td></td><td>Adjacent East</td><td>AdjacentEastComments</td></tr>
+<tr><td class="rownum">105</td><td></td><td></td><td></td><td></td><td>Adjacent West</td><td>AdjacentWestComments</td></tr>
+<tr><td class="rownum">106</td><td></td><td></td><td></td><td></td><td>Location Quality</td><td>QualitativeLocation</td></tr>
+<tr><td class="rownum">107</td><td></td><td></td><td></td><td></td><td>Access</td><td>QualitativeAccess</td></tr>
+<tr><td class="rownum">108</td><td></td><td></td><td></td><td></td><td>Exposure</td><td>QualitativeExposure</td></tr>
+<tr><td class="rownum">109</td><td></td><td></td><td></td><td></td><td>Building Quality</td><td>QualitativeBuilding</td></tr>
+<tr><td class="rownum">110</td><td></td><td></td><td></td><td></td><td>Condition</td><td>QualitativeCondition</td></tr>
+<tr><td class="rownum">111</td><td></td><td></td><td></td><td></td><td>Appeal</td><td>QualitativeAppeal</td></tr>
+<tr><td class="rownum">112</td><td></td><td></td><td></td><td></td><td>Property Comments</td><td>DescriptionText</td></tr>
+<tr><td class="rownum">113</td><td></td><td></td><td></td><td></td><td>Comments (Private)</td><td>CommentsPrivate</td></tr>
+<tr><td class="rownum">114</td><td></td><td></td><td></td><td></td><td>Utility</td><td>SiteUtility</td></tr>
+<tr><td class="rownum">115</td><td></td><td></td><td></td><td></td><td>Address</td><td>FullAddress</td></tr>
+<tr><td class="rownum">116</td><td></td><td></td><td></td><td></td><td>Address</td><td>FullAddressMultiLine</td></tr>
+<tr><td class="rownum">117</td><td></td><td></td><td></td><td></td><td>Created</td><td>CreatedTime</td></tr>
+<tr><td class="rownum">118</td><td></td><td></td><td></td><td></td><td>Updated</td><td>ModifiedTime</td></tr>
+<tr><td class="rownum">119</td><td></td><td></td><td></td><td></td><td>Display Name</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">120</td><td></td><td></td><td></td><td></td><td>Office</td><td>Office._DisplayName</td></tr>
+<tr><td class="rownum">121</td><td></td><td></td><td></td><td></td><td>LatestSurvey</td><td>LatestSurvey._DisplayName</td></tr>
+<tr><td class="rownum">122</td><td></td><td></td><td></td><td></td><td>Primary Photo</td><td>PrimaryImage._DisplayName</td></tr>
+<tr><td class="rownum">123</td><td></td><td></td><td></td><td></td><td>Leases</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">124</td><td></td><td></td><td></td><td></td><td>Expenses</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">125</td><td></td><td></td><td></td><td></td><td>Sales</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">126</td><td></td><td></td><td></td><td></td><td>Surveys</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">127</td><td></td><td></td><td></td><td></td><td>Files</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">128</td><td></td><td></td><td></td><td></td><td>Units</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">129</td><td></td><td></td><td></td><td></td><td>Buildings</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">130</td><td></td><td></td><td></td><td></td><td>Streets</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">131</td><td></td><td></td><td></td><td></td><td>Parcels</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">132</td><td></td><td></td><td></td><td></td><td>LinkedContacts</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">133</td><td></td><td></td><td></td><td></td><td>Images</td><td>_DisplayName</td></tr>
+<tr><td class="rownum">134</td><td></td><td></td><td></td><td></td><td>CustomFields</td><td>_DisplayName</td></tr>
+</table></div>
+<div class="panel" id="p5">
+<table>
+<tr><th class="rownum">1</th><th>Rule ID</th><th>Rule Set ID</th><th>Rule Group</th><th>Rule Role</th><th>Logic Type</th><th>Rule Type</th><th>Valta Field Name</th><th>Operator</th><th>Dropdown Value</th><th></th><th>Valta Field Name</th><th>Result Value</th><th>Text ID</th><th>Priority</th></tr>
+<tr><td class="rownum">2</td><td>R001</td><td>100-Interest</td><td>Interest Rule</td><td>Condition + Output</td><td>And</td><td>Set Value</td><td>PropertyType</td><td>=</td><td>Multifamily</td><td></td><td>InterestAppraised</td><td>Fee Simple </td><td>None</td></tr>
+<tr><td class="rownum">3</td><td>R002</td><td>100-Interest</td><td>Interest Rule</td><td>Condition + Output</td><td>And</td><td>Set Value</td><td></td><td>=</td><td>Self-Storage</td><td></td><td></td><td>Fee Simple </td><td>None</td></tr>
+<tr><td class="rownum">4</td><td>R003</td><td>100-Interest</td><td>Interest Rule</td><td>Condition + Output</td><td>And</td><td>Set Value</td><td></td><td>=</td><td>Retail</td><td></td><td></td><td>Leased Fee Interest</td><td>None</td></tr>
+<tr><td class="rownum">5</td><td>R004</td><td>100-Interest</td><td>Interest Rule</td><td>Condition + Output</td><td>And</td><td>Set Value</td><td></td><td>=</td><td>Industrial</td><td></td><td></td><td>Leased Fee Interest</td><td>None</td></tr>
+<tr><td class="rownum">6</td><td>R005</td><td>100-Interest</td><td>Interest Rule</td><td>Condition + Output</td><td>And</td><td>Set Value</td><td></td><td>=</td><td>Office</td><td></td><td></td><td>Leased Fee Interest</td><td>None</td></tr>
+<tr><td class="rownum">7</td><td>R006</td><td>100-Interest</td><td>Interest Rule</td><td>Condition + Output</td><td>And</td><td>Set Value</td><td></td><td>=</td><td>Land</td><td></td><td></td><td>Fee Simple </td><td>None</td></tr>
+<tr><td class="rownum">8</td><td>R007</td><td>100-Interest</td><td>Interest Rule</td><td>Condition + Output</td><td>And</td><td>Set Value</td><td></td><td>=</td><td>Hotel</td><td></td><td></td><td>Fee Simple </td><td>None</td></tr>
+<tr><td class="rownum">9</td><td>R008</td><td>100-Interest</td><td>Interest Rule</td><td>Condition + Output</td><td>And</td><td>Set Value</td><td></td><td>=</td><td>Seniors </td><td></td><td></td><td>Fee Simple </td><td>None</td></tr>
+<tr><td class="rownum">10</td><td>R009</td><td>100-Interest</td><td>Interest Rule</td><td>Condition + Output</td><td>And</td><td>Set Value</td><td>Tenancy</td><td>=</td><td>Owner-Occupied</td><td></td><td>InterestAppraised</td><td>Fee Simple </td></tr>
+<tr><td class="rownum">11</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>=</td><td>Multi-Tenant</td><td></td><td></td><td>Leased Fee Interest</td></tr>
+<tr><td class="rownum">12</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>=</td><td>Partial Owner Occupied</td><td></td><td></td><td>Leasehold Estate</td></tr>
+<tr><td class="rownum">13</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>=</td><td>Single-Tenant</td><td></td><td></td><td>Going Concern</td></tr>
+<tr><td class="rownum">14</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>=</td><td>Unkown</td></tr>
+<tr><td class="rownum">15</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>=</td><td>Vacant</td></tr>
+<tr><td class="rownum">16</td><td>R010</td><td>100-Interest</td><td>Interest Rule</td><td>Condition + Output</td><td>And</td><td>Set Value</td><td>PropertySubtype</td><td>=</td><td>Mixed Use</td><td></td><td>InterestAppraised</td><td>Fee Simple &amp; Lease Fee </td><td>None</td></tr>
+<tr><td class="rownum">17</td><td>R011</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td>StatusofImprovements</td><td>=</td><td>Improved - Completed</td><td></td><td>ValueScenarios</td><td>As Stabilized</td><td>None</td></tr>
+<tr><td class="rownum">18</td><td>R012</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td></td><td>=</td><td>Improved - Renovated</td><td></td><td></td><td>As Stabilized</td><td>None</td></tr>
+<tr><td class="rownum">19</td><td>R013</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td></td><td>=</td><td>Improved - Under Renovation</td><td></td><td></td><td>As Is</td><td>None</td></tr>
+<tr><td class="rownum">20</td><td>R014</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td></td><td>=</td><td>Improved - Under Renovation</td><td></td><td></td><td>As If Complete &amp; Stabilized</td><td>None</td></tr>
+<tr><td class="rownum">21</td><td>R015</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td></td><td>=</td><td>Improved - Proposed Renovation</td><td></td><td></td><td>As Is</td><td>None</td></tr>
+<tr><td class="rownum">22</td><td>R016</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td></td><td>=</td><td>Improved - Proposed Renovation</td><td></td><td></td><td>As If Complete &amp; Stabilized</td><td>None</td></tr>
+<tr><td class="rownum">23</td><td>R017</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td></td><td>=</td><td>Proposed - Vacant Land</td><td></td><td></td><td>As Is Vacant Land</td><td>None</td></tr>
+<tr><td class="rownum">24</td><td>R018</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td></td><td>=</td><td>Proposed - Vacant Land</td><td></td><td></td><td>As If Complete &amp; Stabilized </td><td>None</td></tr>
+<tr><td class="rownum">25</td><td>R019</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td></td><td>=</td><td>Proposed - Improved Land (Demolition Required) </td><td></td><td></td><td>As If Vacant</td><td>None</td></tr>
+<tr><td class="rownum">26</td><td>R020</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td></td><td>=</td><td>Proposed - Improved Land (Demolition Required) </td><td></td><td></td><td>As If Complete &amp; Stabilized</td><td>None</td></tr>
+<tr><td class="rownum">27</td><td>R021</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td></td><td>=</td><td>Proposed - Under Construction</td><td></td><td></td><td>As If Vacant</td><td>None</td></tr>
+<tr><td class="rownum">28</td><td>R022</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td></td><td>=</td><td>Proposed - Under Construction</td><td></td><td></td><td>As If Complete &amp; Stabilized</td><td>None</td></tr>
+<tr><td class="rownum">29</td><td>R023</td><td>200-Scenario</td><td>Scenario Rule</td><td>Condition + Output</td><td>And</td><td>Set Value</td><td>AuthorizedUse</td><td>=</td><td>Insurance</td><td></td><td></td><td>Insurable Replacement Cost</td><td>None</td></tr>
+<tr><td class="rownum">30</td><td>R024</td><td>300-Approach</td><td>Approach Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td>ValueScenarios</td><td>=</td><td>As Stabilized</td><td></td><td>ApproachestoValue</td><td>Direct Comparison  </td><td>None</td></tr>
+<tr><td class="rownum">31</td><td>R025</td><td>300-Approach</td><td>Approach Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td>ValueScenarios</td><td>=</td><td>As Stabilized</td><td></td><td>ApproachestoValue</td><td>Income Approach</td><td>None</td></tr>
+<tr><td class="rownum">32</td><td>R026</td><td>300-Approach</td><td>Approach Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td>ValueScenarios</td><td>=</td><td>As Is Vacant Land</td><td></td><td>ApproachestoValue</td><td>Land Direct Comparison Approach</td><td>None</td></tr>
+<tr><td class="rownum">33</td><td>R027</td><td>300-Approach</td><td>Approach Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td>ValueScenarios</td><td>=</td><td>As If Vacant Land</td><td></td><td>ApproachestoValue</td><td>Land Direct Comparison Approach</td><td>None</td></tr>
+<tr><td class="rownum">34</td><td>R028</td><td>300-Approach</td><td>Approach Rule</td><td>Condition + Output</td><td>And</td><td>Add Value</td><td>ValueScenarios</td><td>=</td><td>As If Complete &amp; Stabilized</td><td></td><td>ApproachestoValue</td><td>Cost Approach</td><td>None</td></tr>
+<tr><td class="rownum">35</td><td></td></tr>
+<tr><td class="rownum">36</td><td></td></tr>
+<tr><td class="rownum">37</td><td></td></tr>
+<tr><td class="rownum">38</td><td></td></tr>
+<tr><td class="rownum">39</td><td></td><td></td><td>EA / HC Logic</td><td></td><td></td><td>Insert EA/HC Text</td><td>ValueScenarios</td><td></td><td>As If Vacant Land</td><td></td><td>EA Text </td><td>N/A</td><td>The As If Vacant market land value is developed under the hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date. This condition is contrary to the known physical state of the property and is made for the purpose of estimating the underlying land value.</td></tr>
+<tr><td class="rownum">40</td><td></td><td></td><td>EA / HC Logic</td><td></td><td></td><td>Insert EA/HC Text</td><td>ValueScenarios</td><td></td><td>As Stabilized</td><td></td><td>EA Text </td><td>N/A</td></tr>
+</table></div>
+<script>
+function show(n){document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===n));
+document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===n));}
+</script></body></html>

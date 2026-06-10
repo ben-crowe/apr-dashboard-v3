@@ -7,7 +7,9 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { FileText, RefreshCw, Loader2 } from "lucide-react";
 import { SectionGroup, CompactField, TwoColumnFields } from "./ValcreStyles";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { sendToValcre } from "@/utils/webhooks";
+import { STATUS_TO_SCENARIOS, deriveValueScenarios, resolveNarrative } from "@/utils/loe/loeCascade";
 // import { generateLOEandSend } from "@/utils/loe/generateLOE";
 
 const LoeQuoteSectionIndependent: React.FC<SectionProps> = ({
@@ -21,21 +23,33 @@ const LoeQuoteSectionIndependent: React.FC<SectionProps> = ({
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
-    
+
     if (!onUpdateDetails) return;
-    
+
     let processedValue: string | number | boolean = value;
-    
+
     if (type === 'number' && value !== '') {
       processedValue = parseFloat(value);
     } else if (type === 'checkbox') {
       processedValue = (e.target as HTMLInputElement).checked;
     }
-    
+
     onUpdateDetails({
       [name]: processedValue
     });
   };
+
+  // Value-based change (Shadcn Select) — same write path as handleChange.
+  const handleSelect = (value: string, name: string) => {
+    if (onUpdateDetails) onUpdateDetails({ [name]: value });
+  };
+
+  // Value-Scenario cascade preview — read-only mirror of what generateLOE prints in §10.
+  // Imports the SSOT (loeCascade.ts); never re-implements the rules here.
+  const jd = jobDetails as any;
+  const authorizedUse = jd.authorizedUse || (job as any)?.intendedUse || '';
+  const derivedScenarios = deriveValueScenarios(jd.statusOfImprovements, authorizedUse);
+  const isInsuranceOverride = (authorizedUse || '').toLowerCase().includes('insurance');
 
   const fillTestData = () => {
     if (!onUpdateDetails) return;
@@ -260,6 +274,57 @@ const LoeQuoteSectionIndependent: React.FC<SectionProps> = ({
                 readOnly
               />
             </CompactField>
+          </SectionGroup>
+
+          {/* Value-Scenario Cascade — pick Status of Improvements, preview what the LOE §10 will print */}
+          <SectionGroup title="Value Scenarios (LOE §10)">
+            <CompactField label="Status of Improvements">
+              <Select
+                value={jd.statusOfImprovements || ''}
+                onValueChange={(value) => handleSelect(value, 'statusOfImprovements')}
+              >
+                <SelectTrigger className="h-7 text-sm">
+                  <SelectValue placeholder="Select status..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(STATUS_TO_SCENARIOS).map((status) => (
+                    <SelectItem key={status} value={status}>{status}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </CompactField>
+
+            {/* Read-only preview of the derived scenarios + their narrative lines */}
+            <div className="mt-2 rounded-md border bg-muted/40 p-3">
+              {isInsuranceOverride && (
+                <p className="mb-2 text-xs font-medium text-amber-700">
+                  Authorized Use = Insurance overrides the cascade → single scenario.
+                </p>
+              )}
+              {derivedScenarios.length === 0 ? (
+                <p className="text-xs text-muted-foreground">
+                  Pick a Status of Improvements to see the value scenarios the LOE will generate.
+                </p>
+              ) : (
+                <ol className="space-y-1.5">
+                  {derivedScenarios.map((scenario, i) => {
+                    const narrative = resolveNarrative(scenario);
+                    return (
+                      <li key={scenario} className="text-sm">
+                        <span className="font-medium">{i + 1}. {scenario}</span>
+                        {narrative ? (
+                          <span className="block pl-4 text-xs text-muted-foreground">{narrative}</span>
+                        ) : (
+                          <span className="block pl-4 text-xs italic text-muted-foreground">
+                            narrative pending from client
+                          </span>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ol>
+              )}
+            </div>
           </SectionGroup>
 
           {/* Valcre Integration Status */}

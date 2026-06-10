@@ -81,36 +81,6 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
   };
 
   // Fill test data for Section 3B
-  const fillTestData = () => {
-    if (!onUpdateDetails) return;
-    
-    const testData = {
-      // Property Site
-      zoningClassification: 'Commercial Mixed-Use',
-      zoneAbbreviation: 'C-2',
-      landUseDesignation: 'Mixed Residential/Commercial',
-      floodZone: 'Zone X',
-      utilities: 'All public utilities available',
-      // Parcels Summary
-      parcelNumber: '123-456-789',
-      grossBuildingAreaSf: 185908,
-      netRentableAreaSf: 145394,
-      yearBuilt: 2027,
-      usableLandSf: 15000,
-      grossLandSf: 18500,
-      // Assessments & Taxes
-      assessmentYear: '2024',
-      landAssessmentValue: 250000,
-      improvedAssessmentValue: 600000,
-      totalAssessmentValue: 850000,
-      assessedValue: 850000,
-      taxes: 12500
-    };
-    
-    onUpdateDetails(testData);
-    toast.success('Test data populated for Section 3B!');
-  };
-
 
   return <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full border border-gray-400 dark:border-white/20 rounded-lg dark:bg-black/15">
       <CollapsibleTrigger className={`${sectionTriggerStyle} flex items-center justify-between w-full px-4 py-3 bg-gray-200 dark:bg-gray-800 rounded-t-lg`}>
@@ -120,21 +90,7 @@ const PropertyInfoSection: React.FC<SectionProps> = ({
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent className={sectionContentStyle}>
-          {/* Action Buttons Row - Compact */}
-          <div className="mb-4 flex justify-end gap-2">
-            {/* Test Data Button */}
-            <button
-              type="button"
-              onClick={fillTestData}
-              className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-              title="Fill test data for development"
-            >
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-              <span>Test Data</span>
-            </button>
-          </div>
+          {/* Inner 'Test Data' button removed — global top 'Fill Test Data' (JobDetailAccordion) fills all sections. */}
 
           {/* Appraisal Assignment Section — VALTA fields */}
           <SectionGroup title="Appraisal Assignment">

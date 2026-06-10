@@ -168,64 +168,6 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   };
 
 
-  const fillClientTestData = () => {
-    if (!onUpdateJob) return;
-
-    const firstNames = ['Michael', 'Sarah', 'David', 'Jennifer', 'Robert'];
-    const lastNames = ['Johnson', 'Williams', 'Brown', 'Garcia', 'Martinez'];
-    const titles = ['VP of Real Estate', 'Property Manager', 'CEO', 'Director of Operations'];
-    const companies = ['Premier Properties Inc', 'Urban Development Group', 'Skyline Investments'];
-    const propertyNames = ['Downtown Plaza', 'Riverside Complex', 'Tech Center Building'];
-    const streets = ['17th Avenue SW', '8th Avenue SW', 'Centre Street', 'Macleod Trail'];
-    const propertyTypes = ['Multi-Family', 'Office', 'Retail', 'Industrial', 'Building'];
-    const intendedUses = ['First Mortgage Financing', 'Financial Reporting', 'Insurance', 'Acquisition-Disposition'];
-    const conditions = ['Excellent', 'Very Good', 'Good', 'Fair'];
-
-    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
-    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
-    const title = titles[Math.floor(Math.random() * titles.length)];
-    const company = companies[Math.floor(Math.random() * companies.length)];
-    const propertyName = propertyNames[Math.floor(Math.random() * propertyNames.length)];
-    const street = streets[Math.floor(Math.random() * streets.length)];
-    const propertyType = propertyTypes[Math.floor(Math.random() * propertyTypes.length)];
-    const intendedUse = intendedUses[Math.floor(Math.random() * intendedUses.length)];
-    const condition = conditions[Math.floor(Math.random() * conditions.length)];
-
-    const buildingNum = Math.floor(Math.random() * 400) + 100;
-    const suiteNum = Math.floor(Math.random() * 500) + 100;
-    const propNum = Math.floor(Math.random() * 400) + 100;
-    const sqft = (Math.floor(Math.random() * 20) + 5) * 1000;
-
-    const testData = {
-      clientFirstName: firstName,
-      clientLastName: lastName,
-      clientTitle: title,
-      clientOrganization: company,
-      clientAddress: `${buildingNum} ${street} Suite ${suiteNum}, Calgary, AB T2P 3H7`,
-      clientPhone: `403-555-0100`,
-      clientEmail: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@${company.toLowerCase().replace(/ /g, '')}.ca`,
-      propertyName: propertyName,
-      propertyAddress: `${propNum} ${street}, Calgary, AB T2R 1M5`,
-      propertyType: propertyType,
-      intendedUse: intendedUse,
-      valuationPremises: 'Market Value',
-      assetCondition: condition,
-      notes: `Property is a ${sqft.toLocaleString()} sq ft ${propertyType} complex. Need appraisal for ${intendedUse}.`,
-      propertyContactFirstName: ['Marcus', 'Lisa', 'Kevin', 'Amanda', 'Derek'][Math.floor(Math.random() * 5)],
-      propertyContactLastName: ['Thompson', 'Chen', 'Park', 'Rivera', 'O\'Brien'][Math.floor(Math.random() * 5)],
-      propertyContactEmail: `property.manager@${propertyName.toLowerCase().replace(/ /g, '')}.ca`,
-      propertyContactPhone: `403-555-${String(Math.floor(Math.random() * 9000) + 1000)}`,
-      files: [
-        { id: 'mock-1', fileName: 'Site_Survey_Map.pdf', filePath: 'mock/site-survey.pdf', fileType: 'application/pdf', fileSize: 2457600 },
-        { id: 'mock-2', fileName: 'Environmental_Assessment_Report.pdf', filePath: 'mock/env-assessment.pdf', fileType: 'application/pdf', fileSize: 1843200 },
-        { id: 'mock-3', fileName: 'Property_Photos.zip', filePath: 'mock/photos.zip', fileType: 'application/zip', fileSize: 15728640 },
-      ]
-    };
-
-    onUpdateJob(testData);
-    toast.success(`Test data populated: ${firstName} ${lastName} - ${propertyName}`);
-  };
-
   // Handle file upload
   const handleFileUpload = async (files: FileList) => {
     if (!files || files.length === 0) return;
@@ -392,16 +334,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent className={sectionContentStyle}>
-        {/* Action Buttons */}
-        <div className="flex justify-end items-center mb-6">
-          <button
-            type="button"
-            onClick={fillClientTestData}
-            className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1"
-          >
-            Test Data
-          </button>
-        </div>
+        {/* Inner 'Test Data' button removed — the global top 'Fill Test Data' button (JobDetailAccordion) fills all sections. */}
 
         {/* Client Information Group */}
         <SectionGroup title="Client Information">

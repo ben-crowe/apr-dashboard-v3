@@ -54,6 +54,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         propertyType: 'Industrial',
         intendedUse: 'Financial Reporting',
         assetCondition: 'Good',
+        valuationPremises: 'Market Value', // Client-section field reads from `job` (display); also kept on jobDetails below for the Valcre sync
         propertyContactFirstName: 'Daniel',
         propertyContactLastName: 'Okafor',
         propertyContactEmail: 'd.okafor@riversidecc.ca',

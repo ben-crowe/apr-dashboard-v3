@@ -103,7 +103,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     // cmhcFinancing, desktopReport, purpose, leadAppraiser, approachesToValue.
     // authorizedUse REMOVED 2026-06-05 (field-hygiene dedup) — Authorized Use now lives once on Client Intake
     // as `intendedUse`, which already syncs to native Job.IntendedUses. See DASHBOARD-TO-VALCRE-LOCATION-MAP.
-    'analysisLevel', 'transactionStatus', 'zoningStatus', 'valueScenarios'];
+    'analysisLevel', 'transactionStatus', 'zoningStatus', 'valueScenarios',
+    // Fix 4: currentUse → CF12410 (currentUseImprovements), proposedUse → CF12411 (proposedUseImprovements)
+    'currentUse', 'proposedUse'];
 
   // Fields that ALSO push to the ClickUp card (additive to Valcre sync — Ben-confirmed 2026-06-04).
   // These are EXACTLY the Stage-2 LOE-QUOTE fields that update-clickup-task renders into the card
@@ -242,7 +244,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         appraisalFee: jobDetails?.appraisalFee || 0,
         retainerAmount: jobDetails?.retainerAmount || '',
         scopeOfWork: jobDetails?.scopeOfWork || '',
-        valuationPremises: jobDetails?.valuationPremises || '',
+        // Fix 2: fall back to job.valuationPremises (ClientSubmissionSection stores to job_submissions)
+        // so a freshly-created job gets RequestedValues set even if only filled via Client section.
+        valuationPremises: jobDetails?.valuationPremises || (job as any)?.valuationPremises || '',
         propertyRightsAppraised: jobDetails?.propertyRightsAppraised || '',
         reportType: jobDetails?.reportType || '',
         deliveryDate: jobDetails?.deliveryDate || '',
@@ -576,7 +580,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           if (fieldName === 'analysisLevel') syncData.analysisLevel = value;         // → Job.AnalysisLevel (ANALYSIS_LEVEL_MAP)
           if (fieldName === 'transactionStatus') syncData.transactionStatus = value; // → Custom 12424 (server resolves NAME→ID via VALTA_CUSTOM_FIELD_IDS in api/valcre.ts; live-verified 2026-06-10)
           if (fieldName === 'zoningStatus') syncData.zoningStatus = value;           // → Custom 12425 (server resolves NAME→ID via VALTA_CUSTOM_FIELD_IDS in api/valcre.ts; live-verified 2026-06-10)
-          if (fieldName === 'valueScenarios') syncData.valueScenarios = value;       // → lands in ValuationPremise 11563/11564 (live-verified). NOTE: registry maps ValueScenarios→12414 but 12414 is unused; flagged to co-arch 2026-06-10
+          if (fieldName === 'valueScenarios') syncData.valueScenarios = value;       // → CF12414 via setValtaCustomFields (Fix 1: legacy CF11563/11564 path removed)
+          // Fix 4: dashboard sends currentUse/proposedUse; server expects currentUseImprovements/proposedUseImprovements
+          // (those are the VALTA_CUSTOM_FIELD_IDS keys that setValtaCustomFields iterates).
+          // Option labels match CF12410/12411 exactly — no label reconciliation needed.
+          if (fieldName === 'currentUse') syncData.currentUseImprovements = value;   // → CF12410 (currentUseImprovements)
+          if (fieldName === 'proposedUse') syncData.proposedUseImprovements = value; // → CF12411 (proposedUseImprovements)
 
           console.log(`Syncing ${fieldName} to Valcre:`, syncData);
           const result = await sendToValcre(syncData);

@@ -763,44 +763,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             );
           }
 
-          // Value Scenarios → CF11563 (Premise-1) / CF11564 (Premise-2). MANUAL mapping, verified values
-          // only (AUTO-SYNC-WIRING-MAP 2026-06-04 — no cascade built). Each write is readback-verified.
-          if (jobData.valueScenarios) {
-            const scenarios = String(jobData.valueScenarios)
-              .split(",")
-              .map((s: string) => s.trim())
-              .filter(Boolean);
-            for (const sc of scenarios) {
-              const m = VALUE_SCENARIO_PREMISE_MAP[sc];
-              if (!m) {
-                console.log(`  Value Scenario "${sc}": no verified Valcre option — skipped (needs QA verification)`);
-                continue;
-              }
-              try {
-                const resp = await fetch(
-                  `https://api-core.valcre.com/api/v1/CustomFields/UpdateSelectFieldValue`,
-                  {
-                    method: "POST",
-                    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-                    body: JSON.stringify({ EntityId: jobData.jobId, CustomFieldId: m.fieldId, AvailableValueId: m.valueId }),
-                  },
-                );
-                const vals = await getJobCustomFieldValues(token, jobData.jobId);
-                if ((resp.ok || resp.status === 204) && customFieldHasValue(vals, m.fieldId, m.valueId)) {
-                  console.log(`  Value Scenario "${sc}" → CF${m.fieldId}=${m.valueId}: VERIFIED (readback)`);
-                  customFieldResults.success++;
-                } else {
-                  console.error(`  Value Scenario "${sc}" → CF${m.fieldId}: HTTP ${resp.status} but READBACK FAILED`);
-                  customFieldResults.errors.push(`valueScenario ${sc}: readback failed`);
-                  customFieldResults.failed++;
-                }
-              } catch (e: any) {
-                console.error(`  Value Scenario "${sc}" ERROR: ${e.message}`);
-                customFieldResults.errors.push(`valueScenario ${sc}: ${e.message}`);
-                customFieldResults.failed++;
-              }
-            }
-          }
+          // Fix 1: valueScenarios now routes ONLY through setValtaCustomFields → CF12414 (MultiOption,
+          // holds all 10 scenario options). The legacy CF11563/11564 (Premise-1/Premise-2) dual-write was
+          // removed because it only mapped 3 of the 10 scenario names — any scenario NOT in
+          // VALUE_SCENARIO_PREMISE_MAP (e.g. "As If Complete & Stabilized") caused a failed-write that
+          // bubbled up as "Failed to sync valueScenarios to Valcre" even though CF12414 held the data
+          // correctly (readback-verified on job 784140, 2026-06-10). valueScenarios lands in CF12414
+          // via the setValtaCustomFields() call above (the `valueScenarios` key in VALTA_CUSTOM_FIELD_IDS).
 
           return res
             .status(200)
@@ -884,12 +853,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Get CLIENT contact info from jobData (sent by webhook)
     // Parse client name from ClientName field
-    const clientFullName = jobData.ClientName || "Client Contact";
+    // Fix 3: accept both PascalCase (webhook) and camelCase (dashboard update) field names
+    const clientFullName = jobData.ClientName || jobData.clientName || "Client Contact";
     const [clientFirstName, ...clientLastParts] = clientFullName.split(" ");
     const clientLastName = clientLastParts.join(" ") || "Contact";
 
-    const clientEmail = jobData.ClientEmail || "";
-    const contactCompany = jobData.ClientCompany || "Direct Client";
+    const clientEmail = jobData.ClientEmail || jobData.clientEmail || "";
+    const contactCompany = jobData.ClientCompany || jobData.clientOrganization || "Direct Client";
 
     // Parse the property address for property creation
     const addressParts = parseAddress(
@@ -898,8 +868,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Parse the client address separately for contact creation
     // Falls back to property address if no client address provided
-    const clientAddressParts = jobData.ClientAddress
-      ? parseAddress(jobData.ClientAddress)
+    // Fix 3b: accept camelCase clientAddress (dashboard) in addition to PascalCase ClientAddress (webhook).
+    // Without this fallback, clientAddressParts fell back to addressParts (property address) when the
+    // dashboard sent clientAddress — so the contact received the PROPERTY address instead of the client's.
+    const clientAddressParts = (jobData.ClientAddress || jobData.clientAddress)
+      ? parseAddress(jobData.ClientAddress || jobData.clientAddress)
       : addressParts;
 
     // Try to find existing contact by email (if provided)
@@ -945,9 +918,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         AddressCity: clientAddressParts.city,
         AddressState: clientAddressParts.province || "",
         AddressPostalCode: clientAddressParts.postalCode || "",
-        PhoneNumber: jobData.ClientPhone || "",
+        PhoneNumber: jobData.ClientPhone || jobData.clientPhone || "",
         Email: clientEmail,
-        Title: jobData.ClientTitle || "Client",
+        // Fix 3a: accept camelCase clientTitle (dashboard update). Without this fallback the Title
+        // was always "Client" when the dashboard sent clientTitle (camelCase).
+        Title: jobData.ClientTitle || jobData.clientTitle || "Client",
         OwnerId: 7095, // Chris's correct OwnerId
       };
 

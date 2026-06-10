@@ -101,6 +101,82 @@ export function deriveValueScenarios(statusOfImprovements?: string, authorizedUs
   return STATUS_TO_SCENARIOS[(statusOfImprovements || '').trim()] || [];
 }
 
+// ─── TASK 1: Approaches to Value cascade ──────────────────────────────────────
+
+// Status of Improvements → Approaches to Value. Ported from CASCADE-LOGIC-SPEC-AND-WIRING.md Group 2.
+export const STATUS_TO_APPROACHES: Record<string, string[]> = {
+  'Improved - Completed': ['Direct Comparison', 'Income'],
+  'Improved - Renovated': ['Direct Comparison', 'Income'],
+  'Improved - Under Renovation': ['Direct Comparison', 'Income', 'Cost'],
+  'Improved - Proposed Renovation': ['Direct Comparison', 'Income', 'Cost'],
+  'Proposed - Vacant Land': ['Land Direct Comparison', 'Cost'],
+  'Proposed - Improved Land (Demolition Required)': ['Land Direct Comparison', 'Cost'],
+  'Proposed - Under Construction': ['Land Direct Comparison', 'Cost'],
+};
+
+// Override: Authorized Use = Insurance REPLACES the status-derived approaches with this single one.
+export const INSURANCE_OVERRIDE_APPROACHES = 'Cost Approach';
+
+/**
+ * Derive the Approaches to Value string array.
+ * Insurance override (Authorized Use) wins; else Status of Improvements lookup.
+ */
+export function deriveApproaches(statusOfImprovements?: string, authorizedUse?: string): string[] {
+  if ((authorizedUse || '').toLowerCase().includes('insurance')) return [INSURANCE_OVERRIDE_APPROACHES];
+  return STATUS_TO_APPROACHES[(statusOfImprovements || '').trim()] || [];
+}
+
+// ─── TASK 2: Property Rights cascade ──────────────────────────────────────────
+//
+// Ported VERBATIM from public/field-registry-v6.html L951-953 (INT_PT / INT_SUB / INT_TN maps).
+// Override order: Property Type (base) → Subtype (Mixed Use overrides) → Tenancy (beats both;
+// Unknown / Vacant are not keys, so they produce no change).
+//
+// [FLAG → Chris / QA]: The live dashboard Property Type option strings (e.g. "Multi-Family",
+// "Senior", "Hospitality") may NOT match these Valcre-aligned keys ("Multifamily", "Seniors",
+// "Hotel"). Mismatched types yield no base result and the field stays "Pending". Reconciliation
+// of the live option labels to these canonical keys is a Chris / QA item — do NOT invent
+// mappings here.
+
+const PT_TO_RIGHTS: Record<string, string> = {
+  'Multifamily': 'Fee Simple',
+  'Self-Storage': 'Fee Simple',
+  'Retail': 'Leased Fee Interest',
+  'Industrial': 'Leased Fee Interest',
+  'Office': 'Leased Fee Interest',
+  'Land': 'Fee Simple',
+  'Hotel': 'Fee Simple',
+  'Seniors': 'Fee Simple',
+};
+
+const SUB_TO_RIGHTS: Record<string, string> = {
+  'Mixed Use': 'Fee Simple & Leased Fee',
+};
+
+const TN_TO_RIGHTS: Record<string, string> = {
+  'Multi-Tenant': 'Leased Fee Interest',
+  'Owner Occupied': 'Fee Simple',
+  'Partial Owner Occupied': 'Leasehold Estate',
+  'Single-Tenant': 'Going Concern',
+};
+
+/**
+ * Derive the Property Rights Appraised value.
+ * Override order: Property Type (base) → Subtype (Mixed Use) → Tenancy (beats both).
+ * "Unknown" and "Vacant" tenancy are simply not keys in TN_TO_RIGHTS → no change (correct).
+ *
+ * [FLAG → Chris / QA]: Live dashboard Property Type option strings (e.g. "Multi-Family",
+ * "Senior", "Hospitality") may NOT match PT_TO_RIGHTS keys ("Multifamily", "Seniors", "Hotel").
+ * Mismatched types yield '' (field stays "Pending"). Do NOT invent mappings — reconcile with Chris.
+ */
+export function derivePropertyRights(propertyType?: string, propertySubtype?: string, tenancy?: string): string {
+  let result = PT_TO_RIGHTS[(propertyType || '').trim()] || '';
+  if (SUB_TO_RIGHTS[(propertySubtype || '').trim()]) result = SUB_TO_RIGHTS[(propertySubtype || '').trim()];
+  const tn = (tenancy || '').trim();
+  if (TN_TO_RIGHTS[tn]) result = TN_TO_RIGHTS[tn]; // Unknown/Vacant simply aren't keys -> no change
+  return result;
+}
+
 /**
  * Resolve the §10 RIGHT-column summary for a scenario ([EA/HCSummary_n]).
  * Exact scenario-name match. Returns null when no library entry (or text) exists.

@@ -31,7 +31,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { deriveValueScenarios, STATUS_TO_SCENARIOS } from "@/utils/loe/loeCascade";
+import { deriveValueScenarios, STATUS_TO_SCENARIOS, deriveApproaches, derivePropertyRights } from "@/utils/loe/loeCascade";
 
 // Derived field read-only style (Value Scenarios, Property Rights, Approaches to Value)
 const derivedFieldStyle: React.CSSProperties = {
@@ -627,6 +627,33 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     autoSaveField('valueScenarios', joined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusOfImprovements, authorizedUse]);
+
+  // Part D — Cascade Effect: re-derive approachesToValue whenever statusOfImprovements or authorizedUse changes.
+  // NOTE: approachesToValue is intentionally NOT in VALCRE_SYNC_FIELDS (do-not-sync-to-Valcre list).
+  // autoSaveField persists it to Supabase; generateLOE.ts reads jobDetails.approachesToValue directly.
+  useEffect(() => {
+    if (!onUpdateDetails) return;
+    const approaches = deriveApproaches(statusOfImprovements, authorizedUse);
+    const joinedAppr = approaches.join(', ');
+    if (joinedAppr === ((jobDetails as any).approachesToValue || '')) return; // loop guard
+    onUpdateDetails({ approachesToValue: joinedAppr } as any);
+    autoSaveField('approachesToValue', joinedAppr);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusOfImprovements, authorizedUse]);
+
+  // Part E — Cascade Effect: re-derive propertyRightsAppraised whenever Property Type, Subtype, or Tenancy changes.
+  // propertyRightsAppraised IS in VALCRE_SYNC_FIELDS — autoSaveField triggers Valcre sync via the existing if-chain.
+  const primaryPropertyType = (job?.propertyType || '').split(',')[0].trim();
+  useEffect(() => {
+    if (!onUpdateDetails) return;
+    const rights = derivePropertyRights(primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy);
+    if (!rights) return; // no match -> leave field as-is ("Pending"); don't blank an existing value
+    if (rights === (jobDetails.propertyRightsAppraised || '')) return; // loop guard
+    onUpdateDetails({ propertyRightsAppraised: rights });
+    autoSaveField('propertyRightsAppraised', rights);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy]);
+
 
   // Cleanup timers on unmount
   useEffect(() => {

@@ -51,6 +51,12 @@ const LoeQuoteSectionIndependent: React.FC<SectionProps> = ({
   const derivedScenarios = deriveValueScenarios(jd.statusOfImprovements, authorizedUse);
   const isInsuranceOverride = (authorizedUse || '').toLowerCase().includes('insurance');
 
+  // Verbatim from Chris's registry "Dropdown Lists" tab (ListCurrentUseImprovements /
+  // ListProposedUseImprovements). Registry shows NO Valcre target → dashboard-only fields
+  // (save to job record; the LOE reads them from there). Do NOT add a Valcre mapping.
+  const CURRENT_USE_OPTIONS = ['Vacant Land', 'Single Family', 'Multifamily', 'Retail', 'Industrial', 'Office'];
+  const PROPOSED_USE_OPTIONS = ['Single Family', 'Multifamily', 'Mixed Use', 'Retail', 'Industrial', 'Office'];
+
   const fillTestData = () => {
     if (!onUpdateDetails) return;
     
@@ -325,6 +331,42 @@ const LoeQuoteSectionIndependent: React.FC<SectionProps> = ({
                 </ol>
               )}
             </div>
+          </SectionGroup>
+
+          {/* Property Use — registry dropdowns (dashboard-only; feed the LOE from the job record) */}
+          <SectionGroup title="Property Use">
+            <TwoColumnFields>
+              <CompactField label="Current Use">
+                <Select
+                  value={jd.currentUse || ''}
+                  onValueChange={(value) => handleSelect(value, 'currentUse')}
+                >
+                  <SelectTrigger className="h-7 text-sm">
+                    <SelectValue placeholder="Select..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {CURRENT_USE_OPTIONS.map((opt) => (
+                      <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </CompactField>
+              <CompactField label="Proposed Use">
+                <Select
+                  value={jd.proposedUse || ''}
+                  onValueChange={(value) => handleSelect(value, 'proposedUse')}
+                >
+                  <SelectTrigger className="h-7 text-sm">
+                    <SelectValue placeholder="Select..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PROPOSED_USE_OPTIONS.map((opt) => (
+                      <SelectItem key={opt} value={opt}>{opt}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </CompactField>
+            </TwoColumnFields>
           </SectionGroup>
 
           {/* Valcre Integration Status */}

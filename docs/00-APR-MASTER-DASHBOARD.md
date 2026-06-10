@@ -179,6 +179,7 @@ The source of truth for what fields exist, their options, the cascade rules, and
 | Doc | What it is |
 |---|---|
 | [**★ Cascade Logic — Full Spec + Wiring Pass-Off**](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/CASCADE-LOGIC-SPEC-AND-WIRING.md) | **CANONICAL.** Every cascade rule (verified vs code) + built-vs-planned status per group + the wiring tasks. Read this to wire the cascade. |
+| [**★ ClickUp Card Sync — CANONICAL**](~/Development/APR-Dashboard-v3/docs/Features/04-Job%20%26%20Client%20Mgt./CLICKUP-SYNC-CANONICAL.md) | **CANONICAL.** The custom-fields Job-Hub model — which fields sync, why custom fields (not the dead markdown card), the edge fns, readback-verify, test-vs-prod list. Supersedes the stale rich-card docs. |
 | [Cascade Field Options → LOE](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/loe07-build/CASCADE-TO-LOE-CONTRACT-NOTES.md) | Contract-side view — how cascade outputs land in the LOE sections/pages + the §10 narrative-library detail. |
 | [LOE-07 Build-Ready Spec (§10 wiring)](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/loe07-build/LOE-07-RENDER-TWEAKS-2026-06-04.md) | The build-ready execution companion — exact code anchors + values. |
 | [Conditional Field Logic — Complete Reference](~/Development/APR-Dashboard-v3/docs/valta%20share/CONDITIONAL-FIELD-LOGIC.md) | The authoritative cascade rule set. |

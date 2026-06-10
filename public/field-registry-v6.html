@@ -224,6 +224,9 @@
   .fi-table th:hover { color: var(--text); }
   .fi-table th.sorted { color: var(--text); }
   .fi-table td { padding: 5px 10px; border-bottom: 1px solid var(--border); color: var(--text-2); vertical-align: top; white-space: nowrap; }
+  /* fold-out table grows to its content + scrolls horizontally, like the registry table — never squished to screen width */
+  #pa-sec-map .fi-table { width: max-content; min-width: 100%; }
+  #pa-sec-map .fi-table td > div { white-space: nowrap; }
   .fi-table tr:hover td { background: var(--hover); }
   .fi-table .fn { font-weight: 600; color: var(--text); font-family: 'SF Mono','Consolas', monospace; font-size: 11px; }
   .fi-group-hdr td { background: transparent; font-weight: 500; color: var(--text-3); font-size: 10px; padding: 12px 10px 2px; border-bottom: none; letter-spacing: .03em; }
@@ -1611,7 +1614,7 @@ function toggleFmOptions(idx, event) {
     }).join('');
     var expTr = document.createElement('tr');
     expTr.id = 'fmopt-' + idx;
-    expTr.innerHTML = '<td colspan="4"></td><td colspan="2" style="background:var(--bg-card);padding:6px 12px 8px 12px;font-size:11px;">'
+    expTr.innerHTML = '<td colspan="6" style="background:var(--bg-card);padding:6px 16px 8px 20px;font-size:11px;">'
       + optRows + '</td>';
     fieldRow.insertAdjacentElement('afterend', expTr);
     if (trigger) trigger.innerHTML = opts.length + ' options &#9652;';
@@ -1685,7 +1688,7 @@ function toggleFmRoutes(idx, event) {
 
   var expTr = document.createElement('tr');
   expTr.id = 'fmroutes-' + idx;
-  expTr.innerHTML = '<td colspan="4"></td><td colspan="2" style="background:var(--bg-card);padding:6px 12px 8px 12px;font-size:11px;line-height:1.8;">'
+  expTr.innerHTML = '<td colspan="6" style="background:var(--bg-card);padding:6px 16px 8px 20px;font-size:11px;line-height:1.8;">'
     + lines.join('') + '</td>';
 
   /* Insert after fmrow, but after any existing fmopt row too */

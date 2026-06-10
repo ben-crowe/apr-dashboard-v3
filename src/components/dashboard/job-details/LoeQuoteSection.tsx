@@ -31,6 +31,23 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { deriveValueScenarios, STATUS_TO_SCENARIOS } from "@/utils/loe/loeCascade";
+
+// Derived field read-only style (Value Scenarios, Property Rights, Approaches to Value)
+const derivedFieldStyle: React.CSSProperties = {
+  fontStyle: 'italic',
+  color: '#5b6b8c',
+  background: 'rgba(91,107,140,0.08)',
+  borderRadius: '4px',
+  border: 'none',
+  padding: '2px 6px',
+  fontSize: '0.8rem',
+  minHeight: '28px',
+  display: 'flex',
+  alignItems: 'center',
+  userSelect: 'none' as const,
+  pointerEvents: 'none' as const,
+};
 
 const LoeQuoteSection: React.FC<SectionProps> = ({
   job,
@@ -52,12 +69,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // Section-level save state for visual feedback
   const [isSectionSaving, setIsSectionSaving] = useState(false);
   const [fieldStates, setFieldStates] = useState<Record<string, FieldSyncStatus>>({});
-  
+
   // Local state for currency fields during editing (prevents controlled input issues)
   const [editingAppraisalFee, setEditingAppraisalFee] = useState<string | null>(null);
   const [editingRetainerAmount, setEditingRetainerAmount] = useState<string | null>(null);
   const [editingPaymentAmount, setEditingPaymentAmount] = useState<string | null>(null);
   const [commentsExpanded, setCommentsExpanded] = useState(false);
+  // RULE 2 — Value Scenarios locks ONLY after a cascade pick (default: editable multi-select).
+  const [cascadePicked, setCascadePicked] = useState(false);
 
   // LOE template versions (PRD-B version selector) — default newest active
   const [loeTemplates, setLoeTemplates] = useState<Array<{ id: string; name: string; version: number }>>([]);
@@ -366,7 +385,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           try {
             // Get current user for OAuth token lookup
             const { data: { user }, error: authError } = await supabase.auth.getUser();
-            
+
             if (authError) {
               console.warn('⚠️ User authentication check failed:', authError.message);
               console.warn('⚠️ Edge Function will use fallback token');
@@ -379,7 +398,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             const { data: updateResult, error: updateError } = await supabase.functions.invoke(
               'update-clickup-task',
               {
-                body: { 
+                body: {
                   jobId: job.id,
                   userId: user?.id  // OAuth lookup, falls back to env var if null
                 }
@@ -488,11 +507,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           deliveryTime: 'delivery_time',
           clientDocuments: 'client_documents',
           previouslyAppraised: 'previously_appraised',
+          statusOfImprovements: 'status_of_improvements',
         };
-        
+
         // Use mapped field name if exists, otherwise use original
         const dbFieldName = fieldMappings[fieldName] || fieldName;
-        
+
         // Always save to Supabase first
         const { error: supabaseError } = await supabase
           .from('job_loe_details')
@@ -593,6 +613,22 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     }, 500); // 500ms debounce
   }, [job, jobDetails, onUpdateDetails, VALCRE_SYNC_FIELDS, pushCardUpdate]);
 
+  // Part C — Cascade Effect: re-derive valueScenarios whenever statusOfImprovements or authorizedUse changes.
+  // Writes result to jobDetails.valueScenarios via onUpdateDetails + persists via autoSaveField.
+  const statusOfImprovements = (jobDetails as any).statusOfImprovements as string | undefined;
+  const authorizedUse = (jobDetails as any).authorizedUse as string | undefined;
+
+  useEffect(() => {
+    if (!onUpdateDetails) return;
+    const scenarios = deriveValueScenarios(statusOfImprovements, authorizedUse);
+    const joined = scenarios.join(', ');
+    // Loop guard: only write + sync when value has actually changed
+    if (joined === (jobDetails.valueScenarios || '')) return;
+    onUpdateDetails({ valueScenarios: joined });
+    autoSaveField('valueScenarios', joined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusOfImprovements, authorizedUse]);
+
   // Cleanup timers on unmount
   useEffect(() => {
     return () => {
@@ -619,7 +655,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!onUpdateDetails) return;
     const { name, value } = e.target;
-    
+
     // Store raw input value in local state during editing
     if (name === 'appraisalFee') {
       setEditingAppraisalFee(value);
@@ -635,7 +671,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
     // CRITICAL: retainerAmount stored as string in DB, appraisalFee/paymentAmount as number
     const processedValue = name === 'retainerAmount' ? numericValue.toString() : numericValue;
-    
+
     onUpdateDetails({
       [name]: processedValue
     });
@@ -643,7 +679,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
   const handleCurrencyBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    
+
     // Clear editing state on blur - field will show formatted value again
     if (name === 'appraisalFee') {
       setEditingAppraisalFee(null);
@@ -674,12 +710,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       const cleanValue = value.replace(/[^0-9.]/g, '');
       processedValue = cleanValue ? parseFloat(cleanValue) : 0;
     }
-    
+
     // Update UI immediately
     onUpdateDetails({
       [name]: processedValue
     });
-    
+
     // Trigger auto-save for fields that should auto-save
     if (name === 'appraiserComments') {
       autoSaveField(name, processedValue);
@@ -694,7 +730,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       const cleanValue = value.replace(/[^0-9.]/g, '');
       processedValue = cleanValue ? parseFloat(cleanValue) : 0;
     }
-    
+
     autoSaveField(name, processedValue);
   };
 
@@ -828,60 +864,56 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     }
   };
 
-  // Fill test data for appraiser fields - MIX of static and dynamic
-  const fillTestData = () => {
+  // Part B — Cascade Options picker handler
+  // Picks a version, sets statusOfImprovements + per-version overrides.
+  // The cascade useEffect above then derives and writes valueScenarios.
+  const handleCascadeVersion = (version: string) => {
     if (!onUpdateDetails) return;
+    setCascadePicked(true); // lock Value Scenarios display to derived result
 
-    // STATIC VALUES for critical business fields
-    const STATIC_FEE = 6000;  // Fixed fee amount for testing
-    const STATIC_RETAINER = STATIC_FEE * 0.20;  // 20% retainer
-
-    // STATIC delivery date - always 14 days from today
-    const deliveryDate = new Date();
-    deliveryDate.setDate(deliveryDate.getDate() + 14);
-    const staticDeliveryDate = deliveryDate.toISOString().split('T')[0];
-
-    // DYNAMIC values for variety (but not business-critical) - must match dropdown values exactly
-    const propertyRights = ['Fee Simple Interest', 'Leasehold Interest', 'Leased Fee Interest', 'Partial Interest'];
-    const valuationTypes = ['Market Value As Is', 'Market Value As Is And Stabilized', 'Market Value As Complete And Stabilized', 'Market Value Land As Is'];
-    const scopes = ['All Applicable', 'Direct Comparison Approach', 'Income Approach', 'Cost Approach', 'Best Two Approaches'];
-    const reportTypes = ['Appraisal Report', 'Restricted Appraisal Report', 'Desk Review', 'Evaluation', 'Consultation'];
-
-    // Helper to get random element
-    const getRandom = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
-
-    // Dynamic internal comments (just for variety in testing)
-    const appraisers = ['John Smith', 'Jane Williams', 'Bob Johnson', 'Sarah Davis'];
-    const internalNotes = [
-      'Rush appraisal - priority client',
-      'Standard timeline - coordinate site visit',
-      'Follow up with property manager for access',
-      'Client prefers digital delivery'
-    ];
-
-    // Test data with MIX of static (business-critical) and dynamic (for variety)
-    const testData = {
-      // job_number intentionally NOT included - this comes from Valcre API response
-      propertyRightsAppraised: getRandom(propertyRights),  // Dynamic for variety
-      valuationPremises: getRandom(valuationTypes),  // Dynamic for variety
-      deliveryDate: staticDeliveryDate,  // STATIC - always 14 days out
-      scopeOfWork: getRandom(scopes),  // Dynamic for variety
-      reportType: 'Appraisal Report',  // Always Appraisal Report per Ben
-      paymentTerms: 'On LOE Signature',  // STATIC payment terms - matches dropdown value
-      appraisalFee: STATIC_FEE,  // STATIC fee - $3500
-      retainerAmount: STATIC_RETAINER.toFixed(2),  // STATIC retainer - $350
-      deliveryTimeframe: '14 days',  // STATIC timeframe
-      appraiserComments: `${getRandom(appraisers)} assigned. ${getRandom(internalNotes)}`,
-      deliveryComments: 'Draft report due 7 days prior to final delivery. Client to confirm inspection access 48 hours in advance.',
-      paymentComments: 'Retainer due on LOE signature. Balance due on report delivery. Late payments subject to 2% monthly interest.',
-      paymentAmount: STATIC_FEE.toFixed(2),
-      retainerPaidDate: (() => { const d = new Date(); d.setDate(d.getDate() + 1); return d.toISOString().split('T')[0]; })(),
-      paymentPaidDate: (() => { const d = new Date(deliveryDate); d.setDate(d.getDate() + 5); return d.toISOString().split('T')[0]; })()
-    };
-
-    onUpdateDetails(testData);
-    toast.success(`Test data populated! Fee: $${STATIC_FEE} (fixed), Delivery: ${staticDeliveryDate} (14 days)`);
+    if (version === 'V1') {
+      onUpdateDetails({
+        statusOfImprovements: 'Improved - Completed',
+      } as any);
+      autoSaveField('statusOfImprovements', 'Improved - Completed');
+    } else if (version === 'V2') {
+      onUpdateDetails({
+        statusOfImprovements: 'Improved - Under Renovation',
+      } as any);
+      autoSaveField('statusOfImprovements', 'Improved - Under Renovation');
+    } else if (version === 'V3') {
+      onUpdateDetails({
+        statusOfImprovements: 'Proposed - Improved Land (Demolition Required)',
+        propertyRightsAppraised: 'Fee Simple Interest',
+        scopeOfWork: 'Direct Comparison Approach',
+        assetCondition: 'Poor',
+      } as any);
+      autoSaveField('statusOfImprovements', 'Proposed - Improved Land (Demolition Required)');
+      autoSaveField('propertyRightsAppraised', 'Fee Simple Interest');
+      autoSaveField('scopeOfWork', 'Direct Comparison Approach');
+    } else if (version === 'V4') {
+      onUpdateDetails({
+        statusOfImprovements: 'Improved - Completed',
+        authorizedUse: 'Insurance',
+        valuationPremises: 'Insurable Value',
+        scopeOfWork: 'Cost Approach',
+        propertyRightsAppraised: 'Fee Simple Interest',
+      } as any);
+      autoSaveField('statusOfImprovements', 'Improved - Completed');
+      autoSaveField('authorizedUse', 'Insurance');
+      autoSaveField('valuationPremises', 'Insurable Value');
+      autoSaveField('scopeOfWork', 'Cost Approach');
+      autoSaveField('propertyRightsAppraised', 'Fee Simple Interest');
+    }
   };
+
+  // ClickUp task URL derived from job fields
+  const clickupTaskUrl = job.clickup_task_url || (job as any).clickupTaskUrl || '';
+  const clickupTaskId = job.clickup_task_id || (job as any).clickupTaskId || '';
+
+  // RULE 1 — test tools self-disable on a real (live-synced) Valcre job.
+  const isLiveValcreJob = isValcreJobNumber(jobDetails?.jobNumber) && !!(jobDetails as any)?.valcreJobId;
+  const liveJobToast = () => toast.info('Not available — this job is connected to a live Valcre job.');
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full border border-gray-400 dark:border-white/20 rounded-lg dark:bg-black/15">
@@ -897,7 +929,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent className={sectionContentStyle}>
-        {/* Action Buttons Row */}
+        {/* Action Buttons Row — Part F: View in Valcre · View in ClickUp · Preview & Send LOE */}
         <div className="mb-6 flex justify-between">
           <div className="flex gap-2">
             {/* Create/View Valcre Job Button - Transforms after creation */}
@@ -978,11 +1010,40 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           <li key={idx}>{field}</li>
                         ))}
                       </ul>
-                      <p className="text-xs mt-2 text-gray-400">Use "Test Data" buttons to quickly fill fields for testing</p>
+                      <p className="text-xs mt-2 text-gray-400">Use "Fill Test Data" button above to quickly populate fields</p>
                     </div>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
+            )}
+
+            {/* View in ClickUp — Part F: middle button, links to existing task or opens ClickUpAction */}
+            {(clickupTaskUrl || clickupTaskId) ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => window.open(clickupTaskUrl || `https://app.clickup.com/t/${clickupTaskId}`, '_blank')}
+                className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground hover:bg-muted dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-foreground transition-colors text-sm font-medium"
+              >
+                <ExternalLink className="h-4 w-4 mr-1" />
+                View in ClickUp
+              </Button>
+            ) : (
+              /* No task yet — render the create-task widget inline */
+              <ClickUpAction
+                job={job}
+                jobDetails={jobDetails}
+                onTaskCreated={async () => {
+                  console.log('🔄 [ClickUp] Task created - refetching job data...');
+                  if (refetchJobData) {
+                    await refetchJobData();
+                    console.log('✅ [ClickUp] Job data refetched - button state should update');
+                  } else {
+                    console.warn('⚠️ [ClickUp] No refetchJobData function available');
+                  }
+                }}
+              />
             )}
 
             {/* E-Signature Button - Only visible when REAL Valcre job exists (has valcre_job_id) */}
@@ -1068,19 +1129,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               </Button>
             )}
           </div>
-
-          {/* Test Data Link - Discrete for dev/testing */}
-          <button
-            type="button"
-            onClick={fillTestData}
-            className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
-            title="Fill test data for development"
-          >
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-            <span>Test Data</span>
-          </button>
         </div>
 
         {/* 1. Job Info */}
@@ -1094,36 +1142,22 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[160px]"
               />
             </CompactField>
-            <CompactField label="ClickUp Task">
-              <ClickUpAction
-                job={job}
-                jobDetails={jobDetails}
-                onTaskCreated={async () => {
-                  console.log('🔄 [ClickUp] Task created - refetching job data...');
-                  if (refetchJobData) {
-                    await refetchJobData();
-                    console.log('✅ [ClickUp] Job data refetched - button state should update');
-                  } else {
-                    console.warn('⚠️ [ClickUp] No refetchJobData function available');
-                  }
-                }}
-              />
-            </CompactField>
+            {/* ClickUp Task field removed — Part F. Task URL/ID is in the "View in ClickUp" button above. */}
             {/* LOE Version picker removed 2026-06-09 — single active template (LOE-07-1); the
                 send path defaults to the newest active template, so "Preview & Send LOE" goes
                 straight in on the one template. (Document-not-version-picker direction —
                 see JOB-DOCUMENT-PICKER-DECISION-TREE.md.) */}
             <CompactField label="Job Status">
-              {/* No v6 DROPDOWN_OPTIONS list for Job Status — text input (options not invented) */}
-              <Input
-                type="text"
-                name="jobStatus"
-                value={jobDetails.jobStatus || ''}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="Status..."
-                className="h-7 text-sm max-w-[160px]"
-              />
+              {/* Auto-set by workflow stage (triggers not wired yet) — locked display, NOT editable,
+                  NOT a dropdown. Same locked-pending family as Property Rights/Approaches. jobStatus
+                  is job-record-only (not in any sync array), so locking the display is wiring-safe. */}
+              <div
+                style={derivedFieldStyle}
+                className="max-w-[240px]"
+                title="Auto-set by job stage; updates as the job progresses (New/Received → LOE Sent → Signed → In Progress). Triggers not connected yet."
+              >
+                {jobDetails.jobStatus || <span style={{ opacity: 0.4 }}>—</span>}
+              </div>
             </CompactField>
           </TwoColumnFields>
         </SectionGroup>
@@ -1146,55 +1180,112 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </TwoColumnFields>
         </SectionGroup>
 
-        {/* 3. Value Scenarios & Approaches */}
-        <SectionGroup title="Value Scenarios & Approaches">
+        {/* 3. Cascade Options — Part B */}
+        <SectionGroup title="Cascade Options">
           <TwoColumnFields>
-            <CompactField label="Value Scenarios" status={fieldStates['valueScenarios']}>
-              <MultiSelect
-                value={jobDetails.valueScenarios || ''}
-                onChange={values => handleMultiSelectChange(values, 'valueScenarios')}
-                options={[
-                  'As If Complete & Stabilized',
-                  'As If Complete & Stabilized - Renovated',
-                  'As If Complete - Rezoned',
-                  'As If Complete - Serviced',
-                  'As If Complete - Subdivided',
-                  'As If Vacant Land',
-                  'As Is Vacant Land',
-                  'As Stabilized',
-                  'As-Is',
-                  'Insurable Replacement Cost',
-                ]}
-              />
+            <CompactField label="Status of Improvements">
+              {/* Anchor for top Fill button scroll-to */}
+              <span id="cascade-options-anchor" />
+              <Select
+                value={(jobDetails as any).statusOfImprovements || ''}
+                onValueChange={value => {
+                  if (!onUpdateDetails) return;
+                  setCascadePicked(true); // a status drives the cascade → lock Value Scenarios to derived result
+                  onUpdateDetails({ statusOfImprovements: value } as any);
+                  autoSaveField('statusOfImprovements', value);
+                }}
+              >
+                <SelectTrigger className="h-7 text-sm max-w-[220px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.keys(STATUS_TO_SCENARIOS).map(key => (
+                    <SelectItem key={key} value={key}>{key}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </CompactField>
-            <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']}>
-              <MultiSelect
-                value={jobDetails.propertyRightsAppraised || ''}
-                onChange={values => handleMultiSelectChange(values, 'propertyRightsAppraised')}
-                options={[
-                  'ASC 805',
-                  'Condominium Ownership',
-                  'Cost Segregation Study',
-                  'Fee Simple Interest',
-                  'Going Concern',
-                  'Leased Fee Interest',
-                  'Leasehold Interest',
-                  'Market Study',
-                  'Other',
-                  'Partial Interest',
-                  'Partial Interest Taking',
-                  'Rent Restricted',
-                  'Total Taking',
-                ]}
-              />
-            </CompactField>
-            <CompactField label="Approaches to Value">
-              <Input type="text" name="approachesToValue" value={(jobDetails as any).approachesToValue || ''} onChange={handleChange} onBlur={handleBlur} placeholder="Approaches..." className="h-7 text-sm max-w-[160px]" />
+            <CompactField label="Cascade Version">
+              {isLiveValcreJob ? (
+                <div
+                  onClick={liveJobToast}
+                  className="h-7 text-sm max-w-[220px] flex items-center border-0 border-b border-b-gray-400 dark:border-b-white/20 opacity-50 cursor-not-allowed text-muted-foreground"
+                  title="Not available — this job is connected to a live Valcre job."
+                >
+                  Pick version...
+                </div>
+              ) : (
+                <Select value="" onValueChange={handleCascadeVersion}>
+                  <SelectTrigger className="h-7 text-sm max-w-[220px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
+                    <SelectValue placeholder="Pick version..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="V1">V1 — Completed</SelectItem>
+                    <SelectItem value="V2">V2 — Under Renovation</SelectItem>
+                    <SelectItem value="V3">V3 — Improved Land / Demolition</SelectItem>
+                    <SelectItem value="V4">V4 — Insurance</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
             </CompactField>
           </TwoColumnFields>
         </SectionGroup>
 
-        {/* 4. Scope of Work */}
+        {/* 4. Value Scenarios & Approaches */}
+        <SectionGroup title="Value Scenarios & Approaches">
+          <TwoColumnFields>
+            <CompactField label="Value Scenarios" status={fieldStates['valueScenarios']}>
+              {/* RULE 2: editable multi-select by DEFAULT. Locks to the derived read-only
+                  display ONLY after a cascade scenario has been picked (cascadePicked). */}
+              {cascadePicked ? (
+                <div style={derivedFieldStyle} className="max-w-[240px]">
+                  {jobDetails.valueScenarios || <span style={{ opacity: 0.4 }}>Derived from cascade</span>}
+                </div>
+              ) : (
+                <MultiSelect
+                  value={jobDetails.valueScenarios || ''}
+                  onChange={values => handleMultiSelectChange(values, 'valueScenarios')}
+                  options={[
+                    'As If Complete & Stabilized',
+                    'As If Complete & Stabilized - Renovated',
+                    'As If Complete - Rezoned',
+                    'As If Complete - Serviced',
+                    'As If Complete - Subdivided',
+                    'As If Vacant Land',
+                    'As Is Vacant Land',
+                    'As Stabilized',
+                    'As-Is',
+                    'Insurable Replacement Cost',
+                  ]}
+                />
+              )}
+            </CompactField>
+            <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']}>
+              {/* CORRECTION: locked result display (no live compute yet). Always read-only; tooltip
+                  signals it auto-fills from triggers TBD. Still binds to jobDetails key. */}
+              <div
+                style={derivedFieldStyle}
+                className="max-w-[240px]"
+                title="Pending — auto-fills from triggers (to be determined)"
+              >
+                {jobDetails.propertyRightsAppraised || <span style={{ opacity: 0.4 }}>—</span>}
+              </div>
+            </CompactField>
+            <CompactField label="Approaches to Value">
+              {/* CORRECTION: locked result display (no live compute yet). Always read-only; tooltip
+                  signals it auto-fills from triggers TBD. Still binds to jobDetails key. */}
+              <div
+                style={derivedFieldStyle}
+                className="max-w-[240px]"
+                title="Pending — auto-fills from triggers (to be determined)"
+              >
+                {(jobDetails as any).approachesToValue || <span style={{ opacity: 0.4 }}>—</span>}
+              </div>
+            </CompactField>
+          </TwoColumnFields>
+        </SectionGroup>
+
+        {/* 5. Scope of Work */}
         <SectionGroup title="Scope of Work">
           <TwoColumnFields>
             <CompactField label="Scope of Work">
@@ -1223,7 +1314,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </TwoColumnFields>
         </SectionGroup>
 
-        {/* 5. Report Type & Assignment Type */}
+        {/* 6. Report Type & Assignment Type */}
         <SectionGroup title="Report Type & Assignment Type">
           <TwoColumnFields>
             <CompactField label="Report Type">
@@ -1295,7 +1386,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </TwoColumnFields>
         </SectionGroup>
 
-        {/* 6. Fees & Terms */}
+        {/* 7. Fees & Terms */}
         <SectionGroup title="Fees & Terms">
           <TwoColumnFields>
             <CompactField label="Appraisal Fee">
@@ -1336,7 +1427,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </TwoColumnFields>
         </SectionGroup>
 
-        {/* 7. Payment */}
+        {/* 8. Payment */}
         <SectionGroup title="Payment">
           <TwoColumnFields>
             <CompactField label="Retainer Paid">
@@ -1383,7 +1474,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </TwoColumnFields>
         </SectionGroup>
 
-        {/* 8. Effective Date & Report Date */}
+        {/* 9. Effective Date & Report Date */}
         <SectionGroup title="Effective Date & Report Date">
           <TwoColumnFields>
             <CompactField label="Effective Date" status={fieldStates['effectiveDate']}>
@@ -1422,7 +1513,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </TwoColumnFields>
         </SectionGroup>
 
-        {/* 9. Property Use & Other */}
+        {/* 10. Property Use & Other */}
         <SectionGroup title="Property Use & Other">
           <TwoColumnFields>
             <CompactField label="Current Use">
@@ -1472,7 +1563,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </TwoColumnFields>
         </SectionGroup>
 
-        {/* 10. Property Information Request */}
+        {/* 11. Property Information Request */}
         <SectionGroup title="Property Information Request">
           <TwoColumnFields>
             <CompactField label="Client Documents">
@@ -1509,7 +1600,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </TwoColumnFields>
         </SectionGroup>
 
-        {/* 11. Other */}
+        {/* 12. Other */}
         {/* Authorized Use removed 2026-06-05 (field-hygiene dedup) — it now lives ONCE on the Client
             Intake form (its origin), wired there to native Job.IntendedUses. The §10 LOE cascade reads
             job.intendedUse as the canonical source. See DASHBOARD-TO-VALCRE-LOCATION-MAP "Field-hygiene cleanup spec". */}

@@ -1030,7 +1030,8 @@ const PROPOSED_BASE = {
   propContactFirst:'Daniel', propContactLast:'Okafor',
   propContactEmail:'d.okafor@riversidecc.ca', propContactPhone:'(403) 555-0199',
   clientComments:'Refinancing appraisal; site access via property manager Daniel Okafor.',
-  jobNumber:'VAL261142', jobStatus:'In Progress',
+  // jobNumber + jobStatus come FROM Valcre (only exist once a job is created/linked) —
+  // intentionally NOT filled by test data; they hold their no-job state ('Waiting…'/'Pending…').
   purpose:'Financial Reporting',
   propertySubtype:'Mixed Use', tenancy:'Multi-Tenant',
   propertyRights:'Leased Fee Interest', valueTimeframe:'Current',

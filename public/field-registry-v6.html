@@ -921,8 +921,17 @@
 </div></div></div>
 
 <div class="sec" id="pa-sec-map" onclick="toggleSec(this,event)"><div class="sec-title"><span class="sec-chevron">▾</span><span class="sec-num">&#9638;</span>Field Mapping &amp; Wiring</div><div class="sec-body">
+  <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin:0 0 12px;font-size:11px;color:var(--text-2);" onclick="event.stopPropagation();">
+    <span style="font-weight:600;color:var(--text-3);">Each cell — where the field flows + how live:</span>
+    <span><span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;background:#16a34a;"></span>Live — verified</span>
+    <span><span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;background:#d97706;"></span>Partial — some values don't land</span>
+    <span><span style="display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;border:1.5px solid var(--text-3);background:transparent;"></span>Not wired</span>
+    <span style="color:var(--text-3);">&mdash; not a destination</span>
+    <span style="color:var(--text-3);">&dagger; LOE = token-mapped (lower confidence)</span>
+  </div>
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px;" onclick="event.stopPropagation();">
     <button class="btn btn-outline fm-filter active" data-filter="all" onclick="filterFieldMap('all',this)">All</button>
+    <button class="btn btn-outline fm-filter" data-filter="intake" onclick="filterFieldMap('intake',this)">Client Intake</button>
     <button class="btn btn-outline fm-filter" data-filter="wired" onclick="filterFieldMap('wired',this)">Wired</button>
     <button class="btn btn-outline fm-filter" data-filter="notwired" onclick="filterFieldMap('notwired',this)">Not wired</button>
     <button class="btn btn-outline fm-filter" data-filter="valcre" onclick="filterFieldMap('valcre',this)">&#8594; Valcre</button>
@@ -930,7 +939,7 @@
     <button class="btn btn-outline fm-filter" data-filter="loe" onclick="filterFieldMap('loe',this)">&#8594; LOE</button>
   </div>
   <div style="overflow-x:auto;"><table class="fi-table"><thead><tr>
-    <th>Field</th><th>Source</th><th>Control</th><th>Valcre</th><th>ClickUp</th><th>LOE †</th>
+    <th>Field</th><th>Source</th><th>Control</th><th>Intake</th><th>Valcre</th><th>ClickUp</th><th>LOE †</th>
   </tr></thead><tbody id="fmBody"></tbody></table></div>
   <div style="font-size:10px;color:var(--text-3);margin-top:10px;">† LOE column is token-mapped — the value fills the contract, but is not field-by-field readback-verified like Valcre and ClickUp.</div>
 </div></div>
@@ -1362,87 +1371,87 @@ document.addEventListener('click', e => { if (!e.target.closest('.dd')) closeAll
    s ∈ 'live'|'partial'|'not'  (only meaningful when t is non-empty) */
 const DASHBOARD_FIELDMAP = [
  /* ── Section 1 — Client & Property ── */
- {f:'First Name',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.FirstName',s:'live'},clickup:{t:'ClickUp card',s:'live'},loe:{t:'[ClientFirstName]',s:'live'}},
- {f:'Last Name',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.LastName',s:'live'},clickup:{t:'ClickUp card',s:'live'},loe:{t:'[ClientLastName]',s:'live'}},
- {f:'Title',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.Title',s:'partial'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Organization',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.Company',s:'live'},clickup:{t:'ClickUp card',s:'live'},loe:{t:'[CompanyName]',s:'live'}},
- {f:'Phone',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.Phone',s:'live'},clickup:{t:'',s:''},loe:{t:'[Phone]',s:'live'}},
- {f:'Email',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.Email',s:'live'},clickup:{t:'ClickUp card',s:'live'},loe:{t:'[Email]',s:'live'}},
- {f:'Address',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.Address',s:'partial'},clickup:{t:'',s:''},loe:{t:'[OrganizationAddress]',s:'live'}},
- {f:'Property Name',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Property.Name',s:'live'},clickup:{t:'ClickUp card',s:'live'},loe:{t:'[PropertyName]',s:'live'}},
- {f:'Property Type',sec:1,src:'User Input',ctrl:'Select',valcre:{t:'Property.Type',s:'live'},clickup:{t:'ClickUp card',s:'live'},loe:{t:'[PropertyType]',s:'live'}},
- {f:'Property Address',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Property.StreetAddress',s:'live'},clickup:{t:'ClickUp card',s:'live'},loe:{t:'[PropertyAddress]',s:'live'}},
- {f:'Authorized Use',sec:1,src:'User Input',ctrl:'Select',valcre:{t:'Job.IntendedUses',s:'live'},clickup:{t:'ClickUp card',s:'partial'},loe:{t:'[AuthorizedUse]',s:'live'}},
- {f:'Valuation Premises',sec:1,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'[Valuetimeframe]',s:'live'}},
- {f:'Asset Condition',sec:1,src:'User Input',ctrl:'Select',valcre:{t:'Property.Condition',s:'not'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Property Contact',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact (property)',s:'not'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Comments',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Job.Comments',s:'live'},clickup:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'First Name',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.FirstName',s:'live'},clickup:{t:'ClickUp card',s:'live'},intake:{t:'Client form',s:'live'},loe:{t:'[ClientFirstName]',s:'live'}},
+ {f:'Last Name',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.LastName',s:'live'},clickup:{t:'ClickUp card',s:'live'},intake:{t:'Client form',s:'live'},loe:{t:'[ClientLastName]',s:'live'}},
+ {f:'Title',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.Title',s:'partial'},clickup:{t:'',s:''},intake:{t:'Client form',s:'live'},loe:{t:'',s:''}},
+ {f:'Organization',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.Company',s:'live'},clickup:{t:'ClickUp card',s:'live'},intake:{t:'Client form',s:'live'},loe:{t:'[CompanyName]',s:'live'}},
+ {f:'Phone',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.Phone',s:'live'},clickup:{t:'',s:''},intake:{t:'Client form',s:'live'},loe:{t:'[Phone]',s:'live'}},
+ {f:'Email',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.Email',s:'live'},clickup:{t:'ClickUp card',s:'live'},intake:{t:'Client form',s:'live'},loe:{t:'[Email]',s:'live'}},
+ {f:'Address',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact.Address',s:'partial'},clickup:{t:'',s:''},intake:{t:'Client form',s:'live'},loe:{t:'[OrganizationAddress]',s:'live'}},
+ {f:'Property Name',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Property.Name',s:'live'},clickup:{t:'ClickUp card',s:'live'},intake:{t:'Client form',s:'live'},loe:{t:'[PropertyName]',s:'live'}},
+ {f:'Property Type',sec:1,src:'User Input',ctrl:'Select',valcre:{t:'Property.Type',s:'live'},clickup:{t:'ClickUp card',s:'live'},intake:{t:'Client form',s:'live'},loe:{t:'[PropertyType]',s:'live'}},
+ {f:'Property Address',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Property.StreetAddress',s:'live'},clickup:{t:'ClickUp card',s:'live'},intake:{t:'Client form',s:'live'},loe:{t:'[PropertyAddress]',s:'live'}},
+ {f:'Authorized Use',sec:1,src:'User Input',ctrl:'Select',valcre:{t:'Job.IntendedUses',s:'live'},clickup:{t:'ClickUp card',s:'partial'},intake:{t:'Client form',s:'live'},loe:{t:'[AuthorizedUse]',s:'live'}},
+ {f:'Valuation Premises',sec:1,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'Client form',s:'live'},loe:{t:'[Valuetimeframe]',s:'live'}},
+ {f:'Asset Condition',sec:1,src:'User Input',ctrl:'Select',valcre:{t:'Property.Condition',s:'not'},clickup:{t:'',s:''},intake:{t:'Client form',s:'live'},loe:{t:'',s:''}},
+ {f:'Property Contact',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Contact (property)',s:'not'},clickup:{t:'',s:''},intake:{t:'Client form',s:'live'},loe:{t:'',s:''}},
+ {f:'Comments',sec:1,src:'User Input',ctrl:'Text',valcre:{t:'Job.Comments',s:'live'},clickup:{t:'',s:''},intake:{t:'Client form',s:'live'},loe:{t:'',s:''}},
  /* ── Section 2 — LOE Quote ── */
- {f:'Job Number',sec:2,src:'Valcre',ctrl:'Text',valcre:{t:'Job.Number',s:'live'},clickup:{t:'ClickUp card',s:'live'},loe:{t:'[JobNumber]',s:'live'}},
- {f:'Job Status',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'Job.Status',s:'live'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Purpose',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Status of Improvements',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'(cascade)',s:'not'}},
- {f:'Value Scenarios',sec:2,src:'Logic',ctrl:'Derived',valcre:{t:'CF11563/11564 (Valuation Premise 1/2)',s:'partial'},clickup:{t:'',s:''},loe:{t:'[ValueScenarios]',s:'live'}},
- {f:'Property Subtype',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Tenancy',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Property Rights',sec:2,src:'Logic',ctrl:'Multi-select',valcre:{t:'Job.Purposes',s:'live'},clickup:{t:'ClickUp card',s:'live'},loe:{t:'[InterestAppraised]',s:'live'}},
- {f:'Approaches to Value',sec:2,src:'Logic',ctrl:'Derived',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'[ApproachestoValue]',s:'not'}},
- {f:'Value Timeframe',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'[Valuetimeframe]',s:'not'}},
- {f:'Scope of Work',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'Job.Scopes',s:'not'},clickup:{t:'ClickUp card',s:'live'},loe:{t:'',s:''}},
- {f:'Report Type',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'ClickUp card',s:'partial'},loe:{t:'[ReportType]',s:'live'}},
- {f:'Report Format',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'Job.ReportFormat',s:'live'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Assignment Type',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'CF12049',s:'not'},clickup:{t:'',s:''},loe:{t:'[AssignmentType]',s:'not'}},
- {f:'Analysis Level',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'Job.AnalysisLevel',s:'partial'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Appraisal Fee',sec:2,src:'Calculated',ctrl:'Text',valcre:{t:'Job.Fee',s:'live'},clickup:{t:'',s:''},loe:{t:'[Fee]',s:'live'}},
- {f:'Retainer Amount',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'Job.Retainer',s:'live'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Payment Terms',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'Job.Comments (appended)',s:'not'},clickup:{t:'ClickUp card',s:'live'},loe:{t:'',s:''}},
- {f:'Retainer Paid',sec:2,src:'User Input',ctrl:'Date',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Amount Paid',sec:2,src:'Logic',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Paid Date',sec:2,src:'Logic',ctrl:'Date',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Signed Date',sec:2,src:'Logic',ctrl:'Date',valcre:{t:'Job.AwardDate',s:'live'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Effective Date',sec:2,src:'User Input',ctrl:'Date',valcre:{t:'Job.EffectiveDate',s:'live'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Request Date',sec:2,src:'User Input',ctrl:'Date',valcre:{t:'Job.BidDate',s:'live'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Delivery Date',sec:2,src:'User Input',ctrl:'Date',valcre:{t:'Job.DueDate',s:'live'},clickup:{t:'ClickUp card',s:'live'},loe:{t:'',s:''}},
- {f:'Delivery Time (wks)',sec:2,src:'User Input',ctrl:'Number',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'[DeliveryTime]',s:'not'}},
- {f:'Client Documents',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'[ClientDocuments]',s:'not'}},
- {f:'Previously Appraised',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'[PreviouslyAppraised]',s:'not'}},
- {f:'Current Use',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'[CurrentUseImprovements]',s:'partial'}},
- {f:'Proposed Use',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'[ProposedUseImprovements]',s:'partial'}},
- {f:'CMHC Financing',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Transaction Status',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'CF12053',s:'partial'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Zoning Status',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'CF12054',s:'live'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'General 1',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'General 2',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Job Number',sec:2,src:'Valcre',ctrl:'Text',valcre:{t:'Job.Number',s:'live'},clickup:{t:'ClickUp card',s:'live'},intake:{t:'',s:''},loe:{t:'[JobNumber]',s:'live'}},
+ {f:'Job Status',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'Job.Status',s:'live'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Purpose',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Status of Improvements',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'(cascade)',s:'not'}},
+ {f:'Value Scenarios',sec:2,src:'Logic',ctrl:'Derived',valcre:{t:'CF11563/11564 (Valuation Premise 1/2)',s:'partial'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'[ValueScenarios]',s:'live'}},
+ {f:'Property Subtype',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Tenancy',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Property Rights',sec:2,src:'Logic',ctrl:'Multi-select',valcre:{t:'Job.Purposes',s:'live'},clickup:{t:'ClickUp card',s:'live'},intake:{t:'',s:''},loe:{t:'[InterestAppraised]',s:'live'}},
+ {f:'Approaches to Value',sec:2,src:'Logic',ctrl:'Derived',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'[ApproachestoValue]',s:'not'}},
+ {f:'Value Timeframe',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'[Valuetimeframe]',s:'not'}},
+ {f:'Scope of Work',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'Job.Scopes',s:'not'},clickup:{t:'ClickUp card',s:'live'},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Report Type',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'ClickUp card',s:'partial'},intake:{t:'',s:''},loe:{t:'[ReportType]',s:'live'}},
+ {f:'Report Format',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'Job.ReportFormat',s:'live'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Assignment Type',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'CF12049',s:'not'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'[AssignmentType]',s:'not'}},
+ {f:'Analysis Level',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'Job.AnalysisLevel',s:'partial'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Appraisal Fee',sec:2,src:'Calculated',ctrl:'Text',valcre:{t:'Job.Fee',s:'live'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'[Fee]',s:'live'}},
+ {f:'Retainer Amount',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'Job.Retainer',s:'live'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Payment Terms',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'Job.Comments (appended)',s:'not'},clickup:{t:'ClickUp card',s:'live'},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Retainer Paid',sec:2,src:'User Input',ctrl:'Date',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Amount Paid',sec:2,src:'Logic',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Paid Date',sec:2,src:'Logic',ctrl:'Date',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Signed Date',sec:2,src:'Logic',ctrl:'Date',valcre:{t:'Job.AwardDate',s:'live'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Effective Date',sec:2,src:'User Input',ctrl:'Date',valcre:{t:'Job.EffectiveDate',s:'live'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Request Date',sec:2,src:'User Input',ctrl:'Date',valcre:{t:'Job.BidDate',s:'live'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Delivery Date',sec:2,src:'User Input',ctrl:'Date',valcre:{t:'Job.DueDate',s:'live'},clickup:{t:'ClickUp card',s:'live'},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Delivery Time (wks)',sec:2,src:'User Input',ctrl:'Number',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'[DeliveryTime]',s:'not'}},
+ {f:'Client Documents',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'[ClientDocuments]',s:'not'}},
+ {f:'Previously Appraised',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'[PreviouslyAppraised]',s:'not'}},
+ {f:'Current Use',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'[CurrentUseImprovements]',s:'partial'}},
+ {f:'Proposed Use',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'[ProposedUseImprovements]',s:'partial'}},
+ {f:'CMHC Financing',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Transaction Status',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'CF12053',s:'partial'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Zoning Status',sec:2,src:'User Input',ctrl:'Select',valcre:{t:'CF12054',s:'live'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'General 1',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'General 2',sec:2,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
  /* ── Section 3 — Building Information ── */
- {f:'Year Built',sec:3,src:'User Input',ctrl:'Number',valcre:{t:'Property (research)',s:'not'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Building Size (SF)',sec:3,src:'User Input',ctrl:'Number',valcre:{t:'Property (research)',s:'not'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Number of Units',sec:3,src:'User Input',ctrl:'Number',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Parking Spaces',sec:3,src:'User Input',ctrl:'Number',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'State of Improvements',sec:3,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Land Metric',sec:3,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Env. Assessment',sec:3,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Heritage / Conserv.',sec:3,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Description',sec:3,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Year Built',sec:3,src:'User Input',ctrl:'Number',valcre:{t:'Property (research)',s:'not'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Building Size (SF)',sec:3,src:'User Input',ctrl:'Number',valcre:{t:'Property (research)',s:'not'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Number of Units',sec:3,src:'User Input',ctrl:'Number',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Parking Spaces',sec:3,src:'User Input',ctrl:'Number',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'State of Improvements',sec:3,src:'User Input',ctrl:'Select',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Land Metric',sec:3,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Env. Assessment',sec:3,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Heritage / Conserv.',sec:3,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Description',sec:3,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
  /* ── Section 4 — Property Research ── */
- {f:'Zoning',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'Property (research)',s:'not'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Zone Code',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Land Use',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Flood Zone',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'Property (research)',s:'not'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Utilities',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Parcel Number',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'Parcel (research)',s:'not'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Gross Building Area',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Net Rentable Area',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Year Built',sec:4,src:'User Input',ctrl:'Number',valcre:{t:'Property (research)',s:'not'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Buildable Land',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Total Site Area',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Assessed Value',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'Property (research)',s:'not'},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Taxes',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Assessment Year',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Land Value',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Land Split',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Improved Value',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Total Value',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
- {f:'Building Split',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Zoning',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'Property (research)',s:'not'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Zone Code',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Land Use',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Flood Zone',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'Property (research)',s:'not'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Utilities',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Parcel Number',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'Parcel (research)',s:'not'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Gross Building Area',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Net Rentable Area',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Year Built',sec:4,src:'User Input',ctrl:'Number',valcre:{t:'Property (research)',s:'not'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Buildable Land',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Total Site Area',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Assessed Value',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'Property (research)',s:'not'},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Taxes',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Assessment Year',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Land Value',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Land Split',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Improved Value',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Total Value',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
+ {f:'Building Split',sec:4,src:'User Input',ctrl:'Text',valcre:{t:'',s:''},clickup:{t:'',s:''},intake:{t:'',s:''},loe:{t:'',s:''}},
 ];
 
 var FM_SEC_TITLES = {1:'Section 1 — Client &amp; Property',2:'Section 2 — LOE Quote',3:'Section 3 — Building Information',4:'Section 4 — Property Research'};
@@ -1466,7 +1475,7 @@ function renderFieldMap() {
       lastSec = r.sec;
       var hdr = document.createElement('tr');
       hdr.className = 'fm-sec-row';
-      hdr.innerHTML = '<td colspan="6" style="font-weight:600;font-size:11px;color:var(--text-2);padding:14px 0 4px;">' + FM_SEC_TITLES[r.sec] + '</td>';
+      hdr.innerHTML = '<td colspan="7" style="font-weight:600;font-size:11px;color:var(--text-2);padding:14px 0 4px;">' + FM_SEC_TITLES[r.sec] + '</td>';
       tbody.appendChild(hdr);
     }
     var hasLiveDest = (r.valcre.s === 'live') || (r.clickup.s === 'live') || (r.loe.s === 'live');
@@ -1481,11 +1490,13 @@ function renderFieldMap() {
     tr.dataset.valcre   = r.valcre.t ? '1' : '';
     tr.dataset.clickup  = r.clickup.t ? '1' : '';
     tr.dataset.loe      = r.loe.t ? '1' : '';
+    tr.dataset.intake   = r.intake.t ? '1' : '';
     tr.dataset.haslive  = hasLiveDest ? '1' : '';
     tr.dataset.hasany   = hasAnyDest ? '1' : '';
     tr.innerHTML = '<td class="fn">' + r.f + '</td>'
       + '<td>' + r.src + '</td>'
       + '<td>' + r.ctrl + '</td>'
+      + '<td>' + _fmDot(r.intake.t, r.intake.s) + '</td>'
       + '<td>' + valcreCell + '</td>'
       + '<td>' + clickupCell + '</td>'
       + '<td>' + loeCell + '</td>';
@@ -1538,6 +1549,7 @@ function filterFieldMap(mode, btn) {
   var allRows = Array.from(tbody.querySelectorAll('tr:not(.fm-sec-row)'));
 
   function isMatch(tr) {
+    if (mode === 'intake')    return tr.dataset.intake === '1';
     if (mode === 'valcre')    return tr.dataset.valcre === '1';
     if (mode === 'clickup')   return tr.dataset.clickup === '1';
     if (mode === 'loe')       return tr.dataset.loe === '1';

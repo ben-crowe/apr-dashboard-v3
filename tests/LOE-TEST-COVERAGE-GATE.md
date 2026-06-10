@@ -68,6 +68,22 @@ Schedule A slipped, 2026-06-10). Run the LOE against this gate every time; recor
 
 ---
 
+## Delivery — share the rendered LOE as a CLICKABLE PDF (not a screenshot)
+
+The LOE renders to a real **PDF** — that IS the client-facing artifact, so deliver it as a PDF, not a
+screenshot or a tldr board. Seeing the actual PDF is the whole value (it's what the client sees).
+
+- **Save the rendered PDF** to an allowed path (under `~/Development/...`, e.g.
+  `tests/LOE-v1.pdf`). NOT `/tmp` (the viewer can't reach it).
+- **Share it as a clickable link in chat** per Ben's method — the [`/km-open`](~/.claude/skills/km-open/SKILL.md)
+  skill: default = print the `~/`-absolute path on its own bare line (no backticks, short enough not to
+  wrap). Ben clicks → it opens in his KM viewer and he skims the real letter. Only POST to a viewer
+  panel if Ben says "open it in a tab."
+- **Do NOT** default to screenshots or a tldr canvas for a PDF deliverable — a screenshot is a flat
+  image of one page; the clickable PDF lets Ben page through the whole letter as the client would.
+- For a multi-version run, share all the version PDFs as separate clickable lines, labeled (Version 1
+  — Completed, etc.).
+
 ## Per-run record
 
 Each LOE test logs PASS/FAIL per item (A1–E11) in a dated grade doc, e.g.

@@ -1360,27 +1360,26 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         <SectionGroup title="Scope of Work">
           <TwoColumnFields>
             <CompactField label="Scope of Work">
-              <Select value={jobDetails.scopeOfWork || ''} onValueChange={value => handleSelectChange(value, 'scopeOfWork')}>
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="All Applicable">All Applicable</SelectItem>
-                  <SelectItem value="Best One Approach">Best One Approach</SelectItem>
-                  <SelectItem value="Best Two Approaches">Best Two Approaches</SelectItem>
-                  <SelectItem value="Cost Approach">Cost Approach</SelectItem>
-                  <SelectItem value="Direct Comparison Approach">Direct Comparison Approach</SelectItem>
-                  <SelectItem value="Discounted Cash Flow">Discounted Cash Flow</SelectItem>
-                  <SelectItem value="Feasibility Study">Feasibility Study</SelectItem>
-                  <SelectItem value="Income Approach">Income Approach</SelectItem>
-                  <SelectItem value="Land Value">Land Value</SelectItem>
-                  <SelectItem value="Litigation">Litigation</SelectItem>
-                  <SelectItem value="Market Research">Market Research</SelectItem>
-                  <SelectItem value="Market Study">Market Study</SelectItem>
-                  <SelectItem value="Net Rent Review">Net Rent Review</SelectItem>
-                  <SelectItem value="Update">Update</SelectItem>
-                </SelectContent>
-              </Select>
+              <MultiSelect
+                value={(jobDetails as any).scopeOfWork || ''}
+                onChange={values => handleMultiSelectChange(values, 'scopeOfWork')}
+                options={[
+                  'All Applicable',
+                  'Best One Approach',
+                  'Best Two Approaches',
+                  'Cost Approach',
+                  'Direct Comparison Approach',
+                  'Discounted Cash Flow',
+                  'Feasibility Study',
+                  'Income Approach',
+                  'Land Value',
+                  'Litigation',
+                  'Market Research',
+                  'Market Study',
+                  'Net Rent Review',
+                  'Update',
+                ]}
+              />
             </CompactField>
           </TwoColumnFields>
         </SectionGroup>

@@ -543,18 +543,28 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           }
         }
 
-        // Scope of Work → ScopeOfWork field (Nov 13, 2025 - Added)
+        // Scope of Work → ScopeOfWork field (Nov 13, 2025 - Added; multi-select Jun 2026)
         if (jobData.scopeOfWork || jobData.ScopeOfWork) {
           const rawValue = jobData.scopeOfWork || jobData.ScopeOfWork;
-          const converted = SCOPE_OF_WORK_MAP[rawValue];
-          if (converted) {
-            updateData.Scopes = converted;
+          const mappedScopes = rawValue
+            .split(',')
+            .map((v: string) => v.trim())
+            .map((v: string) => {
+              const mapped = SCOPE_OF_WORK_MAP[v];
+              if (!mapped) {
+                console.warn(`⚠️ WARNING: Scope of Work value "${v}" not in SCOPE_OF_WORK_MAP, skipping`);
+              }
+              return mapped;
+            })
+            .filter(Boolean);
+          if (mappedScopes.length > 0) {
+            updateData.Scopes = mappedScopes.join(', ');
             console.log(
-              `✅ Scope of Work mapped: "${rawValue}" → "${converted}"`,
+              `✅ Scope of Work mapped: "${rawValue}" → "${updateData.Scopes}"`,
             );
           } else {
             console.log(
-              `⚠️ WARNING: Scope of Work value "${rawValue}" not in SCOPE_OF_WORK_MAP, skipping`,
+              `⚠️ WARNING: No valid Scope of Work values mapped from "${rawValue}", skipping`,
             );
           }
         }
@@ -1521,16 +1531,26 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
-    // Scope of Work → Scopes field (Valcre API field name is "Scopes", not "ScopeOfWork")
+    // Scope of Work → Scopes field (Valcre API field name is "Scopes", not "ScopeOfWork"; multi-select Jun 2026)
     if (jobData.scopeOfWork || jobData.ScopeOfWork) {
       const rawValue = jobData.scopeOfWork || jobData.ScopeOfWork;
-      const converted = SCOPE_OF_WORK_MAP[rawValue];
-      console.log(`🟣 Scope of Work: "${rawValue}" → "${converted}"`);
-      if (converted) {
-        jobCreateData.Scopes = converted;
+      const mappedScopes = rawValue
+        .split(',')
+        .map((v: string) => v.trim())
+        .map((v: string) => {
+          const mapped = SCOPE_OF_WORK_MAP[v];
+          if (!mapped) {
+            console.warn(`⚠️ WARNING: Scope of Work value "${v}" not in SCOPE_OF_WORK_MAP, skipping`);
+          }
+          return mapped;
+        })
+        .filter(Boolean);
+      if (mappedScopes.length > 0) {
+        jobCreateData.Scopes = mappedScopes.join(', ');
+        console.log(`🟣 Scope of Work: "${rawValue}" → "${jobCreateData.Scopes}"`);
       } else {
         console.log(
-          `⚠️ WARNING: Scope of Work value "${rawValue}" not in SCOPE_OF_WORK_MAP, skipping`,
+          `⚠️ WARNING: No valid Scope of Work values mapped from "${rawValue}", skipping`,
         );
       }
     }

@@ -1144,6 +1144,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       AddressState: jobData.PropertyState || addressParts.province || "",
       AddressPostalCode:
         jobData.PropertyPostalCode || addressParts.postalCode || "",
+      AddressCountry: "Canada",
     };
 
     // Add all other Property fields if provided

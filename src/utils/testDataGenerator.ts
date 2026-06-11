@@ -152,7 +152,7 @@ export function generatePropertyTestData(): TestPropertyData {
   const postalCode = `T${getRandomNumber(0, 9)}${String.fromCharCode(65 + getRandomNumber(0, 25))} ${getRandomNumber(0, 9)}${String.fromCharCode(65 + getRandomNumber(0, 25))}${getRandomNumber(0, 9)}`;
   
   return {
-    propertyAddress: `${streetNumber} ${streetName} ${streetType}`,
+    propertyAddress: `${streetNumber} ${streetName} ${streetType}, ${city}, AB ${postalCode}`,
     propertyCity: city,
     propertyProvince: 'Alberta',
     propertyPostalCode: postalCode,

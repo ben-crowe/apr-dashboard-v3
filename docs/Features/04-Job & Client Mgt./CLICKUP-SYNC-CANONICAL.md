@@ -22,6 +22,8 @@ tags: [apr-workflow, clickup, clickup-sync, custom-fields, job-hub, ground-truth
 **The one place to go for how the APR dashboard syncs to ClickUp.** If you need to know what fields
 sync, why, or where to change it — start here. Vault-search `clickup sync` finds this.
 
+> **⭐ OPEN CHANGE REQUEST (2026-06-11):** [Move job data into CUSTOM FIELDS, not the description](~/Development/APR-Dashboard-v3/docs/Features/04-Job%20%26%20Client%20Mgt./CHANGE-REQUEST-clickup-custom-fields.md) — table view only shows custom fields, so all links/dates (LOE Sent/Signed, Date Received, the hyperlinked Valcre Job field, client phone, property rights, +the unmapped rest) must move off the description into custom fields. qa-agent owns the field-by-field mapping.
+
 > ## ⚠ SUPERSEDES the rich-markdown-card model (2026-06-05 redesign)
 > The OLD approach wrote a rich 9-section **markdown description blob**. That's DEAD — it kept
 > duplicating on update (markdown appends, never replaces). The CURRENT model writes the data into

@@ -182,6 +182,47 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
           </div>
 
           <div className="space-y-2">
+            <Label htmlFor="propertySubtype">Property Subtype</Label>
+            <Select
+              value={formData.propertySubtype || ''}
+              onValueChange={(value) => handleSelectChange(value, "propertySubtype")}
+            >
+              <SelectTrigger className="!bg-transparent border-0 border-b border-b-gray-400 pb-0.5 dark:border-b-white/20 !rounded-none max-w-[240px] hover:border-b-gray-700 dark:hover:border-b-white/40 focus:ring-0 [&>span]:text-gray-500 dark:[&>span]:text-white/60">
+                <SelectValue placeholder="Please Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Low-Rise">Low-Rise</SelectItem>
+                <SelectItem value="Mid-Rise">Mid-Rise</SelectItem>
+                <SelectItem value="High-Rise">High-Rise</SelectItem>
+                <SelectItem value="Garden">Garden</SelectItem>
+                <SelectItem value="Walk-Up">Walk-Up</SelectItem>
+                <SelectItem value="Townhouse">Townhouse</SelectItem>
+                <SelectItem value="Mixed-Use">Mixed-Use</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="tenancy">Tenancy</Label>
+            <Select
+              value={formData.tenancy || ''}
+              onValueChange={(value) => handleSelectChange(value, "tenancy")}
+            >
+              <SelectTrigger className="!bg-transparent border-0 border-b border-b-gray-400 pb-0.5 dark:border-b-white/20 !rounded-none max-w-[240px] hover:border-b-gray-700 dark:hover:border-b-white/40 focus:ring-0 [&>span]:text-gray-500 dark:[&>span]:text-white/60">
+                <SelectValue placeholder="Please Select" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Multi-Tenant">Multi-Tenant</SelectItem>
+                <SelectItem value="Owner Occupied">Owner Occupied</SelectItem>
+                <SelectItem value="Partial Owner Occupied">Partial Owner Occupied</SelectItem>
+                <SelectItem value="Single-Tenant">Single-Tenant</SelectItem>
+                <SelectItem value="Unkown">Unkown</SelectItem>
+                <SelectItem value="Vacant">Vacant</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="intendedUse">Authorized Use</Label>
             <Select
               value={formData.intendedUse}

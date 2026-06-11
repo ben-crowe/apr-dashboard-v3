@@ -9,6 +9,8 @@ export interface FormData {
   propertyName?: string;
   propertyAddress: string;
   propertyType?: string;
+  propertySubtype?: string;
+  tenancy?: string;
   intendedUse?: string;
   valuationPremises?: string;
   assetCondition?: string;

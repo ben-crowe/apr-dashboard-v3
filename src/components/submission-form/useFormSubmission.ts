@@ -16,6 +16,8 @@ const initialFormData: FormData = {
   propertyName: "",
   propertyAddress: "",
   propertyType: "",
+  propertySubtype: "",
+  tenancy: "",
   intendedUse: "",
   valuationPremises: "",
   assetCondition: "",
@@ -156,6 +158,20 @@ const useFormSubmission = () => {
         intended_use: jobData.intended_use,
         asset_condition: jobData.asset_condition
       });
+
+      // Save property_subtype and tenancy to job_property_info if provided
+      if (formData.propertySubtype || formData.tenancy) {
+        const { error: propInfoError } = await supabase
+          .from('job_property_info')
+          .insert({
+            job_id: jobData.id,
+            property_subtype: formData.propertySubtype || null,
+            tenancy: formData.tenancy || null,
+          });
+        if (propInfoError) {
+          console.error('Error saving property info:', propInfoError);
+        }
+      }
 
       const webhookData: WebhookData = {
         jobId: jobData.id,

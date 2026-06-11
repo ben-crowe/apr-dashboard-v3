@@ -1315,32 +1315,17 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 {deriveApproaches(statusOfImprovements, authorizedUse).join(', ') || <span className="text-zinc-400">from Status</span>}
               </div>
             </CompactField>
-            {/* MOVED 2026-06-10 from Building Info (OrganizingDocsSection) — binding/handler/options preserved verbatim. */}
+            {/* READ-ONLY: sourced from Section 1 / job_property_info. Set via client intake or Section 1. */}
             <CompactField label="Property Subtype">
-              <Select value={jobDetails.propertySubtype || ''} onValueChange={value => handleSelectChange(value, 'propertySubtype')}>
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Low-Rise">Low-Rise</SelectItem>
-                  <SelectItem value="Mid-Rise">Mid-Rise</SelectItem>
-                  <SelectItem value="High-Rise">High-Rise</SelectItem>
-                  <SelectItem value="Garden">Garden</SelectItem>
-                  <SelectItem value="Walk-Up">Walk-Up</SelectItem>
-                  <SelectItem value="Townhouse">Townhouse</SelectItem>
-                  <SelectItem value="Mixed-Use">Mixed-Use</SelectItem>
-                </SelectContent>
-              </Select>
+              <div style={derivedFieldStyle} className="max-w-[160px]" title="Set in Section 1 — Property Information.">
+                {(jobDetails as any).propertySubtype || <span className="text-zinc-400">Set in Section 1</span>}
+              </div>
             </CompactField>
-            {/* MOVED 2026-06-10 from Building Info (OrganizingDocsSection) — binding/handler/options preserved verbatim. */}
+            {/* READ-ONLY: sourced from Section 1 / job_property_info. Set via client intake or Section 1. */}
             <CompactField label="Tenancy">
-              <Select value={jobDetails.tenancy || ''} onValueChange={value => handleSelectChange(value, 'tenancy')}>
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Owner-Occupied">Owner-Occupied</SelectItem>
-                  <SelectItem value="Single-Tenant">Single-Tenant</SelectItem>
-                  <SelectItem value="Multi-Tenant">Multi-Tenant</SelectItem>
-                  <SelectItem value="Vacant">Vacant</SelectItem>
-                </SelectContent>
-              </Select>
+              <div style={derivedFieldStyle} className="max-w-[160px]" title="Set in Section 1 — Property Information.">
+                {(jobDetails as any).tenancy || <span className="text-zinc-400">Set in Section 1</span>}
+              </div>
             </CompactField>
             {/* MOVED 2026-06-10 from Data Gathering (PropertyInfoSection Appraisal Assignment) — binding/handler/options preserved verbatim. */}
             <CompactField label="Value Timeframe">

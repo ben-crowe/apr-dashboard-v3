@@ -193,7 +193,7 @@ const ClientSubmissionSectionClean: React.FC<SectionProps> = ({
               </CleanCompactField>
               
               <CleanCompactField label="Property Type">
-                <CleanSelect 
+                <CleanSelect
                   value={job.propertyType || ''}
                   onChange={(e) => onUpdateJob?.({propertyType: e.target.value})}
                 >
@@ -205,6 +205,37 @@ const ClientSubmissionSectionClean: React.FC<SectionProps> = ({
                   <option value="Mixed Use">Mixed Use</option>
                   <option value="Land">Land</option>
                   <option value="Special Purpose">Special Purpose</option>
+                </CleanSelect>
+              </CleanCompactField>
+
+              <CleanCompactField label="Property Subtype">
+                <CleanSelect
+                  value={(jobDetails as any)?.propertySubtype || ''}
+                  onChange={(e) => onUpdateDetails?.({propertySubtype: e.target.value} as any)}
+                >
+                  <option value="">Select subtype</option>
+                  <option value="Low-Rise">Low-Rise</option>
+                  <option value="Mid-Rise">Mid-Rise</option>
+                  <option value="High-Rise">High-Rise</option>
+                  <option value="Garden">Garden</option>
+                  <option value="Walk-Up">Walk-Up</option>
+                  <option value="Townhouse">Townhouse</option>
+                  <option value="Mixed-Use">Mixed-Use</option>
+                </CleanSelect>
+              </CleanCompactField>
+
+              <CleanCompactField label="Tenancy">
+                <CleanSelect
+                  value={(jobDetails as any)?.tenancy || ''}
+                  onChange={(e) => onUpdateDetails?.({tenancy: e.target.value} as any)}
+                >
+                  <option value="">Select tenancy</option>
+                  <option value="Multi-Tenant">Multi-Tenant</option>
+                  <option value="Owner Occupied">Owner Occupied</option>
+                  <option value="Partial Owner Occupied">Partial Owner Occupied</option>
+                  <option value="Single-Tenant">Single-Tenant</option>
+                  <option value="Unkown">Unkown</option>
+                  <option value="Vacant">Vacant</option>
                 </CleanSelect>
               </CleanCompactField>
               

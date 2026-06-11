@@ -194,17 +194,15 @@ Deno.serve(async (req) => {
     // description is a short, linkable header only: the two links + Job# + Date Ordered + the LOE
     // tracker scaffold ("▸ LOE Sent / ▸ LOE Signed") that docuseal-webhook fills + update-clickup-task
     // preserves (everything before the first LOE section). Do NOT re-add a data body here.
+    // TWO-LINE description only (card redesign 2026-06-11). All data lives in CUSTOM FIELDS below.
+    // Line 1 link text = the PROPERTY NAME (not "APR Dashboard"). The verbose Job#/Date/LOE block
+    // comes from the ClickUp TEMPLATE when one is used — for the dev path (no template) we build the
+    // 2-line header only.
     const valcreLink = valcreId
       ? `[VAL Job ${valcreJobNumber}](https://app.valcre.com/job/edit/${valcreId}#job)`
       : '_(pending Valcre job)_'
-    const description = `📍 **NEW APPRAISAL REQUEST** — [APR Dashboard](${jobUrl})
-📍 **VALCRE JOB:** ${valcreLink}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-**Job #:** ${valcreJobNumber}
-**Date Ordered:** ${formattedDateTime}
-  ▸ LOE Sent:
-  ▸ LOE Signed:`
+    const description = `📍 **NEW APPRAISAL REQUEST** — [${propertyName}](${jobUrl})
+📍 **VALCRE JOB:** ${valcreLink}`
 
     // Data is set as CUSTOM FIELDS (idempotent — set REPLACES, never appends → no dup bug).
     // See buildHubCustomFields + applyTaskFields below.

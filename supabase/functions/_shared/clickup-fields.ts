@@ -35,7 +35,7 @@ export async function fetchListFields(token: string, listId: string): Promise<Cl
 // Card-redesign KEEP set (2026-06-05, BRIEF-reactspec-clickup-card-redesign): the GROUPED data fields.
 // Each datum lives ONCE — the two links + Job# + Date Ordered + the LOE tracker live in the DESCRIPTION
 // title block (create-clickup-task), so they are NOT custom fields here. This map closes QA's subset gap
-// (Asset Condition, Client Phone, Property Contact*, Valuation Premise, Status of Improvements were
+// (Asset Condition, Client Phone, Property Contact*, Valuation Premises, Status of Improvements were
 // missing). REMOVED noise: Intended Use (dup of Authorized Use), Client Title, Client Address, Job Status,
 // Additional Info. QA_PROBE_DELETE_ME is a stray ClickUp test field the API CANNOT delete — flag for
 // manual removal in the ClickUp UI; do not fight the API. byName resolver SKIPS any field not yet on the
@@ -56,7 +56,7 @@ function hubValueMap(job: any): Record<string, any> {
     'Property Type': job.property_type || '',
     'Authorized Use': loe.authorized_use || job.intended_use || '',         // canonical (replaces Intended Use dup)
     'Asset Condition': job.asset_condition || pi.asset_condition || '',
-    'Valuation Premise': loe.valuation_premises || job.valuation_premises || '',
+    'Valuation Premises': loe.valuation_premises || job.valuation_premises || '',  // PLURAL — matches live ClickUp field name (singular missed byName, silently skipped)
     // PROPERTY CONTACT group DROPPED 2026-06-05 (Ben, locked mock MK9-0) — duplicates Client (same person).
     // ASSIGNMENT
     'Property Rights Appraised': loe.property_rights_appraised || '',
@@ -82,8 +82,24 @@ function encodeForField(def: ClickUpFieldDef, raw: any): string | number | null 
       // Single-select: take first value if a multi/comma string came through (matches Valcre first-value rule).
       const want = String(raw).split(',')[0].trim().toLowerCase()
       const opts = def.type_config?.options || []
-      const hit = opts.find(o => String(o.label ?? o.name ?? '').trim().toLowerCase() === want)
-      return hit ? hit.id : null // no live option matches → SKIP (HOLD dropdowns self-resolve once aligned)
+      const label = (o: { label?: string; name?: string }) => String(o.label ?? o.name ?? '').trim().toLowerCase()
+      // 1) exact (case-insensitive) match — the strict path.
+      let hit = opts.find(o => label(o) === want)
+      // 2) prefix match — source uses the SHORT form, ClickUp option is the LONG form.
+      //    e.g. source "fee simple" → option "fee simple interest"; "market value" → "market value as is".
+      //    Pick the SHORTEST option that starts with `want` (most specific extension of the source value),
+      //    so "market value" lands on "market value as is" rather than a longer variant.
+      if (!hit && want) {
+        const prefixHits = opts.filter(o => label(o).startsWith(want))
+        if (prefixHits.length) {
+          hit = prefixHits.reduce((a, b) => (label(a).length <= label(b).length ? a : b))
+        }
+      }
+      // 3) reverse prefix — source is the LONG form, option is the SHORT form (rarer, but symmetric).
+      if (!hit && want) {
+        hit = opts.find(o => label(o) && want.startsWith(label(o)))
+      }
+      return hit ? hit.id : null // still no match → SKIP (taxonomy mismatch — report as field-config gap)
     }
     case 'date': {
       const n = typeof raw === 'number' ? raw : Date.parse(String(raw))
@@ -93,8 +109,15 @@ function encodeForField(def: ClickUpFieldDef, raw: any): string | number | null 
       const n = Number(String(raw).replace(/[^0-9.]/g, ''))
       return Number.isFinite(n) ? n : null // dollars
     }
-    case 'phone': // E.164 — no phone in KEEP set, but encode defensively if added
-      return String(raw).trim()
+    case 'phone': {
+      // ClickUp PHONE fields SILENTLY DROP non-E.164 values. Normalize: strip to digits, then format.
+      // "(403) 342-6502" → "+14033426502". 10 digits → +1; 11 starting with 1 → +1…; else +<digits>.
+      const digits = String(raw).replace(/\D/g, '')
+      if (!digits) return null
+      if (digits.length === 10) return `+1${digits}`
+      if (digits.length === 11 && digits.startsWith('1')) return `+${digits}`
+      return `+${digits}`
+    }
     default: // email / url / short_text / text
       return String(raw).trim()
   }

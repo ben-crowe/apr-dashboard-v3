@@ -100,12 +100,16 @@ const ANALYSIS_LEVEL_MAP: Record<string, string> = {
 };
 
 // SCOPE OF WORK MAP - Dashboard "Scope of Work" → Valcre "Scope" field (Nov 13, 2025)
+// Enum values confirmed from Valcre OData $metadata (JobScopes enum) + live job VAL261044 (2026-06-11):
+//   AllApplicable, BestApproach, BestApproaches, DepreciatedReplacementCost, CostApproach,
+//   DiscountedCashFlow, FeasibilityStudy, IncomeApproach, LandValue, Litigation,
+//   MarketResearch, MarketStudy, RentSurvey, SalesComparisonApproach, Update
 const SCOPE_OF_WORK_MAP: Record<string, string> = {
   "All Applicable": "AllApplicable",
-  "Best One Approach": "BestOneApproach",
-  "Best Two Approaches": "BestTwoApproaches",
+  "Best One Approach": "BestApproach",       // was "BestOneApproach" — not in JobScopes enum; confirmed as "BestApproach"
+  "Best Two Approaches": "BestApproaches",   // was "BestTwoApproaches" — corrected to "BestApproaches" per enum
   "Cost Approach": "CostApproach",
-  "Direct Comparison Approach": "DirectComparisonApproach",
+  "Direct Comparison Approach": "SalesComparisonApproach", // was "DirectComparisonApproach" — confirmed via job VAL261044 raw Scopes + JobScopes enum
   "Discounted Cash Flow": "DiscountedCashFlow",
   "Feasibility Study": "FeasibilityStudy",
   "Income Approach": "IncomeApproach",
@@ -113,7 +117,7 @@ const SCOPE_OF_WORK_MAP: Record<string, string> = {
   Litigation: "Litigation",
   "Market Research": "MarketResearch",
   "Market Study": "MarketStudy",
-  "Net Rent Review": "NetRentReview",
+  "Net Rent Review": "NetRentReview", // FLAG: "NetRentReview" not found in JobScopes enum; nearest candidate is "RentSurvey" — left unchanged pending Chris/Ben confirmation
   Update: "Update",
 };
 

@@ -804,7 +804,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "application/json",
                       },
-                      body: JSON.stringify({ SecondaryType: rawSubtype }),
+                      body: JSON.stringify({ SecondaryType: rawSubtype, Country: "CA" }),
                     },
                   );
                   if (propPatchResp.ok || propPatchResp.status === 204) {
@@ -1144,7 +1144,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       AddressState: jobData.PropertyState || addressParts.province || "",
       AddressPostalCode:
         jobData.PropertyPostalCode || addressParts.postalCode || "",
-      AddressCountry: "Canada",
+      Country: "CA",
     };
 
     // Add all other Property fields if provided

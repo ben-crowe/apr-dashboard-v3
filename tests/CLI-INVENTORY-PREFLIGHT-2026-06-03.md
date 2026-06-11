@@ -1,100 +1,86 @@
-# APR E2E — CLI Inventory + Preflight (read-only)
+---
+content_type: pointer-and-residual-findings
+title: APR CLI Inventory — RETIRED into the cli-apr-tools skill (pointer + residual findings)
+status: retired-into-skill — per-command inventory now lives as searchable rows in /cli-apr-tools
+created: 2026-06-03
+updated: 2026-06-10
+last_reviewed: 2026-06-10
+owner: qa-agent (curated) · ui-designer (skill curator) · co-architect
+home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
+tags: [apr-workflow, apr-testing, cli-inventory, cli-apr-tools, ground-truth, loose-end]
+---
 
-**Run:** 2026-06-03 · **By:** qa-agent · **Scope:** BC TEST workspace (8555561) only — no prod/Valta/Chris writes, no Valcre job creation
-**Source of truth diffed against:** `tests/E2E-TESTING-WORKFLOW-MASTER.md` (CLI inventory + mini test plan sections)
-**Verdict:** Evidence-gathering only. NOT a full run. 3 read-only preflights PASS; 2 discrepancies + 5 authoring gaps found.
+# APR CLI Inventory — Retired into the Skill
+
+**Tags:** #apr-testing #cli-inventory #cli-apr-tools #ground-truth #loose-end #apr-workflow
+**Entities:** [[cli-apr-tools]] [[APR-Testing]]
+
+> ## ⚠ THIS DOC IS RETIRED (2026-06-10)
+> The per-command CLI inventory that used to live here is now **searchable rows inside the
+> cli-apr-tools skill**, each carrying a `status` field (`exists` / `missing` / `broken`). A gap
+> search returns the missing/broken items directly — no separate doc to drift. **Go to the skill, not
+> this file, for "what CLI does X / does a CLI for X exist."**
+
+## Where the inventory lives now
+
+The skill is the single source of truth:
+
+~/.claude/skills/cli-apr-tools/SKILL.md
+
+Search it (a gap query returns "✗ MISSING — needs authoring" rows too):
+
+```bash
+python3 ~/.claude/skills/cli-apr-tools/scripts/search.py "reset test job"
+python3 ~/.claude/skills/cli-apr-tools/scripts/search.py "verify clickup button"
+python3 ~/.claude/skills/cli-apr-tools/scripts/search.py "get task"   # flags the broken script
+```
+
+Every on-disk `~/.claude/scripts/apr/` script is now a row (including the new button-verify CLI), the
+broken `clickup-get-task.sh` is flagged `broken`, and the missing/needs-authoring capabilities
+(valcre reset/delete/list-by-appraiser, clickup-update-checklist, resend get-email/domain-check,
+docuseal get-submission/list, reset-test-state.sh) are rows with `status=missing`.
 
 ---
 
-## 1. Exists / Missing / Needs-authoring — per integration
+## Residual findings (NOT per-command — kept here on purpose)
 
-### Valcre — `~/.claude/scripts/apr/`
-**KEY FINDING: Valcre has NO test environment.** `valcre-auth.sh` authenticates as Chris (chris.chornohos@valta.ca) into LIVE prod with hardcoded creds. Every Valcre call is prod-as-Chris. Job-CRUD scripts are absent; the toolkit is field-level only.
+These are constraints/decisions, not tool entries, so they stay in this doc.
 
-| Capability (doc) | Status | Reality on disk |
-|---|---|---|
-| Audit job fields vs dashboard (`valcre-field-audit.sh`) | ✓ EXISTS | present |
-| Verify job (`valcre-verify-job.sh`) | ✓ EXISTS | present (the get/audit path) |
-| Field ops (set/list/get/create/patch custom fields) | ✓ EXISTS | 5 scripts present |
-| Auth (`valcre-auth.sh`) | ✓ EXISTS | present — **prod-as-Chris, no test env** |
-| Get job by VAL number | ❌ MISSING | not present |
-| Delete job (`valcre-delete-job`) | ❌ MISSING | not present (+ API support unverified — not tested, prod guardrail) |
-| Reset test job (`valcre-reset-test-job`) | ❌ MISSING | not present |
-| List jobs by appraiser | ❌ MISSING | not present |
+### 1. Valcre has NO test environment — prod-as-Chris (hard constraint)
 
-### ClickUp — `~/.claude/scripts/apr/` + `.../CLI-Libraries/clickup-cli/scripts/`
-**Best-covered integration.** apr/ has 6 sh scripts; clickup-cli/ has ~48 python scripts (full CRUD, comments, docs, tags, time, bulk).
+`valcre-auth.sh` authenticates as Chris (chris.chornohos@valta.ca) into **LIVE prod** with hardcoded
+creds. Every Valcre call is prod-as-Chris. There are no job-CRUD scripts — the toolkit is field-level
+only. **The only safe pattern is: pin ONE canonical job and modify-not-create. Never create or delete
+a Valcre job in a test.** This elevates Ben's open Q5 (one pinned test job). (Also captured as the
+`valcre-no-test-env-gotcha` row in the skill.)
 
-| Capability (doc unknown) | Status | Reality |
-|---|---|---|
-| Auth / create-task / list-fields / list-tasks / get-task / update-field | ✓ EXISTS | apr/ scripts present |
-| Delete task | ✓ EXISTS | `clickup-cli/delete-task.py` |
-| List tasks | ✓ EXISTS | `clickup-list-tasks.sh` + `get-workspace-tasks.py` |
-| Add comment to task | ✓ EXISTS | `clickup-cli/create-task-comment.py` |
-| **Update checklist item state** | ❌ MISSING | NOT in either location — **Phase 4.4 + 7.2 gap** |
+### 2. ⚑ RECONCILE — ClickUp custom-field count is a 3-way drift (OPEN, do not assume)
 
-### DocuSeal
-**ZERO standalone CLIs.** All logic locked in app edge function `src/utils/webhooks/docuseal.ts`.
+The "all custom fields populated" assertion cannot be trusted until this is reconciled:
 
-| Capability | Status |
-|---|---|
-| create-submission / get-submission / list / delete | ❌ MISSING (no CLI) |
-| complete-submission (programmatic sign) | ❌ MISSING + endpoint-existence unknown → **moot: use Codex browser portal-sign** |
+- The original inventory/doc claimed **49** fields.
+- The 2026-06-03 preflight found **27** fields on the test list.
+- The 2026-06-10 sync (qa, VAL261101) saw **19** columns on test list 901709622357.
 
-### Resend
-**ZERO standalone CLIs.** Send exists only inside app edge function.
+Either the counts target different lists, or columns were added/removed between runs, or a doc is
+stale. **Open question for the team: which list + which count is canonical?** Until resolved, do not
+report a fixed "N fields synced" number as ground truth.
 
-| Capability | Status |
-|---|---|
-| Send transactional email | ✓ (app edge function only, not a CLI) |
-| get-email (delivery status) / list / domain-check | ❌ MISSING (Resend REST supports these — wrappers need authoring) |
+### 3. Bottom line for the team (still current)
 
-### Supabase — `~/.claude/scripts/apr/`
-| Capability | Status |
-|---|---|
-| Read/write/DDL via `supabase-connect.sh` (psql, service-role) | ✓ EXISTS |
-| Reset test job to baseline (`reset-test-job.sh`) | ❌ MISSING |
+- **ClickUp + Supabase** = ready for the API-layer checks (one gap: `clickup-update-checklist`).
+- **DocuSeal + Resend** = need thin read-only wrappers authored, or lean on Codex/app for the rest.
+- **Valcre** = the real constraint (single live prod env as Chris — see finding 1).
+- **Codex** earns its place exactly where CLIs are missing/risky: intake form-fill + DocuSeal portal-sign.
 
-### Test-state scaffold
-- `tests/scripts/` directory **does not exist** → `reset-test-state.sh` MISSING (confirmed). Whole scaffold needs creating.
+## Related
+
+- [cli-apr-tools skill](~/.claude/skills/cli-apr-tools/SKILL.md) — the live searchable inventory.
+- [E2E Testing Workflow — Master Plan](~/Development/APR-Dashboard-v3/tests/E2E-TESTING-WORKFLOW-MASTER.md) — the pipeline this tooling serves.
+- [ClickUp Sync — CANONICAL](~/Development/APR-Dashboard-v3/docs/Features/04-Job%20&%20Client%20Mgt./CLICKUP-SYNC-CANONICAL.md) — the field-sync model.
 
 ---
 
-## 2. Preflight results (read-only, BC test only)
-
-| ID | Check | Command | Result |
-|---|---|---|---|
-| C1 | ClickUp auth | `clickup-auth-test.sh` (BC test token) | **PASS** — 3 workspaces; BC WorkSpace 8555561 reachable (3 members) |
-| C2 | List custom fields | `clickup-list-fields.sh 901709622357` | **PASS w/ DISCREPANCY** — returns **27** fields; doc claims **49** |
-| S1 | Supabase read | `supabase-connect.sh "SELECT count(*) FROM job_submissions"` | **PASS** — 23 rows (doc said 20; minor drift) |
-| V* | Valcre preflight | — | **SKIPPED** — no test env; won't auth as Chris into prod (guardrail) |
-| D*/R* | DocuSeal / Resend preflight | — | **N/A** — no CLIs exist to test |
-
----
-
-## 3. Discrepancies to reconcile (team)
-
-1. **Field count: doc says 49, live test list has 27.** Either the create-task 49-field mapping targets a different/superset list, or the doc is stale. The Phase-2 "49 custom fields populated" assertion will FAIL until reconciled. Which list is canonical?
-2. **job_submissions: doc 20 → live 23.** Benign data growth, but update the doc's baseline.
-
----
-
-## 4. Needs-authoring list (priority)
-
-| Priority | Script | Blocks | Owner | Note |
-|---|---|---|---|---|
-| HIGH | `tests/scripts/reset-test-state.sh` + dir | every run | qa + apr-domain | Supabase part doable now; Valcre-reset part gated on Q5 (no test env) |
-| HIGH | `clickup-update-checklist` | Phase 4.4 + 7.2 | clickup-expert | ClickUp checklist API is a separate endpoint |
-| MED | `resend-get-email`, `resend-domain-check` | Phase 5 + off-board item 2 | apr-domain | Resend REST supports both |
-| MED | `docuseal-get-submission`, `docuseal-list` | Phase 6 status checks | apr-domain | thin wrappers over DocuSeal API |
-| SKIP | `docuseal-complete-submission` | — | — | use Codex portal-sign instead |
-| SKIP | `valcre-delete-job` | — | — | prod-risk, no test env; rely on modify-not-create (Q5) |
-
----
-
-## 5. Bottom line for the team
-
-- **ClickUp + Supabase = ready** for the API-layer checks (one gap: checklist-update).
-- **DocuSeal + Resend = need thin read-only wrappers authored** (or lean on Codex/app for the rest).
-- **Valcre is the real constraint** — single live prod env as Chris. Off-board item 4 (pin one canonical job, modify-not-create) isn't a nicety, it's the *only* safe pattern. Elevates Ben's open Q5.
-- **Codex earns its place** exactly where CLIs are missing/risky: intake form-fill + DocuSeal portal-sign.
+**Last reviewed:** 2026-06-10 by qa-agent — retired the per-command inventory into the cli-apr-tools
+skill (searchable rows + status field); kept the Valcre prod-as-Chris constraint, the 3-way
+field-count RECONCILE flag, and the team bottom-line here.

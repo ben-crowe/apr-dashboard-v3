@@ -129,7 +129,7 @@ Every integration runs on **Ben's own test account** today and migrates to the *
 
 ## 3. Testing
 
-The E2E workflow + how to drive the app.
+The E2E workflow + how to drive the app. **Before any ClickUp / Valcre / DocuSeal / Supabase action, LOAD the tool skill ([`/cli-apr-tools`](~/.claude/skills/cli-apr-tools/SKILL.md)) and run its search FIRST — do not hand-roll curl until you've confirmed no command exists.**
 
 | Doc | What it is |
 |---|---|
@@ -141,7 +141,7 @@ The E2E workflow + how to drive the app.
 | [LOE E2E test plan (8-phase source)](~/Development/APR-Dashboard-v3/tests/LOE-END-TO-END-TEST-PLAN.md) | The source eight-phase plan. |
 | [LOE E2E autonomous-agent PRD](~/Development/APR-Dashboard-v3/tests/LOE-E2E-AGENT-AUTONOMOUS-PRD.md) | The autonomy PRD. |
 | [**Agent CLI & Browser Tooling SOP**](~/Development/APR-Dashboard-v3/docs/AGENT-CLI-TOOLING-SOP.md) | How an agent logs in, fills fields, screenshots, verifies sync. |
-| [CLI inventory preflight](~/Development/APR-Dashboard-v3/tests/CLI-INVENTORY-PREFLIGHT-2026-06-03.md) | What CLIs exist + gaps. |
+| [CLI inventory preflight](~/Development/APR-Dashboard-v3/tests/CLI-INVENTORY-PREFLIGHT-2026-06-03.md) | **Pointer + residual findings only** — the per-command inventory now lives IN the `/cli-apr-tools` skill as searchable rows (with exists/missing/broken status). This doc keeps the non-command findings (Valcre prod-as-Chris constraint, the field-count RECONCILE flag). |
 | [Testing playbook](~/Development/APR-Dashboard-v3/docs/APR-TESTING-PLAYBOOK.md) · [Testing reference](~/Development/APR-Dashboard-v3/docs/APR-TESTING-REFERENCE.md) | Standing testing references. |
 
 **Pinned test job:** VAL261101 "Westside Mall" — modify field-by-field, name-match guard first, never the Test Data button.

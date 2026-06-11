@@ -1107,6 +1107,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       'Commercial': 'Building',
       'Residential': 'Building',
       'Multi-Family': 'Building', // PropertyType field doesn't support Multi-Family - it goes in Types field only
+      'Multifamily': 'Building', // Dashboard canonical spelling (one word) → same as Multi-Family
     };
 
     // TYPES FIELD CONVERSION - Dashboard values → Valcre Types field values
@@ -1114,11 +1115,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // The Types field uses PascalCase: "MultiFamily", "HealthCare", etc.
     const TYPES_FIELD_MAP: Record<string, string> = {
       'Multi-Family': 'MultiFamily',
+      'Multifamily': 'MultiFamily', // Dashboard canonical spelling (one word)
       'Single-Family': 'SingleFamily',
       'Self-Storage': 'SelfStorage',
       'Manufactured Housing': 'ManufacturedHousing',
       'Special Purpose': 'SpecialPurpose',
       'Healthcare': 'HealthCare', // "HealthCare" with capital C
+      'Mixed Use': 'Building', // Valcre has no "Mixed Use" Types value; map to Building
       // Others pass through as-is (Agriculture, Building, Hospitality, Industrial, Land, Office, Retail, Unknown)
     };
 

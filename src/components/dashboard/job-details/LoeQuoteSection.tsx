@@ -1636,17 +1636,17 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             </CompactField>
             <CompactField label="Transaction Status" status={fieldStates['transactionStatus']}>
               {/* v3.1 master ListTransactionStatus — re-optioned to the new CUSTOM field CF12424 value set
-                  (Not Applicable / Listed / Under Contract). Old 5-option set didn't match the new field. */}
-              <Select value={jobDetails.transactionStatus || ''} onValueChange={value => handleSelectChange(value, 'transactionStatus')}>
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Not Applicable">Not Applicable</SelectItem>
-                  <SelectItem value="Listed">Listed</SelectItem>
-                  <SelectItem value="Under Contract">Under Contract</SelectItem>
-                </SelectContent>
-              </Select>
+                  (Not Applicable / Listed / Under Contract). Old 5-option set didn't match the new field.
+                  Converted to MultiSelect (CF12424 is MultiOption) — mirrors Scope of Work / Client Documents pattern. */}
+              <MultiSelect
+                value={(jobDetails as any).transactionStatus || ''}
+                onChange={values => handleMultiSelectChange(values, 'transactionStatus')}
+                options={[
+                  'Not Applicable',
+                  'Listed',
+                  'Under Contract',
+                ]}
+              />
             </CompactField>
             <CompactField label="Zoning Status" status={fieldStates['zoningStatus']}>
               {/* v3.1 master ListZoningStatus — re-optioned to the new CUSTOM field CF12425 value set

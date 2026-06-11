@@ -91,6 +91,10 @@ export interface JobDetails {
   numberOfUnits?: number;
   parkingSpaces?: number;
   
+  // Property Subtype + Tenancy (job_property_info, set in Section 1)
+  propertySubtype?: string;
+  tenancy?: string;
+
   // Section 3B: Pulling Property Info - Research
   zoningClassification?: string;
   zoneAbbreviation?: string;

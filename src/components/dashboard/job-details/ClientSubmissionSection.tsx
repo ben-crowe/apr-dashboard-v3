@@ -432,6 +432,51 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 </SelectContent>
               </Select>
             </CompactField>
+            <CompactField label="Property Subtype">
+              <Select
+                value={jobDetails?.propertySubtype || ''}
+                onValueChange={(value) => {
+                  const v = value === '__clear__' ? '' : value;
+                  onUpdateDetails?.({ propertySubtype: v });
+                }}
+              >
+                <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
+                  <SelectItem value="Low-Rise">Low-Rise</SelectItem>
+                  <SelectItem value="Mid-Rise">Mid-Rise</SelectItem>
+                  <SelectItem value="High-Rise">High-Rise</SelectItem>
+                  <SelectItem value="Garden">Garden</SelectItem>
+                  <SelectItem value="Walk-Up">Walk-Up</SelectItem>
+                  <SelectItem value="Townhouse">Townhouse</SelectItem>
+                  <SelectItem value="Mixed-Use">Mixed-Use</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
+            <CompactField label="Tenancy">
+              <Select
+                value={jobDetails?.tenancy || ''}
+                onValueChange={(value) => {
+                  const v = value === '__clear__' ? '' : value;
+                  onUpdateDetails?.({ tenancy: v });
+                }}
+              >
+                <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                  <SelectValue placeholder="Select..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__clear__" className="text-gray-400 dark:text-white/40">— None</SelectItem>
+                  <SelectItem value="Multi-Tenant">Multi-Tenant</SelectItem>
+                  <SelectItem value="Owner Occupied">Owner Occupied</SelectItem>
+                  <SelectItem value="Partial Owner Occupied">Partial Owner Occupied</SelectItem>
+                  <SelectItem value="Single-Tenant">Single-Tenant</SelectItem>
+                  <SelectItem value="Unkown">Unkown</SelectItem>
+                  <SelectItem value="Vacant">Vacant</SelectItem>
+                </SelectContent>
+              </Select>
+            </CompactField>
           </TwoColumnFields>
           {/* Address — single line, no underline */}
           <div className="mt-4 mb-5">

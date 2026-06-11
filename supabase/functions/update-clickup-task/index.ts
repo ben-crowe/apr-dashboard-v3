@@ -119,7 +119,7 @@ Deno.serve(async (req) => {
 
     console.log('Fetching existing ClickUp task:', taskId)
 
-    // Fetch existing task from ClickUp to preserve Stage 1 data
+    // Fetch existing task from ClickUp — we need the task's list.id for custom-field resolution
     const getTaskResponse = await fetch(`https://api.clickup.com/api/v2/task/${taskId}`, {
       method: 'GET',
       headers: {
@@ -135,7 +135,6 @@ Deno.serve(async (req) => {
     }
 
     const existingTask = await getTaskResponse.json()
-    const existingDescription = existingTask.markdown_description || existingTask.description || ''
 
     console.log('Existing task retrieved, building updated description')
 
@@ -146,111 +145,22 @@ Deno.serve(async (req) => {
     const hubUrl = 'https://apr-dashboard-v3.vercel.app'
     const jobUrl = `${hubUrl}/dashboard/job/${job.id}`
 
-    // Build Valcre job URL only if Valcre job actually exists
+    // Valcre job number for task name
     const valcreJobNumber = loeDetails.job_number || job.job_number || 'PENDING'
-    const valcreJobUrl = loeDetails.valcre_job_id
-      ? `https://app.valcre.com/job/edit/${loeDetails.valcre_job_id}#job`
-      : null
 
-    // Format delivery date
-    // Format date as YY.MM.DD
-    const formatDate = (dateStr: string | null) => {
-      if (!dateStr) return ''
-      const date = new Date(dateStr)
-      const year = String(date.getFullYear()).slice(-2)
-      const month = String(date.getMonth() + 1).padStart(2, '0')
-      const day = String(date.getDate()).padStart(2, '0')
-      return `${year}.${month}.${day}`
-    }
-
-    // Format currency
-    const formatCurrency = (amount: number | null) => {
-      if (!amount) return ''
-      return `${amount.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
-    }
-
-    // Extract ONLY Stage 1 content (everything before the first LOE section)
-    // Look for the Section 2 divider to properly separate Stage 1 from Stage 2
-    const stage1Match = existingDescription.match(/([\s\S]*?)━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\s*\n\s*LOE QUOTE/)
-    const stage1Content = stage1Match ? stage1Match[1].trim() : existingDescription.trim()
-
-    // Update top links section with actual Valcre job link and fix APR Dashboard link
-    let updatedStage1 = stage1Content
-
-    // Fix APR Dashboard link
-    // NOTE: ClickUp strips **bold** markers when processing markdown_description
-    // So we match the processed text (without bold markers)
-    updatedStage1 = updatedStage1.replace(
-      /📍 NEW APPRAISAL REQUEST:[^\n]*/,
-      `📍 **NEW APPRAISAL REQUEST:** [APR Dashboard](${jobUrl})`
-    )
-
-    // Replace Valcre Job Number line with link
-    // Handle multiple formats: with/without bold, with/without existing number
-    if (valcreJobUrl) {
-      console.log('🔍 Before replacement - Stage 1 VALCRE line:', updatedStage1.split('\n').find(l => l.includes('VALCRE JOB NUMBER')) || 'NOT FOUND')
-      
-      // Pattern 1: With bold markers (original format) - no number yet
-      updatedStage1 = updatedStage1.replace(
-        /📍 \*\*VALCRE JOB NUMBER:\*\*\s*$/m,
-        `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`
-      )
-      // Pattern 2: Without bold markers - no number yet
-      updatedStage1 = updatedStage1.replace(
-        /📍 VALCRE JOB NUMBER:\s*$/m,
-        `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`
-      )
-      // Pattern 3: Already has number but no link (most common case after Stage 2 runs)
-      updatedStage1 = updatedStage1.replace(
-        /📍 VALCRE JOB NUMBER:\s*[^\n]*/,
-        `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`
-      )
-      // Pattern 4: With bold but has number already
-      updatedStage1 = updatedStage1.replace(
-        /📍 \*\*VALCRE JOB NUMBER:\*\*\s*[^\n]*/,
-        `📍 **VALCRE JOB NUMBER:** [${valcreJobNumber}](${valcreJobUrl})`
-      )
-      
-      console.log('🔍 After replacement - Stage 1 VALCRE line:', updatedStage1.split('\n').find(l => l.includes('VALCRE JOB NUMBER')) || 'NOT FOUND')
-      console.log('✅ Valcre link added to Stage 1')
-      console.log('🔍 Link in description:', updatedStage1.includes(valcreJobUrl) ? 'YES' : 'NO')
-    } else {
-      console.log('⚠️ No Valcre job URL - valcre_job_id:', loeDetails.valcre_job_id, 'job_number:', valcreJobNumber)
-    }
-
-    // Build Stage 2 LOE section
-    const stage2Section = `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-**LOE QUOTE & VALUATION DETAILS**
-
-**PROPERTY VALUATION**
-• Property Rights:  ${loeDetails.property_rights_appraised || ''}
-• Scope of Work:    ${loeDetails.scope_of_work || ''}
-• Report Type:      ${loeDetails.report_type || ''}
-
-**FINANCIAL DETAILS**
-• Appraisal Fee:    ${formatCurrency(loeDetails.appraisal_fee)}
-• Retainer Amount:  ${formatCurrency(loeDetails.retainer_amount)}
-• Delivery Date:    ${formatDate(loeDetails.delivery_date)}
-• Payment Terms:    ${loeDetails.payment_terms || ''}
-${loeDetails.internal_comments || loeDetails.delivery_comments || loeDetails.payment_comments || loeDetails.client_comments ? `
-**APPRAISER NOTES**` : ''}${loeDetails.internal_comments ? `
-• ${loeDetails.internal_comments}` : ''}${loeDetails.delivery_comments ? `
-• ${loeDetails.delivery_comments}` : ''}${loeDetails.payment_comments ? `
-• ${loeDetails.payment_comments}` : ''}${loeDetails.client_comments ? `
-• ${loeDetails.client_comments}` : ''}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-`
-
-    // Combine Stage 1 (updated) + Stage 2 (new)
-    const combinedDescription = updatedStage1 + stage2Section
+    // LEAN 2-LINE description — mirrors create-clickup-task exactly (card redesign 2026-06-11).
+    // No LOE block in the description. All field data goes to CUSTOM FIELDS below.
+    const valcreLink = loeDetails.valcre_job_id
+      ? `[Quick Link](https://app.valcre.com/job/edit/${loeDetails.valcre_job_id}#job)`
+      : 'Quick Link'
+    const combinedDescription = `📍 **NEW APPRAISAL REQUEST** — [Quick Link](${jobUrl})
+📍 **VALCRE JOB:** ${valcreLink}`
 
     // Debug logging
     console.log('=== DEBUG INFO ===')
     console.log('VAL Number:', valcreJobNumber)
-    console.log('VAL URL:', valcreJobUrl)
-    console.log('Stage 1 content (first 300 chars):', updatedStage1.substring(0, 300))
-    console.log('Does Stage 1 contain VAL number?', updatedStage1.includes(valcreJobNumber))
+    console.log('Valcre Job ID:', loeDetails.valcre_job_id)
+    console.log('Description built (lean):', combinedDescription)
     console.log('==================')
 
     // Update task name from PENDING to VAL number
@@ -312,7 +222,7 @@ ${loeDetails.internal_comments || loeDetails.delivery_comments || loeDetails.pay
         const verifyTask = await verifyResponse.json()
         const liveDesc = verifyTask.markdown_description || verifyTask.description || ''
         verified = liveDesc.trim() === combinedDescription.trim()
-          || liveDesc.includes('LOE QUOTE & VALUATION DETAILS')
+          || liveDesc.includes('NEW APPRAISAL REQUEST')
       } else {
         console.warn('Readback GET non-200:', verifyResponse.status)
       }

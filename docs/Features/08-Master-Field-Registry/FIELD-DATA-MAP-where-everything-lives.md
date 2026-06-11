@@ -38,6 +38,7 @@ The actual dropdown options + which fields are free-text live in the dashboard s
 
 - **In code:** `LoeQuoteSection.tsx` — the `VALCRE_SYNC_FIELDS`, `CLICKUP_CARD_FIELDS`, and do-NOT-wire arrays (the authoritative wiring); `api/valcre.ts` — the Valcre payload + field mapping.
 - **In docs:** [Dashboard→Valcre LOCATION map](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/DASHBOARD-TO-VALCRE-LOCATION-MAP.md) — readback-verified, the human-navigable "where each field lands in Valcre."
+- **Enum ground truth:** [Valcre OData Schema Reference](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/VALCRE-ODATA-SCHEMA-REFERENCE.md) — the authoritative accepted token set for every enum field (Scopes, Purposes, RequestedValues, ReportFormat, IntendedUses, AnalysisLevel, Types, and all 21 custom field option sets). Generated from `$metadata`. Check here before guessing any enum value.
 
 ## Where the CLIENT REGISTRY (source of truth for option-sets) lives
 

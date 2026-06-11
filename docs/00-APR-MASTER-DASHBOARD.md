@@ -2,7 +2,7 @@
 content_type: master-dashboard
 title: APR Dashboard — Master Navigation & Status
 status: living front-door — keep current as work lands
-updated: 2026-06-07
+updated: 2026-06-10
 tags: [apr-workflow, apr-dashboard, master-index, navigation, home]
 note: THE single front door. Open this first. Every significant feature, account, test doc, and reference links from here. Project-specific only — system/agent content lives on the Agent + Workflow dashboards.
 dashboard_format: project-specific (see ~/.claude/knowledge/PROJECT-DASHBOARD-RULES.md)
@@ -15,13 +15,33 @@ If you add a doc, add a link here. **Project-specific only** — agent/skill/coo
 
 > **Agents start here:** [01-AGENT-ACCESS-LOGIN-PRIMING](~/Development/APR-Dashboard-v3/docs/01-AGENT-ACCESS-LOGIN-PRIMING.md) — the single login/access/CLI/priming sheet for the APR Dashboard, ClickUp, Supabase, and Valcre. Load the skills, log in, drive — never a guess.
 
+---
+
+## ⭐ Router — want to do X? go straight here
+
+**New here? Find your lane, open the ONE doc.** Each row points to the single right starting doc; the sections below carry the full set, live status, and accounts. Don't hunt — route.
+
+| I'm working on… | Open this first | Full detail |
+|---|---|---|
+| **0 · Access / login / CLIs** (do FIRST) | [Agent Access & Login Priming](~/Development/APR-Dashboard-v3/docs/01-AGENT-ACCESS-LOGIN-PRIMING.md) | [§2 Accounts & Access](#2-accounts-access) |
+| **1 · Client Intake** (form → dashboard) | [Intake form field map](~/Development/APR-Dashboard-v3/tests/INTAKE-FORM-FIELDMAP-2026-06-03.md) | [§1 Features](#1-significant-features) |
+| **2 · Job + Sync** (Valcre job · ClickUp card · field sync) | [★ ClickUp Card Sync — CANONICAL](~/Development/APR-Dashboard-v3/docs/Features/04-Job%20%26%20Client%20Mgt./CLICKUP-SYNC-CANONICAL.md) · [Dashboard→Valcre location map](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/DASHBOARD-TO-VALCRE-LOCATION-MAP.md) | [§1 Features](#1-significant-features) |
+| **3 · LOE + E-Signature** | [★ LOE / E-Signature Feature Sheet](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/00-LOE-ESIGN-FEATURE.md) | [§1 Features](#1-significant-features) |
+| **4 · Closing: Pay → Paid** | [★ Closing & Payment Feature Sheet](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/00-CLOSING-PAYMENT-FEATURE.md) | [§1 Features](#1-significant-features) |
+| **5 · TESTING** (run the pipeline) | [★ E2E Testing Workflow — Master Plan](~/Development/APR-Dashboard-v3/tests/E2E-TESTING-WORKFLOW-MASTER.md) | [§3 Testing](#3-testing) |
+| **6 · Reference** (fields · cascade · routing) | [★ Field Data Map — where everything lives](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/FIELD-DATA-MAP-where-everything-lives.md) · [Cascade spec + wiring](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/CASCADE-LOGIC-SPEC-AND-WIRING.md) | [§4 Reference](#4-reference) |
+
+> **Before any ClickUp / Valcre / DocuSeal / Supabase action:** LOAD [`/cli-apr-tools`](~/.claude/skills/cli-apr-tools/SKILL.md) + [`/cli-clickup-tools`](~/.claude/skills/cli-clickup-tools/SKILL.md) and **search the catalog first** — most test/sync actions already have a CLI. Don't hand-roll curl until you've confirmed no command exists.
+
 `#apr-workflow` `#apr-dashboard` `#master-index` — search any of these to surface the connected APR doc set.
 
-_Last updated 2026-06-07. Sections follow the canonical project-dashboard format: Significant Features · Accounts & Access · Testing · Reference · Status & Filing._
+_Last updated 2026-06-10 (router/navigability pass — top "want to do X? go here" router added; no content removed). Sections follow the canonical project-dashboard format: Significant Features · Accounts & Access · Testing · Reference · Status & Filing._
 
 ---
 
-## Index
+## Page sections
+
+_(The router above sends you to the right doc; this jumps you to a section on THIS page.)_
 
 1. [Significant Features](#1-significant-features)
 2. [Accounts & Access](#2-accounts-access)
@@ -131,9 +151,12 @@ Every integration runs on **Ben's own test account** today and migrates to the *
 
 The E2E workflow + how to drive the app. **Before any ClickUp / Valcre / DocuSeal / Supabase action, LOAD the tool skill ([`/cli-apr-tools`](~/.claude/skills/cli-apr-tools/SKILL.md)) and run its search FIRST — do not hand-roll curl until you've confirmed no command exists.**
 
+> **Most of these test/sync actions already have a CLI.** Load [`/cli-apr-tools`](~/.claude/skills/cli-apr-tools/SKILL.md) **and** [`/cli-clickup-tools`](~/.claude/skills/cli-clickup-tools/SKILL.md) and search the catalog before hand-rolling anything — each command now carries an **exists / missing / broken** status, so a search also tells you what still needs authoring.
+
 | Doc | What it is |
 |---|---|
-| [**E2E Testing Workflow — Master Plan**](~/Development/APR-Dashboard-v3/tests/E2E-TESTING-WORKFLOW-MASTER.md) | THE end-to-end test plan (v2, decisions locked). Full walk-through of the whole pipeline. |
+| [**★ Full-Loop E2E Test PRD (RUNBOOK)**](~/Development/APR-Dashboard-v3/tests/E2E-TEST-PRD-FULL-LOOP.md) | **THE executable runbook qa-agent drives** — the whole client journey leg by leg (intake field-mapping → LOE → Valcre → ClickUp → e-sign/triggers/signed-date → folders → QuickBooks), each leg with action/verify/screenshot/status. No-stopping rule; screenshots → tldraw canvas. Makes the Master Plan runnable. |
+| [**E2E Testing Workflow — Master Plan**](~/Development/APR-Dashboard-v3/tests/E2E-TESTING-WORKFLOW-MASTER.md) | THE end-to-end test plan (v2, decisions locked). Full walk-through of the whole pipeline + the gap analysis the PRD above executes against. |
 | [**★ LOE Test Coverage Gate**](~/Development/APR-Dashboard-v3/tests/LOE-TEST-COVERAGE-GATE.md) | **The documented "what to verify on EVERY LOE test"** — cascade, §10 cleanliness, Schedule A / multiple properties, Example-block leak, token leaks, render gotcha. Run the LOE against this so nothing's missed (the Schedule-A-miss fix). |
 | [**Data-Flow Visual Verification Workflow**](~/Development/APR-Dashboard-v3/Data-Flow%20Visuals/01-Data-Flow-Diagram.md) | **QA-owned.** Proves a job's data travels intact via filled-in screenshots side-by-side on Paper. Living board: `Build Workflow Testing` › `APR Workflow` › `DATA-FLOW BOARD — VAL261101`. |
 | [Generic Visual Verification SOP](~/Development/APR-Dashboard-v3/tests/Testing-Visual-Verification-Workflow.md) | The capturer≠verifier screenshot discipline. |
@@ -188,6 +211,7 @@ The source of truth for what fields exist, their options, the cascade rules, and
 | [Field Routing (dashboard→ClickUp→LOE)](~/Development/APR-Dashboard-v3/docs/FIELD-ROUTING-dashboard-clickup-loe.md) | Where each field flows. |
 | [PRD-A — Fields → Valcre Mapping](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/PRD-A-fields-to-valcre-mapping.md) | The field→Valcre mapping + sync testing PRD. |
 | [**API & Field Mapping Reference**](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/1-API-FIELD-MAPPING-REFERENCE.md) | Source of truth for field→Valcre mappings + enum conversions. PRIME-FIRST mini-SOP + Work Diary + PENDING Questions park. |
+| [**Valcre OData Schema Reference**](~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/VALCRE-ODATA-SCHEMA-REFERENCE.md) | GROUND TRUTH — authoritative enum token sets for every Valcre field, extracted from $metadata. Check here before guessing any enum value. |
 | [Dropdown vs Registry Audit](~/Development/APR-Dashboard-v3/docs/DROPDOWN-VS-REGISTRY-AUDIT.md) | Every dropdown's options vs the V6 registry — the mismatch punch-list. |
 
 ### Key reference docs

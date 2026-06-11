@@ -10,11 +10,15 @@ const corsHeaders = {
 
 // PURPOSES MAP - Property Rights Appraised conversion
 // Maps Dashboard "Property Rights" field → Valcre "Purpose" field (Nov 13, 2025)
+// Enum values confirmed from Valcre OData $metadata (JobPurposes) 2026-06-11:
+//   None, FeeSimple, LeasedFee, Leasehold, Other, MarketStudy, PartialInterest,
+//   Asc805, CostSegregation, RentRestricted, GoingConcern, LeaseholdFranchise,
+//   PartialInterestTaking, TotalTaking, CondominiumOwnership, All
 const PURPOSES_MAP: Record<string, string> = {
   "Fee Simple Interest": "FeeSimple",
   "Leased Fee Interest": "LeasedFee",
   "Leasehold Interest": "Leasehold",
-  "Undivided Interest": "UndividedInterest",
+  // "Undivided Interest" → no matching JobPurposes member; UNRESOLVED — omit to avoid 400
   "Partial Interest": "PartialInterest",
   "Partial Interest Taking": "PartialInterestTaking",
   "Total Taking": "TotalTaking",
@@ -23,26 +27,31 @@ const PURPOSES_MAP: Record<string, string> = {
   Other: "Other",
   "Going Concern": "GoingConcern",
   "Condominium Ownership": "CondominiumOwnership",
-  "Cost Segregation Study": "CostSegregationStudy",
-  "ASC 805": "ASC805",
+  "Cost Segregation Study": "CostSegregation",  // was "CostSegregationStudy" — $metadata member is "CostSegregation"
+  "ASC 805": "Asc805",                          // was "ASC805" — $metadata member is "Asc805"
   None: "None",
 };
 
 // REQUESTED VALUES (Valuation Premises) - Complete Valcre values (Nov 13, 2025 - Updated)
+// Enum values confirmed from Valcre OData $metadata (JobRequestedValues) 2026-06-11:
+//   None, AsIs, AsStabilized, AsComplete, AsVacant, Lots, LotsToHouses,
+//   BulkValue, Retrospective, RentRestricted, RentSurvey, TaxCredits,
+//   InsurableValue, Disposition, GoDark, Hypothetical, InUse, Liquidation,
+//   Other, RelatedSiteValue, All
 const REQUESTED_VALUES_MAP: Record<string, string> = {
-  // Dashboard values (verified against Valcre dropdown):
+  // Dashboard values:
   "Market Value": "AsIs",
   "As-Is": "AsIs",
-  "Market Rent": "MarketRentStudy",
+  // "Market Rent" → no matching member ("MarketRentStudy" doesn't exist); UNRESOLVED — nearest is RentSurvey; flagged
   "Liquidation Value": "Liquidation",
-  "Investment Value": "ProspectiveAtStabilization", // No direct "Investment Value" in Valcre - using "Prospective at Stabilization" (what investors care about)
-  "Insurable Value": "InsurableReplacementCost", // Fixed: was "InsurableValue" (doesn't exist)
+  "Investment Value": "AsStabilized",    // was "ProspectiveAtStabilization" (not in enum); nearest schema member = "AsStabilized"
+  "Insurable Value": "InsurableValue",   // was "InsurableReplacementCost" (not in enum); correct member = "InsurableValue"
 
-  // Complete Valcre dropdown (from screenshots):
-  "Prospective at Completion": "ProspectiveAtCompletion",
-  "Prospective at Stabilization": "ProspectiveAtStabilization",
+  // Complete Valcre dropdown (reconciled with $metadata 2026-06-11):
+  "Prospective at Completion": "AsComplete",     // was "ProspectiveAtCompletion" (not in enum); nearest = "AsComplete"
+  "Prospective at Stabilization": "AsStabilized", // was "ProspectiveAtStabilization" (not in enum); nearest = "AsStabilized"
   "As-Vacant": "AsVacant",
-  "Insurable Replacement Cost": "InsurableReplacementCost",
+  "Insurable Replacement Cost": "InsurableValue", // was "InsurableReplacementCost" (not in enum); correct member = "InsurableValue"
   "Bulk Value": "BulkValue",
   Disposition: "Disposition",
   "Go Dark": "GoDark",
@@ -50,7 +59,7 @@ const REQUESTED_VALUES_MAP: Record<string, string> = {
   "In Use": "InUse",
   Lots: "Lots",
   "Lots to Houses": "LotsToHouses",
-  "Market Rent Study": "MarketRentStudy",
+  // "Market Rent Study" → "MarketRentStudy" not in enum; UNRESOLVED — nearest is RentSurvey; flagged
   Other: "Other",
   "Rent Restricted": "RentRestricted",
   Retrospective: "Retrospective",
@@ -58,18 +67,21 @@ const REQUESTED_VALUES_MAP: Record<string, string> = {
 };
 
 // REPORT FORMAT - Complete Valcre values (Oct 5, 2025)
+// Enum values confirmed from Valcre OData $metadata (JobReportFormat) 2026-06-11:
+//   Appraisal, RestrictedAppraisal, DeskReview, AmendmentLetter, Consultation,
+//   RentStudy, Evaluation, BrokerOpinionOfValue, Redirection, Completion, PeerReview
 const REPORT_FORMAT_MAP: Record<string, string> = {
   // Dashboard values (verified):
   Comprehensive: "Appraisal",
   Summary: "Appraisal",
   Restricted: "RestrictedAppraisal",
-  Form: "Form",
+  Form: "Form",  // NOTE: code deliberately skips "Form" — not a valid Valcre enum member
 
-  // Complete Valcre dropdown (from screenshots):
+  // Complete Valcre dropdown (reconciled with $metadata 2026-06-11):
   "Appraisal Report": "Appraisal",
   "Amendment Letter": "AmendmentLetter",
   "Broker Opinion of Value": "BrokerOpinionOfValue",
-  "Completion Report": "CompletionReport",
+  "Completion Report": "Completion",    // was "CompletionReport" — $metadata member is "Completion"
   Consultation: "Consultation",
   "Desk Review": "DeskReview",
   Evaluation: "Evaluation",
@@ -100,10 +112,12 @@ const ANALYSIS_LEVEL_MAP: Record<string, string> = {
 };
 
 // SCOPE OF WORK MAP - Dashboard "Scope of Work" → Valcre "Scope" field (Nov 13, 2025)
-// Enum values confirmed from Valcre OData $metadata (JobScopes enum) + live job VAL261044 (2026-06-11):
-//   AllApplicable, BestApproach, BestApproaches, DepreciatedReplacementCost, CostApproach,
+// Enum values confirmed from Valcre OData $metadata (JobScopes enum) 2026-06-11:
+//   None, AllApplicable, BestApproach, BestApproaches, DepreciatedReplacementCost, CostApproach,
 //   DiscountedCashFlow, FeasibilityStudy, IncomeApproach, LandValue, Litigation,
-//   MarketResearch, MarketStudy, RentSurvey, SalesComparisonApproach, Update
+//   MarketResearch, MarketStudy, RentSurvey, SalesComparisonApproach, Update, All
+// UNRESOLVED: "Net Rent Review" → "NetRentReview" is NOT in JobScopes. Nearest candidate = "RentSurvey".
+//   Left as "NetRentReview" pending Chris/Ben confirmation. Will trigger a Valcre 400 if this key is sent.
 const SCOPE_OF_WORK_MAP: Record<string, string> = {
   "All Applicable": "AllApplicable",
   "Best One Approach": "BestApproach",       // was "BestOneApproach" — not in JobScopes enum; confirmed as "BestApproach"
@@ -148,7 +162,7 @@ const INTENDED_USES_MAP: Record<string, string> = {
   Consulting: "Consulting",
   "Decision-Making/Internal": "DecisionMakingInternal",
   "Dispute Resolution": "DisputeResolution",
-  Divorce: "Divorce",
+  // "Divorce" → not in JobIntendedUses enum; UNRESOLVED — nearest is "Matrimonial"; flagged pending confirmation
   "Establish Sales Price": "EstablishSalesPrice",
   Other: "Other",
   "Property Tax Appeal": "PropertyTaxAppeal",

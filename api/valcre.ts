@@ -781,6 +781,50 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           // correctly (readback-verified on job 784140, 2026-06-10). valueScenarios lands in CF12414
           // via the setValtaCustomFields() call above (the `valueScenarios` key in VALTA_CUSTOM_FIELD_IDS).
 
+          // PropertySubtype → Property.SecondaryType (update path).
+          // SecondaryType lives on the Property entity, not the Job entity, so it cannot go into
+          // updateData (the Job PATCH). Resolve the linked PropertyId from the job record then PATCH it.
+          let propertySubtypePatched = false;
+          const rawSubtype = jobData.PropertySubtype || jobData.propertySubtype;
+          if (rawSubtype) {
+            try {
+              const jobFetchResp = await fetch(
+                `https://api-core.valcre.com/api/v1/Jobs(${jobData.jobId})?$select=PropertyId`,
+                { headers: { Authorization: `Bearer ${token}` } },
+              );
+              if (jobFetchResp.ok) {
+                const jobRow = await jobFetchResp.json();
+                const linkedPropertyId = jobRow?.PropertyId;
+                if (linkedPropertyId) {
+                  const propPatchResp = await fetch(
+                    `https://api-core.valcre.com/api/v1/Properties(${linkedPropertyId})`,
+                    {
+                      method: "PATCH",
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({ SecondaryType: rawSubtype }),
+                    },
+                  );
+                  if (propPatchResp.ok || propPatchResp.status === 204) {
+                    console.log(`✅ PropertySubtype → SecondaryType="${rawSubtype}" on Property ${linkedPropertyId}`);
+                    propertySubtypePatched = true;
+                  } else {
+                    const errBody = await propPatchResp.text();
+                    console.error(`⚠️ SecondaryType PATCH failed (${propPatchResp.status}): ${errBody}`);
+                  }
+                } else {
+                  console.warn(`⚠️ SecondaryType: job ${jobData.jobId} has no linked PropertyId — skipping`);
+                }
+              } else {
+                console.warn(`⚠️ SecondaryType: failed to fetch job PropertyId (${jobFetchResp.status})`);
+              }
+            } catch (subtypeErr: any) {
+              console.error(`⚠️ SecondaryType patch error: ${subtypeErr.message}`);
+            }
+          }
+
           return res
             .status(200)
             .setHeader("Access-Control-Allow-Origin", "*")

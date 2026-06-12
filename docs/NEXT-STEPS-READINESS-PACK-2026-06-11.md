@@ -108,6 +108,10 @@ Email send and SharePoint folders are **the same integration** — a single Entr
 
 **How signing works:** the email carries a signing button → custom `/sign/:id` route (fallback = DocuSeal slug URL) → interactive signing page (DECLINE / DOWNLOAD / SIGN NOW). Submitter is `bc@crowestudio.com` on test sends. **Ben's requirement met:** as long as it opens in your inbox, you (or an agent) can sign. Last session an agent drove the sign via Computer Use; not required — Ben signing from the inbox is the simple path.
 
+**Real end-to-end PROVEN 2026-06-12** (real V07 LOE → sent → Resend delivered → Codex signed → webhook → DB `loe_signed` + ClickUp "LOE Signed"). **Two findings:**
+- **⚠ OPEN — register the DocuSeal webhook (UI-only):** DocuSeal did NOT auto-deliver `submission.completed` (handler verified by firing it manually). DocuSeal API has no webhook-config endpoint (404) — **Codex/Ben:** DocuSeal dashboard → Settings → Webhooks → add `https://ngovnamnjmexdpjtcnky.supabase.co/functions/v1/docuseal-webhook`, events **submission.created + submission.completed**. Until done, the signed-status auto-flip won't fire live.
+- **✓ FIXED — SharePoint upload is connect-only:** post-Graph-activation the signed-LOE upload would auto-create a folder for unmatched/test jobs in the client's real SharePoint (caught + cleaned live); `folderExists()` guard now skips unless the client folder already exists.
+
 **Open bugs before a real client send** (not blockers for testing): re-anchor isn't needed (V07 verified); `loe_sent` status never auto-sets (jumps pending→signed); `loe_submissions` insert can fail silently; `docuseal-webhook` returns 200 even on error.
 
 **Where documented:** [LOE/e-Sign Feature Sheet](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/00-LOE-ESIGN-FEATURE.md) · [DocuSeal Architecture](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/LOE-DOCUSEAL-ARCHITECTURE.md) · [Edit/Version Workflow](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/LOE-07-EDIT-VERSION-WORKFLOW.md) · [Phase 5 sheet](~/Development/APR-Dashboard-v3/tests/phase-sheets/PHASE-5-LOE-ESIGN.md)

@@ -91,6 +91,15 @@ After secrets set, **redeploy is NOT required** (Supabase injects secrets into t
 
 ---
 
+## 2b. LOE loop — findings from the real end-to-end run (2026-06-12)
+
+The full real loop is PROVEN: real V07 LOE → sent → Resend delivered → Codex signed → webhook → DB `loe_signed` + ClickUp "LOE Signed". Two findings:
+
+- **Finding A — register the DocuSeal webhook (UI task, OPEN).** DocuSeal's live webhook did NOT auto-deliver `submission.completed` (DB sat unchanged after a completed signature; handler verified by firing the payload manually). DocuSeal's API does NOT expose webhook config (404 on GET/POST `/webhooks`) — it's **dashboard-UI-only**. **Codex/Ben:** DocuSeal dashboard → Settings → Webhooks → add URL `https://ngovnamnjmexdpjtcnky.supabase.co/functions/v1/docuseal-webhook`, subscribe **submission.created + submission.completed**.
+- **Finding B — upload is CONNECT-ONLY (FIXED).** Post-Graph-activation the signed-LOE upload no longer 503-skips, so a raw PUT auto-created a test-job folder in the client's real SharePoint (caught + deleted live). `folderExists()` guard now files ONLY into an existing client job folder, else skips `200 {skipped:true}` — never auto-creates. The same connect-not-create discipline as folder-create, now enforced on upload.
+
+---
+
 ## 3. QuickBooks activation (closing flow)
 
 **Secrets** (Codex produces from the Intuit Developer app + sandbox):

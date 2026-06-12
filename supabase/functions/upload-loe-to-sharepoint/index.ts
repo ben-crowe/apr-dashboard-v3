@@ -19,7 +19,7 @@
 //     "pdfUrl": "https://.../signed.pdf" }   // fetched server-side
 
 import { serve } from 'https://deno.land/std@0.220.0/http/server.ts';
-import { graphConfigured, uploadFile, JOB_SUBFOLDERS } from '../_shared/graph.ts';
+import { graphConfigured, uploadFile, listFolderNames, chooseSignedLoeName, resolveSharePointIds, JOB_SUBFOLDERS } from '../_shared/graph.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -67,10 +67,15 @@ serve(async (req) => {
 
     const resolvedYear = year ?? new Date().getUTCFullYear();
     const parentFolderName = `${jobNumber} - ${propertyDescription}`;
-    // Client's live convention (verified from real folder VAL261003):
-    //   "LOE - {JOB#} - {property desc + addr} - signed.pdf"  == "LOE - {parentFolderName} - signed.pdf"
-    const filename = `LOE - ${parentFolderName} - signed.pdf`;
-    const filePath = `2.Jobs/${resolvedYear}/${parentFolderName}/${BILLING_SUBFOLDER}/${filename}`;
+    const billingPath = `2.Jobs/${resolvedYear}/${parentFolderName}/${BILLING_SUBFOLDER}`;
+
+    // Client's signed-LOE naming VARIES job-to-job (long form "LOE - {parentFolderName} - signed.pdf"
+    // on some, short "LOE - {JOB#} - signed.pdf" on others). Match-or-fallback: reuse an existing
+    // signed-LOE name if one is already in the billing folder (replace, no duplicate); else long form.
+    const { driveId } = await resolveSharePointIds();
+    const existing = await listFolderNames(driveId, billingPath);
+    const filename = chooseSignedLoeName(existing, jobNumber, parentFolderName);
+    const filePath = `${billingPath}/${filename}`;
 
     const uploaded = await uploadFile(filePath, bytes, 'application/pdf');
 

@@ -250,6 +250,31 @@ export function jobFolderInputs(job: {
   return { jobNumber: job.job_number, propertyDescription, year };
 }
 
+/** List the file/folder names directly under a drive path (empty array if the path 404s). */
+export async function listFolderNames(driveId: string, folderPath: string): Promise<string[]> {
+  const res = await graphFetch(`/drives/${driveId}/root:/${encodePath(folderPath)}:/children?$select=name&$top=200`);
+  if (res.status === 404) return [];
+  if (!res.ok) throw new Error(`listFolderNames failed (${res.status}): ${await res.text()}`);
+  const j = await res.json();
+  return (j.value ?? []).map((c: { name: string }) => c.name);
+}
+
+/**
+ * Pick the signed-LOE filename to write, gracefully handling the client's job-to-job
+ * naming variance. If a signed-LOE file ALREADY exists in the folder (either the long
+ * "LOE - {parentFolderName} - signed.pdf" or the short "LOE - {jobNumber} - signed.pdf"
+ * form, or any "LOE - ... signed" variant), REUSE that exact name (replace it — no
+ * duplicate). Otherwise default to the robust long form.
+ */
+export function chooseSignedLoeName(existingNames: string[], jobNumber: string, parentFolderName: string): string {
+  const long = `LOE - ${parentFolderName} - signed.pdf`;
+  const short = `LOE - ${jobNumber} - signed.pdf`;
+  if (existingNames.includes(long)) return long;
+  if (existingNames.includes(short)) return short;
+  const anySigned = existingNames.find((n) => /^LOE .*signed\.pdf$/i.test(n));
+  return anySigned ?? long;
+}
+
 /** Upload a small file (< ~250 MB single PUT) to a path under the drive root. */
 export async function uploadFile(
   filePath: string,        // e.g. "2.Jobs/2026/VAL261054 - .../4. CLIENT BILLING (Invoice, LOE)/LOE.pdf"

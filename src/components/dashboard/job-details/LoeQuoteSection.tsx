@@ -1344,13 +1344,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             {/* READ-ONLY: sourced from Section 1 / job_property_info. Set via client intake or Section 1. */}
             <CompactField label="Property Subtype">
               <div style={derivedFieldStyle} className="max-w-[160px]" title="Set in Section 1 — Property Information.">
-                {(jobDetails as any).propertySubtype || <span className="text-zinc-400">Set in Section 1</span>}
+                {(jobDetails as any).propertySubtype || <span className="text-zinc-400">from Section 1</span>}
               </div>
             </CompactField>
             {/* READ-ONLY: sourced from Section 1 / job_property_info. Set via client intake or Section 1. */}
             <CompactField label="Tenancy">
               <div style={derivedFieldStyle} className="max-w-[160px]" title="Set in Section 1 — Property Information.">
-                {(jobDetails as any).tenancy || <span className="text-zinc-400">Set in Section 1</span>}
+                {(jobDetails as any).tenancy || <span className="text-zinc-400">from Section 1</span>}
               </div>
             </CompactField>
             {/* MOVED 2026-06-10 from Data Gathering (PropertyInfoSection Appraisal Assignment) — binding/handler/options preserved verbatim. */}

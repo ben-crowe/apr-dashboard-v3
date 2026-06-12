@@ -1,26 +1,28 @@
 // Feature B (SharePoint) — create the per-job folder tree on demand.
 //
-// Called at job creation AND by the dashboard "Create Client Folders" button.
-// Idempotent: re-calling never duplicates (check-then-create per folder).
+// Called at job creation (after the VAL number lands) AND by the dashboard
+// "Create Client Folders" button. Idempotent: re-calling never duplicates.
 //
 // INERT until the Entra app exists: with no GRAPH_* secrets it returns 503
 // { configured:false } so the dashboard button can show "SharePoint not configured".
 //
-// Request body:
+// Request body — EITHER form:
+//   { "jobId": "<job_submissions.id>" }                     ← preferred (parity-safe)
 //   { "jobNumber": "VAL261054",
-//     "propertyDescription": "Stacked Townhouse Development 2822 &2828 11 Ave SE Calgary AB",
-//     "year": 2026 }            // optional — defaults to current year
+//     "propertyDescription": "Stacked Townhouse ... Calgary AB",
+//     "year": 2026 }                                        ← explicit override
 //
-// parent folder = "{jobNumber} - {propertyDescription}" under 2.Jobs/{year}/
+// With jobId we look up the row and build the folder name via jobFolderInputs() —
+// the SAME helper the signed-LOE upload uses, so the parent folder is byte-identical.
 
 import { serve } from 'https://deno.land/std@0.220.0/http/server.ts';
-import { graphConfigured, createJobFolders, resolveSharePointIds } from '../_shared/graph.ts';
+import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { graphConfigured, createJobFolders, resolveSharePointIds, jobFolderInputs } from '../_shared/graph.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), {
     status,
@@ -35,9 +37,29 @@ serve(async (req) => {
   }
 
   try {
-    const { jobNumber, propertyDescription, year } = await req.json();
+    const body = await req.json();
+    let jobNumber: string | undefined = body.jobNumber;
+    let propertyDescription: string | undefined = body.propertyDescription;
+    let year: string | number | undefined = body.year;
+
+    // Preferred path: resolve from the job row so the name matches the upload side.
+    if (body.jobId) {
+      const supabase = createClient(
+        Deno.env.get('SUPABASE_URL')!,
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+      );
+      const { data: jobRow, error } = await supabase
+        .from('job_submissions')
+        .select('job_number, property_name, property_address, created_at')
+        .eq('id', body.jobId)
+        .single();
+      if (error || !jobRow) return json({ error: 'Job not found for jobId' }, 404);
+      if (!jobRow.job_number) return json({ error: 'Job has no job_number yet — create the Valcre job first' }, 409);
+      ({ jobNumber, propertyDescription, year } = jobFolderInputs(jobRow));
+    }
+
     if (!jobNumber || !propertyDescription) {
-      return json({ error: 'Missing required fields: jobNumber and propertyDescription' }, 400);
+      return json({ error: 'Provide jobId, or jobNumber + propertyDescription' }, 400);
     }
 
     const parentFolderName = `${jobNumber} - ${propertyDescription}`;

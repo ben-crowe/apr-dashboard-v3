@@ -463,6 +463,29 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
             .from('job_submissions')
             .update({ job_number: result.jobNumber })
             .eq('id', data.jobId);
+
+          // Create the per-job SharePoint folder tree (parent + 5 subfolders).
+          // No-ops cleanly (503) until the Entra app secrets exist; never blocks job creation.
+          try {
+            const sbUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ngovnamnjmexdpjtcnky.supabase.co';
+            const folderRes = await fetch(`${sbUrl}/functions/v1/create-job-folders`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`
+              },
+              body: JSON.stringify({ jobId: data.jobId })
+            });
+            if (folderRes.status === 503) {
+              console.log('SharePoint folders skipped — Entra app not configured yet');
+            } else if (folderRes.ok) {
+              console.log('SharePoint job folders created');
+            } else {
+              console.warn('SharePoint folder create failed:', folderRes.status);
+            }
+          } catch (folderErr) {
+            console.warn('SharePoint folder create error (non-fatal):', folderErr);
+          }
         }
       } catch (error) {
         console.error('Failed to handle ClickUp task:', error);

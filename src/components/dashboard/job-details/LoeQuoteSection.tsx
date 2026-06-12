@@ -964,8 +964,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const clickupTaskId = job.clickup_task_id || (job as any).clickupTaskId || '';
 
   // RULE 1 — test tools self-disable on a real (live-synced) Valcre job.
-  const isLiveValcreJob = isValcreJobNumber(jobDetails?.jobNumber) && !!(jobDetails as any)?.valcreJobId;
-  const liveJobToast = () => toast.info('Not available — this job is connected to a live Valcre job.');
+  // (isLiveValcreJob / liveJobToast removed 2026-06-12 — cascade picker no longer locks on a live
+  //  Valcre job; it stays active as a test/demo tool, consistent with all other dashboard fields.)
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full border border-gray-400 dark:border-white/20 rounded-lg dark:bg-black/15">
@@ -1184,31 +1184,25 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         </div>
 
         {/* Cascade Options — scenario picker strip (TEST tool, NOT a client-facing field).
-            Top of Section 2, pushed to the side, matches the mock #cascadePicker. Disabled on a live Valcre job. */}
+            Top of Section 2, pushed to the side, matches the mock #cascadePicker.
+            Stays ACTIVE on a live Valcre job (2026-06-12) — this is a test/demo tool, never in
+            production. Leaving it live lets us switch versions AFTER a Valcre number exists, which
+            also fires the value-scenarios sync to Valcre (demonstrates the sync working). Consistent
+            with every other dashboard field, none of which lock on a live job. */}
         <div className="flex justify-end mb-2">
           <div id="cascade-options-anchor">
-            {isLiveValcreJob ? (
-              <div
-                onClick={liveJobToast}
-                className="h-8 px-3 text-xs flex items-center gap-1 rounded-md border border-border bg-background opacity-50 cursor-not-allowed text-muted-foreground"
-                title="Not available — this job is connected to a live Valcre job."
-              >
-                Cascade Options — pick a scenario
-              </div>
-            ) : (
-              <Select value={cascadeVersion} onValueChange={handleCascadeVersion}>
-                <SelectTrigger className="h-8 px-3 text-xs gap-1 rounded-md border border-border bg-background min-w-[230px]">
-                  <SelectValue placeholder="Cascade Options — pick a scenario" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="__CLEAR__" className="text-muted-foreground border-b border-border mb-1">Clear — reset to empty</SelectItem>
-                  <SelectItem value="V1">V1 — Completed</SelectItem>
-                  <SelectItem value="V2">V2 — Under Renovation</SelectItem>
-                  <SelectItem value="V3">V3 — Improved Land / Demolition</SelectItem>
-                  <SelectItem value="V4">V4 — Insurance</SelectItem>
-                </SelectContent>
-              </Select>
-            )}
+            <Select value={cascadeVersion} onValueChange={handleCascadeVersion}>
+              <SelectTrigger className="h-8 px-3 text-xs gap-1 rounded-md border border-border bg-background min-w-[230px]">
+                <SelectValue placeholder="Cascade Options — pick a scenario" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="__CLEAR__" className="text-muted-foreground border-b border-border mb-1">Clear — reset to empty</SelectItem>
+                <SelectItem value="V1">V1 — Completed</SelectItem>
+                <SelectItem value="V2">V2 — Under Renovation</SelectItem>
+                <SelectItem value="V3">V3 — Improved Land / Demolition</SelectItem>
+                <SelectItem value="V4">V4 — Insurance</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 

@@ -39,12 +39,20 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
   // "empty → pick → cascade fills." A real, never-filled job derives naturally. Reset by Clear.
   const [testFilled, setTestFilled] = React.useState(false);
 
+  // Test Mode — default OFF on every load, NOT persisted. A real job opened later always
+  // starts OFF so the test links can't accidentally clobber real data. Toggling ON reveals
+  // the Clear / Fill links.
+  const [testMode, setTestMode] = React.useState(false);
+
   const handleFillTestData = () => {
     if (isLiveValcreJob) {
       toast.info('Not available — this job is connected to a live Valcre job.');
       return;
     }
-    if (onUpdateJob) {
+    // Smart Fill: if Section 1 already holds real submission data, DON'T clobber it —
+    // fill only Section 2. Only fill Section 1 when the job is blank.
+    const section1HasData = !!(job.clientFirstName || job.clientEmail || job.propertyName);
+    if (!section1HasData && onUpdateJob) {
       onUpdateJob({
         clientFirstName: 'Sarah',
         clientLastName: 'Mitchell',
@@ -130,7 +138,11 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
       onUpdateDetails({ propertyRightsAppraised: '', statusOfImprovements: '', valueScenarios: '', approachesToValue: '' } as any);
     }
 
-    toast.success('Test data filled — pick a Cascade Options version to set Value Scenarios.');
+    toast.success(
+      section1HasData
+        ? 'Section 2 test data filled — Section 1 preserved from submission.'
+        : 'Test data filled — pick a Cascade Options version to set Value Scenarios.'
+    );
 
     // Scroll to the cascade picker and pulse it (ported from the registry mock) so the eye
     // lands on "now pick a scenario." Pulse is cleared the moment a version is picked
@@ -162,30 +174,55 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
 
   return (
     <div className="space-y-2">
-      {/* Test-data control — subtle frameless text links (NOT buttons). Layout: Clear · | · Fill with Test Data.
-          Both gated: disabled/muted on a live Valcre job. */}
+      {/* Test-data control. Test Mode toggle (default OFF, not persisted) gates the Clear / Fill
+          links — OFF hides them entirely so a real job can't be accidentally clobbered.
+          Links stay gated on a live Valcre job too. */}
       <div className="flex justify-end items-center gap-2.5 px-1 pb-1 text-xs">
-        <span
-          role="button"
-          onClick={handleClearTestData}
-          title={isLiveValcreJob ? 'Not available — this job is connected to a live Valcre job.' : undefined}
-          className={`text-muted-foreground hover:text-foreground transition-colors ${
-            isLiveValcreJob ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-          }`}
-        >
-          Clear
-        </span>
-        <span className="w-px h-3 bg-gray-300 dark:bg-white/20" />
-        <span
-          role="button"
-          onClick={handleFillTestData}
-          title={isLiveValcreJob ? 'Not available — this job is connected to a live Valcre job.' : undefined}
-          className={`text-muted-foreground hover:text-foreground transition-colors ${
-            isLiveValcreJob ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-          }`}
-        >
-          Fill with Test Data
-        </span>
+        <label className="flex items-center gap-1.5 cursor-pointer select-none text-muted-foreground">
+          <span>Test Mode</span>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={testMode}
+            onClick={() => setTestMode((v) => !v)}
+            className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${
+              testMode ? 'bg-primary' : 'bg-gray-300 dark:bg-white/20'
+            }`}
+          >
+            <span
+              className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
+                testMode ? 'translate-x-3.5' : 'translate-x-0.5'
+              }`}
+            />
+          </button>
+        </label>
+
+        {testMode && (
+          <>
+            <span className="w-px h-3 bg-gray-300 dark:bg-white/20" />
+            <span
+              role="button"
+              onClick={handleClearTestData}
+              title={isLiveValcreJob ? 'Not available — this job is connected to a live Valcre job.' : undefined}
+              className={`text-muted-foreground hover:text-foreground transition-colors ${
+                isLiveValcreJob ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+              }`}
+            >
+              Clear
+            </span>
+            <span className="w-px h-3 bg-gray-300 dark:bg-white/20" />
+            <span
+              role="button"
+              onClick={handleFillTestData}
+              title={isLiveValcreJob ? 'Not available — this job is connected to a live Valcre job.' : undefined}
+              className={`text-muted-foreground hover:text-foreground transition-colors ${
+                isLiveValcreJob ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+              }`}
+            >
+              Fill with Test Data
+            </span>
+          </>
+        )}
       </div>
 
       {/* All sections are now independent Collapsibles */}
@@ -202,6 +239,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         onUpdateDetails={onUpdateDetails}
         refetchJobData={refetchJobData}
         testFilled={testFilled}
+        testMode={testMode}
       />
 
       <OrganizingDocsSection

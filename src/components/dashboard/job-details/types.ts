@@ -10,4 +10,6 @@ export interface SectionProps {
   // True once "Fill with Test Data" was pressed for this job (demo mode). Holds the cascade-derived
   // cluster empty until a scenario is picked. A real job (never filled) derives normally.
   testFilled?: boolean;
+  /** Test Mode ON → suppress per-field save/sync FAILURE toasts (demo noise); indicators still update. */
+  testMode?: boolean;
 }

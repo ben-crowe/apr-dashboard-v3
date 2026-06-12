@@ -464,6 +464,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const autoSaveField = useCallback(async (fieldName: string, value: any) => {
     if (!job || !onUpdateDetails) return;
 
+    // Per-field save/sync FAILURE toasts fire ONLY on a real Valcre job. No real job = just
+    // playing/checking fields (no real persistence target) → silent (Ben's demo rule). The job
+    // number is the natural separator. Field-state indicators still update either way.
+    const hasRealJob = hasRealValcreJob(jobDetails);
+
     // Clear any existing debounce timer for this field
     if (debounceTimers.current[fieldName]) {
       clearTimeout(debounceTimers.current[fieldName]);
@@ -536,7 +541,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
         if (supabaseError) {
           console.error('Supabase save error:', supabaseError);
-          toast.error(`Failed to save ${fieldName}`);
+          if (hasRealJob) toast.error(`Failed to save ${fieldName}`); // silent unless a real Valcre job
           setFieldStates(prev => ({ ...prev, [fieldName]: 'idle' }));
           setIsSectionSaving(false);
           return;
@@ -607,7 +612,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           const syncFailed = !result.success || !!result.nativePatchError || nativeBad || customBad;
           if (syncFailed) {
             console.error('Valcre sync failed:', result.nativePatchError || result.error, result);
-            toast.error(`Failed to sync ${getFieldDisplayName(fieldName)} to Valcre`);
+            if (hasRealJob) toast.error(`Failed to sync ${getFieldDisplayName(fieldName)} to Valcre`); // silent unless a real Valcre job
             setFieldStates(prev => ({ ...prev, [fieldName]: 'sync-failed' }));
           } else {
             setFieldStates(prev => ({ ...prev, [fieldName]: 'synced' }));
@@ -621,7 +626,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
       } catch (error: any) {
         console.error('Auto-save error:', error);
-        toast.error(`Failed to save ${fieldName}`);
+        if (hasRealJob) toast.error(`Failed to save ${fieldName}`); // silent unless a real Valcre job
         setFieldStates(prev => ({ ...prev, [fieldName]: 'idle' }));
         setIsSectionSaving(false);
       }

@@ -51,7 +51,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   job,
   jobDetails = {},
   onUpdateDetails,
-  refetchJobData
+  refetchJobData,
+  testFilled = false
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isCreatingJob, setIsCreatingJob] = useState(false);
@@ -661,13 +662,16 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const primaryPropertyType = (job?.propertyType || '').split(',')[0].trim();
   useEffect(() => {
     if (!onUpdateDetails) return;
+    // Demo gate: on a test-filled job, hold Property Rights empty until a cascade scenario is picked,
+    // so the whole derived cluster comes alive together. A real (never-filled) job derives normally.
+    if (testFilled && !cascadePicked) return;
     const rights = derivePropertyRights(primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy);
     if (!rights) return; // no match -> leave field as-is ("Pending"); don't blank an existing value
     if (rights === (jobDetails.propertyRightsAppraised || '')) return; // loop guard
     onUpdateDetails({ propertyRightsAppraised: rights });
     autoSaveField('propertyRightsAppraised', rights);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy]);
+  }, [primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy, testFilled, cascadePicked]);
 
 
   // Cleanup timers on unmount

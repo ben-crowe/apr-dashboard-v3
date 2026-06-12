@@ -34,6 +34,11 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
   // RULE 1 — test tools self-disable on a real (live-synced) Valcre job.
   const isLiveValcreJob = isValcreJobNumber(jobDetails?.jobNumber) && !!(jobDetails as any)?.valcreJobId;
 
+  // Demo signal: true once Fill was pressed. Tells LoeQuoteSection to hold the cascade-derived
+  // cluster (incl. Property Rights) empty until a scenario is picked — so the demo shows
+  // "empty → pick → cascade fills." A real, never-filled job derives naturally. Reset by Clear.
+  const [testFilled, setTestFilled] = React.useState(false);
+
   const handleFillTestData = () => {
     if (isLiveValcreJob) {
       toast.info('Not available — this job is connected to a live Valcre job.');
@@ -118,6 +123,13 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
       } as any);
     }
 
+    // Mark this job test-filled so the cascade-derived cluster stays empty until a scenario is picked.
+    setTestFilled(true);
+    // Explicitly blank the cascade-derived fields so a re-fill always starts from the clean empty state.
+    if (onUpdateDetails) {
+      onUpdateDetails({ propertyRightsAppraised: '', statusOfImprovements: '', valueScenarios: '', approachesToValue: '' } as any);
+    }
+
     toast.success('Test data filled — pick a Cascade Options version to set Value Scenarios.');
 
     // Scroll to the cascade picker and pulse it (ported from the registry mock) so the eye
@@ -144,6 +156,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
     const detailKeys = ['propertySubtype','tenancy','propertyRightsAppraised','valueTimeframe','scopeOfWork','reportType','reportFormat','assignmentType','analysisLevel','appraisalFee','retainerAmount','paymentTerms','effectiveDate','requestDate','deliveryDate','deliveryTime','clientDocuments','previouslyAppraised','currentUse','proposedUse','cmhcFinancing','transactionStatus','zoningStatus','valuationPremises','statusOfImprovements','authorizedUse','valueScenarios','approachesToValue','yearBuilt','buildingSize','numberOfUnits','parkingSpaces','legalDescription','zoningClassification','zoneAbbreviation','landUseDesignation','floodZone','utilities','parcelNumber','grossLandSf','assessedValue','taxes','assessmentYear','landAssessmentValue','improvedAssessmentValue','totalAssessmentValue'];
     if (onUpdateJob) onUpdateJob(Object.fromEntries(jobKeys.map(k => [k, ''])) as any);
     if (onUpdateDetails) onUpdateDetails(Object.fromEntries(detailKeys.map(k => [k, ''])) as any);
+    setTestFilled(false); // back to real-job behavior — cascade derives naturally again
     toast.success('Test data cleared.');
   };
 
@@ -188,6 +201,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         jobDetails={jobDetails}
         onUpdateDetails={onUpdateDetails}
         refetchJobData={refetchJobData}
+        testFilled={testFilled}
       />
 
       <OrganizingDocsSection

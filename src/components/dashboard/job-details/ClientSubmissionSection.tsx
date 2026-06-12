@@ -404,7 +404,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label={testMode ? "Property Type  ·1.1" : "Property Type"}>
+            <CompactField label="Property Type">
               <Select
                 value={job.propertyType?.split(',')[0]?.trim() || ''}
                 onValueChange={(value) => {
@@ -437,7 +437,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 </SelectContent>
               </Select>
             </CompactField>
-            <CompactField label={testMode ? "Property Subtype  ·1.2" : "Property Subtype"}>
+            <CompactField label="Property Subtype">
               <Select
                 value={jobDetails?.propertySubtype || ''}
                 onValueChange={(value) => {
@@ -460,7 +460,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 </SelectContent>
               </Select>
             </CompactField>
-            <CompactField label={testMode ? "Tenancy  ·1.3" : "Tenancy"}>
+            <CompactField label="Tenancy">
               <Select
                 value={jobDetails?.tenancy || ''}
                 onValueChange={(value) => {

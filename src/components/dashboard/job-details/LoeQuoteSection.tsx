@@ -1273,7 +1273,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           <TwoColumnFields>
             {/* Status of Improvements — moved here 2026-06-10 (was in body "Cascade Options" group, now matches mock 2.4).
                 Real user field + the cascade driver. Starts blank (no preset). */}
-            <CompactField label={testMode ? "Status of Improvements  ·2.1" : "Status of Improvements"}>
+            <CompactField label="Status of Improvements">
               <Select
                 value={(jobDetails as any).statusOfImprovements || ''}
                 onValueChange={value => {
@@ -1298,7 +1298,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   driven by the cascade (Status of Improvements via the separate Cascade Options
                   picker), never selected here. Always italic + non-editable. */}
               <div style={derivedFieldStyle} className="max-w-[220px]" title="Computed from Status of Improvements + your Authorized Use (from Section 1).">
-                {(!cascadeIdle && deriveValueScenarios(statusOfImprovements, authorizedUse).join(', ')) || <span className="text-zinc-400">{testMode ? 'from Status 2.1' : 'from Status'}</span>}
+                {(!cascadeIdle && deriveValueScenarios(statusOfImprovements, authorizedUse).join(', ')) || <span className="text-zinc-400">from Status</span>}
               </div>
             </CompactField>
             <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']}>
@@ -1309,7 +1309,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="max-w-[220px]"
                 title="Auto-derived from Property Type, Subtype & Tenancy."
               >
-                {(!cascadeIdle && derivePropertyRights(primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy)) || <span className="text-zinc-400">{testMode ? 'from 1.1·1.2·1.3' : 'from Property Type'}</span>}
+                {(!cascadeIdle && derivePropertyRights(primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy)) || <span className="text-zinc-400">from Property Type</span>}
               </div>
             </CompactField>
             <CompactField label="Approaches to Value">
@@ -1320,17 +1320,17 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="max-w-[220px]"
                 title="Auto-derived from Status of Improvements."
               >
-                {(!cascadeIdle && deriveApproaches(statusOfImprovements, authorizedUse).join(', ')) || <span className="text-zinc-400">{testMode ? 'from Status 2.1' : 'from Status'}</span>}
+                {(!cascadeIdle && deriveApproaches(statusOfImprovements, authorizedUse).join(', ')) || <span className="text-zinc-400">from Status</span>}
               </div>
             </CompactField>
             {/* READ-ONLY: sourced from Section 1 / job_property_info. Set via client intake or Section 1. */}
-            <CompactField label={testMode ? "Property Subtype  ·1.2" : "Property Subtype"}>
+            <CompactField label="Property Subtype">
               <div style={derivedFieldStyle} className="max-w-[160px]" title="Set in Section 1 — Property Information.">
                 {(jobDetails as any).propertySubtype || <span className="text-zinc-400">from Section 1</span>}
               </div>
             </CompactField>
             {/* READ-ONLY: sourced from Section 1 / job_property_info. Set via client intake or Section 1. */}
-            <CompactField label={testMode ? "Tenancy  ·1.3" : "Tenancy"}>
+            <CompactField label="Tenancy">
               <div style={derivedFieldStyle} className="max-w-[160px]" title="Set in Section 1 — Property Information.">
                 {(jobDetails as any).tenancy || <span className="text-zinc-400">from Section 1</span>}
               </div>

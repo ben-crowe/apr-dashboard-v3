@@ -910,6 +910,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // The cascade useEffect above then derives and writes valueScenarios.
   const handleCascadeVersion = (version: string) => {
     if (!onUpdateDetails) return;
+    // Stop the Fill-Test-Data attention pulse the moment a version is picked.
+    document.getElementById('cascade-options-anchor')?.classList.remove('cascade-pulse');
     if (version === '__CLEAR__') {
       // Scoped Clear — resets ONLY the cascade section, leaves all other fields untouched.
       setCascadeVersion('');

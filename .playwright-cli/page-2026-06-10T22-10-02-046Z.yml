@@ -1,0 +1,190 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - img "Valta Property Valuations" [ref=e4]
+    - generic [ref=e5]:
+      - text: Valta Property Valuations Ltd.
+      - text: 300, 4838 Richard Road SW
+      - text: Calgary, AB T3E 6L1
+      - text: 587-801-5151
+      - text: www.valta.ca
+      - text: clientcare@valta.ca
+  - generic [ref=e6]:
+    - paragraph [ref=e7]: 2026-06-08
+    - paragraph [ref=e9]:
+      - text: Sarah Mitchell
+      - text: Bridgepoint Capital Partners
+      - text: 350 7th Avenue SW, Suite 1800, Calgary, AB T2P 3N9
+      - text: (403) 555-0142
+      - text: sarah.mitchell@bridgepointcap.com
+    - generic [ref=e10]:
+      - strong [ref=e11]: "RE:"
+      - generic [ref=e12]:
+        - text: Letter of Engagement for Appraisal & Valuation Services
+        - text: VAL261142 - Riverside Commerce Centre, 4820 Macleod Trail SE, Calgary, AB T2G 0A5
+    - paragraph [ref=e13]: This Letter of Engagement (“LOE” or “Agreement”) is made as of the date of this letter (the “Engagement Date”) between Valta Property Valuations Ltd. (“Appraiser”) and the client named herein (the “Authorized Client”), and sets out the terms and conditions of the assignment, including the Scope of Work, Assumptions, Limiting Conditions, and Terms of Engagement, all of which form an integral part of this Agreement.
+    - heading "1. ASSIGNMENT IDENTIFICATION" [level=1] [ref=e14]
+    - paragraph [ref=e15]: Property Name
+    - paragraph [ref=e16]: Riverside Commerce Centre
+    - paragraph [ref=e17]: Property Address
+    - paragraph [ref=e18]: 4820 Macleod Trail SE, Calgary, AB T2G 0A5
+    - paragraph [ref=e19]: Property Type
+    - paragraph [ref=e20]: Industrial
+    - paragraph [ref=e21]: Interest Appraised
+    - paragraph [ref=e22]: Leased Fee Interest (assumed to be free and clear)
+    - heading "2. PROPERTY DESCRIPTION" [level=1] [ref=e23]
+    - paragraph [ref=e24]: Current Use of the Property
+    - paragraph [ref=e25]: Multi-tenant industrial / warehouse
+    - paragraph [ref=e26]: The current use of the property is identified for context and analysis purposes only and does not imply that such use represents the highest and best use.
+    - paragraph [ref=e27]: Proposed Use of the Property (If Applicable)
+    - paragraph [ref=e28]: Multi-tenant industrial / warehouse
+    - paragraph [ref=e29]: Where a proposed use is identified, the valuation may consider the property on a hypothetical basis, subject to Extraordinary Assumptions and or Hypothetical Conditions as outlined in this Agreement and the report.
+  - generic [ref=e30]:
+    - heading "3. AUTHORIZED CLIENT, USERS & USE" [level=1] [ref=e31]
+    - paragraph [ref=e32]: Authorized Client
+    - paragraph [ref=e33]: Bridgepoint Capital Partners
+    - paragraph [ref=e34]: The appraisal will be prepared for the above-mentioned Authorized Client identified above.
+    - paragraph [ref=e35]: Authorized User
+    - paragraph [ref=e36]: Authorized users include only the Authorized Client unless otherwise identified in writing. No other party is permitted to rely upon this report without prior written consent.
+    - paragraph [ref=e37]: Authorized Use
+    - paragraph [ref=e38]: Financial Reporting
+    - paragraph [ref=e39]: No other use is authorized. Any reliance or use for purposes other than those stated is expressly prohibited and considered unreasonable.
+    - heading "4. PURPOSE OF THE ASSIGNMENT" [level=1] [ref=e40]
+    - paragraph [ref=e41]: To estimate the Current market value of the subject property.
+    - heading "5. VALUE SCENARIOS" [level=1] [ref=e42]
+    - paragraph [ref=e43]: "The Appraisal in accordance with Canadian Uniform Standards of Professional Appraisal (CUSPAP), anticipates developing the following valuation approaches:"
+    - paragraph [ref=e44]: As-Is, As If Complete & Stabilized
+    - heading "6. EFFECTIVE DATE & REPORT DATE" [level=1] [ref=e45]
+    - paragraph [ref=e46]: Effective Date
+    - paragraph [ref=e47]: Date of inspection.
+    - paragraph [ref=e48]: Date of Report
+    - paragraph [ref=e49]: Date the report is completed.
+    - heading "7. REPORT TYPE & ASSIGNMENT TYPE" [level=1] [ref=e50]
+    - paragraph [ref=e51]: Report Type
+    - paragraph [ref=e52]: Appraisal Report
+    - paragraph [ref=e53]: Assignment Type
+    - paragraph [ref=e54]: Single Property
+  - generic [ref=e55]:
+    - heading "8. SCOPE OF WORK" [level=1] [ref=e56]
+    - paragraph [ref=e57]: The Scope of Work includes inspection of the subject property and surrounding area, review of physical, legal, economic, and market factors, collection of municipal and regulatory information, review of client-provided documents, market research including comparable sales and rental data, highest and best use analysis, application of appropriate valuation approaches, and reconciliation to a final value conclusion.
+    - paragraph [ref=e58]: The Scope of Work is developed in accordance with CUSPAP and is sufficient to produce credible results for the Authorized Use.
+    - heading "9. APPROACHES TO VALUE" [level=1] [ref=e59]
+    - paragraph [ref=e60]:
+      - text: The Appraiser anticipates developing the following approaches to value.
+      - text: Direct Comparison, Income, Cost
+    - paragraph [ref=e61]: The inclusion or exclusion of any approach will be explained in the report.
+    - heading "10. EXTRAORDINARY ASSUMPTIONS & HYPOTHETICAL CONDITONS" [level=1] [ref=e62]
+    - paragraph [ref=e63]: "This assignment may rely on Extraordinary Assumptions and/or Hypothetical Conditions, including:"
+    - table [ref=e64]:
+      - rowgroup [ref=e65]:
+        - row "As-Is current market value of the subject property as improved as of the effective date" [ref=e66]:
+          - cell "As-Is" [ref=e67]
+          - cell "current market value of the subject property as improved as of the effective date" [ref=e68]
+        - row "As If Complete & Stabilized current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the project is 100% complete and fully leased at market rents and is at stabilized occupancy, as of the effective date." [ref=e69]:
+          - cell "As If Complete & Stabilized" [ref=e70]
+          - cell "current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the project is 100% complete and fully leased at market rents and is at stabilized occupancy, as of the effective date." [ref=e71]
+    - paragraph [ref=e72]: Example
+    - table [ref=e73]:
+      - rowgroup [ref=e74]:
+        - row "As Is current market value of the subject property as improved as of the effective date" [ref=e75]:
+          - cell "As Is" [ref=e76]
+          - cell "current market value of the subject property as improved as of the effective date" [ref=e77]
+        - row "As If Vacant Land current market value of the subject property based on the extraordinary assumption and hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date." [ref=e78]:
+          - cell "As If Vacant Land" [ref=e79]
+          - cell "current market value of the subject property based on the extraordinary assumption and hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date." [ref=e80]
+  - generic [ref=e81]:
+    - heading "11. PROFESSIONAL FEES & TERMS" [level=1] [ref=e82]
+    - paragraph [ref=e83]: Professional Fee
+    - paragraph [ref=e84]: $6,500 + GST
+    - paragraph [ref=e85]: Expenses
+    - paragraph [ref=e86]: Fees include standard disbursements unless otherwise stated.
+    - paragraph [ref=e87]: Payment Terms
+    - paragraph [ref=e88]: Invoices are due upon receipt by and shall be deemed delinquent if not paid within five (5) days of the date of invoice.
+    - paragraph [ref=e89]: Delivery
+    - paragraph [ref=e90]: 4 weeks from date of payment or signed agreement, whichever is later.
+    - paragraph [ref=e91]: Number of Reports
+    - paragraph [ref=e92]: One (1) Electronic Final Appraisal
+    - heading "12. PROPERTY INFORMATION REQUEST" [level=1] [ref=e93]
+    - paragraph [ref=e94]: "The client agrees to provide the following information:"
+    - paragraph [ref=e95]: Rent roll, T12 operating statements, current leases
+    - heading "13. INSPECTION REQUIREMENTS" [level=1] [ref=e96]
+    - paragraph [ref=e97]: "The client agrees to provide the following:"
+    - list [ref=e98]:
+      - listitem [ref=e99]: Access to the subject property, including contact details for on-site personnel
+      - listitem [ref=e100]: A designated individual to facilitate the inspection and provide access to all areas
+      - listitem [ref=e101]: Written consent from the occupant (tenant or owner) to permit interior photographs for appraisal purposes (excluding personal items, inventory, or equipment), in compliance with privacy requirements
+      - listitem [ref=e102]: Disclosure of any site hazards and confirmation of required or provided personal protective equipment for the inspection
+    - heading "14. TERMS OF ENGAGEMENT" [level=1] [ref=e103]
+    - heading "14.1 Entire Agreement" [level=3] [ref=e104]
+    - paragraph [ref=e105]: This Agreement constitutes the entire agreement between the parties with respect to the assignment and supersedes all prior discussions, negotiations, or agreements, whether written or oral. Any changes must be agreed to in writing.
+    - heading "14.2 Changes to Scope of Work" [level=3] [ref=e106]
+    - paragraph [ref=e107]: If the Authorized Client requests changes to the assignment, including scope, assumptions, timing, reporting requirements, or intended use, the Appraiser may revise the fee and timeline, amend the scope of work, issue a revised Letter of Engagement, or decline to proceed. No changes are effective unless confirmed in writing by the Appraiser.
+  - generic [ref=e108]:
+    - heading "14.3 Expiry of Engagement" [level=3] [ref=e109]
+    - paragraph [ref=e110]: This Agreement is valid for acceptance for five (5) business days from the Engagement Date. If not accepted within that time, the Appraiser may withdraw or revise the terms, including fees, scope, and timing.
+    - heading "14.4 Confidentiality" [level=3] [ref=e111]
+    - paragraph [ref=e112]: The Appraiser will maintain the confidentiality of information obtained during this assignment in accordance with CUSPAP and applicable privacy legislation, including PIPEDA. The report is confidential and will not be disclosed except to the Authorized Client, as required by law or professional obligations, or with written consent. The Authorized Client agrees not to distribute or disclose the report without prior written consent of the Appraiser. The Appraiser may share information with analysts, consultants, or advisors involved in the assignment who are subject to confidentiality obligations.
+    - heading "14.5 Reliance and Third-Party Use" [level=3] [ref=e113]
+    - paragraph [ref=e114]: This report is prepared solely for the Authorized Client and for the Authorized Use identified in this Agreement. No other party may rely on the report without prior written consent of the Appraiser. Any unauthorized reliance is not permitted. The Appraiser may, at its discretion, issue a reliance letter to a specific third party, subject to additional terms and fees.
+    - heading "14.6 Publication and Securities Use" [level=3] [ref=e115]
+    - paragraph [ref=e116]: The report, in whole or in part, including any reference to the Appraiser, may not be used in offering memoranda, prospectuses, securities filings, marketing materials, or public communications without prior written consent. The Appraiser shall not be considered a named expert.
+    - heading "14.7 Limitation of Liability" [level=3] [ref=e117]
+    - paragraph [ref=e118]: The Appraiser assumes no liability to any party other than the Authorized Client.
+    - heading "14.8 Court Testimony" [level=3] [ref=e119]
+    - paragraph [ref=e120]: The Appraiser is not required to provide testimony or participate in legal proceedings unless agreed to in advance with appropriate notice and compensation.
+    - heading "14.9 Electronic Transmission" [level=3] [ref=e121]
+    - paragraph [ref=e122]: Only versions of the report sent directly by the Appraiser and bearing an original or secure digital signature are valid. The Appraiser assumes no responsibility for any changes made after transmission.
+    - heading "14.10 No Modification" [level=3] [ref=e123]
+    - paragraph [ref=e124]: The report may not be altered, reproduced, or distributed without prior written consent of the Appraiser.
+    - heading "15. PRIOR SERVICES & CONFLICT OF INTEREST" [level=1] [ref=e125]
+    - paragraph [ref=e126]: Under Canadian Uniform Standards of Professional Appraisal Practice (CUSPAP) disclosure requirements, the Appraiser confirms whether any prior services have been provided on the subject property within the prescribed period, including the nature of those services, to ensure transparency and compliance with professional standards.
+    - list [ref=e127]:
+      - listitem [ref=e128]: Valta previously appraised this property – No
+    - paragraph [ref=e129]: We value our client relationships and will not provide a valuation or consulting report on the subject property for another client for three months following delivery of the final report without your written consent.
+  - generic [ref=e130]:
+    - heading "16. ACCEPTANCE" [level=1] [ref=e131]
+    - paragraph [ref=e132]: I agree to the stated terms contained in this Agreement and authorize Valta Property Valuations Ltd. to prepare the above referenced appraisal.
+    - paragraph [ref=e135]:
+      - generic [ref=e136]: Sarah Mitchell
+    - paragraph [ref=e137]: "Date:"
+    - paragraph [ref=e140]: Respectfully,
+    - paragraph [ref=e141]:
+      - strong [ref=e142]: VALTA PROPERTY VALUATIONS LTD.
+    - img "Chris Chornohos signature" [ref=e143]
+    - paragraph [ref=e144]:
+      - text: Chris Chornohos, AACI, MRICS
+      - text: Founder
+  - generic [ref=e145]:
+    - heading "SCHEDULE “A”" [level=1] [ref=e146]
+    - paragraph [ref=e147]: Property List
+    - paragraph [ref=e148]: "THIS SCHEDULE INSERTED WHEN Single Property SELECTED TO: MULTIPLE PROPERTIES"
+  - generic [ref=e149]:
+    - heading "APPENDIX A" [level=1] [ref=e150]
+    - paragraph [ref=e151]: ASSUMPTIONS, LIMITING CONDITIONS, DISCLAIMER AND LIMITATIONS OF LIABILITY
+    - paragraph [ref=e152]: Limiting Conditions set out the restrictions on the use of this report, including reliance, liability, scope limitations, and other legal considerations. These conditions define how the report may be used and relied upon by the client and authorized users.
+    - paragraph [ref=e153]: "The certification that appears in the report is subject to compliance with the Personal Information and Electronics Documents Act (PIPEDA), Canadian Uniform Standards of Professional Appraisal Practice (“CUSPAP”) and the following conditions:"
+    - list [ref=e154]:
+      - listitem [ref=e155]: This report is prepared only for the authorized client and authorized users specifically identified in this report and only for the specific use identified herein. No other person may rely on this report or any part of this report without first obtaining consent from the client and written authorization from the authors. Liability is expressly denied to any other person and, accordingly, no responsibility is accepted for any damage suffered by any other person as a result of decisions made or actions taken based on this report. Liability is expressly denied for any unauthorized user or for anyone who uses this report for any use not specifically identified in this report. Payment of the appraisal fee has no effect on liability. Reliance on this report without authorization or for an unauthorized use is unreasonable.
+      - listitem [ref=e156]: Because market conditions, including economic, social and political factors, may change rapidly and, on occasion, without warning, this report cannot be relied upon as of any date other than the effective date specified in this report unless specifically authorized by the author(s).
+      - listitem [ref=e157]: The author will not be responsible for matters of a legal nature that affect either the property being appraised or the title to it. The property is appraised on the basis of it being under responsible ownership. No registry office search has been performed and the author assumes that the title is good and marketable and free and clear of all encumbrances. Matters of a legal nature, including confirming who holds legal title to the appraised property or any portion of the appraised property, are outside the scope of work and expertise of the appraiser. Any information regarding the identity of a property’s owner or identifying the property owned by the listed client and/or applicant provided by the appraiser is for informational purposes only and any reliance on such information is unreasonable. Any information provided by the appraiser does not constitute any title confirmation. Any information provided does not negate the need to retain a real estate lawyer, surveyor or other appropriate experts to verify matters of ownership and/or title.
+      - listitem [ref=e158]: Verification of compliance with governmental regulations, bylaws or statutes is outside the scope of work and expertise of the appraiser. Any information provided by the appraiser is for informational purposes only and any reliance is unreasonable. Any information provided by the appraiser does not negate the need to retain an appropriately qualified professional to determine government regulation compliance.
+      - listitem [ref=e159]: No survey of the property has been made. Any sketch in this report shows approximate dimensions and is included only to assist the reader of this report in visualizing the property. It is unreasonable to rely on this report as an alternative to a survey, and an accredited surveyor ought to be retained for such matters.
+      - listitem [ref=e160]: "This report is completed on the basis that testimony or appearance in court concerning this report is not required unless specific arrangements to do so have been made beforehand. Such arrangements will include, but not necessarily be limited to: adequate time to review the report and related data, and the provision of appropriate compensation."
+      - listitem [ref=e161]: "Unless otherwise stated in this report, the author has no knowledge of any hidden or unapparent conditions (including, but not limited to: its soils, physical structure, mechanical or other operating systems, foundation, etc.) of/on the subject property or of/on a neighbouring property that could affect the value of the subject property. It has been assumed that there are no such conditions. Any such conditions that were visibly apparent at the time of inspection or that became apparent during the normal research involved in completing the report have been noted in the report. This report should not be construed as an environmental audit or detailed property condition report, as such reporting is beyond the scope of this report and/or the qualifications of the author. The author makes no guarantees or warranties, express or implied, regarding the condition of the property, and will not be responsible for any such conditions that do exist or for any engineering or testing that might be required to discover whether such conditions exist. The bearing capacity of the soil is assumed to be adequate."
+      - listitem [ref=e162]: The author is not qualified to comment on detrimental environmental, chemical or biological conditions that may affect the market value of the property appraised, including but not limited to pollution or contamination of land, buildings, water, groundwater or air which may include but are not limited to moulds and mildews or the conditions that may give rise to either. Any such conditions that were visibly apparent at the time of inspection or that became apparent during the normal research involved in completing the report have been noted in the report. It is an assumption of this report that the property complies with all regulatory requirements concerning environmental, chemical and biological matters, and it is assumed that the property is free of any detrimental environmental, chemical legal and biological conditions that may affect the market value of the property appraised. If a party relying on this report requires information about or an assessment of detrimental environmental, chemical or biological conditions that may impact the value conclusion herein, that party is advised to retain an expert qualified in such matters. The author expressly denies any legal liability related to the effect of detrimental environmental, chemical or biological matters on the market value of the property.
+  - list [ref=e164]:
+    - listitem [ref=e165]: The analyses set out in this report relied on written and verbal information obtained from a variety of sources the author considered reliable. Unless otherwise stated herein, the author did not verify client-supplied information, which the author believed to be correct.
+    - listitem [ref=e166]: The term “inspection” refers to observation only as defined by CUSPAP and reporting of the general material finishing and conditions observed for the purposes of a standard appraisal inspection. The inspection scope of work includes the identification of marketable characteristics/amenities offered for comparison and valuation purposes only.
+    - listitem [ref=e167]: The opinions of value and other conclusions contained herein assume satisfactory completion of any work remaining to be completed in a good and workmanlike manner. Further inspection may be required to confirm completion of such work. The author has not confirmed that all mandatory building inspections have been completed to date, nor has the availability/issuance of an occupancy permit been confirmed. The author has not evaluated the quality of construction, workmanship or materials. It should be clearly understood that this visual inspection does not imply compliance with any building code requirements as this is beyond the professional expertise of the author.
+    - listitem [ref=e168]: The contents of this report are confidential and will not be disclosed by the author to any party except as provided for by the provisions of the CUSPAP and/or when properly entered into evidence of a duly qualified judicial or quasi-judicial body. The author acknowledges that the information collected herein is personal and confidential and shall not use or disclose the contents of this report except as provided for in the provisions of the CUSPAP and in accordance with the author’s privacy policy. The client agrees that in accepting this report, it shall maintain the confidentiality and privacy of any personal information contained herein and shall comply in all material respects with the contents of the author's privacy policy and in accordance with the PIPEDA.
+    - listitem [ref=e169]: The author has agreed to enter into the assignment as requested by the client named in this report for the use specified by the client, which is stated in this report. The client has agreed that the performance of this report and the format are appropriate for the authorized use.
+    - listitem [ref=e170]: This report, its content and all attachments/addendums and their content are the property of the author. The client, authorized users and any appraisal facilitator are prohibited, strictly forbidden, and no permission is expressly or implicitly granted or deemed to be granted, to modify, alter, merge, publish (in whole or in part) screen scrape, database scrape, exploit, reproduce, decompile, reassemble or participate in any other activity intended to separate, collect, store, reorganize, scan, copy, manipulate electronically, digitally, manually or by any other means whatsoever this appraisal report, addendum, all attachments and the data contained within for any commercial, or other, use.
+    - listitem [ref=e171]: If transmitted electronically, this report will have been digitally signed and secured with personal passwords to lock the appraisal file. Due to the possibility of digital modification, only originally signed reports and those reports sent directly by the author can be reasonably relied upon.
+    - listitem [ref=e172]: This report form is the property of the Appraisal Institute of Canada (AIC) and for use only by AIC members in good standing. Use by any other person is a violation of AIC copyright.
+    - listitem [ref=e173]: Where the authorized use of this report is for financing or mortgage lending or mortgage insurance, it is a condition of reliance on this report that the authorized user has or will conduct lending, underwriting and insurance underwriting and rigorous due diligence in accordance with the standards of a reasonable and prudent lender or insurer, including but not limited to ensuring the borrower’s demonstrated willingness and capacity to service debt obligations on a timely basis, and to conduct loan underwriting or insuring due diligence similar to the standards set out by the Office of the Superintendent of Financial Institutions (OSFI), even when not otherwise required by law. Liability is expressly denied to those that do not meet this condition. Any reliance on this report without satisfaction of this condition is unreasonable.
+    - listitem [ref=e174]: Unless otherwise indicated, the value conclusions presented in this report relate solely to the real property and exclude personal property, machinery and equipment, trade fixtures, business value, goodwill, and any other non-realty components. The valuation is limited to surface rights only and does not account for any subsurface or mineral interests. Income tax implications have not been considered unless expressly noted, and no opinion is provided regarding any impact such considerations may have on value.
+    - listitem [ref=e175]: It is assumed that any required legal, engineering, or other specialized advice has been or will be obtained from appropriately qualified professionals. This report is not intended to provide guidance on legal or technical matters, including but not limited to encroachments, easements, or discrepancies in the legal description of the property. Unless otherwise stated, it is assumed that there are no adverse or concealed conditions relating to the subsoil or subsurface water conditions, including groundwater levels or floodplain issues.
+    - listitem [ref=e176]: It is assumed that all obligations associated with the property, including taxes, mortgages, contracts, or service agreements, are current and will be satisfied as required. Costs that may arise in a hypothetical sale of the property, including taxes and transaction-related expenses such as brokerage commissions, have not been considered.
+    - listitem [ref=e177]: This report may include projections or estimates of future financial performance, which reflect the author’s reasonable expectations as of the effective date. Such projections are not guarantees of future performance or outcomes. Actual results may differ from those indicated, and such differences may be significant.
+    - listitem [ref=e178]: The analysis assumes that the property will be competently managed, leased, and maintained by financially responsible ownership throughout the anticipated holding period. This assignment does not include an assessment of management effectiveness, and no responsibility is assumed for future operational decisions or performance.
+    - listitem [ref=e179]: The value conclusion is expressed in Canadian dollars and reflects purchasing power as of the effective date of the report.
+    - listitem [ref=e180]: Any draft version of this report is provided solely for the client’s review and is subject to revision. Draft reports are not to be distributed, relied upon, or used for any purpose other than review by the client. No liability is accepted for any use of a draft report. Revisions may be made if additional information becomes available, and such revisions may result in additional fees. If no comments or revisions are received within one week of delivery of the draft report, it will be deemed accepted by the Authorized Client, a final report will be issued.

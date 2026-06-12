@@ -55,3 +55,16 @@ Client Title · Client Phone · Client Address · **all Property Contact fields*
 
 ## Net
 Keep a **tiny description** only for anything that reads better as text (or drop it entirely). Everything structured → custom fields. Build once as a UI template → integration populates it → replicate the template to the Valta client board.
+
+---
+
+## Status — 2026-06-08 (code DONE, UI work PARKED — come back to it)
+
+**Code side complete + deployed.** `buildHubCustomFields` is aligned to EXACTLY the KEEP set; the REMOVE set is dropped from the push (Asset Condition / Valuation Premises / Job Status / Client Phone / Subtype / Tenancy no longer sent; the normalizeAssetCondition band-aid deleted). Verified on test card `86e1uyy98` — 14 KEEP fields set clean incl. the 3 LINKS (Job Number, APR Dashboard Link, Valcre Job Link).
+
+**PARKED — UI work to finish later (ClickUp UI only; API returns 405 on field create/delete):**
+1. **Add 5 columns** to list 901709622357 (and the Valta board): **Intended Use** (drop_down), **Appraisal Fee** (currency), **Received Date** (date), **LOE Sent** (date), **LOE Signed** (date). Already wired in code — they fill the instant the columns exist, no redeploy.
+2. **Build the Job-Hub template** in the ClickUp UI with exactly the KEEP set in 3 clusters (Links → Summary → Dates); hide/remove the REMOVE set from the view; save as template; replicate to the client's Valta area.
+3. **Clear 2 stale leftover values** on existing cards (Valuation Premises, Client Phone) — code no longer pushes them but old values don't self-clear; fresh cards are already clean.
+4. **Report Type watch:** ClickUp options = Comprehensive/Concise/Form/N/A. If the dashboard ever sends "Appraisal Report" it won't match (silent skip) — align the value or add an alias when this surfaces.
+5. **Asset Condition** stays REMOVED from the hub per spec; if it's ever wanted back, its ClickUp field must be a TEXT receiver (one-way), not the dev-type dropdown.

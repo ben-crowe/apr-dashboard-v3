@@ -8,6 +8,8 @@ status: active
 
 # Phase 3 — Valcre Job Creation
 
+**[⬅ Back to Phase Sheets Dashboard](~/Development/APR-Dashboard-v3/tests/phase-sheets/00-PHASE-SHEETS-DASHBOARD.md)**
+
 **What this sheet is:** the canonical reference for turning a submitted job into a real Valcre appraisal job — the step that stamps a VAL job number onto the record and creates the client/contact/property/job entities inside Valcre. Picks up where [Phase 2 — Form Received](~/Development/APR-Dashboard-v3/tests/phase-sheets/PHASE-2-FORM-RECEIVED.md) ends.
 
 **How to read it:** every section leads with the **Goal** (what we want), then a **Current State** block right under it (what the code does today). Goal first, current state second.

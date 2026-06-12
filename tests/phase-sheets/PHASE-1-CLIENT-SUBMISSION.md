@@ -8,6 +8,8 @@ status: active
 
 # Phase 1 — Client Submission Form
 
+**[⬅ Back to Phase Sheets Dashboard](~/Development/APR-Dashboard-v3/tests/phase-sheets/00-PHASE-SHEETS-DASHBOARD.md)**
+
 **What this sheet is:** the canonical one-page reference for testing the very first phase of the APR full-loop — the public client intake form. Everything needed to run, verify, and understand this phase is on this page.
 
 **How to read this sheet:** sections that describe behavior have two parts — **TODAY** (what the code actually does right now) and **TO-BUILD** (the goal, which doubles as the spec). The field tables (Sections 2–3) are the same in both — fields are fields. The submit-triggers-the-chain behavior is where TODAY and TO-BUILD differ (Sections 1 + 6).

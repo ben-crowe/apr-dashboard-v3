@@ -13,6 +13,7 @@ import DocumentBuilderTest from "./pages/DocumentBuilderTest";
 import DiagnosticForm from "./pages/DiagnosticForm";
 import { SigningPage } from "./pages/SigningPage";
 import TestLOE from "./pages/TestLOE";
+import LoeRenderTest from "./pages/LoeRenderTest";
 // import MockReportBuilder from "./pages/MockReportBuilder"; // TODO: consolidate report-builder location (symlink issue)
 import ImageTest from "./pages/ImageTest";
 // import { TestInputDashboard } from "./features/test-input"; // TODO: consolidate report-builder location (symlink issue)
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/diagnostic" element={<DiagnosticForm />} />
             <Route path="/sign/:id" element={<SigningPage />} />
             <Route path="/test-loe" element={<TestLOE />} />
+            <Route path="/loe-render" element={<LoeRenderTest />} />
             {/* <Route path="/mock-builder" element={<MockReportBuilder />} /> */}
             {/* <Route path="/test-input" element={<TestInputDashboard />} /> */}
             {/* <Route path="/calculator-demo" element={<CalculatorDemoPage />} /> */}

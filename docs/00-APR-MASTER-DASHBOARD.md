@@ -229,6 +229,8 @@ The source of truth for what fields exist, their options, the cascade rules, and
 
 ## 5. Status & Filing
 
+> **▶ NEXT-STEPS READINESS PACK (2026-06-11):** [everything prepped for the next build session](~/Development/APR-Dashboard-v3/docs/NEXT-STEPS-READINESS-PACK-2026-06-11.md) — email · SharePoint · QuickBooks · e-Sign · ClickUp-Codex · LOE-finalize, each with state, docs, credential slots, naming specs, and last session's LOE PDFs. Read this first when resuming.
+
 ### Current status (as of 2026-06-05)
 
 **Proven / shipped this week:**

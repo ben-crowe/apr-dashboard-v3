@@ -8,6 +8,8 @@ status: active
 
 # Phase 2 — Form Received
 
+**[⬅ Back to Phase Sheets Dashboard](~/Development/APR-Dashboard-v3/tests/phase-sheets/00-PHASE-SHEETS-DASHBOARD.md)**
+
 **What this sheet is:** the canonical reference for what happens AFTER the client hits Submit on the intake form. Picks up exactly where [Phase 1 — Client Submission](~/Development/APR-Dashboard-v3/tests/phase-sheets/PHASE-1-CLIENT-SUBMISSION.md) ends.
 
 **How to read it:** every section leads with the **Goal** (what we want), then a **Current State** block right under it (what the code does today). Goal first because that's what we're building toward; current state second so you know the gap.

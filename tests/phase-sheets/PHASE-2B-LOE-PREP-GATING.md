@@ -7,6 +7,8 @@ last_reconciled: 2026-06-11
 
 # Phase 2B — LOE Prep + Gating Chain (Stage 2)
 
+**[⬅ Back to Phase Sheets Dashboard](~/Development/APR-Dashboard-v3/tests/phase-sheets/00-PHASE-SHEETS-DASHBOARD.md)**
+
 > **Where this sits:** AFTER the client form is received (Phase 2 — the row + dashboard job + ClickUp card exist) and BEFORE the LOE is sent for signature (Phase 5). This is the "LOE Quote" prep stage: the team fills the appraisal-prep fields, then a two-step gate fires — fill all prep fields → Create Valcre Job button activates → Valcre returns a job number → that activates the LOE/e-sign button. This sheet is the gating chain.
 
 ---

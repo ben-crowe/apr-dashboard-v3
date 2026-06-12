@@ -120,10 +120,16 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
 
     toast.success('Test data filled — pick a Cascade Options version to set Value Scenarios.');
 
-    // Scroll to cascade anchor after a short tick so the DOM has updated
+    // Scroll to the cascade picker and pulse it (ported from the registry mock) so the eye
+    // lands on "now pick a scenario." Pulse is cleared the moment a version is picked
+    // (LoeQuoteSection.handleCascadeVersion); a safety timeout stops it if nobody picks.
     setTimeout(() => {
       const el = document.getElementById('cascade-options-anchor');
-      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.add('cascade-pulse');
+        setTimeout(() => el.classList.remove('cascade-pulse'), 8000);
+      }
     }, 150);
   };
 

@@ -10,6 +10,8 @@ tags: [apr-workflow, stage-anatomy, phase-sheet, closing-sequence, quickbooks, p
 
 # Phase 8 — Closing: Pay → Paid (QuickBooks)
 
+**[⬅ Back to Phase Sheets Dashboard](~/Development/APR-Dashboard-v3/tests/phase-sheets/00-PHASE-SHEETS-DASHBOARD.md)**
+
 **Tags:** #stage-anatomy #phase-sheet #closing-sequence #quickbooks #payment #intuit #paid-trigger
 **Entities:** [[APR-Testing]] [[QuickBooks]] [[Intuit]]
 

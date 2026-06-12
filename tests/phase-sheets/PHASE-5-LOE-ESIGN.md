@@ -7,6 +7,8 @@ last_reconciled: 2026-06-11
 
 # Phase 5 — LOE Send + E-Sign (DocuSeal)
 
+**[⬅ Back to Phase Sheets Dashboard](~/Development/APR-Dashboard-v3/tests/phase-sheets/00-PHASE-SHEETS-DASHBOARD.md)**
+
 > **What this phase covers:** the LOE has been rendered (Phase 4). This phase is everything from "Preview & Send LOE" being clicked through to the signed-date landing back on the job + ClickUp card. The render itself is Phase 4 — this phase is the SEND, the SIGN, and the COMPLETION round-trip.
 
 ---

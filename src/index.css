@@ -313,3 +313,14 @@ input[type="date"]::-webkit-datetime-edit-month-field:not([aria-valuenow]),
 input[type="date"]::-webkit-datetime-edit-day-field:not([aria-valuenow]) {
   color: hsl(var(--muted-foreground));
 }
+/* Cascade picker attention pulse — ported from the registry mock (#cascadePicker.pulse).
+   Added by Fill Test Data, removed the moment a version is picked. Amber glow draws the
+   eye to "now pick a scenario." */
+@keyframes cascadePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+  50%      { box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.55); }
+}
+#cascade-options-anchor.cascade-pulse {
+  animation: cascadePulse 1.2s ease-in-out infinite;
+  border-radius: 8px;
+}

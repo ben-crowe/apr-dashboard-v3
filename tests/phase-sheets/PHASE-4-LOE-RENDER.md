@@ -8,6 +8,8 @@ status: active
 
 # Phase 4 — LOE Generation / Render
 
+**[⬅ Back to Phase Sheets Dashboard](~/Development/APR-Dashboard-v3/tests/phase-sheets/00-PHASE-SHEETS-DASHBOARD.md)**
+
 **What this sheet is:** the canonical reference for generating and rendering the LOE (the engagement letter the client signs). It covers how the letter is built from the live template, how the cascade fills its scenario section, and exactly what to check to call a render clean. Picks up where [Phase 3 — Valcre Job Creation](~/Development/APR-Dashboard-v3/tests/phase-sheets/PHASE-3-VALCRE-JOB-CREATION.md) ends.
 
 **How to read it:** every section leads with the **Goal** (what we want the LOE to do or contain), then a **Current State** block right under it (what's proven and what's missing). Goal first, current state second.

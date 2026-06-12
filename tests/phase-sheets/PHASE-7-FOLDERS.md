@@ -10,6 +10,8 @@ tags: [apr-workflow, stage-anatomy, phase-sheet, sharepoint, msgraph, entra, ass
 
 # Phase 7 — Asset Folders (SharePoint via Microsoft Graph)
 
+**[⬅ Back to Phase Sheets Dashboard](~/Development/APR-Dashboard-v3/tests/phase-sheets/00-PHASE-SHEETS-DASHBOARD.md)**
+
 **Tags:** #stage-anatomy #phase-sheet #sharepoint #msgraph #entra #asset-storage #to-build
 **Entities:** [[Asset-Storage]] [[SharePoint]] [[Microsoft-Graph]] [[APR-Testing]]
 

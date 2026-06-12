@@ -1,5 +1,24 @@
 # APR Dashboard v3 — Agent Instructions
 
+## ⭐ START / RESUME HERE — READ THE MASTER DASHBOARD FIRST (mandatory)
+
+**Before ANY significant work on this project — and on EVERY restart, post-compact resume, or first activation — READ the full APR Master Dashboard:**
+
+```
+docs/00-APR-MASTER-DASHBOARD.md
+```
+
+Read it **in full, all sections** — not a skim of the top:
+- **Significant Features** — the whole pipeline (intake → job → field-sync → LOE/e-sign → closing) + where every feature & doc lives.
+- **Accounts & Access** — what runs on Ben's test accounts vs the client's, and the cutover gate.
+- **Testing** — THE end-to-end testing workflow (`tests/E2E-TESTING-WORKFLOW-MASTER.md`), the visual-verification workflow, the CLI tooling inventory, and how agents drive the app. **Know the team's tools before doing anything manual.**
+- **Reference** — field maps, Valcre/ClickUp wiring, the registry source of truth.
+- **Status & Filing** — what's proven (`[x]`), in-flight (`[~]`), open (`[ ]`).
+
+It is the single source of truth for what's built, what's wired, where everything lives, how to test, and current status. **Do not start designing, building, or testing until you've read it.** This is the canonical "resume working on APR" step — every agent restarting the project runs it.
+
+**The `/prime-apr` skill runs this whole sequence for you** — full dashboard read → full SS12 search on the parts → a "where the project stands" briefing — before any work. Fire it on first activation, after any `/compact`, or whenever resuming APR. (Aliases: `/apr-prime`, `/resume-apr`.)
+
 ## Agent Context Priming
 
 On activation, run:

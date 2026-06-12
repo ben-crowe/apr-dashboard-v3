@@ -1,4 +1,5 @@
 import { serve } from 'https://deno.land/std@0.220.0/http/server.ts';
+import { graphConfigured, graphSendMail } from '../_shared/graph.ts';
 
 serve(async (req) => {
   const corsHeaders = {
@@ -60,7 +61,28 @@ office: 587-801-5151 | email: clientcare@valta.ca | web: www.valta.ca</p>
 </body>
 </html>`;
 
-    // Send via Resend
+    const subject = 'Letter of Engagement - Ready for Signature';
+
+    // PRODUCTION transport: Microsoft Graph sendMail from a valta.ca mailbox.
+    // Active the instant the Entra app secrets exist; until then we fall back to
+    // Resend so the bc@crowestudio.com test path keeps working unchanged.
+    if (graphConfigured()) {
+      const mailbox = Deno.env.get('GRAPH_SEND_MAILBOX') || 'noreply@valta.ca';
+      await graphSendMail({ mailbox, to: actualRecipient, subject, html: emailHtml });
+      console.log('Email sent successfully via Microsoft Graph from:', mailbox);
+      return new Response(
+        JSON.stringify({
+          success: true,
+          message: 'Email sent successfully',
+          recipient: actualRecipient,
+          transport: 'graph',
+          sender: mailbox,
+        }),
+        { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Fallback transport: Resend (test path, sandbox sender → bc@crowestudio.com).
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -70,7 +92,7 @@ office: 587-801-5151 | email: clientcare@valta.ca | web: www.valta.ca</p>
       body: JSON.stringify({
         from: 'Valta Appraisals <onboarding@resend.dev>', // Sandbox domain - works for testing to bc@crowestudio.com
         to: [actualRecipient], // Send to actual recipient
-        subject: 'Letter of Engagement - Ready for Signature',
+        subject,
         html: emailHtml,
       }),
     });
@@ -82,15 +104,16 @@ office: 587-801-5151 | email: clientcare@valta.ca | web: www.valta.ca</p>
 
     const data = await response.json();
     console.log('Email sent successfully via Resend:', data.id);
-    
+
     return new Response(
-      JSON.stringify({ 
-        success: true, 
+      JSON.stringify({
+        success: true,
         message: 'Email sent successfully',
         recipient: actualRecipient,
+        transport: 'resend',
         emailId: data.id
       }),
-      { 
+      {
         status: 200,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       }
@@ -101,7 +124,7 @@ office: 587-801-5151 | email: clientcare@valta.ca | web: www.valta.ca</p>
     return new Response(
       JSON.stringify({ 
         error: 'Failed to send email',
-        details: error.message 
+        details: (error as Error).message
       }),
       { 
         status: 500,

@@ -83,7 +83,7 @@
   .sec-ref-stage { font-size: 12px; font-weight: 700; color: var(--text) !important; padding: 10px 10px 5px 10px !important; border-bottom: 2px solid var(--border) !important; }
   @keyframes cascadePulse { 0%,100% { box-shadow: 0 0 0 0 rgba(245,158,11,.55); } 50% { box-shadow: 0 0 0 7px rgba(245,158,11,0); } }
   #cascadePicker.pulse .dd-trigger { animation: cascadePulse 1.2s ease-in-out infinite; border-color: #f59e0b !important; color: #92400e; font-weight: 600; }
-  #cascadePicker .dd-menu { width: max-content; min-width: 100%; right: auto; }
+  #cascadePicker .dd-menu { width: max-content; min-width: 100%; max-width: 720px; left: auto; right: 0; }  /* open leftward so the wide 3-part names stay on-screen */
   #cascadePicker .dd-item { font-size: 10px; white-space: nowrap; padding: 5px 10px; }
 
   /* Dashboard filter — small text links, right-aligned */
@@ -125,6 +125,8 @@
   .dd-trigger.open { border-bottom-color: var(--text); }
   .dd-trigger.ph { color: var(--text-3); }
   .dd-arrow { width: 0; height: 0; border-left: 3.5px solid transparent; border-right: 3.5px solid transparent; border-top: 4px solid var(--text-3); transition: transform .15s; flex-shrink: 0; }
+  /* long dropdown VALUES never wrap — single line, clip with ellipsis (full text on hover via title). Ben: truncate > wrap. */
+  .dd-text { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .dd-trigger.open .dd-arrow { transform: rotate(180deg); }
   .dd-menu { position: absolute; top: calc(100% + 3px); left: 0; right: 0; background: var(--dd-bg); backdrop-filter: blur(20px) saturate(1.2); -webkit-backdrop-filter: blur(20px) saturate(1.2); border: 1px solid var(--dd-border); border-radius: var(--radius); box-shadow: var(--dd-shadow); z-index: 100; display: none; overflow: hidden; padding: 3px; }
   .dd-menu.open { display: block; }
@@ -158,6 +160,29 @@
   .dd.derived .dd-arrow { display: none; }
   input.u-inp.derived { pointer-events: none; }
   input.u-inp.derived::placeholder { color: var(--text-3); opacity: 1; }  /* match the dd "Pending" shade (text-3), not the lighter text-4 */
+
+  /* ── Provenance (cascade test-mode spec, 2026-06-12): two colours, two controls ── */
+  .f.src-mapped .u-inp, .f.src-mapped .dd-trigger { background:#fef9c3; border-bottom-color:#eab308 !important; }
+  .f.scen-derived .u-inp, .f.scen-derived .dd-trigger { background:#dcfce7; border-bottom-color:#22c55e !important; }
+  /* Cascade provenance — one colour per field in the chain (so a version name's segments thread to fields) */
+  .f.au-derived .u-inp, .f.au-derived .dd-trigger { background:#ffedd5; border-bottom-color:#f97316 !important; }  /* Authorized Use (1.13) — orange */
+  .f.vs-derived .u-inp, .f.vs-derived .dd-trigger { background:#ffe4e6; border-bottom-color:#f43f5e !important; }   /* Value Scenarios (2.5) — rose */
+  .f.appr-derived .u-inp, .f.appr-derived .dd-trigger { background:#dbeafe; border-bottom-color:#3b82f6 !important; } /* Approaches (2.9) — blue */
+  /* cascade-version name SEGMENTS: each output coloured to its destination field */
+  .cv-left    { color:#15803d; font-weight:600; }  /* Status of Improvements (2.4) — green */
+  .cv-left-au { color:#f59e0b; font-weight:700; }  /* Authorized Use (1.13) name — lighter amber-orange so it can't read as red (field box stays its own orange) */
+  .cv-scen    { color:#be123c; font-weight:600; }  /* Value Scenarios (2.5) — rose */
+  .cv-appr    { color:#1d4ed8; font-weight:600; }  /* Approaches (2.9) — blue */
+  #cascadePicker, #cascadePicker .dd-trigger { min-width:360px; }   /* widen so the 3-part name fits one line */
+  .dd.mirror { pointer-events:none; }
+  .dd.mirror .dd-trigger { font-style:italic; border-bottom:1px solid var(--border); padding-bottom:3px; cursor:default; }
+  .dd.mirror .dd-arrow { display:none; }
+  .dd.mirror .dd-trigger:not(.ph) { color:var(--text); }
+  .fromdata-chk { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:var(--text-2); cursor:pointer; user-select:none; padding:5px 10px; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg-card); }
+  .fromdata-chk input { accent-color:#eab308; cursor:pointer; margin:0; }
+  .reg-flag { grid-column:1 / -1; font-size:11px; color:#92400e; background:#fffbeb; border:1px dashed #f59e0b; border-radius:var(--radius); padding:8px 12px; margin:12px 0 2px; line-height:1.55; }
+  .reg-flag b { color:#78350f; }
+  .cascade-note { grid-column:1 / -1; font-size:11px; color:var(--text-3); font-style:italic; margin:2px 0 6px; line-height:1.5; }
   .f.dimmed .f-lbl { opacity: .35; }
   .f.dimmed .dd-trigger { opacity: .35; }
 
@@ -525,20 +550,22 @@
 
   <div class="subgrp">Property Information</div>
   <div class="f"><span class="f-lbl"><span class="f-num">1.8</span>Property Name</span><div class="f-val"><input class="u-inp" data-fill="propertyName" placeholder="Property Name"></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.9</span>Property Type</span><div class="f-val"><div class="dd" data-fill="propertyType"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Agriculture</div><div class="dd-item" onclick="pickDD(this)">Building</div><div class="dd-item" onclick="pickDD(this)">Healthcare</div><div class="dd-item" onclick="pickDD(this)">Hospitality</div><div class="dd-item" onclick="pickDD(this)">Industrial</div><div class="dd-item" onclick="pickDD(this)">Land</div><div class="dd-item" onclick="pickDD(this)">Manufactured Housing</div><div class="dd-item" onclick="pickDD(this)">Multi-Family</div><div class="dd-item" onclick="pickDD(this)">Office</div><div class="dd-item" onclick="pickDD(this)">Retail</div><div class="dd-item" onclick="pickDD(this)">Self-Storage</div><div class="dd-item" onclick="pickDD(this)">Single-Family</div><div class="dd-item" onclick="pickDD(this)">Senior</div><div class="dd-item" onclick="pickDD(this)">Special Purpose</div><div class="dd-item" onclick="pickDD(this)">Unknown</div><div class="dd-item" onclick="pickDD(this)">Other</div></div></div></div></div>
-  <div class="f span2"><span class="f-lbl"><span class="f-num">1.10</span>Property Address</span><div class="f-val"><input class="u-inp" data-fill="propertyAddress" placeholder="Property Address"></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.11</span>Authorized Use</span><div class="f-val"><div class="dd" data-fill="authorizedUse"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">First Mortgage Financing</div><div class="dd-item" onclick="pickDD(this)">Financial Reporting</div><div class="dd-item" onclick="pickDD(this)">Insurance</div><div class="dd-item" onclick="pickDD(this)">Internal Decision-Making</div><div class="dd-item" onclick="pickDD(this)">Acquisition-Disposition</div><div class="dd-item" onclick="pickDD(this)">Estate Planning</div><div class="dd-item" onclick="pickDD(this)">Litigation</div><div class="dd-item" onclick="pickDD(this)">GST</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.12</span>Valuation Premises</span><div class="f-val"><div class="dd" data-fill="valuationPremises"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Market Value</div><div class="dd-item" onclick="pickDD(this)">Market Rent</div><div class="dd-item" onclick="pickDD(this)">Investment Value</div><div class="dd-item" onclick="pickDD(this)">Insurable Value</div><div class="dd-item" onclick="pickDD(this)">Liquidation Value</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.13</span>Asset Condition</span><div class="f-val"><div class="dd" data-fill="assetCondition"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Excellent</div><div class="dd-item" onclick="pickDD(this)">Very Good</div><div class="dd-item" onclick="pickDD(this)">Good</div><div class="dd-item" onclick="pickDD(this)">Fair</div><div class="dd-item" onclick="pickDD(this)">Poor</div></div></div></div></div>
+  <div class="f" data-srcfield><span class="f-lbl"><span class="f-num">1.9</span>Property Type</span><div class="f-val"><div class="dd" data-fill="propertyType"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Agriculture</div><div class="dd-item" onclick="pickDD(this)">Building</div><div class="dd-item" onclick="pickDD(this)">Healthcare</div><div class="dd-item" onclick="pickDD(this)">Hospitality</div><div class="dd-item" onclick="pickDD(this)">Industrial</div><div class="dd-item" onclick="pickDD(this)">Land</div><div class="dd-item" onclick="pickDD(this)">Manufactured Housing</div><div class="dd-item" onclick="pickDD(this)">Multi-Family</div><div class="dd-item" onclick="pickDD(this)">Office</div><div class="dd-item" onclick="pickDD(this)">Retail</div><div class="dd-item" onclick="pickDD(this)">Self-Storage</div><div class="dd-item" onclick="pickDD(this)">Single-Family</div><div class="dd-item" onclick="pickDD(this)">Senior</div><div class="dd-item" onclick="pickDD(this)">Special Purpose</div><div class="dd-item" onclick="pickDD(this)">Unknown</div><div class="dd-item" onclick="pickDD(this)">Other</div></div></div></div></div>
+  <div class="f" data-srcfield><span class="f-lbl"><span class="f-num">1.10</span>Property Subtype</span><div class="f-val"><div class="dd" data-fill="propertySubtype"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Apartment</div><div class="dd-item" onclick="pickDD(this)">Townhouse</div><div class="dd-item" onclick="pickDD(this)">Mixed Use</div><div class="dd-item" onclick="pickDD(this)">Shopping Centre</div></div></div></div></div>
+  <div class="f" data-srcfield><span class="f-lbl"><span class="f-num">1.11</span>Tenancy</span><div class="f-val"><div class="dd" data-fill="tenancy"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Owner-Occupied</div><div class="dd-item" onclick="pickDD(this)">Single-Tenant</div><div class="dd-item" onclick="pickDD(this)">Multi-Tenant</div><div class="dd-item" onclick="pickDD(this)">Vacant</div></div></div></div></div>
+  <div class="f span2"><span class="f-lbl"><span class="f-num">1.12</span>Property Address</span><div class="f-val"><input class="u-inp" data-fill="propertyAddress" placeholder="Property Address"></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">1.13</span>Authorized Use</span><div class="f-val"><div class="dd" data-fill="authorizedUse"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">First Mortgage Financing</div><div class="dd-item" onclick="pickDD(this)">Financial Reporting</div><div class="dd-item" onclick="pickDD(this)">Insurance</div><div class="dd-item" onclick="pickDD(this)">Internal Decision-Making</div><div class="dd-item" onclick="pickDD(this)">Acquisition-Disposition</div><div class="dd-item" onclick="pickDD(this)">Estate Planning</div><div class="dd-item" onclick="pickDD(this)">Litigation</div><div class="dd-item" onclick="pickDD(this)">GST</div></div></div></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">1.14</span>Valuation Premises</span><div class="f-val"><div class="dd" data-fill="valuationPremises"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Market Value</div><div class="dd-item" onclick="pickDD(this)">Market Rent</div><div class="dd-item" onclick="pickDD(this)">Investment Value</div><div class="dd-item" onclick="pickDD(this)">Insurable Value</div><div class="dd-item" onclick="pickDD(this)">Liquidation Value</div></div></div></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">1.15</span>Asset Condition</span><div class="f-val"><div class="dd" data-fill="assetCondition"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Excellent</div><div class="dd-item" onclick="pickDD(this)">Very Good</div><div class="dd-item" onclick="pickDD(this)">Good</div><div class="dd-item" onclick="pickDD(this)">Fair</div><div class="dd-item" onclick="pickDD(this)">Poor</div></div></div></div></div>
 
   <div class="subgrp">Property Contact</div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.14</span>First Name</span><div class="f-val"><input class="u-inp" data-fill="propContactFirst" placeholder="Contact first name"></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.15</span>Last Name</span><div class="f-val"><input class="u-inp" data-fill="propContactLast" placeholder="Contact last name"></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.16</span>Email</span><div class="f-val"><input class="u-inp" data-fill="propContactEmail" placeholder="Contact email"></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">1.17</span>Phone</span><div class="f-val"><input class="u-inp" data-fill="propContactPhone" placeholder="Contact phone"></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">1.16</span>First Name</span><div class="f-val"><input class="u-inp" data-fill="propContactFirst" placeholder="Contact first name"></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">1.17</span>Last Name</span><div class="f-val"><input class="u-inp" data-fill="propContactLast" placeholder="Contact last name"></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">1.18</span>Email</span><div class="f-val"><input class="u-inp" data-fill="propContactEmail" placeholder="Contact email"></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">1.19</span>Phone</span><div class="f-val"><input class="u-inp" data-fill="propContactPhone" placeholder="Contact phone"></div></div>
 
   <div class="subgrp">Client Comments</div>
-  <div class="f span2"><span class="f-lbl"><span class="f-num">1.18</span>Comments</span><div class="f-val"><input class="u-inp" data-fill="clientComments" placeholder="Comments"></div></div>
+  <div class="f span2"><span class="f-lbl"><span class="f-num">1.20</span>Comments</span><div class="f-val"><input class="u-inp" data-fill="clientComments" placeholder="Comments"></div></div>
 
 </div></div></div>
 
@@ -548,12 +575,12 @@
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">↗ View in Valcre</button>
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">↗ View in ClickUp</button>
     <button class="btn btn-outline" style="font-size:11px;padding:5px 12px;">Preview &amp; Send LOE</button>
-    <div class="dd" id="cascadePicker" style="margin-left:auto;min-width:230px;"><div class="dd-trigger" onclick="toggleDD(this)" style="font-size:11px;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);">Cascade Options &mdash; pick a scenario<span class="dd-arrow" style="position:static;margin-left:6px;"></span></div><div class="dd-menu">
+    <div class="dd" id="cascadePicker" style="min-width:360px;margin-left:auto;"><div class="dd-trigger" onclick="toggleDD(this)" style="font-size:11px;padding:5px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);">Cascade Options &mdash; pick a scenario<span class="dd-arrow" style="position:static;margin-left:6px;"></span></div><div class="dd-menu">
       <div class="dd-item" onclick="clearCascade()" style="color:var(--text-3);border-bottom:1px solid var(--border);margin-bottom:3px;padding-bottom:6px;">Clear &mdash; reset to empty</div>
-      <div class="dd-item" onclick="applyProposedVersion(1,this)">V1 &mdash; Completed (baseline &middot; As Stabilized)</div>
-      <div class="dd-item" onclick="applyProposedVersion(2,this)">V2 &mdash; Under Renovation (As-Is + As If Complete &amp; Stabilized)</div>
-      <div class="dd-item" onclick="applyProposedVersion(3,this)">V3 &mdash; Improved Land / Demolition (As If Vacant + As If Complete)</div>
-      <div class="dd-item" onclick="applyProposedVersion(4,this)">V4 &mdash; Insurance override (Insurable Replacement Cost)</div>
+      <div class="dd-item" onclick="applyProposedVersion(1,this)" title="Status (2.4) = Value Scenarios (2.5) & Approaches (2.9)">V1 &mdash; <span class="cv-left">Completed</span> = <span class="cv-scen">As Stabilized</span> &amp; <span class="cv-appr">Direct Comparison + Income</span></div>
+      <div class="dd-item" onclick="applyProposedVersion(2,this)" title="Status (2.4) = Value Scenarios (2.5) & Approaches (2.9)">V2 &mdash; <span class="cv-left">Under Renovation</span> = <span class="cv-scen">As-Is + As If Complete &amp; Stabilized</span> &amp; <span class="cv-appr">Direct Comparison + Income + Cost</span></div>
+      <div class="dd-item" onclick="applyProposedVersion(3,this)" title="Status (2.4) = Value Scenarios (2.5) & Approaches (2.9)">V3 &mdash; <span class="cv-left">Improved Land (Demo Req)</span> = <span class="cv-scen">As If Vacant Land + As If Complete &amp; Stabilized</span> &amp; <span class="cv-appr">Land Direct Comparison + Cost</span></div>
+      <div class="dd-item" onclick="applyProposedVersion(4,this)" title="Authorized Use (1.13) = Value Scenarios (2.5) & Approaches (2.9)">V4 &mdash; <span class="cv-left-au">Insurance</span> = <span class="cv-scen">Insurable Replacement Cost</span> &amp; <span class="cv-appr">Cost Approach</span></div>
     </div></div>
   </div>
   <div class="grid">
@@ -566,12 +593,13 @@
   <div class="f span2"><span class="f-lbl"><span class="f-num">2.3</span>Purpose</span><div class="f-val"><input class="u-inp" data-fill="purpose" placeholder="Purpose of the assignment (free text)" title="Free text — fills the LOE 'Purpose of the Assignment' paragraph (wiring pending)."></div></div>
 
   <div class="subgrp">Value Scenarios &amp; Approaches</div>
+  <div style="grid-column:1 / -1;margin:2px 0 10px;"><label class="fromdata-chk"><input type="checkbox" id="insertFromData" onchange="toggleInsertFromData(this)">Insert from data — map Type / Subtype / Tenancy into the cascade</label></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.4</span>Status of Improvements</span><div class="f-val"><div class="dd" data-fill="statusOfImprovements"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Improved - Completed</div><div class="dd-item" onclick="pickDD(this)">Improved - Renovated</div><div class="dd-item" onclick="pickDD(this)">Improved - Under Renovation</div><div class="dd-item" onclick="pickDD(this)">Improved - Proposed Renovation</div><div class="dd-item" onclick="pickDD(this)">Proposed - Vacant Land</div><div class="dd-item" onclick="pickDD(this)">Proposed - Improved Land (Demolition Required)</div><div class="dd-item" onclick="pickDD(this)">Proposed - Under Construction</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.5</span>Value Scenarios</span><div class="f-val"><div class="dd derived" data-fill="valueScenarios" data-empty="from Status" title="Computed from Status of Improvements + your Authorized Use (from Section 1)."><div class="dd-trigger ph">from Status<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">As Is Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As If Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As-Is</div><div class="dd-item" onclick="pickDD(this)">As If Complete &amp; Stabilized</div><div class="dd-item" onclick="pickDD(this)">As Stabilized</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.6</span>Property Subtype</span><div class="f-val"><div class="dd" data-fill="propertySubtype"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Apartment</div><div class="dd-item" onclick="pickDD(this)">Townhouse</div><div class="dd-item" onclick="pickDD(this)">Mixed Use</div><div class="dd-item" onclick="pickDD(this)">Shopping Centre</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.7</span>Tenancy</span><div class="f-val"><div class="dd" data-fill="tenancy"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Owner-Occupied</div><div class="dd-item" onclick="pickDD(this)">Single-Tenant</div><div class="dd-item" onclick="pickDD(this)">Multi-Tenant</div><div class="dd-item" onclick="pickDD(this)">Vacant</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.8</span>Property Rights</span><div class="f-val"><div class="dd derived" data-fill="propertyRights" data-empty="from Property Type" title="Auto-derived from Property Type, Subtype & Tenancy."><div class="dd-trigger ph">from Property Type<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Fee Simple Interest</div><div class="dd-item" onclick="pickDD(this)">Leasehold Interest</div><div class="dd-item" onclick="pickDD(this)">Leased Fee Interest</div><div class="dd-item" onclick="pickDD(this)">Partial Interest</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.9</span>Approaches to Value</span><div class="f-val" style="position:relative;"><input class="u-inp derived" data-fill="approachesToValue" readonly placeholder="from Status" title="Auto-derived from Status of Improvements."></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.5</span>Value Scenarios</span><div class="f-val"><div class="dd derived" data-fill="valueScenarios" data-empty="from Status of Impr. (2.4)" title="Computed from Status of Improvements + your Authorized Use."><div class="dd-trigger ph">from Status of Impr. (2.4)<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">As Is Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As If Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As-Is</div><div class="dd-item" onclick="pickDD(this)">As If Complete &amp; Stabilized</div><div class="dd-item" onclick="pickDD(this)">As Stabilized</div></div></div></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.6</span>Property Subtype</span><div class="f-val"><div class="dd mirror" data-fill="propertySubtype" data-empty="from Subtype (1.10)"><div class="dd-trigger ph">from Subtype (1.10)<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Apartment</div><div class="dd-item" onclick="pickDD(this)">Townhouse</div><div class="dd-item" onclick="pickDD(this)">Mixed Use</div><div class="dd-item" onclick="pickDD(this)">Shopping Centre</div></div></div></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.7</span>Tenancy</span><div class="f-val"><div class="dd mirror" data-fill="tenancy" data-empty="from Tenancy (1.11)"><div class="dd-trigger ph">from Tenancy (1.11)<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Owner-Occupied</div><div class="dd-item" onclick="pickDD(this)">Single-Tenant</div><div class="dd-item" onclick="pickDD(this)">Multi-Tenant</div><div class="dd-item" onclick="pickDD(this)">Vacant</div></div></div></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.8</span>Property Rights</span><div class="f-val"><div class="dd derived" data-fill="propertyRights" data-empty="from Tenancy (1.11)" title="Auto-derived from Property Type, Subtype &amp; Tenancy."><div class="dd-trigger ph">from Tenancy (1.11)<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Fee Simple Interest</div><div class="dd-item" onclick="pickDD(this)">Leasehold Interest</div><div class="dd-item" onclick="pickDD(this)">Leased Fee Interest</div><div class="dd-item" onclick="pickDD(this)">Partial Interest</div></div></div></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.9</span>Approaches to Value</span><div class="f-val" style="position:relative;"><input class="u-inp derived" data-fill="approachesToValue" readonly placeholder="from Status of Impr. (2.4)" title="Auto-derived from Status of Improvements."></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.10</span>Value Timeframe</span><div class="f-val"><div class="dd" data-fill="valueTimeframe"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Current</div><div class="dd-item" onclick="pickDD(this)">Retrospective</div><div class="dd-item" onclick="pickDD(this)">Prospective</div></div></div></div></div>
 
   <div class="subgrp">Scope of Work</div>
@@ -612,8 +640,11 @@
   <div class="f"><span class="f-lbl"><span class="f-num">2.33</span>Zoning Status</span><div class="f-val"><div class="dd" data-fill="zoningStatus"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">In Place</div><div class="dd-item" onclick="pickDD(this)">To Be Rezoned</div></div></div></div></div>
 
   <div class="subgrp">Notes</div>
-  <div class="f span2"><span class="f-lbl"><span class="f-num">2.34</span>General 1</span><div class="f-val"><input class="u-inp" placeholder="General 1"></div></div>
-  <div class="f span2"><span class="f-lbl"><span class="f-num">2.35</span>General 2</span><div class="f-val"><input class="u-inp" placeholder="General 2"></div></div>
+  <div class="f span2"><span class="f-lbl"><span class="f-num">2.34</span>General</span><div class="f-val"><input class="u-inp" placeholder="Internal appraiser notes..."></div></div>
+  <div class="f span2"><span class="f-lbl"><span class="f-num">2.35</span>Delivery</span><div class="f-val"><input class="u-inp" placeholder="Delivery instructions..."></div></div>
+  <div class="f span2"><span class="f-lbl"><span class="f-num">2.36</span>Payment</span><div class="f-val"><input class="u-inp" placeholder="Payment terms and notes..."></div></div>
+
+  <div class="reg-flag"><b>&#9873; Open registry questions (for Ben / live decision &#8212; not yet answered):</b><br>(a) Should land/demolition or insurance scenarios DROP the building-source dependence? Property Rights currently always uses Subtype (1.10) + Tenancy (1.11) regardless of scenario &#8212; but for a land/demolition or insurance valuation, building tenancy arguably shouldn't drive it.<br>(b) Do we need MORE scenarios to cover every case the two-colour flow should show? Today the picker offers V1&#8211;V4 only.</div>
 
 </div></div></div>
 
@@ -1073,16 +1104,21 @@ const PROPOSED_VERSIONS = {
        valuationPremises:'Insurable Value', scopeOfWork:'Cost Approach', propertyRights:'Fee Simple Interest', valueTimeframe:'Current' },
 };
 function fillTestBase() {
-  // Fill the shared base data INCLUDING authorizedUse (it carries from intake Intended Use) —
-  // leave only the cascade-derived fields (statusOfImprovements, valueScenarios, approachesToValue)
-  // blank for the user's Cascade Options pick.
+  // Skip ONLY the scenario-derived chain (it waits for the scenario pick). Sources (Type/Subtype/Tenancy)
+  // + Property Rights ARE filled by Fill and lit yellow below — they're the mappable source data.
+  var FILL_SKIP = {statusOfImprovements:1, valueScenarios:1, approachesToValue:1, valueTimeframe:1};
   var data = PROPOSED_BASE;
   document.querySelectorAll('#panel-proposedapr [data-fill]').forEach(function(el){
-    var key = el.getAttribute('data-fill'); if (!(key in data)) return;
+    var key = el.getAttribute('data-fill');
+    if (!(key in data) || (key in FILL_SKIP)) return;
     var val = data[key];
     if (el.tagName === 'INPUT') { el.value = val; }
     else { var t = el.querySelector('.dd-trigger'); if (t){ t.childNodes[0].textContent = val || 'Select...'; t.classList.toggle('ph', !val); } el.querySelectorAll('.dd-item').forEach(function(i){ i.classList.toggle('selected', i.textContent.trim() === val); }); }
   });
+  // remember the intake Authorized Use so V4's "Insurance" override can be undone back to THIS value (not "Select…")
+  var _auf = document.querySelector('#panel-proposedapr [data-fill="authorizedUse"]'); if (_auf) _auf.dataset.intake = data.authorizedUse || '';
+  // sources are mappable → light them yellow + sync the Section-2 mirrors + derive Property Rights (one code path)
+  var _ifd = document.getElementById('insertFromData'); if (_ifd) { _ifd.checked = true; toggleInsertFromData(_ifd); }
   // open every toggle so the filled data is visible
   document.querySelectorAll('#panel-proposedapr .sec[onclick*="toggleSec"]').forEach(function(s){ s.classList.remove('closed'); });
   var tgl = document.getElementById('paToggleAll'); if (tgl) tgl.textContent = 'Collapse all';
@@ -1097,11 +1133,19 @@ function clearFields() {
     if (el.tagName === 'INPUT') { el.value = ''; }
     else {
       var t = el.querySelector('.dd-trigger');
+      var isMirror = el.classList.contains('mirror');
       var isDerived = el.classList.contains('derived');
-      if (t) { t.childNodes[0].textContent = isDerived ? (el.getAttribute('data-empty') || 'Pending') : 'Select...'; t.classList.add('ph'); }
+      var emptyText = isMirror ? (el.getAttribute('data-empty') || 'Select...') : (isDerived ? (el.getAttribute('data-empty') || 'Pending') : 'Select...');
+      if (t) { t.childNodes[0].textContent = emptyText; t.classList.add('ph'); }
       el.querySelectorAll('.dd-item').forEach(function(i){ i.classList.remove('selected'); });
     }
   });
+  ['src-mapped','scen-derived','au-derived','vs-derived','appr-derived'].forEach(function(cls){
+    document.querySelectorAll('#panel-proposedapr .f.'+cls).forEach(function(r){ r.classList.remove(cls); });
+  });
+  var _cpt = document.querySelector('#cascadePicker .dd-trigger'); if (_cpt){ var _d=_cpt.querySelector('.dd-text'); if(_d){ _d.textContent='Cascade Options — pick a scenario'; } }
+  var ifd = document.getElementById('insertFromData'); if (ifd) ifd.checked = false;
+  var _aufC = document.querySelector('#panel-proposedapr [data-fill="authorizedUse"]'); if (_aufC) _aufC.removeAttribute('data-intake'); // full reset clears remembered intake
   var picker = document.getElementById('cascadePicker');
   if (picker) picker.classList.remove('pulse');
 }
@@ -1113,25 +1157,124 @@ function toggleAllProposed(btn) {
   requestAnimationFrame(tagCurrentAprColumns);
 }
 
+/* ─── toggleInsertFromData: fills/clears source fields + mirrors + Property Rights (Part E2) ─── */
+function _setProposedDD(key, val, emptyText) {
+  var el = document.querySelector('#panel-proposedapr [data-fill="'+key+'"]');
+  if (!el) return;
+  var t = el.querySelector('.dd-trigger'); if (!t) return;
+  if (val) {
+    t.childNodes[0].textContent = val; t.classList.remove('ph');
+    el.querySelectorAll('.dd-item').forEach(function(i){ i.classList.toggle('selected', i.textContent.trim() === val); });
+  } else {
+    t.childNodes[0].textContent = emptyText || 'Select...'; t.classList.add('ph');
+    el.querySelectorAll('.dd-item').forEach(function(i){ i.classList.remove('selected'); });
+  }
+}
+function _setProposedDD_mirror(key, val) {
+  var el = document.querySelector('#panel-proposedapr .dd.mirror[data-fill="'+key+'"]');
+  if (!el) return;
+  var t = el.querySelector('.dd-trigger'); if (!t) return;
+  var emptyText = el.getAttribute('data-empty') || ('from '+key);
+  if (val) {
+    t.childNodes[0].textContent = val; t.classList.remove('ph');
+    el.querySelectorAll('.dd-item').forEach(function(i){ i.classList.toggle('selected', i.textContent.trim() === val); });
+  } else {
+    t.childNodes[0].textContent = emptyText; t.classList.add('ph');
+    el.querySelectorAll('.dd-item').forEach(function(i){ i.classList.remove('selected'); });
+  }
+}
+function toggleInsertFromData(chk) {
+  if (!chk) return;
+  var srcRows = document.querySelectorAll('#panel-proposedapr [data-srcfield]');
+  var mirror26Row = (function(){ var el=document.querySelector('#panel-proposedapr .dd.mirror[data-fill="propertySubtype"]'); return el ? el.closest('.f') : null; })();
+  var mirror27Row = (function(){ var el=document.querySelector('#panel-proposedapr .dd.mirror[data-fill="tenancy"]'); return el ? el.closest('.f') : null; })();
+  var rights28Row = (function(){ var el=document.querySelector('#panel-proposedapr [data-fill="propertyRights"]'); return el ? el.closest('.f') : null; })();
+  if (chk.checked) {
+    _setProposedDD('propertyType', PROPOSED_BASE.propertyType, 'Select...');
+    _setProposedDD('propertySubtype', PROPOSED_BASE.propertySubtype, 'Select...');
+    _setProposedDD('tenancy', PROPOSED_BASE.tenancy, 'Select...');
+    _setProposedDD_mirror('propertySubtype', PROPOSED_BASE.propertySubtype);
+    _setProposedDD_mirror('tenancy', PROPOSED_BASE.tenancy);
+    var rights = PROPOSED_BASE.propertyRights || 'Leased Fee Interest';
+    _setProposedDD('propertyRights', rights, 'from Tenancy (1.11)');
+    srcRows.forEach(function(r){ r.classList.add('src-mapped'); });
+    if (mirror26Row) mirror26Row.classList.add('src-mapped');
+    if (mirror27Row) mirror27Row.classList.add('src-mapped');
+    if (rights28Row) rights28Row.classList.add('src-mapped');
+  } else {
+    _setProposedDD('propertyType', null, 'Select...');
+    _setProposedDD('propertySubtype', null, 'Select...');
+    _setProposedDD('tenancy', null, 'Select...');
+    _setProposedDD_mirror('propertySubtype', null);
+    _setProposedDD_mirror('tenancy', null);
+    _setProposedDD('propertyRights', null, 'from Tenancy (1.11)');
+    srcRows.forEach(function(r){ r.classList.remove('src-mapped'); });
+    if (mirror26Row) mirror26Row.classList.remove('src-mapped');
+    if (mirror27Row) mirror27Row.classList.remove('src-mapped');
+    if (rights28Row) rights28Row.classList.remove('src-mapped');
+  }
+}
+
 function applyProposedVersion(v, item) {
   pickDD(item);
   var _cp = document.getElementById('cascadePicker'); if (_cp) _cp.classList.remove('pulse');
-  const data = Object.assign({}, PROPOSED_BASE, PROPOSED_VERSIONS[v]);
-  // derive scenarios + approaches from cascade source
-  const scen = (data.authorizedUse === 'Insurance') ? ['Insurable Replacement Cost'] : (SCEN[data.statusOfImprovements] || []);
-  const apprSet = new Set(); scen.forEach(s => (APPR[s]||[]).forEach(a => apprSet.add(a)));
-  data.valueScenarios = scen.join(', ');
-  data.approachesToValue = [...apprSet].map(a => a.replace(' Approach','')).join(', ');
-  // write every data-fill field
-  document.querySelectorAll('#panel-proposedapr [data-fill]').forEach(el => {
-    const key = el.getAttribute('data-fill'); if (!(key in data)) return;
-    const val = data[key];
-    if (el.tagName === 'INPUT') { el.value = val; }
-    else { // .dd
-      const t = el.querySelector('.dd-trigger'); if (t){ t.childNodes[0].textContent = val || 'Select...'; t.classList.toggle('ph', !val); }
-      el.querySelectorAll('.dd-item').forEach(i => i.classList.toggle('selected', i.textContent.trim() === val));
-    }
+  var vdata = PROPOSED_VERSIONS[v]; if (!vdata) return;
+
+  // Which field does THIS version DIRECTLY set? V1-V3 → Status of Improvements (2.4, indigo).
+  // V4 → Authorized Use (a DIFFERENT field, teal). The colour follows the directly-set field.
+  var auDriven = (v === 4);
+  var rowOf = function(key){ var el=document.querySelector('#panel-proposedapr [data-fill="'+key+'"]'); return el?el.closest('.f'):null; };
+
+  // clean slate — strip ALL provenance colours from every field this picker can touch
+  ['statusOfImprovements','valueScenarios','approachesToValue','authorizedUse'].forEach(function(key){
+    var r=rowOf(key); if(r){ r.classList.remove('scen-derived','au-derived','vs-derived','appr-derived'); }
   });
+  // picker trigger PERSISTS the colored 3-part name (copy the option's coloured markup verbatim)
+  var cpTrig = _cp ? _cp.querySelector('.dd-trigger') : null;
+  if (cpTrig){ var _dt=cpTrig.querySelector('.dd-text'); if(_dt) _dt.innerHTML = item.innerHTML; }
+
+  // SHORT display for the Status field (matches the version-name left word); FULL value still drives derivation
+  var STATUS_SHORT = { 'Improved - Completed':'Completed', 'Improved - Under Renovation':'Under Renovation',
+                       'Proposed - Improved Land (Demolition Required)':'Improved Land (Demo Req)' };
+
+  // Authorized Use that drives derivation (V4 = Insurance; else the version's / live non-insurance value)
+  var au = vdata.authorizedUse || '';
+  if (!au) {
+    var auEl = document.querySelector('#panel-proposedapr [data-fill="authorizedUse"]');
+    if (auEl) { if (auEl.tagName==='INPUT'){au=auEl.value;} else { var _t=auEl.querySelector('.dd-trigger'); if(_t&&!_t.classList.contains('ph')) au=_t.childNodes[0].textContent.trim(); } }
+  }
+
+  // INPUT field carries its destination colour: Status (2.4) GREEN for V1-V3, Authorized Use (1.13) ORANGE for V4.
+  // Authorized Use (1.13) is a NORMAL filled intake field — coloured ONLY while V4 overrides it.
+  var statusVal;
+  var auField = document.querySelector('#panel-proposedapr [data-fill="authorizedUse"]');
+  var intakeAU = (auField && auField.dataset.intake) || '';
+  if (auDriven) {
+    // V4 OVERRIDES Authorized Use → "Insurance" + ORANGE. Status (2.4) is NOT used → dash.
+    _setProposedDD('authorizedUse', 'Insurance', 'Select...');
+    _setProposedDD('statusOfImprovements', '', '—');
+    statusVal = '';
+    var auRow = rowOf('authorizedUse'); if (auRow) auRow.classList.add('au-derived'); // override is active → orange
+  } else {
+    // V1-V3 set Status (2.4) → GREEN. Authorized Use is NOT touched — RESTORE its intake value, NO colour
+    // (it keeps showing its filled value; never a dash, never "Select…").
+    statusVal = vdata.statusOfImprovements || '';
+    _setProposedDD('statusOfImprovements', STATUS_SHORT[statusVal] || statusVal, 'Select...');
+    _setProposedDD('authorizedUse', intakeAU, 'Select...');
+    var stRow = rowOf('statusOfImprovements'); if (stRow) stRow.classList.add('scen-derived'); // Status → green
+  }
+  // Value Timeframe (2.10) is no version's job — it's the appraiser's own pick → dash on EVERY version.
+  _setProposedDD('valueTimeframe', '', '—');
+
+  // OUTPUTS — computed from the driver. 2.5 Value Scenarios → rose; 2.9 Approaches → orange (match the name segments)
+  var scen = (au === 'Insurance') ? ['Insurable Replacement Cost'] : (SCEN[statusVal] || []);
+  var apprSet = new Set(); scen.forEach(function(s){ (APPR[s]||[]).forEach(function(a){ apprSet.add(a); }); });
+  _setProposedDD('valueScenarios', scen.join(', '), 'from Status of Impr. (2.4)');
+  var apprEl = document.querySelector('#panel-proposedapr [data-fill="approachesToValue"]');
+  if (apprEl) apprEl.value = Array.from(apprSet).map(function(a){ return a.replace(' Approach',''); }).join(', ');
+  var sR=rowOf('valueScenarios'), aR=rowOf('approachesToValue');
+  if (sR) sR.classList.add('vs-derived');     // Value Scenarios → rose
+  if (aR) aR.classList.add('appr-derived');   // Approaches → orange
 }
 
 // Scoped Clear — resets ONLY the cascade section (Status of Improvements / Value Scenarios / Approaches)
@@ -1145,14 +1288,22 @@ function clearCascade() {
     el.querySelectorAll('.dd-item').forEach(function(i){ i.classList.remove('selected'); });
   };
   setDD('statusOfImprovements','Select...');   // user-choice driver
-  setDD('valueScenarios','from Status');        // derived
+  // Authorized Use is NOT cleared to "Select…" — restore its intake value (only V4 borrowed it). No colour.
+  var _auf2 = document.querySelector('#panel-proposedapr [data-fill="authorizedUse"]');
+  _setProposedDD('authorizedUse', (_auf2 && _auf2.dataset.intake) || '', 'Select...');
+  setDD('valueTimeframe','Select...');         // VT has no intake value → back to resting Select
+  setDD('valueScenarios','from Status of Impr. (2.4)');  // derived
+  ['statusOfImprovements','valueScenarios','approachesToValue','authorizedUse'].forEach(function(key){
+    var el = document.querySelector('#panel-proposedapr [data-fill="'+key+'"]');
+    if (el) { var row = el.closest('.f'); if (row) { row.classList.remove('scen-derived','au-derived','vs-derived','appr-derived'); } }
+  });
   var appr = document.querySelector('#panel-proposedapr [data-fill="approachesToValue"]');
   if(appr) appr.value = '';                 // derived input -> Pending placeholder
-  // reset the picker trigger label + selection
+  // reset the picker trigger label (clears any coloured 3-part name) + selection
   var cp = document.getElementById('cascadePicker');
   if(cp){
     var t = cp.querySelector('.dd-trigger');
-    if(t) t.childNodes[0].textContent = 'Cascade Options \u2014 pick a scenario';
+    if(t){ var _d=t.querySelector('.dd-text'); if(_d){ _d.textContent='Cascade Options \u2014 pick a scenario'; } }
     cp.querySelectorAll('.dd-item').forEach(function(i){ i.classList.remove('selected'); });
     cp.classList.remove('pulse');
   }
@@ -1175,6 +1326,19 @@ function pickDD(item) {
   trigger.childNodes[0].textContent = item.textContent;
   trigger.classList.remove('ph');
   menu.classList.remove('open'); trigger.classList.remove('open');
+  // a MANUAL Authorized Use pick becomes its new intake value (so V4's override can restore to it)
+  if (dd.getAttribute('data-fill') === 'authorizedUse' && dd.closest('#panel-proposedapr')) { dd.dataset.intake = item.textContent; }
+  // Post-pick hook: if checkbox is checked and a source field changed, sync mirrors + re-derive Property Rights
+  try {
+    var fillKey = dd.getAttribute('data-fill');
+    var ifd = document.getElementById('insertFromData');
+    if (ifd && ifd.checked && (fillKey==='propertyType'||fillKey==='propertySubtype'||fillKey==='tenancy')) {
+      if (fillKey==='propertySubtype') _setProposedDD_mirror('propertySubtype', item.textContent);
+      if (fillKey==='tenancy') _setProposedDD_mirror('tenancy', item.textContent);
+      var rights = PROPOSED_BASE.propertyRights || 'Leased Fee Interest';
+      _setProposedDD('propertyRights', rights, 'from Tenancy (1.11)');
+    }
+  } catch(e) {}
 }
 function pickField(item) {
   const dd = item.closest('.dd'), field = dd.dataset.field, val = item.textContent;
@@ -3704,6 +3868,27 @@ function applyColState() {
 }
 // Apply on page load
 document.addEventListener('DOMContentLoaded', function() { setTimeout(applyColState, 100); });
+
+// Truncate long dropdown values: wrap each proposed-panel .dd-trigger's leading text node in a
+// .dd-text span so CSS ellipsis can clip it (keeps the contract that childNodes[0].textContent is
+// the value — childNodes[0] becomes the span, .textContent still reads/writes the value).
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('#panel-proposedapr .dd-trigger').forEach(function(t){
+    var first = t.childNodes[0];
+    if (first && first.nodeType === 3 && !(t.querySelector('.dd-text'))) {
+      var span = document.createElement('span');
+      span.className = 'dd-text';
+      span.textContent = first.textContent;
+      t.replaceChild(span, first);
+    }
+  });
+});
+// Full value on hover ONLY when actually clipped (no stale titles).
+document.addEventListener('mouseover', function(e){
+  var s = e.target.closest && e.target.closest('.dd-text');
+  if (!s) return;
+  if (s.scrollWidth > s.clientWidth + 1) { s.title = s.textContent; } else { s.removeAttribute('title'); }
+});
 // Re-apply after renderFields
 const _origRenderFields = renderFields;
 renderFields = function() { _origRenderFields(); applyColState(); };

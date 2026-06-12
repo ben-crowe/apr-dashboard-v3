@@ -113,15 +113,18 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         landAssessmentValue: 4200000,
         improvedAssessmentValue: 7200000,
         totalAssessmentValue: 11400000,
+        // Cascade-derived fields stay EMPTY after Fill (they fill only when a scenario is picked).
+        // These MUST live in this SINGLE update — a separate second onUpdateDetails call was
+        // clobbering the whole object (stale-closure merge), which blanked all of Section 2.
+        propertyRightsAppraised: '',
+        statusOfImprovements: '',
+        valueScenarios: '',
+        approachesToValue: '',
       } as any);
     }
 
     setTestFilled(true);
     setCascadeResetToken((t) => t + 1); // snap the cascade picker back to "pick a scenario"
-    // Explicitly blank the cascade-derived fields so a re-fill always starts clean.
-    if (onUpdateDetails) {
-      onUpdateDetails({ propertyRightsAppraised: '', statusOfImprovements: '', valueScenarios: '', approachesToValue: '' } as any);
-    }
 
     void 0 /* success: silent (Ben) */;
 

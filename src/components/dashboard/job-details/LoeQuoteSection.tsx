@@ -150,10 +150,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         // Readback, not 200: the edge fn re-GETs the card and returns `verified`.
         if (error || !result?.success) {
           console.error('ClickUp card update failed:', error || result?.error);
-          toast.warning('ClickUp card update failed — refresh ClickUp');
+          (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.warning('ClickUp card update failed — refresh ClickUp');
         } else if (result.verified === false) {
           console.warn('ClickUp card update unverified (PUT 200 but readback mismatch):', result);
-          toast.warning('ClickUp card update unverified');
+          (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.warning('ClickUp card update unverified');
         } else {
           console.log('✅ ClickUp card updated + verified:', result.taskId);
         }
@@ -427,14 +427,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
             if (updateError) {
               console.error('❌ Failed to update ClickUp task:', updateError);
-              toast.warning('ClickUp task update failed - please refresh ClickUp');
+              (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.warning('ClickUp task update failed - please refresh ClickUp');
             } else {
               console.log('✅ ClickUp task updated with LOE section:', updateResult);
               void 0 /* success: silent (Ben) */;
             }
           } catch (clickupError) {
             console.error('❌ Error updating ClickUp task:', clickupError);
-            toast.warning('ClickUp task update failed - please refresh ClickUp');
+            (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.warning('ClickUp task update failed - please refresh ClickUp');
           }
 
           // Refetch job data to ensure UI reflects latest database state

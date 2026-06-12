@@ -4,6 +4,7 @@ import { JobDetails } from "@/types/job";
 import { debounce } from "@/lib/utils";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { isValcreJobNumber } from "@/config/valcre";
 
 export function useSaveJobDetails(jobId: string) {
   const [isSaving, setIsSaving] = useState(false);
@@ -160,7 +161,10 @@ export function useSaveJobDetails(jobId: string) {
         }
       } catch (error) {
         console.error("Error saving job details:", error);
-        toast.error("Failed to save changes");
+        // No Valcre job = just editing a draft → stay silent (Ben: zero popups without a job number).
+        if (isValcreJobNumber(details?.jobNumber) && (details as any)?.valcreJobId) {
+          toast.error("Failed to save changes");
+        }
       } finally {
         setIsSaving(false);
       }

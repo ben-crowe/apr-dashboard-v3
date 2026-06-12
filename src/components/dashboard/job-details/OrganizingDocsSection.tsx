@@ -60,7 +60,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
 
         if (supabaseError) {
           console.error('Supabase save error:', supabaseError);
-          toast.error(`Failed to save ${fieldName}`);
+          (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error(`Failed to save ${fieldName}`);
           setFieldStates(prev => ({ ...prev, [fieldName]: 'idle' }));
           setIsSectionSaving(false);
           return;
@@ -93,7 +93,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
 
       } catch (error: any) {
         console.error('Auto-save error:', error);
-        toast.error(`Failed to save ${fieldName}`);
+        (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error(`Failed to save ${fieldName}`);
         setFieldStates(prev => ({ ...prev, [fieldName]: 'idle' }));
         setIsSectionSaving(false);
       }

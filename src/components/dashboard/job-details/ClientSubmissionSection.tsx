@@ -199,7 +199,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         if (uploadError) {
           console.error('❌ File upload error:', uploadError);
-          toast.error(`Failed to upload ${file.name}: ${uploadError.message}`);
+          (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error(`Failed to upload ${file.name}: ${uploadError.message}`);
           continue;
         }
 
@@ -216,7 +216,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
         if (dbError) {
           console.error('❌ Database insert error:', dbError);
-          toast.error(`Failed to save ${file.name} reference`);
+          (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error(`Failed to save ${file.name} reference`);
         } else {
           console.log('✅ File reference saved to database');
         }
@@ -245,7 +245,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
     } catch (error) {
       console.error('Upload error:', error);
-      toast.error('Failed to upload files');
+      (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error('Failed to upload files');
     } finally {
       setUploading(false);
     }
@@ -282,7 +282,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
       if (storageError) {
         console.error('Storage deletion error:', storageError);
-        toast.error('Failed to delete file from storage');
+        (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error('Failed to delete file from storage');
         return;
       }
 
@@ -294,7 +294,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
       if (dbError) {
         console.error('Database deletion error:', dbError);
-        toast.error('Failed to delete file reference');
+        (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error('Failed to delete file reference');
         return;
       }
 
@@ -321,7 +321,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
 
     } catch (error) {
       console.error('Delete error:', error);
-      toast.error('Failed to delete file');
+      (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error('Failed to delete file');
     }
   };
 
@@ -700,7 +700,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                             void 0 /* success: silent (Ben) */;
                           } catch (error) {
                             console.error('Download error:', error);
-                            toast.error('Failed to download file');
+                            (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error('Failed to download file');
                           }
                         }}
                         className="h-7 w-7 p-0"
@@ -722,7 +722,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                             window.open(data.signedUrl, '_blank');
                           } catch (error) {
                             console.error('View error:', error);
-                            toast.error('Failed to view file');
+                            (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error('Failed to view file');
                           }
                         }}
                         className="h-7 w-7 p-0"

@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import FileUpload from "@/components/FileUpload";
 import { debugSupabase } from "@/utils/debug-supabase";
 import {
+import { isValcreJobNumber } from "@/config/valcre";
   Dialog,
   DialogContent,
   DialogHeader,
@@ -49,12 +50,12 @@ const UploadedDocumentsSection: React.FC<UploadedDocumentsSectionProps> = ({ job
       
       if (error) {
         console.error("Error downloading file:", error);
-        toast.error(`Failed to download ${file.fileName}. ${error.message}`);
+        (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error(`Failed to download ${file.fileName}. ${error.message}`);
         return;
       }
       
       if (!data) {
-        toast.error(`Failed to download ${file.fileName}. File not found.`);
+        (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error(`Failed to download ${file.fileName}. File not found.`);
         return;
       }
       
@@ -73,7 +74,7 @@ const UploadedDocumentsSection: React.FC<UploadedDocumentsSectionProps> = ({ job
       void 0 /* success: silent (Ben) */;
     } catch (error) {
       console.error("Error downloading file:", error);
-      toast.error(`Failed to download ${file.fileName}. Please try again.`);
+      (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error(`Failed to download ${file.fileName}. Please try again.`);
     } finally {
       toast.dismiss();
     }
@@ -90,7 +91,7 @@ const UploadedDocumentsSection: React.FC<UploadedDocumentsSectionProps> = ({ job
         setPreviewUrl(data.publicUrl);
       }
     } catch (error) {
-      toast.error('Unable to view file');
+      (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error('Unable to view file');
     }
   };
   
@@ -129,7 +130,7 @@ const UploadedDocumentsSection: React.FC<UploadedDocumentsSectionProps> = ({ job
           .upload(fileName, file);
         
         if (error) {
-          toast.error(`Failed to upload ${file.name}: ${error.message}`);
+          (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error(`Failed to upload ${file.name}: ${error.message}`);
           continue;
         }
         
@@ -145,7 +146,7 @@ const UploadedDocumentsSection: React.FC<UploadedDocumentsSectionProps> = ({ job
           });
         
         if (dbError) {
-          toast.error(`Failed to save ${file.name} reference`);
+          (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error(`Failed to save ${file.name} reference`);
         } else {
           void 0 /* success: silent (Ben) */;
           // Refresh the page or update the files list
@@ -153,7 +154,7 @@ const UploadedDocumentsSection: React.FC<UploadedDocumentsSectionProps> = ({ job
         }
       }
     } catch (error) {
-      toast.error('Upload failed');
+      (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error('Upload failed');
     } finally {
       setIsUploading(false);
       setPendingFiles([]);

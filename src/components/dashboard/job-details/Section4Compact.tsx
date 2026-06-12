@@ -14,6 +14,7 @@ import { Upload, Eye, Download, ExternalLink, Check, FileText, FileImage, Trash2
 import { supabase } from "@/integrations/supabase/client";
 import { ensureDocumentsBucketExists } from "@/utils/storage";
 import { getSmartLinks, smartLinkLabels } from "@/utils/smartLinks";
+import { isValcreJobNumber } from "@/config/valcre";
 
 // Unified component styling to match other sections
 const SectionCard = ({ children }: { children: React.ReactNode }) => (
@@ -96,7 +97,7 @@ const Section4Compact: React.FC<SectionProps> = ({
 
       if (error) {
         console.error("Upload error:", error);
-        toast.error("Upload failed: " + error.message);
+        (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error("Upload failed: " + error.message);
         return;
       }
 
@@ -114,7 +115,7 @@ const Section4Compact: React.FC<SectionProps> = ({
       void 0 /* success: silent (Ben) */;
     } catch (error) {
       console.error("Upload error:", error);
-      toast.error("Upload failed");
+      (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error("Upload failed");
     } finally {
       setUploading(null);
     }
@@ -146,7 +147,7 @@ const Section4Compact: React.FC<SectionProps> = ({
 
         if (error) {
           console.error("Upload error:", error);
-          toast.error(`Failed to upload ${file.name}`);
+          (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error(`Failed to upload ${file.name}`);
           continue;
         }
 
@@ -170,7 +171,7 @@ const Section4Compact: React.FC<SectionProps> = ({
       void 0 /* success: silent (Ben) */;
     } catch (error) {
       console.error("Upload error:", error);
-      toast.error("Upload failed");
+      (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error("Upload failed");
     } finally {
       setUploading(null);
     }
@@ -220,7 +221,7 @@ const Section4Compact: React.FC<SectionProps> = ({
         
         if (error) {
           console.error('Error deleting file:', error);
-          toast.error('Failed to delete file from storage');
+          (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error('Failed to delete file from storage');
         }
       }
       
@@ -238,7 +239,7 @@ const Section4Compact: React.FC<SectionProps> = ({
       void 0 /* success: silent (Ben) */;
     } catch (error) {
       console.error('Error deleting file:', error);
-      toast.error('Failed to delete file');
+      (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) && toast.error('Failed to delete file');
     }
   };
 

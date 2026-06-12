@@ -8,8 +8,22 @@
 // (stable across lists) → id (differs per list). So this works on the BC mirror now AND auto-works when
 // Ben replicates the template to the Valta board, with ZERO code change. Any hub field that is absent on
 // the target list, or a dropdown whose value doesn't match a live option label, is SKIPPED (never sent) —
-// which makes the HOLD dropdowns (Report Type, Intended Use) and not-yet-added fields (Appraisal Fee,
-// Received/LOE Sent/LOE Signed dates) self-resolve the moment they exist / are aligned, no redeploy.
+// which makes the not-yet-added fields (Appraisal Fee, Received Date, LOE Sent, LOE Signed, Intended Use)
+// self-resolve the moment they exist, no redeploy.
+//
+// KEEP set (spec 03-CLICKUP-JOB-HUB-SPEC.md — updated 2026-06-11):
+// LINKS:   Job Number (short_text) · APR Dashboard Link (url) · Valcre Job Link (url)
+// SUMMARY: Client First Name · Client Last Name · Client Organization · Client Email
+//          Property Name · Property Address · Property Type (drop_down)
+//          Report Type (drop_down) · Intended Use (drop_down ← authorized_use)
+//          Property Rights (drop_down) · Scope of Work (short_text)
+//          Payment Terms (drop_down) · Appraisal Fee (currency)
+// DATES:   Delivery Date · Received Date · LOE Sent · LOE Signed
+//
+// REMOVE set (must NOT be pushed): Client Title, Client Phone, Client Address,
+//   all Property Contact fields, Job Status, Asset Condition, Valuation Premises,
+//   Additional Info/Notes, Property Subtype, Tenancy, Retainer, Status of Improvements,
+//   Authorized Use (canonical key renamed to "Intended Use" per spec).
 
 export interface ClickUpFieldDef {
   id: string
@@ -32,68 +46,58 @@ export async function fetchListFields(token: string, listId: string): Promise<Cl
   return (data.fields || []) as ClickUpFieldDef[]
 }
 
-// Card-redesign KEEP set (2026-06-05, BRIEF-reactspec-clickup-card-redesign): the GROUPED data fields.
-// Each datum lives ONCE — the two links + Job# + Date Ordered + the LOE tracker live in the DESCRIPTION
-// title block (create-clickup-task), so they are NOT custom fields here. This map closes QA's subset gap
-// (Asset Condition, Client Phone, Property Contact*, Valuation Premises, Status of Improvements were
-// missing). REMOVED noise: Intended Use (dup of Authorized Use), Client Title, Client Address, Job Status,
-// Additional Info. QA_PROBE_DELETE_ME is a stray ClickUp test field the API CANNOT delete — flag for
-// manual removal in the ClickUp UI; do not fight the API. byName resolver SKIPS any field not yet on the
-// list, so the 7 ADD fields self-populate the moment their defs exist (create in the UI or via API).
-// Normalize asset_condition from the intake form's condition-rating vocabulary
-// (Excellent / Very Good / Good / Fair / Poor / existing-property) to the ClickUp
-// dropdown taxonomy (New Development | Existing Property).
-// "new-development" or "new development" → New Development; everything else → Existing Property.
-function normalizeAssetCondition(raw: string | undefined | null): string {
-  if (!raw) return ''
-  const v = raw.trim().toLowerCase().replace(/[_-]/g, ' ')
-  if (v === 'new development' || v === 'new') return 'New Development'
-  if (v === 'existing property' || v === 'existing') return 'Existing Property'
-  // Condition-rating values (excellent/good/fair/poor/very good) all indicate an existing property.
-  const ratingWords = ['excellent', 'very good', 'good', 'fair', 'poor']
-  if (ratingWords.some(r => v.includes(r))) return 'Existing Property'
-  return '' // unrecognized — skip
-}
-
-function hubValueMap(job: any): Record<string, any> {
+// Build the hub value map — EXACTLY the KEEP set from the spec.
+// Sources: job_submissions (root), job_loe_details (loe), job_submissions.created_at (Received Date).
+function hubValueMap(job: any, hubUrl?: string): Record<string, any> {
   const loe = (Array.isArray(job.job_loe_details) ? job.job_loe_details[0] : job.job_loe_details) || {}
-  const pi = (Array.isArray(job.job_property_info) ? job.job_property_info[0] : job.job_property_info) || {}
+
+  // ── LINKS ──────────────────────────────────────────────────────────────────
+  // Job Number: job_number lives on job_loe_details per the Valcre sync path.
+  const jobNumber = loe.job_number || job.job_number || ''
+
+  // APR Dashboard Link: <hubUrl>/dashboard/job/<job.id>
+  const base = hubUrl || 'https://apr-dashboard-v3.vercel.app'
+  const aprDashboardLink = job.id ? `${base}/dashboard/job/${job.id}` : ''
+
+  // Valcre Job Link: https://app.valcre.com/job/edit/<valcre_job_id>#job (skip if absent)
+  const valcreJobId = loe.valcre_job_id || job.valcre_job_id || ''
+  const valcreJobLink = valcreJobId ? `https://app.valcre.com/job/edit/${valcreJobId}#job` : ''
+
+  // ── SUMMARY ────────────────────────────────────────────────────────────────
+  const appraisalFee = loe.appraisal_fee ?? job.appraisal_fee ?? ''
+
+  // ── DATES ─────────────────────────────────────────────────────────────────
+  // Delivery Date: loe.delivery_date (ISO string → unix ms via encodeForField date handler)
+  // Received Date: job.created_at (ISO string → unix ms)
+  // LOE Sent:  loe.loe_sent_at (ISO string → unix ms, set by docuseal-webhook on send event)
+  // LOE Signed: loe.signed_at  (ISO string → unix ms, set by docuseal-webhook on completion)
+
   return {
-    // CLIENT
-    'Client Organization': job.client_organization || '',
+    // LINKS
+    'Job Number': jobNumber,
+    'APR Dashboard Link': aprDashboardLink,
+    'Valcre Job Link': valcreJobLink,
+    // SUMMARY — CLIENT
     'Client First Name': job.client_first_name || '',
     'Client Last Name': job.client_last_name || '',
+    'Client Organization': job.client_organization || '',
     'Client Email': job.client_email || '',
-    'Client Phone': job.client_phone || '',
-    // PROPERTY
+    // SUMMARY — PROPERTY
     'Property Name': job.property_name || '',
     'Property Address': job.property_address || '',
     'Property Type': job.property_type || '',
-    // Property Subtype + Tenancy from job_property_info. Fields are field-absent on some lists
-    // (will self-populate the moment "Property Subtype" / "Tenancy" columns are added in the UI).
-    'Property Subtype': pi.property_subtype || '',
-    'Tenancy': pi.tenancy || '',
-    'Authorized Use': loe.authorized_use || job.intended_use || '',         // canonical (replaces Intended Use dup)
-    // Asset Condition: normalize from intake rating vocabulary → ClickUp dropdown taxonomy
-    // (New Development | Existing Property). See normalizeAssetCondition().
-    'Asset Condition': normalizeAssetCondition(job.asset_condition || pi.asset_condition || ''),
-    'Valuation Premises': loe.valuation_premises || job.valuation_premises || '',  // PLURAL — matches live ClickUp field name (singular missed byName, silently skipped)
-    // PROPERTY CONTACT group DROPPED 2026-06-05 (Ben, locked mock MK9-0) — duplicates Client (same person).
-    // ASSIGNMENT
+    // SUMMARY — ASSIGNMENT
+    'Report Type': loe.report_type || job.report_type || '',
+    'Intended Use': loe.authorized_use || job.authorized_use || job.intended_use || '',
     'Property Rights Appraised': loe.property_rights_appraised || '',
     'Scope of Work': loe.scope_of_work || '',
-    'Report Type': loe.report_type || '',
-    'Status of Improvements': pi.status_of_improvements || '',
-    // FINANCIAL
-    'Appraisal Fee': loe.appraisal_fee ?? '',
-    'Retainer': loe.retainer_amount ?? '',
-    'Delivery Date': loe.delivery_date || '',
-    // Payment Terms: "On Completion" (DB value) → "Upon Completion" (ClickUp option).
-    // Normalized via suffix-match below — no hardcoded alias needed; encode logic handles it.
     'Payment Terms': loe.payment_terms || '',
-    // NOTES
-    'Appraiser Notes': loe.internal_comments || loe.appraiser_comments || '',
-    'Client Comments': job.notes || '',
+    'Appraisal Fee': appraisalFee,
+    // DATES
+    'Delivery Date': loe.delivery_date || '',
+    'Received Date': job.created_at || '',
+    'LOE Sent': loe.loe_sent_at || '',
+    'LOE Signed': loe.signed_at || '',
   }
 }
 
@@ -175,9 +179,10 @@ function encodeForField(def: ClickUpFieldDef, raw: any): string | number | null 
 }
 
 // Build the [{id, value}] array for a job against a list's live field defs (byName, type-encoded, skip-on-miss).
-export function buildHubCustomFields(job: any, listFields: ClickUpFieldDef[]): Array<{ id: string; value: any; name: string }> {
+// hubUrl is optional — defaults to the production APR Dashboard URL.
+export function buildHubCustomFields(job: any, listFields: ClickUpFieldDef[], hubUrl?: string): Array<{ id: string; value: any; name: string }> {
   const byName = new Map(listFields.map(f => [f.name, f]))
-  const values = hubValueMap(job)
+  const values = hubValueMap(job, hubUrl)
   const out: Array<{ id: string; value: any; name: string }> = []
   for (const [name, raw] of Object.entries(values)) {
     const def = byName.get(name)
@@ -191,9 +196,9 @@ export function buildHubCustomFields(job: any, listFields: ClickUpFieldDef[]): A
 
 // Diagnostic: which hub field NAMES have no column on this list (byName miss). Independent of value —
 // answers "which fields need a one-time column created in the ClickUp UI". Logged by create-clickup-task.
-export function hubFieldsMissingColumns(job: any, listFields: ClickUpFieldDef[]): string[] {
+export function hubFieldsMissingColumns(job: any, listFields: ClickUpFieldDef[], hubUrl?: string): string[] {
   const have = new Set(listFields.map(f => f.name))
-  return Object.keys(hubValueMap(job)).filter(name => !have.has(name))
+  return Object.keys(hubValueMap(job, hubUrl)).filter(name => !have.has(name))
 }
 
 // Apply custom fields to a task via the per-field endpoint (POST /task/{id}/field/{fieldId}).

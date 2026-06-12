@@ -250,6 +250,14 @@ export function jobFolderInputs(job: {
   return { jobNumber: job.job_number, propertyDescription, year };
 }
 
+/** True iff a folder exists at the given drive path (distinguishes 404 from empty). */
+export async function folderExists(driveId: string, folderPath: string): Promise<boolean> {
+  const res = await graphFetch(`/drives/${driveId}/root:/${encodePath(folderPath)}`);
+  if (res.ok) return true;
+  if (res.status === 404) return false;
+  throw new Error(`folderExists check failed (${res.status}): ${await res.text()}`);
+}
+
 /** List the file/folder names directly under a drive path (empty array if the path 404s). */
 export async function listFolderNames(driveId: string, folderPath: string): Promise<string[]> {
   const res = await graphFetch(`/drives/${driveId}/root:/${encodePath(folderPath)}:/children?$select=name&$top=200`);

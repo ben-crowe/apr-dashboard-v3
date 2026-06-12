@@ -19,7 +19,7 @@
 //     "pdfUrl": "https://.../signed.pdf" }   // fetched server-side
 
 import { serve } from 'https://deno.land/std@0.220.0/http/server.ts';
-import { graphConfigured, uploadFile, listFolderNames, chooseSignedLoeName, resolveSharePointIds, JOB_SUBFOLDERS } from '../_shared/graph.ts';
+import { graphConfigured, uploadFile, listFolderNames, chooseSignedLoeName, resolveSharePointIds, folderExists, JOB_SUBFOLDERS } from '../_shared/graph.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -67,12 +67,20 @@ serve(async (req) => {
 
     const resolvedYear = year ?? new Date().getUTCFullYear();
     const parentFolderName = `${jobNumber} - ${propertyDescription}`;
-    const billingPath = `2.Jobs/${resolvedYear}/${parentFolderName}/${BILLING_SUBFOLDER}`;
+    const { driveId } = await resolveSharePointIds();
+
+    // CONNECT-ONLY guard: only file into the client's EXISTING job folder. If the parent
+    // folder does not exist, SKIP — never auto-create it (a raw PUT auto-creates intermediate
+    // dirs, which would pollute the client's SharePoint with test/unmatched jobs).
+    const parentPath = `2.Jobs/${resolvedYear}/${parentFolderName}`;
+    if (!(await folderExists(driveId, parentPath))) {
+      return json({ configured: true, skipped: true, reason: 'client job folder not found — connect-only, not creating', parentPath }, 200);
+    }
+    const billingPath = `${parentPath}/${BILLING_SUBFOLDER}`;
 
     // Client's signed-LOE naming VARIES job-to-job (long form "LOE - {parentFolderName} - signed.pdf"
     // on some, short "LOE - {JOB#} - signed.pdf" on others). Match-or-fallback: reuse an existing
     // signed-LOE name if one is already in the billing folder (replace, no duplicate); else long form.
-    const { driveId } = await resolveSharePointIds();
     const existing = await listFolderNames(driveId, billingPath);
     const filename = chooseSignedLoeName(existing, jobNumber, parentFolderName);
     const filePath = `${billingPath}/${filename}`;

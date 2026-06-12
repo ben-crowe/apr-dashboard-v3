@@ -45,8 +45,10 @@ const streetTypes = [
 ];
 
 // Pool of property types for variety - MUST MATCH DROPDOWN VALUES EXACTLY
+// Must match the form's Property Type <SelectItem> values exactly (PropertyInformationSection
+// L160-176) or the Select won't bind. 'Mixed Use' was NOT a form option (silently failed).
 const propertyTypes = [
-  'Office', 'Retail', 'Industrial', 'Multifamily', 'Mixed Use', 'Land'
+  'Office', 'Retail', 'Industrial', 'Multifamily', 'Land', 'Hotel', 'Healthcare', 'Self-Storage'
 ];
 
 // Pool of cities (Calgary area)
@@ -158,7 +160,9 @@ export function generatePropertyTestData(): TestPropertyData {
     propertyPostalCode: postalCode,
     propertyType: propertyType,
     // MUST MATCH DROPDOWN VALUES EXACTLY - intendedUse field in form
-    intendedUse: getRandomElement(['Financing/Refinancing', 'Acquisition', 'Disposition', 'Insurance', 'Litigation', 'Estate Planning']),
+    // Must match the form's Authorized Use <SelectItem> values exactly (the canonical 8 =
+    // registry ListAuthorizedUse, PropertyInformationSection L235-242) or the Select won't bind.
+    intendedUse: getRandomElement(['First Mortgage Financing', 'Financial Reporting', 'Insurance', 'Internal Decision-Making', 'Acquisition-Disposition', 'Estate Planning', 'Litigation', 'GST']),
     // MUST MATCH DROPDOWN VALUES EXACTLY - assetCondition field in form
     assetCondition: getRandomElement(['Excellent', 'Very Good', 'Good', 'Fair', 'Poor']),
     appraisalPurpose: getRandomElement(['Financing', 'Purchase', 'Refinancing', 'Sale', 'Estate Planning', 'Insurance']),
@@ -234,6 +238,10 @@ export function generateCompleteTestData() {
     intendedUse: property.intendedUse,
     valuationPremises: getRandomElement(['Market Value', 'Market Rent', 'Investment Value', 'Insurable Value', 'Liquidation Value']),
     assetCondition: property.assetCondition,
+    // Section-1 fields the form added (match the form's flat option lists exactly).
+    propertySubtype: getRandomElement(['Low-Rise', 'Mid-Rise', 'High-Rise', 'Garden', 'Walk-Up', 'Townhouse', 'Mixed-Use']),
+    // ⚠ 'Unkown' is the literal option value (typo in the form) — must match exactly to bind.
+    tenancy: getRandomElement(['Multi-Tenant', 'Owner Occupied', 'Partial Owner Occupied', 'Single-Tenant', 'Unkown', 'Vacant']),
     // Property contact fields - 50/50 same or different
     sameAsClientContact: sameAsClient,
     propertyContactFirstName: sameAsClient ? client.clientFirstName : propertyContact!.clientFirstName,

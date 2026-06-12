@@ -38,8 +38,8 @@ const JobListTitle: React.FC<JobListTitleProps> = ({ onSelectJob }) => {
         throw new Error("No job data returned from Supabase");
       }
 
-      toast.success("New job created! Fill in the client and property details.");
-      
+      // (Removed the "New job created — fill in details" toast — it popped over the cascade
+      //  picker on a fresh job and was just noise. The job opens immediately anyway.)
       // Immediately open the full job detail view
       onSelectJob(newJob.id);
     } catch (error: any) {

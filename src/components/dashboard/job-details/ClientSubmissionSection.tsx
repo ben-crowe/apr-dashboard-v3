@@ -122,7 +122,11 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       }
     } catch (error) {
       console.error(`Error saving ${fieldName}:`, error);
-      toast.error(`Failed to save ${getFieldDisplayName(fieldName)}`);
+      // Only popup a save failure when there's a real Valcre job. No job = just playing/testing
+      // fields → stay silent (Ben: no popup spam without a job number).
+      if (isValcreJobNumber(jobDetails?.jobNumber) && jobDetails?.valcreJobId) {
+        toast.error(`Failed to save ${getFieldDisplayName(fieldName)}`);
+      }
     } finally {
       setIsSectionSaving(false);
     }

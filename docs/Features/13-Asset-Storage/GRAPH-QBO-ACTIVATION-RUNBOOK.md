@@ -79,9 +79,13 @@ supabase secrets set SHAREPOINT_DRIVE_ID="<...>" --project-ref $REF
 3. **Upload into existing billing:** test with a clearly-marked QA filename into `4. CLIENT BILLING (Invoice, LOE)`, verify it lands, then DELETE it — never overwrite a real signed LOE. (The real signed-LOE name already in the folder is the convention source of truth.)
 4. Email: leave on Resend/crowestudio — Graph send is gated on an **explicit `GRAPH_SEND_MAILBOX`** (production-only, not set during folder activation).
 
-> **Signed-LOE filename — CORRECTED 2026-06-11 (verified from real folder VAL261003):**
-> `LOE - {JOB#} - {property desc + addr} - signed.pdf`  ==  `LOE - {parentFolderName} - signed.pdf`
-> (NOT `LOE - {JOB#} - signed.pdf` — that earlier "confirmed" value was missing the property description.)
+> **Signed-LOE filename — CORRECTED + made resilient 2026-06-11:**
+> Client naming **varies job-to-job** — long `LOE - {parentFolderName} - signed.pdf` on some jobs
+> (VAL261003, verified live), short `LOE - {JOB#} - signed.pdf` on others (VAL261054, per Codex).
+> Upload is now **match-or-fallback** (`chooseSignedLoeName`): if a signed-LOE file already exists
+> in `4. CLIENT BILLING`, REUSE that exact name (replace, no duplicate); else write the robust long
+> form. So the upload is correct regardless of which convention that job used.
+> **Open:** confirm with Ben whether to normalize the client to ONE convention going forward.
 
 After secrets set, **redeploy is NOT required** (Supabase injects secrets into the running function); the 503 guard flips to live automatically.
 

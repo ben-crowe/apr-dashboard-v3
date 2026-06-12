@@ -74,7 +74,10 @@ serve(async (req) => {
       jobNumber,
       parentPath: result.parentPath,
       parentId: result.parentId,
-      subfolders: result.subfolders,
+      parentCreated: result.parentCreated,   // false = connected to client's existing folder
+      parentWebUrl: result.parentWebUrl,
+      connectedOnly: result.connectedOnly,    // true = pure connect, nothing created (no duplicate)
+      subfolders: result.subfolders,           // each: { name, id, created, webUrl }
       siteId,
     });
   } catch (error) {

@@ -126,15 +126,24 @@ export async function resolveSharePointIds(): Promise<{ siteId: string; driveId:
 const encodePath = (p: string) => p.split('/').map(encodeURIComponent).join('/');
 
 /**
- * Idempotent folder create at a path under the drive root.
- * GET first (returns id if it already exists), else POST with conflictBehavior:fail.
- * Returns the folder's driveItem id.
+ * CONNECT-or-create a folder at a path under the drive root.
+ * Connect is the dominant path: GET first and return the EXISTING folder if present
+ * (the client manages their own per-job folders — we attach to theirs, never duplicate).
+ * Only POST (conflictBehavior:fail) when the folder is genuinely absent (404).
+ * Returns the driveItem id + whether we created it (created:false = connected to existing).
  */
-export async function ensureFolder(driveId: string, parentPath: string, name: string): Promise<string> {
+export async function ensureFolder(
+  driveId: string,
+  parentPath: string,
+  name: string,
+): Promise<{ id: string; created: boolean; webUrl?: string }> {
   const fullPath = parentPath ? `${parentPath}/${name}` : name;
 
   const getRes = await graphFetch(`/drives/${driveId}/root:/${encodePath(fullPath)}`);
-  if (getRes.ok) return (await getRes.json()).id;
+  if (getRes.ok) {
+    const item = await getRes.json();
+    return { id: item.id, created: false, webUrl: item.webUrl }; // connected to existing
+  }
   if (getRes.status !== 404) {
     throw new Error(`folder GET failed (${getRes.status}): ${await getRes.text()}`);
   }
@@ -146,11 +155,17 @@ export async function ensureFolder(driveId: string, parentPath: string, name: st
     method: 'POST',
     body: JSON.stringify({ name, folder: {}, '@microsoft.graph.conflictBehavior': 'fail' }),
   });
-  if (postRes.status === 201) return (await postRes.json()).id;
+  if (postRes.status === 201) {
+    const item = await postRes.json();
+    return { id: item.id, created: true, webUrl: item.webUrl };
+  }
   if (postRes.status === 409) {
-    // race: someone created it between our GET and POST — re-read
+    // race: created between our GET and POST — re-read + treat as connected (no duplicate)
     const retry = await graphFetch(`/drives/${driveId}/root:/${encodePath(fullPath)}`);
-    if (retry.ok) return (await retry.json()).id;
+    if (retry.ok) {
+      const item = await retry.json();
+      return { id: item.id, created: false, webUrl: item.webUrl };
+    }
   }
   throw new Error(`folder create failed (${postRes.status}): ${await postRes.text()}`);
 }
@@ -172,29 +187,46 @@ export interface JobFolderArgs {
 export interface JobFolderResult {
   parentPath: string;
   parentId: string;
-  subfolders: { name: string; id: string }[];
+  parentCreated: boolean;        // false = connected to the client's existing folder
+  parentWebUrl?: string;
+  subfolders: { name: string; id: string; created: boolean; webUrl?: string }[];
+  connectedOnly: boolean;        // true = nothing was created (pure connect to existing)
 }
 
 /**
- * Create the full per-job folder tree: 2.Jobs/{YEAR}/{parentFolderName}/ + the 5 subfolders.
- * Idempotent — safe to call repeatedly (the dashboard "Create Client Folders" button).
+ * CONNECT to (or, only if absent, create) the per-job folder tree:
+ * 2.Jobs/{YEAR}/{parentFolderName}/ + the 5 subfolders.
+ *
+ * The client manages their own per-job folders; the generated parent name matches their
+ * live convention, so the dominant path resolves + attaches to THEIR existing folder and
+ * surfaces the existing subfolders — never a duplicate parallel set. `created` flags show
+ * exactly what (if anything) had to be made. Idempotent — safe to re-run (dashboard button).
  */
 export async function createJobFolders(args: JobFolderArgs): Promise<JobFolderResult> {
   const { driveId } = await resolveSharePointIds();
   const year = String(args.year);
 
-  // Ensure the 2.Jobs/{YEAR} chain exists (Graph does not auto-create intermediates).
+  // Connect/ensure the 2.Jobs/{YEAR} chain (Graph does not auto-create intermediates).
   await ensureFolder(driveId, '', '2.Jobs');
   await ensureFolder(driveId, '2.Jobs', year);
 
   const parentPath = `2.Jobs/${year}/${args.parentFolderName}`;
-  const parentId = await ensureFolder(driveId, `2.Jobs/${year}`, args.parentFolderName);
+  const parent = await ensureFolder(driveId, `2.Jobs/${year}`, args.parentFolderName);
 
-  const subfolders: { name: string; id: string }[] = [];
+  const subfolders: { name: string; id: string; created: boolean; webUrl?: string }[] = [];
   for (const name of JOB_SUBFOLDERS) {
-    subfolders.push({ name, id: await ensureFolder(driveId, parentPath, name) });
+    const sub = await ensureFolder(driveId, parentPath, name);
+    subfolders.push({ name, id: sub.id, created: sub.created, webUrl: sub.webUrl });
   }
-  return { parentPath, parentId, subfolders };
+  const connectedOnly = !parent.created && subfolders.every((s) => !s.created);
+  return {
+    parentPath,
+    parentId: parent.id,
+    parentCreated: parent.created,
+    parentWebUrl: parent.webUrl,
+    subfolders,
+    connectedOnly,
+  };
 }
 
 /**

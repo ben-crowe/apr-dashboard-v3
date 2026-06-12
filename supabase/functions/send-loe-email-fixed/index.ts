@@ -64,10 +64,12 @@ office: 587-801-5151 | email: clientcare@valta.ca | web: www.valta.ca</p>
     const subject = 'Letter of Engagement - Ready for Signature';
 
     // PRODUCTION transport: Microsoft Graph sendMail from a valta.ca mailbox.
-    // Active the instant the Entra app secrets exist; until then we fall back to
-    // Resend so the bc@crowestudio.com test path keeps working unchanged.
-    if (graphConfigured()) {
-      const mailbox = Deno.env.get('GRAPH_SEND_MAILBOX') || 'noreply@valta.ca';
+    // GATED on an EXPLICIT GRAPH_SEND_MAILBOX — NOT just graphConfigured(). The Graph app
+    // secrets exist for SharePoint, but email stays on the Resend/crowestudio test path until
+    // a real valta.ca sending mailbox is deliberately set (Ben: production-only, later).
+    const graphMailbox = Deno.env.get('GRAPH_SEND_MAILBOX');
+    if (graphConfigured() && graphMailbox) {
+      const mailbox = graphMailbox;
       await graphSendMail({ mailbox, to: actualRecipient, subject, html: emailHtml });
       console.log('Email sent successfully via Microsoft Graph from:', mailbox);
       return new Response(

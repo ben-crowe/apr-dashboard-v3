@@ -232,6 +232,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         propertyAddress: job.propertyAddress,
         propertyType: job.propertyType,  // Comma-separated string: "Healthcare, Manufactured Housing"
         propertyTypes: job.propertyType ? job.propertyType.split(',').map(t => t.trim()).filter(Boolean) : [],  // Parse to array for Valcre API
+        // Subtype + Tenancy: the create path (valcre.ts) reads formData.propertySubtype (-> SecondaryType)
+        // and formData.tenancy (-> CF12408). They were never SENT, so both landed blank (VAL261060).
+        // MUST be lowercase `propertySubtype` to match valcre.ts L283/L337. Stored via the client
+        // section to job_property_info -> surfaces on jobDetails; fall back to job.
+        propertySubtype: (jobDetails as any)?.propertySubtype || (job as any)?.propertySubtype || '',
+        tenancy: (jobDetails as any)?.tenancy || (job as any)?.tenancy || '',
         intendedUse: job.intendedUse,
         assetCondition: job.assetCondition,
         notes: job.notes,

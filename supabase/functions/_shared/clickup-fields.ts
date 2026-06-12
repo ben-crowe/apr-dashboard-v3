@@ -40,6 +40,21 @@ export async function fetchListFields(token: string, listId: string): Promise<Cl
 // Additional Info. QA_PROBE_DELETE_ME is a stray ClickUp test field the API CANNOT delete — flag for
 // manual removal in the ClickUp UI; do not fight the API. byName resolver SKIPS any field not yet on the
 // list, so the 7 ADD fields self-populate the moment their defs exist (create in the UI or via API).
+// Normalize asset_condition from the intake form's condition-rating vocabulary
+// (Excellent / Very Good / Good / Fair / Poor / existing-property) to the ClickUp
+// dropdown taxonomy (New Development | Existing Property).
+// "new-development" or "new development" → New Development; everything else → Existing Property.
+function normalizeAssetCondition(raw: string | undefined | null): string {
+  if (!raw) return ''
+  const v = raw.trim().toLowerCase().replace(/[_-]/g, ' ')
+  if (v === 'new development' || v === 'new') return 'New Development'
+  if (v === 'existing property' || v === 'existing') return 'Existing Property'
+  // Condition-rating values (excellent/good/fair/poor/very good) all indicate an existing property.
+  const ratingWords = ['excellent', 'very good', 'good', 'fair', 'poor']
+  if (ratingWords.some(r => v.includes(r))) return 'Existing Property'
+  return '' // unrecognized — skip
+}
+
 function hubValueMap(job: any): Record<string, any> {
   const loe = (Array.isArray(job.job_loe_details) ? job.job_loe_details[0] : job.job_loe_details) || {}
   const pi = (Array.isArray(job.job_property_info) ? job.job_property_info[0] : job.job_property_info) || {}
@@ -54,8 +69,14 @@ function hubValueMap(job: any): Record<string, any> {
     'Property Name': job.property_name || '',
     'Property Address': job.property_address || '',
     'Property Type': job.property_type || '',
+    // Property Subtype + Tenancy from job_property_info. Fields are field-absent on some lists
+    // (will self-populate the moment "Property Subtype" / "Tenancy" columns are added in the UI).
+    'Property Subtype': pi.property_subtype || '',
+    'Tenancy': pi.tenancy || '',
     'Authorized Use': loe.authorized_use || job.intended_use || '',         // canonical (replaces Intended Use dup)
-    'Asset Condition': job.asset_condition || pi.asset_condition || '',
+    // Asset Condition: normalize from intake rating vocabulary → ClickUp dropdown taxonomy
+    // (New Development | Existing Property). See normalizeAssetCondition().
+    'Asset Condition': normalizeAssetCondition(job.asset_condition || pi.asset_condition || ''),
     'Valuation Premises': loe.valuation_premises || job.valuation_premises || '',  // PLURAL — matches live ClickUp field name (singular missed byName, silently skipped)
     // PROPERTY CONTACT group DROPPED 2026-06-05 (Ben, locked mock MK9-0) — duplicates Client (same person).
     // ASSIGNMENT
@@ -67,6 +88,8 @@ function hubValueMap(job: any): Record<string, any> {
     'Appraisal Fee': loe.appraisal_fee ?? '',
     'Retainer': loe.retainer_amount ?? '',
     'Delivery Date': loe.delivery_date || '',
+    // Payment Terms: "On Completion" (DB value) → "Upon Completion" (ClickUp option).
+    // Normalized via suffix-match below — no hardcoded alias needed; encode logic handles it.
     'Payment Terms': loe.payment_terms || '',
     // NOTES
     'Appraiser Notes': loe.internal_comments || loe.appraiser_comments || '',
@@ -98,6 +121,34 @@ function encodeForField(def: ClickUpFieldDef, raw: any): string | number | null 
       // 3) reverse prefix — source is the LONG form, option is the SHORT form (rarer, but symmetric).
       if (!hit && want) {
         hit = opts.find(o => label(o) && want.startsWith(label(o)))
+      }
+      // 4) significant-word overlap — handles mismatches like "on completion" ↔ "upon completion"
+      //    where neither string is a prefix of the other.
+      //    4a) Multi-word: find the option sharing the most words (≥3 chars) with the source
+      //        (must share ≥2 words to qualify — avoids false positives).
+      //    4b) Single long-word: if source has exactly 1 word ≥5 chars and it appears in only
+      //        one option, use that option (e.g. "on completion" → "upon completion").
+      if (!hit && want) {
+        const wantWords = new Set(want.split(/\s+/).filter(w => w.length >= 3))
+        if (wantWords.size >= 2) {
+          // 4a) multi-word overlap
+          let bestCount = 1
+          let bestOpt: typeof opts[0] | undefined
+          for (const o of opts) {
+            const oWords = label(o).split(/\s+/).filter(w => w.length >= 3)
+            const shared = oWords.filter(w => wantWords.has(w)).length
+            if (shared > bestCount) { bestCount = shared; bestOpt = o }
+          }
+          if (bestOpt) hit = bestOpt
+        } else {
+          // 4b) single long-word match (≥5 chars) — e.g. "completion" → "upon completion"
+          const longWords = Array.from(wantWords).filter(w => w.length >= 5)
+          if (longWords.length === 1) {
+            const lw = longWords[0]
+            const candidates = opts.filter(o => label(o).split(/\s+/).includes(lw))
+            if (candidates.length === 1) hit = candidates[0] // unambiguous single match only
+          }
+        }
       }
       return hit ? hit.id : null // still no match → SKIP (taxonomy mismatch — report as field-config gap)
     }

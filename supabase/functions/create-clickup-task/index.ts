@@ -21,9 +21,11 @@ const corsHeaders = {
 const CLICKUP_ENV = 'dev'
 const CLICKUP_ENV_GLOBAL = Deno.env.get('CLICKUP_ENV') || 'dev' // actual secret, logged for visibility
 
-// Development configuration (BC Workspace)
+// Development configuration (BC Workspace — TEST list 901709622357)
+// 2026-06-11: Pinned to 901709622357 (BC test list with full field schema) for field-map QA.
+// To revert to old dev list (901706896375), change the hardcoded fallback below.
 const DEV_CONFIG = {
-  listId: Deno.env.get('CLICKUP_LIST_ID') || '901706896375', // New Submission - BC Workspace (Dev.Projects)
+  listId: Deno.env.get('CLICKUP_LIST_ID') || '901709622357', // TEST list — BC Workspace (full field schema)
   workspaceId: '8555561', // BC Workspace (Development)
   templateId: null // Skip template for Dev testing
 }
@@ -199,9 +201,9 @@ Deno.serve(async (req) => {
     // comes from the ClickUp TEMPLATE when one is used — for the dev path (no template) we build the
     // 2-line header only.
     const valcreLink = valcreId
-      ? `[VAL Job ${valcreJobNumber}](https://app.valcre.com/job/edit/${valcreId}#job)`
-      : '_(pending Valcre job)_'
-    const description = `📍 **NEW APPRAISAL REQUEST** — [${propertyName}](${jobUrl})
+      ? `[Quick Link](https://app.valcre.com/job/edit/${valcreId}#job)`
+      : 'Quick Link'
+    const description = `📍 **NEW APPRAISAL REQUEST** — [Quick Link](${jobUrl})
 📍 **VALCRE JOB:** ${valcreLink}`
 
     // Data is set as CUSTOM FIELDS (idempotent — set REPLACES, never appends → no dup bug).
@@ -216,7 +218,7 @@ Deno.serve(async (req) => {
       priority: config.priority || null, // Use config priority (4=low for production, null for dev)
       status: 'to do',
       notify_all: false,
-      tags: ['NEW ARRIVAL', 'APR Hub'],
+      tags: ['NEW ARRIVAL'],
     }
 
     // Determine API endpoint - use template endpoint if template_id is set

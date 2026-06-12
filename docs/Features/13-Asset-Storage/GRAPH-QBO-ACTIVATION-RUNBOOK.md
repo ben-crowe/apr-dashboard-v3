@@ -73,10 +73,15 @@ supabase secrets set SHAREPOINT_DRIVE_ID="<...>" --project-ref $REF
 
 > The helper auto-discovers site/drive at runtime if these are unset — pinning is just an optimization.
 
-**Live-test loop** (full pipeline on a real job):
-1. Fire `create-job-folders` with `{jobId}` on a real job → expect `{success:true}` + parent + 5 subfolders → **verify the 5 subfolders appear in SharePoint** (`1. REPORT` … `5. LETTER OF RELIANCE (LOR)`).
-2. Send LOE on that job → `send-loe-email-fixed` now routes via Graph from `GRAPH_SEND_MAILBOX` → response `transport:"graph"` → **verify arrival** (EPA email CLI reads `bc@crowestudio.com`).
-3. Sign the LOE → `docuseal-webhook` `submission.completed` → `upload-loe-to-sharepoint` puts `LOE - {JOB#} - signed.pdf` into `4. CLIENT BILLING (Invoice, LOE)` → **verify the file lands**.
+**Live-test loop — CONNECT, don't create (verified live 2026-06-11 against VAL261003):**
+1. **Parity check FIRST (read-only):** list a real client job folder's subfolders and confirm they match our 5 canonical names byte-for-byte BEFORE any write — else a "connect" would create duplicates.
+2. Fire `create-job-folders` (explicit `jobNumber`+`propertyDescription`+`year`, or `{jobId}`) on a REAL existing client job → **assert `connectedOnly:true`, `parentCreated:false`, every subfolder `created:false`** (pure connect). Then **re-list the year folder and assert NO duplicate** parent appeared.
+3. **Upload into existing billing:** test with a clearly-marked QA filename into `4. CLIENT BILLING (Invoice, LOE)`, verify it lands, then DELETE it — never overwrite a real signed LOE. (The real signed-LOE name already in the folder is the convention source of truth.)
+4. Email: leave on Resend/crowestudio — Graph send is gated on an **explicit `GRAPH_SEND_MAILBOX`** (production-only, not set during folder activation).
+
+> **Signed-LOE filename — CORRECTED 2026-06-11 (verified from real folder VAL261003):**
+> `LOE - {JOB#} - {property desc + addr} - signed.pdf`  ==  `LOE - {parentFolderName} - signed.pdf`
+> (NOT `LOE - {JOB#} - signed.pdf` — that earlier "confirmed" value was missing the property description.)
 
 After secrets set, **redeploy is NOT required** (Supabase injects secrets into the running function); the 503 guard flips to live automatically.
 

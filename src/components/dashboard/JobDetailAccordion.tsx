@@ -44,6 +44,9 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
   // the Clear / Fill links.
   const [testMode, setTestMode] = React.useState(false);
 
+  // Bumped on Fill/Clear to snap LoeQuoteSection's cascade picker back to its unpicked default.
+  const [cascadeResetToken, setCascadeResetToken] = React.useState(0);
+
   const handleFillTestData = () => {
     if (isLiveValcreJob) {
       toast.info('Not available — this job is connected to a live Valcre job.');
@@ -133,6 +136,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
 
     // Mark this job test-filled so the cascade-derived cluster stays empty until a scenario is picked.
     setTestFilled(true);
+    setCascadeResetToken(t => t + 1); // snap the cascade picker back to "pick a scenario"
     // Explicitly blank the cascade-derived fields so a re-fill always starts from the clean empty state.
     if (onUpdateDetails) {
       onUpdateDetails({ propertyRightsAppraised: '', statusOfImprovements: '', valueScenarios: '', approachesToValue: '' } as any);
@@ -169,6 +173,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
     if (onUpdateJob) onUpdateJob(Object.fromEntries(jobKeys.map(k => [k, ''])) as any);
     if (onUpdateDetails) onUpdateDetails(Object.fromEntries(detailKeys.map(k => [k, ''])) as any);
     setTestFilled(false); // back to real-job behavior — cascade derives naturally again
+    setCascadeResetToken(t => t + 1); // snap the cascade picker back to "pick a scenario"
     toast.success('Test data cleared.');
   };
 
@@ -240,6 +245,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         refetchJobData={refetchJobData}
         testFilled={testFilled}
         testMode={testMode}
+        cascadeResetToken={cascadeResetToken}
       />
 
       <OrganizingDocsSection

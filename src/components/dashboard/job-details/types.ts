@@ -12,4 +12,7 @@ export interface SectionProps {
   testFilled?: boolean;
   /** Test Mode ON → suppress per-field save/sync FAILURE toasts (demo noise); indicators still update. */
   testMode?: boolean;
+  /** Bumped by Fill/Clear to reset the cascade picker (cascadePicked + version label) back to the
+   *  unpicked "default cleared" state, so the cascade cluster shows placeholders until a fresh pick. */
+  cascadeResetToken?: number;
 }

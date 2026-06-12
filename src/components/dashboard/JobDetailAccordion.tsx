@@ -8,6 +8,7 @@ import Section4Compact from "./job-details/Section4Compact";
 import { toast } from "sonner";
 import { isValcreJobNumber } from "@/config/valcre";
 import { useTestMode } from "@/contexts/TestModeContext";
+import { Separator } from "@/components/ui/separator";
 
 interface JobDetailAccordionProps {
   job: DetailJob;
@@ -38,7 +39,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
 
   const handleFillTestData = () => {
     if (isLiveValcreJob) {
-      toast.info('Not available — this job is connected to a live Valcre job.');
+      void 0 /* success: silent (Ben) */;
       return;
     }
     // Smart Fill: if Section 1 already holds real submission data, DON'T clobber it —
@@ -122,11 +123,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
       onUpdateDetails({ propertyRightsAppraised: '', statusOfImprovements: '', valueScenarios: '', approachesToValue: '' } as any);
     }
 
-    toast.success(
-      section1HasData
-        ? 'Section 2 test data filled — Section 1 preserved from submission.'
-        : 'Test data filled — pick a Cascade Options version to set Value Scenarios.'
-    );
+    void 0 /* success: silent (Ben) */;
 
     // Scroll to the cascade picker and pulse it so the eye lands on "now pick a scenario."
     setTimeout(() => {
@@ -141,7 +138,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
 
   const handleClearTestData = () => {
     if (isLiveValcreJob) {
-      toast.info('Not available — this job is connected to a live Valcre job.');
+      void 0 /* success: silent (Ben) */;
       return;
     }
     const jobKeys = ['clientFirstName','clientLastName','clientTitle','clientOrganization','clientPhone','clientEmail','clientAddress','propertyName','propertyAddress','propertyType','intendedUse','assetCondition','valuationPremises','propertyContactFirstName','propertyContactLastName','propertyContactEmail','propertyContactPhone','notes'];
@@ -150,7 +147,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
     if (onUpdateDetails) onUpdateDetails(Object.fromEntries(detailKeys.map((k) => [k, ''])) as any);
     setTestFilled(false); // back to real-job behavior — cascade derives naturally again
     setCascadeResetToken((t) => t + 1);
-    toast.success('Test data cleared.');
+    void 0 /* success: silent (Ben) */;
   };
 
   return (
@@ -182,6 +179,10 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
           </span>
         </div>
       )}
+
+      {/* The divider sits BELOW the test links so Clear/Fill ride just above the line
+          (no gap pushing the form down). In non-test mode it's the plain header divider. */}
+      <Separator />
 
       {/* All sections are now independent Collapsibles */}
       <ClientSubmissionSection

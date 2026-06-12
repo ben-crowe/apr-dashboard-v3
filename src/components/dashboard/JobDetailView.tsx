@@ -1,5 +1,4 @@
 import React from "react";
-import { Separator } from "@/components/ui/separator";
 import JobDetailAccordion from "./JobDetailAccordion"; // Use the correct clean version
 import JobDetailHeader from "./job-details/JobDetailHeader";
 import JobDetailSkeleton from "./job-details/JobDetailSkeleton";
@@ -42,8 +41,6 @@ const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
           </h1>
         </div>
       </div>
-
-      <Separator />
 
       <JobDetailAccordion
         job={job}

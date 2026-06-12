@@ -7,6 +7,7 @@ import PropertyInfoSection from "./job-details/PropertyInfoSection";
 import Section4Compact from "./job-details/Section4Compact";
 import { toast } from "sonner";
 import { isValcreJobNumber } from "@/config/valcre";
+import { useTestMode } from "@/contexts/TestModeContext";
 
 interface JobDetailAccordionProps {
   job: DetailJob;
@@ -23,28 +24,16 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
   onUpdateJob,
   refetchJobData,
 }) => {
+  // Test Mode is GLOBAL now (toggle lives in the header). The Fill/Clear links + cascade demo
+  // + source-reference badges read it from context.
+  const { testMode } = useTestMode();
 
-  // REMOVED: Auto-calculation of retainer amount - field must be user-editable
-  // Previously this useEffect was overwriting user input immediately after typing
-  // Client needs to manually set retainer amount per job
-
-  // Fill all base fields from MOCK-DASHBOARD-TEST-DATA.md (Riverside Commerce Centre / Sarah Mitchell).
-  // Does NOT set statusOfImprovements, authorizedUse (LOE side), or valueScenarios —
-  // those are set by the Cascade Options picker in LoeQuoteSection.
   // RULE 1 — test tools self-disable on a real (live-synced) Valcre job.
   const isLiveValcreJob = isValcreJobNumber(jobDetails?.jobNumber) && !!(jobDetails as any)?.valcreJobId;
 
-  // Demo signal: true once Fill was pressed. Tells LoeQuoteSection to hold the cascade-derived
-  // cluster (incl. Property Rights) empty until a scenario is picked — so the demo shows
-  // "empty → pick → cascade fills." A real, never-filled job derives naturally. Reset by Clear.
+  // True once Fill was pressed — holds LoeQuoteSection's cascade cluster empty until a pick.
   const [testFilled, setTestFilled] = React.useState(false);
-
-  // Test Mode — default OFF on every load, NOT persisted. A real job opened later always
-  // starts OFF so the test links can't accidentally clobber real data. Toggling ON reveals
-  // the Clear / Fill links.
-  const [testMode, setTestMode] = React.useState(false);
-
-  // Bumped on Fill/Clear to snap LoeQuoteSection's cascade picker back to its unpicked default.
+  // Bumped on Fill/Clear to snap the cascade picker back to its unpicked default.
   const [cascadeResetToken, setCascadeResetToken] = React.useState(0);
 
   const handleFillTestData = () => {
@@ -69,7 +58,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         propertyType: 'Industrial',
         intendedUse: 'Financial Reporting',
         assetCondition: 'Good',
-        valuationPremises: 'Market Value', // Client-section field reads from `job` (display); also kept on jobDetails below for the Valcre sync
+        valuationPremises: 'Market Value',
         propertyContactFirstName: 'Daniel',
         propertyContactLastName: 'Okafor',
         propertyContactEmail: 'd.okafor@riversidecc.ca',
@@ -80,16 +69,10 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
 
     if (onUpdateDetails) {
       onUpdateDetails({
-        // Section 2 — LOE Quote (base, no cascade inputs)
-        // jobStatus intentionally omitted — locked Valcre-native display, not a test value
-        // purpose intentionally omitted — free-text user input, starts empty (self-describing placeholder)
-        // statusOfImprovements intentionally omitted — set by Cascade Options
-        // valueScenarios intentionally omitted — derived by cascade
-        // authorizedUse intentionally omitted — set by Cascade Options
+        // Section 2 — LOE Quote (base, no cascade inputs). statusOfImprovements/valueScenarios/
+        // authorizedUse/propertyRightsAppraised/approachesToValue omitted — set by Cascade Options.
         propertySubtype: 'Multi-Tenant Industrial',
         tenancy: 'Multi-Tenant',
-        // propertyRightsAppraised intentionally omitted — auto-derives from Property Type/Subtype/Tenancy (don't double-set)
-        // approachesToValue intentionally omitted — derived field
         valueTimeframe: 'Current',
         scopeOfWork: 'Income Approach',
         reportType: 'Appraisal Report',
@@ -111,13 +94,11 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         transactionStatus: 'Under Contract',
         zoningStatus: 'In Place',
         valuationPremises: 'Market Value',
-        // Section 3 — Building Information
         yearBuilt: '2008',
         buildingSize: '84500',
         numberOfUnits: 12,
         parkingSpaces: 140,
         legalDescription: 'Plan 0712345, Block 4, Lot 7',
-        // Section 4 — Property Research
         zoningClassification: 'I-G (Industrial General)',
         zoneAbbreviation: 'IG-2',
         landUseDesignation: 'Industrial',
@@ -134,10 +115,9 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
       } as any);
     }
 
-    // Mark this job test-filled so the cascade-derived cluster stays empty until a scenario is picked.
     setTestFilled(true);
-    setCascadeResetToken(t => t + 1); // snap the cascade picker back to "pick a scenario"
-    // Explicitly blank the cascade-derived fields so a re-fill always starts from the clean empty state.
+    setCascadeResetToken((t) => t + 1); // snap the cascade picker back to "pick a scenario"
+    // Explicitly blank the cascade-derived fields so a re-fill always starts clean.
     if (onUpdateDetails) {
       onUpdateDetails({ propertyRightsAppraised: '', statusOfImprovements: '', valueScenarios: '', approachesToValue: '' } as any);
     }
@@ -148,9 +128,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         : 'Test data filled — pick a Cascade Options version to set Value Scenarios.'
     );
 
-    // Scroll to the cascade picker and pulse it (ported from the registry mock) so the eye
-    // lands on "now pick a scenario." Pulse is cleared the moment a version is picked
-    // (LoeQuoteSection.handleCascadeVersion); a safety timeout stops it if nobody picks.
+    // Scroll to the cascade picker and pulse it so the eye lands on "now pick a scenario."
     setTimeout(() => {
       const el = document.getElementById('cascade-options-anchor');
       if (el) {
@@ -161,8 +139,6 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
     }, 150);
   };
 
-  // Clear — inverse of Fill Test Data. Wipes the test-filled fields back to empty (placeholder state).
-  // Gated identically: never fires on a live Valcre job.
   const handleClearTestData = () => {
     if (isLiveValcreJob) {
       toast.info('Not available — this job is connected to a live Valcre job.');
@@ -170,65 +146,42 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
     }
     const jobKeys = ['clientFirstName','clientLastName','clientTitle','clientOrganization','clientPhone','clientEmail','clientAddress','propertyName','propertyAddress','propertyType','intendedUse','assetCondition','valuationPremises','propertyContactFirstName','propertyContactLastName','propertyContactEmail','propertyContactPhone','notes'];
     const detailKeys = ['propertySubtype','tenancy','propertyRightsAppraised','valueTimeframe','scopeOfWork','reportType','reportFormat','assignmentType','analysisLevel','appraisalFee','retainerAmount','paymentTerms','effectiveDate','requestDate','deliveryDate','deliveryTime','clientDocuments','previouslyAppraised','currentUse','proposedUse','cmhcFinancing','transactionStatus','zoningStatus','valuationPremises','statusOfImprovements','authorizedUse','valueScenarios','approachesToValue','yearBuilt','buildingSize','numberOfUnits','parkingSpaces','legalDescription','zoningClassification','zoneAbbreviation','landUseDesignation','floodZone','utilities','parcelNumber','grossLandSf','assessedValue','taxes','assessmentYear','landAssessmentValue','improvedAssessmentValue','totalAssessmentValue'];
-    if (onUpdateJob) onUpdateJob(Object.fromEntries(jobKeys.map(k => [k, ''])) as any);
-    if (onUpdateDetails) onUpdateDetails(Object.fromEntries(detailKeys.map(k => [k, ''])) as any);
+    if (onUpdateJob) onUpdateJob(Object.fromEntries(jobKeys.map((k) => [k, ''])) as any);
+    if (onUpdateDetails) onUpdateDetails(Object.fromEntries(detailKeys.map((k) => [k, ''])) as any);
     setTestFilled(false); // back to real-job behavior — cascade derives naturally again
-    setCascadeResetToken(t => t + 1); // snap the cascade picker back to "pick a scenario"
+    setCascadeResetToken((t) => t + 1);
     toast.success('Test data cleared.');
   };
 
   return (
     <div className="space-y-2">
-      {/* Test-data control. Test Mode toggle (default OFF, not persisted) gates the Clear / Fill
-          links — OFF hides them entirely so a real job can't be accidentally clobbered.
-          Links stay gated on a live Valcre job too. */}
-      <div className="flex justify-end items-center gap-2.5 px-1 pb-1 text-xs">
-        <label className="flex items-center gap-1.5 cursor-pointer select-none text-muted-foreground">
-          <span>Test Mode</span>
-          <button
-            type="button"
-            role="switch"
-            aria-checked={testMode}
-            onClick={() => setTestMode((v) => !v)}
-            className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${
-              testMode ? 'bg-primary' : 'bg-gray-300 dark:bg-white/20'
+      {/* Test-data links — frameless text, top-right. Shown ONLY in Test Mode (global toggle).
+          Gated on a live Valcre job too. */}
+      {testMode && (
+        <div className="flex justify-end items-center gap-2.5 px-1 pb-1 text-xs">
+          <span
+            role="button"
+            onClick={handleClearTestData}
+            title={isLiveValcreJob ? 'Not available — this job is connected to a live Valcre job.' : undefined}
+            className={`text-muted-foreground hover:text-foreground transition-colors ${
+              isLiveValcreJob ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
             }`}
           >
-            <span
-              className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
-                testMode ? 'translate-x-3.5' : 'translate-x-0.5'
-              }`}
-            />
-          </button>
-        </label>
-
-        {testMode && (
-          <>
-            <span className="w-px h-3 bg-gray-300 dark:bg-white/20" />
-            <span
-              role="button"
-              onClick={handleClearTestData}
-              title={isLiveValcreJob ? 'Not available — this job is connected to a live Valcre job.' : undefined}
-              className={`text-muted-foreground hover:text-foreground transition-colors ${
-                isLiveValcreJob ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-              }`}
-            >
-              Clear
-            </span>
-            <span className="w-px h-3 bg-gray-300 dark:bg-white/20" />
-            <span
-              role="button"
-              onClick={handleFillTestData}
-              title={isLiveValcreJob ? 'Not available — this job is connected to a live Valcre job.' : undefined}
-              className={`text-muted-foreground hover:text-foreground transition-colors ${
-                isLiveValcreJob ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-              }`}
-            >
-              Fill with Test Data
-            </span>
-          </>
-        )}
-      </div>
+            Clear
+          </span>
+          <span className="w-px h-3 bg-gray-300 dark:bg-white/20" />
+          <span
+            role="button"
+            onClick={handleFillTestData}
+            title={isLiveValcreJob ? 'Not available — this job is connected to a live Valcre job.' : undefined}
+            className={`text-muted-foreground hover:text-foreground transition-colors ${
+              isLiveValcreJob ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+            }`}
+          >
+            Fill with Test Data
+          </span>
+        </div>
+      )}
 
       {/* All sections are now independent Collapsibles */}
       <ClientSubmissionSection
@@ -236,6 +189,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         jobDetails={jobDetails}
         onUpdateDetails={onUpdateDetails}
         onUpdateJob={onUpdateJob}
+        testMode={testMode}
       />
 
       <LoeQuoteSection
@@ -243,8 +197,8 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         jobDetails={jobDetails}
         onUpdateDetails={onUpdateDetails}
         refetchJobData={refetchJobData}
-        testFilled={testFilled}
         testMode={testMode}
+        testFilled={testFilled}
         cascadeResetToken={cascadeResetToken}
       />
 

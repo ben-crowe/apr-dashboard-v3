@@ -4,10 +4,37 @@ import { useTheme } from "@/hooks/use-theme";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Sun, Moon, Menu, User, Search, Bell, Plus, Calendar, Settings, LogOut, RefreshCw } from "lucide-react";
+import { TestModeProvider, useTestMode } from "@/contexts/TestModeContext";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
+
+// Global Test Mode toggle — sits in the header Right Side Actions beside Refresh.
+const TestModeHeaderToggle: React.FC = () => {
+  const { testMode, setTestMode } = useTestMode();
+  return (
+    <label className="flex items-center gap-1.5 cursor-pointer select-none text-xs text-muted-foreground mr-1">
+      <span className="hidden sm:inline">Test Mode</span>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={testMode}
+        onClick={() => setTestMode((v) => !v)}
+        title="Test Mode — fill/clear demo data; off by default"
+        className={`relative inline-flex h-4 w-7 items-center rounded-full transition-colors ${
+          testMode ? 'bg-primary' : 'bg-gray-300 dark:bg-white/20'
+        }`}
+      >
+        <span
+          className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${
+            testMode ? 'translate-x-3.5' : 'translate-x-0.5'
+          }`}
+        />
+      </button>
+    </label>
+  );
+};
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   children
@@ -19,7 +46,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     setTheme(theme === "dark" ? "light" : "dark");
   };
   
-  return <div className="min-h-screen bg-background">
+  return <TestModeProvider><div className="min-h-screen bg-background">
       <header className="sticky top-0 z-40 w-full border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-14 items-center px-4">
           {/* Logo area - Clickable to refresh */}
@@ -44,8 +71,10 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
           
           {/* Right Side Actions */}
           <div className="flex items-center gap-2 ml-2">
+            {/* Test Mode toggle — global, beside Refresh */}
+            <TestModeHeaderToggle />
             {/* Refresh Button */}
-            <Button 
+            <Button
               variant="ghost" 
               size="icon" 
               className="h-9 w-9" 
@@ -84,7 +113,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
         </div>
       </header>
       <main className="container py-4 md:py-6 px-4 sm:px-6">{children}</main>
-    </div>;
+    </div></TestModeProvider>;
 };
 
 export default DashboardLayout;

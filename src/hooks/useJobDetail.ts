@@ -6,6 +6,7 @@ import { useSaveJobDetails } from "./useSaveJobDetails";
 import { useJobActions } from "./useJobActions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { isValcreJobNumber } from "@/config/valcre";
 
 export function useJobDetail(jobId: string) {
   const { job, setJob, jobDetails, setJobDetails, isLoading, refetchJobData } = useJobData(jobId);
@@ -74,11 +75,14 @@ export function useJobDetail(jobId: string) {
       if (error) throw error;
     } catch (error) {
       console.error('Error updating job:', error);
-      toast.error('Failed to save changes');
-      // Revert local state on error
-      setJob(job);
+      // Keep the optimistic state — do NOT roll back (a transient save error must not wipe
+      // what the user/Fill just populated; the next save or refetch reconciles). Popup only
+      // on a real Valcre job (passive draft edits stay silent per Ben).
+      if (isValcreJobNumber(jobDetails?.jobNumber) && (jobDetails as any)?.valcreJobId) {
+        toast.error('Failed to save changes');
+      }
     }
-  }, [job, setJob]);
+  }, [job, setJob, jobDetails]);
 
   return {
     job,

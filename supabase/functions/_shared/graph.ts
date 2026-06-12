@@ -197,6 +197,27 @@ export async function createJobFolders(args: JobFolderArgs): Promise<JobFolderRe
   return { parentPath, parentId, subfolders };
 }
 
+/**
+ * Canonical job-folder inputs — the SINGLE source so the folder name built at
+ * intake (create-job-folders) is byte-identical to the one used at signing
+ * (upload-loe-to-sharepoint). Parent folder = "{jobNumber} - {propertyDescription}".
+ * property_address already carries street + city + province.
+ */
+export function jobFolderInputs(job: {
+  job_number: string;
+  property_name?: string | null;
+  property_address?: string | null;
+  created_at?: string | null;
+}): { jobNumber: string; propertyDescription: string; year: number } {
+  const propertyDescription = [job.property_name, job.property_address]
+    .filter(Boolean)
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const year = job.created_at ? new Date(job.created_at).getUTCFullYear() : new Date().getUTCFullYear();
+  return { jobNumber: job.job_number, propertyDescription, year };
+}
+
 /** Upload a small file (< ~250 MB single PUT) to a path under the drive root. */
 export async function uploadFile(
   filePath: string,        // e.g. "2.Jobs/2026/VAL261054 - .../4. CLIENT BILLING (Invoice, LOE)/LOE.pdf"

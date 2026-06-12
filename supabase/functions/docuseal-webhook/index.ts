@@ -1,6 +1,7 @@
 // Supabase Edge Function for DocuSeal Webhook
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 import { createClient } from 'jsr:@supabase/supabase-js@2'
+import { jobFolderInputs } from '../_shared/graph.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -369,6 +370,41 @@ Deno.serve(async (req) => {
 
         if (fileError) {
           console.error('Error storing file record:', fileError)
+        }
+      }
+
+      // Mirror the signed LOE one-way into the job's SharePoint billing folder.
+      // Supabase stays the system of record; only this finalized PDF pushes across.
+      // No-ops cleanly (503) until the Entra app secrets exist. Never fails the webhook.
+      if (signedDocument?.url) {
+        try {
+          const { data: jobRow } = await supabase
+            .from('job_submissions')
+            .select('job_number, property_name, property_address, created_at')
+            .eq('id', jobId)
+            .single()
+
+          if (jobRow?.job_number) {
+            const { jobNumber, propertyDescription, year } = jobFolderInputs(jobRow)
+            const spRes = await fetch(`${supabaseUrl}/functions/v1/upload-loe-to-sharepoint`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${supabaseServiceKey}`,
+                'apikey': supabaseServiceKey,
+              },
+              body: JSON.stringify({ jobNumber, propertyDescription, year, pdfUrl: signedDocument.url }),
+            })
+            if (spRes.status === 503) {
+              console.log('SharePoint LOE upload skipped — Entra app not configured yet')
+            } else if (!spRes.ok) {
+              console.error('SharePoint LOE upload failed:', spRes.status, await spRes.text())
+            } else {
+              console.log('Signed LOE mirrored to SharePoint billing folder')
+            }
+          }
+        } catch (spError) {
+          console.error('SharePoint upload error (non-fatal):', spError)
         }
       }
 

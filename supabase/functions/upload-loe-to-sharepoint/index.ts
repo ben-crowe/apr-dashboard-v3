@@ -67,7 +67,9 @@ serve(async (req) => {
 
     const resolvedYear = year ?? new Date().getUTCFullYear();
     const parentFolderName = `${jobNumber} - ${propertyDescription}`;
-    const filename = `LOE - ${jobNumber} - signed.pdf`;
+    // Client's live convention (verified from real folder VAL261003):
+    //   "LOE - {JOB#} - {property desc + addr} - signed.pdf"  == "LOE - {parentFolderName} - signed.pdf"
+    const filename = `LOE - ${parentFolderName} - signed.pdf`;
     const filePath = `2.Jobs/${resolvedYear}/${parentFolderName}/${BILLING_SUBFOLDER}/${filename}`;
 
     const uploaded = await uploadFile(filePath, bytes, 'application/pdf');

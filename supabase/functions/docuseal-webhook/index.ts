@@ -408,6 +408,59 @@ Deno.serve(async (req) => {
         }
       }
 
+      // QuickBooks Trigger-1 (LOE signed -> create + send invoice).
+      // No-ops cleanly (503) until the Intuit account exists. Never fails the webhook.
+      try {
+        const { data: jobRow } = await supabase
+          .from('job_submissions')
+          .select('client_first_name, client_last_name, client_email, client_organization, job_number')
+          .eq('id', jobId)
+          .single()
+        const { data: loeRow } = await supabase
+          .from('job_loe_details')
+          .select('appraisal_fee')
+          .eq('job_id', jobId)
+          .single()
+
+        const amount = Number(loeRow?.appraisal_fee) || 0
+        const email = jobRow?.client_email || undefined
+        const displayName = jobRow?.client_organization
+          || `${jobRow?.client_first_name ?? ''} ${jobRow?.client_last_name ?? ''}`.trim()
+
+        if (amount > 0 && displayName) {
+          const qboHeaders = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${supabaseServiceKey}`,
+            'apikey': supabaseServiceKey,
+          }
+          const custRes = await fetch(`${supabaseUrl}/functions/v1/qbo-create-customer`, {
+            method: 'POST', headers: qboHeaders, body: JSON.stringify({ displayName, email }),
+          })
+          if (custRes.status === 503) {
+            console.log('QBO invoice skipped — Intuit app not configured yet')
+          } else if (custRes.ok) {
+            const { customerId } = await custRes.json()
+            const invRes = await fetch(`${supabaseUrl}/functions/v1/qbo-create-invoice`, {
+              method: 'POST', headers: qboHeaders,
+              body: JSON.stringify({ customerId, amount, billEmail: email, description: `Appraisal services - ${jobRow?.job_number ?? jobId}` }),
+            })
+            if (invRes.ok) {
+              const { invoiceId } = await invRes.json()
+              await fetch(`${supabaseUrl}/functions/v1/qbo-send-invoice`, {
+                method: 'POST', headers: qboHeaders, body: JSON.stringify({ invoiceId, sendTo: email }),
+              })
+              console.log('QBO invoice created + sent:', invoiceId)
+            } else {
+              console.error('QBO create-invoice failed:', invRes.status)
+            }
+          } else {
+            console.error('QBO create-customer failed:', custRes.status)
+          }
+        }
+      } catch (qboError) {
+        console.error('QBO Trigger-1 error (non-fatal):', qboError)
+      }
+
       // Extract signer name from submitters
       const signerName = payload.data.submitters?.[0]?.name || 'Client'
 

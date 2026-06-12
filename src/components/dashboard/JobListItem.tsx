@@ -62,7 +62,7 @@ const JobListItem: React.FC<JobListItemProps> = ({ job, onSelect, onDelete }) =>
 
       if (error) throw error;
       
-      toast.success('Job deleted successfully');
+      void 0 /* success: silent (Ben) */;
       if (onDelete) onDelete();
       
     } catch (error: any) {

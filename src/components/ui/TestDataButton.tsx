@@ -58,10 +58,7 @@ export function TestDataButton({
     onFillData(testData);
     
     // Show toast notification with the generated data
-    toast.success(toastMessage, {
-      description: 'Test mode - API calls will be mocked',
-      duration: 3000,
-    });
+    void 0 /* success: silent (Ben) */;
   };
   
   // Only show in development environment
@@ -129,9 +126,7 @@ export function TestDataPanel({ onFillData }: { onFillData: (data: any) => void 
     }
     
     onFillData(testData);
-    toast.success(`Test scenario loaded: ${type}`, {
-      description: `${testData.clientFirstName} ${testData.clientLastName} - ${testData.propertyAddress}`
-    });
+    void 0 /* success: silent (Ben) */;
   };
   
   const isDevelopment = import.meta.env.MODE === 'development' || 

@@ -290,13 +290,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         if (isPending) {
           // Don't store PENDING values - they're just temporary placeholders
           // Show success but note that we're waiting for the actual job number
-          toast.success(
-            <div>
-              <div>✅ Job submitted to Valcre!</div>
-              <div>Waiting for {VALCRE_JOB_PREFIX} number...</div>
-              <div className="text-sm mt-1">Check Valcre dashboard for actual job number</div>
-            </div>
-          );
+          void 0 /* success: silent (Ben) */;
 
           // Store a flag that job was created but pending
           await supabase
@@ -436,7 +430,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               toast.warning('ClickUp task update failed - please refresh ClickUp');
             } else {
               console.log('✅ ClickUp task updated with LOE section:', updateResult);
-              toast.success('ClickUp task updated with LOE details');
+              void 0 /* success: silent (Ben) */;
             }
           } catch (clickupError) {
             console.error('❌ Error updating ClickUp task:', clickupError);
@@ -450,20 +444,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             console.log('✅ Job data refetched - button should now show "View in Valcre"');
           }
 
-          toast.success(
-            <div>
-              <div>✅ Valcre job created!</div>
-              <div>Job Number: {result.jobNumber}</div>
-              <a
-                href={`https://app.valcre.com/job/edit/${numericJobId}#job`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ color: '#3b82f6', textDecoration: 'underline' }}
-              >
-                View in Valcre →
-              </a>
-            </div>
-          );
+          void 0 /* success: silent (Ben) */;
         }
       } else {
         toast.error(result.error || 'Failed to create Valcre job');
@@ -847,13 +828,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         const html = await generateLOEHTML(job, jobDetails);
         setPreviewHTML(html);
         setShowPreview(true);
-        toast.info("Ready to resend LOE - please review recipient email");
+        void 0 /* success: silent (Ben) */;
       } else {
         // First time sending - generate preview
         const html = await generateLOEHTML(job, jobDetails);
         setPreviewHTML(html);
         setShowPreview(true);
-        toast.info("Preview generated - please review before sending");
+        void 0 /* success: silent (Ben) */;
 
         // Mark LOE preparation as complete in ClickUp (all required fields are now filled)
         if (jobDetails?.clickupTaskId || job.clickupTaskId) {
@@ -907,7 +888,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         console.log('📮 Email send result:', emailSent ? 'Success' : 'Failed');
 
         if (emailSent) {
-          toast.success(`✅ LOE sent to ${recipientEmail} successfully!`);
+          void 0 /* success: silent (Ben) */;
         } else {
           // Only show the link if email actually failed
           toast.error(`Email failed to send. Please share this link manually: ${result.signingLink}`);

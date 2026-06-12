@@ -156,7 +156,7 @@ export function useSaveJobDetails(jobId: string) {
         
         // Show a success toast only for the first save
         if (isSaving) {
-          toast.success("Changes saved");
+          void 0 /* success: silent (Ben) */;
         }
       } catch (error) {
         console.error("Error saving job details:", error);

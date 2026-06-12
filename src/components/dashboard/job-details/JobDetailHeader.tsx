@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { DetailJob } from "@/types/job";
 
 interface JobDetailHeaderProps {
@@ -50,11 +50,8 @@ const JobDetailHeader: React.FC<JobDetailHeaderProps> = ({ job, onBack, isSaving
           </span>
         )}
       </div>
-      {isSaving && (
-        <span className="text-xs text-muted-foreground animate-pulse">
-          Saving changes...
-        </span>
-      )}
+      {/* In-flight = subtle spinner, no words (Ben's notification rule). */}
+      {isSaving && <Loader2 className="h-3.5 w-3.5 text-muted-foreground animate-spin" aria-label="Saving" />}
     </div>
   );
 };

@@ -97,7 +97,7 @@ const ClientInformationSectionWithAutoFill: React.FC<ClientInformationSectionPro
 
     setHasAutoFilled(true);
     setShowSuggestions(false);
-    toast.success(`Auto-filled from previous submission (${client.totalJobs} prior job${client.totalJobs > 1 ? 's' : ''})`);
+    void 0 /* success: silent (Ben) */;
   };
 
   return (

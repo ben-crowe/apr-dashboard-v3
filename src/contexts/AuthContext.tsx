@@ -61,7 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) throw error;
 
       setUser(data.user);
-      toast.success("Login successful!");
+      void 0 /* success: silent (Ben) */;
       navigate("/dashboard");
     } catch (error: any) {
       console.error("Login error:", error);
@@ -84,7 +84,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (error) throw error;
 
-      toast.success("Account created! Please check your email to verify.");
+      void 0 /* success: silent (Ben) */;
     } catch (error: any) {
       console.error("Sign up error:", error);
       toast.error(error.message || "Sign up failed");
@@ -99,7 +99,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       await supabase.auth.signOut();
       setUser(null);
-      toast.info("You have been logged out");
+      void 0 /* success: silent (Ben) */;
       navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);

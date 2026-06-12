@@ -246,7 +246,7 @@ const useFormSubmission = () => {
       }
 
       setIsSubmitted(true);
-      toast.success("Your submission has been received successfully.");
+      void 0 /* success: silent (Ben) */;
 
       // REMOVED: Automatic ClickUp task creation on form submission
       // ClickUp tasks should be created manually from the dashboard

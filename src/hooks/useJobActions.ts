@@ -48,7 +48,7 @@ export function useJobActions(
         jobNumber: mockJobNumber
       });
       
-      toast.success("Job successfully sent to Valcre");
+      void 0 /* success: silent (Ben) */;
     } catch (error) {
       console.error("Error sending to Valcre:", error);
       toast.error("Failed to send job to Valcre");
@@ -89,7 +89,7 @@ export function useJobActions(
         jobNumber: mockJobNumber
       });
       
-      toast.success("Job successfully sent to Pandadoc");
+      void 0 /* success: silent (Ben) */;
     } catch (error) {
       console.error("Error sending to Pandadoc:", error);
       toast.error("Failed to send job to Pandadoc");
@@ -115,7 +115,7 @@ export function useJobActions(
       
       if (result.success) {
         setGoogleFolderStatus(true);
-        toast.success("File storage created successfully");
+        void 0 /* success: silent (Ben) */;
       } else {
         throw new Error("Failed to create file storage");
       }
@@ -146,7 +146,7 @@ export function useJobActions(
       
       if (error) throw error;
       
-      toast.success("Contract successfully generated");
+      void 0 /* success: silent (Ben) */;
       
       // Update local status
       setJob({
@@ -215,7 +215,7 @@ export function useJobActions(
       
       if (error) throw error;
       
-      toast.success("Final data successfully sent to Valcre");
+      void 0 /* success: silent (Ben) */;
       
       // Update local status
       setJob({

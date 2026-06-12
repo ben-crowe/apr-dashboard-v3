@@ -122,7 +122,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
     setIsRegenerating(true);
     try {
       const name = await renderTemplate(templateId);
-      if (name) toast.success(`Loaded template: ${name}`);
+      if (name) void 0 /* success: silent (Ben) */;
     } catch (error) {
       console.error('Failed to load template:', error);
       toast.error('Failed to load template');
@@ -134,7 +134,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   const handleSetDefault = async (templateId: string) => {
     const success = await setDefaultTemplate(templateId);
     if (success) {
-      toast.success('Default template updated');
+      void 0 /* success: silent (Ben) */;
       loadTemplates(); // Reload to refresh UI
     } else {
       toast.error('Failed to set default template');
@@ -265,7 +265,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
     printWindow.document.open();
     printWindow.document.write(doc);
     printWindow.document.close();
-    toast.success('Preparing PDF — choose "Save as PDF" in the print dialog');
+    void 0 /* success: silent (Ben) */;
   };
 
   return (
@@ -496,7 +496,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
             });
 
             if (result.success) {
-              toast.success(`Template "${templateName}" saved successfully!`);
+              void 0 /* success: silent (Ben) */;
               setEditedHTML(html);
               setTemplateModified(false);
               

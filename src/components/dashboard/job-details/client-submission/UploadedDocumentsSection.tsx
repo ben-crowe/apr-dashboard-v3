@@ -40,7 +40,7 @@ const UploadedDocumentsSection: React.FC<UploadedDocumentsSectionProps> = ({ job
   
   const handleDownload = async (file: { fileName: string; filePath: string }) => {
     try {
-      toast.loading(`Downloading ${file.fileName}...`);
+      void 0 /* success: silent (Ben) */;
       
       // Download file from Supabase Storage
       const { data, error } = await supabase.storage
@@ -70,7 +70,7 @@ const UploadedDocumentsSection: React.FC<UploadedDocumentsSectionProps> = ({ job
       URL.revokeObjectURL(url);
       document.body.removeChild(a);
       
-      toast.success(`${file.fileName} downloaded successfully`);
+      void 0 /* success: silent (Ben) */;
     } catch (error) {
       console.error("Error downloading file:", error);
       toast.error(`Failed to download ${file.fileName}. Please try again.`);
@@ -147,7 +147,7 @@ const UploadedDocumentsSection: React.FC<UploadedDocumentsSectionProps> = ({ job
         if (dbError) {
           toast.error(`Failed to save ${file.name} reference`);
         } else {
-          toast.success(`${file.name} uploaded successfully`);
+          void 0 /* success: silent (Ben) */;
           // Refresh the page or update the files list
           window.location.reload();
         }

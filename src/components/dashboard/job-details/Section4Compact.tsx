@@ -61,7 +61,7 @@ const Section4Compact: React.FC<SectionProps> = ({
     };
 
     onUpdateDetails(testData);
-    toast.success("Test data populated!");
+    void 0 /* success: silent (Ben) */;
   };
 
   // Calculate document count (8 actual file uploads)
@@ -111,7 +111,7 @@ const Section4Compact: React.FC<SectionProps> = ({
         [`${fieldName.replace("_url", "")}_status`]: "uploaded",
       });
 
-      toast.success(`Document uploaded successfully`);
+      void 0 /* success: silent (Ben) */;
     } catch (error) {
       console.error("Upload error:", error);
       toast.error("Upload failed");
@@ -167,7 +167,7 @@ const Section4Compact: React.FC<SectionProps> = ({
         [`${fieldName.replace("_urls", "")}_status`]: "uploaded",
       });
 
-      toast.success(`${uploadedUrls.length} permits uploaded`);
+      void 0 /* success: silent (Ben) */;
     } catch (error) {
       console.error("Upload error:", error);
       toast.error("Upload failed");
@@ -235,7 +235,7 @@ const Section4Compact: React.FC<SectionProps> = ({
         onUpdateDetails?.({ [fieldName]: null });
       }
       
-      toast.success('File deleted successfully');
+      void 0 /* success: silent (Ben) */;
     } catch (error) {
       console.error('Error deleting file:', error);
       toast.error('Failed to delete file');

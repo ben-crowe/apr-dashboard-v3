@@ -55,7 +55,7 @@ const ESignatureAction: React.FC<ESignatureActionProps> = ({
       const html = await generateLOEHTML(job, jobDetails);
       setPreviewHTML(html);
       setShowPreview(true);
-      toast.success("Preview generated successfully! Review your document before sending.");
+      void 0 /* success: silent (Ben) */;
     } catch (error) {
       console.error("❌ Error generating preview:", error);
       toast.error(`Failed to generate document preview: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -91,9 +91,9 @@ const ESignatureAction: React.FC<ESignatureActionProps> = ({
         );
         
         if (emailSent) {
-          toast.success("LOE sent for e-signature successfully!");
+          void 0 /* success: silent (Ben) */;
         } else {
-          toast.success("LOE generated! Signing link: " + result.signingLink);
+          void 0 /* success: silent (Ben) */;
         }
         
         onSignatureSent(result.submissionId);

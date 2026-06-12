@@ -222,7 +222,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         }
       }
 
-      toast.success(`${files.length} file(s) uploaded successfully`);
+      void 0 /* success: silent (Ben) */;
 
       // Refresh file list without closing job
       const { data: fileData, error: fileError } = await supabase
@@ -298,7 +298,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         return;
       }
 
-      toast.success('File deleted successfully');
+      void 0 /* success: silent (Ben) */;
 
       // Refresh file list without closing job
       const { data: fileData, error: fileError } = await supabase
@@ -697,7 +697,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                             document.body.removeChild(a);
                             URL.revokeObjectURL(url);
 
-                            toast.success('File downloaded successfully');
+                            void 0 /* success: silent (Ben) */;
                           } catch (error) {
                             console.error('Download error:', error);
                             toast.error('Failed to download file');

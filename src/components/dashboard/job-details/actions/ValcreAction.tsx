@@ -152,7 +152,7 @@ const ValcreAction: React.FC<ValcreActionProps> = ({
         console.log("✅ [ValcreAction] VAL number saved successfully to both tables");
 
         // Show success message to user
-        toast.success(`Valcre job created: ${result.jobNumber}`);
+        void 0 /* success: silent (Ben) */;
 
         // After successful Valcre job creation, we automatically try to create the Google folder
         onCreateGoogleFolder();

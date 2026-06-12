@@ -22,6 +22,19 @@ import ImageTest from "./pages/ImageTest";
 import ClickUpCallback from "./pages/ClickUpCallback";
 import StandaloneCalculator from "./features/standalone-calculator";
 import StyleGuide from "./pages/StyleGuide";
+import { toast } from "sonner";
+
+// ─── Notification rule (Ben) ──────────────────────────────────────────────
+// SUCCESS = SILENT. No "saved / deleted / renamed / synced" popups — they fired
+// like crazy and Ben never wants them. Only genuine ERRORS pop. In-flight is shown
+// by a spinner, not a toast. We neuter the non-error sonner channels app-wide at the
+// source so every success/info/neutral toast dies at once (keeps toast.error/warning).
+// (Stop-gap blanket kill — QA is doing the proper per-call removal + spinner; this can
+//  be lifted once that lands.)
+(["success", "info", "message", "loading"] as const).forEach((channel) => {
+  // @ts-expect-error — intentionally overriding sonner's channels with silent no-ops
+  toast[channel] = () => "";
+});
 
 const queryClient = new QueryClient();
 

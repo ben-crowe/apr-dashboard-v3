@@ -449,10 +449,11 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                   else groups.push({ title, items: [s] });
                 }
                 return groups.map((g, gi) => {
-                  // Per-group counter for boxes with NO field name — gives the index/list
-                  // sections (Inspection, Appendix, Scope, …) a small "1, 2, 3" above each box,
-                  // matching the numbers already on the page. Otherwise they're blank floaters.
-                  let blockNum = 0;
+                  // Number ONLY real numbered-list items (<ol>, e.g. the Appendix) — counter
+                  // advances only for those, so they read 1..N matching the page. Field-named
+                  // boxes show their name; bullets + prose + titles get NO label (the page has
+                  // no numbers there either).
+                  let orderedNum = 0;
                   return (
                   <div key={gi} className="mb-4">
                     <div className="text-sm font-semibold text-foreground border-b border-border pb-1 mb-2">
@@ -460,12 +461,16 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                     </div>
                     {g.items.map((section) => {
                       const currentValue = sections.get(section.id) || '';
-                      const microLabel = section.fieldLabel ? section.fieldLabel : String(++blockNum);
+                      const micro = section.fieldLabel
+                        ? { text: section.fieldLabel, cls: 'text-xs font-medium text-muted-foreground' }
+                        : section.ordered
+                          ? { text: String(++orderedNum), cls: 'text-[10px] font-semibold text-muted-foreground/70' }
+                          : null;
                       return (
                         <div key={section.id} className="mb-3">
-                          <div className={`mb-1 ${section.fieldLabel ? 'text-xs font-medium text-muted-foreground' : 'text-[10px] font-semibold text-muted-foreground/70'}`}>
-                            {microLabel}
-                          </div>
+                          {micro && (
+                            <div className={`mb-1 ${micro.cls}`}>{micro.text}</div>
+                          )}
                           <Textarea
                             value={currentValue}
                             onChange={(e) => {

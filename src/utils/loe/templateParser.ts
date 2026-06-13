@@ -15,6 +15,7 @@ export interface EditableSection {
   originalHTML?: string; // Original HTML for accurate reconstruction (for table cells)
   sectionTitle?: string; // Numbered parent section/subsection title (e.g. "2. PROPERTY DESCRIPTION") — for grouping
   fieldLabel?: string;   // The specific field this box sits under (e.g. "Current Use"), '' if none
+  ordered?: boolean;     // True only if this box is an <ol> list item (a real numbered list, e.g. the Appendix)
 }
 
 /**
@@ -71,6 +72,17 @@ function parseByMarkers(html: string): EditableSection[] {
     return { sectionTitle: sec ? sec.label : 'Cover Letter', fieldLabel: fieldInSection };
   };
 
+  // A box is "ordered" ONLY if it's a list item inside an <ol> (a real numbered list, like the
+  // Appendix legal-list). <ul> bullets (e.g. Inspection) and prose paragraphs are NOT numbered —
+  // the page doesn't number them, so the editor must not invent numbers there either.
+  const inOrderedList = (idx: number): boolean => {
+    const before = html.slice(0, idx);
+    const inOl = before.lastIndexOf('<ol') > before.lastIndexOf('</ol>');
+    const inUl = before.lastIndexOf('<ul') > before.lastIndexOf('</ul>');
+    if (inOl && inUl) return before.lastIndexOf('<ol') > before.lastIndexOf('<ul'); // nearest open wins
+    return inOl;
+  };
+
   const sections: EditableSection[] = [];
   const blockRe = /<(p|li)((?:\s[^>]*)?)\sdata-editable="([^"]+)"((?:\s[^>]*)?)>([\s\S]*?)<\/\1>/g;
   let m: RegExpExecArray | null;
@@ -87,6 +99,7 @@ function parseByMarkers(html: string): EditableSection[] {
       label: ctx.fieldLabel ? `${ctx.sectionTitle} — ${ctx.fieldLabel}` : ctx.sectionTitle,
       sectionTitle: ctx.sectionTitle,
       fieldLabel: ctx.fieldLabel,
+      ordered: m[1] === 'li' && inOrderedList(m.index),
       content,
       placeholders: extractPlaceholders(innerHTML),
       htmlStart: '',

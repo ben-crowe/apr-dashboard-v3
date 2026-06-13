@@ -424,59 +424,24 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
               <div className="flex-1 overflow-y-auto min-h-0">
                 <div className="space-y-2 px-2 pt-1 pb-4" style={{ fontSize: `${fontSize}px`, lineHeight: `${fontSize * 1.3}px` }}>
 
-              {/* DOCUMENT ORDER RENDERING - Shows both editable and read-only sections */}
+              {/* GENERIC SECTION RENDERING (2026-06-13) — one box per editable section the
+                  parser returns, id-agnostic. Replaces the old 5 hardcoded section IDs
+                  (subject-line/intro/table-row/terms/action) which silently rendered NOTHING for
+                  marker-based (ed-N) templates. Works for BOTH the V07 marker template and the
+                  legacy class-based templates — labels come from section.label. The full letter
+                  (header, signatures, locked titles) lives in the live preview pane on the right. */}
 
-              {/* Header - Read-only */}
-              <div className="text-gray-400 dark:text-muted-foreground text-xs mb-2 pb-2 border-b border-border select-none">
-                [Company Logo]
-                <div className="text-right">
-                  [Date]<br/>
-                  [Client Name] | [Client Contact]<br/>
-                  [Client Address]
+              {editableSections.length === 0 && (
+                <div className="text-xs text-muted-foreground italic select-none px-2 py-6 text-center">
+                  No editable sections found in this template.
                 </div>
-              </div>
+              )}
 
-              {/* Subject Line - Editable boilerplate + read-only field placeholders */}
-              {editableSections.find(s => s.id === 'subject-line') && (() => {
-                const section = editableSections.find(s => s.id === 'subject-line')!;
+              {editableSections.map((section) => {
                 const currentValue = sections.get(section.id) || '';
                 return (
-                  <div className="mb-3">
-                    <div className="text-xs font-medium text-muted-foreground mb-1">Subject Line</div>
-                    <div className="space-y-1">
-                      <Textarea
-                        value={currentValue}
-                        onChange={(e) => {
-                          handleSectionChange(section.id, e.target.value);
-                          handleTextareaResize(e);
-                        }}
-                        data-auto-resize="true"
-                        className="w-full p-2 border border-border rounded resize-none bg-card text-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
-                        rows={1}
-                        style={{ 
-                          fontSize: `${fontSize}px`, 
-                          lineHeight: `${fontSize * 1.3}px`,
-                          height: 'auto',
-                          minHeight: `${fontSize * 1.3 + 16}px` // Single line + padding
-                        }}
-                      />
-                      {section.placeholders.length > 0 && (
-                        <div className="text-xs text-gray-400 dark:text-muted-foreground italic select-none px-2">
-                          {section.placeholders.join(', ')}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })()}
-
-              {/* Introduction - Editable */}
-              {editableSections.find(s => s.id === 'intro') && (() => {
-                const section = editableSections.find(s => s.id === 'intro')!;
-                const currentValue = sections.get(section.id) || '';
-                return (
-                  <div className="mb-3">
-                    <div className="text-xs font-medium text-muted-foreground mb-1">Introduction Paragraph</div>
+                  <div key={section.id} className="mb-3">
+                    <div className="text-xs font-medium text-muted-foreground mb-1">{section.label}</div>
                     <Textarea
                       value={currentValue}
                       onChange={(e) => {
@@ -484,118 +449,23 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                         handleTextareaResize(e);
                       }}
                       data-auto-resize="true"
-                      className="w-full p-2 border border-border rounded resize-none bg-muted dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                      className="w-full p-2 border border-border rounded resize-none bg-card text-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
                       rows={1}
-                      style={{ 
-                        fontSize: `${fontSize}px`, 
+                      style={{
+                        fontSize: `${fontSize}px`,
                         lineHeight: `${fontSize * 1.3}px`,
                         height: 'auto',
-                        minHeight: `${fontSize * 1.3 + 16}px` // Single line + padding
+                        minHeight: `${fontSize * 1.3 + 16}px`,
                       }}
                     />
+                    {section.placeholders.length > 0 && (
+                      <div className="text-xs text-gray-400 dark:text-muted-foreground italic select-none px-2 mt-0.5">
+                        {section.placeholders.join(', ')}
+                      </div>
+                    )}
                   </div>
                 );
-              })()}
-
-              {/* Property Details Table - All fields editable */}
-              <div className="mb-3 text-sm border border-border rounded overflow-hidden">
-                <div className="text-xs font-semibold bg-muted text-foreground px-2 py-1 border-b border-border">Property Details</div>
-
-                <div className="divide-y divide-border">
-                  {/* All table rows are editable - users can override field values */}
-                  {editableSections
-                    .filter(s => s.id.startsWith('table-row-'))
-                    .map((section) => {
-                      const currentValue = sections.get(section.id) || '';
-                      return (
-                        <div key={section.id} className="px-2 py-1">
-                          <div className="text-xs font-medium text-foreground mb-0.5">{section.label}</div>
-                          <Textarea
-                            value={currentValue}
-                            onChange={(e) => {
-                              handleSectionChange(section.id, e.target.value);
-                              handleTextareaResize(e);
-                            }}
-                            data-auto-resize="true"
-                            className="w-full text-xs p-1 border border-border rounded resize-none bg-card text-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
-                            rows={1}
-                            style={{ 
-                              fontSize: `${fontSize}px`, 
-                              lineHeight: `${fontSize * 1.3}px`,
-                              height: 'auto',
-                              minHeight: `${fontSize * 1.3 + 8}px` // Single line + padding (smaller for table cells)
-                            }}
-                          />
-                        </div>
-                      );
-                    })}
-                </div>
-              </div>
-
-              {/* Terms & Conditions - Editable */}
-              {editableSections.find(s => s.id === 'terms') && (() => {
-                const section = editableSections.find(s => s.id === 'terms')!;
-                const currentValue = sections.get(section.id) || '';
-                return (
-                  <div className="mb-3">
-                    <div className="text-xs font-medium text-muted-foreground mb-1">Terms & Conditions</div>
-                    <Textarea
-                      value={currentValue}
-                      onChange={(e) => {
-                        handleSectionChange(section.id, e.target.value);
-                        handleTextareaResize(e);
-                      }}
-                      data-auto-resize="true"
-                      className="w-full p-2 border border-border rounded resize-none bg-muted dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
-                      rows={1}
-                      style={{ 
-                        fontSize: `${fontSize}px`, 
-                        lineHeight: `${fontSize * 1.3}px`,
-                        height: 'auto',
-                        minHeight: `${fontSize * 1.3 + 16}px` // Single line + padding
-                      }}
-                    />
-                  </div>
-                );
-              })()}
-
-              {/* Closing Statement - Editable */}
-              {editableSections.find(s => s.id === 'action') && (() => {
-                const section = editableSections.find(s => s.id === 'action')!;
-                const currentValue = sections.get(section.id) || '';
-                return (
-                  <div className="mb-3">
-                    <div className="text-xs font-medium text-muted-foreground mb-1">Closing Statement</div>
-                    <Textarea
-                      value={currentValue}
-                      onChange={(e) => {
-                        handleSectionChange(section.id, e.target.value);
-                        handleTextareaResize(e);
-                      }}
-                      data-auto-resize="true"
-                      className="w-full p-2 border border-border rounded resize-none bg-muted dark:text-gray-100 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
-                      rows={1}
-                      style={{ 
-                        fontSize: `${fontSize}px`, 
-                        lineHeight: `${fontSize * 1.3}px`,
-                        height: 'auto',
-                        minHeight: `${fontSize * 1.3 + 16}px` // Single line + padding
-                      }}
-                    />
-                  </div>
-                );
-              })()}
-
-              {/* Signature Block - Read-only */}
-              <div className="text-gray-400 dark:text-muted-foreground text-xs select-none mt-4 pt-2 border-t border-border">
-                <div>Sincerely,</div>
-                <div className="font-semibold">Valta Property Valuations Ltd.</div>
-                <div className="mt-2">[Signature Image]</div>
-                <div className="mt-4">
-                  <div>Client Signature: _________________</div>
-                  <div className="mt-2">Date: _________________</div>
-                </div>
-              </div>
+              })}
 
                 </div>
               </div>

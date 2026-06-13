@@ -13,6 +13,8 @@ export interface EditableSection {
   selector: string; // CSS selector or pattern for reconstruction
   type: 'intro' | 'term' | 'table-cell' | 'other'; // Section type
   originalHTML?: string; // Original HTML for accurate reconstruction (for table cells)
+  sectionTitle?: string; // Numbered parent section/subsection title (e.g. "2. PROPERTY DESCRIPTION") — for grouping
+  fieldLabel?: string;   // The specific field this box sits under (e.g. "Current Use"), '' if none
 }
 
 /**
@@ -61,15 +63,12 @@ function parseByMarkers(html: string): EditableSection[] {
     for (const a of arr) { if (a.index < idx) best = a; else break; }
     return best;
   };
-  const labelFor = (idx: number): string => {
+  const contextFor = (idx: number): { sectionTitle: string; fieldLabel: string } => {
     const sec = lastBefore(sectionAnchors, idx);
     const fld = lastBefore(fieldAnchors, idx);
     // The field-label only applies if it belongs to the CURRENT section (sits after its heading).
     const fieldInSection = fld && (!sec || fld.index > sec.index) ? fld.label : '';
-    if (sec && fieldInSection) return `${sec.label} — ${fieldInSection}`;
-    if (sec) return sec.label;
-    if (fieldInSection) return fieldInSection;
-    return 'Cover Letter';
+    return { sectionTitle: sec ? sec.label : 'Cover Letter', fieldLabel: fieldInSection };
   };
 
   const sections: EditableSection[] = [];
@@ -82,9 +81,12 @@ function parseByMarkers(html: string): EditableSection[] {
     const content = stripHTMLTags(innerHTML);
     if (!content.trim()) continue;
     n++;
+    const ctx = contextFor(m.index);
     sections.push({
       id: edId,
-      label: labelFor(m.index),
+      label: ctx.fieldLabel ? `${ctx.sectionTitle} — ${ctx.fieldLabel}` : ctx.sectionTitle,
+      sectionTitle: ctx.sectionTitle,
+      fieldLabel: ctx.fieldLabel,
       content,
       placeholders: extractPlaceholders(innerHTML),
       htmlStart: '',
@@ -95,6 +97,65 @@ function parseByMarkers(html: string): EditableSection[] {
     });
   }
   return sections;
+}
+
+/**
+ * A row in the document-order editor view. Lets the left panel mirror the whole letter:
+ * section/subsection headers appear ONCE, locked data fields are shown (greyed), and editable
+ * wording is a box. Order matches the rendered letter exactly.
+ */
+export type EditorRow =
+  | { kind: 'section'; text: string }                          // h1 numbered title (locked)
+  | { kind: 'subsection'; text: string }                       // h3 (e.g. 14.1) (locked)
+  | { kind: 'field'; label: string; value: string }            // field-label + its data value (locked)
+  | { kind: 'editable'; id: string; content: string; label?: string } // editable wording box
+  | { kind: 'locked'; content: string };                       // other prose/data (locked, e.g. signature lines)
+
+/**
+ * Parse the full letter into ordered rows for the Contract Editor. Marker templates produce the
+ * complete structure (titles + locked data + editable wording); legacy templates fall back to the
+ * editable-only list so they still work.
+ */
+export function parseEditorRows(html: string): EditorRow[] {
+  if (!/data-editable\s*=/.test(html)) {
+    return parseTemplate(html).map((s) => ({ kind: 'editable' as const, id: s.id, content: s.content, label: s.label }));
+  }
+
+  type Tok = { index: number; kind: string; a?: string; b?: string; id?: string };
+  const toks: Tok[] = [];
+  const scan = (source: string, fn: (m: RegExpExecArray) => Tok | null) => {
+    const r = new RegExp(source, 'g');
+    let m: RegExpExecArray | null;
+    while ((m = r.exec(html)) !== null) { const t = fn(m); if (t) toks.push(t); }
+  };
+  scan('<h1[^>]*>([\\s\\S]*?)</h1>', (m) => ({ index: m.index, kind: 'section', a: stripHTMLTags(m[1]).trim() }));
+  scan('<h3[^>]*>([\\s\\S]*?)</h3>', (m) => ({ index: m.index, kind: 'subsection', a: stripHTMLTags(m[1]).trim() }));
+  scan('<p class="field-label"[^>]*>([\\s\\S]*?)</p>', (m) => ({ index: m.index, kind: 'fieldlabel', a: stripHTMLTags(m[1]).trim() }));
+  scan('<(p|li)((?:\\s[^>]*)?)\\sdata-editable="([^"]+)"((?:\\s[^>]*)?)>([\\s\\S]*?)</\\1>', (m) => ({ index: m.index, kind: 'editable', id: m[3], b: stripHTMLTags(m[5]) }));
+  scan('<(p|li)((?:\\s[^>]*)?)>([\\s\\S]*?)</\\1>', (m) => {
+    const full = m[0];
+    if (/data-editable=/.test(full) || /class="field-label"/.test(full)) return null;
+    if (/<(signature-field|text-field|date-field|img)/.test(full)) return null;
+    const text = stripHTMLTags(m[3]).trim();
+    return text ? { index: m.index, kind: 'plain', b: text } : null;
+  });
+  toks.sort((x, y) => x.index - y.index);
+
+  const rows: EditorRow[] = [];
+  for (let i = 0; i < toks.length; i++) {
+    const t = toks[i];
+    if (t.kind === 'section') rows.push({ kind: 'section', text: t.a! });
+    else if (t.kind === 'subsection') rows.push({ kind: 'subsection', text: t.a! });
+    else if (t.kind === 'editable') rows.push({ kind: 'editable', id: t.id!, content: t.b ?? '' });
+    else if (t.kind === 'plain') rows.push({ kind: 'locked', content: t.b ?? '' });
+    else if (t.kind === 'fieldlabel') {
+      const next = toks[i + 1];
+      if (next?.kind === 'plain') { rows.push({ kind: 'field', label: t.a!, value: next.b ?? '' }); i++; }
+      else if (next?.kind === 'editable') { rows.push({ kind: 'editable', id: next.id!, content: next.b ?? '', label: t.a! }); i++; }
+      else rows.push({ kind: 'field', label: t.a!, value: '' });
+    }
+  }
+  return rows;
 }
 
 /**

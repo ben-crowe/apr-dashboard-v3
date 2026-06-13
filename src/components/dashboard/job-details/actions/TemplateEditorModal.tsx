@@ -437,35 +437,56 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 </div>
               )}
 
-              {editableSections.map((section) => {
-                const currentValue = sections.get(section.id) || '';
-                return (
-                  <div key={section.id} className="mb-3">
-                    <div className="text-xs font-medium text-muted-foreground mb-1">{section.label}</div>
-                    <Textarea
-                      value={currentValue}
-                      onChange={(e) => {
-                        handleSectionChange(section.id, e.target.value);
-                        handleTextareaResize(e);
-                      }}
-                      data-auto-resize="true"
-                      className="w-full p-2 border border-border rounded resize-none bg-card text-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
-                      rows={1}
-                      style={{
-                        fontSize: `${fontSize}px`,
-                        lineHeight: `${fontSize * 1.3}px`,
-                        height: 'auto',
-                        minHeight: `${fontSize * 1.3 + 16}px`,
-                      }}
-                    />
-                    {section.placeholders.length > 0 && (
-                      <div className="text-xs text-gray-400 dark:text-muted-foreground italic select-none px-2 mt-0.5">
-                        {section.placeholders.join(', ')}
-                      </div>
-                    )}
+              {/* GROUPED RENDERING (2026-06-13) — the numbered section title shows ONCE as a header;
+                  the editable boxes sit under it with only their short field sub-label (no repeated
+                  section number). Numbered subsections (14.1–14.10) are their own group titles. */}
+              {(() => {
+                const groups: { title: string; items: EditableSection[] }[] = [];
+                for (const s of editableSections) {
+                  const title = s.sectionTitle || s.label || 'Section';
+                  const last = groups[groups.length - 1];
+                  if (last && last.title === title) last.items.push(s);
+                  else groups.push({ title, items: [s] });
+                }
+                return groups.map((g, gi) => (
+                  <div key={gi} className="mb-4">
+                    <div className="text-sm font-semibold text-foreground border-b border-border pb-1 mb-2">
+                      {g.title}
+                    </div>
+                    {g.items.map((section) => {
+                      const currentValue = sections.get(section.id) || '';
+                      return (
+                        <div key={section.id} className="mb-3">
+                          {section.fieldLabel ? (
+                            <div className="text-xs font-medium text-muted-foreground mb-1">{section.fieldLabel}</div>
+                          ) : null}
+                          <Textarea
+                            value={currentValue}
+                            onChange={(e) => {
+                              handleSectionChange(section.id, e.target.value);
+                              handleTextareaResize(e);
+                            }}
+                            data-auto-resize="true"
+                            className="w-full p-2 border border-border rounded resize-none bg-card text-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0 overflow-hidden"
+                            rows={1}
+                            style={{
+                              fontSize: `${fontSize}px`,
+                              lineHeight: `${fontSize * 1.3}px`,
+                              height: 'auto',
+                              minHeight: `${fontSize * 1.3 + 16}px`,
+                            }}
+                          />
+                          {section.placeholders.length > 0 && (
+                            <div className="text-xs text-gray-400 dark:text-muted-foreground italic select-none px-2 mt-0.5">
+                              {section.placeholders.join(', ')}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
-                );
-              })}
+                ));
+              })()}
 
                 </div>
               </div>

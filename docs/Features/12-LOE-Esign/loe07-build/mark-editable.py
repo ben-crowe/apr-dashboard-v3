@@ -41,7 +41,7 @@ def mark_block(m: re.Match) -> str:
         return full
     if any(t in inner for t in SKIP_TAGS):
         return full
-    if not strip_tokens(inner):          # pure-token / empty = data, not wording
+    if not (strip_tokens(inner) or "merge-token" in inner):  # truly empty = skip; data values ARE editable now
         return full
     if "data-editable" in attrs:          # already marked
         return full
@@ -50,7 +50,9 @@ def mark_block(m: re.Match) -> str:
     return f"<{tag}{new_attrs}>{inner}</{tag}>"
 
 
-# Mark <p> and <li> blocks (non-greedy; these tags don't self-nest in this template)
+# Mark EVERY <p>/<li> block editable (Ben 2026-06-13: make it all editable — clients edit freely
+# in Word anyway). Only field-labels (the sub-titles) + the signature/date anchors stay out. The
+# Appendix is included now. (non-greedy; these tags don't self-nest in this template)
 html = re.sub(r"<(p|li)((?:\s[^>]*)?)>([\s\S]*?)</\1>", mark_block, html)
 
 # Mark section titles removable (forward-prep for the X-delete layer)

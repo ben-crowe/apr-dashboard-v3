@@ -82,8 +82,11 @@ function parseByMarkers(html: string): EditableSection[] {
 
 /**
  * Reconstruct a marker-based template: swap each data-editable block's inner content
- * for the user's edited text. Merge-token spans inside the original are preserved by
- * re-merging any tokens the edit didn't keep, so auto-filled data never gets lost.
+ * for the user's edited text. Merge-token data fields are preserved by IDENTITY — each
+ * surviving [Field] bracket in the edited text is re-wrapped with its original
+ * <span class="merge-token" data-token="…"> wrapper, so the data-field highlight + id
+ * survive the save (auto-fill keys off the bare bracket either way). A token the user
+ * deletes from the wording stays gone — re-wrap only what's still there.
  */
 function reconstructByMarkers(html: string, editedSections: Map<string, string>): string {
   return html.replace(
@@ -91,14 +94,24 @@ function reconstructByMarkers(html: string, editedSections: Map<string, string>)
     (full, open, edId, openEnd, origInner, close) => {
       if (!editedSections.has(edId)) return full;
       const edited = editedSections.get(edId)!;
-      // Keep any merge-token spans from the original that the plain-text edit dropped,
-      // appended after the edited text so the auto-filled data still renders.
-      const tokens = origInner.match(/<span class="merge-token"[\s\S]*?<\/span>/g) || [];
-      const keptText = escapeAndFormatHTML(edited);
-      const tokensTail = tokens.length && !/\[[\w./-]+\]/.test(edited)
-        ? ' ' + tokens.join(' ')
-        : '';
-      return `${open}${edId}${openEnd}${keptText}${tokensTail}${close}`;
+
+      // Map each original merge-token span by its bracket text, e.g.
+      // "[Valuetimeframe]" -> '<span class="merge-token" data-token="Valuetimeframe">[Valuetimeframe]</span>'
+      const spanByBracket = new Map<string, string>();
+      const spanRe = /<span class="merge-token"[\s\S]*?<\/span>/g;
+      let sm: RegExpExecArray | null;
+      while ((sm = spanRe.exec(origInner)) !== null) {
+        const bracket = (sm[0].match(/\[[\w./-]+\]/) || [])[0];
+        if (bracket && !spanByBracket.has(bracket)) spanByBracket.set(bracket, sm[0]);
+      }
+
+      // Escape the user's edited text first, THEN re-insert the raw token spans so their
+      // own markup isn't escaped. Literal split/join avoids regex-escaping the brackets.
+      let out = escapeAndFormatHTML(edited);
+      for (const [bracket, span] of spanByBracket) {
+        out = out.split(bracket).join(span);
+      }
+      return `${open}${edId}${openEnd}${out}${close}`;
     }
   );
 }

@@ -116,11 +116,12 @@ Net: the client-facing picker only ever shows the **best, live** version of each
 - Round-trip preserves the merge-token data fields (re-wrapped by identity on save).
 - Section labels carry the template's numbering — e.g. "2. Property Description — Current Use of the Property" — so the panel tracks the letter line-for-line.
 - A marked demo template ("V07 — EDITABLE (demo)") proves it end-to-end. The marking is a reproducible script — `~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/loe07-build/mark-editable.py`.
+- **Renamed** the dashboard button **"Preview & Send LOE" → "Create Contract"** and the modal **"Edit LOE Template" → "Edit Contract".**
+- **Saved-contract framework** — new `job_contracts` table (one row per saved client contract: `job_id`, `template_id/version`, `name`, `edited_html`, `state` draft/saved/sent, `docuseal_submission_id`); data layer `~/Development/APR-Dashboard-v3/src/utils/loe/jobContracts.ts` (load/save/markSent/delete). The Contract Editor's Save now writes a **job contract** (not a template); the dashboard shows a **Saved Contracts** list per client (name + state badge + Open) and "Create Contract" always starts a new one. Save→list loop verified live.
 
-**Pending (this session's next steps):**
+**Pending (next steps):**
 - Render the **locked** parts too (titles, job-ticket data, signatures) shown greyed with a lock — currently only editable boxes render. (Section 3 SOP.)
-- Rename the modal **"Edit LOE Template" → "Edit Contract"**, and the dashboard button **"Preview & Send LOE" → "Create Contract"**. (Sections 2, 6.)
-- Make a saved contract a first-class object: after create + save, surface it on the client dashboard as a **button + dropdown of this client's saved / prepped / sent contracts**, each reopenable. (Section 6.)
+- Wire "Open" on a saved contract to reopen it in **edit** mode (currently reopens the preview seeded with its HTML); and flip a contract to **sent** on send (`markContractSent`).
 - Decide whether to mark the **default** template (not just the demo) so the editor is rich on the default path — Ben's call; markers are non-visual + send-safe.
 - Collapse the client-facing picker to **one live version per template type** (hide the version-lifecycle clutter). Tied to the Template Library work.
 

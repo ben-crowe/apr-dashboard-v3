@@ -12,6 +12,7 @@ import { Send, X, Download, Mail, Plus, ZoomIn, ZoomOut, RotateCcw, Edit, Loader
 import { toast } from "sonner";
 import TemplateEditorModal from './TemplateEditorModal';
 import { saveTemplate, loadAllTemplates, loadTemplateById, setDefaultTemplate, LOETemplate } from '@/utils/loe/saveTemplate';
+import { saveJobContract } from '@/utils/loe/jobContracts';
 import { generateLOEHTML } from '@/utils/loe/generateLOE';
 // Paged.js polyfill is vendored into /public (from the pagedjs npm package) and loaded
 // only when Download is clicked. It renders CSS @page margin-boxes (the running
@@ -26,6 +27,8 @@ interface LOEPreviewModalProps {
   jobDetails: JobDetails;
   documentHTML: string;
   onApprove: (recipientEmail?: string) => Promise<void>;
+  /** Fired after a client contract is saved, so the dashboard can refresh its saved list. */
+  onContractSaved?: () => void;
 }
 
 const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
@@ -34,7 +37,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   job,
   jobDetails,
   documentHTML,
-  onApprove
+  onApprove,
+  onContractSaved
 }) => {
   const [isSending, setIsSending] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string>('');
@@ -487,28 +491,33 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
           isOpen={isEditMode}
           onClose={() => setIsEditMode(false)}
           initialHTML={editedHTML || currentDocumentHTML}
-          onSave={async (templateName, html, setAsDefault) => {
-            // Save template (app-wide, no user requirement)
-            const result = await saveTemplate({
-              templateName,
-              templateHTML: html,
-              setAsDefault
+          onSave={async (contractName, html) => {
+            // Edit Contract mode: save THIS CLIENT's tailored contract (not a template).
+            // Persists to job_contracts against the job; the dashboard then lists it as a
+            // saved contract. (Template structure editing is a separate, future surface.)
+            const chosen = templates.find(t => t.id === selectedTemplateId);
+            const result = await saveJobContract({
+              jobId: job.id,
+              name: contractName || `${chosen?.name || 'Contract'} — ${job.clientLastName || job.clientFirstName || 'Client'}`,
+              editedHtml: html,
+              templateId: selectedTemplateId,
+              templateVersion: (chosen as any)?.version ?? null,
+              contractType: chosen?.name ?? null,
+              state: 'saved',
             });
 
             if (result.success) {
               void 0 /* success: silent (Ben) */;
               setEditedHTML(html);
               setTemplateModified(false);
-              
-              // Reload templates to include the new one
-              await loadTemplates();
-              
               // Update preview with edited HTML
               const blob = new Blob([html], { type: 'text/html' });
               const url = URL.createObjectURL(blob);
               setPreviewUrl(url);
+              // Tell the dashboard to refresh its saved-contracts list.
+              onContractSaved?.();
             } else {
-              toast.error(`Failed to save template: ${result.error}`);
+              toast.error(`Failed to save contract: ${result.error}`);
             }
           }}
         />

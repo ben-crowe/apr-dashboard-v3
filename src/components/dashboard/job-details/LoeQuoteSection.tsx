@@ -22,6 +22,7 @@ import { generateAppraisalTestData } from "@/utils/testDataGenerator";
 import { FileSignature, AlertCircle, ExternalLink } from "lucide-react";
 import { validateRequiredFields } from "@/utils/webhooks/docuseal";
 import { generateLOEHTML, generateAndSendLOE, sendLOEEmail } from "@/utils/loe/generateLOE";
+import { loadJobContracts, JobContract } from "@/utils/loe/jobContracts";
 import { markLOEPrepComplete } from "@/utils/webhooks/clickup";
 import LOEPreviewModal from "./actions/LOEPreviewModal";
 import ClickUpAction from "./actions/ClickUpAction";
@@ -103,6 +104,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [previewHTML, setPreviewHTML] = useState<string>('');
+  // Saved client contracts for THIS job (Create Contract → save → appears here). The
+  // dashboard shows what's been saved/prepped/sent + always lets you create a new one.
+  const [savedContracts, setSavedContracts] = useState<JobContract[]>([]);
+  const refreshContracts = useCallback(() => {
+    if (job?.id) loadJobContracts(job.id).then(setSavedContracts);
+  }, [job?.id]);
+  useEffect(() => { refreshContracts(); }, [refreshContracts]);
   const [validation, setValidation] = useState<{
     isValid: boolean;
     missingFields: string[];
@@ -1091,7 +1099,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent className={sectionContentStyle}>
-        {/* Action Buttons Row — Part F: View in Valcre · View in ClickUp · Preview & Send LOE */}
+        {/* Action Buttons Row — Part F: View in Valcre · View in ClickUp · Create Contract */}
         <div className="mb-6 flex justify-between">
           <div className="flex gap-2">
             {/* Create/View Valcre Job Button - Transforms after creation */}
@@ -1224,7 +1232,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
-                          {alreadySent ? "LOE Sent" : "Preview & Send LOE"}
+                          Create Contract
                         </Button>
                         <AlertCircle className="absolute -top-1 -right-1 h-4 w-4 text-amber-500" />
                       </div>
@@ -1254,7 +1262,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
-                          Preview & Send LOE
+                          Create Contract
                         </Button>
                       </div>
                     </TooltipTrigger>
@@ -1275,7 +1283,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                     : "border-2 border-gray-800 dark:border-white/50 bg-gray-800 dark:bg-transparent text-white dark:text-white hover:bg-gray-700 dark:hover:bg-white/10 transition-colors text-sm font-medium"}
                 >
                   <FileSignature className="h-4 w-4 mr-1" />
-                  {alreadySent ? "Resend LOE" : isGenerating ? "Generating..." : "Preview & Send LOE"}
+                  {isGenerating ? "Generating..." : "Create Contract"}
                 </Button>
               )
             ) : (
@@ -1287,11 +1295,44 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
               >
                 <FileSignature className="h-4 w-4 mr-1" />
-                Preview & Send LOE
+                Create Contract
               </Button>
             )}
           </div>
         </div>
+
+        {/* Saved Contracts for this client — everything created + saved/sent via Create Contract.
+            Always-create-new lives in the action button above; this is the history you can reopen. */}
+        {savedContracts.length > 0 && (
+          <div className="mb-6 rounded-md border border-border bg-muted/30 p-3">
+            <div className="text-xs font-semibold text-foreground mb-2">Saved Contracts</div>
+            <div className="space-y-1.5">
+              {savedContracts.map((c) => (
+                <div key={c.id} className="flex items-center justify-between gap-2 text-sm">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <FileSignature className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                    <span className="truncate text-foreground">{c.name}</span>
+                    <span className={`shrink-0 text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded ${
+                      c.state === 'sent'
+                        ? 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400'
+                        : 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400'}`}>
+                      {c.state}
+                    </span>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 text-xs shrink-0"
+                    onClick={() => { setPreviewHTML(c.edited_html); setShowPreview(true); }}
+                  >
+                    Open
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Cascade Options — scenario picker strip (TEST tool, NOT a client-facing field).
             Top of Section 2, pushed to the side, matches the mock #cascadePicker.
@@ -1348,7 +1389,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             </CompactField>
             {/* ClickUp Task field removed — Part F. Task URL/ID is in the "View in ClickUp" button above. */}
             {/* LOE Version picker removed 2026-06-09 — single active template (LOE-07-1); the
-                send path defaults to the newest active template, so "Preview & Send LOE" goes
+                send path defaults to the newest active template, so "Create Contract" goes
                 straight in on the one template. (Document-not-version-picker direction —
                 see JOB-DOCUMENT-PICKER-DECISION-TREE.md.) */}
             <CompactField label="Job Status">
@@ -1914,11 +1955,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         {/* Preview Modal */}
         <LOEPreviewModal
           isOpen={showPreview}
-          onClose={() => setShowPreview(false)}
+          onClose={() => { setShowPreview(false); refreshContracts(); }}
           job={job}
           jobDetails={jobDetails}
           documentHTML={previewHTML}
           onApprove={handleApproveAndSend}
+          onContractSaved={refreshContracts}
         />
       </CollapsibleContent>
     </Collapsible>

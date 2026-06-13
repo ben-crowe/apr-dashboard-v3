@@ -327,7 +327,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
         {/* Header - Matching LOEPreviewModal */}
         <div className="flex justify-between items-center pb-2 border-b">
           <div>
-            <h2 className="text-lg font-semibold">Edit LOE Template</h2>
+            <h2 className="text-lg font-semibold">Edit Contract</h2>
             <p className="text-sm text-muted-foreground">Edit template content and preview changes</p>
           </div>
           

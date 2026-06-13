@@ -21,7 +21,86 @@ export interface EditableSection {
  * Subject line is now editable (first section)
  */
 export function parseTemplate(html: string): EditableSection[] {
+  // V07+ marker path: if the template carries data-editable markers, drive the
+  // editor off those (the optimized template authored to the editability proposal).
+  // Otherwise fall back to the legacy class-hunt (old V1/V2/V3 templates).
+  if (/data-editable\s*=/.test(html)) {
+    return parseByMarkers(html);
+  }
   return parseSections(html);
+}
+
+/**
+ * Marker-based parse (V07+). Every element tagged data-editable="ed-N" becomes one
+ * editable section. The nearest preceding heading / field-label supplies the label,
+ * so the left panel reads like the letter. Merge-token data + titles stay untouched
+ * (they carry no marker). data-removable on a heading flags an X-to-delete section.
+ */
+function parseByMarkers(html: string): EditableSection[] {
+  // Build an ordered index of context anchors (headings + field labels) so each
+  // editable block can name itself after the part of the letter it sits under.
+  const anchors: Array<{ index: number; label: string }> = [];
+  const anchorRe = /<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>|<p class="field-label"[^>]*>([\s\S]*?)<\/p>/g;
+  let am: RegExpExecArray | null;
+  while ((am = anchorRe.exec(html)) !== null) {
+    const label = stripHTMLTags(am[1] ?? am[2] ?? '').trim();
+    if (label) anchors.push({ index: am.index, label });
+  }
+  const labelFor = (idx: number): string => {
+    let best = '';
+    for (const a of anchors) {
+      if (a.index < idx) best = a.label;
+      else break;
+    }
+    return best || 'Section';
+  };
+
+  const sections: EditableSection[] = [];
+  const blockRe = /<(p|li)((?:\s[^>]*)?)\sdata-editable="([^"]+)"((?:\s[^>]*)?)>([\s\S]*?)<\/\1>/g;
+  let m: RegExpExecArray | null;
+  let n = 0;
+  while ((m = blockRe.exec(html)) !== null) {
+    const innerHTML = m[5];
+    const edId = m[3];
+    const content = stripHTMLTags(innerHTML);
+    if (!content.trim()) continue;
+    n++;
+    sections.push({
+      id: edId,
+      label: labelFor(m.index),
+      content,
+      placeholders: extractPlaceholders(innerHTML),
+      htmlStart: '',
+      htmlEnd: '',
+      selector: `[data-editable="${edId}"]`,
+      type: m[1] === 'li' ? 'term' : 'other',
+      originalHTML: innerHTML,
+    });
+  }
+  return sections;
+}
+
+/**
+ * Reconstruct a marker-based template: swap each data-editable block's inner content
+ * for the user's edited text. Merge-token spans inside the original are preserved by
+ * re-merging any tokens the edit didn't keep, so auto-filled data never gets lost.
+ */
+function reconstructByMarkers(html: string, editedSections: Map<string, string>): string {
+  return html.replace(
+    /(<(?:p|li)(?:\s[^>]*)?\sdata-editable=")([^"]+)("(?:\s[^>]*)?>)([\s\S]*?)(<\/(?:p|li)>)/g,
+    (full, open, edId, openEnd, origInner, close) => {
+      if (!editedSections.has(edId)) return full;
+      const edited = editedSections.get(edId)!;
+      // Keep any merge-token spans from the original that the plain-text edit dropped,
+      // appended after the edited text so the auto-filled data still renders.
+      const tokens = origInner.match(/<span class="merge-token"[\s\S]*?<\/span>/g) || [];
+      const keptText = escapeAndFormatHTML(edited);
+      const tokensTail = tokens.length && !/\[[\w./-]+\]/.test(edited)
+        ? ' ' + tokens.join(' ')
+        : '';
+      return `${open}${edId}${openEnd}${keptText}${tokensTail}${close}`;
+    }
+  );
 }
 
 /**
@@ -253,6 +332,11 @@ export function reconstructHTML(
   parsedSections?: EditableSection[]
 ): string {
   let reconstructed = originalHTML;
+
+  // V07+ marker path mirrors the marker-based parse.
+  if (/data-editable\s*=/.test(originalHTML)) {
+    return reconstructByMarkers(originalHTML, editedSections);
+  }
 
   // Subject line is now editable, so reconstruct entire HTML
   return reconstructSections(originalHTML, editedSections, parsedSections);

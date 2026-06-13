@@ -73,15 +73,17 @@ export async function saveTemplate({
  */
 export async function loadAllTemplates(): Promise<LOETemplate[]> {
   try {
-    // PREVIEW PICKER: surface only ACTIVE templates (Ben 2026-06-10 — the picker must offer
-    // ONLY the current default LOE-07-1, not stale versions). Old versions are is_active=false
-    // (hidden, NOT deleted — still recoverable + still loadable by id via loadTemplateById for
-    // reproducibility of already-sent LOEs). The SEND path is a SEPARATE loader (loadTemplateRow,
-    // newest-ACTIVE in generateLOE.ts) and is unaffected by this filter.
+    // PREVIEW PICKER: surface ALL templates (active or not) so every version — including the
+    // older ones built in the parser-friendly layout — is selectable to view/edit. This restores
+    // the rich editor (Ben 2026-06-13): the older versions carry the section classes templateParser
+    // understands, so picking them lights up many editable sections. The current default LOE-07-1
+    // stays the default (ordered first below) and is NOT touched. The SEND path is a SEPARATE loader
+    // (loadTemplateRow, newest-ACTIVE in generateLOE.ts) — surfacing a template here does NOT put it
+    // in the send path. Old versions are is_active=false (recoverable, loadable by id) — un-hidden
+    // here only for the picker.
     const { data, error } = await supabase
       .from('loe_templates')
       .select('*')
-      .eq('is_active', true)
       .order('is_default', { ascending: false })
       .order('version', { ascending: false });
 

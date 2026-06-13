@@ -45,6 +45,7 @@ _(The router above sends you to the right doc; this jumps you to a section on TH
 
 1. [Significant Features](#1-significant-features)
 2. [Accounts & Access](#2-accounts-access)
+   - [Deployment & Environments](#deployment--environments)
 3. [Testing](#3-testing)
 4. [Reference](#4-reference)
 5. [Status & Filing](#5-status-filing)
@@ -144,6 +145,31 @@ Every integration runs on **Ben's own test account** today and migrates to the *
 - `[ ]` **Client Valta ClickUp — template setup.** The ClickUp API **cannot SAVE a task template (UI-only)** — it can only *apply* `t-86b3exqe8` + create-with-custom-fields. Saving a NEW template = a Codex in-app job (login-gated UI). Plan: Codex logs in via Ben's account → builds the task with all custom fields in the Valta space → "Save as Template."
 
 **APR power tools (ready, don't re-search):** `/cli-clickup-tools` (60 cmds) · `/cli-apr-tools` (Valcre/DocuSeal/Supabase/intake) · `/supabase-deploy` · `/guide-vercel-deploy` · `/codex-in-app-ops` (for the login-gated ClickUp-template-into-Valta task). *Reusable Codex delegation patterns now live on the [Workflows Dashboard](~/.claude/knowledge/WORKFLOWS-DASHBOARD.md).*
+
+---
+
+## Deployment & Environments
+
+**Two separate apps, one shared database.** The local app and the deployed app run *different code*, but both read and write the *same single Supabase database in the cloud* — there is no separate local database. Mental model: **one warehouse (the database), two storefronts (the apps).** A code change lives in only one storefront until deployed; anything written to the database is seen by both.
+
+| | Local (dev) | Deployed (production) |
+|---|---|---|
+| **URL** | `http://localhost:8086` (dev port set in `vite.config.ts` — NOT 5173, that's KM-Exp) | `https://apr-dashboard-v3.vercel.app` (Vercel; the live Valta-facing site) |
+| **Code** | Your working copy on this machine. Edits + uncommitted work show up here instantly (Vite hot-reload). | Whatever was last shipped with `vercel --prod`. Local edits are invisible here until deployed. |
+| **Database** | Shared cloud Supabase (`ngovnamnjmexdpjtcnky`) | **Same** shared cloud Supabase |
+| **Client intake form** | mirrors the live form | Hosted on the Valta site: `https://valta.ca/request-appraisal/intake` (`?test=true` for test mode) |
+
+### How we use each
+
+- **Local is the build + test surface.** It's where agents do the work — full headless browser driving (agent-browser on port 8086), DOM inspection, screenshots, and direct API/DB calls. Faster, safer, and you can see uncommitted changes immediately. All design + verification happens here first.
+
+- **Deployed is the live client-facing site.** It only changes on a deliberate `vercel --prod` push (see `/guide-vercel-deploy`). Nothing reaches the client until it's deployed.
+
+### The one thing to watch — the shared database
+
+Because the database is shared, **a row written from local is also present for the deployed app.** It usually stays invisible/inert on production anyway (e.g. an inactive LOE template won't list or send there), but the data itself is live. So: **code changes are safely isolated to local; database writes are not.** When testing locally, prefer rows that are flagged inactive / non-default so production never surfaces or acts on them.
+
+**Deploy command:** `cd ~/Development/APR-Dashboard-v3 && vercel --prod` (build locally first with `npm run build` to catch errors). Never deploy without Ben's go.
 
 ---
 

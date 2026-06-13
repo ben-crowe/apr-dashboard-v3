@@ -15,4 +15,8 @@ export interface SectionProps {
   /** Bumped by Fill/Clear to reset the cascade picker (cascadePicked + version label) back to the
    *  unpicked "default cleared" state, so the cascade cluster shows placeholders until a fresh pick. */
   cascadeResetToken?: number;
+  /** "Insert from data" toggle (mock parity): when ON, Section 1's Property Type / Subtype / Tenancy
+   *  light yellow and map into Section 2 (mirrors + Property Rights). Shared across Section 1 + 2. */
+  insertFromData?: boolean;
+  setInsertFromData?: (v: boolean) => void;
 }

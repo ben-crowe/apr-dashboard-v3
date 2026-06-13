@@ -28,8 +28,19 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   onUpdateJob,
   onUpdateDetails,
   jobDetails,
-  testMode = false
+  testMode = false,
+  insertFromData = false
 }) => {
+  // Source fields (Property Type / Subtype / Tenancy) light yellow when "Insert from data" maps them
+  // into Section 2's cascade — mirrors the mock's src-mapped highlight.
+  const srcTint = (filled: unknown): React.CSSProperties | undefined =>
+    testMode && insertFromData && filled
+      ? { background: '#fef9c3', borderBottomColor: '#eab308', color: '#1f2937', borderRadius: 4, paddingLeft: 6, paddingRight: 6 }
+      : undefined;
+  const srcTriggerCls = (filled: unknown): string =>
+    testMode && insertFromData && filled
+      ? 'h-7 text-sm w-[160px] border-0 border-b'
+      : 'h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none';
   const [isOpen, setIsOpen] = useState(true);
   
   // Auto-save state for section-level spinner
@@ -413,7 +424,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('propertyType', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                <SelectTrigger className={srcTriggerCls(job.propertyType)} style={srcTint(job.propertyType) || { paddingLeft: 0, paddingRight: 0 }}>
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -445,7 +456,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   onUpdateDetails?.({ propertySubtype: v });
                 }}
               >
-                <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                <SelectTrigger className={srcTriggerCls(jobDetails?.propertySubtype)} style={srcTint(jobDetails?.propertySubtype) || { paddingLeft: 0, paddingRight: 0 }}>
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -468,7 +479,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   onUpdateDetails?.({ tenancy: v });
                 }}
               >
-                <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                <SelectTrigger className={srcTriggerCls(jobDetails?.tenancy)} style={srcTint(jobDetails?.tenancy) || { paddingLeft: 0, paddingRight: 0 }}>
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>
@@ -506,7 +517,16 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                   autoSaveField('intendedUse', v);
                 }}
               >
-                <SelectTrigger className="h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none" style={{ paddingLeft: 0, paddingRight: 0 }}>
+                {/* Provenance: Authorized Use shades ORANGE only while it's the active Insurance override
+                    (Test Mode + value = Insurance) — mirrors the mock; resting look stays unshaded. */}
+                <SelectTrigger
+                  className={testMode && job.intendedUse === 'Insurance'
+                    ? 'h-7 text-sm w-[160px] border-0 border-b px-1.5'
+                    : 'h-7 text-sm w-[160px] !bg-transparent border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] !rounded-none'}
+                  style={testMode && job.intendedUse === 'Insurance'
+                    ? { background: '#ffedd5', borderBottomColor: '#f97316', color: '#1f2937', borderRadius: 4 }
+                    : { paddingLeft: 0, paddingRight: 0 }}
+                >
                   <SelectValue placeholder="Select..." />
                 </SelectTrigger>
                 <SelectContent>

@@ -47,14 +47,55 @@ const derivedFieldStyle: React.CSSProperties = {
   pointerEvents: 'none' as const,
 };
 
+// Provenance colors — mirror the mock (public/field-registry-v6.html). Each color is locked to the
+// DESTINATION field so the box "tells the truth" about what drives it. Applied ONLY while Test Mode is
+// on AND the field is actively driven, so the normal (resting) locked-field look stays unshaded.
+const PROV = {
+  status:     { bg: '#dcfce7', bd: '#22c55e' }, // green  — Status of Improvements (2.4)
+  auth:       { bg: '#ffedd5', bd: '#f97316' }, // orange — Authorized Use (1.13)
+  scenarios:  { bg: '#ffe4e6', bd: '#f43f5e' }, // rose   — Value Scenarios (2.5)
+  approaches: { bg: '#dbeafe', bd: '#3b82f6' }, // blue   — Approaches to Value (2.9)
+  source:     { bg: '#fef9c3', bd: '#eab308' }, // yellow — insert-from-data sources
+} as const;
+
+// Derived-field box style, optionally tinted with a provenance color. Tinting adds padding + radius so
+// the shaded box reads as a chip; null key → plain derived look (unshaded, as Ben locked it at rest).
+const provStyle = (key: keyof typeof PROV | null): React.CSSProperties =>
+  key
+    ? {
+        ...derivedFieldStyle,
+        background: PROV[key].bg,
+        borderBottomColor: PROV[key].bd,
+        color: '#1f2937',        // dark slate — readable on the light pastel in BOTH light + dark mode
+        paddingLeft: 6,
+        paddingRight: 6,
+        borderRadius: 4,
+      }
+    : derivedFieldStyle;
+
+// Name-segment colors for the cascade picker labels (mirror the mock's cv-* spans).
+const CV = { left: '#15803d', leftAu: '#f59e0b', scen: '#be123c', appr: '#1d4ed8' } as const;
+
+// The four scenario choices. `left` is the driving outcome word (green for V1–V3 Status, amber for V4
+// Authorized Use); `scen`/`appr` are the derived Value Scenarios / Approaches the choice produces.
+const CASCADE_OPTIONS = [
+  { v: 'V1', left: 'Completed',                scen: 'As Stabilized',                                appr: 'Direct Comparison + Income' },
+  { v: 'V2', left: 'Under Renovation',         scen: 'As-Is + As If Complete & Stabilized',          appr: 'Direct Comparison + Income + Cost' },
+  { v: 'V3', left: 'Improved Land (Demo Req)', scen: 'As If Vacant Land + As If Complete & Stabilized', appr: 'Land Direct Comparison + Cost' },
+  { v: 'V4', left: 'Insurance',                scen: 'Insurable Replacement Cost',                   appr: 'Cost Approach' },
+] as const;
+
 const LoeQuoteSection: React.FC<SectionProps> = ({
   job,
   jobDetails = {},
   onUpdateDetails,
+  onUpdateJob,
   refetchJobData,
   testFilled = false,
   testMode = false,
-  cascadeResetToken = 0
+  cascadeResetToken = 0,
+  insertFromData = false,
+  setInsertFromData
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isCreatingJob, setIsCreatingJob] = useState(false);
@@ -79,6 +120,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // RULE 2 — Value Scenarios locks ONLY after a cascade pick (default: editable multi-select).
   const [cascadePicked, setCascadePicked] = useState(false);
   const [cascadeVersion, setCascadeVersion] = useState(''); // held selection for the top cascade picker (so the label persists, not resets)
+  // Stash the user's real Authorized Use (intendedUse) BEFORE the V4 Insurance override replaces it,
+  // so Clear / switching to V1–V3 restores it (matches the mock's data-intake behavior). Never blanked.
+  const preInsuranceIntendedUse = useRef<string>('');
+  // Stash the mapped source values when "Insert from data" is UNCHECKED, so re-checking re-injects them
+  // (mock parity: ON re-fills from base, OFF empties all six source/mirror fields + strips the yellow).
+  const mappedSources = useRef<{ propertyType: string; propertySubtype: string; tenancy: string }>({ propertyType: '', propertySubtype: '', tenancy: '' });
 
   // Fill/Clear bump cascadeResetToken → snap the picker back to its unpicked "default cleared" state.
   useEffect(() => {
@@ -633,7 +680,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // Part C — Cascade Effect: re-derive valueScenarios whenever statusOfImprovements or authorizedUse changes.
   // Writes result to jobDetails.valueScenarios via onUpdateDetails + persists via autoSaveField.
   const statusOfImprovements = (jobDetails as any).statusOfImprovements as string | undefined;
-  const authorizedUse = (jobDetails as any).authorizedUse as string | undefined;
+  // UNIFIED 2026-06-12 (Ben-approved): the cascade's Insurance override reads the SAME field the user
+  // sees + sets in Section 1 — `intendedUse` (labelled "Authorized Use"). It lives on the JOB object
+  // (job_submissions), updated via onUpdateJob — NOT on jobDetails. Reading it here means a manual
+  // Section-1 "Insurance" pick fires the override, and V4 writing job.intendedUse colors Section 1 orange.
+  const authorizedUse = (job as any)?.intendedUse as string | undefined;
 
   useEffect(() => {
     if (!onUpdateDetails) return;
@@ -664,16 +715,17 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const primaryPropertyType = (job?.propertyType || '').split(',')[0].trim();
   useEffect(() => {
     if (!onUpdateDetails) return;
-    // Demo gate: on a test-filled job, hold Property Rights empty until a cascade scenario is picked,
-    // so the whole derived cluster comes alive together. A real (never-filled) job derives normally.
-    if (testFilled && !cascadePicked) return;
+    // Property Rights is SOURCE-driven (Type / Subtype / Tenancy), NOT scenario-driven — so it derives
+    // as soon as Fill inserts the sources (lit yellow), independent of the scenario picker. This mirrors
+    // the mock's decoupling: the picker drives Status / Value Scenarios / Approaches; Fill drives the
+    // source chain + Property Rights.
     const rights = derivePropertyRights(primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy);
     if (!rights) return; // no match -> leave field as-is ("Pending"); don't blank an existing value
     if (rights === (jobDetails.propertyRightsAppraised || '')) return; // loop guard
     onUpdateDetails({ propertyRightsAppraised: rights });
     autoSaveField('propertyRightsAppraised', rights);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy, testFilled, cascadePicked]);
+  }, [primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy]);
 
 
   // Cleanup timers on unmount
@@ -918,53 +970,103 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     if (!onUpdateDetails) return;
     // Stop the Fill-Test-Data attention pulse the moment a version is picked.
     document.getElementById('cascade-options-anchor')?.classList.remove('cascade-pulse');
+
+    // Authorized Use (intendedUse) lives on the JOB object — write it via onUpdateJob (the same path
+    // Section 1 uses), so Section 1 sees "Insurance" + colors orange. If we're LEAVING the V4 override,
+    // restore the value we stashed when V4 was entered.
+    const leavingOverride = cascadeVersion === 'V4' && (job as any)?.intendedUse === 'Insurance';
+    const restoreAuthorizedUse = () => {
+      if (leavingOverride && onUpdateJob) onUpdateJob({ intendedUse: preInsuranceIntendedUse.current || '' } as any);
+    };
+
     if (version === '__CLEAR__') {
-      // Scoped Clear — resets ONLY the cascade section, leaves all other fields untouched.
+      // Scoped Clear — resets ONLY the cascade cluster; restores Authorized Use if V4 had overridden it.
       setCascadeVersion('');
       setCascadePicked(false);
       onUpdateDetails({ statusOfImprovements: '', valueScenarios: '', approachesToValue: '' } as any);
       autoSaveField('statusOfImprovements', '');
       autoSaveField('valueScenarios', '');
       autoSaveField('approachesToValue', '');
+      restoreAuthorizedUse();
       return;
     }
     setCascadePicked(true); // lock Value Scenarios display to derived result
     setCascadeVersion(version); // hold the picked version so the picker label persists (e.g. "V2 — Under Renovation")
 
+    // SCENARIO-ONLY, mirroring the mock: V1–V3 set Status of Improvements; V4 DASHES Status and sets
+    // Authorized Use → Insurance. Value Scenarios / Approaches / Property Rights all DERIVE via the
+    // effects — the picker no longer force-sets premise / scope / rights / asset-condition (dropped per
+    // Ben for exact mock parity). Status is ONE batched onUpdateDetails (stale-merge guard); Authorized
+    // Use goes through onUpdateJob (its real store).
     if (version === 'V1') {
-      onUpdateDetails({
-        statusOfImprovements: 'Improved - Completed',
-      } as any);
+      onUpdateDetails({ statusOfImprovements: 'Improved - Completed' } as any);
       autoSaveField('statusOfImprovements', 'Improved - Completed');
+      restoreAuthorizedUse();
     } else if (version === 'V2') {
-      onUpdateDetails({
-        statusOfImprovements: 'Improved - Under Renovation',
-      } as any);
+      onUpdateDetails({ statusOfImprovements: 'Improved - Under Renovation' } as any);
       autoSaveField('statusOfImprovements', 'Improved - Under Renovation');
+      restoreAuthorizedUse();
     } else if (version === 'V3') {
-      onUpdateDetails({
-        statusOfImprovements: 'Proposed - Improved Land (Demolition Required)',
-        propertyRightsAppraised: 'Fee Simple Interest',
-        scopeOfWork: 'Direct Comparison Approach',
-        assetCondition: 'Poor',
-      } as any);
+      onUpdateDetails({ statusOfImprovements: 'Proposed - Improved Land (Demolition Required)' } as any);
       autoSaveField('statusOfImprovements', 'Proposed - Improved Land (Demolition Required)');
-      autoSaveField('propertyRightsAppraised', 'Fee Simple Interest');
-      autoSaveField('scopeOfWork', 'Direct Comparison Approach');
+      restoreAuthorizedUse();
     } else if (version === 'V4') {
-      onUpdateDetails({
-        statusOfImprovements: 'Improved - Completed',
-        authorizedUse: 'Insurance',
-        valuationPremises: 'Insurable Value',
-        scopeOfWork: 'Cost Approach',
-        propertyRightsAppraised: 'Fee Simple Interest',
-      } as any);
-      autoSaveField('statusOfImprovements', 'Improved - Completed');
-      autoSaveField('authorizedUse', 'Insurance');
-      autoSaveField('valuationPremises', 'Insurable Value');
-      autoSaveField('scopeOfWork', 'Cost Approach');
-      autoSaveField('propertyRightsAppraised', 'Fee Simple Interest');
+      // Stash the real Authorized Use before the Insurance override (only on a fresh entry into V4).
+      if (cascadeVersion !== 'V4') preInsuranceIntendedUse.current = (job as any)?.intendedUse || '';
+      onUpdateDetails({ statusOfImprovements: '' } as any); // Status dashes on the Insurance scenario
+      autoSaveField('statusOfImprovements', '');
+      if (onUpdateJob) onUpdateJob({ intendedUse: 'Insurance' } as any); // → Section 1 shows Insurance + orange
     }
+  };
+
+  // "Insert from data" toggle — mock parity (toggleInsertFromData). ON re-injects the source chain
+  // (Property Type / Subtype / Tenancy → Section 2 mirrors + Property Rights) and lights it yellow;
+  // OFF empties ALL SIX back to placeholders and strips the yellow. Re-check restores the stashed set.
+  const handleInsertFromData = (checked: boolean) => {
+    if (checked) {
+      const s = mappedSources.current;
+      if (s.propertyType || s.propertySubtype || s.tenancy) {
+        if (onUpdateJob) onUpdateJob({ propertyType: s.propertyType } as any);
+        onUpdateDetails?.({ propertySubtype: s.propertySubtype, tenancy: s.tenancy } as any);
+      }
+      setInsertFromData?.(true); // Property Rights re-derives via Part E from the restored sources
+    } else {
+      // Stash the current source values so re-check can re-inject them, then empty all six.
+      mappedSources.current = {
+        propertyType: (job as any)?.propertyType || '',
+        propertySubtype: (jobDetails as any)?.propertySubtype || '',
+        tenancy: (jobDetails as any)?.tenancy || '',
+      };
+      if (onUpdateJob) onUpdateJob({ propertyType: '' } as any);
+      onUpdateDetails?.({ propertySubtype: '', tenancy: '', propertyRightsAppraised: '' } as any);
+      setInsertFromData?.(false);
+    }
+  };
+
+  // Render a cascade-cluster derived value, mirroring the mock:
+  //  • before any scenario is picked (idle)  → the dim "from X" placeholder
+  //  • picked but this field isn't driven      → the dash "—" (the dash rule)
+  //  • has a value                             → the value, truncated with a hover title
+  //  • Test-Mode + driven                       → provenance tint on the box (else unshaded at rest)
+  const renderDerived = (
+    value: string,
+    placeholder: string,
+    tintKey: keyof typeof PROV | null,
+    tooltip: string,
+    maxW = 'max-w-[220px]',
+  ): React.ReactNode => {
+    const tinted = testMode ? tintKey : null;
+    // Dark text in light mode (Ben), themed-light only in dark mode when NOT on a pastel chip.
+    const valueTextClass = tinted ? 'text-slate-900' : 'text-slate-900 dark:text-slate-100';
+    let body: React.ReactNode;
+    if (cascadeIdle) body = <span className="text-zinc-400">{placeholder}</span>;
+    else if (value) body = <span className={`truncate min-w-0 flex-1 ${valueTextClass}`}>{value}</span>;
+    else body = <span className="text-zinc-400">{cascadePicked ? '—' : placeholder}</span>;
+    return (
+      <div style={provStyle(tinted)} className={maxW} title={value || tooltip}>
+        {body}
+      </div>
+    );
   };
 
   // ClickUp task URL derived from job fields
@@ -1201,14 +1303,33 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           <div id="cascade-options-anchor">
             <Select value={cascadeVersion} onValueChange={handleCascadeVersion}>
               <SelectTrigger className="h-8 px-3 text-xs gap-1 rounded-md border border-border bg-background min-w-[230px]">
-                <SelectValue placeholder="Cascade Options — pick a scenario" />
+                {/* Trigger shows the FULL colored name — "V# — choice = scenarios & approaches" — exactly
+                    like the mock, not a shortened label. */}
+                {(() => {
+                  const o = CASCADE_OPTIONS.find(x => x.v === cascadeVersion);
+                  return o ? (
+                    <span className="whitespace-nowrap">
+                      {o.v} — <span style={{ color: o.v === 'V4' ? CV.leftAu : CV.left, fontWeight: 600 }}>{o.left}</span>
+                      {' = '}<span style={{ color: CV.scen, fontWeight: 600 }}>{o.scen}</span>
+                      {' & '}<span style={{ color: CV.appr, fontWeight: 600 }}>{o.appr}</span>
+                    </span>
+                  ) : (
+                    <span className="text-muted-foreground">Cascade Options — pick a scenario</span>
+                  );
+                })()}
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="__CLEAR__" className="text-muted-foreground border-b border-border mb-1">Clear — reset to empty</SelectItem>
-                <SelectItem value="V1">V1 — Completed</SelectItem>
-                <SelectItem value="V2">V2 — Under Renovation</SelectItem>
-                <SelectItem value="V3">V3 — Improved Land / Demolition</SelectItem>
-                <SelectItem value="V4">V4 — Insurance</SelectItem>
+                {CASCADE_OPTIONS.map(o => (
+                  <SelectItem key={o.v} value={o.v} textValue={`${o.v} — ${o.left}`}>
+                    <span>{o.v} — </span>
+                    <span style={{ color: o.v === 'V4' ? CV.leftAu : CV.left, fontWeight: 600 }}>{o.left}</span>
+                    <span> = </span>
+                    <span style={{ color: CV.scen, fontWeight: 600 }}>{o.scen}</span>
+                    <span> & </span>
+                    <span style={{ color: CV.appr, fontWeight: 600 }}>{o.appr}</span>
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -1270,81 +1391,135 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
         {/* 4. Value Scenarios & Approaches */}
         <SectionGroup title="Value Scenarios & Approaches">
+          {/* Insert-from-data toggle (mock parity) — checking it maps Section 1's Property Type /
+              Subtype / Tenancy into the cascade and lights those source fields (here + Section 1) yellow.
+              Test tool, shown only in Test Mode. */}
+          {testMode && (
+            <label className="flex items-center gap-2 mb-3 text-xs text-foreground cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={insertFromData}
+                onChange={e => handleInsertFromData(e.target.checked)}
+                className="h-3.5 w-3.5 accent-[#eab308] cursor-pointer"
+              />
+              Insert from data — map Type / Subtype / Tenancy into the cascade
+            </label>
+          )}
           <TwoColumnFields>
             {/* Status of Improvements — moved here 2026-06-10 (was in body "Cascade Options" group, now matches mock 2.4).
                 Real user field + the cascade driver. Starts blank (no preset). */}
             <CompactField label="Status of Improvements">
-              <Select
-                value={(jobDetails as any).statusOfImprovements || ''}
-                onValueChange={value => {
-                  if (!onUpdateDetails) return;
-                  setCascadePicked(true); // a status drives the cascade → lock Value Scenarios to derived result
-                  onUpdateDetails({ statusOfImprovements: value } as any);
-                  autoSaveField('statusOfImprovements', value);
-                }}
-              >
-                <SelectTrigger className="h-7 text-sm max-w-[220px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.keys(STATUS_TO_SCENARIOS).map(key => (
-                    <SelectItem key={key} value={key}>{key}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              {testMode && cascadeVersion === 'V4' ? (
+                // Dash rule: the Insurance scenario is driven by Authorized Use, so Status does not apply.
+                <div style={provStyle(null)} className="max-w-[220px]" title="The Insurance scenario is driven by Authorized Use — Status does not apply.">
+                  <span className="text-zinc-400">—</span>
+                </div>
+              ) : (
+                <Select
+                  value={(jobDetails as any).statusOfImprovements || ''}
+                  onValueChange={value => {
+                    if (!onUpdateDetails) return;
+                    setCascadePicked(true); // a status drives the cascade → lock Value Scenarios to derived result
+                    onUpdateDetails({ statusOfImprovements: value } as any);
+                    autoSaveField('statusOfImprovements', value);
+                  }}
+                >
+                  <SelectTrigger
+                    style={testMode && cascadePicked && (jobDetails as any).statusOfImprovements ? { background: PROV.status.bg, borderBottomColor: PROV.status.bd, color: '#1f2937', borderRadius: 4 } : undefined}
+                    className={testMode && cascadePicked && (jobDetails as any).statusOfImprovements
+                      ? 'h-7 text-sm max-w-[220px] border-0 border-b px-1.5'
+                      : 'h-7 text-sm max-w-[220px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0'}
+                  >
+                    <SelectValue placeholder="Select..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.keys(STATUS_TO_SCENARIOS).map(key => (
+                      <SelectItem key={key} value={key}>{key}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             </CompactField>
             <CompactField label="Value Scenarios" status={fieldStates['valueScenarios']}>
-              {/* Locked derived result — matches the mock: NO in-field picker. Value Scenarios is
-                  driven by the cascade (Status of Improvements via the separate Cascade Options
-                  picker), never selected here. Always italic + non-editable. */}
-              <div style={derivedFieldStyle} className="max-w-[220px]" title="Computed from Status of Improvements + your Authorized Use (from Section 1).">
-                {(!cascadeIdle && deriveValueScenarios(statusOfImprovements, authorizedUse).join(', ')) || <span className="text-zinc-400">from Status</span>}
-              </div>
+              {/* Derived (rose) — driven by Status of Improvements + Authorized Use via the cascade. */}
+              {(() => {
+                const v = deriveValueScenarios(statusOfImprovements, authorizedUse).join(', ');
+                return renderDerived(v, 'from Status of Impr. (2.4)', v ? 'scenarios' : null,
+                  'Computed from Status of Improvements + your Authorized Use (from Section 1).');
+              })()}
             </CompactField>
             <CompactField label="Property Rights" status={fieldStates['propertyRightsAppraised']}>
-              {/* CORRECTION: locked result display (no live compute yet). Always read-only; tooltip
-                  signals it auto-fills from triggers TBD. Still binds to jobDetails key. */}
-              <div
-                style={derivedFieldStyle}
-                className="max-w-[220px]"
-                title="Auto-derived from Property Type, Subtype & Tenancy."
-              >
-                {(!cascadeIdle && derivePropertyRights(primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy)) || <span className="text-zinc-400">from Property Type</span>}
-              </div>
+              {/* Source-driven (yellow) from Type / Subtype / Tenancy — maps in only when "Insert from
+                  data" is on, exactly like the mock; otherwise reads "from Tenancy (1.11)". */}
+              {(() => {
+                const v = derivePropertyRights(primaryPropertyType, (jobDetails as any).propertySubtype, (jobDetails as any).tenancy);
+                const mapped = !testMode || insertFromData;
+                const tinted = testMode && insertFromData && v ? 'source' : null;
+                return (
+                  <div style={provStyle(tinted)} className="max-w-[220px]" title={v || 'Auto-derived from Property Type, Subtype & Tenancy.'}>
+                    {mapped && v
+                      ? <span className={`truncate min-w-0 flex-1 ${tinted ? 'text-slate-900' : 'text-slate-900 dark:text-slate-100'}`}>{v}</span>
+                      : <span className="text-zinc-400">from Tenancy (1.11)</span>}
+                  </div>
+                );
+              })()}
             </CompactField>
             <CompactField label="Approaches to Value">
-              {/* CORRECTION: locked result display (no live compute yet). Always read-only; tooltip
-                  signals it auto-fills from triggers TBD. Still binds to jobDetails key. */}
-              <div
-                style={derivedFieldStyle}
-                className="max-w-[220px]"
-                title="Auto-derived from Status of Improvements."
-              >
-                {(!cascadeIdle && deriveApproaches(statusOfImprovements, authorizedUse).join(', ')) || <span className="text-zinc-400">from Status</span>}
-              </div>
+              {/* Derived (blue) — driven by Status of Improvements via the cascade. */}
+              {(() => {
+                const v = deriveApproaches(statusOfImprovements, authorizedUse).join(', ');
+                return renderDerived(v, 'from Status of Impr. (2.4)', v ? 'approaches' : null,
+                  'Auto-derived from Status of Improvements.');
+              })()}
             </CompactField>
-            {/* READ-ONLY: sourced from Section 1 / job_property_info. Set via client intake or Section 1. */}
+            {/* MIRROR of Section 1. Maps in (shows value + yellow) only when "Insert from data" is on; in
+                Test Mode while unchecked it reads "from Subtype (1.10)" to show it's not yet mapped. */}
             <CompactField label="Property Subtype">
-              <div style={derivedFieldStyle} className="max-w-[160px]" title="Set in Section 1 — Property Information.">
-                {(jobDetails as any).propertySubtype || <span className="text-zinc-400">from Section 1</span>}
-              </div>
+              {(() => {
+                const v = (jobDetails as any).propertySubtype;
+                const mapped = !testMode || insertFromData;
+                const tinted = testMode && insertFromData && v ? 'source' : null;
+                return (
+                  <div style={provStyle(tinted)} className="max-w-[160px]" title="Maps from Property Subtype in Section 1.">
+                    {mapped && v
+                      ? <span className="truncate min-w-0 flex-1 text-slate-900 dark:text-slate-100">{v}</span>
+                      : <span className="text-zinc-400">from Subtype (1.10)</span>}
+                  </div>
+                );
+              })()}
             </CompactField>
-            {/* READ-ONLY: sourced from Section 1 / job_property_info. Set via client intake or Section 1. */}
+            {/* MIRROR of Section 1 — same insert-from-data gating as Property Subtype. */}
             <CompactField label="Tenancy">
-              <div style={derivedFieldStyle} className="max-w-[160px]" title="Set in Section 1 — Property Information.">
-                {(jobDetails as any).tenancy || <span className="text-zinc-400">from Section 1</span>}
-              </div>
+              {(() => {
+                const v = (jobDetails as any).tenancy;
+                const mapped = !testMode || insertFromData;
+                const tinted = testMode && insertFromData && v ? 'source' : null;
+                return (
+                  <div style={provStyle(tinted)} className="max-w-[160px]" title="Maps from Tenancy in Section 1.">
+                    {mapped && v
+                      ? <span className="truncate min-w-0 flex-1 text-slate-900 dark:text-slate-100">{v}</span>
+                      : <span className="text-zinc-400">from Tenancy (1.11)</span>}
+                  </div>
+                );
+              })()}
             </CompactField>
-            {/* MOVED 2026-06-10 from Data Gathering (PropertyInfoSection Appraisal Assignment) — binding/handler/options preserved verbatim. */}
+            {/* MOVED 2026-06-10 from Data Gathering. Dash rule: a picked scenario does not set a timeframe,
+                so in Test Mode it shows "—" once a scenario is active (mirrors the mock). */}
             <CompactField label="Value Timeframe">
-              <Select value={jobDetails.valueTimeframe || ''} onValueChange={value => handleSelectChange(value, 'valueTimeframe')}>
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Current">Current</SelectItem>
-                  <SelectItem value="Retrospective">Retrospective</SelectItem>
-                  <SelectItem value="Prospective">Prospective</SelectItem>
-                </SelectContent>
-              </Select>
+              {testMode && cascadePicked ? (
+                <div style={provStyle(null)} className="max-w-[160px]" title="Not set by the selected scenario.">
+                  <span className="text-zinc-400">—</span>
+                </div>
+              ) : (
+                <Select value={jobDetails.valueTimeframe || ''} onValueChange={value => handleSelectChange(value, 'valueTimeframe')}>
+                  <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Current">Current</SelectItem>
+                    <SelectItem value="Retrospective">Retrospective</SelectItem>
+                    <SelectItem value="Prospective">Prospective</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
             </CompactField>
           </TwoColumnFields>
         </SectionGroup>

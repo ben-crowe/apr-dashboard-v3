@@ -36,6 +36,9 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
   const [testFilled, setTestFilled] = React.useState(false);
   // Bumped on Fill/Clear to snap the cascade picker back to its unpicked default.
   const [cascadeResetToken, setCascadeResetToken] = React.useState(0);
+  // "Insert from data" toggle (mock parity) — shared by Section 1 (source fields yellow) and
+  // Section 2 (the checkbox + mirror/Property-Rights mapping). OFF by default; reset on Fill/Clear.
+  const [insertFromData, setInsertFromData] = React.useState(false);
 
   const handleFillTestData = () => {
     if (isLiveValcreJob) {
@@ -57,7 +60,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         propertyName: 'Riverside Commerce Centre',
         propertyAddress: '4820 Macleod Trail SE, Calgary, AB T2G 0A5',
         propertyType: 'Industrial',
-        intendedUse: 'Financial Reporting',
+        intendedUse: 'First Mortgage Financing', // mock intake Authorized Use; V4 overrides → Insurance, Clear restores this
         assetCondition: 'Good',
         valuationPremises: 'Market Value',
         propertyContactFirstName: 'Daniel',
@@ -72,9 +75,10 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
       onUpdateDetails({
         // Section 2 — LOE Quote (base, no cascade inputs). statusOfImprovements/valueScenarios/
         // authorizedUse/propertyRightsAppraised/approachesToValue omitted — set by Cascade Options.
-        propertySubtype: 'Multi-Tenant Industrial',
+        propertySubtype: 'Mixed-Use', // mock 'Mixed Use' → live option is hyphenated 'Mixed-Use' (space = blank)
         tenancy: 'Multi-Tenant',
-        valueTimeframe: 'Current',
+        // valueTimeframe intentionally NOT filled — the mock skips it (FILL_SKIP) and the scenario
+        // dash-rule shows it as "—". Filling it diverged from the mock.
         scopeOfWork: 'Income Approach',
         reportType: 'Appraisal Report',
         reportFormat: 'Comprehensive',
@@ -89,8 +93,8 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         deliveryTime: '4',
         clientDocuments: 'Rent Roll,Historical Operating Expenses,Purchase & Sale Agreement',
         previouslyAppraised: 'No',
-        currentUse: 'Multi-tenant industrial / warehouse',
-        proposedUse: 'Multi-tenant industrial / warehouse',
+        currentUse: 'Industrial',   // must match a Current Use option (Vacant Land/Single Family/
+        proposedUse: 'Industrial',  // Multifamily/Retail/Industrial/Office) or the Select renders blank.
         cmhcFinancing: 'No',
         transactionStatus: 'Under Contract',
         zoningStatus: 'In Place',
@@ -113,10 +117,12 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         landAssessmentValue: 4200000,
         improvedAssessmentValue: 7200000,
         totalAssessmentValue: 11400000,
-        // Cascade-derived fields stay EMPTY after Fill (they fill only when a scenario is picked).
+        // Property Rights IS source-data (Type+Subtype+Tenancy → Leased Fee Interest, Tenancy wins) —
+        // the mock fills it on Fill + lights it yellow, so we set it here too (not scenario-gated).
+        propertyRightsAppraised: 'Leased Fee Interest',
+        // SCENARIO-derived fields stay EMPTY after Fill (they fill only when a scenario is picked).
         // These MUST live in this SINGLE update — a separate second onUpdateDetails call was
         // clobbering the whole object (stale-closure merge), which blanked all of Section 2.
-        propertyRightsAppraised: '',
         statusOfImprovements: '',
         valueScenarios: '',
         approachesToValue: '',
@@ -124,6 +130,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
     }
 
     setTestFilled(true);
+    setInsertFromData(true); // mock parity: Fill auto-checks "Insert from data" → sources light yellow + map now
     setCascadeResetToken((t) => t + 1); // snap the cascade picker back to "pick a scenario"
 
     void 0 /* success: silent (Ben) */;
@@ -149,6 +156,8 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
     if (onUpdateJob) onUpdateJob(Object.fromEntries(jobKeys.map((k) => [k, ''])) as any);
     if (onUpdateDetails) onUpdateDetails(Object.fromEntries(detailKeys.map((k) => [k, ''])) as any);
     setTestFilled(false); // back to real-job behavior — cascade derives naturally again
+    setInsertFromData(false);
+    setCascadeResetToken((t) => t + 1);
     setCascadeResetToken((t) => t + 1);
     void 0 /* success: silent (Ben) */;
   };
@@ -194,16 +203,20 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         onUpdateDetails={onUpdateDetails}
         onUpdateJob={onUpdateJob}
         testMode={testMode}
+        insertFromData={insertFromData}
       />
 
       <LoeQuoteSection
         job={job}
         jobDetails={jobDetails}
         onUpdateDetails={onUpdateDetails}
+        onUpdateJob={onUpdateJob}
         refetchJobData={refetchJobData}
         testMode={testMode}
         testFilled={testFilled}
         cascadeResetToken={cascadeResetToken}
+        insertFromData={insertFromData}
+        setInsertFromData={setInsertFromData}
       />
 
       <OrganizingDocsSection

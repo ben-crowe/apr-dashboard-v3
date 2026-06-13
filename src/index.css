@@ -59,22 +59,22 @@ textarea::-webkit-scrollbar-thumb {
 @layer base {
   :root {
     --background: 210 20% 98%;
-    --foreground: 220 10% 20%;
+    --foreground: 220 10% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 220 10% 20%;
+    --card-foreground: 220 10% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 220 10% 20%;
+    --popover-foreground: 220 10% 12%;
 
     --primary: 220 13% 18%;
     --primary-foreground: 210 40% 98%;
 
     --secondary: 210 20% 96%;
-    --secondary-foreground: 220 10% 20%;
+    --secondary-foreground: 220 10% 12%;
 
     --muted: 210 20% 94%;
-    --muted-foreground: 220 10% 40%;
+    --muted-foreground: 220 9% 33%;
 
     --accent: 220 13% 18%;
     --accent-foreground: 210 40% 98%;
@@ -89,11 +89,11 @@ textarea::-webkit-scrollbar-thumb {
     --radius: 0.5rem;
 
     --sidebar-background: 210 20% 98%;
-    --sidebar-foreground: 220 10% 40%;
+    --sidebar-foreground: 220 9% 33%;
     --sidebar-primary: 220 13% 18%;
     --sidebar-primary-foreground: 210 40% 98%;
     --sidebar-accent: 220 20% 94%;
-    --sidebar-accent-foreground: 220 10% 20%;
+    --sidebar-accent-foreground: 220 10% 12%;
     --sidebar-border: 220 15% 90%;
     --sidebar-ring: 220 13% 18%;
   }

@@ -37,22 +37,39 @@ export function parseTemplate(html: string): EditableSection[] {
  * (they carry no marker). data-removable on a heading flags an X-to-delete section.
  */
 function parseByMarkers(html: string): EditableSection[] {
-  // Build an ordered index of context anchors (headings + field labels) so each
-  // editable block can name itself after the part of the letter it sits under.
-  const anchors: Array<{ index: number; label: string }> = [];
-  const anchorRe = /<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>|<p class="field-label"[^>]*>([\s\S]*?)<\/p>/g;
-  let am: RegExpExecArray | null;
-  while ((am = anchorRe.exec(html)) !== null) {
-    const label = stripHTMLTags(am[1] ?? am[2] ?? '').trim();
-    if (label) anchors.push({ index: am.index, label });
+  // Two kinds of context anchor, tracked SEPARATELY so each editable block is labelled by its
+  // NUMBERED parent section (mirrors the template's 1–16 numbering) plus the specific field it
+  // sits under — e.g. "2. PROPERTY DESCRIPTION — Current Use of the Property". Without this the
+  // labels jump (field-names with no number for §1–3, then "4. PURPOSE…") and you can't follow
+  // them against the letter.
+  const sectionAnchors: Array<{ index: number; label: string }> = []; // h1/h3 — the numbered titles
+  const fieldAnchors: Array<{ index: number; label: string }> = [];   // <p class="field-label"> sub-labels
+  const secRe = /<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>/g;
+  let sa: RegExpExecArray | null;
+  while ((sa = secRe.exec(html)) !== null) {
+    const label = stripHTMLTags(sa[1]).trim();
+    if (label) sectionAnchors.push({ index: sa.index, label });
   }
+  const fldRe = /<p class="field-label"[^>]*>([\s\S]*?)<\/p>/g;
+  let fa: RegExpExecArray | null;
+  while ((fa = fldRe.exec(html)) !== null) {
+    const label = stripHTMLTags(fa[1]).trim();
+    if (label) fieldAnchors.push({ index: fa.index, label });
+  }
+  const lastBefore = (arr: Array<{ index: number; label: string }>, idx: number) => {
+    let best: { index: number; label: string } | null = null;
+    for (const a of arr) { if (a.index < idx) best = a; else break; }
+    return best;
+  };
   const labelFor = (idx: number): string => {
-    let best = '';
-    for (const a of anchors) {
-      if (a.index < idx) best = a.label;
-      else break;
-    }
-    return best || 'Section';
+    const sec = lastBefore(sectionAnchors, idx);
+    const fld = lastBefore(fieldAnchors, idx);
+    // The field-label only applies if it belongs to the CURRENT section (sits after its heading).
+    const fieldInSection = fld && (!sec || fld.index > sec.index) ? fld.label : '';
+    if (sec && fieldInSection) return `${sec.label} — ${fieldInSection}`;
+    if (sec) return sec.label;
+    if (fieldInSection) return fieldInSection;
+    return 'Cover Letter';
   };
 
   const sections: EditableSection[] = [];

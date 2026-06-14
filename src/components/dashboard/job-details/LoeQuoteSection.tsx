@@ -87,6 +87,37 @@ const CASCADE_OPTIONS = [
   { v: 'V4', left: 'Insurance',                scen: 'Insurable Replacement Cost',                   appr: 'Cost Approach' },
 ] as const;
 
+// ── Saved Documents: template-TYPE taxonomy (Version C pills) ────────────────────────
+// Base registry of document types. These ALWAYS render as pills — even at count 0 — so the
+// type taxonomy is visible/persistent (don't hide empty types). Only LOE is currently wired to
+// a real template; Client Letter / Email / Thank-You are forward-declared placeholders that
+// light up once those template types exist. New types added here appear as new pills
+// automatically; any type discovered in saved data that isn't here is appended at render time.
+const DOC_TYPES: { key: string; label: string }[] = [
+  { key: 'loe',    label: 'LOE' },
+  { key: 'letter', label: 'Client Letter' },
+  { key: 'email',  label: 'Email' },
+  { key: 'thanks', label: 'Thank-You' },
+];
+
+// Map a saved contract to its document type. Keyed off contract_type/name so the same row always
+// lands in the same pill. Unknown types derive their own pill from contract_type so a brand-new
+// template type (or cascade-version label) surfaces as a pill with no code change.
+const typeOf = (c: JobContract): { key: string; label: string } => {
+  const hay = `${c.contract_type ?? ''} ${c.name ?? ''}`.toLowerCase();
+  if (hay.includes('thank'))  return DOC_TYPES[3];
+  if (hay.includes('letter')) return DOC_TYPES[1];
+  if (hay.includes('email'))  return DOC_TYPES[2];
+  if (hay.includes('loe'))    return DOC_TYPES[0];
+  const label = c.contract_type?.trim() || 'Other';
+  return { key: `t:${label.toLowerCase()}`, label };
+};
+
+const formatShortDate = (iso: string): string => {
+  try { return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
+  catch { return ''; }
+};
+
 const LoeQuoteSection: React.FC<SectionProps> = ({
   job,
   jobDetails = {},
@@ -111,8 +142,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const [currentContractId, setCurrentContractId] = useState<string | null>(null);
   // Read-only View mode for the preview (opening a SENT contract).
   const [previewReadOnly, setPreviewReadOnly] = useState(false);
-  // The draft being continued in the standalone editor (Open a draft → "Continue").
+  // The draft being continued in the standalone editor (Open a draft → editor).
   const [editDraft, setEditDraft] = useState<JobContract | null>(null);
+  // Active Saved Documents type pill ('all' or a DOC_TYPES key).
+  const [typeFilter, setTypeFilter] = useState<string>('all');
   // Saved client contracts for THIS job (Create Contract → save → appears here). The
   // dashboard shows what's been saved/prepped/sent + always lets you create a new one.
   const [savedContracts, setSavedContracts] = useState<JobContract[]>([]);
@@ -1313,56 +1346,122 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </div>
         </div>
 
-        {/* Saved Contracts for this client — everything created + saved/sent via Create Contract.
-            Always-create-new lives in the action button above; this is the history you can reopen. */}
-        {savedContracts.length > 0 && (
-          <div className="mb-6 rounded-md border border-border bg-muted/30 p-3">
-            <div className="text-xs font-semibold text-foreground mb-2">Saved Contracts</div>
-            <div className="space-y-1.5">
-              {/* Drafts (actionable/unfinished) sort ABOVE sent (archive); newest-first within
-                  each group is already guaranteed by the updated_at-desc query (stable sort). */}
-              {[...savedContracts]
-                .sort((a, b) => (a.state === 'sent' ? 1 : 0) - (b.state === 'sent' ? 1 : 0))
-                .map((c) => {
-                const isSent = c.state === 'sent';
-                return (
-                <div key={c.id} className="flex items-center justify-between gap-2 text-sm">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <FileSignature className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-                    <span className="truncate text-foreground">{c.name}</span>
-                    <span className={`shrink-0 text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded ${
-                      isSent
-                        ? 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400'
-                        : 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400'}`}>
-                      {c.state}
-                    </span>
-                  </div>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="h-7 text-xs shrink-0"
-                    onClick={() => {
-                      if (isSent) {
-                        // Sent → read-only View of what went out (no editor, no resave).
-                        setCurrentContractId(c.id);
-                        setPreviewReadOnly(true);
-                        setPreviewHTML(c.edited_html);
-                        setShowPreview(true);
-                      } else {
-                        // draft (or legacy 'saved') → Continue editing the SAME instance.
-                        setEditDraft(c);
-                      }
-                    }}
-                  >
-                    {isSent ? 'View' : 'Continue'}
-                  </Button>
+        {/* Saved Documents (Version C — type-tab / pill filter). Half-width (right half free).
+            Persistent type pills incl. empty placeholders; tap a pill to filter; 'All' shows
+            everything drafts-first. ONE consistent "Open" per row — the badge carries draft/sent
+            and behavior branches (draft → editable editor, sent → read-only preview). */}
+        {savedContracts.length > 0 && (() => {
+          // Drafts (actionable) above sent (archive); newest-first within a group is preserved by
+          // the updated_at-desc query (stable sort).
+          const draftFirst = (arr: JobContract[]) =>
+            [...arr].sort((a, b) => (a.state === 'sent' ? 1 : 0) - (b.state === 'sent' ? 1 : 0));
+
+          // Per-type counts + the pill set: base registry ∪ any unregistered type found in data.
+          const counts = new Map<string, number>();
+          for (const c of savedContracts) {
+            const k = typeOf(c).key;
+            counts.set(k, (counts.get(k) ?? 0) + 1);
+          }
+          const seen = new Set<string>();
+          const extraTypes = savedContracts
+            .map(typeOf)
+            .filter(t => !DOC_TYPES.some(d => d.key === t.key))
+            .filter(t => (seen.has(t.key) ? false : (seen.add(t.key), true)));
+          const pillTypes = [...DOC_TYPES, ...extraTypes];
+
+          const visible = typeFilter === 'all'
+            ? savedContracts
+            : savedContracts.filter(c => typeOf(c).key === typeFilter);
+          const rows = draftFirst(visible);
+
+          const pillClass = (active: boolean) =>
+            `inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs transition-colors ${
+              active
+                ? 'bg-gray-900 text-white border-gray-900 dark:bg-white dark:text-gray-900 dark:border-white'
+                : 'bg-background text-muted-foreground border-border hover:border-gray-400'}`;
+          const countClass = (active: boolean) =>
+            `text-[10px] font-semibold rounded-full px-1.5 ${
+              active ? 'bg-white/25 text-white dark:bg-gray-900/20 dark:text-gray-900' : 'bg-muted text-muted-foreground'}`;
+
+          return (
+            <div className="mb-6 w-full md:w-1/2">
+              <div className="rounded-md border border-border bg-muted/30 p-3">
+                <div className="text-xs font-semibold text-foreground mb-2">Saved Documents</div>
+
+                {/* Type pills — tap to filter; persistent even when a type has 0 docs. */}
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  <button type="button" onClick={() => setTypeFilter('all')} className={pillClass(typeFilter === 'all')}>
+                    All
+                    <span className={countClass(typeFilter === 'all')}>{savedContracts.length}</span>
+                  </button>
+                  {pillTypes.map(t => {
+                    const active = typeFilter === t.key;
+                    return (
+                      <button key={t.key} type="button" onClick={() => setTypeFilter(t.key)} className={pillClass(active)}>
+                        {t.label}
+                        <span className={countClass(active)}>{counts.get(t.key) ?? 0}</span>
+                      </button>
+                    );
+                  })}
                 </div>
-                );
-              })}
+
+                {/* Rows */}
+                {rows.length === 0 ? (
+                  <div className="text-xs text-muted-foreground italic px-1 py-2">
+                    {typeFilter === 'all'
+                      ? 'No documents yet.'
+                      : `No ${pillTypes.find(t => t.key === typeFilter)?.label ?? ''} documents yet.`}
+                  </div>
+                ) : (
+                  <div className="space-y-0.5">
+                    {rows.map((c) => {
+                      const isSent = c.state === 'sent';
+                      return (
+                        <div key={c.id} className="flex items-center justify-between gap-2 text-sm px-1.5 py-1.5 rounded hover:bg-muted/60">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <FileSignature className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                            <span className="truncate text-foreground">{c.name}</span>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-[11px] text-muted-foreground">
+                              {typeFilter === 'all' ? typeOf(c).label : formatShortDate(c.updated_at)}
+                            </span>
+                            <span className={`text-[10px] uppercase tracking-wide font-semibold px-1.5 py-0.5 rounded-full ${
+                              isSent
+                                ? 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400'
+                                : 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400'}`}>
+                              {c.state}
+                            </span>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              className="h-7 text-xs"
+                              onClick={() => {
+                                if (isSent) {
+                                  // Sent → read-only preview of what went out (no editor, no resave).
+                                  setCurrentContractId(c.id);
+                                  setPreviewReadOnly(true);
+                                  setPreviewHTML(c.edited_html);
+                                  setShowPreview(true);
+                                } else {
+                                  // draft (or legacy 'saved') → continue editing the SAME instance.
+                                  setEditDraft(c);
+                                }
+                              }}
+                            >
+                              Open
+                            </Button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Cascade Options — scenario picker strip (TEST tool, NOT a client-facing field).
             Top of Section 2, pushed to the side, matches the mock #cascadePicker.

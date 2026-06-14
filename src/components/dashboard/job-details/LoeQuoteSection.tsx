@@ -144,8 +144,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const [previewReadOnly, setPreviewReadOnly] = useState(false);
   // The draft being continued in the standalone editor (Open a draft → editor).
   const [editDraft, setEditDraft] = useState<JobContract | null>(null);
-  // Active Saved Documents type pill ('all' or a DOC_TYPES key).
-  const [typeFilter, setTypeFilter] = useState<string>('all');
+  // Active Saved Documents type pill: '' = nothing selected (list collapsed, just pills),
+  // 'all' = every doc, or a DOC_TYPES key. The pill selection itself is the expand/collapse.
+  const [typeFilter, setTypeFilter] = useState<string>('');
   // Saved client contracts for THIS job (Create Contract → save → appears here). The
   // dashboard shows what's been saved/prepped/sent + always lets you create a new one.
   const [savedContracts, setSavedContracts] = useState<JobContract[]>([]);
@@ -1346,7 +1347,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           </div>
         </div>
 
-        {/* Saved Documents (Version C — type-tab / pill filter). Half-width (right half free).
+        {/* Saved Documents (Version C — type-tab / pill filter). FULL-WIDTH, collapsible toggle
+            WITHIN this section (default open; collapse to hide the list when there are many).
             Persistent type pills incl. empty placeholders; tap a pill to filter; 'All' shows
             everything drafts-first. ONE consistent "Open" per row — the badge carries draft/sent
             and behavior branches (draft → editable editor, sent → read-only preview). */}
@@ -1384,20 +1386,24 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               active ? 'bg-white/25 text-white dark:bg-gray-900/20 dark:text-gray-900' : 'bg-muted text-muted-foreground'}`;
 
           return (
-            <div className="mb-6 w-full md:w-1/2">
+            <div className="mb-6 w-full">
               <div className="rounded-md border border-border bg-muted/30 p-3">
-                <div className="text-xs font-semibold text-foreground mb-2">Saved Documents</div>
+                <div className="text-xs font-semibold text-foreground mb-2">
+                  Saved Documents ({savedContracts.length})
+                </div>
 
-                {/* Type pills — tap to filter; persistent even when a type has 0 docs. */}
-                <div className="flex flex-wrap gap-1.5 mb-3">
-                  <button type="button" onClick={() => setTypeFilter('all')} className={pillClass(typeFilter === 'all')}>
+                {/* Type pills — the selection IS the expand/collapse. Nothing selected on load =
+                    collapsed (just the pills + counts). Tap a pill to expand that type's docs;
+                    tap the active pill again to collapse. Pills persist even at 0 docs. */}
+                <div className="flex flex-wrap gap-1.5">
+                  <button type="button" onClick={() => setTypeFilter(f => f === 'all' ? '' : 'all')} className={pillClass(typeFilter === 'all')}>
                     All
                     <span className={countClass(typeFilter === 'all')}>{savedContracts.length}</span>
                   </button>
                   {pillTypes.map(t => {
                     const active = typeFilter === t.key;
                     return (
-                      <button key={t.key} type="button" onClick={() => setTypeFilter(t.key)} className={pillClass(active)}>
+                      <button key={t.key} type="button" onClick={() => setTypeFilter(f => f === t.key ? '' : t.key)} className={pillClass(active)}>
                         {t.label}
                         <span className={countClass(active)}>{counts.get(t.key) ?? 0}</span>
                       </button>
@@ -1405,15 +1411,15 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   })}
                 </div>
 
-                {/* Rows */}
-                {rows.length === 0 ? (
-                  <div className="text-xs text-muted-foreground italic px-1 py-2">
+                {/* List — only when a pill is selected (the selection is the expand/collapse). */}
+                {typeFilter !== '' && (rows.length === 0 ? (
+                  <div className="text-xs text-muted-foreground italic px-1 pt-3 pb-1">
                     {typeFilter === 'all'
                       ? 'No documents yet.'
                       : `No ${pillTypes.find(t => t.key === typeFilter)?.label ?? ''} documents yet.`}
                   </div>
                 ) : (
-                  <div className="space-y-0.5">
+                  <div className="space-y-0.5 mt-3">
                     {rows.map((c) => {
                       const isSent = c.state === 'sent';
                       return (
@@ -1457,7 +1463,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                       );
                     })}
                   </div>
-                )}
+                ))}
               </div>
             </div>
           );

@@ -22,9 +22,10 @@ import { generateAppraisalTestData } from "@/utils/testDataGenerator";
 import { FileSignature, AlertCircle, ExternalLink } from "lucide-react";
 import { validateRequiredFields } from "@/utils/webhooks/docuseal";
 import { generateLOEHTML, generateAndSendLOE, sendLOEEmail } from "@/utils/loe/generateLOE";
-import { loadJobContracts, JobContract } from "@/utils/loe/jobContracts";
+import { loadJobContracts, saveJobContract, JobContract } from "@/utils/loe/jobContracts";
 import { markLOEPrepComplete } from "@/utils/webhooks/clickup";
 import LOEPreviewModal from "./actions/LOEPreviewModal";
+import TemplateEditorModal from "./actions/TemplateEditorModal";
 import ClickUpAction from "./actions/ClickUpAction";
 import {
   Tooltip,
@@ -104,6 +105,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [previewHTML, setPreviewHTML] = useState<string>('');
+  // Instance id the preview is bound to: null for a brand-new Create Contract, the row's id
+  // when opening an existing (sent) contract for View. Carried into the modal so resave /
+  // future sent-marking updates the same row.
+  const [currentContractId, setCurrentContractId] = useState<string | null>(null);
+  // Read-only View mode for the preview (opening a SENT contract).
+  const [previewReadOnly, setPreviewReadOnly] = useState(false);
+  // The draft being continued in the standalone editor (Open a draft → "Continue").
+  const [editDraft, setEditDraft] = useState<JobContract | null>(null);
   // Saved client contracts for THIS job (Create Contract → save → appears here). The
   // dashboard shows what's been saved/prepped/sent + always lets you create a new one.
   const [savedContracts, setSavedContracts] = useState<JobContract[]>([]);
@@ -881,6 +890,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     }
 
     setIsGenerating(true);
+    // Create Contract = a brand-new instance: no id (first Save Draft inserts), editable.
+    setCurrentContractId(null);
+    setPreviewReadOnly(false);
 
     try {
       // If already sent, we're resending - generate fresh HTML
@@ -1307,13 +1319,19 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           <div className="mb-6 rounded-md border border-border bg-muted/30 p-3">
             <div className="text-xs font-semibold text-foreground mb-2">Saved Contracts</div>
             <div className="space-y-1.5">
-              {savedContracts.map((c) => (
+              {/* Drafts (actionable/unfinished) sort ABOVE sent (archive); newest-first within
+                  each group is already guaranteed by the updated_at-desc query (stable sort). */}
+              {[...savedContracts]
+                .sort((a, b) => (a.state === 'sent' ? 1 : 0) - (b.state === 'sent' ? 1 : 0))
+                .map((c) => {
+                const isSent = c.state === 'sent';
+                return (
                 <div key={c.id} className="flex items-center justify-between gap-2 text-sm">
                   <div className="flex items-center gap-2 min-w-0">
                     <FileSignature className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                     <span className="truncate text-foreground">{c.name}</span>
                     <span className={`shrink-0 text-[10px] uppercase tracking-wide px-1.5 py-0.5 rounded ${
-                      c.state === 'sent'
+                      isSent
                         ? 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400'
                         : 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400'}`}>
                       {c.state}
@@ -1324,12 +1342,24 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                     variant="ghost"
                     size="sm"
                     className="h-7 text-xs shrink-0"
-                    onClick={() => { setPreviewHTML(c.edited_html); setShowPreview(true); }}
+                    onClick={() => {
+                      if (isSent) {
+                        // Sent → read-only View of what went out (no editor, no resave).
+                        setCurrentContractId(c.id);
+                        setPreviewReadOnly(true);
+                        setPreviewHTML(c.edited_html);
+                        setShowPreview(true);
+                      } else {
+                        // draft (or legacy 'saved') → Continue editing the SAME instance.
+                        setEditDraft(c);
+                      }
+                    }}
                   >
-                    Open
+                    {isSent ? 'View' : 'Continue'}
                   </Button>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
@@ -1955,12 +1985,42 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         {/* Preview Modal */}
         <LOEPreviewModal
           isOpen={showPreview}
-          onClose={() => { setShowPreview(false); refreshContracts(); }}
+          onClose={() => { setShowPreview(false); setPreviewReadOnly(false); refreshContracts(); }}
           job={job}
           jobDetails={jobDetails}
           documentHTML={previewHTML}
           onApprove={handleApproveAndSend}
           onContractSaved={refreshContracts}
+          contractId={currentContractId}
+          readOnly={previewReadOnly}
+        />
+
+        {/* Continue-a-draft editor — opens the SAME instance by id (no LOEPreviewModal shell,
+            so the template-regeneration machinery never clobbers the saved draft). Save Draft
+            updates this row in place; the editor stays open so the user can keep working. */}
+        <TemplateEditorModal
+          isOpen={!!editDraft}
+          onClose={() => { setEditDraft(null); refreshContracts(); }}
+          initialHTML={editDraft?.edited_html || ''}
+          initialName={editDraft?.name}
+          onSave={async (documentName, html) => {
+            if (!editDraft) return;
+            const result = await saveJobContract({
+              id: editDraft.id,
+              jobId: job.id,
+              name: documentName || editDraft.name,
+              editedHtml: html,
+              templateId: editDraft.template_id,
+              templateVersion: editDraft.template_version,
+              contractType: editDraft.contract_type,
+              state: 'draft',
+            });
+            if (result.success) {
+              refreshContracts();
+            } else {
+              toast.error(`Failed to save draft: ${result.error}`);
+            }
+          }}
         />
       </CollapsibleContent>
     </Collapsible>

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Save, X, ZoomIn, ZoomOut, RotateCcw, ChevronUp, ChevronDown } from "lucide-react";
 import { toast } from "sonner";
@@ -14,13 +13,17 @@ interface TemplateEditorModalProps {
   isOpen: boolean;
   onClose: () => void;
   initialHTML: string;
-  onSave: (templateName: string, editedHTML: string, setAsDefault: boolean) => Promise<void>;
+  /** Pre-filled Document Name: the saved instance's name when continuing a draft, or a
+      computed default (TemplateType — Client — Mon D) for a brand-new document. */
+  initialName?: string;
+  onSave: (documentName: string, editedHTML: string, setAsDefault: boolean) => Promise<void>;
 }
 
 const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
   isOpen,
   onClose,
   initialHTML,
+  initialName,
   onSave
 }) => {
   console.log('TemplateEditorModal: Component rendered', {
@@ -33,7 +36,6 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
   const [previewUrl, setPreviewUrl] = useState('');
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [templateName, setTemplateName] = useState('');
-  const [setAsDefault, setSetAsDefault] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(75); // Default zoom 75%
   const [fontSize, setFontSize] = useState(12); // Default font size 12px
@@ -86,10 +88,10 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
       });
       setSections(initialSections);
       setShowSaveDialog(false);
-      setTemplateName('');
-      setSetAsDefault(false);
+      // Pre-fill the Document Name so the field is never blank (spec b).
+      setTemplateName(initialName ?? '');
     }
-  }, [isOpen, editableSections]);
+  }, [isOpen, editableSections, initialName]);
 
   // Generate preview HTML with zoom CSS
   const generatePreviewHTML = (html: string): string => {
@@ -223,22 +225,18 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
   };
 
   const handleSave = async () => {
-    if (!templateName.trim()) {
-      toast.error('Please enter a template name');
-      return;
-    }
-
     setIsSaving(true);
     try {
       const reconstructed = reconstructHTML(initialHTML, sections, editableSections);
-      await onSave(templateName.trim(), reconstructed, setAsDefault);
+      // Don't block on an empty name — fall back to the pre-filled default (spec b).
+      const finalName = templateName.trim() || initialName || 'Untitled Document';
+      await onSave(finalName, reconstructed, false);
       setShowSaveDialog(false);
-      setTemplateName('');
-      setSetAsDefault(false);
-      onClose();
+      // Editor STAYS OPEN after a draft save (spec a) so the user can keep working;
+      // we only close the save sub-dialog and keep the name pre-filled for the next save.
     } catch (error) {
       console.error('Save error:', error);
-      toast.error('Failed to save template');
+      toast.error('Failed to save document');
     } finally {
       setIsSaving(false);
     }
@@ -513,7 +511,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
                 disabled={isSaving}
               >
                 <Save className="h-3 w-3" />
-                Save Template
+                Save Draft
               </Button>
               <Button 
                 variant="outline" 
@@ -605,34 +603,23 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
         {showSaveDialog && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-card p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
-              <h3 className="text-lg font-semibold mb-4">Save Template</h3>
-              
+              <h3 className="text-lg font-semibold mb-4">Save Document</h3>
+
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="template-name">Template Name</Label>
+                  <Label htmlFor="template-name">Document Name</Label>
                   <Input
                     id="template-name"
                     value={templateName}
                     onChange={(e) => setTemplateName(e.target.value)}
-                    placeholder="e.g., Standard LOE, Commercial LOE"
+                    placeholder="e.g., LOE-07 — Henderson — Jun 13"
                     className="mt-1 bg-card border border-border text-foreground placeholder:text-muted-foreground hover:border-gray-400 focus-visible:border-gray-400 focus-visible:outline-none focus-visible:ring-0"
                   />
                 </div>
 
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="set-default"
-                    checked={setAsDefault}
-                    onCheckedChange={(checked) => setSetAsDefault(checked as boolean)}
-                  />
-                  <Label htmlFor="set-default" className="cursor-pointer">
-                    Set as my default template
-                  </Label>
-                </div>
-
                 <div className="flex gap-2">
-                  <Button onClick={handleSave} disabled={isSaving || !templateName.trim()}>
-                    {isSaving ? 'Saving...' : 'Save'}
+                  <Button onClick={handleSave} disabled={isSaving}>
+                    {isSaving ? 'Saving...' : 'Save Draft'}
                   </Button>
                   <Button 
                     variant="outline" 

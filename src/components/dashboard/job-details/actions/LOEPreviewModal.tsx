@@ -29,6 +29,14 @@ interface LOEPreviewModalProps {
   onApprove: (recipientEmail?: string) => Promise<void>;
   /** Fired after a client contract is saved, so the dashboard can refresh its saved list. */
   onContractSaved?: () => void;
+  /** Current instance id. Present when reopening an existing contract; absent for a brand-new
+      one (first Save Draft inserts, then this modal captures the returned id). Carried so the
+      eventual sent-marking (Chunk 2) updates the same row instead of forking one. */
+  contractId?: string | null;
+  /** Read-only "View" mode — used when opening a SENT contract. Hides the template picker,
+      email row, Edit Template, and Send so a sent doc can't be silently re-edited into a new
+      send (truthful-sent guardrail). */
+  readOnly?: boolean;
 }
 
 const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
@@ -38,8 +46,13 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   jobDetails,
   documentHTML,
   onApprove,
-  onContractSaved
+  onContractSaved,
+  contractId,
+  readOnly = false
 }) => {
+  // Current instance id this preview/editor is bound to. Seeded from the contractId prop on
+  // open; set after a brand-new insert so subsequent saves update the same row.
+  const [savedContractId, setSavedContractId] = useState<string | null>(contractId ?? null);
   const [isSending, setIsSending] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [recipientEmail, setRecipientEmail] = useState<string>('');
@@ -69,8 +82,11 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   // Load templates when modal opens
   useEffect(() => {
     if (isOpen) {
-      loadTemplates();
       setCurrentDocumentHTML(documentHTML);
+      setSavedContractId(contractId ?? null);
+      // In read-only View mode (a sent doc), do NOT load+regenerate the default template —
+      // that would clobber the saved edited_html. Show exactly what was saved.
+      if (!readOnly) loadTemplates();
     }
   }, [isOpen]);
 
@@ -282,7 +298,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
             <p className="text-sm text-muted-foreground">Review Letter of Engagement before sending to client</p>
           </div>
           
-          {/* Template Picker */}
+          {/* Template Picker — hidden in read-only View (sent doc) */}
+          {!readOnly && (
           <div className="flex items-center gap-2 mr-4">
             <Label htmlFor="template-select" className="text-sm font-medium whitespace-nowrap">
               Template:
@@ -329,7 +346,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               </Button>
             )}
           </div>
-          
+          )}
+
           {/* Zoom Controls */}
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-md">
@@ -370,19 +388,21 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               </Button>
             </div>
             
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                setEditedHTML(currentDocumentHTML);
-                setIsEditMode(true);
-              }}
-              className="gap-2"
-            >
-              <Edit className="h-4 w-4" />
-              Edit Template
-            </Button>
-            
+            {!readOnly && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setEditedHTML(currentDocumentHTML);
+                  setIsEditMode(true);
+                }}
+                className="gap-2"
+              >
+                <Edit className="h-4 w-4" />
+                Edit Template
+              </Button>
+            )}
+
             <Button
               variant="ghost"
               size="sm"
@@ -394,7 +414,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
           </div>
         </div>
 
-        {/* Email Recipient Section */}
+        {/* Email Recipient Section — hidden in read-only View (sent doc) */}
+        {!readOnly && (
         <div className="flex items-center gap-3 py-2 px-4">
           <Mail className="h-4 w-4 text-muted-foreground" />
           {showEmailEdit ? (
@@ -436,6 +457,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
             </div>
           )}
         </div>
+        )}
 
         {/* Preview Frame - Maximum space */}
         <div className="flex-1 border rounded-lg overflow-auto bg-muted my-2">
@@ -469,20 +491,22 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               <Download className="h-4 w-4 mr-1" />
               Download
             </Button>
-            <button
-              onClick={handleSend}
-              disabled={isSending}
-              className="text-foreground hover:text-foreground dark:hover:text-gray-300 hover:underline transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed disabled:no-underline flex items-center gap-1"
-            >
-              {isSending ? (
-                'Sending...'
-              ) : (
-                <>
-                  <Send className="h-4 w-4" />
-                  Send to Client
-                </>
-              )}
-            </button>
+            {!readOnly && (
+              <button
+                onClick={handleSend}
+                disabled={isSending}
+                className="text-foreground hover:text-foreground dark:hover:text-gray-300 hover:underline transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed disabled:no-underline flex items-center gap-1"
+              >
+                {isSending ? (
+                  'Sending...'
+                ) : (
+                  <>
+                    <Send className="h-4 w-4" />
+                    Send to Client
+                  </>
+                )}
+              </button>
+            )}
           </div>
         </div>
 
@@ -491,23 +515,34 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
           isOpen={isEditMode}
           onClose={() => setIsEditMode(false)}
           initialHTML={editedHTML || currentDocumentHTML}
+          initialName={(() => {
+            // Pre-filled Document Name default: {TemplateType} — {Client} — {Mon D} (spec b).
+            const chosen = templates.find(t => t.id === selectedTemplateId);
+            const monthDay = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const client = job.clientLastName || job.clientFirstName || 'Client';
+            return `${chosen?.name || 'Document'} — ${client} — ${monthDay}`;
+          })()}
           onSave={async (contractName, html) => {
             // Edit Contract mode: save THIS CLIENT's tailored contract (not a template).
             // Persists to job_contracts against the job; the dashboard then lists it as a
-            // saved contract. (Template structure editing is a separate, future surface.)
+            // draft. Threads the current instance id so resaving updates the SAME row
+            // instead of forking a new one (no duplicate-on-resave).
             const chosen = templates.find(t => t.id === selectedTemplateId);
             const result = await saveJobContract({
+              id: savedContractId ?? undefined,
               jobId: job.id,
-              name: contractName || `${chosen?.name || 'Contract'} — ${job.clientLastName || job.clientFirstName || 'Client'}`,
+              name: contractName,
               editedHtml: html,
               templateId: selectedTemplateId,
               templateVersion: (chosen as any)?.version ?? null,
               contractType: chosen?.name ?? null,
-              state: 'saved',
+              state: 'draft',
             });
 
             if (result.success) {
-              void 0 /* success: silent (Ben) */;
+              // First insert returns the new id — capture it so the next Save Draft updates
+              // this same row rather than inserting again.
+              if (!savedContractId && result.id) setSavedContractId(result.id);
               setEditedHTML(html);
               setTemplateModified(false);
               // Update preview with edited HTML

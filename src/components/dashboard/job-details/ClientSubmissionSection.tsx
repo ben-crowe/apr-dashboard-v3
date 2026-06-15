@@ -55,7 +55,12 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
     // Wired 2026-06-15 (2nd batch, ui-designer live-pull verified) — tenancy → CF12408 SingleOption (opts 7418-7423).
     // Tenancy is entered HERE in Section 1 (Section 2 only mirrors it), so it must sync from here. All six dashboard
     // options match the server map exactly (incl. Valcre's own 'Unkown' typo = id 7422) → no silent-no-write.
-    'tenancy'
+    'tenancy',
+    // Wired 2026-06-15 (2nd batch) — propertySubtype → native Property.SecondaryType (NOT a custom field).
+    // Server already handles it on both paths (api/valcre.ts: update L823-865 PATCHes the linked Property,
+    // create L1242). Create-job already sent it; the EDIT path was the gap — the onChange below only set
+    // local state, never fired the sync. Same sync-only helper as tenancy. Free-text native field → raw write.
+    'propertySubtype'
   ];
 
   // Helper function to get user-friendly field names for toast messages
@@ -169,6 +174,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         updateType: 'loe_details',
       };
       if (fieldName === 'tenancy') syncData.tenancy = value; // → CF12408 SingleOption
+      if (fieldName === 'propertySubtype') syncData.propertySubtype = value; // → native Property.SecondaryType (server reads jobData.propertySubtype)
       console.log(`Syncing ${fieldName} to Valcre:`, syncData);
       const result = await sendToValcre(syncData);
       if (!result.success) {
@@ -492,7 +498,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={jobDetails?.propertySubtype || ''}
                 onValueChange={(value) => {
                   const v = value === '__clear__' ? '' : value;
-                  onUpdateDetails?.({ propertySubtype: v });
+                  onUpdateDetails?.({ propertySubtype: v });   // persists to job_loe_details (unchanged)
+                  syncDetailFieldToValcre('propertySubtype', v); // wired 2026-06-15 (2nd batch) → native Property.SecondaryType
                 }}
               >
                 <SelectTrigger className={srcTriggerCls(jobDetails?.propertySubtype)} style={srcTint(jobDetails?.propertySubtype) || { paddingLeft: 0, paddingRight: 0 }}>

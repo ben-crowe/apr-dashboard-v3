@@ -216,14 +216,18 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     // Auto-sync wiring (2026-06-04, AUTO-SYNC-WIRING-MAP) — job-prep fields with VERIFIED Valcre targets.
     // analysisLevel→AnalysisLevel, transactionStatus→CF12053, zoningStatus→CF12054, valueScenarios→CF11563/11564.
     // (propertyRightsAppraised→Purposes is already above.) Do-NOT-wire list excluded: reportFormat, assignmentType,
-    // cmhcFinancing, desktopReport, purpose, leadAppraiser, approachesToValue.
+    // cmhcFinancing, desktopReport, purpose, leadAppraiser.
     // authorizedUse REMOVED 2026-06-05 (field-hygiene dedup) — Authorized Use now lives once on Client Intake
     // as `intendedUse`, which already syncs to native Job.IntendedUses. See DASHBOARD-TO-VALCRE-LOCATION-MAP.
     'analysisLevel', 'transactionStatus', 'zoningStatus', 'valueScenarios',
     // Fix 4: currentUse → CF12410 (currentUseImprovements), proposedUse → CF12411 (proposedUseImprovements)
     'currentUse', 'proposedUse',
     // Wired 2026-06-15 — registry-mapped but never sent (single-value, server-ready in VALTA_CUSTOM_FIELD_IDS):
-    'statusOfImprovements', 'valueTimeframe'];
+    'statusOfImprovements', 'valueTimeframe',
+    // Wired 2026-06-15 (second batch, ui-designer live-pull verified) — approachesToValue → CF12415 MultiOption
+    // (opts 7513-7516). Convert layer in api/valcre.ts already matches today's live Valcre; uses the multi-value
+    // path (comma-joined string → option-ID array, same shape as valueScenarios). Was on the old do-not-wire list.
+    'approachesToValue'];
 
   // Fields that ALSO push to the ClickUp card (additive to Valcre sync — Ben-confirmed 2026-06-04).
   // These are EXACTLY the Stage-2 LOE-QUOTE fields that update-clickup-task renders into the card
@@ -693,6 +697,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           if (fieldName === 'valueScenarios') syncData.valueScenarios = value;       // → CF12414 via setValtaCustomFields (Fix 1: legacy CF11563/11564 path removed)
           if (fieldName === 'statusOfImprovements') syncData.statusOfImprovements = value; // → CF12407 (wired 2026-06-15 — was registry-mapped but never sent)
           if (fieldName === 'valueTimeframe') syncData.valueTimeframe = value;             // → CF12419 (wired 2026-06-15 — was registry-mapped but never sent)
+          if (fieldName === 'approachesToValue') syncData.approachesToValue = value;       // → CF12415 MultiOption (wired 2026-06-15, 2nd batch; server converts comma-joined → option-ID array)
           // Fix 4: dashboard sends currentUse/proposedUse; server expects currentUseImprovements/proposedUseImprovements
           // (those are the VALTA_CUSTOM_FIELD_IDS keys that setValtaCustomFields iterates).
           // Option labels match CF12410/12411 exactly — no label reconciliation needed.
@@ -764,8 +769,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   }, [statusOfImprovements, authorizedUse]);
 
   // Part D — Cascade Effect: re-derive approachesToValue whenever statusOfImprovements or authorizedUse changes.
-  // NOTE: approachesToValue is intentionally NOT in VALCRE_SYNC_FIELDS (do-not-sync-to-Valcre list).
-  // autoSaveField persists it to Supabase; generateLOE.ts reads jobDetails.approachesToValue directly.
+  // NOTE: approachesToValue is NOW IN VALCRE_SYNC_FIELDS (wired 2026-06-15, 2nd batch → CF12415 MultiOption).
+  // The autoSaveField('approachesToValue', ...) below both persists to Supabase AND triggers the Valcre sync;
+  // generateLOE.ts still reads jobDetails.approachesToValue directly for the LOE doc.
   useEffect(() => {
     if (!onUpdateDetails) return;
     const approaches = deriveApproaches(statusOfImprovements, authorizedUse);

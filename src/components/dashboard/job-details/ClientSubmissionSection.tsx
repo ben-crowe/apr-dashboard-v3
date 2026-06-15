@@ -51,7 +51,11 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   const VALCRE_SYNC_FIELDS = [
     'notes', 'valuationPremises', 'intendedUse', 'assetCondition', 'propertyTypes', 'propertyName', 'propertyAddress',
     'clientFirstName', 'clientLastName', 'clientTitle', 'clientOrganization', 'clientEmail', 'clientPhone', 'clientAddress',
-    'propertyContactFirstName', 'propertyContactLastName', 'propertyContactEmail', 'propertyContactPhone'
+    'propertyContactFirstName', 'propertyContactLastName', 'propertyContactEmail', 'propertyContactPhone',
+    // Wired 2026-06-15 (2nd batch, ui-designer live-pull verified) — tenancy → CF12408 SingleOption (opts 7418-7423).
+    // Tenancy is entered HERE in Section 1 (Section 2 only mirrors it), so it must sync from here. All six dashboard
+    // options match the server map exactly (incl. Valcre's own 'Unkown' typo = id 7422) → no silent-no-write.
+    'tenancy'
   ];
 
   // Helper function to get user-friendly field names for toast messages
@@ -107,6 +111,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         if (fieldName === 'intendedUse') syncData.intendedUse = value;
         if (fieldName === 'assetCondition') syncData.assetCondition = value;
         if (fieldName === 'propertyTypes') syncData.propertyTypes = value;
+        if (fieldName === 'tenancy') syncData.tenancy = value;   // → CF12408 SingleOption (wired 2026-06-15, 2nd batch)
         if (fieldName === 'propertyName') syncData.propertyName = value;
         if (fieldName === 'propertyAddress') syncData.propertyAddress = value;
         if (fieldName === 'clientFirstName') syncData.clientFirstName = value;
@@ -143,7 +148,41 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       setIsSectionSaving(false);
     }
   }, [onUpdateJob, jobDetails, VALCRE_SYNC_FIELDS]);
-  
+
+  // Sync-ONLY helper for jobDetails-store fields (wired 2026-06-15, 2nd batch).
+  // WHY this exists separate from autoSaveField: autoSaveField persists via onUpdateJob →
+  // job_submissions, which has NO tenancy column (handleUpdateJob field map in useJobDetail.ts).
+  // Tenancy's canonical home is job_loe_details, already persisted by its onUpdateDetails call.
+  // So tenancy must NOT ride autoSaveField (would mis-write/no-op the DB copy) — it persists via
+  // onUpdateDetails and fires ONLY the Valcre sync here. NOTE: tenancy → CF12408 is a CUSTOM-field-
+  // only update → empty native PATCH → blocked by the same server empty-native-PATCH bug until that
+  // server fix deploys; so this lands only WITH that deploy (honest "failed" popup pre-deploy).
+  const syncDetailFieldToValcre = useCallback(async (fieldName: string, value: any) => {
+    const shouldSyncToValcre = VALCRE_SYNC_FIELDS.includes(fieldName) &&
+                                isValcreJobNumber(jobDetails?.jobNumber) &&
+                                jobDetails?.valcreJobId;
+    if (!shouldSyncToValcre) return;
+    try {
+      const syncData: any = {
+        jobId: jobDetails.valcreJobId,
+        jobNumber: jobDetails.jobNumber,
+        updateType: 'loe_details',
+      };
+      if (fieldName === 'tenancy') syncData.tenancy = value; // → CF12408 SingleOption
+      console.log(`Syncing ${fieldName} to Valcre:`, syncData);
+      const result = await sendToValcre(syncData);
+      if (!result.success) {
+        console.warn(`Failed to sync ${fieldName} to Valcre:`, result.error);
+        toast.error(`Failed to sync ${getFieldDisplayName(fieldName)} to Valcre`);
+      }
+    } catch (error) {
+      console.error(`Error syncing ${fieldName} to Valcre:`, error);
+      if (isValcreJobNumber(jobDetails?.jobNumber) && jobDetails?.valcreJobId) {
+        toast.error(`Failed to sync ${getFieldDisplayName(fieldName)} to Valcre`);
+      }
+    }
+  }, [jobDetails, VALCRE_SYNC_FIELDS]);
+
   // Handle field blur with debouncing
   const handleBlur = useCallback((fieldName: string, value: any) => {
     // Clear existing timer
@@ -476,7 +515,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={jobDetails?.tenancy || ''}
                 onValueChange={(value) => {
                   const v = value === '__clear__' ? '' : value;
-                  onUpdateDetails?.({ tenancy: v });
+                  onUpdateDetails?.({ tenancy: v });   // persists to job_loe_details (unchanged)
+                  syncDetailFieldToValcre('tenancy', v); // wired 2026-06-15 (2nd batch) → CF12408
                 }}
               >
                 <SelectTrigger className={srcTriggerCls(jobDetails?.tenancy)} style={srcTint(jobDetails?.tenancy) || { paddingLeft: 0, paddingRight: 0 }}>

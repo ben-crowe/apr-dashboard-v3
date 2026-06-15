@@ -221,7 +221,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     // as `intendedUse`, which already syncs to native Job.IntendedUses. See DASHBOARD-TO-VALCRE-LOCATION-MAP.
     'analysisLevel', 'transactionStatus', 'zoningStatus', 'valueScenarios',
     // Fix 4: currentUse → CF12410 (currentUseImprovements), proposedUse → CF12411 (proposedUseImprovements)
-    'currentUse', 'proposedUse'];
+    'currentUse', 'proposedUse',
+    // Wired 2026-06-15 — registry-mapped but never sent (single-value, server-ready in VALTA_CUSTOM_FIELD_IDS):
+    'statusOfImprovements', 'valueTimeframe'];
 
   // Fields that ALSO push to the ClickUp card (additive to Valcre sync — Ben-confirmed 2026-06-04).
   // These are EXACTLY the Stage-2 LOE-QUOTE fields that update-clickup-task renders into the card
@@ -689,6 +691,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           if (fieldName === 'transactionStatus') syncData.transactionStatus = value; // → Custom 12424 (server resolves NAME→ID via VALTA_CUSTOM_FIELD_IDS in api/valcre.ts; live-verified 2026-06-10)
           if (fieldName === 'zoningStatus') syncData.zoningStatus = value;           // → Custom 12425 (server resolves NAME→ID via VALTA_CUSTOM_FIELD_IDS in api/valcre.ts; live-verified 2026-06-10)
           if (fieldName === 'valueScenarios') syncData.valueScenarios = value;       // → CF12414 via setValtaCustomFields (Fix 1: legacy CF11563/11564 path removed)
+          if (fieldName === 'statusOfImprovements') syncData.statusOfImprovements = value; // → CF12407 (wired 2026-06-15 — was registry-mapped but never sent)
+          if (fieldName === 'valueTimeframe') syncData.valueTimeframe = value;             // → CF12419 (wired 2026-06-15 — was registry-mapped but never sent)
           // Fix 4: dashboard sends currentUse/proposedUse; server expects currentUseImprovements/proposedUseImprovements
           // (those are the VALTA_CUSTOM_FIELD_IDS keys that setValtaCustomFields iterates).
           // Option labels match CF12410/12411 exactly — no label reconciliation needed.

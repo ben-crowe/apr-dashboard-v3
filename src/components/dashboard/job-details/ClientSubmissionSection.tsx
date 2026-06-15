@@ -157,7 +157,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   // Sync-ONLY helper for jobDetails-store fields (wired 2026-06-15, 2nd batch).
   // WHY this exists separate from autoSaveField: autoSaveField persists via onUpdateJob →
   // job_submissions, which has NO tenancy column (handleUpdateJob field map in useJobDetail.ts).
-  // Tenancy's canonical home is job_loe_details, already persisted by its onUpdateDetails call.
+  // Tenancy's canonical home is job_property_info (DB-verified 2026-06-15: useSaveJobDetails.ts routes
+  // 'tenancy' + 'propertySubtype' to job_property_info, NOT job_loe_details), already persisted via onUpdateDetails.
   // So tenancy must NOT ride autoSaveField (would mis-write/no-op the DB copy) — it persists via
   // onUpdateDetails and fires ONLY the Valcre sync here. NOTE: tenancy → CF12408 is a CUSTOM-field-
   // only update → empty native PATCH → blocked by the same server empty-native-PATCH bug until that
@@ -498,7 +499,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={jobDetails?.propertySubtype || ''}
                 onValueChange={(value) => {
                   const v = value === '__clear__' ? '' : value;
-                  onUpdateDetails?.({ propertySubtype: v });   // persists to job_loe_details (unchanged)
+                  onUpdateDetails?.({ propertySubtype: v });   // persists to job_property_info (DB-verified, unchanged)
                   syncDetailFieldToValcre('propertySubtype', v); // wired 2026-06-15 (2nd batch) → native Property.SecondaryType
                 }}
               >
@@ -522,7 +523,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 value={jobDetails?.tenancy || ''}
                 onValueChange={(value) => {
                   const v = value === '__clear__' ? '' : value;
-                  onUpdateDetails?.({ tenancy: v });   // persists to job_loe_details (unchanged)
+                  onUpdateDetails?.({ tenancy: v });   // persists to job_property_info (DB-verified, unchanged)
                   syncDetailFieldToValcre('tenancy', v); // wired 2026-06-15 (2nd batch) → CF12408
                 }}
               >

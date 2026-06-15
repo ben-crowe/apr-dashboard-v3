@@ -51,7 +51,7 @@ Where **Chris's registry** (the source of truth) and **our live code / the live 
 | **Risk** | Same silent-no-write trap as Transaction Status labels — a native enum write that doesn't match an accepted value lands as nothing (HTTP 200, no change). |
 | **To confirm** | Per-option write→readback on a test Property: which of the 4 actually land in `SecondaryType`. |
 | **ALSO** | Valcre Subtype is **nested under Property Type**. Chris's 4 are residential/retail — **no industrial option**. Flag whether an industrial Property can even accept these (Type↔Subtype validity). |
-| **Status** | Step 1 (read-only) DONE 2026-06-10. Steps 2-3 (write-readback) held for Ben's go. |
+| **Status** | Step 1 (read-only) DONE 2026-06-10. **Target + plumbing CONFIRMED 2026-06-15** (see resolution note). Values still OPEN — Chris question drafted (`CHRIS-QUESTION-property-subtype-options.md`). Write-readback held for Ben's go. |
 | **Resolver** | qa (validate) → Ben/Chris (client-review trail). |
 
 **Step 1 read-only findings (sampled 100 live Properties):**
@@ -60,6 +60,24 @@ Where **Chris's registry** (the source of truth) and **our live code / the live 
 - **None of Chris's 4** (Apartment / Townhouse / Mixed Use / Shopping Centre) appear in the sample. ⚠ **`Apartment` (Chris) vs `Apartments` (Valcre) is a singular/plural near-miss** — the exact silent-no-write trap if SecondaryType is enum-validated.
 - **Industrial gap CONFIRMED:** Industrial properties DO carry a subtype (`Warehouse` seen), so Valcre supports industrial subtypes — but Chris's curated 4 contain **no industrial option**. An industrial property (like our test property 25802872, currently SecondaryType=None) has no valid Chris-option to pick.
 - **NOT yet proven:** whether Chris's exact 4 strings LAND or silently no-write. A 100-property sample shows what's *used*, not the accepted enum. The per-option write→readback (step 2, Ben-gated) is what settles "which land."
+
+**Resolution note (2026-06-15, Property-area live pull — ui-designer):**
+- **Target CONFIRMED:** Subtype → native `Property.SecondaryType` is correct. A Property-scoped
+  CustomFields pull found **no real Property custom field** for subtype (only a junk CF `XXXX`).
+  Plumbing is wired both paths (api/valcre.ts update L823-865 + create L1242) and on the edit
+  path's client send (wired 2026-06-15).
+- **Blind spot cleared:** the earlier custom-field pull was Job-scoped (FieldEntityType=Job) only.
+  The Property-area pull confirms Chris's entire real custom-field registry is **Job-scoped** (55
+  Job / 1 Contact-junk / 1 Property-junk of 57 CFs) — nothing was hiding in the Property area.
+- **Still OPEN = values only:** is `SecondaryType` a constrained enum or free text, and what is the
+  canonical accepted option set (incl. an industrial subtype)? → **Chris question**, drafted in
+  `CHRIS-QUESTION-property-subtype-options.md`. Settled by Chris's answer and/or a write→readback.
+
+**Related (NOT a divergence — closed): Tenancy home.** Ben's Property screenshot showed a native
+`Property.Tenancy` attribute, raising "which home?". Live `/CustomFields` `FieldEntityType` pull
+resolves it: CF12408 Tenancy = **Job-scoped** = Chris's purpose-built registry target. The native
+Property.Tenancy is a coincidental native attribute, NOT the registry target. The CF12408 wiring
+(2026-06-15) is **correct** — readback-pending only.
 
 ---
 

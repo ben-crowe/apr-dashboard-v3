@@ -23,6 +23,7 @@ import { FileSignature, AlertCircle, ExternalLink } from "lucide-react";
 import { validateRequiredFields } from "@/utils/webhooks/docuseal";
 import { generateLOEHTML, generateAndSendLOE, sendLOEEmail } from "@/utils/loe/generateLOE";
 import { loadJobContracts, saveJobContract, JobContract } from "@/utils/loe/jobContracts";
+import { saveJobEmailInstance } from "@/utils/loe/emailTemplate";
 import { markLOEPrepComplete } from "@/utils/webhooks/clickup";
 import LOEPreviewModal from "./actions/LOEPreviewModal";
 import TemplateEditorModal from "./actions/TemplateEditorModal";
@@ -704,7 +705,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             ? Object.values(result.nativeVerified).some((v: any) => v && v.ok === false)
             : false;
           const customBad = !!result.customFields && result.customFields.failed > 0;
-          const syncFailed = !result.success || !!result.nativePatchError || nativeBad || customBad;
+          // "Patch object can't be empty" is NOT a real failure — it just means this sync touched
+          // only CUSTOM fields (e.g. valueScenarios / statusOfImprovements) so the native PATCH body
+          // was empty. The custom write still landed (verified: customFields.failed === 0). Treating
+          // it as a failure is the false-positive toast. Only a GENUINE native rejection counts, so
+          // every popup the user sees is a real one.
+          const emptyNativePatch = !!result.nativePatchError && /can.?t be empty|empty/i.test(result.nativePatchError);
+          const realNativePatchError = !!result.nativePatchError && !emptyNativePatch;
+          const syncFailed = !result.success || realNativePatchError || nativeBad || customBad;
           if (syncFailed) {
             console.error('Valcre sync failed:', result.nativePatchError || result.error, result);
             if (hasRealJob) toast.error(`Failed to sync ${getFieldDisplayName(fieldName)} to Valcre`); // silent unless a real Valcre job
@@ -962,50 +970,62 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     }
   };
 
-  // Send after approval
-  const handleApproveAndSend = async (overrideEmail?: string) => {
+  // Send after approval. emailOverride carries the composed ② Email content (subject + body).
+  const handleApproveAndSend = async (
+    overrideEmail?: string,
+    emailOverride?: { subject: string; bodyHtml: string },
+  ) => {
+    // Double-send guard: ignore a second dispatch while one is in flight.
+    if (isSending) return;
     setIsSending(true);
 
     try {
-      // Use override email if provided, otherwise use client's email
       const recipientEmail = overrideEmail || job.clientEmail;
-
-      // Log the email being sent to
-      console.log('📧 Sending LOE to email:', recipientEmail);
-      console.log('📧 Override email provided:', overrideEmail ? 'Yes' : 'No');
-      console.log('📧 Original client email:', job.clientEmail);
-
-      // Create a modified job object if using override email
       const jobToSend = overrideEmail ? { ...job, clientEmail: overrideEmail } : job;
 
-      // Send to DocuSeal with the already generated HTML
-      const result = await generateAndSendLOE(jobToSend, jobDetails, previewHTML);
+      // DocuSeal submission ONLY (sendEmail=false) — we send the composed email ourselves below.
+      // This is the double-send fix: generateAndSendLOE no longer also fires its own email here.
+      const result = await generateAndSendLOE(jobToSend, jobDetails, previewHTML, false);
 
       if (result.success && result.submissionId && result.signingLink) {
-        // Send custom email with signing link
-        console.log('📮 Sending email via Edge Function to:', recipientEmail);
+        // Send the composed cover-note email with the now-resolved signing link.
         const emailSent = await sendLOEEmail(
           recipientEmail,
           `${job.clientFirstName} ${job.clientLastName}`,
           result.signingLink,
-          job.propertyAddress
+          job.propertyAddress,
+          emailOverride,
         );
 
-        console.log('📮 Email send result:', emailSent ? 'Success' : 'Failed');
-
         if (emailSent) {
-          void 0 /* success: silent (Ben) */;
+          // Persist the per-send email INSTANCE as 'sent' (job-scoped; never touches the default).
+          if (emailOverride) {
+            const finalSubject = emailOverride.subject.split('{{signing_link}}').join(result.signingLink);
+            const finalBody = emailOverride.bodyHtml.split('{{signing_link}}').join(result.signingLink);
+            const saved = await saveJobEmailInstance({
+              jobId: job.id,
+              contractId: currentContractId,
+              recipientEmail,
+              subject: finalSubject,
+              bodyHtml: finalBody,
+              state: 'sent',
+              docusealSubmissionId: result.submissionId,
+            });
+            // Surface a persistence failure instead of swallowing it: the email DID
+            // send, but the per-send record didn't save — the client-view history
+            // would be silently incomplete. Make it visible (this is the failure the
+            // first build hid behind an ignored {success,error}).
+            if (!saved.success) {
+              console.error('saveJobEmailInstance failed:', saved.error);
+              toast.error(`Email sent, but saving the record failed: ${saved.error ?? 'unknown error'}`);
+            }
+          }
+          if (onUpdateDetails) onUpdateDetails({ docusealSubmissionId: result.submissionId });
+          setShowPreview(false);
         } else {
-          // Only show the link if email actually failed
+          // Email failed → do NOT mark sent (no instance row, no submission flag). Surface the link.
           toast.error(`Email failed to send. Please share this link manually: ${result.signingLink}`);
         }
-
-        // Update job details with submission ID
-        if (onUpdateDetails) {
-          onUpdateDetails({ docusealSubmissionId: result.submissionId });
-        }
-
-        setShowPreview(false);
       } else {
         toast.error(result.error || "Failed to send LOE");
       }

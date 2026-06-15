@@ -92,6 +92,12 @@ function parseByMarkers(html: string): EditableSection[] {
     const edId = m[3];
     const content = stripHTMLTags(innerHTML);
     if (!content.trim()) continue;
+    // LOCK the top-left client contact/address block (inside <div class="address-block">).
+    // Its stacked <br/> line breaks get stripped on the editable-section round-trip, which
+    // collapses the client name + address into one run-on line. It must stay NON-editable so
+    // the formatting survives. Excluded from the editable regions, never made a box.
+    // (Ben bug 2026-06-15 — contact-block-lock, PRD-APR-LOE-02 Part-1 Part-A.)
+    if (/class="address-block"/.test(html.slice(Math.max(0, m.index - 120), m.index))) continue;
     n++;
     const ctx = contextFor(m.index);
     sections.push({

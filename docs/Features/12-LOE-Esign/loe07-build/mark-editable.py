@@ -39,6 +39,11 @@ def mark_block(m: re.Match) -> str:
     # LOCKED cases -> return untouched
     if "field-label" in attrs:
         return full
+    # The top-left client contact/address block: its stacked <br/> line breaks get stripped on
+    # the editable-section round-trip (name + address collapse to one run-on line), so it must
+    # stay NON-editable. Signature = the contact tokens together. (Ben bug 2026-06-15.)
+    if "ClientFirstName" in inner and "ClientOrganizationAddress" in inner:
+        return full
     if any(t in inner for t in SKIP_TAGS):
         return full
     if not (strip_tokens(inner) or "merge-token" in inner):  # truly empty = skip; data values ARE editable now

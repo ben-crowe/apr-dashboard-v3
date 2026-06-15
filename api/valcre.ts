@@ -778,6 +778,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             }
           }
 
+          // Property Rights → custom "Interest Appraised" (CF12412, MultiOption) — wired 2026-06-15.
+          // WHY (root cause of the long-standing Property Rights sync failure): the dashboard cascade
+          // (derivePropertyRights) emits EXACTLY CF12412's option strings — "Fee Simple",
+          // "Leased Fee Interest", "Leasehold Estate", "Going Concern" — which do NOT match the native
+          // Job.Purposes enum ("Fee Simple Interest"/"Leasehold Interest", single-value). Routing to
+          // native Purposes therefore mismatched the map AND couldn't hold multiple values. The real home
+          // is this custom MultiOption field. Native Purposes stays wired above (best-effort first value);
+          // this ADDS the correct multi-select write. derivePropertyRights' full output is exhaustively
+          // 4 exact-match singles + the one Mixed-Use combo "Fee Simple & Leased Fee" → split to the two
+          // exact option strings. (Custom-only write → rides the empty-native-PATCH server fix to land.)
+          if (
+            (jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised) &&
+            (jobData.interestAppraised === undefined ||
+              jobData.interestAppraised === null ||
+              jobData.interestAppraised === "")
+          ) {
+            jobData.interestAppraised = String(
+              jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised,
+            ).replace(/Fee Simple\s*&\s*Leased Fee/gi, "Fee Simple,Leased Fee Interest");
+          }
+
           // Set VALTA custom fields if any are present in the update
           let customFieldResults = { success: 0, failed: 0, errors: [] as string[] };
           const hasValtaFields = Object.keys(VALTA_CUSTOM_FIELD_IDS).some(
@@ -1676,6 +1697,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       console.log("✅ Successfully created job!");
       console.log("✅ VAL Number:", valNumber);
       console.log("✅ Job ID:", jobId);
+
+      // Property Rights → "Interest Appraised" (CF12412) on CREATE too — mirror of the update-path alias
+      // above. Mirrored deliberately to avoid the known create-vs-update field-coverage gap (fields that
+      // land on edit but not on a fresh job). See the update-path block for the full rationale.
+      if (
+        (jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised) &&
+        (jobData.interestAppraised === undefined ||
+          jobData.interestAppraised === null ||
+          jobData.interestAppraised === "")
+      ) {
+        jobData.interestAppraised = String(
+          jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised,
+        ).replace(/Fee Simple\s*&\s*Leased Fee/gi, "Fee Simple,Leased Fee Interest");
+      }
 
       // Set VALTA custom fields on the newly created job
       let customFieldResults = { success: 0, failed: 0, errors: [] as string[] };

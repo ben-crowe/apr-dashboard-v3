@@ -714,7 +714,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           // was empty. The custom write still landed (verified: customFields.failed === 0). Treating
           // it as a failure is the false-positive toast. Only a GENUINE native rejection counts, so
           // every popup the user sees is a real one.
-          const emptyNativePatch = !!result.nativePatchError && /can.?t be empty|empty/i.test(result.nativePatchError);
+          // NARROW match (ui-designer catch): only the specific empty-patch string, NOT any error
+          // containing "empty" — else a real rejection like "value cannot be empty for required field X"
+          // would be falsely suppressed (a false-negative, the opposite of honest popups).
+          const emptyNativePatch = !!result.nativePatchError && /patch object can.?t be empty/i.test(result.nativePatchError);
           const realNativePatchError = !!result.nativePatchError && !emptyNativePatch;
           const syncFailed = !result.success || realNativePatchError || nativeBad || customBad;
           if (syncFailed) {

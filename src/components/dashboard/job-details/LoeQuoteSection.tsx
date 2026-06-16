@@ -1678,7 +1678,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   <div style={provStyle(tinted)} className="max-w-[220px]" title={v || 'Auto-derived from Property Type, Subtype & Tenancy.'}>
                     {mapped && v
                       ? <span className={`truncate min-w-0 flex-1 ${tinted ? 'text-slate-900' : 'text-slate-900 dark:text-slate-100'}`}>{v}</span>
-                      : <span className="text-zinc-400">from Type / Subtype / Tenancy</span>}
+                      : <span className="text-zinc-400">results from Type / Subtype / Tenancy</span>}
                   </div>
                 );
               })()}

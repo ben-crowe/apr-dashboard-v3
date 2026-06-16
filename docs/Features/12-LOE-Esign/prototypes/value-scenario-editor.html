@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<!-- MOCKUP — Value Scenario narrative editor (Phase A, ui-designer 2026-06-16)
+     Live mirror of LOE Section 10: see + edit each scenario's paragraph in the dashboard
+     before it reaches the contract. Cog beside "Value Scenarios" → modal → pill-expand.
+     Scenario text is VERBATIM from loeCascade.ts NARRATIVES (incl. the "makret" typo +
+     the pending Insurable Replacement Cost). Container = modal (reasoning in the footer note). -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Value Scenario Editor — Mockup</title>
+<style>
+  :root{
+    --bg:#f1f5f9; --card:#ffffff; --fg:#0f172a; --muted:#64748b; --muted-2:#f8fafc;
+    --border:#e2e8f0; --border-strong:#cbd5e1; --accent:#0f172a; --rose:#f43f5e;
+    --rose-bg:#ffe4e6; --amber-bg:#fef3c7; --amber-bd:#fcd34d; --amber-fg:#92400e;
+    --green:#16a34a; --green-bg:#dcfce7; --radius:8px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-size:14px;line-height:1.5;padding:28px}
+  h1{font-size:15px;margin:0 0 2px}
+  .sub{color:var(--muted);font-size:12.5px;margin:0 0 20px}
+
+  /* ---- in-context dashboard slice: the cog beside "Value Scenarios" ---- */
+  .slice{max-width:760px;background:var(--card);border:1px solid var(--border);
+    border-radius:12px;padding:16px 18px;margin-bottom:22px}
+  .slice-h{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:12px}
+  .row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;
+    border-bottom:1px solid var(--border)}
+  .row:last-child{border-bottom:none}
+  .lbl{display:flex;align-items:center;gap:7px;color:var(--fg);font-size:13px}
+  .val{color:var(--muted);font-size:13px}
+  .val.derived{color:#94a3b8;font-style:italic}
+  .cog{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;
+    border-radius:6px;cursor:pointer;color:var(--muted);transition:all .12s;border:1px solid transparent}
+  .cog:hover{background:var(--muted-2);color:var(--fg);border-color:var(--border)}
+  .cog svg{width:15px;height:15px}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:10px}
+  .hint b{color:var(--fg)}
+
+  /* ---- modal ---- */
+  .backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;
+    align-items:center;justify-content:center;padding:24px;z-index:50}
+  .backdrop.open{display:flex}
+  .modal{background:var(--card);width:100%;max-width:680px;max-height:90vh;border-radius:14px;
+    display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px rgba(2,6,23,.32)}
+  .m-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;
+    align-items:flex-start;justify-content:space-between;gap:12px}
+  .m-title{font-size:14.5px;font-weight:600;margin:0}
+  .m-sub{font-size:12px;color:var(--muted);margin:3px 0 0;max-width:520px}
+  .x{border:none;background:none;color:var(--muted);cursor:pointer;font-size:18px;
+    line-height:1;padding:4px;border-radius:6px}
+  .x:hover{background:var(--muted-2);color:var(--fg)}
+  .m-body{padding:16px 20px;overflow:auto}
+
+  /* mirror banner */
+  .mirror{display:flex;gap:8px;align-items:flex-start;background:#eff6ff;border:1px solid #bfdbfe;
+    color:#1e40af;border-radius:8px;padding:9px 11px;font-size:12px;margin-bottom:16px}
+  .mirror svg{width:15px;height:15px;flex:none;margin-top:1px}
+
+  /* version context strip (mirrors the cascade pick) */
+  .ctx{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);margin-bottom:12px;flex-wrap:wrap}
+  .ctx select{font:inherit;font-size:12px;padding:4px 8px;border:1px solid var(--border-strong);
+    border-radius:6px;background:#fff;color:var(--fg)}
+
+  /* pills */
+  .pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+  .pill{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--border-strong);
+    border-radius:999px;padding:6px 13px;font-size:12.5px;color:var(--fg);cursor:pointer;transition:all .12s}
+  .pill:hover{border-color:#94a3b8;background:var(--muted-2)}
+  .pill.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .pill .dot{width:7px;height:7px;border-radius:50%;background:var(--green)}
+  .pill .dot.empty{background:var(--amber-bd)}
+  .pill.active .dot{background:#fff}
+
+  /* expanded block */
+  .block{border:1px solid var(--border);border-radius:10px;background:var(--muted-2);
+    margin-top:12px;overflow:hidden}
+  .block-h{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;
+    border-bottom:1px solid var(--border);background:#fff}
+  .block-h .nm{font-size:13px;font-weight:600}
+  .block-h .tag{font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;
+    color:var(--muted);background:var(--muted-2);border:1px solid var(--border);border-radius:999px;padding:2px 8px;margin-left:8px}
+  .mini{border:none;background:none;color:var(--muted);cursor:pointer;font-size:12px;
+    display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:6px}
+  .mini:hover{background:var(--muted-2);color:var(--fg)}
+  .mini svg{width:13px;height:13px}
+  .block-body{padding:13px}
+  .para{font-size:13px;line-height:1.6;color:#1e293b;margin:0}
+  .para.empty{color:var(--amber-fg);font-style:italic}
+  .s10-cap{font-size:10.5px;color:var(--muted);margin:9px 0 0;display:flex;align-items:center;gap:6px}
+  .s10-cap code{background:#fff;border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:10.5px;color:#475569}
+
+  /* editing */
+  textarea{width:100%;min-height:96px;border:1px solid var(--border-strong);border-radius:8px;
+    padding:10px;font:inherit;font-size:13px;line-height:1.6;color:#1e293b;resize:vertical;
+    background:#fff;outline:none}
+  textarea:focus{border-color:#94a3b8;box-shadow:0 0 0 3px rgba(148,163,184,.18)}
+  .edit-actions{display:flex;align-items:center;gap:8px;margin-top:10px}
+  .btn{font:inherit;font-size:12.5px;font-weight:500;border-radius:7px;padding:7px 14px;cursor:pointer;border:1px solid var(--border-strong);background:#fff;color:var(--fg)}
+  .btn:hover{background:var(--muted-2)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .btn.primary:hover{opacity:.92}
+  .warn-row{display:flex;align-items:center;gap:7px;margin-left:auto;font-size:11.5px;color:var(--muted);cursor:pointer;user-select:none}
+
+  /* toast */
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);
+    opacity:0;pointer-events:none;transition:all .2s;display:flex;align-items:center;gap:9px;
+    padding:11px 16px;border-radius:9px;font-size:13px;font-weight:500;z-index:80;box-shadow:0 10px 30px rgba(2,6,23,.25)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.ok{background:#052e16;color:#bbf7d0}
+  .toast.err{background:#450a0a;color:#fecaca}
+  .toast svg{width:16px;height:16px}
+
+  .open-btn{font:inherit;font-size:13px;background:var(--accent);color:#fff;border:none;
+    border-radius:8px;padding:9px 16px;cursor:pointer}
+  .legend{max-width:680px;font-size:11.5px;color:var(--muted);margin-top:18px;line-height:1.7}
+  .legend b{color:var(--fg)}
+</style>
+</head>
+<body>
+
+<h1>Value Scenario narrative editor — interaction mockup</h1>
+<p class="sub">Phase A · click the cog to open · pills = derived scenarios · click a pill to expand → read → Edit → Save. Try the “simulate save failure” toggle. Switch the scenario set to see the pending V4 (Insurance) case.</p>
+
+<!-- in-context dashboard slice -->
+<div class="slice">
+  <div class="slice-h">Section 2 · Value Scenarios &amp; Approaches</div>
+  <div class="row">
+    <span class="lbl">Status of Improvements</span>
+    <span class="val">Improved - Under Renovation</span>
+  </div>
+  <div class="row">
+    <span class="lbl">
+      Value Scenarios
+      <span class="cog" onclick="openModal()" title="Preview &amp; edit the Section 10 wording">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </span>
+    </span>
+    <span class="val derived">As-Is, As If Complete &amp; Stabilized</span>
+  </div>
+  <div class="row">
+    <span class="lbl">Approaches to Value</span>
+    <span class="val derived">Direct Comparison, Income, Cost</span>
+  </div>
+  <p class="hint">The <b>cog</b> opens the Section 10 preview — read and correct the exact paragraph each scenario writes into the contract, before it’s generated.</p>
+</div>
+
+<button class="open-btn" onclick="openModal()">▸ Open the editor</button>
+
+<div class="legend">
+  <b>What this proves:</b> the wording that today is invisible until you generate the whole LOE is now readable + editable at the point of choice. <b>Live mirror</b> — what you save here is exactly what Section 10 prints. <b>Green dot</b> = has text; <b>amber dot</b> = no text yet (e.g. Insurable Replacement Cost — this is where Chris supplies the missing copy). Reproduces today’s text verbatim, including the client typo “makret” (Chris’s call to fix — shown so he can).
+</div>
+
+<!-- MODAL -->
+<div class="backdrop" id="backdrop">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="m-head">
+      <div>
+        <p class="m-title">Value Scenarios — Section 10 preview &amp; edit</p>
+        <p class="m-sub">What you see and save here is exactly what Section 10 of the contract prints for each scenario.</p>
+      </div>
+      <button class="x" onclick="closeModal()" aria-label="Close">✕</button>
+    </div>
+    <div class="m-body">
+      <div class="mirror">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span>Live mirror of the contract’s Section 10. Edits here flow straight into the generated LOE — no code, no waiting for the finished document.</span>
+      </div>
+
+      <div class="ctx">
+        <span>Scenarios derived for this job:</span>
+        <select id="verSel" onchange="setVersion(this.value)">
+          <option value="V2">V2 — Under Renovation (As-Is + As If Complete &amp; Stabilized)</option>
+          <option value="V1">V1 — Completed (As Stabilized)</option>
+          <option value="V3">V3 — Improved Land (As If Vacant Land + As If Complete &amp; Stabilized)</option>
+          <option value="V4">V4 — Insurance (Insurable Replacement Cost — pending text)</option>
+        </select>
+      </div>
+
+      <div class="pills" id="pills"></div>
+      <div id="expand"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// VERBATIM from src/utils/loe/loeCascade.ts NARRATIVES (summary slot). "" = pending (null in code).
+const TEXT = {
+  "As Is Vacant Land": "current market value of the subject property as of the effective date",
+  "As If Vacant Land": "current makret value based on the extraordinary assumption and hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date.",
+  "As If Complete & Stabilized": "current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the project is 100% complete and fully leased at market rents and is at stabilized occupancy, as of the effective date.",
+  "As-Is": "current market value of the subject property as improved as of the effective date",
+  "As Stabilized": "current market value of the subject property based on the extraordinary assumption that the subject property is fully leased at market rents and is at stabilized occupancy as of the effective date.",
+  "Insurable Replacement Cost": ""
+};
+const VERSIONS = {
+  V1: ["As Stabilized"],
+  V2: ["As-Is", "As If Complete & Stabilized"],
+  V3: ["As If Vacant Land", "As If Complete & Stabilized"],
+  V4: ["Insurable Replacement Cost"]
+};
+let curVer = "V2", curScen = null, editing = false, rowIdx = 1;
+
+function openModal(){ document.getElementById('backdrop').classList.add('open'); setVersion(curVer); }
+function closeModal(){ document.getElementById('backdrop').classList.remove('open'); }
+document.getElementById('backdrop').addEventListener('click', e=>{ if(e.target.id==='backdrop') closeModal(); });
+
+function setVersion(v){
+  curVer = v; document.getElementById('verSel').value = v;
+  curScen = VERSIONS[v][0]; editing = false;
+  renderPills(); renderExpand();
+}
+function renderPills(){
+  const list = VERSIONS[curVer];
+  document.getElementById('pills').innerHTML = list.map(s=>{
+    const empty = !TEXT[s];
+    return `<button class="pill ${s===curScen?'active':''}" onclick="pickScen('${esc(s)}')">
+      <span class="dot ${empty?'empty':''}"></span>${s}</button>`;
+  }).join('');
+}
+function pickScen(s){ curScen = s; editing = false; renderPills(); renderExpand(); }
+
+function renderExpand(){
+  const s = curScen; if(!s){ document.getElementById('expand').innerHTML=''; return; }
+  const txt = TEXT[s]; const empty = !txt;
+  rowIdx = VERSIONS[curVer].indexOf(s) + 1;
+  let inner;
+  if(editing){
+    inner = `<div class="block-body">
+      <textarea id="ed">${esc(empty?'':txt)}</textarea>
+      <div class="edit-actions">
+        <button class="btn primary" onclick="save()">Save</button>
+        <button class="btn" onclick="cancelEdit()">Cancel</button>
+        <label class="warn-row"><input type="checkbox" id="failSim"> simulate save failure</label>
+      </div>
+    </div>`;
+  } else {
+    inner = `<div class="block-body">
+      ${empty
+        ? `<p class="para empty">No text yet — this scenario prints a literal placeholder in the contract. Add the wording here (this is where Chris supplies the missing Insurable copy).</p>`
+        : `<p class="para">${esc(txt)}</p>`}
+      <p class="s10-cap">Renders into Section 10 as <code>[EA/HCSummary${rowIdx}]</code> · live mirror</p>
+    </div>`;
+  }
+  document.getElementById('expand').innerHTML = `<div class="block">
+    <div class="block-h">
+      <div><span class="nm">${s}</span><span class="tag">${empty?'No text':'Section 10 row '+rowIdx}</span></div>
+      ${editing?'' :`<button class="mini" onclick="startEdit()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
+        ${empty?'Add text':'Edit'}</button>`}
+    </div>${inner}</div>`;
+}
+function startEdit(){ editing = true; renderExpand(); setTimeout(()=>document.getElementById('ed').focus(),0); }
+function cancelEdit(){ editing = false; renderExpand(); }
+function save(){
+  const fail = document.getElementById('failSim').checked;
+  if(fail){ toast('err', "Couldn’t save — database write failed. Your text is kept; try again."); return; }
+  TEXT[curScen] = document.getElementById('ed').value.trim();
+  editing = false; renderPills(); renderExpand();
+  toast('ok', 'Saved — Section 10 will print this wording.');
+}
+function toast(kind, msg){
+  const t = document.getElementById('toast');
+  const icon = kind==='ok'
+    ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>';
+  t.className = 'toast show '+kind; t.innerHTML = icon+'<span>'+msg+'</span>';
+  clearTimeout(window._tt); window._tt = setTimeout(()=>t.className='toast '+kind, 3200);
+}
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+</script>
+</body>
+</html>

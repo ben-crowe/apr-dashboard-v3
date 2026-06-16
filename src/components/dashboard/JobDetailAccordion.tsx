@@ -56,9 +56,15 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         clientOrganization: 'Bridgepoint Capital Partners',
         clientPhone: '(403) 555-0142',
         clientEmail: 'sarah.mitchell@bridgepointcap.com',
-        clientAddress: '350 7th Avenue SW, Suite 1800, Calgary, AB T2P 3N9',
+        clientAddress: '350 7th Avenue SW, Suite 1800',
+        clientCity: 'Calgary',
+        clientProvince: 'AB',
+        clientPostal: 'T2P 3N9',
         propertyName: 'Riverside Commerce Centre',
-        propertyAddress: '4820 Macleod Trail SE, Calgary, AB T2G 0A5',
+        propertyAddress: '4820 Macleod Trail SE',
+        propertyCity: 'Calgary',
+        propertyProvince: 'AB',
+        propertyPostal: 'T2G 0A5',
         propertyType: 'Industrial',
         intendedUse: 'First Mortgage Financing', // mock intake Authorized Use; V4 overrides → Insurance, Clear restores this
         assetCondition: 'Good',
@@ -151,7 +157,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
       void 0 /* success: silent (Ben) */;
       return;
     }
-    const jobKeys = ['clientFirstName','clientLastName','clientTitle','clientOrganization','clientPhone','clientEmail','clientAddress','propertyName','propertyAddress','propertyType','intendedUse','assetCondition','valuationPremises','propertyContactFirstName','propertyContactLastName','propertyContactEmail','propertyContactPhone','notes'];
+    const jobKeys = ['clientFirstName','clientLastName','clientTitle','clientOrganization','clientPhone','clientEmail','clientAddress','clientCity','clientProvince','clientPostal','propertyName','propertyAddress','propertyCity','propertyProvince','propertyPostal','propertyType','intendedUse','assetCondition','valuationPremises','propertyContactFirstName','propertyContactLastName','propertyContactEmail','propertyContactPhone','notes'];
     const detailKeys = ['propertySubtype','tenancy','propertyRightsAppraised','valueTimeframe','scopeOfWork','reportType','reportFormat','assignmentType','analysisLevel','appraisalFee','retainerAmount','paymentTerms','effectiveDate','requestDate','deliveryDate','deliveryTime','clientDocuments','previouslyAppraised','currentUse','proposedUse','cmhcFinancing','transactionStatus','zoningStatus','valuationPremises','statusOfImprovements','authorizedUse','valueScenarios','approachesToValue','yearBuilt','buildingSize','numberOfUnits','parkingSpaces','legalDescription','zoningClassification','zoneAbbreviation','landUseDesignation','floodZone','utilities','parcelNumber','grossLandSf','assessedValue','taxes','assessmentYear','landAssessmentValue','improvedAssessmentValue','totalAssessmentValue'];
     if (onUpdateJob) onUpdateJob(Object.fromEntries(jobKeys.map((k) => [k, ''])) as any);
     if (onUpdateDetails) onUpdateDetails(Object.fromEntries(detailKeys.map((k) => [k, ''])) as any);

@@ -84,6 +84,9 @@ export interface TestClientData {
   clientTitle: string;
   clientOrganization: string;
   clientAddress: string;
+  clientCity: string;
+  clientProvince: string;
+  clientPostal: string;
   clientPhone: string;
   clientEmail: string;
 }
@@ -92,7 +95,7 @@ export interface TestPropertyData {
   propertyAddress: string;
   propertyCity: string;
   propertyProvince: string;
-  propertyPostalCode: string;
+  propertyPostal: string;
   propertyType: string;
   intendedUse: string;
   assetCondition: string;
@@ -134,7 +137,10 @@ export function generateClientTestData(): TestClientData {
     clientLastName: lastName,
     clientTitle: getRandomElement(['Owner', 'Property Manager', 'CEO', 'VP Operations', 'Director', 'Asset Manager']),
     clientOrganization: company,
-    clientAddress: `${suite}${streetNumber} ${streetName} ${streetType}, Calgary, AB T${getRandomNumber(0, 9)}${String.fromCharCode(65 + getRandomNumber(0, 25))} ${getRandomNumber(0, 9)}${String.fromCharCode(65 + getRandomNumber(0, 25))}${getRandomNumber(0, 9)}`,
+    clientAddress: `${suite}${streetNumber} ${streetName} ${streetType}`,   // STREET only — city/province/postal are separate fields now
+    clientCity: 'Calgary',
+    clientProvince: 'AB',
+    clientPostal: `T${getRandomNumber(0, 9)}${String.fromCharCode(65 + getRandomNumber(0, 25))} ${getRandomNumber(0, 9)}${String.fromCharCode(65 + getRandomNumber(0, 25))}${getRandomNumber(0, 9)}`,
     clientPhone: formatPhoneNumber(phoneNumber),
     clientEmail: `${firstName.toLowerCase()}.${lastName.toLowerCase()}.${uniqueId}@test.com`
   };
@@ -154,10 +160,10 @@ export function generatePropertyTestData(): TestPropertyData {
   const postalCode = `T${getRandomNumber(0, 9)}${String.fromCharCode(65 + getRandomNumber(0, 25))} ${getRandomNumber(0, 9)}${String.fromCharCode(65 + getRandomNumber(0, 25))}${getRandomNumber(0, 9)}`;
   
   return {
-    propertyAddress: `${streetNumber} ${streetName} ${streetType}, ${city}, AB ${postalCode}`,
+    propertyAddress: `${streetNumber} ${streetName} ${streetType}`,   // STREET only — city/province/postal are separate fields now
     propertyCity: city,
-    propertyProvince: 'Alberta',
-    propertyPostalCode: postalCode,
+    propertyProvince: 'AB',
+    propertyPostal: postalCode,
     propertyType: propertyType,
     // MUST MATCH DROPDOWN VALUES EXACTLY - intendedUse field in form
     // Must match the form's Authorized Use <SelectItem> values exactly (the canonical 8 =
@@ -234,6 +240,9 @@ export function generateCompleteTestData() {
     // Add property fields with correct names for the form
     propertyName: getRandomElement(propertyNames),
     propertyAddress: property.propertyAddress,
+    propertyCity: property.propertyCity,
+    propertyProvince: property.propertyProvince,
+    propertyPostal: property.propertyPostal,
     propertyType: property.propertyType,
     intendedUse: property.intendedUse,
     valuationPremises: getRandomElement(['Market Value', 'Market Rent', 'Investment Value', 'Insurable Value', 'Liquidation Value']),

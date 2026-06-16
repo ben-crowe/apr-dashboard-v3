@@ -23,13 +23,20 @@ The ✓ means "the last call returned 200," NOT "Valcre holds the current value.
 indicator — it violates the honest-indicator principle this whole effort exists to uphold.**
 
 ## Design (co-architect direction — latest-wins queue; explicitly NOT readback-before-green)
-A **per-field, latest-wins, single-in-flight** sync queue:
-- Each synced field holds **ONE pending value** (a slot).
-- A newer change to the SAME field **REPLACES** the pending value (supersedes) — intermediate values
-  **never even fire** (fewer Valcre calls — good, Valcre is degraded).
-- A **single in-flight worker per field** runs: it `await`s the prior call, then sends the latest
-  pending value **only if it changed**; loops if a newer value arrived while it was in flight; stops
-  when pending is empty.
+A **per-field, latest-wins, single-in-flight** sync queue **with a leading coalesce window**:
+- **Leading coalesce window (~150–250ms) per field (added per co-arch gate 2026-06-16 — required for
+  strict zero-intermediate):** on a change, set pending = latest value and (re)start a short per-field
+  timer; rapid same-field changes WITHIN the window keep REPLACING pending and do NOT send. The first
+  send fires only when the window elapses, carrying the LATEST pending. This collapses a rapid toggle to
+  a SINGLE send of the FINAL value → strict **zero** intermediate Valcre writes (makes acceptance #2
+  literally true) + the fewest possible calls on the degraded Valcre. (Without this window the FIRST
+  change would fire immediately and one intermediate could write before convergence — the gap co-arch
+  caught.)
+- Each synced field holds **ONE pending value** (a slot); a newer change to the SAME field **REPLACES**
+  it (supersedes) — whether the coalesce window is still open OR a worker is already in-flight.
+- A **single in-flight worker per field**: after the window elapses it `await`s any prior call, then
+  sends the latest pending **only if it changed**; loops if a newer value arrived while in-flight;
+  stops when pending is empty.
 - Net: Valcre **converges to the FINAL value** in correct order; the `✓` honestly means *"the latest
   value is the one that was sent."*
 - **Do NOT** add readback-before-green (option c) — too many calls on a degraded Valcre.

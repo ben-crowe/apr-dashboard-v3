@@ -499,6 +499,7 @@
   <div class="seg">
     <button class="active" onclick="setView('index',this)">Field Registry</button>
     <button onclick="setView('logic',this)">Logic Fields</button>
+    <button onclick="setView('scenarios',this)">Scenarios</button>
     <button onclick="setView('proposedapr',this)">Mock Dashboard</button>
     <button onclick="window.open('https://apr-dashboard-v3.vercel.app/dashboard','_blank')">Live Dashboard</button>
   </div>
@@ -960,6 +961,23 @@ E  Authorized Use          ──┘</div>
 </div>
 
 <!-- ═══ DROPDOWN OPTIONS ═══ -->
+<div class="panel" id="panel-scenarios">
+  <div class="sec">
+    <div class="sec-title" style="cursor:default;justify-content:space-between;">Value Scenarios — Section 10 Library
+      <a class="fm-test" href="https://apr-dashboard-v3.vercel.app/dashboard" target="_blank" style="margin-left:auto;font-size:11px;" title="Edit the live §10 text in the dashboard Value Scenarios editor">Edit in Dashboard ▸</a>
+    </div>
+    <div class="sec-body">
+      <div style="font-size:11.5px;color:var(--text-3);margin-bottom:10px;line-height:1.5;">Every Section 10 value scenario: its contract summary, what derives it (Status of Improvements / Authorized Use), where it lands in Valcre (custom field <b>CF12414</b>, by option ID), and whether copy is still pending. <b>Reference view</b> — the live, editable text lives in the dashboard Value Scenarios editor (the editable store); this mirrors it with the code seed as fallback.</div>
+      <input id="scnSearch" placeholder="Search scenarios or summary text…" oninput="renderScenarios()" style="width:100%;max-width:360px;font-size:12px;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);color:var(--text);margin-bottom:12px;">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;">
+        <thead><tr style="text-align:left;border-bottom:1px solid var(--border);color:var(--text-2);font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;">
+          <th style="padding:7px 8px;">Scenario</th><th style="padding:7px 8px;">Section 10 Summary</th><th style="padding:7px 8px;width:54px;">EA/HC</th><th style="padding:7px 8px;">Derived From</th><th style="padding:7px 8px;width:120px;">Valcre (CF12414)</th><th style="padding:7px 8px;width:80px;">Status</th>
+        </tr></thead>
+        <tbody id="scnBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
 <div class="panel" id="panel-options">
 <div class="sec"><div class="sec-title" style="cursor:default;">Dropdown Options</div><div class="sec-body">
   <input class="fi-search" id="optSearch" placeholder="Search options..." oninput="renderOptions()">
@@ -1775,6 +1793,7 @@ function setView(view, btn) {
   if (view === 'index') renderFields();
   if (view === 'currentapr') requestAnimationFrame(tagCurrentAprColumns);
   if (view === 'proposedapr') { requestAnimationFrame(tagCurrentAprColumns); renderFieldMap(); }
+  if (view === 'scenarios') renderScenarios();
   // Show dash controls only on Full Dashboard — keep right-aligned
   document.getElementById('dashControls').parentElement.style.display = (view === 'full') ? 'flex' : 'none';
   // Show buttons only on Full Dashboard
@@ -2115,6 +2134,49 @@ function roleBadge(r) {
   return '<span style="font-size:11px;color:var(--text-3);">—</span>';
 }
 let currentSort = 'idx';
+
+// ═══ VALUE SCENARIOS — §10 library (reference view) ═══
+// Source: loeCascade.ts NARRATIVES (seed summary text, verbatim incl "makret"), STATUS_TO_SCENARIOS
+// (which Status of Improvements derives which scenario), and CF12414 valueScenarios option IDs (api/valcre.ts).
+// The LIVE editable text lives in the scenario_narratives store (dashboard editor); this mirrors it, seed as fallback.
+const SCN_LIB = [
+  {n:"As Is Vacant Land", sum:"current market value of the subject property as of the effective date", ea:0, hc:0, from:["Proposed - Vacant Land"], oid:7499, pending:0},
+  {n:"As If Vacant Land", sum:"current makret value based on the extraordinary assumption and hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date.", ea:1, hc:1, from:["Improved Land (Demo Req)","Under Construction"], oid:7507, pending:0},
+  {n:"As If Complete & Stabilized", sum:"current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the project is 100% complete and fully leased at market rents and is at stabilized occupancy, as of the effective date.", ea:1, hc:1, from:["Under Renovation","Proposed Renovation","Vacant Land","Improved Land (Demo)","Under Construction"], oid:7506, pending:0},
+  {n:"As-Is", sum:"current market value of the subject property as improved as of the effective date", ea:0, hc:0, from:["Under Renovation","Proposed Renovation"], oid:7505, pending:0},
+  {n:"As Stabilized", sum:"current market value of the subject property based on the extraordinary assumption that the subject property is fully leased at market rents and is at stabilized occupancy as of the effective date.", ea:1, hc:1, from:["Completed","Renovated"], oid:7504, pending:0},
+  {n:"As If Complete & Stabilized - Renovated", sum:"current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the renovation is 100% complete and the property is fully leased and is at stabilized occupancy, as of the effective date.", ea:0, hc:0, from:["Option-set only (not derived today)"], oid:7503, pending:0},
+  {n:"As If Complete - Rezoned", sum:"", ea:0, hc:0, from:["Option-set only"], oid:7502, pending:1},
+  {n:"As If Complete - Serviced", sum:"", ea:0, hc:0, from:["Option-set only"], oid:7501, pending:1},
+  {n:"As If Complete - Subdivided", sum:"", ea:0, hc:0, from:["Option-set only"], oid:7500, pending:1},
+  {n:"Insurable Replacement Cost", sum:"", ea:0, hc:0, from:["Authorized Use = Insurance (override)"], oid:7508, pending:1},
+];
+function scnEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function renderScenarios() {
+  const q = (document.getElementById('scnSearch') ? document.getElementById('scnSearch').value : '').toLowerCase();
+  const tb = document.getElementById('scnBody'); if (!tb) return; tb.innerHTML = '';
+  SCN_LIB.forEach(s => {
+    const hay = [s.n, s.sum, (s.from||[]).join(' ')].join(' ').toLowerCase();
+    if (q && !hay.includes(q)) return;
+    const eahc = ((s.ea?'EA':'') + (s.ea&&s.hc?' + ':'') + (s.hc?'HC':'')) || '—';
+    const sumCell = s.pending
+      ? '<span style="color:#b45309;font-style:italic;">— no copy yet (Chris to supply) —</span>'
+      : '<span style="font-family:Georgia,serif;color:var(--text);">'+scnEsc(s.sum)+'</span>';
+    const statusBadge = s.pending
+      ? '<span class="cs-status cs-status-pending">Needs text</span>'
+      : '<span class="cs-status cs-status-active">Has text</span>';
+    const fromCell = (s.from||[]).map(f => '<span style="display:inline-block;font-size:10.5px;color:var(--text-2);background:var(--muted);border:1px solid var(--border);border-radius:999px;padding:1px 7px;margin:1px 2px 1px 0;">'+scnEsc(f)+'</span>').join('');
+    tb.innerHTML +=
+      '<tr style="border-bottom:1px solid var(--border);vertical-align:top;">' +
+        '<td style="padding:9px 8px;font-weight:600;color:var(--text);">'+scnEsc(s.n)+'</td>' +
+        '<td style="padding:9px 8px;line-height:1.5;color:var(--text);max-width:340px;">'+sumCell+'</td>' +
+        '<td style="padding:9px 8px;font-size:11px;color:var(--text-3);">'+eahc+'</td>' +
+        '<td style="padding:9px 8px;">'+fromCell+'</td>' +
+        '<td style="padding:9px 8px;font-family:SF Mono,Consolas,monospace;font-size:11px;color:var(--text-2);">CF12414 · '+s.oid+'</td>' +
+        '<td style="padding:9px 8px;">'+statusBadge+'</td>' +
+      '</tr>';
+  });
+}
 
 function renderFields() {
   const q = document.getElementById('fiSearch').value.toLowerCase();

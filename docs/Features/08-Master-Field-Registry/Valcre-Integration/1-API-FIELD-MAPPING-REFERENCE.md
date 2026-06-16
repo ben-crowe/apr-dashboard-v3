@@ -1173,4 +1173,72 @@ Open items from the audit (each needs a ruling):
 
 ---
 
+## 2026-06-16 — TODAY RECONCILIATION (Valcre custom-field sync block — CODE-VERIFIED)
+
+> **Why this block exists:** the table above (v2.1, Nov 2025) predates the entire **v3.1 custom-field
+> sync block** (`CF12407–12427`, wired 2026-06-05 onward). It still shows the OLD native mappings
+> (e.g. `propertyRightsAppraised → Job.PropertyRightsAppraised`), which are SUPERSEDED. Everything below
+> is read **straight from `api/valcre.ts` `VALTA_CUSTOM_FIELD_IDS` (~L174–223)** and proven live this
+> session — NOT from memory or the stale rows above. **Where this block and the v2.1 table disagree,
+> THIS block wins.**
+>
+> ⚠ **Memory-drift caught today:** a Cognee/knowledge-layer search returned `interestAppraised = CF12415`
+> — WRONG (conflated with approachesToValue). Code is authoritative: `interestAppraised = CF12412`,
+> `approachesToValue = CF12415`. Flagged to mcp-knowledge-manager; do not trust the memory layer for CF IDs.
+
+### Custom-field map (dashboard field → Valcre CF ID), code-cited `api/valcre.ts:174–223`
+
+| Dashboard field | Valcre CF | Type | Key option IDs |
+|---|---|---|---|
+| `statusOfImprovements` | **CF12407** | SingleOption | Improved-Completed 7432 · Under Renovation 7434 · Proposed-Improved Land (Demolition) 7437 |
+| `tenancy` | **CF12408** | SingleOption | Multi-Tenant 7418 · Owner Occupied 7419 · Partial Owner Occupied 7420 · Single-Tenant 7421 · Unkown 7422 · Vacant 7423 |
+| `interestAppraised` (Property Rights) | **CF12412** | MultiOption | Fee Simple 7469 · Leased Fee Interest 7470 · Leasehold Estate 7471 · Going Concern 7472 |
+| `authorizedUse` | **CF12413** | (8 ListAuthorizedUse option IDs) | per `api/valcre.ts:555` |
+| `valueScenarios` | **CF12414** | MultiOption | As Is Vacant Land 7499 … Insurable Replacement Cost 7508 |
+| `approachesToValue` | **CF12415** | MultiOption | Cost 7514 · Land Direct Comparison 7513 · Direct Comparison 7515 · Income 7516 (short-name aliases added so cascade labels match) |
+| `valueTimeframe` | **CF12419** | SingleOption | Current 7534 · Prospective 7535 · Retrospective 7536 |
+
+All seven land via `setValtaCustomFields()` (MultiOption = `SelectedIds`, comma-joined option-id string).
+Empty-native-PATCH is skipped when `updateData` has 0 keys so custom-only writes still land.
+
+### Behaviors verified live this session (2026-06-16)
+
+- **Property Rights routes to CF12412 ONLY.** The native `Job.Purposes` write was **REMOVED** — Valcre
+  always rejected Purposes and the proxy bailed *before* `setValtaCustomFields`, so InterestAppraised
+  never updated. Removing the native write = the fix (`api/valcre.ts:623–628`, `:1586`). Verified: PR
+  writes, no error toast.
+- **Property Rights is DERIVED, not entered** (`derivePropertyRights`, `loeCascade.ts`). Override order
+  **Tenancy > Subtype > Type**; emits EXACTLY CF12412's option strings. Rules: Tenancy → Multi-Tenant=
+  Leased Fee Interest, Single-Tenant=Going Concern, Owner Occupied=Fee Simple, Partial=Leasehold Estate;
+  Subtype Mixed Use → "Fee Simple & Leased Fee"; Type base (Retail/Industrial/Office=Leased Fee, else
+  Fee Simple). Unknown/Vacant tenancy = no override.
+- **`valueScenarios` → CF12414 only** (readback-verified job 784140, 2026-06-10). **`approachesToValue` →
+  CF12415** (short-name aliases). **`statusOfImprovements` → CF12407**, **`valueTimeframe` → CF12419**,
+  **`tenancy` → CF12408** — all confirmed syncing with the in-dashboard sync indicator (saving→synced/
+  sync-failed amber triangle).
+- **Address (native, 1:1 structured):** client vs property addresses map to separate Valcre slots, no
+  cross/swap; **contact address is CREATE-ONLY** (`api/valcre.ts:~1009` — set only when minting a new
+  contact; edits never re-PATCH). PropertyContact left empty when not provided. (Fresh-job 3-entity
+  readback still owed — pending a fresh intake with distinct client vs property addresses.)
+- **Property Type / Subtype** = native Property-entity fields (PropertyType single enum + `Types`
+  PascalCase multi-select); Tenancy is native AND mirrored to CF12408.
+
+### NOT a Valcre field (new today, for the record)
+
+- **`scenario_narratives`** Supabase table (Value Scenario editor, shipped 2026-06-16) — the §10 LOE
+  narrative text store. RLS public-read / authenticated-write, 6 rows seeded verbatim (incl "makret").
+  Internal to the LOE generator; does not sync to Valcre.
+
+### Still STALE above / open
+
+- The v2.1 table's `propertyRightsAppraised → Job.PropertyRightsAppraised` row is **superseded** by
+  CF12412 (above). Left in place for history; this reconciliation overrides it.
+- The pre-existing audit open-items (Property Type 9-vs-16, Report Type/Format naming, Zoning options
+  fill, etc.) are UNCHANGED by this reconciliation — they remain open for Ben/Chris rulings.
+
+*Reconciliation by qa-agent, 2026-06-16, code-cited from `api/valcre.ts` + this session's live readbacks.
+Shared with co-architect. Supersedes memory-layer CF assignments (which were drifting).*
+
+---
+
 **End of API & Field Mapping Reference**

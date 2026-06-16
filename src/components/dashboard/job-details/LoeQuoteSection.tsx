@@ -1728,7 +1728,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               {/* Derived (rose) — driven by Status of Improvements + Authorized Use via the cascade. */}
               {(() => {
                 const v = deriveValueScenarios(statusOfImprovements, authorizedUse).join(', ');
-                return renderDerived(v, 'from Status of Impr. (2.4)', v ? 'scenarios' : null,
+                return renderDerived(v, 'results from Status + Authorized Use', v ? 'scenarios' : null,
                   'Computed from Status of Improvements + your Authorized Use (from Section 1).');
               })()}
             </CompactField>
@@ -1752,8 +1752,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               {/* Derived (blue) — driven by Status of Improvements via the cascade. */}
               {(() => {
                 const v = deriveApproaches(statusOfImprovements, authorizedUse).join(', ');
-                return renderDerived(v, 'from Status of Impr. (2.4)', v ? 'approaches' : null,
-                  'Auto-derived from Status of Improvements.');
+                return renderDerived(v, 'results from Status + Authorized Use', v ? 'approaches' : null,
+                  'Computed from Status of Improvements + Authorized Use (Insurance → Cost Approach).');
               })()}
             </CompactField>
             {/* MIRROR of Section 1. Maps in (shows value + yellow) only when "Insert from data" is on; in

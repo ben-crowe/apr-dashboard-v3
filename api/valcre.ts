@@ -208,7 +208,15 @@ const VALTA_FIELD_CONFIG: Record<string, { type: string; options?: Record<string
   authorizedUse: { type: "SingleOption", options: { "First Mortgage Financing": 7481, "Litigation": 7482, "Estate Planning": 7483, "Acquisition-Disposition": 7484, "Internal Decision-Making": 7485, "Insurance": 7486, "Financial Reporting": 7487, "GST": 7488 } },
   intendedUse: { type: "SingleOption", options: { "First Mortgage Financing": 7481, "Litigation": 7482, "Estate Planning": 7483, "Acquisition-Disposition": 7484, "Internal Decision-Making": 7485, "Insurance": 7486, "Financial Reporting": 7487, "GST": 7488 } },
   valueScenarios: { type: "MultiOption", options: { "As Is Vacant Land": 7499, "As If Complete - Subdivided": 7500, "As If Complete - Serviced": 7501, "As If Complete - Rezoned": 7502, "As If Complete & Stabilized - Renovated": 7503, "As Stabilized": 7504, "As-Is": 7505, "As If Complete & Stabilized": 7506, "As If Vacant Land": 7507, "Insurable Replacement Cost": 7508 } },
-  approachesToValue: { type: "MultiOption", options: { "Land Direct Comparison Approach": 7513, "Cost Approach": 7514, "Direct Comparison Approach": 7515, "Income Approach": 7516 } },
+  approachesToValue: { type: "MultiOption", options: {
+    // Valcre's exact option labels:
+    "Land Direct Comparison Approach": 7513, "Cost Approach": 7514, "Direct Comparison Approach": 7515, "Income Approach": 7516,
+    // ALIASES (fix 2026-06-16): the dashboard cascade (loeCascade.ts STATUS_TO_APPROACHES) emits SHORT
+    // names without the "Approach" suffix ("Direct Comparison", "Income", "Cost", "Land Direct Comparison")
+    // → they didn't match Valcre's labels → silent no-write (live-confirmed on VAL261101). Map the short
+    // forms to the same IDs so the cascade's output lands. Display stays short; only the Valcre sync resolves.
+    "Direct Comparison": 7515, "Income": 7516, "Cost": 7514, "Land Direct Comparison": 7513,
+  } },
   assignmentType: { type: "SingleOption", options: { "Single Property": 7519, "Multiple Properties": 7520 } },
   reportType: { type: "SingleOption", options: { "Comprehensive": 7524, "Concise": 7525, "Form": 7526 } },
   desktopReport: { type: "SingleOption", options: { "Yes": 7529, "No": 7530 } },

@@ -54,6 +54,14 @@ const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
   const [bodyHtml, setBodyHtml] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
+  // Left-pane edit surface: false = rendered WYSIWYG (default — edit the real letter),
+  // true = raw HTML source (drop-in code for fully custom formatting).
+  const [sourceMode, setSourceMode] = useState(false);
+  const editorIframeRef = useRef<HTMLIFrameElement>(null);
+  // Re-seed signal: bump to (re)load the editable iframe from bodyHtml. We seed imperatively
+  // (not via React on every keystroke) so the caret never resets while typing.
+  const [seedTick, setSeedTick] = useState(0);
+  const seedingRef = useRef(false);
 
   const tokenCtx = {
     firstName: job.clientFirstName || '',
@@ -77,6 +85,7 @@ const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
       setBodyHtml(resolveEditTimeTokens(EMAIL_SEED_BODY, tokenCtx));
     } finally {
       setIsLoading(false);
+      setSeedTick(t => t + 1); // re-seed the rendered editor from the freshly-loaded body
     }
   };
 
@@ -85,13 +94,61 @@ const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
-  // Insert a merge token at the cursor in the body textarea.
+  // Serialize the editable iframe's document back to a full HTML string (with DOCTYPE).
+  const readEditorHtml = (doc: Document): string =>
+    '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+
+  // (Re)seed the editable iframe from bodyHtml and wire read-back of edits. Runs only when the
+  // seed signal bumps or we switch into rendered mode — NOT on every keystroke (caret stays put).
+  useEffect(() => {
+    if (sourceMode || isLoading) return;
+    const iframe = editorIframeRef.current;
+    const doc = iframe?.contentDocument;
+    if (!doc) return;
+    seedingRef.current = true;
+    // Defensively strip any <script> so written template HTML can't execute in the same-origin frame.
+    const safe = (bodyHtml || '<p></p>').replace(/<script[\s\S]*?<\/script>/gi, '');
+    doc.open();
+    doc.write(safe);
+    doc.close();
+    doc.designMode = 'on';
+    seedingRef.current = false;
+    const handler = () => {
+      if (seedingRef.current) return;
+      setBodyHtml(readEditorHtml(doc));
+    };
+    doc.addEventListener('input', handler);
+    return () => doc.removeEventListener('input', handler);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seedTick, sourceMode, isLoading]);
+
+  // Insert a merge token at the cursor — works in BOTH the rendered editor and the raw-source box.
   const insertToken = (token: string) => {
+    if (!sourceMode) {
+      const doc = editorIframeRef.current?.contentDocument;
+      if (doc) {
+        (doc.body as HTMLElement | null)?.focus();
+        const ok = doc.execCommand('insertText', false, token);
+        if (!ok && doc.body) doc.body.append(token); // fallback when no live selection
+        setBodyHtml(readEditorHtml(doc));
+        return;
+      }
+    }
     const el = bodyRef.current;
     if (!el) { setBodyHtml(b => b + token); return; }
     const start = el.selectionStart ?? bodyHtml.length;
     const end = el.selectionEnd ?? bodyHtml.length;
     setBodyHtml(bodyHtml.slice(0, start) + token + bodyHtml.slice(end));
+  };
+
+  // Toggle the left pane between rendered editing and raw HTML source. Re-seed the rendered
+  // editor when returning to it so it reflects any raw-source edits.
+  const toggleSourceMode = () => {
+    setSourceMode(prev => {
+      const next = !prev;
+      if (!next) setSeedTick(t => t + 1);
+      return next;
+    });
   };
 
   // Save the CURRENT compose content as the new managed default (Set as Default). Re-tokenize
@@ -213,15 +270,37 @@ const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
               </div>
 
               <div className="flex-1 flex flex-col">
-                <Label htmlFor="email-body" className="text-xs font-medium">Body (HTML)</Label>
-                <textarea
-                  id="email-body"
-                  ref={bodyRef}
-                  value={bodyHtml}
-                  onChange={(e) => setBodyHtml(e.target.value)}
-                  className="mt-1 flex-1 min-h-[240px] w-full rounded-md border border-border bg-card p-2 text-xs font-mono text-foreground focus:outline-none focus:ring-0 focus:border-gray-400"
-                  spellCheck={false}
-                />
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="email-body" className="text-xs font-medium">
+                    {sourceMode ? 'Body (HTML source)' : 'Body — click to edit the letter'}
+                  </Label>
+                  <button
+                    type="button"
+                    onClick={toggleSourceMode}
+                    title={sourceMode
+                      ? 'Switch back to editing the rendered letter'
+                      : 'Drop into raw HTML for fully custom formatting'}
+                    className="flex items-center gap-1 text-[11px] px-2 py-0.5 rounded border border-border text-muted-foreground hover:bg-muted transition-colors font-mono"
+                  >
+                    {sourceMode ? '◀ Rich view' : '</> HTML source'}
+                  </button>
+                </div>
+                {sourceMode ? (
+                  <textarea
+                    id="email-body"
+                    ref={bodyRef}
+                    value={bodyHtml}
+                    onChange={(e) => setBodyHtml(e.target.value)}
+                    className="mt-1 flex-1 min-h-[240px] w-full rounded-md border border-border bg-card p-2 text-xs font-mono text-foreground focus:outline-none focus:ring-0 focus:border-gray-400"
+                    spellCheck={false}
+                  />
+                ) : (
+                  <iframe
+                    ref={editorIframeRef}
+                    title="Email body editor"
+                    className="mt-1 flex-1 min-h-[240px] w-full rounded-md border border-border bg-white focus-within:border-gray-400"
+                  />
+                )}
               </div>
 
               <div className="flex items-center gap-2 flex-wrap">

@@ -181,10 +181,17 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   // only update → empty native PATCH → blocked by the same server empty-native-PATCH bug until that
   // server fix deploys; so this lands only WITH that deploy (honest "failed" popup pre-deploy).
   const syncDetailFieldToValcre = useCallback(async (fieldName: string, value: any) => {
+    // G — sync-reassurance indicator: mirror autoSaveField so Subtype/Tenancy get the same
+    // saving → synced / sync-failed checkmark as the other Section-1 fields (fix 2026-06-16).
+    setFieldStates(prev => ({ ...prev, [fieldName]: 'saving' }));
     const shouldSyncToValcre = VALCRE_SYNC_FIELDS.includes(fieldName) &&
                                 isValcreJobNumber(jobDetails?.jobNumber) &&
                                 jobDetails?.valcreJobId;
-    if (!shouldSyncToValcre) return;
+    if (!shouldSyncToValcre) {
+      // Persisted to Supabase via the onChange's onUpdateDetails, but no Valcre job → grey 'saved'.
+      setFieldStates(prev => ({ ...prev, [fieldName]: 'saved' }));
+      return;
+    }
     try {
       const syncData: any = {
         jobId: jobDetails.valcreJobId,
@@ -197,10 +204,14 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
       const result = await sendToValcre(syncData);
       if (!result.success) {
         console.warn(`Failed to sync ${fieldName} to Valcre:`, result.error);
+        setFieldStates(prev => ({ ...prev, [fieldName]: 'sync-failed' }));
         toast.error(`Failed to sync ${getFieldDisplayName(fieldName)} to Valcre`);
+      } else {
+        setFieldStates(prev => ({ ...prev, [fieldName]: 'synced' }));
       }
     } catch (error) {
       console.error(`Error syncing ${fieldName} to Valcre:`, error);
+      setFieldStates(prev => ({ ...prev, [fieldName]: 'sync-failed' }));
       if (isValcreJobNumber(jobDetails?.jobNumber) && jobDetails?.valcreJobId) {
         toast.error(`Failed to sync ${getFieldDisplayName(fieldName)} to Valcre`);
       }
@@ -507,7 +518,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label="Property Type">
+            <CompactField label="Property Type" status={fieldStates['propertyType']}>
               <Select
                 value={job.propertyType?.split(',')[0]?.trim() || ''}
                 onValueChange={(value) => {
@@ -540,7 +551,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 </SelectContent>
               </Select>
             </CompactField>
-            <CompactField label="Property Subtype">
+            <CompactField label="Property Subtype" status={fieldStates['propertySubtype']}>
               <Select
                 value={jobDetails?.propertySubtype || ''}
                 onValueChange={(value) => {
@@ -564,7 +575,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
                 </SelectContent>
               </Select>
             </CompactField>
-            <CompactField label="Tenancy">
+            <CompactField label="Tenancy" status={fieldStates['tenancy']}>
               <Select
                 value={jobDetails?.tenancy || ''}
                 onValueChange={(value) => {

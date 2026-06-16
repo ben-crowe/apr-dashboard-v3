@@ -546,7 +546,8 @@
   <div class="f"><span class="f-lbl"><span class="f-num">1.4</span>Organization</span><div class="f-val"><input class="u-inp" data-fill="organization" placeholder="Organization"></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">1.5</span>Phone</span><div class="f-val"><input class="u-inp" data-fill="clientPhone" placeholder="Client phone"></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">1.6</span>Email</span><div class="f-val"><input class="u-inp" data-fill="clientEmail" placeholder="Client email"></div></div>
-  <div class="f span2"><span class="f-lbl"><span class="f-num">1.7</span>Address</span><div class="f-val"><input class="u-inp" data-fill="clientAddress" placeholder="Address"></div></div>
+  <div class="f span2"><span class="f-lbl"><span class="f-num">1.7</span>Street Address</span><div class="f-val"><input class="u-inp" data-fill="clientAddress" placeholder="Street + suite"></div></div>
+  <div class="f span2"><span class="f-lbl"><span class="f-num">1.7b</span>City / Province / Postal</span><div class="f-val"><input class="u-inp" data-fill="clientAddressLocality" placeholder="City, Province  Postal"></div></div>
 
   <div class="subgrp">Property Information</div>
   <div class="f"><span class="f-lbl"><span class="f-num">1.8</span>Property Name</span><div class="f-val"><input class="u-inp" data-fill="propertyName" placeholder="Property Name"></div></div>
@@ -1062,7 +1063,7 @@ const PROPOSED_BASE = {
   clientFirstName:'Sarah', clientLastName:'Mitchell', clientTitle:'Portfolio Manager',
   organization:'Bridgepoint Capital Partners', clientPhone:'(403) 555-0142',
   clientEmail:'sarah.mitchell@bridgepointcap.com',
-  clientAddress:'350 7th Avenue SW, Suite 1800, Calgary, AB T2P 3N9',
+  clientAddress:'350 7th Avenue SW, Suite 1800', clientAddressLocality:'Calgary, AB T2P 3N9',
   propertyName:'Riverside Commerce Centre', propertyType:'Industrial',
   propertyAddress:'4820 Macleod Trail SE, Calgary, AB T2G 0A5',
   valuationPremises:'Market Value', assetCondition:'Good',

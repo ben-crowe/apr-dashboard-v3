@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DetailJob, JobDetails } from "@/types/job";
-import { Send, X, Download, Mail, Plus, ZoomIn, ZoomOut, RotateCcw, Edit, Loader2 } from "lucide-react";
+import { Send, X, Download, Mail, Plus, ZoomIn, ZoomOut, RotateCcw, Edit, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 import TemplateEditorModal from './TemplateEditorModal';
 import EmailComposeModal from './EmailComposeModal';
@@ -55,6 +55,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   // open; set after a brand-new insert so subsequent saves update the same row.
   const [savedContractId, setSavedContractId] = useState<string | null>(contractId ?? null);
   const [isSending, setIsSending] = useState(false);
+  const [isSavingDraft, setIsSavingDraft] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string>('');
   const [recipientEmail, setRecipientEmail] = useState<string>('');
   const [showEmailEdit, setShowEmailEdit] = useState(false);
@@ -294,6 +295,43 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
     void 0 /* success: silent (Ben) */;
   };
 
+  // Save the CURRENTLY-PREVIEWED document as a draft directly from the preview — no need to
+  // open Edit Document. Same persistence path as the editor's Save Draft (job_contracts,
+  // state 'draft'); threads savedContractId so a re-save updates the SAME row, not a fork.
+  const handleSaveDraftFromPreview = async () => {
+    const htmlToSave = editedHTML || currentDocumentHTML;
+    if (!htmlToSave) {
+      toast.error('Nothing to save yet — generate the preview first');
+      return;
+    }
+    const chosen = templates.find(t => t.id === selectedTemplateId);
+    const monthDay = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const client = job.clientLastName || job.clientFirstName || 'Client';
+    const draftName = `${chosen?.name || 'Document'} — ${client} — ${monthDay}`;
+    setIsSavingDraft(true);
+    try {
+      const result = await saveJobContract({
+        id: savedContractId ?? undefined,
+        jobId: job.id,
+        name: draftName,
+        editedHtml: htmlToSave,
+        templateId: selectedTemplateId,
+        templateVersion: (chosen as any)?.version ?? null,
+        contractType: chosen?.name ?? null,
+        state: 'draft',
+      });
+      if (result.success) {
+        if (!savedContractId && result.id) setSavedContractId(result.id);
+        onContractSaved?.();
+        toast.success('Draft saved');
+      } else {
+        toast.error(`Failed to save draft: ${result.error}`);
+      }
+    } finally {
+      setIsSavingDraft(false);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-5xl w-[90vw] h-[95vh] flex flex-col p-4 [&>button]:hidden">
@@ -497,6 +535,18 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               <Download className="h-4 w-4 mr-1" />
               Download
             </Button>
+            {!readOnly && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSaveDraftFromPreview}
+                disabled={isSavingDraft}
+                className="h-7 text-sm"
+              >
+                <Save className="h-4 w-4 mr-1" />
+                {isSavingDraft ? 'Saving…' : 'Save Draft'}
+              </Button>
+            )}
             {!readOnly && (
               <button
                 onClick={handleProceedToEmail}

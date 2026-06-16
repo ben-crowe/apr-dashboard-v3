@@ -9,7 +9,8 @@ import { V4_TEMPLATE } from './v4Template';
 import { V5_TEMPLATE } from './v5Template';
 import { testEnvironmentVariables } from '@/utils/testEnv';
 import { supabase } from '@/integrations/supabase/client';
-import { deriveValueScenarios, resolveNarrative } from './loeCascade';
+import { deriveValueScenarios, resolveNarrative, resolveNarrativeFrom } from './loeCascade';
+import { loadNarrativeMap, type NarrativeMap } from './narrativeStore';
 
 // Seed all template versions to DB if no templates exist
 async function seedTemplatesIfEmpty(): Promise<void> {
@@ -73,7 +74,7 @@ async function loadTemplateRow(opts?: { templateHTML?: string; templateId?: stri
 /**
  * Map APR Hub data to V5 template fields
  */
-function mapDataToV3Fields(job: DetailJob, jobDetails: JobDetails) {
+function mapDataToV3Fields(job: DetailJob, jobDetails: JobDetails, _narrativeMap?: NarrativeMap | null) {
   const currentDate = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
@@ -134,7 +135,7 @@ function mapDataToV3Fields(job: DetailJob, jobDetails: JobDetails) {
  * Field routing per DECISIONS-2026-06-04.md. Gap fields fall back gracefully
  * (job-prep inputs being added incrementally; EA/HC summaries = narrative Text Library, TODO).
  */
-function mapDataToV07Fields(job: DetailJob, jobDetails: JobDetails): Record<string, string> {
+function mapDataToV07Fields(job: DetailJob, jobDetails: JobDetails, narrativeMap?: NarrativeMap | null): Record<string, string> {
   const jd = jobDetails as any;
   const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
   const fmtCurrency = (v: any) => (v ? `$${Number(String(v).replace(/[^0-9.]/g, '')).toLocaleString()}` : '$TBD');
@@ -189,8 +190,9 @@ function mapDataToV07Fields(job: DetailJob, jobDetails: JobDetails): Record<stri
     const scenario = scenarios[i - 1];
     map[`[ValueScenario${i}]`] = scenario || ''; // empty → row suppressed in generateLOEHTML
     if (scenario) {
-      // Resolved narrative text, else keep the LITERAL bracket so the row degrades cleanly (never blank).
-      map[`[EA/HCSummary${i}]`] = resolveNarrative(scenario) || `[EA/HCSummary${i}]`;
+      // Resolved narrative text (preloaded store → code seed fallback), else keep the LITERAL bracket
+      // so the row degrades cleanly (never blank).
+      map[`[EA/HCSummary${i}]`] = resolveNarrativeFrom(narrativeMap, scenario) || `[EA/HCSummary${i}]`;
     } else {
       map[`[EA/HCSummary${i}]`] = ''; // no scenario → no row at all
     }
@@ -199,7 +201,7 @@ function mapDataToV07Fields(job: DetailJob, jobDetails: JobDetails): Record<stri
 }
 
 // Pair a template version with its placeholder mapper (each version owns its vocabulary).
-function getMapperForVersion(version: number): (j: DetailJob, d: JobDetails) => Record<string, string> {
+function getMapperForVersion(version: number): (j: DetailJob, d: JobDetails, m?: NarrativeMap | null) => Record<string, string> {
   return version >= 6 ? mapDataToV07Fields : mapDataToV3Fields;
 }
 
@@ -253,9 +255,12 @@ export async function generateLOEHTML(
   // passes the row's version so we still pick the correct mapper (V07 tokens vs V3 tokens).
   const effectiveVersion = (templateHTML && templateVersion != null) ? templateVersion : loaded.version;
 
-  // Pair the template version with its placeholder vocabulary
+  // Pair the template version with its placeholder vocabulary. Preload the editable §10 narratives
+  // ONCE here (async), then hand the in-memory map to the SYNC mapper so the §10 loop resolves edited
+  // text without a per-call await (BLOCKING-1: mapper stays synchronous). V07 only; null → code seed.
   const mapper = getMapperForVersion(effectiveVersion);
-  const fieldMappings = mapper(job, jobDetails);
+  const narrativeMap = effectiveVersion >= 6 ? await loadNarrativeMap() : null;
+  const fieldMappings = mapper(job, jobDetails, narrativeMap);
 
   // V07 conditional sections (each drops + reflows + renumbers via the CSS-counter template):
   if (effectiveVersion >= 6) {

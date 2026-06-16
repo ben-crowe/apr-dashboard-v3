@@ -39,6 +39,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { deriveValueScenarios, STATUS_TO_SCENARIOS, deriveApproaches, derivePropertyRights } from "@/utils/loe/loeCascade";
+import ValueScenarioNarratives from "./ValueScenarioNarratives";
 
 // Derived field read-only style (Value Scenarios, Property Rights, Approaches to Value)
 const derivedFieldStyle: React.CSSProperties = {
@@ -1827,6 +1828,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               )}
             </CompactField>
           </TwoColumnFields>
+          {/* Live §10 mirror — the derived scenarios' actual write-ups, inline + editable on the dashboard. */}
+          <ValueScenarioNarratives scenarios={deriveValueScenarios(statusOfImprovements, authorizedUse)} />
         </SectionGroup>
 
         {/* 5. Scope of Work */}

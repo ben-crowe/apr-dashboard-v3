@@ -206,3 +206,39 @@ export function resolveNarrative(scenario: string): string | null {
 export function resolveNarrativeDetails(scenario: string): Narrative | null {
   return NARRATIVES.find(n => n.scenario === scenario) || null;
 }
+
+/**
+ * Option-set scenarios that exist in the registry but carry NO library text yet (resolve to null →
+ * §10 keeps the literal bracket). These are where Chris supplies the missing copy via the editor.
+ */
+export const PENDING_SCENARIOS: string[] = [
+  'As If Complete - Rezoned',
+  'As If Complete - Serviced',
+  'As If Complete - Subdivided',
+  'Insurable Replacement Cost',
+];
+
+/**
+ * The full §10 scenario registry — every scenario the Value-Scenario editor exposes (6 with seed text
+ * + the 4 pending). Order: NARRATIVES first (has text), then the pending option-set members.
+ */
+export const ALL_SCENARIOS: string[] = [
+  ...NARRATIVES.map(n => n.scenario),
+  ...PENDING_SCENARIOS,
+];
+
+/**
+ * Resolve the §10 summary against a PRELOADED store map (scenario → summary), falling back to the
+ * code seed (`resolveNarrative`) when the map lacks the key or the store is unavailable. Lets the
+ * generator's sync mapper read edited text without an await per call (preload-once, mapper stays sync).
+ */
+export function resolveNarrativeFrom(
+  map: Record<string, string | null | undefined> | null | undefined,
+  scenario: string,
+): string | null {
+  if (map && Object.prototype.hasOwnProperty.call(map, scenario)) {
+    const v = map[scenario];
+    return v && String(v).trim() ? String(v) : null;
+  }
+  return resolveNarrative(scenario);
+}

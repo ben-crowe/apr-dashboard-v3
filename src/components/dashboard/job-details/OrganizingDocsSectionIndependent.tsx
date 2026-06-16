@@ -254,7 +254,7 @@ const OrganizingDocsSectionIndependent: React.FC<SectionProps> = ({
               ) : (
                 <>
                   <FolderOpen className="mr-2 h-3 w-3" />
-                  Create Asset Folders
+                  Asset Folders
                 </>
               )}
             </Button>

@@ -601,9 +601,9 @@
   <div class="subgrp">Value Scenarios &amp; Approaches</div>
   <div style="grid-column:1 / -1;margin:2px 0 10px;"><label class="fromdata-chk"><input type="checkbox" id="insertFromData" onchange="toggleInsertFromData(this)">Insert from data — map Type / Subtype / Tenancy into the cascade</label></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.4</span>Status of Improvements</span><div class="f-val"><div class="dd" data-fill="statusOfImprovements"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Improved - Completed</div><div class="dd-item" onclick="pickDD(this)">Improved - Renovated</div><div class="dd-item" onclick="pickDD(this)">Improved - Under Renovation</div><div class="dd-item" onclick="pickDD(this)">Improved - Proposed Renovation</div><div class="dd-item" onclick="pickDD(this)">Proposed - Vacant Land</div><div class="dd-item" onclick="pickDD(this)">Proposed - Improved Land (Demolition Required)</div><div class="dd-item" onclick="pickDD(this)">Proposed - Under Construction</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.5</span>Value Scenarios</span><div class="f-val"><div class="dd derived" data-fill="valueScenarios" data-empty="from Status of Impr. (2.4)" title="Computed from Status of Improvements + your Authorized Use."><div class="dd-trigger ph">from Status of Impr. (2.4)<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">As Is Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As If Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As-Is</div><div class="dd-item" onclick="pickDD(this)">As If Complete &amp; Stabilized</div><div class="dd-item" onclick="pickDD(this)">As Stabilized</div></div></div></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.5</span>Value Scenarios</span><div class="f-val"><div class="dd derived" data-fill="valueScenarios" data-empty="results from Status + Authorized Use" title="Computed from Status of Improvements + your Authorized Use."><div class="dd-trigger ph">results from Status + Authorized Use<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">As Is Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As If Vacant Land</div><div class="dd-item" onclick="pickDD(this)">As-Is</div><div class="dd-item" onclick="pickDD(this)">As If Complete &amp; Stabilized</div><div class="dd-item" onclick="pickDD(this)">As Stabilized</div></div></div></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.6</span>Property Rights</span><div class="f-val"><div class="dd derived" data-fill="propertyRights" data-empty="results from Type / Subtype / Tenancy" title="Auto-derived from Property Type, Subtype &amp; Tenancy."><div class="dd-trigger ph">results from Type / Subtype / Tenancy<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Fee Simple Interest</div><div class="dd-item" onclick="pickDD(this)">Leasehold Interest</div><div class="dd-item" onclick="pickDD(this)">Leased Fee Interest</div><div class="dd-item" onclick="pickDD(this)">Partial Interest</div></div></div></div></div>
-  <div class="f"><span class="f-lbl"><span class="f-num">2.7</span>Approaches to Value</span><div class="f-val" style="position:relative;"><input class="u-inp derived" data-fill="approachesToValue" readonly placeholder="from Status of Impr. (2.4)" title="Auto-derived from Status of Improvements."></div></div>
+  <div class="f"><span class="f-lbl"><span class="f-num">2.7</span>Approaches to Value</span><div class="f-val" style="position:relative;"><input class="u-inp derived" data-fill="approachesToValue" readonly placeholder="results from Status + Authorized Use" title="Computed from Status of Improvements + Authorized Use (Insurance → Cost Approach)."></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.8</span>Property Subtype</span><div class="f-val"><div class="dd mirror" data-fill="propertySubtype" data-empty="from Subtype (1.10)"><div class="dd-trigger ph">from Subtype (1.10)<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Apartment</div><div class="dd-item" onclick="pickDD(this)">Townhouse</div><div class="dd-item" onclick="pickDD(this)">Mixed Use</div><div class="dd-item" onclick="pickDD(this)">Shopping Centre</div></div></div></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.9</span>Tenancy</span><div class="f-val"><div class="dd mirror" data-fill="tenancy" data-empty="from Tenancy (1.11)"><div class="dd-trigger ph">from Tenancy (1.11)<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Owner-Occupied</div><div class="dd-item" onclick="pickDD(this)">Single-Tenant</div><div class="dd-item" onclick="pickDD(this)">Multi-Tenant</div><div class="dd-item" onclick="pickDD(this)">Vacant</div></div></div></div></div>
   <div class="f"><span class="f-lbl"><span class="f-num">2.10</span>Value Timeframe</span><div class="f-val"><div class="dd" data-fill="valueTimeframe"><div class="dd-trigger ph" onclick="toggleDD(this)">Select...<span class="dd-arrow"></span></div><div class="dd-menu"><div class="dd-item" onclick="pickDD(this)">Current</div><div class="dd-item" onclick="pickDD(this)">Retrospective</div><div class="dd-item" onclick="pickDD(this)">Prospective</div></div></div></div></div>
@@ -1202,7 +1202,7 @@ function toggleInsertFromData(chk) {
     _setProposedDD_mirror('propertySubtype', PROPOSED_BASE.propertySubtype);
     _setProposedDD_mirror('tenancy', PROPOSED_BASE.tenancy);
     var rights = PROPOSED_BASE.propertyRights || 'Leased Fee Interest';
-    _setProposedDD('propertyRights', rights, 'from Tenancy (1.11)');
+    _setProposedDD('propertyRights', rights, 'results from Type / Subtype / Tenancy');
     srcRows.forEach(function(r){ r.classList.add('src-mapped'); });
     if (mirror26Row) mirror26Row.classList.add('src-mapped');
     if (mirror27Row) mirror27Row.classList.add('src-mapped');
@@ -1213,7 +1213,7 @@ function toggleInsertFromData(chk) {
     _setProposedDD('tenancy', null, 'Select...');
     _setProposedDD_mirror('propertySubtype', null);
     _setProposedDD_mirror('tenancy', null);
-    _setProposedDD('propertyRights', null, 'from Tenancy (1.11)');
+    _setProposedDD('propertyRights', null, 'results from Type / Subtype / Tenancy');
     srcRows.forEach(function(r){ r.classList.remove('src-mapped'); });
     if (mirror26Row) mirror26Row.classList.remove('src-mapped');
     if (mirror27Row) mirror27Row.classList.remove('src-mapped');
@@ -1275,7 +1275,7 @@ function applyProposedVersion(v, item) {
   // OUTPUTS — computed from the driver. 2.5 Value Scenarios → rose; 2.9 Approaches → orange (match the name segments)
   var scen = (au === 'Insurance') ? ['Insurable Replacement Cost'] : (SCEN[statusVal] || []);
   var apprSet = new Set(); scen.forEach(function(s){ (APPR[s]||[]).forEach(function(a){ apprSet.add(a); }); });
-  _setProposedDD('valueScenarios', scen.join(', '), 'from Status of Impr. (2.4)');
+  _setProposedDD('valueScenarios', scen.join(', '), 'results from Status + Authorized Use');
   var apprEl = document.querySelector('#panel-proposedapr [data-fill="approachesToValue"]');
   if (apprEl) apprEl.value = Array.from(apprSet).map(function(a){ return a.replace(' Approach',''); }).join(', ');
   var sR=rowOf('valueScenarios'), aR=rowOf('approachesToValue');
@@ -1298,7 +1298,7 @@ function clearCascade() {
   var _auf2 = document.querySelector('#panel-proposedapr [data-fill="authorizedUse"]');
   _setProposedDD('authorizedUse', (_auf2 && _auf2.dataset.intake) || '', 'Select...');
   setDD('valueTimeframe','Select...');         // VT has no intake value → back to resting Select
-  setDD('valueScenarios','from Status of Impr. (2.4)');  // derived
+  setDD('valueScenarios','results from Status + Authorized Use');  // derived
   ['statusOfImprovements','valueScenarios','approachesToValue','authorizedUse'].forEach(function(key){
     var el = document.querySelector('#panel-proposedapr [data-fill="'+key+'"]');
     if (el) { var row = el.closest('.f'); if (row) { row.classList.remove('scen-derived','au-derived','vs-derived','appr-derived'); } }
@@ -1342,7 +1342,7 @@ function pickDD(item) {
       if (fillKey==='propertySubtype') _setProposedDD_mirror('propertySubtype', item.textContent);
       if (fillKey==='tenancy') _setProposedDD_mirror('tenancy', item.textContent);
       var rights = PROPOSED_BASE.propertyRights || 'Leased Fee Interest';
-      _setProposedDD('propertyRights', rights, 'from Tenancy (1.11)');
+      _setProposedDD('propertyRights', rights, 'results from Type / Subtype / Tenancy');
     }
   } catch(e) {}
 }

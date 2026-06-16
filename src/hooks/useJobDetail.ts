@@ -64,6 +64,7 @@ export function useJobDetail(jobId: string) {
     if (updates.propertyProvince !== undefined) dbUpdates.property_province = updates.propertyProvince;
     if (updates.propertyPostal !== undefined) dbUpdates.property_postal_code = updates.propertyPostal;
     if (updates.propertyName !== undefined) dbUpdates.property_name = updates.propertyName;
+    if (updates.sharepointFolderUrl !== undefined) dbUpdates.sharepoint_folder_url = updates.sharepointFolderUrl;
     if (updates.propertyType !== undefined) dbUpdates.property_type = updates.propertyType;
     if (updates.propertyTypes !== undefined) dbUpdates.property_types = updates.propertyTypes;
     if (updates.intendedUse !== undefined) dbUpdates.intended_use = updates.intendedUse;

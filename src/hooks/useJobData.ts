@@ -56,6 +56,7 @@ export function useJobData(jobId: string) {
             clientProvince: jobData.client_province || undefined,
             clientPostal: jobData.client_postal_code || undefined,
             propertyName: jobData.property_name || undefined,
+            sharepointFolderUrl: (jobData as any).sharepoint_folder_url || undefined,
             propertyAddress: jobData.property_address,
             propertyCity: jobData.property_city || undefined,
             propertyProvince: jobData.property_province || undefined,

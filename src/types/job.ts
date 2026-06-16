@@ -52,6 +52,7 @@ export interface JobSubmission {
   jobNumber?: string;
   clickupTaskId?: string; // ClickUp task ID for this job
   clickupTaskUrl?: string; // Direct link to ClickUp task
+  sharepointFolderUrl?: string; // SharePoint asset-folder URL once created (drives button state)
   files?: JobFile[]; // Files property for uploads
 }
 

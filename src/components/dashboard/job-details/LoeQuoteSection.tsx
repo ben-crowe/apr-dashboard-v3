@@ -19,7 +19,7 @@ import JobNumberField from "./loe-quote/JobNumberField";
 import { sendToValcre } from "@/utils/webhooks";
 import { supabase } from "@/integrations/supabase/client";
 import { generateAppraisalTestData } from "@/utils/testDataGenerator";
-import { FileSignature, AlertCircle, ExternalLink, Trash2, FolderOpen } from "lucide-react";
+import { FileSignature, AlertCircle, ExternalLink, Trash2, FolderOpen, CheckCircle } from "lucide-react";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -164,9 +164,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         return;
       }
       if (data?.success) {
+        // Persist the folder URL so the button stays in its "created → open" state across reloads
+        // and never re-creates a set. onUpdateJob writes job_submissions.sharepoint_folder_url.
+        if (data.parentWebUrl && onUpdateJob) {
+          onUpdateJob({ sharepointFolderUrl: data.parentWebUrl } as any);
+        }
         toast.success(
           <div>
-            <div>✅ Asset folders created!</div>
+            <div>{data.connectedOnly ? '✅ Asset folders linked!' : '✅ Asset folders created!'}</div>
             {data.parentWebUrl && (
               <a href={data.parentWebUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">
                 Open folder →
@@ -1340,22 +1345,38 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               />
             )}
 
-            {/* Asset Folders — on-demand SharePoint folder tree for this job. Between ClickUp + Create Contract. */}
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={handleCreateAssetFolders}
-              disabled={isCreatingAssetFolders || !isValcreJobNumber(jobDetails?.jobNumber)}
-              className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground hover:bg-muted dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-foreground transition-colors text-sm font-medium"
-            >
-              {isCreatingAssetFolders ? (
-                <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-              ) : (
+            {/* Asset Folders — two states. CREATED (job has a folder URL): green "active" look that
+                OPENS the existing set (never re-creates). NOT YET: plain outline that creates once. */}
+            {(job as any)?.sharepointFolderUrl ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => window.open((job as any).sharepointFolderUrl, '_blank')}
+                className="border border-emerald-500/70 bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-400/40 hover:bg-emerald-100 dark:hover:bg-emerald-500/20 transition-colors text-sm font-medium"
+                title="Asset folders exist — click to open in SharePoint"
+              >
                 <FolderOpen className="h-4 w-4 mr-1" />
-              )}
-              {isCreatingAssetFolders ? 'Creating...' : 'Asset Folders'}
-            </Button>
+                Asset Folders
+                <CheckCircle className="h-3.5 w-3.5 ml-1" />
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleCreateAssetFolders}
+                disabled={isCreatingAssetFolders || !isValcreJobNumber(jobDetails?.jobNumber)}
+                className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground hover:bg-muted dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-foreground transition-colors text-sm font-medium"
+              >
+                {isCreatingAssetFolders ? (
+                  <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                ) : (
+                  <FolderOpen className="h-4 w-4 mr-1" />
+                )}
+                {isCreatingAssetFolders ? 'Creating...' : 'Asset Folders'}
+              </Button>
+            )}
 
             {/* E-Signature Button - Only visible when REAL Valcre job exists (has valcre_job_id) */}
             {hasRealValcreJob(jobDetails) ? (

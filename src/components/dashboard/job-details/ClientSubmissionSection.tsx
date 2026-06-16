@@ -12,7 +12,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
 import { SectionProps } from "./types";
 import { supabase } from "@/integrations/supabase/client";
-import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField } from "./ValcreStyles";
+import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField, FieldSyncStatus } from "./ValcreStyles";
 import { sendToValcre } from "@/utils/webhooks/valcre";
 import { isValcreJobNumber } from "@/config/valcre";
 import {
@@ -45,6 +45,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   
   // Auto-save state for section-level spinner
   const [isSectionSaving, setIsSectionSaving] = useState(false);
+  // G — per-field sync-reassurance (mirror Section 2): saving → saved → synced / sync-failed.
+  const [fieldStates, setFieldStates] = useState<Record<string, FieldSyncStatus>>({});
   const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
   
   // Fields that sync to Valcre
@@ -94,10 +96,13 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
     
     try {
       setIsSectionSaving(true);
-      
+      setFieldStates(prev => ({ ...prev, [fieldName]: 'saving' }));
+
       // Always save to Supabase first
       await onUpdateJob({ [fieldName]: value });
-      
+      // Persisted to Supabase — baseline 'saved' (grey check); upgraded to 'synced'/'sync-failed' below.
+      setFieldStates(prev => ({ ...prev, [fieldName]: 'saved' }));
+
       // Check if this field should also sync to Valcre
       const shouldSyncToValcre = VALCRE_SYNC_FIELDS.includes(fieldName) &&
                                   isValcreJobNumber(jobDetails?.jobNumber) &&
@@ -136,14 +141,18 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         
         if (!result.success) {
           console.warn(`Failed to sync ${fieldName} to Valcre:`, result.error);
+          setFieldStates(prev => ({ ...prev, [fieldName]: 'sync-failed' }));
           toast.error(`Failed to sync ${getFieldDisplayName(fieldName)} to Valcre`);
+        } else {
+          setFieldStates(prev => ({ ...prev, [fieldName]: 'synced' }));
         }
       } else {
-        // Field saved but not synced (no Valcre job yet)
+        // Field saved but not synced (no Valcre job yet) — leave the 'saved' grey check.
         // Silent save — no toast for routine field updates
       }
     } catch (error) {
       console.error(`Error saving ${fieldName}:`, error);
+      setFieldStates(prev => ({ ...prev, [fieldName]: 'sync-failed' }));
       // Only popup a save failure when there's a real Valcre job. No job = just playing/testing
       // fields → stay silent (Ben: no popup spam without a job number).
       if (isValcreJobNumber(jobDetails?.jobNumber) && jobDetails?.valcreJobId) {
@@ -401,37 +410,37 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         {/* Client Information Group */}
         <SectionGroup title="Client Information">
           <TwoColumnFields className="md:!grid-cols-[1fr_1fr] md:!max-w-[1100px] pr-8">
-            <CompactField label="First Name">
+            <CompactField label="First Name" status={fieldStates['clientFirstName']}>
               <div className="relative">
                 <Input value={job.clientFirstName || ''} onChange={(e) => onUpdateJob?.({clientFirstName: e.target.value})} onBlur={(e) => handleBlur('clientFirstName', e.target.value)} placeholder="First name" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label="Last Name">
+            <CompactField label="Last Name" status={fieldStates['clientLastName']}>
               <div className="relative">
                 <Input value={job.clientLastName || ''} onChange={(e) => onUpdateJob?.({clientLastName: e.target.value})} onBlur={(e) => handleBlur('clientLastName', e.target.value)} placeholder="Last name" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label="Title">
+            <CompactField label="Title" status={fieldStates['clientTitle']}>
               <div className="relative">
                 <Input value={job.clientTitle || ''} onChange={(e) => onUpdateJob?.({clientTitle: e.target.value})} onBlur={(e) => handleBlur('clientTitle', e.target.value)} placeholder="Title" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label="Organization">
+            <CompactField label="Organization" status={fieldStates['clientOrganization']}>
               <div className="relative">
                 <Input value={job.clientOrganization || ''} onChange={(e) => onUpdateJob?.({clientOrganization: e.target.value})} onBlur={(e) => handleBlur('clientOrganization', e.target.value)} placeholder="Organization" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label="Phone">
+            <CompactField label="Phone" status={fieldStates['clientPhone']}>
               <div className="relative">
                 <Input type="tel" value={job.clientPhone ? formatPhoneNumber(job.clientPhone) : ''} onChange={(e) => { const numbersOnly = e.target.value.replace(/\D/g, ''); onUpdateJob?.({clientPhone: numbersOnly}); }} onBlur={(e) => handleBlur('clientPhone', e.target.value.replace(/\D/g, ''))} placeholder="Phone" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
               </div>
             </CompactField>
-            <CompactField label="Email">
+            <CompactField label="Email" status={fieldStates['clientEmail']}>
               <div className="relative">
                 <Input value={job.clientEmail || ''} onChange={(e) => onUpdateJob?.({clientEmail: e.target.value})} onBlur={(e) => handleBlur('clientEmail', e.target.value)} placeholder="Email" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />
@@ -440,7 +449,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
           </TwoColumnFields>
           {/* Address — single line, no underline */}
           <div className="mt-4 mb-5">
-            <CompactField label="Address">
+            <CompactField label="Address" status={fieldStates['clientAddress']}>
               <Input
                 value={job.clientAddress || ''}
                 onChange={(e) => onUpdateJob?.({clientAddress: e.target.value})}
@@ -455,7 +464,7 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         {/* Property Information Group */}
         <SectionGroup title="Property Information">
           <TwoColumnFields className="md:!grid-cols-[1fr_1fr] md:!max-w-[1100px] pr-8">
-            <CompactField label="Property Name">
+            <CompactField label="Property Name" status={fieldStates['propertyName']}>
               <div className="relative">
                 <Input value={job.propertyName || ''} onChange={(e) => onUpdateJob?.({propertyName: e.target.value})} onBlur={(e) => handleBlur('propertyName', e.target.value)} placeholder="Property name" className="h-7 text-sm w-full !border-0 !rounded-none bg-transparent !px-0 !shadow-none" />
                 <div className="absolute bottom-0 left-0 w-[160px] h-px bg-gray-300 dark:bg-white/[0.12]" />

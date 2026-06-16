@@ -19,10 +19,14 @@ import JobNumberField from "./loe-quote/JobNumberField";
 import { sendToValcre } from "@/utils/webhooks";
 import { supabase } from "@/integrations/supabase/client";
 import { generateAppraisalTestData } from "@/utils/testDataGenerator";
-import { FileSignature, AlertCircle, ExternalLink } from "lucide-react";
+import { FileSignature, AlertCircle, ExternalLink, Trash2 } from "lucide-react";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { validateRequiredFields } from "@/utils/webhooks/docuseal";
 import { generateLOEHTML, generateAndSendLOE, sendLOEEmail } from "@/utils/loe/generateLOE";
-import { loadJobContracts, saveJobContract, JobContract } from "@/utils/loe/jobContracts";
+import { loadJobContracts, saveJobContract, deleteJobContract, JobContract } from "@/utils/loe/jobContracts";
 import { saveJobEmailInstance } from "@/utils/loe/emailTemplate";
 import { markLOEPrepComplete } from "@/utils/webhooks/clickup";
 import LOEPreviewModal from "./actions/LOEPreviewModal";
@@ -151,6 +155,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // Saved client contracts for THIS job (Create Contract → save → appears here). The
   // dashboard shows what's been saved/prepped/sent + always lets you create a new one.
   const [savedContracts, setSavedContracts] = useState<JobContract[]>([]);
+  // C — delete a saved DRAFT (never a sent doc). Two-step: hover-X → confirm dialog → delete.
+  const [pendingDelete, setPendingDelete] = useState<JobContract | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const refreshContracts = useCallback(() => {
     if (job?.id) loadJobContracts(job.id).then(setSavedContracts);
   }, [job?.id]);
@@ -1456,7 +1463,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                     {rows.map((c) => {
                       const isSent = c.state === 'sent';
                       return (
-                        <div key={c.id} className="flex items-center justify-between gap-2 text-sm px-1.5 py-1.5 rounded hover:bg-muted/60">
+                        <div key={c.id} className="group flex items-center justify-between gap-2 text-sm px-1.5 py-1.5 rounded hover:bg-muted/60">
                           <div className="flex items-center gap-2 min-w-0">
                             <FileSignature className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                             <span className="truncate text-foreground">{c.name}</span>
@@ -1491,6 +1498,18 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                             >
                               Open
                             </Button>
+                            {/* C — delete: subtle hover-X, DRAFTS ONLY (never sent). */}
+                            {!isSent && (
+                              <button
+                                type="button"
+                                aria-label="Delete draft"
+                                title="Delete draft"
+                                onClick={() => setPendingDelete(c)}
+                                className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-red-600 shrink-0 p-0.5"
+                              >
+                                <Trash2 className="h-3.5 w-3.5" />
+                              </button>
+                            )}
                           </div>
                         </div>
                       );
@@ -2160,6 +2179,40 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             }
           }}
         />
+
+        {/* C — delete-draft confirmation (second popup). DRAFTS ONLY — never opened for sent. */}
+        <AlertDialog open={!!pendingDelete} onOpenChange={(o) => { if (!o) setPendingDelete(null); }}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete this draft?</AlertDialogTitle>
+              <AlertDialogDescription>
+                "{pendingDelete?.name}" will be permanently removed. This can't be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                disabled={isDeleting}
+                onClick={async (e) => {
+                  e.preventDefault();
+                  if (!pendingDelete || pendingDelete.state === 'sent') { setPendingDelete(null); return; }
+                  setIsDeleting(true);
+                  const result = await deleteJobContract(pendingDelete.id);
+                  setIsDeleting(false);
+                  if (result.success) {
+                    toast.success('Draft deleted');
+                    setPendingDelete(null);
+                    refreshContracts();
+                  } else {
+                    toast.error(`Failed to delete: ${result.error}`);
+                  }
+                }}
+              >
+                {isDeleting ? 'Deleting…' : 'Delete'}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </CollapsibleContent>
     </Collapsible>
   );

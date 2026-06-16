@@ -326,7 +326,7 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
         <div className="flex justify-between items-center pb-2 border-b">
           <div>
             <h2 className="text-lg font-semibold">Edit Contract</h2>
-            <p className="text-sm text-muted-foreground">Edit template content and preview changes</p>
+            <p className="text-sm text-muted-foreground">Edit document content and preview changes</p>
           </div>
           
           {/* Zoom Controls */}

@@ -689,16 +689,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           JSON.stringify(updateData, null, 2),
         );
 
-        // Update the job using PATCH
+        // Update the job using PATCH — ONLY if there are native fields to write. (F: empty-PATCH skip)
+        // A custom-field-only sync (e.g. cascade Value Scenarios) builds an EMPTY updateData; firing an
+        // empty PATCH makes Valcre reject with 400 "Patch object cant be empty", which bailed before
+        // setValtaCustomFields ran → custom writes never landed + a false "Failed to sync" toast.
+        // Skip the native PATCH when there's nothing native; fall through to the custom-field write.
+        const hasNativeUpdate = Object.keys(updateData).length > 0;
         const updateUrl = `https://api-core.valcre.com/api/v1/Jobs(${jobData.jobId})`;
-        const updateResponse = await fetch(updateUrl, {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updateData),
-        });
+        const updateResponse: Response | null = hasNativeUpdate
+          ? await fetch(updateUrl, {
+              method: "PATCH",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updateData),
+            })
+          : null;
 
         // For updates, we can't easily update Property/Parcel entities since we don't have their IDs
         // But we can add the parcel/assessment data to Comments for now
@@ -729,28 +736,35 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           );
         }
 
-        const updateResponseText = await updateResponse.text();
-        console.log("Update response status:", updateResponse.status);
-        console.log("Update response:", updateResponseText);
-
-        // Valcre can return HTTP 200 with a FAILURE body for the native PATCH
-        // (e.g. {"status":"400","success":false,"error":["Requested value 'Concise' was not found."]}).
-        // Detect it so a rejected native write is NOT reported as success (the 200-not-success trap that
-        // hid the AnalysisLevel bug — invalid enum value silently accepted at the HTTP layer).
+        let updateResponseText = "";
         let nativePatchError: string | null = null;
-        try {
-          const parsed = JSON.parse(updateResponseText);
-          if (parsed && (parsed.success === false || parsed.status === "400" || parsed.status === 400 || parsed.error)) {
-            nativePatchError = Array.isArray(parsed.error)
-              ? parsed.error.join("; ")
-              : String(parsed.error ?? parsed.status ?? "native PATCH rejected");
-            console.error(`🔴 Native PATCH returned HTTP ${updateResponse.status} but body indicates FAILURE: ${nativePatchError}`);
+        if (hasNativeUpdate && updateResponse) {
+          updateResponseText = await updateResponse.text();
+          console.log("Update response status:", updateResponse.status);
+          console.log("Update response:", updateResponseText);
+
+          // Valcre can return HTTP 200 with a FAILURE body for the native PATCH
+          // (e.g. {"status":"400","success":false,"error":["Requested value 'Concise' was not found."]}).
+          // Detect it so a rejected native write is NOT reported as success (the 200-not-success trap that
+          // hid the AnalysisLevel bug — invalid enum value silently accepted at the HTTP layer).
+          try {
+            const parsed = JSON.parse(updateResponseText);
+            if (parsed && (parsed.success === false || parsed.status === "400" || parsed.status === 400 || parsed.error)) {
+              nativePatchError = Array.isArray(parsed.error)
+                ? parsed.error.join("; ")
+                : String(parsed.error ?? parsed.status ?? "native PATCH rejected");
+              console.error(`🔴 Native PATCH returned HTTP ${updateResponse.status} but body indicates FAILURE: ${nativePatchError}`);
+            }
+          } catch {
+            /* non-JSON body (empty 204 etc.) = no in-body error */
           }
-        } catch {
-          /* non-JSON body (empty 204 etc.) = no in-body error */
+        } else {
+          // Custom-field-only sync: no native fields → no PATCH fired (F: empty-PATCH skip).
+          updateResponseText = "No native fields to update (custom-only sync) — native PATCH skipped";
+          console.log("Custom-only sync: skipping native PATCH (empty updateData), proceeding to custom fields");
         }
 
-        if (updateResponse.ok || updateResponse.status === 204) {
+        if (!hasNativeUpdate || updateResponse!.ok || updateResponse!.status === 204) {
           // NATIVE readback (2026-06-04): the per-field native bug hid behind a 200, so verify the PATCH
           // actually landed by reading the native fields back — don't trust updateResponse.ok alone.
           const nativeVerify: Record<string, { sent: any; actual: any; ok: boolean }> = {};

@@ -141,19 +141,31 @@ function mapDataToV07Fields(job: DetailJob, jobDetails: JobDetails): Record<stri
   const fmtDate = (v: any) => (v ? String(v).split('T')[0] : '');
   const propName = job.propertyName || 'Unnamed Property';
 
+  // Structured-address compose (2026-06-16): street stays in [ClientOrganizationAddress]/[PropertyAddress];
+  // city/province/postal form a 2nd line. Empty parts drop; all-empty → no 2nd line + NO stray <br/>
+  // (the <br/> is only added when a locality exists). Token replace is RAW (L268) so the <br/> renders.
+  const composeLocality = (city?: string, prov?: string, postal?: string) => {
+    const tail = [prov, postal].filter(Boolean).join(' ');   // "AB  T2P 3N9"
+    return [city, tail].filter(Boolean).join(', ');           // "Calgary, AB  T2P 3N9"
+  };
+  const clientLocality = composeLocality(job.clientCity, job.clientProvince, job.clientPostal);
+  const propertyLocality = composeLocality(job.propertyCity, job.propertyProvince, job.propertyPostal);
+  const clientAddrBlock = [job.clientAddress, clientLocality].filter(Boolean).join('<br/>');
+  const propertyFull = [job.propertyAddress, propertyLocality].filter(Boolean).join(', ');
+
   const map: Record<string, string> = {
     "[Today's Date]": today,   // legacy V07 (May-25) token — curly apostrophe
     '[TodaysDate]': today,     // V07-1 normalized token (straight, fill-safe)
     '[ClientFirstName]': job.clientFirstName || '',
     '[ClientLastName]': job.clientLastName || '',
     '[ClientCompanyName]': job.clientOrganization || '',
-    '[ClientOrganizationAddress]': job.clientAddress || '',
+    '[ClientOrganizationAddress]': clientAddrBlock,
     '[ClientPhone]': job.clientPhone || '',
     '[ClientEmail]': job.clientEmail || '',
     '[JobNumber]': jobDetails.jobNumber || 'Awaiting Valcre job',
-    '[JobName]': [propName, job.propertyAddress].filter(Boolean).join(', '),
+    '[JobName]': [propName, propertyFull].filter(Boolean).join(', '),
     '[PropertyName]': propName,
-    '[PropertyAddress]': job.propertyAddress || '',
+    '[PropertyAddress]': propertyFull,
     '[PropertyType]': job.propertyType || '',
     '[InterestAppraised]': jobDetails.propertyRightsAppraised || '',
     '[CurrentUseImprovements]': jd.currentUse || jd.currentUseImprovements || '',

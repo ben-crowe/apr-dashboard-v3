@@ -262,9 +262,17 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
       ClientCompany: formData.clientOrganization || formData.organizationName || 'Direct Client',
       ClientTitle: formData.clientTitle || '',
       ClientAddress: formData.clientAddress || '',
+      // 4-field structured address parts — camelCase, the EXACT keys api/valcre.ts reads 1:1
+      // (clientAddressParts/addressParts). NO-CROSS: client parts → client only, property → property only.
+      clientCity: formData.clientCity,
+      clientProvince: formData.clientProvince,
+      clientPostal: formData.clientPostal,
 
-      // Property address for parsing
+      // Property address (street) + its structured parts
       PropertyAddress: formData.propertyAddress,
+      propertyCity: formData.propertyCity,
+      propertyProvince: formData.propertyProvince,
+      propertyPostal: formData.propertyPostal,
 
       // Property fields (will be used for Property entity)
       // Support both legacy single-select and new multi-select

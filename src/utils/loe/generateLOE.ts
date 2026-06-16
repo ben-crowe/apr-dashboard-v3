@@ -277,9 +277,13 @@ export async function generateLOEHTML(
  * Called when "Send LOE" button is clicked in APR Hub
  */
 export async function generateAndSendLOE(
-  job: DetailJob, 
+  job: DetailJob,
   jobDetails: JobDetails,
-  htmlTemplate?: string // Optional: provide pre-generated HTML or template HTML
+  htmlTemplate?: string, // Optional: provide pre-generated HTML or template HTML
+  // When false, this fn does the DocuSeal submission ONLY and the caller sends the email
+  // itself (via sendLOEEmail, with the composed ② Email content). Default true preserves the
+  // standalone TestLOE path. This flag is the double-send guard: the real send paths pass false.
+  sendEmail: boolean = true
 ): Promise<{
   success: boolean;
   submissionId?: string;
@@ -456,30 +460,34 @@ export async function generateAndSendLOE(
     console.log('🔗 SIGNING LINK (for testing):', signingLink);
     console.log('📝 If email fails, use this link directly!');
     
-    // Send email using our Gmail SMTP Edge Function
-    console.log('📧 Sending email via Gmail SMTP to:', clientEmail);
-    const emailResponse = await fetch(`${supabaseUrl}/functions/v1/send-loe-email-fixed`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${supabaseAnonKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        to: clientEmail,
-        clientName: clientName,
-        signingLink: signingLink,
-        propertyAddress: job.propertyAddress || 'Property'
-      })
-    });
-    
-    if (!emailResponse.ok) {
-      console.error('Failed to send email, but LOE was created');
-      const emailError = await emailResponse.text();
-      console.error('Email error:', emailError);
-    } else {
-      console.log('✅ Email sent successfully');
+    // Send email here ONLY when the caller didn't take ownership of the send (double-send guard).
+    // The real send paths pass sendEmail=false and call sendLOEEmail themselves with the composed
+    // ② Email content; standalone callers (TestLOE) leave sendEmail=true and get the seed email.
+    if (sendEmail) {
+      console.log('📧 Sending default LOE email to:', clientEmail);
+      const emailResponse = await fetch(`${supabaseUrl}/functions/v1/send-loe-email-fixed`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          to: clientEmail,
+          clientName: clientName,
+          signingLink: signingLink,
+          propertyAddress: job.propertyAddress || 'Property'
+        })
+      });
+
+      if (!emailResponse.ok) {
+        console.error('Failed to send email, but LOE was created');
+        const emailError = await emailResponse.text();
+        console.error('Email error:', emailError);
+      } else {
+        console.log('✅ Email sent successfully');
+      }
     }
-    
+
     return {
       success: true,
       submissionId: submissionData.id,
@@ -522,13 +530,16 @@ export async function sendLOEEmail(
   clientEmail: string,
   clientName: string,
   signingLink: string,
-  propertyAddress: string
+  propertyAddress: string,
+  // Composed override from the editable ② Email step. When present, this subject+body is what
+  // gets sent (already merged for names/job#); the {{signing_link}} token resolves here at send.
+  emailOverride?: { subject: string; bodyHtml: string }
 ): Promise<boolean> {
   try {
     // Use Supabase Edge Function for email sending
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseAnonKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-    
+
     const response = await fetch(`${supabaseUrl}/functions/v1/send-loe-email-fixed`, {
       method: 'POST',
       headers: {
@@ -539,7 +550,13 @@ export async function sendLOEEmail(
         to: clientEmail,
         clientName,
         signingLink,
-        propertyAddress
+        propertyAddress,
+        ...(emailOverride
+          ? {
+              subject: emailOverride.subject.split('{{signing_link}}').join(signingLink),
+              bodyHtml: emailOverride.bodyHtml.split('{{signing_link}}').join(signingLink),
+            }
+          : {}),
       })
     });
     
@@ -551,15 +568,21 @@ export async function sendLOEEmail(
     
     const result = await response.json();
     console.log('Email response:', result);
-    
-    // If email service is not configured, consider it successful (LOE was created)
+
+    // REAL send status only: the edge function returns { success: true, emailId }
+    // when it actually dispatched (Graph or Resend), and { error, details } on
+    // failure. Do NOT report success on a bare 200 — silent-true is exactly the
+    // anti-pattern that hid the RLS persistence failure from the first build.
+    if (result.success !== true) {
+      console.error('Email not sent — function did not confirm success:', result);
+      return false;
+    }
+
     if (result.signingLink) {
-      console.log('📋 Signing link available:', result.signingLink);
       // Store the signing link in session storage for display
       sessionStorage.setItem('lastSigningLink', result.signingLink);
     }
-    
-    // Return true even if email isn't actually sent, as long as LOE was created
+
     return true;
   } catch (error) {
     console.error('Failed to send email:', error);

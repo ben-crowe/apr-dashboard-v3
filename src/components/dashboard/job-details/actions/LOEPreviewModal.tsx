@@ -11,6 +11,7 @@ import { DetailJob, JobDetails } from "@/types/job";
 import { Send, X, Download, Mail, Plus, ZoomIn, ZoomOut, RotateCcw, Edit, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import TemplateEditorModal from './TemplateEditorModal';
+import EmailComposeModal from './EmailComposeModal';
 import { saveTemplate, loadAllTemplates, loadTemplateById, setDefaultTemplate, LOETemplate } from '@/utils/loe/saveTemplate';
 import { saveJobContract } from '@/utils/loe/jobContracts';
 import { generateLOEHTML } from '@/utils/loe/generateLOE';
@@ -26,7 +27,7 @@ interface LOEPreviewModalProps {
   job: DetailJob;
   jobDetails: JobDetails;
   documentHTML: string;
-  onApprove: (recipientEmail?: string) => Promise<void>;
+  onApprove: (recipientEmail?: string, emailOverride?: { subject: string; bodyHtml: string }) => Promise<void>;
   /** Fired after a client contract is saved, so the dashboard can refresh its saved list. */
   onContractSaved?: () => void;
   /** Current instance id. Present when reopening an existing contract; absent for a brand-new
@@ -59,6 +60,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   const [showEmailEdit, setShowEmailEdit] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(75); // Default zoom 75%
   const [isEditMode, setIsEditMode] = useState(false);
+  // ② Email step — opens after the user confirms the document, before the actual send.
+  const [showEmailStep, setShowEmailStep] = useState(false);
   const [editedHTML, setEditedHTML] = useState<string>('');
   const [templateModified, setTemplateModified] = useState(false);
   
@@ -205,26 +208,29 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
     }
   }, [currentDocumentHTML, editedHTML, zoomLevel]);
 
-  const handleSend = async () => {
-    // Check if template was edited but not saved
+  // ① → ②: confirm the document, then open the Email step. The actual send fires from there.
+  const handleProceedToEmail = () => {
     if (templateModified) {
       toast.error('Please save your template before sending to client');
       return;
     }
-
-    // Validate email before sending with proper regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!recipientEmail || !emailRegex.test(recipientEmail)) {
       toast.error('Please enter a valid email address (e.g., name@domain.com)');
       setShowEmailEdit(true);
       return;
     }
+    setShowEmailStep(true);
+  };
 
+  // ② → ③: send with the composed email. Double-send guard: isSending disables the button.
+  const handleSendEmail = async (emailOverride: { subject: string; bodyHtml: string }) => {
+    if (isSending) return;
     setIsSending(true);
     try {
-      // Pass the recipient email if it's different from the original
       const emailToUse = recipientEmail !== job.clientEmail ? recipientEmail : undefined;
-      await onApprove(emailToUse);
+      await onApprove(emailToUse, emailOverride);
+      setShowEmailStep(false);
       onClose();
     } catch (error) {
       console.error('Error sending document:', error);
@@ -493,18 +499,12 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
             </Button>
             {!readOnly && (
               <button
-                onClick={handleSend}
+                onClick={handleProceedToEmail}
                 disabled={isSending}
                 className="text-foreground hover:text-foreground dark:hover:text-gray-300 hover:underline transition-colors text-sm font-medium disabled:text-gray-400 disabled:cursor-not-allowed disabled:no-underline flex items-center gap-1"
               >
-                {isSending ? (
-                  'Sending...'
-                ) : (
-                  <>
-                    <Send className="h-4 w-4" />
-                    Send to Client
-                  </>
-                )}
+                <Send className="h-4 w-4" />
+                Continue to Email
               </button>
             )}
           </div>
@@ -555,6 +555,18 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               toast.error(`Failed to save contract: ${result.error}`);
             }
           }}
+        />
+
+        {/* ② Email step — opens on "Continue to Email", sends with the composed cover note */}
+        <EmailComposeModal
+          isOpen={showEmailStep}
+          onClose={() => setShowEmailStep(false)}
+          onBack={() => setShowEmailStep(false)}
+          job={job}
+          jobDetails={jobDetails}
+          recipientEmail={recipientEmail}
+          isSending={isSending}
+          onSend={handleSendEmail}
         />
       </DialogContent>
     </Dialog>

@@ -12,8 +12,12 @@ serve(async (req) => {
   }
 
   try {
-    const { to, clientName, signingLink, propertyAddress } = await req.json()
-    
+    // `subject` + `bodyHtml` are OPTIONAL composed overrides from the editable ② Email step.
+    // When present, they ARE the email (already merged for names/job#); we only resolve the
+    // {{signing_link}} token here (it can't exist before the send). When absent, we fall back
+    // to the verbatim hardcoded seed below (TestLOE / default path) — nothing else changes.
+    const { to, clientName, signingLink, propertyAddress, subject: subjectOverride, bodyHtml } = await req.json()
+
     if (!to || !signingLink) {
       return new Response(
         JSON.stringify({ error: 'Missing required fields: to and signingLink' }),
@@ -34,7 +38,10 @@ serve(async (req) => {
     const actualRecipient = to;
     console.log(`📧 Sending LOE email to: ${actualRecipient}`);
     
-    const emailHtml = `<!DOCTYPE html>
+    // VERBATIM SEED — the fallback email used when no composed override is sent. Kept in sync
+    // with src/utils/loe/emailTemplate.ts (EMAIL_SEED_*). The editable ② Email step lifts this
+    // out into the email_templates default; this stays as the no-override fallback.
+    const seedHtml = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -61,7 +68,15 @@ office: 587-801-5151 | email: clientcare@valta.ca | web: www.valta.ca</p>
 </body>
 </html>`;
 
-    const subject = 'Letter of Engagement - Ready for Signature';
+    // Composed override wins. Resolve the send-time {{signing_link}} token into it (belt-and-
+    // suspenders — the client also substitutes before sending). Otherwise use the verbatim seed.
+    const emailHtml = (typeof bodyHtml === 'string' && bodyHtml.trim())
+      ? bodyHtml.split('{{signing_link}}').join(signingLink)
+      : seedHtml;
+
+    const subject = (typeof subjectOverride === 'string' && subjectOverride.trim())
+      ? subjectOverride.split('{{signing_link}}').join(signingLink)
+      : 'Letter of Engagement - Ready for Signature';
 
     // PRODUCTION transport: Microsoft Graph sendMail from a valta.ca mailbox.
     // GATED on an EXPLICIT GRAPH_SEND_MAILBOX — NOT just graphConfigured(). The Graph app

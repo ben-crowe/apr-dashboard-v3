@@ -78,9 +78,10 @@ const ESignatureAction: React.FC<ESignatureActionProps> = ({
         clientEmail: emailToUse
       };
       
-      // Send to DocuSeal with the already generated HTML
-      const result = await generateAndSendLOE(jobWithUpdatedEmail, jobDetails, previewHTML);
-      
+      // DocuSeal submission ONLY (sendEmail=false) — this path sends its own email below via
+      // sendLOEEmail. Passing false is the double-send guard (was firing two emails per send).
+      const result = await generateAndSendLOE(jobWithUpdatedEmail, jobDetails, previewHTML, false);
+
       if (result.success && result.submissionId && result.signingLink) {
         // Send custom email with signing link
         const emailSent = await sendLOEEmail(

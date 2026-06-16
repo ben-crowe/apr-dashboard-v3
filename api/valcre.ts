@@ -976,19 +976,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const clientEmail = jobData.ClientEmail || jobData.clientEmail || "";
     const contactCompany = jobData.ClientCompany || jobData.clientOrganization || "Direct Client";
 
-    // Parse the property address for property creation
-    const addressParts = parseAddress(
-      jobData.PropertyAddress || jobData.Street || "",
-    );
-
-    // Parse the client address separately for contact creation
-    // Falls back to property address if no client address provided
-    // Fix 3b: accept camelCase clientAddress (dashboard) in addition to PascalCase ClientAddress (webhook).
-    // Without this fallback, clientAddressParts fell back to addressParts (property address) when the
-    // dashboard sent clientAddress — so the contact received the PROPERTY address instead of the client's.
-    const clientAddressParts = (jobData.ClientAddress || jobData.clientAddress)
-      ? parseAddress(jobData.ClientAddress || jobData.clientAddress)
-      : addressParts;
+    // 4-FIELD STRUCTURED ADDRESS — map 1:1, NO parseAddress (removed from the address flow 2026-06-16).
+    // Each part is its own field; clientAddress/propertyAddress are street-only now.
+    // ⚑ NO-CROSS: property parts come ONLY from property fields, client parts ONLY from client fields —
+    // the contact can NEVER inherit the property address (the documented past bug). camelCase = dashboard,
+    // PascalCase = legacy/webhook. Structured city/province/postal default to "" (legacy rows render street-only).
+    const addressParts = {
+      street: jobData.propertyAddress || jobData.PropertyAddress || jobData.PropertyStreet || jobData.Street || "",
+      city: jobData.propertyCity || jobData.PropertyCity || "",
+      province: jobData.propertyProvince || jobData.PropertyState || "",
+      postalCode: jobData.propertyPostal || jobData.PropertyPostalCode || "",
+    };
+    const clientAddressParts = {
+      street: jobData.clientAddress || jobData.ClientAddress || "",
+      city: jobData.clientCity || jobData.ClientCity || "",
+      province: jobData.clientProvince || jobData.ClientProvince || "",
+      postalCode: jobData.clientPostal || jobData.ClientPostal || "",
+    };
 
     // Try to find existing contact by email (if provided)
     if (clientEmail) {
@@ -1118,11 +1122,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         Company: jobData.PropertyContact.Company || contactCompany,
         FirstName: jobData.PropertyContact.FirstName || clientFirstName,
         LastName: jobData.PropertyContact.LastName || clientLastName,
-        AddressStreet:
-          jobData.PropertyContact.AddressStreet || addressParts.street,
-        AddressCity: addressParts.city,
-        AddressState: addressParts.province || "",
-        AddressPostalCode: addressParts.postalCode || "",
+        // PropertyContact gets NO address (Ben-confirmed 2026-06-16): we don't collect a
+        // property-contact address, so any fill = invented cross-data. Empty beats wrong.
+        AddressStreet: "",
+        AddressCity: "",
+        AddressState: "",
+        AddressPostalCode: "",
         PhoneNumber: jobData.PropertyContact.PhoneNumber || "",
         Email: jobData.PropertyContact.Email || "",
         Title: jobData.PropertyContact.Title || "Property Contact",

@@ -155,8 +155,9 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
           Company: formData.clientOrganization || 'Direct Client',
           Email: formData.propertyContactEmail,
           PhoneNumber: formData.propertyContactPhone,
-          Title: 'Property Manager',
-          AddressStreet: formData.propertyAddress
+          Title: 'Property Manager'
+          // NO address on PropertyContact (no-cross, Ben-confirmed): the property-contact
+          // person does not inherit the property address.
         };
       }
 
@@ -378,8 +379,9 @@ export const sendToValcre = async (data: ValcreWebhookData): Promise<{success: b
         Company: formData.clientOrganization || formData.organizationName || 'Direct Client',
         Email: formData.propertyContactEmail,
         PhoneNumber: formData.propertyContactPhone,
-        Title: formData.clientTitle || 'Property Manager',
-        AddressStreet: formData.propertyAddress
+        Title: formData.clientTitle || 'Property Manager'
+        // NO address on PropertyContact (no-cross, Ben-confirmed): the property-contact
+        // person does not inherit the property address.
       };
     }
 

@@ -26,12 +26,17 @@ export function useJobDetail(jobId: string) {
   } = useJobActions(job, setJob, jobDetails);
 
   const handleUpdateDetails = useCallback((newDetails: Partial<JobDetails>) => {
-    const updatedDetails = { ...jobDetails, ...newDetails };
-    setJobDetails(updatedDetails);
-    
-    // Save the updated details
-    debouncedSave(updatedDetails);
-  }, [jobDetails, setJobDetails, debouncedSave]);
+    // FUNCTIONAL update (fix 2026-06-16): merge against the LATEST state (prev), NOT a stale `jobDetails`
+    // closure. The cascade fires several onUpdateDetails calls in rapid succession (status → derived
+    // scenarios/approaches/rights); with the old closure-spread, a later call merged a STALE snapshot and
+    // clobbered fields just set elsewhere — live-confirmed wiping Section-1 Property Type/Subtype/Tenancy
+    // on a cascade switch (VAL261101 + VAL261062). Merging against `prev` preserves every field.
+    setJobDetails(prev => {
+      const updatedDetails = { ...prev, ...newDetails };
+      debouncedSave(updatedDetails); // debounced → safe if the updater double-invokes (React strict mode)
+      return updatedDetails;
+    });
+  }, [setJobDetails, debouncedSave]);
 
   const handleUpdateJob = useCallback(async (updates: Partial<DetailJob>) => {
     if (!job) return;
@@ -51,7 +56,13 @@ export function useJobDetail(jobId: string) {
     if (updates.clientTitle !== undefined) dbUpdates.client_title = updates.clientTitle;
     if (updates.clientOrganization !== undefined) dbUpdates.client_organization = updates.clientOrganization;
     if (updates.clientAddress !== undefined) dbUpdates.client_address = updates.clientAddress;
+    if (updates.clientCity !== undefined) dbUpdates.client_city = updates.clientCity;
+    if (updates.clientProvince !== undefined) dbUpdates.client_province = updates.clientProvince;
+    if (updates.clientPostal !== undefined) dbUpdates.client_postal_code = updates.clientPostal;
     if (updates.propertyAddress !== undefined) dbUpdates.property_address = updates.propertyAddress;
+    if (updates.propertyCity !== undefined) dbUpdates.property_city = updates.propertyCity;
+    if (updates.propertyProvince !== undefined) dbUpdates.property_province = updates.propertyProvince;
+    if (updates.propertyPostal !== undefined) dbUpdates.property_postal_code = updates.propertyPostal;
     if (updates.propertyName !== undefined) dbUpdates.property_name = updates.propertyName;
     if (updates.propertyType !== undefined) dbUpdates.property_type = updates.propertyType;
     if (updates.propertyTypes !== undefined) dbUpdates.property_types = updates.propertyTypes;

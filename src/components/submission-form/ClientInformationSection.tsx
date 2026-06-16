@@ -143,14 +143,47 @@ const ClientInformationSection: React.FC<ClientInformationSectionProps> = ({
         </div>
 
         <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="clientAddress">Client Organization Address</Label>
+          <Label htmlFor="clientAddress">Street Address</Label>
           <Input
             id="clientAddress"
             name="clientAddress"
             value={formData.clientAddress}
             onChange={handleChange}
             className="bg-transparent border-0 border-b border-b-gray-400 pb-0.5 dark:border-b-white/20 text-gray-900 dark:text-white/70 rounded-none px-1 ml-3 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
-            placeholder="123 Main Street, Calgary, AB T2P 1A1"
+            placeholder="123 Main Street, Suite 500"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="clientCity">City</Label>
+          <Input
+            id="clientCity"
+            name="clientCity"
+            value={formData.clientCity}
+            onChange={handleChange}
+            className="bg-transparent border-0 border-b border-b-gray-400 pb-0.5 dark:border-b-white/20 text-gray-900 dark:text-white/70 rounded-none px-1 ml-3 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
+            placeholder="Calgary"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="clientProvince">Province</Label>
+          <Input
+            id="clientProvince"
+            name="clientProvince"
+            value={formData.clientProvince}
+            onChange={handleChange}
+            className="bg-transparent border-0 border-b border-b-gray-400 pb-0.5 dark:border-b-white/20 text-gray-900 dark:text-white/70 rounded-none px-1 ml-3 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
+            placeholder="AB"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="clientPostal">Postal Code</Label>
+          <Input
+            id="clientPostal"
+            name="clientPostal"
+            value={formData.clientPostal}
+            onChange={handleChange}
+            className="bg-transparent border-0 border-b border-b-gray-400 pb-0.5 dark:border-b-white/20 text-gray-900 dark:text-white/70 rounded-none px-1 ml-3 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
+            placeholder="T2P 1A1"
           />
         </div>
       </div>

@@ -57,7 +57,7 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
 
           <div className="space-y-2">
             <Label htmlFor="propertyAddress" className={cn(errors.propertyAddress && "text-destructive")}>
-              Property Address
+              Street Address
             </Label>
             <Input
               id="propertyAddress"
@@ -68,11 +68,44 @@ const PropertyInformationSection: React.FC<PropertyInformationSectionProps> = ({
                 "bg-transparent border-0 border-b border-b-gray-400 pb-0.5 dark:border-b-white/20 text-gray-900 dark:text-white/70 rounded-none px-1 ml-3 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0",
                 errors.propertyAddress && "border-destructive"
               )}
-              placeholder="456 River Road, Calgary, AB T2P 2B2"
+              placeholder="456 River Road"
             />
             {errors.propertyAddress && (
               <p className="text-sm text-destructive">{errors.propertyAddress}</p>
             )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="propertyCity">City</Label>
+            <Input
+              id="propertyCity"
+              name="propertyCity"
+              value={formData.propertyCity}
+              onChange={handleChange}
+              className="bg-transparent border-0 border-b border-b-gray-400 pb-0.5 dark:border-b-white/20 text-gray-900 dark:text-white/70 rounded-none px-1 ml-3 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
+              placeholder="Calgary"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="propertyProvince">Province</Label>
+            <Input
+              id="propertyProvince"
+              name="propertyProvince"
+              value={formData.propertyProvince}
+              onChange={handleChange}
+              className="bg-transparent border-0 border-b border-b-gray-400 pb-0.5 dark:border-b-white/20 text-gray-900 dark:text-white/70 rounded-none px-1 ml-3 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
+              placeholder="AB"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="propertyPostal">Postal Code</Label>
+            <Input
+              id="propertyPostal"
+              name="propertyPostal"
+              value={formData.propertyPostal}
+              onChange={handleChange}
+              className="bg-transparent border-0 border-b border-b-gray-400 pb-0.5 dark:border-b-white/20 text-gray-900 dark:text-white/70 rounded-none px-1 ml-3 max-w-[240px] placeholder:text-gray-300 dark:placeholder:text-white/25 hover:border-b-gray-700 dark:hover:border-b-white/40 focus-visible:border-b-gray-800 dark:focus-visible:border-b-border focus-visible:outline-none focus-visible:ring-0"
+              placeholder="T2P 1A1"
+            />
           </div>
         </div>
 

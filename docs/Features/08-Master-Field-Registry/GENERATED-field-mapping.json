@@ -1,0 +1,762 @@
+{
+  "_meta": {
+    "source": "public/field-registry-v6.html (canonical HTML registry)",
+    "runtime_truth": "api/valcre.ts",
+    "generated_by": "scripts/generate-registry-derivatives.mjs",
+    "note": "GENERATED — do not hand-edit. Edit the HTML registry then regenerate."
+  },
+  "fields": [
+    {
+      "name": "JobNumber",
+      "label": "Job Number",
+      "control": "Alpha Numeric",
+      "source": "Valcre API",
+      "dropdownList": null,
+      "routesTo": "Job.Number",
+      "entity": "Job",
+      "notForm": false,
+      "required": true,
+      "notes": "Unique job identifier from Valcre"
+    },
+    {
+      "name": "JobName",
+      "label": "Job Name",
+      "control": "Alpha Numeric",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "Job.Name",
+      "entity": "Job",
+      "notForm": false,
+      "required": true,
+      "notes": "Job/project name"
+    },
+    {
+      "name": "JobStatus",
+      "label": "Job Status",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "Job.Status",
+      "entity": "Job",
+      "notForm": false,
+      "required": true,
+      "notes": "Current job status"
+    },
+    {
+      "name": "SubjectProperty",
+      "label": "Subject Property",
+      "control": "Alpha Numeric",
+      "source": "Valcre API",
+      "dropdownList": null,
+      "routesTo": "Job.Property._DisplayName",
+      "entity": "Job",
+      "notForm": false,
+      "required": true,
+      "notes": "Property display name from Valcre"
+    },
+    {
+      "name": "ClientCompanyName",
+      "label": "Client Company Name",
+      "control": "Alpha Numeric",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "Job.Client._DisplayName",
+      "entity": "Job",
+      "notForm": false,
+      "required": true,
+      "notes": "Client company display name"
+    },
+    {
+      "name": "ClientOrganizationAddress",
+      "label": "Client Organization Address",
+      "control": "Alpha Numeric",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "Contact.AddressStreet/City/State/PostalCode",
+      "entity": "Contact",
+      "notForm": false,
+      "required": true,
+      "notes": "4-field structured address (street/city/province/postal) → Contact.AddressStreet/City/State/PostalCode. ⚠ CREATE-ONLY (written only when minting a new contact, never re-PATCHed on edit). NO-CROSS: client address parts come ONLY from client fields, never the property."
+    },
+    {
+      "name": "ClientFirstName",
+      "label": "Client First Name",
+      "control": "Text",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "Contact.FirstName",
+      "entity": "Contact",
+      "notForm": false,
+      "required": true,
+      "notes": "⚠ Contact CREATE-ONLY (set on new-contact creation, not re-PATCHed)."
+    },
+    {
+      "name": "ClientLastName",
+      "label": "Client Last Name",
+      "control": "Text",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "Contact.LastName",
+      "entity": "Contact",
+      "notForm": false,
+      "required": true,
+      "notes": "⚠ Contact CREATE-ONLY."
+    },
+    {
+      "name": "ClientTitle",
+      "label": "Client Title",
+      "control": "Text",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "Contact.Title",
+      "entity": "Contact",
+      "notForm": false,
+      "required": true,
+      "notes": "⚠ Contact CREATE-ONLY (app key clientTitle)."
+    },
+    {
+      "name": "ClientPhone",
+      "label": "Client Phone",
+      "control": "Text",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "Contact.PhoneNumber",
+      "entity": "Contact",
+      "notForm": false,
+      "required": true,
+      "notes": "⚠ Contact CREATE-ONLY."
+    },
+    {
+      "name": "ClientEmail",
+      "label": "Client Email",
+      "control": "Text",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "Contact.Email",
+      "entity": "Contact",
+      "notForm": false,
+      "required": true,
+      "notes": "⚠ Contact CREATE-ONLY. Also the match key — existing contact reused if email matches."
+    },
+    {
+      "name": "PropertyName",
+      "label": "Property Name",
+      "control": "Alpha Numeric",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "Property.Name",
+      "entity": "Property",
+      "notForm": false,
+      "required": true,
+      "notes": ""
+    },
+    {
+      "name": "PropertyAddress",
+      "label": "Property Address",
+      "control": "Alpha Numeric",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "Property.AddressStreet",
+      "entity": "Property",
+      "notForm": false,
+      "required": true,
+      "notes": ""
+    },
+    {
+      "name": "PropertyType",
+      "label": "Property Type",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListPropertyType",
+      "routesTo": "Property.Type (single) + Property.Types (multi)",
+      "entity": "Property",
+      "notForm": false,
+      "required": true,
+      "notes": "Primary property classification — cascade trigger. Writes BOTH Valcre fields: Property.Type (single validated enum, first of the split) AND Property.Types (multi PascalCase from PropertyTypeEnum)."
+    },
+    {
+      "name": "PropertySubtype",
+      "label": "Property Subtype",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListPropertySubtype",
+      "routesTo": "Property.SecondaryType",
+      "entity": "Property",
+      "notForm": true,
+      "required": true,
+      "notes": "Secondary type — overrides Property Rights"
+    },
+    {
+      "name": "Tenancy",
+      "label": "Tenancy",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListTenancy",
+      "routesTo": "CF12408",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "Occupancy type — highest priority override for Property Rights. Valcre custom field CF12408 (SingleOption)."
+    },
+    {
+      "name": "StateofImprovements",
+      "label": "State of Improvements",
+      "control": "Select one",
+      "source": "Logic",
+      "dropdownList": "ListStateofImprovements",
+      "routesTo": "CF12409",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "Derived from Status of Improvements. Valcre custom field CF12409 (SingleOption)."
+    },
+    {
+      "name": "StatusofImprovements",
+      "label": "Status of Improvements",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListStatusofImprovements",
+      "routesTo": "CF12407",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "DIRECT user pick — drives the Value Scenarios + Approaches + Property Rights cascade. Valcre custom field CF12407 (SingleOption)."
+    },
+    {
+      "name": "InterestAppraised",
+      "label": "Interest Appraised (Property Rights)",
+      "control": "Select multiple",
+      "source": "Logic",
+      "dropdownList": "ListInterestAppraised",
+      "routesTo": "CF12412",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "DERIVED (derivePropertyRights) from PropertyType + Subtype + Tenancy — not user-typed. App key interestAppraised → Valcre custom field CF12412 (MultiOption). User sees 'Property Rights'."
+    },
+    {
+      "name": "AuthorizedUse",
+      "label": "Authorized Use",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListAuthorizedUse",
+      "routesTo": "CF12413",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "Insurance overrides Value Scenarios. App keys authorizedUse + intendedUse both → Valcre custom field CF12413 (SingleOption)."
+    },
+    {
+      "name": "ValueScenarios",
+      "label": "Value Scenarios",
+      "control": "Select multiple",
+      "source": "Logic",
+      "dropdownList": "ListValueScenarios",
+      "routesTo": "CF12414",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "DERIVED (deriveValueScenarios) from Status of Improvements + Authorized Use — not user-typed. Valcre custom field CF12414 (MultiOption)."
+    },
+    {
+      "name": "ApproachestoValue",
+      "label": "Approaches to Value",
+      "control": "Select multiple",
+      "source": "Logic",
+      "dropdownList": "ListApproachestoValue",
+      "routesTo": "CF12415",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "DERIVED (deriveApproaches) from Status of Improvements + Authorized Use — not user-typed. Valcre custom field CF12415 (MultiOption)."
+    },
+    {
+      "name": "AssignmentType",
+      "label": "Assignment Type",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListAssignmentType",
+      "routesTo": "CF12416",
+      "entity": "Job",
+      "notForm": false,
+      "required": true,
+      "notes": "Single or multiple property. Valcre custom field CF12416 (SingleOption)."
+    },
+    {
+      "name": "ReportType",
+      "label": "Report Type",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListReportType",
+      "routesTo": "CF12417",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "Comprehensive, Concise, or Form. Valcre custom field CF12417 (SingleOption)."
+    },
+    {
+      "name": "DesktopReport",
+      "label": "Desktop Report",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListYes/No",
+      "routesTo": "CF12418",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "Desktop-only report flag. Valcre custom field CF12418 (SingleOption)."
+    },
+    {
+      "name": "Valuetimeframe",
+      "label": "Value Timeframe",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListValueTimeFrame",
+      "routesTo": "CF12419",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "Current, Prospective, or Retrospective. Valcre custom field CF12419 (SingleOption)."
+    },
+    {
+      "name": "InspectionDate",
+      "label": "Inspection Date",
+      "control": "Date",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "Job.InspectionDate",
+      "entity": "Job",
+      "notForm": false,
+      "required": true,
+      "notes": ""
+    },
+    {
+      "name": "Fee",
+      "label": "Fee",
+      "control": "Whole Number",
+      "source": "Calculated",
+      "dropdownList": null,
+      "routesTo": "Job.Fee",
+      "entity": "Job",
+      "notForm": false,
+      "required": true,
+      "notes": "Appraisal fee amount"
+    },
+    {
+      "name": "DeliveryTime",
+      "label": "Delivery Time",
+      "control": "Whole Number",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": "CF12420",
+      "entity": "Job",
+      "notForm": true,
+      "required": false,
+      "notes": "Business days for delivery. Valcre custom field CF12420."
+    },
+    {
+      "name": "PaidDate",
+      "label": "Paid Date",
+      "control": "Date",
+      "source": "Logic",
+      "dropdownList": null,
+      "routesTo": "Job.PaidDate",
+      "entity": "Job",
+      "notForm": false,
+      "required": false,
+      "notes": "Date payment received"
+    },
+    {
+      "name": "Paid",
+      "label": "Paid",
+      "control": "Checkbox",
+      "source": "Logic",
+      "dropdownList": null,
+      "routesTo": "CF12421",
+      "entity": "Job",
+      "notForm": false,
+      "required": false,
+      "notes": "Payment received flag. Valcre custom field CF12421."
+    },
+    {
+      "name": "RequestDate",
+      "label": "Request Date",
+      "control": "Date",
+      "source": "Logic",
+      "dropdownList": null,
+      "routesTo": "Job.BidDate",
+      "entity": "Job",
+      "notForm": false,
+      "required": false,
+      "notes": "Date job was requested (Bid Date in Valcre)"
+    },
+    {
+      "name": "SignedDate",
+      "label": "Signed Date",
+      "control": "Date",
+      "source": "Logic",
+      "dropdownList": null,
+      "routesTo": "Job.AwardDate",
+      "entity": "Job",
+      "notForm": false,
+      "required": false,
+      "notes": "LOE signed date (Award Date in Valcre)"
+    },
+    {
+      "name": "DueDate",
+      "label": "Due Date",
+      "control": "Date",
+      "source": "Logic",
+      "dropdownList": null,
+      "routesTo": "Job.DueDate",
+      "entity": "Job",
+      "notForm": false,
+      "required": false,
+      "notes": "Report due date"
+    },
+    {
+      "name": "AmountPaid",
+      "label": "Amount Paid",
+      "control": "Decimal",
+      "source": "Logic",
+      "dropdownList": null,
+      "routesTo": "Job.AmountPaid",
+      "entity": "Job",
+      "notForm": false,
+      "required": false,
+      "notes": "Total amount paid to date"
+    },
+    {
+      "name": "ClientDocuments",
+      "label": "Client Documents",
+      "control": "Select multiple",
+      "source": "Logic",
+      "dropdownList": "ListClientDocuments",
+      "routesTo": "CF12422",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "Documents provided by client. Valcre custom field CF12422 (MultiOption)."
+    },
+    {
+      "name": "TransactionStatus",
+      "label": "Transaction Status",
+      "control": "Select multiple",
+      "source": "User Input",
+      "dropdownList": "ListTransactionStatus",
+      "routesTo": "CF12424",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "Property transaction status. Valcre custom field CF12424."
+    },
+    {
+      "name": "ZoningStatus",
+      "label": "Zoning Status",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListZoningStatus",
+      "routesTo": "CF12425",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "Valcre custom field CF12425."
+    },
+    {
+      "name": "LandMetric",
+      "label": "Land $/Metric",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListLand$/Metric",
+      "routesTo": "CF12426",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "Land valuation metric. Valcre custom field CF12426."
+    },
+    {
+      "name": "CMHCFinancing",
+      "label": "CMHC Financing",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListYes/No",
+      "routesTo": "CF12427",
+      "entity": "Job",
+      "notForm": true,
+      "required": true,
+      "notes": "CMHC insured financing flag. Valcre custom field CF12427."
+    },
+    {
+      "name": "CurrentUseImprovements",
+      "label": "Current Use",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListCurrentUse",
+      "routesTo": "CF12410",
+      "entity": "Job",
+      "notForm": true,
+      "required": false,
+      "notes": "DIRECT user pick — current use of improvements (app key currentUseImprovements). Valcre custom field CF12410 (SingleOption)."
+    },
+    {
+      "name": "ProposedUseImprovements",
+      "label": "Proposed Use",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListProposedUse",
+      "routesTo": "CF12411",
+      "entity": "Job",
+      "notForm": true,
+      "required": false,
+      "notes": "DIRECT user pick — proposed use of improvements (app key proposedUseImprovements). Valcre custom field CF12411 (SingleOption)."
+    },
+    {
+      "name": "PreviouslyAppraised",
+      "label": "Previously Appraised",
+      "control": "Select one",
+      "source": "User Input",
+      "dropdownList": "ListYes/No",
+      "routesTo": "CF12423",
+      "entity": "Job",
+      "notForm": true,
+      "required": false,
+      "notes": "DIRECT user pick — previously-appraised flag (app key previouslyAppraised). Valcre custom field CF12423."
+    },
+    {
+      "name": "EA1",
+      "label": "Extraordinary Assumption 1",
+      "control": "Multi-line",
+      "source": "Logic",
+      "dropdownList": null,
+      "routesTo": null,
+      "entity": null,
+      "notForm": true,
+      "required": false,
+      "notes": "Auto-populated from cascade/text library"
+    },
+    {
+      "name": "EA2",
+      "label": "Extraordinary Assumption 2",
+      "control": "Multi-line",
+      "source": "Logic",
+      "dropdownList": null,
+      "routesTo": null,
+      "entity": null,
+      "notForm": true,
+      "required": false,
+      "notes": ""
+    },
+    {
+      "name": "EA3",
+      "label": "Extraordinary Assumption 3",
+      "control": "Multi-line",
+      "source": "Logic",
+      "dropdownList": null,
+      "routesTo": null,
+      "entity": null,
+      "notForm": true,
+      "required": false,
+      "notes": ""
+    },
+    {
+      "name": "EA4",
+      "label": "Extraordinary Assumption 4",
+      "control": "Multi-line",
+      "source": "Logic",
+      "dropdownList": null,
+      "routesTo": null,
+      "entity": null,
+      "notForm": true,
+      "required": false,
+      "notes": ""
+    },
+    {
+      "name": "EA5",
+      "label": "Extraordinary Assumption 5",
+      "control": "Multi-line",
+      "source": "Logic",
+      "dropdownList": null,
+      "routesTo": null,
+      "entity": null,
+      "notForm": true,
+      "required": false,
+      "notes": ""
+    }
+  ],
+  "scenarios": [
+    {
+      "scenario": "As Is Vacant Land",
+      "summary": "current market value of the subject property as of the effective date",
+      "hasText": true,
+      "pending": false,
+      "eaDetail": false,
+      "hcDetail": false,
+      "derivedFrom": [
+        "Proposed - Vacant Land"
+      ],
+      "derivedFromDisplay": [
+        "Proposed - Vacant Land"
+      ],
+      "valcreCustomField": "CF12414",
+      "valcreOptionId": 7499
+    },
+    {
+      "scenario": "As If Vacant Land",
+      "summary": "current makret value based on the extraordinary assumption and hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date.",
+      "hasText": true,
+      "pending": false,
+      "eaDetail": true,
+      "hcDetail": true,
+      "derivedFrom": [
+        "Proposed - Improved Land (Demolition Required)",
+        "Proposed - Under Construction"
+      ],
+      "derivedFromDisplay": [
+        "Improved Land (Demo Req)",
+        "Under Construction"
+      ],
+      "valcreCustomField": "CF12414",
+      "valcreOptionId": 7507
+    },
+    {
+      "scenario": "As If Complete & Stabilized",
+      "summary": "current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the project is 100% complete and fully leased at market rents and is at stabilized occupancy, as of the effective date.",
+      "hasText": true,
+      "pending": false,
+      "eaDetail": true,
+      "hcDetail": true,
+      "derivedFrom": [
+        "Improved - Under Renovation",
+        "Improved - Proposed Renovation",
+        "Proposed - Vacant Land",
+        "Proposed - Improved Land (Demolition Required)",
+        "Proposed - Under Construction"
+      ],
+      "derivedFromDisplay": [
+        "Under Renovation",
+        "Proposed Renovation",
+        "Vacant Land",
+        "Improved Land (Demo)",
+        "Under Construction"
+      ],
+      "valcreCustomField": "CF12414",
+      "valcreOptionId": 7506
+    },
+    {
+      "scenario": "As-Is",
+      "summary": "current market value of the subject property as improved as of the effective date",
+      "hasText": true,
+      "pending": false,
+      "eaDetail": false,
+      "hcDetail": false,
+      "derivedFrom": [
+        "Improved - Under Renovation",
+        "Improved - Proposed Renovation"
+      ],
+      "derivedFromDisplay": [
+        "Under Renovation",
+        "Proposed Renovation"
+      ],
+      "valcreCustomField": "CF12414",
+      "valcreOptionId": 7505
+    },
+    {
+      "scenario": "As Stabilized",
+      "summary": "current market value of the subject property based on the extraordinary assumption that the subject property is fully leased at market rents and is at stabilized occupancy as of the effective date.",
+      "hasText": true,
+      "pending": false,
+      "eaDetail": true,
+      "hcDetail": true,
+      "derivedFrom": [
+        "Improved - Completed",
+        "Improved - Renovated"
+      ],
+      "derivedFromDisplay": [
+        "Completed",
+        "Renovated"
+      ],
+      "valcreCustomField": "CF12414",
+      "valcreOptionId": 7504
+    },
+    {
+      "scenario": "As If Complete & Stabilized - Renovated",
+      "summary": "current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the renovation is 100% complete and the property is fully leased and is at stabilized occupancy, as of the effective date.",
+      "hasText": true,
+      "pending": false,
+      "eaDetail": false,
+      "hcDetail": false,
+      "derivedFrom": [
+        "Option-set only (not derived today)"
+      ],
+      "derivedFromDisplay": [
+        "Option-set only (not derived today)"
+      ],
+      "valcreCustomField": "CF12414",
+      "valcreOptionId": 7503
+    },
+    {
+      "scenario": "As If Complete - Rezoned",
+      "summary": null,
+      "hasText": false,
+      "pending": true,
+      "eaDetail": false,
+      "hcDetail": false,
+      "derivedFrom": [
+        "Option-set only"
+      ],
+      "derivedFromDisplay": [
+        "Option-set only"
+      ],
+      "valcreCustomField": "CF12414",
+      "valcreOptionId": 7502
+    },
+    {
+      "scenario": "As If Complete - Serviced",
+      "summary": null,
+      "hasText": false,
+      "pending": true,
+      "eaDetail": false,
+      "hcDetail": false,
+      "derivedFrom": [
+        "Option-set only"
+      ],
+      "derivedFromDisplay": [
+        "Option-set only"
+      ],
+      "valcreCustomField": "CF12414",
+      "valcreOptionId": 7501
+    },
+    {
+      "scenario": "As If Complete - Subdivided",
+      "summary": null,
+      "hasText": false,
+      "pending": true,
+      "eaDetail": false,
+      "hcDetail": false,
+      "derivedFrom": [
+        "Option-set only"
+      ],
+      "derivedFromDisplay": [
+        "Option-set only"
+      ],
+      "valcreCustomField": "CF12414",
+      "valcreOptionId": 7500
+    },
+    {
+      "scenario": "Insurable Replacement Cost",
+      "summary": null,
+      "hasText": false,
+      "pending": true,
+      "eaDetail": false,
+      "hcDetail": false,
+      "derivedFrom": [
+        "Authorized Use = Insurance (override)"
+      ],
+      "derivedFromDisplay": [
+        "Authorized Use = Insurance (override)"
+      ],
+      "valcreCustomField": "CF12414",
+      "valcreOptionId": 7508
+    }
+  ]
+}

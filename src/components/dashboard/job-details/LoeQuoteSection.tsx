@@ -1628,8 +1628,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             {/* Status of Improvements — moved here 2026-06-10 (was in body "Cascade Options" group, now matches mock 2.4).
                 Real user field + the cascade driver. Starts blank (no preset). */}
             <CompactField label="Status of Improvements">
-              {testMode && cascadeVersion === 'V4' ? (
+              {cascadeVersion === 'V4' ? (
                 // Dash rule: the Insurance scenario is driven by Authorized Use, so Status does not apply.
+                // NOT test-mode-gated — V4 always dashes Status (live + test), matching the mock.
                 <div style={provStyle(null)} className="max-w-[220px]" title="The Insurance scenario is driven by Authorized Use — Status does not apply.">
                   <span className="text-zinc-400">—</span>
                 </div>

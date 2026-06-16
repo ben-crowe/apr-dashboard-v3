@@ -620,32 +620,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
         // Map Report fields to proper Valcre enum fields (Nov 13, 2025 - Fixed)
 
-        // Property Rights → Purposes field (using PURPOSES_MAP)
-        if (
-          jobData.propertyRightsAppraised ||
-          jobData.PropertyRightsAppraised
-        ) {
-          // Job.Purposes is a SINGLE enum but the dashboard field is multi-select (comma-joined).
-          // House pattern for multi-select → single-enum = "First value only" (matches PropertyType,
-          // 1-API-FIELD-MAPPING-REFERENCE.md). Take the primary selection so multi-select degrades
-          // gracefully instead of silently skipping (whole comma string never matches a map key).
-          const rawValue = String(
-            jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised,
-          )
-            .split(",")[0]
-            .trim();
-          const converted = PURPOSES_MAP[rawValue];
-          if (converted) {
-            updateData.Purposes = converted;
-            console.log(
-              `✅ Property Rights mapped: "${rawValue}" → "${converted}"`,
-            );
-          } else {
-            console.log(
-              `⚠️ WARNING: Property Rights value "${rawValue}" not in PURPOSES_MAP, skipping`,
-            );
-          }
-        }
+        // Property Rights → routes ONLY to custom field CF12412 (interestAppraised), NOT native Job.Purposes.
+        // REMOVED the native Purposes write 2026-06-16: Valcre ALWAYS rejected the Purposes PATCH (long-standing),
+        // and setting updateData.Purposes made updateData non-empty → the native PATCH fired + failed → the proxy
+        // bailed before setValtaCustomFields → CF12412 never wrote (InterestAppraised stuck at Fee Simple). With
+        // Purposes gone, a Property-Rights-only change is custom-field-only → the empty-PATCH skip kicks in →
+        // CF12412 writes cleanly, no toast. Native Purposes never worked, so zero loss.
 
         // Report Type → ReportFormat field (using REPORT_FORMAT_MAP)
         if (jobData.reportType || jobData.ReportType) {
@@ -1602,15 +1582,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       }
     }
 
-    // Purposes - Convert using map (e.g., "Fee Simple Interest" → "FeeSimple")
-    if (jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised) {
-      const rawValue =
-        jobData.propertyRightsAppraised || jobData.PropertyRightsAppraised;
-      const converted = PURPOSES_MAP[rawValue];
-      if (converted) {
-        jobCreateData.Purposes = converted;
-      }
-    }
+    // Purposes — REMOVED 2026-06-16 (create-path equivalent). Property Rights routes ONLY to custom
+    // field CF12412 (interestAppraised), never native Job.Purposes — Valcre always rejected the Purposes
+    // write. See the matching note in the update path above.
 
     // RequestedValues - Convert using map (e.g., "As-Is" → "AsIs")
     if (jobData.valuationPremises || jobData.ValuationPremises) {

@@ -1279,7 +1279,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={handleCreateValcreJob}
-                className="!border !border-border dark:!border-white/30 !bg-transparent !text-foreground dark:!text-white hover:!bg-muted dark:hover:!bg-white/10 hover:!border-gray-400 dark:hover:!border-white/50 transition-colors text-sm font-medium"
+                className="!border-2 !border-emerald-500 dark:!border-emerald-400/60 !bg-background dark:!bg-transparent !text-foreground hover:!bg-emerald-50 dark:hover:!bg-emerald-500/10 transition-colors text-sm font-medium"
                 disabled={isCreatingJob}
               >
                 {isCreatingJob ? 'Creating...' : 'Create Valcre Job'}
@@ -1442,7 +1442,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   disabled={!validation.isValid || isSending || isGenerating}
                   className={alreadySent
                     ? "border border-amber-300 dark:border-amber-500/30 bg-transparent text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-500/10 hover:border-amber-400 dark:hover:border-amber-500/50 transition-colors text-sm font-medium"
-                    : "border-2 border-gray-800 dark:border-white/50 bg-gray-800 dark:bg-transparent text-white dark:text-white hover:bg-gray-700 dark:hover:bg-white/10 transition-colors text-sm font-medium"}
+                    : "border-2 border-emerald-500 dark:border-emerald-400/60 bg-background dark:bg-transparent text-foreground hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-colors text-sm font-medium"}
                 >
                   <FileSignature className="h-4 w-4 mr-1" />
                   {isGenerating ? "Generating..." : "Create Contract"}

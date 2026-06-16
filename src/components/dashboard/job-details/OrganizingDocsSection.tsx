@@ -4,8 +4,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronRight, Loader2, FolderOpen } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronRight, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField } from "./ValcreStyles";
 import { Label } from "@/components/ui/label";
@@ -22,54 +21,7 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
   onUpdateDetails
 }) => {
   const [isSectionSaving, setIsSectionSaving] = useState(false);
-  const [isCreatingAssetFolders, setIsCreatingAssetFolders] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
-
-  // Create the SharePoint per-job folder tree (parent + 5 standard subfolders) ON DEMAND.
-  // Works for ANY job, including ones created directly in Valcre. Explicit jobNumber +
-  // propertyDescription form so it never depends on a job_submissions row. Idempotent.
-  const handleCreateAssetFolders = async () => {
-    if (!job || !jobDetails?.jobNumber) {
-      toast.error("Please create a job number first (in Section 2)");
-      return;
-    }
-    setIsCreatingAssetFolders(true);
-    try {
-      const jn = jobDetails.jobNumber.toString();
-      const yy = parseInt(jn.replace(/\D/g, '').slice(0, 2), 10);
-      const year = Number.isFinite(yy) ? 2000 + yy : new Date().getFullYear();
-      const propertyDescription = [(job as any).propertyName, (job as any).propertyAddress]
-        .filter(Boolean)
-        .join(', ');
-      const { data, error } = await supabase.functions.invoke('create-job-folders', {
-        body: { jobNumber: jn, propertyDescription, year },
-      });
-      if (error) throw error;
-      if (data?.configured === false) {
-        toast.error('SharePoint is not configured yet');
-        return;
-      }
-      if (data?.success) {
-        toast.success(
-          <div>
-            <div>✅ Asset folders created!</div>
-            {data.parentWebUrl && (
-              <a href={data.parentWebUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">
-                Open folder →
-              </a>
-            )}
-          </div>
-        );
-      } else {
-        toast.error('Failed to create asset folders');
-      }
-    } catch (error) {
-      console.error('Error creating asset folders:', error);
-      toast.error('Failed to create asset folders');
-    } finally {
-      setIsCreatingAssetFolders(false);
-    }
-  };
   const [fieldStates, setFieldStates] = useState<Record<string, 'idle' | 'saving'>>({});
   const debounceTimers = useRef<Record<string, NodeJS.Timeout>>({});
 
@@ -198,29 +150,6 @@ const OrganizingDocsSection: React.FC<SectionProps> = ({
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent className={sectionContentStyle}>
-        {/* Asset Folders — on-demand SharePoint folder tree for this job. */}
-        <div className="mb-4 flex justify-end">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={handleCreateAssetFolders}
-            disabled={isCreatingAssetFolders || !jobDetails?.jobNumber}
-            className="border-indigo-600 text-indigo-700 hover:bg-indigo-50"
-          >
-            {isCreatingAssetFolders ? (
-              <>
-                <Loader2 className="mr-2 h-3 w-3 animate-spin" />
-                Creating...
-              </>
-            ) : (
-              <>
-                <FolderOpen className="mr-2 h-3 w-3" />
-                Asset Folders
-              </>
-            )}
-          </Button>
-        </div>
         {/* Building Information Section */}
         <SectionGroup title="Building Information">
           {/* Inner Test Data button removed 2026-06-10 — the global top "Fill Test Data" (JobDetailAccordion) fills all sections. */}

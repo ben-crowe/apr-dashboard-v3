@@ -19,7 +19,7 @@ import JobNumberField from "./loe-quote/JobNumberField";
 import { sendToValcre } from "@/utils/webhooks";
 import { supabase } from "@/integrations/supabase/client";
 import { generateAppraisalTestData } from "@/utils/testDataGenerator";
-import { FileSignature, AlertCircle, ExternalLink, Trash2 } from "lucide-react";
+import { FileSignature, AlertCircle, ExternalLink, Trash2, FolderOpen } from "lucide-react";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -137,6 +137,53 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [isCreatingJob, setIsCreatingJob] = useState(false);
+  const [isCreatingAssetFolders, setIsCreatingAssetFolders] = useState(false);
+
+  // Create the SharePoint per-job folder tree (parent + 5 standard subfolders) ON DEMAND from
+  // the action ribbon. Works for ANY job, including ones created directly in Valcre. Explicit
+  // jobNumber + propertyDescription form so it never depends on a job_submissions row. Idempotent.
+  const handleCreateAssetFolders = async () => {
+    if (!jobDetails?.jobNumber) {
+      toast.error('Create a Valcre job first');
+      return;
+    }
+    setIsCreatingAssetFolders(true);
+    try {
+      const jn = jobDetails.jobNumber.toString();
+      const yy = parseInt(jn.replace(/\D/g, '').slice(0, 2), 10);
+      const year = Number.isFinite(yy) ? 2000 + yy : new Date().getFullYear();
+      const propertyDescription = [(job as any)?.propertyName, (job as any)?.propertyAddress]
+        .filter(Boolean)
+        .join(', ');
+      const { data, error } = await supabase.functions.invoke('create-job-folders', {
+        body: { jobNumber: jn, propertyDescription, year },
+      });
+      if (error) throw error;
+      if (data?.configured === false) {
+        toast.error('SharePoint is not configured yet');
+        return;
+      }
+      if (data?.success) {
+        toast.success(
+          <div>
+            <div>✅ Asset folders created!</div>
+            {data.parentWebUrl && (
+              <a href={data.parentWebUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">
+                Open folder →
+              </a>
+            )}
+          </div>
+        );
+      } else {
+        toast.error('Failed to create asset folders');
+      }
+    } catch (error) {
+      console.error('Error creating asset folders:', error);
+      toast.error('Failed to create asset folders');
+    } finally {
+      setIsCreatingAssetFolders(false);
+    }
+  };
   const [isSending, setIsSending] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -1292,6 +1339,23 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 }}
               />
             )}
+
+            {/* Asset Folders — on-demand SharePoint folder tree for this job. Between ClickUp + Create Contract. */}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={handleCreateAssetFolders}
+              disabled={isCreatingAssetFolders || !isValcreJobNumber(jobDetails?.jobNumber)}
+              className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground hover:bg-muted dark:hover:bg-white/10 hover:border-gray-400 dark:hover:border-white/50 hover:text-foreground transition-colors text-sm font-medium"
+            >
+              {isCreatingAssetFolders ? (
+                <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+              ) : (
+                <FolderOpen className="h-4 w-4 mr-1" />
+              )}
+              {isCreatingAssetFolders ? 'Creating...' : 'Asset Folders'}
+            </Button>
 
             {/* E-Signature Button - Only visible when REAL Valcre job exists (has valcre_job_id) */}
             {hasRealValcreJob(jobDetails) ? (

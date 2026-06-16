@@ -1119,28 +1119,13 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     }
   };
 
-  // "Insert from data" toggle — mock parity (toggleInsertFromData). ON re-injects the source chain
-  // (Property Type / Subtype / Tenancy → Section 2 mirrors + Property Rights) and lights it yellow;
-  // OFF empties ALL SIX back to placeholders and strips the yellow. Re-check restores the stashed set.
+  // "Insert from data" toggle — HIGHLIGHT-ONLY (Ben 2026-06-16). This checkbox only shows/hides the
+  // yellow "these are the mapped source fields" indicator; it must NEVER add or remove the underlying
+  // field DATA. (Previously OFF emptied Property Type / Subtype / Tenancy / Property Rights — a real
+  // data-loss bug, the same class as the cascade-switch clobber.) Section 2's mapped display already
+  // shows/hides off this same flag, so toggling the flag alone is all that's needed. Data stays put.
   const handleInsertFromData = (checked: boolean) => {
-    if (checked) {
-      const s = mappedSources.current;
-      if (s.propertyType || s.propertySubtype || s.tenancy) {
-        if (onUpdateJob) onUpdateJob({ propertyType: s.propertyType } as any);
-        onUpdateDetails?.({ propertySubtype: s.propertySubtype, tenancy: s.tenancy } as any);
-      }
-      setInsertFromData?.(true); // Property Rights re-derives via Part E from the restored sources
-    } else {
-      // Stash the current source values so re-check can re-inject them, then empty all six.
-      mappedSources.current = {
-        propertyType: (job as any)?.propertyType || '',
-        propertySubtype: (jobDetails as any)?.propertySubtype || '',
-        tenancy: (jobDetails as any)?.tenancy || '',
-      };
-      if (onUpdateJob) onUpdateJob({ propertyType: '' } as any);
-      onUpdateDetails?.({ propertySubtype: '', tenancy: '', propertyRightsAppraised: '' } as any);
-      setInsertFromData?.(false);
-    }
+    setInsertFromData?.(checked);
   };
 
   // Render a cascade-cluster derived value, mirroring the mock:

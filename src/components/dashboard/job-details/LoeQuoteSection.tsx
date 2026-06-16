@@ -356,9 +356,15 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         clientPhone: job.clientPhone,
         clientTitle: job.clientTitle,
         clientOrganization: job.clientOrganization,
-        clientAddress: job.clientAddress || '',  // Client address for contact entity (separate from property)
+        clientAddress: job.clientAddress || '',  // Client address (street) for contact entity (separate from property)
+        clientCity: job.clientCity || '',        // → Valcre Contact AddressCity (1:1, no parse)
+        clientProvince: job.clientProvince || '', // → Valcre Contact AddressState
+        clientPostal: job.clientPostal || '',     // → Valcre Contact AddressPostalCode
         propertyName: job.propertyName,  // Include property name for Valcre job title
         propertyAddress: job.propertyAddress,
+        propertyCity: job.propertyCity || '',        // → Valcre Property AddressCity (1:1, no parse)
+        propertyProvince: job.propertyProvince || '', // → Valcre Property AddressState
+        propertyPostal: job.propertyPostal || '',     // → Valcre Property AddressPostalCode
         propertyType: job.propertyType,  // Comma-separated string: "Healthcare, Manufactured Housing"
         propertyTypes: job.propertyType ? job.propertyType.split(',').map(t => t.trim()).filter(Boolean) : [],  // Parse to array for Valcre API
         // Subtype + Tenancy: the create path (valcre.ts) reads formData.propertySubtype (-> SecondaryType)

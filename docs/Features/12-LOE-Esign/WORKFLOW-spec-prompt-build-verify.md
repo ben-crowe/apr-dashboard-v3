@@ -22,7 +22,7 @@ they are spelled out here so we never re-litigate them.
 
 ## Roles (one line each)
 
-- **Ben** — direction + the GO. Does not pick the builder, does not build, does not review.
+- **Ben** — direction only. Does not pick the builder, does not build, does not review, and does NOT gate deploys (policy change 2026-06-16: agents deploy freely + INFORM Ben — this is a test/prep dashboard, not live client use). Ben just wants to be TOLD when something goes live.
 - **Co-architect** — specs the work; writes the build prompt (SHE names the builder agent in it);
   dispatches her own forked builder; supervises the build.
 - **qa-agent (me)** — gates the spec, gates the prompt, verifies the finished build. Does NOT build

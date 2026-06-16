@@ -41,5 +41,29 @@ way," "works for client fields but not server-mapped ones."
 does nothing on the dashboard / the Vite proxy gotcha." This project-local note exists because it cost us
 a real diagnosis cycle.)
 
-*qa-agent · 2026-06-15. Captured at Ben's request after the cascade-sync work was tested against
-not-yet-deployed server code.*
+## What "LIVE / synced" means — the 4 points (use this definition every time)
+
+When qa (or anyone) says **"it's live / synced,"** it means ALL FOUR are true:
+1. **Front-end** — the deployed site matches local (the screens reflect the latest code). [needs a deploy]
+2. **Back-end** — the deployed server matches local (the Valcre connector runs the latest code). [needs a deploy]
+3. **Valcre** — your changes are actually reaching/updating Valcre (follows from #2 being deployed).
+4. **Supabase** — the database matches. [ALWAYS true — one shared cloud DB, never needs a deploy]
+
+When it's **NOT live** (= local changes not yet deployed):
+- Front-end: deployed site still shows OLD code (local ≠ live).
+- Back-end / Valcre: your changes aren't running, so Valcre isn't getting them.
+- Supabase: **still matches** — this is the one that's always shared/live (job tickets, field saves persist
+  even locally). This is why "it saved but Valcre didn't update" happens before a deploy.
+
+So: **Supabase is the always-on shared one; the other three only line up after a deploy.**
+
+## Policy (Ben, 2026-06-16): deploy freely, no gate
+
+This APR dashboard is a TEST/prep instance — no real client team uses it yet; it's hosted on Chris's
+Vercel only so he can log in and play. So agents **deploy freely** (`vercel --prod`) when work verifies,
+and just **inform Ben** it's live — no waiting for approval. Treat "done" as "deployed." The only genuinely
+real external system is **Valcre** (Chris's live appraisal tenant) — stay on the test job + minimal
+mutating calls; everything else (dashboard, Supabase) is test and safe to push.
+
+*qa-agent · 2026-06-15 (def + policy added 2026-06-16). Captured at Ben's request after the cascade-sync
+work was tested against not-yet-deployed server code.*

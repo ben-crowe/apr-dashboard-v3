@@ -53,6 +53,8 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
   const VALCRE_SYNC_FIELDS = [
     'notes', 'valuationPremises', 'intendedUse', 'assetCondition', 'propertyTypes', 'propertyName', 'propertyAddress',
     'clientFirstName', 'clientLastName', 'clientTitle', 'clientOrganization', 'clientEmail', 'clientPhone', 'clientAddress',
+    // Structured address parts (2026-06-16) — map 1:1 to Valcre AddressCity/AddressState/AddressPostalCode (Contact + Property). Valcre backend rewire pending (co-arch).
+    'clientCity', 'clientProvince', 'clientPostal', 'propertyCity', 'propertyProvince', 'propertyPostal',
     'propertyContactFirstName', 'propertyContactLastName', 'propertyContactEmail', 'propertyContactPhone',
     // Wired 2026-06-15 (2nd batch, ui-designer live-pull verified) — tenancy → CF12408 SingleOption (opts 7418-7423).
     // Tenancy is entered HERE in Section 1 (Section 2 only mirrors it), so it must sync from here. All six dashboard
@@ -131,6 +133,12 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
         if (fieldName === 'clientEmail') syncData.clientEmail = value;
         if (fieldName === 'clientPhone') syncData.clientPhone = value;
         if (fieldName === 'clientAddress') syncData.clientAddress = value;
+        if (fieldName === 'clientCity') syncData.clientCity = value;
+        if (fieldName === 'clientProvince') syncData.clientProvince = value;
+        if (fieldName === 'clientPostal') syncData.clientPostal = value;
+        if (fieldName === 'propertyCity') syncData.propertyCity = value;
+        if (fieldName === 'propertyProvince') syncData.propertyProvince = value;
+        if (fieldName === 'propertyPostal') syncData.propertyPostal = value;
         if (fieldName === 'propertyContactFirstName') syncData.propertyContactFirstName = value;
         if (fieldName === 'propertyContactLastName') syncData.propertyContactLastName = value;
         if (fieldName === 'propertyContactEmail') syncData.propertyContactEmail = value;
@@ -447,17 +455,46 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               </div>
             </CompactField>
           </TwoColumnFields>
-          {/* Address — single line, no underline */}
+          {/* Address — four parts (Street / City / Province / Postal) → Valcre AddressStreet/AddressCity/AddressState/AddressPostalCode */}
           <div className="mt-4 mb-5">
-            <CompactField label="Address" status={fieldStates['clientAddress']}>
-              <Input
-                value={job.clientAddress || ''}
-                onChange={(e) => onUpdateJob?.({clientAddress: e.target.value})}
-                onBlur={(e) => handleBlur('clientAddress', e.target.value)}
-                placeholder="123 Main Street, Suite 500, Calgary, AB T2P 1A1"
-                className="h-7 text-sm border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] rounded-none bg-transparent px-0 w-full"
-              />
-            </CompactField>
+            <TwoColumnFields>
+              <CompactField label="Street Address" status={fieldStates['clientAddress']}>
+                <Input
+                  value={job.clientAddress || ''}
+                  onChange={(e) => onUpdateJob?.({clientAddress: e.target.value})}
+                  onBlur={(e) => handleBlur('clientAddress', e.target.value)}
+                  placeholder="123 Main Street, Suite 500"
+                  className="h-7 text-sm border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] rounded-none bg-transparent px-0 w-full"
+                />
+              </CompactField>
+              <CompactField label="City" status={fieldStates['clientCity']}>
+                <Input
+                  value={job.clientCity || ''}
+                  onChange={(e) => onUpdateJob?.({clientCity: e.target.value})}
+                  onBlur={(e) => handleBlur('clientCity', e.target.value)}
+                  placeholder="Calgary"
+                  className="h-7 text-sm border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] rounded-none bg-transparent px-0 w-full"
+                />
+              </CompactField>
+              <CompactField label="Province" status={fieldStates['clientProvince']}>
+                <Input
+                  value={job.clientProvince || ''}
+                  onChange={(e) => onUpdateJob?.({clientProvince: e.target.value})}
+                  onBlur={(e) => handleBlur('clientProvince', e.target.value)}
+                  placeholder="AB"
+                  className="h-7 text-sm border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] rounded-none bg-transparent px-0 w-full"
+                />
+              </CompactField>
+              <CompactField label="Postal Code" status={fieldStates['clientPostal']}>
+                <Input
+                  value={job.clientPostal || ''}
+                  onChange={(e) => onUpdateJob?.({clientPostal: e.target.value})}
+                  onBlur={(e) => handleBlur('clientPostal', e.target.value)}
+                  placeholder="T2P 1A1"
+                  className="h-7 text-sm border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] rounded-none bg-transparent px-0 w-full"
+                />
+              </CompactField>
+            </TwoColumnFields>
           </div>
         </SectionGroup>
 
@@ -551,17 +588,46 @@ const ClientSubmissionSection: React.FC<SectionProps> = ({
               </Select>
             </CompactField>
           </TwoColumnFields>
-          {/* Address — single line, no underline */}
+          {/* Address — four parts (Street / City / Province / Postal) → Valcre Property AddressStreet/AddressCity/AddressState/AddressPostalCode */}
           <div className="mt-4 mb-5">
-            <CompactField label="Address">
-              <Input
-                value={job.propertyAddress || ''}
-                onChange={(e) => onUpdateJob?.({propertyAddress: e.target.value})}
-                onBlur={(e) => handleBlur('propertyAddress', e.target.value)}
-                placeholder="2800 Bayview Avenue, Calgary, AB T2P 1A1"
-                className="h-7 text-sm border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] rounded-none bg-transparent px-0 w-full"
-              />
-            </CompactField>
+            <TwoColumnFields>
+              <CompactField label="Street Address" status={fieldStates['propertyAddress']}>
+                <Input
+                  value={job.propertyAddress || ''}
+                  onChange={(e) => onUpdateJob?.({propertyAddress: e.target.value})}
+                  onBlur={(e) => handleBlur('propertyAddress', e.target.value)}
+                  placeholder="2800 Bayview Avenue"
+                  className="h-7 text-sm border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] rounded-none bg-transparent px-0 w-full"
+                />
+              </CompactField>
+              <CompactField label="City" status={fieldStates['propertyCity']}>
+                <Input
+                  value={job.propertyCity || ''}
+                  onChange={(e) => onUpdateJob?.({propertyCity: e.target.value})}
+                  onBlur={(e) => handleBlur('propertyCity', e.target.value)}
+                  placeholder="Calgary"
+                  className="h-7 text-sm border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] rounded-none bg-transparent px-0 w-full"
+                />
+              </CompactField>
+              <CompactField label="Province" status={fieldStates['propertyProvince']}>
+                <Input
+                  value={job.propertyProvince || ''}
+                  onChange={(e) => onUpdateJob?.({propertyProvince: e.target.value})}
+                  onBlur={(e) => handleBlur('propertyProvince', e.target.value)}
+                  placeholder="AB"
+                  className="h-7 text-sm border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] rounded-none bg-transparent px-0 w-full"
+                />
+              </CompactField>
+              <CompactField label="Postal Code" status={fieldStates['propertyPostal']}>
+                <Input
+                  value={job.propertyPostal || ''}
+                  onChange={(e) => onUpdateJob?.({propertyPostal: e.target.value})}
+                  onBlur={(e) => handleBlur('propertyPostal', e.target.value)}
+                  placeholder="T2P 1A1"
+                  className="h-7 text-sm border-0 border-b border-b-gray-300 dark:border-b-white/[0.12] rounded-none bg-transparent px-0 w-full"
+                />
+              </CompactField>
+            </TwoColumnFields>
           </div>
           {/* Three selects — use same TwoColumnFields grid so edges align */}
           <TwoColumnFields className="md:!grid-cols-[1fr_1fr] md:!max-w-[1100px] pr-8">

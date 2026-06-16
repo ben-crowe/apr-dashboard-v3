@@ -28,7 +28,13 @@ export interface JobSubmission {
   clientTitle?: string;
   clientOrganization?: string;
   clientAddress?: string;
+  clientCity?: string;
+  clientProvince?: string;
+  clientPostal?: string;
   propertyAddress: string;
+  propertyCity?: string;
+  propertyProvince?: string;
+  propertyPostal?: string;
   propertyName?: string;
   propertyType?: string; // Legacy single-select (keep for backwards compatibility)
   propertyTypes?: string[]; // New multi-select array

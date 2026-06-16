@@ -923,6 +923,12 @@ export type Database = {
           clickup_task_id: string | null
           clickup_task_url: string | null
           client_address: string | null
+          client_city: string | null
+          client_province: string | null
+          client_postal_code: string | null
+          property_city: string | null
+          property_province: string | null
+          property_postal_code: string | null
           client_email: string
           client_first_name: string
           client_id: string | null
@@ -1000,6 +1006,12 @@ export type Database = {
           clickup_task_id?: string | null
           clickup_task_url?: string | null
           client_address?: string | null
+          client_city?: string | null
+          client_province?: string | null
+          client_postal_code?: string | null
+          property_city?: string | null
+          property_province?: string | null
+          property_postal_code?: string | null
           client_email: string
           client_first_name: string
           client_id?: string | null
@@ -1077,6 +1089,12 @@ export type Database = {
           clickup_task_id?: string | null
           clickup_task_url?: string | null
           client_address?: string | null
+          client_city?: string | null
+          client_province?: string | null
+          client_postal_code?: string | null
+          property_city?: string | null
+          property_province?: string | null
+          property_postal_code?: string | null
           client_email?: string
           client_first_name?: string
           client_id?: string | null

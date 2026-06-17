@@ -81,10 +81,21 @@ Before Phase 1 locks the field set: produce the **V4-only (bucket 4)** list (V4 
 6. V3's live forms are UNCHANGED (no rebuild); intake/LOE still work exactly as today.
 7. `tsc --noEmit` + build clean; deployed.
 
-## Out of scope
+## ⚑ SCOPE BOUNDARY — Sections 1 & 2 ONLY (hard, Ben 2026-06-17 — do NOT let any agent drift past this)
+**IN SCOPE — the only two V3 components matched to V4:**
+- **Section 1 = `ClientSubmissionSection.tsx`** (client intake).
+- **Section 2 = `LoeQuoteSection.tsx`** (LOE / valuation prep + the cascade).
+
+**OUT OF SCOPE — verified in code, NEVER auto-map these:**
+- **Section 3 = `OrganizingDocsSection.tsx`** (Building Information, etc.) **+ `PropertyInfoSection.tsx`** ("Data Gathering – Property Research": Zoning, Zone Code, Flood Zone, Parcels Summary, Assessments & Taxes, Land Value/Improved Value, etc.).
+- **Section 4 = `Section4Compact.tsx`** (Document Upload & Organization: Land Title Certificate, Survey/RPR, Tax Notice, Aerial/Zoning/Flood maps, Building Permits, Site Plan).
+- All Building Info / Property Research / Parcels / Assessments / Document-Upload fields are Section 3–4 → **not part of this slice, not mapped, not touched.**
+> **⚑ NAME-COLLISION TRAP:** Section 3's "State of Improvements" (in `OrganizingDocsSection`) is a DIFFERENT field from Section 2's "Status of Improvements" cascade trigger. Only the **Section 2** one is in scope. Do not conflate them.
+
+## Out of scope (other)
 - **The V3 forms refactor** (reading the registry live = Option A) — later, only if full auto-both-ways is wanted.
 - Removing any V4-extra field — gated behind explicit review.
-- Fields beyond Sections 1–2; calculator; SaaS/domain track.
+- Calculator track; SaaS/domain track.
 
 ---
 

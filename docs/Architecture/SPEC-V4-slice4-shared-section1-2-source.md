@@ -37,6 +37,7 @@ tags: [apr, v3, v4, registry, single-source, drift-check, sections-1-2, test-fix
 Add to the `FIELDS` model in `public/field-registry-v6.html` the metadata a form config needs (current model has only the descriptive core: name/label/control/dropdown/required):
 - **Alias columns:** `v3key` (the REAL camelCase key V3's JSX uses, e.g. `scopeOfWork`) + `v4id` (the REAL kebab id in `fieldRegistry.ts`, e.g. `scope-of-work`).
 - **Form-layout metadata:** sub-section/tab assignment, field ORDER, validation, conditional show/hide, placeholder/defaults.
+- **`section-home` tag (scope enforcer):** each field tagged with its V3 form-file home; fields homed in `OrganizingDocs`/`PropertyInfo`/`Section4Compact` (S3/S4) are flagged out-of-Slice-4. The `v3key`→file trace produces this tag; bucket-4 + drift-check read it so the S1+S2 boundary is code-enforced, not remembered.
 - **⚑ Alias capture is the careful part (ui-designer, code-confirmed asymmetric risk):**
   - `v4id` is CLEAN — `fieldRegistry.ts` has `id===storeId` + explicit section; read it straight.
   - `v3key` is the REAL risk — V3 keys fields via scattered JSX `id`/`name` attrs through a shared `onInputChange`, with up to THREE candidate keys per field (JSX input id · form-STATE key · camelCase sync key in `VALCRE_SYNC_FIELDS`) that don't always coincide. Some v3keys WILL be ambiguous.
@@ -91,6 +92,12 @@ Before Phase 1 locks the field set: produce the **V4-only (bucket 4)** list (V4 
 - **Section 4 = `Section4Compact.tsx`** (Document Upload & Organization: Land Title Certificate, Survey/RPR, Tax Notice, Aerial/Zoning/Flood maps, Building Permits, Site Plan).
 - All Building Info / Property Research / Parcels / Assessments / Document-Upload fields are Section 3–4 → **not part of this slice, not mapped, not touched.**
 > **⚑ NAME-COLLISION TRAP:** Section 3's "State of Improvements" (in `OrganizingDocsSection`) is a DIFFERENT field from Section 2's "Status of Improvements" cascade trigger. Only the **Section 2** one is in scope. Do not conflate them.
+
+**Code-traced field classification (ui-designer, 2026-06-17 — the registry is BROADER than S1+S2, so phases FILTER to this subset):**
+- **CONFIRMED IN-SCOPE (S2 / LoeQuoteSection):** `statusOfImprovements`, `zoningStatus`, `transactionStatus`, `cmhcFinancing`, `currentUse`, `proposedUse`, `previouslyAppraised`, `valueScenarios`, `authorizedUse`.
+- **⚑ EXCLUDE — in the registry but S3, NOT this slice:** (1) `StateofImprovements`/**CF12409** = the S3 `OrganizingDocsSection` field `stateOfImprovements` (the name-trap twin of S2's `StatusofImprovements`/CF12407 — confirmed by form location). (2) `LandMetric`/**CF12426** = lives ONLY in `OrganizingDocsSection` (S3).
+- **⚑ `tenancy` is DUAL-HOME** — appears in BOTH `LoeQuoteSection` (S2, in scope) AND `OrganizingDocsSection` (S3, out). Only the S2 instance is in scope; **the spike must resolve which is canonical.**
+- **ENFORCEMENT MECHANISM (not "remembered"):** Phase 1 tags each registry field with its **V3 section-home** (the `v3key`→form-file trace IS the in/out classifier). Any field whose form lives in `OrganizingDocs`/`PropertyInfo`/`Section4Compact` is flagged **out-of-Slice-4**. Bucket-4 reverse-pass AND the drift-check both READ this tag → the S1+S2 boundary lives in the registry per-field, code-enforced.
 
 ## Out of scope (other)
 - **The V3 forms refactor** (reading the registry live = Option A) — later, only if full auto-both-ways is wanted.

@@ -30,7 +30,6 @@ import { loadJobContracts, saveJobContract, deleteJobContract, JobContract } fro
 import { saveJobEmailInstance } from "@/utils/loe/emailTemplate";
 import { markLOEPrepComplete } from "@/utils/webhooks/clickup";
 import LOEPreviewModal from "./actions/LOEPreviewModal";
-import TemplateEditorModal from "./actions/TemplateEditorModal";
 import ClickUpAction from "./actions/ClickUpAction";
 import {
   Tooltip,
@@ -200,8 +199,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const [currentContractId, setCurrentContractId] = useState<string | null>(null);
   // Read-only View mode for the preview (opening a SENT contract).
   const [previewReadOnly, setPreviewReadOnly] = useState(false);
-  // The draft being continued in the standalone editor (Open a draft → editor).
-  const [editDraft, setEditDraft] = useState<JobContract | null>(null);
+  // True when the preview is showing an ALREADY-SAVED instance (reopened draft/sent) — show its
+  // HTML verbatim, don't regenerate the default template on open.
+  const [previewExisting, setPreviewExisting] = useState(false);
   // Active Saved Documents type pill: '' = nothing selected (list collapsed, just pills),
   // 'all' = every doc, or a DOC_TYPES key. The pill selection itself is the expand/collapse.
   const [typeFilter, setTypeFilter] = useState<string>('');
@@ -1011,9 +1011,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     }
 
     setIsGenerating(true);
-    // Create Contract = a brand-new instance: no id (first Save Draft inserts), editable.
+    // Create Contract = a brand-new instance: no id (first Save Draft inserts), editable,
+    // regenerated from the template (not a reopened saved instance).
     setCurrentContractId(null);
     setPreviewReadOnly(false);
+    setPreviewExisting(false);
 
     try {
       // If already sent, we're resending - generate fresh HTML
@@ -1561,16 +1563,15 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                               size="sm"
                               className="h-7 text-xs"
                               onClick={() => {
-                                if (isSent) {
-                                  // Sent → read-only preview of what went out (no editor, no resave).
-                                  setCurrentContractId(c.id);
-                                  setPreviewReadOnly(true);
-                                  setPreviewHTML(c.edited_html);
-                                  setShowPreview(true);
-                                } else {
-                                  // draft (or legacy 'saved') → continue editing the SAME instance.
-                                  setEditDraft(c);
-                                }
+                                // Both states open at the single-panel PREVIEW level (not the split
+                                // editor). Sent = read-only; draft = editable (Edit Document opens
+                                // the split, and Cancel there returns HERE instead of dead-ending
+                                // back to the job). existingContract shows the saved HTML verbatim.
+                                setCurrentContractId(c.id);
+                                setPreviewReadOnly(isSent);
+                                setPreviewExisting(true);
+                                setPreviewHTML(c.edited_html);
+                                setShowPreview(true);
                               }}
                             >
                               Open
@@ -2222,7 +2223,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         {/* Preview Modal */}
         <LOEPreviewModal
           isOpen={showPreview}
-          onClose={() => { setShowPreview(false); setPreviewReadOnly(false); refreshContracts(); }}
+          onClose={() => { setShowPreview(false); setPreviewReadOnly(false); setPreviewExisting(false); refreshContracts(); }}
           job={job}
           jobDetails={jobDetails}
           documentHTML={previewHTML}
@@ -2230,35 +2231,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           onContractSaved={refreshContracts}
           contractId={currentContractId}
           readOnly={previewReadOnly}
+          existingContract={previewExisting}
         />
 
-        {/* Continue-a-draft editor — opens the SAME instance by id (no LOEPreviewModal shell,
-            so the template-regeneration machinery never clobbers the saved draft). Save Draft
-            updates this row in place; the editor stays open so the user can keep working. */}
-        <TemplateEditorModal
-          isOpen={!!editDraft}
-          onClose={() => { setEditDraft(null); refreshContracts(); }}
-          initialHTML={editDraft?.edited_html || ''}
-          initialName={editDraft?.name}
-          onSave={async (documentName, html) => {
-            if (!editDraft) return;
-            const result = await saveJobContract({
-              id: editDraft.id,
-              jobId: job.id,
-              name: documentName || editDraft.name,
-              editedHtml: html,
-              templateId: editDraft.template_id,
-              templateVersion: editDraft.template_version,
-              contractType: editDraft.contract_type,
-              state: 'draft',
-            });
-            if (result.success) {
-              refreshContracts();
-            } else {
-              toast.error(`Failed to save draft: ${result.error}`);
-            }
-          }}
-        />
+        {/* Reopening a draft now routes through LOEPreviewModal (single-panel preview → Edit →
+            split editor → Back to Preview), so the old standalone draft-editor shell is retired —
+            it dead-ended on Cancel back to the job instead of the preview. */}
 
         {/* C — delete-draft confirmation (second popup). DRAFTS ONLY — never opened for sent. */}
         <AlertDialog open={!!pendingDelete} onOpenChange={(o) => { if (!o) setPendingDelete(null); }}>

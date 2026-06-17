@@ -38,6 +38,10 @@ interface LOEPreviewModalProps {
       email row, Edit Template, and Send so a sent doc can't be silently re-edited into a new
       send (truthful-sent guardrail). */
   readOnly?: boolean;
+  /** documentHTML is an ALREADY-SAVED instance (a reopened DRAFT). Show it verbatim on open —
+      load the template LIST for the picker but do NOT regenerate the default, which would
+      clobber the saved edits. Editable (unlike readOnly): the user can still hit Edit Document. */
+  existingContract?: boolean;
 }
 
 const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
@@ -49,7 +53,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   onApprove,
   onContractSaved,
   contractId,
-  readOnly = false
+  readOnly = false,
+  existingContract = false
 }) => {
   // Current instance id this preview/editor is bound to. Seeded from the contractId prop on
   // open; set after a brand-new insert so subsequent saves update the same row.
@@ -90,7 +95,9 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
       setSavedContractId(contractId ?? null);
       // In read-only View mode (a sent doc), do NOT load+regenerate the default template —
       // that would clobber the saved edited_html. Show exactly what was saved.
-      if (!readOnly) loadTemplates();
+      // For a reopened DRAFT (existingContract), load the template LIST for the picker but skip
+      // the default-render so the saved draft shows verbatim; a brand-new doc renders the default.
+      if (!readOnly) loadTemplates(!existingContract);
     }
   }, [isOpen]);
 
@@ -121,7 +128,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
     return template.name;
   };
 
-  const loadTemplates = async () => {
+  const loadTemplates = async (renderDefault = true) => {
     setIsLoadingTemplates(true);
     try {
       const loadedTemplates = await loadAllTemplates();
@@ -130,7 +137,12 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
       // Open on the default template (render it so the preview matches the picker selection).
       const defaultTemplate = loadedTemplates.find(t => t.is_default) ?? loadedTemplates[0];
       if (defaultTemplate) {
-        await renderTemplate(defaultTemplate.id);
+        if (renderDefault) {
+          await renderTemplate(defaultTemplate.id);
+        } else {
+          // Reopened draft: keep the saved HTML in the preview; just sync the picker selection.
+          setSelectedTemplateId(defaultTemplate.id);
+        }
       }
     } catch (error) {
       console.error('Failed to load templates:', error);

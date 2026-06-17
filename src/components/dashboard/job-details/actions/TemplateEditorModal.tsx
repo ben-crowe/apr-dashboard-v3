@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Save, X, ZoomIn, ZoomOut, RotateCcw, ChevronUp, ChevronDown } from "lucide-react";
+import { Save, X, ZoomIn, ZoomOut, RotateCcw, ChevronUp, ChevronDown, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { parseTemplate, reconstructHTML, EditableSection } from "@/utils/loe/templateParser";
 
@@ -324,9 +324,16 @@ const TemplateEditorModal: React.FC<TemplateEditorModalProps> = ({
       <DialogContent className="!max-w-[95vw] !max-h-[95vh] w-[95vw] h-[95vh] overflow-hidden flex flex-col p-4 [&>button]:hidden">
         {/* Header - Matching LOEPreviewModal */}
         <div className="flex justify-between items-center pb-2 border-b">
-          <div>
-            <h2 className="text-lg font-semibold">Edit Contract</h2>
-            <p className="text-sm text-muted-foreground">Edit document content and preview changes</p>
+          <div className="flex items-center gap-3">
+            {/* Clear way OUT of the split editor without saving — returns to the single-panel
+                preview (the editor's onClose). Pairs with the bare X for an obvious exit. */}
+            <Button variant="ghost" size="sm" onClick={onClose} className="gap-1 h-8">
+              <ArrowLeft className="h-4 w-4" /> Back to Preview
+            </Button>
+            <div>
+              <h2 className="text-lg font-semibold">Edit Contract</h2>
+              <p className="text-sm text-muted-foreground">Edit document content and preview changes</p>
+            </div>
           </div>
           
           {/* Zoom Controls */}

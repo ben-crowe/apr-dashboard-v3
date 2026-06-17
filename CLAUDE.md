@@ -1,5 +1,11 @@
 # APR Dashboard v3 — Agent Instructions
 
+## 🚫 NO LOGIN — THE APP IS WIDE OPEN (read this first, never forget it)
+
+**There is NO login on this app. It is wide open. Nobody — no agent, not Ben — ever logs in.**
+Every route renders directly: `/dashboard`, the job details, the LOE/email flows — open the URL and it's there. Yes, a `/login` route and Supabase-auth code exist in the source; they are NOT enforced. **DO NOT spend a single second logging in, provisioning credentials, saving passwords, or "authenticating as a test account."** If you ever think a screen needs a login: it doesn't — just `agent-browser open` the route and screenshot it.
+(The only auth-shaped thing that's real is RLS on *database writes* — and even that is OFF on the email tables. Page access is never gated. Never conflate "anon DB write" with "the page needs a login.")
+
 ## ⭐ START / RESUME HERE — READ THE MASTER DASHBOARD FIRST (mandatory)
 
 **Before ANY significant work on this project — and on EVERY restart, post-compact resume, or first activation — READ the full APR Master Dashboard:**

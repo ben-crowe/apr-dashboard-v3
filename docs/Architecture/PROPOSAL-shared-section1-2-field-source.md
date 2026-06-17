@@ -55,7 +55,20 @@ fields) for bucket 4.
 - Nearly the same outcome (change once, both follow) with **far less rebuild and no risk to the current live forms**.
 - **Cost/risk:** a regeneration/sync step rather than pure-live; the drift-check is what guarantees they stay matched.
 
-**Recommendation: Option B**, as the first step — same drift-proof result Ben wants, without reworking the polished intake forms. Option A can be a later evolution if live-render proves worth it. *(I'll verify how V3's sections 1–2 are actually built before locking this — if they're already config-driven, A gets cheaper and I'll revisit.)*
+**Recommendation: Option B**, as the first step — same drift-proof result Ben wants, without reworking the polished intake forms. Option A can be a later evolution if live-render proves worth it.
+
+### ⚑ Registry-owner mechanics finding (verified — changes what "automatic" means)
+ui-designer (registry owner) verified the actual build:
+- **V3 Sections 1–2 are hand-built JSX with NO central field schema** — split across sub-components (S1: ClientInformation + PropertyInformation + PropertyContact; S2: Valuation + Payment + PropertyRights + Comments + JobNumber). Field names are camelCase app keys (`scopeOfWork`, `appraisalFee`). There is no field-definition/config file anywhere.
+- **V4 IS schema-driven** — `fieldRegistry.ts` has ~83 entries across client-intake + loe-prep (S1/S2).
+
+**The honest limit this creates — "edit once → both follow" is NOT fully automatic today:**
+- **registry → V4 = automatic** (V4 reads the schema).
+- **V3 → registry = a MANUAL mirror step.** Because V3 has no schema, when Chris changes a V3 field someone must reflect it into the registry by hand. It becomes fully automatic both-ways ONLY if V3's forms are later refactored to read the registry (that refactor IS Option A).
+- So **Option B delivers: registry is the canonical written record of the S1/S2 field set; V4 auto-derives; V3 stays a deliberate manual mirror.** It kills *silent* drift (the registry is the agreed truth + a drift-check catches divergence) but does not yet remove the manual V3 update. True change-once-both-follow = Option A = the V3 refactor (bigger, later).
+
+### ⚑ Naming crosswalk — a decision the proposal must settle
+The same field has THREE names: V3 camelCase (`scopeOfWork`) · registry PascalCase (`ScopeOfWork`) · V4 kebab id (`scope-of-work`). The shared source must **pick ONE canonical key + define the mapping to the other two**, or the "one source" just moves the drift into the naming layer.
 
 ---
 

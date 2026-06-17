@@ -35,8 +35,13 @@ function arg(flag, def = null) {
 }
 const asJson = process.argv.includes('--json');
 
-// --- PROD detection: explicit --prod, else VITE_V4_ENABLED unset/!=='true' => prod (Slice-2 contract).
-const isProd = process.argv.includes('--prod') || process.env.VITE_V4_ENABLED !== 'true';
+// --- PROD detection (build-time reliable). The gate BLOCKS only the PRODUCTION build:
+//   • --prod            → explicit (tests).
+//   • VERCEL_ENV==='production' → the canonical Vercel prod-build signal (preview/dev/local are NOT prod).
+// NOTE: do NOT key off VITE_V4_ENABLED here — Vite .env files are NOT loaded into a pre-build node
+// step's process.env, so that heuristic would wrongly mark local `npm run build` as prod. VERCEL_ENV
+// is the same prod/preview boundary Slice-2 rides on, but it's actually present at build time.
+const isProd = process.argv.includes('--prod') || process.env.VERCEL_ENV === 'production';
 
 const RED = (m) => { console.error('⛔ DRIFT-GATE BLOCK: ' + m); };
 const OK = (m) => { console.log('✅ ' + m); };

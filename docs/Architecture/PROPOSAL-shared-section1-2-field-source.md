@@ -76,6 +76,11 @@ Don't frame B as "emit a V3 config AND a V4 config" — the two sides differ:
 ### ⚑ Naming crosswalk — a decision the proposal must settle
 The same field has THREE names: V3 camelCase (`scopeOfWork`) · registry PascalCase (`ScopeOfWork`) · V4 kebab id (`scope-of-work`). The shared source must **pick ONE canonical key + define the mapping to the other two**, or the "one source" just moves the drift into the naming layer.
 
+**DECIDED (ui-designer, registry owner): canonical = the registry `n` (PascalCase)** — already the join key across the field map + fold + derivatives, so anything else is churn; and the registry is the master. Two safety rules:
+- **`n` is an OPAQUE id — the crosswalk is EXPLICIT per field, never algorithmically derived.** (PascalCase is already inconsistent — `StatusofImprovements` has a lowercase "of" — so auto-casing `n`→camelCase would produce a wrong key. No casing algorithm; explicit aliases only.)
+- **Add two alias columns to the registry `FIELDS` model:** `v3key` (the real camelCase key V3's JSX uses, e.g. `scopeOfWork`) + `v4id` (the real kebab id in `fieldRegistry.ts`, e.g. `scope-of-work`). Each row then carries `n` + explicit `v3key` + `v4id` = the whole crosswalk, zero ambiguity. Generator emits the V4 config keyed by `v4id` and the V3 drift-check keyed by `v3key`, both resolved from `n`.
+- **Work/risk:** populating `v3key`+`v4id` is real capture work — read the actual V3 JSX sub-sections + `fieldRegistry.ts` to record the REAL ids (not guessed); QA reconciles the aliases against the code (a wrong alias = a silent drift-check miss). ui-designer owns the model extension + alias capture; this lands in the **Option-B sub-spec** (separate doc, on Ben's pick — keeps it off this proposal to avoid edit collision during review).
+
 ---
 
 ## Proposed sequence (after Ben picks A or B)

@@ -19,7 +19,7 @@ import JobNumberField from "./loe-quote/JobNumberField";
 import { sendToValcre } from "@/utils/webhooks";
 import { supabase } from "@/integrations/supabase/client";
 import { generateAppraisalTestData } from "@/utils/testDataGenerator";
-import { FileSignature, AlertCircle, ExternalLink, Trash2, FolderOpen, CheckCircle } from "lucide-react";
+import { FileSignature, AlertCircle, ExternalLink, Trash2, FolderOpen, CheckCircle, Mail } from "lucide-react";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -27,7 +27,9 @@ import {
 import { validateRequiredFields } from "@/utils/webhooks/docuseal";
 import { generateLOEHTML, generateAndSendLOE, sendLOEEmail } from "@/utils/loe/generateLOE";
 import { loadJobContracts, saveJobContract, deleteJobContract, JobContract } from "@/utils/loe/jobContracts";
-import { saveJobEmailInstance, loadJobEmailInstances, EmailInstance } from "@/utils/loe/emailTemplate";
+import { saveJobEmailInstance, loadJobEmailInstances, EmailInstance, EmailTemplate } from "@/utils/loe/emailTemplate";
+import SendByEmailControl from "@/components/dashboard/job-details/actions/SendByEmailControl";
+import EmailComposeModal from "@/components/dashboard/job-details/actions/EmailComposeModal";
 import { markLOEPrepComplete } from "@/utils/webhooks/clickup";
 import LOEPreviewModal from "./actions/LOEPreviewModal";
 import ClickUpAction from "./actions/ClickUpAction";
@@ -193,7 +195,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [previewHTML, setPreviewHTML] = useState<string>('');
-  // Instance id the preview is bound to: null for a brand-new Create Contract, the row's id
+  // Instance id the preview is bound to: null for a brand-new Create Document/Contract, the row's id
   // when opening an existing (sent) contract for View. Carried into the modal so resave /
   // future sent-marking updates the same row.
   const [currentContractId, setCurrentContractId] = useState<string | null>(null);
@@ -205,7 +207,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // Active Saved Documents type pill: '' = nothing selected (list collapsed, just pills),
   // 'all' = every doc, or a DOC_TYPES key. The pill selection itself is the expand/collapse.
   const [typeFilter, setTypeFilter] = useState<string>('');
-  // Saved client contracts for THIS job (Create Contract → save → appears here). The
+  // Saved client contracts for THIS job (Create Document/Contract → save → appears here). The
   // dashboard shows what's been saved/prepped/sent + always lets you create a new one.
   const [savedContracts, setSavedContracts] = useState<JobContract[]>([]);
   // C — delete a saved DRAFT (never a sent doc). Two-step: hover-X → confirm dialog → delete.
@@ -238,6 +240,43 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     await refreshEmailInstances();
     return res;
   };
+
+  // PRD-APR-LOE-03 Wave D1 — the DOCUMENT-LESS first-class email send (INV-0): a standalone
+  // Send-by-Email entry on the job, reachable WITHOUT opening a document. Additive — it does
+  // NOT touch the live LOE send path (handleApproveAndSend); it writes a contract_id=null instance.
+  const TEST_RECIPIENT = 'bc@crowestudio.com';
+  // INV-1 recipient fail-safe: in non-prod, or when the recipient is missing/ambiguous, FORCE
+  // the test address — never default to a real client. (The Resend sandbox is the server-side
+  // guard; this is the client-side belt so the doc-less path can't bypass it.)
+  const safeRecipient = (email?: string | null): string =>
+    (!import.meta.env.PROD || !email || !email.includes('@')) ? TEST_RECIPIENT : email;
+  const [docLessOpen, setDocLessOpen] = useState(false);
+  const [docLessTemplate, setDocLessTemplate] = useState<EmailTemplate | null>(null);
+  const [docLessSending, setDocLessSending] = useState(false);
+  // Doc-less send: empty signing link (G5 — no DocuSeal link on a document-less email);
+  // persist the instance as 'sent' ONLY on Resend success (G4); contract_id=null (KR2).
+  const handleSendDocLess = async (payload: { subject: string; bodyHtml: string }) => {
+    if (docLessSending) return;
+    setDocLessSending(true);
+    try {
+      const recipient = safeRecipient(job?.clientEmail);
+      const clientName = `${job?.clientFirstName ?? ''} ${job?.clientLastName ?? ''}`.trim();
+      const ok = await sendLOEEmail(recipient, clientName, '', job?.propertyAddress ?? '', payload);
+      if (ok) {
+        await persistEmailInstance({
+          subject: payload.subject, bodyHtml: payload.bodyHtml,
+          recipientEmail: recipient, contractId: null, state: 'sent',
+        });
+        toast.success('Email sent (document-less) and recorded on the job.');
+        setDocLessOpen(false);
+      } else {
+        toast.error('Email send failed — not recorded (no draft left behind).');
+      }
+    } finally {
+      setDocLessSending(false);
+    }
+  };
+
   const [validation, setValidation] = useState<{
     isValid: boolean;
     missingFields: string[];
@@ -1034,7 +1073,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     }
 
     setIsGenerating(true);
-    // Create Contract = a brand-new instance: no id (first Save Draft inserts), editable,
+    // Create Document/Contract = a brand-new instance: no id (first Save Draft inserts), editable,
     // regenerated from the template (not a reopened saved instance).
     setCurrentContractId(null);
     setPreviewReadOnly(false);
@@ -1255,7 +1294,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent className={sectionContentStyle}>
-        {/* Action Buttons Row — Part F: View in Valcre · View in ClickUp · Create Contract */}
+        {/* Action Buttons Row — Part F: View in Valcre · View in ClickUp · Create Document/Contract */}
         <div className="mb-6 flex justify-between">
           <div className="flex gap-2">
             {/* Create/View Valcre Job Button - Transforms after creation */}
@@ -1421,7 +1460,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
-                          Create Contract
+                          Create Document/Contract
                         </Button>
                         <AlertCircle className="absolute -top-1 -right-1 h-4 w-4 text-amber-500" />
                       </div>
@@ -1451,7 +1490,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
-                          Create Contract
+                          Create Document/Contract
                         </Button>
                       </div>
                     </TooltipTrigger>
@@ -1472,7 +1511,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                     : "border-2 border-emerald-500 dark:border-emerald-400/60 bg-background dark:bg-transparent text-foreground hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-colors text-sm font-medium"}
                 >
                   <FileSignature className="h-4 w-4 mr-1" />
-                  {isGenerating ? "Generating..." : "Create Contract"}
+                  {isGenerating ? "Generating..." : "Create Document/Contract"}
                 </Button>
               )
             ) : (
@@ -1484,11 +1523,60 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
               >
                 <FileSignature className="h-4 w-4 mr-1" />
-                Create Contract
+                Create Document/Contract
               </Button>
             )}
           </div>
         </div>
+
+        {/* PRD-APR-LOE-03 Wave D1 — DOCUMENT-LESS first-class email (INV-0): a standalone
+            Send-by-Email entry on the job, reachable WITHOUT opening any document. Additive —
+            sits alongside the existing flows; the doc-less send writes a contract_id=null instance. */}
+        <div className="mb-6 rounded-md border border-border p-3 space-y-2">
+          <div className="flex items-center justify-between gap-2">
+            <SendByEmailControl
+              docTemplateId={null}
+              onPreview={(tpl) => { setDocLessTemplate(tpl); setDocLessOpen(true); }}
+              onSend={(tpl) => handleSendDocLess({ subject: tpl.subject, bodyHtml: tpl.body_html })}
+              disabled={docLessSending}
+            />
+          </div>
+          {emailInstances.length > 0 && (
+            <div className="flex flex-wrap gap-2">
+              {emailInstances.map((e) => (
+                <span
+                  key={e.id}
+                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs border ${
+                    e.state === 'sent'
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-500/10 dark:text-emerald-400'
+                      : 'bg-muted text-muted-foreground border-border'}`}
+                  title={`${e.subject} → ${e.recipient_email ?? ''}${e.contract_id === null ? ' (no document)' : ''}`}
+                >
+                  <Mail className="h-3 w-3" />
+                  {e.state === 'sent' ? 'Sent' : 'Draft'}: {e.subject || '(untitled)'}
+                  {e.contract_id === null ? ' · no doc' : ''}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Doc-less compose/preview modal (Wave D1 — separate instance from the with-document path). */}
+        <EmailComposeModal
+          isOpen={docLessOpen}
+          onClose={() => setDocLessOpen(false)}
+          onBack={() => setDocLessOpen(false)}
+          job={job}
+          jobDetails={jobDetails}
+          recipientEmail={safeRecipient(job?.clientEmail)}
+          isSending={docLessSending}
+          onSend={handleSendDocLess}
+          initialTemplate={docLessTemplate ?? undefined}
+          onSaveDraft={async (subject, bodyHtml) => {
+            await persistEmailInstance({ subject, bodyHtml, recipientEmail: safeRecipient(job?.clientEmail), contractId: null, state: 'draft' });
+          }}
+          docTemplateId={null}
+        />
 
         {/* Saved Documents (Version C — type-tab / pill filter). FULL-WIDTH, collapsible toggle
             WITHIN this section (default open; collapse to hide the list when there are many).
@@ -1678,7 +1766,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             </CompactField>
             {/* ClickUp Task field removed — Part F. Task URL/ID is in the "View in ClickUp" button above. */}
             {/* LOE Version picker removed 2026-06-09 — single active template (LOE-07-1); the
-                send path defaults to the newest active template, so "Create Contract" goes
+                send path defaults to the newest active template, so "Create Document/Contract" goes
                 straight in on the one template. (Document-not-version-picker direction —
                 see JOB-DOCUMENT-PICKER-DECISION-TREE.md.) */}
             <CompactField label="Job Status">

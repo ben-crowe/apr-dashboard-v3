@@ -16,21 +16,21 @@ tags: [apr, v4, slice-4b, field-registry, missing-fields, cascade-bridge, four-f
 | Field | Label | Control | Source | Dropdown | Valcre (routesTo) | Derived? |
 |---|---|---|---|---|---|---|
 | `StatusofImprovements` | Status of Improvements | Select one | User Input | ListStatusofImprovements | CF12407 | direct |
-| `StateofImprovements` | State of Improvements | Select one | Logic | ListStateofImprovements | CF12409 | direct |
+| `StateofImprovements` | State of Improvements | Select one | User Input | ListStateofImprovements | CF12409 | direct |
 | `AssignmentType` | Assignment Type | Select one | User Input | ListAssignmentType | CF12416 | direct |
 | `TransactionStatus` | Transaction Status | Select multiple | User Input | ListTransactionStatus | CF12424 | direct |
 | `ZoningStatus` | Zoning Status | Select one | User Input | ListZoningStatus | CF12425 | direct |
 | `CMHCFinancing` | CMHC Financing | Select one | User Input | ListYes/No | CF12427 | direct |
 | `LandMetric` | Land $/Metric | Select one | User Input | ListLand$/Metric | CF12426 | direct |
 | `DesktopReport` | Desktop Report | Select one | User Input | ListYes/No | CF12418 | direct |
-| `ClientDocuments` | Client Documents | Select multiple | Logic | ListClientDocuments | CF12422 | direct |
+| `ClientDocuments` | Client Documents | Select multiple | User Input | ListClientDocuments | CF12422 | direct |
 | `CurrentUseImprovements` | Current Use | Select one | User Input | ListCurrentUse | CF12410 | direct |
 | `ProposedUseImprovements` | Proposed Use | Select one | User Input | ListProposedUse | CF12411 | direct |
 | `PreviouslyAppraised` | Previously Appraised | Select one | User Input | ListYes/No | CF12423 | direct |
 | `DeliveryTime` | Delivery Time | Whole Number | User Input | — | CF12420 | direct |
 
 ## Notes
-- **Cascade cluster** (StatusofImprovements → ValueScenarios → ApproachestoValue, + StateofImprovements) carries the section-10 logic — adding these + wiring `loeCascade.ts` output into the builder IS the cascade-bridge close.
-- **StateofImprovements** is also the S3→S2 move (Slice-4); here it additionally needs a net-new V4 field.
+- **⚑ NO cascade wiring in this slice (corrected — do NOT follow the old framing):** the §10 derived outputs (`ValueScenarios`/`ApproachestoValue`/`Valuetimeframe`) ALREADY exist in V4 (`value-scenario`/`approaches-applied`/`timeframe`) and ALREADY land via the Slice-3 bridge — re-adding/re-wiring them is the DUPLICATE TRAP. This seed = DIRECT field-adds only. `StatusofImprovements` is added as the cascade TRIGGER input (a direct user field), not a derived output.
+- **StateofImprovements** is also the S3→S2 move (Slice-4); here it additionally needs a net-new V4 field. DIRECT user `Select`, no derivation logic — `Source = User Input`.
 - All section-home = **S2 (loe-prep)** per the pre-acceptance rule.
 - Attributes pulled from the canonical registry; QA reconciles each new fieldRegistry entry vs Chris VALTA-FIELD-SPEC + the 4-file sync.

@@ -20,7 +20,7 @@ tags: [apr, v4, slice-4b, field-registry, missing-fields, cascade-bridge, four-f
 > **PREP — nothing builds until QA passes + Ben signs off.**
 
 ## Why this exists (the reconcile earned it)
-Slice-4 Phase-1 reconcile confirmed these 16 are **0-hit in `fieldRegistry.ts`** — genuinely absent, not renamed/misplaced. V4's S1/S2 registry was the LOE-document/appraiser field set; it had no home for the cascade/classification set. **This is exactly why the §10 cascade "never bridged to the builder" (Slice-3).** Closing this list closes that gap.
+Slice-4 Phase-1 reconcile + the Corrected Classification below found **~13 genuinely-absent (bucket-C) DIRECT fields** missing from `fieldRegistry.ts` — the job-classification set V3 Section 2 collects but the report builder has no home for. **NOTE the cascade is NOT in this slice:** the §10 derived outputs (value-scenario/approaches/timeframe) ALREADY exist in V4 and ALREADY land via the Slice-3 bridge (bucket-A) — that gap is closed. This slice adds the ~13 DIRECT fields only; it does NOT re-wire the cascade.
 
 ## ⚑ CORRECTED FIELD CLASSIFICATION (QA gate + co-arch code-verify, 2026-06-17 — the seed's "16 all-absent / 4 derived" was WRONG)
 QA caught two seed errors; co-arch confirmed both directly in code. The list is NOT "16 absent, add all." Three buckets:
@@ -58,7 +58,7 @@ Then **render-verify** (the field appears + populates in the report preview).
 4. The ~13 bucket-C direct fields render + accept their values; dropdown option sets match Chris's registry; `StatusofImprovements` (the cascade trigger) is present as a report field.
 5. No regression to the existing report fields or the Slice-4 machinery.
 6. `tsc --noEmit` + build clean; deployed Vercel build passes.
-7. **Hand-off to Slice 4:** once added, these 16 become part of the shared-source set — Slice-4's capture + drift-check now cover them (they graduate from "class 3 absent" to "class 1 present"). Note in the registry so Slice-4 picks them up.
+7. **Hand-off to Slice 4:** once added, these **~13 bucket-C fields** become part of the shared-source set — Slice-4's capture + drift-check now cover them (they graduate from "class-3 absent" to "class-1 present"). Note in the registry so Slice-4 picks them up.
 
 ## Out of scope
 - The Slice-4 machinery itself (shared-source generator + drift-check) — that's Slice 4, running in parallel; 4b just adds the fields it will then cover.

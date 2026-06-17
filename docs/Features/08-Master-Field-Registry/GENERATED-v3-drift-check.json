@@ -1,0 +1,547 @@
+{
+  "_meta": {
+    "source": "public/field-registry-v6.html (canonical)",
+    "purpose": "V3 drift-check \u2014 compare V3 actual fields vs master via the alias map (NEVER v3key==v4id); fail-closed on sentinels",
+    "generated_by": "scripts/generate-registry-derivatives.mjs",
+    "rule": "Match V3 field by v3key; verify it still aligns to masterName/v4id. Any checkable:false row = FLAG (do not silent-pass).",
+    "antiCircular": "The GATE must compare the manifest V3-ACTUAL against THIS file\u2019s per-field masterExpectations (registry-sourced: options/order/required). NEVER derive master from V3-actual \u2014 that is the circular false-pass. The manifest supplies V3-ACTUAL ONLY."
+  },
+  "counts": {
+    "total": 27,
+    "checkable": 26,
+    "failClosed": 1,
+    "renames": 11,
+    "knownGaps": 3
+  },
+  "checks": [
+    {
+      "masterName": "JobNumber",
+      "v3key": "jobNumber",
+      "v4id": "job-number",
+      "sectionHome": "S2",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ClientCompanyName",
+      "v3key": "clientOrganization",
+      "v4id": "client-organization",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ClientOrganizationAddress",
+      "v3key": "clientAddress",
+      "v4id": "client-address",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ClientFirstName",
+      "v3key": "clientFirstName",
+      "v4id": "client-first-name",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ClientLastName",
+      "v3key": "clientLastName",
+      "v4id": "client-last-name",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ClientTitle",
+      "v3key": "clientTitle",
+      "v4id": "client-title",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ClientPhone",
+      "v3key": "clientPhone",
+      "v4id": "client-phone",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ClientEmail",
+      "v3key": "clientEmail",
+      "v4id": "client-email",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "PropertyName",
+      "v3key": "propertyName",
+      "v4id": "property-name",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "PropertyAddress",
+      "v3key": "propertyAddress",
+      "v4id": "property-address",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "PropertyType",
+      "v3key": "propertyType",
+      "v4id": "property-type",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": "ListPropertyType",
+        "options": [
+          "Agriculture",
+          "Building",
+          "Healthcare",
+          "Hospitality",
+          "Industrial",
+          "Land",
+          "Manufactured Housing",
+          "Multi-Family",
+          "Office",
+          "Retail",
+          "Self-Storage"
+        ],
+        "optionCount": 11
+      },
+      "knownGap": {
+        "allowed": [
+          "Seniors",
+          "Other"
+        ],
+        "reason": "registry-only values absent from V3; keep-or-drop",
+        "resolveBy": "Chris-thread",
+        "ref": "SLICE4-option-drift-triage-2026-06-17 #3"
+      }
+    },
+    {
+      "masterName": "PropertySubtype",
+      "v3key": "propertySubtype",
+      "v4id": "property-subtype",
+      "sectionHome": "S2",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": "ListPropertySubtype",
+        "options": [
+          "Apartment",
+          "Townhouse",
+          "Mixed-Use"
+        ],
+        "optionCount": 3
+      },
+      "knownGap": {
+        "allowed": [
+          "Low-Rise",
+          "Mid-Rise",
+          "High-Rise",
+          "Garden",
+          "Walk-Up",
+          "Apartment"
+        ],
+        "reason": "GRANULAR-vs-GENERIC taxonomy gap (QA-confirmed real): V3 has granular subtypes (Low-Rise/Mid-Rise/etc), master/client lean (Apartment) \u2014 needs Chris lean-vs-full call. Mixed-Use hyphen-variant now ALIGNED (no longer gapped).",
+        "resolveBy": "Chris-thread",
+        "ref": "SLICE4-extraction-completion-2026-06-17"
+      }
+    },
+    {
+      "masterName": "Tenancy",
+      "v3key": "tenancy",
+      "v4id": "impv-tenancy",
+      "sectionHome": "S2",
+      "checkable": true,
+      "failClosed": null,
+      "rename": true,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": "ListTenancy",
+        "options": [
+          "Multi-Tenant",
+          "Owner Occupied",
+          "Partial Owner Occupied",
+          "Single-Tenant",
+          "Unkown",
+          "Vacant"
+        ],
+        "optionCount": 6
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "InterestAppraised",
+      "v3key": "propertyRightsAppraised",
+      "v4id": "property-rights",
+      "sectionHome": "S2",
+      "checkable": true,
+      "failClosed": null,
+      "rename": true,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": "ListInterestAppraised",
+        "options": [
+          "Fee Simple",
+          "Leased Fee Interest",
+          "Fee Simple & Leased Fee",
+          "Leasehold Estate",
+          "Going Concern"
+        ],
+        "optionCount": 5
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "AuthorizedUse",
+      "v3key": "intendedUse",
+      "v4id": "intended-use",
+      "sectionHome": "S2",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": "ListAuthorizedUse",
+        "options": [
+          "Acquisition/Disposition",
+          "Decision-Making/Internal",
+          "Estate Planning",
+          "Financial Reporting",
+          "Litigation",
+          "First Mortgage Financing",
+          "Insurance",
+          "GST"
+        ],
+        "optionCount": 8
+      },
+      "knownGap": {
+        "allowed": [
+          "First Mortgage Financing",
+          "Insurance",
+          "GST",
+          "Financing",
+          "Consulting",
+          "Dispute Resolution",
+          "Divorce",
+          "Establish Sales Price",
+          "Other"
+        ],
+        "reason": "residual taxonomy divergence registry\u2194V3, materially different lists",
+        "resolveBy": "Chris-thread",
+        "ref": "SLICE4-option-drift-triage-2026-06-17 #4"
+      }
+    },
+    {
+      "masterName": "ValueScenarios",
+      "v3key": "valueScenarios",
+      "v4id": "value-scenario",
+      "sectionHome": "S2",
+      "checkable": true,
+      "failClosed": null,
+      "rename": true,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": "ListValueScenarios",
+        "options": [
+          "As Is Vacant Land",
+          "As If Vacant Land",
+          "As If Complete & Stabilized",
+          "As-Is",
+          "As Stabilized",
+          "As If Complete & Stabilized - Renovated",
+          "As If Complete - Rezoned",
+          "As If Complete - Serviced",
+          "As If Complete - Subdivided",
+          "Insurable Replacement Cost"
+        ],
+        "optionCount": 10
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ApproachestoValue",
+      "v3key": "approachesToValue",
+      "v4id": "approaches-applied",
+      "sectionHome": "S2",
+      "checkable": true,
+      "failClosed": null,
+      "rename": true,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": "ListApproachestoValue",
+        "options": [
+          "Direct Comparison",
+          "Income",
+          "Cost",
+          "Land Direct Comparison"
+        ],
+        "optionCount": 4
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ReportType",
+      "v3key": "reportFormat",
+      "v4id": "report-type",
+      "sectionHome": "S2",
+      "checkable": true,
+      "failClosed": null,
+      "rename": true,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": "ListReportType",
+        "options": [
+          "Comprehensive",
+          "Concise",
+          "Form"
+        ],
+        "optionCount": 3
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "Valuetimeframe",
+      "v3key": "valueTimeframe",
+      "v4id": "timeframe",
+      "sectionHome": "S2",
+      "checkable": true,
+      "failClosed": null,
+      "rename": true,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": "ListValueTimeFrame",
+        "options": [
+          "Current",
+          "Prospective",
+          "Retrospective"
+        ],
+        "optionCount": 3
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "InspectionDate",
+      "v3key": "GAP-no-V3-input",
+      "v4id": "report-inspectiondate",
+      "sectionHome": "S2",
+      "checkable": false,
+      "failClosed": "flag \u2014 uncheckable (GAP-no-V3-input)",
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "Fee",
+      "v3key": "appraisalFee",
+      "v4id": "appraisal-fee",
+      "sectionHome": "S2",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": true,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "LegalDescription",
+      "v3key": "legalDescription",
+      "v4id": "report-legal",
+      "sectionHome": "S3",
+      "checkable": true,
+      "failClosed": null,
+      "rename": true,
+      "masterExpectations": {
+        "required": false,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ScopeOfWork",
+      "v3key": "scopeOfWork",
+      "v4id": "scope-of-work",
+      "sectionHome": "S2",
+      "checkable": true,
+      "failClosed": null,
+      "rename": false,
+      "masterExpectations": {
+        "required": false,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ContactFirstName",
+      "v3key": "propertyContactFirstName",
+      "v4id": "contact-first-name",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": true,
+      "masterExpectations": {
+        "required": false,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ContactLastName",
+      "v3key": "propertyContactLastName",
+      "v4id": "contact-last-name",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": true,
+      "masterExpectations": {
+        "required": false,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ContactEmail",
+      "v3key": "propertyContactEmail",
+      "v4id": "contact-email",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": true,
+      "masterExpectations": {
+        "required": false,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    },
+    {
+      "masterName": "ContactPhone",
+      "v3key": "propertyContactPhone",
+      "v4id": "contact-phone",
+      "sectionHome": "S1",
+      "checkable": true,
+      "failClosed": null,
+      "rename": true,
+      "masterExpectations": {
+        "required": false,
+        "dropdownList": null,
+        "options": null,
+        "optionCount": null
+      },
+      "knownGap": null
+    }
+  ]
+}

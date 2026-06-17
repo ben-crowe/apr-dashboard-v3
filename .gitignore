@@ -74,3 +74,6 @@ Password Manager/
 !package-lock.json
 !tsconfig*.json
 !eslint.config.js
+
+# Gate contract artifact — the drift-check master config MUST ship (Vercel prod build reads it); committed like a lockfile
+!docs/Features/08-Master-Field-Registry/GENERATED-v3-drift-check.json

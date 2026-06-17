@@ -12,6 +12,7 @@ import { Send, X, Download, Mail, Plus, ZoomIn, ZoomOut, RotateCcw, Edit, Loader
 import { toast } from "sonner";
 import TemplateEditorModal from './TemplateEditorModal';
 import EmailComposeModal from './EmailComposeModal';
+import { loadAllEmailTemplates, EmailTemplate } from '@/utils/loe/emailTemplate';
 import { saveTemplate, loadAllTemplates, loadTemplateById, setDefaultTemplate, LOETemplate } from '@/utils/loe/saveTemplate';
 import { saveJobContract } from '@/utils/loe/jobContracts';
 import { generateLOEHTML } from '@/utils/loe/generateLOE';
@@ -42,6 +43,10 @@ interface LOEPreviewModalProps {
       load the template LIST for the picker but do NOT regenerate the default, which would
       clobber the saved edits. Editable (unlike readOnly): the user can still hit Edit Document. */
   existingContract?: boolean;
+  /** PRD-APR-LOE-03 INV-0: the Email dropdown lives in the Previewer BESIDE the Document dropdown.
+      Picking an Email template fires this → parent opens the STANDALONE email composer
+      (docTemplateId=null, contract_id=null) — the document-less first-class send path. */
+  onPickEmail?: (emailTemplate: EmailTemplate) => void;
 }
 
 const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
@@ -54,7 +59,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   onContractSaved,
   contractId,
   readOnly = false,
-  existingContract = false
+  existingContract = false,
+  onPickEmail
 }) => {
   // Current instance id this preview/editor is bound to. Seeded from the contractId prop on
   // open; set after a brand-new insert so subsequent saves update the same row.
@@ -76,6 +82,12 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [isLoadingTemplates, setIsLoadingTemplates] = useState(false);
   const [isRegenerating, setIsRegenerating] = useState(false);
+  // INV-0: Email templates for the Previewer's Email dropdown (peer to Document Templates).
+  const [emailTemplates, setEmailTemplates] = useState<EmailTemplate[]>([]);
+  useEffect(() => {
+    if (!isOpen) return;
+    loadAllEmailTemplates().then(setEmailTemplates).catch(() => setEmailTemplates([]));
+  }, [isOpen]);
   const [currentDocumentHTML, setCurrentDocumentHTML] = useState<string>(documentHTML);
 
   // Initialize recipient email - Default to bc@crowestudio.com for testing (developer's email)
@@ -400,6 +412,35 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               >
                 Set Default
               </Button>
+            )}
+            {/* INV-0: Email Templates dropdown — PEER to Document Templates, side by side in the
+                Previewer. Picking one opens the STANDALONE email composer (document-less,
+                contract_id=null) via onPickEmail — email sendable without a document. */}
+            {onPickEmail && (
+              <>
+                <Label htmlFor="email-template-select" className="text-sm font-medium whitespace-nowrap ml-2">
+                  Email:
+                </Label>
+                <Select
+                  value=""
+                  onValueChange={(id) => {
+                    const tpl = emailTemplates.find(t => t.id === id);
+                    if (tpl) onPickEmail(tpl);
+                  }}
+                  disabled={emailTemplates.length === 0}
+                >
+                  <SelectTrigger id="email-template-select" className="w-[200px] h-8 text-sm bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
+                    <SelectValue placeholder={emailTemplates.length ? 'Send an email…' : 'No email templates'} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border border-border">
+                    {emailTemplates.map((t) => (
+                      <SelectItem key={t.id} value={t.id}>
+                        {t.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </>
             )}
           </div>
           )}

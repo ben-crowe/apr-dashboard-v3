@@ -28,7 +28,6 @@ import { validateRequiredFields } from "@/utils/webhooks/docuseal";
 import { generateLOEHTML, generateAndSendLOE, sendLOEEmail } from "@/utils/loe/generateLOE";
 import { loadJobContracts, saveJobContract, deleteJobContract, JobContract } from "@/utils/loe/jobContracts";
 import { saveJobEmailInstance, loadJobEmailInstances, EmailInstance, EmailTemplate } from "@/utils/loe/emailTemplate";
-import SendByEmailControl from "@/components/dashboard/job-details/actions/SendByEmailControl";
 import EmailComposeModal from "@/components/dashboard/job-details/actions/EmailComposeModal";
 import { markLOEPrepComplete } from "@/utils/webhooks/clickup";
 import LOEPreviewModal from "./actions/LOEPreviewModal";
@@ -195,7 +194,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const [previewHTML, setPreviewHTML] = useState<string>('');
-  // Instance id the preview is bound to: null for a brand-new Create Document/Contract, the row's id
+  // Instance id the preview is bound to: null for a brand-new Create Document/Email, the row's id
   // when opening an existing (sent) contract for View. Carried into the modal so resave /
   // future sent-marking updates the same row.
   const [currentContractId, setCurrentContractId] = useState<string | null>(null);
@@ -207,7 +206,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // Active Saved Documents type pill: '' = nothing selected (list collapsed, just pills),
   // 'all' = every doc, or a DOC_TYPES key. The pill selection itself is the expand/collapse.
   const [typeFilter, setTypeFilter] = useState<string>('');
-  // Saved client contracts for THIS job (Create Document/Contract → save → appears here). The
+  // Saved client contracts for THIS job (Create Document/Email → save → appears here). The
   // dashboard shows what's been saved/prepped/sent + always lets you create a new one.
   const [savedContracts, setSavedContracts] = useState<JobContract[]>([]);
   // C — delete a saved DRAFT (never a sent doc). Two-step: hover-X → confirm dialog → delete.
@@ -1073,7 +1072,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     }
 
     setIsGenerating(true);
-    // Create Document/Contract = a brand-new instance: no id (first Save Draft inserts), editable,
+    // Create Document/Email = a brand-new instance: no id (first Save Draft inserts), editable,
     // regenerated from the template (not a reopened saved instance).
     setCurrentContractId(null);
     setPreviewReadOnly(false);
@@ -1294,7 +1293,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent className={sectionContentStyle}>
-        {/* Action Buttons Row — Part F: View in Valcre · View in ClickUp · Create Document/Contract */}
+        {/* Action Buttons Row — Part F: View in Valcre · View in ClickUp · Create Document/Email */}
         <div className="mb-6 flex justify-between">
           <div className="flex gap-2">
             {/* Create/View Valcre Job Button - Transforms after creation */}
@@ -1460,7 +1459,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
-                          Create Document/Contract
+                          Create Document/Email
                         </Button>
                         <AlertCircle className="absolute -top-1 -right-1 h-4 w-4 text-amber-500" />
                       </div>
@@ -1490,7 +1489,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                           className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
                         >
                           <FileSignature className="h-4 w-4 mr-1" />
-                          Create Document/Contract
+                          Create Document/Email
                         </Button>
                       </div>
                     </TooltipTrigger>
@@ -1511,7 +1510,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                     : "border-2 border-emerald-500 dark:border-emerald-400/60 bg-background dark:bg-transparent text-foreground hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-colors text-sm font-medium"}
                 >
                   <FileSignature className="h-4 w-4 mr-1" />
-                  {isGenerating ? "Generating..." : "Create Document/Contract"}
+                  {isGenerating ? "Generating..." : "Create Document/Email"}
                 </Button>
               )
             ) : (
@@ -1523,25 +1522,19 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="border border-border dark:border-white/30 bg-background dark:bg-transparent text-foreground cursor-not-allowed text-sm font-medium"
               >
                 <FileSignature className="h-4 w-4 mr-1" />
-                Create Document/Contract
+                Create Document/Email
               </Button>
             )}
           </div>
         </div>
 
-        {/* PRD-APR-LOE-03 Wave D1 — DOCUMENT-LESS first-class email (INV-0): a standalone
-            Send-by-Email entry on the job, reachable WITHOUT opening any document. Additive —
-            sits alongside the existing flows; the doc-less send writes a contract_id=null instance. */}
-        <div className="mb-6 rounded-md border border-border p-3 space-y-2">
-          <div className="flex items-center justify-between gap-2">
-            <SendByEmailControl
-              docTemplateId={null}
-              onPreview={(tpl) => { setDocLessTemplate(tpl); setDocLessOpen(true); }}
-              onSend={(tpl) => handleSendDocLess({ subject: tpl.subject, bodyHtml: tpl.body_html })}
-              disabled={docLessSending}
-            />
-          </div>
-          {emailInstances.length > 0 && (
+        {/* PRD-APR-LOE-03 D2 (INV-0 + INV-4): D1's loose dashboard Send-by-Email widget is REMOVED —
+            the standalone email SEND entry now lives in the Previewer's Email dropdown (beside the
+            Document dropdown), NOT loose on the job page. Sent/draft emails surface here as pills
+            under "Saved Documents/Email". (Pill grouping under doc vs email marker = ui-designer refine, non-blocking.) */}
+        {emailInstances.length > 0 && (
+          <div className="mb-6 space-y-2">
+            <h3 className="text-sm font-semibold text-foreground">Saved Documents/Email — Emails</h3>
             <div className="flex flex-wrap gap-2">
               {emailInstances.map((e) => (
                 <span
@@ -1558,8 +1551,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 </span>
               ))}
             </div>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Doc-less compose/preview modal (Wave D1 — separate instance from the with-document path). */}
         <EmailComposeModal
@@ -1620,7 +1613,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <div className="mb-6 w-full">
               <div className="rounded-md border border-border bg-muted/30 p-3">
                 <div className="text-xs font-semibold text-foreground mb-2">
-                  Saved Documents ({savedContracts.length})
+                  Saved Documents/Email ({savedContracts.length})
                 </div>
 
                 {/* Type pills — the selection IS the expand/collapse. Nothing selected on load =
@@ -1766,7 +1759,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             </CompactField>
             {/* ClickUp Task field removed — Part F. Task URL/ID is in the "View in ClickUp" button above. */}
             {/* LOE Version picker removed 2026-06-09 — single active template (LOE-07-1); the
-                send path defaults to the newest active template, so "Create Document/Contract" goes
+                send path defaults to the newest active template, so "Create Document/Email" goes
                 straight in on the one template. (Document-not-version-picker direction —
                 see JOB-DOCUMENT-PICKER-DECISION-TREE.md.) */}
             <CompactField label="Job Status">
@@ -2344,6 +2337,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           contractId={currentContractId}
           readOnly={previewReadOnly}
           existingContract={previewExisting}
+          onPickEmail={(tpl) => { setDocLessTemplate(tpl); setDocLessOpen(true); }}
         />
 
         {/* Reopening a draft now routes through LOEPreviewModal (single-panel preview → Edit →

@@ -41,6 +41,13 @@ interface LoeData {
   property_rights_appraised?: string;
   scope_of_work?: string;
   delivery_date?: string;
+  // V4 Slice 3 — section-2 valuation cascade (verified columns on job_loe_details).
+  // Pushed into the report builder as LABELS (headings), all-sync. No lossy transform.
+  // NOTE: job_loe_details has NO `tenancy` column (verified) — tenancy is not bridged here.
+  status_of_improvements?: string;
+  value_scenarios?: string;
+  approaches_to_value?: string;
+  value_timeframe?: string;
 }
 
 interface PropertyData {
@@ -205,6 +212,28 @@ const fieldMappings: JobDataMapping[] = [
   {
     fieldId: 'scope-of-work',
     getValue: (_job, loe) => loe?.scope_of_work,
+  },
+
+  // V4 Slice 3 — Section-2 valuation cascade → report builder (LABELS/headings, all-sync).
+  // Same scenarios as V3, one source of truth. Raw passthrough — NO lossy transform
+  // (the property-type typeMap collapse above is the anti-pattern; do not repeat it).
+  // TWO cascade fields are intentionally NOT mapped (cite-or-drop, verified against the DB):
+  //   • 'Status of Improvements' — exists on job_loe_details but has NO report field id in
+  //     fieldRegistry.ts → no home to map to (registry/template decision, ui-designer's lane).
+  //   • 'Tenancy' — has report field 'impv-tenancy' but NO source column on job_loe_details
+  //     (or job_submissions) → no verified source to read (needs the real tenancy source located).
+  {
+    // Value scenario label(s), e.g. "As Stabilized" / "As-Is, As If Complete & Stabilized".
+    fieldId: 'value-scenario',
+    getValue: (_job, loe) => loe?.value_scenarios,
+  },
+  {
+    fieldId: 'approaches-applied',
+    getValue: (_job, loe) => loe?.approaches_to_value,
+  },
+  {
+    fieldId: 'timeframe',
+    getValue: (_job, loe) => loe?.value_timeframe,
   },
 
   // Subject Property Contact (canonical IDs from client-intake section)

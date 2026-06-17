@@ -48,8 +48,8 @@ export const coverMappings: FieldMapping[] = [
   { valcreId: 'DateOfValuation', registryId: 'valuation-date', type: 'date', section: 'cover', description: 'Effective date of valuation' },
   { valcreId: 'DateOfReport', registryId: 'report-date', type: 'date', section: 'cover', description: 'Date report was prepared' },
   { valcreId: 'FileNo', registryId: 'file-number', type: 'text', section: 'cover', description: 'File reference number' },
-  { valcreId: 'InterestAppraised', registryId: 'property-rights', type: 'text', section: 'exec', description: 'Interest appraised (Fee Simple, etc.)' },
-  { valcreId: 'ValueType', registryId: 'value-scenario', type: 'text', section: 'exec', description: 'Type of value (As Is, As Stabilized, etc.)' },
+  { valcreId: 'InterestAppraised', registryId: 'interest-appraised', type: 'text', section: 'exec', description: 'Interest appraised (Fee Simple, etc.)' },
+  { valcreId: 'ValueType', registryId: 'value-scenarios', type: 'text', section: 'exec', description: 'Type of value (As Is, As Stabilized, etc.)' },
 ];
 
 // ============================================================================
@@ -60,7 +60,7 @@ export const clientMappings: FieldMapping[] = [
   { valcreId: 'ClientName', registryId: 'client-contact-name', type: 'text', section: 'cover', description: 'Client contact name' },
   { valcreId: 'ClientCompany', registryId: 'client-company', type: 'text', section: 'cover', description: 'Client company name' },
   { valcreId: 'ClientTitle', registryId: 'client-title', type: 'text', section: 'cover', description: 'Client title' },
-  { valcreId: 'ClientAddress1', registryId: 'client-address', type: 'text', section: 'cover', description: 'Client address line 1' },
+  { valcreId: 'ClientAddress1', registryId: 'client-organization-address', type: 'text', section: 'cover', description: 'Client address line 1' },
   { valcreId: 'ClientCity', registryId: 'client-city', type: 'text', section: 'cover', description: 'Client city' },
   { valcreId: 'ClientProvince', registryId: 'client-province', type: 'text', section: 'cover', description: 'Client province' },
   { valcreId: 'ClientPostalCode', registryId: 'client-postal', type: 'text', section: 'cover', description: 'Client postal code' },

@@ -136,11 +136,11 @@ const fieldMappings: JobDataMapping[] = [
     getValue: (job) => job.client_phone,
   },
   {
-    fieldId: 'client-organization',
+    fieldId: 'client-company-name',
     getValue: (job) => job.client_organization,
   },
   {
-    fieldId: 'client-address',
+    fieldId: 'client-organization-address',
     getValue: (job) => parseAddress(job.client_address).street,
   },
   {
@@ -203,11 +203,11 @@ const fieldMappings: JobDataMapping[] = [
     getValue: (_job, loe) => loe?.report_type,
   },
   {
-    fieldId: 'property-rights',
+    fieldId: 'interest-appraised',
     getValue: (_job, loe) => loe?.property_rights_appraised,
   },
   {
-    fieldId: 'intended-use',
+    fieldId: 'authorized-use',
     getValue: (job) => job.intended_use,
   },
   {
@@ -225,20 +225,20 @@ const fieldMappings: JobDataMapping[] = [
   //  fetches as propertyData; the earlier "no source" note checked only loe/submissions, not property_info.)
   {
     // Value scenario label(s), e.g. "As Stabilized" / "As-Is, As If Complete & Stabilized".
-    fieldId: 'value-scenario',
+    fieldId: 'value-scenarios',
     getValue: (_job, loe) => loe?.value_scenarios,
   },
   {
-    fieldId: 'approaches-applied',
+    fieldId: 'approaches-to-value',
     getValue: (_job, loe) => loe?.approaches_to_value,
   },
   {
-    fieldId: 'timeframe',
+    fieldId: 'value-timeframe',
     getValue: (_job, loe) => loe?.value_timeframe,
   },
   {
-    // Tenancy → report 'impv-tenancy'. Source = job_property_info.tenancy (fetched as propertyData).
-    fieldId: 'impv-tenancy',
+    // Tenancy → report 'tenancy'. Source = job_property_info.tenancy (fetched as propertyData).
+    fieldId: 'tenancy',
     getValue: (_job, _loe, property) => property?.tenancy,
   },
 

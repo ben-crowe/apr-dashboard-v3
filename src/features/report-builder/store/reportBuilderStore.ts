@@ -411,7 +411,7 @@ const getMockData = (): ReportSection[] => [
             value: "",
             isEditable: true,
             inputType: "user-input",
-            mapsTo: "client-address",
+            mapsTo: "client-organization-address",
           },
         ],
       },
@@ -486,7 +486,7 @@ const getMockData = (): ReportSection[] => [
             isEditable: true,
             inputType: "dropdown",
             options: ["As Is", "As Stabilized", "As Complete", "As Proposed"],
-            mapsTo: "value-scenario",
+            mapsTo: "value-scenarios",
           },
           {
             id: "intake-asset-condition",
@@ -638,7 +638,7 @@ const getMockData = (): ReportSection[] => [
             isEditable: true,
             inputType: "dropdown",
             options: ["Fee Simple Estate", "Leased Fee", "Leasehold"],
-            mapsTo: "property-rights",
+            mapsTo: "interest-appraised",
           },
         ],
       },
@@ -802,7 +802,7 @@ const getMockData = (): ReportSection[] => [
             inputType: "user-input",
           },
           {
-            id: "client-address",
+            id: "client-organization-address",
             label: "Client Address",
             type: "text",
             value: "",
@@ -1684,7 +1684,7 @@ const getMockData = (): ReportSection[] => [
         title: "PROPERTY IDENTIFICATION",
         fields: [
           {
-            id: "value-scenario",
+            id: "value-scenarios",
             label: "Value Scenario",
             type: "text",
             value: "",
@@ -1693,7 +1693,7 @@ const getMockData = (): ReportSection[] => [
             options: ["As Is", "As Stabilized", "As Complete", "As Proposed"],
           },
           {
-            id: "property-rights",
+            id: "interest-appraised",
             label: "Property Rights",
             type: "text",
             value: "",
@@ -6830,18 +6830,18 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       "client-company",
       String(
         testDataSet1["client-company"] ||
-          testDataSet1["client-organization"] ||
+          testDataSet1["client-company-name"] ||
           "",
       ),
     );
     updateField("client-title", String(testDataSet1["client-title"] || ""));
     updateField(
-      "client-organization",
-      String(testDataSet1["client-organization"] || ""),
+      "client-company-name",
+      String(testDataSet1["client-company-name"] || ""),
     );
     updateField("client-email", String(testDataSet1["client-email"] || ""));
     updateField("client-phone", String(testDataSet1["client-phone"] || ""));
-    updateField("client-address", String(testDataSet1["client-address"] || ""));
+    updateField("client-organization-address", String(testDataSet1["client-organization-address"] || ""));
     updateField("client-city", String(testDataSet1["client-city"] || ""));
     updateField(
       "client-province",
@@ -6890,10 +6890,10 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
       String(testDataSet1["report-type"] || "Appraisal Report"),
     );
     updateField(
-      "property-rights",
-      String(testDataSet1["property-rights"] || ""),
+      "interest-appraised",
+      String(testDataSet1["interest-appraised"] || ""),
     );
-    updateField("intended-use", String(testDataSet1["intended-use"] || ""));
+    updateField("authorized-use", String(testDataSet1["authorized-use"] || ""));
     updateField("scope-of-work", String(testDataSet1["scope-of-work"] || ""));
 
     // Contact Information (from client-intake section)
@@ -7053,8 +7053,8 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     // Report Type & Property Rights
     updateField("report-type", String(testDataSet1["report-type"] || ""));
     updateField(
-      "property-rights",
-      String(testDataSet1["property-rights"] || ""),
+      "interest-appraised",
+      String(testDataSet1["interest-appraised"] || ""),
     );
     updateField(
       "property-interest",
@@ -7062,7 +7062,7 @@ export const useReportBuilderStore = create<ReportBuilderState>((set, get) => ({
     );
 
     // Intended Use & Users
-    updateField("intended-use", String(testDataSet1["intended-use"] || ""));
+    updateField("authorized-use", String(testDataSet1["authorized-use"] || ""));
     updateField("intended-user", String(testDataSet1["intended-user"] || ""));
 
     // Scope of Work

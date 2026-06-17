@@ -93,7 +93,7 @@
       "reportTarget": "Job.Client._DisplayName",
       "bridgeNote": "carried into the report builder by useLoadJobIntoReport bridge",
       "v3key": "clientOrganization",
-      "v4id": "client-organization",
+      "v4id": "client-company-name",
       "sectionHome": "S1"
     },
     {
@@ -111,7 +111,7 @@
       "reportTarget": "Contact.AddressStreet/City/State/PostalCode",
       "bridgeNote": "bridge splits client_address via parseAddress into store client-address/city/province/postal (4 fields)",
       "v3key": "clientAddress",
-      "v4id": "client-address",
+      "v4id": "client-organization-address",
       "sectionHome": "S1"
     },
     {
@@ -289,9 +289,9 @@
       "notes": "Occupancy type — highest priority override for Property Rights. Valcre custom field CF12408 (SingleOption).",
       "bridgeStatus": "maps-clean",
       "reportTarget": "CF12408",
-      "bridgeNote": "Bridged into V4 via impv-tenancy (Slice-3, source job_property_info.tenancy). ⚠ v4id corrected 2026-06-17: was 'tenancy' (DEAD duplicate, id 4086) → repointed to LIVE 'impv-tenancy' (the bridge target) per QA catch.",
+      "bridgeNote": "Bridged into V4 via impv-tenancy (Slice-3, source job_property_info.tenancy). ⚠ v4id corrected 2026-06-17: was 'tenancy' (DEAD duplicate, id 4086) → repointed to LIVE 'tenancy' (the bridge target) per QA catch.",
       "v3key": "tenancy",
-      "v4id": "impv-tenancy",
+      "v4id": "tenancy",
       "sectionHome": "S2"
     },
     {
@@ -343,9 +343,9 @@
       "notes": "DERIVED (derivePropertyRights) from PropertyType + Subtype + Tenancy — not user-typed. App key interestAppraised → Valcre custom field CF12412 (MultiOption). User sees 'Property Rights'.",
       "bridgeStatus": "maps-clean",
       "reportTarget": "CF12412",
-      "bridgeNote": "value flows via loe.property_rights_appraised → store id 'property-rights' (id renamed, value faithful)",
+      "bridgeNote": "value flows via loe.property_rights_appraised → store id 'interest-appraised' (id renamed, value faithful)",
       "v3key": "propertyRightsAppraised",
-      "v4id": "property-rights",
+      "v4id": "interest-appraised",
       "sectionHome": "S2"
     },
     {
@@ -361,9 +361,9 @@
       "notes": "Insurance overrides Value Scenarios. App keys authorizedUse + intendedUse both → Valcre custom field CF12413 (SingleOption).",
       "bridgeStatus": "maps-clean",
       "reportTarget": "CF12413",
-      "bridgeNote": "value flows via job.intended_use → store id 'intended-use' (id renamed, value faithful)",
+      "bridgeNote": "value flows via job.intended_use → store id 'authorized-use' (id renamed, value faithful)",
       "v3key": "intendedUse",
-      "v4id": "intended-use",
+      "v4id": "authorized-use",
       "sectionHome": "S2"
     },
     {
@@ -381,7 +381,7 @@
       "reportTarget": "CF12414",
       "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
       "v3key": "valueScenarios",
-      "v4id": "value-scenario",
+      "v4id": "value-scenarios",
       "sectionHome": "S2"
     },
     {
@@ -399,7 +399,7 @@
       "reportTarget": "CF12415",
       "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
       "v3key": "approachesToValue",
-      "v4id": "approaches-applied",
+      "v4id": "approaches-to-value",
       "sectionHome": "S2"
     },
     {
@@ -471,7 +471,7 @@
       "reportTarget": "CF12419",
       "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
       "v3key": "valueTimeframe",
-      "v4id": "timeframe",
+      "v4id": "value-timeframe",
       "sectionHome": "S2"
     },
     {

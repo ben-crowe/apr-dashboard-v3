@@ -1,16 +1,16 @@
 {
   "_meta": {
     "source": "public/field-registry-v6.html (canonical)",
-    "purpose": "V3 drift-check \u2014 compare V3 actual fields vs master via the alias map (NEVER v3key==v4id); fail-closed on sentinels",
+    "purpose": "V3 drift-check — compare V3 actual fields vs master via the alias map (NEVER v3key==v4id); fail-closed on sentinels",
     "generated_by": "scripts/generate-registry-derivatives.mjs",
     "rule": "Match V3 field by v3key; verify it still aligns to masterName/v4id. Any checkable:false row = FLAG (do not silent-pass).",
-    "antiCircular": "The GATE must compare the manifest V3-ACTUAL against THIS file\u2019s per-field masterExpectations (registry-sourced: options/order/required). NEVER derive master from V3-actual \u2014 that is the circular false-pass. The manifest supplies V3-ACTUAL ONLY."
+    "antiCircular": "The GATE must compare the manifest V3-ACTUAL against THIS file’s per-field masterExpectations (registry-sourced: options/order/required). NEVER derive master from V3-actual — that is the circular false-pass. The manifest supplies V3-ACTUAL ONLY."
   },
   "counts": {
     "total": 27,
     "checkable": 26,
     "failClosed": 1,
-    "renames": 11,
+    "renames": 10,
     "knownGaps": 3
   },
   "checks": [
@@ -33,11 +33,11 @@
     {
       "masterName": "ClientCompanyName",
       "v3key": "clientOrganization",
-      "v4id": "client-organization",
+      "v4id": "client-company-name",
       "sectionHome": "S1",
       "checkable": true,
       "failClosed": null,
-      "rename": false,
+      "rename": true,
       "masterExpectations": {
         "required": true,
         "dropdownList": null,
@@ -49,11 +49,11 @@
     {
       "masterName": "ClientOrganizationAddress",
       "v3key": "clientAddress",
-      "v4id": "client-address",
+      "v4id": "client-organization-address",
       "sectionHome": "S1",
       "checkable": true,
       "failClosed": null,
-      "rename": false,
+      "rename": true,
       "masterExpectations": {
         "required": true,
         "dropdownList": null,
@@ -237,7 +237,7 @@
           "Walk-Up",
           "Apartment"
         ],
-        "reason": "GRANULAR-vs-GENERIC taxonomy gap (QA-confirmed real): V3 has granular subtypes (Low-Rise/Mid-Rise/etc), master/client lean (Apartment) \u2014 needs Chris lean-vs-full call. Mixed-Use hyphen-variant now ALIGNED (no longer gapped).",
+        "reason": "GRANULAR-vs-GENERIC taxonomy gap (QA-confirmed real): V3 has granular subtypes (Low-Rise/Mid-Rise/etc), master/client lean (Apartment) — needs Chris lean-vs-full call. Mixed-Use hyphen-variant now ALIGNED (no longer gapped).",
         "resolveBy": "Chris-thread",
         "ref": "SLICE4-extraction-completion-2026-06-17"
       }
@@ -245,11 +245,11 @@
     {
       "masterName": "Tenancy",
       "v3key": "tenancy",
-      "v4id": "impv-tenancy",
+      "v4id": "tenancy",
       "sectionHome": "S2",
       "checkable": true,
       "failClosed": null,
-      "rename": true,
+      "rename": false,
       "masterExpectations": {
         "required": true,
         "dropdownList": "ListTenancy",
@@ -268,7 +268,7 @@
     {
       "masterName": "InterestAppraised",
       "v3key": "propertyRightsAppraised",
-      "v4id": "property-rights",
+      "v4id": "interest-appraised",
       "sectionHome": "S2",
       "checkable": true,
       "failClosed": null,
@@ -290,11 +290,11 @@
     {
       "masterName": "AuthorizedUse",
       "v3key": "intendedUse",
-      "v4id": "intended-use",
+      "v4id": "authorized-use",
       "sectionHome": "S2",
       "checkable": true,
       "failClosed": null,
-      "rename": false,
+      "rename": true,
       "masterExpectations": {
         "required": true,
         "dropdownList": "ListAuthorizedUse",
@@ -322,7 +322,7 @@
           "Establish Sales Price",
           "Other"
         ],
-        "reason": "residual taxonomy divergence registry\u2194V3, materially different lists",
+        "reason": "residual taxonomy divergence registry↔V3, materially different lists",
         "resolveBy": "Chris-thread",
         "ref": "SLICE4-option-drift-triage-2026-06-17 #4"
       }
@@ -330,11 +330,11 @@
     {
       "masterName": "ValueScenarios",
       "v3key": "valueScenarios",
-      "v4id": "value-scenario",
+      "v4id": "value-scenarios",
       "sectionHome": "S2",
       "checkable": true,
       "failClosed": null,
-      "rename": true,
+      "rename": false,
       "masterExpectations": {
         "required": true,
         "dropdownList": "ListValueScenarios",
@@ -357,11 +357,11 @@
     {
       "masterName": "ApproachestoValue",
       "v3key": "approachesToValue",
-      "v4id": "approaches-applied",
+      "v4id": "approaches-to-value",
       "sectionHome": "S2",
       "checkable": true,
       "failClosed": null,
-      "rename": true,
+      "rename": false,
       "masterExpectations": {
         "required": true,
         "dropdownList": "ListApproachestoValue",
@@ -398,11 +398,11 @@
     {
       "masterName": "Valuetimeframe",
       "v3key": "valueTimeframe",
-      "v4id": "timeframe",
+      "v4id": "value-timeframe",
       "sectionHome": "S2",
       "checkable": true,
       "failClosed": null,
-      "rename": true,
+      "rename": false,
       "masterExpectations": {
         "required": true,
         "dropdownList": "ListValueTimeFrame",
@@ -421,7 +421,7 @@
       "v4id": "report-inspectiondate",
       "sectionHome": "S2",
       "checkable": false,
-      "failClosed": "flag \u2014 uncheckable (GAP-no-V3-input)",
+      "failClosed": "flag — uncheckable (GAP-no-V3-input)",
       "rename": false,
       "masterExpectations": {
         "required": true,

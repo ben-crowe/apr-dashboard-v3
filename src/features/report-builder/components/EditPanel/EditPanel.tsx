@@ -81,9 +81,9 @@ const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
     // Template uses {{client-full-name}} - calculated from first+last
     { fields: ['client-first-name', 'client-last-name'], widths: ['50%', '50%'] },
     { fields: ['client-full-name'], widths: ['100%'] },  // Calculated field for template
-    { fields: ['client-organization'], widths: ['100%'] },
+    { fields: ['client-company-name'], widths: ['100%'] },
     { fields: ['client-email', 'client-phone'], widths: ['50%', '50%'] },
-    { fields: ['client-address'], widths: ['100%'] },
+    { fields: ['client-organization-address'], widths: ['100%'] },
     { fields: ['client-city', 'client-province', 'client-postal'], widths: ['40%', '30%', '30%'] },
   ],
   'appraiser-info': [
@@ -103,7 +103,7 @@ const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
     { fields: ['report-legal'], widths: ['100%'] },
   ],
   'assignment-details': [
-    { fields: ['report-type', 'property-rights'], widths: ['50%', '50%'] },
+    { fields: ['report-type', 'interest-appraised'], widths: ['50%', '50%'] },
     // Template uses {{report-intendeduse}} and {{report-intendeduser}}
     { fields: ['report-intendeduse', 'report-intendeduser'], widths: ['50%', '50%'] },
     // Slice-4b: 10 bucket-C assignment fields
@@ -150,7 +150,7 @@ const HOME_SUBSECTION_TITLES: Record<string, string> = {
 const COVER_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
   'client-info': [
     { fields: ['client-contact-name', 'client-company'], widths: ['50%', '50%'] },
-    { fields: ['client-address'], widths: ['100%'] },
+    { fields: ['client-organization-address'], widths: ['100%'] },
     { fields: ['client-city', 'client-province', 'client-postal'], widths: ['40%', '30%', '30%'] },
   ],
   'appraiser-info': [
@@ -213,7 +213,7 @@ const ASSIGNMENT_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
 // Layout configuration for Exec section
 const EXEC_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
   'property-identification': [
-    { fields: ['value-scenario', 'property-rights'], widths: ['50%', '50%'] },
+    { fields: ['value-scenarios', 'interest-appraised'], widths: ['50%', '50%'] },
     { fields: ['building-style', 'total-buildings'], widths: ['50%', '50%'] },
     { fields: ['total-nra', 'total-units'], widths: ['50%', '50%'] },
     { fields: ['year-built', 'occupancy-rate'], widths: ['50%', '50%'] },

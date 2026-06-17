@@ -80,7 +80,7 @@ export class FieldRegistry {
         required: false
       },
       {
-        id: 'client-address',
+        id: 'client-organization-address',
         displayName: 'Client Address',
         marker: '[--client-address--]',
         dataPath: 'clientAddress',
@@ -124,7 +124,7 @@ export class FieldRegistry {
       
       // Section 3B - Valuation Details
       {
-        id: 'intended-use',
+        id: 'authorized-use',
         displayName: 'Intended Use',
         marker: '[--intended-use--]',
         dataPath: 'intendedUse',
@@ -140,7 +140,7 @@ export class FieldRegistry {
         required: true
       },
       {
-        id: 'property-rights',
+        id: 'interest-appraised',
         displayName: 'Property Rights',
         marker: '[--property-rights--]',
         dataPath: 'propertyRights',

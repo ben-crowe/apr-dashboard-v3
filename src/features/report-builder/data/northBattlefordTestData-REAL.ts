@@ -34,7 +34,7 @@ export const northBattlefordRealData: Record<string, string | number | string[]>
   // Client Info Subsection
   'client-contact-name': 'Kenneth Engler',
   'client-company': '102109845 Saskatchewan Ltd.',
-  'client-address': '1901, 1088 - 6th Ave SW',
+  'client-organization-address': '1901, 1088 - 6th Ave SW',
   'client-city': 'Calgary',
   'client-province': 'AB',
   'client-postal': 'T2P 5N3',
@@ -168,8 +168,8 @@ In selecting applicable approaches to value, the appraiser considered the agreed
   // ============================================================================
   // EXECUTIVE SUMMARY (EXEC) - Property Identification (10 fields)
   // ============================================================================
-  'value-scenario': 'As Stabilized',
-  'property-rights': 'Fee Simple Estate',
+  'value-scenarios': 'As Stabilized',
+  'interest-appraised': 'Fee Simple Estate',
   'building-style': 'Walkup',
   'total-buildings': 2,
   'total-nra': 10204,
@@ -822,7 +822,7 @@ export const fieldToSectionMap: Record<string, string> = {
   'file-number': 'cover',
   'client-contact-name': 'cover',
   'client-company': 'cover',
-  'client-address': 'cover',
+  'client-organization-address': 'cover',
   'client-city': 'cover',
   'client-province': 'cover',
   'client-postal': 'cover',
@@ -915,8 +915,8 @@ export const fieldToSectionMap: Record<string, string> = {
   'report-compliance': 'report',
 
   // Executive Summary section
-  'value-scenario': 'exec',
-  'property-rights': 'exec',
+  'value-scenarios': 'exec',
+  'interest-appraised': 'exec',
   'building-style': 'exec',
   'total-buildings': 'exec',
   'total-nra': 'exec',

@@ -158,8 +158,8 @@ export const fieldRegistry: FieldDefinition[] = [
     required: false,
   },
   {
-    id: "client-organization",
-    storeId: "client-organization",
+    id: "client-company-name",
+    storeId: "client-company-name",
     label: "Organization",
     section: "client-intake",
     subsection: "client-info-intake",
@@ -168,8 +168,8 @@ export const fieldRegistry: FieldDefinition[] = [
     required: false,
   },
   {
-    id: "client-address",
-    storeId: "client-address",
+    id: "client-organization-address",
+    storeId: "client-organization-address",
     label: "Client Address",
     section: "client-intake",
     subsection: "client-info-intake",
@@ -290,8 +290,8 @@ export const fieldRegistry: FieldDefinition[] = [
     ],
   },
   {
-    id: "intended-use",
-    storeId: "intended-use",
+    id: "authorized-use",
+    storeId: "authorized-use",
     label: "Intended Use",
     section: "client-intake",
     subsection: "property-info-intake",
@@ -532,8 +532,8 @@ export const fieldRegistry: FieldDefinition[] = [
     options: ["Appraisal Report", "Restricted Appraisal", "Desktop Appraisal"],
   },
   {
-    id: "property-rights",
-    storeId: "property-rights",
+    id: "interest-appraised",
+    storeId: "interest-appraised",
     label: "Property Rights Appraised",
     section: "loe-prep",
     subsection: "delivery-details",
@@ -2485,8 +2485,8 @@ export const fieldRegistry: FieldDefinition[] = [
   // Cover - Client Info Subsection (managed in S1 - client-intake)
   // These fields are reference links to client-intake section - rendered as "Managed in S1" links in UI
   {
-    id: "client-address",
-    storeId: "client-address",
+    id: "client-organization-address",
+    storeId: "client-organization-address",
     label: "Client Address",
     section: "cover",
     subsection: "client-info",
@@ -2794,8 +2794,8 @@ export const fieldRegistry: FieldDefinition[] = [
     options: ["DC", "Income", "Cost", "Land", "DCF"],
   },
   {
-    id: "approaches-applied",
-    storeId: "approaches-applied",
+    id: "approaches-to-value",
+    storeId: "approaches-to-value",
     label: "Approaches Applied",
     section: "home",
     subsection: "approach-selection",
@@ -2880,8 +2880,8 @@ export const fieldRegistry: FieldDefinition[] = [
 
   // Exec - Property Identification Subsection
   {
-    id: "value-scenario",
-    storeId: "value-scenario",
+    id: "value-scenarios",
+    storeId: "value-scenarios",
     label: "Value Scenario",
     section: "exec",
     subsection: "property-identification",
@@ -2889,17 +2889,6 @@ export const fieldRegistry: FieldDefinition[] = [
     inputSource: "user-input",
     required: true,
     options: ["As Is", "As Stabilized", "As Complete", "As Proposed"],
-  },
-  {
-    id: "property-rights",
-    storeId: "property-rights",
-    label: "Property Rights",
-    section: "exec",
-    subsection: "property-identification",
-    type: "select",
-    inputSource: "user-input",
-    required: true,
-    options: ["Fee Simple Estate", "Leased Fee", "Leasehold"],
   },
   {
     id: "building-style",
@@ -20666,16 +20655,6 @@ export const fieldRegistry: FieldDefinition[] = [
     inputSource: "user-input",
     required: false,
   },
-  {
-    id: "impv-tenancy",
-    storeId: "impv-tenancy",
-    label: "Tenancy Type",
-    section: "impv",
-    subsection: "building-overview",
-    type: "text",
-    inputSource: "user-input",
-    required: false,
-  },
 
   // ============================================================================
   // NEW FIELDS - SUBJECT PROPERTY (30 fields)
@@ -21239,8 +21218,8 @@ export const fieldRegistry: FieldDefinition[] = [
     options: ["Multi-Tenant", "Single-Tenant", "Owner-Occupied", "Vacant"],
   },
   {
-    id: "timeframe",
-    storeId: "timeframe",
+    id: "value-timeframe",
+    storeId: "value-timeframe",
     label: "Timeframe",
     section: "exec",
     subsection: "property-identification",

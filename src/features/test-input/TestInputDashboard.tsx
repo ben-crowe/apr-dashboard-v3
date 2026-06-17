@@ -208,8 +208,8 @@ const TestInputDashboard: React.FC = () => {
     }
   > = {
     // Client fields in cover section that are managed in client-intake
-    "client-address": {
-      managedFieldId: "client-address",
+    "client-organization-address": {
+      managedFieldId: "client-organization-address",
       destination: "S1 - Client Intake",
       section: "client-intake",
       subsection: "client-info-intake",

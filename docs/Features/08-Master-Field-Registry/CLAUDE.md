@@ -2,6 +2,10 @@
 
 This folder is the deep reference layer for all 2,082 fields in the APR appraisal report — what each field is, what it maps to, what calculation owns it, and how it flows to Valcre.
 
+> **Source-of-truth resources (check these before guessing):**
+> - **Client registry (what WE map):** the June-9 canonical workbook `client-source/Valta Master Field Registry v03 - reviewed 2026-06-09.xlsx` + the parsed `BASELINE-v03-2026-06-09-authority.{md,json}`. (The old April `docs/valta share/` copy is STALE — archived, do not cite.)
+> - **Valcre API spec (what Valcre OFFERS — upstream truth for field mapping + custom-field creation):** `Valcre-API-Reference/` — the Swagger-extracted per-entity field defs + enums + API guide. See its README. NOTE: the old v2 *mapping tables* were deliberately NOT brought in (superseded by the current registry — do not confuse).
+
 ---
 
 ## Production Source

@@ -361,9 +361,9 @@ export default function CalculatorWithPreview() {
     values['recon-cost-weighted'] = formatCurrency(reconCostValue * reconCostWeight / 100);
 
     // Property metadata fields for Page 62 Reconciliation header
-    values['value-scenario'] = getFieldString('value-scenario') || 'AS STABILIZED';
-    values['VALUE-SCENARIO'] = getFieldString('value-scenario') || 'AS STABILIZED';
-    values['property-rights'] = getFieldString('property-rights') || 'Fee Simple Estate';
+    values['value-scenario'] = getFieldString('value-scenarios') || 'AS STABILIZED';
+    values['VALUE-SCENARIO'] = getFieldString('value-scenarios') || 'AS STABILIZED';
+    values['property-rights'] = getFieldString('interest-appraised') || 'Fee Simple Estate';
     values['recon-effective-date'] = getFieldString('recon-effective-date') || getFieldString('effective-date') || '';
     values['effective-date'] = getFieldString('effective-date') || '';
 

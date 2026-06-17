@@ -425,10 +425,10 @@ export default function HomeTabPanel() {
             <div className="form-group">
               <label>Valuation Type</label>
               <select
-                value={String(getValue('value-scenario') || '')}
-                onChange={onInputChange('value-scenario')}
+                value={String(getValue('value-scenarios') || '')}
+                onChange={onInputChange('value-scenarios')}
               >
-                {getFieldOptions('value-scenario').map(opt => (
+                {getFieldOptions('value-scenarios').map(opt => (
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
               </select>
@@ -500,8 +500,8 @@ export default function HomeTabPanel() {
               <label>Organization</label>
               <input
                 type="text"
-                value={String(getValue('client-organization') || '')}
-                onChange={onInputChange('client-organization')}
+                value={String(getValue('client-company-name') || '')}
+                onChange={onInputChange('client-company-name')}
               />
             </div>
             <div className="form-group">
@@ -532,8 +532,8 @@ export default function HomeTabPanel() {
               <label>Address</label>
               <input
                 type="text"
-                value={String(getValue('client-address') || '')}
-                onChange={onInputChange('client-address')}
+                value={String(getValue('client-organization-address') || '')}
+                onChange={onInputChange('client-organization-address')}
               />
             </div>
             <div className="form-group">
@@ -636,10 +636,10 @@ export default function HomeTabPanel() {
             <div className="form-group">
               <label>Scenario Name</label>
               <select
-                value={String(getValue('value-scenario') || '')}
-                onChange={onInputChange('value-scenario')}
+                value={String(getValue('value-scenarios') || '')}
+                onChange={onInputChange('value-scenarios')}
               >
-                {getFieldOptions('value-scenario').map(opt => (
+                {getFieldOptions('value-scenarios').map(opt => (
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
               </select>
@@ -647,10 +647,10 @@ export default function HomeTabPanel() {
             <div className="form-group">
               <label>Property Rights</label>
               <select
-                value={String(getValue('property-rights') || '')}
-                onChange={onInputChange('property-rights')}
+                value={String(getValue('interest-appraised') || '')}
+                onChange={onInputChange('interest-appraised')}
               >
-                {getFieldOptions('property-rights').map(opt => (
+                {getFieldOptions('interest-appraised').map(opt => (
                   <option key={opt} value={opt}>{opt}</option>
                 ))}
               </select>

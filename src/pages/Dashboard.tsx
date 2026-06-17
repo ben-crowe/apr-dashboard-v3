@@ -6,6 +6,7 @@ import JobDetailView from "@/components/dashboard/JobDetailView";
 import AppraisalTable from "@/components/dashboard/AppraisalTable";
 import { JobListProvider, useJobList } from "@/components/dashboard/job-list/JobListContext";
 import JobReportBuilder from "./JobReportBuilder";
+import { isV4Enabled } from "@/lib/featureFlags";
 
 // Job List Route Component
 const JobListRoute = () => {
@@ -104,7 +105,12 @@ const Dashboard = () => {
     <Routes>
       <Route path="/" element={<JobListRoute />} />
       <Route path="/job/:jobId" element={<JobDetailRoute />} />
-      <Route path="/job/:jobId/report" element={<JobReportRoute />} />
+      {/* V4 GATE — the report builder route is registered ONLY when VITE_V4_ENABLED='true'.
+          In the client build it's unregistered, so a direct hit to /dashboard/job/:id/report
+          matches nothing and the builder never mounts. */}
+      {isV4Enabled() && (
+        <Route path="/job/:jobId/report" element={<JobReportRoute />} />
+      )}
     </Routes>
   );
 };

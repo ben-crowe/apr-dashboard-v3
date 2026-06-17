@@ -22,6 +22,7 @@ import CalculatorWithPreview from "@/features/calculator-demo-v4/CalculatorWithP
 import ClickUpCallback from "./pages/ClickUpCallback";
 import StandaloneCalculator from "./features/standalone-calculator";
 import StyleGuide from "./pages/StyleGuide";
+import { isV4Enabled } from "@/lib/featureFlags";
 
 // ─── Notification rule (Ben) ──────────────────────────────────────────────
 // SUCCESS = SILENT (no "saved / deleted / renamed / synced" popups), in-flight = a
@@ -53,11 +54,20 @@ const App = () => (
             <Route path="/sign/:id" element={<SigningPage />} />
             <Route path="/test-loe" element={<TestLOE />} />
             <Route path="/loe-render" element={<LoeRenderTest />} />
-            <Route path="/mock-builder" element={<MockReportBuilder />} />
-            <Route path="/test-input" element={<TestInputDashboard />} />
-            <Route path="/calculator-demo" element={<CalculatorDemoPage />} />
-            <Route path="/calculator-preview" element={<CalculatorWithPreview />} />
-            <Route path="/standalone-calculator" element={<StandaloneCalculator />} />
+            {/* ── V4 GATE — report-builder + calculator dev surfaces ──────────────────
+                Registered ONLY when VITE_V4_ENABLED='true'. In the client/Production build
+                (flag OFF) these paths are unregistered → fall through to the catch-all
+                NotFound, so no direct-URL access to V4. (The /dashboard/job/:jobId/report
+                route is gated separately inside Dashboard.tsx.) */}
+            {isV4Enabled() && (
+              <>
+                <Route path="/mock-builder" element={<MockReportBuilder />} />
+                <Route path="/test-input" element={<TestInputDashboard />} />
+                <Route path="/calculator-demo" element={<CalculatorDemoPage />} />
+                <Route path="/calculator-preview" element={<CalculatorWithPreview />} />
+                <Route path="/standalone-calculator" element={<StandaloneCalculator />} />
+              </>
+            )}
             <Route path="/image-test" element={<ImageTest />} />
             <Route path="/clickup/callback" element={<ClickUpCallback />} />
             <Route path="/style-guide" element={<StyleGuide />} />

@@ -123,6 +123,24 @@ app → then run **registry-extension** and **calculator-completion** as separat
 
 ---
 
+## 4b. Ben's product/deployment direction (2026-06-16) — THREE locked guardrails
+
+These shape every V4 slice from here. Captured from Ben in-session; co-architect authored.
+
+**1. The V3/V4 seam is a GATE — section 3 onward stays hidden until V4 is done.**
+- **Sections 1–2 (client intake + LOE prep) = the shippable V3 product.** Standalone functional on its own. This is what Chris + his team get to USE as the live app today — intake, LOE/quote, e-sign. They keep using **Valcre** for full report building exactly as they do now.
+- **Sections 3–4 onward (property research → report builder) = gated/not-opened** to the client until V4 is fully worked out + operational. We build V4 **silently** behind the gate, then introduce it once ready.
+- **Build implication:** section 3+ and the report builder need a **feature-gate / hidden-route** so Chris's team never sees half-built V4 in their live app. Sections 1–2 must keep working with the gate ON. (This is a concrete near-term task — flag-gate the section-3+ surface.)
+
+**2. Sections 1–2 must be verifiably standalone.** Intake + LOE prep cannot depend on any V4/report-builder code to function — Chris's team runs them with V4 entirely dark. Every V4 change is checked to NOT regress the standalone 1–2 flow.
+
+**3. SaaS hosting model — our domain, NOT the client's. (NEW — biggest new planning item.)**
+- Build/host the full app on **our own separate domain**, not on a client's domain. Clients access it via **subscriptions to our app** — we do not host the app on their site.
+- This is a **multi-tenant SaaS** direction (our infra, our domain, per-client subscription access) rather than per-client deployment.
+- **Status: needs its own planning track** — touches deployment architecture, multi-tenancy/data isolation, auth + subscription/billing, domain setup. Ben + KN-Mgr planning territory; co-arch specs once the shape is decided. NOT a Slice-1-adjacent task — a parallel strategic track to scope deliberately. Do NOT start building it off this note alone.
+
+---
+
 ## 5. Fields, registry & the report mapping (the planning core)
 
 This is the through-line from today's V3 registry work into V4.

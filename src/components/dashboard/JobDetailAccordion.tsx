@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { isValcreJobNumber } from "@/config/valcre";
 import { useTestMode } from "@/contexts/TestModeContext";
 import { Separator } from "@/components/ui/separator";
+import { isV4Enabled } from "@/lib/featureFlags";
 
 interface JobDetailAccordionProps {
   job: DetailJob;
@@ -225,23 +226,33 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         setInsertFromData={setInsertFromData}
       />
 
-      <OrganizingDocsSection
-        job={job}
-        jobDetails={jobDetails}
-        onUpdateDetails={onUpdateDetails}
-      />
+      {/* ── V4 GATE — section 3 onward (property research + report content) ──────────────
+          Sections 1–2 above (intake + LOE) are the standalone V3 product Chris's team ships
+          with; sections 3–4 are the V4 transition and stay DARK unless VITE_V4_ENABLED='true'.
+          Conditional-mount (not CSS-hide) so no V4 code runs in the client build.
+          ⚑ Any FUTURE section-3 entry button/link/affordance added here MUST also read
+          isV4Enabled() — do not leave an ungated door into the gated surface. */}
+      {isV4Enabled() && (
+        <>
+          <OrganizingDocsSection
+            job={job}
+            jobDetails={jobDetails}
+            onUpdateDetails={onUpdateDetails}
+          />
 
-      <PropertyInfoSection
-        job={job}
-        jobDetails={jobDetails}
-        onUpdateDetails={onUpdateDetails}
-      />
+          <PropertyInfoSection
+            job={job}
+            jobDetails={jobDetails}
+            onUpdateDetails={onUpdateDetails}
+          />
 
-      <Section4Compact
-        job={job}
-        jobDetails={jobDetails}
-        onUpdateDetails={onUpdateDetails}
-      />
+          <Section4Compact
+            job={job}
+            jobDetails={jobDetails}
+            onUpdateDetails={onUpdateDetails}
+          />
+        </>
+      )}
     </div>
   );
 };

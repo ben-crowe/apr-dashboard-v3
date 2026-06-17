@@ -622,6 +622,29 @@ export default function EditPanel() {
       );
     }
 
+    // Handle multi-select fields (Slice-4b JOB 2): value = comma-joined string of option labels.
+    // The Valcre write (api/valcre.ts MultiOption) splits this -> maps each -> SelectedIds, so multiple values SYNC.
+    if (field.type === 'multi-select' && field.options) {
+      const selected = String(field.value || '').split(',').map((s) => s.trim()).filter(Boolean);
+      const toggleOption = (opt: string) => {
+        const next = selected.includes(opt) ? selected.filter((s) => s !== opt) : [...selected, opt];
+        updateFieldValue(field.id, next.join(', '));
+      };
+      return (
+        <>
+          <Label className="text-sm font-medium mb-2 block text-white">{field.label}</Label>
+          <div className="flex flex-col gap-1.5 rounded-md border border-gray-600 p-2">
+            {field.options.map((option) => (
+              <label key={option} className="flex items-center gap-2 text-sm text-white cursor-pointer">
+                <input type="checkbox" checked={selected.includes(option)} disabled={!field.isEditable} onChange={() => toggleOption(option)} className="h-4 w-4 rounded border-gray-500" />
+                {option}
+              </label>
+            ))}
+          </div>
+        </>
+      );
+    }
+
     // Handle boolean/toggle fields
     if (field.type === 'boolean') {
       const isChecked = field.value === true || field.value === 'true' || field.value === 1;
@@ -730,6 +753,28 @@ export default function EditPanel() {
               ))}
             </SelectContent>
           </Select>
+        </div>
+      );
+    }
+
+    // Handle multi-select fields in standalone render (Slice-4b JOB 2) — comma-joined string value.
+    if (field.type === 'multi-select' && field.options) {
+      const selected = String(field.value || '').split(',').map((s) => s.trim()).filter(Boolean);
+      const toggleOption = (opt: string) => {
+        const next = selected.includes(opt) ? selected.filter((s) => s !== opt) : [...selected, opt];
+        updateFieldValue(field.id, next.join(', '));
+      };
+      return (
+        <div key={field.id} className="mb-6">
+          <Label className="text-sm font-medium mb-2 block text-white">{field.label}</Label>
+          <div className="flex flex-col gap-1.5 rounded-md border border-gray-600 p-2">
+            {field.options.map((option) => (
+              <label key={option} className="flex items-center gap-2 text-sm text-white cursor-pointer">
+                <input type="checkbox" checked={selected.includes(option)} disabled={!field.isEditable} onChange={() => toggleOption(option)} className="h-4 w-4 rounded border-gray-500" />
+                {option}
+              </label>
+            ))}
+          </div>
         </div>
       );
     }

@@ -1,17 +1,7 @@
 {
   "_note": "Human-ACCEPTED Slice-4 known-gaps (Chris-thread triaged). The drift-gate value-scopes each accepted field against its config knownGap.allowed set — a residual BEYOND allowed still BLOCKS. InspectionDate is the accepted uncheckable collection-gap (Slice-4c pending: add a V3 input). Any field NOT listed here that drifts => BLOCK. Editing this file = a deliberate acceptance decision; keep it minimal.",
   "_ref": "SLICE4-option-drift-triage-2026-06-17",
-  "_followups": [
-    {
-      "id": "slice-4b-multiselect-truncation",
-      "fields": ["transaction-status", "client-documents"],
-      "gap": "Shipped single-select; June-9 canonical (Valta Master Field Registry v03, reviewed 2026-06-09) lists both as 'Select multiple options'. Single-select silently truncates the user to one value = data loss, not cosmetic.",
-      "severity": "must-fix-pre-cutover",
-      "resolveBy": "Multi-select EditPanel control before client cutover. This is a CONTROL-TYPE gap, not a release-gate option-drift — deliberately tracked under the _followups meta key (which the drift-gate ignores, same as _note/_ref) and NOT as a field-keyed acceptance, because a field key here would risk suppressing real future option-drift on these two fields.",
-      "owner": "build (EditPanel) + ui-designer",
-      "raisedBy": "qa-agent build-verify 2026-06-17"
-    }
-  ],
+  "_resolved": "slice-4b-multiselect-truncation: CLOSED 2026-06-17 — transaction-status + client-documents shipped as true multi-select (EditPanel checkbox branch holds >1; api/valcre.ts MultiOption splits comma -> maps each label -> SelectedIds, verified emits multiple ids not first-only). Gap closed, no longer must-fix. qa-agent build-verify.",
   "PropertyType": "known-gap",
   "PropertySubtype": "known-gap",
   "AuthorizedUse": "known-gap",

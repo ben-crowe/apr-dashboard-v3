@@ -579,13 +579,13 @@ export const fieldRegistry: FieldDefinition[] = [
     options: ["Single Property", "Multiple Properties"],
   },
   {
-    // Canonical control = Select multiple (Chris registry); rendered as single dropdown today — multi-select EditPanel support is a follow-up.
+    // Select multiple (June-9 ListTransactionStatus, Valcre CF12424 MultiOption). True multi-select (Slice-4b JOB 2).
     id: "transaction-status",
     storeId: "transaction-status",
     label: "Transaction Status",
     section: "loe-prep",
     subsection: "assignment-details",
-    type: "dropdown",
+    type: "multi-select",
     inputSource: "user-input",
     required: false,
     options: ["Not Applicable", "Listed", "Under Contract"],
@@ -636,13 +636,13 @@ export const fieldRegistry: FieldDefinition[] = [
     options: ["Yes", "No"],
   },
   {
-    // Canonical control = Select multiple (Chris registry); rendered as single dropdown today — multi-select EditPanel support is a follow-up.
+    // Select multiple (June-9 ListClientDocuments, Valcre CF12422 MultiOption). True multi-select (Slice-4b JOB 2).
     id: "client-documents",
     storeId: "client-documents",
     label: "Client Documents",
     section: "loe-prep",
     subsection: "assignment-details",
-    type: "dropdown",
+    type: "multi-select",
     inputSource: "user-input",
     required: false,
     options: ["Previous Appraisal", "Property Details", "Proforma", "Unit Mix", "Rent Roll", "Historical Operating Expenses", "Development Permit Drawings", "Contact for Property Tour", "Purchase & Sale Agreement", "Environmental Reports", "Property Condition Reports"],

@@ -68,8 +68,21 @@ The strict, release-blocking change-detector. QA-authored requirements (from the
 - **Sync toggle** on V4's existing test-mode switch: OFF = fixture (bypass V3, fast iteration); ON = live V3→V4 sync (true end-to-end). **Both states feed the SAME canonical contract** — fixture and live describe fields identically (no "passes in fixture, breaks live").
 - **Feasibility CONFIRMED (ui-designer, code-checked):** `reportBuilderStore` already has `activeTestMode` (`'none'|'test-report'|'designer'`) + `setTestMode` + `loadDataSet1User/All` + `testDataFieldMapping`; the live path reuses the existing `useLoadJobIntoReport` bridge. Build = extend an enum + a load path, not new infrastructure.
 
-### Phase 0 (precursor) — Reverse-pass the field map (owner: ui-designer; co-arch reviews)
-Before Phase 1 locks the field set: produce the **V4-only (bucket 4)** list (V4 S1/S2 fields not in V3) from `fieldRegistry.ts`, so nothing is removed by assumption — each gets surfaced for review. (ui-designer is already in `fieldRegistry.ts` + the V3 JSX for the alias capture, so it's efficient to pair the reverse-pass with the spike.)
+### Phase 0 (precursor) — Reconcile against CHRIS'S REGISTRY as the defining source (owner: ui-designer; co-arch reviews) — REFRAMED 2026-06-17
+**The defining authority for the S1+S2 field set is Chris's registry (`docs/VALTA-FIELD-SPEC.md`), NOT our V3 code.** Key findings (ui-designer, grep-confirmed):
+- Chris's registry = **37 fields, ALL Record Location='Job', NO stage/section column.** Those 37 ARE the authoritative JOB-STAGE field set = **the S1+S2 UNION** (the explicit "what should our app have" definition Ben was asking for).
+- The deep building/data-gathering fields (year built, parcels, assessments) are **NOT in Chris's registry at all** → CONFIRMS they're out of LOE-stage scope (Valcre/appraisal stage), not a gap. (Validates the S3/S4 exclusion.)
+- The **S1-vs-S2 split is NOT in Chris's registry — it's OUR organization** (intake vs LOE-prep). Chris defines MEMBERSHIP; we assign the stage/split.
+
+**New Phase-0 procedure (flips the order — registry defines, code verifies):**
+1. Take Chris's **37** as the canonical S1+S2 set.
+2. **Reconcile our app against it:** is each of the 37 present in our S1/S2? (`State of Improvements` + `Land Metric` are the misplaced ones → move S3→S2.) Any app S1/S2 field NOT in the 37 = bucket-4 review (operational extra → justify or drop, **never auto-remove**).
+3. The code **`section-home` tag is now a RECONCILE INPUT (verify against), NOT the authority.** Chris's registry membership is the authority; the code tag confirms placement.
+4. Assign each of the 37 an **S1/S2 stage in OUR registry** (we own the split); ambiguous ones = **Chris questions**; render via the stage-filter.
+
+**⚑ TWO HONEST FLAGS (resolve before locking):**
+- Chris's spec header says **"62 fields total"** but only **37 are tabled** in the `.md` — verify against the source `Valta-field-v03.xlsx` whether the conversion dropped any.
+- The S1/S2 stage assignment needs a **Chris confirm** for any non-obvious field.
 
 ---
 

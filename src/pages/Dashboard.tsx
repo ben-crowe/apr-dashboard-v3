@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route, useNavigate, useParams } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate, useParams } from "react-router-dom";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import JobListView from "@/components/dashboard/JobListView";
 import JobDetailView from "@/components/dashboard/JobDetailView";
@@ -121,6 +121,9 @@ const Dashboard = () => {
       {isV4Enabled() && (
         <Route path="/job/:jobId/report" element={<JobReportRoute />} />
       )}
+      {/* Catch-all: any unmatched nested path (incl. /job/:id/report when V4 is OFF and the
+          route above is unregistered) redirects cleanly to the dashboard — never a blank page. */}
+      <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
   );
 };

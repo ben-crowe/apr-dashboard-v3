@@ -7,8 +7,6 @@ import AppraisalTable from "@/components/dashboard/AppraisalTable";
 import { JobListProvider, useJobList } from "@/components/dashboard/job-list/JobListContext";
 import JobReportBuilder from "./JobReportBuilder";
 import { isV4Enabled } from "@/lib/featureFlags";
-import { Button } from "@/components/ui/button";
-import { FileText } from "lucide-react";
 
 // Job List Route Component
 const JobListRoute = () => {
@@ -31,16 +29,9 @@ const JobListRoute = () => {
             {/* OAuth removed - using personal API token */}
 
             <div>
+              {/* V4 door moved to the top ribbon (DashboardLayout) per Ben — not the panel header. */}
               <div className="mb-4 flex items-center justify-between gap-4">
                 <h1 className="text-2xl font-bold">Appraisal Submissions</h1>
-                {/* Easy top-level entry into the SEPARATE V4 report builder for review.
-                    Gated: our V4-lit build only, never Chris's client build. */}
-                {isV4Enabled() && (
-                  <Button onClick={() => navigate('/mock-builder')} className="shrink-0">
-                    <FileText className="mr-2 h-4 w-4" />
-                    Open Report Builder
-                  </Button>
-                )}
               </div>
 
               {viewMode === 'list' ? (

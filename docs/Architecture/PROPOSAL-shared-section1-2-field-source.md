@@ -1,0 +1,77 @@
+---
+id: proposal-shared-section1-2-field-source
+title: "PROPOSAL — One shared field source for Sections 1–2 (V3 + V4 consume the same definitions)"
+created: 2026-06-17
+type: architecture-proposal
+status: for-review (QA) → Ben decides the "how"
+owner: co-architect (author/design) · ui-designer (registry owner, mechanics) · qa-agent (review) · Ben (decision)
+source: Ben + ui-designer thread 2026-06-17 (dev-3)
+tags: [apr, v3, v4, registry, single-source-of-truth, sections-1-2, drift, intake, loe, report-builder]
+---
+
+# PROPOSAL — One shared field source for Sections 1–2
+
+> **One line:** Stop maintaining two parallel field lists (V3 intake/LOE sections 1–2 and V4 report
+> builder's matching fields) and reconciling them by hand. Define the Section 1–2 fields ONCE; both
+> V3 and V4 consume that one source — so a client change is made once and both inherit it, drift-proof.
+
+> **PROPOSAL only — nothing builds until Ben picks the "how" + QA reviews.**
+
+---
+
+## The goal (Ben, 2026-06-17)
+Chris is about to tune Section 2 over the next week. Every field change he makes must hit BOTH the V3
+intake/LOE dashboard AND the V4 report builder — automatically, not by editing two lists from memory
+(which is exactly how they quietly drift apart, and why the V3→V4 field map kept finding gaps).
+
+---
+
+## The reconciliation method (V3-driven, NON-destructive to V4)
+V3 Sections 1–2 are the **reference** (they're the polished, current, client-tuned set). Lay V3's
+Section 1–2 fields beside V4's. Four outcomes per field — **and the V4-extra rule is a hard guardrail:**
+
+1. **Match** — V3 field already in V4 1–2 → confirm 1:1 (most fall here; the field map showed the data already largely flows).
+2. **Missing in V4** — V3 has it, V4 doesn't → move/organize it into V4 to match V3.
+3. **Stale/mismatched** — exists in V4 but named/placed/shaped differently → align to V3.
+4. **⚑ V4-EXTRA — exists in V4 1–2, NOT in V3 → REVIEW, never auto-remove.** These may serve a real
+   purpose (report-side need, a calc input, something Chris hasn't surfaced). The rule: **surface every
+   V4-only field for review; move it if it belongs elsewhere; remove ONLY after a deliberate "this has
+   no purpose" decision — never by assumption.** (Don't kill what you don't understand.)
+
+The existing `V3-to-V4-field-map.json` already gives buckets 1–3; this adds the **reverse pass** (V4-only
+fields) for bucket 4.
+
+---
+
+## The decision Ben must make — HOW "shared"?
+
+**Option A — One LIVE shared definition both forms read at runtime.**
+- Both V3's sections 1–2 and V4's matching fields render FROM the registry live. A change shows in both instantly, zero regeneration.
+- Strongest drift-proofing (literally one source).
+- **Cost/risk:** V3's sections 1–2 are hand-built React with rich custom UX (cascades, sync indicators, conditional fields). Making them render dynamically from a registry is a significant rebuild and risks disturbing the section 1–2 experience you just refined.
+
+**Option B — One MASTER definition both forms are BUILT FROM (recommended).**
+- The registry is the canonical master. Both V3 and V4 field configs are generated/checked against it; a drift-check flags any divergence. Change the master → both regenerate.
+- Nearly the same outcome (change once, both follow) with **far less rebuild and no risk to the current live forms**.
+- **Cost/risk:** a regeneration/sync step rather than pure-live; the drift-check is what guarantees they stay matched.
+
+**Recommendation: Option B**, as the first step — same drift-proof result Ben wants, without reworking the polished intake forms. Option A can be a later evolution if live-render proves worth it. *(I'll verify how V3's sections 1–2 are actually built before locking this — if they're already config-driven, A gets cheaper and I'll revisit.)*
+
+---
+
+## Proposed sequence (after Ben picks A or B)
+1. **Reverse-pass the field map** — produce the V4-only (bucket 4) list so nothing gets removed by assumption. (co-arch + the existing map.)
+2. **Define the canonical Section 1–2 field set** in the registry (ui-designer owns the registry; co-arch the schema).
+3. **Wire/generate** both V3 + V4 1–2 from it per the chosen option, with a drift-check (QA's reconcile pattern).
+4. **Hold for Chris's week of Section 2 tuning** — this is the payoff: his changes land once, both inherit.
+
+---
+
+## Out of scope
+- The valuation cascade bridge (shipped) and the calculator track — separate.
+- Removing any V4-extra field — gated behind explicit review (bucket 4 rule), never in the wiring step.
+- The separate-domain / SaaS track — unrelated.
+
+---
+
+*co-architect, 2026-06-17. From the Ben + ui-designer thread. → I verify V3 form structure → QA reviews → Ben picks A or B → sequence above. The V4-extra non-destructive rule is a hard guardrail, not a preference.*

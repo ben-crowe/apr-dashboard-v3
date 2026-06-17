@@ -119,23 +119,54 @@ function compareField(c) {
   //    no required attr → V3-actual emits required=null for every field), so a required mismatch is
   //    NOT a real V3 dimension yet and would 100%-false-block. We still COMPARE + REPORT it (so the
   //    divergence is visible), but it NEVER exits RED. Re-enable as blocking when V3 enforces required.
-  const blockingDrift = [];
-  const infoDrift = [];
-  if ((actual.present ?? true) === false) blockingDrift.push('absent');
-  if (Array.isArray(M.options)) {
-    const optA = JSON.stringify(actual.options || []);   // ORDERED — order is part of the contract
-    const optM = JSON.stringify(M.options);
-    if (optA !== optM) blockingDrift.push('options');
+  const masterOpts = Array.isArray(M.options) ? M.options : null;
+  const actualOpts = Array.isArray(actual.options) ? actual.options : [];
+  const absent = (actual.present ?? true) === false;
+
+  // Value-level divergence (for both the normal block-test AND value-scoped suppression).
+  let removed = [], added = [], optionsDiffer = false;
+  if (masterOpts) {
+    const mset = new Set(masterOpts), aset = new Set(actualOpts);
+    removed = masterOpts.filter((v) => !aset.has(v));
+    added = actualOpts.filter((v) => !mset.has(v));
+    optionsDiffer = JSON.stringify(actualOpts) !== JSON.stringify(masterOpts); // set OR order
   }
+  const blockingDrift = [];
+  if (absent) blockingDrift.push('absent');
+  if (optionsDiffer) blockingDrift.push('options');
+
+  const infoDrift = [];
   if ((actual.required ?? null) !== (M.required ?? null))
-    infoDrift.push(`required(v3=${actual.required}, master=${M.required})`);
+    infoDrift.push(`required(v3=${actual.required}, master=${M.required})`); // REPORT-ONLY (v1)
 
   if (blockingDrift.length === 0)
     return { state: 'PASS', why: infoDrift.length ? `in sync (report-only: ${infoDrift.join(';')})` : 'in sync', info: infoDrift };
 
-  // BLOCKING mismatch — honor STATUS TAG.
+  // BLOCKING mismatch — honor STATUS TAG, but VALUE-SCOPED for known-gap/approved-change.
   const status = approved[c.masterName] || actual.status || 'pending';
-  if (status === 'approved-change') return { state: 'PASS', why: `intentional (approved-change): ${blockingDrift.join(',')}`, info: infoDrift };
+  if (status === 'approved-change' || status === 'known-gap') {
+    // ⚑ VALUE-SCOPED suppression — a known-gap tag must NEVER blanket the whole field.
+    // FAIL-CLOSED: tagged but config carries no knownGap.allowed set => cannot suppress => BLOCK.
+    const allowed = c.knownGap && Array.isArray(c.knownGap.allowed) ? c.knownGap.allowed : null;
+    if (!allowed)
+      return { state: 'BLOCK', why: `known-gap tagged but NO knownGap.allowed set in config (fail-closed) — drift [${blockingDrift.join(',')}]`, info: infoDrift };
+    const aset = new Set(allowed);
+    // residual VALUES = changed/added/removed values NOT in the allowed set (corrupted shared value or new value).
+    const residual = [...removed, ...added].filter((v) => !aset.has(v));
+    // residual ORDER = relative order of SHARED, non-allowed values must be preserved (allowed items may shift positions).
+    let orderResidual = false;
+    if (masterOpts) {
+      const stableM = masterOpts.filter((v) => actualOpts.includes(v) && !aset.has(v));
+      const stableA = actualOpts.filter((v) => masterOpts.includes(v) && !aset.has(v));
+      orderResidual = JSON.stringify(stableM) !== JSON.stringify(stableA);
+    }
+    const residualDetail = [...residual];
+    if (absent) residualDetail.push('absent(presence not suppressible)');
+    if (orderResidual) residualDetail.push('ORDER-on-shared-values');
+    if (residualDetail.length === 0)
+      return { state: 'PASS', why: `known-gap honored NARROWLY (all divergence ⊆ allowed): ${[...removed, ...added].join(',') || 'n/a'}`, info: infoDrift };
+    return { state: 'BLOCK', why: `known-gap does NOT cover residual [${residualDetail.join(',')}] (allowed=${allowed.join('|')})`, info: infoDrift };
+  }
   return { state: 'BLOCK', why: `drift [${blockingDrift.join(',')}] status=${status}`, info: infoDrift };
 }
 

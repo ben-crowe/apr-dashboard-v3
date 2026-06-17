@@ -17,6 +17,7 @@ const config = JSON.parse(readFileSync(CONFIG, 'utf8'));
 const checkable = config.checks.filter((c) => c.checkable !== false);
 const dd = checkable.find((c) => Array.isArray(c.masterExpectations?.options)); // a dropdown field
 const txt = checkable.find((c) => !c.masterExpectations?.options);              // a required-only field
+const kg = checkable.find((c) => c.knownGap && Array.isArray(c.knownGap.allowed) && Array.isArray(c.masterExpectations?.options)); // a known-gap dropdown (e.g. PropertyType)
 const dir = mkdtempSync(join(tmpdir(), 'driftgate-'));
 
 // CLEAN V3-actual manifest = mirrors each field's registry masterExpectations (in sync). NO master key.
@@ -75,12 +76,48 @@ const acceptGap = write('approved-gap.json', { InspectionDate: 'known-gap' });
   const r = runGate(write('D.json', man), { approved: acceptGap });
   assert('D unreadable → fail-closed BLOCK', r.code === 1 && r.out.blockDetail.some((b) => /readable/.test(b.why)), JSON.stringify(r.out.blockDetail).slice(0, 200));
 }
-// E — same drift as B but approved-change => PASS.
+// ===== VALUE-SCOPED KNOWN-GAP CASES (the prod-live hole + its inverse) =====
+// kg = a known-gap dropdown (e.g. PropertyType, allowed=[Seniors,Other]).
+const kgAllowed = kg.knownGap.allowed;
+const kgOpts = kg.masterExpectations.options;
+const kgShared = kgOpts.filter((v) => !kgAllowed.includes(v)); // the protected, non-allowed values
+const tagKg = (extra = {}) => write('appr-kg.json', { InspectionDate: 'known-gap', [kg.masterName]: 'approved-change', ...extra });
+
+// (KG-1) tagged approved-change + a SHARED value CORRUPTED (not in allowed) => MUST BLOCK (the hole).
 {
-  const man = cleanManifest(); man.fields[dd.v3key].options = [...dd.masterExpectations.options].reverse();
-  const appr = write('approved-E.json', { InspectionDate: 'known-gap', [dd.masterName]: 'approved-change' });
-  const r = runGate(write('E.json', man), { approved: appr });
-  assert('E approved-change drift → PASS', r.code === 0 && r.out.result === 'PASS', JSON.stringify(r.out).slice(0, 200));
+  const man = cleanManifest();
+  const opts = [...kgOpts]; opts[0] = opts[0] + ' CORRUPTED';   // corrupt a shared, non-allowed value
+  man.fields[kg.v3key].options = opts;
+  const r = runGate(write('KG1.json', man), { approved: tagKg() });
+  assert('(KG-1) approved-change + corrupted SHARED value → BLOCK (hole closed)', r.code === 1 && r.out.blockDetail.some((b) => b.field === kg.masterName && /residual/.test(b.why)), JSON.stringify(r.out.blockDetail).slice(0, 240));
+}
+// (KG-2) tagged + divergence EXACTLY the allowed set (drop allowed items) => PASS (narrow suppression).
+{
+  const man = cleanManifest();
+  man.fields[kg.v3key].options = kgOpts.filter((v) => !kgAllowed.includes(v)); // removed == allowed set
+  const r = runGate(write('KG2.json', man), { approved: tagKg() });
+  assert('(KG-2) divergence ⊆ allowed → PASS (narrow)', r.code === 0 && r.out.result === 'PASS', JSON.stringify(r.out).slice(0, 240));
+}
+// (KG-3) tagged + ORDER drift on SHARED (non-allowed) values => BLOCK.
+{
+  const man = cleanManifest();
+  const opts = [...kgOpts];
+  // swap the first two shared values' positions (order drift among protected values)
+  const i = opts.indexOf(kgShared[0]), j = opts.indexOf(kgShared[1]);
+  [opts[i], opts[j]] = [opts[j], opts[i]];
+  man.fields[kg.v3key].options = opts;
+  const r = runGate(write('KG3.json', man), { approved: tagKg() });
+  assert('(KG-3) order drift on shared values → BLOCK', r.code === 1 && r.out.blockDetail.some((b) => b.field === kg.masterName && /ORDER/.test(b.why)), JSON.stringify(r.out.blockDetail).slice(0, 240));
+}
+// (KG-4) tagged known-gap but config has NO allowed set for it => fail-closed BLOCK.
+{
+  const bad = JSON.parse(JSON.stringify(config));
+  const victim = bad.checks.find((c) => c.masterName === kg.masterName);
+  victim.knownGap = null;                                    // strip the allowed set
+  const badCfg = write('config-noallowed.json', bad);
+  const man = cleanManifest(); man.fields[kg.v3key].options = [...kgOpts].reverse(); // any drift
+  const r = runGate(write('KG4.json', man), { approved: tagKg(), configPath: badCfg });
+  assert('(KG-4) known-gap tag + no allowed set → fail-closed BLOCK', r.code === 1 && r.out.blockDetail.some((b) => b.field === kg.masterName && /allowed set/i.test(b.why)), JSON.stringify(r.out.blockDetail).slice(0, 240));
 }
 // F — InspectionDate NOT accepted => fail-closed BLOCK.
 {

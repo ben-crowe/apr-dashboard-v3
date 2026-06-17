@@ -113,23 +113,30 @@ function compareField(c) {
   if (actual.readable === false) return { state: 'BLOCK', why: 'options not machine-readable (fail-closed)' };
 
   // STRICT diff: V3-ACTUAL (manifest) vs MASTER (config.masterExpectations, registry-sourced).
-  //  - Dropdowns (master.options is an array) → compare ORDERED options (set+order) + required.
-  //  - Text/date/number (master.options null) → required-only.
-  const drift = [];
-  if ((actual.present ?? true) === false) drift.push('absent');
-  if ((actual.required ?? null) !== (M.required ?? null)) drift.push('required');
+  //  - Dropdowns (master.options is an array) → ORDERED options (set+order) = BLOCKING.
+  //  - Presence (absent) = BLOCKING.
+  //  - ⚑ `required` = REPORT-ONLY for v1 — V3 does NOT enforce required (e.g. contact fields have
+  //    no required attr → V3-actual emits required=null for every field), so a required mismatch is
+  //    NOT a real V3 dimension yet and would 100%-false-block. We still COMPARE + REPORT it (so the
+  //    divergence is visible), but it NEVER exits RED. Re-enable as blocking when V3 enforces required.
+  const blockingDrift = [];
+  const infoDrift = [];
+  if ((actual.present ?? true) === false) blockingDrift.push('absent');
   if (Array.isArray(M.options)) {
     const optA = JSON.stringify(actual.options || []);   // ORDERED — order is part of the contract
     const optM = JSON.stringify(M.options);
-    if (optA !== optM) drift.push('options');
+    if (optA !== optM) blockingDrift.push('options');
   }
+  if ((actual.required ?? null) !== (M.required ?? null))
+    infoDrift.push(`required(v3=${actual.required}, master=${M.required})`);
 
-  if (drift.length === 0) return { state: 'PASS', why: 'in sync' };
+  if (blockingDrift.length === 0)
+    return { state: 'PASS', why: infoDrift.length ? `in sync (report-only: ${infoDrift.join(';')})` : 'in sync', info: infoDrift };
 
-  // Mismatch — honor STATUS TAG.
+  // BLOCKING mismatch — honor STATUS TAG.
   const status = approved[c.masterName] || actual.status || 'pending';
-  if (status === 'approved-change') return { state: 'PASS', why: `intentional (approved-change): ${drift.join(',')}` };
-  return { state: 'BLOCK', why: `drift [${drift.join(',')}] status=${status}` };
+  if (status === 'approved-change') return { state: 'PASS', why: `intentional (approved-change): ${blockingDrift.join(',')}`, info: infoDrift };
+  return { state: 'BLOCK', why: `drift [${blockingDrift.join(',')}] status=${status}`, info: infoDrift };
 }
 
 // --- Run.
@@ -137,11 +144,13 @@ const expectedCheckable = checks.filter((c) => c.checkable !== false).length;
 let verified = 0;
 const blocks = [];
 const flags = [];
+const info = [];   // report-only divergences (required, v1) — surfaced, NEVER blocking
 for (const c of checks) {
   const r = compareField(c);
   if (c.checkable !== false && r.state === 'PASS') verified++;      // only a real PASS counts as verified
   if (r.state === 'BLOCK') blocks.push({ field: c.masterName, v3key: c.v3key, why: r.why });
   if (r.state === 'FLAG') flags.push({ field: c.masterName, v3key: c.v3key, why: r.why });
+  if (Array.isArray(r.info) && r.info.length) info.push({ field: c.masterName, v3key: c.v3key, note: r.info.join(';') });
 }
 
 // COVERAGE: verified must reach expectedCheckable, else we're blind on some checkable field.
@@ -149,13 +158,17 @@ const coverageOK = verified === expectedCheckable;
 
 const summary = {
   gate: 'v3-drift', prod: isProd,
+  requiredPolicy: 'report-only-v1 (V3 does not enforce required; re-enable as blocking when it does)',
+  blockingDimensions: ['options', 'order', 'presence'],
   total: checks.length, expectedCheckable, verified,
   coverageOK, blocks: blocks.length, blockDetail: blocks,
   flags: flags.length, flagDetail: flags,
+  info: info.length, infoDetail: info,
 };
 
-// FLAGS are always surfaced (never silent), regardless of pass/block.
+// FLAGS + report-only INFO are always surfaced (never silent), regardless of pass/block.
 if (flags.length && !asJson) for (const f of flags) console.log(`⚑ FLAG ${f.field} (${f.v3key}): ${f.why}`);
+if (info.length && !asJson) for (const i of info) console.log(`ℹ️  report-only ${i.field} (${i.v3key}): ${i.note}`);
 
 if (blocks.length > 0 || !coverageOK) {
   if (asJson) console.log(JSON.stringify({ ...summary, result: 'BLOCK' }, null, 2));

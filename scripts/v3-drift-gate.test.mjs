@@ -115,11 +115,27 @@ const acceptGap = write('approved-gap.json', { InspectionDate: 'known-gap' });
   const r = runGate(write('case-a.json', cleanManifest()), { approved: acceptGap, configPath: badCfg });
   assert('(a) master-missing-from-config → fail-closed RED', r.code === 1 && r.out.blockDetail.some((b) => b.field === victim.masterName && /masterExpectations/.test(b.why)), JSON.stringify(r.out.blockDetail).slice(0, 200));
 }
-// (b) V3-ACTUAL differs from registry-master (required flipped on a text field) => BLOCK.
+// (b) ⚑ required-ONLY mismatch => REPORT-ONLY PASS (NOT a block) — v1 policy.
 {
   const man = cleanManifest(); man.fields[txt.v3key].required = !txt.masterExpectations.required;
   const r = runGate(write('case-b.json', man), { approved: acceptGap });
-  assert('(b) V3≠registry-master (required) → BLOCK', r.code === 1 && r.out.blockDetail.some((b) => b.field === txt.masterName && /required/.test(b.why)), JSON.stringify(r.out.blockDetail).slice(0, 200));
+  assert('(b) required-only mismatch → report-only PASS (not block)', r.code === 0 && r.out.result === 'PASS', `code=${r.code} result=${r.out.result}`);
+  assert('(b) required divergence REPORTED in info', r.out.info >= 1 && r.out.infoDetail.some((i) => i.field === txt.masterName && /required/.test(i.note)), JSON.stringify(r.out.infoDetail).slice(0, 200));
+}
+// (b2) ⚑ REAL V3 SHAPE: every field required=null (V3 doesn't enforce) => PASS, full coverage, all reported.
+{
+  const man = cleanManifest();
+  for (const k of Object.keys(man.fields)) man.fields[k].required = null;
+  const r = runGate(write('case-b2.json', man), { approved: acceptGap });
+  assert('(b2) all-required-null (real V3) → PASS not 100%-block', r.code === 0 && r.out.result === 'PASS', `code=${r.code} result=${r.out.result}`);
+  assert('(b2) full coverage despite required=null everywhere', r.out.verified === checkable.length && r.out.coverageOK, `verified=${r.out.verified}/${checkable.length}`);
+  assert('(b2) required divergences all REPORTED (not silent)', r.out.info >= 1, `info=${r.out.info}`);
+}
+// (b3) OPTION/order mismatch STILL BLOCKS (blocking dimension intact) — guard against over-loosening.
+{
+  const man = cleanManifest(); man.fields[dd.v3key].options = [...dd.masterExpectations.options].reverse();
+  const r = runGate(write('case-b3.json', man), { approved: acceptGap });
+  assert('(b3) option/order mismatch STILL BLOCKS', r.code === 1 && r.out.blockDetail.some((b) => b.field === dd.masterName && /options/.test(b.why)), JSON.stringify(r.out.blockDetail).slice(0, 200));
 }
 // (c) V3-ACTUAL matches registry-master => PASS (explicit non-circular pass).
 {

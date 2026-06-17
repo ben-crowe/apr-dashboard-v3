@@ -178,6 +178,21 @@ export const testDataSet1: Record<string, string | number | string[]> = {
   "payment-terms": "Net 30 days upon delivery",
   "delivery-date": "2025-11-30",
   "report-type": "Appraisal Report",
+  // Slice-4b assignment-details (10 bucket-C fields) — values mirror a valid V3 fill
+  "status-of-improvements": "Improved - Completed",
+  "state-of-improvements": "Improved",
+  "assignment-type": "Single Property",
+  "transaction-status": "Listed",
+  "zoning-status": "In Place",
+  "cmhc-financing": "Yes",
+  "land-metric": "$/SF",
+  "desktop-report": "No",
+  "client-documents": "Rent Roll",
+  "delivery-time": 4,
+  // Slice-4b re-baseline delta (June-9 authority)
+  "current-use-improvements": "Multifamily",
+  "proposed-use-improvements": "Multifamily",
+  "previously-appraised": "No",
   "scope-of-work":
     "Complete appraisal of the subject property including all three approaches to value where applicable.",
   "special-instructions": "Client requests digital delivery only.",

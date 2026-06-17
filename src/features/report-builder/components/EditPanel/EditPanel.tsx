@@ -106,6 +106,15 @@ const HOME_FIELD_LAYOUT: Record<string, SubsectionLayout> = {
     { fields: ['report-type', 'property-rights'], widths: ['50%', '50%'] },
     // Template uses {{report-intendeduse}} and {{report-intendeduser}}
     { fields: ['report-intendeduse', 'report-intendeduser'], widths: ['50%', '50%'] },
+    // Slice-4b: 10 bucket-C assignment fields
+    { fields: ['status-of-improvements', 'state-of-improvements'], widths: ['50%', '50%'] },
+    { fields: ['assignment-type', 'transaction-status'], widths: ['50%', '50%'] },
+    { fields: ['zoning-status', 'cmhc-financing'], widths: ['50%', '50%'] },
+    { fields: ['land-metric', 'desktop-report'], widths: ['50%', '50%'] },
+    { fields: ['client-documents', 'delivery-time'], widths: ['50%', '50%'] },
+    // Slice-4b re-baseline delta (June-9 authority): 3 newly-confirmed fields
+    { fields: ['current-use-improvements', 'proposed-use-improvements'], widths: ['50%', '50%'] },
+    { fields: ['previously-appraised'], widths: ['50%'] },
     { fields: ['scope-of-work'], widths: ['100%'] },
   ],
   'subject-contact': [

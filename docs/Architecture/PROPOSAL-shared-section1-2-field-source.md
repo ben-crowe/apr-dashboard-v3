@@ -67,6 +67,12 @@ ui-designer (registry owner) verified the actual build:
 - **V3 → registry = a MANUAL mirror step.** Because V3 has no schema, when Chris changes a V3 field someone must reflect it into the registry by hand. It becomes fully automatic both-ways ONLY if V3's forms are later refactored to read the registry (that refactor IS Option A).
 - So **Option B delivers: registry is the canonical written record of the S1/S2 field set; V4 auto-derives; V3 stays a deliberate manual mirror.** It kills *silent* drift (the registry is the agreed truth + a drift-check catches divergence) but does not yet remove the manual V3 update. True change-once-both-follow = Option A = the V3 refactor (bigger, later).
 
+### ⚑ Option B refined — ASYMMETRIC (registry-owner scoped). This is the buildable shape.
+Don't frame B as "emit a V3 config AND a V4 config" — the two sides differ:
+- **V4 (schema-driven) → GENERATE its config.** V4 consumes a generated field config off the master → the V4 S1/S2 fields are produced from the registry.
+- **V3 (hardcoded JSX) → DRIFT-CHECK, not a config.** V3 can't consume a config without the rebuild we're avoiding, so instead emit a conformance check that verifies V3 matches the master and flags divergence. V3 stays untouched + non-destructive. (This IS the "generate/check against it" phrasing.)
+- **Cost (incremental, not a rewrite):** extend the registry `FIELDS` model with the form-layout metadata a real config needs — sub-section/tab, field ORDER, the name crosswalk, validation, conditional show/hide, placeholders/defaults (the current model has only the descriptive core: name/label/control/dropdown/required) — then add 2 new generator emit targets (V4 config + V3 drift-check). The bigger lift is the model extension, not the emitter. **ui-designer owns the generator + model extension and will scope a sub-spec once Ben picks B; the drift-check reuses QA's reconcile pattern.**
+
 ### ⚑ Naming crosswalk — a decision the proposal must settle
 The same field has THREE names: V3 camelCase (`scopeOfWork`) · registry PascalCase (`ScopeOfWork`) · V4 kebab id (`scope-of-work`). The shared source must **pick ONE canonical key + define the mapping to the other two**, or the "one source" just moves the drift into the naming layer.
 

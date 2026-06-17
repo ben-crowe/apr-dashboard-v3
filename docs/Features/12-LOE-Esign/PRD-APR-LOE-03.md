@@ -43,9 +43,10 @@ gemini_store: workflows
 
 > The architecture is written as TESTABLE invariants, not prose — so QA's `/review-gate` runs the PROVED-BY directly. INV-0 = the thesis (sequenced FIRST in the build). The "email buried under a document" bug happened because this was prose with no gate hook; the INV closes that.
 
-**INV-0 (THESIS) — Email MUST be sendable WITHOUT a document** (email is first-class, never a document sub-step).
-  - FAIL-WHEN: the only path to compose/send an email is through opening a document.
-  - PROVED-BY: from the job view with NO document, the Send-by-Email control writes a `job_email_instances` row with `contract_id = null` and the email is reachable without opening a document. *(Built FIRST — Wave D1.)*
+**INV-0 (THESIS — placement is part of the proof; Ben-confirmed via full explain-back, LOCKED FINAL 2026-06-17) — Email MUST be sendable without a document, via an Email dropdown SIDE-BY-SIDE with the Document dropdown IN THE PREVIEWER.** The dashboard button **"Create Document/Email"** opens the Previewer; two peer dropdowns render side by side. DOCUMENT path → document workflow → the **bottom document-Send button** sends WITH the document connected (signing link) — that button STAYS. EMAIL path → the email previewer standalone, nothing connected (`contract_id=null`). **One reusable email component both ways** (SendByEmailControl, `docTemplateId: string|null`): under a document → `docTemplateId=the-doc` (connected, signing link); from the Email dropdown → `docTemplateId=null` (standalone). Same screen/template-edit both ways; only the document-connection differs.
+  - FAIL-WHEN: the email entry is a loose element on the dashboard/job page, OR not beside the Document dropdown in the Previewer, OR the bottom document-Send button was removed.
+  - PROVED-BY: the dashboard button reads "Create Document/Email" → opens the Previewer → Document + Email dropdowns render SIDE BY SIDE; pick Email + Send → `job_email_instances` row with `contract_id=null`, no document opened; the bottom document-Send button is still present + the live LOE document send works (document path, `docTemplateId=the-doc`, signing link); the loose D1 dashboard email widget is GONE.
+  - *Drift history (why placement is in the PROVED-BY): viewer-header (right) → entry-button (drift 2, co-arch mis-moved) → dashboard/job-page (drift 3, D1) → locked back to the Previewer. D1's dashboard widget REMOVED; built correctly in D2.*
 
 **INV-1 — A misclick MUST NOT send a live client email** (test-recipient fail-safe).
   - FAIL-WHEN: a send can reach a real client address in non-prod / on ambiguity.
@@ -59,9 +60,25 @@ gemini_store: workflows
   - FAIL-WHEN: two emails pair one doc nondeterministically; OR a signing link is injected into a doc-less/non-LOE send; OR the LOE send loses its link.
   - PROVED-BY: partial-unique pairing rejects a dupe (23505 → clean typed error); LOE send → signing link present; doc-less send → no link.
 
-## Entry architecture (Ben click-test LOCK, 2026-06-17 — resolves spec §7 entry-placement)
+**INV-4 — A sent/drafted email lands as a pill in the "Saved Documents/Email" section** (the saved section is renamed from "Saved Documents").
+  - FAIL-WHEN: a sent/drafted email does not appear as a pill in that section, OR the section header still reads "Saved Documents", OR an emailed document is DOUBLE-listed (a separate email entry instead of an "emailed" marker on its document pill).
+  - PROVED-BY: send a standalone email → a pill appears under the Email filter; the section header reads "Saved Documents/Email".
+  - *Grouping (default, derivable from `contract_id`; ui-designer refines): email-only (`contract_id=null`) → Email/Thank-You pill; a document that was emailed (`contract_id` set) → stays under its document pill with an "emailed" marker, NOT a second entry.*
 
-The SINGLE ENTRY is the renamed **"Create Document/Contract"** button on the job (was "Create Contract" — it is NOT always a contract). Clicking it opens **TWO DROPDOWNS side by side: "Email Templates" + "Documents/Contracts"** — two ways in from one place. **You do NOT open a document first to reach email** (that buried-in-the-send-modal flow was the deviation Ben caught — it made email a document sub-step, killing the north star). From the entry: pick an email template → standalone document-less send (connects to the job, contract_id=null); pick a document → the existing document/LOE flow (where the email-tied-to-that-document inline send lives). The two-dropdown surface is at the ENTRY, never buried after opening a document.
+**INV-5 — The recipient DEFAULTS to the CLIENT, with a "Change Recipient" control; it must NOT look hardwired to the test address.** (Ben: the composer currently shows `bc@crowestudio.com` as the default → looks hardwired to the dev's email.) ⚑ Safety preserved: non-prod DELIVERY is still sandbox-redirected to the test address (INV-1) — the DISPLAYED/intended recipient is the client; the actual non-prod send still goes to test, shown as a note.
+  - FAIL-WHEN: the recipient field defaults to / shows the test address as if hardwired; OR there's no way to change the recipient; OR (safety) a real client email is actually DELIVERED in non-prod.
+  - PROVED-BY: open the email composer → the recipient defaults to the job's client email + a "Change Recipient" control is present; in non-prod the actual Resend delivery still redirects to the test address (sandbox), with a visible note. (Display = client/intended; non-prod delivery = test/sandbox.)
+
+## Entry architecture (Ben-confirmed via full explain-back, 2026-06-17 — FINAL, see INV-0)
+
+- **ENTRY:** the dashboard button **"Create Document/Email"** (rename) is the single entry → pressing it OPENS the Previewer.
+- **PREVIEWER:** two dropdowns SIDE BY SIDE — **Document** + **Email**.
+  - **Document path:** pick Document → the document workflow → the **bottom document-Send button** (the existing send) sends by email WITH the document connected (signing link). ⚑ KEEP that bottom button — do NOT remove it.
+  - **Email path:** pick Email → the email previewer opens STANDALONE — nothing connected (`contract_id=null`), adjust the template, send.
+- **⭐ ONE reusable component both ways:** the email previewer/dropdown is the SAME component (SendByEmailControl, `docTemplateId: string|null`); the ONLY difference is the connection — under a document → `docTemplateId=the-doc` (connected, signing link); from the Email dropdown directly → `docTemplateId=null` (standalone). Same screen + template-edit both ways. NOT a new component — feed it the doc vs null.
+- **REMOVE:** D1's loose "Send by Email: [Default LOE Email][Preview][Send]" widget on the dashboard/job page.
+
+This is QA's original Hole 0 (Previewer two-dropdown, §4A) — correct before it drifted (viewer-header → entry-button → dashboard → locked back to the Previewer).
 
 ## Scope
 

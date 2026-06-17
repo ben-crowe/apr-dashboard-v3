@@ -93,6 +93,18 @@ function compareField(c) {
   const actual = m[c.v3key];
   if (!actual) return { state: 'BLOCK', why: `v3 field absent for v3key='${c.v3key}'` };
 
+  // ⚑ CIRCULAR-GUARD #1 (fail-closed): MASTER must come from THIS config (registry-sourced
+  // masterExpectations), NEVER from V3-actual. A checkable row with no masterExpectations cannot
+  // be verified against a real master → RED. (_meta.antiCircular.)
+  const M = c.masterExpectations;
+  if (!M || typeof M !== 'object')
+    return { state: 'BLOCK', why: 'NO masterExpectations in config — circular-guard fail-closed (no registry master to verify against)' };
+
+  // ⚑ CIRCULAR-GUARD #2 (fail-closed): the manifest must supply V3-ACTUAL ONLY. If it smuggles
+  // its own master snapshot, the master source would echo the manifest (the circular false-pass).
+  if (actual.master !== undefined || actual.masterExpectations !== undefined)
+    return { state: 'BLOCK', why: 'manifest carries a master snapshot — circular (manifest must be V3-ACTUAL only)' };
+
   // Twin disambiguation: sectionHome must match (never match by name alone).
   if (actual.sectionHome && c.sectionHome && actual.sectionHome !== c.sectionHome)
     return { state: 'BLOCK', why: `sectionHome mismatch ${actual.sectionHome}!=${c.sectionHome}` };
@@ -100,20 +112,16 @@ function compareField(c) {
   // FAIL-CLOSED: options must be machine-readable to be checked.
   if (actual.readable === false) return { state: 'BLOCK', why: 'options not machine-readable (fail-closed)' };
 
-  // STRICT diff: options (set), order, required. Master expectations live on the manifest's
-  // master mirror OR are carried per-field; here we diff actual vs its recorded master snapshot.
+  // STRICT diff: V3-ACTUAL (manifest) vs MASTER (config.masterExpectations, registry-sourced).
+  //  - Dropdowns (master.options is an array) → compare ORDERED options (set+order) + required.
+  //  - Text/date/number (master.options null) → required-only.
   const drift = [];
-  if (actual.master) {
-    const a = actual, M = actual.master;
-    const optA = JSON.stringify([...(a.options || [])].sort());
-    const optM = JSON.stringify([...(M.options || [])].sort());
+  if ((actual.present ?? true) === false) drift.push('absent');
+  if ((actual.required ?? null) !== (M.required ?? null)) drift.push('required');
+  if (Array.isArray(M.options)) {
+    const optA = JSON.stringify(actual.options || []);   // ORDERED — order is part of the contract
+    const optM = JSON.stringify(M.options);
     if (optA !== optM) drift.push('options');
-    if ((a.order ?? null) !== (M.order ?? null)) drift.push('order');
-    if ((a.required ?? null) !== (M.required ?? null)) drift.push('required');
-    if ((a.present ?? true) === false) drift.push('absent');
-  } else {
-    // No master snapshot to compare against = cannot verify = fail-closed.
-    return { state: 'BLOCK', why: 'no master snapshot to compare (fail-closed)' };
   }
 
   if (drift.length === 0) return { state: 'PASS', why: 'in sync' };

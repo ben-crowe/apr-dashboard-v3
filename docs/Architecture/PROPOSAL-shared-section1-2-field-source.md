@@ -102,7 +102,9 @@ QA independently verified the grounding (V3 genuinely hardcoded: LoeQuoteSection
 Ben wants V4's **"fill with test data"** (the existing Load Data button) to be a faithful stand-in for a real V3 handoff — so the whole report build can be tested INSIDE V4 without re-entering everything in V3 each round.
 - **Tie the test fixture to the SAME canonical field set** (the master `n` + `v3key`/`v4id` aliases). Then it's not "some sample values" — it's a real fixture of "what V3 hands over," and it's **drift-checked against the master too** (same discipline as the form configs).
 - **Why:** a hardcoded test set untied to the source rots silently — when Chris tunes Section 2, V4 tests start passing on data that no longer looks like a real job (false confidence, the drift problem in the test layer).
-- ui-designer folds this into the Option-B sub-spec scope alongside the model extension + emit targets.
+- **Plus a SYNC TOGGLE (Ben), built on V4's existing test-mode switch:** OFF = V4 runs on the prefilled fixture (bypass V3, fast iteration); ON = real sync fires from the V3 dashboard for true end-to-end V3→V4→report testing.
+- **⚑ The discipline that makes the toggle valid:** BOTH states must feed the SAME canonical field contract (`n` + `v3key`/`v4id`) — fixture and live-sync describe the fields identically — else you get "passes in fixture mode, breaks live," the exact false-confidence class this whole effort kills.
+- ui-designer folds this into the Option-B sub-spec scope alongside the model extension + emit targets (same owner: registry/generator/fixture).
 
 ## Out of scope
 - The valuation cascade bridge (shipped) and the calculator track — separate.

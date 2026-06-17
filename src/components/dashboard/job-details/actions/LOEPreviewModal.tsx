@@ -22,6 +22,13 @@ import { generateLOEHTML } from '@/utils/loe/generateLOE';
 // PDF carries the footer on every page.
 const PAGED_POLYFILL_PATH = '/paged.polyfill.js';
 
+// INV-1/INV-5: DELIVERY guard. The recipient is DISPLAYED as the client, but the actual non-prod
+// send is redirected to the sandbox test address — a real client email is never delivered in
+// non-prod. Mirrors LoeQuoteSection.safeRecipient. (Display = client; delivery = sandbox-safe.)
+const TEST_RECIPIENT = 'bc@crowestudio.com';
+const safeRecipient = (email?: string | null): string =>
+  (!import.meta.env.PROD || !email || !email.includes('@')) ? TEST_RECIPIENT : email;
+
 interface LOEPreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -90,15 +97,12 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   }, [isOpen]);
   const [currentDocumentHTML, setCurrentDocumentHTML] = useState<string>(documentHTML);
 
-  // Initialize recipient email - Default to bc@crowestudio.com for testing (developer's email)
-  // Users can change it via "Change Recipient" button if needed
+  // INV-5: the recipient DEFAULTS to the CLIENT (the real intended recipient), editable via the
+  // "Change Recipient" control. Non-prod DELIVERY still redirects to the sandbox test address at
+  // send time (safeRecipient, module-level) — display = client, delivery = sandbox-safe (INV-1).
   useEffect(() => {
-    // For testing: Default to developer's email (bc@crowestudio.com)
-    // Users can override via "Change Recipient" button
-    const testEmail = 'bc@crowestudio.com';
-    setRecipientEmail(testEmail);
-    console.log('📧 Default email set to:', testEmail, '(testing mode)');
-  }, []);
+    setRecipientEmail(job?.clientEmail || '');
+  }, [job?.clientEmail]);
 
   // Load templates when modal opens
   useEffect(() => {
@@ -253,7 +257,9 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
     if (isSending) return;
     setIsSending(true);
     try {
-      const emailToUse = recipientEmail !== job.clientEmail ? recipientEmail : undefined;
+      // INV-5: deliver to the chosen recipient, but non-prod redirects to the sandbox test address
+      // (real client never emailed in non-prod). Display = client; delivery = safeRecipient.
+      const emailToUse = safeRecipient(recipientEmail);
       await onApprove(emailToUse, emailOverride);
       setShowEmailStep(false);
       onClose();
@@ -370,14 +376,14 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
           {!readOnly && (
           <div className="flex items-center gap-2 mr-4">
             <Label htmlFor="template-select" className="text-sm font-medium whitespace-nowrap">
-              Document Templates:
+              Document
             </Label>
             <Select
               value={selectedTemplateId || 'default'}
               onValueChange={handleTemplateChange}
               disabled={isLoadingTemplates || isRegenerating}
             >
-              <SelectTrigger id="template-select" className="w-[200px] h-8 text-sm bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
+              <SelectTrigger id="template-select" className="w-[150px] h-8 text-sm bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
                 {isRegenerating ? (
                   <div className="flex items-center gap-2">
                     <Loader2 className="h-3 w-3 animate-spin" />
@@ -419,7 +425,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
             {onPickEmail && (
               <>
                 <Label htmlFor="email-template-select" className="text-sm font-medium whitespace-nowrap ml-2">
-                  Email:
+                  Email
                 </Label>
                 <Select
                   value=""
@@ -429,7 +435,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
                   }}
                   disabled={emailTemplates.length === 0}
                 >
-                  <SelectTrigger id="email-template-select" className="w-[200px] h-8 text-sm bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
+                  <SelectTrigger id="email-template-select" className="w-[150px] h-8 text-sm bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
                     <SelectValue placeholder={emailTemplates.length ? 'Send an email…' : 'No email templates'} />
                   </SelectTrigger>
                   <SelectContent className="bg-background border border-border">

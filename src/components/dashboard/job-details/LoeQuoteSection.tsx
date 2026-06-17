@@ -1561,12 +1561,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           onBack={() => setDocLessOpen(false)}
           job={job}
           jobDetails={jobDetails}
-          recipientEmail={safeRecipient(job?.clientEmail)}
+          recipientEmail={job?.clientEmail || ''}
           isSending={docLessSending}
           onSend={handleSendDocLess}
           initialTemplate={docLessTemplate ?? undefined}
           onSaveDraft={async (subject, bodyHtml) => {
-            await persistEmailInstance({ subject, bodyHtml, recipientEmail: safeRecipient(job?.clientEmail), contractId: null, state: 'draft' });
+            await persistEmailInstance({ subject, bodyHtml, recipientEmail: job?.clientEmail || '', contractId: null, state: 'draft' });
           }}
           docTemplateId={null}
         />

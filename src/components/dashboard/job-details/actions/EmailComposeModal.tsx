@@ -317,8 +317,7 @@ const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
         <div className="flex items-center gap-2 mt-2 px-3 py-2 rounded-md bg-amber-100 border border-amber-300 text-amber-900 text-sm">
           <AlertTriangle className="h-4 w-4 shrink-0" />
           <span>
-            <strong>TEST — delivered to sandbox, not the client.</strong> Sending goes to{' '}
-            <strong>{recipientEmail}</strong> only (Resend sandbox), even though the email is merged as the client.
+            <strong>Recipient: {recipientEmail}</strong> (the client). <strong>TEST mode:</strong> in non-prod the actual delivery is redirected to the sandbox test address — the real client is never emailed in non-prod.
           </span>
         </div>
 

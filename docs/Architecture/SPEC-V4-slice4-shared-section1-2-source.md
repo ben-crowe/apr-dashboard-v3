@@ -69,20 +69,23 @@ The strict, release-blocking change-detector. QA-authored requirements (from the
 - **Feasibility CONFIRMED (ui-designer, code-checked):** `reportBuilderStore` already has `activeTestMode` (`'none'|'test-report'|'designer'`) + `setTestMode` + `loadDataSet1User/All` + `testDataFieldMapping`; the live path reuses the existing `useLoadJobIntoReport` bridge. Build = extend an enum + a load path, not new infrastructure.
 
 ### Phase 0 (precursor) — Reconcile against CHRIS'S REGISTRY as the defining source (owner: ui-designer; co-arch reviews) — REFRAMED 2026-06-17
-**The defining authority for the S1+S2 field set is Chris's registry (`docs/VALTA-FIELD-SPEC.md`), NOT our V3 code.** Key findings (ui-designer, grep-confirmed):
-- Chris's registry = **37 fields, ALL Record Location='Job', NO stage/section column.** Those 37 ARE the authoritative JOB-STAGE field set = **the S1+S2 UNION** (the explicit "what should our app have" definition Ben was asking for).
-- The deep building/data-gathering fields (year built, parcels, assessments) are **NOT in Chris's registry at all** → CONFIRMS they're out of LOE-stage scope (Valcre/appraisal stage), not a gap. (Validates the S3/S4 exclusion.)
-- The **S1-vs-S2 split is NOT in Chris's registry — it's OUR organization** (intake vs LOE-prep). Chris defines MEMBERSHIP; we assign the stage/split.
+**The defining authority for the S1+S2 field set is Chris's registry — specifically the SOURCE XLSX `docs/valta share/Valta-field-v03.xlsx` (NOT the `.md`, which is a lossy view), and NOT our V3 code.** Key findings (ui-designer, xlsx-parsed):
+- Authority = the **xlsx, ~45 field rows**, ALL Record Location='Job'. **The `VALTA-FIELD-SPEC.md` is a LOSSY conversion** — it dropped ~payment/date/logic fields (DeliveryTime, PaidDate, Paid, RequestDate, SignedDate, DueDate, AmountPaid, ClientDocuments, ZoningStatus, CMHCFinancing), the EA1–5 expansion, and several columns (App Location, Valcre Field Name/Label/ID/Key, Owner, Status). Use the xlsx; treat the .md as a stale view. (Earlier "37" came from the lossy .md; "62" was the spec header — actual ≈ **45**.)
+- Those ~45 = the authoritative JOB-STAGE field set = **the S1+S2 UNION** (the explicit "what should our app have" definition Ben wanted).
+- The deep building/data-gathering fields (Year Built, Building Size, Parcels, Assessments) are **STILL ABSENT** from the xlsx → CONFIRMS they're out of LOE-stage scope (Valcre/appraisal stage), not a gap. (Validates the S3/S4 exclusion.)
+- The xlsx has an **`App Location` column but Chris left it BLANK for every field** → his registry does NOT designate app placement → the **S1-vs-S2 split (and section placement) is 100% OURS** (Ben confirmed). Chris defines MEMBERSHIP; we own the split.
+- Our `field-registry-v6.html` (48 rows) already ≈ matches the xlsx set → **we weren't missing fields; the .md was just a lossy view.** Phase-0 reconcile = lay our 48 vs the xlsx ~45 (authority); already close.
+- `'Required'` in the xlsx = OUR-APP-required (core client/property/cascade/LOE = Yes; payment/date/EA = No). Data note: `EA1` appears 5× in the xlsx = a merged-cell artifact for EA1–5.
 
 **New Phase-0 procedure (flips the order — registry defines, code verifies):**
-1. Take Chris's **37** as the canonical S1+S2 set.
+1. Take the xlsx **~45** as the canonical S1+S2 set (NOT the lossy .md).
 2. **Reconcile our app against it:** is each of the 37 present in our S1/S2? (`State of Improvements` + `Land Metric` are the misplaced ones → move S3→S2.) Any app S1/S2 field NOT in the 37 = bucket-4 review (operational extra → justify or drop, **never auto-remove**).
 3. The code **`section-home` tag is now a RECONCILE INPUT (verify against), NOT the authority.** Chris's registry membership is the authority; the code tag confirms placement.
-4. Assign each of the 37 an **S1/S2 stage in OUR registry** (we own the split); ambiguous ones = **Chris questions**; render via the stage-filter.
+4. Assign each of the ~45 an **S1/S2 stage in OUR registry** (we own the split — `App Location` is blank, so no Chris confirm needed); render via the stage-filter.
 
-**⚑ TWO HONEST FLAGS (resolve before locking):**
-- Chris's spec header says **"62 fields total"** but only **37 are tabled** in the `.md` — verify against the source `Valta-field-v03.xlsx` whether the conversion dropped any.
-- The S1/S2 stage assignment needs a **Chris confirm** for any non-obvious field.
+**⚑ BOTH HONEST FLAGS — RESOLVED (2026-06-17):**
+- ~~37-vs-62 count~~ → **RESOLVED:** the xlsx (authority) has **~45** rows; the .md "37" was lossy + the "62" header was wrong. Reconcile our 48 vs the xlsx ~45.
+- ~~Chris confirm for stage~~ → **DROPPED:** the xlsx `App Location` column is blank for every field, so placement is ours by definition (Ben confirmed). No Chris confirm on the split.
 
 ---
 

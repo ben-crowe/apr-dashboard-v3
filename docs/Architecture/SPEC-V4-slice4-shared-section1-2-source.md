@@ -83,6 +83,12 @@ The strict, release-blocking change-detector. QA-authored requirements (from the
 3. The code **`section-home` tag is now a RECONCILE INPUT (verify against), NOT the authority.** Chris's registry membership is the authority; the code tag confirms placement.
 4. Assign each of the ~45 an **S1/S2 stage in OUR registry** (we own the split — `App Location` is blank, so no Chris confirm needed); render via the stage-filter.
 
+**✅ PHASE-0 RESULT (ui-designer, 2026-06-17 — sweep + spike done):**
+- **S3-EXTRACTION COMPLETENESS = CONFIRMED.** Our 52-row registry is a full SUPERSET of Chris's 41 job-level fields (the lone set-diff "miss" = a `'Paid '` trailing-space artifact, not real). Enumerating the S3 `OrganizingDocsSection`: the ONLY Chris-job-level fields stranded there are **`stateOfImprovements` + `landMetric`** (→ move S2). Everything else in S3 (`yearBuilt`, `buildingSize`, `numberOfUnits`, `parkingSpaces`, `environmentalAssessment`, `heritageConservation`, `legalDescription`) is deep building data NOT in Chris's registry → correctly STAYS S3. **Guarantee: only those 2 belong up; nothing else stranded.** (Count settled at 41 from the xlsx.)
+- **EXTRAS (ours, not in Chris's set) = bucket-4 review, none auto-removed:** `CurrentUseImprovements`, `ProposedUseImprovements`, `PreviouslyAppraised`, `LegalDescription`, `ScopeOfWork`, `PropertyContact`, `ReportDate` (+ EA1–5 = the EA expansion vs Chris's single EA row). Surface for review during Chris's S2-tuning week.
+- **SPIKE (v3key):** the form-STATE key IS reliably findable in the section files (captured exact: `statusOfImprovements`, `valueScenarios`, `clientEmail`, `propertyType`, `scopeOfWork`). **⚑ Auto-deriving v3key from the PascalCase name BREAKS on multi-word fields** (`stateOfImprovements`=capital O, `valueTimeframe`=capital T) → v3key MUST be captured EXPLICITLY per field, never algorithmically (this is exactly the "opaque id" rule, now proven). v4id capture = label/storeId match, not casing.
+- **NET: no blockers. Ready for full v3key/v4id capture (co-arch review + QA reconcile).**
+
 **⚑ BOTH HONEST FLAGS — RESOLVED (2026-06-17):**
 - ~~37-vs-62 count~~ → **RESOLVED:** the xlsx (authority) has **~45** rows; the .md "37" was lossy + the "62" header was wrong. Reconcile our 48 vs the xlsx ~45.
 - ~~Chris confirm for stage~~ → **DROPPED:** the xlsx `App Location` column is blank for every field, so placement is ours by definition (Ben confirmed). No Chris confirm on the split.

@@ -61,8 +61,8 @@ Extend `scripts/generate-registry-derivatives.mjs` (today emits docs only) with 
 - **Sync toggle** on V4's existing test-mode switch: OFF = fixture (bypass V3, fast iteration); ON = live V3→V4 sync (true end-to-end). **Both states feed the SAME canonical contract** — fixture and live describe fields identically (no "passes in fixture, breaks live").
 - **Feasibility CONFIRMED (ui-designer, code-checked):** `reportBuilderStore` already has `activeTestMode` (`'none'|'test-report'|'designer'`) + `setTestMode` + `loadDataSet1User/All` + `testDataFieldMapping`; the live path reuses the existing `useLoadJobIntoReport` bridge. Build = extend an enum + a load path, not new infrastructure.
 
-### Phase 0 (precursor) — Reverse-pass the field map (owner: co-arch)
-Before Phase 1 locks the field set: produce the **V4-only (bucket 4)** list (V4 S1/S2 fields not in V3) from `fieldRegistry.ts`, so nothing is removed by assumption — each gets surfaced for review.
+### Phase 0 (precursor) — Reverse-pass the field map (owner: ui-designer; co-arch reviews)
+Before Phase 1 locks the field set: produce the **V4-only (bucket 4)** list (V4 S1/S2 fields not in V3) from `fieldRegistry.ts`, so nothing is removed by assumption — each gets surfaced for review. (ui-designer is already in `fieldRegistry.ts` + the V3 JSX for the alias capture, so it's efficient to pair the reverse-pass with the spike.)
 
 ---
 

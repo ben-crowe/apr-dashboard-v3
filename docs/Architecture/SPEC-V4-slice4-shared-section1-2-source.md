@@ -3,7 +3,7 @@ id: spec-v4-slice4-shared-section1-2-source
 title: "SPEC — V4 Slice 4: Shared Section 1–2 field source (Option B build sub-spec)"
 created: 2026-06-17
 type: implementation-spec
-status: for-spec-gate (QA flaw-review) → then Ben sign-off → then build
+status: REOPENED — scope-authority reframe in flight (Chris registry as defining source); NOT for sign-off until folded
 track: "Track 1/2 join — co-architect authored; registry owner (ui-designer) + QA co-build"
 owner: co-architect (author/design) · ui-designer (registry model + generator + fixture) · qa-agent (drift-check gate + reconcile) · Ben (sign-off)
 source: PROPOSAL-shared-section1-2-field-source.md (Ben picked Option B 2026-06-17)
@@ -95,11 +95,12 @@ Before Phase 1 locks the field set: produce the **V4-only (bucket 4)** list (V4 
 
 **Code-traced field classification (ui-designer, 2026-06-17 — the registry is BROADER than S1+S2, so phases FILTER to this subset):**
 - **CONFIRMED IN-SCOPE (S2 / LoeQuoteSection):** `statusOfImprovements`, `zoningStatus`, `transactionStatus`, `cmhcFinancing`, `currentUse`, `proposedUse`, `previouslyAppraised`, `valueScenarios`, `authorizedUse`.
-- **⚑ EXCLUDE — in the registry but S3, NOT this slice:** (1) `StateofImprovements`/**CF12409** = the S3 `OrganizingDocsSection` field `stateOfImprovements` (the name-trap twin of S2's `StatusofImprovements`/CF12407 — confirmed by form location). (2) `LandMetric`/**CF12426** = lives ONLY in `OrganizingDocsSection` (S3).
+- **⚑ REVERSED 2026-06-17 — `StateofImprovements`/CF12409 + `LandMetric`/CF12426 are IN SCOPE (move S3→S2), NOT excluded.** We had excluded them on V3 CODE placement (they sit in `OrganizingDocsSection`). But Chris's authoritative registry (`docs/VALTA-FIELD-SPEC.md`, the Valta Master Field Registry) lists BOTH as JOB-LEVEL fields he wants: #18 State of Improvements + #35 Land Metric, Source=`User Input`, Required=Yes, Outputs=LOR/Excel/Word/ClickUp. State of Improvements feeding the **LOR** = a pre-acceptance/LOE output → by Ben's "if Chris wants it for the LOE, it's S2" rule, these belong in **Section 2**. **Registry wins over code placement** (it's the field-definition authority). Action: these two MOVE S3→S2 as part of this slice.
 - **`tenancy` = S2-ONLY (corrected — no dual-home).** The earlier "dual-home" flag was a grep matching a COMMENT in `OrganizingDocsSection` ("Tenancy MOVED to Section 2 … 2026-06-10 migration"), not a live S3 field. So tenancy lives only in S2 — just CONFIRM, no spike resolution needed.
 - **The S2/S3 duplicate cleanup Ben's rule targets was ALREADY DONE (2026-06-10 migration).** That migration moved `Status of Improvements`, `Property Subtype`, and `Tenancy` out of S3 into S2 (documented in `OrganizingDocsSection` comments). So there are no stale S2-twins to delete in S3 today.
-- **`StateofImprovements` (CF12409) + `LandMetric` (CF12426) are LEGIT S3-only fields — EXCLUDE from scope, do NOT flag for removal.** `StateofImprovements` has its own simpler options (Proposed / Under Construction / Complete) — genuinely distinct from S2's `StatusofImprovements` cascade, not a duplicate. They're real S3 fields; they just aren't part of this S1+S2 slice.
 - The per-field `section-home` tag (Phase 1) still systematically CONFIRMS no stale S2-twin remains in S3 — enforcement, not just trust in the June migration.
+
+> **⚑⚑ REOPENED — NOT FOR SIGN-OFF YET (2026-06-17).** A scope-authority reframe is in flight: the State-of-Improvements/Land-Metric mismatch proved we've been scoping from OUR V3 CODE placement, when **Chris's registry (`docs/VALTA-FIELD-SPEC.md`) is the defining authority** for what S1/S2 SHOULD contain. ui-designer is detailing a proposal to make Chris's registry (stage-tagged) the defining source and reconcile our sections against IT — and briefing Ben. **Do NOT lock this spec or start build until that's folded.** The `section-home` (code-placement) tag becomes a *reconcile input* against Chris's stage tag, not the authority itself.
 - **ENFORCEMENT MECHANISM (not "remembered"):** Phase 1 tags each registry field with its **V3 section-home** (the `v3key`→form-file trace IS the in/out classifier). Any field whose form lives in `OrganizingDocs`/`PropertyInfo`/`Section4Compact` is flagged **out-of-Slice-4**. Bucket-4 reverse-pass AND the drift-check both READ this tag → the S1+S2 boundary lives in the registry per-field, code-enforced.
 
 ## Out of scope (other)

@@ -1,6 +1,6 @@
 ---
 id: spec-v4-slice4b-add-missing-fields
-title: "SPEC — V4 Slice 4b: Add the 16 missing S2 fields to the report builder (+ close the §10 cascade bridge)"
+title: "SPEC — V4 Slice 4b: Add the ~13 missing S2 fields to the report builder (DIRECT adds; cascade already lands via Slice-3)"
 created: 2026-06-17
 type: implementation-spec
 status: for-spec-gate (QA flaw-review) → then Ben sign-off → then build
@@ -10,12 +10,12 @@ source: SEED-V4b-add-missing-fields.md (Slice-4 Phase-1 reconcile, 0-hit confirm
 tags: [apr, v4, slice-4b, field-registry, missing-fields, cascade-bridge, four-file-sync, section-10]
 ---
 
-# SPEC — V4 Slice 4b: Add the 16 missing S2 fields (+ close the §10 cascade bridge)
+# SPEC — V4 Slice 4b: Add the ~13 missing S2 fields (DIRECT adds)
 
-> **One line:** The report builder is missing 16 fields that Chris's registry requires and V3 Section 2
-> collects — the valuation-cascade + job-classification set. Add each via the mandated 4-file sync so V4
-> can RECEIVE them. Adding + wiring the cascade cluster closes the Slice-3 §10 cascade-bridge in the
-> same stroke (V4 finally has fields to land §10 in).
+> **One line:** The report builder is missing ~13 job-classification fields that Chris's registry requires
+> and V3 Section 2 collects. Add each via the mandated 4-file sync so V4 has a home for them. **All DIRECT
+> fields** — the cascade-DERIVED outputs (value-scenario/approaches/timeframe) ALREADY exist + land via the
+> Slice-3 bridge, so this slice does NOT re-wire the cascade (see Corrected Classification below).
 
 > **PREP — nothing builds until QA passes + Ben signs off.**
 
@@ -41,18 +41,18 @@ QA caught two seed errors; co-arch confirmed both directly in code. The list is 
 **⚑ Net: this slice is ~13 DIRECT field ADDs, not 16, and NOT a cascade re-wire. ui-designer to correct the seed (3 exist, 2 mislabeled).**
 
 ## Per-field build — the mandated 4-FILE SYNC (CLAUDE.md rule) + verify
-For EACH of the 16, all four, no partial syncs:
+For EACH of the ~13 bucket-C (DIRECT) fields, all four, no partial syncs:
 1. **`fieldRegistry.ts`** entry (section-home = loe-prep/S2; id/storeId; control per the seed; dropdown list).
 2. **`Report-MF-template.html`** `{{placeholder}}` where it renders.
 3. **`TestDataSet1`** value (so the fixture carries it — ties to Slice-4 Phase-4 fixture).
 4. **EditPanel** control.
 Then **render-verify** (the field appears + populates in the report preview).
 
-- **Dropdown option lists** (`ListStatusofImprovements`, `ListValueScenarios`, …): source the option sets from Chris's registry; for the LOGIC/DERIVED lists, the values come from `loeCascade.ts` (`STATUS_TO_SCENARIOS`, `deriveValueScenarios`, `STATUS_TO_APPROACHES`, etc.) — reuse, don't re-author.
-- **Cascade wiring (the 4 derived fields):** feed `loeCascade.ts` output → the new V4 fields via the existing `useLoadJobIntoReport` bridge (the Slice-3 mechanism, now with a home to land in). Pass values RAW (no lossy transform).
+- **Dropdown option lists** (`ListStatusofImprovements`, `ListTransactionStatus`, …): source the option sets from Chris's registry. (No cascade-derived lists here — the derived fields are NOT in this slice; they already exist + land via Slice-3.)
+- **No cascade wiring in this slice** — the §10 derived outputs (value-scenario/approaches/timeframe) already exist and are fed by the Slice-3 bridge. This slice is DIRECT field-adds only. `StatusofImprovements` is added as the cascade TRIGGER input (direct), not a derived output.
 
 ## Acceptance (verified on the DEPLOYED app)
-1. All 16 fields exist in `fieldRegistry.ts` with section-home = S2; QA reconciles each entry vs `SEED-V4b…` + Chris's `Valta-field-v03.xlsx`.
+1. All ~13 bucket-C fields exist in `fieldRegistry.ts` with section-home = S2; QA reconciles each entry vs the corrected `SEED-V4b…` + Chris's `Valta-field-v03.xlsx`.
 2. Each field passes the **4-file sync** (registry + template placeholder + TestDataSet + EditPanel) — QA verifies no partial syncs.
 3. **No duplicates (the headline fix):** the bucket-A fields (`value-scenario`/`approaches-applied`/`timeframe`) are NOT re-added — they still populate from the Slice-3 bridge (verify they still fill; confirm no empty duplicate field was created). The §10 derived values already land — this slice does not re-wire that.
 4. The ~13 bucket-C direct fields render + accept their values; dropdown option sets match Chris's registry; `StatusofImprovements` (the cascade trigger) is present as a report field.

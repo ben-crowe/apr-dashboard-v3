@@ -27,7 +27,7 @@ import {
 import { validateRequiredFields } from "@/utils/webhooks/docuseal";
 import { generateLOEHTML, generateAndSendLOE, sendLOEEmail } from "@/utils/loe/generateLOE";
 import { loadJobContracts, saveJobContract, deleteJobContract, JobContract } from "@/utils/loe/jobContracts";
-import { saveJobEmailInstance } from "@/utils/loe/emailTemplate";
+import { saveJobEmailInstance, loadJobEmailInstances, EmailInstance } from "@/utils/loe/emailTemplate";
 import { markLOEPrepComplete } from "@/utils/webhooks/clickup";
 import LOEPreviewModal from "./actions/LOEPreviewModal";
 import ClickUpAction from "./actions/ClickUpAction";
@@ -215,6 +215,29 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     if (job?.id) loadJobContracts(job.id).then(setSavedContracts);
   }, [job?.id]);
   useEffect(() => { refreshContracts(); }, [refreshContracts]);
+
+  // PRD-APR-LOE-03 T3 — wire per-send email INSTANCES (load/state/refresh), mirroring the
+  // contract refresh pattern above. The instance SAVE already lives in the send path below;
+  // this adds the read side + a single persist helper for the send/draft paths (Wave C/D
+  // consume it). contract_id stays nullable → the document-less first-class send (KR2).
+  const [emailInstances, setEmailInstances] = useState<EmailInstance[]>([]);
+  const refreshEmailInstances = useCallback(async () => {
+    if (job?.id) setEmailInstances(await loadJobEmailInstances(job.id));
+  }, [job?.id]);
+  useEffect(() => { void refreshEmailInstances(); }, [refreshEmailInstances]);
+  const persistEmailInstance = async (args: {
+    id?: string; subject: string; bodyHtml: string;
+    recipientEmail: string; contractId: string | null; state: 'draft' | 'sent';
+  }) => {
+    const res = await saveJobEmailInstance({
+      id: args.id, jobId: job.id, contractId: args.contractId ?? undefined,
+      recipientEmail: args.recipientEmail, subject: args.subject,
+      bodyHtml: args.bodyHtml, state: args.state,
+    });
+    if (!res.success) toast.error(`Saving email failed: ${res.error ?? 'unknown error'}`);
+    await refreshEmailInstances();
+    return res;
+  };
   const [validation, setValidation] = useState<{
     isValid: boolean;
     missingFields: string[];
@@ -1100,6 +1123,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               console.error('saveJobEmailInstance failed:', saved.error);
               toast.error(`Email sent, but saving the record failed: ${saved.error ?? 'unknown error'}`);
             }
+            void refreshEmailInstances(); // T3: keep the job's instance list live after a send
           }
           if (onUpdateDetails) onUpdateDetails({ docusealSubmissionId: result.submissionId });
           setShowPreview(false);

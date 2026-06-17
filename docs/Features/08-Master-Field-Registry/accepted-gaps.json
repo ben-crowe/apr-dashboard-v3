@@ -1,0 +1,8 @@
+{
+  "_note": "Human-ACCEPTED Slice-4 known-gaps (Chris-thread triaged). The drift-gate value-scopes each accepted field against its config knownGap.allowed set — a residual BEYOND allowed still BLOCKS. InspectionDate is the accepted uncheckable collection-gap (Slice-4c pending: add a V3 input). Any field NOT listed here that drifts => BLOCK. Editing this file = a deliberate acceptance decision; keep it minimal.",
+  "_ref": "SLICE4-option-drift-triage-2026-06-17",
+  "PropertyType": "known-gap",
+  "PropertySubtype": "known-gap",
+  "AuthorizedUse": "known-gap",
+  "InspectionDate": "known-gap"
+}

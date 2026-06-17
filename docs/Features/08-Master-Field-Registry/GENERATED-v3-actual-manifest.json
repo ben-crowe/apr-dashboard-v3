@@ -1,0 +1,499 @@
+{
+  "_meta": {
+    "purpose": "V3-ACTUAL manifest — the live V3 form reality (present/options/order/required) lifted from inline <SelectItem> JSX.",
+    "contract": "This is V3-ACTUAL ONLY. The CI gate diffs THIS against GENERATED-v3-drift-check.json masterExpectations (registry-sourced). NEVER use this as the master — that is the circular trap.",
+    "generated_by": "scripts/gen-v3-actual-manifest.mjs"
+  },
+  "fieldCount": 40,
+  "fields": {
+    "valueTimeframe": {
+      "present": true,
+      "options": [
+        "Current",
+        "Prospective",
+        "Retrospective"
+      ],
+      "optionCount": 3,
+      "required": null,
+      "readable": "valueTimeframe",
+      "sourceFile": "LoeQuoteSection.tsx"
+    },
+    "reportType": {
+      "present": true,
+      "options": [
+        "Amendment Letter",
+        "Appraisal Report",
+        "Broker Opinion of Value",
+        "Completion Report",
+        "Consultation",
+        "Desk Review",
+        "Evaluation",
+        "Peer Review",
+        "Rent Study",
+        "Restricted Appraisal Report"
+      ],
+      "optionCount": 10,
+      "required": null,
+      "readable": "reportType",
+      "sourceFile": "LoeQuoteSection.tsx"
+    },
+    "reportFormat": {
+      "present": true,
+      "options": [
+        "Comprehensive",
+        "Concise",
+        "Form"
+      ],
+      "optionCount": 3,
+      "required": null,
+      "readable": "reportFormat",
+      "sourceFile": "LoeQuoteSection.tsx"
+    },
+    "assignmentType": {
+      "present": true,
+      "options": [
+        "Multiple Properties",
+        "Single Property"
+      ],
+      "optionCount": 2,
+      "required": null,
+      "readable": "assignmentType",
+      "sourceFile": "LoeQuoteSection.tsx"
+    },
+    "analysisLevel": {
+      "present": true,
+      "options": [
+        "Detailed",
+        "Summary",
+        "Brief",
+        "DetailedResidential",
+        "RestrictedAccessReport",
+        "ProgressReport",
+        "ValuationAssessmentLetter",
+        "RentalAssessmentLetter",
+        "RentalSubmission",
+        "RentalDetermination",
+        "PropertyPro"
+      ],
+      "optionCount": 11,
+      "required": null,
+      "readable": "analysisLevel",
+      "sourceFile": "LoeQuoteSection.tsx"
+    },
+    "paymentTerms": {
+      "present": true,
+      "options": [
+        "On LOE Signature",
+        "NET 30 Days",
+        "On Completion",
+        "50% Upfront"
+      ],
+      "optionCount": 4,
+      "required": null,
+      "readable": "paymentTerms",
+      "sourceFile": "LoeQuoteSection.tsx"
+    },
+    "currentUse": {
+      "present": true,
+      "options": [
+        "Vacant Land",
+        "Single Family",
+        "Multifamily",
+        "Retail",
+        "Industrial",
+        "Office"
+      ],
+      "optionCount": 6,
+      "required": null,
+      "readable": "currentUse",
+      "sourceFile": "LoeQuoteSection.tsx"
+    },
+    "proposedUse": {
+      "present": true,
+      "options": [
+        "Not Applicable",
+        "Single Family",
+        "Multifamily",
+        "Mixed Use",
+        "Retail",
+        "Industrial",
+        "Office"
+      ],
+      "optionCount": 7,
+      "required": null,
+      "readable": "proposedUse",
+      "sourceFile": "LoeQuoteSection.tsx"
+    },
+    "cmhcFinancing": {
+      "present": true,
+      "options": [
+        "Yes",
+        "No"
+      ],
+      "optionCount": 2,
+      "required": null,
+      "readable": "cmhcFinancing",
+      "sourceFile": "LoeQuoteSection.tsx"
+    },
+    "zoningStatus": {
+      "present": true,
+      "options": [
+        "In Place",
+        "To Be Rezoned"
+      ],
+      "optionCount": 2,
+      "required": null,
+      "readable": "zoningStatus",
+      "sourceFile": "LoeQuoteSection.tsx"
+    },
+    "previouslyAppraised": {
+      "present": true,
+      "options": [
+        "Yes",
+        "No"
+      ],
+      "optionCount": 2,
+      "required": null,
+      "readable": "previouslyAppraised",
+      "sourceFile": "LoeQuoteSection.tsx"
+    },
+    "propertyType": {
+      "present": true,
+      "options": [
+        "Agriculture",
+        "Building",
+        "Healthcare",
+        "Hospitality",
+        "Industrial",
+        "Land",
+        "Manufactured Housing",
+        "Multi-Family",
+        "Office",
+        "Retail",
+        "Self-Storage"
+      ],
+      "optionCount": 11,
+      "required": null,
+      "readable": "propertyType",
+      "sourceFile": "PropertyInformationSection.tsx"
+    },
+    "propertySubtype": {
+      "present": true,
+      "options": [
+        "Low-Rise",
+        "Mid-Rise",
+        "High-Rise",
+        "Garden",
+        "Walk-Up",
+        "Townhouse",
+        "Mixed-Use"
+      ],
+      "optionCount": 7,
+      "required": null,
+      "readable": "propertySubtype",
+      "sourceFile": "ClientSubmissionSection.tsx"
+    },
+    "tenancy": {
+      "present": true,
+      "options": [
+        "Multi-Tenant",
+        "Owner Occupied",
+        "Partial Owner Occupied",
+        "Single-Tenant",
+        "Unkown",
+        "Vacant"
+      ],
+      "optionCount": 6,
+      "required": null,
+      "readable": "tenancy",
+      "sourceFile": "ClientSubmissionSection.tsx"
+    },
+    "intendedUse": {
+      "present": true,
+      "options": [
+        "Acquisition/Disposition",
+        "Consulting",
+        "Decision-Making/Internal",
+        "Dispute Resolution",
+        "Divorce",
+        "Establish Sales Price",
+        "Estate Planning",
+        "Financial Reporting",
+        "Financing",
+        "Litigation",
+        "Other"
+      ],
+      "optionCount": 11,
+      "required": null,
+      "readable": "intendedUse",
+      "sourceFile": "PropertyInformationSection.tsx"
+    },
+    "valuationPremises": {
+      "present": true,
+      "options": [
+        "As-Is",
+        "Prospective at Completion",
+        "Prospective at Stabilization",
+        "As-Vacant",
+        "Insurable Replacement Cost",
+        "Bulk Value",
+        "Disposition",
+        "Go Dark",
+        "Hypothetical",
+        "In Use",
+        "Liquidation",
+        "Lots",
+        "Lots to Houses",
+        "Market Rent Study",
+        "Other",
+        "Rent Restricted",
+        "Retrospective",
+        "Tax Credits"
+      ],
+      "optionCount": 18,
+      "required": null,
+      "readable": "valuationPremises",
+      "sourceFile": "PropertyInformationSection.tsx"
+    },
+    "assetCondition": {
+      "present": true,
+      "options": [
+        "Excellent",
+        "Very Good",
+        "Good",
+        "Fair",
+        "Poor"
+      ],
+      "optionCount": 5,
+      "required": null,
+      "readable": "assetCondition",
+      "sourceFile": "PropertyInformationSection.tsx"
+    },
+    "stateOfImprovements": {
+      "present": true,
+      "options": [
+        "Proposed",
+        "Under Construction",
+        "Complete"
+      ],
+      "optionCount": 3,
+      "required": null,
+      "readable": "stateOfImprovements",
+      "sourceFile": "OrganizingDocsSection.tsx"
+    },
+    "landMetric": {
+      "present": true,
+      "options": [
+        "Square Feet",
+        "Acres",
+        "Hectares"
+      ],
+      "optionCount": 3,
+      "required": null,
+      "readable": "landMetric",
+      "sourceFile": "OrganizingDocsSection.tsx"
+    },
+    "statusOfImprovements": {
+      "present": true,
+      "options": [
+        "Improved - Completed",
+        "Improved - Renovated",
+        "Improved - Under Renovation",
+        "Improved - Proposed Renovation",
+        "Proposed - Vacant Land",
+        "Proposed - Improved Land (Demolition Required)",
+        "Proposed - Under Construction"
+      ],
+      "optionCount": 7,
+      "required": true,
+      "readable": "statusOfImprovements",
+      "sourceFile": "loeCascade.ts (cascade logic)",
+      "derived": false
+    },
+    "valueScenarios": {
+      "present": true,
+      "options": [
+        "As Is Vacant Land",
+        "As If Vacant Land",
+        "As If Complete & Stabilized",
+        "As-Is",
+        "As Stabilized",
+        "As If Complete & Stabilized - Renovated",
+        "As If Complete - Rezoned",
+        "As If Complete - Serviced",
+        "As If Complete - Subdivided",
+        "Insurable Replacement Cost"
+      ],
+      "optionCount": 10,
+      "required": true,
+      "readable": "valueScenarios",
+      "sourceFile": "loeCascade.ts (cascade logic)",
+      "derived": true
+    },
+    "approachesToValue": {
+      "present": true,
+      "options": [
+        "Direct Comparison",
+        "Income",
+        "Cost",
+        "Land Direct Comparison"
+      ],
+      "optionCount": 4,
+      "required": true,
+      "readable": "approachesToValue",
+      "sourceFile": "loeCascade.ts (cascade logic)",
+      "derived": true
+    },
+    "propertyRightsAppraised": {
+      "present": true,
+      "options": [
+        "Fee Simple",
+        "Leased Fee Interest",
+        "Fee Simple & Leased Fee",
+        "Leasehold Estate",
+        "Going Concern"
+      ],
+      "optionCount": 5,
+      "required": true,
+      "readable": "propertyRightsAppraised",
+      "sourceFile": "loeCascade.ts (cascade logic)",
+      "derived": true
+    },
+    "jobNumber": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "clientOrganization": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "clientAddress": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "clientFirstName": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "clientLastName": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "clientTitle": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "clientPhone": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "clientEmail": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "propertyName": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "propertyAddress": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "appraisalFee": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "legalDescription": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "scopeOfWork": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "propertyContactFirstName": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "propertyContactLastName": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "propertyContactEmail": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    },
+    "propertyContactPhone": {
+      "present": true,
+      "options": null,
+      "optionCount": null,
+      "required": null,
+      "readable": true,
+      "sourceFile": "V3 form (text/number/date — no option-set)"
+    }
+  }
+}

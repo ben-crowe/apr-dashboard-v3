@@ -23,7 +23,12 @@ related:
 ## Status — last worked on
 
 - **Last updated:** 2026-06-16
-- **What changed (2026-06-16):**
+- **What changed (2026-06-16, V3→V4 bridge fold):**
+  - Folded **co-arch's V3→V4 field map** (`V3-to-V4-field-map.json`) into the registry — every field now carries a **Bridge** status (`maps-clean` | `mismatched-stale` | `missing-in-v4`) + a **Report Target**. Bridge = does the V3 value actually *reach* the report builder via `useLoadJobIntoReport.ts` (bridge-FLOW, not registry-presence). Buckets: 13 maps-clean · 4 mismatched-stale · 35 missing-in-v4. Biggest gap = the entire §10 valuation cascade (Status→ValueScenarios→Approaches + Tenancy + Value Timeframe) never bridges to the builder.
+  - Added 4 **V4-bridge-only fields** (LegalDescription, ScopeOfWork, PropertyContact, ReportDate) — carried into the builder but previously absent from the intake registry.
+  - **Cross-checked the template `{{placeholder}}` side** (the leg co-arch correctly left unverified) against `Report-MF-template.html` + the bridge. Found **2 three-way breaks**: `legal-description` and `scope-of-work` are written to the store but have **no matching template placeholder**, so the value never renders. `report-date` verified present. Flagged for a template-placeholder decision.
+  - The registry **viewer** now shows a color-coded V4 bridge chip per field (green ✓ / amber ~ / red ✗), report target on hover. Generator (`generate-registry-derivatives.mjs`) emits `bridgeStatus` + `reportTarget` + `bridgeNote`; markdown derivative gains Bridge + Report Target columns.
+- **What changed (2026-06-16, earlier):**
   - Promoted the HTML registry to the **canonical** central field-mapping source (Ben's call) — superseding the hand-edited markdown "API & Field Mapping Reference," which is now demoted to generated-output + a gotchas notes file.
   - Folded today's verified **Valcre custom-field mapping** (CF12407–CF12427) into the registry's Routes-To column for all cascade/LOE fields; marked derived-vs-direct (Interest Appraised / Value Scenarios / Approaches = computed; Status of Improvements = direct trigger); fixed entity scoping; added Current Use / Proposed Use / Previously Appraised rows; represented the PropertyType dual-write (`Property.Type` single + `Property.Types` multi).
   - Added a **Scenarios tab** — the §10 value-scenario library (summary, EA/HC, what derives it, Valcre CF12414 option ID, has-text-vs-pending).

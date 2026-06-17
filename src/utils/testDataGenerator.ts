@@ -249,7 +249,7 @@ export function generateCompleteTestData() {
     assetCondition: property.assetCondition,
     // Section-1 fields the form added (match the form's flat option lists exactly).
     propertySubtype: getRandomElement(['Low-Rise', 'Mid-Rise', 'High-Rise', 'Garden', 'Walk-Up', 'Townhouse', 'Mixed-Use']),
-    // ⚠ 'Unkown' is the literal option value (typo in the form) — must match exactly to bind.
+    // ⚠ 'Unkown' is the literal option value (INTENTIONAL — matches Valcre's own typo'd option id 7422 so the Valcre write doesn't silently no-op; see ClientSubmissionSection.tsx:61). Do NOT "fix" to Unknown.
     tenancy: getRandomElement(['Multi-Tenant', 'Owner Occupied', 'Partial Owner Occupied', 'Single-Tenant', 'Unkown', 'Vacant']),
     // Property contact fields - 50/50 same or different
     sameAsClientContact: sameAsClient,

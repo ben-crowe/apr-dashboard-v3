@@ -16,7 +16,13 @@
       "entity": "Job",
       "notForm": false,
       "required": true,
-      "notes": "Unique job identifier from Valcre"
+      "notes": "Unique job identifier from Valcre",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "Job.Number",
+      "bridgeNote": "bridge: loe.valcre_job_id || job.job_number || job.id → store 'job-number'",
+      "v3key": "jobNumber",
+      "v4id": "job-number",
+      "sectionHome": "S2"
     },
     {
       "name": "JobName",
@@ -28,7 +34,13 @@
       "entity": "Job",
       "notForm": false,
       "required": true,
-      "notes": "Job/project name"
+      "notes": "Job/project name",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "Job.Name",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "JobStatus",
@@ -40,7 +52,13 @@
       "entity": "Job",
       "notForm": false,
       "required": true,
-      "notes": "Current job status"
+      "notes": "Current job status",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "Job.Status",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "SubjectProperty",
@@ -52,7 +70,13 @@
       "entity": "Job",
       "notForm": false,
       "required": true,
-      "notes": "Property display name from Valcre"
+      "notes": "Property display name from Valcre",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "Job.Property._DisplayName",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "ClientCompanyName",
@@ -64,7 +88,13 @@
       "entity": "Job",
       "notForm": false,
       "required": true,
-      "notes": "Client company display name"
+      "notes": "Client company display name",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "Job.Client._DisplayName",
+      "bridgeNote": "carried into the report builder by useLoadJobIntoReport bridge",
+      "v3key": "clientOrganization",
+      "v4id": "client-organization",
+      "sectionHome": "S1"
     },
     {
       "name": "ClientOrganizationAddress",
@@ -76,7 +106,13 @@
       "entity": "Contact",
       "notForm": false,
       "required": true,
-      "notes": "4-field structured address (street/city/province/postal) → Contact.AddressStreet/City/State/PostalCode. ⚠ CREATE-ONLY (written only when minting a new contact, never re-PATCHed on edit). NO-CROSS: client address parts come ONLY from client fields, never the property."
+      "notes": "4-field structured address (street/city/province/postal) → Contact.AddressStreet/City/State/PostalCode. ⚠ CREATE-ONLY (written only when minting a new contact, never re-PATCHed on edit). NO-CROSS: client address parts come ONLY from client fields, never the property.",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "Contact.AddressStreet/City/State/PostalCode",
+      "bridgeNote": "bridge splits client_address via parseAddress into store client-address/city/province/postal (4 fields)",
+      "v3key": "clientAddress",
+      "v4id": "client-address",
+      "sectionHome": "S1"
     },
     {
       "name": "ClientFirstName",
@@ -88,7 +124,13 @@
       "entity": "Contact",
       "notForm": false,
       "required": true,
-      "notes": "⚠ Contact CREATE-ONLY (set on new-contact creation, not re-PATCHed)."
+      "notes": "⚠ Contact CREATE-ONLY (set on new-contact creation, not re-PATCHed).",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "Contact.FirstName",
+      "bridgeNote": "carried into the report builder by useLoadJobIntoReport bridge",
+      "v3key": "clientFirstName",
+      "v4id": "client-first-name",
+      "sectionHome": "S1"
     },
     {
       "name": "ClientLastName",
@@ -100,7 +142,13 @@
       "entity": "Contact",
       "notForm": false,
       "required": true,
-      "notes": "⚠ Contact CREATE-ONLY."
+      "notes": "⚠ Contact CREATE-ONLY.",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "Contact.LastName",
+      "bridgeNote": "carried into the report builder by useLoadJobIntoReport bridge",
+      "v3key": "clientLastName",
+      "v4id": "client-last-name",
+      "sectionHome": "S1"
     },
     {
       "name": "ClientTitle",
@@ -112,7 +160,13 @@
       "entity": "Contact",
       "notForm": false,
       "required": true,
-      "notes": "⚠ Contact CREATE-ONLY (app key clientTitle)."
+      "notes": "⚠ Contact CREATE-ONLY (app key clientTitle).",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "Contact.Title",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": "clientTitle",
+      "v4id": "client-title",
+      "sectionHome": "S1"
     },
     {
       "name": "ClientPhone",
@@ -124,7 +178,13 @@
       "entity": "Contact",
       "notForm": false,
       "required": true,
-      "notes": "⚠ Contact CREATE-ONLY."
+      "notes": "⚠ Contact CREATE-ONLY.",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "Contact.PhoneNumber",
+      "bridgeNote": "carried into the report builder by useLoadJobIntoReport bridge",
+      "v3key": "clientPhone",
+      "v4id": "client-phone",
+      "sectionHome": "S1"
     },
     {
       "name": "ClientEmail",
@@ -136,7 +196,13 @@
       "entity": "Contact",
       "notForm": false,
       "required": true,
-      "notes": "⚠ Contact CREATE-ONLY. Also the match key — existing contact reused if email matches."
+      "notes": "⚠ Contact CREATE-ONLY. Also the match key — existing contact reused if email matches.",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "Contact.Email",
+      "bridgeNote": "carried into the report builder by useLoadJobIntoReport bridge",
+      "v3key": "clientEmail",
+      "v4id": "client-email",
+      "sectionHome": "S1"
     },
     {
       "name": "PropertyName",
@@ -148,7 +214,13 @@
       "entity": "Property",
       "notForm": false,
       "required": true,
-      "notes": ""
+      "notes": "",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "Property.Name",
+      "bridgeNote": "carried into the report builder by useLoadJobIntoReport bridge",
+      "v3key": "propertyName",
+      "v4id": "property-name",
+      "sectionHome": "S1"
     },
     {
       "name": "PropertyAddress",
@@ -160,7 +232,13 @@
       "entity": "Property",
       "notForm": false,
       "required": true,
-      "notes": ""
+      "notes": "",
+      "bridgeStatus": "mismatched-stale",
+      "reportTarget": "Property.AddressStreet",
+      "bridgeNote": "bridge takes parseAddress(...).street ONLY — drops city/province/postal for the property (client address keeps all 4); parseAddress is a heuristic comma-split",
+      "v3key": "propertyAddress",
+      "v4id": "property-address",
+      "sectionHome": "S1"
     },
     {
       "name": "PropertyType",
@@ -172,7 +250,13 @@
       "entity": "Property",
       "notForm": false,
       "required": true,
-      "notes": "Primary property classification — cascade trigger. Writes BOTH Valcre fields: Property.Type (single validated enum, first of the split) AND Property.Types (multi PascalCase from PropertyTypeEnum)."
+      "notes": "Primary property classification — cascade trigger. Writes BOTH Valcre fields: Property.Type (single validated enum, first of the split) AND Property.Types (multi PascalCase from PropertyTypeEnum).",
+      "bridgeStatus": "mismatched-stale",
+      "reportTarget": "Property.Type (single) + Property.Types (multi)",
+      "bridgeNote": "bridge typeMap collapses Single-Family→Multi-Family & Agriculture→Land (lossy); does NOT honor the registry Property.Type(single)+Property.Types(multi) dual-write",
+      "v3key": "propertyType",
+      "v4id": "property-type",
+      "sectionHome": "S1"
     },
     {
       "name": "PropertySubtype",
@@ -184,7 +268,13 @@
       "entity": "Property",
       "notForm": true,
       "required": true,
-      "notes": "Secondary type — overrides Property Rights"
+      "notes": "Secondary type — overrides Property Rights",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "Property.SecondaryType",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": "propertySubtype",
+      "v4id": "property-subtype",
+      "sectionHome": "S2"
     },
     {
       "name": "Tenancy",
@@ -196,19 +286,31 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "Occupancy type — highest priority override for Property Rights. Valcre custom field CF12408 (SingleOption)."
+      "notes": "Occupancy type — highest priority override for Property Rights. Valcre custom field CF12408 (SingleOption).",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "CF12408",
+      "bridgeNote": "Bridged into V4 via impv-tenancy (Slice-3, source job_property_info.tenancy). ⚠ v4id corrected 2026-06-17: was 'tenancy' (DEAD duplicate, id 4086) → repointed to LIVE 'impv-tenancy' (the bridge target) per QA catch.",
+      "v3key": "tenancy",
+      "v4id": "impv-tenancy",
+      "sectionHome": "S2"
     },
     {
       "name": "StateofImprovements",
       "label": "State of Improvements",
       "control": "Select one",
-      "source": "Logic",
+      "source": "User Input",
       "dropdownList": "ListStateofImprovements",
       "routesTo": "CF12409",
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "Derived from Status of Improvements. Valcre custom field CF12409 (SingleOption)."
+      "notes": "DIRECT user Select (OrganizingDocsSection — options Proposed/Under Construction/Complete). NOT derived (corrected 2026-06-17: prior 'Derived from...' + source:Logic was drift; code has no derivation). Valcre custom field CF12409 (SingleOption).",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12409",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "StatusofImprovements",
@@ -220,7 +322,13 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "DIRECT user pick — drives the Value Scenarios + Approaches + Property Rights cascade. Valcre custom field CF12407 (SingleOption)."
+      "notes": "DIRECT user pick — drives the Value Scenarios + Approaches + Property Rights cascade. Valcre custom field CF12407 (SingleOption).",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12407 (intake) · NO report field id / placeholder yet",
+      "bridgeNote": "BACKLOG (registry-extension, flagged by co-arch from Slice 3 build 2026-06-16): unlike the other 4 cascade fields, Status of Improvements has NO field id in fieldRegistry.ts (only subject-siteimprovements exists — a DIFFERENT field) and no template {{placeholder}}, so it has nowhere to bridge. To surface it in the report needs a NEW report field + a new template placeholder (ui-designer lane). Not blocking Slice 3 — scenarios/approaches/timeframe/tenancy shipped.",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "InterestAppraised",
@@ -232,7 +340,13 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "DERIVED (derivePropertyRights) from PropertyType + Subtype + Tenancy — not user-typed. App key interestAppraised → Valcre custom field CF12412 (MultiOption). User sees 'Property Rights'."
+      "notes": "DERIVED (derivePropertyRights) from PropertyType + Subtype + Tenancy — not user-typed. App key interestAppraised → Valcre custom field CF12412 (MultiOption). User sees 'Property Rights'.",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "CF12412",
+      "bridgeNote": "value flows via loe.property_rights_appraised → store id 'property-rights' (id renamed, value faithful)",
+      "v3key": "propertyRightsAppraised",
+      "v4id": "property-rights",
+      "sectionHome": "S2"
     },
     {
       "name": "AuthorizedUse",
@@ -244,7 +358,13 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "Insurance overrides Value Scenarios. App keys authorizedUse + intendedUse both → Valcre custom field CF12413 (SingleOption)."
+      "notes": "Insurance overrides Value Scenarios. App keys authorizedUse + intendedUse both → Valcre custom field CF12413 (SingleOption).",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "CF12413",
+      "bridgeNote": "value flows via job.intended_use → store id 'intended-use' (id renamed, value faithful)",
+      "v3key": "intendedUse",
+      "v4id": "intended-use",
+      "sectionHome": "S2"
     },
     {
       "name": "ValueScenarios",
@@ -256,7 +376,13 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "DERIVED (deriveValueScenarios) from Status of Improvements + Authorized Use — not user-typed. Valcre custom field CF12414 (MultiOption)."
+      "notes": "DERIVED (deriveValueScenarios) from Status of Improvements + Authorized Use — not user-typed. Valcre custom field CF12414 (MultiOption).",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12414",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": "valueScenarios",
+      "v4id": "value-scenario",
+      "sectionHome": "S2"
     },
     {
       "name": "ApproachestoValue",
@@ -268,7 +394,13 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "DERIVED (deriveApproaches) from Status of Improvements + Authorized Use — not user-typed. Valcre custom field CF12415 (MultiOption)."
+      "notes": "DERIVED (deriveApproaches) from Status of Improvements + Authorized Use — not user-typed. Valcre custom field CF12415 (MultiOption).",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12415",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": "approachesToValue",
+      "v4id": "approaches-applied",
+      "sectionHome": "S2"
     },
     {
       "name": "AssignmentType",
@@ -280,7 +412,13 @@
       "entity": "Job",
       "notForm": false,
       "required": true,
-      "notes": "Single or multiple property. Valcre custom field CF12416 (SingleOption)."
+      "notes": "Single or multiple property. Valcre custom field CF12416 (SingleOption).",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12416",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "ReportType",
@@ -292,7 +430,13 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "Comprehensive, Concise, or Form. Valcre custom field CF12417 (SingleOption)."
+      "notes": "Comprehensive, Concise, or Form (FORMAT axis). Valcre custom field CF12417 (SingleOption).",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "CF12417",
+      "bridgeNote": "⚠ v3key corrected 2026-06-17 (QA wrong-alias catch): was 'reportType' (V3 PRODUCT axis: Appraisal Report/Desk Review/etc — a DIFFERENT field) → repointed to 'reportFormat' (V3 field whose options = Comprehensive/Concise/Form, same FORMAT axis as this registry field). V3 reportType (PRODUCT: Appraisal Report/Desk Review/etc) = BUCKET-4 V3-only Chris-Q: the product VALUES are ABSENT from Chris VALTA-FIELD-SPEC entirely (xlsx-verified 2026-06-17), so NOT a canonical add (membership=Chris) — surface as Chris-question, resolve-by=Chris-thread, ref=SLICE4-option-drift-triage. Does not block prod-live (not in the 26-checkable).",
+      "v3key": "reportFormat",
+      "v4id": "report-type",
+      "sectionHome": "S2"
     },
     {
       "name": "DesktopReport",
@@ -304,7 +448,13 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "Desktop-only report flag. Valcre custom field CF12418 (SingleOption)."
+      "notes": "Desktop-only report flag. Valcre custom field CF12418 (SingleOption).",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12418",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "Valuetimeframe",
@@ -316,7 +466,13 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "Current, Prospective, or Retrospective. Valcre custom field CF12419 (SingleOption)."
+      "notes": "Current, Prospective, or Retrospective. Valcre custom field CF12419 (SingleOption).",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12419",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": "valueTimeframe",
+      "v4id": "timeframe",
+      "sectionHome": "S2"
     },
     {
       "name": "InspectionDate",
@@ -328,7 +484,13 @@
       "entity": "Job",
       "notForm": false,
       "required": true,
-      "notes": ""
+      "notes": "Chris-required. V4 home = report-inspectiondate (PRESENT). But NO live V3 form collects it (only testDataGenerator + V4 schema) — V3-side collection gap.",
+      "bridgeStatus": "mismatched-stale",
+      "reportTarget": "Job.InspectionDate",
+      "bridgeNote": "V3-COLLECTION GAP (ui-designer traced 2026-06-17): v4 home exists (report-inspectiondate) but no V3 input captures it — inspectionDate appears ONLY in testDataGenerator.ts + the report-builder schema, not in any intake/LOE form. So no v3key to capture; FAIL-CLOSED. To bridge it, V3 needs an input added (Slice-4b-adjacent). Chris-required, so it IS wanted.",
+      "v3key": "GAP-no-V3-input",
+      "v4id": "report-inspectiondate",
+      "sectionHome": "S2"
     },
     {
       "name": "Fee",
@@ -340,7 +502,13 @@
       "entity": "Job",
       "notForm": false,
       "required": true,
-      "notes": "Appraisal fee amount"
+      "notes": "Appraisal fee amount",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "Job.Fee",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": "appraisalFee",
+      "v4id": "appraisal-fee",
+      "sectionHome": "S2"
     },
     {
       "name": "DeliveryTime",
@@ -352,7 +520,13 @@
       "entity": "Job",
       "notForm": true,
       "required": false,
-      "notes": "Business days for delivery. Valcre custom field CF12420."
+      "notes": "Business days for delivery. Valcre custom field CF12420.",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12420",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "PaidDate",
@@ -364,7 +538,13 @@
       "entity": "Job",
       "notForm": false,
       "required": false,
-      "notes": "Date payment received"
+      "notes": "Date payment received",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "Job.PaidDate",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "Paid",
@@ -376,7 +556,13 @@
       "entity": "Job",
       "notForm": false,
       "required": false,
-      "notes": "Payment received flag. Valcre custom field CF12421."
+      "notes": "Payment received flag. Valcre custom field CF12421.",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12421",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "RequestDate",
@@ -388,7 +574,13 @@
       "entity": "Job",
       "notForm": false,
       "required": false,
-      "notes": "Date job was requested (Bid Date in Valcre)"
+      "notes": "Date job was requested (Bid Date in Valcre)",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "Job.BidDate",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "SignedDate",
@@ -400,7 +592,13 @@
       "entity": "Job",
       "notForm": false,
       "required": false,
-      "notes": "LOE signed date (Award Date in Valcre)"
+      "notes": "LOE signed date (Award Date in Valcre)",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "Job.AwardDate",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "DueDate",
@@ -412,7 +610,13 @@
       "entity": "Job",
       "notForm": false,
       "required": false,
-      "notes": "Report due date"
+      "notes": "Report due date",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "Job.DueDate",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "AmountPaid",
@@ -424,19 +628,31 @@
       "entity": "Job",
       "notForm": false,
       "required": false,
-      "notes": "Total amount paid to date"
+      "notes": "Total amount paid to date",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "Job.AmountPaid",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "ClientDocuments",
       "label": "Client Documents",
       "control": "Select multiple",
-      "source": "Logic",
+      "source": "User Input",
       "dropdownList": "ListClientDocuments",
       "routesTo": "CF12422",
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "Documents provided by client. Valcre custom field CF12422 (MultiOption)."
+      "notes": "Documents provided by client. Valcre custom field CF12422 (MultiOption). (source corrected 2026-06-17: was Logic, no derivation in code.)",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12422",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "TransactionStatus",
@@ -448,7 +664,13 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "Property transaction status. Valcre custom field CF12424."
+      "notes": "Property transaction status. Valcre custom field CF12424.",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12424",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "ZoningStatus",
@@ -460,7 +682,13 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "Valcre custom field CF12425."
+      "notes": "Valcre custom field CF12425.",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12425",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "LandMetric",
@@ -472,7 +700,13 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "Land valuation metric. Valcre custom field CF12426."
+      "notes": "Land valuation metric. Valcre custom field CF12426.",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12426",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "CMHCFinancing",
@@ -484,7 +718,13 @@
       "entity": "Job",
       "notForm": true,
       "required": true,
-      "notes": "CMHC insured financing flag. Valcre custom field CF12427."
+      "notes": "CMHC insured financing flag. Valcre custom field CF12427.",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12427",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "CurrentUseImprovements",
@@ -496,7 +736,13 @@
       "entity": "Job",
       "notForm": true,
       "required": false,
-      "notes": "DIRECT user pick — current use of improvements (app key currentUseImprovements). Valcre custom field CF12410 (SingleOption)."
+      "notes": "DIRECT user pick — current use of improvements (app key currentUseImprovements). Valcre custom field CF12410 (SingleOption).",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12410",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "ProposedUseImprovements",
@@ -508,7 +754,13 @@
       "entity": "Job",
       "notForm": true,
       "required": false,
-      "notes": "DIRECT user pick — proposed use of improvements (app key proposedUseImprovements). Valcre custom field CF12411 (SingleOption)."
+      "notes": "DIRECT user pick — proposed use of improvements (app key proposedUseImprovements). Valcre custom field CF12411 (SingleOption).",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12411",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "PreviouslyAppraised",
@@ -520,7 +772,13 @@
       "entity": "Job",
       "notForm": true,
       "required": false,
-      "notes": "DIRECT user pick — previously-appraised flag (app key previouslyAppraised). Valcre custom field CF12423."
+      "notes": "DIRECT user pick — previously-appraised flag (app key previouslyAppraised). Valcre custom field CF12423.",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": "CF12423",
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "EA1",
@@ -532,7 +790,13 @@
       "entity": null,
       "notForm": true,
       "required": false,
-      "notes": "Auto-populated from cascade/text library"
+      "notes": "Auto-populated from cascade/text library",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": null,
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "EA2",
@@ -544,7 +808,13 @@
       "entity": null,
       "notForm": true,
       "required": false,
-      "notes": ""
+      "notes": "",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": null,
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "EA3",
@@ -556,7 +826,13 @@
       "entity": null,
       "notForm": true,
       "required": false,
-      "notes": ""
+      "notes": "",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": null,
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "EA4",
@@ -568,7 +844,13 @@
       "entity": null,
       "notForm": true,
       "required": false,
-      "notes": ""
+      "notes": "",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": null,
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     },
     {
       "name": "EA5",
@@ -580,7 +862,139 @@
       "entity": null,
       "notForm": true,
       "required": false,
-      "notes": ""
+      "notes": "",
+      "bridgeStatus": "missing-in-v4",
+      "reportTarget": null,
+      "bridgeNote": "NOT bridged into the report builder today — no mapping in useLoadJobIntoReport.fieldMappings",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
+    },
+    {
+      "name": "LegalDescription",
+      "label": "Legal Description",
+      "control": "Alpha Numeric",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": null,
+      "entity": "Property",
+      "notForm": true,
+      "required": false,
+      "notes": "[V4 bridge field — not on intake form] property.legal_description → store legal-description",
+      "bridgeStatus": "mismatched-stale",
+      "reportTarget": "store legal-description → NO {{legal-description}} placeholder (template candidates: {{report-legal}} / {{info-legal-source}})",
+      "bridgeNote": "3-WAY BREAK (ui-designer verified 2026-06-16): bridge writes store id 'legal-description' but the template has no matching placeholder — value reaches the store and never renders. Also absent from the 48-field intake registry. Needs a template-placeholder decision.",
+      "v3key": "legalDescription",
+      "v4id": "report-legal",
+      "sectionHome": "S3"
+    },
+    {
+      "name": "ScopeOfWork",
+      "label": "Scope of Work",
+      "control": "Alpha Numeric",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": null,
+      "entity": "Job",
+      "notForm": true,
+      "required": false,
+      "notes": "[V4 bridge field — not on intake form] loe.scope_of_work → store scope-of-work",
+      "bridgeStatus": "mismatched-stale",
+      "reportTarget": "store scope-of-work → NO {{scope-of-work}} placeholder in template",
+      "bridgeNote": "3-WAY BREAK (ui-designer verified 2026-06-16): bridge writes store id 'scope-of-work' but the template has no matching placeholder — value reaches the store and never renders. Also absent from the intake registry. Needs a template-placeholder decision.",
+      "v3key": "scopeOfWork",
+      "v4id": "scope-of-work",
+      "sectionHome": "S2"
+    },
+    {
+      "name": "ContactFirstName",
+      "label": "Subject Property Contact — First Name",
+      "control": "Text",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": null,
+      "entity": "PropertyContact",
+      "notForm": true,
+      "required": false,
+      "notes": "[1→4 split of Chris 'PropertyContact' composite] subject-property contact first name.",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": null,
+      "bridgeNote": "1→4 expansion of Chris-registry PropertyContact; bridged into V4 contact-first-name.",
+      "v3key": "propertyContactFirstName",
+      "v4id": "contact-first-name",
+      "sectionHome": "S1"
+    },
+    {
+      "name": "ContactLastName",
+      "label": "Subject Property Contact — Last Name",
+      "control": "Text",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": null,
+      "entity": "PropertyContact",
+      "notForm": true,
+      "required": false,
+      "notes": "[1→4 split of Chris 'PropertyContact' composite] subject-property contact last name.",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": null,
+      "bridgeNote": "1→4 expansion of Chris-registry PropertyContact; bridged into V4 contact-last-name.",
+      "v3key": "propertyContactLastName",
+      "v4id": "contact-last-name",
+      "sectionHome": "S1"
+    },
+    {
+      "name": "ContactEmail",
+      "label": "Subject Property Contact — Email",
+      "control": "Text",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": null,
+      "entity": "PropertyContact",
+      "notForm": true,
+      "required": false,
+      "notes": "[1→4 split of Chris 'PropertyContact' composite] subject-property contact email.",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": null,
+      "bridgeNote": "1→4 expansion of Chris-registry PropertyContact; bridged into V4 contact-email.",
+      "v3key": "propertyContactEmail",
+      "v4id": "contact-email",
+      "sectionHome": "S1"
+    },
+    {
+      "name": "ContactPhone",
+      "label": "Subject Property Contact — Phone",
+      "control": "Text",
+      "source": "User Input",
+      "dropdownList": null,
+      "routesTo": null,
+      "entity": "PropertyContact",
+      "notForm": true,
+      "required": false,
+      "notes": "[1→4 split of Chris 'PropertyContact' composite] subject-property contact phone.",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": null,
+      "bridgeNote": "1→4 expansion of Chris-registry PropertyContact; bridged into V4 contact-phone.",
+      "v3key": "propertyContactPhone",
+      "v4id": "contact-phone",
+      "sectionHome": "S1"
+    },
+    {
+      "name": "ReportDate",
+      "label": "Report Date",
+      "control": "Date",
+      "source": "Calculated",
+      "dropdownList": null,
+      "routesTo": null,
+      "entity": "Job",
+      "notForm": true,
+      "required": false,
+      "notes": "[V4 bridge field — not on intake form] computed today() → store report-date",
+      "bridgeStatus": "maps-clean",
+      "reportTarget": "{{report-date}} (template placeholder VERIFIED present)",
+      "bridgeNote": "COMPUTED: not a V3 field — bridge stamps current date. 3-way VERIFIED (ui-designer 2026-06-16): store report-date → {{report-date}} exists in template.",
+      "v3key": null,
+      "v4id": null,
+      "sectionHome": null
     }
   ],
   "scenarios": [

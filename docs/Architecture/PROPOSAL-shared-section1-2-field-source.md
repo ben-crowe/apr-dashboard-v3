@@ -98,6 +98,12 @@ QA independently verified the grounding (V3 genuinely hardcoded: LoeQuoteSection
 
 ---
 
+### ⚑ Add to Option-B sub-spec — the test-data fixture (Ben, 2026-06-17)
+Ben wants V4's **"fill with test data"** (the existing Load Data button) to be a faithful stand-in for a real V3 handoff — so the whole report build can be tested INSIDE V4 without re-entering everything in V3 each round.
+- **Tie the test fixture to the SAME canonical field set** (the master `n` + `v3key`/`v4id` aliases). Then it's not "some sample values" — it's a real fixture of "what V3 hands over," and it's **drift-checked against the master too** (same discipline as the form configs).
+- **Why:** a hardcoded test set untied to the source rots silently — when Chris tunes Section 2, V4 tests start passing on data that no longer looks like a real job (false confidence, the drift problem in the test layer).
+- ui-designer folds this into the Option-B sub-spec scope alongside the model extension + emit targets.
+
 ## Out of scope
 - The valuation cascade bridge (shipped) and the calculator track — separate.
 - Removing any V4-extra field — gated behind explicit review (bucket 4 rule), never in the wiring step.

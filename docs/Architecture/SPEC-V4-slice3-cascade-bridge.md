@@ -51,7 +51,7 @@ a future option; do not build it here.
    - Tenancy → `impv-tenancy`.
    - Value Timeframe → its report field id.
 2. **Scenario fields receive the LABEL, not the prose (ui-designer verified against the template).** The placeholders `{{value-scenario}}`, `{{valuation-scenario}}`, `{{report-valuescenario1}}` carry the scenario LABEL ('As Stabilized', rendered as a bold uppercase heading) — NOT the §10 paragraph. So the bridge maps the derived scenario LABEL(s) (from `deriveValueScenarios` / the stored `value_scenarios`) into those fields. Do not push prose into them.
-   - **⚑ OPEN DECISION (Ben) — the §10 PROSE has NO home in the report template.** There is no summary/premise/narrative placeholder anywhere in `Report-MF-template.html`. The §10 paragraph text (what the Value Scenario editor produces from `scenario_narratives`) therefore **cannot land in the report today**. If the appraisal report SHOULD carry that prose, it requires a NEW template placeholder (ui-designer, same class as scope-of-work) AND a bridge mapping sourced from `scenario_narratives` (one source of truth, edits propagate to §10 + report). **If the report only needs the labels/headings, no prose work is needed.** This is Ben's call and gates whether the prose half of this slice exists.
+   - **✅ DECIDED (Ben, 2026-06-17): HEADINGS ONLY — no §10 prose in the report.** The report gets the scenario LABELS/headings; the §10 paragraph prose is NOT pulled in (it's engagement-letter language, not necessarily report content). The §10-prose placeholder + `scenario_narratives` sourcing are PARKED as a future option. Consequence: this whole slice is **all-sync** — every cascade value comes off `loeData` synchronously, so the preload-once pattern (FIX-2 below) is now **MOOT / not needed**.
 3. **Map authority = the folded registry `reportTarget` column** (registry↔code↔template three-way). Do NOT hard-code placeholders the registry doesn't carry; read the target per field. Where a cascade field's report field id is ambiguous, confirm against `fieldRegistry.ts` (cite the line), never guess.
 4. **Reuse the lossy-mapping discipline from the field map:** do not collapse/transform cascade values (the PropertyType `typeMap` lossiness is a known anti-pattern — pass the real value through).
 
@@ -66,9 +66,9 @@ QA re-gate verdict on the corrected spec: **PASS** with two fixes:
 ui-designer verified the template side. The items:
 1. **legal-description → `{{report-legal}}`** — this placeholder ALREADY EXISTS (the legal-description slot in the property tables). Just map the bridge to it. Do NOT use `{{info-legal-source}}` — that's the source citation (e.g. Land Titles), a different field.
 2. **scope-of-work → NEW placeholder** — no placeholder exists; ui-designer adds one in `Report-MF-template.html`, then the bridge maps to it.
-3. **§10 prose → NEW placeholder, ONLY IF Ben wants prose in the report** (the open decision above). ui-designer adds it; bridge sources from `scenario_narratives`.
+3. ~~§10 prose placeholder~~ — **PARKED (Ben: headings only)**. Not in this slice.
 
-Net template-side: 1 existing map (legal→`{{report-legal}}`) + 1 new add (scope-of-work) + 1 conditional new add (§10-prose, pending Ben).
+Net template-side: 1 existing map (legal→`{{report-legal}}`) + 1 new add (scope-of-work). §10-prose parked.
 
 > **⚑ ui-designer owns the HTML/template side; co-arch/builder owns the bridge + code side.** The
 > placeholder ADDS happen in `Report-MF-template.html` (ui-designer) and are verified via the
@@ -80,7 +80,7 @@ Net template-side: 1 existing map (legal→`{{report-legal}}`) + 1 new add (scop
 
 ## Acceptance (verified on the DEPLOYED app, V4-lit build)
 1. Load a job (with section-2 cascade data) into the report builder → Status of Improvements, Value Scenario LABELS, Approaches, Tenancy, Value Timeframe all populate with the SAME values stored on the job's LOE.
-2. **(Only if Ben wants prose)** the §10 scenario prose renders in the report from `scenario_narratives` — edit a narrative in the Value Scenario editor → it changes in BOTH §10 and the report (one source of truth). **If labels-only: this criterion is dropped.**
+2. ~~§10 prose in report~~ — **DROPPED (headings-only decision).** Parked future option.
 3. legal-description renders via `{{report-legal}}`; scope-of-work renders via its new placeholder — the three-way breaks closed.
 4. No regression: the ~30 existing bridge fields still populate; existing report rendering unchanged.
 5. `tsc --noEmit` + `npm run build` clean; DEPLOYED Vercel build passes.

@@ -44,13 +44,15 @@ Add to the `FIELDS` model in `public/field-registry-v6.html` the metadata a form
   - **Canonical `v3key` = the form-STATE key the form actually reads/writes** (NOT the display id) — that's what the drift-check must compare against.
   - **Run a 5-field alias-capture SPIKE first** to surface the ambiguity pattern before committing the full-capture estimate. Then full capture.
   - **QA reconciles EVERY captured v3key against the real code** — a wrong alias = a silent drift-check miss (same discipline as the bridge reconcile).
+  - **⚑ v3key SHAPE is section-dependent (capture finding):** S2 (`LoeQuoteSection`) = FLAT `jobDetails.X`; S1 (`ClientSubmissionSection`) = NESTED `job.client.X` / `job.property.X` AND DELEGATED to `client-submission/*.tsx` sub-components → S1 capture must trace the sub-component tree (heavier per-field than S2). Capture S2-flat first, then the S1 nested/delegated set.
+  - **Mechanism PROVEN + Batch 1 done (2026-06-17):** FIELDS model extended with `v3key`/`v4id`/`sectionHome`, generator emits them, derivative parses clean; reusable `scripts/inject-aliases.mjs`. Batch 1 (ReportType, ScopeOfWork, InterestAppraised, AuthorizedUse, LegalDescription) captured + with QA.
 - Regenerate the derivatives.
 - **Feasibility CONFIRMED (ui-designer, code-checked):** the model extension + generator changes are incremental (same pattern as this session's st/rt/bn add), not a rewrite.
 
 ### Phase 2 — Generator emit targets (owner: ui-designer)
 Extend `scripts/generate-registry-derivatives.mjs` (today emits docs only) with two new emit targets, both off the one master:
 - **V4 form config** keyed by `v4id` — the schema-driven V4 S1/S2 consumes this.
-- **V3 drift-check** keyed by `v3key` — compares V3's actual fields/options against the master, emits divergences.
+- **V3 drift-check** keyed by `v3key` — compares V3's actual fields/options against the master, emits divergences. **⚑ Compare via the ALIAS MAP (`v3key`↔`n`↔`v4id`), NEVER assume `v3key==v4id`** — renames are common (3 of 5 in capture Batch 1: InterestAppraised→property-rights, AuthorizedUse→intended-use, LegalDescription→report-legal).
 
 ### Phase 3 — The drift-check as a HARD GATE (owner: qa-agent; co-arch wiring) — HARDENED per QA gate
 The strict, release-blocking change-detector. QA-authored requirements (from the gate):

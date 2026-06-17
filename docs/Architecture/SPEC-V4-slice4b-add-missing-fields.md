@@ -22,10 +22,23 @@ tags: [apr, v4, slice-4b, field-registry, missing-fields, cascade-bridge, four-f
 ## Why this exists (the reconcile earned it)
 Slice-4 Phase-1 reconcile confirmed these 16 are **0-hit in `fieldRegistry.ts`** — genuinely absent, not renamed/misplaced. V4's S1/S2 registry was the LOE-document/appraiser field set; it had no home for the cascade/classification set. **This is exactly why the §10 cascade "never bridged to the builder" (Slice-3).** Closing this list closes that gap.
 
-## The 16 fields (authority: `SEED-V4b-add-missing-fields.md` — that table is the field list of record)
-All **section-home = S2 (loe-prep)** per the pre-acceptance rule. Two kinds — the distinction drives the build:
-- **DIRECT (User Input)** — a plain control the appraiser/intake fills: `StatusofImprovements`, `AssignmentType`, `Valuetimeframe`, `TransactionStatus`, `ZoningStatus`, `CMHCFinancing`, `LandMetric`, `DesktopReport`, `CurrentUseImprovements`, `ProposedUseImprovements`, `PreviouslyAppraised`, `DeliveryTime`.
-- **⚑ LOGIC/DERIVED (computed by `loeCascade.ts`, NOT free input)** — `StateofImprovements`, `ValueScenarios`, `ApproachestoValue`, `ClientDocuments`. These are produced by the cascade engine; the build must FEED `loeCascade.ts` output into the builder field, not just add an empty control. **This is the cascade-bridge close.**
+## ⚑ CORRECTED FIELD CLASSIFICATION (QA gate + co-arch code-verify, 2026-06-17 — the seed's "16 all-absent / 4 derived" was WRONG)
+QA caught two seed errors; co-arch confirmed both directly in code. The list is NOT "16 absent, add all." Three buckets:
+
+**A. ALREADY EXIST in V4 + ALREADY FED by the Slice-3 bridge → DO NOT add (would create empty duplicates):**
+- `ValueScenarios` = exists as **`value-scenario`** (`fieldRegistry.ts:2734`), fed by `useLoadJobIntoReport:228`.
+- `ApproachestoValue` = exists as **`approaches-applied`** (`:2648`), fed `:232`.
+- `Valuetimeframe` = exists as **`timeframe`** (`:21093`), fed `:236`.
+- The seed's "0-hit" was a PascalCase grep miss (real ids are kebab). **⚑ Adding new fields alongside = data keeps landing in the old ones, new stay empty → the headline acceptance FAILS.** These 3 are DONE (Slice-3). If canonical-naming is later wanted, that's a RE-POINT/rename — NOT an add, and not this slice. **So the §10 cascade-bridge derived outputs ALREADY LAND** — the "cascade-bridge close" framing was overstated; Slice-3 closed it for the derived values.
+
+**B. MISLABELED "derived" → actually DIRECT user input (no computation logic exists):**
+- `StateofImprovements` — seed said Logic/derived; it's a plain user `Select` (`OrganizingDocsSection:217`), zero derivation in `loeCascade.ts`. Add as DIRECT.
+- `ClientDocuments` — seed said Logic/derived; no derivation logic anywhere. Add as DIRECT (or a doc-list), NOT cascade-fed.
+- (`loeCascade.ts` genuinely derives ONLY `ValueScenarios`/`Approaches`/`PropertyRights` — and the first two already exist + are fed, bucket A.)
+
+**C. GENUINELY ABSENT (0-hit confirmed) → ADD as DIRECT fields, section-home=S2:** `StatusofImprovements` (the cascade TRIGGER — user input), `AssignmentType`, `TransactionStatus`, `ZoningStatus`, `CMHCFinancing`, `LandMetric`, `DesktopReport`, `CurrentUseImprovements`, `ProposedUseImprovements`, `PreviouslyAppraised`, `DeliveryTime`, + the 2 reclassified from B (`StateofImprovements`, `ClientDocuments`). **All DIRECT — none are cascade-derived-and-unfed**, so this slice is field-adds (4-file sync), not cascade wiring (that's done).
+
+**⚑ Net: this slice is ~13 DIRECT field ADDs, not 16, and NOT a cascade re-wire. ui-designer to correct the seed (3 exist, 2 mislabeled).**
 
 ## Per-field build — the mandated 4-FILE SYNC (CLAUDE.md rule) + verify
 For EACH of the 16, all four, no partial syncs:
@@ -41,8 +54,8 @@ Then **render-verify** (the field appears + populates in the report preview).
 ## Acceptance (verified on the DEPLOYED app)
 1. All 16 fields exist in `fieldRegistry.ts` with section-home = S2; QA reconciles each entry vs `SEED-V4b…` + Chris's `Valta-field-v03.xlsx`.
 2. Each field passes the **4-file sync** (registry + template placeholder + TestDataSet + EditPanel) — QA verifies no partial syncs.
-3. **§10 CASCADE-BRIDGE CLOSED:** load a job with section-2 cascade data → `StatusofImprovements` + the derived `ValueScenarios`/`ApproachestoValue`/`StateofImprovements` populate in the report from the job's cascade (same values §10 produces). The Slice-3 gap is gone.
-4. The 12 direct fields render + accept their values; dropdown option sets match Chris's registry.
+3. **No duplicates (the headline fix):** the bucket-A fields (`value-scenario`/`approaches-applied`/`timeframe`) are NOT re-added — they still populate from the Slice-3 bridge (verify they still fill; confirm no empty duplicate field was created). The §10 derived values already land — this slice does not re-wire that.
+4. The ~13 bucket-C direct fields render + accept their values; dropdown option sets match Chris's registry; `StatusofImprovements` (the cascade trigger) is present as a report field.
 5. No regression to the existing report fields or the Slice-4 machinery.
 6. `tsc --noEmit` + build clean; deployed Vercel build passes.
 7. **Hand-off to Slice 4:** once added, these 16 become part of the shared-source set — Slice-4's capture + drift-check now cover them (they graduate from "class 3 absent" to "class 1 present"). Note in the registry so Slice-4 picks them up.

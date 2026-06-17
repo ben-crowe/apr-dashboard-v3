@@ -350,15 +350,15 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
         {/* Minimal Header */}
         <div className="flex justify-between items-center pb-2 border-b">
           <div className="flex-1">
-            <h2 className="text-lg font-semibold">LOE Preview</h2>
-            <p className="text-sm text-muted-foreground">Review Letter of Engagement before sending to client</p>
+            <h2 className="text-lg font-semibold">Previewer</h2>
+            <p className="text-sm text-muted-foreground">Review before sending</p>
           </div>
           
           {/* Template Picker — hidden in read-only View (sent doc) */}
           {!readOnly && (
           <div className="flex items-center gap-2 mr-4">
             <Label htmlFor="template-select" className="text-sm font-medium whitespace-nowrap">
-              Template:
+              Document Templates:
             </Label>
             <Select
               value={selectedTemplateId || 'default'}

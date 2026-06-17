@@ -55,6 +55,11 @@ a future option; do not build it here.
 3. **Map authority = the folded registry `reportTarget` column** (registry↔code↔template three-way). Do NOT hard-code placeholders the registry doesn't carry; read the target per field. Where a cascade field's report field id is ambiguous, confirm against `fieldRegistry.ts` (cite the line), never guess.
 4. **Reuse the lossy-mapping discipline from the field map:** do not collapse/transform cascade values (the PropertyType `typeMap` lossiness is a known anti-pattern — pass the real value through).
 
+### QA spec-gate fixes (PASS-WITH-FIXES — fold in, do NOT re-spec)
+QA re-gate verdict on the corrected spec: **PASS** with two fixes:
+- **FIX-1 — legal-description + scope-of-work are ALREADY bridged.** The bridge already maps `legal-description` (`useLoadJobIntoReport.ts:189`) and `scope-of-work` (`:207`) into the store. They are **TEMPLATE-side only**, NOT bridge work: legal→existing `{{report-legal}}`, scope-of-work→new placeholder. Do not add bridge mappings for these two; the store already has the values — the break is purely the missing/mismatched template placeholder.
+- **FIX-2 — bridge `getValue` is SYNCHRONOUS.** The cascade LABELS come straight off `loeData` (sync, fine). BUT the conditional §10-prose path (if Ben wants prose) sources from `scenario_narratives` (async store) — so it needs the **preload-once pattern**: await the store load ONCE in the async caller (the `useEffect`/loader in `useLoadJobIntoReport`), pass an in-memory resolver into the still-sync `getValue`. Mirror `generateLOEHTML`'s precedent. Do NOT make `getValue` async. (Only applies IF prose is in scope.)
+
 ---
 
 ## Template-placeholder gaps to close (the three-way breaks — coordinate with ui-designer)

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saved Documents — layout options</title>
+<style>
+  :root{
+    --bg:#ffffff; --fg:#0f172a; --muted:#f1f5f9; --muted-2:#f8fafc;
+    --border:#e2e8f0; --mfg:#64748b; --accent:#0f172a;
+    --blue-bg:#dbeafe; --blue-fg:#1d4ed8;
+    --green-bg:#dcfce7; --green-fg:#15803d;
+    --radius:8px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:#eef1f5; color:var(--fg);
+    font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    padding:32px 24px 80px;
+  }
+  h1{font-size:20px;margin:0 0 4px}
+  .sub{color:var(--mfg);font-size:13px;margin:0 0 28px;max-width:760px}
+  .grid{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+  /* faux dashboard column to prove HALF-WIDTH: the section is ~880, the list sits in the left half */
+  .stage{
+    background:var(--bg);border:1px solid var(--border);border-radius:12px;
+    width:880px;max-width:100%;padding:18px;box-shadow:0 1px 2px rgba(15,23,42,.04);
+  }
+  .stage-row{display:flex;gap:18px}
+  .half{flex:0 0 50%;max-width:50%}
+  .ghost-half{flex:1;border:1px dashed var(--border);border-radius:var(--radius);
+    background:repeating-linear-gradient(45deg,#fafbfc,#fafbfc 8px,#f3f5f8 8px,#f3f5f8 16px);
+    display:flex;align-items:center;justify-content:center;color:#b6c0cc;font-size:12px;min-height:240px}
+  .opt-label{display:flex;align-items:baseline;gap:10px;margin:0 0 6px}
+  .opt-label .tag{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    background:var(--accent);color:#fff;border-radius:5px;padding:3px 7px}
+  .opt-label h2{font-size:15px;margin:0}
+  .why{color:var(--mfg);font-size:12.5px;margin:0 0 14px;max-width:820px}
+
+  /* ---- shared list primitives (mirror the app's tokens) ---- */
+  .panel{border:1px solid var(--border);background:var(--muted-2);border-radius:var(--radius);padding:12px}
+  .panel-title{font-size:12px;font-weight:600;margin:0 0 10px;display:flex;align-items:center;justify-content:space-between}
+  .panel-title .total{color:var(--mfg);font-weight:500}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:7px 8px;border-radius:6px}
+  .row:hover{background:var(--muted)}
+  .row + .row{margin-top:2px}
+  .row .name{display:flex;align-items:center;gap:8px;min-width:0}
+  .row .name .ico{color:var(--mfg);flex:none}
+  .row .name .txt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row .meta{color:var(--mfg);font-size:11.5px;flex:none}
+  .badge{flex:none;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;
+    padding:2px 7px;border-radius:999px}
+  .badge.draft{background:var(--blue-bg);color:var(--blue-fg)}
+  .badge.sent{background:var(--green-bg);color:var(--green-fg)}
+  /* ONE consistent action on every row */
+  .open{flex:none;display:inline-flex;align-items:center;gap:4px;border:1px solid var(--border);
+    background:#fff;border-radius:6px;padding:3px 9px;font-size:12px;color:var(--fg);cursor:pointer}
+  .open:hover{border-color:#cbd5e1;background:var(--muted)}
+  .open svg{width:13px;height:13px}
+  .right{display:flex;align-items:center;gap:8px;flex:none}
+
+  select{font:inherit;padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:#fff;color:var(--fg)}
+  .count-pill{font-size:11px;font-weight:600;background:var(--muted);color:var(--mfg);border-radius:999px;padding:1px 8px}
+
+  /* ---- B: accordion groups ---- */
+  .group{border:1px solid var(--border);border-radius:7px;background:#fff;margin-bottom:8px;overflow:hidden}
+  .group > summary{list-style:none;cursor:pointer;padding:9px 11px;display:flex;align-items:center;
+    justify-content:space-between;font-weight:600;font-size:13px;background:var(--muted-2)}
+  .group > summary::-webkit-details-marker{display:none}
+  .group[open] > summary{border-bottom:1px solid var(--border)}
+  .group .body{padding:6px}
+  .chev{transition:transform .15s;color:var(--mfg)}
+  .group[open] .chev{transform:rotate(90deg)}
+
+  /* ---- C: tabs ---- */
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+  .tab{border:1px solid var(--border);background:#fff;border-radius:999px;padding:5px 12px;font-size:12.5px;
+    cursor:pointer;color:var(--mfg);display:inline-flex;align-items:center;gap:6px}
+  .tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .tab.active .count-pill{background:rgba(255,255,255,.22);color:#fff}
+
+  .legend{margin-top:10px;color:var(--mfg);font-size:11.5px;display:flex;gap:14px;flex-wrap:wrap}
+  .legend b{color:var(--fg);font-weight:600}
+  footer{margin-top:40px;color:#94a3b8;font-size:12px}
+</style>
+</head>
+<body>
+  <h1>Saved Documents — three layout options</h1>
+  <p class="sub">Same data in all three (one client, 12 documents across 4 types). Half-width by design — the right
+  half of the section is left free (shown hatched). Every row uses <b>one consistent action ("Open")</b>; the
+  badge carries draft-vs-sent, and behavior differs underneath (a <span style="color:var(--blue-fg)">draft</span>
+  opens editable, a <span style="color:var(--green-fg)">sent</span> doc opens read-only). Dropdowns / groups / tabs are live — click them.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>ui-designer · options for PRD-multi-document-creator "UI presentation" KR · pick one, react-spec builds it</footer>
+
+<script>
+// ---- sample data: one client, 12 docs, 4 types, mixed state ----
+const TYPES = [
+  {key:'loe',    label:'LOE'},
+  {key:'email',  label:'Email'},
+  {key:'letter', label:'Client Letter'},
+  {key:'thanks', label:'Thank-You'},
+];
+const DOCS = [
+  {type:'loe',    name:'LOE-07 — Henderson — Jun 13',          state:'sent',  date:'Jun 13'},
+  {type:'loe',    name:'LOE-07 — Henderson (revised fee)',     state:'draft', date:'Jun 14'},
+  {type:'loe',    name:'LOE-05 — Henderson — May 02',          state:'sent',  date:'May 02'},
+  {type:'email',  name:'Engagement intro email',               state:'sent',  date:'Jun 13'},
+  {type:'email',  name:'Fee-revision follow-up',               state:'sent',  date:'Jun 14'},
+  {type:'email',  name:'Document-ready notice',                state:'sent',  date:'Jun 14'},
+  {type:'email',  name:'Reminder — awaiting signature',        state:'draft', date:'Jun 14'},
+  {type:'letter', name:'Cover letter — appraisal scope',       state:'sent',  date:'Jun 10'},
+  {type:'letter', name:'Cover letter — addendum',              state:'draft', date:'Jun 14'},
+  {type:'thanks', name:'Thank-you — engagement signed',        state:'sent',  date:'Jun 13'},
+  {type:'thanks', name:'Thank-you — report delivered',         state:'draft', date:'Jun 14'},
+  {type:'loe',    name:'LOE-07 — Henderson (scope B)',         state:'draft', date:'Jun 14'},
+];
+const OPEN_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const FILE_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
+const labelOf = k => TYPES.find(t=>t.key===k).label;
+const byType = k => DOCS.filter(d=>d.type===k);
+const sortDraftFirst = arr => [...arr].sort((a,b)=> (a.state==='draft'?0:1)-(b.state==='draft'?0:1));
+
+function rowHTML(d, showType=false){
+  return `<div class="row">
+    <div class="name">
+      <span class="ico">${FILE_ICON}</span>
+      <span class="txt">${d.name}</span>
+    </div>
+    <div class="right">
+      ${showType?`<span class="meta">${labelOf(d.type)}</span>`:`<span class="meta">${d.date}</span>`}
+      <span class="badge ${d.state}">${d.state}</span>
+      <button class="open">${OPEN_ICON} Open</button>
+    </div>
+  </div>`;
+}
+const legend = `<div class="legend">
+  <span><span class="badge draft" style="padding:1px 6px">draft</span> &nbsp;opens <b>editable</b></span>
+  <span><span class="badge sent" style="padding:1px 6px">sent</span> &nbsp;opens <b>read-only</b></span>
+  <span>Action word never changes — <b>“Open”</b> on every row.</span>
+</div>`;
+
+function stage(tag, title, why, innerHTML){
+  return `<div class="stage">
+    <div class="opt-label"><span class="tag">${tag}</span><h2>${title}</h2></div>
+    <p class="why">${why}</p>
+    <div class="stage-row">
+      <div class="half">${innerHTML}${legend}</div>
+      <div class="ghost-half">right half stays free<br>(half-width)</div>
+    </div>
+  </div>`;
+}
+
+/* ===== OPTION A — Type dropdown leads ===== */
+function optA(){
+  const opts = `<option value="all">All types · ${DOCS.length}</option>` +
+    TYPES.map(t=>`<option value="${t.key}">${t.label} · ${byType(t.key).length}</option>`).join('');
+  const inner = `
+    <div class="panel">
+      <div class="panel-title">
+        <span>Saved Documents</span>
+        <select id="aSel" onchange="renderAList()">${opts}</select>
+      </div>
+      <div id="aList"></div>
+    </div>`;
+  return stage('A','Dropdown-led filter',
+    'Pick a type from the dropdown (“Emails · 3”) and the list below shows only that type; “All types” shows everything, drafts first. The most literal read of “a type picker first.” Minimal, calmest, scales to any number of types by just adding options.',
+    inner);
+}
+function renderAList(){
+  const sel = document.getElementById('aSel').value;
+  const items = sel==='all' ? sortDraftFirst(DOCS) : sortDraftFirst(byType(sel));
+  document.getElementById('aList').innerHTML = items.map(d=>rowHTML(d, sel==='all')).join('');
+}
+
+/* ===== OPTION B — Accordion groups by type ===== */
+function optB(){
+  const groups = TYPES.filter(t=>byType(t.key).length).map((t,i)=>{
+    const items = sortDraftFirst(byType(t.key));
+    const sent = items.filter(d=>d.state==='sent').length;
+    const draft = items.filter(d=>d.state==='draft').length;
+    return `<details class="group" ${i===0?'open':''}>
+      <summary>
+        <span><span class="chev">${'▸'}</span> &nbsp;${t.label}
+          <span class="count-pill">${items.length}</span></span>
+        <span class="meta">${sent} sent${draft?` · ${draft} draft`:''}</span>
+      </summary>
+      <div class="body">${items.map(d=>rowHTML(d,false)).join('')}</div>
+    </details>`;
+  }).join('');
+  const inner = `<div class="panel" style="background:transparent;border:none;padding:0">
+      <div class="panel-title" style="padding:0 2px"><span>Saved Documents</span><span class="total">${DOCS.length} total</span></div>
+      ${groups}
+    </div>`;
+  return stage('B','Grouped accordion',
+    'Every type is its own collapsible group with a live count (“Email · 3 · 2 sent · 1 draft”), so you see how many of each were sent at a glance and collapse what you don’t need. No dropdown — all types are browsable at once; collapsing is how it scales to 10+.',
+    inner);
+}
+
+/* ===== OPTION C — Type tabs + list (hybrid) ===== */
+function optC(){
+  const tabs = `<button class="tab active" data-k="all" onclick="setCTab(this)">All <span class="count-pill">${DOCS.length}</span></button>` +
+    TYPES.map(t=>`<button class="tab" data-k="${t.key}" onclick="setCTab(this)">${t.label} <span class="count-pill">${byType(t.key).length}</span></button>`).join('');
+  const inner = `<div class="panel">
+      <div class="panel-title"><span>Saved Documents</span></div>
+      <div class="tabs">${tabs}</div>
+      <div id="cList"></div>
+    </div>`;
+  return stage('C','Type tabs (hybrid)',
+    'Counts are always visible as pills across the top (“Email 3 · Letter 2 · Thank-You 2”); tap a type to see just those, drafts first. Closest to Ben’s “Emails sent → every email” phrasing while keeping every count on screen. Tabs wrap to a second line as types grow.',
+    inner);
+}
+function setCTab(btn){
+  document.querySelectorAll('#grid .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderCList(btn.dataset.k);
+}
+function renderCList(k){
+  const items = k==='all' ? sortDraftFirst(DOCS) : sortDraftFirst(byType(k));
+  document.getElementById('cList').innerHTML = items.map(d=>rowHTML(d, k==='all')).join('');
+}
+
+document.getElementById('grid').innerHTML = optA() + optB() + optC();
+renderAList(); renderCList('all');
+</script>
+</body>
+</html>

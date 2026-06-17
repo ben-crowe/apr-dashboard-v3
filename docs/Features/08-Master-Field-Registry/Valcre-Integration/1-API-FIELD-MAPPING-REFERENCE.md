@@ -1,7 +1,8 @@
 ---
 content_type: field-mapping-reference
-title: APR Dashboard V3 — API & Field Mapping Reference (SOURCE OF TRUTH + work diary)
-status: active — living source of truth; diary at bottom
+title: APR Dashboard V3 — API & Field Mapping Reference (SUPERSEDED — history + work diary)
+status: SUPERSEDED 2026-06-16 — canonical mapping moved to GENERATED-field-mapping.md/.json (auto-generated from the HTML field registry, QA-certified vs api/valcre.ts). This doc is retained as history + Valcre work diary only; do NOT treat as current truth.
+superseded_by: ~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/GENERATED-field-mapping.md
 owner: react-spec (code) · qa-agent (verifies) · co-architect (coordinates)
 home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
 registry_v6: "https://apr-dashboard-v3.vercel.app/field-registry-v6.html (Valta Registry V6 — canonical field + option source)"
@@ -10,7 +11,9 @@ keywords: [field mapping reference, dashboard to valcre mapping, enum conversion
 related: [~/Development/APR-Dashboard-v3/docs/Features/08-Master-Field-Registry/Valcre-Integration/AUTO-SYNC-WIRING-MAP.md, "[[field-sync-verification-workflow]]", ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md]
 ---
 
-<!-- facets --> #ground-truth #doctrine-decision
+<!-- facets --> #ground-truth #doctrine-decision #superseded
+
+> ⚠️ **SUPERSEDED 2026-06-16.** The canonical, agent-readable field mapping is now the auto-generated derivative **`../GENERATED-field-mapping.md`** (+ `.json`), emitted from the canonical HTML field registry and QA-certified 1:1 against `api/valcre.ts`. This file is kept for **history + the Valcre work diary** only. For current field→Valcre truth, read the GENERATED derivative. Canonical chain: HTML registry → generated derivative → runtime (`api/valcre.ts`).
 
 # APR Dashboard V3 - API & Field Mapping Reference
 

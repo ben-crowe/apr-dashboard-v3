@@ -1,0 +1,228 @@
+# Valcre Custom Field definitions — LIVE pull 2026-06-15 (read-only GET /api/v1/CustomFields)
+# Source of truth = what Valcre actually has RIGHT NOW. Cross-check against Chris's registry (registry-first).
+
+11553 | LenderCompanyName (String) | "Lender Company Name" | 0 options
+11554 | LenderCompanyAddress (String) | "Lender Company Address" | 0 options
+11555 | LenderContactName (String) | "Lender Contact Name" | 0 options
+11556 | LenderContactEmail (String) | "Lender Contact Email" | 0 options
+11557 | LenderContactPhone (String) | "Lender Contact Phone" | 0 options
+11558 | LenderContactTitle (String) | "Lender Contact Title" | 0 options
+11563 | ValuationPremiseOne (SingleOption) | "Valuation Premise - 1" | 9 options
+     5128: As Is
+     5129: As Stabilized
+     5130: As If Renovated & Stabilized
+     5131: As If Complete & Stabilized
+     5132: As Is Vacant Land
+     5133: As If Vacant Land
+     5134: As If Rezoned
+     5135: As If Serviced
+     5136: As If Subdivided
+11564 | ValuationPremiseTwo (SingleOption) | "Valuation Premise - 2" | 9 options
+     5137: As Is
+     5138: As Stabilized
+     5139: As If Renovated & Stabilized
+     5140: As If Complete & Stabilized
+     5141: As Is Vacant Land
+     5142: As If Vacant Land
+     5143: As If Rezoned
+     5144: As If Serviced
+     5145: As If Subdivided
+11565 | AppraisedValueOne (Integer) | "Appraised Value - 1" | 0 options
+11566 | AppraisedValueTwo (Integer) | "Appraised Value - 2" | 0 options
+12405 | sss (String) | "sss" | 0 options
+12406 | XXXX (String) | "XXXX" | 0 options
+12407 | StatusofImprovements (SingleOption) | "Status of Improvements" | 7 options
+     7432: Improved - Completed
+     7433: Improved - Renovated
+     7434: Improved - Under Renovation
+     7435: Improved - Proposed Renovation
+     7436: Proposed - Vacant Land
+     7437: Proposed - Improved Land (Demolition Required)
+     7438: Proposed - Under Construction
+12408 | Tenancy (SingleOption) | "Tenancy" | 6 options
+     7418: Multi-Tenant
+     7419: Owner Occupied
+     7420: Partial Owner Occupied
+     7421: Single-Tenant
+     7422: Unkown
+     7423: Vacant
+12409 | StateofImprovements (SingleOption) | "State of Improvements" | 4 options
+     7428: Improved
+     7429: Proposed
+     7430: Vacant Land
+     7431: Improved Development Land
+12410 | CurrentUseImprovements (SingleOption) | "Current Use Improvements" | 6 options
+     7445: Vacant Land
+     7446: Single Family
+     7447: Multifamily
+     7448: Retail
+     7449: Industrial
+     7450: Office
+12411 | ProposedUseImprovements (SingleOption) | "Proposed Use Improvements" | 7 options
+     7458: Not Applicable
+     7459: Single Family
+     7460: Multifamily
+     7461: Mixed Use
+     7462: Retail
+     7463: Industrial
+     7464: Office
+12412 | InterestAppraised (MultiOption) | "Interest Appraised" | 4 options
+     7469: Fee Simple
+     7470: Leased Fee Interest
+     7471: Leasehold Estate
+     7472: Going Concern
+12413 | AuthorizedUse (SingleOption) | "Authorized Use" | 8 options
+     7481: First Mortgage Financing
+     7482: Litigation
+     7483: Estate Planning
+     7484: Acquisition-Disposition
+     7485: Internal Decision-Making
+     7486: Insurance
+     7487: Financial Reporting
+     7488: GST
+12414 | ValueScenarios (MultiOption) | "Value Scenario (s)" | 10 options
+     7499: As Is Vacant Land
+     7500: As If Complete - Subdivided
+     7501: As If Complete - Serviced
+     7502: As If Complete - Rezoned
+     7503: As If Complete & Stabilized - Renovated
+     7504: As Stabilized
+     7505: As-Is
+     7506: As If Complete & Stabilized
+     7507: As If Vacant Land
+     7508: Insurable Replacement Cost
+12415 | ApproachestoValue (MultiOption) | "Approaches to Value" | 4 options
+     7513: Land Direct Comparison Approach
+     7514: Cost Approach
+     7515: Direct Comparison Approach
+     7516: Income Approach
+12416 | AssignmentType (SingleOption) | "Assignment Type" | 2 options
+     7519: Single Property
+     7520: Multiple Properties
+12417 | ReportType (SingleOption) | "Report Type" | 3 options
+     7524: Comprehensive
+     7525: Concise
+     7526: Form
+12418 | DesktopReport (SingleOption) | "Desktop Report" | 2 options
+     7529: Yes
+     7530: No
+12419 | Valuetimeframe (SingleOption) | "Value Timeframe" | 3 options
+     7534: Current
+     7535: Prospective
+     7536: Retrospective
+12420 | DeliveryTime (Integer) | "Delivery Time" | 0 options
+12421 | Paid (Boolean) | "Paid" | 0 options
+12422 | ClientDocuments (MultiOption) | "Client Documents" | 11 options
+     7548: Previous Appraisal
+     7549: Environmental Reports
+     7550: Purchase & Sale Agreement
+     7551: Contact for Property Tour
+     7552: Development Permit Drawings
+     7553: Historical Operating Expenses
+     7554: Rent Roll
+     7555: Unit Mix
+     7556: Proforma
+     7557: Property Details
+     7558: Property Condition Reports
+12423 | PreviouslyAppraised (SingleOption) | "Previously Appraised" | 2 options
+     7561: Yes
+     7562: No
+12424 | TransactionStatus (MultiOption) | "Transaction Status" | 3 options
+     7566: Not Applicable
+     7567: Listed
+     7568: Under Contract
+12425 | ZoningStatus (SingleOption) | "Zoning Status" | 2 options
+     7571: In Place
+     7572: To Be Rezoned
+12426 | LandMetric (SingleOption) | "Land $/Metric" | 4 options
+     7577: $/Unit
+     7578: $/FAR
+     7579: $/SF
+     7580: $/Acre
+12427 | CMHCFinancing (SingleOption) | "CMHC Financing" | 2 options
+     7583: Yes
+     7584: No
+12428 | ValueScenario1 (SingleOption) | "Value Scenario 1" | 10 options
+     7595: As Is Vacant Land
+     7596: As If Complete - Subdivided
+     7597: As If Complete - Serviced
+     7598: As If Complete - Rezoned
+     7599: As If Complete & Stabilized - Renovated
+     7600: As Stabilized
+     7601: As-Is
+     7602: As If Complete & Stabilized
+     7603: As If Vacant Land
+     7604: Insurable Replacement Cost
+12429 | ValueScenario2 (SingleOption) | "Value Scenario 2" | 10 options
+     7615: As Is Vacant Land
+     7616: As If Complete - Subdivided
+     7617: As If Complete - Serviced
+     7618: As If Complete - Rezoned
+     7619: As If Complete & Stabilized - Renovated
+     7620: As Stabilized
+     7621: As-Is
+     7622: As If Complete & Stabilized
+     7623: As If Vacant Land
+     7624: Insurable Replacement Cost
+12430 | ValueScenario3 (SingleOption) | "Value Scenario 3" | 10 options
+     7635: As Is Vacant Land
+     7636: As If Complete - Subdivided
+     7637: As If Complete - Serviced
+     7638: As If Complete - Rezoned
+     7639: As If Complete & Stabilized - Renovated
+     7640: As Stabilized
+     7641: As-Is
+     7642: As If Complete & Stabilized
+     7643: As If Vacant Land
+     7644: Insurable Replacement Cost
+12431 | ValueScenario4 (SingleOption) | "Value Scenario 4" | 10 options
+     7655: As Is Vacant Land
+     7656: As If Complete - Subdivided
+     7657: As If Complete - Serviced
+     7658: As If Complete - Rezoned
+     7659: As If Complete & Stabilized - Renovated
+     7660: As Stabilized
+     7661: As-Is
+     7662: As If Complete & Stabilized
+     7663: As If Vacant Land
+     7664: Insurable Replacement Cost
+12432 | ValueScenario5 (SingleOption) | "Value Scenario 5" | 10 options
+     7675: As Is Vacant Land
+     7676: As If Complete - Subdivided
+     7677: As If Complete - Serviced
+     7678: As If Complete - Rezoned
+     7679: As If Complete & Stabilized - Renovated
+     7680: As Stabilized
+     7681: As-Is
+     7682: As If Complete & Stabilized
+     7683: As If Vacant Land
+     7684: Insurable Replacement Cost
+12433 | ValueScenario6 (SingleOption) | "Value Scenario 6" | 10 options
+     7695: As Is Vacant Land
+     7696: As If Complete - Subdivided
+     7697: As If Complete - Serviced
+     7698: As If Complete - Rezoned
+     7699: As If Complete & Stabilized - Renovated
+     7700: As Stabilized
+     7701: As-Is
+     7702: As If Complete & Stabilized
+     7703: As If Vacant Land
+     7704: Insurable Replacement Cost
+12434 | EA/HCSummary1 (String) | "EA/HC Summary 1" | 0 options
+12435 | EA/HCSummary2 (String) | "EA/HC Summary 2" | 0 options
+12436 | EA/HCSummary3 (String) | "EA/HC Summary 3" | 0 options
+12437 | EA/HCSummary4 (String) | "EA/HC Summary 4" | 0 options
+12438 | EA/HCSummary5 (String) | "EA/HC Summary 5" | 0 options
+12439 | EA/HCSummary6 (String) | "EA/HC Summary 6" | 0 options
+12440 | EADetail1 (String) | "EA Detail 1" | 0 options
+12441 | EADetail2 (String) | "EA Detail 2" | 0 options
+12442 | EADetail3 (String) | "EA Detail 3" | 0 options
+12443 | EADetail4 (String) | "EA Detail 4" | 0 options
+12444 | EADetail5 (String) | "EA Detail 5" | 0 options
+12445 | EADetail6 (String) | "EA Detail 6" | 0 options
+12446 | HCDetail1 (String) | "HC Detail 1" | 0 options
+12447 | HCDetail2 (String) | "HC Detail 2" | 0 options
+12448 | HCDetail3 (String) | "HC Detail 3" | 0 options
+12449 | HCDetail4 (String) | "HC Detail 4" | 0 options
+12450 | HCDetail5 (String) | "HC Detail 5" | 0 options
+12451 | HCDetail6 (String) | "HC Detail 6" | 0 options

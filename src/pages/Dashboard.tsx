@@ -5,7 +5,7 @@ import JobListView from "@/components/dashboard/JobListView";
 import JobDetailView from "@/components/dashboard/JobDetailView";
 import AppraisalTable from "@/components/dashboard/AppraisalTable";
 import { JobListProvider, useJobList } from "@/components/dashboard/job-list/JobListContext";
-// import MockReportBuilder from "./MockReportBuilder"; // TODO: consolidate report-builder location (symlink issue)
+import JobReportBuilder from "./JobReportBuilder";
 
 // Job List Route Component
 const JobListRoute = () => {
@@ -68,7 +68,8 @@ const JobDetailRoute = () => {
   );
 };
 
-// Job Report Route Component - Opens Report Builder with job data pre-filled
+// Job Report Route Component - Opens Report Builder with job data pre-filled + persistent.
+// V4 Slice 1: symlink removed, report-builder consolidated, persistence wired.
 const JobReportRoute = () => {
   const { jobId } = useParams<{ jobId: string }>();
 
@@ -76,8 +77,7 @@ const JobReportRoute = () => {
     return null;
   }
 
-  // TODO: Report Builder disabled until report-builder directory is consolidated (symlink issue)
-  return <div style={{padding: '40px', textAlign: 'center', color: '#999'}}>Report Builder — coming soon</div>;
+  return <JobReportBuilder />;
 };
 
 // Inner component that uses JobList context

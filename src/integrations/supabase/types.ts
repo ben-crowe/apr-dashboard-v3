@@ -367,6 +367,36 @@ export type Database = {
         }
         Relationships: []
       }
+      email_templates: {
+        Row: {
+          body_html: string
+          created_at: string
+          id: string
+          is_default: boolean
+          name: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          body_html: string
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          body_html?: string
+          created_at?: string
+          id?: string
+          is_default?: boolean
+          name?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       files_modified: {
         Row: {
           change_type: string | null
@@ -398,6 +428,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      job_contracts: {
+        Row: {
+          contract_type: string | null
+          created_at: string | null
+          docuseal_submission_id: string | null
+          edited_html: string
+          id: string
+          job_id: string
+          name: string
+          state: string
+          template_id: string | null
+          template_version: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          contract_type?: string | null
+          created_at?: string | null
+          docuseal_submission_id?: string | null
+          edited_html: string
+          id?: string
+          job_id: string
+          name: string
+          state?: string
+          template_id?: string | null
+          template_version?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          contract_type?: string | null
+          created_at?: string | null
+          docuseal_submission_id?: string | null
+          edited_html?: string
+          id?: string
+          job_id?: string
+          name?: string
+          state?: string
+          template_id?: string | null
+          template_version?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       job_documents: {
         Row: {
@@ -464,6 +536,45 @@ export type Database = {
             referencedColumns: ["job_id"]
           },
         ]
+      }
+      job_email_instances: {
+        Row: {
+          body_html: string
+          contract_id: string | null
+          created_at: string
+          docuseal_submission_id: string | null
+          id: string
+          job_id: string
+          recipient_email: string | null
+          state: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          body_html: string
+          contract_id?: string | null
+          created_at?: string
+          docuseal_submission_id?: string | null
+          id?: string
+          job_id: string
+          recipient_email?: string | null
+          state?: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          body_html?: string
+          contract_id?: string | null
+          created_at?: string
+          docuseal_submission_id?: string | null
+          id?: string
+          job_id?: string
+          recipient_email?: string | null
+          state?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       job_files: {
         Row: {
@@ -622,14 +733,18 @@ export type Database = {
         Row: {
           analysis_level: string | null
           appraisal_fee: number | null
+          approaches_to_value: string | null
           assignment_type: string | null
           authorized_use: string | null
           clickup_task_id: string | null
           clickup_task_url: string | null
+          client_documents: string | null
           cmhc_financing: string | null
           created_at: string
+          current_use: string | null
           delivery_comments: string | null
           delivery_date: string | null
+          delivery_time: string | null
           desktop_report: string | null
           disbursement_percentage: string | null
           docuseal_submission_id: string | null
@@ -640,11 +755,14 @@ export type Database = {
           job_number: string | null
           job_status: string | null
           lead_appraiser: string | null
+          loe_template_id: string | null
           payment_amount: number | null
           payment_comments: string | null
           payment_paid_date: string | null
           payment_terms: string | null
+          previously_appraised: string | null
           property_rights_appraised: string | null
+          proposed_use: string | null
           purpose: string | null
           report_format: string | null
           report_type: string | null
@@ -656,24 +774,30 @@ export type Database = {
           signed_date: string | null
           signed_document_url: string | null
           special_instructions: string | null
+          status_of_improvements: string | null
           transaction_status: string | null
           updated_at: string
           valcre_job_id: number | null
           valuation_premises: string | null
           value_scenarios: string | null
+          value_timeframe: string | null
           zoning_status: string | null
         }
         Insert: {
           analysis_level?: string | null
           appraisal_fee?: number | null
+          approaches_to_value?: string | null
           assignment_type?: string | null
           authorized_use?: string | null
           clickup_task_id?: string | null
           clickup_task_url?: string | null
+          client_documents?: string | null
           cmhc_financing?: string | null
           created_at?: string
+          current_use?: string | null
           delivery_comments?: string | null
           delivery_date?: string | null
+          delivery_time?: string | null
           desktop_report?: string | null
           disbursement_percentage?: string | null
           docuseal_submission_id?: string | null
@@ -684,11 +808,14 @@ export type Database = {
           job_number?: string | null
           job_status?: string | null
           lead_appraiser?: string | null
+          loe_template_id?: string | null
           payment_amount?: number | null
           payment_comments?: string | null
           payment_paid_date?: string | null
           payment_terms?: string | null
+          previously_appraised?: string | null
           property_rights_appraised?: string | null
+          proposed_use?: string | null
           purpose?: string | null
           report_format?: string | null
           report_type?: string | null
@@ -700,24 +827,30 @@ export type Database = {
           signed_date?: string | null
           signed_document_url?: string | null
           special_instructions?: string | null
+          status_of_improvements?: string | null
           transaction_status?: string | null
           updated_at?: string
           valcre_job_id?: number | null
           valuation_premises?: string | null
           value_scenarios?: string | null
+          value_timeframe?: string | null
           zoning_status?: string | null
         }
         Update: {
           analysis_level?: string | null
           appraisal_fee?: number | null
+          approaches_to_value?: string | null
           assignment_type?: string | null
           authorized_use?: string | null
           clickup_task_id?: string | null
           clickup_task_url?: string | null
+          client_documents?: string | null
           cmhc_financing?: string | null
           created_at?: string
+          current_use?: string | null
           delivery_comments?: string | null
           delivery_date?: string | null
+          delivery_time?: string | null
           desktop_report?: string | null
           disbursement_percentage?: string | null
           docuseal_submission_id?: string | null
@@ -728,11 +861,14 @@ export type Database = {
           job_number?: string | null
           job_status?: string | null
           lead_appraiser?: string | null
+          loe_template_id?: string | null
           payment_amount?: number | null
           payment_comments?: string | null
           payment_paid_date?: string | null
           payment_terms?: string | null
+          previously_appraised?: string | null
           property_rights_appraised?: string | null
+          proposed_use?: string | null
           purpose?: string | null
           report_format?: string | null
           report_type?: string | null
@@ -744,11 +880,13 @@ export type Database = {
           signed_date?: string | null
           signed_document_url?: string | null
           special_instructions?: string | null
+          status_of_improvements?: string | null
           transaction_status?: string | null
           updated_at?: string
           valcre_job_id?: number | null
           valuation_premises?: string | null
           value_scenarios?: string | null
+          value_timeframe?: string | null
           zoning_status?: string | null
         }
         Relationships: [
@@ -765,6 +903,13 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "property_job_history"
             referencedColumns: ["job_id"]
+          },
+          {
+            foreignKeyName: "job_loe_details_loe_template_id_fkey"
+            columns: ["loe_template_id"]
+            isOneToOne: false
+            referencedRelation: "loe_templates"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -924,17 +1069,14 @@ export type Database = {
           clickup_task_url: string | null
           client_address: string | null
           client_city: string | null
-          client_province: string | null
-          client_postal_code: string | null
-          property_city: string | null
-          property_province: string | null
-          property_postal_code: string | null
           client_email: string
           client_first_name: string
           client_id: string | null
           client_last_name: string
           client_organization: string | null
           client_phone: string
+          client_postal_code: string | null
+          client_province: string | null
           client_title: string | null
           copied_from_job_id: string | null
           created_at: string
@@ -957,17 +1099,21 @@ export type Database = {
           notes: string | null
           permit_years: Json | null
           property_address: string
+          property_city: string | null
           property_contact_email: string | null
           property_contact_first_name: string | null
           property_contact_last_name: string | null
           property_contact_phone: string | null
           property_id: string | null
           property_name: string | null
+          property_postal_code: string | null
+          property_province: string | null
           property_type: string
           property_types: string[] | null
           recent_improvements: string | null
           same_as_client_contact: boolean | null
           section_4_status: string | null
+          sharepoint_folder_url: string | null
           site_plan_status: string | null
           site_plan_uploaded_at: string | null
           site_plan_url: string | null
@@ -1007,17 +1153,14 @@ export type Database = {
           clickup_task_url?: string | null
           client_address?: string | null
           client_city?: string | null
-          client_province?: string | null
-          client_postal_code?: string | null
-          property_city?: string | null
-          property_province?: string | null
-          property_postal_code?: string | null
           client_email: string
           client_first_name: string
           client_id?: string | null
           client_last_name: string
           client_organization?: string | null
           client_phone: string
+          client_postal_code?: string | null
+          client_province?: string | null
           client_title?: string | null
           copied_from_job_id?: string | null
           created_at?: string
@@ -1040,17 +1183,21 @@ export type Database = {
           notes?: string | null
           permit_years?: Json | null
           property_address: string
+          property_city?: string | null
           property_contact_email?: string | null
           property_contact_first_name?: string | null
           property_contact_last_name?: string | null
           property_contact_phone?: string | null
           property_id?: string | null
           property_name?: string | null
+          property_postal_code?: string | null
+          property_province?: string | null
           property_type: string
           property_types?: string[] | null
           recent_improvements?: string | null
           same_as_client_contact?: boolean | null
           section_4_status?: string | null
+          sharepoint_folder_url?: string | null
           site_plan_status?: string | null
           site_plan_uploaded_at?: string | null
           site_plan_url?: string | null
@@ -1090,17 +1237,14 @@ export type Database = {
           clickup_task_url?: string | null
           client_address?: string | null
           client_city?: string | null
-          client_province?: string | null
-          client_postal_code?: string | null
-          property_city?: string | null
-          property_province?: string | null
-          property_postal_code?: string | null
           client_email?: string
           client_first_name?: string
           client_id?: string | null
           client_last_name?: string
           client_organization?: string | null
           client_phone?: string
+          client_postal_code?: string | null
+          client_province?: string | null
           client_title?: string | null
           copied_from_job_id?: string | null
           created_at?: string
@@ -1123,17 +1267,21 @@ export type Database = {
           notes?: string | null
           permit_years?: Json | null
           property_address?: string
+          property_city?: string | null
           property_contact_email?: string | null
           property_contact_first_name?: string | null
           property_contact_last_name?: string | null
           property_contact_phone?: string | null
           property_id?: string | null
           property_name?: string | null
+          property_postal_code?: string | null
+          property_province?: string | null
           property_type?: string
           property_types?: string[] | null
           recent_improvements?: string | null
           same_as_client_contact?: boolean | null
           section_4_status?: string | null
+          sharepoint_folder_url?: string | null
           site_plan_status?: string | null
           site_plan_uploaded_at?: string | null
           site_plan_url?: string | null
@@ -1205,6 +1353,82 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "property_job_history"
             referencedColumns: ["property_id"]
+          },
+        ]
+      }
+      loe_submissions: {
+        Row: {
+          client_email: string | null
+          client_name: string | null
+          created_at: string | null
+          docuseal_slug: string | null
+          docuseal_submission_id: string | null
+          id: string
+          job_id: string | null
+          job_number: string | null
+          loe_html: string | null
+          loe_version: string | null
+          signed_at: string | null
+          signed_document_url: string | null
+          status: string | null
+          template_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          client_email?: string | null
+          client_name?: string | null
+          created_at?: string | null
+          docuseal_slug?: string | null
+          docuseal_submission_id?: string | null
+          id?: string
+          job_id?: string | null
+          job_number?: string | null
+          loe_html?: string | null
+          loe_version?: string | null
+          signed_at?: string | null
+          signed_document_url?: string | null
+          status?: string | null
+          template_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          client_email?: string | null
+          client_name?: string | null
+          created_at?: string | null
+          docuseal_slug?: string | null
+          docuseal_submission_id?: string | null
+          id?: string
+          job_id?: string | null
+          job_number?: string | null
+          loe_html?: string | null
+          loe_version?: string | null
+          signed_at?: string | null
+          signed_document_url?: string | null
+          status?: string | null
+          template_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loe_submissions_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "job_submissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loe_submissions_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "property_job_history"
+            referencedColumns: ["job_id"]
+          },
+          {
+            foreignKeyName: "loe_submissions_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "loe_templates"
+            referencedColumns: ["id"]
           },
         ]
       }
@@ -1567,6 +1791,87 @@ export type Database = {
             referencedColumns: ["property_id"]
           },
         ]
+      }
+      quickbooks_tokens: {
+        Row: {
+          access_expires_at: string | null
+          access_token: string | null
+          id: number
+          realm_id: string | null
+          refresh_expires_at: string | null
+          refresh_token: string | null
+          updated_at: string
+        }
+        Insert: {
+          access_expires_at?: string | null
+          access_token?: string | null
+          id?: number
+          realm_id?: string | null
+          refresh_expires_at?: string | null
+          refresh_token?: string | null
+          updated_at?: string
+        }
+        Update: {
+          access_expires_at?: string | null
+          access_token?: string | null
+          id?: number
+          realm_id?: string | null
+          refresh_expires_at?: string | null
+          refresh_token?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      report_builder_data: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          job_id: string
+          schema_version: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id?: string
+          job_id: string
+          schema_version?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          job_id?: string
+          schema_version?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      scenario_narratives: {
+        Row: {
+          ea_detail: string | null
+          hc_detail: string | null
+          scenario: string
+          summary: string | null
+          updated_at: string
+        }
+        Insert: {
+          ea_detail?: string | null
+          hc_detail?: string | null
+          scenario: string
+          summary?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ea_detail?: string | null
+          hc_detail?: string | null
+          scenario?: string
+          summary?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
     }
     Views: {

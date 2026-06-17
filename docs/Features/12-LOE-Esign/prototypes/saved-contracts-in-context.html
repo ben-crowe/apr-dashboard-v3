@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saved Documents — in context on the job record</title>
+<style>
+  :root{
+    --bg:#ffffff; --fg:#0f172a; --muted:#f1f5f9; --muted-2:#f8fafc;
+    --border:#e2e8f0; --mfg:#64748b;
+    --blue-bg:#dbeafe; --blue-fg:#1d4ed8;
+    --green-bg:#dcfce7; --green-fg:#15803d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#e9edf2;color:var(--fg);
+    font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    padding:24px 20px 80px}
+  .page{max-width:880px;margin:0 auto}
+  .pagehint{color:var(--mfg);font-size:12.5px;margin:0 0 14px;text-align:center}
+
+  /* form switcher toolbar */
+  .switcher{display:flex;align-items:center;gap:10px;justify-content:center;margin:0 0 18px;
+    background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 14px;
+    position:sticky;top:10px;z-index:5;box-shadow:0 1px 3px rgba(15,23,42,.06)}
+  .switcher b{font-size:12.5px}
+  .seg{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .seg button{border:0;background:#fff;padding:7px 14px;font:inherit;font-size:12.5px;cursor:pointer;color:var(--mfg)}
+  .seg button + button{border-left:1px solid var(--border)}
+  .seg button.active{background:#0f172a;color:#fff;font-weight:600}
+  .switcher .desc{color:var(--mfg);font-size:12px;min-width:230px}
+
+  /* ---- the real job-record card ---- */
+  .card{border:1px solid #9aa5b1;border-radius:10px;background:var(--bg);overflow:hidden;
+    box-shadow:0 1px 2px rgba(15,23,42,.05)}
+  .card-head{background:#e5e9ef;padding:11px 16px;display:flex;align-items:center;gap:8px;
+    font-weight:600;font-size:15px;border-bottom:1px solid var(--border)}
+  .card-head .chev{color:var(--mfg)}
+  .card-body{padding:18px}
+
+  /* action row (Part F) */
+  .actionrow{display:flex;justify-content:space-between;margin-bottom:22px}
+  .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:#fff;
+    border-radius:7px;padding:7px 12px;font-size:13px;cursor:pointer;color:var(--fg);box-shadow:0 1px 1px rgba(15,23,42,.04)}
+  .btn svg{width:14px;height:14px}
+  .btn.primary{background:#0f172a;color:#fff;border-color:#0f172a;font-weight:600}
+  .btn.valcre{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+  .btn.clickup{background:#f5f3ff;color:#6d28d9;border-color:#ddd6fe}
+
+  /* the SLOT where the list lands — highlighted so placement is obvious */
+  .slot{position:relative;margin-bottom:22px}
+  .slot::before{content:"▼ Saved Documents list lands here";position:absolute;top:-9px;left:12px;
+    background:#fff7ed;color:#c2410c;font-size:10.5px;font-weight:700;letter-spacing:.04em;
+    padding:1px 7px;border-radius:5px;border:1px solid #fed7aa}
+  .slot-inner{border:1.5px dashed #fdba74;border-radius:9px;padding:14px 12px 12px;background:#fffdf9}
+
+  /* shared list primitives */
+  .panel-title{font-size:12px;font-weight:600;margin:0 0 10px;display:flex;align-items:center;justify-content:space-between}
+  .panel-title .total{color:var(--mfg);font-weight:500}
+  .listbox{border:1px solid var(--border);background:var(--muted-2);border-radius:8px;padding:12px}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:7px 8px;border-radius:6px}
+  .row:hover{background:var(--muted)}
+  .row + .row{margin-top:2px}
+  .row .name{display:flex;align-items:center;gap:8px;min-width:0}
+  .row .name .ico{color:var(--mfg);flex:none}
+  .row .name .txt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row .meta{color:var(--mfg);font-size:11.5px;flex:none}
+  .right{display:flex;align-items:center;gap:8px;flex:none}
+  .badge{flex:none;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:2px 7px;border-radius:999px}
+  .badge.draft{background:var(--blue-bg);color:var(--blue-fg)}
+  .badge.sent{background:var(--green-bg);color:var(--green-fg)}
+  .open{flex:none;display:inline-flex;align-items:center;gap:4px;border:1px solid var(--border);background:#fff;border-radius:6px;padding:3px 9px;font-size:12px;color:var(--fg);cursor:pointer}
+  .open:hover{border-color:#cbd5e1;background:var(--muted)}
+  .open svg{width:13px;height:13px}
+  select{font:inherit;padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:#fff;color:var(--fg)}
+  .count-pill{font-size:11px;font-weight:600;background:var(--muted);color:var(--mfg);border-radius:999px;padding:1px 8px}
+  .legend{margin-top:9px;color:var(--mfg);font-size:11px;display:flex;gap:14px;flex-wrap:wrap}
+  .legend b{color:var(--fg);font-weight:600}
+
+  /* accordion (B) */
+  .group{border:1px solid var(--border);border-radius:7px;background:#fff;margin-bottom:8px;overflow:hidden}
+  .group>summary{list-style:none;cursor:pointer;padding:9px 11px;display:flex;align-items:center;justify-content:space-between;font-weight:600;font-size:13px;background:var(--muted-2)}
+  .group>summary::-webkit-details-marker{display:none}
+  .group[open]>summary{border-bottom:1px solid var(--border)}
+  .group .gbody{padding:6px}
+  .chev2{transition:transform .15s;color:var(--mfg);display:inline-block}
+  .group[open] .chev2{transform:rotate(90deg)}
+
+  /* tabs (C) */
+  .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+  .tab{border:1px solid var(--border);background:#fff;border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;color:var(--mfg);display:inline-flex;align-items:center;gap:6px}
+  .tab.active{background:#0f172a;color:#fff;border-color:#0f172a}
+  .tab.active .count-pill{background:rgba(255,255,255,.22);color:#fff}
+
+  /* greyed section stubs below, so the surrounding page is visible */
+  .stub{border-top:1px solid var(--border);padding:13px 2px 2px;margin-top:4px}
+  .stub h4{margin:0 0 9px;font-size:13px;color:#334155;display:flex;align-items:center;gap:7px}
+  .stub h4::before{content:"▸";color:var(--mfg)}
+  .stub .fields{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .ph{height:30px;border:1px solid var(--border);border-radius:6px;background:repeating-linear-gradient(100deg,#fafbfc,#fafbfc 10px,#f3f5f8 10px,#f3f5f8 20px)}
+  .ph.lbl{position:relative}
+  .cascade{display:flex;justify-content:flex-end;margin-bottom:14px}
+  .cascade .ph{width:230px;height:30px}
+</style>
+</head>
+<body>
+<div class="page">
+  <p class="pagehint">This is the real <b>“LOE Quote &amp; Valuation Details”</b> section of a job record. The Saved Documents list lands in the highlighted slot — directly under the action row, above the form fields. Switch the form to see each option in its true spot.</p>
+
+  <div class="switcher">
+    <b>Form:</b>
+    <div class="seg">
+      <button class="active" data-f="A" onclick="setForm(this)">A · Dropdown</button>
+      <button data-f="B" onclick="setForm(this)">B · Accordion</button>
+      <button data-f="C" onclick="setForm(this)">C · Tabs</button>
+    </div>
+    <span class="desc" id="formDesc"></span>
+  </div>
+
+  <div class="card">
+    <div class="card-head"><span class="chev">▾</span> LOE Quote &amp; Valuation Details</div>
+    <div class="card-body">
+
+      <!-- Action row (Part F) -->
+      <div class="actionrow">
+        <div style="display:flex;gap:8px">
+          <button class="btn valcre">↗ View in Valcre</button>
+          <button class="btn clickup">↗ View in ClickUp</button>
+        </div>
+        <button class="btn primary">＋ Create Contract</button>
+      </div>
+
+      <!-- THE SLOT -->
+      <div class="slot">
+        <div class="slot-inner" id="slot"></div>
+      </div>
+
+      <!-- Cascade strip (real page has this next) -->
+      <div class="cascade"><div class="ph" title="Cascade Options picker"></div></div>
+
+      <!-- surrounding sections (greyed stubs so placement context is visible) -->
+      <div class="stub"><h4>Job Info</h4><div class="fields"><div class="ph"></div><div class="ph"></div></div></div>
+      <div class="stub"><h4>Purpose of the Assignment</h4><div class="fields"><div class="ph"></div><div class="ph"></div></div></div>
+      <div class="stub"><h4>Value Scenarios &amp; Approaches</h4><div class="fields"><div class="ph"></div><div class="ph"></div></div></div>
+      <div class="stub"><h4>Scope of Work · Report Type · Fees &amp; Terms · …</h4><div class="fields"><div class="ph"></div><div class="ph"></div></div></div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const TYPES=[{key:'loe',label:'LOE'},{key:'email',label:'Email'},{key:'letter',label:'Client Letter'},{key:'thanks',label:'Thank-You'}];
+const DOCS=[
+ {type:'loe',name:'LOE-07 — Henderson — Jun 13',state:'sent',date:'Jun 13'},
+ {type:'loe',name:'LOE-07 — Henderson (revised fee)',state:'draft',date:'Jun 14'},
+ {type:'loe',name:'LOE-05 — Henderson — May 02',state:'sent',date:'May 02'},
+ {type:'loe',name:'LOE-07 — Henderson (scope B)',state:'draft',date:'Jun 14'},
+ {type:'email',name:'Engagement intro email',state:'sent',date:'Jun 13'},
+ {type:'email',name:'Fee-revision follow-up',state:'sent',date:'Jun 14'},
+ {type:'email',name:'Document-ready notice',state:'sent',date:'Jun 14'},
+ {type:'email',name:'Reminder — awaiting signature',state:'draft',date:'Jun 14'},
+ {type:'letter',name:'Cover letter — appraisal scope',state:'sent',date:'Jun 10'},
+ {type:'letter',name:'Cover letter — addendum',state:'draft',date:'Jun 14'},
+ {type:'thanks',name:'Thank-you — engagement signed',state:'sent',date:'Jun 13'},
+ {type:'thanks',name:'Thank-you — report delivered',state:'draft',date:'Jun 14'},
+];
+const OPEN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const FILE='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
+const labelOf=k=>TYPES.find(t=>t.key===k).label;
+const byType=k=>DOCS.filter(d=>d.type===k);
+const draftFirst=a=>[...a].sort((x,y)=>(x.state==='draft'?0:1)-(y.state==='draft'?0:1));
+const DESCS={A:'Pick a type from the dropdown; list shows that type.',B:'Each type a collapsible group with its sent/draft count.',C:'Count pills always on screen; tap to filter.'};
+function row(d,showType){return `<div class="row"><div class="name"><span class="ico">${FILE}</span><span class="txt">${d.name}</span></div><div class="right">${showType?`<span class="meta">${labelOf(d.type)}</span>`:`<span class="meta">${d.date}</span>`}<span class="badge ${d.state}">${d.state}</span><button class="open">${OPEN} Open</button></div></div>`}
+const legend='<div class="legend"><span><span class="badge draft" style="padding:1px 6px">draft</span> opens <b>editable</b></span><span><span class="badge sent" style="padding:1px 6px">sent</span> opens <b>read-only</b></span><span>Action word never changes — <b>“Open”</b>.</span></div>';
+
+function formA(){
+  const opts=`<option value="all">All types · ${DOCS.length}</option>`+TYPES.map(t=>`<option value="${t.key}">${t.label} · ${byType(t.key).length}</option>`).join('');
+  return `<div class="listbox"><div class="panel-title"><span>Saved Documents</span><select id="aSel" onchange="rA()">${opts}</select></div><div id="aList"></div></div>${legend}`;
+}
+function rA(){const s=document.getElementById('aSel').value;const it=s==='all'?draftFirst(DOCS):draftFirst(byType(s));document.getElementById('aList').innerHTML=it.map(d=>row(d,s==='all')).join('')}
+function formB(){
+  const g=TYPES.filter(t=>byType(t.key).length).map((t,i)=>{const it=draftFirst(byType(t.key));const s=it.filter(d=>d.state==='sent').length;const d=it.filter(x=>x.state==='draft').length;return `<details class="group" ${i===0?'open':''}><summary><span><span class="chev2">▸</span> ${t.label} <span class="count-pill">${it.length}</span></span><span class="meta">${s} sent${d?` · ${d} draft`:''}</span></summary><div class="gbody">${it.map(x=>row(x,false)).join('')}</div></details>`}).join('');
+  return `<div class="panel-title" style="padding:0 2px"><span>Saved Documents</span><span class="total">${DOCS.length} total</span></div>${g}${legend}`;
+}
+function formC(){
+  const tabs=`<button class="tab active" data-k="all" onclick="cT(this)">All <span class="count-pill">${DOCS.length}</span></button>`+TYPES.map(t=>`<button class="tab" data-k="${t.key}" onclick="cT(this)">${t.label} <span class="count-pill">${byType(t.key).length}</span></button>`).join('');
+  return `<div class="listbox"><div class="panel-title"><span>Saved Documents</span></div><div class="tabs">${tabs}</div><div id="cList"></div></div>${legend}`;
+}
+function cT(b){document.querySelectorAll('#slot .tab').forEach(t=>t.classList.remove('active'));b.classList.add('active');rC(b.dataset.k)}
+function rC(k){const it=k==='all'?draftFirst(DOCS):draftFirst(byType(k));document.getElementById('cList').innerHTML=it.map(d=>row(d,k==='all')).join('')}
+
+function setForm(btn){
+  document.querySelectorAll('.seg button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  const f=btn.dataset.f;document.getElementById('formDesc').textContent=DESCS[f];
+  const slot=document.getElementById('slot');
+  if(f==='A'){slot.innerHTML=formA();rA()}
+  else if(f==='B'){slot.innerHTML=formB()}
+  else{slot.innerHTML=formC();rC('all')}
+}
+setForm(document.querySelector('.seg button.active'));
+</script>
+</body>
+</html>

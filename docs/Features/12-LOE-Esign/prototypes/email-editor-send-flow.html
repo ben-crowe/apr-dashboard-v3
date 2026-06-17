@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Email editor — send flow mock</title>
+<style>
+  :root{
+    --bg:#ffffff; --fg:#0f1729; --muted:#f1f5f9; --muted-2:#f8fafc;
+    --border:#e3e8ef; --mfg:#5b6b82;
+    --accent:#0f1729;           /* app primary (near-black) */
+    --link:#1a73e8;             /* the real send-button blue from the edge fn */
+    --link-bg:#eaf1fd;
+    --lock-bg:#eef2f7; --lock-fg:#334155; --lock-bd:#cdd7e5;
+    --amber-bg:#fff8ec; --amber-bd:#f5dca6; --amber-fg:#92600c;
+    --green-bg:#dcfce7; --green-fg:#15803d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#e7ebf1;color:var(--fg);
+    font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    padding:22px 18px 80px}
+  .page{max-width:940px;margin:0 auto}
+  .hint{color:var(--mfg);font-size:12.5px;text-align:center;margin:0 0 14px;line-height:1.5}
+  .hint b{color:var(--fg)}
+
+  .switcher{display:flex;flex-wrap:wrap;align-items:center;gap:14px;justify-content:center;margin:0 0 18px;
+    background:#fff;border:1px solid var(--border);border-radius:10px;padding:10px 14px;
+    position:sticky;top:8px;z-index:8;box-shadow:0 1px 3px rgba(15,23,42,.06)}
+  .switcher .lbl{font-size:12px;font-weight:600;color:var(--mfg)}
+  .seg{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+  .seg button{border:0;background:#fff;padding:7px 13px;font:inherit;font-size:12.5px;cursor:pointer;color:var(--mfg)}
+  .seg button + button{border-left:1px solid var(--border)}
+  .seg button.active{background:var(--accent);color:#fff;font-weight:600}
+
+  /* faux send modal */
+  .modal{background:#fff;border:1px solid #b8c1cd;border-radius:12px;overflow:hidden;box-shadow:0 18px 50px rgba(15,23,41,.18)}
+  .modal-top{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--muted-2)}
+  .modal-title{font-weight:600;font-size:14px}
+  .x{color:var(--mfg);cursor:pointer;font-size:16px;line-height:1}
+  /* stepper */
+  .stepper{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mfg)}
+  .step{display:flex;align-items:center;gap:6px}
+  .step .dot{width:18px;height:18px;border-radius:999px;border:1.5px solid var(--border);display:grid;place-items:center;font-size:10px;font-weight:700;color:var(--mfg)}
+  .step.done .dot{background:var(--green-bg);border-color:transparent;color:var(--green-fg)}
+  .step.active .dot{background:var(--accent);border-color:transparent;color:#fff}
+  .step.active span{color:var(--fg);font-weight:600}
+  .sep{width:18px;height:1px;background:var(--border)}
+
+  .modal-body{padding:0}
+  .split{display:flex}
+  .compose{flex:1;min-width:0;padding:18px 18px 0}
+  .docpane{width:330px;flex:none;border-left:1px solid var(--border);background:var(--muted-2);padding:16px;display:none}
+  .split.two .docpane{display:block}
+  .split.two .compose{max-width:none}
+
+  /* default-vs-this scope control */
+  .scope{display:flex;align-items:center;justify-content:space-between;gap:12px;
+    border:1px solid var(--amber-bd);background:var(--amber-bg);border-radius:9px;padding:9px 12px;margin-bottom:16px}
+  .scope .seg2{display:flex;border:1px solid var(--amber-bd);border-radius:7px;overflow:hidden;background:#fff}
+  .scope .seg2 button{border:0;background:transparent;padding:5px 11px;font:inherit;font-size:12px;cursor:pointer;color:var(--mfg);display:flex;align-items:center;gap:5px}
+  .scope .seg2 button.active{background:var(--accent);color:#fff;font-weight:600}
+  .scope .note{font-size:11.5px;color:var(--amber-fg)}
+  .scope a{color:var(--amber-fg);font-weight:600;text-decoration:underline;cursor:pointer;white-space:nowrap}
+
+  .attach{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#fff;border-radius:8px;padding:7px 11px;font-size:12.5px;margin-bottom:16px}
+  .attach .pdf{display:grid;place-items:center;width:22px;height:22px;border-radius:5px;background:#fdecec;color:#c0392b;font-size:9px;font-weight:700}
+  .attach .meta{color:var(--mfg);font-size:11px}
+
+  .field{margin-bottom:14px}
+  .field label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--mfg);margin-bottom:5px}
+  .subject{width:100%;border:1px solid var(--border);border-radius:8px;padding:9px 11px;font:inherit;font-size:13.5px;background:#fff}
+  .subject:focus{outline:none;border-color:#aab6c6;box-shadow:0 0 0 3px rgba(26,115,232,.10)}
+
+  /* token toolbar */
+  .toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--muted-2);border:1px solid var(--border);border-bottom:0;border-radius:8px 8px 0 0;padding:8px 10px}
+  .toolbar .t-lbl{font-size:11px;color:var(--mfg);font-weight:600;margin-right:2px}
+  .insert{display:inline-flex;align-items:center;gap:5px;border:1px dashed var(--lock-bd);background:#fff;color:var(--lock-fg);border-radius:999px;padding:3px 9px;font-size:11.5px;cursor:pointer}
+  .insert:hover{border-color:#9fb0c4;background:var(--muted)}
+  .insert .plus{color:var(--mfg);font-weight:700}
+
+  /* body editor */
+  .editor{border:1px solid var(--border);border-radius:0 0 8px 8px;background:#fff;padding:14px 14px;min-height:230px;font-size:14px;line-height:1.7}
+  .editor p{margin:0 0 12px}
+  /* LOCKED merge token pill */
+  .tok{display:inline-flex;align-items:center;gap:4px;background:var(--lock-bg);color:var(--lock-fg);
+    border:1px solid var(--lock-bd);border-radius:6px;padding:0 6px 0 5px;font-size:12.5px;font-weight:600;
+    white-space:nowrap;vertical-align:baseline;user-select:none;position:relative}
+  .tok .lk{width:10px;height:10px;opacity:.7}
+  .tok.link{background:var(--link-bg);color:var(--link);border-color:#bcd5f8}
+  /* the signing-link CTA, locked */
+  .cta{display:inline-block;background:var(--link);color:#fff;border:1px solid var(--link);border-radius:7px;
+    padding:9px 18px;font-size:13px;font-weight:600;text-decoration:none;position:relative}
+  .cta .lk{position:absolute;top:-7px;right:-7px;background:#fff;border:1px solid #bcd5f8;border-radius:999px;width:16px;height:16px;display:grid;place-items:center}
+  .cta .lk svg{width:9px;height:9px;color:var(--link)}
+  .lockcap{font-size:11px;color:var(--mfg);margin:7px 2px 0;display:flex;align-items:center;gap:6px}
+  .lockcap svg{width:11px;height:11px;color:var(--mfg)}
+
+  /* resolved (client-preview) values */
+  .val{color:var(--fg);font-weight:600;background:#fffbe9;border-radius:3px;padding:0 2px}
+
+  .footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-top:1px solid var(--border);margin-top:16px;background:var(--muted-2)}
+  .recip{font-size:12px;color:var(--mfg)}
+  .recip b{color:var(--fg)}
+  .fbtns{display:flex;gap:8px}
+  .btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:#fff;border-radius:8px;padding:8px 14px;font:inherit;font-size:13px;cursor:pointer;color:var(--fg)}
+  .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600}
+  .btn svg{width:14px;height:14px}
+
+  /* doc preview thumb */
+  .docthumb{background:#fff;border:1px solid var(--border);border-radius:6px;padding:16px 14px;box-shadow:0 1px 2px rgba(15,23,42,.05)}
+  .docthumb .logo{height:14px;width:64px;background:var(--muted);border-radius:3px;margin-bottom:12px}
+  .docthumb .ln{height:7px;border-radius:3px;background:#eef2f7;margin-bottom:7px}
+  .docthumb .ln.s{width:55%}.docthumb .ln.m{width:80%}.docthumb .ln.l{width:96%}
+  .docthumb .sig{height:24px;width:120px;border:1px dashed #c7d2e0;border-radius:4px;margin-top:14px}
+  .docpane .cap{font-size:11px;color:var(--mfg);margin:0 0 9px;font-weight:600}
+</style>
+</head>
+<body>
+<div class="page">
+  <p class="hint">New step in the send flow. Today <b>“Send to Client”</b> fires the email immediately with a hardcoded subject and body. This mock adds an <b>email review step</b> before the send. Merge fields are <b>locked</b> (can’t be deleted); the saved default lives in settings, and this screen edits <b>only this one send</b>.</p>
+
+  <div class="switcher">
+    <span class="lbl">Layout</span>
+    <div class="seg" id="layoutSeg">
+      <button class="active" data-l="one" onclick="setLayout(this)">Compose step</button>
+      <button data-l="two" onclick="setLayout(this)">Split (email + document)</button>
+    </div>
+    <span class="lbl" style="margin-left:8px">View</span>
+    <div class="seg" id="viewSeg">
+      <button class="active" data-v="edit" onclick="setView(this)">Edit (locked fields)</button>
+      <button data-v="client" onclick="setView(this)">As client sees it</button>
+    </div>
+  </div>
+
+  <div class="modal">
+    <div class="modal-top">
+      <div class="modal-title">Send Letter of Engagement</div>
+      <div class="stepper">
+        <div class="step done"><span class="dot">✓</span><span>Review document</span></div>
+        <div class="sep"></div>
+        <div class="step active"><span class="dot">2</span><span>Email</span></div>
+        <div class="sep"></div>
+        <div class="step"><span class="dot">3</span><span>Sent</span></div>
+      </div>
+      <div class="x">✕</div>
+    </div>
+
+    <div class="modal-body">
+      <div class="split" id="split">
+        <div class="compose">
+
+          <!-- scope: default vs this send -->
+          <div class="scope">
+            <div style="display:flex;align-items:center;gap:10px">
+              <div class="seg2">
+                <button onclick="alert('Opens the Default Email Template in Settings (managed default).')">✎ Default template</button>
+                <button class="active">This send only</button>
+              </div>
+              <span class="note">Edits here don’t change your saved default.</span>
+            </div>
+            <a onclick="alert('Opens Settings → Default Email Template (saved, overwritable).')">Manage default template →</a>
+          </div>
+
+          <!-- attachment -->
+          <div class="attach">
+            <span class="pdf">PDF</span>
+            <span>LOE-07 — Henderson.pdf</span>
+            <span class="meta">attached · signing link embedded</span>
+          </div>
+
+          <!-- recipient + subject -->
+          <div class="field">
+            <label>Subject</label>
+            <input class="subject" value="Letter of Engagement - Ready for Signature">
+          </div>
+
+          <!-- token toolbar -->
+          <div class="field" style="margin-bottom:0">
+            <label>Message</label>
+            <div class="toolbar">
+              <span class="t-lbl">Insert field:</span>
+              <span class="insert"><span class="plus">+</span> First Name</span>
+              <span class="insert"><span class="plus">+</span> Last Name</span>
+              <span class="insert"><span class="plus">+</span> Job Number</span>
+              <span class="insert"><span class="plus">+</span> Signing Link</span>
+            </div>
+            <div class="editor" id="editor"></div>
+            <div class="lockcap">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+              Shaded fields are locked merge tokens — they fill with each client’s real data on send and can’t be deleted or broken.
+            </div>
+          </div>
+
+          <div class="footer">
+            <span class="recip">To <b>sarah.henderson@example.com</b></span>
+            <div class="fbtns">
+              <button class="btn">‹ Back to document</button>
+              <button class="btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg> Send to client</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- right doc pane (split layout only) -->
+        <div class="docpane">
+          <p class="cap">Attached document</p>
+          <div class="docthumb">
+            <div class="logo"></div>
+            <div class="ln l"></div><div class="ln m"></div><div class="ln l"></div>
+            <div class="ln s"></div><div class="ln m"></div><div class="ln l"></div><div class="ln m"></div>
+            <div class="sig"></div>
+          </div>
+          <p class="cap" style="margin-top:12px">Page 1 of 8 · the signing link points here</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const LK='<svg class="lk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+function tok(label,cls){return `<span class="tok ${cls||''}">${LK}${label}</span>`}
+// EDIT mode: body with locked token pills (seeded from the current hardcoded default text)
+const BODY_EDIT = `
+  <p>Hi ${tok('First Name')},</p>
+  <p>Your Letter of Engagement for job ${tok('Job Number')} is ready for your review and signature.</p>
+  <p><a class="cta">Review &amp; Sign Document<span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span></a> &nbsp;<span class="tok link">${'Signing Link'}</span></p>
+  <p>What happens next:</p>
+  <p style="margin-left:4px">• Review the Letter of Engagement carefully<br>• Sign the document electronically<br>• You’ll receive a copy for your records<br>• We’ll begin work on your appraisal immediately</p>
+  <p>If you have any questions, please don’t hesitate to contact us.</p>
+  <p>Best regards,<br>Client Services Team<br>Valta Property Valuations Ltd.</p>`;
+// CLIENT preview: tokens resolved to sample values
+const v = s => `<span class="val">${s}</span>`;
+const BODY_CLIENT = `
+  <p>Hi ${v('Sarah')},</p>
+  <p>Your Letter of Engagement for job ${v('VAL-2025-0142')} is ready for your review and signature.</p>
+  <p><a class="cta" style="text-decoration:none">Review &amp; Sign Document</a></p>
+  <p>What happens next:</p>
+  <p style="margin-left:4px">• Review the Letter of Engagement carefully<br>• Sign the document electronically<br>• You’ll receive a copy for your records<br>• We’ll begin work on your appraisal immediately</p>
+  <p>If you have any questions, please don’t hesitate to contact us.</p>
+  <p>Best regards,<br>Client Services Team<br>Valta Property Valuations Ltd.</p>`;
+
+let view='edit';
+function render(){document.getElementById('editor').innerHTML = view==='edit'?BODY_EDIT:BODY_CLIENT;
+  // hide the lock caption + toolbar usefulness in client view
+  document.querySelector('.lockcap').style.display = view==='edit'?'flex':'none';
+  document.querySelector('.toolbar').style.opacity = view==='edit'?'1':'.45';
+}
+function setLayout(b){document.querySelectorAll('#layoutSeg button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+  document.getElementById('split').classList.toggle('two', b.dataset.l==='two');}
+function setView(b){document.querySelectorAll('#viewSeg button').forEach(x=>x.classList.remove('active'));b.classList.add('active');view=b.dataset.v;render();}
+render();
+</script>
+</body>
+</html>

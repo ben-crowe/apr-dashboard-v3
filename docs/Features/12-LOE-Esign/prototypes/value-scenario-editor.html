@@ -1,154 +1,134 @@
 <!DOCTYPE html>
-<!-- MOCKUP — Value Scenario narrative editor (Phase A, ui-designer 2026-06-16, rev2)
-     FULL LIBRARY view: every Section-10 scenario in the registry exposed, each readable/editable/lockable,
-     shown exactly as it prints in §10 (Extraordinary Assumptions & Hypothetical Conditions — a
-     Scenario | Summary table). Text VERBATIM from loeCascade.ts NARRATIVES (incl. "makret"); 4 pending
-     scenarios (no text yet) flagged for Chris to supply. Container = modal opened by a cog beside
-     "Value Scenarios" in Section 2. -->
+<!-- MOCKUP — Value Scenario narrative editor (Phase A, ui-designer 2026-06-16, rev3 INLINE-FIRST)
+     Ben's direction: no modal-drilling. The job's derived scenarios show their ACTUAL §10 paragraph
+     INLINE in Section 2, readable at a glance, editable in place (1 click). The cog beside "Value
+     Scenarios" opens the full library (all 10 registry scenarios) only when you want to manage the rest
+     (e.g. the 4 pending ones Chris fills). Text VERBATIM from loeCascade.ts NARRATIVES (incl "makret"). -->
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Value Scenario Editor — Mockup</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Value Scenario Editor — Mockup (inline)</title>
 <style>
-  :root{
-    --bg:#f1f5f9; --card:#ffffff; --fg:#0f172a; --muted:#64748b; --muted-2:#f8fafc;
-    --border:#e2e8f0; --border-strong:#cbd5e1; --accent:#0f172a;
-    --amber-fg:#b45309; --amber-bd:#fcd34d; --green:#16a34a; --green-bg:#dcfce7; --radius:8px;
-  }
+  :root{--bg:#f1f5f9;--card:#fff;--fg:#0f172a;--muted:#64748b;--muted-2:#f8fafc;--border:#e2e8f0;
+    --border-strong:#cbd5e1;--accent:#0f172a;--amber-fg:#b45309;--amber-bd:#fcd34d;--green:#16a34a;--rose:#f43f5e;}
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--fg);
-    font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    font-size:14px;line-height:1.5;padding:28px}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;line-height:1.5;padding:28px}
   h1{font-size:15px;margin:0 0 2px}
   .sub{color:var(--muted);font-size:12.5px;margin:0 0 20px;max-width:880px}
 
-  /* in-context dashboard slice */
-  .slice{max-width:760px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:22px}
-  .slice-h{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
-  .row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)}
-  .row:last-child{border-bottom:none}
-  .lbl{display:flex;align-items:center;gap:7px;font-size:13px}
-  .val{color:var(--muted);font-size:13px}
-  .val.derived{color:#94a3b8;font-style:italic}
-  .cog{width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;border-radius:6px;cursor:pointer;color:var(--muted);transition:all .12s;border:1px solid transparent}
-  .cog:hover{background:var(--muted-2);color:var(--fg);border-color:var(--border)}
-  .cog svg{width:15px;height:15px}
-  .hint{font-size:11.5px;color:var(--muted);margin-top:10px}.hint b{color:var(--fg)}
-  .open-btn{font:inherit;font-size:13px;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 16px;cursor:pointer}
+  /* dashboard card */
+  .card{max-width:880px;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .sec-head{background:#f1f5f9;border-bottom:1px solid var(--border);padding:11px 18px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px}
+  .sec-head .chev{color:var(--muted)}
+  .pad{padding:16px 18px}
+  .grp{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin:4px 0 12px}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:12px 40px;margin-bottom:6px}
+  .field{display:flex;align-items:baseline;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)}
+  .fl{font-size:13px;color:var(--fg);min-width:130px;text-align:right;flex:none}
+  .fv{font-size:13px;color:#334155}
+  .fv.muted{color:#94a3b8}
+  .fv.sel{color:#94a3b8;font-style:italic}
 
-  /* modal */
-  .backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:24px;z-index:50}
-  .backdrop.open{display:flex}
-  .modal{background:var(--card);width:100%;max-width:720px;max-height:92vh;border-radius:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px rgba(2,6,23,.32)}
-  .m-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-  .m-title{font-size:14.5px;font-weight:600;margin:0}
-  .m-sub{font-size:12px;color:var(--muted);margin:3px 0 0;max-width:560px}
-  .x{border:none;background:none;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:4px;border-radius:6px}
-  .x:hover{background:var(--muted-2);color:var(--fg)}
-  .m-body{padding:16px 20px;overflow:auto}
+  /* the live Value Scenarios block (full width, inline paragraphs) */
+  .vs-wrap{grid-column:1 / -1;border-top:1px solid var(--border);margin-top:6px;padding-top:14px}
+  .vs-head{display:flex;align-items:center;gap:9px;margin-bottom:4px}
+  .vs-head .t{font-size:13px;font-weight:600}
+  .vs-head .src{font-size:11.5px;color:#94a3b8;font-style:italic}
+  .cog{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);
+    border:1px solid var(--border-strong);border-radius:7px;padding:4px 9px;cursor:pointer;background:#fff}
+  .cog:hover{background:var(--muted-2);color:var(--fg)}
+  .cog svg{width:13px;height:13px}
+  .vs-note{font-size:11.5px;color:var(--muted);margin:2px 0 12px}
 
-  .mirror{display:flex;gap:8px;align-items:flex-start;background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:8px;padding:9px 11px;font-size:12px;margin-bottom:14px}
-  .mirror svg{width:15px;height:15px;flex:none;margin-top:1px}
-
-  /* §10 context header (so the table reads as the contract section) */
-  .s10-head{font-family:Georgia,'Times New Roman',serif;border:1px solid var(--border);border-radius:10px;padding:13px 15px;margin-bottom:14px;background:#fff}
-  .s10-head h2{font-size:13.5px;font-weight:700;margin:0 0 6px}
-  .s10-head p{font-size:12px;color:#334155;margin:0}
-
-  /* filters */
-  .filters{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
-  .fbtn{font:inherit;font-size:12px;background:#fff;border:1px solid var(--border-strong);border-radius:999px;padding:5px 12px;cursor:pointer;color:var(--fg)}
-  .fbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .fbtn .c{font-weight:600;margin-left:5px;opacity:.7}
-
-  /* scenario rows */
-  .scn{border:1px solid var(--border);border-radius:10px;background:#fff;margin-bottom:9px;overflow:hidden}
-  .scn-h{display:flex;align-items:center;gap:10px;padding:11px 13px;cursor:pointer}
-  .scn-h:hover{background:var(--muted-2)}
-  .dot{width:8px;height:8px;border-radius:50%;flex:none;background:var(--green)}
-  .dot.empty{background:var(--amber-bd)}
-  .scn-nm{font-size:13px;font-weight:600;flex:1}
-  .chip{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;border-radius:999px;padding:2px 8px;border:1px solid var(--border)}
-  .chip.cascade{color:#0369a1;background:#e0f2fe;border-color:#bae6fd}
-  .chip.need{color:var(--amber-fg);background:#fffbeb;border-color:var(--amber-bd)}
-  .chev{color:var(--muted);transition:transform .15s;font-size:12px}
-  .scn.open .chev{transform:rotate(90deg)}
-  .scn-body{display:none;padding:0 13px 13px;border-top:1px solid var(--border)}
-  .scn.open .scn-body{display:block}
-
-  .as-prints{font-family:Georgia,'Times New Roman',serif;background:var(--muted-2);border:1px solid var(--border);border-radius:8px;padding:11px 13px;margin:12px 0 0;font-size:13px;line-height:1.6;color:#1e293b}
-  .as-prints.empty{color:var(--amber-fg);font-style:italic;font-family:'Inter',sans-serif;font-size:12.5px}
-  .cap{font-size:10.5px;color:var(--muted);margin:8px 0 0;display:flex;align-items:center;gap:6px}
+  /* inline scenario card */
+  .sc{border:1px solid var(--border);border-radius:10px;background:var(--muted-2);margin-bottom:10px;overflow:hidden}
+  .sc-h{display:flex;align-items:center;gap:9px;padding:9px 12px;background:#fff;border-bottom:1px solid var(--border)}
+  .sc-dot{width:7px;height:7px;border-radius:50%;background:var(--rose);flex:none}
+  .sc-dot.empty{background:var(--amber-bd)}
+  .sc-nm{font-size:12.5px;font-weight:600;flex:1}
+  .sc-row{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);background:var(--muted-2);border:1px solid var(--border);border-radius:999px;padding:2px 8px}
+  .sc-edit{border:1px solid var(--border-strong);background:#fff;color:var(--fg);font-size:11.5px;cursor:pointer;border-radius:6px;padding:4px 10px;display:inline-flex;align-items:center;gap:5px}
+  .sc-edit:hover{background:var(--muted-2)}
+  .sc-edit svg{width:12px;height:12px}
+  .sc-body{padding:12px}
+  .para{font-family:Georgia,'Times New Roman',serif;font-size:13px;line-height:1.6;color:#1e293b;margin:0}
+  .para.empty{color:var(--amber-fg);font-style:italic;font-family:'Inter',sans-serif;font-size:12.5px}
+  .cap{font-size:10.5px;color:var(--muted);margin:9px 0 0;display:flex;align-items:center;gap:6px}
   .cap code{background:#fff;border:1px solid var(--border);border-radius:4px;padding:1px 5px;font-size:10.5px;color:#475569;font-family:ui-monospace,Menlo,monospace}
-  .acts{display:flex;align-items:center;gap:8px;margin-top:11px}
-  .mini{border:1px solid var(--border-strong);background:#fff;color:var(--fg);cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:7px}
-  .mini:hover{background:var(--muted-2)}
-  .mini svg{width:13px;height:13px}
-  .locked{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--green);font-weight:500}
-  .locked svg{width:13px;height:13px}
-
-  textarea{width:100%;min-height:92px;border:1px solid var(--border-strong);border-radius:8px;padding:10px;font:inherit;font-size:13px;line-height:1.6;color:#1e293b;resize:vertical;outline:none;margin-top:12px}
+  .saved{display:inline-flex;align-items:center;gap:4px;color:var(--green);font-size:11px;font-weight:500;margin-left:8px}
+  .saved svg{width:12px;height:12px}
+  textarea{width:100%;min-height:84px;border:1px solid var(--border-strong);border-radius:8px;padding:9px;font:inherit;font-size:13px;line-height:1.6;color:#1e293b;resize:vertical;outline:none}
   textarea:focus{border-color:#94a3b8;box-shadow:0 0 0 3px rgba(148,163,184,.18)}
-  .btn{font:inherit;font-size:12.5px;font-weight:500;border-radius:7px;padding:7px 14px;cursor:pointer;border:1px solid var(--border-strong);background:#fff;color:var(--fg)}
+  .acts{display:flex;align-items:center;gap:8px;margin-top:9px}
+  .btn{font:inherit;font-size:12px;font-weight:500;border-radius:7px;padding:6px 13px;cursor:pointer;border:1px solid var(--border-strong);background:#fff;color:var(--fg)}
   .btn:hover{background:var(--muted-2)}
   .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.btn.primary:hover{opacity:.92}
-  .warn-row{display:flex;align-items:center;gap:7px;margin-left:auto;font-size:11.5px;color:var(--muted);cursor:pointer;user-select:none}
+  .warn{display:flex;align-items:center;gap:6px;margin-left:auto;font-size:11px;color:var(--muted);cursor:pointer}
+
+  /* library modal (the cog) */
+  .backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:24px;z-index:50}
+  .backdrop.open{display:flex}
+  .modal{background:#fff;width:100%;max-width:680px;max-height:88vh;border-radius:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px rgba(2,6,23,.32)}
+  .m-head{padding:15px 19px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .m-head .t{font-size:14px;font-weight:600;margin:0}
+  .m-head .s{font-size:11.5px;color:var(--muted);margin:3px 0 0}
+  .x{border:none;background:none;color:var(--muted);font-size:18px;cursor:pointer;padding:3px;border-radius:6px}.x:hover{background:var(--muted-2)}
+  .m-body{padding:14px 19px;overflow:auto}
+  .lib{border:1px solid var(--border);border-radius:9px;margin-bottom:8px;background:#fff;overflow:hidden}
+  .lib-h{display:flex;align-items:center;gap:9px;padding:10px 12px;cursor:pointer}.lib-h:hover{background:var(--muted-2)}
+  .lib-b{display:none;padding:0 12px 12px;border-top:1px solid var(--border)}
+  .lib.open .lib-b{display:block}
+  .filters{display:flex;gap:8px;margin-bottom:12px}
+  .fbtn{font:inherit;font-size:12px;background:#fff;border:1px solid var(--border-strong);border-radius:999px;padding:5px 12px;cursor:pointer}
+  .fbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}.fbtn .c{font-weight:600;margin-left:5px;opacity:.7}
 
   .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;transition:all .2s;display:flex;align-items:center;gap:9px;padding:11px 16px;border-radius:9px;font-size:13px;font-weight:500;z-index:80;box-shadow:0 10px 30px rgba(2,6,23,.25)}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .toast.ok{background:#052e16;color:#bbf7d0}.toast.err{background:#450a0a;color:#fecaca}
   .toast svg{width:16px;height:16px}
-  .legend{max-width:720px;font-size:11.5px;color:var(--muted);margin-top:18px;line-height:1.7}.legend b{color:var(--fg)}
+  .legend{max-width:880px;font-size:11.5px;color:var(--muted);margin-top:16px;line-height:1.7}.legend b{color:var(--fg)}
 </style>
 </head>
 <body>
 
-<h1>Value Scenario narrative editor — interaction mockup (rev 2)</h1>
-<p class="sub">Phase A · Every Section-10 scenario in the registry, exposed for reading + editing. Click the cog → modal → expand any scenario to read the exact write-up that prints in the contract, edit it, and lock it in. Green = has text · amber = no text yet (Chris supplies). Text is verbatim from the code, including the “makret” typo.</p>
+<h1>Value Scenarios — inline on the dashboard (rev 3)</h1>
+<p class="sub">No drilling. The job's scenarios show their actual Section 10 write-up right here in Section 2 — read at a glance, click <b>Edit</b> to change it in place. The <b>⚙ All scenarios</b> button opens the full library (all 10) only when you need the rest.</p>
 
-<div class="slice">
-  <div class="slice-h">Section 2 · Value Scenarios &amp; Approaches</div>
-  <div class="row">
-    <span class="lbl">Status of Improvements</span><span class="val">Improved - Under Renovation</span>
+<div class="card">
+  <div class="sec-head"><span class="chev">▾</span> LOE Quote &amp; Valuation Details</div>
+  <div class="pad">
+    <div class="grp">Value Scenarios &amp; Approaches</div>
+    <div class="frow">
+      <div class="field"><span class="fl">Status of Improvements:</span><span class="fv">Improved - Under Renovation</span></div>
+      <div class="field"><span class="fl">Approaches to Value:</span><span class="fv sel">Direct Comparison, Income, Cost</span></div>
+
+      <!-- the live, inline Value Scenarios block -->
+      <div class="vs-wrap">
+        <div class="vs-head">
+          <span class="t">Value Scenarios</span>
+          <span class="src">results from Status + Authorized Use</span>
+          <button class="cog" onclick="openLib()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            All scenarios
+          </button>
+        </div>
+        <p class="vs-note">This job uses 2 scenarios — each one’s exact Section 10 write-up is shown below, editable in place.</p>
+        <div id="inline"></div>
+      </div>
+    </div>
   </div>
-  <div class="row">
-    <span class="lbl">Value Scenarios
-      <span class="cog" onclick="openModal()" title="Read &amp; edit the Section 10 write-ups">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      </span>
-    </span>
-    <span class="val derived">As-Is, As If Complete &amp; Stabilized</span>
-  </div>
-  <div class="row"><span class="lbl">Approaches to Value</span><span class="val derived">Direct Comparison, Income, Cost</span></div>
-  <p class="hint">The <b>cog</b> opens the full Section 10 library — read, edit and lock the exact write-up for every scenario.</p>
 </div>
 
-<button class="open-btn" onclick="openModal()">▸ Open the editor</button>
+<div class="legend"><b>What changed (rev 3):</b> the write-ups now live ON the dashboard for the job’s scenarios — pick/derive a scenario and its paragraph appears here, no modal. <b>Edit</b> is inline (one click). The <b>⚙ All scenarios</b> button is the only thing that opens a separate surface — the full 10-scenario library, for adding the pending ones (e.g. Insurable Replacement Cost) Chris hasn’t written yet.</div>
 
-<div class="legend"><b>What this proves:</b> every Section-10 write-up — the ones the cascade generates today AND the rest in the registry — is exposed for the user to read exactly as it prints, edit, and lock in. <b>Blue “in cascade” tag</b> = a scenario the current cascade can produce; the rest are library entries available for §10. <b>Amber “needs text”</b> = no write-up yet (e.g. Insurable Replacement Cost) — where Chris fills the gap.</div>
-
-<!-- MODAL -->
+<!-- LIBRARY MODAL (cog only) -->
 <div class="backdrop" id="backdrop">
   <div class="modal" role="dialog" aria-modal="true">
     <div class="m-head">
-      <div>
-        <p class="m-title">Section 10 write-ups — Value Scenario library</p>
-        <p class="m-sub">Read each scenario’s write-up exactly as it prints in the contract, edit it, and lock it in. What you lock here is what Section 10 generates.</p>
-      </div>
-      <button class="x" onclick="closeModal()" aria-label="Close">✕</button>
+      <div><p class="t">All Section 10 scenarios — library</p><p class="s">Every scenario in the registry. Edit the job’s ones inline; use this to fill the rest (the pending 4).</p></div>
+      <button class="x" onclick="closeLib()">✕</button>
     </div>
     <div class="m-body">
-      <div class="mirror">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
-        <span>Live mirror of the contract. Each write-up below is the exact right-hand cell of its Section 10 row — edit + lock here and the generated LOE prints it.</span>
-      </div>
-
-      <div class="s10-head">
-        <h2>10. Extraordinary Assumptions &amp; Hypothetical Conditions</h2>
-        <p>This assignment may rely on Extraordinary Assumptions and/or Hypothetical Conditions, including:</p>
-      </div>
-
       <div class="filters" id="filters"></div>
       <div id="list"></div>
     </div>
@@ -158,93 +138,101 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// VERBATIM from src/utils/loe/loeCascade.ts — 6 NARRATIVES with text + 4 registry/option-set scenarios
-// PENDING text (As If Complete - Rezoned/Serviced/Subdivided, Insurable Replacement Cost). t:"" = pending.
-// cascade:true = the live cascade can currently derive this scenario (STATUS_TO_SCENARIOS / Insurance override).
-const SCEN = [
-  {n:"As Is Vacant Land", cascade:true,  t:"current market value of the subject property as of the effective date"},
-  {n:"As If Vacant Land", cascade:true,  t:"current makret value based on the extraordinary assumption and hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date."},
-  {n:"As If Complete & Stabilized", cascade:true, t:"current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the project is 100% complete and fully leased at market rents and is at stabilized occupancy, as of the effective date."},
-  {n:"As-Is", cascade:true, t:"current market value of the subject property as improved as of the effective date"},
-  {n:"As Stabilized", cascade:true, t:"current market value of the subject property based on the extraordinary assumption that the subject property is fully leased at market rents and is at stabilized occupancy as of the effective date."},
-  {n:"As If Complete & Stabilized - Renovated", cascade:false, t:"current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the renovation is 100% complete and the property is fully leased and is at stabilized occupancy, as of the effective date."},
-  {n:"As If Complete - Rezoned", cascade:false, t:""},
-  {n:"As If Complete - Serviced", cascade:false, t:""},
-  {n:"As If Complete - Subdivided", cascade:false, t:""},
-  {n:"Insurable Replacement Cost", cascade:true, t:""},
+// VERBATIM from src/utils/loe/loeCascade.ts. t:"" = pending (Chris to supply). job:true = derived for THIS job.
+const SCEN=[
+ {n:"As Is Vacant Land",cascade:true,job:false,t:"current market value of the subject property as of the effective date"},
+ {n:"As If Vacant Land",cascade:true,job:false,t:"current makret value based on the extraordinary assumption and hypothetical condition that the existing improvements on the subject site do not exist, and that the property is vacant as of the effective date."},
+ {n:"As If Complete & Stabilized",cascade:true,job:true,t:"current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the project is 100% complete and fully leased at market rents and is at stabilized occupancy, as of the effective date."},
+ {n:"As-Is",cascade:true,job:true,t:"current market value of the subject property as improved as of the effective date"},
+ {n:"As Stabilized",cascade:true,job:false,t:"current market value of the subject property based on the extraordinary assumption that the subject property is fully leased at market rents and is at stabilized occupancy as of the effective date."},
+ {n:"As If Complete & Stabilized - Renovated",cascade:false,job:false,t:"current market value of the subject property as proposed based upon the extraordinary assumption and hypothetical condition that the renovation is 100% complete and the property is fully leased and is at stabilized occupancy, as of the effective date."},
+ {n:"As If Complete - Rezoned",cascade:false,job:false,t:""},
+ {n:"As If Complete - Serviced",cascade:false,job:false,t:""},
+ {n:"As If Complete - Subdivided",cascade:false,job:false,t:""},
+ {n:"Insurable Replacement Cost",cascade:true,job:false,t:""},
 ];
-const state = SCEN.map(s=>({...s, open:false, editing:false, locked:false}));
-let filter = 'all';
+const st=SCEN.map(s=>({...s,editing:false,open:false,saved:false}));
+let filter='all';
 
-function openModal(){ document.getElementById('backdrop').classList.add('open'); render(); }
-function closeModal(){ document.getElementById('backdrop').classList.remove('open'); }
-document.getElementById('backdrop').addEventListener('click', e=>{ if(e.target.id==='backdrop') closeModal(); });
-
-function shown(){
-  if(filter==='text') return state.filter(s=>s.t);
-  if(filter==='need') return state.filter(s=>!s.t);
-  return state;
+// ---------- INLINE (dashboard) ----------
+function jobScens(){ return st.filter(s=>s.job); }
+function renderInline(){
+  document.getElementById('inline').innerHTML = jobScens().map(s=>{
+    const i=st.indexOf(s), empty=!s.t, row=jobScens().indexOf(s)+1;
+    const body = s.editing
+      ? `<div class="sc-body"><textarea id="i-${i}">${esc(s.t)}</textarea>
+           <div class="acts"><button class="btn primary" onclick="iSave(${i})">Save &amp; lock</button>
+           <button class="btn" onclick="iCancel(${i})">Cancel</button>
+           <label class="warn"><input type="checkbox" id="if-${i}"> simulate fail</label></div></div>`
+      : `<div class="sc-body">
+           <p class="para ${empty?'empty':''}">${empty?'No write-up yet — add the wording (Section 10 prints a placeholder until then).':esc(s.t)}</p>
+           <p class="cap">Prints into Section 10 as <code>[EA/HCSummary${row}]</code> · live mirror</p></div>`;
+    return `<div class="sc">
+      <div class="sc-h">
+        <span class="sc-dot ${empty?'empty':''}"></span>
+        <span class="sc-nm">${esc(s.n)}</span>
+        <span class="sc-row">§10 row ${row}</span>
+        ${s.saved?`<span class="saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>locked</span>`:''}
+        ${s.editing?'':`<button class="sc-edit" onclick="iEdit(${i})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>${empty?'Add text':'Edit'}</button>`}
+      </div>${body}</div>`;
+  }).join('');
 }
-function render(){
-  const nAll=state.length, nText=state.filter(s=>s.t).length, nNeed=nAll-nText;
-  document.getElementById('filters').innerHTML =
-    fbtn('all','All',nAll)+fbtn('text','Has text',nText)+fbtn('need','Needs text',nNeed);
-  document.getElementById('list').innerHTML = shown().map(rowHTML).join('');
+function iEdit(i){ st[i].editing=true; renderInline(); setTimeout(()=>{const e=document.getElementById('i-'+i);if(e)e.focus();},0); }
+function iCancel(i){ st[i].editing=false; renderInline(); }
+function iSave(i){
+  if(document.getElementById('if-'+i).checked){ toast('err',"Couldn’t save — write failed. Text kept; try again."); return; }
+  st[i].t=document.getElementById('i-'+i).value.trim(); st[i].editing=false; st[i].saved=true;
+  renderInline(); toast('ok','Locked in — Section 10 prints this.');
 }
-function fbtn(k,label,c){ return `<button class="fbtn ${filter===k?'active':''}" onclick="setFilter('${k}')">${label}<span class="c">${c}</span></button>`; }
-function setFilter(k){ filter=k; render(); }
 
-function rowHTML(s){
-  const i = state.indexOf(s); const empty=!s.t;
+// ---------- LIBRARY (cog modal) ----------
+function openLib(){ document.getElementById('backdrop').classList.add('open'); renderLib(); }
+function closeLib(){ document.getElementById('backdrop').classList.remove('open'); }
+document.getElementById('backdrop').addEventListener('click',e=>{if(e.target.id==='backdrop')closeLib();});
+function shown(){ if(filter==='text')return st.filter(s=>s.t); if(filter==='need')return st.filter(s=>!s.t); return st; }
+function setFilter(k){filter=k;renderLib();}
+function renderLib(){
+  const a=st.length,tt=st.filter(s=>s.t).length;
+  document.getElementById('filters').innerHTML=
+    fb('all','All',a)+fb('text','Has text',tt)+fb('need','Needs text',a-tt);
+  document.getElementById('list').innerHTML=shown().map(libRow).join('');
+}
+function fb(k,l,c){return `<button class="fbtn ${filter===k?'active':''}" onclick="setFilter('${k}')">${l}<span class="c">${c}</span></button>`;}
+function libRow(s){
+  const i=st.indexOf(s),empty=!s.t;
   let body='';
   if(s.open){
-    if(s.editing){
-      body=`<div class="scn-body"><textarea id="ed-${i}">${esc(s.t)}</textarea>
-        <div class="acts">
-          <button class="btn primary" onclick="save(${i})">Save &amp; lock</button>
-          <button class="btn" onclick="cancel(${i})">Cancel</button>
-          <label class="warn-row"><input type="checkbox" id="fail-${i}"> simulate save failure</label>
-        </div></div>`;
-    } else {
-      body=`<div class="scn-body">
-        <div class="as-prints ${empty?'empty':''}">${empty
-          ? 'No write-up yet — Section 10 prints a literal placeholder for this scenario. Add the wording here (this is where Chris supplies the missing copy).'
-          : esc(s.t)}</div>
-        <p class="cap">Prints as the right-hand cell of its Section 10 row → <code>[EA/HCSummary]</code></p>
-        <div class="acts">
-          <button class="mini" onclick="edit(${i})">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg>
-            ${empty?'Add text':'Edit'}</button>
-          ${s.locked?`<span class="locked"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Locked in</span>`:''}
-        </div></div>`;
-    }
+    body = s.editing
+      ? `<div class="lib-b"><textarea id="l-${i}">${esc(s.t)}</textarea>
+          <div class="acts"><button class="btn primary" onclick="lSave(${i})">Save &amp; lock</button>
+          <button class="btn" onclick="lCancel(${i})">Cancel</button></div></div>`
+      : `<div class="lib-b"><p class="para ${empty?'empty':''}" style="margin-top:11px">${empty?'No write-up yet — add it here (this is where the pending Insurable copy goes).':esc(s.t)}</p>
+          <div class="acts"><button class="sc-edit" onclick="lEdit(${i})">${empty?'Add text':'Edit'}</button></div></div>`;
   }
-  const statusChip = empty ? `<span class="chip need">needs text</span>` : (s.cascade?`<span class="chip cascade">in cascade</span>`:'');
-  return `<div class="scn ${s.open?'open':''}">
-    <div class="scn-h" onclick="toggle(${i})">
-      <span class="dot ${empty?'empty':''}"></span>
-      <span class="scn-nm">${esc(s.n)}</span>
-      ${statusChip}
-      <span class="chev">▶</span>
+  const chip = empty?`<span class="sc-row" style="color:var(--amber-fg);background:#fffbeb;border-color:var(--amber-bd)">needs text</span>`
+    :(s.job?`<span class="sc-row" style="color:#0369a1;background:#e0f2fe;border-color:#bae6fd">this job</span>`
+      :(s.cascade?`<span class="sc-row">in cascade</span>`:''));
+  return `<div class="lib ${s.open?'open':''}">
+    <div class="lib-h" onclick="lToggle(${i})">
+      <span class="sc-dot ${empty?'empty':''}"></span><span class="sc-nm">${esc(s.n)}</span>${chip}
+      <span style="color:var(--muted);font-size:11px">${s.open?'▾':'▸'}</span>
     </div>${body}</div>`;
 }
-function toggle(i){ state[i].open=!state[i].open; if(!state[i].open) state[i].editing=false; render(); }
-function edit(i){ state[i].editing=true; render(); setTimeout(()=>{const e=document.getElementById('ed-'+i);if(e)e.focus();},0); }
-function cancel(i){ state[i].editing=false; render(); }
-function save(i){
-  if(document.getElementById('fail-'+i).checked){ toast('err',"Couldn’t save — database write failed. Your text is kept; try again."); return; }
-  state[i].t=document.getElementById('ed-'+i).value.trim(); state[i].editing=false; state[i].locked=true;
-  render(); toast('ok','Locked in — Section 10 will print this write-up.');
-}
+function lToggle(i){st[i].open=!st[i].open;if(!st[i].open)st[i].editing=false;renderLib();}
+function lEdit(i){st[i].editing=true;renderLib();setTimeout(()=>{const e=document.getElementById('l-'+i);if(e)e.focus();},0);}
+function lCancel(i){st[i].editing=false;renderLib();}
+function lSave(i){ st[i].t=document.getElementById('l-'+i).value.trim();st[i].editing=false;st[i].saved=true;
+  renderLib(); renderInline(); toast('ok','Locked in.'); }
+
 function toast(kind,msg){
   const t=document.getElementById('toast');
-  const icon=kind==='ok'
-    ?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+  const ic=kind==='ok'?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
     :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>';
-  t.className='toast show '+kind; t.innerHTML=icon+'<span>'+msg+'</span>';
-  clearTimeout(window._tt); window._tt=setTimeout(()=>t.className='toast '+kind,3200);
+  t.className='toast show '+kind;t.innerHTML=ic+'<span>'+msg+'</span>';
+  clearTimeout(window._tt);window._tt=setTimeout(()=>t.className='toast '+kind,3000);
 }
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+renderInline();
 </script>
 </body>
 </html>

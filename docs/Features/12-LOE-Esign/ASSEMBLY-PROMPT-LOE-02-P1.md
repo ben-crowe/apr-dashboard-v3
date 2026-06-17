@@ -42,36 +42,42 @@ You are now **react-specialist** — APR Dashboard v3 (React 18 + TypeScript + V
 ### STEP 2 — Search-prime (both phases, scoped)
 `Activate /search-2phase` → `--project ~/Development/APR-Dashboard-v3 --topic "LOE templateParser stripHTMLTags contact block job_contracts saveJobContract loeCascade structured address Valcre AddressStreet 1:1 parseAddress empty-PATCH VALCRE_SYNC_FIELDS"`. Thin leg → read the spec Entry Files directly (ground truth), don't conclude "missing."
 
-### STEP 3 — Build (per the specs; grouped)
-**A. Contact-block lock** (Spec 1 §A) — exclude the client contact block from the editable-sections parse (root cause: `templateParser.ts` `stripHTMLTags` flattens it); render read-only + structured from the client record; click → contact record with **guarded nav**; **graceful empty** (omit empty lines). Scope: contact block ONLY.
+### STEP 3 — Build (RECONCILED against git HEAD, 2026-06-16 — co-arch already cleaned the tree)
+
+**⚑ PRE-FLIGHT (mandatory): the tree is now CLEAN** (co-arch committed the stranded email pilot at `0baad11`). Still — `git log`-check before each item; if something below is already in HEAD, SKIP it (don't redo/clobber). The earlier dispatch STUCK because the scope overlapped committed work — this scope is reconciled, but verify.
+
+**ALREADY COMMITTED — do NOT rebuild (verified in git this session):**
+- Contact-block lock (`0058b5c`) · cascade-sync client verdict fix (`be7cb51`/`3cf67f6`) · `statusOfImprovements`+`valueTimeframe` sync wiring (`26a6107`) · Approaches+Tenancy 2nd-batch (`10447a6`) · Property-Subtype sync (`98f23c8`) · **Property Rights → custom field CF12412 (`d4f3a16`) — this REPLACES the old "fix native Purposes" plan; do NOT touch native Purposes / do NOT revert this** · the editable-email pilot (`0baad11`). Spec 1 §A and the old F(f)/F(g) are DONE/superseded — skip them.
+
+**BUILD — the genuine remainder:**
 **B. Rename** "Edit Template" → **"Edit Document"** (`LOEPreviewModal.tsx:408`) + the subtitle (`TemplateEditorModal.tsx:329`).
 **C. Delete a saved version** — subtle **hover-X** beside "Open" on each saved row → **"are you sure?"** confirm → delete. **DRAFTS ONLY** (block/hide on sent). Backend `deleteJobContract(id)` exists; wire UI + confirm + drafts-only guard.
-**D. Cascade versions save as distinct drafts** (Spec 1 §B–F) — each new version = fresh **Create Contract** (no `id` → INSERT, separate `job_contracts` draft row, no overwrite); **per-version label** via `template_version`; **save-failure must SURFACE** (toast/throw, not swallow); `job_contracts` insert visible to **anon**.
-**E. 4-field structured address** (Spec 2) — DB migration: 6 nullable cols (`client_city/province/postal_code`, `property_city/province/postal_code`); `types.ts` + `src/types/job.ts`; `ClientSubmissionSection.tsx` Street/City/Province/Postal for BOTH client + property (auto-save + in the `syncData` PAYLOAD); `SubmissionForm.tsx` intake; LOE mapper composes `[ClientAddressLocality]` + `[PropertyAddressLocality]` (empty-suppress line+`<br/>` if all 3 empty); **Valcre 1:1 — DELETE `parseAddress`**, map AddressStreet/City/State/PostalCode directly. **⚑⚑ NO-CROSS:** client→Contact only, property→Property only; **PropertyContact = EMPTY (remove the `|| addressParts.street` fallback at ~L1100)** — Ben-confirmed. `[JobName]` label: **KEEP the city** (recombine just for the label) — co-arch default pending Ben; one-line flip if he says street-only.
-**F. Cascade-sync fixes** (punchlist CASCADE-SYNC set) — **(a) SERVER empty-native-PATCH skip** in `api/valcre.ts`: when `updateData` has no keys, SKIP the native PATCH, go straight to `setValtaCustomFields` (this is LOAD-BEARING — empty PATCH currently hard-fails and custom fields never write). **(f) Surface the swallowed Valcre native-PATCH error** (currently `details:''`) so failures are diagnosable. **(g) Fix the Property Rights `Purposes` native update** once (f) reveals the real rejection reason (REAL failure, not a mute). **(d)** surface the cascade-derived state on the dashboard.
+**D. Cascade versions save as distinct drafts** (Spec 1 §B–F) — each new version = fresh **Create Contract** (no `id` → INSERT, separate `job_contracts` draft row, no overwrite); **per-version label** via `template_version`; **save-failure must SURFACE** (toast/throw, not swallow).
+**E. 4-field structured address** (Spec 2) — DB migration: 6 nullable cols (`client_city/province/postal_code`, `property_city/province/postal_code`); `types.ts` + `src/types/job.ts`; `ClientSubmissionSection.tsx` Street/City/Province/Postal for BOTH client + property (auto-save + in the `syncData` PAYLOAD); `SubmissionForm.tsx` intake; LOE mapper composes `[ClientAddressLocality]` + `[PropertyAddressLocality]` (empty-suppress line+`<br/>` if all 3 empty); **Valcre 1:1 — DELETE `parseAddress`**, map AddressStreet/City/State/PostalCode directly. **⚑⚑ NO-CROSS:** client→Contact only, property→Property only; **PropertyContact = EMPTY (remove the `|| addressParts.street` fallback at ~L1100)** — Ben-confirmed. `[JobName]` label: **KEEP the city** (recombine just for the label).
+**F. SERVER empty-native-PATCH skip** in `api/valcre.ts`: when `updateData` has no keys, SKIP the native PATCH, go straight to `setValtaCustomFields` (LOAD-BEARING — empty PATCH currently hard-fails so custom-only writes never land). PLUS surface the cascade-derived state on the dashboard. *(The old F(f) error-surfacing + F(g) Purposes fix are DROPPED — Property Rights now routes to CF12412, so there's no native-Purposes failure left to surface or fix.)*
 **G. Sync-reassurance UX** — give `ClientSubmissionSection` (Section 1) the same per-field `fieldStates`→'synced ✓' indicator `LoeQuoteSection` (Section 2) has (`status=` on its CompactFields) so no-popup reads as success.
 
-**⚑ PRESERVE QA's already-committed client-side fixes — do NOT regen over them:**
-- `LoeQuoteSection.tsx` syncFailed **verdict fix** (~L704-711): empty-native-PATCH no longer counts as failure.
-- `statusOfImprovements` + `valueTimeframe` wired into `VALCRE_SYNC_FIELDS` + `syncData`.
+**⚑ PRESERVE all the committed work above — do NOT regen over it.** Build only B/C/D/E/F/G.
 
 ### STEP 4 — Self-verify BEFORE reporting (the testable proof)
 
 **⚑ TWO non-negotiable verification rules (live evidence this session — ignore them and every check false-passes):**
 
 - **AUTH (TWEAK 2):** the app's real identity is **AUTHENTICATED, not unauthenticated.** **Unauthenticated/anon writes SILENTLY FAIL RLS** — the UI optimistically shows "saved" while the DB row reads back EMPTY (confirmed live this session). So: **LOG IN as `bc@crowestudio.com`** in the running app, THEN exercise the flows. Confirm persistence by **DB READ AFTER A RELOAD** (reload the job, re-query Supabase) — NEVER trust the optimistic UI "saved" state. (NOT service-role/console either — that's the opposite false-pass.)
-- **LOCAL-vs-DEPLOYED (TWEAK 1):** on port 8086, **`/api` proxies to the DEPLOYED server** (`vite.config.ts`) — so your STEP-3-F **SERVER** edits (`api/valcre.ts`: empty-PATCH skip, error-surfacing, Property Rights `Purposes`) are **NOT live on localhost** until deployed. Do NOT verify them on 8086 and do NOT claim them "verified" — you'd be testing stale prod (was 4 days stale this session). Build + commit them, report **"built, awaiting deploy."**
+- **LOCAL-vs-DEPLOYED (TWEAK 1) — now resolved by DEPLOY-FREELY:** on port 8086, **`/api` proxies to the DEPLOYED server** (`vite.config.ts`) — so your SERVER edits (`api/valcre.ts` empty-PATCH skip) are NOT live on localhost. Because deploy is now free (see CONSTRAINTS), the flow is: verify CLIENT-side on 8086 → **`vercel --prod`** → verify the SERVER-side fixes on the DEPLOYED app. Do NOT claim a server fix "verified" until you've verified it on the deployed instance (localhost would test stale prod — was 4 days stale this session).
 
-**Verify NOW on 8086 (client-side, logged in as bc@crowestudio.com, DB-read-after-reload):**
+**Phase 1 — verify CLIENT-side on 8086 (logged in as bc@crowestudio.com, DB-read-after-reload):**
 1. **Cascade versions:** create the distinct versions (Spec 1 divergence table), each a fresh Create Contract → Save Draft → **reload → query `job_contracts`** = distinct labeled draft rows, none overwritten → content-diff `edited_html` §10 differs (cascade-isolated). Reopen a version → loads THAT row's html.
-2. **Contact-block lock:** renders one-item-per-line from the record; not inline-editable; click → contact record (guarded nav); empty field omits its line; a draft created after the fix shows no run-on.
+2. **Edit Document rename** shows on the button + subtitle.
 3. **4-field address round-trip (DB side):** enter all 4 parts both addresses → save → **reload → re-query Supabase** = the 6 cols persist (DIFFERENT client vs property addresses) → LOE shows street + composed locality line (+ property full), empty-suppress holds.
 4. **Delete:** hover-X deletes a DRAFT after confirm; sent contracts not deletable.
-5. `npx tsc --noEmit` + build clean.
+5. **Sync-reassurance:** Section 1 fields show the 'synced ✓' indicator.
+6. `npx tsc --noEmit` + build clean.
 
-**Built + committed, proof DEFERRED to post-deploy (report "built, awaiting deploy" — do NOT mark verified off localhost):**
-6. **Address → Valcre 1:1 across ALL THREE entities** (Contact = client addr exactly, Property = property addr exactly, **PropertyContact = EMPTY**, no truncation, no swap) — needs the deployed proxy (server-side map + parseAddress deletion). QA runs this readback post-deploy.
-7. **Cascade-sync server fixes** — empty-PATCH skip (custom-only writes land), swallowed-error surfacing, Property Rights `Purposes` sync. All server-side → verify post-deploy.
+**Phase 2 — DEPLOY (`vercel --prod`) then verify SERVER-side on the deployed app:**
+7. **Address → Valcre 1:1 across ALL THREE entities** (Contact = client addr exactly, Property = property addr exactly, **PropertyContact = EMPTY**, no truncation, no swap) — use DIFFERENT client vs property addresses so a swap is visible.
+8. **Empty-PATCH skip:** a cascade-only change persists to Valcre custom fields (no empty-PATCH bail, no false toast).
+Report these as VERIFIED-ON-DEPLOYED (not "awaiting"). QA then runs the independent post-deploy round-trip.
 
 ### TOOL REMINDER — browser testing
 `/cli-browser-auto` / agent-browser **headless on port 8086**, **LOGGED IN as `bc@crowestudio.com`** (authenticated — unauthenticated/anon writes silently fail RLS and read back empty). **NOT Playwright, never --headed.** Search before guessing: `python3 ~/.claude/skills/cli-browser-auto/scripts/search.py "your task"`.
@@ -87,4 +93,4 @@ VERIFY artifact: the Step-4 results with evidence (DB rows, content-diff, Valcre
 
 ---
 
-*Route to QA `/review-gate` mode-2 before deploy. On thumbs-up → fork react-specialist with the prompt above. Go-live stays Ben's gate.*
+*QA mode-2 gate = PASSED. Scope RECONCILED against git 2026-06-16 (dropped already-committed items + the superseded Property-Rights/Purposes fix; email pilot committed `0baad11`; verify switched to deploy-then-verify). DEPLOY FREELY (Ben policy) — builder commits to main + `vercel --prod`, just informs Ben.*

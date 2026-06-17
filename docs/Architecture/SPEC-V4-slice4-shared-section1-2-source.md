@@ -3,7 +3,7 @@ id: spec-v4-slice4-shared-section1-2-source
 title: "SPEC — V4 Slice 4: Shared Section 1–2 field source (Option B build sub-spec)"
 created: 2026-06-17
 type: implementation-spec
-status: REOPENED — scope-authority reframe in flight (Chris registry as defining source); NOT for sign-off until folded
+status: READY FOR SIGN-OFF — Ben nodded the registry-as-defining-source reframe 2026-06-17; both honest flags resolved
 track: "Track 1/2 join — co-architect authored; registry owner (ui-designer) + QA co-build"
 owner: co-architect (author/design) · ui-designer (registry model + generator + fixture) · qa-agent (drift-check gate + reconcile) · Ben (sign-off)
 source: PROPOSAL-shared-section1-2-field-source.md (Ben picked Option B 2026-06-17)
@@ -79,7 +79,7 @@ The strict, release-blocking change-detector. QA-authored requirements (from the
 
 **New Phase-0 procedure (flips the order — registry defines, code verifies):**
 1. Take the xlsx **~45** as the canonical S1+S2 set (NOT the lossy .md).
-2. **Reconcile our app against it:** is each of the 37 present in our S1/S2? (`State of Improvements` + `Land Metric` are the misplaced ones → move S3→S2.) Any app S1/S2 field NOT in the 37 = bucket-4 review (operational extra → justify or drop, **never auto-remove**).
+2. **Reconcile our app against it — THIS IS THE S3-EXTRACTION COMPLETENESS CHECK (Ben's actual goal for this whole thread).** For EVERY one of the ~45 Chris-registry fields, check WHERE it currently lives in our app. The point: **before we "disregard Section 3 onward," guarantee we pulled EVERYTHING out of S3/S4 that belongs in S1–2.** The side-by-side sweep is the systematic guarantee — not a spot-check. `State of Improvements` + `Land Metric` are the two strays caught by eye → **MOVE S3→S2 is a HARD to-do THIS round (Ben: lock now, do not defer).** The sweep surfaces any OTHER stray beyond those two. Any app S1/S2 field NOT in the ~45 = bucket-4 review (operational extra → justify or drop, **never auto-remove**).
 3. The code **`section-home` tag is now a RECONCILE INPUT (verify against), NOT the authority.** Chris's registry membership is the authority; the code tag confirms placement.
 4. Assign each of the ~45 an **S1/S2 stage in OUR registry** (we own the split — `App Location` is blank, so no Chris confirm needed); render via the stage-filter.
 

@@ -51,10 +51,14 @@ Extend `scripts/generate-registry-derivatives.mjs` (today emits docs only) with 
 - **V4 form config** keyed by `v4id` — the schema-driven V4 S1/S2 consumes this.
 - **V3 drift-check** keyed by `v3key` — compares V3's actual fields/options against the master, emits divergences.
 
-### Phase 3 — The drift-check as a HARD GATE (owner: qa-agent + co-arch wiring)
-- Run the V3 drift-check in CI / the build path; **a mismatch BLOCKS the release** (non-zero exit / failed check), not a passive report.
-- **STRICT scope:** compares field presence, placement, AND dropdown OPTION sets (Chris's real edits), per field, both directions (missing + extra; extra = flag for review, not auto-fail-to-delete).
-- Reuses QA's reconcile pattern. **QA folds in their 4 tightening points here.**
+### Phase 3 — The drift-check as a HARD GATE (owner: qa-agent; co-arch wiring) — HARDENED per QA gate
+The strict, release-blocking change-detector. QA-authored requirements (from the gate):
+- **STRICT — watches the actual dropdown OPTIONS, not just field names** (options are what Chris edits). Per field, both directions (missing + extra).
+- **⚑ FAIL-CLOSED — refuse to pass if it CANNOT check something.** If a field's options aren't machine-readable, the check FAILS — it never waves the field through. This directly answers the V3 blind-spot QA found: V3's dropdown options are mixed — some in importable consts (`CASCADE_OPTIONS`, `DOC_TYPES`) but **~55 inline `<SelectItem>` literals scattered across LoeQuoteSection's 2301 lines**, which can't be read without fragile JSX parsing or a self-drifting manifest. **Consequence (precursor task):** to make those fields checkable, their inline options must be lifted into importable consts (a small, behavior-preserving V3 change — the ONLY V3 touch in this slice, and it's mechanical, not a form rebuild). Until a field's options are readable, fail-closed blocks it — which is the forcing function to lift them.
+- **Blocks the CLIENT (Production) release ONLY** — preview/dev builds are NOT blocked, so Chris + we can still iterate fast. The gate bites at the prod boundary.
+- **⚑ STATUS TAG per field** (e.g. `synced` | `approved-change` | `pending`) so the check can tell "someone forgot to sync" (BLOCK) from "we changed the master on purpose" (ALLOW). Without it, every legit master change jams the line. A deliberate change is marked approved → passes; an unexplained mismatch → blocks.
+- **Protect deliberately-different V4 fields** — the generate step (Phase 2) must NOT overwrite an intentional V4-only field (bucket-4) when producing the V4 config from the master.
+- Reuses QA's reconcile pattern. **QA owns this phase + confirms the folded text matches their sent version.**
 
 ### Phase 4 — Test-data fixture + sync toggle (owner: ui-designer)
 - V4's "fill with test data" (existing Load Data button) fixture is **keyed to the canonical field set** (`n`+`v3key`/`v4id`) and **drift-checked against the master** (so it can't rot when Chris tunes S2).
@@ -69,7 +73,7 @@ Before Phase 1 locks the field set: produce the **V4-only (bucket 4)** list (V4 
 ## Acceptance
 1. Registry `FIELDS` carries `v3key` + `v4id` + layout metadata for the full S1/S2 set; QA reconciles aliases against real code (zero wrong aliases).
 2. Generator emits a V4 config + a V3 drift-check off the one master; V4 S1/S2 builds from the generated config.
-3. **Drift-check BLOCKS:** introduce a deliberate V3↔master mismatch (incl. a changed dropdown OPTION) → the check FAILS the build. Fix it → passes. (Proves strict + hard-gate.)
+3. **Drift-check BLOCKS — MULTI-CASE + coverage-counted (QA):** introduce deliberate mismatches across SEVERAL fields (incl. a changed dropdown OPTION AND an unreadable/inline-option field) → the check FAILS on each. The check must REPORT how many fields it actually verified (coverage count) so it can't pass while blind to everything except the one broken field. A field marked `approved-change` passes; an unexplained mismatch blocks. Fail-closed: an uncheckable field FAILS, never skipped.
 4. V4-only fields surfaced for review; none auto-removed.
 5. Test-data fixture keyed to the canonical set; toggle OFF = fixture, ON = live V3→V4, both speaking the same contract; fixture is drift-checked too.
 6. V3's live forms are UNCHANGED (no rebuild); intake/LOE still work exactly as today.

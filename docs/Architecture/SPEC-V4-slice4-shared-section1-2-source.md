@@ -89,6 +89,16 @@ The strict, release-blocking change-detector. QA-authored requirements (from the
 - **SPIKE (v3key):** the form-STATE key IS reliably findable in the section files (captured exact: `statusOfImprovements`, `valueScenarios`, `clientEmail`, `propertyType`, `scopeOfWork`). **⚑ Auto-deriving v3key from the PascalCase name BREAKS on multi-word fields** (`stateOfImprovements`=capital O, `valueTimeframe`=capital T) → v3key MUST be captured EXPLICITLY per field, never algorithmically (this is exactly the "opaque id" rule, now proven). v4id capture = label/storeId match, not casing.
 - **NET: no blockers. Ready for full v3key/v4id capture (co-arch review + QA reconcile).**
 
+**⚑⚑ PHASE-1 MAJOR FINDING (ui-designer, 2026-06-17) — capture surfaced a V4 FIELD GAP, not just aliases.** Pulling V4's real `fieldRegistry.ts` S1/S2 set (83 entries) + grepping the whole registry, the in-scope fields split into THREE classes:
+- **Class 1 — DIRECT/ALIAS** (exist both sides, normal v3key+v4id capture): client contact, property name/address/type/subtype, fee, report-type, scope-of-work, legal.
+- **Class 2 — SEMANTIC RENAME** (exist in V4 under a different id): `InterestAppraised`→v4 `property-rights`, `AuthorizedUse`→v4 `intended-use`.
+- **Class 3 — ⚑ ABSENT FROM V4 ENTIRELY** (0 hits in `fieldRegistry.ts`): `StatusofImprovements`, `ValueScenarios`, `ApproachestoValue`, `AssignmentType`, `Valuetimeframe`, `TransactionStatus`, `ZoningStatus`, `CMHCFinancing`, `LandMetric` (+ likely `DesktopReport`, `ClientDocuments`, `Current/ProposedUse`, `PreviouslyAppraised`). **V4's S1/S2 registry is the LOE-document/appraiser field set — it has NO field for the valuation-cascade + job-classification set that Chris's registry requires and V3 S2 collects.** This is WHY the §10 cascade "never bridged to the builder" (the Slice-3 finding) — V4 literally has no fields to land it in.
+
+**SCOPE DECISION (co-arch, recommend to Ben): BRANCH class 3 to its own next slice (Slice 4b), do NOT fold into Slice 4.**
+- Slice 4 ships the shared-source machinery + drift-check + **classes 1+2** (fields that exist both sides) — Chris's tuning-week drift-protection lands now.
+- **Class 3 = the "ADD-TO-V4 list"** — net-new V4 fields, each needing a `fieldRegistry.ts` entry + a template `{{placeholder}}` + the mandated **4-file sync** + test data + render-verify. That's heavier, different-in-kind work, and it's the SAME work that closes the Slice-3 cascade-bridge gap. The capture output IS the ready-made Slice-4b spec (registry defines them; V4 builds them; section-home=S2).
+- Rationale: folding ~13 net-new fields would bloat Slice 4 and delay the drift-protection; branching sequences the risk and gets Chris protected on the existing fields sooner. **Pending Ben's bless (ui-designer briefing him in parallel).**
+
 **⚑ BOTH HONEST FLAGS — RESOLVED (2026-06-17):**
 - ~~37-vs-62 count~~ → **RESOLVED:** the xlsx (authority) has **~45** rows; the .md "37" was lossy + the "62" header was wrong. Reconcile our 48 vs the xlsx ~45.
 - ~~Chris confirm for stage~~ → **DROPPED:** the xlsx `App Location` column is blank for every field, so placement is ours by definition (Ben confirmed). No Chris confirm on the split.

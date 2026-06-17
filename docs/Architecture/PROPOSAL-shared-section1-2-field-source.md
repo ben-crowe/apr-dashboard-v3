@@ -83,6 +83,13 @@ The same field has THREE names: V3 camelCase (`scopeOfWork`) · registry PascalC
 
 ---
 
+### ⚑ QA review condition (qa-agent — load-bearing for Option B)
+QA independently verified the grounding (V3 genuinely hardcoded: LoeQuoteSection 2301 lines/119 field elements, ClientSubmission 912/97, zero registry import → A is a real rebuild, B's premise holds) and recommends **B — but only if the drift-check is built RIGHT:**
+- **STRICT:** the checker must watch the actual **dropdown OPTIONS** Chris changes (his real edits), not just field names. Names-only = a safety net with holes.
+- **HARD GATE, not a report:** a mismatch must **block a release**, not produce a log nobody reads. A passive drift report fails the goal.
+- QA sent co-architect 4 specific tightening points → captured into the **Option-B sub-spec** (where the checker is built), with QA's reconcile-pattern as the verify layer.
+> Net: B only delivers Ben's "change once" protection if the checker is strict + blocking. A loose checker is worse than nothing (false confidence). This is a build requirement, not a nice-to-have.
+
 ## Proposed sequence (after Ben picks A or B)
 1. **Reverse-pass the field map** — produce the V4-only (bucket 4) list so nothing gets removed by assumption. (co-arch + the existing map.)
 2. **Define the canonical Section 1–2 field set** in the registry (ui-designer owns the registry; co-arch the schema).

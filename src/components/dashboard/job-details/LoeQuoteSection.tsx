@@ -1821,8 +1821,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0"><SelectValue placeholder="Select..." /></SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Current">Current</SelectItem>
-                    <SelectItem value="Retrospective">Retrospective</SelectItem>
                     <SelectItem value="Prospective">Prospective</SelectItem>
+                    <SelectItem value="Retrospective">Retrospective</SelectItem>
                   </SelectContent>
                 </Select>
               )}

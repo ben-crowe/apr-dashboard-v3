@@ -69,8 +69,27 @@ export interface EmailTemplate {
   subject: string;
   body_html: string;
   is_default: boolean;
+  /** The document template (loe_templates.id) this email is paired to, or null for a
+   *  document-less / unpaired email (PRD-APR-LOE-03 KR2 — first-class send). */
+  paired_template_id: string | null;
+  channel: 'email' | 'popup';
+  trigger: 'manual' | 'after_sign';
   created_at: string;
   updated_at: string;
+}
+
+/** Clean typed result of a save — `error: 'already-paired'` is the deterministic-pairing
+ *  guardrail (PRD-APR-LOE-03 Guardrail 3): a raw Postgres 23505 from the partial-unique
+ *  pairing index never propagates; the UI maps 'already-paired' to its own toast (Wave C). */
+export interface SaveEmailTemplateInput {
+  id?: string;                 // present = update in place; absent = insert new
+  name: string;
+  subject: string;
+  body_html: string;
+  setAsDefault?: boolean;
+  pairedTemplateId?: string | null;
+  channel?: 'email' | 'popup';
+  trigger?: 'manual' | 'after_sign';
 }
 
 export interface EmailInstance {
@@ -215,4 +234,86 @@ export function resolveEditTimeTokens(
 /** Resolve the SEND-time {{signing_link}} token (the link only exists after the DocuSeal send). */
 export function resolveSigningLink(text: string, signingLink: string): string {
   return text.replaceAll('{{signing_link}}', signingLink);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Email-template LIBRARY (PRD-APR-LOE-03 Wave B / Task 2) — manage email templates
+// as first-class objects: list, create/edit, set-default, pair to a document.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** True when a Supabase error is the partial-unique PAIRING violation (one doc ↔ one email,
+ *  index `uq_email_templates_paired`). Postgres unique-violation = SQLSTATE 23505. */
+function isPairingUniqueViolation(error: { code?: string; message?: string; details?: string } | null): boolean {
+  if (!error || error.code !== '23505') return false;
+  return /paired/i.test(`${error.message ?? ''} ${error.details ?? ''}`);
+}
+
+/** All email templates — default first, then alphabetical. */
+export async function loadAllEmailTemplates(): Promise<EmailTemplate[]> {
+  const { data, error } = await supabase
+    .from('email_templates')
+    .select('*')
+    .order('is_default', { ascending: false })
+    .order('name', { ascending: true });
+  if (error) {
+    console.error('loadAllEmailTemplates failed:', error);
+    return [];
+  }
+  return (data ?? []) as EmailTemplate[];
+}
+
+/**
+ * Create (no id) or update-in-place (id given) an email template.
+ * ⚑ Guardrail 3 (deterministic pairing): if the pairing collides with the partial-unique
+ * index, returns `{ success:false, error:'already-paired' }` — NEVER a raw 23505. The caller
+ * (Wave C UI) maps 'already-paired' to a clean toast.
+ */
+export async function saveEmailTemplate(
+  input: SaveEmailTemplateInput,
+): Promise<{ success: boolean; id?: string; error?: string }> {
+  // Single-default invariant: clear the current default before setting a new one.
+  if (input.setAsDefault) {
+    await supabase.from('email_templates').update({ is_default: false }).eq('is_default', true);
+  }
+  const row = {
+    name: input.name,
+    subject: input.subject,
+    body_html: input.body_html,
+    is_default: input.setAsDefault ?? false,
+    paired_template_id: input.pairedTemplateId ?? null,
+    channel: input.channel ?? 'email',
+    trigger: input.trigger ?? 'manual',
+    updated_at: new Date().toISOString(),
+  };
+  if (input.id) {
+    const { error } = await supabase.from('email_templates').update(row).eq('id', input.id);
+    if (isPairingUniqueViolation(error)) return { success: false, error: 'already-paired' };
+    return error ? { success: false, error: error.message } : { success: true, id: input.id };
+  }
+  const { data, error } = await supabase.from('email_templates').insert(row).select('id').single();
+  if (isPairingUniqueViolation(error)) return { success: false, error: 'already-paired' };
+  return error ? { success: false, error: error.message } : { success: true, id: (data as { id: string } | null)?.id };
+}
+
+/** Promote one template to the managed default (clears the prior default first). */
+export async function setDefaultEmailTemplate(id: string): Promise<boolean> {
+  await supabase.from('email_templates').update({ is_default: false }).eq('is_default', true);
+  const { error } = await supabase.from('email_templates').update({ is_default: true }).eq('id', id);
+  if (error) {
+    console.error('setDefaultEmailTemplate failed:', error);
+    return false;
+  }
+  return true;
+}
+
+/** Pre-select the email for a document: the template paired to it, else the global default. */
+export function resolveEmailTemplateForDocument(
+  docTemplateId: string | null,
+  all: EmailTemplate[],
+): EmailTemplate | null {
+  if (docTemplateId) {
+    const paired = all.find(t => t.paired_template_id === docTemplateId);
+    if (paired) return paired;
+  }
+  return all.find(t => t.is_default) ?? all[0] ?? null;
 }

@@ -46,6 +46,7 @@ Add to the `FIELDS` model in `public/field-registry-v6.html` the metadata a form
   - **QA reconciles EVERY captured v3key against the real code** — a wrong alias = a silent drift-check miss (same discipline as the bridge reconcile).
   - **⚑ v3key SHAPE is section-dependent (capture finding):** S2 (`LoeQuoteSection`) = FLAT `jobDetails.X`; S1 (`ClientSubmissionSection`) = NESTED `job.client.X` / `job.property.X` AND DELEGATED to `client-submission/*.tsx` sub-components → S1 capture must trace the sub-component tree (heavier per-field than S2). Capture S2-flat first, then the S1 nested/delegated set.
   - **Mechanism PROVEN + Batch 1 done (2026-06-17):** FIELDS model extended with `v3key`/`v4id`/`sectionHome`, generator emits them, derivative parses clean; reusable `scripts/inject-aliases.mjs`. Batch 1 (ReportType, ScopeOfWork, InterestAppraised, AuthorizedUse, LegalDescription) captured + with QA.
+  - **⚑ COMPOSITE-FIELD RULE (co-arch call):** `PropertyContact` (Chris-registry 1 row = MEMBERSHIP) **SPLITS into 4 rows** — `contact-first-name`/`contact-last-name`/`contact-email`/`contact-phone`, each 1:1 with its v4 field — so the drift-check stays uniform + per-field (a v4id-LIST composite would force a checker special-case). Documented as a **1→4 expansion** (we own representation; Chris owns membership) — NOT a reconcile mismatch.
 - Regenerate the derivatives.
 - **Feasibility CONFIRMED (ui-designer, code-checked):** the model extension + generator changes are incremental (same pattern as this session's st/rt/bn add), not a rewrite.
 

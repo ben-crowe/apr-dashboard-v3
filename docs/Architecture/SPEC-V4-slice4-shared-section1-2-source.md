@@ -37,8 +37,14 @@ tags: [apr, v3, v4, registry, single-source, drift-check, sections-1-2, test-fix
 Add to the `FIELDS` model in `public/field-registry-v6.html` the metadata a form config needs (current model has only the descriptive core: name/label/control/dropdown/required):
 - **Alias columns:** `v3key` (the REAL camelCase key V3's JSX uses, e.g. `scopeOfWork`) + `v4id` (the REAL kebab id in `fieldRegistry.ts`, e.g. `scope-of-work`).
 - **Form-layout metadata:** sub-section/tab assignment, field ORDER, validation, conditional show/hide, placeholder/defaults.
-- **⚑ Alias capture is real work, cite-or-drop:** read the actual V3 JSX sub-sections (S1: ClientInformation/PropertyInformation/PropertyContact; S2: Valuation/Payment/PropertyRights/Comments/JobNumber) + `fieldRegistry.ts` to record the REAL ids — never guessed. A wrong alias = a silent drift-check miss.
-- Regenerate the derivatives; QA reconciles the aliases against the code.
+- **⚑ Alias capture is the careful part (ui-designer, code-confirmed asymmetric risk):**
+  - `v4id` is CLEAN — `fieldRegistry.ts` has `id===storeId` + explicit section; read it straight.
+  - `v3key` is the REAL risk — V3 keys fields via scattered JSX `id`/`name` attrs through a shared `onInputChange`, with up to THREE candidate keys per field (JSX input id · form-STATE key · camelCase sync key in `VALCRE_SYNC_FIELDS`) that don't always coincide. Some v3keys WILL be ambiguous.
+  - **Canonical `v3key` = the form-STATE key the form actually reads/writes** (NOT the display id) — that's what the drift-check must compare against.
+  - **Run a 5-field alias-capture SPIKE first** to surface the ambiguity pattern before committing the full-capture estimate. Then full capture.
+  - **QA reconciles EVERY captured v3key against the real code** — a wrong alias = a silent drift-check miss (same discipline as the bridge reconcile).
+- Regenerate the derivatives.
+- **Feasibility CONFIRMED (ui-designer, code-checked):** the model extension + generator changes are incremental (same pattern as this session's st/rt/bn add), not a rewrite.
 
 ### Phase 2 — Generator emit targets (owner: ui-designer)
 Extend `scripts/generate-registry-derivatives.mjs` (today emits docs only) with two new emit targets, both off the one master:
@@ -53,6 +59,7 @@ Extend `scripts/generate-registry-derivatives.mjs` (today emits docs only) with 
 ### Phase 4 — Test-data fixture + sync toggle (owner: ui-designer)
 - V4's "fill with test data" (existing Load Data button) fixture is **keyed to the canonical field set** (`n`+`v3key`/`v4id`) and **drift-checked against the master** (so it can't rot when Chris tunes S2).
 - **Sync toggle** on V4's existing test-mode switch: OFF = fixture (bypass V3, fast iteration); ON = live V3→V4 sync (true end-to-end). **Both states feed the SAME canonical contract** — fixture and live describe fields identically (no "passes in fixture, breaks live").
+- **Feasibility CONFIRMED (ui-designer, code-checked):** `reportBuilderStore` already has `activeTestMode` (`'none'|'test-report'|'designer'`) + `setTestMode` + `loadDataSet1User/All` + `testDataFieldMapping`; the live path reuses the existing `useLoadJobIntoReport` bridge. Build = extend an enum + a load path, not new infrastructure.
 
 ### Phase 0 (precursor) — Reverse-pass the field map (owner: co-arch)
 Before Phase 1 locks the field set: produce the **V4-only (bucket 4)** list (V4 S1/S2 fields not in V3) from `fieldRegistry.ts`, so nothing is removed by assumption — each gets surfaced for review.

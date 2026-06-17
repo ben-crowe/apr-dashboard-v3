@@ -58,7 +58,9 @@ The strict, release-blocking change-detector. QA-authored requirements (from the
 - **Blocks the CLIENT (Production) release ONLY** — preview/dev builds are NOT blocked, so Chris + we can still iterate fast. The gate bites at the prod boundary.
 - **⚑ STATUS TAG per field** (e.g. `synced` | `approved-change` | `pending`) so the check can tell "someone forgot to sync" (BLOCK) from "we changed the master on purpose" (ALLOW). Without it, every legit master change jams the line. A deliberate change is marked approved → passes; an unexplained mismatch → blocks.
 - **Protect deliberately-different fields — V4-only AND shared (QA delta).** The generate step (Phase 2) must NOT overwrite an intentional difference — neither a V4-only field (bucket-4) NOR a deliberately-different config on a SHARED field. Intentional divergence (marked `approved-change`) is preserved, not clobbered by the master.
-- Reuses QA's reconcile pattern. **QA owns this phase + confirms the folded text matches their sent version.**
+- **Runs PER-CHANGE, not periodic (QA delta 3)** — the check fires on every change, especially during Chris's tuning week; a weekly/manual run is useless mid-tuning (drift would ship between runs).
+- **Fail-closed covers the CHECK'S OWN failure (QA delta 4)** — if the checker crashes, can't read the master, or the field set comes back empty → exit RED. It must NEVER report "no drift found" from a failed/empty run (a silent green is the worst outcome).
+- Reuses QA's reconcile pattern. **QA owns this phase + confirmed the folded text matches their sent version.**
 
 ### Phase 4 — Test-data fixture + sync toggle (owner: ui-designer)
 - V4's "fill with test data" (existing Load Data button) fixture is **keyed to the canonical field set** (`n`+`v3key`/`v4id`) and **drift-checked against the master** (so it can't rot when Chris tunes S2).

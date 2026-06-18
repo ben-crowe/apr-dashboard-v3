@@ -94,7 +94,6 @@ export function SigningPage() {
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-4xl mx-auto p-8">
           <div className="bg-white rounded-lg shadow-lg p-12 text-center">
-            <div className="text-green-500 text-6xl mb-4">✓</div>
             <h1 className="text-3xl font-bold mb-4">Thank You!</h1>
             <p className="text-lg text-gray-600">
               Your Letter of Engagement has been successfully signed.

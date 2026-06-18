@@ -73,6 +73,7 @@ async function graphFetch(path: string, init: RequestInit = {}): Promise<Respons
 
 export interface SendMailArgs {
   mailbox: string;            // sending UPN, e.g. noreply@valta.ca
+  fromName?: string;          // sender DISPLAY name override (cosmetic); address stays = mailbox
   to: string | string[];
   subject: string;
   html: string;
@@ -90,6 +91,7 @@ export async function graphSendMail(args: SendMailArgs): Promise<void> {
     body: { contentType: 'HTML', content: args.html },
     toRecipients: toRecipientList(args.to),
   };
+  if (args.fromName) message.from = { emailAddress: { name: args.fromName, address: args.mailbox } };
   if (args.cc) message.ccRecipients = toRecipientList(args.cc);
 
   const res = await graphFetch(`/users/${encodeURIComponent(args.mailbox)}/sendMail`, {

@@ -85,8 +85,11 @@ office: 587-801-5151 | email: clientcare@valta.ca | web: www.valta.ca</p>
     const graphMailbox = Deno.env.get('GRAPH_SEND_MAILBOX');
     if (graphConfigured() && graphMailbox) {
       const mailbox = graphMailbox;
-      await graphSendMail({ mailbox, to: actualRecipient, subject, html: emailHtml });
-      console.log('Email sent successfully via Microsoft Graph from:', mailbox);
+      // Sender DISPLAY name (cosmetic) — settable via the GRAPH_SEND_NAME secret so the wording
+      // can change without a code deploy. Falls back to a sensible default.
+      const fromName = Deno.env.get('GRAPH_SEND_NAME') || 'Valta Appraisals';
+      await graphSendMail({ mailbox, fromName, to: actualRecipient, subject, html: emailHtml });
+      console.log('Email sent successfully via Microsoft Graph from:', `${fromName} <${mailbox}>`);
       return new Response(
         JSON.stringify({
           success: true,

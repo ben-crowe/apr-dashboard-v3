@@ -243,12 +243,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // PRD-APR-LOE-03 Wave D1 — the DOCUMENT-LESS first-class email send (INV-0): a standalone
   // Send-by-Email entry on the job, reachable WITHOUT opening a document. Additive — it does
   // NOT touch the live LOE send path (handleApproveAndSend); it writes a contract_id=null instance.
-  const TEST_RECIPIENT = 'bc@crowestudio.com';
-  // INV-1 recipient fail-safe: in non-prod, or when the recipient is missing/ambiguous, FORCE
-  // the test address — never default to a real client. (The Resend sandbox is the server-side
-  // guard; this is the client-side belt so the doc-less path can't bypass it.)
-  const safeRecipient = (email?: string | null): string =>
-    (!import.meta.env.PROD || !email || !email.includes('@')) ? TEST_RECIPIENT : email;
+  // Doc-less send goes to the client email as-is (no hidden redirect). Test data uses fake
+  // @test.com addresses, so testing is safe; pick the real client only when intended.
   const [docLessOpen, setDocLessOpen] = useState(false);
   const [docLessTemplate, setDocLessTemplate] = useState<EmailTemplate | null>(null);
   const [docLessSending, setDocLessSending] = useState(false);
@@ -258,7 +254,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     if (docLessSending) return;
     setDocLessSending(true);
     try {
-      const recipient = safeRecipient(job?.clientEmail);
+      const recipient = job?.clientEmail || '';
       const clientName = `${job?.clientFirstName ?? ''} ${job?.clientLastName ?? ''}`.trim();
       const ok = await sendLOEEmail(recipient, clientName, '', job?.propertyAddress ?? '', payload);
       if (ok) {
@@ -1763,13 +1759,27 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 straight in on the one template. (Document-not-version-picker direction —
                 see JOB-DOCUMENT-PICKER-DECISION-TREE.md.) */}
             <CompactField label="Job Status">
-              {/* Reflects Valcre's native Status field. Two-way Valcre Status sync is a real TODO
-                  (next wiring pass: api/valcre.ts push + a pull path) — for now render locked/italic,
-                  non-editable, no tooltip. jobStatus is job-record-only (not in any sync array). */}
+              {/* Shows the LOGICAL workflow status (job.status) as a plain-language label —
+                  Submitted → "Sent — Awaiting Signature" → "Signed by Client" → … — so the field
+                  reflects the LOE pipeline, not the (unwired) Valcre mirror. Read-only for now; it
+                  advances as the sent/signed events update job.status. Two-way Valcre Status sync
+                  remains a separate TODO (api/valcre.ts push + pull). */}
               <Input
-                value={jobDetails.jobStatus || ''}
+                value={
+                  ({
+                    submitted: 'Submitted',
+                    in_progress: 'In Progress',
+                    loe_pending: 'LOE Pending',
+                    loe_sent: 'Sent — Awaiting Signature',
+                    loe_signed: 'Signed by Client',
+                    contract_generated: 'Contract Generated',
+                    paid: 'Paid',
+                    active: 'Active',
+                    completed: 'Completed',
+                  } as Record<string, string>)[job?.status] ?? (jobDetails.jobStatus || '')
+                }
                 readOnly
-                placeholder="Pending Valcre job status"
+                placeholder="No status yet"
                 className="h-7 text-sm max-w-[220px] italic !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0 cursor-default focus-visible:ring-0"
               />
             </CompactField>

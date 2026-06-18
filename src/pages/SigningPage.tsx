@@ -5,8 +5,8 @@ import { supabase } from '@/integrations/supabase/client';
 
 export function SigningPage() {
   const { id } = useParams<{ id: string }>();
-  const [loeHTML, setLoeHTML] = useState<string>('');
   const [docusealSlug, setDocusealSlug] = useState<string>('');
+  const [jobId, setJobId] = useState<string>('');
   const [clientName, setClientName] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
@@ -39,7 +39,7 @@ export function SigningPage() {
       }
 
       // Set the data for display
-      setLoeHTML(data.loe_html);
+      setJobId(data.job_id || '');
       setDocusealSlug(data.docuseal_slug);
       setClientName(data.client_name);
       setLoading(false);
@@ -52,14 +52,22 @@ export function SigningPage() {
 
   const handleSigningComplete = async () => {
     setSigned(true);
-    // Update database to mark as signed
+    const signedAt = new Date().toISOString();
+    // Mark the signing record itself signed
     await supabase
       .from('loe_submissions')
-      .update({ 
-        status: 'signed', 
-        signed_at: new Date().toISOString() 
-      })
+      .update({ status: 'signed', signed_at: signedAt })
       .eq('id', id);
+    // Backup status-advance: flip the linked DASHBOARD job to "signed" directly, so the
+    // dashboard reflects the signature even if the DocuSeal webhook doesn't fire. The webhook
+    // (when registered) still does the heavier ClickUp / SharePoint / payment work.
+    if (jobId) {
+      await supabase.from('job_submissions').update({ status: 'loe_signed' }).eq('id', jobId);
+      await supabase
+        .from('job_loe_details')
+        .update({ signed_at: signedAt, job_status: 'loe_signed' })
+        .eq('job_id', jobId);
+    }
   };
 
   if (loading) {
@@ -116,27 +124,13 @@ export function SigningPage() {
 
       <div className="max-w-5xl mx-auto p-6">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          
-          {/* Display the complete V3-LOE document */}
-          <div className="p-8">
-            <div 
-              className="loe-document"
-              dangerouslySetInnerHTML={{ __html: loeHTML }}
-              style={{
-                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif',
-                fontSize: '14px',
-                lineHeight: '1.6',
-                color: '#333'
-              }}
-            />
-          </div>
 
-          {/* DocuSeal Signature Widget - This is where they sign */}
-          <div className="p-8 bg-gray-50 border-t-2 border-gray-200">
+          {/* DocuSeal Signature Widget — shows the full paginated document + signature block (no separate HTML copy) */}
+          <div className="p-8">
             <h3 className="text-lg font-semibold mb-4">
-              Please review and sign the Letter of Engagement above
+              Please review and sign your Letter of Engagement below
             </h3>
-            
+
             <DocusealForm
               src={`https://docuseal.com/s/${docusealSlug}`}
               onComplete={handleSigningComplete}

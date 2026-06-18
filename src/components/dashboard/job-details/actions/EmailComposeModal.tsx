@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DetailJob, JobDetails } from "@/types/job";
-import { Send, X, Mail, RotateCcw, Save, AlertTriangle, Loader2, ArrowLeft, Pencil, FilePlus2 } from "lucide-react";
+import { Send, X, Mail, RotateCcw, Save, Loader2, ArrowLeft, Pencil, FilePlus2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   EMAIL_MERGE_TOKENS,
@@ -313,11 +313,11 @@ const EmailComposeModal: React.FC<EmailComposeModalProps> = ({
           </div>
         </div>
 
-        {/* TEST-path banner */}
-        <div className="flex items-center gap-2 mt-2 px-3 py-2 rounded-md bg-amber-100 border border-amber-300 text-amber-900 text-sm">
-          <AlertTriangle className="h-4 w-4 shrink-0" />
+        {/* Recipient confirmation — sends to exactly this address (set it in the previewer's "Send to") */}
+        <div className="flex items-center gap-2 mt-2 px-3 py-2 rounded-md bg-muted border border-border text-foreground text-sm">
+          <Send className="h-4 w-4 shrink-0" />
           <span>
-            <strong>Recipient: {recipientEmail}</strong> (the client). <strong>TEST mode:</strong> in non-prod the actual delivery is redirected to the sandbox test address — the real client is never emailed in non-prod.
+            Sending to: <strong>{recipientEmail}</strong>
           </span>
         </div>
 

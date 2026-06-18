@@ -22,12 +22,8 @@ import { generateLOEHTML } from '@/utils/loe/generateLOE';
 // PDF carries the footer on every page.
 const PAGED_POLYFILL_PATH = '/paged.polyfill.js';
 
-// INV-1/INV-5: DELIVERY guard. The recipient is DISPLAYED as the client, but the actual non-prod
-// send is redirected to the sandbox test address — a real client email is never delivered in
-// non-prod. Mirrors LoeQuoteSection.safeRecipient. (Display = client; delivery = sandbox-safe.)
-const TEST_RECIPIENT = 'bc@crowestudio.com';
-const safeRecipient = (email?: string | null): string =>
-  (!import.meta.env.PROD || !email || !email.includes('@')) ? TEST_RECIPIENT : email;
+// Recipient is whatever is set in the "Send to" field — no hidden redirect. Pick a test address
+// (e.g. an @test.com one) when testing; the real client only when you intend it.
 
 interface LOEPreviewModalProps {
   isOpen: boolean;
@@ -257,9 +253,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
     if (isSending) return;
     setIsSending(true);
     try {
-      // INV-5: deliver to the chosen recipient, but non-prod redirects to the sandbox test address
-      // (real client never emailed in non-prod). Display = client; delivery = safeRecipient.
-      const emailToUse = safeRecipient(recipientEmail);
+      // Deliver to the recipient chosen in the "Send to" field — no hidden redirect.
+      const emailToUse = recipientEmail;
       await onApprove(emailToUse, emailOverride);
       setShowEmailStep(false);
       onClose();

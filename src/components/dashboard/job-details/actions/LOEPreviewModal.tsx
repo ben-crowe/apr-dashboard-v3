@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DetailJob, JobDetails } from "@/types/job";
-import { Send, X, Download, Mail, Plus, ZoomIn, ZoomOut, RotateCcw, Edit, Loader2, Save } from "lucide-react";
+import { Send, X, Download, Mail, Plus, ChevronUp, ChevronDown, RotateCcw, Edit, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 import TemplateEditorModal from './TemplateEditorModal';
 import EmailComposeModal from './EmailComposeModal';
@@ -367,14 +367,16 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
       <DialogContent className="max-w-5xl w-[90vw] h-[95vh] flex flex-col p-4 [&>button]:hidden">
         {/* Minimal Header */}
         <div className="flex justify-between items-center pb-2 border-b">
-          <div className="flex-1">
+          <div className="min-w-0">
             <h2 className="text-lg font-semibold">Previewer</h2>
             <p className="text-sm text-muted-foreground">Review before sending</p>
           </div>
-          
+
+          {/* All header controls grouped on the right so they stay together and don't overflow the row */}
+          <div className="flex items-center gap-3 flex-shrink-0">
           {/* Template Picker — hidden in read-only View (sent doc) */}
           {!readOnly && (
-          <div className="flex items-center gap-2 mr-4">
+          <div className="flex items-center gap-2">
             <Label htmlFor="template-select" className="text-sm font-medium whitespace-nowrap">
               Document
             </Label>
@@ -383,7 +385,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               onValueChange={handleTemplateChange}
               disabled={isLoadingTemplates || isRegenerating}
             >
-              <SelectTrigger id="template-select" className="w-[150px] h-8 text-sm bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
+              <SelectTrigger id="template-select" className="w-[128px] h-8 text-sm bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
                 {isRegenerating ? (
                   <div className="flex items-center gap-2">
                     <Loader2 className="h-3 w-3 animate-spin" />
@@ -435,7 +437,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
                   }}
                   disabled={emailTemplates.length === 0}
                 >
-                  <SelectTrigger id="email-template-select" className="w-[150px] h-8 text-sm bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
+                  <SelectTrigger id="email-template-select" className="w-[128px] h-8 text-sm bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
                     <SelectValue placeholder={emailTemplates.length ? 'Send an email…' : 'No email templates'} />
                   </SelectTrigger>
                   <SelectContent className="bg-background border border-border">
@@ -451,46 +453,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
           </div>
           )}
 
-          {/* Zoom Controls */}
+          {/* Edit + Close (zoom relocated to a compact strip just above the document) */}
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 px-2 py-1 bg-muted rounded-md">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setZoomLevel(Math.max(25, zoomLevel - 10))}
-                className="h-6 w-6 p-0 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-200"
-                title="Zoom Out"
-              >
-                <ZoomOut className="h-3 w-3" />
-              </Button>
-              
-              <span className="text-xs font-medium px-2 min-w-[45px] text-center dark:text-gray-200">
-                {zoomLevel}%
-              </span>
-              
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setZoomLevel(Math.min(200, zoomLevel + 10))}
-                className="h-6 w-6 p-0 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-200"
-                title="Zoom In"
-              >
-                <ZoomIn className="h-3 w-3" />
-              </Button>
-              
-              <div className="w-px h-4 bg-gray-300 dark:bg-gray-600 mx-1" />
-              
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setZoomLevel(75)}
-                className="h-6 w-6 p-0 hover:bg-gray-200 dark:hover:bg-gray-600 dark:text-gray-200"
-                title="Reset Zoom"
-              >
-                <RotateCcw className="h-3 w-3" />
-              </Button>
-            </div>
-            
             {!readOnly && (
               <Button
                 variant="outline"
@@ -515,12 +479,13 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               <X className="h-4 w-4" />
             </Button>
           </div>
+          </div>
         </div>
 
         {/* Email Recipient Section — hidden in read-only View (sent doc) */}
         {!readOnly && (
-        <div className="flex items-center gap-3 py-2 px-4">
-          <Mail className="h-4 w-4 text-muted-foreground" />
+        <div className="flex items-start gap-3 py-2 px-4">
+          <Mail className="h-4 w-4 text-muted-foreground mt-0.5" />
           {showEmailEdit ? (
             <div className="flex items-center gap-2 flex-1">
               <span className="text-sm font-medium text-foreground">Send to:</span>
@@ -541,19 +506,21 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               </Button>
             </div>
           ) : (
-            <div className="flex items-center gap-2 flex-1">
-              <span className="text-sm font-medium text-foreground">E-signature will be sent to:</span>
-              <span className="text-sm font-semibold text-foreground">{recipientEmail || 'No email specified'}</span>
-              {recipientEmail !== job.clientEmail && (
-                <span className="text-xs text-muted-foreground">
-                  (Testing: {recipientEmail}, Client: {job.clientEmail})
-                </span>
-              )}
+            <div className="flex flex-col items-start gap-1 flex-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-sm font-medium text-foreground">E-signature will be sent to:</span>
+                <span className="text-sm font-semibold text-foreground">{recipientEmail || 'No email specified'}</span>
+                {recipientEmail !== job.clientEmail && (
+                  <span className="text-xs text-muted-foreground">
+                    (Testing: {recipientEmail}, Client: {job.clientEmail})
+                  </span>
+                )}
+              </div>
               <Button
                 size="sm"
                 variant="ghost"
                 onClick={() => setShowEmailEdit(true)}
-                className="h-7 text-xs text-foreground hover:text-foreground dark:hover:text-gray-300 hover:underline ml-auto"
+                className="h-6 px-0 text-xs text-foreground hover:text-foreground dark:hover:text-gray-300 hover:underline"
               >
                 Change Recipient
               </Button>
@@ -561,6 +528,40 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
           )}
         </div>
         )}
+
+        {/* Compact zoom adjuster — moved out of the header; sits just above the document it controls */}
+        <div className="flex items-center justify-end px-4 pt-1">
+          <div className="flex items-center gap-0.5 text-muted-foreground">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setZoomLevel(Math.max(25, zoomLevel - 10))}
+              className="h-5 w-5 p-0 hover:text-foreground"
+              title="Zoom Out"
+            >
+              <ChevronDown className="h-3.5 w-3.5" />
+            </Button>
+            <span className="text-[11px] tabular-nums w-9 text-center select-none">{zoomLevel}%</span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setZoomLevel(Math.min(200, zoomLevel + 10))}
+              className="h-5 w-5 p-0 hover:text-foreground"
+              title="Zoom In"
+            >
+              <ChevronUp className="h-3.5 w-3.5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setZoomLevel(75)}
+              className="h-5 w-5 p-0 hover:text-foreground ml-2"
+              title="Reset Zoom"
+            >
+              <RotateCcw className="h-3 w-3" />
+            </Button>
+          </div>
+        </div>
 
         {/* Preview Frame - Maximum space */}
         <div className="flex-1 border rounded-lg overflow-auto bg-muted my-2">

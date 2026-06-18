@@ -29,6 +29,8 @@ import { generateLOEHTML, generateAndSendLOE, sendLOEEmail } from "@/utils/loe/g
 import { loadJobContracts, saveJobContract, deleteJobContract, JobContract } from "@/utils/loe/jobContracts";
 import { saveJobEmailInstance, loadJobEmailInstances, EmailInstance, EmailTemplate } from "@/utils/loe/emailTemplate";
 import EmailComposeModal from "@/components/dashboard/job-details/actions/EmailComposeModal";
+import PopupComposeModal from "@/components/dashboard/job-details/actions/PopupComposeModal";
+import { PopupTemplate } from "@/utils/loe/popupTemplate";
 import { markLOEPrepComplete } from "@/utils/webhooks/clickup";
 import LOEPreviewModal from "./actions/LOEPreviewModal";
 import ClickUpAction from "./actions/ClickUpAction";
@@ -248,6 +250,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   const [docLessOpen, setDocLessOpen] = useState(false);
   const [docLessTemplate, setDocLessTemplate] = useState<EmailTemplate | null>(null);
   const [docLessSending, setDocLessSending] = useState(false);
+  // Popup editor (third component type) — opened from the Previewer's Popup dropdown.
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [popupInitial, setPopupInitial] = useState<PopupTemplate | null>(null);
   // Doc-less send: empty signing link (G5 — no DocuSeal link on a document-less email);
   // persist the instance as 'sent' ONLY on Resend success (G4); contract_id=null (KR2).
   const handleSendDocLess = async (payload: { subject: string; bodyHtml: string }) => {
@@ -2348,6 +2353,16 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           readOnly={previewReadOnly}
           existingContract={previewExisting}
           onPickEmail={(tpl) => { setDocLessTemplate(tpl); setDocLessOpen(true); }}
+          onPickPopup={(p) => { setPopupInitial(p ?? null); setPopupOpen(true); }}
+        />
+
+        {/* Popup editor — the third managed component type (post-sign Thank-You screen). */}
+        <PopupComposeModal
+          isOpen={popupOpen}
+          onClose={() => setPopupOpen(false)}
+          job={job}
+          jobDetails={jobDetails}
+          initialTemplate={popupInitial ?? undefined}
         />
 
         {/* Reopening a draft now routes through LOEPreviewModal (single-panel preview → Edit →

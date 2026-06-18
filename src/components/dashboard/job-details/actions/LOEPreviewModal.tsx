@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import TemplateEditorModal from './TemplateEditorModal';
 import EmailComposeModal from './EmailComposeModal';
 import { loadAllEmailTemplates, EmailTemplate } from '@/utils/loe/emailTemplate';
+import { loadAllPopupTemplates, PopupTemplate } from '@/utils/loe/popupTemplate';
 import { saveTemplate, loadAllTemplates, loadTemplateById, setDefaultTemplate, LOETemplate } from '@/utils/loe/saveTemplate';
 import { saveJobContract } from '@/utils/loe/jobContracts';
 import { generateLOEHTML } from '@/utils/loe/generateLOE';
@@ -50,6 +51,10 @@ interface LOEPreviewModalProps {
       Picking an Email template fires this → parent opens the STANDALONE email composer
       (docTemplateId=null, contract_id=null) — the document-less first-class send path. */
   onPickEmail?: (emailTemplate: EmailTemplate) => void;
+  /** INV-1: the Popup dropdown lives in the Previewer BESIDE Document + Email. Selecting a
+      popup (or "Open editor") fires this → parent opens the Popup editor (the post-sign
+      Thank-You screen). The third managed component type. */
+  onPickPopup?: (popup?: PopupTemplate) => void;
 }
 
 const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
@@ -63,7 +68,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   contractId,
   readOnly = false,
   existingContract = false,
-  onPickEmail
+  onPickEmail,
+  onPickPopup
 }) => {
   // Current instance id this preview/editor is bound to. Seeded from the contractId prop on
   // open; set after a brand-new insert so subsequent saves update the same row.
@@ -87,9 +93,12 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   const [isRegenerating, setIsRegenerating] = useState(false);
   // INV-0: Email templates for the Previewer's Email dropdown (peer to Document Templates).
   const [emailTemplates, setEmailTemplates] = useState<EmailTemplate[]>([]);
+  // INV-1: Popup templates for the Previewer's Popup dropdown (peer to Document + Email).
+  const [popupTemplates, setPopupTemplates] = useState<PopupTemplate[]>([]);
   useEffect(() => {
     if (!isOpen) return;
     loadAllEmailTemplates().then(setEmailTemplates).catch(() => setEmailTemplates([]));
+    if (onPickPopup) loadAllPopupTemplates().then(setPopupTemplates).catch(() => setPopupTemplates([]));
   }, [isOpen]);
   const [currentDocumentHTML, setCurrentDocumentHTML] = useState<string>(documentHTML);
 
@@ -439,6 +448,36 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
                     {emailTemplates.map((t) => (
                       <SelectItem key={t.id} value={t.id}>
                         {t.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </>
+            )}
+            {/* INV-1: Popup dropdown — the THIRD component type, peer to Document + Email.
+                Picking a saved popup (or "Open editor") opens the Popup editor for the
+                post-sign Thank-You screen via onPickPopup. */}
+            {onPickPopup && (
+              <>
+                <Label htmlFor="popup-template-select" className="text-sm font-medium whitespace-nowrap ml-2">
+                  Popup
+                </Label>
+                <Select
+                  value=""
+                  onValueChange={(id) => {
+                    if (id === '__editor__') { onPickPopup(undefined); return; }
+                    const p = popupTemplates.find(t => t.id === id);
+                    onPickPopup(p);
+                  }}
+                >
+                  <SelectTrigger id="popup-template-select" className="w-[128px] h-8 text-sm bg-card border border-border text-foreground hover:border-gray-400 focus:border-gray-400 focus:outline-none focus:ring-0">
+                    <SelectValue placeholder="Thank-You screen…" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border border-border">
+                    <SelectItem value="__editor__">✎ Open editor</SelectItem>
+                    {popupTemplates.map((t) => (
+                      <SelectItem key={t.id} value={t.id}>
+                        {t.name}{t.is_active ? ' (active)' : ''}
                       </SelectItem>
                     ))}
                   </SelectContent>

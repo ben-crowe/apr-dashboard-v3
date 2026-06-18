@@ -2,6 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { DocusealForm } from '@docuseal/react';
 import { supabase } from '@/integrations/supabase/client';
+import {
+  loadActivePopupTemplate,
+  resolvePopupTokens,
+  POPUP_SEED_BODY,
+} from '@/utils/loe/popupTemplate';
 
 export function SigningPage() {
   const { id } = useParams<{ id: string }>();
@@ -11,10 +16,39 @@ export function SigningPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
   const [signed, setSigned] = useState(false);
+  // INV-0/INV-3/INV-4: the post-sign screen renders the ACTIVE saved popup (token-resolved).
+  // Falls back to the code seed if no active row resolves — the signed screen is never blank.
+  const [popupHtml, setPopupHtml] = useState<string>('');
 
   useEffect(() => {
     loadSigningData();
   }, [id]);
+
+  /**
+   * Resolve the post-sign screen: the ACTIVE saved popup (DB) → token-resolved HTML.
+   * No active row (or a DB error) → the code seed, also token-resolved. Never blank (INV-3).
+   * Tokens resolve at SIGN time, here, from the signed submission + its job (INV-4).
+   */
+  const resolveActivePopup = async (name: string, jId: string) => {
+    let ctx: { clientName?: string; propertyAddress?: string; jobNumber?: string } = { clientName: name };
+    if (jId) {
+      const { data: job } = await supabase
+        .from('job_submissions')
+        .select('*')
+        .eq('id', jId)
+        .maybeSingle();
+      if (job) {
+        ctx = {
+          clientName: name,
+          propertyAddress: (job as Record<string, unknown>).property_address as string | undefined,
+          jobNumber: (job as Record<string, unknown>).job_number as string | undefined,
+        };
+      }
+    }
+    const active = await loadActivePopupTemplate();
+    const baseHtml = active?.body_html ?? POPUP_SEED_BODY;
+    setPopupHtml(resolvePopupTokens(baseHtml, ctx));
+  };
 
   const loadSigningData = async () => {
     try {
@@ -33,8 +67,12 @@ export function SigningPage() {
 
       // Check if already signed
       if (data.status === 'signed') {
+        setJobId(data.job_id || '');
+        setClientName(data.client_name || '');
         setSigned(true);
         setLoading(false);
+        // Reopening an already-signed link → render the active popup (token-resolved).
+        void resolveActivePopup(data.client_name || '', data.job_id || '');
         return;
       }
 
@@ -52,6 +90,8 @@ export function SigningPage() {
 
   const handleSigningComplete = async () => {
     setSigned(true);
+    // Render the active popup as the post-sign screen (token-resolved); never blank (INV-0/3/4).
+    void resolveActivePopup(clientName, jobId);
     const signedAt = new Date().toISOString();
     // Mark the signing record itself signed
     await supabase
@@ -90,20 +130,19 @@ export function SigningPage() {
   }
 
   if (signed) {
+    // INV-0: the post-sign screen IS the ACTIVE saved popup (DB-driven, token-resolved),
+    // rendered standalone in a full-height iframe — the same way the email previews render.
+    // popupHtml is resolved by resolveActivePopup() and is never blank (INV-3 fallback to
+    // the code seed). While it resolves on the very first paint, show the seed token-resolved
+    // so there is no flash of blank.
+    const srcDoc = popupHtml || resolvePopupTokens(POPUP_SEED_BODY, { clientName });
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-4xl mx-auto p-8">
-          <div className="bg-white rounded-lg shadow-lg p-12 text-center">
-            <h1 className="text-3xl font-bold mb-4">Thank You!</h1>
-            <p className="text-lg text-gray-600">
-              Your Letter of Engagement has been successfully signed.
-            </p>
-            <p className="text-gray-500 mt-4">
-              You will receive a copy of the signed document via email shortly.
-            </p>
-          </div>
-        </div>
-      </div>
+      <iframe
+        srcDoc={srcDoc}
+        title="Signing complete"
+        sandbox="allow-same-origin"
+        style={{ border: 'none', width: '100%', height: '100vh', display: 'block' }}
+      />
     );
   }
 

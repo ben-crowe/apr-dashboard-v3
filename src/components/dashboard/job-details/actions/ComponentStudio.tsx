@@ -1,0 +1,349 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { DetailJob, JobDetails } from "@/types/job";
+import {
+  FileText, Mail, MonitorCheck, ArrowRight, ArrowLeft, ChevronDown, ChevronRight,
+  Pencil, X, Layers, LayoutGrid, Download, Loader2, Eye,
+} from "lucide-react";
+import { toast } from "sonner";
+import DocumentPreviewPane from './DocumentPreviewPane';
+import { downloadPagedPdf } from '@/utils/loe/downloadPagedPdf';
+import { generateLOEHTML } from '@/utils/loe/generateLOE';
+import { loadAllTemplates, LOETemplate } from '@/utils/loe/saveTemplate';
+import { loadAllEmailTemplates, resolveEditTimeTokens, EmailTemplate } from '@/utils/loe/emailTemplate';
+import { loadAllPopupTemplates, resolvePopupTokens, PopupTemplate } from '@/utils/loe/popupTemplate';
+
+/**
+ * ComponentStudio — the Document/Email/Popup library + sequence map + split previewer/editor
+ * (SPEC-component-studio). A SHELL that arranges the proven components; it does NOT rebuild them:
+ *   - Document renders through the SHARED DocumentPreviewPane + generateLOEHTML + downloadPagedPdf
+ *     (the exact path the existing LOEPreviewModal uses — INV-0, no new render engine).
+ *   - Email renders the managed email's body (edit-time tokens resolved).
+ *   - Popup renders the managed popup's body (sign-time tokens resolved).
+ * Deep EDIT delegates to the existing modal editors via the onEdit* callbacks (full reuse):
+ *   document → LOEPreviewModal, email → EmailComposeModal, popup → PopupComposeModal.
+ *
+ * Interaction rules (locked with Ben against the reviewed mockup):
+ *   - LIBRARY entry → the library rail STAYS; component opens on the right (no spine).
+ *   - SEQUENCE-block entry → rail collapses to icons, the sequence SPINE takes the left.
+ *   - Split is render-LEFT / editor-RIGHT, render-dominant (¾:¼), chevron→half, drag grabber, render zoom.
+ */
+type CompType = 'doc' | 'mail' | 'popup';
+type View = 'map' | 'seq' | 'lib';
+
+interface StudioInstance { id: string; name: string; }
+
+interface ComponentStudioProps {
+  isOpen: boolean;
+  onClose: () => void;
+  job: DetailJob;
+  jobDetails: JobDetails;
+  /** Deep-edit delegates to the existing proven modal editors (reuse — no rebuild). */
+  onEditDocument?: (template: LOETemplate) => void;
+  onEditEmail?: (template: EmailTemplate) => void;
+  onEditPopup?: (template: PopupTemplate) => void;
+}
+
+const TYPE_META: Record<CompType, { label: string; icon: React.ReactNode; accent: string; dot: string }> = {
+  mail:  { label: 'Email',    icon: <Mail className="h-3.5 w-3.5" />,        accent: 'border-t-cyan-700',  dot: 'bg-cyan-700' },
+  doc:   { label: 'Document', icon: <FileText className="h-3.5 w-3.5" />,    accent: 'border-t-[#2c5aa0]', dot: 'bg-[#2c5aa0]' },
+  popup: { label: 'Popup',    icon: <MonitorCheck className="h-3.5 w-3.5" />, accent: 'border-t-emerald-600', dot: 'bg-emerald-600' },
+};
+const ORDER: CompType[] = ['mail', 'doc', 'popup'];
+const CONN: Record<string, string> = { mail: 'delivers', doc: 'after signing' };
+
+const ComponentStudio: React.FC<ComponentStudioProps> = ({
+  isOpen, onClose, job, jobDetails, onEditDocument, onEditEmail, onEditPopup,
+}) => {
+  const [view, setView] = useState<View>('map');
+  const [itemType, setItemType] = useState<CompType>('doc');
+  const [selectedId, setSelectedId] = useState<string>('');
+  const [ratio, setRatio] = useState<'view' | 'edit'>('view');
+
+  const [docTemplates, setDocTemplates] = useState<LOETemplate[]>([]);
+  const [emailTemplates, setEmailTemplates] = useState<EmailTemplate[]>([]);
+  const [popupTemplates, setPopupTemplates] = useState<PopupTemplate[]>([]);
+  const [open, setOpen] = useState<Record<CompType, boolean>>({ doc: true, mail: true, popup: true });
+
+  const [docHtml, setDocHtml] = useState<string>('');
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const splitRef = useRef<HTMLDivElement>(null);
+
+  // Load the three libraries on open.
+  useEffect(() => {
+    if (!isOpen) return;
+    loadAllTemplates().then(setDocTemplates).catch(() => setDocTemplates([]));
+    loadAllEmailTemplates().then(ts => setEmailTemplates(ts.filter(t => t.channel === 'email'))).catch(() => setEmailTemplates([]));
+    loadAllPopupTemplates().then(setPopupTemplates).catch(() => setPopupTemplates([]));
+    setView('map');
+  }, [isOpen]);
+
+  const listFor = (t: CompType): StudioInstance[] =>
+    t === 'doc' ? docTemplates.map(d => ({ id: d.id, name: d.name }))
+    : t === 'mail' ? emailTemplates.map(e => ({ id: e.id, name: e.name }))
+    : popupTemplates.map(p => ({ id: p.id, name: p.name }));
+
+  const defaultIdFor = (t: CompType): string => {
+    if (t === 'doc') return (docTemplates.find(d => d.is_default) ?? docTemplates[0])?.id ?? '';
+    if (t === 'mail') return (emailTemplates.find(e => e.is_default) ?? emailTemplates[0])?.id ?? '';
+    return (popupTemplates.find(p => p.is_active) ?? popupTemplates[0])?.id ?? '';
+  };
+  const nameFor = (t: CompType, id: string): string => listFor(t).find(i => i.id === id)?.name ?? TYPE_META[t].label;
+
+  const tokenCtx = {
+    firstName: job.clientFirstName || '', lastName: job.clientLastName || '',
+    jobNumber: jobDetails.jobNumber || '', propertyAddress: job.propertyAddress || '',
+    clientName: `${job.clientFirstName ?? ''} ${job.clientLastName ?? ''}`.trim(),
+  };
+
+  // Generate the document render through the SHARED engine when a doc is selected.
+  useEffect(() => {
+    let cancelled = false;
+    if ((view === 'seq' || view === 'lib') && itemType === 'doc' && selectedId) {
+      const tpl = docTemplates.find(d => d.id === selectedId);
+      if (!tpl) return;
+      setIsGenerating(true);
+      generateLOEHTML(job, jobDetails, tpl.template_html, tpl.id, (tpl as any).version)
+        .then(html => { if (!cancelled) setDocHtml(html); })
+        .catch(() => { if (!cancelled) setDocHtml(''); })
+        .finally(() => { if (!cancelled) setIsGenerating(false); });
+    }
+    return () => { cancelled = true; };
+  }, [view, itemType, selectedId, docTemplates, job, jobDetails]);
+
+  // ── open paths ────────────────────────────────────────────────────────────
+  const openSeq = (t: CompType) => { setItemType(t); setSelectedId(defaultIdFor(t)); setView('seq'); };
+  const openLib = (t: CompType, id: string) => { setItemType(t); setSelectedId(id); setView('lib'); setRatio('view'); };
+  const closePanel = () => setView('map');
+
+  const handleEdit = () => {
+    if (itemType === 'doc') {
+      const tpl = docTemplates.find(d => d.id === selectedId);
+      if (tpl && onEditDocument) onEditDocument(tpl); else toast.message('Document editing opens the previewer/editor.');
+    } else if (itemType === 'mail') {
+      const tpl = emailTemplates.find(e => e.id === selectedId);
+      if (tpl && onEditEmail) onEditEmail(tpl);
+    } else {
+      const tpl = popupTemplates.find(p => p.id === selectedId);
+      if (tpl && onEditPopup) onEditPopup(tpl);
+    }
+  };
+
+  const handleDownload = () => {
+    if (itemType === 'doc' && docHtml) {
+      const ok = downloadPagedPdf(docHtml, `LOE-${job.clientLastName || 'Client'}-${jobDetails.jobNumber || 'DRAFT'}`);
+      if (!ok) toast.error('Please allow pop-ups to download the PDF');
+    }
+  };
+
+  // ── render of the selected component (left pane) ──────────────────────────
+  const renderLeft = () => {
+    if (itemType === 'doc') {
+      if (isGenerating && !docHtml) {
+        return <div className="flex-1 flex items-center justify-center text-muted-foreground"><Loader2 className="h-5 w-5 animate-spin mr-2" /> Rendering document…</div>;
+      }
+      // Document = the SHARED previewer pane (paper page on the viewer, zoom + paged path).
+      return <DocumentPreviewPane html={docHtml} />;
+    }
+    // Email + Popup = screen content → a monitor view floating on the viewer backdrop.
+    const html = itemType === 'mail'
+      ? resolveEditTimeTokens(emailTemplates.find(e => e.id === selectedId)?.body_html ?? '', tokenCtx)
+      : resolvePopupTokens(popupTemplates.find(p => p.id === selectedId)?.body_html ?? '', tokenCtx);
+    return (
+      <div className="flex-1 overflow-auto bg-muted p-6">
+        <div className="max-w-[680px] mx-auto bg-card border rounded-lg shadow-lg overflow-hidden">
+          <div className="h-8 bg-muted border-b flex items-center gap-1.5 px-3">
+            <span className="w-2.5 h-2.5 rounded-full bg-red-300" /><span className="w-2.5 h-2.5 rounded-full bg-yellow-300" /><span className="w-2.5 h-2.5 rounded-full bg-green-300" />
+            <span className="ml-2 flex-1 h-4 bg-card border rounded" />
+          </div>
+          <iframe srcDoc={html} title={`${TYPE_META[itemType].label} preview`} sandbox="allow-same-origin" className="w-full" style={{ border: 'none', height: itemType === 'popup' ? 560 : 640 }} />
+        </div>
+      </div>
+    );
+  };
+
+  // ── library rail ──────────────────────────────────────────────────────────
+  const Rail = () => (
+    <aside className={`flex-none bg-card border-r flex flex-col overflow-y-auto transition-[width] ${view === 'seq' ? 'w-[60px]' : 'w-[268px]'}`}>
+      <div className="p-3.5 pb-2">
+        <div className={`flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-2 ${view === 'seq' ? 'justify-center' : ''}`}>
+          <Layers className="h-3 w-3" />{view !== 'seq' && 'Sequences'}
+        </div>
+        <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer bg-[#eef3fb] ring-1 ring-[#c7d7ef] ${view === 'seq' ? 'justify-center' : ''}`} onClick={closePanel} title="Default LOE Deployment">
+          <ChevronRight className="h-4 w-4 text-[#2c5aa0] rotate-90" />
+          {view !== 'seq' && <><span className="flex-1 font-semibold text-sm truncate">Default LOE Deployment</span><span className="text-[10px] font-bold text-[#2c5aa0] bg-card border border-[#c7d7ef] rounded-full px-1.5">DEFAULT</span></>}
+        </div>
+      </div>
+      <div className="p-3.5 pt-3 border-t">
+        <div className={`flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-2 ${view === 'seq' ? 'justify-center' : ''}`}>
+          <LayoutGrid className="h-3 w-3" />{view !== 'seq' && 'Component Library'}
+        </div>
+        {ORDER.map(t => (
+          <div key={t} className="mb-1">
+            <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-muted font-semibold ${view === 'seq' ? 'justify-center' : ''}`}
+                 onClick={() => view !== 'seq' && setOpen(o => ({ ...o, [t]: !o[t] }))} title={TYPE_META[t].label + 's'}>
+              <span className={t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}>{TYPE_META[t].icon}</span>
+              {view !== 'seq' && <>{TYPE_META[t].label}s<span className="ml-auto text-[11px] text-muted-foreground bg-muted rounded-full px-2">{listFor(t).length}</span>
+                <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${open[t] ? '' : '-rotate-90'}`} /></>}
+            </div>
+            {view !== 'seq' && open[t] && (
+              <div className="pl-[30px] py-0.5">
+                {listFor(t).map(inst => (
+                  <div key={inst.id} className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg cursor-pointer hover:bg-muted text-[13px]" onClick={() => openLib(t, inst.id)}>
+                    <span className={`w-1.5 h-1.5 rounded-full flex-none ${TYPE_META[t].dot}`} />
+                    <span className="flex-1 truncate">{inst.name}</span>
+                  </div>
+                ))}
+                {listFor(t).length === 0 && <div className="px-2.5 py-1.5 text-xs text-muted-foreground">None yet</div>}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </aside>
+  );
+
+  // ── sequence map (blocks) ─────────────────────────────────────────────────
+  const Map = () => (
+    <div className="flex-1 overflow-auto p-6">
+      <h1 className="text-xl font-bold">Default LOE Deployment</h1>
+      <p className="text-muted-foreground mt-1">What the client experiences, in order. Open a block to preview &amp; edit on the right; the sequence stays as your spine.</p>
+      <div className="flex items-stretch mt-7 pb-4 overflow-x-auto">
+        {ORDER.map((t, i) => (
+          <React.Fragment key={t}>
+            <div className={`w-[236px] flex-none bg-card border rounded-2xl shadow-sm overflow-hidden cursor-pointer hover:-translate-y-0.5 hover:shadow-md transition border-t-4 ${TYPE_META[t].accent}`} onClick={() => openSeq(t)}>
+              <div className="p-4">
+                <div className={`flex items-center gap-1.5 text-[11px] font-bold tracking-wide uppercase ${t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[t].icon}{TYPE_META[t].label}</div>
+                <div className="text-[15px] font-bold mt-2">{nameFor(t, defaultIdFor(t))}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{t === 'doc' ? 'e-signature document' : t === 'mail' ? 'delivers the signing link' : 'post-sign confirmation'}</div>
+              </div>
+              <div className="flex items-center gap-1.5 border-t px-3 py-2 bg-muted/30">
+                <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#2c5aa0]"><Eye className="h-3 w-3" /> Open</span>
+              </div>
+            </div>
+            {i < ORDER.length - 1 && (
+              <div className="w-[74px] flex-none flex flex-col items-center justify-center gap-1.5 text-muted-foreground">
+                <span className="text-[10px] font-bold uppercase tracking-wide">{CONN[t]}</span>
+                <ArrowRight className="h-4 w-4" />
+              </div>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
+    </div>
+  );
+
+  // ── sequence spine (vertical, while a panel is open from a block) ─────────
+  const Spine = () => (
+    <div className="w-[312px] flex-none border-r bg-muted/40 overflow-y-auto p-4">
+      <div className="text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-3 px-1">Sequence</div>
+      {ORDER.map((t, i) => (
+        <React.Fragment key={t}>
+          <div className={`bg-card border rounded-xl p-3 cursor-pointer shadow-sm border-l-[3px] ${t === itemType ? 'ring-2 ring-[#2c5aa0]' : ''} ${t === 'doc' ? 'border-l-[#2c5aa0]' : t === 'mail' ? 'border-l-cyan-700' : 'border-l-emerald-600'}`} onClick={() => openSeq(t)}>
+            <div className={`flex items-center gap-1.5 text-[10px] font-bold uppercase ${t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[t].icon}{TYPE_META[t].label}</div>
+            <div className="font-bold text-[13.5px] mt-1">{nameFor(t, defaultIdFor(t))}</div>
+          </div>
+          {i < ORDER.length - 1 && <div className="flex items-center gap-1.5 text-muted-foreground px-1.5 py-1.5 text-[10.5px] font-bold uppercase"><ChevronDown className="h-3.5 w-3.5" />{CONN[t]}</div>}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+
+  // ── the split work area (render left, editor right) ───────────────────────
+  const leftPct = ratio === 'edit' ? '50%' : '72%';
+  const startGrab = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const split = splitRef.current; if (!split) return;
+    const left = split.firstElementChild as HTMLElement | null; if (!left) return;
+    const move = (ev: MouseEvent) => {
+      const r = split.getBoundingClientRect();
+      const w = Math.max(260, Math.min(r.width - 260, ev.clientX - r.left));
+      left.style.flex = `0 0 ${w}px`;
+    };
+    const up = () => { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); };
+    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+  };
+
+  const Work = () => (
+    <div className="flex-1 flex min-w-0">
+      {view === 'seq' && <Spine />}
+      <div className="flex-1 flex flex-col min-w-0 bg-background">
+        {/* panel bar */}
+        <div className="flex items-center gap-2.5 h-12 px-4 bg-card border-b flex-none">
+          <span className={`flex items-center gap-1.5 text-[11px] font-bold uppercase ${itemType === 'doc' ? 'text-[#2c5aa0]' : itemType === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[itemType].icon}{TYPE_META[itemType].label}</span>
+          <span className="font-bold">{nameFor(itemType, selectedId)}</span>
+          <div className="flex-1" />
+          {itemType === 'doc' && <Button variant="ghost" size="sm" className="h-8 gap-1" onClick={handleDownload}><Download className="h-4 w-4" /> Download</Button>}
+          <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={closePanel}><X className="h-4 w-4" /></Button>
+        </div>
+        {/* split */}
+        <div ref={splitRef} className="flex-1 flex min-h-0 p-4 gap-0">
+          <div className="flex flex-col border rounded-xl overflow-hidden bg-card min-w-0" style={{ flex: `0 0 ${leftPct}` }}>
+            <div className="flex items-center gap-2 px-3.5 py-2.5 border-b font-semibold text-[13px] bg-muted/30"><Eye className="h-3.5 w-3.5" /> Rendered</div>
+            <div className="flex-1 flex flex-col min-h-0 overflow-hidden">{renderLeft()}</div>
+          </div>
+          <div className="w-3.5 flex items-center justify-center cursor-col-resize group" onMouseDown={startGrab} title="Drag to resize">
+            <span className="w-[3px] h-9 rounded bg-border group-hover:bg-[#2c5aa0]" />
+          </div>
+          <div className="flex flex-col border rounded-xl overflow-hidden bg-card flex-1 min-w-0">
+            <div className="flex items-center gap-2 px-3.5 py-2.5 border-b font-semibold text-[13px] bg-muted/30">
+              <Pencil className="h-3.5 w-3.5" /> Editor
+              <button className="ml-auto inline-flex items-center gap-1 text-[11px] font-semibold text-muted-foreground border rounded-md px-2 py-0.5 hover:text-[#2c5aa0] hover:border-[#2c5aa0]" onClick={() => setRatio(r => r === 'edit' ? 'view' : 'edit')}>
+                {ratio === 'edit' ? <ChevronRight className="h-3 w-3" /> : <ArrowLeft className="h-3 w-3" />}{ratio === 'edit' ? 'Collapse' : 'Expand'}
+              </button>
+            </div>
+            <div className="flex-1 min-h-0 overflow-auto p-4 flex flex-col items-center justify-center text-center gap-3">
+              <p className="text-sm text-muted-foreground max-w-[24ch]">Edit <span className="font-semibold text-foreground">{nameFor(itemType, selectedId)}</span> in its full editor.</p>
+              <Button size="sm" className="gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]" onClick={handleEdit}><Pencil className="h-3.5 w-3.5" /> Open editor</Button>
+              <p className="text-[11px] text-muted-foreground max-w-[26ch]">Opens the proven {TYPE_META[itemType].label.toLowerCase()} editor — same one you use today.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-[1280px] w-[95vw] h-[95vh] flex flex-col p-0 gap-0 [&>button]:hidden overflow-hidden">
+        {/* top bar */}
+        <div className="flex items-center gap-4 px-4 h-14 border-b flex-none">
+          <div className="flex items-baseline gap-2"><span className="font-extrabold tracking-wide text-[#2c5aa0]">VALTA</span><span className="text-xs text-muted-foreground">Component Studio</span></div>
+          <span className="w-px h-6 bg-border" />
+          <span className="font-semibold text-sm">LOE Sequence Builder</span>
+          <div className="flex-1" />
+          <Button variant="ghost" size="sm" className="h-8 w-8 p-0" onClick={onClose}><X className="h-4 w-4" /></Button>
+        </div>
+        {/* shell */}
+        <div className="flex-1 flex min-h-0">
+          <Rail />
+          <main className="flex-1 flex flex-col min-w-0">
+            {/* stage bar / crumb */}
+            <div className="flex items-center gap-3 h-12 px-5 border-b flex-none text-sm">
+              {view === 'map' ? (
+                <span className="font-semibold">Default LOE Deployment</span>
+              ) : (
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <span className="cursor-pointer hover:text-[#2c5aa0]" onClick={closePanel}>{view === 'lib' ? 'Component Library' : 'Default LOE Deployment'}</span>
+                  <span className="text-muted-foreground/50">/</span>
+                  <span>{TYPE_META[itemType].label}{view === 'lib' ? 's' : ''}</span>
+                  <span className="text-muted-foreground/50">/</span>
+                  <span className="text-foreground font-semibold">{nameFor(itemType, selectedId)}</span>
+                </div>
+              )}
+              <div className="flex-1" />
+              {view !== 'map' && <Button variant="ghost" size="sm" className="h-8 gap-1" onClick={closePanel}><ArrowLeft className="h-4 w-4" /> Back to map</Button>}
+            </div>
+            <div className="flex-1 flex min-h-0">
+              {view === 'map' ? <Map /> : <Work />}
+            </div>
+          </main>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default ComponentStudio;

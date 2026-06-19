@@ -19,7 +19,7 @@ import JobNumberField from "./loe-quote/JobNumberField";
 import { sendToValcre } from "@/utils/webhooks";
 import { supabase } from "@/integrations/supabase/client";
 import { generateAppraisalTestData } from "@/utils/testDataGenerator";
-import { FileSignature, AlertCircle, ExternalLink, Trash2, FolderOpen, CheckCircle, Mail } from "lucide-react";
+import { FileSignature, AlertCircle, ExternalLink, Trash2, FolderOpen, CheckCircle, Mail, LayoutGrid } from "lucide-react";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -30,6 +30,7 @@ import { loadJobContracts, saveJobContract, deleteJobContract, JobContract } fro
 import { saveJobEmailInstance, loadJobEmailInstances, EmailInstance, EmailTemplate } from "@/utils/loe/emailTemplate";
 import EmailComposeModal from "@/components/dashboard/job-details/actions/EmailComposeModal";
 import PopupComposeModal from "@/components/dashboard/job-details/actions/PopupComposeModal";
+import ComponentStudio from "@/components/dashboard/job-details/actions/ComponentStudio";
 import { PopupTemplate } from "@/utils/loe/popupTemplate";
 import { markLOEPrepComplete } from "@/utils/webhooks/clickup";
 import LOEPreviewModal from "./actions/LOEPreviewModal";
@@ -253,6 +254,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // Popup editor (third component type) — opened from the Previewer's Popup dropdown.
   const [popupOpen, setPopupOpen] = useState(false);
   const [popupInitial, setPopupInitial] = useState<PopupTemplate | null>(null);
+  // Component Studio (library + sequence map + split previewer/editor) — additive entry; the
+  // proven document previewer/email/popup editors are reused via the onEdit* callbacks.
+  const [studioOpen, setStudioOpen] = useState(false);
   // Doc-less send: empty signing link (G5 — no DocuSeal link on a document-less email);
   // persist the instance as 'sent' ONLY on Resend success (G4); contract_id=null (KR2).
   const handleSendDocLess = async (payload: { subject: string; bodyHtml: string }) => {
@@ -1526,6 +1530,17 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 Create Document/Email
               </Button>
             )}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setStudioOpen(true)}
+              className="border border-border bg-background text-foreground hover:bg-muted transition-colors text-sm font-medium"
+              title="Open the Component Studio — Document, Email & Popup library + sequence map"
+            >
+              <LayoutGrid className="h-4 w-4 mr-1" />
+              Component Studio
+            </Button>
           </div>
         </div>
 
@@ -2363,6 +2378,18 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           job={job}
           jobDetails={jobDetails}
           initialTemplate={popupInitial ?? undefined}
+        />
+
+        {/* Component Studio — additive surface. Deep-edit delegates to the proven editors:
+            document → the existing previewer/editor, email → EmailComposeModal, popup → PopupComposeModal. */}
+        <ComponentStudio
+          isOpen={studioOpen}
+          onClose={() => setStudioOpen(false)}
+          job={job}
+          jobDetails={jobDetails}
+          onEditDocument={() => { setStudioOpen(false); handleGeneratePreview(); }}
+          onEditEmail={(tpl) => { setDocLessTemplate(tpl); setDocLessOpen(true); }}
+          onEditPopup={(p) => { setPopupInitial(p ?? null); setPopupOpen(true); }}
         />
 
         {/* Reopening a draft now routes through LOEPreviewModal (single-panel preview → Edit →

@@ -232,31 +232,20 @@ Deno.serve(async (req) => {
         )
       }
 
-      // Update LOE sent timestamp in database, and auto-set the Delivery Date.
-      // Delivery clock starts at LOE-sent: delivery_date = loe_sent_at + deliveryTime weeks
-      // (contract default 3 weeks). Stays blank in the dashboard until this fires.
+      // Update LOE sent timestamp in database.
+      // NOTE (Ben 2026-06-19): the Delivery Date auto-set/lock was REMOVED — Delivery Date is now a
+      // live "today + deliveryTime weeks" estimate computed in the dashboard, not derived from
+      // loe_sent_at. We still stamp loe_sent_at (used elsewhere); we no longer write delivery_date here.
       const sentAt = payload.data.created_at || new Date().toISOString()
-      const { data: loeRow } = await supabase
-        .from('job_loe_details')
-        .select('delivery_time')
-        .eq('job_id', loeDetails.job_id)
-        .single()
-      const weeks = parseInt(String(loeRow?.delivery_time ?? ''), 10)
-      const effectiveWeeks = Number.isFinite(weeks) && weeks > 0 ? weeks : 3
-      const deliveryDate = new Date(sentAt)
-      deliveryDate.setDate(deliveryDate.getDate() + effectiveWeeks * 7)
-      const deliveryDateStr = deliveryDate.toISOString().slice(0, 10) // YYYY-MM-DD
-
       const { error: updateError } = await supabase
         .from('job_loe_details')
         .update({
-          loe_sent_at: sentAt,
-          delivery_date: deliveryDateStr
+          loe_sent_at: sentAt
         })
         .eq('job_id', loeDetails.job_id)
 
       if (updateError) {
-        console.error('Error updating loe_sent_at / delivery_date:', updateError)
+        console.error('Error updating loe_sent_at:', updateError)
       }
 
       // Update ClickUp task with LOE Sent timestamp

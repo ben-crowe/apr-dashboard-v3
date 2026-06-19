@@ -86,7 +86,6 @@ export interface JobDetails {
   valueScenarios?: string;
   approachesToValue?: string;
   deliveryTime?: string;
-  loeSentAt?: string; // set by docuseal-webhook on LOE send; locks the Delivery Date estimate
   clientDocuments?: string;
   currentUse?: string;
   proposedUse?: string;

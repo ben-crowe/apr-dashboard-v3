@@ -157,7 +157,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const mergeTokens = itemType === 'mail' ? EMAIL_MERGE_TOKENS : POPUP_MERGE_TOKENS;
 
   // ── open paths ────────────────────────────────────────────────────────────
-  const openSeq = (t: CompType) => { setItemType(t); setSelectedId(defaultIdFor(t)); setView('seq'); };
+  const openSeq = (t: CompType, r: 'view' | 'edit' = 'view') => { setItemType(t); setSelectedId(defaultIdFor(t)); setRatio(r); setView('seq'); };
   const openLib = (t: CompType, id: string) => { setItemType(t); setSelectedId(id); setView('lib'); setRatio('view'); };
   const closePanel = () => setView('map');
 
@@ -274,7 +274,14 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
                 <div className="text-xs text-muted-foreground mt-0.5">{t === 'doc' ? 'e-signature document' : t === 'mail' ? 'delivers the signing link' : 'post-sign confirmation'}</div>
               </div>
               <div className="flex items-center gap-1.5 border-t px-3 py-2 bg-muted/30">
-                <span className="inline-flex items-center gap-1 text-xs font-semibold text-[#2c5aa0]"><Eye className="h-3 w-3" /> Open</span>
+                <button type="button" onClick={(e) => { e.stopPropagation(); openSeq(t, 'view'); }}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground border rounded-md px-2 py-1 bg-card hover:text-[#2c5aa0] hover:border-[#2c5aa0] transition-colors">
+                  <Eye className="h-3 w-3" /> Preview
+                </button>
+                <button type="button" onClick={(e) => { e.stopPropagation(); openSeq(t, 'edit'); }}
+                  className="inline-flex items-center gap-1 text-xs font-semibold text-muted-foreground border rounded-md px-2 py-1 bg-card hover:text-[#2c5aa0] hover:border-[#2c5aa0] transition-colors">
+                  <Pencil className="h-3 w-3" /> Edit
+                </button>
               </div>
             </div>
             {i < ORDER.length - 1 && (

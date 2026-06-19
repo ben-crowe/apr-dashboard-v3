@@ -128,6 +128,27 @@ const formatShortDate = (iso: string): string => {
   catch { return ''; }
 };
 
+// Default delivery time in weeks (contract standard, Ben 2026-06-19).
+const DEFAULT_DELIVERY_WEEKS = 3;
+
+// Compute a delivery date = base + weeks, returned as a YYYY-MM-DD string for <input type="date">.
+const addWeeks = (base: Date, weeks: number): string => {
+  const d = new Date(base);
+  d.setDate(d.getDate() + weeks * 7);
+  return d.toISOString().slice(0, 10);
+};
+
+// Resolve the Delivery Date for display. Two states:
+//   PENDING (no loe_sent_at) → ROLLING estimate = TODAY + weeks, recomputed on every render
+//     (display-only, never persisted; refresh rolls it, changing the weeks shifts it).
+//   ACTIVE (loe_sent_at set)  → LOCKED to the persisted delivery_date (= sent date + weeks at send time).
+const resolveDeliveryDate = (deliveryDate: string | undefined, loeSentAt: string | undefined, weeksRaw: string | undefined): string => {
+  const weeksNum = parseInt(String(weeksRaw ?? ''), 10);
+  const weeks = Number.isFinite(weeksNum) && weeksNum > 0 ? weeksNum : DEFAULT_DELIVERY_WEEKS;
+  if (loeSentAt) return deliveryDate || addWeeks(new Date(loeSentAt), weeks); // locked
+  return addWeeks(new Date(), weeks); // rolling estimate from today
+};
+
 // Clickable info popover (? icon) for a field label. Click to open. Used on fields whose behavior
 // isn't obvious (Delivery Date auto-set on LOE-sent; Client Requested Date; questionable fields).
 //
@@ -2224,19 +2245,22 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <CompactField
               label={
                 <FieldInfo label="Delivery Date:">
-                  Auto-set when the LOE is sent — {(jobDetails as any).deliveryTime || '3'} weeks
-                  from the sent date. Blank until the job is active.
+                  Rolling estimate — {(jobDetails as any).deliveryTime || DEFAULT_DELIVERY_WEEKS} weeks
+                  from today until the job is active, then locked to the sent date +{' '}
+                  {(jobDetails as any).deliveryTime || DEFAULT_DELIVERY_WEEKS} weeks.
                 </FieldInfo>
               }
             >
+              {/* Derived/display-only: PENDING = TODAY + weeks (recomputed each render, not persisted);
+                  ACTIVE (loe_sent_at set) = locked to the persisted delivery_date. Read-only — the value
+                  is computed, not user-typed, so a refresh rolls it and changing weeks shifts it live. */}
               <Input
                 type="date"
                 name="deliveryDate"
-                value={jobDetails.deliveryDate || ''}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                placeholder="TBD — set when LOE is sent"
-                className="h-7 text-sm max-w-[160px]"
+                value={resolveDeliveryDate(jobDetails.deliveryDate, jobDetails.loeSentAt, (jobDetails as any).deliveryTime)}
+                readOnly
+                title={jobDetails.loeSentAt ? 'Locked — LOE sent' : 'Rolling estimate from today'}
+                className="h-7 text-sm max-w-[160px] cursor-default opacity-90"
               />
             </CompactField>
             <CompactField label="Delivery Time (wks)">

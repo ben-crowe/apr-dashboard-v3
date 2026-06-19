@@ -82,7 +82,9 @@ Named so far (qa-agent to complete the full field-by-field sweep against the sub
 
 ## ⛔ SUPERSEDED — adopt the CLIENT'S EXISTING fields (Ben, 2026-06-18, later)
 
-> **The lean 18-field redesign below is NO LONGER the plan.** Ben surfaced the client's LIVE Valta custom-field set — we will most likely **adopt the client's existing fields as-is** rather than impose our own. The grouped-18 / number-prefix / divider-header work below is retained as REFERENCE (the grouping ideas may still inform layout), but the field LIST is now the client's. Do not build to the 18-set.
+> **The lean 18-field redesign below is NO LONGER the plan.** Ben surfaced the client's LIVE Valta custom-field set — we **adopt the client's existing fields as-is** rather than impose our own.
+>
+> **⭐ CANONICAL field layout (LOCKED 2026-06-18) = [TARGET-task-field-layout.md](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/eSign-Workflow/TARGET-task-field-layout.md)** + the ready-to-paste [CODEX-TASK-mirror-reorg.md](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/eSign-Workflow/CODEX-TASK-mirror-reorg.md). **Naming scheme changed:** each field's Name = a **single group digit + space + the field's own name** (e.g. `1 Received Date`, `3 Client Email`) so ClickUp's name-sort clusters by group. **NO header/divider fields, NO decimals, NO tens-blocks** — the divider-header + tens-block + type work BELOW in this doc is SUPERSEDED reference, do NOT build from it. Target = the **"APR Test - Valta Mirror"** list in Ben's BC workspace ONLY. **Renaming/creating field definitions is UI-only (no API/CLI) → Codex via computer-use is the only path.**
 
 ### The client's existing custom fields (captured from the live Valta board, 2026-06-18 — canonical candidate)
 

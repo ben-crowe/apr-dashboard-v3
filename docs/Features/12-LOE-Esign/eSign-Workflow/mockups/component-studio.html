@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Component Studio — LOE Sequence Builder (mockup v2)</title>
+<style>
+  :root{
+    --brand:#2c5aa0; --brand-dark:#234a85; --brand-tint:#eef3fb;
+    --bg:#eef1f5; --surface:#ffffff; --border:#e2e8f0; --border2:#cbd5e1;
+    --ink:#0f172a; --muted:#64748b; --muted2:#94a3b8;
+    --doc:#2c5aa0; --doc-tint:#eef3fb;
+    --mail:#0e7490; --mail-tint:#ecfeff;
+    --popup:#059669; --popup-tint:#ecfdf5;
+    --shadow:0 10px 30px -12px rgba(15,23,42,.18);
+    --shadow-sm:0 1px 2px rgba(15,23,42,.06);
+  }
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg); color:var(--ink); font-size:14px; line-height:1.5;
+    display:flex; flex-direction:column; height:100vh; overflow:hidden;
+  }
+  svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+  .muted{color:var(--muted)} .small{font-size:12px}
+
+  /* ── Top bar ───────────────────────────────────────────── */
+  .topbar{display:flex;align-items:center;gap:16px;padding:0 18px;height:56px;background:var(--surface);border-bottom:1px solid var(--border);flex:none;z-index:20}
+  .brand{display:flex;align-items:baseline;gap:8px}
+  .brand .mark{font-weight:800;letter-spacing:.02em;color:var(--brand);font-size:17px}
+  .brand .sub{font-size:12px;color:var(--muted)}
+  .divider{width:1px;height:24px;background:var(--border)}
+  .studio-name{font-weight:600}
+  .topbar .spacer{flex:1}
+  .seq-switch{display:flex;align-items:center;gap:8px;height:34px;padding:0 12px;border:1px solid var(--border2);border-radius:8px;background:var(--surface);cursor:pointer;font-weight:500}
+  .seq-switch:hover{border-color:var(--brand)}
+  .seq-switch .chev{color:var(--muted)}
+  .btn{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 14px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;border:1px solid transparent;transition:.15s}
+  .btn-primary{background:var(--brand);color:#fff}
+  .btn-primary:hover{background:var(--brand-dark)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--border2)}
+  .btn-ghost:hover{background:#f1f5f9}
+  .btn-sm{height:28px;padding:0 10px;font-size:12px;border-radius:7px}
+
+  /* ── Shell ─────────────────────────────────────────────── */
+  .shell{flex:1;display:flex;min-height:0}
+
+  /* ── Left rail (component library) ─────────────────────── */
+  .rail{width:268px;flex:none;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;transition:width .22s ease}
+  .rail-sec{padding:14px 14px 8px}
+  .rail-sec + .rail-sec{border-top:1px solid var(--border)}
+  .rail-h{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);margin-bottom:8px;white-space:nowrap;overflow:hidden}
+  .seq-item,.lib-row{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;transition:.12s}
+  .seq-item:hover,.lib-row:hover{background:#f1f5f9}
+  .seq-item.active{background:var(--brand-tint);box-shadow:inset 0 0 0 1px #c7d7ef}
+  .seq-item .ic{color:var(--brand)}
+  .seq-item .t{font-weight:600;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .seq-item .badge{font-size:10px;font-weight:700;color:var(--brand);background:#fff;border:1px solid #c7d7ef;border-radius:999px;padding:1px 7px}
+  .lib-group{margin-bottom:4px}
+  .lib-head{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:600;white-space:nowrap}
+  .lib-head:hover{background:#f1f5f9}
+  .lib-head .count{margin-left:auto;font-size:11px;color:var(--muted);background:#f1f5f9;border-radius:999px;padding:1px 8px}
+  .lib-head .chev{color:var(--muted2);transition:transform .15s}
+  .lib-group.collapsed .chev{transform:rotate(-90deg)}
+  .lib-group.collapsed .lib-rows{display:none}
+  .lib-rows{padding:2px 0 4px 30px}
+  .lib-row{padding:6px 10px;font-size:13px}
+  .lib-row .name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dot{width:7px;height:7px;border-radius:999px;flex:none}
+  .pill{font-size:10px;font-weight:700;border-radius:999px;padding:1px 7px;white-space:nowrap}
+  .ic-doc{color:var(--doc)} .ic-mail{color:var(--mail)} .ic-popup{color:var(--popup)}
+  .dot-doc{background:var(--doc)} .dot-mail{background:var(--mail)} .dot-popup{background:var(--popup)}
+  .pill-doc{color:var(--doc);background:var(--doc-tint)} .pill-mail{color:var(--mail);background:var(--mail-tint)} .pill-popup{color:var(--popup);background:var(--popup-tint)}
+  .rail-add{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:12.5px;font-weight:600;padding:7px 10px;cursor:pointer;border-radius:8px;white-space:nowrap}
+  .rail-add:hover{color:var(--brand);background:#f1f5f9}
+  /* focus mode — collapse rail to an icon strip when a right panel is open */
+  /* SEQUENCE entry only: collapse the library rail to an icon strip + show the spine */
+  .studio.seq .rail{width:60px}
+  .studio.seq .rail .rail-h,.studio.seq .rail .t,.studio.seq .rail .badge,.studio.seq .rail .count,
+  .studio.seq .rail .name,.studio.seq .rail .pill,.studio.seq .rail .chev,.studio.seq .rail-add span,
+  .studio.seq .rail .lib-rows{display:none}
+  .studio.seq .rail .lib-head{justify-content:center;padding:8px 0;font-size:0}
+  .studio.seq .rail .seq-item{justify-content:center;padding:8px 0}
+  .studio.seq .rail-add{justify-content:center}
+  /* LIBRARY entry: rail stays full, NO spine — just the component on the right */
+  .studio.lib .spine{display:none}
+
+  /* ── Stage ─────────────────────────────────────────────── */
+  .studio{flex:1;display:flex;min-width:0}
+  .stage{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+  .stage-bar{display:flex;align-items:center;gap:12px;height:50px;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--border);flex:none}
+  .crumb{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--muted)}
+  .crumb .here{color:var(--ink);font-weight:600}
+  .crumb .sep{color:var(--muted2)}
+  .crumb .lnk{cursor:pointer}
+  .crumb .lnk:hover{color:var(--brand)}
+  .stage-bar .spacer{flex:1}
+  .stage-body{flex:1;min-height:0;overflow:hidden;display:flex}
+
+  /* ── MAP (hero) ────────────────────────────────────────── */
+  #hero{flex:1;overflow:auto;padding:24px;display:none}
+  .studio.map #hero{display:block}
+  .map-head h1{margin:0;font-size:20px;font-weight:700}
+  .map-head p{margin:4px 0 0;color:var(--muted)}
+  .flow{display:flex;align-items:stretch;margin-top:26px;padding:8px 4px 18px;overflow-x:auto}
+  .node{width:236px;flex:none;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-sm);overflow:hidden;transition:.16s;display:flex;flex-direction:column}
+  .node:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--border2)}
+  .node .accent{height:4px}
+  .node.doc .accent{background:var(--doc)} .node.mail .accent{background:var(--mail)} .node.popup .accent{background:var(--popup)}
+  .node .body{padding:15px 16px 14px;cursor:pointer}
+  .node .type{display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+  .node.doc .type{color:var(--doc)} .node.mail .type{color:var(--mail)} .node.popup .type{color:var(--popup)}
+  .node .nm{font-size:15px;font-weight:700;margin:9px 0 3px}
+  .node .meta{font-size:12px;color:var(--muted)}
+  .glyph{margin:13px 0 4px;height:62px;border-radius:8px;background:#f8fafc;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:5px;padding:8px}
+  .gp{width:26px;height:34px;background:#fff;border:1px solid var(--border2);border-radius:3px;position:relative}
+  .gp::before,.gp::after{content:"";position:absolute;left:4px;right:4px;height:2px;background:#e2e8f0;border-radius:2px}
+  .gp::before{top:7px} .gp::after{top:13px}
+  .gp.stack{box-shadow:3px 3px 0 -1px #fff,3px 3px 0 0 var(--border2),6px 6px 0 -1px #fff,6px 6px 0 0 var(--border2)}
+  .genv{width:46px;height:32px;border:1.5px solid var(--mail);border-radius:4px;position:relative;background:var(--mail-tint)}
+  .genv::after{content:"";position:absolute;top:-1px;left:-1px;right:-1px;height:18px;clip-path:polygon(0 0,50% 70%,100% 0);background:var(--mail);opacity:.18}
+  .gbadge{width:40px;height:40px;border-radius:999px;background:var(--popup-tint);border:1px solid #a7f3d0;display:flex;align-items:center;justify-content:center;color:var(--popup)}
+  .node .foot{display:flex;align-items:center;gap:6px;border-top:1px solid var(--border);padding:9px 12px;background:#fcfdfe}
+  .node .foot .status{margin-left:auto;font-size:10px;font-weight:700;border-radius:999px;padding:2px 8px}
+  .status.on{color:var(--popup);background:var(--popup-tint)}
+  .status.def{color:var(--doc);background:var(--doc-tint)}
+  .mini{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--border2);background:#fff;border-radius:7px;padding:4px 9px;cursor:pointer;transition:.12s}
+  .mini:hover{color:var(--brand);border-color:var(--brand)}
+  .mini.edit:hover{color:var(--brand)}
+
+  .conn{flex:none;width:74px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted2)}
+  .conn .line{width:100%;height:2px;background:repeating-linear-gradient(90deg,var(--border2) 0 6px,transparent 6px 11px);position:relative}
+  .conn .line::after{content:"";position:absolute;right:-1px;top:-4px;border-left:7px solid var(--border2);border-top:5px solid transparent;border-bottom:5px solid transparent}
+  .conn .lbl{font-size:10px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--muted)}
+  .addnode{width:150px;flex:none;border:1.5px dashed var(--border2);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);cursor:pointer;background:#fbfcfe}
+  .addnode:hover{color:var(--brand);border-color:var(--brand)}
+  .legend{margin-top:16px;display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+  .legend span{display:flex;align-items:center;gap:6px}
+
+  /* ── WORK (spine + right panel) ────────────────────────── */
+  #work{flex:1;display:none;min-width:0}
+  .studio.seq #work,.studio.lib #work{display:flex}
+  .spine{width:312px;flex:none;border-right:1px solid var(--border);background:#f7f9fc;overflow-y:auto;padding:18px 16px}
+  .spine-h{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);margin:0 4px 12px}
+  .snode{background:var(--surface);border:1px solid var(--border);border-left:3px solid transparent;border-radius:10px;padding:11px 13px;cursor:pointer;transition:.14s;box-shadow:var(--shadow-sm)}
+  .snode:hover{border-color:var(--border2)}
+  .snode .stype{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+  .snode.doc{border-left-color:var(--doc)} .snode.mail{border-left-color:var(--mail)} .snode.popup{border-left-color:var(--popup)}
+  .snode.doc .stype{color:var(--doc)} .snode.mail .stype{color:var(--mail)} .snode.popup .stype{color:var(--popup)}
+  .snode .snm{font-weight:700;font-size:13.5px;margin-top:4px}
+  .snode .smeta{font-size:11.5px;color:var(--muted);margin-top:1px}
+  .snode.cur{outline:2px solid var(--brand);outline-offset:0;border-left-color:var(--brand)}
+  .sconn{display:flex;align-items:center;gap:7px;color:var(--muted2);padding:7px 6px;font-size:10.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
+  .sconn svg{width:14px;height:14px}
+  .spine .add{margin-top:6px;display:flex;align-items:center;justify-content:center;gap:7px;border:1.5px dashed var(--border2);border-radius:10px;padding:9px;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer}
+  .spine .add:hover{color:var(--brand);border-color:var(--brand)}
+
+  .panel{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--bg)}
+  .panel-bar{display:flex;align-items:center;gap:10px;height:48px;padding:0 16px;background:var(--surface);border-bottom:1px solid var(--border);flex:none}
+  .panel-bar .ptype{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+  .panel-bar.doc .ptype{color:var(--doc)} .panel-bar.mail .ptype{color:var(--mail)} .panel-bar.popup .ptype{color:var(--popup)}
+  .panel-bar .pnm{font-weight:700}
+  .panel-bar .spacer{flex:1}
+  .panel-body{flex:1;min-height:0;overflow:auto;padding:20px}
+
+  /* preview render frames */
+  .device{max-width:760px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+  .pv-doc .sheet{background:#fff;border-bottom:1px solid var(--border);padding:34px 46px;min-height:300px}
+  .pv-doc .ph{height:12px;border-radius:3px;background:#eef2f7;margin:0 0 10px}
+  .pv-doc .ph.t{height:18px;width:55%;background:#dde6f1;margin-bottom:18px}
+  .pv-doc .ph.s{width:90%} .pv-doc .ph.m{width:75%} .pv-doc .ph.l{width:40%}
+  .pageno{text-align:center;font-size:11px;color:var(--muted2);padding:7px;background:#fafbfc}
+  .pv-email{padding:26px 34px}
+  .pv-email .row{display:flex;gap:8px;font-size:13px;padding:6px 0;border-bottom:1px solid var(--border)}
+  .pv-email .row b{color:var(--muted);width:60px;font-weight:600}
+  .pv-email .cta{display:inline-block;margin:16px 0;background:var(--brand);color:#fff;padding:9px 16px;border-radius:6px;font-weight:600;font-size:13px}
+  .pv-popup{background:#f1f5f9;padding:38px 20px;display:flex;justify-content:center}
+  .tycard{max-width:440px;width:100%;background:#fff;border:1px solid var(--border);border-top:4px solid var(--brand);border-radius:16px;box-shadow:var(--shadow);padding:36px 30px;text-align:center}
+  .tycard .bdg{width:60px;height:60px;margin:0 auto 18px;border-radius:999px;background:var(--popup-tint);border:1px solid #a7f3d0;display:flex;align-items:center;justify-content:center;color:var(--popup)}
+  .tycard .bdg svg{width:30px;height:30px}
+  .tycard h2{margin:0 0 11px;font-size:23px}
+  .tycard p{margin:0 auto 8px;max-width:40ch;color:#334155}
+  .tycard .sub{font-size:13px;color:var(--muted)}
+
+  /* edit split (inside the right panel) */
+  /* split = rendered (LEFT) | grabber | editor (RIGHT) */
+  .split{display:flex;gap:0;height:100%}
+  @media(max-width:680px){.split{flex-direction:column}.grabber{display:none}}
+  .pane{flex:1;min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;overflow:hidden;min-height:0}
+  .grabber{flex:none;width:14px;cursor:col-resize;display:flex;align-items:center;justify-content:center;touch-action:none}
+  .grabber::before{content:"";width:3px;height:38px;border-radius:3px;background:var(--border2);transition:.12s}
+  .grabber:hover::before{background:var(--brand);height:64px}
+  /* expand/collapse the editor — sits beside the "Editor" name */
+  .hx{margin-left:auto;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--muted);border:1px solid var(--border2);background:#fff;border-radius:6px;padding:3px 8px;cursor:pointer}
+  .hx:hover{color:var(--brand);border-color:var(--brand)}
+  .hx svg{width:13px;height:13px}
+  /* render pane = a realistic page on a viewer backdrop, so real-world fit is judgeable */
+  .render-stage{background:var(--bg);padding:24px}
+  .rpage{background:#fff;border:1px solid var(--border);box-shadow:var(--shadow);margin:0 auto 18px}
+  .rpage:last-child{margin-bottom:0}
+  .rpage.doc{max-width:660px;padding:58px 66px}
+  .rpage.doc .h{height:15px;background:#e9eef4;border-radius:3px;margin:0 0 13px}
+  .rpage.doc .h.t{height:22px;width:58%;background:#d7e0ec;margin-bottom:24px}
+  .rpage.doc .h.s{width:92%} .rpage.doc .h.m{width:78%} .rpage.doc .h.l{width:46%}
+  .rpage.doc .pn{text-align:center;font-size:11px;color:var(--muted2);margin-top:40px}
+  .rpage.email{max-width:600px;padding:34px 38px;font-family:Arial,Helvetica,sans-serif;color:#333;font-size:14px;line-height:1.55}
+  .rpage.email p{margin:0 0 14px} .rpage.email ul{margin:0 0 14px;padding-left:20px} .rpage.email li{margin:3px 0}
+  .em-btn{display:inline-block;background:#1a73e8;color:#fff;padding:10px 20px;border-radius:5px;text-decoration:none;font-size:13px}
+  .em-sig{color:#555;font-size:12.5px;line-height:1.5;margin-top:6px}
+  /* SCREEN assets (email + popup) float like a monitor view; documents stay paper pages */
+  .screen{max-width:680px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+  .screen-bar{height:32px;background:#f1f5f9;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px;padding:0 12px}
+  .screen-bar .d{width:10px;height:10px;border-radius:999px;background:#cbd5e1}
+  .screen-bar .d.r{background:#f0a8a0} .screen-bar .d.y{background:#f6d488} .screen-bar .d.g{background:#a6d8a8}
+  .screen-bar .addr{margin-left:6px;flex:1;height:18px;background:#fff;border:1px solid var(--border);border-radius:5px}
+  .screen .rpage.email{max-width:none;margin:0;border:none;box-shadow:none}
+  .screen .pv-screen{background:#eef1f5;padding:34px 22px;display:flex;justify-content:center}
+  /* RENDERED editor (WYSIWYG, never raw HTML) — same page, editable, tokens as chips */
+  .wysiwyg{background:#fff;border:1px solid var(--border);border-radius:8px;padding:18px 20px;font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.55;color:#333;outline:none;overflow:auto}
+  .wysiwyg:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(44,90,160,.08)}
+  .wysiwyg.center{display:flex;justify-content:center;background:#f1f5f9}
+  .wysiwyg p{margin:0 0 14px} .wysiwyg ul{margin:0 0 14px;padding-left:20px} .wysiwyg li{margin:3px 0}
+  .chip{display:inline-block;background:var(--brand-tint);border:1px solid #c7d7ef;color:var(--brand);border-radius:5px;padding:0 6px;font-size:12px;font-family:ui-monospace,Menlo,monospace;cursor:default}
+  /* compact zoom on the Render page — mirrors the current previewer */
+  .zoomstrip{margin-left:auto;display:flex;align-items:center;gap:1px;color:var(--muted)}
+  .zoomstrip button{height:22px;width:22px;padding:0;border:none;background:none;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:5px}
+  .zoomstrip button:hover{color:var(--brand);background:#f1f5f9}
+  .zoomstrip button svg{width:14px;height:14px}
+  .zoomstrip .zv{font-size:11px;font-variant-numeric:tabular-nums;width:34px;text-align:center;user-select:none}
+  .zoomstrip .rst{margin-left:4px}
+  .pane-h{display:flex;align-items:center;gap:8px;padding:10px 13px;border-bottom:1px solid var(--border);font-weight:600;font-size:12.5px;background:#fcfdfe}
+  .pane-b{flex:1;min-height:0;overflow:auto;padding:13px}
+  .toks{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px}
+  .tok{font-family:ui-monospace,Menlo,monospace;font-size:11px;background:#f1f5f9;border:1px solid var(--border2);border-radius:6px;padding:3px 8px;cursor:pointer}
+  .tok:hover{border-color:var(--brand);color:var(--brand)}
+  textarea.src{width:100%;height:calc(100% - 36px);min-height:200px;border:1px solid var(--border);border-radius:8px;padding:10px;font-family:ui-monospace,Menlo,monospace;font-size:12px;resize:none}
+
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:600;box-shadow:var(--shadow);transition:.25s;z-index:60;display:flex;align-items:center;gap:8px}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .ribbon{margin:0 0 18px;background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:10px;padding:10px 14px;font-size:12.5px;display:flex;gap:9px;align-items:flex-start}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="mark">VALTA</span><span class="sub">Component Studio</span></div>
+  <div class="divider"></div>
+  <div class="studio-name">LOE Sequence Builder</div>
+  <div class="spacer"></div>
+  <div class="seq-switch">
+    <svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
+    <span>Default LOE Deployment</span>
+    <svg class="chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+  </div>
+  <div class="btn btn-primary"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>Deploy sequence</div>
+</div>
+
+<div class="studio map" id="studio">
+  <!-- LEFT RAIL -->
+  <aside class="rail">
+    <div class="rail-sec">
+      <div class="rail-h"><svg viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>Sequences</div>
+      <div class="seq-item active" onclick="closePanel()" title="Default LOE Deployment">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></span>
+        <span class="t">Default LOE Deployment</span><span class="badge">DEFAULT</span>
+      </div>
+      <div class="seq-item" title="Rush LOE">
+        <span class="ic" style="color:var(--muted2)"><svg viewBox="0 0 24 24"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></span>
+        <span class="t" style="font-weight:500">Rush LOE (next-day)</span>
+      </div>
+      <div class="rail-add"><svg viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 5v14"/><path d="M5 12h14"/></svg><span>New sequence</span></div>
+    </div>
+    <div class="rail-sec">
+      <div class="rail-h"><svg viewBox="0 0 24 24" style="width:13px;height:13px"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Component Library</div>
+      <div class="lib-group" id="g-doc">
+        <div class="lib-head" onclick="toggleGroup('g-doc')" title="Documents">
+          <span class="ic-doc"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg></span>
+          Documents <span class="count">3</span><svg class="chev" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <div class="lib-rows">
+          <div class="lib-row" onclick="openLib('doc','Standard LOE')"><span class="dot dot-doc"></span><span class="name">Standard LOE</span><span class="pill pill-doc">Default</span></div>
+          <div class="lib-row" onclick="openLib('doc','Commercial LOE — long')"><span class="dot dot-doc"></span><span class="name">Commercial LOE — long</span></div>
+          <div class="lib-row" onclick="openLib('doc','Residential — short')"><span class="dot dot-doc"></span><span class="name">Residential — short</span></div>
+        </div>
+      </div>
+      <div class="lib-group" id="g-mail">
+        <div class="lib-head" onclick="toggleGroup('g-mail')" title="Emails">
+          <span class="ic-mail"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></span>
+          Emails <span class="count">2</span><svg class="chev" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <div class="lib-rows">
+          <div class="lib-row" onclick="openLib('mail','LOE — Ready for Signature')"><span class="dot dot-mail"></span><span class="name">LOE — Ready for Signature</span><span class="pill pill-mail">Default</span></div>
+          <div class="lib-row" onclick="openLib('mail','Reminder nudge')"><span class="dot dot-mail"></span><span class="name">Reminder nudge</span></div>
+        </div>
+      </div>
+      <div class="lib-group" id="g-popup">
+        <div class="lib-head" onclick="toggleGroup('g-popup')" title="Popups">
+          <span class="ic-popup"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/><path d="m9 9 2 2 4-4"/></svg></span>
+          Popups <span class="count">1</span><svg class="chev" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <div class="lib-rows">
+          <div class="lib-row" onclick="openLib('popup','Thank-You')"><span class="dot dot-popup"></span><span class="name">Thank-You</span><span class="pill pill-popup">Active</span></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- STAGE -->
+  <main class="stage">
+    <div class="stage-bar">
+      <div class="crumb" id="crumb"><span class="here">Default LOE Deployment</span></div>
+      <div class="spacer"></div>
+      <div id="bar-actions"></div>
+    </div>
+    <div class="stage-body">
+
+      <!-- HERO MAP -->
+      <div id="hero">
+        <div class="ribbon">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <span><b>Concept mockup (v2).</b> Preview &amp; Edit now dock to the RIGHT as a split panel — the sequence stays visible on the left as your spine. Nothing here is wired to the real app.</span>
+        </div>
+        <div class="map-head">
+          <h1>Default LOE Deployment</h1>
+          <p>What the client experiences, in order. <b>Preview</b> opens on the right without leaving the map · <b>Edit</b> opens the split editor there too.</p>
+        </div>
+        <div class="flow" id="flow"></div>
+        <div class="legend">
+          <span><span class="dot dot-mail"></span>Email</span>
+          <span><span class="dot dot-doc"></span>Document</span>
+          <span><span class="dot dot-popup"></span>Popup</span>
+          <span class="muted">· Blocks show the component, not its full render — Preview to skim all 7 pages on the right.</span>
+        </div>
+      </div>
+
+      <!-- WORK: spine + right panel -->
+      <div id="work">
+        <div class="spine">
+          <div class="spine-h">Sequence</div>
+          <div id="spine-list"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-bar" id="panel-bar"></div>
+          <div class="panel-body" id="panel-body"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  var state = { view:'map', item:'doc', name:'Standard LOE', ratio:'view', zoom:100 };
+  var typeName = {doc:'Document', mail:'Email', popup:'Popup'};
+  var labels = {doc:'Standard LOE', mail:'LOE — Ready for Signature', popup:'Thank-You'};
+  var meta = {doc:'7 pages · e-signature', mail:'Delivers the signing link', popup:'Post-sign confirmation'};
+  var order = ['mail','doc','popup'];
+  var connLbl = {mail:'delivers', doc:'after signing'};
+
+  var ICON = {
+    doc:'<svg viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>',
+    mail:'<svg viewBox="0 0 24 24" style="width:14px;height:14px"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>',
+    popup:'<svg viewBox="0 0 24 24" style="width:14px;height:14px"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/></svg>'
+  };
+  var GLYPH = {
+    doc:'<div class="gp stack"></div>', mail:'<div class="genv"></div>',
+    popup:'<div class="gbadge"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>'
+  };
+  var STATUS = {doc:'<span class="status def">Default</span>', mail:'<span class="status def">Default</span>', popup:'<span class="status on">Active</span>'};
+
+  function el(id){return document.getElementById(id);}
+  function toggleGroup(id){ el(id).classList.toggle('collapsed'); }
+
+  /* ---- HERO map ---- */
+  function buildFlow(){
+    var html='';
+    order.forEach(function(t,i){
+      html += '<div class="node '+t+'">'+
+        '<div class="accent"></div>'+
+        '<div class="body" onclick="openSeq(\''+t+'\',\'view\')">'+
+          '<div class="type">'+ICON[t]+typeName[t]+'</div>'+
+          '<div class="nm">'+labels[t]+'</div>'+
+          '<div class="meta">'+meta[t]+'</div>'+
+          '<div class="glyph">'+GLYPH[t]+'</div>'+
+        '</div>'+
+        '<div class="foot">'+
+          '<span class="mini" onclick="openSeq(\''+t+'\',\'view\')"><svg viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>Preview</span>'+
+          '<span class="mini edit" onclick="openSeq(\''+t+'\',\'edit\')"><svg viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>Edit</span>'+
+          STATUS[t]+
+        '</div>'+
+      '</div>';
+      if(i<order.length-1){
+        html += '<div class="conn"><span class="lbl">'+connLbl[t]+'</span><div class="line"></div></div>';
+      }
+    });
+    html += '<div class="conn"><div class="line" style="background:none"></div></div>'+
+            '<div class="addnode"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg><span class="small" style="font-weight:600">Add step</span></div>';
+    el('flow').innerHTML = html;
+  }
+
+  /* ---- SPINE (vertical sequence while a panel is open) ---- */
+  function buildSpine(){
+    var html='';
+    order.forEach(function(t,i){
+      html += '<div class="snode '+t+(t===state.item?' cur':'')+'" onclick="openSeq(\''+t+'\',\''+state.ratio+'\')">'+
+        '<div class="stype">'+ICON[t]+typeName[t]+'</div>'+
+        '<div class="snm">'+labels[t]+'</div>'+
+        '<div class="smeta">'+meta[t]+'</div>'+
+      '</div>';
+      if(i<order.length-1){
+        html += '<div class="sconn"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>'+connLbl[t]+'</div>';
+      }
+    });
+    html += '<div class="add"><svg viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M12 5v14"/><path d="M5 12h14"/></svg>Add step</div>';
+    el('spine-list').innerHTML = html;
+  }
+
+  /* ---- RENDERED preview: a real page at true size, on a viewer backdrop ----
+     The email shows the REAL (plain, centered-button, over-spaced) version incl. the
+     signature block — so you can judge whether it's actually well laid out. ---- */
+  function emailBody(editable){
+    var cn = editable ? '<span class="chip">{{client_name}}</span>' : 'Alexandra';
+    var pa = editable ? '<span class="chip">{{property_address}}</span>' : '1240 Riverside Dr';
+    return '<p>Hi '+cn+',</p>'+
+      '<p>Your Letter of Engagement for the property appraisal at '+pa+' is ready for your review and signature.</p>'+
+      '<p><a class="em-btn" href="#" onclick="return false">Review &amp; Sign Document</a></p>'+
+      '<p>What happens next:</p>'+
+      '<ul><li>Review the Letter of Engagement carefully</li><li>Sign the document electronically</li>'+
+      '<li>You&rsquo;ll receive a copy for your records</li><li>We&rsquo;ll begin work on your appraisal immediately</li></ul>'+
+      '<p>If you have any questions, please don&rsquo;t hesitate to contact us.</p>'+
+      '<p>Best regards,</p>'+
+      '<div class="em-sig"><strong>Client Services Team</strong><br>Valta Property Valuations Ltd.<br>'+
+      '#300-4838 Richard Road SW, Calgary, AB T3E 6L1<br>'+
+      'office: 587-801-5151 &nbsp;|&nbsp; email: clientcare@valta.ca &nbsp;|&nbsp; web: www.valta.ca</div>';
+  }
+  function docBody(editable){
+    var cn = editable ? '<span class="chip">{{client_name}}</span>' : 'Alexandra Richardson';
+    var jn = editable ? '<span class="chip">{{job_number}}</span>' : 'VA-2026-0418';
+    var p='<div class="rpage doc"><div class="h t"></div><div class="h s"></div><div class="h m"></div><div class="h s"></div><div class="h l"></div><div class="h s"></div><div class="h m"></div>';
+    return p+'<div style="font-size:12px;color:#475569;margin-top:8px">Prepared for '+cn+' &middot; job '+jn+'</div><div class="pn">Page 1 of 7</div></div>';
+  }
+  function popupBody(editable){
+    var cn = editable ? '<span class="chip">{{client_name}}</span>' : 'Alexandra';
+    return '<div class="tycard"><div class="bdg"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div>'+
+      '<h2>Thank You!</h2><p>'+cn+', your Letter of Engagement has been successfully signed.</p>'+
+      '<p class="sub">You will receive a copy of the signed document via email shortly.</p></div>';
+  }
+  function previewMarkup(type){
+    if(type==='doc'){
+      var pages=''; for(var i=1;i<=7;i++){
+        pages+='<div class="rpage doc"><div class="h t"></div><div class="h s"></div><div class="h m"></div><div class="h s"></div><div class="h l"></div><div class="h s"></div><div class="h m"></div><div class="pn">Page '+i+' of 7</div></div>';
+      }
+      return pages;
+    }
+    var bar='<div class="screen-bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="addr"></span></div>';
+    if(type==='mail'){
+      // Email = screen content → shown like a monitor view, floating on the viewer.
+      return '<div class="screen">'+bar+'<div class="rpage email">'+emailBody(false)+'</div></div>';
+    }
+    // Popup = a full screen the client sees → a monitor view of the whole thank-you screen.
+    return '<div class="screen">'+bar+'<div class="pv-screen">'+popupBody(false)+'</div></div>';
+  }
+  /* ---- RENDERED editor (WYSIWYG, not raw HTML): same page, editable, tokens as chips ---- */
+  function editorRendered(type){
+    var inner = type==='mail' ? emailBody(true) : type==='popup' ? popupBody(true) : docBody(true);
+    return '<div class="wysiwyg'+(type==='popup'?' center':'')+'" contenteditable="true" spellcheck="false">'+inner+'</div>';
+  }
+
+  /* ---- details shown beneath the render (uses the dominant ¾ space) ---- */
+  function detailRows(t){
+    var rows={
+      doc:[['Pages','7'],['Format','E-signature'],['Status','Default'],['Used in','Default LOE Deployment'],['Last edited','Jun 16, 2026']],
+      mail:[['Channel','Email'],['Trigger','Manual send'],['Status','Default'],['Used in','Default LOE Deployment'],['Last edited','Jun 17, 2026']],
+      popup:[['Trigger','After signing'],['Status','Active'],['Used in','Default LOE Deployment'],['Last edited','Jun 18, 2026']]
+    }[t];
+    return '<div class="pv-details">'+rows.map(function(r){return '<div class="drow"><span class="dk">'+r[0]+'</span><span class="dv">'+r[1]+'</span></div>';}).join('')+'</div>';
+  }
+
+  /* ---- right panel: ALWAYS a split — RENDER (left) | grabber+chevron | EDITOR (right).
+         Default ratio 'view' = ¾ render / ¼ editor (editor is a hint, not in your face).
+         Chevron toggles to 'edit' = half & half. Grabber drags to any width. ---- */
+  function renderPanel(){
+    var t=state.item, nm=state.name;
+    el('panel-bar').className='panel-bar '+t;
+    el('panel-bar').innerHTML =
+      '<span class="ptype">'+ICON[t]+typeName[t]+'</span><span class="pnm">'+nm+'</span>'+
+      '<div class="spacer"></div>'+
+      '<span class="btn btn-primary btn-sm" onclick="saveEdit()"><svg viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Save</span>'+
+      '<span class="btn btn-ghost btn-sm" style="margin-left:6px" onclick="closePanel()"><svg viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></span>';
+    var leftw = state.ratio==='edit' ? '50%' : '72%';
+    var hxLabel = state.ratio==='edit' ? 'Collapse' : 'Expand';
+    var hxPath = state.ratio==='edit' ? 'm9 6 6 6-6 6' : 'm15 6-6 6 6 6';
+    el('panel-body').innerHTML =
+      '<div class="split">'+
+        '<div class="pane" style="flex:0 0 '+leftw+'">'+
+          '<div class="pane-h"><svg viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Rendered'+
+            '<div class="zoomstrip">'+
+              '<button onclick="zoomBy(-10)" title="Zoom out"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>'+
+              '<span class="zv">'+state.zoom+'%</span>'+
+              '<button onclick="zoomBy(10)" title="Zoom in"><svg viewBox="0 0 24 24"><path d="m18 15-6-6-6 6"/></svg></button>'+
+              '<button class="rst" onclick="zoomReset()" title="Reset zoom"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>'+
+            '</div>'+
+          '</div>'+
+          '<div class="pane-b render-stage"><div style="zoom:'+(state.zoom/100)+'">'+previewMarkup(t)+'</div></div>'+
+        '</div>'+
+        '<div class="grabber" onmousedown="startGrab(event)" title="Drag to resize"></div>'+
+        '<div class="pane">'+
+          '<div class="pane-h"><svg viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg> Editor'+
+            '<button class="hx" onclick="toggleRatio()" title="'+hxLabel+' the editor"><svg viewBox="0 0 24 24"><path d="'+hxPath+'"/></svg>'+hxLabel+'</button>'+
+          '</div>'+
+          '<div class="pane-b"><div class="small muted" style="margin-bottom:8px">Merge fields (click to insert)</div>'+
+          '<div class="toks"><span class="tok">{{client_name}}</span><span class="tok">{{property_address}}</span><span class="tok">{{job_number}}</span></div>'+
+          editorRendered(t)+'</div>'+
+        '</div>'+
+      '</div>';
+  }
+
+  function startGrab(e){
+    e.preventDefault();
+    var split=el('panel-body').querySelector('.split');
+    var left=split.querySelector('.pane');
+    function mv(ev){
+      var r=split.getBoundingClientRect();
+      var w=Math.max(260,Math.min(r.width-260, ev.clientX-r.left));
+      left.style.flex='0 0 '+w+'px';
+    }
+    function up(){ document.removeEventListener('mousemove',mv); document.removeEventListener('mouseup',up); }
+    document.addEventListener('mousemove',mv); document.addEventListener('mouseup',up);
+  }
+  function toggleRatio(){ state.ratio = state.ratio==='edit' ? 'view' : 'edit'; render(); }
+  function zoomBy(d){ state.zoom = Math.max(50, Math.min(150, state.zoom + d)); render(); }
+  function zoomReset(){ state.zoom = 100; render(); }
+
+  function crumb(){
+    if(state.view==='map'){ el('crumb').innerHTML='<span class="here">Default LOE Deployment</span>'; return; }
+    if(state.view==='lib'){
+      el('crumb').innerHTML='<span class="lnk" onclick="closePanel()">Component Library</span><span class="sep">/</span>'+
+        '<span>'+typeName[state.item]+'s</span><span class="sep">/</span><span class="here">'+state.name+'</span>';
+      return;
+    }
+    el('crumb').innerHTML='<span class="lnk" onclick="closePanel()">Default LOE Deployment</span><span class="sep">/</span>'+
+      '<span>'+typeName[state.item]+'</span><span class="sep">/</span><span class="here">'+state.name+'</span>';
+  }
+  function barActions(){
+    if(state.view==='map'){
+      el('bar-actions').innerHTML='<div class="btn btn-ghost btn-sm" onclick="toast(\'Reorder — mockup\')"><svg viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>Reorder</div>';
+      return;
+    }
+    var back = state.view==='lib' ? 'Close' : 'Back to map';
+    el('bar-actions').innerHTML='<div class="btn btn-ghost btn-sm" onclick="closePanel()"><svg viewBox="0 0 24 24" style="width:15px;height:15px"><path d="m15 18-6-6 6-6"/></svg>'+back+'</div>';
+  }
+
+  function render(){
+    el('studio').className = 'studio '+state.view;
+    if(state.view==='seq'){ buildSpine(); renderPanel(); }
+    else if(state.view==='lib'){ renderPanel(); }
+    crumb(); barActions();
+  }
+  // SEQUENCE entry → spine on the left; opens render-dominant ('view'), or balanced ('edit') from the block's Edit.
+  function openSeq(item,ratio){ state.view='seq'; state.item=item; state.name=labels[item]; state.ratio=ratio||'view'; render(); }
+  // LIBRARY entry → library rail STAYS; component opens render-dominant on the right.
+  function openLib(item,name){ state.view='lib'; state.item=item; state.name=name; state.ratio='view'; render(); }
+  function closePanel(){ state.view='map'; render(); }
+  function saveEdit(){ toast('Saved — '+state.name); }
+
+  var tEl=el('toast'),tT;
+  function toast(msg){
+    tEl.innerHTML='<svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#34d399"><path d="M20 6 9 17l-5-5"/></svg>'+msg;
+    tEl.classList.add('show'); clearTimeout(tT); tT=setTimeout(function(){tEl.classList.remove('show');},1900);
+  }
+
+  buildFlow(); render();
+</script>
+</body>
+</html>

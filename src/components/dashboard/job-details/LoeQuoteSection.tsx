@@ -2249,15 +2249,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               }
             >
               {/* Derived/display-only: ALWAYS today + weeks, recomputed each render (not persisted).
-                  Read-only — computed, not user-typed; a refresh rolls it, changing weeks shifts it live. */}
-              <Input
-                type="date"
-                name="deliveryDate"
-                value={resolveDeliveryDate((jobDetails as any).deliveryTime)}
-                readOnly
-                title="Always N weeks ahead of today"
-                className="h-7 text-sm max-w-[160px] cursor-default opacity-90"
-              />
+                  Rendered as PLAIN TEXT — NOT a date input (Ben): no picker, no manual entry, no edit
+                  path. The ONLY way to change it is the Delivery Time (wks) field; they are locked as a pair. */}
+              <span
+                className="inline-flex items-center h-7 text-sm text-foreground/90 max-w-[160px]"
+                title="Always N weeks ahead of today — change the Delivery Time field to adjust"
+              >
+                {resolveDeliveryDate((jobDetails as any).deliveryTime)}
+              </span>
             </CompactField>
             <CompactField label="Delivery Time (wks)">
               <Input type="text" name="deliveryTime" value={(jobDetails as any).deliveryTime || '3'} onChange={handleChange} onBlur={handleBlur} placeholder="e.g. 3" className="h-7 text-sm max-w-[160px]" />

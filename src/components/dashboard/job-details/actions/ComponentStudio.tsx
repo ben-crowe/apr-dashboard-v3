@@ -11,6 +11,7 @@ import DocumentPreviewPane from './DocumentPreviewPane';
 import { downloadPagedPdf } from '@/utils/loe/downloadPagedPdf';
 import { generateLOEHTML } from '@/utils/loe/generateLOE';
 import { loadAllTemplates, LOETemplate } from '@/utils/loe/saveTemplate';
+import { saveJobContract } from '@/utils/loe/jobContracts';
 import { loadAllEmailTemplates, resolveEditTimeTokens, saveEmailTemplate, EMAIL_MERGE_TOKENS, EmailTemplate } from '@/utils/loe/emailTemplate';
 import { loadAllPopupTemplates, resolvePopupTokens, savePopupTemplate, POPUP_MERGE_TOKENS, PopupTemplate } from '@/utils/loe/popupTemplate';
 
@@ -120,16 +121,16 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const editableBody = (): string =>
     itemType === 'mail' ? (emailTemplates.find(e => e.id === selectedId)?.body_html ?? '')
     : itemType === 'popup' ? (popupTemplates.find(p => p.id === selectedId)?.body_html ?? '')
-    : '';
+    : docHtml;
 
   useEffect(() => {
-    if (view === 'map' || itemType === 'doc') return;
+    if (view === 'map') return;
     const doc = editIframeRef.current?.contentDocument;
     if (!doc) return;
     const body = (editableBody() || '<p></p>').replace(/<script[\s\S]*?<\/script>/gi, '');
     doc.open(); doc.write(body); doc.close(); doc.designMode = 'on';
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [view, itemType, selectedId, ratio, emailTemplates, popupTemplates]);
+  }, [view, itemType, selectedId, ratio, emailTemplates, popupTemplates, docHtml]);
 
   const insertToken = (token: string) => {
     const doc = editIframeRef.current?.contentDocument;
@@ -142,6 +143,16 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     const doc = editIframeRef.current?.contentDocument;
     if (!doc) return;
     const body = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+    if (itemType === 'doc') {
+      // Saves a tailored draft on the job — the SAME path the existing Edit Document uses.
+      const tpl = docTemplates.find(d => d.id === selectedId);
+      const client = job.clientLastName || job.clientFirstName || 'Client';
+      const monthDay = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      const name = `${tpl?.name || 'Document'} — ${client} — ${monthDay}`;
+      const res = await saveJobContract({ jobId: job.id, name, editedHtml: body, templateId: selectedId || null, templateVersion: (tpl as any)?.version ?? null, contractType: tpl?.name ?? null, state: 'draft' });
+      if (res.success) { toast.success('Saved as draft'); setDocHtml(body); } else toast.error(`Save failed: ${res.error}`);
+      return;
+    }
     if (itemType === 'popup') {
       const tpl = popupTemplates.find(p => p.id === selectedId);
       const res = await savePopupTemplate({ id: selectedId || undefined, name: tpl?.name ?? 'Thank-You', body_html: body, setActive: tpl?.is_active ?? false });
@@ -355,30 +366,31 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
                 {ratio === 'edit' ? <ChevronRight className="h-3 w-3" /> : <ArrowLeft className="h-3 w-3" />}{ratio === 'edit' ? 'Collapse' : 'Expand'}
               </button>
             </div>
-            {itemType === 'doc' ? (
-              // A 79-page LOE template is too large for a side pane — edit opens the full document editor.
-              <div className="flex-1 min-h-0 overflow-auto p-4 flex flex-col items-center justify-center text-center gap-3">
-                <p className="text-sm text-muted-foreground max-w-[26ch]">This is a multi-page document. Edit it in the full document editor.</p>
-                <Button size="sm" className="gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]" onClick={handleEdit}><Pencil className="h-3.5 w-3.5" /> Open document editor</Button>
-              </div>
-            ) : (
-              // Email + popup edit INLINE — the same designMode editable surface the modal editors use.
-              <div className="flex-1 min-h-0 flex flex-col p-3 gap-2">
-                <div className="text-[11px] text-muted-foreground">Merge fields (click to insert)</div>
-                <div className="flex flex-wrap gap-1.5">
-                  {mergeTokens.map(tk => (
-                    <button key={tk.token} type="button" onClick={() => insertToken(tk.token)}
-                      className="text-xs px-2 py-1 rounded border font-mono bg-muted text-foreground hover:border-[#2c5aa0] hover:text-[#2c5aa0] transition-colors">
-                      {tk.label}
-                    </button>
-                  ))}
+            {/* INLINE editor beside the render for ALL three types (designMode editable surface). */}
+            <div className="flex-1 min-h-0 flex flex-col p-3 gap-2">
+              {itemType !== 'doc' ? (
+                <>
+                  <div className="text-[11px] text-muted-foreground">Merge fields (click to insert)</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {mergeTokens.map(tk => (
+                      <button key={tk.token} type="button" onClick={() => insertToken(tk.token)}
+                        className="text-xs px-2 py-1 rounded border font-mono bg-muted text-foreground hover:border-[#2c5aa0] hover:text-[#2c5aa0] transition-colors">
+                        {tk.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] text-muted-foreground">Edit saves a tailored draft on this job.</span>
+                  <button type="button" onClick={handleEdit} className="text-[11px] font-semibold text-muted-foreground hover:text-[#2c5aa0]">Open full editor ↗</button>
                 </div>
-                <iframe ref={editIframeRef} title="Inline editor" className="flex-1 min-h-0 w-full rounded-md border bg-white focus-within:border-[#2c5aa0]" />
-                <div className="flex justify-end">
-                  <Button size="sm" className="gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]" onClick={handleSaveInline}><Pencil className="h-3.5 w-3.5" /> Save</Button>
-                </div>
+              )}
+              <iframe ref={editIframeRef} title="Inline editor" className="flex-1 min-h-0 w-full rounded-md border bg-white focus-within:border-[#2c5aa0]" />
+              <div className="flex justify-end">
+                <Button size="sm" className="gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]" onClick={handleSaveInline}><Pencil className="h-3.5 w-3.5" /> Save</Button>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

@@ -3,8 +3,8 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { DetailJob, JobDetails } from "@/types/job";
 import {
-  FileText, Mail, MonitorCheck, ArrowRight, ArrowLeft, ChevronDown, ChevronRight,
-  Pencil, X, Layers, LayoutGrid, Download, Loader2, Eye,
+  FileText, Mail, MonitorCheck, ArrowRight, ArrowLeft, ChevronDown, ChevronUp, ChevronRight,
+  Pencil, X, Layers, LayoutGrid, Download, Loader2, Eye, RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
 import DocumentPreviewPane from './DocumentPreviewPane';
@@ -60,6 +60,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const [itemType, setItemType] = useState<CompType>('doc');
   const [selectedId, setSelectedId] = useState<string>('');
   const [ratio, setRatio] = useState<'view' | 'edit'>('view');
+  const [screenZoom, setScreenZoom] = useState(100); // zoom for email/popup render (doc uses the pane's own)
 
   const [docTemplates, setDocTemplates] = useState<LOETemplate[]>([]);
   const [emailTemplates, setEmailTemplates] = useState<EmailTemplate[]>([]);
@@ -194,13 +195,24 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
       ? resolveEditTimeTokens(emailTemplates.find(e => e.id === selectedId)?.body_html ?? '', tokenCtx)
       : resolvePopupTokens(popupTemplates.find(p => p.id === selectedId)?.body_html ?? '', tokenCtx);
     return (
-      <div className="flex-1 overflow-auto bg-muted p-6">
-        <div className="max-w-[680px] mx-auto bg-card border rounded-lg shadow-lg overflow-hidden">
-          <div className="h-8 bg-muted border-b flex items-center gap-1.5 px-3">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-300" /><span className="w-2.5 h-2.5 rounded-full bg-yellow-300" /><span className="w-2.5 h-2.5 rounded-full bg-green-300" />
-            <span className="ml-2 flex-1 h-4 bg-card border rounded" />
+      <div className="flex-1 flex flex-col min-h-0">
+        {/* compact zoom — parity with the document pane */}
+        <div className="flex items-center justify-end px-4 pt-1">
+          <div className="flex items-center gap-0.5 text-muted-foreground">
+            <Button variant="ghost" size="sm" onClick={() => setScreenZoom(z => Math.max(25, z - 10))} className="h-5 w-5 p-0 hover:text-foreground" title="Zoom Out"><ChevronDown className="h-3.5 w-3.5" /></Button>
+            <span className="text-[11px] tabular-nums w-9 text-center select-none">{screenZoom}%</span>
+            <Button variant="ghost" size="sm" onClick={() => setScreenZoom(z => Math.min(200, z + 10))} className="h-5 w-5 p-0 hover:text-foreground" title="Zoom In"><ChevronUp className="h-3.5 w-3.5" /></Button>
+            <Button variant="ghost" size="sm" onClick={() => setScreenZoom(100)} className="h-5 w-5 p-0 hover:text-foreground ml-2" title="Reset Zoom"><RotateCcw className="h-3 w-3" /></Button>
           </div>
-          <iframe srcDoc={html} title={`${TYPE_META[itemType].label} preview`} sandbox="allow-same-origin" className="w-full" style={{ border: 'none', height: itemType === 'popup' ? 560 : 640 }} />
+        </div>
+        <div className="flex-1 overflow-auto bg-muted p-6">
+          <div className="max-w-[680px] mx-auto bg-card border rounded-lg shadow-lg overflow-hidden" style={{ zoom: screenZoom / 100 }}>
+            <div className="h-8 bg-muted border-b flex items-center gap-1.5 px-3">
+              <span className="w-2.5 h-2.5 rounded-full bg-red-300" /><span className="w-2.5 h-2.5 rounded-full bg-yellow-300" /><span className="w-2.5 h-2.5 rounded-full bg-green-300" />
+              <span className="ml-2 flex-1 h-4 bg-card border rounded" />
+            </div>
+            <iframe srcDoc={html} title={`${TYPE_META[itemType].label} preview`} sandbox="allow-same-origin" className="w-full" style={{ border: 'none', height: itemType === 'popup' ? 560 : 640 }} />
+          </div>
         </div>
       </div>
     );

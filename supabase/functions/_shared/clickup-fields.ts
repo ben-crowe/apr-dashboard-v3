@@ -7,23 +7,30 @@
 // Resolution is DYNAMIC byName: we GET the list's field definitions at runtime and match by field NAME
 // (stable across lists) → id (differs per list). So this works on the BC mirror now AND auto-works when
 // Ben replicates the template to the Valta board, with ZERO code change. Any hub field that is absent on
-// the target list, or a dropdown whose value doesn't match a live option label, is SKIPPED (never sent) —
-// which makes the not-yet-added fields (Appraisal Fee, Received Date, LOE Sent, LOE Signed, Intended Use)
-// self-resolve the moment they exist, no redeploy.
+// the target list, or a dropdown whose value doesn't match a live option label, is SKIPPED (never sent).
 //
-// KEEP set (spec 03-CLICKUP-JOB-HUB-SPEC.md — updated 2026-06-11):
-// LINKS:   Job Number (short_text) · APR Dashboard Link (url) · Valcre Job Link (url)
-// SUMMARY: Client First Name · Client Last Name · Client Organization · Client Email
-//          Property Name · Property Address · Property Type (drop_down)
-//          Report Type (drop_down) · Intended Use (drop_down ← authorized_use)
-//          Property Rights (drop_down) · Scope of Work (short_text)
-//          Payment Terms (drop_down) · Appraisal Fee (currency)
-// DATES:   Delivery Date · Received Date · LOE Sent · LOE Signed
+// GOVERNING RULE (Ben, 2026-06-19): the ClickUp mirror's fields + dropdown OPTIONS are the client's
+// source of truth. We do NOT add fields or options to ClickUp — keys here are reconciled to the LIVE
+// mirror names (mirror task 86e1yb8nz). A dashboard value with no matching field/option simply does not
+// sync — by design. See docs/CLICKUP-MIRROR-SYNC-RECONCILIATION-FIX.md.
 //
-// REMOVE set (must NOT be pushed): Client Title, Client Phone, Client Address,
-//   all Property Contact fields, Job Status, Asset Condition, Valuation Premises,
-//   Additional Info/Notes, Property Subtype, Tenancy, Retainer, Status of Improvements,
-//   Authorized Use (canonical key renamed to "Intended Use" per spec).
+// KEEP set (reconciled to live mirror names 2026-06-19):
+// LINKS/JOB: Job Number (short_text) · APR Dashboard Link (url) · Valcre Job (url)
+// CLIENT:    Client Full Name (first+last) · Client Email · Client Phone · Client Organization
+// PROPERTY:  Property Name · Property Address · Property Type (drop_down) · Property Subtype (drop_down)
+// CONTACT:   Contact Name (first+last) · Contact Email · Contact Phone
+// SCOPE:     Report Type (drop_down) · Authorized Use (drop_down ← authorized_use)
+//            Interest Appraised (drop_down ← property_rights_appraised) · State of Improvements (drop_down)
+//            Status of Improvements (drop_down) · Approaches To Value · Value Scenario(s)
+// SITE/TXN:  Transaction Status (drop_down) · Zoning Status (drop_down)
+// DATES:     Delivery Date · Received Date · LOE Sent · LOE Signed
+//
+// SOURCES: job_submissions (root, incl. property_contact_* + client_*), job_loe_details (loe),
+//   job_property_info (prop — only on create-clickup-task's select unless update's select is widened).
+//   Cascade outputs (Approaches/Value Scenarios/Status/Txn/Zoning) are sourced loe-first so they sync
+//   on UPDATE too (update-clickup-task selects loe but historically not prop).
+//
+// REMOVED 2026-06-19 (not on the client mirror, Ben confirmed): Scope of Work, Payment Terms, Appraisal Fee.
 
 export interface ClickUpFieldDef {
   id: string
@@ -46,10 +53,13 @@ export async function fetchListFields(token: string, listId: string): Promise<Cl
   return (data.fields || []) as ClickUpFieldDef[]
 }
 
-// Build the hub value map — EXACTLY the KEEP set from the spec.
-// Sources: job_submissions (root), job_loe_details (loe), job_submissions.created_at (Received Date).
+// Build the hub value map — keyed to the LIVE mirror field names (mirror task 86e1yb8nz, 39 fields).
+// Sources: job_submissions (root), job_loe_details (loe), job_property_info (prop),
+//   job_submissions.created_at (Received Date). The resolver matches by EXACT field name and skips on
+//   miss, so every key here must match the live mirror name character-for-character.
 function hubValueMap(job: any, hubUrl?: string): Record<string, any> {
   const loe = (Array.isArray(job.job_loe_details) ? job.job_loe_details[0] : job.job_loe_details) || {}
+  const prop = (Array.isArray(job.job_property_info) ? job.job_property_info[0] : job.job_property_info) || {}
 
   // ── LINKS ──────────────────────────────────────────────────────────────────
   // Job Number: job_number lives on job_loe_details per the Valcre sync path.
@@ -63,36 +73,52 @@ function hubValueMap(job: any, hubUrl?: string): Record<string, any> {
   const valcreJobId = loe.valcre_job_id || job.valcre_job_id || ''
   const valcreJobLink = valcreJobId ? `https://app.valcre.com/job/edit/${valcreJobId}#job` : ''
 
-  // ── SUMMARY ────────────────────────────────────────────────────────────────
-  const appraisalFee = loe.appraisal_fee ?? job.appraisal_fee ?? ''
+  // ── CLIENT ───────────────────────────────────────────────────────────────
+  // Client Full Name: the mirror has ONE name field (not first/last). Concatenate, trim.
+  const clientFullName = [job.client_first_name, job.client_last_name]
+    .filter(Boolean).join(' ').trim()
+
+  // ── CONTACT (property contact, on job_submissions root) ──────────────────
+  const contactName = [job.property_contact_first_name, job.property_contact_last_name]
+    .filter(Boolean).join(' ').trim()
 
   // ── DATES ─────────────────────────────────────────────────────────────────
   // Delivery Date: loe.delivery_date (ISO string → unix ms via encodeForField date handler)
   // Received Date: job.created_at (ISO string → unix ms)
-  // LOE Sent:  loe.loe_sent_at (ISO string → unix ms, set by docuseal-webhook on send event)
-  // LOE Signed: loe.signed_at  (ISO string → unix ms, set by docuseal-webhook on completion)
+  // LOE Sent:  loe.loe_sent_at (ISO string → unix ms, stamped by docuseal-webhook on send event;
+  //            column added by migration 20260619_add_loe_sent_at.sql so the webhook write lands)
+  // LOE Signed: loe.signed_at  (ISO string → unix ms, stamped by docuseal-webhook on completion)
 
   return {
-    // LINKS
+    // LINKS / JOB
     'Job Number': jobNumber,
     'APR Dashboard Link': aprDashboardLink,
-    'Valcre Job Link': valcreJobLink,
-    // SUMMARY — CLIENT
-    'Client First Name': job.client_first_name || '',
-    'Client Last Name': job.client_last_name || '',
-    'Client Organization': job.client_organization || '',
+    'Valcre Job': valcreJobLink,
+    // CLIENT
+    'Client Full Name': clientFullName,
     'Client Email': job.client_email || '',
-    // SUMMARY — PROPERTY
+    'Client Phone': job.client_phone || '',
+    'Client Organization': job.client_organization || '',
+    // PROPERTY
     'Property Name': job.property_name || '',
     'Property Address': job.property_address || '',
     'Property Type': job.property_type || '',
-    // SUMMARY — ASSIGNMENT
+    'Property Subtype': prop.property_subtype || '',
+    // CONTACT
+    'Contact Name': contactName,
+    'Contact Email': job.property_contact_email || '',
+    'Contact Phone': job.property_contact_phone || '',
+    // SCOPE / ASSIGNMENT
     'Report Type': loe.report_type || job.report_type || '',
-    'Intended Use': loe.authorized_use || job.authorized_use || job.intended_use || '',
-    'Property Rights Appraised': loe.property_rights_appraised || '',
-    'Scope of Work': loe.scope_of_work || '',
-    'Payment Terms': loe.payment_terms || '',
-    'Appraisal Fee': appraisalFee,
+    'Authorized Use': loe.authorized_use || job.authorized_use || job.intended_use || '',
+    'Interest Appraised': loe.property_rights_appraised || '',
+    'State of Improvements': prop.state_of_improvements || '',
+    'Status of Improvements': loe.status_of_improvements || prop.status_of_improvements || '',
+    'Approaches To Value': loe.approaches_to_value || prop.approaches_to_value || '',
+    'Value Scenario(s)': loe.value_scenarios || prop.value_scenarios || '',
+    // SITE / TXN
+    'Transaction Status': loe.transaction_status || prop.transaction_status || '',
+    'Zoning Status': loe.zoning_status || prop.zoning_status || '',
     // DATES
     'Delivery Date': loe.delivery_date || '',
     'Received Date': job.created_at || '',

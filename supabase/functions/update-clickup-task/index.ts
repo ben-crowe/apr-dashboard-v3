@@ -99,10 +99,12 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Fetch job and LOE details from database
+    // Fetch job, LOE details, and property info from database.
+    // job_property_info is required so resolver fields sourced only from it (Property Subtype,
+    // State of Improvements) sync on UPDATE, not just on create.
     const { data: job, error: jobError } = await supabase
       .from('job_submissions')
-      .select('*, job_loe_details(*)')
+      .select('*, job_loe_details(*), job_property_info(*)')
       .eq('id', jobId)
       .single()
 

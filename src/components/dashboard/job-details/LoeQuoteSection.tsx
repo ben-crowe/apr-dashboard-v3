@@ -128,23 +128,31 @@ const formatShortDate = (iso: string): string => {
   catch { return ''; }
 };
 
-// Clickable info popover (? icon) for a field label. Click to open — used on the date fields whose
-// behavior isn't obvious (Delivery Date auto-set on LOE-sent; Request Date = client-requested date).
-const FieldInfo: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <Popover>
-    <PopoverTrigger asChild>
-      <button
-        type="button"
-        aria-label="Field info"
-        className="inline-flex items-center text-muted-foreground hover:text-foreground"
-      >
-        <HelpCircle className="h-3.5 w-3.5" />
-      </button>
-    </PopoverTrigger>
-    <PopoverContent side="top" align="start" className="max-w-xs text-xs leading-relaxed">
-      {children}
-    </PopoverContent>
-  </Popover>
+// Clickable info popover (? icon) for a field label. Click to open. Used on fields whose behavior
+// isn't obvious (Delivery Date auto-set on LOE-sent; Client Requested Date; questionable fields).
+//
+// PLACEMENT RULE (Ben): the ? icon ALWAYS sits OUTSIDE the field name — to the LEFT of the label
+// text (the outer edge of a right-aligned label) — so the label→value line is never broken. This
+// helper bakes that in: it returns a flex row that puts the icon FIRST, then the label text. Callers
+// pass the field-name string as `label`; never place the icon between the label and the input.
+const FieldInfo: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
+  <span className="inline-flex items-center justify-end gap-1 w-full">
+    <Popover>
+      <PopoverTrigger asChild>
+        <button
+          type="button"
+          aria-label="Field info"
+          className="inline-flex items-center text-muted-foreground hover:text-foreground shrink-0"
+        >
+          <HelpCircle className="h-3.5 w-3.5" />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent side="top" align="start" className="max-w-xs text-xs leading-relaxed">
+        {children}
+      </PopoverContent>
+    </Popover>
+    {label}
+  </span>
 );
 
 const LoeQuoteSection: React.FC<SectionProps> = ({
@@ -2110,12 +2118,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             </CompactField>
             <CompactField
               label={
-                <span className="inline-flex items-center justify-end gap-1 w-full">
-                  Retainer Amount:
-                  <FieldInfo>
-                    Is a retainer required, or is it 100% on signing? This field may be removable.
-                  </FieldInfo>
-                </span>
+                <FieldInfo label="Retainer Amount:">
+                  Is a retainer required, or is it 100% on signing? This field may be removable.
+                </FieldInfo>
               }
             >
               <Input
@@ -2131,13 +2136,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             </CompactField>
             <CompactField
               label={
-                <span className="inline-flex items-center justify-end gap-1 w-full">
-                  Payment Terms:
-                  <FieldInfo>
-                    May not be needed — payment terms are fixed in the contract (due on
-                    signing/receipt). Keep or remove?
-                  </FieldInfo>
-                </span>
+                <FieldInfo label="Payment Terms:">
+                  May not be needed — payment terms are fixed in the contract (due on
+                  signing/receipt). Keep or remove?
+                </FieldInfo>
               }
             >
               <Select value={jobDetails.paymentTerms || ''} onValueChange={value => handleSelectChange(value, 'paymentTerms')}>
@@ -2160,12 +2162,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           <TwoColumnFields>
             <CompactField
               label={
-                <span className="inline-flex items-center justify-end gap-1 w-full">
-                  Retainer Paid:
-                  <FieldInfo>
-                    Currently feeds nothing downstream — keep for internal tracking, or remove?
-                  </FieldInfo>
-                </span>
+                <FieldInfo label="Retainer Paid:">
+                  Currently feeds nothing downstream — keep for internal tracking, or remove?
+                </FieldInfo>
               }
             >
               <Input
@@ -2227,14 +2226,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <CompactField
               status={fieldStates['requestDate']}
               label={
-                <span className="inline-flex items-center justify-end gap-1 w-full">
-                  Client Requested Date:
-                  <FieldInfo>
-                    Optional — the client's special requested delivery date (e.g. a rush, or a later
-                    date like 4 months out). Leave blank for the standard 3-week turnaround. A date
-                    later than standard pushes the delivery assumption out.
-                  </FieldInfo>
-                </span>
+                <FieldInfo label="Client Requested Date:">
+                  Optional — the client's special requested delivery date (e.g. a rush, or a later
+                  date like 4 months out). Leave blank for the standard 3-week turnaround. A date
+                  later than standard pushes the delivery assumption out.
+                </FieldInfo>
               }
             >
               <Input
@@ -2248,13 +2244,10 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             </CompactField>
             <CompactField
               label={
-                <span className="inline-flex items-center justify-end gap-1 w-full">
-                  Delivery Date:
-                  <FieldInfo>
-                    Auto-set when the LOE is sent — {(jobDetails as any).deliveryTime || '3'} weeks
-                    from the sent date. Blank until the job is active.
-                  </FieldInfo>
-                </span>
+                <FieldInfo label="Delivery Date:">
+                  Auto-set when the LOE is sent — {(jobDetails as any).deliveryTime || '3'} weeks
+                  from the sent date. Blank until the job is active.
+                </FieldInfo>
               }
             >
               <Input

@@ -109,7 +109,9 @@ function hubValueMap(job: any, hubUrl?: string): Record<string, any> {
     'Contact Email': job.property_contact_email || '',
     'Contact Phone': job.property_contact_phone || '',
     // SCOPE / ASSIGNMENT
-    'Report Type': loe.report_type || job.report_type || '',
+    // "Report Type" on the client mirror is the report FORMAT dropdown (Comprehensive/Concise/Form/N/A),
+    // NOT report_type ("Appraisal Report" etc.). Source from report_format so the value matches an option.
+    'Report Type': loe.report_format || job.report_format || '',
     'Authorized Use': loe.authorized_use || job.authorized_use || job.intended_use || '',
     'Interest Appraised': loe.property_rights_appraised || '',
     'State of Improvements': prop.state_of_improvements || '',
@@ -127,60 +129,75 @@ function hubValueMap(job: any, hubUrl?: string): Record<string, any> {
   }
 }
 
+// Match ONE source value against a field's options, returning the option id or null.
+// The full fuzzy cascade (exact → prefix → reverse-prefix → word-overlap), shared by drop_down
+// (single) and labels (multi). `rawValue` is one already-trimmed value (no comma splitting here).
+function matchOption(opts: Array<{ id: string; name?: string; label?: string }>, rawValue: string): string | null {
+  const want = String(rawValue).trim().toLowerCase()
+  if (!want) return null
+  const label = (o: { label?: string; name?: string }) => String(o.label ?? o.name ?? '').trim().toLowerCase()
+  // 1) exact (case-insensitive) match — the strict path.
+  let hit = opts.find(o => label(o) === want)
+  // 2) prefix match — source uses the SHORT form, ClickUp option is the LONG form.
+  //    e.g. source "fee simple" → option "fee simple interest"; "Cost" → "Cost Approach".
+  //    Pick the SHORTEST option that starts with `want` (most specific extension of the source value).
+  if (!hit) {
+    const prefixHits = opts.filter(o => label(o).startsWith(want))
+    if (prefixHits.length) {
+      hit = prefixHits.reduce((a, b) => (label(a).length <= label(b).length ? a : b))
+    }
+  }
+  // 3) reverse prefix — source is the LONG form, option is the SHORT form (rarer, but symmetric).
+  if (!hit) {
+    hit = opts.find(o => label(o) && want.startsWith(label(o)))
+  }
+  // 4) significant-word overlap — handles mismatches like "on completion" ↔ "upon completion"
+  //    where neither string is a prefix of the other.
+  //    4a) Multi-word: option sharing the most words (≥3 chars), must share ≥2 to qualify.
+  //    4b) Single long-word (≥5 chars) appearing in exactly one option.
+  if (!hit) {
+    const wantWords = new Set(want.split(/\s+/).filter(w => w.length >= 3))
+    if (wantWords.size >= 2) {
+      let bestCount = 1
+      let bestOpt: typeof opts[0] | undefined
+      for (const o of opts) {
+        const oWords = label(o).split(/\s+/).filter(w => w.length >= 3)
+        const shared = oWords.filter(w => wantWords.has(w)).length
+        if (shared > bestCount) { bestCount = shared; bestOpt = o }
+      }
+      if (bestOpt) hit = bestOpt
+    } else {
+      const longWords = Array.from(wantWords).filter(w => w.length >= 5)
+      if (longWords.length === 1) {
+        const lw = longWords[0]
+        const candidates = opts.filter(o => label(o).split(/\s+/).includes(lw))
+        if (candidates.length === 1) hit = candidates[0] // unambiguous single match only
+      }
+    }
+  }
+  return hit ? hit.id : null // no match → caller decides (drop_down skips; labels drops just this value)
+}
+
 // Encode one value for a given ClickUp field type. Returns the API-ready value, or null = SKIP.
-function encodeForField(def: ClickUpFieldDef, raw: any): string | number | null {
+// drop_down → option id (string); labels → array of option ids (string[]); date/currency → number.
+function encodeForField(def: ClickUpFieldDef, raw: any): string | number | string[] | null {
   if (raw === null || raw === undefined || String(raw).trim() === '') return null
   switch (def.type) {
     case 'drop_down': {
       // Single-select: take first value if a multi/comma string came through (matches Valcre first-value rule).
-      const want = String(raw).split(',')[0].trim().toLowerCase()
       const opts = def.type_config?.options || []
-      const label = (o: { label?: string; name?: string }) => String(o.label ?? o.name ?? '').trim().toLowerCase()
-      // 1) exact (case-insensitive) match — the strict path.
-      let hit = opts.find(o => label(o) === want)
-      // 2) prefix match — source uses the SHORT form, ClickUp option is the LONG form.
-      //    e.g. source "fee simple" → option "fee simple interest"; "market value" → "market value as is".
-      //    Pick the SHORTEST option that starts with `want` (most specific extension of the source value),
-      //    so "market value" lands on "market value as is" rather than a longer variant.
-      if (!hit && want) {
-        const prefixHits = opts.filter(o => label(o).startsWith(want))
-        if (prefixHits.length) {
-          hit = prefixHits.reduce((a, b) => (label(a).length <= label(b).length ? a : b))
-        }
+      return matchOption(opts, String(raw).split(',')[0])
+    }
+    case 'labels': {
+      // Multi-select (ClickUp type "labels"): source is comma-separated. Match EACH value through the
+      // same fuzzy cascade, collect the matched option ids. Skip the whole field only if NONE match.
+      const opts = def.type_config?.options || []
+      const ids: string[] = []
+      for (const part of String(raw).split(',')) {
+        const id = matchOption(opts, part)
+        if (id && !ids.includes(id)) ids.push(id)
       }
-      // 3) reverse prefix — source is the LONG form, option is the SHORT form (rarer, but symmetric).
-      if (!hit && want) {
-        hit = opts.find(o => label(o) && want.startsWith(label(o)))
-      }
-      // 4) significant-word overlap — handles mismatches like "on completion" ↔ "upon completion"
-      //    where neither string is a prefix of the other.
-      //    4a) Multi-word: find the option sharing the most words (≥3 chars) with the source
-      //        (must share ≥2 words to qualify — avoids false positives).
-      //    4b) Single long-word: if source has exactly 1 word ≥5 chars and it appears in only
-      //        one option, use that option (e.g. "on completion" → "upon completion").
-      if (!hit && want) {
-        const wantWords = new Set(want.split(/\s+/).filter(w => w.length >= 3))
-        if (wantWords.size >= 2) {
-          // 4a) multi-word overlap
-          let bestCount = 1
-          let bestOpt: typeof opts[0] | undefined
-          for (const o of opts) {
-            const oWords = label(o).split(/\s+/).filter(w => w.length >= 3)
-            const shared = oWords.filter(w => wantWords.has(w)).length
-            if (shared > bestCount) { bestCount = shared; bestOpt = o }
-          }
-          if (bestOpt) hit = bestOpt
-        } else {
-          // 4b) single long-word match (≥5 chars) — e.g. "completion" → "upon completion"
-          const longWords = Array.from(wantWords).filter(w => w.length >= 5)
-          if (longWords.length === 1) {
-            const lw = longWords[0]
-            const candidates = opts.filter(o => label(o).split(/\s+/).includes(lw))
-            if (candidates.length === 1) hit = candidates[0] // unambiguous single match only
-          }
-        }
-      }
-      return hit ? hit.id : null // still no match → SKIP (taxonomy mismatch — report as field-config gap)
+      return ids.length ? ids : null
     }
     case 'date': {
       const n = typeof raw === 'number' ? raw : Date.parse(String(raw))
@@ -238,10 +255,15 @@ export async function applyTaskFields(
   let set = 0, failed = 0
   for (const f of fields) {
     try {
+      // labels (multi-select) need the add/rem envelope; ClickUp rejects a bare array or string.
+      // All other types take the plain { value }. Array value == labels field.
+      const body = Array.isArray(f.value)
+        ? { value: { add: f.value, rem: [] } }
+        : { value: f.value }
       const resp = await fetch(`https://api.clickup.com/api/v2/task/${taskId}/field/${f.id}`, {
         method: 'POST',
         headers: { 'Authorization': token, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ value: f.value }),
+        body: JSON.stringify(body),
       })
       if (resp.ok) { set++ } else {
         failed++
@@ -265,8 +287,15 @@ export async function applyTaskFields(
       const live = new Map((task.custom_fields || []).map((cf: any) => [cf.id, cf.value]))
       for (const f of fields) {
         const v = live.get(f.id)
-        // dropdown live value is the option id; date/number/string compare loosely
-        if (v !== undefined && v !== null && String(v) === String(f.value)) verified++
+        if (v === undefined || v === null) continue
+        if (Array.isArray(f.value)) {
+          // labels: live value is an array of option ids — verify every id we sent is present.
+          const liveIds = new Set((Array.isArray(v) ? v : []).map((x: any) => String(x)))
+          if (f.value.length > 0 && f.value.every((id: string) => liveIds.has(String(id)))) verified++
+        } else if (String(v) === String(f.value)) {
+          // dropdown live value is the option id; date/number/string compare loosely
+          verified++
+        }
       }
     }
   } catch (e) {

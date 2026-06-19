@@ -12,6 +12,7 @@
     --doc:#2c5aa0; --doc-tint:#eef3fb;
     --mail:#0e7490; --mail-tint:#ecfeff;
     --popup:#059669; --popup-tint:#ecfdf5;
+    --sig:#64748b; --sig-tint:#f1f5f9;
     --shadow:0 10px 30px -12px rgba(15,23,42,.18);
     --shadow-sm:0 1px 2px rgba(15,23,42,.06);
   }
@@ -69,9 +70,9 @@
   .lib-row .name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .dot{width:7px;height:7px;border-radius:999px;flex:none}
   .pill{font-size:10px;font-weight:700;border-radius:999px;padding:1px 7px;white-space:nowrap}
-  .ic-doc{color:var(--doc)} .ic-mail{color:var(--mail)} .ic-popup{color:var(--popup)}
-  .dot-doc{background:var(--doc)} .dot-mail{background:var(--mail)} .dot-popup{background:var(--popup)}
-  .pill-doc{color:var(--doc);background:var(--doc-tint)} .pill-mail{color:var(--mail);background:var(--mail-tint)} .pill-popup{color:var(--popup);background:var(--popup-tint)}
+  .ic-doc{color:var(--doc)} .ic-mail{color:var(--mail)} .ic-popup{color:var(--popup)} .ic-sig{color:var(--sig)}
+  .dot-doc{background:var(--doc)} .dot-mail{background:var(--mail)} .dot-popup{background:var(--popup)} .dot-sig{background:var(--sig)}
+  .pill-doc{color:var(--doc);background:var(--doc-tint)} .pill-mail{color:var(--mail);background:var(--mail-tint)} .pill-popup{color:var(--popup);background:var(--popup-tint)} .pill-sig{color:var(--sig);background:var(--sig-tint)}
   .rail-add{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:12.5px;font-weight:600;padding:7px 10px;cursor:pointer;border-radius:8px;white-space:nowrap}
   .rail-add:hover{color:var(--brand);background:#f1f5f9}
   /* focus mode — collapse rail to an icon strip when a right panel is open */
@@ -159,7 +160,7 @@
   .panel{flex:1;min-width:0;display:flex;flex-direction:column;background:var(--bg)}
   .panel-bar{display:flex;align-items:center;gap:10px;height:48px;padding:0 16px;background:var(--surface);border-bottom:1px solid var(--border);flex:none}
   .panel-bar .ptype{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
-  .panel-bar.doc .ptype{color:var(--doc)} .panel-bar.mail .ptype{color:var(--mail)} .panel-bar.popup .ptype{color:var(--popup)}
+  .panel-bar.doc .ptype{color:var(--doc)} .panel-bar.mail .ptype{color:var(--mail)} .panel-bar.popup .ptype{color:var(--popup)} .panel-bar.sig .ptype{color:var(--sig)}
   .panel-bar .pnm{font-weight:700}
   .panel-bar .spacer{flex:1}
   .panel-body{flex:1;min-height:0;overflow:auto;padding:20px}
@@ -208,6 +209,18 @@
   .rpage.email p{margin:0 0 14px} .rpage.email ul{margin:0 0 14px;padding-left:20px} .rpage.email li{margin:3px 0}
   .em-btn{display:inline-block;background:#1a73e8;color:#fff;padding:10px 20px;border-radius:5px;text-decoration:none;font-size:13px}
   .em-sig{color:#555;font-size:12.5px;line-height:1.5;margin-top:6px}
+  /* Reusable EMAIL-PAGE shell — a real received-email page (subject + from + body), so the
+     content is proportioned + judged the way it actually lands (the Gmail view). The signature
+     is composed into the body bottom; for a Signature asset the body is empty + just the sig. */
+  .epage{background:#fff;font-family:Arial,Helvetica,sans-serif;color:#202124}
+  .ep-subject{font-size:18px;font-weight:400;padding:18px 26px 12px}
+  .ep-from{display:flex;align-items:center;gap:11px;padding:0 26px 14px;border-bottom:1px solid #eee}
+  .ep-av{width:34px;height:34px;border-radius:999px;background:#dbe5f1;flex:none}
+  .ep-name{font-size:13px;font-weight:700} .ep-name span{font-weight:400;color:#5f6368}
+  .ep-to{font-size:12px;color:#5f6368}
+  .ep-body{padding:20px 26px 28px;font-size:14px;line-height:1.55}
+  .ep-body p{margin:0 0 14px} .ep-body ul{margin:0 0 14px;padding-left:20px} .ep-body li{margin:3px 0}
+  .ep-empty{border:1px dashed #cbd5e1;border-radius:8px;color:#94a3b8;font-size:12.5px;text-align:center;padding:26px 12px;margin-bottom:18px}
   /* SCREEN assets (email + popup) float like a monitor view; documents stay paper pages */
   .screen{max-width:680px;margin:0 auto;background:#fff;border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
   .screen-bar{height:32px;background:#f1f5f9;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:7px;padding:0 12px}
@@ -239,11 +252,96 @@
   .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:#fff;padding:11px 18px;border-radius:9px;font-size:13px;font-weight:600;box-shadow:var(--shadow);transition:.25s;z-index:60;display:flex;align-items:center;gap:8px}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .ribbon{margin:0 0 18px;background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:10px;padding:10px 14px;font-size:12.5px;display:flex;gap:9px;align-items:flex-start}
+  /* ── Host: the APR Job Dashboard — where the Studio is launched FROM ── */
+  #host{flex:1;display:flex;flex-direction:column;min-height:0}
+  .hbar{display:flex;align-items:center;gap:14px;height:54px;padding:0 18px;background:var(--surface);border-bottom:1px solid var(--border);flex:none}
+  .hbar .brand .sub{color:var(--muted)}
+  .hbar .job-title{font-weight:600;font-size:14px}
+  .hbody{flex:1;display:flex;min-height:0}
+  .studio-nav{width:248px;flex:none;background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:14px 12px;transition:width .2s ease}
+  .sn-toggle{margin-left:auto;height:22px;width:22px;display:flex;align-items:center;justify-content:center;border:none;background:none;color:var(--muted);cursor:pointer;border-radius:5px}
+  .sn-toggle:hover{color:var(--brand);background:#f1f5f9}
+  .sn-toggle svg{width:14px;height:14px}
+  .studio-nav.collapsed{width:50px;padding:14px 7px}
+  .studio-nav.collapsed .sn-sec, .studio-nav.collapsed .sn-label{display:none}
+  .studio-nav.collapsed .sn-item{justify-content:center;gap:0;font-size:0;padding:9px 0}
+  .studio-nav.collapsed .sn-head{justify-content:center}
+  .studio-nav.collapsed .sn-toggle{transform:rotate(180deg)}
+  .sn-head{display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;margin:2px 4px 14px}
+  .sn-head svg{width:16px;height:16px;color:var(--brand)}
+  .sn-sec{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted2);margin:12px 6px 6px}
+  .sn-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:13.5px;font-weight:500}
+  .sn-item:hover{background:#f1f5f9;color:var(--brand)}
+  .sn-item svg{width:15px;height:15px;flex:none}
+  .hmain{flex:1;overflow-y:auto;padding:24px;background:var(--bg)}
+  .job-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-bottom:16px;box-shadow:var(--shadow-sm);max-width:760px}
+  .job-card h3{margin:0 0 5px;font-size:15px}
+  .job-card .jc-sub{color:var(--muted);font-size:13px}
+  .job-grid{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
+  .job-grid div{font-size:13px} .job-grid .k{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+  .loe-actions{display:flex;gap:10px;margin-top:14px}
+  .hint{font-size:11px;color:var(--muted2);margin-top:8px}
+  /* the Studio opens as an overlay OVER the job */
+  #studio-overlay{position:fixed;inset:0;z-index:50;display:none;flex-direction:column;background:var(--surface)}
+  #studio-overlay.open{display:flex}
+  .backbtn{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border:1px solid var(--border2);border-radius:8px;background:var(--surface);cursor:pointer;font-weight:600;font-size:13px;color:var(--ink)}
+  .backbtn:hover{border-color:var(--brand);color:var(--brand)}
 </style>
 </head>
 <body>
 
+<!-- ════════ HOST: the APR Job Dashboard — the Studio is launched FROM here ════════ -->
+<div id="host">
+  <div class="hbar">
+    <div class="brand"><span class="mark">VALTA</span><span class="sub">APR Dashboard</span></div>
+    <div class="divider"></div>
+    <span class="job-title">Sarah Thompson · 4820 Macleod Trail SE</span>
+    <div class="spacer"></div>
+  </div>
+  <div class="hbody">
+    <!-- LEFT slide-out: the proper home of the Studio (component library + sequences) -->
+    <aside class="studio-nav" id="studio-nav">
+      <div class="sn-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg> <span class="sn-label">Component Studio</span><button class="sn-toggle" onclick="toggleNav()" title="Collapse / expand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button></div>
+      <div class="sn-sec">Sequences</div>
+      <div class="sn-item" onclick="openStudioFromNav('seq')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg> Default LOE Deployment</div>
+      <div class="sn-sec">Components</div>
+      <div class="sn-item" onclick="openStudioFromNav('doc')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg> Documents</div>
+      <div class="sn-item" onclick="openStudioFromNav('mail')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg> Emails</div>
+      <div class="sn-item" onclick="openStudioFromNav('sig')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 19c-2 0-3-1-3-3s1-4 0-6-3 2-4 4-1 5-3 5-2-3-1-5"/><path d="M3 21h18"/></svg> Email Signatures</div>
+      <div class="sn-item" onclick="openStudioFromNav('popup')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/></svg> Popups</div>
+    </aside>
+    <!-- MAIN: the job -->
+    <main class="hmain">
+      <div class="job-card">
+        <h3>Sarah Thompson</h3>
+        <div class="jc-sub">Residential appraisal · 4820 Macleod Trail SE, Calgary AB</div>
+        <div class="job-grid">
+          <div><div class="k">Job #</div>VA-2026-0418</div>
+          <div><div class="k">Status</div>LOE — in progress</div>
+          <div><div class="k">Intended use</div>Financing</div>
+        </div>
+      </div>
+      <div class="job-card">
+        <h3>Letter of Engagement / E-Signature</h3>
+        <div class="jc-sub">Create the LOE document &amp; cover email to send for signing.</div>
+        <div class="loe-actions">
+          <button class="btn btn-primary" onclick="openStudioToDoc()"><svg viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg> Create Document/Email</button>
+        </div>
+        <div class="hint">Opens the Studio straight to this LOE's document — not the Studio home.</div>
+      </div>
+      <div class="job-card">
+        <h3>Saved Documents / Emails</h3>
+        <div class="jc-sub">Drafts and sent items for this job appear here.</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- ════════ STUDIO: opens as an overlay OVER the job ════════ -->
+<div id="studio-overlay">
 <div class="topbar">
+  <button class="backbtn" onclick="closeStudio()"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg> Dashboard</button>
+  <div class="divider"></div>
   <div class="brand"><span class="mark">VALTA</span><span class="sub">Component Studio</span></div>
   <div class="divider"></div>
   <div class="studio-name">LOE Sequence Builder</div>
@@ -292,6 +390,16 @@
         <div class="lib-rows">
           <div class="lib-row" onclick="openLib('mail','LOE — Ready for Signature')"><span class="dot dot-mail"></span><span class="name">LOE — Ready for Signature</span><span class="pill pill-mail">Default</span></div>
           <div class="lib-row" onclick="openLib('mail','Reminder nudge')"><span class="dot dot-mail"></span><span class="name">Reminder nudge</span></div>
+        </div>
+      </div>
+      <div class="lib-group" id="g-sig">
+        <div class="lib-head" onclick="toggleGroup('g-sig')" title="Email Signatures">
+          <span class="ic-sig"><svg viewBox="0 0 24 24"><path d="M20 19c-2 0-3-1-3-3s1-4 0-6-3 2-4 4-1 5-3 5-2-3-1-5"/><path d="M3 21h18"/></svg></span>
+          Email Signatures <span class="count">2</span><svg class="chev" viewBox="0 0 24 24" style="width:14px;height:14px"><path d="m6 9 6 6 6-6"/></svg>
+        </div>
+        <div class="lib-rows">
+          <div class="lib-row" onclick="openLib('sig','Valta Default Signature')"><span class="dot dot-sig"></span><span class="name">Valta Default Signature</span><span class="pill pill-sig">Default</span></div>
+          <div class="lib-row" onclick="openLib('sig','Short Signature')"><span class="dot dot-sig"></span><span class="name">Short Signature</span></div>
         </div>
       </div>
       <div class="lib-group" id="g-popup">
@@ -349,21 +457,23 @@
     </div>
   </main>
 </div>
+</div><!-- /#studio-overlay -->
 
 <div class="toast" id="toast"></div>
 
 <script>
   var state = { view:'map', item:'doc', name:'Standard LOE', ratio:'view', zoom:100 };
-  var typeName = {doc:'Document', mail:'Email', popup:'Popup'};
-  var labels = {doc:'Standard LOE', mail:'LOE — Ready for Signature', popup:'Thank-You'};
-  var meta = {doc:'7 pages · e-signature', mail:'Delivers the signing link', popup:'Post-sign confirmation'};
-  var order = ['mail','doc','popup'];
+  var typeName = {doc:'Document', mail:'Email', popup:'Popup', sig:'Email Signature'};
+  var labels = {doc:'Standard LOE', mail:'LOE — Ready for Signature', popup:'Thank-You', sig:'Valta Default Signature'};
+  var meta = {doc:'7 pages · e-signature', mail:'Delivers the signing link', popup:'Post-sign confirmation', sig:'Reusable — used by every email'};
+  var order = ['mail','doc','popup']; // sequence steps (signatures are a library asset, not a step)
   var connLbl = {mail:'delivers', doc:'after signing'};
 
   var ICON = {
     doc:'<svg viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>',
     mail:'<svg viewBox="0 0 24 24" style="width:14px;height:14px"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>',
-    popup:'<svg viewBox="0 0 24 24" style="width:14px;height:14px"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/></svg>'
+    popup:'<svg viewBox="0 0 24 24" style="width:14px;height:14px"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/></svg>',
+    sig:'<svg viewBox="0 0 24 24" style="width:14px;height:14px"><path d="M20 19c-2 0-3-1-3-3s1-4 0-6-3 2-4 4-1 5-3 5-2-3-1-5"/><path d="M3 21h18"/></svg>'
   };
   var GLYPH = {
     doc:'<div class="gp stack"></div>', mail:'<div class="genv"></div>',
@@ -421,9 +531,10 @@
   /* ---- RENDERED preview: a real page at true size, on a viewer backdrop ----
      The email shows the REAL (plain, centered-button, over-spaced) version incl. the
      signature block — so you can judge whether it's actually well laid out. ---- */
-  function emailBody(editable){
-    var cn = editable ? '<span class="chip">{{client_name}}</span>' : 'Alexandra';
-    var pa = editable ? '<span class="chip">{{property_address}}</span>' : '1240 Riverside Dr';
+  // The email MESSAGE only (no signature — the signature is now its own reusable asset).
+  function emailMessage(editable){
+    var cn = editable ? '<span class="chip">{{client_name}}</span>' : 'Sarah';
+    var pa = editable ? '<span class="chip">{{property_address}}</span>' : '4820 Macleod Trail SE';
     return '<p>Hi '+cn+',</p>'+
       '<p>Your Letter of Engagement for the property appraisal at '+pa+' is ready for your review and signature.</p>'+
       '<p><a class="em-btn" href="#" onclick="return false">Review &amp; Sign Document</a></p>'+
@@ -431,10 +542,21 @@
       '<ul><li>Review the Letter of Engagement carefully</li><li>Sign the document electronically</li>'+
       '<li>You&rsquo;ll receive a copy for your records</li><li>We&rsquo;ll begin work on your appraisal immediately</li></ul>'+
       '<p>If you have any questions, please don&rsquo;t hesitate to contact us.</p>'+
-      '<p>Best regards,</p>'+
-      '<div class="em-sig"><strong>Client Services Team</strong><br>Valta Property Valuations Ltd.<br>'+
+      '<p>Best regards,</p>';
+  }
+  // The SIGNATURE — its own reusable asset (Email > Email Signatures), composed into every email.
+  function signatureBlock(){
+    return '<div class="em-sig"><strong>Client Services Team</strong><br>Valta Property Valuations Ltd.<br>'+
       '#300-4838 Richard Road SW, Calgary, AB T3E 6L1<br>'+
       'office: 587-801-5151 &nbsp;|&nbsp; email: clientcare@valta.ca &nbsp;|&nbsp; web: www.valta.ca</div>';
+  }
+  // Reusable email-PAGE shell: a real received-email page (subject + from + body area).
+  function emailPageShell(inner){
+    return '<div class="epage">'+
+      '<div class="ep-subject">Letter of Engagement — Ready for Signature</div>'+
+      '<div class="ep-from"><span class="ep-av"></span><div><div class="ep-name">Valta ClientCare <span>&lt;clientcare@valta.ca&gt;</span></div><div class="ep-to">to me</div></div></div>'+
+      '<div class="ep-body">'+inner+'</div>'+
+    '</div>';
   }
   function docBody(editable){
     var cn = editable ? '<span class="chip">{{client_name}}</span>' : 'Alexandra Richardson';
@@ -457,15 +579,21 @@
     }
     var bar='<div class="screen-bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="addr"></span></div>';
     if(type==='mail'){
-      // Email = screen content → shown like a monitor view, floating on the viewer.
-      return '<div class="screen">'+bar+'<div class="rpage email">'+emailBody(false)+'</div></div>';
+      // Email = the reusable email-page shell, body + composed signature, on a monitor view.
+      return '<div class="screen">'+bar+emailPageShell(emailMessage(false)+signatureBlock())+'</div>';
+    }
+    if(type==='sig'){
+      // Signature = the SAME email page, body EMPTY, just the signature — grounded, not floating.
+      return '<div class="screen">'+bar+emailPageShell('<div class="ep-empty">— email message —</div>'+signatureBlock())+'</div>';
     }
     // Popup = a full screen the client sees → a monitor view of the whole thank-you screen.
     return '<div class="screen">'+bar+'<div class="pv-screen">'+popupBody(false)+'</div></div>';
   }
   /* ---- RENDERED editor (WYSIWYG, not raw HTML): same page, editable, tokens as chips ---- */
   function editorRendered(type){
-    var inner = type==='mail' ? emailBody(true) : type==='popup' ? popupBody(true) : docBody(true);
+    var inner = type==='mail' ? emailMessage(true)
+      : type==='sig' ? signatureBlock()
+      : type==='popup' ? popupBody(true) : docBody(true);
     return '<div class="wysiwyg'+(type==='popup'?' center':'')+'" contenteditable="true" spellcheck="false">'+inner+'</div>';
   }
 
@@ -565,6 +693,15 @@
   function openLib(item,name){ state.view='lib'; state.item=item; state.name=name; state.ratio='view'; render(); }
   function closePanel(){ state.view='map'; render(); }
   function saveEdit(){ toast('Saved — '+state.name); }
+
+  /* ── Studio launch (from the job dashboard) / close (back to the dashboard) ── */
+  function openStudio(){ el('studio-overlay').classList.add('open'); }
+  function closeStudio(){ el('studio-overlay').classList.remove('open'); }
+  // From the left Studio slide-out nav: a sequence opens the map; a component opens that asset.
+  function openStudioFromNav(t){ openStudio(); if(t==='seq'){ closePanel(); } else { openLib(t, labels[t]); } }
+  // From the LOE section's Create button: jump STRAIGHT to this LOE's document (not the map).
+  function openStudioToDoc(){ openStudio(); openSeq('doc','view'); }
+  function toggleNav(){ el('studio-nav').classList.toggle('collapsed'); }
 
   var tEl=el('toast'),tT;
   function toast(msg){

@@ -239,9 +239,9 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
         <div className={`flex items-center gap-2 text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-2 ${view === 'seq' ? 'justify-center' : ''}`}>
           <Layers className="h-3 w-3" />{view !== 'seq' && 'Sequences'}
         </div>
-        <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer bg-[#eef3fb] ring-1 ring-[#c7d7ef] ${view === 'seq' ? 'justify-center' : ''}`} onClick={closePanel} title="Default LOE Deployment">
-          <ChevronRight className="h-4 w-4 text-[#2c5aa0] rotate-90" />
-          {view !== 'seq' && <><span className="flex-1 font-semibold text-sm truncate">Default LOE Deployment</span><span className="text-[10px] font-bold text-[#2c5aa0] bg-card border border-[#c7d7ef] rounded-full px-1.5">DEFAULT</span></>}
+        <div className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer bg-[#2c5aa0]/10 ring-1 ring-[#2c5aa0]/30 ${view === 'seq' ? 'justify-center' : ''}`} onClick={closePanel} title="Default LOE Deployment">
+          <ChevronRight className="h-4 w-4 text-[#2c5aa0] dark:text-blue-300 rotate-90" />
+          {view !== 'seq' && <><span className="flex-1 font-semibold text-sm truncate text-foreground">Default LOE Deployment</span><span className="text-[10px] font-bold text-[#2c5aa0] dark:text-blue-300 bg-[#2c5aa0]/10 border border-[#2c5aa0]/30 rounded-full px-1.5">DEFAULT</span></>}
         </div>
       </div>
       <div className="p-3.5 pt-3 border-t">

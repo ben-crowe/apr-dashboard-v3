@@ -8,20 +8,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DetailJob, JobDetails } from "@/types/job";
-import { Send, X, Download, Mail, Plus, ChevronUp, ChevronDown, RotateCcw, Edit, Loader2, Save } from "lucide-react";
+import { Send, X, Download, Mail, Plus, Edit, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 import TemplateEditorModal from './TemplateEditorModal';
 import EmailComposeModal from './EmailComposeModal';
+import DocumentPreviewPane from './DocumentPreviewPane';
 import { loadAllEmailTemplates, EmailTemplate } from '@/utils/loe/emailTemplate';
 import { loadAllPopupTemplates, PopupTemplate } from '@/utils/loe/popupTemplate';
 import { saveTemplate, loadAllTemplates, loadTemplateById, setDefaultTemplate, LOETemplate } from '@/utils/loe/saveTemplate';
 import { saveJobContract } from '@/utils/loe/jobContracts';
 import { generateLOEHTML } from '@/utils/loe/generateLOE';
-// Paged.js polyfill is vendored into /public (from the pagedjs npm package) and loaded
-// only when Download is clicked. It renders CSS @page margin-boxes (the running
-// Page X of Y + VALTA footer) that bare Chrome print silently drops — so the downloaded
-// PDF carries the footer on every page.
-const PAGED_POLYFILL_PATH = '/paged.polyfill.js';
+import { downloadPagedPdf } from '@/utils/loe/downloadPagedPdf';
 
 // Recipient is whatever is set in the "Send to" field — no hidden redirect. Pick a test address
 // (e.g. an @test.com one) when testing; the real client only when you intend it.
@@ -76,10 +73,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   const [savedContractId, setSavedContractId] = useState<string | null>(contractId ?? null);
   const [isSending, setIsSending] = useState(false);
   const [isSavingDraft, setIsSavingDraft] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string>('');
   const [recipientEmail, setRecipientEmail] = useState<string>('');
   const [showEmailEdit, setShowEmailEdit] = useState(false);
-  const [zoomLevel, setZoomLevel] = useState(75); // Default zoom 75%
   const [isEditMode, setIsEditMode] = useState(false);
   // ② Email step — opens after the user confirms the document, before the actual send.
   const [showEmailStep, setShowEmailStep] = useState(false);
@@ -198,49 +193,8 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
     }
   };
 
-  useEffect(() => {
-    // Create a blob URL for the preview with proper scaling CSS
-    const htmlToUse = editedHTML || currentDocumentHTML;
-    if (htmlToUse) {
-      // Add CSS to scale the document based on zoom level
-      const zoomDecimal = zoomLevel / 100;
-      const scaleValue = 0.9 + (zoomDecimal - 0.75) * 0.5; // Adjust scale proportionally
-      
-      const scaledHTML = htmlToUse.replace(
-        '</head>',
-        `<style>
-          body {
-            zoom: ${zoomDecimal};
-            transform: scale(${scaleValue});
-            transform-origin: top center;
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 20px;
-            overflow-x: hidden;
-          }
-          .document {
-            max-width: 850px;
-            margin: 0 auto;
-          }
-          @media print {
-            body {
-              zoom: 1;
-              transform: none;
-              max-width: 100%;
-            }
-          }
-        </style>
-        </head>`
-      );
-      
-      const blob = new Blob([scaledHTML], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      setPreviewUrl(url);
-      
-      // Cleanup on unmount
-      return () => URL.revokeObjectURL(url);
-    }
-  }, [currentDocumentHTML, editedHTML, zoomLevel]);
+  // (The scaled-blob preview + zoom now live in the shared DocumentPreviewPane — INV-0 single
+  //  render path. This component just feeds it `editedHTML || currentDocumentHTML`.)
 
   // ① → ②: confirm the document, then open the Email step. The actual send fires from there.
   const handleProceedToEmail = () => {
@@ -276,57 +230,15 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   };
 
   const handleDownloadPreview = () => {
-    // Download as a TRUE paged PDF (not raw HTML). Open a clean print window, run the
-    // Paged.js polyfill so the @page footer (Page X of Y + VALTA) is rendered onto every
-    // page, then auto-open the print dialog -> client picks "Save as PDF".
-    // (Bare Chrome print drops @page margin-box content; Paged.js restores it.)
+    // Download as a TRUE paged PDF via the shared downloadPagedPdf util (INV-0 single path).
     const htmlToDownload = editedHTML || currentDocumentHTML;
     if (!htmlToDownload) {
       toast.error('Nothing to download yet — generate the preview first');
       return;
     }
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) {
-      toast.error('Please allow pop-ups for this site to download the PDF');
-      return;
-    }
-
-    const polyfillSrc = new URL(PAGED_POLYFILL_PATH, window.location.origin).href;
     const docTitle = `LOE-${job.clientLastName || 'Client'}-${jobDetails.jobNumber || 'DRAFT'}`;
-    // Point the download tab at the app's VA favicon. Without this the new window falls
-    // back to /favicon.ico (the stale Lovable heart) instead of the VA mark.
-    const faviconTag = `<link rel="icon" type="image/svg+xml" href="${window.location.origin}/favicon.svg">`;
-    const titleTag = `<title>${docTitle}</title>${faviconTag}`;
-    // White-paper guard: Paged.js paginates in SCREEN context, where the template's
-    // @media screen grey backdrop would tint the page boxes. Force every Paged.js page
-    // box (and the paper) white so the downloaded PDF is uniform white edge-to-edge.
-    const whitePaperStyle =
-      `<style>html,body{background:#fff !important}` +
-      `.pagedjs_pages,.pagedjs_page,.pagedjs_sheet,.pagedjs_pagebox{background:#fff !important}` +
-      `@media print{html,body,.pagedjs_page{background:#fff !important}}</style>`;
-    // PagedConfig must be set BEFORE the polyfill loads; .after fires once pagination completes.
-    const pagedHooks =
-      `<script>window.PagedConfig={auto:true,after:function(){setTimeout(function(){window.focus();window.print();},400);}};</scr` + `ipt>` +
-      `<script src="${polyfillSrc}"></scr` + `ipt>`;
-
-    let doc = htmlToDownload;
-    doc = /<\/title>/i.test(doc)
-      ? doc.replace(/<title>[\s\S]*?<\/title>/i, titleTag)
-      : /<\/head>/i.test(doc)
-        ? doc.replace(/<\/head>/i, `${titleTag}</head>`)
-        : titleTag + doc;
-    // inject the white-paper guard as the LAST thing in <head> so it wins the cascade
-    doc = /<\/head>/i.test(doc)
-      ? doc.replace(/<\/head>/i, `${whitePaperStyle}</head>`)
-      : whitePaperStyle + doc;
-    doc = /<\/body>/i.test(doc)
-      ? doc.replace(/<\/body>/i, `${pagedHooks}</body>`)
-      : doc + pagedHooks;
-
-    printWindow.document.open();
-    printWindow.document.write(doc);
-    printWindow.document.close();
-    void 0 /* success: silent (Ben) */;
+    const ok = downloadPagedPdf(htmlToDownload, docTitle);
+    if (!ok) toast.error('Please allow pop-ups for this site to download the PDF');
   };
 
   // Save the CURRENTLY-PREVIEWED document as a draft directly from the preview — no need to
@@ -563,56 +475,9 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
         </div>
         )}
 
-        {/* Compact zoom adjuster — moved out of the header; sits just above the document it controls */}
-        <div className="flex items-center justify-end px-4 pt-1">
-          <div className="flex items-center gap-0.5 text-muted-foreground">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setZoomLevel(Math.max(25, zoomLevel - 10))}
-              className="h-5 w-5 p-0 hover:text-foreground"
-              title="Zoom Out"
-            >
-              <ChevronDown className="h-3.5 w-3.5" />
-            </Button>
-            <span className="text-[11px] tabular-nums w-9 text-center select-none">{zoomLevel}%</span>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setZoomLevel(Math.min(200, zoomLevel + 10))}
-              className="h-5 w-5 p-0 hover:text-foreground"
-              title="Zoom In"
-            >
-              <ChevronUp className="h-3.5 w-3.5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setZoomLevel(75)}
-              className="h-5 w-5 p-0 hover:text-foreground ml-2"
-              title="Reset Zoom"
-            >
-              <RotateCcw className="h-3 w-3" />
-            </Button>
-          </div>
-        </div>
-
-        {/* Preview Frame - Maximum space */}
-        <div className="flex-1 border rounded-lg overflow-auto bg-muted my-2">
-          {previewUrl ? (
-            <iframe
-              src={previewUrl}
-              className="w-full h-full bg-card"
-              title="LOE Document Preview"
-              sandbox="allow-same-origin"
-              style={{ border: 'none', minHeight: '100%' }}
-            />
-          ) : (
-            <div className="flex items-center justify-center h-full text-muted-foreground">
-              Loading preview...
-            </div>
-          )}
-        </div>
+        {/* Document render — the SHARED DocumentPreviewPane (zoom strip + scaled iframe).
+            INV-0: same pane the Component Studio uses, so the previewer can never regress. */}
+        <DocumentPreviewPane html={editedHTML || currentDocumentHTML} />
 
         {/* Minimal Footer */}
         <div className="flex justify-between items-center pt-2 border-t">
@@ -689,10 +554,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
               if (!savedContractId && result.id) setSavedContractId(result.id);
               setEditedHTML(html);
               setTemplateModified(false);
-              // Update preview with edited HTML
-              const blob = new Blob([html], { type: 'text/html' });
-              const url = URL.createObjectURL(blob);
-              setPreviewUrl(url);
+              // The shared DocumentPreviewPane re-renders off the editedHTML prop — no manual blob.
               // Tell the dashboard to refresh its saved-contracts list.
               onContractSaved?.();
             } else {

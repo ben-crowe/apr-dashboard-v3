@@ -2134,14 +2134,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[160px]"
               />
             </CompactField>
-            <CompactField
-              label={
-                <FieldInfo label="Payment Terms:">
-                  May not be needed — payment terms are fixed in the contract (due on
-                  signing/receipt). Keep or remove?
-                </FieldInfo>
-              }
-            >
+            <CompactField label="Payment Terms">
               <Select value={jobDetails.paymentTerms || ''} onValueChange={value => handleSelectChange(value, 'paymentTerms')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                   <SelectValue placeholder="Select..." />

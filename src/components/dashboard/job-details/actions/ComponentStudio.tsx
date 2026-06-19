@@ -11,8 +11,8 @@ import DocumentPreviewPane from './DocumentPreviewPane';
 import { downloadPagedPdf } from '@/utils/loe/downloadPagedPdf';
 import { generateLOEHTML } from '@/utils/loe/generateLOE';
 import { loadAllTemplates, LOETemplate } from '@/utils/loe/saveTemplate';
-import { loadAllEmailTemplates, resolveEditTimeTokens, EmailTemplate } from '@/utils/loe/emailTemplate';
-import { loadAllPopupTemplates, resolvePopupTokens, PopupTemplate } from '@/utils/loe/popupTemplate';
+import { loadAllEmailTemplates, resolveEditTimeTokens, saveEmailTemplate, EMAIL_MERGE_TOKENS, EmailTemplate } from '@/utils/loe/emailTemplate';
+import { loadAllPopupTemplates, resolvePopupTokens, savePopupTemplate, POPUP_MERGE_TOKENS, PopupTemplate } from '@/utils/loe/popupTemplate';
 
 /**
  * ComponentStudio — the Document/Email/Popup library + sequence map + split previewer/editor
@@ -112,6 +112,48 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     }
     return () => { cancelled = true; };
   }, [view, itemType, selectedId, docTemplates, job, jobDetails]);
+
+  // Inline editor (email + popup) — the SAME editable-surface mechanism the existing modal
+  // editors use (a designMode document seeded with the managed body). Reused inline here.
+  const editIframeRef = useRef<HTMLIFrameElement>(null);
+  const editableBody = (): string =>
+    itemType === 'mail' ? (emailTemplates.find(e => e.id === selectedId)?.body_html ?? '')
+    : itemType === 'popup' ? (popupTemplates.find(p => p.id === selectedId)?.body_html ?? '')
+    : '';
+
+  useEffect(() => {
+    if (view === 'map' || itemType === 'doc') return;
+    const doc = editIframeRef.current?.contentDocument;
+    if (!doc) return;
+    const body = (editableBody() || '<p></p>').replace(/<script[\s\S]*?<\/script>/gi, '');
+    doc.open(); doc.write(body); doc.close(); doc.designMode = 'on';
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, itemType, selectedId, ratio, emailTemplates, popupTemplates]);
+
+  const insertToken = (token: string) => {
+    const doc = editIframeRef.current?.contentDocument;
+    if (!doc) return;
+    (doc.body as HTMLElement | null)?.focus();
+    if (!doc.execCommand('insertText', false, token) && doc.body) doc.body.append(token);
+  };
+
+  const handleSaveInline = async () => {
+    const doc = editIframeRef.current?.contentDocument;
+    if (!doc) return;
+    const body = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+    if (itemType === 'popup') {
+      const tpl = popupTemplates.find(p => p.id === selectedId);
+      const res = await savePopupTemplate({ id: selectedId || undefined, name: tpl?.name ?? 'Thank-You', body_html: body, setActive: tpl?.is_active ?? false });
+      if (res.success) { toast.success('Saved'); loadAllPopupTemplates().then(setPopupTemplates); } else toast.error(`Save failed: ${res.error}`);
+    } else if (itemType === 'mail') {
+      const tpl = emailTemplates.find(e => e.id === selectedId);
+      if (!tpl) return;
+      const res = await saveEmailTemplate({ id: tpl.id, name: tpl.name, subject: tpl.subject, body_html: body, channel: 'email' });
+      if (res.success) { toast.success('Saved'); loadAllEmailTemplates().then(ts => setEmailTemplates(ts.filter(t => t.channel === 'email'))); } else toast.error(`Save failed: ${res.error}`);
+    }
+  };
+
+  const mergeTokens = itemType === 'mail' ? EMAIL_MERGE_TOKENS : POPUP_MERGE_TOKENS;
 
   // ── open paths ────────────────────────────────────────────────────────────
   const openSeq = (t: CompType) => { setItemType(t); setSelectedId(defaultIdFor(t)); setView('seq'); };
@@ -268,7 +310,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
 
   const Work = () => (
     <div className="flex-1 flex min-w-0">
-      {view === 'seq' && <Spine />}
+      {view === 'seq' && Spine()}
       <div className="flex-1 flex flex-col min-w-0 bg-background">
         {/* panel bar */}
         <div className="flex items-center gap-2.5 h-12 px-4 bg-card border-b flex-none">
@@ -294,11 +336,30 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
                 {ratio === 'edit' ? <ChevronRight className="h-3 w-3" /> : <ArrowLeft className="h-3 w-3" />}{ratio === 'edit' ? 'Collapse' : 'Expand'}
               </button>
             </div>
-            <div className="flex-1 min-h-0 overflow-auto p-4 flex flex-col items-center justify-center text-center gap-3">
-              <p className="text-sm text-muted-foreground max-w-[24ch]">Edit <span className="font-semibold text-foreground">{nameFor(itemType, selectedId)}</span> in its full editor.</p>
-              <Button size="sm" className="gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]" onClick={handleEdit}><Pencil className="h-3.5 w-3.5" /> Open editor</Button>
-              <p className="text-[11px] text-muted-foreground max-w-[26ch]">Opens the proven {TYPE_META[itemType].label.toLowerCase()} editor — same one you use today.</p>
-            </div>
+            {itemType === 'doc' ? (
+              // A 79-page LOE template is too large for a side pane — edit opens the full document editor.
+              <div className="flex-1 min-h-0 overflow-auto p-4 flex flex-col items-center justify-center text-center gap-3">
+                <p className="text-sm text-muted-foreground max-w-[26ch]">This is a multi-page document. Edit it in the full document editor.</p>
+                <Button size="sm" className="gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]" onClick={handleEdit}><Pencil className="h-3.5 w-3.5" /> Open document editor</Button>
+              </div>
+            ) : (
+              // Email + popup edit INLINE — the same designMode editable surface the modal editors use.
+              <div className="flex-1 min-h-0 flex flex-col p-3 gap-2">
+                <div className="text-[11px] text-muted-foreground">Merge fields (click to insert)</div>
+                <div className="flex flex-wrap gap-1.5">
+                  {mergeTokens.map(tk => (
+                    <button key={tk.token} type="button" onClick={() => insertToken(tk.token)}
+                      className="text-xs px-2 py-1 rounded border font-mono bg-muted text-foreground hover:border-[#2c5aa0] hover:text-[#2c5aa0] transition-colors">
+                      {tk.label}
+                    </button>
+                  ))}
+                </div>
+                <iframe ref={editIframeRef} title="Inline editor" className="flex-1 min-h-0 w-full rounded-md border bg-white focus-within:border-[#2c5aa0]" />
+                <div className="flex justify-end">
+                  <Button size="sm" className="gap-1.5 bg-[#2c5aa0] hover:bg-[#234a85]" onClick={handleSaveInline}><Pencil className="h-3.5 w-3.5" /> Save</Button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -318,7 +379,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
         </div>
         {/* shell */}
         <div className="flex-1 flex min-h-0">
-          <Rail />
+          {Rail()}
           <main className="flex-1 flex flex-col min-w-0">
             {/* stage bar / crumb */}
             <div className="flex items-center gap-3 h-12 px-5 border-b flex-none text-sm">
@@ -337,7 +398,7 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
               {view !== 'map' && <Button variant="ghost" size="sm" className="h-8 gap-1" onClick={closePanel}><ArrowLeft className="h-4 w-4" /> Back to map</Button>}
             </div>
             <div className="flex-1 flex min-h-0">
-              {view === 'map' ? <Map /> : <Work />}
+              {view === 'map' ? Map() : Work()}
             </div>
           </main>
         </div>

@@ -178,6 +178,31 @@ function matchOption(opts: Array<{ id: string; name?: string; label?: string }>,
   return hit ? hit.id : null // no match → caller decides (drop_down skips; labels drops just this value)
 }
 
+// Per-field synonym tables, keyed by ClickUp field NAME. Applied BEFORE the generic fuzzy matcher to
+// bridge cases where the dashboard's vocabulary and the client's option labels mean the same thing but
+// share no word the matcher could catch (e.g. "Improved" vs "Existing Property"). Keyed by lowercased
+// source value → the client's exact option label. A source value NOT in the table falls through to the
+// normal fuzzy match (which skips on no match). A wrong value on the client card is worse than an empty
+// one, so we only normalize mappings we're certain of and deliberately leave ambiguous values unmapped.
+const FIELD_SYNONYMS: Record<string, Record<string, string>> = {
+  'State of Improvements': {
+    'improved': 'Existing Property',
+    'complete': 'Existing Property',
+    'completed': 'Existing Property',
+    'existing': 'Existing Property',
+    'proposed': 'Proposed', // already matches; included for clarity
+    // Vacant Land / Improved Development Land intentionally unmapped pending client taxonomy
+    // confirmation — safe-skip (a wrong value is worse than blank).
+  },
+}
+
+// Apply a field's synonym table to one source value (returns the canonical label, or the value unchanged).
+function applySynonym(fieldName: string, value: string): string {
+  const table = FIELD_SYNONYMS[fieldName]
+  if (!table) return value
+  return table[value.trim().toLowerCase()] ?? value
+}
+
 // Encode one value for a given ClickUp field type. Returns the API-ready value, or null = SKIP.
 // drop_down → option id (string); labels → array of option ids (string[]); date/currency → number.
 function encodeForField(def: ClickUpFieldDef, raw: any): string | number | string[] | null {
@@ -186,7 +211,7 @@ function encodeForField(def: ClickUpFieldDef, raw: any): string | number | strin
     case 'drop_down': {
       // Single-select: take first value if a multi/comma string came through (matches Valcre first-value rule).
       const opts = def.type_config?.options || []
-      return matchOption(opts, String(raw).split(',')[0])
+      return matchOption(opts, applySynonym(def.name, String(raw).split(',')[0]))
     }
     case 'labels': {
       // Multi-select (ClickUp type "labels"): source is comma-separated. Match EACH value through the
@@ -194,7 +219,7 @@ function encodeForField(def: ClickUpFieldDef, raw: any): string | number | strin
       const opts = def.type_config?.options || []
       const ids: string[] = []
       for (const part of String(raw).split(',')) {
-        const id = matchOption(opts, part)
+        const id = matchOption(opts, applySynonym(def.name, part))
         if (id && !ids.includes(id)) ids.push(id)
       }
       return ids.length ? ids : null

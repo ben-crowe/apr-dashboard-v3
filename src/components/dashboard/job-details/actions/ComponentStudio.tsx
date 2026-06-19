@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { DetailJob, JobDetails } from "@/types/job";
 import {
   FileText, Mail, MonitorCheck, ArrowRight, ArrowLeft, ChevronDown, ChevronUp, ChevronRight, ChevronLeft,
-  Pencil, X, Layers, LayoutGrid, Download, Loader2, Eye, RotateCcw,
+  Pencil, X, Layers, LayoutGrid, Download, Loader2, Eye, RotateCcw, Plus,
 } from "lucide-react";
 import { toast } from "sonner";
 import DocumentPreviewPane from './DocumentPreviewPane';
@@ -12,8 +12,8 @@ import { downloadPagedPdf } from '@/utils/loe/downloadPagedPdf';
 import { generateLOEHTML } from '@/utils/loe/generateLOE';
 import { loadAllTemplates, LOETemplate } from '@/utils/loe/saveTemplate';
 import { saveJobContract } from '@/utils/loe/jobContracts';
-import { loadAllEmailTemplates, resolveEditTimeTokens, saveEmailTemplate, EMAIL_MERGE_TOKENS, EmailTemplate } from '@/utils/loe/emailTemplate';
-import { loadAllPopupTemplates, resolvePopupTokens, savePopupTemplate, POPUP_MERGE_TOKENS, PopupTemplate } from '@/utils/loe/popupTemplate';
+import { loadAllEmailTemplates, resolveEditTimeTokens, saveEmailTemplate, EMAIL_MERGE_TOKENS, EMAIL_SEED_SUBJECT, EMAIL_SEED_BODY, EmailTemplate } from '@/utils/loe/emailTemplate';
+import { loadAllPopupTemplates, loadActivePopupTemplate, resolvePopupTokens, savePopupTemplate, POPUP_MERGE_TOKENS, POPUP_SEED_BODY, PopupTemplate } from '@/utils/loe/popupTemplate';
 
 /**
  * ComponentStudio — the Document/Email/Popup library + sequence map + split previewer/editor
@@ -80,9 +80,27 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
     if (!isOpen) return;
     loadAllTemplates().then(setDocTemplates).catch(() => setDocTemplates([]));
     loadAllEmailTemplates().then(ts => setEmailTemplates(ts.filter(t => t.channel === 'email'))).catch(() => setEmailTemplates([]));
-    loadAllPopupTemplates().then(setPopupTemplates).catch(() => setPopupTemplates([]));
+    // Popups: self-heal — if the table has no rows yet, seed the default Thank-You so the
+    // Popup component is always present (loadActivePopupTemplate seeds; loadAll just lists).
+    loadAllPopupTemplates().then(async ps => {
+      if (ps.length === 0) { await loadActivePopupTemplate(); ps = await loadAllPopupTemplates(); }
+      setPopupTemplates(ps);
+    }).catch(() => setPopupTemplates([]));
     setView('map');
   }, [isOpen]);
+
+  // Add a new component instance (email/popup) from its seed, then open it.
+  const addNew = async (t: CompType) => {
+    if (t === 'popup') {
+      const res = await savePopupTemplate({ name: 'New popup', body_html: POPUP_SEED_BODY });
+      if (res.success && res.id) { setPopupTemplates(await loadAllPopupTemplates()); openLib('popup', res.id); }
+      else toast.error('Could not add popup');
+    } else if (t === 'mail') {
+      const res = await saveEmailTemplate({ name: 'New email', subject: EMAIL_SEED_SUBJECT, body_html: EMAIL_SEED_BODY, channel: 'email' });
+      if (res.success && res.id) { setEmailTemplates((await loadAllEmailTemplates()).filter(x => x.channel === 'email')); openLib('mail', res.id); }
+      else toast.error('Could not add email');
+    }
+  };
 
   const listFor = (t: CompType): StudioInstance[] =>
     t === 'doc' ? docTemplates.map(d => ({ id: d.id, name: d.name }))
@@ -265,6 +283,12 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
                   </div>
                 ))}
                 {listFor(t).length === 0 && <div className="px-2.5 py-1.5 text-xs text-muted-foreground">None yet</div>}
+                {(t === 'popup' || t === 'mail') && (
+                  <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg cursor-pointer hover:bg-muted text-[13px] text-muted-foreground" onClick={() => addNew(t)}>
+                    <Plus className="h-3.5 w-3.5 flex-none" />
+                    <span className="flex-1">New {TYPE_META[t].label.toLowerCase()}</span>
+                  </div>
+                )}
               </div>
             )}
           </div>

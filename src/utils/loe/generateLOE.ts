@@ -110,7 +110,7 @@ function mapDataToV3Fields(job: DetailJob, jobDetails: JobDetails, _narrativeMap
     '[valuetimeframe]': jobDetails.valuationPremises || 'Current',
     '[valuescenarios]': jobDetails.valueScenarios || 'As Is',
     '[approachestovalue]': jobDetails.approachesToValue || 'Direct Comparison, Income, Cost',
-    '[deliverytime]': jobDetails.deliveryTime || '4',
+    '[deliverytime]': jobDetails.deliveryTime || '3',
     '[clientdocuments]': jobDetails.clientDocuments || '',
 
     // V5 new fields
@@ -178,7 +178,7 @@ function mapDataToV07Fields(job: DetailJob, jobDetails: JobDetails, narrativeMap
     '[AssignmentType]': jd.assignmentType || '',
     '[ApproachestoValue]': jd.approachesToValue || '',
     '[Fee]': fmtCurrency(jobDetails.appraisalFee),
-    '[DeliveryTime]': jd.deliveryTime || jd.deliveryTimeWeeks || '',
+    '[DeliveryTime]': jd.deliveryTime || jd.deliveryTimeWeeks || '3',
     '[ClientDocuments]': jd.clientDocuments || '',
     '[PreviouslyAppraised]': jd.previouslyAppraised || '',
     '[ScheduleAPropertyList]': jd.scheduleAPropertyList || '',

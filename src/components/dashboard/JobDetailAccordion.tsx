@@ -97,7 +97,7 @@ const JobDetailAccordion: React.FC<JobDetailAccordionProps> = ({
         effectiveDate: '2026-06-15',
         requestDate: '2026-06-09',
         deliveryDate: '2026-07-10',
-        deliveryTime: '4',
+        deliveryTime: '3',
         clientDocuments: 'Rent Roll,Historical Operating Expenses,Purchase & Sale Agreement',
         previouslyAppraised: 'No',
         currentUse: 'Industrial',   // must match a Current Use option (Vacant Land/Single Family/

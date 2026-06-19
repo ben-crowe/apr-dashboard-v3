@@ -171,7 +171,9 @@ export function useJobData(jobId: string) {
               // LOE-07 gap fields
               currentUse: loeData.current_use,
               proposedUse: loeData.proposed_use,
-              deliveryTime: loeData.delivery_time,
+              // Delivery default = 3 weeks (contract standard, Ben 2026-06-19). Data/UI default,
+              // overridable — pre-populates even before the user touches it when no value is saved.
+              deliveryTime: loeData.delivery_time || '3',
               clientDocuments: loeData.client_documents,
               previouslyAppraised: loeData.previously_appraised,
               // Read-back fix (2026-06-04, CoArch ruling): job_loe_details is the SINGLE canonical home

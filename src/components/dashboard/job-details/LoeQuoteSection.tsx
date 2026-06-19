@@ -5,8 +5,9 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ChevronDown, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronDown, ChevronRight, Loader2, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { SectionTitle, sectionTriggerStyle, sectionContentStyle, FieldRow, SectionGroup, TwoColumnFields, CompactField, FieldSyncStatus } from "./ValcreStyles";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -126,6 +127,25 @@ const formatShortDate = (iso: string): string => {
   try { return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
   catch { return ''; }
 };
+
+// Clickable info popover (? icon) for a field label. Click to open — used on the date fields whose
+// behavior isn't obvious (Delivery Date auto-set on LOE-sent; Request Date = client-requested date).
+const FieldInfo: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <Popover>
+    <PopoverTrigger asChild>
+      <button
+        type="button"
+        aria-label="Field info"
+        className="inline-flex items-center text-muted-foreground hover:text-foreground"
+      >
+        <HelpCircle className="h-3.5 w-3.5" />
+      </button>
+    </PopoverTrigger>
+    <PopoverContent side="top" align="start" className="max-w-xs text-xs leading-relaxed">
+      {children}
+    </PopoverContent>
+  </Popover>
+);
 
 const LoeQuoteSection: React.FC<SectionProps> = ({
   job,
@@ -818,7 +838,12 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           if (fieldName === 'reportType') syncData.reportType = value;
           if (fieldName === 'paymentAmount') syncData.paymentAmount = value;
           if (fieldName === 'paymentPaidDate') syncData.paymentPaidDate = value;
-          if (fieldName === 'requestDate') syncData.requestDate = value;     // PRD-A #1 → Job.BidDate
+          // SEMANTIC-MISMATCH FLAG (2026-06-19): the dashboard label is now "Client Requested Date"
+          // (client's special requested delivery date), but this field STILL writes Valcre Job.BidDate
+          // (intake/bid date). Mapping kept intact per Ben — blank = nothing syncs. Do NOT rewire or
+          // drop the Valcre mapping without Ben's go; revisit whether client-requested-delivery should
+          // map to a different Valcre field (or none).
+          if (fieldName === 'requestDate') syncData.requestDate = value;     // PRD-A #1 → Job.BidDate (see flag above)
           if (fieldName === 'signedDate') syncData.signedDate = value;       // PRD-A #2 → Job.AwardDate
           if (fieldName === 'effectiveDate') syncData.effectiveDate = value; // PRD-A #3 → Job.EffectiveDate
           // Auto-sync wiring (2026-06-04, AUTO-SYNC-WIRING-MAP) — server routes each to its verified target
@@ -2171,7 +2196,19 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[160px]"
               />
             </CompactField>
-            <CompactField label="Request Date" status={fieldStates['requestDate']}>
+            <CompactField
+              status={fieldStates['requestDate']}
+              label={
+                <span className="inline-flex items-center justify-end gap-1 w-full">
+                  Client Requested Date:
+                  <FieldInfo>
+                    Optional — the client's special requested delivery date (e.g. a rush, or a later
+                    date like 4 months out). Leave blank for the standard 3-week turnaround. A date
+                    later than standard pushes the delivery assumption out.
+                  </FieldInfo>
+                </span>
+              }
+            >
               <Input
                 type="date"
                 name="requestDate"
@@ -2181,18 +2218,29 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[160px]"
               />
             </CompactField>
-            <CompactField label="Delivery Date">
+            <CompactField
+              label={
+                <span className="inline-flex items-center justify-end gap-1 w-full">
+                  Delivery Date:
+                  <FieldInfo>
+                    Auto-set when the LOE is sent — {(jobDetails as any).deliveryTime || '3'} weeks
+                    from the sent date. Blank until the job is active.
+                  </FieldInfo>
+                </span>
+              }
+            >
               <Input
                 type="date"
                 name="deliveryDate"
                 value={jobDetails.deliveryDate || ''}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                placeholder="TBD — set when LOE is sent"
                 className="h-7 text-sm max-w-[160px]"
               />
             </CompactField>
             <CompactField label="Delivery Time (wks)">
-              <Input type="text" name="deliveryTime" value={(jobDetails as any).deliveryTime || ''} onChange={handleChange} onBlur={handleBlur} placeholder="e.g. 4" className="h-7 text-sm max-w-[160px]" />
+              <Input type="text" name="deliveryTime" value={(jobDetails as any).deliveryTime || '3'} onChange={handleChange} onBlur={handleBlur} placeholder="e.g. 3" className="h-7 text-sm max-w-[160px]" />
             </CompactField>
           </TwoColumnFields>
         </SectionGroup>

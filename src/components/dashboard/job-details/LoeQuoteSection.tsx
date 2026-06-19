@@ -2135,7 +2135,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             <CompactField
               label={
                 <FieldInfo label="Retainer Amount:">
-                  Is a retainer required, or is it 100% on signing? This field may be removable.
+                  Keep for special use cases? Standard is 100% on signing — a retainer (partial
+                  payment up front) only applies to the occasional large job. Otherwise leave at 0.
                 </FieldInfo>
               }
             >
@@ -2143,7 +2144,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 type="text"
                 name="retainerAmount"
                 placeholder="$ amount"
-                value={editingRetainerAmount !== null ? editingRetainerAmount : (jobDetails.retainerAmount ? `$${formatCurrency(parseFloat(jobDetails.retainerAmount))}` : '')}
+                /* Defaults to $0.00 until a value is entered (Ben 2026-06-19) — standard is no retainer. */
+                value={editingRetainerAmount !== null ? editingRetainerAmount : (jobDetails.retainerAmount ? `$${formatCurrency(parseFloat(jobDetails.retainerAmount))}` : '$0.00')}
                 onChange={handleCurrencyChange}
                 onBlur={handleCurrencyBlur}
                 onFocus={() => setEditingRetainerAmount(jobDetails.retainerAmount || '')}

@@ -3,7 +3,7 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { DetailJob, JobDetails } from "@/types/job";
 import {
-  FileText, Mail, MonitorCheck, ArrowRight, ArrowLeft, ChevronDown, ChevronUp, ChevronRight,
+  FileText, Mail, MonitorCheck, ArrowRight, ArrowLeft, ChevronDown, ChevronUp, ChevronRight, ChevronLeft,
   Pencil, X, Layers, LayoutGrid, Download, Loader2, Eye, RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -62,6 +62,8 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   const [selectedId, setSelectedId] = useState<string>('');
   const [ratio, setRatio] = useState<'view' | 'edit'>('view');
   const [screenZoom, setScreenZoom] = useState(100); // zoom for email/popup render (doc uses the pane's own)
+  const [spineW, setSpineW] = useState(312);          // sequence-spine width (drag to resize)
+  const [spineCollapsed, setSpineCollapsed] = useState(false); // collapse the spine to an icon strip
 
   const [docTemplates, setDocTemplates] = useState<LOETemplate[]>([]);
   const [emailTemplates, setEmailTemplates] = useState<EmailTemplate[]>([]);
@@ -308,18 +310,47 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
   );
 
   // ── sequence spine (vertical, while a panel is open from a block) ─────────
+  const startSpineGrab = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const startX = e.clientX, startW = spineW;
+    const move = (ev: MouseEvent) => setSpineW(Math.max(200, Math.min(460, startW + (ev.clientX - startX))));
+    const up = () => { document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); };
+    document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+  };
+
   const Spine = () => (
-    <div className="w-[312px] flex-none border-r bg-muted/40 overflow-y-auto p-4">
-      <div className="text-[11px] font-bold tracking-wider uppercase text-muted-foreground mb-3 px-1">Sequence</div>
-      {ORDER.map((t, i) => (
-        <React.Fragment key={t}>
-          <div className={`bg-card border rounded-xl p-3 cursor-pointer shadow-sm border-l-[3px] ${t === itemType ? 'ring-2 ring-[#2c5aa0]' : ''} ${t === 'doc' ? 'border-l-[#2c5aa0]' : t === 'mail' ? 'border-l-cyan-700' : 'border-l-emerald-600'}`} onClick={() => openSeq(t)}>
-            <div className={`flex items-center gap-1.5 text-[10px] font-bold uppercase ${t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600'}`}>{TYPE_META[t].icon}{TYPE_META[t].label}</div>
-            <div className="font-bold text-[13.5px] mt-1">{nameFor(t, defaultIdFor(t))}</div>
-          </div>
-          {i < ORDER.length - 1 && <div className="flex items-center gap-1.5 text-muted-foreground px-1.5 py-1.5 text-[10.5px] font-bold uppercase"><ChevronDown className="h-3.5 w-3.5" />{CONN[t]}</div>}
-        </React.Fragment>
-      ))}
+    <div className="flex-none border-r bg-muted/40 overflow-y-auto relative" style={{ width: spineCollapsed ? 54 : spineW }}>
+      <div className={spineCollapsed ? 'p-2' : 'p-4'}>
+        <div className="flex items-center mb-3">
+          {!spineCollapsed && <span className="flex-1 text-[11px] font-bold tracking-wider uppercase text-muted-foreground px-1">Sequence</span>}
+          <button onClick={() => setSpineCollapsed(c => !c)} title={spineCollapsed ? 'Expand sequence' : 'Collapse sequence'}
+            className="h-6 w-6 flex items-center justify-center rounded-md border bg-card text-muted-foreground hover:text-[#2c5aa0] hover:border-[#2c5aa0] mx-auto">
+            {spineCollapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronLeft className="h-3.5 w-3.5" />}
+          </button>
+        </div>
+        {ORDER.map((t, i) => {
+          const cur = t === itemType;
+          const lcol = t === 'doc' ? 'border-l-[#2c5aa0]' : t === 'mail' ? 'border-l-cyan-700' : 'border-l-emerald-600';
+          const tcol = t === 'doc' ? 'text-[#2c5aa0]' : t === 'mail' ? 'text-cyan-700' : 'text-emerald-600';
+          return (
+            <React.Fragment key={t}>
+              {spineCollapsed ? (
+                <button onClick={() => openSeq(t)} title={`${TYPE_META[t].label}: ${nameFor(t, defaultIdFor(t))}`}
+                  className={`w-full flex items-center justify-center py-2.5 my-1.5 rounded-lg border bg-card border-l-[3px] ${lcol} ${tcol} ${cur ? 'ring-2 ring-[#2c5aa0]' : ''}`}>
+                  {TYPE_META[t].icon}
+                </button>
+              ) : (
+                <div className={`bg-card border rounded-xl p-3 cursor-pointer shadow-sm border-l-[3px] ${lcol} ${cur ? 'ring-2 ring-[#2c5aa0]' : ''}`} onClick={() => openSeq(t)}>
+                  <div className={`flex items-center gap-1.5 text-[10px] font-bold uppercase ${tcol}`}>{TYPE_META[t].icon}{TYPE_META[t].label}</div>
+                  <div className="font-bold text-[13.5px] mt-1 truncate">{nameFor(t, defaultIdFor(t))}</div>
+                </div>
+              )}
+              {!spineCollapsed && i < ORDER.length - 1 && <div className="flex items-center gap-1.5 text-muted-foreground px-1.5 py-1.5 text-[10.5px] font-bold uppercase"><ChevronDown className="h-3.5 w-3.5" />{CONN[t]}</div>}
+            </React.Fragment>
+          );
+        })}
+      </div>
+      {!spineCollapsed && <div className="absolute top-0 right-0 h-full w-1.5 cursor-col-resize hover:bg-[#2c5aa0]/30" onMouseDown={startSpineGrab} title="Drag to resize" />}
     </div>
   );
 

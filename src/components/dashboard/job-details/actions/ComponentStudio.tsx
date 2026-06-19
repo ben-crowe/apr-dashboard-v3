@@ -218,13 +218,14 @@ const ComponentStudio: React.FC<ComponentStudioProps> = ({
             <Button variant="ghost" size="sm" onClick={() => setScreenZoom(100)} className="h-5 w-5 p-0 hover:text-foreground ml-2" title="Reset Zoom"><RotateCcw className="h-3 w-3" /></Button>
           </div>
         </div>
-        <div className="flex-1 overflow-auto bg-muted p-6">
-          <div className="max-w-[680px] mx-auto bg-card border rounded-lg shadow-lg overflow-hidden" style={{ zoom: screenZoom / 100 }}>
-            <div className="h-8 bg-muted border-b flex items-center gap-1.5 px-3">
+        {/* The rendered SCREEN is always a light page on a light viewer (never themed dark). */}
+        <div className="flex-1 overflow-auto bg-slate-100 p-6">
+          <div className="max-w-[680px] mx-auto bg-white border border-slate-200 rounded-lg shadow-lg overflow-hidden" style={{ zoom: screenZoom / 100 }}>
+            <div className="h-8 bg-slate-100 border-b border-slate-200 flex items-center gap-1.5 px-3">
               <span className="w-2.5 h-2.5 rounded-full bg-red-300" /><span className="w-2.5 h-2.5 rounded-full bg-yellow-300" /><span className="w-2.5 h-2.5 rounded-full bg-green-300" />
-              <span className="ml-2 flex-1 h-4 bg-card border rounded" />
+              <span className="ml-2 flex-1 h-4 bg-white border border-slate-200 rounded" />
             </div>
-            <iframe srcDoc={html} title={`${TYPE_META[itemType].label} preview`} sandbox="allow-same-origin" className="w-full" style={{ border: 'none', height: itemType === 'popup' ? 560 : 640 }} />
+            <iframe srcDoc={html} title={`${TYPE_META[itemType].label} preview`} sandbox="allow-same-origin" className="w-full bg-white" style={{ border: 'none', height: itemType === 'popup' ? 560 : 640 }} />
           </div>
         </div>
       </div>

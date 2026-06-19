@@ -102,18 +102,19 @@ const DocumentPreviewPane: React.FC<DocumentPreviewPaneProps> = ({ html, zoom, o
         </div>
       </div>
 
-      {/* Preview Frame */}
-      <div className="flex-1 border rounded-lg overflow-auto bg-muted my-2">
+      {/* Preview Frame — the rendered PAGE is always a light page (never themed dark): explicit
+          light backdrop + white iframe, matching the email/popup preview convention (bg-white). */}
+      <div className="flex-1 border border-slate-200 rounded-lg overflow-auto bg-slate-100 my-2">
         {previewUrl ? (
           <iframe
             src={previewUrl}
-            className="w-full h-full bg-card"
+            className="w-full h-full bg-white"
             title="LOE Document Preview"
             sandbox="allow-same-origin"
             style={{ border: 'none', minHeight: '100%' }}
           />
         ) : (
-          <div className="flex items-center justify-center h-full text-muted-foreground">
+          <div className="flex items-center justify-center h-full text-slate-500">
             Loading preview...
           </div>
         )}

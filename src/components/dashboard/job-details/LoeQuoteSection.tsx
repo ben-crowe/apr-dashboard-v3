@@ -366,7 +366,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // requestDate→Job.BidDate (#1 PASS), signedDate→Job.AwardDate (#2 PASS), effectiveDate→Job.EffectiveDate (#3 PASS).
   // Desktop Report (#4) was REVERTED — Valcre custom field 12050 does NOT exist on this tenant
   //   (confirmed live API + QA readback + Ben's admin list). Stays Supabase/LOE-only until/unless a CF is created.
-  const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments', 'deliveryComments', 'paymentComments', 'propertyRightsAppraised', 'scopeOfWork', 'valuationPremises', 'reportType', 'paymentAmount', 'paymentPaidDate', 'requestDate', 'signedDate', 'effectiveDate',
+  // paymentTerms REMOVED 2026-06-19 (Ben) — field retired; LOE clause is fixed boilerplate, not a per-job
+  // choice, so it no longer syncs to Valcre. DB column job_loe_details.payment_terms left in place (unused).
+  const VALCRE_SYNC_FIELDS = ['appraisalFee', 'retainerAmount', 'deliveryDate', 'appraiserComments', 'deliveryComments', 'paymentComments', 'propertyRightsAppraised', 'scopeOfWork', 'valuationPremises', 'reportType', 'paymentAmount', 'paymentPaidDate', 'requestDate', 'signedDate', 'effectiveDate',
     // Auto-sync wiring (2026-06-04, AUTO-SYNC-WIRING-MAP) — job-prep fields with VERIFIED Valcre targets.
     // analysisLevel→AnalysisLevel, transactionStatus→CF12053, zoningStatus→CF12054, valueScenarios→CF11563/11564.
     // (propertyRightsAppraised→Purposes is already above.) Do-NOT-wire list excluded: reportFormat, assignmentType,
@@ -390,7 +392,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // need to fire it (by jobId) after the field persists — no per-field value payload. Internal-only
   // tracking fields (retainerPaidDate / paymentAmount-paid / paymentPaidDate) are NOT-on-card → excluded.
   const CLICKUP_CARD_FIELDS = ['propertyRightsAppraised', 'scopeOfWork', 'reportType', 'appraisalFee',
-    'retainerAmount', 'deliveryDate', 'paymentTerms', 'appraiserComments', 'deliveryComments', 'paymentComments'];
+    'retainerAmount', 'deliveryDate', 'appraiserComments', 'deliveryComments', 'paymentComments'];
 
   // Debounced card refresh: rapid edits across several card fields coalesce into ONE update-clickup-task
   // call (it rebuilds the whole section from DB anyway). Reuses the saved clickup_task_id — never creates.
@@ -428,7 +430,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       appraisalFee: 'Appraisal Fee',
       retainerAmount: 'Retainer Amount',
       deliveryDate: 'Delivery Date',
-      paymentTerms: 'Payment Terms',
       appraiserComments: 'Appraiser Comments',
       deliveryComments: 'Delivery Comments',
       paymentComments: 'Payment Comments',
@@ -538,7 +539,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         propertyRightsAppraised: jobDetails?.propertyRightsAppraised || '',
         reportType: jobDetails?.reportType || '',
         deliveryDate: jobDetails?.deliveryDate || '',
-        paymentTerms: jobDetails?.paymentTerms || '',
         status: 'in_progress',
         timestamp: new Date().toISOString(),
       };
@@ -648,7 +648,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               property_rights_appraised: jobDetails?.propertyRightsAppraised || '',
               report_type: jobDetails?.reportType || '',
               delivery_date: jobDetails?.deliveryDate || null,
-              payment_terms: jobDetails?.paymentTerms || '',
               internal_comments: jobDetails?.appraiserComments || '',
               delivery_comments: jobDetails?.deliveryComments || '',
               payment_comments: jobDetails?.paymentComments || '',
@@ -753,7 +752,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           scopeOfWork: 'scope_of_work',
           propertyRightsAppraised: 'property_rights_appraised',
           reportType: 'report_type',
-          paymentTerms: 'payment_terms',
           valuationPremises: 'valuation_premises',
           deliveryDate: 'delivery_date',
           paymentAmount: 'payment_amount',
@@ -836,7 +834,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           if (fieldName === 'appraisalFee') syncData.appraisalFee = value;
           if (fieldName === 'retainerAmount') syncData.retainerAmount = value;
           if (fieldName === 'deliveryDate') syncData.deliveryDate = value;
-          if (fieldName === 'paymentTerms') syncData.paymentTerms = value;
           if (fieldName === 'appraiserComments') syncData.appraiserComments = value;
           if (fieldName === 'deliveryComments') syncData.deliveryComments = value;
           if (fieldName === 'paymentComments') syncData.paymentComments = value;
@@ -2134,19 +2131,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[160px]"
               />
             </CompactField>
-            <CompactField label="Payment Terms">
-              <Select value={jobDetails.paymentTerms || ''} onValueChange={value => handleSelectChange(value, 'paymentTerms')}>
-                <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
-                  <SelectValue placeholder="Select..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="On LOE Signature">On LOE Signature</SelectItem>
-                  <SelectItem value="NET 30 Days">NET 30 Days</SelectItem>
-                  <SelectItem value="On Completion">On Completion</SelectItem>
-                  <SelectItem value="50% Upfront">50% Upfront</SelectItem>
-                </SelectContent>
-              </Select>
-            </CompactField>
+            {/* Payment Terms field REMOVED 2026-06-19 (Ben) — LOE clause is fixed contract boilerplate,
+                not a per-job choice. No dashboard input; the contract template's fixed clause stays. */}
           </TwoColumnFields>
         </SectionGroup>
 

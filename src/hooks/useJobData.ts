@@ -147,7 +147,7 @@ export function useJobData(jobId: string) {
               scopeOfWork: loeData.scope_of_work,
               specialInstructions: loeData.special_instructions,
               reportType: loeData.report_type,
-              paymentTerms: loeData.payment_terms,
+              // paymentTerms read-back REMOVED 2026-06-19 — field retired from the dashboard LOE Quote.
               appraisalFee: loeData.appraisal_fee,
               retainerAmount: loeData.retainer_amount,
               disbursementPercentage: loeData.disbursement_percentage,

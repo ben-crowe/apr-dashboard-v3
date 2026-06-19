@@ -18,8 +18,9 @@ export function useSaveJobDetails(jobId: string) {
         const loeFields = [
           'jobNumber', 'valcreJobId',  // Add these critical fields!
           'propertyRightsAppraised', 'valuationPremises', 'deliveryDate', 
-          'scopeOfWork', 'specialInstructions', 'reportType', 
-          'paymentTerms', 'appraisalFee', 'retainerAmount',
+          'scopeOfWork', 'specialInstructions', 'reportType',
+          // paymentTerms REMOVED 2026-06-19 — field retired; column left in DB but no longer written.
+          'appraisalFee', 'retainerAmount',
           'disbursementPercentage', 'internalComments', 'appraiserComments',
           'deliveryComments', 'paymentComments',
           'paymentAmount', 'paymentPaidDate', 'retainerPaidDate',

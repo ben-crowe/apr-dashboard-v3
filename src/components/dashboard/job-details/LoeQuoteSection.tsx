@@ -2108,7 +2108,16 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[160px]"
               />
             </CompactField>
-            <CompactField label="Retainer Amount">
+            <CompactField
+              label={
+                <span className="inline-flex items-center justify-end gap-1 w-full">
+                  Retainer Amount:
+                  <FieldInfo>
+                    Is a retainer required, or is it 100% on signing? This field may be removable.
+                  </FieldInfo>
+                </span>
+              }
+            >
               <Input
                 type="text"
                 name="retainerAmount"
@@ -2120,7 +2129,17 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 className="h-7 text-sm max-w-[160px]"
               />
             </CompactField>
-            <CompactField label="Payment Terms">
+            <CompactField
+              label={
+                <span className="inline-flex items-center justify-end gap-1 w-full">
+                  Payment Terms:
+                  <FieldInfo>
+                    May not be needed — payment terms are fixed in the contract (due on
+                    signing/receipt). Keep or remove?
+                  </FieldInfo>
+                </span>
+              }
+            >
               <Select value={jobDetails.paymentTerms || ''} onValueChange={value => handleSelectChange(value, 'paymentTerms')}>
                 <SelectTrigger className="h-7 text-sm max-w-[160px] !bg-transparent border-0 border-b border-b-gray-400 dark:border-b-white/20 !rounded-none px-0">
                   <SelectValue placeholder="Select..." />
@@ -2139,7 +2158,16 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         {/* 8. Payment */}
         <SectionGroup title="Payment">
           <TwoColumnFields>
-            <CompactField label="Retainer Paid">
+            <CompactField
+              label={
+                <span className="inline-flex items-center justify-end gap-1 w-full">
+                  Retainer Paid:
+                  <FieldInfo>
+                    Currently feeds nothing downstream — keep for internal tracking, or remove?
+                  </FieldInfo>
+                </span>
+              }
+            >
               <Input
                 type="date"
                 name="retainerPaidDate"

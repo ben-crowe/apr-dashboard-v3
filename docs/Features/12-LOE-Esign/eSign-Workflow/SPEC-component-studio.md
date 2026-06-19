@@ -64,9 +64,11 @@ tags: [apr, loe-esign, component-studio, sequence-builder, previewer, document, 
   - FAIL-WHEN: clicking a **library** item changes the rail into the sequence spine; OR clicking a **sequence block** does NOT bring up the spine.
   - PROVED-BY: click a library document → the full library rail stays, component opens on the right, no spine. Click the Document block in the map → rail collapses to icons, the spine shows, component opens on the right.
 
-**INV-4 — The split is render-LEFT / editor-RIGHT, render-dominant by default, with expand + drag + zoom.**
+**INV-4 — The split is render-LEFT / editor-RIGHT, render-dominant by default, with expand + drag + zoom; the editor is INLINE WYSIWYG (Ben chose option b, 2026-06-18).**
   - FAIL-WHEN: the editor is on the left or the render on the right; OR it opens 50/50 by default instead of render-dominant; OR there is no expand control beside "Editor"; OR the grabber can't resize; OR the render has no zoom; OR the editor is a raw-HTML textarea.
-  - PROVED-BY: open any component → render is left, editor right at ~¾:¼; the "Expand" control beside Editor toggles to ~50/50; dragging the grabber resizes; the render zoom in/out/reset works; the editor shows the rendered content with tokens as chips (no raw HTML).
+  - PROVED-BY: open any component → render is left, editor right at ~¾:¼; the "Expand" control beside Editor toggles to ~50/50; dragging the grabber resizes; the render zoom in/out/reset works.
+  - **Inline-editor scope (Ben-approved split):** **Email + Popup edit INLINE in the right pane** — the SAME `designMode` editable surface the modal editors use, reused inline (merge-field chips, Save writes the selected template in place via `saveEmailTemplate` / `savePopupTemplate`), never a raw-HTML box. **Document is the documented EXCEPTION:** the 79-page template is too large for a side pane, so the Document keeps the full existing editor (`TemplateEditorModal`) — this preserves INV-0 (no document-editor rebuild) and is the sensible split, NOT a gate failure.
+  - PROVED-BY (inline): open Email or Popup → the right pane is the editable rendered surface with token chips; edit + Save updates that template in place. Open Document → the full existing editor (unchanged) handles deep edit.
 
 **INV-5 — Browsing/editing a component never silently mutates a sequence.**
   - FAIL-WHEN: opening or editing a non-slotted component (e.g. "Commercial LOE") changes which component the active sequence uses, with no explicit swap action.

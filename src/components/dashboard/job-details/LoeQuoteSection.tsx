@@ -20,7 +20,7 @@ import JobNumberField from "./loe-quote/JobNumberField";
 import { sendToValcre } from "@/utils/webhooks";
 import { supabase } from "@/integrations/supabase/client";
 import { generateAppraisalTestData } from "@/utils/testDataGenerator";
-import { FileSignature, AlertCircle, ExternalLink, Trash2, FolderOpen, CheckCircle, Mail, LayoutGrid } from "lucide-react";
+import { FileSignature, AlertCircle, ExternalLink, Trash2, FolderOpen, CheckCircle, Mail, Settings } from "lucide-react";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -1347,8 +1347,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent className={sectionContentStyle}>
-        {/* Action Buttons Row — Part F: View in Valcre · View in ClickUp · Create Document/Email */}
-        <div className="mb-6 flex justify-between">
+        {/* Action Buttons Row — Part F: View in Valcre · View in ClickUp · Create Document/Email.
+            Production actions live in the LEFT cluster (they PRODUCE assets for the job). The
+            Asset Studio sits alone on the RIGHT as a quiet configure-affordance (it CONFIGURES
+            templates, not a peer production action) — see the borderless cog after this group. */}
+        <div className="mb-6 flex justify-between items-center">
           <div className="flex gap-2">
             {/* Create/View Valcre Job Button - Transforms after creation */}
             {isValcreJobNumber(jobDetails?.jobNumber) ? (
@@ -1579,18 +1582,21 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 Create Document/Email
               </Button>
             )}
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => setStudioOpen(true)}
-              className="border border-border bg-background text-foreground hover:bg-muted transition-colors text-sm font-medium"
-              title="Open the Component Studio — Document, Email & Popup library + sequence map"
-            >
-              <LayoutGrid className="h-4 w-4 mr-1" />
-              Component Studio
-            </Button>
           </div>
+
+          {/* Asset Studio — quiet configure-affordance, deliberately NOT a peer of the production
+              buttons. Borderless cog + label under the ribbon; the gear nudges on hover so it reads
+              as "configure templates", not "produce a document". Forward-compat: this is the anchor
+              the later job-dashboard slide-out hangs off — keep it the single right-side trigger. */}
+          <button
+            type="button"
+            onClick={() => setStudioOpen(true)}
+            title="Asset Studio — Document, Email & Popup library + sequence map"
+            className="group inline-flex items-center gap-1.5 flex-none text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Settings className="h-4 w-4 transition-transform duration-150 group-hover:rotate-45" />
+            Asset Studio
+          </button>
         </div>
 
         {/* PRD-APR-LOE-03 D2 (INV-0 + INV-4): D1's loose dashboard Send-by-Email widget is REMOVED —

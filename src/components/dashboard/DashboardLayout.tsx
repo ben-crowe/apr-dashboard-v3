@@ -3,10 +3,8 @@ import React from "react";
 import { useTheme } from "@/hooks/use-theme";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Sun, Moon, Menu, User, Search, Bell, Plus, Calendar, Settings, LogOut, RefreshCw, FileText } from "lucide-react";
+import { Sun, Moon, Menu, User, Search, Bell, Plus, Calendar, Settings, LogOut, RefreshCw } from "lucide-react";
 import { TestModeProvider, useTestMode } from "@/contexts/TestModeContext";
-import { useNavigate } from "react-router-dom";
-import { isV4Enabled } from "@/lib/featureFlags";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -43,7 +41,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 }) => {
   const { theme, setTheme } = useTheme();
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
 
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
@@ -95,20 +92,6 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
             <Button variant="ghost" size="icon" aria-label="Toggle theme" onClick={toggleTheme} className="h-9 w-9">
               {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
-            {/* DISCREET top-ribbon door into the V4 report builder ("go to my V4").
-                Gated to our V4-lit build (never Chris's client build); faint until hover so clients don't notice. */}
-            {isV4Enabled() && (
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label="Open V4 Report Builder"
-                title="Report Builder (V4)"
-                onClick={() => navigate('/mock-builder')}
-                className="h-9 w-9 text-muted-foreground/30 hover:text-muted-foreground"
-              >
-                <FileText className="h-5 w-5" />
-              </Button>
-            )}
             <Button variant="ghost" size="icon" aria-label="Settings" className="h-9 w-9">
               <Settings className="h-5 w-5" />
             </Button>

@@ -100,7 +100,12 @@ The Studio shell itself is the net-new code: the library rail, the sequence map,
 
 The Studio shell is **net-new visual**, so the build MUST **load AND apply** ui-designer's design cascade: `/impeccable` (entry — shape → ia-wireframe → wireframe-layout → craft → human-centered-product-sense, Rejection Filter, no stage-skips) + `/ui-ux-pro-max` + `/interface-design` + `/visual-alignment` + `/human-centered-product-sense`, built against the signed-off mockup as the visual source of truth.
 
-**Verification model:** agents verify **CODE / DB only** — the reuse imports (INV-0/1/2), entry-path routing, split ratios/grabber/zoom wiring, no-mutation logic, `tsc` clean, drift green. ⛔ **NO `/agent-screenshot`, NO app-walk, NO visual self-verify** (Ben's hard rule). **Ben click-tests the live Studio** for everything visual.
+**Verification model (CORRECTED 2026-06-21 — the original "CODE/DB only · NO agent screenshots · Ben click-tests everything visual" rule was the ROOT CAUSE of repeated placement misses: it made Ben the *first and only* set of eyes on every visual, so basic errors — e.g. the Asset Studio cog landing in the wrong row twice — shipped uncaught. Killed.):** agents verify **code/DB AND the visual outcome.**
+- **Code/DB:** the reuse imports (INV-0/1/2), entry-path routing, split wiring, no-mutation logic, `tsc` clean, drift green.
+- **VISUAL — mandatory before "done":** the builder takes a **full-page (`--full`, top-to-bottom — NOT just the viewport) screenshot** of the real route, **saves it, Reads it against the spec/mockup, and hands back the file path.** Verify **placement AND function** — for any trigger/modal, also screenshot the *working* state (e.g. clicked-open). QA independently re-verifies the same way at the gate.
+- **Ben is the FINAL aesthetic sign-off only** — never the catcher of misplacements.
+- **Gotcha:** `agent-browser` needs a **unique `--session`** (not default) or it hijacks the live KM-Exp window. Recipe: start dev server → `agent-browser --session <uniq> open <route>` → `screenshot --full` → Read → `close`.
+- **Placement specs must name an exact anchor + side** (e.g. "page top, JobDetailView title row, far right") — never vague prose like "under the ribbon." The QA gate throws back any vague *where/what*.
 
 ## Dispatch Plan (visible for the gate)
 

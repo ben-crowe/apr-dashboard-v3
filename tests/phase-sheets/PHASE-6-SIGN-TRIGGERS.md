@@ -1,7 +1,7 @@
 ---
 content_type: stage-anatomy
 title: Phase 6 — Sign → Triggers → Signed-Date
-status: WIRED, UNPROVEN END-TO-END — webhook deployed, no full automated round-trip run yet
+status: VERIFIED LIVE 2026-06-18 — signed-trigger fires; job→loe_signed + signed_at land, confirmed in DB (ckpt #148). Closing auto-trigger (Phase 8) + loe_submissions update still open.
 created: 2026-06-11
 owner: co-architect (doc) · react-spec (code) · qa-agent (verify)
 home: ~/Development/APR-Dashboard-v3/docs/00-APR-MASTER-DASHBOARD.md
@@ -380,13 +380,13 @@ agent without a human in the loop, using the DocuSeal `PUT /submitters/{id}` API
 - All six evidence gates in Section 8 pass.
 - The automated closing trigger (Phase 8) is NOT yet part of Today-PASS — it is not built.
 
-**Current state (verified against code 2026-06-11):**
+**Current state (updated 2026-06-18 — signing round-trip now PROVEN live):**
 - Webhook deployed to Supabase: ✅
 - `submission.completed` DB writes implemented: ✅ (all three tables, per Section 3)
 - ClickUp update implemented: ✅ (with error-swallow)
-- Closing sequence auto-trigger: ❌ (TODO comment in code, not built)
+- **Signed-trigger fires end-to-end: ✅ VERIFIED LIVE 2026-06-18 (ckpt #148).** Root cause of the earlier ❌ was the DocuSeal webhook URL set to a placeholder `example.com/hook`; repointed to the real `docuseal-webhook` function. A sign now flips `job_submissions.status → loe_signed` and stamps `job_loe_details.signed_at` — confirmed by DB readback. A backup status-advance on `SigningPage` was added as a webhook backstop.
+- Closing sequence auto-trigger: ❌ (TODO comment in code, not built — separate from the signed-trigger above)
 - `loe_submissions` status update: ❌ (documented in architecture, missing from live code)
-- End-to-end round-trip run in test: ❌ (no full cycle proven yet)
 - HTTP 200 on error consistency: ❌ (inconsistent — see Section 10)
 
 ---

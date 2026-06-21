@@ -4,7 +4,7 @@
     "contract": "This is V3-ACTUAL ONLY. The CI gate diffs THIS against GENERATED-v3-drift-check.json masterExpectations (registry-sourced). NEVER use this as the master — that is the circular trap.",
     "generated_by": "scripts/gen-v3-actual-manifest.mjs"
   },
-  "fieldCount": 40,
+  "fieldCount": 39,
   "fields": {
     "valueTimeframe": {
       "present": true,
@@ -78,19 +78,6 @@
       "optionCount": 11,
       "required": null,
       "readable": "analysisLevel",
-      "sourceFile": "LoeQuoteSection.tsx"
-    },
-    "paymentTerms": {
-      "present": true,
-      "options": [
-        "On LOE Signature",
-        "NET 30 Days",
-        "On Completion",
-        "50% Upfront"
-      ],
-      "optionCount": 4,
-      "required": null,
-      "readable": "paymentTerms",
       "sourceFile": "LoeQuoteSection.tsx"
     },
     "currentUse": {

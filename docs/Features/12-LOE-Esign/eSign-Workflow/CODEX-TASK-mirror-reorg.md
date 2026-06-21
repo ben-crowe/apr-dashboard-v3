@@ -1,33 +1,48 @@
-# Codex Task — rename the Valta Mirror fields to single-digit groups (LOCKED)
+# Codex brief — order the custom fields on ONE task (LOCKED, manual-sort approach)
 
-**Target:** the **"APR Test - Valta Mirror"** list in Ben's BC ClickUp workspace (the imported VALTA JOBS - Temp V2 template). NOT the client's account. NOT the live-wired dashboard list. Only this mirror. Work in the ClickUp UI (computer-use) — no API (ClickUp can't rename field definitions via API).
+**Target task:** `86e1yb8nz` — task name **"VALTA JOBS - Temp V2"** — https://app.clickup.com/t/8555561/86e1yb8nz (BC workspace). This ONE task only; confirm the task title reads "VALTA JOBS - Temp V2" before touching anything.
 
-**Exact names are LOCKED in:** [TARGET-task-field-layout.md](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/eSign-Workflow/TARGET-task-field-layout.md) — copy each Name verbatim.
+**What changed (why no more numbers):** our roadmap research found that ClickUp does NOT reliably order a task's fields by name — it always groups filled/pinned/required fields first, so a number-prefix hack scrambles on a real task. The proper lever is the **Custom Fields ClickApp → Manual sort → drag in the Custom Field Manager**. So: clean field names, set order by dragging. Full how-to in [ROADMAP-clickup-custom-fields-ui.md](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/eSign-Workflow/ROADMAP-clickup-custom-fields-ui.md) — Codex reads it instead of searching.
 
-**Scheme:** every field's Name = one group digit + a space + its own name (e.g. `1 Received Date`, `3 Client Email`, `6 Interest Appraised`). Same digit = same group; ClickUp sorts fields by name so they cluster. No title/header fields, no decimals. Within-group order doesn't matter.
-
----
-
-## The prompt (paste to Codex when it's back online)
-
-```
-You are configuring a ClickUp list via the browser UI (computer-use). Target = BEN'S OWN account, the "APR Test - Valta Mirror" list. Work only in the ClickUp UI. NEVER delete a field or a drop-down option. If a control is missing or an action looks destructive, describe what you see and STOP.
-
-THE JOB: rename every custom field so its name = its group digit + a space + its own name, per the locked target. Open this file and copy each Name verbatim:
-  ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/eSign-Workflow/TARGET-task-field-layout.md
-
-KEY MECHANIC (why your earlier attempt looked like it failed): ClickUp orders a task's custom fields ALPHANUMERICALLY BY NAME. There is NO drag. Renaming is the only lever, and you must rename ALL fields in one pass — renaming only a few barely moves the order so it looks like nothing happened. Leave NONE on the old import names (1.0/2.1 style).
-
-STEPS:
-1. Rename each existing field to "<digit> <name>" from the file (e.g. "1 Received Date"). Keep each field's type and its drop-down options exactly — only the NAME changes.
-2. CREATE any of our fields that don't exist yet (the group 1-5 "we feed" ones: the dates, APR Dashboard Link, Valcre Job, Job Number, the Client fields, the Contact fields) with the right digit prefix and type.
-3. There are NO header/divider fields in this scheme — do not create any.
-4. Create the status TAGS: new arrival → loe sent → loe signed → awaiting payment → paid, plus an "apr hub" tag. Cool (blue) earliest → green (paid).
-5. Reload a job task's detail view and CONFIRM the fields now cluster by their digit (all 1s together, then 2s, etc.).
-
-VERIFY (report back with a task-detail screenshot): fields cluster by digit per the target file; all drop-down options intact; list anything you could not do. Do NOT touch billing, sharing, workspace settings, or integrations.
-```
+**The order we want (clean names, no numbers — just dragged into these groups, top to bottom):**
+Dates (Received, LOE Sent, LOE Signed, Delivery) → Job (APR Dashboard Link, Valcre Job, Job Number) → Client (Full Name, Email, Phone, Organization) → Property (Name, Address, Type) → Property Contact (Name, Email, Phone) → Appraisal Scope (Subtype, Interest Appraised, Authorized Use, State/Status of Improvements, Approaches to Value, Value Scenario(s), Report Type, Inspection Date) → Site/Transaction (Transaction Status, Zoning Status, Land $/Metric) → Team & Workflow (Phase Owner, Work Phase, the report checkboxes) → Notes (Notes, Task Type). Full list: [TARGET-task-field-layout.md](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/eSign-Workflow/TARGET-task-field-layout.md) (ignore the numbers there — names only now).
 
 ---
 
-*Locked 2026-06-18 by qa-agent + Ben (single-digit group scheme). Names live in [TARGET-task-field-layout.md](~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/eSign-Workflow/TARGET-task-field-layout.md).*
+## How to run Codex — STAGED, confirm-first (do NOT dump-and-go)
+
+Run these in order. **Do not let Codex click anything until its Stage-2 repeat-back is clean.**
+
+### Stage 0 — read the pre-research (no clicking)
+```
+Read this file fully — it's the ClickUp how-to roadmap we already researched for you, so you do NOT need to search or discover the UI:
+  ~/Development/APR-Dashboard-v3/docs/Features/12-LOE-Esign/eSign-Workflow/ROADMAP-clickup-custom-fields-ui.md
+Summarize back in 3-4 lines how field ordering actually works in ClickUp.
+```
+
+### Stage 1 — the job + the NOT-list (still no clicking)
+```
+The job, plain: ONE task (86e1yb8nz) already holds a set of CUSTOM FIELDS. We want those fields ORDERED into clean logical groups (Dates, Job, Client, Property, Property Contact, Appraisal Scope, Site/Transaction, Team & Workflow, Notes), with clean field NAMES (no number prefixes). You set the order via the Custom Fields ClickApp → Manual sort → drag in the Custom Field Manager — NOT by renaming.
+
+You are NOT: making a task board, turning fields into columns or tasks, reordering List/Table view columns, deleting any field or dropdown option, or touching billing/sharing/settings/integrations/other tasks.
+```
+
+### Stage 2 — repeat back + WAIT for go
+```
+Before clicking anything, tell me in your own words: (1) what you're going to do, (2) the NOT-list, (3) the single mechanic that sets field order (answer: flip Custom Fields ClickApp to Manual, then drag in the Custom Field Manager — NOT renaming). Ask me anything unclear. Then STOP and wait for my "go".
+```
+
+### Stage 3 — execute (only after a clean Stage-2 confirm)
+```
+Go. (a) If any field still carries an old number prefix (e.g. "1.1"), rename it to its clean name. (b) Flip the Custom Fields ClickApp to Manual sort. (c) In the Custom Field Manager, drag the fields into the group order above. (d) Optionally PIN the fields so the order holds on real tasks (ClickUp floats filled/pinned fields first). (e) Create the status TAGS at the Space level: new arrival → loe sent → loe signed → awaiting payment → paid, plus an "apr hub" tag (cool/blue earliest → green paid).
+Never delete a field or a dropdown option. When done, open task 86e1yb8nz and screenshot the field list in its new order; report anything you couldn't do.
+```
+
+### Bonus recon (optional, while you're in there)
+```
+If easy: with Chrome DevTools → Network open, capture the HTTP call ClickUp fires when you drag-reorder a field (URL + method + payload + auth). Save as ~/Development/APR-Dashboard-v3/tests/clickup-reorder-call.har (or copy-as-cURL) and hand it to qa-agent to try as a CLI. Caveat: it rides session auth, may be fragile — that's expected.
+```
+
+---
+
+*Locked 2026-06-19 by qa-agent + Ben. Manual-sort approach (supersedes the number-prefix scheme after the roadmap research showed name-order is unreliable). Stays with qa-agent for the Codex handoff (not routed to co-arch). Follows the `/computer-use-prep` doctrine.*

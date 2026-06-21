@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { FileText } from "lucide-react";
+import { FileText, Settings } from "lucide-react";
 import JobDetailAccordion from "./JobDetailAccordion"; // Use the correct clean version
 import JobDetailHeader from "./job-details/JobDetailHeader";
 import JobDetailSkeleton from "./job-details/JobDetailSkeleton";
@@ -44,19 +44,33 @@ const JobDetailView: React.FC<JobDetailViewProps> = ({ jobId, onBack }) => {
           <h1 className="text-2xl font-semibold tracking-tight">
             {formatJobNumber(job.jobNumber, job)}
           </h1>
-          {/* Report Builder entry — opens the SEPARATE report builder app with this job's data
-              mapped in. Gated: only shows in our V4-lit build, never on Chris's client build.
-              Any future section-3 entry point must likewise read isV4Enabled(). */}
-          {isV4Enabled() && (
-            <Button
-              variant="default"
-              onClick={() => navigate(`/dashboard/job/${jobId}/report`)}
-              className="shrink-0"
+          <div className="flex items-center gap-3 flex-none">
+            {/* Report Builder entry — opens the SEPARATE report builder app with this job's data
+                mapped in. Gated: only shows in our V4-lit build, never on Chris's client build.
+                Any future section-3 entry point must likewise read isV4Enabled(). */}
+            {isV4Enabled() && (
+              <Button
+                variant="default"
+                onClick={() => navigate(`/dashboard/job/${jobId}/report`)}
+                className="shrink-0"
+              >
+                <FileText className="mr-2 h-4 w-4" />
+                Report Builder
+              </Button>
+            )}
+            {/* Asset Studio — quiet configure-affordance at the PAGE TOP (under the ribbon, far right),
+                deliberately OFF the LOE action row so it never reads as a peer of the produce buttons.
+                Opens the Studio (mounted in LoeQuoteSection) via a decoupled window event. */}
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('apr:open-asset-studio'))}
+              title="Asset Studio — Document, Email & Popup library + sequence map"
+              className="group inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              <FileText className="mr-2 h-4 w-4" />
-              Report Builder
-            </Button>
-          )}
+              <Settings className="h-4 w-4 transition-transform duration-150 group-hover:rotate-45" />
+              Asset Studio
+            </button>
+          </div>
         </div>
       </div>
 

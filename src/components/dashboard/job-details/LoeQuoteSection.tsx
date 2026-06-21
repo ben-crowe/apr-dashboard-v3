@@ -20,7 +20,7 @@ import JobNumberField from "./loe-quote/JobNumberField";
 import { sendToValcre } from "@/utils/webhooks";
 import { supabase } from "@/integrations/supabase/client";
 import { generateAppraisalTestData } from "@/utils/testDataGenerator";
-import { FileSignature, AlertCircle, ExternalLink, Trash2, FolderOpen, CheckCircle, Mail, Settings } from "lucide-react";
+import { FileSignature, AlertCircle, ExternalLink, Trash2, FolderOpen, CheckCircle, Mail } from "lucide-react";
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
@@ -304,6 +304,14 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // Component Studio (library + sequence map + split previewer/editor) — additive entry; the
   // proven document previewer/email/popup editors are reused via the onEdit* callbacks.
   const [studioOpen, setStudioOpen] = useState(false);
+  // Asset Studio trigger now lives at the PAGE TOP (JobDetailView, under the ribbon, far right) —
+  // off the action row, NOT a peer of the produce buttons. The Studio modal + its edit-delegate
+  // handlers stay here, so the page-top cog opens it via a decoupled window event.
+  useEffect(() => {
+    const open = () => setStudioOpen(true);
+    window.addEventListener('apr:open-asset-studio', open);
+    return () => window.removeEventListener('apr:open-asset-studio', open);
+  }, []);
   // Doc-less send: empty signing link (G5 — no DocuSeal link on a document-less email);
   // persist the instance as 'sent' ONLY on Resend success (G4); contract_id=null (KR2).
   const handleSendDocLess = async (payload: { subject: string; bodyHtml: string }) => {
@@ -1348,9 +1356,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       </CollapsibleTrigger>
       <CollapsibleContent className={sectionContentStyle}>
         {/* Action Buttons Row — Part F: View in Valcre · View in ClickUp · Create Document/Email.
-            Production actions live in the LEFT cluster (they PRODUCE assets for the job). The
-            Asset Studio sits alone on the RIGHT as a quiet configure-affordance (it CONFIGURES
-            templates, not a peer production action) — see the borderless cog after this group. */}
+            These PRODUCE assets for the job. The Asset Studio (CONFIGURE templates) deliberately does
+            NOT live here — it's a quiet cog at the PAGE TOP (JobDetailView, under the ribbon, far
+            right), opened via the 'apr:open-asset-studio' window event so it's never a peer of these. */}
         <div className="mb-6 flex justify-between items-center">
           <div className="flex gap-2">
             {/* Create/View Valcre Job Button - Transforms after creation */}
@@ -1584,19 +1592,6 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             )}
           </div>
 
-          {/* Asset Studio — quiet configure-affordance, deliberately NOT a peer of the production
-              buttons. Borderless cog + label under the ribbon; the gear nudges on hover so it reads
-              as "configure templates", not "produce a document". Forward-compat: this is the anchor
-              the later job-dashboard slide-out hangs off — keep it the single right-side trigger. */}
-          <button
-            type="button"
-            onClick={() => setStudioOpen(true)}
-            title="Asset Studio — Document, Email & Popup library + sequence map"
-            className="group inline-flex items-center gap-1.5 flex-none text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <Settings className="h-4 w-4 transition-transform duration-150 group-hover:rotate-45" />
-            Asset Studio
-          </button>
         </div>
 
         {/* PRD-APR-LOE-03 D2 (INV-0 + INV-4): D1's loose dashboard Send-by-Email widget is REMOVED —

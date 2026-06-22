@@ -77,3 +77,4 @@ Password Manager/
 
 # Gate contract artifact — the drift-check master config MUST ship (Vercel prod build reads it); committed like a lockfile
 !docs/Features/08-Master-Field-Registry/GENERATED-v3-drift-check.json
+.env.v4shoot

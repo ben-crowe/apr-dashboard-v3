@@ -10,9 +10,9 @@ This folder is the deep reference layer for all 2,082 fields in the APR appraisa
 
 ## Production Source
 
-**File:** `src/features/image-configurator/report-builder/schema/fieldRegistry.ts`
-**Size:** 22,032 lines, 2,082 field definitions (verify: `grep -cE "^\s+id: ['\"]" <path>` → 2082)
-**Mirror path:** `src/features/report-builder/schema/fieldRegistry.ts` also exists at identical size/mtime — canonical location unresolved, treat the image-configurator path as authoritative until reconciled.
+**File (CANONICAL):** `src/features/report-builder/schema/fieldRegistry.ts`
+**Size:** ~22,032 lines, ~2,082+ field definitions (verify: `grep -cE "^\s+id: ['\"]" <path>`).
+**Reconciled 2026-06-22:** the old `src/features/image-configurator/report-builder/schema/fieldRegistry.ts` dual-registry landmine is GONE — `report-builder` is a real dir and the sole canonical path; all imports point here (qa-confirmed this session). Do NOT cite the image-configurator path — it no longer exists.
 
 The registry is the single source of truth. Docs in this folder describe it; they do not replace it.
 

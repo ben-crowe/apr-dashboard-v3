@@ -39,25 +39,31 @@ the history of deleted/compacted tabs showing through.
 | **S2** | LOE Prep (V3) | the V3 LOE fields — mapped in |
 | **S3** | **Client Documents** | the files the client is REQUIRED to submit (list below) — NOT images |
 
-### REPORT layer (contiguous 01–16, report-flow order preserved)
-| New # | Section | (was) |
-|---|---|---|
-| 01 | Cover Page | 01 |
-| 02 | Report Information | 05 |
-| 03 | Executive Summary | 06 |
-| 04 | Site Details | 08 |
-| 05 | Location Analysis | 09 |
-| 06 | Property Taxes | 10 |
-| 07 | Market Analysis | 11 |
-| 08 | Improvements | 12 |
-| 09 | Zoning | 13 |
-| 10 | Highest & Best Use | 14 |
-| 11 | Valuations (All 3 Approaches) | 15 (+ COST — see note) |
-| 12 | Sales Comps | 18 |
-| 13 | Rent Comps | 19 |
-| 14 | Rent Roll | 20 |
-| 15 | Certification | 22 |
-| 16 | **Images & Exhibits** | (was S3) — appraiser-generated photos/maps/comps |
+### REPORT layer — ⚑ CORRECTED RULING (Ben, 2026-06-22): KEEP ALL TABS, sequential, NO merges
+
+> **Supersedes the original "contiguous 01–16" table below.** dev-3 verified against the LIVE
+> builder: there are **22 real report tabs**, none empty — the missing numbers (02/03/04/07/16/17/21)
+> are NOT gaps, they're tabs that were grouped/renamed, every slot is a real tab. The original table
+> assumed 6 merges that are NOT happening. **Ben's ruling: keep every tab, one continuous sequential
+> run, no deletions.**
+>
+> **The scheme:** one continuous numbering — `S1, S2, S3` on the three collection tabs (the only
+> special-cased prefix, marking them as the client-submission layer), then the report tabs keep their
+> current order and continue the numbers straight through (do NOT restart at 01). Result = a clean
+> sequential run with zero gaps, every tab preserved.
+>
+> **COST → Valuations merge is DEFERRED** — it's the ONLY thing that changes the tab count, and it's a
+> content decision, not a numbering one. This pass is PURELY renumbering; the COST merge is a separate
+> later call (still co-arch's lean = group under Valuations, but parked).
+>
+> **Where the numbering lives:** the builder's tab config (+ the testing-workbench
+> `TestInputDashboard.tsx sectionNameMapping`) — NOT the locked `fieldRegistry.ts`, so this renumber
+> does not collide with the registry dup/bridge work. dev-3 owns the exact live tab list as ground truth.
+>
+> **Downstream:** the final section list this produces feeds the asset-routing canonical category set
+> (ASSET-ROUTING-ARCHITECTURE.md) + qa's sample-doc mapping — so the Images/Exhibits landing matters.
+
+**Original table (HISTORICAL — assumed merges, do NOT execute literally):** contiguous 01–16 with Cover→01, Report Info→02, Exec Summary→03, Site→04, Location→05, Taxes→06, Market→07, Improvements→08, Zoning→09, HBU→10, Valuations(+COST)→11, Sales Comps→12, Rent Comps→13, Rent Roll→14, Cert→15, Images & Exhibits→16. *(This is what mis-stated 22 tabs as 16 — kept only to show what was superseded.)*
 
 ## The key reframe — images are REPORT content, not client-collection
 

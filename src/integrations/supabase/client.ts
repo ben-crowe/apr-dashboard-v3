@@ -2,8 +2,11 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+// .trim() guards against trailing newline/whitespace baked into an env value at build
+// (e.g. a Vercel dashboard var pasted with a trailing \n) — that corrupted the URL and
+// produced 'Invalid API key' / 'Error fetching jobs' on the apr-v4 deploy. Kills the class.
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL?.trim();
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY?.trim();
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";

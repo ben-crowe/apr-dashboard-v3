@@ -147,6 +147,17 @@ const resolveDeliveryDate = (weeksRaw: string | undefined): string => {
   return addWeeks(new Date(), weeks);
 };
 
+// Postgres DATE columns reject empty strings with `22007 invalid input syntax for type date: ""`.
+// Blank date inputs (Retainer Paid / Signed / Effective / Request / Payment Paid) emit `""`, which
+// would otherwise blow up the LOE-detail save and block the Create-Valcre button flipping to
+// "View in Valcre". Coerce any empty/whitespace string → null so the DATE column gets a real null.
+// Returns null for null/undefined/empty; otherwise the trimmed value untouched. (Bug A, 2026-06-22.)
+const nullIfEmptyDate = (v: unknown): string | null => {
+  if (v === null || v === undefined) return null;
+  const s = String(v).trim();
+  return s === '' ? null : s;
+};
+
 // Clickable info popover (? icon) for a field label. Click to open. Used on fields whose behavior
 // isn't obvious (Delivery Date auto-set on LOE-sent; Client Requested Date; questionable fields).
 //
@@ -515,9 +526,18 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     return missingFields;
   }, [job, jobDetails]);
 
+  // Bug C: `disabled={isCreatingJob}` (button @ JSX) is NOT enough — React batches setIsCreatingJob,
+  // so a rapid double-click can re-enter handleCreateValcreJob before the disabled prop re-renders,
+  // firing TWO Valcre creates. A synchronous useRef guard flips instantly (no render needed) and is
+  // the real lock. (2026-06-22.)
+  const isCreatingJobLock = useRef(false);
+
   // Handle creating Valcre job
   const handleCreateValcreJob = async () => {
     if (!job || !canCreateValcreJob) return;
+    // Synchronous re-entry guard — the FIRST line that runs, before any await.
+    if (isCreatingJobLock.current) return;
+    isCreatingJobLock.current = true;
 
     setIsCreatingJob(true);
 
@@ -679,8 +699,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
               delivery_comments: jobDetails?.deliveryComments || '',
               payment_comments: jobDetails?.paymentComments || '',
               payment_amount: jobDetails?.paymentAmount || null,
-              payment_paid_date: jobDetails?.paymentPaidDate || '',
-              retainer_paid_date: jobDetails?.retainerPaidDate || '',
+              // Bug A: payment_paid_date / retainer_paid_date are Postgres DATE columns — an empty
+              // string ("") throws 22007 and aborts this save, blocking the "View in Valcre" flip.
+              // Coerce blank → null.
+              payment_paid_date: nullIfEmptyDate(jobDetails?.paymentPaidDate),
+              retainer_paid_date: nullIfEmptyDate(jobDetails?.retainerPaidDate),
               updated_at: new Date().toISOString()
             })
             .eq('job_id', job.id);
@@ -745,6 +768,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       toast.error('Failed to create Valcre job. Check console for details.');
     } finally {
       setIsCreatingJob(false);
+      isCreatingJobLock.current = false; // release the Bug-C synchronous re-entry guard
     }
   };
 
@@ -815,12 +839,21 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         // Use mapped field name if exists, otherwise use original
         const dbFieldName = fieldMappings[fieldName] || fieldName;
 
+        // Bug A: these map to Postgres DATE columns — a cleared date input emits "" which throws
+        // 22007 on write. Coerce blank → null for any date-typed column. (delivery_date is text in
+        // the schema today but is included defensively in case the column type tightens.)
+        const DATE_DB_COLUMNS = new Set([
+          'retainer_paid_date', 'payment_paid_date', 'signed_date',
+          'effective_date', 'request_date', 'delivery_date',
+        ]);
+        const saveValue = DATE_DB_COLUMNS.has(dbFieldName) ? nullIfEmptyDate(value) : value;
+
         // Always save to Supabase first
         const { error: supabaseError } = await supabase
           .from('job_loe_details')
           .upsert({
             job_id: job.id,
-            [dbFieldName]: value,  // Use mapped field name
+            [dbFieldName]: saveValue,  // Use mapped field name (date blanks coerced to null)
             updated_at: new Date().toISOString()
           }, {
             onConflict: 'job_id'

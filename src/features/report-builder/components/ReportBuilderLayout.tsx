@@ -50,7 +50,7 @@ export default function ReportBuilderLayout() {
             Back to TDD
           </Button>
           <span style={{ color: '#9ca3af' }}>|</span>
-          <span className="font-semibold">Report Builder</span>
+          <span className="font-semibold">APR V4</span>
         </div>
         
         {/* Toggle Switch - OFF=Dev Mode, ON=User Ready */}

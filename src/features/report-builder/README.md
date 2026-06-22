@@ -6,7 +6,7 @@ A mock V4 report builder implementation demonstrating split-screen editing with 
 
 ```bash
 # Navigate to the mock builder
-http://localhost:3000/mock-builder
+http://localhost:3000/apr-v4
 ```
 
 ## Features
@@ -178,7 +178,7 @@ export default function YourFieldEditor({ field }: { field: ReportField }) {
 ## Testing
 
 ### Manual Testing
-- Navigate to `/mock-builder`
+- Navigate to `/apr-v4`
 - Edit fields and verify preview updates
 - Drag-drop images and verify order
 - Switch tabs and verify content

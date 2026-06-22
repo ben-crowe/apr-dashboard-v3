@@ -1017,8 +1017,8 @@ const TestInputDashboard: React.FC = () => {
       }
     }
     // Use React Router navigate (preserves Zustand store state)
-    // Route is /mock-builder not /report-builder
-    navigate("/mock-builder");
+    // Route is /apr-v4 not /report-builder
+    navigate("/apr-v4");
   };
 
   // Group fields by section
@@ -1233,7 +1233,7 @@ const TestInputDashboard: React.FC = () => {
                 )}
               </Button>
               <Button
-                onClick={() => navigate("/mock-builder")}
+                onClick={() => navigate("/apr-v4")}
                 variant="outline"
                 size="sm"
                 className="gap-2 text-white border transition-colors"
@@ -1254,8 +1254,8 @@ const TestInputDashboard: React.FC = () => {
               </Button>
               <Button
                 onClick={() => {
-                  console.log("View Report: Navigating to mock-builder...");
-                  navigate("/mock-builder");
+                  console.log("View Report: Navigating to apr-v4...");
+                  navigate("/apr-v4");
                 }}
                 variant="outline"
                 size="sm"
@@ -1280,7 +1280,7 @@ const TestInputDashboard: React.FC = () => {
                     e.currentTarget.style.backgroundColor = "#22c55e";
                   }
                 }}
-                title="Load user-inputs, run calc engine, then navigate to mock-builder"
+                title="Load user-inputs, run calc engine, then navigate to apr-v4"
               >
                 <ExternalLink className="w-3 h-3" />
                 View Report

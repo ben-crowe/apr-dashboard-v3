@@ -61,7 +61,7 @@ const App = () => (
                 route is gated separately inside Dashboard.tsx.) */}
             {isV4Enabled() && (
               <>
-                <Route path="/mock-builder" element={<MockReportBuilder />} />
+                <Route path="/apr-v4" element={<MockReportBuilder />} />
                 <Route path="/test-input" element={<TestInputDashboard />} />
                 <Route path="/calculator-demo" element={<CalculatorDemoPage />} />
                 <Route path="/calculator-preview" element={<CalculatorWithPreview />} />

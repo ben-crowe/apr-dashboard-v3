@@ -2570,7 +2570,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "client-organization-address",
     storeId: "client-organization-address",
-    label: "Client Address",
+    label: "Street Address",
     section: "cover",
     subsection: "client-info",
     type: "text",
@@ -18649,9 +18649,10 @@ export const fieldRegistry: FieldDefinition[] = [
     label: "Interest Appraised",
     section: "exec",
     subsection: "property-identification",
-    type: "text",
+    type: "dropdown",
     inputSource: "user-input",
     required: false,
+    options: ["Fee Simple Estate", "Leased Fee Estate", "Leasehold Interest"],
   },
   {
     id: "risk-premium-bp",
@@ -18712,7 +18713,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "appraiser1-allunits",
     storeId: "appraiser1-allunits",
-    label: "Appraiser 1 Inspected All Units",
+    label: "Appraiser 1 All Units Inspected",
     section: "cert",
     subsection: "inspection-details",
     type: "boolean",
@@ -18763,7 +18764,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "appraiser2-allunits",
     storeId: "appraiser2-allunits",
-    label: "Appraiser 2 Inspected All Units",
+    label: "Appraiser 2 All Units Inspected",
     section: "cert",
     subsection: "inspection-details",
     type: "boolean",

@@ -115,18 +115,16 @@ const TestInputDashboard: React.FC = () => {
 
   // Section names with numbered prefixes for easy cross-reference with Report Builder
   const sectionNameMapping: Record<string, string> = {
-    // V3 Operational Sections (mirrors deployed V3 Dashboard)
+    // COLLECTION layer (S-tabs — from the client). S3 = Client Documents (SharePoint
+    // reference, rendered as a UI-only placeholder card — no registry section/fields).
     "client-intake": "S1 - CLIENT INTAKE (V3)",
     "loe-prep": "S2 - LOE PREP (V3)",
-    "image-mgt": "S3 - IMAGE MANAGEMENT",
-    // Report Builder Sections
-    cover: "01 - COVER PAGE",
-    home: "02 - INTRODUCTION LETTER",
-    maps: "03 - LOCATION MAPS",
-    assignment: "04 - IDENTIFICATION OF ASSIGNMENT",
-    report: "05 - REPORT INFORMATION",
-    exec: "06 - EXECUTIVE SUMMARY",
-    photos: "07 - PROPERTY PHOTOGRAPHS",
+    "client-documents": "S3 - CLIENT DOCUMENTS",
+    // REPORT layer — continuous sequential numbering, no gaps. Images & Exhibits last.
+    cover: "04 - COVER PAGE",
+    home: "05 - INTRODUCTION LETTER",
+    report: "06 - REPORT INFORMATION",
+    exec: "07 - EXECUTIVE SUMMARY",
     site: "08 - SITE DETAILS",
     location: "09 - LOCATION ANALYSIS",
     tax: "10 - PROPERTY TAXES",
@@ -136,16 +134,21 @@ const TestInputDashboard: React.FC = () => {
     hbu: "14 - HIGHEST & BEST USE",
     calc: "15 - VALUATIONS (All 3 Approaches)",
     land1: "16 - LAND VALUE",
-    "cost-s": "17 - COST APPROACH",
-    sales: "18 - SALES COMPARISON",
-    income: "19 - INCOME APPROACH",
-    "rental-survey": "20 - RENTAL SURVEY",
-    recon: "21 - RECONCILIATION",
-    cert: "22 - CERTIFICATION",
-    // Renamed unnumbered sections
+    cost: "17 - COST APPROACH",
     "sales-comparison": "18 - SALES COMPS",
     "rent-analysis": "19 - RENT COMPS",
     rentroll: "20 - RENT ROLL",
+    recon: "21 - RECONCILIATION",
+    cert: "22 - CERTIFICATION",
+    "image-mgt": "23 - IMAGES & EXHIBITS",
+    // Consolidated/hidden sections (folded into accordions — no top-level number).
+    maps: "LOCATION MAPS",
+    assignment: "IDENTIFICATION OF ASSIGNMENT",
+    photos: "PROPERTY PHOTOGRAPHS",
+    "cost-s": "COST APPROACH (stub)",
+    sales: "SALES COMPARISON",
+    income: "INCOME APPROACH",
+    "rental-survey": "RENTAL SURVEY",
   };
 
   // Subsection name mapping for image-mgt
@@ -159,8 +162,8 @@ const TestInputDashboard: React.FC = () => {
     "systems-photos": "BUILDING SYSTEMS",
   };
 
-  // Sections hidden because they're consolidated into accordions
-  // Maintains number gaps (03, 07, 17-19) for alignment with Report Builder
+  // Sections hidden because they're consolidated into accordions under parent
+  // sections. The visible run is now continuous (no number gaps) — these stay folded.
   // calc-output: Output-only fields that shouldn't appear as input tabs
   const hiddenSections = [
     "maps",
@@ -175,11 +178,11 @@ const TestInputDashboard: React.FC = () => {
   const sectionDisplayOrder = [
     "client-intake", // S1 - CLIENT INTAKE (V3)
     "loe-prep", // S2 - LOE PREP (V3)
-    "image-mgt", // S3 - IMAGE MANAGEMENT
-    "cover", // 01 - COVER PAGE
-    "home", // 02 - INTRODUCTION LETTER
-    "report", // 05 - REPORT INFORMATION
-    "exec", // 06 - EXECUTIVE SUMMARY
+    "client-documents", // S3 - CLIENT DOCUMENTS (UI-only placeholder card)
+    "cover", // 04 - COVER PAGE
+    "home", // 05 - INTRODUCTION LETTER
+    "report", // 06 - REPORT INFORMATION
+    "exec", // 07 - EXECUTIVE SUMMARY
     "site", // 08 - SITE DETAILS
     "location", // 09 - LOCATION ANALYSIS
     "tax", // 10 - PROPERTY TAXES
@@ -189,11 +192,13 @@ const TestInputDashboard: React.FC = () => {
     "hbu", // 14 - HIGHEST & BEST USE
     "calc", // 15 - VALUATIONS (All 3 Approaches)
     "land1", // 16 - LAND VALUE
+    "cost", // 17 - COST APPROACH (own tab this pass; Valuations merge deferred)
     "sales-comparison", // 18 - SALES COMPS
     "rent-analysis", // 19 - RENT COMPS
     "rentroll", // 20 - RENT ROLL
     "recon", // 21 - RECONCILIATION
     "cert", // 22 - CERTIFICATION
+    "image-mgt", // 23 - IMAGES & EXHIBITS (relocated to report layer, last)
   ];
 
   // Legacy image fields that are now managed in Image Management
@@ -1294,7 +1299,7 @@ const TestInputDashboard: React.FC = () => {
 
         {/* Sections */}
         <div className="space-y-2">
-          {allSections
+          {[...allSections, "client-documents"]
             .filter((sectionId) => !hiddenSections.includes(sectionId))
             .sort((a, b) => {
               const indexA = sectionDisplayOrder.indexOf(a);
@@ -1308,6 +1313,42 @@ const TestInputDashboard: React.FC = () => {
               return 0;
             })
             .map((sectionId) => {
+              // S3 — Client Documents: UI-only placeholder card (SharePoint reference).
+              // No registry section, no fields — the client's required documents live in
+              // the SharePoint "2. CLIENT SUPPLIED" folder; permanent ingest is the
+              // separate asset-routing workstream, NOT built here.
+              if (sectionId === "client-documents") {
+                return (
+                  <div
+                    key="client-documents"
+                    id="section-client-documents"
+                    className="rounded-lg overflow-hidden mb-2 p-4"
+                    style={{
+                      backgroundColor: "#2a2a2a",
+                      border: "1px solid #4b5563",
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-lg font-semibold text-white">
+                        {sectionNameMapping["client-documents"]}
+                      </h2>
+                      <Badge
+                        variant="outline"
+                        className="text-xs text-gray-300 border-gray-500"
+                      >
+                        Reference
+                      </Badge>
+                    </div>
+                    <p className="mt-2 text-sm text-gray-400">
+                      Files the client is required to submit (Property Details /
+                      Prior Appraisal, Proforma, Unit Mix or Rent Roll, Operating
+                      Expenses, Drawings/Plans, tour contact). These are referenced
+                      from the client's SharePoint "2. CLIENT SUPPLIED" folder — not
+                      uploaded or stored here.
+                    </p>
+                  </div>
+                );
+              }
               const allFields = getFieldsBySection(sectionId)
                 .filter((f) => f.inputSource === "user-input")
                 .filter(

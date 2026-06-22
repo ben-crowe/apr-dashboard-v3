@@ -2277,7 +2277,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "comp1-photo",
     storeId: "comp1-photo",
-    label: "Comp 1 Photo",
+    label: "Comp1 Photo",
     section: "image-mgt",
     subsection: "comp-photos",
     type: "image",
@@ -2297,7 +2297,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "comp2-photo",
     storeId: "comp2-photo",
-    label: "Comp 2 Photo",
+    label: "Comp2 Photo",
     section: "image-mgt",
     subsection: "comp-photos",
     type: "image",
@@ -2317,7 +2317,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "comp3-photo",
     storeId: "comp3-photo",
-    label: "Comp 3 Photo",
+    label: "Comp3 Photo",
     section: "image-mgt",
     subsection: "comp-photos",
     type: "image",
@@ -2337,7 +2337,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "comp4-photo",
     storeId: "comp4-photo",
-    label: "Comp 4 Photo",
+    label: "Comp4 Photo",
     section: "image-mgt",
     subsection: "comp-photos",
     type: "image",
@@ -2357,7 +2357,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "comp5-photo",
     storeId: "comp5-photo",
-    label: "Comp 5 Photo",
+    label: "Comp5 Photo",
     section: "image-mgt",
     subsection: "comp-photos",
     type: "image",
@@ -2379,7 +2379,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "comp1-map",
     storeId: "comp1-map",
-    label: "Comp 1 Map",
+    label: "Comp1 Map",
     section: "image-mgt",
     subsection: "comp-maps",
     type: "image",
@@ -2389,7 +2389,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "comp2-map",
     storeId: "comp2-map",
-    label: "Comp 2 Map",
+    label: "Comp2 Map",
     section: "image-mgt",
     subsection: "comp-maps",
     type: "image",
@@ -2399,7 +2399,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "comp3-map",
     storeId: "comp3-map",
-    label: "Comp 3 Map",
+    label: "Comp3 Map",
     section: "image-mgt",
     subsection: "comp-maps",
     type: "image",
@@ -2409,7 +2409,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "comp4-map",
     storeId: "comp4-map",
-    label: "Comp 4 Map",
+    label: "Comp4 Map",
     section: "image-mgt",
     subsection: "comp-maps",
     type: "image",
@@ -2419,7 +2419,7 @@ export const fieldRegistry: FieldDefinition[] = [
   {
     id: "comp5-map",
     storeId: "comp5-map",
-    label: "Comp 5 Map",
+    label: "Comp5 Map",
     section: "image-mgt",
     subsection: "comp-maps",
     type: "image",

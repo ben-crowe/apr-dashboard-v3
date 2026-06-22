@@ -124,6 +124,18 @@ dev-3's V4-native dup review (per [REGISTRY-DUP-ID-RULE.md](~/Development/APR-Da
 
 So: **[dup cleanup → test-data fill] sequential on the registry/TestDataSet; [recon value-flow fix] parallel.** Note: qa's #2 DELTAS (coverage map + recon root-cause trace) are READ-ONLY analysis — zero edit, zero collision — so they can be produced anytime; the collision discipline only bites at the BUILD-edit phase.
 
+### UPDATED full registry sequence (2026-06-22 — incl. the new tab-scheme work)
+
+The dup cleanup (FIX-1/2/3) is DONE + committed. The remaining registry-touching work must run SEQUENTIAL on `fieldRegistry.ts` (no parallel edits — cross-stream discipline), in this order:
+
+1. **qa's 4 bridge fixes** (tiny, decided): `interest-appraised` (exec text→dropdown, copy loe-prep options) + 3 bridge FIX-3 labels. Lowest blast radius → first.
+2. **Tab renumber + Image move** (per REPORT-BUILDER-TAB-SCHEME.md): contiguous 01–16, image-mgt 134 fields → 16, COST grouped under 11-Valuations, `cost-s` stub retire. Higher blast radius (section structure) → after the small fixes.
+3. **S3 Client Documents** — ⛔ ONLY IF Ben rules "build upload fields" (vs "reference the SharePoint client-supplied folder"); if reference, no registry change here. Open decision.
+4. **#2 test-data fill** (`TestDataSet1.ts`) — LAST, against the FINAL structure (so we don't fill values for a structure about to change).
+5. **recon-$0 value-flow fix** — PARALLEL throughout (different file set, not the registry).
+
+**⚑ PAUSED for compact-prime (Ben, 2026-06-22):** the tab-scheme is new scope on a long session. Execution does NOT roll now — all three agents compact-prime to freshen, then resume this exact sequence next session. Everything is captured (this plan + REPORT-BUILDER-TAB-SCHEME.md + REGISTRY-DUP-ID-RULE.md); the one open gate is Ben's #3 ruling (S3 build-vs-reference).
+
 ## Out of scope
 
 - **Legacy `sales` section dead-code assessment (~283 fields, minus the comp1-5 dups dev-3 retires)** — a separate cleanup pass; NOT this build, and NOT a blanket delete. Flag-only for now.

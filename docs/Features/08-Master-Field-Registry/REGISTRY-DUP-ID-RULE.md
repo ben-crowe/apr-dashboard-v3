@@ -38,6 +38,12 @@ the same id so the value flows. **KEEP it — but every instance MUST be consist
    - **The CAPTURE/source section wins** — where the user actually ENTERS the field (usually intake / S1–S2). Downstream copies match it (or become read-only references).
    - **Addition (co-arch) — V4-native-only dups (no S1/S2 capture involved):** when BOTH instances are downstream/V4-native (e.g. a `subject-*` id repeated across `exec`/`site`), there's no S1/S2 capture to win — so canonical = the section where the field is the genuine **INPUT** (vs a display mirror). If no clear input-owner, **flag it, don't guess** (STUCK / to co-arch).
 
+> **⚑ Clarification — TYPE-canonical vs HOME-canonical are SEPARATE questions (qa, 2026-06-22).** "Dropdown wins for option-fields" and "the capture/canonical section wins" can look like they conflict — they don't, because they answer different things:
+> - **TYPE-canonical** = which *type* is correct (the better-constrained one: dropdown > text for an option-field; currency/manual > a stale `calculated` for a captured value).
+> - **HOME-canonical** = which *section's instance* is the home (capture/V3 section, or the genuine input-owner).
+>
+> **Resolution: apply the winning TYPE to the canonical HOME instance**, and make the other instances match. (e.g. `comp-parking-type`: upgrade the sales-comparison canonical instance TO dropdown + copy the options — TYPE-canonical=dropdown applied to HOME-canonical=sales-comparison.)
+
 **Scope guard:** ONLY the two defect classes get touched — (1) same-section redundancy + (2) cross-section
 type/options/label mismatch. The ~109 *consistent* consolidation dups are **LEFT ALONE** — touching them
 breaks the value-flow pattern. KEEP-by-default: if you can't name the defect class + why, don't merge.

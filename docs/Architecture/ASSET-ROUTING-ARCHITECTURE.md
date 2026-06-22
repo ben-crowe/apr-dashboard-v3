@@ -4,7 +4,7 @@ title: Asset Routing Architecture — SharePoint → Supabase → Report (folder
 created: 2026-06-22
 author: co-architect (owns architecture/spec)
 gate: qa-agent (produces sample-doc set + per-file→section mapping, gates this spec)
-status: DRAFT — model + interfaces locked; canonical category list pending STEP 2 (tab-scheme)
+status: qa-gated PASS-WITH-FIXES applied (intake-upload as first-class source, re-sync semantics, INV-0); canonical category list pending STEP 2 (tab-scheme)
 purpose: Define how client-supplied files move from collection (SharePoint) into the appraisal's permanent home (Supabase) and land in the correct report section/field — driven by ONE canonical asset-category set, with folder placement as the primary routing signal.
 tags: [apr-dashboard, assets, document-intake, sharepoint, supabase, routing, report-builder, v4]
 ---
@@ -84,6 +84,32 @@ What already exists — build ON this, don't rebuild:
 3. **GAP (net-new, exists nowhere):** nothing scans file CONTENTS or routes each file to a report
    section/field.
 
+## Collection sources — TWO first-class paths (not just SharePoint)
+
+Because SharePoint is OPTIONAL, it is NOT the only source — and for a client who skips it, the
+**intake-upload path is the primary (only) source.** Both must categorize:
+
+| Source | When | How it gets a category |
+|---|---|---|
+| **Intake-upload** (existing: client uploads at submission → `documents` bucket + `job_files`) | every job; the ONLY source for no-SharePoint clients | the intake `DocumentsSection` presents the SAME category drop-zones (folder-as-router at upload time) → stamp `category` on the `job_files` row at upload. If no category chosen → explicit `misc-uncategorized` (→ Piece D), never a silent null. |
+| **SharePoint** (optional front-door) | when a client prefers folders | category read from the subfolder the file sat in (Piece B) |
+
+> **Why this is load-bearing:** if intake-uploaded files land with NO category, a no-SharePoint
+> client's files ALL funnel to `misc` → Piece D scan, making the "fallback" the default path. Intake
+> categorization at upload keeps folder-as-router true for BOTH sources.
+
+## Source-of-truth + re-sync semantics (Supabase wins, post-ingest — full stop)
+
+"Supabase authoritative" with teeth:
+
+1. **Re-sync is ADDITIVE-ONLY.** A SharePoint file disappearing (deleted/renamed there) NEVER
+   deletes or orphans the corresponding Supabase row. Sync adds/updates; it does not destroy.
+2. **Supabase-side edits are NEVER overwritten by a later SharePoint sync.** Once a row exists, any
+   category change or edit made in Supabase is final — a subsequent sync must not clobber it
+   (idempotent on content-hash/path key; on conflict, Supabase state wins).
+3. Net: **post-ingest, Supabase is the system of record, period.** SharePoint can only contribute
+   NEW assets, never override or remove what Supabase already holds.
+
 ## The three build pieces (this workstream — NOT the registry sequence)
 
 ### Piece A — align collection structure (cheapest, highest leverage)
@@ -117,6 +143,15 @@ category. Never the primary router; a confidence-gated assist.
 - **co-architect** — owns this architecture/spec (the SharePoint↔Supabase↔report asset model).
 - **qa-agent** — produces a realistic sample client-doc set + per-file→report-section mapping,
   built around the SAME canonical category set; gates this spec.
+
+## Invariants (verbatim proof targets)
+
+**INV-0 — folder-placement-as-route (the spine):** A file placed in category subfolder `X` MUST
+land in report drop-zone `X` with NO content-scan.
+- **FAIL-WHEN:** a correctly-foldered file needs scanning to route.
+- **PROVED-BY:** drop a sample file in the `site-photos` subfolder → ingest → assert
+  `job_files.category = site-photos` AND it renders in the site-photos report area AND the scanner
+  was never invoked.
 
 ## The reenactment (Ben's ask)
 

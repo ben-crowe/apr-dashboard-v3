@@ -73,9 +73,13 @@ the history of deleted/compacted tabs showing through.
 > co-arch's lean = group under Valuations, but parked). "No merges this pass" = don't fold COST; it
 > does NOT mean "don't move the images" — the image relocation IS in scope (it's what makes S3 correct).
 >
-> **Where the numbering lives:** the builder's tab config (+ the testing-workbench
-> `TestInputDashboard.tsx sectionNameMapping`) — NOT the locked `fieldRegistry.ts`, so this renumber
-> does not collide with the registry dup/bridge work. dev-3 owns the exact live tab list as ground truth.
+> **Where the numbering lives — CORRECTED to live ground truth (dev-3, 2026-06-22):** the numbers Ben
+> sees live in **ONE place only — the testing-workbench `TestInputDashboard.tsx`**
+> (`sectionNameMapping`/`displayOrder`/`hiddenSections`). The "builder tab config" (getMockData,
+> `01-`/`S1-` shortNames) is **DEAD CODE** — grep-confirmed never called. The LIVE report-builder
+> sidebar (`SectionSidebar.tsx`) renders plain auto slug names (COVER, EXEC, IMAGE MGT) with NO numbers,
+> ordered by fieldRegistry appearance — so it has no numbers to fix. **This renumber is a WORKBENCH-ONLY
+> edit; `fieldRegistry.ts` is UNTOUCHED this pass** (zero collision with the registry dup/bridge work).
 >
 > **Downstream:** the final section list this produces feeds the asset-routing canonical category set
 > (ASSET-ROUTING-ARCHITECTURE.md) + qa's sample-doc mapping — so the Images/Exhibits landing matters.
@@ -118,18 +122,21 @@ SharePoint `2. CLIENT SUPPLIED` folder. (Documented 2026-06-22 — was never for
    tabs, then the report tabs keep their current order and continue the numbers straight through. Do
    NOT execute the old "contiguous 01–16" table — that assumed merges that are not happening. Every
    tab is preserved.
-2. **Relocate the image-mgt fields to the report-layer "Images & Exhibits" section.** All ~134 image
-   fields are appraiser-generated (inspection/comp photos, maps) — they move OUT of the (mislabeled)
-   3rd collection slot INTO their own report-layer section, which lands at its real sequential number
-   (NOT a hardcoded 16). The 4 `img-site-plan-1/2` (+titles) go WITH them — they're report DISPLAY
-   SLOTS (where a client-supplied survey/plan image is PLACED in the report); the client file itself is
-   collected at S3. Relocation, not deletion — nothing is lost.
-3. **S3 = Client Documents — RULED: REFERENCE SharePoint, do NOT build upload fields (Ben, this
-   session).** The 3rd collection tab becomes Client Documents: it references the client's submitted
-   files in the SharePoint "2. CLIENT SUPPLIED" folder (the existing `client-documents` checklist +
-   `file-number`), NOT new per-doc upload/storage fields. The builder currently mislabeling the 3rd
-   tab as "Image Management" is the bug this fixes. (Permanent ingest of those files → Supabase is the
-   SEPARATE asset-routing workstream — see ASSET-ROUTING-ARCHITECTURE.md — not this pass.)
+2. **Relabel + reorder the image section to "Images & Exhibits", LAST (workbench-only this pass).** The
+   image content (slug `image-mgt`, ~134 appraiser-generated fields) is relabeled "Images & Exhibits"
+   and moved to the FINAL report position (after Certification — conventional addenda spot). This pass
+   = workbench relabel+reorder ONLY; the `fieldRegistry.ts` `image-mgt` slug itself is left UNCHANGED
+   (renaming the registry slug is a separate later pass — it would touch the file qa just cleared).
+   Relocation/relabel, not deletion — nothing is lost.
+3. **S3 = Client Documents — LABEL-ONLY PLACEHOLDER referencing SharePoint (RULED, co-arch 2026-06-22).**
+   Ground truth: there is NO backing `client-documents` SECTION — that field lives inside `loe-prep`
+   (S2), `file-number` inside `cover`. A real built S3 tab = a new grouping = a BUILD, which Ben turned
+   OFF (reference SharePoint, don't build). So S3 = a **label-only placeholder** tab in the workbench: a
+   labeled stub pointing at the client's SharePoint "2. CLIENT SUPPLIED" files — no fields, no registry
+   section. This preserves the locked 3-collection-tab model AND is exactly the "reference not build"
+   path. **HARD GUARD: if the workbench can't render a label-only section without a backing registry
+   section, fall back to S1/S2-only and flag — NEVER build a registry section for this.** (Permanent
+   ingest of those files → Supabase is the SEPARATE asset-routing workstream — ASSET-ROUTING-ARCHITECTURE.md.)
 4. **COST → Valuations merge — DEFERRED (no merges this pass).** COST is 32 real Cost-Approach fields
    (NOT a dup of the income-approach Valuations math); co-arch's lean is still to group the three
    approaches under Valuations, but that's a CONTENT decision parked for a separate call. This pass

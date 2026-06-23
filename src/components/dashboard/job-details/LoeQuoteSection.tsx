@@ -1338,17 +1338,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
     document.getElementById('cascade-options-anchor')?.classList.remove('cascade-pulse');
 
     // Authorized Use (intendedUse) lives on the JOB object — write it via onUpdateJob (the same path
-    // Section 1 uses), so Section 1 sees "Insurance" + colors orange. If we're LEAVING the Insurance
-    // override, restore the value we stashed when V4 was entered (or clear it if the stash was lost on reload).
-    //
-    // TRAP FIX (2026-06-23): detect "leaving the Insurance override" from the PERSISTED job.intendedUse,
-    // NOT the transient cascadeVersion. cascadeVersion resets to '' on every reload, so the old
-    // `cascadeVersion === 'V4'` gate never matched after a refresh — once a job had intendedUse='Insurance'
-    // persisted, the §10 scenarios were locked to 'Insurable Replacement Cost' and picking V1/V2/V3 could
-    // never escape it. Reading the persisted value makes the escape reliable across reloads. The stash
-    // (preInsuranceIntendedUse) is also lost on reload, so when it's empty we CLEAR intendedUse — that
-    // still escapes Insurance, which is the goal (an explicit normal-scenario pick means "not Insurance").
-    const leavingOverride = (job as any)?.intendedUse === 'Insurance';
+    // Section 1 uses), so Section 1 sees "Insurance" + colors orange. If we're LEAVING the V4 override,
+    // restore the value we stashed when V4 was entered.
+    const leavingOverride = cascadeVersion === 'V4' && (job as any)?.intendedUse === 'Insurance';
     const restoreAuthorizedUse = () => {
       if (leavingOverride && onUpdateJob) onUpdateJob({ intendedUse: preInsuranceIntendedUse.current || '' } as any);
     };
@@ -1385,9 +1377,8 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       autoSaveField('statusOfImprovements', 'Proposed - Improved Land (Demolition Required)');
       restoreAuthorizedUse();
     } else if (version === 'V4') {
-      // Stash the real Authorized Use before the Insurance override (only on a fresh entry into V4 —
-      // guard on the PERSISTED value so a reload doesn't re-stash 'Insurance' over the real prior value).
-      if ((job as any)?.intendedUse !== 'Insurance') preInsuranceIntendedUse.current = (job as any)?.intendedUse || '';
+      // Stash the real Authorized Use before the Insurance override (only on a fresh entry into V4).
+      if (cascadeVersion !== 'V4') preInsuranceIntendedUse.current = (job as any)?.intendedUse || '';
       onUpdateDetails({ statusOfImprovements: '' } as any); // Status dashes on the Insurance scenario
       autoSaveField('statusOfImprovements', '');
       if (onUpdateJob) onUpdateJob({ intendedUse: 'Insurance' } as any); // → Section 1 shows Insurance + orange

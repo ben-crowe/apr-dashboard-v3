@@ -7,11 +7,14 @@ import {
   resolvePopupTokens,
   POPUP_SEED_BODY,
 } from '@/utils/loe/popupTemplate';
+import { markContractSigned } from '@/utils/loe/jobContracts';
 
 export function SigningPage() {
   const { id } = useParams<{ id: string }>();
   const [docusealSlug, setDocusealSlug] = useState<string>('');
   const [jobId, setJobId] = useState<string>('');
+  // DocuSeal submission id for this signing — used to mark the matching saved contract 'signed'.
+  const [submissionId, setSubmissionId] = useState<string>('');
   const [clientName, setClientName] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>('');
@@ -78,6 +81,7 @@ export function SigningPage() {
 
       // Set the data for display
       setJobId(data.job_id || '');
+      setSubmissionId(data.docuseal_submission_id || '');
       setDocusealSlug(data.docuseal_slug);
       setClientName(data.client_name);
       setLoading(false);
@@ -107,6 +111,12 @@ export function SigningPage() {
         .from('job_loe_details')
         .update({ signed_at: signedAt, job_status: 'loe_signed' })
         .eq('job_id', jobId);
+    }
+    // Promote the matching saved contract to 'signed' (matched by DocuSeal submission id), so the
+    // Saved Documents row flips from SENT to SIGNED. No-op-safe if no row carries this submission id.
+    if (submissionId) {
+      const res = await markContractSigned(submissionId);
+      if (!res.success) console.error('markContractSigned failed:', res.error);
     }
   };
 

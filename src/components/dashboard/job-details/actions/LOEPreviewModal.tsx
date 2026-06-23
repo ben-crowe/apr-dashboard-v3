@@ -44,6 +44,10 @@ interface LOEPreviewModalProps {
       load the template LIST for the picker but do NOT regenerate the default, which would
       clobber the saved edits. Editable (unlike readOnly): the user can still hit Edit Document. */
   existingContract?: boolean;
+  /** Executed (signed) PDF URL for a SIGNED contract. When present, the preview shows the signed
+      PDF in an iframe instead of the draft HTML — the signed row must open the EXECUTED copy, not
+      the pre-send draft. DocuSeal-hosted; opens read-only. */
+  signedDocumentUrl?: string | null;
   /** PRD-APR-LOE-03 INV-0: the Email dropdown lives in the Previewer BESIDE the Document dropdown.
       Picking an Email template fires this → parent opens the STANDALONE email composer
       (docTemplateId=null, contract_id=null) — the document-less first-class send path. */
@@ -65,6 +69,7 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
   contractId,
   readOnly = false,
   existingContract = false,
+  signedDocumentUrl = null,
   onPickEmail,
   onPickPopup
 }) => {
@@ -475,9 +480,19 @@ const LOEPreviewModal: React.FC<LOEPreviewModalProps> = ({
         </div>
         )}
 
-        {/* Document render — the SHARED DocumentPreviewPane (zoom strip + scaled iframe).
+        {/* Document render — a SIGNED contract shows the executed PDF (DocuSeal-hosted URL) in an
+            iframe; everything else uses the SHARED DocumentPreviewPane (zoom strip + scaled iframe).
             INV-0: same pane the Component Studio uses, so the previewer can never regress. */}
-        <DocumentPreviewPane html={editedHTML || currentDocumentHTML} />
+        {signedDocumentUrl ? (
+          <iframe
+            src={signedDocumentUrl}
+            title="Signed document"
+            className="w-full rounded-md border border-border"
+            style={{ height: '70vh', minHeight: '400px' }}
+          />
+        ) : (
+          <DocumentPreviewPane html={editedHTML || currentDocumentHTML} />
+        )}
 
         {/* Minimal Footer */}
         <div className="flex justify-between items-center pt-2 border-t">

@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { validateRequiredFields } from "@/utils/webhooks/docuseal";
 import { generateLOEHTML, generateAndSendLOE, sendLOEEmail } from "@/utils/loe/generateLOE";
-import { loadJobContracts, saveJobContract, deleteJobContract, JobContract } from "@/utils/loe/jobContracts";
+import { loadJobContracts, saveJobContract, deleteJobContract, markContractSent, JobContract } from "@/utils/loe/jobContracts";
 import { saveJobEmailInstance, loadJobEmailInstances, EmailInstance, EmailTemplate } from "@/utils/loe/emailTemplate";
 import EmailComposeModal from "@/components/dashboard/job-details/actions/EmailComposeModal";
 import PopupComposeModal from "@/components/dashboard/job-details/actions/PopupComposeModal";
@@ -264,6 +264,9 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
   // True when the preview is showing an ALREADY-SAVED instance (reopened draft/sent) — show its
   // HTML verbatim, don't regenerate the default template on open.
   const [previewExisting, setPreviewExisting] = useState(false);
+  // When opening a SIGNED contract, the preview shows the executed PDF at this URL (read-only),
+  // not the pre-send draft HTML. Null for draft/sent (which still render edited_html).
+  const [previewSignedUrl, setPreviewSignedUrl] = useState<string | null>(null);
   // Active Saved Documents type pill: '' = nothing selected (list collapsed, just pills),
   // 'all' = every doc, or a DOC_TYPES key. The pill selection itself is the expand/collapse.
   const [typeFilter, setTypeFilter] = useState<string>('');
@@ -1220,6 +1223,31 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
       const recipientEmail = overrideEmail || job.clientEmail;
       const jobToSend = overrideEmail ? { ...job, clientEmail: overrideEmail } : job;
 
+      // Guarantee a saved contract row BEFORE sending. If we're sending a brand-new (never-saved)
+      // document, there's no job_contracts row yet, so the send could only ever produce a doc-less
+      // email pill — the contract would never appear in Saved Documents. Insert a draft carrying the
+      // edited HTML now, so (a) Open works (the row holds the HTML that went out) and (b) the next
+      // step can promote that same row to 'sent'. Reuses currentContractId when one already exists
+      // (reopened draft) so we update the SAME row rather than forking a duplicate.
+      let contractId = currentContractId;
+      if (!contractId && previewHTML) {
+        const monthDay = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const client = job.clientLastName || job.clientFirstName || 'Client';
+        const saved = await saveJobContract({
+          jobId: job.id,
+          name: `LOE — ${client} — ${monthDay}`,
+          editedHtml: previewHTML,
+          contractType: 'LOE',
+          state: 'draft',
+        });
+        if (saved.success && saved.id) {
+          contractId = saved.id;
+          setCurrentContractId(saved.id);
+        } else {
+          console.error('saveJobContract (pre-send) failed:', saved.error);
+        }
+      }
+
       // DocuSeal submission ONLY (sendEmail=false) — we send the composed email ourselves below.
       // This is the double-send fix: generateAndSendLOE no longer also fires its own email here.
       const result = await generateAndSendLOE(jobToSend, jobDetails, previewHTML, false);
@@ -1235,13 +1263,23 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         );
 
         if (emailSent) {
+          // Promote the saved contract row to 'sent' and record the DocuSeal submission id, so the
+          // row surfaces in Saved Documents with a SENT badge (and the signed event can later match
+          // it by submission id). Then refresh the list so it appears immediately.
+          if (contractId) {
+            const promoted = await markContractSent(contractId, result.submissionId);
+            if (!promoted.success) {
+              console.error('markContractSent failed:', promoted.error);
+            }
+            refreshContracts();
+          }
           // Persist the per-send email INSTANCE as 'sent' (job-scoped; never touches the default).
           if (emailOverride) {
             const finalSubject = emailOverride.subject.split('{{signing_link}}').join(result.signingLink);
             const finalBody = emailOverride.bodyHtml.split('{{signing_link}}').join(result.signingLink);
             const saved = await saveJobEmailInstance({
               jobId: job.id,
-              contractId: currentContractId,
+              contractId: contractId,
               recipientEmail,
               subject: finalSubject,
               bodyHtml: finalBody,
@@ -1627,31 +1665,11 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
 
         </div>
 
-        {/* PRD-APR-LOE-03 D2 (INV-0 + INV-4): D1's loose dashboard Send-by-Email widget is REMOVED —
-            the standalone email SEND entry now lives in the Previewer's Email dropdown (beside the
-            Document dropdown), NOT loose on the job page. Sent/draft emails surface here as pills
-            under "Saved Documents/Email". (Pill grouping under doc vs email marker = ui-designer refine, non-blocking.) */}
-        {emailInstances.length > 0 && (
-          <div className="mb-6 space-y-2">
-            <h3 className="text-sm font-semibold text-foreground">Saved Documents/Email — Emails</h3>
-            <div className="flex flex-wrap gap-2">
-              {emailInstances.map((e) => (
-                <span
-                  key={e.id}
-                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs border ${
-                    e.state === 'sent'
-                      ? 'bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-500/10 dark:text-emerald-400'
-                      : 'bg-muted text-muted-foreground border-border'}`}
-                  title={`${e.subject} → ${e.recipient_email ?? ''}${e.contract_id === null ? ' (no document)' : ''}`}
-                >
-                  <Mail className="h-3 w-3" />
-                  {e.state === 'sent' ? 'Sent' : 'Draft'}: {e.subject || '(untitled)'}
-                  {e.contract_id === null ? ' · no doc' : ''}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* PRD-APR-LOE-03 D2 (INV-0 + INV-4) + LOE-saved-docs consolidation (2026-06-23): the separate
+            "Saved Documents/Email — Emails" PILL block is REMOVED. Everything — draft / sent / signed
+            documents AND document-less emails — now lives as ROWS inside the single Saved Documents
+            expandable list below, each with its own status badge + Open. Doc-less emails (contract_id
+            === null) surface as rows tagged "Email" rather than a separate pill strip. */}
 
         {/* Doc-less compose/preview modal (Wave D1 — separate instance from the with-document path). */}
         <EmailComposeModal
@@ -1675,28 +1693,51 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             Persistent type pills incl. empty placeholders; tap a pill to filter; 'All' shows
             everything drafts-first. ONE consistent "Open" per row — the badge carries draft/sent
             and behavior branches (draft → editable editor, sent → read-only preview). */}
-        {savedContracts.length > 0 && (() => {
-          // Drafts (actionable) above sent (archive); newest-first within a group is preserved by
-          // the updated_at-desc query (stable sort).
-          const draftFirst = (arr: JobContract[]) =>
-            [...arr].sort((a, b) => (a.state === 'sent' ? 1 : 0) - (b.state === 'sent' ? 1 : 0));
+        {(savedContracts.length > 0 || emailInstances.some(e => e.contract_id === null)) && (() => {
+          // CONSOLIDATED list model (2026-06-23): one expandable list carries BOTH saved contracts
+          // (draft / sent / signed) AND document-less emails (contract_id === null) as rows. Emails
+          // that belong to a contract are already represented by that contract's row, so only the
+          // doc-less ones surface here (no duplication). Each row is a discriminated union so the
+          // renderer can branch contract-vs-email behaviour.
+          type ContractRow = { kind: 'contract'; id: string; contract: JobContract };
+          type EmailRow = { kind: 'email'; id: string; email: EmailInstance };
+          type ListRow = ContractRow | EmailRow;
+
+          const docLessEmails = emailInstances.filter(e => e.contract_id === null);
+
+          const contractRows: ListRow[] = savedContracts.map(c => ({ kind: 'contract', id: c.id, contract: c }));
+          const emailRows: ListRow[] = docLessEmails.map(e => ({ kind: 'email', id: e.id, email: e }));
+          const allRows: ListRow[] = [...contractRows, ...emailRows];
+
+          // Type key/label for any row: contracts via typeOf(); doc-less emails are always 'email'.
+          const rowType = (r: ListRow): { key: string; label: string } =>
+            r.kind === 'contract' ? typeOf(r.contract) : DOC_TYPES[2]; // DOC_TYPES[2] = Email
+
+          // Sort order within a group: drafts (actionable) above sent/signed (archive). updated_at-desc
+          // from the queries gives newest-first; this stable sort just floats drafts to the top.
+          const orderWeight = (r: ListRow): number => {
+            const st = r.kind === 'contract' ? r.contract.state : r.email.state;
+            return st === 'draft' ? 0 : 1;
+          };
+          const draftFirst = (arr: ListRow[]) =>
+            [...arr].sort((a, b) => orderWeight(a) - orderWeight(b));
 
           // Per-type counts + the pill set: base registry ∪ any unregistered type found in data.
           const counts = new Map<string, number>();
-          for (const c of savedContracts) {
-            const k = typeOf(c).key;
+          for (const r of allRows) {
+            const k = rowType(r).key;
             counts.set(k, (counts.get(k) ?? 0) + 1);
           }
           const seen = new Set<string>();
-          const extraTypes = savedContracts
-            .map(typeOf)
+          const extraTypes = allRows
+            .map(rowType)
             .filter(t => !DOC_TYPES.some(d => d.key === t.key))
             .filter(t => (seen.has(t.key) ? false : (seen.add(t.key), true)));
           const pillTypes = [...DOC_TYPES, ...extraTypes];
 
           const visible = typeFilter === 'all'
-            ? savedContracts
-            : savedContracts.filter(c => typeOf(c).key === typeFilter);
+            ? allRows
+            : allRows.filter(r => rowType(r).key === typeFilter);
           const rows = draftFirst(visible);
 
           const pillClass = (active: boolean) =>
@@ -1708,11 +1749,20 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
             `text-[10px] font-semibold rounded-full px-1.5 ${
               active ? 'bg-white/25 text-white dark:bg-gray-900/20 dark:text-gray-900' : 'bg-muted text-muted-foreground'}`;
 
+          // Shared status-badge style: signed (emerald, terminal) > sent (green) > draft (blue).
+          const badgeClass = (state: string) =>
+            `text-[10px] uppercase tracking-wide font-semibold px-1.5 py-0.5 rounded-full ${
+              state === 'signed'
+                ? 'bg-emerald-600 text-white dark:bg-emerald-600 dark:text-white'
+                : state === 'sent'
+                ? 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400'
+                : 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400'}`;
+
           return (
             <div className="mb-6 w-full">
               <div className="rounded-md border border-border bg-muted/30 p-3">
                 <div className="text-xs font-semibold text-foreground mb-2">
-                  Saved Documents/Email ({savedContracts.length})
+                  Saved Documents/Email ({allRows.length})
                 </div>
 
                 {/* Type pills — the selection IS the expand/collapse. Nothing selected on load =
@@ -1721,7 +1771,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                 <div className="flex flex-wrap gap-1.5">
                   <button type="button" onClick={() => setTypeFilter(f => f === 'all' ? '' : 'all')} className={pillClass(typeFilter === 'all')}>
                     All
-                    <span className={countClass(typeFilter === 'all')}>{savedContracts.length}</span>
+                    <span className={countClass(typeFilter === 'all')}>{allRows.length}</span>
                   </button>
                   {pillTypes.map(t => {
                     const active = typeFilter === t.key;
@@ -1743,10 +1793,51 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                   </div>
                 ) : (
                   <div className="space-y-0.5 mt-3">
-                    {rows.map((c) => {
+                    {rows.map((r) => {
+                      if (r.kind === 'email') {
+                        // Doc-less email row: tagged "Email", state badge, Open previews the email
+                        // body HTML read-only (no contractId, no signed PDF). No delete (records of
+                        // what went out aren't editable here).
+                        const e = r.email;
+                        return (
+                          <div key={r.id} className="group flex items-center justify-between gap-2 text-sm px-1.5 py-1.5 rounded hover:bg-muted/60">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <Mail className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+                              <span className="truncate text-foreground">{e.subject || '(untitled email)'}</span>
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0">
+                              <span className="text-[11px] text-muted-foreground">
+                                {typeFilter === 'all' ? 'Email' : formatShortDate(e.updated_at)}
+                              </span>
+                              <span className={badgeClass(e.state)}>{e.state}</span>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                className="h-7 text-xs"
+                                onClick={() => {
+                                  // Preview the email body verbatim, read-only. Not a contract:
+                                  // no contractId, no signed PDF, no editable draft path.
+                                  setCurrentContractId(null);
+                                  setPreviewReadOnly(true);
+                                  setPreviewExisting(true);
+                                  setPreviewSignedUrl(null);
+                                  setPreviewHTML(e.body_html || '');
+                                  setShowPreview(true);
+                                }}
+                              >
+                                Open
+                              </Button>
+                            </div>
+                          </div>
+                        );
+                      }
+
+                      const c = r.contract;
                       const isSent = c.state === 'sent';
+                      const isSigned = c.state === 'signed';
                       return (
-                        <div key={c.id} className="group flex items-center justify-between gap-2 text-sm px-1.5 py-1.5 rounded hover:bg-muted/60">
+                        <div key={r.id} className="group flex items-center justify-between gap-2 text-sm px-1.5 py-1.5 rounded hover:bg-muted/60">
                           <div className="flex items-center gap-2 min-w-0">
                             <FileSignature className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                             <span className="truncate text-foreground">{c.name}</span>
@@ -1755,12 +1846,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                             <span className="text-[11px] text-muted-foreground">
                               {typeFilter === 'all' ? typeOf(c).label : formatShortDate(c.updated_at)}
                             </span>
-                            <span className={`text-[10px] uppercase tracking-wide font-semibold px-1.5 py-0.5 rounded-full ${
-                              isSent
-                                ? 'bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400'
-                                : 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400'}`}>
-                              {c.state}
-                            </span>
+                            <span className={badgeClass(c.state)}>{c.state}</span>
                             <Button
                               type="button"
                               variant="outline"
@@ -1771,17 +1857,20 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
                                 // editor). Sent = read-only; draft = editable (Edit Document opens
                                 // the split, and Cancel there returns HERE instead of dead-ending
                                 // back to the job). existingContract shows the saved HTML verbatim.
+                                // SIGNED → open the executed PDF (read-only) at signed_document_url;
+                                // draft/sent → render the saved edited_html as before.
                                 setCurrentContractId(c.id);
-                                setPreviewReadOnly(isSent);
+                                setPreviewReadOnly(isSent || isSigned);
                                 setPreviewExisting(true);
+                                setPreviewSignedUrl(isSigned ? (c.signed_document_url ?? null) : null);
                                 setPreviewHTML(c.edited_html);
                                 setShowPreview(true);
                               }}
                             >
                               Open
                             </Button>
-                            {/* C — delete: subtle hover-X, DRAFTS ONLY (never sent). */}
-                            {!isSent && (
+                            {/* C — delete: subtle hover-X, DRAFTS ONLY (never sent or signed). */}
+                            {!isSent && !isSigned && (
                               <button
                                 type="button"
                                 aria-label="Delete draft"
@@ -2461,7 +2550,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
         {/* Preview Modal */}
         <LOEPreviewModal
           isOpen={showPreview}
-          onClose={() => { setShowPreview(false); setPreviewReadOnly(false); setPreviewExisting(false); refreshContracts(); }}
+          onClose={() => { setShowPreview(false); setPreviewReadOnly(false); setPreviewExisting(false); setPreviewSignedUrl(null); refreshContracts(); }}
           job={job}
           jobDetails={jobDetails}
           documentHTML={previewHTML}
@@ -2470,6 +2559,7 @@ const LoeQuoteSection: React.FC<SectionProps> = ({
           contractId={currentContractId}
           readOnly={previewReadOnly}
           existingContract={previewExisting}
+          signedDocumentUrl={previewSignedUrl}
           onPickEmail={(tpl) => { setDocLessTemplate(tpl); setDocLessOpen(true); }}
           onPickPopup={(p) => { setPopupInitial(p ?? null); setPopupOpen(true); }}
         />

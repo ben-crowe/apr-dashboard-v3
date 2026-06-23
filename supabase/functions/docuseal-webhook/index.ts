@@ -360,6 +360,23 @@ Deno.serve(async (req) => {
           console.error('Error storing signed document:', docError)
         }
 
+        // Promote the matching saved CONTRACT row to 'signed' and attach the executed PDF URL,
+        // matched by docuseal_submission_id (the key the signed event carries). This is what flips
+        // the LOE "Saved Documents" row from SENT to SIGNED and lets Open show the signed copy
+        // instead of the pre-send draft HTML. No-op-safe if no contract row carries this submission.
+        const { error: contractSignError } = await supabase
+          .from('job_contracts')
+          .update({
+            state: 'signed',
+            signed_document_url: signedDocument.url,
+            updated_at: new Date().toISOString()
+          })
+          .eq('docuseal_submission_id', submissionId)
+
+        if (contractSignError) {
+          console.error('Error marking contract signed:', contractSignError)
+        }
+
         // Also store in job_files table for our file management system
         const { error: fileError } = await supabase
           .from('job_files')

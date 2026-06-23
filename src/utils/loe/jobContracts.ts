@@ -10,10 +10,11 @@
  * Lifecycle states:
  *   - 'draft' | 'saved' : created + tailored, not yet sent (reopen + keep editing)
  *   - 'sent'            : delivered to the client via DocuSeal (reopen to view what went out)
+ *   - 'signed'          : the client signed via DocuSeal (terminal; reopen to view what was signed)
  */
 import { supabase } from "@/integrations/supabase/client";
 
-export type ContractState = 'draft' | 'saved' | 'sent';
+export type ContractState = 'draft' | 'saved' | 'sent' | 'signed';
 
 export interface JobContract {
   id: string;
@@ -25,6 +26,8 @@ export interface JobContract {
   edited_html: string;
   state: ContractState;
   docuseal_submission_id: string | null;
+  /** DocuSeal-hosted URL of the executed signed PDF; null until state='signed'. */
+  signed_document_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -100,6 +103,22 @@ export async function markContractSent(
       updated_at: new Date().toISOString(),
     })
     .eq('id', id);
+  return error ? { success: false, error: error.message } : { success: true };
+}
+
+/**
+ * Flip a contract to 'signed', matched by its DocuSeal submission id (the only key the signed
+ * event carries back). No-op-safe: if no row carries the submission id, nothing updates and we
+ * still report success — the contract may simply not have been saved through this dashboard.
+ */
+export async function markContractSigned(
+  docusealSubmissionId: string,
+): Promise<{ success: boolean; error?: string }> {
+  if (!docusealSubmissionId) return { success: false, error: 'missing docuseal submission id' };
+  const { error } = await supabase
+    .from('job_contracts')
+    .update({ state: 'signed', updated_at: new Date().toISOString() })
+    .eq('docuseal_submission_id', docusealSubmissionId);
   return error ? { success: false, error: error.message } : { success: true };
 }
 
